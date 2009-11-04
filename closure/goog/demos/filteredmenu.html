@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!--
+Copyright 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+<title>goog.ui.FilteredMenu</title>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+  goog.require('goog.events');
+  goog.require('goog.ui.Menu');
+  goog.require('goog.ui.MenuItem');
+  goog.require('goog.ui.CheckBoxMenuItem');
+  goog.require('goog.ui.FilteredMenu');
+  goog.require('goog.ui.TriStateMenuItem');
+  goog.require('goog.ui.FilterObservingMenuItem');
+</script>
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="stylesheet" type="text/css" href="css/menus.css">
+<style type="text/css">
+
+.goog-menu {
+  width: 30ex;
+}
+
+.goog-menu-filter input {
+  width: 100%;
+  
+  /* width: 100% interferes with the input event handler in IE6 */
+  width: expression('30ex');
+}
+</style>
+</head>
+<body>
+
+<div id="menu1"></div>
+
+<script type="text/javascript">
+
+var folders = [
+  'Inbox',
+  'Starred',
+  'Spam',
+  'Sent Mail',
+  'Trash'
+];
+
+var labels = [
+  'Gmail',
+  'Finance',
+  'Bugs',
+  'Apps',
+  'Apps UI',
+  'Apps UX',
+  'Gmail Bugs',
+  'Reference',
+  'DO',
+  'READ',
+  'misc'
+];
+
+var el = goog.dom.getElement('menu1');
+var menu1 = new goog.ui.FilteredMenu();
+menu1.setFilterLabel('Create / search');
+menu1.setAllowMultiple(true);
+
+var lm, cm, cm2;
+for (var str, i = 0; str = labels[i]; i++) {
+  menu1.addItem(lm = new goog.ui.TriStateMenuItem(str));
+  if (i == 0 || i == 3) {
+    lm.setCheckedState(goog.ui.TriStateMenuItem.State.PARTIALLY_CHECKED);
+  } else if (i == 1 || i == 4 || i == 5) {
+    lm.setCheckedState(goog.ui.TriStateMenuItem.State.FULLY_CHECKED);
+  }
+}
+menu1.addItem(new goog.ui.MenuSeparator());
+for (var str, i = 0; str = folders[i]; i++) {
+  menu1.addItem(new goog.ui.MenuItem(str));
+} 
+menu1.addItem(new goog.ui.MenuSeparator());
+menu1.addItem(cm = new goog.ui.FilterObservingMenuItem(''));
+menu1.addItem(cm2 = new goog.ui.FilterObservingMenuItem('Manage tags'));
+
+menu1.render(el);
+menu1.setPosition(10, 10);
+
+
+cm.setObserver(function(item, str) {
+  str = goog.string.trim(str);
+  var b = str == '' || goog.array.contains(folders, str) ||
+                       goog.array.contains(labels, str); 
+  item.setVisible(!b);
+  if (!b) {
+    item.setContent(this.dom_.createDom(
+        'span',
+        null,
+        '"',
+        this.dom_.createDom('b', null, str),
+        '" (create tag)'));
+  }
+});
+
+cm2.setObserver(function(item, str) {
+  item.setVisible(str == '');
+});
+
+</script>
+
+</body>
+</html>

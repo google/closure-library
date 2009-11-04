@@ -1,0 +1,487 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>abstractgraphics.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_graphics_abstractgraphics.js.html">abstractgraphics.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Graphics utility functions and factory methods.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.graphics.AbstractGraphics&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.graphics.Path&#39;);
+<a name="line24"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line25"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line26"></a>goog.require(&#39;goog.style&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Base class for the different graphics. You should never construct objects
+<a name="line32"></a> * of this class. Instead us goog.graphics.createGraphics
+<a name="line33"></a> * @param {number|string} width The width in pixels or percent.
+<a name="line34"></a> * @param {number|string} height The height in pixels or percent.
+<a name="line35"></a> * @param {number?} opt_coordWidth Optional coordinate system width - if
+<a name="line36"></a> *     omitted or null, defaults to same as width.
+<a name="line37"></a> * @param {number?} opt_coordHeight Optional coordinate system height - if
+<a name="line38"></a> *     omitted or null, defaults to same as height.
+<a name="line39"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+<a name="line40"></a> *     document we want to render in.
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @extends {goog.ui.Component}
+<a name="line43"></a> */
+<a name="line44"></a>goog.graphics.AbstractGraphics = function(width, height,
+<a name="line45"></a>                                          opt_coordWidth, opt_coordHeight,
+<a name="line46"></a>                                          opt_domHelper) {
+<a name="line47"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line48"></a>
+<a name="line49"></a>  /**
+<a name="line50"></a>   * Width of graphics in pixels or percentage points.
+<a name="line51"></a>   * @type {number|string}
+<a name="line52"></a>   * @protected
+<a name="line53"></a>   */
+<a name="line54"></a>  this.width = width;
+<a name="line55"></a>
+<a name="line56"></a>  /**
+<a name="line57"></a>   * Height of graphics in pixels or precentage points.
+<a name="line58"></a>   * @type {number|string}
+<a name="line59"></a>   * @protected
+<a name="line60"></a>   */
+<a name="line61"></a>  this.height = height;
+<a name="line62"></a>
+<a name="line63"></a>  /**
+<a name="line64"></a>   * Width of coordinate system in units.
+<a name="line65"></a>   * @type {number?}
+<a name="line66"></a>   * @protected
+<a name="line67"></a>   */
+<a name="line68"></a>  this.coordWidth = opt_coordWidth || null;
+<a name="line69"></a>
+<a name="line70"></a>  /**
+<a name="line71"></a>   * Height of coordinate system in units.
+<a name="line72"></a>   * @type {number?}
+<a name="line73"></a>   * @protected
+<a name="line74"></a>   */
+<a name="line75"></a>  this.coordHeight = opt_coordHeight || null;
+<a name="line76"></a>};
+<a name="line77"></a>goog.inherits(goog.graphics.AbstractGraphics, goog.ui.Component);
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * The root level group element.
+<a name="line82"></a> * @type {goog.graphics.GroupElement?}
+<a name="line83"></a> * @protected
+<a name="line84"></a> */
+<a name="line85"></a>goog.graphics.AbstractGraphics.prototype.canvasElement = null;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Left coordinate of the view box
+<a name="line90"></a> * @type {number}
+<a name="line91"></a> * @protected
+<a name="line92"></a> */
+<a name="line93"></a>goog.graphics.AbstractGraphics.prototype.coordLeft = 0;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Top coordinate of the view box
+<a name="line98"></a> * @type {number}
+<a name="line99"></a> * @protected
+<a name="line100"></a> */
+<a name="line101"></a>goog.graphics.AbstractGraphics.prototype.coordTop = 0;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * @return {goog.graphics.GroupElement} The root level canvas element.
+<a name="line106"></a> */
+<a name="line107"></a>goog.graphics.AbstractGraphics.prototype.getCanvasElement = function() {
+<a name="line108"></a>  return this.canvasElement;
+<a name="line109"></a>};
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Changes the coordinate size.
+<a name="line114"></a> * @param {number} coordWidth  The coordinate width.
+<a name="line115"></a> * @param {number} coordHeight  The coordinate height.
+<a name="line116"></a> */
+<a name="line117"></a>goog.graphics.AbstractGraphics.prototype.setCoordSize = function(coordWidth,
+<a name="line118"></a>                                                                 coordHeight) {
+<a name="line119"></a>  this.coordWidth = coordWidth;
+<a name="line120"></a>  this.coordHeight = coordHeight;
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * @return {goog.math.Size} The coordinate size.
+<a name="line126"></a> */
+<a name="line127"></a>goog.graphics.AbstractGraphics.prototype.getCoordSize = function() {
+<a name="line128"></a>  if (this.coordWidth) {
+<a name="line129"></a>    return new goog.math.Size(this.coordWidth,
+<a name="line130"></a>        /** @type {number} */ (this.coordHeight));
+<a name="line131"></a>  } else {
+<a name="line132"></a>    return this.getPixelSize();
+<a name="line133"></a>  }
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Changes the coordinate system position.
+<a name="line139"></a> * @param {number} left  The coordinate system left bound.
+<a name="line140"></a> * @param {number} top  The coordinate system top bound.
+<a name="line141"></a> */
+<a name="line142"></a>goog.graphics.AbstractGraphics.prototype.setCoordOrigin = goog.abstractMethod;
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * @return {goog.math.Coordinate} The coordinate system position.
+<a name="line147"></a> */
+<a name="line148"></a>goog.graphics.AbstractGraphics.prototype.getCoordOrigin = function() {
+<a name="line149"></a>  return new goog.math.Coordinate(this.coordLeft, this.coordTop);
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * Change the size of the canvas.
+<a name="line155"></a> * @param {number} pixelWidth  The width in pixels.
+<a name="line156"></a> * @param {number} pixelHeight  The height in pixels.
+<a name="line157"></a> */
+<a name="line158"></a>goog.graphics.AbstractGraphics.prototype.setSize = goog.abstractMethod;
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * @return {goog.math.Size} The size of canvas.
+<a name="line163"></a> * @deprecated Use getPixelSize.
+<a name="line164"></a> */
+<a name="line165"></a>goog.graphics.AbstractGraphics.prototype.getSize = function() {
+<a name="line166"></a>  return this.getPixelSize();
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * @return {goog.math.Size?} Returns the number of pixels spanned by the
+<a name="line172"></a> *     surface, or null if the size could not be computed due to the size being
+<a name="line173"></a> *     specified in percentage points and the component not being in the
+<a name="line174"></a> *     document.
+<a name="line175"></a> */
+<a name="line176"></a>goog.graphics.AbstractGraphics.prototype.getPixelSize = function() {
+<a name="line177"></a>  if (this.isInDocument()) {
+<a name="line178"></a>    return goog.style.getSize(this.getElement());
+<a name="line179"></a>  }
+<a name="line180"></a>  if (goog.isNumber(this.width) &amp;&amp; goog.isNumber(this.height)) {
+<a name="line181"></a>    return new goog.math.Size(this.width, this.height);
+<a name="line182"></a>  }
+<a name="line183"></a>  return null;
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * @return {number} Returns the number of pixels per unit in the x direction.
+<a name="line189"></a> */
+<a name="line190"></a>goog.graphics.AbstractGraphics.prototype.getPixelScaleX = function() {
+<a name="line191"></a>  var pixelSize = this.getPixelSize();
+<a name="line192"></a>  return pixelSize ? pixelSize.width / this.getCoordSize().width : 0;
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * @return {number} Returns the number of pixels per unit in the y direction.
+<a name="line198"></a> */
+<a name="line199"></a>goog.graphics.AbstractGraphics.prototype.getPixelScaleY = function() {
+<a name="line200"></a>  var pixelSize = this.getPixelSize();
+<a name="line201"></a>  return pixelSize ? pixelSize.height / this.getCoordSize().height : 0;
+<a name="line202"></a>};
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * Remove all drawing elements from the graphics.
+<a name="line207"></a> */
+<a name="line208"></a>goog.graphics.AbstractGraphics.prototype.clear = goog.abstractMethod;
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/**
+<a name="line212"></a> * Remove a single drawing element from the surface.  The default implementation
+<a name="line213"></a> * assumes a DOM based drawing surface.
+<a name="line214"></a> * @param {goog.graphics.Element} element The element to remove.
+<a name="line215"></a> */
+<a name="line216"></a>goog.graphics.AbstractGraphics.prototype.removeElement = function(element) {
+<a name="line217"></a>  goog.dom.removeNode(element.getElement());
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Sets the fill for the given element.
+<a name="line223"></a> * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
+<a name="line224"></a> * @param {goog.graphics.Fill?} fill The fill object.
+<a name="line225"></a> */
+<a name="line226"></a>goog.graphics.AbstractGraphics.prototype.setElementFill = goog.abstractMethod;
+<a name="line227"></a>
+<a name="line228"></a>
+<a name="line229"></a>/**
+<a name="line230"></a> * Sets the stroke for the given element.
+<a name="line231"></a> * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
+<a name="line232"></a> * @param {goog.graphics.Stroke?} stroke The stroke object.
+<a name="line233"></a> */
+<a name="line234"></a>goog.graphics.AbstractGraphics.prototype.setElementStroke = goog.abstractMethod;
+<a name="line235"></a>
+<a name="line236"></a>
+<a name="line237"></a>/**
+<a name="line238"></a> * Set the transformation of an element.
+<a name="line239"></a> * @param {goog.graphics.Element} element The element wrapper.
+<a name="line240"></a> * @param {number} x The x coordinate of the translation transform.
+<a name="line241"></a> * @param {number} y The y coordinate of the translation transform.
+<a name="line242"></a> * @param {number} angle The angle of the rotation transform.
+<a name="line243"></a> * @param {number} centerX The horizontal center of the rotation transform.
+<a name="line244"></a> * @param {number} centerY The vertical center of the rotation transform.
+<a name="line245"></a> */
+<a name="line246"></a>goog.graphics.AbstractGraphics.prototype.setElementTransform =
+<a name="line247"></a>    goog.abstractMethod;
+<a name="line248"></a>
+<a name="line249"></a>
+<a name="line250"></a>/**
+<a name="line251"></a> * Draw a circle
+<a name="line252"></a> *
+<a name="line253"></a> * @param {number} cx Center X coordinate.
+<a name="line254"></a> * @param {number} cy Center Y coordinate.
+<a name="line255"></a> * @param {number} r Radius length.
+<a name="line256"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line257"></a> *    stroke.
+<a name="line258"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line259"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line260"></a> *     append to. If not specified, appends to the main canvas.
+<a name="line261"></a> *
+<a name="line262"></a> * @return {goog.graphics.EllipseElement} The newly created element.
+<a name="line263"></a> */
+<a name="line264"></a>goog.graphics.AbstractGraphics.prototype.drawCircle = function(
+<a name="line265"></a>    cx, cy, r, stroke, fill, opt_group) {
+<a name="line266"></a>  return this.drawEllipse(cx, cy, r, r, stroke, fill, opt_group);
+<a name="line267"></a>};
+<a name="line268"></a>
+<a name="line269"></a>
+<a name="line270"></a>/**
+<a name="line271"></a> * Draw an ellipse
+<a name="line272"></a> *
+<a name="line273"></a> * @param {number} cx Center X coordinate.
+<a name="line274"></a> * @param {number} cy Center Y coordinate.
+<a name="line275"></a> * @param {number} rx Radius length for the x-axis.
+<a name="line276"></a> * @param {number} ry Radius length for the y-axis.
+<a name="line277"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line278"></a> *    stroke.
+<a name="line279"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line280"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line281"></a> *     append to. If not specified, appends to the main canvas.
+<a name="line282"></a> *
+<a name="line283"></a> * @return {goog.graphics.EllipseElement} The newly created element.
+<a name="line284"></a> */
+<a name="line285"></a>goog.graphics.AbstractGraphics.prototype.drawEllipse = goog.abstractMethod;
+<a name="line286"></a>
+<a name="line287"></a>
+<a name="line288"></a>/**
+<a name="line289"></a> * Draw a rectangle
+<a name="line290"></a> *
+<a name="line291"></a> * @param {number} x X coordinate (left).
+<a name="line292"></a> * @param {number} y Y coordinate (top).
+<a name="line293"></a> * @param {number} width Width of rectangle.
+<a name="line294"></a> * @param {number} height Height of rectangle.
+<a name="line295"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line296"></a> *    stroke.
+<a name="line297"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line298"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line299"></a> *     append to. If not specified, appends to the main canvas.
+<a name="line300"></a> *
+<a name="line301"></a> * @return {goog.graphics.RectElement} The newly created element.
+<a name="line302"></a> */
+<a name="line303"></a>goog.graphics.AbstractGraphics.prototype.drawRect = goog.abstractMethod;
+<a name="line304"></a>
+<a name="line305"></a>
+<a name="line306"></a>/**
+<a name="line307"></a> * Draw a text string within a rectangle (drawing is horizontal)
+<a name="line308"></a> *
+<a name="line309"></a> * @param {string} text The text to draw.
+<a name="line310"></a> * @param {number} x X coordinate (left).
+<a name="line311"></a> * @param {number} y Y coordinate (top).
+<a name="line312"></a> * @param {number} width Width of rectangle.
+<a name="line313"></a> * @param {number} height Height of rectangle.
+<a name="line314"></a> * @param {string} align Horizontal alignment: left (default), center, right.
+<a name="line315"></a> * @param {string} vAlign Vertical alignment: top (default), center, bottom.
+<a name="line316"></a> * @param {goog.graphics.Font} font Font describing the font properties.
+<a name="line317"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line318"></a> *    stroke.
+<a name="line319"></a> * @param {goog.graphics.Fill?} fill  Fill object describing the fill.
+<a name="line320"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line321"></a> *     append to. If not specified, appends to the main canvas.
+<a name="line322"></a> *
+<a name="line323"></a> * @return {goog.graphics.TextElement} The newly created element.
+<a name="line324"></a> */
+<a name="line325"></a>goog.graphics.AbstractGraphics.prototype.drawText = function(
+<a name="line326"></a>    text, x, y, width, height, align, vAlign, font, stroke, fill, opt_group) {
+<a name="line327"></a>  var baseline = font.size / 2; // Baseline is middle of line
+<a name="line328"></a>  var textY;
+<a name="line329"></a>  if (vAlign == &#39;bottom&#39;) {
+<a name="line330"></a>    textY = y + height - baseline;
+<a name="line331"></a>  } else if (vAlign == &#39;center&#39;) {
+<a name="line332"></a>    textY = y + height / 2;
+<a name="line333"></a>  } else {
+<a name="line334"></a>    textY = y + baseline;
+<a name="line335"></a>  }
+<a name="line336"></a>
+<a name="line337"></a>  return this.drawTextOnLine(text, x, textY, x + width, textY, align,
+<a name="line338"></a>      font, stroke, fill, opt_group);
+<a name="line339"></a>};
+<a name="line340"></a>
+<a name="line341"></a>
+<a name="line342"></a>/**
+<a name="line343"></a> * Draw a text string vertically centered on a given line.
+<a name="line344"></a> *
+<a name="line345"></a> * @param {string} text  The text to draw.
+<a name="line346"></a> * @param {number} x1 X coordinate of start of line.
+<a name="line347"></a> * @param {number} y1 Y coordinate of start of line.
+<a name="line348"></a> * @param {number} x2 X coordinate of end of line.
+<a name="line349"></a> * @param {number} y2 Y coordinate of end of line.
+<a name="line350"></a> * @param {string} align Horizontal alingnment: left (default), center, right.
+<a name="line351"></a> * @param {goog.graphics.Font} font Font describing the font properties.
+<a name="line352"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line353"></a> *    stroke.
+<a name="line354"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line355"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line356"></a> *     append to. If not specified, appends to the main canvas.
+<a name="line357"></a> *
+<a name="line358"></a> * @return {goog.graphics.TextElement} The newly created element.
+<a name="line359"></a> */
+<a name="line360"></a>goog.graphics.AbstractGraphics.prototype.drawTextOnLine = goog.abstractMethod;
+<a name="line361"></a>
+<a name="line362"></a>
+<a name="line363"></a>/**
+<a name="line364"></a> * Draw a path.
+<a name="line365"></a> *
+<a name="line366"></a> * @param {goog.graphics.Path} path The path object to draw.
+<a name="line367"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line368"></a> *    stroke.
+<a name="line369"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line370"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line371"></a> *     append to. If not specified, appends to the main canvas.
+<a name="line372"></a> *
+<a name="line373"></a> * @return {goog.graphics.PathElement} The newly created element.
+<a name="line374"></a> */
+<a name="line375"></a>goog.graphics.AbstractGraphics.prototype.drawPath = goog.abstractMethod;
+<a name="line376"></a>
+<a name="line377"></a>
+<a name="line378"></a>/**
+<a name="line379"></a> * Create an empty group of drawing elements.
+<a name="line380"></a> *
+<a name="line381"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line382"></a> *     append to. If not specified, appends to the main canvas.
+<a name="line383"></a> *
+<a name="line384"></a> * @return {goog.graphics.GroupElement} The newly created group.
+<a name="line385"></a> */
+<a name="line386"></a>goog.graphics.AbstractGraphics.prototype.createGroup = goog.abstractMethod;
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/**
+<a name="line390"></a> * Create an empty path.
+<a name="line391"></a> *
+<a name="line392"></a> * @return {goog.graphics.Path} The path.
+<a name="line393"></a> * @deprecated Use {@code new goog.graphics.Path()}.
+<a name="line394"></a> */
+<a name="line395"></a>goog.graphics.AbstractGraphics.prototype.createPath = function() {
+<a name="line396"></a>  return new goog.graphics.Path();
+<a name="line397"></a>};
+<a name="line398"></a>
+<a name="line399"></a>
+<a name="line400"></a>/**
+<a name="line401"></a> * Measure and return the width (in pixels) of a given text string.
+<a name="line402"></a> * Text measurement is needed to make sure a text can fit in the allocated
+<a name="line403"></a> * area. The way text length is measured is by writing it into a div that is
+<a name="line404"></a> * after the visible area, measure the div width, and immediatly erase the
+<a name="line405"></a> * written value.
+<a name="line406"></a> *
+<a name="line407"></a> * @param {string} text The text string to measure.
+<a name="line408"></a> * @param {goog.graphics.Font} font The font object describing the font style.
+<a name="line409"></a> *
+<a name="line410"></a> * @return {number} The width in pixels of the text strings.
+<a name="line411"></a> */
+<a name="line412"></a>goog.graphics.AbstractGraphics.prototype.getTextWidth = goog.abstractMethod;
+<a name="line413"></a>
+<a name="line414"></a>
+<a name="line415"></a>/**
+<a name="line416"></a> * @return {boolean} Whether the underlying element can be cloned resulting in
+<a name="line417"></a> *     an accurate reproduction of the graphics contents.
+<a name="line418"></a> */
+<a name="line419"></a>goog.graphics.AbstractGraphics.prototype.isDomClonable = function() {
+<a name="line420"></a>  return false;
+<a name="line421"></a>};
+<a name="line422"></a>
+<a name="line423"></a>
+<a name="line424"></a>/**
+<a name="line425"></a> * Start preventing redraws - useful for chaining large numbers of changes
+<a name="line426"></a> * together.  Not guaranteed to do anything - i.e. only use this for
+<a name="line427"></a> * optimization of a single code path.
+<a name="line428"></a> */
+<a name="line429"></a>goog.graphics.AbstractGraphics.prototype.suspend = function() {
+<a name="line430"></a>};
+<a name="line431"></a>
+<a name="line432"></a>
+<a name="line433"></a>/**
+<a name="line434"></a> * Stop preventing redraws.  If any redraws had been prevented, a redraw will
+<a name="line435"></a> * be done now.
+<a name="line436"></a> */
+<a name="line437"></a>goog.graphics.AbstractGraphics.prototype.resume = function() {
+<a name="line438"></a>};
+</pre>
+
+
+</body>
+</html>

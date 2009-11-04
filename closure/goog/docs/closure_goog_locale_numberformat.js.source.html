@@ -1,0 +1,814 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>numberformat.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_locale_numberformat.js.html">numberformat.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Number format/parse library with locale support.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>/**
+<a name="line20"></a> * Namespace for locale number format functions
+<a name="line21"></a> */
+<a name="line22"></a>goog.provide(&#39;goog.locale.NumberFormat&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.locale&#39;);
+<a name="line25"></a>goog.require(&#39;goog.locale.currencyCodeMap&#39;);
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Constructor of NumberFormat.
+<a name="line29"></a> * @constructor
+<a name="line30"></a> * @deprecated Use goog.i18n.NumberFormat.
+<a name="line31"></a> */
+<a name="line32"></a>goog.locale.NumberFormat = function() {
+<a name="line33"></a>  this.symbols_ = goog.locale.getResource(&#39;NumberFormatConstants&#39;,
+<a name="line34"></a>                                          goog.locale.getLocale());
+<a name="line35"></a>};
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>/**
+<a name="line39"></a> * Apply a predefined pattern to NumberFormat object.
+<a name="line40"></a> * @param {number} patternType The number that indicates a predefined number
+<a name="line41"></a> *     format pattern.
+<a name="line42"></a> * @param {string} opt_currency Optional international currency code. This
+<a name="line43"></a> *     determines the currency code/symbol used in format/parse. If not given,
+<a name="line44"></a> *     the currency code for current locale will be used.
+<a name="line45"></a> * @deprecated Use goog.i18n.NumberFormat.
+<a name="line46"></a> */
+<a name="line47"></a>goog.locale.NumberFormat.prototype.applyStandardPattern =
+<a name="line48"></a>    function(patternType, opt_currency) {
+<a name="line49"></a>  switch (patternType) {
+<a name="line50"></a>    case goog.locale.DECIMAL_PATTERN:
+<a name="line51"></a>      this.applyPattern(this.symbols_.DECIMAL_PATTERN, opt_currency);
+<a name="line52"></a>      break;
+<a name="line53"></a>    case goog.locale.SCIENTIFIC_PATTERN:
+<a name="line54"></a>      this.applyPattern(this.symbols_.SCIENTIFIC_PATTERN, opt_currency);
+<a name="line55"></a>      break;
+<a name="line56"></a>    case goog.locale.PERCENT_PATTERN:
+<a name="line57"></a>      this.applyPattern(this.symbols_.PERCENT_PATTERN, opt_currency);
+<a name="line58"></a>      break;
+<a name="line59"></a>    case goog.locale.CURRENCY_PATTERN:
+<a name="line60"></a>      this.applyPattern(this.symbols_.CURRENCY_PATTERN, opt_currency);
+<a name="line61"></a>      break;
+<a name="line62"></a>    default:
+<a name="line63"></a>      throw Error(&#39;Unsupported pattern type.&#39;);
+<a name="line64"></a>  }
+<a name="line65"></a>};
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * Apply a pattern to NumberFormat object.
+<a name="line70"></a> * @param {string} pattern The number format pattern string.
+<a name="line71"></a> * @param {string} opt_currency Optional international currency code. This
+<a name="line72"></a> *     determines the currency code/symbol used in format/parse. If not given,
+<a name="line73"></a> *     the currency code for current locale will be used.
+<a name="line74"></a> * @deprecated Use goog.i18n.NumberFormat.
+<a name="line75"></a> */
+<a name="line76"></a>goog.locale.NumberFormat.prototype.applyPattern =
+<a name="line77"></a>    function(pattern, opt_currency) {
+<a name="line78"></a>  this.pattern_ = pattern;
+<a name="line79"></a>  this.intlCurrencyCode_ = opt_currency || this.symbols_.DEF_CURRENCY_CODE;
+<a name="line80"></a>  this.currencySymbol_ = goog.locale.currencyCodeMap[this.intlCurrencyCode_];
+<a name="line81"></a>
+<a name="line82"></a>  this.maximumIntegerDigits_ = 40;
+<a name="line83"></a>  this.minimumIntegerDigits_ = 1;
+<a name="line84"></a>  this.maximumFractionDigits_ = 3; // invariant, &gt;= minFractionDigits
+<a name="line85"></a>  this.minimumFractionDigits_ = 0;
+<a name="line86"></a>  this.minExponentDigits_ = 0;
+<a name="line87"></a>
+<a name="line88"></a>  this.positivePrefix_ = &#39;&#39;;
+<a name="line89"></a>  this.positiveSuffix_ = &#39;&#39;;
+<a name="line90"></a>  this.negativePrefix_ = &#39;-&#39;;
+<a name="line91"></a>  this.negativeSuffix_ = &#39;&#39;;
+<a name="line92"></a>
+<a name="line93"></a>  // The multiplier for use in percent, per mille, etc.
+<a name="line94"></a>  this.multiplier_ = 1;
+<a name="line95"></a>  this.groupingSize_ = 3;
+<a name="line96"></a>  this.decimalSeparatorAlwaysShown_ = false;
+<a name="line97"></a>  this.isCurrencyFormat_ = false;
+<a name="line98"></a>  this.useExponentialNotation_ = false;
+<a name="line99"></a>
+<a name="line100"></a>  this.parsePattern_(this.pattern_);
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Parses text string to produce a Number.
+<a name="line106"></a> *
+<a name="line107"></a> * This method attempts to parse text starting from position &quot;opt_pos&quot; if it
+<a name="line108"></a> * is given. Otherwise the parse will start from the beginning of the text.
+<a name="line109"></a> * When opt_pos presents, opt_pos will be updated to the character next to where
+<a name="line110"></a> * parsing stops after the call. If an error occurs, opt_pos won&#39;t be updated.
+<a name="line111"></a> *
+<a name="line112"></a> * @param {string} text the string to be parsed.
+<a name="line113"></a> * @param {Array} opt_pos position to pass in and get back.
+<a name="line114"></a> * @return {number} Parsed number, or NaN if the parse fails.
+<a name="line115"></a> * @deprecated Use goog.i18n.NumberFormat.prototype.parse.
+<a name="line116"></a> */
+<a name="line117"></a>goog.locale.NumberFormat.prototype.parse = function(text, opt_pos) {
+<a name="line118"></a>  var pos = opt_pos || [0];
+<a name="line119"></a>
+<a name="line120"></a>  var start = pos[0];
+<a name="line121"></a>  var ret = NaN;
+<a name="line122"></a>
+<a name="line123"></a>  var gotPositive = text.indexOf(this.positivePrefix_, pos[0]) == pos[0];
+<a name="line124"></a>  var gotNegative = text.indexOf(this.negativePrefix_, pos[0]) == pos[0];
+<a name="line125"></a>
+<a name="line126"></a>  // check for the longest match
+<a name="line127"></a>  if (gotPositive &amp;&amp; gotNegative) {
+<a name="line128"></a>    if (this.positivePrefix_.length &gt; this.negativePrefix_.length) {
+<a name="line129"></a>      gotNegative = false;
+<a name="line130"></a>    } else if (this.positivePrefix_.length &lt; this.negativePrefix_.length) {
+<a name="line131"></a>      gotPositive = false;
+<a name="line132"></a>    }
+<a name="line133"></a>  }
+<a name="line134"></a>
+<a name="line135"></a>  if (gotPositive) {
+<a name="line136"></a>    pos[0] += this.positivePrefix_.length;
+<a name="line137"></a>  } else if (gotNegative) {
+<a name="line138"></a>    pos[0] += this.negativePrefix_.length;
+<a name="line139"></a>  }
+<a name="line140"></a>
+<a name="line141"></a>  // process digits or Inf, find decimal position
+<a name="line142"></a>  if (text.indexOf(this.symbols_.INFINITY, pos[0]) == pos[0]) {
+<a name="line143"></a>    pos[0] += this.symbols_.INFINITY.length;
+<a name="line144"></a>    ret = Infinity;
+<a name="line145"></a>  } else {
+<a name="line146"></a>    ret = this.parseNumber_(text, pos);
+<a name="line147"></a>  }
+<a name="line148"></a>
+<a name="line149"></a>  // check for suffix
+<a name="line150"></a>  if (gotPositive) {
+<a name="line151"></a>    if (!(text.indexOf(this.positiveSuffix_, pos[0]) == pos[0])) {
+<a name="line152"></a>      pos[0] = start;
+<a name="line153"></a>      return NaN;
+<a name="line154"></a>    }
+<a name="line155"></a>    pos[0] += this.positiveSuffix_.length;
+<a name="line156"></a>  } else if (gotNegative) {
+<a name="line157"></a>    if (!(text.indexOf(this.negativeSuffix_, pos[0]) == pos[0])) {
+<a name="line158"></a>      pos[0] = start;
+<a name="line159"></a>      return NaN;
+<a name="line160"></a>    }
+<a name="line161"></a>    pos[0] += this.negativeSuffix_.length;
+<a name="line162"></a>  }
+<a name="line163"></a>
+<a name="line164"></a>  return gotNegative ? -ret : ret;
+<a name="line165"></a>};
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * This function will parse a &quot;localized&quot; text into a Number. It needs to
+<a name="line170"></a> * handle locale specific decimal, grouping, exponent and digits.
+<a name="line171"></a> *
+<a name="line172"></a> * @param {string} text The text that need to be parsed.
+<a name="line173"></a> * @param {Array} pos  In/out parsing position. In case of failure, pos value
+<a name="line174"></a> *   won&#39;t be changed.
+<a name="line175"></a> * @return {number} Number value, could be 0.0 if nothing can be parsed.
+<a name="line176"></a> * @private
+<a name="line177"></a> */
+<a name="line178"></a>goog.locale.NumberFormat.prototype.parseNumber_ = function(text, pos) {
+<a name="line179"></a>  var sawDecimal = false;
+<a name="line180"></a>  var sawExponent = false;
+<a name="line181"></a>  var sawDigit = false;
+<a name="line182"></a>  var scale = 1;
+<a name="line183"></a>  var decimal = this.isCurrencyFormat_ ? this.symbols_.MONETARY_SEP :
+<a name="line184"></a>                this.symbols_.DECIMAL_SEP;
+<a name="line185"></a>  var grouping = this.isCurrencyFormat_ ? this.symbols_.MONETARY_GROUP_SEP :
+<a name="line186"></a>                 this.symbols_.GROUP_SEP;
+<a name="line187"></a>  var exponentChar = this.symbols_.EXP_SYMBOL;
+<a name="line188"></a>
+<a name="line189"></a>  var normalizedText = &#39;&#39;;
+<a name="line190"></a>  for (; pos[0] &lt; text.length; pos[0]++) {
+<a name="line191"></a>    var ch = text.charAt(pos[0]);
+<a name="line192"></a>    var digit = this.getDigit_(ch);
+<a name="line193"></a>    if (digit &gt;= 0 &amp;&amp; digit &lt;= 9) {
+<a name="line194"></a>      normalizedText += digit;
+<a name="line195"></a>      sawDigit = true;
+<a name="line196"></a>    } else if (ch == decimal.charAt(0)) {
+<a name="line197"></a>      if (sawDecimal || sawExponent) {
+<a name="line198"></a>        break;
+<a name="line199"></a>      }
+<a name="line200"></a>      normalizedText += &#39;.&#39;;
+<a name="line201"></a>      sawDecimal = true;
+<a name="line202"></a>    } else if (ch == grouping.charAt(0) || &#39;\u00a0&#39; == grouping.charAt(0) &amp;&amp;
+<a name="line203"></a>               ch == &#39; &#39; &amp;&amp; pos[0] + 1 &lt; text.length &amp;&amp;
+<a name="line204"></a>               this.getDigit_(text.charAt(pos[0] + 1)) &gt;= 0) {
+<a name="line205"></a>      if (sawDecimal || sawExponent) {
+<a name="line206"></a>        break;
+<a name="line207"></a>      }
+<a name="line208"></a>      continue;
+<a name="line209"></a>    } else if (ch == exponentChar.charAt(0)) {
+<a name="line210"></a>      if (sawExponent) {
+<a name="line211"></a>        break;
+<a name="line212"></a>      }
+<a name="line213"></a>      normalizedText += &#39;E&#39;;
+<a name="line214"></a>      sawExponent = true;
+<a name="line215"></a>    } else if (ch == &#39;+&#39; || ch == &#39;-&#39;) {
+<a name="line216"></a>      normalizedText += ch;
+<a name="line217"></a>    } else if (ch == this.symbols_.PERCENT.charAt(0)) {
+<a name="line218"></a>      if (scale != 1) {
+<a name="line219"></a>        break;
+<a name="line220"></a>      }
+<a name="line221"></a>      scale = 100;
+<a name="line222"></a>      if (sawDigit) {
+<a name="line223"></a>        pos[0]++; // eat this character if parse end here
+<a name="line224"></a>        break;
+<a name="line225"></a>      }
+<a name="line226"></a>    } else if (ch == this.symbols_.PERMILL.charAt(0)) {
+<a name="line227"></a>      if (scale != 1) {
+<a name="line228"></a>        break;
+<a name="line229"></a>      }
+<a name="line230"></a>      scale = 1000;
+<a name="line231"></a>      if (sawDigit) {
+<a name="line232"></a>        pos[0]++; // eat this character if parse end here
+<a name="line233"></a>        break;
+<a name="line234"></a>      }
+<a name="line235"></a>    } else {
+<a name="line236"></a>      break;
+<a name="line237"></a>    }
+<a name="line238"></a>  }
+<a name="line239"></a>  return parseFloat(normalizedText) / scale;
+<a name="line240"></a>};
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * Formats a Number to produce a string.
+<a name="line245"></a> *
+<a name="line246"></a> * @param {number} number The Number to be formatted.
+<a name="line247"></a> * @return {string} The formatted number string.
+<a name="line248"></a> * @deprecated Use goog.i18n.NumberFormat.prototype.format.
+<a name="line249"></a> */
+<a name="line250"></a>goog.locale.NumberFormat.prototype.format = function(number) {
+<a name="line251"></a>  if (isNaN(number)) {
+<a name="line252"></a>    return this.symbols_.NAN;
+<a name="line253"></a>  }
+<a name="line254"></a>
+<a name="line255"></a>  var parts = [];
+<a name="line256"></a>
+<a name="line257"></a>  // in icu code, it is commented that certain computation need to keep the
+<a name="line258"></a>  // negative sign for 0.
+<a name="line259"></a>  var isNegative = number &lt; 0.0 || number == 0.0 &amp;&amp; 1 / number &lt; 0.0;
+<a name="line260"></a>
+<a name="line261"></a>  parts.push(isNegative ? this.negativePrefix_ : this.positivePrefix_);
+<a name="line262"></a>
+<a name="line263"></a>  if (!isFinite(number)) {
+<a name="line264"></a>    parts.push(this.symbols_.INFINITY);
+<a name="line265"></a>  } else {
+<a name="line266"></a>    // convert number to non-negative value
+<a name="line267"></a>    number *= isNegative ? -1 : 1;
+<a name="line268"></a>
+<a name="line269"></a>    number *= this.multiplier_;
+<a name="line270"></a>    this.useExponentialNotation_ ?
+<a name="line271"></a>      this.subformatExponential_(number, parts) :
+<a name="line272"></a>      this.subformatFixed_(number, this.minimumIntegerDigits_, parts);
+<a name="line273"></a>  }
+<a name="line274"></a>
+<a name="line275"></a>  parts.push(isNegative ? this.negativeSuffix_ : this.positiveSuffix_);
+<a name="line276"></a>
+<a name="line277"></a>  return parts.join(&#39;&#39;);
+<a name="line278"></a>};
+<a name="line279"></a>
+<a name="line280"></a>
+<a name="line281"></a>/**
+<a name="line282"></a> * Formats a Number in fraction format.
+<a name="line283"></a> *
+<a name="line284"></a> * @param {number} number Value need to be formated.
+<a name="line285"></a> * @param {number} minIntDigits Minimum integer digits.
+<a name="line286"></a> * @param {Array} parts This array holds the pieces of formatted string.
+<a name="line287"></a> *     This function will add its formatted pieces to the array.
+<a name="line288"></a> * @private
+<a name="line289"></a> */
+<a name="line290"></a>goog.locale.NumberFormat.prototype.subformatFixed_ = function(number,
+<a name="line291"></a>                                                              minIntDigits,
+<a name="line292"></a>                                                              parts) {
+<a name="line293"></a>  // round the number
+<a name="line294"></a>  var power = Math.pow(10, this.maximumFractionDigits_);
+<a name="line295"></a>  number = Math.round(number * power);
+<a name="line296"></a>  var intValue = Math.floor(number / power);
+<a name="line297"></a>  var fracValue = Math.floor(number - intValue * power);
+<a name="line298"></a>
+<a name="line299"></a>  var fractionPresent = this.minimumFractionDigits_ &gt; 0 || fracValue &gt; 0;
+<a name="line300"></a>
+<a name="line301"></a>  var intPart = &#39;&#39;;
+<a name="line302"></a>  var translatableInt = intValue;
+<a name="line303"></a>  while (translatableInt &gt; 1E20) {
+<a name="line304"></a>    // here it goes beyond double precision, add &#39;0&#39; make it look better
+<a name="line305"></a>    intPart = &#39;0&#39; + intPart;
+<a name="line306"></a>    translatableInt = Math.round(translatableInt / 10);
+<a name="line307"></a>  }
+<a name="line308"></a>  intPart = translatableInt + intPart;
+<a name="line309"></a>
+<a name="line310"></a>  var decimal = this.isCurrencyFormat_ ? this.symbols_.MONETARY_SEP :
+<a name="line311"></a>                this.symbols_.DECIMAL_SEP;
+<a name="line312"></a>  var grouping = this.isCurrencyFormat_ ? this.symbols_.MONETARY_GROUP_SEP :
+<a name="line313"></a>                 this.symbols_.GROUP_SEP;
+<a name="line314"></a>
+<a name="line315"></a>  var zeroCode = this.symbols_.ZERO_DIGIT.charCodeAt(0);
+<a name="line316"></a>  var digitLen = intPart.length;
+<a name="line317"></a>
+<a name="line318"></a>  if (intValue &gt; 0 || minIntDigits &gt; 0) {
+<a name="line319"></a>    for (var i = digitLen; i &lt; minIntDigits; i++) {
+<a name="line320"></a>      parts.push(this.symbols_.ZERO_DIGIT);
+<a name="line321"></a>    }
+<a name="line322"></a>
+<a name="line323"></a>    for (var i = 0; i &lt; digitLen; i++) {
+<a name="line324"></a>      parts.push(String.fromCharCode(zeroCode + intPart.charAt(i) * 1));
+<a name="line325"></a>
+<a name="line326"></a>      if (digitLen - i &gt; 1 &amp;&amp; this.groupingSize_ &gt; 0 &amp;&amp;
+<a name="line327"></a>          ((digitLen - i) % this.groupingSize_ == 1)) {
+<a name="line328"></a>        parts.push(grouping);
+<a name="line329"></a>      }
+<a name="line330"></a>    }
+<a name="line331"></a>  } else if (!fractionPresent) {
+<a name="line332"></a>    // If there is no fraction present, and we haven&#39;t printed any
+<a name="line333"></a>    // integer digits, then print a zero.
+<a name="line334"></a>    parts.push(this.symbols_.ZERO_DIGIT);
+<a name="line335"></a>  }
+<a name="line336"></a>
+<a name="line337"></a>  // Output the decimal separator if we always do so.
+<a name="line338"></a>  if (this.decimalSeparatorAlwaysShown_ || fractionPresent) {
+<a name="line339"></a>    parts.push(decimal);
+<a name="line340"></a>  }
+<a name="line341"></a>
+<a name="line342"></a>  var fracPart = &#39;&#39; + (fracValue + power);
+<a name="line343"></a>  var fracLen = fracPart.length;
+<a name="line344"></a>  while (fracPart.charAt(fracLen - 1) == &#39;0&#39; &amp;&amp;
+<a name="line345"></a>         fracLen &gt; this.minimumFractionDigits_ + 1) {
+<a name="line346"></a>    fracLen--;
+<a name="line347"></a>  }
+<a name="line348"></a>
+<a name="line349"></a>  for (var i = 1; i &lt; fracLen; i++) {
+<a name="line350"></a>    parts.push(String.fromCharCode(zeroCode + fracPart.charAt(i) * 1));
+<a name="line351"></a>  }
+<a name="line352"></a>};
+<a name="line353"></a>
+<a name="line354"></a>
+<a name="line355"></a>/**
+<a name="line356"></a> * Formats exponent part of a Number.
+<a name="line357"></a> *
+<a name="line358"></a> * @param {number} exponent exponential value.
+<a name="line359"></a> * @param {Array} parts This array holds the pieces of formatted string.
+<a name="line360"></a> *     This function will add its formatted pieces to the array.
+<a name="line361"></a> * @private
+<a name="line362"></a> */
+<a name="line363"></a>goog.locale.NumberFormat.prototype.addExponentPart_ = function(exponent,
+<a name="line364"></a>                                                               parts) {
+<a name="line365"></a>  parts.push(this.symbols_.EXP_SYMBOL);
+<a name="line366"></a>
+<a name="line367"></a>  if (exponent &lt; 0) {
+<a name="line368"></a>    exponent = -exponent;
+<a name="line369"></a>    parts.push(this.symbols_.MINUS_SIGN);
+<a name="line370"></a>  }
+<a name="line371"></a>
+<a name="line372"></a>  var exponentDigits = &#39;&#39; + exponent;
+<a name="line373"></a>  for (var i = exponentDigits.length; i &lt; this.minExponentDigits_; i++) {
+<a name="line374"></a>    parts.push(this.symbols_.ZERO_DIGIT);
+<a name="line375"></a>  }
+<a name="line376"></a>  parts.push(exponentDigits);
+<a name="line377"></a>};
+<a name="line378"></a>
+<a name="line379"></a>
+<a name="line380"></a>/**
+<a name="line381"></a> * Formats Number in exponential format.
+<a name="line382"></a> *
+<a name="line383"></a> * @param {number} number Value need to be formated.
+<a name="line384"></a> * @param {Array} parts This array holds the pieces of formatted string.
+<a name="line385"></a> *     This function will add its formatted pieces to the array.
+<a name="line386"></a> * @private
+<a name="line387"></a> */
+<a name="line388"></a>goog.locale.NumberFormat.prototype.subformatExponential_ = function(number,
+<a name="line389"></a>                                                                    parts) {
+<a name="line390"></a>  if (number == 0.0) {
+<a name="line391"></a>    this.subformatFixed_(number, this.minimumIntegerDigits_, parts);
+<a name="line392"></a>    this.addExponentPart_(0, parts);
+<a name="line393"></a>    return;
+<a name="line394"></a>  }
+<a name="line395"></a>
+<a name="line396"></a>  var exponent = Math.floor(Math.log(number) / Math.log(10));
+<a name="line397"></a>  number /= Math.pow(10, exponent);
+<a name="line398"></a>
+<a name="line399"></a>  var minIntDigits = this.minimumIntegerDigits_;
+<a name="line400"></a>  if (this.maximumIntegerDigits_ &gt; 1 &amp;&amp;
+<a name="line401"></a>      this.maximumIntegerDigits_ &gt; this.minimumIntegerDigits_) {
+<a name="line402"></a>    // A repeating range is defined; adjust to it as follows.
+<a name="line403"></a>    // If repeat == 3, we have 6,5,4=&gt;3; 3,2,1=&gt;0; 0,-1,-2=&gt;-3;
+<a name="line404"></a>    // -3,-4,-5=&gt;-6, etc. This takes into account that the
+<a name="line405"></a>    // exponent we have here is off by one from what we expect;
+<a name="line406"></a>    // it is for the format 0.MMMMMx10^n.
+<a name="line407"></a>    while ((exponent % this.maximumIntegerDigits_) != 0) {
+<a name="line408"></a>      number *= 10;
+<a name="line409"></a>      exponent--;
+<a name="line410"></a>    }
+<a name="line411"></a>    minIntDigits = 1;
+<a name="line412"></a>  } else {
+<a name="line413"></a>    // No repeating range is defined; use minimum integer digits.
+<a name="line414"></a>    if (this.minimumIntegerDigits_ &lt; 1) {
+<a name="line415"></a>      exponent++;
+<a name="line416"></a>      number /= 10;
+<a name="line417"></a>    } else {
+<a name="line418"></a>      exponent -= this.minimumIntegerDigits_ - 1;
+<a name="line419"></a>      number *= Math.pow(10, this.minimumIntegerDigits_ - 1);
+<a name="line420"></a>    }
+<a name="line421"></a>  }
+<a name="line422"></a>  this.subformatFixed_(number, minIntDigits, parts);
+<a name="line423"></a>  this.addExponentPart_(exponent, parts);
+<a name="line424"></a>};
+<a name="line425"></a>
+<a name="line426"></a>
+<a name="line427"></a>/**
+<a name="line428"></a> * Returns the digit value of current character. The character could be either
+<a name="line429"></a> * &#39;0&#39; to &#39;9&#39;, or a locale specific digit.
+<a name="line430"></a> *
+<a name="line431"></a> * @param {string} ch Character that represents a digit.
+<a name="line432"></a> * @return {number} The digit value, or -1 on error.
+<a name="line433"></a> * @private
+<a name="line434"></a> */
+<a name="line435"></a>goog.locale.NumberFormat.prototype.getDigit_ = function(ch) {
+<a name="line436"></a>  var code = ch.charCodeAt(0);
+<a name="line437"></a>  // between &#39;0&#39; to &#39;9&#39;
+<a name="line438"></a>  if (48 &lt;= code &amp;&amp; code &lt; 58) {
+<a name="line439"></a>    return code - 48;
+<a name="line440"></a>  } else {
+<a name="line441"></a>    var zeroCode = this.symbols_.ZERO_DIGIT.charCodeAt(0);
+<a name="line442"></a>    return zeroCode &lt;= code &amp;&amp; code &lt; zeroCode + 10 ? code - zeroCode : -1;
+<a name="line443"></a>  }
+<a name="line444"></a>};
+<a name="line445"></a>
+<a name="line446"></a>
+<a name="line447"></a>// ----------------------------------------------------------------------
+<a name="line448"></a>// CONSTANTS
+<a name="line449"></a>// ----------------------------------------------------------------------
+<a name="line450"></a>// Constants for characters used in programmatic (unlocalized) patterns.
+<a name="line451"></a>/**
+<a name="line452"></a> * A zero digit character.
+<a name="line453"></a> * @type {string}
+<a name="line454"></a> * @private
+<a name="line455"></a> */
+<a name="line456"></a>goog.locale.NumberFormat.PATTERN_ZERO_DIGIT_ = &#39;0&#39;;
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>/**
+<a name="line460"></a> * A grouping separator character.
+<a name="line461"></a> * @type {string}
+<a name="line462"></a> * @private
+<a name="line463"></a> */
+<a name="line464"></a>goog.locale.NumberFormat.PATTERN_GROUPING_SEPARATOR_ = &#39;,&#39;;
+<a name="line465"></a>
+<a name="line466"></a>
+<a name="line467"></a>/**
+<a name="line468"></a> * A decimal separator character.
+<a name="line469"></a> * @type {string}
+<a name="line470"></a> * @private
+<a name="line471"></a> */
+<a name="line472"></a>goog.locale.NumberFormat.PATTERN_DECIMAL_SEPARATOR_ = &#39;.&#39;;
+<a name="line473"></a>
+<a name="line474"></a>
+<a name="line475"></a>/**
+<a name="line476"></a> * A per mille character.
+<a name="line477"></a> * @type {string}
+<a name="line478"></a> * @private
+<a name="line479"></a> */
+<a name="line480"></a>goog.locale.NumberFormat.PATTERN_PER_MILLE_ = &#39;\u2030&#39;;
+<a name="line481"></a>
+<a name="line482"></a>
+<a name="line483"></a>/**
+<a name="line484"></a> * A percent character.
+<a name="line485"></a> * @type {string}
+<a name="line486"></a> * @private
+<a name="line487"></a> */
+<a name="line488"></a>goog.locale.NumberFormat.PATTERN_PERCENT_ = &#39;%&#39;;
+<a name="line489"></a>
+<a name="line490"></a>
+<a name="line491"></a>/**
+<a name="line492"></a> * A digit character.
+<a name="line493"></a> * @type {string}
+<a name="line494"></a> * @private
+<a name="line495"></a> */
+<a name="line496"></a>goog.locale.NumberFormat.PATTERN_DIGIT_ = &#39;#&#39;;
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * A separator character.
+<a name="line501"></a> * @type {string}
+<a name="line502"></a> * @private
+<a name="line503"></a> */
+<a name="line504"></a>goog.locale.NumberFormat.PATTERN_SEPARATOR_ = &#39;;&#39;;
+<a name="line505"></a>
+<a name="line506"></a>
+<a name="line507"></a>/**
+<a name="line508"></a> * An exponent character.
+<a name="line509"></a> * @type {string}
+<a name="line510"></a> * @private
+<a name="line511"></a> */
+<a name="line512"></a>goog.locale.NumberFormat.PATTERN_EXPONENT_ = &#39;E&#39;;
+<a name="line513"></a>
+<a name="line514"></a>
+<a name="line515"></a>/**
+<a name="line516"></a> * A minus character.
+<a name="line517"></a> * @type {string}
+<a name="line518"></a> * @private
+<a name="line519"></a> */
+<a name="line520"></a>goog.locale.NumberFormat.PATTERN_MINUS_ = &#39;-&#39;;
+<a name="line521"></a>
+<a name="line522"></a>
+<a name="line523"></a>/**
+<a name="line524"></a> * A quote character.
+<a name="line525"></a> * @type {string}
+<a name="line526"></a> * @private
+<a name="line527"></a> */
+<a name="line528"></a>goog.locale.NumberFormat.PATTERN_CURRENCY_SIGN_ = &#39;\u00A4&#39;;
+<a name="line529"></a>
+<a name="line530"></a>
+<a name="line531"></a>/**
+<a name="line532"></a> * A quote character.
+<a name="line533"></a> * @type {string}
+<a name="line534"></a> * @private
+<a name="line535"></a> */
+<a name="line536"></a>goog.locale.NumberFormat.QUOTE_ = &#39;\&#39;&#39;;
+<a name="line537"></a>
+<a name="line538"></a>
+<a name="line539"></a>/**
+<a name="line540"></a> * Parses affix part of pattern.
+<a name="line541"></a> *
+<a name="line542"></a> * @param {string} pattern Pattern string that need to be parsed.
+<a name="line543"></a> * @param {Array} pos  One element position array to set and receive parsing
+<a name="line544"></a> *     position.
+<a name="line545"></a> *
+<a name="line546"></a> * @return {string} affix received from parsing.
+<a name="line547"></a> * @private
+<a name="line548"></a> */
+<a name="line549"></a>goog.locale.NumberFormat.prototype.parseAffix_ = function(pattern, pos) {
+<a name="line550"></a>  var affix = &#39;&#39;;
+<a name="line551"></a>  var inQuote = false;
+<a name="line552"></a>  var len = pattern.length;
+<a name="line553"></a>
+<a name="line554"></a>  for (; pos[0] &lt; len; pos[0]++) {
+<a name="line555"></a>    var ch = pattern.charAt(pos[0]);
+<a name="line556"></a>    if (ch == goog.locale.NumberFormat.QUOTE_) {
+<a name="line557"></a>      if (pos[0] + 1 &lt; len &amp;&amp;
+<a name="line558"></a>          pattern.charAt(pos[0] + 1) == goog.locale.NumberFormat.QUOTE_) {
+<a name="line559"></a>        pos[0]++;
+<a name="line560"></a>        affix += &#39;\&#39;&#39;; // &#39;don&#39;&#39;t&#39;
+<a name="line561"></a>      } else {
+<a name="line562"></a>        inQuote = !inQuote;
+<a name="line563"></a>      }
+<a name="line564"></a>      continue;
+<a name="line565"></a>    }
+<a name="line566"></a>
+<a name="line567"></a>    if (inQuote) {
+<a name="line568"></a>      affix += ch;
+<a name="line569"></a>    } else {
+<a name="line570"></a>      switch (ch) {
+<a name="line571"></a>        case goog.locale.NumberFormat.PATTERN_DIGIT_:
+<a name="line572"></a>        case goog.locale.NumberFormat.PATTERN_ZERO_DIGIT_:
+<a name="line573"></a>        case goog.locale.NumberFormat.PATTERN_GROUPING_SEPARATOR_:
+<a name="line574"></a>        case goog.locale.NumberFormat.PATTERN_DECIMAL_SEPARATOR_:
+<a name="line575"></a>        case goog.locale.NumberFormat.PATTERN_SEPARATOR_:
+<a name="line576"></a>          return affix;
+<a name="line577"></a>        case goog.locale.NumberFormat.PATTERN_CURRENCY_SIGN_:
+<a name="line578"></a>          this.isCurrencyFormat_ = true;
+<a name="line579"></a>          if ((pos[0] + 1) &lt; len &amp;&amp;
+<a name="line580"></a>              pattern.charAt(pos[0] + 1) ==
+<a name="line581"></a>              goog.locale.NumberFormat.PATTERN_CURRENCY_SIGN_) {
+<a name="line582"></a>            pos[0]++;
+<a name="line583"></a>            affix += this.intlCurrencyCode_;
+<a name="line584"></a>          } else {
+<a name="line585"></a>            affix += this.currencySymbol_;
+<a name="line586"></a>          }
+<a name="line587"></a>          break;
+<a name="line588"></a>        case goog.locale.NumberFormat.PATTERN_PERCENT_:
+<a name="line589"></a>          if (this.multiplier_ != 1) {
+<a name="line590"></a>            throw Error(&#39;Too many percent/permill&#39;);
+<a name="line591"></a>          }
+<a name="line592"></a>          this.multiplier_ = 100;
+<a name="line593"></a>          affix += this.symbols_.PERCENT;
+<a name="line594"></a>          break;
+<a name="line595"></a>        case goog.locale.NumberFormat.PATTERN_PER_MILLE_:
+<a name="line596"></a>          if (this.multiplier_ != 1) {
+<a name="line597"></a>            throw Error(&#39;Too many percent/permill&#39;);
+<a name="line598"></a>          }
+<a name="line599"></a>          this.multiplier_ = 1000;
+<a name="line600"></a>          affix += this.symbols_.PERMILL;
+<a name="line601"></a>          break;
+<a name="line602"></a>        default:
+<a name="line603"></a>          affix += ch;
+<a name="line604"></a>      }
+<a name="line605"></a>    }
+<a name="line606"></a>  }
+<a name="line607"></a>
+<a name="line608"></a>  return affix;
+<a name="line609"></a>};
+<a name="line610"></a>
+<a name="line611"></a>
+<a name="line612"></a>/**
+<a name="line613"></a> * Parses the trunk part of a pattern.
+<a name="line614"></a> *
+<a name="line615"></a> * @param {string} pattern Pattern string that need to be parsed.
+<a name="line616"></a> * @param {Array} pos One element position array to set and receive parsing
+<a name="line617"></a> *     position.
+<a name="line618"></a> * @private
+<a name="line619"></a> */
+<a name="line620"></a>goog.locale.NumberFormat.prototype.parseTrunk_ = function(pattern, pos) {
+<a name="line621"></a>  var decimalPos = -1;
+<a name="line622"></a>  var digitLeftCount = 0;
+<a name="line623"></a>  var zeroDigitCount = 0;
+<a name="line624"></a>  var digitRightCount = 0;
+<a name="line625"></a>  var groupingCount = -1;
+<a name="line626"></a>
+<a name="line627"></a>  var len = pattern.length;
+<a name="line628"></a>  for (var loop = true; pos[0] &lt; len &amp;&amp; loop; pos[0]++) {
+<a name="line629"></a>    var ch = pattern.charAt(pos[0]);
+<a name="line630"></a>    switch (ch) {
+<a name="line631"></a>      case goog.locale.NumberFormat.PATTERN_DIGIT_:
+<a name="line632"></a>        if (zeroDigitCount &gt; 0) {
+<a name="line633"></a>          digitRightCount++;
+<a name="line634"></a>        } else {
+<a name="line635"></a>          digitLeftCount++;
+<a name="line636"></a>        }
+<a name="line637"></a>        if (groupingCount &gt;= 0 &amp;&amp; decimalPos &lt; 0) {
+<a name="line638"></a>          groupingCount++;
+<a name="line639"></a>        }
+<a name="line640"></a>        break;
+<a name="line641"></a>      case goog.locale.NumberFormat.PATTERN_ZERO_DIGIT_:
+<a name="line642"></a>        if (digitRightCount &gt; 0) {
+<a name="line643"></a>          throw Error(&#39;Unexpected &quot;0&quot; in pattern &quot;&#39; + pattern + &#39;&quot;&#39;);
+<a name="line644"></a>        }
+<a name="line645"></a>        zeroDigitCount++;
+<a name="line646"></a>        if (groupingCount &gt;= 0 &amp;&amp; decimalPos &lt; 0) {
+<a name="line647"></a>          groupingCount++;
+<a name="line648"></a>        }
+<a name="line649"></a>        break;
+<a name="line650"></a>      case goog.locale.NumberFormat.PATTERN_GROUPING_SEPARATOR_:
+<a name="line651"></a>        groupingCount = 0;
+<a name="line652"></a>        break;
+<a name="line653"></a>      case goog.locale.NumberFormat.PATTERN_DECIMAL_SEPARATOR_:
+<a name="line654"></a>        if (decimalPos &gt;= 0) {
+<a name="line655"></a>          throw Error(&#39;Multiple decimal separators in pattern &quot;&#39; +
+<a name="line656"></a>                      pattern + &#39;&quot;&#39;);
+<a name="line657"></a>        }
+<a name="line658"></a>        decimalPos = digitLeftCount + zeroDigitCount + digitRightCount;
+<a name="line659"></a>        break;
+<a name="line660"></a>      case goog.locale.NumberFormat.PATTERN_EXPONENT_:
+<a name="line661"></a>        if (this.useExponentialNotation_) {
+<a name="line662"></a>          throw Error(&#39;Multiple exponential symbols in pattern &quot;&#39; +
+<a name="line663"></a>                      pattern + &#39;&quot;&#39;);
+<a name="line664"></a>        }
+<a name="line665"></a>        this.useExponentialNotation_ = true;
+<a name="line666"></a>        this.minExponentDigits_ = 0;
+<a name="line667"></a>
+<a name="line668"></a>        // Use lookahead to parse out the exponential part
+<a name="line669"></a>        // of the pattern, then jump into phase 2.
+<a name="line670"></a>        while ((pos[0] + 1) &lt; len &amp;&amp; pattern.charAt(pos[0] + 1) ==
+<a name="line671"></a>               goog.locale.NumberFormat.PATTERN_ZERO_DIGIT_) {
+<a name="line672"></a>          pos[0]++;
+<a name="line673"></a>          this.minExponentDigits_++;
+<a name="line674"></a>        }
+<a name="line675"></a>
+<a name="line676"></a>        if ((digitLeftCount + zeroDigitCount) &lt; 1 ||
+<a name="line677"></a>            this.minExponentDigits_ &lt; 1) {
+<a name="line678"></a>          throw Error(&#39;Malformed exponential pattern &quot;&#39; + pattern + &#39;&quot;&#39;);
+<a name="line679"></a>        }
+<a name="line680"></a>        loop = false;
+<a name="line681"></a>        break;
+<a name="line682"></a>      default:
+<a name="line683"></a>        pos[0]--;
+<a name="line684"></a>        loop = false;
+<a name="line685"></a>        break;
+<a name="line686"></a>    }
+<a name="line687"></a>  }
+<a name="line688"></a>
+<a name="line689"></a>  if (zeroDigitCount == 0 &amp;&amp; digitLeftCount &gt; 0 &amp;&amp; decimalPos &gt;= 0) {
+<a name="line690"></a>    // Handle &#39;###.###&#39; and &#39;###.&#39; and &#39;.###&#39;
+<a name="line691"></a>    var n = decimalPos;
+<a name="line692"></a>    if (n == 0) { // Handle &#39;.###&#39;
+<a name="line693"></a>      n++;
+<a name="line694"></a>    }
+<a name="line695"></a>    digitRightCount = digitLeftCount - n;
+<a name="line696"></a>    digitLeftCount = n - 1;
+<a name="line697"></a>    zeroDigitCount = 1;
+<a name="line698"></a>  }
+<a name="line699"></a>
+<a name="line700"></a>  // Do syntax checking on the digits.
+<a name="line701"></a>  if (decimalPos &lt; 0 &amp;&amp; digitRightCount &gt; 0 ||
+<a name="line702"></a>       decimalPos &gt;= 0 &amp;&amp; (decimalPos &lt; digitLeftCount ||
+<a name="line703"></a>                           decimalPos &gt; digitLeftCount + zeroDigitCount) ||
+<a name="line704"></a>       groupingCount == 0) {
+<a name="line705"></a>    throw Error(&#39;Malformed pattern &quot;&#39; + pattern + &#39;&quot;&#39;);
+<a name="line706"></a>  }
+<a name="line707"></a>  var totalDigits = digitLeftCount + zeroDigitCount + digitRightCount;
+<a name="line708"></a>
+<a name="line709"></a>  this.maximumFractionDigits_ = decimalPos &gt;= 0 ? totalDigits - decimalPos : 0;
+<a name="line710"></a>  if (decimalPos &gt;= 0) {
+<a name="line711"></a>    this.minimumFractionDigits_ = digitLeftCount + zeroDigitCount - decimalPos;
+<a name="line712"></a>    if (this.minimumFractionDigits_ &lt; 0) {
+<a name="line713"></a>      this.minimumFractionDigits_ = 0;
+<a name="line714"></a>    }
+<a name="line715"></a>  }
+<a name="line716"></a>
+<a name="line717"></a>  // The effectiveDecimalPos is the position the decimal is at or would be at
+<a name="line718"></a>  // if there is no decimal. Note that if decimalPos&lt;0, then digitTotalCount ==
+<a name="line719"></a>  // digitLeftCount + zeroDigitCount.
+<a name="line720"></a>  var effectiveDecimalPos = decimalPos &gt;= 0 ? decimalPos : totalDigits;
+<a name="line721"></a>  this.minimumIntegerDigits_ = effectiveDecimalPos - digitLeftCount;
+<a name="line722"></a>  if (this.useExponentialNotation_) {
+<a name="line723"></a>    this.maximumIntegerDigits_ = digitLeftCount + this.minimumIntegerDigits_;
+<a name="line724"></a>
+<a name="line725"></a>    // in exponential display, we need to at least show something.
+<a name="line726"></a>    if (this.maximumFractionDigits_ == 0 &amp;&amp; this.minimumIntegerDigits_ == 0) {
+<a name="line727"></a>      this.minimumIntegerDigits_ = 1;
+<a name="line728"></a>    }
+<a name="line729"></a>  }
+<a name="line730"></a>
+<a name="line731"></a>  this.groupingSize_ = Math.max(0, groupingCount);
+<a name="line732"></a>  this.decimalSeparatorAlwaysShown_ = decimalPos == 0 ||
+<a name="line733"></a>                                      decimalPos == totalDigits;
+<a name="line734"></a>};
+<a name="line735"></a>
+<a name="line736"></a>
+<a name="line737"></a>/**
+<a name="line738"></a> * Parses provided pattern, result are stored in member variables.
+<a name="line739"></a> *
+<a name="line740"></a> * @param {string} pattern string pattern being applied.
+<a name="line741"></a> * @private
+<a name="line742"></a> */
+<a name="line743"></a>goog.locale.NumberFormat.prototype.parsePattern_ = function(pattern) {
+<a name="line744"></a>  var pos = [0];
+<a name="line745"></a>
+<a name="line746"></a>  this.positivePrefix_ = this.parseAffix_(pattern, pos);
+<a name="line747"></a>  var trunkStart = pos[0];
+<a name="line748"></a>  this.parseTrunk_(pattern, pos);
+<a name="line749"></a>  var trunkLen = pos[0] - trunkStart;
+<a name="line750"></a>  this.positiveSuffix_ = this.parseAffix_(pattern, pos);
+<a name="line751"></a>
+<a name="line752"></a>  if (pos[0] &lt; pattern.length &amp;&amp;
+<a name="line753"></a>      pattern.charAt(pos[0]) == goog.locale.NumberFormat.PATTERN_SEPARATOR_) {
+<a name="line754"></a>    pos[0]++;
+<a name="line755"></a>    this.negativePrefix_ = this.parseAffix_(pattern, pos);
+<a name="line756"></a>    // we assume this part is identical to positive part.
+<a name="line757"></a>    // user must make sure the pattern is correctly constructed.
+<a name="line758"></a>    pos[0] += trunkLen;
+<a name="line759"></a>    this.negativeSuffix_ = this.parseAffix_(pattern, pos);
+<a name="line760"></a>  } else {
+<a name="line761"></a>    // if no negative affix specified, they share the same positive affix
+<a name="line762"></a>    this.negativePrefix_ = this.positivePrefix_ + this.negativePrefix_;
+<a name="line763"></a>    this.negativeSuffix_ += this.positiveSuffix_;
+<a name="line764"></a>  }
+<a name="line765"></a>};
+</pre>
+
+
+</body>
+</html>

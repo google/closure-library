@@ -1,0 +1,886 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iframeio.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">iframeio.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Class for managing requests via iFrames.  Supports a number of
+ methods of transfer.
+
+ Gets and Posts can be performed and the resultant page read in as text,
+ JSON, or from the HTML DOM.
+
+ Using an iframe causes the throbber to spin, this is good for providing
+ feedback to the user that an action has occurred.
+
+ Requests do not affect the history stack, see goog.History if you require
+ this behavior.
+
+ The responseText and responseJson methods assume the response is plain,
+ text.  You can access the Iframe&#39;s DOM through responseXml if you need
+ access to the raw HTML.
+
+ Tested:
+ + FF2.0 (Win Linux)
+ + IE6, IE7
+ + Opera 9.1,
+ + Chrome
+ - Opera 8.5 fails because of no textContent and buggy innerText support
+
+ NOTE: Safari doesn&#39;t fire the onload handler when loading plain text files
+
+ This has been tested with Drip in IE to ensure memory usage is as constant
+ as possible. When making making thousands of requests, memory usage stays
+ constant for a while but then starts increasing (&lt;500k for 2000
+ requests) -- this hasn&#39;t yet been tracked down yet, though it is cleared up
+ after a refresh.
+
+
+ BACKGROUND FILE UPLOAD:
+ By posting an arbitrary form through an IframeIo object, it is possible to
+ implement background file uploads.  Here&#39;s how to do it:
+
+ - Create a form:
+ <pre class="lang-js">
+ &lt;form id=&quot;form&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;&gt;
+ &lt;input name=&quot;userfile&quot; type=&quot;file&quot; /&gt;
+ &lt;/form&gt;
+ </pre>
+
+ - Have the user click the file input
+ - Create an IframeIo instance
+ <pre class="lang-js">
+ var io = new goog.net.IframeIo;
+ goog.events.listen(io, goog.net.EventType.COMPLETE,
+ function() { alert(&#39;Sent&#39;); });
+ io.sendFromForm(document.getElementById(&#39;form&#39;));
+ </pre>
+
+
+ INCREMENTAL LOADING:
+ Gmail sends down multiple script blocks which get executed as they are
+ received by the client. This allows incremental rendering of the thread
+ list and conversations.
+
+ This requires collaboration with the server that is sending the requested
+ page back.  To set incremental loading up, you should:
+
+ A) In the application code there should be an externed reference to
+ <code>handleIncrementalData()</code>.  e.g.
+ goog.exportSymbol(&#39;GG_iframeFn&#39;, goog.net.IframeIo.handleIncrementalData);
+
+ B) The response page should them call this method directly, an example
+ response would look something like this:
+ <pre class="lang-js">
+ &lt;html&gt;
+ &lt;head&gt;
+ &lt;meta content=&quot;text/html;charset=UTF-8&quot; http-equiv=&quot;content-type&quot;&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+ &lt;script&gt;
+ D = top.P ? function(d) { top.GG_iframeFn(window, d) } : function() {};
+ &lt;/script&gt;
+
+ &lt;script&gt;D([1, 2, 3, 4, 5]);&lt;/script&gt;
+ &lt;script&gt;D([6, 7, 8, 9, 10]);&lt;/script&gt;
+ &lt;script&gt;D([11, 12, 13, 14, 15]);&lt;/script&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;
+ </pre>
+
+ Your application should then listen, on the IframeIo instance, to the event
+ goog.net.EventType.INCREMENTAL_DATA.  The event object contains a
+ &#39;data&#39; member which is the content from the D() calls above.
+
+ NOTE: There can be problems if you save a reference to the data object in IE.
+ If you save an array, and the iframe is dispose, then the array looses its
+ prototype and thus array methods like .join().  You can get around this by
+ creating arrays using the parent window&#39;s Array constructor, or you can
+ clone the array.
+
+
+ EVENT MODEL:
+ The various send methods work asynchronously. You can be notified about
+ the current status of the request (completed, success or error) by
+ listening for events on the IframeIo object itself. The following events
+ will be sent:
+ - goog.net.EventType.COMPLETE: when the request is completed
+ (either sucessfully or unsuccessfully). You can find out about the result
+ using the isSuccess() and getLastError
+ methods.
+ - goog.net.EventType.SUCCESS: when the request was completed
+ successfully
+ - goog.net.EventType.ERROR: when the request failed
+ - goog.net.EventType.ABORT: when the request has been aborted
+
+ Example:
+ <pre class="lang-js">
+ var io = new goog.net.IframeIo();
+ goog.events.listen(io, goog.net.EventType.COMPLETE,
+ function() { alert(&#39;request complete&#39;); });
+ io.sendFromForm(...);
+ </pre>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_net_iframeio.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/net/iframeio.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_net_IframeIo.html">
+          goog.net.IframeIo</a><br/>
+        <div class="class-details">Class for managing requests via iFrames.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_net_IframeIo_IncrementalDataEvent.html">
+          goog.net.IframeIo.IncrementalDataEvent</a><br/>
+        <div class="class-details">Class for representing incremental data events.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.IframeIo.addFormInputs_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">addFormInputs_<span class="args">(<span class="arg">form</span>,&nbsp;<span class="arg">data</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds the key value pairs from a map like data structure to a form
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">form</span>
+        : <div class="fullType"><span class="type">HTMLFormElement</span></div>
+        <div class="entryOverview">The form to add to.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">data</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_Uri_QueryData.html">goog.Uri.QueryData</a></span></div>
+        <div class="entryOverview">The data to add.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line344">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.IframeIo.getForm_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">getForm_<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type">HTMLFormElement</span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets a static form, one for all instances of IframeIo since IE6 leaks form
+nodes that are created/removed from the document.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type">HTMLFormElement</span></div>&nbsp;
+            The static form.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line318">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.IframeIo.getIframeByName"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">getIframeByName<span class="args">(<span class="arg">fname</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type">HTMLIFrameElement</span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Find an iframe by name (assumes the context is goog.global since that is
+where IframeIo&#39;s iframes are kept).
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">fname</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The name to find.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type">HTMLIFrameElement</span></div>&nbsp;
+            The iframe element with that name.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line265">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.IframeIo.getInstanceByName"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">getInstanceByName<span class="args">(<span class="arg">fname</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_net_IframeIo.html">goog.net.IframeIo</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Find an instance of the IframeIo object by name.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">fname</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The name to find.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_net_IframeIo.html">goog.net.IframeIo</a></span></div>&nbsp;
+            The instance of IframeIo.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line275">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.IframeIo.getNextName_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">getNextName_<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
+            The next iframe name.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line307">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.IframeIo.handleIncrementalData"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">handleIncrementalData<span class="args">(<span class="arg">win</span>,&nbsp;<span class="arg">data</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Handles incremental data and routes it to the correct iframeIo instance.
+The HTML page requested by the IframeIo instance should contain script blocks
+that call an externed reference to this method.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">win</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/window">Window</a></span></div>
+        <div class="entryOverview">The window object.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">data</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">The data object.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line287">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.IframeIo.send"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">send<span class="args">(<span class="arg">uri</span>,&nbsp;<span class="arg">opt_callback</span>,&nbsp;<span class="arg">opt_method</span>,&nbsp;<span class="arg">opt_noCache</span>,&nbsp;<span class="arg">opt_data</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Static send that creates a short lived instance of IframeIo to send the
+request.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">uri</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Uri of the request, it is up the caller to manage query string params.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_callback</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        <div class="entryOverview">Event handler for when request is completed.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_method</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Default is GET, POST uses a form to submit the request.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_noCache</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Append a timestamp to the request to avoid caching.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_data</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span></div>
+        <div class="entryOverview">Map of key-value pairs that will be posted to the server via the iframe&#39;s form.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line247">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.IframeIo.FRAME_NAME_PREFIX"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">FRAME_NAME_PREFIX</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Prefix for frame names
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line198">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.IframeIo.IFRAME_DISPOSE_DELAY_MS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">IFRAME_DISPOSE_DELAY_MS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The number of milliseconds after a request is completed to dispose the
+iframes.  This can be done lazily so we wait long enough for any processing
+that occurred as a result of the response to finish.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line215">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.IframeIo.INNER_FRAME_SUFFIX"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">INNER_FRAME_SUFFIX</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Suffix that is added to inner frames used for sending requests in non-IE
+browsers
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line206">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.IframeIo.counter_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">counter_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Counter used when creating iframes
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line223">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.IframeIo.instances_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.IframeIo.</span><span class="entryName">instances_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Object used as a map to lookup instances of IframeIo objects by name.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_iframeio.js.source.html#line191">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/net/iframeio.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

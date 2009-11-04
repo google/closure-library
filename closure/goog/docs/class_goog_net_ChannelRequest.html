@@ -1,0 +1,3093 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>ChannelRequest (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">net.ChannelRequest</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          <a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">
+            Object</a>
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Creates a ChannelRequest object which encapsulates a request to the server.
+A new ChannelRequest is created for each request to the server.
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_net_channelrequest.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<pre class="inheritance">
+Object
+     <img src="static/images/inherit.gif">goog.net.ChannelRequest
+</pre>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.net.ChannelRequest(<span><span class="arg">channel</span>,&nbsp;<span class="arg">channelDebug</span>,&nbsp;<span class="arg">opt_sessionId</span>,&nbsp;<span class="arg">opt_requestId</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">channel</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_net_BrowserChannel.html">goog.net.BrowserChannel</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_net_BrowserTestChannel.html">goog.net.BrowserTestChannel</a></span></div>
+        <div class="entryOverview">The BrowserChannel that owns this request.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">channelDebug</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_net_ChannelDebug.html">goog.net.ChannelDebug</a></span></div>
+        <div class="entryOverview">A ChannelDebug to use for logging.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_sessionId</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The session id for the channel.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_requestId</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The request id for this request.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_net_ChannelRequest.html">
+              goog.net.ChannelRequest
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.cancel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">cancel<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line933">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.cancelRetryTimer_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">cancelRetryTimer_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Cancels the retry timer if it has been started.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1088">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.cancelWatchDogTimer_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">cancelWatchDogTimer_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Cancels the watchdog timer if it has been started.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line973">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.cleanup_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">cleanup_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Cleans up the objects used to make the request. This function is
+idempotent.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1123">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.createXhrIo_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createXhrIo_<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_net_XhrIo.html">goog.net.XhrIo</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_net_XhrIo.html">goog.net.XhrIo</a></span></div>&nbsp;
+            New XhrIo.  Separated out for testing.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line511">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.decodeNextChunks_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">decodeNextChunks_<span class="args">(<span class="arg">readyState</span>,&nbsp;<span class="arg">responseText</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Decodes the next set of available chunks in the response.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">readyState</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The value of readyState.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">responseText</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The value of responseText.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line654">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.ensureWatchDogTimer_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">ensureWatchDogTimer_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Ensures that there is watchdog timeout which is used to ensure that
+the connection completes in time.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line946">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.errorStringFromCode_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">errorStringFromCode_<span class="args">(<span class="arg">errorCode</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a useful error string for debugging based on the specified error
+code.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">errorCode</span>
+        : <div class="fullType"><span class="type">goog.net.ChannelRequest.Error</span></div>
+        <div class="entryOverview">The error code.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
+            The error string for the given code.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1103">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.getLastError"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getLastError<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span>?</span><span class="type">goog.net.ChannelRequest.Error</span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       If the request was not successful, returns the reason.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type">goog.net.ChannelRequest.Error</span></div>&nbsp;
+            The last error.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1157">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.getLastStatusCode"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getLastStatusCode<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the status code of the last request.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>&nbsp;
+            The status code of the last request.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1165">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.getNextChunk_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getNextChunk_<span class="args">(<span class="arg">responseText</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the next chunk of a chunk-encoded response. This is not standard
+HTTP chunked encoding because browsers don&#39;t expose the chunk boundaries to
+the application through XMLHTTP. So we have an additional chunk encoding at
+the application level that lets us tell where the beginning and end of
+individual responses are so that we can only try to eval a complete JS array.
+
+The encoding is the size of the chunk encoded as a decimal string followed
+by a newline followed by the data.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">responseText</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The response text from the XMLHTTP response.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>&nbsp;
+            The next chunk string or a sentinel object indicating a special condition.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line761">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.getRequestId"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getRequestId<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the request id for this request. Each request has a unique request
+id and the request IDs are a sequential increasing count.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>&nbsp;
+            The request ID.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1184">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.getRetryTime_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getRetryTime_<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>&nbsp;
+            Time in ms before firing next retry request.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1058">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.getSessionId"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getSessionId<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the session id for this channel.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>&nbsp;
+            The session ID.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1174">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.getSuccess"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getSuccess<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Indicates whether the request was successful. Only valid after the handler
+is called to indicate completion of the request.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            True if the request succeeded.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1147">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.handleTimeout_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">handleTimeout_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Called when the request has actually timed out. Will cleanup and maybe retry
+the request if we haven&#39;t exceeded the retry count.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1007">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.imgTagGet_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">imgTagGet_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Starts the IMG request.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line923">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.maybeRetry_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">maybeRetry_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Retries the current request if we still meet the conditions for retrying.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1028">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.onTridentDoneAsync_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onTridentDoneAsync_<span class="args">(<span class="arg">successful</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Callback from the Trident htmlfile ActiveX control for when the request
+is complete
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">successful</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether the request successfully completed.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line892">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.onTridentDone_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onTridentDone_<span class="args">(<span class="arg">successful</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Callback from the Trident htmlfile ActiveX control for when the request
+is complete
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">successful</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether the request successfully completed.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line878">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.onTridentRpcMessageAsync_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onTridentRpcMessageAsync_<span class="args">(<span class="arg">msg</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Callback from the Trident htmlfile ActiveX control for when a new message
+is received.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The data payload.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line860">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.onTridentRpcMessage_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onTridentRpcMessage_<span class="args">(<span class="arg">msg</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Callback from the Trident htmlfile ActiveX control for when a new message
+is received.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The data payload.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line846">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.onWatchDogTimout_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onWatchDogTimout_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Called when the watchdog timer is triggered. It also handles a case where it
+is called too early which we suspect may be happening sometimes
+(not sure why)
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line988">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onXmlHttpReadyStateChanged_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Called by the readystate handler for XMLHTTP requests.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line551">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.pollResponse_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">pollResponse_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Polls the response for new data.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line709">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.retry_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">retry_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Performs a retry by restarting the request
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1076">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.safeOnRequestData_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">safeOnRequestData_<span class="args">(<span class="arg">data</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Helper to call the callback&#39;s onRequestData, which catches any
+exception and cleans up the request.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">data</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The request data.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line1195">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.sendUsingImgTag"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">sendUsingImgTag<span class="args">(<span class="arg">uri</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Uses an IMG tag to send an HTTP get to the server. This is only currently
+used to terminate the connection, as an IMG tag is the most reliable way to
+send something to the server while the page is getting torn down.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">uri</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
+        <div class="entryOverview">The uri to send a request to.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line911">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.sendXmlHttp_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">sendXmlHttp_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sends a request via XMLHTTP according to the current state of the
+ChannelRequest object.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line474">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.setExtraHeaders"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setExtraHeaders<span class="args">(<span class="arg">extraHeaders</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets extra HTTP headers to add to all the requests sent to the server.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">extraHeaders</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">The HTTP headers.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line385">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.setMaxRetries"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setMaxRetries<span class="args">(<span class="arg">maxRetries</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the maximum number of retries for a request.  If the request is already
+on a retry beyond the new maxRetries, then it will fail immediately.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">maxRetries</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The maximum number of retries for a request.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line396">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.setRetryTimeout"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setRetryTimeout<span class="args">(<span class="arg">retryTimeout</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the retry timeout for a request
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">retryTimeout</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The timeout in MS for when we either retry the request or fail.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line423">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.startPolling_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">startPolling_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Starts a polling interval for changes to responseText of the
+XMLHttpRequest, for browsers that don&#39;t fire onreadystatechange
+as data comes in incrementally.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line729">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.startWatchDogTimer_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">startWatchDogTimer_<span class="args">(<span class="arg">time</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Starts the watchdog timer which is used to ensure that the connection
+completes in time.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">time</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The number of milliseconds to wait.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line958">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.stopPolling_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">stopPolling_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Stops the polling interval for changes to responseText.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line740">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.tridentGet"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">tridentGet<span class="args">(<span class="arg">uri</span>,&nbsp;<span class="arg">usingSecondaryDomain</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Uses the Trident htmlfile ActiveX control to send a GET request in IE. This
+is the innovation discovered that lets us get intermediate results in
+Internet Explorer.  Thanks to <a href="http://go/kev">http://go/kev</a>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">uri</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
+        <div class="entryOverview">The uri to request from.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">usingSecondaryDomain</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether to use a secondary domain.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line792">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.tridentGet_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">tridentGet_<span class="args">(<span class="arg">usingSecondaryDomain</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Starts the Trident request.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">usingSecondaryDomain</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether to use a secondary domain.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line805">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.xmlHttpGet"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">xmlHttpGet<span class="args">(<span class="arg">uri</span>,&nbsp;<span class="arg">decodeChunks</span>,&nbsp;<span class="arg">opt_noClose</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Uses XMLHTTP to send an HTTP GET to the server.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">uri</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
+        <div class="entryOverview">The uri of the request.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">decodeChunks</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether to the result is expected to be encoded for chunking and thus requires decoding.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_noClose</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether to request that the tcp/ip connection should be closed.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line455">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.xmlHttpHandler_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">xmlHttpHandler_<span class="args">(<span class="arg">e</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       XmlHttp handler
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">e</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
+        <div class="entryOverview">Event object, target is a XhrIo object.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line521">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.ChannelRequest.prototype.xmlHttpPost"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">xmlHttpPost<span class="args">(<span class="arg">uri</span>,&nbsp;<span class="arg">postData</span>,&nbsp;<span class="arg">decodeChunks</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Uses XMLHTTP to send an HTTP POST to the server.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">uri</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
+        <div class="entryOverview">The uri of the request.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">postData</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The data for the post body.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">decodeChunks</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether to the result is expected to be encoded for chunking and thus requires decoding.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line436">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_net_ChannelRequest.html">
+              goog.net.ChannelRequest
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.baseUri_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">baseUri_</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The base Uri for the request. The includes all the parameters except the
+one that indicates the retry number.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line170">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.cancelled_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">cancelled_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Whether the request has been cancelled due to a call to cancel.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line251">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.extraHeaders_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">extraHeaders_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Extra HTTP headers to add to all the requests sent to the server.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line112">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.lastStatusCode_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">lastStatusCode_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The last status code received.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line235">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.maxRetries_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">maxRetries_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The maximum number of attempts to retry the request before failing.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line120">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.postData_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">postData_</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The post data, if the request is a post.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line186">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.requestUri_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">requestUri_</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The request Uri that was actually used for the most recent request attempt.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line178">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.retryCount_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">retryCount_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The attempt number of the current request.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line153">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.sendClose_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">sendClose_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Whether to send the Connection:close header as part of the request.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line243">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.successful_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">successful_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Whether the request was successful. This is only set to true after the
+request successfuly completes.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line129">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.trident_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">trident_</span>
+        : <div class="fullType"><span>?</span><span class="type">ActiveXObject</span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The Trident instance if the request is using Trident.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line211">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.type_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">type_</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The type of request (XMLHTTP, IMG, Trident)
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line161">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.verb_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">verb_</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The verb (Get or Post) for the request.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line219">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.watchDogTimeoutTime_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">watchDogTimeoutTime_</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The time in the future when the request will timeout.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line145">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.watchDogTimerId_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">watchDogTimerId_</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The TimerID of the timer used to detect if the request has timed-out.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line137">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.xmlHttpChunkStart_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">xmlHttpChunkStart_</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The position of where the next unprocessed chunk starts in the response
+text.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line203">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.prototype.xmlHttp_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">xmlHttp_</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_net_XhrIo.html">goog.net.XhrIo</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The XhrLte request if the request is using XMLHTTP
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line194">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+<h2>Static Properties</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.INACTIVE_CHANNEL_RETRY_FACTOR"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">INACTIVE_CHANNEL_RETRY_FACTOR</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       When retrying for an inactive channel, we will multiply the total delay by
+this number.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line283">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.INCOMPLETE_CHUNK_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">INCOMPLETE_CHUNK_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Sentinel value used to indicate an incomplete chunk in a multi-chunk
+response.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line377">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.INVALID_CHUNK_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">INVALID_CHUNK_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Sentinel value used to indicate an invalid chunk in a multi-chunk response.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line368">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.MIN_WEBKIT_FOR_INTERACTIVE_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">MIN_WEBKIT_FOR_INTERACTIVE_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Minimum version of Safari that receives a non-null responseText in ready
+state interactive.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line300">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.POLLING_INTERVAL_MS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">POLLING_INTERVAL_MS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       How often to poll (in MS) for changes to responseText in browsers that don&#39;t
+fire onreadystatechange during incremental loading of responseText.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line291">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.RETRY_DELAY_MS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">RETRY_DELAY_MS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Default timeout in MS before the initial retry. Subsequent retries will be
+slower.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line267">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.RETRY_DELAY_SEED"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">RETRY_DELAY_SEED</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       We will add a random time between 0 and this number of MS to retries to
+the retry time for this request.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line275">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.ChannelRequest.TIMEOUT_MS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">TIMEOUT_MS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Default timeout in MS for a request. The server must return data within this
+time limit for the request to not timeout.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_channelrequest.js.source.html#line259">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package net</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="goog" current="net.ChannelRequest"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

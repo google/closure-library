@@ -1,0 +1,278 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>logrecord.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_debug_logrecord.js.html">logrecord.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the LogRecord class. Please minimize
+<a name="line17"></a> * dependencies this file has on other closure classes as any dependency it
+<a name="line18"></a> * takes won&#39;t be able to use the logging infrastructure.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.debug.LogRecord&#39;);
+<a name="line23"></a>
+<a name="line24"></a>/**
+<a name="line25"></a> * LogRecord objects are used to pass logging requests between
+<a name="line26"></a> * the logging framework and individual log Handlers.
+<a name="line27"></a> * @constructor
+<a name="line28"></a> * @param {goog.debug.Logger.Level} level One of the level identifiers.
+<a name="line29"></a> * @param {string} msg The string message.
+<a name="line30"></a> * @param {string} loggerName The name of the source logger.
+<a name="line31"></a> * @param {number} opt_time Time this log record was created if other than now.
+<a name="line32"></a> *     If 0, we use #goog.now.
+<a name="line33"></a> * @param {number} opt_sequenceNumber Sequence number of this log record. This
+<a name="line34"></a> *     should only be passed in when restoring a log record from persistence.
+<a name="line35"></a> */
+<a name="line36"></a>goog.debug.LogRecord = function(level, msg, loggerName,
+<a name="line37"></a>      opt_time, opt_sequenceNumber) {
+<a name="line38"></a>  /**
+<a name="line39"></a>   * Sequence number for the LogRecord. Each record has a unique sequence number
+<a name="line40"></a>   * that is greater than all log records created before it.
+<a name="line41"></a>   * @type {number}
+<a name="line42"></a>   * @private
+<a name="line43"></a>   */
+<a name="line44"></a>  this.sequenceNumber_ = typeof opt_sequenceNumber == &#39;number&#39; ?
+<a name="line45"></a>      opt_sequenceNumber : goog.debug.LogRecord.nextSequenceNumber_++;
+<a name="line46"></a>
+<a name="line47"></a>  /**
+<a name="line48"></a>   * Time the LogRecord was created.
+<a name="line49"></a>   * @type {number}
+<a name="line50"></a>   * @private
+<a name="line51"></a>   */
+<a name="line52"></a>  this.time_ = opt_time || goog.now();
+<a name="line53"></a>
+<a name="line54"></a>  /**
+<a name="line55"></a>   * Level of the LogRecord
+<a name="line56"></a>   * @type {goog.debug.Logger.Level}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.level_ = level;
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * Message associated with the record
+<a name="line63"></a>   * @type {string}
+<a name="line64"></a>   * @private
+<a name="line65"></a>   */
+<a name="line66"></a>  this.msg_ = msg;
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>  /**
+<a name="line70"></a>   * Name of the logger that created the record.
+<a name="line71"></a>   * @type {string}
+<a name="line72"></a>   * @private
+<a name="line73"></a>   */
+<a name="line74"></a>  this.loggerName_ = loggerName;
+<a name="line75"></a>};
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Exception associated with the record
+<a name="line79"></a> * @type {Object?}
+<a name="line80"></a> * @private
+<a name="line81"></a> */
+<a name="line82"></a>goog.debug.LogRecord.prototype.exception_ = null;
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Exception text associated with the record
+<a name="line86"></a> * @type {string?}
+<a name="line87"></a> * @private
+<a name="line88"></a> */
+<a name="line89"></a>goog.debug.LogRecord.prototype.exceptionText_ = null;
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * A sequence counter for assigning increasing sequence numbers to LogRecord
+<a name="line94"></a> * objects.
+<a name="line95"></a> * @type {number}
+<a name="line96"></a> * @private
+<a name="line97"></a> */
+<a name="line98"></a>goog.debug.LogRecord.nextSequenceNumber_ = 0;
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * Get the source Logger&#39;s name.
+<a name="line103"></a> *
+<a name="line104"></a> * @return {string} source logger name (may be null).
+<a name="line105"></a> */
+<a name="line106"></a>goog.debug.LogRecord.prototype.getLoggerName = function() {
+<a name="line107"></a>  return this.loggerName_;
+<a name="line108"></a>};
+<a name="line109"></a>
+<a name="line110"></a>
+<a name="line111"></a>/**
+<a name="line112"></a> * Get the exception that is part of the log record.
+<a name="line113"></a> *
+<a name="line114"></a> * @return {Object?} the exception.
+<a name="line115"></a> */
+<a name="line116"></a>goog.debug.LogRecord.prototype.getException = function() {
+<a name="line117"></a>  return this.exception_;
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Set the exception that is part of the log record.
+<a name="line123"></a> *
+<a name="line124"></a> * @param {Object} exception the exception.
+<a name="line125"></a> */
+<a name="line126"></a>goog.debug.LogRecord.prototype.setException = function(exception) {
+<a name="line127"></a>  this.exception_ = exception;
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Get the exception text that is part of the log record.
+<a name="line133"></a> *
+<a name="line134"></a> * @return {string?} Exception text.
+<a name="line135"></a> */
+<a name="line136"></a>goog.debug.LogRecord.prototype.getExceptionText = function() {
+<a name="line137"></a>  return this.exceptionText_;
+<a name="line138"></a>};
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * Set the exception text that is part of the log record.
+<a name="line143"></a> *
+<a name="line144"></a> * @param {string} text The exception text.
+<a name="line145"></a> */
+<a name="line146"></a>goog.debug.LogRecord.prototype.setExceptionText = function(text) {
+<a name="line147"></a>  this.exceptionText_ = text;
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Get the source Logger&#39;s name.
+<a name="line153"></a> *
+<a name="line154"></a> * @param {string} loggerName source logger name (may be null).
+<a name="line155"></a> */
+<a name="line156"></a>goog.debug.LogRecord.prototype.setLoggerName = function(loggerName) {
+<a name="line157"></a>  this.loggerName_ = loggerName;
+<a name="line158"></a>};
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Get the logging message level, for example Level.SEVERE.
+<a name="line163"></a> * @return {goog.debug.Logger.Level} the logging message level.
+<a name="line164"></a> */
+<a name="line165"></a>goog.debug.LogRecord.prototype.getLevel = function() {
+<a name="line166"></a>  return this.level_;
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Set the logging message level, for example Level.SEVERE.
+<a name="line172"></a> * @param {goog.debug.Logger.Level} level the logging message level.
+<a name="line173"></a> */
+<a name="line174"></a>goog.debug.LogRecord.prototype.setLevel = function(level) {
+<a name="line175"></a>  this.level_ = level;
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Get the &quot;raw&quot; log message, before localization or formatting.
+<a name="line181"></a> *
+<a name="line182"></a> * @return {string} the raw message string.
+<a name="line183"></a> */
+<a name="line184"></a>goog.debug.LogRecord.prototype.getMessage = function() {
+<a name="line185"></a>  return this.msg_;
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Set the &quot;raw&quot; log message, before localization or formatting.
+<a name="line191"></a> *
+<a name="line192"></a> * @param {string} msg the raw message string.
+<a name="line193"></a> */
+<a name="line194"></a>goog.debug.LogRecord.prototype.setMessage = function(msg) {
+<a name="line195"></a>  this.msg_ = msg;
+<a name="line196"></a>};
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * Get event time in milliseconds since 1970.
+<a name="line201"></a> *
+<a name="line202"></a> * @return {number} event time in millis since 1970.
+<a name="line203"></a> */
+<a name="line204"></a>goog.debug.LogRecord.prototype.getMillis = function() {
+<a name="line205"></a>  return this.time_;
+<a name="line206"></a>};
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Set event time in milliseconds since 1970.
+<a name="line211"></a> *
+<a name="line212"></a> * @param {number} time event time in millis since 1970.
+<a name="line213"></a> */
+<a name="line214"></a>goog.debug.LogRecord.prototype.setMillis = function(time) {
+<a name="line215"></a>  this.time_ = time;
+<a name="line216"></a>};
+<a name="line217"></a>
+<a name="line218"></a>
+<a name="line219"></a>/**
+<a name="line220"></a> * Get the sequence number.
+<a name="line221"></a> * &lt;p&gt;
+<a name="line222"></a> * Sequence numbers are normally assigned in the LogRecord
+<a name="line223"></a> * constructor, which assigns unique sequence numbers to
+<a name="line224"></a> * each new LogRecord in increasing order.
+<a name="line225"></a> * @return {number} the sequence number.
+<a name="line226"></a> */
+<a name="line227"></a>goog.debug.LogRecord.prototype.getSequenceNumber = function() {
+<a name="line228"></a>  return this.sequenceNumber_;
+<a name="line229"></a>};
+</pre>
+
+
+</body>
+</html>

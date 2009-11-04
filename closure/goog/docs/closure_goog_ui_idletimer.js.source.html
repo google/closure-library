@@ -1,0 +1,347 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>idletimer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_idletimer.js.html">idletimer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Idle Timer.
+<a name="line17"></a> *
+<a name="line18"></a> * Keeps track of transitions between active and idle. This class is built on
+<a name="line19"></a> * top of ActivityMonitor. Whenever an active user becomes idle, this class
+<a name="line20"></a> * dispatches a BECOME_IDLE event. Whenever an idle user becomes active, this
+<a name="line21"></a> * class dispatches a BECOME_ACTIVE event. The amount of inactive time it
+<a name="line22"></a> * takes for a user to be considered idle is specified by the client, and
+<a name="line23"></a> * different instances of this class can all use different thresholds.
+<a name="line24"></a> *
+<a name="line25"></a> */
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.ui.IdleTimer&#39;);
+<a name="line28"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventTarget&#39;)
+<a name="line31"></a>goog.require(&#39;goog.structs.Set&#39;);
+<a name="line32"></a>goog.require(&#39;goog.ui.ActivityMonitor&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Event target that will give notification of state changes between active and
+<a name="line37"></a> * idle. This class is designed to require few resources while the user is
+<a name="line38"></a> * active.
+<a name="line39"></a> * @param {number} idleThreshold Amount of time in ms at which we consider the
+<a name="line40"></a> *     user has gone idle.
+<a name="line41"></a> * @param {goog.ui.ActivityMonitor} opt_activityMonitor The activity monitor
+<a name="line42"></a> *     keeping track of user interaction. Defaults to a default-constructed
+<a name="line43"></a> *     activity monitor. If a default activity monitor is used then this class
+<a name="line44"></a> *     will dispose of it. If an activity monitor is passed in then the caller
+<a name="line45"></a> *     remains responsible for disposing of it.
+<a name="line46"></a> * @constructor
+<a name="line47"></a> * @extends {goog.events.EventTarget}
+<a name="line48"></a> */
+<a name="line49"></a>goog.ui.IdleTimer = function(idleThreshold, opt_activityMonitor) {
+<a name="line50"></a>  goog.events.EventTarget.call(this);
+<a name="line51"></a>
+<a name="line52"></a>  var activityMonitor = opt_activityMonitor ||
+<a name="line53"></a>      this.getDefaultActivityMonitor_();
+<a name="line54"></a>
+<a name="line55"></a>  /**
+<a name="line56"></a>   * The amount of time in ms at which we consider the user has gone idle
+<a name="line57"></a>   * @type {number}
+<a name="line58"></a>   * @private
+<a name="line59"></a>   */
+<a name="line60"></a>  this.idleThreshold_ = idleThreshold;
+<a name="line61"></a>
+<a name="line62"></a>  /**
+<a name="line63"></a>   * The activity monitor keeping track of user interaction
+<a name="line64"></a>   * @type {goog.ui.ActivityMonitor}
+<a name="line65"></a>   * @private
+<a name="line66"></a>   */
+<a name="line67"></a>  this.activityMonitor_ = activityMonitor;
+<a name="line68"></a>
+<a name="line69"></a>  /**
+<a name="line70"></a>   * Cached onActivityTick_ bound to the object for later use
+<a name="line71"></a>   * @type {Function}
+<a name="line72"></a>   * @private
+<a name="line73"></a>   */
+<a name="line74"></a>  this.boundOnActivityTick_ = goog.bind(this.onActivityTick_, this);
+<a name="line75"></a>
+<a name="line76"></a>  // Decide whether the user is currently active or idle. This method will
+<a name="line77"></a>  // check whether it is correct to start with the user in the active state.
+<a name="line78"></a>  this.maybeStillActive_();
+<a name="line79"></a>};
+<a name="line80"></a>goog.inherits(goog.ui.IdleTimer, goog.events.EventTarget);
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Whether a listener is currently registered for an idle timer event. On
+<a name="line85"></a> * initialization, the user is assumed to be active.
+<a name="line86"></a> * @type {boolean}
+<a name="line87"></a> * @private
+<a name="line88"></a> */
+<a name="line89"></a>goog.ui.IdleTimer.prototype.hasActivityListener_ = false;
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * Handle to the timer ID used for checking ongoing activity, or null
+<a name="line94"></a> * @type {number?}
+<a name="line95"></a> * @private
+<a name="line96"></a> */
+<a name="line97"></a>goog.ui.IdleTimer.prototype.onActivityTimerId_ = null;
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Whether the user is currently idle
+<a name="line102"></a> * @type {boolean}
+<a name="line103"></a> * @private
+<a name="line104"></a> */
+<a name="line105"></a>goog.ui.IdleTimer.prototype.isIdle_ = false;
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * The default activity monitor created by this class, if any
+<a name="line110"></a> * @type {goog.ui.ActivityMonitor?}
+<a name="line111"></a> * @private
+<a name="line112"></a> */
+<a name="line113"></a>goog.ui.IdleTimer.defaultActivityMonitor_ = null;
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * The idle timers that currently reference the default activity monitor
+<a name="line118"></a> * @type {goog.structs.Set}
+<a name="line119"></a> * @private
+<a name="line120"></a> */
+<a name="line121"></a>goog.ui.IdleTimer.defaultActivityMonitorReferences_ = new goog.structs.Set();
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Event constants for the idle timer event target
+<a name="line126"></a> * @enum {string}
+<a name="line127"></a> */
+<a name="line128"></a>goog.ui.IdleTimer.Event = {
+<a name="line129"></a>  /** Event fired when an idle user transitions into the active state */
+<a name="line130"></a>  BECOME_ACTIVE: &#39;active&#39;,
+<a name="line131"></a>  /** Event fired when an active user transitions into the idle state */
+<a name="line132"></a>  BECOME_IDLE: &#39;idle&#39;
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Gets the default activity monitor used by this class. If a default has not
+<a name="line138"></a> * been created yet, then a new one will be created.
+<a name="line139"></a> * @return {goog.ui.ActivityMonitor} The default activity monitor.
+<a name="line140"></a> * @private
+<a name="line141"></a> */
+<a name="line142"></a>goog.ui.IdleTimer.prototype.getDefaultActivityMonitor_ = function() {
+<a name="line143"></a>  goog.ui.IdleTimer.defaultActivityMonitorReferences_.add(this);
+<a name="line144"></a>  if (goog.ui.IdleTimer.defaultActivityMonitor_ == null) {
+<a name="line145"></a>    goog.ui.IdleTimer.defaultActivityMonitor_ = new goog.ui.ActivityMonitor();
+<a name="line146"></a>  }
+<a name="line147"></a>  return goog.ui.IdleTimer.defaultActivityMonitor_;
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Removes the reference to the default activity monitor. If there are no more
+<a name="line153"></a> * references then the default activity monitor gets disposed.
+<a name="line154"></a> * @private
+<a name="line155"></a> */
+<a name="line156"></a>goog.ui.IdleTimer.prototype.maybeDisposeDefaultActivityMonitor_ = function() {
+<a name="line157"></a>  goog.ui.IdleTimer.defaultActivityMonitorReferences_.remove(this);
+<a name="line158"></a>  if (goog.ui.IdleTimer.defaultActivityMonitor_ != null &amp;&amp;
+<a name="line159"></a>      goog.ui.IdleTimer.defaultActivityMonitorReferences_.isEmpty()) {
+<a name="line160"></a>    goog.ui.IdleTimer.defaultActivityMonitor_.dispose();
+<a name="line161"></a>    goog.ui.IdleTimer.defaultActivityMonitor_ = null;
+<a name="line162"></a>  }
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Checks whether the user is active. If the user is still active, then a timer
+<a name="line168"></a> * is started to check again later.
+<a name="line169"></a> * @private
+<a name="line170"></a> */
+<a name="line171"></a>goog.ui.IdleTimer.prototype.maybeStillActive_ = function() {
+<a name="line172"></a>  // See how long before the user would go idle. The user is considered idle
+<a name="line173"></a>  // after the idle time has passed, not exactly when the idle time arrives.
+<a name="line174"></a>  var remainingIdleThreshold = this.idleThreshold_ + 1 -
+<a name="line175"></a>      (goog.now() - this.activityMonitor_.getLastEventTime());
+<a name="line176"></a>  if (remainingIdleThreshold &gt; 0) {
+<a name="line177"></a>    // The user is still active. Check again later.
+<a name="line178"></a>    this.onActivityTimerId_ = goog.Timer.callOnce(
+<a name="line179"></a>        this.boundOnActivityTick_, remainingIdleThreshold);
+<a name="line180"></a>  } else {
+<a name="line181"></a>    // The user has not been active recently.
+<a name="line182"></a>    this.becomeIdle_();
+<a name="line183"></a>  }
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Handler for the timeout used for checking ongoing activity
+<a name="line189"></a> * @private
+<a name="line190"></a> */
+<a name="line191"></a>goog.ui.IdleTimer.prototype.onActivityTick_ = function() {
+<a name="line192"></a>  // The timer has fired.
+<a name="line193"></a>  this.onActivityTimerId_ = null;
+<a name="line194"></a>
+<a name="line195"></a>  // The maybeStillActive method will restart the timer, if appropriate.
+<a name="line196"></a>  this.maybeStillActive_();
+<a name="line197"></a>};
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Transitions from the active state to the idle state
+<a name="line202"></a> * @private
+<a name="line203"></a> */
+<a name="line204"></a>goog.ui.IdleTimer.prototype.becomeIdle_ = function() {
+<a name="line205"></a>  this.isIdle_ = true;
+<a name="line206"></a>
+<a name="line207"></a>  // The idle timer will send notification when the user does something
+<a name="line208"></a>  // interactive.
+<a name="line209"></a>  goog.events.listen(this.activityMonitor_,
+<a name="line210"></a>      goog.ui.ActivityMonitor.Event.ACTIVITY,
+<a name="line211"></a>      this.onActivity_, false, this);
+<a name="line212"></a>  this.hasActivityListener_ = true;
+<a name="line213"></a>
+<a name="line214"></a>  // Notify clients of the state change.
+<a name="line215"></a>  this.dispatchEvent(goog.ui.IdleTimer.Event.BECOME_IDLE);
+<a name="line216"></a>};
+<a name="line217"></a>
+<a name="line218"></a>
+<a name="line219"></a>/**
+<a name="line220"></a> * Handler for idle timer events when the user does something interactive
+<a name="line221"></a> * @param {goog.events.Event} e The event object.
+<a name="line222"></a> * @private
+<a name="line223"></a> */
+<a name="line224"></a>goog.ui.IdleTimer.prototype.onActivity_ = function(e) {
+<a name="line225"></a>  this.becomeActive_();
+<a name="line226"></a>};
+<a name="line227"></a>
+<a name="line228"></a>
+<a name="line229"></a>/**
+<a name="line230"></a> * Transitions from the idle state to the active state
+<a name="line231"></a> * @private
+<a name="line232"></a> */
+<a name="line233"></a>goog.ui.IdleTimer.prototype.becomeActive_ = function() {
+<a name="line234"></a>  this.isIdle_ = false;
+<a name="line235"></a>
+<a name="line236"></a>  // Stop listening to every interactive event.
+<a name="line237"></a>  this.removeActivityListener_();
+<a name="line238"></a>
+<a name="line239"></a>  // Notify clients of the state change.
+<a name="line240"></a>  this.dispatchEvent(goog.ui.IdleTimer.Event.BECOME_ACTIVE);
+<a name="line241"></a>
+<a name="line242"></a>  // Periodically check whether the user has gone inactive.
+<a name="line243"></a>  this.maybeStillActive_();
+<a name="line244"></a>};
+<a name="line245"></a>
+<a name="line246"></a>
+<a name="line247"></a>/**
+<a name="line248"></a> * Removes the activity listener, if necessary
+<a name="line249"></a> * @private
+<a name="line250"></a> */
+<a name="line251"></a>goog.ui.IdleTimer.prototype.removeActivityListener_ = function() {
+<a name="line252"></a>  if (this.hasActivityListener_) {
+<a name="line253"></a>    goog.events.unlisten(this.activityMonitor_,
+<a name="line254"></a>        goog.ui.ActivityMonitor.Event.ACTIVITY,
+<a name="line255"></a>        this.onActivity_, false, this);
+<a name="line256"></a>    this.hasActivityListener_ = false;
+<a name="line257"></a>  }
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/** @inheritDoc */
+<a name="line262"></a>goog.ui.IdleTimer.prototype.disposeInternal = function() {
+<a name="line263"></a>  this.removeActivityListener_();
+<a name="line264"></a>  if (this.onActivityTimerId_ != null) {
+<a name="line265"></a>    goog.global.clearTimeout(this.onActivityTimerId_);
+<a name="line266"></a>    this.onActivityTimerId_ = null;
+<a name="line267"></a>  }
+<a name="line268"></a>  this.maybeDisposeDefaultActivityMonitor_();
+<a name="line269"></a>  goog.ui.IdleTimer.superClass_.disposeInternal.call(this);
+<a name="line270"></a>};
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * @return {number} the amount of time at which we consider the user has gone
+<a name="line275"></a> *     idle in ms.
+<a name="line276"></a> */
+<a name="line277"></a>goog.ui.IdleTimer.prototype.getIdleThreshold = function() {
+<a name="line278"></a>  return this.idleThreshold_;
+<a name="line279"></a>};
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>/**
+<a name="line283"></a> * @return {goog.ui.ActivityMonitor} the activity monitor keeping track of user
+<a name="line284"></a> *     interaction.
+<a name="line285"></a> */
+<a name="line286"></a>goog.ui.IdleTimer.prototype.getActivityMonitor = function() {
+<a name="line287"></a>  return this.activityMonitor_;
+<a name="line288"></a>};
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * Returns true if there has been no user action for at least the specified
+<a name="line293"></a> * interval, and false otherwise
+<a name="line294"></a> * @return {boolean} true if the user is idle, false otherwise.
+<a name="line295"></a> */
+<a name="line296"></a>goog.ui.IdleTimer.prototype.isIdle = function() {
+<a name="line297"></a>  return this.isIdle_;
+<a name="line298"></a>};
+</pre>
+
+
+</body>
+</html>

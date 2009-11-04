@@ -1,0 +1,516 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>timezone.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">timezone.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Functions to provide timezone information for use with
+ date/time format.
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_i18n_timezone.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/i18n/timezone.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_i18n_TimeZone.html">
+          goog.i18n.TimeZone</a><br/>
+        <div class="class-details">TimeZone class implemented a time zone resolution and name information
+source for client applications. The time zone object is initiated from
+a time zone information object. Application can initiate a time zone
+statically, or it may choose to initiate from a data obtained from server.
+Each time zone information array is small, but the whole set of data
+is too much for client application to download. If end user is allowed to
+change time zone setting, dynamic retrieval should be the method to use.
+In case only time zone offset is known, there is a decent fallback
+that only use the time zone offset to create a TimeZone object.
+A whole set of time zone information array was available under
+<a href="http://go/js_locale_data">http://go/js_locale_data</a>. It is generated based on CLDR and
+Olson time zone data base (through pytz), and will be updated timely.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.i18n.TimeZone.composeGMTString_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.i18n.TimeZone.</span><span class="entryName">composeGMTString_<span class="args">(<span class="arg">offset</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Generate GMT string given a time zone offset.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">offset</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">time zone offset in minutes.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
+            GMT string for this offset.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_i18n_timezone.js.source.html#line150">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.i18n.TimeZone.composePosixTimeZoneID_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.i18n.TimeZone.</span><span class="entryName">composePosixTimeZoneID_<span class="args">(<span class="arg">offset</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       POSIX time zone ID as fallback.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">offset</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">time zone offset in minutes.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
+            posix time zone id for given offset.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_i18n_timezone.js.source.html#line166">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.i18n.TimeZone.composeUTCString_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.i18n.TimeZone.</span><span class="entryName">composeUTCString_<span class="args">(<span class="arg">offset</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Generate UTC string.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">offset</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">time zone offset in minutes.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
+            UTC string for given offset.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_i18n_timezone.js.source.html#line187">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.i18n.TimeZone.createSimpleTimeZone_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.i18n.TimeZone.</span><span class="entryName">createSimpleTimeZone_<span class="args">(<span class="arg">timeZoneOffsetInMinutes</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_i18n_TimeZone.html">goog.i18n.TimeZone</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       This factory method provides a decent fallback to create a time zone object
+just based on a given time zone offset.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">timeZoneOffsetInMinutes</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">time zone offset in minutes.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_i18n_TimeZone.html">goog.i18n.TimeZone</a></span></div>&nbsp;
+            A goog.i18n.TimeZone object generated by just using the time zone offset information.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_i18n_timezone.js.source.html#line132">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.i18n.TimeZone.createTimeZone"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.i18n.TimeZone.</span><span class="entryName">createTimeZone<span class="args">(<span class="arg">timeZoneData</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_i18n_TimeZone.html">goog.i18n.TimeZone</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       This factory method creates a time zone instance. It takes either a time zone
+information array or a simple timezone offset. The latter form does not offer
+the same set of functionalities as first form.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">timeZoneData</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">this parameter could take 2 types, if it is a number, a simple TimeZone object will be created. Otherwise, it should be an Object that holds all time zone related information.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_i18n_TimeZone.html">goog.i18n.TimeZone</a></span></div>&nbsp;
+            A goog.i18n.TimeZone object for the given time zone data.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_i18n_timezone.js.source.html#line111">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.i18n.TimeZone.MILLISECONDS_PER_HOUR_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.i18n.TimeZone.</span><span class="entryName">MILLISECONDS_PER_HOUR_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Milliseconds per hour constant.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_i18n_timezone.js.source.html#line84">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/i18n/timezone.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

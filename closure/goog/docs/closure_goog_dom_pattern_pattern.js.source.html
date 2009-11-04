@@ -1,0 +1,141 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>pattern.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_dom_pattern_pattern.js.html">pattern.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview DOM patterns.  Allows for description of complex DOM patterns
+<a name="line17"></a> * using regular expression like constructs.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.dom.pattern&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.dom.pattern.MatchType&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Regular expression for breaking text nodes.
+<a name="line27"></a> * @type {RegExp}
+<a name="line28"></a> */
+<a name="line29"></a>goog.dom.pattern.BREAKING_TEXTNODE_RE = /^\s*$/;
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Utility function to match a string against either a string or a regular
+<a name="line34"></a> * expression.
+<a name="line35"></a> *
+<a name="line36"></a> * @param {string|RegExp} obj Either a string or a regular expression.
+<a name="line37"></a> * @param {string} str The string to match.
+<a name="line38"></a> * @return {boolean} Whether the strings are equal, or if the string matches
+<a name="line39"></a> *     the regular expression.
+<a name="line40"></a> */
+<a name="line41"></a>goog.dom.pattern.matchStringOrRegex = function(obj, str) {
+<a name="line42"></a>  if (goog.isString(obj)) {
+<a name="line43"></a>    // Match a string
+<a name="line44"></a>    return str == obj;
+<a name="line45"></a>  } else {
+<a name="line46"></a>    // Match a regular expression
+<a name="line47"></a>    return !!(str &amp;&amp; str.match(obj));
+<a name="line48"></a>  }
+<a name="line49"></a>};
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>/**
+<a name="line53"></a> * Utility function to match a DOM attribute against either a string or a
+<a name="line54"></a> * regular expression.  Conforms to the interface spec for
+<a name="line55"></a> * {@link goog.object#every}.
+<a name="line56"></a> *
+<a name="line57"></a> * @param {string|RegExp} elem Either a string or a regular expression.
+<a name="line58"></a> * @param {string} index The attribute name to match.
+<a name="line59"></a> * @param {Object} orig The original map of matches to test.
+<a name="line60"></a> * @return {boolean} Whether the strings are equal, or if the attribute matches
+<a name="line61"></a> *     the regular expression.
+<a name="line62"></a> * @this {Element} Called using goog.object every on an Element.
+<a name="line63"></a> */
+<a name="line64"></a>goog.dom.pattern.matchStringOrRegexMap = function(elem, index, orig) {
+<a name="line65"></a>  return goog.dom.pattern.matchStringOrRegex(elem,
+<a name="line66"></a>      index in this ? this[index] :
+<a name="line67"></a>          (this.getAttribute ? this.getAttribute(index) : null));
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * When matched to a token, a pattern may return any of the following statuses:
+<a name="line73"></a> *  &lt;ol&gt;
+<a name="line74"></a> *    &lt;li&gt;&lt;code&gt;NO_MATCH&lt;/code&gt; - The pattern does not match.  This is the only
+<a name="line75"></a> *      value that evaluates to &lt;code&gt;false&lt;/code&gt; in a boolean context.
+<a name="line76"></a> *    &lt;li&gt;&lt;code&gt;MATCHING&lt;/code&gt; - The token is part of an incomplete match.
+<a name="line77"></a> *    &lt;li&gt;&lt;code&gt;MATCH&lt;/code&gt; - The token completes a match.
+<a name="line78"></a> *    &lt;li&gt;&lt;code&gt;BACKTRACK_MATCH&lt;/code&gt; - The token does not match, but indicates
+<a name="line79"></a> *      the end of a repetitive match.  For instance, in regular expressions,
+<a name="line80"></a> *      the pattern &lt;code&gt;/a+/&lt;/code&gt; would match &lt;code&gt;&#39;aaaaaaaab&#39;&lt;/code&gt;.
+<a name="line81"></a> *      Every &lt;code&gt;&#39;a&#39;&lt;/code&gt; token would give a status of
+<a name="line82"></a> *      &lt;code&gt;MATCHING&lt;/code&gt; while the &lt;code&gt;&#39;b&#39;&lt;/code&gt; token would give a
+<a name="line83"></a> *      status of &lt;code&gt;BACKTRACK_MATCH&lt;/code&gt;.
+<a name="line84"></a> *  &lt;/ol&gt;
+<a name="line85"></a> * @enum {number}
+<a name="line86"></a> */
+<a name="line87"></a>goog.dom.pattern.MatchType = {
+<a name="line88"></a>  NO_MATCH: 0,
+<a name="line89"></a>  MATCHING: 1,
+<a name="line90"></a>  MATCH: 2,
+<a name="line91"></a>  BACKTRACK_MATCH: 3
+<a name="line92"></a>};
+</pre>
+
+
+</body>
+</html>

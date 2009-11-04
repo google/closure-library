@@ -1,0 +1,202 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>moduleloader.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_module_moduleloader.js.html">moduleloader.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview The module loader which uses the BulkLoader to load the URIs.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.module.ModuleLoader&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.array&#39;);
+<a name="line23"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line26"></a>goog.require(&#39;goog.module.BaseModuleLoader&#39;);
+<a name="line27"></a>goog.require(&#39;goog.net.BulkLoader&#39;);
+<a name="line28"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line29"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * A class that loads Javascript modules.
+<a name="line34"></a> * @constructor
+<a name="line35"></a> * @extends {goog.module.BaseModuleLoader}
+<a name="line36"></a> */
+<a name="line37"></a>goog.module.ModuleLoader = function() {
+<a name="line38"></a>  goog.module.BaseModuleLoader.call(this);
+<a name="line39"></a>
+<a name="line40"></a>  /**
+<a name="line41"></a>   * Event handler for managing handling events.
+<a name="line42"></a>   * @type {goog.events.EventHandler}
+<a name="line43"></a>   * @private
+<a name="line44"></a>   */
+<a name="line45"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line46"></a>};
+<a name="line47"></a>goog.inherits(goog.module.ModuleLoader, goog.module.BaseModuleLoader);
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>/**
+<a name="line51"></a> * A logger.
+<a name="line52"></a> * @type {goog.debug.Logger}
+<a name="line53"></a> * @protected
+<a name="line54"></a> */
+<a name="line55"></a>goog.module.ModuleLoader.prototype.logger = goog.debug.Logger.getLogger(
+<a name="line56"></a>    &#39;goog.module.ModuleLoader&#39;);
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/** @inheritDoc */
+<a name="line60"></a>goog.module.ModuleLoader.prototype.loadModulesInternal = function(
+<a name="line61"></a>    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {
+<a name="line62"></a>  var uris = [];
+<a name="line63"></a>  for (var i = 0; i &lt; ids.length; i++) {
+<a name="line64"></a>    goog.array.extend(uris, moduleInfoMap[ids[i]].getUris());
+<a name="line65"></a>  }
+<a name="line66"></a>  this.logger.info(&#39;loadModules ids:&#39; + ids + &#39; uris:&#39; + uris);
+<a name="line67"></a>
+<a name="line68"></a>  // In prod, we don&#39;t load via a script tag because it is difficult to
+<a name="line69"></a>  // determine if the script has been loaded and to handle errors conditions.
+<a name="line70"></a>  if (this.getDebugMode() &amp;&amp; goog.userAgent.GECKO) {
+<a name="line71"></a>    // In debug mode on FF, we do not load via an XHR + eval as the script will
+<a name="line72"></a>    // not show in firebug.
+<a name="line73"></a>    for (var i = 0; i &lt; uris.length; i++) {
+<a name="line74"></a>      var scriptElt = goog.dom.createElement(&#39;script&#39;);
+<a name="line75"></a>      scriptElt.src = uris[i];
+<a name="line76"></a>      scriptElt.type = &#39;text/javascript&#39;;
+<a name="line77"></a>      document.documentElement.appendChild(scriptElt);
+<a name="line78"></a>    }
+<a name="line79"></a>  } else {
+<a name="line80"></a>    var bulkLoader = new goog.net.BulkLoader(uris);
+<a name="line81"></a>    var eventHandler = this.eventHandler_;
+<a name="line82"></a>    eventHandler.listen(
+<a name="line83"></a>        bulkLoader,
+<a name="line84"></a>        goog.net.EventType.SUCCESS,
+<a name="line85"></a>        goog.bind(this.handleSuccess, this, bulkLoader, ids,
+<a name="line86"></a>            opt_successFn, opt_errorFn),
+<a name="line87"></a>        false,
+<a name="line88"></a>        null);
+<a name="line89"></a>    eventHandler.listen(
+<a name="line90"></a>        bulkLoader,
+<a name="line91"></a>        goog.net.EventType.ERROR,
+<a name="line92"></a>        goog.bind(this.handleError, this, bulkLoader, ids, opt_errorFn),
+<a name="line93"></a>        false,
+<a name="line94"></a>        null);
+<a name="line95"></a>    // TODO: Need to handle timeouts in the module loading code.
+<a name="line96"></a>
+<a name="line97"></a>    bulkLoader.load();
+<a name="line98"></a>  }
+<a name="line99"></a>};
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Handles a successful response to a request for one or more modules.
+<a name="line104"></a> *
+<a name="line105"></a> * @param {goog.net.BulkLoader} bulkLoader The bulk loader.
+<a name="line106"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
+<a name="line107"></a> * @param {function()} successFn The callback for success.
+<a name="line108"></a> * @param {function(?number)} errorFn The callback for error.
+<a name="line109"></a> */
+<a name="line110"></a>goog.module.ModuleLoader.prototype.handleSuccess = function(
+<a name="line111"></a>  bulkLoader, moduleIds, successFn, errorFn) {
+<a name="line112"></a>  var jsCode = bulkLoader.getResponseTexts().join(&#39;\n&#39;);
+<a name="line113"></a>
+<a name="line114"></a>  this.handleRequestSuccess(jsCode, moduleIds, successFn, errorFn);
+<a name="line115"></a>
+<a name="line116"></a>  // NOTE: A bulk loader instance is used for loading a set of module ids. Once
+<a name="line117"></a>  // these modules have been loaded succesfully or in error the bulk loader
+<a name="line118"></a>  // should be disposed as it is not needed anymore. A new bulk loader is
+<a name="line119"></a>  // instantiated for any new modules to be loaded. The dispose is called
+<a name="line120"></a>  // on a timer so that the bulkloader has a chance to release its
+<a name="line121"></a>  // objects.
+<a name="line122"></a>  goog.Timer.callOnce(bulkLoader.dispose, 5, bulkLoader);
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * Handles an error during a request for one or more modules.
+<a name="line128"></a> * @param {goog.net.BulkLoader} bulkLoader The bulk loader.
+<a name="line129"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
+<a name="line130"></a> * @param {function(?number)} errorFn The function to call on failure.
+<a name="line131"></a> * @param {number} status The response status.
+<a name="line132"></a> */
+<a name="line133"></a>goog.module.ModuleLoader.prototype.handleError = function(
+<a name="line134"></a>    bulkLoader, moduleIds, errorFn, status) {
+<a name="line135"></a>  this.handleRequestError(moduleIds, errorFn, status);
+<a name="line136"></a>
+<a name="line137"></a>  // NOTE: A bulk loader instance is used for loading a set of module ids. Once
+<a name="line138"></a>  // these modules have been loaded succesfully or in error the bulk loader
+<a name="line139"></a>  // should be disposed as it is not needed anymore. A new bulk loader is
+<a name="line140"></a>  // instantiated for any new modules to be loaded. The dispose is called
+<a name="line141"></a>  // on another thread so that the bulkloader has a chance to release its
+<a name="line142"></a>  // objects.
+<a name="line143"></a>  goog.Timer.callOnce(bulkLoader.dispose, 5, bulkLoader);
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/** @inheritDoc */
+<a name="line148"></a>goog.module.ModuleLoader.prototype.disposeInternal = function() {
+<a name="line149"></a>  goog.module.ModuleLoader.superClass_.disposeInternal.call(this);
+<a name="line150"></a>
+<a name="line151"></a>  this.eventHandler_.dispose();
+<a name="line152"></a>  this.eventHandler_ = null;
+<a name="line153"></a>};
+</pre>
+
+
+</body>
+</html>

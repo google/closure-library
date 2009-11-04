@@ -1,0 +1,215 @@
+/*
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+*/
+
+/* Copyright 2008 Google Inc.  All Rights Reserved. */
+/**/
+
+/* Imageless button styles. */
+.goog-imageless-button {
+  margin: 2px;
+  border: 0;
+  padding: 0;
+  font: normal Tahoma, Arial, sans-serif;
+  color: #000;
+  text-decoration: none;
+  list-style: none;
+  vertical-align: middle;
+  cursor: default;
+  outline: none;
+}
+
+
+/* Pseudo-rounded corners. */
+.goog-imageless-button-outer-box,
+.goog-imageless-button-inner-box {
+  border: solid #bbb;
+  padding: 0;
+}
+
+.goog-imageless-button-outer-box {
+  margin: 0;
+  border-width: 1px 0;
+}
+
+.goog-imageless-button-inner-box {
+  margin: 0 -1px;
+  border-width: 0 1px;
+  background: #e3e3e3;
+}
+
+.goog-imageless-button-pos {
+  position: relative;
+  height: 100%;
+}
+
+.goog-imageless-button-top-shadow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0px;
+  height: 0.7em;
+  background: #f9f9f9;
+  overflow: hidden;
+  border-bottom: 0.2em solid #eee;
+}
+
+.goog-imageless-button-content {
+  position: relative;
+  padding: 0px 4px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.5em;
+  color: #333;
+}
+
+
+/* Pre-IE7 IE hack; ignored by IE7 and all non-IE browsers. */
+* html .goog-imageless-button-inner-box {
+  /* IE6 needs to have the box shifted to make the borders line up. */
+  left: -1px;
+}
+
+/* Pre-IE7 BiDi fixes. */
+* html .goog-imageless-button-rtl .goog-imageless-button-outer-box {
+  left: -1px;
+}
+* html .goog-imageless-button-rtl .goog-imageless-button-inner-box {
+  left: 0;
+}
+
+/* IE7-only hack; ignored by all other browsers. */
+*:first-child+html .goog-imageless-button-inner-box {
+  /* IE7 needs to have the box shifted to make the borders line up. */
+  left: -1px;
+}
+
+/* IE7 BiDi fix. */
+*:first-child+html .goog-imageless-button-rtl .goog-imageless-button-inner-box {
+  left: 1px;
+}
+
+/* Safari-only hacks. */
+::root .goog-imageless-button,
+::root .goog-imageless-button-outer-box {
+  /* Required to make pseudo-rounded corners work on Safari. */
+  line-height: 0;
+}
+
+::root .goog-imageless-button-inner-box {
+  /* Required to make pseudo-rounded corners work on Safari. */
+  line-height: normal;
+}
+
+
+/* Disabled styles. */
+.goog-imageless-button-disabled .goog-imageless-button-outer-box,
+.goog-imageless-button-disabled .goog-imageless-button-inner-box {
+  border-color: #ccc;
+}
+
+.goog-imageless-button-disabled .goog-imageless-button-inner-box,
+.goog-imageless-button-disabled .goog-imageless-button-top-shadow {
+  background: #eee;
+}
+
+.goog-imageless-button-disabled .goog-imageless-button-top-shadow {
+  border-color: #eee;
+}
+
+.goog-imageless-button-disabled .goog-imageless-button-content {
+  color: #999;
+}
+
+
+/* Hover styles. */
+.goog-imageless-button-hover .goog-imageless-button-outer-box,
+.goog-imageless-button-hover .goog-imageless-button-inner-box {
+  border-color: #9cf;
+}
+
+
+/* Active styles. */
+.goog-imageless-button-active .goog-imageless-button-inner-box {
+  background: #f9f9f9;
+}
+
+.goog-imageless-button-active .goog-imageless-button-top-shadow {
+  background: #e3e3e3;
+}
+
+.goog-imageless-button-active .goog-imageless-button-content {
+  color: #000;
+}
+
+
+/* Checked styles. */
+.goog-imageless-button-checked .goog-imageless-button-inner-box {
+  background: #999;
+}
+
+.goog-imageless-button-checked .goog-imageless-button-top-shadow {
+  background: #777;
+  border-color: #888;
+}
+
+.goog-imageless-button-checked .goog-imageless-button-content {
+  color: #fff;
+}
+
+
+/* Pill (collapsed border) styles. */
+.goog-imageless-button-collapse-right,
+.goog-imageless-button-collapse-right .goog-imageless-button-inner-box,
+.goog-imageless-button-collapse-right .goog-imageless-button-outer-box {
+  margin-right: 0;
+}
+
+.goog-imageless-button-collapse-left,
+.goog-imageless-button-collapse-left .goog-imageless-button-outer-box,
+.goog-imageless-button-collapse-left .goog-imageless-button-inner-box {
+  margin-left: 0;
+}
+
+.goog-imageless-button-collapse-left .goog-imageless-button-inner-box  {
+  border-left: 1px solid #fff;
+}
+
+.goog-imageless-button-collapse-left.goog-imageless-button-checked
+.goog-imageless-button-inner-box {
+  border-left: 1px solid #777;
+}
+
+/* Pre-IE7 IE hack; ignored by IE7 and all non-IE browsers. */
+* html .goog-imageless-button-collapse-left .goog-imageless-button-inner-box {
+  left: 0px;
+}
+
+/* IE7-only hack; ignored by all other browsers. */
+*:first-child+html .goog-imageless-button-collapse-left
+.goog-imageless-button-inner-box {
+  left: 0px;
+}
+
+
+/* IE6 hacks */
+* html .goog-imageless-button-inner-box {
+  line-height: 1.5em;
+  overflow: hidden;
+}
+
+* html .goog-imageless-button-pos {
+  height: auto;
+}
+
+* html .goog-imageless-button-top-shadow {
+  position: static;
+  height: auto;
+  line-height: 0.65em;
+}
+
+* html .goog-imageless-button-content {
+  position: relative;
+  margin-top: -0.75em;
+}

@@ -1,0 +1,752 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>gauge.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">gauge.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Gauge UI component, using browser vector graphics.
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="../demos/gauge.html">Demo</a></li>
+            <li><a href="closure_goog_ui_gauge.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/ui/gauge.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_GaugeColoredRange.html">
+          goog.ui.GaugeColoredRange</a><br/>
+        <div class="class-details">Information on how to decorate a range in the gauge.
+This is an internal-only class.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Gauge.html">
+          goog.ui.Gauge</a><br/>
+        <div class="class-details">A UI component that displays a gauge.
+A gauge displayes a current value within a round axis that represents a
+given range.
+The gauge is built from an external border, and internal border inside it,
+ticks and labels inside the internal border, and a needle that points to
+the current value.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_COLOR_RADIUS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_COLOR_RADIUS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The ratio of the colored background area for value ranges.
+The colored area width is computed as
+InternalRadius * (1 - FACTOR_COLOR_RADIUS)
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line159">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_MAIN_AREA"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_MAIN_AREA</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The ratio of internal gauge radius from entire radius.
+The remaining area is the border around the gauge.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line150">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_MAJOR_TICKS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_MAJOR_TICKS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The ratio of the major ticks length start position, from the radius.
+The major ticks length width is computed as
+InternalRadius * (1 - FACTOR_MAJOR_TICKS)
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line168">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_MINOR_TICKS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_MINOR_TICKS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The ratio of the minor ticks length start position, from the radius.
+The minor ticks length width is computed as
+InternalRadius * (1 - FACTOR_MINOR_TICKS)
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line177">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_NEEDLE_BACK"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_NEEDLE_BACK</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The length of the needle back relative to the internal radius.
+The needle back is the part of the needle that points away from the value.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line193">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_NEEDLE_FRONT"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_NEEDLE_FRONT</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The length of the needle front (value facing) from the internal radius.
+The needle front is the part of the needle that points to the value.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line185">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_NEEDLE_HINGE"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_NEEDLE_HINGE</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The width (radius) of the needle hinge from the gauge radius.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line209">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_NEEDLE_WIDTH"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_NEEDLE_WIDTH</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The width of the needle front at the hinge.
+This is the width of the curve control point, the actual width is
+computed by the curve itself.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line202">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_RADIUS_FROM_SIZE"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_RADIUS_FROM_SIZE</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The radius of the entire gauge from the canvas size.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line142">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_TICK_LABEL_FONT_SIZE"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_TICK_LABEL_FONT_SIZE</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The title font size (height) for tick labels relative to the internal radius.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line237">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_TITLE_FONT_SIZE"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_TITLE_FONT_SIZE</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The title font size (height) for titles relative to the internal radius.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line216">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_TITLE_OFFSET"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_TITLE_OFFSET</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The offset of the title from the center, relative to the internal radius.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line223">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_VALUE_FONT_SIZE"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_VALUE_FONT_SIZE</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The formatted value font size (height) relative to the internal radius.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line230">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.FACTOR_VALUE_OFFSET"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">FACTOR_VALUE_OFFSET</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The offset of the formatted value down from the center, relative to the
+internal radius.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line245">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.MAX_EXCEED_POSITION_POSITION"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">MAX_EXCEED_POSITION_POSITION</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Tolerance factor for how much values can exceed the range (being too
+low or too high). The value is presented as a position (percentage).
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line276">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.NEEDLE_MOVE_MAX_STEP"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">NEEDLE_MOVE_MAX_STEP</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The maximal size of a step the needle can move (percent from size of range).
+If the needle needs to move more, it will be moved in animated steps, to
+show a smooth transition between values.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line261">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.NEEDLE_MOVE_TIME"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">NEEDLE_MOVE_TIME</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Time in miliseconds for animating a move of the value pointer.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line268">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Gauge.TITLE_FONT_NAME"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Gauge.</span><span class="entryName">TITLE_FONT_NAME</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       The font name for title text.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_gauge.js.source.html#line252">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/ui/gauge.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

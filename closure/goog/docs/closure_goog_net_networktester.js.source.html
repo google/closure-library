@@ -1,0 +1,431 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>networktester.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_net_networktester.js.html">networktester.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of goog.net.NetworkTester.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.net.NetworkTester&#39;);
+<a name="line20"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line21"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line22"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Creates an instance of goog.net.NetworkTester which can be used to test
+<a name="line27"></a> * for internet connectivity by seeing if an image can be loaded from
+<a name="line28"></a> * google.com. It can also be tested with other URLs.
+<a name="line29"></a> * @param {Function} callback Callback that is called when the test completes.
+<a name="line30"></a> *     The callback takes a single boolean parameter. True indicates the URL
+<a name="line31"></a> *     was reachable, false indicates it wasn&#39;t.
+<a name="line32"></a> * @param {Object} opt_handler Handler object for the callback.
+<a name="line33"></a> * @param {goog.Uri} opt_uri URI to use for testing.
+<a name="line34"></a> * @constructor
+<a name="line35"></a> */
+<a name="line36"></a>goog.net.NetworkTester = function(callback, opt_handler, opt_uri) {
+<a name="line37"></a>  /**
+<a name="line38"></a>   * Callback that is called when the test completes.
+<a name="line39"></a>   * The callback takes a single boolean parameter. True indicates the URL was
+<a name="line40"></a>   * reachable, false indicates it wasn&#39;t.
+<a name="line41"></a>   * @type {Function}
+<a name="line42"></a>   * @private
+<a name="line43"></a>   */
+<a name="line44"></a>  this.callback_ = callback;
+<a name="line45"></a>
+<a name="line46"></a>  /**
+<a name="line47"></a>   * Handler object for the callback.
+<a name="line48"></a>   * @type {Object|undefined}
+<a name="line49"></a>   * @private
+<a name="line50"></a>   */
+<a name="line51"></a>  this.handler_ = opt_handler;
+<a name="line52"></a>
+<a name="line53"></a>  if (!opt_uri) {
+<a name="line54"></a>    // set the default URI to be based on the cleardot image at google.com
+<a name="line55"></a>    // We need to add a &#39;rand&#39; to make sure the response is not fulfilled
+<a name="line56"></a>    // by browser cache. Use protocol-relative URLs to avoid insecure content
+<a name="line57"></a>    // warnings in IE.
+<a name="line58"></a>    opt_uri = new goog.Uri(&#39;//www.google.com/images/cleardot.gif&#39;);
+<a name="line59"></a>    opt_uri.makeUnique();
+<a name="line60"></a>  }
+<a name="line61"></a>
+<a name="line62"></a>  /**
+<a name="line63"></a>   * Uri to use for test. Defaults to using an image off of google.com
+<a name="line64"></a>   * @type {goog.Uri}
+<a name="line65"></a>   * @private
+<a name="line66"></a>   */
+<a name="line67"></a>  this.uri_ = opt_uri;
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Default timeout
+<a name="line73"></a> * @type {number}
+<a name="line74"></a> */
+<a name="line75"></a>goog.net.NetworkTester.DEFAULT_TIMEOUT_MS = 10000;
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Logger object
+<a name="line80"></a> * @type {goog.debug.Logger}
+<a name="line81"></a> * @private
+<a name="line82"></a> */
+<a name="line83"></a>goog.net.NetworkTester.prototype.logger_ =
+<a name="line84"></a>    goog.debug.Logger.getLogger(&#39;goog.net.NetworkTester&#39;);
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * Timeout for test
+<a name="line89"></a> * @type {number}
+<a name="line90"></a> * @private
+<a name="line91"></a> */
+<a name="line92"></a>goog.net.NetworkTester.prototype.timeoutMs_ =
+<a name="line93"></a>    goog.net.NetworkTester.DEFAULT_TIMEOUT_MS;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Whether we&#39;ve already started running.
+<a name="line98"></a> * @type {boolean}
+<a name="line99"></a> * @private
+<a name="line100"></a> */
+<a name="line101"></a>goog.net.NetworkTester.prototype.running_ = false;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Number of retries to attempt
+<a name="line106"></a> * @type {number}
+<a name="line107"></a> * @private
+<a name="line108"></a> */
+<a name="line109"></a>goog.net.NetworkTester.prototype.retries_ = 0;
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Attempt number we&#39;re on
+<a name="line114"></a> * @type {number}
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.net.NetworkTester.prototype.attempt_ = 0;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Pause between retries in milliseconds.
+<a name="line122"></a> * @type {number}
+<a name="line123"></a> * @private
+<a name="line124"></a> */
+<a name="line125"></a>goog.net.NetworkTester.prototype.pauseBetweenRetriesMs_ = 0;
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * Timer for timeouts.
+<a name="line130"></a> * @type {number?}
+<a name="line131"></a> * @private
+<a name="line132"></a> */
+<a name="line133"></a>goog.net.NetworkTester.prototype.timeoutTimer_ = null;
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Timer for pauses between retries.
+<a name="line138"></a> * @type {number?}
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.net.NetworkTester.prototype.pauseTimer_ = null;
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Returns the timeout in milliseconds.
+<a name="line146"></a> * @return {number} Timeout in milliseconds.
+<a name="line147"></a> */
+<a name="line148"></a>goog.net.NetworkTester.prototype.getTimeout = function() {
+<a name="line149"></a>  return this.timeoutMs_;
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * Sets the timeout in milliseconds.
+<a name="line155"></a> * @param {number} timeoutMs Timeout in milliseconds.
+<a name="line156"></a> */
+<a name="line157"></a>goog.net.NetworkTester.prototype.setTimeout = function(timeoutMs) {
+<a name="line158"></a>  this.timeoutMs_ = timeoutMs;
+<a name="line159"></a>};
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>/**
+<a name="line163"></a> * Returns the numer of retries to attempt.
+<a name="line164"></a> * @return {number} Number of retries to attempt.
+<a name="line165"></a> */
+<a name="line166"></a>goog.net.NetworkTester.prototype.getNumRetries = function() {
+<a name="line167"></a>  return this.retries_;
+<a name="line168"></a>};
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * Sets the timeout in milliseconds.
+<a name="line173"></a> * @param {number} retries Number of retries to attempt.
+<a name="line174"></a> */
+<a name="line175"></a>goog.net.NetworkTester.prototype.setNumRetries = function(retries) {
+<a name="line176"></a>  this.retries_ = retries;
+<a name="line177"></a>};
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * Returns the pause between retries in milliseconds.
+<a name="line182"></a> * @return {number} Pause between retries in milliseconds.
+<a name="line183"></a> */
+<a name="line184"></a>goog.net.NetworkTester.prototype.getPauseBetweenRetries = function() {
+<a name="line185"></a>  return this.pauseBetweenRetriesMs_;
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Sets the pause between retries in milliseconds.
+<a name="line191"></a> * @param {number} pauseMs Pause between retries in milliseconds.
+<a name="line192"></a> */
+<a name="line193"></a>goog.net.NetworkTester.prototype.setPauseBetweenRetries = function(pauseMs) {
+<a name="line194"></a>  this.pauseBetweenRetriesMs_ = pauseMs;
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Returns the uri to use for the test.
+<a name="line200"></a> * @return {goog.Uri} The uri for the test.
+<a name="line201"></a> */
+<a name="line202"></a>goog.net.NetworkTester.prototype.getUri = function() {
+<a name="line203"></a>  return this.uri_;
+<a name="line204"></a>};
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * Sets the uri to use for the test.
+<a name="line209"></a> * @param {goog.Uri} uri The uri for the test.
+<a name="line210"></a> */
+<a name="line211"></a>goog.net.NetworkTester.prototype.setUri = function(uri) {
+<a name="line212"></a>  this.uri_ = uri;
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Returns whether the tester is currently running.
+<a name="line218"></a> * @return {boolean} True if it&#39;s running, false if it&#39;s not running.
+<a name="line219"></a> */
+<a name="line220"></a>goog.net.NetworkTester.prototype.isRunning = function() {
+<a name="line221"></a>  return this.running_;
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * Starts the process of testing the network.
+<a name="line227"></a> */
+<a name="line228"></a>goog.net.NetworkTester.prototype.start = function() {
+<a name="line229"></a>  if (this.running_) {
+<a name="line230"></a>    throw Error(&#39;NetworkTester.start called when already running&#39;);
+<a name="line231"></a>  }
+<a name="line232"></a>  this.running_ = true;
+<a name="line233"></a>
+<a name="line234"></a>  this.logger_.info(&#39;Starting&#39;);
+<a name="line235"></a>  this.attempt_ = 0;
+<a name="line236"></a>  this.startNextAttempt_();
+<a name="line237"></a>};
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * Stops the testing of the network. This is a noop if not running.
+<a name="line242"></a> */
+<a name="line243"></a>goog.net.NetworkTester.prototype.stop = function() {
+<a name="line244"></a>  this.cleanupCallbacks_();
+<a name="line245"></a>  this.running_ = false;
+<a name="line246"></a>};
+<a name="line247"></a>
+<a name="line248"></a>
+<a name="line249"></a>/**
+<a name="line250"></a> * Starts the next attempt to load an image.
+<a name="line251"></a> * @private
+<a name="line252"></a> */
+<a name="line253"></a>goog.net.NetworkTester.prototype.startNextAttempt_ = function() {
+<a name="line254"></a>  this.attempt_++;
+<a name="line255"></a>
+<a name="line256"></a>  if (goog.net.NetworkTester.getNavigatorOffline_()) {
+<a name="line257"></a>    this.logger_.info(&#39;Browser is set to work offline.&#39;);
+<a name="line258"></a>    // Call in a timeout to make async like the rest.
+<a name="line259"></a>    goog.Timer.callOnce(goog.bind(this.onResult, this, false), 0);
+<a name="line260"></a>  } else {
+<a name="line261"></a>    this.logger_.info(&#39;Loading image (attempt &#39; + this.attempt_ +
+<a name="line262"></a>                      &#39;) at &#39; + this.uri_);
+<a name="line263"></a>    this.image_ = new Image();
+<a name="line264"></a>    this.image_.onload = goog.bind(this.onImageLoad_, this);
+<a name="line265"></a>    this.image_.onerror = goog.bind(this.onImageError_, this);
+<a name="line266"></a>    this.image_.onabort = goog.bind(this.onImageAbort_, this);
+<a name="line267"></a>
+<a name="line268"></a>    this.timeoutTimer_ = goog.Timer.callOnce(this.onImageTimeout_,
+<a name="line269"></a>        this.timeoutMs_, this);
+<a name="line270"></a>    this.image_.src = String(this.uri_);
+<a name="line271"></a>  }
+<a name="line272"></a>};
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * @return {boolean} Whether navigator.onLine returns false.
+<a name="line277"></a> * @private
+<a name="line278"></a> */
+<a name="line279"></a>goog.net.NetworkTester.getNavigatorOffline_ = function() {
+<a name="line280"></a>  return &#39;onLine&#39; in navigator &amp;&amp; !navigator.onLine;
+<a name="line281"></a>};
+<a name="line282"></a>
+<a name="line283"></a>
+<a name="line284"></a>/**
+<a name="line285"></a> * Callback for the image successfully loading.
+<a name="line286"></a> * @private
+<a name="line287"></a> */
+<a name="line288"></a>goog.net.NetworkTester.prototype.onImageLoad_ = function() {
+<a name="line289"></a>  this.logger_.info(&#39;Image loaded&#39;);
+<a name="line290"></a>  this.onResult(true);
+<a name="line291"></a>};
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * Callback for the image failing to load.
+<a name="line296"></a> * @private
+<a name="line297"></a> */
+<a name="line298"></a>goog.net.NetworkTester.prototype.onImageError_ = function() {
+<a name="line299"></a>  this.logger_.info(&#39;Image load error&#39;);
+<a name="line300"></a>  this.onResult(false);
+<a name="line301"></a>};
+<a name="line302"></a>
+<a name="line303"></a>
+<a name="line304"></a>/**
+<a name="line305"></a> * Callback for the image load being aborted.
+<a name="line306"></a> * @private
+<a name="line307"></a> */
+<a name="line308"></a>goog.net.NetworkTester.prototype.onImageAbort_ = function() {
+<a name="line309"></a>  this.logger_.info(&#39;Image load aborted&#39;);
+<a name="line310"></a>  this.onResult(false);
+<a name="line311"></a>};
+<a name="line312"></a>
+<a name="line313"></a>
+<a name="line314"></a>/**
+<a name="line315"></a> * Callback for the image load timing out.
+<a name="line316"></a> * @private
+<a name="line317"></a> */
+<a name="line318"></a>goog.net.NetworkTester.prototype.onImageTimeout_ = function() {
+<a name="line319"></a>  this.logger_.info(&#39;Image load timed out&#39;);
+<a name="line320"></a>  this.onResult(false);
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Handles a successful or failed result.
+<a name="line326"></a> * @param {boolean} succeeded Whether the image load succeeded.
+<a name="line327"></a> */
+<a name="line328"></a>goog.net.NetworkTester.prototype.onResult = function(succeeded) {
+<a name="line329"></a>  this.cleanupCallbacks_();
+<a name="line330"></a>
+<a name="line331"></a>  if (succeeded) {
+<a name="line332"></a>    this.running_ = false
+<a name="line333"></a>    this.callback_.call(this.handler_, true);
+<a name="line334"></a>  } else {
+<a name="line335"></a>    if (this.attempt_ &lt;= this.retries_) {
+<a name="line336"></a>      if (this.pauseBetweenRetriesMs_) {
+<a name="line337"></a>        this.pauseTimer_ = goog.Timer.callOnce(this.onPauseFinished_,
+<a name="line338"></a>            this.pauseBetweenRetriesMs_, this);
+<a name="line339"></a>      } else {
+<a name="line340"></a>        this.startNextAttempt_();
+<a name="line341"></a>      }
+<a name="line342"></a>    } else {
+<a name="line343"></a>      this.running_ = false
+<a name="line344"></a>      this.callback_.call(this.handler_, false);
+<a name="line345"></a>    }
+<a name="line346"></a>  }
+<a name="line347"></a>};
+<a name="line348"></a>
+<a name="line349"></a>
+<a name="line350"></a>/**
+<a name="line351"></a> * Callback for the pause between retry timer.
+<a name="line352"></a> * @private
+<a name="line353"></a> */
+<a name="line354"></a>goog.net.NetworkTester.prototype.onPauseFinished_ = function() {
+<a name="line355"></a>  this.pauseTimer_ = null;
+<a name="line356"></a>  this.startNextAttempt_();
+<a name="line357"></a>};
+<a name="line358"></a>
+<a name="line359"></a>
+<a name="line360"></a>/**
+<a name="line361"></a> * Cleans up the handlers and timer associated with the image.
+<a name="line362"></a> * @private
+<a name="line363"></a> */
+<a name="line364"></a>goog.net.NetworkTester.prototype.cleanupCallbacks_ = function() {
+<a name="line365"></a>  // clear handlers to avoid memory leaks
+<a name="line366"></a>  // NOTE: Nullified individually to avoid compiler warnings
+<a name="line367"></a>  // (BUG 658126)
+<a name="line368"></a>  if (this.image_) {
+<a name="line369"></a>    this.image_.onload = null;
+<a name="line370"></a>    this.image_.onerror = null;
+<a name="line371"></a>    this.image_.onabort = null;
+<a name="line372"></a>    this.image_ = null;
+<a name="line373"></a>  }
+<a name="line374"></a>  if (this.timeoutTimer_) {
+<a name="line375"></a>    goog.Timer.clear(this.timeoutTimer_);
+<a name="line376"></a>    this.timeoutTimer_ = null;
+<a name="line377"></a>  }
+<a name="line378"></a>  if (this.pauseTimer_) {
+<a name="line379"></a>    goog.Timer.clear(this.pauseTimer_);
+<a name="line380"></a>    this.pauseTimer_ = null;
+<a name="line381"></a>  }
+<a name="line382"></a>};
+</pre>
+
+
+</body>
+</html>

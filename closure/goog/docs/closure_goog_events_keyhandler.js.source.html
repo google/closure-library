@@ -1,0 +1,546 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>keyhandler.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_events_keyhandler.js.html">keyhandler.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This file contains a class for working with keyboard events
+<a name="line17"></a> * that repeat consistently across browsers and platforms. It also unifies the
+<a name="line18"></a> * key code so that it is the same in all browsers and platforms.
+<a name="line19"></a> *
+<a name="line20"></a> * Different web browsers have very different keyboard event handling. Most
+<a name="line21"></a> * importantly is that only certain browsers repeat keydown events:
+<a name="line22"></a> * IE, Opera, FF/Win32, and Safari 3 repeat keydown events.
+<a name="line23"></a> * FF/Mac and Safari 2 do not.
+<a name="line24"></a> *
+<a name="line25"></a> * For the purposes of this code, &quot;Safari 3&quot; means WebKit 525+, when WebKit
+<a name="line26"></a> * decided that they should try to match IE&#39;s key handling behavior.
+<a name="line27"></a> * Safari 3.0.4, which shipped with Leopard (WebKit 523), has the
+<a name="line28"></a> * Safari 2 behavior.
+<a name="line29"></a> *
+<a name="line30"></a> * Firefox, Safari, Opera prevent on keypress
+<a name="line31"></a> *
+<a name="line32"></a> * IE prevents on keydown
+<a name="line33"></a> *
+<a name="line34"></a> * Firefox does not fire keypress for shift, ctrl, alt
+<a name="line35"></a> * Firefox does fire keydown for shift, ctrl, alt, meta
+<a name="line36"></a> * Firefox does not repeat keydown for shift, ctrl, alt, meta
+<a name="line37"></a> *
+<a name="line38"></a> * Firefox does not fire keypress for up and down in an input
+<a name="line39"></a> *
+<a name="line40"></a> * Opera fires keypress for shift, ctrl, alt, meta
+<a name="line41"></a> * Opera does not repeat keypress for shift, ctrl, alt, meta
+<a name="line42"></a> *
+<a name="line43"></a> * Safari 2 and 3 do not fire keypress for shift, ctrl, alt
+<a name="line44"></a> * Safari 2 does not fire keydown for shift, ctrl, alt
+<a name="line45"></a> * Safari 3 *does* fire keydown for shift, ctrl, alt
+<a name="line46"></a> *
+<a name="line47"></a> * IE provides the keycode for keyup/down events and the charcode (in the
+<a name="line48"></a> * keycode field) for keypress.
+<a name="line49"></a> *
+<a name="line50"></a> * Mozilla provides the keycode for keyup/down and the charcode for keypress
+<a name="line51"></a> * unless it&#39;s a non text modifying key in which case the keycode is provided.
+<a name="line52"></a> *
+<a name="line53"></a> * Safari 3 provides the keycode and charcode for all events.
+<a name="line54"></a> *
+<a name="line55"></a> * Opera provides the keycode for keyup/down event and either the charcode or
+<a name="line56"></a> * the keycode (in the keycode field) for keypress events.
+<a name="line57"></a> *
+<a name="line58"></a> * Firefox x11 doesn&#39;t fire keydown events if a another key is already held down
+<a name="line59"></a> * until the first key is released. This can cause a key event to be fired with
+<a name="line60"></a> * a keyCode for the first key and a charCode for the second key.
+<a name="line61"></a> *
+<a name="line62"></a> * Safari in keypress
+<a name="line63"></a> *
+<a name="line64"></a> *        charCode keyCode which
+<a name="line65"></a> * ENTER:       13      13    13
+<a name="line66"></a> * F1:       63236   63236 63236
+<a name="line67"></a> * F8:       63243   63243 63243
+<a name="line68"></a> * ...
+<a name="line69"></a> * p:          112     112   112
+<a name="line70"></a> * P:           80      80    80
+<a name="line71"></a> *
+<a name="line72"></a> * Firefox, keypress:
+<a name="line73"></a> *
+<a name="line74"></a> *        charCode keyCode which
+<a name="line75"></a> * ENTER:        0      13    13
+<a name="line76"></a> * F1:           0     112     0
+<a name="line77"></a> * F8:           0     119     0
+<a name="line78"></a> * ...
+<a name="line79"></a> * p:          112       0   112
+<a name="line80"></a> * P:           80       0    80
+<a name="line81"></a> *
+<a name="line82"></a> * Opera, Mac+Win32, keypress:
+<a name="line83"></a> *
+<a name="line84"></a> *         charCode keyCode which
+<a name="line85"></a> * ENTER: undefined      13    13
+<a name="line86"></a> * F1:    undefined     112     0
+<a name="line87"></a> * F8:    undefined     119     0
+<a name="line88"></a> * ...
+<a name="line89"></a> * p:     undefined     112   112
+<a name="line90"></a> * P:     undefined      80    80
+<a name="line91"></a> *
+<a name="line92"></a> * IE7, keydown
+<a name="line93"></a> *
+<a name="line94"></a> *         charCode keyCode     which
+<a name="line95"></a> * ENTER: undefined      13 undefined
+<a name="line96"></a> * F1:    undefined     112 undefined
+<a name="line97"></a> * F8:    undefined     119 undefined
+<a name="line98"></a> * ...
+<a name="line99"></a> * p:     undefined      80 undefined
+<a name="line100"></a> * P:     undefined      80 undefined
+<a name="line101"></a> *
+<a name="line102"></a> * @see ../demos/keyhandler.html
+<a name="line103"></a> */
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>goog.provide(&#39;goog.events.KeyEvent&#39;);
+<a name="line107"></a>goog.provide(&#39;goog.events.KeyHandler&#39;);
+<a name="line108"></a>goog.provide(&#39;goog.events.KeyHandler.EventType&#39;);
+<a name="line109"></a>
+<a name="line110"></a>goog.require(&#39;goog.events&#39;);
+<a name="line111"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
+<a name="line112"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line113"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line114"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line115"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * A wrapper around an element that you want to listen to keyboard events on.
+<a name="line119"></a> * XXX: {Document|Element} != {Element|Document}.
+<a name="line120"></a> * see: http://b/1470354
+<a name="line121"></a> * @param {Element|Document} opt_element The element or document to listen on.
+<a name="line122"></a> * @constructor
+<a name="line123"></a> * @extends {goog.events.EventTarget}
+<a name="line124"></a> */
+<a name="line125"></a>goog.events.KeyHandler = function(opt_element) {
+<a name="line126"></a>  goog.events.EventTarget.call(this);
+<a name="line127"></a>
+<a name="line128"></a>  if (opt_element) {
+<a name="line129"></a>    this.attach(opt_element);
+<a name="line130"></a>  }
+<a name="line131"></a>};
+<a name="line132"></a>goog.inherits(goog.events.KeyHandler, goog.events.EventTarget);
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * This is the element that we will listen to the real keyboard events on.
+<a name="line137"></a> * @type {Element|Document|null}
+<a name="line138"></a> * @private
+<a name="line139"></a> */
+<a name="line140"></a>goog.events.KeyHandler.prototype.element_ = null;
+<a name="line141"></a>
+<a name="line142"></a>
+<a name="line143"></a>/**
+<a name="line144"></a> * The key for the key press listener.
+<a name="line145"></a> * @type {number?}
+<a name="line146"></a> * @private
+<a name="line147"></a> */
+<a name="line148"></a>goog.events.KeyHandler.prototype.keyPressKey_ = null;
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * The key for the key down listener.
+<a name="line153"></a> * @type {number?}
+<a name="line154"></a> * @private
+<a name="line155"></a> */
+<a name="line156"></a>goog.events.KeyHandler.prototype.keyDownKey_ = null;
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * The key for the key up listener.
+<a name="line161"></a> * @type {number?}
+<a name="line162"></a> * @private
+<a name="line163"></a> */
+<a name="line164"></a>goog.events.KeyHandler.prototype.keyUpKey_ = null;
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Used to detect keyboard repeat events.
+<a name="line169"></a> * @private
+<a name="line170"></a> * @type {number}
+<a name="line171"></a> */
+<a name="line172"></a>goog.events.KeyHandler.prototype.lastKey_ = -1;
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * Keycode recorded for key down events. As most browsers don&#39;t report the
+<a name="line177"></a> * keycode in the key press event we need to record it in the key down phase.
+<a name="line178"></a> * @private
+<a name="line179"></a> * @type {number}
+<a name="line180"></a> */
+<a name="line181"></a>goog.events.KeyHandler.prototype.keyCode_ = -1;
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * Enum type for the events fired by the key handler
+<a name="line186"></a> * @enum {string}
+<a name="line187"></a> */
+<a name="line188"></a>goog.events.KeyHandler.EventType = {
+<a name="line189"></a>  KEY: &#39;key&#39;
+<a name="line190"></a>};
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * An enumeration of key codes that Safari 2 does incorrectly
+<a name="line195"></a> * @type {Object}
+<a name="line196"></a> * @private
+<a name="line197"></a> */
+<a name="line198"></a>goog.events.KeyHandler.safariKey_ = {
+<a name="line199"></a>  &#39;3&#39;: goog.events.KeyCodes.ENTER, // 13
+<a name="line200"></a>  &#39;12&#39;: goog.events.KeyCodes.NUMLOCK, // 144
+<a name="line201"></a>  &#39;63232&#39;: goog.events.KeyCodes.UP, // 38
+<a name="line202"></a>  &#39;63233&#39;: goog.events.KeyCodes.DOWN, // 40
+<a name="line203"></a>  &#39;63234&#39;: goog.events.KeyCodes.LEFT, // 37
+<a name="line204"></a>  &#39;63235&#39;: goog.events.KeyCodes.RIGHT, // 39
+<a name="line205"></a>  &#39;63236&#39;: goog.events.KeyCodes.F1, // 112
+<a name="line206"></a>  &#39;63237&#39;: goog.events.KeyCodes.F2, // 113
+<a name="line207"></a>  &#39;63238&#39;: goog.events.KeyCodes.F3, // 114
+<a name="line208"></a>  &#39;63239&#39;: goog.events.KeyCodes.F4, // 115
+<a name="line209"></a>  &#39;63240&#39;: goog.events.KeyCodes.F5, // 116
+<a name="line210"></a>  &#39;63241&#39;: goog.events.KeyCodes.F6, // 117
+<a name="line211"></a>  &#39;63242&#39;: goog.events.KeyCodes.F7, // 118
+<a name="line212"></a>  &#39;63243&#39;: goog.events.KeyCodes.F8, // 119
+<a name="line213"></a>  &#39;63244&#39;: goog.events.KeyCodes.F9, // 120
+<a name="line214"></a>  &#39;63245&#39;: goog.events.KeyCodes.F10, // 121
+<a name="line215"></a>  &#39;63246&#39;: goog.events.KeyCodes.F11, // 122
+<a name="line216"></a>  &#39;63247&#39;: goog.events.KeyCodes.F12, // 123
+<a name="line217"></a>  &#39;63248&#39;: goog.events.KeyCodes.PRINT_SCREEN, // 44
+<a name="line218"></a>  &#39;63272&#39;: goog.events.KeyCodes.DELETE, // 46
+<a name="line219"></a>  &#39;63273&#39;: goog.events.KeyCodes.HOME, // 36
+<a name="line220"></a>  &#39;63275&#39;: goog.events.KeyCodes.END, // 35
+<a name="line221"></a>  &#39;63276&#39;: goog.events.KeyCodes.PAGE_UP, // 33
+<a name="line222"></a>  &#39;63277&#39;: goog.events.KeyCodes.PAGE_DOWN, // 34
+<a name="line223"></a>  &#39;63289&#39;: goog.events.KeyCodes.NUMLOCK, // 144
+<a name="line224"></a>  &#39;63302&#39;: goog.events.KeyCodes.INSERT // 45
+<a name="line225"></a>};
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>/**
+<a name="line229"></a> * An enumeration of key identifiers currently part of the W3C draft for DOM3
+<a name="line230"></a> * and their mappings to keyCodes.
+<a name="line231"></a> * http://www.w3.org/TR/DOM-Level-3-Events/keyset.html#KeySet-Set
+<a name="line232"></a> * This is currently supported in Safari and should be platform independent.
+<a name="line233"></a> * @type {Object}
+<a name="line234"></a> * @private
+<a name="line235"></a> */
+<a name="line236"></a>goog.events.KeyHandler.keyIdentifier_ = {
+<a name="line237"></a>  &#39;Up&#39;: goog.events.KeyCodes.UP, // 38
+<a name="line238"></a>  &#39;Down&#39;: goog.events.KeyCodes.DOWN, // 40
+<a name="line239"></a>  &#39;Left&#39;: goog.events.KeyCodes.LEFT, // 37
+<a name="line240"></a>  &#39;Right&#39;: goog.events.KeyCodes.RIGHT, // 39
+<a name="line241"></a>  &#39;Enter&#39;: goog.events.KeyCodes.ENTER, // 13
+<a name="line242"></a>  &#39;F1&#39;: goog.events.KeyCodes.F1, // 112
+<a name="line243"></a>  &#39;F2&#39;: goog.events.KeyCodes.F2, // 113
+<a name="line244"></a>  &#39;F3&#39;: goog.events.KeyCodes.F3, // 114
+<a name="line245"></a>  &#39;F4&#39;: goog.events.KeyCodes.F4, // 115
+<a name="line246"></a>  &#39;F5&#39;: goog.events.KeyCodes.F5, // 116
+<a name="line247"></a>  &#39;F6&#39;: goog.events.KeyCodes.F6, // 117
+<a name="line248"></a>  &#39;F7&#39;: goog.events.KeyCodes.F7, // 118
+<a name="line249"></a>  &#39;F8&#39;: goog.events.KeyCodes.F8, // 119
+<a name="line250"></a>  &#39;F9&#39;: goog.events.KeyCodes.F9, // 120
+<a name="line251"></a>  &#39;F10&#39;: goog.events.KeyCodes.F10, // 121
+<a name="line252"></a>  &#39;F11&#39;: goog.events.KeyCodes.F11, // 122
+<a name="line253"></a>  &#39;F12&#39;: goog.events.KeyCodes.F12, // 123
+<a name="line254"></a>  &#39;U+007F&#39;: goog.events.KeyCodes.DELETE, // 46
+<a name="line255"></a>  &#39;Home&#39;: goog.events.KeyCodes.HOME, // 36
+<a name="line256"></a>  &#39;End&#39;: goog.events.KeyCodes.END, // 35
+<a name="line257"></a>  &#39;PageUp&#39;: goog.events.KeyCodes.PAGE_UP, // 33
+<a name="line258"></a>  &#39;PageDown&#39;: goog.events.KeyCodes.PAGE_DOWN, // 34
+<a name="line259"></a>  &#39;Insert&#39;: goog.events.KeyCodes.INSERT // 45
+<a name="line260"></a>};
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * Map from Gecko specific key codes to cross browser key codes
+<a name="line265"></a> * @type {Object}
+<a name="line266"></a> * @private
+<a name="line267"></a> */
+<a name="line268"></a>goog.events.KeyHandler.mozKeyCodeToKeyCodeMap_ = {
+<a name="line269"></a>  61: 187,  // =, equals
+<a name="line270"></a>  59: 186   // ;, semicolon
+<a name="line271"></a>};
+<a name="line272"></a>
+<a name="line273"></a>
+<a name="line274"></a>/**
+<a name="line275"></a> * If true, the KeyEvent fires on keydown. Otherwise, it fires on keypress.
+<a name="line276"></a> *
+<a name="line277"></a> * @type {boolean}
+<a name="line278"></a> * @private
+<a name="line279"></a> */
+<a name="line280"></a>goog.events.KeyHandler.USES_KEYDOWN_ = goog.userAgent.IE ||
+<a name="line281"></a>    goog.userAgent.WEBKIT &amp;&amp; goog.userAgent.isVersion(&#39;525&#39;);
+<a name="line282"></a>
+<a name="line283"></a>
+<a name="line284"></a>/**
+<a name="line285"></a> * Records the keycode for browsers that only returns the keycode for key up/
+<a name="line286"></a> * down events. For browser/key combinations that doesn&#39;t trigger a key pressed
+<a name="line287"></a> * event it also fires the patched key event.
+<a name="line288"></a> * @param {goog.events.BrowserEvent} e The key down event.
+<a name="line289"></a> * @private
+<a name="line290"></a> */
+<a name="line291"></a>goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
+<a name="line292"></a>  if (goog.events.KeyHandler.USES_KEYDOWN_ &amp;&amp;
+<a name="line293"></a>      !goog.events.KeyCodes.firesKeyPressEvent(e.keyCode,
+<a name="line294"></a>          this.lastKey_, e.shiftKey, e.ctrlKey)) {
+<a name="line295"></a>    this.handleEvent(e);
+<a name="line296"></a>  } else {
+<a name="line297"></a>    if (goog.userAgent.GECKO &amp;&amp;
+<a name="line298"></a>        e.keyCode in goog.events.KeyHandler.mozKeyCodeToKeyCodeMap_) {
+<a name="line299"></a>      this.keyCode_ = goog.events.KeyHandler.mozKeyCodeToKeyCodeMap_[e.keyCode];
+<a name="line300"></a>    } else {
+<a name="line301"></a>      this.keyCode_ = e.keyCode;
+<a name="line302"></a>    }
+<a name="line303"></a>  }
+<a name="line304"></a>};
+<a name="line305"></a>
+<a name="line306"></a>
+<a name="line307"></a>/**
+<a name="line308"></a> * Clears the stored previous key value, resetting the key repeat status. Uses
+<a name="line309"></a> * -1 because the Safari 3 Windows beta reports 0 for certain keys (like Home
+<a name="line310"></a> * and End.)
+<a name="line311"></a> * @param {goog.events.BrowserEvent} e The keyup event.
+<a name="line312"></a> * @private
+<a name="line313"></a> */
+<a name="line314"></a>goog.events.KeyHandler.prototype.handleKeyup_ = function(e) {
+<a name="line315"></a>  this.lastKey_ = -1;
+<a name="line316"></a>  this.keyCode_ = -1;
+<a name="line317"></a>};
+<a name="line318"></a>
+<a name="line319"></a>
+<a name="line320"></a>/**
+<a name="line321"></a> * Handles the events on the element.
+<a name="line322"></a> * @param {goog.events.BrowserEvent} e  The keyboard event sent from the
+<a name="line323"></a> *     browser.
+<a name="line324"></a> */
+<a name="line325"></a>goog.events.KeyHandler.prototype.handleEvent = function(e) {
+<a name="line326"></a>  var be = e.getBrowserEvent();
+<a name="line327"></a>  var keyCode, charCode;
+<a name="line328"></a>
+<a name="line329"></a>  // IE reports the character code in the keyCode field for keypress events.
+<a name="line330"></a>  // There are two exceptions however, Enter and Escape.
+<a name="line331"></a>  if (goog.userAgent.IE &amp;&amp; e.type == goog.events.EventType.KEYPRESS) {
+<a name="line332"></a>    keyCode = this.keyCode_;
+<a name="line333"></a>    charCode = keyCode != goog.events.KeyCodes.ENTER &amp;&amp;
+<a name="line334"></a>        keyCode != goog.events.KeyCodes.ESC ?
+<a name="line335"></a>            be.keyCode : 0;
+<a name="line336"></a>
+<a name="line337"></a>  // Safari reports the character code in the keyCode field for keypress
+<a name="line338"></a>  // events but also has a charCode field.
+<a name="line339"></a>  } else if (goog.userAgent.WEBKIT &amp;&amp;
+<a name="line340"></a>      e.type == goog.events.EventType.KEYPRESS) {
+<a name="line341"></a>    keyCode = this.keyCode_;
+<a name="line342"></a>    charCode = be.charCode &gt;= 0 &amp;&amp; be.charCode &lt; 63232 &amp;&amp;
+<a name="line343"></a>        goog.events.KeyCodes.isCharacterKey(keyCode) ?
+<a name="line344"></a>            be.charCode : 0;
+<a name="line345"></a>
+<a name="line346"></a>  // Opera reports the keycode or the character code in the keyCode field.
+<a name="line347"></a>  } else if (goog.userAgent.OPERA) {
+<a name="line348"></a>    keyCode = this.keyCode_;
+<a name="line349"></a>    charCode = goog.events.KeyCodes.isCharacterKey(keyCode) ?
+<a name="line350"></a>        be.keyCode : 0;
+<a name="line351"></a>
+<a name="line352"></a>  // Mozilla reports the character code in the charCode field.
+<a name="line353"></a>  } else {
+<a name="line354"></a>    keyCode = be.keyCode || this.keyCode_;
+<a name="line355"></a>    charCode = be.charCode || 0;
+<a name="line356"></a>    // On the Mac, shift-/ triggers a question mark char code and no key code,
+<a name="line357"></a>    // so we synthesize the latter
+<a name="line358"></a>    if (goog.userAgent.MAC &amp;&amp;
+<a name="line359"></a>        charCode == goog.events.KeyCodes.QUESTION_MARK &amp;&amp;
+<a name="line360"></a>        !keyCode) {
+<a name="line361"></a>      keyCode = goog.events.KeyCodes.SLASH;
+<a name="line362"></a>    }
+<a name="line363"></a>  }
+<a name="line364"></a>
+<a name="line365"></a>  var key = keyCode;
+<a name="line366"></a>  var keyIdentifier = be.keyIdentifier;
+<a name="line367"></a>
+<a name="line368"></a>  // Correct the key value for certain browser-specific quirks.
+<a name="line369"></a>  if (keyCode) {
+<a name="line370"></a>    if (keyCode &gt;= 63232 &amp;&amp; keyCode in goog.events.KeyHandler.safariKey_) {
+<a name="line371"></a>      // NOTE: Safari 3 has fixed this problem,
+<a name="line372"></a>      // this is only needed for Safari 2.
+<a name="line373"></a>      key = goog.events.KeyHandler.safariKey_[keyCode];
+<a name="line374"></a>    } else {
+<a name="line375"></a>
+<a name="line376"></a>      // Safari returns 25 for Shift+Tab instead of 9.
+<a name="line377"></a>      if (keyCode == 25 &amp;&amp; e.shiftKey) {
+<a name="line378"></a>        key = 9;
+<a name="line379"></a>      }
+<a name="line380"></a>    }
+<a name="line381"></a>  } else if (keyIdentifier &amp;&amp;
+<a name="line382"></a>             keyIdentifier in goog.events.KeyHandler.keyIdentifier_) {
+<a name="line383"></a>    // This is needed for Safari Windows because it currently doesn&#39;t give a
+<a name="line384"></a>    // keyCode/which for non printable keys.
+<a name="line385"></a>    key = goog.events.KeyHandler.keyIdentifier_[keyIdentifier];
+<a name="line386"></a>  }
+<a name="line387"></a>
+<a name="line388"></a>  // If we get the same keycode as a keydown/keypress without having seen a
+<a name="line389"></a>  // keyup event, then this event was caused by key repeat.
+<a name="line390"></a>  var repeat = key == this.lastKey_;
+<a name="line391"></a>  this.lastKey_ = key;
+<a name="line392"></a>
+<a name="line393"></a>  var event = new goog.events.KeyEvent(key, charCode, repeat, be);
+<a name="line394"></a>  try {
+<a name="line395"></a>    this.dispatchEvent(event);
+<a name="line396"></a>  } finally {
+<a name="line397"></a>    event.dispose();
+<a name="line398"></a>  }
+<a name="line399"></a>};
+<a name="line400"></a>
+<a name="line401"></a>
+<a name="line402"></a>/**
+<a name="line403"></a> * Adds the proper key event listeners to the element.
+<a name="line404"></a> * XXX: {Document|Element} != {Element|Document}.
+<a name="line405"></a> * see: http://b/1470354
+<a name="line406"></a> * @param {Element|Document} element The element to listen on.
+<a name="line407"></a> */
+<a name="line408"></a>goog.events.KeyHandler.prototype.attach = function(element) {
+<a name="line409"></a>  if (this.keyUpKey_) {
+<a name="line410"></a>    this.detach();
+<a name="line411"></a>  }
+<a name="line412"></a>
+<a name="line413"></a>  this.element_ = element;
+<a name="line414"></a>
+<a name="line415"></a>  this.keyPressKey_ = goog.events.listen(this.element_,
+<a name="line416"></a>                                         goog.events.EventType.KEYPRESS,
+<a name="line417"></a>                                         this);
+<a name="line418"></a>
+<a name="line419"></a>  // Most browsers (Safari 2 being the notable exception) doesn&#39;t include the
+<a name="line420"></a>  // keyCode in keypress events (IE has the char code in the keyCode field and
+<a name="line421"></a>  // Mozilla only included the keyCode if there&#39;s no charCode). Thus we have to
+<a name="line422"></a>  // listen for keydown to capture the keycode.
+<a name="line423"></a>  this.keyDownKey_ = goog.events.listen(this.element_,
+<a name="line424"></a>                                        goog.events.EventType.KEYDOWN,
+<a name="line425"></a>                                        this.handleKeyDown_,
+<a name="line426"></a>                                        false,
+<a name="line427"></a>                                        this);
+<a name="line428"></a>
+<a name="line429"></a>
+<a name="line430"></a>  this.keyUpKey_ = goog.events.listen(this.element_,
+<a name="line431"></a>                                      goog.events.EventType.KEYUP,
+<a name="line432"></a>                                      this.handleKeyup_,
+<a name="line433"></a>                                      false,
+<a name="line434"></a>                                      this);
+<a name="line435"></a>};
+<a name="line436"></a>
+<a name="line437"></a>
+<a name="line438"></a>/**
+<a name="line439"></a> * Removes the listeners that may exist.
+<a name="line440"></a> */
+<a name="line441"></a>goog.events.KeyHandler.prototype.detach = function() {
+<a name="line442"></a>  if (this.keyPressKey_) {
+<a name="line443"></a>    goog.events.unlistenByKey(this.keyPressKey_);
+<a name="line444"></a>    goog.events.unlistenByKey(this.keyDownKey_);
+<a name="line445"></a>    goog.events.unlistenByKey(this.keyUpKey_);
+<a name="line446"></a>    this.keyPressKey_ = null;
+<a name="line447"></a>    this.keyDownKey_ = null;
+<a name="line448"></a>    this.keyUpKey_ = null;
+<a name="line449"></a>  }
+<a name="line450"></a>  this.element_ = null;
+<a name="line451"></a>  this.lastKey_ = -1;
+<a name="line452"></a>};
+<a name="line453"></a>
+<a name="line454"></a>
+<a name="line455"></a>/**
+<a name="line456"></a> * Disposes of the key handler.
+<a name="line457"></a> */
+<a name="line458"></a>goog.events.KeyHandler.prototype.disposeInternal = function() {
+<a name="line459"></a>  goog.events.KeyHandler.superClass_.disposeInternal.call(this);
+<a name="line460"></a>  this.detach();
+<a name="line461"></a>};
+<a name="line462"></a>
+<a name="line463"></a>
+<a name="line464"></a>/**
+<a name="line465"></a> * This class is used for the goog.events.KeyHandler.EventType.KEY event and
+<a name="line466"></a> * it overrides the key code with the fixed key code.
+<a name="line467"></a> * @param {number} keyCode The adjusted key code.
+<a name="line468"></a> * @param {number} charCode The unicode character code.
+<a name="line469"></a> * @param {boolean} repeat Whether this event was generated by keyboard repeat.
+<a name="line470"></a> * @param {Event} browserEvent Browser event object.
+<a name="line471"></a> * @constructor
+<a name="line472"></a> * @extends {goog.events.BrowserEvent}
+<a name="line473"></a> */
+<a name="line474"></a>goog.events.KeyEvent = function(keyCode, charCode, repeat, browserEvent) {
+<a name="line475"></a>  goog.events.BrowserEvent.call(this, browserEvent);
+<a name="line476"></a>  this.type = goog.events.KeyHandler.EventType.KEY;
+<a name="line477"></a>
+<a name="line478"></a>  /**
+<a name="line479"></a>   * Keycode of key press.
+<a name="line480"></a>   * @type {number}
+<a name="line481"></a>   */
+<a name="line482"></a>  this.keyCode = keyCode;
+<a name="line483"></a>
+<a name="line484"></a>  /**
+<a name="line485"></a>   * Unicode character code.
+<a name="line486"></a>   * @type {number}
+<a name="line487"></a>   */
+<a name="line488"></a>  this.charCode = charCode;
+<a name="line489"></a>
+<a name="line490"></a>  /**
+<a name="line491"></a>   * True if this event was generated by keyboard auto-repeat (i.e., the user is
+<a name="line492"></a>   * holding the key down.)
+<a name="line493"></a>   * @type {boolean}
+<a name="line494"></a>   */
+<a name="line495"></a>  this.repeat = repeat;
+<a name="line496"></a>};
+<a name="line497"></a>goog.inherits(goog.events.KeyEvent, goog.events.BrowserEvent);
+</pre>
+
+
+</body>
+</html>

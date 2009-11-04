@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+Copyright 2008 Google Inc. All Rights Reserved.
+
+-->
+<head>
+  <title>Closure Unit Tests - goog.ui.DatePicker</title>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.dom');
+    goog.require('goog.i18n.DateTimeSymbols_en_US');
+    goog.require('goog.i18n.DateTimeSymbols_zh_HK');
+    goog.require('goog.style');
+    goog.require('goog.testing.jsunit');
+    goog.require('goog.ui.PopupDatePicker');
+  </script>
+</head>
+<body>
+<div id="sandbox"></div>
+<script>
+  var picker;
+  var $ = goog.dom.getElement;
+  var $$ = goog.dom.getElementsByTagNameAndClass;
+  var sandbox = $('sandbox');
+
+  function tearDown() {
+    picker.dispose();
+    goog.dom.removeChildren(sandbox);
+  }
+
+  function testIsMonthOnLeft() {
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_US;
+    picker = new goog.ui.DatePicker();
+    picker.create(sandbox);
+    var head = $$('tr', 'goog-date-picker-head')[0];
+    var month = $$('button', 'goog-date-picker-month',
+        head.firstChild)[0];
+    assertSameElements(
+        'Button element must have expected class names',
+        ['goog-date-picker-btn','goog-date-picker-month'],
+        goog.dom.classes.get(month)
+    );
+  }
+
+  function testIsYearOnLeft() {
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh_HK;
+    picker = new goog.ui.DatePicker();
+    picker.create(sandbox);
+    var head = $$('tr', 'goog-date-picker-head')[0];
+    var year = $$('button', 'goog-date-picker-year',
+        head.firstChild)[0];
+    assertSameElements(
+        'Button element must have expected class names',
+        ['goog-date-picker-btn','goog-date-picker-year'],
+        goog.dom.classes.get(year)
+    );
+  }
+
+  function testHidingOfTableFoot0() {
+    picker = new goog.ui.DatePicker();
+    picker.setAllowNone(false);
+    picker.setShowToday(false);
+    picker.create(sandbox);
+    var tFoot = $$('tfoot')[0];
+    assertFalse(goog.style.isElementShown(tFoot))
+  }
+
+  function testHidingOfTableFoot1() {
+    picker = new goog.ui.DatePicker();
+    picker.setAllowNone(false);
+    picker.setShowToday(true);
+    picker.create(sandbox);
+    var tFoot = $$('tfoot')[0];
+    assertTrue(goog.style.isElementShown(tFoot))
+  }
+
+  function testHidingOfTableFoot2() {
+    picker = new goog.ui.DatePicker();
+    picker.setAllowNone(true);
+    picker.setShowToday(false);
+    picker.create(sandbox);
+    var tFoot = $$('tfoot')[0];
+    assertTrue(goog.style.isElementShown(tFoot))
+  }
+
+  function testHidingOfTableFoot3() {
+    picker = new goog.ui.DatePicker();
+    picker.setAllowNone(true);
+    picker.setShowToday(true);
+    picker.create(sandbox);
+    var tFoot = $$('tfoot')[0];
+    assertTrue(goog.style.isElementShown(tFoot))
+  }
+
+  function testHidingOfTableFootAfterCreate0() {
+    picker = new goog.ui.DatePicker();
+    picker.create(sandbox);
+    picker.setAllowNone(false);
+    picker.setShowToday(false);
+    var tFoot = $$('tfoot')[0];
+    assertFalse(goog.style.isElementShown(tFoot))
+  }
+
+  function testHidingOfTableFootAfterCreate1() {
+    picker = new goog.ui.DatePicker();
+    picker.create(sandbox);
+    picker.setAllowNone(false);
+    picker.setShowToday(true);
+    var tFoot = $$('tfoot')[0];
+    assertTrue(goog.style.isElementShown(tFoot))
+  }
+
+  function testHidingOfTableFootAfterCreate2() {
+    picker = new goog.ui.DatePicker();
+    picker.create(sandbox);
+    picker.setAllowNone(true);
+    picker.setShowToday(false);
+    var tFoot = $$('tfoot')[0];
+    assertTrue(goog.style.isElementShown(tFoot))
+  }
+
+  function testHidingOfTableFootAfterCreate3() {
+    picker = new goog.ui.DatePicker();
+    picker.create(sandbox);
+    picker.setAllowNone(true);
+    picker.setShowToday(true);
+    var tFoot = $$('tfoot')[0];
+    assertTrue(goog.style.isElementShown(tFoot))
+  }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>spriteinfo.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_emoji_spriteinfo.js.html">spriteinfo.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview SpriteInfo implementation. This is a simple wrapper class to
+<a name="line17"></a> * hold CSS metadata needed for sprited emoji.
+<a name="line18"></a> *
+<a name="line19"></a> * @see ../demos/popupemojipicker.html or emojipicker_test.html for examples
+<a name="line20"></a> * of how to use this class.
+<a name="line21"></a> *
+<a name="line22"></a> */
+<a name="line23"></a>goog.provide(&#39;goog.ui.emoji.SpriteInfo&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Creates a SpriteInfo object with the specified properties. If the image is
+<a name="line28"></a> * sprited via CSS, then only the first parameter needs a value. If the image
+<a name="line29"></a> * is sprited via metadata, then the first parameter should be left null.
+<a name="line30"></a> *
+<a name="line31"></a> * @param {string?} cssClass CSS class to properly display the sprited image.
+<a name="line32"></a> * @param {string} opt_url Url of the sprite image.
+<a name="line33"></a> * @param {number} opt_width Width of the image being sprited.
+<a name="line34"></a> * @param {number} opt_height Height of the image being sprited.
+<a name="line35"></a> * @param {number} opt_xOffset Positive x offset of the image being sprited
+<a name="line36"></a> *     within the sprite.
+<a name="line37"></a> * @param {number} opt_yOffset Positive y offset of the image being sprited
+<a name="line38"></a> *     within the sprite.
+<a name="line39"></a> * @param {boolean} opt_animated Whether the sprite is animated.
+<a name="line40"></a> * @constructor
+<a name="line41"></a> */
+<a name="line42"></a>goog.ui.emoji.SpriteInfo = function(cssClass, opt_url, opt_width, opt_height,
+<a name="line43"></a>                                    opt_xOffset, opt_yOffset, opt_animated) {
+<a name="line44"></a>  if (cssClass != null) {
+<a name="line45"></a>    this.cssClass_ = cssClass;
+<a name="line46"></a>  } else {
+<a name="line47"></a>    if (opt_url == undefined || opt_width === undefined ||
+<a name="line48"></a>        opt_height === undefined || opt_xOffset == undefined ||
+<a name="line49"></a>        opt_yOffset === undefined) {
+<a name="line50"></a>      throw Error(&#39;Sprite info is not fully specified&#39;);
+<a name="line51"></a>    }
+<a name="line52"></a>
+<a name="line53"></a>    this.url_ = opt_url;
+<a name="line54"></a>    this.width_ = opt_width;
+<a name="line55"></a>    this.height_ = opt_height;
+<a name="line56"></a>    this.xOffset_ = opt_xOffset;
+<a name="line57"></a>    this.yOffset_ = opt_yOffset;
+<a name="line58"></a>  }
+<a name="line59"></a>
+<a name="line60"></a>  this.animated_ = !!opt_animated;
+<a name="line61"></a>};
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * Name of the CSS class to properly display the sprited image.
+<a name="line66"></a> * @type {string}
+<a name="line67"></a> * @private
+<a name="line68"></a> */
+<a name="line69"></a>goog.ui.emoji.SpriteInfo.prototype.cssClass_;
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Url of the sprite image.
+<a name="line74"></a> * @type {string|undefined}
+<a name="line75"></a> * @private
+<a name="line76"></a> */
+<a name="line77"></a>goog.ui.emoji.SpriteInfo.prototype.url_;
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * Width of the image being sprited.
+<a name="line82"></a> * @type {number|undefined}
+<a name="line83"></a> * @private
+<a name="line84"></a> */
+<a name="line85"></a>goog.ui.emoji.SpriteInfo.prototype.width_;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Height of the image being sprited.
+<a name="line90"></a> * @type {number|undefined}
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.ui.emoji.SpriteInfo.prototype.height_;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Positive x offset of the image being sprited within the sprite.
+<a name="line98"></a> * @type {number|undefined}
+<a name="line99"></a> * @private
+<a name="line100"></a> */
+<a name="line101"></a>goog.ui.emoji.SpriteInfo.prototype.xOffset_;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Positive y offset of the image being sprited within the sprite.
+<a name="line106"></a> * @type {number|undefined}
+<a name="line107"></a> * @private
+<a name="line108"></a> */
+<a name="line109"></a>goog.ui.emoji.SpriteInfo.prototype.yOffset_;
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Whether the emoji specified by the sprite is animated.
+<a name="line114"></a> * @type {boolean}
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.emoji.SpriteInfo.prototype.animated_;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Returns the css class of the sprited image.
+<a name="line122"></a> * @return {string?} Name of the CSS class to properly display the sprited
+<a name="line123"></a> *     image.
+<a name="line124"></a> */
+<a name="line125"></a>goog.ui.emoji.SpriteInfo.prototype.getCssClass = function() {
+<a name="line126"></a>  return this.cssClass_ || null;
+<a name="line127"></a>};
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Returns the url of the sprite image.
+<a name="line132"></a> * @return {string?} Url of the sprite image.
+<a name="line133"></a> */
+<a name="line134"></a>goog.ui.emoji.SpriteInfo.prototype.getUrl = function() {
+<a name="line135"></a>  return this.url_ || null;
+<a name="line136"></a>};
+<a name="line137"></a>
+<a name="line138"></a>
+<a name="line139"></a>/**
+<a name="line140"></a> * Returns whether the emoji specified by this sprite is animated.
+<a name="line141"></a> * @return {boolean} Whether the emoji is animated.
+<a name="line142"></a> */
+<a name="line143"></a>goog.ui.emoji.SpriteInfo.prototype.isAnimated = function() {
+<a name="line144"></a>  return this.animated_;
+<a name="line145"></a>};
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Returns the width of the image being sprited, appropriate for a CSS value.
+<a name="line150"></a> * @return {string} The width of the image being sprited.
+<a name="line151"></a> */
+<a name="line152"></a>goog.ui.emoji.SpriteInfo.prototype.getWidthCssValue = function() {
+<a name="line153"></a>  return goog.ui.emoji.SpriteInfo.getCssPixelValue_(this.width_);
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Returns the height of the image being sprited, appropriate for a CSS value.
+<a name="line159"></a> * @return {string} The height of the image being sprited.
+<a name="line160"></a> */
+<a name="line161"></a>goog.ui.emoji.SpriteInfo.prototype.getHeightCssValue = function() {
+<a name="line162"></a>  return goog.ui.emoji.SpriteInfo.getCssPixelValue_(this.height_);
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Returns the x offset of the image being sprited within the sprite,
+<a name="line168"></a> * appropriate for a CSS value.
+<a name="line169"></a> * @return {string} The x offset of the image being sprited within the sprite.
+<a name="line170"></a> */
+<a name="line171"></a>goog.ui.emoji.SpriteInfo.prototype.getXOffsetCssValue = function() {
+<a name="line172"></a>  return goog.ui.emoji.SpriteInfo.getOffsetCssValue_(this.xOffset_);
+<a name="line173"></a>};
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Returns the positive y offset of the image being sprited within the sprite,
+<a name="line178"></a> * appropriate for a CSS value.
+<a name="line179"></a> * @return {string} The y offset of the image being sprited within the sprite.
+<a name="line180"></a> */
+<a name="line181"></a>goog.ui.emoji.SpriteInfo.prototype.getYOffsetCssValue = function() {
+<a name="line182"></a>  return goog.ui.emoji.SpriteInfo.getOffsetCssValue_(this.yOffset_);
+<a name="line183"></a>};
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * Returns a string appropriate for use as a CSS value. If the value is zero,
+<a name="line188"></a> * then there is no unit appended.
+<a name="line189"></a> *
+<a name="line190"></a> * @param {number|undefined} value A number to be turned into a
+<a name="line191"></a> *     CSS size/location value.
+<a name="line192"></a> * @return {string} A string appropriate for use as a CSS value.
+<a name="line193"></a> * @private
+<a name="line194"></a> */
+<a name="line195"></a>goog.ui.emoji.SpriteInfo.getCssPixelValue_ = function(value) {
+<a name="line196"></a>  return !value ? &#39;0&#39; : value + &#39;px&#39;;
+<a name="line197"></a>};
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Returns a string appropriate for use as a CSS value for a position offset,
+<a name="line202"></a> * such as the position argument for sprites.
+<a name="line203"></a> *
+<a name="line204"></a> * @param {number|undefined} posOffset A positive offset for a position.
+<a name="line205"></a> * @return {string} A string appropriate for use as a CSS value.
+<a name="line206"></a> * @private
+<a name="line207"></a> */
+<a name="line208"></a>goog.ui.emoji.SpriteInfo.getOffsetCssValue_ = function(posOffset) {
+<a name="line209"></a>  var offset = goog.ui.emoji.SpriteInfo.getCssPixelValue_(posOffset);
+<a name="line210"></a>  return offset == &#39;0&#39; ? offset : &#39;-&#39; + offset;
+<a name="line211"></a>};
+</pre>
+
+
+</body>
+</html>

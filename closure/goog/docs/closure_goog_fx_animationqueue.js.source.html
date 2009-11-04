@@ -1,0 +1,395 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>animationqueue.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_fx_animationqueue.js.html">animationqueue.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A class which automatically plays through a queue of
+<a name="line17"></a> * animations.  AnimationParallelQueue and AnimationSerialQueue provide
+<a name="line18"></a> * specific implementations of the abstract class AnimationQueue.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.fx.AnimationParallelQueue&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.fx.AnimationQueue&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.fx.AnimationSerialQueue&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.array&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line28"></a>goog.require(&#39;goog.fx.Animation&#39;);
+<a name="line29"></a>goog.require(&#39;goog.fx.Animation.EventType&#39;);
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Constructor for AnimationQueue object.
+<a name="line33"></a> * @constructor
+<a name="line34"></a> * @extends {goog.fx.Animation}
+<a name="line35"></a> */
+<a name="line36"></a>goog.fx.AnimationQueue = function() {
+<a name="line37"></a>  goog.fx.Animation.call(this, [0], [0], 0);
+<a name="line38"></a>
+<a name="line39"></a>  /**
+<a name="line40"></a>   * An array holding all animations in the queue.
+<a name="line41"></a>   * @type {Array}
+<a name="line42"></a>   * @private
+<a name="line43"></a>   */
+<a name="line44"></a>  this.queue_ = [];
+<a name="line45"></a>};
+<a name="line46"></a>goog.inherits(goog.fx.AnimationQueue, goog.fx.Animation);
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>/**
+<a name="line50"></a> * Calls resume on the children animations.
+<a name="line51"></a> * @protected
+<a name="line52"></a> * @override
+<a name="line53"></a> */
+<a name="line54"></a>goog.fx.AnimationQueue.prototype.onResume = function() {
+<a name="line55"></a>  this.executeChildrenAction(function(anim) {
+<a name="line56"></a>    anim.play(anim.progress == 0);
+<a name="line57"></a>  });
+<a name="line58"></a>  goog.fx.AnimationQueue.superClass_.onResume.call(this);
+<a name="line59"></a>};
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Calls stop on the children animations.
+<a name="line64"></a> * @protected
+<a name="line65"></a> * @override
+<a name="line66"></a> */
+<a name="line67"></a>goog.fx.AnimationQueue.prototype.onStop = function() {
+<a name="line68"></a>  this.executeChildrenAction(function(anim) {
+<a name="line69"></a>    anim.stop();
+<a name="line70"></a>  });
+<a name="line71"></a>  goog.fx.AnimationQueue.superClass_.onStop.call(this);
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Calls pause on the children animations.
+<a name="line77"></a> * @protected
+<a name="line78"></a> * @override
+<a name="line79"></a> */
+<a name="line80"></a>goog.fx.AnimationQueue.prototype.onPause = function() {
+<a name="line81"></a>  this.executeChildrenAction(function(anim) {
+<a name="line82"></a>    anim.pause();
+<a name="line83"></a>  });
+<a name="line84"></a>  goog.fx.AnimationQueue.superClass_.onPause.call(this);
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Destroy the queue when the animation is destroyed.
+<a name="line90"></a> * @protected
+<a name="line91"></a> * @override
+<a name="line92"></a> */
+<a name="line93"></a>goog.fx.AnimationQueue.prototype.onDestroy = function() {
+<a name="line94"></a>  this.destroyQueueAndHandlers_();
+<a name="line95"></a>  goog.fx.AnimationQueue.superClass_.onDestroy.call(this);
+<a name="line96"></a>};
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Calls a function on the children in implementation specific order.
+<a name="line101"></a> * @param {function(goog.fx.Animation)} f The function that will be called on
+<a name="line102"></a> *     the children animation.
+<a name="line103"></a> * @protected
+<a name="line104"></a> */
+<a name="line105"></a>goog.fx.AnimationQueue.prototype.executeChildrenAction = goog.abstractMethod;
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Push an Animation to the end of the queue.
+<a name="line110"></a> * @param {goog.fx.Animation} animation The animation to add to the queue.
+<a name="line111"></a> */
+<a name="line112"></a>goog.fx.AnimationQueue.prototype.add = goog.abstractMethod;
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * Remove an Animation from the queue.
+<a name="line117"></a> * @param {goog.fx.Animation} animation The animation to remove.
+<a name="line118"></a> */
+<a name="line119"></a>goog.fx.AnimationQueue.prototype.remove = goog.abstractMethod;
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Destroy all animations in the queue as well as the event handler.  We don&#39;t
+<a name="line124"></a> * override the destroy method in the parent class, but instead can call this
+<a name="line125"></a> * upon receiving its DESTROY event.
+<a name="line126"></a> * @private
+<a name="line127"></a> */
+<a name="line128"></a>goog.fx.AnimationQueue.prototype.destroyQueueAndHandlers_ = function() {
+<a name="line129"></a>  goog.array.forEach(
+<a name="line130"></a>      this.queue_,
+<a name="line131"></a>      function(element) {
+<a name="line132"></a>        element.destroy();
+<a name="line133"></a>      });
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/**
+<a name="line139"></a> * Constructor for AnimationParallelQueue object.
+<a name="line140"></a> * @constructor
+<a name="line141"></a> * @extends {goog.fx.AnimationQueue}
+<a name="line142"></a> */
+<a name="line143"></a>goog.fx.AnimationParallelQueue = function() {
+<a name="line144"></a>  goog.fx.AnimationQueue.call(this);
+<a name="line145"></a>};
+<a name="line146"></a>goog.inherits(goog.fx.AnimationParallelQueue, goog.fx.AnimationQueue);
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/**
+<a name="line150"></a> * Plays all animations in the queue at once.
+<a name="line151"></a> * @private
+<a name="line152"></a> */
+<a name="line153"></a>goog.fx.AnimationParallelQueue.prototype.playAll_ = function() {
+<a name="line154"></a>  for (var i = 0; i &lt; this.queue_.length; i++) {
+<a name="line155"></a>    this.queue_[i].play();
+<a name="line156"></a>  }
+<a name="line157"></a>};
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Play all on begin.
+<a name="line162"></a> * @override
+<a name="line163"></a> */
+<a name="line164"></a>goog.fx.AnimationParallelQueue.prototype.onBegin = function() {
+<a name="line165"></a>  // TODO: Shouldn&#39;t this be done onPlay?
+<a name="line166"></a>  this.playAll_();
+<a name="line167"></a>  goog.fx.AnimationParallelQueue.superClass_.onBegin.call(this);
+<a name="line168"></a>};
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/** @inheritDoc */
+<a name="line172"></a>goog.fx.AnimationParallelQueue.prototype.executeChildrenAction = function(f) {
+<a name="line173"></a>  goog.array.forEach(this.queue_, f);
+<a name="line174"></a>};
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * Add an animation to the queue.
+<a name="line179"></a> * @param {goog.fx.Animation} animation The animation to add.
+<a name="line180"></a> */
+<a name="line181"></a>goog.fx.AnimationParallelQueue.prototype.add = function(animation) {
+<a name="line182"></a>  this.queue_.push(animation);
+<a name="line183"></a>
+<a name="line184"></a>  this.duration = Math.max(this.duration, animation.duration);
+<a name="line185"></a>};
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Remove an Animation from the queue.
+<a name="line190"></a> * @param {goog.fx.Animation} animation The animation to remove.
+<a name="line191"></a> */
+<a name="line192"></a>goog.fx.AnimationParallelQueue.prototype.remove = function(animation) {
+<a name="line193"></a>  if (goog.array.remove(this.queue_, animation)) {
+<a name="line194"></a>    // ensure that duration reflects the length of the longest animation
+<a name="line195"></a>    if (animation.duration == this.duration) {
+<a name="line196"></a>      this.duration = 0;
+<a name="line197"></a>      goog.array.forEach(this.queue_, function(element) {
+<a name="line198"></a>        this.duration = Math.max(element.duration, this.duration);
+<a name="line199"></a>      }, this);
+<a name="line200"></a>    }
+<a name="line201"></a>  }
+<a name="line202"></a>};
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Constructor for an AnimationSerialQueue object.
+<a name="line208"></a> * @constructor
+<a name="line209"></a> * @extends {goog.fx.AnimationQueue}
+<a name="line210"></a> */
+<a name="line211"></a>goog.fx.AnimationSerialQueue = function() {
+<a name="line212"></a>  goog.fx.AnimationQueue.call(this);
+<a name="line213"></a>
+<a name="line214"></a>  /**
+<a name="line215"></a>   * A separate handler is needed to handle FINISH events for animations in the
+<a name="line216"></a>   * queue, since it&#39;s necessary to remove the listeners after the animation
+<a name="line217"></a>   * stops playing, and we don&#39;t want to clobber the listeners for other events,
+<a name="line218"></a>   * like BEGIN and END.
+<a name="line219"></a>   * @type {goog.events.EventHandler}
+<a name="line220"></a>   * @private
+<a name="line221"></a>   */
+<a name="line222"></a>  this.childHandler_ = new goog.events.EventHandler(this);
+<a name="line223"></a>};
+<a name="line224"></a>goog.inherits(goog.fx.AnimationSerialQueue, goog.fx.AnimationQueue);
+<a name="line225"></a>
+<a name="line226"></a>
+<a name="line227"></a>/**
+<a name="line228"></a> * Records the animation currently being played.
+<a name="line229"></a> * @type {number}
+<a name="line230"></a> * @private
+<a name="line231"></a> */
+<a name="line232"></a>goog.fx.AnimationSerialQueue.prototype.counter_ = 0;
+<a name="line233"></a>
+<a name="line234"></a>
+<a name="line235"></a>
+<a name="line236"></a>/**
+<a name="line237"></a> * Play next on begin.
+<a name="line238"></a> * @override
+<a name="line239"></a> */
+<a name="line240"></a>goog.fx.AnimationSerialQueue.prototype.onBegin = function() {
+<a name="line241"></a>  this.playNext_();
+<a name="line242"></a>  goog.fx.AnimationSerialQueue.superClass_.onBegin.call(this);
+<a name="line243"></a>};
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/**
+<a name="line247"></a> * Reset on end.
+<a name="line248"></a> * @override
+<a name="line249"></a> */
+<a name="line250"></a>goog.fx.AnimationSerialQueue.prototype.onEnd = function() {
+<a name="line251"></a>  this.reset_();
+<a name="line252"></a>  goog.fx.AnimationSerialQueue.superClass_.onEnd.call(this);
+<a name="line253"></a>};
+<a name="line254"></a>
+<a name="line255"></a>
+<a name="line256"></a>/**
+<a name="line257"></a> * Reset the counter and remove all listeners.
+<a name="line258"></a> * @private
+<a name="line259"></a> */
+<a name="line260"></a>goog.fx.AnimationSerialQueue.prototype.reset_ = function() {
+<a name="line261"></a>  this.counter_ = 0;
+<a name="line262"></a>
+<a name="line263"></a>  this.childHandler_.removeAll();
+<a name="line264"></a>};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Plays the next animation in the queue.
+<a name="line269"></a> * @private
+<a name="line270"></a> */
+<a name="line271"></a>goog.fx.AnimationSerialQueue.prototype.playNext_ = function() {
+<a name="line272"></a>  // if the state is paused, and this method was called (only called through the
+<a name="line273"></a>  // dispatch of a BEGIN event), then we know that we must be restarting, so we
+<a name="line274"></a>  // should stop all animations in the queue, reset the listeners, and rezero
+<a name="line275"></a>  // the counter
+<a name="line276"></a>  if (this.state_ == goog.fx.Animation.State.PAUSED) {
+<a name="line277"></a>    this.reset_();
+<a name="line278"></a>
+<a name="line279"></a>    goog.array.forEach(this.queue_, function(animation) {
+<a name="line280"></a>      // reset the progress to zero and update the coords to reset the position
+<a name="line281"></a>      animation.progress = 0;
+<a name="line282"></a>      animation.updateCoords_(animation.progress);
+<a name="line283"></a>
+<a name="line284"></a>      animation.stop();
+<a name="line285"></a>    });
+<a name="line286"></a>  }
+<a name="line287"></a>
+<a name="line288"></a>  this.queue_[this.counter_].play();
+<a name="line289"></a>  this.counter_++;
+<a name="line290"></a>
+<a name="line291"></a>  if (this.counter_ &lt; this.queue_.length) {
+<a name="line292"></a>    this.childHandler_.listen(
+<a name="line293"></a>        this.queue_[this.counter_ - 1],
+<a name="line294"></a>        goog.fx.Animation.EventType.FINISH,
+<a name="line295"></a>        function() {
+<a name="line296"></a>          this.playNext_();
+<a name="line297"></a>        });
+<a name="line298"></a>  }
+<a name="line299"></a>};
+<a name="line300"></a>
+<a name="line301"></a>
+<a name="line302"></a>/**
+<a name="line303"></a> * Add an animation to the queue.
+<a name="line304"></a> * @param {goog.fx.Animation} animation The animation to add.
+<a name="line305"></a> */
+<a name="line306"></a>goog.fx.AnimationSerialQueue.prototype.add = function(animation) {
+<a name="line307"></a>  this.queue_.push(animation);
+<a name="line308"></a>
+<a name="line309"></a>  this.duration += animation.duration;
+<a name="line310"></a>};
+<a name="line311"></a>
+<a name="line312"></a>
+<a name="line313"></a>/**
+<a name="line314"></a> * Remove an Animation from the queue.
+<a name="line315"></a> * @param {goog.fx.Animation} animation The animation to remove.
+<a name="line316"></a> */
+<a name="line317"></a>goog.fx.AnimationSerialQueue.prototype.remove = function(animation) {
+<a name="line318"></a>  if (goog.array.remove(this.queue_, animation)) {
+<a name="line319"></a>    this.duration -= animation.duration;
+<a name="line320"></a>  }
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/** @inheritDoc */
+<a name="line325"></a>goog.fx.AnimationSerialQueue.prototype.executeChildrenAction = function(f) {
+<a name="line326"></a>  if (this.counter_ &gt; 0) {
+<a name="line327"></a>    f(this.queue_[this.counter_ - 1]);
+<a name="line328"></a>  }
+<a name="line329"></a>};
+<a name="line330"></a>
+<a name="line331"></a>
+<a name="line332"></a>/**
+<a name="line333"></a> * Destroy all animations in the queue as well as the event handler.  We don&#39;t
+<a name="line334"></a> * override the destroy method in the parent class, but instead can call this
+<a name="line335"></a> * upon receiving its DESTROY event.
+<a name="line336"></a> * @private
+<a name="line337"></a> */
+<a name="line338"></a>goog.fx.AnimationSerialQueue.prototype.destroyQueueAndHandlers_ = function() {
+<a name="line339"></a>  goog.array.forEach(
+<a name="line340"></a>      this.queue_,
+<a name="line341"></a>      function(element) {
+<a name="line342"></a>        element.destroy();
+<a name="line343"></a>      });
+<a name="line344"></a>
+<a name="line345"></a>  this.childHandler_.dispose();
+<a name="line346"></a>};
+</pre>
+
+
+</body>
+</html>

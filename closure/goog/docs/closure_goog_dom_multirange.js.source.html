@@ -1,0 +1,564 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>multirange.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_dom_multirange.js.html">multirange.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities for working with W3C multi-part ranges.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.dom.MultiRange&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.dom.MultiRangeIterator&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.AbstractMultiRange&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.AbstractRange&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom.RangeIterator&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.RangeType&#39;);
+<a name="line30"></a>goog.require(&#39;goog.dom.SavedRange&#39;);
+<a name="line31"></a>goog.require(&#39;goog.dom.TextRange&#39;);
+<a name="line32"></a>goog.require(&#39;goog.iter.StopIteration&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Creates a new multi part range with no properties.  Do not use this
+<a name="line37"></a> * constructor: use one of the goog.dom.Range.createFrom* methods instead.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @extends {goog.dom.AbstractMultiRange}
+<a name="line40"></a> */
+<a name="line41"></a>goog.dom.MultiRange = function() {
+<a name="line42"></a>  /**
+<a name="line43"></a>   * Array of browser sub-ranges comprising this multi-range.
+<a name="line44"></a>   * @type {Array.&lt;Range&gt;}
+<a name="line45"></a>   * @private
+<a name="line46"></a>   */
+<a name="line47"></a>  this.browserRanges_ = [];
+<a name="line48"></a>
+<a name="line49"></a>  /**
+<a name="line50"></a>   * Lazily initialized array of range objects comprising this multi-range.
+<a name="line51"></a>   * @type {Array.&lt;goog.dom.TextRange&gt;}
+<a name="line52"></a>   * @private
+<a name="line53"></a>   */
+<a name="line54"></a>  this.ranges_ = [];
+<a name="line55"></a>
+<a name="line56"></a>  /**
+<a name="line57"></a>   * Lazily computed sorted version of ranges_, sorted by start point.
+<a name="line58"></a>   * @type {Array.&lt;goog.dom.TextRange&gt;?}
+<a name="line59"></a>   * @private
+<a name="line60"></a>   */
+<a name="line61"></a>  this.sortedRanges_ = null;
+<a name="line62"></a>
+<a name="line63"></a>  /**
+<a name="line64"></a>   * Lazily computed container node.
+<a name="line65"></a>   * @type {Node?}
+<a name="line66"></a>   * @private
+<a name="line67"></a>   */
+<a name="line68"></a>  this.container_ = null;
+<a name="line69"></a>};
+<a name="line70"></a>goog.inherits(goog.dom.MultiRange, goog.dom.AbstractMultiRange);
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * Creates a new range wrapper from the given browser selection object.  Do not
+<a name="line75"></a> * use this method directly - please use goog.dom.Range.createFrom* instead.
+<a name="line76"></a> * @param {Selection} selection The browser selection object.
+<a name="line77"></a> * @return {goog.dom.MultiRange} A range wrapper object.
+<a name="line78"></a> */
+<a name="line79"></a>goog.dom.MultiRange.createFromBrowserSelection = function(selection) {
+<a name="line80"></a>  var range = new goog.dom.MultiRange();
+<a name="line81"></a>  for (var i = 0, len = selection.rangeCount; i &lt; len; i++) {
+<a name="line82"></a>    range.browserRanges_.push(selection.getRangeAt(i));
+<a name="line83"></a>  }
+<a name="line84"></a>  return range;
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Creates a new range wrapper from the given browser ranges.  Do not
+<a name="line90"></a> * use this method directly - please use goog.dom.Range.createFrom* instead.
+<a name="line91"></a> * @param {Array.&lt;Range&gt;} browserRanges The browser ranges.
+<a name="line92"></a> * @return {goog.dom.MultiRange} A range wrapper object.
+<a name="line93"></a> */
+<a name="line94"></a>goog.dom.MultiRange.createFromBrowserRanges = function(browserRanges) {
+<a name="line95"></a>  var range = new goog.dom.MultiRange();
+<a name="line96"></a>  range.browserRanges_ = goog.array.clone(browserRanges);
+<a name="line97"></a>  return range;
+<a name="line98"></a>};
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * Creates a new range wrapper from the given goog.dom.TextRange objects.  Do
+<a name="line103"></a> * not use this method directly - please use goog.dom.Range.createFrom* instead.
+<a name="line104"></a> * @param {Array.&lt;goog.dom.TextRange&gt;} textRanges The text range objects.
+<a name="line105"></a> * @return {goog.dom.MultiRange} A range wrapper object.
+<a name="line106"></a> */
+<a name="line107"></a>goog.dom.MultiRange.createFromTextRanges = function(textRanges) {
+<a name="line108"></a>  var range = new goog.dom.MultiRange();
+<a name="line109"></a>  range.ranges_ = textRanges;
+<a name="line110"></a>  range.browserRanges_ = goog.array.map(textRanges, function(range) {
+<a name="line111"></a>    return range.getBrowserRangeObject();
+<a name="line112"></a>  });
+<a name="line113"></a>  return range;
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Logging object.
+<a name="line119"></a> * @type {goog.debug.Logger}
+<a name="line120"></a> * @private
+<a name="line121"></a> */
+<a name="line122"></a>goog.dom.MultiRange.prototype.logger_ =
+<a name="line123"></a>    goog.debug.Logger.getLogger(&#39;goog.dom.MultiRange&#39;);
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>// Method implementations
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * Clears cached values.  Should be called whenever this.browserRanges_ is
+<a name="line131"></a> * modified.
+<a name="line132"></a> * @private
+<a name="line133"></a> */
+<a name="line134"></a>goog.dom.MultiRange.prototype.clearCachedValues_ = function() {
+<a name="line135"></a>  this.ranges_ = [];
+<a name="line136"></a>  this.sortedRanges_ = null;
+<a name="line137"></a>  this.container_ = null;
+<a name="line138"></a>};
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * @return {goog.dom.MultiRange} A clone of this range.
+<a name="line143"></a> */
+<a name="line144"></a>goog.dom.MultiRange.prototype.clone = function() {
+<a name="line145"></a>  return goog.dom.MultiRange.createFromBrowserRanges(this.browserRanges_);
+<a name="line146"></a>};
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/** @inheritDoc */
+<a name="line150"></a>goog.dom.MultiRange.prototype.getType = function() {
+<a name="line151"></a>  return goog.dom.RangeType.MULTI;
+<a name="line152"></a>};
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/** @inheritDoc */
+<a name="line156"></a>goog.dom.MultiRange.prototype.getBrowserRangeObject = function() {
+<a name="line157"></a>  // NOTE: This method does not make sense for multi-ranges.
+<a name="line158"></a>  if (this.browserRanges_.length &gt; 1) {
+<a name="line159"></a>    this.logger_.warning(
+<a name="line160"></a>        &#39;getBrowserRangeObject called on MultiRange with more than 1 range&#39;);
+<a name="line161"></a>  }
+<a name="line162"></a>  return this.browserRanges_[0];
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/** @inheritDoc */
+<a name="line167"></a>goog.dom.MultiRange.prototype.setBrowserRangeObject = function(nativeRange) {
+<a name="line168"></a>  // TODO: Look in to adding setBrowserSelectionObject.
+<a name="line169"></a>  return false;
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/** @inheritDoc */
+<a name="line174"></a>goog.dom.MultiRange.prototype.getTextRangeCount = function() {
+<a name="line175"></a>  return this.browserRanges_.length;
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/** @inheritDoc */
+<a name="line180"></a>goog.dom.MultiRange.prototype.getTextRange = function(i) {
+<a name="line181"></a>  if (!this.ranges_[i]) {
+<a name="line182"></a>    this.ranges_[i] = goog.dom.TextRange.createFromBrowserRange(
+<a name="line183"></a>        this.browserRanges_[i]);
+<a name="line184"></a>  }
+<a name="line185"></a>  return this.ranges_[i];
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/** @inheritDoc */
+<a name="line190"></a>goog.dom.MultiRange.prototype.getContainer = function() {
+<a name="line191"></a>  if (!this.container_) {
+<a name="line192"></a>    var nodes = [];
+<a name="line193"></a>    for (var i = 0, len = this.getTextRangeCount(); i &lt; len; i++) {
+<a name="line194"></a>      nodes.push(this.getTextRange(i).getContainer());
+<a name="line195"></a>    }
+<a name="line196"></a>    this.container_ = goog.dom.findCommonAncestor.apply(null, nodes);
+<a name="line197"></a>  }
+<a name="line198"></a>  return this.container_;
+<a name="line199"></a>};
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>/**
+<a name="line203"></a> * @return {Array.&lt;goog.dom.TextRange&gt;} An array of sub-ranges, sorted by start
+<a name="line204"></a> *     point.
+<a name="line205"></a> */
+<a name="line206"></a>goog.dom.MultiRange.prototype.getSortedRanges = function() {
+<a name="line207"></a>  if (!this.sortedRanges_) {
+<a name="line208"></a>    this.sortedRanges_ = this.getTextRanges();
+<a name="line209"></a>    this.sortedRanges_.sort(function(a, b) {
+<a name="line210"></a>      var aStartNode = a.getStartNode();
+<a name="line211"></a>      var aStartOffset = a.getStartOffset();
+<a name="line212"></a>      var bStartNode = b.getStartNode();
+<a name="line213"></a>      var bStartOffset = b.getStartOffset();
+<a name="line214"></a>
+<a name="line215"></a>      if (aStartNode == bStartNode &amp;&amp; aStartOffset == bStartOffset) {
+<a name="line216"></a>        return 0;
+<a name="line217"></a>      }
+<a name="line218"></a>
+<a name="line219"></a>      return goog.dom.Range.isReversed(aStartNode, aStartOffset, bStartNode,
+<a name="line220"></a>          bStartOffset) ? 1 : -1;
+<a name="line221"></a>    });
+<a name="line222"></a>  }
+<a name="line223"></a>  return this.sortedRanges_;
+<a name="line224"></a>};
+<a name="line225"></a>
+<a name="line226"></a>
+<a name="line227"></a>/** @inheritDoc */
+<a name="line228"></a>goog.dom.MultiRange.prototype.getStartNode = function() {
+<a name="line229"></a>  return this.getSortedRanges()[0].getStartNode();
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/** @inheritDoc */
+<a name="line234"></a>goog.dom.MultiRange.prototype.getStartOffset = function() {
+<a name="line235"></a>  return this.getSortedRanges()[0].getStartOffset();
+<a name="line236"></a>};
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>/** @inheritDoc */
+<a name="line240"></a>goog.dom.MultiRange.prototype.getEndNode = function() {
+<a name="line241"></a>  // NOTE: This may return the wrong node if any subranges overlap.
+<a name="line242"></a>  return goog.array.peek(this.getSortedRanges()).getEndNode();
+<a name="line243"></a>};
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/** @inheritDoc */
+<a name="line247"></a>goog.dom.MultiRange.prototype.getEndOffset = function() {
+<a name="line248"></a>  // NOTE: This may return the wrong value if any subranges overlap.
+<a name="line249"></a>  return goog.array.peek(this.getSortedRanges()).getEndOffset();
+<a name="line250"></a>};
+<a name="line251"></a>
+<a name="line252"></a>
+<a name="line253"></a>/** @inheritDoc */
+<a name="line254"></a>goog.dom.MultiRange.prototype.isRangeInDocument = function() {
+<a name="line255"></a>  return goog.array.every(this.getTextRanges(), function(range) {
+<a name="line256"></a>    return range.isRangeInDocument();
+<a name="line257"></a>  });
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/** @inheritDoc */
+<a name="line262"></a>goog.dom.MultiRange.prototype.isCollapsed = function() {
+<a name="line263"></a>  return this.browserRanges_.length == 0 ||
+<a name="line264"></a>      this.browserRanges_.length == 1 &amp;&amp; this.getTextRange(0).isCollapsed();
+<a name="line265"></a>};
+<a name="line266"></a>
+<a name="line267"></a>
+<a name="line268"></a>/** @inheritDoc */
+<a name="line269"></a>goog.dom.MultiRange.prototype.getText = function() {
+<a name="line270"></a>  return goog.array.map(this.getTextRanges(), function(range) {
+<a name="line271"></a>    return range.getText();
+<a name="line272"></a>  }).join(&#39;&#39;);
+<a name="line273"></a>};
+<a name="line274"></a>
+<a name="line275"></a>
+<a name="line276"></a>/** @inheritDoc */
+<a name="line277"></a>goog.dom.MultiRange.prototype.getHtmlFragment = function() {
+<a name="line278"></a>  return this.getValidHtml();
+<a name="line279"></a>};
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>/** @inheritDoc */
+<a name="line283"></a>goog.dom.MultiRange.prototype.getValidHtml = function() {
+<a name="line284"></a>  // NOTE: This does not behave well if the sub-ranges overlap.
+<a name="line285"></a>  return goog.array.map(this.getTextRanges(), function(range) {
+<a name="line286"></a>    return range.getValidHtml();
+<a name="line287"></a>  }).join(&#39;&#39;);
+<a name="line288"></a>};
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/** @inheritDoc */
+<a name="line292"></a>goog.dom.MultiRange.prototype.getPastableHtml = function() {
+<a name="line293"></a>  // TODO: This should probably do something smart like group TR and TD
+<a name="line294"></a>  // selections in to the same table.
+<a name="line295"></a>  return this.getValidHtml();
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/** @inheritDoc */
+<a name="line300"></a>goog.dom.MultiRange.prototype.__iterator__ = function(opt_keys) {
+<a name="line301"></a>  return new goog.dom.MultiRangeIterator(this);
+<a name="line302"></a>};
+<a name="line303"></a>
+<a name="line304"></a>
+<a name="line305"></a>// RANGE ACTIONS
+<a name="line306"></a>
+<a name="line307"></a>
+<a name="line308"></a>/** @inheritDoc */
+<a name="line309"></a>goog.dom.MultiRange.prototype.select = function() {
+<a name="line310"></a>  var selection = goog.dom.AbstractRange.getBrowserSelectionForWindow(
+<a name="line311"></a>      this.getWindow());
+<a name="line312"></a>  selection.removeAllRanges();
+<a name="line313"></a>  for (var i = 0, len = this.getTextRangeCount(); i &lt; len; i++) {
+<a name="line314"></a>    selection.addRange(this.getTextRange(i).getBrowserRangeObject());
+<a name="line315"></a>  }
+<a name="line316"></a>};
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/** @inheritDoc */
+<a name="line320"></a>goog.dom.MultiRange.prototype.removeContents = function() {
+<a name="line321"></a>  goog.array.forEach(this.getTextRanges(), function(range) {
+<a name="line322"></a>    range.removeContents();
+<a name="line323"></a>  });
+<a name="line324"></a>};
+<a name="line325"></a>
+<a name="line326"></a>
+<a name="line327"></a>// SAVE/RESTORE
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/** @inheritDoc */
+<a name="line331"></a>goog.dom.MultiRange.prototype.saveUsingDom = function() {
+<a name="line332"></a>  return new goog.dom.DomSavedMultiRange_(this);
+<a name="line333"></a>};
+<a name="line334"></a>
+<a name="line335"></a>
+<a name="line336"></a>// RANGE MODIFICATION
+<a name="line337"></a>
+<a name="line338"></a>
+<a name="line339"></a>/**
+<a name="line340"></a> * Collapses this range to a single point, either the first or last point
+<a name="line341"></a> * depending on the parameter.  This will result in the number of ranges in this
+<a name="line342"></a> * multi range becoming 1.
+<a name="line343"></a> * @param {boolean} toAnchor Whether to collapse to the anchor.
+<a name="line344"></a> */
+<a name="line345"></a>goog.dom.MultiRange.prototype.collapse = function(toAnchor) {
+<a name="line346"></a>  if (!this.isCollapsed()) {
+<a name="line347"></a>    var range = toAnchor ? this.getTextRange(0) : this.getTextRange(
+<a name="line348"></a>        this.getTextRangeCount() - 1);
+<a name="line349"></a>
+<a name="line350"></a>    this.clearCachedValues_();
+<a name="line351"></a>    range.collapse(toAnchor);
+<a name="line352"></a>    this.ranges_ = [range];
+<a name="line353"></a>    this.sortedRanges_ = [range];
+<a name="line354"></a>    this.browserRanges_ = [range.getBrowserRangeObject()];
+<a name="line355"></a>  }
+<a name="line356"></a>};
+<a name="line357"></a>
+<a name="line358"></a>
+<a name="line359"></a>// SAVED RANGE OBJECTS
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * A SavedRange implementation using DOM endpoints.
+<a name="line364"></a> * @param {goog.dom.MultiRange} range The range to save.
+<a name="line365"></a> * @constructor
+<a name="line366"></a> * @extends {goog.dom.SavedRange}
+<a name="line367"></a> * @private
+<a name="line368"></a> */
+<a name="line369"></a>goog.dom.DomSavedMultiRange_ = function(range) {
+<a name="line370"></a>  /**
+<a name="line371"></a>   * Array of saved ranges.
+<a name="line372"></a>   * @type {Array.&lt;goog.dom.SavedRange&gt;}
+<a name="line373"></a>   * @private
+<a name="line374"></a>   */
+<a name="line375"></a>  this.savedRanges_ = goog.array.map(range.getTextRanges(), function(range) {
+<a name="line376"></a>    return range.saveUsingDom();
+<a name="line377"></a>  });
+<a name="line378"></a>};
+<a name="line379"></a>goog.inherits(goog.dom.DomSavedMultiRange_, goog.dom.SavedRange);
+<a name="line380"></a>
+<a name="line381"></a>
+<a name="line382"></a>/**
+<a name="line383"></a> * @return {goog.dom.MultiRange} The restored range.
+<a name="line384"></a> */
+<a name="line385"></a>goog.dom.DomSavedMultiRange_.prototype.restoreInternal = function() {
+<a name="line386"></a>  var ranges = goog.array.map(this.savedRanges_, function(savedRange) {
+<a name="line387"></a>    return savedRange.restore();
+<a name="line388"></a>  });
+<a name="line389"></a>  return goog.dom.MultiRange.createFromTextRanges(ranges);
+<a name="line390"></a>};
+<a name="line391"></a>
+<a name="line392"></a>
+<a name="line393"></a>/** @inheritDoc */
+<a name="line394"></a>goog.dom.DomSavedMultiRange_.prototype.disposeInternal = function() {
+<a name="line395"></a>  goog.dom.DomSavedMultiRange_.superClass_.disposeInternal.call(this);
+<a name="line396"></a>
+<a name="line397"></a>  goog.array.forEach(this.savedRanges_, function(savedRange) {
+<a name="line398"></a>    savedRange.dispose();
+<a name="line399"></a>  });
+<a name="line400"></a>  delete this.savedRanges_;
+<a name="line401"></a>};
+<a name="line402"></a>
+<a name="line403"></a>
+<a name="line404"></a>// RANGE ITERATION
+<a name="line405"></a>
+<a name="line406"></a>
+<a name="line407"></a>/**
+<a name="line408"></a> * Subclass of goog.dom.TagIterator that iterates over a DOM range.  It
+<a name="line409"></a> * adds functions to determine the portion of each text node that is selected.
+<a name="line410"></a> *
+<a name="line411"></a> * @param {goog.dom.MultiRange} range The range to traverse.
+<a name="line412"></a> * @constructor
+<a name="line413"></a> * @extends {goog.dom.RangeIterator}
+<a name="line414"></a> */
+<a name="line415"></a>goog.dom.MultiRangeIterator = function(range) {
+<a name="line416"></a>  if (range) {
+<a name="line417"></a>    this.iterators_ = goog.array.map(
+<a name="line418"></a>        range.getSortedRanges(),
+<a name="line419"></a>        function(r) {
+<a name="line420"></a>          return goog.iter.toIterator(r);
+<a name="line421"></a>        });
+<a name="line422"></a>  }
+<a name="line423"></a>
+<a name="line424"></a>  goog.dom.RangeIterator.call(
+<a name="line425"></a>      this, range ? this.getStartNode() : null, false);
+<a name="line426"></a>};
+<a name="line427"></a>goog.inherits(goog.dom.MultiRangeIterator, goog.dom.RangeIterator);
+<a name="line428"></a>
+<a name="line429"></a>
+<a name="line430"></a>/**
+<a name="line431"></a> * The list of range iterators left to traverse.
+<a name="line432"></a> * @type {Array.&lt;goog.dom.RangeIterator&gt;?}
+<a name="line433"></a> * @private
+<a name="line434"></a> */
+<a name="line435"></a>goog.dom.MultiRangeIterator.prototype.iterators_ = null;
+<a name="line436"></a>
+<a name="line437"></a>
+<a name="line438"></a>/**
+<a name="line439"></a> * The index of the current sub-iterator being traversed.
+<a name="line440"></a> * @type {number}
+<a name="line441"></a> * @private
+<a name="line442"></a> */
+<a name="line443"></a>goog.dom.MultiRangeIterator.prototype.currentIdx_ = 0;
+<a name="line444"></a>
+<a name="line445"></a>
+<a name="line446"></a>/** @inheritDoc */
+<a name="line447"></a>goog.dom.MultiRangeIterator.prototype.getStartTextOffset = function() {
+<a name="line448"></a>  return this.iterators_[this.currentIdx_].getStartTextOffset();
+<a name="line449"></a>};
+<a name="line450"></a>
+<a name="line451"></a>
+<a name="line452"></a>/** @inheritDoc */
+<a name="line453"></a>goog.dom.MultiRangeIterator.prototype.getEndTextOffset = function() {
+<a name="line454"></a>  return this.iterators_[this.currentIdx_].getEndTextOffset();
+<a name="line455"></a>};
+<a name="line456"></a>
+<a name="line457"></a>
+<a name="line458"></a>/** @inheritDoc */
+<a name="line459"></a>goog.dom.MultiRangeIterator.prototype.getStartNode = function() {
+<a name="line460"></a>  return this.iterators_[0].getStartNode();
+<a name="line461"></a>};
+<a name="line462"></a>
+<a name="line463"></a>
+<a name="line464"></a>/** @inheritDoc */
+<a name="line465"></a>goog.dom.MultiRangeIterator.prototype.getEndNode = function() {
+<a name="line466"></a>  return goog.array.peek(this.iterators_).getEndNode();
+<a name="line467"></a>};
+<a name="line468"></a>
+<a name="line469"></a>
+<a name="line470"></a>/** @inheritDoc */
+<a name="line471"></a>goog.dom.MultiRangeIterator.prototype.isLast = function() {
+<a name="line472"></a>  return this.iterators_[this.currentIdx_].isLast();
+<a name="line473"></a>};
+<a name="line474"></a>
+<a name="line475"></a>
+<a name="line476"></a>/** @inheritDoc */
+<a name="line477"></a>goog.dom.MultiRangeIterator.prototype.next = function() {
+<a name="line478"></a>  /** @preserveTry */
+<a name="line479"></a>  try {
+<a name="line480"></a>    var it = this.iterators_[this.currentIdx_];
+<a name="line481"></a>    var next = it.next();
+<a name="line482"></a>    this.setPosition(it.node, it.tagType, it.depth);
+<a name="line483"></a>    return next;
+<a name="line484"></a>  } catch (ex) {
+<a name="line485"></a>    if (ex !== goog.iter.StopIteration ||
+<a name="line486"></a>        this.iterators_.length - 1 == this.currentIdx_) {
+<a name="line487"></a>      throw ex;
+<a name="line488"></a>    } else {
+<a name="line489"></a>      // In case we got a StopIteration, increment counter and try again.
+<a name="line490"></a>      this.currentIdx_++;
+<a name="line491"></a>      return this.next();
+<a name="line492"></a>    }
+<a name="line493"></a>  }
+<a name="line494"></a>};
+<a name="line495"></a>
+<a name="line496"></a>
+<a name="line497"></a>/**
+<a name="line498"></a> * Replaces this iterator&#39;s values with values from another.
+<a name="line499"></a> * @param {goog.dom.MultiRangeIterator} other The iterator to copy.
+<a name="line500"></a> * @protected
+<a name="line501"></a> */
+<a name="line502"></a>goog.dom.MultiRangeIterator.prototype.copyFrom = function(other) {
+<a name="line503"></a>  this.iterators_ = goog.array.clone(other.iterators_);
+<a name="line504"></a>  goog.dom.MultiRangeIterator.superClass_.copyFrom.call(this, other);
+<a name="line505"></a>};
+<a name="line506"></a>
+<a name="line507"></a>
+<a name="line508"></a>/**
+<a name="line509"></a> * @return {goog.dom.MultiRangeIterator} An identical iterator.
+<a name="line510"></a> */
+<a name="line511"></a>goog.dom.MultiRangeIterator.prototype.clone = function() {
+<a name="line512"></a>  var copy = new goog.dom.MultiRangeIterator(null);
+<a name="line513"></a>  copy.copyFrom(this);
+<a name="line514"></a>  return copy;
+<a name="line515"></a>};
+</pre>
+
+
+</body>
+</html>

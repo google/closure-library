@@ -1,0 +1,1388 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>NumberFormat (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">locale.NumberFormat</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          <a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">
+            Object</a>
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Constructor of NumberFormat.
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_locale_numberformat.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<pre class="inheritance">
+Object
+     <img src="static/images/inherit.gif">goog.locale.NumberFormat
+</pre>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.locale.NumberFormat(<span></span>)
+  </div>
+
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_locale_NumberFormat.html">
+              goog.locale.NumberFormat
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.addExponentPart_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addExponentPart_<span class="args">(<span class="arg">exponent</span>,&nbsp;<span class="arg">parts</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Formats exponent part of a Number.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">exponent</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">exponential value.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">parts</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
+        <div class="entryOverview">This array holds the pieces of formatted string. This function will add its formatted pieces to the array.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line363">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.applyPattern"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">applyPattern<span class="args">(<span class="arg">pattern</span>,&nbsp;<span class="arg">opt_currency</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Apply a pattern to NumberFormat object.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">pattern</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The number format pattern string.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_currency</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Optional international currency code. This determines the currency code/symbol used in format/parse. If not given, the currency code for current locale will be used.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line76">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.applyStandardPattern"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">applyStandardPattern<span class="args">(<span class="arg">patternType</span>,&nbsp;<span class="arg">opt_currency</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Apply a predefined pattern to NumberFormat object.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">patternType</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The number that indicates a predefined number format pattern.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_currency</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Optional international currency code. This determines the currency code/symbol used in format/parse. If not given, the currency code for current locale will be used.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line47">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.format"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">format<span class="args">(<span class="arg">number</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Formats a Number to produce a string.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">number</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The Number to be formatted.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
+            The formatted number string.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line250">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.getDigit_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getDigit_<span class="args">(<span class="arg">ch</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the digit value of current character. The character could be either
+&#39;0&#39; to &#39;9&#39;, or a locale specific digit.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">ch</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Character that represents a digit.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>&nbsp;
+            The digit value, or -1 on error.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line435">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.parse"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">parse<span class="args">(<span class="arg">text</span>,&nbsp;<span class="arg">opt_pos</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Parses text string to produce a Number.
+
+This method attempts to parse text starting from position &quot;opt_pos&quot; if it
+is given. Otherwise the parse will start from the beginning of the text.
+When opt_pos presents, opt_pos will be updated to the character next to where
+parsing stops after the call. If an error occurs, opt_pos won&#39;t be updated.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">text</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">the string to be parsed.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_pos</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
+        <div class="entryOverview">position to pass in and get back.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>&nbsp;
+            Parsed number, or NaN if the parse fails.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line117">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.parseAffix_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">parseAffix_<span class="args">(<span class="arg">pattern</span>,&nbsp;<span class="arg">pos</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Parses affix part of pattern.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">pattern</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Pattern string that need to be parsed.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">pos</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
+        <div class="entryOverview">One element position array to set and receive parsing position.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
+            affix received from parsing.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line549">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.parseNumber_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">parseNumber_<span class="args">(<span class="arg">text</span>,&nbsp;<span class="arg">pos</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       This function will parse a &quot;localized&quot; text into a Number. It needs to
+handle locale specific decimal, grouping, exponent and digits.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">text</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The text that need to be parsed.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">pos</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
+        <div class="entryOverview">In/out parsing position. In case of failure, pos value won&#39;t be changed.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>&nbsp;
+            Number value, could be 0.0 if nothing can be parsed.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line178">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.parsePattern_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">parsePattern_<span class="args">(<span class="arg">pattern</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Parses provided pattern, result are stored in member variables.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">pattern</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">string pattern being applied.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line743">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.parseTrunk_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">parseTrunk_<span class="args">(<span class="arg">pattern</span>,&nbsp;<span class="arg">pos</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Parses the trunk part of a pattern.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">pattern</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Pattern string that need to be parsed.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">pos</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
+        <div class="entryOverview">One element position array to set and receive parsing position.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line620">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.subformatExponential_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">subformatExponential_<span class="args">(<span class="arg">number</span>,&nbsp;<span class="arg">parts</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Formats Number in exponential format.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">number</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Value need to be formated.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">parts</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
+        <div class="entryOverview">This array holds the pieces of formatted string. This function will add its formatted pieces to the array.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line388">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.locale.NumberFormat.prototype.subformatFixed_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">subformatFixed_<span class="args">(<span class="arg">number</span>,&nbsp;<span class="arg">minIntDigits</span>,&nbsp;<span class="arg">parts</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Formats a Number in fraction format.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">number</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Value need to be formated.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">minIntDigits</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Minimum integer digits.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parts</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
+        <div class="entryOverview">This array holds the pieces of formatted string. This function will add its formatted pieces to the array.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line290">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+<h2>Static Properties</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.PATTERN_CURRENCY_SIGN_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">PATTERN_CURRENCY_SIGN_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A quote character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line528">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.PATTERN_DECIMAL_SEPARATOR_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">PATTERN_DECIMAL_SEPARATOR_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A decimal separator character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line472">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.PATTERN_DIGIT_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">PATTERN_DIGIT_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A digit character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line496">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.PATTERN_EXPONENT_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">PATTERN_EXPONENT_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       An exponent character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line512">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.PATTERN_GROUPING_SEPARATOR_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">PATTERN_GROUPING_SEPARATOR_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A grouping separator character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line464">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.PATTERN_MINUS_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">PATTERN_MINUS_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A minus character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line520">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.PATTERN_PERCENT_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">PATTERN_PERCENT_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A percent character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line488">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.PATTERN_PER_MILLE_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">PATTERN_PER_MILLE_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A per mille character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line480">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.PATTERN_SEPARATOR_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">PATTERN_SEPARATOR_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A separator character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line504">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.PATTERN_ZERO_DIGIT_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">PATTERN_ZERO_DIGIT_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A zero digit character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line456">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.locale.NumberFormat.QUOTE_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.locale.NumberFormat.</span><span class="entryName">QUOTE_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A quote character.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_locale_numberformat.js.source.html#line536">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package locale</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="goog" current="locale.NumberFormat"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

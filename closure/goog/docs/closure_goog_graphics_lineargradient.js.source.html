@@ -1,0 +1,179 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>lineargradient.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_graphics_lineargradient.js.html">lineargradient.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Represents a gradient to be used with a Graphics implementor.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.graphics.LinearGradient&#39;);
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.graphics.Fill&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Creates an immutable linear gradient fill object.
+<a name="line29"></a> *
+<a name="line30"></a> * @param {number} x1 Start X position of the gradient.
+<a name="line31"></a> * @param {number} y1 Start Y position of the gradient.
+<a name="line32"></a> * @param {number} x2 End X position of the gradient.
+<a name="line33"></a> * @param {number} y2 End Y position of the gradient.
+<a name="line34"></a> * @param {string} color1 Start color of the gradient.
+<a name="line35"></a> * @param {string} color2 End color of the gradient.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @extends {goog.graphics.Fill}
+<a name="line38"></a> */
+<a name="line39"></a>goog.graphics.LinearGradient = function(x1, y1, x2, y2, color1, color2) {
+<a name="line40"></a>  /**
+<a name="line41"></a>   * Start X position of the gradient.
+<a name="line42"></a>   * @type {number}
+<a name="line43"></a>   * @private
+<a name="line44"></a>   */
+<a name="line45"></a>  this.x1_ = x1;
+<a name="line46"></a>
+<a name="line47"></a>  /**
+<a name="line48"></a>   * Start Y position of the gradient.
+<a name="line49"></a>   * @type {number}
+<a name="line50"></a>   * @private
+<a name="line51"></a>   */
+<a name="line52"></a>  this.y1_ = y1;
+<a name="line53"></a>
+<a name="line54"></a>  /**
+<a name="line55"></a>   * End X position of the gradient.
+<a name="line56"></a>   * @type {number}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.x2_ = x2;
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * End Y position of the gradient.
+<a name="line63"></a>   * @type {number}
+<a name="line64"></a>   * @private
+<a name="line65"></a>   */
+<a name="line66"></a>  this.y2_ = y2;
+<a name="line67"></a>
+<a name="line68"></a>  /**
+<a name="line69"></a>   * Start color of the gradient.
+<a name="line70"></a>   * @type {string}
+<a name="line71"></a>   * @private
+<a name="line72"></a>   */
+<a name="line73"></a>  this.color1_ = color1;
+<a name="line74"></a>
+<a name="line75"></a>  /**
+<a name="line76"></a>   * End color of the gradient.
+<a name="line77"></a>   * @type {string}
+<a name="line78"></a>   * @private
+<a name="line79"></a>   */
+<a name="line80"></a>  this.color2_ = color2;
+<a name="line81"></a>};
+<a name="line82"></a>goog.inherits(goog.graphics.LinearGradient, goog.graphics.Fill);
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * @return {number} The start X position of the gradient.
+<a name="line87"></a> */
+<a name="line88"></a>goog.graphics.LinearGradient.prototype.getX1 = function() {
+<a name="line89"></a>  return this.x1_;
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * @return {number} The start Y position of the gradient.
+<a name="line95"></a> */
+<a name="line96"></a>goog.graphics.LinearGradient.prototype.getY1 = function() {
+<a name="line97"></a>  return this.y1_;
+<a name="line98"></a>};
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * @return {number} The end X position of the gradient.
+<a name="line103"></a> */
+<a name="line104"></a>goog.graphics.LinearGradient.prototype.getX2 = function() {
+<a name="line105"></a>  return this.x2_;
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * @return {number} The end Y position of the gradient.
+<a name="line111"></a> */
+<a name="line112"></a>goog.graphics.LinearGradient.prototype.getY2 = function() {
+<a name="line113"></a>  return this.y2_;
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * @return {string} The start color of the gradient.
+<a name="line119"></a> */
+<a name="line120"></a>goog.graphics.LinearGradient.prototype.getColor1 = function() {
+<a name="line121"></a>  return this.color1_;
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * @return {string} The end color of the gradient.
+<a name="line127"></a> */
+<a name="line128"></a>goog.graphics.LinearGradient.prototype.getColor2 = function() {
+<a name="line129"></a>  return this.color2_;
+<a name="line130"></a>};
+</pre>
+
+
+</body>
+</html>

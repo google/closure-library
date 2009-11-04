@@ -1,0 +1,301 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>expr.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">expr.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Expression evaluation utilities. Expression format is very similar to XPath.
+
+ Expression details:
+ - Of format A/B/C, which will evaluate getChildNode(&#39;A&#39;).getChildNode(&#39;B&#39;).
+ getChildNodes(&#39;C&#39;)|getChildNodeValue(&#39;C&#39;)|getChildNode(&#39;C&#39;) depending on
+ call
+ - If expression ends with &#39;/name()&#39;, will get the name() of the node
+ referenced by the preceding path.
+ - If expression ends with &#39;/count()&#39;, will get the count() of the nodes that
+ match the expression referenced by the preceding path.
+ - If expression ends with &#39;?&#39;, the value is OK to evaluate to null. This is
+ not enforced by the expression evaluation functions, instead it is
+ provided as a flag for client code which may ignore depending on usage
+ - If expression has [INDEX], will use getChildNodes().getByIndex(INDEX)
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_datasource_expr.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/datasource/expr.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_Expr.html">
+          goog.ds.Expr</a><br/>
+        <div class="class-details">Create a new expression. An expression uses a string expression language, and
+from this string and a passed in DataNode can evaluate to a value, DataNode,
+or a DataNodeList.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ds.Expr.create"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.Expr.</span><span class="entryName">create<span class="args">(<span class="arg">expr</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_ds_Expr.html">goog.ds.Expr</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Create an expression from a string, can use cached values
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">expr</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The expression string.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_ds_Expr.html">goog.ds.Expr</a></span></div>&nbsp;
+            The expression object.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_datasource_expr.js.source.html#line427">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ds.Expr.createInternal_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.Expr.</span><span class="entryName">createInternal_<span class="args">(<span class="arg">opt_expr</span>,&nbsp;<span class="arg">opt_parts</span>,&nbsp;<span class="arg">opt_childExpr</span>,&nbsp;<span class="arg">opt_prevExpr</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_ds_Expr.html">goog.ds.Expr</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Create an expression from a string, can use cached values
+Uses hints from related expressions to help in creation
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_expr</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The string expression source.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_parts</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
+        <div class="entryOverview">Array of the parts of an expression.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_childExpr</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ds_Expr.html">goog.ds.Expr</a></span></div>
+        <div class="entryOverview">Optional child of this expression, passed in as a hint for processing.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_prevExpr</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ds_Expr.html">goog.ds.Expr</a></span></div>
+        <div class="entryOverview">Optional preceding expression (i.e. $A/B/C is previous expression to B/C) passed in as a hint for processing.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_ds_Expr.html">goog.ds.Expr</a></span></div>&nbsp;
+            The expression object.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_datasource_expr.js.source.html#line452">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/datasource/expr.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

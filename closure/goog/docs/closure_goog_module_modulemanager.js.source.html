@@ -1,0 +1,906 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>modulemanager.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_module_modulemanager.js.html">modulemanager.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A singleton object for managing Javascript code modules.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.module.ModuleManager&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line25"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line26"></a>goog.require(&#39;goog.debug.Trace&#39;);
+<a name="line27"></a>goog.require(&#39;goog.module.ModuleInfo&#39;);
+<a name="line28"></a>goog.require(&#39;goog.module.ModuleInfo.Callback&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * The ModuleManager keeps track of all modules in the environment.
+<a name="line33"></a> * Since modules may not have their code loaded, we must keep track of them.
+<a name="line34"></a> * @constructor
+<a name="line35"></a> * @extends {goog.Disposable}
+<a name="line36"></a> */
+<a name="line37"></a>goog.module.ModuleManager = function() {
+<a name="line38"></a>  goog.Disposable.call(this);
+<a name="line39"></a>
+<a name="line40"></a>  /**
+<a name="line41"></a>   * A mapping from module id to ModuleInfo object.
+<a name="line42"></a>   * @type {Object}
+<a name="line43"></a>   * @private
+<a name="line44"></a>   */
+<a name="line45"></a>  this.moduleInfoMap_ = {};
+<a name="line46"></a>
+<a name="line47"></a>  /**
+<a name="line48"></a>   * The ids of the currently loading modules. If batch mode is disabled, then
+<a name="line49"></a>   * this array will never contain more than one element at a time.
+<a name="line50"></a>   * @type {Array.&lt;string&gt;}
+<a name="line51"></a>   * @private
+<a name="line52"></a>   */
+<a name="line53"></a>  this.loadingModuleIds_ = [];
+<a name="line54"></a>
+<a name="line55"></a>  /**
+<a name="line56"></a>   * A queue of the ids of requested but not-yet-loaded modules. The zero
+<a name="line57"></a>   * position is the front of the queue.
+<a name="line58"></a>   * @type {Array.&lt;string&gt;}
+<a name="line59"></a>   * @private
+<a name="line60"></a>   */
+<a name="line61"></a>  this.requestedModuleIdsQueue_ = [];
+<a name="line62"></a>
+<a name="line63"></a>  /**
+<a name="line64"></a>   * The ids of the currently loading modules which have been initiated by user
+<a name="line65"></a>   * actions.
+<a name="line66"></a>   * @type {Array.&lt;string&gt;}
+<a name="line67"></a>   * @private
+<a name="line68"></a>   */
+<a name="line69"></a>  this.userInitiatedLoadingModuleIds_ = [];
+<a name="line70"></a>
+<a name="line71"></a>  /**
+<a name="line72"></a>   * A map of callback types to the functions to call for the specified
+<a name="line73"></a>   * callback type.
+<a name="line74"></a>   * @type {Object}
+<a name="line75"></a>   * @private
+<a name="line76"></a>   */
+<a name="line77"></a>  this.callbackMap_ = {};
+<a name="line78"></a>};
+<a name="line79"></a>goog.inherits(goog.module.ModuleManager, goog.Disposable);
+<a name="line80"></a>goog.addSingletonGetter(goog.module.ModuleManager);
+<a name="line81"></a>
+<a name="line82"></a>/**
+<a name="line83"></a>* The type of callbacks that can be registered with the module manager,.
+<a name="line84"></a>* @enum {string}
+<a name="line85"></a>*/
+<a name="line86"></a>goog.module.ModuleManager.CallbackType = {
+<a name="line87"></a>  /**
+<a name="line88"></a>   * Fired when an error has occurred.
+<a name="line89"></a>   */
+<a name="line90"></a>  ERROR: &#39;error&#39;,
+<a name="line91"></a>
+<a name="line92"></a>  /**
+<a name="line93"></a>   * Fired when it becomes idle and has no more module loads to process.
+<a name="line94"></a>   */
+<a name="line95"></a>  IDLE: &#39;idle&#39;,
+<a name="line96"></a>
+<a name="line97"></a>  /**
+<a name="line98"></a>   * Fired when it becomes active and has module loads to process.
+<a name="line99"></a>   */
+<a name="line100"></a>  ACTIVE: &#39;active&#39;,
+<a name="line101"></a>
+<a name="line102"></a>  /**
+<a name="line103"></a>   * Fired when it becomes idle and has no more user-initiated module loads to
+<a name="line104"></a>   * process.
+<a name="line105"></a>   */
+<a name="line106"></a>  USER_IDLE: &#39;userIdle&#39;,
+<a name="line107"></a>
+<a name="line108"></a>  /**
+<a name="line109"></a>   * Fired when it becomes active and has user-initiated module loads to
+<a name="line110"></a>   * process.
+<a name="line111"></a>   */
+<a name="line112"></a>  USER_ACTIVE: &#39;userActive&#39;
+<a name="line113"></a>};
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * A logger.
+<a name="line118"></a> * @type {goog.debug.Logger}
+<a name="line119"></a> * @private
+<a name="line120"></a> */
+<a name="line121"></a>goog.module.ModuleManager.prototype.logger_ = goog.debug.Logger.getLogger(
+<a name="line122"></a>    &#39;goog.module.ModuleManager&#39;);
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Whether the batch mode (i.e. the loading of multiple modules with just one
+<a name="line127"></a> * request) has been enabled.
+<a name="line128"></a> * @type {boolean}
+<a name="line129"></a> * @private
+<a name="line130"></a> */
+<a name="line131"></a>goog.module.ModuleManager.prototype.batchModeEnabled_ = false;
+<a name="line132"></a>
+<a name="line133"></a>
+<a name="line134"></a>/**
+<a name="line135"></a> * A loader for the modules that implements loadModules(ids, moduleInfoMap,
+<a name="line136"></a> * opt_successFn, opt_errorFn, opt_timeoutFn) method.
+<a name="line137"></a> * @type {goog.module.AbstractModuleLoader}
+<a name="line138"></a> * @private
+<a name="line139"></a> */
+<a name="line140"></a>goog.module.ModuleManager.prototype.loader_ = null;
+<a name="line141"></a>
+<a name="line142"></a>
+<a name="line143"></a>// TODO: Remove tracer.
+<a name="line144"></a>/**
+<a name="line145"></a> * Tracer that measures how long it takes to load a module.
+<a name="line146"></a> * @type {number?}
+<a name="line147"></a> * @private
+<a name="line148"></a> */
+<a name="line149"></a>goog.module.ModuleManager.prototype.loadTracer_ = null;
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * The number of consecutive failures that have happened upon module load
+<a name="line154"></a> * requests.
+<a name="line155"></a> * @type {number}
+<a name="line156"></a> * @private
+<a name="line157"></a> */
+<a name="line158"></a>goog.module.ModuleManager.prototype.consecutiveFailures_ = 0;
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Determines if the module manager was just active before the processing of
+<a name="line163"></a> * the last data.
+<a name="line164"></a> * @type {boolean}
+<a name="line165"></a> * @private
+<a name="line166"></a> */
+<a name="line167"></a>goog.module.ModuleManager.prototype.lastActive_ = false;
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Determines if the module manager was just user active before the processing
+<a name="line172"></a> * of the last data. The module manager is user active if any of the
+<a name="line173"></a> * user-initiated modules are loading or queued up to load.
+<a name="line174"></a> * @type {boolean}
+<a name="line175"></a> * @private
+<a name="line176"></a> */
+<a name="line177"></a>goog.module.ModuleManager.prototype.userLastActive_ = false;
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * The module context needed for module initialization.
+<a name="line182"></a> * @type {Object?}
+<a name="line183"></a> * @private
+<a name="line184"></a> */
+<a name="line185"></a>goog.module.ModuleManager.prototype.moduleContext_ = null;
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Sets the batch mode as enabled or disabled for the module manager.
+<a name="line190"></a> * @param {boolean} enabled Whether the batch mode is to be enabled or not.
+<a name="line191"></a> */
+<a name="line192"></a>goog.module.ModuleManager.prototype.setBatchModeEnabled = function(
+<a name="line193"></a>    enabled) {
+<a name="line194"></a>  this.batchModeEnabled_ = enabled;
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Sets the module info for all modules. Should only be called once.
+<a name="line200"></a> *
+<a name="line201"></a> * @param {Object} infoMap A mapping from module id (String) to list of
+<a name="line202"></a> *     required module ids (Array).
+<a name="line203"></a> */
+<a name="line204"></a>goog.module.ModuleManager.prototype.setAllModuleInfo = function(infoMap) {
+<a name="line205"></a>  for (var id in infoMap) {
+<a name="line206"></a>    this.moduleInfoMap_[id] = new goog.module.ModuleInfo(infoMap[id]);
+<a name="line207"></a>  }
+<a name="line208"></a>};
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/**
+<a name="line212"></a> * Gets a module info object by id.
+<a name="line213"></a> * @param {string} id A module identifier.
+<a name="line214"></a> * @return {goog.module.ModuleInfo} The module info.
+<a name="line215"></a> */
+<a name="line216"></a>goog.module.ModuleManager.prototype.getModuleInfo = function(id) {
+<a name="line217"></a>  return this.moduleInfoMap_[id];
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Sets the module uris.
+<a name="line223"></a> *
+<a name="line224"></a> * @param {Object} moduleUriMap The map of id/uris pairs for each module.
+<a name="line225"></a> */
+<a name="line226"></a>goog.module.ModuleManager.prototype.setModuleUris = function(moduleUriMap) {
+<a name="line227"></a>  for (var id in moduleUriMap) {
+<a name="line228"></a>    this.moduleInfoMap_[id].setUris(moduleUriMap[id]);
+<a name="line229"></a>  }
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Gets the application-specific module loader.
+<a name="line235"></a> * @return {goog.module.AbstractModuleLoader} An object that has a
+<a name="line236"></a> *     loadModules(ids, moduleInfoMap, opt_successFn, opt_errFn,
+<a name="line237"></a> *         opt_timeoutFn) method.
+<a name="line238"></a> */
+<a name="line239"></a>goog.module.ModuleManager.prototype.getLoader = function() {
+<a name="line240"></a>  return this.loader_;
+<a name="line241"></a>};
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Sets the application-specific module loader.
+<a name="line246"></a> * @param {goog.module.AbstractModuleLoader} loader An object that has a
+<a name="line247"></a> *     loadModules(ids, moduleInfoMap, opt_successFn, opt_errFn,
+<a name="line248"></a> *         opt_timeoutFn) method.
+<a name="line249"></a> */
+<a name="line250"></a>goog.module.ModuleManager.prototype.setLoader = function(loader) {
+<a name="line251"></a>  this.loader_ = loader;
+<a name="line252"></a>};
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * Gets the module context to use to initialize the module.
+<a name="line257"></a> * @return {Object} The context.
+<a name="line258"></a> */
+<a name="line259"></a>goog.module.ModuleManager.prototype.getModuleContext = function() {
+<a name="line260"></a>  return this.moduleContext_;
+<a name="line261"></a>};
+<a name="line262"></a>
+<a name="line263"></a>
+<a name="line264"></a>/**
+<a name="line265"></a> * Sets the module context to use to initialize the module.
+<a name="line266"></a> * @param {Object} context The context.
+<a name="line267"></a> */
+<a name="line268"></a>goog.module.ModuleManager.prototype.setModuleContext = function(context) {
+<a name="line269"></a>  this.moduleContext_ = context;
+<a name="line270"></a>};
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * Determines if the ModuleManager is active
+<a name="line275"></a> * @return {boolean} TRUE iff the ModuleManager is active (i.e., not idle).
+<a name="line276"></a> */
+<a name="line277"></a>goog.module.ModuleManager.prototype.isActive = function() {
+<a name="line278"></a>  return this.loadingModuleIds_.length &gt; 0;
+<a name="line279"></a>};
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>/**
+<a name="line283"></a> * Determines if the ModuleManager is user active
+<a name="line284"></a> * @return {boolean} TRUE iff the ModuleManager is user active (i.e., not idle).
+<a name="line285"></a> */
+<a name="line286"></a>goog.module.ModuleManager.prototype.isUserActive = function() {
+<a name="line287"></a>  return this.userInitiatedLoadingModuleIds_.length &gt; 0;
+<a name="line288"></a>};
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * Dispatches an ACTIVE or IDLE event if necessary.
+<a name="line293"></a> * @private
+<a name="line294"></a> */
+<a name="line295"></a>goog.module.ModuleManager.prototype.dispatchActiveIdleChangeIfNeeded_ =
+<a name="line296"></a>    function() {
+<a name="line297"></a>  var lastActive = this.lastActive_;
+<a name="line298"></a>  var active = this.isActive();
+<a name="line299"></a>  if (active != lastActive) {
+<a name="line300"></a>    this.executeCallbacks_(active ?
+<a name="line301"></a>        goog.module.ModuleManager.CallbackType.ACTIVE :
+<a name="line302"></a>        goog.module.ModuleManager.CallbackType.IDLE);
+<a name="line303"></a>
+<a name="line304"></a>    // Flip the last active value.
+<a name="line305"></a>    this.lastActive_ = active;
+<a name="line306"></a>  }
+<a name="line307"></a>
+<a name="line308"></a>  // Check if the module manager is user active i.e., there are user initiated
+<a name="line309"></a>  // modules being loaded or queued up to be loaded.
+<a name="line310"></a>  var userLastActive = this.userLastActive_;
+<a name="line311"></a>  var userActive = this.isUserActive();
+<a name="line312"></a>  if (userActive != userLastActive) {
+<a name="line313"></a>    this.executeCallbacks_(userActive ?
+<a name="line314"></a>        goog.module.ModuleManager.CallbackType.USER_ACTIVE :
+<a name="line315"></a>        goog.module.ModuleManager.CallbackType.USER_IDLE);
+<a name="line316"></a>
+<a name="line317"></a>    // Flip the last user active value.
+<a name="line318"></a>    this.userLastActive_ = userActive;
+<a name="line319"></a>  }
+<a name="line320"></a>};
+<a name="line321"></a>
+<a name="line322"></a>
+<a name="line323"></a>/**
+<a name="line324"></a> * Preloads a module after a short delay.
+<a name="line325"></a> *
+<a name="line326"></a> * @param {string} id The id of the module to preload.
+<a name="line327"></a> * @param {number} opt_timeout The number of ms to wait before adding the module
+<a name="line328"></a> *     id to the loading queue (defaults to 0 ms). Note that the module will be
+<a name="line329"></a> *     loaded asynchronously regardless of the value of this parameter.
+<a name="line330"></a> * @return {goog.async.Deferred} A deferred object.
+<a name="line331"></a> */
+<a name="line332"></a>goog.module.ModuleManager.prototype.preloadModule = function(
+<a name="line333"></a>    id, opt_timeout) {
+<a name="line334"></a>  var d = new goog.async.Deferred();
+<a name="line335"></a>  window.setTimeout(
+<a name="line336"></a>      goog.bind(this.loadModuleOrEnqueueIfNotLoadedOrLoading_, this, id, d),
+<a name="line337"></a>      opt_timeout || 0);
+<a name="line338"></a>  return d;
+<a name="line339"></a>};
+<a name="line340"></a>
+<a name="line341"></a>
+<a name="line342"></a>/**
+<a name="line343"></a> * Loads a specific module or, if some other module is currently being loaded,
+<a name="line344"></a> * appends its id to the queue of requested module ids. Does nothing if the
+<a name="line345"></a> * module is already loaded or is currently loading.
+<a name="line346"></a> *
+<a name="line347"></a> * @param {string} id The id of the module to load.
+<a name="line348"></a> * @param {goog.async.Deferred} d A deferred object.
+<a name="line349"></a> * @private
+<a name="line350"></a> */
+<a name="line351"></a>goog.module.ModuleManager.prototype.
+<a name="line352"></a>    loadModuleOrEnqueueIfNotLoadedOrLoading_ = function(id, d) {
+<a name="line353"></a>  var moduleInfo = this.getModuleInfo(id);
+<a name="line354"></a>  // TODO: Push deferred pattern further into module manager.
+<a name="line355"></a>  if (moduleInfo.isLoaded()) {
+<a name="line356"></a>    d.callback(this.moduleContext_);
+<a name="line357"></a>  } else {
+<a name="line358"></a>    moduleInfo.registerCallback(d.callback, d);
+<a name="line359"></a>    moduleInfo.registerErrback(d.errback, d);
+<a name="line360"></a>    if (!this.isModuleLoading(id)) {
+<a name="line361"></a>      this.loadModuleOrEnqueue_(id);
+<a name="line362"></a>    }
+<a name="line363"></a>  }
+<a name="line364"></a>};
+<a name="line365"></a>
+<a name="line366"></a>
+<a name="line367"></a>/**
+<a name="line368"></a> * Initiates loading of a specific module or, if a module is currently being
+<a name="line369"></a> * loaded, appends the module&#39;s id to the queue of requested module ids.
+<a name="line370"></a> *
+<a name="line371"></a> * The caller should verify that the requested module is not already loaded or
+<a name="line372"></a> * loading. {@link #loadModuleOrEnqueueIfNotLoadedOrLoading_} is a more lenient
+<a name="line373"></a> * alternative to this method.
+<a name="line374"></a> *
+<a name="line375"></a> * @param {string} id The id of the module to load.
+<a name="line376"></a> * @private
+<a name="line377"></a> */
+<a name="line378"></a>goog.module.ModuleManager.prototype.loadModuleOrEnqueue_ = function(id) {
+<a name="line379"></a>  if (goog.array.isEmpty(this.loadingModuleIds_)) {
+<a name="line380"></a>    this.loadModule_(id);
+<a name="line381"></a>  } else {
+<a name="line382"></a>    this.requestedModuleIdsQueue_.push(id);
+<a name="line383"></a>    this.dispatchActiveIdleChangeIfNeeded_();
+<a name="line384"></a>  }
+<a name="line385"></a>};
+<a name="line386"></a>
+<a name="line387"></a>
+<a name="line388"></a>/**
+<a name="line389"></a> * Loads a module and any of its not-yet-loaded prerequisites. If batch mode is
+<a name="line390"></a> * enabled, the prerequisites will be loaded together with the requested module.
+<a name="line391"></a> *
+<a name="line392"></a> * The caller should verify that the requested module is not already loaded
+<a name="line393"></a> * and that no modules are currently loading before calling this method.
+<a name="line394"></a> *
+<a name="line395"></a> * @param {string} id The id of the module to load.
+<a name="line396"></a> * @param {boolean} opt_isRetry If the load is a retry of a previous load
+<a name="line397"></a> *     attempt.
+<a name="line398"></a> * @private
+<a name="line399"></a> */
+<a name="line400"></a>goog.module.ModuleManager.prototype.loadModule_ = function(
+<a name="line401"></a>    id, opt_isRetry) {
+<a name="line402"></a>  var moduleInfo = this.moduleInfoMap_[id];
+<a name="line403"></a>  if (moduleInfo.isLoaded()) {
+<a name="line404"></a>    throw Error(&#39;Module already loaded: &#39; + id);
+<a name="line405"></a>  }
+<a name="line406"></a>
+<a name="line407"></a>  // Build a list of the ids of this module and any of its not-yet-loaded
+<a name="line408"></a>  // prerequisite modules in dependency order.
+<a name="line409"></a>  var ids = this.getNotYetLoadedTransitiveDepIds_(id);
+<a name="line410"></a>
+<a name="line411"></a>  if (!this.batchModeEnabled_ &amp;&amp; ids.length &gt; 1) {
+<a name="line412"></a>    var idToLoad = ids.shift();
+<a name="line413"></a>    this.logger_.info(&#39;Must load &#39; + idToLoad + &#39; module before &#39; + id);
+<a name="line414"></a>
+<a name="line415"></a>    // Insert the requested module id and any other not-yet-loaded prereqs
+<a name="line416"></a>    // that it has at the front of the queue.
+<a name="line417"></a>    this.requestedModuleIdsQueue_ = ids.concat(this.requestedModuleIdsQueue_);
+<a name="line418"></a>    ids = [idToLoad];
+<a name="line419"></a>  }
+<a name="line420"></a>
+<a name="line421"></a>  if (!opt_isRetry) {
+<a name="line422"></a>    this.consecutiveFailures_ = 0;
+<a name="line423"></a>  }
+<a name="line424"></a>
+<a name="line425"></a>  this.logger_.info(&#39;Loading module(s): &#39; + ids);
+<a name="line426"></a>  this.loadingModuleIds_ = ids;
+<a name="line427"></a>
+<a name="line428"></a>  // Dispatch an active/idle change if needed.
+<a name="line429"></a>  this.dispatchActiveIdleChangeIfNeeded_();
+<a name="line430"></a>
+<a name="line431"></a>  this.loader_.loadModules(
+<a name="line432"></a>      goog.array.clone(ids), this.moduleInfoMap_, null,
+<a name="line433"></a>      goog.bind(this.handleLoadError_, this),
+<a name="line434"></a>      goog.bind(this.handleLoadTimeout_, this));
+<a name="line435"></a>};
+<a name="line436"></a>
+<a name="line437"></a>
+<a name="line438"></a>/**
+<a name="line439"></a> * Builds a list of the ids of the not-yet-loaded modules that a particular
+<a name="line440"></a> * module transitively depends on, including itself.
+<a name="line441"></a> *
+<a name="line442"></a> * @param {string} id The id of a not-yet-loaded module.
+<a name="line443"></a> * @return {Array.&lt;string&gt;} An array of module ids in dependency order that&#39;s
+<a name="line444"></a> *     guaranteed to end with the provided module id.
+<a name="line445"></a> * @private
+<a name="line446"></a> */
+<a name="line447"></a>goog.module.ModuleManager.prototype.getNotYetLoadedTransitiveDepIds_ =
+<a name="line448"></a>    function(id) {
+<a name="line449"></a>  // NOTE: We want the earliest occurrance of a module, not the first
+<a name="line450"></a>  // dependency we find. Therefore we strip duplicates at the end rather than
+<a name="line451"></a>  // during.  See the tests for concrete examples.
+<a name="line452"></a>  var ids = [id];
+<a name="line453"></a>  var depIds = goog.array.clone(this.getModuleInfo(id).getDependencies());
+<a name="line454"></a>  while (depIds.length) {
+<a name="line455"></a>    var depId = depIds.pop();
+<a name="line456"></a>    if (!this.getModuleInfo(depId).isLoaded()) {
+<a name="line457"></a>      ids.unshift(depId);
+<a name="line458"></a>      // We need to process direct dependencies first.
+<a name="line459"></a>      Array.prototype.unshift.apply(depIds,
+<a name="line460"></a>          this.getModuleInfo(depId).getDependencies());
+<a name="line461"></a>    }
+<a name="line462"></a>  }
+<a name="line463"></a>  goog.array.removeDuplicates(ids);
+<a name="line464"></a>  return ids;
+<a name="line465"></a>};
+<a name="line466"></a>
+<a name="line467"></a>
+<a name="line468"></a>/**
+<a name="line469"></a> * Records that a module was loaded. Also initiates loading the next module if
+<a name="line470"></a> * any module requests are queued. This method is called by code that is
+<a name="line471"></a> * generated and appended to each dynamic module&#39;s code at compilation time.
+<a name="line472"></a> *
+<a name="line473"></a> * @param {string} id A module id.
+<a name="line474"></a> */
+<a name="line475"></a>goog.module.ModuleManager.prototype.setLoaded = function(id) {
+<a name="line476"></a>  this.logger_.info(&#39;Module loaded: &#39; + id);
+<a name="line477"></a>
+<a name="line478"></a>  // Remove the module id from the user initiated set if it existed there.
+<a name="line479"></a>  goog.array.remove(this.userInitiatedLoadingModuleIds_, id);
+<a name="line480"></a>
+<a name="line481"></a>  // Remove the module id from the loading modules if it exists there.
+<a name="line482"></a>  goog.array.remove(this.loadingModuleIds_, id);
+<a name="line483"></a>
+<a name="line484"></a>  this.moduleInfoMap_[id].onLoad(goog.bind(this.getModuleContext, this));
+<a name="line485"></a>
+<a name="line486"></a>  if (goog.array.isEmpty(this.loadingModuleIds_)) {
+<a name="line487"></a>    // No more modules are currently being loaded (e.g. arriving later in the
+<a name="line488"></a>    // same HTTP response), so proceed to load the next module in the queue.
+<a name="line489"></a>    this.loadNextModule_();
+<a name="line490"></a>  }
+<a name="line491"></a>
+<a name="line492"></a>  // Dispatch an active/idle change if needed.
+<a name="line493"></a>  this.dispatchActiveIdleChangeIfNeeded_();
+<a name="line494"></a>};
+<a name="line495"></a>
+<a name="line496"></a>
+<a name="line497"></a>/**
+<a name="line498"></a> * Gets whether a module is currently loading or in the queue, waiting to be
+<a name="line499"></a> * loaded.
+<a name="line500"></a> * @param {string} id A module id.
+<a name="line501"></a> * @return {boolean} TRUE iff the module is loading.
+<a name="line502"></a> */
+<a name="line503"></a>goog.module.ModuleManager.prototype.isModuleLoading = function(id) {
+<a name="line504"></a>  return goog.array.contains(this.loadingModuleIds_, id) ||
+<a name="line505"></a>       goog.array.contains(this.requestedModuleIdsQueue_, id);
+<a name="line506"></a>};
+<a name="line507"></a>
+<a name="line508"></a>
+<a name="line509"></a>/**
+<a name="line510"></a> * Requests that a function be called once a particular module is loaded.
+<a name="line511"></a> * Client code can use this method to safely call into modules that may not yet
+<a name="line512"></a> * be loaded. For consistency, this method always calls the function
+<a name="line513"></a> * asynchronously -- even if the module is already loaded. Initiates loading of
+<a name="line514"></a> * the module if necessary, unless opt_noLoad is true.
+<a name="line515"></a> *
+<a name="line516"></a> * @param {string} moduleId A module id.
+<a name="line517"></a> * @param {Function} fn Function to execute when the module has loaded.
+<a name="line518"></a> * @param {Object} opt_handler Optional handler under whose scope to execute
+<a name="line519"></a> *     the callback.
+<a name="line520"></a> * @param {boolean} opt_noLoad TRUE iff not to initiate loading of the module.
+<a name="line521"></a> * @param {boolean} opt_userInitiated TRUE iff the loading of the module was
+<a name="line522"></a> *     user initiated.
+<a name="line523"></a> * @param {boolean} opt_preferSynchronous TRUE iff the function should be
+<a name="line524"></a> *     executed synchronously if the module has already been loaded.
+<a name="line525"></a> * @return {goog.module.ModuleInfo.Callback} A callback wrapper that exposes
+<a name="line526"></a> *     an abort and execute method.
+<a name="line527"></a> */
+<a name="line528"></a>goog.module.ModuleManager.prototype.execOnLoad = function(
+<a name="line529"></a>    moduleId, fn, opt_handler, opt_noLoad,
+<a name="line530"></a>    opt_userInitiated, opt_preferSynchronous) {
+<a name="line531"></a>  var moduleInfo = this.moduleInfoMap_[moduleId];
+<a name="line532"></a>  var callbackWrapper;
+<a name="line533"></a>
+<a name="line534"></a>  if (moduleInfo.isLoaded()) {
+<a name="line535"></a>    this.logger_.info(moduleId + &#39; module already loaded&#39;);
+<a name="line536"></a>    // Call async so that code paths don&#39;t change between loaded and unloaded
+<a name="line537"></a>    // cases.
+<a name="line538"></a>    callbackWrapper = new goog.module.ModuleInfo.Callback(fn, opt_handler);
+<a name="line539"></a>    if (opt_preferSynchronous) {
+<a name="line540"></a>      callbackWrapper.execute(this.moduleContext_);
+<a name="line541"></a>    } else {
+<a name="line542"></a>      window.setTimeout(
+<a name="line543"></a>          goog.bind(callbackWrapper.execute, callbackWrapper), 0);
+<a name="line544"></a>    }
+<a name="line545"></a>  } else if (this.isModuleLoading(moduleId)) {
+<a name="line546"></a>    this.logger_.info(moduleId + &#39; module already loading&#39;);
+<a name="line547"></a>    callbackWrapper = moduleInfo.registerCallback(fn, opt_handler);
+<a name="line548"></a>    if (opt_userInitiated) {
+<a name="line549"></a>      this.logger_.info(&#39;User initiated module already loading: &#39; + moduleId);
+<a name="line550"></a>      this.userInitiatedLoadingModuleIds_.push(moduleId);
+<a name="line551"></a>      this.dispatchActiveIdleChangeIfNeeded_();
+<a name="line552"></a>    }
+<a name="line553"></a>  } else {
+<a name="line554"></a>    this.logger_.info(&#39;Registering callback for module: &#39; + moduleId);
+<a name="line555"></a>    callbackWrapper = moduleInfo.registerCallback(fn, opt_handler);
+<a name="line556"></a>    if (!opt_noLoad) {
+<a name="line557"></a>      if (opt_userInitiated) {
+<a name="line558"></a>        this.logger_.info(&#39;User initiated module load: &#39; + moduleId);
+<a name="line559"></a>        this.userInitiatedLoadingModuleIds_.push(moduleId);
+<a name="line560"></a>      }
+<a name="line561"></a>      this.logger_.info(&#39;Initiating module load: &#39; + moduleId);
+<a name="line562"></a>      this.loadModuleOrEnqueue_(moduleId);
+<a name="line563"></a>    }
+<a name="line564"></a>  }
+<a name="line565"></a>  return callbackWrapper;
+<a name="line566"></a>};
+<a name="line567"></a>
+<a name="line568"></a>
+<a name="line569"></a>/**
+<a name="line570"></a> * Loads a module, returning a goog.async.Deferred for keeping track of the
+<a name="line571"></a> * result.
+<a name="line572"></a> *
+<a name="line573"></a> * @param {string} moduleId A module id.
+<a name="line574"></a> * @return {goog.async.Deferred} A deferred object.
+<a name="line575"></a> */
+<a name="line576"></a>goog.module.ModuleManager.prototype.load = function(moduleId) {
+<a name="line577"></a>  var moduleInfo = this.moduleInfoMap_[moduleId];
+<a name="line578"></a>  var d = new goog.async.Deferred();
+<a name="line579"></a>
+<a name="line580"></a>  // TODO: Push deferred pattern further into module manager.
+<a name="line581"></a>  if (moduleInfo.isLoaded()) {
+<a name="line582"></a>    d.callback(this.moduleContext_);
+<a name="line583"></a>
+<a name="line584"></a>  } else if (this.isModuleLoading(moduleId)) {
+<a name="line585"></a>    this.logger_.info(moduleId + &#39; module already loading&#39;);
+<a name="line586"></a>    moduleInfo.registerCallback(d.callback, d);
+<a name="line587"></a>    moduleInfo.registerErrback(d.errback, d);
+<a name="line588"></a>
+<a name="line589"></a>  } else {
+<a name="line590"></a>    this.logger_.info(&#39;Registering callback for module: &#39; + moduleId);
+<a name="line591"></a>    moduleInfo.registerCallback(d.callback, d);
+<a name="line592"></a>    moduleInfo.registerErrback(d.errback, d);
+<a name="line593"></a>    this.logger_.info(&#39;Initiating module load: &#39; + moduleId);
+<a name="line594"></a>    this.loadModuleOrEnqueue_(moduleId);
+<a name="line595"></a>  }
+<a name="line596"></a>
+<a name="line597"></a>  return d;
+<a name="line598"></a>};
+<a name="line599"></a>
+<a name="line600"></a>
+<a name="line601"></a>/**
+<a name="line602"></a> * Method called just before a module code is loaded.
+<a name="line603"></a> * @param {string} id Identifier of the module.
+<a name="line604"></a> */
+<a name="line605"></a>goog.module.ModuleManager.prototype.beforeLoadModuleCode = function(id) {
+<a name="line606"></a>  this.loadTracer_ = goog.debug.Trace.startTracer(&#39;Module Load: &#39; + id,
+<a name="line607"></a>      &#39;Module Load&#39;);
+<a name="line608"></a>  if (this.currentlyLoadingModule_) {
+<a name="line609"></a>    this.logger_.severe(&#39;beforeLoadModuleCode called with module &quot;&#39; + id +
+<a name="line610"></a>                        &#39;&quot; while module &quot;&#39; + this.currentlyLoadingModule_ +
+<a name="line611"></a>                        &#39;&quot; is loading&#39;);
+<a name="line612"></a>  }
+<a name="line613"></a>  this.currentlyLoadingModule_ = id;
+<a name="line614"></a>};
+<a name="line615"></a>
+<a name="line616"></a>
+<a name="line617"></a>/**
+<a name="line618"></a> * Method called just after module code is loaded
+<a name="line619"></a> * @param {string} id Identifier of the module.
+<a name="line620"></a> */
+<a name="line621"></a>goog.module.ModuleManager.prototype.afterLoadModuleCode = function(id) {
+<a name="line622"></a>  if (id != this.currentlyLoadingModule_) {
+<a name="line623"></a>    this.logger_.severe(&#39;afterLoadModuleCode called with module &quot;&#39; + id +
+<a name="line624"></a>                        &#39;&quot; while loading module &quot;&#39; +
+<a name="line625"></a>                        this.currentlyLoadingModule_ + &#39;&quot;&#39;);
+<a name="line626"></a>
+<a name="line627"></a>  }
+<a name="line628"></a>  this.currentlyLoadingModule_ = null;
+<a name="line629"></a>  goog.debug.Trace.stopTracer(this.loadTracer_);
+<a name="line630"></a>};
+<a name="line631"></a>
+<a name="line632"></a>
+<a name="line633"></a>/**
+<a name="line634"></a> * Register an initialization callback for the currently loading module. This
+<a name="line635"></a> * should only be called by script that is executed during the evaluation of
+<a name="line636"></a> * a module&#39;s javascript. This is almost equivalent to calling the function
+<a name="line637"></a> * inline, but ensures that all the code from the currently loading module
+<a name="line638"></a> * has been loaded. This makes it cleaner and more robust than calling the
+<a name="line639"></a> * function inline.
+<a name="line640"></a> * @param {Function} fn A callback function that takes a single argument
+<a name="line641"></a> *    which is the module context.
+<a name="line642"></a> * @param {Object} opt_handler Optional handler under whose scope to execute
+<a name="line643"></a> *     the callback.
+<a name="line644"></a> */
+<a name="line645"></a>goog.module.ModuleManager.prototype.registerInitializationCallback = function(
+<a name="line646"></a>    fn, opt_handler) {
+<a name="line647"></a>  if (!this.currentlyLoadingModule_) {
+<a name="line648"></a>    this.logger_.severe(&#39;No module is currently loading&#39;);
+<a name="line649"></a>    return;
+<a name="line650"></a>  }
+<a name="line651"></a>  this.getModuleInfo(this.currentlyLoadingModule_).registerEarlyCallback(
+<a name="line652"></a>      fn, opt_handler);
+<a name="line653"></a>};
+<a name="line654"></a>
+<a name="line655"></a>
+<a name="line656"></a>/**
+<a name="line657"></a> * The possible reasons for a module load failure callback being fired.
+<a name="line658"></a> * @enum {number}
+<a name="line659"></a> */
+<a name="line660"></a>goog.module.ModuleManager.FailureType = {
+<a name="line661"></a>  /** 401 Status. */
+<a name="line662"></a>  UNAUTHORIZED: 0,
+<a name="line663"></a>
+<a name="line664"></a>  /** Error status (not 401) returned multiple times. */
+<a name="line665"></a>  CONSECUTIVE_FAILURES: 1,
+<a name="line666"></a>
+<a name="line667"></a>  /** Request timeout. */
+<a name="line668"></a>  TIMEOUT: 2,
+<a name="line669"></a>
+<a name="line670"></a>  /** 410 status, old code gone. */
+<a name="line671"></a>  OLD_CODE_GONE: 3
+<a name="line672"></a>};
+<a name="line673"></a>
+<a name="line674"></a>
+<a name="line675"></a>/**
+<a name="line676"></a> * Handles a module load failure.
+<a name="line677"></a> *
+<a name="line678"></a> * @param {number} status The error status.
+<a name="line679"></a> * @private
+<a name="line680"></a> */
+<a name="line681"></a>goog.module.ModuleManager.prototype.handleLoadError_ = function(status) {
+<a name="line682"></a>  this.consecutiveFailures_++;
+<a name="line683"></a>  if (status == 401) {
+<a name="line684"></a>    // The user is not logged in. They&#39;ve cleared their cookies or logged out
+<a name="line685"></a>    // from another window.
+<a name="line686"></a>    this.logger_.info(&#39;Module loading unauthorized&#39;);
+<a name="line687"></a>    this.dispatchModuleLoadFailed_(
+<a name="line688"></a>        goog.module.ModuleManager.FailureType.UNAUTHORIZED);
+<a name="line689"></a>    // Drop any additional module requests.
+<a name="line690"></a>    this.requestedModuleIdsQueue_.length = 0;
+<a name="line691"></a>  } else if (status == 410) {
+<a name="line692"></a>    // The requested module js is old and not available.
+<a name="line693"></a>    this.dispatchModuleLoadFailed_(
+<a name="line694"></a>          goog.module.ModuleManager.FailureType.OLD_CODE_GONE);
+<a name="line695"></a>    this.loadNextModule_();
+<a name="line696"></a>  } else if (this.consecutiveFailures_ &gt;= 3) {
+<a name="line697"></a>    this.logger_.info(&#39;Aborting after failure to load: &#39; +
+<a name="line698"></a>                      this.loadingModuleIds_);
+<a name="line699"></a>    this.dispatchModuleLoadFailed_(
+<a name="line700"></a>        goog.module.ModuleManager.FailureType.CONSECUTIVE_FAILURES);
+<a name="line701"></a>    this.loadNextModule_();
+<a name="line702"></a>  } else {
+<a name="line703"></a>    this.logger_.info(&#39;Retrying after failure to load: &#39; +
+<a name="line704"></a>                      this.loadingModuleIds_);
+<a name="line705"></a>    // The last value in loadingModuleIds_ is the requested id, (with others
+<a name="line706"></a>    // before it being its dependencies). We call loadModule_ again because
+<a name="line707"></a>    // batchModeEnabled_ may have changed.
+<a name="line708"></a>    var id = this.loadingModuleIds_.pop();
+<a name="line709"></a>    this.loadingModuleIds_.length = 0;
+<a name="line710"></a>    this.loadModule_(id, true);
+<a name="line711"></a>  }
+<a name="line712"></a>};
+<a name="line713"></a>
+<a name="line714"></a>
+<a name="line715"></a>/**
+<a name="line716"></a> * Handles a module load timeout.
+<a name="line717"></a> * @private
+<a name="line718"></a> */
+<a name="line719"></a>goog.module.ModuleManager.prototype.handleLoadTimeout_ = function() {
+<a name="line720"></a>  this.logger_.info(&#39;Aborting after timeout: &#39; + this.loadingModuleIds_);
+<a name="line721"></a>  this.dispatchModuleLoadFailed_(goog.module.ModuleManager.FailureType.TIMEOUT);
+<a name="line722"></a>  this.loadNextModule_();
+<a name="line723"></a>};
+<a name="line724"></a>
+<a name="line725"></a>
+<a name="line726"></a>/**
+<a name="line727"></a> * Handles when a module load failed.
+<a name="line728"></a> * @param {goog.module.ModuleManager.FailureType} cause The reason for the
+<a name="line729"></a> *     failure.
+<a name="line730"></a> * @private
+<a name="line731"></a> */
+<a name="line732"></a>goog.module.ModuleManager.prototype.dispatchModuleLoadFailed_ = function(
+<a name="line733"></a>    cause) {
+<a name="line734"></a>  // The explicitly requested id is the last value in loadingModuleIds_.  All
+<a name="line735"></a>  // the others are dependencies of the requested id.
+<a name="line736"></a>  var id = this.loadingModuleIds_.pop();
+<a name="line737"></a>  this.loadingModuleIds_.length = 0;
+<a name="line738"></a>
+<a name="line739"></a>  // If any pending modules depend on the id that failed,
+<a name="line740"></a>  // they need to be removed from the queue.
+<a name="line741"></a>  var self = this;
+<a name="line742"></a>  var idsToCancel = goog.array.filter(
+<a name="line743"></a>      this.requestedModuleIdsQueue_,
+<a name="line744"></a>      function(requestedId) {
+<a name="line745"></a>        return goog.array.contains(
+<a name="line746"></a>            self.getNotYetLoadedTransitiveDepIds_(requestedId),
+<a name="line747"></a>            id);
+<a name="line748"></a>      });
+<a name="line749"></a>  if (id) {
+<a name="line750"></a>    goog.array.insert(idsToCancel, id);
+<a name="line751"></a>  }
+<a name="line752"></a>
+<a name="line753"></a>  for (var i = 0; i &lt; idsToCancel.length; i++) {
+<a name="line754"></a>    goog.array.remove(this.requestedModuleIdsQueue_, idsToCancel[i]);
+<a name="line755"></a>    goog.array.remove(this.userInitiatedLoadingModuleIds_, idsToCancel[i]);
+<a name="line756"></a>  }
+<a name="line757"></a>
+<a name="line758"></a>  // Call the functions for error notification.
+<a name="line759"></a>  var errorCallbacks = this.callbackMap_[
+<a name="line760"></a>      goog.module.ModuleManager.CallbackType.ERROR];
+<a name="line761"></a>  if (errorCallbacks) {
+<a name="line762"></a>    for (var i = 0; i &lt; errorCallbacks.length; i++) {
+<a name="line763"></a>      var callback = errorCallbacks[i];
+<a name="line764"></a>      for (var j = 0; j &lt; idsToCancel.length; j++) {
+<a name="line765"></a>        callback(goog.module.ModuleManager.CallbackType.ERROR, idsToCancel[j],
+<a name="line766"></a>            cause);
+<a name="line767"></a>      }
+<a name="line768"></a>    }
+<a name="line769"></a>  }
+<a name="line770"></a>
+<a name="line771"></a>  // Call the errbacks on the module info.
+<a name="line772"></a>  if (this.moduleInfoMap_[id]) {
+<a name="line773"></a>    this.moduleInfoMap_[id].onError(cause);
+<a name="line774"></a>  }
+<a name="line775"></a>
+<a name="line776"></a>  this.dispatchActiveIdleChangeIfNeeded_();
+<a name="line777"></a>};
+<a name="line778"></a>
+<a name="line779"></a>
+<a name="line780"></a>/**
+<a name="line781"></a> * Loads the next module on the queue.
+<a name="line782"></a> * @private
+<a name="line783"></a> */
+<a name="line784"></a>goog.module.ModuleManager.prototype.loadNextModule_ = function() {
+<a name="line785"></a>  while (this.requestedModuleIdsQueue_.length) {
+<a name="line786"></a>    var nextId = this.requestedModuleIdsQueue_.shift();
+<a name="line787"></a>    if (!this.getModuleInfo(nextId).isLoaded()) {
+<a name="line788"></a>      this.loadModule_(nextId);
+<a name="line789"></a>      return;
+<a name="line790"></a>    }
+<a name="line791"></a>  }
+<a name="line792"></a>
+<a name="line793"></a>  // Dispatch an active/idle change if needed.
+<a name="line794"></a>  this.dispatchActiveIdleChangeIfNeeded_();
+<a name="line795"></a>};
+<a name="line796"></a>
+<a name="line797"></a>
+<a name="line798"></a>/**
+<a name="line799"></a> * The function to call if the module manager is in error.
+<a name="line800"></a> * @param {goog.module.ModuleManager.CallbackType|Array.&lt;goog.module.ModuleManager.CallbackType&gt;} types
+<a name="line801"></a> *  The callback type.
+<a name="line802"></a> * @param {Function} fn The function to register as a callback.
+<a name="line803"></a> */
+<a name="line804"></a>goog.module.ModuleManager.prototype.registerCallback = function(
+<a name="line805"></a>    types, fn) {
+<a name="line806"></a>  if (!goog.isArray(types)) {
+<a name="line807"></a>    types = [types];
+<a name="line808"></a>  }
+<a name="line809"></a>
+<a name="line810"></a>  for (var i = 0; i &lt; types.length; i++) {
+<a name="line811"></a>    this.registerCallback_(types[i], fn);
+<a name="line812"></a>  }
+<a name="line813"></a>};
+<a name="line814"></a>
+<a name="line815"></a>
+<a name="line816"></a>/**
+<a name="line817"></a> * Register a callback for the specified callback type.
+<a name="line818"></a> * @param {goog.module.ModuleManager.CallbackType} type The callback type.
+<a name="line819"></a> * @param {Function} fn The callback function.
+<a name="line820"></a> * @private
+<a name="line821"></a> */
+<a name="line822"></a>goog.module.ModuleManager.prototype.registerCallback_ = function(type, fn) {
+<a name="line823"></a>  var callbackMap = this.callbackMap_;
+<a name="line824"></a>  if (!callbackMap[type]) {
+<a name="line825"></a>    callbackMap[type] = [];
+<a name="line826"></a>  }
+<a name="line827"></a>  callbackMap[type].push(fn);
+<a name="line828"></a>};
+<a name="line829"></a>
+<a name="line830"></a>
+<a name="line831"></a>/**
+<a name="line832"></a> * Call the callback functions of the specified type.
+<a name="line833"></a> * @param {goog.module.ModuleManager.CallbackType} type The callback type.
+<a name="line834"></a> * @private
+<a name="line835"></a> */
+<a name="line836"></a>goog.module.ModuleManager.prototype.executeCallbacks_ = function(type) {
+<a name="line837"></a>  var callbacks = this.callbackMap_[type];
+<a name="line838"></a>  for (var i = 0; callbacks &amp;&amp; i &lt; callbacks.length; i++) {
+<a name="line839"></a>    callbacks[i](type);
+<a name="line840"></a>  }
+<a name="line841"></a>};
+<a name="line842"></a>
+<a name="line843"></a>
+<a name="line844"></a>/**
+<a name="line845"></a> * Disposes of the module manager.
+<a name="line846"></a> */
+<a name="line847"></a>goog.module.ModuleManager.prototype.disposeInternal = function() {
+<a name="line848"></a>  goog.module.ModuleManager.superClass_.disposeInternal.call(this);
+<a name="line849"></a>
+<a name="line850"></a>  // Dispose of each ModuleInfo object.
+<a name="line851"></a>  goog.array.forEach(goog.object.getValues(this.moduleInfoMap_), goog.dispose);
+<a name="line852"></a>  this.moduleInfoMap_ = null;
+<a name="line853"></a>  this.loadingModuleIds_ = null;
+<a name="line854"></a>  this.userInitiatedLoadingModuleIds_ = null;
+<a name="line855"></a>  this.requestedModuleIdsQueue_ = null;
+<a name="line856"></a>  this.callbackMap_ = null;
+<a name="line857"></a>};
+</pre>
+
+
+</body>
+</html>

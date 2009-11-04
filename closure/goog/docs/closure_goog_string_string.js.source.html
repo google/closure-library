@@ -1,0 +1,1168 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>string.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_string_string.js.html">string.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities for string manipulation.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>
+<a name="line20"></a>/**
+<a name="line21"></a> * Namespace for string utilities
+<a name="line22"></a> */
+<a name="line23"></a>goog.provide(&#39;goog.string&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.string.Unicode&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Common Unicode string characters.
+<a name="line29"></a> * @enum {string}
+<a name="line30"></a> */
+<a name="line31"></a>goog.string.Unicode = {
+<a name="line32"></a>  NBSP: &#39;\xa0&#39;
+<a name="line33"></a>};
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/**
+<a name="line37"></a> * Fast prefix-checker.
+<a name="line38"></a> * @param {string} str The string to check.
+<a name="line39"></a> * @param {string} prefix A string to look for at the start of {@code str}.
+<a name="line40"></a> * @return {boolean} True if {@code str} begins with {@code prefix}.
+<a name="line41"></a> */
+<a name="line42"></a>goog.string.startsWith = function(str, prefix) {
+<a name="line43"></a>  return str.indexOf(prefix) == 0;
+<a name="line44"></a>};
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Fast suffix-checker.
+<a name="line49"></a> * @param {string} str The string to check.
+<a name="line50"></a> * @param {string} suffix A string to look for at the end of {@code str}.
+<a name="line51"></a> * @return {boolean} True if {@code str} ends with {@code suffix}.
+<a name="line52"></a> */
+<a name="line53"></a>goog.string.endsWith = function(str, suffix) {
+<a name="line54"></a>  var l = str.length - suffix.length;
+<a name="line55"></a>  return l &gt;= 0 &amp;&amp; str.lastIndexOf(suffix, l) == l;
+<a name="line56"></a>};
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Case-insensitive prefix-checker.
+<a name="line61"></a> * @param {string} str The string to check.
+<a name="line62"></a> * @param {string} prefix  A string to look for at the end of {@code str}.
+<a name="line63"></a> * @return {boolean} True if {@code str} begins with {@code prefix} (ignoring
+<a name="line64"></a> *     case).
+<a name="line65"></a> */
+<a name="line66"></a>goog.string.caseInsensitiveStartsWith = function(str, prefix) {
+<a name="line67"></a>  return goog.string.caseInsensitiveCompare(
+<a name="line68"></a>      prefix, str.substr(0, prefix.length)) == 0;
+<a name="line69"></a>};
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Case-insensitive suffix-checker.
+<a name="line74"></a> * @param {string} str The string to check.
+<a name="line75"></a> * @param {string} suffix A string to look for at the end of {@code str}.
+<a name="line76"></a> * @return {boolean} True if {@code str} ends with {@code suffix} (ignoring
+<a name="line77"></a> *     case).
+<a name="line78"></a> */
+<a name="line79"></a>goog.string.caseInsensitiveEndsWith = function(str, suffix) {
+<a name="line80"></a>  return goog.string.caseInsensitiveCompare(
+<a name="line81"></a>      suffix, str.substr(str.length - suffix.length, suffix.length)) == 0;
+<a name="line82"></a>};
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Does simple python-style string substitution.
+<a name="line87"></a> * subs(&quot;foo%s hot%s&quot;, &quot;bar&quot;, &quot;dog&quot;) becomes &quot;foobar hotdog&quot;.
+<a name="line88"></a> * @param {string} str The string containing the pattern.
+<a name="line89"></a> * @param {*} var_args The items to substitute into the pattern.
+<a name="line90"></a> * @return {string} A copy of {@code str} in which each occurrence of
+<a name="line91"></a> *     {@code %s} has been replaced an argument from {@code var_args}.
+<a name="line92"></a> */
+<a name="line93"></a>goog.string.subs = function(str, var_args) {
+<a name="line94"></a>  // This appears to be slow, but testing shows it compares more or less
+<a name="line95"></a>  // equivalent to the regex.exec method.
+<a name="line96"></a>  for (var i = 1; i &lt; arguments.length; i++) {
+<a name="line97"></a>    // We cast to String in case an argument is a Function.  Replacing $&amp;, for
+<a name="line98"></a>    // example, with $$$&amp; stops the replace from subsituting the whole match
+<a name="line99"></a>    // into the resultant string.  $$$&amp; in the first replace becomes $$&amp; in the
+<a name="line100"></a>    //  second, which leaves $&amp; in the resultant string.  Also:
+<a name="line101"></a>    // $$, $`, $&#39;, $n $nn
+<a name="line102"></a>    var replacement = String(arguments[i]).replace(/\$/g, &#39;$$$$&#39;);
+<a name="line103"></a>    str = str.replace(/\%s/, replacement);
+<a name="line104"></a>  }
+<a name="line105"></a>  return str;
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Converts multiple whitespace chars (spaces, non-breaking-spaces, new lines
+<a name="line111"></a> * and tabs) to a single space, and strips leading and trailing whitespace.
+<a name="line112"></a> * @param {string} str Input string.
+<a name="line113"></a> * @return {string} A copy of {@code str} with collapsed whitespace.
+<a name="line114"></a> */
+<a name="line115"></a>goog.string.collapseWhitespace = function(str) {
+<a name="line116"></a>  // Since IE doesn&#39;t include non-breaking-space (0xa0) in their \s character
+<a name="line117"></a>  // class (as required by section 7.2 of the ECMAScript spec), we explicitly
+<a name="line118"></a>  // include it in the regexp to enforce consistent cross-browser behavior.
+<a name="line119"></a>  return str.replace(/[\s\xa0]+/g, &#39; &#39;).replace(/^\s+|\s+$/g, &#39;&#39;);
+<a name="line120"></a>};
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Checks if a string is empty or contains only whitespaces.
+<a name="line125"></a> * @param {string} str The string to check.
+<a name="line126"></a> * @return {boolean} True if {@code str} is empty or whitespace only.
+<a name="line127"></a> */
+<a name="line128"></a>goog.string.isEmpty = function(str) {
+<a name="line129"></a>  // testing length == 0 first is actually slower in all browsers (about the
+<a name="line130"></a>  // same in Opera).
+<a name="line131"></a>  // Since IE doesn&#39;t include non-breaking-space (0xa0) in their \s character
+<a name="line132"></a>  // class (as required by section 7.2 of the ECMAScript spec), we explicitly
+<a name="line133"></a>  // include it in the regexp to enforce consistent cross-browser behavior.
+<a name="line134"></a>  return /^[\s\xa0]*$/.test(str);
+<a name="line135"></a>};
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/**
+<a name="line139"></a> * Checks if a string is null, empty or contains only whitespaces.
+<a name="line140"></a> * @param {*} str The string to check.
+<a name="line141"></a> * @return {boolean} True if{@code str} is null, empty, or whitespace only.
+<a name="line142"></a> */
+<a name="line143"></a>goog.string.isEmptySafe = function(str) {
+<a name="line144"></a>  return goog.string.isEmpty(goog.string.makeSafe(str));
+<a name="line145"></a>};
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Checks if a string is all breaking whitespace.
+<a name="line150"></a> * @param {string} str The string to check.
+<a name="line151"></a> * @return {boolean} Whether the string is all breaking whitespace.
+<a name="line152"></a> */
+<a name="line153"></a>goog.string.isBreakingWhitespace = function(str) {
+<a name="line154"></a>  return !/[^\t\n\r ]/.test(str);
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * Checks if a string contains all letters.
+<a name="line160"></a> * @param {string} str string to check.
+<a name="line161"></a> * @return {boolean} True if {@code str} consists entirely of letters.
+<a name="line162"></a> */
+<a name="line163"></a>goog.string.isAlpha = function(str) {
+<a name="line164"></a>  return !/[^a-zA-Z]/.test(str);
+<a name="line165"></a>};
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * Checks if a string contains only numbers.
+<a name="line170"></a> * @param {*} str string to check. If not a string, it will be
+<a name="line171"></a> *     casted to one.
+<a name="line172"></a> * @return {boolean} True if {@code str} is numeric.
+<a name="line173"></a> */
+<a name="line174"></a>goog.string.isNumeric = function(str) {
+<a name="line175"></a>  return !/[^0-9]/.test(str);
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Checks if a string contains only numbers or letters.
+<a name="line181"></a> * @param {string} str string to check.
+<a name="line182"></a> * @return {boolean} True if {@code str} is alphanumeric.
+<a name="line183"></a> */
+<a name="line184"></a>goog.string.isAlphaNumeric = function(str) {
+<a name="line185"></a>  return !/[^a-zA-Z0-9]/.test(str);
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Checks if a character is a space character.
+<a name="line191"></a> * @param {string} ch Character to check.
+<a name="line192"></a> * @return {boolean} True if {code ch} is a space.
+<a name="line193"></a> */
+<a name="line194"></a>goog.string.isSpace = function(ch) {
+<a name="line195"></a>  return ch == &#39; &#39;;
+<a name="line196"></a>};
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * Checks if a character is a valid unicode character.
+<a name="line201"></a> * @param {string} ch Character to check.
+<a name="line202"></a> * @return {boolean} True if {code ch} is a valid unicode character.
+<a name="line203"></a> */
+<a name="line204"></a>goog.string.isUnicodeChar = function(ch) {
+<a name="line205"></a>  return ch.length == 1 &amp;&amp; ch &gt;= &#39; &#39; &amp;&amp; ch &lt;= &#39;~&#39; ||
+<a name="line206"></a>         ch &gt;= &#39;\u0080&#39; &amp;&amp; ch &lt;= &#39;\uFFFD&#39;;
+<a name="line207"></a>};
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * Takes a string and replaces newlines with a space. Multiple lines are
+<a name="line212"></a> * replaced with a single space.
+<a name="line213"></a> * @param {string} str The string from which to strip newlines.
+<a name="line214"></a> * @return {string} A copy of {@code str} stripped of newlines.
+<a name="line215"></a> */
+<a name="line216"></a>goog.string.stripNewlines = function(str) {
+<a name="line217"></a>  return str.replace(/(\r\n|\r|\n)+/g, &#39; &#39;);
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Replaces Windows and Mac new lines with unix style: \r or \r\n with \n.
+<a name="line223"></a> * @param {string} str The string to in which to canonicalize newlines.
+<a name="line224"></a> * @return {string} {@code str} A copy of {@code} with canonicalized newlines.
+<a name="line225"></a> */
+<a name="line226"></a>goog.string.canonicalizeNewlines = function(str) {
+<a name="line227"></a>  return str.replace(/(\r\n|\r|\n)/g, &#39;\n&#39;);
+<a name="line228"></a>};
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Normalizes whitespace in a string, replacing all whitespace chars with
+<a name="line233"></a> * a space.
+<a name="line234"></a> * @param {string} str The string in which to normalize whitespace.
+<a name="line235"></a> * @return {string} A copy of {@code str} with all whitespace normalized.
+<a name="line236"></a> */
+<a name="line237"></a>goog.string.normalizeWhitespace = function(str) {
+<a name="line238"></a>  return str.replace(/\xa0|\s/g, &#39; &#39;);
+<a name="line239"></a>};
+<a name="line240"></a>
+<a name="line241"></a>
+<a name="line242"></a>/**
+<a name="line243"></a> * Normalizes spaces in a string, replacing all consecutive spaces and tabs
+<a name="line244"></a> * with a single space. Replaces non-breaking space with a space.
+<a name="line245"></a> * @param {string} str The string in which to normalize spaces.
+<a name="line246"></a> * @return {string} A copy of {@code str} with all consecutive spaces and tabs
+<a name="line247"></a> *    replaced with a single space.
+<a name="line248"></a> */
+<a name="line249"></a>goog.string.normalizeSpaces = function(str) {
+<a name="line250"></a>  return str.replace(/\xa0|[ \t]+/g, &#39; &#39;);
+<a name="line251"></a>};
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>/**
+<a name="line255"></a> * Trims white spaces to the left and right of a string.
+<a name="line256"></a> * @param {string} str The string to trim.
+<a name="line257"></a> * @return {string} A trimmed copy of {@code str}.
+<a name="line258"></a> */
+<a name="line259"></a>goog.string.trim = function(str) {
+<a name="line260"></a>  // Since IE doesn&#39;t include non-breaking-space (0xa0) in their \s character
+<a name="line261"></a>  // class (as required by section 7.2 of the ECMAScript spec), we explicitly
+<a name="line262"></a>  // include it in the regexp to enforce consistent cross-browser behavior.
+<a name="line263"></a>  return str.replace(/^[\s\xa0]+|[\s\xa0]+$/g, &#39;&#39;);
+<a name="line264"></a>};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Trims whitespaces at the left end of a string.
+<a name="line269"></a> * @param {string} str The string to left trim.
+<a name="line270"></a> * @return {string} A trimmed copy of {@code str}.
+<a name="line271"></a> */
+<a name="line272"></a>goog.string.trimLeft = function(str) {
+<a name="line273"></a>  // Since IE doesn&#39;t include non-breaking-space (0xa0) in their \s character
+<a name="line274"></a>  // class (as required by section 7.2 of the ECMAScript spec), we explicitly
+<a name="line275"></a>  // include it in the regexp to enforce consistent cross-browser behavior.
+<a name="line276"></a>  return str.replace(/^[\s\xa0]+/, &#39;&#39;);
+<a name="line277"></a>};
+<a name="line278"></a>
+<a name="line279"></a>
+<a name="line280"></a>/**
+<a name="line281"></a> * Trims whitespaces at the right end of a string.
+<a name="line282"></a> * @param {string} str The string to right trim.
+<a name="line283"></a> * @return {string} A trimmed copy of {@code str}.
+<a name="line284"></a> */
+<a name="line285"></a>goog.string.trimRight = function(str) {
+<a name="line286"></a>  // Since IE doesn&#39;t include non-breaking-space (0xa0) in their \s character
+<a name="line287"></a>  // class (as required by section 7.2 of the ECMAScript spec), we explicitly
+<a name="line288"></a>  // include it in the regexp to enforce consistent cross-browser behavior.
+<a name="line289"></a>  return str.replace(/[\s\xa0]+$/, &#39;&#39;);
+<a name="line290"></a>};
+<a name="line291"></a>
+<a name="line292"></a>
+<a name="line293"></a>/**
+<a name="line294"></a> * A string comparator that ignores case.
+<a name="line295"></a> * -1 = str1 less than str2
+<a name="line296"></a> *  0 = str1 equals str2
+<a name="line297"></a> *  1 = str1 greater than str2
+<a name="line298"></a> *
+<a name="line299"></a> * @param {string} str1 The string to compare.
+<a name="line300"></a> * @param {string} str2 The string to compare {@code str1} to.
+<a name="line301"></a> * @return {number} The comparator result, as described above.
+<a name="line302"></a> */
+<a name="line303"></a>goog.string.caseInsensitiveCompare = function(str1, str2) {
+<a name="line304"></a>  var test1 = String(str1).toLowerCase();
+<a name="line305"></a>  var test2 = String(str2).toLowerCase();
+<a name="line306"></a>
+<a name="line307"></a>  if (test1 &lt; test2) {
+<a name="line308"></a>    return -1;
+<a name="line309"></a>  } else if (test1 == test2) {
+<a name="line310"></a>    return 0;
+<a name="line311"></a>  } else {
+<a name="line312"></a>    return 1;
+<a name="line313"></a>  }
+<a name="line314"></a>};
+<a name="line315"></a>
+<a name="line316"></a>
+<a name="line317"></a>/**
+<a name="line318"></a> * Regular expression used for splitting a string into substrings of fractional
+<a name="line319"></a> * numbers, integers, and non-numeric characters.
+<a name="line320"></a> * @type {RegExp}
+<a name="line321"></a> * @private
+<a name="line322"></a> */
+<a name="line323"></a>goog.string.numerateCompareRegExp_ = /(\.\d+)|(\d+)|(\D+)/g;
+<a name="line324"></a>
+<a name="line325"></a>
+<a name="line326"></a>/**
+<a name="line327"></a> * String comparison function that handles numbers in a way humans might expect.
+<a name="line328"></a> * Using this function, the string &quot;File 2.jpg&quot; sorts before &quot;File 10.jpg&quot;. The
+<a name="line329"></a> * comparison is mostly case-insensitive, though strings that are identical
+<a name="line330"></a> * except for case are sorted with the upper-case strings before lower-case.
+<a name="line331"></a> *
+<a name="line332"></a> * This comparison function is significantly slower (about 500x) than either
+<a name="line333"></a> * the default or the case-insensitive compare. It should not be used in
+<a name="line334"></a> * time-critical code, but should be fast enough to sort several hundred short
+<a name="line335"></a> * strings (like filenames) with a reasonable delay.
+<a name="line336"></a> *
+<a name="line337"></a> * @param {string} str1 The string to compare in a numerically sensitive way.
+<a name="line338"></a> * @param {string} str2 The string to compare {@code str1} to.
+<a name="line339"></a> * @return {number} less than 0 if str1 &lt; str2, 0 if str1 == str2, greater than
+<a name="line340"></a> *     0 if str1 &gt; str2.
+<a name="line341"></a> */
+<a name="line342"></a>goog.string.numerateCompare = function(str1, str2) {
+<a name="line343"></a>  if (str1 == str2) {
+<a name="line344"></a>    return 0;
+<a name="line345"></a>  }
+<a name="line346"></a>  if (!str1) {
+<a name="line347"></a>    return -1;
+<a name="line348"></a>  }
+<a name="line349"></a>  if (!str2) {
+<a name="line350"></a>    return 1;
+<a name="line351"></a>  }
+<a name="line352"></a>
+<a name="line353"></a>  // Using match to split the entire string ahead of time turns out to be faster
+<a name="line354"></a>  // for most inputs than using RegExp.exec or iterating over each character.
+<a name="line355"></a>  var tokens1 = str1.toLowerCase().match(goog.string.numerateCompareRegExp_);
+<a name="line356"></a>  var tokens2 = str2.toLowerCase().match(goog.string.numerateCompareRegExp_);
+<a name="line357"></a>
+<a name="line358"></a>  var count = Math.min(tokens1.length, tokens2.length);
+<a name="line359"></a>
+<a name="line360"></a>  for (var i = 0; i &lt; count; i++) {
+<a name="line361"></a>    var a = tokens1[i];
+<a name="line362"></a>    var b = tokens2[i];
+<a name="line363"></a>
+<a name="line364"></a>    // Compare pairs of tokens, returning if one token sorts before the other.
+<a name="line365"></a>    if (a != b) {
+<a name="line366"></a>
+<a name="line367"></a>      // Only if both tokens are integers is a special comparison required.
+<a name="line368"></a>      // Decimal numbers are sorted as strings (e.g., &#39;.09&#39; &lt; &#39;.1&#39;).
+<a name="line369"></a>      var num1 = parseInt(a, 10);
+<a name="line370"></a>      if (!isNaN(num1)) {
+<a name="line371"></a>        var num2 = parseInt(b, 10);
+<a name="line372"></a>        if (!isNaN(num2) &amp;&amp; num1 - num2) {
+<a name="line373"></a>          return num1 - num2;
+<a name="line374"></a>        }
+<a name="line375"></a>      }
+<a name="line376"></a>      return a &lt; b ? -1 : 1;
+<a name="line377"></a>    }
+<a name="line378"></a>  }
+<a name="line379"></a>
+<a name="line380"></a>  // If one string is a substring of the other, the shorter string sorts first.
+<a name="line381"></a>  if (tokens1.length != tokens2.length) {
+<a name="line382"></a>    return tokens1.length - tokens2.length;
+<a name="line383"></a>  }
+<a name="line384"></a>
+<a name="line385"></a>  // The two strings must be equivalent except for case (perfect equality is
+<a name="line386"></a>  // tested at the head of the function.) Revert to default ASCII-betical string
+<a name="line387"></a>  // comparison to stablize the sort.
+<a name="line388"></a>  return str1 &lt; str2 ? -1 : 1;
+<a name="line389"></a>};
+<a name="line390"></a>
+<a name="line391"></a>
+<a name="line392"></a>/**
+<a name="line393"></a> * Regular expression used for determining if a string needs to be encoded.
+<a name="line394"></a> * @type {RegExp}
+<a name="line395"></a> * @private
+<a name="line396"></a> */
+<a name="line397"></a>goog.string.encodeUriRegExp_ = /^[a-zA-Z0-9\-_.!~*&#39;()]*$/;
+<a name="line398"></a>
+<a name="line399"></a>/**
+<a name="line400"></a> * URL-encodes a string
+<a name="line401"></a> * @param {*} str The string to url-encode.
+<a name="line402"></a> * @return {string} An encoded copy of {@code str} that is safe for urls.
+<a name="line403"></a> *     Note that &#39;#&#39;, &#39;:&#39;, and other characters used to delimit portions
+<a name="line404"></a> *     of URLs *will* be encoded.
+<a name="line405"></a> */
+<a name="line406"></a>goog.string.urlEncode = function(str) {
+<a name="line407"></a>  str = String(str);
+<a name="line408"></a>  // Checking if the search matches before calling encodeURIComponent avoids an
+<a name="line409"></a>  // extra allocation in IE6. This adds about 10us time in FF and a similiar
+<a name="line410"></a>  // over head in IE6 for lower working set apps, but for large working set
+<a name="line411"></a>  // apps like Gmail, it saves about 70us per call.
+<a name="line412"></a>  if (!goog.string.encodeUriRegExp_.test(str)) {
+<a name="line413"></a>    return encodeURIComponent(str);
+<a name="line414"></a>  }
+<a name="line415"></a>  return str;
+<a name="line416"></a>};
+<a name="line417"></a>
+<a name="line418"></a>
+<a name="line419"></a>/**
+<a name="line420"></a> * URL-decodes the string. We need to specially handle &#39;+&#39;s because
+<a name="line421"></a> * the javascript library doesn&#39;t convert them to spaces.
+<a name="line422"></a> * @param {string} str The string to url decode.
+<a name="line423"></a> * @return {string} The decoded {@code str}.
+<a name="line424"></a> */
+<a name="line425"></a>goog.string.urlDecode = function(str) {
+<a name="line426"></a>  return decodeURIComponent(str.replace(/\+/g, &#39; &#39;));
+<a name="line427"></a>};
+<a name="line428"></a>
+<a name="line429"></a>
+<a name="line430"></a>/**
+<a name="line431"></a> * Converts \n to &lt;br&gt;s or &lt;br /&gt;s.
+<a name="line432"></a> * @param {string} str The string in which to convert newlines.
+<a name="line433"></a> * @param {boolean} opt_xml Whether to use XML compatible tags.
+<a name="line434"></a> * @return {string} A copy of {@code str} with converted newlines.
+<a name="line435"></a> */
+<a name="line436"></a>goog.string.newLineToBr = function(str, opt_xml) {
+<a name="line437"></a>  return str.replace(/(\r\n|\r|\n)/g, opt_xml ? &#39;&lt;br /&gt;&#39; : &#39;&lt;br&gt;&#39;);
+<a name="line438"></a>};
+<a name="line439"></a>
+<a name="line440"></a>
+<a name="line441"></a>/**
+<a name="line442"></a> * Escape double quote &#39;&quot;&#39; characters in addition to &#39;&amp;&#39;, &#39;&lt;&#39;, and &#39;&gt;&#39; so that a
+<a name="line443"></a> * string can be included in an HTML tag attribute value within double quotes.
+<a name="line444"></a> *
+<a name="line445"></a> * It should be noted that &gt; doesn&#39;t need to be escaped for the HTML or XML to
+<a name="line446"></a> * be valid, but it has been decided to escape it for consistency with other
+<a name="line447"></a> * implementations.
+<a name="line448"></a> *
+<a name="line449"></a> * NOTE:
+<a name="line450"></a> * HtmlEscape is often called during the generation of large blocks of HTML.
+<a name="line451"></a> * Using statics for the regular expressions and strings is an optimization
+<a name="line452"></a> * that can more than half the amount of time IE spends in this function for
+<a name="line453"></a> * large apps, since strings and regexes both contribute to GC allocations.
+<a name="line454"></a> *
+<a name="line455"></a> * Testing for the presence of a character before escaping increases the number
+<a name="line456"></a> * of function calls, but actually provides a speed increase for the average
+<a name="line457"></a> * case -- since the average case often doesn&#39;t require the escaping of all 4
+<a name="line458"></a> * characters and indexOf() is much cheaper than replace().
+<a name="line459"></a> * The worst case does suffer slightly from the additional calls, therefore the
+<a name="line460"></a> * opt_isLikelyToContainHtmlChars option has been included for situations
+<a name="line461"></a> * where all 4 HTML entities are very likely to be present and need escaping.
+<a name="line462"></a> *
+<a name="line463"></a> * Some benchmarks (times tended to fluctuate +-0.05ms):
+<a name="line464"></a> *                                     FireFox                     IE6
+<a name="line465"></a> * (no chars / average (mix of cases) / all 4 chars)
+<a name="line466"></a> * no checks                     0.13 / 0.22 / 0.22         0.23 / 0.53 / 0.80
+<a name="line467"></a> * indexOf                       0.08 / 0.17 / 0.26         0.22 / 0.54 / 0.84
+<a name="line468"></a> * indexOf + re test             0.07 / 0.17 / 0.28         0.19 / 0.50 / 0.85
+<a name="line469"></a> *
+<a name="line470"></a> * An additional advantage of checking if replace actually needs to be called
+<a name="line471"></a> * is a reduction in the number of object allocations, so as the size of the
+<a name="line472"></a> * application grows the difference between the various methods would increase.
+<a name="line473"></a> *
+<a name="line474"></a> * @param {string} str string to be escaped.
+<a name="line475"></a> * @param {boolean} opt_isLikelyToContainHtmlChars Don&#39;t perform a check to see
+<a name="line476"></a> *     if the character needs replacing - use this option if you expect each of
+<a name="line477"></a> *     the characters to appear often. Leave false if you expect few html
+<a name="line478"></a> *     characters to occur in your strings, such as if you are escaping HTML.
+<a name="line479"></a> * @return {string} An escaped copy of {@code str}.
+<a name="line480"></a> */
+<a name="line481"></a>goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
+<a name="line482"></a>
+<a name="line483"></a>  if (opt_isLikelyToContainHtmlChars) {
+<a name="line484"></a>    return str.replace(goog.string.amperRe_, &#39;&amp;amp;&#39;)
+<a name="line485"></a>          .replace(goog.string.ltRe_, &#39;&amp;lt;&#39;)
+<a name="line486"></a>          .replace(goog.string.gtRe_, &#39;&amp;gt;&#39;)
+<a name="line487"></a>          .replace(goog.string.quotRe_, &#39;&amp;quot;&#39;);
+<a name="line488"></a>
+<a name="line489"></a>  } else {
+<a name="line490"></a>    // quick test helps in the case when there are no chars to replace, in
+<a name="line491"></a>    // worst case this makes barely a difference to the time taken
+<a name="line492"></a>    if (!goog.string.allRe_.test(str)) return str;
+<a name="line493"></a>
+<a name="line494"></a>    // str.indexOf is faster than regex.test in this case
+<a name="line495"></a>    if (str.indexOf(&#39;&amp;&#39;) != -1) {
+<a name="line496"></a>      str = str.replace(goog.string.amperRe_, &#39;&amp;amp;&#39;);
+<a name="line497"></a>    }
+<a name="line498"></a>    if (str.indexOf(&#39;&lt;&#39;) != -1) {
+<a name="line499"></a>      str = str.replace(goog.string.ltRe_, &#39;&amp;lt;&#39;);
+<a name="line500"></a>    }
+<a name="line501"></a>    if (str.indexOf(&#39;&gt;&#39;) != -1) {
+<a name="line502"></a>      str = str.replace(goog.string.gtRe_, &#39;&amp;gt;&#39;);
+<a name="line503"></a>    }
+<a name="line504"></a>    if (str.indexOf(&#39;&quot;&#39;) != -1) {
+<a name="line505"></a>      str = str.replace(goog.string.quotRe_, &#39;&amp;quot;&#39;);
+<a name="line506"></a>    }
+<a name="line507"></a>    return str;
+<a name="line508"></a>  }
+<a name="line509"></a>};
+<a name="line510"></a>
+<a name="line511"></a>
+<a name="line512"></a>/**
+<a name="line513"></a> * Regular expression that matches an ampersand, for use in escaping.
+<a name="line514"></a> * @type {RegExp}
+<a name="line515"></a> * @private
+<a name="line516"></a> */
+<a name="line517"></a>goog.string.amperRe_ = /&amp;/g;
+<a name="line518"></a>
+<a name="line519"></a>
+<a name="line520"></a>/**
+<a name="line521"></a> * Regular expression that matches a less than sign, for use in escaping.
+<a name="line522"></a> * @type {RegExp}
+<a name="line523"></a> * @private
+<a name="line524"></a> */
+<a name="line525"></a>goog.string.ltRe_ = /&lt;/g;
+<a name="line526"></a>
+<a name="line527"></a>
+<a name="line528"></a>/**
+<a name="line529"></a> * Regular expression that matches a greater than sign, for use in escaping.
+<a name="line530"></a> * @type {RegExp}
+<a name="line531"></a> * @private
+<a name="line532"></a> */
+<a name="line533"></a>goog.string.gtRe_ = /&gt;/g;
+<a name="line534"></a>
+<a name="line535"></a>
+<a name="line536"></a>/**
+<a name="line537"></a> * Regular expression that matches a double quote, for use in escaping.
+<a name="line538"></a> * @type {RegExp}
+<a name="line539"></a> * @private
+<a name="line540"></a> */
+<a name="line541"></a>goog.string.quotRe_ = /\&quot;/g;
+<a name="line542"></a>
+<a name="line543"></a>
+<a name="line544"></a>/**
+<a name="line545"></a> * Regular expression that matches any character that needs to be escaped.
+<a name="line546"></a> * @type {RegExp}
+<a name="line547"></a> * @private
+<a name="line548"></a> */
+<a name="line549"></a>goog.string.allRe_ = /[&amp;&lt;&gt;\&quot;]/;
+<a name="line550"></a>
+<a name="line551"></a>
+<a name="line552"></a>/**
+<a name="line553"></a> * Unescapes an HTML string.
+<a name="line554"></a> *
+<a name="line555"></a> * @param {string} str The string to unescape.
+<a name="line556"></a> * @return {string} An unescaped copy of {@code str}.
+<a name="line557"></a> */
+<a name="line558"></a>goog.string.unescapeEntities = function(str) {
+<a name="line559"></a>  if (goog.string.contains(str, &#39;&amp;&#39;)) {
+<a name="line560"></a>    // We are careful not to use a DOM if we do not have one. We use the []
+<a name="line561"></a>    // notation so that the JSCompiler will not complain about these objects and
+<a name="line562"></a>    // fields in the case where we have no DOM.
+<a name="line563"></a>    // If the string contains &lt; then there could be a script tag in there and in
+<a name="line564"></a>    // that case we fall back to a non DOM solution as well.
+<a name="line565"></a>    if (&#39;document&#39; in goog.global &amp;&amp; !goog.string.contains(str, &#39;&lt;&#39;)) {
+<a name="line566"></a>      return goog.string.unescapeEntitiesUsingDom_(str);
+<a name="line567"></a>    } else {
+<a name="line568"></a>      // Fall back on pure XML entities
+<a name="line569"></a>      return goog.string.unescapePureXmlEntities_(str);
+<a name="line570"></a>    }
+<a name="line571"></a>  }
+<a name="line572"></a>  return str;
+<a name="line573"></a>};
+<a name="line574"></a>
+<a name="line575"></a>
+<a name="line576"></a>/**
+<a name="line577"></a> * Unescapes an HTML string using a DOM. Don&#39;t use this function directly, it
+<a name="line578"></a> * should only be used by unescapeEntities. If used directly you will be
+<a name="line579"></a> * vulnerable to XSS attacks.
+<a name="line580"></a> * @private
+<a name="line581"></a> * @param {string} str The string to unescape.
+<a name="line582"></a> * @return {string} The unescaped {@code str} string.
+<a name="line583"></a> */
+<a name="line584"></a>goog.string.unescapeEntitiesUsingDom_ = function(str) {
+<a name="line585"></a>  var el = goog.global[&#39;document&#39;][&#39;createElement&#39;](&#39;a&#39;);
+<a name="line586"></a>  el[&#39;innerHTML&#39;] = str;
+<a name="line587"></a>  // Accesing the function directly triggers some virus scanners.
+<a name="line588"></a>  if (el[goog.string.NORMALIZE_FN_]) {
+<a name="line589"></a>    el[goog.string.NORMALIZE_FN_]();
+<a name="line590"></a>  }
+<a name="line591"></a>  str = el[&#39;firstChild&#39;][&#39;nodeValue&#39;];
+<a name="line592"></a>  el[&#39;innerHTML&#39;] = &#39;&#39;;
+<a name="line593"></a>  return str;
+<a name="line594"></a>};
+<a name="line595"></a>
+<a name="line596"></a>
+<a name="line597"></a>/**
+<a name="line598"></a> * Unescapes XML entities.
+<a name="line599"></a> * @private
+<a name="line600"></a> * @param {string} str The string to unescape.
+<a name="line601"></a> * @return {string} An unescaped copy of {@code str}.
+<a name="line602"></a> */
+<a name="line603"></a>goog.string.unescapePureXmlEntities_ = function(str) {
+<a name="line604"></a>  return str.replace(/&amp;([^;]+);/g, function(s, entity) {
+<a name="line605"></a>    switch (entity) {
+<a name="line606"></a>      case &#39;amp&#39;:
+<a name="line607"></a>        return &#39;&amp;&#39;;
+<a name="line608"></a>      case &#39;lt&#39;:
+<a name="line609"></a>        return &#39;&lt;&#39;;
+<a name="line610"></a>      case &#39;gt&#39;:
+<a name="line611"></a>        return &#39;&gt;&#39;;
+<a name="line612"></a>      case &#39;quot&#39;:
+<a name="line613"></a>        return &#39;&quot;&#39;;
+<a name="line614"></a>      default:
+<a name="line615"></a>        if (entity.charAt(0) == &#39;#&#39;) {
+<a name="line616"></a>          var n = Number(&#39;0&#39; + entity.substr(1));
+<a name="line617"></a>          if (!isNaN(n)) {
+<a name="line618"></a>            return String.fromCharCode(n);
+<a name="line619"></a>          }
+<a name="line620"></a>        }
+<a name="line621"></a>        // For invalid entities we just return the entity
+<a name="line622"></a>        return s;
+<a name="line623"></a>    }
+<a name="line624"></a>  });
+<a name="line625"></a>};
+<a name="line626"></a>
+<a name="line627"></a>/**
+<a name="line628"></a> * String name for the node.normalize function. Anti-virus programs use this as
+<a name="line629"></a> * a signature for some viruses so we need a work around (temporary).
+<a name="line630"></a> * @private
+<a name="line631"></a> * @type {string}
+<a name="line632"></a> */
+<a name="line633"></a>goog.string.NORMALIZE_FN_ = &#39;normalize&#39;;
+<a name="line634"></a>
+<a name="line635"></a>/**
+<a name="line636"></a> * Do escaping of whitespace to preserve spatial formatting. We use character
+<a name="line637"></a> * entity #160 to make it safer for xml.
+<a name="line638"></a> * @param {string} str The string in which to escape whitespace.
+<a name="line639"></a> * @param {boolean} opt_xml Whether to use XML compatible tags.
+<a name="line640"></a> * @return {string} An escaped copy of {@code str}.
+<a name="line641"></a> */
+<a name="line642"></a>goog.string.whitespaceEscape = function(str, opt_xml) {
+<a name="line643"></a>  return goog.string.newLineToBr(str.replace(/  /g, &#39; &amp;#160;&#39;), opt_xml);
+<a name="line644"></a>};
+<a name="line645"></a>
+<a name="line646"></a>
+<a name="line647"></a>/**
+<a name="line648"></a> * Strip quote characters around a string.  The second argument is a string of
+<a name="line649"></a> * characters to treat as quotes.  This can be a single character or a string of
+<a name="line650"></a> * multiple character and in that case each of those are treated as possible
+<a name="line651"></a> * quote characters. For example:
+<a name="line652"></a> *
+<a name="line653"></a> * &lt;pre&gt;
+<a name="line654"></a> * goog.string.stripQuotes(&#39;&quot;abc&quot;&#39;, &#39;&quot;`&#39;) --&gt; &#39;abc&#39;
+<a name="line655"></a> * goog.string.stripQuotes(&#39;`abc`&#39;, &#39;&quot;`&#39;) --&gt; &#39;abc&#39;
+<a name="line656"></a> * &lt;/pre&gt;
+<a name="line657"></a> *
+<a name="line658"></a> * @param {string} str The string to strip.
+<a name="line659"></a> * @param {string} quoteChars The quote characters to strip.
+<a name="line660"></a> * @return {string} A copy of {@code str} without the quotes.
+<a name="line661"></a> *
+<a name="line662"></a> */
+<a name="line663"></a>goog.string.stripQuotes = function(str, quoteChars) {
+<a name="line664"></a>  var length = quoteChars.length;
+<a name="line665"></a>  for (var i = 0; i &lt; length; i++) {
+<a name="line666"></a>    var quoteChar = length == 1 ? quoteChars : quoteChars.charAt(i);
+<a name="line667"></a>    if (str.charAt(0) == quoteChar &amp;&amp; str.charAt(str.length - 1) == quoteChar) {
+<a name="line668"></a>      return str.substring(1, str.length - 1);
+<a name="line669"></a>    }
+<a name="line670"></a>  }
+<a name="line671"></a>  return str;
+<a name="line672"></a>};
+<a name="line673"></a>
+<a name="line674"></a>
+<a name="line675"></a>/**
+<a name="line676"></a> * Truncates a string to a certain length and adds &#39;...&#39; if necessary.  The
+<a name="line677"></a> * length also accounts for the ellipsis, so a maximum length of 10 and a string
+<a name="line678"></a> * &#39;Hello World!&#39; produces &#39;Hello W...&#39;.
+<a name="line679"></a> * @param {string} str The string to truncate.
+<a name="line680"></a> * @param {number} chars Max number of characters.
+<a name="line681"></a> * @param {boolean} opt_protectEscapedCharacters Whether to protect escaped
+<a name="line682"></a> *     characters from being cut off in the middle.
+<a name="line683"></a> * @return {string} The truncated {@code str} string.
+<a name="line684"></a> */
+<a name="line685"></a>goog.string.truncate = function(str, chars, opt_protectEscapedCharacters) {
+<a name="line686"></a>  if (opt_protectEscapedCharacters) {
+<a name="line687"></a>    str = goog.string.unescapeEntities(str);
+<a name="line688"></a>  }
+<a name="line689"></a>
+<a name="line690"></a>  if (str.length &gt; chars) {
+<a name="line691"></a>    str = str.substring(0, chars - 3) + &#39;...&#39;;
+<a name="line692"></a>  }
+<a name="line693"></a>
+<a name="line694"></a>  if (opt_protectEscapedCharacters) {
+<a name="line695"></a>    str = goog.string.htmlEscape(str);
+<a name="line696"></a>  }
+<a name="line697"></a>
+<a name="line698"></a>  return str;
+<a name="line699"></a>};
+<a name="line700"></a>
+<a name="line701"></a>
+<a name="line702"></a>/**
+<a name="line703"></a> * Truncate a string in the middle, adding &quot;...&quot; if necessary,
+<a name="line704"></a> * and favoring the beginning of the string.
+<a name="line705"></a> * @param {string} str The string to truncate the middle of.
+<a name="line706"></a> * @param {number} chars Max number of characters.
+<a name="line707"></a> * @param {boolean} opt_protectEscapedCharacters Whether to protect escaped
+<a name="line708"></a> *     characters from being cutoff in the middle.
+<a name="line709"></a> * @return {string} A truncated copy of {@code str}.
+<a name="line710"></a> */
+<a name="line711"></a>goog.string.truncateMiddle = function(str, chars,
+<a name="line712"></a>    opt_protectEscapedCharacters) {
+<a name="line713"></a>  if (opt_protectEscapedCharacters) {
+<a name="line714"></a>    str = goog.string.unescapeEntities(str);
+<a name="line715"></a>  }
+<a name="line716"></a>
+<a name="line717"></a>  if (str.length &gt; chars) {
+<a name="line718"></a>    // Favor the beginning of the string:
+<a name="line719"></a>    var half = Math.floor(chars / 2);
+<a name="line720"></a>    var endPos = str.length - half;
+<a name="line721"></a>    half += chars % 2;
+<a name="line722"></a>    str = str.substring(0, half) + &#39;...&#39; + str.substring(endPos);
+<a name="line723"></a>  }
+<a name="line724"></a>
+<a name="line725"></a>  if (opt_protectEscapedCharacters) {
+<a name="line726"></a>    str = goog.string.htmlEscape(str);
+<a name="line727"></a>  }
+<a name="line728"></a>
+<a name="line729"></a>  return str;
+<a name="line730"></a>};
+<a name="line731"></a>
+<a name="line732"></a>
+<a name="line733"></a>/**
+<a name="line734"></a> * Character mappings used internally for goog.string.quote.
+<a name="line735"></a> * @private
+<a name="line736"></a> * @type {Object}
+<a name="line737"></a> */
+<a name="line738"></a>goog.string.jsEscapeCache_ = {
+<a name="line739"></a>  &#39;\b&#39;: &#39;\\b&#39;,
+<a name="line740"></a>  &#39;\f&#39;: &#39;\\f&#39;,
+<a name="line741"></a>  &#39;\n&#39;: &#39;\\n&#39;,
+<a name="line742"></a>  &#39;\r&#39;: &#39;\\r&#39;,
+<a name="line743"></a>  &#39;\t&#39;: &#39;\\t&#39;,
+<a name="line744"></a>  &#39;\x0B&#39;: &#39;\\x0B&#39;, // &#39;\v&#39; is not supported in JScript
+<a name="line745"></a>  &#39;&quot;&#39;: &#39;\\&quot;&#39;,
+<a name="line746"></a>  &#39;\&#39;&#39;: &#39;\\\&#39;&#39;,
+<a name="line747"></a>  &#39;\\&#39;: &#39;\\\\&#39;
+<a name="line748"></a>};
+<a name="line749"></a>
+<a name="line750"></a>
+<a name="line751"></a>/**
+<a name="line752"></a> * Encloses a string in double quotes and escapes characters so that the
+<a name="line753"></a> * string is a valid JS string.
+<a name="line754"></a> * @param {string} s The string to quote.
+<a name="line755"></a> * @return {string} A copy of {@code s} surrounded by double quotes.
+<a name="line756"></a> */
+<a name="line757"></a>goog.string.quote = function(s) {
+<a name="line758"></a>  s = String(s);
+<a name="line759"></a>  if (s.quote) {
+<a name="line760"></a>    return s.quote();
+<a name="line761"></a>  } else {
+<a name="line762"></a>    var sb = [&#39;&quot;&#39;];
+<a name="line763"></a>    for (var i = 0; i &lt; s.length; i++) {
+<a name="line764"></a>      sb[i + 1] = goog.string.escapeChar(s.charAt(i));
+<a name="line765"></a>    }
+<a name="line766"></a>    sb.push(&#39;&quot;&#39;);
+<a name="line767"></a>    return sb.join(&#39;&#39;);
+<a name="line768"></a>  }
+<a name="line769"></a>};
+<a name="line770"></a>
+<a name="line771"></a>
+<a name="line772"></a>/**
+<a name="line773"></a> * Takes a character and returns the escaped string for that character. For
+<a name="line774"></a> * example escapeChar(String.fromCharCode(15)) -&gt; &quot;\\x0E&quot;.
+<a name="line775"></a> * @param {string} c The character to escape.
+<a name="line776"></a> * @return {string} An escaped string representing {@code c}.
+<a name="line777"></a> */
+<a name="line778"></a>goog.string.escapeChar = function(c) {
+<a name="line779"></a>  if (c in goog.string.jsEscapeCache_) {
+<a name="line780"></a>    return goog.string.jsEscapeCache_[c];
+<a name="line781"></a>  }
+<a name="line782"></a>  var rv = c;
+<a name="line783"></a>  var cc = c.charCodeAt(0);
+<a name="line784"></a>  if (cc &gt; 31 &amp;&amp; cc &lt; 127) {
+<a name="line785"></a>    rv = c;
+<a name="line786"></a>  } else {
+<a name="line787"></a>    // tab is 9 but handled above
+<a name="line788"></a>    if (cc &lt; 256) {
+<a name="line789"></a>      rv = &#39;\\x&#39;;
+<a name="line790"></a>      if (cc &lt; 16 || cc &gt; 256) {
+<a name="line791"></a>        rv += &#39;0&#39;;
+<a name="line792"></a>      }
+<a name="line793"></a>    } else {
+<a name="line794"></a>      rv = &#39;\\u&#39;;
+<a name="line795"></a>      if (cc &lt; 4096) { // \u1000
+<a name="line796"></a>        rv += &#39;0&#39;;
+<a name="line797"></a>      }
+<a name="line798"></a>    }
+<a name="line799"></a>    rv += cc.toString(16).toUpperCase();
+<a name="line800"></a>  }
+<a name="line801"></a>
+<a name="line802"></a>  return goog.string.jsEscapeCache_[c] = rv;
+<a name="line803"></a>};
+<a name="line804"></a>
+<a name="line805"></a>
+<a name="line806"></a>/**
+<a name="line807"></a> * Takes a string and creates a map (Object) in which the keys are the
+<a name="line808"></a> * characters in the string. The value for the key is set to true. You can
+<a name="line809"></a> * then use goog.object.map or goog.array.map to change the values.
+<a name="line810"></a> * @param {string} s The string to build the map from.
+<a name="line811"></a> * @return {Object} The map of characters used.
+<a name="line812"></a> */
+<a name="line813"></a>// TODO: It seems like we should have a generic goog.array.toMap. But do
+<a name="line814"></a>//            we want a dependency on goog.array in goog.string?
+<a name="line815"></a>goog.string.toMap = function(s) {
+<a name="line816"></a>  var rv = {};
+<a name="line817"></a>  for (var i = 0; i &lt; s.length; i++) {
+<a name="line818"></a>    rv[s.charAt(i)] = true;
+<a name="line819"></a>  }
+<a name="line820"></a>  return rv;
+<a name="line821"></a>};
+<a name="line822"></a>
+<a name="line823"></a>
+<a name="line824"></a>/**
+<a name="line825"></a> * Checks whether a string contains a given character.
+<a name="line826"></a> * @param {string} s The string to test.
+<a name="line827"></a> * @param {string} ss The substring to test for.
+<a name="line828"></a> * @return {boolean} True if {@code s} contains {@code ss}.
+<a name="line829"></a> */
+<a name="line830"></a>goog.string.contains = function(s, ss) {
+<a name="line831"></a>  return s.indexOf(ss) != -1;
+<a name="line832"></a>};
+<a name="line833"></a>
+<a name="line834"></a>
+<a name="line835"></a>/**
+<a name="line836"></a> * Removes a substring of a specified length at a specific
+<a name="line837"></a> * index in a string.
+<a name="line838"></a> * @param {string} s The base string from which to remove.
+<a name="line839"></a> * @param {number} index The index at which to remove the substring.
+<a name="line840"></a> * @param {number} stringLength The length of the substring to remove.
+<a name="line841"></a> * @return {string} A copy of {@code s} with the substring removed or the full
+<a name="line842"></a> *     string if nothing is removed or the input is invalid.
+<a name="line843"></a> */
+<a name="line844"></a>goog.string.removeAt = function(s, index, stringLength) {
+<a name="line845"></a>  var resultStr = s;
+<a name="line846"></a>  // If the index is greater or equal to 0 then remove substring
+<a name="line847"></a>  if (index &gt;= 0 &amp;&amp; index &lt; s.length &amp;&amp; stringLength &gt; 0) {
+<a name="line848"></a>    resultStr = s.substr(0, index) +
+<a name="line849"></a>        s.substr(index + stringLength, s.length - index - stringLength);
+<a name="line850"></a>  }
+<a name="line851"></a>  return resultStr;
+<a name="line852"></a>};
+<a name="line853"></a>
+<a name="line854"></a>
+<a name="line855"></a>/**
+<a name="line856"></a> *  Removes the first occurrence of a substring from a string.
+<a name="line857"></a> *  @param {string} s The base string from which to remove.
+<a name="line858"></a> *  @param {string} ss The string to remove.
+<a name="line859"></a> *  @return {string} A copy of {@code s} with {@code ss} removed or the full
+<a name="line860"></a> *      string if nothing is removed.
+<a name="line861"></a> */
+<a name="line862"></a>goog.string.remove = function(s, ss) {
+<a name="line863"></a>  var re = new RegExp(goog.string.regExpEscape(ss), &#39;&#39;);
+<a name="line864"></a>  return s.replace(re, &#39;&#39;);
+<a name="line865"></a>};
+<a name="line866"></a>
+<a name="line867"></a>
+<a name="line868"></a>/**
+<a name="line869"></a> *  Removes all occurrences of a substring from a string.
+<a name="line870"></a> *  @param {string} s The base string from which to remove.
+<a name="line871"></a> *  @param {string} ss The string to remove.
+<a name="line872"></a> *  @return {string} A copy of {@code s} with {@code ss} removed or the full
+<a name="line873"></a> *      string if nothing is removed.
+<a name="line874"></a> */
+<a name="line875"></a>goog.string.removeAll = function(s, ss) {
+<a name="line876"></a>  var re = new RegExp(goog.string.regExpEscape(ss), &#39;g&#39;);
+<a name="line877"></a>  return s.replace(re, &#39;&#39;);
+<a name="line878"></a>};
+<a name="line879"></a>
+<a name="line880"></a>
+<a name="line881"></a>/**
+<a name="line882"></a> * Escapes characters in the string that are not safe to use in a RegExp.
+<a name="line883"></a> * @param {*} s The string to escape. If not a string, it will be casted
+<a name="line884"></a> *     to one.
+<a name="line885"></a> * @return {string} A RegExp safe, escaped copy of {@code s}.
+<a name="line886"></a> */
+<a name="line887"></a>goog.string.regExpEscape = function(s) {
+<a name="line888"></a>  return String(s).replace(/([-()\[\]{}+?*.$\^|,:#&lt;!\\])/g, &#39;\\$1&#39;).
+<a name="line889"></a>                   replace(/\x08/g, &#39;\\x08&#39;);
+<a name="line890"></a>};
+<a name="line891"></a>
+<a name="line892"></a>
+<a name="line893"></a>/**
+<a name="line894"></a> * Repeats a string n times.
+<a name="line895"></a> * @param {string} string The string to repeat.
+<a name="line896"></a> * @param {number} length The number of times to repeat.
+<a name="line897"></a> * @return {string} A string containing {@code length} repetitions of
+<a name="line898"></a> *     {@code string}.
+<a name="line899"></a> */
+<a name="line900"></a>goog.string.repeat = function(string, length) {
+<a name="line901"></a>  return new Array(length + 1).join(string);
+<a name="line902"></a>};
+<a name="line903"></a>
+<a name="line904"></a>
+<a name="line905"></a>/**
+<a name="line906"></a> * Pads number to given length and optionally rounds it to a given precision.
+<a name="line907"></a> * For example:
+<a name="line908"></a> * &lt;pre&gt;padNumber(1.25, 2, 3) -&gt; &#39;01.250&#39;
+<a name="line909"></a> * padNumber(1.25, 2) -&gt; &#39;01.25&#39;
+<a name="line910"></a> * padNumber(1.25, 2, 1) -&gt; &#39;01.3&#39;
+<a name="line911"></a> * padNumber(1.25, 0) -&gt; &#39;1.25&#39;&lt;/pre&gt;
+<a name="line912"></a> *
+<a name="line913"></a> * @param {number} num The number to pad.
+<a name="line914"></a> * @param {number} length The desired length.
+<a name="line915"></a> * @param {number} opt_precision The desired precision.
+<a name="line916"></a> * @return {string} {@code num} as a string with the given options.
+<a name="line917"></a> */
+<a name="line918"></a>goog.string.padNumber = function(num, length, opt_precision) {
+<a name="line919"></a>  var s = goog.isDef(opt_precision) ? num.toFixed(opt_precision) : String(num);
+<a name="line920"></a>  var index = s.indexOf(&#39;.&#39;);
+<a name="line921"></a>  if (index == -1) {
+<a name="line922"></a>    index = s.length;
+<a name="line923"></a>  }
+<a name="line924"></a>  return goog.string.repeat(&#39;0&#39;, Math.max(0, length - index)) + s;
+<a name="line925"></a>};
+<a name="line926"></a>
+<a name="line927"></a>
+<a name="line928"></a>/**
+<a name="line929"></a> * Returns a string representation of the given object, with
+<a name="line930"></a> * null and undefined being returned as the empty string.
+<a name="line931"></a> *
+<a name="line932"></a> * @param {*} obj The object to convert.
+<a name="line933"></a> * @return {string} A string representation of the {@code obj}.
+<a name="line934"></a> */
+<a name="line935"></a>goog.string.makeSafe = function(obj) {
+<a name="line936"></a>  return obj == null ? &#39;&#39; : String(obj);
+<a name="line937"></a>};
+<a name="line938"></a>
+<a name="line939"></a>
+<a name="line940"></a>/**
+<a name="line941"></a> * Concatenates string expressions. This is useful
+<a name="line942"></a> * since some browsers are very inefficient when it comes to using plus to
+<a name="line943"></a> * concat strings. Be careful when using null and undefined here since
+<a name="line944"></a> * these will not be included in the result. If you need to represent these
+<a name="line945"></a> * be sure to cast the argument to a String first.
+<a name="line946"></a> * For example:
+<a name="line947"></a> * &lt;pre&gt;buildString(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;) -&gt; &#39;abcd&#39;
+<a name="line948"></a> * buildString(null, undefined) -&gt; &#39;&#39;
+<a name="line949"></a> * &lt;/pre&gt;
+<a name="line950"></a> * @param {*} var_args A list of strings to concatenate. If not a string,
+<a name="line951"></a> *     it will be casted to one.
+<a name="line952"></a> * @return {string} The concatenation of {@code var_args}.
+<a name="line953"></a> */
+<a name="line954"></a>goog.string.buildString = function(var_args) {
+<a name="line955"></a>  return Array.prototype.join.call(arguments, &#39;&#39;);
+<a name="line956"></a>};
+<a name="line957"></a>
+<a name="line958"></a>
+<a name="line959"></a>/**
+<a name="line960"></a> * Returns a string with at least 64-bits of randomness.
+<a name="line961"></a> *
+<a name="line962"></a> * Doesn&#39;t trust Javascript&#39;s random function entirely. Uses a combination of
+<a name="line963"></a> * random and current timestamp, and then encodes the string in base-36 to
+<a name="line964"></a> * make it shorter.
+<a name="line965"></a> *
+<a name="line966"></a> * @return {string} A random string, e.g. sn1s7vb4gcic.
+<a name="line967"></a> */
+<a name="line968"></a>goog.string.getRandomString = function() {
+<a name="line969"></a>  return Math.floor(Math.random() * 2147483648).toString(36) +
+<a name="line970"></a>         (Math.floor(Math.random() * 2147483648) ^
+<a name="line971"></a>          (new Date).getTime()).toString(36);
+<a name="line972"></a>};
+<a name="line973"></a>
+<a name="line974"></a>
+<a name="line975"></a>/**
+<a name="line976"></a> * Compares two version numbers.
+<a name="line977"></a> *
+<a name="line978"></a> * @param {string|number} version1 Version of first item.
+<a name="line979"></a> * @param {string|number} version2 Version of second item.
+<a name="line980"></a> *
+<a name="line981"></a> * @return {number}  1 if {@code version1} is higher.
+<a name="line982"></a> *                   0 if arguments are equal.
+<a name="line983"></a> *                  -1 if {@code version2} is higher.
+<a name="line984"></a> */
+<a name="line985"></a>goog.string.compareVersions = function(version1, version2) {
+<a name="line986"></a>  var order = 0;
+<a name="line987"></a>  // Trim leading and trailing whitespace and split the versions into
+<a name="line988"></a>  // subversions.
+<a name="line989"></a>  var v1Subs = goog.string.trim(String(version1)).split(&#39;.&#39;);
+<a name="line990"></a>  var v2Subs = goog.string.trim(String(version2)).split(&#39;.&#39;);
+<a name="line991"></a>  var subCount = Math.max(v1Subs.length, v2Subs.length);
+<a name="line992"></a>
+<a name="line993"></a>  // Iterate over the subversions, as long as they appear to be equivalent.
+<a name="line994"></a>  for (var subIdx = 0; order == 0 &amp;&amp; subIdx &lt; subCount; subIdx++) {
+<a name="line995"></a>    var v1Sub = v1Subs[subIdx] || &#39;&#39;;
+<a name="line996"></a>    var v2Sub = v2Subs[subIdx] || &#39;&#39;;
+<a name="line997"></a>
+<a name="line998"></a>    // Split the subversions into pairs of numbers and qualifiers (like &#39;b&#39;).
+<a name="line999"></a>    // Two different RegExp objects are needed because they are both using
+<a name="line1000"></a>    // the &#39;g&#39; flag.
+<a name="line1001"></a>    var v1CompParser = new RegExp(&#39;(\\d*)(\\D*)&#39;, &#39;g&#39;);
+<a name="line1002"></a>    var v2CompParser = new RegExp(&#39;(\\d*)(\\D*)&#39;, &#39;g&#39;);
+<a name="line1003"></a>    do {
+<a name="line1004"></a>      var v1Comp = v1CompParser.exec(v1Sub) || [&#39;&#39;, &#39;&#39;, &#39;&#39;];
+<a name="line1005"></a>      var v2Comp = v2CompParser.exec(v2Sub) || [&#39;&#39;, &#39;&#39;, &#39;&#39;];
+<a name="line1006"></a>      // Break if there are no more matches.
+<a name="line1007"></a>      if (v1Comp[0].length == 0 &amp;&amp; v2Comp[0].length == 0) {
+<a name="line1008"></a>        break;
+<a name="line1009"></a>      }
+<a name="line1010"></a>
+<a name="line1011"></a>      // Parse the numeric part of the subversion. A missing number is
+<a name="line1012"></a>      // equivalent to 0.
+<a name="line1013"></a>      var v1CompNum = v1Comp[1].length == 0 ? 0 : parseInt(v1Comp[1], 10);
+<a name="line1014"></a>      var v2CompNum = v2Comp[1].length == 0 ? 0 : parseInt(v2Comp[1], 10);
+<a name="line1015"></a>
+<a name="line1016"></a>      // Compare the subversion components. The number has the highest
+<a name="line1017"></a>      // precedence. Next, if the numbers are equal, a subversion without any
+<a name="line1018"></a>      // qualifier is always higher than a subversion with any qualifier. Next,
+<a name="line1019"></a>      // the qualifiers are compared as strings.
+<a name="line1020"></a>      order = goog.string.compareElements_(v1CompNum, v2CompNum) ||
+<a name="line1021"></a>          goog.string.compareElements_(v1Comp[2].length == 0,
+<a name="line1022"></a>              v2Comp[2].length == 0) ||
+<a name="line1023"></a>          goog.string.compareElements_(v1Comp[2], v2Comp[2]);
+<a name="line1024"></a>    // Stop as soon as an inequality is discovered.
+<a name="line1025"></a>    } while (order == 0);
+<a name="line1026"></a>  }
+<a name="line1027"></a>
+<a name="line1028"></a>  return order;
+<a name="line1029"></a>};
+<a name="line1030"></a>
+<a name="line1031"></a>
+<a name="line1032"></a>/**
+<a name="line1033"></a> * Compares elements of a version number.
+<a name="line1034"></a> *
+<a name="line1035"></a> * @param {string|number|boolean} left An element from a version number.
+<a name="line1036"></a> * @param {string|number|boolean} right An element from a version number.
+<a name="line1037"></a> *
+<a name="line1038"></a> * @return {number}  1 if {@code left} is higher.
+<a name="line1039"></a> *                   0 if arguments are equal.
+<a name="line1040"></a> *                  -1 if {@code right} is higher.
+<a name="line1041"></a> * @private
+<a name="line1042"></a> */
+<a name="line1043"></a>goog.string.compareElements_ = function(left, right) {
+<a name="line1044"></a>  if (left &lt; right) {
+<a name="line1045"></a>    return -1;
+<a name="line1046"></a>  } else if (left &gt; right) {
+<a name="line1047"></a>    return 1;
+<a name="line1048"></a>  }
+<a name="line1049"></a>  return 0;
+<a name="line1050"></a>};
+<a name="line1051"></a>
+<a name="line1052"></a>
+<a name="line1053"></a>/**
+<a name="line1054"></a> * Maximum value of #goog.string.hashCode, exclusive. 2^32.
+<a name="line1055"></a> * @type {number}
+<a name="line1056"></a> * @private
+<a name="line1057"></a> */
+<a name="line1058"></a>goog.string.HASHCODE_MAX_ = 0x100000000;
+<a name="line1059"></a>
+<a name="line1060"></a>
+<a name="line1061"></a>/**
+<a name="line1062"></a> * String hash function similar to java.lang.String.hashCode().
+<a name="line1063"></a> * The hash code for a string is computed as
+<a name="line1064"></a> * s[0] * 31 ^ (n - 1) + s[1] * 31 ^ (n - 2) + ... + s[n - 1],
+<a name="line1065"></a> * where s[i] is the ith character of the string and n is the length of
+<a name="line1066"></a> * the string. We mod the result to make it between 0 (inclusive) and 2^32
+<a name="line1067"></a> * (exclusive).
+<a name="line1068"></a> * @param {string} str A string.
+<a name="line1069"></a> * @return {number} Hash value for {@code str}, between 0 (inclusive) and 2^32
+<a name="line1070"></a> *  (exclusive). The empty string returns 0.
+<a name="line1071"></a> */
+<a name="line1072"></a>goog.string.hashCode = function(str) {
+<a name="line1073"></a>  var result = 0;
+<a name="line1074"></a>  for (var i = 0; i &lt; str.length; ++i) {
+<a name="line1075"></a>    result = 31 * result + str.charCodeAt(i);
+<a name="line1076"></a>    // Normalize to 4 byte range, 0 ... 2^32.
+<a name="line1077"></a>    result %= goog.string.HASHCODE_MAX_;
+<a name="line1078"></a>  }
+<a name="line1079"></a>  return result;
+<a name="line1080"></a>};
+<a name="line1081"></a>
+<a name="line1082"></a>
+<a name="line1083"></a>/**
+<a name="line1084"></a> * The most recent globally unique ID.
+<a name="line1085"></a> * @type {number}
+<a name="line1086"></a> * @private
+<a name="line1087"></a> */
+<a name="line1088"></a>goog.string.uniqueStringCounter_ = goog.now();
+<a name="line1089"></a>
+<a name="line1090"></a>
+<a name="line1091"></a>/**
+<a name="line1092"></a> * Generates and returns a unique string based on the current date so strings
+<a name="line1093"></a> * remain unique between sessions.  This is useful, for example, to create
+<a name="line1094"></a> * unique IDs for DOM elements.
+<a name="line1095"></a> * @return {string} A unique id.
+<a name="line1096"></a> */
+<a name="line1097"></a>goog.string.createUniqueString = function() {
+<a name="line1098"></a>  return &#39;goog_&#39; + goog.string.uniqueStringCounter_++;
+<a name="line1099"></a>};
+<a name="line1100"></a>
+<a name="line1101"></a>
+<a name="line1102"></a>/**
+<a name="line1103"></a> * Converts the supplied string to a number, which may be Ininity or NaN.
+<a name="line1104"></a> * This function strips whitespace: (toNumber(&#39; 123&#39;) === 123)
+<a name="line1105"></a> * This function accepts scientific notation: (toNumber(&#39;1e1&#39;) === 10)
+<a name="line1106"></a> *
+<a name="line1107"></a> * This is better than Javascript&#39;s built-in conversions because, sadly:
+<a name="line1108"></a> *     (Number(&#39; &#39;) === 0) and (parseFloat(&#39;123a&#39;) === 123)
+<a name="line1109"></a> *
+<a name="line1110"></a> * @param {string} str The string to convert.
+<a name="line1111"></a> * @return {number} The number the supplied string represents, or NaN.
+<a name="line1112"></a> */
+<a name="line1113"></a>goog.string.toNumber = function(str) {
+<a name="line1114"></a>  var num = Number(str);
+<a name="line1115"></a>  if (num == 0 &amp;&amp; goog.string.isEmpty(str)) {
+<a name="line1116"></a>    return NaN;
+<a name="line1117"></a>  }
+<a name="line1118"></a>  return num;
+<a name="line1119"></a>};
+</pre>
+
+
+</body>
+</html>

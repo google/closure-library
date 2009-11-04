@@ -1,0 +1,576 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>object.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_object_object.js.html">object.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities for manipulating objects/maps/hashes.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.object&#39;);
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>/**
+<a name="line23"></a> * Calls a function for each element in an object/map/hash.
+<a name="line24"></a> *
+<a name="line25"></a> * @param {Object} obj The object over which to iterate.
+<a name="line26"></a> * @param {Function} f The function to call for every element. This function
+<a name="line27"></a> *     takes 3 arguments (the element, the index and the object)
+<a name="line28"></a> *     and the return value is irrelevant.
+<a name="line29"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object within f.
+<a name="line30"></a> */
+<a name="line31"></a>goog.object.forEach = function(obj, f, opt_obj) {
+<a name="line32"></a>  for (var key in obj) {
+<a name="line33"></a>    f.call(opt_obj, obj[key], key, obj);
+<a name="line34"></a>  }
+<a name="line35"></a>};
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>/**
+<a name="line39"></a> * Calls a function for each element in an object/map/hash. If that call returns
+<a name="line40"></a> * true, adds the element to a new object.
+<a name="line41"></a> *
+<a name="line42"></a> * @param {Object} obj The object over which to iterate.
+<a name="line43"></a> * @param {Function} f The function to call for every element. This
+<a name="line44"></a> *     function takes 3 arguments (the element, the index and the object)
+<a name="line45"></a> *     and should return a boolean. If the return value is true the
+<a name="line46"></a> *     element is added to the result object. If it is false the
+<a name="line47"></a> *     element is not included.
+<a name="line48"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object within f.
+<a name="line49"></a> * @return {!Object} a new object in which only elements that passed the test
+<a name="line50"></a> *     are present.
+<a name="line51"></a> */
+<a name="line52"></a>goog.object.filter = function(obj, f, opt_obj) {
+<a name="line53"></a>  var res = {};
+<a name="line54"></a>  for (var key in obj) {
+<a name="line55"></a>    if (f.call(opt_obj, obj[key], key, obj)) {
+<a name="line56"></a>      res[key] = obj[key];
+<a name="line57"></a>    }
+<a name="line58"></a>  }
+<a name="line59"></a>  return res;
+<a name="line60"></a>};
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * For every element in an object/map/hash calls a function and inserts the
+<a name="line65"></a> * result into a new object.
+<a name="line66"></a> *
+<a name="line67"></a> * @param {Object} obj The object over which to iterate.
+<a name="line68"></a> * @param {Function} f The function to call for every element. This function
+<a name="line69"></a> *     takes 3 arguments (the element, the index and the object)
+<a name="line70"></a> *     and should return something. The result will be inserted
+<a name="line71"></a> *     into a new object.
+<a name="line72"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object within f.
+<a name="line73"></a> * @return {!Object} a new object with the results from f.
+<a name="line74"></a> */
+<a name="line75"></a>goog.object.map = function(obj, f, opt_obj) {
+<a name="line76"></a>  var res = {};
+<a name="line77"></a>  for (var key in obj) {
+<a name="line78"></a>    res[key] = f.call(opt_obj, obj[key], key, obj);
+<a name="line79"></a>  }
+<a name="line80"></a>  return res;
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Calls a function for each element in an object/map/hash. If any
+<a name="line86"></a> * call returns true, returns true (without checking the rest). If
+<a name="line87"></a> * all calls return false, returns false.
+<a name="line88"></a> *
+<a name="line89"></a> * @param {Object} obj The object to check.
+<a name="line90"></a> * @param {Function} f The function to call for every element. This function
+<a name="line91"></a> *     takes 3 arguments (the element, the index and the object) and should
+<a name="line92"></a> *     return a boolean.
+<a name="line93"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object within f.
+<a name="line94"></a> * @return {boolean} true if any element passes the test.
+<a name="line95"></a> */
+<a name="line96"></a>goog.object.some = function(obj, f, opt_obj) {
+<a name="line97"></a>  for (var key in obj) {
+<a name="line98"></a>    if (f.call(opt_obj, obj[key], key, obj)) {
+<a name="line99"></a>      return true;
+<a name="line100"></a>    }
+<a name="line101"></a>  }
+<a name="line102"></a>  return false;
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Calls a function for each element in an object/map/hash. If
+<a name="line108"></a> * all calls return true, returns true. If any call returns false, returns
+<a name="line109"></a> * false at this point and does not continue to check the remaining elements.
+<a name="line110"></a> *
+<a name="line111"></a> * @param {Object} obj The object to check.
+<a name="line112"></a> * @param {Function} f The function to call for every element. This function
+<a name="line113"></a> *     takes 3 arguments (the element, the index and the object) and should
+<a name="line114"></a> *     return a boolean.
+<a name="line115"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object within f.
+<a name="line116"></a> * @return {boolean} false if any element fails the test.
+<a name="line117"></a> */
+<a name="line118"></a>goog.object.every = function(obj, f, opt_obj) {
+<a name="line119"></a>  for (var key in obj) {
+<a name="line120"></a>    if (!f.call(opt_obj, obj[key], key, obj)) {
+<a name="line121"></a>      return false;
+<a name="line122"></a>    }
+<a name="line123"></a>  }
+<a name="line124"></a>  return true;
+<a name="line125"></a>};
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * Returns the number of key-value pairs in the object map.
+<a name="line130"></a> *
+<a name="line131"></a> * @param {Object} obj The object for which to get the number of key-value
+<a name="line132"></a> *     pairs.
+<a name="line133"></a> * @return {number} The number of key-value pairs in the object map.
+<a name="line134"></a> */
+<a name="line135"></a>goog.object.getCount = function(obj) {
+<a name="line136"></a>  // JS1.5 has __count__ but it has been deprecated so it raises a warning...
+<a name="line137"></a>  // in other words do not use. Also __count__ only includes the fields on the
+<a name="line138"></a>  // actual object and not in the prototype chain.
+<a name="line139"></a>  var rv = 0;
+<a name="line140"></a>  for (var key in obj) {
+<a name="line141"></a>    rv++;
+<a name="line142"></a>  }
+<a name="line143"></a>  return rv;
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * Returns one key from the object map, if any exists.
+<a name="line149"></a> * For map literals the returned key will be the first one in most of the
+<a name="line150"></a> * browsers (a know exception is Konqueror).
+<a name="line151"></a> *
+<a name="line152"></a> * @param {Object} obj The object to pick a key from.
+<a name="line153"></a> * @return {string|undefined} The key or undefined if the object is empty.
+<a name="line154"></a> */
+<a name="line155"></a>goog.object.getAnyKey = function(obj) {
+<a name="line156"></a>  for (var key in obj) {
+<a name="line157"></a>    return key;
+<a name="line158"></a>  }
+<a name="line159"></a>};
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>/**
+<a name="line163"></a> * Returns one value from the object map, if any exists.
+<a name="line164"></a> * For map literals the returned value will be the first one in most of the
+<a name="line165"></a> * browsers (a know exception is Konqueror).
+<a name="line166"></a> *
+<a name="line167"></a> * @param {Object} obj The object to pick a value from.
+<a name="line168"></a> * @return {*} The value or undefined if the object is empty.
+<a name="line169"></a> */
+<a name="line170"></a>goog.object.getAnyValue = function(obj) {
+<a name="line171"></a>  for (var key in obj) {
+<a name="line172"></a>    return obj[key];
+<a name="line173"></a>  }
+<a name="line174"></a>};
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * Whether the object/hash/map contains the given object as a value.
+<a name="line179"></a> * An alias for goog.object.containsValue(obj, val).
+<a name="line180"></a> *
+<a name="line181"></a> * @param {Object} obj The object in which to look for val.
+<a name="line182"></a> * @param {*} val The object for which to check.
+<a name="line183"></a> * @return {boolean} true if val is present.
+<a name="line184"></a> */
+<a name="line185"></a>goog.object.contains = function(obj, val) {
+<a name="line186"></a>  return goog.object.containsValue(obj, val);
+<a name="line187"></a>};
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * Returns the values of the object/map/hash.
+<a name="line192"></a> *
+<a name="line193"></a> * @param {Object} obj The object from which to get the values.
+<a name="line194"></a> * @return {!Array} The values in the object/map/hash.
+<a name="line195"></a> */
+<a name="line196"></a>goog.object.getValues = function(obj) {
+<a name="line197"></a>  var res = [];
+<a name="line198"></a>  var i = 0;
+<a name="line199"></a>  for (var key in obj) {
+<a name="line200"></a>    res[i++] = obj[key];
+<a name="line201"></a>  }
+<a name="line202"></a>  return res;
+<a name="line203"></a>};
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Returns the keys of the object/map/hash.
+<a name="line208"></a> *
+<a name="line209"></a> * @param {Object} obj The object from which to get the keys.
+<a name="line210"></a> * @return {!Array.&lt;string&gt;} Array of property keys.
+<a name="line211"></a> */
+<a name="line212"></a>goog.object.getKeys = function(obj) {
+<a name="line213"></a>  var res = [];
+<a name="line214"></a>  var i = 0;
+<a name="line215"></a>  for (var key in obj) {
+<a name="line216"></a>    res[i++] = key;
+<a name="line217"></a>  }
+<a name="line218"></a>  return res;
+<a name="line219"></a>};
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * Whether the object/map/hash contains the given key.
+<a name="line224"></a> *
+<a name="line225"></a> * @param {Object} obj The object in which to look for key.
+<a name="line226"></a> * @param {*} key The key for which to check.
+<a name="line227"></a> * @return {boolean} true If the map contains the key.
+<a name="line228"></a> */
+<a name="line229"></a>goog.object.containsKey = function(obj, key) {
+<a name="line230"></a>  return key in obj;
+<a name="line231"></a>};
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>/**
+<a name="line235"></a> * Whether the object/map/hash contains the given value. This is O(n).
+<a name="line236"></a> *
+<a name="line237"></a> * @param {Object} obj The object in which to look for val.
+<a name="line238"></a> * @param {*} val The value for which to check.
+<a name="line239"></a> * @return {boolean} true If the map contains the value.
+<a name="line240"></a> */
+<a name="line241"></a>goog.object.containsValue = function(obj, val) {
+<a name="line242"></a>  for (var key in obj) {
+<a name="line243"></a>    if (obj[key] == val) {
+<a name="line244"></a>      return true;
+<a name="line245"></a>    }
+<a name="line246"></a>  }
+<a name="line247"></a>  return false;
+<a name="line248"></a>};
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>/**
+<a name="line252"></a> * Searches an object for an element that satisfies the given condition and
+<a name="line253"></a> * returns its key.
+<a name="line254"></a> * @param {Object} obj The object to search in.
+<a name="line255"></a> * @param {function(*, string, Object): boolean} f The function to call for
+<a name="line256"></a> *     every element. Takes 3 arguments (the value, the key and the object) and
+<a name="line257"></a> *     should return a boolean.
+<a name="line258"></a> * @param {Object} opt_this An optional &quot;this&quot; context for the function.
+<a name="line259"></a> * @return {string|undefined} The key of an element for which the function
+<a name="line260"></a> *     returns true or undefined if no such element is found.
+<a name="line261"></a> */
+<a name="line262"></a>goog.object.findKey = function(obj, f, opt_this) {
+<a name="line263"></a>  for (var key in obj) {
+<a name="line264"></a>    if (f.call(opt_this, obj[key], key, obj)) {
+<a name="line265"></a>      return key;
+<a name="line266"></a>    }
+<a name="line267"></a>  }
+<a name="line268"></a>  return undefined;
+<a name="line269"></a>};
+<a name="line270"></a>
+<a name="line271"></a>
+<a name="line272"></a>/**
+<a name="line273"></a> * Searches an object for an element that satisfies the given condition and
+<a name="line274"></a> * returns its value.
+<a name="line275"></a> * @param {Object} obj The object to search in.
+<a name="line276"></a> * @param {function(*, string, Object): boolean} f The function to call for
+<a name="line277"></a> *     every element. Takes 3 arguments (the value, the key and the object) and
+<a name="line278"></a> *     should return a boolean.
+<a name="line279"></a> * @param {Object} opt_this An optional &quot;this&quot; context for the function.
+<a name="line280"></a> * @return {*} The value of an element for which the function returns true or
+<a name="line281"></a> *     undefined if no such element is found.
+<a name="line282"></a> */
+<a name="line283"></a>goog.object.findValue = function(obj, f, opt_this) {
+<a name="line284"></a>  var key = goog.object.findKey(obj, f, opt_this);
+<a name="line285"></a>  return key &amp;&amp; obj[key];
+<a name="line286"></a>};
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * Whether the object/map/hash is empty.
+<a name="line291"></a> *
+<a name="line292"></a> * @param {Object} obj The object to test.
+<a name="line293"></a> * @return {boolean} true if obj is empty.
+<a name="line294"></a> */
+<a name="line295"></a>goog.object.isEmpty = function(obj) {
+<a name="line296"></a>  for (var key in obj) {
+<a name="line297"></a>    return false;
+<a name="line298"></a>  }
+<a name="line299"></a>  return true;
+<a name="line300"></a>};
+<a name="line301"></a>
+<a name="line302"></a>
+<a name="line303"></a>/**
+<a name="line304"></a> * Removes all key value pairs from the object/map/hash.
+<a name="line305"></a> *
+<a name="line306"></a> * @param {Object} obj The object to clear.
+<a name="line307"></a> */
+<a name="line308"></a>goog.object.clear = function(obj) {
+<a name="line309"></a>  // Some versions of IE has problems if we delete keys from the beginning
+<a name="line310"></a>  var keys = goog.object.getKeys(obj);
+<a name="line311"></a>  for (var i = keys.length - 1; i &gt;= 0; i--) {
+<a name="line312"></a>    goog.object.remove(obj, keys[i]);
+<a name="line313"></a>  }
+<a name="line314"></a>};
+<a name="line315"></a>
+<a name="line316"></a>
+<a name="line317"></a>/**
+<a name="line318"></a> * Removes a key-value pair based on the key.
+<a name="line319"></a> *
+<a name="line320"></a> * @param {Object} obj The object from which to remove the key.
+<a name="line321"></a> * @param {*} key The key to remove.
+<a name="line322"></a> * @return {boolean} Whether an element was removed.
+<a name="line323"></a> */
+<a name="line324"></a>goog.object.remove = function(obj, key) {
+<a name="line325"></a>  var rv;
+<a name="line326"></a>  if ((rv = key in obj)) {
+<a name="line327"></a>    delete obj[key];
+<a name="line328"></a>  }
+<a name="line329"></a>  return rv;
+<a name="line330"></a>};
+<a name="line331"></a>
+<a name="line332"></a>
+<a name="line333"></a>/**
+<a name="line334"></a> * Adds a key-value pair to the object. Throws an exception if the key is
+<a name="line335"></a> * already in use. Use set if you want to change an existing pair.
+<a name="line336"></a> *
+<a name="line337"></a> * @param {Object} obj The object to which to add the key-value pair.
+<a name="line338"></a> * @param {string} key The key to add.
+<a name="line339"></a> * @param {*} val The value to add.
+<a name="line340"></a> */
+<a name="line341"></a>goog.object.add = function(obj, key, val) {
+<a name="line342"></a>  if (key in obj) {
+<a name="line343"></a>    throw Error(&#39;The object already contains the key &quot;&#39; + key + &#39;&quot;&#39;);
+<a name="line344"></a>  }
+<a name="line345"></a>  goog.object.set(obj, key, val);
+<a name="line346"></a>};
+<a name="line347"></a>
+<a name="line348"></a>
+<a name="line349"></a>/**
+<a name="line350"></a> * Returns the value for the given key.
+<a name="line351"></a> *
+<a name="line352"></a> * @param {Object} obj The object from which to get the value.
+<a name="line353"></a> * @param {string} key The key for which to get the value.
+<a name="line354"></a> * @param {*} opt_val The value to return if no item is found for the given
+<a name="line355"></a> *     key (default is undefined).
+<a name="line356"></a> * @return {*} The value for the given key.
+<a name="line357"></a> */
+<a name="line358"></a>goog.object.get = function(obj, key, opt_val) {
+<a name="line359"></a>  if (key in obj) {
+<a name="line360"></a>    return obj[key];
+<a name="line361"></a>  }
+<a name="line362"></a>  return opt_val;
+<a name="line363"></a>};
+<a name="line364"></a>
+<a name="line365"></a>
+<a name="line366"></a>/**
+<a name="line367"></a> * Adds a key-value pair to the object/map/hash.
+<a name="line368"></a> *
+<a name="line369"></a> * @param {Object} obj The object to which to add the key-value pair.
+<a name="line370"></a> * @param {string} key The key to add.
+<a name="line371"></a> * @param {*} value The value to add.
+<a name="line372"></a> */
+<a name="line373"></a>goog.object.set = function(obj, key, value) {
+<a name="line374"></a>  obj[key] = value;
+<a name="line375"></a>};
+<a name="line376"></a>
+<a name="line377"></a>
+<a name="line378"></a>/**
+<a name="line379"></a> * Adds a key-value pair to the object/map/hash if it doesn&#39;t exist yet.
+<a name="line380"></a> *
+<a name="line381"></a> * @param {Object} obj The object to which to add the key-value pair.
+<a name="line382"></a> * @param {string} key The key to add.
+<a name="line383"></a> * @param {*} value The value to add if the key wasn&#39;t present.
+<a name="line384"></a> * @return {*} The value of the entry at the end of the function.
+<a name="line385"></a> */
+<a name="line386"></a>goog.object.setIfUndefined = function(obj, key, value) {
+<a name="line387"></a>  return key in obj ? obj[key] : (obj[key] = value);
+<a name="line388"></a>};
+<a name="line389"></a>
+<a name="line390"></a>
+<a name="line391"></a>/**
+<a name="line392"></a> * Does a flat clone of the object.
+<a name="line393"></a> *
+<a name="line394"></a> * @param {Object} obj Object to clone.
+<a name="line395"></a> * @return {!Object} Clone of the input object.
+<a name="line396"></a> */
+<a name="line397"></a>goog.object.clone = function(obj) {
+<a name="line398"></a>  // We cannot use the prototype trick because a lot of methods depend on where
+<a name="line399"></a>  // the actual key is set.
+<a name="line400"></a>
+<a name="line401"></a>  var res = {};
+<a name="line402"></a>  for (var key in obj) {
+<a name="line403"></a>    res[key] = obj[key];
+<a name="line404"></a>  }
+<a name="line405"></a>  return res;
+<a name="line406"></a>  // We could also use goog.mixin but I wanted this to be independent from that.
+<a name="line407"></a>};
+<a name="line408"></a>
+<a name="line409"></a>
+<a name="line410"></a>/**
+<a name="line411"></a> * Returns a new object in which all the keys and values are interchanged
+<a name="line412"></a> * (keys become values and values become keys). If multiple keys map to the
+<a name="line413"></a> * same value, the chosen transposed value is implementation-dependent.
+<a name="line414"></a> *
+<a name="line415"></a> * @param {Object} obj The object to transpose.
+<a name="line416"></a> * @return {!Object} The transposed object.
+<a name="line417"></a> */
+<a name="line418"></a>goog.object.transpose = function(obj) {
+<a name="line419"></a>  var transposed = {};
+<a name="line420"></a>  for (var key in obj) {
+<a name="line421"></a>    transposed[obj[key]] = key;
+<a name="line422"></a>  }
+<a name="line423"></a>  return transposed;
+<a name="line424"></a>};
+<a name="line425"></a>
+<a name="line426"></a>
+<a name="line427"></a>/**
+<a name="line428"></a> * The names of the fields that are defined on Object.prototype.
+<a name="line429"></a> * @type {Array.&lt;string&gt;}
+<a name="line430"></a> * @private
+<a name="line431"></a> */
+<a name="line432"></a>goog.object.PROTOTYPE_FIELDS_ = [
+<a name="line433"></a>  &#39;constructor&#39;,
+<a name="line434"></a>  &#39;hasOwnProperty&#39;,
+<a name="line435"></a>  &#39;isPrototypeOf&#39;,
+<a name="line436"></a>  &#39;propertyIsEnumerable&#39;,
+<a name="line437"></a>  &#39;toLocaleString&#39;,
+<a name="line438"></a>  &#39;toString&#39;,
+<a name="line439"></a>  &#39;valueOf&#39;
+<a name="line440"></a>];
+<a name="line441"></a>
+<a name="line442"></a>
+<a name="line443"></a>/**
+<a name="line444"></a> * Extends an object with another object.
+<a name="line445"></a> * This operates &#39;in-place&#39;; it does not create a new Object.
+<a name="line446"></a> *
+<a name="line447"></a> * Example:
+<a name="line448"></a> * var o = {};
+<a name="line449"></a> * goog.object.extend(o, {a: 0, b: 1});
+<a name="line450"></a> * o; // {a: 0, b: 1}
+<a name="line451"></a> * goog.object.extend(o, {c: 2});
+<a name="line452"></a> * o; // {a: 0, b: 1, c: 2}
+<a name="line453"></a> *
+<a name="line454"></a> * @param {Object} target  The object to modify.
+<a name="line455"></a> * @param {Object} var_args The objects from which values will be copied.
+<a name="line456"></a> */
+<a name="line457"></a>goog.object.extend = function(target, var_args) {
+<a name="line458"></a>  var key, source;
+<a name="line459"></a>  for (var i = 1; i &lt; arguments.length; i++) {
+<a name="line460"></a>    source = arguments[i];
+<a name="line461"></a>    for (key in source) {
+<a name="line462"></a>      target[key] = source[key];
+<a name="line463"></a>    }
+<a name="line464"></a>
+<a name="line465"></a>    // For IE the for-in-loop does not contain any properties that are not
+<a name="line466"></a>    // enumerable on the prototype object (for example isPrototypeOf from
+<a name="line467"></a>    // Object.prototype) and it will also not include &#39;replace&#39; on objects that
+<a name="line468"></a>    // extend String and change &#39;replace&#39; (not that it is common for anyone to
+<a name="line469"></a>    // extend anything except Object).
+<a name="line470"></a>
+<a name="line471"></a>    for (var j = 0; j &lt; goog.object.PROTOTYPE_FIELDS_.length; j++) {
+<a name="line472"></a>      key = goog.object.PROTOTYPE_FIELDS_[j];
+<a name="line473"></a>      if (Object.prototype.hasOwnProperty.call(source, key)) {
+<a name="line474"></a>        target[key] = source[key];
+<a name="line475"></a>      }
+<a name="line476"></a>    }
+<a name="line477"></a>  }
+<a name="line478"></a>};
+<a name="line479"></a>
+<a name="line480"></a>
+<a name="line481"></a>/**
+<a name="line482"></a> * Creates a new object built from the key-value pairs provided as arguments.
+<a name="line483"></a> * @param {*} var_args If only one argument is provided and it is an array then
+<a name="line484"></a> *     this is used as the arguments,  otherwise even arguments are used as the
+<a name="line485"></a> *     property names and odd arguments are used as the property values.
+<a name="line486"></a> * @return {!Object} The new object.
+<a name="line487"></a> * @throws {Error} If there are uneven number of arguments or there is only one
+<a name="line488"></a> *     non array argument.
+<a name="line489"></a> */
+<a name="line490"></a>goog.object.create = function(var_args) {
+<a name="line491"></a>  var argLength = arguments.length;
+<a name="line492"></a>  if (argLength == 1 &amp;&amp; goog.isArray(arguments[0])) {
+<a name="line493"></a>    return goog.object.create.apply(null, arguments[0]);
+<a name="line494"></a>  }
+<a name="line495"></a>
+<a name="line496"></a>  if (argLength % 2) {
+<a name="line497"></a>    throw Error(&#39;Uneven number of arguments&#39;);
+<a name="line498"></a>  }
+<a name="line499"></a>
+<a name="line500"></a>  var rv = {};
+<a name="line501"></a>  for (var i = 0; i &lt; argLength; i += 2) {
+<a name="line502"></a>    rv[arguments[i]] = arguments[i + 1];
+<a name="line503"></a>  }
+<a name="line504"></a>  return rv;
+<a name="line505"></a>};
+<a name="line506"></a>
+<a name="line507"></a>
+<a name="line508"></a>/**
+<a name="line509"></a> * Creates a new object where the property names come from the arguments but
+<a name="line510"></a> * the value is always set to true
+<a name="line511"></a> * @param {*} var_args If only one argument is provided and it is an array then
+<a name="line512"></a> *     this is used as the arguments,  otherwise the arguments are used as the
+<a name="line513"></a> *     property names.
+<a name="line514"></a> * @return {!Object} The new object.
+<a name="line515"></a> */
+<a name="line516"></a>goog.object.createSet = function(var_args) {
+<a name="line517"></a>  var argLength = arguments.length;
+<a name="line518"></a>  if (argLength == 1 &amp;&amp; goog.isArray(arguments[0])) {
+<a name="line519"></a>    return goog.object.createSet.apply(null, arguments[0]);
+<a name="line520"></a>  }
+<a name="line521"></a>
+<a name="line522"></a>  var rv = {};
+<a name="line523"></a>  for (var i = 0; i &lt; argLength; i++) {
+<a name="line524"></a>    rv[arguments[i]] = true;
+<a name="line525"></a>  }
+<a name="line526"></a>  return rv;
+<a name="line527"></a>};
+</pre>
+
+
+</body>
+</html>

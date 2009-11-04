@@ -1,0 +1,3114 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>DragDrop (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">fx.DragDrop</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          <a href="class_goog_fx_AbstractDragDrop.html">
+            goog.fx.AbstractDragDrop</a>
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Drag/drop implementation for creating drag sources/drop targets consisting of
+a single HTML Element.
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="../demos/dragdrop.html">Demo</a></li>
+            <li><a href="closure_goog_fx_dragdrop.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<pre class="inheritance">
+Object
+     <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span>
+          <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span>
+               <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_fx_AbstractDragDrop.html">goog.fx.AbstractDragDrop</a></span>
+                    <img src="static/images/inherit.gif">goog.fx.DragDrop
+</pre>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.fx.DragDrop(<span><span class="arg">element</span>,&nbsp;<span class="arg">opt_data</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">element</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Dom Node, or string representation of node id, to be used as drag source/drop target.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_data</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">Data associated with the source/target.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_fx_AbstractDragDrop.html">
+              goog.fx.AbstractDragDrop
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.addDragTarget_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addDragTarget_<span class="args">(<span class="arg">target</span>,&nbsp;<span class="arg">item</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Add possible drop target for current drag operation.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">target</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_AbstractDragDrop.html">goog.fx.AbstractDragDrop</a></span></div>
+        <div class="entryOverview">Drag handler.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">item</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_DragDropItem.html">goog.fx.DragDropItem</a></span></div>
+        <div class="entryOverview">Item that&#39;s being dragged.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line806">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.addItem"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addItem<span class="args">(<span class="arg">item</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Add item to drag object.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">item</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_DragDropItem.html">goog.fx.DragDropItem</a></span></div>
+        <div class="entryOverview">Item to be added.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line241">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.addScrollableContainer"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addScrollableContainer<span class="args">(<span class="arg">element</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Makes drag and drop aware of a target container that could scroll mid drag.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">element</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">The scroll container.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line679">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.addTarget"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addTarget<span class="args">(<span class="arg">target</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Associate drop target with drag element.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">target</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_AbstractDragDrop.html">goog.fx.AbstractDragDrop</a></span></div>
+        <div class="entryOverview">Target to add.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line251">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.afterEndDrag"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">afterEndDrag<span class="args">(<span class="arg">opt_dropTarget</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Called after a drag operation has finished.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_dropTarget</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_DragDropItem.html">goog.fx.DragDropItem</a></span></div>
+        <div class="entryOverview">Target for successful drop.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line497">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.cloneNode_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">cloneNode_<span class="args">(<span class="arg">sourceEl</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates copy of node being dragged.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">sourceEl</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">Element to copy.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+            The clone of {@code sourceEl}.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line782">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.containerScrollHandler_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">containerScrollHandler_<span class="args">(<span class="arg">e</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Event handler for containers scrolling.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">e</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
+        <div class="entryOverview">The event.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line689">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.createDragElement"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createDragElement<span class="args">(<span class="arg">sourceEl</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an element for the item being dragged.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">sourceEl</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">Drag source element.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+            The new drag element.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line733">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.createDraggerFor"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createDraggerFor<span class="args">(<span class="arg">sourceEl</span>,&nbsp;<span class="arg">el</span>,&nbsp;<span class="arg">event</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_fx_Dragger.html">goog.fx.Dragger</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates the Dragger for the drag element.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">sourceEl</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">Drag source element.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">el</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">the element created by createDragElement().</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">event</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span></div>
+        <div class="entryOverview">Mouse down event for start of drag.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_fx_Dragger.html">goog.fx.Dragger</a></span></div>&nbsp;
+            The new Dragger.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line425">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.disposeDrag"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposeDrag<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Called once a drag operation has finished. Removes event listeners and
+elements.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line508">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.disposeInternal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposeInternal<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line1032">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.disposeScrollableContainerListeners_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposeScrollableContainerListeners_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Cleans up the scrollable container listeners.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line665">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.endDrag"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">endDrag<span class="args">(<span class="arg">event</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Event handler that&#39;s used to stop drag. Fires a drop event if over a valid
+target.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">event</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_DragEvent.html">goog.fx.DragEvent</a></span></div>
+        <div class="entryOverview">Drag event.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line442">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.getDragElementPosition"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getDragElementPosition<span class="args">(<span class="arg">el</span>,&nbsp;<span class="arg">dragEl</span>,&nbsp;<span class="arg">event</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the position for the drag element.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">el</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">Drag source element.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">dragEl</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">The dragged element created by createDragElement().</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">event</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span></div>
+        <div class="entryOverview">Mouse down event for start of drag.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>&nbsp;
+            The position for the drag element.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line751">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.getDragger"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getDragger<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_fx_Dragger.html">goog.fx.Dragger</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the dragger object.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_fx_Dragger.html">goog.fx.Dragger</a></span></div>&nbsp;
+            The dragger object used by this drag and drop instance.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line770">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.getPageScroll_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getPageScroll_<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the page scroll distance as a coordinate object, using
+the window of the current drag element&#39;s dom.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>&nbsp;
+            Object with scroll offsets &#39;x&#39; and &#39;y&#39;.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line1024">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.getTargetFromPosition_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getTargetFromPosition_<span class="args">(<span class="arg">x</span>,&nbsp;<span class="arg">y</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the target for a given cursor position.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">x</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Cursor position on the x-axis.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">y</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Cursor position on the y-axis.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>&nbsp;
+            Target for position or null if no target was defined for the given position.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line981">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.init"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">init<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line273">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.initItem"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">initItem<span class="args">(<span class="arg">item</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Initializes a single item.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">item</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_DragDropItem.html">goog.fx.DragDropItem</a></span></div>
+        <div class="entryOverview">Item to initialize.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line291">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.initScrollableContainers_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">initScrollableContainers_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Stores current scroll positions of containers and allocates targets
+to the approptiate containers.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line635">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.isInitialized"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isInitialized<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Whether the control has been initialized.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            True if it&#39;s been initialized.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line230">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.isInside_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isInside_<span class="args">(<span class="arg">x</span>,&nbsp;<span class="arg">y</span>,&nbsp;<span class="arg">box</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Checks whatever a given point is inside a given box.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">x</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Cursor position on the x-axis.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">y</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Cursor position on the y-axis.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">box</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Box.html">goog.math.Box</a></span></div>
+        <div class="entryOverview">Box to check position against.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            Whether the given point is inside {@code box}.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line1010">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.maybeCreateDummyTargetForPosition_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">maybeCreateDummyTargetForPosition_<span class="args">(<span class="arg">x</span>,&nbsp;<span class="arg">y</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_fx_ActiveDropTarget_.html">goog.fx.ActiveDropTarget_</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a dummy target for the given cursor position. The assumption is to
+create as big dummy target box as possible, the only constraints are:
+- The dummy targert box cannot overlap any of real target boxes.
+- The dummy target has to contain a point with current mouse coordinates.
+
+NOTE: For performance reasons the box construction algorithm is kept simple
+and it is not optimal (see example below). Currently it is O(n) in regard to
+the number of real drop target boxes, but it&#39;s result depends on the order
+of those boxes being processed (the order in which they&#39;re added to the
+targetList_ collection).
+
+The algorithm.
+a) Assumptions
+- Mouse pointer is in the bounding box of real target boxes.
+- None of the boxes have negative coordinate values.
+- Mouse pointer is not contained by any of &quot;real target&quot; boxes.
+
+b) Outline
+- Initialize the fake target to the bounding box of real targets.
+- For each real target box - clip the fake target box so it does not contain
+that target box, but does contain the mouse pointer.
+-- Project the real target box, mouse pointer and fake target box onto
+both axes and calculate the clipping coordinates.
+-- Only one coordinate is used to clip the fake target box to keep the
+fake target as big as possible.
+-- If the projection of the real target box contains the mouse pointer,
+clipping for a given axis is not possible.
+-- If both clippings are possible, the clipping more distant from the
+mouse pointer is selected to keep bigger fake target area.
+- Save the created fake target only if it has a big enough area.
+
+
+c) Example
+<pre class="lang-js">
+Input:           Algorithm created box:        Maximum box:
++---------------------+ +---------------------+ +---------------------+
+| B1      |        B2 | | B1               B2 | | B1               B2 |
+|         |           | |   +-------------+   | |+-------------------+|
+|---------x-----------| |   |             |   | ||                   ||
+|         |           | |   |             |   | ||                   ||
+|         |           | |   |             |   | ||                   ||
+|         |           | |   |             |   | ||                   ||
+|         |           | |   |             |   | ||                   ||
+|         |           | |   +-------------+   | |+-------------------+|
+| B4      |        B3 | | B4               B3 | | B4               B3 |
++---------------------+ +---------------------+ +---------------------+
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">x</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Cursor position on the x-axis.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">y</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Cursor position on the y-axis.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_fx_ActiveDropTarget_.html">goog.fx.ActiveDropTarget_</a></span></div>&nbsp;
+            Dummy drop target.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line893">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.maybeStartDrag"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">maybeStartDrag<span class="args">(<span class="arg">event</span>,&nbsp;<span class="arg">item</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Starts a drag event for an item if the mouse button stays pressed and the
+cursor moves a few pixels. Allows dragging of items without first having to
+register them with addItem.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">event</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span></div>
+        <div class="entryOverview">Mouse down event.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">item</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_DragDropItem.html">goog.fx.DragDropItem</a></span></div>
+        <div class="entryOverview">Item that&#39;s being dragged.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line334">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.moveDrag_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">moveDrag_<span class="args">(<span class="arg">event</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Event handler for drag events. Determines the active drop target, if any, and
+fires dragover and dragout events appropriately.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">event</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_DragEvent.html">goog.fx.DragEvent</a></span></div>
+        <div class="entryOverview">Drag event.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line528">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.recalculateDragTargets"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">recalculateDragTargets<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line404">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.removeItems"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">removeItems<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line309">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.setDragClass"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setDragClass<span class="args">(<span class="arg">className</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Set class to add to source elements being dragged.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">className</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Class to be added.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line200">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.setScrollTarget"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setScrollTarget<span class="args">(<span class="arg">scrollTarget</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the SCROLL event target to make drag element follow scrolling.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">scrollTarget</span>
+        : <div class="fullType"><span class="type">EventTarget</span></div>
+        <div class="entryOverview">The element that dispatches SCROLL events.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line263">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.setSourceClass"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setSourceClass<span class="args">(<span class="arg">className</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Set class to add to source elements.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">className</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Class to be added.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line210">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.setSubtargetFunction"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setSubtargetFunction<span class="args">(<span class="arg">f</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Set a function that provides subtargets. A subtargeting function
+returns an arbitrary identifier for each subtarget of an element.
+DnD code will generate additional drag over / out events when
+switching from subtarget to subtarget. This is useful for instance
+if you are interested if you are on the top half or the bottom half
+of the element.
+The provided function will be given the DragDropItem, box, x, y
+box is the current window coordinates occupied by element
+x, y is the mouse position in window coordinates
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">f</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        <div class="entryOverview">The new subtarget function.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line722">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.setTargetClass"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setTargetClass<span class="args">(<span class="arg">className</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Set class to add to target elements.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">className</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Class to be added.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line220">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.startDrag"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">startDrag<span class="args">(<span class="arg">event</span>,&nbsp;<span class="arg">item</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Event handler that&#39;s used to start drag.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">event</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span></div>
+        <div class="entryOverview">Mouse move event.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">item</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_DragDropItem.html">goog.fx.DragDropItem</a></span></div>
+        <div class="entryOverview">Item that&#39;s being dragged.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line345">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fx.AbstractDragDrop.prototype.suppressSelect_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">suppressSelect_<span class="args">(<span class="arg">event</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Event handler for suppressing selectstart events. Selecting should be
+disabled while dragging.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">event</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
+        <div class="entryOverview">The selectstart event to suppress.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            Whether to perform default behavior.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line625">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_events_EventTarget.html">
+              goog.events.EventTarget
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.events.EventTarget.prototype.addEventListener"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addEventListener<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_capture</span>,&nbsp;<span class="arg">opt_handlerScope</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds an event listener to the event target. The same handler can only be
+added once per the type. Even if you add the same handler multiple times
+using the same type then it will only be called once when the event is
+dispatched.
+
+Supported for legacy but use goog.events.listen(src, type, handler) instead.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">type</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The type of the event to listen for.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">handler</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">The function to handle the event. The handler can also be an object that implements the handleEvent method which takes the event object as argument.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_capture</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_handlerScope</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">Object in whose scope to call the listener.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_events_eventtarget.js.source.html#line134">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.events.EventTarget.prototype.dispatchEvent"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">e</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Dispatches an event (or event like object) and calls all listeners
+listening for events of this type. The type of the event is decided by the
+type property on the event object.
+
+If any of the listeners returns false OR calls preventDefault then this
+function will return false.  If one of the capture listeners calls
+stopPropagation, then the bubble listeners won&#39;t fire.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">e</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
+        <div class="entryOverview">Event object.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            If anyone called preventDefault on the event object (or if any of the handlers returns false this will also return false.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_events_eventtarget.js.source.html#line172">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.events.EventTarget.prototype.disposeInternal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposeInternal<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Unattach listeners from this object.  Classes that extend EventTarget may
+need to override this method in order to remove references to DOM Elements
+and additional listeners, it should be something like this:
+<pre class="lang-js">
+MyClass.prototype.disposeInternal = function() {
+MyClass.superClass_.disposeInternal.call(this);
+// Dispose logic for MyClass
+};
+</pre>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_events_eventtarget.js.source.html#line189">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.events.EventTarget.prototype.getParentEventTarget"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getParentEventTarget<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the parent of this event target to use for bubbling.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></div>&nbsp;
+            The parent EventTarget or null if there is no parent.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_events_eventtarget.js.source.html#line102">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.events.EventTarget.prototype.removeEventListener"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">removeEventListener<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_capture</span>,&nbsp;<span class="arg">opt_handlerScope</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes an event listener from the event target. The handler must be the
+same object as the one added. If the handler has not been added then
+nothing is done.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">type</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The type of the event to listen for.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">handler</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">The function to handle the event. The handler can also be an object that implements the handleEvent method which takes the event object as argument.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_capture</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_handlerScope</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">Object in whose scope to call the listener.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_events_eventtarget.js.source.html#line153">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.events.EventTarget.prototype.setParentEventTarget"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">parent</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the parent of this event target to use for bubbling.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></div>
+        <div class="entryOverview">Parent EventTarget (null if none).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_events_eventtarget.js.source.html#line112">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_Disposable.html">
+              goog.Disposable
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Disposable.prototype.dispose"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dispose<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_disposable_disposable.js.source.html#line64">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Disposable.prototype.disposeInternal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposeInternal<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Deletes or nulls out any references to COM objects, DOM nodes, or other
+disposable objects. Classes that extend {@code goog.Disposable} should
+override this method.  For example:
+<pre class="lang-js">
+mypackage.MyClass = function() {
+goog.Disposable.call(this);
+// Constructor logic specific to MyClass.
+...
+};
+goog.inherits(mypackage.MyClass, goog.Disposable);
+
+mypackage.MyClass.prototype.disposeInternal = function() {
+mypackage.MyClass.superClass_.disposeInternal.call(this);
+// Dispose logic specific to MyClass.
+...
+};
+</pre>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_disposable_disposable.js.source.html#line94">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Disposable.prototype.getDisposed"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getDisposed<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            Whether the object has been disposed of.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_disposable_disposable.js.source.html#line55">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Disposable.prototype.isDisposed"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isDisposed<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            Whether the object has been disposed of.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_disposable_disposable.js.source.html#line46">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_fx_AbstractDragDrop.html">
+              goog.fx.AbstractDragDrop
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.AbstractDragDrop.prototype.initialized_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">initialized_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Whether the object has been initialized.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line170">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.AbstractDragDrop.prototype.isSource_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isSource_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Flag indicating if it&#39;s a drag source, set by addTarget.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line96">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.AbstractDragDrop.prototype.isTarget_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isTarget_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Flag indicating if it&#39;s a drop target, set when added as target to another
+DragDrop object.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_fx_abstractdragdrop.js.source.html#line105">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_events_EventTarget.html">
+              goog.events.EventTarget
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.EventTarget.prototype.customEvent_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">customEvent_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Used to tell if an event is a real event in goog.events.listen() so we don&#39;t
+get listen() calling addEventListener() and vice-versa.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_events_eventtarget.js.source.html#line85">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.EventTarget.prototype.parentEventTarget_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">parentEventTarget_</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Parent event target, used during event bubbling.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_events_eventtarget.js.source.html#line93">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_Disposable.html">
+              goog.Disposable
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.Disposable.prototype.disposed_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposed_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Whether the object has been disposed of.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_disposable_disposable.js.source.html#line40">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package fx</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="goog" current="fx.DragDrop"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

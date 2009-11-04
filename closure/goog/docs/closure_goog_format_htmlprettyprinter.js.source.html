@@ -1,0 +1,452 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>htmlprettyprinter.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_format_htmlprettyprinter.js.html">htmlprettyprinter.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides functions to parse and pretty-print HTML strings.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.format.HtmlPrettyPrinter&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.format.HtmlPrettyPrinter.Buffer&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.object&#39;);
+<a name="line24"></a>goog.require(&#39;goog.string.StringBuffer&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * This class formats HTML to be more human-readable.
+<a name="line29"></a> * TODO: Add hierarchical indentation.
+<a name="line30"></a> * @param {number} opt_timeOutMillis Max # milliseconds to spend on #format. If
+<a name="line31"></a> *     this time is exceeded, return partially formatted. 0 or negative number
+<a name="line32"></a> *     indicates no timeout.
+<a name="line33"></a> * @constructor
+<a name="line34"></a> */
+<a name="line35"></a>goog.format.HtmlPrettyPrinter = function(opt_timeOutMillis) {
+<a name="line36"></a>  /**
+<a name="line37"></a>   * Max # milliseconds to spend on #format.
+<a name="line38"></a>   * @type {number}
+<a name="line39"></a>   * @private
+<a name="line40"></a>   */
+<a name="line41"></a>  this.timeOutMillis_ = opt_timeOutMillis &amp;&amp; opt_timeOutMillis &gt; 0 ?
+<a name="line42"></a>      opt_timeOutMillis : 0;
+<a name="line43"></a>};
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Singleton.
+<a name="line48"></a> * @type {goog.format.HtmlPrettyPrinter?}
+<a name="line49"></a> * @private
+<a name="line50"></a> */
+<a name="line51"></a>goog.format.HtmlPrettyPrinter.instance_ = null;
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Singleton lazy initializer.
+<a name="line56"></a> * @return {goog.format.HtmlPrettyPrinter} Singleton.
+<a name="line57"></a> * @private
+<a name="line58"></a> */
+<a name="line59"></a>goog.format.HtmlPrettyPrinter.getInstance_ = function() {
+<a name="line60"></a>  if (!goog.format.HtmlPrettyPrinter.instance_) {
+<a name="line61"></a>    goog.format.HtmlPrettyPrinter.instance_ =
+<a name="line62"></a>        new goog.format.HtmlPrettyPrinter();
+<a name="line63"></a>  }
+<a name="line64"></a>  return goog.format.HtmlPrettyPrinter.instance_;
+<a name="line65"></a>};
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * Static utility function. See prototype #format.
+<a name="line70"></a> * @param {string} html The HTML text to pretty print.
+<a name="line71"></a> * @return {string} Formatted result.
+<a name="line72"></a> */
+<a name="line73"></a>goog.format.HtmlPrettyPrinter.format = function(html) {
+<a name="line74"></a>  return goog.format.HtmlPrettyPrinter.getInstance_().format(html);
+<a name="line75"></a>};
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * List of patterns used to tokenize HTML for pretty printing. Cache
+<a name="line80"></a> * subexpression for tag name.
+<a name="line81"></a> * comment|meta-tag|tag|text|other-less-than-characters
+<a name="line82"></a> * @type {RegExp}
+<a name="line83"></a> * @private
+<a name="line84"></a> */
+<a name="line85"></a>goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ =
+<a name="line86"></a>    /(?:&lt;!--.*?--&gt;|&lt;!.*?&gt;|&lt;(\/?)(\w+)[^&gt;]*&gt;|[^&lt;]+|&lt;)/g;
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Tags whose contents we don&#39;t want pretty printed.
+<a name="line91"></a> * @type {Object}
+<a name="line92"></a> * @private
+<a name="line93"></a> */
+<a name="line94"></a>goog.format.HtmlPrettyPrinter.NON_PRETTY_PRINTED_TAGS_ = goog.object.createSet(
+<a name="line95"></a>    &#39;script&#39;,
+<a name="line96"></a>    &#39;style&#39;,
+<a name="line97"></a>    &#39;pre&#39;,
+<a name="line98"></a>    &#39;xmp&#39;);
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * &#39;Block&#39; tags. We should add newlines before and after these tags during
+<a name="line103"></a> * pretty printing. Tags drawn mostly from HTML4 definitions for block and other
+<a name="line104"></a> * non-online tags, excepting the ones in
+<a name="line105"></a> * #goog.format.HtmlPrettyPrinter.NON_PRETTY_PRINTED_TAGS_.
+<a name="line106"></a> *
+<a name="line107"></a> * @type {Object}
+<a name="line108"></a> * @private
+<a name="line109"></a> */
+<a name="line110"></a>goog.format.HtmlPrettyPrinter.BLOCK_TAGS_ = goog.object.createSet(
+<a name="line111"></a>    &#39;address&#39;,
+<a name="line112"></a>    &#39;applet&#39;,
+<a name="line113"></a>    &#39;area&#39;,
+<a name="line114"></a>    &#39;base&#39;,
+<a name="line115"></a>    &#39;basefont&#39;,
+<a name="line116"></a>    &#39;blockquote&#39;,
+<a name="line117"></a>    &#39;body&#39;,
+<a name="line118"></a>    &#39;caption&#39;,
+<a name="line119"></a>    &#39;center&#39;,
+<a name="line120"></a>    &#39;col&#39;,
+<a name="line121"></a>    &#39;colgroup&#39;,
+<a name="line122"></a>    &#39;dir&#39;,
+<a name="line123"></a>    &#39;div&#39;,
+<a name="line124"></a>    &#39;dl&#39;,
+<a name="line125"></a>    &#39;fieldset&#39;,
+<a name="line126"></a>    &#39;form&#39;,
+<a name="line127"></a>    &#39;frame&#39;,
+<a name="line128"></a>    &#39;frameset&#39;,
+<a name="line129"></a>    &#39;h1&#39;,
+<a name="line130"></a>    &#39;h2&#39;,
+<a name="line131"></a>    &#39;h3&#39;,
+<a name="line132"></a>    &#39;h4&#39;,
+<a name="line133"></a>    &#39;h5&#39;,
+<a name="line134"></a>    &#39;h6&#39;,
+<a name="line135"></a>    &#39;head&#39;,
+<a name="line136"></a>    &#39;hr&#39;,
+<a name="line137"></a>    &#39;html&#39;,
+<a name="line138"></a>    &#39;iframe&#39;,
+<a name="line139"></a>    &#39;isindex&#39;,
+<a name="line140"></a>    &#39;legend&#39;,
+<a name="line141"></a>    &#39;link&#39;,
+<a name="line142"></a>    &#39;menu&#39;,
+<a name="line143"></a>    &#39;meta&#39;,
+<a name="line144"></a>    &#39;noframes&#39;,
+<a name="line145"></a>    &#39;noscript&#39;,
+<a name="line146"></a>    &#39;ol&#39;,
+<a name="line147"></a>    &#39;optgroup&#39;,
+<a name="line148"></a>    &#39;option&#39;,
+<a name="line149"></a>    &#39;p&#39;,
+<a name="line150"></a>    &#39;param&#39;,
+<a name="line151"></a>    &#39;table&#39;,
+<a name="line152"></a>    &#39;tbody&#39;,
+<a name="line153"></a>    &#39;td&#39;,
+<a name="line154"></a>    &#39;tfoot&#39;,
+<a name="line155"></a>    &#39;th&#39;,
+<a name="line156"></a>    &#39;thead&#39;,
+<a name="line157"></a>    &#39;title&#39;,
+<a name="line158"></a>    &#39;tr&#39;,
+<a name="line159"></a>    &#39;ul&#39;);
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>/**
+<a name="line163"></a> * Non-block tags that break flow. We insert a line break after, but not before
+<a name="line164"></a> * these. Tags drawn from HTML4 definitions.
+<a name="line165"></a> * @type {Object}
+<a name="line166"></a> * @private
+<a name="line167"></a> */
+<a name="line168"></a>goog.format.HtmlPrettyPrinter.BREAKS_FLOW_TAGS_ = goog.object.createSet(
+<a name="line169"></a>    &#39;br&#39;,
+<a name="line170"></a>    &#39;dd&#39;,
+<a name="line171"></a>    &#39;dt&#39;,
+<a name="line172"></a>    &#39;br&#39;,
+<a name="line173"></a>    &#39;li&#39;,
+<a name="line174"></a>    &#39;noframes&#39;);
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * Empty tags. These are treated as both start and end tags.
+<a name="line179"></a> * @type {Object}
+<a name="line180"></a> * @private
+<a name="line181"></a> */
+<a name="line182"></a>goog.format.HtmlPrettyPrinter.EMPTY_TAGS_ = goog.object.createSet(
+<a name="line183"></a>    &#39;br&#39;,
+<a name="line184"></a>    &#39;hr&#39;,
+<a name="line185"></a>    &#39;isindex&#39;);
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Breaks up HTML so it&#39;s easily readable by the user.
+<a name="line189"></a> * @param {string} html The HTML text to pretty print.
+<a name="line190"></a> * @return {string} Formatted result.
+<a name="line191"></a> * @throws {Error} Regex error, data loss, or endless loop detected.
+<a name="line192"></a> */
+<a name="line193"></a>goog.format.HtmlPrettyPrinter.prototype.format = function(html) {
+<a name="line194"></a>  // Trim leading whitespace, but preserve first indent; in other words, keep
+<a name="line195"></a>  // any spaces immediately before the first non-whitespace character (that&#39;s
+<a name="line196"></a>  // what $1 is), but remove all other leading whitespace. This adjustment
+<a name="line197"></a>  // historically had been made in Docs. The motivation is that some
+<a name="line198"></a>  // browsers prepend several line breaks in designMode.
+<a name="line199"></a>  html = html.replace(/^\s*?( *\S)/, &#39;$1&#39;);
+<a name="line200"></a>
+<a name="line201"></a>  // Trim trailing whitespace.
+<a name="line202"></a>  html = html.replace(/\s+$/, &#39;&#39;);
+<a name="line203"></a>
+<a name="line204"></a>  // Keep track of how much time we&#39;ve used.
+<a name="line205"></a>  var timeOutMillis = this.timeOutMillis_;
+<a name="line206"></a>  var startMillis = timeOutMillis ? goog.now() : 0;
+<a name="line207"></a>
+<a name="line208"></a>  // Handles concatenation of the result and required line breaks.
+<a name="line209"></a>  var buffer = new goog.format.HtmlPrettyPrinter.Buffer();
+<a name="line210"></a>
+<a name="line211"></a>  // Declare these for efficiency since we access them in a loop.
+<a name="line212"></a>  var tokenRegex = goog.format.HtmlPrettyPrinter.TOKEN_REGEX_;
+<a name="line213"></a>  var nonPpTags = goog.format.HtmlPrettyPrinter.NON_PRETTY_PRINTED_TAGS_;
+<a name="line214"></a>  var blockTags = goog.format.HtmlPrettyPrinter.BLOCK_TAGS_;
+<a name="line215"></a>  var breaksFlowTags = goog.format.HtmlPrettyPrinter.BREAKS_FLOW_TAGS_;
+<a name="line216"></a>  var emptyTags = goog.format.HtmlPrettyPrinter.EMPTY_TAGS_;
+<a name="line217"></a>
+<a name="line218"></a>  // Used to verify we&#39;re making progress through our regex tokenization.
+<a name="line219"></a>  var lastIndex = 0;
+<a name="line220"></a>
+<a name="line221"></a>  // Use this to track non-pretty-printed tags and childen.
+<a name="line222"></a>  var nonPpTagStack = [];
+<a name="line223"></a>
+<a name="line224"></a>  // Loop through each matched token.
+<a name="line225"></a>  var match;
+<a name="line226"></a>  while (match = tokenRegex.exec(html)) {
+<a name="line227"></a>    // Get token.
+<a name="line228"></a>    var token = match[0];
+<a name="line229"></a>
+<a name="line230"></a>    // Is this token a tag? match.length == 3 for tags, 1 for all others.
+<a name="line231"></a>    if (match.length == 3) {
+<a name="line232"></a>      var tagName = match[2];
+<a name="line233"></a>      if (tagName) {
+<a name="line234"></a>        tagName = tagName.toLowerCase();
+<a name="line235"></a>      }
+<a name="line236"></a>
+<a name="line237"></a>      // Non-pretty-printed tags?
+<a name="line238"></a>      if (nonPpTags.hasOwnProperty(tagName)) {
+<a name="line239"></a>        // End tag?
+<a name="line240"></a>        if (match[1] == &#39;/&#39;) {
+<a name="line241"></a>          // Do we have a matching start tag?
+<a name="line242"></a>          var stackSize = nonPpTagStack.length;
+<a name="line243"></a>          var startTagName = stackSize ? nonPpTagStack[stackSize - 1] : null;
+<a name="line244"></a>          if (startTagName == tagName) {
+<a name="line245"></a>            // End of non-pretty-printed block. Line break after.
+<a name="line246"></a>            nonPpTagStack.pop();
+<a name="line247"></a>            buffer.pushToken(false, token, !nonPpTagStack.length);
+<a name="line248"></a>          } else {
+<a name="line249"></a>            // Malformed HTML. No line breaks.
+<a name="line250"></a>            buffer.pushToken(false, token, false);
+<a name="line251"></a>          }
+<a name="line252"></a>        } else {
+<a name="line253"></a>          // Start of non-pretty-printed block. Line break before.
+<a name="line254"></a>          buffer.pushToken(!nonPpTagStack.length, token, false);
+<a name="line255"></a>          nonPpTagStack.push(tagName);
+<a name="line256"></a>        }
+<a name="line257"></a>      } else if (nonPpTagStack.length) {
+<a name="line258"></a>        // Inside non-pretty-printed block, no new line breaks.
+<a name="line259"></a>        buffer.pushToken(false, token, false);
+<a name="line260"></a>      } else if (blockTags.hasOwnProperty(tagName)) {
+<a name="line261"></a>        // Put line break before start block and after end block tags.
+<a name="line262"></a>        var isEmpty = emptyTags.hasOwnProperty(tagName);
+<a name="line263"></a>        var isEndTag = match[1] == &#39;/&#39;;
+<a name="line264"></a>        buffer.pushToken(isEmpty || !isEndTag, token, isEmpty || isEndTag);
+<a name="line265"></a>      } else if (breaksFlowTags.hasOwnProperty(tagName)) {
+<a name="line266"></a>        var isEmpty = emptyTags.hasOwnProperty(tagName);
+<a name="line267"></a>        var isEndTag = match[1] == &#39;/&#39;;
+<a name="line268"></a>        // Put line break after end flow-breaking tags.
+<a name="line269"></a>        buffer.pushToken(false, token, isEndTag || isEmpty);
+<a name="line270"></a>      } else {
+<a name="line271"></a>        // All other tags, no line break.
+<a name="line272"></a>        buffer.pushToken(false, token, false);
+<a name="line273"></a>      }
+<a name="line274"></a>    } else {
+<a name="line275"></a>      // Non-tags, no line break.
+<a name="line276"></a>      buffer.pushToken(false, token, false);
+<a name="line277"></a>    }
+<a name="line278"></a>
+<a name="line279"></a>    // Double check that we&#39;re making progress.
+<a name="line280"></a>    var newLastIndex = tokenRegex.lastIndex;
+<a name="line281"></a>    if (!token || newLastIndex &lt;= lastIndex) {
+<a name="line282"></a>      throw Error(&#39;Regex failed to make progress through source html.&#39;);
+<a name="line283"></a>    }
+<a name="line284"></a>    lastIndex = newLastIndex;
+<a name="line285"></a>
+<a name="line286"></a>    // Out of time?
+<a name="line287"></a>    if (timeOutMillis) {
+<a name="line288"></a>      if (goog.now() - startMillis &gt; timeOutMillis) {
+<a name="line289"></a>        // Push unprocessed data as one big token and reset regex object.
+<a name="line290"></a>        buffer.pushToken(false, html.substring(tokenRegex.lastIndex), false);
+<a name="line291"></a>        tokenRegex.lastIndex = 0;
+<a name="line292"></a>        break;
+<a name="line293"></a>      }
+<a name="line294"></a>    }
+<a name="line295"></a>  }
+<a name="line296"></a>
+<a name="line297"></a>  // Ensure we end in a line break.
+<a name="line298"></a>  buffer.lineBreak();
+<a name="line299"></a>
+<a name="line300"></a>  // Construct result string.
+<a name="line301"></a>  var result = String(buffer);
+<a name="line302"></a>
+<a name="line303"></a>  // Length should be original length plus # line breaks added.
+<a name="line304"></a>  var expectedLength = html.length + buffer.breakCount;
+<a name="line305"></a>  if (result.length != expectedLength) {
+<a name="line306"></a>    throw Error(&#39;Lost data pretty printing html.&#39;);
+<a name="line307"></a>  }
+<a name="line308"></a>
+<a name="line309"></a>  return result;
+<a name="line310"></a>};
+<a name="line311"></a>
+<a name="line312"></a>
+<a name="line313"></a>/**
+<a name="line314"></a> * This class is a buffer to which we push our output. It tracks line breaks to
+<a name="line315"></a> * make sure we don&#39;t add unnecessary ones.
+<a name="line316"></a> * @constructor
+<a name="line317"></a> */
+<a name="line318"></a>goog.format.HtmlPrettyPrinter.Buffer = function() {
+<a name="line319"></a>  /**
+<a name="line320"></a>   * Tokens to be output in #toString.
+<a name="line321"></a>   * @type {goog.string.StringBuffer}
+<a name="line322"></a>   * @private
+<a name="line323"></a>   */
+<a name="line324"></a>  this.out_ = new goog.string.StringBuffer();
+<a name="line325"></a>};
+<a name="line326"></a>
+<a name="line327"></a>
+<a name="line328"></a>/**
+<a name="line329"></a> * Tracks number of line breaks added.
+<a name="line330"></a> * @type {number}
+<a name="line331"></a> */
+<a name="line332"></a>goog.format.HtmlPrettyPrinter.Buffer.prototype.breakCount = 0;
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * Tracks if we are at the start of a new line.
+<a name="line337"></a> * @type {boolean}
+<a name="line338"></a> * @private
+<a name="line339"></a> */
+<a name="line340"></a>goog.format.HtmlPrettyPrinter.Buffer.prototype.isBeginningOfNewLine_ = true;
+<a name="line341"></a>
+<a name="line342"></a>
+<a name="line343"></a>/**
+<a name="line344"></a> * Tracks if we need a new line before the next token.
+<a name="line345"></a> * @type {boolean}
+<a name="line346"></a> * @private
+<a name="line347"></a> */
+<a name="line348"></a>goog.format.HtmlPrettyPrinter.Buffer.prototype.needsNewLine_ = false;
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>/**
+<a name="line352"></a> * Adds token and necessary line breaks to output buffer.
+<a name="line353"></a> * @param {boolean} breakBefore If true, add line break before token if
+<a name="line354"></a> *     necessary.
+<a name="line355"></a> * @param {string} token Token to push.
+<a name="line356"></a> * @param {boolean} breakAfter If true, add line break after token if
+<a name="line357"></a> *     necessary.
+<a name="line358"></a> */
+<a name="line359"></a>goog.format.HtmlPrettyPrinter.Buffer.prototype.pushToken = function(
+<a name="line360"></a>    breakBefore, token, breakAfter) {
+<a name="line361"></a>  // If this token needs a preceeding line break, and
+<a name="line362"></a>  // we haven&#39;t already added a line break, and
+<a name="line363"></a>  // this token does not start with a line break,
+<a name="line364"></a>  // then add line break.
+<a name="line365"></a>  // Due to FF3.0 bug with lists, we don&#39;t insert a /n
+<a name="line366"></a>  // right before &lt;/ul&gt;. See bug 1520665.
+<a name="line367"></a>  if ((this.needsNewLine_ || breakBefore) &amp;&amp;
+<a name="line368"></a>      !/^\r?\n/.test(token) &amp;&amp;
+<a name="line369"></a>      !/\/ul/i.test(token)) {
+<a name="line370"></a>    this.lineBreak();
+<a name="line371"></a>  }
+<a name="line372"></a>
+<a name="line373"></a>  // Token.
+<a name="line374"></a>  this.out_.append(token);
+<a name="line375"></a>
+<a name="line376"></a>  // Remember if this string ended with a line break so we know we don&#39;t have to
+<a name="line377"></a>  // insert another one before the next token.
+<a name="line378"></a>  this.isBeginningOfNewLine_ = /\r?\n$/.test(token);
+<a name="line379"></a>
+<a name="line380"></a>  // Remember if this token requires a line break after it. We don&#39;t insert it
+<a name="line381"></a>  // here because we might not have to if the next token starts with a line
+<a name="line382"></a>  // break.
+<a name="line383"></a>  this.needsNewLine_ = breakAfter &amp;&amp; !this.isBeginningOfNewLine_;
+<a name="line384"></a>};
+<a name="line385"></a>
+<a name="line386"></a>
+<a name="line387"></a>/**
+<a name="line388"></a> * Append line break if we need one.
+<a name="line389"></a> */
+<a name="line390"></a>goog.format.HtmlPrettyPrinter.Buffer.prototype.lineBreak = function() {
+<a name="line391"></a>  if (!this.isBeginningOfNewLine_) {
+<a name="line392"></a>    this.out_.append(&#39;\n&#39;);
+<a name="line393"></a>    ++this.breakCount;
+<a name="line394"></a>  }
+<a name="line395"></a>};
+<a name="line396"></a>
+<a name="line397"></a>
+<a name="line398"></a>/**
+<a name="line399"></a> * @return {string} String representation of tokens.
+<a name="line400"></a> */
+<a name="line401"></a>goog.format.HtmlPrettyPrinter.Buffer.prototype.toString = function() {
+<a name="line402"></a>  return this.out_.toString();
+<a name="line403"></a>};
+</pre>
+
+
+</body>
+</html>

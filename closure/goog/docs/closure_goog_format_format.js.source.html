@@ -1,0 +1,487 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>format.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_format_format.js.html">format.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides utility functions for formatting strings, numbers etc.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.format&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.i18n.GraphemeBreak&#39;);
+<a name="line23"></a>goog.require(&#39;goog.string&#39;);
+<a name="line24"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Formats a number of bytes in human readable form.
+<a name="line29"></a> * 54, 450K, 1.3M, 5G etc.
+<a name="line30"></a> * @param {number} bytes The number of bytes to show.
+<a name="line31"></a> * @param {number} opt_decimals The number of decimals to use.  Defaults to 2.
+<a name="line32"></a> * @return {string} The human readable form of the byte size.
+<a name="line33"></a> */
+<a name="line34"></a>goog.format.fileSize = function(bytes, opt_decimals) {
+<a name="line35"></a>  return goog.format.numBytesToString(bytes, opt_decimals, false);
+<a name="line36"></a>};
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Checks whether string value containing scaling units (K, M, G, T, P, m,
+<a name="line41"></a> * u, n) can be converted to a number.
+<a name="line42"></a> *
+<a name="line43"></a> * Where there is a decimal, there must be a digit to the left of the
+<a name="line44"></a> * decimal point.
+<a name="line45"></a> *
+<a name="line46"></a> * Negative numbers are valid.
+<a name="line47"></a> *
+<a name="line48"></a> * Examples:
+<a name="line49"></a> *   0, 1, 1.0, 10.4K, 2.3M, -0.3P, 1.2m
+<a name="line50"></a> *
+<a name="line51"></a> * @param {string} val String value to check.
+<a name="line52"></a> * @return {boolean} True if string could be converted to a numeric value.
+<a name="line53"></a> */
+<a name="line54"></a>goog.format.isConvertableScaledNumber = function(val) {
+<a name="line55"></a>  return goog.format.SCALED_NUMERIC_RE_.test(val);
+<a name="line56"></a>};
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Converts a string to numeric value, taking into account the units.
+<a name="line61"></a> * If string ends in &#39;B&#39;, use binary conversion.
+<a name="line62"></a> * @param {string} stringValue String to be converted to numeric value.
+<a name="line63"></a> * @return {number} Numeric value for string.
+<a name="line64"></a> */
+<a name="line65"></a>goog.format.stringToNumericValue = function(stringValue) {
+<a name="line66"></a>  if (goog.string.endsWith(stringValue, &#39;B&#39;)) {
+<a name="line67"></a>    return goog.format.stringToNumericValue_(
+<a name="line68"></a>        stringValue, goog.format.NUMERIC_SCALES_BINARY_);
+<a name="line69"></a>  }
+<a name="line70"></a>  return goog.format.stringToNumericValue_(
+<a name="line71"></a>        stringValue, goog.format.NUMERIC_SCALES_SI_);
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Converts a string to number of bytes, taking into account the units.
+<a name="line77"></a> * Binary conversion.
+<a name="line78"></a> * @param {string} stringValue String to be converted to numeric value.
+<a name="line79"></a> * @return {number} Numeric value for string.
+<a name="line80"></a> */
+<a name="line81"></a>goog.format.stringToNumBytes = function(stringValue) {
+<a name="line82"></a>  return goog.format.stringToNumericValue_(
+<a name="line83"></a>      stringValue, goog.format.NUMERIC_SCALES_BINARY_);
+<a name="line84"></a>};
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * Converts a numeric value to string representation. SI conversion.
+<a name="line89"></a> * @param {number} val Value to be converted.
+<a name="line90"></a> * @param {number} opt_decimals The number of decimals to use.  Defaults to 2.
+<a name="line91"></a> * @return {string} String representation of number.
+<a name="line92"></a> */
+<a name="line93"></a>goog.format.numericValueToString = function(val, opt_decimals) {
+<a name="line94"></a>  return goog.format.numericValueToString_(
+<a name="line95"></a>      val, goog.format.NUMERIC_SCALES_SI_, opt_decimals);
+<a name="line96"></a>};
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Converts number of bytes to string representation. Binary conversion.
+<a name="line101"></a> * Default is to return the additional &#39;B&#39; suffix, e.g. &#39;10.5KB&#39; to minimize
+<a name="line102"></a> * confusion with counts that are scaled by powers of 1000.
+<a name="line103"></a> * @param {number} val Value to be converted.
+<a name="line104"></a> * @param {number} opt_decimals The number of decimals to use.  Defaults to 2.
+<a name="line105"></a> * @param {boolean} opt_suffix If true, include trailing &#39;B&#39; in returned
+<a name="line106"></a> *     string.  Default is true.
+<a name="line107"></a> * @return {string} String representation of number of bytes.
+<a name="line108"></a> */
+<a name="line109"></a>goog.format.numBytesToString = function(val, opt_decimals, opt_suffix) {
+<a name="line110"></a>  var suffix = &#39;&#39;;
+<a name="line111"></a>  if (!goog.isDef(opt_suffix) || opt_suffix) {
+<a name="line112"></a>    suffix = &#39;B&#39;
+<a name="line113"></a>  }
+<a name="line114"></a>  return goog.format.numericValueToString_(
+<a name="line115"></a>      val, goog.format.NUMERIC_SCALES_BINARY_, opt_decimals, suffix);
+<a name="line116"></a>};
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Converts a string to numeric value, taking into account the units.
+<a name="line121"></a> * @param {string} stringValue String to be converted to numeric value.
+<a name="line122"></a> * @param {Object} conversion Dictionary of conversion scales.
+<a name="line123"></a> * @return {number} Numeric value for string.  If it cannot be converted,
+<a name="line124"></a> *    returns NaN.
+<a name="line125"></a> * @private
+<a name="line126"></a> */
+<a name="line127"></a>goog.format.stringToNumericValue_ = function(stringValue, conversion) {
+<a name="line128"></a>  var match = stringValue.match(goog.format.SCALED_NUMERIC_RE_);
+<a name="line129"></a>  if (!match) {
+<a name="line130"></a>    return NaN;
+<a name="line131"></a>  }
+<a name="line132"></a>  var val = match[1] * conversion[match[2]];
+<a name="line133"></a>  return val;
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Converts a numeric value to string, using specified conversion
+<a name="line139"></a> * scales.
+<a name="line140"></a> * @param {number} val Value to be converted.
+<a name="line141"></a> * @param {Object} conversion Dictionary of scaling factors.
+<a name="line142"></a> * @param {number} opt_decimals The number of decimals to use.  Default is 2.
+<a name="line143"></a> * @param {string} opt_suffix Optional suffix to append.
+<a name="line144"></a> * @return {string} The human readable form of the byte size.
+<a name="line145"></a> * @private
+<a name="line146"></a> */
+<a name="line147"></a>goog.format.numericValueToString_ = function(val, conversion,
+<a name="line148"></a>                                             opt_decimals, opt_suffix) {
+<a name="line149"></a>  var prefixes = goog.format.NUMERIC_SCALE_PREFIXES_;
+<a name="line150"></a>  var orig_val = val;
+<a name="line151"></a>  var symbol = &#39;&#39;;
+<a name="line152"></a>  var scale = 1;
+<a name="line153"></a>  if (val &lt; 0) {
+<a name="line154"></a>    val = -val;
+<a name="line155"></a>  }
+<a name="line156"></a>  for (var i = 0; i &lt; prefixes.length; i++) {
+<a name="line157"></a>    var unit = prefixes[i];
+<a name="line158"></a>    scale = conversion[unit];
+<a name="line159"></a>    if (val &gt;= scale || (scale &lt;= 1 &amp;&amp; val &gt; 0.1 * scale)) {
+<a name="line160"></a>      // Treat values less than 1 differently, allowing 0.5 to be &quot;0.5&quot; rather
+<a name="line161"></a>      // than &quot;500m&quot;
+<a name="line162"></a>      symbol = unit;
+<a name="line163"></a>      break;
+<a name="line164"></a>    }
+<a name="line165"></a>  }
+<a name="line166"></a>  if (!symbol) {
+<a name="line167"></a>    scale = 1;
+<a name="line168"></a>  } else if (opt_suffix) {
+<a name="line169"></a>    symbol += opt_suffix;
+<a name="line170"></a>  }
+<a name="line171"></a>  var ex = Math.pow(10, goog.isDef(opt_decimals) ? opt_decimals : 2);
+<a name="line172"></a>  return Math.round(orig_val / scale * ex) / ex + symbol;
+<a name="line173"></a>};
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Regular expression for detecting scaling units, such as K, M, G, etc. for
+<a name="line178"></a> * converting a string representation to a numeric value.
+<a name="line179"></a> *
+<a name="line180"></a> * Also allow &#39;k&#39; to be aliased to &#39;K&#39;.  These could be used for SI (powers
+<a name="line181"></a> * of 1000) or Binary (powers of 1024) conversions.
+<a name="line182"></a> *
+<a name="line183"></a> * Also allow final &#39;B&#39; to be interpreted as byte-count, implicitly triggering
+<a name="line184"></a> * binary conversion (e.g., &#39;10.2MB&#39;).
+<a name="line185"></a> *
+<a name="line186"></a> * @type {RegExp}
+<a name="line187"></a> * @private
+<a name="line188"></a> */
+<a name="line189"></a>goog.format.SCALED_NUMERIC_RE_ = /^([-]?\d+\.?\d*)([K,M,G,T,P,k,m,u,n]?)[B]?$/;
+<a name="line190"></a>
+<a name="line191"></a>
+<a name="line192"></a>/**
+<a name="line193"></a> * Ordered list of scaling prefixes in decreasing order.
+<a name="line194"></a> * @type {Array}
+<a name="line195"></a> * @private
+<a name="line196"></a> */
+<a name="line197"></a>goog.format.NUMERIC_SCALE_PREFIXES_ = [
+<a name="line198"></a>    &#39;P&#39;, &#39;T&#39;, &#39;G&#39;, &#39;M&#39;, &#39;K&#39;, &#39;&#39;, &#39;m&#39;, &#39;u&#39;, &#39;n&#39;
+<a name="line199"></a>];
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>/**
+<a name="line203"></a> * Scaling factors for conversion of numeric value to string.  SI conversion.
+<a name="line204"></a> * @type {Object}
+<a name="line205"></a> * @private
+<a name="line206"></a> */
+<a name="line207"></a>goog.format.NUMERIC_SCALES_SI_ = {
+<a name="line208"></a>  &#39;&#39;: 1,
+<a name="line209"></a>  &#39;n&#39;: 1e-9,
+<a name="line210"></a>  &#39;u&#39;: 1e-6,
+<a name="line211"></a>  &#39;m&#39;: 1e-3,
+<a name="line212"></a>  &#39;k&#39;: 1e3,
+<a name="line213"></a>  &#39;K&#39;: 1e3,
+<a name="line214"></a>  &#39;M&#39;: 1e6,
+<a name="line215"></a>  &#39;G&#39;: 1e9,
+<a name="line216"></a>  &#39;T&#39;: 1e12,
+<a name="line217"></a>  &#39;P&#39;: 1e15
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Scaling factors for conversion of numeric value to string.  Binary
+<a name="line223"></a> * conversion.
+<a name="line224"></a> * @type {Object}
+<a name="line225"></a> * @private
+<a name="line226"></a> */
+<a name="line227"></a>goog.format.NUMERIC_SCALES_BINARY_ = {
+<a name="line228"></a>  &#39;&#39;: 1,
+<a name="line229"></a>  &#39;n&#39;: Math.pow(1024, -3),
+<a name="line230"></a>  &#39;u&#39;: Math.pow(1024, -2),
+<a name="line231"></a>  &#39;m&#39;: 1.0 / 1024,
+<a name="line232"></a>  &#39;k&#39;: 1024,
+<a name="line233"></a>  &#39;K&#39;: 1024,
+<a name="line234"></a>  &#39;M&#39;: Math.pow(1024, 2),
+<a name="line235"></a>  &#39;G&#39;: Math.pow(1024, 3),
+<a name="line236"></a>  &#39;T&#39;: Math.pow(1024, 4),
+<a name="line237"></a>  &#39;P&#39;: Math.pow(1024, 5)
+<a name="line238"></a>};
+<a name="line239"></a>
+<a name="line240"></a>
+<a name="line241"></a>/**
+<a name="line242"></a> * First Unicode code point that has the Mark property.
+<a name="line243"></a> * @type {number}
+<a name="line244"></a> * @private
+<a name="line245"></a> */
+<a name="line246"></a>goog.format.FIRST_GRAPHEME_EXTEND_ = 0x300;
+<a name="line247"></a>
+<a name="line248"></a>
+<a name="line249"></a>/**
+<a name="line250"></a> * Inserts word breaks into an HTML string at a given interval.  The counter is
+<a name="line251"></a> * reset if a space is encountered.  WBRs aren&#39;t inserted into HTML tags or
+<a name="line252"></a> * entities.  Entites count towards the character count, HTML tags do not.
+<a name="line253"></a> *
+<a name="line254"></a> * With common strings aliased, objects allocations are constant based on the
+<a name="line255"></a> * length of the string: N + 3. This guarantee does not hold if the string
+<a name="line256"></a> * contains an element &gt;= U+0300 and hasGraphemeBreak is non-trivial.
+<a name="line257"></a> *
+<a name="line258"></a> * @param {string} str HTML to insert word breaks into.
+<a name="line259"></a> * @param {function(number, number, boolean): boolean} hasGraphemeBreak A
+<a name="line260"></a> *     function determining if there is a grapheme break between two characters,
+<a name="line261"></a> *     in the same signature as goog.i18n.GraphemeBreak.hasGraphemeBreak.
+<a name="line262"></a> * @param {number} opt_maxlen Maximum length after which to ensure
+<a name="line263"></a> *     there is a break.  Default is 10 characters.
+<a name="line264"></a> * @return {string} The string including word breaks.
+<a name="line265"></a> * @private
+<a name="line266"></a> */
+<a name="line267"></a>goog.format.insertWordBreaksGeneric_ = function(str, hasGraphemeBreak,
+<a name="line268"></a>    opt_maxlen) {
+<a name="line269"></a>  var maxlen = opt_maxlen || 10;
+<a name="line270"></a>  if (maxlen &gt; str.length) return str;
+<a name="line271"></a>
+<a name="line272"></a>  var rv = [];
+<a name="line273"></a>  var n = 0; // The length of the current token
+<a name="line274"></a>
+<a name="line275"></a>  // This will contain the ampersand or less-than character if one of the
+<a name="line276"></a>  // two has been seen; otherwise, the value is zero.
+<a name="line277"></a>  var nestingCharCode = 0;
+<a name="line278"></a>
+<a name="line279"></a>  // First character position from input string that has not been outputted.
+<a name="line280"></a>  var lastDumpPosition = 0;
+<a name="line281"></a>
+<a name="line282"></a>  var charCode = 0;
+<a name="line283"></a>  for (var i = 0; i &lt; str.length; i++) {
+<a name="line284"></a>    // Using charCodeAt versus charAt avoids allocating new string objects.
+<a name="line285"></a>    var lastCharCode = charCode;
+<a name="line286"></a>    charCode = str.charCodeAt(i);
+<a name="line287"></a>
+<a name="line288"></a>    // Don&#39;t add a WBR before characters that might be grapheme extending.
+<a name="line289"></a>    var isPotentiallyGraphemeExtending =
+<a name="line290"></a>        charCode &gt;= goog.format.FIRST_GRAPHEME_EXTEND_ &amp;&amp;
+<a name="line291"></a>        !hasGraphemeBreak(lastCharCode, charCode, true);
+<a name="line292"></a>
+<a name="line293"></a>    // Don&#39;t add a WBR at the end of a word.  For simplicity, all control
+<a name="line294"></a>    // characters are treated as whitespace.
+<a name="line295"></a>    if (n &gt;= maxlen &amp;&amp;
+<a name="line296"></a>        charCode &gt; goog.format.WbrToken_.SPACE &amp;&amp;
+<a name="line297"></a>        !isPotentiallyGraphemeExtending) {
+<a name="line298"></a>      // Flush everything seen so far, and append a word break.
+<a name="line299"></a>      rv.push(str.substring(lastDumpPosition, i), goog.format.WORD_BREAK_HTML);
+<a name="line300"></a>      lastDumpPosition = i;
+<a name="line301"></a>      n = 0;
+<a name="line302"></a>    }
+<a name="line303"></a>
+<a name="line304"></a>    if (!nestingCharCode) {
+<a name="line305"></a>      // Not currently within an HTML tag or entity
+<a name="line306"></a>
+<a name="line307"></a>      if (charCode == goog.format.WbrToken_.LT ||
+<a name="line308"></a>          charCode == goog.format.WbrToken_.AMP) {
+<a name="line309"></a>
+<a name="line310"></a>        // Entering an HTML Entity &#39;&amp;&#39; or open tag &#39;&lt;&#39;
+<a name="line311"></a>        nestingCharCode = charCode;
+<a name="line312"></a>      } else if (charCode &lt;= goog.format.WbrToken_.SPACE) {
+<a name="line313"></a>
+<a name="line314"></a>        // A space or control character -- reset the token length
+<a name="line315"></a>        n = 0;
+<a name="line316"></a>      } else {
+<a name="line317"></a>
+<a name="line318"></a>        // A normal flow character - increment.  For grapheme extending
+<a name="line319"></a>        // characters, this is not *technically* a new character.  However,
+<a name="line320"></a>        // since the grapheme break detector might be overly conservative,
+<a name="line321"></a>        // we have to continue incrementing, or else we won&#39;t even be able
+<a name="line322"></a>        // to add breaks when we get to things like punctuation.  For the
+<a name="line323"></a>        // case where we have a full grapheme break detector, it is okay if
+<a name="line324"></a>        // we occasionally break slightly early.
+<a name="line325"></a>        n++;
+<a name="line326"></a>      }
+<a name="line327"></a>    } else if (charCode == goog.format.WbrToken_.GT &amp;&amp;
+<a name="line328"></a>        nestingCharCode == goog.format.WbrToken_.LT) {
+<a name="line329"></a>
+<a name="line330"></a>      // Leaving an HTML tag, treat the tag as zero-length
+<a name="line331"></a>      nestingCharCode = 0;
+<a name="line332"></a>    } else if (charCode == goog.format.WbrToken_.SEMI_COLON &amp;&amp;
+<a name="line333"></a>        nestingCharCode == goog.format.WbrToken_.AMP) {
+<a name="line334"></a>
+<a name="line335"></a>      // Leaving an HTML entity, treat it as length one
+<a name="line336"></a>      nestingCharCode = 0;
+<a name="line337"></a>      n++;
+<a name="line338"></a>    }
+<a name="line339"></a>  }
+<a name="line340"></a>
+<a name="line341"></a>  // Take care of anything we haven&#39;t flushed so far.
+<a name="line342"></a>  rv.push(str.substr(lastDumpPosition));
+<a name="line343"></a>
+<a name="line344"></a>  return rv.join(&#39;&#39;);
+<a name="line345"></a>};
+<a name="line346"></a>
+<a name="line347"></a>
+<a name="line348"></a>/**
+<a name="line349"></a> * Inserts word breaks into an HTML string at a given interval.
+<a name="line350"></a> *
+<a name="line351"></a> * This method is as aggressive as possible, using a full table of Unicode
+<a name="line352"></a> * characters where it is legal to insert word breaks; however, this table
+<a name="line353"></a> * comes at a 2.5k pre-gzip (~1k post-gzip) size cost.  Consider using
+<a name="line354"></a> * insertWordBreaksBasic to minimize the size impact.
+<a name="line355"></a> *
+<a name="line356"></a> * @param {string} str HTML to insert word breaks into.
+<a name="line357"></a> * @param {number} opt_maxlen Maximum length after which to ensure there is a
+<a name="line358"></a> *     break.  Default is 10 characters.
+<a name="line359"></a> * @return {string} The string including word breaks.
+<a name="line360"></a> */
+<a name="line361"></a>goog.format.insertWordBreaks = function(str, opt_maxlen) {
+<a name="line362"></a>  return goog.format.insertWordBreaksGeneric_(str,
+<a name="line363"></a>      goog.i18n.GraphemeBreak.hasGraphemeBreak, opt_maxlen);
+<a name="line364"></a>};
+<a name="line365"></a>
+<a name="line366"></a>
+<a name="line367"></a>/**
+<a name="line368"></a> * Determines conservatively if a character has a Grapheme break.
+<a name="line369"></a> *
+<a name="line370"></a> * Conforms to a similar signature as goog.i18n.GraphemeBreak, but is overly
+<a name="line371"></a> * conservative, returning true only for characters in common scripts that
+<a name="line372"></a> * are simple to account for.
+<a name="line373"></a> *
+<a name="line374"></a> * @param {number} lastCharCode The previous character code.  Ignored.
+<a name="line375"></a> * @param {number} charCode The character code under consideration.  It must be
+<a name="line376"></a> *     at least \u0300 as a precondition -- this case is covered by
+<a name="line377"></a> *     insertWordBreaksGeneric_.
+<a name="line378"></a> * @param {boolean} opt_extended Ignored, to conform with the interface.
+<a name="line379"></a> * @return {boolean} Whether it is one of the recognized subsets of characters
+<a name="line380"></a> *     with a grapheme break.
+<a name="line381"></a> * @private
+<a name="line382"></a> */
+<a name="line383"></a>goog.format.conservativelyHasGraphemeBreak_ = function(
+<a name="line384"></a>    lastCharCode, charCode, opt_extended) {
+<a name="line385"></a>  // Return false for everything except the most common Cyrillic characters.
+<a name="line386"></a>  // Don&#39;t worry about Latin characters, because insertWordBreaksGeneric_
+<a name="line387"></a>  // itself already handles those.
+<a name="line388"></a>  // TODO: Also account for Greek, Armenian, and Georgian if it is
+<a name="line389"></a>  // simple to do so.
+<a name="line390"></a>  return charCode &gt;= 0x400 &amp;&amp; charCode &lt; 0x523;
+<a name="line391"></a>};
+<a name="line392"></a>
+<a name="line393"></a>
+<a name="line394"></a>// TODO: Consider using a compile-time flag to switch implementations
+<a name="line395"></a>// rather than relying on the developers to toggle implementations.
+<a name="line396"></a>/**
+<a name="line397"></a> * Inserts word breaks into an HTML string at a given interval.
+<a name="line398"></a> *
+<a name="line399"></a> * This method is less aggressive than insertWordBreaks, only inserting
+<a name="line400"></a> * breaks next to punctuation and between Latin or Cyrillic characters.
+<a name="line401"></a> * However, this is good enough for the common case of URLs.  It also
+<a name="line402"></a> * works for all Latin and Cyrillic languages, plus CJK has no need for word
+<a name="line403"></a> * breaks.  When this method is used, goog.i18n.GraphemeBreak may be dead
+<a name="line404"></a> * code eliminated.
+<a name="line405"></a> *
+<a name="line406"></a> * @param {string} str HTML to insert word breaks into.
+<a name="line407"></a> * @param {number} opt_maxlen Maximum length after which to ensure there is a
+<a name="line408"></a> *     break.  Default is 10 characters.
+<a name="line409"></a> * @return {string} The string including word breaks.
+<a name="line410"></a> */
+<a name="line411"></a>goog.format.insertWordBreaksBasic = function(str, opt_maxlen) {
+<a name="line412"></a>  return goog.format.insertWordBreaksGeneric_(str,
+<a name="line413"></a>      goog.format.conservativelyHasGraphemeBreak_, opt_maxlen);
+<a name="line414"></a>};
+<a name="line415"></a>
+<a name="line416"></a>
+<a name="line417"></a>/**
+<a name="line418"></a> * Constant for the WBR replacement used by insertWordBreaks.  Safari requires
+<a name="line419"></a> * &lt;wbr&gt;&lt;/wbr&gt;, Opera needs the &amp;shy; entity, though this will give a visible
+<a name="line420"></a> * hyphen at breaks.  Other browsers just use &lt;wbr&gt;.
+<a name="line421"></a> * @type {string}
+<a name="line422"></a> */
+<a name="line423"></a>goog.format.WORD_BREAK_HTML = goog.userAgent.WEBKIT ? &#39;&lt;wbr&gt;&lt;/wbr&gt;&#39; :
+<a name="line424"></a>    goog.userAgent.OPERA ? &#39;&amp;shy;&#39; : &#39;&lt;wbr&gt;&#39;;
+<a name="line425"></a>
+<a name="line426"></a>
+<a name="line427"></a>/**
+<a name="line428"></a> * Tokens used within insertWordBreaks.
+<a name="line429"></a> * @private
+<a name="line430"></a> * @enum {number}
+<a name="line431"></a> */
+<a name="line432"></a>goog.format.WbrToken_ = {
+<a name="line433"></a>  LT: 60, // &#39;&lt;&#39;.charCodeAt(0)
+<a name="line434"></a>  GT: 62, // &#39;&gt;&#39;.charCodeAt(0)
+<a name="line435"></a>  AMP: 38, // &#39;&amp;&#39;.charCodeAt(0)
+<a name="line436"></a>  SEMI_COLON: 59, // &#39;;&#39;.charCodeAt(0)
+<a name="line437"></a>  SPACE: 32 // &#39; &#39;.charCodeAt(0)
+<a name="line438"></a>};
+</pre>
+
+
+</body>
+</html>

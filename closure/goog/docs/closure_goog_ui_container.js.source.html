@@ -1,0 +1,1270 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>container.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_container.js.html">container.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Base class for containers that host {@link goog.ui.Control}s,
+<a name="line17"></a> * such as menus and toolbars.  Provides default keyboard and mouse event
+<a name="line18"></a> * handling and child management, based on a generalized version of
+<a name="line19"></a> * {@link goog.ui.Menu}.
+<a name="line20"></a> *
+<a name="line21"></a> * @see ../demos/container.html
+<a name="line22"></a> */
+<a name="line23"></a>// TODO:  Fix code/logic duplication between this and goog.ui.Control.
+<a name="line24"></a>// TODO:  Maybe pull common stuff all the way up into Component...?
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.ui.Container&#39;);
+<a name="line27"></a>goog.provide(&#39;goog.ui.Container.Orientation&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line30"></a>goog.require(&#39;goog.dom.a11y&#39;);
+<a name="line31"></a>goog.require(&#39;goog.dom.a11y.State&#39;);
+<a name="line32"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line33"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line34"></a>goog.require(&#39;goog.events.KeyHandler&#39;);
+<a name="line35"></a>goog.require(&#39;goog.events.KeyHandler.EventType&#39;);
+<a name="line36"></a>goog.require(&#39;goog.style&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line38"></a>goog.require(&#39;goog.ui.Component.Error&#39;);
+<a name="line39"></a>goog.require(&#39;goog.ui.Component.EventType&#39;);
+<a name="line40"></a>goog.require(&#39;goog.ui.Component.State&#39;);
+<a name="line41"></a>goog.require(&#39;goog.ui.ContainerRenderer&#39;);
+<a name="line42"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * Base class for containers.  Extends {@link goog.ui.Component} by adding
+<a name="line46"></a> * the following:
+<a name="line47"></a> *  &lt;ul&gt;
+<a name="line48"></a> *    &lt;li&gt;a {@link goog.events.KeyHandler}, to simplify keyboard handling,
+<a name="line49"></a> *    &lt;li&gt;a pluggable &lt;em&gt;renderer&lt;/em&gt; framework, to simplify the creation of
+<a name="line50"></a> *        containers without the need to subclass this class,
+<a name="line51"></a> *    &lt;li&gt;methods to manage child controls hosted in the container,
+<a name="line52"></a> *    &lt;li&gt;default mouse and keyboard event handling methods.
+<a name="line53"></a> *  &lt;/ul&gt;
+<a name="line54"></a> * @param {?goog.ui.Container.Orientation} opt_orientation Container
+<a name="line55"></a> *     orientation; defaults to {@code VERTICAL}.
+<a name="line56"></a> * @param {?goog.ui.ContainerRenderer} opt_renderer Renderer used to render or
+<a name="line57"></a> *     decorate the container; defaults to {@link goog.ui.ContainerRenderer}.
+<a name="line58"></a> * @param {?goog.dom.DomHelper} opt_domHelper DOM helper, used for document
+<a name="line59"></a> *     interaction.
+<a name="line60"></a> * @extends {goog.ui.Component}
+<a name="line61"></a> * @constructor
+<a name="line62"></a> */
+<a name="line63"></a>goog.ui.Container = function(opt_orientation, opt_renderer, opt_domHelper) {
+<a name="line64"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line65"></a>  this.renderer_ = opt_renderer || goog.ui.ContainerRenderer.getInstance();
+<a name="line66"></a>  this.orientation_ = opt_orientation || this.renderer_.getDefaultOrientation();
+<a name="line67"></a>};
+<a name="line68"></a>goog.inherits(goog.ui.Container, goog.ui.Component);
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Container-specific events.
+<a name="line73"></a> * @enum {string}
+<a name="line74"></a> */
+<a name="line75"></a>goog.ui.Container.EventType = {
+<a name="line76"></a>  /**
+<a name="line77"></a>   * Dispatched after a goog.ui.Container becomes visible. Non-cancellable.
+<a name="line78"></a>   * NOTE: This event really shouldn&#39;t exist, because the
+<a name="line79"></a>   * goog.ui.Component.EventType.SHOW event should behave like this one. But the
+<a name="line80"></a>   * SHOW event for containers has been behaving as other components&#39;
+<a name="line81"></a>   * BEFORE_SHOW event for a long time, and too much code relies on that old
+<a name="line82"></a>   * behavior to fix it now.
+<a name="line83"></a>   */
+<a name="line84"></a>  AFTER_SHOW: &#39;aftershow&#39;
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Container orientation constants.
+<a name="line90"></a> * @enum {string}
+<a name="line91"></a> */
+<a name="line92"></a>goog.ui.Container.Orientation = {
+<a name="line93"></a>  HORIZONTAL: &#39;horizontal&#39;,
+<a name="line94"></a>  VERTICAL: &#39;vertical&#39;
+<a name="line95"></a>};
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/**
+<a name="line99"></a> * Allows an alternative element to be set to recieve key events, otherwise
+<a name="line100"></a> * defers to the renderer&#39;s element choice.
+<a name="line101"></a> * @type {Element|undefined}
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.ui.Container.prototype.keyEventTarget_ = null;
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Keyboard event handler.
+<a name="line109"></a> * @type {goog.events.KeyHandler?}
+<a name="line110"></a> * @private
+<a name="line111"></a> */
+<a name="line112"></a>goog.ui.Container.prototype.keyHandler_ = null;
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * Renderer for the container.  Defaults to {@link goog.ui.ContainerRenderer}.
+<a name="line117"></a> * @type {goog.ui.ContainerRenderer?}
+<a name="line118"></a> * @private
+<a name="line119"></a> */
+<a name="line120"></a>goog.ui.Container.prototype.renderer_ = null;
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Container orientation; determines layout and default keyboard navigation.
+<a name="line125"></a> * @type {?goog.ui.Container.Orientation}
+<a name="line126"></a> * @private
+<a name="line127"></a> */
+<a name="line128"></a>goog.ui.Container.prototype.orientation_ = null;
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Whether the container is set to be visible.  Defaults to true.
+<a name="line133"></a> * @type {boolean}
+<a name="line134"></a> * @private
+<a name="line135"></a> */
+<a name="line136"></a>goog.ui.Container.prototype.visible_ = true;
+<a name="line137"></a>
+<a name="line138"></a>
+<a name="line139"></a>/**
+<a name="line140"></a> * Whether the container is enabled and reacting to keyboard and mouse events.
+<a name="line141"></a> * Defaults to true.
+<a name="line142"></a> * @type {boolean}
+<a name="line143"></a> * @private
+<a name="line144"></a> */
+<a name="line145"></a>goog.ui.Container.prototype.enabled_ = true;
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Whether the container supports keyboard focus.  Defaults to true.  Focusable
+<a name="line150"></a> * containers have a {@code tabIndex} and can be navigated to via the keyboard.
+<a name="line151"></a> * @type {boolean}
+<a name="line152"></a> * @private
+<a name="line153"></a> */
+<a name="line154"></a>goog.ui.Container.prototype.focusable_ = true;
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * The 0-based index of the currently highlighted control in the container
+<a name="line159"></a> * (-1 if none).
+<a name="line160"></a> * @type {number}
+<a name="line161"></a> * @private
+<a name="line162"></a> */
+<a name="line163"></a>goog.ui.Container.prototype.highlightedIndex_ = -1;
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * The currently open (expanded) control in the container (null if none).
+<a name="line168"></a> * @type {goog.ui.Control?}
+<a name="line169"></a> * @private
+<a name="line170"></a> */
+<a name="line171"></a>goog.ui.Container.prototype.openItem_ = null;
+<a name="line172"></a>
+<a name="line173"></a>
+<a name="line174"></a>/**
+<a name="line175"></a> * Whether the mouse button is held down.  Defaults to false.  This flag is set
+<a name="line176"></a> * when the user mouses down over the container, and remains set until they
+<a name="line177"></a> * release the mouse button.
+<a name="line178"></a> * @type {boolean}
+<a name="line179"></a> * @private
+<a name="line180"></a> */
+<a name="line181"></a>goog.ui.Container.prototype.mouseButtonPressed_ = false;
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * Whether focus of child componenets should be allowed.  Only effective if
+<a name="line186"></a> * focusable_ is set to false.
+<a name="line187"></a> * @type {boolean}
+<a name="line188"></a> * @private
+<a name="line189"></a> */
+<a name="line190"></a>goog.ui.Container.prototype.allowFocusableChildren_ = false;
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Map of DOM IDs to child controls.  Each key is the DOM ID of a child
+<a name="line195"></a> * control&#39;s root element; each value is a reference to the child control
+<a name="line196"></a> * itself.  Used for looking up the child control corresponding to a DOM
+<a name="line197"></a> * node in O(1) time.
+<a name="line198"></a> * @type {Object?}
+<a name="line199"></a> * @private
+<a name="line200"></a> */
+<a name="line201"></a>goog.ui.Container.prototype.childElementIdMap_ = null;
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>// Event handler and renderer management.
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * Returns the DOM element on which the container is listening for keyboard
+<a name="line209"></a> * events (null if none).
+<a name="line210"></a> * @return {Element?} Element on which the container is listening for key
+<a name="line211"></a> *     events.
+<a name="line212"></a> */
+<a name="line213"></a>goog.ui.Container.prototype.getKeyEventTarget = function() {
+<a name="line214"></a>  // Delegate to renderer, unless we&#39;ve set an explicit target.
+<a name="line215"></a>  return this.keyEventTarget_ || this.renderer_.getKeyEventTarget(this);
+<a name="line216"></a>};
+<a name="line217"></a>
+<a name="line218"></a>
+<a name="line219"></a>/**
+<a name="line220"></a> * Attaches an element on which to listen for key events.
+<a name="line221"></a> * @param {Element|undefined} element The element to attach, or null/undefined
+<a name="line222"></a> *     to attach to the default element.
+<a name="line223"></a> */
+<a name="line224"></a>goog.ui.Container.prototype.setKeyEventTarget = function(element) {
+<a name="line225"></a>  if (this.focusable_) {
+<a name="line226"></a>    var oldTarget = this.getKeyEventTarget();
+<a name="line227"></a>    var inDocument = this.isInDocument();
+<a name="line228"></a>
+<a name="line229"></a>    this.keyEventTarget_ = element;
+<a name="line230"></a>    var newTarget = this.getKeyEventTarget();
+<a name="line231"></a>
+<a name="line232"></a>    if (inDocument) {
+<a name="line233"></a>      // Unlisten for events on the old key target.  Requires us to reset
+<a name="line234"></a>      // key target state temporarily.
+<a name="line235"></a>      this.keyEventTarget_ = oldTarget;
+<a name="line236"></a>      this.enableFocusHandling_(false);
+<a name="line237"></a>      this.keyEventTarget_ = element;
+<a name="line238"></a>
+<a name="line239"></a>      // Listen for events on the new key target.
+<a name="line240"></a>      this.getKeyHandler().attach(newTarget);
+<a name="line241"></a>      this.enableFocusHandling_(true);
+<a name="line242"></a>    }
+<a name="line243"></a>  } else {
+<a name="line244"></a>   throw Error(&#39;Can\&#39;t set key event target for container &#39; +
+<a name="line245"></a>       &#39;that doesn\&#39;t support keyboard focus!&#39;);
+<a name="line246"></a> }
+<a name="line247"></a>};
+<a name="line248"></a>
+<a name="line249"></a>
+<a name="line250"></a>/**
+<a name="line251"></a> * Returns the keyboard event handler for this container, lazily created the
+<a name="line252"></a> * first time this method is called.  The keyboard event handler listens for
+<a name="line253"></a> * keyboard events on the container&#39;s key event target, as determined by its
+<a name="line254"></a> * renderer.
+<a name="line255"></a> * @return {goog.events.KeyHandler} Keyboard event handler for this container.
+<a name="line256"></a> */
+<a name="line257"></a>goog.ui.Container.prototype.getKeyHandler = function() {
+<a name="line258"></a>  return this.keyHandler_ ||
+<a name="line259"></a>      (this.keyHandler_ = new goog.events.KeyHandler(this.getKeyEventTarget()));
+<a name="line260"></a>};
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * Returns the renderer used by this container to render itself or to decorate
+<a name="line265"></a> * an existing element.
+<a name="line266"></a> * @return {goog.ui.ContainerRenderer} Renderer used by the container.
+<a name="line267"></a> */
+<a name="line268"></a>goog.ui.Container.prototype.getRenderer = function() {
+<a name="line269"></a>  return this.renderer_;
+<a name="line270"></a>};
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * Registers the given renderer with the container.  Changing renderers after
+<a name="line275"></a> * the container has already been rendered or decorated is an error.
+<a name="line276"></a> * @param {goog.ui.ContainerRenderer} renderer Renderer used by the container.
+<a name="line277"></a> */
+<a name="line278"></a>goog.ui.Container.prototype.setRenderer = function(renderer) {
+<a name="line279"></a>  if (this.getElement()) {
+<a name="line280"></a>    // Too late.
+<a name="line281"></a>    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+<a name="line282"></a>  }
+<a name="line283"></a>
+<a name="line284"></a>  this.renderer_ = renderer;
+<a name="line285"></a>};
+<a name="line286"></a>
+<a name="line287"></a>
+<a name="line288"></a>// Standard goog.ui.Component implementation.
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * Creates the container&#39;s DOM.  Overrides {@link goog.ui.Component#createDom}.
+<a name="line293"></a> */
+<a name="line294"></a>goog.ui.Container.prototype.createDom = function() {
+<a name="line295"></a>  // Delegate to renderer.
+<a name="line296"></a>  this.setElementInternal(this.renderer_.createDom(this));
+<a name="line297"></a>};
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * Returns the DOM element into which child components are to be rendered,
+<a name="line302"></a> * or null if the container itself hasn&#39;t been rendered yet.  Overrides
+<a name="line303"></a> * {@link goog.ui.Component#getContentElement} by delegating to the renderer.
+<a name="line304"></a> * @return {Element?} Element to contain child elements (null if none).
+<a name="line305"></a> */
+<a name="line306"></a>goog.ui.Container.prototype.getContentElement = function() {
+<a name="line307"></a>  // Delegate to renderer.
+<a name="line308"></a>  return this.renderer_.getContentElement(this.getElement());
+<a name="line309"></a>};
+<a name="line310"></a>
+<a name="line311"></a>
+<a name="line312"></a>/**
+<a name="line313"></a> * Returns true if the given element can be decorated by this container.
+<a name="line314"></a> * Overrides {@link goog.ui.Component#canDecorate}.
+<a name="line315"></a> * @param {Element} element Element to decorate.
+<a name="line316"></a> * @return {boolean} True iff the element can be decorated.
+<a name="line317"></a> */
+<a name="line318"></a>goog.ui.Container.prototype.canDecorate = function(element) {
+<a name="line319"></a>  // Delegate to renderer.
+<a name="line320"></a>  return this.renderer_.canDecorate(element);
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Decorates the given element with this container. Overrides {@link
+<a name="line326"></a> * goog.ui.Component#decorateInternal}.  Considered protected.
+<a name="line327"></a> * @param {Element} element Element to decorate.
+<a name="line328"></a> */
+<a name="line329"></a>goog.ui.Container.prototype.decorateInternal = function(element) {
+<a name="line330"></a>  // Delegate to renderer.
+<a name="line331"></a>  this.setElementInternal(this.renderer_.decorate(this, element));
+<a name="line332"></a>  // Check whether the decorated element is explicitly styled to be invisible.
+<a name="line333"></a>  if (element.style.display == &#39;none&#39;) {
+<a name="line334"></a>    this.visible_ = false;
+<a name="line335"></a>  }
+<a name="line336"></a>};
+<a name="line337"></a>
+<a name="line338"></a>
+<a name="line339"></a>/**
+<a name="line340"></a> * Configures the container after its DOM has been rendered, and sets up event
+<a name="line341"></a> * handling.  Overrides {@link goog.ui.Component#enterDocument}.
+<a name="line342"></a> */
+<a name="line343"></a>goog.ui.Container.prototype.enterDocument = function() {
+<a name="line344"></a>  goog.ui.Container.superClass_.enterDocument.call(this);
+<a name="line345"></a>
+<a name="line346"></a>  this.forEachChild(function(child) {
+<a name="line347"></a>    if (child.isInDocument()) {
+<a name="line348"></a>      this.registerChildId_(child);
+<a name="line349"></a>    }
+<a name="line350"></a>  }, this);
+<a name="line351"></a>
+<a name="line352"></a>  // Detect right-to-left direction.
+<a name="line353"></a>  var elem = this.getElement();
+<a name="line354"></a>
+<a name="line355"></a>  // Call the renderer&#39;s initializeDom method to initialize the container&#39;s DOM.
+<a name="line356"></a>  this.renderer_.initializeDom(this);
+<a name="line357"></a>
+<a name="line358"></a>  // Initialize visibility (opt_force = true, so we don&#39;t dispatch events).
+<a name="line359"></a>  this.setVisible(this.visible_, true);
+<a name="line360"></a>
+<a name="line361"></a>  // Handle events dispatched by child controls.
+<a name="line362"></a>  this.getHandler().
+<a name="line363"></a>      listen(this, goog.ui.Component.EventType.ENTER,
+<a name="line364"></a>          this.handleEnterItem).
+<a name="line365"></a>      listen(this, goog.ui.Component.EventType.HIGHLIGHT,
+<a name="line366"></a>          this.handleHighlightItem).
+<a name="line367"></a>      listen(this, goog.ui.Component.EventType.UNHIGHLIGHT,
+<a name="line368"></a>          this.handleUnHighlightItem).
+<a name="line369"></a>      listen(this, goog.ui.Component.EventType.OPEN, this.handleOpenItem).
+<a name="line370"></a>      listen(this, goog.ui.Component.EventType.CLOSE, this.handleCloseItem).
+<a name="line371"></a>
+<a name="line372"></a>      // Handle mouse events.
+<a name="line373"></a>      listen(elem, goog.events.EventType.MOUSEDOWN, this.handleMouseDown).
+<a name="line374"></a>      listen(goog.dom.getOwnerDocument(elem), goog.events.EventType.MOUSEUP,
+<a name="line375"></a>          this.handleDocumentMouseUp).
+<a name="line376"></a>
+<a name="line377"></a>      // Handle mouse events on behalf of cpresently2ontrols in the container.
+<a name="line378"></a>      listen(elem, [
+<a name="line379"></a>        goog.events.EventType.MOUSEDOWN,
+<a name="line380"></a>        goog.events.EventType.MOUSEUP,
+<a name="line381"></a>        goog.events.EventType.MOUSEOVER,
+<a name="line382"></a>        goog.events.EventType.MOUSEOUT
+<a name="line383"></a>      ], this.handleChildMouseEvents);
+<a name="line384"></a>
+<a name="line385"></a>  // If the container is focusable, set up keyboard event handling.
+<a name="line386"></a>  if (this.isFocusable()) {
+<a name="line387"></a>    this.enableFocusHandling_(true);
+<a name="line388"></a>  }
+<a name="line389"></a>};
+<a name="line390"></a>
+<a name="line391"></a>
+<a name="line392"></a>/**
+<a name="line393"></a> * Sets up listening for events applicable to focusable containers.
+<a name="line394"></a> * @param {boolean} enable Whether to enable or disable focus handling.
+<a name="line395"></a> * @private
+<a name="line396"></a> */
+<a name="line397"></a>goog.ui.Container.prototype.enableFocusHandling_ = function(enable) {
+<a name="line398"></a>  var handler = this.getHandler();
+<a name="line399"></a>  var keyTarget = this.getKeyEventTarget();
+<a name="line400"></a>  if (enable) {
+<a name="line401"></a>    handler.
+<a name="line402"></a>        listen(keyTarget, goog.events.EventType.FOCUS, this.handleFocus).
+<a name="line403"></a>        listen(keyTarget, goog.events.EventType.BLUR, this.handleBlur).
+<a name="line404"></a>        listen(this.getKeyHandler(), goog.events.KeyHandler.EventType.KEY,
+<a name="line405"></a>            this.handleKeyEvent);
+<a name="line406"></a>  } else {
+<a name="line407"></a>    handler.
+<a name="line408"></a>        unlisten(keyTarget, goog.events.EventType.FOCUS, this.handleFocus).
+<a name="line409"></a>        unlisten(keyTarget, goog.events.EventType.BLUR, this.handleBlur).
+<a name="line410"></a>        unlisten(this.getKeyHandler(), goog.events.KeyHandler.EventType.KEY,
+<a name="line411"></a>            this.handleKeyEvent);
+<a name="line412"></a>  }
+<a name="line413"></a>};
+<a name="line414"></a>
+<a name="line415"></a>
+<a name="line416"></a>/**
+<a name="line417"></a> * Cleans up the container before its DOM is removed from the document, and
+<a name="line418"></a> * removes event handlers.  Overrides {@link goog.ui.Component#exitDocument}.
+<a name="line419"></a> */
+<a name="line420"></a>goog.ui.Container.prototype.exitDocument = function() {
+<a name="line421"></a>  // {@link #setHighlightedIndex} has to be called before
+<a name="line422"></a>  // {@link goog.ui.Component#exitDocument}, otherwise it has no effect.
+<a name="line423"></a>  this.setHighlightedIndex(-1);
+<a name="line424"></a>
+<a name="line425"></a>  if (this.openItem_) {
+<a name="line426"></a>    this.openItem_.setOpen(false);
+<a name="line427"></a>  }
+<a name="line428"></a>
+<a name="line429"></a>  this.mouseButtonPressed_ = false;
+<a name="line430"></a>
+<a name="line431"></a>  goog.ui.Container.superClass_.exitDocument.call(this);
+<a name="line432"></a>};
+<a name="line433"></a>
+<a name="line434"></a>
+<a name="line435"></a>/** @inheritDoc */
+<a name="line436"></a>goog.ui.Container.prototype.disposeInternal = function() {
+<a name="line437"></a>  goog.ui.Container.superClass_.disposeInternal.call(this);
+<a name="line438"></a>
+<a name="line439"></a>  if (this.keyHandler_) {
+<a name="line440"></a>    this.keyHandler_.dispose();
+<a name="line441"></a>    this.keyHandler_ = null;
+<a name="line442"></a>  }
+<a name="line443"></a>
+<a name="line444"></a>  this.childElementIdMap_ = null;
+<a name="line445"></a>  this.openItem_ = null;
+<a name="line446"></a>  this.renderer_ = null;
+<a name="line447"></a>};
+<a name="line448"></a>
+<a name="line449"></a>
+<a name="line450"></a>// Default event handlers.
+<a name="line451"></a>
+<a name="line452"></a>
+<a name="line453"></a>/**
+<a name="line454"></a> * Handles ENTER events raised by child controls when they are navigated to.
+<a name="line455"></a> * @param {goog.events.Event} e ENTER event to handle.
+<a name="line456"></a> * @return {boolean} Whether to prevent handleMouseOver from handling
+<a name="line457"></a> *    the event.
+<a name="line458"></a> */
+<a name="line459"></a>goog.ui.Container.prototype.handleEnterItem = function(e) {
+<a name="line460"></a>  // Allow the Control to highlight itself.
+<a name="line461"></a>  return true;
+<a name="line462"></a>};
+<a name="line463"></a>
+<a name="line464"></a>
+<a name="line465"></a>/**
+<a name="line466"></a> * Handles HIGHLIGHT events dispatched by items in the container when
+<a name="line467"></a> * they are highlighted.
+<a name="line468"></a> * @param {goog.events.Event} e Highlight event to handle.
+<a name="line469"></a> */
+<a name="line470"></a>goog.ui.Container.prototype.handleHighlightItem = function(e) {
+<a name="line471"></a>  var index = this.indexOfChild(/** @type {goog.ui.Control} */ (e.target));
+<a name="line472"></a>  if (index &gt; -1 &amp;&amp; index != this.highlightedIndex_) {
+<a name="line473"></a>    var item = this.getHighlighted();
+<a name="line474"></a>    if (item) {
+<a name="line475"></a>      // Un-highlight previously highlighted item.
+<a name="line476"></a>      item.setHighlighted(false);
+<a name="line477"></a>    }
+<a name="line478"></a>
+<a name="line479"></a>    this.highlightedIndex_ = index;
+<a name="line480"></a>    item = this.getHighlighted();
+<a name="line481"></a>
+<a name="line482"></a>    if (this.isMouseButtonPressed()) {
+<a name="line483"></a>      // Activate item when mouse button is pressed, to allow MacOS-style
+<a name="line484"></a>      // dragging to choose menu items.  Although this should only truly
+<a name="line485"></a>      // happen if the highlight is due to mouse movements, there is little
+<a name="line486"></a>      // harm in doing it for keyboard or programmatic highlights.
+<a name="line487"></a>      item.setActive(true);
+<a name="line488"></a>    }
+<a name="line489"></a>
+<a name="line490"></a>    // Open follows highlight.
+<a name="line491"></a>    if (this.openItem_ &amp;&amp; item != this.openItem_) {
+<a name="line492"></a>      if (item.isSupportedState(goog.ui.Component.State.OPENED)) {
+<a name="line493"></a>        item.setOpen(true);
+<a name="line494"></a>      } else {
+<a name="line495"></a>        this.openItem_.setOpen(false);
+<a name="line496"></a>      }
+<a name="line497"></a>    }
+<a name="line498"></a>  }
+<a name="line499"></a>  goog.dom.a11y.setState(this.getElement(),
+<a name="line500"></a>      goog.dom.a11y.State.ACTIVEDESCENDANT, e.target.getElement().id);
+<a name="line501"></a>};
+<a name="line502"></a>
+<a name="line503"></a>
+<a name="line504"></a>/**
+<a name="line505"></a> * Handles UNHIGHLIGHT events dispatched by items in the container when
+<a name="line506"></a> * they are unhighlighted.
+<a name="line507"></a> * @param {goog.events.Event} e Unhighlight event to handle.
+<a name="line508"></a> */
+<a name="line509"></a>goog.ui.Container.prototype.handleUnHighlightItem = function(e) {
+<a name="line510"></a>  if (e.target == this.getHighlighted()) {
+<a name="line511"></a>    this.highlightedIndex_ = -1;
+<a name="line512"></a>  }
+<a name="line513"></a>  goog.dom.a11y.setState(this.getElement(),
+<a name="line514"></a>       goog.dom.a11y.State.ACTIVEDESCENDANT, &#39;&#39;);
+<a name="line515"></a>};
+<a name="line516"></a>
+<a name="line517"></a>
+<a name="line518"></a>/**
+<a name="line519"></a> * Handles OPEN events dispatched by items in the container when they are
+<a name="line520"></a> * opened.
+<a name="line521"></a> * @param {goog.events.Event} e Open event to handle.
+<a name="line522"></a> */
+<a name="line523"></a>goog.ui.Container.prototype.handleOpenItem = function(e) {
+<a name="line524"></a>  var item = /** @type {goog.ui.Control} */ (e.target);
+<a name="line525"></a>  if (item &amp;&amp; item != this.openItem_ &amp;&amp; item.getParent() == this) {
+<a name="line526"></a>    if (this.openItem_) {
+<a name="line527"></a>      this.openItem_.setOpen(false);
+<a name="line528"></a>    }
+<a name="line529"></a>    this.openItem_ = item;
+<a name="line530"></a>  }
+<a name="line531"></a>};
+<a name="line532"></a>
+<a name="line533"></a>
+<a name="line534"></a>/**
+<a name="line535"></a> * Handles CLOSE events dispatched by items in the container when they are
+<a name="line536"></a> * closed.
+<a name="line537"></a> * @param {goog.events.Event} e Close event to handle.
+<a name="line538"></a> */
+<a name="line539"></a>goog.ui.Container.prototype.handleCloseItem = function(e) {
+<a name="line540"></a>  if (e.target == this.openItem_) {
+<a name="line541"></a>    this.openItem_ = null;
+<a name="line542"></a>  }
+<a name="line543"></a>};
+<a name="line544"></a>
+<a name="line545"></a>
+<a name="line546"></a>/**
+<a name="line547"></a> * Handles mousedown events over the container.  The default implementation
+<a name="line548"></a> * sets the &quot;mouse button pressed&quot; flag and, if the container is focusable,
+<a name="line549"></a> * grabs keyboard focus.
+<a name="line550"></a> * @param {goog.events.BrowserEvent} e Mousedown event to handle.
+<a name="line551"></a> */
+<a name="line552"></a>goog.ui.Container.prototype.handleMouseDown = function(e) {
+<a name="line553"></a>  if (this.enabled_) {
+<a name="line554"></a>    this.setMouseButtonPressed(true);
+<a name="line555"></a>  }
+<a name="line556"></a>
+<a name="line557"></a>  var keyTarget = this.getKeyEventTarget();
+<a name="line558"></a>  if (this.renderer_.hasTabIndex(keyTarget)) {
+<a name="line559"></a>    // The container is configured to receive keyboard focus.
+<a name="line560"></a>    keyTarget.focus();
+<a name="line561"></a>  } else {
+<a name="line562"></a>    // The control isn&#39;t configured to receive keyboard focus; prevent it
+<a name="line563"></a>    // from stealing focus or destroying the selection.
+<a name="line564"></a>    e.preventDefault();
+<a name="line565"></a>  }
+<a name="line566"></a>};
+<a name="line567"></a>
+<a name="line568"></a>
+<a name="line569"></a>/**
+<a name="line570"></a> * Handles mouseup events over the document.  The default implementation
+<a name="line571"></a> * clears the &quot;mouse button pressed&quot; flag.
+<a name="line572"></a> * @param {goog.events.BrowserEvent} e Mouseup event to handle.
+<a name="line573"></a> */
+<a name="line574"></a>goog.ui.Container.prototype.handleDocumentMouseUp = function(e) {
+<a name="line575"></a>  this.setMouseButtonPressed(false);
+<a name="line576"></a>};
+<a name="line577"></a>
+<a name="line578"></a>
+<a name="line579"></a>/**
+<a name="line580"></a> * Handles mouse events originating from nodes belonging to the controls hosted
+<a name="line581"></a> * in the container.  Locates the child control based on the DOM node that
+<a name="line582"></a> * dispatched the event, and forwards the event to the control for handling.
+<a name="line583"></a> * @param {goog.events.BrowserEvent} e Mouse event to handle.
+<a name="line584"></a> */
+<a name="line585"></a>goog.ui.Container.prototype.handleChildMouseEvents = function(e) {
+<a name="line586"></a>  var control = this.getOwnerControl(/** @type {Node} */ (e.target));
+<a name="line587"></a>  if (control) {
+<a name="line588"></a>    // Child control identified; forward the event.
+<a name="line589"></a>    switch (e.type) {
+<a name="line590"></a>      case goog.events.EventType.MOUSEDOWN:
+<a name="line591"></a>        control.handleMouseDown(e);
+<a name="line592"></a>        break;
+<a name="line593"></a>      case goog.events.EventType.MOUSEUP:
+<a name="line594"></a>        control.handleMouseUp(e);
+<a name="line595"></a>        break;
+<a name="line596"></a>      case goog.events.EventType.MOUSEOVER:
+<a name="line597"></a>        control.handleMouseOver(e);
+<a name="line598"></a>        break;
+<a name="line599"></a>      case goog.events.EventType.MOUSEOUT:
+<a name="line600"></a>        control.handleMouseOut(e);
+<a name="line601"></a>        break;
+<a name="line602"></a>    }
+<a name="line603"></a>  }
+<a name="line604"></a>};
+<a name="line605"></a>
+<a name="line606"></a>
+<a name="line607"></a>/**
+<a name="line608"></a> * Returns the child control that owns the given DOM node, or null if no such
+<a name="line609"></a> * control is found.
+<a name="line610"></a> * @param {Node} node DOM node whose owner is to be returned.
+<a name="line611"></a> * @return {goog.ui.Control?} Control hosted in the container to which the node
+<a name="line612"></a> *     belongs (if found).
+<a name="line613"></a> * @protected
+<a name="line614"></a> */
+<a name="line615"></a>goog.ui.Container.prototype.getOwnerControl = function(node) {
+<a name="line616"></a>  // Ensure that this container actually has child controls before
+<a name="line617"></a>  // looking up the owner.
+<a name="line618"></a>  if (this.childElementIdMap_) {
+<a name="line619"></a>    var elem = this.getElement();
+<a name="line620"></a>    while (node &amp;&amp; node.parentNode &amp;&amp; node != elem) {
+<a name="line621"></a>      var id = node.id;
+<a name="line622"></a>      if (id in this.childElementIdMap_) {
+<a name="line623"></a>        return this.childElementIdMap_[id];
+<a name="line624"></a>      }
+<a name="line625"></a>      node = node.parentNode;
+<a name="line626"></a>    }
+<a name="line627"></a>  }
+<a name="line628"></a>  return null;
+<a name="line629"></a>};
+<a name="line630"></a>
+<a name="line631"></a>
+<a name="line632"></a>/**
+<a name="line633"></a> * Handles focus events raised when the container&#39;s key event target receives
+<a name="line634"></a> * keyboard focus.
+<a name="line635"></a> * @param {goog.events.BrowserEvent} e Focus event to handle.
+<a name="line636"></a> */
+<a name="line637"></a>goog.ui.Container.prototype.handleFocus = function(e) {
+<a name="line638"></a>  // No-op in the base class.
+<a name="line639"></a>};
+<a name="line640"></a>
+<a name="line641"></a>
+<a name="line642"></a>/**
+<a name="line643"></a> * Handles blur events raised when the container&#39;s key event target loses
+<a name="line644"></a> * keyboard focus.  The default implementation clears the highlight index.
+<a name="line645"></a> * @param {goog.events.BrowserEvent} e Blur event to handle.
+<a name="line646"></a> */
+<a name="line647"></a>goog.ui.Container.prototype.handleBlur = function(e) {
+<a name="line648"></a>  this.setHighlightedIndex(-1);
+<a name="line649"></a>  this.setMouseButtonPressed(false);
+<a name="line650"></a>  // If the container loses focus, and one of its children is open, close it.
+<a name="line651"></a>  if (this.openItem_) {
+<a name="line652"></a>    this.openItem_.setOpen(false);
+<a name="line653"></a>  }
+<a name="line654"></a>};
+<a name="line655"></a>
+<a name="line656"></a>
+<a name="line657"></a>/**
+<a name="line658"></a> * Attempts to handle a keyboard event, if the control is enabled, by calling
+<a name="line659"></a> * {@link handleKeyEventInternal}.  Considered protected; should only be used
+<a name="line660"></a> * within this package and by subclasses.
+<a name="line661"></a> * @param {goog.events.KeyEvent} e Key event to handle.
+<a name="line662"></a> * @return {boolean} Whether the key event was handled.
+<a name="line663"></a> */
+<a name="line664"></a>goog.ui.Container.prototype.handleKeyEvent = function(e) {
+<a name="line665"></a>  if (this.isEnabled() &amp;&amp; this.getChildCount() != 0 &amp;&amp;
+<a name="line666"></a>      this.handleKeyEventInternal(e)) {
+<a name="line667"></a>    e.preventDefault();
+<a name="line668"></a>    e.stopPropagation();
+<a name="line669"></a>    return true;
+<a name="line670"></a>  }
+<a name="line671"></a>  return false;
+<a name="line672"></a>};
+<a name="line673"></a>
+<a name="line674"></a>
+<a name="line675"></a>/**
+<a name="line676"></a> * Attempts to handle a keyboard event; returns true if the event was handled,
+<a name="line677"></a> * false otherwise.  If the container is enabled, and a child is highlighted,
+<a name="line678"></a> * calls the child control&#39;s {@code handleKeyEvent} method to give the control
+<a name="line679"></a> * a chance to handle the event first.
+<a name="line680"></a> * @param {goog.events.KeyEvent} e Key event to handle.
+<a name="line681"></a> * @return {boolean} Whether the event was handled by the container (or one of
+<a name="line682"></a> *     its children).
+<a name="line683"></a> */
+<a name="line684"></a>goog.ui.Container.prototype.handleKeyEventInternal = function(e) {
+<a name="line685"></a>  // Give the highlighted control the chance to handle the key event.
+<a name="line686"></a>  var highlighted = this.getHighlighted();
+<a name="line687"></a>  if (highlighted &amp;&amp; typeof highlighted.handleKeyEvent == &#39;function&#39; &amp;&amp;
+<a name="line688"></a>      highlighted.handleKeyEvent(e)) {
+<a name="line689"></a>    return true;
+<a name="line690"></a>  }
+<a name="line691"></a>
+<a name="line692"></a>  // Give the open control the chance to handle the key event.
+<a name="line693"></a>  if (this.openItem_ &amp;&amp; this.openItem_ != highlighted &amp;&amp;
+<a name="line694"></a>      typeof this.openItem_.handleKeyEvent == &#39;function&#39; &amp;&amp;
+<a name="line695"></a>      this.openItem_.handleKeyEvent(e)) {
+<a name="line696"></a>    return true;
+<a name="line697"></a>  }
+<a name="line698"></a>
+<a name="line699"></a>  // Either nothing is highlighted, or the highlighted control didn&#39;t handle
+<a name="line700"></a>  // the key event, so attempt to handle it here.
+<a name="line701"></a>  switch (e.keyCode) {
+<a name="line702"></a>    case goog.events.KeyCodes.ESC:
+<a name="line703"></a>      if (this.isFocusable()) {
+<a name="line704"></a>        this.getKeyEventTarget().blur();
+<a name="line705"></a>      } else {
+<a name="line706"></a>        return false;
+<a name="line707"></a>      }
+<a name="line708"></a>      break;
+<a name="line709"></a>
+<a name="line710"></a>    case goog.events.KeyCodes.HOME:
+<a name="line711"></a>      this.highlightFirst();
+<a name="line712"></a>      break;
+<a name="line713"></a>
+<a name="line714"></a>    case goog.events.KeyCodes.END:
+<a name="line715"></a>      this.highlightLast();
+<a name="line716"></a>      break;
+<a name="line717"></a>
+<a name="line718"></a>    case goog.events.KeyCodes.UP:
+<a name="line719"></a>      if (this.orientation_ == goog.ui.Container.Orientation.VERTICAL) {
+<a name="line720"></a>        this.highlightPrevious();
+<a name="line721"></a>      } else {
+<a name="line722"></a>        return false;
+<a name="line723"></a>      }
+<a name="line724"></a>      break;
+<a name="line725"></a>
+<a name="line726"></a>    case goog.events.KeyCodes.LEFT:
+<a name="line727"></a>      if (this.orientation_ == goog.ui.Container.Orientation.HORIZONTAL) {
+<a name="line728"></a>        if (this.isRightToLeft()) {
+<a name="line729"></a>          this.highlightNext();
+<a name="line730"></a>        } else {
+<a name="line731"></a>          this.highlightPrevious();
+<a name="line732"></a>        }
+<a name="line733"></a>      } else {
+<a name="line734"></a>        return false;
+<a name="line735"></a>      }
+<a name="line736"></a>      break;
+<a name="line737"></a>
+<a name="line738"></a>    case goog.events.KeyCodes.DOWN:
+<a name="line739"></a>      if (this.orientation_ == goog.ui.Container.Orientation.VERTICAL) {
+<a name="line740"></a>        this.highlightNext();
+<a name="line741"></a>      } else {
+<a name="line742"></a>        return false;
+<a name="line743"></a>      }
+<a name="line744"></a>      break;
+<a name="line745"></a>
+<a name="line746"></a>    case goog.events.KeyCodes.RIGHT:
+<a name="line747"></a>      if (this.orientation_ == goog.ui.Container.Orientation.HORIZONTAL) {
+<a name="line748"></a>        if (this.isRightToLeft()) {
+<a name="line749"></a>          this.highlightPrevious();
+<a name="line750"></a>        } else {
+<a name="line751"></a>          this.highlightNext();
+<a name="line752"></a>        }
+<a name="line753"></a>      } else {
+<a name="line754"></a>        return false;
+<a name="line755"></a>      }
+<a name="line756"></a>      break;
+<a name="line757"></a>
+<a name="line758"></a>    default:
+<a name="line759"></a>      return false;
+<a name="line760"></a>  }
+<a name="line761"></a>
+<a name="line762"></a>  return true;
+<a name="line763"></a>};
+<a name="line764"></a>
+<a name="line765"></a>
+<a name="line766"></a>// Child component management.
+<a name="line767"></a>
+<a name="line768"></a>
+<a name="line769"></a>/**
+<a name="line770"></a> * Creates a DOM ID for the child control and registers it to an internal
+<a name="line771"></a> * hash table to be able to find it fast by id.
+<a name="line772"></a> * @param {goog.ui.Control} child The child control. Its root element has
+<a name="line773"></a> *     to be created yet.
+<a name="line774"></a> * @private
+<a name="line775"></a> */
+<a name="line776"></a>goog.ui.Container.prototype.registerChildId_ = function(child) {
+<a name="line777"></a>  // Map the DOM ID of the control&#39;s root element to the control itself.
+<a name="line778"></a>  var childElem = child.getElement();
+<a name="line779"></a>
+<a name="line780"></a>  // If the control&#39;s root element doesn&#39;t have a DOM ID assign one.
+<a name="line781"></a>  var id = childElem.id || (childElem.id = child.getId());
+<a name="line782"></a>
+<a name="line783"></a>  // Lazily create the child element ID map on first use.
+<a name="line784"></a>  if (!this.childElementIdMap_) {
+<a name="line785"></a>    this.childElementIdMap_ = {};
+<a name="line786"></a>  }
+<a name="line787"></a>  this.childElementIdMap_[id] = child;
+<a name="line788"></a>};
+<a name="line789"></a>
+<a name="line790"></a>
+<a name="line791"></a>/**
+<a name="line792"></a> * Adds the specified control as the last child of this container.  See
+<a name="line793"></a> * {@link goog.ui.Container#addChildAt} for detailed semantics.
+<a name="line794"></a> * @param {goog.ui.Control} child The new child control.
+<a name="line795"></a> * @param {boolean} opt_render Whether the new child should be rendered
+<a name="line796"></a> *     immediately after being added (defaults to false).
+<a name="line797"></a> */
+<a name="line798"></a>goog.ui.Container.prototype.addChild = function(child, opt_render) {
+<a name="line799"></a>  goog.ui.Container.superClass_.addChild.call(this, child, opt_render);
+<a name="line800"></a>};
+<a name="line801"></a>
+<a name="line802"></a>
+<a name="line803"></a>/**
+<a name="line804"></a> * Adds the control as a child of this container at the given 0-based index.
+<a name="line805"></a> * Overrides {@link goog.ui.Component#addChildAt} by also updating the
+<a name="line806"></a> * container&#39;s highlight index.  Since {@link goog.ui.Component#addChild} uses
+<a name="line807"></a> * {@link #addChildAt} internally, we only need to override this method.
+<a name="line808"></a> * @param {goog.ui.Control} control New child.
+<a name="line809"></a> * @param {number} index Index at which the new child is to be added.
+<a name="line810"></a> * @param {boolean} opt_render Whether the new child should be rendered
+<a name="line811"></a> *     immediately after being added (defaults to false).
+<a name="line812"></a> */
+<a name="line813"></a>goog.ui.Container.prototype.addChildAt = function(control, index, opt_render) {
+<a name="line814"></a>  // Make sure the child control dispatches HIGHLIGHT, UNHIGHLIGHT, OPEN, and
+<a name="line815"></a>  // CLOSE events, and that it doesn&#39;t steal keyboard focus.
+<a name="line816"></a>  control.setDispatchTransitionEvents(goog.ui.Component.State.HOVER, true);
+<a name="line817"></a>  control.setDispatchTransitionEvents(goog.ui.Component.State.OPENED, true);
+<a name="line818"></a>  if (this.isFocusable() || !this.isFocusableChildrenAllowed()) {
+<a name="line819"></a>    control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
+<a name="line820"></a>  }
+<a name="line821"></a>
+<a name="line822"></a>  // Disable mouse event handling by child controls.
+<a name="line823"></a>  control.setHandleMouseEvents(false);
+<a name="line824"></a>
+<a name="line825"></a>  // Let the superclass implementation do the work.
+<a name="line826"></a>  goog.ui.Container.superClass_.addChildAt.call(this, control, index,
+<a name="line827"></a>      opt_render);
+<a name="line828"></a>
+<a name="line829"></a>  if (opt_render &amp;&amp; this.isInDocument()) {
+<a name="line830"></a>    this.registerChildId_(control);
+<a name="line831"></a>  }
+<a name="line832"></a>
+<a name="line833"></a>  // Update the highlight index, if needed.
+<a name="line834"></a>  if (index &lt;= this.highlightedIndex_) {
+<a name="line835"></a>    this.highlightedIndex_++;
+<a name="line836"></a>  }
+<a name="line837"></a>};
+<a name="line838"></a>
+<a name="line839"></a>
+<a name="line840"></a>/**
+<a name="line841"></a> * Removes a child control.  Overrides {@link goog.ui.Component#removeChild} by
+<a name="line842"></a> * updating the highlight index.  Since {@link goog.ui.Component#removeChildAt}
+<a name="line843"></a> * uses {@link #removeChild} internally, we only need to override this method.
+<a name="line844"></a> * @param {string|goog.ui.Control} control The ID of the child to remove, or
+<a name="line845"></a> *     the control itself.
+<a name="line846"></a> * @param {boolean} opt_unrender Whether to call {@code exitDocument} on the
+<a name="line847"></a> *     removed control, and detach its DOM from the document (defaults to
+<a name="line848"></a> *     false).
+<a name="line849"></a> * @return {goog.ui.Control} The removed control, if any.
+<a name="line850"></a> */
+<a name="line851"></a>goog.ui.Container.prototype.removeChild = function(control, opt_unrender) {
+<a name="line852"></a>  // TODO: Fix implementation so that it works if control is a string.
+<a name="line853"></a>
+<a name="line854"></a>  var index = this.indexOfChild(/** @type {goog.ui.Control} */ (control));
+<a name="line855"></a>  if (index != -1) {
+<a name="line856"></a>    if (index == this.highlightedIndex_) {
+<a name="line857"></a>      control.setHighlighted(false);
+<a name="line858"></a>    } else if (index &lt; this.highlightedIndex_) {
+<a name="line859"></a>      this.highlightedIndex_--;
+<a name="line860"></a>    }
+<a name="line861"></a>  }
+<a name="line862"></a>
+<a name="line863"></a>  // Remove the mapping from the child element ID map.
+<a name="line864"></a>  var childElem = control.getElement();
+<a name="line865"></a>  if (childElem &amp;&amp; childElem.id) {
+<a name="line866"></a>    goog.object.remove(this.childElementIdMap_, childElem.id);
+<a name="line867"></a>  }
+<a name="line868"></a>
+<a name="line869"></a>  control = /** @type {goog.ui.Control} */ (
+<a name="line870"></a>      goog.ui.Container.superClass_.removeChild.call(this, control,
+<a name="line871"></a>          opt_unrender));
+<a name="line872"></a>
+<a name="line873"></a>  // Re-enable mouse event handling (in case the control is reused elsewhere).
+<a name="line874"></a>  control.setHandleMouseEvents(true);
+<a name="line875"></a>
+<a name="line876"></a>  return control;
+<a name="line877"></a>};
+<a name="line878"></a>
+<a name="line879"></a>
+<a name="line880"></a>// Container state management.
+<a name="line881"></a>
+<a name="line882"></a>
+<a name="line883"></a>/**
+<a name="line884"></a> * Returns the container&#39;s orientation.
+<a name="line885"></a> * @return {?goog.ui.Container.Orientation} Container orientation.
+<a name="line886"></a> */
+<a name="line887"></a>goog.ui.Container.prototype.getOrientation = function() {
+<a name="line888"></a>  return this.orientation_;
+<a name="line889"></a>};
+<a name="line890"></a>
+<a name="line891"></a>
+<a name="line892"></a>/**
+<a name="line893"></a> * Sets the container&#39;s orientation.
+<a name="line894"></a> * @param {goog.ui.Container.Orientation} orientation Container orientation.
+<a name="line895"></a> */
+<a name="line896"></a>// TODO: Do we need to support containers with dynamic orientation?
+<a name="line897"></a>goog.ui.Container.prototype.setOrientation = function(orientation) {
+<a name="line898"></a>  if (this.getElement()) {
+<a name="line899"></a>    // Too late.
+<a name="line900"></a>    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+<a name="line901"></a>  }
+<a name="line902"></a>
+<a name="line903"></a>  this.orientation_ = orientation;
+<a name="line904"></a>};
+<a name="line905"></a>
+<a name="line906"></a>
+<a name="line907"></a>/**
+<a name="line908"></a> * Returns true if the container&#39;s visibility is set to visible, false if
+<a name="line909"></a> * it is set to hidden.  A container that is set to hidden is guaranteed
+<a name="line910"></a> * to be hidden from the user, but the reverse isn&#39;t necessarily true.
+<a name="line911"></a> * A container may be set to visible but can otherwise be obscured by another
+<a name="line912"></a> * element, rendered off-screen, or hidden using direct CSS manipulation.
+<a name="line913"></a> * @return {boolean} Whether the container is set to be visible.
+<a name="line914"></a> */
+<a name="line915"></a>goog.ui.Container.prototype.isVisible = function() {
+<a name="line916"></a>  return this.visible_;
+<a name="line917"></a>};
+<a name="line918"></a>
+<a name="line919"></a>
+<a name="line920"></a>/**
+<a name="line921"></a> * Shows or hides the container.  Does nothing if the container already has
+<a name="line922"></a> * the requested visibility.  Otherwise, dispatches a SHOW or HIDE event as
+<a name="line923"></a> * appropriate, giving listeners a chance to prevent the visibility change.
+<a name="line924"></a> * @param {boolean} visible Whether to show or hide the container.
+<a name="line925"></a> * @param {boolean} opt_force If true, doesn&#39;t check whether the container
+<a name="line926"></a> *     already has the requested visibility, and doesn&#39;t dispatch any events.
+<a name="line927"></a> * @return {boolean} Whether the visibility was changed.
+<a name="line928"></a> */
+<a name="line929"></a>goog.ui.Container.prototype.setVisible = function(visible, opt_force) {
+<a name="line930"></a>  if (opt_force || (this.visible_ != visible &amp;&amp; this.dispatchEvent(visible ?
+<a name="line931"></a>      goog.ui.Component.EventType.SHOW : goog.ui.Component.EventType.HIDE))) {
+<a name="line932"></a>    this.visible_ = visible;
+<a name="line933"></a>
+<a name="line934"></a>    var elem = this.getElement();
+<a name="line935"></a>    if (elem) {
+<a name="line936"></a>      goog.style.showElement(elem, visible);
+<a name="line937"></a>      if (this.isFocusable()) {
+<a name="line938"></a>        // Enable keyboard access only for enabled &amp; visible containers.
+<a name="line939"></a>        this.renderer_.enableTabIndex(this.getKeyEventTarget(),
+<a name="line940"></a>            this.enabled_ &amp;&amp; this.visible_);
+<a name="line941"></a>      }
+<a name="line942"></a>      if (this.visible_ &amp;&amp; !opt_force) {
+<a name="line943"></a>        this.dispatchEvent(goog.ui.Container.EventType.AFTER_SHOW);
+<a name="line944"></a>      }
+<a name="line945"></a>    }
+<a name="line946"></a>
+<a name="line947"></a>    return true;
+<a name="line948"></a>  }
+<a name="line949"></a>
+<a name="line950"></a>  return false;
+<a name="line951"></a>};
+<a name="line952"></a>
+<a name="line953"></a>
+<a name="line954"></a>/**
+<a name="line955"></a> * Returns true if the container is enabled, false otherwise.
+<a name="line956"></a> * @return {boolean} Whether the container is enabled.
+<a name="line957"></a> */
+<a name="line958"></a>goog.ui.Container.prototype.isEnabled = function() {
+<a name="line959"></a>  return this.enabled_;
+<a name="line960"></a>};
+<a name="line961"></a>
+<a name="line962"></a>
+<a name="line963"></a>/**
+<a name="line964"></a> * Enables/disables the container based on the {@code enable} argument.
+<a name="line965"></a> * Dispatches an {@code ENABLED} or {@code DISABLED} event prior to changing
+<a name="line966"></a> * the container&#39;s state, which may be caught and canceled to prevent the
+<a name="line967"></a> * container from changing state.  Also enables/disables child controls.
+<a name="line968"></a> * @param {boolean} enable Whether to enable or disable the container.
+<a name="line969"></a> */
+<a name="line970"></a>goog.ui.Container.prototype.setEnabled = function(enable) {
+<a name="line971"></a>  if (this.enabled_ != enable &amp;&amp; this.dispatchEvent(enable ?
+<a name="line972"></a>      goog.ui.Component.EventType.ENABLE :
+<a name="line973"></a>      goog.ui.Component.EventType.DISABLE)) {
+<a name="line974"></a>    if (enable) {
+<a name="line975"></a>      // Flag the container as enabled first, then update children.  This is
+<a name="line976"></a>      // because controls can&#39;t be enabled if their parent is disabled.
+<a name="line977"></a>      this.enabled_ = true;
+<a name="line978"></a>      this.forEachChild(function(child) {
+<a name="line979"></a>        // Enable child control unless it is flagged.
+<a name="line980"></a>        if (child.wasDisabled) {
+<a name="line981"></a>          delete child.wasDisabled;
+<a name="line982"></a>        } else {
+<a name="line983"></a>          child.setEnabled(true);
+<a name="line984"></a>        }
+<a name="line985"></a>      });
+<a name="line986"></a>    } else {
+<a name="line987"></a>      // Disable children first, then flag the container as disabled.  This is
+<a name="line988"></a>      // because controls can&#39;t be disabled if their parent is already disabled.
+<a name="line989"></a>      this.forEachChild(function(child) {
+<a name="line990"></a>        // Disable child control, or flag it if it&#39;s already disabled.
+<a name="line991"></a>        if (child.isEnabled()) {
+<a name="line992"></a>          child.setEnabled(false);
+<a name="line993"></a>        } else {
+<a name="line994"></a>          child.wasDisabled = true;
+<a name="line995"></a>        }
+<a name="line996"></a>      });
+<a name="line997"></a>      this.enabled_ = false;
+<a name="line998"></a>      this.setMouseButtonPressed(false);
+<a name="line999"></a>    }
+<a name="line1000"></a>
+<a name="line1001"></a>    if (this.isFocusable()) {
+<a name="line1002"></a>      // Enable keyboard access only for enabled &amp; visible components.
+<a name="line1003"></a>      this.renderer_.enableTabIndex(this.getKeyEventTarget(),
+<a name="line1004"></a>          enable &amp;&amp; this.visible_);
+<a name="line1005"></a>    }
+<a name="line1006"></a>  }
+<a name="line1007"></a>};
+<a name="line1008"></a>
+<a name="line1009"></a>
+<a name="line1010"></a>/**
+<a name="line1011"></a> * Returns true if the container is focusable, false otherwise.  The default
+<a name="line1012"></a> * is true.  Focusable containers always have a tab index and allocate a key
+<a name="line1013"></a> * handler to handle keyboard events while focused.
+<a name="line1014"></a> * @return {boolean} Whether the component is focusable.
+<a name="line1015"></a> */
+<a name="line1016"></a>goog.ui.Container.prototype.isFocusable = function() {
+<a name="line1017"></a>  return this.focusable_;
+<a name="line1018"></a>};
+<a name="line1019"></a>
+<a name="line1020"></a>
+<a name="line1021"></a>/**
+<a name="line1022"></a> * Sets whether the container is focusable.  The default is true.  Focusable
+<a name="line1023"></a> * containers always have a tab index and allocate a key handler to handle
+<a name="line1024"></a> * keyboard events while focused.
+<a name="line1025"></a> * @param {boolean} focusable Whether the component is to be focusable.
+<a name="line1026"></a> */
+<a name="line1027"></a>goog.ui.Container.prototype.setFocusable = function(focusable) {
+<a name="line1028"></a>  if (focusable != this.focusable_ &amp;&amp; this.isInDocument()) {
+<a name="line1029"></a>    this.enableFocusHandling_(focusable);
+<a name="line1030"></a>  }
+<a name="line1031"></a>  this.focusable_ = focusable;
+<a name="line1032"></a>  if (this.enabled_ &amp;&amp; this.visible_) {
+<a name="line1033"></a>    this.renderer_.enableTabIndex(this.getKeyEventTarget(), focusable);
+<a name="line1034"></a>  }
+<a name="line1035"></a>};
+<a name="line1036"></a>
+<a name="line1037"></a>
+<a name="line1038"></a>/**
+<a name="line1039"></a> * Returns true if the container allows children to be focusable, false
+<a name="line1040"></a> * otherwise.  Only effective if the container is not focusable.
+<a name="line1041"></a> * @return {boolean} Whether children should be focusable.
+<a name="line1042"></a> */
+<a name="line1043"></a>goog.ui.Container.prototype.isFocusableChildrenAllowed = function() {
+<a name="line1044"></a>  return this.allowFocusableChildren_;
+<a name="line1045"></a>};
+<a name="line1046"></a>
+<a name="line1047"></a>
+<a name="line1048"></a>/**
+<a name="line1049"></a> * Sets whether the container allows children to be focusable, false
+<a name="line1050"></a> * otherwise.  Only effective if the container is not focusable.
+<a name="line1051"></a> * @param {boolean} focusable Whether the children should be focusable.
+<a name="line1052"></a> */
+<a name="line1053"></a>goog.ui.Container.prototype.setFocusableChildrenAllowed = function(focusable) {
+<a name="line1054"></a>  this.allowFocusableChildren_ = focusable;
+<a name="line1055"></a>};
+<a name="line1056"></a>
+<a name="line1057"></a>
+<a name="line1058"></a>// Highlight management.
+<a name="line1059"></a>
+<a name="line1060"></a>
+<a name="line1061"></a>/**
+<a name="line1062"></a> * Returns the index of the currently highlighted item (-1 if none).
+<a name="line1063"></a> * @return {number} Index of the currently highlighted item.
+<a name="line1064"></a> */
+<a name="line1065"></a>goog.ui.Container.prototype.getHighlightedIndex = function() {
+<a name="line1066"></a>  return this.highlightedIndex_;
+<a name="line1067"></a>};
+<a name="line1068"></a>
+<a name="line1069"></a>
+<a name="line1070"></a>/**
+<a name="line1071"></a> * Highlights the item at the given 0-based index (if any).  If another item
+<a name="line1072"></a> * was previously highlighted, it is un-highlighted.
+<a name="line1073"></a> * @param {number} index Index of item to highlight (-1 removes the current
+<a name="line1074"></a> *     highlight).
+<a name="line1075"></a> */
+<a name="line1076"></a>goog.ui.Container.prototype.setHighlightedIndex = function(index) {
+<a name="line1077"></a>  var child = this.getChildAt(index);
+<a name="line1078"></a>  if (child) {
+<a name="line1079"></a>    child.setHighlighted(true);
+<a name="line1080"></a>  } else if (this.highlightedIndex_ &gt; -1) {
+<a name="line1081"></a>    this.getHighlighted().setHighlighted(false);
+<a name="line1082"></a>  }
+<a name="line1083"></a>};
+<a name="line1084"></a>
+<a name="line1085"></a>
+<a name="line1086"></a>/**
+<a name="line1087"></a> * Highlights the given item if it exists and is a child of the container;
+<a name="line1088"></a> * otherwise un-highlights the currently highlighted item.
+<a name="line1089"></a> * @param {goog.ui.Control} item Item to highlight.
+<a name="line1090"></a> */
+<a name="line1091"></a>goog.ui.Container.prototype.setHighlighted = function(item) {
+<a name="line1092"></a>  this.setHighlightedIndex(this.indexOfChild(item));
+<a name="line1093"></a>};
+<a name="line1094"></a>
+<a name="line1095"></a>
+<a name="line1096"></a>/**
+<a name="line1097"></a> * Returns the currently highlighted item (if any).
+<a name="line1098"></a> * @return {goog.ui.Control?} Highlighted item (null if none).
+<a name="line1099"></a> */
+<a name="line1100"></a>goog.ui.Container.prototype.getHighlighted = function() {
+<a name="line1101"></a>  return /** @type {goog.ui.Control} */ (
+<a name="line1102"></a>      this.getChildAt(this.highlightedIndex_));
+<a name="line1103"></a>};
+<a name="line1104"></a>
+<a name="line1105"></a>
+<a name="line1106"></a>/**
+<a name="line1107"></a> * Highlights the first highlightable item in the container
+<a name="line1108"></a> */
+<a name="line1109"></a>goog.ui.Container.prototype.highlightFirst = function() {
+<a name="line1110"></a>  this.highlightHelper(function(index, max) {
+<a name="line1111"></a>    return (index + 1) % max;
+<a name="line1112"></a>  }, this.getChildCount() - 1);
+<a name="line1113"></a>};
+<a name="line1114"></a>
+<a name="line1115"></a>
+<a name="line1116"></a>/**
+<a name="line1117"></a> * Highlights the last highlightable item in the container.
+<a name="line1118"></a> */
+<a name="line1119"></a>goog.ui.Container.prototype.highlightLast = function() {
+<a name="line1120"></a>  this.highlightHelper(function(index, max) {
+<a name="line1121"></a>    index--;
+<a name="line1122"></a>    return index &lt; 0 ? max - 1 : index;
+<a name="line1123"></a>  }, 0);
+<a name="line1124"></a>};
+<a name="line1125"></a>
+<a name="line1126"></a>
+<a name="line1127"></a>/**
+<a name="line1128"></a> * Highlights the next highlightable item (or the first if nothing is currently
+<a name="line1129"></a> * highlighted).
+<a name="line1130"></a> */
+<a name="line1131"></a>goog.ui.Container.prototype.highlightNext = function() {
+<a name="line1132"></a>  this.highlightHelper(function(index, max) {
+<a name="line1133"></a>    return (index + 1) % max;
+<a name="line1134"></a>  }, this.highlightedIndex_);
+<a name="line1135"></a>};
+<a name="line1136"></a>
+<a name="line1137"></a>
+<a name="line1138"></a>/**
+<a name="line1139"></a> * Highlights the previous highlightable item (or the last if nothing is
+<a name="line1140"></a> * currently highlighted).
+<a name="line1141"></a> */
+<a name="line1142"></a>goog.ui.Container.prototype.highlightPrevious = function() {
+<a name="line1143"></a>  this.highlightHelper(function(index, max) {
+<a name="line1144"></a>    index--;
+<a name="line1145"></a>    return index &lt; 0 ? max - 1 : index;
+<a name="line1146"></a>  }, this.highlightedIndex_);
+<a name="line1147"></a>};
+<a name="line1148"></a>
+<a name="line1149"></a>
+<a name="line1150"></a>/**
+<a name="line1151"></a> * Helper function that manages the details of moving the highlight among
+<a name="line1152"></a> * child controls in response to keyboard events.
+<a name="line1153"></a> * @param {function(number, number) : number} fn Function that accepts the
+<a name="line1154"></a> *     current and maximum indices, and returns the next index to check.
+<a name="line1155"></a> * @param {number} startIndex Start index.
+<a name="line1156"></a> * @return {boolean} Whether the highlight has changed.
+<a name="line1157"></a> * @protected
+<a name="line1158"></a> */
+<a name="line1159"></a>goog.ui.Container.prototype.highlightHelper = function(fn, startIndex) {
+<a name="line1160"></a>  // If the start index is -1 (meaning there&#39;s nothing currently highlighted),
+<a name="line1161"></a>  // try starting from the currently open item, if any.
+<a name="line1162"></a>  var curIndex = startIndex &lt; 0 ?
+<a name="line1163"></a>      this.indexOfChild(this.openItem_) : startIndex;
+<a name="line1164"></a>  var numItems = this.getChildCount();
+<a name="line1165"></a>
+<a name="line1166"></a>  curIndex = fn(curIndex, numItems);
+<a name="line1167"></a>  var visited = 0;
+<a name="line1168"></a>  while (visited &lt;= numItems) {
+<a name="line1169"></a>    var control = /** @type {goog.ui.Control} */ (this.getChildAt(curIndex));
+<a name="line1170"></a>    if (control &amp;&amp; this.canHighlightItem(control)) {
+<a name="line1171"></a>      this.setHighlightedIndexFromKeyEvent(curIndex);
+<a name="line1172"></a>      return true;
+<a name="line1173"></a>    }
+<a name="line1174"></a>    visited++;
+<a name="line1175"></a>    curIndex = fn(curIndex, numItems);
+<a name="line1176"></a>  }
+<a name="line1177"></a>  return false;
+<a name="line1178"></a>};
+<a name="line1179"></a>
+<a name="line1180"></a>
+<a name="line1181"></a>/**
+<a name="line1182"></a> * Returns whether the given item can be highlighted.
+<a name="line1183"></a> * @param {goog.ui.Control} item The item to check.
+<a name="line1184"></a> * @return {boolean} Whether the item can be highlighted.
+<a name="line1185"></a> * @protected
+<a name="line1186"></a> */
+<a name="line1187"></a>goog.ui.Container.prototype.canHighlightItem = function(item) {
+<a name="line1188"></a>  return item.isVisible() &amp;&amp; item.isEnabled() &amp;&amp;
+<a name="line1189"></a>      item.isSupportedState(goog.ui.Component.State.HOVER);
+<a name="line1190"></a>};
+<a name="line1191"></a>
+<a name="line1192"></a>
+<a name="line1193"></a>/**
+<a name="line1194"></a> * Helper method that sets the highlighted index to the given index in response
+<a name="line1195"></a> * to a keyboard event.  The base class implementation simply calls the
+<a name="line1196"></a> * {@link #setHighlightedIndex} method, but subclasses can override this
+<a name="line1197"></a> * behavior as needed.
+<a name="line1198"></a> * @param {number} index Index of item to highlight.
+<a name="line1199"></a> * @protected
+<a name="line1200"></a> */
+<a name="line1201"></a>goog.ui.Container.prototype.setHighlightedIndexFromKeyEvent = function(index) {
+<a name="line1202"></a>  this.setHighlightedIndex(index);
+<a name="line1203"></a>};
+<a name="line1204"></a>
+<a name="line1205"></a>
+<a name="line1206"></a>/**
+<a name="line1207"></a> * Returns true if the mouse button is pressed, false otherwise.
+<a name="line1208"></a> * @return {boolean} Whether the mouse button is pressed.
+<a name="line1209"></a> */
+<a name="line1210"></a>goog.ui.Container.prototype.isMouseButtonPressed = function() {
+<a name="line1211"></a>  return this.mouseButtonPressed_;
+<a name="line1212"></a>};
+<a name="line1213"></a>
+<a name="line1214"></a>
+<a name="line1215"></a>/**
+<a name="line1216"></a> * Sets or clears the &quot;mouse button pressed&quot; flag.
+<a name="line1217"></a> * @param {boolean} pressed Whether the mouse button is presed.
+<a name="line1218"></a> */
+<a name="line1219"></a>goog.ui.Container.prototype.setMouseButtonPressed = function(pressed) {
+<a name="line1220"></a>  this.mouseButtonPressed_ = pressed;
+<a name="line1221"></a>};
+</pre>
+
+
+</body>
+</html>

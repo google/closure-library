@@ -1,0 +1,378 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>drilldownrow.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">drilldownrow.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Tree-like drilldown components for HTML tables.
+
+ This component supports expanding and collapsing groups of rows in
+ HTML tables.  The behavior is like typical Tree widgets, but tables
+ need special support to enable the tree behaviors.
+
+ Any row or rows in an HTML table can be DrilldownRows.  The root
+ DrilldownRow nodes are always visible in the table, but the rest show
+ or hide as input events expand and collapse their ancestors.
+
+ Programming them:  Top-level DrilldownRows are made by decorating
+ a TR element.  Children are made with addChild or addChildAt, and
+ are entered into the document by the render() method.
+
+ A DrilldownRow can have any number of children.  If it has no children
+ it can be loaded, not loaded, or with a load in progress.
+ Top-level DrilldownRows are always displayed (though setting
+ style.display on a containing DOM node could make one be not
+ visible to the user).  A DrilldownRow can be expanded, or not.  A
+ DrilldownRow displays if all of its ancestors are expanded.
+
+ Set up event handlers and style each row for the application in an
+ enterDocument method.
+
+ Children normally render into the document lazily, at the first
+ moment when all ancestors are expanded.
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_ui_drilldownrow.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/ui/drilldownrow.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_DrilldownRow.html">
+          goog.ui.DrilldownRow</a><br/>
+        <div class="class-details">Builds a DrilldownRow component, which can overlay a tree
+structure onto sections of an HTML table.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.DrilldownRow.createRowNode_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.DrilldownRow.</span><span class="entryName">createRowNode_<span class="args">(<span class="arg">html</span>,&nbsp;<span class="arg">doc</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Create and return a TR element from HTML that looks like
+&quot;<table><tr><td> ... </td></tr><td>&quot;.</td></table>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">html</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">for one row.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">doc</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
+        <div class="entryOverview">object to hold the Element.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+            table row node created from the HTML.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_drilldownrow.js.source.html#line440">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.DrilldownRow.decorate"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.DrilldownRow.</span><span class="entryName">decorate<span class="args">(<span class="arg">selfObj</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       This static function is a default decorator that adds HTML at the
+beginning of the first cell to display indentation and an expander
+image; sets up a click handler on the toggler; initializes a class
+for the row: either goog-drilldown-expanded or
+goog-drilldown-collapsed, depending on the initial state of the
+DrilldownRow; and sets up a click event handler on the toggler
+element.
+
+This creates a DIV with class=toggle.  Your application can set up
+CSS style rules something like this:
+
+tr.goog-drilldown-expanded .toggle {
+background-image: url(&#39;minus.png&#39;);
+}
+
+tr.goog-drilldown-collapsed .toggle {
+background-image: url(&#39;plus.png&#39;);
+}
+
+These background images show whether the DrilldownRow is expanded.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">selfObj</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ui_DrilldownRow.html">goog.ui.DrilldownRow</a></span></div>
+        <div class="entryOverview">DrilldownRow to be decorated.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_drilldownrow.js.source.html#line355">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.DrilldownRow.sampleProperties.decorator"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.DrilldownRow.sampleProperties.</span><span class="entryName">decorator<span class="args">(<span class="arg">selfObj</span>,&nbsp;<span class="arg">handler</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">selfObj</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">handler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_drilldownrow.js.source.html#line145">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/ui/drilldownrow.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>charcounter.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_charcounter.js.html">charcounter.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 Google Inc.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>// Copyright (C)2006 Google, Inc.
+<a name="line16"></a>
+<a name="line17"></a>/**
+<a name="line18"></a> * @fileoverview Character counter widget implementation.
+<a name="line19"></a> *
+<a name="line20"></a> * @see ../demos/charcounter.html
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.ui.CharCounter&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.InputHandler&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * CharCounter widget. Counts the number of characters in a input field or a
+<a name="line33"></a> * text box and displays the number of additional characters that may be
+<a name="line34"></a> * entered before the maximum length is reached.
+<a name="line35"></a> *
+<a name="line36"></a> * @extends {goog.events.EventTarget}
+<a name="line37"></a> * @param {HTMLInputElement|HTMLTextAreaElement} elInput Input or text area
+<a name="line38"></a> *        element to count the number of characters in.
+<a name="line39"></a> * @param {Element} elCount HTML element to display the remaining number of
+<a name="line40"></a> *       characters in.
+<a name="line41"></a> * @param {number} maxLength The maximum length.
+<a name="line42"></a> * @constructor
+<a name="line43"></a> */
+<a name="line44"></a>goog.ui.CharCounter = function(elInput, elCount, maxLength) {
+<a name="line45"></a>  goog.events.EventTarget.call(this);
+<a name="line46"></a>
+<a name="line47"></a>  /**
+<a name="line48"></a>   * Input or text area element to count the number of characters in.
+<a name="line49"></a>   * @type {HTMLInputElement|HTMLTextAreaElement}
+<a name="line50"></a>   * @private
+<a name="line51"></a>   */
+<a name="line52"></a>  this.elInput_ = elInput;
+<a name="line53"></a>
+<a name="line54"></a>  /**
+<a name="line55"></a>   * HTML element to display the remaining number of characters in.
+<a name="line56"></a>   * @type {Element}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.elCount_ = elCount;
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * The maximum length.
+<a name="line63"></a>   * @type {number}
+<a name="line64"></a>   * @private
+<a name="line65"></a>   */
+<a name="line66"></a>  this.maxLength_ = maxLength;
+<a name="line67"></a>
+<a name="line68"></a>  elInput.maxLength = maxLength;
+<a name="line69"></a>
+<a name="line70"></a>  /**
+<a name="line71"></a>   * The input handler that provides the input event.
+<a name="line72"></a>   * @type {goog.events.InputHandler}
+<a name="line73"></a>   * @private
+<a name="line74"></a>   */
+<a name="line75"></a>  this.inputHandler_ = new goog.events.InputHandler(elInput);
+<a name="line76"></a>
+<a name="line77"></a>  goog.events.listen(this.inputHandler_,
+<a name="line78"></a>      goog.events.InputHandler.EventType.INPUT, this.onChange_, false, this);
+<a name="line79"></a>
+<a name="line80"></a>  this.checkLength_();
+<a name="line81"></a>};
+<a name="line82"></a>goog.inherits(goog.ui.CharCounter, goog.events.EventTarget);
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Sets the maximum length.
+<a name="line87"></a> *
+<a name="line88"></a> * @param {number} maxLength The maximum length.
+<a name="line89"></a> */
+<a name="line90"></a>goog.ui.CharCounter.prototype.setMaxLength = function(maxLength) {
+<a name="line91"></a>  this.maxLength_ = maxLength;
+<a name="line92"></a>  this.elInput_.maxLength = maxLength;
+<a name="line93"></a>  this.checkLength_();
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Returns the maximum length.
+<a name="line99"></a> *
+<a name="line100"></a> * @return {number} The maximum length.
+<a name="line101"></a> */
+<a name="line102"></a>goog.ui.CharCounter.prototype.getMaxLength = function() {
+<a name="line103"></a>  return this.maxLength_;
+<a name="line104"></a>};
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Change event handler for input field.
+<a name="line109"></a> *
+<a name="line110"></a> * @param {goog.events.BrowserEvent} event Change event.
+<a name="line111"></a> * @private
+<a name="line112"></a> */
+<a name="line113"></a>goog.ui.CharCounter.prototype.onChange_ = function(event) {
+<a name="line114"></a>  this.checkLength_();
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * Checks length of text in input field and updates the counter. Truncates text
+<a name="line120"></a> * if the maximum lengths is exceeded.
+<a name="line121"></a> *
+<a name="line122"></a> * @private
+<a name="line123"></a> */
+<a name="line124"></a>goog.ui.CharCounter.prototype.checkLength_ = function() {
+<a name="line125"></a>  var len, value = this.elInput_.value;
+<a name="line126"></a>
+<a name="line127"></a>  // There&#39;s no maxlength property for textareas so instead we truncate the
+<a name="line128"></a>  // text if it gets too long. It&#39;s also used to truncate the text in a input
+<a name="line129"></a>  // field if the maximum length is changed.
+<a name="line130"></a>  if (value.length &gt; this.maxLength_) {
+<a name="line131"></a>
+<a name="line132"></a>    var scrollTop = this.elInput_.scrollTop
+<a name="line133"></a>    var scrollLeft = this.elInput_.scrollLeft;
+<a name="line134"></a>
+<a name="line135"></a>    this.elInput_.value = value.substring(0, this.maxLength_);
+<a name="line136"></a>    len = 0;
+<a name="line137"></a>
+<a name="line138"></a>    this.elInput_.scrollTop = scrollTop;
+<a name="line139"></a>    this.elInput_.scrollLeft = scrollLeft;
+<a name="line140"></a>  } else {
+<a name="line141"></a>    len = this.maxLength_ - value.length;
+<a name="line142"></a>  }
+<a name="line143"></a>
+<a name="line144"></a>  goog.dom.setTextContent(this.elCount_, len);
+<a name="line145"></a>};
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/** @inheritDoc */
+<a name="line149"></a>goog.ui.CharCounter.prototype.disposeInternal = function() {
+<a name="line150"></a>  goog.ui.CharCounter.superClass_.disposeInternal.call(this);
+<a name="line151"></a>  delete this.elInput_;
+<a name="line152"></a>  this.inputHandler_.dispose();
+<a name="line153"></a>  this.inputHandler_ = null;
+<a name="line154"></a>};
+</pre>
+
+
+</body>
+</html>

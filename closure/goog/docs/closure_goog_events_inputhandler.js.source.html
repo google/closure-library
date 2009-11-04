@@ -1,0 +1,161 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>inputhandler.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_events_inputhandler.js.html">inputhandler.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview An object that encapsulates text changed events for textareas
+<a name="line17"></a> * and input element of type text and password. This event only occurs when the
+<a name="line18"></a> * element is focused (which means that using drag and drop will not trigger
+<a name="line19"></a> * the event because the element does not have focus at that time).&lt;br&gt;
+<a name="line20"></a> * &lt;br&gt;
+<a name="line21"></a> * Note: this does not guarantee the correctness of {@code keyCode} or
+<a name="line22"></a> * {@code charCode}, or attempt to unify them across browsers. See
+<a name="line23"></a> * {@code goog.events.KeyHandler} for that functionality.&lt;br&gt;
+<a name="line24"></a> * &lt;br&gt;
+<a name="line25"></a> * Known Issues: It does not trigger for drop events
+<a name="line26"></a> * Known Issues: WebKit does not fire input event in textareas.
+<a name="line27"></a> * @see ../demos/inputhandler.html
+<a name="line28"></a> */
+<a name="line29"></a>
+<a name="line30"></a>goog.provide(&#39;goog.events.InputHandler&#39;);
+<a name="line31"></a>goog.provide(&#39;goog.events.InputHandler.EventType&#39;);
+<a name="line32"></a>
+<a name="line33"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line34"></a>goog.require(&#39;goog.events&#39;);
+<a name="line35"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
+<a name="line36"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line37"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * This event handler will dispatch events when the user types into a text
+<a name="line42"></a> * input, password input or a textarea
+<a name="line43"></a> * @param {Element} element  The element that you want to listen for input
+<a name="line44"></a> *     events on.
+<a name="line45"></a> * @constructor
+<a name="line46"></a> * @extends {goog.events.EventTarget}
+<a name="line47"></a> */
+<a name="line48"></a>goog.events.InputHandler = function(element) {
+<a name="line49"></a>  goog.events.EventTarget.call(this);
+<a name="line50"></a>
+<a name="line51"></a>  /**
+<a name="line52"></a>   * The element that you want to listen for input events on.
+<a name="line53"></a>   * @type {Element}
+<a name="line54"></a>   * @private
+<a name="line55"></a>   */
+<a name="line56"></a>  this.element_ = element;
+<a name="line57"></a>
+<a name="line58"></a>  // WebKit before version 531 did not support input events for textareas.
+<a name="line59"></a>  // keypress isn&#39;t as good (doesn&#39;t support copy/paste), but it&#39;s better than
+<a name="line60"></a>  // nothing
+<a name="line61"></a>  var type = goog.userAgent.IE ? &#39;propertychange&#39; :
+<a name="line62"></a>      (goog.userAgent.WEBKIT &amp;&amp; element.tagName == &#39;TEXTAREA&#39; &amp;&amp;
+<a name="line63"></a>          !goog.userAgent.isVersion(&#39;531&#39;) ? &#39;keypress&#39; : &#39;input&#39;);
+<a name="line64"></a>  this.listenKey_ = goog.events.listen(this.element_, type, this);
+<a name="line65"></a>};
+<a name="line66"></a>goog.inherits(goog.events.InputHandler, goog.events.EventTarget);
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * Enum type for the events fired by the input handler
+<a name="line71"></a> * @enum {string}
+<a name="line72"></a> */
+<a name="line73"></a>goog.events.InputHandler.EventType = {
+<a name="line74"></a>  INPUT: &#39;input&#39;
+<a name="line75"></a>};
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * This handles the underlying events and dispatches a new event as needed.
+<a name="line80"></a> * @param {goog.events.BrowserEvent} e The underlying browser event.
+<a name="line81"></a> */
+<a name="line82"></a>goog.events.InputHandler.prototype.handleEvent = function(e) {
+<a name="line83"></a>  var be = e.getBrowserEvent();
+<a name="line84"></a>  if (be.type == &#39;propertychange&#39; &amp;&amp; be.propertyName == &#39;value&#39; ||
+<a name="line85"></a>      be.type == &#39;input&#39; ||
+<a name="line86"></a>      be.type == &#39;keypress&#39;) {
+<a name="line87"></a>    if (goog.userAgent.IE || goog.userAgent.OPERA) {
+<a name="line88"></a>      var inputEl = be.srcElement;
+<a name="line89"></a>      // only dispatch the event if the element currently has focus
+<a name="line90"></a>      if (inputEl != goog.dom.getOwnerDocument(inputEl).activeElement) {
+<a name="line91"></a>        return;
+<a name="line92"></a>      }
+<a name="line93"></a>    }
+<a name="line94"></a>    var event = new goog.events.BrowserEvent(be);
+<a name="line95"></a>    event.type = goog.events.InputHandler.EventType.INPUT;
+<a name="line96"></a>    try {
+<a name="line97"></a>      this.dispatchEvent(event);
+<a name="line98"></a>    } finally {
+<a name="line99"></a>      event.dispose();
+<a name="line100"></a>    }
+<a name="line101"></a>  }
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Disposes of the input handler.
+<a name="line107"></a> */
+<a name="line108"></a>goog.events.InputHandler.prototype.disposeInternal = function() {
+<a name="line109"></a>  goog.events.InputHandler.superClass_.disposeInternal.call(this);
+<a name="line110"></a>  goog.events.unlistenByKey(this.listenKey_);
+<a name="line111"></a>  delete this.element_;
+<a name="line112"></a>};
+</pre>
+
+
+</body>
+</html>

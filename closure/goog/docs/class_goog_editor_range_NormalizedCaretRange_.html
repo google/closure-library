@@ -1,0 +1,1078 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>NormalizedCaretRange_ (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">editor.range.NormalizedCaretRange_</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          <a href="class_goog_dom_SavedCaretRange.html">
+            goog.dom.SavedCaretRange</a>
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Saves the range using carets, but normalizes text nodes when carets
+are removed.
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="class_goog_editor_range_saveUsingNormalizedCarets.html">Also See: goog.editor.range.saveUsingNormalizedCarets</a></li>
+            <li><a href="closure_goog_editor_range.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<pre class="inheritance">
+Object
+     <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span>
+          <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_dom_SavedRange.html">goog.dom.SavedRange</a></span>
+               <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_dom_SavedCaretRange.html">goog.dom.SavedCaretRange</a></span>
+                    <img src="static/images/inherit.gif">goog.editor.range.NormalizedCaretRange_
+</pre>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.editor.range.NormalizedCaretRange_(<span><span class="arg">range</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">range</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>
+        <div class="entryOverview">The range being saved.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_editor_range_NormalizedCaretRange_.html">
+              goog.editor.range.NormalizedCaretRange_
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.NormalizedCaretRange_.prototype.removeCarets"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">removeCarets<span class="args">(<span class="arg">opt_range</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Normalizes text nodes whenever carets are removed from the document.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_range</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>
+        <div class="entryOverview">A range whose offsets have already been adjusted for caret removal; it will be adjusted and returned if it is also affected by post-removal operations, such as text node normalization.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>&nbsp;
+            The adjusted range, if opt_range was provided.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_editor_range.js.source.html#line505">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_dom_SavedCaretRange.html">
+              goog.dom.SavedCaretRange
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.SavedCaretRange.prototype.createCaret_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createCaret_<span class="args">(<span class="arg">start</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a caret element.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">start</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">If true, creates the start caret. Otherwise, creates the end caret.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+            The new caret element.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_dom_savedcaretrange.js.source.html#line168">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.SavedCaretRange.prototype.disposeInternal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposeInternal<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Dispose the saved range and remove the carets from the DOM.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_dom_savedcaretrange.js.source.html#line155">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.SavedCaretRange.prototype.getCaret"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getCaret<span class="args">(<span class="arg">start</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets carets.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">start</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">If true, returns the start caret. Otherwise, get the end caret.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+            The start or end caret in the given document.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_dom_savedcaretrange.js.source.html#line87">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.SavedCaretRange.prototype.removeCarets"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">removeCarets<span class="args">(<span class="arg">opt_range</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes the carets from the current restoration document.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_range</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>
+        <div class="entryOverview">A range whose offsets have already been adjusted for caret removal; it will be adjusted if it is also affected by post-removal operations, such as text node normalization.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>&nbsp;
+            The adjusted range, if opt_range was provided.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_dom_savedcaretrange.js.source.html#line100">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.SavedCaretRange.prototype.restoreInternal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">restoreInternal<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Reconstruct the selection from the given saved range. Removes carets after
+restoring the selection. If restore does not dispose this saved range, it may
+only be restored a second time if innerHTML or some other mechanism is used
+to restore the carets to the dom.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>&nbsp;
+            Restored selection.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_dom_savedcaretrange.js.source.html#line125">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.SavedCaretRange.prototype.setRestorationDocument"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setRestorationDocument<span class="args">(<span class="arg">doc</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the document where the range will be restored.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">doc</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
+        <div class="entryOverview">An HTML document.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_dom_savedcaretrange.js.source.html#line111">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.SavedCaretRange.prototype.toAbstractRange"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">toAbstractRange<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the range that this SavedCaretRage represents, without selecting it
+or removing the carets from the DOM.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>&nbsp;
+            An abstract range.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_dom_savedcaretrange.js.source.html#line70">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_dom_SavedRange.html">
+              goog.dom.SavedRange
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.SavedRange.prototype.restore"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">restore<span class="args">(<span class="arg">opt_stayAlive</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Restores the range and by default disposes of the saved copy.  Take note:
+this means the by default SavedRange objects are single use objects.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_stayAlive</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether this SavedRange should stay alive (not be disposed) after restoring the range. Defaults to false (dispose).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>&nbsp;
+            The restored range.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_dom_savedrange.js.source.html#line54">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.SavedRange.prototype.restoreInternal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">restoreInternal<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Internal method to restore the saved range.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>&nbsp;
+            The restored range.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_dom_savedrange.js.source.html#line72">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_Disposable.html">
+              goog.Disposable
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Disposable.prototype.dispose"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dispose<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_disposable_disposable.js.source.html#line64">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Disposable.prototype.disposeInternal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposeInternal<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Deletes or nulls out any references to COM objects, DOM nodes, or other
+disposable objects. Classes that extend {@code goog.Disposable} should
+override this method.  For example:
+<pre class="lang-js">
+mypackage.MyClass = function() {
+goog.Disposable.call(this);
+// Constructor logic specific to MyClass.
+...
+};
+goog.inherits(mypackage.MyClass, goog.Disposable);
+
+mypackage.MyClass.prototype.disposeInternal = function() {
+mypackage.MyClass.superClass_.disposeInternal.call(this);
+// Dispose logic specific to MyClass.
+...
+};
+</pre>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_disposable_disposable.js.source.html#line94">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Disposable.prototype.getDisposed"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getDisposed<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            Whether the object has been disposed of.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_disposable_disposable.js.source.html#line55">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Disposable.prototype.isDisposed"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isDisposed<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            Whether the object has been disposed of.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_disposable_disposable.js.source.html#line46">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_Disposable.html">
+              goog.Disposable
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.Disposable.prototype.disposed_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposed_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Whether the object has been disposed of.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_disposable_disposable.js.source.html#line40">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package editor</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="goog" current="editor.range.NormalizedCaretRange_"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

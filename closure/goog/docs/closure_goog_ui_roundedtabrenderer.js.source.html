@@ -1,0 +1,245 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>roundedtabrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_roundedtabrenderer.js.html">roundedtabrenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Rounded corner tab renderer for {@link goog.ui.Tab}s.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.ui.RoundedTabRenderer&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line23"></a>goog.require(&#39;goog.ui.Tab&#39;);
+<a name="line24"></a>goog.require(&#39;goog.ui.TabBar.Location&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.TabRenderer&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Rounded corner tab renderer for {@link goog.ui.Tab}s.
+<a name="line32"></a> * @constructor
+<a name="line33"></a> * @extends {goog.ui.TabRenderer}
+<a name="line34"></a> */
+<a name="line35"></a>goog.ui.RoundedTabRenderer = function() {
+<a name="line36"></a>  goog.ui.TabRenderer.call(this);
+<a name="line37"></a>};
+<a name="line38"></a>goog.inherits(goog.ui.RoundedTabRenderer, goog.ui.TabRenderer);
+<a name="line39"></a>goog.addSingletonGetter(goog.ui.RoundedTabRenderer);
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line44"></a> * by this renderer.
+<a name="line45"></a> * @type {string}
+<a name="line46"></a> */
+<a name="line47"></a>goog.ui.RoundedTabRenderer.CSS_CLASS = goog.getCssName(&#39;goog-rounded-tab&#39;);
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>/**
+<a name="line51"></a> * Returns the CSS class name to be applied to the root element of all tabs
+<a name="line52"></a> * rendered or decorated using this renderer.
+<a name="line53"></a> * @return {string} Renderer-specific CSS class name.
+<a name="line54"></a> * @override
+<a name="line55"></a> */
+<a name="line56"></a>goog.ui.RoundedTabRenderer.prototype.getCssClass = function() {
+<a name="line57"></a>  return goog.ui.RoundedTabRenderer.CSS_CLASS;
+<a name="line58"></a>};
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * Creates the tab&#39;s DOM structure, based on the containing tab bar&#39;s location
+<a name="line63"></a> * relative to tab contents.  For example, the DOM for a tab in a tab bar
+<a name="line64"></a> * located above tab contents would look like this:
+<a name="line65"></a> * &lt;pre&gt;
+<a name="line66"></a> *   &lt;div class=&quot;goog-rounded-tab&quot; title=&quot;...&quot;&gt;
+<a name="line67"></a> *     &lt;table class=&quot;goog-rounded-tab-table&quot;&gt;
+<a name="line68"></a> *       &lt;tbody&gt;
+<a name="line69"></a> *         &lt;tr&gt;
+<a name="line70"></a> *           &lt;td nowrap&gt;
+<a name="line71"></a> *             &lt;div class=&quot;goog-rounded-tab-outer-edge&quot;&gt;&lt;/div&gt;
+<a name="line72"></a> *             &lt;div class=&quot;goog-rounded-tab-inner-edge&quot;&gt;&lt;/div&gt;
+<a name="line73"></a> *           &lt;/td&gt;
+<a name="line74"></a> *         &lt;/tr&gt;
+<a name="line75"></a> *         &lt;tr&gt;
+<a name="line76"></a> *           &lt;td nowrap&gt;
+<a name="line77"></a> *             &lt;div class=&quot;goog-rounded-tab-caption&quot;&gt;Hello, world&lt;/div&gt;
+<a name="line78"></a> *           &lt;/td&gt;
+<a name="line79"></a> *         &lt;/tr&gt;
+<a name="line80"></a> *       &lt;/tbody&gt;
+<a name="line81"></a> *     &lt;/table&gt;
+<a name="line82"></a> *   &lt;/div&gt;
+<a name="line83"></a> * &lt;/pre&gt;
+<a name="line84"></a> * @param {goog.ui.Control} tab Tab to render.
+<a name="line85"></a> * @return {Element} Root element for the tab.
+<a name="line86"></a> * @override
+<a name="line87"></a> */
+<a name="line88"></a>goog.ui.RoundedTabRenderer.prototype.createDom = function(tab) {
+<a name="line89"></a>  return this.decorate(tab,
+<a name="line90"></a>      goog.ui.RoundedTabRenderer.superClass_.createDom.call(this, tab));
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Decorates the element with the tab.  Overrides the superclass implementation
+<a name="line96"></a> * by wrapping the tab&#39;s content in a table that implements rounded corners.
+<a name="line97"></a> * @param {goog.ui.Control} tab Tab to decorate the element.
+<a name="line98"></a> * @param {Element} element Element to decorate.
+<a name="line99"></a> * @return {Element} Decorated element.
+<a name="line100"></a> * @override
+<a name="line101"></a> */
+<a name="line102"></a>goog.ui.RoundedTabRenderer.prototype.decorate = function(tab, element) {
+<a name="line103"></a>  var tabBar = tab.getParent();
+<a name="line104"></a>
+<a name="line105"></a>  if (!this.getContentElement(element)) {
+<a name="line106"></a>    // The element to be decorated doesn&#39;t appear to have the full tab DOM,
+<a name="line107"></a>    // so we have to create it.
+<a name="line108"></a>    element.appendChild(this.createTab(tab.getDomHelper(), element.childNodes,
+<a name="line109"></a>        tabBar.getLocation()));
+<a name="line110"></a>  }
+<a name="line111"></a>
+<a name="line112"></a>  return goog.ui.RoundedTabRenderer.superClass_.decorate.call(this, tab,
+<a name="line113"></a>      element);
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Creates a table implementing a rounded corner tab.
+<a name="line119"></a> * @param {goog.dom.DomHelper} dom DOM helper to use for element construction.
+<a name="line120"></a> * @param {goog.ui.ControlContent} caption Text caption or DOM structure
+<a name="line121"></a> *     to display as the tab&#39;s caption.
+<a name="line122"></a> * @param {goog.ui.TabBar.Location} location Tab bar location relative to the
+<a name="line123"></a> *     tab contents.
+<a name="line124"></a> * @return {Element} Table implementing a rounded corner tab.
+<a name="line125"></a> * @protected
+<a name="line126"></a> */
+<a name="line127"></a>goog.ui.RoundedTabRenderer.prototype.createTab = function(dom, caption,
+<a name="line128"></a>    location) {
+<a name="line129"></a>  var rows = [];
+<a name="line130"></a>
+<a name="line131"></a>  if (location != goog.ui.TabBar.Location.BOTTOM) {
+<a name="line132"></a>    // This is a left, right, or top tab, so it needs a rounded top edge.
+<a name="line133"></a>    rows.push(this.createEdge(dom, /* isTopEdge */ true));
+<a name="line134"></a>  }
+<a name="line135"></a>  rows.push(this.createCaption(dom, caption));
+<a name="line136"></a>  if (location != goog.ui.TabBar.Location.TOP) {
+<a name="line137"></a>    // This is a left, right, or bottom tab, so it needs a rounded bottom edge.
+<a name="line138"></a>    rows.push(this.createEdge(dom, /* isTopEdge */ false));
+<a name="line139"></a>  }
+<a name="line140"></a>
+<a name="line141"></a>  return dom.createDom(&#39;table&#39;, {
+<a name="line142"></a>    &#39;cellPadding&#39;: 0,
+<a name="line143"></a>    &#39;cellSpacing&#39;: 0,
+<a name="line144"></a>    &#39;className&#39;: goog.getCssName(this.getStructuralCssClass(), &#39;table&#39;)
+<a name="line145"></a>  }, dom.createDom(&#39;tbody&#39;, null, rows));
+<a name="line146"></a>};
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/**
+<a name="line150"></a> * Creates a table row implementing the tab caption.
+<a name="line151"></a> * @param {goog.dom.DomHelper} dom DOM helper to use for element construction.
+<a name="line152"></a> * @param {goog.ui.ControlContent} caption Text caption or DOM structure
+<a name="line153"></a> *     to display as the tab&#39;s caption.
+<a name="line154"></a> * @return {Element} Tab caption table row.
+<a name="line155"></a> * @protected
+<a name="line156"></a> */
+<a name="line157"></a>goog.ui.RoundedTabRenderer.prototype.createCaption = function(dom, caption) {
+<a name="line158"></a>  var baseClass = this.getStructuralCssClass();
+<a name="line159"></a>  return dom.createDom(&#39;tr&#39;, null,
+<a name="line160"></a>      dom.createDom(&#39;td&#39;, {&#39;noWrap&#39;: true},
+<a name="line161"></a>          dom.createDom(&#39;div&#39;, goog.getCssName(baseClass, &#39;caption&#39;),
+<a name="line162"></a>              caption)));
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Creates a table row implementing a rounded tab edge.
+<a name="line168"></a> * @param {goog.dom.DomHelper} dom DOM helper to use for element construction.
+<a name="line169"></a> * @param {boolean} isTopEdge Whether to create a top or bottom edge.
+<a name="line170"></a> * @return {Element} Rounded tab edge table row.
+<a name="line171"></a> * @protected
+<a name="line172"></a> */
+<a name="line173"></a>goog.ui.RoundedTabRenderer.prototype.createEdge = function(dom, isTopEdge) {
+<a name="line174"></a>  var baseClass = this.getStructuralCssClass();
+<a name="line175"></a>  var inner = dom.createDom(&#39;div&#39;, goog.getCssName(baseClass, &#39;inner-edge&#39;));
+<a name="line176"></a>  var outer = dom.createDom(&#39;div&#39;, goog.getCssName(baseClass, &#39;outer-edge&#39;));
+<a name="line177"></a>  return dom.createDom(&#39;tr&#39;, null,
+<a name="line178"></a>      dom.createDom(&#39;td&#39;, {&#39;noWrap&#39;: true},
+<a name="line179"></a>          isTopEdge ? [outer, inner] : [inner, outer]));
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/** @inheritDoc */
+<a name="line184"></a>goog.ui.RoundedTabRenderer.prototype.getContentElement = function(element) {
+<a name="line185"></a>  var baseClass = this.getStructuralCssClass();
+<a name="line186"></a>  return element &amp;&amp;
+<a name="line187"></a>      goog.dom.$$(&#39;div&#39;, goog.getCssName(baseClass, &#39;caption&#39;), element)[0];
+<a name="line188"></a>};
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>// Register a decorator factory function for goog.ui.Tabs using the rounded
+<a name="line192"></a>// tab renderer.
+<a name="line193"></a>goog.ui.registry.setDecoratorByClassName(goog.ui.RoundedTabRenderer.CSS_CLASS,
+<a name="line194"></a>    function() {
+<a name="line195"></a>      return new goog.ui.Tab(null, goog.ui.RoundedTabRenderer.getInstance());
+<a name="line196"></a>    });
+</pre>
+
+
+</body>
+</html>

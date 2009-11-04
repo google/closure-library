@@ -1,0 +1,213 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>emojipicker.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">emojipicker.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Emoji Picker implementation. This provides a UI widget for
+ choosing an emoji from a grid of possible choices.
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="class___/demos/popupemojipicker_html for an example of how to instantiate.html">Also See: ../demos/popupemojipicker.html for an example of how to instantiate</a></li>
+            <li><a href="closure_goog_ui_emoji_emojipicker.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/ui/emoji/emojipicker.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_emoji_EmojiPicker.html">
+          goog.ui.emoji.EmojiPicker</a><br/>
+        <div class="class-details">Creates a new, empty emoji picker. An emoji picker is a grid of emoji, each
+cell of the grid containing a single emoji. The picker may contain multiple
+pages of emoji.
+
+When a user selects an emoji, by either clicking or pressing enter, the
+picker fires a goog.ui.Component.EventType.ACTION event with the id. The
+client listens on this event and in the handler can retrieve the id of the
+selected emoji and do something with it, for instance, inserting an image
+tag into a rich text control. An emoji picker does not maintain state. That
+is, once an emoji is selected, the emoji picker does not remember which emoji
+was selected.
+
+The emoji picker is implemented as a tabpane with each tabpage being a table.
+Each of the tables are the same size to prevent jittering when switching
+between pages.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.emoji.EmojiPicker.DEFAULT_NUM_COLS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.emoji.EmojiPicker.</span><span class="entryName">DEFAULT_NUM_COLS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Default number of columns per grid of emoji.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_emoji_emojipicker.js.source.html#line123">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.emoji.EmojiPicker.DEFAULT_NUM_ROWS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.emoji.EmojiPicker.</span><span class="entryName">DEFAULT_NUM_ROWS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Default number of rows per grid of emoji.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_emoji_emojipicker.js.source.html#line115">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/ui/emoji/emojipicker.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

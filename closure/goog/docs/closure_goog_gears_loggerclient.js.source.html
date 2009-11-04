@@ -1,0 +1,181 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>loggerclient.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_gears_loggerclient.js.html">loggerclient.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This class lives on a worker thread and it intercepts the
+<a name="line17"></a> * goog.debug.Logger objects and sends a LOGGER command to the main thread
+<a name="line18"></a> * instead.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.gears.LoggerClient&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line25"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line26"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Singleton class that overrides the goog.debug.Logger to send log commands
+<a name="line31"></a> * to the main thread.
+<a name="line32"></a> * @param {goog.gears.Worker} mainThread  The main thread that has the
+<a name="line33"></a> *     logger server running.
+<a name="line34"></a> * @param {number} logCommandId  The command id used for logging.
+<a name="line35"></a> * @param {string} opt_workerName  This, if present, is added to the error
+<a name="line36"></a> *     object when serializing it.
+<a name="line37"></a> * @constructor
+<a name="line38"></a> * @extends {goog.Disposable}
+<a name="line39"></a> */
+<a name="line40"></a>goog.gears.LoggerClient = function(mainThread, logCommandId, opt_workerName) {
+<a name="line41"></a>  if (goog.gears.LoggerClient.instance_) {
+<a name="line42"></a>    return goog.gears.LoggerClient.instance_;
+<a name="line43"></a>  }
+<a name="line44"></a>
+<a name="line45"></a>  goog.Disposable.call(this);
+<a name="line46"></a>
+<a name="line47"></a>  /**
+<a name="line48"></a>   * The main thread object.
+<a name="line49"></a>   * @type {goog.gears.Worker}
+<a name="line50"></a>   * @private
+<a name="line51"></a>   */
+<a name="line52"></a>  this.mainThread_ = mainThread;
+<a name="line53"></a>
+<a name="line54"></a>  /**
+<a name="line55"></a>   * The command id to use to send log commands to the main thread.
+<a name="line56"></a>   * @type {number}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.logCommandId_ = logCommandId;
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * The name of the worker thread.
+<a name="line63"></a>   * @type {string}
+<a name="line64"></a>   * @private
+<a name="line65"></a>   */
+<a name="line66"></a>  this.workerName_ = opt_workerName || &#39;&#39;;
+<a name="line67"></a>
+<a name="line68"></a>  var loggerClient = this;
+<a name="line69"></a>  // Override the log method
+<a name="line70"></a>  goog.debug.Logger.prototype.logRecord = function(logRecord) {
+<a name="line71"></a>    if (this.isLoggable(logRecord.getLevel())) {
+<a name="line72"></a>      var name = this.getName();
+<a name="line73"></a>      loggerClient.sendLog_(
+<a name="line74"></a>          name, logRecord.getLevel(), logRecord.getMessage(),
+<a name="line75"></a>          logRecord.getException());
+<a name="line76"></a>    }
+<a name="line77"></a>  };
+<a name="line78"></a>
+<a name="line79"></a>  goog.gears.LoggerClient.instance_ = this;
+<a name="line80"></a>};
+<a name="line81"></a>goog.inherits(goog.gears.LoggerClient, goog.Disposable);
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * The singleton instance if any.
+<a name="line86"></a> * @type {goog.gears.LoggerClient?}
+<a name="line87"></a> * @private
+<a name="line88"></a> */
+<a name="line89"></a>goog.gears.LoggerClient.instance_ = null;
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * Sends a log message to the main thread.
+<a name="line94"></a> * @param {string} name The name of the logger.
+<a name="line95"></a> * @param {goog.debug.Logger.Level} level One of the level identifiers.
+<a name="line96"></a> * @param {string} msg The string message.
+<a name="line97"></a> * @param {Object} opt_exception An exception associated with the message.
+<a name="line98"></a> * @private
+<a name="line99"></a> */
+<a name="line100"></a>goog.gears.LoggerClient.prototype.sendLog_ = function(name,
+<a name="line101"></a>                                                      level,
+<a name="line102"></a>                                                      msg,
+<a name="line103"></a>                                                      opt_exception) {
+<a name="line104"></a>  var exception;
+<a name="line105"></a>  if (opt_exception) {
+<a name="line106"></a>    var prefix = this.workerName_ ? this.workerName_ + &#39;: &#39; : &#39;&#39;;
+<a name="line107"></a>    exception = {
+<a name="line108"></a>      message: prefix + opt_exception.message,
+<a name="line109"></a>      stack: opt_exception.stack ||
+<a name="line110"></a>          goog.debug.getStacktrace(goog.debug.Logger.prototype.log)
+<a name="line111"></a>    };
+<a name="line112"></a>
+<a name="line113"></a>    // Add messageN to the exception in case it was added using
+<a name="line114"></a>    // goog.debug.enhanceError.
+<a name="line115"></a>    for (var i = 0; &#39;message&#39; + i in opt_exception; i++) {
+<a name="line116"></a>      exception[&#39;message&#39; + i] = String(opt_exception[&#39;message&#39; + i]);
+<a name="line117"></a>    }
+<a name="line118"></a>  }
+<a name="line119"></a>  this.mainThread_.sendCommand(
+<a name="line120"></a>      this.logCommandId_,
+<a name="line121"></a>      [name, level.value, msg, exception]);
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Disposes of the logger client.
+<a name="line127"></a> */
+<a name="line128"></a>goog.gears.LoggerClient.prototype.disposeInternal = function() {
+<a name="line129"></a>  goog.gears.LoggerClient.superClass_.disposeInternal.call(this);
+<a name="line130"></a>  this.mainThread_ = null;
+<a name="line131"></a>  goog.gears.LoggerClient.instance_ = null;
+<a name="line132"></a>};
+</pre>
+
+
+</body>
+</html>

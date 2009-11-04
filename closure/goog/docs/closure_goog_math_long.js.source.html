@@ -1,0 +1,839 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>long.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_math_long.js.html">long.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2009 Google Inc. All Rights Reserved
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Defines a Long class for representing a 64-bit two&#39;s-complement
+<a name="line17"></a> * integer value, which faithfully simulates the behavior of a Java &quot;long&quot;. This
+<a name="line18"></a> * implementation is derived from LongLib in GWT.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.math.Long&#39;)
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Constructs a 64-bit two&#39;s-complement integer, given its low and high 32-bit
+<a name="line27"></a> * values as *signed* integers.  See the from* functions below for more
+<a name="line28"></a> * convenient ways of constructing Longs.
+<a name="line29"></a> *
+<a name="line30"></a> * The internal representation of a long is the two given signed, 32-bit values.
+<a name="line31"></a> * We use 32-bit pieces because these are the size of integers on which
+<a name="line32"></a> * Javascript performs bit-operations.  For operations like addition and
+<a name="line33"></a> * multiplication, we split each number into 16-bit pieces, which can easily be
+<a name="line34"></a> * multiplied within Javascript&#39;s floating-point representation without overflow
+<a name="line35"></a> * or change in sign.
+<a name="line36"></a> *
+<a name="line37"></a> * In the algorithms below, we frequently reduce the negative case to the
+<a name="line38"></a> * positive case by negating the input(s) and then post-processing the result.
+<a name="line39"></a> * Note that we must ALWAYS check specially whether those values are MIN_VALUE
+<a name="line40"></a> * (-2^63) because -MIN_VALUE == MIN_VALUE (since 2^63 cannot be represented as
+<a name="line41"></a> * a positive number, it overflows back into a negative).  Not handling this
+<a name="line42"></a> * case would often result in infinite recursion.
+<a name="line43"></a> *
+<a name="line44"></a> * @param {number} low  The low (signed) 32 bits of the long.
+<a name="line45"></a> * @param {number} high  The high (signed) 32 bits of the long.
+<a name="line46"></a> * @constructor
+<a name="line47"></a> */
+<a name="line48"></a>goog.math.Long = function(low, high) {
+<a name="line49"></a>  /**
+<a name="line50"></a>   * @type {number}
+<a name="line51"></a>   * @private
+<a name="line52"></a>   */
+<a name="line53"></a>  this.low_ = low | 0;  // force into 32 signed bits.
+<a name="line54"></a>
+<a name="line55"></a>  /**
+<a name="line56"></a>   * @type {number}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.high_ = high | 0;  // force into 32 signed bits.
+<a name="line60"></a>};
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>// NOTE: Common constant values ZERO, ONE, NEG_ONE, etc. are defined below the
+<a name="line64"></a>// from* methods on which they depend.
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * A cache of the Long representations of small integer values.
+<a name="line69"></a> * @type {Object}
+<a name="line70"></a> * @private
+<a name="line71"></a> */
+<a name="line72"></a>goog.math.Long.INT_CACHE_ = {};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Returns a Long representing the given (32-bit) integer value.
+<a name="line77"></a> * @param {number} value The 32-bit integer in question.
+<a name="line78"></a> * @return {goog.math.Long} The corresponding Long value.
+<a name="line79"></a> */
+<a name="line80"></a>goog.math.Long.fromInt = function(value) {
+<a name="line81"></a>  if (-128 &lt;= value &amp;&amp; value &lt; 128) {
+<a name="line82"></a>    var cachedObj = goog.math.Long.INT_CACHE_[value];
+<a name="line83"></a>    if (cachedObj) {
+<a name="line84"></a>      return cachedObj;
+<a name="line85"></a>    }
+<a name="line86"></a>  }
+<a name="line87"></a>
+<a name="line88"></a>  var obj = new goog.math.Long(value | 0, value &lt; 0 ? -1 : 0);
+<a name="line89"></a>  if (-128 &lt;= value &amp;&amp; value &lt; 128) {
+<a name="line90"></a>    goog.math.Long.INT_CACHE_[value] = obj;
+<a name="line91"></a>  }
+<a name="line92"></a>  return obj;
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Returns a Long representing the given value, provided that it is a finite
+<a name="line98"></a> * number.  Otherwise, zero is returned.
+<a name="line99"></a> * @param {number} value The number in question.
+<a name="line100"></a> * @return {goog.math.Long} The corresponding Long value.
+<a name="line101"></a> */
+<a name="line102"></a>goog.math.Long.fromNumber = function(value) {
+<a name="line103"></a>  if (isNaN(value) || !isFinite(value)) {
+<a name="line104"></a>    return goog.math.Long.ZERO;
+<a name="line105"></a>  } else if (value &lt;= -goog.math.Long.TWO_PWR_63_DBL_) {
+<a name="line106"></a>    return goog.math.Long.MIN_VALUE;
+<a name="line107"></a>  } else if (value + 1 &gt;= goog.math.Long.TWO_PWR_63_DBL_) {
+<a name="line108"></a>    return goog.math.Long.MAX_VALUE;
+<a name="line109"></a>  } else if (value &lt; 0) {
+<a name="line110"></a>    return goog.math.Long.fromNumber(-value).negate();
+<a name="line111"></a>  } else {
+<a name="line112"></a>    return new goog.math.Long(
+<a name="line113"></a>               (value % goog.math.Long.TWO_PWR_32_DBL_) | 0,
+<a name="line114"></a>               (value / goog.math.Long.TWO_PWR_32_DBL_) | 0);
+<a name="line115"></a>  }
+<a name="line116"></a>};
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Returns a Long representing the 64-bit integer that comes by concatenating
+<a name="line121"></a> * the given high and low bits.  Each is assumed to use 32 bits.
+<a name="line122"></a> * @param {number} lowBits The low 32-bits.
+<a name="line123"></a> * @param {number} highBits The high 32-bits.
+<a name="line124"></a> * @return {goog.math.Long} The corresponding Long value.
+<a name="line125"></a> */
+<a name="line126"></a>goog.math.Long.fromBits = function(lowBits, highBits) {
+<a name="line127"></a>  return new goog.math.Long(lowBits, highBits);
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Returns a Long representation of the given string, written using the given
+<a name="line133"></a> * radix.
+<a name="line134"></a> * @param {string} str The textual representation of the Long.
+<a name="line135"></a> * @param {number} opt_radix The radix in which the text is written.
+<a name="line136"></a> * @return {goog.math.Long} The corresponding Long value.
+<a name="line137"></a> */
+<a name="line138"></a>goog.math.Long.fromString = function(str, opt_radix) {
+<a name="line139"></a>  if (str.length == 0) {
+<a name="line140"></a>    throw Error(&#39;number format error: empty string&#39;);
+<a name="line141"></a>  }
+<a name="line142"></a>
+<a name="line143"></a>  var radix = opt_radix || 10;
+<a name="line144"></a>  if (radix &lt; 2 || 36 &lt; radix) {
+<a name="line145"></a>    throw Error(&#39;radix out of range: &#39; + radix);
+<a name="line146"></a>  }
+<a name="line147"></a>
+<a name="line148"></a>  if (str.charAt(0) == &#39;-&#39;) {
+<a name="line149"></a>    return goog.math.Long.fromString(str.substring(1), radix).negate();
+<a name="line150"></a>  } else if (str.indexOf(&#39;-&#39;) &gt;= 0) {
+<a name="line151"></a>    throw Error(&#39;number format error: interior &quot;-&quot; character: &#39; + str);
+<a name="line152"></a>  }
+<a name="line153"></a>
+<a name="line154"></a>  // Do several (8) digits each time through the loop, so as to
+<a name="line155"></a>  // minimize the calls to the very expensive emulated div.
+<a name="line156"></a>  var radixToPower = goog.math.Long.fromNumber(Math.pow(radix, 8));
+<a name="line157"></a>
+<a name="line158"></a>  var result = goog.math.Long.ZERO;
+<a name="line159"></a>  for (var i = 0; i &lt; str.length; i += 8) {
+<a name="line160"></a>    var size = Math.min(8, str.length - i);
+<a name="line161"></a>    var value = parseInt(str.substring(i, i + size), radix);
+<a name="line162"></a>    if (size &lt; 8) {
+<a name="line163"></a>      var power = goog.math.Long.fromNumber(Math.pow(radix, size));
+<a name="line164"></a>      result = result.multiply(power).add(goog.math.Long.fromNumber(value));
+<a name="line165"></a>    } else {
+<a name="line166"></a>      result = result.multiply(radixToPower);
+<a name="line167"></a>      result = result.add(goog.math.Long.fromNumber(value));
+<a name="line168"></a>    }
+<a name="line169"></a>  }
+<a name="line170"></a>  return result;
+<a name="line171"></a>};
+<a name="line172"></a>
+<a name="line173"></a>
+<a name="line174"></a>// NOTE: the compiler should inline these constant values below and then remove
+<a name="line175"></a>// these variables, so there should be no runtime penalty for these.
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * Number used repeated below in calculations.  This must appear before the
+<a name="line180"></a> * first call to any from* function below.
+<a name="line181"></a> * @type {number}
+<a name="line182"></a> * @private
+<a name="line183"></a> */
+<a name="line184"></a>goog.math.Long.TWO_PWR_16_DBL_ = 1 &lt;&lt; 16;
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * @type {number}
+<a name="line188"></a> * @private
+<a name="line189"></a> */
+<a name="line190"></a>goog.math.Long.TWO_PWR_24_DBL_ = 1 &lt;&lt; 24;
+<a name="line191"></a>
+<a name="line192"></a>/**
+<a name="line193"></a> * @type {number}
+<a name="line194"></a> * @private
+<a name="line195"></a> */
+<a name="line196"></a>goog.math.Long.TWO_PWR_32_DBL_ =
+<a name="line197"></a>    goog.math.Long.TWO_PWR_16_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * @type {number}
+<a name="line201"></a> * @private
+<a name="line202"></a> */
+<a name="line203"></a>goog.math.Long.TWO_PWR_31_DBL_ =
+<a name="line204"></a>    goog.math.Long.TWO_PWR_32_DBL_ / 2;
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * @type {number}
+<a name="line208"></a> * @private
+<a name="line209"></a> */
+<a name="line210"></a>goog.math.Long.TWO_PWR_48_DBL_ =
+<a name="line211"></a>    goog.math.Long.TWO_PWR_32_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * @type {number}
+<a name="line215"></a> * @private
+<a name="line216"></a> */
+<a name="line217"></a>goog.math.Long.TWO_PWR_64_DBL_ =
+<a name="line218"></a>    goog.math.Long.TWO_PWR_32_DBL_ * goog.math.Long.TWO_PWR_32_DBL_;
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * @type {number}
+<a name="line222"></a> * @private
+<a name="line223"></a> */
+<a name="line224"></a>goog.math.Long.TWO_PWR_63_DBL_ =
+<a name="line225"></a>    goog.math.Long.TWO_PWR_64_DBL_ / 2;
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>/** @type {goog.math.Long} */
+<a name="line229"></a>goog.math.Long.ZERO = goog.math.Long.fromInt(0);
+<a name="line230"></a>
+<a name="line231"></a>/** @type {goog.math.Long} */
+<a name="line232"></a>goog.math.Long.ONE = goog.math.Long.fromInt(1);
+<a name="line233"></a>
+<a name="line234"></a>/** @type {goog.math.Long} */
+<a name="line235"></a>goog.math.Long.NEG_ONE = goog.math.Long.fromInt(-1);
+<a name="line236"></a>
+<a name="line237"></a>/** @type {goog.math.Long} */
+<a name="line238"></a>goog.math.Long.MAX_VALUE =
+<a name="line239"></a>    goog.math.Long.fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0);
+<a name="line240"></a>
+<a name="line241"></a>/** @type {goog.math.Long} */
+<a name="line242"></a>goog.math.Long.MIN_VALUE = goog.math.Long.fromBits(0, 0x80000000 | 0);
+<a name="line243"></a>
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * @type {goog.math.Long}
+<a name="line247"></a> * @private
+<a name="line248"></a> */
+<a name="line249"></a>goog.math.Long.TWO_PWR_24_ = goog.math.Long.fromInt(1 &lt;&lt; 24);
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/** @return {number} The value, assuming it is a 32-bit integer. */
+<a name="line253"></a>goog.math.Long.prototype.toInt = function() {
+<a name="line254"></a>  return this.low_;
+<a name="line255"></a>};
+<a name="line256"></a>
+<a name="line257"></a>
+<a name="line258"></a>/** @return {number} The closest floating-point representation to this value. */
+<a name="line259"></a>goog.math.Long.prototype.toNumber = function() {
+<a name="line260"></a>  return this.high_ * goog.math.Long.TWO_PWR_32_DBL_ +
+<a name="line261"></a>         this.getLowBitsUnsigned();
+<a name="line262"></a>};
+<a name="line263"></a>
+<a name="line264"></a>
+<a name="line265"></a>/**
+<a name="line266"></a> * @param {number} opt_radix The radix in which the text should be written.
+<a name="line267"></a> * @return {string} The textual representation of this value.
+<a name="line268"></a> */
+<a name="line269"></a>goog.math.Long.prototype.toString = function(opt_radix) {
+<a name="line270"></a>  var radix = opt_radix || 10;
+<a name="line271"></a>  if (radix &lt; 2 || 36 &lt; radix) {
+<a name="line272"></a>    throw Error(&#39;radix out of range: &#39; + radix);
+<a name="line273"></a>  }
+<a name="line274"></a>
+<a name="line275"></a>  if (this.isZero()) {
+<a name="line276"></a>    return &#39;0&#39;;
+<a name="line277"></a>  }
+<a name="line278"></a>
+<a name="line279"></a>  if (this.isNegative()) {
+<a name="line280"></a>    if (this.equals(goog.math.Long.MIN_VALUE)) {
+<a name="line281"></a>      // We need to change the Long value before it can be negated, so we remove
+<a name="line282"></a>      // the bottom-most digit in this base and then recurse to do the rest.
+<a name="line283"></a>      var radixLong = goog.math.Long.fromNumber(radix);
+<a name="line284"></a>      var div = this.div(radixLong);
+<a name="line285"></a>      var rem = div.multiply(radixLong).subtract(this);
+<a name="line286"></a>      return div.toString(radix) + rem.toInt().toString(radix);
+<a name="line287"></a>    } else {
+<a name="line288"></a>      return &#39;-&#39; + this.negate().toString(radix);
+<a name="line289"></a>    }
+<a name="line290"></a>  }
+<a name="line291"></a>
+<a name="line292"></a>  // Do several (6) digits each time through the loop, so as to
+<a name="line293"></a>  // minimize the calls to the very expensive emulated div.
+<a name="line294"></a>  var radixToPower = goog.math.Long.fromNumber(Math.pow(radix, 6));
+<a name="line295"></a>
+<a name="line296"></a>  var rem = this;
+<a name="line297"></a>  var result = &#39;&#39;;
+<a name="line298"></a>  while (true) {
+<a name="line299"></a>    var remDiv = rem.div(radixToPower);
+<a name="line300"></a>    var intval = rem.subtract(remDiv.multiply(radixToPower)).toInt();
+<a name="line301"></a>    var digits = intval.toString(radix);
+<a name="line302"></a>
+<a name="line303"></a>    rem = remDiv;
+<a name="line304"></a>    if (rem.isZero()) {
+<a name="line305"></a>      return digits + result;
+<a name="line306"></a>    } else {
+<a name="line307"></a>      while (digits.length &lt; 6) {
+<a name="line308"></a>        digits = &#39;0&#39; + digits;
+<a name="line309"></a>      }
+<a name="line310"></a>      result = &#39;&#39; + digits + result;
+<a name="line311"></a>    }
+<a name="line312"></a>  }
+<a name="line313"></a>};
+<a name="line314"></a>
+<a name="line315"></a>
+<a name="line316"></a>/** @return {number} The high 32-bits as a signed value. */
+<a name="line317"></a>goog.math.Long.prototype.getHighBits = function() {
+<a name="line318"></a>  return this.high_;
+<a name="line319"></a>};
+<a name="line320"></a>
+<a name="line321"></a>
+<a name="line322"></a>/** @return {number} The low 32-bits as a signed value. */
+<a name="line323"></a>goog.math.Long.prototype.getLowBits = function() {
+<a name="line324"></a>  return this.low_;
+<a name="line325"></a>};
+<a name="line326"></a>
+<a name="line327"></a>
+<a name="line328"></a>/** @return {number} The low 32-bits as an unsigned value. */
+<a name="line329"></a>goog.math.Long.prototype.getLowBitsUnsigned = function() {
+<a name="line330"></a>  return (this.low_ &gt;= 0) ?
+<a name="line331"></a>      this.low_ : goog.math.Long.TWO_PWR_32_DBL_ + this.low_;
+<a name="line332"></a>};
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * @return {number} Returns the number of bits needed to represent the absolute
+<a name="line337"></a> *     value of this Long.
+<a name="line338"></a> */
+<a name="line339"></a>goog.math.Long.prototype.getNumBitsAbs = function() {
+<a name="line340"></a>  if (this.isNegative()) {
+<a name="line341"></a>    if (this.equals(goog.math.Long.MIN_VALUE)) {
+<a name="line342"></a>      return 64;
+<a name="line343"></a>    } else {
+<a name="line344"></a>      return this.negate().getNumBitsAbs();
+<a name="line345"></a>    }
+<a name="line346"></a>  } else {
+<a name="line347"></a>    var val = this.high_ != 0 ? this.high_ : this.low_;
+<a name="line348"></a>    for (var bit = 31; bit &gt; 0; bit--) {
+<a name="line349"></a>      if ((val &amp; (1 &lt;&lt; bit)) != 0) {
+<a name="line350"></a>        break;
+<a name="line351"></a>      }
+<a name="line352"></a>    }
+<a name="line353"></a>    return this.high_ != 0 ? bit + 33 : bit + 1;
+<a name="line354"></a>  }
+<a name="line355"></a>};
+<a name="line356"></a>
+<a name="line357"></a>
+<a name="line358"></a>/** @return {boolean} Whether this value is zero. */
+<a name="line359"></a>goog.math.Long.prototype.isZero = function() {
+<a name="line360"></a>  return this.high_ == 0 &amp;&amp; this.low_ == 0;
+<a name="line361"></a>};
+<a name="line362"></a>
+<a name="line363"></a>
+<a name="line364"></a>/** @return {boolean} Whether this value is negative. */
+<a name="line365"></a>goog.math.Long.prototype.isNegative = function() {
+<a name="line366"></a>  return this.high_ &lt; 0;
+<a name="line367"></a>};
+<a name="line368"></a>
+<a name="line369"></a>
+<a name="line370"></a>/** @return {boolean} Whether this value is odd. */
+<a name="line371"></a>goog.math.Long.prototype.isOdd = function() {
+<a name="line372"></a>  return (this.low_ &amp; 1) == 1;
+<a name="line373"></a>};
+<a name="line374"></a>
+<a name="line375"></a>
+<a name="line376"></a>/**
+<a name="line377"></a> * @param {goog.math.Long} other Long to compare against.
+<a name="line378"></a> * @return {boolean} Whether this Long equals the other.
+<a name="line379"></a> */
+<a name="line380"></a>goog.math.Long.prototype.equals = function(other) {
+<a name="line381"></a>  return (this.high_ == other.high_) &amp;&amp; (this.low_ == other.low_);
+<a name="line382"></a>};
+<a name="line383"></a>
+<a name="line384"></a>
+<a name="line385"></a>/**
+<a name="line386"></a> * @param {goog.math.Long} other Long to compare against.
+<a name="line387"></a> * @return {boolean} Whether this Long does not equal the other.
+<a name="line388"></a> */
+<a name="line389"></a>goog.math.Long.prototype.notEquals = function(other) {
+<a name="line390"></a>  return (this.high_ != other.high_) || (this.low_ != other.low_);
+<a name="line391"></a>};
+<a name="line392"></a>
+<a name="line393"></a>
+<a name="line394"></a>/**
+<a name="line395"></a> * @param {goog.math.Long} other Long to compare against.
+<a name="line396"></a> * @return {boolean} Whether this Long is less than the other.
+<a name="line397"></a> */
+<a name="line398"></a>goog.math.Long.prototype.lessThan = function(other) {
+<a name="line399"></a>  return this.compare(other) &lt; 0;
+<a name="line400"></a>};
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>/**
+<a name="line404"></a> * @param {goog.math.Long} other Long to compare against.
+<a name="line405"></a> * @return {boolean} Whether this Long is less than or equal to the other.
+<a name="line406"></a> */
+<a name="line407"></a>goog.math.Long.prototype.lessThanOrEqual = function(other) {
+<a name="line408"></a>  return this.compare(other) &lt;= 0;
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>/**
+<a name="line413"></a> * @param {goog.math.Long} other Long to compare against.
+<a name="line414"></a> * @return {boolean} Whether this Long is greater than the other.
+<a name="line415"></a> */
+<a name="line416"></a>goog.math.Long.prototype.greaterThan = function(other) {
+<a name="line417"></a>  return this.compare(other) &gt; 0;
+<a name="line418"></a>};
+<a name="line419"></a>
+<a name="line420"></a>
+<a name="line421"></a>/**
+<a name="line422"></a> * @param {goog.math.Long} other Long to compare against.
+<a name="line423"></a> * @return {boolean} Whether this Long is greater than or equal to the other.
+<a name="line424"></a> */
+<a name="line425"></a>goog.math.Long.prototype.greaterThanOrEqual = function(other) {
+<a name="line426"></a>  return this.compare(other) &gt;= 0;
+<a name="line427"></a>};
+<a name="line428"></a>
+<a name="line429"></a>
+<a name="line430"></a>/**
+<a name="line431"></a> * Compares this Long with the given one.
+<a name="line432"></a> * @param {goog.math.Long} other Long to compare against.
+<a name="line433"></a> * @return {number} 0 if they are the same, 1 if the this is greater, and -1
+<a name="line434"></a> *     if the given one is greater.
+<a name="line435"></a> */
+<a name="line436"></a>goog.math.Long.prototype.compare = function(other) {
+<a name="line437"></a>  if (this.equals(other)) {
+<a name="line438"></a>    return 0;
+<a name="line439"></a>  }
+<a name="line440"></a>
+<a name="line441"></a>  var thisNeg = this.isNegative();
+<a name="line442"></a>  var otherNeg = other.isNegative();
+<a name="line443"></a>  if (thisNeg &amp;&amp; !otherNeg) {
+<a name="line444"></a>    return -1;
+<a name="line445"></a>  }
+<a name="line446"></a>  if (!thisNeg &amp;&amp; otherNeg) {
+<a name="line447"></a>    return 1;
+<a name="line448"></a>  }
+<a name="line449"></a>
+<a name="line450"></a>  // at this point, the signs are the same, so subtraction will not overflow
+<a name="line451"></a>  if (this.subtract(other).isNegative()) {
+<a name="line452"></a>    return -1;
+<a name="line453"></a>  } else {
+<a name="line454"></a>    return 1;
+<a name="line455"></a>  }
+<a name="line456"></a>};
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>/** @return {goog.math.Long} The negation of this value. */
+<a name="line460"></a>goog.math.Long.prototype.negate = function() {
+<a name="line461"></a>  if (this.equals(goog.math.Long.MIN_VALUE)) {
+<a name="line462"></a>    return goog.math.Long.MIN_VALUE;
+<a name="line463"></a>  } else {
+<a name="line464"></a>    return this.not().add(goog.math.Long.ONE);
+<a name="line465"></a>  }
+<a name="line466"></a>};
+<a name="line467"></a>
+<a name="line468"></a>
+<a name="line469"></a>/**
+<a name="line470"></a> * Returns the sum of this and the given Long.
+<a name="line471"></a> * @param {goog.math.Long} other Long to add to this one.
+<a name="line472"></a> * @return {goog.math.Long} The sum of this and the given Long.
+<a name="line473"></a> */
+<a name="line474"></a>goog.math.Long.prototype.add = function(other) {
+<a name="line475"></a>  // Divide each number into 4 chunks of 16 bits, and then sum the chunks.
+<a name="line476"></a>
+<a name="line477"></a>  var a48 = this.high_ &gt;&gt;&gt; 16;
+<a name="line478"></a>  var a32 = this.high_ &amp; 0xFFFF;
+<a name="line479"></a>  var a16 = this.low_ &gt;&gt;&gt; 16;
+<a name="line480"></a>  var a00 = this.low_ &amp; 0xFFFF;
+<a name="line481"></a>
+<a name="line482"></a>  var b48 = other.high_ &gt;&gt;&gt; 16;
+<a name="line483"></a>  var b32 = other.high_ &amp; 0xFFFF;
+<a name="line484"></a>  var b16 = other.low_ &gt;&gt;&gt; 16;
+<a name="line485"></a>  var b00 = other.low_ &amp; 0xFFFF;
+<a name="line486"></a>
+<a name="line487"></a>  var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
+<a name="line488"></a>  c00 += a00 + b00;
+<a name="line489"></a>  c16 += c00 &gt;&gt;&gt; 16;
+<a name="line490"></a>  c00 &amp;= 0xFFFF;
+<a name="line491"></a>  c16 += a16 + b16;
+<a name="line492"></a>  c32 += c16 &gt;&gt;&gt; 16;
+<a name="line493"></a>  c16 &amp;= 0xFFFF;
+<a name="line494"></a>  c32 += a32 + b32;
+<a name="line495"></a>  c48 += c32 &gt;&gt;&gt; 16;
+<a name="line496"></a>  c32 &amp;= 0xFFFF;
+<a name="line497"></a>  c48 += a48 + b48;
+<a name="line498"></a>  c48 &amp;= 0xFFFF;
+<a name="line499"></a>  return goog.math.Long.fromBits((c16 &lt;&lt; 16) | c00, (c48 &lt;&lt; 16) | c32);
+<a name="line500"></a>};
+<a name="line501"></a>
+<a name="line502"></a>
+<a name="line503"></a>/**
+<a name="line504"></a> * Returns the difference of this and the given Long.
+<a name="line505"></a> * @param {goog.math.Long} other Long to subtract from this.
+<a name="line506"></a> * @return {goog.math.Long} The difference of this and the given Long.
+<a name="line507"></a> */
+<a name="line508"></a>goog.math.Long.prototype.subtract = function(other) {
+<a name="line509"></a>  return this.add(other.negate());
+<a name="line510"></a>};
+<a name="line511"></a>
+<a name="line512"></a>
+<a name="line513"></a>/**
+<a name="line514"></a> * Returns the product of this and the given long.
+<a name="line515"></a> * @param {goog.math.Long} other Long to multiply with this.
+<a name="line516"></a> * @return {goog.math.Long} The product of this and the other.
+<a name="line517"></a> */
+<a name="line518"></a>goog.math.Long.prototype.multiply = function(other) {
+<a name="line519"></a>  if (this.isZero()) {
+<a name="line520"></a>    return goog.math.Long.ZERO;
+<a name="line521"></a>  } else if (other.isZero()) {
+<a name="line522"></a>    return goog.math.Long.ZERO;
+<a name="line523"></a>  }
+<a name="line524"></a>
+<a name="line525"></a>  if (this.equals(goog.math.Long.MIN_VALUE)) {
+<a name="line526"></a>    return other.isOdd() ? goog.math.Long.MIN_VALUE : goog.math.Long.ZERO;
+<a name="line527"></a>  } else if (other.equals(goog.math.Long.MIN_VALUE)) {
+<a name="line528"></a>    return this.isOdd() ? goog.math.Long.MIN_VALUE : goog.math.Long.ZERO;
+<a name="line529"></a>  }
+<a name="line530"></a>
+<a name="line531"></a>  if (this.isNegative()) {
+<a name="line532"></a>    if (other.isNegative()) {
+<a name="line533"></a>      return this.negate().multiply(other.negate());
+<a name="line534"></a>    } else {
+<a name="line535"></a>      return this.negate().multiply(other).negate();
+<a name="line536"></a>    }
+<a name="line537"></a>  } else if (other.isNegative()) {
+<a name="line538"></a>    return this.multiply(other.negate()).negate();
+<a name="line539"></a>  }
+<a name="line540"></a>
+<a name="line541"></a>  // If both longs are small, use float multiplication
+<a name="line542"></a>  if (this.lessThan(goog.math.Long.TWO_PWR_24_) &amp;&amp;
+<a name="line543"></a>      other.lessThan(goog.math.Long.TWO_PWR_24_)) {
+<a name="line544"></a>    return goog.math.Long.fromNumber(this.toNumber() * other.toNumber());
+<a name="line545"></a>  }
+<a name="line546"></a>
+<a name="line547"></a>  // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
+<a name="line548"></a>  // We can skip products that would overflow.
+<a name="line549"></a>
+<a name="line550"></a>  var a48 = this.high_ &gt;&gt;&gt; 16;
+<a name="line551"></a>  var a32 = this.high_ &amp; 0xFFFF;
+<a name="line552"></a>  var a16 = this.low_ &gt;&gt;&gt; 16;
+<a name="line553"></a>  var a00 = this.low_ &amp; 0xFFFF;
+<a name="line554"></a>
+<a name="line555"></a>  var b48 = other.high_ &gt;&gt;&gt; 16;
+<a name="line556"></a>  var b32 = other.high_ &amp; 0xFFFF;
+<a name="line557"></a>  var b16 = other.low_ &gt;&gt;&gt; 16;
+<a name="line558"></a>  var b00 = other.low_ &amp; 0xFFFF;
+<a name="line559"></a>
+<a name="line560"></a>  var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
+<a name="line561"></a>  c00 += a00 * b00;
+<a name="line562"></a>  c16 += c00 &gt;&gt;&gt; 16;
+<a name="line563"></a>  c00 &amp;= 0xFFFF;
+<a name="line564"></a>  c16 += a16 * b00;
+<a name="line565"></a>  c32 += c16 &gt;&gt;&gt; 16;
+<a name="line566"></a>  c16 &amp;= 0xFFFF;
+<a name="line567"></a>  c16 += a00 * b16;
+<a name="line568"></a>  c32 += c16 &gt;&gt;&gt; 16;
+<a name="line569"></a>  c16 &amp;= 0xFFFF;
+<a name="line570"></a>  c32 += a32 * b00;
+<a name="line571"></a>  c48 += c32 &gt;&gt;&gt; 16;
+<a name="line572"></a>  c32 &amp;= 0xFFFF;
+<a name="line573"></a>  c32 += a16 * b16;
+<a name="line574"></a>  c48 += c32 &gt;&gt;&gt; 16;
+<a name="line575"></a>  c32 &amp;= 0xFFFF;
+<a name="line576"></a>  c32 += a00 * b32;
+<a name="line577"></a>  c48 += c32 &gt;&gt;&gt; 16;
+<a name="line578"></a>  c32 &amp;= 0xFFFF;
+<a name="line579"></a>  c48 += a48 * b00 + a32 * b16 + a16 * b32 + a00 * b48;
+<a name="line580"></a>  c48 &amp;= 0xFFFF;
+<a name="line581"></a>  return goog.math.Long.fromBits((c16 &lt;&lt; 16) | c00, (c48 &lt;&lt; 16) | c32);
+<a name="line582"></a>};
+<a name="line583"></a>
+<a name="line584"></a>
+<a name="line585"></a>/**
+<a name="line586"></a> * Returns this Long divided by the given one.
+<a name="line587"></a> * @param {goog.math.Long} other Long by which to divide.
+<a name="line588"></a> * @return {goog.math.Long} This Long divided by the given one.
+<a name="line589"></a> */
+<a name="line590"></a>goog.math.Long.prototype.div = function(other) {
+<a name="line591"></a>  if (other.isZero()) {
+<a name="line592"></a>    throw Error(&#39;division by zero&#39;);
+<a name="line593"></a>  } else if (this.isZero()) {
+<a name="line594"></a>    return goog.math.Long.ZERO;
+<a name="line595"></a>  }
+<a name="line596"></a>
+<a name="line597"></a>  if (this.equals(goog.math.Long.MIN_VALUE)) {
+<a name="line598"></a>    if (other.equals(goog.math.Long.ONE) ||
+<a name="line599"></a>        other.equals(goog.math.Long.NEG_ONE)) {
+<a name="line600"></a>      return goog.math.Long.MIN_VALUE;  // recall that -MIN_VALUE == MIN_VALUE
+<a name="line601"></a>    } else if (other.equals(goog.math.Long.MIN_VALUE)) {
+<a name="line602"></a>      return goog.math.Long.ONE;
+<a name="line603"></a>    } else {
+<a name="line604"></a>      // At this point, we have |other| &gt;= 2, so |this/other| &lt; |MIN_VALUE|.
+<a name="line605"></a>      var halfThis = this.shiftRight(1);
+<a name="line606"></a>      var approx = halfThis.div(other).shiftLeft(1);
+<a name="line607"></a>      if (approx.equals(goog.math.Long.ZERO)) {
+<a name="line608"></a>        return other.isNegative() ? goog.math.Long.ONE : goog.math.Long.NEG_ONE;
+<a name="line609"></a>      } else {
+<a name="line610"></a>        var rem = this.subtract(other.multiply(approx));
+<a name="line611"></a>        var result = approx.add(rem.div(other));
+<a name="line612"></a>        return result;
+<a name="line613"></a>      }
+<a name="line614"></a>    }
+<a name="line615"></a>  } else if (other.equals(goog.math.Long.MIN_VALUE)) {
+<a name="line616"></a>    return goog.math.Long.ZERO;
+<a name="line617"></a>  }
+<a name="line618"></a>
+<a name="line619"></a>  if (this.isNegative()) {
+<a name="line620"></a>    if (other.isNegative()) {
+<a name="line621"></a>      return this.negate().div(other.negate());
+<a name="line622"></a>    } else {
+<a name="line623"></a>      return this.negate().div(other).negate();
+<a name="line624"></a>    }
+<a name="line625"></a>  } else if (other.isNegative()) {
+<a name="line626"></a>    return this.div(other.negate()).negate();
+<a name="line627"></a>  }
+<a name="line628"></a>
+<a name="line629"></a>  // Repeat the following until the remainder is less than other:  find a
+<a name="line630"></a>  // floating-point that approximates remainder / other *from below*, add this
+<a name="line631"></a>  // into the result, and subtract it from the remainder.  It is critical that
+<a name="line632"></a>  // the approximate value is less than or equal to the real value so that the
+<a name="line633"></a>  // remainder never becomes negative.
+<a name="line634"></a>  var res = goog.math.Long.ZERO;
+<a name="line635"></a>  var rem = this;
+<a name="line636"></a>  while (rem.greaterThanOrEqual(other)) {
+<a name="line637"></a>    // Approximate the result of division. This may be a little greater or
+<a name="line638"></a>    // smaller than the actual value.
+<a name="line639"></a>    var approx = Math.max(1, Math.floor(rem.toNumber() / other.toNumber()));
+<a name="line640"></a>
+<a name="line641"></a>    // We will tweak the approximate result by changing it in the 48-th digit or
+<a name="line642"></a>    // the smallest non-fractional digit, whichever is larger.
+<a name="line643"></a>    var log2 = Math.ceil(Math.log(approx) / Math.LN2);
+<a name="line644"></a>    var delta = (log2 &lt;= 48) ? 1 : Math.pow(2, log2 - 48);
+<a name="line645"></a>
+<a name="line646"></a>    // Decrease the approximation until it is smaller than the remainder.  Note
+<a name="line647"></a>    // that if it is too large, the product overflows and is negative.
+<a name="line648"></a>    var approxRes = goog.math.Long.fromNumber(approx);
+<a name="line649"></a>    var approxRem = approxRes.multiply(other);
+<a name="line650"></a>    while (approxRem.isNegative() || approxRem.greaterThan(rem)) {
+<a name="line651"></a>      approx -= delta;
+<a name="line652"></a>      approxRes = goog.math.Long.fromNumber(approx);
+<a name="line653"></a>      approxRem = approxRes.multiply(other);
+<a name="line654"></a>    }
+<a name="line655"></a>
+<a name="line656"></a>    // We know the answer can&#39;t be zero... and actually, zero would cause
+<a name="line657"></a>    // infinite recursion since we would make no progress.
+<a name="line658"></a>    if (approxRes.isZero()) {
+<a name="line659"></a>      approxRes = goog.math.Long.ONE;
+<a name="line660"></a>    }
+<a name="line661"></a>
+<a name="line662"></a>    res = res.add(approxRes);
+<a name="line663"></a>    rem = rem.subtract(approxRem);
+<a name="line664"></a>  }
+<a name="line665"></a>  return res;
+<a name="line666"></a>};
+<a name="line667"></a>
+<a name="line668"></a>
+<a name="line669"></a>/**
+<a name="line670"></a> * Returns this Long modulo the given one.
+<a name="line671"></a> * @param {goog.math.Long} other Long by which to mod.
+<a name="line672"></a> * @return {goog.math.Long} This Long modulo the given one.
+<a name="line673"></a> */
+<a name="line674"></a>goog.math.Long.prototype.modulo = function(other) {
+<a name="line675"></a>  return this.subtract(this.div(other).multiply(other));
+<a name="line676"></a>};
+<a name="line677"></a>
+<a name="line678"></a>
+<a name="line679"></a>/** @return {goog.math.Long} The bitwise-NOT of this value. */
+<a name="line680"></a>goog.math.Long.prototype.not = function() {
+<a name="line681"></a>  return goog.math.Long.fromBits(~this.low_, ~this.high_);
+<a name="line682"></a>};
+<a name="line683"></a>
+<a name="line684"></a>
+<a name="line685"></a>/**
+<a name="line686"></a> * Returns the bitwise-AND of this Long and the given one.
+<a name="line687"></a> * @param {goog.math.Long} other The Long with which to AND.
+<a name="line688"></a> * @return {goog.math.Long} The bitwise-AND of this and the other.
+<a name="line689"></a> */
+<a name="line690"></a>goog.math.Long.prototype.and = function(other) {
+<a name="line691"></a>  return goog.math.Long.fromBits(this.low_ &amp; other.low_,
+<a name="line692"></a>                                 this.high_ &amp; other.high_);
+<a name="line693"></a>};
+<a name="line694"></a>
+<a name="line695"></a>
+<a name="line696"></a>/**
+<a name="line697"></a> * Returns the bitwise-OR of this Long and the given one.
+<a name="line698"></a> * @param {goog.math.Long} other The Long with which to OR.
+<a name="line699"></a> * @return {goog.math.Long} The bitwise-OR of this and the other.
+<a name="line700"></a> */
+<a name="line701"></a>goog.math.Long.prototype.or = function(other) {
+<a name="line702"></a>  return goog.math.Long.fromBits(this.low_ | other.low_,
+<a name="line703"></a>                                 this.high_ | other.high_);
+<a name="line704"></a>};
+<a name="line705"></a>
+<a name="line706"></a>
+<a name="line707"></a>/**
+<a name="line708"></a> * Returns the bitwise-XOR of this Long and the given one.
+<a name="line709"></a> * @param {goog.math.Long} other The Long with which to XOR.
+<a name="line710"></a> * @return {goog.math.Long} The bitwise-XOR of this and the other.
+<a name="line711"></a> */
+<a name="line712"></a>goog.math.Long.prototype.xor = function(other) {
+<a name="line713"></a>  return goog.math.Long.fromBits(this.low_ ^ other.low_,
+<a name="line714"></a>                                 this.high_ ^ other.high_);
+<a name="line715"></a>};
+<a name="line716"></a>
+<a name="line717"></a>
+<a name="line718"></a>/**
+<a name="line719"></a> * Returns this Long with bits shifted to the left by the given amount.
+<a name="line720"></a> * @param {number} numBits The number of bits by which to shift.
+<a name="line721"></a> * @return {goog.math.Long} This shifted to the left by the given amount.
+<a name="line722"></a> */
+<a name="line723"></a>goog.math.Long.prototype.shiftLeft = function(numBits) {
+<a name="line724"></a>  numBits &amp;= 63;
+<a name="line725"></a>  if (numBits == 0) {
+<a name="line726"></a>    return this;
+<a name="line727"></a>  } else {
+<a name="line728"></a>    var low = this.low_;
+<a name="line729"></a>    if (numBits &lt; 32) {
+<a name="line730"></a>      var high = this.high_;
+<a name="line731"></a>      return goog.math.Long.fromBits(
+<a name="line732"></a>                 low &lt;&lt; numBits,
+<a name="line733"></a>                 (high &lt;&lt; numBits) | (low &gt;&gt;&gt; (32 - numBits)));
+<a name="line734"></a>    } else {
+<a name="line735"></a>      return goog.math.Long.fromBits(0, low &lt;&lt; (numBits - 32));
+<a name="line736"></a>    }
+<a name="line737"></a>  }
+<a name="line738"></a>};
+<a name="line739"></a>
+<a name="line740"></a>
+<a name="line741"></a>/**
+<a name="line742"></a> * Returns this Long with bits shifted to the right by the given amount.
+<a name="line743"></a> * @param {number} numBits The number of bits by which to shift.
+<a name="line744"></a> * @return {goog.math.Long} This shifted to the right by the given amount.
+<a name="line745"></a> */
+<a name="line746"></a>goog.math.Long.prototype.shiftRight = function(numBits) {
+<a name="line747"></a>  numBits &amp;= 63;
+<a name="line748"></a>  if (numBits == 0) {
+<a name="line749"></a>    return this;
+<a name="line750"></a>  } else {
+<a name="line751"></a>    var high = this.high_;
+<a name="line752"></a>    if (numBits &lt; 32) {
+<a name="line753"></a>      var low = this.low_;
+<a name="line754"></a>      return goog.math.Long.fromBits(
+<a name="line755"></a>                 (low &gt;&gt;&gt; numBits) | (high &lt;&lt; (32 - numBits)),
+<a name="line756"></a>                 high &gt;&gt; numBits);
+<a name="line757"></a>    } else {
+<a name="line758"></a>      return goog.math.Long.fromBits(
+<a name="line759"></a>                 high &gt;&gt; (numBits - 32),
+<a name="line760"></a>                 high &gt;= 0 ? 0 : -1);
+<a name="line761"></a>    }
+<a name="line762"></a>  }
+<a name="line763"></a>};
+<a name="line764"></a>
+<a name="line765"></a>
+<a name="line766"></a>/**
+<a name="line767"></a> * Returns this Long with bits shifted to the right by the given amount, with
+<a name="line768"></a> * the new top bits matching the current sign bit.
+<a name="line769"></a> * @param {number} numBits The number of bits by which to shift.
+<a name="line770"></a> * @return {goog.math.Long} This shifted to the right by the given amount, with
+<a name="line771"></a> *     zeros placed into the new leading bits.
+<a name="line772"></a> */
+<a name="line773"></a>goog.math.Long.prototype.shiftRightUnsigned = function(numBits) {
+<a name="line774"></a>  numBits &amp;= 63;
+<a name="line775"></a>  if (numBits == 0) {
+<a name="line776"></a>    return this;
+<a name="line777"></a>  } else {
+<a name="line778"></a>    var high = this.high_;
+<a name="line779"></a>    if (numBits &lt; 32) {
+<a name="line780"></a>      var low = this.low_;
+<a name="line781"></a>      return goog.math.Long.fromBits(
+<a name="line782"></a>                 (low &gt;&gt;&gt; numBits) | (high &lt;&lt; (32 - numBits)),
+<a name="line783"></a>                 high &gt;&gt;&gt; numBits);
+<a name="line784"></a>    } else if (numBits == 32) {
+<a name="line785"></a>      return goog.math.Long.fromBits(high, 0);
+<a name="line786"></a>    } else {
+<a name="line787"></a>      return goog.math.Long.fromBits(high &gt;&gt;&gt; (numBits - 32), 0);
+<a name="line788"></a>    }
+<a name="line789"></a>  }
+<a name="line790"></a>};
+</pre>
+
+
+</body>
+</html>

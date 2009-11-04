@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!--
+Copyright 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+  <title>goog.ui.DatePicker</title>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.dom');
+    goog.require('goog.date');
+    goog.require('goog.locale');
+    goog.require('goog.locale.formatting');
+    goog.require('goog.ui.DatePicker');
+  </script>
+  <link rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="css/datepicker.css">
+</head>
+<body>
+  <h1>goog.ui.DatePicker</h1>
+
+  <table width="100%" summary="for laying out datepickers"><tr><td valign="top">
+  <h2>Default: ISO 8601</h2>
+  <div id="widget_iso_8601"></div>
+  <div style="clear: both;">&nbsp;</div>
+  <span id="label_iso_8601"></span>
+  <br><br>
+  <h2>Custom</h2>
+  <input type="checkbox" id="ck-0"
+      onclick="dp_custom.setShowFixedNumWeeks(this.checked);" checked><label
+      for="ck-0">ShowFixedNumWeeks</label><br>
+  <input type="checkbox" id="ck-1"
+      onclick="dp_custom.setShowOtherMonths(this.checked);" checked><label
+      for="ck-1">ShowOtherMonths</label><br>
+  <input type="checkbox" id="ck-2"
+      onclick="dp_custom.setExtraWeekAtEnd(this.checked);" checked><label
+      for="ck-2">ExtraWeekAtEnd</label><br>
+  <input type="checkbox" id="ck-3"
+      onclick="dp_custom.setShowWeekNum(this.checked);" checked><label
+      for="ck-3">ShowWeekNum</label><br>
+  <input type="checkbox" id="ck-4"
+      onclick="dp_custom.setShowWeekdayNames(this.checked);" checked><label
+      for="ck-4">ShowWeekdays</label><br>
+  <input type="checkbox" id="ck-5"
+      onclick="dp_custom.setAllowNone(this.checked);" checked><label
+      for="ck-5">AllowNone</label><br>
+  <input type="checkbox" id="ck-6"
+      onclick="dp_custom.setShowToday(this.checked);" checked><label
+      for="ck-6">ShowToday</label><br>
+  <input type="checkbox" id="ck-7"
+      onclick="dp_custom.setUseNarrowWeekdayNames(this.checked);"><label
+      for="ck-7">UseNarrowWeekdayNames</label><br>
+  <input type="checkbox" id="ck-8"
+      onclick="dp_custom.setUseSimpleNavigationMenu(this.checked);"><label
+      for="ck-8">UseSimpleNavigationMenu</label><br>
+  <br>
+  <div id="widget_custom"></div>
+  <div style="clear: both;">&nbsp;</div>
+  <span id="label_custom"></span>
+  </td>
+  <td valign="top">
+
+  <h2>English(US)</h2>
+  <div id="widget_en_US"></div>
+  <div style="clear: both;">&nbsp;</div>
+  <span id="label_en_US"></span>
+  <br><br>
+
+  <h2>German</h2>
+  <div id="widget_de"></div>
+  <div style="clear: both;">&nbsp;</div>
+  <span id="label_de"></span>
+  <br><br>
+
+  <h2>Malayalam</h2>
+  <div id="widget_ml"></div>
+  <div style="clear: both;">&nbsp;</div>
+  <span id="label_ml"></span>
+  <br><br>
+
+  <h2>Arabic(Yemen)</h2>
+  <div dir=rtl id="widget_ar_YE"></div>
+  <div style="clear: both;">&nbsp;</div>
+  <span id="label_ar_YE"></span>
+  <br><br>
+  </td></tr></table>
+
+  <script type="text/javascript"
+    src="../../../googledata/i18n/js_locale_data/DateTimeConstants__en_US.js">
+  </script>
+  <script type="text/javascript"
+    src="../../../googledata/i18n/js_locale_data/DateTimeConstants__de.js">
+  </script>
+  <script type="text/javascript"
+    src="../../../googledata/i18n/js_locale_data/DateTimeConstants__ml.js">
+  </script>
+  <script type="text/javascript"
+    src="../../../googledata/i18n/js_locale_data/DateTimeConstants__ar_YE.js">
+  </script>
+
+  <script type="text/javascript">
+    // Standard: ISO 8601
+    goog.locale.setLocale('und');
+    var dp_iso_8601 = new goog.ui.DatePicker();
+    dp_iso_8601.create(document.getElementById('widget_iso_8601'));
+
+    goog.events.listen(dp_iso_8601,
+        goog.ui.DatePicker.Events.CHANGE, function(event) {
+      goog.dom.setTextContent(document.getElementById('label_iso_8601'),
+          event.date ?
+          event.date.toIsoString(true) : 'none');
+    });
+
+    goog.dom.setTextContent(document.getElementById('label_iso_8601'),
+                            dp_iso_8601.getDate().toIsoString(true));
+
+    // Custom
+    var dp_custom = new goog.ui.DatePicker(new goog.date.Date(2006, 0, 1));
+    dp_custom.create(document.getElementById('widget_custom'));
+
+    goog.events.listen(dp_custom, goog.ui.DatePicker.Events.CHANGE,
+                       function(event) {
+      goog.dom.setTextContent(document.getElementById('label_custom'),
+          event.date ?
+          event.date.toIsoString(true) : 'none');
+    });
+
+    goog.dom.setTextContent(document.getElementById('label_custom'),
+                            dp_custom.getDate().toIsoString(true));
+
+    // English(US)
+    goog.locale.setLocale('en_US');
+
+    var dp_en_US = new goog.ui.DatePicker();
+    dp_en_US.create(document.getElementById('widget_en_US'));
+
+    goog.events.listen(dp_en_US, goog.ui.DatePicker.Events.CHANGE,
+        function(event) {
+      goog.dom.setTextContent(document.getElementById('label_en_US'), event.date ?
+          event.date.toIsoString(true) : 'none');
+    });
+
+    goog.dom.setTextContent(document.getElementById('label_en_US'),
+                            dp_en_US.getDate().toIsoString(true));
+
+    // German
+    goog.locale.setLocale('de');
+
+    dp_de = new goog.ui.DatePicker();
+    dp_de.create(document.getElementById('widget_de'));
+
+    goog.events.listen(dp_de, goog.ui.DatePicker.Events.CHANGE, function(event) {
+      goog.dom.setTextContent(document.getElementById('label_de'), event.date ?
+          event.date.toIsoString(true) : 'none');
+    });
+
+    goog.dom.setTextContent(document.getElementById('label_de'),
+                            dp_de.getDate().toIsoString(true));
+
+    // Malayalam
+    goog.locale.setLocale('ml');
+
+    var dp_ml = new goog.ui.DatePicker();
+    dp_ml.create(document.getElementById('widget_ml'));
+
+    goog.events.listen(dp_ml, goog.ui.DatePicker.Events.CHANGE, function(event) {
+      goog.dom.setTextContent(document.getElementById('label_ml'), event.date ?
+          event.date.toIsoString(true) : 'none');
+    });
+
+    goog.dom.setTextContent(document.getElementById('label_ml'),
+                            dp_ml.getDate().toIsoString(true));
+
+    // Arabic(Yemen)
+    goog.locale.setLocale('ar_YE');
+
+    var dp_ar_YE = new goog.ui.DatePicker();
+    dp_ar_YE.create(document.getElementById('widget_ar_YE'));
+
+    goog.events.listen(dp_ar_YE, goog.ui.DatePicker.Events.CHANGE,
+        function(event) {
+      goog.dom.setTextContent(document.getElementById('label_ar_YE'), event.date ?
+          event.date.toIsoString(true) : 'none');
+    });
+
+    goog.dom.setTextContent(document.getElementById('label_ar_YE'),
+                            dp_ar_YE.getDate().toIsoString(true));
+
+  </script>
+</body>
+</html>

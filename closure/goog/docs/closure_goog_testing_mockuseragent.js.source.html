@@ -1,0 +1,157 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mockuseragent.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_testing_mockuseragent.js.html">mockuseragent.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview MockUserAgent overrides goog.userAgent.getUserAgentString()
+<a name="line17"></a> *     depending on a specified configuration.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.testing.MockUserAgent&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line24"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Class for unit testing code that uses goog.userAgent.
+<a name="line29"></a> *
+<a name="line30"></a> * @extends {goog.Disposable}
+<a name="line31"></a> * @constructor
+<a name="line32"></a> */
+<a name="line33"></a>goog.testing.MockUserAgent = function() {
+<a name="line34"></a>  goog.Disposable.call(this);
+<a name="line35"></a>
+<a name="line36"></a>  /**
+<a name="line37"></a>   * The userAgent string used by goog.userAgent.
+<a name="line38"></a>   * @type {string}
+<a name="line39"></a>   * @private
+<a name="line40"></a>   */
+<a name="line41"></a>  this.userAgent_ = goog.userAgent.getUserAgentString();
+<a name="line42"></a>
+<a name="line43"></a>  /**
+<a name="line44"></a>   * The original goog.userAgent.getUserAgentString function.
+<a name="line45"></a>   * @type {Function}
+<a name="line46"></a>   * @private
+<a name="line47"></a>   */
+<a name="line48"></a>  this.originalUserAgentFunction_ = goog.userAgent.getUserAgentString;
+<a name="line49"></a>};
+<a name="line50"></a>goog.inherits(goog.testing.MockUserAgent, goog.Disposable);
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Whether this MockUserAgent has been installed.
+<a name="line55"></a> * @type {boolean}
+<a name="line56"></a> * @private
+<a name="line57"></a> */
+<a name="line58"></a>goog.testing.MockUserAgent.prototype.installed_;
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * Installs this MockUserAgent.
+<a name="line63"></a> */
+<a name="line64"></a>goog.testing.MockUserAgent.prototype.install = function() {
+<a name="line65"></a>  if (!this.installed_) {
+<a name="line66"></a>    goog.userAgent.getUserAgentString =
+<a name="line67"></a>        goog.bind(this.getUserAgentString, this);
+<a name="line68"></a>    this.installed_ = true;
+<a name="line69"></a>  }
+<a name="line70"></a>};
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * @return {string} The userAgent set in this class.
+<a name="line75"></a> */
+<a name="line76"></a>goog.testing.MockUserAgent.prototype.getUserAgentString = function() {
+<a name="line77"></a>  return this.userAgent_;
+<a name="line78"></a>};
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * @param {string} userAgent The desired userAgent string to use.
+<a name="line83"></a> */
+<a name="line84"></a>goog.testing.MockUserAgent.prototype.setUserAgentString = function(userAgent) {
+<a name="line85"></a>  this.userAgent_ = userAgent;
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Uninstalls the MockUserAgent.
+<a name="line91"></a> */
+<a name="line92"></a>goog.testing.MockUserAgent.prototype.uninstall = function() {
+<a name="line93"></a>  if (this.installed_) {
+<a name="line94"></a>    goog.userAgent.getUserAgentString = this.originalUserAgentFunction_;
+<a name="line95"></a>    this.installed_ = false;
+<a name="line96"></a>  }
+<a name="line97"></a>};
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Disposes of the MockUserAgent.
+<a name="line102"></a> */
+<a name="line103"></a>goog.testing.MockUserAgent.prototype.disposeInternal = function() {
+<a name="line104"></a>  this.uninstall();
+<a name="line105"></a>  delete this.userAgent_;
+<a name="line106"></a>  delete this.originalUserAgentFunction_;
+<a name="line107"></a>  goog.testing.MockUserAgent.superClass_.disposeInternal.call(this);
+<a name="line108"></a>};
+</pre>
+
+
+</body>
+</html>

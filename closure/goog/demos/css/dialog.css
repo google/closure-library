@@ -1,0 +1,70 @@
+/*
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+*/
+
+/* Copyright 2007 Google Inc.  All Rights Reserved. */
+/**/
+
+/* Styles for goog.ui.Dialog */
+.modal-dialog-bg {
+  position: absolute;
+  background-color: #666;
+  top: 0;
+  left: 0;
+}
+
+.modal-dialog {
+  position: absolute;
+  padding: 5px;
+  background-color: #bcf;
+  border: 1px solid #000;
+  font-family: arial, sans-serif;
+  width: 475px;
+  color: #000;
+  outline: none;
+}
+
+.modal-dialog a,
+.modal-dialog a:link,
+.modal-dialog a:visited  {
+  color: #0066cc;
+  cursor: pointer;
+}
+
+.modal-dialog-title {
+  position: relative;
+  background-color: #ebeff9;
+  color: #000000;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  vertical-align: middle;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.modal-dialog-title-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  width: 15px;
+  height: 16px;
+  background: url("../images/dialog_close_box.gif") no-repeat center;
+  cursor: default;
+}
+
+.modal-dialog-content {
+  padding: 15px;
+  font-size: 90%;
+  background-color: #fff;
+}
+
+.modal-dialog-buttons {
+  padding: 0 15px 15px;
+  background-color: #fff;
+}
+
+.goog-buttonset-default {
+  font-weight: bold;
+}

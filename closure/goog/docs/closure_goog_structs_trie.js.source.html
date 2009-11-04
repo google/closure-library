@@ -1,0 +1,418 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>trie.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_structs_trie.js.html">trie.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Datastructure: Trie.
+<a name="line17"></a> *
+<a name="line18"></a> *
+<a name="line19"></a> * This file provides the implementation of a trie data structure.  A trie is a
+<a name="line20"></a> * data structure that stores key/value pairs in a prefix tree.  See:
+<a name="line21"></a> *     http://en.wikipedia.org/wiki/Trie
+<a name="line22"></a> *
+<a name="line23"></a> */
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.structs.Trie&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.object&#39;);
+<a name="line29"></a>goog.require(&#39;goog.structs&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Class for a Trie datastructure.  Trie data structures are made out of trees
+<a name="line35"></a> * of Trie classes.
+<a name="line36"></a> *
+<a name="line37"></a> * @param {Object} opt_trie Optional goog.structs.Trie or Object to initialize
+<a name="line38"></a> *    trie with.
+<a name="line39"></a> * @constructor
+<a name="line40"></a> */
+<a name="line41"></a>goog.structs.Trie = function(opt_trie) {
+<a name="line42"></a>  /**
+<a name="line43"></a>   * This trie&#39;s child nodes.
+<a name="line44"></a>   * @private
+<a name="line45"></a>   * @type {Object.&lt;goog.structs.Trie&gt;}
+<a name="line46"></a>   */
+<a name="line47"></a>  this.childNodes_ = {};
+<a name="line48"></a>
+<a name="line49"></a>  if (opt_trie) {
+<a name="line50"></a>    this.setAll(opt_trie);
+<a name="line51"></a>  }
+<a name="line52"></a>};
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * This trie&#39;s value.  For the base trie, this will be the value of the
+<a name="line57"></a> * empty key, if defined.
+<a name="line58"></a> * @private
+<a name="line59"></a> * @type {*}
+<a name="line60"></a> */
+<a name="line61"></a>goog.structs.Trie.prototype.value_ = undefined;
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * Sets the given key/value pair in the trie.  O(L), where L is the length
+<a name="line66"></a> * of the key.
+<a name="line67"></a> * @param {string} key The key.
+<a name="line68"></a> * @param {*} value The value.
+<a name="line69"></a> */
+<a name="line70"></a>goog.structs.Trie.prototype.set = function(key, value) {
+<a name="line71"></a>  this.setOrAdd_(key, value, false);
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Adds the given key/value pair in the trie.  Throw an exception if the key
+<a name="line77"></a> * already exists in the trie.  O(L), where L is the length of the key.
+<a name="line78"></a> * @param {string} key The key.
+<a name="line79"></a> * @param {*} value The value.
+<a name="line80"></a> */
+<a name="line81"></a>goog.structs.Trie.prototype.add = function(key, value) {
+<a name="line82"></a>  this.setOrAdd_(key, value, true);
+<a name="line83"></a>};
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Helper function for set and add.  Adds the given key/value pair to
+<a name="line88"></a> * the trie, or, if the key already exists, sets the value of the key. If
+<a name="line89"></a> * opt_add is true, then throws an exception if the key already has a value in
+<a name="line90"></a> * the trie.  O(L), where L is the length of the key.
+<a name="line91"></a> * @param {string} key The key.
+<a name="line92"></a> * @param {*} value The value.
+<a name="line93"></a> * @param {boolean} opt_add Throw exception if key is already in the trie.
+<a name="line94"></a> * @private
+<a name="line95"></a> */
+<a name="line96"></a>goog.structs.Trie.prototype.setOrAdd_ = function(key, value, opt_add) {
+<a name="line97"></a>  var node = this;
+<a name="line98"></a>  for (var characterPosition = 0; characterPosition &lt; key.length;
+<a name="line99"></a>       characterPosition++) {
+<a name="line100"></a>    var currentCharacter = key.charAt(characterPosition);
+<a name="line101"></a>    if (!node.childNodes_[currentCharacter]) {
+<a name="line102"></a>      node.childNodes_[currentCharacter] = new goog.structs.Trie();
+<a name="line103"></a>    }
+<a name="line104"></a>    node = node.childNodes_[currentCharacter];
+<a name="line105"></a>  }
+<a name="line106"></a>  if (opt_add &amp;&amp; node.value_ !== undefined) {
+<a name="line107"></a>    throw Error(&#39;The collection already contains the key &quot;&#39; + key + &#39;&quot;&#39;);
+<a name="line108"></a>  } else {
+<a name="line109"></a>    node.value_ = value;
+<a name="line110"></a>  }
+<a name="line111"></a>};
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * Adds multiple key/value pairs from another goog.structs.Trie or Object.
+<a name="line116"></a> * O(N) where N is the number of nodes in the trie.
+<a name="line117"></a> * @param {Object|goog.structs.Trie} trie Object containing the data to add.
+<a name="line118"></a> */
+<a name="line119"></a>goog.structs.Trie.prototype.setAll = function(trie) {
+<a name="line120"></a>  var keys = goog.structs.getKeys(trie);
+<a name="line121"></a>  var values = goog.structs.getValues(trie);
+<a name="line122"></a>
+<a name="line123"></a>  for (var i = 0; i &lt; keys.length; i++) {
+<a name="line124"></a>    this.set(keys[i], values[i]);
+<a name="line125"></a>  }
+<a name="line126"></a>};
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * Retrieves a value from the trie given a key.  O(L), where L is the length of
+<a name="line131"></a> * the key.
+<a name="line132"></a> * @param {string} key The key to retrieve from the trie.
+<a name="line133"></a> * @return {*} The value of the key in the trie, or undefined if the trie does
+<a name="line134"></a> *     not contain this key.
+<a name="line135"></a> */
+<a name="line136"></a>goog.structs.Trie.prototype.get = function(key) {
+<a name="line137"></a>  var node = this;
+<a name="line138"></a>  for (var characterPosition = 0; characterPosition &lt; key.length;
+<a name="line139"></a>       characterPosition++) {
+<a name="line140"></a>    var currentCharacter = key.charAt(characterPosition);
+<a name="line141"></a>    if (!node.childNodes_[currentCharacter]) {
+<a name="line142"></a>      return undefined;
+<a name="line143"></a>    }
+<a name="line144"></a>    node = node.childNodes_[currentCharacter];
+<a name="line145"></a>  }
+<a name="line146"></a>  return node.value_;
+<a name="line147"></a>};
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Retrieves all values from the trie that correspond to prefixes of the given
+<a name="line152"></a> * input key. O(L), where L is the length of the key.
+<a name="line153"></a> *
+<a name="line154"></a> * @param {string} key The key to use for lookup. The given key as well as all
+<a name="line155"></a> *     prefixes of the key are retrieved.
+<a name="line156"></a> * @param {number?} opt_keyStartIndex Optional position in key to start lookup
+<a name="line157"></a> *     from. Defaults to 0 if not specified.
+<a name="line158"></a> * @return {Object} Map of end index of matching prefixes and corresponding
+<a name="line159"></a> *     values. Empty if no match found.
+<a name="line160"></a> */
+<a name="line161"></a>goog.structs.Trie.prototype.getKeyAndPrefixes = function(key,
+<a name="line162"></a>                                                         opt_keyStartIndex) {
+<a name="line163"></a>  var node = this;
+<a name="line164"></a>  var matches = {};
+<a name="line165"></a>  var characterPosition = opt_keyStartIndex || 0;
+<a name="line166"></a>
+<a name="line167"></a>  if (node.value_ !== undefined) {
+<a name="line168"></a>    matches[characterPosition] = node.value_;
+<a name="line169"></a>  }
+<a name="line170"></a>
+<a name="line171"></a>  for (; characterPosition &lt; key.length; characterPosition++) {
+<a name="line172"></a>    var currentCharacter = key.charAt(characterPosition);
+<a name="line173"></a>    if (!(currentCharacter in node.childNodes_)) {
+<a name="line174"></a>      break;
+<a name="line175"></a>    }
+<a name="line176"></a>    node = node.childNodes_[currentCharacter];
+<a name="line177"></a>    if (node.value_ !== undefined) {
+<a name="line178"></a>      matches[characterPosition] = node.value_;
+<a name="line179"></a>    }
+<a name="line180"></a>  }
+<a name="line181"></a>
+<a name="line182"></a>  return matches;
+<a name="line183"></a>};
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * Gets the values of the trie.  Not returned in any reliable order.  O(N) where
+<a name="line188"></a> * N is the number of nodes in the trie.  Calls getValuesInternal_.
+<a name="line189"></a> * @return {Array} The values in the trie.
+<a name="line190"></a> */
+<a name="line191"></a>goog.structs.Trie.prototype.getValues = function() {
+<a name="line192"></a>  var allValues = [];
+<a name="line193"></a>  this.getValuesInternal_(allValues);
+<a name="line194"></a>  return allValues;
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Gets the values of the trie.  Not returned in any reliable order.  O(N) where
+<a name="line200"></a> * N is the number of nodes in the trie.  Builds the values as it goes.
+<a name="line201"></a> * @param {Array.&lt;string&gt;} allValues Array to place values into.
+<a name="line202"></a> * @private
+<a name="line203"></a> */
+<a name="line204"></a>goog.structs.Trie.prototype.getValuesInternal_ = function(allValues) {
+<a name="line205"></a>  if (this.value_ !== undefined) {
+<a name="line206"></a>    allValues.push(this.value_);
+<a name="line207"></a>  }
+<a name="line208"></a>  for (var childNode in this.childNodes_) {
+<a name="line209"></a>    this.childNodes_[childNode].getValuesInternal_(allValues);
+<a name="line210"></a>  }
+<a name="line211"></a>};
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/**
+<a name="line215"></a> * Gets the keys of the trie.  Not returned in any reliable order.  O(N) where
+<a name="line216"></a> * N is the number of nodes in the trie (or prefix subtree).
+<a name="line217"></a> * @param {string} opt_prefix Find only keys with this optional prefix.
+<a name="line218"></a> * @return {Array} The keys in the trie.
+<a name="line219"></a> */
+<a name="line220"></a>goog.structs.Trie.prototype.getKeys = function(opt_prefix) {
+<a name="line221"></a>  var allKeys = [];
+<a name="line222"></a>  if (opt_prefix) {
+<a name="line223"></a>    // Traverse to the given prefix, then call getKeysInternal_ to dump the
+<a name="line224"></a>    // keys below that point.
+<a name="line225"></a>    var node = this;
+<a name="line226"></a>    for (var characterPosition = 0; characterPosition &lt; opt_prefix.length;
+<a name="line227"></a>        characterPosition++) {
+<a name="line228"></a>      var currentCharacter = opt_prefix.charAt(characterPosition);
+<a name="line229"></a>      if (!node.childNodes_[currentCharacter]) {
+<a name="line230"></a>        return [];
+<a name="line231"></a>      }
+<a name="line232"></a>      node = node.childNodes_[currentCharacter];
+<a name="line233"></a>    }
+<a name="line234"></a>    node.getKeysInternal_(opt_prefix, allKeys);
+<a name="line235"></a>  } else {
+<a name="line236"></a>    this.getKeysInternal_(&#39;&#39;, allKeys);
+<a name="line237"></a>  }
+<a name="line238"></a>  return allKeys;
+<a name="line239"></a>};
+<a name="line240"></a>
+<a name="line241"></a>
+<a name="line242"></a>/**
+<a name="line243"></a> * Private method to get keys from the trie.  Builds the keys as it goes.
+<a name="line244"></a> * @param {string} keySoFar The partial key (prefix) traversed so far.
+<a name="line245"></a> * @param {Array} allKeys The partially built array of keys seen so far.
+<a name="line246"></a> * @private
+<a name="line247"></a> */
+<a name="line248"></a>goog.structs.Trie.prototype.getKeysInternal_ = function(keySoFar, allKeys) {
+<a name="line249"></a>  if (this.value_ !== undefined) {
+<a name="line250"></a>    allKeys.push(keySoFar);
+<a name="line251"></a>  }
+<a name="line252"></a>  for (var childNode in this.childNodes_) {
+<a name="line253"></a>    this.childNodes_[childNode].getKeysInternal_(keySoFar + childNode, allKeys);
+<a name="line254"></a>  }
+<a name="line255"></a>};
+<a name="line256"></a>
+<a name="line257"></a>
+<a name="line258"></a>/**
+<a name="line259"></a> * Checks to see if a certain key is in the trie.  O(L), where L is the length
+<a name="line260"></a> * of the key.
+<a name="line261"></a> * @param {string} key A key that may be in the trie.
+<a name="line262"></a> * @return {boolean} Whether the trie contains key.
+<a name="line263"></a> */
+<a name="line264"></a>goog.structs.Trie.prototype.containsKey = function(key) {
+<a name="line265"></a>  return this.get(key) !== undefined;
+<a name="line266"></a>};
+<a name="line267"></a>
+<a name="line268"></a>
+<a name="line269"></a>/**
+<a name="line270"></a> * Checks to see if a certain value is in the trie.  Worst case is O(N) where
+<a name="line271"></a> * N is the number of nodes in the trie.
+<a name="line272"></a> * @param {*} value A value that may be in the trie.
+<a name="line273"></a> * @return {boolean} Whether the trie contains the value.
+<a name="line274"></a> */
+<a name="line275"></a>goog.structs.Trie.prototype.containsValue = function(value) {
+<a name="line276"></a>  if (this.value_ === value) {
+<a name="line277"></a>    return true;
+<a name="line278"></a>  }
+<a name="line279"></a>  for (var childNode in this.childNodes_) {
+<a name="line280"></a>    if (this.childNodes_[childNode].containsValue(value)) {
+<a name="line281"></a>      return true;
+<a name="line282"></a>    }
+<a name="line283"></a>  }
+<a name="line284"></a>  return false;
+<a name="line285"></a>};
+<a name="line286"></a>
+<a name="line287"></a>
+<a name="line288"></a>/**
+<a name="line289"></a> * Completely empties a trie of all keys and values.  ~O(1)
+<a name="line290"></a> */
+<a name="line291"></a>goog.structs.Trie.prototype.clear = function() {
+<a name="line292"></a>  this.childNodes_ = {};
+<a name="line293"></a>  this.value_ = undefined;
+<a name="line294"></a>};
+<a name="line295"></a>
+<a name="line296"></a>
+<a name="line297"></a>/**
+<a name="line298"></a> * Removes a key from the trie or throws an exception if the key is not in the
+<a name="line299"></a> * trie.  O(L), where L is the length of the key.
+<a name="line300"></a> * @param {string} key A key that should be removed from the trie.
+<a name="line301"></a> * @return {*} The value whose key was removed.
+<a name="line302"></a> */
+<a name="line303"></a>goog.structs.Trie.prototype.remove = function(key) {
+<a name="line304"></a>  var node = this;
+<a name="line305"></a>  var parents = [];
+<a name="line306"></a>  for (var characterPosition = 0; characterPosition &lt; key.length;
+<a name="line307"></a>       characterPosition++) {
+<a name="line308"></a>    var currentCharacter = key.charAt(characterPosition);
+<a name="line309"></a>    if (!node.childNodes_[currentCharacter]) {
+<a name="line310"></a>      throw Error(&#39;The collection does not have the key &quot;&#39; + key + &#39;&quot;&#39;);
+<a name="line311"></a>    }
+<a name="line312"></a>
+<a name="line313"></a>    // Archive the current parent and child name (key in childNodes_) so that
+<a name="line314"></a>    // we may remove the following node and its parents if they are empty.
+<a name="line315"></a>    parents.push([node, currentCharacter]);
+<a name="line316"></a>
+<a name="line317"></a>    node = node.childNodes_[currentCharacter];
+<a name="line318"></a>  }
+<a name="line319"></a>  var oldValue = node.value_;
+<a name="line320"></a>  delete node.value_;
+<a name="line321"></a>
+<a name="line322"></a>  while (parents.length &gt; 0) {
+<a name="line323"></a>    var currentParentAndCharacter = parents.pop();
+<a name="line324"></a>    var currentParent = currentParentAndCharacter[0];
+<a name="line325"></a>    var currentCharacter = currentParentAndCharacter[1];
+<a name="line326"></a>    if (goog.object.isEmpty(
+<a name="line327"></a>        currentParent.childNodes_[currentCharacter].childNodes_)) {
+<a name="line328"></a>      // If we have no child nodes, then remove this node.
+<a name="line329"></a>      delete currentParent.childNodes_[currentCharacter];
+<a name="line330"></a>    } else {
+<a name="line331"></a>      // No point of traversing back any further, since we can&#39;t remove this
+<a name="line332"></a>      // path.
+<a name="line333"></a>      break;
+<a name="line334"></a>    }
+<a name="line335"></a>  }
+<a name="line336"></a>  return oldValue;
+<a name="line337"></a>};
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * Clones a trie and returns a new trie.  O(N), where N is the number of nodes
+<a name="line342"></a> * in the trie.
+<a name="line343"></a> * @return {goog.structs.Trie} A new goog.structs.Trie with the same key value
+<a name="line344"></a> *     pairs.
+<a name="line345"></a> */
+<a name="line346"></a>goog.structs.Trie.prototype.clone = function() {
+<a name="line347"></a>  return new goog.structs.Trie(this);
+<a name="line348"></a>};
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>/**
+<a name="line352"></a> * Returns the number of key value pairs in the trie.  O(N), where N is the
+<a name="line353"></a> * number of nodes in the trie.
+<a name="line354"></a> * TODO: This could be optimized by storing a weight (count below) in every
+<a name="line355"></a> * node.
+<a name="line356"></a> * @return {number} The number of pairs.
+<a name="line357"></a> */
+<a name="line358"></a>goog.structs.Trie.prototype.getCount = function() {
+<a name="line359"></a>  return goog.structs.getCount(this.getValues());
+<a name="line360"></a>};
+<a name="line361"></a>
+<a name="line362"></a>
+<a name="line363"></a>/**
+<a name="line364"></a> * Returns true if this trie contains no elements.  ~O(1).
+<a name="line365"></a> * @return {boolean} True iff this trie contains no elements.
+<a name="line366"></a> */
+<a name="line367"></a>goog.structs.Trie.prototype.isEmpty = function() {
+<a name="line368"></a>  return this.value_ === undefined &amp;&amp; goog.structs.isEmpty(this.childNodes_);
+<a name="line369"></a>};
+</pre>
+
+
+</body>
+</html>

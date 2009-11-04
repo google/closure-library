@@ -1,0 +1,576 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>autocomplete.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_autocomplete_autocomplete.js.html">autocomplete.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Gmail-like AutoComplete logic.
+<a name="line17"></a> *
+<a name="line18"></a> * @see ../../demos/autocomplete-basic.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.AutoComplete&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.ui.AutoComplete.EventType&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * This is the central manager class for an AutoComplete instance.
+<a name="line32"></a> *
+<a name="line33"></a> * @param {Object} matcher A data source and row matcher, implements
+<a name="line34"></a> *        &lt;code&gt;requestMatchingRows(token, maxMatches, matchCallback)&lt;/code&gt;.
+<a name="line35"></a> * @param {goog.events.EventTarget} renderer An object that implements
+<a name="line36"></a> *        &lt;code&gt;
+<a name="line37"></a> *          isVisible():boolean&lt;br&gt;
+<a name="line38"></a> *          renderRows(rows:Array, token:string, target:Element);&lt;br&gt;
+<a name="line39"></a> *          hiliteId(row-id:number);&lt;br&gt;
+<a name="line40"></a> *          dismiss();&lt;br&gt;
+<a name="line41"></a> *          dispose():
+<a name="line42"></a> *        &lt;/code&gt;.
+<a name="line43"></a> * @param {Object} selectionHandler An object that implements
+<a name="line44"></a> *        &lt;code&gt;
+<a name="line45"></a> *          selectRow(row);&lt;br&gt;
+<a name="line46"></a> *          update(opt_force);
+<a name="line47"></a> *        &lt;/code&gt;.
+<a name="line48"></a> *
+<a name="line49"></a> * @constructor
+<a name="line50"></a> * @extends {goog.events.EventTarget}
+<a name="line51"></a> */
+<a name="line52"></a>goog.ui.AutoComplete = function(matcher, renderer, selectionHandler) {
+<a name="line53"></a>  goog.events.EventTarget.call(this);
+<a name="line54"></a>
+<a name="line55"></a>  /**
+<a name="line56"></a>   * A data-source which provides autocomplete suggestions.
+<a name="line57"></a>   * @type {Object}
+<a name="line58"></a>   * @protected
+<a name="line59"></a>   * @suppress {underscore}
+<a name="line60"></a>   */
+<a name="line61"></a>  this.matcher_ = matcher;
+<a name="line62"></a>
+<a name="line63"></a>  /**
+<a name="line64"></a>   * A handler which interacts with the input DOM element (textfield, textarea,
+<a name="line65"></a>   * or richedit).
+<a name="line66"></a>   * @type {Object}
+<a name="line67"></a>   * @protected
+<a name="line68"></a>   * @suppress {underscore}
+<a name="line69"></a>   */
+<a name="line70"></a>  this.selectionHandler_ = selectionHandler;
+<a name="line71"></a>
+<a name="line72"></a>  /**
+<a name="line73"></a>   * A renderer to render/show/highlight/hide the autocomplete menu.
+<a name="line74"></a>   * @type {goog.events.EventTarget}
+<a name="line75"></a>   * @protected
+<a name="line76"></a>   * @suppress {underscore}
+<a name="line77"></a>   */
+<a name="line78"></a>  this.renderer_ = renderer;
+<a name="line79"></a>  goog.events.listen(renderer, [
+<a name="line80"></a>      goog.ui.AutoComplete.EventType.HILITE,
+<a name="line81"></a>      goog.ui.AutoComplete.EventType.SELECT,
+<a name="line82"></a>      goog.ui.AutoComplete.EventType.CANCEL_DISMISS,
+<a name="line83"></a>      goog.ui.AutoComplete.EventType.DISMISS], this);
+<a name="line84"></a>
+<a name="line85"></a>  /**
+<a name="line86"></a>   * Currently typed token which will be used for completion.
+<a name="line87"></a>   * @type {string?}
+<a name="line88"></a>   * @protected
+<a name="line89"></a>   * @suppress {underscore}
+<a name="line90"></a>   */
+<a name="line91"></a>  this.token_ = null;
+<a name="line92"></a>
+<a name="line93"></a>  /**
+<a name="line94"></a>   * Autcomplete suggestion items.
+<a name="line95"></a>   * @type {Array}
+<a name="line96"></a>   * @protected
+<a name="line97"></a>   * @suppress {underscore}
+<a name="line98"></a>   */
+<a name="line99"></a>  this.rows_ = [];
+<a name="line100"></a>
+<a name="line101"></a>  /**
+<a name="line102"></a>   * Id of the currently highlighted row.
+<a name="line103"></a>   * @type {number}
+<a name="line104"></a>   * @protected
+<a name="line105"></a>   * @suppress {underscore}
+<a name="line106"></a>   */
+<a name="line107"></a>  this.hiliteId_ = -1;
+<a name="line108"></a>
+<a name="line109"></a>  /**
+<a name="line110"></a>   * Id of the first row in autocomplete menu. Note that new ids are assigned
+<a name="line111"></a>   * everytime new suggestions are fetched.
+<a name="line112"></a>   * @type {number}
+<a name="line113"></a>   * @protected
+<a name="line114"></a>   * @suppress {underscore}
+<a name="line115"></a>   */
+<a name="line116"></a>  this.firstRowId_ = 0;
+<a name="line117"></a>
+<a name="line118"></a>  /**
+<a name="line119"></a>   * The target HTML node for displaying.
+<a name="line120"></a>   * @type {Element}
+<a name="line121"></a>   * @protected
+<a name="line122"></a>   * @suppress {underscore}
+<a name="line123"></a>   */
+<a name="line124"></a>  this.target_ = null;
+<a name="line125"></a>
+<a name="line126"></a>  /**
+<a name="line127"></a>   * The timer id for dismissing autocomplete menu with a delay.
+<a name="line128"></a>   * @type {number?}
+<a name="line129"></a>   * @private
+<a name="line130"></a>   */
+<a name="line131"></a>  this.dismissTimer_ = null;
+<a name="line132"></a>};
+<a name="line133"></a>goog.inherits(goog.ui.AutoComplete, goog.events.EventTarget);
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * The maximum number of matches that should be returned
+<a name="line138"></a> * @type {number}
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.ui.AutoComplete.prototype.maxMatches_ = 10;
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * True iff the first row should automatically be highlighted
+<a name="line146"></a> * @type {boolean}
+<a name="line147"></a> * @private
+<a name="line148"></a> */
+<a name="line149"></a>goog.ui.AutoComplete.prototype.autoHilite_ = true;
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * True iff the user can unhilight all rows by pressing the up arrow.
+<a name="line154"></a> * @type {boolean}
+<a name="line155"></a> * @private
+<a name="line156"></a> */
+<a name="line157"></a>goog.ui.AutoComplete.prototype.allowFreeSelect_ = false;
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Whether completion from suggestion triggers fetching new suggestion.
+<a name="line162"></a> * @type {boolean}
+<a name="line163"></a> * @private
+<a name="line164"></a> */
+<a name="line165"></a>goog.ui.AutoComplete.prototype.triggerSuggestionsOnUpdate_ = false;
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * Events associated with the autocomplete
+<a name="line170"></a> * @enum {string}
+<a name="line171"></a> */
+<a name="line172"></a>goog.ui.AutoComplete.EventType = {
+<a name="line173"></a>  /** A row has been highlighted by the renderer */
+<a name="line174"></a>  HILITE: &#39;hilite&#39;,
+<a name="line175"></a>
+<a name="line176"></a>  /** A row has been selected by the renderer */
+<a name="line177"></a>  SELECT: &#39;select&#39;,
+<a name="line178"></a>
+<a name="line179"></a>  /** A dismiss event has occurred */
+<a name="line180"></a>  DISMISS: &#39;dismiss&#39;,
+<a name="line181"></a>
+<a name="line182"></a>  /** Event that cancels a dismiss event */
+<a name="line183"></a>  CANCEL_DISMISS: &#39;canceldismiss&#39;,
+<a name="line184"></a>
+<a name="line185"></a>  /**
+<a name="line186"></a>   * Field value was updated.  A row field is included and is non-null when a
+<a name="line187"></a>   * row has been selected.  The value of the row typically includes fields:
+<a name="line188"></a>   * contactData and formattedValue as well as a toString function (though none
+<a name="line189"></a>   * of these fields are guaranteed to exist).  The row field may be used to
+<a name="line190"></a>   * return custom-type row data.
+<a name="line191"></a>   */
+<a name="line192"></a>  UPDATE: &#39;update&#39;
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Generic event handler that handles any events this object is listening to.
+<a name="line198"></a> * @param {goog.events.Event} e Event Object.
+<a name="line199"></a> */
+<a name="line200"></a>goog.ui.AutoComplete.prototype.handleEvent = function(e) {
+<a name="line201"></a>  if (e.target == this.renderer_) {
+<a name="line202"></a>    switch (e.type) {
+<a name="line203"></a>      case goog.ui.AutoComplete.EventType.HILITE:
+<a name="line204"></a>        this.hiliteId(e.row);
+<a name="line205"></a>        break;
+<a name="line206"></a>
+<a name="line207"></a>      case goog.ui.AutoComplete.EventType.SELECT:
+<a name="line208"></a>        this.selectHilited();
+<a name="line209"></a>        break;
+<a name="line210"></a>
+<a name="line211"></a>      case goog.ui.AutoComplete.EventType.CANCEL_DISMISS:
+<a name="line212"></a>        this.cancelDelayedDismiss();
+<a name="line213"></a>        break;
+<a name="line214"></a>
+<a name="line215"></a>      case goog.ui.AutoComplete.EventType.DISMISS:
+<a name="line216"></a>        this.dismissOnDelay();
+<a name="line217"></a>        break;
+<a name="line218"></a>    }
+<a name="line219"></a>  }
+<a name="line220"></a>};
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/**
+<a name="line224"></a> * Sets the max number of matches to fetch from the Matcher.
+<a name="line225"></a> *
+<a name="line226"></a> * @param {number} max Max number of matches.
+<a name="line227"></a> */
+<a name="line228"></a>goog.ui.AutoComplete.prototype.setMaxMatches = function(max) {
+<a name="line229"></a>  this.maxMatches_ = max;
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Sets whether or not the first row should be highlighted by default.
+<a name="line235"></a> *
+<a name="line236"></a> * @param {boolean} autoHilite true iff the first row should be
+<a name="line237"></a> *      highlighted by default.
+<a name="line238"></a> */
+<a name="line239"></a>goog.ui.AutoComplete.prototype.setAutoHilite = function(autoHilite) {
+<a name="line240"></a>  this.autoHilite_ = autoHilite;
+<a name="line241"></a>};
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Sets whether or not the up arrow can unhilite all rows.
+<a name="line246"></a> *
+<a name="line247"></a> * @param {boolean} allowFreeSelect true iff the up arrow can unhilite all rows.
+<a name="line248"></a> */
+<a name="line249"></a>goog.ui.AutoComplete.prototype.setAllowFreeSelect = function(allowFreeSelect) {
+<a name="line250"></a>  this.allowFreeSelect_ = allowFreeSelect;
+<a name="line251"></a>};
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>/**
+<a name="line255"></a> * Sets whether or not to request new suggestions immediately after completion
+<a name="line256"></a> * of a suggestion.
+<a name="line257"></a> *
+<a name="line258"></a> * @param {boolean} triggerSuggestionsOnUpdate true iff completion should fetch
+<a name="line259"></a> *     new suggestions.
+<a name="line260"></a> */
+<a name="line261"></a>goog.ui.AutoComplete.prototype.setTriggerSuggestionsOnUpdate = function(
+<a name="line262"></a>    triggerSuggestionsOnUpdate) {
+<a name="line263"></a>  this.triggerSuggestionsOnUpdate_ = triggerSuggestionsOnUpdate;
+<a name="line264"></a>};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Sets the token to match against.  This triggers calls to the Matcher to
+<a name="line269"></a> * fetch the matches (up to maxMatches), and then it triggers a call to
+<a name="line270"></a> * &lt;code&gt;renderer.renderRows()&lt;/code&gt;.
+<a name="line271"></a> *
+<a name="line272"></a> * @param {string} token The string for which to search in the Matcher.
+<a name="line273"></a> * @param {String} opt_fullString Optionally, the full string in the input
+<a name="line274"></a> *     field.
+<a name="line275"></a> */
+<a name="line276"></a>goog.ui.AutoComplete.prototype.setToken = function(token, opt_fullString) {
+<a name="line277"></a>  if (this.token_ == token) {
+<a name="line278"></a>    return;
+<a name="line279"></a>  }
+<a name="line280"></a>  this.token_ = token;
+<a name="line281"></a>  this.matcher_.requestMatchingRows(this.token_,
+<a name="line282"></a>      this.maxMatches_, goog.bind(this.matchListener_, this), opt_fullString);
+<a name="line283"></a>  this.cancelDelayedDismiss();
+<a name="line284"></a>};
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>/**
+<a name="line288"></a> * Gets the current target HTML node for displaying autocomplete UI.
+<a name="line289"></a> * @return {Element?} The current target HTML node for displaying autocomplete
+<a name="line290"></a> *     UI.
+<a name="line291"></a> */
+<a name="line292"></a>goog.ui.AutoComplete.prototype.getTarget = function() {
+<a name="line293"></a>  return this.target_;
+<a name="line294"></a>};
+<a name="line295"></a>
+<a name="line296"></a>
+<a name="line297"></a>/**
+<a name="line298"></a> * Sets the current target HTML node for displaying autocomplete UI.
+<a name="line299"></a> * Can be an implementation specific definition of how to display UI in relation
+<a name="line300"></a> * to the target node.
+<a name="line301"></a> * This target will be passed into  &lt;code&gt;renderer.renderRows()&lt;/code&gt;
+<a name="line302"></a> *
+<a name="line303"></a> * @param {Element} target The current target HTML node for displaying
+<a name="line304"></a> *     autocomplete UI.
+<a name="line305"></a> */
+<a name="line306"></a>goog.ui.AutoComplete.prototype.setTarget = function(target) {
+<a name="line307"></a>  this.target_ = target;
+<a name="line308"></a>};
+<a name="line309"></a>
+<a name="line310"></a>
+<a name="line311"></a>/**
+<a name="line312"></a> * @return {boolean} Whether the autocomplete&#39;s renderer is open.
+<a name="line313"></a> */
+<a name="line314"></a>goog.ui.AutoComplete.prototype.isOpen = function() {
+<a name="line315"></a>  return this.renderer_.isVisible();
+<a name="line316"></a>};
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/**
+<a name="line320"></a> * Moves the hilite to the next row, or does nothing if we&#39;re already at the
+<a name="line321"></a> * end of the current set of matches.  Calls renderer.hiliteId() when there&#39;s
+<a name="line322"></a> * something to do.
+<a name="line323"></a> * @return {boolean} Returns true on a successful hilite.
+<a name="line324"></a> */
+<a name="line325"></a>goog.ui.AutoComplete.prototype.hiliteNext = function() {
+<a name="line326"></a>  if (this.hiliteId_ &gt;= this.firstRowId_ &amp;&amp;
+<a name="line327"></a>      this.hiliteId_ &lt; this.firstRowId_ + this.rows_.length - 1) {
+<a name="line328"></a>    this.hiliteId(this.hiliteId_ + 1);
+<a name="line329"></a>    return true;
+<a name="line330"></a>  } else if (this.hiliteId_ == -1) {
+<a name="line331"></a>    this.hiliteId(this.firstRowId_);
+<a name="line332"></a>    return true;
+<a name="line333"></a>  }
+<a name="line334"></a>  return false;
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * Moves the hilite to the previous row, or does nothing if we&#39;re already at
+<a name="line340"></a> * the beginning of the current set of matches.  Calls renderer.hiliteId()
+<a name="line341"></a> * when there&#39;s something to do.
+<a name="line342"></a> * @return {boolean} Returns true on a successful hilite.
+<a name="line343"></a> */
+<a name="line344"></a>goog.ui.AutoComplete.prototype.hilitePrev = function() {
+<a name="line345"></a>  if (this.hiliteId_ &gt; this.firstRowId_) {
+<a name="line346"></a>    this.hiliteId(this.hiliteId_ - 1);
+<a name="line347"></a>    return true;
+<a name="line348"></a>  } else if (this.allowFreeSelect_ &amp;&amp; this.hiliteId_ == this.firstRowId_) {
+<a name="line349"></a>    this.hiliteId(-1);
+<a name="line350"></a>  }
+<a name="line351"></a>  return false;
+<a name="line352"></a>};
+<a name="line353"></a>
+<a name="line354"></a>
+<a name="line355"></a>/**
+<a name="line356"></a> * Hilites the id if it&#39;s valid, otherwise does nothing.
+<a name="line357"></a> * @param {number} id A row id (not index).
+<a name="line358"></a> * @return {boolean} Whether the id was hilited.
+<a name="line359"></a> */
+<a name="line360"></a>goog.ui.AutoComplete.prototype.hiliteId = function(id) {
+<a name="line361"></a>  this.hiliteId_ = id;
+<a name="line362"></a>  this.renderer_.hiliteId(id);
+<a name="line363"></a>  return this.getIndexOfId(id) != -1;
+<a name="line364"></a>};
+<a name="line365"></a>
+<a name="line366"></a>
+<a name="line367"></a>/**
+<a name="line368"></a> * If there are any current matches, this passes the hilited row data to
+<a name="line369"></a> * &lt;code&gt;selectionHandler.selectRow()&lt;/code&gt;
+<a name="line370"></a> * @return {boolean} Whether there are any current matches.
+<a name="line371"></a> */
+<a name="line372"></a>goog.ui.AutoComplete.prototype.selectHilited = function() {
+<a name="line373"></a>  var index = this.getIndexOfId(this.hiliteId_);
+<a name="line374"></a>  if (index != -1) {
+<a name="line375"></a>    var selectedRow = this.rows_[index];
+<a name="line376"></a>    var suppressUpdate = this.selectionHandler_.selectRow(selectedRow);
+<a name="line377"></a>    this.dismiss();
+<a name="line378"></a>    if (!suppressUpdate) {
+<a name="line379"></a>      this.dispatchEvent({
+<a name="line380"></a>        type: goog.ui.AutoComplete.EventType.UPDATE,
+<a name="line381"></a>        row: selectedRow
+<a name="line382"></a>      });
+<a name="line383"></a>      if (this.triggerSuggestionsOnUpdate_) {
+<a name="line384"></a>        this.selectionHandler_.update(true);
+<a name="line385"></a>      }
+<a name="line386"></a>    }
+<a name="line387"></a>    return true;
+<a name="line388"></a>  } else {
+<a name="line389"></a>    this.dismiss();
+<a name="line390"></a>    this.dispatchEvent(
+<a name="line391"></a>        {
+<a name="line392"></a>          type: goog.ui.AutoComplete.EventType.UPDATE,
+<a name="line393"></a>          row: null
+<a name="line394"></a>        });
+<a name="line395"></a>    return false;
+<a name="line396"></a>  }
+<a name="line397"></a>};
+<a name="line398"></a>
+<a name="line399"></a>
+<a name="line400"></a>/**
+<a name="line401"></a> * Clears out the token, rows, and hilite, and calls
+<a name="line402"></a> * &lt;code&gt;renderer.dismiss()&lt;/code&gt;
+<a name="line403"></a> */
+<a name="line404"></a>goog.ui.AutoComplete.prototype.dismiss = function() {
+<a name="line405"></a>  this.hiliteId_ = -1;
+<a name="line406"></a>  this.token_ = null;
+<a name="line407"></a>  this.firstRowId_ += this.rows_.length;
+<a name="line408"></a>  this.rows_ = [];
+<a name="line409"></a>  window.clearTimeout(this.dismissTimer_);
+<a name="line410"></a>  this.dismissTimer_ = null;
+<a name="line411"></a>  this.renderer_.dismiss();
+<a name="line412"></a>};
+<a name="line413"></a>
+<a name="line414"></a>
+<a name="line415"></a>/**
+<a name="line416"></a> * Call a dismiss after a delay, if there&#39;s already a dismiss active, ignore.
+<a name="line417"></a> */
+<a name="line418"></a>goog.ui.AutoComplete.prototype.dismissOnDelay = function() {
+<a name="line419"></a>  if (!this.dismissTimer_) {
+<a name="line420"></a>    this.dismissTimer_ = window.setTimeout(goog.bind(this.dismiss, this), 100);
+<a name="line421"></a>  }
+<a name="line422"></a>};
+<a name="line423"></a>
+<a name="line424"></a>
+<a name="line425"></a>/**
+<a name="line426"></a> * Call a dismiss after a delay, if there&#39;s already a dismiss active, ignore.
+<a name="line427"></a> */
+<a name="line428"></a>goog.ui.AutoComplete.prototype.cancelDelayedDismiss = function() {
+<a name="line429"></a>  window.setTimeout(goog.bind(function() {
+<a name="line430"></a>    if (this.dismissTimer_) {
+<a name="line431"></a>      window.clearTimeout(this.dismissTimer_);
+<a name="line432"></a>      this.dismissTimer_ = null;
+<a name="line433"></a>    }
+<a name="line434"></a>  }, this), 10);
+<a name="line435"></a>};
+<a name="line436"></a>
+<a name="line437"></a>
+<a name="line438"></a>/**
+<a name="line439"></a> * Cleans up the autocomplete object.
+<a name="line440"></a> */
+<a name="line441"></a>goog.ui.AutoComplete.prototype.disposeInternal = function() {
+<a name="line442"></a>  goog.ui.AutoComplete.superClass_.disposeInternal.call(this);
+<a name="line443"></a>  this.renderer_.dispose();
+<a name="line444"></a>  this.selectionHandler_.dispose();
+<a name="line445"></a>  this.matcher_ = null;
+<a name="line446"></a>};
+<a name="line447"></a>
+<a name="line448"></a>
+<a name="line449"></a>/**
+<a name="line450"></a> * Callback passed to Matcher when requesting mathces for a token.
+<a name="line451"></a> * This might be called synchronously, or asynchronously, or both, for
+<a name="line452"></a> * any implementation of a Matcher.
+<a name="line453"></a> * If the Matcher calls this back, with the same token this AutoComplete
+<a name="line454"></a> * has set currently, then this will package the mathcing rows in object
+<a name="line455"></a> * of the form
+<a name="line456"></a> * &lt;pre&gt;
+<a name="line457"></a> * {
+<a name="line458"></a> *   id: an integer ID unique to this result set and AutoComplete instance,
+<a name="line459"></a> *   data: the raw row data from Matcher
+<a name="line460"></a> * }
+<a name="line461"></a> * &lt;/pre&gt;
+<a name="line462"></a> *
+<a name="line463"></a> * @param {string} matchedToken Token that corresponds with the rows.
+<a name="line464"></a> * @param {Array} rows Set of data that match the given token.
+<a name="line465"></a> * @param {boolean} opt_preserveHilited If true, keeps the currently hilited
+<a name="line466"></a> *     (by index) element hilited.
+<a name="line467"></a> *
+<a name="line468"></a> * @private
+<a name="line469"></a> */
+<a name="line470"></a>goog.ui.AutoComplete.prototype.matchListener_ = function(matchedToken, rows,
+<a name="line471"></a>    opt_preserveHilited) {
+<a name="line472"></a>  if (this.token_ != matchedToken) {
+<a name="line473"></a>    // Matcher&#39;s response token doesn&#39;t match current token.
+<a name="line474"></a>    // This is probably an async response that came in after
+<a name="line475"></a>    // the token was changed, so don&#39;t do anything.
+<a name="line476"></a>    return;
+<a name="line477"></a>  }
+<a name="line478"></a>
+<a name="line479"></a>  var indexToHilite = opt_preserveHilited ?
+<a name="line480"></a>      this.getIndexOfId(this.hiliteId_) : null;
+<a name="line481"></a>
+<a name="line482"></a>  // Current token matches the matcher&#39;s response token.
+<a name="line483"></a>  this.firstRowId_ += this.rows_.length;
+<a name="line484"></a>  this.rows_ = rows;
+<a name="line485"></a>  var rendRows = [];
+<a name="line486"></a>  for (var i = 0; i &lt; rows.length; ++i) {
+<a name="line487"></a>    rendRows.push({
+<a name="line488"></a>      id: this.getIdOfIndex_(i),
+<a name="line489"></a>      data: rows[i]
+<a name="line490"></a>    });
+<a name="line491"></a>  }
+<a name="line492"></a>  this.renderer_.renderRows(rendRows, this.token_, this.target_);
+<a name="line493"></a>
+<a name="line494"></a>  if (this.autoHilite_ &amp;&amp; rendRows.length != 0) {
+<a name="line495"></a>    var idToHilite = indexToHilite != null ?
+<a name="line496"></a>        this.getIdOfIndex_(indexToHilite) : this.firstRowId_;
+<a name="line497"></a>    this.hiliteId(idToHilite);
+<a name="line498"></a>  } else {
+<a name="line499"></a>    this.hiliteId_ = -1;
+<a name="line500"></a>  }
+<a name="line501"></a>};
+<a name="line502"></a>
+<a name="line503"></a>
+<a name="line504"></a>/**
+<a name="line505"></a> * Gets the index corresponding to a particular id.
+<a name="line506"></a> * @param {number} id A unique id for the row.
+<a name="line507"></a> * @return {number} A valid index into rows_, or -1 if the id is invalid.
+<a name="line508"></a> * @protected
+<a name="line509"></a> */
+<a name="line510"></a>goog.ui.AutoComplete.prototype.getIndexOfId = function(id) {
+<a name="line511"></a>  var index = id - this.firstRowId_;
+<a name="line512"></a>  if (index &lt; 0 || index &gt;= this.rows_.length) {
+<a name="line513"></a>    return -1;
+<a name="line514"></a>  }
+<a name="line515"></a>  return index;
+<a name="line516"></a>};
+<a name="line517"></a>
+<a name="line518"></a>
+<a name="line519"></a>/**
+<a name="line520"></a> * Gets the id corresponding to a particular index.  (Does no checking.)
+<a name="line521"></a> * @param {number} index The index of a row in the result set.
+<a name="line522"></a> * @return {number} The id that currently corresponds to that index.
+<a name="line523"></a> * @private
+<a name="line524"></a> */
+<a name="line525"></a>goog.ui.AutoComplete.prototype.getIdOfIndex_ = function(index) {
+<a name="line526"></a>  return this.firstRowId_ + index;
+<a name="line527"></a>};
+</pre>
+
+
+</body>
+</html>

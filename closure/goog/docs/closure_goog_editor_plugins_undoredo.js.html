@@ -1,0 +1,260 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>undoredo.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">undoredo.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Code for handling edit history (undo/redo).
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_editor_plugins_undoredo.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/editor/plugins/undoredo.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_UndoRedo.html">
+          goog.editor.plugins.UndoRedo</a><br/>
+        <div class="class-details">Encapsulates undo/redo logic using a custom undo stack (i.e. not browser
+built-in). Browser built-in undo stacks are too flaky (e.g. IE&#39;s gets
+clobbered on DOM modifications). Also, this allows interleaving non-editing
+commands into the undo stack via the UndoRedoManager.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_UndoRedo_UndoState_.html">
+          goog.editor.plugins.UndoRedo.UndoState_</a><br/>
+        <div class="class-details">This object encapsulates the state of an editable field.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_UndoRedo_CursorPosition_.html">
+          goog.editor.plugins.UndoRedo.CursorPosition_</a><br/>
+        <div class="class-details">Stores the state of the selection in a way the survives DOM modifications
+that don&#39;t modify the user-interactable content (e.g. making something bold
+vs. typing a character).
+
+TODO: Completely get rid of this and use goog.dom.SavedCaretRange.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.plugins.UndoRedo.CursorPosition_.computeEndOffsetIE_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.UndoRedo.CursorPosition_.</span><span class="entryName">computeEndOffsetIE_<span class="args">(<span class="arg">range</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Compute the number of characters to the end of the range in IE.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">range</span>
+        : <div class="fullType"><span class="type">TextRange</span></div>
+        <div class="entryOverview">The range to compute an offset for.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>&nbsp;
+            The number of characters to the end of the range.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line975">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.UndoRedo.SUPPORTED_COMMANDS_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.UndoRedo.</span><span class="entryName">SUPPORTED_COMMANDS_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Inverse map of execCommand strings to
+{@link goog.editor.plugins.UndoRedo.COMMAND} constants. Used to determine
+whether a string corresponds to a command this plugin handles in O(1) time.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line132">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/editor/plugins/undoredo.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

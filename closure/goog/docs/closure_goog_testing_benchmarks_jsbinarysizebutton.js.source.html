@@ -1,0 +1,111 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>jsbinarysizebutton.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_testing_benchmarks_jsbinarysizebutton.js.html">jsbinarysizebutton.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Sample code to instantiate a few goog.ui.Buttons.  The
+<a name="line17"></a> * size of the resulting jsbinary for this sample file is tracked using
+<a name="line18"></a> * Greenspan (http://go/greenspan).
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.array&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line24"></a>goog.require(&#39;goog.events&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.Button&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.Button.Side&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.Component.EventType&#39;);
+<a name="line28"></a>goog.require(&#39;goog.ui.CustomButton&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>function drawButtons() {
+<a name="line32"></a>  function logEvent(e) {
+<a name="line33"></a>  }
+<a name="line34"></a>
+<a name="line35"></a>  // Create a simple button programmatically
+<a name="line36"></a>  var b1 = new goog.ui.Button(&#39;Hello!&#39;);
+<a name="line37"></a>  b1.render(goog.dom.$(&#39;b1&#39;));
+<a name="line38"></a>  b1.setTooltip(&#39;I changed the tooltip.&#39;);
+<a name="line39"></a>  goog.events.listen(b1, goog.ui.Component.EventType.ACTION, logEvent);
+<a name="line40"></a>
+<a name="line41"></a>  // Create some custom buttons programatically.
+<a name="line42"></a>  var disabledButton, leftButton, centerButton, rightButton;
+<a name="line43"></a>  var customButtons = [
+<a name="line44"></a>      new goog.ui.CustomButton(&#39;Button&#39;),
+<a name="line45"></a>      new goog.ui.CustomButton(&#39;Another Button&#39;),
+<a name="line46"></a>      disabledButton = new goog.ui.CustomButton(&#39;Disabled Button&#39;),
+<a name="line47"></a>      new goog.ui.CustomButton(&#39;Yet Another Button&#39;),
+<a name="line48"></a>      leftButton = new goog.ui.CustomButton(&#39;Left&#39;),
+<a name="line49"></a>      centerButton = new goog.ui.CustomButton(&#39;Center&#39;),
+<a name="line50"></a>      rightButton = new goog.ui.CustomButton(&#39;Right&#39;)
+<a name="line51"></a>  ];
+<a name="line52"></a>  disabledButton.setEnabled(false);
+<a name="line53"></a>  leftButton.setCollapsed(goog.ui.Button.Side.END);
+<a name="line54"></a>  centerButton.setCollapsed(goog.ui.Button.Side.BOTH);
+<a name="line55"></a>  rightButton.setCollapsed(goog.ui.Button.Side.START);
+<a name="line56"></a>  goog.array.forEach(customButtons, function(b) {
+<a name="line57"></a>    b.render(goog.dom.$(&#39;cb1&#39;));
+<a name="line58"></a>    goog.events.listen(b, goog.ui.Component.EventType.ACTION, logEvent);
+<a name="line59"></a>  });
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>goog.exportSymbol(&#39;drawButtons&#39;, drawButtons);
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,979 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>database.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_gears_database.js.html">database.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This file contains functions for using the Gears database.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.gears.Database&#39;);
+<a name="line20"></a>goog.provide(&#39;goog.gears.Database.EventType&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.gears.Database.TransactionEvent&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line25"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line28"></a>goog.require(&#39;goog.gears&#39;);
+<a name="line29"></a>goog.require(&#39;goog.json&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Class that for accessing a Gears database
+<a name="line34"></a> *
+<a name="line35"></a> * @constructor
+<a name="line36"></a> * @extends {goog.events.EventTarget}
+<a name="line37"></a> * @param {string} userId the id token for this user.
+<a name="line38"></a> * @param {string} appName  the name of the application creating this database.
+<a name="line39"></a> */
+<a name="line40"></a>goog.gears.Database = function(userId, appName) {
+<a name="line41"></a>  goog.events.EventTarget.call(this);
+<a name="line42"></a>
+<a name="line43"></a>  var factory = goog.gears.getFactory();
+<a name="line44"></a>  try {
+<a name="line45"></a>    /**
+<a name="line46"></a>     * The pointer to the Gears database object
+<a name="line47"></a>     * @private
+<a name="line48"></a>     */
+<a name="line49"></a>    this.database_ = factory.create(&#39;beta.database&#39;, &#39;1.0&#39;);
+<a name="line50"></a>  } catch (ex) {
+<a name="line51"></a>    // We will fail here if we cannot get a version of the database that is
+<a name="line52"></a>    // compatible with the JS code.
+<a name="line53"></a>    throw Error(&#39;Could not create the database. &#39; + ex.message);
+<a name="line54"></a>  }
+<a name="line55"></a>
+<a name="line56"></a>  if (this.database_ != null) {
+<a name="line57"></a>    var dbId = userId + &#39;-&#39; + appName;
+<a name="line58"></a>    var safeDbId = goog.gears.makeSafeFileName(dbId);
+<a name="line59"></a>    if (dbId != safeDbId) {
+<a name="line60"></a>      this.logger_.info(&#39;database name &#39; + dbId + &#39;-&gt;&#39; + safeDbId);
+<a name="line61"></a>    }
+<a name="line62"></a>    this.safeDbId_ = safeDbId;
+<a name="line63"></a>    this.database_.open(safeDbId);
+<a name="line64"></a>  } else {
+<a name="line65"></a>    throw Error(&#39;Could not create the database&#39;);
+<a name="line66"></a>  }
+<a name="line67"></a>};
+<a name="line68"></a>goog.inherits(goog.gears.Database, goog.events.EventTarget);
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Constants for transaction event names.
+<a name="line73"></a> * @enum {string}
+<a name="line74"></a> */
+<a name="line75"></a>goog.gears.Database.EventType = {
+<a name="line76"></a>  BEFOREBEGIN: &#39;beforebegin&#39;,
+<a name="line77"></a>  BEGIN: &#39;begin&#39;,
+<a name="line78"></a>  BEFORECOMMIT: &#39;beforecommit&#39;,
+<a name="line79"></a>  COMMIT: &#39;commit&#39;,
+<a name="line80"></a>  BEFOREROLLBACK: &#39;beforerollback&#39;,
+<a name="line81"></a>  ROLLBACK: &#39;rollback&#39;
+<a name="line82"></a>};
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Event info for transaction events.
+<a name="line87"></a> * @extends {goog.events.Event}
+<a name="line88"></a> * @constructor
+<a name="line89"></a> * @param {goog.gears.Database.EventType} eventType The type of event.
+<a name="line90"></a> */
+<a name="line91"></a>goog.gears.Database.TransactionEvent = function(eventType) {
+<a name="line92"></a>  goog.events.Event.call(this, eventType);
+<a name="line93"></a>};
+<a name="line94"></a>goog.inherits(goog.gears.Database.TransactionEvent, goog.events.Event);
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Logger object
+<a name="line99"></a> * @type {goog.debug.Logger}
+<a name="line100"></a> * @private
+<a name="line101"></a> */
+<a name="line102"></a>goog.gears.Database.prototype.logger_ =
+<a name="line103"></a>    goog.debug.Logger.getLogger(&#39;goog.gears.Database&#39;);
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * The safe name of the database.
+<a name="line108"></a> * @type {string}
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.gears.Database.prototype.safeDbId_;
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * True if the database will be using transactions
+<a name="line116"></a> * @private
+<a name="line117"></a> * @type {boolean}
+<a name="line118"></a> */
+<a name="line119"></a>goog.gears.Database.prototype.useTransactions_ = true;
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Number of currently openned transactions. Use this to allow
+<a name="line124"></a> * for nested Begin/Commit transactions. Will only do the real
+<a name="line125"></a> * commit when this equals 0
+<a name="line126"></a> * @private
+<a name="line127"></a> * @type {number}
+<a name="line128"></a> */
+<a name="line129"></a>goog.gears.Database.prototype.openTransactions_ = 0;
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * True if the outstanding opened transactions need to be rolled back
+<a name="line134"></a> * @private
+<a name="line135"></a> * @type {boolean}
+<a name="line136"></a> */
+<a name="line137"></a>goog.gears.Database.prototype.needsRollback_ = false;
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * The default type of begin statement to use.
+<a name="line142"></a> * @type {string}
+<a name="line143"></a> * @private
+<a name="line144"></a> */
+<a name="line145"></a>goog.gears.Database.prototype.defaultBeginType_ = &#39;IMMEDIATE&#39;;
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Indicaton of the level of the begin. This is used to make sure
+<a name="line150"></a> * nested begins do not elivate the level of the begin.
+<a name="line151"></a> * @enum {number}
+<a name="line152"></a> * @private
+<a name="line153"></a> */
+<a name="line154"></a>goog.gears.Database.BeginLevels_ = {
+<a name="line155"></a>  &#39;DEFERRED&#39;: 0,
+<a name="line156"></a>  &#39;IMMEDIATE&#39;: 1,
+<a name="line157"></a>  &#39;EXCLUSIVE&#39;: 2
+<a name="line158"></a>};
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * The begin level of the currently opened transaction
+<a name="line163"></a> * @type {goog.gears.Database.BeginLevels_}
+<a name="line164"></a> * @private
+<a name="line165"></a> */
+<a name="line166"></a>goog.gears.Database.prototype.currentBeginLevel_ =
+<a name="line167"></a>    goog.gears.Database.BeginLevels_[&#39;DEFERRED&#39;];
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * Returns an array of arrays, where each sub array contains the selected
+<a name="line173"></a> * values for each row in the result set.
+<a name="line174"></a> * result values
+<a name="line175"></a> *
+<a name="line176"></a> * @param {GearsResultSet} rs the result set returned by execute.
+<a name="line177"></a> * @return {Array} An array of arrays. Returns an empty array if
+<a name="line178"></a> *                  there are no matching rows.
+<a name="line179"></a> */
+<a name="line180"></a>goog.gears.Database.resultSetToArrays = function(rs) {
+<a name="line181"></a>  var rv = [];
+<a name="line182"></a>  if (rs) {
+<a name="line183"></a>    var cols = rs[&#39;fieldCount&#39;]();
+<a name="line184"></a>    while (rs[&#39;isValidRow&#39;]()) {
+<a name="line185"></a>      var row = new Array(cols);
+<a name="line186"></a>      for (var i = 0; i &lt; cols; i++) {
+<a name="line187"></a>        row[i] = rs[&#39;field&#39;](i);
+<a name="line188"></a>      }
+<a name="line189"></a>      rv.push(row);
+<a name="line190"></a>      rs[&#39;next&#39;]();
+<a name="line191"></a>    }
+<a name="line192"></a>  }
+<a name="line193"></a>  return rv;
+<a name="line194"></a>};
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * Returns a array of hash objects, one per row in the result set,
+<a name="line199"></a> * where the column names in the query are used as the members of
+<a name="line200"></a> * the object.
+<a name="line201"></a> *
+<a name="line202"></a> * @param {GearsResultSet} rs the result set returned by execute.
+<a name="line203"></a> * @return {Array.&lt;Object&gt;} An array containing hashes. Returns an empty
+<a name="line204"></a> *     array if there are no matching rows.
+<a name="line205"></a> */
+<a name="line206"></a>goog.gears.Database.resultSetToObjectArray = function(rs) {
+<a name="line207"></a>  var rv = [];
+<a name="line208"></a>  if (rs) {
+<a name="line209"></a>    var cols = rs[&#39;fieldCount&#39;]();
+<a name="line210"></a>    var colNames = [];
+<a name="line211"></a>    for (var i = 0; i &lt; cols; i++) {
+<a name="line212"></a>      colNames.push(rs[&#39;fieldName&#39;](i));
+<a name="line213"></a>    }
+<a name="line214"></a>
+<a name="line215"></a>    while (rs[&#39;isValidRow&#39;]()) {
+<a name="line216"></a>      var h = {};
+<a name="line217"></a>      for (var i = 0; i &lt; cols; i++) {
+<a name="line218"></a>        h[colNames[i]] = rs[&#39;field&#39;](i);
+<a name="line219"></a>      }
+<a name="line220"></a>      rv.push(h);
+<a name="line221"></a>      rs[&#39;next&#39;]();
+<a name="line222"></a>    }
+<a name="line223"></a>  }
+<a name="line224"></a>  return rv;
+<a name="line225"></a>};
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>/**
+<a name="line229"></a> * Returns an array containing the first item of each row in a result set.
+<a name="line230"></a> * This is useful for query that returns one column
+<a name="line231"></a> *
+<a name="line232"></a> * @param {GearsResultSet} rs the result set returned by execute.
+<a name="line233"></a> * @return {Array.&lt;Object&gt;} An array containing the values in the first column
+<a name="line234"></a> *                     Returns an empty array if there are no matching rows.
+<a name="line235"></a> */
+<a name="line236"></a>goog.gears.Database.resultSetToValueArray = function(rs) {
+<a name="line237"></a>  var rv = [];
+<a name="line238"></a>  if (rs) {
+<a name="line239"></a>    while (rs[&#39;isValidRow&#39;]()) {
+<a name="line240"></a>      rv.push(rs[&#39;field&#39;](0));
+<a name="line241"></a>      rs[&#39;next&#39;]();
+<a name="line242"></a>    }
+<a name="line243"></a>  }
+<a name="line244"></a>  return rv;
+<a name="line245"></a>};
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * Returns a single value from the results (first column in first row).
+<a name="line250"></a> *
+<a name="line251"></a> * @param {GearsResultSet} rs the result set returned by execute.
+<a name="line252"></a> * @return {(number,string,null)} The first item in the first row of the
+<a name="line253"></a> *     result set. Returns null if there are no matching rows.
+<a name="line254"></a> */
+<a name="line255"></a>goog.gears.Database.resultSetToValue = function(rs) {
+<a name="line256"></a>  if (rs &amp;&amp; rs[&#39;isValidRow&#39;]()) {
+<a name="line257"></a>    return rs[&#39;field&#39;](0);
+<a name="line258"></a>  } else {
+<a name="line259"></a>    return null;
+<a name="line260"></a>  }
+<a name="line261"></a>};
+<a name="line262"></a>
+<a name="line263"></a>
+<a name="line264"></a>/**
+<a name="line265"></a> * Returns a single hashed object from the result set (the first row),
+<a name="line266"></a> * where the column names in the query are used as the members of
+<a name="line267"></a> * the object.
+<a name="line268"></a> *
+<a name="line269"></a> * @param {GearsResultSet} rs the result set returned by execute.
+<a name="line270"></a> * @return {Object?} a hash map with the key-value-pairs from the first row.
+<a name="line271"></a> *     Returns null is there are no matching rows.
+<a name="line272"></a> */
+<a name="line273"></a>goog.gears.Database.resultSetToObject = function(rs) {
+<a name="line274"></a>  if (rs &amp;&amp; rs[&#39;isValidRow&#39;]()) {
+<a name="line275"></a>    var rv = {};
+<a name="line276"></a>    var cols = rs[&#39;fieldCount&#39;]();
+<a name="line277"></a>    for (var i = 0; i &lt; cols; i++) {
+<a name="line278"></a>      rv[rs[&#39;fieldName&#39;](i)] = rs[&#39;field&#39;](i);
+<a name="line279"></a>    }
+<a name="line280"></a>    return rv;
+<a name="line281"></a>  } else {
+<a name="line282"></a>    return null;
+<a name="line283"></a>  }
+<a name="line284"></a>};
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>/**
+<a name="line288"></a> * Returns an array of the first row in the result set
+<a name="line289"></a> *
+<a name="line290"></a> * @param {GearsResultSet} rs the result set returned by execute.
+<a name="line291"></a> * @return {Array} An array containing the values in the
+<a name="line292"></a> *     first result set. Returns an empty array if there no
+<a name="line293"></a> *     matching rows.
+<a name="line294"></a> */
+<a name="line295"></a>goog.gears.Database.resultSetToArray = function(rs) {
+<a name="line296"></a>  var rv = [];
+<a name="line297"></a>  if (rs &amp;&amp; rs[&#39;isValidRow&#39;]()) {
+<a name="line298"></a>    var cols = rs[&#39;fieldCount&#39;]();
+<a name="line299"></a>    for (var i = 0; i &lt; cols; i++) {
+<a name="line300"></a>      rv[i] = rs[&#39;field&#39;](i);
+<a name="line301"></a>    }
+<a name="line302"></a>  }
+<a name="line303"></a>  return rv;
+<a name="line304"></a>};
+<a name="line305"></a>
+<a name="line306"></a>
+<a name="line307"></a>/**
+<a name="line308"></a> * Execute a sql statement with a set of arguments
+<a name="line309"></a> *
+<a name="line310"></a> * @param {string} sql The sql statement to execute.
+<a name="line311"></a> * @param {*} var_args The arguments to execute, either as a single
+<a name="line312"></a> * array argument or as var_args.
+<a name="line313"></a> * @return {GearsResultSet} The results.
+<a name="line314"></a> */
+<a name="line315"></a>goog.gears.Database.prototype.execute = function(sql, var_args) {
+<a name="line316"></a>  this.logger_.finer(&#39;Executing SQL: &#39; + sql);
+<a name="line317"></a>
+<a name="line318"></a>  // TODO: Remove when Gears adds more rubust type handling.
+<a name="line319"></a>  // Safety measure since Gears behaves very badly if it gets an unexpected
+<a name="line320"></a>  // data type.
+<a name="line321"></a>  sql = String(sql);
+<a name="line322"></a>
+<a name="line323"></a>  var args;
+<a name="line324"></a>  try {
+<a name="line325"></a>    if (arguments.length == 1) {
+<a name="line326"></a>      return this.database_.execute(sql);
+<a name="line327"></a>    }
+<a name="line328"></a>
+<a name="line329"></a>    if (arguments.length == 2 &amp;&amp; goog.isArray(arguments[1])) {
+<a name="line330"></a>      args = arguments[1];
+<a name="line331"></a>    } else {
+<a name="line332"></a>      args = goog.array.slice(arguments, 1);
+<a name="line333"></a>    }
+<a name="line334"></a>    this.logger_.finest(&#39;SQL arguments: &#39; + args);
+<a name="line335"></a>
+<a name="line336"></a>    // TODO: Type safety checking for args?
+<a name="line337"></a>    return this.database_.execute(sql, args);
+<a name="line338"></a>  } catch (e) {
+<a name="line339"></a>    if (args) {
+<a name="line340"></a>      sql += &#39;: &#39; + goog.json.serialize(args);
+<a name="line341"></a>    }
+<a name="line342"></a>
+<a name="line343"></a>    throw goog.debug.enhanceError(e, sql);
+<a name="line344"></a>  }
+<a name="line345"></a>};
+<a name="line346"></a>
+<a name="line347"></a>/**
+<a name="line348"></a> * This is useful to remove all the arguments juggling from inside the
+<a name="line349"></a> * different helper functions.
+<a name="line350"></a> *
+<a name="line351"></a> * @private
+<a name="line352"></a> * @param {string} sql The SQL statement.
+<a name="line353"></a> * @param {Object} params An Array or arguments Object containing the query
+<a name="line354"></a> *     params. If the element at startIndex is an array, it will be used as
+<a name="line355"></a> *     the arguments passed to the execute method.
+<a name="line356"></a> * @param {number} startIndex Where to start getting the query params from
+<a name="line357"></a> *     params.
+<a name="line358"></a> * @return {GearsResultSet} The results of the command.
+<a name="line359"></a> */
+<a name="line360"></a>goog.gears.Database.prototype.executeVarArgs_ = function(sql, params,
+<a name="line361"></a>                                                         startIndex) {
+<a name="line362"></a>  if (params.length == 0 || startIndex &gt;= params.length) {
+<a name="line363"></a>    return this.execute(sql);
+<a name="line364"></a>  } else {
+<a name="line365"></a>    if (goog.isArray(params[startIndex])) {
+<a name="line366"></a>      return this.execute(sql, params[startIndex]);
+<a name="line367"></a>    }
+<a name="line368"></a>    var args = Array.prototype.slice.call(params, startIndex);
+<a name="line369"></a>    return this.execute(sql, args);
+<a name="line370"></a>  }
+<a name="line371"></a>};
+<a name="line372"></a>
+<a name="line373"></a>
+<a name="line374"></a>/**
+<a name="line375"></a> * Helper methods for queryArrays, queryObjectArray, queryValueArray,
+<a name="line376"></a> * queryValue, queryObject.
+<a name="line377"></a> *
+<a name="line378"></a> * @private
+<a name="line379"></a> * @param {string} sql The SQL statement.
+<a name="line380"></a> * @param {Function} f The function to call on the result set.
+<a name="line381"></a> * @param {Object} params query params as an Array or an arguments object. If
+<a name="line382"></a> *     the element at startIndex is an array, it will be used as the arguments
+<a name="line383"></a> *     passed to the execute method.
+<a name="line384"></a> * @param {number} startIndex Where to start getting the query params from
+<a name="line385"></a> *     params.
+<a name="line386"></a> * @return {(Object,number,string,boolean,undefined,null)} whatever &#39;f&#39;
+<a name="line387"></a> *     returns, which could be any type.
+<a name="line388"></a> *
+<a name="line389"></a> */
+<a name="line390"></a>goog.gears.Database.prototype.queryObject_ = function(sql,
+<a name="line391"></a>    f, params, startIndex) {
+<a name="line392"></a>  var rs = this.executeVarArgs_(sql, params, startIndex);
+<a name="line393"></a>  try {
+<a name="line394"></a>    return f(rs);
+<a name="line395"></a>  } finally {
+<a name="line396"></a>    if (rs) {
+<a name="line397"></a>      rs.close();
+<a name="line398"></a>    }
+<a name="line399"></a>  }
+<a name="line400"></a>};
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>/**
+<a name="line404"></a> * This calls query on the database and builds a two dimensional array
+<a name="line405"></a> * containing the result.
+<a name="line406"></a> *
+<a name="line407"></a> * @param {string} sql The SQL statement.
+<a name="line408"></a> * @param {Object} var_args Query params. An array or multiple arguments.
+<a name="line409"></a> * @return {Array} An array of arrays containing the results of the query.
+<a name="line410"></a> */
+<a name="line411"></a>goog.gears.Database.prototype.queryArrays = function(sql, var_args) {
+<a name="line412"></a>  return /** @type {Array} */ (this.queryObject_(sql,
+<a name="line413"></a>      goog.gears.Database.resultSetToArrays,
+<a name="line414"></a>      arguments,
+<a name="line415"></a>      1));
+<a name="line416"></a>};
+<a name="line417"></a>
+<a name="line418"></a>
+<a name="line419"></a>/**
+<a name="line420"></a> * This calls query on the database and builds an array containing hashes
+<a name="line421"></a> *
+<a name="line422"></a> * @param {string} sql Ths SQL statement.
+<a name="line423"></a> * @param {Object} var_args query params. An array or multiple arguments.
+<a name="line424"></a> * @return {Array} An array of hashes containing the results of the query.
+<a name="line425"></a> */
+<a name="line426"></a>goog.gears.Database.prototype.queryObjectArray = function(sql, var_args) {
+<a name="line427"></a>  return /** @type {Array} */ (this.queryObject_(sql,
+<a name="line428"></a>      goog.gears.Database.resultSetToObjectArray,
+<a name="line429"></a>      arguments,
+<a name="line430"></a>      1));
+<a name="line431"></a>};
+<a name="line432"></a>
+<a name="line433"></a>
+<a name="line434"></a>/**
+<a name="line435"></a> * This calls query on the database and returns an array containing the values
+<a name="line436"></a> * in the first column. This is useful if the result set only contains one
+<a name="line437"></a> * column.
+<a name="line438"></a> *
+<a name="line439"></a> * @param {string} sql SQL statement.
+<a name="line440"></a> * @param {Object} var_args query params. An array or multiple arguments.
+<a name="line441"></a> * @return {Array} The values in the first column.
+<a name="line442"></a> */
+<a name="line443"></a>goog.gears.Database.prototype.queryValueArray = function(sql, var_args) {
+<a name="line444"></a>  return /** @type {Array} */ (this.queryObject_(sql,
+<a name="line445"></a>    goog.gears.Database.resultSetToValueArray,
+<a name="line446"></a>    arguments,
+<a name="line447"></a>    1));
+<a name="line448"></a>};
+<a name="line449"></a>
+<a name="line450"></a>
+<a name="line451"></a>/**
+<a name="line452"></a> * This calls query on the database and returns the first value in the first
+<a name="line453"></a> * row.
+<a name="line454"></a> *
+<a name="line455"></a> * @param {string} sql SQL statement.
+<a name="line456"></a> * @param {Object} var_args query params. An array or multiple arguments.
+<a name="line457"></a> * @return {(number,string,null)} The first value in
+<a name="line458"></a> *     the first row.
+<a name="line459"></a> */
+<a name="line460"></a>goog.gears.Database.prototype.queryValue = function(sql, var_args) {
+<a name="line461"></a>  return /** @type {(number,string,null)} */ (this.queryObject_(sql,
+<a name="line462"></a>      goog.gears.Database.resultSetToValue,
+<a name="line463"></a>      arguments,
+<a name="line464"></a>      1));
+<a name="line465"></a>};
+<a name="line466"></a>
+<a name="line467"></a>
+<a name="line468"></a>/**
+<a name="line469"></a> * This calls query on the database and returns the first row as a hash map
+<a name="line470"></a> * where the keys are the column names.
+<a name="line471"></a> *
+<a name="line472"></a> * @param {string} sql SQL statement.
+<a name="line473"></a> * @param {*} var_args query params. An array or multiple arguments.
+<a name="line474"></a> * @return {Object} The first row as a hash map.
+<a name="line475"></a> */
+<a name="line476"></a>goog.gears.Database.prototype.queryObject = function(sql, var_args) {
+<a name="line477"></a>  return /** @type {Object} */ (this.queryObject_(sql,
+<a name="line478"></a>      goog.gears.Database.resultSetToObject,
+<a name="line479"></a>      arguments,
+<a name="line480"></a>      1));
+<a name="line481"></a>};
+<a name="line482"></a>
+<a name="line483"></a>
+<a name="line484"></a>/**
+<a name="line485"></a> * This calls query on the database and returns the first row as an array
+<a name="line486"></a> *
+<a name="line487"></a> * @param {string} sql SQL statement.
+<a name="line488"></a> * @param {Object} var_args query params. An array or multiple arguments.
+<a name="line489"></a> * @return {Array} The first row as an array.
+<a name="line490"></a> */
+<a name="line491"></a>goog.gears.Database.prototype.queryArray = function(sql, var_args) {
+<a name="line492"></a>  return /** @type {Array} */ (this.queryObject_(sql,
+<a name="line493"></a>      goog.gears.Database.resultSetToArray,
+<a name="line494"></a>      arguments,
+<a name="line495"></a>      1));
+<a name="line496"></a>};
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * For each value in the result set f will be called with the following
+<a name="line501"></a> * parameters; value, rowIndex, columnIndex, columnName. Values will continue
+<a name="line502"></a> * being processed as long as f returns true.
+<a name="line503"></a> *
+<a name="line504"></a> * @param {string} sql The SQL statement to execute.
+<a name="line505"></a> * @param {Function} f Function to call for each value.
+<a name="line506"></a> * @param {Object} opt_this If present f will be called using this object as
+<a name="line507"></a> *                          &#39;this&#39;.
+<a name="line508"></a> * @param {Object} var_args query params. An array or multiple arguments.
+<a name="line509"></a> */
+<a name="line510"></a>goog.gears.Database.prototype.forEachValue = function(sql,
+<a name="line511"></a>    f, opt_this, var_args) {
+<a name="line512"></a>  var rs = this.executeVarArgs_(sql, arguments, 3);
+<a name="line513"></a>  try {
+<a name="line514"></a>    var rowIndex = 0;
+<a name="line515"></a>    var cols = rs[&#39;fieldCount&#39;]();
+<a name="line516"></a>    var colNames = [];
+<a name="line517"></a>    for (var i = 0; i &lt; cols; i++) {
+<a name="line518"></a>      colNames.push(rs[&#39;fieldName&#39;](i));
+<a name="line519"></a>    }
+<a name="line520"></a>
+<a name="line521"></a>    mainLoop: while (rs[&#39;isValidRow&#39;]()) {
+<a name="line522"></a>      for (var i = 0; i &lt; cols; i++) {
+<a name="line523"></a>        if (!f.call(opt_this, rs[&#39;field&#39;](i), rowIndex, i, colNames[i])) {
+<a name="line524"></a>          break mainLoop;
+<a name="line525"></a>        }
+<a name="line526"></a>      }
+<a name="line527"></a>      rs[&#39;next&#39;]();
+<a name="line528"></a>      rowIndex++;
+<a name="line529"></a>    }
+<a name="line530"></a>  } finally {
+<a name="line531"></a>    rs.close();
+<a name="line532"></a>  }
+<a name="line533"></a>};
+<a name="line534"></a>
+<a name="line535"></a>
+<a name="line536"></a>/**
+<a name="line537"></a> * For each row in the result set f will be called with the following
+<a name="line538"></a> * parameters: row (array of values), rowIndex and columnNames.  Rows will
+<a name="line539"></a> * continue being processed as long as f returns true.
+<a name="line540"></a> *
+<a name="line541"></a> * @param {string} sql The SQL statement to execute.
+<a name="line542"></a> * @param {Function} f Function to call for each row.
+<a name="line543"></a> * @param {Object} opt_this If present f will be called using this
+<a name="line544"></a> *                          object as &#39;this&#39;.
+<a name="line545"></a> * @param {*} var_args query params. An array or multiple arguments.
+<a name="line546"></a> */
+<a name="line547"></a>goog.gears.Database.prototype.forEachRow = function(sql,
+<a name="line548"></a>    f, opt_this, var_args) {
+<a name="line549"></a>  var rs = this.executeVarArgs_(sql, arguments, 3);
+<a name="line550"></a>  try {
+<a name="line551"></a>    var rowIndex = 0;
+<a name="line552"></a>    var cols = rs[&#39;fieldCount&#39;]();
+<a name="line553"></a>    var colNames = [];
+<a name="line554"></a>    for (var i = 0; i &lt; cols; i++) {
+<a name="line555"></a>      colNames.push(rs[&#39;fieldName&#39;](i));
+<a name="line556"></a>    }
+<a name="line557"></a>
+<a name="line558"></a>    var row;
+<a name="line559"></a>    while (rs[&#39;isValidRow&#39;]()) {
+<a name="line560"></a>      row = [];
+<a name="line561"></a>      for (var i = 0; i &lt; cols; i++) {
+<a name="line562"></a>        row.push(rs[&#39;field&#39;](i));
+<a name="line563"></a>      }
+<a name="line564"></a>      if (!f.call(opt_this, row, rowIndex, colNames)) {
+<a name="line565"></a>        break;
+<a name="line566"></a>      }
+<a name="line567"></a>      rs[&#39;next&#39;]();
+<a name="line568"></a>      rowIndex++;
+<a name="line569"></a>    }
+<a name="line570"></a>  } finally {
+<a name="line571"></a>    rs.close();
+<a name="line572"></a>  }
+<a name="line573"></a>};
+<a name="line574"></a>
+<a name="line575"></a>
+<a name="line576"></a>/**
+<a name="line577"></a> * Executes a function transactionally.
+<a name="line578"></a> *
+<a name="line579"></a> * @param {Function} func the function to execute transactionally.
+<a name="line580"></a> * Takes no params.
+<a name="line581"></a> * @return {Object|number|boolean|string|null|undefined} the return value
+<a name="line582"></a> *     of &#39;func()&#39;.
+<a name="line583"></a> */
+<a name="line584"></a>goog.gears.Database.prototype.transact = function(func) {
+<a name="line585"></a>  this.begin();
+<a name="line586"></a>  try {
+<a name="line587"></a>    var result = func();
+<a name="line588"></a>    this.commit();
+<a name="line589"></a>  } catch (e) {
+<a name="line590"></a>    this.rollback(e);
+<a name="line591"></a>    throw e;
+<a name="line592"></a>  }
+<a name="line593"></a>  return result;
+<a name="line594"></a>};
+<a name="line595"></a>
+<a name="line596"></a>/**
+<a name="line597"></a> * Helper that performs either a COMMIT or ROLLBACK command and dispatches
+<a name="line598"></a> * pre/post commit/rollback events.
+<a name="line599"></a> *
+<a name="line600"></a> * @private
+<a name="line601"></a> *
+<a name="line602"></a> * @param {boolean} rollback Whether to rollback or commit.
+<a name="line603"></a> * @return {boolean} True if the transaction was closed, false otherwise.
+<a name="line604"></a> */
+<a name="line605"></a>goog.gears.Database.prototype.closeTransaction_ = function(rollback) {
+<a name="line606"></a>  // Send before rollback/commit event
+<a name="line607"></a>  var cmd;
+<a name="line608"></a>  var eventType;
+<a name="line609"></a>  cmd = rollback ? &#39;ROLLBACK&#39; : &#39;COMMIT&#39;;
+<a name="line610"></a>  eventType = rollback ? goog.gears.Database.EventType.BEFOREROLLBACK :
+<a name="line611"></a>      goog.gears.Database.EventType.BEFORECOMMIT;
+<a name="line612"></a>  var event = new goog.gears.Database.TransactionEvent(eventType);
+<a name="line613"></a>  var returnValue = this.dispatchEvent(event);
+<a name="line614"></a>
+<a name="line615"></a>  // Only commit/rollback and send events if none of the event listeners
+<a name="line616"></a>  // called preventDefault().
+<a name="line617"></a>  if (returnValue) {
+<a name="line618"></a>    this.database_.execute(cmd);
+<a name="line619"></a>    this.openTransactions_ = 0;
+<a name="line620"></a>    eventType = rollback ? goog.gears.Database.EventType.ROLLBACK :
+<a name="line621"></a>        goog.gears.Database.EventType.COMMIT;
+<a name="line622"></a>    this.dispatchEvent(new goog.gears.Database.TransactionEvent(eventType));
+<a name="line623"></a>  }
+<a name="line624"></a>
+<a name="line625"></a>  return returnValue;
+<a name="line626"></a>};
+<a name="line627"></a>
+<a name="line628"></a>
+<a name="line629"></a>/**
+<a name="line630"></a> * Whether transactions are used for the database
+<a name="line631"></a> *
+<a name="line632"></a> * @param {boolean} b Whether to use transactions or not.
+<a name="line633"></a> */
+<a name="line634"></a>goog.gears.Database.prototype.setUseTransactions = function(b) {
+<a name="line635"></a>  this.useTransactions_ = b;
+<a name="line636"></a>};
+<a name="line637"></a>
+<a name="line638"></a>
+<a name="line639"></a>/**
+<a name="line640"></a> * Whether transactions are used for the database
+<a name="line641"></a> *
+<a name="line642"></a> * @return {boolean} true if transactions should be used.
+<a name="line643"></a> */
+<a name="line644"></a>goog.gears.Database.prototype.getUseTransactions = function() {
+<a name="line645"></a>  return this.useTransactions_;
+<a name="line646"></a>};
+<a name="line647"></a>
+<a name="line648"></a>/**
+<a name="line649"></a> * Sets the default begin type.
+<a name="line650"></a> *
+<a name="line651"></a> * @param {string} beginType The default begin type.
+<a name="line652"></a> */
+<a name="line653"></a>goog.gears.Database.prototype.setDefaultBeginType = function(beginType) {
+<a name="line654"></a>  if (beginType in goog.gears.Database.BeginLevels_) {
+<a name="line655"></a>    this.defaultBeginType_ = beginType;
+<a name="line656"></a>  }
+<a name="line657"></a>};
+<a name="line658"></a>
+<a name="line659"></a>/**
+<a name="line660"></a> * Marks the beginning of a database transaction. Does a real BEGIN operation
+<a name="line661"></a> * if useTransactions is true for this database and the this is the first
+<a name="line662"></a> * opened transaction
+<a name="line663"></a> * @private
+<a name="line664"></a> *
+<a name="line665"></a> * @param {string} beginType the type of begin comand.
+<a name="line666"></a> * @return {boolean} true if the BEGIN has been executed.
+<a name="line667"></a> */
+<a name="line668"></a>goog.gears.Database.prototype.beginTransaction_ = function(beginType) {
+<a name="line669"></a>  if (this.useTransactions_) {
+<a name="line670"></a>    if (this.openTransactions_ == 0) {
+<a name="line671"></a>      this.needsRollback_ = false;
+<a name="line672"></a>      this.dispatchEvent(
+<a name="line673"></a>          new goog.gears.Database.TransactionEvent(
+<a name="line674"></a>              goog.gears.Database.EventType.BEFOREBEGIN));
+<a name="line675"></a>      this.database_.execute(&#39;BEGIN &#39; + beginType);
+<a name="line676"></a>      this.currentBeginLevel_ =
+<a name="line677"></a>          goog.gears.Database.BeginLevels_[beginType];
+<a name="line678"></a>      this.openTransactions_ = 1;
+<a name="line679"></a>      try {
+<a name="line680"></a>        this.dispatchEvent(
+<a name="line681"></a>            new goog.gears.Database.TransactionEvent(
+<a name="line682"></a>                goog.gears.Database.EventType.BEGIN));
+<a name="line683"></a>      } catch (e) {
+<a name="line684"></a>        this.database_.execute(&#39;ROLLBACK&#39;);
+<a name="line685"></a>        this.openTransactions_ = 0;
+<a name="line686"></a>        throw e;
+<a name="line687"></a>      }
+<a name="line688"></a>      return true;
+<a name="line689"></a>    } else if (this.needsRollback_) {
+<a name="line690"></a>      throw Error(
+<a name="line691"></a>          &#39;Cannot begin a transaction with a rollback pending&#39;);
+<a name="line692"></a>    } else if (goog.gears.Database.BeginLevels_[beginType] &gt;
+<a name="line693"></a>               this.currentBeginLevel_) {
+<a name="line694"></a>      throw Error(
+<a name="line695"></a>          &#39;Cannot elevate the level within a nested begin&#39;);
+<a name="line696"></a>    } else {
+<a name="line697"></a>      this.openTransactions_++;
+<a name="line698"></a>    }
+<a name="line699"></a>  }
+<a name="line700"></a>  return false;
+<a name="line701"></a>};
+<a name="line702"></a>
+<a name="line703"></a>
+<a name="line704"></a>/**
+<a name="line705"></a> * Marks the beginning of a database transaction using the default begin
+<a name="line706"></a> * type. Does a real BEGIN operation if useTransactions is true for this
+<a name="line707"></a> * database and this is the first opened transaction. This will throw
+<a name="line708"></a> * an exception if this is a nested begin and is trying to elevate the
+<a name="line709"></a> * begin type from the original BEGIN that was processed.
+<a name="line710"></a> *
+<a name="line711"></a> * @return {boolean} true if the BEGIN has been executed.
+<a name="line712"></a> */
+<a name="line713"></a>goog.gears.Database.prototype.begin = function() {
+<a name="line714"></a>  return this.beginTransaction_(this.defaultBeginType_);
+<a name="line715"></a>};
+<a name="line716"></a>
+<a name="line717"></a>
+<a name="line718"></a>/**
+<a name="line719"></a> * Marks the beginning of a deferred database transaction.
+<a name="line720"></a> * Does a real BEGIN operation if useTransactions is true for this
+<a name="line721"></a> * database and this is the first opened transaction.
+<a name="line722"></a> *
+<a name="line723"></a> * @return {boolean} true if the BEGIN has been executed.
+<a name="line724"></a> */
+<a name="line725"></a>goog.gears.Database.prototype.beginDeferred = function() {
+<a name="line726"></a>  return this.beginTransaction_(&#39;DEFERRED&#39;);
+<a name="line727"></a>};
+<a name="line728"></a>
+<a name="line729"></a>
+<a name="line730"></a>/**
+<a name="line731"></a> * Marks the beginning of an immediate database transaction.
+<a name="line732"></a> * Does a real BEGIN operation if useTransactions is true for this
+<a name="line733"></a> * database and this is the first opened transaction. This will throw
+<a name="line734"></a> * an exception if this is a nested begin and is trying to elevate the
+<a name="line735"></a> * begin type from the original BEGIN that was processed.
+<a name="line736"></a> *
+<a name="line737"></a> * @return {boolean} true if the BEGIN has been executed.
+<a name="line738"></a> */
+<a name="line739"></a>goog.gears.Database.prototype.beginImmediate = function() {
+<a name="line740"></a>  return this.beginTransaction_(&#39;IMMEDIATE&#39;);
+<a name="line741"></a>};
+<a name="line742"></a>
+<a name="line743"></a>
+<a name="line744"></a>/**
+<a name="line745"></a> * Marks the beginning of an exclusive database transaction.
+<a name="line746"></a> * Does a real BEGIN operation if useTransactions is true for this
+<a name="line747"></a> * database and this is the first opened transaction. This will throw
+<a name="line748"></a> * an exception if this is a nested begin and is trying to elevate the
+<a name="line749"></a> * begin type from the original BEGIN that was processed.
+<a name="line750"></a> *
+<a name="line751"></a> * @return {boolean} true if the BEGIN has been executed.
+<a name="line752"></a> */
+<a name="line753"></a>goog.gears.Database.prototype.beginExclusive = function() {
+<a name="line754"></a>  return this.beginTransaction_(&#39;EXCLUSIVE&#39;);
+<a name="line755"></a>};
+<a name="line756"></a>
+<a name="line757"></a>
+<a name="line758"></a>/**
+<a name="line759"></a> * Marks the end of a successful transaction. Will do a real COMMIT
+<a name="line760"></a> * if this the last outstanding transaction unless a nested transaction
+<a name="line761"></a> * was closed with a ROLLBACK in which case a real ROLLBACK will be performed.
+<a name="line762"></a> *
+<a name="line763"></a> * @return {boolean} true if the COMMIT has been executed.
+<a name="line764"></a> */
+<a name="line765"></a>goog.gears.Database.prototype.commit = function() {
+<a name="line766"></a>  if (this.useTransactions_) {
+<a name="line767"></a>    if (this.openTransactions_ &lt;= 0) {
+<a name="line768"></a>      throw Error(&#39;Unbalanced transaction&#39;);
+<a name="line769"></a>    }
+<a name="line770"></a>
+<a name="line771"></a>    // Only one left.
+<a name="line772"></a>    if (this.openTransactions_ == 1) {
+<a name="line773"></a>      var closed = this.closeTransaction_(this.needsRollback_);
+<a name="line774"></a>      return !this.needsRollback_ &amp;&amp; closed;
+<a name="line775"></a>    } else {
+<a name="line776"></a>      this.openTransactions_--;
+<a name="line777"></a>    }
+<a name="line778"></a>  }
+<a name="line779"></a>  return false;
+<a name="line780"></a>};
+<a name="line781"></a>
+<a name="line782"></a>
+<a name="line783"></a>/**
+<a name="line784"></a> * Marks the end of an unsuccessful transaction. Will do a real ROLLBACK
+<a name="line785"></a> * if this the last outstanding transaction, otherwise the real ROLLBACK will
+<a name="line786"></a> * be deferred until the last outstanding transaction is closed.
+<a name="line787"></a> *
+<a name="line788"></a> * @param {Error} opt_e the exception that caused this rollback. If it
+<a name="line789"></a> *                          is provided then that exception is rethown if
+<a name="line790"></a> *                          the rollback does not take place.
+<a name="line791"></a> * @return {boolean} true if the ROLLBACK has been executed or if we are not
+<a name="line792"></a> *                   using transactions.
+<a name="line793"></a> */
+<a name="line794"></a>goog.gears.Database.prototype.rollback = function(opt_e) {
+<a name="line795"></a>  var closed = true;
+<a name="line796"></a>  if (this.useTransactions_) {
+<a name="line797"></a>    if (this.openTransactions_ &lt;= 0) {
+<a name="line798"></a>      throw Error(&#39;Unbalanced transaction&#39;);
+<a name="line799"></a>    }
+<a name="line800"></a>    // Only one left.
+<a name="line801"></a>    if (this.openTransactions_ == 1) {
+<a name="line802"></a>      closed = this.closeTransaction_(true);
+<a name="line803"></a>    } else {
+<a name="line804"></a>      this.openTransactions_--;
+<a name="line805"></a>      this.needsRollback_ = true;
+<a name="line806"></a>      if (opt_e) {
+<a name="line807"></a>        throw opt_e;
+<a name="line808"></a>      }
+<a name="line809"></a>      return false;
+<a name="line810"></a>    }
+<a name="line811"></a>  }
+<a name="line812"></a>
+<a name="line813"></a>  return closed;
+<a name="line814"></a>};
+<a name="line815"></a>
+<a name="line816"></a>
+<a name="line817"></a>/**
+<a name="line818"></a> * Returns whether or not we&#39;re in a transaction.
+<a name="line819"></a> *
+<a name="line820"></a> * @return {boolean} true if a transaction has been started and is not yet
+<a name="line821"></a> *                   complete.
+<a name="line822"></a> */
+<a name="line823"></a>goog.gears.Database.prototype.isInTransaction = function() {
+<a name="line824"></a>  return this.useTransactions_ &amp;&amp; this.openTransactions_ &gt; 0;
+<a name="line825"></a>};
+<a name="line826"></a>
+<a name="line827"></a>
+<a name="line828"></a>/**
+<a name="line829"></a> * Ensures there is no open transaction upon return. An existing open
+<a name="line830"></a> * transaction is rolled back.
+<a name="line831"></a> *
+<a name="line832"></a> * @param {string} opt_logMsgPrefix a prefix to the message that is logged when
+<a name="line833"></a> *     an unexpected open transaction is found.
+<a name="line834"></a> */
+<a name="line835"></a>goog.gears.Database.prototype.ensureNoTransaction = function(opt_logMsgPrefix) {
+<a name="line836"></a>  if (this.isInTransaction()) {
+<a name="line837"></a>    this.logger_.warning((opt_logMsgPrefix || &#39;ensureNoTransaction&#39;) +
+<a name="line838"></a>                         &#39; - rolling back unexpected transaction&#39;);
+<a name="line839"></a>    do {
+<a name="line840"></a>      this.rollback();
+<a name="line841"></a>    } while (this.isInTransaction());
+<a name="line842"></a>  }
+<a name="line843"></a>};
+<a name="line844"></a>
+<a name="line845"></a>
+<a name="line846"></a>/**
+<a name="line847"></a> * Returns whether or not the current transaction has a pending rollback.
+<a name="line848"></a> * Returns false if there is no current transaction.
+<a name="line849"></a> *
+<a name="line850"></a> * @return {boolean} Whether a started transaction has a rollback pending.
+<a name="line851"></a> */
+<a name="line852"></a>goog.gears.Database.prototype.needsRollback = function() {
+<a name="line853"></a>  return this.useTransactions_ &amp;&amp;
+<a name="line854"></a>         this.openTransactions_ &gt; 0 &amp;&amp;
+<a name="line855"></a>         this.needsRollback_;
+<a name="line856"></a>};
+<a name="line857"></a>
+<a name="line858"></a>
+<a name="line859"></a>/**
+<a name="line860"></a> * Returns the time in Ms that database operations have currently
+<a name="line861"></a> * consumed. This only exists in debug builds, but it still may be useful
+<a name="line862"></a> * for goog.gears.Trace.
+<a name="line863"></a> *
+<a name="line864"></a> * @return {number} The time in Ms that database operations have currently
+<a name="line865"></a> *     consumed.
+<a name="line866"></a> */
+<a name="line867"></a>goog.gears.Database.prototype.getExecutionTime = function() {
+<a name="line868"></a>  return this.database_[&#39;executeMsec&#39;] || 0;
+<a name="line869"></a>};
+<a name="line870"></a>
+<a name="line871"></a>
+<a name="line872"></a>/**
+<a name="line873"></a> * @return {number} The id of the last inserted row.
+<a name="line874"></a> */
+<a name="line875"></a>goog.gears.Database.prototype.getLastInsertRowId = function() {
+<a name="line876"></a>  return this.database_[&#39;lastInsertRowId&#39;];
+<a name="line877"></a>};
+<a name="line878"></a>
+<a name="line879"></a>
+<a name="line880"></a>/**
+<a name="line881"></a> * Opens the database.
+<a name="line882"></a> */
+<a name="line883"></a>goog.gears.Database.prototype.open = function() {
+<a name="line884"></a>  if (this.database_ &amp;&amp; this.safeDbId_) {
+<a name="line885"></a>    this.database_.open(this.safeDbId_);
+<a name="line886"></a>  } else {
+<a name="line887"></a>    throw Error(&#39;Could not open the database&#39;);
+<a name="line888"></a>  }
+<a name="line889"></a>};
+<a name="line890"></a>
+<a name="line891"></a>
+<a name="line892"></a>/**
+<a name="line893"></a> * Closes the database.
+<a name="line894"></a> */
+<a name="line895"></a>goog.gears.Database.prototype.close = function() {
+<a name="line896"></a>  if (this.database_) {
+<a name="line897"></a>    this.database_.close();
+<a name="line898"></a>  }
+<a name="line899"></a>};
+<a name="line900"></a>
+<a name="line901"></a>
+<a name="line902"></a>/**
+<a name="line903"></a> * Disposes of the object.
+<a name="line904"></a> */
+<a name="line905"></a>goog.gears.Database.prototype.disposeInternal = function() {
+<a name="line906"></a>  goog.gears.Database.superClass_.disposeInternal.call(this);
+<a name="line907"></a>  this.database_ = null;
+<a name="line908"></a>};
+<a name="line909"></a>
+<a name="line910"></a>
+<a name="line911"></a>/**
+<a name="line912"></a> * Determines if the exception is a locking error.
+<a name="line913"></a> * @param {Error} ex The exception object.
+<a name="line914"></a> * @return {boolean} Whether this is a database locked exception.
+<a name="line915"></a> */
+<a name="line916"></a>goog.gears.Database.isLockedException = function(ex) {
+<a name="line917"></a>  // TODO: change the test when gears provides a reasonable
+<a name="line918"></a>  // error code to check.
+<a name="line919"></a>  return !!ex.message &amp;&amp; ex.message.indexOf(&#39;database is locked&#39;) &gt;= 0;
+<a name="line920"></a>};
+<a name="line921"></a>
+<a name="line922"></a>
+<a name="line923"></a>/**
+<a name="line924"></a> * Removes the database.
+<a name="line925"></a> * @throws {Error} This requires Gears 0.5 or newer and will throw an error if
+<a name="line926"></a> *     called on a too old version of Gears.
+<a name="line927"></a> */
+<a name="line928"></a>goog.gears.Database.prototype.remove = function() {
+<a name="line929"></a>  this.database_.remove();
+<a name="line930"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>strictmock.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_testing_strictmock.js.html">strictmock.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This file defines a strict mock implementation.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.testing.StrictMock&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.array&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.Mock&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * This is a mock that verifies that methods are called in the order that they
+<a name="line27"></a> * are specified during the recording phase. Since it verifies order, it
+<a name="line28"></a> * follows &#39;fail fast&#39; semantics. If it detects a deviation from the
+<a name="line29"></a> * expectations, it will throw an exception and not wait for verify to be
+<a name="line30"></a> * called.
+<a name="line31"></a> * @param {Object} objectToMock The object to mock.
+<a name="line32"></a> * @param {boolean} opt_mockStaticMethods An optional argument denoting that
+<a name="line33"></a> *     a mock should be constructed from the static functions of a class.
+<a name="line34"></a> * @param {boolean} opt_createProxy An optional argument denoting that
+<a name="line35"></a> *     a proxy for the target mock should be created.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @extends {goog.testing.Mock}
+<a name="line38"></a> */
+<a name="line39"></a>goog.testing.StrictMock = function(objectToMock, opt_mockStaticMethods,
+<a name="line40"></a>    opt_createProxy) {
+<a name="line41"></a>  goog.testing.Mock.call(this, objectToMock, opt_mockStaticMethods,
+<a name="line42"></a>      opt_createProxy);
+<a name="line43"></a>
+<a name="line44"></a>  /**
+<a name="line45"></a>   * An array of MockExpectations.
+<a name="line46"></a>   * @type {Array.&lt;goog.testing.MockExpectation&gt;}
+<a name="line47"></a>   * @private
+<a name="line48"></a>   */
+<a name="line49"></a>  this.$expectations_ = [];
+<a name="line50"></a>};
+<a name="line51"></a>goog.inherits(goog.testing.StrictMock, goog.testing.Mock);
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/** @inheritDoc */
+<a name="line55"></a>goog.testing.StrictMock.prototype.$recordExpectation = function() {
+<a name="line56"></a>  this.$expectations_.push(this.$pendingExpectation);
+<a name="line57"></a>};
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/** @inheritDoc */
+<a name="line61"></a>goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
+<a name="line62"></a>  if (this.$expectations_.length == 0) {
+<a name="line63"></a>    this.$throwCallException(name, args);
+<a name="line64"></a>  }
+<a name="line65"></a>
+<a name="line66"></a>  // If the current expectation has a different name, make sure it was called
+<a name="line67"></a>  // enough and then discard it. We&#39;re through with it.
+<a name="line68"></a>  var currentExpectation = this.$expectations_[0];
+<a name="line69"></a>  while (!this.$verifyCall(currentExpectation, name, args)) {
+<a name="line70"></a>
+<a name="line71"></a>    // This might be an item which has passed its min, and we can now
+<a name="line72"></a>    // look past it, or it might be below its min and generate an error.
+<a name="line73"></a>    if (currentExpectation.actualCalls &lt; currentExpectation.minCalls) {
+<a name="line74"></a>      this.$throwCallException(name, args, currentExpectation);
+<a name="line75"></a>    }
+<a name="line76"></a>
+<a name="line77"></a>    this.$expectations_.shift();
+<a name="line78"></a>    if (this.$expectations_.length == 0) {
+<a name="line79"></a>      // Nothing left, but this may be a failed attempt to call the previous
+<a name="line80"></a>      // item on the list, which may have been between its min and max.
+<a name="line81"></a>      this.$throwCallException(name, args, currentExpectation);
+<a name="line82"></a>    }
+<a name="line83"></a>    currentExpectation = this.$expectations_[0];
+<a name="line84"></a>  }
+<a name="line85"></a>
+<a name="line86"></a>  currentExpectation.actualCalls++;
+<a name="line87"></a>  // If we hit the max number of calls for this expectation, we&#39;re finished
+<a name="line88"></a>  // with it.
+<a name="line89"></a>  if (currentExpectation.actualCalls &gt;= currentExpectation.maxCalls) {
+<a name="line90"></a>    this.$expectations_.shift();
+<a name="line91"></a>  }
+<a name="line92"></a>
+<a name="line93"></a>  return this.$do(currentExpectation, args);
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/** @inheritDoc */
+<a name="line98"></a>goog.testing.StrictMock.prototype.$reset = function() {
+<a name="line99"></a>  goog.testing.StrictMock.superClass_.$reset.call(this);
+<a name="line100"></a>
+<a name="line101"></a>  goog.array.clear(this.$expectations_);
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/** @inheritDoc */
+<a name="line106"></a>goog.testing.StrictMock.prototype.$verify = function() {
+<a name="line107"></a>  goog.testing.StrictMock.superClass_.$verify.call(this);
+<a name="line108"></a>
+<a name="line109"></a>  while (this.$expectations_.length &gt; 0) {
+<a name="line110"></a>    var expectation = this.$expectations_[0];
+<a name="line111"></a>    if (expectation.actualCalls &lt; expectation.minCalls) {
+<a name="line112"></a>      this.$throwException(&#39;Missing a call to &#39; + expectation.name +
+<a name="line113"></a>          &#39;\nExpected: &#39; + expectation.minCalls + &#39; but was: &#39; +
+<a name="line114"></a>          expectation.actualCalls);
+<a name="line115"></a>
+<a name="line116"></a>    } else {
+<a name="line117"></a>      // Don&#39;t need to check max, that&#39;s handled when the call is made
+<a name="line118"></a>      this.$expectations_.shift();
+<a name="line119"></a>    }
+<a name="line120"></a>  }
+<a name="line121"></a>};
+</pre>
+
+
+</body>
+</html>

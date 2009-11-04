@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+  Copyright 2008 Google Inc. All Rights Reserved.
+-->
+<head>
+<title>Closure Unit Tests - goog.crypt</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.crypt');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<script>
+
+  function testStringToUtf8ByteArray() {
+    // Known encodings taken from Java's String.getBytes("UTF8")
+
+    assertArrayEquals([72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100],
+        goog.crypt.stringToUtf8ByteArray('Hello, world'));
+
+    assertArrayEquals([87, 119, 70, 115, 77, 100],
+        goog.crypt.stringToUtf8ByteArray('WwFsMd'));
+
+    assertArrayEquals([83, 99, 104, 195, 182, 110],
+        goog.crypt.stringToUtf8ByteArray('Sch\u00f6n'));
+  }
+
+  function testUtf8ByteArrayToString() {
+    // Known encodings taken from Java's String.getBytes("UTF8")
+
+    assertEquals('Hello, world', goog.crypt.utf8ByteArrayToString(
+        [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100]));
+
+    assertEquals('WwFsMd', goog.crypt.utf8ByteArrayToString(
+        [87, 119, 70, 115, 77, 100]));
+
+    assertEquals('Sch\u00f6n', goog.crypt.utf8ByteArrayToString(
+        [83, 99, 104, 195, 182, 110]));
+  }
+</script>
+</body>
+</html>

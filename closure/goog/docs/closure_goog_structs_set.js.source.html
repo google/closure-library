@@ -1,0 +1,288 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>set.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_structs_set.js.html">set.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Datastructure: Set.
+<a name="line17"></a> *
+<a name="line18"></a> *
+<a name="line19"></a> * This class implements a set data structure. Adding and removing is O(1). It
+<a name="line20"></a> * supports both object and primitive values. Be careful because you can add
+<a name="line21"></a> * both 1 and new Number(1), beacuse these are not the same. You can even add
+<a name="line22"></a> * multiple new Number(1) because these are not equal.
+<a name="line23"></a> */
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.structs.Set&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.structs&#39;);
+<a name="line29"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Class for Set datastructure.
+<a name="line34"></a> *
+<a name="line35"></a> * @param {Array|Object} opt_values Initial values to start with.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> */
+<a name="line38"></a>goog.structs.Set = function(opt_values) {
+<a name="line39"></a>  this.map_ = new goog.structs.Map;
+<a name="line40"></a>  if (opt_values) {
+<a name="line41"></a>    this.addAll(opt_values);
+<a name="line42"></a>  }
+<a name="line43"></a>};
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * This is used to get the key or the hash. We are not using getHashCode
+<a name="line48"></a> * because it only works with objects.
+<a name="line49"></a> * @param {*} val Object or primitive value to get a key for.
+<a name="line50"></a> * @return {string} A unique key for this value/object.
+<a name="line51"></a> * @private
+<a name="line52"></a> */
+<a name="line53"></a>goog.structs.Set.getKey_ = function(val) {
+<a name="line54"></a>  var type = typeof val;
+<a name="line55"></a>  if (type == &#39;object&#39; &amp;&amp; val || type == &#39;function&#39;) {
+<a name="line56"></a>    return &#39;o&#39; + goog.getHashCode(/** @type {Object} */ (val));
+<a name="line57"></a>  } else {
+<a name="line58"></a>    return type.substr(0, 1) + val;
+<a name="line59"></a>  }
+<a name="line60"></a>};
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * @return {number} The number of objects in the Set.
+<a name="line65"></a> */
+<a name="line66"></a>goog.structs.Set.prototype.getCount = function() {
+<a name="line67"></a>  return this.map_.getCount();
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Add an object to the set.
+<a name="line73"></a> * @param {*} obj The object to add.
+<a name="line74"></a> */
+<a name="line75"></a>goog.structs.Set.prototype.add = function(obj) {
+<a name="line76"></a>  this.map_.set(goog.structs.Set.getKey_(obj), obj);
+<a name="line77"></a>};
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * Adds all objects from one goog.structs.Set to the current one. This can
+<a name="line82"></a> * take an array as well.
+<a name="line83"></a> * @param {Array|Object} set The set or array to add objects from.
+<a name="line84"></a> */
+<a name="line85"></a>goog.structs.Set.prototype.addAll = function(set) {
+<a name="line86"></a>  var values = goog.structs.getValues(set);
+<a name="line87"></a>  var l = values.length;
+<a name="line88"></a>  for (var i = 0; i &lt; l; i++) {
+<a name="line89"></a>    this.add(values[i]);
+<a name="line90"></a>  }
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Removes all objects in one goog.structs.Set from the current one. This can
+<a name="line96"></a> * take an array as well.
+<a name="line97"></a> * @param {Array|Object} set The set or array to remove objects from.
+<a name="line98"></a> */
+<a name="line99"></a>goog.structs.Set.prototype.removeAll = function(set) {
+<a name="line100"></a>  var values = goog.structs.getValues(set);
+<a name="line101"></a>  var l = values.length;
+<a name="line102"></a>  for (var i = 0; i &lt; l; i++) {
+<a name="line103"></a>    this.remove(values[i]);
+<a name="line104"></a>  }
+<a name="line105"></a>};
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Removes an object from the set.
+<a name="line110"></a> * @param {*} obj The object to remove.
+<a name="line111"></a> * @return {boolean} Whether object was removed.
+<a name="line112"></a> */
+<a name="line113"></a>goog.structs.Set.prototype.remove = function(obj) {
+<a name="line114"></a>  return this.map_.remove(goog.structs.Set.getKey_(obj));
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * Removes all objects from the set.
+<a name="line120"></a> */
+<a name="line121"></a>goog.structs.Set.prototype.clear = function() {
+<a name="line122"></a>  this.map_.clear();
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * Whether the set contains no objects.
+<a name="line128"></a> * @return {boolean} True if there are no objects in the goog.structs.Set.
+<a name="line129"></a> */
+<a name="line130"></a>goog.structs.Set.prototype.isEmpty = function() {
+<a name="line131"></a>  return this.map_.isEmpty();
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Whether the goog.structs.Set contains an object or not.
+<a name="line137"></a> * @param {*} obj The object to test for.
+<a name="line138"></a> * @return {boolean} True if the set contains the object.
+<a name="line139"></a> */
+<a name="line140"></a>goog.structs.Set.prototype.contains = function(obj) {
+<a name="line141"></a>  return this.map_.containsKey(goog.structs.Set.getKey_(obj));
+<a name="line142"></a>};
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * Whether the goog.structs.Set contains all elements of the collection.
+<a name="line147"></a> * Ignores identical elements, e.g. set([1, 2]) contains [1, 1].
+<a name="line148"></a> * @param {Object} col A collection-like object.
+<a name="line149"></a> * @return {boolean} True if the set contains all elements.
+<a name="line150"></a> */
+<a name="line151"></a>goog.structs.Set.prototype.containsAll = function(col) {
+<a name="line152"></a>  return goog.structs.every(col, this.contains, this);
+<a name="line153"></a>};
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>/**
+<a name="line157"></a> * Find all elements present in both this and the given set.
+<a name="line158"></a> * @param {Array|Object} set The set or array to test against.
+<a name="line159"></a> * @return {goog.structs.Set} A new set containing all elements present in both
+<a name="line160"></a> *     this object and specified set.
+<a name="line161"></a> */
+<a name="line162"></a>goog.structs.Set.prototype.intersection = function(set) {
+<a name="line163"></a>  var result = new goog.structs.Set();
+<a name="line164"></a>
+<a name="line165"></a>  var values = goog.structs.getValues(set);
+<a name="line166"></a>  for (var i = 0; i &lt; values.length; i++) {
+<a name="line167"></a>    var value = values[i];
+<a name="line168"></a>    if (this.contains(value)) {
+<a name="line169"></a>      result.add(value);
+<a name="line170"></a>    }
+<a name="line171"></a>  }
+<a name="line172"></a>
+<a name="line173"></a>  return result;
+<a name="line174"></a>};
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * Inserts the objects in the set into a new Array.
+<a name="line179"></a> * @return {Array} An array of all the values in the Set.
+<a name="line180"></a> */
+<a name="line181"></a>goog.structs.Set.prototype.getValues = function() {
+<a name="line182"></a>  return this.map_.getValues();
+<a name="line183"></a>};
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * Does a shallow clone of the goog.structs.Set.
+<a name="line188"></a> * @return {goog.structs.Set} The cloned Set.
+<a name="line189"></a> */
+<a name="line190"></a>goog.structs.Set.prototype.clone = function() {
+<a name="line191"></a>  return new goog.structs.Set(this);
+<a name="line192"></a>};
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * Compares this set with the input collection for equality.
+<a name="line197"></a> * Its time complexity is O(|col|) and uses equals (==) to test the existence
+<a name="line198"></a> * of the elements.
+<a name="line199"></a> * @param {Object} col A collection-like object.
+<a name="line200"></a> * @return {boolean} True if the collection consists of the same elements as
+<a name="line201"></a> *     the set in arbitrary order.
+<a name="line202"></a> */
+<a name="line203"></a>goog.structs.Set.prototype.equals = function(col) {
+<a name="line204"></a>  return this.getCount() == goog.structs.getCount(col) &amp;&amp; this.isSubsetOf(col);
+<a name="line205"></a>};
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * Decides if the input collection contains all elements of this set.
+<a name="line210"></a> * Its time complexity is O(|col|) and uses equals (==) to test the existence
+<a name="line211"></a> * of the elements.
+<a name="line212"></a> * @param {Object} col A collection-like object.
+<a name="line213"></a> * @return {boolean} True if the set is a subset of the collection.
+<a name="line214"></a> */
+<a name="line215"></a>goog.structs.Set.prototype.isSubsetOf = function(col) {
+<a name="line216"></a>  var colCount = goog.structs.getCount(col);
+<a name="line217"></a>  if (this.getCount() &gt; colCount) {
+<a name="line218"></a>    return false;
+<a name="line219"></a>  }
+<a name="line220"></a>  // TODO Find the minimal collection size where the conversion makes
+<a name="line221"></a>  // the contains() method faster.
+<a name="line222"></a>  if (!(col instanceof goog.structs.Set) &amp;&amp; colCount &gt; 5) {
+<a name="line223"></a>    // Make the goog.structs.contains(col, value) faster if necessary.
+<a name="line224"></a>    col = new goog.structs.Set(col);
+<a name="line225"></a>  }
+<a name="line226"></a>  return goog.structs.every(this, function(value) {
+<a name="line227"></a>    return goog.structs.contains(col, value);
+<a name="line228"></a>  });
+<a name="line229"></a>};
+<a name="line230"></a>
+<a name="line231"></a>
+<a name="line232"></a>/**
+<a name="line233"></a> * Returns an iterator that iterates over the elements in the set.
+<a name="line234"></a> * @param {boolean} opt_keys Ignored for sets.
+<a name="line235"></a> * @return {goog.iter.Iterator} An iterator over the elements in the set.
+<a name="line236"></a> */
+<a name="line237"></a>goog.structs.Set.prototype.__iterator__ = function(opt_keys) {
+<a name="line238"></a>  return this.map_.__iterator__(false);
+<a name="line239"></a>};
+</pre>
+
+
+</body>
+</html>

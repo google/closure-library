@@ -1,0 +1,1127 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>offlineinstalldialog.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_offlineinstalldialog.js.html">offlineinstalldialog.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A dialog for presenting the offline (Gears) install flow. It
+<a name="line17"></a> * show information on how to install Gears if Gears is not already installed,
+<a name="line18"></a> * or will offer the option to enable the application for Gears support.
+<a name="line19"></a> *
+<a name="line20"></a> * @see ../demos/offline.html
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.ui.OfflineInstallDialog&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.ui.OfflineInstallDialog.ButtonKeyType&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.ui.OfflineInstallDialog.EnableScreen&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.ui.OfflineInstallDialog.InstallScreen&#39;);
+<a name="line27"></a>goog.provide(&#39;goog.ui.OfflineInstallDialog.InstallingGearsScreen&#39;);
+<a name="line28"></a>goog.provide(&#39;goog.ui.OfflineInstallDialog.ScreenType&#39;);
+<a name="line29"></a>goog.provide(&#39;goog.ui.OfflineInstallDialog.UpgradeScreen&#39;);
+<a name="line30"></a>goog.provide(&#39;goog.ui.OfflineInstallDialogScreen&#39;);
+<a name="line31"></a>
+<a name="line32"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line33"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line34"></a>goog.require(&#39;goog.gears&#39;);
+<a name="line35"></a>goog.require(&#39;goog.string&#39;);
+<a name="line36"></a>goog.require(&#39;goog.string.StringBuffer&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.Dialog&#39;);
+<a name="line38"></a>goog.require(&#39;goog.ui.Dialog.ButtonSet&#39;);
+<a name="line39"></a>goog.require(&#39;goog.ui.Dialog.EventType&#39;);
+<a name="line40"></a>goog.require(&#39;goog.window&#39;);
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * An offline install dialog.
+<a name="line45"></a> * @param {string} opt_class CSS class name for the dialog element, also used
+<a name="line46"></a> *    as a class name prefix for related elements; defaults to modal-dialog.
+<a name="line47"></a> * @param {boolean} opt_useIframeMask Work around windowed controls z-index
+<a name="line48"></a> *     issue by using an iframe instead of a div for bg element.
+<a name="line49"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line50"></a> * @constructor
+<a name="line51"></a> * @extends {goog.ui.Dialog}
+<a name="line52"></a> */
+<a name="line53"></a>goog.ui.OfflineInstallDialog = function(
+<a name="line54"></a>    opt_class, opt_useIframeMask, opt_domHelper) {
+<a name="line55"></a>  goog.ui.Dialog.call(this, opt_class, opt_useIframeMask, opt_domHelper);
+<a name="line56"></a>
+<a name="line57"></a>  /**
+<a name="line58"></a>   * This is used to allow more screens to be added programatically. It is a
+<a name="line59"></a>   * map from screen type to a constructor that extends
+<a name="line60"></a>   * goog.ui.OfflineInstallDialogScreen.
+<a name="line61"></a>   * @type {Object}
+<a name="line62"></a>   * @private
+<a name="line63"></a>   */
+<a name="line64"></a>  this.screenConstructors_ = {};
+<a name="line65"></a>
+<a name="line66"></a>  /**
+<a name="line67"></a>   * This is a map of constructed screens. It uses the constructors in the
+<a name="line68"></a>   * screenConstructors_ map.
+<a name="line69"></a>   * @type {Object}
+<a name="line70"></a>   * @private
+<a name="line71"></a>   */
+<a name="line72"></a>  this.screens_ = {};
+<a name="line73"></a>
+<a name="line74"></a>  this.currentScreenType_ = goog.gears.hasFactory() ?
+<a name="line75"></a>      goog.ui.OfflineInstallDialog.ScreenType.ENABLE :
+<a name="line76"></a>      goog.ui.OfflineInstallDialog.ScreenType.INSTALL;
+<a name="line77"></a>
+<a name="line78"></a>  this.registerScreenType(goog.ui.OfflineInstallDialog.EnableScreen.TYPE,
+<a name="line79"></a>                          goog.ui.OfflineInstallDialog.EnableScreen);
+<a name="line80"></a>  this.registerScreenType(goog.ui.OfflineInstallDialog.InstallScreen.TYPE,
+<a name="line81"></a>                          goog.ui.OfflineInstallDialog.InstallScreen);
+<a name="line82"></a>  this.registerScreenType(goog.ui.OfflineInstallDialog.UpgradeScreen.TYPE,
+<a name="line83"></a>                          goog.ui.OfflineInstallDialog.UpgradeScreen);
+<a name="line84"></a>  this.registerScreenType(
+<a name="line85"></a>      goog.ui.OfflineInstallDialog.InstallingGearsScreen.TYPE,
+<a name="line86"></a>      goog.ui.OfflineInstallDialog.InstallingGearsScreen);
+<a name="line87"></a>};
+<a name="line88"></a>goog.inherits(goog.ui.OfflineInstallDialog, goog.ui.Dialog);
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Buttons keys of the dialog.
+<a name="line93"></a> * @enum {string}
+<a name="line94"></a> */
+<a name="line95"></a>goog.ui.OfflineInstallDialog.ButtonKeyType = {
+<a name="line96"></a>  INSTALL: &#39;io&#39;,
+<a name="line97"></a>  UPGRADE: &#39;u&#39;,
+<a name="line98"></a>  ENABLE: &#39;eo&#39;,
+<a name="line99"></a>  CANCEL: &#39;ca&#39;,
+<a name="line100"></a>  CLOSE: &#39;cl&#39;,
+<a name="line101"></a>  OK: &#39;ok&#39;
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * The various types of screens the dialog can display.
+<a name="line107"></a> * @enum {string}
+<a name="line108"></a> */
+<a name="line109"></a>goog.ui.OfflineInstallDialog.ScreenType = {
+<a name="line110"></a>  INSTALL: &#39;i&#39;,
+<a name="line111"></a>  INSTALLING_GEARS: &#39;ig&#39;,
+<a name="line112"></a>  ENABLE: &#39;e&#39;,
+<a name="line113"></a>  UPGRADE: &#39;u&#39;
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Whether the dialog is dirty and requires an upate to its display.
+<a name="line119"></a> * @type {boolean}
+<a name="line120"></a> * @private
+<a name="line121"></a> */
+<a name="line122"></a>goog.ui.OfflineInstallDialog.prototype.dirty_ = false;
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * The type of the current screen of the dialog.
+<a name="line127"></a> * @type {string}
+<a name="line128"></a> * @private
+<a name="line129"></a> */
+<a name="line130"></a>goog.ui.OfflineInstallDialog.prototype.currentScreenType_;
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * The url of the application.
+<a name="line135"></a> * @type {string}
+<a name="line136"></a> * @private
+<a name="line137"></a> */
+<a name="line138"></a>goog.ui.OfflineInstallDialog.prototype.appUrl_ = &#39;&#39;;
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * The url of the page to download Gears from.
+<a name="line143"></a> * @type {string}
+<a name="line144"></a> * @private
+<a name="line145"></a> */
+<a name="line146"></a>goog.ui.OfflineInstallDialog.prototype.gearsDownloadPageUrl_ = &#39;&#39;;
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/**
+<a name="line150"></a> * Marks as dirty and calls update if needed.
+<a name="line151"></a> * @private
+<a name="line152"></a> */
+<a name="line153"></a>goog.ui.OfflineInstallDialog.prototype.invalidateAndUpdate_ = function() {
+<a name="line154"></a>  this.dirty_ = true;
+<a name="line155"></a>  if (this.getElement() &amp;&amp; this.isVisible()) {
+<a name="line156"></a>    this.update();
+<a name="line157"></a>  }
+<a name="line158"></a>};
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Sets the URL of the appliction to show in the dialog.
+<a name="line163"></a> * @param {string} url The application URL.
+<a name="line164"></a> */
+<a name="line165"></a>goog.ui.OfflineInstallDialog.prototype.setAppUrl = function(url) {
+<a name="line166"></a>  this.appUrl_ = url;
+<a name="line167"></a>  this.invalidateAndUpdate_();
+<a name="line168"></a>};
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * @return {string} The application URL.
+<a name="line173"></a> */
+<a name="line174"></a>goog.ui.OfflineInstallDialog.prototype.getAppUrl = function() {
+<a name="line175"></a>  return this.appUrl_;
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Sets the Gears download page URL.
+<a name="line181"></a> * @param {string} url The Gears download page URL.
+<a name="line182"></a> */
+<a name="line183"></a>goog.ui.OfflineInstallDialog.prototype.setGearsDownloadPageUrl = function(url) {
+<a name="line184"></a>  this.gearsDownloadPageUrl_ = url;
+<a name="line185"></a>  this.invalidateAndUpdate_();
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * @return {string} The Gears download page URL.
+<a name="line191"></a> */
+<a name="line192"></a>goog.ui.OfflineInstallDialog.prototype.getGearsDownloadPageUrl = function() {
+<a name="line193"></a>  return this.gearsDownloadPageUrl_;
+<a name="line194"></a>};
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * This allows you to provide a shorter and more user friendly URL to the Gears
+<a name="line199"></a> * download page since the Gears download URL can get quite ugly with all its
+<a name="line200"></a> * params.
+<a name="line201"></a> * @return {string} The Gears download page friendly URL.
+<a name="line202"></a> */
+<a name="line203"></a>goog.ui.OfflineInstallDialog.prototype.getGearsDownloadPageFriendlyUrl =
+<a name="line204"></a>    function() {
+<a name="line205"></a>  return this.gearsDownloadPageFriendlyUrl_ || this.gearsDownloadPageUrl_;
+<a name="line206"></a>};
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Sets the Gears download page friendly URL.
+<a name="line211"></a> * @see #getGearsDownloadPageFriendlyUrl
+<a name="line212"></a> * @param {string} url The Gears download page friendly URL.
+<a name="line213"></a> */
+<a name="line214"></a>goog.ui.OfflineInstallDialog.prototype.setGearsDownloadPageFriendlyUrl =
+<a name="line215"></a>    function(url) {
+<a name="line216"></a>  this.gearsDownloadPageFriendlyUrl_ = url;
+<a name="line217"></a>  this.invalidateAndUpdate_();
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Sets the screen type.
+<a name="line223"></a> * @param {string} screenType The screen type.
+<a name="line224"></a> */
+<a name="line225"></a>goog.ui.OfflineInstallDialog.prototype.setCurrentScreenType = function(
+<a name="line226"></a>    screenType) {
+<a name="line227"></a>  if (screenType != this.currentScreenType_) {
+<a name="line228"></a>    // If we have a current screen object then call deactivate on it
+<a name="line229"></a>    var currentScreen = this.getCurrentScreen();
+<a name="line230"></a>    if (currentScreen &amp;&amp; this.isInDocument()) {
+<a name="line231"></a>      currentScreen.deactivate();
+<a name="line232"></a>    }
+<a name="line233"></a>    this.currentScreenType_ = screenType;
+<a name="line234"></a>    this.invalidateAndUpdate_();
+<a name="line235"></a>  }
+<a name="line236"></a>};
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>/**
+<a name="line240"></a> * @return {string} The screen type.
+<a name="line241"></a> */
+<a name="line242"></a>goog.ui.OfflineInstallDialog.prototype.getCurrentScreenType = function() {
+<a name="line243"></a>  return this.currentScreenType_;
+<a name="line244"></a>};
+<a name="line245"></a>
+<a name="line246"></a>
+<a name="line247"></a>/**
+<a name="line248"></a> * @return {goog.ui.OfflineInstallDialogScreen?} The current screen object.
+<a name="line249"></a> */
+<a name="line250"></a>goog.ui.OfflineInstallDialog.prototype.getCurrentScreen = function() {
+<a name="line251"></a>  return this.getScreen(this.currentScreenType_);
+<a name="line252"></a>};
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * Returns the screen object for a given registered type or null if no such type
+<a name="line257"></a> * exists. This will create a screen object for a registered type as needed.
+<a name="line258"></a> * @param {string} type  The type of screen to get.
+<a name="line259"></a> * @return {goog.ui.OfflineInstallDialogScreen?} The screen object.
+<a name="line260"></a> */
+<a name="line261"></a>goog.ui.OfflineInstallDialog.prototype.getScreen = function(type) {
+<a name="line262"></a>  if (this.screens_[type]) {
+<a name="line263"></a>    return this.screens_[type];
+<a name="line264"></a>  }
+<a name="line265"></a>  // Construct lazily as needed
+<a name="line266"></a>  if (this.screenConstructors_[type]) {
+<a name="line267"></a>    return this.screens_[type] = new this.screenConstructors_[type](this);
+<a name="line268"></a>  }
+<a name="line269"></a>  return null;
+<a name="line270"></a>};
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * Registers a screen constructor to be usable with the dialog.
+<a name="line275"></a> * @param {string} type  The type of this screen.
+<a name="line276"></a> * @param {Function} constr  A function that represents a constructor that
+<a name="line277"></a> *     extends goog.ui.OfflineInstallDialogScreen.
+<a name="line278"></a> */
+<a name="line279"></a>goog.ui.OfflineInstallDialog.prototype.registerScreenType = function(type,
+<a name="line280"></a>                                                                     constr) {
+<a name="line281"></a>  this.screenConstructors_[type] = constr;
+<a name="line282"></a>  // Remove screen in case it already exists.
+<a name="line283"></a>  if (this.screens_[type]) {
+<a name="line284"></a>    var isCurrenScreenType = this.currentScreenType_ == type;
+<a name="line285"></a>    this.screens_[type].dispose();
+<a name="line286"></a>    delete this.screens_[type];
+<a name="line287"></a>    if (isCurrenScreenType) {
+<a name="line288"></a>      this.invalidateAndUpdate_();
+<a name="line289"></a>    }
+<a name="line290"></a>  }
+<a name="line291"></a>};
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * Registers an instance of a screen to be usable with the dialog.
+<a name="line296"></a> * @param {goog.ui.OfflineInstallDialogScreen} screen The screen to register.
+<a name="line297"></a> */
+<a name="line298"></a>goog.ui.OfflineInstallDialog.prototype.registerScreen = function(screen) {
+<a name="line299"></a>  this.screens_[screen.getType()] = screen;
+<a name="line300"></a>};
+<a name="line301"></a>
+<a name="line302"></a>
+<a name="line303"></a>/** @inheritDoc */
+<a name="line304"></a>goog.ui.OfflineInstallDialog.prototype.setVisible = function(visible) {
+<a name="line305"></a>  if (this.isInDocument() &amp;&amp; visible) {
+<a name="line306"></a>    if (this.dirty_) {
+<a name="line307"></a>      this.update();
+<a name="line308"></a>    }
+<a name="line309"></a>  }
+<a name="line310"></a>
+<a name="line311"></a>  goog.ui.OfflineInstallDialog.superClass_.setVisible.call(this, visible);
+<a name="line312"></a>};
+<a name="line313"></a>
+<a name="line314"></a>
+<a name="line315"></a>/** @inheritDoc */
+<a name="line316"></a>goog.ui.OfflineInstallDialog.prototype.createDom = function() {
+<a name="line317"></a>  goog.ui.OfflineInstallDialog.superClass_.createDom.call(this);
+<a name="line318"></a>  this.update();
+<a name="line319"></a>};
+<a name="line320"></a>
+<a name="line321"></a>
+<a name="line322"></a>/** @inheritDoc */
+<a name="line323"></a>goog.ui.OfflineInstallDialog.prototype.enterDocument = function() {
+<a name="line324"></a>  goog.ui.OfflineInstallDialog.superClass_.enterDocument.call(this);
+<a name="line325"></a>
+<a name="line326"></a>  this.getHandler().listen(
+<a name="line327"></a>      this, goog.ui.Dialog.EventType.SELECT, this.handleSelect_);
+<a name="line328"></a>
+<a name="line329"></a>  if (this.dirty_) {
+<a name="line330"></a>    this.update();
+<a name="line331"></a>  }
+<a name="line332"></a>};
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * Updates the dialog. This will ensure the correct screen is shown.
+<a name="line337"></a> */
+<a name="line338"></a>goog.ui.OfflineInstallDialog.prototype.update = function() {
+<a name="line339"></a>  if (this.getElement()) {
+<a name="line340"></a>    var screen = this.getCurrentScreen();
+<a name="line341"></a>    if (screen) {
+<a name="line342"></a>      screen.activate();
+<a name="line343"></a>    }
+<a name="line344"></a>
+<a name="line345"></a>    // Clear the dirty state.
+<a name="line346"></a>    this.dirty_ = false;
+<a name="line347"></a>  }
+<a name="line348"></a>};
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>/**
+<a name="line352"></a> * Handles the SELECT_EVENT for the current dialog. Forward the event to the
+<a name="line353"></a> * correct screen object and let the screen decide where to go next.
+<a name="line354"></a> * @param {goog.ui.Dialog.Event} e The event.
+<a name="line355"></a> * @private
+<a name="line356"></a> */
+<a name="line357"></a>goog.ui.OfflineInstallDialog.prototype.handleSelect_ = function(e) {
+<a name="line358"></a>  var screen = this.getCurrentScreen();
+<a name="line359"></a>  if (screen) {
+<a name="line360"></a>    screen.handleSelect(e);
+<a name="line361"></a>  }
+<a name="line362"></a>};
+<a name="line363"></a>
+<a name="line364"></a>
+<a name="line365"></a>/**
+<a name="line366"></a> * Opens a new browser window with the Gears download page and changes
+<a name="line367"></a> * the screen to the installing gears page.
+<a name="line368"></a> */
+<a name="line369"></a>goog.ui.OfflineInstallDialog.prototype.goToGearsDownloadPage = function() {
+<a name="line370"></a>  goog.window.open(this.gearsDownloadPageUrl_);
+<a name="line371"></a>};
+<a name="line372"></a>
+<a name="line373"></a>
+<a name="line374"></a>/** @inheritDoc */
+<a name="line375"></a>goog.ui.OfflineInstallDialog.prototype.disposeInternal = function() {
+<a name="line376"></a>  goog.ui.OfflineInstallDialog.superClass_.disposeInternal.call(this);
+<a name="line377"></a>
+<a name="line378"></a>  delete this.screenConstructors_;
+<a name="line379"></a>  for (var type in this.screens_) {
+<a name="line380"></a>    this.screens_[type].dispose();
+<a name="line381"></a>  }
+<a name="line382"></a>  delete this.screens_;
+<a name="line383"></a>};
+<a name="line384"></a>
+<a name="line385"></a>
+<a name="line386"></a>
+<a name="line387"></a>/**
+<a name="line388"></a> * Represents a screen on the dialog. You can create new screens and add them
+<a name="line389"></a> * to the offline install dialog by calling registerScreenType and
+<a name="line390"></a> * setCurrentScreenType.
+<a name="line391"></a> * @param {goog.ui.OfflineInstallDialog} dialog  The dialog this screen should
+<a name="line392"></a> *     work with.
+<a name="line393"></a> * @param {string} type  The screen type name.
+<a name="line394"></a> * @constructor
+<a name="line395"></a> * @extends {goog.Disposable}
+<a name="line396"></a> */
+<a name="line397"></a>goog.ui.OfflineInstallDialogScreen = function(dialog, type) {
+<a name="line398"></a>  /**
+<a name="line399"></a>   * @type {goog.ui.OfflineInstallDialog}
+<a name="line400"></a>   * @protected
+<a name="line401"></a>   * @suppress {underscore}
+<a name="line402"></a>   */
+<a name="line403"></a>  this.dialog_ = dialog;
+<a name="line404"></a>
+<a name="line405"></a>  /**
+<a name="line406"></a>   * @type {string}
+<a name="line407"></a>   * @private
+<a name="line408"></a>   */
+<a name="line409"></a>  this.type_ = type;
+<a name="line410"></a>
+<a name="line411"></a>  /**
+<a name="line412"></a>   * @type {goog.dom.DomHelper}
+<a name="line413"></a>   * @private
+<a name="line414"></a>   */
+<a name="line415"></a>  this.dom_ = dialog.getDomHelper();
+<a name="line416"></a>};
+<a name="line417"></a>goog.inherits(goog.ui.OfflineInstallDialogScreen, goog.Disposable);
+<a name="line418"></a>
+<a name="line419"></a>
+<a name="line420"></a>/**
+<a name="line421"></a> * The HTML content to show on the screen.
+<a name="line422"></a> * @type {string}
+<a name="line423"></a> * @private
+<a name="line424"></a> */
+<a name="line425"></a>goog.ui.OfflineInstallDialogScreen.prototype.content_ = &#39;&#39;;
+<a name="line426"></a>
+<a name="line427"></a>
+<a name="line428"></a>/**
+<a name="line429"></a> * The title to show on the dialog.
+<a name="line430"></a> * @type {string}
+<a name="line431"></a> * @private
+<a name="line432"></a> */
+<a name="line433"></a>goog.ui.OfflineInstallDialogScreen.prototype.title_ = &#39;&#39;;
+<a name="line434"></a>
+<a name="line435"></a>
+<a name="line436"></a>/**
+<a name="line437"></a> * The button set to use with this screen.
+<a name="line438"></a> * @type {goog.ui.Dialog.ButtonSet}
+<a name="line439"></a> * @private
+<a name="line440"></a> */
+<a name="line441"></a>goog.ui.OfflineInstallDialogScreen.prototype.buttonSet_;
+<a name="line442"></a>
+<a name="line443"></a>
+<a name="line444"></a>/**
+<a name="line445"></a> * @return {goog.ui.OfflineInstallDialog} The dialog the screen will be
+<a name="line446"></a> *     displayed in.
+<a name="line447"></a> */
+<a name="line448"></a>goog.ui.OfflineInstallDialogScreen.prototype.getDialog = function() {
+<a name="line449"></a>  return this.dialog_;
+<a name="line450"></a>};
+<a name="line451"></a>
+<a name="line452"></a>
+<a name="line453"></a>/**
+<a name="line454"></a> * Returns the type of the screen. This is used to identify the screen type this
+<a name="line455"></a> * reflects.
+<a name="line456"></a> * @return {string} The type of the screen.
+<a name="line457"></a> */
+<a name="line458"></a>goog.ui.OfflineInstallDialogScreen.prototype.getType = function() {
+<a name="line459"></a>  return this.type_;
+<a name="line460"></a>};
+<a name="line461"></a>
+<a name="line462"></a>
+<a name="line463"></a>/**
+<a name="line464"></a> * @return {goog.ui.Dialog.ButtonSet} The button set to use with this screen.
+<a name="line465"></a> */
+<a name="line466"></a>goog.ui.OfflineInstallDialogScreen.prototype.getButtonSet = function() {
+<a name="line467"></a>  return this.buttonSet_;
+<a name="line468"></a>};
+<a name="line469"></a>
+<a name="line470"></a>
+<a name="line471"></a>/**
+<a name="line472"></a> * Sets the button set to use with this screen.
+<a name="line473"></a> * @param {goog.ui.Dialog.ButtonSet} bs The button set to use.
+<a name="line474"></a> */
+<a name="line475"></a>goog.ui.OfflineInstallDialogScreen.prototype.setButtonSet = function(bs) {
+<a name="line476"></a>  this.buttonSet_ = bs;
+<a name="line477"></a>};
+<a name="line478"></a>
+<a name="line479"></a>
+<a name="line480"></a>/**
+<a name="line481"></a> * @return {string} The HTML content to used for this screen.
+<a name="line482"></a> */
+<a name="line483"></a>goog.ui.OfflineInstallDialogScreen.prototype.getContent = function() {
+<a name="line484"></a>  return this.content_;
+<a name="line485"></a>};
+<a name="line486"></a>
+<a name="line487"></a>
+<a name="line488"></a>/**
+<a name="line489"></a> * Sets the HTML content to use for this screen.
+<a name="line490"></a> * @param {string} html  The HTML text to use as content for the screen.
+<a name="line491"></a> */
+<a name="line492"></a>goog.ui.OfflineInstallDialogScreen.prototype.setContent = function(html) {
+<a name="line493"></a>  this.content_ = html;
+<a name="line494"></a>};
+<a name="line495"></a>
+<a name="line496"></a>
+<a name="line497"></a>/**
+<a name="line498"></a> * @return {string} The text title to used for the dialog when this screen is
+<a name="line499"></a> *     shown.
+<a name="line500"></a> */
+<a name="line501"></a>goog.ui.OfflineInstallDialogScreen.prototype.getTitle = function() {
+<a name="line502"></a>  return this.title_ || this.dialog_.getTitle();
+<a name="line503"></a>};
+<a name="line504"></a>
+<a name="line505"></a>
+<a name="line506"></a>/**
+<a name="line507"></a> * Sets the plain text title to use for this screen.
+<a name="line508"></a> * @param {string} title  The plain text to use as a title on the dialog.
+<a name="line509"></a> */
+<a name="line510"></a>goog.ui.OfflineInstallDialogScreen.prototype.setTitle = function(title) {
+<a name="line511"></a>  this.title_ = title;
+<a name="line512"></a>};
+<a name="line513"></a>
+<a name="line514"></a>
+<a name="line515"></a>/**
+<a name="line516"></a> * @return {string} A custom class name that should be added to the dialog when
+<a name="line517"></a> *     this screen is active.
+<a name="line518"></a> */
+<a name="line519"></a>goog.ui.OfflineInstallDialogScreen.prototype.getCustomClassName = function() {
+<a name="line520"></a>  return this.customClassName_;
+<a name="line521"></a>};
+<a name="line522"></a>
+<a name="line523"></a>
+<a name="line524"></a>/**
+<a name="line525"></a> * Sets the custom class name that should be added to the dialog when this
+<a name="line526"></a> * screen is active.
+<a name="line527"></a> * @param {string} customClassName  The custom class name.
+<a name="line528"></a> */
+<a name="line529"></a>goog.ui.OfflineInstallDialogScreen.prototype.setCustomClassName = function(
+<a name="line530"></a>    customClassName) {
+<a name="line531"></a>  this.customClassName_ = customClassName;
+<a name="line532"></a>};
+<a name="line533"></a>
+<a name="line534"></a>
+<a name="line535"></a>/**
+<a name="line536"></a> * Called when the screen is shown. At this point the dialog is in the document.
+<a name="line537"></a> */
+<a name="line538"></a>goog.ui.OfflineInstallDialogScreen.prototype.activate = function() {
+<a name="line539"></a>  var d = this.dialog_;
+<a name="line540"></a>  // Add custom class.
+<a name="line541"></a>  var customClassName = this.getCustomClassName();
+<a name="line542"></a>  if (customClassName) {
+<a name="line543"></a>    goog.dom.classes.add(d.getElement(), customClassName);
+<a name="line544"></a>  }
+<a name="line545"></a>
+<a name="line546"></a>  d.setTitle(this.getTitle());
+<a name="line547"></a>  d.setContent(this.getContent());
+<a name="line548"></a>  d.setButtonSet(this.getButtonSet());
+<a name="line549"></a>};
+<a name="line550"></a>
+<a name="line551"></a>
+<a name="line552"></a>/**
+<a name="line553"></a> * Called when the screen is hidden.  At this point the dialog is in the
+<a name="line554"></a> * document.
+<a name="line555"></a> */
+<a name="line556"></a>goog.ui.OfflineInstallDialogScreen.prototype.deactivate = function() {
+<a name="line557"></a>  // Remove custom class name
+<a name="line558"></a>  var customClassName = this.getCustomClassName();
+<a name="line559"></a>  if (customClassName) {
+<a name="line560"></a>    goog.dom.classes.remove(this.dialog_.getElement(), customClassName);
+<a name="line561"></a>  }
+<a name="line562"></a>};
+<a name="line563"></a>
+<a name="line564"></a>
+<a name="line565"></a>/**
+<a name="line566"></a> * Called when the user clicks any of the buttons for this dialog screen.
+<a name="line567"></a> * @param {goog.ui.Dialog.Event} e The dialog event.
+<a name="line568"></a> */
+<a name="line569"></a>goog.ui.OfflineInstallDialogScreen.prototype.handleSelect = function(e) {
+<a name="line570"></a>
+<a name="line571"></a>};
+<a name="line572"></a>
+<a name="line573"></a>
+<a name="line574"></a>
+<a name="line575"></a>// Classes for some of the standard screens
+<a name="line576"></a>
+<a name="line577"></a>/**
+<a name="line578"></a> * This screen is shown to users that do have Gears installed but have
+<a name="line579"></a> * not enabled the current application for offline access.
+<a name="line580"></a> * @param {goog.ui.OfflineInstallDialog} dialog  The dialog this is a screen
+<a name="line581"></a> *     for.
+<a name="line582"></a> * @constructor
+<a name="line583"></a> * @extends {goog.ui.OfflineInstallDialogScreen}
+<a name="line584"></a> */
+<a name="line585"></a>goog.ui.OfflineInstallDialog.EnableScreen = function(dialog) {
+<a name="line586"></a>  goog.ui.OfflineInstallDialogScreen.call(this, dialog,
+<a name="line587"></a>      goog.ui.OfflineInstallDialog.EnableScreen.TYPE);
+<a name="line588"></a>
+<a name="line589"></a>  /**
+<a name="line590"></a>   * @desc Text of button that enables offline functionality for the app.
+<a name="line591"></a>   * @hidden
+<a name="line592"></a>   */
+<a name="line593"></a>  var MSG_OFFLINE_DIALOG_ENABLE_GEARS = goog.getMsg(&#39;Enable offline access&#39;);
+<a name="line594"></a>
+<a name="line595"></a>  /**
+<a name="line596"></a>   * @type {string}
+<a name="line597"></a>   * @protected
+<a name="line598"></a>   * @suppress {underscore}
+<a name="line599"></a>   */
+<a name="line600"></a>  this.enableMsg_ = MSG_OFFLINE_DIALOG_ENABLE_GEARS;
+<a name="line601"></a>};
+<a name="line602"></a>goog.inherits(goog.ui.OfflineInstallDialog.EnableScreen,
+<a name="line603"></a>              goog.ui.OfflineInstallDialogScreen);
+<a name="line604"></a>
+<a name="line605"></a>
+<a name="line606"></a>/**
+<a name="line607"></a> * The type of this screen.
+<a name="line608"></a> * @type {string}
+<a name="line609"></a> */
+<a name="line610"></a>goog.ui.OfflineInstallDialog.EnableScreen.TYPE =
+<a name="line611"></a>    goog.ui.OfflineInstallDialog.ScreenType.ENABLE;
+<a name="line612"></a>
+<a name="line613"></a>
+<a name="line614"></a>/**
+<a name="line615"></a> * Should enable button action be performed immediately when the user presses
+<a name="line616"></a> * the enter key anywhere on the dialog. This should be set to false if there
+<a name="line617"></a> * are other action handlers on the dialog that may stop propagation.
+<a name="line618"></a> * @type {boolean}
+<a name="line619"></a> * @protected
+<a name="line620"></a> */
+<a name="line621"></a>goog.ui.OfflineInstallDialog.EnableScreen.prototype.enableOnEnter = true;
+<a name="line622"></a>
+<a name="line623"></a>
+<a name="line624"></a>/**
+<a name="line625"></a> * @return {goog.ui.Dialog.ButtonSet} The button set for the enable screen.
+<a name="line626"></a> */
+<a name="line627"></a>goog.ui.OfflineInstallDialog.EnableScreen.prototype.getButtonSet = function() {
+<a name="line628"></a>  if (!this.buttonSet_) {
+<a name="line629"></a>
+<a name="line630"></a>    /**
+<a name="line631"></a>     * @desc Text of button that cancels setting up Offline.
+<a name="line632"></a>     * @hidden
+<a name="line633"></a>     */
+<a name="line634"></a>    var MSG_OFFLINE_DIALOG_CANCEL = goog.getMsg(&#39;Cancel&#39;);
+<a name="line635"></a>    var buttonSet = this.buttonSet_ = new goog.ui.Dialog.ButtonSet(this.dom_);
+<a name="line636"></a>    buttonSet.set(goog.ui.OfflineInstallDialog.ButtonKeyType.ENABLE,
+<a name="line637"></a>        this.enableMsg_, this.enableOnEnter, false);
+<a name="line638"></a>    buttonSet.set(goog.ui.OfflineInstallDialog.ButtonKeyType.CANCEL,
+<a name="line639"></a>        MSG_OFFLINE_DIALOG_CANCEL, false, true);
+<a name="line640"></a>  }
+<a name="line641"></a>
+<a name="line642"></a>  return this.buttonSet_;
+<a name="line643"></a>};
+<a name="line644"></a>
+<a name="line645"></a>
+<a name="line646"></a>
+<a name="line647"></a>/**
+<a name="line648"></a> * This screen is shown to users that do have Gears installed but have
+<a name="line649"></a> * not enabled the current application for offline access.
+<a name="line650"></a> * @param {goog.ui.OfflineInstallDialog} dialog  The dialog this is a screen
+<a name="line651"></a> *     for.
+<a name="line652"></a> * @param {string} opt_type An optional type, for specifying a more specific
+<a name="line653"></a> *     type of dialog. Only for use by subclasses.
+<a name="line654"></a> * @constructor
+<a name="line655"></a> * @extends {goog.ui.OfflineInstallDialogScreen}
+<a name="line656"></a> */
+<a name="line657"></a>goog.ui.OfflineInstallDialog.InstallScreen = function(dialog, opt_type) {
+<a name="line658"></a>  goog.ui.OfflineInstallDialogScreen.call(this, dialog,
+<a name="line659"></a>      opt_type || goog.ui.OfflineInstallDialog.InstallScreen.TYPE);
+<a name="line660"></a>
+<a name="line661"></a>  /**
+<a name="line662"></a>   * @desc The description of the the install step to perform in order to
+<a name="line663"></a>   *     enable offline access.
+<a name="line664"></a>   * @hidden
+<a name="line665"></a>   */
+<a name="line666"></a>  var MSG_OFFLINE_DIALOG_INSTALL_GEARS = goog.getMsg(&#39;Install Gears&#39;);
+<a name="line667"></a>
+<a name="line668"></a>  /**
+<a name="line669"></a>   * @type {string}
+<a name="line670"></a>   * @protected
+<a name="line671"></a>   * @suppress {underscore}
+<a name="line672"></a>   */
+<a name="line673"></a>  this.installMsg_ = MSG_OFFLINE_DIALOG_INSTALL_GEARS;
+<a name="line674"></a>
+<a name="line675"></a>  /**
+<a name="line676"></a>   * @desc Text of button that opens the download page for Gears.
+<a name="line677"></a>   * @hidden
+<a name="line678"></a>   */
+<a name="line679"></a>  var MSG_INSTALL_GEARS = goog.getMsg(&#39;Get Gears now&#39;);
+<a name="line680"></a>
+<a name="line681"></a>  /**
+<a name="line682"></a>   * @type {string}
+<a name="line683"></a>   * @protected
+<a name="line684"></a>   * @suppress {underscore}
+<a name="line685"></a>   */
+<a name="line686"></a>  this.enableMsg_ = MSG_INSTALL_GEARS;
+<a name="line687"></a>
+<a name="line688"></a>  /**
+<a name="line689"></a>   * @desc Text of button that cancels setting up Offline.
+<a name="line690"></a>   * @hidden
+<a name="line691"></a>   */
+<a name="line692"></a>  var MSG_OFFLINE_DIALOG_CANCEL_2 = goog.getMsg(&#39;Cancel&#39;);
+<a name="line693"></a>
+<a name="line694"></a>  /**
+<a name="line695"></a>   * @type {string}
+<a name="line696"></a>   * @private
+<a name="line697"></a>   */
+<a name="line698"></a>  this.cancelMsg_ = MSG_OFFLINE_DIALOG_CANCEL_2;
+<a name="line699"></a>};
+<a name="line700"></a>goog.inherits(goog.ui.OfflineInstallDialog.InstallScreen,
+<a name="line701"></a>              goog.ui.OfflineInstallDialogScreen);
+<a name="line702"></a>
+<a name="line703"></a>
+<a name="line704"></a>/**
+<a name="line705"></a> * The type of this screen.
+<a name="line706"></a> * @type {string}
+<a name="line707"></a> */
+<a name="line708"></a>goog.ui.OfflineInstallDialog.InstallScreen.TYPE =
+<a name="line709"></a>    goog.ui.OfflineInstallDialog.ScreenType.INSTALL;
+<a name="line710"></a>
+<a name="line711"></a>
+<a name="line712"></a>/**
+<a name="line713"></a> * The text to show before the installation steps.
+<a name="line714"></a> * @type {string}
+<a name="line715"></a> * @private
+<a name="line716"></a> */
+<a name="line717"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.installDescription_ = &#39;&#39;;
+<a name="line718"></a>
+<a name="line719"></a>
+<a name="line720"></a>/**
+<a name="line721"></a> * The CSS className to use when showing the app url.
+<a name="line722"></a> * @type {string}
+<a name="line723"></a> * @private
+<a name="line724"></a> */
+<a name="line725"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.appUrlClassName_ =
+<a name="line726"></a>    goog.getCssName(&#39;goog-offlinedialog-url&#39;);
+<a name="line727"></a>
+<a name="line728"></a>
+<a name="line729"></a>/**
+<a name="line730"></a> * The CSS className for the element that contains the install steps.
+<a name="line731"></a> * @type {string}
+<a name="line732"></a> * @private
+<a name="line733"></a> */
+<a name="line734"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.stepsClassName_ =
+<a name="line735"></a>    goog.getCssName(&#39;goog-offlinedialog-steps&#39;);
+<a name="line736"></a>
+<a name="line737"></a>
+<a name="line738"></a>/**
+<a name="line739"></a> * The CSS className for each step element.
+<a name="line740"></a> * @type {string}
+<a name="line741"></a> * @private
+<a name="line742"></a> */
+<a name="line743"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.stepClassName_ =
+<a name="line744"></a>    goog.getCssName(&#39;goog-offlinedialog-step&#39;);
+<a name="line745"></a>
+<a name="line746"></a>
+<a name="line747"></a>/**
+<a name="line748"></a> * The CSS className for the element that shows the step number.
+<a name="line749"></a> * @type {string}
+<a name="line750"></a> * @private
+<a name="line751"></a> */
+<a name="line752"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.stepNumberClassName_ =
+<a name="line753"></a>    goog.getCssName(&#39;goog-offlinedialog-step-number&#39;);
+<a name="line754"></a>
+<a name="line755"></a>
+<a name="line756"></a>/**
+<a name="line757"></a> * The CSS className for the element that shows the step desccription.
+<a name="line758"></a> * @type {string}
+<a name="line759"></a> * @private
+<a name="line760"></a> */
+<a name="line761"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.stepDescriptionClassName_ =
+<a name="line762"></a>    goog.getCssName(&#39;goog-offlinedialog-step-description&#39;);
+<a name="line763"></a>
+<a name="line764"></a>
+<a name="line765"></a>/**
+<a name="line766"></a> * Should install button action be performed immediately when the user presses
+<a name="line767"></a> * the enter key anywhere on the dialog. This should be set to false if there
+<a name="line768"></a> * are other action handlers on the dialog that may stop propagation.
+<a name="line769"></a> * @type {boolean}
+<a name="line770"></a> * @protected
+<a name="line771"></a> */
+<a name="line772"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.isInstallButtonDefault =
+<a name="line773"></a>    true;
+<a name="line774"></a>
+<a name="line775"></a>
+<a name="line776"></a>/**
+<a name="line777"></a> * @return {goog.ui.Dialog.ButtonSet} The button set for the install screen.
+<a name="line778"></a> */
+<a name="line779"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.getButtonSet = function() {
+<a name="line780"></a>  if (!this.buttonSet_) {
+<a name="line781"></a>    var buttonSet = this.buttonSet_ = new goog.ui.Dialog.ButtonSet(this.dom_);
+<a name="line782"></a>    buttonSet.set(goog.ui.OfflineInstallDialog.ButtonKeyType.INSTALL,
+<a name="line783"></a>        this.enableMsg_, this.isInstallButtonDefault, false);
+<a name="line784"></a>    buttonSet.set(goog.ui.OfflineInstallDialog.ButtonKeyType.CANCEL,
+<a name="line785"></a>        this.cancelMsg_, false, true);
+<a name="line786"></a>  }
+<a name="line787"></a>
+<a name="line788"></a>  return this.buttonSet_;
+<a name="line789"></a>};
+<a name="line790"></a>
+<a name="line791"></a>
+<a name="line792"></a>/**
+<a name="line793"></a> * Sets the install description. This is the text before the installation steps.
+<a name="line794"></a> * @param {string} description  The install description.
+<a name="line795"></a> */
+<a name="line796"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.setInstallDescription =
+<a name="line797"></a>    function(description) {
+<a name="line798"></a>  this.installDescription_ = description;
+<a name="line799"></a>};
+<a name="line800"></a>
+<a name="line801"></a>
+<a name="line802"></a>/** @inheritDoc */
+<a name="line803"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.getContent = function() {
+<a name="line804"></a>  if (!this.content_) {
+<a name="line805"></a>    var sb = new goog.string.StringBuffer(this.installDescription_);
+<a name="line806"></a>
+<a name="line807"></a>    /**
+<a name="line808"></a>     * @desc Header for the section that states the steps for the user to
+<a name="line809"></a>     *     perform in order to enable offline access.
+<a name="line810"></a>     * @hidden
+<a name="line811"></a>     */
+<a name="line812"></a>    var MSG_OFFLINE_DIALOG_NEED_TO = goog.getMsg(&#39;You\&#39;ll need to:&#39;);
+<a name="line813"></a>    sb.append(&#39;&lt;div class=&quot;&#39;, this.stepsClassName_, &#39;&quot;&gt;&#39;,
+<a name="line814"></a>        MSG_OFFLINE_DIALOG_NEED_TO);
+<a name="line815"></a>
+<a name="line816"></a>    // Create and append the html for step #1.
+<a name="line817"></a>
+<a name="line818"></a>    sb.append(this.getStepHtml_(1, this.installMsg_));
+<a name="line819"></a>
+<a name="line820"></a>    // Create and append the html for step #2.
+<a name="line821"></a>    /**
+<a name="line822"></a>     * @desc One of the steps to perform in order to enable offline access.
+<a name="line823"></a>     * @hidden
+<a name="line824"></a>     */
+<a name="line825"></a>    var MSG_OFFLINE_DIALOG_RESTART_BROWSER = goog.getMsg(
+<a name="line826"></a>        &#39;Restart your browser&#39;);
+<a name="line827"></a>    sb.append(this.getStepHtml_(2, MSG_OFFLINE_DIALOG_RESTART_BROWSER));
+<a name="line828"></a>
+<a name="line829"></a>    // Create and append the html for step #3.
+<a name="line830"></a>    /**
+<a name="line831"></a>     * @desc One of the steps to perform in order to enable offline access.
+<a name="line832"></a>     * @hidden
+<a name="line833"></a>     */
+<a name="line834"></a>    var MSG_OFFLINE_DIALOG_COME_BACK = goog.getMsg(&#39;Come back to {$appUrl}!&#39;,
+<a name="line835"></a>        {&#39;appUrl&#39;: &#39;&lt;span class=&quot;&#39; + this.appUrlClassName_ + &#39;&quot;&gt;&#39; +
+<a name="line836"></a>            this.dialog_.getAppUrl() + &#39;&lt;/span&gt;&#39;});
+<a name="line837"></a>    sb.append(this.getStepHtml_(3, MSG_OFFLINE_DIALOG_COME_BACK));
+<a name="line838"></a>
+<a name="line839"></a>    // Close the enclosing element.
+<a name="line840"></a>    sb.append(&#39;&lt;/div&gt;&#39;);
+<a name="line841"></a>
+<a name="line842"></a>    this.content_ = String(sb);
+<a name="line843"></a>  }
+<a name="line844"></a>  return this.content_;
+<a name="line845"></a>};
+<a name="line846"></a>
+<a name="line847"></a>
+<a name="line848"></a>/**
+<a name="line849"></a> * Creats the html for a step.
+<a name="line850"></a> * @param {Number} stepNumber The number of the step.
+<a name="line851"></a> * @param {string} description The description of the step.
+<a name="line852"></a> * @private
+<a name="line853"></a> * @return {string} The step HTML in string form.
+<a name="line854"></a> */
+<a name="line855"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.getStepHtml_ = function(
+<a name="line856"></a>    stepNumber, description) {
+<a name="line857"></a>  return goog.string.buildString(&#39;&lt;div class=&quot;&#39;, this.stepClassName_,
+<a name="line858"></a>      &#39;&quot;&gt;&lt;span class=&quot;&#39;, this.stepNumberClassName_, &#39;&quot;&gt;&#39;, stepNumber,
+<a name="line859"></a>      &#39;&lt;/span&gt;&lt;span class=&quot;&#39;, this.stepDescriptionClassName_, &#39;&quot;&gt;&#39;,
+<a name="line860"></a>      description, &#39;&lt;/span&gt;&lt;/div&gt;&#39;);
+<a name="line861"></a>};
+<a name="line862"></a>
+<a name="line863"></a>
+<a name="line864"></a>/**
+<a name="line865"></a> * Overrides to go to Gears page.
+<a name="line866"></a> * @inheritDoc
+<a name="line867"></a> */
+<a name="line868"></a>goog.ui.OfflineInstallDialog.InstallScreen.prototype.handleSelect =
+<a name="line869"></a>    function(e) {
+<a name="line870"></a>  switch (e.key) {
+<a name="line871"></a>    case goog.ui.OfflineInstallDialog.ButtonKeyType.INSTALL:
+<a name="line872"></a>    case goog.ui.OfflineInstallDialog.ButtonKeyType.UPGRADE:
+<a name="line873"></a>      e.preventDefault();
+<a name="line874"></a>      this.dialog_.goToGearsDownloadPage();
+<a name="line875"></a>      this.dialog_.setCurrentScreenType(
+<a name="line876"></a>          goog.ui.OfflineInstallDialog.ScreenType.INSTALLING_GEARS);
+<a name="line877"></a>      break;
+<a name="line878"></a>  }
+<a name="line879"></a>};
+<a name="line880"></a>
+<a name="line881"></a>
+<a name="line882"></a>
+<a name="line883"></a>/**
+<a name="line884"></a> * This screen is shown to users that needs to update their version of Gears
+<a name="line885"></a> * before they can enabled the current application for offline access.
+<a name="line886"></a> * @param {goog.ui.OfflineInstallDialog} dialog  The dialog this is a screen
+<a name="line887"></a> *     for.
+<a name="line888"></a> * @constructor
+<a name="line889"></a> * @extends {goog.ui.OfflineInstallDialog.InstallScreen}
+<a name="line890"></a> */
+<a name="line891"></a>goog.ui.OfflineInstallDialog.UpgradeScreen = function(dialog) {
+<a name="line892"></a>  goog.ui.OfflineInstallDialog.InstallScreen.call(this, dialog,
+<a name="line893"></a>      goog.ui.OfflineInstallDialog.UpgradeScreen.TYPE);
+<a name="line894"></a>
+<a name="line895"></a>  /**
+<a name="line896"></a>   * @desc The description of the the upgrade step to perform in order to enable
+<a name="line897"></a>   *     offline access.
+<a name="line898"></a>   * @hidden
+<a name="line899"></a>   */
+<a name="line900"></a>  var MSG_OFFLINE_DIALOG_INSTALL_NEW_GEARS = goog.getMsg(
+<a name="line901"></a>      &#39;Install a new version of Gears&#39;);
+<a name="line902"></a>
+<a name="line903"></a>  /**
+<a name="line904"></a>   * Override to say upgrade instead of install.
+<a name="line905"></a>   * @type {string}
+<a name="line906"></a>   * @protected
+<a name="line907"></a>   * @suppress {underscore}
+<a name="line908"></a>   */
+<a name="line909"></a>  this.installMsg_ = MSG_OFFLINE_DIALOG_INSTALL_NEW_GEARS;
+<a name="line910"></a>
+<a name="line911"></a>  /**
+<a name="line912"></a>   * @desc Text of button that opens the download page for Gears for an
+<a name="line913"></a>   *     upgrade.
+<a name="line914"></a>   * @hidden
+<a name="line915"></a>   */
+<a name="line916"></a>  var MSG_OFFLINE_DIALOG_UPGRADE_GEARS =
+<a name="line917"></a>      goog.getMsg(&#39;Upgrade Gears now&#39;);
+<a name="line918"></a>
+<a name="line919"></a>  /**
+<a name="line920"></a>   * Override the text on the button to show upgrade instead of install.
+<a name="line921"></a>   * @type {string}
+<a name="line922"></a>   * @protected
+<a name="line923"></a>   * @suppress {underscore}
+<a name="line924"></a>   */
+<a name="line925"></a>  this.enableMsg_ = MSG_OFFLINE_DIALOG_UPGRADE_GEARS;
+<a name="line926"></a>};
+<a name="line927"></a>goog.inherits(goog.ui.OfflineInstallDialog.UpgradeScreen,
+<a name="line928"></a>              goog.ui.OfflineInstallDialog.InstallScreen);
+<a name="line929"></a>
+<a name="line930"></a>
+<a name="line931"></a>/**
+<a name="line932"></a> * The type of this screen.
+<a name="line933"></a> * @type {string}
+<a name="line934"></a> */
+<a name="line935"></a>goog.ui.OfflineInstallDialog.UpgradeScreen.TYPE =
+<a name="line936"></a>    goog.ui.OfflineInstallDialog.ScreenType.UPGRADE;
+<a name="line937"></a>
+<a name="line938"></a>
+<a name="line939"></a>/**
+<a name="line940"></a> * Should upgrade button action be performed immediately when the user presses
+<a name="line941"></a> * the enter key anywhere on the dialog. This should be set to false if there
+<a name="line942"></a> * are other action handlers on the dialog that may stop propagation.
+<a name="line943"></a> * @type {boolean}
+<a name="line944"></a> * @protected
+<a name="line945"></a> */
+<a name="line946"></a>goog.ui.OfflineInstallDialog.UpgradeScreen.prototype.isUpgradeButtonDefault =
+<a name="line947"></a>    true;
+<a name="line948"></a>
+<a name="line949"></a>
+<a name="line950"></a>/**
+<a name="line951"></a> * @return {goog.ui.Dialog.ButtonSet} The button set for the upgrade screen.
+<a name="line952"></a> */
+<a name="line953"></a>goog.ui.OfflineInstallDialog.UpgradeScreen.prototype.getButtonSet = function() {
+<a name="line954"></a>  if (!this.buttonSet_) {
+<a name="line955"></a>    /**
+<a name="line956"></a>     * @desc Text of button that cancels setting up Offline.
+<a name="line957"></a>     * @hidden
+<a name="line958"></a>     */
+<a name="line959"></a>    var MSG_OFFLINE_DIALOG_CANCEL_3 = goog.getMsg(&#39;Cancel&#39;);
+<a name="line960"></a>
+<a name="line961"></a>    var buttonSet = this.buttonSet_ = new goog.ui.Dialog.ButtonSet(this.dom_);
+<a name="line962"></a>    buttonSet.set(goog.ui.OfflineInstallDialog.ButtonKeyType.UPGRADE,
+<a name="line963"></a>        this.enableMsg_, this.isUpgradeButtonDefault, false);
+<a name="line964"></a>    buttonSet.set(goog.ui.OfflineInstallDialog.ButtonKeyType.CANCEL,
+<a name="line965"></a>        MSG_OFFLINE_DIALOG_CANCEL_3, false, true);
+<a name="line966"></a>  }
+<a name="line967"></a>
+<a name="line968"></a>  return this.buttonSet_;
+<a name="line969"></a>};
+<a name="line970"></a>
+<a name="line971"></a>
+<a name="line972"></a>/**
+<a name="line973"></a> * Sets the upgrade description. This is the text before the upgrade steps.
+<a name="line974"></a> * @param {string} description  The upgrade description.
+<a name="line975"></a> */
+<a name="line976"></a>goog.ui.OfflineInstallDialog.UpgradeScreen.prototype.setUpgradeDescription =
+<a name="line977"></a>    function(description) {
+<a name="line978"></a>  this.setInstallDescription(description);
+<a name="line979"></a>};
+<a name="line980"></a>
+<a name="line981"></a>
+<a name="line982"></a>/**
+<a name="line983"></a> * This screen is shown to users after the window to the Gears download page has
+<a name="line984"></a> * been opened.
+<a name="line985"></a> * @param {goog.ui.OfflineInstallDialog} dialog  The dialog this is a screen
+<a name="line986"></a> *     for.
+<a name="line987"></a> * @constructor
+<a name="line988"></a> * @extends {goog.ui.OfflineInstallDialogScreen}
+<a name="line989"></a> */
+<a name="line990"></a>goog.ui.OfflineInstallDialog.InstallingGearsScreen = function(dialog) {
+<a name="line991"></a>  goog.ui.OfflineInstallDialogScreen.call(this, dialog,
+<a name="line992"></a>      goog.ui.OfflineInstallDialog.InstallingGearsScreen.TYPE);
+<a name="line993"></a>};
+<a name="line994"></a>goog.inherits(goog.ui.OfflineInstallDialog.InstallingGearsScreen,
+<a name="line995"></a>              goog.ui.OfflineInstallDialogScreen);
+<a name="line996"></a>
+<a name="line997"></a>
+<a name="line998"></a>/**
+<a name="line999"></a> * The type of this screen.
+<a name="line1000"></a> * @type {string}
+<a name="line1001"></a> */
+<a name="line1002"></a>goog.ui.OfflineInstallDialog.InstallingGearsScreen.TYPE =
+<a name="line1003"></a>    goog.ui.OfflineInstallDialog.ScreenType.INSTALLING_GEARS;
+<a name="line1004"></a>
+<a name="line1005"></a>
+<a name="line1006"></a>/**
+<a name="line1007"></a> * The CSS className to use for bold text.
+<a name="line1008"></a> * @type {string}
+<a name="line1009"></a> * @private
+<a name="line1010"></a> */
+<a name="line1011"></a>goog.ui.OfflineInstallDialog.InstallingGearsScreen.prototype.boldClassName_ =
+<a name="line1012"></a>    goog.getCssName(&#39;goog-offlinedialog-bold&#39;);
+<a name="line1013"></a>
+<a name="line1014"></a>
+<a name="line1015"></a>/**
+<a name="line1016"></a> * Gets the button set for the dialog when the user is suposed to be installing
+<a name="line1017"></a> * Gears.
+<a name="line1018"></a> * @return {goog.ui.Dialog.ButtonSet} The button set.
+<a name="line1019"></a> */
+<a name="line1020"></a>goog.ui.OfflineInstallDialog.InstallingGearsScreen.prototype.getButtonSet =
+<a name="line1021"></a>    function() {
+<a name="line1022"></a>  if (!this.buttonSet_) {
+<a name="line1023"></a>    /**
+<a name="line1024"></a>     * @desc Text of button that closes the dialog.
+<a name="line1025"></a>     * @hidden
+<a name="line1026"></a>     */
+<a name="line1027"></a>    var MSG_OFFLINE_DIALOG_CLOSE = goog.getMsg(&#39;Close&#39;);
+<a name="line1028"></a>
+<a name="line1029"></a>    var buttonSet = this.buttonSet_ =
+<a name="line1030"></a>        new goog.ui.Dialog.ButtonSet(this.dom_);
+<a name="line1031"></a>    buttonSet.set(goog.ui.OfflineInstallDialog.ButtonKeyType.CLOSE,
+<a name="line1032"></a>        MSG_OFFLINE_DIALOG_CLOSE, false, true);
+<a name="line1033"></a>  }
+<a name="line1034"></a>  return this.buttonSet_;
+<a name="line1035"></a>};
+<a name="line1036"></a>
+<a name="line1037"></a>/**
+<a name="line1038"></a> * Gets the content for the dialog when the user is suposed to be installing
+<a name="line1039"></a> * Gears.
+<a name="line1040"></a> * @return {string} The content of the dialog as html.
+<a name="line1041"></a> */
+<a name="line1042"></a>goog.ui.OfflineInstallDialog.InstallingGearsScreen.prototype.getContent =
+<a name="line1043"></a>    function() {
+<a name="line1044"></a>  if (!this.content_) {
+<a name="line1045"></a>    /**
+<a name="line1046"></a>     * @desc Congratulate the user for trying to download Google gears,
+<a name="line1047"></a>     *     and give them a push in the right direction.
+<a name="line1048"></a>     */
+<a name="line1049"></a>    var MSG_OFFLINE_DIALOG_GEARS_DOWNLOAD_OPEN = goog.getMsg(
+<a name="line1050"></a>        &#39;Great! The Gears download page has been opened in a new &#39; +
+<a name="line1051"></a>        &#39;window. If you accidentally closed it, you can {$aBegin}open the &#39; +
+<a name="line1052"></a>        &#39;Gears download page again{$aEnd}.&#39;,
+<a name="line1053"></a>        {
+<a name="line1054"></a>          &#39;aBegin&#39;: &#39;&lt;a &#39; + &#39;target=&quot;_blank&quot; href=&quot;&#39; +
+<a name="line1055"></a>              this.getDialog().getGearsDownloadPageUrl() + &#39;&quot;&gt;&#39;,
+<a name="line1056"></a>          &#39;aEnd&#39;: &#39;&lt;/a&gt;&#39;
+<a name="line1057"></a>        });
+<a name="line1058"></a>
+<a name="line1059"></a>    /**
+<a name="line1060"></a>     * @desc Informs the user to come back to the the given site after
+<a name="line1061"></a>     *     installing Gears.
+<a name="line1062"></a>     * @hidden
+<a name="line1063"></a>     */
+<a name="line1064"></a>    var MSG_OFFLINE_DIALOG_GEARS_AFTER_INSTALL = goog.getMsg(&#39;After you\&#39;ve &#39; +
+<a name="line1065"></a>        &#39;downloaded and installed Gears, {$beginTag}restart your &#39; +
+<a name="line1066"></a>        &#39;browser, and then come back to {$appUrl}!{$endTag}&#39;,
+<a name="line1067"></a>        {
+<a name="line1068"></a>          &#39;beginTag&#39;: &#39;&lt;div class=&quot;&#39; + this.boldClassName_ + &#39;&quot;&gt;&#39;,
+<a name="line1069"></a>          &#39;endTag&#39;: &#39;&lt;/div&gt;&#39;, &#39;appUrl&#39;: this.getDialog().getAppUrl()
+<a name="line1070"></a>        });
+<a name="line1071"></a>
+<a name="line1072"></a>    // Set the content.
+<a name="line1073"></a>    this.content_ = goog.string.buildString(&#39;&lt;div&gt;&#39;,
+<a name="line1074"></a>        MSG_OFFLINE_DIALOG_GEARS_DOWNLOAD_OPEN, &#39;&lt;/div&gt;&lt;br/&gt;&lt;div&gt;&#39;,
+<a name="line1075"></a>        MSG_OFFLINE_DIALOG_GEARS_AFTER_INSTALL, &#39;&lt;/div&gt;&#39;);
+<a name="line1076"></a>  }
+<a name="line1077"></a>  return this.content_;
+<a name="line1078"></a>};
+</pre>
+
+
+</body>
+</html>

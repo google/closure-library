@@ -1,0 +1,149 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>viewportclientposition.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_positioning_viewportclientposition.js.html">viewportclientposition.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Client viewport positioning class.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.positioning.ViewportClientPosition&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.math.Box&#39;);
+<a name="line23"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line24"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line25"></a>goog.require(&#39;goog.positioning.ClientPosition&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Encapsulates a popup position where the popup is positioned relative to the
+<a name="line31"></a> * window (client) coordinates, and made to stay within the viewport.
+<a name="line32"></a> *
+<a name="line33"></a> * @param {number|goog.math.Coordinate} arg1 Left position or coordinate.
+<a name="line34"></a> * @param {number} opt_arg2 Top position if arg1 is a number representing the
+<a name="line35"></a> *     left position, ignored otherwise.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @extends {goog.positioning.ClientPosition}
+<a name="line38"></a> */
+<a name="line39"></a>goog.positioning.ViewportClientPosition = function(arg1, opt_arg2) {
+<a name="line40"></a>  goog.positioning.ClientPosition.call(this, arg1, opt_arg2);
+<a name="line41"></a>};
+<a name="line42"></a>goog.inherits(goog.positioning.ViewportClientPosition,
+<a name="line43"></a>              goog.positioning.ClientPosition);
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Repositions the popup according to the current state.
+<a name="line48"></a> *
+<a name="line49"></a> * @param {Element} element The DOM element of the popup.
+<a name="line50"></a> * @param {goog.positioning.Corner} popupCorner The corner of the popup
+<a name="line51"></a> *     element that that should be positioned adjacent to the anchorElement.
+<a name="line52"></a> *     One of the goog.positioning.Corner constants.
+<a name="line53"></a> * @param {goog.math.Box} opt_margin A margin specified in pixels.
+<a name="line54"></a> * @param {goog.math.Size} opt_preferredSize Preferred size fo the element.
+<a name="line55"></a> */
+<a name="line56"></a>goog.positioning.ViewportClientPosition.prototype.reposition = function(
+<a name="line57"></a>    element, popupCorner, opt_margin, opt_preferredSize) {
+<a name="line58"></a>  var viewportElt = goog.style.getClientViewportElement(element);
+<a name="line59"></a>  var viewport = goog.style.getVisibleRectForElement(viewportElt);
+<a name="line60"></a>  var scrollEl = goog.dom.getDomHelper(element).getDocumentScrollElement();
+<a name="line61"></a>  var clientPos = new goog.math.Coordinate(
+<a name="line62"></a>      this.coordinate.x + scrollEl.scrollLeft,
+<a name="line63"></a>      this.coordinate.y + scrollEl.scrollTop);
+<a name="line64"></a>
+<a name="line65"></a>  var failXY = goog.positioning.Overflow.FAIL_X |
+<a name="line66"></a>               goog.positioning.Overflow.FAIL_Y;
+<a name="line67"></a>  var corner = popupCorner;
+<a name="line68"></a>
+<a name="line69"></a>  // Try the requested position.
+<a name="line70"></a>  var status = goog.positioning.positionAtCoordinate(clientPos, element, corner,
+<a name="line71"></a>      opt_margin, viewport, failXY, opt_preferredSize);
+<a name="line72"></a>  if ((status &amp; goog.positioning.OverflowStatus.FAILED) == 0) {
+<a name="line73"></a>    return;
+<a name="line74"></a>  }
+<a name="line75"></a>
+<a name="line76"></a>  // Outside left or right edge of viewport, try try to flip it horizontally.
+<a name="line77"></a>  if (status &amp; goog.positioning.OverflowStatus.FAILED_LEFT ||
+<a name="line78"></a>      status &amp; goog.positioning.OverflowStatus.FAILED_RIGHT) {
+<a name="line79"></a>    corner = goog.positioning.flipCornerHorizontal(corner);
+<a name="line80"></a>  }
+<a name="line81"></a>
+<a name="line82"></a>  // Outside top or bottom edge of viewport, try try to flip it vertically.
+<a name="line83"></a>  if (status &amp; goog.positioning.OverflowStatus.FAILED_TOP ||
+<a name="line84"></a>      status &amp; goog.positioning.OverflowStatus.FAILED_BOTTOM) {
+<a name="line85"></a>    corner = goog.positioning.flipCornerVertical(corner);
+<a name="line86"></a>  }
+<a name="line87"></a>
+<a name="line88"></a>  // Try flipped position.
+<a name="line89"></a>  status = goog.positioning.positionAtCoordinate(clientPos, element, corner,
+<a name="line90"></a>      opt_margin, viewport, failXY, opt_preferredSize);
+<a name="line91"></a>  if ((status &amp; goog.positioning.OverflowStatus.FAILED) == 0) {
+<a name="line92"></a>    return;
+<a name="line93"></a>  }
+<a name="line94"></a>
+<a name="line95"></a>  // If that failed, the viewport is simply too small to contain the popup.
+<a name="line96"></a>  // Revert to the original position.
+<a name="line97"></a>  goog.positioning.positionAtCoordinate(
+<a name="line98"></a>      clientPos, element, popupCorner, opt_margin, viewport, undefined,
+<a name="line99"></a>      opt_preferredSize);
+<a name="line100"></a>};
+</pre>
+
+
+</body>
+</html>

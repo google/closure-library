@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+Copyright 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+<title>goog.events.Dragger</title>
+<script src="../base.js"></script>
+<script>
+
+goog.require('goog.events');
+goog.require('goog.fx.Dragger');
+goog.require('goog.fx.Dragger.EventType');
+
+</script>
+<link rel="stylesheet" href="css/demo.css">
+<style>
+
+#stopper {
+  position: absolute;
+  padding: 5px;
+  right: 20px;
+  top: 20px;
+  width: 100px;
+  height: 100px;
+  background: pink;
+  border: 1px solid red;
+}
+
+#out {
+  display: inline;
+  background: #eee;
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+
+</style>
+</head>
+<body>
+
+<h1>goog.events.Dragger</h1>
+
+<p>This demo shows how to use a dragger to capture mouse move events. It tests
+that you can drag things outside the window and that alerts ends the dragging.
+
+<h2 id=test onclick="alert('Click')">Drag me</h2>
+<pre id=out>Status</pre>
+
+<div id=stopper onmouseover="alert('Stop!')">Drag over me to generate an
+alert</div>
+
+<script>
+
+function update(e) {
+  print(e.clientX + ', ' +  e.clientY);
+}
+
+function print(s) {
+  document.getElementById('out').innerHTML = s;
+}
+
+var testEl = document.getElementById('test');
+
+goog.events.listen(testEl, goog.events.EventType.MOUSEDOWN, function(e) {
+
+  var d = new goog.fx.Dragger(testEl);
+  d.addEventListener(goog.fx.Dragger.EventType.DRAG, function(e) {
+    update(e);
+  });
+  d.addEventListener(goog.fx.Dragger.EventType.END, function(e) {
+    print('finish');
+    d.dispose();
+  });
+  d.startDrag(e);
+});
+
+</script>
+</body>
+</html>

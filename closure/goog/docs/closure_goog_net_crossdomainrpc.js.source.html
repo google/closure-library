@@ -1,0 +1,895 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>crossdomainrpc.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_net_crossdomainrpc.js.html">crossdomainrpc.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Cross domain RPC library using the &lt;a
+<a name="line17"></a> * href=&quot;http://go/xd2_design&quot; target=&quot;_top&quot;&gt;XD2 approach&lt;/a&gt;.
+<a name="line18"></a> *
+<a name="line19"></a> * &lt;h5&gt;Protocol&lt;/h5&gt;
+<a name="line20"></a> * Client sends a request across domain via a form submission.  Server
+<a name="line21"></a> * receives these parameters: &quot;xdpe:request-id&quot;, &quot;xdpe:dummy-uri&quot; (&quot;xdpe&quot; for
+<a name="line22"></a> * &quot;cross domain parameter to echo back&quot;) and other user parameters prefixed
+<a name="line23"></a> * with &quot;xdp&quot; (for &quot;cross domain parameter&quot;).  Headers are passed as parameters
+<a name="line24"></a> * prefixed with &quot;xdh&quot; (for &quot;cross domain header&quot;).  Only strings are supported
+<a name="line25"></a> * for parameters and headers.  A GET method is mapped to a form GET.  All
+<a name="line26"></a> * other methods are mapped to a POST.  Server is expected to produce a
+<a name="line27"></a> * HTML response such as the following:
+<a name="line28"></a> * &lt;pre&gt;
+<a name="line29"></a> * &amp;lt;body&amp;gt;
+<a name="line30"></a> * &amp;lt;script type=&quot;text/javascript&quot;
+<a name="line31"></a> *     src=&quot;path-to-crossdomainrpc.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+<a name="line32"></a> * var currentDirectory = location.href.substring(
+<a name="line33"></a> *     0, location.href.lastIndexOf(&#39;/&#39;)
+<a name="line34"></a> * );
+<a name="line35"></a> *
+<a name="line36"></a> * // echo all parameters prefixed with &quot;xdpe:&quot;
+<a name="line37"></a> * var echo = {};
+<a name="line38"></a> * echo[goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID] =
+<a name="line39"></a> *     &amp;lt;value of parameter &quot;xdpe:request-id&quot;&amp;gt;;
+<a name="line40"></a> * echo[goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI] =
+<a name="line41"></a> *     &amp;lt;value of parameter &quot;xdpe:dummy-uri&quot;&amp;gt;;
+<a name="line42"></a> *
+<a name="line43"></a> * goog.net.CrossDomainRpc.sendResponse(
+<a name="line44"></a> *     &#39;({&quot;result&quot;:&quot;&amp;lt;responseInJSON&quot;})&#39;,
+<a name="line45"></a> *     true,    // is JSON
+<a name="line46"></a> *     echo,    // parameters to echo back
+<a name="line47"></a> *     status,  // response status code
+<a name="line48"></a> *     headers  // response headers
+<a name="line49"></a> * );
+<a name="line50"></a> * &amp;lt;/script&amp;gt;
+<a name="line51"></a> * &amp;lt;/body&amp;gt;
+<a name="line52"></a> * &lt;/pre&gt;
+<a name="line53"></a> *
+<a name="line54"></a> * &lt;h5&gt;Server Side&lt;/h5&gt;
+<a name="line55"></a> * For an example of the server side, refer to the following files:
+<a name="line56"></a> * &lt;ul&gt;
+<a name="line57"></a> * &lt;li&gt;http://go/xdservletfilter.java&lt;/li&gt;
+<a name="line58"></a> * &lt;li&gt;http://go/xdservletrequest.java&lt;/li&gt;
+<a name="line59"></a> * &lt;li&gt;http://go/xdservletresponse.java&lt;/li&gt;
+<a name="line60"></a> * &lt;/ul&gt;
+<a name="line61"></a> *
+<a name="line62"></a> * &lt;h5&gt;System Requirements&lt;/h5&gt;
+<a name="line63"></a> * Tested on IE6, IE7, Firefox 2.0 and Safari nightly r23841.
+<a name="line64"></a> *
+<a name="line65"></a> */
+<a name="line66"></a>
+<a name="line67"></a>goog.provide(&#39;goog.net.CrossDomainRpc&#39;);
+<a name="line68"></a>
+<a name="line69"></a>goog.require(&#39;goog.Uri.QueryData&#39;);
+<a name="line70"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line71"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line72"></a>goog.require(&#39;goog.events&#39;);
+<a name="line73"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line74"></a>goog.require(&#39;goog.json&#39;);
+<a name="line75"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line76"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Creates a new instance of cross domain RPC
+<a name="line81"></a> * @extends {goog.events.EventTarget}
+<a name="line82"></a> * @constructor
+<a name="line83"></a> */
+<a name="line84"></a>goog.net.CrossDomainRpc = function() {
+<a name="line85"></a>  goog.events.EventTarget.call(this);
+<a name="line86"></a>};
+<a name="line87"></a>goog.inherits(goog.net.CrossDomainRpc, goog.events.EventTarget);
+<a name="line88"></a>
+<a name="line89"></a>
+<a name="line90"></a>/**
+<a name="line91"></a> * Cross-domain response iframe marker.
+<a name="line92"></a> * @type {string}
+<a name="line93"></a> * @private
+<a name="line94"></a> */
+<a name="line95"></a>goog.net.CrossDomainRpc.RESPONSE_MARKER_ = &#39;xdrp&#39;;
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/**
+<a name="line99"></a> * Use a fallback dummy resource if none specified or detected.
+<a name="line100"></a> * @type {boolean}
+<a name="line101"></a> * @private
+<a name="line102"></a> */
+<a name="line103"></a>goog.net.CrossDomainRpc.useFallBackDummyResource_ = true;
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Checks to see if we are executing inside a response iframe.  This is the
+<a name="line108"></a> * case when this page is used as a dummy resource to gain caller&#39;s domain.
+<a name="line109"></a> * @return {*} True if we are executing inside a response iframe; false
+<a name="line110"></a> *     otherwise.
+<a name="line111"></a> * @private
+<a name="line112"></a> */
+<a name="line113"></a>goog.net.CrossDomainRpc.isInResponseIframe_ = function() {
+<a name="line114"></a>  return window.location &amp;&amp; (window.location.hash.indexOf(
+<a name="line115"></a>      goog.net.CrossDomainRpc.RESPONSE_MARKER_) == 1 ||
+<a name="line116"></a>      window.location.search.indexOf(
+<a name="line117"></a>          goog.net.CrossDomainRpc.RESPONSE_MARKER_) == 1);
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Stops execution of the rest of the page if this page is loaded inside a
+<a name="line123"></a> *    response iframe.
+<a name="line124"></a> */
+<a name="line125"></a>if (goog.net.CrossDomainRpc.isInResponseIframe_()) {
+<a name="line126"></a>  if (goog.userAgent.IE) {
+<a name="line127"></a>    document.execCommand(&#39;Stop&#39;);
+<a name="line128"></a>  } else if (goog.userAgent.GECKO) {
+<a name="line129"></a>    window.stop();
+<a name="line130"></a>  } else {
+<a name="line131"></a>    throw Error(&#39;stopped&#39;);
+<a name="line132"></a>  }
+<a name="line133"></a>}
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Sets the URI for a dummy resource on caller&#39;s domain.  This function is
+<a name="line138"></a> * used for specifying a particular resource to use rather than relying on
+<a name="line139"></a> * auto detection.
+<a name="line140"></a> * @param {string} dummyResourceUri URI to dummy resource on the same domain
+<a name="line141"></a> *    of caller&#39;s page.
+<a name="line142"></a> */
+<a name="line143"></a>goog.net.CrossDomainRpc.setDummyResourceUri = function(dummyResourceUri) {
+<a name="line144"></a>  goog.net.CrossDomainRpc.dummyResourceUri_ = dummyResourceUri;
+<a name="line145"></a>};
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Sets whether a fallback dummy resource (&quot;/robots.txt&quot; on Firefox and Safari
+<a name="line150"></a> * and current page on IE) should be used when a suitable dummy resource is
+<a name="line151"></a> * not available.
+<a name="line152"></a> * @param {boolean} useFallBack Whether to use fallback or not.
+<a name="line153"></a> */
+<a name="line154"></a>goog.net.CrossDomainRpc.setUseFallBackDummyResource = function(useFallBack) {
+<a name="line155"></a>  goog.net.CrossDomainRpc.useFallBackDummyResource_ = useFallBack;
+<a name="line156"></a>};
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * Sends a request across domain.
+<a name="line161"></a> * @param {string} uri Uri to make request to.
+<a name="line162"></a> * @param {Function} opt_continuation Continuation function to be called
+<a name="line163"></a> *     when request is completed.  Takes one argument of an event object
+<a name="line164"></a> *     whose target has the following properties: &quot;status&quot; is the HTTP
+<a name="line165"></a> *     response status code, &quot;responseText&quot; is the response text,
+<a name="line166"></a> *     and &quot;headers&quot; is an object with all response headers.  The event
+<a name="line167"></a> *     target&#39;s getResponseJson() method returns a JavaScript object evaluated
+<a name="line168"></a> *     from the JSON response or undefined if response is not JSON.
+<a name="line169"></a> * @param {string} opt_method Method of request. Default is POST.
+<a name="line170"></a> * @param {Object} opt_params Parameters. Each property is turned into a
+<a name="line171"></a> *     request parameter.
+<a name="line172"></a> * @param {Object} opt_headers Map of headers of the request.
+<a name="line173"></a> */
+<a name="line174"></a>goog.net.CrossDomainRpc.send =
+<a name="line175"></a>    function(uri, opt_continuation, opt_method, opt_params, opt_headers) {
+<a name="line176"></a>  var xdrpc = new goog.net.CrossDomainRpc();
+<a name="line177"></a>  if (opt_continuation) {
+<a name="line178"></a>    goog.events.listen(xdrpc, goog.net.EventType.COMPLETE, opt_continuation);
+<a name="line179"></a>  }
+<a name="line180"></a>  goog.events.listen(xdrpc, goog.net.EventType.READY, xdrpc.reset);
+<a name="line181"></a>  xdrpc.sendRequest(uri, opt_method, opt_params, opt_headers);
+<a name="line182"></a>};
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Sets debug mode to true or false.  When debug mode is on, response iframes
+<a name="line187"></a> * are visible and left behind after their use is finished.
+<a name="line188"></a> * @param {boolean} flag Flag to indicate intention to turn debug model on
+<a name="line189"></a> *     (true) or off (false).
+<a name="line190"></a> */
+<a name="line191"></a>goog.net.CrossDomainRpc.setDebugMode = function(flag) {
+<a name="line192"></a>  goog.net.CrossDomainRpc.debugMode_ = flag;
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Logger for goog.net.CrossDomainRpc
+<a name="line198"></a> * @type {goog.debug.Logger}
+<a name="line199"></a> * @private
+<a name="line200"></a> */
+<a name="line201"></a>goog.net.CrossDomainRpc.logger_ =
+<a name="line202"></a>    goog.debug.Logger.getLogger(&#39;goog.net.CrossDomainRpc&#39;);
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * Creates the HTML of an input element
+<a name="line207"></a> * @param {string} name Name of input element.
+<a name="line208"></a> * @param {Object} value Value of input element.
+<a name="line209"></a> * @return {string} HTML of input element with that name and value.
+<a name="line210"></a> * @private
+<a name="line211"></a> */
+<a name="line212"></a>goog.net.CrossDomainRpc.createInputHtml_ = function(name, value) {
+<a name="line213"></a>  return &#39;&lt;textarea name=&quot;&#39; + name + &#39;&quot;&gt;&#39; +
+<a name="line214"></a>      goog.net.CrossDomainRpc.escapeAmpersand_(value) + &#39;&lt;/textarea&gt;&#39;;
+<a name="line215"></a>};
+<a name="line216"></a>
+<a name="line217"></a>
+<a name="line218"></a>/**
+<a name="line219"></a> * Escapes ampersand so that XML/HTML entities are submitted as is because
+<a name="line220"></a> * browser unescapes them when they are put into a text area.
+<a name="line221"></a> * @param {Object} value Value to escape.
+<a name="line222"></a> * @return {Object} Value with ampersand escaped, if value is a string;
+<a name="line223"></a> *     otherwise the value itself is returned.
+<a name="line224"></a> * @private
+<a name="line225"></a> */
+<a name="line226"></a>goog.net.CrossDomainRpc.escapeAmpersand_ = function(value) {
+<a name="line227"></a>  return value &amp;&amp; (goog.isString(value) || value.constructor == String) ?
+<a name="line228"></a>      value.replace(/&amp;/g, &#39;&amp;amp;&#39;) : value;
+<a name="line229"></a>};
+<a name="line230"></a>
+<a name="line231"></a>
+<a name="line232"></a>/**
+<a name="line233"></a> * Finds a dummy resource that can be used by response to gain domain of
+<a name="line234"></a> * requester&#39;s page.
+<a name="line235"></a> * @return {string} URI of the resource to use.
+<a name="line236"></a> * @private
+<a name="line237"></a> */
+<a name="line238"></a>goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
+<a name="line239"></a>  if (goog.net.CrossDomainRpc.dummyResourceUri_) {
+<a name="line240"></a>    return goog.net.CrossDomainRpc.dummyResourceUri_;
+<a name="line241"></a>  }
+<a name="line242"></a>
+<a name="line243"></a>  // find a style sheet if not on IE, which will attempt to save style sheet
+<a name="line244"></a>  if (goog.userAgent.GECKO) {
+<a name="line245"></a>    var links = document.getElementsByTagName(&#39;link&#39;);
+<a name="line246"></a>    for (var i = 0; i &lt; links.length; i++) {
+<a name="line247"></a>      var link = links[i];
+<a name="line248"></a>      // find a link which is on the same domain as this page
+<a name="line249"></a>      // cannot use one with &#39;?&#39; or &#39;#&#39; in its URL as it will confuse
+<a name="line250"></a>      // goog.net.CrossDomainRpc.getFramePayload_()
+<a name="line251"></a>      if (link.rel == &#39;stylesheet&#39; &amp;&amp;
+<a name="line252"></a>          goog.Uri.haveSameDomain(link.href, window.location.href) &amp;&amp;
+<a name="line253"></a>          link.href.indexOf(&#39;?&#39;) &lt; 0) {
+<a name="line254"></a>        return goog.net.CrossDomainRpc.removeHash_(link.href);
+<a name="line255"></a>      }
+<a name="line256"></a>    }
+<a name="line257"></a>  }
+<a name="line258"></a>
+<a name="line259"></a>  var images = document.getElementsByTagName(&#39;img&#39;);
+<a name="line260"></a>  for (var i = 0; i &lt; images.length; i++) {
+<a name="line261"></a>    var image = images[i];
+<a name="line262"></a>    // find a link which is on the same domain as this page
+<a name="line263"></a>    // cannot use one with &#39;?&#39; or &#39;#&#39; in its URL as it will confuse
+<a name="line264"></a>    // goog.net.CrossDomainRpc.getFramePayload_()
+<a name="line265"></a>    if (goog.Uri.haveSameDomain(image.src, window.location.href) &amp;&amp;
+<a name="line266"></a>        image.src.indexOf(&#39;?&#39;) &lt; 0) {
+<a name="line267"></a>      return goog.net.CrossDomainRpc.removeHash_(image.src);
+<a name="line268"></a>    }
+<a name="line269"></a>  }
+<a name="line270"></a>
+<a name="line271"></a>  if (!goog.net.CrossDomainRpc.useFallBackDummyResource_) {
+<a name="line272"></a>    throw Error(
+<a name="line273"></a>        &#39;No suitable dummy resource specified or detected for this page&#39;);
+<a name="line274"></a>  }
+<a name="line275"></a>
+<a name="line276"></a>  if (goog.userAgent.IE) {
+<a name="line277"></a>    // use this page as the dummy resource; remove hash from URL if any
+<a name="line278"></a>    return goog.net.CrossDomainRpc.removeHash_(window.location.href);
+<a name="line279"></a>  } else {
+<a name="line280"></a>    /**
+<a name="line281"></a>     * Try to use &quot;http://&lt;this-domain&gt;/robots.txt&quot; which may exist.  Even if
+<a name="line282"></a>     * it does not, an error page is returned and is a good dummy resource to
+<a name="line283"></a>     * use on Firefox and Safari.  An existing resource is faster because it
+<a name="line284"></a>     * is cached.
+<a name="line285"></a>     */
+<a name="line286"></a>    var locationHref = window.location.href;
+<a name="line287"></a>    var rootSlash = locationHref.indexOf(&#39;/&#39;, locationHref.indexOf(&#39;//&#39;) + 2);
+<a name="line288"></a>    var rootHref = locationHref.substring(0, rootSlash);
+<a name="line289"></a>    return rootHref + &#39;/robots.txt&#39;;
+<a name="line290"></a>  }
+<a name="line291"></a>};
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * Removes everything at and after hash from URI
+<a name="line296"></a> * @param {string} uri Uri to to remove hash.
+<a name="line297"></a> * @return {string} Uri with its hash and all characters after removed.
+<a name="line298"></a> * @private
+<a name="line299"></a> */
+<a name="line300"></a>goog.net.CrossDomainRpc.removeHash_ = function(uri) {
+<a name="line301"></a>  return uri.split(&#39;#&#39;)[0];
+<a name="line302"></a>};
+<a name="line303"></a>
+<a name="line304"></a>
+<a name="line305"></a>// ------------
+<a name="line306"></a>// request side
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>/**
+<a name="line310"></a> * next request id used to support multiple XD requests at the same time
+<a name="line311"></a> * @type {number}
+<a name="line312"></a> * @private
+<a name="line313"></a> */
+<a name="line314"></a>goog.net.CrossDomainRpc.nextRequestId_ = 0;
+<a name="line315"></a>
+<a name="line316"></a>
+<a name="line317"></a>/**
+<a name="line318"></a> * Header prefix.
+<a name="line319"></a> * @type {string}
+<a name="line320"></a> */
+<a name="line321"></a>goog.net.CrossDomainRpc.HEADER = &#39;xdh:&#39;;
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Parameter prefix.
+<a name="line326"></a> * @type {string}
+<a name="line327"></a> */
+<a name="line328"></a>goog.net.CrossDomainRpc.PARAM = &#39;xdp:&#39;;
+<a name="line329"></a>
+<a name="line330"></a>
+<a name="line331"></a>/**
+<a name="line332"></a> * Parameter to echo prefix.
+<a name="line333"></a> * @type {string}
+<a name="line334"></a> */
+<a name="line335"></a>goog.net.CrossDomainRpc.PARAM_ECHO = &#39;xdpe:&#39;;
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * Parameter to echo: request id
+<a name="line340"></a> * @type {string}
+<a name="line341"></a> */
+<a name="line342"></a>goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID =
+<a name="line343"></a>    goog.net.CrossDomainRpc.PARAM_ECHO + &#39;request-id&#39;;
+<a name="line344"></a>
+<a name="line345"></a>
+<a name="line346"></a>/**
+<a name="line347"></a> * Parameter to echo: dummy resource URI
+<a name="line348"></a> * @type {string}
+<a name="line349"></a> */
+<a name="line350"></a>goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI =
+<a name="line351"></a>    goog.net.CrossDomainRpc.PARAM_ECHO + &#39;dummy-uri&#39;;
+<a name="line352"></a>
+<a name="line353"></a>
+<a name="line354"></a>/**
+<a name="line355"></a> * Cross-domain request marker.
+<a name="line356"></a> * @type {string}
+<a name="line357"></a> * @private
+<a name="line358"></a> */
+<a name="line359"></a>goog.net.CrossDomainRpc.REQUEST_MARKER_ = &#39;xdrq&#39;;
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * Sends a request across domain.
+<a name="line364"></a> * @param {string} uri Uri to make request to.
+<a name="line365"></a> * @param {string} opt_method Method of request. Default is POST.
+<a name="line366"></a> * @param {Object} opt_params Parameters. Each property is turned into a
+<a name="line367"></a> *     request parameter.
+<a name="line368"></a> * @param {Object} opt_headers Map of headers of the request.
+<a name="line369"></a> */
+<a name="line370"></a>goog.net.CrossDomainRpc.prototype.sendRequest =
+<a name="line371"></a>    function(uri, opt_method, opt_params, opt_headers) {
+<a name="line372"></a>  // create request frame
+<a name="line373"></a>  var requestFrame = this.requestFrame_ = document.createElement(&#39;iframe&#39;);
+<a name="line374"></a>  var requestId = goog.net.CrossDomainRpc.nextRequestId_++;
+<a name="line375"></a>  requestFrame.id = goog.net.CrossDomainRpc.REQUEST_MARKER_ + &#39;-&#39; + requestId;
+<a name="line376"></a>  if (!goog.net.CrossDomainRpc.debugMode_) {
+<a name="line377"></a>    requestFrame.style.position = &#39;absolute&#39;;
+<a name="line378"></a>    requestFrame.style.top = &#39;-5000px&#39;;
+<a name="line379"></a>    requestFrame.style.left = &#39;-5000px&#39;;
+<a name="line380"></a>  }
+<a name="line381"></a>  document.body.appendChild(requestFrame);
+<a name="line382"></a>
+<a name="line383"></a>  // build inputs
+<a name="line384"></a>  var inputs = [];
+<a name="line385"></a>
+<a name="line386"></a>  // add request id
+<a name="line387"></a>  inputs.push(goog.net.CrossDomainRpc.createInputHtml_(
+<a name="line388"></a>      goog.net.CrossDomainRpc.PARAM_ECHO_REQUEST_ID, requestId));
+<a name="line389"></a>
+<a name="line390"></a>  // add dummy resource uri
+<a name="line391"></a>  var dummyUri = goog.net.CrossDomainRpc.getDummyResourceUri_();
+<a name="line392"></a>  goog.net.CrossDomainRpc.logger_.log(
+<a name="line393"></a>      goog.debug.Logger.Level.FINE, &#39;dummyUri: &#39; + dummyUri);
+<a name="line394"></a>  inputs.push(goog.net.CrossDomainRpc.createInputHtml_(
+<a name="line395"></a>      goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI, dummyUri));
+<a name="line396"></a>
+<a name="line397"></a>  // add parameters
+<a name="line398"></a>  if (opt_params) {
+<a name="line399"></a>    for (var name in opt_params) {
+<a name="line400"></a>      var value = opt_params[name];
+<a name="line401"></a>      inputs.push(goog.net.CrossDomainRpc.createInputHtml_(
+<a name="line402"></a>          goog.net.CrossDomainRpc.PARAM + name, value));
+<a name="line403"></a>    }
+<a name="line404"></a>  }
+<a name="line405"></a>
+<a name="line406"></a>  // add headers
+<a name="line407"></a>  if (opt_headers) {
+<a name="line408"></a>    for (var name in opt_headers) {
+<a name="line409"></a>      var value = opt_headers[name];
+<a name="line410"></a>      inputs.push(goog.net.CrossDomainRpc.createInputHtml_(
+<a name="line411"></a>          goog.net.CrossDomainRpc.HEADER + name, value));
+<a name="line412"></a>    }
+<a name="line413"></a>  }
+<a name="line414"></a>
+<a name="line415"></a>  var requestFrameContent = &#39;&lt;body&gt;&lt;form method=&quot;&#39; +
+<a name="line416"></a>      (opt_method == &#39;GET&#39; ? &#39;GET&#39; : &#39;POST&#39;) + &#39;&quot; action=&quot;&#39; +
+<a name="line417"></a>      uri + &#39;&quot;&gt;&#39; + inputs.join(&#39;&#39;) + &#39;&lt;/form&gt;&lt;/body&gt;&#39;;
+<a name="line418"></a>  var requestFrameDoc = goog.dom.getFrameContentDocument(requestFrame);
+<a name="line419"></a>  requestFrameDoc.open();
+<a name="line420"></a>  requestFrameDoc.write(requestFrameContent);
+<a name="line421"></a>  requestFrameDoc.close();
+<a name="line422"></a>
+<a name="line423"></a>  requestFrameDoc.forms[0].submit();
+<a name="line424"></a>  requestFrameDoc = null;
+<a name="line425"></a>
+<a name="line426"></a>  this.loadListenerKey_ = goog.events.listen(requestFrame,
+<a name="line427"></a>      goog.events.EventType.LOAD, function() {
+<a name="line428"></a>        goog.net.CrossDomainRpc.logger_.log(goog.debug.Logger.Level.FINE,
+<a name="line429"></a>            &#39;response ready&#39;);
+<a name="line430"></a>        this.responseReady_ = true;
+<a name="line431"></a>      }, false, this
+<a name="line432"></a>  );
+<a name="line433"></a>
+<a name="line434"></a>  this.receiveResponse_();
+<a name="line435"></a>};
+<a name="line436"></a>
+<a name="line437"></a>
+<a name="line438"></a>/**
+<a name="line439"></a> * period of response polling (ms)
+<a name="line440"></a> * @type {number}
+<a name="line441"></a> * @private
+<a name="line442"></a> */
+<a name="line443"></a>goog.net.CrossDomainRpc.RESPONSE_POLLING_PERIOD_ = 50;
+<a name="line444"></a>
+<a name="line445"></a>
+<a name="line446"></a>/**
+<a name="line447"></a> * timeout from response comes back to sendResponse is called (ms)
+<a name="line448"></a> * @type {number}
+<a name="line449"></a> * @private
+<a name="line450"></a> */
+<a name="line451"></a>goog.net.CrossDomainRpc.SEND_RESPONSE_TIME_OUT_ = 500;
+<a name="line452"></a>
+<a name="line453"></a>
+<a name="line454"></a>/**
+<a name="line455"></a> * Receives response by polling to check readiness of response and then
+<a name="line456"></a> *     reads response frames and assembles response data
+<a name="line457"></a> * @private
+<a name="line458"></a> */
+<a name="line459"></a>goog.net.CrossDomainRpc.prototype.receiveResponse_ = function() {
+<a name="line460"></a>  this.timeWaitedAfterResponseReady_ = 0;
+<a name="line461"></a>  var responseDetectorHandle = window.setInterval(goog.bind(function() {
+<a name="line462"></a>    this.detectResponse_(responseDetectorHandle);
+<a name="line463"></a>  }, this), goog.net.CrossDomainRpc.RESPONSE_POLLING_PERIOD_);
+<a name="line464"></a>};
+<a name="line465"></a>
+<a name="line466"></a>
+<a name="line467"></a>/**
+<a name="line468"></a> * Detects response inside request frame
+<a name="line469"></a> * @param {number} responseDetectorHandle Handle of detector.
+<a name="line470"></a> * @private
+<a name="line471"></a> */
+<a name="line472"></a>goog.net.CrossDomainRpc.prototype.detectResponse_ =
+<a name="line473"></a>    function(responseDetectorHandle) {
+<a name="line474"></a>  var requestFrameWindow = this.requestFrame_.contentWindow;
+<a name="line475"></a>  var grandChildrenLength = requestFrameWindow.frames.length;
+<a name="line476"></a>  var responseInfoFrame = null;
+<a name="line477"></a>  if (grandChildrenLength &gt; 0 &amp;&amp;
+<a name="line478"></a>      goog.net.CrossDomainRpc.isResponseInfoFrame_(responseInfoFrame =
+<a name="line479"></a>      requestFrameWindow.frames[grandChildrenLength - 1])) {
+<a name="line480"></a>    goog.net.CrossDomainRpc.logger_.log(goog.debug.Logger.Level.FINE,
+<a name="line481"></a>        &#39;xd response ready&#39;);
+<a name="line482"></a>
+<a name="line483"></a>    var responseInfoPayload = goog.net.CrossDomainRpc.getFramePayload_(
+<a name="line484"></a>        responseInfoFrame).substring(1);
+<a name="line485"></a>    var params = new goog.Uri.QueryData(responseInfoPayload);
+<a name="line486"></a>
+<a name="line487"></a>    var chunks = [];
+<a name="line488"></a>    var numChunks = Number(params.get(&#39;n&#39;));
+<a name="line489"></a>    goog.net.CrossDomainRpc.logger_.log(goog.debug.Logger.Level.FINE,
+<a name="line490"></a>        &#39;xd response number of chunks: &#39; + numChunks);
+<a name="line491"></a>    for (var i = 0; i &lt; numChunks; i++) {
+<a name="line492"></a>      var responseFrame = requestFrameWindow.frames[i];
+<a name="line493"></a>      if (!responseFrame || !responseFrame.location ||
+<a name="line494"></a>          !responseFrame.location.href) {
+<a name="line495"></a>        // On Safari 3.0, it is sometimes the case that the
+<a name="line496"></a>        // iframe exists but doesn&#39;t have a same domain href yet.
+<a name="line497"></a>        goog.net.CrossDomainRpc.logger_.log(goog.debug.Logger.Level.FINE,
+<a name="line498"></a>            &#39;xd response iframe not ready&#39;);
+<a name="line499"></a>        return;
+<a name="line500"></a>      }
+<a name="line501"></a>      var responseChunkPayload =
+<a name="line502"></a>          goog.net.CrossDomainRpc.getFramePayload_(responseFrame);
+<a name="line503"></a>      // go past &quot;chunk=&quot;
+<a name="line504"></a>      var chunkIndex = responseChunkPayload.indexOf(
+<a name="line505"></a>          goog.net.CrossDomainRpc.PARAM_CHUNK_) +
+<a name="line506"></a>          goog.net.CrossDomainRpc.PARAM_CHUNK_.length + 1;
+<a name="line507"></a>      var chunk = responseChunkPayload.substring(chunkIndex);
+<a name="line508"></a>      chunks.push(chunk);
+<a name="line509"></a>    }
+<a name="line510"></a>
+<a name="line511"></a>    window.clearInterval(responseDetectorHandle);
+<a name="line512"></a>
+<a name="line513"></a>    var responseData = chunks.join(&#39;&#39;);
+<a name="line514"></a>    // Payload is not encoded to begin with on IE. Decode in other cases only.
+<a name="line515"></a>    if (!goog.userAgent.IE) {
+<a name="line516"></a>      responseData = decodeURIComponent(responseData);
+<a name="line517"></a>    }
+<a name="line518"></a>
+<a name="line519"></a>    this.status = Number(params.get(&#39;status&#39;));
+<a name="line520"></a>    this.responseText = responseData;
+<a name="line521"></a>    this.responseTextIsJson_ = params.get(&#39;isDataJson&#39;) == &#39;true&#39;;
+<a name="line522"></a>    this.responseHeaders = goog.json.unsafeParse(
+<a name="line523"></a>        /** @type {string} */ (params.get(&#39;headers&#39;)));
+<a name="line524"></a>
+<a name="line525"></a>    this.dispatchEvent(goog.net.EventType.READY);
+<a name="line526"></a>    this.dispatchEvent(goog.net.EventType.COMPLETE);
+<a name="line527"></a>  } else {
+<a name="line528"></a>    if (this.responseReady_) {
+<a name="line529"></a>      /* The response has come back. But the first response iframe has not
+<a name="line530"></a>       * been created yet. If this lasts long enough, it is an error.
+<a name="line531"></a>       */
+<a name="line532"></a>      this.timeWaitedAfterResponseReady_ +=
+<a name="line533"></a>          goog.net.CrossDomainRpc.RESPONSE_POLLING_PERIOD_;
+<a name="line534"></a>      if (this.timeWaitedAfterResponseReady_ &gt;
+<a name="line535"></a>          goog.net.CrossDomainRpc.SEND_RESPONSE_TIME_OUT_) {
+<a name="line536"></a>        goog.net.CrossDomainRpc.logger_.log(goog.debug.Logger.Level.FINE,
+<a name="line537"></a>            &#39;xd response timed out&#39;);
+<a name="line538"></a>        window.clearInterval(responseDetectorHandle);
+<a name="line539"></a>
+<a name="line540"></a>        this.status = 500;
+<a name="line541"></a>        this.responseText = &#39;response timed out&#39;;
+<a name="line542"></a>        this.dispatchEvent(goog.net.EventType.READY);
+<a name="line543"></a>        this.dispatchEvent(goog.net.EventType.ERROR);
+<a name="line544"></a>        this.dispatchEvent(goog.net.EventType.COMPLETE);
+<a name="line545"></a>      }
+<a name="line546"></a>    }
+<a name="line547"></a>  }
+<a name="line548"></a>};
+<a name="line549"></a>
+<a name="line550"></a>
+<a name="line551"></a>/**
+<a name="line552"></a> * Checks whether a frame is response info frame.
+<a name="line553"></a> * @param {Object} frame Frame to check.
+<a name="line554"></a> * @return {boolean} True if frame is a response info frame; false otherwise.
+<a name="line555"></a> * @private
+<a name="line556"></a> */
+<a name="line557"></a>goog.net.CrossDomainRpc.isResponseInfoFrame_ = function(frame) {
+<a name="line558"></a>  /** @preserveTry */
+<a name="line559"></a>  try {
+<a name="line560"></a>    return goog.net.CrossDomainRpc.getFramePayload_(frame).indexOf(
+<a name="line561"></a>        goog.net.CrossDomainRpc.RESPONSE_INFO_MARKER_) == 1;
+<a name="line562"></a>  } catch (e) {
+<a name="line563"></a>    // frame not ready for same-domain access yet
+<a name="line564"></a>    return false;
+<a name="line565"></a>  }
+<a name="line566"></a>};
+<a name="line567"></a>
+<a name="line568"></a>
+<a name="line569"></a>/**
+<a name="line570"></a> * Returns the payload of a frame (value after # or ? on the URL).  This value
+<a name="line571"></a> * is URL encoded except IE, where the value is not encoded to begin with.
+<a name="line572"></a> * @param {Object} frame Frame.
+<a name="line573"></a> * @return {string} Payload of that frame.
+<a name="line574"></a> * @private
+<a name="line575"></a> */
+<a name="line576"></a>goog.net.CrossDomainRpc.getFramePayload_ = function(frame) {
+<a name="line577"></a>  var href = frame.location.href;
+<a name="line578"></a>  var question = href.indexOf(&#39;?&#39;);
+<a name="line579"></a>  var hash = href.indexOf(&#39;#&#39;);
+<a name="line580"></a>  // On IE, beucase the URL is not encoded, we can have a case where ?
+<a name="line581"></a>  // is the delimiter before payload and # in payload or # as the delimiter
+<a name="line582"></a>  // and ? in payload.  So here we treat whoever is the first as the delimiter.
+<a name="line583"></a>  var delimiter = question &lt; 0 ? hash :
+<a name="line584"></a>      hash &lt; 0 ? question : Math.min(question, hash);
+<a name="line585"></a>  return href.substring(delimiter);
+<a name="line586"></a>};
+<a name="line587"></a>
+<a name="line588"></a>
+<a name="line589"></a>/**
+<a name="line590"></a> * If response is JSON, evaluates it to a JavaScript object and
+<a name="line591"></a> * returns it; otherwise returns undefined.
+<a name="line592"></a> * @return {Object|undefined} JavaScript object if response is in JSON
+<a name="line593"></a> *     or undefined.
+<a name="line594"></a> */
+<a name="line595"></a>goog.net.CrossDomainRpc.prototype.getResponseJson = function() {
+<a name="line596"></a>  return this.responseTextIsJson_ ?
+<a name="line597"></a>      goog.json.unsafeParse(this.responseText) : undefined;
+<a name="line598"></a>};
+<a name="line599"></a>
+<a name="line600"></a>
+<a name="line601"></a>/**
+<a name="line602"></a> * @return {boolean} Whether the request completed with a success.
+<a name="line603"></a> */
+<a name="line604"></a>goog.net.CrossDomainRpc.prototype.isSuccess = function() {
+<a name="line605"></a>  // Definition similar to goog.net.XhrIo.prototype.isSuccess.
+<a name="line606"></a>  switch (this.status) {
+<a name="line607"></a>    case 200:       // Http Success
+<a name="line608"></a>    case 304:       // Http Cache
+<a name="line609"></a>      return true;
+<a name="line610"></a>
+<a name="line611"></a>    default:
+<a name="line612"></a>      return false;
+<a name="line613"></a>  }
+<a name="line614"></a>};
+<a name="line615"></a>
+<a name="line616"></a>
+<a name="line617"></a>/**
+<a name="line618"></a> * Removes request iframe used.
+<a name="line619"></a> */
+<a name="line620"></a>goog.net.CrossDomainRpc.prototype.reset = function() {
+<a name="line621"></a>  if (!goog.net.CrossDomainRpc.debugMode_) {
+<a name="line622"></a>    goog.net.CrossDomainRpc.logger_.log(goog.debug.Logger.Level.FINE,
+<a name="line623"></a>        &#39;request frame removed: &#39; + this.requestFrame_.id);
+<a name="line624"></a>    goog.events.unlistenByKey(this.loadListenerKey_);
+<a name="line625"></a>    this.requestFrame_.parentNode.removeChild(this.requestFrame_);
+<a name="line626"></a>  }
+<a name="line627"></a>  delete this.requestFrame_;
+<a name="line628"></a>};
+<a name="line629"></a>
+<a name="line630"></a>
+<a name="line631"></a>// -------------
+<a name="line632"></a>// response side
+<a name="line633"></a>
+<a name="line634"></a>
+<a name="line635"></a>/**
+<a name="line636"></a> * Name of response info iframe.
+<a name="line637"></a> * @type {string}
+<a name="line638"></a> * @private
+<a name="line639"></a> */
+<a name="line640"></a>goog.net.CrossDomainRpc.RESPONSE_INFO_MARKER_ =
+<a name="line641"></a>    goog.net.CrossDomainRpc.RESPONSE_MARKER_ + &#39;-info&#39;;
+<a name="line642"></a>
+<a name="line643"></a>
+<a name="line644"></a>/**
+<a name="line645"></a> * Maximal chunk size.  IE can only handle 4095 bytes on its URL.
+<a name="line646"></a> * 16MB has been tested on Firefox.  But 1MB is a practical size.
+<a name="line647"></a> * @type {number}
+<a name="line648"></a> * @private
+<a name="line649"></a> */
+<a name="line650"></a>goog.net.CrossDomainRpc.MAX_CHUNK_SIZE_ =
+<a name="line651"></a>    goog.userAgent.IE ? 4095 : 1024 * 1024;
+<a name="line652"></a>
+<a name="line653"></a>
+<a name="line654"></a>/**
+<a name="line655"></a> * Query parameter &#39;chunk&#39;.
+<a name="line656"></a> * @type {string}
+<a name="line657"></a> * @private
+<a name="line658"></a> */
+<a name="line659"></a>goog.net.CrossDomainRpc.PARAM_CHUNK_ = &#39;chunk&#39;;
+<a name="line660"></a>
+<a name="line661"></a>
+<a name="line662"></a>/**
+<a name="line663"></a> * Prefix before data chunk for passing other parameters.
+<a name="line664"></a> * type String
+<a name="line665"></a> * @private
+<a name="line666"></a> */
+<a name="line667"></a>goog.net.CrossDomainRpc.CHUNK_PREFIX_ =
+<a name="line668"></a>    goog.net.CrossDomainRpc.RESPONSE_MARKER_ + &#39;=1&amp;&#39; +
+<a name="line669"></a>    goog.net.CrossDomainRpc.PARAM_CHUNK_ + &#39;=&#39;;
+<a name="line670"></a>
+<a name="line671"></a>
+<a name="line672"></a>/**
+<a name="line673"></a> * Makes response available for grandparent (requester)&#39;s receiveResponse
+<a name="line674"></a> * call to pick up by creating a series of iframes pointed to the dummy URI
+<a name="line675"></a> * with a payload (value after either ? or #) carrying a chunk of response
+<a name="line676"></a> * data and a response info iframe that tells the grandparent (requester) the
+<a name="line677"></a> * readiness of response.
+<a name="line678"></a> * @param {string} data Response data (string or JSON string).
+<a name="line679"></a> * @param {boolean} isDataJson true if data is a JSON string; false if just a
+<a name="line680"></a> *     string.
+<a name="line681"></a> * @param {Object} echo Parameters to echo back
+<a name="line682"></a> *     &quot;xdpe:request-id&quot;: Server that produces the response needs to
+<a name="line683"></a> *     copy it here to support multiple current XD requests on the same page.
+<a name="line684"></a> *     &quot;xdpe:dummy-uri&quot;: URI to a dummy resource that response
+<a name="line685"></a> *     iframes point to to gain the domain of the client.  This can be an
+<a name="line686"></a> *     image (IE) or a CSS file (FF) found on the requester&#39;s page.
+<a name="line687"></a> *     Server should copy value from request parameter &quot;xdpe:dummy-uri&quot;.
+<a name="line688"></a> * @param {number} status HTTP response status code.
+<a name="line689"></a> * @param {string} headers Response headers in JSON format.
+<a name="line690"></a> */
+<a name="line691"></a>goog.net.CrossDomainRpc.sendResponse =
+<a name="line692"></a>    function(data, isDataJson, echo, status, headers) {
+<a name="line693"></a>  var dummyUri = echo[goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI];
+<a name="line694"></a>
+<a name="line695"></a>  // since the dummy-uri can be specified by the user, verify that it doesn&#39;t
+<a name="line696"></a>  // use any other protocols. (Specifically we don&#39;t want users to use a
+<a name="line697"></a>  // dummy-uri beginning with &quot;javascript:&quot;).
+<a name="line698"></a>  if (!goog.string.caseInsensitiveStartsWith(dummyUri, &#39;http://&#39;) &amp;&amp;
+<a name="line699"></a>      !goog.string.caseInsensitiveStartsWith(dummyUri, &#39;https://&#39;)) {
+<a name="line700"></a>    dummyUri = &#39;http://&#39; + dummyUri;
+<a name="line701"></a>  }
+<a name="line702"></a>
+<a name="line703"></a>  // usable chunk size is max less dummy URI less chunk prefix length
+<a name="line704"></a>  // TODO: Figure out why we need to do &quot;- 1&quot; below
+<a name="line705"></a>  var chunkSize = goog.net.CrossDomainRpc.MAX_CHUNK_SIZE_ - dummyUri.length -
+<a name="line706"></a>      1 - // payload delimiter (&#39;#&#39; or &#39;?&#39;)
+<a name="line707"></a>      goog.net.CrossDomainRpc.CHUNK_PREFIX_.length - 1;
+<a name="line708"></a>
+<a name="line709"></a>  /*
+<a name="line710"></a>   * Here we used to do URI encoding of data before we divide it into chunks
+<a name="line711"></a>   * and decode on the receiving end.  We don&#39;t do this any more on IE for the
+<a name="line712"></a>   * following reasons.
+<a name="line713"></a>   *
+<a name="line714"></a>   * 1) On IE, calling decodeURIComponent on a relatively large string is
+<a name="line715"></a>   *   extremely slow (~22s for 160KB).  So even a moderate amount of data
+<a name="line716"></a>   *   makes this library pretty much useless.  Fortunately, we can actually
+<a name="line717"></a>   *   put unencoded data on IE&#39;s URL and get it back reliably.  So we are
+<a name="line718"></a>   *   completely skipping encoding and decoding on IE.  When we call
+<a name="line719"></a>   *   getFrameHash_ to get it back, the value is still intact(*) and unencoded.
+<a name="line720"></a>   * 2) On Firefox, we have to call decodeURIComponent because location.hash
+<a name="line721"></a>   *   does decoding by itself.  Fortunately, decodeURIComponent is not slow
+<a name="line722"></a>   *   on Firefox.
+<a name="line723"></a>   * 3) Safari automatically encodes everything you put on URL and it does not
+<a name="line724"></a>   *   automatically decode when you access it via location.hash or
+<a name="line725"></a>   *   location.href.  So we encode it here and decode it in detectResponse_().
+<a name="line726"></a>   *
+<a name="line727"></a>   * NOTE: IE actually does encode only space to %20 and decodes that
+<a name="line728"></a>   *   automatically when you do location.href or location.hash.
+<a name="line729"></a>   */
+<a name="line730"></a>  if (!goog.userAgent.IE) {
+<a name="line731"></a>    data = encodeURIComponent(data);
+<a name="line732"></a>  }
+<a name="line733"></a>
+<a name="line734"></a>  var numChunksToSend = Math.ceil(data.length / chunkSize);
+<a name="line735"></a>  if (numChunksToSend == 0) {
+<a name="line736"></a>    goog.net.CrossDomainRpc.createResponseInfo_(
+<a name="line737"></a>        dummyUri, numChunksToSend, isDataJson, status, headers);
+<a name="line738"></a>  } else {
+<a name="line739"></a>    var numChunksSent = 0;
+<a name="line740"></a>    function checkToCreateResponseInfo_() {
+<a name="line741"></a>      if (++numChunksSent == numChunksToSend) {
+<a name="line742"></a>        goog.net.CrossDomainRpc.createResponseInfo_(
+<a name="line743"></a>            dummyUri, numChunksToSend, isDataJson, status, headers);
+<a name="line744"></a>      }
+<a name="line745"></a>    }
+<a name="line746"></a>
+<a name="line747"></a>    for (var i = 0; i &lt; numChunksToSend; i++) {
+<a name="line748"></a>      var chunkStart = i * chunkSize;
+<a name="line749"></a>      var chunkEnd = chunkStart + chunkSize;
+<a name="line750"></a>      var chunk = chunkEnd &gt; data.length ?
+<a name="line751"></a>          data.substring(chunkStart) :
+<a name="line752"></a>          data.substring(chunkStart, chunkEnd);
+<a name="line753"></a>
+<a name="line754"></a>      var responseFrame = document.createElement(&#39;iframe&#39;);
+<a name="line755"></a>      responseFrame.src = dummyUri +
+<a name="line756"></a>          goog.net.CrossDomainRpc.getPayloadDelimiter_(dummyUri) +
+<a name="line757"></a>          goog.net.CrossDomainRpc.CHUNK_PREFIX_ + chunk;
+<a name="line758"></a>      document.body.appendChild(responseFrame);
+<a name="line759"></a>
+<a name="line760"></a>      // We used to call the function below when handling load event of
+<a name="line761"></a>      // responseFrame.  But that event does not fire on IE when current
+<a name="line762"></a>      // page is used as the dummy resource (because its loading is stopped?).
+<a name="line763"></a>      // It also does not fire sometimes on Firefox.  So now we call it
+<a name="line764"></a>      // directly.
+<a name="line765"></a>      checkToCreateResponseInfo_();
+<a name="line766"></a>    }
+<a name="line767"></a>  }
+<a name="line768"></a>};
+<a name="line769"></a>
+<a name="line770"></a>
+<a name="line771"></a>/**
+<a name="line772"></a> * Creates a response info iframe to indicate completion of sendResponse
+<a name="line773"></a> * @param {string} dummyUri URI to a dummy resource.
+<a name="line774"></a> * @param {number} numChunks Total number of chunks.
+<a name="line775"></a> * @param {boolean} isDataJson Whether response is a JSON string or just string.
+<a name="line776"></a> * @param {number} status HTTP response status code.
+<a name="line777"></a> * @param {string} headers Response headers in JSON format.
+<a name="line778"></a> * @private
+<a name="line779"></a> */
+<a name="line780"></a>goog.net.CrossDomainRpc.createResponseInfo_ =
+<a name="line781"></a>    function(dummyUri, numChunks, isDataJson, status, headers) {
+<a name="line782"></a>  var responseInfoFrame = document.createElement(&#39;iframe&#39;);
+<a name="line783"></a>  document.body.appendChild(responseInfoFrame);
+<a name="line784"></a>  responseInfoFrame.src = dummyUri +
+<a name="line785"></a>      goog.net.CrossDomainRpc.getPayloadDelimiter_(dummyUri) +
+<a name="line786"></a>      goog.net.CrossDomainRpc.RESPONSE_INFO_MARKER_ +
+<a name="line787"></a>      &#39;=1&amp;n=&#39; + numChunks + &#39;&amp;isDataJson=&#39; + isDataJson + &#39;&amp;status=&#39; + status +
+<a name="line788"></a>      &#39;&amp;headers=&#39; + encodeURIComponent(headers);
+<a name="line789"></a>};
+<a name="line790"></a>
+<a name="line791"></a>
+<a name="line792"></a>/**
+<a name="line793"></a> * Returns payload delimiter, either &quot;#&quot; when caller&#39;s page is not used as
+<a name="line794"></a> * the dummy resource or &quot;?&quot; when it is, in which case caching issues prevent
+<a name="line795"></a> * response frames to gain the caller&#39;s domain.
+<a name="line796"></a> * @param {string} dummyUri URI to resource being used as dummy resource.
+<a name="line797"></a> * @return {string} Either &quot;?&quot; when caller&#39;s page is used as dummy resource or
+<a name="line798"></a> *     &quot;#&quot; if it is not.
+<a name="line799"></a> * @private
+<a name="line800"></a> */
+<a name="line801"></a>goog.net.CrossDomainRpc.getPayloadDelimiter_ = function(dummyUri) {
+<a name="line802"></a>  return goog.net.CrossDomainRpc.REFERRER_ == dummyUri ? &#39;?&#39; : &#39;#&#39;;
+<a name="line803"></a>};
+<a name="line804"></a>
+<a name="line805"></a>
+<a name="line806"></a>/**
+<a name="line807"></a> * Removes all parameters (after ? or #) from URI.
+<a name="line808"></a> * @param {string} uri URI to remove parameters from.
+<a name="line809"></a> * @return {string} URI with all parameters removed.
+<a name="line810"></a> * @private
+<a name="line811"></a> */
+<a name="line812"></a>goog.net.CrossDomainRpc.removeUriParams_ = function(uri) {
+<a name="line813"></a>  // remove everything after question mark
+<a name="line814"></a>  var question = uri.indexOf(&#39;?&#39;);
+<a name="line815"></a>  if (question &gt; 0) {
+<a name="line816"></a>    uri = uri.substring(0, question);
+<a name="line817"></a>  }
+<a name="line818"></a>
+<a name="line819"></a>  // remove everything after hash mark
+<a name="line820"></a>  var hash = uri.indexOf(&#39;#&#39;);
+<a name="line821"></a>  if (hash &gt; 0) {
+<a name="line822"></a>    uri = uri.substring(0, hash);
+<a name="line823"></a>  }
+<a name="line824"></a>
+<a name="line825"></a>  return uri;
+<a name="line826"></a>};
+<a name="line827"></a>
+<a name="line828"></a>
+<a name="line829"></a>/**
+<a name="line830"></a> * Gets a response header.
+<a name="line831"></a> * @param {string} name Name of response header.
+<a name="line832"></a> * @return {string|undefined} Value of response header; undefined if not found.
+<a name="line833"></a> */
+<a name="line834"></a>goog.net.CrossDomainRpc.prototype.getResponseHeader = function(name) {
+<a name="line835"></a>  return goog.isObject(this.responseHeaders) ?
+<a name="line836"></a>      this.responseHeaders[name] : undefined;
+<a name="line837"></a>};
+<a name="line838"></a>
+<a name="line839"></a>
+<a name="line840"></a>/**
+<a name="line841"></a> * Referrer of current document with all parameters after &quot;?&quot; and &quot;#&quot; stripped.
+<a name="line842"></a> * @type {string}
+<a name="line843"></a> * @private
+<a name="line844"></a> */
+<a name="line845"></a>goog.net.CrossDomainRpc.REFERRER_ =
+<a name="line846"></a>    goog.net.CrossDomainRpc.removeUriParams_(document.referrer);
+</pre>
+
+
+</body>
+</html>

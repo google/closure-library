@@ -1,0 +1,655 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>textrange.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_dom_textrange.js.html">textrange.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities for working with text ranges in HTML documents.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.dom.TextRange&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.AbstractRange&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.RangeType&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.SavedRange&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.TextRangeIterator&#39;);
+<a name="line30"></a>goog.require(&#39;goog.dom.browserrange&#39;);
+<a name="line31"></a>goog.require(&#39;goog.string&#39;);
+<a name="line32"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Create a new text selection with no properties.  Do not use this constructor:
+<a name="line37"></a> * use one of the goog.dom.Range.createFrom* methods instead.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @extends {goog.dom.AbstractRange}
+<a name="line40"></a> */
+<a name="line41"></a>goog.dom.TextRange = function() {
+<a name="line42"></a>};
+<a name="line43"></a>goog.inherits(goog.dom.TextRange, goog.dom.AbstractRange);
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Create a new range wrapper from the given browser range object.  Do not use
+<a name="line48"></a> * this method directly - please use goog.dom.Range.createFrom* instead.
+<a name="line49"></a> * @param {Range|TextRange} range The browser range object.
+<a name="line50"></a> * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+<a name="line51"></a> *     node.
+<a name="line52"></a> * @return {goog.dom.TextRange} A range wrapper object.
+<a name="line53"></a> */
+<a name="line54"></a>goog.dom.TextRange.createFromBrowserRange = function(range, opt_isReversed) {
+<a name="line55"></a>  return goog.dom.TextRange.createFromBrowserRangeWrapper_(
+<a name="line56"></a>      goog.dom.browserrange.createRange(range), opt_isReversed);
+<a name="line57"></a>};
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * Create a new range wrapper from the given browser range wrapper.
+<a name="line62"></a> * @param {goog.dom.browserrange.AbstractRange} browserRange The browser range
+<a name="line63"></a> *     wrapper.
+<a name="line64"></a> * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+<a name="line65"></a> *     node.
+<a name="line66"></a> * @return {goog.dom.TextRange} A range wrapper object.
+<a name="line67"></a> * @private
+<a name="line68"></a> */
+<a name="line69"></a>goog.dom.TextRange.createFromBrowserRangeWrapper_ = function(browserRange,
+<a name="line70"></a>    opt_isReversed) {
+<a name="line71"></a>  var range = new goog.dom.TextRange();
+<a name="line72"></a>
+<a name="line73"></a>  // Initialize the range as a browser range wrapper type range.
+<a name="line74"></a>  range.browserRangeWrapper_ = browserRange;
+<a name="line75"></a>  range.isReversed_ = !!opt_isReversed;
+<a name="line76"></a>
+<a name="line77"></a>  return range;
+<a name="line78"></a>};
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Create a new range wrapper that selects the given node&#39;s text.  Do not use
+<a name="line83"></a> * this method directly - please use goog.dom.Range.createFrom* instead.
+<a name="line84"></a> * @param {Node} node The node to select.
+<a name="line85"></a> * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+<a name="line86"></a> *     node.
+<a name="line87"></a> * @return {goog.dom.TextRange} A range wrapper object.
+<a name="line88"></a> */
+<a name="line89"></a>goog.dom.TextRange.createFromNodeContents = function(node, opt_isReversed) {
+<a name="line90"></a>  return goog.dom.TextRange.createFromBrowserRangeWrapper_(
+<a name="line91"></a>      goog.dom.browserrange.createRangeFromNodeContents(node),
+<a name="line92"></a>      opt_isReversed);
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Create a new range wrapper that selects the area between the given nodes,
+<a name="line98"></a> * accounting for the given offsets.  Do not use this method directly - please
+<a name="line99"></a> * use goog.dom.Range.createFrom* instead.
+<a name="line100"></a> * @param {Node} anchorNode The node to start with.
+<a name="line101"></a> * @param {number} anchorOffset The offset within the node to start.
+<a name="line102"></a> * @param {Node} focusNode The node to end with.
+<a name="line103"></a> * @param {number} focusOffset The offset within the node to end.
+<a name="line104"></a> * @return {goog.dom.TextRange} A range wrapper object.
+<a name="line105"></a> */
+<a name="line106"></a>goog.dom.TextRange.createFromNodes = function(anchorNode, anchorOffset,
+<a name="line107"></a>    focusNode, focusOffset) {
+<a name="line108"></a>  var range = new goog.dom.TextRange();
+<a name="line109"></a>  range.isReversed_ = goog.dom.Range.isReversed(anchorNode, anchorOffset,
+<a name="line110"></a>      focusNode, focusOffset);
+<a name="line111"></a>
+<a name="line112"></a>  // Avoid selecting BRs directly
+<a name="line113"></a>  if (anchorNode.tagName == &#39;BR&#39;) {
+<a name="line114"></a>    var parent = anchorNode.parentNode;
+<a name="line115"></a>    anchorOffset = goog.array.indexOf(parent.childNodes, anchorNode);
+<a name="line116"></a>    anchorNode = parent;
+<a name="line117"></a>  }
+<a name="line118"></a>
+<a name="line119"></a>  if (focusNode.tagName == &#39;BR&#39;) {
+<a name="line120"></a>    var parent = focusNode.parentNode;
+<a name="line121"></a>    focusOffset = goog.array.indexOf(parent.childNodes, focusNode);
+<a name="line122"></a>    focusNode = parent;
+<a name="line123"></a>  }
+<a name="line124"></a>
+<a name="line125"></a>  // Initialize the range as a W3C style range.
+<a name="line126"></a>  if (range.isReversed_) {
+<a name="line127"></a>    range.startNode_ = focusNode;
+<a name="line128"></a>    range.startOffset_ = focusOffset;
+<a name="line129"></a>    range.endNode_ = anchorNode;
+<a name="line130"></a>    range.endOffset_ = anchorOffset;
+<a name="line131"></a>  } else {
+<a name="line132"></a>    range.startNode_ = anchorNode;
+<a name="line133"></a>    range.startOffset_ = anchorOffset;
+<a name="line134"></a>    range.endNode_ = focusNode;
+<a name="line135"></a>    range.endOffset_ = focusOffset;
+<a name="line136"></a>  }
+<a name="line137"></a>
+<a name="line138"></a>  return range;
+<a name="line139"></a>};
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>// Representation 1: a browser range wrapper.
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * The browser specific range wrapper.  This can be null if one of the other
+<a name="line147"></a> * representations of the range is specified.
+<a name="line148"></a> * @type {goog.dom.browserrange.AbstractRange?}
+<a name="line149"></a> * @private
+<a name="line150"></a> */
+<a name="line151"></a>goog.dom.TextRange.prototype.browserRangeWrapper_ = null;
+<a name="line152"></a>
+<a name="line153"></a>
+<a name="line154"></a>// Representation 2: two endpoints specified as nodes + offsets
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * The start node of the range.  This can be null if one of the other
+<a name="line159"></a> * representations of the range is specified.
+<a name="line160"></a> * @type {Node?}
+<a name="line161"></a> * @private
+<a name="line162"></a> */
+<a name="line163"></a>goog.dom.TextRange.prototype.startNode_ = null;
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * The start offset of the range.  This can be null if one of the other
+<a name="line168"></a> * representations of the range is specified.
+<a name="line169"></a> * @type {number?}
+<a name="line170"></a> * @private
+<a name="line171"></a> */
+<a name="line172"></a>goog.dom.TextRange.prototype.startOffset_ = null;
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * The end node of the range.  This can be null if one of the other
+<a name="line177"></a> * representations of the range is specified.
+<a name="line178"></a> * @type {Node?}
+<a name="line179"></a> * @private
+<a name="line180"></a> */
+<a name="line181"></a>goog.dom.TextRange.prototype.endNode_ = null;
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * The end offset of the range.  This can be null if one of the other
+<a name="line186"></a> * representations of the range is specified.
+<a name="line187"></a> * @type {number?}
+<a name="line188"></a> * @private
+<a name="line189"></a> */
+<a name="line190"></a>goog.dom.TextRange.prototype.endOffset_ = null;
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Whether the focus node is before the anchor node.
+<a name="line195"></a> * @type {boolean}
+<a name="line196"></a> * @private
+<a name="line197"></a> */
+<a name="line198"></a>goog.dom.TextRange.prototype.isReversed_ = false;
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>// Method implementations
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * @return {goog.dom.TextRange} A clone of this range.
+<a name="line206"></a> */
+<a name="line207"></a>goog.dom.TextRange.prototype.clone = function() {
+<a name="line208"></a>  var range = new goog.dom.TextRange();
+<a name="line209"></a>  range.browserRangeWrapper_ = this.browserRangeWrapper_;
+<a name="line210"></a>  range.startNode_ = this.startNode_;
+<a name="line211"></a>  range.startOffset_ = this.startOffset_;
+<a name="line212"></a>  range.endNode_ = this.endNode_;
+<a name="line213"></a>  range.endOffset_ = this.endOffset_;
+<a name="line214"></a>  range.isReversed_ = this.isReversed_;
+<a name="line215"></a>
+<a name="line216"></a>  return range;
+<a name="line217"></a>};
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/** @inheritDoc */
+<a name="line221"></a>goog.dom.TextRange.prototype.getType = function() {
+<a name="line222"></a>  return goog.dom.RangeType.TEXT;
+<a name="line223"></a>};
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/** @inheritDoc */
+<a name="line227"></a>goog.dom.TextRange.prototype.getBrowserRangeObject = function() {
+<a name="line228"></a>  return this.getBrowserRangeWrapper_().getBrowserRange();
+<a name="line229"></a>};
+<a name="line230"></a>
+<a name="line231"></a>
+<a name="line232"></a>/** @inheritDoc */
+<a name="line233"></a>goog.dom.TextRange.prototype.setBrowserRangeObject = function(nativeRange) {
+<a name="line234"></a>  // Test if it&#39;s a control range by seeing if a control range only method
+<a name="line235"></a>  // exists.
+<a name="line236"></a>  if (goog.dom.AbstractRange.isNativeControlRange(nativeRange)) {
+<a name="line237"></a>    return false;
+<a name="line238"></a>  }
+<a name="line239"></a>  this.browserRangeWrapper_ = goog.dom.browserrange.createRange(
+<a name="line240"></a>      nativeRange);
+<a name="line241"></a>  this.clearCachedValues_();
+<a name="line242"></a>  return true;
+<a name="line243"></a>};
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/**
+<a name="line247"></a> * Clear all cached values.
+<a name="line248"></a> * @private
+<a name="line249"></a> */
+<a name="line250"></a>goog.dom.TextRange.prototype.clearCachedValues_ = function() {
+<a name="line251"></a>  this.startNode_ = this.startOffset_ = this.endNode_ = this.endOffset_ = null;
+<a name="line252"></a>};
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/** @inheritDoc */
+<a name="line256"></a>goog.dom.TextRange.prototype.getTextRangeCount = function() {
+<a name="line257"></a>  return 1;
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/** @inheritDoc */
+<a name="line262"></a>goog.dom.TextRange.prototype.getTextRange = function(i) {
+<a name="line263"></a>  return this;
+<a name="line264"></a>};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * @return {goog.dom.browserrange.AbstractRange} The range wrapper object.
+<a name="line269"></a> * @private
+<a name="line270"></a> */
+<a name="line271"></a>goog.dom.TextRange.prototype.getBrowserRangeWrapper_ = function() {
+<a name="line272"></a>  return this.browserRangeWrapper_ ||
+<a name="line273"></a>      (this.browserRangeWrapper_ = goog.dom.browserrange.createRangeFromNodes(
+<a name="line274"></a>          this.getStartNode(), this.getStartOffset(),
+<a name="line275"></a>          this.getEndNode(), this.getEndOffset()));
+<a name="line276"></a>};
+<a name="line277"></a>
+<a name="line278"></a>
+<a name="line279"></a>/** @inheritDoc */
+<a name="line280"></a>goog.dom.TextRange.prototype.getContainer = function() {
+<a name="line281"></a>  return this.getBrowserRangeWrapper_().getContainer();
+<a name="line282"></a>};
+<a name="line283"></a>
+<a name="line284"></a>
+<a name="line285"></a>/** @inheritDoc */
+<a name="line286"></a>goog.dom.TextRange.prototype.getStartNode = function() {
+<a name="line287"></a>  return this.startNode_ ||
+<a name="line288"></a>      (this.startNode_ = this.getBrowserRangeWrapper_().getStartNode());
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/** @inheritDoc */
+<a name="line293"></a>goog.dom.TextRange.prototype.getStartOffset = function() {
+<a name="line294"></a>  return this.startOffset_ != null ? this.startOffset_ :
+<a name="line295"></a>      (this.startOffset_ = this.getBrowserRangeWrapper_().getStartOffset());
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/** @inheritDoc */
+<a name="line300"></a>goog.dom.TextRange.prototype.getEndNode = function() {
+<a name="line301"></a>  return this.endNode_ ||
+<a name="line302"></a>      (this.endNode_ = this.getBrowserRangeWrapper_().getEndNode());
+<a name="line303"></a>};
+<a name="line304"></a>
+<a name="line305"></a>
+<a name="line306"></a>/** @inheritDoc */
+<a name="line307"></a>goog.dom.TextRange.prototype.getEndOffset = function() {
+<a name="line308"></a>  return this.endOffset_ != null ? this.endOffset_ :
+<a name="line309"></a>      (this.endOffset_ = this.getBrowserRangeWrapper_().getEndOffset());
+<a name="line310"></a>};
+<a name="line311"></a>
+<a name="line312"></a>
+<a name="line313"></a>/**
+<a name="line314"></a> * Moves a TextRange to the provided nodes and offsets.
+<a name="line315"></a> * @param {Node} startNode The node to start with.
+<a name="line316"></a> * @param {number} startOffset The offset within the node to start.
+<a name="line317"></a> * @param {Node} endNode The node to end with.
+<a name="line318"></a> * @param {number} endOffset The offset within the node to end.
+<a name="line319"></a> * @param {boolean} isReversed Whether the range is reversed.
+<a name="line320"></a> */
+<a name="line321"></a>goog.dom.TextRange.prototype.moveToNodes = function(startNode, startOffset,
+<a name="line322"></a>                                                    endNode, endOffset,
+<a name="line323"></a>                                                    isReversed) {
+<a name="line324"></a>  this.startNode_ = startNode;
+<a name="line325"></a>  this.startOffset_ = startOffset;
+<a name="line326"></a>  this.endNode_ = endNode;
+<a name="line327"></a>  this.endOffset_ = endOffset;
+<a name="line328"></a>  this.isReversed_ = isReversed;
+<a name="line329"></a>  this.browserRangeWrapper_ = null;
+<a name="line330"></a>};
+<a name="line331"></a>
+<a name="line332"></a>
+<a name="line333"></a>/** @inheritDoc */
+<a name="line334"></a>goog.dom.TextRange.prototype.isReversed = function() {
+<a name="line335"></a>  return this.isReversed_;
+<a name="line336"></a>};
+<a name="line337"></a>
+<a name="line338"></a>
+<a name="line339"></a>/** @inheritDoc */
+<a name="line340"></a>goog.dom.TextRange.prototype.containsRange = function(otherRange,
+<a name="line341"></a>                                                      opt_allowPartial) {
+<a name="line342"></a>  var otherRangeType = otherRange.getType();
+<a name="line343"></a>  if (otherRangeType == goog.dom.RangeType.TEXT) {
+<a name="line344"></a>    return this.getBrowserRangeWrapper_().containsRange(
+<a name="line345"></a>        otherRange.getBrowserRangeWrapper_(), opt_allowPartial);
+<a name="line346"></a>  } else if (otherRangeType == goog.dom.RangeType.CONTROL) {
+<a name="line347"></a>    var elements = otherRange.getElements();
+<a name="line348"></a>    var fn = opt_allowPartial ? goog.array.some : goog.array.every;
+<a name="line349"></a>    return fn(elements, function(el) {
+<a name="line350"></a>      return this.containsNode(el, opt_allowPartial);
+<a name="line351"></a>    }, this);
+<a name="line352"></a>  }
+<a name="line353"></a>  return false;
+<a name="line354"></a>};
+<a name="line355"></a>
+<a name="line356"></a>
+<a name="line357"></a>/**
+<a name="line358"></a> * Tests if the given node is in a document.
+<a name="line359"></a> * @param {Node} node The node to check.
+<a name="line360"></a> * @return {boolean} Whether the given node is in the given document.
+<a name="line361"></a> */
+<a name="line362"></a>goog.dom.TextRange.isAttachedNode = function(node) {
+<a name="line363"></a>  if (goog.userAgent.IE) {
+<a name="line364"></a>    var returnValue = false;
+<a name="line365"></a>    /** @preserveTry */
+<a name="line366"></a>    try {
+<a name="line367"></a>      returnValue = node.parentNode;
+<a name="line368"></a>    } catch (e) {
+<a name="line369"></a>      // IE sometimes throws Invalid Argument errors when a node is detached.
+<a name="line370"></a>      // Note: trying to return a value from the above try block can cause IE
+<a name="line371"></a>      // to crash.  It is necessary to use the local returnValue
+<a name="line372"></a>    }
+<a name="line373"></a>    return !!returnValue;
+<a name="line374"></a>  } else {
+<a name="line375"></a>    return goog.dom.contains(node.ownerDocument.body, node);
+<a name="line376"></a>  }
+<a name="line377"></a>};
+<a name="line378"></a>
+<a name="line379"></a>
+<a name="line380"></a>/** @inheritDoc */
+<a name="line381"></a>goog.dom.TextRange.prototype.isRangeInDocument = function() {
+<a name="line382"></a>  // Ensure any cached nodes are in the document.  IE also allows ranges to
+<a name="line383"></a>  // become detached, so we check if the range is still in the document as
+<a name="line384"></a>  // well for IE.
+<a name="line385"></a>  return (!this.startNode_ ||
+<a name="line386"></a>          goog.dom.TextRange.isAttachedNode(this.startNode_)) &amp;&amp;
+<a name="line387"></a>         (!this.endNode_ ||
+<a name="line388"></a>          goog.dom.TextRange.isAttachedNode(this.endNode_)) &amp;&amp;
+<a name="line389"></a>         (!goog.userAgent.IE ||
+<a name="line390"></a>          this.getBrowserRangeWrapper_().isRangeInDocument());
+<a name="line391"></a>};
+<a name="line392"></a>
+<a name="line393"></a>
+<a name="line394"></a>/** @inheritDoc */
+<a name="line395"></a>goog.dom.TextRange.prototype.isCollapsed = function() {
+<a name="line396"></a>  return this.getBrowserRangeWrapper_().isCollapsed();
+<a name="line397"></a>};
+<a name="line398"></a>
+<a name="line399"></a>
+<a name="line400"></a>/** @inheritDoc */
+<a name="line401"></a>goog.dom.TextRange.prototype.getText = function() {
+<a name="line402"></a>  return this.getBrowserRangeWrapper_().getText();
+<a name="line403"></a>};
+<a name="line404"></a>
+<a name="line405"></a>
+<a name="line406"></a>/** @inheritDoc */
+<a name="line407"></a>goog.dom.TextRange.prototype.getHtmlFragment = function() {
+<a name="line408"></a>  // TODO: Generalize the code in browserrange so it is static and
+<a name="line409"></a>  // just takes an iterator.  This would mean we don&#39;t always have to create a
+<a name="line410"></a>  // browser range.
+<a name="line411"></a>  return this.getBrowserRangeWrapper_().getHtmlFragment();
+<a name="line412"></a>};
+<a name="line413"></a>
+<a name="line414"></a>
+<a name="line415"></a>/** @inheritDoc */
+<a name="line416"></a>goog.dom.TextRange.prototype.getValidHtml = function() {
+<a name="line417"></a>  return this.getBrowserRangeWrapper_().getValidHtml();
+<a name="line418"></a>};
+<a name="line419"></a>
+<a name="line420"></a>
+<a name="line421"></a>/** @inheritDoc */
+<a name="line422"></a>goog.dom.TextRange.prototype.getPastableHtml = function() {
+<a name="line423"></a>  // TODO: Get any attributes the table or tr has.
+<a name="line424"></a>
+<a name="line425"></a>  var html = this.getValidHtml();
+<a name="line426"></a>
+<a name="line427"></a>  if (html.match(/^\s*&lt;td\b/i)) {
+<a name="line428"></a>    // Match html starting with a TD.
+<a name="line429"></a>    html = &#39;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&#39; + html + &#39;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&#39;;
+<a name="line430"></a>  } else if (html.match(/^\s*&lt;tr\b/i)) {
+<a name="line431"></a>    // Match html starting with a TR.
+<a name="line432"></a>    html = &#39;&lt;table&gt;&lt;tbody&gt;&#39; + html + &#39;&lt;/tbody&gt;&lt;/table&gt;&#39;;
+<a name="line433"></a>  } else if (html.match(/^\s*&lt;tbody\b/i)) {
+<a name="line434"></a>    // Match html starting with a TBODY.
+<a name="line435"></a>    html = &#39;&lt;table&gt;&#39; + html + &#39;&lt;/table&gt;&#39;;
+<a name="line436"></a>  } else if (html.match(/^\s*&lt;li\b/i)) {
+<a name="line437"></a>    // Match html starting with an LI.
+<a name="line438"></a>    var container = this.getContainer();
+<a name="line439"></a>    var tagType = goog.dom.TagName.UL;
+<a name="line440"></a>    while (container) {
+<a name="line441"></a>      if (container.tagName == goog.dom.TagName.OL) {
+<a name="line442"></a>        tagType = goog.dom.TagName.OL;
+<a name="line443"></a>        break;
+<a name="line444"></a>      } else if (container.tagName == goog.dom.TagName.UL) {
+<a name="line445"></a>        break;
+<a name="line446"></a>      }
+<a name="line447"></a>      container = container.parentNode;
+<a name="line448"></a>    }
+<a name="line449"></a>    html = goog.string.buildString(&#39;&lt;&#39;, tagType, &#39;&gt;&#39;, html, &#39;&lt;/&#39;, tagType, &#39;&gt;&#39;);
+<a name="line450"></a>  }
+<a name="line451"></a>
+<a name="line452"></a>  return html;
+<a name="line453"></a>};
+<a name="line454"></a>
+<a name="line455"></a>
+<a name="line456"></a>/**
+<a name="line457"></a> * Returns a TextRangeIterator over the contents of the range.  Regardless of
+<a name="line458"></a> * the direction of the range, the iterator will move in document order.
+<a name="line459"></a> * @param {boolean} opt_keys Unused for this iterator.
+<a name="line460"></a> * @return {goog.dom.TextRangeIterator} An iterator over tags in the range.
+<a name="line461"></a> */
+<a name="line462"></a>goog.dom.TextRange.prototype.__iterator__ = function(opt_keys) {
+<a name="line463"></a>  return new goog.dom.TextRangeIterator(this.getStartNode(),
+<a name="line464"></a>      this.getStartOffset(), this.getEndNode(), this.getEndOffset());
+<a name="line465"></a>};
+<a name="line466"></a>
+<a name="line467"></a>
+<a name="line468"></a>// RANGE ACTIONS
+<a name="line469"></a>
+<a name="line470"></a>
+<a name="line471"></a>/** @inheritDoc */
+<a name="line472"></a>goog.dom.TextRange.prototype.select = function() {
+<a name="line473"></a>  this.getBrowserRangeWrapper_().select(this.isReversed_);
+<a name="line474"></a>};
+<a name="line475"></a>
+<a name="line476"></a>
+<a name="line477"></a>/** @inheritDoc */
+<a name="line478"></a>goog.dom.TextRange.prototype.removeContents = function() {
+<a name="line479"></a>  this.getBrowserRangeWrapper_().removeContents();
+<a name="line480"></a>  this.clearCachedValues_();
+<a name="line481"></a>};
+<a name="line482"></a>
+<a name="line483"></a>
+<a name="line484"></a>/**
+<a name="line485"></a> * Surrounds the text range with the specified element (on Mozilla) or with a
+<a name="line486"></a> * clone of the specified element (on IE).  Returns a reference to the
+<a name="line487"></a> * surrounding element if the operation was successful; returns null if the
+<a name="line488"></a> * operation failed.
+<a name="line489"></a> * @param {Element?} element The element with which the selection is to be
+<a name="line490"></a> *    surrounded.
+<a name="line491"></a> * @return {Element?} The surrounding element (same as the argument on Mozilla,
+<a name="line492"></a> *    but not on IE), or null if unsuccessful.
+<a name="line493"></a> */
+<a name="line494"></a>goog.dom.TextRange.prototype.surroundContents = function(element) {
+<a name="line495"></a>  var output = this.getBrowserRangeWrapper_().surroundContents(element);
+<a name="line496"></a>  this.clearCachedValues_();
+<a name="line497"></a>  return output;
+<a name="line498"></a>};
+<a name="line499"></a>
+<a name="line500"></a>
+<a name="line501"></a>/** @inheritDoc */
+<a name="line502"></a>goog.dom.TextRange.prototype.insertNode = function(node, before) {
+<a name="line503"></a>  var output = this.getBrowserRangeWrapper_().insertNode(node, before);
+<a name="line504"></a>  this.clearCachedValues_();
+<a name="line505"></a>  return output;
+<a name="line506"></a>};
+<a name="line507"></a>
+<a name="line508"></a>
+<a name="line509"></a>/** @inheritDoc */
+<a name="line510"></a>goog.dom.TextRange.prototype.surroundWithNodes = function(startNode, endNode) {
+<a name="line511"></a>  this.getBrowserRangeWrapper_().surroundWithNodes(startNode, endNode);
+<a name="line512"></a>  this.clearCachedValues_();
+<a name="line513"></a>};
+<a name="line514"></a>
+<a name="line515"></a>
+<a name="line516"></a>// SAVE/RESTORE
+<a name="line517"></a>
+<a name="line518"></a>
+<a name="line519"></a>/** @inheritDoc */
+<a name="line520"></a>goog.dom.TextRange.prototype.saveUsingDom = function() {
+<a name="line521"></a>  return new goog.dom.DomSavedTextRange_(this);
+<a name="line522"></a>};
+<a name="line523"></a>
+<a name="line524"></a>
+<a name="line525"></a>// RANGE MODIFICATION
+<a name="line526"></a>
+<a name="line527"></a>
+<a name="line528"></a>/** @inheritDoc */
+<a name="line529"></a>goog.dom.TextRange.prototype.collapse = function(toAnchor) {
+<a name="line530"></a>  var toStart = this.isReversed() ? !toAnchor : toAnchor;
+<a name="line531"></a>
+<a name="line532"></a>  if (this.browserRangeWrapper_) {
+<a name="line533"></a>    this.browserRangeWrapper_.collapse(toStart);
+<a name="line534"></a>  }
+<a name="line535"></a>
+<a name="line536"></a>  if (toStart) {
+<a name="line537"></a>    this.endNode_ = this.startNode_;
+<a name="line538"></a>    this.endOffset_ = this.startOffset_;
+<a name="line539"></a>  } else {
+<a name="line540"></a>    this.startNode_ = this.endNode_;
+<a name="line541"></a>    this.startOffset_ = this.endOffset_;
+<a name="line542"></a>  }
+<a name="line543"></a>
+<a name="line544"></a>  // Collapsed ranges can&#39;t be reversed
+<a name="line545"></a>  this.isReversed_ = false;
+<a name="line546"></a>};
+<a name="line547"></a>
+<a name="line548"></a>
+<a name="line549"></a>// SAVED RANGE OBJECTS
+<a name="line550"></a>
+<a name="line551"></a>
+<a name="line552"></a>/**
+<a name="line553"></a> * A SavedRange implementation using DOM endpoints.
+<a name="line554"></a> * @param {goog.dom.AbstractRange} range The range to save.
+<a name="line555"></a> * @constructor
+<a name="line556"></a> * @extends {goog.dom.SavedRange}
+<a name="line557"></a> * @private
+<a name="line558"></a> */
+<a name="line559"></a>goog.dom.DomSavedTextRange_ = function(range) {
+<a name="line560"></a>  /**
+<a name="line561"></a>   * The anchor node.
+<a name="line562"></a>   * @type {Node}
+<a name="line563"></a>   * @private
+<a name="line564"></a>   */
+<a name="line565"></a>  this.anchorNode_ = range.getAnchorNode();
+<a name="line566"></a>
+<a name="line567"></a>  /**
+<a name="line568"></a>   * The anchor node offset.
+<a name="line569"></a>   * @type {number}
+<a name="line570"></a>   * @private
+<a name="line571"></a>   */
+<a name="line572"></a>  this.anchorOffset_ = range.getAnchorOffset();
+<a name="line573"></a>
+<a name="line574"></a>  /**
+<a name="line575"></a>   * The focus node.
+<a name="line576"></a>   * @type {Node}
+<a name="line577"></a>   * @private
+<a name="line578"></a>   */
+<a name="line579"></a>  this.focusNode_ = range.getFocusNode();
+<a name="line580"></a>
+<a name="line581"></a>  /**
+<a name="line582"></a>   * The focus node offset.
+<a name="line583"></a>   * @type {number}
+<a name="line584"></a>   * @private
+<a name="line585"></a>   */
+<a name="line586"></a>  this.focusOffset_ = range.getFocusOffset();
+<a name="line587"></a>};
+<a name="line588"></a>goog.inherits(goog.dom.DomSavedTextRange_, goog.dom.SavedRange);
+<a name="line589"></a>
+<a name="line590"></a>
+<a name="line591"></a>/**
+<a name="line592"></a> * @return {goog.dom.AbstractRange} The restored range.
+<a name="line593"></a> */
+<a name="line594"></a>goog.dom.DomSavedTextRange_.prototype.restoreInternal = function() {
+<a name="line595"></a>  return goog.dom.Range.createFromNodes(this.anchorNode_, this.anchorOffset_,
+<a name="line596"></a>      this.focusNode_, this.focusOffset_);
+<a name="line597"></a>};
+<a name="line598"></a>
+<a name="line599"></a>
+<a name="line600"></a>/** @inheritDoc */
+<a name="line601"></a>goog.dom.DomSavedTextRange_.prototype.disposeInternal = function() {
+<a name="line602"></a>  goog.dom.DomSavedTextRange_.superClass_.disposeInternal.call(this);
+<a name="line603"></a>
+<a name="line604"></a>  this.anchorNode_ = null;
+<a name="line605"></a>  this.focusNode_ = null;
+<a name="line606"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>hovercard.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_hovercard.js.html">hovercard.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Show hovercards with a delay after the mouse moves over an
+<a name="line17"></a> * element of a specified type and with a specific attribute.
+<a name="line18"></a> *
+<a name="line19"></a> * @see ../demos/hovercard.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.HoverCard&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.ui.HoverCard.EventType&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.ui.HoverCard.TriggerEvent&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events&#39;);
+<a name="line28"></a>goog.require(&#39;goog.ui.AdvancedTooltip&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Create a hover card object.  Hover cards extend tooltips in that they don&#39;t
+<a name="line34"></a> * have to be manually attached to each element that can cause them to display.
+<a name="line35"></a> * Instead, you can create a function that gets called when the mouse goes over
+<a name="line36"></a> * any element on your page, and returns whether or not the hovercard should be
+<a name="line37"></a> * shown for that element.
+<a name="line38"></a> *
+<a name="line39"></a> * Alternatively, you can define a map of tag names to the attribute name each
+<a name="line40"></a> * tag should have for that tag to trigger the hover card.  See example below.
+<a name="line41"></a> *
+<a name="line42"></a> * Hovercards can also be triggered manually by calling
+<a name="line43"></a> * {@code triggerForElement}, shown without a delay by calling
+<a name="line44"></a> * {@code showForElement}, or triggered over other elements by calling
+<a name="line45"></a> * {@code attach}.  For the latter two cases, the application is responsible
+<a name="line46"></a> * for calling {@code detach} when finished.
+<a name="line47"></a> *
+<a name="line48"></a> * HoverCard objects fire a TRIGGER event when the mouse moves over an element
+<a name="line49"></a> * that can trigger a hovercard, and BEFORE_SHOW when the hovercard is
+<a name="line50"></a> * about to be shown.  Clients can respond to these events and can prevent the
+<a name="line51"></a> * hovercard from being triggered or shown.
+<a name="line52"></a> *
+<a name="line53"></a> * @param {Function|Object} isAnchor Function that returns true if a given
+<a name="line54"></a> *     element should trigger the hovercard.  Alternatively, it can be a map of
+<a name="line55"></a> *     tag names to the attribute that the tag should have in order to trigger
+<a name="line56"></a> *     the hovercard, e.g., {A: &#39;href&#39;} for all links.  Tag names must be all
+<a name="line57"></a> *     upper case; attribute names are case insensitive.
+<a name="line58"></a> * @param {boolean} opt_checkDescendants Use false for a performance gain if
+<a name="line59"></a> *     you are sure that none of your triggering elements have child elements.
+<a name="line60"></a> *     Default is true.
+<a name="line61"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line62"></a> * @constructor
+<a name="line63"></a> * @extends {goog.ui.AdvancedTooltip}
+<a name="line64"></a> */
+<a name="line65"></a>goog.ui.HoverCard = function(isAnchor, opt_checkDescendants, opt_domHelper) {
+<a name="line66"></a>  goog.ui.AdvancedTooltip.call(this, null, null, opt_domHelper);
+<a name="line67"></a>
+<a name="line68"></a>  if (goog.isFunction(isAnchor)) {
+<a name="line69"></a>    // Override default implementation of {@code isAnchor_}.
+<a name="line70"></a>    this.isAnchor_ = isAnchor;
+<a name="line71"></a>  } else {
+<a name="line72"></a>
+<a name="line73"></a>    /**
+<a name="line74"></a>     * Map of tag names to attribute names that will trigger a hovercard.
+<a name="line75"></a>     * @type {Object}
+<a name="line76"></a>     * @private
+<a name="line77"></a>     */
+<a name="line78"></a>    this.anchors_ = isAnchor;
+<a name="line79"></a>  }
+<a name="line80"></a>
+<a name="line81"></a>  /**
+<a name="line82"></a>   * Whether anchors may have child elements.  If true, then we need to check
+<a name="line83"></a>   * the parent chain of any mouse over event to see if any of those elements
+<a name="line84"></a>   * could be anchors.  Default is true.
+<a name="line85"></a>   * @type {boolean}
+<a name="line86"></a>   * @private
+<a name="line87"></a>   */
+<a name="line88"></a>  this.checkDescendants_ = opt_checkDescendants != false;
+<a name="line89"></a>
+<a name="line90"></a>  /**
+<a name="line91"></a>   * Array of anchor elements that should be detached when we are no longer
+<a name="line92"></a>   * associated with them.
+<a name="line93"></a>   * @type {!Array.&lt;Element&gt;}
+<a name="line94"></a>   * @private
+<a name="line95"></a>   */
+<a name="line96"></a>  this.tempAttachedAnchors_ = [];
+<a name="line97"></a>
+<a name="line98"></a>  /**
+<a name="line99"></a>   * Document containing the triggering elements, to which we listen for
+<a name="line100"></a>   * mouseover events.
+<a name="line101"></a>   * @type {Document}
+<a name="line102"></a>   * @private
+<a name="line103"></a>   */
+<a name="line104"></a>  this.document_ = opt_domHelper ? opt_domHelper.getDocument() :
+<a name="line105"></a>                   goog.dom.getDocument();
+<a name="line106"></a>
+<a name="line107"></a>  goog.events.listen(this.document_, goog.events.EventType.MOUSEOVER,
+<a name="line108"></a>                     this.handleTriggerMouseOver_, false, this);
+<a name="line109"></a>};
+<a name="line110"></a>goog.inherits(goog.ui.HoverCard, goog.ui.AdvancedTooltip);
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Enum for event type fired by HoverCard.
+<a name="line115"></a> * @enum {string}
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.HoverCard.EventType = {
+<a name="line118"></a>  TRIGGER: &#39;trigger&#39;,
+<a name="line119"></a>  CANCEL_TRIGGER: &#39;canceltrigger&#39;,
+<a name="line120"></a>  BEFORE_SHOW: goog.ui.PopupBase.EventType.BEFORE_SHOW,
+<a name="line121"></a>  SHOW: goog.ui.PopupBase.EventType.SHOW,
+<a name="line122"></a>  BEFORE_HIDE: goog.ui.PopupBase.EventType.BEFORE_HIDE,
+<a name="line123"></a>  HIDE: goog.ui.PopupBase.EventType.HIDE
+<a name="line124"></a>};
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Destroys widget and remove listeners.
+<a name="line129"></a> */
+<a name="line130"></a>goog.ui.HoverCard.prototype.disposeInternal = function() {
+<a name="line131"></a>  goog.ui.HoverCard.superClass_.disposeInternal.call(this);
+<a name="line132"></a>
+<a name="line133"></a>  goog.events.unlisten(this.document_, goog.events.EventType.MOUSEOVER,
+<a name="line134"></a>                       this.handleTriggerMouseOver_, false, this);
+<a name="line135"></a>};
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/**
+<a name="line139"></a> * Anchor of hovercard currently being shown.  This may be different from
+<a name="line140"></a> * {@code anchor} property if a second hovercard is triggered, when
+<a name="line141"></a> * {@code anchor} becomes the second hovercard while {@code currentAnchor_}
+<a name="line142"></a> * is still the old (but currently displayed) anchor.
+<a name="line143"></a> * @type {Element}
+<a name="line144"></a> * @private
+<a name="line145"></a> */
+<a name="line146"></a>goog.ui.HoverCard.prototype.currentAnchor_;
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/**
+<a name="line150"></a> * Maximum number of levels to search up the dom when checking descendants.
+<a name="line151"></a> * @type {number}
+<a name="line152"></a> * @private
+<a name="line153"></a> */
+<a name="line154"></a>goog.ui.HoverCard.prototype.maxSearchSteps_;
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * This function can be overridden by passing a function as the first parameter
+<a name="line159"></a> * to the constructor.
+<a name="line160"></a> * @param {Element} element Element to test.
+<a name="line161"></a> * @return {boolean} Whether or not hovercard should be shown.
+<a name="line162"></a> * @private
+<a name="line163"></a> */
+<a name="line164"></a>goog.ui.HoverCard.prototype.isAnchor_ = function(element) {
+<a name="line165"></a>  return element.tagName in this.anchors_ &amp;&amp;
+<a name="line166"></a>      !!element.getAttribute(this.anchors_[element.tagName]);
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * If the user mouses over an element with the correct tag and attribute, then
+<a name="line172"></a> * trigger the hovercard for that element.  If anchors could have children, then
+<a name="line173"></a> * we also need to check the parent chain of the given element.
+<a name="line174"></a> * @param {goog.events.Event} e Mouse over event.
+<a name="line175"></a> * @private
+<a name="line176"></a> */
+<a name="line177"></a>goog.ui.HoverCard.prototype.handleTriggerMouseOver_ = function(e) {
+<a name="line178"></a>  var target = /** @type {Element} */ (e.target);
+<a name="line179"></a>  // Target might be null when hovering over disabled input textboxes in IE.
+<a name="line180"></a>  if (!target) {
+<a name="line181"></a>    return;
+<a name="line182"></a>  }
+<a name="line183"></a>  if (this.isAnchor_(target)) {
+<a name="line184"></a>    this.setPosition(null);
+<a name="line185"></a>    this.triggerForElement(target);
+<a name="line186"></a>  } else if (this.checkDescendants_) {
+<a name="line187"></a>    var trigger = goog.dom.getAncestor(target,
+<a name="line188"></a>                                       goog.bind(this.isAnchor_, this),
+<a name="line189"></a>                                       false,
+<a name="line190"></a>                                       this.maxSearchSteps_);
+<a name="line191"></a>    if (trigger) {
+<a name="line192"></a>      this.triggerForElement(/** @type {Element} */ (trigger));
+<a name="line193"></a>    }
+<a name="line194"></a>  }
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Triggers the hovercard to show after a delay.
+<a name="line200"></a> * @param {Element} anchorElement Element that is triggering the hovercard.
+<a name="line201"></a> * @param {goog.positioning.AbstractPosition} opt_pos Position to display
+<a name="line202"></a> *     hovercard.
+<a name="line203"></a> * @param {Object} opt_data Data to pass to the onTrigger event.
+<a name="line204"></a> */
+<a name="line205"></a>goog.ui.HoverCard.prototype.triggerForElement = function(anchorElement,
+<a name="line206"></a>                                                         opt_pos, opt_data) {
+<a name="line207"></a>  if (anchorElement == this.currentAnchor_) {
+<a name="line208"></a>    // Element is already showing, just make sure it doesn&#39;t hide.
+<a name="line209"></a>    this.clearHideTimer_();
+<a name="line210"></a>    return;
+<a name="line211"></a>  }
+<a name="line212"></a>  if (anchorElement == this.anchor) {
+<a name="line213"></a>    // Hovercard is pending, no need to retrigger.
+<a name="line214"></a>    return;
+<a name="line215"></a>  }
+<a name="line216"></a>
+<a name="line217"></a>  // If a previous hovercard was being triggered, cancel it.
+<a name="line218"></a>  this.maybeCancelTrigger_();
+<a name="line219"></a>
+<a name="line220"></a>  // Create a new event for this trigger
+<a name="line221"></a>  var triggerEvent = new goog.ui.HoverCard.TriggerEvent(
+<a name="line222"></a>      goog.ui.HoverCard.EventType.TRIGGER, this, anchorElement, opt_data);
+<a name="line223"></a>
+<a name="line224"></a>  if (!this.elements_.contains(anchorElement)) {
+<a name="line225"></a>    this.attach(anchorElement);
+<a name="line226"></a>    this.tempAttachedAnchors_.push(anchorElement);
+<a name="line227"></a>  }
+<a name="line228"></a>  this.anchor = anchorElement;
+<a name="line229"></a>  if (!this.onTrigger(triggerEvent)) {
+<a name="line230"></a>    this.onCancelTrigger();
+<a name="line231"></a>    return;
+<a name="line232"></a>  }
+<a name="line233"></a>  var pos = opt_pos || this.position_;
+<a name="line234"></a>  this.startShowTimer(anchorElement,
+<a name="line235"></a>      /** @type {goog.positioning.AbstractPosition} */ (pos));
+<a name="line236"></a>};
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>/**
+<a name="line240"></a> * Sets the current anchor element at the time that the hovercard is shown.
+<a name="line241"></a> * @param {Element} anchor New current anchor element, or null if there is
+<a name="line242"></a> *     no current anchor.
+<a name="line243"></a> * @private
+<a name="line244"></a> */
+<a name="line245"></a>goog.ui.HoverCard.prototype.setCurrentAnchor_ = function(anchor) {
+<a name="line246"></a>  if (anchor != this.currentAnchor_) {
+<a name="line247"></a>    this.detachTempAnchor_(this.currentAnchor_);
+<a name="line248"></a>  }
+<a name="line249"></a>  this.currentAnchor_ = anchor;
+<a name="line250"></a>};
+<a name="line251"></a>
+<a name="line252"></a>
+<a name="line253"></a>/**
+<a name="line254"></a> * If given anchor is in the list of temporarily attached anchors, then
+<a name="line255"></a> * detach and remove from the list.
+<a name="line256"></a> * @param {Element|undefined} anchor Anchor element that we may want to detach
+<a name="line257"></a> *     from.
+<a name="line258"></a> * @private
+<a name="line259"></a> */
+<a name="line260"></a>goog.ui.HoverCard.prototype.detachTempAnchor_ = function(anchor) {
+<a name="line261"></a>  var pos = goog.array.indexOf(this.tempAttachedAnchors_, anchor);
+<a name="line262"></a>  if (pos != -1) {
+<a name="line263"></a>    this.detach(anchor);
+<a name="line264"></a>    this.tempAttachedAnchors_.splice(pos, 1);
+<a name="line265"></a>  }
+<a name="line266"></a>};
+<a name="line267"></a>
+<a name="line268"></a>
+<a name="line269"></a>/**
+<a name="line270"></a> * Called when an element triggers the hovercard.  This will return false
+<a name="line271"></a> * if an event handler sets preventDefault to true, which will prevent
+<a name="line272"></a> * the hovercard from being shown.
+<a name="line273"></a> * @param {!goog.ui.HoverCard.TriggerEvent} triggerEvent Event object to use
+<a name="line274"></a> *     for trigger event.
+<a name="line275"></a> * @return {boolean} Whether hovercard should be shown or cancelled.
+<a name="line276"></a> * @protected
+<a name="line277"></a> */
+<a name="line278"></a>goog.ui.HoverCard.prototype.onTrigger = function(triggerEvent) {
+<a name="line279"></a>  return this.dispatchEvent(triggerEvent);
+<a name="line280"></a>};
+<a name="line281"></a>
+<a name="line282"></a>
+<a name="line283"></a>/**
+<a name="line284"></a> * Abort pending hovercard showing, if any.
+<a name="line285"></a> */
+<a name="line286"></a>goog.ui.HoverCard.prototype.cancelTrigger = function() {
+<a name="line287"></a>  this.clearShowTimer();
+<a name="line288"></a>  this.onCancelTrigger();
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * If hovercard is in the process of being triggered, then cancel it.
+<a name="line294"></a> * @private
+<a name="line295"></a> */
+<a name="line296"></a>goog.ui.HoverCard.prototype.maybeCancelTrigger_ = function() {
+<a name="line297"></a>  if (this.getState() == goog.ui.Tooltip.State.WAITING_TO_SHOW ||
+<a name="line298"></a>      this.getState() == goog.ui.Tooltip.State.UPDATING) {
+<a name="line299"></a>    this.cancelTrigger();
+<a name="line300"></a>  }
+<a name="line301"></a>};
+<a name="line302"></a>
+<a name="line303"></a>
+<a name="line304"></a>/**
+<a name="line305"></a> * This method gets called when we detect that a trigger event will not lead
+<a name="line306"></a> * to the hovercard being shown.
+<a name="line307"></a> * @protected
+<a name="line308"></a> */
+<a name="line309"></a>goog.ui.HoverCard.prototype.onCancelTrigger = function() {
+<a name="line310"></a>  var event = new goog.ui.HoverCard.TriggerEvent(
+<a name="line311"></a>      goog.ui.HoverCard.EventType.CANCEL_TRIGGER, this, this.anchor || null);
+<a name="line312"></a>  this.dispatchEvent(event);
+<a name="line313"></a>  this.detachTempAnchor_(this.anchor);
+<a name="line314"></a>  delete this.anchor;
+<a name="line315"></a>};
+<a name="line316"></a>
+<a name="line317"></a>
+<a name="line318"></a>/**
+<a name="line319"></a> * Gets the DOM element that triggered the current hovercard.  Note that in
+<a name="line320"></a> * the TRIGGER or CANCEL_TRIGGER events, the current hovercard&#39;s anchor may not
+<a name="line321"></a> * be the one that caused the event, so use the event&#39;s anchor property instead.
+<a name="line322"></a> * @return {Element?} Object that caused the currently displayed hovercard (or
+<a name="line323"></a> *     pending hovercard if none is displayed) to be triggered.
+<a name="line324"></a> */
+<a name="line325"></a>goog.ui.HoverCard.prototype.getAnchorElement = function() {
+<a name="line326"></a>  // this.currentAnchor_ is only set if the hovercard is showing.  If it isn&#39;t
+<a name="line327"></a>  // showing yet, then use this.anchor as the pending anchor.
+<a name="line328"></a>  return /** @type {Element} */ (this.currentAnchor_ || this.anchor);
+<a name="line329"></a>};
+<a name="line330"></a>
+<a name="line331"></a>
+<a name="line332"></a>/**
+<a name="line333"></a> * Make sure we detach from temp anchor when we are done displaying hovercard.
+<a name="line334"></a> * @private
+<a name="line335"></a> */
+<a name="line336"></a>goog.ui.HoverCard.prototype.onHide_ = function() {
+<a name="line337"></a>  goog.ui.HoverCard.superClass_.onHide_.call(this);
+<a name="line338"></a>  this.setCurrentAnchor_(null);
+<a name="line339"></a>};
+<a name="line340"></a>
+<a name="line341"></a>
+<a name="line342"></a>/**
+<a name="line343"></a> * This mouse over event is only received if the anchor is already attached.
+<a name="line344"></a> * If it was attached manually, then it may need to be triggered.
+<a name="line345"></a> * @param {goog.events.BrowserEvent} event Mouse over event.
+<a name="line346"></a> * @protected
+<a name="line347"></a> */
+<a name="line348"></a>goog.ui.HoverCard.prototype.handleMouseOver = function(event) {
+<a name="line349"></a>  // If this is a child of a triggering element, find the triggering element.
+<a name="line350"></a>  var trigger = this.getAnchorFromElement(
+<a name="line351"></a>      /** @type {Element} */ (event.target));
+<a name="line352"></a>
+<a name="line353"></a>  // If we moused over an element different from the one currently being
+<a name="line354"></a>  // triggered (if any), then trigger this new element.
+<a name="line355"></a>  if (trigger &amp;&amp; trigger != this.anchor) {
+<a name="line356"></a>    this.triggerForElement(trigger);
+<a name="line357"></a>    return;
+<a name="line358"></a>  }
+<a name="line359"></a>
+<a name="line360"></a>  goog.ui.HoverCard.superClass_.handleMouseOver.call(this, event);
+<a name="line361"></a>};
+<a name="line362"></a>
+<a name="line363"></a>
+<a name="line364"></a>/**
+<a name="line365"></a> * If the mouse moves out of the trigger while we&#39;re being triggered, then
+<a name="line366"></a> * cancel it.
+<a name="line367"></a> * @param {goog.events.BrowserEvent} event Mouse out or blur event.
+<a name="line368"></a> * @protected
+<a name="line369"></a> */
+<a name="line370"></a>goog.ui.HoverCard.prototype.handleMouseOutAndBlur = function(event) {
+<a name="line371"></a>  // Get ready to see if a trigger should be cancelled.
+<a name="line372"></a>  var anchor = this.anchor;
+<a name="line373"></a>  var state = this.getState();
+<a name="line374"></a>  goog.ui.HoverCard.superClass_.handleMouseOutAndBlur.call(this, event);
+<a name="line375"></a>  if (state != this.getState() &amp;&amp;
+<a name="line376"></a>      (state == goog.ui.Tooltip.State.WAITING_TO_SHOW ||
+<a name="line377"></a>       state == goog.ui.Tooltip.State.UPDATING)) {
+<a name="line378"></a>    // Tooltip&#39;s handleMouseOutAndBlur method sets anchor to null.  Reset
+<a name="line379"></a>    // so that the cancel trigger event will have the right data, and so that
+<a name="line380"></a>    // it will be properly detached.
+<a name="line381"></a>    this.anchor = anchor;
+<a name="line382"></a>    this.onCancelTrigger();  // This will remove and detach the anchor.
+<a name="line383"></a>  }
+<a name="line384"></a>};
+<a name="line385"></a>
+<a name="line386"></a>
+<a name="line387"></a>/**
+<a name="line388"></a> * Called by timer from mouse over handler. If this is called and the hovercard
+<a name="line389"></a> * is not shown for whatever reason, then send a cancel trigger event.
+<a name="line390"></a> * @param {Element} el Element to show tooltip for.
+<a name="line391"></a> * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+<a name="line392"></a> *     at.
+<a name="line393"></a> */
+<a name="line394"></a>goog.ui.HoverCard.prototype.maybeShow = function(el, opt_pos) {
+<a name="line395"></a>  goog.ui.HoverCard.superClass_.maybeShow.call(this, el, opt_pos);
+<a name="line396"></a>
+<a name="line397"></a>  if (!this.isVisible()) {
+<a name="line398"></a>    this.cancelTrigger();
+<a name="line399"></a>  } else {
+<a name="line400"></a>    this.setCurrentAnchor_(el);
+<a name="line401"></a>  }
+<a name="line402"></a>};
+<a name="line403"></a>
+<a name="line404"></a>
+<a name="line405"></a>/**
+<a name="line406"></a> * Sets the max number of levels to search up the dom if checking descendants.
+<a name="line407"></a> * @param {number} maxSearchSteps Maximum number of levels to search up the
+<a name="line408"></a> *     dom if checking descendants.
+<a name="line409"></a> */
+<a name="line410"></a>goog.ui.HoverCard.prototype.setMaxSearchSteps = function(maxSearchSteps) {
+<a name="line411"></a>  if (!maxSearchSteps) {
+<a name="line412"></a>    this.checkDescendants_ = false;
+<a name="line413"></a>  } else if (this.checkDescendants_) {
+<a name="line414"></a>    this.maxSearchSteps_ = maxSearchSteps;
+<a name="line415"></a>  }
+<a name="line416"></a>};
+<a name="line417"></a>
+<a name="line418"></a>
+<a name="line419"></a>
+<a name="line420"></a>/**
+<a name="line421"></a> * Create a trigger event for specified anchor and optional data.
+<a name="line422"></a> * @param {goog.ui.HoverCard.EventType} type Event type.
+<a name="line423"></a> * @param {goog.ui.HoverCard} target Hovercard that is triggering the event.
+<a name="line424"></a> * @param {Element} anchor Element that triggered event.
+<a name="line425"></a> * @param {Object} opt_data Optional data to be available in the TRIGGER event.
+<a name="line426"></a> * @constructor
+<a name="line427"></a> * @extends {goog.events.Event}
+<a name="line428"></a> */
+<a name="line429"></a>goog.ui.HoverCard.TriggerEvent = function(type, target, anchor, opt_data) {
+<a name="line430"></a>  goog.events.Event.call(this, type, target);
+<a name="line431"></a>
+<a name="line432"></a>  /**
+<a name="line433"></a>   * Element that triggered the hovercard event.
+<a name="line434"></a>   * @type {Element}
+<a name="line435"></a>   */
+<a name="line436"></a>  this.anchor = anchor;
+<a name="line437"></a>
+<a name="line438"></a>  /**
+<a name="line439"></a>   * Optional data to be passed to the listener.
+<a name="line440"></a>   * @type {Object|undefined}
+<a name="line441"></a>   */
+<a name="line442"></a>  this.data = opt_data;
+<a name="line443"></a>};
+<a name="line444"></a>goog.inherits(goog.ui.HoverCard.TriggerEvent, goog.events.Event);
+</pre>
+
+
+</body>
+</html>

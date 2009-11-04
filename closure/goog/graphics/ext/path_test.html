@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+  Copyright 2007 Google Inc. All Rights Reserved.
+-->
+<head>
+<title>Closure Unit Tests - goog.graphics.ext.Path</title>
+<script src="../../base.js"></script>
+<script>
+  goog.require('goog.graphics');
+  goog.require('goog.graphics.ext');
+  goog.require('goog.testing.graphics');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+
+<script>
+  function testClone() {
+    var path = new goog.graphics.ext.Path().moveTo(0, 0).lineTo(1, 1).
+        curveTo(2, 2, 3, 3, 4, 4).arc(5, 5, 6, 6, 0, 90, false).close();
+    assertTrue('Cloned path is a goog.graphics.ext.Path',
+        path instanceof goog.graphics.ext.Path);
+  }
+
+  function testBoundingBox() {
+    var path = new goog.graphics.ext.Path().moveTo(0, 0).lineTo(1, 1).
+        curveTo(2, 2, 3, 3, 4, 4).close();
+    assertTrue('Bounding box is correct', goog.math.Rect.equals(
+        path.getBoundingBox(), new goog.math.Rect(0, 0, 4, 4)));
+  }
+
+  function testModifyBounds() {
+    var path1 = new goog.graphics.ext.Path().moveTo(0, 0).lineTo(1, 1).
+        curveTo(2, 2, 3, 3, 4, 4).close();
+    goog.testing.graphics.assertPathEquals(
+        ['M', -2, -2, 'L', 0, 0, 'C', 2, 2, 4, 4, 6, 6, 'X'],
+        path1.modifyBounds(-1, -1, 2, 2));
+  }
+</script>
+</body>
+</html>

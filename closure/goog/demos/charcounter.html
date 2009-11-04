@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+Copyright 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+  <title>goog.ui.CharCounter</title>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.dom');
+    goog.require('goog.ui.CharCounter');
+  </script>
+  <link rel="stylesheet" href="css/demo.css">
+</head>
+<body>
+  <h1>goog.ui.CharCounter</h1>
+
+  <p>
+  <input type="text" id="input1">
+  <span id="counter1"></span> character(s) remaining
+  </p>
+  <p>
+  <input type="text" id="input2">
+  <span id="counter2"></span> character(s) remaining
+  <button onclick="c2.setMaxLength(10);">setMaxLength(10)</button>
+  <button onclick="c2.setMaxLength(20);">setMaxLength(20)</button>
+  </p>
+  <p>
+  <textarea id="input3"></textarea>
+  <span id="counter3"></span> character(s) remaining
+  </p>
+
+  <script>
+
+    var c1 = new goog.ui.CharCounter(document.getElementById('input1'),
+                                     document.getElementById('counter1'), 160);
+
+    var c2 = new goog.ui.CharCounter(document.getElementById('input2'),
+                                     document.getElementById('counter2'), 10);
+
+    var c3 = new goog.ui.CharCounter(document.getElementById('input3'),
+                                     document.getElementById('counter3'), 255);
+  </script>
+</body>
+</html>

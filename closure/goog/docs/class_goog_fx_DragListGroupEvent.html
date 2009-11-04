@@ -1,0 +1,246 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>DragListGroupEvent (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">fx.DragListGroupEvent</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          <a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">
+            Object</a>
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    The event object dispatched by DragListGroup.
+The fields draggerElCenter, hoverList, and hoverNextItem are only available
+for the BEFOREDRAGMOVE and DRAGMOVE events.
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="../demos/draglistgroup.html">Demo</a></li>
+            <li><a href="closure_goog_fx_draglistgroup.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<pre class="inheritance">
+Object
+     <img src="static/images/inherit.gif">goog.fx.DragListGroupEvent
+</pre>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.fx.DragListGroupEvent(<span><span class="arg">type</span>,&nbsp;<span class="arg">dragListGroup</span>,&nbsp;<span class="arg">event</span>,&nbsp;<span class="arg">currDragItem</span>,&nbsp;<span class="arg">draggerEl</span>,&nbsp;<span class="arg">dragger</span>,&nbsp;<span class="arg">opt_draggerElCenter</span>,&nbsp;<span class="arg">opt_hoverList</span>,&nbsp;<span class="arg">opt_hoverNextItem</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">type</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The event type string.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">dragListGroup</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_DragListGroup.html">goog.fx.DragListGroup</a></span></div>
+        <div class="entryOverview">A reference to the associated DragListGroup object.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">event</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_fx_DragEvent.html">goog.fx.DragEvent</a></span></div>
+        <div class="entryOverview">The event fired by the browser or fired by the dragger.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">currDragItem</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">The current drag item being moved.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">draggerEl</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">The clone of the current drag item that&#39;s actually being dragged around.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">dragger</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_fx_Dragger.html">goog.fx.Dragger</a></span></div>
+        <div class="entryOverview">The dragger object.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_draggerElCenter</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        <div class="entryOverview">The current center position of the draggerEl.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_hoverList</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">The current drag list that&#39;s being hovered over, or null if the center of draggerEl is outside of any drag lists. If not null and the drag action ends right now, then currDragItem will end up in this list.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_hoverNextItem</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">The current next item in the hoverList that the draggerEl is hovering over. (I.e. If the drag action ends right now, then this item would become the next item after the new location of currDragItem.) May be null if not applicable or if currDragItem would be added to the end of hoverList.</div>
+     </td>
+   </tr>
+  </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package fx</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="goog" current="fx.DragListGroupEvent"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

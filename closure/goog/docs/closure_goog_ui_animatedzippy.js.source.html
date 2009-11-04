@@ -1,0 +1,238 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>animatedzippy.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_animatedzippy.js.html">animatedzippy.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Animated zippy widget implementation.
+<a name="line17"></a> *
+<a name="line18"></a> * @see ../demos/zippy.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.AnimatedZippy&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line24"></a>goog.require(&#39;goog.events&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line26"></a>goog.require(&#39;goog.fx.Animation&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.Zippy&#39;);
+<a name="line28"></a>goog.require(&#39;goog.ui.ZippyEvent&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Zippy widget. Expandable/collapsible container, clicking the header toggles
+<a name="line33"></a> * the visibility of the content.
+<a name="line34"></a> *
+<a name="line35"></a> * @param {Element|string} header Header element, either element reference or
+<a name="line36"></a> *     string id.
+<a name="line37"></a> * @param {Element|string} content Content element, either element reference or
+<a name="line38"></a> *     string id.
+<a name="line39"></a> * @param {boolean} opt_expanded Initial expanded/visibility state. Defaults to
+<a name="line40"></a> *     false.
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @extends {goog.ui.Zippy}
+<a name="line43"></a> */
+<a name="line44"></a>goog.ui.AnimatedZippy = function(header, content, opt_expanded) {
+<a name="line45"></a>  // Create wrapper element and move content into it.
+<a name="line46"></a>  var elWrapper = goog.dom.createDom(&#39;div&#39;, {&#39;style&#39;: &#39;overflow:hidden&#39;});
+<a name="line47"></a>  var elContent = goog.dom.getElement(content);
+<a name="line48"></a>  elContent.parentNode.replaceChild(elWrapper, elContent);
+<a name="line49"></a>  elWrapper.appendChild(elContent);
+<a name="line50"></a>
+<a name="line51"></a>  /**
+<a name="line52"></a>   * Contant wrapper, used for animation.
+<a name="line53"></a>   * @type {Element}
+<a name="line54"></a>   * @private
+<a name="line55"></a>   */
+<a name="line56"></a>  this.elWrapper_ = elWrapper;
+<a name="line57"></a>
+<a name="line58"></a>  /**
+<a name="line59"></a>   * Reference to animation or null if animation is not active.
+<a name="line60"></a>   * @type {goog.fx.Animation}
+<a name="line61"></a>   * @private
+<a name="line62"></a>   */
+<a name="line63"></a>  this.anim_ = null;
+<a name="line64"></a>
+<a name="line65"></a>  // Call constructor of super class.
+<a name="line66"></a>  goog.ui.Zippy.call(this, header, elContent, opt_expanded);
+<a name="line67"></a>
+<a name="line68"></a>  // Set initial state.
+<a name="line69"></a>  // NOTE: Set the class names as well otherwise animated zippys
+<a name="line70"></a>  // start with empty class names.
+<a name="line71"></a>  var expanded = this.expanded_;
+<a name="line72"></a>  this.elWrapper_.style.display = expanded ? &#39;&#39; : &#39;none&#39;;
+<a name="line73"></a>  this.updateHeaderClassName_(expanded);
+<a name="line74"></a>};
+<a name="line75"></a>goog.inherits(goog.ui.AnimatedZippy, goog.ui.Zippy);
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Duration of expand/collapse animation, in milliseconds.
+<a name="line80"></a> * @type {number}
+<a name="line81"></a> */
+<a name="line82"></a>goog.ui.AnimatedZippy.prototype.animationDuration = 500;
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Acceleration function for expand/collapse animation.
+<a name="line87"></a> * @type {!Function}
+<a name="line88"></a> */
+<a name="line89"></a>goog.ui.AnimatedZippy.prototype.animationAcceleration = goog.fx.easing.easeOut;
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * @return {boolean} Whether the zippy is in the process of being expanded or
+<a name="line94"></a> *     collapsed.
+<a name="line95"></a> */
+<a name="line96"></a>goog.ui.Zippy.prototype.isBusy = function() {
+<a name="line97"></a>  return this.anim_ != null;
+<a name="line98"></a>};
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * Sets expanded state.
+<a name="line103"></a> *
+<a name="line104"></a> * @param {boolean} expanded Expanded/visibility state.
+<a name="line105"></a> */
+<a name="line106"></a>goog.ui.AnimatedZippy.prototype.setExpanded = function(expanded) {
+<a name="line107"></a>  if (this.expanded_ == expanded &amp;&amp; !this.anim_) {
+<a name="line108"></a>    return;
+<a name="line109"></a>  }
+<a name="line110"></a>
+<a name="line111"></a>  // Reset display property of wrapper to allow content element to be
+<a name="line112"></a>  // measured.
+<a name="line113"></a>  if (this.elWrapper_.style.display == &#39;none&#39;) {
+<a name="line114"></a>    this.elWrapper_.style.display = &#39;&#39;;
+<a name="line115"></a>  }
+<a name="line116"></a>
+<a name="line117"></a>  // Measure content element.
+<a name="line118"></a>  var h = this.elContent_.offsetHeight;
+<a name="line119"></a>
+<a name="line120"></a>  // Stop active animation (if any) and determine starting height.
+<a name="line121"></a>  var startH = 0;
+<a name="line122"></a>  if (this.anim_) {
+<a name="line123"></a>    expanded = this.expanded_;
+<a name="line124"></a>    goog.events.removeAll(this.anim_);
+<a name="line125"></a>    this.anim_.stop(false);
+<a name="line126"></a>
+<a name="line127"></a>    startH = h - Math.abs(parseInt(this.elContent_.style.marginTop, 10));
+<a name="line128"></a>  } else {
+<a name="line129"></a>    startH = expanded ? 0 : h;
+<a name="line130"></a>  }
+<a name="line131"></a>
+<a name="line132"></a>  // Updates header class name after the animation has been stopped.
+<a name="line133"></a>  this.updateHeaderClassName_(expanded);
+<a name="line134"></a>
+<a name="line135"></a>  // Set up expand/collapse animation.
+<a name="line136"></a>  this.anim_ = new goog.fx.Animation([0, startH],
+<a name="line137"></a>                                     [0, expanded ? h : 0],
+<a name="line138"></a>                                     this.animationDuration,
+<a name="line139"></a>                                     this.animationAcceleration);
+<a name="line140"></a>
+<a name="line141"></a>  var events = [goog.fx.Animation.EventType.BEGIN,
+<a name="line142"></a>                goog.fx.Animation.EventType.ANIMATE,
+<a name="line143"></a>                goog.fx.Animation.EventType.END];
+<a name="line144"></a>  goog.events.listen(this.anim_, events, this.onAnimate_, false, this);
+<a name="line145"></a>  goog.events.listen(this.anim_,
+<a name="line146"></a>                     goog.fx.Animation.EventType.END,
+<a name="line147"></a>                     goog.bind(this.onAnimationCompleted_, this, expanded));
+<a name="line148"></a>
+<a name="line149"></a>  // Start animation.
+<a name="line150"></a>  this.anim_.play(false);
+<a name="line151"></a>};
+<a name="line152"></a>
+<a name="line153"></a>
+<a name="line154"></a>/**
+<a name="line155"></a> * Called during animation
+<a name="line156"></a> *
+<a name="line157"></a> * @param {goog.events.Event} e The event.
+<a name="line158"></a> * @private
+<a name="line159"></a> */
+<a name="line160"></a>goog.ui.AnimatedZippy.prototype.onAnimate_ = function(e) {
+<a name="line161"></a>  var h = this.elContent_.offsetHeight;
+<a name="line162"></a>  this.elContent_.style.marginTop = (e.y - h) + &#39;px&#39;;
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Called once the expand/collapse animation has completed.
+<a name="line168"></a> *
+<a name="line169"></a> * @param {boolean} expanded Expanded/visibility state.
+<a name="line170"></a> * @private
+<a name="line171"></a> */
+<a name="line172"></a>goog.ui.AnimatedZippy.prototype.onAnimationCompleted_ = function(expanded) {
+<a name="line173"></a>  // Fix wrong end position if the content has changed during the animation.
+<a name="line174"></a>  if (expanded) {
+<a name="line175"></a>    this.elContent_.style.marginTop = &#39;0&#39;;
+<a name="line176"></a>  }
+<a name="line177"></a>
+<a name="line178"></a>  goog.events.removeAll(this.anim_);
+<a name="line179"></a>  this.expanded_ = expanded;
+<a name="line180"></a>  this.anim_ = null;
+<a name="line181"></a>
+<a name="line182"></a>  if (!expanded) {
+<a name="line183"></a>    this.elWrapper_.style.display = &#39;none&#39;;
+<a name="line184"></a>  }
+<a name="line185"></a>
+<a name="line186"></a>  // Fire toggle event.
+<a name="line187"></a>  this.dispatchEvent(new goog.ui.ZippyEvent(goog.ui.Zippy.Events.TOGGLE,
+<a name="line188"></a>                                            this, expanded));
+<a name="line189"></a>};
+</pre>
+
+
+</body>
+</html>

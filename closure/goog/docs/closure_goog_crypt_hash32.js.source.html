@@ -1,0 +1,232 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>hash32.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_crypt_hash32.js.html">hash32.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Implementation of 32-bit hashing functions.
+<a name="line17"></a> *
+<a name="line18"></a> * This is a direct port from the Google Java Hash class
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.crypt.hash32&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.crypt&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Default seed used during hashing, digits of pie.
+<a name="line29"></a> * See SEED32 in http://go/base.hash.java
+<a name="line30"></a> * @type {number}
+<a name="line31"></a> */
+<a name="line32"></a>goog.crypt.hash32.SEED32 = 314159265;
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Arbitrary constant used during hashing.
+<a name="line37"></a> * See CONSTANT32 in http://go/base.hash.java
+<a name="line38"></a> * @type {number}
+<a name="line39"></a> */
+<a name="line40"></a>goog.crypt.hash32.CONSTANT32 = -1640531527;
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * Hashes a string to a 32-bit value.
+<a name="line45"></a> * @param {string} str String to hash.
+<a name="line46"></a> * @return {number} 32-bit hash.
+<a name="line47"></a> */
+<a name="line48"></a>goog.crypt.hash32.encodeString = function(str) {
+<a name="line49"></a>  return goog.crypt.hash32.encodeByteArray(goog.crypt.stringToByteArray(str));
+<a name="line50"></a>};
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Hashes a string to a 32-bit value, converting the string to UTF-8 before
+<a name="line55"></a> * doing the encoding.
+<a name="line56"></a> * @param {string} str String to hash.
+<a name="line57"></a> * @return {number} 32-bit hash.
+<a name="line58"></a> */
+<a name="line59"></a>goog.crypt.hash32.encodeStringUtf8 = function(str) {
+<a name="line60"></a>  return goog.crypt.hash32.encodeByteArray(
+<a name="line61"></a>      goog.crypt.stringToUtf8ByteArray(str));
+<a name="line62"></a>};
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Hashes an integer to a 32-bit value.
+<a name="line67"></a> * @param {number} value Number to hash.
+<a name="line68"></a> * @return {number} 32-bit hash.
+<a name="line69"></a> */
+<a name="line70"></a>goog.crypt.hash32.encodeInteger = function(value) {
+<a name="line71"></a>  // TODO: Does this make sense in JavaScript with doubles?  Should we
+<a name="line72"></a>  // force the value to be in the correct range?
+<a name="line73"></a>  return goog.crypt.hash32.mix32_({
+<a name="line74"></a>    a: value,
+<a name="line75"></a>    b: goog.crypt.hash32.CONSTANT32,
+<a name="line76"></a>    c: goog.crypt.hash32.SEED32
+<a name="line77"></a>  });
+<a name="line78"></a>};
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Hashes a &quot;byte&quot; array to a 32-bit value using the supplied seed.
+<a name="line83"></a> * @param {Array.&lt;number&gt;} bytes Array of bytes.
+<a name="line84"></a> * @param {number} opt_offset The starting position to use for hash computation.
+<a name="line85"></a> * @param {number} opt_length Number of bytes that are used for hashing.
+<a name="line86"></a> * @param {number} opt_seed The seed.
+<a name="line87"></a> * @return {number} 32-bit hash.
+<a name="line88"></a> */
+<a name="line89"></a>goog.crypt.hash32.encodeByteArray = function(
+<a name="line90"></a>    bytes, opt_offset, opt_length, opt_seed) {
+<a name="line91"></a>  var offset = opt_offset || 0;
+<a name="line92"></a>  var length = opt_length || bytes.length;
+<a name="line93"></a>  var seed = opt_seed || goog.crypt.hash32.SEED32;
+<a name="line94"></a>
+<a name="line95"></a>  var mix = {
+<a name="line96"></a>    a: goog.crypt.hash32.CONSTANT32,
+<a name="line97"></a>    b: goog.crypt.hash32.CONSTANT32,
+<a name="line98"></a>    c: seed
+<a name="line99"></a>  };
+<a name="line100"></a>
+<a name="line101"></a>  var keylen;
+<a name="line102"></a>  for (keylen = length; keylen &gt;= 12; keylen -= 12, offset += 12) {
+<a name="line103"></a>    mix.a += goog.crypt.hash32.wordAt_(bytes, offset);
+<a name="line104"></a>    mix.b += goog.crypt.hash32.wordAt_(bytes, offset + 4);
+<a name="line105"></a>    mix.c += goog.crypt.hash32.wordAt_(bytes, offset + 8);
+<a name="line106"></a>    goog.crypt.hash32.mix32_(mix);
+<a name="line107"></a>  }
+<a name="line108"></a>  // Hash any remaining bytes
+<a name="line109"></a>  mix.c += length;
+<a name="line110"></a>  switch (keylen) {  // deal with rest.  Some cases fall through
+<a name="line111"></a>    case 11: mix.c += (bytes[offset + 10]) &lt;&lt; 24;
+<a name="line112"></a>    case 10: mix.c += (bytes[offset + 9] &amp; 0xff) &lt;&lt; 16;
+<a name="line113"></a>    case 9 : mix.c += (bytes[offset + 8] &amp; 0xff) &lt;&lt; 8;
+<a name="line114"></a>      // the first byte of c is reserved for the length
+<a name="line115"></a>    case 8 :
+<a name="line116"></a>      mix.b += goog.crypt.hash32.wordAt_(bytes, offset + 4);
+<a name="line117"></a>      mix.a += goog.crypt.hash32.wordAt_(bytes, offset);
+<a name="line118"></a>      break;
+<a name="line119"></a>    case 7 : mix.b += (bytes[offset + 6] &amp; 0xff) &lt;&lt; 16;
+<a name="line120"></a>    case 6 : mix.b += (bytes[offset + 5] &amp; 0xff) &lt;&lt; 8;
+<a name="line121"></a>    case 5 : mix.b += (bytes[offset + 4] &amp; 0xff);
+<a name="line122"></a>    case 4 :
+<a name="line123"></a>      mix.a += goog.crypt.hash32.wordAt_(bytes, offset);
+<a name="line124"></a>      break;
+<a name="line125"></a>    case 3 : mix.a += (bytes[offset + 2] &amp; 0xff) &lt;&lt; 16;
+<a name="line126"></a>    case 2 : mix.a += (bytes[offset + 1] &amp; 0xff) &lt;&lt; 8;
+<a name="line127"></a>    case 1 : mix.a += (bytes[offset + 0] &amp; 0xff);
+<a name="line128"></a>      // case 0 : nothing left to add
+<a name="line129"></a>  }
+<a name="line130"></a>  return goog.crypt.hash32.mix32_(mix);
+<a name="line131"></a>};
+<a name="line132"></a>
+<a name="line133"></a>
+<a name="line134"></a>/**
+<a name="line135"></a> * Performs an inplace mix of an object with the integer properties (a, b, c)
+<a name="line136"></a> * and returns the final value of c.
+<a name="line137"></a> * @param {Object} mix Object with properties, a, b, and c.
+<a name="line138"></a> * @return {number} The end c-value for the mixing.
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.crypt.hash32.mix32_ = function(mix) {
+<a name="line142"></a>  var a = mix.a, b = mix.b, c = mix.c;
+<a name="line143"></a>  a -= b; a -= c; a ^= c &gt;&gt;&gt; 13;
+<a name="line144"></a>  b -= c; b -= a; b ^= a &lt;&lt; 8;
+<a name="line145"></a>  c -= a; c -= b; c ^= b &gt;&gt;&gt; 13;
+<a name="line146"></a>  a -= b; a -= c; a ^= c &gt;&gt;&gt; 12;
+<a name="line147"></a>  b -= c; b -= a; b ^= a &lt;&lt; 16;
+<a name="line148"></a>  c -= a; c -= b; c ^= b &gt;&gt;&gt; 5;
+<a name="line149"></a>  a -= b; a -= c; a ^= c &gt;&gt;&gt; 3;
+<a name="line150"></a>  b -= c; b -= a; b ^= a &lt;&lt; 10;
+<a name="line151"></a>  c -= a; c -= b; c ^= b &gt;&gt;&gt; 15;
+<a name="line152"></a>  mix.a = a; mix.b = b; mix.c = c;
+<a name="line153"></a>  return c;
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Returns the word at a given offset.  Treating an array of bytes a word at a
+<a name="line159"></a> * time is far more efficient than byte-by-byte.
+<a name="line160"></a> * @param {Array.&lt;number&gt;} bytes Array of bytes.
+<a name="line161"></a> * @param {number} offset Offset in the byte array.
+<a name="line162"></a> * @return {number} Integer value for the word.
+<a name="line163"></a> * @private
+<a name="line164"></a> */
+<a name="line165"></a>goog.crypt.hash32.wordAt_ = function(bytes, offset) {
+<a name="line166"></a>  var a = goog.crypt.hash32.toSigned_(bytes[offset + 0]);
+<a name="line167"></a>  var b = goog.crypt.hash32.toSigned_(bytes[offset + 1]);
+<a name="line168"></a>  var c = goog.crypt.hash32.toSigned_(bytes[offset + 2]);
+<a name="line169"></a>  var d = goog.crypt.hash32.toSigned_(bytes[offset + 3]);
+<a name="line170"></a>  return a + (b &lt;&lt; 8) + (c &lt;&lt; 16) + (d &lt;&lt; 24);
+<a name="line171"></a>};
+<a name="line172"></a>
+<a name="line173"></a>
+<a name="line174"></a>/**
+<a name="line175"></a> * Converts an unsigned &quot;byte&quot; to signed, that is, convert a value in the range
+<a name="line176"></a> * (0, 2^8-1) to (-2^7, 2^7-1) in order to be compatible with Java&#39;s byte type.
+<a name="line177"></a> * @param {number} n Unsigned &quot;byte&quot; value.
+<a name="line178"></a> * @return {number} Signed &quot;byte&quot; value.
+<a name="line179"></a> * @private
+<a name="line180"></a> */
+<a name="line181"></a>goog.crypt.hash32.toSigned_ = function(n) {
+<a name="line182"></a>  return n &gt; 127 ? n - 256 : n;
+<a name="line183"></a>};
+</pre>
+
+
+</body>
+</html>

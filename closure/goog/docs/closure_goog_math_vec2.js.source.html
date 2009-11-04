@@ -1,0 +1,302 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>vec2.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_math_vec2.js.html">vec2.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Defines a 2-element vector class that can be used for
+<a name="line17"></a> * coordinate math, useful for animation systems and point manipulation.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.math.Vec2&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.math&#39;);
+<a name="line24"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Class for a two-dimensional vector object and assorted functions useful for
+<a name="line29"></a> * manipulating points.
+<a name="line30"></a> *
+<a name="line31"></a> * Inherits from goog.math.Coordinate so that a Vec2 may be passed in to any
+<a name="line32"></a> * function that requires a Coordinate.
+<a name="line33"></a> *
+<a name="line34"></a> * @param {number} opt_x The x coordinate for the vector.
+<a name="line35"></a> * @param {number} opt_y The y coordinate for the vector.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @extends {goog.math.Coordinate}
+<a name="line38"></a> */
+<a name="line39"></a>goog.math.Vec2 = function(opt_x, opt_y) {
+<a name="line40"></a>  /**
+<a name="line41"></a>   * X-value
+<a name="line42"></a>   * @type {number}
+<a name="line43"></a>   */
+<a name="line44"></a>  this.x = Number(opt_x) || 0;
+<a name="line45"></a>
+<a name="line46"></a>  /**
+<a name="line47"></a>   * Y-value
+<a name="line48"></a>   * @type {number}
+<a name="line49"></a>   */
+<a name="line50"></a>  this.y = Number(opt_y) || 0;
+<a name="line51"></a>};
+<a name="line52"></a>goog.inherits(goog.math.Vec2, goog.math.Coordinate);
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * @return {!goog.math.Vec2} A random unit-length vector.
+<a name="line57"></a> */
+<a name="line58"></a>goog.math.Vec2.randomUnit = function() {
+<a name="line59"></a>  var angle = Math.random() * Math.PI * 2;
+<a name="line60"></a>  return new goog.math.Vec2(Math.cos(angle), Math.sin(angle));
+<a name="line61"></a>};
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * @return {!goog.math.Vec2} A random vector inside the unit-disc.
+<a name="line66"></a> */
+<a name="line67"></a>goog.math.Vec2.random = function() {
+<a name="line68"></a>  var mag = Math.sqrt(Math.random());
+<a name="line69"></a>  var angle = Math.random() * Math.PI * 2;
+<a name="line70"></a>
+<a name="line71"></a>  return new goog.math.Vec2(Math.cos(angle) * mag, Math.sin(angle) * mag);
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Returns a new Vec2 object from a given coordinate.
+<a name="line77"></a> * @param {!goog.math.Coordinate} a The coordinate.
+<a name="line78"></a> * @return {!goog.math.Vec2} A new vector object.
+<a name="line79"></a> */
+<a name="line80"></a>goog.math.Vec2.fromCoordinate = function(a) {
+<a name="line81"></a>  return new goog.math.Vec2(a.x, a.y);
+<a name="line82"></a>};
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * @return {!goog.math.Vec2} A new vector with the same coordinates as this one.
+<a name="line87"></a> */
+<a name="line88"></a>goog.math.Vec2.prototype.clone = function() {
+<a name="line89"></a>  return new goog.math.Vec2(this.x, this.y);
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Returns the magnitude of the vector measured from the origin.
+<a name="line95"></a> * @return {number} The length of the vector.
+<a name="line96"></a> */
+<a name="line97"></a>goog.math.Vec2.prototype.magnitude = function() {
+<a name="line98"></a>  return Math.sqrt(this.x * this.x + this.y * this.y);
+<a name="line99"></a>};
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Returns the squared magnitude of the vector measured from the origin.
+<a name="line104"></a> * NOTE: Leaving out the square root is not a significant
+<a name="line105"></a> * optimization in JavaScript.
+<a name="line106"></a> * @return {number} The length of the vector, squared.
+<a name="line107"></a> */
+<a name="line108"></a>goog.math.Vec2.prototype.squaredMagnitude = function() {
+<a name="line109"></a>  return this.x * this.x + this.y * this.y;
+<a name="line110"></a>};
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Scales the current vector by a constant.
+<a name="line115"></a> * @param {number} s The scale factor.
+<a name="line116"></a> * @return {!goog.math.Vec2} The scaled vector.
+<a name="line117"></a> */
+<a name="line118"></a>goog.math.Vec2.prototype.scale = function(s) {
+<a name="line119"></a>  this.x *= s;
+<a name="line120"></a>  this.y *= s;
+<a name="line121"></a>  return this;
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Reverses the sign of the vector. Equivalent to scaling the vector by -1.
+<a name="line127"></a> * @return {!goog.math.Vec2} The inverted vector.
+<a name="line128"></a> */
+<a name="line129"></a>goog.math.Vec2.prototype.invert = function() {
+<a name="line130"></a>  this.x = -this.x;
+<a name="line131"></a>  this.y = -this.y;
+<a name="line132"></a>  return this;
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Normalizes the current vector to have a magnitude of 1.
+<a name="line138"></a> * @return {!goog.math.Vec2} The normalized vector.
+<a name="line139"></a> */
+<a name="line140"></a>goog.math.Vec2.prototype.normalize = function() {
+<a name="line141"></a>  return this.scale(1 / this.magnitude());
+<a name="line142"></a>};
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * Adds another vector to this vector in-place. Uses goog.math.Vec2.sum(a, b) to
+<a name="line147"></a> * return a new vector.
+<a name="line148"></a> * @param {!goog.math.Vec2} b The vector to add.
+<a name="line149"></a> * @return {!goog.math.Vec2}  This vector with {@code b} added.
+<a name="line150"></a> */
+<a name="line151"></a>goog.math.Vec2.prototype.add = function(b) {
+<a name="line152"></a>  this.x += b.x;
+<a name="line153"></a>  this.y += b.y;
+<a name="line154"></a>  return this;
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * Subtracts another vector from this vector in-place. Uses
+<a name="line160"></a> * goog.math.Vec2.difference(a, b) to return a new vector.
+<a name="line161"></a> * @param {!goog.math.Vec2} b The vector to subtract.
+<a name="line162"></a> * @return {!goog.math.Vec2} This vector with {@code b} subtracted.
+<a name="line163"></a> */
+<a name="line164"></a>goog.math.Vec2.prototype.subtract = function(b) {
+<a name="line165"></a>  this.x -= b.x;
+<a name="line166"></a>  this.y -= b.y;
+<a name="line167"></a>  return this;
+<a name="line168"></a>};
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * Compares this vector with another for equality.
+<a name="line173"></a> * @param {!goog.math.Vec2} b The other vector.
+<a name="line174"></a> * @return {boolean} True if this vector has the same x and y as the given
+<a name="line175"></a> *     vector.
+<a name="line176"></a> */
+<a name="line177"></a>goog.math.Vec2.prototype.equals = function(b) {
+<a name="line178"></a>  return this == b || !!b &amp;&amp; this.x == b.x &amp;&amp; this.y == b.y;
+<a name="line179"></a>};
+<a name="line180"></a>
+<a name="line181"></a>
+<a name="line182"></a>/**
+<a name="line183"></a> * Returns the distance between two vectors.
+<a name="line184"></a> * @param {!goog.math.Vec2} a The first vector.
+<a name="line185"></a> * @param {!goog.math.Vec2} b The second vector.
+<a name="line186"></a> * @return {number} The distance.
+<a name="line187"></a> */
+<a name="line188"></a>goog.math.Vec2.distance = goog.math.Coordinate.distance;
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * Returns the squared distance between two vectors.
+<a name="line193"></a> * @param {!goog.math.Vec2} a The first vector.
+<a name="line194"></a> * @param {!goog.math.Vec2} b The second vector.
+<a name="line195"></a> * @return {number} The squared distance.
+<a name="line196"></a> */
+<a name="line197"></a>goog.math.Vec2.squaredDistance = goog.math.Coordinate.squaredDistance;
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Compares vectors for equality.
+<a name="line202"></a> * @param {!goog.math.Vec2} a The first vector.
+<a name="line203"></a> * @param {!goog.math.Vec2} b The second vector.
+<a name="line204"></a> * @return {boolean} True if the vectors have the same x and the same y.
+<a name="line205"></a> */
+<a name="line206"></a>goog.math.Vec2.equals = goog.math.Coordinate.equals;
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Returns the sum of two vectors as a new Vec2.
+<a name="line211"></a> * @param {!goog.math.Vec2} a The first vector.
+<a name="line212"></a> * @param {!goog.math.Vec2} b The second vector.
+<a name="line213"></a> * @return {!goog.math.Vec2} The sum vector.
+<a name="line214"></a> */
+<a name="line215"></a>goog.math.Vec2.sum = function(a, b) {
+<a name="line216"></a>  return new goog.math.Vec2(a.x + b.x, a.y + b.y);
+<a name="line217"></a>};
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * Returns the difference between two vectors as a new Vec2.
+<a name="line222"></a> * @param {!goog.math.Vec2} a The first vector.
+<a name="line223"></a> * @param {!goog.math.Vec2} b The second vector.
+<a name="line224"></a> * @return {!goog.math.Vec2} The difference vector.
+<a name="line225"></a> */
+<a name="line226"></a>goog.math.Vec2.difference = function(a, b) {
+<a name="line227"></a>  return new goog.math.Vec2(a.x - b.x, a.y - b.y);
+<a name="line228"></a>};
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Returns the dot-product of two vectors.
+<a name="line233"></a> * @param {!goog.math.Vec2} a The first vector.
+<a name="line234"></a> * @param {!goog.math.Vec2} b The second vector.
+<a name="line235"></a> * @return {number} The dot-product of the two vectors.
+<a name="line236"></a> */
+<a name="line237"></a>goog.math.Vec2.dot = function(a, b) {
+<a name="line238"></a>  return a.x * b.x + a.y * b.y;
+<a name="line239"></a>};
+<a name="line240"></a>
+<a name="line241"></a>
+<a name="line242"></a>/**
+<a name="line243"></a> * Returns a new Vec2 that is the linear interpolant between vectors a and b at
+<a name="line244"></a> * scale-value x.
+<a name="line245"></a> * @param {!goog.math.Vec2} a Vector a.
+<a name="line246"></a> * @param {!goog.math.Vec2} b Vector b.
+<a name="line247"></a> * @param {number} x The proportion between a and b.
+<a name="line248"></a> * @return {!goog.math.Vec2} The interpolated vector.
+<a name="line249"></a> */
+<a name="line250"></a>goog.math.Vec2.lerp = function(a, b, x) {
+<a name="line251"></a>  return new goog.math.Vec2(goog.math.lerp(a.x, b.x, x),
+<a name="line252"></a>                            goog.math.lerp(a.y, b.y, x));
+<a name="line253"></a>};
+</pre>
+
+
+</body>
+</html>

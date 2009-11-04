@@ -1,0 +1,345 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>controlrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">controlrenderer.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Base class for control renderers.
+ TODO:  If the renderer framework works well, pull it into Component.
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_ui_controlrenderer.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/ui/controlrenderer.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_ControlRenderer.html">
+          goog.ui.ControlRenderer</a><br/>
+        <div class="class-details">Default renderer for {@link goog.ui.Control}s.  Can be used as-is, but
+subclasses of Control will probably want to use renderers specifically
+tailored for them by extending this class.  Controls that use renderers
+delegate one or more of the following API methods to the renderer:
+<ul>
+<li>{@code createDom} - renders the DOM for the component
+<li>{@code canDecorate} - determines whether an element can be decorated
+by the component
+<li>{@code decorate} - decorates an existing element with the component
+<li>{@code setState} - updates the appearance of the component based on
+its state
+<li>{@code getContent} - returns the component&#39;s content
+<li>{@code setContent} - sets the component&#39;s content
+</li></li></li></li></li></li></ul>
+Controls are stateful; renderers, on the other hand, should be stateless and
+reusable.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.ControlRenderer.getCustomRenderer"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.ControlRenderer.</span><span class="entryName">getCustomRenderer<span class="args">(<span class="arg">ctor</span>,&nbsp;<span class="arg">cssClassName</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_ui_ControlRenderer.html">goog.ui.ControlRenderer</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Constructs a new renderer and sets the CSS class that the renderer will use
+as the base CSS class to apply to all elements rendered by that renderer.
+An example to use this function using a color palette:
+
+<pre class="lang-js">
+var myCustomRenderer = goog.ui.ControlRenderer.getCustomRenderer(
+goog.ui.PaletteRenderer, &#39;my-special-palette&#39;);
+var newColorPalette = new goog.ui.ColorPalette(
+colors, myCustomRenderer, opt_domHelper);
+</pre>
+
+Your CSS can look like this now:
+<pre class="lang-js">
+.my-special-palette { }
+.my-special-palette-table { }
+.my-special-palette-cell { }
+etc.
+</pre>
+
+<em>instead</em> of
+<pre class="lang-js">
+.CSS_MY_SPECIAL_PALETTE .goog-palette { }
+.CSS_MY_SPECIAL_PALETTE .goog-palette-table { }
+.CSS_MY_SPECIAL_PALETTE .goog-palette-cell { }
+etc.
+</pre>
+
+You would want to use this functionality when you want an instance of a
+component to have specific styles different than the other components of the
+same type in your application.  This avoids using descendant selectors to
+apply the specific styles to this component.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">ctor</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        <div class="entryOverview">The constructor of the renderer you are trying to create.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">cssClassName</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The name of the CSS class for this renderer.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_ui_ControlRenderer.html">goog.ui.ControlRenderer</a></span></div>&nbsp;
+            An instance of the desired renderer with its getCssClass() method overridden to return the supplied custom CSS class name.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_controlrenderer.js.source.html#line99">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.ControlRenderer.CSS_CLASS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.ControlRenderer.</span><span class="entryName">CSS_CLASS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Default CSS class to be applied to the root element of components rendered
+by this renderer.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_controlrenderer.js.source.html#line120">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.ControlRenderer.IE6_CLASS_COMBINATIONS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.ControlRenderer.</span><span class="entryName">IE6_CLASS_COMBINATIONS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&gt;&gt;</div>
+     </div>
+
+
+     <div class="entryOverview">
+       Array of arrays of CSS classes that we want composite classes added and
+removed for in IE6 and lower as a workaround for lack of multi-class CSS
+selector support.
+
+Subclasses that have accompanying CSS requiring this workaround should define
+their own static IE6_CLASS_COMBINATIONS constant and override
+getIe6ClassCombinations to return it.
+
+For example, if your stylesheet uses the selector .button.collapse-left
+(and is compiled to .button_collapse-left for the IE6 version of the
+stylesheet,) you should include [&#39;button&#39;, &#39;collapse-left&#39;] in this array
+and the class button_collapse-left will be applied to the root element
+whenever both button and collapse-left are applied individually.
+
+Members of each class name combination will be joined with underscores in the
+order that they&#39;re defined in the array. You should alphabetize them (for
+compatibility with the CSS compiler) unless you are doing something special.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_controlrenderer.js.source.html#line143">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/ui/controlrenderer.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

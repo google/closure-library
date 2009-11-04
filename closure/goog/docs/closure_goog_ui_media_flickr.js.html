@@ -1,0 +1,597 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>flickr.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">flickr.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    provides a reusable FlickrSet photo UI component given a public
+ FlickrSetModel.
+
+ goog.ui.media.FlickrSet is actually a {@link goog.ui.ControlRenderer}, a
+ stateless class - that could/should be used as a Singleton with the static
+ method {@code goog.ui.media.FlickrSet.getInstance} -, that knows how to
+ render Flickr sets. It is designed to be used with a {@link goog.ui.Control},
+ which will actually control the media renderer and provide the
+ {@link goog.ui.Component} base. This design guarantees that all different
+ types of medias will behave alike but will look different.
+
+ goog.ui.media.FlickrSet expects a {@code goog.ui.media.FlickrSetModel} on
+ {@code goog.ui.Control.getModel} as data models, and renders a flash object
+ that will show the contents of that set.
+
+ Example of usage:
+
+ <pre class="lang-js">
+ var flickrSet = goog.ui.media.FlickrSetModel.newInstance(flickrSetUrl);
+ goog.ui.media.FlickrSet.newControl(flickrSet).render();
+ </pre>
+
+ FlickrSet medias currently support the following states:
+
+ <ul>
+ <li> {@link goog.ui.Component.State.DISABLED}: shows &#39;flash not available&#39;
+ <li> {@link goog.ui.Component.State.HOVER}: mouse cursor is over the video
+ <li> {@link goog.ui.Component.State.SELECTED}: flash video is shown
+ </li></li></li></ul>
+
+ Which can be accessed by
+ <pre class="lang-js">
+ video.setEnabled(true);
+ video.setHighlighted(true);
+ video.setSelected(true);
+ </pre>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_ui_media_flickr.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/ui/media/flickr.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_FlickrSet.html">
+          goog.ui.media.FlickrSet</a><br/>
+        <div class="class-details">Subclasses a goog.ui.media.MediaRenderer to provide a FlickrSet specific
+media renderer.
+
+This class knows how to parse FlickrSet URLs, and render the DOM structure
+of flickr set players. This class is meant to be used as a singleton static
+stateless class, that takes {@code goog.ui.media.Media} instances and renders
+it. It expects {@code goog.ui.media.Media.getModel} to return a well formed,
+previously constructed, set id {@see goog.ui.media.FlickrSet.parseUrl},
+which is the data model this renderer will use to construct the DOM
+structure. {@see goog.ui.media.FlickrSet.newControl} for a example of
+constructing a control with this renderer.
+
+This design is patterned after
+<a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
+
+It uses {@link goog.ui.media.FlashObject} to embed the flash object.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_FlickrSetModel.html">
+          goog.ui.media.FlickrSetModel</a><br/>
+        <div class="class-details">The {@code goog.ui.media.FlickrAlbum} media data model. It stores a required
+{@code userId} and {@code setId} fields, sets the flickr Set URL, and
+allows a few optional parameters.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.FlickrSetModel.buildUrl"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.FlickrSetModel.</span><span class="entryName">buildUrl<span class="args">(<span class="arg">userId</span>,&nbsp;<span class="arg">setId</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Takes a flickr username and set id and returns an URL.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">userId</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The owner of the set.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">setId</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The set id.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
+            The URL of the set.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_media_flickr.js.source.html#line287">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.FlickrSetModel.matcher_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.FlickrSetModel.</span><span class="entryName">matcher_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Regular expression used to extract the username and set id out of the flickr
+URLs.
+
+Copied from <a href="http://go/markdownlite.js">http://go/markdownlite.js</a> and {@link FlickrExtractor.xml}.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_media_flickr.js.source.html#line254">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.FlickrSet.newControl"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.FlickrSet.</span><span class="entryName">newControl<span class="args">(<span class="arg">dataModel</span>,&nbsp;<span class="arg">opt_domHelper</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_ui_media_Media.html">goog.ui.media.Media</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       A static convenient method to construct a goog.ui.media.Media control out of
+a FlickrSet URL. It extracts the set id information on the URL, sets it
+as the data model goog.ui.media.FlickrSet renderer uses, sets the states
+supported by the renderer, and returns a Control that binds everything
+together. This is what you should be using for constructing FlickrSet videos,
+except if you need more fine control over the configuration.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">dataModel</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ui_media_FlickrSetModel.html">goog.ui.media.FlickrSetModel</a></span></div>
+        <div class="entryOverview">The Flickr Set data model.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        <div class="entryOverview">Optional DOM helper, used for document interaction.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_ui_media_Media.html">goog.ui.media.Media</a></span></div>&nbsp;
+            A Control binded to the FlickrSet renderer.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_media_flickr.js.source.html#line135">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.FlickrSetModel.newInstance"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.FlickrSetModel.</span><span class="entryName">newInstance<span class="args">(<span class="arg">flickrSetUrl</span>,&nbsp;<span class="arg">opt_caption</span>,&nbsp;<span class="arg">opt_description</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_ui_media_FlickrSetModel.html">goog.ui.media.FlickrSetModel</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Takes a {@code flickrSetUrl} and extracts the flickr username and set id.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">flickrSetUrl</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">A Flickr set URL.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_caption</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">An optional caption of the flickr set.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_description</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">An optional description of the flickr set.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_ui_media_FlickrSetModel.html">goog.ui.media.FlickrSetModel</a></span></div>&nbsp;
+            The data model that represents the Flickr set.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_media_flickr.js.source.html#line268">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.FlickrSet.setFlashUrl"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.FlickrSet.</span><span class="entryName">setFlashUrl<span class="args">(<span class="arg">flashUrl</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       A static method that sets which flash URL this class should use. Use this if
+you want to host your own flash flickr player.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">flashUrl</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The URL of the flash flickr player.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_media_flickr.js.source.html#line149">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.media.FlickrSet.CSS_CLASS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.FlickrSet.</span><span class="entryName">CSS_CLASS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Default CSS class to be applied to the root element of components rendered
+by this renderer.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_media_flickr.js.source.html#line107">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.media.FlickrSet.flashUrl_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.FlickrSet.</span><span class="entryName">flashUrl_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Flash player URL. Uses Flickr&#39;s flash player by default.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_media_flickr.js.source.html#line116">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/ui/media/flickr.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

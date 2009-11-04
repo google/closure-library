@@ -1,0 +1,741 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>locale.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_locale_locale.js.html">locale.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Functions for dealing with Date formatting &amp; Parsing,
+<a name="line17"></a> * County and language name, TimeZone list.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>/**
+<a name="line22"></a> * Namespace for locale related functions.
+<a name="line23"></a> */
+<a name="line24"></a>goog.provide(&#39;goog.locale&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.locale.nativeNameConstants&#39;);
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Set currnet locale to the specified one.
+<a name="line30"></a> * @param {string} localeName Locale name string. We are following the usage
+<a name="line31"></a> *     in CLDR, but can make a few compromise for existing name compatibility.
+<a name="line32"></a> */
+<a name="line33"></a>goog.locale.setLocale = function(localeName) {
+<a name="line34"></a>  // it is common to see people use &#39;-&#39; as locale part separator, normalize it.
+<a name="line35"></a>  localeName = localeName.replace(/-/g, &#39;_&#39;);
+<a name="line36"></a>  goog.locale.activeLocale_ = localeName;
+<a name="line37"></a>};
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Retrieve the currnet locale
+<a name="line42"></a> * @return {string} Current locale name string.
+<a name="line43"></a> */
+<a name="line44"></a>goog.locale.getLocale = function() {
+<a name="line45"></a>  if (!goog.locale.activeLocale_) {
+<a name="line46"></a>    goog.locale.activeLocale_ = &#39;en&#39;;
+<a name="line47"></a>  }
+<a name="line48"></a>  return goog.locale.activeLocale_;
+<a name="line49"></a>};
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>// Couple of constants to represent predefined Date/Time format type.
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Format for full representations of dates.
+<a name="line56"></a> * @type {number}
+<a name="line57"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.FULL_DATE.
+<a name="line58"></a> */
+<a name="line59"></a>goog.locale.FULL_DATE_FORMAT = 0;
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Format for long representations of dates.
+<a name="line64"></a> * @type {number}
+<a name="line65"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.LONG_DATE.
+<a name="line66"></a> */
+<a name="line67"></a>goog.locale.LONG_DATE_FORMAT = 1;
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * Format for medium representations of dates.
+<a name="line72"></a> * @type {number}
+<a name="line73"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.MEDIUM_DATE.
+<a name="line74"></a> */
+<a name="line75"></a>goog.locale.MEDIUM_DATE_FORMAT = 2;
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Format for short representations of dates.
+<a name="line80"></a> * @type {number}
+<a name="line81"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.SHORT_DATE.
+<a name="line82"></a> */
+<a name="line83"></a>goog.locale.SHORT_DATE_FORMAT = 3;
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Format for full representations of times.
+<a name="line88"></a> * @type {number}
+<a name="line89"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.FULL_TIME.
+<a name="line90"></a> */
+<a name="line91"></a>goog.locale.FULL_TIME_FORMAT = 4;
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Format for long representations of times.
+<a name="line96"></a> * @type {number}
+<a name="line97"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.LONG_TIME.
+<a name="line98"></a> */
+<a name="line99"></a>goog.locale.LONG_TIME_FORMAT = 5;
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Format for medium representations of times.
+<a name="line104"></a> * @type {number}
+<a name="line105"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.MEDIUM_TIME.
+<a name="line106"></a> */
+<a name="line107"></a>goog.locale.MEDIUM_TIME_FORMAT = 6;
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Format for short representations of times.
+<a name="line112"></a> * @type {number}
+<a name="line113"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.SHORT_TIME.
+<a name="line114"></a> */
+<a name="line115"></a>goog.locale.SHORT_TIME_FORMAT = 7;
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * Format for short representations of datetimes.
+<a name="line120"></a> * @type {number}
+<a name="line121"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.FULL_DATETIME.
+<a name="line122"></a> */
+<a name="line123"></a>goog.locale.FULL_DATETIME_FORMAT = 8;
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * Format for short representations of datetimes.
+<a name="line128"></a> * @type {number}
+<a name="line129"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.LONG_DATETIME.
+<a name="line130"></a> */
+<a name="line131"></a>goog.locale.LONG_DATETIME_FORMAT = 9;
+<a name="line132"></a>
+<a name="line133"></a>
+<a name="line134"></a>/**
+<a name="line135"></a> * Format for medium representations of datetimes.
+<a name="line136"></a> * @type {number}
+<a name="line137"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME.
+<a name="line138"></a> */
+<a name="line139"></a>goog.locale.MEDIUM_DATETIME_FORMAT = 10;
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * Format for short representations of datetimes.
+<a name="line144"></a> * @type {number}
+<a name="line145"></a> * @deprecated Use goog.i18n.DateTimeFormat.Format.SHORT_DATETIME.
+<a name="line146"></a> */
+<a name="line147"></a>goog.locale.SHORT_DATETIME_FORMAT = 11;
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Enum of resources that can be registered.
+<a name="line152"></a> * @enum {string}
+<a name="line153"></a> */
+<a name="line154"></a>goog.locale.Resource = {
+<a name="line155"></a>  DATE_TIME_CONSTANTS: &#39;DateTimeConstants&#39;,
+<a name="line156"></a>  NUMBER_FORMAT_CONSTANTS: &#39;NumberFormatConstants&#39;,
+<a name="line157"></a>  TIME_ZONE_CONSTANTS: &#39;TimeZoneConstants&#39;,
+<a name="line158"></a>  LOCAL_NAME_CONSTANTS: &#39;LocaleNameConstants&#39;,
+<a name="line159"></a>
+<a name="line160"></a>  TIME_ZONE_SELECTED_IDS: &#39;TimeZoneSelectedIds&#39;,
+<a name="line161"></a>  TIME_ZONE_SELECTED_SHORT_NAMES: &#39;TimeZoneSelectedShortNames&#39;,
+<a name="line162"></a>  TIME_ZONE_SELECTED_LONG_NAMES: &#39;TimeZoneSelectedLongNames&#39;,
+<a name="line163"></a>  TIME_ZONE_ALL_LONG_NAMES: &#39;TimeZoneAllLongNames&#39;
+<a name="line164"></a>};
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Predefined number format pattern type. The actual pattern is defined
+<a name="line169"></a> * separately for each locale.
+<a name="line170"></a> */
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Pattern for decimal numbers.
+<a name="line175"></a> * @type {number}
+<a name="line176"></a> * @deprecated Use goog.i18n.NumberFormat.Format.DECIMAL.
+<a name="line177"></a> */
+<a name="line178"></a>goog.locale.DECIMAL_PATTERN = 1;
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Pattern for scientific numbers.
+<a name="line183"></a> * @type {number}
+<a name="line184"></a> * @deprecated Use goog.i18n.NumberFormat.Format.SCIENTIFIC.
+<a name="line185"></a> */
+<a name="line186"></a>goog.locale.SCIENTIFIC_PATTERN = 2;
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Pattern for percentages.
+<a name="line191"></a> * @type {number}
+<a name="line192"></a> * @deprecated Use goog.i18n.NumberFormat.Format.PERCENT.
+<a name="line193"></a> */
+<a name="line194"></a>goog.locale.PERCENT_PATTERN = 3;
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * Pattern for currency.
+<a name="line199"></a> * @type {number}
+<a name="line200"></a> * @deprecated Use goog.i18n.NumberFormat.Format.CURRENCY.
+<a name="line201"></a> */
+<a name="line202"></a>goog.locale.CURRENCY_PATTERN = 4;
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>// BCP 47 language code:
+<a name="line206"></a>//
+<a name="line207"></a>// LanguageCode := LanguageSubtag
+<a name="line208"></a>//                (&quot;-&quot; ScriptSubtag)?
+<a name="line209"></a>//                (&quot;-&quot; RegionSubtag)?
+<a name="line210"></a>//                (&quot;-&quot; VariantSubtag)?
+<a name="line211"></a>//                (&quot;@&quot; Keyword &quot;=&quot; Value (&quot;,&quot; Keyword &quot;=&quot; Value)* )?
+<a name="line212"></a>//
+<a name="line213"></a>// e.g. en-Latn-GB
+<a name="line214"></a>//
+<a name="line215"></a>// NOTICE:
+<a name="line216"></a>// No special format checking is performed. If you pass a none valid
+<a name="line217"></a>// language code as parameter to the following functions,
+<a name="line218"></a>// you might get an unexpected result.
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Returns the language-subtag of the given language code.
+<a name="line223"></a> *
+<a name="line224"></a> * @param {string} languageCode Language code to extract language subtag from.
+<a name="line225"></a> * @return {string} Language subtag (in lowercase).
+<a name="line226"></a> */
+<a name="line227"></a>goog.locale.getLanguageSubTag = function(languageCode) {
+<a name="line228"></a>  var result = languageCode.match(/^\w{2,3}([-_]|$)/);
+<a name="line229"></a>  return result ? result[0].replace(/[_-]/g, &#39;&#39;) : &#39;&#39;;
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Returns the region-sub-tag of the given language code.
+<a name="line235"></a> *
+<a name="line236"></a> * @param {string} languageCode Language code to extract region subtag from.
+<a name="line237"></a> * @return {string} Region sub-tag (in uppercase).
+<a name="line238"></a> */
+<a name="line239"></a>goog.locale.getRegionSubTag = function(languageCode) {
+<a name="line240"></a>  var result = languageCode.match(/[-_]([a-zA-Z]{2}|\d{3})([-_]|$)/);
+<a name="line241"></a>  return result ? result[0].replace(/[_-]/g, &#39;&#39;) : &#39;&#39;;
+<a name="line242"></a>};
+<a name="line243"></a>
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * Returns the script subtag of the locale with the first alphabet in uppercase
+<a name="line247"></a> * and the rest 3 characters in lower case.
+<a name="line248"></a> *
+<a name="line249"></a> * @param {string} languageCode Language Code to extract script subtag from.
+<a name="line250"></a> * @return {string} Script subtag.
+<a name="line251"></a> */
+<a name="line252"></a>goog.locale.getScriptSubTag = function(languageCode) {
+<a name="line253"></a>  var result = languageCode.split(/[-_]/g);
+<a name="line254"></a>  return result.length &gt; 1 &amp;&amp; result[1].match(/^[a-zA-Z]{4}$/) ?
+<a name="line255"></a>      result[1] : &#39;&#39;;
+<a name="line256"></a>};
+<a name="line257"></a>
+<a name="line258"></a>
+<a name="line259"></a>/**
+<a name="line260"></a> * Returns the variant-sub-tag of the given language code.
+<a name="line261"></a> *
+<a name="line262"></a> * @param {string} languageCode Language code to extract variant subtag from.
+<a name="line263"></a> * @return {string} Variant sub-tag.
+<a name="line264"></a> */
+<a name="line265"></a>goog.locale.getVariantSubTag = function(languageCode) {
+<a name="line266"></a>  var result = languageCode.match(/[-_]([a-z]{2,})/);
+<a name="line267"></a>  return result ? result[1] : &#39;&#39;;
+<a name="line268"></a>};
+<a name="line269"></a>
+<a name="line270"></a>
+<a name="line271"></a>/**
+<a name="line272"></a> * Returns the country name of the provided language code in it&#39;s native
+<a name="line273"></a> * language.
+<a name="line274"></a> *
+<a name="line275"></a> * This method depends on goog.locale.nativeNameConstants available from
+<a name="line276"></a> * nativenameconstants.js. User of this method has to add dependacy to this.
+<a name="line277"></a> *
+<a name="line278"></a> * @param {string} countryCode Code to lookup the country name for.
+<a name="line279"></a> *
+<a name="line280"></a> * @return {string} Country name for the provided language code.
+<a name="line281"></a> */
+<a name="line282"></a>goog.locale.getNativeCountryName = function(countryCode) {
+<a name="line283"></a>  var key = goog.locale.getLanguageSubTag(countryCode) + &#39;_&#39; +
+<a name="line284"></a>            goog.locale.getRegionSubTag(countryCode);
+<a name="line285"></a>  return key in goog.locale.nativeNameConstants.COUNTRY ?
+<a name="line286"></a>      goog.locale.nativeNameConstants.COUNTRY[key] : countryCode;
+<a name="line287"></a>};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * Returns the localized country name for the provided language code in the
+<a name="line292"></a> * current or provided locale symbols set.
+<a name="line293"></a> *
+<a name="line294"></a> * This method depends on goog.locale.LocaleNameConstants__&lt;locale&gt; available
+<a name="line295"></a> * from //javascript/googledata/i18n/js_locale_data. User of this method
+<a name="line296"></a> * has to add dependacy to this.
+<a name="line297"></a> *
+<a name="line298"></a> * @param {string} languageCode Language code to lookup the country name for.
+<a name="line299"></a> * @param {Object} opt_localeSymbols If omitted the current locale symbol
+<a name="line300"></a> *     set is used.
+<a name="line301"></a> *
+<a name="line302"></a> * @return {string} Localized country name.
+<a name="line303"></a> */
+<a name="line304"></a>goog.locale.getLocalizedCountryName = function(languageCode,
+<a name="line305"></a>                                               opt_localeSymbols) {
+<a name="line306"></a>  if (!opt_localeSymbols) {
+<a name="line307"></a>    opt_localeSymbols = goog.locale.getResource(&#39;LocaleNameConstants&#39;,
+<a name="line308"></a>        goog.locale.getLocale());
+<a name="line309"></a>  }
+<a name="line310"></a>  var code = goog.locale.getRegionSubTag(languageCode);
+<a name="line311"></a>  return code in opt_localeSymbols.COUNTRY ?
+<a name="line312"></a>      opt_localeSymbols.COUNTRY[code] : languageCode;
+<a name="line313"></a>};
+<a name="line314"></a>
+<a name="line315"></a>
+<a name="line316"></a>/**
+<a name="line317"></a> * Returns the language name of the provided language code in it&#39;s native
+<a name="line318"></a> * language.
+<a name="line319"></a> *
+<a name="line320"></a> * This method depends on goog.locale.nativeNameConstants available from
+<a name="line321"></a> * nativenameconstants.js. User of this method has to add dependacy to this.
+<a name="line322"></a> *
+<a name="line323"></a> * @param {string} languageCode Language code to lookup the language name for.
+<a name="line324"></a> *
+<a name="line325"></a> * @return {string} Language name for the provided language code.
+<a name="line326"></a> */
+<a name="line327"></a>goog.locale.getNativeLanguageName = function(languageCode) {
+<a name="line328"></a>  var code = goog.locale.getLanguageSubTag(languageCode);
+<a name="line329"></a>  return code in goog.locale.nativeNameConstants.LANGUAGE ?
+<a name="line330"></a>      goog.locale.nativeNameConstants.LANGUAGE[code] : languageCode;
+<a name="line331"></a>};
+<a name="line332"></a>
+<a name="line333"></a>
+<a name="line334"></a>/**
+<a name="line335"></a> * Returns the localized language name for the provided language code in
+<a name="line336"></a> * the current or provided locale symbols set.
+<a name="line337"></a> *
+<a name="line338"></a> * This method depends on goog.locale.LocaleNameConstants__&lt;locale&gt; available
+<a name="line339"></a> * from //javascript/googledata/i18n/js_locale_data. User of this method
+<a name="line340"></a> * has to add dependacy to this.
+<a name="line341"></a> *
+<a name="line342"></a> * @param {string} languageCode Language code to lookup the language name for.
+<a name="line343"></a> * @param {Object} opt_localeSymbols locale symbol set if given.
+<a name="line344"></a> *
+<a name="line345"></a> * @return {string} Localized language name of the provided language code.
+<a name="line346"></a> */
+<a name="line347"></a>goog.locale.getLocalizedLanguageName = function(languageCode,
+<a name="line348"></a>                                                opt_localeSymbols) {
+<a name="line349"></a>  if (!opt_localeSymbols) {
+<a name="line350"></a>    opt_localeSymbols = goog.locale.getResource(&#39;LocaleNameConstants&#39;,
+<a name="line351"></a>        goog.locale.getLocale());
+<a name="line352"></a>  }
+<a name="line353"></a>  var code = goog.locale.getLanguageSubTag(languageCode);
+<a name="line354"></a>  return code in opt_localeSymbols.LANGUAGE ?
+<a name="line355"></a>      opt_localeSymbols.LANGUAGE[code] : languageCode;
+<a name="line356"></a>};
+<a name="line357"></a>
+<a name="line358"></a>
+<a name="line359"></a>/**
+<a name="line360"></a> * Register a resource object for certain locale.
+<a name="line361"></a> * @param {Object} dataObj The resource object being registered.
+<a name="line362"></a> * @param {goog.locale.Resource|string} resourceName String that represents
+<a name="line363"></a> *     the type of resource.
+<a name="line364"></a> * @param {string} localeName Locale ID.
+<a name="line365"></a> */
+<a name="line366"></a>goog.locale.registerResource = function(dataObj, resourceName, localeName) {
+<a name="line367"></a>  if (!goog.locale.resourceRegistry_[resourceName]) {
+<a name="line368"></a>    goog.locale.resourceRegistry_[resourceName] = {};
+<a name="line369"></a>  }
+<a name="line370"></a>  goog.locale.resourceRegistry_[resourceName][localeName] = dataObj;
+<a name="line371"></a>  // the first registered locale becomes active one. Usually there will be
+<a name="line372"></a>  // only one locale per js binary bundle.
+<a name="line373"></a>  if (!goog.locale.activeLocale_) {
+<a name="line374"></a>    goog.locale.activeLocale_ = localeName;
+<a name="line375"></a>  }
+<a name="line376"></a>};
+<a name="line377"></a>
+<a name="line378"></a>
+<a name="line379"></a>/**
+<a name="line380"></a> * Returns true if the required resource has already been registered.
+<a name="line381"></a> * @param {goog.locale.Resource|string} resourceName String that represents
+<a name="line382"></a> *     the type of resource.
+<a name="line383"></a> * @param {string} localeName Locale ID.
+<a name="line384"></a> * @return {boolean} Whether the required resource has already been registered.
+<a name="line385"></a> */
+<a name="line386"></a>goog.locale.isResourceRegistered = function(resourceName, localeName) {
+<a name="line387"></a>  return resourceName in goog.locale.resourceRegistry_ &amp;&amp;
+<a name="line388"></a>      localeName in goog.locale.resourceRegistry_[resourceName];
+<a name="line389"></a>};
+<a name="line390"></a>
+<a name="line391"></a>
+<a name="line392"></a>/**
+<a name="line393"></a> * This object maps (resourceName, localeName) to a resourceObj.
+<a name="line394"></a> * @type {Object}
+<a name="line395"></a> * @private
+<a name="line396"></a> */
+<a name="line397"></a>goog.locale.resourceRegistry_ = {};
+<a name="line398"></a>
+<a name="line399"></a>
+<a name="line400"></a>/**
+<a name="line401"></a> * Registers the datetime constants object for a given locale name.
+<a name="line402"></a> * @param {Object} dataObj The resource object.
+<a name="line403"></a> * @param {string} localeName Locale ID.
+<a name="line404"></a> * @deprecated Use goog.i18n.DateTimeFormat, no longer need this.
+<a name="line405"></a> */
+<a name="line406"></a>goog.locale.registerDateTimeConstants = function(dataObj, localeName) {
+<a name="line407"></a>  goog.locale.registerResource(
+<a name="line408"></a>      dataObj, goog.locale.Resource.DATE_TIME_CONSTANTS, localeName);
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>/**
+<a name="line413"></a> * Registers the timezone constants object for a given locale name.
+<a name="line414"></a> * @param {Object} dataObj The resource object.
+<a name="line415"></a> * @param {string} localeName Locale ID.
+<a name="line416"></a> * @deprecated Use goog.i18n.TimeZone, no longer need this.
+<a name="line417"></a> */
+<a name="line418"></a>goog.locale.registerTimeZoneConstants = function(dataObj, localeName) {
+<a name="line419"></a>  goog.locale.registerResource(
+<a name="line420"></a>      dataObj, goog.locale.Resource.TIME_ZONE_CONSTANTS, localeName);
+<a name="line421"></a>};
+<a name="line422"></a>
+<a name="line423"></a>
+<a name="line424"></a>/**
+<a name="line425"></a> * Registers the number formatting constants for a given locale.
+<a name="line426"></a> * @param {Object} dataObj The resource object.
+<a name="line427"></a> * @param {string} localeName Locale ID.
+<a name="line428"></a> * @deprecated Use goog.i18n.NumberFormat, no longer need this.
+<a name="line429"></a> */
+<a name="line430"></a>goog.locale.registerNumberFormatConstants = function(dataObj, localeName) {
+<a name="line431"></a>  goog.locale.registerResource(
+<a name="line432"></a>      dataObj, goog.locale.Resource.NUMBER_FORMAT_CONSTANTS, localeName);
+<a name="line433"></a>};
+<a name="line434"></a>
+<a name="line435"></a>
+<a name="line436"></a>/**
+<a name="line437"></a> * Registers the LocaleNameConstants constants object for a given locale name.
+<a name="line438"></a> * @param {Object} dataObj The resource object.
+<a name="line439"></a> * @param {string} localeName Locale ID.
+<a name="line440"></a> */
+<a name="line441"></a>goog.locale.registerLocaleNameConstants = function(dataObj, localeName) {
+<a name="line442"></a>  goog.locale.registerResource(
+<a name="line443"></a>      dataObj, goog.locale.Resource.LOCAL_NAME_CONSTANTS, localeName);
+<a name="line444"></a>};
+<a name="line445"></a>
+<a name="line446"></a>
+<a name="line447"></a>/**
+<a name="line448"></a> * Registers the TimeZoneSelectedIds constants object for a given locale name.
+<a name="line449"></a> * @param {Object} dataObj The resource object.
+<a name="line450"></a> * @param {string} localeName Locale ID.
+<a name="line451"></a> */
+<a name="line452"></a>goog.locale.registerTimeZoneSelectedIds = function(dataObj, localeName) {
+<a name="line453"></a>  goog.locale.registerResource(
+<a name="line454"></a>      dataObj, goog.locale.Resource.TIME_ZONE_SELECTED_IDS, localeName);
+<a name="line455"></a>};
+<a name="line456"></a>
+<a name="line457"></a>
+<a name="line458"></a>/**
+<a name="line459"></a> * Registers the TimeZoneSelectedShortNames constants object for a given
+<a name="line460"></a> *     locale name.
+<a name="line461"></a> * @param {Object} dataObj The resource object.
+<a name="line462"></a> * @param {string} localeName Locale ID.
+<a name="line463"></a> */
+<a name="line464"></a>goog.locale.registerTimeZoneSelectedShortNames = function(dataObj, localeName) {
+<a name="line465"></a>  goog.locale.registerResource(
+<a name="line466"></a>      dataObj, goog.locale.Resource.TIME_ZONE_SELECTED_SHORT_NAMES, localeName);
+<a name="line467"></a>};
+<a name="line468"></a>
+<a name="line469"></a>
+<a name="line470"></a>/**
+<a name="line471"></a> * Registers the TimeZoneSelectedLongNames constants object for a given locale
+<a name="line472"></a> *     name.
+<a name="line473"></a> * @param {Object} dataObj The resource object.
+<a name="line474"></a> * @param {string} localeName Locale ID.
+<a name="line475"></a> */
+<a name="line476"></a>goog.locale.registerTimeZoneSelectedLongNames = function(dataObj, localeName) {
+<a name="line477"></a>  goog.locale.registerResource(
+<a name="line478"></a>      dataObj, goog.locale.Resource.TIME_ZONE_SELECTED_LONG_NAMES, localeName);
+<a name="line479"></a>};
+<a name="line480"></a>
+<a name="line481"></a>
+<a name="line482"></a>/**
+<a name="line483"></a> * Registers the TimeZoneAllLongNames constants object for a given locale name.
+<a name="line484"></a> * @param {Object} dataObj The resource object.
+<a name="line485"></a> * @param {string} localeName Locale ID.
+<a name="line486"></a> */
+<a name="line487"></a>goog.locale.registerTimeZoneAllLongNames = function(dataObj, localeName) {
+<a name="line488"></a>  goog.locale.registerResource(
+<a name="line489"></a>      dataObj, goog.locale.Resource.TIME_ZONE_ALL_LONG_NAMES, localeName);
+<a name="line490"></a>};
+<a name="line491"></a>
+<a name="line492"></a>
+<a name="line493"></a>/**
+<a name="line494"></a> * Retrieve specified resource for certain locale.
+<a name="line495"></a> * @param {string} resourceName String that represents the type of resource.
+<a name="line496"></a> * @param {string} opt_locale Locale ID, if not given, current locale
+<a name="line497"></a> *     will be assumed.
+<a name="line498"></a> * @return {Object|undefined} The resource object that hold all the resource
+<a name="line499"></a> *     data, or undefined if not available.
+<a name="line500"></a> */
+<a name="line501"></a>goog.locale.getResource = function(resourceName, opt_locale) {
+<a name="line502"></a>  var locale = opt_locale ? opt_locale : goog.locale.getLocale();
+<a name="line503"></a>
+<a name="line504"></a>  if (!(resourceName in goog.locale.resourceRegistry_)) {
+<a name="line505"></a>    return undefined;
+<a name="line506"></a>  }
+<a name="line507"></a>  return goog.locale.resourceRegistry_[resourceName][locale];
+<a name="line508"></a>};
+<a name="line509"></a>
+<a name="line510"></a>
+<a name="line511"></a>/**
+<a name="line512"></a> * Retrieve specified resource for certain locale with fallback. For example,
+<a name="line513"></a> * request of &#39;zh_CN&#39; will be resolved in following order: zh_CN, zh, en.
+<a name="line514"></a> * If none of the above succeeds, of if the resource as indicated by
+<a name="line515"></a> * resourceName does not exist at all, undefined will be returned.
+<a name="line516"></a> *
+<a name="line517"></a> * @param {string} resourceName String that represents the type of resource.
+<a name="line518"></a> * @param {string} opt_locale locale ID, if not given, current locale
+<a name="line519"></a> *     will be assumed.
+<a name="line520"></a> * @return {Object|undefined} The resource object for desired locale.
+<a name="line521"></a> */
+<a name="line522"></a>goog.locale.getResourceWithFallback = function(resourceName, opt_locale) {
+<a name="line523"></a>  var locale = opt_locale ? opt_locale : goog.locale.getLocale();
+<a name="line524"></a>
+<a name="line525"></a>  if (!(resourceName in goog.locale.resourceRegistry_)) {
+<a name="line526"></a>    return undefined;
+<a name="line527"></a>  }
+<a name="line528"></a>
+<a name="line529"></a>  if (locale in goog.locale.resourceRegistry_[resourceName]) {
+<a name="line530"></a>    return goog.locale.resourceRegistry_[resourceName][locale];
+<a name="line531"></a>  }
+<a name="line532"></a>
+<a name="line533"></a>  // if locale has multiple parts (2 atmost in reality), fallback to base part.
+<a name="line534"></a>  var locale_parts = locale.split(&#39;_&#39;);
+<a name="line535"></a>  if (locale_parts.length &gt; 1 &amp;&amp;
+<a name="line536"></a>      locale_parts[0] in goog.locale.resourceRegistry_[resourceName]) {
+<a name="line537"></a>    return goog.locale.resourceRegistry_[resourceName][locale_parts[0]];
+<a name="line538"></a>  }
+<a name="line539"></a>
+<a name="line540"></a>  // otherwise, fallback to &#39;en&#39;
+<a name="line541"></a>  return goog.locale.resourceRegistry_[resourceName][&#39;en&#39;];
+<a name="line542"></a>};
+<a name="line543"></a>
+<a name="line544"></a>
+<a name="line545"></a>/**
+<a name="line546"></a> * The default English number format symbols.  See:
+<a name="line547"></a> * googledata/i18n/js_locale_data/NumberFormatConstants__*.js for other
+<a name="line548"></a> * symbol tables.
+<a name="line549"></a> *
+<a name="line550"></a> * @enum {string}
+<a name="line551"></a> * @deprecated Use goog.i18n.NumberFormatSymbols.
+<a name="line552"></a> */
+<a name="line553"></a>goog.locale.DefaultNumberFormatConstants = {
+<a name="line554"></a>  DECIMAL_SEP: &#39;.&#39;,
+<a name="line555"></a>  GROUP_SEP: &#39;,&#39;,
+<a name="line556"></a>  PERCENT: &#39;%&#39;,
+<a name="line557"></a>  ZERO_DIGIT: &#39;0&#39;,
+<a name="line558"></a>  PLUS_SIGN: &#39;+&#39;,
+<a name="line559"></a>  MINUS_SIGN: &#39;-&#39;,
+<a name="line560"></a>  EXP_SYMBOL: &#39;E&#39;,
+<a name="line561"></a>  PERMILL: &#39;\u2030&#39;,
+<a name="line562"></a>  INFINITY: &#39;\u221E&#39;,
+<a name="line563"></a>  NAN: &#39;NaN&#39;,
+<a name="line564"></a>  MONETARY_SEP: &#39;.&#39;,
+<a name="line565"></a>  MONETARY_GROUP_SEP: &#39;,&#39;,
+<a name="line566"></a>  DECIMAL_PATTERN: &#39;#,##0.###&#39;,
+<a name="line567"></a>  SCIENTIFIC_PATTERN: &#39;0.###E0&#39;,
+<a name="line568"></a>  PERCENT_PATTERN: &#39;#,##0%&#39;,
+<a name="line569"></a>  CURRENCY_PATTERN: &#39;\u00A4#,##0.00&#39;,
+<a name="line570"></a>  DEF_CURRENCY_CODE: &#39;USD&#39;
+<a name="line571"></a>};
+<a name="line572"></a>
+<a name="line573"></a>
+<a name="line574"></a>/**
+<a name="line575"></a> * The default English date time symbols.  See:
+<a name="line576"></a> * googledata/i18n/js_locale_data/DateTimeConstants__*.js for other
+<a name="line577"></a> * symbol tables.
+<a name="line578"></a> * @deprecated Use goog.i18n.DateTimeSymbols.
+<a name="line579"></a> */
+<a name="line580"></a>goog.locale.DefaultDateTimeConstants = {
+<a name="line581"></a>  ERAS: [&#39;BC&#39;, &#39;AD&#39;],
+<a name="line582"></a>  ERANAMES: [&#39;Before Christ&#39;, &#39;Anno Domini&#39;],
+<a name="line583"></a>  NARROWMONTHS: [&#39;J&#39;, &#39;F&#39;, &#39;M&#39;, &#39;A&#39;, &#39;M&#39;, &#39;J&#39;, &#39;J&#39;, &#39;A&#39;, &#39;S&#39;, &#39;O&#39;, &#39;N&#39;, &#39;D&#39;],
+<a name="line584"></a>  MONTHS: [&#39;January&#39;, &#39;February&#39;, &#39;March&#39;, &#39;April&#39;, &#39;May&#39;, &#39;June&#39;, &#39;July&#39;,
+<a name="line585"></a>           &#39;August&#39;, &#39;September&#39;, &#39;October&#39;, &#39;November&#39;, &#39;December&#39;],
+<a name="line586"></a>  SHORTMONTHS: [&#39;Jan&#39;, &#39;Feb&#39;, &#39;Mar&#39;, &#39;Apr&#39;, &#39;May&#39;, &#39;Jun&#39;, &#39;Jul&#39;, &#39;Aug&#39;, &#39;Sep&#39;,
+<a name="line587"></a>                &#39;Oct&#39;, &#39;Nov&#39;, &#39;Dec&#39;],
+<a name="line588"></a>  WEEKDAYS: [&#39;Sunday&#39;, &#39;Monday&#39;, &#39;Tuesday&#39;, &#39;Wednesday&#39;, &#39;Thursday&#39;, &#39;Friday&#39;,
+<a name="line589"></a>             &#39;Saturday&#39;],
+<a name="line590"></a>  SHORTWEEKDAYS: [&#39;Sun&#39;, &#39;Mon&#39;, &#39;Tue&#39;, &#39;Wed&#39;, &#39;Thu&#39;, &#39;Fri&#39;, &#39;Sat&#39;],
+<a name="line591"></a>  NARROWWEEKDAYS: [&#39;S&#39;, &#39;M&#39;, &#39;T&#39;, &#39;W&#39;, &#39;T&#39;, &#39;F&#39;, &#39;S&#39;],
+<a name="line592"></a>  SHORTQUARTERS: [&#39;Q1&#39;, &#39;Q2&#39;, &#39;Q3&#39;, &#39;Q4&#39;],
+<a name="line593"></a>  QUARTERS: [&#39;1st quarter&#39;, &#39;2nd quarter&#39;, &#39;3rd quarter&#39;, &#39;4th quarter&#39;],
+<a name="line594"></a>  AMPMS: [&#39;AM&#39;, &#39;PM&#39;],
+<a name="line595"></a>  DATEFORMATS: [&#39;EEEE, MMMM d, yyyy&#39;, &#39;MMMM d, yyyy&#39;, &#39;MMM d, yyyy&#39;, &#39;M/d/yy&#39;],
+<a name="line596"></a>  TIMEFORMATS: [&#39;h:mm:ss a v&#39;, &#39;h:mm:ss a z&#39;, &#39;h:mm:ss a&#39;, &#39;h:mm a&#39;],
+<a name="line597"></a>  FIRSTDAYOFWEEK: 6,
+<a name="line598"></a>  WEEKENDRANGE: [5, 6],
+<a name="line599"></a>  FIRSTWEEKCUTOFFDAY: 6
+<a name="line600"></a>};
+<a name="line601"></a>
+<a name="line602"></a>
+<a name="line603"></a>/**
+<a name="line604"></a> * The default ISO 8601 date time symbols. If not defined in ISO 8601,
+<a name="line605"></a> * then fallback is &#39;en&#39;. See:
+<a name="line606"></a> * googledata/i18n/js_locale_data/DateTimeConstants__*.js for other
+<a name="line607"></a> * symbol tables.
+<a name="line608"></a> * @deprecated Use goog.i18n.DateTimeSymbols.
+<a name="line609"></a> */
+<a name="line610"></a>goog.locale.DateTimeConstants__en_iso8601 = {
+<a name="line611"></a>  ERAS: [&#39;BCE&#39;, &#39;CE&#39;],
+<a name="line612"></a>  ERANAMES: [&#39;BCE&#39;, &#39;CE&#39;],
+<a name="line613"></a>  NARROWMONTHS: [&#39;J&#39;, &#39;F&#39;, &#39;M&#39;, &#39;A&#39;, &#39;M&#39;, &#39;J&#39;, &#39;J&#39;, &#39;A&#39;, &#39;S&#39;, &#39;O&#39;, &#39;N&#39;, &#39;D&#39;],
+<a name="line614"></a>  MONTHS: [&#39;January&#39;, &#39;February&#39;, &#39;March&#39;, &#39;April&#39;, &#39;May&#39;, &#39;June&#39;, &#39;July&#39;,
+<a name="line615"></a>           &#39;August&#39;, &#39;September&#39;, &#39;October&#39;, &#39;November&#39;, &#39;December&#39;],
+<a name="line616"></a>  SHORTMONTHS: [&#39;Jan&#39;, &#39;Feb&#39;, &#39;Mar&#39;, &#39;Apr&#39;, &#39;May&#39;, &#39;Jun&#39;, &#39;Jul&#39;, &#39;Aug&#39;, &#39;Sep&#39;,
+<a name="line617"></a>                &#39;Oct&#39;, &#39;Nov&#39;, &#39;Dec&#39;],
+<a name="line618"></a>  WEEKDAYS: [&#39;Sunday&#39;, &#39;Monday&#39;, &#39;Tuesday&#39;, &#39;Wednesday&#39;, &#39;Thursday&#39;, &#39;Friday&#39;,
+<a name="line619"></a>             &#39;Saturday&#39;],
+<a name="line620"></a>  SHORTWEEKDAYS: [&#39;Sun&#39;, &#39;Mon&#39;, &#39;Tue&#39;, &#39;Wed&#39;, &#39;Thu&#39;, &#39;Fri&#39;, &#39;Sat&#39;],
+<a name="line621"></a>  NARROWWEEKDAYS: [&#39;S&#39;, &#39;M&#39;, &#39;T&#39;, &#39;W&#39;, &#39;T&#39;, &#39;F&#39;, &#39;S&#39;],
+<a name="line622"></a>  SHORTQUARTERS: [&#39;Q1&#39;, &#39;Q2&#39;, &#39;Q3&#39;, &#39;Q4&#39;],
+<a name="line623"></a>  QUARTERS: [&#39;1st quarter&#39;, &#39;2nd quarter&#39;, &#39;3rd quarter&#39;, &#39;4th quarter&#39;],
+<a name="line624"></a>  AMPMS: [&#39;AM&#39;, &#39;PM&#39;],
+<a name="line625"></a>  DATEFORMATS: [&#39;EEEE, y MMMM dd&#39;, &#39;y MMMM d&#39;, &#39;y MMM d&#39;, &#39;yyyy-MM-dd&#39;],
+<a name="line626"></a>  TIMEFORMATS: [&#39;HH:mm:ss v&#39;, &#39;HH:mm:ss z&#39;, &#39;HH:mm:ss&#39;, &#39;HH:mm&#39;],
+<a name="line627"></a>  FIRSTDAYOFWEEK: 0,
+<a name="line628"></a>  WEEKENDRANGE: [5, 6],
+<a name="line629"></a>  FIRSTWEEKCUTOFFDAY: 3
+<a name="line630"></a>};
+<a name="line631"></a>
+<a name="line632"></a>
+<a name="line633"></a>/**
+<a name="line634"></a> * Narrowest names of months.
+<a name="line635"></a> * @type {Array.&lt;string&gt;}
+<a name="line636"></a> */
+<a name="line637"></a>goog.locale.DefaultDateTimeConstants.STANDALONENARROWMONTHS =
+<a name="line638"></a>    goog.locale.DefaultDateTimeConstants.NARROWMONTHS;
+<a name="line639"></a>
+<a name="line640"></a>
+<a name="line641"></a>/**
+<a name="line642"></a> * Full names of months.
+<a name="line643"></a> * @type {Array.&lt;string&gt;}
+<a name="line644"></a> */
+<a name="line645"></a>goog.locale.DefaultDateTimeConstants.STANDALONEMONTHS =
+<a name="line646"></a>    goog.locale.DefaultDateTimeConstants.MONTHS;
+<a name="line647"></a>
+<a name="line648"></a>
+<a name="line649"></a>/**
+<a name="line650"></a> * Short names of months.
+<a name="line651"></a> * @type {Array.&lt;string&gt;}
+<a name="line652"></a> */
+<a name="line653"></a>goog.locale.DefaultDateTimeConstants.STANDALONESHORTMONTHS =
+<a name="line654"></a>    goog.locale.DefaultDateTimeConstants.SHORTMONTHS;
+<a name="line655"></a>
+<a name="line656"></a>
+<a name="line657"></a>/**
+<a name="line658"></a> * Full names of week days.
+<a name="line659"></a> * @type {Array.&lt;string&gt;}
+<a name="line660"></a> */
+<a name="line661"></a>goog.locale.DefaultDateTimeConstants.STANDALONEWEEKDAYS =
+<a name="line662"></a>    goog.locale.DefaultDateTimeConstants.WEEKDAYS;
+<a name="line663"></a>
+<a name="line664"></a>
+<a name="line665"></a>/**
+<a name="line666"></a> * Short names of week days.
+<a name="line667"></a> * @type {Array.&lt;string&gt;}
+<a name="line668"></a> */
+<a name="line669"></a>goog.locale.DefaultDateTimeConstants.STANDALONESHORTWEEKDAYS =
+<a name="line670"></a>    goog.locale.DefaultDateTimeConstants.SHORTWEEKDAYS;
+<a name="line671"></a>
+<a name="line672"></a>
+<a name="line673"></a>/**
+<a name="line674"></a> * Narrowest names of week days.
+<a name="line675"></a> * @type {Array.&lt;string&gt;}
+<a name="line676"></a> */
+<a name="line677"></a>goog.locale.DefaultDateTimeConstants.STANDALONENARROWWEEKDAYS =
+<a name="line678"></a>    goog.locale.DefaultDateTimeConstants.NARROWWEEKDAYS;
+<a name="line679"></a>
+<a name="line680"></a>
+<a name="line681"></a>// Export global functions that are used by the date time constants files.
+<a name="line682"></a>// See http://go/js_locale_data
+<a name="line683"></a>var registerDateTimeConstants = goog.locale.registerDateTimeConstants;
+<a name="line684"></a>var registerNumberFormatConstants = goog.locale.registerNumberFormatConstants;
+<a name="line685"></a>var registerLocalNameConstants = goog.locale.registerLocaleNameConstants;
+<a name="line686"></a>
+<a name="line687"></a>var registerTimeZoneSelectedIds = goog.locale.registerTimeZoneSelectedIds;
+<a name="line688"></a>var registerTimeZoneSelectedShortNames =
+<a name="line689"></a>    goog.locale.registerTimeZoneSelectedShortNames;
+<a name="line690"></a>var registerTimeZoneSelectedLongNames =
+<a name="line691"></a>    goog.locale.registerTimeZoneSelectedLongNames;
+<a name="line692"></a>var registerTimeZoneAllLongNames = goog.locale.registerTimeZoneAllLongNames;
+</pre>
+
+
+</body>
+</html>

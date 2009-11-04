@@ -1,0 +1,439 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>scrollfloater.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_scrollfloater.js.html">scrollfloater.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview  Class for making an element detach and float to remain
+<a name="line17"></a> * visible when otherwise it would have scrolled up out of view.
+<a name="line18"></a> * &lt;p&gt;
+<a name="line19"></a> * The element remains at its normal position in the layout until scrolling
+<a name="line20"></a> * would cause its top edge to scroll off the top of the viewport; at that
+<a name="line21"></a> * point, the element is replaced with an invisible placeholder (to keep the
+<a name="line22"></a> * layout stable), reattached in the dom tree to a new parent (the body element
+<a name="line23"></a> * by default), and set to &quot;fixed&quot; positioning (emulated for IE &lt; 7) so that it
+<a name="line24"></a> * remains at its original X position while staying fixed to the top of the
+<a name="line25"></a> * viewport in the Y dimension.
+<a name="line26"></a> * &lt;p&gt;
+<a name="line27"></a> * When the window is scrolled up past the point where the original element
+<a name="line28"></a> * would be fully visible again, the element snaps back into place, replacing
+<a name="line29"></a> * the placeholder.
+<a name="line30"></a> *
+<a name="line31"></a> *
+<a name="line32"></a> * Adapted from http://go/elementfloater.js
+<a name="line33"></a> */
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>goog.provide(&#39;goog.ui.ScrollFloater&#39;);
+<a name="line37"></a>
+<a name="line38"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line39"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line40"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line41"></a>goog.require(&#39;goog.object&#39;);
+<a name="line42"></a>goog.require(&#39;goog.style&#39;);
+<a name="line43"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line44"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Creates a ScrollFloater; see file overview for details.
+<a name="line49"></a> *
+<a name="line50"></a> * @param {Element} opt_parentElement Where to attach the element when it&#39;s
+<a name="line51"></a> *     floating.  Default is the document body.  If the floating element
+<a name="line52"></a> *     contains form inputs, it will be necessary to attach it to the
+<a name="line53"></a> *     corresponding form element, or to an element in the DOM subtree under
+<a name="line54"></a> *     the form element.
+<a name="line55"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line56"></a> * @constructor
+<a name="line57"></a> * @extends {goog.ui.Component}
+<a name="line58"></a> */
+<a name="line59"></a>goog.ui.ScrollFloater = function(opt_parentElement, opt_domHelper) {
+<a name="line60"></a>  // If a parentElement is supplied, we want to use its domHelper,
+<a name="line61"></a>  // ignoring the caller-supplied one.
+<a name="line62"></a>  var domHelper = opt_parentElement ?
+<a name="line63"></a>      goog.dom.getDomHelper(opt_parentElement) : opt_domHelper;
+<a name="line64"></a>
+<a name="line65"></a>  goog.ui.Component.call(this, domHelper);
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * The element to which the scroll-floated element will be attached
+<a name="line69"></a>   * when it is floating.
+<a name="line70"></a>   * @type {Element}
+<a name="line71"></a>   * @private
+<a name="line72"></a>   */
+<a name="line73"></a>  this.parentElement_ =
+<a name="line74"></a>      opt_parentElement || this.getDomHelper().getDocument().body;
+<a name="line75"></a>
+<a name="line76"></a>  /**
+<a name="line77"></a>   * The original styles applied to the element before it began floating;
+<a name="line78"></a>   * used to restore those styles when the element stops floating.
+<a name="line79"></a>   * @type {Object}
+<a name="line80"></a>   * @private
+<a name="line81"></a>   */
+<a name="line82"></a>  this.originalStyles_ = {};
+<a name="line83"></a>};
+<a name="line84"></a>goog.inherits(goog.ui.ScrollFloater, goog.ui.Component);
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * The placeholder element dropped in to hold the layout for
+<a name="line89"></a> * the floated element.
+<a name="line90"></a> * @type {Element}
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.ui.ScrollFloater.prototype.placeholder_;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Whether scrolling is enabled for this element; true by default.
+<a name="line98"></a> * The {@link #setScrollingEnabled} method can be used to change this value.
+<a name="line99"></a> * @type {boolean}
+<a name="line100"></a> * @private
+<a name="line101"></a> */
+<a name="line102"></a>goog.ui.ScrollFloater.prototype.scrollingEnabled_ = true;
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * A flag indicating whether this instance is currently floating.
+<a name="line107"></a> * @type {boolean}
+<a name="line108"></a> * @private
+<a name="line109"></a> */
+<a name="line110"></a>goog.ui.ScrollFloater.prototype.floating_ = false;
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * The original vertical page offset at which the top of the element
+<a name="line115"></a> * was rendered.
+<a name="line116"></a> * @type {number}
+<a name="line117"></a> * @private
+<a name="line118"></a> */
+<a name="line119"></a>goog.ui.ScrollFloater.prototype.originalOffset_;
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * The style properties which are stored when we float an element, so they
+<a name="line123"></a> * can be restored when it &#39;docks&#39; again.
+<a name="line124"></a> * @type {Array.&lt;string&gt;}
+<a name="line125"></a> * @private
+<a name="line126"></a> */
+<a name="line127"></a>goog.ui.ScrollFloater.STORED_STYLE_PROPS_ = [
+<a name="line128"></a>  &#39;position&#39;, &#39;top&#39;, &#39;left&#39;, &#39;width&#39;, &#39;cssFloat&#39;];
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * The style elements managed for the placeholder object.
+<a name="line133"></a> * @type {Array.&lt;string&gt;}
+<a name="line134"></a> * @private
+<a name="line135"></a> */
+<a name="line136"></a>goog.ui.ScrollFloater.PLACEHOLDER_STYLE_PROPS_ = [
+<a name="line137"></a>  &#39;position&#39;, &#39;top&#39;, &#39;left&#39;, &#39;display&#39;, &#39;cssFloat&#39;,
+<a name="line138"></a>  &#39;marginTop&#39;, &#39;marginLeft&#39;, &#39;marginRight&#39;, &#39;marginBottom&#39;];
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * The class name applied to the floating element.
+<a name="line142"></a> * @type {string}
+<a name="line143"></a> * @private
+<a name="line144"></a> */
+<a name="line145"></a>goog.ui.ScrollFloater.CSS_CLASS_ = &#39;goog-scrollfloater&#39;;
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Delegates dom creation to superclass, then constructs and
+<a name="line150"></a> * decorates required DOM elements.
+<a name="line151"></a> */
+<a name="line152"></a>goog.ui.ScrollFloater.prototype.createDom = function() {
+<a name="line153"></a>  goog.ui.ScrollFloater.superClass_.createDom.call(this);
+<a name="line154"></a>
+<a name="line155"></a>  this.decorateInternal(this.getElement());
+<a name="line156"></a>};
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * Decorates the floated element with the standard ScrollFloater CSS class.
+<a name="line161"></a> * @param {Element} element The element to decorate.
+<a name="line162"></a> */
+<a name="line163"></a>goog.ui.ScrollFloater.prototype.decorateInternal = function(element) {
+<a name="line164"></a>  goog.ui.ScrollFloater.superClass_.decorateInternal.call(this, element);
+<a name="line165"></a>
+<a name="line166"></a>  goog.dom.classes.add(element, goog.ui.ScrollFloater.CSS_CLASS_);
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/** @inheritDoc */
+<a name="line171"></a>goog.ui.ScrollFloater.prototype.enterDocument = function() {
+<a name="line172"></a>  goog.ui.ScrollFloater.superClass_.enterDocument.call(this);
+<a name="line173"></a>
+<a name="line174"></a>  if (!this.placeholder_) {
+<a name="line175"></a>    this.placeholder_ =
+<a name="line176"></a>        this.getDomHelper().createDom(&#39;div&#39;, {&#39;style&#39;: &#39;visibility:hidden&#39;});
+<a name="line177"></a>  }
+<a name="line178"></a>
+<a name="line179"></a>  this.originalOffset_ = goog.style.getPageOffsetTop(this.getElement());
+<a name="line180"></a>  this.setScrollingEnabled(this.scrollingEnabled_);
+<a name="line181"></a>  this.getHandler().listen(
+<a name="line182"></a>      window, goog.events.EventType.SCROLL, this.update_);
+<a name="line183"></a>  this.getHandler().listen(
+<a name="line184"></a>      window, goog.events.EventType.RESIZE, this.handleResize_);
+<a name="line185"></a>};
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/** @inheritDoc */
+<a name="line189"></a>goog.ui.ScrollFloater.prototype.disposeInternal = function() {
+<a name="line190"></a>  goog.ui.ScrollFloater.superClass_.disposeInternal.call(this);
+<a name="line191"></a>
+<a name="line192"></a>  delete this.placeholder_;
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Sets whether the element should be floated if it scrolls out of view.
+<a name="line198"></a> * @param {boolean} enable Whether floating is enabled for this element.
+<a name="line199"></a> */
+<a name="line200"></a>goog.ui.ScrollFloater.prototype.setScrollingEnabled = function(enable) {
+<a name="line201"></a>  this.scrollingEnabled_ = enable;
+<a name="line202"></a>
+<a name="line203"></a>  if (enable) {
+<a name="line204"></a>    this.applyIeBgHack_();
+<a name="line205"></a>    this.update_();
+<a name="line206"></a>  } else {
+<a name="line207"></a>    this.stopFloating_();
+<a name="line208"></a>  }
+<a name="line209"></a>};
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * @return {boolean} Whether the component is enabled for scroll-floating.
+<a name="line214"></a> */
+<a name="line215"></a>goog.ui.ScrollFloater.prototype.isScrollingEnabled = function() {
+<a name="line216"></a>  return this.scrollingEnabled_;
+<a name="line217"></a>};
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * @return {boolean} Whether the component is currently scroll-floating.
+<a name="line222"></a> */
+<a name="line223"></a>goog.ui.ScrollFloater.prototype.isFloating = function() {
+<a name="line224"></a>  return this.floating_;
+<a name="line225"></a>};
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>/**
+<a name="line229"></a> * When a scroll event occurs, compares the element&#39;s position to the current
+<a name="line230"></a> * document scroll position, and stops or starts floating behavior if needed.
+<a name="line231"></a> * @param {goog.events.Event} opt_e The event, which is ignored.
+<a name="line232"></a> * @private
+<a name="line233"></a> */
+<a name="line234"></a>goog.ui.ScrollFloater.prototype.update_ = function(opt_e) {
+<a name="line235"></a>  if (this.scrollingEnabled_) {
+<a name="line236"></a>    var doc = this.getDomHelper().getDocument();
+<a name="line237"></a>    var currentScrollTop = this.getDomHelper().getDocumentScroll().y;
+<a name="line238"></a>
+<a name="line239"></a>    if (currentScrollTop &gt; this.originalOffset_) {
+<a name="line240"></a>      this.startFloating_();
+<a name="line241"></a>    } else {
+<a name="line242"></a>      this.stopFloating_();
+<a name="line243"></a>    }
+<a name="line244"></a>  }
+<a name="line245"></a>};
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * Begins floating behavior, making the element position:fixed (or IE hacked
+<a name="line250"></a> * equivalent) and inserting a placeholder where it used to be to keep the
+<a name="line251"></a> * layout from shifting around.
+<a name="line252"></a> * @private
+<a name="line253"></a> */
+<a name="line254"></a>goog.ui.ScrollFloater.prototype.startFloating_ = function() {
+<a name="line255"></a>  if (this.floating_) {
+<a name="line256"></a>    return;
+<a name="line257"></a>  }
+<a name="line258"></a>
+<a name="line259"></a>  var elem = this.getElement();
+<a name="line260"></a>  var doc = this.getDomHelper().getDocument();
+<a name="line261"></a>
+<a name="line262"></a>  // Read properties of element before modifying it.
+<a name="line263"></a>  var originalLeft_ = goog.style.getPageOffsetLeft(elem);
+<a name="line264"></a>  var originalWidth_ = goog.style.getContentBoxSize(elem).width;
+<a name="line265"></a>
+<a name="line266"></a>  this.originalStyles_ = {};
+<a name="line267"></a>
+<a name="line268"></a>  // Store styles while not floating so we can restore them when the
+<a name="line269"></a>  // element stops floating.
+<a name="line270"></a>  goog.object.forEach(goog.ui.ScrollFloater.STORED_STYLE_PROPS_,
+<a name="line271"></a>                      function(property) {
+<a name="line272"></a>                        this.originalStyles_[property] = elem.style[property];
+<a name="line273"></a>                      },
+<a name="line274"></a>                      this);
+<a name="line275"></a>
+<a name="line276"></a>  // Copy relevant styles to placeholder so it will be layed out the same
+<a name="line277"></a>  // as the element that&#39;s about to be floated.
+<a name="line278"></a>  goog.object.forEach(goog.ui.ScrollFloater.PLACEHOLDER_STYLE_PROPS_,
+<a name="line279"></a>                      function(property) {
+<a name="line280"></a>                        this.placeholder_.style[property] =
+<a name="line281"></a>                            elem.style[property] ||
+<a name="line282"></a>                                goog.style.getCascadedStyle(elem, property) ||
+<a name="line283"></a>                                goog.style.getComputedStyle(elem, property);
+<a name="line284"></a>                      },
+<a name="line285"></a>                      this);
+<a name="line286"></a>
+<a name="line287"></a>  goog.style.setSize(this.placeholder_, elem.offsetWidth, elem.offsetHeight);
+<a name="line288"></a>
+<a name="line289"></a>  // Make element float.
+<a name="line290"></a>
+<a name="line291"></a>  goog.style.setStyle(elem, {
+<a name="line292"></a>    &#39;left&#39;: originalLeft_ + &#39;px&#39;,
+<a name="line293"></a>    &#39;width&#39;: originalWidth_ + &#39;px&#39;,
+<a name="line294"></a>    &#39;cssFloat&#39;: &#39;none&#39;
+<a name="line295"></a>  });
+<a name="line296"></a>
+<a name="line297"></a>  elem.parentNode.replaceChild(this.placeholder_, elem);
+<a name="line298"></a>  this.parentElement_.appendChild(elem);
+<a name="line299"></a>
+<a name="line300"></a>  // Versions of IE below 7-in-standards-mode don&#39;t handle &#39;position: fixed&#39;,
+<a name="line301"></a>  // so we must emulate it using an IE-specific idiom for JS-based calculated
+<a name="line302"></a>  // style values.
+<a name="line303"></a>
+<a name="line304"></a>  if (this.needsIePositionHack_()) {
+<a name="line305"></a>    elem.style.position = &#39;absolute&#39;;
+<a name="line306"></a>    elem.style.setExpression(&#39;top&#39;,
+<a name="line307"></a>        &#39;document.compatMode==&quot;CSS1Compat&quot;?&#39; +
+<a name="line308"></a>        &#39;documentElement.scrollTop:document.body.scrollTop&#39;);
+<a name="line309"></a>  } else {
+<a name="line310"></a>    elem.style.position = &#39;fixed&#39;;
+<a name="line311"></a>    elem.style.top = &#39;0&#39;;
+<a name="line312"></a>  }
+<a name="line313"></a>
+<a name="line314"></a>  this.floating_ = true;
+<a name="line315"></a>};
+<a name="line316"></a>
+<a name="line317"></a>
+<a name="line318"></a>/**
+<a name="line319"></a> * Stops floating behavior, returning element to its original state.
+<a name="line320"></a> * @private
+<a name="line321"></a> */
+<a name="line322"></a>goog.ui.ScrollFloater.prototype.stopFloating_ = function() {
+<a name="line323"></a>  if (this.floating_) {
+<a name="line324"></a>    var elem = this.getElement();
+<a name="line325"></a>
+<a name="line326"></a>    for (var prop in this.originalStyles_) {
+<a name="line327"></a>      elem.style[prop] = this.originalStyles_[prop];
+<a name="line328"></a>    }
+<a name="line329"></a>
+<a name="line330"></a>    if (this.needsIePositionHack_()) {
+<a name="line331"></a>      elem.style.removeExpression(&#39;top&#39;);
+<a name="line332"></a>    }
+<a name="line333"></a>
+<a name="line334"></a>    this.placeholder_.parentNode.replaceChild(elem, this.placeholder_);
+<a name="line335"></a>    this.floating_ = false;
+<a name="line336"></a>  }
+<a name="line337"></a>};
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * Responds to window resize events by snapping the floater back to the new
+<a name="line342"></a> * version of its original position, then allowing it to float again if
+<a name="line343"></a> * appropriate.
+<a name="line344"></a> * @private
+<a name="line345"></a> */
+<a name="line346"></a>goog.ui.ScrollFloater.prototype.handleResize_ = function() {
+<a name="line347"></a>  this.stopFloating_();
+<a name="line348"></a>  this.originalOffset_ = goog.style.getPageOffsetTop(this.getElement());
+<a name="line349"></a>  this.update_();
+<a name="line350"></a>};
+<a name="line351"></a>
+<a name="line352"></a>
+<a name="line353"></a>/**
+<a name="line354"></a> * Determines whether we need to apply the position hack to emulated position:
+<a name="line355"></a> * fixed on this browser.
+<a name="line356"></a> * @return {boolean} Whether the current browser needs the position hack.
+<a name="line357"></a> * @private
+<a name="line358"></a> */
+<a name="line359"></a>goog.ui.ScrollFloater.prototype.needsIePositionHack_ = function() {
+<a name="line360"></a>  return goog.userAgent.IE &amp;&amp;
+<a name="line361"></a>      !(goog.userAgent.isVersion(&#39;7&#39;) &amp;&amp;
+<a name="line362"></a>          this.getDomHelper().isCss1CompatMode());
+<a name="line363"></a>};
+<a name="line364"></a>
+<a name="line365"></a>
+<a name="line366"></a>/**
+<a name="line367"></a> * Sets some magic CSS properties that make float-scrolling work smoothly
+<a name="line368"></a> * in IE6 (and IE7 in quirks mode). Without this hack, the floating element
+<a name="line369"></a> * will appear jumpy when you scroll the document. This involves modifying
+<a name="line370"></a> * the background of the HTML element (or BODY in quirks mode). If there&#39;s
+<a name="line371"></a> * already a background image in use this is not required.
+<a name="line372"></a> * For further reading, see
+<a name="line373"></a> * http://annevankesteren.nl/2005/01/position-fixed-in-ie
+<a name="line374"></a> * @private
+<a name="line375"></a> */
+<a name="line376"></a>goog.ui.ScrollFloater.prototype.applyIeBgHack_ = function() {
+<a name="line377"></a>  if (this.needsIePositionHack_()) {
+<a name="line378"></a>    var doc = this.getDomHelper().getDocument();
+<a name="line379"></a>    var topLevelElement = goog.style.getClientViewportElement(doc);
+<a name="line380"></a>
+<a name="line381"></a>    if (topLevelElement.currentStyle.backgroundImage == &#39;none&#39;) {
+<a name="line382"></a>      // Using an https URL if the current windowbp is https avoids an IE
+<a name="line383"></a>      // &quot;This page contains a mix of secure and nonsecure items&quot; warning.
+<a name="line384"></a>      topLevelElement.style.backgroundImage =
+<a name="line385"></a>          this.getDomHelper().getWindow().location.protocol == &#39;https:&#39; ?
+<a name="line386"></a>              &#39;url(https:///)&#39; : &#39;url(about:blank)&#39;;
+<a name="line387"></a>      topLevelElement.style.backgroundAttachment = &#39;fixed&#39;;
+<a name="line388"></a>    }
+<a name="line389"></a>  }
+<a name="line390"></a>};
+</pre>
+
+
+</body>
+</html>

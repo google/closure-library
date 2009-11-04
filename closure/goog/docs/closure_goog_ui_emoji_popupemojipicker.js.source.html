@@ -1,0 +1,457 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>popupemojipicker.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_emoji_popupemojipicker.js.html">popupemojipicker.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Popup Emoji Picker implementation. This provides a UI widget
+<a name="line17"></a> * for choosing an emoji from a grid of possible choices. The widget is a popup,
+<a name="line18"></a> * so it is suitable for a toolbar, for instance the TrogEdit toolbar.
+<a name="line19"></a> *
+<a name="line20"></a> * @see ../demos/popupemojipicker.html for an example of how to instantiate
+<a name="line21"></a> * an emoji picker.
+<a name="line22"></a> *
+<a name="line23"></a> * See goog.ui.emoji.EmojiPicker in emojipicker.js for more details.
+<a name="line24"></a> *
+<a name="line25"></a> * Based on goog.ui.PopupColorPicker (popupcolorpicker.js).
+<a name="line26"></a> *
+<a name="line27"></a> */
+<a name="line28"></a>
+<a name="line29"></a>goog.provide(&#39;goog.ui.emoji.PopupEmojiPicker&#39;);
+<a name="line30"></a>
+<a name="line31"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line32"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line33"></a>goog.require(&#39;goog.positioning.AnchoredPosition&#39;);
+<a name="line34"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line35"></a>goog.require(&#39;goog.ui.Popup&#39;);
+<a name="line36"></a>goog.require(&#39;goog.ui.emoji.EmojiPicker&#39;);
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Constructs a popup emoji picker widget.
+<a name="line41"></a> *
+<a name="line42"></a> * @param {string} defaultImgUrl Url of the img that should be used to fill up
+<a name="line43"></a> *     the cells in the emoji table, to prevent jittering. Should be the same
+<a name="line44"></a> *     size as the emoji.
+<a name="line45"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line46"></a> * @extends {goog.ui.Component}
+<a name="line47"></a> * @constructor
+<a name="line48"></a> */
+<a name="line49"></a>goog.ui.emoji.PopupEmojiPicker =
+<a name="line50"></a>    function(defaultImgUrl, opt_domHelper) {
+<a name="line51"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line52"></a>
+<a name="line53"></a>  this.emojiPicker_ = new goog.ui.emoji.EmojiPicker(defaultImgUrl,
+<a name="line54"></a>                                                    opt_domHelper);
+<a name="line55"></a>  this.addChild(this.emojiPicker_);
+<a name="line56"></a>
+<a name="line57"></a>  this.getHandler().listen(this.emojiPicker_,
+<a name="line58"></a>      goog.ui.Component.EventType.ACTION, this.onEmojiPicked_);
+<a name="line59"></a>};
+<a name="line60"></a>goog.inherits(goog.ui.emoji.PopupEmojiPicker, goog.ui.Component);
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Instance of an emoji picker control.
+<a name="line65"></a> * @type {goog.ui.emoji.EmojiPicker}
+<a name="line66"></a> * @private
+<a name="line67"></a> */
+<a name="line68"></a>goog.ui.emoji.PopupEmojiPicker.prototype.emojiPicker_ = null;
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Instance of goog.ui.Popup used to manage the behavior of the emoji picker.
+<a name="line73"></a> * @type {goog.ui.Popup}
+<a name="line74"></a> * @private
+<a name="line75"></a> */
+<a name="line76"></a>goog.ui.emoji.PopupEmojiPicker.prototype.popup_ = null;
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Reference to the element that triggered the last popup.
+<a name="line81"></a> * @type {Element?}
+<a name="line82"></a> * @private
+<a name="line83"></a> */
+<a name="line84"></a>goog.ui.emoji.PopupEmojiPicker.prototype.lastTarget_ = null;
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * Whether the emoji picker can accept focus.
+<a name="line89"></a> * @type {boolean}
+<a name="line90"></a> * @private
+<a name="line91"></a> */
+<a name="line92"></a>goog.ui.emoji.PopupEmojiPicker.prototype.focusable_ = true;
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * If true, then the emojipicker will toggle off if it is already visible.
+<a name="line97"></a> * Default is true.
+<a name="line98"></a> * @type {boolean}
+<a name="line99"></a> * @private
+<a name="line100"></a> */
+<a name="line101"></a>goog.ui.emoji.PopupEmojiPicker.prototype.toggleMode_ = true;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Adds a group of emoji to the picker.
+<a name="line106"></a> *
+<a name="line107"></a> * @param {string|Element} title Title for the group.
+<a name="line108"></a> * @param {Array.&lt;Array&gt;} emojiGroup A new group of emoji to be added. Each
+<a name="line109"></a> *    internal array contains [emojiUrl, emojiId].
+<a name="line110"></a> */
+<a name="line111"></a>goog.ui.emoji.PopupEmojiPicker.prototype.addEmojiGroup =
+<a name="line112"></a>    function(title, emojiGroup) {
+<a name="line113"></a>  this.emojiPicker_.addEmojiGroup(title, emojiGroup);
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Sets whether the emoji picker should toggle if it is already open.
+<a name="line119"></a> * @param {boolean} toggle The toggle mode to use.
+<a name="line120"></a> */
+<a name="line121"></a>goog.ui.emoji.PopupEmojiPicker.prototype.setToggleMode = function(toggle) {
+<a name="line122"></a>  this.toggleMode_ = toggle;
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * Gets whether the emojipicker is in toggle mode
+<a name="line128"></a> * @return {boolean} toggle.
+<a name="line129"></a> */
+<a name="line130"></a>goog.ui.emoji.PopupEmojiPicker.prototype.getToggleMode = function() {
+<a name="line131"></a>  return this.toggleMode_;
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Sets whether loading of images should be delayed until after dom creation.
+<a name="line137"></a> * Thus, this function must be called before {@link #createDom}. If set to true,
+<a name="line138"></a> * the client must call {@link #loadImages} when they wish the images to be
+<a name="line139"></a> * loaded.
+<a name="line140"></a> *
+<a name="line141"></a> * @param {boolean} shouldDelay Whether to delay loading the images.
+<a name="line142"></a> */
+<a name="line143"></a>goog.ui.emoji.PopupEmojiPicker.prototype.setDelayedLoad =
+<a name="line144"></a>    function(shouldDelay) {
+<a name="line145"></a>  if (this.emojiPicker_) {
+<a name="line146"></a>    this.emojiPicker_.setDelayedLoad(shouldDelay);
+<a name="line147"></a>  }
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Sets whether the emoji picker can accept focus.
+<a name="line153"></a> * @param {boolean} focusable Whether the emoji picker should accept focus.
+<a name="line154"></a> */
+<a name="line155"></a>goog.ui.emoji.PopupEmojiPicker.prototype.setFocusable = function(focusable) {
+<a name="line156"></a>  this.focusable_ = focusable;
+<a name="line157"></a>  if (this.emojiPicker_) {
+<a name="line158"></a>    // TODO: In next revision sort the behavior of passing state to
+<a name="line159"></a>    // children correctly
+<a name="line160"></a>    this.emojiPicker_.setFocusable(focusable);
+<a name="line161"></a>  }
+<a name="line162"></a>};
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * Sets the URL prefix for the emoji URLs.
+<a name="line167"></a> *
+<a name="line168"></a> * @param {string} urlPrefix Prefix that should be prepended to all URLs.
+<a name="line169"></a> */
+<a name="line170"></a>goog.ui.emoji.PopupEmojiPicker.prototype.setUrlPrefix = function(urlPrefix) {
+<a name="line171"></a>  this.emojiPicker_.setUrlPrefix(urlPrefix);
+<a name="line172"></a>};
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * Sets the location of the tabs in relation to the emoji grids. This should
+<a name="line177"></a> * only be called before the picker has been rendered.
+<a name="line178"></a> *
+<a name="line179"></a> * @param {goog.ui.TabPane.TabLocation} tabLocation The location of the tabs.
+<a name="line180"></a> */
+<a name="line181"></a>goog.ui.emoji.PopupEmojiPicker.prototype.setTabLocation =
+<a name="line182"></a>    function(tabLocation) {
+<a name="line183"></a>  this.emojiPicker_.setTabLocation(tabLocation);
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Sets the number of rows per grid in the emoji picker. This should only be
+<a name="line189"></a> * called before the picker has been rendered.
+<a name="line190"></a> *
+<a name="line191"></a> * @param {number} numRows Number of rows per grid.
+<a name="line192"></a> */
+<a name="line193"></a>goog.ui.emoji.PopupEmojiPicker.prototype.setNumRows = function(numRows) {
+<a name="line194"></a>  this.emojiPicker_.setNumRows(numRows);
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Sets the number of columns per grid in the emoji picker. This should only be
+<a name="line200"></a> * called before the picker has been rendered.
+<a name="line201"></a> *
+<a name="line202"></a> * @param {number} numCols Number of columns per grid.
+<a name="line203"></a> */
+<a name="line204"></a>goog.ui.emoji.PopupEmojiPicker.prototype.setNumColumns = function(numCols) {
+<a name="line205"></a>  this.emojiPicker_.setNumColumns(numCols);
+<a name="line206"></a>};
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Sets the progressive rendering aspect of this emojipicker. Must be called
+<a name="line211"></a> * before createDom to have an effect.
+<a name="line212"></a> *
+<a name="line213"></a> * @param {boolean} progressive Whether the picker should render progressively.
+<a name="line214"></a> */
+<a name="line215"></a>goog.ui.emoji.PopupEmojiPicker.prototype.setProgressiveRender =
+<a name="line216"></a>    function(progressive) {
+<a name="line217"></a>  if (this.emojiPicker_) {
+<a name="line218"></a>    this.emojiPicker_.setProgressiveRender(progressive);
+<a name="line219"></a>  }
+<a name="line220"></a>};
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/**
+<a name="line224"></a> * Returns the number of emoji groups in this picker.
+<a name="line225"></a> *
+<a name="line226"></a> * @return {Number} The number of emoji groups in this picker.
+<a name="line227"></a> */
+<a name="line228"></a>goog.ui.emoji.PopupEmojiPicker.prototype.getNumEmojiGroups = function() {
+<a name="line229"></a>  return this.emojiPicker_.getNumEmojiGroups();
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Causes the emoji imgs to be loaded into the picker. Used for delayed loading.
+<a name="line235"></a> */
+<a name="line236"></a>goog.ui.emoji.PopupEmojiPicker.prototype.loadImages = function() {
+<a name="line237"></a>  if (this.emojiPicker_) {
+<a name="line238"></a>    this.emojiPicker_.loadImages();
+<a name="line239"></a>  }
+<a name="line240"></a>};
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/** @inheritDoc */
+<a name="line244"></a>goog.ui.emoji.PopupEmojiPicker.prototype.createDom = function() {
+<a name="line245"></a>  goog.ui.emoji.PopupEmojiPicker.superClass_.createDom.call(this);
+<a name="line246"></a>
+<a name="line247"></a>  this.emojiPicker_.createDom();
+<a name="line248"></a>
+<a name="line249"></a>  this.getElement().className = goog.getCssName(&#39;goog-ui-popupemojipicker&#39;);
+<a name="line250"></a>  this.getElement().appendChild(this.emojiPicker_.getElement());
+<a name="line251"></a>
+<a name="line252"></a>  this.popup_ = new goog.ui.Popup(this.getElement());
+<a name="line253"></a>  this.getElement().unselectable = &#39;on&#39;;
+<a name="line254"></a>};
+<a name="line255"></a>
+<a name="line256"></a>
+<a name="line257"></a>/** @inheritDoc */
+<a name="line258"></a>goog.ui.emoji.PopupEmojiPicker.prototype.disposeInternal = function() {
+<a name="line259"></a>  goog.ui.emoji.PopupEmojiPicker.superClass_.disposeInternal.call(this);
+<a name="line260"></a>  this.emojiPicker_ = null;
+<a name="line261"></a>  this.lastTarget_ = null;
+<a name="line262"></a>  if (this.popup_) {
+<a name="line263"></a>    this.popup_.dispose();
+<a name="line264"></a>    this.popup_ = null;
+<a name="line265"></a>  }
+<a name="line266"></a>};
+<a name="line267"></a>
+<a name="line268"></a>
+<a name="line269"></a>/**
+<a name="line270"></a> * Attaches the popup emoji picker to an element.
+<a name="line271"></a> *
+<a name="line272"></a> * @param {Element} element The element to attach to.
+<a name="line273"></a> */
+<a name="line274"></a>goog.ui.emoji.PopupEmojiPicker.prototype.attach = function(element) {
+<a name="line275"></a>  // TODO: standardize event type, popups should use MOUSEDOWN, but
+<a name="line276"></a>  // currently apps are using click.
+<a name="line277"></a>  this.getHandler().listen(element, goog.events.EventType.CLICK, this.show_);
+<a name="line278"></a>};
+<a name="line279"></a>
+<a name="line280"></a>
+<a name="line281"></a>/**
+<a name="line282"></a> * Detatches the popup emoji picker from an element.
+<a name="line283"></a> *
+<a name="line284"></a> * @param {Element} element The element to detach from.
+<a name="line285"></a> */
+<a name="line286"></a>goog.ui.emoji.PopupEmojiPicker.prototype.detach = function(element) {
+<a name="line287"></a>  this.getHandler().unlisten(element, goog.events.EventType.CLICK, this.show_);
+<a name="line288"></a>};
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * @return {goog.ui.emoji.EmojiPicker} The emoji picker instance.
+<a name="line293"></a> */
+<a name="line294"></a>goog.ui.emoji.PopupEmojiPicker.prototype.getEmojiPicker = function() {
+<a name="line295"></a>  return this.emojiPicker_;
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * Returns whether the Popup dismisses itself when the user clicks outside of
+<a name="line301"></a> * it.
+<a name="line302"></a> * @return {boolean} Whether the Popup autohides on an external click.
+<a name="line303"></a> */
+<a name="line304"></a>goog.ui.emoji.PopupEmojiPicker.prototype.getAutoHide = function() {
+<a name="line305"></a>  return !!this.popup_ &amp;&amp; this.popup_.getAutoHide();
+<a name="line306"></a>};
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>/**
+<a name="line310"></a> * Sets whether the Popup dismisses itself when the user clicks outside of it -
+<a name="line311"></a> * must be called after the Popup has been created (in createDom()),
+<a name="line312"></a> * otherwise it does nothing.
+<a name="line313"></a> *
+<a name="line314"></a> * @param {boolean} autoHide Whether to autohide on an external click.
+<a name="line315"></a> */
+<a name="line316"></a>goog.ui.emoji.PopupEmojiPicker.prototype.setAutoHide = function(autoHide) {
+<a name="line317"></a>  if (this.popup_) {
+<a name="line318"></a>    this.popup_.setAutoHide(autoHide);
+<a name="line319"></a>  }
+<a name="line320"></a>};
+<a name="line321"></a>
+<a name="line322"></a>
+<a name="line323"></a>/**
+<a name="line324"></a> * Returns the region inside which the Popup dismisses itself when the user
+<a name="line325"></a> * clicks, or null if it was not set. Null indicates the entire document is
+<a name="line326"></a> * the autohide region.
+<a name="line327"></a> * @return {Element?} The DOM element for autohide, or null if it hasn&#39;t been
+<a name="line328"></a> *     set.
+<a name="line329"></a> */
+<a name="line330"></a>goog.ui.emoji.PopupEmojiPicker.prototype.getAutoHideRegion = function() {
+<a name="line331"></a>  return this.popup_ &amp;&amp; this.popup_.getAutoHideRegion();
+<a name="line332"></a>};
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * Sets the region inside which the Popup dismisses itself when the user
+<a name="line337"></a> * clicks - must be called after the Popup has been created (in createDom()),
+<a name="line338"></a> * otherwise it does nothing.
+<a name="line339"></a> *
+<a name="line340"></a> * @param {Element} element The DOM element for autohide.
+<a name="line341"></a> */
+<a name="line342"></a>goog.ui.emoji.PopupEmojiPicker.prototype.setAutoHideRegion = function(element) {
+<a name="line343"></a>  if (this.popup_) {
+<a name="line344"></a>    this.popup_.setAutoHideRegion(element);
+<a name="line345"></a>  }
+<a name="line346"></a>};
+<a name="line347"></a>
+<a name="line348"></a>
+<a name="line349"></a>/**
+<a name="line350"></a> * Returns the {@link goog.ui.PopupBase} from this picker. Returns null if the
+<a name="line351"></a> * popup has not yet been created.
+<a name="line352"></a> *
+<a name="line353"></a> * NOTE: This should *ONLY* be called from tests. If called before createDom(),
+<a name="line354"></a> * this should return null.
+<a name="line355"></a> *
+<a name="line356"></a> * @return {goog.ui.PopupBase?} The popup, or null if it hasn&#39;t been created.
+<a name="line357"></a> */
+<a name="line358"></a>goog.ui.emoji.PopupEmojiPicker.prototype.getPopup = function() {
+<a name="line359"></a>  return this.popup_;
+<a name="line360"></a>};
+<a name="line361"></a>
+<a name="line362"></a>
+<a name="line363"></a>/**
+<a name="line364"></a> * @return {Element?} The last element that triggered the popup.
+<a name="line365"></a> */
+<a name="line366"></a>goog.ui.emoji.PopupEmojiPicker.prototype.getLastTarget = function() {
+<a name="line367"></a>  return this.lastTarget_;
+<a name="line368"></a>};
+<a name="line369"></a>
+<a name="line370"></a>
+<a name="line371"></a>/**
+<a name="line372"></a> * @return {goog.ui.emoji.Emoji} The currently selected emoji.
+<a name="line373"></a> */
+<a name="line374"></a>goog.ui.emoji.PopupEmojiPicker.prototype.getSelectedEmoji = function() {
+<a name="line375"></a>  return this.emojiPicker_.getSelectedEmoji();
+<a name="line376"></a>};
+<a name="line377"></a>
+<a name="line378"></a>
+<a name="line379"></a>/**
+<a name="line380"></a> * Handles click events on the element this picker is attached to and shows the
+<a name="line381"></a> * emoji picker in a popup.
+<a name="line382"></a> *
+<a name="line383"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line384"></a> * @private
+<a name="line385"></a> */
+<a name="line386"></a>goog.ui.emoji.PopupEmojiPicker.prototype.show_ = function(e) {
+<a name="line387"></a>  if (this.popup_.isOrWasRecentlyVisible() &amp;&amp; this.toggleMode_ &amp;&amp;
+<a name="line388"></a>      this.lastTarget_ == e.currentTarget) {
+<a name="line389"></a>    this.popup_.setVisible(false);
+<a name="line390"></a>    return;
+<a name="line391"></a>  }
+<a name="line392"></a>
+<a name="line393"></a>  this.lastTarget_ = /** @type {Element} */ (e.currentTarget);
+<a name="line394"></a>  this.popup_.setPosition(new goog.positioning.AnchoredPosition(
+<a name="line395"></a>      this.lastTarget_, goog.positioning.Corner.BOTTOM_LEFT));
+<a name="line396"></a>  this.popup_.setVisible(true);
+<a name="line397"></a>};
+<a name="line398"></a>
+<a name="line399"></a>
+<a name="line400"></a>/**
+<a name="line401"></a> * Handles selection of an emoji.
+<a name="line402"></a> *
+<a name="line403"></a> * @param {goog.events.Event} e The event object.
+<a name="line404"></a> * @private
+<a name="line405"></a> */
+<a name="line406"></a>goog.ui.emoji.PopupEmojiPicker.prototype.onEmojiPicked_ = function(e) {
+<a name="line407"></a>  this.popup_.setVisible(false);
+<a name="line408"></a>};
+</pre>
+
+
+</body>
+</html>

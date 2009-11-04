@@ -1,0 +1,328 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>cccbutton.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_cccbutton.js.html">cccbutton.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This class is now deprecated.  Use {@link goog.ui.Button} and
+<a name="line17"></a> * {@link goog.ui.CustomButtonRenderer} to create CCC-style buttons.  See
+<a name="line18"></a> * closure/demos/button.html for an example.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.CccButton&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line29"></a>goog.require(&#39;goog.ui.DeprecatedButton&#39;);
+<a name="line30"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * CCC-style implementation of a button.
+<a name="line35"></a> * The Html structure of the button is:
+<a name="line36"></a> * &lt;pre&gt;
+<a name="line37"></a> *  Element
+<a name="line38"></a> * ------------------------
+<a name="line39"></a> * - a
+<a name="line40"></a> *     - b
+<a name="line41"></a> *         - b
+<a name="line42"></a> *             - b
+<a name="line43"></a> *                 - text
+<a name="line44"></a> * &lt;/pre&gt;
+<a name="line45"></a> *
+<a name="line46"></a> * @param {string} opt_class Optional class for component.
+<a name="line47"></a> *     Default: &#39;goog-cccbutton&#39;.
+<a name="line48"></a> * @param {boolean} opt_noPoundSignInHref An optional argument that, when true,
+<a name="line49"></a> *     instructs the button to not use the href=&quot;#&quot; to create the link. The
+<a name="line50"></a> *     side effect of this option being true is that clicking the button
+<a name="line51"></a> *     triggers the window&#39;s onunload or onbeforeunload handler in IE. The
+<a name="line52"></a> *     upside of setting this to true is that the page will not scroll when
+<a name="line53"></a> *     clicking this button in IE.
+<a name="line54"></a> *
+<a name="line55"></a> * @constructor
+<a name="line56"></a> * @extends {goog.ui.DeprecatedButton}
+<a name="line57"></a> * @deprecated Use {@link goog.ui.Button} instead.
+<a name="line58"></a> */
+<a name="line59"></a>goog.ui.CccButton = function(opt_class, opt_noPoundSignInHref) {
+<a name="line60"></a>  var className = opt_class ? opt_class : &#39;goog-cccbutton&#39;;
+<a name="line61"></a>  goog.ui.DeprecatedButton.call(this, className);
+<a name="line62"></a>
+<a name="line63"></a>  /**
+<a name="line64"></a>   * Whether the &#39;a&#39; element used for the button will use href=&#39;#&#39; or instead
+<a name="line65"></a>   * use href=&#39;javascript:;&#39;.
+<a name="line66"></a>   * @type {boolean}
+<a name="line67"></a>   * @private
+<a name="line68"></a>   */
+<a name="line69"></a>  this.noPoundSignInHref_ = opt_noPoundSignInHref || false;
+<a name="line70"></a>};
+<a name="line71"></a>goog.inherits(goog.ui.CccButton, goog.ui.DeprecatedButton);
+<a name="line72"></a>
+<a name="line73"></a>
+<a name="line74"></a>/**
+<a name="line75"></a> * Prefix for all ID&#39;s of this component.
+<a name="line76"></a> * @type {string}
+<a name="line77"></a> * @private
+<a name="line78"></a> */
+<a name="line79"></a>goog.ui.CccButton.BASE_ID_ = &#39;goog.ui.CccButton.&#39;;
+<a name="line80"></a>
+<a name="line81"></a>
+<a name="line82"></a>/**
+<a name="line83"></a> * Next unique instance ID for this component.
+<a name="line84"></a> * @type {number}
+<a name="line85"></a> * @private
+<a name="line86"></a> */
+<a name="line87"></a>goog.ui.CccButton.nextId_ = 0;
+<a name="line88"></a>
+<a name="line89"></a>
+<a name="line90"></a>/**
+<a name="line91"></a> * Gets the next unique ID for the component.
+<a name="line92"></a> * @return {string} The next unique ID for the component.
+<a name="line93"></a> */
+<a name="line94"></a>goog.ui.CccButton.getNextUniqueId = function() {
+<a name="line95"></a>  return goog.ui.CccButton.BASE_ID_ + String(goog.ui.CccButton.nextId_++);
+<a name="line96"></a>};
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Gets the next unique ID for the component. This method is used in the
+<a name="line101"></a> * constructor to generate the unique ID for the component.
+<a name="line102"></a> *
+<a name="line103"></a> * NOTE: This method is placed on the prototype so that classes that inherit
+<a name="line104"></a> * this class can override this method and have the ID automatically set by
+<a name="line105"></a> * calling the parent class&#39;s constructor.
+<a name="line106"></a> *
+<a name="line107"></a> * @return {string} The next unique ID for the component.
+<a name="line108"></a> * @private
+<a name="line109"></a> */
+<a name="line110"></a>goog.ui.CccButton.prototype.getNextUniqueId_ = function() {
+<a name="line111"></a>  return goog.ui.CccButton.getNextUniqueId();
+<a name="line112"></a>};
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * Element that directly contains the caption for the component.
+<a name="line117"></a> * @type {Element?}
+<a name="line118"></a> * @private
+<a name="line119"></a> */
+<a name="line120"></a>goog.ui.DeprecatedButton.prototype.captionEl_ = null;
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Addition to base CSS class name to add when component is enabled.
+<a name="line125"></a> * @type {string}
+<a name="line126"></a> * @private
+<a name="line127"></a> */
+<a name="line128"></a>goog.ui.CccButton.ENABLED_CLASS_ADDITION_ = &#39;-enabled&#39;;
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Addition to base CSS class name to add when component is disabled.
+<a name="line133"></a> * @type {string}
+<a name="line134"></a> * @private
+<a name="line135"></a> */
+<a name="line136"></a>goog.ui.CccButton.DISABLED_CLASS_ADDITION_ = &#39;-disabled&#39;;
+<a name="line137"></a>
+<a name="line138"></a>
+<a name="line139"></a>/**
+<a name="line140"></a> * Gets the CSS class to use for when enabled.
+<a name="line141"></a> * @return {string} The CSS class name.
+<a name="line142"></a> */
+<a name="line143"></a>goog.ui.CccButton.prototype.getEnabledClass = function() {
+<a name="line144"></a>  return this.class_ + goog.ui.CccButton.ENABLED_CLASS_ADDITION_;
+<a name="line145"></a>};
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Gets the CSS class to use for when disabled.
+<a name="line150"></a> * @return {string} The CSS class name.
+<a name="line151"></a> */
+<a name="line152"></a>goog.ui.CccButton.prototype.getDisabledClass = function() {
+<a name="line153"></a>  return this.class_ + goog.ui.CccButton.DISABLED_CLASS_ADDITION_;
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Sets the caption for the component.
+<a name="line159"></a> * @param {string} caption The caption.
+<a name="line160"></a> */
+<a name="line161"></a>goog.ui.CccButton.prototype.setCaption = function(caption) {
+<a name="line162"></a>  this.caption_ = caption;
+<a name="line163"></a>  if (this.isRendered()) {
+<a name="line164"></a>    var element = this.captionEl_;
+<a name="line165"></a>    element.innerHTML = &#39;&#39;;
+<a name="line166"></a>    var domHelper = goog.dom.getDomHelper(element);
+<a name="line167"></a>    domHelper.appendChild(element, domHelper.createTextNode(caption));
+<a name="line168"></a>  }
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Sets the enabled status of the component.
+<a name="line174"></a> * @param {boolean} enable TRUE iff enable the button. Otherwise, disable.
+<a name="line175"></a> */
+<a name="line176"></a>goog.ui.CccButton.prototype.setEnabled = function(enable) {
+<a name="line177"></a>  if (this.getEnabled() != enable &amp;&amp;
+<a name="line178"></a>      this.dispatchEvent(goog.ui.DeprecatedButton.EventType.ENABLE)) {
+<a name="line179"></a>    if (this.isRendered()) {
+<a name="line180"></a>      // Swap the CSS class for enabled/disabled.
+<a name="line181"></a>      var element = this.getElement();
+<a name="line182"></a>      var fromClass = !enable ? this.getEnabledClass() :
+<a name="line183"></a>          this.getDisabledClass();
+<a name="line184"></a>      var toClass = enable ? this.getEnabledClass() : this.getDisabledClass();
+<a name="line185"></a>      goog.dom.classes.swap(element, fromClass, toClass);
+<a name="line186"></a>    }
+<a name="line187"></a>    this.enabled_ = enable;
+<a name="line188"></a>  }
+<a name="line189"></a>};
+<a name="line190"></a>
+<a name="line191"></a>
+<a name="line192"></a>/**
+<a name="line193"></a> * Renders the component. Throws an Error if the component is already rendered.
+<a name="line194"></a> * @param {Element} opt_element Element to render the compponent into.
+<a name="line195"></a> *                              If omitted, then the componenet is appended to
+<a name="line196"></a> *                              the document.
+<a name="line197"></a> */
+<a name="line198"></a>goog.ui.CccButton.prototype.render = function(opt_element) {
+<a name="line199"></a>  if (this.isRendered()) {
+<a name="line200"></a>    throw Error(&#39;Compenent already rendered&#39;);
+<a name="line201"></a>  }
+<a name="line202"></a>
+<a name="line203"></a>  // Get the DOM helper.
+<a name="line204"></a>  var domHelper = goog.dom.getDomHelper(opt_element);
+<a name="line205"></a>
+<a name="line206"></a>  // Adding # was problematic in non-IE, cause of bug 572520.
+<a name="line207"></a>  var hrefString = goog.userAgent.IE ? &#39;#&#39; : &#39;javascript:;&#39;;
+<a name="line208"></a>  hrefString = this.noPoundSignInHref_ ? &#39;javascript:;&#39; : hrefString;
+<a name="line209"></a>
+<a name="line210"></a>  // Create element.
+<a name="line211"></a>  var element = domHelper.createDom(&#39;a&#39;,
+<a name="line212"></a>      {title: this.tooltip_, className: this.class_ + &#39; &#39; +
+<a name="line213"></a>          (this.enabled_ ? this.getEnabledClass() : this.getDisabledClass()),
+<a name="line214"></a>          href: hrefString },
+<a name="line215"></a>              domHelper.createDom(&#39;b&#39;, {},
+<a name="line216"></a>                  domHelper.createDom(&#39;b&#39;, {},
+<a name="line217"></a>                      this.captionEl_ =
+<a name="line218"></a>                          domHelper.createDom(&#39;b&#39;, {}, this.caption_))));
+<a name="line219"></a>
+<a name="line220"></a>  // Append to parent.
+<a name="line221"></a>  var parentElement = opt_element || domHelper.getDocument().body;
+<a name="line222"></a>  domHelper.appendChild(parentElement, element);
+<a name="line223"></a>
+<a name="line224"></a>  // Setup event handlers.
+<a name="line225"></a>  goog.events.listen(element, goog.events.EventType.CLICK,
+<a name="line226"></a>      this.onClick_, true, this);
+<a name="line227"></a>
+<a name="line228"></a>  this.element_ = element;
+<a name="line229"></a>  this.rendered_ = true;
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Helper for checking if the structure of an element is valid for this
+<a name="line235"></a> * component.
+<a name="line236"></a> * @param {Element} element The element to check.
+<a name="line237"></a> * @param {string} tag The tag name to check for.
+<a name="line238"></a> * @return {boolean} Whether there is only one child and the child is of the
+<a name="line239"></a> *     given tag.
+<a name="line240"></a> * @private
+<a name="line241"></a> */
+<a name="line242"></a>goog.ui.CccButton.prototype.isValidButtonChildHelper_ = function(element, tag) {
+<a name="line243"></a>  var domHelper = goog.dom.getDomHelper(element);
+<a name="line244"></a>  var firstChild = element ? domHelper.getFirstElementChild(element) : null;
+<a name="line245"></a>  if (firstChild &amp;&amp; firstChild.tagName.toLowerCase() == tag &amp;&amp;
+<a name="line246"></a>      element.childNodes.length == 1) {
+<a name="line247"></a>    return true;
+<a name="line248"></a>  }
+<a name="line249"></a>  return false;
+<a name="line250"></a>};
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * Decorates the element for the UI component.
+<a name="line254"></a> * @param {Element} element Element to decorate.
+<a name="line255"></a> */
+<a name="line256"></a>goog.ui.CccButton.prototype.decorate = function(element) {
+<a name="line257"></a>  if (this.isRendered()) {
+<a name="line258"></a>    throw Error(&#39;Component already rendered&#39;);
+<a name="line259"></a>  } else {
+<a name="line260"></a>    var domHelper = goog.dom.getDomHelper(element);
+<a name="line261"></a>    var firstElement = element ? domHelper.getFirstElementChild(element) : null;
+<a name="line262"></a>    var secondElement = firstElement ?
+<a name="line263"></a>        domHelper.getFirstElementChild(firstElement) : null;
+<a name="line264"></a>    // Check if the structure of the element is valid for this component.
+<a name="line265"></a>    if (element &amp;&amp; element.tagName.toLowerCase() == &#39;a&#39; &amp;&amp;
+<a name="line266"></a>        this.isValidButtonChildHelper_(element, &#39;b&#39;) &amp;&amp;
+<a name="line267"></a>        this.isValidButtonChildHelper_(firstElement, &#39;b&#39;) &amp;&amp;
+<a name="line268"></a>        this.isValidButtonChildHelper_(secondElement, &#39;b&#39;)) {
+<a name="line269"></a>      // Setup properties.
+<a name="line270"></a>      this.element_ = element;
+<a name="line271"></a>      this.setCaption(secondElement.firstChild.innerHTML);
+<a name="line272"></a>      this.setTooltip(element.title);
+<a name="line273"></a>      this.class_ = element.className;
+<a name="line274"></a>      this.rendered_ = true;
+<a name="line275"></a>    } else {
+<a name="line276"></a>      throw Error(&#39;Invalid element to decorate&#39;);
+<a name="line277"></a>    }
+<a name="line278"></a>  }
+<a name="line279"></a>};
+</pre>
+
+
+</body>
+</html>

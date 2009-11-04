@@ -1,0 +1,613 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>crosspagechannel.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_net_xpc_crosspagechannel.js.html">crosspagechannel.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides the class CrossDomainChannel, the main class in
+<a name="line17"></a> * goog.net.xpc.
+<a name="line18"></a> *
+<a name="line19"></a> * @see ../../demos/xpc/index.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.net.xpc.CrossPageChannel&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.net.xpc.CrossPageChannel.Role&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line26"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line28"></a>goog.require(&#39;goog.json&#39;);
+<a name="line29"></a>goog.require(&#39;goog.net.xpc&#39;);
+<a name="line30"></a>goog.require(&#39;goog.net.xpc.FrameElementMethodTransport&#39;);
+<a name="line31"></a>goog.require(&#39;goog.net.xpc.IframePollingTransport&#39;);
+<a name="line32"></a>goog.require(&#39;goog.net.xpc.IframeRelayTransport&#39;);
+<a name="line33"></a>goog.require(&#39;goog.net.xpc.NativeMessagingTransport&#39;);
+<a name="line34"></a>goog.require(&#39;goog.net.xpc.NixTransport&#39;);
+<a name="line35"></a>goog.require(&#39;goog.net.xpc.Transport&#39;);
+<a name="line36"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * A communication channel between two documents from different domains.
+<a name="line42"></a> * Provides asynchronous messaging.
+<a name="line43"></a> *
+<a name="line44"></a> * @param {Object} cfg Channel configuration object.
+<a name="line45"></a> * @constructor
+<a name="line46"></a> * @extends {goog.Disposable}
+<a name="line47"></a> */
+<a name="line48"></a>goog.net.xpc.CrossPageChannel = function(cfg) {
+<a name="line49"></a>  goog.Disposable.call(this);
+<a name="line50"></a>
+<a name="line51"></a>  /**
+<a name="line52"></a>   * The configuration for this channel.
+<a name="line53"></a>   * @type {Object}
+<a name="line54"></a>   * @private
+<a name="line55"></a>   */
+<a name="line56"></a>  this.cfg_ = cfg;
+<a name="line57"></a>
+<a name="line58"></a>  /**
+<a name="line59"></a>   * The name of the channel.
+<a name="line60"></a>   * @type {string}
+<a name="line61"></a>   * @protected
+<a name="line62"></a>   */
+<a name="line63"></a>  this.name = this.cfg_[goog.net.xpc.CfgFields.CHANNEL_NAME] ||
+<a name="line64"></a>      goog.net.xpc.getRandomString(10);
+<a name="line65"></a>
+<a name="line66"></a>  /**
+<a name="line67"></a>   * Object holding the service callbacks.
+<a name="line68"></a>   * @type {Object}
+<a name="line69"></a>   * @private
+<a name="line70"></a>   */
+<a name="line71"></a>  this.services_ = {};
+<a name="line72"></a>
+<a name="line73"></a>  goog.net.xpc.channels_[this.name] = this;
+<a name="line74"></a>
+<a name="line75"></a>  goog.events.listen(window, &#39;unload&#39;,
+<a name="line76"></a>      goog.net.xpc.CrossPageChannel.disposeAll_);
+<a name="line77"></a>
+<a name="line78"></a>  goog.net.xpc.logger.info(&#39;CrossPageChannel created: &#39; + this.name);
+<a name="line79"></a>};
+<a name="line80"></a>goog.inherits(goog.net.xpc.CrossPageChannel, goog.Disposable);
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * The transport.
+<a name="line85"></a> * @type {goog.net.xpc.Transport?}
+<a name="line86"></a> * @private
+<a name="line87"></a> */
+<a name="line88"></a>goog.net.xpc.CrossPageChannel.prototype.transport_ = null;
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * The channel state.
+<a name="line93"></a> * @type {number}
+<a name="line94"></a> * @private
+<a name="line95"></a> */
+<a name="line96"></a>goog.net.xpc.CrossPageChannel.prototype.state_ =
+<a name="line97"></a>    goog.net.xpc.ChannelStates.NOT_CONNECTED;
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * @return {boolean} Whether the channel is connected.
+<a name="line102"></a> */
+<a name="line103"></a>goog.net.xpc.CrossPageChannel.prototype.isConnected = function() {
+<a name="line104"></a>  return this.state_ == goog.net.xpc.ChannelStates.CONNECTED;
+<a name="line105"></a>};
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Reference to the window-object of the peer page.
+<a name="line110"></a> * @type {Object?}
+<a name="line111"></a> * @private
+<a name="line112"></a> */
+<a name="line113"></a>goog.net.xpc.CrossPageChannel.prototype.peerWindowObject_ = null;
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Reference to the iframe-element.
+<a name="line118"></a> * @type {Object?}
+<a name="line119"></a> * @private
+<a name="line120"></a> */
+<a name="line121"></a>goog.net.xpc.CrossPageChannel.prototype.iframeElement_ = null;
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Sets the window object the foreign document resides in.
+<a name="line126"></a> *
+<a name="line127"></a> * @param {Object} peerWindowObject The window object of the peer.
+<a name="line128"></a> */
+<a name="line129"></a>goog.net.xpc.CrossPageChannel.prototype.setPeerWindowObject =
+<a name="line130"></a>    function(peerWindowObject) {
+<a name="line131"></a>  this.peerWindowObject_ = peerWindowObject;
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Determine which transport type to use for this channel / useragent.
+<a name="line137"></a> * @return {goog.net.xpc.TransportTypes|undefined} The best transport type.
+<a name="line138"></a> * @private
+<a name="line139"></a> */
+<a name="line140"></a>goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
+<a name="line141"></a>  var transportType;
+<a name="line142"></a>  if (goog.isFunction(document.postMessage) ||
+<a name="line143"></a>      goog.isFunction(window.postMessage) ||
+<a name="line144"></a>      // IE8 supports window.postMessage, but
+<a name="line145"></a>      // typeof window.postMessage returns &quot;object&quot;
+<a name="line146"></a>      (goog.userAgent.IE &amp;&amp; window.postMessage)) {
+<a name="line147"></a>    transportType = goog.net.xpc.TransportTypes.NATIVE_MESSAGING;
+<a name="line148"></a>  } else if (goog.userAgent.GECKO) {
+<a name="line149"></a>    transportType = goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD;
+<a name="line150"></a>  } else if (goog.userAgent.IE &amp;&amp;
+<a name="line151"></a>             this.cfg_[goog.net.xpc.CfgFields.PEER_RELAY_URI]) {
+<a name="line152"></a>    transportType = goog.net.xpc.TransportTypes.IFRAME_RELAY;
+<a name="line153"></a>  } else if (goog.userAgent.IE) {
+<a name="line154"></a>    transportType = goog.net.xpc.TransportTypes.NIX;
+<a name="line155"></a>  } else if (this.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI] &amp;&amp;
+<a name="line156"></a>             this.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI]) {
+<a name="line157"></a>    transportType = goog.net.xpc.TransportTypes.IFRAME_POLLING;
+<a name="line158"></a>  }
+<a name="line159"></a>  return transportType;
+<a name="line160"></a>};
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * Creates the transport for this channel. Chooses from the available
+<a name="line165"></a> * transport based on the user agent and the configuration.
+<a name="line166"></a> * @private
+<a name="line167"></a> */
+<a name="line168"></a>goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
+<a name="line169"></a>  // return, if the transport has already been created
+<a name="line170"></a>  if (this.transport_) {
+<a name="line171"></a>    return;
+<a name="line172"></a>  }
+<a name="line173"></a>
+<a name="line174"></a>  if (!this.cfg_[goog.net.xpc.CfgFields.TRANSPORT]) {
+<a name="line175"></a>    this.cfg_[goog.net.xpc.CfgFields.TRANSPORT] =
+<a name="line176"></a>        this.determineTransportType_();
+<a name="line177"></a>  }
+<a name="line178"></a>
+<a name="line179"></a>  switch (this.cfg_[goog.net.xpc.CfgFields.TRANSPORT]) {
+<a name="line180"></a>    case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
+<a name="line181"></a>      this.transport_ = new goog.net.xpc.NativeMessagingTransport(
+<a name="line182"></a>          this,
+<a name="line183"></a>          this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME]);
+<a name="line184"></a>      break;
+<a name="line185"></a>    case goog.net.xpc.TransportTypes.NIX:
+<a name="line186"></a>      this.transport_ = new goog.net.xpc.NixTransport(this);
+<a name="line187"></a>      break;
+<a name="line188"></a>    case goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD:
+<a name="line189"></a>      this.transport_ = new goog.net.xpc.FrameElementMethodTransport(this);
+<a name="line190"></a>      break;
+<a name="line191"></a>    case goog.net.xpc.TransportTypes.IFRAME_RELAY:
+<a name="line192"></a>      this.transport_ = new goog.net.xpc.IframeRelayTransport(this);
+<a name="line193"></a>      break;
+<a name="line194"></a>    case goog.net.xpc.TransportTypes.IFRAME_POLLING:
+<a name="line195"></a>      this.transport_ = new goog.net.xpc.IframePollingTransport(this);
+<a name="line196"></a>      break;
+<a name="line197"></a>  }
+<a name="line198"></a>
+<a name="line199"></a>  if (this.transport_) {
+<a name="line200"></a>    goog.net.xpc.logger.info(&#39;Transport created: &#39; + this.transport_.getName());
+<a name="line201"></a>  } else {
+<a name="line202"></a>    throw Error(&#39;CrossPageChannel: No suitable transport found!&#39;);
+<a name="line203"></a>  }
+<a name="line204"></a>};
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * Returns the transport type in use for this channel.
+<a name="line209"></a> * @return {number} Transport-type identifier.
+<a name="line210"></a> */
+<a name="line211"></a>goog.net.xpc.CrossPageChannel.prototype.getTransportType = function() {
+<a name="line212"></a>  return this.transport_.getType();
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Returns the tranport name in use for this channel.
+<a name="line218"></a> * @return {string} The transport name.
+<a name="line219"></a> */
+<a name="line220"></a>goog.net.xpc.CrossPageChannel.prototype.getTransportName = function() {
+<a name="line221"></a>  return this.transport_.getName();
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * @return {Object} Configuration-object to be used by the peer to
+<a name="line227"></a> *     initialize the channel.
+<a name="line228"></a> */
+<a name="line229"></a>goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
+<a name="line230"></a>  var peerCfg = {};
+<a name="line231"></a>  peerCfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = this.name;
+<a name="line232"></a>  peerCfg[goog.net.xpc.CfgFields.TRANSPORT] =
+<a name="line233"></a>      this.cfg_[goog.net.xpc.CfgFields.TRANSPORT];
+<a name="line234"></a>
+<a name="line235"></a>  if (this.cfg_[goog.net.xpc.CfgFields.LOCAL_RELAY_URI]) {
+<a name="line236"></a>    peerCfg[goog.net.xpc.CfgFields.PEER_RELAY_URI] =
+<a name="line237"></a>        this.cfg_[goog.net.xpc.CfgFields.LOCAL_RELAY_URI];
+<a name="line238"></a>  }
+<a name="line239"></a>  if (this.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI]){
+<a name="line240"></a>    peerCfg[goog.net.xpc.CfgFields.PEER_POLL_URI] =
+<a name="line241"></a>        this.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI];
+<a name="line242"></a>  }
+<a name="line243"></a>  if (this.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI]) {
+<a name="line244"></a>    peerCfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] =
+<a name="line245"></a>        this.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI];
+<a name="line246"></a>  }
+<a name="line247"></a>
+<a name="line248"></a>  return peerCfg;
+<a name="line249"></a>};
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * Creates the iframe containing the peer page in a specified parent element.
+<a name="line254"></a> * This method does not connect the channel, connect() still has to be called
+<a name="line255"></a> * separately.
+<a name="line256"></a> *
+<a name="line257"></a> * @param {!Element} parentElm The container element the iframe is appended to.
+<a name="line258"></a> * @param {Function} opt_configureIframeCb If present, this function gets
+<a name="line259"></a> *     called with the iframe element as parameter to allow setting properties
+<a name="line260"></a> *     on it before it gets added to the DOM. If absent, the iframe&#39;s width and
+<a name="line261"></a> *     height are set to &#39;100%&#39;.
+<a name="line262"></a> * @param {boolean} opt_addCfgParam Whether to add the peer configuration as
+<a name="line263"></a> *     URL parameter (default: true).
+<a name="line264"></a> * @return {!HTMLIFrameElement} The iframe element.
+<a name="line265"></a> */
+<a name="line266"></a>goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(
+<a name="line267"></a>    parentElm, opt_configureIframeCb, opt_addCfgParam) {
+<a name="line268"></a>
+<a name="line269"></a>  var iframeId = this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID];
+<a name="line270"></a>  if (!iframeId) {
+<a name="line271"></a>    // Create a randomized ID for the iframe element to avoid
+<a name="line272"></a>    // bfcache-related issues.
+<a name="line273"></a>    iframeId = this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID] =
+<a name="line274"></a>        &#39;xpcpeer&#39; + goog.net.xpc.getRandomString(4);
+<a name="line275"></a>  }
+<a name="line276"></a>
+<a name="line277"></a>  // TODO Opera creates a history-entry when creating an iframe
+<a name="line278"></a>  // programmatically as follows. Find a way which avoids this.
+<a name="line279"></a>
+<a name="line280"></a>  var iframeElm = goog.dom.createElement(&#39;IFRAME&#39;);
+<a name="line281"></a>  iframeElm.id = iframeElm.name = iframeId;
+<a name="line282"></a>  if (opt_configureIframeCb) {
+<a name="line283"></a>    opt_configureIframeCb(iframeElm);
+<a name="line284"></a>  } else {
+<a name="line285"></a>    iframeElm.style.width = iframeElm.style.height = &#39;100%&#39;;
+<a name="line286"></a>  }
+<a name="line287"></a>
+<a name="line288"></a>  var peerUri = this.cfg_[goog.net.xpc.CfgFields.PEER_URI];
+<a name="line289"></a>  if (goog.isString(peerUri)) {
+<a name="line290"></a>    peerUri = this.cfg_[goog.net.xpc.CfgFields.PEER_URI] =
+<a name="line291"></a>        new goog.Uri(peerUri);
+<a name="line292"></a>  }
+<a name="line293"></a>
+<a name="line294"></a>  // Add the channel configuration used by the peer as URL parameter.
+<a name="line295"></a>  if (opt_addCfgParam !== false) {
+<a name="line296"></a>    peerUri.setParameterValue(&#39;xpc&#39;,
+<a name="line297"></a>                              goog.json.serialize(
+<a name="line298"></a>                                  this.getPeerConfiguration())
+<a name="line299"></a>                              );
+<a name="line300"></a>  }
+<a name="line301"></a>
+<a name="line302"></a>  if (goog.userAgent.GECKO || goog.userAgent.WEBKIT) {
+<a name="line303"></a>    // Appending the iframe in a timeout to avoid a weird fastback issue, which
+<a name="line304"></a>    // is present in Safari and Gecko.
+<a name="line305"></a>    this.deferConnect_ = true;
+<a name="line306"></a>    window.setTimeout(
+<a name="line307"></a>        goog.bind(function() {
+<a name="line308"></a>          this.deferConnect_ = false;
+<a name="line309"></a>          parentElm.appendChild(iframeElm);
+<a name="line310"></a>          iframeElm.src = peerUri.toString();
+<a name="line311"></a>          goog.net.xpc.logger.info(&#39;peer iframe created (&#39; + iframeId + &#39;)&#39;);
+<a name="line312"></a>          if (this.connectDeferred_) {
+<a name="line313"></a>            this.connect(this.connectCb_);
+<a name="line314"></a>          }
+<a name="line315"></a>        }, this), 1);
+<a name="line316"></a>  } else {
+<a name="line317"></a>    iframeElm.src = peerUri.toString();
+<a name="line318"></a>    parentElm.appendChild(iframeElm);
+<a name="line319"></a>    goog.net.xpc.logger.info(&#39;peer iframe created (&#39; + iframeId + &#39;)&#39;);
+<a name="line320"></a>  }
+<a name="line321"></a>
+<a name="line322"></a>  return /** @type {!HTMLIFrameElement} */ (iframeElm);
+<a name="line323"></a>};
+<a name="line324"></a>
+<a name="line325"></a>
+<a name="line326"></a>/**
+<a name="line327"></a> * Flag whether connecting should be deferred.
+<a name="line328"></a> * @type {boolean}
+<a name="line329"></a> * @private
+<a name="line330"></a> */
+<a name="line331"></a>goog.net.xpc.CrossPageChannel.prototype.deferConnect_ = false;
+<a name="line332"></a>
+<a name="line333"></a>
+<a name="line334"></a>/**
+<a name="line335"></a> * Flag to remember if connect() has been called.
+<a name="line336"></a> * @type {boolean}
+<a name="line337"></a> * @private
+<a name="line338"></a> */
+<a name="line339"></a>goog.net.xpc.CrossPageChannel.prototype.connectDeferred_ = false;
+<a name="line340"></a>
+<a name="line341"></a>
+<a name="line342"></a>/**
+<a name="line343"></a> * Initiates connecting the channel. When this method is called, all the
+<a name="line344"></a> * information needed to connect the channel has to be available.
+<a name="line345"></a> *
+<a name="line346"></a> * @param {Function} opt_connectCb The function to be called when the
+<a name="line347"></a> * channel has been connected and is ready to be used.
+<a name="line348"></a> */
+<a name="line349"></a>goog.net.xpc.CrossPageChannel.prototype.connect = function(opt_connectCb) {
+<a name="line350"></a>  this.connectCb_ = opt_connectCb || goog.nullFunction;
+<a name="line351"></a>
+<a name="line352"></a>  if (this.deferConnect_) {
+<a name="line353"></a>    goog.net.xpc.logger.info(&#39;connect() deferred&#39;);
+<a name="line354"></a>    this.connectDeferred_ = true;
+<a name="line355"></a>    return;
+<a name="line356"></a>  }
+<a name="line357"></a>
+<a name="line358"></a>  goog.net.xpc.logger.info(&#39;connect()&#39;);
+<a name="line359"></a>  if (this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID]) {
+<a name="line360"></a>    this.iframeElement_ = goog.dom.getElement(
+<a name="line361"></a>        this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID]);
+<a name="line362"></a>  }
+<a name="line363"></a>  if (this.iframeElement_) {
+<a name="line364"></a>    var winObj = this.iframeElement_.contentWindow;
+<a name="line365"></a>    // accessing the window using contentWindow doesn&#39;t work in safari
+<a name="line366"></a>    if (!winObj) {
+<a name="line367"></a>      winObj = window.frames[this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID]];
+<a name="line368"></a>    }
+<a name="line369"></a>    this.setPeerWindowObject(winObj);
+<a name="line370"></a>  }
+<a name="line371"></a>
+<a name="line372"></a>  // if the peer window object has not been set at this point, we assume
+<a name="line373"></a>  // being in an iframe and the channel is meant to be to the containing page
+<a name="line374"></a>  if (!this.peerWindowObject_) {
+<a name="line375"></a>    // throw an error if we are in the top window (== not in an iframe)
+<a name="line376"></a>    if (window == top) {
+<a name="line377"></a>      throw Error(
+<a name="line378"></a>          &quot;CrossPageChannel: Can&#39;t connect, peer window-object not set.&quot;);
+<a name="line379"></a>    } else {
+<a name="line380"></a>      this.setPeerWindowObject(window.parent);
+<a name="line381"></a>    }
+<a name="line382"></a>  }
+<a name="line383"></a>
+<a name="line384"></a>  this.createTransport_();
+<a name="line385"></a>
+<a name="line386"></a>  this.transport_.connect();
+<a name="line387"></a>};
+<a name="line388"></a>
+<a name="line389"></a>
+<a name="line390"></a>/**
+<a name="line391"></a> * Closes the channel.
+<a name="line392"></a> */
+<a name="line393"></a>goog.net.xpc.CrossPageChannel.prototype.close = function() {
+<a name="line394"></a>  if (!this.isConnected()) return;
+<a name="line395"></a>  this.state_ = goog.net.xpc.ChannelStates.CLOSED;
+<a name="line396"></a>  this.transport_.dispose();
+<a name="line397"></a>  this.transport_ = null;
+<a name="line398"></a>  goog.net.xpc.logger.info(&#39;Channel &quot;&#39; + this.name + &#39;&quot; closed&#39;);
+<a name="line399"></a>};
+<a name="line400"></a>
+<a name="line401"></a>
+<a name="line402"></a>/**
+<a name="line403"></a> * Called by the transport when the channel is connected.
+<a name="line404"></a> * @private
+<a name="line405"></a> */
+<a name="line406"></a>goog.net.xpc.CrossPageChannel.prototype.notifyConnected_ = function() {
+<a name="line407"></a>  if (this.isConnected()) {
+<a name="line408"></a>    return;
+<a name="line409"></a>  }
+<a name="line410"></a>  this.state_ = goog.net.xpc.ChannelStates.CONNECTED;
+<a name="line411"></a>  goog.net.xpc.logger.info(&#39;Channel &quot;&#39; + this.name + &#39;&quot; connected&#39;);
+<a name="line412"></a>  this.connectCb_();
+<a name="line413"></a>};
+<a name="line414"></a>
+<a name="line415"></a>
+<a name="line416"></a>/**
+<a name="line417"></a> * Called by the transport in case of an unrecoverable failure.
+<a name="line418"></a> * @private
+<a name="line419"></a> */
+<a name="line420"></a>goog.net.xpc.CrossPageChannel.prototype.notifyTransportError_ = function() {
+<a name="line421"></a>  goog.net.xpc.logger.info(&#39;Transport Error&#39;);
+<a name="line422"></a>  this.close();
+<a name="line423"></a>};
+<a name="line424"></a>
+<a name="line425"></a>
+<a name="line426"></a>/**
+<a name="line427"></a> * Registers a service.
+<a name="line428"></a> *
+<a name="line429"></a> * @param {string} serviceName The name of the service.
+<a name="line430"></a> * @param {Function} callback The callback responsible to process incoming
+<a name="line431"></a> *     messages.
+<a name="line432"></a> * @param {boolean} opt_jsonEncoded If true, incoming messages for this
+<a name="line433"></a> *     service are expected to contain a JSON-encoded object and will be
+<a name="line434"></a> *     deserialized automatically.
+<a name="line435"></a> */
+<a name="line436"></a>goog.net.xpc.CrossPageChannel.prototype.registerService = function(
+<a name="line437"></a>    serviceName, callback, opt_jsonEncoded) {
+<a name="line438"></a>  this.services_[serviceName] = {
+<a name="line439"></a>    name: serviceName,
+<a name="line440"></a>    callback: callback,
+<a name="line441"></a>    jsonEncoded: !!opt_jsonEncoded
+<a name="line442"></a>  };
+<a name="line443"></a>};
+<a name="line444"></a>
+<a name="line445"></a>
+<a name="line446"></a>/**
+<a name="line447"></a> * Sends a msg over the channel.
+<a name="line448"></a> *
+<a name="line449"></a> * @param {string} serviceName The name of the service this message
+<a name="line450"></a> *     should be delivered to.
+<a name="line451"></a> * @param {string|Object} payload The payload. If this is an object, it is
+<a name="line452"></a> *     serialized to JSON before sending.
+<a name="line453"></a> */
+<a name="line454"></a>goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
+<a name="line455"></a>  if (!this.isConnected()) {
+<a name="line456"></a>    goog.net.xpc.logger.severe(&#39;Can\&#39;t send. Channel not connected.&#39;);
+<a name="line457"></a>    return;
+<a name="line458"></a>  }
+<a name="line459"></a>  // Check if the peer is still around.
+<a name="line460"></a>  // NOTE: This check is not reliable in IE, where a document in an
+<a name="line461"></a>  // iframe does not get unloaded when removing the iframe element from the DOM.
+<a name="line462"></a>  // TODO: Find something that works in IE as well.
+<a name="line463"></a>  if (this.peerWindowObject_.closed) {
+<a name="line464"></a>    goog.net.xpc.logger.severe(&#39;Peer has disappeared.&#39;);
+<a name="line465"></a>    this.close();
+<a name="line466"></a>    return;
+<a name="line467"></a>  }
+<a name="line468"></a>  if (goog.isObject(payload)) {
+<a name="line469"></a>    payload = goog.json.serialize(payload);
+<a name="line470"></a>  }
+<a name="line471"></a>  this.transport_.send(serviceName, payload);
+<a name="line472"></a>};
+<a name="line473"></a>
+<a name="line474"></a>
+<a name="line475"></a>/**
+<a name="line476"></a> * Delivers messages to the appropriate service-handler.
+<a name="line477"></a> *
+<a name="line478"></a> * @param {string} serviceName The name of the port.
+<a name="line479"></a> * @param {string} payload The payload.
+<a name="line480"></a> * @private
+<a name="line481"></a> */
+<a name="line482"></a>goog.net.xpc.CrossPageChannel.prototype.deliver_ = function(serviceName,
+<a name="line483"></a>                                                            payload) {
+<a name="line484"></a>
+<a name="line485"></a>  // transport service?
+<a name="line486"></a>  if (!serviceName ||
+<a name="line487"></a>      serviceName == goog.net.xpc.TRANSPORT_SERVICE_) {
+<a name="line488"></a>    this.transport_.transportServiceHandler(payload);
+<a name="line489"></a>  } else {
+<a name="line490"></a>    // only deliver messages if connected
+<a name="line491"></a>    if (this.isConnected()) {
+<a name="line492"></a>      var service = this.services_[serviceName];
+<a name="line493"></a>      if (service) {
+<a name="line494"></a>        if (service.jsonEncoded) {
+<a name="line495"></a>          /** @preserveTry */
+<a name="line496"></a>          try {
+<a name="line497"></a>            payload = goog.json.parse(payload);
+<a name="line498"></a>          } catch (e) {
+<a name="line499"></a>            goog.net.xpc.logger.info(&#39;Error parsing JSON-encoded payload.&#39;);
+<a name="line500"></a>            return;
+<a name="line501"></a>          }
+<a name="line502"></a>        }
+<a name="line503"></a>        service.callback(payload);
+<a name="line504"></a>      } else {
+<a name="line505"></a>        goog.net.xpc.logger.info(&#39;CrossPageChannel::deliver_(): &#39; +
+<a name="line506"></a>                                 &#39;No such service: &quot;&#39; + serviceName + &#39;&quot; &#39; +
+<a name="line507"></a>                                 &#39;(payload: &#39; + payload + &#39;)&#39;);
+<a name="line508"></a>      }
+<a name="line509"></a>    } else {
+<a name="line510"></a>      goog.net.xpc.logger.info(&#39;CrossPageChannel::deliver_(): Not connected.&#39;);
+<a name="line511"></a>    }
+<a name="line512"></a>  }
+<a name="line513"></a>};
+<a name="line514"></a>
+<a name="line515"></a>
+<a name="line516"></a>/**
+<a name="line517"></a> * The role of the peer.
+<a name="line518"></a> * @enum {number}
+<a name="line519"></a> */
+<a name="line520"></a>goog.net.xpc.CrossPageChannel.Role = {
+<a name="line521"></a>  OUTER: 0,
+<a name="line522"></a>  INNER: 1
+<a name="line523"></a>};
+<a name="line524"></a>
+<a name="line525"></a>
+<a name="line526"></a>/**
+<a name="line527"></a> * Returns the role of this channel (either inner or outer).
+<a name="line528"></a> * @return {number} The role of this channel.
+<a name="line529"></a> */
+<a name="line530"></a>goog.net.xpc.CrossPageChannel.prototype.getRole = function() {
+<a name="line531"></a>  return window.parent == this.peerWindowObject_ ?
+<a name="line532"></a>      goog.net.xpc.CrossPageChannel.Role.INNER :
+<a name="line533"></a>      goog.net.xpc.CrossPageChannel.Role.OUTER;
+<a name="line534"></a>};
+<a name="line535"></a>
+<a name="line536"></a>
+<a name="line537"></a>/**
+<a name="line538"></a> * Disposes of the channel.
+<a name="line539"></a> */
+<a name="line540"></a>goog.net.xpc.CrossPageChannel.prototype.disposeInternal = function() {
+<a name="line541"></a>  goog.net.xpc.CrossPageChannel.superClass_.disposeInternal.call(this);
+<a name="line542"></a>
+<a name="line543"></a>  this.close();
+<a name="line544"></a>
+<a name="line545"></a>  this.peerWindowObject_ = null;
+<a name="line546"></a>  this.iframeElement_ = null;
+<a name="line547"></a>  delete this.services_;
+<a name="line548"></a>
+<a name="line549"></a>  goog.net.xpc.channels_[this.name] = null;
+<a name="line550"></a>};
+<a name="line551"></a>
+<a name="line552"></a>
+<a name="line553"></a>/**
+<a name="line554"></a> * Disposes all channels.
+<a name="line555"></a> * @private
+<a name="line556"></a> */
+<a name="line557"></a>goog.net.xpc.CrossPageChannel.disposeAll_ = function() {
+<a name="line558"></a>  for (var name in goog.net.xpc.channels_) {
+<a name="line559"></a>    var ch = goog.net.xpc.channels_[name];
+<a name="line560"></a>    if (ch) {
+<a name="line561"></a>      ch.dispose();
+<a name="line562"></a>    }
+<a name="line563"></a>  }
+<a name="line564"></a>};
+</pre>
+
+
+</body>
+</html>

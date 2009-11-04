@@ -1,0 +1,416 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>rangeset.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_math_rangeset.js.html">rangeset.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2009 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A RangeSet is a structure that manages a list of ranges.
+<a name="line17"></a> * Numeric ranges may be added and removed from the RangeSet, and the set may
+<a name="line18"></a> * be queried for the presence or absence of individual values or ranges of
+<a name="line19"></a> * values.
+<a name="line20"></a> *
+<a name="line21"></a> * This may be used, for example, to track the availability of sparse elements
+<a name="line22"></a> * in an array without iterating over the entire array.
+<a name="line23"></a> *
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.math.RangeSet&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.array&#39;);
+<a name="line29"></a>goog.require(&#39;goog.iter.Iterator&#39;);
+<a name="line30"></a>goog.require(&#39;goog.iter.StopIteration&#39;);
+<a name="line31"></a>goog.require(&#39;goog.math.Range&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Constructs a new RangeSet, which can store numeric ranges.
+<a name="line36"></a> *
+<a name="line37"></a> * Ranges are treated as half-closed: that is, they are exclusive of their end
+<a name="line38"></a> * value [start, end).
+<a name="line39"></a> *
+<a name="line40"></a> * New ranges added to the set which overlap the values in one or more existing
+<a name="line41"></a> * ranges will be merged.
+<a name="line42"></a> *
+<a name="line43"></a> * @constructor
+<a name="line44"></a> */
+<a name="line45"></a>goog.math.RangeSet = function() {
+<a name="line46"></a>  /**
+<a name="line47"></a>   * A sorted list of ranges that represent the values in the set.
+<a name="line48"></a>   * @type {Array.&lt;goog.math.Range&gt;}
+<a name="line49"></a>   * @private
+<a name="line50"></a>   */
+<a name="line51"></a>  this.ranges_ = [];
+<a name="line52"></a>};
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>if (goog.DEBUG) {
+<a name="line56"></a>  /**
+<a name="line57"></a>   * @return {string} A debug string in the form [[1, 5], [8, 9], [15, 30]].
+<a name="line58"></a>   */
+<a name="line59"></a>  goog.math.RangeSet.prototype.toString = function() {
+<a name="line60"></a>    return &#39;[&#39; + this.ranges_.join(&#39;, &#39;) + &#39;]&#39;;
+<a name="line61"></a>  };
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Compares two sets for equality.
+<a name="line67"></a> *
+<a name="line68"></a> * @param {goog.math.RangeSet} a A range set.
+<a name="line69"></a> * @param {goog.math.RangeSet} b A range set.
+<a name="line70"></a> * @return {boolean} Whether both sets contain the same values.
+<a name="line71"></a> */
+<a name="line72"></a>goog.math.RangeSet.equals = function(a, b) {
+<a name="line73"></a>  // Fast check for object equality. Also succeeds if a and b are both null.
+<a name="line74"></a>  return a == b || !!(a &amp;&amp; b &amp;&amp; goog.array.equals(a.ranges_, b.ranges_,
+<a name="line75"></a>      goog.math.Range.equals));
+<a name="line76"></a>};
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * @return {goog.math.RangeSet} A new RangeSet containing the same values as
+<a name="line81"></a> *      this one.
+<a name="line82"></a> */
+<a name="line83"></a>goog.math.RangeSet.prototype.clone = function() {
+<a name="line84"></a>  var set = new goog.math.RangeSet();
+<a name="line85"></a>
+<a name="line86"></a>  for (var i = this.ranges_.length; i--;) {
+<a name="line87"></a>    set.ranges_[i] = this.ranges_[i].clone();
+<a name="line88"></a>  }
+<a name="line89"></a>
+<a name="line90"></a>  return set;
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Adds a range to the set. If the new range overlaps existing values, those
+<a name="line96"></a> * ranges will be merged.
+<a name="line97"></a> *
+<a name="line98"></a> * @param {goog.math.Range} a The range to add.
+<a name="line99"></a> */
+<a name="line100"></a>goog.math.RangeSet.prototype.add = function(a) {
+<a name="line101"></a>  if (a.end &lt;= a.start) {
+<a name="line102"></a>    // Empty ranges are ignored.
+<a name="line103"></a>    return;
+<a name="line104"></a>  }
+<a name="line105"></a>
+<a name="line106"></a>  a = a.clone();
+<a name="line107"></a>
+<a name="line108"></a>  // Find the insertion point.
+<a name="line109"></a>  for (var i = 0, b; b = this.ranges_[i]; i++) {
+<a name="line110"></a>    if (a.start &lt;= b.end) {
+<a name="line111"></a>      a.start = Math.min(a.start, b.start);
+<a name="line112"></a>      break;
+<a name="line113"></a>    }
+<a name="line114"></a>  }
+<a name="line115"></a>
+<a name="line116"></a>  var insertionPoint = i;
+<a name="line117"></a>
+<a name="line118"></a>  for (; b = this.ranges_[i]; i++) {
+<a name="line119"></a>    if (a.end &lt; b.start) {
+<a name="line120"></a>      break;
+<a name="line121"></a>    }
+<a name="line122"></a>    a.end = Math.max(a.end, b.end);
+<a name="line123"></a>  }
+<a name="line124"></a>
+<a name="line125"></a>  this.ranges_.splice(insertionPoint, i - insertionPoint, a);
+<a name="line126"></a>};
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * Removes a range of values from the set.
+<a name="line131"></a> *
+<a name="line132"></a> * @param {goog.math.Range} a The range to remove.
+<a name="line133"></a> */
+<a name="line134"></a>goog.math.RangeSet.prototype.remove = function(a) {
+<a name="line135"></a>  if (a.end &lt;= a.start) {
+<a name="line136"></a>    // Empty ranges are ignored.
+<a name="line137"></a>    return;
+<a name="line138"></a>  }
+<a name="line139"></a>
+<a name="line140"></a>  // Find the insertion point.
+<a name="line141"></a>  for (var i = 0, b; b = this.ranges_[i]; i++) {
+<a name="line142"></a>    if (a.start &lt; b.end) {
+<a name="line143"></a>      break;
+<a name="line144"></a>    }
+<a name="line145"></a>  }
+<a name="line146"></a>
+<a name="line147"></a>  if (!b || a.end &lt; b.start) {
+<a name="line148"></a>    // The range being removed doesn&#39;t overlap any existing range. Exit early.
+<a name="line149"></a>    return;
+<a name="line150"></a>  }
+<a name="line151"></a>
+<a name="line152"></a>  var insertionPoint = i;
+<a name="line153"></a>
+<a name="line154"></a>  if (a.start &gt; b.start) {
+<a name="line155"></a>    // There is an overlap with the nearest range. Modify it accordingly.
+<a name="line156"></a>    insertionPoint++;
+<a name="line157"></a>
+<a name="line158"></a>    if (a.end &lt; b.end) {
+<a name="line159"></a>      goog.array.insertAt(this.ranges_,
+<a name="line160"></a>                          new goog.math.Range(a.end, b.end),
+<a name="line161"></a>                          insertionPoint);
+<a name="line162"></a>    }
+<a name="line163"></a>    b.end = a.start;
+<a name="line164"></a>  }
+<a name="line165"></a>
+<a name="line166"></a>  for (i = insertionPoint, b; b = this.ranges_[i]; i++) {
+<a name="line167"></a>    b.start = Math.max(a.end, b.start);
+<a name="line168"></a>    if (a.end &lt; b.end) {
+<a name="line169"></a>      break;
+<a name="line170"></a>    }
+<a name="line171"></a>  }
+<a name="line172"></a>
+<a name="line173"></a>  this.ranges_.splice(insertionPoint, i - insertionPoint);
+<a name="line174"></a>};
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * Determines whether a given range is in the set. Only succeeds if the entire
+<a name="line179"></a> * range is available.
+<a name="line180"></a> *
+<a name="line181"></a> * @param {goog.math.Range} a The query range.
+<a name="line182"></a> * @return {boolean} Whether the entire requested range is set.
+<a name="line183"></a> */
+<a name="line184"></a>goog.math.RangeSet.prototype.contains = function(a) {
+<a name="line185"></a>  if (a.end &lt;= a.start) {
+<a name="line186"></a>    return false;
+<a name="line187"></a>  }
+<a name="line188"></a>
+<a name="line189"></a>  for (var i = 0, b; b = this.ranges_[i]; i++) {
+<a name="line190"></a>    if (a.start &lt; b.end) {
+<a name="line191"></a>      if (a.end &gt;= b.start) {
+<a name="line192"></a>        return goog.math.Range.contains(b, a);
+<a name="line193"></a>      }
+<a name="line194"></a>      break;
+<a name="line195"></a>    }
+<a name="line196"></a>  }
+<a name="line197"></a>  return false;
+<a name="line198"></a>};
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * Determines whether a given value is set in the RangeSet.
+<a name="line203"></a> *
+<a name="line204"></a> * @param {number} value The value to test.
+<a name="line205"></a> * @return {boolean} Whether the given value is in the set.
+<a name="line206"></a> */
+<a name="line207"></a>goog.math.RangeSet.prototype.containsValue = function(value) {
+<a name="line208"></a>  for (var i = 0, b; b = this.ranges_[i]; i++) {
+<a name="line209"></a>    if (value &lt; b.end) {
+<a name="line210"></a>      if (value &gt;= b.start) {
+<a name="line211"></a>        return true;
+<a name="line212"></a>      }
+<a name="line213"></a>      break;
+<a name="line214"></a>    }
+<a name="line215"></a>  }
+<a name="line216"></a>  return false;
+<a name="line217"></a>};
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * Returns the union of this RangeSet with another.
+<a name="line222"></a> *
+<a name="line223"></a> * @param {goog.math.RangeSet} set Another RangeSet.
+<a name="line224"></a> * @return {goog.math.RangeSet} A new RangeSet containing all values from either
+<a name="line225"></a> *     set.
+<a name="line226"></a> */
+<a name="line227"></a>goog.math.RangeSet.prototype.union = function(set) {
+<a name="line228"></a>  // TODO: A linear-time merge would be preferable if it is ever a
+<a name="line229"></a>  // bottleneck.
+<a name="line230"></a>  set = set.clone();
+<a name="line231"></a>
+<a name="line232"></a>  for (var i = 0, a; a = this.ranges_[i]; i++) {
+<a name="line233"></a>    set.add(a);
+<a name="line234"></a>  }
+<a name="line235"></a>
+<a name="line236"></a>  return set;
+<a name="line237"></a>};
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * Intersects this RangeSet with another.
+<a name="line242"></a> *
+<a name="line243"></a> * @param {goog.math.RangeSet} set The RangeSet to intersect with.
+<a name="line244"></a> * @return {goog.math.RangeSet} A new RangeSet containing all values set in both
+<a name="line245"></a> *     this and the input set.
+<a name="line246"></a> */
+<a name="line247"></a>goog.math.RangeSet.prototype.intersection = function(set) {
+<a name="line248"></a>  if (this.isEmpty() || set.isEmpty()) {
+<a name="line249"></a>    return new goog.math.RangeSet();
+<a name="line250"></a>  }
+<a name="line251"></a>
+<a name="line252"></a>  set = set.inverse(this.getBounds());
+<a name="line253"></a>  var r = this.clone();
+<a name="line254"></a>
+<a name="line255"></a>  for (var i = 0, a; a = set.ranges_[i]; i++) {
+<a name="line256"></a>    r.remove(a);
+<a name="line257"></a>  }
+<a name="line258"></a>
+<a name="line259"></a>  return r;
+<a name="line260"></a>};
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * Creates a subset of this set over the input range.
+<a name="line265"></a> *
+<a name="line266"></a> * @param {goog.math.Range} range The range to copy into the slice.
+<a name="line267"></a> * @return {goog.math.RangeSet} A new RangeSet with a copy of the values in the
+<a name="line268"></a> *     input range.
+<a name="line269"></a> */
+<a name="line270"></a>goog.math.RangeSet.prototype.slice = function(range) {
+<a name="line271"></a>  var set = new goog.math.RangeSet();
+<a name="line272"></a>  if (range.start &gt;= range.end) {
+<a name="line273"></a>    return set;
+<a name="line274"></a>  }
+<a name="line275"></a>
+<a name="line276"></a>  for (var i = 0, b; b = this.ranges_[i]; i++) {
+<a name="line277"></a>    if (b.end &lt;= range.start) {
+<a name="line278"></a>      continue;
+<a name="line279"></a>    }
+<a name="line280"></a>    if (b.start &gt; range.end) {
+<a name="line281"></a>      break;
+<a name="line282"></a>    }
+<a name="line283"></a>
+<a name="line284"></a>    set.add(new goog.math.Range(Math.max(range.start, b.start),
+<a name="line285"></a>                                Math.min(range.end, b.end)));
+<a name="line286"></a>  }
+<a name="line287"></a>
+<a name="line288"></a>  return set;
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * Creates an inverted slice of this set over the input range.
+<a name="line294"></a> *
+<a name="line295"></a> * @param {goog.math.Range} range The range to copy into the slice.
+<a name="line296"></a> * @return {goog.math.RangeSet} A new RangeSet containing inverted values from
+<a name="line297"></a> *     the original over the input range.
+<a name="line298"></a> */
+<a name="line299"></a>goog.math.RangeSet.prototype.inverse = function(range) {
+<a name="line300"></a>  var set = new goog.math.RangeSet();
+<a name="line301"></a>
+<a name="line302"></a>  set.add(range);
+<a name="line303"></a>  for (var i = 0, b; b = this.ranges_[i]; i++) {
+<a name="line304"></a>    if (range.start &gt;= b.end) {
+<a name="line305"></a>      continue;
+<a name="line306"></a>    }
+<a name="line307"></a>    if (range.end &lt; b.start) {
+<a name="line308"></a>      break;
+<a name="line309"></a>    }
+<a name="line310"></a>
+<a name="line311"></a>    set.remove(b);
+<a name="line312"></a>  }
+<a name="line313"></a>
+<a name="line314"></a>  return set;
+<a name="line315"></a>};
+<a name="line316"></a>
+<a name="line317"></a>
+<a name="line318"></a>/**
+<a name="line319"></a> * @return {goog.math.Range} The total range this set covers, ignoring any
+<a name="line320"></a> *     gaps between ranges.
+<a name="line321"></a> */
+<a name="line322"></a>goog.math.RangeSet.prototype.getBounds = function() {
+<a name="line323"></a>  if (this.ranges_.length) {
+<a name="line324"></a>    return new goog.math.Range(this.ranges_[0].start,
+<a name="line325"></a>                               goog.array.peek(this.ranges_).end);
+<a name="line326"></a>  }
+<a name="line327"></a>
+<a name="line328"></a>  return null;
+<a name="line329"></a>};
+<a name="line330"></a>
+<a name="line331"></a>
+<a name="line332"></a>/**
+<a name="line333"></a> * @return {boolean} Whether any ranges are currently in the set.
+<a name="line334"></a> */
+<a name="line335"></a>goog.math.RangeSet.prototype.isEmpty = function() {
+<a name="line336"></a>  return this.ranges_.length == 0;
+<a name="line337"></a>};
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * Removes all values in the set.
+<a name="line342"></a> */
+<a name="line343"></a>goog.math.RangeSet.prototype.clear = function() {
+<a name="line344"></a>  this.ranges_.length = 0;
+<a name="line345"></a>};
+<a name="line346"></a>
+<a name="line347"></a>
+<a name="line348"></a>/**
+<a name="line349"></a> * Returns an iterator that iterates over the ranges in the RangeSet.
+<a name="line350"></a> *
+<a name="line351"></a> * @param {boolean} opt_keys Ignored for RangeSets.
+<a name="line352"></a> * @return {goog.iter.Iterator} An iterator over the values in the set.
+<a name="line353"></a> */
+<a name="line354"></a>goog.math.RangeSet.prototype.__iterator__ = function(opt_keys) {
+<a name="line355"></a>  var i = 0;
+<a name="line356"></a>  var list = this.ranges_;
+<a name="line357"></a>
+<a name="line358"></a>  var iterator = new goog.iter.Iterator();
+<a name="line359"></a>  iterator.next = function() {
+<a name="line360"></a>    if (i &gt;= list.length) {
+<a name="line361"></a>      throw goog.iter.StopIteration;
+<a name="line362"></a>    }
+<a name="line363"></a>    return list[i++].clone();
+<a name="line364"></a>  }
+<a name="line365"></a>
+<a name="line366"></a>  return iterator;
+<a name="line367"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>emojipalette.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_emoji_emojipalette.js.html">emojipalette.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Emoji Palette implementation. This provides a UI widget for
+<a name="line17"></a> * choosing an emoji from a palette of possible choices. EmojiPalettes are
+<a name="line18"></a> * contained within EmojiPickers.
+<a name="line19"></a> *
+<a name="line20"></a> * See ../demos/popupemojipicker.html for an example of how to instantiate
+<a name="line21"></a> * an emoji picker.
+<a name="line22"></a> *
+<a name="line23"></a> * Based on goog.ui.ColorPicker (colorpicker.js).
+<a name="line24"></a> *
+<a name="line25"></a> */
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.ui.emoji.EmojiPalette&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line32"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line33"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line34"></a>goog.require(&#39;goog.net.ImageLoader&#39;);
+<a name="line35"></a>goog.require(&#39;goog.ui.Palette&#39;);
+<a name="line36"></a>goog.require(&#39;goog.ui.emoji.Emoji&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.emoji.EmojiPaletteRenderer&#39;);
+<a name="line38"></a>goog.require(&#39;goog.ui.emoji.SpriteInfo&#39;);
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/**
+<a name="line42"></a> * A page of emoji to be displayed in an EmojiPicker.
+<a name="line43"></a> *
+<a name="line44"></a> * @param {Array.&lt;Array&gt;} emoji List of emoji for this page.
+<a name="line45"></a>  * @param {?string} opt_urlPrefix Prefix that should be prepended to all URL.
+<a name="line46"></a> * @param {goog.ui.PaletteRenderer} opt_renderer Renderer used to render or
+<a name="line47"></a> *     decorate the palette; defaults to {@link goog.ui.PaletteRenderer}.
+<a name="line48"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line49"></a> * @extends {goog.ui.Palette}
+<a name="line50"></a> * @constructor
+<a name="line51"></a> */
+<a name="line52"></a>goog.ui.emoji.EmojiPalette = function(emoji,
+<a name="line53"></a>                                      opt_urlPrefix,
+<a name="line54"></a>                                      opt_renderer,
+<a name="line55"></a>                                      opt_domHelper) {
+<a name="line56"></a>  goog.ui.Palette.call(this,
+<a name="line57"></a>                       null,
+<a name="line58"></a>                       opt_renderer ||
+<a name="line59"></a>                       new goog.ui.emoji.EmojiPaletteRenderer(null),
+<a name="line60"></a>                       opt_domHelper);
+<a name="line61"></a>  /**
+<a name="line62"></a>   * All the different emoji that this palette can display. Maps emoji ids
+<a name="line63"></a>   * (string) to the goog.ui.emoji.Emoji for that id.
+<a name="line64"></a>   *
+<a name="line65"></a>   * @type {Object}
+<a name="line66"></a>   * @private
+<a name="line67"></a>   */
+<a name="line68"></a>  this.emojiCells_ = {};
+<a name="line69"></a>
+<a name="line70"></a>  /**
+<a name="line71"></a>   * Map of emoji id to index into this.emojiCells_.
+<a name="line72"></a>   *
+<a name="line73"></a>   * @type {Object}
+<a name="line74"></a>   * @private
+<a name="line75"></a>   */
+<a name="line76"></a>  this.emojiMap_ = {};
+<a name="line77"></a>
+<a name="line78"></a>  /**
+<a name="line79"></a>   * List of the animated emoji in this palette. Each internal array is of type
+<a name="line80"></a>   * [HTMLDivElement, goog.ui.emoji.Emoji], and represents the palette item
+<a name="line81"></a>   * for that animated emoji, and the Emoji object.
+<a name="line82"></a>   *
+<a name="line83"></a>   * @type {Array.&lt;Array.&lt;HTMLDivElement, goog.ui.emoji.Emoji&gt;&gt;}
+<a name="line84"></a>   * @private
+<a name="line85"></a>   */
+<a name="line86"></a>  this.animatedEmoji_ = [];
+<a name="line87"></a>
+<a name="line88"></a>  this.urlPrefix_ = opt_urlPrefix || &#39;&#39;;
+<a name="line89"></a>
+<a name="line90"></a>  /**
+<a name="line91"></a>   * Palette items that are displayed on this page of the emoji picker. Each
+<a name="line92"></a>   * item is a div wrapped around a div or an img.
+<a name="line93"></a>   *
+<a name="line94"></a>   * @type {Array.&lt;HTMLDivElement&gt;}
+<a name="line95"></a>   * @private
+<a name="line96"></a>   */
+<a name="line97"></a>  this.emoji_ = this.getEmojiArrayFromProperties_(emoji);
+<a name="line98"></a>
+<a name="line99"></a>  /**
+<a name="line100"></a>   * The renderer for this emoji palette.
+<a name="line101"></a>   *
+<a name="line102"></a>   * @type {goog.ui.ControlRenderer|undefined}
+<a name="line103"></a>   * @private
+<a name="line104"></a>   */
+<a name="line105"></a>  this.renderer_ = this.getRenderer();
+<a name="line106"></a>
+<a name="line107"></a>  this.setContent(this.emoji_);
+<a name="line108"></a>};
+<a name="line109"></a>goog.inherits(goog.ui.emoji.EmojiPalette, goog.ui.Palette);
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Indicates a prefix that should be prepended to all URLs of images in this
+<a name="line114"></a> * emojipalette. This provides an optimization if the URLs are long, so that
+<a name="line115"></a> * the client does not have to send a long string for each emoji.
+<a name="line116"></a> *
+<a name="line117"></a> * @type {string}
+<a name="line118"></a> * @private
+<a name="line119"></a> */
+<a name="line120"></a>goog.ui.emoji.EmojiPalette.prototype.urlPrefix_ = &#39;&#39;;
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Whether the emoji images have been loaded.
+<a name="line125"></a> *
+<a name="line126"></a> * @type {boolean}
+<a name="line127"></a> * @private
+<a name="line128"></a> */
+<a name="line129"></a>goog.ui.emoji.EmojiPalette.prototype.imagesLoaded_ = false;
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Image loader for loading animated emoji.
+<a name="line134"></a> *
+<a name="line135"></a> * @type {goog.net.ImageLoader}
+<a name="line136"></a> * @private
+<a name="line137"></a> */
+<a name="line138"></a>goog.ui.emoji.EmojiPalette.prototype.imageLoader_;
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * Helps create an array of emoji palette items from an array of emoji
+<a name="line143"></a> * properties. Each element will be either a div with background-image set to
+<a name="line144"></a> * a sprite, or an img element pointing directly to an emoji, and all elements
+<a name="line145"></a> * are wrapped with an outer div for alignment issues (i.e., this allows
+<a name="line146"></a> * centering the inner div).
+<a name="line147"></a> *
+<a name="line148"></a> * @param {Object} emojiGroup The group of emoji for this page.
+<a name="line149"></a> * @return {Array.&lt;HTMLDivElement&gt;} The emoji items.
+<a name="line150"></a> * @private
+<a name="line151"></a> */
+<a name="line152"></a>goog.ui.emoji.EmojiPalette.prototype.getEmojiArrayFromProperties_ =
+<a name="line153"></a>    function(emojiGroup) {
+<a name="line154"></a>  var emojiItems = [];
+<a name="line155"></a>
+<a name="line156"></a>  for (var i = 0; i &lt; emojiGroup.length; i++) {
+<a name="line157"></a>    var url = emojiGroup[i][0];
+<a name="line158"></a>    var id = emojiGroup[i][1];
+<a name="line159"></a>    var spriteInfo = emojiGroup[i][2];
+<a name="line160"></a>    var displayUrl = spriteInfo ? spriteInfo.getUrl() :
+<a name="line161"></a>                     this.urlPrefix_ + url;
+<a name="line162"></a>
+<a name="line163"></a>    var item = this.renderer_.createPaletteItem(this.getDomHelper(),
+<a name="line164"></a>                                                id,
+<a name="line165"></a>                                                spriteInfo,
+<a name="line166"></a>                                                displayUrl);
+<a name="line167"></a>    emojiItems.push(item);
+<a name="line168"></a>
+<a name="line169"></a>    var emoji = new goog.ui.emoji.Emoji(url, id);
+<a name="line170"></a>    this.emojiCells_[id] = emoji;
+<a name="line171"></a>    this.emojiMap_[id] = i;
+<a name="line172"></a>
+<a name="line173"></a>    // Keep track of sprited emoji that are animated, for later loading.
+<a name="line174"></a>    if (spriteInfo &amp;&amp; spriteInfo.isAnimated()) {
+<a name="line175"></a>      this.animatedEmoji_.push([item, emoji]);
+<a name="line176"></a>    }
+<a name="line177"></a>  }
+<a name="line178"></a>
+<a name="line179"></a>  // Create the image loader now so that tests can access it before it has
+<a name="line180"></a>  // started loading images.
+<a name="line181"></a>  if (this.animatedEmoji_.length &gt; 0) {
+<a name="line182"></a>    this.imageLoader_ = new goog.net.ImageLoader();
+<a name="line183"></a>  }
+<a name="line184"></a>
+<a name="line185"></a>  this.imagesLoaded_ = true;
+<a name="line186"></a>  return emojiItems;
+<a name="line187"></a>};
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * Sends off requests for all the animated emoji and replaces their static
+<a name="line192"></a> * sprites when the images are done downloading.
+<a name="line193"></a> */
+<a name="line194"></a>goog.ui.emoji.EmojiPalette.prototype.loadAnimatedEmoji = function() {
+<a name="line195"></a>  if (this.animatedEmoji_.length &gt; 0) {
+<a name="line196"></a>    for (var i = 0; i &lt; this.animatedEmoji_.length; i++) {
+<a name="line197"></a>      var paletteItem = this.animatedEmoji_[i][0];
+<a name="line198"></a>      var emoji = this.animatedEmoji_[i][1];
+<a name="line199"></a>      var url = this.urlPrefix_ + emoji.getUrl();
+<a name="line200"></a>
+<a name="line201"></a>      this.imageLoader_.addImage(emoji.getId(), url);
+<a name="line202"></a>    }
+<a name="line203"></a>
+<a name="line204"></a>    this.getHandler().listen(this.imageLoader_, goog.events.EventType.LOAD,
+<a name="line205"></a>        this.handleImageLoad_);
+<a name="line206"></a>    this.imageLoader_.start();
+<a name="line207"></a>  }
+<a name="line208"></a>};
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/**
+<a name="line212"></a> * Handles image load events from the ImageLoader.
+<a name="line213"></a> *
+<a name="line214"></a> * @param {goog.events.Event} e The event object.
+<a name="line215"></a> * @private
+<a name="line216"></a> */
+<a name="line217"></a>goog.ui.emoji.EmojiPalette.prototype.handleImageLoad_ = function(e) {
+<a name="line218"></a>  var id = e.target.id;
+<a name="line219"></a>  var url = e.target.src;
+<a name="line220"></a>  // Just to be safe, we check to make sure we have an id and src url from
+<a name="line221"></a>  // the event target, which the ImageLoader sets to an Image object.
+<a name="line222"></a>  if (id &amp;&amp; url) {
+<a name="line223"></a>    var item = this.emoji_[this.emojiMap_[id]];
+<a name="line224"></a>    if (item) {
+<a name="line225"></a>      this.getRenderer().updateAnimatedPaletteItem(item, e.target);
+<a name="line226"></a>    }
+<a name="line227"></a>  }
+<a name="line228"></a>};
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Returns the image loader that this palette uses. Used for testing.
+<a name="line233"></a> *
+<a name="line234"></a> * @return {goog.net.ImageLoader} the image loader.
+<a name="line235"></a> */
+<a name="line236"></a>goog.ui.emoji.EmojiPalette.prototype.getImageLoader = function() {
+<a name="line237"></a>  return this.imageLoader_;
+<a name="line238"></a>};
+<a name="line239"></a>
+<a name="line240"></a>
+<a name="line241"></a>/** @inheritDoc */
+<a name="line242"></a>goog.ui.emoji.EmojiPalette.prototype.disposeInternal = function() {
+<a name="line243"></a>  goog.ui.emoji.EmojiPalette.superClass_.disposeInternal.call(this);
+<a name="line244"></a>
+<a name="line245"></a>  if (this.imageLoader_) {
+<a name="line246"></a>    this.imageLoader_.dispose();
+<a name="line247"></a>    this.imageLoader_ = null;
+<a name="line248"></a>  }
+<a name="line249"></a>  this.animatedEmoji_ = null;
+<a name="line250"></a>  this.emojiCells_ = null;
+<a name="line251"></a>  this.emojiMap_ = null;
+<a name="line252"></a>  this.emoji_ = null;
+<a name="line253"></a>};
+<a name="line254"></a>
+<a name="line255"></a>
+<a name="line256"></a>/**
+<a name="line257"></a> * Returns a goomoji id from an img or the containing td, or null if none
+<a name="line258"></a> * exists for that element.
+<a name="line259"></a> *
+<a name="line260"></a> * @param {Element} el The element to get the Goomoji id from.
+<a name="line261"></a> * @return {string?} A goomoji id from an img or the containing td, or null if
+<a name="line262"></a> *     none exists for that element.
+<a name="line263"></a> * @private
+<a name="line264"></a> */
+<a name="line265"></a>goog.ui.emoji.EmojiPalette.prototype.getGoomojiIdFromElement_ = function(el) {
+<a name="line266"></a>  if (!el) {
+<a name="line267"></a>    return null;
+<a name="line268"></a>  }
+<a name="line269"></a>
+<a name="line270"></a>  var item = this.getRenderer().getContainingItem(this, el);
+<a name="line271"></a>  return item ? item.getAttribute(&#39;goomoji&#39;) : null;
+<a name="line272"></a>};
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * @return {goog.ui.emoji.Emoji} The currently selected emoji from this palette.
+<a name="line277"></a> */
+<a name="line278"></a>goog.ui.emoji.EmojiPalette.prototype.getSelectedEmoji = function() {
+<a name="line279"></a>  var elem = /** @type {Element} */ (this.getSelectedItem());
+<a name="line280"></a>  var goomojiId = this.getGoomojiIdFromElement_(elem);
+<a name="line281"></a>  return this.emojiCells_[goomojiId];
+<a name="line282"></a>};
+<a name="line283"></a>
+<a name="line284"></a>
+<a name="line285"></a>/**
+<a name="line286"></a> * @return {number} The number of emoji managed by this palette.
+<a name="line287"></a> */
+<a name="line288"></a>goog.ui.emoji.EmojiPalette.prototype.getNumberOfEmoji = function() {
+<a name="line289"></a>  return this.emojiCells_.length;
+<a name="line290"></a>};
+<a name="line291"></a>
+<a name="line292"></a>
+<a name="line293"></a>/**
+<a name="line294"></a> * Returns the index of the specified emoji within this palette.
+<a name="line295"></a> *
+<a name="line296"></a> * @param {string} id Id of the emoji to look up.
+<a name="line297"></a> * @return {number} The index of the specified emoji within this palette.
+<a name="line298"></a> */
+<a name="line299"></a>goog.ui.emoji.EmojiPalette.prototype.getEmojiIndex = function(id) {
+<a name="line300"></a>  return this.emojiMap_[id];
+<a name="line301"></a>};
+</pre>
+
+
+</body>
+</html>

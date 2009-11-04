@@ -1,0 +1,44 @@
+/*
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+*/
+
+/* Copyright 2008 Google Inc.  All Rights Reserved. */
+/**/
+/**/
+
+/* Styles for goog.ui.DimensionPicker. */
+
+/* goog.ui.DimensionPickerRenderer */
+
+.goog-dimension-picker {
+  padding: 4px;
+  font-size: 18px;
+}
+
+.goog-dimension-picker div {
+  position: relative;
+}
+
+.goog-dimension-picker div.goog-dimension-picker-highlighted {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-image: url(../images/dimension-highlighted.png);
+  overflow: hidden;
+}
+
+.goog-dimension-picker-unhighlighted {
+  background-image: url(../images/dimension-unhighlighted.png);
+}
+
+.goog-dimension-picker-status {
+  font-size: 10pt;
+  text-align: center;
+}
+
+.goog-dimension-picker div.goog-dimension-picker-mousecatcher {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+}

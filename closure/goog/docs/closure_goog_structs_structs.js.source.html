@@ -1,0 +1,391 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>structs.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_structs_structs.js.html">structs.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Generics method for collection-like classes and objects.
+<a name="line17"></a> *
+<a name="line18"></a> *
+<a name="line19"></a> * This file contains functions to work with collections. It supports using
+<a name="line20"></a> * Map, Set, Array and Object and other classes that implement collection-like
+<a name="line21"></a> * methods.
+<a name="line22"></a> *
+<a name="line23"></a> */
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.structs&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.array&#39;);
+<a name="line29"></a>goog.require(&#39;goog.object&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>// We treat an object as a dictionary if it has getKeys or it is an object that
+<a name="line33"></a>// isn&#39;t arrayLike.
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/**
+<a name="line37"></a> * Returns the number of values in the collection-like object.
+<a name="line38"></a> * @param {Object} col The collection-like object.
+<a name="line39"></a> * @return {number} The number of values in the collection-like object.
+<a name="line40"></a> */
+<a name="line41"></a>goog.structs.getCount = function(col) {
+<a name="line42"></a>  if (typeof col.getCount == &#39;function&#39;) {
+<a name="line43"></a>    return col.getCount();
+<a name="line44"></a>  }
+<a name="line45"></a>  if (goog.isArrayLike(col) || goog.isString(col)) {
+<a name="line46"></a>    return col.length;
+<a name="line47"></a>  }
+<a name="line48"></a>  return goog.object.getCount(col);
+<a name="line49"></a>};
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>/**
+<a name="line53"></a> * Returns the values of the collection-like object.
+<a name="line54"></a> * @param {Object} col The collection-like object.
+<a name="line55"></a> * @return {!Array} The values in the collection-like object.
+<a name="line56"></a> */
+<a name="line57"></a>goog.structs.getValues = function(col) {
+<a name="line58"></a>  if (typeof col.getValues == &#39;function&#39;) {
+<a name="line59"></a>    return col.getValues();
+<a name="line60"></a>  }
+<a name="line61"></a>  if (goog.isString(col)) {
+<a name="line62"></a>    return col.split(&#39;&#39;);
+<a name="line63"></a>  }
+<a name="line64"></a>  if (goog.isArrayLike(col)) {
+<a name="line65"></a>    var rv = [];
+<a name="line66"></a>    var l = col.length;
+<a name="line67"></a>    for (var i = 0; i &lt; l; i++) {
+<a name="line68"></a>      rv.push(col[i]);
+<a name="line69"></a>    }
+<a name="line70"></a>    return rv;
+<a name="line71"></a>  }
+<a name="line72"></a>  return goog.object.getValues(col);
+<a name="line73"></a>};
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * Returns the keys of the collection. Some collections have no notion of
+<a name="line78"></a> * keys/indexes and this function will return undefined in those cases.
+<a name="line79"></a> * @param {Object} col The collection-like object.
+<a name="line80"></a> * @return {!Array|undefined} The keys in the collection.
+<a name="line81"></a> */
+<a name="line82"></a>goog.structs.getKeys = function(col) {
+<a name="line83"></a>  if (typeof col.getKeys == &#39;function&#39;) {
+<a name="line84"></a>    return col.getKeys();
+<a name="line85"></a>  }
+<a name="line86"></a>  // if we have getValues but no getKeys we know this is a key-less collection
+<a name="line87"></a>  if (typeof col.getValues == &#39;function&#39;) {
+<a name="line88"></a>    return undefined;
+<a name="line89"></a>  }
+<a name="line90"></a>  if (goog.isArrayLike(col) || goog.isString(col)) {
+<a name="line91"></a>    var rv = [];
+<a name="line92"></a>    var l = col.length;
+<a name="line93"></a>    for (var i = 0; i &lt; l; i++) {
+<a name="line94"></a>      rv.push(i);
+<a name="line95"></a>    }
+<a name="line96"></a>    return rv;
+<a name="line97"></a>  }
+<a name="line98"></a>
+<a name="line99"></a>  return goog.object.getKeys(col);
+<a name="line100"></a>};
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Whether the collection contains the given value. This is O(n) and uses
+<a name="line105"></a> * equals (==) to test the existence.
+<a name="line106"></a> * @param {Object} col The collection-like object.
+<a name="line107"></a> * @param {*} val The value to check for.
+<a name="line108"></a> * @return {boolean} True if the map contains the value.
+<a name="line109"></a> */
+<a name="line110"></a>goog.structs.contains = function(col, val) {
+<a name="line111"></a>  if (typeof col.contains == &#39;function&#39;) {
+<a name="line112"></a>    return col.contains(val);
+<a name="line113"></a>  }
+<a name="line114"></a>  if (typeof col.containsValue == &#39;function&#39;) {
+<a name="line115"></a>    return col.containsValue(val);
+<a name="line116"></a>  }
+<a name="line117"></a>  if (goog.isArrayLike(col) || goog.isString(col)) {
+<a name="line118"></a>    return goog.array.contains(/** @type {Array} */ (col), val);
+<a name="line119"></a>  }
+<a name="line120"></a>  return goog.object.containsValue(col, val);
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Whether the collection is empty.
+<a name="line126"></a> * @param {Object} col The collection-like object.
+<a name="line127"></a> * @return {boolean} True if empty.
+<a name="line128"></a> */
+<a name="line129"></a>goog.structs.isEmpty = function(col) {
+<a name="line130"></a>  if (typeof col.isEmpty == &#39;function&#39;) {
+<a name="line131"></a>    return col.isEmpty();
+<a name="line132"></a>  }
+<a name="line133"></a>
+<a name="line134"></a>  // We do not use goog.string.isEmpty because here we treat the string as
+<a name="line135"></a>  // collection and as such even whitespace matters
+<a name="line136"></a>
+<a name="line137"></a>  if (goog.isArrayLike(col) || goog.isString(col)) {
+<a name="line138"></a>    return goog.array.isEmpty(/** @type {Array} */ (col));
+<a name="line139"></a>  }
+<a name="line140"></a>  return goog.object.isEmpty(col);
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Removes all the elements from the collection.
+<a name="line146"></a> * @param {Object} col The collection-like object.
+<a name="line147"></a> */
+<a name="line148"></a>goog.structs.clear = function(col) {
+<a name="line149"></a>  // NOTE: This should not contain strings because strings are immutable
+<a name="line150"></a>  if (typeof col.clear == &#39;function&#39;) {
+<a name="line151"></a>    col.clear();
+<a name="line152"></a>  } else if (goog.isArrayLike(col)) {
+<a name="line153"></a>    goog.array.clear((/** @type {goog.array.ArrayLike} */ col));
+<a name="line154"></a>  } else {
+<a name="line155"></a>    goog.object.clear(col);
+<a name="line156"></a>  }
+<a name="line157"></a>};
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Calls a function for each value in a collection. The function takes
+<a name="line162"></a> * three arguments; the value, the key and the collection.
+<a name="line163"></a> *
+<a name="line164"></a> * @param {Object} col The collection-like object.
+<a name="line165"></a> * @param {Function} f The function to call for every value. This function takes
+<a name="line166"></a> *     3 arguments (the value, the key or undefined if the collection has no
+<a name="line167"></a> *     notion of keys, and the collection) and the return value is irrelevant.
+<a name="line168"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line169"></a> *     within {@code f}.
+<a name="line170"></a> */
+<a name="line171"></a>goog.structs.forEach = function(col, f, opt_obj) {
+<a name="line172"></a>  if (typeof col.forEach == &#39;function&#39;) {
+<a name="line173"></a>    col.forEach(f, opt_obj);
+<a name="line174"></a>  } else if (goog.isArrayLike(col) || goog.isString(col)) {
+<a name="line175"></a>    goog.array.forEach(/** @type {Array} */ (col), f, opt_obj);
+<a name="line176"></a>  } else {
+<a name="line177"></a>    var keys = goog.structs.getKeys(col);
+<a name="line178"></a>    var values = goog.structs.getValues(col);
+<a name="line179"></a>    var l = values.length;
+<a name="line180"></a>    for (var i = 0; i &lt; l; i++) {
+<a name="line181"></a>      f.call(opt_obj, values[i], keys &amp;&amp; keys[i], col);
+<a name="line182"></a>    }
+<a name="line183"></a>  }
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Calls a function for every value in the collection. When a call returns true,
+<a name="line189"></a> * adds the value to a new collection (Array is returned by default).
+<a name="line190"></a> *
+<a name="line191"></a> * @param {Object} col The collection-like object.
+<a name="line192"></a> * @param {Function} f The function to call for every value. This function takes
+<a name="line193"></a> *     3 arguments (the value, the key or undefined if the collection has no
+<a name="line194"></a> *     notion of keys, and the collection) and should return a Boolean. If the
+<a name="line195"></a> *     return value is true the value is added to the result collection. If it
+<a name="line196"></a> *     is false the value is not included.
+<a name="line197"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line198"></a> *     within {@code f}.
+<a name="line199"></a> * @return {!Object|!Array} A new collection where the passed values are
+<a name="line200"></a> *     present. If col is a key-less collection an array is returned.  If col
+<a name="line201"></a> *     has keys and values a plain old JS object is returned.
+<a name="line202"></a> */
+<a name="line203"></a>goog.structs.filter = function(col, f, opt_obj) {
+<a name="line204"></a>  if (typeof col.filter == &#39;function&#39;) {
+<a name="line205"></a>    return col.filter(f, opt_obj);
+<a name="line206"></a>  }
+<a name="line207"></a>  if (goog.isArrayLike(col) || goog.isString(col)) {
+<a name="line208"></a>    return goog.array.filter(/** @type {!Array} */ (col), f, opt_obj);
+<a name="line209"></a>  }
+<a name="line210"></a>
+<a name="line211"></a>  var rv;
+<a name="line212"></a>  var keys = goog.structs.getKeys(col);
+<a name="line213"></a>  var values = goog.structs.getValues(col);
+<a name="line214"></a>  var l = values.length;
+<a name="line215"></a>  if (keys) {
+<a name="line216"></a>    rv = {};
+<a name="line217"></a>    for (var i = 0; i &lt; l; i++) {
+<a name="line218"></a>      if (f.call(opt_obj, values[i], keys[i], col)) {
+<a name="line219"></a>        rv[keys[i]] = values[i];
+<a name="line220"></a>      }
+<a name="line221"></a>    }
+<a name="line222"></a>  } else {
+<a name="line223"></a>    // We should not use goog.array.filter here since we want to make sure that
+<a name="line224"></a>    // the index is undefined as well as make sure that col is passed to the
+<a name="line225"></a>    // function.
+<a name="line226"></a>    rv = [];
+<a name="line227"></a>    for (var i = 0; i &lt; l; i++) {
+<a name="line228"></a>      if (f.call(opt_obj, values[i], undefined, col)) {
+<a name="line229"></a>        rv.push(values[i]);
+<a name="line230"></a>      }
+<a name="line231"></a>    }
+<a name="line232"></a>  }
+<a name="line233"></a>  return rv;
+<a name="line234"></a>};
+<a name="line235"></a>
+<a name="line236"></a>
+<a name="line237"></a>/**
+<a name="line238"></a> * Calls a function for every value in the collection and adds the result into a
+<a name="line239"></a> * new collection (defaults to creating a new Array).
+<a name="line240"></a> *
+<a name="line241"></a> * @param {Object} col The collection-like object.
+<a name="line242"></a> * @param {Function} f The function to call for every value. This function
+<a name="line243"></a> *     takes 3 arguments (the value, the key or undefined if the collection has
+<a name="line244"></a> *     no notion of keys, and the collection) and should return something. The
+<a name="line245"></a> *     result will be used as the value in the new collection.
+<a name="line246"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line247"></a> *     within {@code f}.
+<a name="line248"></a> * @return {!Object|!Array} A new collection with the new values.  If col is a
+<a name="line249"></a> *     key-less collection an array is returned.  If col has keys and values a
+<a name="line250"></a> *     plain old JS object is returned.
+<a name="line251"></a> */
+<a name="line252"></a>goog.structs.map = function(col, f, opt_obj) {
+<a name="line253"></a>  if (typeof col.map == &#39;function&#39;) {
+<a name="line254"></a>    return col.map(f, opt_obj);
+<a name="line255"></a>  }
+<a name="line256"></a>  if (goog.isArrayLike(col) || goog.isString(col)) {
+<a name="line257"></a>    return goog.array.map(/** @type {!Array} */ (col), f, opt_obj);
+<a name="line258"></a>  }
+<a name="line259"></a>
+<a name="line260"></a>  var rv;
+<a name="line261"></a>  var keys = goog.structs.getKeys(col);
+<a name="line262"></a>  var values = goog.structs.getValues(col);
+<a name="line263"></a>  var l = values.length;
+<a name="line264"></a>  if (keys) {
+<a name="line265"></a>    rv = {};
+<a name="line266"></a>    for (var i = 0; i &lt; l; i++) {
+<a name="line267"></a>      rv[keys[i]] = f.call(opt_obj, values[i], keys[i], col);
+<a name="line268"></a>    }
+<a name="line269"></a>  } else {
+<a name="line270"></a>    // We should not use goog.array.map here since we want to make sure that
+<a name="line271"></a>    // the index is undefined as well as make sure that col is passed to the
+<a name="line272"></a>    // function.
+<a name="line273"></a>    rv = [];
+<a name="line274"></a>    for (var i = 0; i &lt; l; i++) {
+<a name="line275"></a>      rv[i] = f.call(opt_obj, values[i], undefined, col);
+<a name="line276"></a>    }
+<a name="line277"></a>  }
+<a name="line278"></a>  return rv;
+<a name="line279"></a>};
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>/**
+<a name="line283"></a> * Calls f for each value in a collection. If any call returns true this returns
+<a name="line284"></a> * true (without checking the rest). If all returns false this returns false.
+<a name="line285"></a> *
+<a name="line286"></a> * @param {Object|Array|string} col The collection-like object.
+<a name="line287"></a> * @param {Function} f The function to call for every value. This function takes
+<a name="line288"></a> *     3 arguments (the value, the key or undefined if the collection has no
+<a name="line289"></a> *     notion of keys, and the collection) and should return a Boolean.
+<a name="line290"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line291"></a> *     within {@code f}.
+<a name="line292"></a> * @return {boolean} True if any value passes the test.
+<a name="line293"></a> */
+<a name="line294"></a>goog.structs.some = function(col, f, opt_obj) {
+<a name="line295"></a>  if (typeof col.some == &#39;function&#39;) {
+<a name="line296"></a>    return col.some(f, opt_obj);
+<a name="line297"></a>  }
+<a name="line298"></a>  if (goog.isArrayLike(col) || goog.isString(col)) {
+<a name="line299"></a>    return goog.array.some(/** @type {!Array} */ (col), f, opt_obj);
+<a name="line300"></a>  }
+<a name="line301"></a>  var keys = goog.structs.getKeys(col);
+<a name="line302"></a>  var values = goog.structs.getValues(col);
+<a name="line303"></a>  var l = values.length;
+<a name="line304"></a>  for (var i = 0; i &lt; l; i++) {
+<a name="line305"></a>    if (f.call(opt_obj, values[i], keys &amp;&amp; keys[i], col)) {
+<a name="line306"></a>      return true;
+<a name="line307"></a>    }
+<a name="line308"></a>  }
+<a name="line309"></a>  return false;
+<a name="line310"></a>};
+<a name="line311"></a>
+<a name="line312"></a>
+<a name="line313"></a>/**
+<a name="line314"></a> * Calls f for each value in a collection. If all calls return true this return
+<a name="line315"></a> * true this returns true. If any returns false this returns false at this point
+<a name="line316"></a> *  and does not continue to check the remaining values.
+<a name="line317"></a> *
+<a name="line318"></a> * @param {Object} col The collection-like object.
+<a name="line319"></a> * @param {Function} f The function to call for every value. This function takes
+<a name="line320"></a> *     3 arguments (the value, the key or undefined if the collection has no
+<a name="line321"></a> *     notion of keys, and the collection) and should return a Boolean.
+<a name="line322"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line323"></a> *     within {@code f}.
+<a name="line324"></a> * @return {boolean} True if all key-value pairs pass the test.
+<a name="line325"></a> */
+<a name="line326"></a>goog.structs.every = function(col, f, opt_obj) {
+<a name="line327"></a>  if (typeof col.every == &#39;function&#39;) {
+<a name="line328"></a>    return col.every(f, opt_obj);
+<a name="line329"></a>  }
+<a name="line330"></a>  if (goog.isArrayLike(col) || goog.isString(col)) {
+<a name="line331"></a>    return goog.array.every(/** @type {!Array} */ (col), f, opt_obj);
+<a name="line332"></a>  }
+<a name="line333"></a>  var keys = goog.structs.getKeys(col);
+<a name="line334"></a>  var values = goog.structs.getValues(col);
+<a name="line335"></a>  var l = values.length;
+<a name="line336"></a>  for (var i = 0; i &lt; l; i++) {
+<a name="line337"></a>    if (!f.call(opt_obj, values[i], keys &amp;&amp; keys[i], col)) {
+<a name="line338"></a>      return false;
+<a name="line339"></a>    }
+<a name="line340"></a>  }
+<a name="line341"></a>  return true;
+<a name="line342"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+  Copyright 2006 Google Inc. All Rights Reserved.
+-->
+<head>
+<title>Closure Unit Tests - goog.locale.DateTimeFormat</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.locale');
+  goog.require('goog.locale.formatting');
+  goog.require('goog.locale.DateTimeFormat');
+  goog.require('goog.locale.DateTimeParse');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<script>
+ var DateTimeConstants_en = {
+   ERAS:["BC", "AD"],
+   ERANAMES:["Before Christ", "Anno Domini"],
+   NARROWMONTHS:["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+   MONTHS:["January", "February", "March", "April", "May", "June", "July", 
+       "August", "September", "October", "November", "December"],
+   SHORTMONTHS:["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+       "Oct", "Nov", "Dec"],
+   WEEKDAYS:["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+       "Saturday"],
+   SHORTWEEKDAYS:["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+   NARROWWEEKDAYS:["S", "M", "T", "W", "T", "F", "S"],
+   SHORTQUARTERS:["Q1", "Q2", "Q3", "Q4"],
+   QUARTERS:["1st quarter", "2nd quarter", "3rd quarter", "4th quarter"],
+   AMPMS:["AM", "PM"],
+   DATEFORMATS:["EEEE, MMMM d, yyyy", "MMMM d, yyyy", "MMM d, yyyy", "M/d/yy"],
+   TIMEFORMATS:["h:mm:ss a v", "h:mm:ss a z", "h:mm:ss a", "h:mm a"],
+   ZONESTRINGS:null
+ };
+
+ DateTimeConstants_en.STANDALONENARROWMONTHS = 
+     DateTimeConstants_en.NARROWMONTHS;
+ DateTimeConstants_en.STANDALONEMONTHS = DateTimeConstants_en.MONTHS;
+ DateTimeConstants_en.STANDALONESHORTMONTHS = DateTimeConstants_en.SHORTMONTHS;
+ DateTimeConstants_en.STANDALONEWEEKDAYS = DateTimeConstants_en.WEEKDAYS;
+ DateTimeConstants_en.STANDALONESHORTWEEKDAYS = 
+     DateTimeConstants_en.SHORTWEEKDAYS;
+ DateTimeConstants_en.STANDALONENARROWWEEKDAYS =
+     DateTimeConstants_en.NARROWWEEKDAYS;
+
+ registerDateTimeConstants(DateTimeConstants_en, 'en');
+
+ var DateTimeConstants_zh_CN = {
+   ERAS:["\u516C\u5143\u524D", "\u516C\u5143"],
+   ERANAMES:["\u516C\u5143\u524D", "\u516C\u5143"],
+   NARROWMONTHS:["1\u6708", "2\u6708", "3\u6708", "4\u6708", "5\u6708",
+       "6\u6708", "7\u6708", "8\u6708", "9\u6708", "10\u6708", "11\u6708",
+       "12\u6708"],
+   MONTHS:["\u4E00\u6708", "\u4E8C\u6708", "\u4E09\u6708", "\u56DB\u6708", 
+       "\u4E94\u6708", "\u516D\u6708", "\u4E03\u6708", "\u516B\u6708",
+       "\u4E5D\u6708", "\u5341\u6708", "\u5341\u4E00\u6708",
+       "\u5341\u4E8C\u6708"],
+   SHORTMONTHS:["\u4E00\u6708", "\u4E8C\u6708", "\u4E09\u6708", "\u56DB\u6708",
+       "\u4E94\u6708", "\u516D\u6708", "\u4E03\u6708", "\u516B\u6708",
+       "\u4E5D\u6708", "\u5341\u6708", "\u5341\u4E00\u6708",
+       "\u5341\u4E8C\u6708"],
+   WEEKDAYS:["\u661F\u671F\u65E5", "\u661F\u671F\u4E00", "\u661F\u671F\u4E8C",
+       "\u661F\u671F\u4E09", "\u661F\u671F\u56DB", "\u661F\u671F\u4E94",
+       "\u661F\u671F\u516D"],
+   SHORTWEEKDAYS:["\u5468\u65E5", "\u5468\u4E00", "\u5468\u4E8C",
+       "\u5468\u4E09", "\u5468\u56DB", "\u5468\u4E94", "\u5468\u516D"],
+   NARROWWEEKDAYS:["\u65E5", "\u4E00", "\u4E8C", "\u4E09", "\u56DB", "\u4E94",
+       "\u516D"],
+   SHORTQUARTERS:["1\u5B63", "2\u5B63", "3\u5B63", "4\u5B63"],
+   QUARTERS:["\u7B2C1\u5B63\u5EA6", "\u7B2C2\u5B63\u5EA6",
+       "\u7B2C3\u5B63\u5EA6", "\u7B2C4\u5B63\u5EA6"],
+   AMPMS:["\u4E0A\u5348", "\u4E0B\u5348"],
+   DATEFORMATS:["yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE",
+     "yyyy'\u5E74'M'\u6708'd'\u65E5'", "yyyy-M-d", "yy-M-d"],
+   TIMEFORMATS:["ahh'\u65F6'mm'\u5206'ss'\u79D2' z",
+     "ahh'\u65F6'mm'\u5206'ss'\u79D2'", "ahh:mm:ss", "ah:mm"],
+   ZONESTRINGS:null
+ };
+
+ DateTimeConstants_zh_CN.STANDALONENARROWMONTHS =
+     DateTimeConstants_zh_CN.NARROWMONTHS;
+ DateTimeConstants_zh_CN.STANDALONEMONTHS =
+     DateTimeConstants_zh_CN.MONTHS;
+ DateTimeConstants_zh_CN.STANDALONESHORTMONTHS =
+     DateTimeConstants_zh_CN.SHORTMONTHS;
+ DateTimeConstants_zh_CN.STANDALONEWEEKDAYS =
+     DateTimeConstants_zh_CN.WEEKDAYS;
+ DateTimeConstants_zh_CN.STANDALONESHORTWEEKDAYS =
+     DateTimeConstants_zh_CN.SHORTWEEKDAYS;
+ DateTimeConstants_zh_CN.STANDALONENARROWWEEKDAYS =
+     DateTimeConstants_zh_CN.NARROWWEEKDAYS;
+
+ registerDateTimeConstants(DateTimeConstants_zh_CN, 'zh_CN');
+
+function setUp() {
+  goog.locale.setLocale('en');
+}
+
+function testNegativeYear() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("MM/dd, yyyy", "11/22, 1999",
+                                       0, date) > 0);
+  assertEquals(1999, date.getFullYear());
+  assertEquals(11 - 1, date.getMonth());
+  assertEquals(22, date.getDate());
+
+  assertTrue(goog.locale.parseDateTime("MM/dd, yyyy", "11/22, -1999", 
+                                       0, date) > 0);
+  assertEquals(-1999, date.getFullYear());
+  assertEquals(11 - 1, date.getMonth());
+  assertEquals(22, date.getDate());
+}
+
+function testEra() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("MM/dd, yyyyG", "11/22, 1999BC",
+                                       0, date) > 0);
+  assertEquals(-1998, date.getFullYear());
+  assertEquals(11 - 1, date.getMonth());
+  assertEquals(22, date.getDate());
+
+  assertTrue(goog.locale.parseDateTime("MM/dd, yyyyG", "11/22, 1BC",
+                                       0, date) > 0);
+  assertEquals(0, date.getFullYear());
+  assertEquals(11 - 1, date.getMonth());
+  assertEquals(22, date.getDate());
+
+  assertTrue(goog.locale.parseDateTime("MM/dd, yyyyG", "11/22, 1999AD",
+                                       0, date) > 0);
+  assertEquals(1999, date.getFullYear());
+  assertEquals(11 - 1, date.getMonth());
+  assertEquals(22, date.getDate());
+}
+
+function testFractionalSeconds() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("hh:mm:ss.SSS", "11:12:13.956",
+                                       0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(12, date.getMinutes());
+  assertEquals(13, date.getSeconds());
+  assertEquals(956, date.getTime() % 1000);
+  
+  assertTrue(goog.locale.parseDateTime("hh:mm:ss.SSS", "11:12:13.95",
+                                       0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(12, date.getMinutes());
+  assertEquals(13, date.getSeconds());
+  assertEquals(950, date.getTime() % 1000);
+
+  assertTrue(goog.locale.parseDateTime("hh:mm:ss.SSS", "11:12:13.9",
+                                       0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(12, date.getMinutes());
+  assertEquals(13, date.getSeconds());
+  assertEquals(900, date.getTime() % 1000);
+}
+
+function testAmbiguousYear() {
+  var date = new Date();
+
+  // assume this year is 2006, year 27 to 99 will be interpret as 1927 to 1999
+  // year 00 to 25 will be 2000 to 2025. Year 26 can be either 1926 or 2026
+  // depend on the exact time. 
+  var org_date = new Date();
+  org_date.setFullYear(org_date.getFullYear() + 20);
+
+  // following 2 lines only works in 2006. Keep them here as they explained
+  // our intention better.
+  //assertTrue(DateTimeParse.parse("01/01/26", 0, "MM/dd/yy", date) > 0);
+  //assertTrue(date.getYear() == 2026 - 1900);
+
+  // rewrite so that it works in any year.
+  org_date.setMonth(0);
+  org_date.setDate(1);
+  org_date.setHours(0);
+  org_date.setMinutes(0);
+  org_date.setSeconds(0);
+  org_date.setMilliseconds(1);
+  var str = '01/01/' + (org_date.getFullYear() % 100);
+  assertTrue(goog.locale.parseDateTime("MM/dd/yy", str, 0, date) > 0);
+  assertEquals(org_date.getFullYear(), date.getFullYear());
+
+  // following 2 lines only works in 2006. Keep them here as they explained
+  // our intention better.
+  //assertTrue(DateTimeParse.parse("MM/dd/yy", "12/30/26", 0, date) > 0);
+  //assertTrue(date.getYear() == 1926 - 1900);
+
+  // rewrite so that it works in any year.
+  org_date.setMonth(11);
+  org_date.setDate(31);
+  org_date.setHours(23);
+  org_date.setMinutes(59);
+  org_date.setSeconds(59);
+  org_date.setMilliseconds(999);
+  str = '12/31/' + (org_date.getFullYear() % 100);
+  assertTrue(goog.locale.parseDateTime("MM/dd/yy", str, 0, date) > 0);
+  assertEquals(org_date.getFullYear(), date.getFullYear()+100);
+  
+  assertTrue(goog.locale.parseDateTime("yy,MM,dd", "2097,07,21", 0, date) > 0);
+  assertEquals(2097, date.getFullYear());
+
+  // Test the ability to move the disambiguation century
+  goog.locale.DateTimeParse.ambiguousYearCenturyStart = 60;
+  
+  org_date.setMonth(0);
+  org_date.setDate(1);
+  org_date.setHours(0);
+  org_date.setMinutes(0);
+  org_date.setSeconds(0);
+  org_date.setMilliseconds(1);
+  str = '01/01/' + (org_date.getFullYear() % 100);
+  assertTrue(goog.locale.parseDateTime("MM/dd/yy", str, 0, date) > 0);
+  assertEquals(org_date.getFullYear(), date.getFullYear());
+
+  // Increment org_date 20 more years
+  org_date.setFullYear(date.getFullYear() + 20);
+  str = '01/01/' + (org_date.getFullYear() % 100);
+  assertTrue(goog.locale.parseDateTime("MM/dd/yy", str, 0, date) > 0);
+  assertEquals(org_date.getFullYear(), date.getFullYear());
+
+  org_date.setFullYear(date.getFullYear() + 21);
+  str = '01/01/' + (org_date.getFullYear() % 100);
+  assertTrue(goog.locale.parseDateTime("MM/dd/yy", str, 0, date) > 0);
+  assertEquals(org_date.getFullYear(), date.getFullYear()+100);
+
+  // Reset parameter for other test cases
+  goog.locale.DateTimeParse.ambiguousYearCenturyStart = 80;
+}
+
+function testLeapYear() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("MMdd, yyyy", "0229, 2001",
+                                       0, date) > 0);
+  assertEquals(3 - 1, date.getMonth());
+  assertEquals(1, date.getDate());
+
+  assertTrue(goog.locale.parseDateTime("MMdd, yyyy", "0229, 2000",
+                                       0, date) > 0);
+  assertEquals(2 - 1, date.getMonth());
+  assertEquals(29, date.getDate());
+}  
+
+function testAbutField() {
+  var date = new Date();
+  
+  assertTrue(goog.locale.parseDateTime("hhmm", "1122", 0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("hhmm", "122", 0, date) > 0);
+  assertEquals(1, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("hhmmss", "112233", 0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(22, date.getMinutes());
+  assertEquals(33, date.getSeconds());
+
+  assertTrue(goog.locale.parseDateTime("hhmmss", "12233", 0, date) > 0);
+  assertEquals(1, date.getHours());
+  assertEquals(22, date.getMinutes());
+  assertEquals(33, date.getSeconds());
+
+  assertTrue(goog.locale.parseDateTime("yyyyMMdd", "19991202", 0, date) > 0);
+  assertEquals(1999, date.getFullYear());
+  assertEquals(12 - 1, date.getMonth());
+  assertEquals(02, date.getDate());
+
+  assertTrue(goog.locale.parseDateTime("yyyyMMdd", "9991202", 0, date) > 0);
+  assertTrue(date.getFullYear() == 999);
+  assertEquals(12 - 1, date.getMonth());
+  assertEquals(02, date.getDate());
+
+  assertTrue(goog.locale.parseDateTime("yyyyMMdd", "991202", 0, date) > 0);
+  assertEquals(99, date.getFullYear());
+  assertEquals(12 - 1, date.getMonth());
+  assertEquals(02, date.getDate());
+
+  assertTrue(goog.locale.parseDateTime("yyyyMMdd", "91202", 0, date) > 0);
+  assertEquals(9, date.getFullYear());
+  assertEquals(12 - 1, date.getMonth());
+  assertEquals(02, date.getDate());
+}
+
+function testYearParsing() {
+  var date = new Date();
+  
+  assertTrue(goog.locale.parseDateTime("yyMMdd", "991202", 0, date) > 0);
+  assertEquals(1999, date.getFullYear());
+  assertEquals(12 - 1, date.getMonth());
+  assertEquals(02, date.getDate());
+
+  assertTrue(goog.locale.parseDateTime("yyyyMMdd", "20051202", 0, date) > 0);
+  assertEquals(2005, date.getFullYear());
+  assertEquals(12 - 1, date.getMonth());
+  assertEquals(02, date.getDate());
+}
+
+function testHourParsing_hh() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("hhmm", "0022", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("hhmm", "1122", 0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("hhmm", "1222", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("hhmm", "2322", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("hhmm", "2422", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("hhmma", "0022am", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("hhmma", "1122am", 0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("hhmma", "1222am", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("hhmma", "2322am", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("hhmma", "2422am", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("hhmma", "0022pm", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("hhmma", "1122pm", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("hhmma", "1222pm", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("hhmma", "2322pm", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("hhmma", "2422pm", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+}
+
+function testHourParsing_KK() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("KKmm", "0022", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("KKmm", "1122", 0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("KKmm", "1222", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("KKmm", "2322", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("KKmm", "2422", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+
+  assertTrue(goog.locale.parseDateTime("KKmma", "0022am", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("KKmma", "1122am", 0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("KKmma", "1222am", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("KKmma", "2322am", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("KKmma", "2422am", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("KKmma", "0022pm", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("KKmma", "1122pm", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("KKmma", "1222pm", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("KKmma", "2322pm", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("KKmma", "2422pm", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+}
+
+function testHourParsing_kk() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("kkmm", "0022", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("kkmm", "1122", 0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("kkmm", "1222", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("kkmm", "2322", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("kkmm", "2422", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("kkmma", "0022am", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("kkmma", "1122am", 0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("kkmma", "1222am", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("kkmma", "2322am", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("kkmma", "2422am", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("kkmma", "0022pm", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("kkmma", "1122pm", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("kkmma", "1222pm", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("kkmma", "2322pm", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("kkmma", "2422pm", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+}
+
+function testHourParsing_HH() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("HHmm", "0022", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("HHmm", "1122", 0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("HHmm", "1222", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("HHmm", "2322", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("HHmm", "2422", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("HHmma", "0022am", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("HHmma", "1122am", 0, date) > 0);
+  assertEquals(11, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("HHmma", "1222am", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("HHmma", "2322am", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("HHmma", "2422am", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("HHmma", "0022pm", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("HHmma", "1122pm", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+  
+  assertTrue(goog.locale.parseDateTime("HHmma", "1222pm", 0, date) > 0);
+  assertEquals(12, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("HHmma", "2322pm", 0, date) > 0);
+  assertEquals(23, date.getHours());
+  assertEquals(22, date.getMinutes());
+
+  assertTrue(goog.locale.parseDateTime("HHmma", "2422pm", 0, date) > 0);
+  assertEquals(00, date.getHours());
+  assertEquals(22, date.getMinutes());
+}
+
+function testEnglishDate() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("yyyy MMM dd hh:mm",
+                                       "2006 Jul 10 15:44", 0, date) > 0);
+  assertEquals(2006, date.getFullYear());
+  assertEquals(7 - 1, date.getMonth());
+  assertEquals(10, date.getDate());
+  assertEquals(15, date.getHours());
+  assertEquals(44, date.getMinutes());
+}
+
+function testChineseDate() {
+  goog.locale.setLocale('zh_CN');
+  var date = new Date();
+
+  goog.locale.standardParseDateTime(goog.locale.FULL_DATE_FORMAT, 
+      "2006\u5E747\u670824\u65E5\u661F\u671F\u4E00", 0, date);
+  assertEquals(2006, date.getFullYear());
+  assertEquals(7 - 1, date.getMonth());
+  assertEquals(24, date.getDate());
+  goog.locale.standardParseDateTime(goog.locale.LONG_DATE_FORMAT, 
+                                    "2006\u5E747\u670824\u65E5", 0, date);
+  assertEquals(2006, date.getFullYear());
+  assertEquals(7 - 1, date.getMonth());
+  assertEquals(24, date.getDate());
+  goog.locale.standardParseDateTime(goog.locale.FULL_TIME_FORMAT,
+      "\u4E0B\u534803\u65F626\u520628\u79D2 GMT-07:00", 0, date);
+  assertEquals((24 + date.getHours() + date.getTimezoneOffset()/60) % 24, 22);
+  assertEquals(26, date.getMinutes());
+  assertEquals(28, date.getSeconds());
+
+  goog.locale.setLocale('en');
+}
+
+function testTimeZone() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("MM/dd/yyyy, hh:mm:ss zzz",
+                                       "07/21/2003, 11:22:33 GMT-0700", 0,
+                                       date) > 0);
+  var hour_GmtMinus07 = date.getHours();
+
+  assertTrue(goog.locale.parseDateTime("MM/dd/yyyy, hh:mm:ss zzz",
+                                       "07/21/2003, 11:22:33 GMT-0600", 0,
+                                       date) > 0);
+  var hour_GmtMinus06 = date.getHours(); 
+  assertEquals(1, (hour_GmtMinus07 + 24 - hour_GmtMinus06) % 24);
+
+  assertTrue(goog.locale.parseDateTime("MM/dd/yyyy, hh:mm:ss zzz",
+                                       "07/21/2003, 11:22:33 GMT-0800", 0,
+                                       date) > 0);
+  var hour_GmtMinus08 = date.getHours();
+  assertEquals(1, (hour_GmtMinus08 + 24 - hour_GmtMinus07) % 24);
+
+  assertTrue(goog.locale.parseDateTime("MM/dd/yyyy, HH:mm:ss zzz",
+                                       "07/21/2003, 23:22:33 GMT-0800", 0,
+                                       date) > 0);
+  assertEquals((date.getHours() + 24 - hour_GmtMinus07) % 24, 13);
+
+  assertTrue(goog.locale.parseDateTime("MM/dd/yyyy, HH:mm:ss zzz",
+                                       "07/21/2003, 11:22:33 GMT+0800", 0,
+                                       date) > 0);
+  var hour_Gmt08 = date.getHours();
+  assertEquals(16, (hour_GmtMinus08 + 24 - hour_Gmt08) % 24);
+
+  assertTrue(goog.locale.parseDateTime("MM/dd/yyyy, HH:mm:ss zzz",
+                                       "07/21/2003, 11:22:33 GMT0800", 0,
+                                       date) > 0);
+  assertEquals(hour_Gmt08, date.getHours());
+}
+
+function testWeekDay() {
+  var date = new Date();
+
+  assertTrue(goog.locale.parseDateTime("EEEE, MM/dd/yyyy",
+                                       "Wednesday, 08/16/2006", 0, date) > 0);
+  assertEquals(2006, date.getFullYear());
+  assertEquals(8 - 1, date.getMonth());
+  assertEquals(16, date.getDate());
+  assertTrue(goog.locale.parseDateTime("EEEE, MM/dd/yyyy",
+                                       "Tuesday, 08/16/2006", 0, date) == 0);
+  assertTrue(goog.locale.parseDateTime("EEEE, MM/dd/yyyy",
+                                       "Thursday, 08/16/2006", 0, date) == 0);
+  assertTrue(goog.locale.parseDateTime("EEEE, MM/dd/yyyy",
+                                       "Wed, 08/16/2006", 0, date) > 0);
+  assertTrue(goog.locale.parseDateTime("EEEE, MM/dd/yyyy",
+                                       "Wasdfed, 08/16/2006", 0, date) == 0);
+
+  date.setDate(25);
+  assertTrue(goog.locale.parseDateTime("EEEE, MM/yyyy",
+                                       "Wed, 09/2006", 0, date) > 0);
+  assertEquals(27, date.getDate());
+
+  date.setDate(30);
+  assertTrue(goog.locale.parseDateTime("EEEE, MM/yyyy",
+                                       "Wed, 09/2006", 0, date) > 0);
+  assertEquals(27, date.getDate());
+  date.setDate(30);
+  assertTrue(goog.locale.parseDateTime("EEEE, MM/yyyy",
+                                       "Mon, 09/2006", 0, date) > 0);
+  assertEquals(25, date.getDate());
+
+}
+
+function testStrictParse() {
+  var date = new Date();
+
+  assertTrue(goog.locale.strictParseDateTime("yyyy/MM/dd",
+                                             "2000/13/10", 0, date) == 0);
+  assertTrue(goog.locale.strictParseDateTime("yyyy/MM/dd",
+                                             "2000/13/40", 0, date) == 0);
+  assertTrue(goog.locale.strictParseDateTime("yy/MM/dd",
+                                             "00/11/10", 0, date) > 0);
+  assertTrue(goog.locale.strictParseDateTime("yy/MM/dd",
+                                             "99/11/10", 0, date) > 0);
+  assertTrue(goog.locale.strictParseDateTime("yy/MM/dd",
+                                             "00/13/10", 0, date) == 0);
+  assertTrue(goog.locale.strictParseDateTime("yy/MM/dd",
+                                             "00/11/32", 0, date) == 0);
+  assertTrue(goog.locale.strictParseDateTime("yy/MM/dd",
+                                             "1900/11/2", 0, date) > 0);
+  assertTrue(goog.locale.strictParseDateTime("yyyy/MM/dd",
+                                             "2000/11/10", 0, date) > 0);
+  assertEquals(2000, date.getFullYear());
+  assertEquals(11 - 1, date.getMonth());
+  assertEquals(10, date.getDate());
+
+  assertTrue(goog.locale.strictParseDateTime("hh:mm", "15:44", 0, date) > 0);
+  assertTrue(goog.locale.strictParseDateTime("hh:mm", "25:44", 0, date) == 0);
+  assertTrue(goog.locale.strictParseDateTime("hh:mm", "15:64", 0, date) == 0);
+
+  // leap year
+  assertTrue(goog.locale.strictParseDateTime("yy/MM/dd",
+                                             "00/02/29", 0, date) > 0);
+  assertTrue(goog.locale.strictParseDateTime("yy/MM/dd",
+                                             "01/02/29", 0, date) == 0);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>crypt.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_crypt_crypt.js.html">crypt.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Namespace with crypto related helper functions.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.crypt&#39;);
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>/**
+<a name="line24"></a> * Turns a string into an array of bytes; a &quot;byte&quot; being a JS number in the
+<a name="line25"></a> * range 0-255.
+<a name="line26"></a> * @param {string} str String value to arrify.
+<a name="line27"></a> * @return {Array.&lt;number&gt;} Array of numbers corresponding to the
+<a name="line28"></a> *     UCS character codes of each character in str.
+<a name="line29"></a> */
+<a name="line30"></a>goog.crypt.stringToByteArray = function(str) {
+<a name="line31"></a>  var output = [], p = 0;
+<a name="line32"></a>  for (var i = 0; i &lt; str.length; i++) {
+<a name="line33"></a>    var c = str.charCodeAt(i);
+<a name="line34"></a>    while (c &gt; 0xff) {
+<a name="line35"></a>      output[p++] = c &amp; 0xff;
+<a name="line36"></a>      c &gt;&gt;= 8;
+<a name="line37"></a>    }
+<a name="line38"></a>    output[p++] = c;
+<a name="line39"></a>  }
+<a name="line40"></a>  return output;
+<a name="line41"></a>};
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * Turns an array of numbers into the string given by the concatenation of the
+<a name="line46"></a> * characters to which the numbers correspond.
+<a name="line47"></a> * @param {Array} array Array of numbers representing characters.
+<a name="line48"></a> * @return {string} Stringification of the array.
+<a name="line49"></a> */
+<a name="line50"></a>goog.crypt.byteArrayToString = function(array) {
+<a name="line51"></a>  var output = [];
+<a name="line52"></a>  for (var i = 0; i &lt; array.length; i++) {
+<a name="line53"></a>    output[i] = String.fromCharCode(array[i]);
+<a name="line54"></a>  }
+<a name="line55"></a>  return output.join(&#39;&#39;);
+<a name="line56"></a>};
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Converts a JS string to a UTF-8 &quot;byte&quot; array.
+<a name="line61"></a> * @param {string} str 16-bit unicode string.
+<a name="line62"></a> * @return {Array.&lt;number&gt;} UTF-8 byte array.
+<a name="line63"></a> */
+<a name="line64"></a>goog.crypt.stringToUtf8ByteArray = function(str) {
+<a name="line65"></a>  // TODO: Use native implementations if/when available
+<a name="line66"></a>  str = str.replace(/\r\n/g, &#39;\n&#39;);
+<a name="line67"></a>  var out = [], p = 0;
+<a name="line68"></a>  for (var i = 0; i &lt; str.length; i++) {
+<a name="line69"></a>    var c = str.charCodeAt(i);
+<a name="line70"></a>    if (c &lt; 128) {
+<a name="line71"></a>      out[p++] = c;
+<a name="line72"></a>    } else if (c &lt; 2048) {
+<a name="line73"></a>      out[p++] = (c &gt;&gt; 6) | 192;
+<a name="line74"></a>      out[p++] = (c &amp; 63) | 128;
+<a name="line75"></a>    } else {
+<a name="line76"></a>      out[p++] = (c &gt;&gt; 12) | 224;
+<a name="line77"></a>      out[p++] = ((c &gt;&gt; 6) &amp; 63) | 128;
+<a name="line78"></a>      out[p++] = (c &amp; 63) | 128;
+<a name="line79"></a>    }
+<a name="line80"></a>  }
+<a name="line81"></a>  return out;
+<a name="line82"></a>};
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Converts a UTF-8 byte array to JavaScript&#39;s 16-bit Unicode.
+<a name="line87"></a> * @param {Array.&lt;number&gt;} bytes UTF-8 byte array.
+<a name="line88"></a> * @return {string} 16-bit Unicode string.
+<a name="line89"></a> */
+<a name="line90"></a>goog.crypt.utf8ByteArrayToString = function(bytes) {
+<a name="line91"></a>  // TODO: Use native implementations if/when available
+<a name="line92"></a>  var out = [], pos = 0, c = 0;
+<a name="line93"></a>  while (pos &lt; bytes.length) {
+<a name="line94"></a>    var c1 = bytes[pos++];
+<a name="line95"></a>    if (c1 &lt; 128) {
+<a name="line96"></a>      out[c++] = String.fromCharCode(c1);
+<a name="line97"></a>    } else if (c1 &gt; 191 &amp;&amp; c1 &lt; 224) {
+<a name="line98"></a>      var c2 = bytes[pos++];
+<a name="line99"></a>      out[c++] = String.fromCharCode((c1 &amp; 31) &lt;&lt; 6 | c2 &amp; 63);
+<a name="line100"></a>    } else {
+<a name="line101"></a>      var c2 = bytes[pos++];
+<a name="line102"></a>      var c3 = bytes[pos++];
+<a name="line103"></a>      out[c++] = String.fromCharCode(
+<a name="line104"></a>          (c1 &amp; 15) &lt;&lt; 12 | (c2 &amp; 63) &lt;&lt; 6 | c3 &amp; 63);
+<a name="line105"></a>    }
+<a name="line106"></a>  }
+<a name="line107"></a>  return out.join(&#39;&#39;);
+<a name="line108"></a>};
+</pre>
+
+
+</body>
+</html>

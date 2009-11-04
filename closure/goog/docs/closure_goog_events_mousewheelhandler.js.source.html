@@ -1,0 +1,240 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mousewheelhandler.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_events_mousewheelhandler.js.html">mousewheelhandler.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This event wrapper will dispatch an event when the user uses
+<a name="line17"></a> * the mouse wheel to scroll an element. You can get the direction by checking
+<a name="line18"></a> * the deltaX and deltaY properties of the event.
+<a name="line19"></a> *
+<a name="line20"></a> * @see ../demos/mousewheelhandler.html
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.events.MouseWheelEvent&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.events.MouseWheelHandler&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.events.MouseWheelHandler.EventType&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.events&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line30"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * This event handler allows you to catch mouse wheel events in a consistent
+<a name="line35"></a> * manner.
+<a name="line36"></a> * @param {Element|Document} element  The element to listen to the mouse wheel
+<a name="line37"></a> *     event on.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @extends {goog.events.EventTarget}
+<a name="line40"></a> */
+<a name="line41"></a>goog.events.MouseWheelHandler = function(element) {
+<a name="line42"></a>  goog.events.EventTarget.call(this);
+<a name="line43"></a>
+<a name="line44"></a>  /**
+<a name="line45"></a>   * This is the element that we will listen to the real mouse wheel events on.
+<a name="line46"></a>   * @type {Element|Document}
+<a name="line47"></a>   * @private
+<a name="line48"></a>   */
+<a name="line49"></a>  this.element_ = element;
+<a name="line50"></a>
+<a name="line51"></a>  var type = goog.userAgent.GECKO ? &#39;DOMMouseScroll&#39; : &#39;mousewheel&#39;;
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * The key returned from the goog.events.listen.
+<a name="line55"></a>   * @type {number?}
+<a name="line56"></a>   * @private
+<a name="line57"></a>   */
+<a name="line58"></a>  this.listenKey_ = goog.events.listen(this.element_, type, this);
+<a name="line59"></a>};
+<a name="line60"></a>goog.inherits(goog.events.MouseWheelHandler, goog.events.EventTarget);
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Enum type for the events fired by the mouse wheel handler.
+<a name="line65"></a> * @enum {string}
+<a name="line66"></a> */
+<a name="line67"></a>goog.events.MouseWheelHandler.EventType = {
+<a name="line68"></a>  MOUSEWHEEL: &#39;mousewheel&#39;
+<a name="line69"></a>};
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Handles the events on the element.
+<a name="line74"></a> * @param {goog.events.BrowserEvent} e The underlying browser event.
+<a name="line75"></a> */
+<a name="line76"></a>goog.events.MouseWheelHandler.prototype.handleEvent = function(e) {
+<a name="line77"></a>  var deltaX = 0;
+<a name="line78"></a>  var deltaY = 0;
+<a name="line79"></a>  var detail = 0;
+<a name="line80"></a>  var be = e.getBrowserEvent();
+<a name="line81"></a>  if (be.type == &#39;mousewheel&#39;) {
+<a name="line82"></a>    var wheelDeltaScaleFactor = 1;
+<a name="line83"></a>    if (goog.userAgent.IE ||
+<a name="line84"></a>        goog.userAgent.WEBKIT &amp;&amp;
+<a name="line85"></a>        (goog.userAgent.WINDOWS || goog.userAgent.isVersion(&#39;532.0&#39;))) {
+<a name="line86"></a>      // In IE we get a multiple of 120; we adjust to a multiple of 3 to
+<a name="line87"></a>      // represent number of lines scrolled (like Gecko).
+<a name="line88"></a>      // Newer versions of Webkit match IE behavior, and WebKit on
+<a name="line89"></a>      // Windows also matches IE behavior.
+<a name="line90"></a>      // See bug https://bugs.webkit.org/show_bug.cgi?id=24368
+<a name="line91"></a>      wheelDeltaScaleFactor = 40;
+<a name="line92"></a>    }
+<a name="line93"></a>
+<a name="line94"></a>    detail = -be.wheelDelta / wheelDeltaScaleFactor;
+<a name="line95"></a>    if (goog.isDef(be.wheelDeltaX)) {
+<a name="line96"></a>      // Webkit has two properties to indicate directional scroll, and
+<a name="line97"></a>      // can scroll both directions at once.
+<a name="line98"></a>      deltaX = -be.wheelDeltaX / wheelDeltaScaleFactor;
+<a name="line99"></a>      deltaY = -be.wheelDeltaY / wheelDeltaScaleFactor;
+<a name="line100"></a>    } else {
+<a name="line101"></a>      deltaY = detail;
+<a name="line102"></a>    }
+<a name="line103"></a>
+<a name="line104"></a>    // Historical note: Opera (pre 9.5) used to negate the detail value.
+<a name="line105"></a>  } else { // Gecko
+<a name="line106"></a>    // Gecko returns multiple of 3 (representing the number of lines scrolled)
+<a name="line107"></a>    detail = be.detail;
+<a name="line108"></a>
+<a name="line109"></a>    // Gecko sometimes returns really big values if the user changes settings to
+<a name="line110"></a>    // scroll a whole page per scroll
+<a name="line111"></a>    if (detail &gt; 100) {
+<a name="line112"></a>      detail = 3;
+<a name="line113"></a>    } else if (detail &lt; -100) {
+<a name="line114"></a>      detail = -3;
+<a name="line115"></a>    }
+<a name="line116"></a>
+<a name="line117"></a>    // Firefox 3.1 adds an axis field to the event to indicate direction of
+<a name="line118"></a>    // scroll.  See https://developer.mozilla.org/en/Gecko-Specific_DOM_Events
+<a name="line119"></a>    if (goog.isDef(be.axis) &amp;&amp; be.axis === be.HORIZONTAL_AXIS) {
+<a name="line120"></a>      deltaX = detail;
+<a name="line121"></a>    } else {
+<a name="line122"></a>      deltaY = detail;
+<a name="line123"></a>    }
+<a name="line124"></a>  }
+<a name="line125"></a>
+<a name="line126"></a>  var newEvent = new goog.events.MouseWheelEvent(detail, be, deltaX, deltaY);
+<a name="line127"></a>  try {
+<a name="line128"></a>    this.dispatchEvent(newEvent);
+<a name="line129"></a>  } finally {
+<a name="line130"></a>    newEvent.dispose();
+<a name="line131"></a>  }
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Stops listening to the underlying mouse wheel event, and cleans up state.
+<a name="line137"></a> */
+<a name="line138"></a>goog.events.MouseWheelHandler.prototype.disposeInternal = function() {
+<a name="line139"></a>  goog.events.MouseWheelHandler.superClass_.disposeInternal.call(this);
+<a name="line140"></a>  goog.events.unlistenByKey(this.listenKey_);
+<a name="line141"></a>  delete this.listenKey_;
+<a name="line142"></a>};
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * A base class for mouse wheel events. This is used with the
+<a name="line147"></a> * MouseWheelHandler.
+<a name="line148"></a> *
+<a name="line149"></a> * @param {number} detail The number of rows the user scrolled.
+<a name="line150"></a> * @param {Event} browserEvent Browser event object.
+<a name="line151"></a> * @param {number} deltaX The number of rows the user scrolled in the X
+<a name="line152"></a> *     direction.
+<a name="line153"></a> * @param {number} deltaY The number of rows the user scrolled in the Y
+<a name="line154"></a> *     direction.
+<a name="line155"></a> * @constructor
+<a name="line156"></a> * @extends {goog.events.BrowserEvent}
+<a name="line157"></a> */
+<a name="line158"></a>goog.events.MouseWheelEvent = function(detail, browserEvent, deltaX, deltaY) {
+<a name="line159"></a>  goog.events.BrowserEvent.call(this, browserEvent);
+<a name="line160"></a>
+<a name="line161"></a>  this.type = goog.events.MouseWheelHandler.EventType.MOUSEWHEEL;
+<a name="line162"></a>
+<a name="line163"></a>  /**
+<a name="line164"></a>   * The number of lines the user scrolled
+<a name="line165"></a>   * @type {number}
+<a name="line166"></a>   * NOTE: Informally deprecated. Use deltaX and deltaY instead, they provide
+<a name="line167"></a>   * more information.
+<a name="line168"></a>   */
+<a name="line169"></a>  this.detail = detail;
+<a name="line170"></a>
+<a name="line171"></a>  /**
+<a name="line172"></a>   * The number of &quot;lines&quot; scrolled in the X direction.
+<a name="line173"></a>   *
+<a name="line174"></a>   * Note that not all browsers provide enough information to distinguish
+<a name="line175"></a>   * horizontal and vertical scroll events, so for these unsupported browsers,
+<a name="line176"></a>   * we will always have a deltaX of 0, even if the user scrolled their mouse
+<a name="line177"></a>   * wheel or trackpad sideways.
+<a name="line178"></a>   *
+<a name="line179"></a>   * Currently supported browsers are Webkit and Firefox 3.1 or later.
+<a name="line180"></a>   *
+<a name="line181"></a>   * @type {number}
+<a name="line182"></a>   */
+<a name="line183"></a>  this.deltaX = deltaX;
+<a name="line184"></a>
+<a name="line185"></a>  /**
+<a name="line186"></a>   * The number of lines scrolled in the Y direction.
+<a name="line187"></a>   * @type {number}
+<a name="line188"></a>   */
+<a name="line189"></a>  this.deltaY = deltaY;
+<a name="line190"></a>};
+<a name="line191"></a>goog.inherits(goog.events.MouseWheelEvent, goog.events.BrowserEvent);
+</pre>
+
+
+</body>
+</html>

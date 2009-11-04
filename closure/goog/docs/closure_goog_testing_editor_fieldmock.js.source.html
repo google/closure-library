@@ -1,0 +1,116 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>fieldmock.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_testing_editor_fieldmock.js.html">fieldmock.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google, Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Mock of goog.editor.field.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.testing.editor.FieldMock&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom.Range&#39;);
+<a name="line24"></a>goog.require(&#39;goog.editor.Field&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.LooseMock&#39;);
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Mock of goog.editor.Field.
+<a name="line29"></a> * @param {Window} opt_window Window the field would edit.  Defaults to
+<a name="line30"></a> *     {@code window}.
+<a name="line31"></a> * @param {Window} opt_appWindow &quot;AppWindow&quot; of the field, which can be
+<a name="line32"></a> *     different from {@code opt_window} when mocking a field that uses an
+<a name="line33"></a> *     iframe. Defaults to {@code opt_window}.
+<a name="line34"></a> * @param {goog.dom.AbstractRange} opt_range An object (mock or real) to be
+<a name="line35"></a> *     returned by getRange(). If ommitted, a new goog.dom.Range is created
+<a name="line36"></a> *     from the window every time getRange() is called.
+<a name="line37"></a> * @constructor
+<a name="line38"></a> * @extends {goog.testing.LooseMock}
+<a name="line39"></a> */
+<a name="line40"></a>goog.testing.editor.FieldMock =
+<a name="line41"></a>    function(opt_window, opt_appWindow, opt_range) {
+<a name="line42"></a>  goog.testing.LooseMock.call(this, goog.editor.Field);
+<a name="line43"></a>  opt_window = opt_window || window;
+<a name="line44"></a>  opt_appWindow = opt_appWindow || opt_window;
+<a name="line45"></a>
+<a name="line46"></a>  this.getAppWindow();
+<a name="line47"></a>  this.$anyTimes();
+<a name="line48"></a>  this.$returns(opt_appWindow);
+<a name="line49"></a>
+<a name="line50"></a>  this.getRange();
+<a name="line51"></a>  this.$anyTimes();
+<a name="line52"></a>  this.$does(function() {
+<a name="line53"></a>    return opt_range || goog.dom.Range.createFromWindow(opt_window);
+<a name="line54"></a>  });
+<a name="line55"></a>
+<a name="line56"></a>  this.getEditableDomHelper();
+<a name="line57"></a>  this.$anyTimes();
+<a name="line58"></a>  this.$returns(goog.dom.getDomHelper(opt_window.document));
+<a name="line59"></a>
+<a name="line60"></a>  this.usesIframe();
+<a name="line61"></a>  this.$anyTimes();
+<a name="line62"></a>
+<a name="line63"></a>  this.getBaseZindex();
+<a name="line64"></a>  this.$anyTimes();
+<a name="line65"></a>  this.$returns(0);
+<a name="line66"></a>};
+<a name="line67"></a>goog.inherits(goog.testing.editor.FieldMock, goog.testing.LooseMock);
+</pre>
+
+
+</body>
+</html>

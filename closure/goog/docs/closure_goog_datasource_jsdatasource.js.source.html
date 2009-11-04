@@ -1,0 +1,509 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>jsdatasource.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_datasource_jsdatasource.js.html">jsdatasource.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview An implementation of DataNode for wrapping JS data.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ds.JsDataSource&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.ds.JsPropertyDataSource&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.ds.BaseDataNode&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ds.BasicNodeList&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ds.DataManager&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ds.EmptyNodeList&#39;);
+<a name="line28"></a>goog.require(&#39;goog.ds.LoadState&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Data source whose backing is JavaScript data
+<a name="line33"></a> *
+<a name="line34"></a> * Names that are reserved for system use and shouldn&#39;t be used for data node
+<a name="line35"></a> * names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
+<a name="line36"></a> * undefined if these names are used.
+<a name="line37"></a> *
+<a name="line38"></a> * @param {Object} root The root JS node.
+<a name="line39"></a> * @param {string} dataName The name of this node relative to the parent node.
+<a name="line40"></a> * @param {Object} opt_parent Optional parent of this JsDataSource.
+<a name="line41"></a> *
+<a name="line42"></a> * implements goog.ds.DataNode.
+<a name="line43"></a> * @constructor
+<a name="line44"></a> * @extends {goog.ds.DataNode}
+<a name="line45"></a> */
+<a name="line46"></a>// TODO: Use interfaces when available.
+<a name="line47"></a>goog.ds.JsDataSource = function(root, dataName, opt_parent) {
+<a name="line48"></a>  this.parent_ = opt_parent;
+<a name="line49"></a>  this.dataName_ = dataName;
+<a name="line50"></a>  this.setRoot(root);
+<a name="line51"></a>};
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * The root JS object. Can be null.
+<a name="line56"></a> * @type {?Object}
+<a name="line57"></a> * @protected
+<a name="line58"></a> * @suppress {underscore}
+<a name="line59"></a> */
+<a name="line60"></a>goog.ds.JsDataSource.prototype.root_;
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Sets the root JS object
+<a name="line65"></a> * @param {Object?} root The root JS object. Can be null.
+<a name="line66"></a> *
+<a name="line67"></a> * @protected
+<a name="line68"></a> */
+<a name="line69"></a>goog.ds.JsDataSource.prototype.setRoot = function(root) {
+<a name="line70"></a>  this.root_ = root;
+<a name="line71"></a>  this.childNodeList_ = null;
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Set this data source to use list semantics. List data sources:
+<a name="line77"></a> * - Are assumed to have child nodes of all of the same type of data
+<a name="line78"></a> * - Fire data changes on the root node of the list whenever children
+<a name="line79"></a> *     are added or removed
+<a name="line80"></a> * @param {boolean?} isList True to use list semantics.
+<a name="line81"></a> * @private
+<a name="line82"></a> */
+<a name="line83"></a>goog.ds.JsDataSource.prototype.setIsList_ = function(isList) {
+<a name="line84"></a>  this.isList_ = isList;
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Get the value of the node
+<a name="line90"></a> * @return {Object} The value of the node, or null if no value.
+<a name="line91"></a> */
+<a name="line92"></a>goog.ds.JsDataSource.prototype.get = function() {
+<a name="line93"></a>  return !goog.isObject(this.root_) ? this.root_ : this.getChildNodes();
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Set the value of the node
+<a name="line99"></a> * @param {Object} value The new value of the node.
+<a name="line100"></a> */
+<a name="line101"></a>goog.ds.JsDataSource.prototype.set = function(value) {
+<a name="line102"></a>  if (value &amp;&amp; goog.isObject(this.root_)) {
+<a name="line103"></a>    throw Error(&#39;Can\&#39;t set group nodes to new values yet&#39;);
+<a name="line104"></a>  }
+<a name="line105"></a>
+<a name="line106"></a>  if (this.parent_) {
+<a name="line107"></a>    this.parent_.root_[this.dataName_] = value;
+<a name="line108"></a>  }
+<a name="line109"></a>  this.root_ = value;
+<a name="line110"></a>  this.childNodeList_ = null;
+<a name="line111"></a>
+<a name="line112"></a>  goog.ds.DataManager.getInstance().fireDataChange(this.getDataPath());
+<a name="line113"></a>};
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Gets all of the child nodes of the current node.
+<a name="line118"></a> * Should return an empty DataNode list if no child nodes.
+<a name="line119"></a> * @param {string} opt_selector String selector to choose child nodes.
+<a name="line120"></a> * @return {goog.ds.DataNodeList} The child nodes.
+<a name="line121"></a> *
+<a name="line122"></a> * TODO revisit lazy creation.
+<a name="line123"></a> */
+<a name="line124"></a>goog.ds.JsDataSource.prototype.getChildNodes = function(opt_selector) {
+<a name="line125"></a>  if (!this.root_) {
+<a name="line126"></a>    return new goog.ds.EmptyNodeList();
+<a name="line127"></a>  }
+<a name="line128"></a>
+<a name="line129"></a>  if (!opt_selector || opt_selector == goog.ds.STR_ALL_CHILDREN_SELECTOR) {
+<a name="line130"></a>    this.createChildNodes_(false);
+<a name="line131"></a>    return this.childNodeList_;
+<a name="line132"></a>  } else if (opt_selector.indexOf(goog.ds.STR_WILDCARD) == -1) {
+<a name="line133"></a>    if (this.root_[opt_selector] != null){
+<a name="line134"></a>      return new goog.ds.BasicNodeList([this.getChildNode(opt_selector)])
+<a name="line135"></a>    } else {
+<a name="line136"></a>      return new goog.ds.EmptyNodeList();
+<a name="line137"></a>    }
+<a name="line138"></a>  } else {
+<a name="line139"></a>      throw Error(&#39;Selector not supported yet (&#39; + opt_selector + &#39;)&#39;);
+<a name="line140"></a>  }
+<a name="line141"></a>
+<a name="line142"></a>};
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * Creates the DataNodeList with the child nodes for this element.
+<a name="line147"></a> * Allows for only building list as needed.
+<a name="line148"></a> *
+<a name="line149"></a> * @param {boolean} opt_force Whether to force recreating child nodes,
+<a name="line150"></a> *     defaults to false.
+<a name="line151"></a> * @private
+<a name="line152"></a> */
+<a name="line153"></a>goog.ds.JsDataSource.prototype.createChildNodes_ = function(opt_force) {
+<a name="line154"></a>  if (this.childNodeList_ &amp;&amp; !opt_force) {
+<a name="line155"></a>    return;
+<a name="line156"></a>  }
+<a name="line157"></a>
+<a name="line158"></a>  if (!goog.isObject(this.root_)) {
+<a name="line159"></a>    this.childNodeList_ = new goog.ds.EmptyNodeList();
+<a name="line160"></a>    return;
+<a name="line161"></a>  }
+<a name="line162"></a>
+<a name="line163"></a>  var childNodeList = new goog.ds.BasicNodeList();
+<a name="line164"></a>  var newNode;
+<a name="line165"></a>  if (goog.isArray(this.root_)) {
+<a name="line166"></a>    var len = this.root_.length;
+<a name="line167"></a>    for (var i = 0; i &lt; len; i++) {
+<a name="line168"></a>      // &quot;id&quot; is reserved node name that will map to a named child node
+<a name="line169"></a>      // TODO Configurable logic for choosing id node
+<a name="line170"></a>      var node = this.root_[i];
+<a name="line171"></a>      var id = node.id;
+<a name="line172"></a>      var name = id != null ? String(id) : &#39;[&#39; + i + &#39;]&#39;;
+<a name="line173"></a>      newNode = new goog.ds.JsDataSource(node, name, this);
+<a name="line174"></a>      childNodeList.add(newNode);
+<a name="line175"></a>    }
+<a name="line176"></a>  } else {
+<a name="line177"></a>    for (var name in this.root_) {
+<a name="line178"></a>      var obj = this.root_[name];
+<a name="line179"></a>      // If the node is already a datasource, then add it.
+<a name="line180"></a>      if (obj.getDataName) {
+<a name="line181"></a>        childNodeList.add(obj);
+<a name="line182"></a>      } else if (!goog.isFunction(obj)) {
+<a name="line183"></a>        newNode = new goog.ds.JsDataSource(obj, name, this);
+<a name="line184"></a>        childNodeList.add(newNode);
+<a name="line185"></a>      }
+<a name="line186"></a>    }
+<a name="line187"></a>  }
+<a name="line188"></a>  this.childNodeList_ = childNodeList;
+<a name="line189"></a>};
+<a name="line190"></a>
+<a name="line191"></a>
+<a name="line192"></a>/**
+<a name="line193"></a> * Gets a named child node of the current node
+<a name="line194"></a> * @param {string} name The node name.
+<a name="line195"></a> * @param {boolean} opt_canCreate If true, can create child node.
+<a name="line196"></a> * @return {goog.ds.DataNode} The child node, or null if no node of
+<a name="line197"></a> *     this name exists.
+<a name="line198"></a> */
+<a name="line199"></a>goog.ds.JsDataSource.prototype.getChildNode = function(name, opt_canCreate) {
+<a name="line200"></a>  if (!this.root_) {
+<a name="line201"></a>    return null;
+<a name="line202"></a>  }
+<a name="line203"></a>  var node = this.getChildNodes().get(name);
+<a name="line204"></a>  if (!node &amp;&amp; opt_canCreate) {
+<a name="line205"></a>    var newObj = {};
+<a name="line206"></a>    if (goog.isArray(this.root_)) {
+<a name="line207"></a>      newObj[&#39;id&#39;] = name;
+<a name="line208"></a>      this.root_.push(newObj);
+<a name="line209"></a>    } else {
+<a name="line210"></a>      this.root_[name] = newObj;
+<a name="line211"></a>    }
+<a name="line212"></a>    node = new goog.ds.JsDataSource(newObj, name, this);
+<a name="line213"></a>    if (this.childNodeList_) {
+<a name="line214"></a>      this.childNodeList_.add(node);
+<a name="line215"></a>    }
+<a name="line216"></a>  }
+<a name="line217"></a>  return node;
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Gets the value of a child node
+<a name="line223"></a> * @param {string} name The node name.
+<a name="line224"></a> * @return {Object?} The value of the node, or null if no value or the child
+<a name="line225"></a> *    node doesn&#39;t exist.
+<a name="line226"></a> */
+<a name="line227"></a>goog.ds.JsDataSource.prototype.getChildNodeValue = function(name) {
+<a name="line228"></a>  if (this.childNodeList_) {
+<a name="line229"></a>    var node = this.getChildNodes().get(name);
+<a name="line230"></a>    return node ? node.get() : null;
+<a name="line231"></a>  } else if (this.root_) {
+<a name="line232"></a>    return this.root_[name];
+<a name="line233"></a>  } else {
+<a name="line234"></a>    return null;
+<a name="line235"></a>  }
+<a name="line236"></a>};
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>/**
+<a name="line240"></a> * Sets a named child node of the current node.
+<a name="line241"></a> * If value is null, removes the child node.
+<a name="line242"></a> * @param {string} name The node name.
+<a name="line243"></a> * @param {Object?} value The value to set, can be DataNode, object,
+<a name="line244"></a> *     property, or null.
+<a name="line245"></a> * @return {Object?} The child node, if set.
+<a name="line246"></a> */
+<a name="line247"></a>goog.ds.JsDataSource.prototype.setChildNode = function(name, value) {
+<a name="line248"></a>  var removedPath = null;
+<a name="line249"></a>  var node = null;
+<a name="line250"></a>  var addedNode = false;
+<a name="line251"></a>
+<a name="line252"></a>  // Set node to the DataNode to add - if the value isn&#39;t already a DataNode,
+<a name="line253"></a>  // creates a JsDataSource or JsPropertyDataSource wrapper
+<a name="line254"></a>  if (value != null) {
+<a name="line255"></a>    if (value.getDataName) {
+<a name="line256"></a>      // The value is a DataNode. We must update its parent.
+<a name="line257"></a>      node = value;
+<a name="line258"></a>      node.parent_ = this;
+<a name="line259"></a>    } else {
+<a name="line260"></a>      if (goog.isArray(value) || goog.isObject(value)) {
+<a name="line261"></a>        node = new goog.ds.JsDataSource(value, name, this);
+<a name="line262"></a>      } else {
+<a name="line263"></a>        node = new goog.ds.JsPropertyDataSource(
+<a name="line264"></a>            /** @type {goog.ds.DataNode} */ (this.root_), name, this);
+<a name="line265"></a>      }
+<a name="line266"></a>    }
+<a name="line267"></a>  }
+<a name="line268"></a>
+<a name="line269"></a>  // This logic will get cleaner once we can remove the backing array / object
+<a name="line270"></a>  // and just rely on the childNodeList_. This is needed until dependent code
+<a name="line271"></a>  // is cleaned up.
+<a name="line272"></a>  // TODO Remove backing array / object and just use childNodeList_
+<a name="line273"></a>
+<a name="line274"></a>  if (goog.isArray(this.root_)) {
+<a name="line275"></a>    // To remove by name, need to create a map of the child nodes by ID
+<a name="line276"></a>    this.createChildNodes_();
+<a name="line277"></a>    var index = this.childNodeList_.indexOf(name);
+<a name="line278"></a>    if (value == null) {
+<a name="line279"></a>      // Remove the node
+<a name="line280"></a>      var nodeToRemove = this.childNodeList_.get(name);
+<a name="line281"></a>      if (nodeToRemove) {
+<a name="line282"></a>        removedPath = nodeToRemove.getDataPath();
+<a name="line283"></a>      }
+<a name="line284"></a>      this.root_.splice(index, 1);
+<a name="line285"></a>    } else {
+<a name="line286"></a>      // Add the node
+<a name="line287"></a>      if (index) {
+<a name="line288"></a>        this.root_[index] = value;
+<a name="line289"></a>      } else {
+<a name="line290"></a>        this.root_.push(value);
+<a name="line291"></a>      }
+<a name="line292"></a>    }
+<a name="line293"></a>    if (index == null) {
+<a name="line294"></a>      addedNode = true;
+<a name="line295"></a>    }
+<a name="line296"></a>    this.childNodeList_.setNode(name, /** @type {goog.ds.DataNode} */ (node));
+<a name="line297"></a>  } else if (goog.isObject(this.root_)) {
+<a name="line298"></a>    if (value == null) {
+<a name="line299"></a>      // Remove the node
+<a name="line300"></a>      this.createChildNodes_();
+<a name="line301"></a>      var nodeToRemove = this.childNodeList_.get(name);
+<a name="line302"></a>      if (nodeToRemove) {
+<a name="line303"></a>        removedPath = nodeToRemove.getDataPath();
+<a name="line304"></a>      }
+<a name="line305"></a>      delete this.root_[name];
+<a name="line306"></a>    } else {
+<a name="line307"></a>      // Add the node
+<a name="line308"></a>      if (!this.root_[name]) {
+<a name="line309"></a>        addedNode = true;
+<a name="line310"></a>      }
+<a name="line311"></a>      this.root_[name] = value;
+<a name="line312"></a>    }
+<a name="line313"></a>    // Only need to update childNodeList_ if has been created already
+<a name="line314"></a>    if (this.childNodeList_) {
+<a name="line315"></a>      this.childNodeList_.setNode(name, /** @type {goog.ds.DataNode} */ (node));
+<a name="line316"></a>    }
+<a name="line317"></a>  }
+<a name="line318"></a>
+<a name="line319"></a>  // Fire the event that the node changed
+<a name="line320"></a>  var dm = goog.ds.DataManager.getInstance();
+<a name="line321"></a>  if (node) {
+<a name="line322"></a>    dm.fireDataChange(node.getDataPath());
+<a name="line323"></a>    if (addedNode &amp;&amp; this.isList()) {
+<a name="line324"></a>      dm.fireDataChange(this.getDataPath());
+<a name="line325"></a>      dm.fireDataChange(this.getDataPath() + &#39;/count()&#39;);
+<a name="line326"></a>    }
+<a name="line327"></a>  } else if (removedPath) {
+<a name="line328"></a>    dm.fireDataChange(removedPath);
+<a name="line329"></a>    if (this.isList()) {
+<a name="line330"></a>      dm.fireDataChange(this.getDataPath());
+<a name="line331"></a>      dm.fireDataChange(this.getDataPath() + &#39;/count()&#39;);
+<a name="line332"></a>    }
+<a name="line333"></a>  }
+<a name="line334"></a>  return node;
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * Get the name of the node relative to the parent node
+<a name="line340"></a> * @return {string} The name of the node.
+<a name="line341"></a> */
+<a name="line342"></a>goog.ds.JsDataSource.prototype.getDataName = function() {
+<a name="line343"></a>  return this.dataName_;
+<a name="line344"></a>};
+<a name="line345"></a>
+<a name="line346"></a>
+<a name="line347"></a>/**
+<a name="line348"></a> * Setthe name of the node relative to the parent node
+<a name="line349"></a> * @param {string} dataName The name of the node.
+<a name="line350"></a> */
+<a name="line351"></a>goog.ds.JsDataSource.prototype.setDataName = function(dataName) {
+<a name="line352"></a>  this.dataName_ = dataName;
+<a name="line353"></a>};
+<a name="line354"></a>
+<a name="line355"></a>
+<a name="line356"></a>/**
+<a name="line357"></a> * Gets the a qualified data path to this node
+<a name="line358"></a> * @return {string} The data path.
+<a name="line359"></a> */
+<a name="line360"></a>goog.ds.JsDataSource.prototype.getDataPath = function() {
+<a name="line361"></a>  var parentPath = &#39;&#39;;
+<a name="line362"></a>  if (this.parent_) {
+<a name="line363"></a>    parentPath = this.parent_.getDataPath() + goog.ds.STR_PATH_SEPARATOR;
+<a name="line364"></a>  }
+<a name="line365"></a>
+<a name="line366"></a>  return parentPath + this.dataName_;
+<a name="line367"></a>};
+<a name="line368"></a>
+<a name="line369"></a>
+<a name="line370"></a>/**
+<a name="line371"></a> * Load or reload the backing data for this node
+<a name="line372"></a> */
+<a name="line373"></a>goog.ds.JsDataSource.prototype.load = function() {
+<a name="line374"></a>  // Nothing to do
+<a name="line375"></a>};
+<a name="line376"></a>
+<a name="line377"></a>
+<a name="line378"></a>/**
+<a name="line379"></a> * Gets the state of the backing data for this node
+<a name="line380"></a> * TODO Discuss null value handling
+<a name="line381"></a> * @return {goog.ds.LoadState} The state.
+<a name="line382"></a> */
+<a name="line383"></a>goog.ds.JsDataSource.prototype.getLoadState = function() {
+<a name="line384"></a>  return (this.root_ == null) ? goog.ds.LoadState.NOT_LOADED :
+<a name="line385"></a>      goog.ds.LoadState.LOADED;
+<a name="line386"></a>};
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/**
+<a name="line390"></a> * Whether the value of this node is a homogeneous list of data
+<a name="line391"></a> * @return {boolean} True if a list.
+<a name="line392"></a> */
+<a name="line393"></a>goog.ds.JsDataSource.prototype.isList = function() {
+<a name="line394"></a>  return this.isList_ != null ? this.isList_ : goog.isArray(this.root_);
+<a name="line395"></a>};
+<a name="line396"></a>
+<a name="line397"></a>
+<a name="line398"></a>
+<a name="line399"></a>/**
+<a name="line400"></a> * Data source for JavaScript properties that arent objects. Contains reference
+<a name="line401"></a> * to parent object so that you can set the vaule
+<a name="line402"></a> *
+<a name="line403"></a> * @param {goog.ds.DataNode} parent Parent object.
+<a name="line404"></a> * @param {string} dataName Name of this property.
+<a name="line405"></a> * @param {goog.ds.DataNode} opt_parentDataNode The parent data node. If
+<a name="line406"></a> *     omitted, assumes that the parent object is the parent data node.
+<a name="line407"></a> *
+<a name="line408"></a> * @constructor
+<a name="line409"></a> * @extends {goog.ds.BaseDataNode}
+<a name="line410"></a> */
+<a name="line411"></a>goog.ds.JsPropertyDataSource = function(parent, dataName, opt_parentDataNode) {
+<a name="line412"></a>  goog.ds.BaseDataNode.call(this);
+<a name="line413"></a>  this.dataName_ = dataName;
+<a name="line414"></a>  this.parent_ = parent;
+<a name="line415"></a>  this.parentDataNode_ = opt_parentDataNode || this.parent_;
+<a name="line416"></a>};
+<a name="line417"></a>goog.inherits(goog.ds.JsPropertyDataSource, goog.ds.BaseDataNode);
+<a name="line418"></a>
+<a name="line419"></a>
+<a name="line420"></a>/**
+<a name="line421"></a> * Get the value of the node
+<a name="line422"></a> * @return {Object} The value of the node, or null if no value.
+<a name="line423"></a> */
+<a name="line424"></a>goog.ds.JsPropertyDataSource.prototype.get = function() {
+<a name="line425"></a>  return this.parent_[this.dataName_];
+<a name="line426"></a>};
+<a name="line427"></a>
+<a name="line428"></a>
+<a name="line429"></a>/**
+<a name="line430"></a> * Set the value of the node
+<a name="line431"></a> * @param {Object} value The new value of the node.
+<a name="line432"></a> */
+<a name="line433"></a>goog.ds.JsPropertyDataSource.prototype.set = function(value) {
+<a name="line434"></a>  var oldValue = this.parent_[this.dataName_];
+<a name="line435"></a>  this.parent_[this.dataName_] = value;
+<a name="line436"></a>
+<a name="line437"></a>  if (oldValue != value) {
+<a name="line438"></a>    goog.ds.DataManager.getInstance().fireDataChange(this.getDataPath());
+<a name="line439"></a>  }
+<a name="line440"></a>};
+<a name="line441"></a>
+<a name="line442"></a>
+<a name="line443"></a>/**
+<a name="line444"></a> * Get the name of the node relative to the parent node
+<a name="line445"></a> * @return {string} The name of the node.
+<a name="line446"></a> */
+<a name="line447"></a>goog.ds.JsPropertyDataSource.prototype.getDataName = function() {
+<a name="line448"></a>  return this.dataName_;
+<a name="line449"></a>};
+<a name="line450"></a>
+<a name="line451"></a>
+<a name="line452"></a>/**
+<a name="line453"></a> * Get the parent node
+<a name="line454"></a> * @return {goog.ds.DataNode} The parent.
+<a name="line455"></a> * @protected
+<a name="line456"></a> * @suppress {underscore}
+<a name="line457"></a> */
+<a name="line458"></a>goog.ds.JsPropertyDataSource.prototype.getParent_ = function() {
+<a name="line459"></a>  return this.parentDataNode_;
+<a name="line460"></a>};
+</pre>
+
+
+</body>
+</html>

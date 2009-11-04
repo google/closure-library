@@ -1,0 +1,1132 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>sliderbase.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_sliderbase.js.html">sliderbase.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Implementation of a basic slider control.
+<a name="line17"></a> *
+<a name="line18"></a> * Models a control that allows to select a sub-range within a given
+<a name="line19"></a> * range of values using two thumbs.  The underlying range is modeled
+<a name="line20"></a> * as a range model, where the min thumb points to value of the
+<a name="line21"></a> * rangemodel, and the max thumb points to value + extent of the range
+<a name="line22"></a> * model.
+<a name="line23"></a> *
+<a name="line24"></a> * The currently selected range is exposed through methods
+<a name="line25"></a> * getValue() and getExtent().
+<a name="line26"></a> *
+<a name="line27"></a> * The reason for modelling the basic slider state as value + extent is
+<a name="line28"></a> * to be able to capture both, a two-thumb slider to select a range, and
+<a name="line29"></a> * a single-thumb slider to just select a value (in the latter case, extent
+<a name="line30"></a> * is always zero). We provide subclasses (twothumbslider.js and slider.js)
+<a name="line31"></a> * that model those special cases of this control.
+<a name="line32"></a> *
+<a name="line33"></a> * All rendering logic is left out, so that the subclasses can define
+<a name="line34"></a> * their own rendering. To do so, the subclasses overwrite:
+<a name="line35"></a> * - createDom
+<a name="line36"></a> * - decorateInternal
+<a name="line37"></a> * - getCssClass
+<a name="line38"></a> *
+<a name="line39"></a> */
+<a name="line40"></a>
+<a name="line41"></a>goog.provide(&#39;goog.ui.SliderBase&#39;);
+<a name="line42"></a>goog.provide(&#39;goog.ui.SliderBase.Orientation&#39;);
+<a name="line43"></a>
+<a name="line44"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line45"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line46"></a>goog.require(&#39;goog.dom.a11y&#39;);
+<a name="line47"></a>goog.require(&#39;goog.dom.a11y.Role&#39;);
+<a name="line48"></a>goog.require(&#39;goog.dom.a11y.State&#39;);
+<a name="line49"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line50"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line51"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line52"></a>goog.require(&#39;goog.events.KeyHandler&#39;);
+<a name="line53"></a>goog.require(&#39;goog.events.KeyHandler.EventType&#39;);
+<a name="line54"></a>goog.require(&#39;goog.events.MouseWheelHandler&#39;);
+<a name="line55"></a>goog.require(&#39;goog.events.MouseWheelHandler.EventType&#39;);
+<a name="line56"></a>goog.require(&#39;goog.fx.Animation.EventType&#39;);
+<a name="line57"></a>goog.require(&#39;goog.fx.Dragger&#39;);
+<a name="line58"></a>goog.require(&#39;goog.fx.Dragger.EventType&#39;);
+<a name="line59"></a>goog.require(&#39;goog.fx.dom.SlideFrom&#39;);
+<a name="line60"></a>goog.require(&#39;goog.math&#39;);
+<a name="line61"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line62"></a>goog.require(&#39;goog.style&#39;);
+<a name="line63"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line64"></a>goog.require(&#39;goog.ui.Component.EventType&#39;);
+<a name="line65"></a>goog.require(&#39;goog.ui.RangeModel&#39;);
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * This creates a SliderBase object.
+<a name="line70"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line71"></a> * @constructor
+<a name="line72"></a> * @extends {goog.ui.Component}
+<a name="line73"></a> */
+<a name="line74"></a>goog.ui.SliderBase = function(opt_domHelper) {
+<a name="line75"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line76"></a>  this.rangeModel = new goog.ui.RangeModel;
+<a name="line77"></a>  this.getHandler().listen(this.rangeModel, goog.ui.Component.EventType.CHANGE,
+<a name="line78"></a>      this.handleRangeModelChange);
+<a name="line79"></a>};
+<a name="line80"></a>goog.inherits(goog.ui.SliderBase, goog.ui.Component);
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Enum for representing the orientation of the slider.
+<a name="line85"></a> *
+<a name="line86"></a> * @enum {string}
+<a name="line87"></a> */
+<a name="line88"></a>goog.ui.SliderBase.Orientation = {
+<a name="line89"></a>  VERTICAL: &#39;vertical&#39;,
+<a name="line90"></a>  HORIZONTAL: &#39;horizontal&#39;
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Orientation of the slider.
+<a name="line96"></a> * @type {goog.ui.SliderBase.Orientation}
+<a name="line97"></a> * @private
+<a name="line98"></a> */
+<a name="line99"></a>goog.ui.SliderBase.prototype.orientation_ =
+<a name="line100"></a>    goog.ui.SliderBase.Orientation.HORIZONTAL;
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * When the user holds down the mouse on the slider background, the closest
+<a name="line105"></a> * thumb will move in &quot;lock-step&quot; towards the mouse. This number indicates how
+<a name="line106"></a> * long each step should take (in milliseconds).
+<a name="line107"></a> * @type {number}
+<a name="line108"></a> * @private
+<a name="line109"></a> */
+<a name="line110"></a>goog.ui.SliderBase.MOUSE_DOWN_INCREMENT_INTERVAL_ = 200;
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * How long the animations should take (in milliseconds).
+<a name="line115"></a> * @type {number}
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.ui.SliderBase.ANIMATION_INTERVAL_ = 100;
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * The underlying range model
+<a name="line123"></a> * @type {goog.ui.RangeModel}
+<a name="line124"></a> * @protected
+<a name="line125"></a> */
+<a name="line126"></a>goog.ui.SliderBase.prototype.rangeModel;
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * The minThumb dom-element, pointing to the start of the selected range
+<a name="line131"></a> * @type {HTMLDivElement}
+<a name="line132"></a> * @protected
+<a name="line133"></a> */
+<a name="line134"></a>goog.ui.SliderBase.prototype.valueThumb;
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * The maxThumb dom-element, pointing to the end of the selected range
+<a name="line139"></a> * @type {HTMLDivElement}
+<a name="line140"></a> * @protected
+<a name="line141"></a> */
+<a name="line142"></a>goog.ui.SliderBase.prototype.extentThumb;
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * The thumb that we should be moving (only relevant when timed move is active)
+<a name="line147"></a> * @type {HTMLDivElement}
+<a name="line148"></a> * @private
+<a name="line149"></a> */
+<a name="line150"></a>goog.ui.SliderBase.prototype.thumbToMove_;
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * The object handling keyboard events.
+<a name="line155"></a> * @type {goog.events.KeyHandler}
+<a name="line156"></a> * @private
+<a name="line157"></a> */
+<a name="line158"></a>goog.ui.SliderBase.prototype.keyHandler_;
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * The object handling mouse wheel events.
+<a name="line163"></a> * @type {goog.events.MouseWheelHandler}
+<a name="line164"></a> * @private
+<a name="line165"></a> */
+<a name="line166"></a>goog.ui.SliderBase.prototype.mouseWheelHandler_;
+<a name="line167"></a>
+<a name="line168"></a>
+<a name="line169"></a>/**
+<a name="line170"></a> * The Dragger for dragging the valueThumb
+<a name="line171"></a> * @type {goog.fx.Dragger}
+<a name="line172"></a> * @private
+<a name="line173"></a> */
+<a name="line174"></a>goog.ui.SliderBase.prototype.valueDragger_;
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * The Dragger for dragging the extentThumb.
+<a name="line179"></a> * @type {goog.fx.Dragger}
+<a name="line180"></a> * @private
+<a name="line181"></a> */
+<a name="line182"></a>goog.ui.SliderBase.prototype.extentDragger_;
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * If we are currently animating the thumb
+<a name="line187"></a> * @private
+<a name="line188"></a> * @type {boolean}
+<a name="line189"></a> */
+<a name="line190"></a>goog.ui.SliderBase.prototype.isAnimating_ = false;
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Whether clicking on the backgtround should move directly to that point
+<a name="line195"></a> * @private
+<a name="line196"></a> * @type {boolean}
+<a name="line197"></a> */
+<a name="line198"></a>goog.ui.SliderBase.prototype.moveToPointEnabled_ = false;
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * The amount to increment/decrement for page up/down as well as when holding
+<a name="line203"></a> * down the mouse button on the background.
+<a name="line204"></a> * @private
+<a name="line205"></a> * @type {number}
+<a name="line206"></a> */
+<a name="line207"></a>goog.ui.SliderBase.prototype.blockIncrement_ = 10;
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * The minimal extent. The class will ensure that the extent cannot shrink
+<a name="line212"></a> * to a value smaller than minExtent.
+<a name="line213"></a> * @private
+<a name="line214"></a> * @type {number}
+<a name="line215"></a> */
+<a name="line216"></a>goog.ui.SliderBase.prototype.minExtent_ = 0;
+<a name="line217"></a>
+<a name="line218"></a>
+<a name="line219"></a>/**
+<a name="line220"></a> * Returns the CSS class applied to the slider element for the given
+<a name="line221"></a> * orientation. Subclasses must override this method.
+<a name="line222"></a> * @param {goog.ui.SliderBase.Orientation} orient The orientation.
+<a name="line223"></a> * @return {string} The CSS class applied to slider elements.
+<a name="line224"></a> * @protected
+<a name="line225"></a> */
+<a name="line226"></a>goog.ui.SliderBase.prototype.getCssClass = goog.abstractMethod;
+<a name="line227"></a>
+<a name="line228"></a>
+<a name="line229"></a>/** @inheritDoc */
+<a name="line230"></a>goog.ui.SliderBase.prototype.createDom = function() {
+<a name="line231"></a>  goog.ui.SliderBase.superClass_.createDom.call(this);
+<a name="line232"></a>  var element =
+<a name="line233"></a>      this.getDomHelper().createDom(&#39;div&#39;, this.getCssClass(this.orientation_));
+<a name="line234"></a>  this.decorateInternal(element);
+<a name="line235"></a>};
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>/**
+<a name="line239"></a> * Subclasses must implement this method and set the valueThumb and
+<a name="line240"></a> * extentThumb to non-null values.
+<a name="line241"></a> * @type {function() : void}
+<a name="line242"></a> * @protected
+<a name="line243"></a> */
+<a name="line244"></a>goog.ui.SliderBase.prototype.createThumbs = goog.abstractMethod;
+<a name="line245"></a>
+<a name="line246"></a>
+<a name="line247"></a>/** @inheritDoc */
+<a name="line248"></a>goog.ui.SliderBase.prototype.decorateInternal = function(element) {
+<a name="line249"></a>  goog.ui.SliderBase.superClass_.decorateInternal.call(this, element);
+<a name="line250"></a>  goog.dom.classes.add(element, this.getCssClass(this.orientation_));
+<a name="line251"></a>  this.createThumbs();
+<a name="line252"></a>  this.setAriaRoles();
+<a name="line253"></a>};
+<a name="line254"></a>
+<a name="line255"></a>
+<a name="line256"></a>/**
+<a name="line257"></a> * Called when the DOM for the component is for sure in the document.
+<a name="line258"></a> * Subclasses should override this method to set this element&#39;s role.
+<a name="line259"></a> */
+<a name="line260"></a>goog.ui.SliderBase.prototype.enterDocument = function() {
+<a name="line261"></a>  goog.ui.SliderBase.superClass_.enterDocument.call(this);
+<a name="line262"></a>
+<a name="line263"></a>  // Attach the events
+<a name="line264"></a>  this.valueDragger_ = new goog.fx.Dragger(this.valueThumb);
+<a name="line265"></a>  this.extentDragger_ = new goog.fx.Dragger(this.extentThumb);
+<a name="line266"></a>  this.keyHandler_ = new goog.events.KeyHandler(this.getElement());
+<a name="line267"></a>  this.mouseWheelHandler_ = new goog.events.MouseWheelHandler(
+<a name="line268"></a>      this.getElement());
+<a name="line269"></a>  this.getHandler().
+<a name="line270"></a>      listen(this.valueDragger_, goog.fx.Dragger.EventType.BEFOREDRAG,
+<a name="line271"></a>          this.handleBeforeDrag_).
+<a name="line272"></a>      listen(this.extentDragger_, goog.fx.Dragger.EventType.BEFOREDRAG,
+<a name="line273"></a>          this.handleBeforeDrag_).
+<a name="line274"></a>      listen(this.keyHandler_, goog.events.KeyHandler.EventType.KEY,
+<a name="line275"></a>          this.handleKeyDown_).
+<a name="line276"></a>      listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
+<a name="line277"></a>          this.handleMouseDown_).
+<a name="line278"></a>      listen(this.mouseWheelHandler_,
+<a name="line279"></a>          goog.events.MouseWheelHandler.EventType.MOUSEWHEEL,
+<a name="line280"></a>          this.handleMouseWheel_);
+<a name="line281"></a>
+<a name="line282"></a>  this.getElement().tabIndex = 0;
+<a name="line283"></a>  this.updateUi_();
+<a name="line284"></a>};
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>/**
+<a name="line288"></a> * Handler for the before drag event. We prevent the default action and use the
+<a name="line289"></a> * event properties to determine the new value
+<a name="line290"></a> * @param {goog.fx.DragEvent} e  The drag event used to drag the thumb.
+<a name="line291"></a> * @private
+<a name="line292"></a> */
+<a name="line293"></a>goog.ui.SliderBase.prototype.handleBeforeDrag_ = function(e) {
+<a name="line294"></a>  var thumbToDrag = e.dragger == this.valueDragger_ ?
+<a name="line295"></a>      this.valueThumb : this.extentThumb;
+<a name="line296"></a>  var value;
+<a name="line297"></a>  if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
+<a name="line298"></a>    var availHeight = this.getElement().clientHeight - thumbToDrag.offsetHeight;
+<a name="line299"></a>    value = (availHeight - e.top) / availHeight *
+<a name="line300"></a>        (this.getMaximum() - this.getMinimum()) + this.getMinimum();
+<a name="line301"></a>  } else {
+<a name="line302"></a>    var availWidth = this.getElement().clientWidth - thumbToDrag.offsetWidth;
+<a name="line303"></a>    value = (e.left / availWidth) * (this.getMaximum() - this.getMinimum()) +
+<a name="line304"></a>        this.getMinimum();
+<a name="line305"></a>  }
+<a name="line306"></a>  // Bind the value within valid range before calling setThumbPosition_.
+<a name="line307"></a>  // This is necessary because setThumbPosition_ is a no-op for values outside
+<a name="line308"></a>  // of the legal range. For drag operations, we want the handle to snap to the
+<a name="line309"></a>  // last valid value instead of remaining at the previous position.
+<a name="line310"></a>  if (e.dragger == this.valueDragger_) {
+<a name="line311"></a>    value = Math.min(Math.max(value, this.getMinimum()),
+<a name="line312"></a>        this.getValue() + this.getExtent());
+<a name="line313"></a>  } else {
+<a name="line314"></a>    value = Math.min(Math.max(value, this.getValue()), this.getMaximum());
+<a name="line315"></a>  }
+<a name="line316"></a>  this.setThumbPosition_(thumbToDrag, value);
+<a name="line317"></a>  e.preventDefault();
+<a name="line318"></a>};
+<a name="line319"></a>
+<a name="line320"></a>
+<a name="line321"></a>/**
+<a name="line322"></a> * Event handler for the key down event. This is used to update the value
+<a name="line323"></a> * based on the key pressed
+<a name="line324"></a> * @param {goog.events.KeyEvent} e  The keyboard event object.
+<a name="line325"></a> * @private
+<a name="line326"></a> */
+<a name="line327"></a>goog.ui.SliderBase.prototype.handleKeyDown_ = function(e) {
+<a name="line328"></a>  var handled = true;
+<a name="line329"></a>  switch (e.keyCode) {
+<a name="line330"></a>    case goog.events.KeyCodes.HOME:
+<a name="line331"></a>      this.animatedSetValue_(this.getMinimum());
+<a name="line332"></a>      break;
+<a name="line333"></a>    case goog.events.KeyCodes.END:
+<a name="line334"></a>      this.animatedSetValue_(this.getMaximum());
+<a name="line335"></a>      break;
+<a name="line336"></a>    case goog.events.KeyCodes.PAGE_UP:
+<a name="line337"></a>      this.moveThumbs(this.getBlockIncrement());
+<a name="line338"></a>      break;
+<a name="line339"></a>    case goog.events.KeyCodes.PAGE_DOWN:
+<a name="line340"></a>      this.moveThumbs(-this.getBlockIncrement());
+<a name="line341"></a>      break;
+<a name="line342"></a>    case goog.events.KeyCodes.LEFT:
+<a name="line343"></a>    case goog.events.KeyCodes.DOWN:
+<a name="line344"></a>      this.moveThumbs(e.shiftKey ?
+<a name="line345"></a>          -this.getBlockIncrement() : -this.getUnitIncrement());
+<a name="line346"></a>      break;
+<a name="line347"></a>    case goog.events.KeyCodes.RIGHT:
+<a name="line348"></a>    case goog.events.KeyCodes.UP:
+<a name="line349"></a>      this.moveThumbs(e.shiftKey ?
+<a name="line350"></a>          this.getBlockIncrement() : this.getUnitIncrement());
+<a name="line351"></a>      break;
+<a name="line352"></a>
+<a name="line353"></a>    default:
+<a name="line354"></a>      handled = false;
+<a name="line355"></a>  }
+<a name="line356"></a>
+<a name="line357"></a>  if (handled) {
+<a name="line358"></a>    e.preventDefault();
+<a name="line359"></a>  }
+<a name="line360"></a>};
+<a name="line361"></a>
+<a name="line362"></a>
+<a name="line363"></a>/**
+<a name="line364"></a> * Handler for the mouse down event.
+<a name="line365"></a> * @param {goog.events.Event} e  The mouse event object.
+<a name="line366"></a> * @private
+<a name="line367"></a> */
+<a name="line368"></a>goog.ui.SliderBase.prototype.handleMouseDown_ = function(e) {
+<a name="line369"></a>  if (this.getElement().focus) {
+<a name="line370"></a>    this.getElement().focus();
+<a name="line371"></a>  }
+<a name="line372"></a>
+<a name="line373"></a>  // Known Element.
+<a name="line374"></a>  var target = /** @type {Element} */ (e.target);
+<a name="line375"></a>
+<a name="line376"></a>  if (!goog.dom.contains(this.valueThumb, target) &amp;&amp;
+<a name="line377"></a>      !goog.dom.contains(this.extentThumb, target)) {
+<a name="line378"></a>    if (this.moveToPointEnabled_) {
+<a name="line379"></a>      // just set the value directly based on the position of the click
+<a name="line380"></a>      this.animatedSetValue_(this.getValueFromMousePosition_(e));
+<a name="line381"></a>    } else {
+<a name="line382"></a>      // start a timer that incrementally moves the handle
+<a name="line383"></a>      this.startBlockIncrementing_(e);
+<a name="line384"></a>    }
+<a name="line385"></a>  }
+<a name="line386"></a>};
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/**
+<a name="line390"></a> * Handler for the mouse wheel event.
+<a name="line391"></a> * @param {goog.events.MouseWheelEvent} e  The mouse wheel event object.
+<a name="line392"></a> * @private
+<a name="line393"></a> */
+<a name="line394"></a>goog.ui.SliderBase.prototype.handleMouseWheel_ = function(e) {
+<a name="line395"></a>  // Just move one unit increment per mouse wheel event
+<a name="line396"></a>  var direction = e.detail &gt; 0 ? -1 : 1;
+<a name="line397"></a>  this.moveThumbs(direction * this.getUnitIncrement());
+<a name="line398"></a>  e.preventDefault();
+<a name="line399"></a>};
+<a name="line400"></a>
+<a name="line401"></a>
+<a name="line402"></a>/**
+<a name="line403"></a> * Starts the animation that causes the thumb to increment/decrement by the
+<a name="line404"></a> * block increment when the user presses down on the background.
+<a name="line405"></a> * @param {goog.events.Event} e  The mouse event object.
+<a name="line406"></a> * @private
+<a name="line407"></a> */
+<a name="line408"></a>goog.ui.SliderBase.prototype.startBlockIncrementing_ = function(e) {
+<a name="line409"></a>  this.storeMousePos_(e);
+<a name="line410"></a>  this.thumbToMove_ = this.getClosestThumb_(this.getValueFromMousePosition_(e));
+<a name="line411"></a>  if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
+<a name="line412"></a>    this.incrementing_ = this.lastMousePosition_ &lt; this.thumbToMove_.offsetTop;
+<a name="line413"></a>  } else {
+<a name="line414"></a>    this.incrementing_ = this.lastMousePosition_ &gt;
+<a name="line415"></a>                         this.thumbToMove_.offsetLeft +
+<a name="line416"></a>                         this.thumbToMove_.offsetWidth;
+<a name="line417"></a>  }
+<a name="line418"></a>
+<a name="line419"></a>  var doc = goog.dom.getOwnerDocument(this.getElement());
+<a name="line420"></a>  this.getHandler().
+<a name="line421"></a>      listen(doc, goog.events.EventType.MOUSEUP, this.handleMouseUp_, true).
+<a name="line422"></a>      listen(this.getElement(), goog.events.EventType.MOUSEMOVE,
+<a name="line423"></a>          this.storeMousePos_);
+<a name="line424"></a>
+<a name="line425"></a>  if (!this.incTimer_) {
+<a name="line426"></a>    this.incTimer_ = new goog.Timer(
+<a name="line427"></a>        goog.ui.SliderBase.MOUSE_DOWN_INCREMENT_INTERVAL_);
+<a name="line428"></a>    this.getHandler().listen(this.incTimer_, goog.Timer.TICK,
+<a name="line429"></a>        this.handleTimerTick_);
+<a name="line430"></a>  }
+<a name="line431"></a>  this.handleTimerTick_();
+<a name="line432"></a>  this.incTimer_.start();
+<a name="line433"></a>};
+<a name="line434"></a>
+<a name="line435"></a>
+<a name="line436"></a>/**
+<a name="line437"></a> * Handler for the tick event dispatched by the timer used to update the value
+<a name="line438"></a> * in a block increment. This is also called directly from
+<a name="line439"></a> * startBlockIncrementing_.
+<a name="line440"></a> * @private
+<a name="line441"></a> */
+<a name="line442"></a>goog.ui.SliderBase.prototype.handleTimerTick_ = function() {
+<a name="line443"></a>  var value;
+<a name="line444"></a>  if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
+<a name="line445"></a>    var mouseY = this.lastMousePosition_;
+<a name="line446"></a>    var thumbY = this.thumbToMove_.offsetTop;
+<a name="line447"></a>    if (this.incrementing_) {
+<a name="line448"></a>      if (mouseY &lt; thumbY) {
+<a name="line449"></a>        value = this.getThumbPosition_(this.thumbToMove_) +
+<a name="line450"></a>            this.getBlockIncrement();
+<a name="line451"></a>      }
+<a name="line452"></a>    } else {
+<a name="line453"></a>      var thumbH = this.thumbToMove_.offsetHeight;
+<a name="line454"></a>      if (mouseY &gt; thumbY + thumbH) {
+<a name="line455"></a>        value = this.getThumbPosition_(this.thumbToMove_) -
+<a name="line456"></a>            this.getBlockIncrement();
+<a name="line457"></a>      }
+<a name="line458"></a>    }
+<a name="line459"></a>  } else {
+<a name="line460"></a>    var mouseX = this.lastMousePosition_;
+<a name="line461"></a>    var thumbX = this.thumbToMove_.offsetLeft;
+<a name="line462"></a>    if (this.incrementing_) {
+<a name="line463"></a>      var thumbW = this.thumbToMove_.offsetWidth;
+<a name="line464"></a>      if (mouseX &gt; thumbX + thumbW) {
+<a name="line465"></a>        value = this.getThumbPosition_(this.thumbToMove_) +
+<a name="line466"></a>            this.getBlockIncrement();
+<a name="line467"></a>      }
+<a name="line468"></a>    } else {
+<a name="line469"></a>      if (mouseX &lt; thumbX) {
+<a name="line470"></a>        value = this.getThumbPosition_(this.thumbToMove_) -
+<a name="line471"></a>            this.getBlockIncrement();
+<a name="line472"></a>      }
+<a name="line473"></a>    }
+<a name="line474"></a>  }
+<a name="line475"></a>
+<a name="line476"></a>  if (goog.isDef(value)) { // not all code paths sets the value variable
+<a name="line477"></a>    this.setThumbPosition_(this.thumbToMove_, value);
+<a name="line478"></a>  }
+<a name="line479"></a>};
+<a name="line480"></a>
+<a name="line481"></a>
+<a name="line482"></a>/**
+<a name="line483"></a> * Handler for the mouse up event.
+<a name="line484"></a> * @param {goog.events.Event} e  The event object.
+<a name="line485"></a> * @private
+<a name="line486"></a> */
+<a name="line487"></a>goog.ui.SliderBase.prototype.handleMouseUp_ = function(e) {
+<a name="line488"></a>  if (this.incTimer_) {
+<a name="line489"></a>    this.incTimer_.stop();
+<a name="line490"></a>  }
+<a name="line491"></a>
+<a name="line492"></a>  var doc = goog.dom.getOwnerDocument(this.getElement());
+<a name="line493"></a>  this.getHandler().
+<a name="line494"></a>      unlisten(doc, goog.events.EventType.MOUSEUP, this.handleMouseUp_, true).
+<a name="line495"></a>      unlisten(this.getElement(), goog.events.EventType.MOUSEMOVE,
+<a name="line496"></a>          this.storeMousePos_);
+<a name="line497"></a>};
+<a name="line498"></a>
+<a name="line499"></a>
+<a name="line500"></a>/**
+<a name="line501"></a> * Returns the relative mouse position to the slider.
+<a name="line502"></a> * @param {goog.events.Event} e  The mouse event object.
+<a name="line503"></a> * @return {number} The relative mouse position to the slider.
+<a name="line504"></a> * @private
+<a name="line505"></a> */
+<a name="line506"></a>goog.ui.SliderBase.prototype.getRelativeMousePos_ = function(e) {
+<a name="line507"></a>  var coord = goog.style.getRelativePosition(e, this.getElement());
+<a name="line508"></a>  if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
+<a name="line509"></a>    return coord.y;
+<a name="line510"></a>  } else {
+<a name="line511"></a>    return coord.x;
+<a name="line512"></a>  }
+<a name="line513"></a>};
+<a name="line514"></a>
+<a name="line515"></a>
+<a name="line516"></a>/**
+<a name="line517"></a> * Stores the current mouse position so that it can be used in the timer
+<a name="line518"></a> * @param {goog.events.Event} e  The mouse event object.
+<a name="line519"></a> * @private
+<a name="line520"></a> */
+<a name="line521"></a>goog.ui.SliderBase.prototype.storeMousePos_ = function(e) {
+<a name="line522"></a>  this.lastMousePosition_ = this.getRelativeMousePos_(e);
+<a name="line523"></a>};
+<a name="line524"></a>
+<a name="line525"></a>
+<a name="line526"></a>/**
+<a name="line527"></a> * Returns the value to use for the current mouse position
+<a name="line528"></a> * @param {goog.events.Event} e  The mouse event object.
+<a name="line529"></a> * @return {number} The value that this mouse position represents.
+<a name="line530"></a> * @private
+<a name="line531"></a> */
+<a name="line532"></a>goog.ui.SliderBase.prototype.getValueFromMousePosition_ = function(e) {
+<a name="line533"></a>  var min = this.getMinimum();
+<a name="line534"></a>  var max = this.getMaximum();
+<a name="line535"></a>  if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
+<a name="line536"></a>    var thumbH = this.valueThumb.offsetHeight;
+<a name="line537"></a>    var availH = this.getElement().clientHeight - thumbH;
+<a name="line538"></a>    var y = this.getRelativeMousePos_(e) - thumbH / 2;
+<a name="line539"></a>    return (max - min) * (availH - y) / availH + min;
+<a name="line540"></a>  } else {
+<a name="line541"></a>    var thumbW = this.valueThumb.offsetWidth;
+<a name="line542"></a>    var availW = this.getElement().clientWidth - thumbW;
+<a name="line543"></a>    var x = this.getRelativeMousePos_(e) - thumbW / 2;
+<a name="line544"></a>    return (max - min) * x / availW + min;
+<a name="line545"></a>  }
+<a name="line546"></a>};
+<a name="line547"></a>
+<a name="line548"></a>
+<a name="line549"></a>/**
+<a name="line550"></a> * @param {HTMLDivElement} thumb  The thumb object.
+<a name="line551"></a> * @return {number} The position of the specified thumb.
+<a name="line552"></a> * @private
+<a name="line553"></a> */
+<a name="line554"></a>goog.ui.SliderBase.prototype.getThumbPosition_ = function(thumb) {
+<a name="line555"></a>  if (thumb == this.valueThumb) {
+<a name="line556"></a>    return this.rangeModel.getValue();
+<a name="line557"></a>  } else if (thumb == this.extentThumb) {
+<a name="line558"></a>    return this.rangeModel.getValue() + this.rangeModel.getExtent();
+<a name="line559"></a>  } else {
+<a name="line560"></a>    throw Error(&#39;Illegal thumb element. Neither minThumb nor maxThumb&#39;);
+<a name="line561"></a>  }
+<a name="line562"></a>};
+<a name="line563"></a>
+<a name="line564"></a>
+<a name="line565"></a>/**
+<a name="line566"></a> * Moves the thumbs by the specified delta as follows
+<a name="line567"></a> * - as long as both thumbs stay within [min,max], both thumbs are moved
+<a name="line568"></a> * - once a thumb reaches or exceeds min (or max, respectively), it stays
+<a name="line569"></a> * - at min (or max, respectively).
+<a name="line570"></a> * In case both thumbs have reached min (or max), no change event will fire.
+<a name="line571"></a> * @param {number} delta The delta by which to move the selected range.
+<a name="line572"></a> */
+<a name="line573"></a>goog.ui.SliderBase.prototype.moveThumbs = function(delta) {
+<a name="line574"></a>  var newMinPos = this.getThumbPosition_(this.valueThumb) + delta;
+<a name="line575"></a>  var newMaxPos = this.getThumbPosition_(this.extentThumb) + delta;
+<a name="line576"></a>  // correct min / max positions to be within bounds
+<a name="line577"></a>  newMinPos = goog.math.clamp(
+<a name="line578"></a>      newMinPos, this.getMinimum(), this.getMaximum() - this.minExtent_);
+<a name="line579"></a>  newMaxPos = goog.math.clamp(
+<a name="line580"></a>      newMaxPos, this.getMinimum() + this.minExtent_, this.getMaximum());
+<a name="line581"></a>  // Set value and extent atomically
+<a name="line582"></a>  this.setValueAndExtent(newMinPos, newMaxPos - newMinPos);
+<a name="line583"></a>};
+<a name="line584"></a>
+<a name="line585"></a>
+<a name="line586"></a>/**
+<a name="line587"></a> * Sets the position of the given thumb. The set is ignored and no CHANGE event
+<a name="line588"></a> * fires if it violates the constraint minimum &lt;= value (valueThumb position) &lt;=
+<a name="line589"></a> * value + extent (extentThumb position) &lt;= maximum.
+<a name="line590"></a> *
+<a name="line591"></a> * Note: To keep things simple, the setThumbPosition_ function does not have the
+<a name="line592"></a> * side-effect of &quot;correcting&quot; value or extent to fit the above constraint as it
+<a name="line593"></a> * is the case in the underlying range model. Instead, we simply ignore the
+<a name="line594"></a> * call. Callers must make these adjustements explicitly if they wish.
+<a name="line595"></a> * @param {Element} thumb The thumb whose position to set.
+<a name="line596"></a> * @param {number} position The position to move the thumb to.
+<a name="line597"></a> * @private
+<a name="line598"></a> */
+<a name="line599"></a>goog.ui.SliderBase.prototype.setThumbPosition_ = function(thumb, position) {
+<a name="line600"></a>  var intermediateExtent = null;
+<a name="line601"></a>  // Make sure the maxThumb stays within minThumb &lt;= maxThumb &lt;= maximum
+<a name="line602"></a>  if (thumb == this.extentThumb &amp;&amp;
+<a name="line603"></a>      position &lt;= this.rangeModel.getMaximum() &amp;&amp;
+<a name="line604"></a>      position &gt;= this.rangeModel.getValue() + this.minExtent_) {
+<a name="line605"></a>      // For the case where there is only one thumb, we don&#39;t want to set the
+<a name="line606"></a>      // extent twice, causing two change events, so delay setting until we know
+<a name="line607"></a>      // if there will be a subsequent change.
+<a name="line608"></a>      intermediateExtent = position - this.rangeModel.getValue();
+<a name="line609"></a>  }
+<a name="line610"></a>
+<a name="line611"></a>  // Make sure the minThumb stays within minimum &lt;= minThumb &lt;= maxThumb
+<a name="line612"></a>  var currentExtent = intermediateExtent || this.rangeModel.getExtent();
+<a name="line613"></a>  if (thumb == this.valueThumb &amp;&amp;
+<a name="line614"></a>      position &gt;= this.getMinimum() &amp;&amp;
+<a name="line615"></a>      position &lt;= this.rangeModel.getValue() +
+<a name="line616"></a>          currentExtent - this.minExtent_) {
+<a name="line617"></a>    var newExtent = currentExtent -
+<a name="line618"></a>                    (position - this.rangeModel.getValue());
+<a name="line619"></a>    // The range model will round the value and extent. Since we&#39;re setting
+<a name="line620"></a>    // both, extent and value at the same time, it can happen that the
+<a name="line621"></a>    // rounded sum of position and extent is not equal to the sum of the
+<a name="line622"></a>    // position and extent rounded individually. If this happens, we simply
+<a name="line623"></a>    // ignore the update to prevent inconsistent moves of the extent thumb.
+<a name="line624"></a>    if (this.rangeModel.roundToStepWithMin(position) +
+<a name="line625"></a>            this.rangeModel.roundToStepWithMin(newExtent) ==
+<a name="line626"></a>        this.rangeModel.roundToStepWithMin(position + newExtent)) {
+<a name="line627"></a>      // Atomically update the position and extent.
+<a name="line628"></a>      this.setValueAndExtent(position, newExtent);
+<a name="line629"></a>      intermediateExtent = null;
+<a name="line630"></a>    }
+<a name="line631"></a>  }
+<a name="line632"></a>
+<a name="line633"></a>  // Need to be able to set extent to 0.
+<a name="line634"></a>  if (intermediateExtent != null) {
+<a name="line635"></a>    this.rangeModel.setExtent(intermediateExtent);
+<a name="line636"></a>  }
+<a name="line637"></a>};
+<a name="line638"></a>
+<a name="line639"></a>
+<a name="line640"></a>/**
+<a name="line641"></a> * Sets the value and extent of the underlying range model. We enforce that
+<a name="line642"></a> * getMinimum() &lt;= value &lt;= getMaximum() - extent and
+<a name="line643"></a> * getMinExtent &lt;= extent &lt;= getMaximum() - getValue()
+<a name="line644"></a> * If this is not satisifed for the given extent, the call is ignored and no
+<a name="line645"></a> * CHANGE event fires. This is a utility method to allow setting the thumbs
+<a name="line646"></a> * simultaneously and ensuring that only one event fires.
+<a name="line647"></a> * @param {number} value The value to which to set the value.
+<a name="line648"></a> * @param {number} extent The value to which to set the extent.
+<a name="line649"></a> */
+<a name="line650"></a>goog.ui.SliderBase.prototype.setValueAndExtent = function(value, extent) {
+<a name="line651"></a>  if (this.getMinimum() &lt;= value &amp;&amp;
+<a name="line652"></a>      value &lt;= this.getMaximum() - extent &amp;&amp;
+<a name="line653"></a>      this.minExtent_ &lt;= extent &amp;&amp;
+<a name="line654"></a>      extent &lt;= this.getMaximum() - value) {
+<a name="line655"></a>
+<a name="line656"></a>    if (value == this.getValue() &amp;&amp; extent == this.getExtent()) {
+<a name="line657"></a>      return;
+<a name="line658"></a>    }
+<a name="line659"></a>    // because the underlying range model applies adjustements of value
+<a name="line660"></a>    // and extent to fit within bounds, we need to reset the extent
+<a name="line661"></a>    // first so these adjustements don&#39;t kick in.
+<a name="line662"></a>    this.rangeModel.setMute(true);
+<a name="line663"></a>    this.rangeModel.setExtent(0);
+<a name="line664"></a>    this.rangeModel.setValue(value);
+<a name="line665"></a>    this.rangeModel.setExtent(extent);
+<a name="line666"></a>    this.rangeModel.setMute(false);
+<a name="line667"></a>    this.updateUi_();
+<a name="line668"></a>    this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line669"></a>  }
+<a name="line670"></a>};
+<a name="line671"></a>
+<a name="line672"></a>
+<a name="line673"></a>/**
+<a name="line674"></a> * @return {number} The minimum value.
+<a name="line675"></a> */
+<a name="line676"></a>goog.ui.SliderBase.prototype.getMinimum = function() {
+<a name="line677"></a>  return this.rangeModel.getMinimum();
+<a name="line678"></a>};
+<a name="line679"></a>
+<a name="line680"></a>
+<a name="line681"></a>/**
+<a name="line682"></a> * Sets the minimum number
+<a name="line683"></a> * @param {number} min The minimum value.
+<a name="line684"></a> */
+<a name="line685"></a>goog.ui.SliderBase.prototype.setMinimum = function(min) {
+<a name="line686"></a>  this.rangeModel.setMinimum(min);
+<a name="line687"></a>};
+<a name="line688"></a>
+<a name="line689"></a>
+<a name="line690"></a>/**
+<a name="line691"></a> * @return {number} The maximum value.
+<a name="line692"></a> */
+<a name="line693"></a>goog.ui.SliderBase.prototype.getMaximum = function() {
+<a name="line694"></a>  return this.rangeModel.getMaximum();
+<a name="line695"></a>};
+<a name="line696"></a>
+<a name="line697"></a>
+<a name="line698"></a>/**
+<a name="line699"></a> * Sets the maximum number
+<a name="line700"></a> * @param {number} max The maximum value.
+<a name="line701"></a> */
+<a name="line702"></a>goog.ui.SliderBase.prototype.setMaximum = function(max) {
+<a name="line703"></a>  this.rangeModel.setMaximum(max);
+<a name="line704"></a>};
+<a name="line705"></a>
+<a name="line706"></a>
+<a name="line707"></a>/**
+<a name="line708"></a> * @return {HTMLDivElement} The value thumb element.
+<a name="line709"></a> */
+<a name="line710"></a>goog.ui.SliderBase.prototype.getValueThumb = function() {
+<a name="line711"></a>  return this.valueThumb;
+<a name="line712"></a>};
+<a name="line713"></a>
+<a name="line714"></a>
+<a name="line715"></a>/**
+<a name="line716"></a> * @return {HTMLDivElement} The extent thumb element.
+<a name="line717"></a> */
+<a name="line718"></a>goog.ui.SliderBase.prototype.getExtentThumb = function() {
+<a name="line719"></a>  return this.extentThumb;
+<a name="line720"></a>};
+<a name="line721"></a>
+<a name="line722"></a>
+<a name="line723"></a>/**
+<a name="line724"></a> * @param {number} position The position to get the closest thumb to.
+<a name="line725"></a> * @return {HTMLDivElement} The thumb that is closest to the given position.
+<a name="line726"></a> * @private
+<a name="line727"></a> */
+<a name="line728"></a>goog.ui.SliderBase.prototype.getClosestThumb_ = function(position) {
+<a name="line729"></a>  if (position &lt;= (this.rangeModel.getValue() +
+<a name="line730"></a>                   this.rangeModel.getExtent() / 2)) {
+<a name="line731"></a>    return this.valueThumb;
+<a name="line732"></a>  } else {
+<a name="line733"></a>    return this.extentThumb;
+<a name="line734"></a>  }
+<a name="line735"></a>};
+<a name="line736"></a>
+<a name="line737"></a>
+<a name="line738"></a>/**
+<a name="line739"></a> * Call back when the internal range model changes. Sub-classes may override
+<a name="line740"></a> * and re-enter this method to update a11y state. Consider protected
+<a name="line741"></a> * @param {goog.events.Event} e The event object.
+<a name="line742"></a> * @protected
+<a name="line743"></a> */
+<a name="line744"></a>goog.ui.SliderBase.prototype.handleRangeModelChange = function(e) {
+<a name="line745"></a>  this.updateUi_();
+<a name="line746"></a>  this.updateAriaStates();
+<a name="line747"></a>  this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line748"></a>};
+<a name="line749"></a>
+<a name="line750"></a>
+<a name="line751"></a>/**
+<a name="line752"></a> * This is called when we need to update the size of the thumb. This happens
+<a name="line753"></a> * when first created as well as when the value and the orientation changes.
+<a name="line754"></a> * @private
+<a name="line755"></a> */
+<a name="line756"></a>goog.ui.SliderBase.prototype.updateUi_ = function() {
+<a name="line757"></a>  if (this.valueThumb &amp;&amp; !this.isAnimating_) {
+<a name="line758"></a>    var minCoord = this.getThumbCoordinateForValue_(
+<a name="line759"></a>        this.getThumbPosition_(this.valueThumb));
+<a name="line760"></a>    var maxCoord = this.getThumbCoordinateForValue_(
+<a name="line761"></a>         this.getThumbPosition_(this.extentThumb));
+<a name="line762"></a>
+<a name="line763"></a>    if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
+<a name="line764"></a>      this.valueThumb.style.top = minCoord.y + &#39;px&#39;;
+<a name="line765"></a>      this.extentThumb.style.top = maxCoord.y + &#39;px&#39;;
+<a name="line766"></a>    } else {
+<a name="line767"></a>      this.valueThumb.style.left = minCoord.x + &#39;px&#39;;
+<a name="line768"></a>      this.extentThumb.style.left = maxCoord.x + &#39;px&#39;;
+<a name="line769"></a>    }
+<a name="line770"></a>  }
+<a name="line771"></a>};
+<a name="line772"></a>
+<a name="line773"></a>
+<a name="line774"></a>/**
+<a name="line775"></a> * Returns the position to move the handle to for a given value
+<a name="line776"></a> * @param {number} val  The value to get the coordinate for.
+<a name="line777"></a> * @return {goog.math.Coordinate} Coordinate with either x or y set.
+<a name="line778"></a> * @private
+<a name="line779"></a> */
+<a name="line780"></a>goog.ui.SliderBase.prototype.getThumbCoordinateForValue_ = function(val) {
+<a name="line781"></a>  var coord = new goog.math.Coordinate;
+<a name="line782"></a>  if (this.valueThumb) {
+<a name="line783"></a>    var min = this.getMinimum();
+<a name="line784"></a>    var max = this.getMaximum();
+<a name="line785"></a>
+<a name="line786"></a>    // This check ensures the ratio never take NaN value, which is possible when
+<a name="line787"></a>    // the slider min &amp; max are same numbers (i.e. 1).
+<a name="line788"></a>    var ratio = (val == min &amp;&amp; min == max) ? 0 : (val - min) / (max - min);
+<a name="line789"></a>
+<a name="line790"></a>    if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
+<a name="line791"></a>      var thumbHeight = this.valueThumb.offsetHeight;
+<a name="line792"></a>      var h = this.getElement().clientHeight - thumbHeight;
+<a name="line793"></a>      var bottom = Math.round(ratio * h);
+<a name="line794"></a>      coord.y = h - bottom;
+<a name="line795"></a>    } else {
+<a name="line796"></a>      var w = this.getElement().clientWidth - this.valueThumb.offsetWidth;
+<a name="line797"></a>      var left = Math.round(ratio * w);
+<a name="line798"></a>      coord.x = left;
+<a name="line799"></a>    }
+<a name="line800"></a>  }
+<a name="line801"></a>  return coord;
+<a name="line802"></a>};
+<a name="line803"></a>
+<a name="line804"></a>
+<a name="line805"></a>/**
+<a name="line806"></a> * Sets the value and starts animating the handle towards that position
+<a name="line807"></a> * @param {number} v Value to set and animate to.
+<a name="line808"></a> * @private
+<a name="line809"></a> */
+<a name="line810"></a>goog.ui.SliderBase.prototype.animatedSetValue_ = function(v) {
+<a name="line811"></a>  // the value might be out of bounds
+<a name="line812"></a>  v = Math.min(this.getMaximum(), Math.max(v, this.getMinimum()));
+<a name="line813"></a>
+<a name="line814"></a>  if (this.currentAnimation_) {
+<a name="line815"></a>    this.currentAnimation_.stop(true);
+<a name="line816"></a>  }
+<a name="line817"></a>
+<a name="line818"></a>  var end;
+<a name="line819"></a>  var thumb = this.getClosestThumb_(v);
+<a name="line820"></a>  var coord = this.getThumbCoordinateForValue_(v);
+<a name="line821"></a>  if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
+<a name="line822"></a>    end = [thumb.offsetLeft, coord.y];
+<a name="line823"></a>  } else {
+<a name="line824"></a>    end = [coord.x, thumb.offsetTop];
+<a name="line825"></a>  }
+<a name="line826"></a>  var animation = new goog.fx.dom.SlideFrom(thumb, end,
+<a name="line827"></a>      goog.ui.SliderBase.ANIMATION_INTERVAL_);
+<a name="line828"></a>  this.currentAnimation_ = animation;
+<a name="line829"></a>  this.getHandler().listen(animation, goog.fx.Animation.EventType.END,
+<a name="line830"></a>      this.endAnimation_);
+<a name="line831"></a>
+<a name="line832"></a>  this.isAnimating_ = true;
+<a name="line833"></a>  this.setThumbPosition_(thumb, v);
+<a name="line834"></a>  animation.play(false);
+<a name="line835"></a>};
+<a name="line836"></a>
+<a name="line837"></a>
+<a name="line838"></a>/**
+<a name="line839"></a> * Sets the isAnimating_ field to false once the animation is done
+<a name="line840"></a> * @param {goog.fx.AnimationEvent} e Event object passed by the animation
+<a name="line841"></a> *     object.
+<a name="line842"></a> * @private
+<a name="line843"></a> */
+<a name="line844"></a>goog.ui.SliderBase.prototype.endAnimation_ = function(e) {
+<a name="line845"></a>  this.isAnimating_ = false;
+<a name="line846"></a>};
+<a name="line847"></a>
+<a name="line848"></a>
+<a name="line849"></a>/**
+<a name="line850"></a> * changes the orientation
+<a name="line851"></a> * @param {goog.ui.SliderBase.Orientation} orient The orientation.
+<a name="line852"></a> */
+<a name="line853"></a>goog.ui.SliderBase.prototype.setOrientation = function(orient) {
+<a name="line854"></a>  if (this.orientation_ != orient) {
+<a name="line855"></a>    var oldCss = this.getCssClass(this.orientation_);
+<a name="line856"></a>    var newCss = this.getCssClass(orient);
+<a name="line857"></a>    this.orientation_ = orient;
+<a name="line858"></a>
+<a name="line859"></a>    // Update the DOM
+<a name="line860"></a>    if (this.getElement()) {
+<a name="line861"></a>      goog.dom.classes.swap(this.getElement(), oldCss, newCss);
+<a name="line862"></a>      // we need to reset the left and top
+<a name="line863"></a>      this.valueThumb.style.left = this.valueThumb.style.top = &#39;&#39;;
+<a name="line864"></a>      this.extentThumb.style.left = this.extentThumb.style.top = &#39;&#39;;
+<a name="line865"></a>      this.updateUi_();
+<a name="line866"></a>    }
+<a name="line867"></a>  }
+<a name="line868"></a>};
+<a name="line869"></a>
+<a name="line870"></a>
+<a name="line871"></a>/**
+<a name="line872"></a> * @return {goog.ui.SliderBase.Orientation} the orientation of the slider.
+<a name="line873"></a> */
+<a name="line874"></a>goog.ui.SliderBase.prototype.getOrientation = function() {
+<a name="line875"></a>  return this.orientation_;
+<a name="line876"></a>};
+<a name="line877"></a>
+<a name="line878"></a>
+<a name="line879"></a>/** @inheritDoc */
+<a name="line880"></a>goog.ui.SliderBase.prototype.disposeInternal = function() {
+<a name="line881"></a>  goog.ui.SliderBase.superClass_.disposeInternal.call(this);
+<a name="line882"></a>  if (this.incTimer_) {
+<a name="line883"></a>    this.incTimer_.dispose();
+<a name="line884"></a>  }
+<a name="line885"></a>  delete this.incTimer_;
+<a name="line886"></a>  if (this.currentAnimation_) {
+<a name="line887"></a>    this.currentAnimation_.dispose();
+<a name="line888"></a>  }
+<a name="line889"></a>  delete this.currentAnimation_;
+<a name="line890"></a>  delete this.valueThumb;
+<a name="line891"></a>  delete this.extentThumb;
+<a name="line892"></a>  this.rangeModel.dispose();
+<a name="line893"></a>  delete this.rangeModel;
+<a name="line894"></a>  if (this.keyHandler_) {
+<a name="line895"></a>    this.keyHandler_.dispose();
+<a name="line896"></a>    delete this.keyHandler_;
+<a name="line897"></a>  }
+<a name="line898"></a>  if (this.mouseWheelHandler_) {
+<a name="line899"></a>    this.mouseWheelHandler_.dispose();
+<a name="line900"></a>    delete this.mouseWheelHandler_;
+<a name="line901"></a>  }
+<a name="line902"></a>};
+<a name="line903"></a>
+<a name="line904"></a>
+<a name="line905"></a>/**
+<a name="line906"></a> * @return {number} The amount to increment/decrement for page up/down as well
+<a name="line907"></a> *     as when holding down the mouse button on the background.
+<a name="line908"></a> */
+<a name="line909"></a>goog.ui.SliderBase.prototype.getBlockIncrement = function() {
+<a name="line910"></a>  return this.blockIncrement_;
+<a name="line911"></a>};
+<a name="line912"></a>
+<a name="line913"></a>
+<a name="line914"></a>/**
+<a name="line915"></a> * Sets the amount to increment/decrement for page up/down as well as when
+<a name="line916"></a> * holding down the mouse button on the background.
+<a name="line917"></a> *
+<a name="line918"></a> * @param {number} value The value to set the block increment to.
+<a name="line919"></a> */
+<a name="line920"></a>goog.ui.SliderBase.prototype.setBlockIncrement = function(value) {
+<a name="line921"></a>  this.blockIncrement_ = value;
+<a name="line922"></a>};
+<a name="line923"></a>
+<a name="line924"></a>
+<a name="line925"></a>/**
+<a name="line926"></a> * Sets the minimal value that the extent may have.
+<a name="line927"></a> *
+<a name="line928"></a> * @param {number} value The minimal value for the extent.
+<a name="line929"></a> */
+<a name="line930"></a>goog.ui.SliderBase.prototype.setMinExtent = function(value) {
+<a name="line931"></a>  this.minExtent_ = value;
+<a name="line932"></a>};
+<a name="line933"></a>
+<a name="line934"></a>
+<a name="line935"></a>/**
+<a name="line936"></a> * The amount to increment/decrement for up, down, left and right arrow keys.
+<a name="line937"></a> * @private
+<a name="line938"></a> * @type {number}
+<a name="line939"></a> */
+<a name="line940"></a>goog.ui.SliderBase.prototype.unitIncrement_ = 1;
+<a name="line941"></a>
+<a name="line942"></a>
+<a name="line943"></a>/**
+<a name="line944"></a> * @return {number} The amount to increment/decrement for up, down, left and
+<a name="line945"></a> *     right arrow keys.
+<a name="line946"></a> */
+<a name="line947"></a>goog.ui.SliderBase.prototype.getUnitIncrement = function() {
+<a name="line948"></a>  return this.unitIncrement_;
+<a name="line949"></a>};
+<a name="line950"></a>
+<a name="line951"></a>
+<a name="line952"></a>/**
+<a name="line953"></a> * Sets the amount to increment/decrement for up, down, left and right arrow
+<a name="line954"></a> * keys.
+<a name="line955"></a> * @param {number} value  The value to set the unit increment to.
+<a name="line956"></a> */
+<a name="line957"></a>goog.ui.SliderBase.prototype.setUnitIncrement = function(value) {
+<a name="line958"></a>  this.unitIncrement_ = value;
+<a name="line959"></a>};
+<a name="line960"></a>
+<a name="line961"></a>
+<a name="line962"></a>/**
+<a name="line963"></a> * @return {number?} The step value used to determine how to round the value.
+<a name="line964"></a> */
+<a name="line965"></a>goog.ui.SliderBase.prototype.getStep = function() {
+<a name="line966"></a>  return this.rangeModel.getStep();
+<a name="line967"></a>};
+<a name="line968"></a>
+<a name="line969"></a>
+<a name="line970"></a>/**
+<a name="line971"></a> * Sets the step value. The step value is used to determine how to round the
+<a name="line972"></a> * value.
+<a name="line973"></a> * @param {number?} step  The step size.
+<a name="line974"></a> */
+<a name="line975"></a>goog.ui.SliderBase.prototype.setStep = function(step) {
+<a name="line976"></a>  this.rangeModel.setStep(step);
+<a name="line977"></a>};
+<a name="line978"></a>
+<a name="line979"></a>
+<a name="line980"></a>
+<a name="line981"></a>/**
+<a name="line982"></a> * @return {boolean} Whether clicking on the backgtround should move directly to
+<a name="line983"></a> *     that point.
+<a name="line984"></a> */
+<a name="line985"></a>goog.ui.SliderBase.prototype.getMoveToPointEnabled = function() {
+<a name="line986"></a>  return this.moveToPointEnabled_;
+<a name="line987"></a>};
+<a name="line988"></a>
+<a name="line989"></a>
+<a name="line990"></a>/**
+<a name="line991"></a> * Sets whether clicking on the background should move directly to that point.
+<a name="line992"></a> * @param {boolean} val Whether clicking on the background should move directly
+<a name="line993"></a> *     to that point.
+<a name="line994"></a> */
+<a name="line995"></a>goog.ui.SliderBase.prototype.setMoveToPointEnabled = function(val) {
+<a name="line996"></a>  this.moveToPointEnabled_ = val;
+<a name="line997"></a>};
+<a name="line998"></a>
+<a name="line999"></a>
+<a name="line1000"></a>/**
+<a name="line1001"></a> * @return {number} The value of the underlying range model.
+<a name="line1002"></a> */
+<a name="line1003"></a>goog.ui.SliderBase.prototype.getValue = function() {
+<a name="line1004"></a>  return this.rangeModel.getValue();
+<a name="line1005"></a>};
+<a name="line1006"></a>
+<a name="line1007"></a>
+<a name="line1008"></a>/**
+<a name="line1009"></a> * Sets the value of the underlying range model. We enforce that
+<a name="line1010"></a> * getMinimum() &lt;= value &lt;= getMaximum() - getExtent()
+<a name="line1011"></a> * If this is not satisifed for the given value, the call is ignored and no
+<a name="line1012"></a> * CHANGE event fires.
+<a name="line1013"></a> * @param {number} value The value.
+<a name="line1014"></a> */
+<a name="line1015"></a>goog.ui.SliderBase.prototype.setValue = function(value) {
+<a name="line1016"></a>  // Set the position through the thumb method to enforce constraints.
+<a name="line1017"></a>  this.setThumbPosition_(this.valueThumb, value);
+<a name="line1018"></a>};
+<a name="line1019"></a>
+<a name="line1020"></a>
+<a name="line1021"></a>/**
+<a name="line1022"></a> * @return {number} The value of the extent of the underlying range model.
+<a name="line1023"></a> */
+<a name="line1024"></a>goog.ui.SliderBase.prototype.getExtent = function() {
+<a name="line1025"></a>  return this.rangeModel.getExtent();
+<a name="line1026"></a>};
+<a name="line1027"></a>
+<a name="line1028"></a>
+<a name="line1029"></a>/**
+<a name="line1030"></a> * Sets the extent of the underlying range model. We enforce that
+<a name="line1031"></a> * getMinExtent() &lt;= extent &lt;= getMaximum() - getValue()
+<a name="line1032"></a> * If this is not satisifed for the given extent, the call is ignored and no
+<a name="line1033"></a> * CHANGE event fires.
+<a name="line1034"></a> * @param {number} extent The value to which to set the extent.
+<a name="line1035"></a> */
+<a name="line1036"></a>goog.ui.SliderBase.prototype.setExtent = function(extent) {
+<a name="line1037"></a>  // Set the position through the thumb method to enforce constraints.
+<a name="line1038"></a>  this.setThumbPosition_(this.extentThumb, (this.rangeModel.getValue() +
+<a name="line1039"></a>                                             extent));
+<a name="line1040"></a>};
+<a name="line1041"></a>
+<a name="line1042"></a>
+<a name="line1043"></a>/**
+<a name="line1044"></a> * Change the visibility of the slider.
+<a name="line1045"></a> * You must call this if you had set the slider&#39;s value when it was invisible.
+<a name="line1046"></a> * @param {boolean} visible Whether to show the slider.
+<a name="line1047"></a> */
+<a name="line1048"></a>goog.ui.SliderBase.prototype.setVisible = function(visible) {
+<a name="line1049"></a>  goog.style.showElement(this.getElement(), visible);
+<a name="line1050"></a>  if (visible) {
+<a name="line1051"></a>    this.updateUi_();
+<a name="line1052"></a>  }
+<a name="line1053"></a>};
+<a name="line1054"></a>
+<a name="line1055"></a>
+<a name="line1056"></a>/**
+<a name="line1057"></a> * Set a11y roles and state.
+<a name="line1058"></a> * @protected
+<a name="line1059"></a> */
+<a name="line1060"></a>goog.ui.SliderBase.prototype.setAriaRoles = function() {
+<a name="line1061"></a>  goog.dom.a11y.setRole(this.getElement(), goog.dom.a11y.Role.SLIDER);
+<a name="line1062"></a>  this.updateAriaStates();
+<a name="line1063"></a>};
+<a name="line1064"></a>
+<a name="line1065"></a>
+<a name="line1066"></a>/**
+<a name="line1067"></a> * Set a11y roles and state when values change.
+<a name="line1068"></a> * @protected
+<a name="line1069"></a> */
+<a name="line1070"></a>goog.ui.SliderBase.prototype.updateAriaStates = function() {
+<a name="line1071"></a>  var element = this.getElement();
+<a name="line1072"></a>  if (element) {
+<a name="line1073"></a>    goog.dom.a11y.setState(element,
+<a name="line1074"></a>                           goog.dom.a11y.State.VALUEMIN,
+<a name="line1075"></a>                           this.getMinimum());
+<a name="line1076"></a>    goog.dom.a11y.setState(element,
+<a name="line1077"></a>                           goog.dom.a11y.State.VALUEMAX,
+<a name="line1078"></a>                           this.getMaximum());
+<a name="line1079"></a>    goog.dom.a11y.setState(element,
+<a name="line1080"></a>                           goog.dom.a11y.State.VALUENOW,
+<a name="line1081"></a>                           this.getValue());
+<a name="line1082"></a>  }
+<a name="line1083"></a>};
+</pre>
+
+
+</body>
+</html>

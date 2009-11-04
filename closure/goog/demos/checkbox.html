@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--
+Copyright 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+  <title>3-state checkbox demo</title>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.dom');
+    goog.require('goog.events');
+    goog.require('goog.ui.Checkbox');
+    goog.require('goog.ui.Checkbox.State');
+  </script>
+  <link rel="stylesheet" href="css/checkbox.css">
+</head>
+<body>
+  <div><span id="all"></span>root</div>
+  <div style="margin-left: 1em;">
+    <div><span id="leaf1"></span>leaf 1</div>
+    <div><span id="leaf2"></span>leaf 2</div>
+  </div>
+
+  <script>
+    var all = new goog.ui.Checkbox();
+    all.decorate(goog.dom.$('all'));
+    all.setLabel(all.getElement().parentNode);
+
+    var leaf1 = new goog.ui.Checkbox();
+    leaf1.decorate(goog.dom.$('leaf1'));
+    leaf1.setLabel(leaf1.getElement().parentNode);
+
+    var leaf2 = new goog.ui.Checkbox();
+    leaf2.decorate(goog.dom.$('leaf2'));
+    leaf2.setLabel(leaf2.getElement().parentNode);
+
+    function rootChanged(e) {
+      leaf1.setChecked(all.getChecked());
+      leaf2.setChecked(all.getChecked());
+    }
+
+    function leafChanged(e) {
+      var same = leaf1.getChecked() == leaf2.getChecked();
+      all.setChecked(same ? leaf1.getChecked() :
+          goog.ui.Checkbox.State.UNDETERMINED);
+    }
+
+    goog.events.listen(all, goog.ui.Component.EventType.CHANGE, rootChanged);
+    goog.events.listen(leaf1, goog.ui.Component.EventType.CHANGE, leafChanged);
+    goog.events.listen(leaf2, goog.ui.Component.EventType.CHANGE, leafChanged);
+  </script>
+</body>
+</html>

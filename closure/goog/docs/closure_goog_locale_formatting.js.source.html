@@ -1,0 +1,325 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>formatting.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_locale_formatting.js.html">formatting.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Functions for dealing with locale-specific formatting.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.locale.formatting&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.locale.DateTimeFormat&#39;);
+<a name="line22"></a>goog.require(&#39;goog.locale.DateTimeParse&#39;);
+<a name="line23"></a>goog.require(&#39;goog.locale.NumberFormat&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Format the given date object into a string representation using pattern
+<a name="line28"></a> * specified.
+<a name="line29"></a> * @param {string} pattern Pattern String to specify how the date should
+<a name="line30"></a> *     be formatted.
+<a name="line31"></a> * @param {Date} date Date object being formatted.
+<a name="line32"></a> * @param {goog.locale.TimeZone} opt_timeZone optional, if specified, time
+<a name="line33"></a> *    related fields will be formatted based on its setting.
+<a name="line34"></a> *
+<a name="line35"></a> * @return {string} string representation of date/time.
+<a name="line36"></a> * @deprecated Use goog.i18n.DateTimeFormat.
+<a name="line37"></a> */
+<a name="line38"></a>goog.locale.formatDateTime = function(pattern, date, opt_timeZone) {
+<a name="line39"></a>  var formatter = new goog.locale.DateTimeFormat();
+<a name="line40"></a>  formatter.applyPattern(pattern);
+<a name="line41"></a>  return formatter.format(date, opt_timeZone);
+<a name="line42"></a>};
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * Formats a given date object according to a predefined
+<a name="line47"></a> * date format pattern specified in symbols object.
+<a name="line48"></a> * @param {number} formatType Number used to reference predefined pattern.
+<a name="line49"></a> * @param {Date} date The date object being formatted.
+<a name="line50"></a> * @param {goog.locale.TimeZone} opt_timeZone optional, if specified, time
+<a name="line51"></a> *    related fields will be formatted based on its setting.
+<a name="line52"></a> * @return {string} string representation of date/time.
+<a name="line53"></a> * @deprecated Use goog.i18n.DateTimeFormat.
+<a name="line54"></a> */
+<a name="line55"></a>goog.locale.standardFormatDateTime = function(formatType, date, opt_timeZone) {
+<a name="line56"></a>  var formatter = new goog.locale.DateTimeFormat();
+<a name="line57"></a>  formatter.applyStandardPattern(formatType);
+<a name="line58"></a>  return formatter.format(date, opt_timeZone);
+<a name="line59"></a>};
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Return a  object for specified pattern, that can be used  to
+<a name="line64"></a> * format date object.
+<a name="line65"></a> * @param {string} pattern specifies how the date should be formatted.
+<a name="line66"></a> *
+<a name="line67"></a> * @return {goog.locale.DateTimeFormat} A DateTimeFormat instance for given
+<a name="line68"></a> *     pattern.
+<a name="line69"></a> * @deprecated Use goog.i18n.DateTimeFormat.
+<a name="line70"></a> */
+<a name="line71"></a>goog.locale.getDateTimeFormatter = function(pattern) {
+<a name="line72"></a>  var formatter = new goog.locale.DateTimeFormat();
+<a name="line73"></a>  formatter.applyPattern(pattern);
+<a name="line74"></a>  return formatter;
+<a name="line75"></a>};
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Return a DateTimeFormat object that can be used to format date using a
+<a name="line80"></a> * predefined pattern as identified by &quot;formatType&quot;.
+<a name="line81"></a> * @param {number} formatType identifies the predefined pattern string.
+<a name="line82"></a> *
+<a name="line83"></a> * @return {goog.locale.DateTimeFormat} A DateTimeFormat instance for the
+<a name="line84"></a> *     predefined format type.
+<a name="line85"></a> * @deprecated Use goog.i18n.DateTimeFormat.
+<a name="line86"></a> */
+<a name="line87"></a>goog.locale.getStandardDateTimeFormatter = function(formatType) {
+<a name="line88"></a>  var formatter = new goog.locale.DateTimeFormat();
+<a name="line89"></a>  formatter.applyStandardPattern(formatType);
+<a name="line90"></a>  return formatter;
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Parse a string using the format as specified in pattern string, and
+<a name="line96"></a> * return date in the passed &quot;date&quot; parameter.
+<a name="line97"></a> *
+<a name="line98"></a> * @param {string} pattern specifies how the date should be formatted.
+<a name="line99"></a> * @param {string} text The string that need to be parsed.
+<a name="line100"></a> * @param {number} start The character position in &quot;text&quot; where parse begins.
+<a name="line101"></a> * @param {Date} date The date object that will hold parsed value.
+<a name="line102"></a> *
+<a name="line103"></a> * @return {number} The number of characters advanced or 0 if failed.
+<a name="line104"></a> * @deprecated Use goog.i18n.DateTimeParse.
+<a name="line105"></a> */
+<a name="line106"></a>goog.locale.parseDateTime = function(pattern, text, start, date) {
+<a name="line107"></a>  var parser = new goog.locale.DateTimeParse();
+<a name="line108"></a>  parser.applyPattern(pattern);
+<a name="line109"></a>  return parser.parse(text, start, date);
+<a name="line110"></a>};
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Parse a string using the format as specified in pattern string, and
+<a name="line115"></a> * return date in the passed &quot;date&quot; parameter.
+<a name="line116"></a> *
+<a name="line117"></a> * @param {string} pattern specifies how the date should be formatted.
+<a name="line118"></a> * @param {string} text The string that need to be parsed.
+<a name="line119"></a> * @param {number} start The character position in &quot;text&quot; where parse begins.
+<a name="line120"></a> * @param {Date} date used to hold the parsed value.
+<a name="line121"></a> *
+<a name="line122"></a> * @return {number} The number of characters advanced or 0 if failed.
+<a name="line123"></a> * @deprecated Use goog.i18n.DateTimeParse.
+<a name="line124"></a> */
+<a name="line125"></a>goog.locale.strictParseDateTime = function(pattern, text, start, date) {
+<a name="line126"></a>  var parser = new goog.locale.DateTimeParse();
+<a name="line127"></a>  parser.applyPattern(pattern);
+<a name="line128"></a>  return parser.strictParse(text, start, date);
+<a name="line129"></a>};
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Parse a string using a predefined date/time pattern.
+<a name="line134"></a> *
+<a name="line135"></a> * @param {number} formatType identifies a predefined pattern stored in
+<a name="line136"></a> *     locale specific repository.
+<a name="line137"></a> * @param {string} text The string that needs to be parsed.
+<a name="line138"></a> * @param {number} start parse start position in &quot;text&quot;.
+<a name="line139"></a> * @param {Date} date used to hold the parsed value.
+<a name="line140"></a> *
+<a name="line141"></a> * @return {number} The number of characters advanced or 0 if failed.
+<a name="line142"></a> * @deprecated Use goog.i18n.DateTimeParse.
+<a name="line143"></a> */
+<a name="line144"></a>goog.locale.standardParseDateTime = function(formatType, text, start, date) {
+<a name="line145"></a>  var parser = new goog.locale.DateTimeParse();
+<a name="line146"></a>  parser.applyStandardPattern(formatType);
+<a name="line147"></a>  return parser.parse(text, start, date);
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Get a DateTimeParse object that could parse date string using a predefined
+<a name="line153"></a> * pattern type.
+<a name="line154"></a> * @param {number} formatType identifies a predefined pattern stored in
+<a name="line155"></a> *     locale specific repository.
+<a name="line156"></a> * @return {goog.locale.DateTimeParse} A goog.locale.DateTimeParse instance
+<a name="line157"></a> *     for the predefined format type.
+<a name="line158"></a> * @deprecated Use goog.i18n.DateTimeParse.
+<a name="line159"></a> */
+<a name="line160"></a>goog.locale.getStandardDateTimeParser = function(formatType) {
+<a name="line161"></a>  var parser = new goog.locale.DateTimeParse();
+<a name="line162"></a>  parser.applyStandardPattern(formatType);
+<a name="line163"></a>  return parser;
+<a name="line164"></a>};
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Get a DateTimeParse object that could parse date string using given pattern.
+<a name="line169"></a> * @param {string} pattern specifies how the date should be formatted.
+<a name="line170"></a> * @return {goog.locale.DateTimeParse} A goog.locale.DateTimeParse instance
+<a name="line171"></a> *     for the given pattern.
+<a name="line172"></a> * @deprecated Use goog.i18n.DateTimeParse.
+<a name="line173"></a> */
+<a name="line174"></a>goog.locale.getDateTimeParser = function(pattern) {
+<a name="line175"></a>  var parser = new goog.locale.DateTimeParse();
+<a name="line176"></a>  parser.applyPattern(pattern);
+<a name="line177"></a>  return parser;
+<a name="line178"></a>};
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Format the number using given pattern.
+<a name="line183"></a> * @param {string} pattern specifies how number should be formatted.
+<a name="line184"></a> * @param {number} value The number being formatted.
+<a name="line185"></a> * @return {string} The formatted string.
+<a name="line186"></a> * @deprecated Use goog.i18n.NumberFormat.
+<a name="line187"></a> */
+<a name="line188"></a>goog.locale.formatNumber = function(pattern, value) {
+<a name="line189"></a>  var formatter = new goog.locale.NumberFormat();
+<a name="line190"></a>  formatter.applyPattern(pattern);
+<a name="line191"></a>  return formatter.format(value);
+<a name="line192"></a>};
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * Parse the given text using specified pattern to get a number.
+<a name="line197"></a> * @param {string} pattern tells how the text is constructed.
+<a name="line198"></a> * @param {string} text input text being parsed.
+<a name="line199"></a> * @param {Array} opt_pos optional one element array that holds position
+<a name="line200"></a> *     information. It tells from where parse should begin. Upon return, it
+<a name="line201"></a> *     holds parse stop position.
+<a name="line202"></a> * @return {number} Parsed number, NaN if in error.
+<a name="line203"></a> * @deprecated Use goog.i18n.NumberFormat.
+<a name="line204"></a> */
+<a name="line205"></a>goog.locale.parseNumber = function(pattern, text, opt_pos) {
+<a name="line206"></a>  var formatter = new goog.locale.NumberFormat();
+<a name="line207"></a>  formatter.applyPattern(pattern);
+<a name="line208"></a>  return formatter.parse(text, opt_pos);
+<a name="line209"></a>};
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Format the number using predefined pattern.
+<a name="line214"></a> * @param {number} patternType indentifies a predefined pattern to use.
+<a name="line215"></a> * @param {number} value the number being formatted.
+<a name="line216"></a> * @return {string} The formatted string.
+<a name="line217"></a> * @deprecated Use goog.i18n.NumberFormat.
+<a name="line218"></a> */
+<a name="line219"></a>goog.locale.standardFormatNumber = function(patternType, value) {
+<a name="line220"></a>  var formatter = new goog.locale.NumberFormat();
+<a name="line221"></a>  formatter.applyStandardPattern(patternType);
+<a name="line222"></a>  return formatter.format(value);
+<a name="line223"></a>};
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/**
+<a name="line227"></a> * Parse the given text using a predefined pattern to get a number.
+<a name="line228"></a> * @param {number} patternType identifies a predefined pattern to use.
+<a name="line229"></a> * @param {string} text the input text being parsed.
+<a name="line230"></a> * @param {number} opt_pos optional position information, it holds parse start
+<a name="line231"></a> *     position in the beginning. If parsing is successful, this position will
+<a name="line232"></a> *     be updated to the character next to where parsing ends.
+<a name="line233"></a> * @return {number} Parsed number, 0 if in error.
+<a name="line234"></a> * @deprecated Use goog.i18n.NumberFormat.
+<a name="line235"></a> */
+<a name="line236"></a>goog.locale.standardParseNumber = function(patternType, text, opt_pos) {
+<a name="line237"></a>  var formatter = new goog.locale.NumberFormat();
+<a name="line238"></a>  formatter.applyStandardPattern(patternType);
+<a name="line239"></a>  return formatter.parse(text, opt_pos ? [opt_pos] : null);
+<a name="line240"></a>};
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * To obtain a NumberFormat object that can be used for number format/parse.
+<a name="line245"></a> * @param {string} pattern number format pattern string.
+<a name="line246"></a> * @param {string} opt_currencyCode optional international currency code, it
+<a name="line247"></a> *     determines the currency code/symbol should be used in format/parse. If
+<a name="line248"></a> *     not given, the currency code for current locale will be used.
+<a name="line249"></a> * @return {goog.locale.NumberFormat}  A goog.locale.NumberFormat instance
+<a name="line250"></a> *     for the given pattern and currency.
+<a name="line251"></a> * @deprecated Use goog.i18n.NumberFormat.
+<a name="line252"></a> */
+<a name="line253"></a>goog.locale.getNumberFormatter = function(pattern, opt_currencyCode) {
+<a name="line254"></a>  var formatter = new goog.locale.NumberFormat();
+<a name="line255"></a>  formatter.applyPattern(pattern, opt_currencyCode);
+<a name="line256"></a>  return formatter;
+<a name="line257"></a>};
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/**
+<a name="line261"></a> * To obtain a NumberFormat object that can be used for number format/parse from
+<a name="line262"></a> * a predefined pattern type.
+<a name="line263"></a> * @param {number} patternType identifies a predefined number format pattern.
+<a name="line264"></a> * @param {string} opt_currencyCode optional international currency code. It
+<a name="line265"></a> *     determines the currency code/symbol used in format/parse. If not given,
+<a name="line266"></a> *     the currency code for current locale will be used.
+<a name="line267"></a> * @return {goog.locale.NumberFormat} A goog.locale.NumberFormat instance for
+<a name="line268"></a> *     the predefined pattern type and currency code.
+<a name="line269"></a> * @deprecated Use goog.i18n.NumberFormat.
+<a name="line270"></a> */
+<a name="line271"></a>goog.locale.getStandardNumberFormatter = function(patternType,
+<a name="line272"></a>                                                  opt_currencyCode) {
+<a name="line273"></a>  var formatter = new goog.locale.NumberFormat();
+<a name="line274"></a>  formatter.applyStandardPattern(patternType, opt_currencyCode);
+<a name="line275"></a>  return formatter;
+<a name="line276"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!--
+Copyright 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+  <title>goog.ui.Palette &amp; goog.ui.ColorPalette</title>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.array');
+    goog.require('goog.color');
+    goog.require('goog.events');
+    goog.require('goog.object');
+    goog.require('goog.debug.DivConsole');
+    goog.require('goog.debug.Logger');
+    goog.require('goog.debug.LogManager');
+    goog.require('goog.ui.Component.EventType');
+    goog.require('goog.ui.Palette');
+    goog.require('goog.ui.ColorPalette');
+    goog.require('goog.ui.CustomColorPalette');
+  </script>
+  <link rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="css/palette.css">
+  <style>
+    #cp_text, #ccp_text {
+      font: medium monospace;
+    }
+
+    .fakelink {
+      text-decoration: underline;
+      color: blue;
+      cursor: pointer;
+    }
+
+    /* Demo styles */
+    .simple-palette .goog-palette-active {
+      border-color: #edf;
+    }
+
+    .simple-palette .goog-palette-table {
+      border: 1px solid #888;
+      border-collapse: separate;
+    }
+
+    .simple-palette .goog-palette-cell {
+      height: 16px;
+      width: 16px;
+      margin: 0;
+      border: 0;
+      padding: 1px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .simple-palette .goog-palette-cell-hover {
+      border: 1px solid #cc0;
+      padding: 0;
+      background-color: #ff0 !important;
+    }
+
+    .simple-palette .goog-palette-cell-selected {
+      border: 1px solid #008 !important;
+      padding: 0;
+      color: #00f;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>goog.ui.Palette &amp; goog.ui.ColorPalette</h1>
+  <table border="0" cellpadding="0" cellspacing="4" width="100%">
+    <tbody>
+      <tr valign="top">
+        <td width="67%">
+          <fieldset>
+            <legend>Demo of the <strong>goog.ui.Palette</strong>:</legend>
+            <br/>
+            <label id="p1">This is a 3x3 palette with only 8 elements:</label>
+            <label>You selected <span id="p1_value">nothing</span></label>
+            <br/>
+            <i>Note that if you don't specify any dimensions, the palette will auto-size
+              to fit your items in the smallest square.</i><br/>
+          </fieldset>
+          <br/>
+          <br/>
+          <fieldset>
+            <legend>Demo of the <strong>goog.ui.ColorPalette</strong>:</legend>
+            <div id="cp"></div>
+            <p>The color you selected was:
+              <span id="cp_value" class="goog-inline-block goog-palette-colorswatch">
+                &nbsp;
+              </span>
+              <span id="cp_text"></span>
+            </p>
+          </fieldset>
+          <br/>
+          <br/>
+          <fieldset>
+            <legend>Demo of the <strong>goog.ui.CustomColorPalette</strong>:</legend>
+            <div id="ccp"></div>
+            <p>The color you selected was:
+              <span id="ccp_value" class="goog-inline-block goog-palette-colorswatch">
+                &nbsp;
+              </span>
+              <span id="ccp_text"></span>
+            </p>
+          </fieldset>
+        </td>
+        <td width="33%">
+          <!-- Event log. -->
+          <fieldset class="goog-debug-panel">
+            <legend>Event Log</legend>
+            <div id="log"></div>
+          </fieldset>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br/>
+  <div id="perf"></div>
+  <script>
+    var timer = goog.now();
+
+    // Set up a logger.
+    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+    var logger = goog.debug.Logger.getLogger('demo');
+    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    logconsole.setCapturing(true);
+
+    var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
+    logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
+
+    function logEvent(e) {
+      var component = e.target;
+      var caption = (typeof component.getCaption == 'function' &&
+                     component.getCaption()) || component.getId();
+      logger.info('"' + caption + '" dispatched: ' + e.type);
+    }
+
+    var items = [];
+    for (var i = 1; i < 9; i++) {
+      items.push(goog.dom.createTextNode('' + i));
+    }
+    var p1 = new goog.ui.Palette(items);
+    p1.render(goog.dom.$('p1'));
+    goog.dom.classes.add(p1.getElement(), 'simple-palette');
+
+    goog.events.listen(p1, goog.ui.Component.EventType.ACTION,
+        function(e) {
+          var palette = e.target;
+          goog.dom.setTextContent(goog.dom.$('p1_value'),
+              goog.dom.getTextContent(palette.getSelectedItem()));
+        });
+    goog.events.listen(p1, EVENTS, logEvent);
+
+
+
+    // Color Palette Examples
+
+
+    function createColorPaletteDemo(colors, width, caption) {
+      goog.dom.$('cp').appendChild(goog.dom.createDom('p', null, caption));
+      var cp = new goog.ui.ColorPalette(colors);
+      cp.setSize(width); // If we only set the columns, the rows are calculated.
+      cp.render(goog.dom.$('cp'));
+      goog.events.listen(cp, goog.ui.Component.EventType.ACTION, onColorEvent);
+      goog.events.listen(cp, EVENTS, logEvent);
+      return cp;
+    }
+
+    function onColorEvent(e) {
+      var palette = e.target;
+      var color = palette.getSelectedColor();
+      goog.style.setStyle(goog.dom.$('cp_value'), 'background-color',
+          color);
+      goog.dom.$('cp_value').title = color;
+      goog.dom.$('cp_text').innerHTML = goog.color.parse(color).hex;
+    }
+
+    createColorPaletteDemo(['black', 'blue', 'red', 'magenta',
+        'green', 'cyan', 'orange', 'yellow', '#404040', '#808080', '#b0b0b0',
+        'white'], 4, 'This is a 4x3 color palette with named colors:');
+
+
+    createColorPaletteDemo(
+        ['#F00', '#F90', '#FF0', '#3F3', '#0FF', '#00F', '#90F', '#F0F'], 8,
+        'These colors are bright:');
+
+    createColorPaletteDemo([
+        '#EA9999', '#F9CB9C', '#FFE599', '#B6D7A8',
+        '#A2C4C9', '#9FC5E8', '#B4A7D6', '#D5A6BD',
+        '#E06666', '#F6B26B', '#FFD966', '#93C47D',
+        '#76A5AF', '#6FA8DC', '#8E7CC3', '#C27BA0',
+        '#CC0000', '#E69138', '#F1C232', '#6AA84F',
+        '#45818E', '#3D85C6', '#674EA7', '#A64D79'],
+        8, 'This is a lovely pastelle color palette:');
+
+
+    var cpg = createColorPaletteDemo(['#000', '#444', '#666', '#999', '#AAA',
+        '#CCC', '#EEE', '#FFF'], 8,
+        'This is a grey scale color palette:');
+
+    // Hack for the demo, don't try this at home, kids!
+    var cpc = goog.dom.$('cp');
+    cpc.appendChild(document.createTextNode('Change: '));
+    cpc.appendChild(goog.dom.createDom('span',
+        {'class': 'fakelink', 'onclick': function() {
+          cpg.setColors(
+              ['#000', '#400', '#600', '#900', '#A00', '#C00', '#E00', '#F00']);
+        }}, 'Reds'));
+    cpc.appendChild(document.createTextNode(', '));
+    cpc.appendChild(goog.dom.createDom('span',
+        {'class': 'fakelink', 'onclick': function() {
+          cpg.setColors(
+              ['#000', '#040', '#060', '#090', '#0A0', '#0C0', '#0E0', '#0F0']);
+        }}, 'Greens'));
+    cpc.appendChild(document.createTextNode(', '));
+    cpc.appendChild(goog.dom.createDom('span',
+        {'class': 'fakelink', 'onclick': function() {
+          cpg.setColors(
+              ['#000', '#004', '#006', '#009', '#00A', '#00C', '#00E', '#00F']);
+        }}, 'Blues'));
+    cpc.appendChild(document.createTextNode(', '));
+    cpc.appendChild(goog.dom.createDom('span',
+        {'class': 'fakelink', 'onclick': function() {
+          cpg.setColors(
+              ['#000', '#444', '#666', '#999', '#AAA', '#CCC', '#EEE', '#FFF']);
+        }}, 'Greys'));
+
+
+
+    // Custom Color Palette Examples
+
+    var cp = new goog.ui.CustomColorPalette(['#FE1', '#ACD' , '#119']);
+    cp.setSize(6);
+    cp.render(goog.dom.$('ccp'));
+    goog.dom.classes.add(cp.getElement(), 'color-picker');
+    goog.events.listen(cp, goog.ui.Component.EventType.ACTION,  function (e) {
+      var palette = e.target;
+      var color = palette.getSelectedColor();
+      goog.style.setStyle(goog.dom.$('ccp_value'), 'background-color', color);
+      goog.dom.$('ccp_value').title = color;
+      goog.dom.$('ccp_text').innerHTML = goog.color.parse(color).hex;
+    });
+    goog.events.listen(cp, EVENTS, logEvent);
+
+    // Perf and clean up
+
+    goog.dom.setTextContent(goog.dom.$('perf'), (goog.now() - timer) + 'ms');
+
+    goog.events.listen(window, 'unload', function() {
+      goog.events.removeAll();
+    });
+  </script>
+</body>
+</html>

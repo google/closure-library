@@ -1,0 +1,975 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>basicmenu.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_basicmenu.js.html">basicmenu.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A basic menu that accepts a set of items.  The ITEM_EVENT
+<a name="line17"></a> * instead of returning the DOM node returns a reference to the menu item.
+<a name="line18"></a> *
+<a name="line19"></a> * NOTE: This class has been deprecated.  Please use goog.ui.Menu,
+<a name="line20"></a> * goog.ui.PopupMenu, and if you need submenus goog.ui.SubMenu.
+<a name="line21"></a> *
+<a name="line22"></a> *
+<a name="line23"></a> */
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.ui.BasicMenu&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.ui.BasicMenu.Item&#39;);
+<a name="line27"></a>goog.provide(&#39;goog.ui.BasicMenu.Separator&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line30"></a>goog.require(&#39;goog.array&#39;);
+<a name="line31"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line32"></a>goog.require(&#39;goog.dom.a11y&#39;);
+<a name="line33"></a>goog.require(&#39;goog.positioning&#39;);
+<a name="line34"></a>goog.require(&#39;goog.positioning.AnchoredPosition&#39;);
+<a name="line35"></a>goog.require(&#39;goog.positioning.Corner&#39;);
+<a name="line36"></a>goog.require(&#39;goog.ui.AttachableMenu&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.ItemEvent&#39;);
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Class that extends AttachableMenu and creates a simple menu, purely from
+<a name="line42"></a> * code.The ITEM_EVENT instead of returning the DOM node returns a reference the
+<a name="line43"></a> * menu item.
+<a name="line44"></a> *
+<a name="line45"></a> * @param {string} opt_class Optional class for menu element, Default: &#39;menu&#39;.
+<a name="line46"></a> * @param {Element} opt_parent Optional parent element, otherwise it will be
+<a name="line47"></a> *     added to the end of the document body.
+<a name="line48"></a> * @constructor
+<a name="line49"></a> * @extends {goog.ui.AttachableMenu}
+<a name="line50"></a> */
+<a name="line51"></a>goog.ui.BasicMenu = function(opt_class, opt_parent) {
+<a name="line52"></a>  var cls = opt_class || &#39;menu&#39;;
+<a name="line53"></a>  var parent = opt_parent || goog.dom.getDocument().body;
+<a name="line54"></a>
+<a name="line55"></a>  /**
+<a name="line56"></a>   * Menu element
+<a name="line57"></a>   * @type {Element}
+<a name="line58"></a>   * @private
+<a name="line59"></a>   */
+<a name="line60"></a>  this.element_ = goog.dom.createDom(&#39;div&#39;, {&#39;tabIndex&#39;: 0, &#39;class&#39;: cls});
+<a name="line61"></a>
+<a name="line62"></a>  goog.dom.a11y.setRole(this.element_, &#39;menu&#39;);
+<a name="line63"></a>  goog.dom.a11y.setState(this.element_, &#39;haspopup&#39;, true);
+<a name="line64"></a>
+<a name="line65"></a>  parent.appendChild(this.element_);
+<a name="line66"></a>  goog.ui.AttachableMenu.call(this, this.element_);
+<a name="line67"></a>
+<a name="line68"></a>  /**
+<a name="line69"></a>   * Parent menu
+<a name="line70"></a>   * @type {goog.ui.BasicMenu}
+<a name="line71"></a>   * @private
+<a name="line72"></a>   */
+<a name="line73"></a>  this.parentMenu_ = null;
+<a name="line74"></a>
+<a name="line75"></a>  /**
+<a name="line76"></a>   * Array of menu items
+<a name="line77"></a>   * @type {Array}
+<a name="line78"></a>   * @private
+<a name="line79"></a>   */
+<a name="line80"></a>  this.items_ = [];
+<a name="line81"></a>
+<a name="line82"></a>  /**
+<a name="line83"></a>   * The active item.
+<a name="line84"></a>   * @type {goog.ui.BasicMenu.Item}
+<a name="line85"></a>   * @private
+<a name="line86"></a>   */
+<a name="line87"></a>  this.activeItem_;
+<a name="line88"></a>};
+<a name="line89"></a>goog.inherits(goog.ui.BasicMenu, goog.ui.AttachableMenu);
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * Key for the event used to trigger the menu
+<a name="line94"></a> * @type {string?}
+<a name="line95"></a> * @private
+<a name="line96"></a> */
+<a name="line97"></a>goog.ui.BasicMenu.prototype.evtKey_ = null;
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Key for the window resize event listener
+<a name="line102"></a> * @type {string?}
+<a name="line103"></a> * @private
+<a name="line104"></a> */
+<a name="line105"></a>goog.ui.BasicMenu.prototype.resizeEvtKey_ = null;
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Z-index used for top level menu.
+<a name="line110"></a> * @type {number}
+<a name="line111"></a> * @private
+<a name="line112"></a> */
+<a name="line113"></a>goog.ui.BasicMenu.prototype.zIndex_ = 10;
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * A time in ms used to delay opening/closing submenus when the selection
+<a name="line118"></a> * changes.
+<a name="line119"></a> *
+<a name="line120"></a> * @type {number}
+<a name="line121"></a> * @private
+<a name="line122"></a> */
+<a name="line123"></a>goog.ui.BasicMenu.SUBMENU_ACTIVATION_DELAY_MS_ = 300;
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * @return {number} The z-index.
+<a name="line128"></a> */
+<a name="line129"></a>goog.ui.BasicMenu.prototype.getZIndex = function() {
+<a name="line130"></a>  return this.zIndex_;
+<a name="line131"></a>};
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Sets the z-index. The change will take effect the next time
+<a name="line135"></a> * setVisible(true) is called.
+<a name="line136"></a> *
+<a name="line137"></a> * @param {number} zIndex The new z-index.
+<a name="line138"></a> */
+<a name="line139"></a>goog.ui.BasicMenu.prototype.setZIndex = function(zIndex) {
+<a name="line140"></a>  this.zIndex_ = zIndex;
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>/**
+<a name="line144"></a> * Add a menu item.
+<a name="line145"></a> *
+<a name="line146"></a> * @param {goog.ui.BasicMenu.Item} item Menu Item.
+<a name="line147"></a> */
+<a name="line148"></a>goog.ui.BasicMenu.prototype.add = function(item) {
+<a name="line149"></a>  var el = this.getElement();
+<a name="line150"></a>  if (!el) {
+<a name="line151"></a>    throw Error(&#39;setElement() called before create()&#39;)
+<a name="line152"></a>  }
+<a name="line153"></a>  if (item.getMenu()) {
+<a name="line154"></a>    throw Error(&#39;Menu item already added to a menu&#39;)
+<a name="line155"></a>  }
+<a name="line156"></a>
+<a name="line157"></a>  item.setMenu_(this);
+<a name="line158"></a>  this.items_.push(item);
+<a name="line159"></a>  el.appendChild(item.create());
+<a name="line160"></a>};
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * Add a menu item at a specific index.
+<a name="line165"></a> * @param {goog.ui.BasicMenu.Item} item Menu Item.
+<a name="line166"></a> * @param {number} index The index to insert at.
+<a name="line167"></a> */
+<a name="line168"></a>goog.ui.BasicMenu.prototype.insertAt = function(item, index) {
+<a name="line169"></a>  var el = this.getElement();
+<a name="line170"></a>  if (!el) {
+<a name="line171"></a>    throw Error(&#39;setElement() called before create()&#39;)
+<a name="line172"></a>  }
+<a name="line173"></a>  if (item.getMenu()) {
+<a name="line174"></a>    throw Error(&#39;Menu item already added to a menu&#39;)
+<a name="line175"></a>  }
+<a name="line176"></a>
+<a name="line177"></a>  item.setMenu_(this);
+<a name="line178"></a>  goog.array.insertAt(this.items_, item, index);
+<a name="line179"></a>  el.insertBefore(item.create(), el.childNodes[index]);
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Remove a menu item.
+<a name="line185"></a> * @param {goog.ui.BasicMenu.Item} item Menu Item.
+<a name="line186"></a> */
+<a name="line187"></a>goog.ui.BasicMenu.prototype.remove = function(item) {
+<a name="line188"></a>  item.remove();
+<a name="line189"></a>  item.setMenu_(null);
+<a name="line190"></a>  goog.array.remove(this.items_, item);
+<a name="line191"></a>};
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>/**
+<a name="line195"></a> * Remove a menu item from a particular index.
+<a name="line196"></a> * @param {number} index Index of menu item to remove.
+<a name="line197"></a> */
+<a name="line198"></a>goog.ui.BasicMenu.prototype.removeAt = function(index) {
+<a name="line199"></a>  this.remove(this.items_[index]);
+<a name="line200"></a>};
+<a name="line201"></a>
+<a name="line202"></a>
+<a name="line203"></a>/**
+<a name="line204"></a> * Sets focus to the menu&#39;s base element.
+<a name="line205"></a> */
+<a name="line206"></a>goog.ui.BasicMenu.prototype.focus = function() {
+<a name="line207"></a>  this.element_.focus();
+<a name="line208"></a>};
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/**
+<a name="line212"></a> * Sets menu&#39;s parent menu in case it&#39;s a submenu.
+<a name="line213"></a> * @param {goog.ui.BasicMenu} parent Parent menu.
+<a name="line214"></a> * @private
+<a name="line215"></a> */
+<a name="line216"></a>goog.ui.BasicMenu.prototype.setParentMenu_ = function(parent) {
+<a name="line217"></a>  this.parentMenu_ = parent;
+<a name="line218"></a>  this.setParentEventTarget(parent);
+<a name="line219"></a>};
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * @return {goog.ui.BasicMenu} The menu&#39;s parent menu in case it&#39;s a submenu.
+<a name="line224"></a> */
+<a name="line225"></a>goog.ui.BasicMenu.prototype.getParentMenu = function() {
+<a name="line226"></a>  return this.parentMenu_;
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Anchor the menu position to an element, and attach a click event.
+<a name="line232"></a> * @param {Element} el Element to anchor menu to.
+<a name="line233"></a> * @param {goog.positioning.Corner} opt_pos Corner: Default Bottom-left.
+<a name="line234"></a> * @param {goog.events.EventType} opt_eventType Event that triggers menu.
+<a name="line235"></a> *     Default click.
+<a name="line236"></a> */
+<a name="line237"></a>goog.ui.BasicMenu.prototype.setAnchorElement = function(el, opt_pos,
+<a name="line238"></a>                                                        opt_eventType) {
+<a name="line239"></a>  if (this.evtKey_) {
+<a name="line240"></a>    goog.events.unlistenByKey(this.evtKey_);
+<a name="line241"></a>  }
+<a name="line242"></a>
+<a name="line243"></a>  // Reset properties related to showing/hiding the menu as their state is only
+<a name="line244"></a>  // applicable when bound to the anchor element original triggering the menu.
+<a name="line245"></a>  if (this.anchorElement_ != el) {
+<a name="line246"></a>    this.clickToClose_ = false;
+<a name="line247"></a>    this.lastHideTime_ = -1;
+<a name="line248"></a>  }
+<a name="line249"></a>
+<a name="line250"></a>  var eventType = opt_eventType || goog.events.EventType.CLICK;
+<a name="line251"></a>  this.evtKey_ = goog.events.listen(el, eventType, this.openMenu_, false, this);
+<a name="line252"></a>  this.resizeEvtKey_ = goog.events.listen(window,
+<a name="line253"></a>      goog.events.EventType.RESIZE, this.onResize_, false, this);
+<a name="line254"></a>  this.setPosition(new goog.positioning.AnchoredPosition(el,
+<a name="line255"></a>      goog.isDef(opt_pos) ? opt_pos : goog.positioning.Corner.BOTTOM_START));
+<a name="line256"></a>  this.anchorElement_ = el;
+<a name="line257"></a>};
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/** @inheritDoc */
+<a name="line261"></a>goog.ui.BasicMenu.prototype.disposeInternal = function() {
+<a name="line262"></a>  for (var i = 0; i &lt; this.items_.length; i++) {
+<a name="line263"></a>    this.items_[i].dispose();
+<a name="line264"></a>  }
+<a name="line265"></a>  goog.events.unlistenByKey(this.evtKey_);
+<a name="line266"></a>  goog.events.unlistenByKey(this.resizeEvtKey_);
+<a name="line267"></a>  goog.dom.removeNode(this.element_);
+<a name="line268"></a>  delete this.element_;
+<a name="line269"></a>  this.anchorElement_ = null;
+<a name="line270"></a>  goog.ui.BasicMenu.superClass_.disposeInternal.call(this);
+<a name="line271"></a>};
+<a name="line272"></a>
+<a name="line273"></a>
+<a name="line274"></a>/**
+<a name="line275"></a> * Sets whether the popup should be visible.
+<a name="line276"></a> * @param {boolean} visible Show menu?.
+<a name="line277"></a>*  @param {boolean} opt_bubble Bubble to parent menu?.
+<a name="line278"></a> */
+<a name="line279"></a>goog.ui.BasicMenu.prototype.setVisible = function(visible, opt_bubble) {
+<a name="line280"></a>  // Ignore setVisible(true) if already visible
+<a name="line281"></a>  if (this.isOrWasRecentlyVisible() &amp;&amp; visible) {
+<a name="line282"></a>    return;
+<a name="line283"></a>  }
+<a name="line284"></a>
+<a name="line285"></a>  if (visible == false) {
+<a name="line286"></a>
+<a name="line287"></a>    // Close submenus recursively. goog.ui.BasicMenu.Item.closeSubmenu calls
+<a name="line288"></a>    // goog.ui.BasicMenu.setVisible(false) for the submenu.
+<a name="line289"></a>    if (this.activeItem_) {
+<a name="line290"></a>      this.activeItem_.closeSubmenu();
+<a name="line291"></a>      goog.ui.AttachableMenu.prototype.setSelectedItem.call(this, null);
+<a name="line292"></a>    }
+<a name="line293"></a>
+<a name="line294"></a>    // Set focus to parent for submenus.
+<a name="line295"></a>    if (this.parentMenu_ &amp;&amp; !opt_bubble) {
+<a name="line296"></a>      this.parentMenu_.focus();
+<a name="line297"></a>    }
+<a name="line298"></a>  }
+<a name="line299"></a>  else {
+<a name="line300"></a>    if (this.parentMenu_) {
+<a name="line301"></a>      this.zIndex_ = this.parentMenu_.getZIndex() + 1;
+<a name="line302"></a>    }
+<a name="line303"></a>    this.element_.style.zIndex = this.zIndex_;
+<a name="line304"></a>  }
+<a name="line305"></a>
+<a name="line306"></a>  if (opt_bubble &amp;&amp; this.parentMenu_) {
+<a name="line307"></a>    this.parentMenu_.setVisible(visible, opt_bubble);
+<a name="line308"></a>  }
+<a name="line309"></a>
+<a name="line310"></a>  // Clear activation timer
+<a name="line311"></a>  if (this.activationTimer_) {
+<a name="line312"></a>    window.clearTimeout(this.activationTimer_);
+<a name="line313"></a>    this.activationTimer_ = null;
+<a name="line314"></a>  }
+<a name="line315"></a>
+<a name="line316"></a>  this.activeItem_ = null;
+<a name="line317"></a>  goog.ui.PopupBase.prototype.setVisible.call(this, visible);
+<a name="line318"></a>};
+<a name="line319"></a>
+<a name="line320"></a>
+<a name="line321"></a>/**
+<a name="line322"></a> * Select menu item by index.
+<a name="line323"></a> * @param {number} index Index of item to select, zero based.
+<a name="line324"></a> */
+<a name="line325"></a>goog.ui.BasicMenu.prototype.setSelectedIndex = function(index) {
+<a name="line326"></a>  this.setSelectedItem(index == -1 ? null : this.element_.childNodes[index]);
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Select menu item by element reference and active it (open/close submenus)
+<a name="line332"></a> * with a slight delay.
+<a name="line333"></a> * @param {Element} el Element for item to select.
+<a name="line334"></a> * @param {boolean} opt_keyEvent Was item selected using keyboard? In that case
+<a name="line335"></a> *     open submenus are closed immediately and new submenus are not opened
+<a name="line336"></a> *     automatically.
+<a name="line337"></a> * @private
+<a name="line338"></a> */
+<a name="line339"></a>goog.ui.BasicMenu.prototype.itemSelectionHandler_ = function(el, opt_keyEvent) {
+<a name="line340"></a>  // Highlight menu item
+<a name="line341"></a>  if (el || !this.activeItem_ || !this.activeItem_.hasOpenSubmenu()) {
+<a name="line342"></a>    goog.ui.AttachableMenu.prototype.setSelectedItem.call(this, el);
+<a name="line343"></a>  }
+<a name="line344"></a>
+<a name="line345"></a>  var item = el ? this.getItemForElement_(el) : null;
+<a name="line346"></a>
+<a name="line347"></a>  if (item &amp;&amp; item != this.activeItem_) {
+<a name="line348"></a>
+<a name="line349"></a>    if (opt_keyEvent &amp;&amp; this.activeItem_) {
+<a name="line350"></a>      this.activeItem_.closeSubmenu();
+<a name="line351"></a>      this.activeItem_ = null;
+<a name="line352"></a>    }
+<a name="line353"></a>
+<a name="line354"></a>    // Clear previous timer, if any
+<a name="line355"></a>    if (this.activationTimer_) {
+<a name="line356"></a>      window.clearTimeout(this.activationTimer_);
+<a name="line357"></a>      this.activationTimer_ = null;
+<a name="line358"></a>    }
+<a name="line359"></a>
+<a name="line360"></a>    // Call selectItem_ with delay
+<a name="line361"></a>    if (!opt_keyEvent) {
+<a name="line362"></a>      this.activationTimer_ = window.setTimeout(
+<a name="line363"></a>          goog.bind(this.selectItem_, this, item),
+<a name="line364"></a>          goog.ui.BasicMenu.SUBMENU_ACTIVATION_DELAY_MS_);
+<a name="line365"></a>    }
+<a name="line366"></a>
+<a name="line367"></a>    // Select anchor element in parent menu (to prevent submenu from closing).
+<a name="line368"></a>    if (this.parentMenu_) {
+<a name="line369"></a>      this.parentMenu_.setSelectedItem(this.anchorElement_);
+<a name="line370"></a>      this.element_.focus();
+<a name="line371"></a>    }
+<a name="line372"></a>  }
+<a name="line373"></a>};
+<a name="line374"></a>
+<a name="line375"></a>
+<a name="line376"></a>/**
+<a name="line377"></a> * Select menu item by element reference and activate it immediately.
+<a name="line378"></a> * @param {Element|goog.ui.BasicMenu.Item} arg Element Item to select or element
+<a name="line379"></a> *     for it.
+<a name="line380"></a> */
+<a name="line381"></a>goog.ui.BasicMenu.prototype.setSelectedItem = function(arg) {
+<a name="line382"></a>  var el, item;
+<a name="line383"></a>  if (!arg) {
+<a name="line384"></a>    el = null;
+<a name="line385"></a>    item = null;
+<a name="line386"></a>  } else if (arg instanceof goog.ui.BasicMenu.Item) {
+<a name="line387"></a>    item = arg;
+<a name="line388"></a>    el = item.element_;
+<a name="line389"></a>  } else {
+<a name="line390"></a>    el = arg;
+<a name="line391"></a>    item = this.getItemForElement_(el);
+<a name="line392"></a>  }
+<a name="line393"></a>
+<a name="line394"></a>  if (el || !this.activeItem_ || !this.activeItem_.hasOpenSubmenu()) {
+<a name="line395"></a>    goog.ui.AttachableMenu.prototype.setSelectedItem.call(this, el);
+<a name="line396"></a>  }
+<a name="line397"></a>
+<a name="line398"></a>  if (item == this.activeItem_) {
+<a name="line399"></a>    return;
+<a name="line400"></a>  }
+<a name="line401"></a>
+<a name="line402"></a>  if (this.activeItem_ &amp;&amp; el) {
+<a name="line403"></a>    this.activeItem_.closeSubmenu();
+<a name="line404"></a>  }
+<a name="line405"></a>
+<a name="line406"></a>  if (el) {
+<a name="line407"></a>  // TODO: var item declared earlier
+<a name="line408"></a>    item = this.getItemForElement_(el);
+<a name="line409"></a>    if (item.hasSubmenu()) {
+<a name="line410"></a>      item.openSubmenu();
+<a name="line411"></a>      item.getSubmenu().focus();
+<a name="line412"></a>    }
+<a name="line413"></a>    this.activeItem_ = item;
+<a name="line414"></a>  }
+<a name="line415"></a>};
+<a name="line416"></a>
+<a name="line417"></a>
+<a name="line418"></a>/**
+<a name="line419"></a> * @return {goog.ui.BasicMenu.Item} The selected item.
+<a name="line420"></a> */
+<a name="line421"></a>goog.ui.BasicMenu.prototype.getSelectedItem = function() {
+<a name="line422"></a>  return this.selectedElement_ ? this.items_[goog.array.indexOf(
+<a name="line423"></a>      this.element_.childNodes, this.selectedElement_)] : null;
+<a name="line424"></a>};
+<a name="line425"></a>
+<a name="line426"></a>
+<a name="line427"></a>/**
+<a name="line428"></a> * Select menu item, triggered by a delayed call from itemSelectionHandler_.
+<a name="line429"></a> * Opens submenu associated with selected/active item and/or closes any other
+<a name="line430"></a> * open submenus.
+<a name="line431"></a> * @param {goog.ui.BasicMenu.Item} item Menu item to select.
+<a name="line432"></a> * @private
+<a name="line433"></a> */
+<a name="line434"></a>goog.ui.BasicMenu.prototype.selectItem_ = function(item) {
+<a name="line435"></a>  // Clear timer
+<a name="line436"></a>  if (this.activationTimer_) {
+<a name="line437"></a>    window.clearTimeout(this.activationTimer_);
+<a name="line438"></a>    this.activationTimer_ = null;
+<a name="line439"></a>  }
+<a name="line440"></a>
+<a name="line441"></a>  var selectedItem = this.getItemForElement_(this.selectedElement_);
+<a name="line442"></a>  if (selectedItem != item) {
+<a name="line443"></a>    return;
+<a name="line444"></a>  }
+<a name="line445"></a>
+<a name="line446"></a>  if (this.activeItem_ &amp;&amp; item) {
+<a name="line447"></a>    this.activeItem_.closeSubmenu();
+<a name="line448"></a>  }
+<a name="line449"></a>
+<a name="line450"></a>  if (item.hasSubmenu()) {
+<a name="line451"></a>    item.openSubmenu();
+<a name="line452"></a>    item.getSubmenu().focus();
+<a name="line453"></a>  }
+<a name="line454"></a>  else {
+<a name="line455"></a>    this.element_.focus();
+<a name="line456"></a>  }
+<a name="line457"></a>
+<a name="line458"></a>  this.activeItem_ = item;
+<a name="line459"></a>};
+<a name="line460"></a>
+<a name="line461"></a>
+<a name="line462"></a>/**
+<a name="line463"></a> * Activates a menu item, opens submenu or triggers the select event and closes
+<a name="line464"></a> * the menu if no submenu is available for item.
+<a name="line465"></a> * @param {Element} el Element for item to activate.
+<a name="line466"></a> * @private
+<a name="line467"></a> */
+<a name="line468"></a>goog.ui.BasicMenu.prototype.activateItem_ = function(el) {
+<a name="line469"></a>  var item = this.getItemForElement_(el);
+<a name="line470"></a>
+<a name="line471"></a>  if (item.hasSubmenu()) {
+<a name="line472"></a>    item.openSubmenu();
+<a name="line473"></a>    var submenu = item.getSubmenu();
+<a name="line474"></a>    submenu.focus();
+<a name="line475"></a>    this.activeItem_ = item;
+<a name="line476"></a>  }
+<a name="line477"></a>  else {
+<a name="line478"></a>    this.setVisible(false, true);
+<a name="line479"></a>    this.dispatchEvent(new goog.ui.ItemEvent(
+<a name="line480"></a>        goog.ui.MenuBase.Events.ITEM_ACTION, this, item));
+<a name="line481"></a>  }
+<a name="line482"></a>};
+<a name="line483"></a>
+<a name="line484"></a>
+<a name="line485"></a>/**
+<a name="line486"></a> * Anchor triggered, open menu unless it was just closed by the mousedown part
+<a name="line487"></a> * of the click.
+<a name="line488"></a> *
+<a name="line489"></a> * @private
+<a name="line490"></a> */
+<a name="line491"></a>goog.ui.BasicMenu.prototype.openMenu_ = function() {
+<a name="line492"></a>  if (!this.clickToClose_) {
+<a name="line493"></a>    this.setVisible(true);
+<a name="line494"></a>  }
+<a name="line495"></a>  this.clickToClose_ = false;
+<a name="line496"></a>};
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * Returns whether the specified element is contained inside the menu, including
+<a name="line501"></a> * open submenus.
+<a name="line502"></a> * @param {Element} el Element to check.
+<a name="line503"></a> * @return {boolean} Whether the specified element is contained inside the menu,
+<a name="line504"></a> *     including open submenus.
+<a name="line505"></a> * @private
+<a name="line506"></a> */
+<a name="line507"></a>goog.ui.BasicMenu.prototype.containsElement_ = function(el) {
+<a name="line508"></a>  if (goog.dom.contains(this.element_, el)) {
+<a name="line509"></a>    return true;
+<a name="line510"></a>  }
+<a name="line511"></a>
+<a name="line512"></a>  if (this.activeItem_ &amp;&amp; this.activeItem_.hasSubmenu()) {
+<a name="line513"></a>    return this.activeItem_.getSubmenu().containsElement_(el);
+<a name="line514"></a>  }
+<a name="line515"></a>
+<a name="line516"></a>  return false;
+<a name="line517"></a>};
+<a name="line518"></a>
+<a name="line519"></a>
+<a name="line520"></a>/**
+<a name="line521"></a> * Mouse down handler for the document on capture phase. Hides the menu.
+<a name="line522"></a> * @param {goog.events.Event} e The event object.
+<a name="line523"></a> * @private
+<a name="line524"></a> */
+<a name="line525"></a>goog.ui.BasicMenu.prototype.onDocumentMouseDown_ = function(e) {
+<a name="line526"></a>  // Mousedown on anchor element, set clickToClose_ to true to prevent the
+<a name="line527"></a>  // mouseup event from opening the menu.
+<a name="line528"></a>  if (this.anchorElement_ == e.target ||
+<a name="line529"></a>      goog.dom.contains(this.anchorElement_, e.target)) {
+<a name="line530"></a>    this.clickToClose_ = true;
+<a name="line531"></a>  }
+<a name="line532"></a>
+<a name="line533"></a>  // Mousedown outside menu, close it.
+<a name="line534"></a>  var rootMenu = this;
+<a name="line535"></a>  while (rootMenu.parentMenu_) {
+<a name="line536"></a>    rootMenu = rootMenu.parentMenu_;
+<a name="line537"></a>  }
+<a name="line538"></a>  if (!rootMenu.containsElement_(/** @type {Element} */ (e.target))) {
+<a name="line539"></a>    this.hide_();
+<a name="line540"></a>  }
+<a name="line541"></a>};
+<a name="line542"></a>
+<a name="line543"></a>
+<a name="line544"></a>/**
+<a name="line545"></a> * Mouse over handler for the menu.
+<a name="line546"></a> * @param {goog.events.Event} e The event object.
+<a name="line547"></a> * @protected
+<a name="line548"></a> */
+<a name="line549"></a>goog.ui.BasicMenu.prototype.onMouseOver = function(e) {
+<a name="line550"></a>  var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
+<a name="line551"></a>  if (eltItem == null) {
+<a name="line552"></a>    return;
+<a name="line553"></a>  }
+<a name="line554"></a>
+<a name="line555"></a>  this.itemSelectionHandler_(eltItem);
+<a name="line556"></a>};
+<a name="line557"></a>
+<a name="line558"></a>
+<a name="line559"></a>/**
+<a name="line560"></a> * Mouse out handler for the menu.
+<a name="line561"></a> * @param {goog.events.Event} e The event object.
+<a name="line562"></a> * @protected
+<a name="line563"></a> */
+<a name="line564"></a>goog.ui.BasicMenu.prototype.onMouseOut = function(e) {
+<a name="line565"></a>  var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
+<a name="line566"></a>  if (eltItem == null) {
+<a name="line567"></a>    return;
+<a name="line568"></a>  }
+<a name="line569"></a>
+<a name="line570"></a>  this.itemSelectionHandler_(null);
+<a name="line571"></a>};
+<a name="line572"></a>
+<a name="line573"></a>
+<a name="line574"></a>/**
+<a name="line575"></a> * Overloaded document focus handler. Prevents the default action which is to
+<a name="line576"></a> * close the menu on focus change, which is not desirable for hierarchical
+<a name="line577"></a> * menus.
+<a name="line578"></a> * @param {goog.events.Event} e The event object.
+<a name="line579"></a> * @private
+<a name="line580"></a> */
+<a name="line581"></a>goog.ui.BasicMenu.prototype.onDocumentFocus_ = function(e) {
+<a name="line582"></a>
+<a name="line583"></a>};
+<a name="line584"></a>
+<a name="line585"></a>
+<a name="line586"></a>/**
+<a name="line587"></a> * Mouse up handler for the menu.
+<a name="line588"></a> * @param {goog.events.Event} e The event object.
+<a name="line589"></a> * @protected
+<a name="line590"></a> */
+<a name="line591"></a>goog.ui.BasicMenu.prototype.onMouseUp = function(e) {
+<a name="line592"></a>  var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
+<a name="line593"></a>  if (eltItem != null) {
+<a name="line594"></a>    this.activateItem_(eltItem);
+<a name="line595"></a>  }
+<a name="line596"></a>};
+<a name="line597"></a>
+<a name="line598"></a>
+<a name="line599"></a>/**
+<a name="line600"></a> * Window resize handler.
+<a name="line601"></a> * @private
+<a name="line602"></a> */
+<a name="line603"></a>goog.ui.BasicMenu.prototype.onResize_ = function() {
+<a name="line604"></a>  if (!this.isDisposed() &amp;&amp; this.isVisible()){
+<a name="line605"></a>    this.reposition();
+<a name="line606"></a>  }
+<a name="line607"></a>};
+<a name="line608"></a>
+<a name="line609"></a>
+<a name="line610"></a>/**
+<a name="line611"></a> * Key down handler for the menu.
+<a name="line612"></a> * @param {goog.events.KeyEvent} e The event object.
+<a name="line613"></a> * @protected
+<a name="line614"></a> */
+<a name="line615"></a>goog.ui.BasicMenu.prototype.onKeyDown = function(e) {
+<a name="line616"></a>  var handled = false;
+<a name="line617"></a>
+<a name="line618"></a>  switch (e.keyCode) {
+<a name="line619"></a>    case 37: // Left
+<a name="line620"></a>      if (this.parentMenu_) {
+<a name="line621"></a>        this.setVisible(false); // setVisible(false) calls focus on the parent
+<a name="line622"></a>      }
+<a name="line623"></a>      handled = true;
+<a name="line624"></a>      break;
+<a name="line625"></a>    case 39: // Right
+<a name="line626"></a>      var item = this.getItemForElement_(this.selectedElement_);
+<a name="line627"></a>     if (this.selectedElement_ &amp;&amp; item.hasSubmenu()) {
+<a name="line628"></a>       this.activateItem_(this.selectedElement_);
+<a name="line629"></a>       item.getSubmenu().setSelectedIndex(0);
+<a name="line630"></a>      }
+<a name="line631"></a>      handled = true;
+<a name="line632"></a>      break;
+<a name="line633"></a>    case 40: // Down
+<a name="line634"></a>      this.itemSelectionHandler_(this.getNextPrevItem(false), true);
+<a name="line635"></a>      handled = true;
+<a name="line636"></a>      break;
+<a name="line637"></a>    case 38: // Up
+<a name="line638"></a>      this.itemSelectionHandler_(this.getNextPrevItem(true), true);
+<a name="line639"></a>      handled = true;
+<a name="line640"></a>      break;
+<a name="line641"></a>    case 13: // Enter
+<a name="line642"></a>      if (this.selectedElement_) {
+<a name="line643"></a>        this.activateItem_(this.selectedElement_);
+<a name="line644"></a>      }
+<a name="line645"></a>      handled = true;
+<a name="line646"></a>      break;
+<a name="line647"></a>    case 27: // Esc
+<a name="line648"></a>      this.setVisible(false);
+<a name="line649"></a>      handled = true;
+<a name="line650"></a>      break;
+<a name="line651"></a>  }
+<a name="line652"></a>
+<a name="line653"></a>  // Prevent the browser&#39;s default keydown behaviour when the menu is open,
+<a name="line654"></a>  // e.g. keyboard scrolling
+<a name="line655"></a>  if (handled) {
+<a name="line656"></a>    e.preventDefault();
+<a name="line657"></a>  }
+<a name="line658"></a>};
+<a name="line659"></a>
+<a name="line660"></a>
+<a name="line661"></a>/**
+<a name="line662"></a> * Called after the menu is shown.
+<a name="line663"></a> * @private
+<a name="line664"></a> */
+<a name="line665"></a>goog.ui.BasicMenu.prototype.onShow_ = function() {
+<a name="line666"></a>  goog.ui.BasicMenu.superClass_.onShow_.call(this);
+<a name="line667"></a>  this.setSelectedItem(null);
+<a name="line668"></a>
+<a name="line669"></a>  var rtl = goog.style.isRightToLeft(this.element_);
+<a name="line670"></a>  if (rtl) {
+<a name="line671"></a>    goog.dom.classes.add(this.element_, &#39;goog-rtl&#39;);
+<a name="line672"></a>  } else {
+<a name="line673"></a>    goog.dom.classes.remove(this.element_, &#39;goog-rtl&#39;);
+<a name="line674"></a>  }
+<a name="line675"></a>
+<a name="line676"></a>  if (!this.parentMenu_) {
+<a name="line677"></a>    this.element_.focus();
+<a name="line678"></a>  }
+<a name="line679"></a>};
+<a name="line680"></a>
+<a name="line681"></a>
+<a name="line682"></a>/**
+<a name="line683"></a> * Returns the menu item a given element is associated with.
+<a name="line684"></a> * @param {Element} el Element.
+<a name="line685"></a> * @return {goog.ui.BasicMenu.Item} The menu item a given element is associated
+<a name="line686"></a> *     with.
+<a name="line687"></a> * @private
+<a name="line688"></a> */
+<a name="line689"></a>goog.ui.BasicMenu.prototype.getItemForElement_ = function(el) {
+<a name="line690"></a>  var index = -1;
+<a name="line691"></a>  for (var node = el; node; node = goog.dom.getPreviousElementSibling(node)) {
+<a name="line692"></a>    index++;
+<a name="line693"></a>  }
+<a name="line694"></a>  return index == -1 ? null : this.items_[index];
+<a name="line695"></a>};
+<a name="line696"></a>
+<a name="line697"></a>
+<a name="line698"></a>
+<a name="line699"></a>/**
+<a name="line700"></a> * A menu item
+<a name="line701"></a> *
+<a name="line702"></a> * @param {?string} caption Html caption that gets shown in the menu.
+<a name="line703"></a> * @param {Object} opt_value The value that gets returned in the ItemEvent.
+<a name="line704"></a> * @param {goog.ui.BasicMenu} opt_submenu Optional menu that this item is the
+<a name="line705"></a> *    anchor for.
+<a name="line706"></a> * @constructor
+<a name="line707"></a> * @extends {goog.Disposable}
+<a name="line708"></a> */
+<a name="line709"></a>goog.ui.BasicMenu.Item = function(caption, opt_value, opt_submenu) {
+<a name="line710"></a>  goog.Disposable.call(this);
+<a name="line711"></a>
+<a name="line712"></a>  /**
+<a name="line713"></a>   * HTML Caption that gets displayed in the menu
+<a name="line714"></a>   * @type {string}
+<a name="line715"></a>   * @private
+<a name="line716"></a>   */
+<a name="line717"></a>  this.caption_ = String(caption);
+<a name="line718"></a>
+<a name="line719"></a>  /**
+<a name="line720"></a>   * Value associated with the menu option.
+<a name="line721"></a>   * @type {Object}
+<a name="line722"></a>   * @private
+<a name="line723"></a>   */
+<a name="line724"></a>  this.value_ = opt_value || caption;
+<a name="line725"></a>
+<a name="line726"></a>  /**
+<a name="line727"></a>   * Reference to the sub menu that this item is the anchor for.
+<a name="line728"></a>   * @type {goog.ui.BasicMenu}
+<a name="line729"></a>   * @private
+<a name="line730"></a>   */
+<a name="line731"></a>  this.submenu_ = opt_submenu || null;
+<a name="line732"></a>
+<a name="line733"></a>  /**
+<a name="line734"></a>   * Reference to the menu that this item is attached to.
+<a name="line735"></a>   * @type {goog.ui.BasicMenu}
+<a name="line736"></a>   * @private
+<a name="line737"></a>   */
+<a name="line738"></a>  this.menu_ = null;
+<a name="line739"></a>
+<a name="line740"></a>  /**
+<a name="line741"></a>   * Menu item element
+<a name="line742"></a>   * @type {Element}
+<a name="line743"></a>   * @private
+<a name="line744"></a>   */
+<a name="line745"></a>  this.element_ = null;
+<a name="line746"></a>};
+<a name="line747"></a>goog.inherits(goog.ui.BasicMenu.Item, goog.Disposable);
+<a name="line748"></a>
+<a name="line749"></a>
+<a name="line750"></a>/**
+<a name="line751"></a> * @return {string} The caption.
+<a name="line752"></a> */
+<a name="line753"></a>goog.ui.BasicMenu.Item.prototype.getCaption = function() {
+<a name="line754"></a>  return this.caption_;
+<a name="line755"></a>};
+<a name="line756"></a>
+<a name="line757"></a>
+<a name="line758"></a>/**
+<a name="line759"></a> * @return {Object} The value associated with menu item.
+<a name="line760"></a> */
+<a name="line761"></a>goog.ui.BasicMenu.Item.prototype.getValue = function() {
+<a name="line762"></a>  return this.value_;
+<a name="line763"></a>};
+<a name="line764"></a>
+<a name="line765"></a>
+<a name="line766"></a>/**
+<a name="line767"></a> * Updates caption.
+<a name="line768"></a> * @param {string} caption Desired caption.
+<a name="line769"></a> */
+<a name="line770"></a>goog.ui.BasicMenu.Item.prototype.setCaption = function(caption) {
+<a name="line771"></a>  this.caption_ = caption;
+<a name="line772"></a>  if (this.element_) {
+<a name="line773"></a>    this.element_.firstChild.nodeValue = caption;
+<a name="line774"></a>  }
+<a name="line775"></a>};
+<a name="line776"></a>
+<a name="line777"></a>
+<a name="line778"></a>/**
+<a name="line779"></a> * Sets value associated with menu item.
+<a name="line780"></a> * @param {Object} value Desired value.
+<a name="line781"></a> */
+<a name="line782"></a>goog.ui.BasicMenu.Item.prototype.setValue = function(value) {
+<a name="line783"></a>  this.value_ = value;
+<a name="line784"></a>};
+<a name="line785"></a>
+<a name="line786"></a>
+<a name="line787"></a>/** @inheritDoc */
+<a name="line788"></a>goog.ui.BasicMenu.Item.prototype.disposeInternal = function() {
+<a name="line789"></a>  goog.ui.BasicMenu.Item.superClass_.disposeInternal.call(this);
+<a name="line790"></a>  this.remove();
+<a name="line791"></a>  if (this.submenu_) {
+<a name="line792"></a>    this.submenu_.dispose();
+<a name="line793"></a>  }
+<a name="line794"></a>};
+<a name="line795"></a>
+<a name="line796"></a>
+<a name="line797"></a>/**
+<a name="line798"></a> * Set the parent menu for this menu item.
+<a name="line799"></a> * @param {goog.ui.BasicMenu} menu Parent menu.
+<a name="line800"></a> * @private
+<a name="line801"></a> */
+<a name="line802"></a>goog.ui.BasicMenu.Item.prototype.setMenu_ = function(menu) {
+<a name="line803"></a>  this.menu_ = menu;
+<a name="line804"></a>  if (this.submenu_) {
+<a name="line805"></a>    this.submenu_.setParentMenu_(menu);
+<a name="line806"></a>  }
+<a name="line807"></a>};
+<a name="line808"></a>
+<a name="line809"></a>
+<a name="line810"></a>/**
+<a name="line811"></a> * @return {goog.ui.BasicMenu} The parent menu for this menu item.
+<a name="line812"></a> * @protected
+<a name="line813"></a> */
+<a name="line814"></a>goog.ui.BasicMenu.Item.prototype.getMenu = function() {
+<a name="line815"></a>  return this.menu_;
+<a name="line816"></a>};
+<a name="line817"></a>
+<a name="line818"></a>
+<a name="line819"></a>/**
+<a name="line820"></a> * Returns the DOM element(s) for the menu item.  Should be treated as package
+<a name="line821"></a> * scope.
+<a name="line822"></a> * @return {Element} The DOM element(s) for the menu item.
+<a name="line823"></a> */
+<a name="line824"></a>goog.ui.BasicMenu.Item.prototype.create = function() {
+<a name="line825"></a>  if (!this.menu_) {
+<a name="line826"></a>    throw Error(&#39;MenuItem is not attached to a menu&#39;);
+<a name="line827"></a>  }
+<a name="line828"></a>  var leftArrow, rightArrow;
+<a name="line829"></a>  if (this.submenu_) {
+<a name="line830"></a>    rightArrow = goog.dom.createDom(&#39;span&#39;, &#39;goog-menu-arrow-right&#39;, &#39;\u25b6&#39;);
+<a name="line831"></a>    leftArrow = goog.dom.createDom(&#39;span&#39;, &#39;goog-menu-arrow-left&#39;, &#39;\u25c0&#39;);
+<a name="line832"></a>  }
+<a name="line833"></a>
+<a name="line834"></a>  this.element_ = goog.dom.createDom(&#39;div&#39;, this.menu_.getItemClassName(),
+<a name="line835"></a>      this.caption_, leftArrow, rightArrow);
+<a name="line836"></a>
+<a name="line837"></a>  return this.element_;
+<a name="line838"></a>};
+<a name="line839"></a>
+<a name="line840"></a>
+<a name="line841"></a>/**
+<a name="line842"></a> * Removes DOM element(s) for item.
+<a name="line843"></a> */
+<a name="line844"></a>goog.ui.BasicMenu.Item.prototype.remove = function() {
+<a name="line845"></a>  goog.dom.removeNode(this.element_);
+<a name="line846"></a>  this.element_ = null;
+<a name="line847"></a>};
+<a name="line848"></a>
+<a name="line849"></a>
+<a name="line850"></a>/**
+<a name="line851"></a> * @return {boolean} Whether the menu item has has submenu.
+<a name="line852"></a> */
+<a name="line853"></a>goog.ui.BasicMenu.Item.prototype.hasSubmenu = function() {
+<a name="line854"></a>  return this.submenu_ != null;
+<a name="line855"></a>};
+<a name="line856"></a>
+<a name="line857"></a>
+<a name="line858"></a>/**
+<a name="line859"></a> * @return {boolean} Whether the menu item has has submenu that&#39;s open.
+<a name="line860"></a> */
+<a name="line861"></a>goog.ui.BasicMenu.Item.prototype.hasOpenSubmenu = function() {
+<a name="line862"></a>  return this.hasSubmenu() ? this.submenu_.isOrWasRecentlyVisible() : false;
+<a name="line863"></a>};
+<a name="line864"></a>
+<a name="line865"></a>
+<a name="line866"></a>/**
+<a name="line867"></a> * @return {goog.ui.BasicMenu} The submenu associated with the item.
+<a name="line868"></a> */
+<a name="line869"></a>goog.ui.BasicMenu.Item.prototype.getSubmenu = function() {
+<a name="line870"></a>  return this.submenu_;
+<a name="line871"></a>};
+<a name="line872"></a>
+<a name="line873"></a>
+<a name="line874"></a>/**
+<a name="line875"></a> * Opens the item&#39;s submenu.
+<a name="line876"></a> */
+<a name="line877"></a>goog.ui.BasicMenu.Item.prototype.openSubmenu = function() {
+<a name="line878"></a>  if (this.submenu_) {
+<a name="line879"></a>    var submenu = this.submenu_;
+<a name="line880"></a>
+<a name="line881"></a>    // If the submenu is pinned at a TOP position, infer
+<a name="line882"></a>    // that we want to anchor at the opposite corresponding
+<a name="line883"></a>    // absolute/relative horizontal position.
+<a name="line884"></a>    var pinComplement = goog.positioning.flipCornerHorizontal(
+<a name="line885"></a>        submenu.getPinnedCorner());
+<a name="line886"></a>    submenu.setAnchorElement(this.element_, pinComplement);
+<a name="line887"></a>    submenu.setVisible(true);
+<a name="line888"></a>  }
+<a name="line889"></a>};
+<a name="line890"></a>
+<a name="line891"></a>
+<a name="line892"></a>/**
+<a name="line893"></a> * Closes the item&#39;s submenu.
+<a name="line894"></a> */
+<a name="line895"></a>goog.ui.BasicMenu.Item.prototype.closeSubmenu = function() {
+<a name="line896"></a>  if (this.submenu_) {
+<a name="line897"></a>    this.submenu_.setVisible(false);
+<a name="line898"></a>  }
+<a name="line899"></a>};
+<a name="line900"></a>
+<a name="line901"></a>
+<a name="line902"></a>/**
+<a name="line903"></a> * A menu separator
+<a name="line904"></a> *
+<a name="line905"></a> * @constructor
+<a name="line906"></a> * @extends {goog.ui.BasicMenu.Item}
+<a name="line907"></a> */
+<a name="line908"></a>goog.ui.BasicMenu.Separator = function() {
+<a name="line909"></a>  goog.ui.BasicMenu.Item.call(this, null);
+<a name="line910"></a>};
+<a name="line911"></a>goog.inherits(goog.ui.BasicMenu.Separator, goog.ui.BasicMenu.Item);
+<a name="line912"></a>
+<a name="line913"></a>
+<a name="line914"></a>/**
+<a name="line915"></a> * Returns the DOM element(s) for the separator.  Should be treated as having
+<a name="line916"></a> * package scope.
+<a name="line917"></a> * @return {Element} The DOM element(s) for the separator.
+<a name="line918"></a> */
+<a name="line919"></a>goog.ui.BasicMenu.Separator.prototype.create = function() {
+<a name="line920"></a>  if (!this.menu_) {
+<a name="line921"></a>    throw Error(&#39;MenuSeparator is not attached to a menu&#39;);
+<a name="line922"></a>  }
+<a name="line923"></a>  this.element_ = goog.dom.createElement(&#39;hr&#39;);
+<a name="line924"></a>  goog.dom.a11y.setRole(this.element_, &#39;separator&#39;);
+<a name="line925"></a>  return this.element_;
+<a name="line926"></a>};
+</pre>
+
+
+</body>
+</html>

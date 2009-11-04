@@ -1,0 +1,294 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>fastdatanode.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">fastdatanode.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Efficient implementation of DataNode API.
+
+ The implementation consists of three concrete classes for modelling
+ DataNodes with different characteristics: FastDataNode,
+ FastPrimitiveDataNode and FastListNode.
+
+ FastDataNode is for bean-like or map-like objects that consists of
+ key/value mappings and where the primary access pattern is by key.
+
+ FastPrimitiveDataNode wraps primitives like strings, boolean, and numbers.
+
+ FastListNode is for array-like data nodes. It also supports key-based
+ lookups if the data nodes have an &quot;id&quot; property or if child nodes are
+ explicitly added by name. It is most efficient if these features are not
+ used.
+
+ FastDataNodes can be constructed from JSON-like objects via the function
+ goog.ds.FastDataNode.fromJs.
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_datasource_fastdatanode.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/datasource/fastdatanode.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_AbstractFastDataNode.html">
+          goog.ds.AbstractFastDataNode</a><br/>
+        <div class="class-details">Creates a new abstract data node.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_FastDataNode.html">
+          goog.ds.FastDataNode</a><br/>
+        <div class="class-details">Creates a new fast data node, using the properties of root.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_PrimitiveFastDataNode.html">
+          goog.ds.PrimitiveFastDataNode</a><br/>
+        <div class="class-details">Creates a new data node wrapping a primitive value.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_FastListNode.html">
+          goog.ds.FastListNode</a><br/>
+        <div class="class-details">Creates a new list node from an array.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ds.FastDataNode.fromJs"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.FastDataNode.</span><span class="entryName">fromJs<span class="args">(<span class="arg">object</span>,&nbsp;<span class="arg">dataName</span>,&nbsp;<span class="arg">opt_parent</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_ds_AbstractFastDataNode.html">goog.ds.AbstractFastDataNode</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new FastDataNode structure initialized from object. This will
+return an instance of the most suitable sub-class of FastDataNode.
+
+You should not modify object after creating a fast data node from it
+or assume that changing object changes the data node. Doing so results
+in undefined behaviour.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">object</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Object to initialize data node from.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">dataName</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Name of data node.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_parent</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></div>
+        <div class="entryOverview">Parent of data node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_ds_AbstractFastDataNode.html">goog.ds.AbstractFastDataNode</a></span></div>&nbsp;
+            Data node representing object.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line150">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.FastDataNode.emptyList_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.FastDataNode.</span><span class="entryName">emptyList_</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ds_EmptyNodeList.html">goog.ds.EmptyNodeList</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Static instance of an empty list.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line168">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/datasource/fastdatanode.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

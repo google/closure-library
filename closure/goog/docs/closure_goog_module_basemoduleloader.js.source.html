@@ -1,0 +1,254 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>basemoduleloader.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_module_basemoduleloader.js.html">basemoduleloader.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview The base class for module loading.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.module.BaseModuleLoader&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line23"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line24"></a>goog.require(&#39;goog.module.AbstractModuleLoader&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * A class that loads Javascript modules.
+<a name="line29"></a> * @constructor
+<a name="line30"></a> * @extends {goog.Disposable}
+<a name="line31"></a> * @implements {goog.module.AbstractModuleLoader}
+<a name="line32"></a> */
+<a name="line33"></a>goog.module.BaseModuleLoader = function() {
+<a name="line34"></a>  goog.Disposable.call(this);
+<a name="line35"></a>};
+<a name="line36"></a>goog.inherits(goog.module.BaseModuleLoader, goog.Disposable);
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * A logger.
+<a name="line41"></a> * @type {goog.debug.Logger}
+<a name="line42"></a> * @protected
+<a name="line43"></a> */
+<a name="line44"></a>goog.module.BaseModuleLoader.prototype.logger = goog.debug.Logger.getLogger(
+<a name="line45"></a>    &#39;goog.module.BaseModuleLoader&#39;);
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * Whether debug mode is enabled.
+<a name="line50"></a> * @type {boolean}
+<a name="line51"></a> * @private
+<a name="line52"></a> */
+<a name="line53"></a>goog.module.BaseModuleLoader.prototype.debugMode_ = false;
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * The postfix to check for in code received from the server before it is
+<a name="line58"></a> * evaluated on the client.
+<a name="line59"></a> * @type {string?}
+<a name="line60"></a> * @private
+<a name="line61"></a> */
+<a name="line62"></a>goog.module.BaseModuleLoader.prototype.codePostfix_ = null;
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Gets the debug mode for the loader.
+<a name="line67"></a> * @return {boolean} debugMode Whether the debug mode is enabled.
+<a name="line68"></a> */
+<a name="line69"></a>goog.module.BaseModuleLoader.prototype.getDebugMode = function() {
+<a name="line70"></a>  return this.debugMode_;
+<a name="line71"></a>};
+<a name="line72"></a>
+<a name="line73"></a>
+<a name="line74"></a>/**
+<a name="line75"></a> * Sets the debug mode for the loader.
+<a name="line76"></a> * @param {boolean} debugMode Whether the debug mode is enabled.
+<a name="line77"></a> */
+<a name="line78"></a>goog.module.BaseModuleLoader.prototype.setDebugMode = function(debugMode) {
+<a name="line79"></a>  this.debugMode_ = debugMode;
+<a name="line80"></a>};
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Set the postfix to check for when we receive code from the server.
+<a name="line85"></a> * @param {string} codePostfix The postfix.
+<a name="line86"></a> */
+<a name="line87"></a>goog.module.BaseModuleLoader.prototype.setCodePostfix = function(
+<a name="line88"></a>    codePostfix) {
+<a name="line89"></a>  this.codePostfix_ = codePostfix;
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/** @inheritDoc */
+<a name="line94"></a>goog.module.BaseModuleLoader.prototype.loadModules = function(
+<a name="line95"></a>    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {
+<a name="line96"></a>  this.loadModulesInternal(ids, moduleInfoMap, opt_successFn, opt_errorFn,
+<a name="line97"></a>      opt_timeoutFn);
+<a name="line98"></a>};
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * Loads a list of JavaScript modules.
+<a name="line103"></a> * @param {Array.&lt;string&gt;} ids The module ids in dependency order.
+<a name="line104"></a> * @param {Object} moduleInfoMap A mapping from module id to ModuleInfo object.
+<a name="line105"></a> * @param {function()} opt_successFn The callback if module loading is a
+<a name="line106"></a> *     success.
+<a name="line107"></a> * @param {function(number)} opt_errorFn The callback if module loading is in
+<a name="line108"></a> *     error.
+<a name="line109"></a> * @param {function()} opt_timeoutFn The callback if module loading times out.
+<a name="line110"></a> * @protected
+<a name="line111"></a> */
+<a name="line112"></a>goog.module.BaseModuleLoader.prototype.loadModulesInternal = function(
+<a name="line113"></a>    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {
+<a name="line114"></a>  // Should be overridden by the derived class.
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * Evaluate the JS code.
+<a name="line120"></a> * @param {Array.&lt;string&gt;} moduleIds The module ids.
+<a name="line121"></a> * @param {string} jsCode The JS code.
+<a name="line122"></a> * @return {boolean} Whether the JS code was evaluated successfully.
+<a name="line123"></a> */
+<a name="line124"></a>goog.module.BaseModuleLoader.prototype.evaluateCode = function(
+<a name="line125"></a>    moduleIds, jsCode) {
+<a name="line126"></a>  var success = true;
+<a name="line127"></a>  try {
+<a name="line128"></a>    if (this.validateCodePostfix_(jsCode)) {
+<a name="line129"></a>      goog.globalEval(jsCode);
+<a name="line130"></a>    } else {
+<a name="line131"></a>      success = false;
+<a name="line132"></a>    }
+<a name="line133"></a>  } catch (e) {
+<a name="line134"></a>    success = false;
+<a name="line135"></a>    // TODO: Consider throwing an exception here.
+<a name="line136"></a>    this.logger.warning(&#39;Loaded incomplete code for module(s): &#39; +
+<a name="line137"></a>        moduleIds, e);
+<a name="line138"></a>  }
+<a name="line139"></a>
+<a name="line140"></a>  return success;
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Handles a successful response to a request for one or more modules.
+<a name="line146"></a> * @param {string} jsCode the JS code.
+<a name="line147"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
+<a name="line148"></a> * @param {function()} successFn The callback for success.
+<a name="line149"></a> * @param {function(?number)} errorFn The callback for error.
+<a name="line150"></a> */
+<a name="line151"></a>goog.module.BaseModuleLoader.prototype.handleRequestSuccess = function(
+<a name="line152"></a>  jsCode, moduleIds, successFn, errorFn) {
+<a name="line153"></a>  this.logger.info(&#39;Code loaded for module(s): &#39; + moduleIds);
+<a name="line154"></a>
+<a name="line155"></a>  var success = this.evaluateCode(moduleIds, jsCode);
+<a name="line156"></a>  if (!success) {
+<a name="line157"></a>    this.handleRequestError(moduleIds, errorFn, null);
+<a name="line158"></a>  } else if (success &amp;&amp; successFn) {
+<a name="line159"></a>    successFn();
+<a name="line160"></a>  }
+<a name="line161"></a>};
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>/**
+<a name="line165"></a> * Handles an error during a request for one or more modules.
+<a name="line166"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
+<a name="line167"></a> * @param {function(?number)} errorFn The function to call on failure.
+<a name="line168"></a> * @param {?number} status The response status.
+<a name="line169"></a> */
+<a name="line170"></a>goog.module.BaseModuleLoader.prototype.handleRequestError = function(
+<a name="line171"></a>    moduleIds, errorFn, status) {
+<a name="line172"></a>  this.logger.warning(&#39;Request failed for module(s): &#39; + moduleIds);
+<a name="line173"></a>
+<a name="line174"></a>  if (errorFn) {
+<a name="line175"></a>    errorFn(status);
+<a name="line176"></a>  }
+<a name="line177"></a>};
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * Handles a timeout during a request for one or more modules.
+<a name="line182"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
+<a name="line183"></a> * @param {function()} timeoutFn The function to call on timeout.
+<a name="line184"></a> */
+<a name="line185"></a>goog.module.BaseModuleLoader.prototype.handleRequestTimeout = function(
+<a name="line186"></a>    moduleIds, timeoutFn) {
+<a name="line187"></a>  this.logger.warning(&#39;Request timed out for module(s): &#39; + moduleIds);
+<a name="line188"></a>
+<a name="line189"></a>  if (timeoutFn) {
+<a name="line190"></a>    timeoutFn();
+<a name="line191"></a>  }
+<a name="line192"></a>};
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * Validate the js code received from the server.
+<a name="line197"></a> * @param {string} jsCode The JS code.
+<a name="line198"></a> * @return {boolean} TRUE iff the jsCode is valid.
+<a name="line199"></a> * @private
+<a name="line200"></a> */
+<a name="line201"></a>goog.module.BaseModuleLoader.prototype.validateCodePostfix_ = function(
+<a name="line202"></a>    jsCode) {
+<a name="line203"></a>  return this.codePostfix_ ?
+<a name="line204"></a>      goog.string.endsWith(jsCode, this.codePostfix_) : true;
+<a name="line205"></a>};
+</pre>
+
+
+</body>
+</html>

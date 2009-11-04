@@ -1,0 +1,847 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>emojipicker.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_emoji_emojipicker.js.html">emojipicker.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Emoji Picker implementation. This provides a UI widget for
+<a name="line17"></a> * choosing an emoji from a grid of possible choices.
+<a name="line18"></a> *
+<a name="line19"></a> * @see ../demos/popupemojipicker.html for an example of how to instantiate
+<a name="line20"></a> * an emoji picker.
+<a name="line21"></a> *
+<a name="line22"></a> * Based on goog.ui.ColorPicker (colorpicker.js).
+<a name="line23"></a> *
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.ui.emoji.EmojiPicker&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line30"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line32"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line33"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line34"></a>goog.require(&#39;goog.ui.TabPane&#39;);
+<a name="line35"></a>goog.require(&#39;goog.ui.TabPane.TabPage&#39;);
+<a name="line36"></a>goog.require(&#39;goog.ui.emoji.Emoji&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.emoji.EmojiPalette&#39;);
+<a name="line38"></a>goog.require(&#39;goog.ui.emoji.EmojiPaletteRenderer&#39;);
+<a name="line39"></a>goog.require(&#39;goog.ui.emoji.ProgressiveEmojiPaletteRenderer&#39;);
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * Creates a new, empty emoji picker. An emoji picker is a grid of emoji, each
+<a name="line44"></a> * cell of the grid containing a single emoji. The picker may contain multiple
+<a name="line45"></a> * pages of emoji.
+<a name="line46"></a> *
+<a name="line47"></a> * When a user selects an emoji, by either clicking or pressing enter, the
+<a name="line48"></a> * picker fires a goog.ui.Component.EventType.ACTION event with the id. The
+<a name="line49"></a> * client listens on this event and in the handler can retrieve the id of the
+<a name="line50"></a> * selected emoji and do something with it, for instance, inserting an image
+<a name="line51"></a> * tag into a rich text control. An emoji picker does not maintain state. That
+<a name="line52"></a> * is, once an emoji is selected, the emoji picker does not remember which emoji
+<a name="line53"></a> * was selected.
+<a name="line54"></a> *
+<a name="line55"></a> * The emoji picker is implemented as a tabpane with each tabpage being a table.
+<a name="line56"></a> * Each of the tables are the same size to prevent jittering when switching
+<a name="line57"></a> * between pages.
+<a name="line58"></a> *
+<a name="line59"></a> * @param {string} defaultImgUrl Url of the img that should be used to fill up
+<a name="line60"></a> *     the cells in the emoji table, to prevent jittering. Should be the same
+<a name="line61"></a> *     size as the emoji.
+<a name="line62"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line63"></a> * @extends {goog.ui.Component}
+<a name="line64"></a> * @constructor
+<a name="line65"></a> */
+<a name="line66"></a>goog.ui.emoji.EmojiPicker = function(defaultImgUrl, opt_domHelper) {
+<a name="line67"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line68"></a>
+<a name="line69"></a>  this.defaultImgUrl_ = defaultImgUrl;
+<a name="line70"></a>
+<a name="line71"></a>  /**
+<a name="line72"></a>   * Emoji that this picker displays.
+<a name="line73"></a>   *
+<a name="line74"></a>   * @type {Array.&lt;Object&gt;}
+<a name="line75"></a>   * @private
+<a name="line76"></a>   */
+<a name="line77"></a>  this.emoji_ = [];
+<a name="line78"></a>
+<a name="line79"></a>  /**
+<a name="line80"></a>   * Pages of this emoji picker.
+<a name="line81"></a>   *
+<a name="line82"></a>   * @type {Array.&lt;goog.ui.emoji.EmojiPalette&gt;}
+<a name="line83"></a>   * @private
+<a name="line84"></a>   */
+<a name="line85"></a>  this.pages_ = [];
+<a name="line86"></a>
+<a name="line87"></a>  /**
+<a name="line88"></a>   * Keeps track of which pages in the picker have been loaded. Used for delayed
+<a name="line89"></a>   * loading of tabs.
+<a name="line90"></a>   *
+<a name="line91"></a>   * @type {Array.&lt;boolean&gt;}
+<a name="line92"></a>   * @private
+<a name="line93"></a>   */
+<a name="line94"></a>  this.pageLoadStatus_ = [];
+<a name="line95"></a>
+<a name="line96"></a>  /**
+<a name="line97"></a>   * Tabpane to hold the pages of this emojipicker.
+<a name="line98"></a>   *
+<a name="line99"></a>   * @type {goog.ui.TabPane}
+<a name="line100"></a>   * @private
+<a name="line101"></a>   */
+<a name="line102"></a>  this.tabPane_ = null;
+<a name="line103"></a>
+<a name="line104"></a>  this.getHandler().listen(this, goog.ui.Component.EventType.ACTION,
+<a name="line105"></a>      this.onEmojiPaletteAction_);
+<a name="line106"></a>};
+<a name="line107"></a>goog.inherits(goog.ui.emoji.EmojiPicker, goog.ui.Component);
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Default number of rows per grid of emoji.
+<a name="line112"></a> *
+<a name="line113"></a> * @type {number}
+<a name="line114"></a> */
+<a name="line115"></a>goog.ui.emoji.EmojiPicker.DEFAULT_NUM_ROWS = 5;
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * Default number of columns per grid of emoji.
+<a name="line120"></a> *
+<a name="line121"></a> * @type {number}
+<a name="line122"></a> */
+<a name="line123"></a>goog.ui.emoji.EmojiPicker.DEFAULT_NUM_COLS = 10;
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * Default location of the tabs in relation to the emoji grids.
+<a name="line128"></a> *
+<a name="line129"></a> * @type {goog.ui.TabPane.TabLocation}
+<a name="line130"></a> */
+<a name="line131"></a>goog.ui.emoji.EmojiPicker.DEFAULT_TAB_LOCATION =
+<a name="line132"></a>    goog.ui.TabPane.TabLocation.TOP;
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Number of rows per grid of emoji.
+<a name="line137"></a> *
+<a name="line138"></a> * @type {number}
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.ui.emoji.EmojiPicker.prototype.numRows_ =
+<a name="line142"></a>    goog.ui.emoji.EmojiPicker.DEFAULT_NUM_ROWS;
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * Number of columns per grid of emoji.
+<a name="line147"></a> *
+<a name="line148"></a> * @type {number}
+<a name="line149"></a> * @private
+<a name="line150"></a> */
+<a name="line151"></a>goog.ui.emoji.EmojiPicker.prototype.numCols_ =
+<a name="line152"></a>    goog.ui.emoji.EmojiPicker.DEFAULT_NUM_COLS;
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * Whether the number of rows in the picker should be automatically determined
+<a name="line157"></a> * by the specified number of columns so as to minimize/eliminate jitter when
+<a name="line158"></a> * switching between tabs.
+<a name="line159"></a> *
+<a name="line160"></a> * @type {boolean}
+<a name="line161"></a> * @private
+<a name="line162"></a> */
+<a name="line163"></a>goog.ui.emoji.EmojiPicker.prototype.autoSizeByColumnCount_ = true;
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Location of the tabs for the picker tabpane.
+<a name="line168"></a> *
+<a name="line169"></a> * @type {goog.ui.TabPane.TabLocation}
+<a name="line170"></a> * @private
+<a name="line171"></a> */
+<a name="line172"></a>goog.ui.emoji.EmojiPicker.prototype.tabLocation_ =
+<a name="line173"></a>    goog.ui.emoji.EmojiPicker.DEFAULT_TAB_LOCATION;
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Whether the component is focusable.
+<a name="line178"></a> * @type {boolean}
+<a name="line179"></a> * @private
+<a name="line180"></a> */
+<a name="line181"></a>goog.ui.emoji.EmojiPicker.prototype.focusable_ = true;
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * Url of the img that should be used for cells in the emoji picker that are
+<a name="line186"></a> * not filled with emoji, i.e., after all the emoji have already been placed
+<a name="line187"></a> * on a page.
+<a name="line188"></a> *
+<a name="line189"></a> * @type {string}
+<a name="line190"></a> * @private
+<a name="line191"></a> */
+<a name="line192"></a>goog.ui.emoji.EmojiPicker.prototype.defaultImgUrl_;
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * If present, indicates a prefix that should be prepended to all URLs
+<a name="line197"></a> * of images in this emojipicker. This provides an optimization if the URLs
+<a name="line198"></a> * are long, so that the client does not have to send a long string for each
+<a name="line199"></a> * emoji.
+<a name="line200"></a> *
+<a name="line201"></a> * @type {string|undefined}
+<a name="line202"></a> * @private
+<a name="line203"></a> */
+<a name="line204"></a>goog.ui.emoji.EmojiPicker.prototype.urlPrefix_;
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * If true, delay loading the images for the emojipalettes until after
+<a name="line209"></a> * construction. This gives a better user experience before the images are in
+<a name="line210"></a> * the cache, since other widgets waiting for construction of the emojipalettes
+<a name="line211"></a> * won&#39;t have to wait for all the images (which may be a substantial amount) to
+<a name="line212"></a> * load.
+<a name="line213"></a> *
+<a name="line214"></a> * @type {boolean}
+<a name="line215"></a> * @private
+<a name="line216"></a> */
+<a name="line217"></a>goog.ui.emoji.EmojiPicker.prototype.delayedLoad_ = false;
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * Whether to use progressive rendering in the emojipicker&#39;s palette, if using
+<a name="line222"></a> * sprited imgs. If true, then uses img tags, which most browsers render
+<a name="line223"></a> * progressively (i.e., as the data comes in). If false, then uses div tags
+<a name="line224"></a> * with the background-image, which some newer browsers render progressively
+<a name="line225"></a> * but older ones do not.
+<a name="line226"></a> *
+<a name="line227"></a> * @type {boolean}
+<a name="line228"></a> * @private
+<a name="line229"></a> */
+<a name="line230"></a>goog.ui.emoji.EmojiPicker.prototype.progressiveRender_ = false;
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Whether to require the caller to manually specify when to start loading
+<a name="line235"></a> * animated emoji. This is primarily for unittests to be able to test the
+<a name="line236"></a> * structure of the emojipicker palettes before and after the animated emoji
+<a name="line237"></a> * have been loaded.
+<a name="line238"></a> *
+<a name="line239"></a> * @type {boolean}
+<a name="line240"></a> * @private
+<a name="line241"></a> */
+<a name="line242"></a>goog.ui.emoji.EmojiPicker.prototype.manualLoadOfAnimatedEmoji_ = false;
+<a name="line243"></a>
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * Index of the active page in the picker.
+<a name="line247"></a> *
+<a name="line248"></a> * @type {number}
+<a name="line249"></a> * @private
+<a name="line250"></a> */
+<a name="line251"></a>goog.ui.emoji.EmojiPicker.prototype.activePage_ = -1;
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>/**
+<a name="line255"></a> * Adds a group of emoji to the picker.
+<a name="line256"></a> *
+<a name="line257"></a> * @param {string|Element} title Title for the group.
+<a name="line258"></a> * @param {Array.&lt;Array.&lt;string&gt;&gt;} emojiGroup A new group of emoji to be added
+<a name="line259"></a> *    Each internal array contains [emojiUrl, emojiId].
+<a name="line260"></a> */
+<a name="line261"></a>goog.ui.emoji.EmojiPicker.prototype.addEmojiGroup =
+<a name="line262"></a>    function(title, emojiGroup) {
+<a name="line263"></a>  this.emoji_.push({title: title, emoji: emojiGroup});
+<a name="line264"></a>};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Gets the number of rows per grid in the emoji picker.
+<a name="line269"></a> *
+<a name="line270"></a> * @return {number} number of rows per grid.
+<a name="line271"></a> */
+<a name="line272"></a>goog.ui.emoji.EmojiPicker.prototype.getNumRows = function() {
+<a name="line273"></a>  return this.numRows_;
+<a name="line274"></a>};
+<a name="line275"></a>
+<a name="line276"></a>
+<a name="line277"></a>/**
+<a name="line278"></a> * Gets the number of columns per grid in the emoji picker.
+<a name="line279"></a> *
+<a name="line280"></a> * @return {number} number of columns per grid.
+<a name="line281"></a> */
+<a name="line282"></a>goog.ui.emoji.EmojiPicker.prototype.getNumColumns = function() {
+<a name="line283"></a>  return this.numCols_;
+<a name="line284"></a>};
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>/**
+<a name="line288"></a> * Sets the number of rows per grid in the emoji picker. This should only be
+<a name="line289"></a> * called before the picker has been rendered.
+<a name="line290"></a> *
+<a name="line291"></a> * @param {number} numRows Number of rows per grid.
+<a name="line292"></a> */
+<a name="line293"></a>goog.ui.emoji.EmojiPicker.prototype.setNumRows = function(numRows) {
+<a name="line294"></a>  this.numRows_ = numRows;
+<a name="line295"></a>};
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>/**
+<a name="line299"></a> * Sets the number of columns per grid in the emoji picker. This should only be
+<a name="line300"></a> * called before the picker has been rendered.
+<a name="line301"></a> *
+<a name="line302"></a> * @param {number} numCols Number of columns per grid.
+<a name="line303"></a> */
+<a name="line304"></a>goog.ui.emoji.EmojiPicker.prototype.setNumColumns = function(numCols) {
+<a name="line305"></a>  this.numCols_ = numCols;
+<a name="line306"></a>};
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>/**
+<a name="line310"></a> * Sets whether to automatically size the emojipicker based on the number of
+<a name="line311"></a> * columns and the number of emoji in each group, so as to reduce jitter.
+<a name="line312"></a> *
+<a name="line313"></a> * @param {boolean} autoSize Whether to automatically size the picker.
+<a name="line314"></a> */
+<a name="line315"></a>goog.ui.emoji.EmojiPicker.prototype.setAutoSizeByColumnCount =
+<a name="line316"></a>    function(autoSize) {
+<a name="line317"></a>  this.autoSizeByColumnCount_ = autoSize;
+<a name="line318"></a>};
+<a name="line319"></a>
+<a name="line320"></a>
+<a name="line321"></a>/**
+<a name="line322"></a> * Sets the location of the tabs in relation to the emoji grids. This should
+<a name="line323"></a> * only be called before the picker has been rendered.
+<a name="line324"></a> *
+<a name="line325"></a> * @param {goog.ui.TabPane.TabLocation} tabLocation The location of the tabs.
+<a name="line326"></a> */
+<a name="line327"></a>goog.ui.emoji.EmojiPicker.prototype.setTabLocation = function(tabLocation) {
+<a name="line328"></a>  this.tabLocation_ = tabLocation;
+<a name="line329"></a>};
+<a name="line330"></a>
+<a name="line331"></a>
+<a name="line332"></a>/**
+<a name="line333"></a> * Sets whether loading of images should be delayed until after dom creation.
+<a name="line334"></a> * Thus, this function must be called before {@link #createDom}. If set to true,
+<a name="line335"></a> * the client must call {@link #loadImages} when they wish the images to be
+<a name="line336"></a> * loaded.
+<a name="line337"></a> *
+<a name="line338"></a> * @param {boolean} shouldDelay Whether to delay loading the images.
+<a name="line339"></a> */
+<a name="line340"></a>goog.ui.emoji.EmojiPicker.prototype.setDelayedLoad = function(shouldDelay) {
+<a name="line341"></a>  this.delayedLoad_ = shouldDelay;
+<a name="line342"></a>};
+<a name="line343"></a>
+<a name="line344"></a>
+<a name="line345"></a>/**
+<a name="line346"></a> * Sets whether to require the caller to manually specify when to start loading
+<a name="line347"></a> * animated emoji. This is primarily for unittests to be able to test the
+<a name="line348"></a> * structure of the emojipicker palettes before and after the animated emoji
+<a name="line349"></a> * have been loaded. This only affects sprited emojipickers with sprite data
+<a name="line350"></a> * for animated emoji.
+<a name="line351"></a> *
+<a name="line352"></a> * @param {boolean} manual Whether to load animated emoji manually.
+<a name="line353"></a> */
+<a name="line354"></a>goog.ui.emoji.EmojiPicker.prototype.setManualLoadOfAnimatedEmoji =
+<a name="line355"></a>    function(manual) {
+<a name="line356"></a>  this.manualLoadOfAnimatedEmoji_ = manual;
+<a name="line357"></a>};
+<a name="line358"></a>
+<a name="line359"></a>
+<a name="line360"></a>/**
+<a name="line361"></a> * Returns true if the component is focusable, false otherwise.  The default
+<a name="line362"></a> * is true.  Focusable components always have a tab index and allocate a key
+<a name="line363"></a> * handler to handle keyboard events while focused.
+<a name="line364"></a> * @return {boolean} Whether the component is focusable.
+<a name="line365"></a> */
+<a name="line366"></a>goog.ui.emoji.EmojiPicker.prototype.isFocusable = function() {
+<a name="line367"></a>  return this.focusable_;
+<a name="line368"></a>};
+<a name="line369"></a>
+<a name="line370"></a>
+<a name="line371"></a>/**
+<a name="line372"></a> * Sets whether the component is focusable.  The default is true.
+<a name="line373"></a> * Focusable components always have a tab index and allocate a key handler to
+<a name="line374"></a> * handle keyboard events while focused.
+<a name="line375"></a> * @param {boolean} focusable Whether the component is focusable.
+<a name="line376"></a> */
+<a name="line377"></a>goog.ui.emoji.EmojiPicker.prototype.setFocusable = function(focusable) {
+<a name="line378"></a>  this.focusable_ = focusable;
+<a name="line379"></a>  for (var i = 0; i &lt; this.pages_.length; i++) {
+<a name="line380"></a>    if (this.pages_[i]) {
+<a name="line381"></a>      this.pages_[i].setSupportedState(goog.ui.Component.State.FOCUSED,
+<a name="line382"></a>                                       focusable);
+<a name="line383"></a>    }
+<a name="line384"></a>  }
+<a name="line385"></a>};
+<a name="line386"></a>
+<a name="line387"></a>
+<a name="line388"></a>/**
+<a name="line389"></a> * Sets the URL prefix for the emoji URLs.
+<a name="line390"></a> *
+<a name="line391"></a> * @param {string} urlPrefix Prefix that should be prepended to all URLs.
+<a name="line392"></a> */
+<a name="line393"></a>goog.ui.emoji.EmojiPicker.prototype.setUrlPrefix = function(urlPrefix) {
+<a name="line394"></a>  this.urlPrefix_ = urlPrefix;
+<a name="line395"></a>};
+<a name="line396"></a>
+<a name="line397"></a>
+<a name="line398"></a>/**
+<a name="line399"></a> * Sets the progressive rendering aspect of this emojipicker. Must be called
+<a name="line400"></a> * before createDom to have an effect.
+<a name="line401"></a> *
+<a name="line402"></a> * @param {boolean} progressive Whether this picker should render progressively.
+<a name="line403"></a> */
+<a name="line404"></a>goog.ui.emoji.EmojiPicker.prototype.setProgressiveRender =
+<a name="line405"></a>    function(progressive) {
+<a name="line406"></a>  this.progressiveRender_ = progressive;
+<a name="line407"></a>};
+<a name="line408"></a>
+<a name="line409"></a>
+<a name="line410"></a>/**
+<a name="line411"></a> * Logger for the emoji picker.
+<a name="line412"></a> *
+<a name="line413"></a> * @type {goog.debug.Logger}
+<a name="line414"></a> * @private
+<a name="line415"></a> */
+<a name="line416"></a>goog.ui.emoji.EmojiPicker.prototype.logger_ =
+<a name="line417"></a>    goog.debug.Logger.getLogger(&#39;goog.ui.emoji.EmojiPicker&#39;);
+<a name="line418"></a>
+<a name="line419"></a>
+<a name="line420"></a>/**
+<a name="line421"></a> * Adjusts the number of rows to be the maximum row count out of all the emoji
+<a name="line422"></a> * groups, in order to prevent jitter in switching among the tabs.
+<a name="line423"></a> *
+<a name="line424"></a> * @private
+<a name="line425"></a> */
+<a name="line426"></a>goog.ui.emoji.EmojiPicker.prototype.adjustNumRowsIfNecessary_ = function() {
+<a name="line427"></a>  var currentMax = 0;
+<a name="line428"></a>
+<a name="line429"></a>  for (var i = 0; i &lt; this.emoji_.length; i++) {
+<a name="line430"></a>    var numEmoji = this.emoji_[i].emoji.length;
+<a name="line431"></a>    var rowsNeeded = Math.ceil(numEmoji / this.numCols_);
+<a name="line432"></a>    if (rowsNeeded &gt; currentMax) {
+<a name="line433"></a>      currentMax = rowsNeeded;
+<a name="line434"></a>    }
+<a name="line435"></a>  }
+<a name="line436"></a>
+<a name="line437"></a>  this.setNumRows(currentMax);
+<a name="line438"></a>};
+<a name="line439"></a>
+<a name="line440"></a>
+<a name="line441"></a>/**
+<a name="line442"></a> * Causes the emoji imgs to be loaded into the picker. Used for delayed loading.
+<a name="line443"></a> * No-op if delayed loading is not set.
+<a name="line444"></a> */
+<a name="line445"></a>goog.ui.emoji.EmojiPicker.prototype.loadImages = function() {
+<a name="line446"></a>  if (!this.delayedLoad_) {
+<a name="line447"></a>    return;
+<a name="line448"></a>  }
+<a name="line449"></a>
+<a name="line450"></a>  // Load the first page only
+<a name="line451"></a>  this.loadPage_(0);
+<a name="line452"></a>  this.activePage_ = 0;
+<a name="line453"></a>};
+<a name="line454"></a>
+<a name="line455"></a>
+<a name="line456"></a>/** @inheritDoc */
+<a name="line457"></a>goog.ui.emoji.EmojiPicker.prototype.createDom = function() {
+<a name="line458"></a>  this.setElementInternal(this.getDomHelper().createDom(&#39;div&#39;));
+<a name="line459"></a>
+<a name="line460"></a>  if (this.autoSizeByColumnCount_) {
+<a name="line461"></a>    this.adjustNumRowsIfNecessary_();
+<a name="line462"></a>  }
+<a name="line463"></a>
+<a name="line464"></a>  if (this.emoji_.length == 0) {
+<a name="line465"></a>    throw Error(&#39;Must add some emoji to the picker&#39;);
+<a name="line466"></a>  }
+<a name="line467"></a>
+<a name="line468"></a>  // If there is more than one group of emoji, we construct a tabpane
+<a name="line469"></a>  if (this.emoji_.length &gt; 1) {
+<a name="line470"></a>    // Give the tabpane a div to use as its content element, since tabpane
+<a name="line471"></a>    // overwrites the CSS class of the element it&#39;s passed
+<a name="line472"></a>    var div = this.getDomHelper().createDom(&#39;div&#39;);
+<a name="line473"></a>    this.getElement().appendChild(div);
+<a name="line474"></a>    this.tabPane_ = new goog.ui.TabPane(div,
+<a name="line475"></a>                                        this.tabLocation_,
+<a name="line476"></a>                                        this.getDomHelper(),
+<a name="line477"></a>                                        true  /* use MOUSEDOWN */);
+<a name="line478"></a>  }
+<a name="line479"></a>
+<a name="line480"></a>  this.renderer_ = this.progressiveRender_ ?
+<a name="line481"></a>      new goog.ui.emoji.ProgressiveEmojiPaletteRenderer(this.defaultImgUrl_) :
+<a name="line482"></a>      new goog.ui.emoji.EmojiPaletteRenderer(this.defaultImgUrl_);
+<a name="line483"></a>
+<a name="line484"></a>  for (var i = 0; i &lt; this.emoji_.length; i++) {
+<a name="line485"></a>    var emoji = this.emoji_[i].emoji;
+<a name="line486"></a>    var page = this.delayedLoad_ ?
+<a name="line487"></a>               this.createPlaceholderEmojiPage_(emoji) :
+<a name="line488"></a>               this.createEmojiPage_(emoji, i);
+<a name="line489"></a>    this.pages_.push(page);
+<a name="line490"></a>  }
+<a name="line491"></a>
+<a name="line492"></a>  this.activePage_ = 0;
+<a name="line493"></a>  this.getElement().tabIndex = 0;
+<a name="line494"></a>};
+<a name="line495"></a>
+<a name="line496"></a>
+<a name="line497"></a>/**
+<a name="line498"></a> * Used by unittests to manually load the animated emoji for this picker.
+<a name="line499"></a> */
+<a name="line500"></a>goog.ui.emoji.EmojiPicker.prototype.manuallyLoadAnimatedEmoji = function() {
+<a name="line501"></a>  for (var i = 0; i &lt; this.pages_.length; i++) {
+<a name="line502"></a>    this.pages_[i].loadAnimatedEmoji();
+<a name="line503"></a>  }
+<a name="line504"></a>};
+<a name="line505"></a>
+<a name="line506"></a>
+<a name="line507"></a>/**
+<a name="line508"></a> * Creates a page if it has not already been loaded. This has the side effects
+<a name="line509"></a> * of setting the load status of the page to true.
+<a name="line510"></a> *
+<a name="line511"></a> * @param {Array.&lt;Array.&lt;string&gt;&gt;} emoji Emoji for this page. See
+<a name="line512"></a> *     {@link addEmojiGroup} for more details.
+<a name="line513"></a> * @param {number} index Index of the page in the emojipicker.
+<a name="line514"></a> * @return {goog.ui.emoji.EmojiPalette} the emoji page.
+<a name="line515"></a> * @private
+<a name="line516"></a> */
+<a name="line517"></a>goog.ui.emoji.EmojiPicker.prototype.createEmojiPage_ = function(emoji, index) {
+<a name="line518"></a>  // Safeguard against trying to create the same page twice
+<a name="line519"></a>  if (this.pageLoadStatus_[index]) {
+<a name="line520"></a>    return null;
+<a name="line521"></a>  }
+<a name="line522"></a>
+<a name="line523"></a>  var palette = new goog.ui.emoji.EmojiPalette(emoji,
+<a name="line524"></a>                                               this.urlPrefix_,
+<a name="line525"></a>                                               this.renderer_,
+<a name="line526"></a>                                               this.getDomHelper());
+<a name="line527"></a>  if (!this.manualLoadOfAnimatedEmoji_) {
+<a name="line528"></a>    palette.loadAnimatedEmoji();
+<a name="line529"></a>  }
+<a name="line530"></a>  palette.setSize(this.numCols_, this.numRows_);
+<a name="line531"></a>  palette.setSupportedState(goog.ui.Component.State.FOCUSED, this.focusable_);
+<a name="line532"></a>  palette.createDom();
+<a name="line533"></a>  palette.setParent(this);
+<a name="line534"></a>
+<a name="line535"></a>  this.pageLoadStatus_[index] = true;
+<a name="line536"></a>
+<a name="line537"></a>  return palette;
+<a name="line538"></a>};
+<a name="line539"></a>
+<a name="line540"></a>
+<a name="line541"></a>/**
+<a name="line542"></a> * Returns an array of emoji whose real URLs have been replaced with the
+<a name="line543"></a> * default img URL. Used for delayed loading.
+<a name="line544"></a> *
+<a name="line545"></a> * @param {Array.&lt;Array.&lt;string&gt;&gt;} emoji Original emoji array.
+<a name="line546"></a> * @return {Array.&lt;Array.&lt;string&gt;&gt;} emoji array with all emoji pointing to the
+<a name="line547"></a> *     default img.
+<a name="line548"></a> * @private
+<a name="line549"></a> */
+<a name="line550"></a>goog.ui.emoji.EmojiPicker.prototype.getPlaceholderEmoji_ = function(emoji) {
+<a name="line551"></a>  var placeholderEmoji = [];
+<a name="line552"></a>
+<a name="line553"></a>  for (var i = 0; i &lt; emoji.length; i++) {
+<a name="line554"></a>    placeholderEmoji.push([this.defaultImgUrl_, emoji[i][1]]);
+<a name="line555"></a>  }
+<a name="line556"></a>
+<a name="line557"></a>  return placeholderEmoji;
+<a name="line558"></a>};
+<a name="line559"></a>
+<a name="line560"></a>
+<a name="line561"></a>/**
+<a name="line562"></a> * Creates an emoji page using placeholder emoji pointing to the default
+<a name="line563"></a> * img instead of the real emoji. Used for delayed loading.
+<a name="line564"></a> *
+<a name="line565"></a> * @param {Array.&lt;Array.&lt;string&gt;&gt;} emoji Emoji for this page. See
+<a name="line566"></a> *     {@link addEmojiGroup} for more details.
+<a name="line567"></a> * @return {goog.ui.emoji.EmojiPalette} the emoji page.
+<a name="line568"></a> * @private
+<a name="line569"></a> */
+<a name="line570"></a>goog.ui.emoji.EmojiPicker.prototype.createPlaceholderEmojiPage_ =
+<a name="line571"></a>    function(emoji) {
+<a name="line572"></a>  var placeholderEmoji = this.getPlaceholderEmoji_(emoji);
+<a name="line573"></a>
+<a name="line574"></a>  var palette = new goog.ui.emoji.EmojiPalette(placeholderEmoji,
+<a name="line575"></a>                                               null,  // no url prefix
+<a name="line576"></a>                                               this.renderer_,
+<a name="line577"></a>                                               this.getDomHelper());
+<a name="line578"></a>  palette.setSize(this.numCols_, this.numRows_);
+<a name="line579"></a>  palette.setSupportedState(goog.ui.Component.State.FOCUSED, this.focusable_);
+<a name="line580"></a>  palette.createDom();
+<a name="line581"></a>  palette.setParent(this);
+<a name="line582"></a>
+<a name="line583"></a>  return palette;
+<a name="line584"></a>};
+<a name="line585"></a>
+<a name="line586"></a>
+<a name="line587"></a>/**
+<a name="line588"></a> * EmojiPickers cannot be used to decorate pre-existing html, since the
+<a name="line589"></a> * structure they build is fairly complicated.
+<a name="line590"></a> * @param {Element} element Element to decorate.
+<a name="line591"></a> * @return {boolean} Returns always false.
+<a name="line592"></a> */
+<a name="line593"></a>goog.ui.emoji.EmojiPicker.prototype.canDecorate = function(element) {
+<a name="line594"></a>  return false;
+<a name="line595"></a>};
+<a name="line596"></a>
+<a name="line597"></a>
+<a name="line598"></a>/** @inheritDoc */
+<a name="line599"></a>goog.ui.emoji.EmojiPicker.prototype.enterDocument = function() {
+<a name="line600"></a>  goog.ui.emoji.EmojiPicker.superClass_.enterDocument.call(this);
+<a name="line601"></a>
+<a name="line602"></a>  for (var i = 0; i &lt; this.pages_.length; i++) {
+<a name="line603"></a>    this.pages_[i].enterDocument();
+<a name="line604"></a>    var pageElement = this.pages_[i].getElement();
+<a name="line605"></a>
+<a name="line606"></a>    // Add a new tab to the tabpane if there&#39;s more than one group of emoji.
+<a name="line607"></a>    // If there is just one group of emoji, then we simply use the single
+<a name="line608"></a>    // page&#39;s element as the content for the picker
+<a name="line609"></a>    if (this.pages_.length &gt; 1) {
+<a name="line610"></a>      // Create a simple default title containg the page number if the title
+<a name="line611"></a>      // was not provided in the emoji group params
+<a name="line612"></a>      var title = this.emoji_[i].title || (i + 1);
+<a name="line613"></a>      this.tabPane_.addPage(new goog.ui.TabPane.TabPage(
+<a name="line614"></a>          pageElement, title, this.getDomHelper()));
+<a name="line615"></a>    } else {
+<a name="line616"></a>      this.getElement().appendChild(pageElement);
+<a name="line617"></a>    }
+<a name="line618"></a>  }
+<a name="line619"></a>
+<a name="line620"></a>  // Initialize listeners. Note that we need to initialize this listener
+<a name="line621"></a>  // after createDom, because addPage causes the goog.ui.TabPane.Events.CHANGE
+<a name="line622"></a>  // event to fire, but we only want the handler (which loads delayed images)
+<a name="line623"></a>  // to run after the picker has been constructed.
+<a name="line624"></a>  if (this.tabPane_) {
+<a name="line625"></a>    this.getHandler().listen(
+<a name="line626"></a>        this.tabPane_, goog.ui.TabPane.Events.CHANGE, this.onPageChanged_);
+<a name="line627"></a>
+<a name="line628"></a>    // Make the tabpane unselectable so that changing tabs doesn&#39;t disturb the
+<a name="line629"></a>    // cursor
+<a name="line630"></a>    goog.style.setUnselectable(this.tabPane_.getElement(), true);
+<a name="line631"></a>  }
+<a name="line632"></a>
+<a name="line633"></a>  this.getElement().unselectable = &#39;on&#39;;
+<a name="line634"></a>};
+<a name="line635"></a>
+<a name="line636"></a>
+<a name="line637"></a>/** @inheritDoc */
+<a name="line638"></a>goog.ui.emoji.EmojiPicker.prototype.exitDocument = function() {
+<a name="line639"></a>  goog.ui.emoji.EmojiPicker.superClass_.exitDocument.call(this);
+<a name="line640"></a>  for (var i = 0; i &lt; this.pages_.length; i++) {
+<a name="line641"></a>    this.pages_[i].exitDocument();
+<a name="line642"></a>  }
+<a name="line643"></a>};
+<a name="line644"></a>
+<a name="line645"></a>
+<a name="line646"></a>/** @inheritDoc */
+<a name="line647"></a>goog.ui.emoji.EmojiPicker.prototype.disposeInternal = function() {
+<a name="line648"></a>  goog.ui.emoji.EmojiPicker.superClass_.disposeInternal.call(this);
+<a name="line649"></a>
+<a name="line650"></a>  if (this.tabPane_) {
+<a name="line651"></a>    this.tabPane_.dispose();
+<a name="line652"></a>    this.tabPane_ = null;
+<a name="line653"></a>  }
+<a name="line654"></a>
+<a name="line655"></a>  for (var i = 0; i &lt; this.pages_.length; i++) {
+<a name="line656"></a>    this.pages_[i].dispose();
+<a name="line657"></a>  }
+<a name="line658"></a>  this.pages_.length = 0;
+<a name="line659"></a>};
+<a name="line660"></a>
+<a name="line661"></a>
+<a name="line662"></a>/**
+<a name="line663"></a> * @return {string} CSS class for the root element of EmojiPicker.
+<a name="line664"></a> */
+<a name="line665"></a>goog.ui.emoji.EmojiPicker.prototype.getCssClass = function() {
+<a name="line666"></a>  return goog.getCssName(&#39;goog-ui-emojipicker&#39;);
+<a name="line667"></a>};
+<a name="line668"></a>
+<a name="line669"></a>
+<a name="line670"></a>/**
+<a name="line671"></a> * Returns the currently selected emoji from this picker. If the picker is
+<a name="line672"></a> * using the URL prefix optimization, allocates a new emoji object with the
+<a name="line673"></a> * full URL. This method is meant to be used by clients of the emojipicker,
+<a name="line674"></a> * e.g., in a listener on goog.ui.component.EventType.ACTION that wants to use
+<a name="line675"></a> * the just-selected emoji.
+<a name="line676"></a> *
+<a name="line677"></a> * @return {goog.ui.emoji.Emoji} The currently selected emoji from this picker.
+<a name="line678"></a> */
+<a name="line679"></a>goog.ui.emoji.EmojiPicker.prototype.getSelectedEmoji = function() {
+<a name="line680"></a>  return this.urlPrefix_ ?
+<a name="line681"></a>      new goog.ui.emoji.Emoji(this.urlPrefix_ + this.selectedEmoji_.getId(),
+<a name="line682"></a>                              this.selectedEmoji_.getId()) :
+<a name="line683"></a>      this.selectedEmoji_;
+<a name="line684"></a>};
+<a name="line685"></a>
+<a name="line686"></a>
+<a name="line687"></a>/**
+<a name="line688"></a> * Returns the number of emoji groups in this picker.
+<a name="line689"></a> *
+<a name="line690"></a> * @return {Number} The number of emoji groups in this picker.
+<a name="line691"></a> */
+<a name="line692"></a>goog.ui.emoji.EmojiPicker.prototype.getNumEmojiGroups = function() {
+<a name="line693"></a>  return this.emoji_.length;
+<a name="line694"></a>};
+<a name="line695"></a>
+<a name="line696"></a>
+<a name="line697"></a>/**
+<a name="line698"></a> * Returns a page from the picker. This should be considered protected, and is
+<a name="line699"></a> * ONLY FOR TESTING.
+<a name="line700"></a> *
+<a name="line701"></a> * @param {number} index Index of the page to return.
+<a name="line702"></a> * @return {goog.ui.emoji.EmojiPalette?} the page at the specified index or null
+<a name="line703"></a> *     if none exists.
+<a name="line704"></a> */
+<a name="line705"></a>goog.ui.emoji.EmojiPicker.prototype.getPage = function(index) {
+<a name="line706"></a>  return this.pages_[index];
+<a name="line707"></a>};
+<a name="line708"></a>
+<a name="line709"></a>
+<a name="line710"></a>/**
+<a name="line711"></a> * Returns all the pages from the picker. This should be considered protected,
+<a name="line712"></a> * and is ONLY FOR TESTING.
+<a name="line713"></a> *
+<a name="line714"></a> * @return {Array.&lt;goog.ui.emoji.EmojiPalette&gt;?} the pages in the picker or
+<a name="line715"></a> *     null if none exist.
+<a name="line716"></a> */
+<a name="line717"></a>goog.ui.emoji.EmojiPicker.prototype.getPages = function() {
+<a name="line718"></a>  return this.pages_;
+<a name="line719"></a>};
+<a name="line720"></a>
+<a name="line721"></a>
+<a name="line722"></a>/**
+<a name="line723"></a> * Returns the tabpane if this is a multipage picker. This should be considered
+<a name="line724"></a> * protected, and is ONLY FOR TESTING.
+<a name="line725"></a> *
+<a name="line726"></a> * @return {goog.ui.TabPane} the tabpane if it is a multipage picker,
+<a name="line727"></a> *     or null if it does not exist or is a single page picker.
+<a name="line728"></a> */
+<a name="line729"></a>goog.ui.emoji.EmojiPicker.prototype.getTabPane = function() {
+<a name="line730"></a>  return this.tabPane_;
+<a name="line731"></a>};
+<a name="line732"></a>
+<a name="line733"></a>
+<a name="line734"></a>/**
+<a name="line735"></a> * @return {goog.ui.emoji.EmojiPalette} The active page of the emoji picker.
+<a name="line736"></a> * @private
+<a name="line737"></a> */
+<a name="line738"></a>goog.ui.emoji.EmojiPicker.prototype.getActivePage_ = function() {
+<a name="line739"></a>  return this.pages_[this.activePage_];
+<a name="line740"></a>};
+<a name="line741"></a>
+<a name="line742"></a>
+<a name="line743"></a>/**
+<a name="line744"></a> * Handles actions from the EmojiPalettes that this picker contains.
+<a name="line745"></a> *
+<a name="line746"></a> * @param {goog.ui.Component.EventType} e The event object.
+<a name="line747"></a> * @private
+<a name="line748"></a> */
+<a name="line749"></a>goog.ui.emoji.EmojiPicker.prototype.onEmojiPaletteAction_ = function(e) {
+<a name="line750"></a>  this.selectedEmoji_ = this.getActivePage_().getSelectedEmoji();
+<a name="line751"></a>};
+<a name="line752"></a>
+<a name="line753"></a>
+<a name="line754"></a>/**
+<a name="line755"></a> * Handles changes in the active page in the tabpane.
+<a name="line756"></a> *
+<a name="line757"></a> * @param {goog.ui.TabPaneEvent} e The event object.
+<a name="line758"></a> * @private
+<a name="line759"></a> */
+<a name="line760"></a>goog.ui.emoji.EmojiPicker.prototype.onPageChanged_ = function(e) {
+<a name="line761"></a>  var index = /** @type {number} */ (e.page.getIndex());
+<a name="line762"></a>  this.loadPage_(index);
+<a name="line763"></a>  this.activePage_ = index;
+<a name="line764"></a>};
+<a name="line765"></a>
+<a name="line766"></a>
+<a name="line767"></a>/**
+<a name="line768"></a> * Loads a page into the picker if it has not yet been loaded.
+<a name="line769"></a> *
+<a name="line770"></a> * @param {number} index Index of the page to load.
+<a name="line771"></a> * @private
+<a name="line772"></a> */
+<a name="line773"></a>goog.ui.emoji.EmojiPicker.prototype.loadPage_ = function(index) {
+<a name="line774"></a>  if (index &lt; 0 || index &gt; this.pages_.length) {
+<a name="line775"></a>    throw Error(&#39;Index out of bounds&#39;);
+<a name="line776"></a>  }
+<a name="line777"></a>
+<a name="line778"></a>  if (!this.pageLoadStatus_[index]) {
+<a name="line779"></a>    var oldPage = this.pages_[index];
+<a name="line780"></a>    this.pages_[index] = this.createEmojiPage_(this.emoji_[index].emoji,
+<a name="line781"></a>                                               index);
+<a name="line782"></a>    this.pages_[index].enterDocument();
+<a name="line783"></a>    var pageElement = this.pages_[index].getElement();
+<a name="line784"></a>    if (this.pages_.length &gt; 1) {
+<a name="line785"></a>      this.tabPane_.removePage(index);
+<a name="line786"></a>      var title = this.emoji_[index].title || (index + 1);
+<a name="line787"></a>      this.tabPane_.addPage(new goog.ui.TabPane.TabPage(
+<a name="line788"></a>          pageElement, title, this.getDomHelper()), index);
+<a name="line789"></a>      this.tabPane_.setSelectedIndex(index);
+<a name="line790"></a>    } else {
+<a name="line791"></a>      var el = this.getElement();
+<a name="line792"></a>      el.appendChild(pageElement);
+<a name="line793"></a>    }
+<a name="line794"></a>    if (oldPage) {
+<a name="line795"></a>      oldPage.dispose();
+<a name="line796"></a>    }
+<a name="line797"></a>  }
+<a name="line798"></a>};
+</pre>
+
+
+</body>
+</html>

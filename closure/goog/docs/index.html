@@ -1,0 +1,302 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>Closure Library API Documentation (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc-index.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="whatitis" class="g-tpl-75-25 g-section">
+  <div class="g-unit g-first">
+    <h1>What is the Closure Library?</h1>
+    <p>
+      The Closure Library is an industrial-strength JavaScript library. It provides user interface widgets, an event framework, a packaging and dependency resolution system, tools for DOM manipulation, tools for creating animation effects (including drag and drop), communication utilities, a unit testing framework, and a wide variety of other packages.
+    </p>
+    <p>
+      Google engineers developed the Closure Library in the process of creating large-scale web applications, and it is now the foundation of Gmail, Google Docs, and many other Google products. If you are developing a large or growing application, you may benefit from the Closure Library's breadth. A well-tested library can insulate you from cross-browser compatibility issues and the minutiae of client-side programming, letting you focus on the fun stuff.
+    </p>
+
+    <img
+      id="example-img"
+      src="static/images/example.png"
+      height="360"
+      width="410">
+    <cite>
+      An example of <a href="class_goog_ui_Toolbar.html">goog.ui.Toolbar</a>
+      and <a href="class_goog_ui_editor_ToolbarController.html">goog.ui.editor.ToolbarController</a>.
+    </cite>
+  </div>
+
+  <div class="g-unit">
+    <div class="col2-c">
+      <h2>Additional Resources</h2>
+      <ul>
+        <li>
+          <a href="http://code.google.com/p/closure-library/source/checkout">Download Closure</a>
+        </li>
+        <li>
+          Read <a href="http://code.google.com/closure/library/docs/introduction.html">Finding Your Way around Closure</a>
+        </li>
+        <li>
+          Do the Closure <a href="http://code.google.com/closure/library/docs/gettingstarted.html">Hello World</a> exercise.
+        </li>
+        <li>
+          Read <a href="http://code.google.com/closure/library/docs/calcdeps.html">the tutorial</a>.
+        </li>
+        <li>
+          Explore other <a href="http://code.google.com/closure/">Closure tools.</a>
+        </li>
+      </ul>
+    </div>
+
+    <div id="tabbar" class="goog-tab-bar-top goog-tab-bar">
+      <div class="goog-tab goog-tab-selected">Type Index</div>
+      <div class="goog-tab">File Index</div>
+      <div class="goog-tab">Demos</div>
+    </div>
+
+    <!-- Use goog-tab-bar-clear between the tabs and the content. -->
+    <div class="goog-tab-bar-clear"></div>
+    <div class="goog-tab-content">
+
+      <div id="loading">Loading... <img src="static/images/loading.gif"></div>
+
+      <div id="typePage">
+        <div id="typeTreePeg" class="indexTree"></div>
+      </div>
+
+      <div id="filePage">
+        <div id="fileTreePeg" class="indexTree"></div>
+      </div>
+
+      <div id="demoPage">
+        <ul>
+          <li>
+            <a href="../demos/advancedtooltip.html">advancedtooltip.html</a>
+          </li>
+          <li>
+            <a href="../demos/graphics/basicelements.html">basicelements.html</a>
+          </li>
+          <li>
+            <a href="../demos/bidiinput.html">bidiinput.html</a>
+          </li>
+          <li>
+            <a href="../demos/bubble.html">bubble.html</a>
+          </li>
+          <li>
+            <a href="../demos/button.html">button.html</a>
+          </li>
+          <li>
+            <a href="../demos/charcounter.html">charcounter.html</a>
+          </li>
+          <li>
+            <a href="../demos/combobox.html">combobox.html</a>
+          </li>
+          <li>
+            <a href="../demos/container.html">container.html</a>
+          </li>
+          <li>
+            <a href="../demos/control.html">control.html</a>
+          </li>
+          <li>
+            <a href="../demos/datepicker.html">datepicker.html</a>
+          </li>
+          <li>
+            <a href="../demos/debug.html">debug.html</a>
+          </li>
+          <li>
+            <a href="../demos/tree/demo.html">demo.html</a>
+          </li>
+          <li>
+            <a href="../demos/dialog.html">dialog.html</a>
+          </li>
+          <li>
+            <a href="../demos/dimensionpicker.html">dimensionpicker.html</a>
+          </li>
+          <li>
+            <a href="../demos/dom_selection.html">dom_selection.html</a>
+          </li>
+          <li>
+            <a href="../demos/dragdrop.html">dragdrop.html</a>
+          </li>
+          <li>
+            <a href="../demos/draglistgroup.html">draglistgroup.html</a>
+          </li>
+          <li>
+            <a href="../demos/effects.html">effects.html</a>
+          </li>
+          <li>
+            <a href="../demos/event-propogation.html">event-propogation.html</a>
+          </li>
+          <li>
+            <a href="../demos/events.html">events.html</a>
+          </li>
+          <li>
+            <a href="../demos/graphics/events.html">events.html</a>
+          </li>
+          <li>
+            <a href="../demos/focushandler.html">focushandler.html</a>
+          </li>
+          <li>
+            <a href="../demos/gauge.html">gauge.html</a>
+          </li>
+          <li>
+            <a href="../demos/history1.html">history1.html</a>
+          </li>
+          <li>
+            <a href="../demos/history2.html">history2.html</a>
+          </li>
+          <li>
+            <a href="../demos/hovercard.html">hovercard.html</a>
+          </li>
+          <li>
+            <a href="../demos/inputdatepicker.html">inputdatepicker.html</a>
+          </li>
+          <li>
+            <a href="../demos/inputhandler.html">inputhandler.html</a>
+          </li>
+          <li>
+            <a href="../demos/keyboardshortcuts.html">keyboardshortcuts.html</a>
+          </li>
+          <li>
+            <a href="../demos/keyhandler.html">keyhandler.html</a>
+          </li>
+          <li>
+            <a href="../demos/labelinput.html">labelinput.html</a>
+          </li>
+          <li>
+            <a href="../demos/menu.html">menu.html</a>
+          </li>
+          <li>
+            <a href="../demos/menubutton.html">menubutton.html</a>
+          </li>
+          <li>
+            <a href="../demos/graphics/modifyelements.html">modifyelements.html</a>
+          </li>
+          <li>
+            <a href="../demos/mousewheelhandler.html">mousewheelhandler.html</a>
+          </li>
+          <li>
+            <a href="../demos/offline.html">offline.html</a>
+          </li>
+          <li>
+            <a href="../demos/palette.html">palette.html</a>
+          </li>
+          <li>
+            <a href="../demos/plaintextspellchecker.html">plaintextspellchecker.html</a>
+          </li>
+          <li>
+            <a href="../demos/popup.html">popup.html</a>
+          </li>
+          <li>
+            <a href="../demos/popupcolorpicker.html">popupcolorpicker.html</a>
+          </li>
+          <li>
+            <a href="../demos/popupdatepicker.html">popupdatepicker.html</a>
+          </li>
+          <li>
+            <a href="../demos/popupmenu.html">popupmenu.html</a>
+          </li>
+          <li>
+            <a href="../demos/progressbar.html">progressbar.html</a>
+          </li>
+          <li>
+            <a href="../demos/prompt.html">prompt.html</a>
+          </li>
+          <li>
+            <a href="../demos/quadtree.html">quadtree.html</a>
+          </li>
+          <li>
+            <a href="../demos/ratings.html">ratings.html</a>
+          </li>
+          <li>
+            <a href="../demos/richtextspellchecker.html">richtextspellchecker.html</a>
+          </li>
+          <li>
+            <a href="../demos/roundedpanel.html">roundedpanel.html</a>
+          </li>
+          <li>
+            <a href="../demos/select.html">select.html</a>
+          </li>
+          <li>
+            <a href="../demos/slider.html">slider.html</a>
+          </li>
+          <li>
+            <a href="../demos/splitpane.html">splitpane.html</a>
+          </li>
+          <li>
+            <a href="../demos/submenus.html">submenus.html</a>
+          </li>
+          <li>
+            <a href="../demos/submenus2.html">submenus2.html</a>
+          </li>
+          <li>
+            <a href="../demos/tablesorter.html">tablesorter.html</a>
+          </li>
+          <li>
+            <a href="../demos/tabpane.html">tabpane.html</a>
+          </li>
+          <li>
+            <a href="../demos/graphics/tiger.html">tiger.html</a>
+          </li>
+          <li>
+            <a href="../demos/timers.html">timers.html</a>
+          </li>
+          <li>
+            <a href="../demos/toolbar.html">toolbar.html</a>
+          </li>
+          <li>
+            <a href="../demos/tooltip.html">tooltip.html</a>
+          </li>
+          <li>
+            <a href="../demos/../tracer.html">tracer.html</a>
+          </li>
+          <li>
+            <a href="../demos/twothumbslider.html">twothumbslider.html</a>
+          </li>
+          <li>
+            <a href="../demos/useragent.html">useragent.html</a>
+          </li>
+          <li>
+            <a href="../demos/viewportsizemonitor.html">viewportsizemonitor.html</a>
+          </li>
+          <li>
+            <a href="../demos/zippy.html">zippy.html</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+

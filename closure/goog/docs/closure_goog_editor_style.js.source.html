@@ -1,0 +1,155 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>style.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_editor_style.js.html">style.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2009 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilties for working with the styles of DOM nodes, and
+<a name="line17"></a> * related to rich text editing.
+<a name="line18"></a> *
+<a name="line19"></a> * Many of these are not general enough to go into goog.style, and use
+<a name="line20"></a> * constructs (like &quot;isContainer&quot;) that only really make sense inside
+<a name="line21"></a> * of an HTML editor.
+<a name="line22"></a> *
+<a name="line23"></a> * The API has been optimized for iterating over large, irregular DOM
+<a name="line24"></a> * structures (with lots of text nodes), and so the API tends to be a bit
+<a name="line25"></a> * more permissive than the goog.style API should be. For example,
+<a name="line26"></a> * goog.style.getComputedStyle will throw an exception if you give it a
+<a name="line27"></a> * text node.
+<a name="line28"></a> *
+<a name="line29"></a> */
+<a name="line30"></a>
+<a name="line31"></a>goog.provide(&#39;goog.editor.style&#39;);
+<a name="line32"></a>
+<a name="line33"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line34"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line35"></a>goog.require(&#39;goog.style&#39;);
+<a name="line36"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Gets the computed or cascaded style.
+<a name="line41"></a> *
+<a name="line42"></a> * This is different than goog.style.getStyle_ because it returns null
+<a name="line43"></a> * for text nodes (instead of throwing an exception), and never reads
+<a name="line44"></a> * inline style. These two functions may need to be reconciled.
+<a name="line45"></a> *
+<a name="line46"></a> * @param {Node} node Node to get style of.
+<a name="line47"></a> * @param {string} stylePropertyName Property to get (must be camelCase,
+<a name="line48"></a> *     not css-style).
+<a name="line49"></a> * @return {string?} Style value, or null if this is not an element node.
+<a name="line50"></a> * @private
+<a name="line51"></a> */
+<a name="line52"></a>goog.editor.style.getComputedOrCascadedStyle_ =
+<a name="line53"></a>    function(node, stylePropertyName) {
+<a name="line54"></a>  if (node.nodeType != goog.dom.NodeType.ELEMENT) {
+<a name="line55"></a>    // Only element nodes have style.
+<a name="line56"></a>    return null;
+<a name="line57"></a>  }
+<a name="line58"></a>  return goog.userAgent.IE ?
+<a name="line59"></a>      goog.style.getCascadedStyle(/** @type {Element} */ (node),
+<a name="line60"></a>          stylePropertyName) :
+<a name="line61"></a>      goog.style.getComputedStyle(/** @type {Element} */ (node),
+<a name="line62"></a>          stylePropertyName);
+<a name="line63"></a>};
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * Checks whether the given element inherits display: block.
+<a name="line68"></a> * @param {Node} node The Node to check.
+<a name="line69"></a> * @return {boolean} Whether the element inherits CSS display: block.
+<a name="line70"></a> */
+<a name="line71"></a>goog.editor.style.isDisplayBlock = function(node) {
+<a name="line72"></a>  return goog.editor.style.getComputedOrCascadedStyle_(
+<a name="line73"></a>      node, &#39;display&#39;) == &#39;block&#39;;
+<a name="line74"></a>};
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Returns true if the element is a container of other non-inline HTML
+<a name="line79"></a> * Note that span, strong and em tags, being inline can only contain
+<a name="line80"></a> * other inline elements and are thus, not containers. Containers are elements
+<a name="line81"></a> * that should not be broken up when wrapping selections with a node of an
+<a name="line82"></a> * inline block styling.
+<a name="line83"></a> * @param {Node?} element The element to check.
+<a name="line84"></a> * @return {boolean} Whether the element is a container.
+<a name="line85"></a> */
+<a name="line86"></a>goog.editor.style.isContainer = function(element) {
+<a name="line87"></a>  var nodeName = element &amp;&amp; element.nodeName.toLowerCase();
+<a name="line88"></a>  return !!(element &amp;&amp;
+<a name="line89"></a>      (goog.editor.style.isDisplayBlock(element) ||
+<a name="line90"></a>          nodeName == &#39;td&#39; ||
+<a name="line91"></a>          nodeName == &#39;table&#39; ||
+<a name="line92"></a>          nodeName == &#39;li&#39;));
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Return the first ancestor of this node that is a container, inclusive.
+<a name="line98"></a> * @see isContainer
+<a name="line99"></a> * @param {Node?} node Node to find the container of.
+<a name="line100"></a> * @return {Element} The element which contains node.
+<a name="line101"></a> */
+<a name="line102"></a>goog.editor.style.getContainer = function(node) {
+<a name="line103"></a>  // We assume that every node must have a container.
+<a name="line104"></a>  return /** @type {Element} */ (
+<a name="line105"></a>      goog.dom.getAncestor(node, goog.editor.style.isContainer, true));
+<a name="line106"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>popup.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">popup.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Definition of the Popup class.
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="../demos/popup.html">Demo</a></li>
+            <li><a href="closure_goog_ui_popup.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/ui/popup.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Popup.html">
+          goog.ui.Popup</a><br/>
+        <div class="class-details">The Popup class provides functionality for displaying an absolutely
+positioned element at a particular location in the window. It&#39;s designed to
+be used as the foundation for building controls like a menu or tooltip. The
+Popup class includes functionality for displaying a Popup near adjacent to
+an anchor element.
+
+This works cross browser and thus does not use IE&#39;s createPopup feature
+which supports extending outside the edge of the brower window.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Popup_AnchoredPosition.html">
+          goog.ui.Popup.AnchoredPosition</a><br/>
+        <div class="class-details">Encapsulates a popup position where the popup is anchored at a corner of
+an element.
+
+When using AnchoredPosition, it is recommended that the popup element
+specified in the Popup constructor or Popup.setElement be absolutely
+positioned.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Popup_AnchoredViewPortPosition.html">
+          goog.ui.Popup.AnchoredViewPortPosition</a><br/>
+        <div class="class-details">Encapsulates a popup position where the popup is anchored at a corner of
+an element. The corners are swapped if dictated by the viewport. For instance
+if a popup is anchored with it&#39;s top left corner to the bottom left corner of
+the anchor the popup is either displayed below the anchor (as specified) or
+above it if there&#39;s not enough room to display it below.
+
+When using AnchoredPosition, it is recommended that the popup element
+specified in the Popup constructor or Popup.setElement be absolutely
+positioned.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Popup_AbsolutePosition.html">
+          goog.ui.Popup.AbsolutePosition</a><br/>
+        <div class="class-details">Encapsulates a popup position where the popup absolutely positioned by
+setting the left/top style elements directly to the specified values.
+The position is generally relative to the element&#39;s offsetParent. Normally,
+this is the document body, but can be another element if the popup element
+is scoped by an element with relative position.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Popup_ViewPortPosition.html">
+          goog.ui.Popup.ViewPortPosition</a><br/>
+        <div class="class-details">Encapsulates a popup position where the popup is positioned according to
+coordinates relative to the  element&#39;s view port (page). This calculates the
+correct position to use even if the element is relatively positioned to some
+other element.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Popup_ClientPosition.html">
+          goog.ui.Popup.ClientPosition</a><br/>
+        <div class="class-details">Encapsulates a popup position where the popup is positioned relative to the
+window (client) coordinates. This calculates the correct position to
+use even if the element is relatively positioned to some other element. This
+is for trying to position an element at the spot of the mouse cursor in
+a MOUSEMOVE event. Just use the event.clientX and event.clientY as the
+parameters.</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Popup_ViewPortClientPosition.html">
+          goog.ui.Popup.ViewPortClientPosition</a><br/>
+        <div class="class-details">Encapsulates a popup position where the popup is positioned relative to the
+window (client) coordinates, and made to stay within the viewport.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Popup.positionAtCoordinate"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Popup.</span><span class="entryName">positionAtCoordinate<span class="args">(<span class="arg">absolutePos</span>,&nbsp;<span class="arg">movableElement</span>,&nbsp;<span class="arg">movableElementCorner</span>,&nbsp;<span class="arg">opt_margin</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Positions the specified corner of the movable element at the
+specified coordinate.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">absolutePos</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        <div class="entryOverview">The coordinate to position the element at.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">movableElement</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">The element to be positioned.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">movableElementCorner</span>
+        : <div class="fullType"><span class="type">goog.positioning.Corner</span></div>
+        <div class="entryOverview">The corner of the movableElement that that should be positioned.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_margin</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Box.html">goog.math.Box</a></span></div>
+        <div class="entryOverview">A margin specified in pixels.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            Always returns true.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_popup.js.source.html#line282">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Popup.positionPopup"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Popup.</span><span class="entryName">positionPopup<span class="args">(<span class="arg">anchorElement</span>,&nbsp;<span class="arg">anchorElementCorner</span>,&nbsp;<span class="arg">movableElement</span>,&nbsp;<span class="arg">movableElementCorner</span>,&nbsp;<span class="arg">opt_offset</span>,&nbsp;<span class="arg">opt_margin</span>,&nbsp;<span class="arg">opt_overflow</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Positions a movable element relative to an anchorElement. The caller
+specifies the corners that should touch. This functions then moves the
+movable element accordingly.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">anchorElement</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">The DOM element that is the anchor for where the movable element should position itself.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">anchorElementCorner</span>
+        : <div class="fullType"><span class="type">goog.positioning.Corner</span></div>
+        <div class="entryOverview">The corner of the anchorElement for positioning the movable element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">movableElement</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">The DOM element to move.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">movableElementCorner</span>
+        : <div class="fullType"><span class="type">goog.positioning.Corner</span></div>
+        <div class="entryOverview">The corner of the movableElement that that should be positioned adjacent to the anchorElement.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_offset</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        <div class="entryOverview">An offset specified in pixels. After the normal positioning algorithm is applied, the offset is then applied. Positive coordinates move the popup closer to the center of the anchor element. Negative coordinates move the popup away from the center of the anchor element.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_margin</span>
+        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_math_Box.html">goog.math.Box</a></span></div>
+        <div class="entryOverview">A margin specified in pixels. After the normal positioning algorithm is applied and any offset, the margin is then applied. Positive coordinates move the popup away from the spot it was positioned towards its center. Negative coordiates move it towards the spot it was positioned away from its center.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_overflow</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Overflow handling mode. Defaults to goog.ui.Popup.Overflow.IGNORE if not specified. Bitmap.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            Returns true if the element was positioned or false if opt_overflow was set to FAIL and the element wouldn&#39;t fit inside the viewport.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_popup.js.source.html#line257">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/ui/popup.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

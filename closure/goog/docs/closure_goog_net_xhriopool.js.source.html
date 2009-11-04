@@ -1,0 +1,134 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>xhriopool.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_net_xhriopool.js.html">xhriopool.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Creates a pool of XhrIo objects to use. This allows multiple
+<a name="line17"></a> * XhrIo objects to be grouped together and requests will use next available
+<a name="line18"></a> * XhrIo object.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.net.XhrIoPool&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.net.XhrIo&#39;);
+<a name="line25"></a>goog.require(&#39;goog.structs&#39;);
+<a name="line26"></a>goog.require(&#39;goog.structs.PriorityPool&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * A pool of XhrIo objects.
+<a name="line31"></a> * @param {goog.structs.Map} opt_headers Map of default headers to add to every
+<a name="line32"></a> *                                       request.
+<a name="line33"></a> * @param {number} opt_minCount Min. number of objects (Default: 1).
+<a name="line34"></a> * @param {number} opt_maxCount Max. number of objects (Default: 10).
+<a name="line35"></a> * @constructor
+<a name="line36"></a> * @extends {goog.structs.PriorityPool}
+<a name="line37"></a> */
+<a name="line38"></a>goog.net.XhrIoPool = function(opt_headers, opt_minCount, opt_maxCount) {
+<a name="line39"></a>  goog.structs.PriorityPool.call(this, opt_minCount, opt_maxCount);
+<a name="line40"></a>
+<a name="line41"></a>  /**
+<a name="line42"></a>   * Map of default headers to add to every request.
+<a name="line43"></a>   * @type {goog.structs.Map|undefined}
+<a name="line44"></a>   * @private
+<a name="line45"></a>   */
+<a name="line46"></a>  this.headers_ = opt_headers;
+<a name="line47"></a>};
+<a name="line48"></a>goog.inherits(goog.net.XhrIoPool, goog.structs.PriorityPool);
+<a name="line49"></a>
+<a name="line50"></a>/**
+<a name="line51"></a> * Creates an instance of an XhrIo object to use in the pool.
+<a name="line52"></a> * @return {goog.net.XhrIo} The created object.
+<a name="line53"></a> */
+<a name="line54"></a>goog.net.XhrIoPool.prototype.createObject = function() {
+<a name="line55"></a>  var xhrIo = new goog.net.XhrIo();
+<a name="line56"></a>  var headers = this.headers_;
+<a name="line57"></a>  if (headers) {
+<a name="line58"></a>    goog.structs.forEach(headers, function(value, key) {
+<a name="line59"></a>      xhrIo.headers.set(key, value);
+<a name="line60"></a>    });
+<a name="line61"></a>  }
+<a name="line62"></a>  return xhrIo;
+<a name="line63"></a>};
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * Should be overriden to dispose of an object, default implementation is to
+<a name="line68"></a> * remove all it&#39;s members which should render it useless.
+<a name="line69"></a> * @param {goog.net.XhrIo} obj The object to dispose.
+<a name="line70"></a> */
+<a name="line71"></a>goog.net.XhrIoPool.prototype.disposeObject = function(obj) {
+<a name="line72"></a>  obj.dispose();
+<a name="line73"></a>};
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * Determine if an object has become unusable and should not be used.
+<a name="line78"></a> * @param {goog.net.XhrIo} obj The object to test.
+<a name="line79"></a> * @return {boolean} Whether the objct can be reused, which is true if the
+<a name="line80"></a> *     object is not disposed and not active.
+<a name="line81"></a> */
+<a name="line82"></a>goog.net.XhrIoPool.prototype.objectCanBeReused = function(obj) {
+<a name="line83"></a>  // An active XhrIo object should never be used.
+<a name="line84"></a>  return !obj.isDisposed() &amp;&amp; !obj.isActive();
+<a name="line85"></a>};
+</pre>
+
+
+</body>
+</html>

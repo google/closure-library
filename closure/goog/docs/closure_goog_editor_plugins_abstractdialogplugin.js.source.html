@@ -1,0 +1,359 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>abstractdialogplugin.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_editor_plugins_abstractdialogplugin.js.html">abstractdialogplugin.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google, Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview An abstract superclass for TrogEdit dialog plugins. Each
+<a name="line17"></a> * Trogedit dialog has its own plugin.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.editor.plugins.AbstractDialogPlugin&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.editor.plugins.AbstractDialogPlugin.EventType&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.Range&#39;);
+<a name="line26"></a>goog.require(&#39;goog.editor.Field.EventType&#39;);
+<a name="line27"></a>goog.require(&#39;goog.editor.Plugin&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events&#39;);
+<a name="line29"></a>goog.require(&#39;goog.ui.editor.AbstractDialog.EventType&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>// *** Public interface ***************************************************** //
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * An abstract superclass for a Trogedit plugin that creates exactly one
+<a name="line36"></a> * dialog. By default dialogs are not reused -- each time execCommand is called,
+<a name="line37"></a> * a new instance of the dialog object is created (and the old one disposed of).
+<a name="line38"></a> * To enable reusing of the dialog object, subclasses should call
+<a name="line39"></a> * setReuseDialog() after calling the superclass constructor.
+<a name="line40"></a> * @param {string} command The command that this plugin handles.
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @extends {goog.editor.Plugin}
+<a name="line43"></a> */
+<a name="line44"></a>goog.editor.plugins.AbstractDialogPlugin = function(command) {
+<a name="line45"></a>  goog.editor.Plugin.call(this);
+<a name="line46"></a>  this.command_ = command;
+<a name="line47"></a>};
+<a name="line48"></a>goog.inherits(goog.editor.plugins.AbstractDialogPlugin, goog.editor.Plugin);
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/** @inheritDoc */
+<a name="line52"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.isSupportedCommand =
+<a name="line53"></a>    function(command) {
+<a name="line54"></a>  return command == this.command_;
+<a name="line55"></a>};
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>/**
+<a name="line59"></a> * Handles execCommand. Dialog plugins don&#39;t make any changes when they open a
+<a name="line60"></a> * dialog, just when the dialog closes (because only modal dialogs are
+<a name="line61"></a> * supported). Hence this method does not dispatch the change events that the
+<a name="line62"></a> * superclass method does.
+<a name="line63"></a> * @param {string} command The command to execute.
+<a name="line64"></a> * @param {Object} var_args Any additional parameters needed to
+<a name="line65"></a> *     execute the command.
+<a name="line66"></a> * @return {Object|undefined} The result of the execCommand, if any.
+<a name="line67"></a> * @override
+<a name="line68"></a> */
+<a name="line69"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.execCommand = function(
+<a name="line70"></a>    command, var_args) {
+<a name="line71"></a>  return this.execCommandInternal.apply(this, arguments);
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>// *** Events *************************************************************** //
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Event type constants for events the dialog plugins fire.
+<a name="line79"></a> * @enum {string}
+<a name="line80"></a> */
+<a name="line81"></a>goog.editor.plugins.AbstractDialogPlugin.EventType = {
+<a name="line82"></a>  // This event is fired when a dialog has been opened.
+<a name="line83"></a>  OPENED: &#39;dialogOpened&#39;,
+<a name="line84"></a>  // This event is fired when a dialog has been closed.
+<a name="line85"></a>  CLOSED: &#39;dialogClosed&#39;
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>// *** Protected interface ************************************************** //
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Creates a new instance of this plugin&#39;s dialog. Must be overridden by
+<a name="line93"></a> * subclasses.
+<a name="line94"></a> * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
+<a name="line95"></a> *     create the dialog.
+<a name="line96"></a> * @param {*} opt_arg The dialog specific argument. Concrete subclasses should
+<a name="line97"></a> *     declare a specific type.
+<a name="line98"></a> * @return {goog.ui.editor.AbstractDialog} The newly created dialog.
+<a name="line99"></a> * @protected
+<a name="line100"></a> */
+<a name="line101"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.createDialog =
+<a name="line102"></a>    goog.abstractMethod;
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Returns the current dialog that was created and opened by this plugin.
+<a name="line106"></a> * @return {goog.ui.editor.AbstractDialog} The current dialog that was created
+<a name="line107"></a> *     and opened by this plugin.
+<a name="line108"></a> * @protected
+<a name="line109"></a> */
+<a name="line110"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.getDialog = function() {
+<a name="line111"></a>  return this.dialog_;
+<a name="line112"></a>};
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * Sets whether this plugin should reuse the same instance of the dialog each
+<a name="line116"></a> * time execCommand is called or create a new one. This is intended for use by
+<a name="line117"></a> * subclasses only, hence protected.
+<a name="line118"></a> * @param {boolean} reuse Whether to reuse the dialog.
+<a name="line119"></a> * @protected
+<a name="line120"></a> */
+<a name="line121"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.setReuseDialog =
+<a name="line122"></a>    function(reuse) {
+<a name="line123"></a>  this.reuseDialog_ = reuse;
+<a name="line124"></a>};
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Handles execCommand by opening the dialog. Dispatches
+<a name="line129"></a> * {@link goog.editor.plugins.AbstractDialogPlugin.EventType.OPENED} after the
+<a name="line130"></a> * dialog is shown.
+<a name="line131"></a> * @param {string} command The command to execute.
+<a name="line132"></a> * @param {*} opt_arg The dialog specific argument. Should be the same as
+<a name="line133"></a> *     {@link createDialog}.
+<a name="line134"></a> * @return {Object|undefined} The result of the execCommand, if any.
+<a name="line135"></a> * @protected
+<a name="line136"></a> * @override
+<a name="line137"></a> */
+<a name="line138"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.execCommandInternal =
+<a name="line139"></a>    function(command, opt_arg) {
+<a name="line140"></a>  // If this plugin should not reuse dialog instances, first dispose of the
+<a name="line141"></a>  // previous dialog.
+<a name="line142"></a>  if (!this.reuseDialog_) {
+<a name="line143"></a>    this.disposeDialog_();
+<a name="line144"></a>  }
+<a name="line145"></a>  // If there is no dialog yet (or we aren&#39;t reusing the previous one), create
+<a name="line146"></a>  // one.
+<a name="line147"></a>  if (!this.dialog_) {
+<a name="line148"></a>    this.dialog_ = this.createDialog(
+<a name="line149"></a>        // TODO: Add Field.getAppDomHelper. (Note dom helper will
+<a name="line150"></a>        // need to be updated if setAppWindow is called by clients.)
+<a name="line151"></a>        goog.dom.getDomHelper(this.fieldObject.getAppWindow()),
+<a name="line152"></a>        opt_arg);
+<a name="line153"></a>  }
+<a name="line154"></a>
+<a name="line155"></a>  // Since we&#39;re opening a dialog, we need to clear the selection because the
+<a name="line156"></a>  // focus will be going to the dialog, and if we leave an selection in the
+<a name="line157"></a>  // editor while another selection is active in the dialog as the user is
+<a name="line158"></a>  // typing, some browsers will screw up the original selection. But first we
+<a name="line159"></a>  // save it so we can restore it when the dialog closes.
+<a name="line160"></a>  // getRange may return null if there is no selection in the field.
+<a name="line161"></a>  var tempRange = this.fieldObject.getRange();
+<a name="line162"></a>  // saveUsingDom() did not work as well as saveUsingCarets(), not sure why.
+<a name="line163"></a>  this.savedRange_ = tempRange &amp;&amp; tempRange.saveUsingCarets();
+<a name="line164"></a>  goog.dom.Range.clearSelection(
+<a name="line165"></a>      this.fieldObject.getEditableDomHelper().getWindow());
+<a name="line166"></a>
+<a name="line167"></a>  // Listen for the dialog closing so we can clean up.
+<a name="line168"></a>  goog.events.listenOnce(this.dialog_,
+<a name="line169"></a>      goog.ui.editor.AbstractDialog.EventType.AFTER_HIDE,
+<a name="line170"></a>      this.handleAfterHide,
+<a name="line171"></a>      false,
+<a name="line172"></a>      this);
+<a name="line173"></a>
+<a name="line174"></a>  this.fieldObject.setModalMode(true);
+<a name="line175"></a>  this.dialog_.show();
+<a name="line176"></a>  this.dispatchEvent(goog.editor.plugins.AbstractDialogPlugin.EventType.OPENED);
+<a name="line177"></a>};
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * Cleans up after the dialog has closed, including restoring the selection to
+<a name="line182"></a> * what it was before the dialog was opened. If a subclass modifies the editable
+<a name="line183"></a> * field&#39;s content such that the original selection is no longer valid (usually
+<a name="line184"></a> * the case when the user clicks OK, and sometimes also on Cancel), it is that
+<a name="line185"></a> * subclass&#39; responsibility to place the selection in the desired place during
+<a name="line186"></a> * the OK or Cancel (or other) handler. In that case, this method will leave the
+<a name="line187"></a> * selection in place.
+<a name="line188"></a> * @param {goog.events.Event} e The AFTER_HIDE event object.
+<a name="line189"></a> * @protected
+<a name="line190"></a> */
+<a name="line191"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.handleAfterHide = function(
+<a name="line192"></a>    e) {
+<a name="line193"></a>  this.fieldObject.setModalMode(false);
+<a name="line194"></a>
+<a name="line195"></a>  // When the dialog closes due to pressing enter or escape, that happens on the
+<a name="line196"></a>  // keydown event. But the browser will still fire a keyup event after that,
+<a name="line197"></a>  // which is caught by the editable field and causes it to try to fire a
+<a name="line198"></a>  // selection change event. To avoid that, we &quot;debounce&quot; the selection change
+<a name="line199"></a>  // event, meaning the editable field will not fire that event if the keyup
+<a name="line200"></a>  // that caused it immediately after this dialog was hidden (&quot;immediately&quot;
+<a name="line201"></a>  // means a small number of milliseconds defined by the editable field).
+<a name="line202"></a>  this.fieldObject.debounceEvent(goog.editor.Field.EventType.SELECTIONCHANGE);
+<a name="line203"></a>
+<a name="line204"></a>  if (!this.reuseDialog_) {
+<a name="line205"></a>    this.disposeDialog_();
+<a name="line206"></a>  }
+<a name="line207"></a>
+<a name="line208"></a>  this.restoreOriginalSelection();
+<a name="line209"></a>  this.dispatchEvent(goog.editor.plugins.AbstractDialogPlugin.EventType.CLOSED);
+<a name="line210"></a>};
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Restores the selection in the editable field to what it was before the dialog
+<a name="line215"></a> * was opened. This is not guaranteed to work if the contents of the field
+<a name="line216"></a> * have changed.
+<a name="line217"></a> * @protected
+<a name="line218"></a> */
+<a name="line219"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.restoreOriginalSelection =
+<a name="line220"></a>    function() {
+<a name="line221"></a>  this.fieldObject.focus();
+<a name="line222"></a>  if (this.savedRange_) {
+<a name="line223"></a>    this.savedRange_.restore();
+<a name="line224"></a>    this.savedRange_ = null;
+<a name="line225"></a>  }
+<a name="line226"></a>};
+<a name="line227"></a>
+<a name="line228"></a>/**
+<a name="line229"></a> * Cleans up the structure used to save the original selection before the dialog
+<a name="line230"></a> * was opened. Should be used by subclasses that don&#39;t restore the original
+<a name="line231"></a> * selection via restoreOriginalSelection.
+<a name="line232"></a> * @protected
+<a name="line233"></a> */
+<a name="line234"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.disposeOriginalSelection =
+<a name="line235"></a>    function() {
+<a name="line236"></a>  if (this.savedRange_) {
+<a name="line237"></a>    this.savedRange_.dispose();
+<a name="line238"></a>    this.savedRange_ = null;
+<a name="line239"></a>  }
+<a name="line240"></a>};
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/** @inheritDoc */
+<a name="line244"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.disposeInternal =
+<a name="line245"></a>    function() {
+<a name="line246"></a>  this.disposeDialog_();
+<a name="line247"></a>  goog.editor.plugins.AbstractDialogPlugin.superClass_.disposeInternal.call(
+<a name="line248"></a>      this);
+<a name="line249"></a>};
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>// *** Private implementation *********************************************** //
+<a name="line253"></a>
+<a name="line254"></a>/**
+<a name="line255"></a> * The command that this plugin handles.
+<a name="line256"></a> * @type {string}
+<a name="line257"></a> * @private
+<a name="line258"></a> */
+<a name="line259"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.command_;
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * The current dialog that was created and opened by this plugin.
+<a name="line263"></a> * @type {goog.ui.editor.AbstractDialog}
+<a name="line264"></a> * @private
+<a name="line265"></a> */
+<a name="line266"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.dialog_;
+<a name="line267"></a>
+<a name="line268"></a>/**
+<a name="line269"></a> * Whether this plugin should reuse the same instance of the dialog each time
+<a name="line270"></a> * execCommand is called or create a new one.
+<a name="line271"></a> * @type {boolean}
+<a name="line272"></a> * @private
+<a name="line273"></a> */
+<a name="line274"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.reuseDialog_ = false;
+<a name="line275"></a>
+<a name="line276"></a>/**
+<a name="line277"></a> * Mutex to prevent recursive calls to disposeDialog_.
+<a name="line278"></a> * @type {boolean}
+<a name="line279"></a> * @private
+<a name="line280"></a> */
+<a name="line281"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.isDisposingDialog_ = false;
+<a name="line282"></a>
+<a name="line283"></a>/**
+<a name="line284"></a> * SavedRange representing the selection before the dialog was opened.
+<a name="line285"></a> * @type {goog.dom.SavedRange}
+<a name="line286"></a> * @private
+<a name="line287"></a> */
+<a name="line288"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.savedRange_;
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * Disposes of the dialog if needed. It is this abstract class&#39; responsibility
+<a name="line293"></a> * to dispose of the dialog. The &quot;if needed&quot; refers to the fact this method
+<a name="line294"></a> * might be called twice (nested calls, not sequential) in the dispose flow, so
+<a name="line295"></a> * if the dialog was already disposed once it should not be disposed again.
+<a name="line296"></a> * @private
+<a name="line297"></a> */
+<a name="line298"></a>goog.editor.plugins.AbstractDialogPlugin.prototype.disposeDialog_ = function() {
+<a name="line299"></a>  // Wrap disposing the dialog in a mutex. Otherwise disposing it would cause it
+<a name="line300"></a>  // to get hidden (if it is still open) and fire AFTER_HIDE, which in
+<a name="line301"></a>  // turn would cause the dialog to be disposed again (closure only flags an
+<a name="line302"></a>  // object as disposed after the dispose call chain completes, so it doesn&#39;t
+<a name="line303"></a>  // prevent recursive dispose calls).
+<a name="line304"></a>  if (this.dialog_ &amp;&amp; !this.isDisposingDialog_) {
+<a name="line305"></a>    this.isDisposingDialog_ = true;
+<a name="line306"></a>    this.dialog_.dispose();
+<a name="line307"></a>    this.dialog_ = null;
+<a name="line308"></a>    this.isDisposingDialog_ = false;
+<a name="line309"></a>  }
+<a name="line310"></a>};
+</pre>
+
+
+</body>
+</html>

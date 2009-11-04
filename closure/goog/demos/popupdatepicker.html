@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+Copyright 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+  <title>goog.ui.PopupDatePicker</title>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.locale');
+    goog.require('goog.ui.PopupDatePicker');
+  </script>
+  <link rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="css/popupdatepicker.css">
+  <style>
+    #button1, #button2 {
+      display: block;
+      width: 60px;
+      text-align: center;
+      margin: 10px;
+      padding: 10px;
+      font: normal 0.8em verdana,sans-serif;
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>goog.ui.PopupDatePicker</h1>
+
+  <a href="javascript:void(0)" id="button1">Show 1</a>
+  <a href="javascript:void(0)" id="button2">Show 2</a>
+
+  <script>
+    registerDateTimeConstants(goog.locale.DefaultDateTimeConstants, 'en');
+
+    var picker = new goog.ui.PopupDatePicker();
+    picker.render();
+    picker.attach(document.getElementById('button1'));
+    picker.attach(document.getElementById('button2'));
+
+    goog.events.listen(picker, 'change', function(e) {
+      var date = picker.getDate();
+      var dateString = date ? date.toString() : '';
+      picker.getLastTarget().innerHTML = dateString;
+    });
+
+    // Want to use a PopupDatePicker with an input element?
+    // Check out InputDatePicker.
+
+  </script>
+</body>
+</html>

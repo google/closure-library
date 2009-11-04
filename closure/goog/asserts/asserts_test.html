@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+  Copyright 2008 Google Inc. All Rights Reserved.
+-->
+<head>
+<title>Closure Unit Tests - goog.asserts.assert</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.asserts');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<script>
+
+function testAssert() {
+  // None of them may throw exception
+  goog.asserts.assert(true);
+  goog.asserts.assert(1);
+  goog.asserts.assert([]);
+  goog.asserts.assert({});
+
+  assertThrows('assert(false)', goog.partial(goog.asserts.assert, false));
+  assertThrows('assert(0)', goog.partial(goog.asserts.assert, 0));
+  assertThrows('assert(null)', goog.partial(goog.asserts.assert, null));
+  assertThrows('assert(undefined)',
+               goog.partial(goog.asserts.assert, undefined));
+
+  // Test error message
+  var message;
+  try {
+    goog.asserts.assert(false);
+  } catch (e) {
+    message = e.message;
+  }
+  assertEquals('default message', 'Assertion failed', message);
+
+  try {
+    goog.asserts.assert(false, 'ouch');
+  } catch (e) {
+    message = e.message;
+  }
+  assertEquals('custom message', 'Assertion failed: ouch', message);
+}
+
+
+function testFail() {
+  assertThrows('fail()', goog.asserts.fail);
+}
+
+function testNumber() {
+  goog.asserts.assertNumber(1);
+  assertThrows('assertNumber(null)',
+      goog.partial(goog.asserts.assertNumber, null));
+}
+
+function testString() {
+  goog.asserts.assertString('1');
+  assertThrows('assertString(null)',
+      goog.partial(goog.asserts.assertString, null));
+}
+
+function testFunction() {
+  goog.asserts.assertFunction(function() {});
+  assertThrows('assertFunction(null)',
+      goog.partial(goog.asserts.assertFunction, null));
+}
+
+function testObject() {
+  goog.asserts.assertObject({});
+  assertThrows('assertObject(null)',
+      goog.partial(goog.asserts.assertObject, null));
+}
+
+function testInstanceof() {
+  /** @constructor */
+  var F = function() {};
+  goog.asserts.assertInstanceof(new F(), F);
+  assertThrows('assertInstanceof({}, F)',
+      goog.partial(goog.asserts.assertInstanceof, {}, F));
+}
+
+</script>
+</body>
+</html>

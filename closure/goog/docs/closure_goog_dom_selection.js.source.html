@@ -1,0 +1,516 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>selection.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_dom_selection.js.html">selection.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities for working with selections in input boxes and text
+<a name="line17"></a> * areas.
+<a name="line18"></a> *
+<a name="line19"></a> * @see ../demos/dom_selection.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.dom.selection&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.string&#39;);
+<a name="line26"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Sets the place where the selection should start inside a textarea or a text
+<a name="line31"></a> * input
+<a name="line32"></a> * @param {Element} textfield A textarea or text input.
+<a name="line33"></a> * @param {number} pos The position to set the start of the selection at.
+<a name="line34"></a> */
+<a name="line35"></a>goog.dom.selection.setStart = function(textfield, pos) {
+<a name="line36"></a>  if (goog.dom.selection.useSelectionProperties_(textfield)) {
+<a name="line37"></a>    textfield.selectionStart = pos;
+<a name="line38"></a>  } else if (goog.userAgent.IE) {
+<a name="line39"></a>    // destructuring assignment would have been sweet
+<a name="line40"></a>    var tmp = goog.dom.selection.getRangeIe_(textfield);
+<a name="line41"></a>    var range = tmp[0];
+<a name="line42"></a>    var selectionRange = tmp[1];
+<a name="line43"></a>
+<a name="line44"></a>    if (range.inRange(selectionRange)) {
+<a name="line45"></a>      pos = goog.dom.selection.canonicalizePositionIe_(textfield, pos);
+<a name="line46"></a>
+<a name="line47"></a>      range.collapse(true);
+<a name="line48"></a>      range.move(&#39;character&#39;, pos);
+<a name="line49"></a>      range.select();
+<a name="line50"></a>    }
+<a name="line51"></a>  }
+<a name="line52"></a>};
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * Return the place where the selection starts inside a textarea or a text
+<a name="line57"></a> * input
+<a name="line58"></a> * @param {Element} textfield A textarea or text input.
+<a name="line59"></a> * @return {number} The position where the selection starts or 0 if it was
+<a name="line60"></a> *     unable to find the position or no selection exists. Note that we can&#39;t
+<a name="line61"></a> *     reliably tell the difference between an element that has no selection and
+<a name="line62"></a> *     one where it starts at 0.
+<a name="line63"></a> */
+<a name="line64"></a>goog.dom.selection.getStart = function(textfield) {
+<a name="line65"></a>  return goog.dom.selection.getEndPoints_(textfield, true)[0];
+<a name="line66"></a>};
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * Returns the start and end points of the selection within a textarea in IE.
+<a name="line71"></a> * IE treats newline characters as \r\n characters, and we need to check for
+<a name="line72"></a> * these characters at the edge of our selection, to ensure that we return the
+<a name="line73"></a> * right cursor position.
+<a name="line74"></a> * @param {TextRange} range Complete range object, e.g., &quot;Hello\r\n&quot;.
+<a name="line75"></a> * @param {TextRange} selRange Selected range object.
+<a name="line76"></a> * @param {boolean} getOnlyStart Value indicating if only start
+<a name="line77"></a> *     cursor position is to be returned. In IE, obtaining the end position
+<a name="line78"></a> *     involves extra work, hence we have this parameter for calls which need
+<a name="line79"></a> *     only start position.
+<a name="line80"></a> * @return {Array.&lt;number&gt;} An array with the start and end positions where the
+<a name="line81"></a> *     selection starts and ends or [0,0] if it was unable to find the
+<a name="line82"></a> *     positions or no selection exists. Note that we can&#39;t reliably tell the
+<a name="line83"></a> *     difference between an element that has no selection and one where
+<a name="line84"></a> *     it starts and ends at 0. If getOnlyStart was true, we return
+<a name="line85"></a> *     -1 as end offset.
+<a name="line86"></a> * @private
+<a name="line87"></a> */
+<a name="line88"></a>goog.dom.selection.getEndPointsTextareaIe_ = function(
+<a name="line89"></a>    range, selRange, getOnlyStart) {
+<a name="line90"></a>  // Create a duplicate of the selected range object to perform our actions
+<a name="line91"></a>  // against. Example of selectionRange = &quot;&quot; (assuming that the cursor is
+<a name="line92"></a>  // just after the \r\n combination)
+<a name="line93"></a>  var selectionRange = selRange.duplicate();
+<a name="line94"></a>
+<a name="line95"></a>  // Text before the selection start, e.g.,&quot;Hello&quot; (notice how range.text
+<a name="line96"></a>  // excludes the \r\n sequence)
+<a name="line97"></a>  var beforeSelectionText = range.text;
+<a name="line98"></a>  // Text before the selection start, e.g., &quot;Hello&quot; (this will later include
+<a name="line99"></a>  // the \r\n sequences also)
+<a name="line100"></a>  var untrimmedBeforeSelectionText = beforeSelectionText;
+<a name="line101"></a>  // Text within the selection , e.g. &quot;&quot; assuming that the cursor is just after
+<a name="line102"></a>  // the \r\n combination.
+<a name="line103"></a>  var selectionText = selectionRange.text;
+<a name="line104"></a>  // Text within the selection, e.g.,  &quot;&quot; (this will later include the \r\n
+<a name="line105"></a>  // sequences also)
+<a name="line106"></a>  var untrimmedSelectionText = selectionText;
+<a name="line107"></a>
+<a name="line108"></a>  // Boolean indicating whether we are done dealing with the text before the
+<a name="line109"></a>  // selection&#39;s beginning.
+<a name="line110"></a>  var isRangeEndTrimmed = false;
+<a name="line111"></a>  // Go over the range until it becomes a 0-lengthed range or until the range
+<a name="line112"></a>  // text starts changing when we move the end back by one character.
+<a name="line113"></a>  // If after moving the end back by one character, the text remains the same,
+<a name="line114"></a>  // then we need to add a &quot;\r\n&quot; at the end to get the actual text.
+<a name="line115"></a>  while (!isRangeEndTrimmed) {
+<a name="line116"></a>    if (range.compareEndPoints(&#39;StartToEnd&#39;, range) == 0) {
+<a name="line117"></a>      isRangeEndTrimmed = true;
+<a name="line118"></a>    } else {
+<a name="line119"></a>      range.moveEnd(&#39;character&#39;, -1);
+<a name="line120"></a>      if (range.text == beforeSelectionText) {
+<a name="line121"></a>        // If the start position of the cursor was after a \r\n string,
+<a name="line122"></a>        // we would skip over it in one go with the moveEnd call, but
+<a name="line123"></a>        // range.text will still show &quot;Hello&quot; (because of the IE range.text
+<a name="line124"></a>        // bug) - this implies that we should add a \r\n to our
+<a name="line125"></a>        // untrimmedBeforeSelectionText string.
+<a name="line126"></a>        untrimmedBeforeSelectionText += &#39;\r\n&#39;;
+<a name="line127"></a>      } else {
+<a name="line128"></a>        isRangeEndTrimmed = true;
+<a name="line129"></a>      }
+<a name="line130"></a>    }
+<a name="line131"></a>  }
+<a name="line132"></a>
+<a name="line133"></a>  if (getOnlyStart) {
+<a name="line134"></a>    // We return -1 as end, since the caller is only interested in the start
+<a name="line135"></a>    // value.
+<a name="line136"></a>    return [untrimmedBeforeSelectionText.length, -1];
+<a name="line137"></a>  }
+<a name="line138"></a>  // Boolean indicating whether we are done dealing with the text inside the
+<a name="line139"></a>  // selection.
+<a name="line140"></a>  var isSelectionRangeEndTrimmed = false;
+<a name="line141"></a>  // Go over the selected range until it becomes a 0-lengthed range or until
+<a name="line142"></a>  // the range text starts changing when we move the end back by one character.
+<a name="line143"></a>  // If after moving the end back by one character, the text remains the same,
+<a name="line144"></a>  // then we need to add a &quot;\r\n&quot; at the end to get the actual text.
+<a name="line145"></a>  while (!isSelectionRangeEndTrimmed) {
+<a name="line146"></a>    if (selectionRange.compareEndPoints(&#39;StartToEnd&#39;, selectionRange) == 0) {
+<a name="line147"></a>      isSelectionRangeEndTrimmed = true;
+<a name="line148"></a>    } else {
+<a name="line149"></a>      selectionRange.moveEnd(&#39;character&#39;, -1);
+<a name="line150"></a>      if (selectionRange.text == selectionText) {
+<a name="line151"></a>        // If the selection was not empty, and the end point of the selection
+<a name="line152"></a>        // was just after a \r\n, we would have skipped it in one go with the
+<a name="line153"></a>        // moveEnd call, and this implies that we should add a \r\n to the
+<a name="line154"></a>        // untrimmedSelectionText string.
+<a name="line155"></a>        untrimmedSelectionText += &#39;\r\n&#39;;
+<a name="line156"></a>      } else {
+<a name="line157"></a>        isSelectionRangeEndTrimmed = true;
+<a name="line158"></a>      }
+<a name="line159"></a>    }
+<a name="line160"></a>  }
+<a name="line161"></a>  return [untrimmedBeforeSelectionText.length,
+<a name="line162"></a>          untrimmedBeforeSelectionText.length + untrimmedSelectionText.length];
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Returns the start and end points of the selection inside a textarea or a
+<a name="line168"></a> * text input.
+<a name="line169"></a> * @param {Element} textfield A textarea or text input.
+<a name="line170"></a> * @return {Array.&lt;number&gt;} An array with the start and end positions where the
+<a name="line171"></a> *     selection starts and ends or [0,0] if it was unable to find the
+<a name="line172"></a> *     positions or no selection exists. Note that we can&#39;t reliably tell the
+<a name="line173"></a> *     difference between an element that has no selection and one where
+<a name="line174"></a> *     it starts and ends at 0.
+<a name="line175"></a> */
+<a name="line176"></a>goog.dom.selection.getEndPoints = function(textfield) {
+<a name="line177"></a>  return goog.dom.selection.getEndPoints_(textfield, false);
+<a name="line178"></a>};
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Returns the start and end points of the selection inside a textarea or a
+<a name="line183"></a> * text input.
+<a name="line184"></a> * @param {Element} textfield A textarea or text input.
+<a name="line185"></a> * @param {boolean} getOnlyStart Value indicating if only start
+<a name="line186"></a> *     cursor position is to be returned. In IE, obtaining the end position
+<a name="line187"></a> *     involves extra work, hence we have this parameter. In FF, there is not
+<a name="line188"></a> *     much extra effort involved.
+<a name="line189"></a> * @return {Array.&lt;number&gt;} An array with the start and end positions where the
+<a name="line190"></a> *     selection starts and ends or [0,0] if it was unable to find the
+<a name="line191"></a> *     positions or no selection exists. Note that we can&#39;t reliably tell the
+<a name="line192"></a> *     difference between an element that has no selection and one where
+<a name="line193"></a> *     it starts and ends at 0. If getOnlyStart was true, we return
+<a name="line194"></a> *     -1 as end offset.
+<a name="line195"></a> * @private
+<a name="line196"></a> */
+<a name="line197"></a>goog.dom.selection.getEndPoints_ = function(textfield, getOnlyStart) {
+<a name="line198"></a>  var startPos = 0;
+<a name="line199"></a>  var endPos = 0;
+<a name="line200"></a>  if (goog.dom.selection.useSelectionProperties_(textfield)) {
+<a name="line201"></a>    startPos = textfield.selectionStart;
+<a name="line202"></a>    endPos = getOnlyStart ? -1 : textfield.selectionEnd;
+<a name="line203"></a>  } else if (goog.userAgent.IE) {
+<a name="line204"></a>    var tmp = goog.dom.selection.getRangeIe_(textfield);
+<a name="line205"></a>    var range = tmp[0];
+<a name="line206"></a>    var selectionRange = tmp[1];
+<a name="line207"></a>
+<a name="line208"></a>    if (range.inRange(selectionRange)) {
+<a name="line209"></a>      range.setEndPoint(&#39;EndToStart&#39;, selectionRange);
+<a name="line210"></a>      if (textfield.type == &#39;textarea&#39;) {
+<a name="line211"></a>        return goog.dom.selection.getEndPointsTextareaIe_(
+<a name="line212"></a>            range, selectionRange, getOnlyStart);
+<a name="line213"></a>      }
+<a name="line214"></a>      startPos = range.text.length;
+<a name="line215"></a>      if (!getOnlyStart) {
+<a name="line216"></a>        endPos = range.text.length + selectionRange.text.length;
+<a name="line217"></a>      } else {
+<a name="line218"></a>        endPos = -1;  // caller did not ask for end position
+<a name="line219"></a>      }
+<a name="line220"></a>    }
+<a name="line221"></a>  }
+<a name="line222"></a>  return [startPos, endPos];
+<a name="line223"></a>};
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/**
+<a name="line227"></a> * Sets the place where the selection should end inside a text area or a text
+<a name="line228"></a> * input
+<a name="line229"></a> * @param {Element} textfield A textarea or text input.
+<a name="line230"></a> * @param {number} pos The position to end the selection at.
+<a name="line231"></a> */
+<a name="line232"></a>goog.dom.selection.setEnd = function(textfield, pos) {
+<a name="line233"></a>  if (goog.dom.selection.useSelectionProperties_(textfield)) {
+<a name="line234"></a>    textfield.selectionEnd = pos;
+<a name="line235"></a>  } else if (goog.userAgent.IE) {
+<a name="line236"></a>    var tmp = goog.dom.selection.getRangeIe_(textfield);
+<a name="line237"></a>    var range = tmp[0];
+<a name="line238"></a>    var selectionRange = tmp[1];
+<a name="line239"></a>
+<a name="line240"></a>    if (range.inRange(selectionRange)) {
+<a name="line241"></a>      // Both the current position and the start cursor position need
+<a name="line242"></a>      // to be canonicalized to take care of possible \r\n miscounts.
+<a name="line243"></a>      pos = goog.dom.selection.canonicalizePositionIe_(textfield, pos);
+<a name="line244"></a>      var startCursorPos = goog.dom.selection.canonicalizePositionIe_(
+<a name="line245"></a>          textfield, goog.dom.selection.getStart(textfield));
+<a name="line246"></a>
+<a name="line247"></a>      selectionRange.collapse(true);
+<a name="line248"></a>      selectionRange.moveEnd(&#39;character&#39;, pos - startCursorPos);
+<a name="line249"></a>      selectionRange.select();
+<a name="line250"></a>    }
+<a name="line251"></a>  }
+<a name="line252"></a>};
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * Returns the place where the selection ends inside a textarea or a text input
+<a name="line257"></a> * @param {Element} textfield A textarea or text input.
+<a name="line258"></a> * @return {number} The position where the selection ends or 0 if it was
+<a name="line259"></a> *     unable to find the position or no selection exists.
+<a name="line260"></a> */
+<a name="line261"></a>goog.dom.selection.getEnd = function(textfield) {
+<a name="line262"></a> return goog.dom.selection.getEndPoints_(textfield, false)[1];
+<a name="line263"></a>};
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * Sets the cursor position within a textfield.
+<a name="line268"></a> * @param {Element} textfield A textarea or text input.
+<a name="line269"></a> * @param {number} pos The position within the text field.
+<a name="line270"></a> */
+<a name="line271"></a>goog.dom.selection.setCursorPosition = function(textfield, pos) {
+<a name="line272"></a>  if (goog.dom.selection.useSelectionProperties_(textfield)) {
+<a name="line273"></a>    // Mozilla directly supports this
+<a name="line274"></a>    textfield.selectionStart = pos;
+<a name="line275"></a>    textfield.selectionEnd = pos;
+<a name="line276"></a>
+<a name="line277"></a>  } else if (goog.userAgent.IE) {
+<a name="line278"></a>    pos = goog.dom.selection.canonicalizePositionIe_(textfield, pos);
+<a name="line279"></a>
+<a name="line280"></a>    // IE has textranges. A textfield&#39;s textrange encompasses the
+<a name="line281"></a>    // entire textfield&#39;s text by default
+<a name="line282"></a>    var sel = textfield.createTextRange();
+<a name="line283"></a>
+<a name="line284"></a>    sel.collapse(true);
+<a name="line285"></a>    sel.move(&#39;character&#39;, pos);
+<a name="line286"></a>    sel.select();
+<a name="line287"></a>  }
+<a name="line288"></a>};
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * Sets the selected text inside a textarea or a text input
+<a name="line293"></a> * @param {Element} textfield A textarea or text input.
+<a name="line294"></a> * @param {string} text The text to change the selection to.
+<a name="line295"></a> */
+<a name="line296"></a>goog.dom.selection.setText = function(textfield, text) {
+<a name="line297"></a>  if (goog.dom.selection.useSelectionProperties_(textfield)) {
+<a name="line298"></a>    var value = textfield.value;
+<a name="line299"></a>    var oldSelectionStart = textfield.selectionStart;
+<a name="line300"></a>    var before = value.substr(0, oldSelectionStart);
+<a name="line301"></a>    var after = value.substr(textfield.selectionEnd);
+<a name="line302"></a>    textfield.value = before + text + after;
+<a name="line303"></a>    textfield.selectionStart = oldSelectionStart;
+<a name="line304"></a>    textfield.selectionEnd = oldSelectionStart + text.length;
+<a name="line305"></a>  } else if (goog.userAgent.IE) {
+<a name="line306"></a>    var tmp = goog.dom.selection.getRangeIe_(textfield);
+<a name="line307"></a>    var range = tmp[0];
+<a name="line308"></a>    var selectionRange = tmp[1];
+<a name="line309"></a>
+<a name="line310"></a>    if (!range.inRange(selectionRange)) {
+<a name="line311"></a>      return;
+<a name="line312"></a>    }
+<a name="line313"></a>    // When we set the selection text the selection range is collapsed to the
+<a name="line314"></a>    // end. We therefore duplicate the current selection so we know where it
+<a name="line315"></a>    // started. Once we&#39;ve set the selection text we move the start of the
+<a name="line316"></a>    // selection range to the old start
+<a name="line317"></a>    var range2 = selectionRange.duplicate();
+<a name="line318"></a>    selectionRange.text = text;
+<a name="line319"></a>    selectionRange.setEndPoint(&#39;StartToStart&#39;, range2);
+<a name="line320"></a>    selectionRange.select();
+<a name="line321"></a>  } else {
+<a name="line322"></a>    throw Error(&#39;Cannot set the selection end&#39;);
+<a name="line323"></a>  }
+<a name="line324"></a>};
+<a name="line325"></a>
+<a name="line326"></a>
+<a name="line327"></a>/**
+<a name="line328"></a> * Returns the selected text inside a textarea or a text input
+<a name="line329"></a> * @param {Element} textfield A textarea or text input.
+<a name="line330"></a> * @return {string} The selected text.
+<a name="line331"></a> */
+<a name="line332"></a>goog.dom.selection.getText = function(textfield) {
+<a name="line333"></a>  if (goog.dom.selection.useSelectionProperties_(textfield)) {
+<a name="line334"></a>    var s = textfield.value;
+<a name="line335"></a>    return s.substring(textfield.selectionStart, textfield.selectionEnd);
+<a name="line336"></a>  }
+<a name="line337"></a>
+<a name="line338"></a>  if (goog.userAgent.IE) {
+<a name="line339"></a>    var tmp = goog.dom.selection.getRangeIe_(textfield);
+<a name="line340"></a>    var range = tmp[0];
+<a name="line341"></a>    var selectionRange = tmp[1];
+<a name="line342"></a>
+<a name="line343"></a>    if (!range.inRange(selectionRange)) {
+<a name="line344"></a>      return &#39;&#39;;
+<a name="line345"></a>    } else if (textfield.type == &#39;textarea&#39;) {
+<a name="line346"></a>      return goog.dom.selection.getSelectionRangeText_(selectionRange);
+<a name="line347"></a>    }
+<a name="line348"></a>    return selectionRange.text;
+<a name="line349"></a>  }
+<a name="line350"></a>
+<a name="line351"></a>  throw Error(&#39;Cannot get the selection text&#39;);
+<a name="line352"></a>};
+<a name="line353"></a>
+<a name="line354"></a>/**
+<a name="line355"></a> * Returns the selected text within a textarea in IE.
+<a name="line356"></a> * IE treats newline characters as \r\n characters, and we need to check for
+<a name="line357"></a> * these characters at the edge of our selection, to ensure that we return the
+<a name="line358"></a> * right string.
+<a name="line359"></a> * @param {TextRange} selRange Selected range object.
+<a name="line360"></a> * @return {string} Selected text in the textarea.
+<a name="line361"></a> * @private
+<a name="line362"></a> */
+<a name="line363"></a>goog.dom.selection.getSelectionRangeText_ = function(selRange) {
+<a name="line364"></a>  // Create a duplicate of the selected range object to perform our actions
+<a name="line365"></a>  // against. Suppose the text in the textarea is &quot;Hello\r\nWorld&quot; and the
+<a name="line366"></a>  // selection encompasses the &quot;o\r\n&quot; bit, initial selectionRange will be &quot;o&quot;
+<a name="line367"></a>  // (assuming that the cursor is just after the \r\n combination)
+<a name="line368"></a>  var selectionRange = selRange.duplicate();
+<a name="line369"></a>
+<a name="line370"></a>  // Text within the selection , e.g. &quot;o&quot; assuming that the cursor is just after
+<a name="line371"></a>  // the \r\n combination.
+<a name="line372"></a>  var selectionText = selectionRange.text;
+<a name="line373"></a>  // Text within the selection, e.g.,  &quot;o&quot; (this will later include the \r\n
+<a name="line374"></a>  // sequences also)
+<a name="line375"></a>  var untrimmedSelectionText = selectionText;
+<a name="line376"></a>
+<a name="line377"></a>  // Boolean indicating whether we are done dealing with the text inside the
+<a name="line378"></a>  // selection.
+<a name="line379"></a>  var isSelectionRangeEndTrimmed = false;
+<a name="line380"></a>  // Go over the selected range until it becomes a 0-lengthed range or until
+<a name="line381"></a>  // the range text starts changing when we move the end back by one character.
+<a name="line382"></a>  // If after moving the end back by one character, the text remains the same,
+<a name="line383"></a>  // then we need to add a &quot;\r\n&quot; at the end to get the actual text.
+<a name="line384"></a>  while (!isSelectionRangeEndTrimmed) {
+<a name="line385"></a>    if (selectionRange.compareEndPoints(&#39;StartToEnd&#39;, selectionRange) == 0) {
+<a name="line386"></a>      isSelectionRangeEndTrimmed = true;
+<a name="line387"></a>    } else {
+<a name="line388"></a>      selectionRange.moveEnd(&#39;character&#39;, -1);
+<a name="line389"></a>      if (selectionRange.text == selectionText) {
+<a name="line390"></a>        // If the selection was not empty, and the end point of the selection
+<a name="line391"></a>        // was just after a \r\n, we would have skipped it in one go with the
+<a name="line392"></a>        // moveEnd call, and this implies that we should add a \r\n to the
+<a name="line393"></a>        // untrimmedSelectionText string.
+<a name="line394"></a>        untrimmedSelectionText += &#39;\r\n&#39;;
+<a name="line395"></a>      } else {
+<a name="line396"></a>        isSelectionRangeEndTrimmed = true;
+<a name="line397"></a>      }
+<a name="line398"></a>    }
+<a name="line399"></a>  }
+<a name="line400"></a>  return untrimmedSelectionText;
+<a name="line401"></a>};
+<a name="line402"></a>
+<a name="line403"></a>/**
+<a name="line404"></a> * Helper function for returning the range for an object as well as the
+<a name="line405"></a> * selection range
+<a name="line406"></a> * @private
+<a name="line407"></a> * @param {Element} el The element to get the range for.
+<a name="line408"></a> * @return {Array.&lt;TextRange&gt;} Range of object and selection range in two
+<a name="line409"></a> *     element array.
+<a name="line410"></a> */
+<a name="line411"></a>goog.dom.selection.getRangeIe_ = function(el) {
+<a name="line412"></a>  var doc = el.ownerDocument || el.document;
+<a name="line413"></a>
+<a name="line414"></a>  var selectionRange = doc.selection.createRange();
+<a name="line415"></a>  // el.createTextRange() doesn&#39;t work on textareas
+<a name="line416"></a>  var range;
+<a name="line417"></a>
+<a name="line418"></a>  if (el.type == &#39;textarea&#39;) {
+<a name="line419"></a>    range = doc.body.createTextRange();
+<a name="line420"></a>    range.moveToElementText(el);
+<a name="line421"></a>  } else {
+<a name="line422"></a>    range = el.createTextRange();
+<a name="line423"></a>  }
+<a name="line424"></a>
+<a name="line425"></a>  return [range, selectionRange];
+<a name="line426"></a>};
+<a name="line427"></a>
+<a name="line428"></a>
+<a name="line429"></a>/**
+<a name="line430"></a> * Helper function for canonicalizing a position inside a textfield in IE.
+<a name="line431"></a> * Deals with the issue that \r\n counts as 2 characters, but
+<a name="line432"></a> * move(&#39;character&#39;, n) passes over both characters in one move.
+<a name="line433"></a> * @private
+<a name="line434"></a> * @param {Element} textfield The text element.
+<a name="line435"></a> * @param {number} pos The position desired in that element.
+<a name="line436"></a> * @return {number} The canonicalized position that will work properly with
+<a name="line437"></a> *     move(&#39;character&#39;, pos).
+<a name="line438"></a> */
+<a name="line439"></a>goog.dom.selection.canonicalizePositionIe_ = function(textfield, pos) {
+<a name="line440"></a>  if (textfield.type == &#39;textarea&#39;) {
+<a name="line441"></a>    // We do this only for textarea because it is the only one which can
+<a name="line442"></a>    // have a \r\n (input cannot have this).
+<a name="line443"></a>    var value = textfield.value.substring(0, pos);
+<a name="line444"></a>    pos = goog.string.canonicalizeNewlines(value).length;
+<a name="line445"></a>  }
+<a name="line446"></a>  return pos;
+<a name="line447"></a>};
+<a name="line448"></a>
+<a name="line449"></a>
+<a name="line450"></a>/**
+<a name="line451"></a> * Helper function to determine whether it&#39;s okay to use
+<a name="line452"></a> * selectionStart/selectionEnd.
+<a name="line453"></a> *
+<a name="line454"></a> * @param {Element} el The element to check for.
+<a name="line455"></a> * @return {boolean} Wether it&#39;s okay to use the selectionStart and
+<a name="line456"></a> *     selectionEnd properties on {@code el}.
+<a name="line457"></a> * @private
+<a name="line458"></a> */
+<a name="line459"></a>goog.dom.selection.useSelectionProperties_ = function(el) {
+<a name="line460"></a>  try {
+<a name="line461"></a>    return typeof el.selectionStart == &#39;number&#39;;
+<a name="line462"></a>  } catch (e) {
+<a name="line463"></a>    // Firefox throws an exception if you try to access selectionStart
+<a name="line464"></a>    // on an element with display: none.
+<a name="line465"></a>    return false;
+<a name="line466"></a>  }
+<a name="line467"></a>};
+</pre>
+
+
+</body>
+</html>

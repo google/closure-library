@@ -1,0 +1,519 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>bubble.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_bubble.js.html">bubble.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the Bubble class.
+<a name="line17"></a> *
+<a name="line18"></a> *
+<a name="line19"></a> * @see ../demos/bubble.html
+<a name="line20"></a> *
+<a name="line21"></a> * TODO: support decoration and addChild
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.ui.Bubble&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line31"></a>goog.require(&#39;goog.math.Box&#39;);
+<a name="line32"></a>goog.require(&#39;goog.positioning&#39;);
+<a name="line33"></a>goog.require(&#39;goog.positioning.AbsolutePosition&#39;);
+<a name="line34"></a>goog.require(&#39;goog.positioning.AbstractPosition&#39;);
+<a name="line35"></a>goog.require(&#39;goog.positioning.AnchoredPosition&#39;);
+<a name="line36"></a>goog.require(&#39;goog.positioning.Corner&#39;);
+<a name="line37"></a>goog.require(&#39;goog.style&#39;);
+<a name="line38"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line39"></a>goog.require(&#39;goog.ui.Popup&#39;);
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * The Bubble provides a general purpose bubble implementation that can be
+<a name="line45"></a> * anchored to a particular element and displayed for a period of time.
+<a name="line46"></a> *
+<a name="line47"></a> * @param {string|Element} message HTML string or an element to display inside
+<a name="line48"></a> *     the bubble.
+<a name="line49"></a> * @param {Object} opt_config The configuration
+<a name="line50"></a> *     for the bubble. If not specified, the default configuration will be
+<a name="line51"></a> *     used. {@see goog.ui.Bubble.defaultConfig}.
+<a name="line52"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line53"></a> * @constructor
+<a name="line54"></a> * @extends {goog.ui.Component}
+<a name="line55"></a> */
+<a name="line56"></a>goog.ui.Bubble = function(message, opt_config, opt_domHelper) {
+<a name="line57"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line58"></a>
+<a name="line59"></a>  /**
+<a name="line60"></a>   * The HTML string or element to display inside the bubble.
+<a name="line61"></a>   *
+<a name="line62"></a>   * @type {string|Element}
+<a name="line63"></a>   * @private
+<a name="line64"></a>   */
+<a name="line65"></a>  this.message_ = message;
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * The Popup element used to position and display the bubble.
+<a name="line69"></a>   *
+<a name="line70"></a>   * @type {goog.ui.Popup}
+<a name="line71"></a>   * @private
+<a name="line72"></a>   */
+<a name="line73"></a>  this.popup_ = new goog.ui.Popup();
+<a name="line74"></a>
+<a name="line75"></a>  /**
+<a name="line76"></a>   * Configuration map that contains bubble&#39;s UI elements.
+<a name="line77"></a>   *
+<a name="line78"></a>   * @type {Object}
+<a name="line79"></a>   * @private
+<a name="line80"></a>   */
+<a name="line81"></a>  this.config_ = opt_config || goog.ui.Bubble.defaultConfig;
+<a name="line82"></a>
+<a name="line83"></a>  /**
+<a name="line84"></a>   * Id of the close button for this bubble.
+<a name="line85"></a>   *
+<a name="line86"></a>   * @type {string}
+<a name="line87"></a>   * @private
+<a name="line88"></a>   */
+<a name="line89"></a>  this.closeButtonId_ = this.makeId(&#39;cb&#39;);
+<a name="line90"></a>
+<a name="line91"></a>  /**
+<a name="line92"></a>   * Id of the div for the embedded element.
+<a name="line93"></a>   *
+<a name="line94"></a>   * @type {string}
+<a name="line95"></a>   * @private
+<a name="line96"></a>   */
+<a name="line97"></a>  this.messageId_ = this.makeId(&#39;mi&#39;);
+<a name="line98"></a>
+<a name="line99"></a>};
+<a name="line100"></a>goog.inherits(goog.ui.Bubble, goog.ui.Component);
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * In milliseconds, timeout after which the button auto-hides. Null means
+<a name="line104"></a> * infinite.
+<a name="line105"></a> * @type {number?}
+<a name="line106"></a> * @private
+<a name="line107"></a> */
+<a name="line108"></a>goog.ui.Bubble.prototype.timeout_ = null;
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Key returned by the bubble timer.
+<a name="line112"></a> * @type {number}
+<a name="line113"></a> * @private
+<a name="line114"></a> */
+<a name="line115"></a>goog.ui.Bubble.prototype.timerId_ = 0;
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Key returned by the listen function for the close button.
+<a name="line119"></a> * @type {?number}
+<a name="line120"></a> * @private
+<a name="line121"></a> */
+<a name="line122"></a>goog.ui.Bubble.prototype.listener_ = null;
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Key returned by the listen function for the close button.
+<a name="line126"></a> * @type {Element?}
+<a name="line127"></a> * @private
+<a name="line128"></a> */
+<a name="line129"></a>goog.ui.Bubble.prototype.anchor_ = null;
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/** @inheritDoc */
+<a name="line133"></a>goog.ui.Bubble.prototype.createDom = function() {
+<a name="line134"></a>  goog.ui.Bubble.superClass_.createDom.call(this);
+<a name="line135"></a>
+<a name="line136"></a>  var element = this.getElement();
+<a name="line137"></a>  element.style.position = &#39;absolute&#39;;
+<a name="line138"></a>  element.style.visibility = &#39;hidden&#39;;
+<a name="line139"></a>
+<a name="line140"></a>  this.popup_.setElement(element);
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Attaches the bubble to an anchor element. Computes the positioning and
+<a name="line146"></a> * orientation of the bubble.
+<a name="line147"></a> *
+<a name="line148"></a> * @param {Element} anchorElement The element to which we are attaching.
+<a name="line149"></a> */
+<a name="line150"></a>goog.ui.Bubble.prototype.attach = function(anchorElement) {
+<a name="line151"></a>  this.setAnchoredPosition_(
+<a name="line152"></a>      anchorElement, this.computePinnedCorner_(anchorElement));
+<a name="line153"></a>};
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>/**
+<a name="line157"></a> * Sets the corner of the bubble to used in the positioning algorithm.
+<a name="line158"></a> *
+<a name="line159"></a> * @param {goog.positioning.Corner} corner The bubble corner used for
+<a name="line160"></a> *     positioning constants.
+<a name="line161"></a> */
+<a name="line162"></a>goog.ui.Bubble.prototype.setPinnedCorner = function(corner) {
+<a name="line163"></a>  this.popup_.setPinnedCorner(corner);
+<a name="line164"></a>};
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Sets the position of the bubble. Pass null for corner in AnchoredPosition
+<a name="line169"></a> * for corner to be computed automatically.
+<a name="line170"></a> *
+<a name="line171"></a> * @param {goog.positioning.AbstractPosition} position The position of the
+<a name="line172"></a> *     bubble.
+<a name="line173"></a> */
+<a name="line174"></a>goog.ui.Bubble.prototype.setPosition = function(position) {
+<a name="line175"></a>  if (position instanceof goog.positioning.AbsolutePosition) {
+<a name="line176"></a>    this.popup_.setPosition(position);
+<a name="line177"></a>  } else if (position instanceof goog.positioning.AnchoredPosition) {
+<a name="line178"></a>    this.setAnchoredPosition_(position.element, position.corner);
+<a name="line179"></a>  } else {
+<a name="line180"></a>    throw Error(&#39;Bubble only supports absolute and anchored positions!&#39;);
+<a name="line181"></a>  }
+<a name="line182"></a>};
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Sets the timeout after which bubble hides itself.
+<a name="line187"></a> *
+<a name="line188"></a> * @param {number} timeout Timeout of the bubble.
+<a name="line189"></a> */
+<a name="line190"></a>goog.ui.Bubble.prototype.setTimeout = function(timeout) {
+<a name="line191"></a>  this.timeout_ = timeout;
+<a name="line192"></a>};
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * Sets whether the bubble should be automatically hidden whenever user clicks
+<a name="line197"></a> * outside the bubble element.
+<a name="line198"></a> *
+<a name="line199"></a> * @param {boolean} autoHide Whether to hide if user clicks outside the bubble.
+<a name="line200"></a> */
+<a name="line201"></a>goog.ui.Bubble.prototype.setAutoHide = function(autoHide) {
+<a name="line202"></a>  this.popup_.setAutoHide(autoHide);
+<a name="line203"></a>};
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Sets whether the bubble should be visible.
+<a name="line208"></a> *
+<a name="line209"></a> * @param {boolean} visible Desired visibility state.
+<a name="line210"></a> */
+<a name="line211"></a>goog.ui.Bubble.prototype.setVisible = function(visible) {
+<a name="line212"></a>  if (visible &amp;&amp; !this.popup_.isVisible()) {
+<a name="line213"></a>    this.configureElement_();
+<a name="line214"></a>  }
+<a name="line215"></a>  this.popup_.setVisible(visible);
+<a name="line216"></a>  if (!this.popup_.isVisible()) {
+<a name="line217"></a>    this.unconfigureElement_();
+<a name="line218"></a>  }
+<a name="line219"></a>};
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * @return {boolean} Whether the bubble is visible.
+<a name="line224"></a> */
+<a name="line225"></a>goog.ui.Bubble.prototype.isVisible = function() {
+<a name="line226"></a>  return this.popup_.isVisible();
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/** @inheritDoc */
+<a name="line231"></a>goog.ui.Bubble.prototype.disposeInternal = function() {
+<a name="line232"></a>  this.unconfigureElement_();
+<a name="line233"></a>  this.popup_.dispose();
+<a name="line234"></a>  this.popup_ = null;
+<a name="line235"></a>  goog.ui.Bubble.superClass_.disposeInternal.call(this);
+<a name="line236"></a>};
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>/**
+<a name="line240"></a> * Creates element&#39;s contents and configures all timers. This is called on
+<a name="line241"></a> * setVisible(true).
+<a name="line242"></a> * @private
+<a name="line243"></a> */
+<a name="line244"></a>goog.ui.Bubble.prototype.configureElement_ = function() {
+<a name="line245"></a>  if (!this.isInDocument()) {
+<a name="line246"></a>    throw Error(&#39;You must render the bubble before showing it!&#39;);
+<a name="line247"></a>  }
+<a name="line248"></a>
+<a name="line249"></a>  var element = this.getElement();
+<a name="line250"></a>  var corner = this.popup_.getPinnedCorner();
+<a name="line251"></a>  element.innerHTML = this.computeHtmlForCorner_(corner);
+<a name="line252"></a>
+<a name="line253"></a>  if (typeof this.message_ == &#39;object&#39;) {
+<a name="line254"></a>    var messageDiv = this.getDomHelper().getElement(this.messageId_);
+<a name="line255"></a>    this.getDomHelper().appendChild(messageDiv, this.message_);
+<a name="line256"></a>  }
+<a name="line257"></a>  var closeButton = this.getDomHelper().getElement(this.closeButtonId_);
+<a name="line258"></a>  this.listener_ = goog.events.listen(closeButton,
+<a name="line259"></a>        goog.events.EventType.CLICK, this.hideBubble_, false, this);
+<a name="line260"></a>
+<a name="line261"></a>  if (this.timeout_) {
+<a name="line262"></a>    this.timerId_ = goog.Timer.callOnce(this.hideBubble_, this.timeout_, this);
+<a name="line263"></a>  }
+<a name="line264"></a>};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Gets rid of the element&#39;s contents and all assoicated timers and listeners.
+<a name="line269"></a> * This is called on dispose as well as on setVisible(false).
+<a name="line270"></a> * @private
+<a name="line271"></a> */
+<a name="line272"></a>goog.ui.Bubble.prototype.unconfigureElement_ = function() {
+<a name="line273"></a>  if (this.listener_) {
+<a name="line274"></a>    goog.events.unlistenByKey(this.listener_);
+<a name="line275"></a>    this.listener_ = null;
+<a name="line276"></a>  }
+<a name="line277"></a>  if (this.timerId_) {
+<a name="line278"></a>    goog.Timer.clear(this.timerId_);
+<a name="line279"></a>    this.timerId = null;
+<a name="line280"></a>  }
+<a name="line281"></a>
+<a name="line282"></a>  var element = this.getElement();
+<a name="line283"></a>  if (element) {
+<a name="line284"></a>    this.getDomHelper().removeChildren(element);
+<a name="line285"></a>    element.innerHTML = &#39;&#39;;
+<a name="line286"></a>  }
+<a name="line287"></a>};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * Computes bubble position based on anchored element.
+<a name="line292"></a> *
+<a name="line293"></a> * @param {Element} anchorElement The element to which we are attaching.
+<a name="line294"></a> * @param {goog.positioning.Corner} corner The bubble corner used for
+<a name="line295"></a> *     positioning.
+<a name="line296"></a> * @private
+<a name="line297"></a> */
+<a name="line298"></a>goog.ui.Bubble.prototype.setAnchoredPosition_ = function(anchorElement,
+<a name="line299"></a>    corner) {
+<a name="line300"></a>  this.popup_.setPinnedCorner(corner);
+<a name="line301"></a>  var margin = this.createMarginForCorner_(corner);
+<a name="line302"></a>  this.popup_.setMargin(margin);
+<a name="line303"></a>  var anchorCorner = goog.positioning.flipCorner(corner);
+<a name="line304"></a>  this.popup_.setPosition(new goog.positioning.AnchoredPosition(
+<a name="line305"></a>      anchorElement, anchorCorner));
+<a name="line306"></a>};
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>/**
+<a name="line310"></a> * Hides the bubble. This is called asynchronously by timer of event processor
+<a name="line311"></a> * for the mouse click on the close button.
+<a name="line312"></a> * @private
+<a name="line313"></a> */
+<a name="line314"></a>goog.ui.Bubble.prototype.hideBubble_ = function() {
+<a name="line315"></a>  this.setVisible(false);
+<a name="line316"></a>};
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/**
+<a name="line320"></a> * Returns an AnchoredPosition that will position the bubble optimally
+<a name="line321"></a> * given the position of the anchor element and the size of the viewport.
+<a name="line322"></a> *
+<a name="line323"></a> * @param {Element} anchorElement The element to which the bubble is attached.
+<a name="line324"></a> * @return {goog.ui.Popup.AnchoredPosition} The AnchoredPosition to give to
+<a name="line325"></a> *     {@link #setPosition}.
+<a name="line326"></a> */
+<a name="line327"></a>goog.ui.Bubble.prototype.getComputedAnchoredPosition = function(anchorElement) {
+<a name="line328"></a>  return new goog.ui.Popup.AnchoredPosition(
+<a name="line329"></a>      anchorElement, this.computePinnedCorner_(anchorElement));
+<a name="line330"></a>};
+<a name="line331"></a>
+<a name="line332"></a>
+<a name="line333"></a>/**
+<a name="line334"></a> * Computes the pinned corner for the bubble.
+<a name="line335"></a> *
+<a name="line336"></a> * @param {Element} anchorElement The element to which the button is attached.
+<a name="line337"></a> * @return {goog.positioning.Corner} The pinned corner.
+<a name="line338"></a> * @private
+<a name="line339"></a> */
+<a name="line340"></a>goog.ui.Bubble.prototype.computePinnedCorner_ = function(anchorElement) {
+<a name="line341"></a>  var doc = this.getDomHelper().getOwnerDocument(anchorElement);
+<a name="line342"></a>  var viewportElement = goog.style.getClientViewportElement(doc);
+<a name="line343"></a>  var viewportWidth = viewportElement.offsetWidth;
+<a name="line344"></a>  var viewportHeight = viewportElement.offsetHeight;
+<a name="line345"></a>  var anchorElementOffset = goog.style.getPageOffset(anchorElement);
+<a name="line346"></a>  var anchorElementSize = goog.style.getSize(anchorElement);
+<a name="line347"></a>  var anchorType = 0;
+<a name="line348"></a>  // right margin or left?
+<a name="line349"></a>  if (viewportWidth - anchorElementOffset.x - anchorElementSize.width &gt;
+<a name="line350"></a>      anchorElementOffset.x) {
+<a name="line351"></a>    anchorType += 1;
+<a name="line352"></a>  }
+<a name="line353"></a>  // attaches to the top or to the bottom?
+<a name="line354"></a>  if (viewportHeight - anchorElementOffset.y - anchorElementSize.height &gt;
+<a name="line355"></a>      anchorElementOffset.y) {
+<a name="line356"></a>    anchorType += 2;
+<a name="line357"></a>  }
+<a name="line358"></a>  return goog.ui.Bubble.corners_[anchorType];
+<a name="line359"></a>};
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * Computes the right offset for a given bubble corner
+<a name="line364"></a> * and creates a margin element for it. This is done to have the
+<a name="line365"></a> * button anchor element on its frame rather than on the corner.
+<a name="line366"></a> *
+<a name="line367"></a> * @param {goog.positioning.Corner} corner The corner.
+<a name="line368"></a> * @return {goog.math.Box} the computed margin. Only left or right fields are
+<a name="line369"></a> *     non-zero, but they may be negative.
+<a name="line370"></a> * @private
+<a name="line371"></a> */
+<a name="line372"></a>goog.ui.Bubble.prototype.createMarginForCorner_ = function(corner) {
+<a name="line373"></a>  var margin = new goog.math.Box(0, 0, 0, 0);
+<a name="line374"></a>  if (corner &amp; goog.positioning.CornerBit.RIGHT) {
+<a name="line375"></a>    margin.right -= this.config_.marginShift;
+<a name="line376"></a>  } else {
+<a name="line377"></a>    margin.left -= this.config_.marginShift;
+<a name="line378"></a>  }
+<a name="line379"></a>  return margin;
+<a name="line380"></a>};
+<a name="line381"></a>
+<a name="line382"></a>
+<a name="line383"></a>/**
+<a name="line384"></a> * Computes the HTML string for a given bubble orientation.
+<a name="line385"></a> *
+<a name="line386"></a> * @param {goog.positioning.Corner} corner The corner.
+<a name="line387"></a> * @return {string} The HTML string to place inside the bubble&#39;s popup.
+<a name="line388"></a> * @private
+<a name="line389"></a> */
+<a name="line390"></a>goog.ui.Bubble.prototype.computeHtmlForCorner_ = function(corner) {
+<a name="line391"></a>  var bubbleTopClass;
+<a name="line392"></a>  var bubbleBottomClass;
+<a name="line393"></a>  switch (corner) {
+<a name="line394"></a>    case goog.positioning.Corner.TOP_LEFT:
+<a name="line395"></a>      bubbleTopClass = this.config_.cssBubbleTopLeftAnchor;
+<a name="line396"></a>      bubbleBottomClass = this.config_.cssBubbleBottomNoAnchor;
+<a name="line397"></a>      break;
+<a name="line398"></a>    case goog.positioning.Corner.TOP_RIGHT:
+<a name="line399"></a>      bubbleTopClass = this.config_.cssBubbleTopRightAnchor;
+<a name="line400"></a>      bubbleBottomClass = this.config_.cssBubbleBottomNoAnchor;
+<a name="line401"></a>      break;
+<a name="line402"></a>    case goog.positioning.Corner.BOTTOM_LEFT:
+<a name="line403"></a>      bubbleTopClass = this.config_.cssBubbleTopNoAnchor;
+<a name="line404"></a>      bubbleBottomClass = this.config_.cssBubbleBottomLeftAnchor;
+<a name="line405"></a>      break;
+<a name="line406"></a>    case goog.positioning.Corner.BOTTOM_RIGHT:
+<a name="line407"></a>      bubbleTopClass = this.config_.cssBubbleTopNoAnchor;
+<a name="line408"></a>      bubbleBottomClass = this.config_.cssBubbleBottomRightAnchor;
+<a name="line409"></a>      break;
+<a name="line410"></a>    default:
+<a name="line411"></a>      throw Error(&#39;This corner type is not supported by bubble!&#39;);
+<a name="line412"></a>  }
+<a name="line413"></a>  var message = null;
+<a name="line414"></a>  if (typeof this.message_ == &#39;object&#39;) {
+<a name="line415"></a>    message = &#39;&lt;div id=&quot;&#39; + this.messageId_ + &#39;&quot;&gt;&#39;;
+<a name="line416"></a>  } else {
+<a name="line417"></a>    message = this.message_;
+<a name="line418"></a>  }
+<a name="line419"></a>  var html =
+<a name="line420"></a>      &#39;&lt;table border=0 cellspacing=0 cellpadding=0 style=&quot;z-index:1&quot;&#39; +
+<a name="line421"></a>      &#39; width=&#39; + this.config_.bubbleWidth + &#39;&gt;&#39; +
+<a name="line422"></a>      &#39;&lt;tr&gt;&lt;td colspan=4 class=&quot;&#39; + bubbleTopClass + &#39;&quot;&gt;&#39; +
+<a name="line423"></a>      &#39;&lt;tr&gt;&#39; +
+<a name="line424"></a>      &#39;&lt;td class=&quot;&#39; + this.config_.cssBubbleLeft + &#39;&quot;&gt;&#39; +
+<a name="line425"></a>      &#39;&lt;td class=&quot;&#39; + this.config_.cssBubbleFont + &#39;&quot;&#39; +
+<a name="line426"></a>      &#39; style=&quot;padding:0 4;background:white&quot;&gt;&#39; + message +
+<a name="line427"></a>      &#39;&lt;td id=&quot;&#39; + this.closeButtonId_ + &#39;&quot;&#39; +
+<a name="line428"></a>      &#39; class=&quot;&#39; + this.config_.cssCloseButton + &#39;&quot;/&gt;&#39; +
+<a name="line429"></a>      &#39;&lt;td class=&quot;&#39; + this.config_.cssBubbleRight + &#39;&quot;&gt;&#39; +
+<a name="line430"></a>      &#39;&lt;tr&gt;&#39; +
+<a name="line431"></a>      &#39;&lt;td colspan=4 class=&quot;&#39; + bubbleBottomClass + &#39;&quot;&gt;&#39; +
+<a name="line432"></a>      &#39;&lt;/table&gt;&#39;;
+<a name="line433"></a>  return html;
+<a name="line434"></a>};
+<a name="line435"></a>
+<a name="line436"></a>
+<a name="line437"></a>/**
+<a name="line438"></a> * A default configuration for the bubble.
+<a name="line439"></a> *
+<a name="line440"></a> * @type {Object}
+<a name="line441"></a> */
+<a name="line442"></a>goog.ui.Bubble.defaultConfig = {
+<a name="line443"></a>  bubbleWidth: 147,
+<a name="line444"></a>  marginShift: 60,
+<a name="line445"></a>  cssBubbleFont: goog.getCssName(&#39;goog-bubble-font&#39;),
+<a name="line446"></a>  cssCloseButton: goog.getCssName(&#39;goog-bubble-close-button&#39;),
+<a name="line447"></a>  cssBubbleTopRightAnchor: goog.getCssName(&#39;goog-bubble-top-right-anchor&#39;),
+<a name="line448"></a>  cssBubbleTopLeftAnchor: goog.getCssName(&#39;goog-bubble-top-left-anchor&#39;),
+<a name="line449"></a>  cssBubbleTopNoAnchor: goog.getCssName(&#39;goog-bubble-top-no-anchor&#39;),
+<a name="line450"></a>  cssBubbleBottomRightAnchor:
+<a name="line451"></a>      goog.getCssName(&#39;goog-bubble-bottom-right-anchor&#39;),
+<a name="line452"></a>  cssBubbleBottomLeftAnchor: goog.getCssName(&#39;goog-bubble-bottom-left-anchor&#39;),
+<a name="line453"></a>  cssBubbleBottomNoAnchor: goog.getCssName(&#39;goog-bubble-bottom-no-anchor&#39;),
+<a name="line454"></a>  cssBubbleLeft: goog.getCssName(&#39;goog-bubble-left&#39;),
+<a name="line455"></a>  cssBubbleRight: goog.getCssName(&#39;goog-bubble-right&#39;)
+<a name="line456"></a>};
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>/**
+<a name="line460"></a> * An auxiliary array optimizing the corner computation.
+<a name="line461"></a> *
+<a name="line462"></a> * @type {Array.&lt;goog.positioning.Corner&gt;}
+<a name="line463"></a> * @private
+<a name="line464"></a> */
+<a name="line465"></a>goog.ui.Bubble.corners_ = [
+<a name="line466"></a>  goog.positioning.Corner.BOTTOM_RIGHT,
+<a name="line467"></a>  goog.positioning.Corner.BOTTOM_LEFT,
+<a name="line468"></a>  goog.positioning.Corner.TOP_RIGHT,
+<a name="line469"></a>  goog.positioning.Corner.TOP_LEFT
+<a name="line470"></a>];
+</pre>
+
+
+</body>
+</html>

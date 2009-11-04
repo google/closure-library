@@ -1,0 +1,526 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>logstore.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_gears_logstore.js.html">logstore.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This file implements a store for goog.debug.Logger data.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.gears.LogStore&#39;);
+<a name="line20"></a>goog.provide(&#39;goog.gears.LogStore.Query&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.async.Delay&#39;);
+<a name="line23"></a>goog.require(&#39;goog.debug.LogManager&#39;);
+<a name="line24"></a>goog.require(&#39;goog.debug.LogRecord&#39;);
+<a name="line25"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line26"></a>goog.require(&#39;goog.debug.Logger.Level&#39;);
+<a name="line27"></a>goog.require(&#39;goog.gears.BaseStore&#39;);
+<a name="line28"></a>goog.require(&#39;goog.gears.BaseStore.SchemaType&#39;);
+<a name="line29"></a>goog.require(&#39;goog.json&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Implements a store for goog.debug.Logger data.
+<a name="line34"></a> * @param {goog.gears.Database} database Database.
+<a name="line35"></a> * @param {string?} opt_tableName Name of logging table to use.
+<a name="line36"></a> * @extends {goog.gears.BaseStore}
+<a name="line37"></a> * @constructor
+<a name="line38"></a> */
+<a name="line39"></a>goog.gears.LogStore = function(database, opt_tableName) {
+<a name="line40"></a>  goog.gears.BaseStore.call(this, database);
+<a name="line41"></a>
+<a name="line42"></a>  /**
+<a name="line43"></a>   * Name of log table.
+<a name="line44"></a>   * @type {string}
+<a name="line45"></a>   */
+<a name="line46"></a>  var tableName = opt_tableName || goog.gears.LogStore.DEFAULT_TABLE_NAME_;
+<a name="line47"></a>  this.tableName_ = tableName
+<a name="line48"></a>
+<a name="line49"></a>  // Override BaseStore schema attribute.
+<a name="line50"></a>  this.schema = [
+<a name="line51"></a>    {
+<a name="line52"></a>      type: goog.gears.BaseStore.SchemaType.TABLE,
+<a name="line53"></a>      name: tableName,
+<a name="line54"></a>      columns: [
+<a name="line55"></a>         // Unique ID.
+<a name="line56"></a>         &#39;id INTEGER PRIMARY KEY AUTOINCREMENT&#39;,
+<a name="line57"></a>         // Timestamp.
+<a name="line58"></a>         &#39;millis BIGINT&#39;,
+<a name="line59"></a>         // #goog.debug.Logger.Level value.
+<a name="line60"></a>         &#39;level INTEGER&#39;,
+<a name="line61"></a>         // Message.
+<a name="line62"></a>         &#39;msg TEXT&#39;,
+<a name="line63"></a>         // Name of logger object.
+<a name="line64"></a>         &#39;logger TEXT&#39;,
+<a name="line65"></a>         // Serialized error object.
+<a name="line66"></a>         &#39;exception TEXT&#39;,
+<a name="line67"></a>         // Full exception text.
+<a name="line68"></a>         &#39;exceptionText TEXT&#39;
+<a name="line69"></a>       ]
+<a name="line70"></a>    },
+<a name="line71"></a>    {
+<a name="line72"></a>      type: goog.gears.BaseStore.SchemaType.INDEX,
+<a name="line73"></a>      name: tableName + &#39;MillisIndex&#39;,
+<a name="line74"></a>      isUnique: false,
+<a name="line75"></a>      tableName: tableName,
+<a name="line76"></a>      columns: [&#39;millis&#39;]
+<a name="line77"></a>    },
+<a name="line78"></a>    {
+<a name="line79"></a>      type: goog.gears.BaseStore.SchemaType.INDEX,
+<a name="line80"></a>      name: tableName + &#39;LevelIndex&#39;,
+<a name="line81"></a>      isUnique: false,
+<a name="line82"></a>      tableName: tableName,
+<a name="line83"></a>      columns: [&#39;level&#39;]
+<a name="line84"></a>    }
+<a name="line85"></a>  ];
+<a name="line86"></a>
+<a name="line87"></a>  /**
+<a name="line88"></a>   * Buffered log records not yet flushed to DB.
+<a name="line89"></a>   * @type {Array.&lt;goog.debug.Logger.LogRecord&gt;}
+<a name="line90"></a>   * @private
+<a name="line91"></a>   */
+<a name="line92"></a>  this.records_ = [];
+<a name="line93"></a>
+<a name="line94"></a>  /**
+<a name="line95"></a>   * Save the publish handler so it can be removed.
+<a name="line96"></a>   * @type {Function}
+<a name="line97"></a>   * @private
+<a name="line98"></a>   */
+<a name="line99"></a>  this.publishHandler_ = goog.bind(this.addLogRecord, this);
+<a name="line100"></a>};
+<a name="line101"></a>goog.inherits(goog.gears.LogStore, goog.gears.BaseStore);
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/** @inheritDoc */
+<a name="line105"></a>goog.gears.LogStore.prototype.version = 1;
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Whether we are currently capturing logger output.
+<a name="line110"></a> * @type {boolean}
+<a name="line111"></a> * @private
+<a name="line112"></a> */
+<a name="line113"></a>goog.gears.LogStore.prototype.isCapturing_ = false;
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Size of buffered log data messages.
+<a name="line118"></a> * @type {number}
+<a name="line119"></a> * @private
+<a name="line120"></a> */
+<a name="line121"></a>goog.gears.LogStore.prototype.bufferSize_ = 0;
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Scheduler for pruning action.
+<a name="line126"></a> * @type {goog.async.Delay?}
+<a name="line127"></a> * @private
+<a name="line128"></a> */
+<a name="line129"></a>goog.gears.LogStore.prototype.delay_ = null;
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Use this to protect against recursive flushing.
+<a name="line134"></a> * @type {boolean}
+<a name="line135"></a> * @private
+<a name="line136"></a> */
+<a name="line137"></a>goog.gears.LogStore.prototype.isFlushing_ = false;
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * Logger.
+<a name="line142"></a> * @type {goog.debug.Logger}
+<a name="line143"></a> * @private
+<a name="line144"></a> */
+<a name="line145"></a>goog.gears.LogStore.prototype.logger_ =
+<a name="line146"></a>    goog.debug.Logger.getLogger(&#39;goog.gears.LogStore&#39;);
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/**
+<a name="line150"></a>  * Default value for how many records we keep when pruning.
+<a name="line151"></a>  * @type {number}
+<a name="line152"></a>  * @private
+<a name="line153"></a>  */
+<a name="line154"></a>goog.gears.LogStore.DEFAULT_PRUNE_KEEPER_COUNT_ = 1000;
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a>  * Default value for how often to auto-prune (10 minutes).
+<a name="line159"></a>  * @type {number}
+<a name="line160"></a>  * @private
+<a name="line161"></a>  */
+<a name="line162"></a>goog.gears.LogStore.DEFAULT_AUTOPRUNE_INTERVAL_MILLIS_ = 10 * 60 * 1000;
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a>  * The name for the log table.
+<a name="line167"></a>  * @type {string}
+<a name="line168"></a>  * @private
+<a name="line169"></a>  */
+<a name="line170"></a>goog.gears.LogStore.DEFAULT_TABLE_NAME_ = &#39;GoogGearsDebugLogStore&#39;;
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a>  * Max message bytes to buffer before flushing to database.
+<a name="line175"></a>  * @type {number}
+<a name="line176"></a>  * @private
+<a name="line177"></a>  */
+<a name="line178"></a>goog.gears.LogStore.MAX_BUFFER_BYTES_ = 200000;
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Flush buffered log records.
+<a name="line183"></a> */
+<a name="line184"></a>goog.gears.LogStore.prototype.flush = function() {
+<a name="line185"></a>  if (this.isFlushing_ || !this.database_) {
+<a name="line186"></a>    return;
+<a name="line187"></a>  }
+<a name="line188"></a>  this.isFlushing_ = true;
+<a name="line189"></a>
+<a name="line190"></a>  // Grab local copy of records so database can log during this process.
+<a name="line191"></a>  this.logger_.info(&#39;flushing &#39; + this.records_.length + &#39; records&#39;);
+<a name="line192"></a>  var records = this.records_;
+<a name="line193"></a>  this.records_ = [];
+<a name="line194"></a>
+<a name="line195"></a>  for (var i = 0; i &lt; records.length; i++) {
+<a name="line196"></a>    var record = records[i];
+<a name="line197"></a>    var exception = record.getException();
+<a name="line198"></a>    var serializedException = exception ? goog.json.serialize(exception) : &#39;&#39;;
+<a name="line199"></a>    var statement = &#39;INSERT INTO &#39; + this.tableName_ +
+<a name="line200"></a>        &#39; (millis, level, msg, logger, exception, exceptionText)&#39; +
+<a name="line201"></a>        &#39; VALUES (?, ?, ?, ?, ?, ?)&#39;;
+<a name="line202"></a>    this.database_.execute(statement,
+<a name="line203"></a>        record.getMillis(), record.getLevel().value, record.getMessage(),
+<a name="line204"></a>        record.getLoggerName(), serializedException,
+<a name="line205"></a>        record.getExceptionText() || &#39;&#39;);
+<a name="line206"></a>  }
+<a name="line207"></a>
+<a name="line208"></a>  this.isFlushing_ = false;
+<a name="line209"></a>};
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Create new delay object for auto-pruning. Does not stop or
+<a name="line214"></a> * start auto-pruning, call #startAutoPrune and #startAutoPrune for that.
+<a name="line215"></a> * @param {number?} opt_count Number of records of recent hitory to keep.
+<a name="line216"></a> * @param {number?} opt_interval Milliseconds to wait before next pruning.
+<a name="line217"></a> */
+<a name="line218"></a>goog.gears.LogStore.prototype.createAutoPruneDelay = function(
+<a name="line219"></a>    opt_count, opt_interval) {
+<a name="line220"></a>  if (this.delay_) {
+<a name="line221"></a>    this.delay_.dispose();
+<a name="line222"></a>    this.delay_ = null;
+<a name="line223"></a>  }
+<a name="line224"></a>  var interval = typeof opt_interval == &#39;number&#39; ?
+<a name="line225"></a>      opt_interval : goog.gears.LogStore.DEFAULT_AUTOPRUNE_INTERVAL_MILLIS_;
+<a name="line226"></a>  var listener = goog.bind(this.autoPrune_, this, opt_count);
+<a name="line227"></a>  this.delay_ = new goog.async.Delay(listener, interval);
+<a name="line228"></a>};
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Enable periodic pruning. As a side effect, this also flushes the memory
+<a name="line233"></a> * buffer.
+<a name="line234"></a> */
+<a name="line235"></a>goog.gears.LogStore.prototype.startAutoPrune = function() {
+<a name="line236"></a>  if (!this.delay_) {
+<a name="line237"></a>    this.createAutoPruneDelay(
+<a name="line238"></a>        goog.gears.LogStore.DEFAULT_PRUNE_KEEPER_COUNT_,
+<a name="line239"></a>        goog.gears.LogStore.DEFAULT_AUTOPRUNE_INTERVAL_MILLIS_);
+<a name="line240"></a>  }
+<a name="line241"></a>  this.delay_.fire();
+<a name="line242"></a>};
+<a name="line243"></a>
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * Disable scheduled pruning.
+<a name="line247"></a> */
+<a name="line248"></a>goog.gears.LogStore.prototype.stopAutoPrune = function() {
+<a name="line249"></a>  if (this.delay_) {
+<a name="line250"></a>    this.delay_.stop();
+<a name="line251"></a>  }
+<a name="line252"></a>};
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * @return {boolean} True iff auto prune timer is active.
+<a name="line257"></a> */
+<a name="line258"></a>goog.gears.LogStore.prototype.isAutoPruneActive = function() {
+<a name="line259"></a>  return !!this.delay_ &amp;&amp; this.delay_.isActive();
+<a name="line260"></a>};
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * Prune, and schedule next pruning.
+<a name="line265"></a> * @param {number?} opt_count Number of records of recent hitory to keep.
+<a name="line266"></a> * @private
+<a name="line267"></a> */
+<a name="line268"></a>goog.gears.LogStore.prototype.autoPrune_ = function(opt_count) {
+<a name="line269"></a>  this.pruneBeforeCount(opt_count);
+<a name="line270"></a>  this.delay_.start();
+<a name="line271"></a>};
+<a name="line272"></a>
+<a name="line273"></a>
+<a name="line274"></a>/**
+<a name="line275"></a> * Keep some number of most recent log records and delete all older ones.
+<a name="line276"></a> * @param {number?} opt_count Number of records of recent history to keep. If
+<a name="line277"></a> *     unspecified, we use #goog.gears.LogStore.DEFAULT_PRUNE_KEEPER_COUNT_.
+<a name="line278"></a> *     Pass in 0 to delete all log records.
+<a name="line279"></a> */
+<a name="line280"></a>goog.gears.LogStore.prototype.pruneBeforeCount = function(opt_count) {
+<a name="line281"></a>  if (!this.database_) {
+<a name="line282"></a>    return;
+<a name="line283"></a>  }
+<a name="line284"></a>  var count = typeof opt_count == &#39;number&#39; ?
+<a name="line285"></a>      opt_count : goog.gears.LogStore.DEFAULT_PRUNE_KEEPER_COUNT_;
+<a name="line286"></a>  this.logger_.info(&#39;pruning before &#39; + count + &#39; records ago&#39;);
+<a name="line287"></a>  this.flush();
+<a name="line288"></a>  this.database_.execute(&#39;DELETE FROM &#39; + this.tableName_ +
+<a name="line289"></a>      &#39; WHERE id &lt;= ((SELECT MAX(id) FROM &#39; + this.tableName_ + &#39;) - ?)&#39;,
+<a name="line290"></a>      count);
+<a name="line291"></a>};
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * Delete log record #id and all older records.
+<a name="line296"></a> * @param {number} sequenceNumber ID before which we delete all records.
+<a name="line297"></a> */
+<a name="line298"></a>goog.gears.LogStore.prototype.pruneBeforeSequenceNumber =
+<a name="line299"></a>    function(sequenceNumber) {
+<a name="line300"></a>  if (!this.database_) {
+<a name="line301"></a>    return;
+<a name="line302"></a>  }
+<a name="line303"></a>  this.logger_.info(&#39;pruning before sequence number &#39; + sequenceNumber);
+<a name="line304"></a>  this.flush();
+<a name="line305"></a>  this.database_.execute(&#39;DELETE FROM &#39; + this.tableName_ + &#39; WHERE id &lt;= ?&#39;,
+<a name="line306"></a>      sequenceNumber);
+<a name="line307"></a>};
+<a name="line308"></a>
+<a name="line309"></a>
+<a name="line310"></a>/**
+<a name="line311"></a> * Whether we are currently capturing logger output.
+<a name="line312"></a> * @return {boolean} Whether we are currently capturing logger output.
+<a name="line313"></a> */
+<a name="line314"></a>goog.gears.LogStore.prototype.isCapturing = function() {
+<a name="line315"></a>  return this.isCapturing_;
+<a name="line316"></a>};
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/**
+<a name="line320"></a> * Sets whether we are currently capturing logger output.
+<a name="line321"></a> * @param {boolean} capturing Whether to capture logger output.
+<a name="line322"></a> */
+<a name="line323"></a>goog.gears.LogStore.prototype.setCapturing = function(capturing) {
+<a name="line324"></a>  if (capturing != this.isCapturing_) {
+<a name="line325"></a>    this.isCapturing_ = capturing;
+<a name="line326"></a>
+<a name="line327"></a>    // Attach or detach handler from the root logger.
+<a name="line328"></a>    var rootLogger = goog.debug.LogManager.getRoot();
+<a name="line329"></a>    if (capturing) {
+<a name="line330"></a>      rootLogger.addHandler(this.publishHandler_);
+<a name="line331"></a>      this.logger_.info(&#39;enabled&#39;);
+<a name="line332"></a>    } else {
+<a name="line333"></a>      this.logger_.info(&#39;disabling&#39;);
+<a name="line334"></a>      rootLogger.removeHandler(this.publishHandler_);
+<a name="line335"></a>    }
+<a name="line336"></a>  }
+<a name="line337"></a>};
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * Adds a log record.
+<a name="line342"></a> * @param {goog.debug.LogRecord} logRecord the LogRecord.
+<a name="line343"></a> */
+<a name="line344"></a>goog.gears.LogStore.prototype.addLogRecord = function(logRecord) {
+<a name="line345"></a>  this.records_.push(logRecord);
+<a name="line346"></a>  this.bufferSize_ += logRecord.getMessage().length;
+<a name="line347"></a>  var exceptionText = logRecord.getExceptionText();
+<a name="line348"></a>  if (exceptionText) {
+<a name="line349"></a>    this.bufferSize_ += exceptionText.length;
+<a name="line350"></a>  }
+<a name="line351"></a>  if (this.bufferSize_ &gt;= goog.gears.LogStore.MAX_BUFFER_BYTES_) {
+<a name="line352"></a>    this.flush();
+<a name="line353"></a>  }
+<a name="line354"></a>};
+<a name="line355"></a>
+<a name="line356"></a>
+<a name="line357"></a>/**
+<a name="line358"></a> * Select log records.
+<a name="line359"></a> * @param {goog.gears.LogStore.Query} query Query object.
+<a name="line360"></a> * @return {Array.&lt;goog.debug.LogRecord&gt;} Selected logs in descending
+<a name="line361"></a> *     order of creation time.
+<a name="line362"></a> */
+<a name="line363"></a>goog.gears.LogStore.prototype.select = function(query) {
+<a name="line364"></a>  if (!this.database_) {
+<a name="line365"></a>    // This should only occur if we&#39;ve been disposed.
+<a name="line366"></a>    return [];
+<a name="line367"></a>  }
+<a name="line368"></a>  this.flush();
+<a name="line369"></a>
+<a name="line370"></a>  // TODO Perhaps have Query object build this SQL string so we can
+<a name="line371"></a>  // omit unneeded WHERE clauses.
+<a name="line372"></a>  var statement =
+<a name="line373"></a>      &#39;SELECT id, millis, level, msg, logger, exception, exceptionText&#39; +
+<a name="line374"></a>      &#39; FROM &#39; + this.tableName_ +
+<a name="line375"></a>      &#39; WHERE level &gt;= ? AND millis &gt;= ? AND millis &lt;= ?&#39; +
+<a name="line376"></a>      &#39; AND msg like ? and logger like ?&#39; +
+<a name="line377"></a>      &#39; ORDER BY id DESC LIMIT ?&#39;;
+<a name="line378"></a>  var rows = this.database_.queryObjectArray(statement,
+<a name="line379"></a>      query.level.value, query.minMillis, query.maxMillis,
+<a name="line380"></a>      query.msgLike, query.loggerLike, query.limit);
+<a name="line381"></a>
+<a name="line382"></a>  var result = Array(rows.length);
+<a name="line383"></a>  for (var i = rows.length - 1; i &gt;= 0; i--) {
+<a name="line384"></a>    var row = rows[i];
+<a name="line385"></a>
+<a name="line386"></a>    // Parse fields, allowing for invalid values.
+<a name="line387"></a>    var sequenceNumber = Number(row[&#39;id&#39;]) || 0;
+<a name="line388"></a>    var level = goog.debug.Logger.Level.getPredefinedLevelByValue(
+<a name="line389"></a>        Number(row[&#39;level&#39;]) || 0);
+<a name="line390"></a>    var msg = row[&#39;msg&#39;] || &#39;&#39;;
+<a name="line391"></a>    var loggerName = row[&#39;logger&#39;] || &#39;&#39;;
+<a name="line392"></a>    var millis = Number(row[&#39;millis&#39;]) || 0;
+<a name="line393"></a>    var serializedException = row[&#39;exception&#39;];
+<a name="line394"></a>    var exception = serializedException ?
+<a name="line395"></a>        goog.json.parse(serializedException) : null;
+<a name="line396"></a>    var exceptionText = row[&#39;exceptionText&#39;] || &#39;&#39;;
+<a name="line397"></a>
+<a name="line398"></a>    // Create record.
+<a name="line399"></a>    var record = new goog.debug.LogRecord(level, msg, loggerName,
+<a name="line400"></a>        millis, sequenceNumber);
+<a name="line401"></a>    if (exception) {
+<a name="line402"></a>      record.setException(exception);
+<a name="line403"></a>      record.setExceptionText(exceptionText);
+<a name="line404"></a>    }
+<a name="line405"></a>
+<a name="line406"></a>    result[i] = record;
+<a name="line407"></a>  }
+<a name="line408"></a>  return result;
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>/**
+<a name="line413"></a> * Clean up.
+<a name="line414"></a> */
+<a name="line415"></a>goog.gears.LogStore.prototype.disposeInternal = function() {
+<a name="line416"></a>  this.flush();
+<a name="line417"></a>
+<a name="line418"></a>  goog.gears.LogStore.superClass_.disposeInternal.call(this);
+<a name="line419"></a>
+<a name="line420"></a>  if (this.delay_) {
+<a name="line421"></a>    this.delay_.dispose();
+<a name="line422"></a>    this.delay_ = null;
+<a name="line423"></a>  }
+<a name="line424"></a>};
+<a name="line425"></a>
+<a name="line426"></a>
+<a name="line427"></a>
+<a name="line428"></a>/**
+<a name="line429"></a> * Query to select log records.
+<a name="line430"></a> * @constructor
+<a name="line431"></a> */
+<a name="line432"></a>goog.gears.LogStore.Query = function() {
+<a name="line433"></a>};
+<a name="line434"></a>
+<a name="line435"></a>
+<a name="line436"></a>/**
+<a name="line437"></a> * Minimum logging level.
+<a name="line438"></a> * @type {goog.debug.Logger.Level}
+<a name="line439"></a> */
+<a name="line440"></a>goog.gears.LogStore.Query.prototype.level = goog.debug.Logger.Level.ALL;
+<a name="line441"></a>
+<a name="line442"></a>
+<a name="line443"></a>/**
+<a name="line444"></a> * Minimum timestamp, inclusive.
+<a name="line445"></a> * @type {number}
+<a name="line446"></a> */
+<a name="line447"></a>goog.gears.LogStore.Query.prototype.minMillis = -1;
+<a name="line448"></a>
+<a name="line449"></a>
+<a name="line450"></a>/**
+<a name="line451"></a> * Maximum timestamp, inclusive.
+<a name="line452"></a> * @type {number}
+<a name="line453"></a> */
+<a name="line454"></a>goog.gears.LogStore.Query.prototype.maxMillis = Infinity;
+<a name="line455"></a>
+<a name="line456"></a>
+<a name="line457"></a>/**
+<a name="line458"></a> * Message &#39;like&#39; pattern.
+<a name="line459"></a> * See http://www.sqlite.org/lang_expr.html#likeFunc for &#39;like&#39; syntax.
+<a name="line460"></a> * @type {string}
+<a name="line461"></a> */
+<a name="line462"></a>goog.gears.LogStore.Query.prototype.msgLike = &#39;%&#39;;
+<a name="line463"></a>
+<a name="line464"></a>
+<a name="line465"></a>/**
+<a name="line466"></a> * Logger name &#39;like&#39; pattern.
+<a name="line467"></a> * See http://www.sqlite.org/lang_expr.html#likeFunc for &#39;like&#39; syntax.
+<a name="line468"></a> * @type {string}
+<a name="line469"></a> */
+<a name="line470"></a>goog.gears.LogStore.Query.prototype.loggerLike = &#39;%&#39;;
+<a name="line471"></a>
+<a name="line472"></a>
+<a name="line473"></a>/**
+<a name="line474"></a> * Max # recent records to return. -1 means no limit.
+<a name="line475"></a> * @type {number}
+<a name="line476"></a> */
+<a name="line477"></a>goog.gears.LogStore.Query.prototype.limit = -1;
+</pre>
+
+
+</body>
+</html>

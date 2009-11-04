@@ -1,0 +1,385 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>eventhandler.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_events_eventhandler.js.html">eventhandler.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2005 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Class to create objects which want to handle multiple events
+<a name="line17"></a> * and have their listeners easily cleaned up via a dispose method.
+<a name="line18"></a> *
+<a name="line19"></a> * Example:
+<a name="line20"></a> * &lt;pre&gt;
+<a name="line21"></a> * function Something() {
+<a name="line22"></a> *   goog.events.EventHandler.call(this);
+<a name="line23"></a> *
+<a name="line24"></a> *   ... set up object ...
+<a name="line25"></a> *
+<a name="line26"></a> *   // Add event listeners
+<a name="line27"></a> *   this.listen(this.starEl, &#39;click&#39;, this.handleStar);
+<a name="line28"></a> *   this.listen(this.headerEl, &#39;click&#39;, this.expand);
+<a name="line29"></a> *   this.listen(this.collapseEl, &#39;click&#39;, this.collapse);
+<a name="line30"></a> *   this.listen(this.infoEl, &#39;mouseover&#39;, this.showHover);
+<a name="line31"></a> *   this.listen(this.infoEl, &#39;mouseout&#39;, this.hideHover);
+<a name="line32"></a> * }
+<a name="line33"></a> * goog.inherits(Something, goog.events.EventHandler);
+<a name="line34"></a> *
+<a name="line35"></a> * Something.prototype.disposeInternal = function() {
+<a name="line36"></a> *   Something.superClass_.disposeInternal.call(this);
+<a name="line37"></a> *   goog.dom.removeNode(this.container);
+<a name="line38"></a> * };
+<a name="line39"></a> *
+<a name="line40"></a> *
+<a name="line41"></a> * // Then elsewhere:
+<a name="line42"></a> *
+<a name="line43"></a> * var activeSomething = null;
+<a name="line44"></a> * function openSomething() {
+<a name="line45"></a> *   activeSomething = new Something();
+<a name="line46"></a> * }
+<a name="line47"></a> *
+<a name="line48"></a> * function closeSomething() {
+<a name="line49"></a> *   if (activeSomething) {
+<a name="line50"></a> *     activeSomething.dispose();  // Remove event listeners
+<a name="line51"></a> *     activeSomething = null;
+<a name="line52"></a> *   }
+<a name="line53"></a> * }
+<a name="line54"></a> * &lt;/pre&gt;
+<a name="line55"></a> *
+<a name="line56"></a> */
+<a name="line57"></a>
+<a name="line58"></a>goog.provide(&#39;goog.events.EventHandler&#39;);
+<a name="line59"></a>
+<a name="line60"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line61"></a>goog.require(&#39;goog.events&#39;);
+<a name="line62"></a>goog.require(&#39;goog.events.EventWrapper&#39;);
+<a name="line63"></a>goog.require(&#39;goog.object&#39;);
+<a name="line64"></a>goog.require(&#39;goog.structs.SimplePool&#39;);
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * Super class for objects that want to easily manage a number of event
+<a name="line69"></a> * listeners.  It allows a short cut to listen and also provides a quick way
+<a name="line70"></a> * to remove all events listeners belonging to this object. It is optimized to
+<a name="line71"></a> * use less objects if only one event is being listened to, but if that&#39;s the
+<a name="line72"></a> * case, it may not be worth using the EventHandler anyway.
+<a name="line73"></a> * @param {Object} opt_handler Object in whose scope to call the listeners.
+<a name="line74"></a> * @constructor
+<a name="line75"></a> * @extends {goog.Disposable}
+<a name="line76"></a> */
+<a name="line77"></a>goog.events.EventHandler = function(opt_handler) {
+<a name="line78"></a>  this.handler_ = opt_handler;
+<a name="line79"></a>};
+<a name="line80"></a>goog.inherits(goog.events.EventHandler, goog.Disposable);
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Initial count for the keyPool_
+<a name="line85"></a> * @type {number}
+<a name="line86"></a> */
+<a name="line87"></a>goog.events.EventHandler.KEY_POOL_INITIAL_COUNT = 0;
+<a name="line88"></a>
+<a name="line89"></a>
+<a name="line90"></a>/**
+<a name="line91"></a> * Max count for the keyPool_
+<a name="line92"></a> * @type {number}
+<a name="line93"></a> */
+<a name="line94"></a>goog.events.EventHandler.KEY_POOL_MAX_COUNT = 100;
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * SimplePool to cache the key object. This was implemented to make IE6
+<a name="line99"></a> * performance better and removed an object allocation in the listen method
+<a name="line100"></a> * when in steady state.
+<a name="line101"></a> * @type {goog.structs.SimplePool}
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.events.EventHandler.keyPool_ = new goog.structs.SimplePool(
+<a name="line105"></a>    goog.events.EventHandler.KEY_POOL_INITIAL_COUNT,
+<a name="line106"></a>    goog.events.EventHandler.KEY_POOL_MAX_COUNT);
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Keys for events that are being listened to. This is used once there are more
+<a name="line111"></a> * than one event to listen to. If there is only one event to listen to, key_
+<a name="line112"></a> * is used.
+<a name="line113"></a> * @type {Object?}
+<a name="line114"></a> * @private
+<a name="line115"></a> */
+<a name="line116"></a>goog.events.EventHandler.keys_ = null;
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Keys for event that is being listened to if only one event is being listened
+<a name="line121"></a> * to. This is a performance optimization to avoid creating an extra object
+<a name="line122"></a> * if not necessary.
+<a name="line123"></a> * @type {string?}
+<a name="line124"></a> * @private
+<a name="line125"></a> */
+<a name="line126"></a>goog.events.EventHandler.key_ = null;
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * Listen to an event on a DOM node or EventTarget.  If the function is ommitted
+<a name="line131"></a> * then the EventHandler&#39;s handleEvent method will be used.
+<a name="line132"></a> * @param {goog.events.EventTarget|EventTarget} src Event source.
+<a name="line133"></a> * @param {string|Array.&lt;string&gt;} type Event type to listen for or array of
+<a name="line134"></a> *     event types.
+<a name="line135"></a> * @param {Function|Object} opt_fn Optional callback function to be used as the
+<a name="line136"></a> *    listener or an object with handleEvent function.
+<a name="line137"></a> * @param {boolean} opt_capture Optional whether to use capture phase.
+<a name="line138"></a> * @param {Object} opt_handler Object in whose scope to call the listener.
+<a name="line139"></a> * @return {goog.events.EventHandler} This object, allowing for chaining of
+<a name="line140"></a> *     calls.
+<a name="line141"></a> */
+<a name="line142"></a>goog.events.EventHandler.prototype.listen = function(src, type, opt_fn,
+<a name="line143"></a>                                                     opt_capture,
+<a name="line144"></a>                                                     opt_handler) {
+<a name="line145"></a>  if (goog.isArray(type)) {
+<a name="line146"></a>    for (var i = 0; i &lt; type.length; i++) {
+<a name="line147"></a>      this.listen(src, type[i], opt_fn, opt_capture, opt_handler);
+<a name="line148"></a>    }
+<a name="line149"></a>  } else {
+<a name="line150"></a>    var key = (/** @type {number} */
+<a name="line151"></a>        goog.events.listen(src, type, opt_fn || this,
+<a name="line152"></a>                           opt_capture || false,
+<a name="line153"></a>                           opt_handler || this.handler_ || this));
+<a name="line154"></a>    this.recordListenerKey_(key);
+<a name="line155"></a>  }
+<a name="line156"></a>
+<a name="line157"></a>  return this;
+<a name="line158"></a>};
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Listen to an event on a DOM node or EventTarget.  If the function is ommitted
+<a name="line163"></a> * then the EventHandler&#39;s handleEvent method will be used. After the event has
+<a name="line164"></a> * fired the event listener is removed from the target. If an array of event
+<a name="line165"></a> * types is provided, each event type will be listened to once.
+<a name="line166"></a> * @param {goog.events.EventTarget|EventTarget} src Event source.
+<a name="line167"></a> * @param {string|Array.&lt;string&gt;} type Event type to listen for or array of
+<a name="line168"></a> *     event types.
+<a name="line169"></a> * @param {Function|Object} opt_fn Optional callback function to be used as the
+<a name="line170"></a> *    listener or an object with handleEvent function.
+<a name="line171"></a> * @param {boolean} opt_capture Optional whether to use capture phase.
+<a name="line172"></a> * @param {Object} opt_handler Object in whose scope to call the listener.
+<a name="line173"></a> * @return {goog.events.EventHandler} This object, allowing for chaining of
+<a name="line174"></a> *     calls.
+<a name="line175"></a> */
+<a name="line176"></a>goog.events.EventHandler.prototype.listenOnce = function(src, type, opt_fn,
+<a name="line177"></a>                                                         opt_capture,
+<a name="line178"></a>                                                         opt_handler) {
+<a name="line179"></a>  if (goog.isArray(type)) {
+<a name="line180"></a>    for (var i = 0; i &lt; type.length; i++) {
+<a name="line181"></a>      this.listenOnce(src, type[i], opt_fn, opt_capture, opt_handler);
+<a name="line182"></a>    }
+<a name="line183"></a>  } else {
+<a name="line184"></a>    var key = (/** @type {number} */
+<a name="line185"></a>        goog.events.listenOnce(src, type, opt_fn || this,
+<a name="line186"></a>                               opt_capture || false,
+<a name="line187"></a>                               opt_handler || this.handler_ || this));
+<a name="line188"></a>    this.recordListenerKey_(key);
+<a name="line189"></a>  }
+<a name="line190"></a>
+<a name="line191"></a>  return this;
+<a name="line192"></a>};
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * Adds an event listener with a specific event wrapper on a DOM Node or an
+<a name="line197"></a> * object that has implemented {@link goog.events.EventTarget}. A listener can
+<a name="line198"></a> * only be added once to an object.
+<a name="line199"></a> *
+<a name="line200"></a> * @param {EventTarget|goog.events.EventTarget} src The node to listen to
+<a name="line201"></a> *     events on.
+<a name="line202"></a> * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
+<a name="line203"></a> * @param {Function|Object} listener Callback method, or an object with a
+<a name="line204"></a> *     handleEvent function.
+<a name="line205"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+<a name="line206"></a> *     false).
+<a name="line207"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line208"></a> * @return {goog.events.EventHandler} This object, allowing for chaining of
+<a name="line209"></a> *     calls.
+<a name="line210"></a> */
+<a name="line211"></a>goog.events.EventHandler.prototype.listenWithWrapper = function(src, wrapper,
+<a name="line212"></a>    listener, opt_capt, opt_handler) {
+<a name="line213"></a>  wrapper.listen(src, listener, opt_capt, opt_handler || this.handler_, this);
+<a name="line214"></a>  return this;
+<a name="line215"></a>};
+<a name="line216"></a>
+<a name="line217"></a>
+<a name="line218"></a>/**
+<a name="line219"></a> * Record the key returned for the listener so that it can be user later
+<a name="line220"></a> * to remove the listener.
+<a name="line221"></a> * @param {number} key Unique key for the listener.
+<a name="line222"></a> * @private
+<a name="line223"></a> */
+<a name="line224"></a>goog.events.EventHandler.prototype.recordListenerKey_ = function(key) {
+<a name="line225"></a>  if (this.keys_) {
+<a name="line226"></a>    // already have multiple keys
+<a name="line227"></a>    this.keys_[key] = true;
+<a name="line228"></a>  } else if (this.key_) {
+<a name="line229"></a>    // going from one key to multiple - must now use object as map
+<a name="line230"></a>    this.keys_ = goog.events.EventHandler.keyPool_.getObject();
+<a name="line231"></a>    this.keys_[this.key_] = true;
+<a name="line232"></a>    this.key_ = null;
+<a name="line233"></a>    this.keys_[key] = true;
+<a name="line234"></a>  } else {
+<a name="line235"></a>    // first key - can use single key
+<a name="line236"></a>    this.key_ = key;
+<a name="line237"></a>  }
+<a name="line238"></a>};
+<a name="line239"></a>
+<a name="line240"></a>
+<a name="line241"></a>/**
+<a name="line242"></a> * Unlistens on an event.
+<a name="line243"></a> * @param {goog.events.EventTarget|EventTarget} src Event source.
+<a name="line244"></a> * @param {string|Array.&lt;string&gt;} type Event type to listen for.
+<a name="line245"></a> * @param {Function|Object} opt_fn Optional callback function to be used as the
+<a name="line246"></a> *    listener or an object with handleEvent function.
+<a name="line247"></a> * @param {boolean} opt_capture Optional whether to use capture phase.
+<a name="line248"></a> * @param {Object} opt_handler Object in whose scope to call the listener.
+<a name="line249"></a> * @return {goog.events.EventHandler} This object, allowing for chaining of
+<a name="line250"></a> *     calls.
+<a name="line251"></a> */
+<a name="line252"></a>goog.events.EventHandler.prototype.unlisten = function(src, type, opt_fn,
+<a name="line253"></a>                                                       opt_capture,
+<a name="line254"></a>                                                       opt_handler) {
+<a name="line255"></a>  if (this.key_ || this.keys_) {
+<a name="line256"></a>    if (goog.isArray(type)) {
+<a name="line257"></a>      for (var i = 0; i &lt; type.length; i++) {
+<a name="line258"></a>        this.unlisten(src, type[i], opt_fn, opt_capture, opt_handler);
+<a name="line259"></a>      }
+<a name="line260"></a>    } else {
+<a name="line261"></a>      var listener = goog.events.getListener(src, type, opt_fn || this,
+<a name="line262"></a>          opt_capture || false, opt_handler || this.handler_ || this);
+<a name="line263"></a>
+<a name="line264"></a>      if (listener) {
+<a name="line265"></a>        var key = listener.key;
+<a name="line266"></a>        goog.events.unlistenByKey(key);
+<a name="line267"></a>
+<a name="line268"></a>        if (this.keys_) {
+<a name="line269"></a>          goog.object.remove(this.keys_, key);
+<a name="line270"></a>        } else if (this.key_ == key) {
+<a name="line271"></a>          this.key_ = null;
+<a name="line272"></a>        }
+<a name="line273"></a>      }
+<a name="line274"></a>    }
+<a name="line275"></a>  }
+<a name="line276"></a>
+<a name="line277"></a>  return this;
+<a name="line278"></a>};
+<a name="line279"></a>
+<a name="line280"></a>
+<a name="line281"></a>/**
+<a name="line282"></a> * Removes an event listener which was added with listenWithWrapper().
+<a name="line283"></a> *
+<a name="line284"></a> * @param {EventTarget|goog.events.EventTarget} src The target to stop
+<a name="line285"></a> *     listening to events on.
+<a name="line286"></a> * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
+<a name="line287"></a> * @param {Function|Object} listener The listener function to remove.
+<a name="line288"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+<a name="line289"></a> *     whether the listener is fired during the capture or bubble phase of the
+<a name="line290"></a> *     event.
+<a name="line291"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line292"></a> * @return {goog.events.EventHandler} This object, allowing for chaining of
+<a name="line293"></a> *     calls.
+<a name="line294"></a> */
+<a name="line295"></a>goog.events.EventHandler.prototype.unlistenWithWrapper = function(src, wrapper,
+<a name="line296"></a>    listener, opt_capt, opt_handler) {
+<a name="line297"></a>  wrapper.unlisten(src, listener, opt_capt, opt_handler || this.handler_, this);
+<a name="line298"></a>  return this;
+<a name="line299"></a>};
+<a name="line300"></a>
+<a name="line301"></a>
+<a name="line302"></a>/**
+<a name="line303"></a> * Unlistens to all events.
+<a name="line304"></a> */
+<a name="line305"></a>goog.events.EventHandler.prototype.removeAll = function() {
+<a name="line306"></a>  if (this.keys_) {
+<a name="line307"></a>    for (var key in this.keys_) {
+<a name="line308"></a>      goog.events.unlistenByKey((/** @type {number} */ key));
+<a name="line309"></a>      // Clean the keys before returning object to the pool.
+<a name="line310"></a>      delete this.keys_[key];
+<a name="line311"></a>    }
+<a name="line312"></a>    goog.events.EventHandler.keyPool_.releaseObject(this.keys_);
+<a name="line313"></a>    this.keys_ = null;
+<a name="line314"></a>
+<a name="line315"></a>  } else if (this.key_) {
+<a name="line316"></a>    goog.events.unlistenByKey(this.key_);
+<a name="line317"></a>  }
+<a name="line318"></a>};
+<a name="line319"></a>
+<a name="line320"></a>
+<a name="line321"></a>/**
+<a name="line322"></a> * Disposes of this EventHandler and remove all listeners that it registered.
+<a name="line323"></a> */
+<a name="line324"></a>goog.events.EventHandler.prototype.disposeInternal = function() {
+<a name="line325"></a>  goog.events.EventHandler.superClass_.disposeInternal.call(this);
+<a name="line326"></a>  this.removeAll();
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Default event handler
+<a name="line332"></a> * @param {goog.events.Event} e Event object.
+<a name="line333"></a> */
+<a name="line334"></a>goog.events.EventHandler.prototype.handleEvent = function(e) {
+<a name="line335"></a>  throw Error(&#39;EventHandler.handleEvent not implemented&#39;);
+<a name="line336"></a>};
+</pre>
+
+
+</body>
+</html>

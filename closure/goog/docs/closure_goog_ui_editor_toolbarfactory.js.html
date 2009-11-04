@@ -1,0 +1,1462 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>toolbarfactory.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">toolbarfactory.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Generic factory functions for creating the building blocks for
+ an editor toolbar.
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="closure_goog_ui_editor_toolbarfactory.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/ui/editor/toolbarfactory.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.addFont"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">addFont<span class="args">(<span class="arg">button</span>,&nbsp;<span class="arg">caption</span>,&nbsp;<span class="arg">value</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds a menu item to the given font menu button.  The first font listed in
+the {@code value} argument is considered the font ID, so adding two items
+whose CSS style starts with the same font may lead to unpredictable results.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">button</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Select.html">goog.ui.Select</a></span></div>
+        <div class="entryOverview">Font menu button.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">caption</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Caption to show for the font menu.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">value</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Value for the corresponding &#39;font-family&#39; CSS style.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line83">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.addFontSize"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">addFontSize<span class="args">(<span class="arg">button</span>,&nbsp;<span class="arg">caption</span>,&nbsp;<span class="arg">value</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds a menu item to the given font size menu button.  The {@code value}
+argument must be a legacy HTML font size in the 0-7 range.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">button</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Select.html">goog.ui.Select</a></span></div>
+        <div class="entryOverview">Font size menu button.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">caption</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Caption to show in the font size menu.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">value</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Value for the corresponding HTML font size.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line124">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.addFontSizes"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">addFontSizes<span class="args">(<span class="arg">button</span>,&nbsp;<span class="arg">sizes</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Bulk-adds font sizes to the given font size menu button.  The argument must
+be an array of font size descriptor objects, each of which must have the
+following attributes:
+<ul>
+<li>{@code caption} - Caption to show in the font size menu (e.g. &#39;Huge&#39;)
+<li>{@code value} - Value for the corresponding HTML font size (e.g. 6)
+</li></li></ul>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">button</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Select.html">goog.ui.Select</a></span></div>
+        <div class="entryOverview">Font size menu button.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">sizes</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">{caption: string</span>,<span class="type"> value:number}</span>&gt;</div>
+        <div class="entryOverview">Array of font size descriptors.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line110">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.addFonts"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">addFonts<span class="args">(<span class="arg">button</span>,&nbsp;<span class="arg">fonts</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Bulk-adds fonts to the given font menu button.  The argument must be an
+array of font descriptor objects, each of which must have the following
+attributes:
+<ul>
+<li>{@code caption} - Caption to show in the font menu (e.g. &#39;Tahoma&#39;)
+<li>{@code value} - Value for the corresponding &#39;font-family&#39; CSS style
+(e.g. &#39;Tahoma, Arial, sans-serif&#39;)
+</li></li></ul>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">button</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Select.html">goog.ui.Select</a></span></div>
+        <div class="entryOverview">Font menu button.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">fonts</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">{caption: string</span>,<span class="type"> value: string}</span>&gt;</div>
+        <div class="entryOverview">Array of font descriptors.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line68">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.addFormatOption"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">addFormatOption<span class="args">(<span class="arg">button</span>,&nbsp;<span class="arg">caption</span>,&nbsp;<span class="arg">tag</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds a menu item to the given &quot;Format block&quot; menu button.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">button</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Select.html">goog.ui.Select</a></span></div>
+        <div class="entryOverview">&quot;Format block&quot; menu button.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">caption</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Caption to show in the menu.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">tag</span>
+        : <div class="fullType"><span class="type">goog.dom.TagName</span></div>
+        <div class="entryOverview">Corresponding block format tag.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line188">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.addFormatOptions"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">addFormatOptions<span class="args">(<span class="arg">button</span>,&nbsp;<span class="arg">formats</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Bulk-adds format options to the given &quot;Format block&quot; menu button.  The
+argument must be an array of format option descriptor objects, each of
+which must have the following attributes:
+<ul>
+<li>{@code caption} - Caption to show in the menu (e.g. &#39;Minor heading&#39;)
+<li>{@code command} - Corresponding {@link goog.dom.TagName} (e.g.
+&#39;H4&#39;)
+</li></li></ul>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">button</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Select.html">goog.ui.Select</a></span></div>
+        <div class="entryOverview">&quot;Format block&quot; menu button.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">formats</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">{caption: string</span>,<span class="type"> command: string}</span>&gt;</div>
+        <div class="entryOverview">Array of format option descriptors.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line174">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.createContent_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">createContent_<span class="args">(<span class="arg">caption</span>,&nbsp;<span class="arg">opt_classNames</span>,&nbsp;<span class="arg">opt_domHelper</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new DIV that wraps a button caption, optionally applying CSS
+class names to it.  Used as a helper function in button factory methods.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">caption</span>
+        : <div class="fullType"><span class="type">goog.ui.ControlContent</span></div>
+        <div class="entryOverview">Button caption.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_classNames</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">CSS class name(s) to apply to the DIV that wraps the caption (if any).</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        <div class="entryOverview">DOM helper, used for DOM creation; defaults to the current document if unspecified.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+            DIV that wraps the caption.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line412">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.getPrimaryFont"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">getPrimaryFont<span class="args">(<span class="arg">fontSpec</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Takes a font spec (e.g. &quot;Arial, Helvetica, sans-serif&quot;) and returns the
+primary font name, normalized to lowercase (e.g. &quot;arial&quot;).
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">fontSpec</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Font specification.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
+            The primary font name, in lowercase.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line47">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.getPxFromLegacySize"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">getPxFromLegacySize<span class="args">(<span class="arg">fontSize</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Converts a legacy font size specification into an equivalent pixel size.
+For example, {@code <font size="6">} is {@code font-size: 32px;}, etc.</font>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">fontSize</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Legacy font size spec in the 0-7 range.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>&nbsp;
+            Equivalent pixel size.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line146">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.makeButton"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">makeButton<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">tooltip</span>,&nbsp;<span class="arg">caption</span>,&nbsp;<span class="arg">opt_classNames</span>,&nbsp;<span class="arg">opt_renderer</span>,&nbsp;<span class="arg">opt_domHelper</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Button.html">goog.ui.Button</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a toolbar button with the given ID, tooltip, and caption.  Applies
+any custom CSS class names to the button&#39;s caption element.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Button ID; must equal a {@link goog.editor.Command} for built-in buttons, anything else for custom buttons.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">tooltip</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Tooltip to be shown on hover.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">caption</span>
+        : <div class="fullType"><span class="type">goog.ui.ControlContent</span></div>
+        <div class="entryOverview">Button caption.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_classNames</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">CSS class name(s) to apply to the caption element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_renderer</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></div>
+        <div class="entryOverview">Button renderer; defaults to {@link goog.ui.ToolbarButtonRenderer} if unspecified.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        <div class="entryOverview">DOM helper, used for DOM creation; defaults to the current document if unspecified.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Button.html">goog.ui.Button</a></span></div>&nbsp;
+            A toolbar button.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line260">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.makeColorMenuButton"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">makeColorMenuButton<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">tooltip</span>,&nbsp;<span class="arg">caption</span>,&nbsp;<span class="arg">opt_classNames</span>,&nbsp;<span class="arg">opt_renderer</span>,&nbsp;<span class="arg">opt_domHelper</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_ColorMenuButton.html">goog.ui.ColorMenuButton</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a color menu button with the given ID, tooltip, and caption.
+Applies any custom CSS class names to the button&#39;s caption element.  The
+button is created with a default color menu containing standard color
+palettes.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Button ID; must equal a {@link goog.editor.Command} for built-in toolbar buttons, but can be anything else for custom buttons.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">tooltip</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Tooltip to be shown on hover.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">caption</span>
+        : <div class="fullType"><span class="type">goog.ui.ControlContent</span></div>
+        <div class="entryOverview">Button caption.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_classNames</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">CSS class name(s) to apply to the caption element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_renderer</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ui_ColorMenuButtonRenderer.html">goog.ui.ColorMenuButtonRenderer</a></span></div>
+        <div class="entryOverview">Button renderer; defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer} if unspecified.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        <div class="entryOverview">DOM helper, used for DOM creation; defaults to the current document if unspecified.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_ColorMenuButton.html">goog.ui.ColorMenuButton</a></span></div>&nbsp;
+            A color menu button.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line387">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.makeMenuButton"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">makeMenuButton<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">tooltip</span>,&nbsp;<span class="arg">caption</span>,&nbsp;<span class="arg">opt_classNames</span>,&nbsp;<span class="arg">opt_renderer</span>,&nbsp;<span class="arg">opt_domHelper</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_MenuButton.html">goog.ui.MenuButton</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a menu button with the given ID, tooltip, and caption. Applies
+any custom CSS class names to the button&#39;s caption element.  The button
+returned doesn&#39;t have an actual menu attached; use {@link
+goog.ui.MenuButton#setMenu} to attach a {@link goog.ui.Menu} to the
+button.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Button ID; must equal a {@link goog.editor.Command} for built-in buttons, anything else for custom buttons.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">tooltip</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Tooltip to be shown on hover.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">caption</span>
+        : <div class="fullType"><span class="type">goog.ui.ControlContent</span></div>
+        <div class="entryOverview">Button caption.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_classNames</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">CSS class name(s) to apply to the caption element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_renderer</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></div>
+        <div class="entryOverview">Button renderer; defaults to {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        <div class="entryOverview">DOM helper, used for DOM creation; defaults to the current document if unspecified.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_MenuButton.html">goog.ui.MenuButton</a></span></div>&nbsp;
+            A menu button.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line316">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.makeSelectButton"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">makeSelectButton<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">tooltip</span>,&nbsp;<span class="arg">caption</span>,&nbsp;<span class="arg">opt_classNames</span>,&nbsp;<span class="arg">opt_renderer</span>,&nbsp;<span class="arg">opt_domHelper</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Select.html">goog.ui.Select</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a select button with the given ID, tooltip, and caption. Applies
+any custom CSS class names to the button&#39;s root element.  The button
+returned doesn&#39;t have an actual menu attached; use {@link
+goog.ui.Select#setMenu} to attach a {@link goog.ui.Menu} containing
+{@link goog.ui.Option}s to the select button.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Button ID; must equal a {@link goog.editor.Command} for built-in buttons, anything else for custom buttons.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">tooltip</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Tooltip to be shown on hover.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">caption</span>
+        : <div class="fullType"><span class="type">goog.ui.ControlContent</span></div>
+        <div class="entryOverview">Button caption; used as the default caption when nothing is selected.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_classNames</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">CSS class name(s) to apply to the button&#39;s root element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_renderer</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ui_MenuButtonRenderer.html">goog.ui.MenuButtonRenderer</a></span></div>
+        <div class="entryOverview">Button renderer; defaults to {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        <div class="entryOverview">DOM helper, used for DOM creation; defaults to the current document if unspecified.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Select.html">goog.ui.Select</a></span></div>&nbsp;
+            A select button.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line349">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.makeToggleButton"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">makeToggleButton<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">tooltip</span>,&nbsp;<span class="arg">caption</span>,&nbsp;<span class="arg">opt_classNames</span>,&nbsp;<span class="arg">opt_renderer</span>,&nbsp;<span class="arg">opt_domHelper</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Button.html">goog.ui.Button</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a toggle button with the given ID, tooltip, and caption. Applies
+any custom CSS class names to the button&#39;s caption element. The button
+returned has checkbox-like toggle semantics.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Button ID; must equal a {@link goog.editor.Command} for built-in buttons, anything else for custom buttons.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">tooltip</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">Tooltip to be shown on hover.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">caption</span>
+        : <div class="fullType"><span class="type">goog.ui.ControlContent</span></div>
+        <div class="entryOverview">Button caption.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_classNames</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">CSS class name(s) to apply to the caption element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_renderer</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></div>
+        <div class="entryOverview">Button renderer; defaults to {@link goog.ui.ToolbarButtonRenderer} if unspecified.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        <div class="entryOverview">DOM helper, used for DOM creation; defaults to the current document if unspecified.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Button.html">goog.ui.Button</a></span></div>&nbsp;
+            A toggle button.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line289">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.editor.ToolbarFactory.makeToolbar"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">makeToolbar<span class="args">(<span class="arg">items</span>,&nbsp;<span class="arg">elem</span>,&nbsp;<span class="arg">opt_isRightToLeft</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Toolbar.html">goog.ui.Toolbar</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a {@link goog.ui.Toolbar} containing the specified set of
+toolbar buttons, and renders it into the given parent element.  Each
+item in the {@code items} array must a {@link goog.ui.Control}.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">items</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="class_goog_ui_Control.html">goog.ui.Control</a></span>&gt;</div>
+        <div class="entryOverview">Toolbar items; each must be a {@link goog.ui.Control}.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">elem</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        <div class="entryOverview">Toolbar parent element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_isRightToLeft</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether the editor chrome is right-to-left; defaults to the directionality of the toolbar parent element.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>!</span><span class="type"><a href="class_goog_ui_Toolbar.html">goog.ui.Toolbar</a></span></div>&nbsp;
+            Editor toolbar, rendered into the given parent element.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line211">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.editor.ToolbarFactory.</span><span class="entryName">LEGACY_SIZE_TO_PX_MAP_</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;</div>
+     </div>
+
+
+     <div class="entryOverview">
+       Map of legacy font sizes (0-7) to equivalent pixel sizes.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_editor_toolbarfactory.js.source.html#line156">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/ui/editor/toolbarfactory.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

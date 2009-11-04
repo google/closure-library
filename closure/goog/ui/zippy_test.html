@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+Copyright 2008 Google Inc. All Rights Reserved.
+
+-->
+<head>
+  <title>Closure Unit Tests - goog.ui.Zippy</title>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.dom');
+    goog.require('goog.events');
+    goog.require('goog.testing.events');
+    goog.require('goog.testing.jsunit');
+    goog.require('goog.ui.Zippy');
+    goog.require('goog.ui.ZippyEvent');
+  </script>
+  <style type="text/css">
+
+    .demo {
+      border: solid 1px red;
+      margin: 0 0 20px 0;
+    }
+
+    .demo h2 {
+      background-color: yellow;
+      border: solid 1px #ccc;
+      padding: 2px;
+      margin: 0;
+      fint-size: 100%;
+    }
+
+    .demo div {
+      border: solid 1px #ccc;
+      padding: 2px;
+    }
+
+  </style>
+</head>
+<body>
+
+
+<div class="demo" id="d1">
+
+  <h2 id="t1">handler</h2>
+
+  <div id="c1">
+    sem. Suspendisse porta felis ac ipsum. Sed tincidunt dui vitae nulla. Ut
+    blandit. Nunc non neque. Mauris placerat. Vestibulum mollis tellus id dolor.
+    Phasellus ac dolor molestie nunc euismod aliquam. Mauris tellus ipsum,
+    fringilla id, tincidunt eu, vestibulum sit amet, metus. Quisque congue
+    varius
+    ligula. Quisque ornare mollis enim. Aliquam erat volutpat. Nulla mattis
+    venenatis magna.
+  </div>
+</div>
+
+
+<script>
+
+  var zippy, fakeZippy1, fakeZippy2, contentlessZippy;
+
+  function setUp() {
+    zippy = new goog.ui.Zippy(goog.dom.$('t1'), goog.dom.$('c1'));
+
+    var fakeControlEl = document.createElement('button');
+    var fakeContentEl = document.createElement('div');
+
+    fakeZippy1 = new goog.ui.Zippy(fakeControlEl.cloneNode(true),
+        fakeContentEl.cloneNode(true), true);
+    fakeZippy2 = new goog.ui.Zippy(fakeControlEl.cloneNode(true),
+        fakeContentEl.cloneNode(true), false);
+    contentlessZippy = new goog.ui.Zippy(fakeControlEl.cloneNode(true),
+        undefined, true);
+  }
+
+  function testConstructor() {
+    assertNotNull('must not be null', zippy);
+  }
+
+  function testIsExpanded() {
+    assertEquals("Default expanded must be false", false, zippy.isExpanded());
+    assertEquals("Expanded must be true", true, fakeZippy1.isExpanded());
+    assertEquals("Expanded must be false", false, fakeZippy2.isExpanded());
+  }
+
+  function tearDown() {
+    zippy.disposeInternal();
+    fakeZippy1.disposeInternal();
+    fakeZippy2.disposeInternal();
+  }
+
+  function testExpandCollapse() {
+    zippy.expand();
+    assertEquals("expanded must be true", true, zippy.isExpanded());
+
+    zippy.collapse();
+    assertEquals("expanded must be false", false, zippy.isExpanded());
+  }
+
+  function testSetExpand() {
+    var expanded = !zippy.isExpanded();
+    zippy.setExpanded(expanded);
+    assertEquals("expanded must be " + expanded, expanded, zippy.isExpanded());
+  }
+
+  function testToggle() {
+    var expanded = !zippy.isExpanded();
+    zippy.toggle();
+    assertEquals("expanded must be " + expanded, expanded, zippy.isExpanded());
+  }
+
+  function testCustomEventTOGGLE() {
+    var dispatchedActionCount;
+    var handleAction = function() {
+      dispatchedActionCount++;
+    }
+
+    var doTest = function (zippyObj) {
+      dispatchedActionCount = 0;
+      goog.events.listen(zippyObj, goog.ui.Zippy.Events.TOGGLE, handleAction);
+      zippy.toggle();
+      assertEquals("Custom Event must be called ", 1, dispatchedActionCount);
+    }
+
+    doTest(zippy);
+    doTest(fakeZippy1);
+    doTest(contentlessZippy);
+  }
+
+  function testBasicZippyBehavior() {
+    var dispatchedActionCount = 0;
+    var handleAction = function() {
+      dispatchedActionCount++;
+    }
+
+    goog.events.listen(zippy, goog.ui.Zippy.Events.TOGGLE, handleAction);
+    goog.testing.events.fireClickSequence(zippy.elHeader_);
+    assertEquals('Zippy  must have dispatched TOGGLE on click', 1,
+        dispatchedActionCount);
+
+  }
+</script>
+
+</body>
+</html>

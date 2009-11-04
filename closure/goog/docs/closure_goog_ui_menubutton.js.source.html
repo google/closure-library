@@ -1,0 +1,792 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>menubutton.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_menubutton.js.html">menubutton.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A menu button control.
+<a name="line17"></a> *
+<a name="line18"></a> * @see ../demos/menubutton.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.MenuButton&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.a11y&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.a11y.State&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.KeyHandler.EventType&#39;);
+<a name="line30"></a>goog.require(&#39;goog.math.Box&#39;);
+<a name="line31"></a>goog.require(&#39;goog.math.Rect&#39;);
+<a name="line32"></a>goog.require(&#39;goog.positioning.Corner&#39;);
+<a name="line33"></a>goog.require(&#39;goog.positioning.MenuAnchoredPosition&#39;);
+<a name="line34"></a>goog.require(&#39;goog.style&#39;);
+<a name="line35"></a>goog.require(&#39;goog.ui.Button&#39;);
+<a name="line36"></a>goog.require(&#39;goog.ui.Component.EventType&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.Component.State&#39;);
+<a name="line38"></a>goog.require(&#39;goog.ui.ControlContent&#39;);
+<a name="line39"></a>goog.require(&#39;goog.ui.Menu&#39;);
+<a name="line40"></a>goog.require(&#39;goog.ui.MenuButtonRenderer&#39;);
+<a name="line41"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * A menu button control.  Extends {@link goog.ui.Button} by composing a button
+<a name="line46"></a> * with a dropdown arrow and a popup menu.
+<a name="line47"></a> *
+<a name="line48"></a> * @param {goog.ui.ControlContent} content Text caption or existing DOM
+<a name="line49"></a> *     structure to display as the button&#39;s caption (if any).
+<a name="line50"></a> * @param {goog.ui.Menu} opt_menu Menu to render under the button when clicked.
+<a name="line51"></a> * @param {goog.ui.ButtonRenderer} opt_renderer Renderer used to render or
+<a name="line52"></a> *     decorate the menu button; defaults to {@link goog.ui.MenuButtonRenderer}.
+<a name="line53"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+<a name="line54"></a> *     document interaction.
+<a name="line55"></a> * @constructor
+<a name="line56"></a> * @extends {goog.ui.Button}
+<a name="line57"></a> */
+<a name="line58"></a>goog.ui.MenuButton = function(content, opt_menu, opt_renderer, opt_domHelper) {
+<a name="line59"></a>  goog.ui.Button.call(this, content, opt_renderer ||
+<a name="line60"></a>      goog.ui.MenuButtonRenderer.getInstance(), opt_domHelper);
+<a name="line61"></a>
+<a name="line62"></a>  // Menu buttons support the OPENED state.
+<a name="line63"></a>  this.setSupportedState(goog.ui.Component.State.OPENED, true);
+<a name="line64"></a>
+<a name="line65"></a>  if (opt_menu) {
+<a name="line66"></a>    this.setMenu(opt_menu);
+<a name="line67"></a>  }
+<a name="line68"></a>  this.timer_ = new goog.Timer(500);  // 0.5 sec
+<a name="line69"></a>};
+<a name="line70"></a>goog.inherits(goog.ui.MenuButton, goog.ui.Button);
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * The menu.
+<a name="line75"></a> * @type {goog.ui.Menu|undefined}
+<a name="line76"></a> * @private
+<a name="line77"></a> */
+<a name="line78"></a>goog.ui.MenuButton.prototype.menu_;
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Whether the popup menu should be aligned to the start or the end of the
+<a name="line83"></a> * button; defaults to true (align to start).
+<a name="line84"></a> * @type {boolean}
+<a name="line85"></a> * @private
+<a name="line86"></a> */
+<a name="line87"></a>goog.ui.MenuButton.prototype.alignToStart_ = true;
+<a name="line88"></a>
+<a name="line89"></a>
+<a name="line90"></a>/**
+<a name="line91"></a> * Whether the popup menu should scroll when it&#39;s to big to fit vertically
+<a name="line92"></a> * on the screen. Defaults to false, use the adjust logic to reposition the
+<a name="line93"></a> * menu on overflow rather then scroll.
+<a name="line94"></a> * @type {boolean}
+<a name="line95"></a> * @private
+<a name="line96"></a> */
+<a name="line97"></a>goog.ui.MenuButton.prototype.scrollOnOverflow_ = false;
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Whether the attached popup menu is focusable or not (defaults to false).
+<a name="line102"></a> * Popup menus attached to menu buttons usually don&#39;t need to be focusable,
+<a name="line103"></a> * i.e. the button retains keyboard focus, and forwards key events to the
+<a name="line104"></a> * menu for processing.  However, menus like {@link goog.ui.FilteredMenu}
+<a name="line105"></a> * need to be focusable.
+<a name="line106"></a> * @type {boolean}
+<a name="line107"></a> * @private
+<a name="line108"></a> */
+<a name="line109"></a>goog.ui.MenuButton.prototype.isFocusablePopupMenu_ = false;
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * A Timer to correct menu position.
+<a name="line114"></a> * @type {goog.Timer}
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.MenuButton.prototype.timer_;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * The bounding rectangle of the button element.
+<a name="line122"></a> * @type {goog.math.Rect}
+<a name="line123"></a> * @private
+<a name="line124"></a> */
+<a name="line125"></a>goog.ui.MenuButton.prototype.buttonRect_;
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * The viewport rectangle.
+<a name="line130"></a> * @type {goog.math.Box}
+<a name="line131"></a> * @private
+<a name="line132"></a> */
+<a name="line133"></a>goog.ui.MenuButton.prototype.viewportBox_;
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * The original size.
+<a name="line138"></a> * @type {goog.math.Size|undefined}
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.ui.MenuButton.prototype.originalSize_;
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Sets up event handlers specific to menu buttons.
+<a name="line146"></a> * @override
+<a name="line147"></a> */
+<a name="line148"></a>goog.ui.MenuButton.prototype.enterDocument = function() {
+<a name="line149"></a>  goog.ui.MenuButton.superClass_.enterDocument.call(this);
+<a name="line150"></a>  if (this.menu_) {
+<a name="line151"></a>    this.attachMenuEventListeners_(this.menu_, true);
+<a name="line152"></a>  }
+<a name="line153"></a>  goog.dom.a11y.setState(this.getElement(),
+<a name="line154"></a>      goog.dom.a11y.State.HASPOPUP, &#39;true&#39;);
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * Removes event handlers specific to menu buttons, and ensures that the
+<a name="line160"></a> * attached menu also exits the document.
+<a name="line161"></a> * @override
+<a name="line162"></a> */
+<a name="line163"></a>goog.ui.MenuButton.prototype.exitDocument = function() {
+<a name="line164"></a>  goog.ui.MenuButton.superClass_.exitDocument.call(this);
+<a name="line165"></a>  if (this.menu_) {
+<a name="line166"></a>    this.setOpen(false);
+<a name="line167"></a>    this.menu_.exitDocument();
+<a name="line168"></a>    this.attachMenuEventListeners_(this.menu_, false);
+<a name="line169"></a>
+<a name="line170"></a>    var menuElement = this.menu_.getElement();
+<a name="line171"></a>    if (menuElement) {
+<a name="line172"></a>      goog.dom.removeNode(menuElement);
+<a name="line173"></a>    }
+<a name="line174"></a>  }
+<a name="line175"></a>};
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/** @inheritDoc */
+<a name="line179"></a>goog.ui.MenuButton.prototype.disposeInternal = function() {
+<a name="line180"></a>  goog.ui.MenuButton.superClass_.disposeInternal.call(this);
+<a name="line181"></a>  if (this.menu_) {
+<a name="line182"></a>    this.menu_.dispose();
+<a name="line183"></a>    delete this.menu_;
+<a name="line184"></a>  }
+<a name="line185"></a>  this.timer_.dispose();
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Handles mousedown events.  Invokes the superclass implementation to dispatch
+<a name="line191"></a> * an ACTIVATE event and activate the button.  Also toggles the visibility of
+<a name="line192"></a> * the attached menu.
+<a name="line193"></a> * @param {goog.events.Event} e Mouse event to handle.
+<a name="line194"></a> * @override
+<a name="line195"></a> * @protected
+<a name="line196"></a> */
+<a name="line197"></a>goog.ui.MenuButton.prototype.handleMouseDown = function(e) {
+<a name="line198"></a>  goog.ui.MenuButton.superClass_.handleMouseDown.call(this, e);
+<a name="line199"></a>  if (this.isActive()) {
+<a name="line200"></a>    // The component was allowed to activate; toggle menu visibility.
+<a name="line201"></a>    this.setOpen(!this.isOpen());
+<a name="line202"></a>    if (this.menu_) {
+<a name="line203"></a>      this.menu_.setMouseButtonPressed(this.isOpen());
+<a name="line204"></a>    }
+<a name="line205"></a>  }
+<a name="line206"></a>};
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Handles mouseup events.  Invokes the superclass implementation to dispatch
+<a name="line211"></a> * an ACTION event and deactivate the button.
+<a name="line212"></a> * @param {goog.events.Event} e Mouse event to handle.
+<a name="line213"></a> * @override
+<a name="line214"></a> * @protected
+<a name="line215"></a> */
+<a name="line216"></a>goog.ui.MenuButton.prototype.handleMouseUp = function(e) {
+<a name="line217"></a>  goog.ui.MenuButton.superClass_.handleMouseUp.call(this, e);
+<a name="line218"></a>  if (this.menu_ &amp;&amp; !this.isActive()) {
+<a name="line219"></a>    this.menu_.setMouseButtonPressed(false);
+<a name="line220"></a>  }
+<a name="line221"></a>};
+<a name="line222"></a>
+<a name="line223"></a>
+<a name="line224"></a>/**
+<a name="line225"></a> * Performs the appropriate action when the menu button is activated by the
+<a name="line226"></a> * user.  Overrides the superclass implementation by not dispatching an {@code
+<a name="line227"></a> * ACTION} event, because menu buttons exist only to reveal menus, not to
+<a name="line228"></a> * perform actions themselves.  Calls {@link #setActive} to deactivate the
+<a name="line229"></a> * button.
+<a name="line230"></a> * @param {goog.events.Event} e Mouse or key event that triggered the action.
+<a name="line231"></a> * @return {boolean} Whether the action was allowed to proceed.
+<a name="line232"></a> * @override
+<a name="line233"></a> * @protected
+<a name="line234"></a> */
+<a name="line235"></a>goog.ui.MenuButton.prototype.performActionInternal = function(e) {
+<a name="line236"></a>  this.setActive(false);
+<a name="line237"></a>  return true;
+<a name="line238"></a>};
+<a name="line239"></a>
+<a name="line240"></a>
+<a name="line241"></a>/**
+<a name="line242"></a> * Handles mousedown events over the document.  If the mousedown happens over
+<a name="line243"></a> * an element unrelated to the component, hides the menu.
+<a name="line244"></a> * TODO: Reconcile this with goog.ui.Popup (and handle frames/windows).
+<a name="line245"></a> * @param {goog.events.BrowserEvent} e Mouse event to handle.
+<a name="line246"></a> * @protected
+<a name="line247"></a> */
+<a name="line248"></a>goog.ui.MenuButton.prototype.handleDocumentMouseDown = function(e) {
+<a name="line249"></a>  if (this.menu_ &amp;&amp;
+<a name="line250"></a>      this.menu_.isVisible() &amp;&amp;
+<a name="line251"></a>      !this.containsElement(/** @type {Element} */ (e.target))) {
+<a name="line252"></a>    // User clicked somewhere else in the document while the menu was visible;
+<a name="line253"></a>    // dismiss menu.
+<a name="line254"></a>    this.setOpen(false);
+<a name="line255"></a>  }
+<a name="line256"></a>};
+<a name="line257"></a>
+<a name="line258"></a>
+<a name="line259"></a>/**
+<a name="line260"></a> * Returns true if the given element is to be considered part of the component,
+<a name="line261"></a> * even if it isn&#39;t a DOM descendant of the component&#39;s root element.
+<a name="line262"></a> * @param {Element?} element Element to test (if any).
+<a name="line263"></a> * @return {boolean} Whether the element is considered part of the component.
+<a name="line264"></a> * @protected
+<a name="line265"></a> */
+<a name="line266"></a>goog.ui.MenuButton.prototype.containsElement = function(element) {
+<a name="line267"></a>  return element &amp;&amp; goog.dom.contains(this.getElement(), element) ||
+<a name="line268"></a>      this.menu_ &amp;&amp; this.menu_.containsElement(element) || false;
+<a name="line269"></a>};
+<a name="line270"></a>
+<a name="line271"></a>
+<a name="line272"></a>/** @inheritDoc */
+<a name="line273"></a>goog.ui.MenuButton.prototype.handleKeyEventInternal = function(e) {
+<a name="line274"></a>  // Handle SPACE on keyup and all other keys on keypress.
+<a name="line275"></a>  var eventType = e.keyCode == goog.events.KeyCodes.SPACE ?
+<a name="line276"></a>      goog.events.EventType.KEYUP : goog.events.KeyHandler.EventType.KEY;
+<a name="line277"></a>  if (e.type != eventType) {
+<a name="line278"></a>    return false;
+<a name="line279"></a>  }
+<a name="line280"></a>
+<a name="line281"></a>  if (this.menu_ &amp;&amp; this.menu_.isVisible()) {
+<a name="line282"></a>    // Menu is open.
+<a name="line283"></a>    var handledByMenu = this.menu_.handleKeyEvent(e);
+<a name="line284"></a>    if (e.keyCode == goog.events.KeyCodes.ESC) {
+<a name="line285"></a>      // Dismiss the menu.
+<a name="line286"></a>      this.setOpen(false);
+<a name="line287"></a>      return true;
+<a name="line288"></a>    }
+<a name="line289"></a>    return handledByMenu;
+<a name="line290"></a>  }
+<a name="line291"></a>
+<a name="line292"></a>  if (e.keyCode == goog.events.KeyCodes.DOWN ||
+<a name="line293"></a>      e.keyCode == goog.events.KeyCodes.UP ||
+<a name="line294"></a>      e.keyCode == goog.events.KeyCodes.SPACE) {
+<a name="line295"></a>    // Menu is closed, and the user hit the down/up/space key; open menu.
+<a name="line296"></a>    this.setOpen(true);
+<a name="line297"></a>    return true;
+<a name="line298"></a>  }
+<a name="line299"></a>
+<a name="line300"></a>  // Key event wasn&#39;t handled by the component.
+<a name="line301"></a>  return false;
+<a name="line302"></a>};
+<a name="line303"></a>
+<a name="line304"></a>
+<a name="line305"></a>/**
+<a name="line306"></a> * Handles {@code ACTION} events dispatched by an activated menu item.
+<a name="line307"></a> * @param {goog.events.Event} e Action event to handle.
+<a name="line308"></a> * @protected
+<a name="line309"></a> */
+<a name="line310"></a>goog.ui.MenuButton.prototype.handleMenuAction = function(e) {
+<a name="line311"></a>  // Close the menu on click.
+<a name="line312"></a>  this.setOpen(false);
+<a name="line313"></a>};
+<a name="line314"></a>
+<a name="line315"></a>
+<a name="line316"></a>/**
+<a name="line317"></a> * Handles {@code BLUR} events dispatched by the popup menu by closing it.
+<a name="line318"></a> * Only registered if the menu is focusable.
+<a name="line319"></a> * @param {goog.events.Event} e Blur event dispatched by a focusable menu.
+<a name="line320"></a> */
+<a name="line321"></a>goog.ui.MenuButton.prototype.handleMenuBlur = function(e) {
+<a name="line322"></a>  // Close the menu when it reports that it lost focus, unless the button is
+<a name="line323"></a>  // pressed (active).
+<a name="line324"></a>  if (!this.isActive()) {
+<a name="line325"></a>    this.setOpen(false);
+<a name="line326"></a>  }
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Handles blur events dispatched by the button&#39;s key event target when it
+<a name="line332"></a> * loses keyboard focus by closing the popup menu (unless it is focusable).
+<a name="line333"></a> * Only registered if the button is focusable.
+<a name="line334"></a> * @param {goog.events.Event} e Blur event dispatched by the menu button.
+<a name="line335"></a> * @override
+<a name="line336"></a> * @protected
+<a name="line337"></a> */
+<a name="line338"></a>goog.ui.MenuButton.prototype.handleBlur = function(e) {
+<a name="line339"></a>  if (!this.isFocusablePopupMenu()) {
+<a name="line340"></a>    this.setOpen(false);
+<a name="line341"></a>  }
+<a name="line342"></a>  goog.ui.MenuButton.superClass_.handleBlur.call(this, e);
+<a name="line343"></a>};
+<a name="line344"></a>
+<a name="line345"></a>
+<a name="line346"></a>/**
+<a name="line347"></a> * Returns the menu attached to the button.  If no menu is attached, creates a
+<a name="line348"></a> * new empty menu.
+<a name="line349"></a> * @return {goog.ui.Menu} Popup menu attached to the menu button.
+<a name="line350"></a> */
+<a name="line351"></a>goog.ui.MenuButton.prototype.getMenu = function() {
+<a name="line352"></a>  if (!this.menu_) {
+<a name="line353"></a>    this.setMenu(new goog.ui.Menu(this.getDomHelper()));
+<a name="line354"></a>  }
+<a name="line355"></a>  return this.menu_ || null;
+<a name="line356"></a>};
+<a name="line357"></a>
+<a name="line358"></a>
+<a name="line359"></a>/**
+<a name="line360"></a> * Replaces the menu attached to the button with the argument, and returns the
+<a name="line361"></a> * previous menu (if any).
+<a name="line362"></a> * @param {goog.ui.Menu?} menu New menu to be attached to the menu button (null
+<a name="line363"></a> *     to remove the menu).
+<a name="line364"></a> * @return {goog.ui.Menu|undefined} Previous menu (undefined if none).
+<a name="line365"></a> */
+<a name="line366"></a>goog.ui.MenuButton.prototype.setMenu = function(menu) {
+<a name="line367"></a>  var oldMenu = this.menu_;
+<a name="line368"></a>
+<a name="line369"></a>  // Do nothing unless the new menu is different from the current one.
+<a name="line370"></a>  if (menu != oldMenu) {
+<a name="line371"></a>    if (oldMenu) {
+<a name="line372"></a>      this.setOpen(false);
+<a name="line373"></a>      if (this.isInDocument()) {
+<a name="line374"></a>        this.attachMenuEventListeners_(oldMenu, false);
+<a name="line375"></a>      }
+<a name="line376"></a>      delete this.menu_;
+<a name="line377"></a>    }
+<a name="line378"></a>    if (menu) {
+<a name="line379"></a>      this.menu_ = menu;
+<a name="line380"></a>      menu.setParent(this);
+<a name="line381"></a>      menu.setVisible(false);
+<a name="line382"></a>      menu.setAllowAutoFocus(this.isFocusablePopupMenu());
+<a name="line383"></a>      if (this.isInDocument()) {
+<a name="line384"></a>        this.attachMenuEventListeners_(menu, true);
+<a name="line385"></a>      }
+<a name="line386"></a>    }
+<a name="line387"></a>  }
+<a name="line388"></a>
+<a name="line389"></a>  return oldMenu;
+<a name="line390"></a>};
+<a name="line391"></a>
+<a name="line392"></a>
+<a name="line393"></a>/**
+<a name="line394"></a> * Adds a new menu item at the end of the menu.
+<a name="line395"></a> * @param {goog.ui.MenuItem|goog.ui.MenuSeparator|goog.ui.Control} item Menu
+<a name="line396"></a> *     item to add to the menu.
+<a name="line397"></a> */
+<a name="line398"></a>goog.ui.MenuButton.prototype.addItem = function(item) {
+<a name="line399"></a>  this.getMenu().addChild(item, true);
+<a name="line400"></a>};
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>/**
+<a name="line404"></a> * Adds a new menu item at the specific index in the menu.
+<a name="line405"></a> * @param {goog.ui.MenuItem|goog.ui.MenuSeparator} item Menu item to add to the
+<a name="line406"></a> *     menu.
+<a name="line407"></a> * @param {number} index Index at which to insert the menu item.
+<a name="line408"></a> */
+<a name="line409"></a>goog.ui.MenuButton.prototype.addItemAt = function(item, index) {
+<a name="line410"></a>  this.getMenu().addChildAt(item, index, true);
+<a name="line411"></a>};
+<a name="line412"></a>
+<a name="line413"></a>
+<a name="line414"></a>/**
+<a name="line415"></a> * Removes the item from the menu and disposes of it.
+<a name="line416"></a> * @param {goog.ui.MenuItem|goog.ui.MenuSeparator} item The menu item to remove.
+<a name="line417"></a> */
+<a name="line418"></a>goog.ui.MenuButton.prototype.removeItem = function(item) {
+<a name="line419"></a>  var child = this.getMenu().removeChild(item, true);
+<a name="line420"></a>  if (child) {
+<a name="line421"></a>    child.dispose();
+<a name="line422"></a>  }
+<a name="line423"></a>};
+<a name="line424"></a>
+<a name="line425"></a>
+<a name="line426"></a>/**
+<a name="line427"></a> * Removes the menu item at a given index in the menu and disposes of it.
+<a name="line428"></a> * @param {number} index Index of item.
+<a name="line429"></a> */
+<a name="line430"></a>goog.ui.MenuButton.prototype.removeItemAt = function(index) {
+<a name="line431"></a>  var child = this.getMenu().removeChildAt(index, true);
+<a name="line432"></a>  if (child) {
+<a name="line433"></a>    child.dispose();
+<a name="line434"></a>  }
+<a name="line435"></a>};
+<a name="line436"></a>
+<a name="line437"></a>
+<a name="line438"></a>/**
+<a name="line439"></a> * Returns the menu item at a given index.
+<a name="line440"></a> * @param {number} index Index of menu item.
+<a name="line441"></a> * @return {goog.ui.MenuItem?} Menu item (null if not found).
+<a name="line442"></a> */
+<a name="line443"></a>goog.ui.MenuButton.prototype.getItemAt = function(index) {
+<a name="line444"></a>  return this.menu_ ?
+<a name="line445"></a>      /** @type {goog.ui.MenuItem} */ (this.menu_.getChildAt(index)) : null;
+<a name="line446"></a>};
+<a name="line447"></a>
+<a name="line448"></a>
+<a name="line449"></a>/**
+<a name="line450"></a> * Returns the number of items in the menu (including separators).
+<a name="line451"></a> * @return {number} The number of items in the menu.
+<a name="line452"></a> */
+<a name="line453"></a>goog.ui.MenuButton.prototype.getItemCount = function() {
+<a name="line454"></a>  return this.menu_ ? this.menu_.getChildCount() : 0;
+<a name="line455"></a>};
+<a name="line456"></a>
+<a name="line457"></a>
+<a name="line458"></a>/**
+<a name="line459"></a> * Shows/hides the menu button based on the value of the argument.  Also hides
+<a name="line460"></a> * the popup menu if the button is being hidden.
+<a name="line461"></a> * @param {boolean} visible Whether to show or hide the button.
+<a name="line462"></a> * @param {boolean} opt_force If true, doesn&#39;t check whether the component
+<a name="line463"></a> *     already has the requested visibility, and doesn&#39;t dispatch any events.
+<a name="line464"></a> * @return {boolean} Whether the visibility was changed.
+<a name="line465"></a> * @override
+<a name="line466"></a> */
+<a name="line467"></a>goog.ui.MenuButton.prototype.setVisible = function(visible, opt_force) {
+<a name="line468"></a>  var visibilityChanged = goog.ui.MenuButton.superClass_.setVisible.call(this,
+<a name="line469"></a>      visible, opt_force);
+<a name="line470"></a>  if (visibilityChanged &amp;&amp; !this.isVisible()) {
+<a name="line471"></a>    this.setOpen(false);
+<a name="line472"></a>  }
+<a name="line473"></a>  return visibilityChanged;
+<a name="line474"></a>};
+<a name="line475"></a>
+<a name="line476"></a>
+<a name="line477"></a>/**
+<a name="line478"></a> * Enables/disables the menu button based on the value of the argument, and
+<a name="line479"></a> * updates its CSS styling.  Also hides the popup menu if the button is being
+<a name="line480"></a> * disabled.
+<a name="line481"></a> * @param {boolean} enable Whether to enable or disable the button.
+<a name="line482"></a> * @override
+<a name="line483"></a> */
+<a name="line484"></a>goog.ui.MenuButton.prototype.setEnabled = function(enable) {
+<a name="line485"></a>  goog.ui.MenuButton.superClass_.setEnabled.call(this, enable);
+<a name="line486"></a>  if (!this.isEnabled()) {
+<a name="line487"></a>    this.setOpen(false);
+<a name="line488"></a>  }
+<a name="line489"></a>};
+<a name="line490"></a>
+<a name="line491"></a>
+<a name="line492"></a>/**
+<a name="line493"></a> * @return {boolean} Whether the menu is aligned to the start of the button
+<a name="line494"></a> *     (left if the render direction is left-to-right, right if the render
+<a name="line495"></a> *     direction is right-to-left).
+<a name="line496"></a> */
+<a name="line497"></a>goog.ui.MenuButton.prototype.isAlignMenuToStart = function() {
+<a name="line498"></a>  return this.alignToStart_;
+<a name="line499"></a>};
+<a name="line500"></a>
+<a name="line501"></a>
+<a name="line502"></a>/**
+<a name="line503"></a> * Sets whether the menu is aligned to the start or the end of the button.
+<a name="line504"></a> * @param {boolean} alignToStart Whether the menu is to be aligned to the start
+<a name="line505"></a> *     of the button (left if the render direction is left-to-right, right if
+<a name="line506"></a> *     the render direction is right-to-left).
+<a name="line507"></a> */
+<a name="line508"></a>goog.ui.MenuButton.prototype.setAlignMenuToStart = function(alignToStart) {
+<a name="line509"></a>  this.alignToStart_ = alignToStart;
+<a name="line510"></a>};
+<a name="line511"></a>
+<a name="line512"></a>
+<a name="line513"></a>/**
+<a name="line514"></a> * Sets whether the menu should scroll when it&#39;s too big to fix vertically on
+<a name="line515"></a> * the screen.  The css of the menu element should have overflow set to auto.
+<a name="line516"></a> * Note: Adding or removing items while the menu is open will not work correctly
+<a name="line517"></a> * if scrollOnOverflow is on.
+<a name="line518"></a> * @param {boolean} scrollOnOverflow Whether the menu should scroll when too big
+<a name="line519"></a> *     to fit on the screen.  If false, adjust logic will be used to try and
+<a name="line520"></a> *     reposition the menu to fit.
+<a name="line521"></a> */
+<a name="line522"></a>goog.ui.MenuButton.prototype.setScrollOnOverflow = function(scrollOnOverflow) {
+<a name="line523"></a>  this.scrollOnOverflow_ = scrollOnOverflow;
+<a name="line524"></a>};
+<a name="line525"></a>
+<a name="line526"></a>
+<a name="line527"></a>/**
+<a name="line528"></a> * @return {boolean} Wether the menu will scroll when it&#39;s to big to fit
+<a name="line529"></a> *     vertically on the screen.
+<a name="line530"></a> */
+<a name="line531"></a>goog.ui.MenuButton.prototype.isScrollOnOverflow = function() {
+<a name="line532"></a>  return this.scrollOnOverflow_;
+<a name="line533"></a>};
+<a name="line534"></a>
+<a name="line535"></a>
+<a name="line536"></a>/**
+<a name="line537"></a> * @return {boolean} Whether the attached menu is focusable.
+<a name="line538"></a> */
+<a name="line539"></a>goog.ui.MenuButton.prototype.isFocusablePopupMenu = function() {
+<a name="line540"></a>  return this.isFocusablePopupMenu_;
+<a name="line541"></a>};
+<a name="line542"></a>
+<a name="line543"></a>
+<a name="line544"></a>/**
+<a name="line545"></a> * Sets whether the attached popup menu is focusable.  If the popup menu is
+<a name="line546"></a> * focusable, it may steal keyboard focus from the menu button, so the button
+<a name="line547"></a> * will not hide the menu on blur.
+<a name="line548"></a> * @param {boolean} focusable Whether the attached menu is focusable.
+<a name="line549"></a> */
+<a name="line550"></a>goog.ui.MenuButton.prototype.setFocusablePopupMenu = function(focusable) {
+<a name="line551"></a>  // TODO:  The menu itself should advertise whether it is focusable.
+<a name="line552"></a>  this.isFocusablePopupMenu_ = focusable;
+<a name="line553"></a>};
+<a name="line554"></a>
+<a name="line555"></a>
+<a name="line556"></a>/**
+<a name="line557"></a> * Reveals the menu and hooks up menu-specific event handling.
+<a name="line558"></a> * @deprecated Use {@link #setOpen} instead.
+<a name="line559"></a> */
+<a name="line560"></a>goog.ui.MenuButton.prototype.showMenu = function() {
+<a name="line561"></a>  this.setOpen(true);
+<a name="line562"></a>};
+<a name="line563"></a>
+<a name="line564"></a>
+<a name="line565"></a>/**
+<a name="line566"></a> * Hides the menu and cleans up menu-specific event handling.
+<a name="line567"></a> * @deprecated Use {@link #setOpen} instead.
+<a name="line568"></a> */
+<a name="line569"></a>goog.ui.MenuButton.prototype.hideMenu = function() {
+<a name="line570"></a>  this.setOpen(false);
+<a name="line571"></a>};
+<a name="line572"></a>
+<a name="line573"></a>
+<a name="line574"></a>/**
+<a name="line575"></a> * Opens or closes the attached popup menu.
+<a name="line576"></a> * @param {boolean} open Whether to open or close the menu.
+<a name="line577"></a> * @override
+<a name="line578"></a> */
+<a name="line579"></a>goog.ui.MenuButton.prototype.setOpen = function(open) {
+<a name="line580"></a>  goog.ui.MenuButton.superClass_.setOpen.call(this, open);
+<a name="line581"></a>  if (this.menu_ &amp;&amp; this.hasState(goog.ui.Component.State.OPENED) == open) {
+<a name="line582"></a>    if (open) {
+<a name="line583"></a>      if (!this.menu_.isInDocument()) {
+<a name="line584"></a>        // Lazily render the menu if needed.
+<a name="line585"></a>        this.menu_.render();
+<a name="line586"></a>      }
+<a name="line587"></a>      this.viewportBox_ =
+<a name="line588"></a>          goog.style.getVisibleRectForElement(this.getElement());
+<a name="line589"></a>      this.buttonRect_ = goog.style.getBounds(this.getElement());
+<a name="line590"></a>      this.positionMenu();
+<a name="line591"></a>      this.menu_.setHighlightedIndex(-1);
+<a name="line592"></a>    } else {
+<a name="line593"></a>      this.setActive(false);
+<a name="line594"></a>      this.menu_.setMouseButtonPressed(false);
+<a name="line595"></a>
+<a name="line596"></a>      // Clear any sizes that might have been stored.
+<a name="line597"></a>      if (goog.isDefAndNotNull(this.originalSize_)) {
+<a name="line598"></a>        this.originalSize_ = undefined;
+<a name="line599"></a>        var elem = this.menu_.getElement();
+<a name="line600"></a>        if (elem) {
+<a name="line601"></a>          goog.style.setSize(elem, &#39;&#39;, &#39;&#39;);
+<a name="line602"></a>        }
+<a name="line603"></a>      }
+<a name="line604"></a>    }
+<a name="line605"></a>    this.menu_.setVisible(open);
+<a name="line606"></a>    this.attachPopupListeners_(open);
+<a name="line607"></a>  }
+<a name="line608"></a>};
+<a name="line609"></a>
+<a name="line610"></a>
+<a name="line611"></a>/**
+<a name="line612"></a> * Positions the menu under the button.
+<a name="line613"></a> * @protected
+<a name="line614"></a> */
+<a name="line615"></a>goog.ui.MenuButton.prototype.positionMenu = function() {
+<a name="line616"></a>  var anchorCorner = this.isAlignMenuToStart() ?
+<a name="line617"></a>      goog.positioning.Corner.BOTTOM_START : goog.positioning.Corner.BOTTOM_END;
+<a name="line618"></a>  var position = new goog.positioning.MenuAnchoredPosition(this.getElement(),
+<a name="line619"></a>      anchorCorner, /* opt_adjust */ !this.scrollOnOverflow_,
+<a name="line620"></a>      /* opt_resize */ this.scrollOnOverflow_);
+<a name="line621"></a>
+<a name="line622"></a>  var elem = this.menu_.getElement();
+<a name="line623"></a>  if (!this.menu_.isVisible()) {
+<a name="line624"></a>    elem.style.visibility = &#39;hidden&#39;;
+<a name="line625"></a>    goog.style.showElement(elem, true);
+<a name="line626"></a>  }
+<a name="line627"></a>
+<a name="line628"></a>  if (!this.originalSize_ &amp;&amp; this.scrollOnOverflow_) {
+<a name="line629"></a>    this.originalSize_ = goog.style.getSize(elem);
+<a name="line630"></a>  }
+<a name="line631"></a>  var popupCorner = this.isAlignMenuToStart() ?
+<a name="line632"></a>      goog.positioning.Corner.TOP_START : goog.positioning.Corner.TOP_END;
+<a name="line633"></a>  position.reposition(elem, popupCorner, null, this.originalSize_);
+<a name="line634"></a>
+<a name="line635"></a>  if (!this.menu_.isVisible()) {
+<a name="line636"></a>    goog.style.showElement(elem, false);
+<a name="line637"></a>    elem.style.visibility = &#39;visible&#39;;
+<a name="line638"></a>  }
+<a name="line639"></a>};
+<a name="line640"></a>
+<a name="line641"></a>
+<a name="line642"></a>/**
+<a name="line643"></a> * Periodically repositions the menu while it is visible.
+<a name="line644"></a> *
+<a name="line645"></a> * @param {goog.events.Event} e An event object.
+<a name="line646"></a> * @private
+<a name="line647"></a> */
+<a name="line648"></a>goog.ui.MenuButton.prototype.onTick_ = function(e) {
+<a name="line649"></a>  // Call positionMenu() only if the button position or size was
+<a name="line650"></a>  // changed, or if the window&#39;s viewport was changed.
+<a name="line651"></a>  var currentButtonRect = goog.style.getBounds(this.getElement());
+<a name="line652"></a>  var currentViewport = goog.style.getVisibleRectForElement(this.getElement());
+<a name="line653"></a>  if (!goog.math.Rect.equals(this.buttonRect_, currentButtonRect) ||
+<a name="line654"></a>      !goog.math.Box.equals(this.viewportBox_, currentViewport)) {
+<a name="line655"></a>    this.buttonRect_ = currentButtonRect;
+<a name="line656"></a>    this.viewportBox_ = currentViewport;
+<a name="line657"></a>    this.positionMenu();
+<a name="line658"></a>  }
+<a name="line659"></a>};
+<a name="line660"></a>
+<a name="line661"></a>
+<a name="line662"></a>/**
+<a name="line663"></a> * Attaches or detaches menu event listeners to/from the given menu.
+<a name="line664"></a> * Called each time a menu is attached to or detached from the button.
+<a name="line665"></a> * @param {goog.ui.Menu} menu Menu on which to listen for events.
+<a name="line666"></a> * @param {boolean} attach Whether to attach or detach event listeners.
+<a name="line667"></a> * @private
+<a name="line668"></a> */
+<a name="line669"></a>goog.ui.MenuButton.prototype.attachMenuEventListeners_ = function(menu,
+<a name="line670"></a>    attach) {
+<a name="line671"></a>  var handler = this.getHandler();
+<a name="line672"></a>  var method = attach ? handler.listen : handler.unlisten;
+<a name="line673"></a>
+<a name="line674"></a>  // Handle events dispatched by menu items.
+<a name="line675"></a>  method.call(handler, menu, goog.ui.Component.EventType.ACTION,
+<a name="line676"></a>      this.handleMenuAction);
+<a name="line677"></a>  method.call(handler, menu, goog.ui.Component.EventType.HIGHLIGHT,
+<a name="line678"></a>      this.handleHighlightItem);
+<a name="line679"></a>  method.call(handler, menu, goog.ui.Component.EventType.UNHIGHLIGHT,
+<a name="line680"></a>      this.handleUnHighlightItem);
+<a name="line681"></a>};
+<a name="line682"></a>
+<a name="line683"></a>
+<a name="line684"></a>/**
+<a name="line685"></a> * Handles {@code HIGHLIGHT} events dispatched by the attached menu.
+<a name="line686"></a> * @param {goog.events.Event} e Highlight event to handle.
+<a name="line687"></a> */
+<a name="line688"></a>goog.ui.MenuButton.prototype.handleHighlightItem = function(e) {
+<a name="line689"></a>  goog.dom.a11y.setState(this.getElement(),
+<a name="line690"></a>      goog.dom.a11y.State.ACTIVEDESCENDANT, e.target.getElement().id);
+<a name="line691"></a>};
+<a name="line692"></a>
+<a name="line693"></a>
+<a name="line694"></a>/**
+<a name="line695"></a> * Handles UNHIGHLIGHT events dispatched by the associated menu.
+<a name="line696"></a> * @param {goog.events.Event} e Unhighlight event to handle.
+<a name="line697"></a> */
+<a name="line698"></a>goog.ui.MenuButton.prototype.handleUnHighlightItem = function(e) {
+<a name="line699"></a>  if (!this.menu_.getHighlighted()) {
+<a name="line700"></a>    goog.dom.a11y.setState(this.getElement(),
+<a name="line701"></a>        goog.dom.a11y.State.ACTIVEDESCENDANT, &#39;&#39;);
+<a name="line702"></a>  }
+<a name="line703"></a>};
+<a name="line704"></a>
+<a name="line705"></a>
+<a name="line706"></a>/**
+<a name="line707"></a> * Attaches or detaches event listeners depending on whether the popup menu
+<a name="line708"></a> * is being shown or hidden.  Starts listening for document mousedown events
+<a name="line709"></a> * and for menu blur events when the menu is shown, and stops listening for
+<a name="line710"></a> * these events when it is hidden.  Called from {@link #setOpen}.
+<a name="line711"></a> * @param {boolean} attach Whether to attach or detach event listeners.
+<a name="line712"></a> * @private
+<a name="line713"></a> */
+<a name="line714"></a>goog.ui.MenuButton.prototype.attachPopupListeners_ = function(attach) {
+<a name="line715"></a>  var handler = this.getHandler();
+<a name="line716"></a>  var method = attach ? handler.listen : handler.unlisten;
+<a name="line717"></a>
+<a name="line718"></a>  // Listen for document mousedown events in the capture phase, because
+<a name="line719"></a>  // the target may stop propagation of the event in the bubble phase.
+<a name="line720"></a>  method.call(handler, this.getDomHelper().getDocument(),
+<a name="line721"></a>      goog.events.EventType.MOUSEDOWN, this.handleDocumentMouseDown, true);
+<a name="line722"></a>
+<a name="line723"></a>  // Only listen for blur events dispatched by the menu if it is focusable.
+<a name="line724"></a>  if (this.isFocusablePopupMenu()) {
+<a name="line725"></a>    method.call(handler, /** @type {goog.events.EventTarget} */ (this.menu_),
+<a name="line726"></a>        goog.ui.Component.EventType.BLUR, this.handleMenuBlur);
+<a name="line727"></a>  }
+<a name="line728"></a>
+<a name="line729"></a>  method.call(handler, this.timer_, goog.Timer.TICK, this.onTick_);
+<a name="line730"></a>  if (attach) {
+<a name="line731"></a>    this.timer_.start();
+<a name="line732"></a>  } else {
+<a name="line733"></a>    this.timer_.stop();
+<a name="line734"></a>  }
+<a name="line735"></a>};
+<a name="line736"></a>
+<a name="line737"></a>
+<a name="line738"></a>// Register a decorator factory function for goog.ui.MenuButtons.
+<a name="line739"></a>goog.ui.registry.setDecoratorByClassName(goog.ui.MenuButtonRenderer.CSS_CLASS,
+<a name="line740"></a>    function() {
+<a name="line741"></a>      // MenuButton defaults to using MenuButtonRenderer.
+<a name="line742"></a>      return new goog.ui.MenuButton(null);
+<a name="line743"></a>    });
+</pre>
+
+
+</body>
+</html>

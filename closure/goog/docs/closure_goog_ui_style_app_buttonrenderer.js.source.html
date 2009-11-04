@@ -1,0 +1,242 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>buttonrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_style_app_buttonrenderer.js.html">buttonrenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Renderer for {@link goog.ui.Button}s in App style.
+<a name="line17"></a> *
+<a name="line18"></a> * Based on ImagelessButtonRender. Uses even more CSS voodoo than the default
+<a name="line19"></a> * implementation to render custom buttons with fake rounded corners and
+<a name="line20"></a> * dimensionality (via a subtle flat shadow on the bottom half of the button)
+<a name="line21"></a> * without the use of images.
+<a name="line22"></a> *
+<a name="line23"></a> * Based on the Custom Buttons 3.1 visual specification, see
+<a name="line24"></a> * http://go/custombuttons
+<a name="line25"></a> *
+<a name="line26"></a> */
+<a name="line27"></a>
+<a name="line28"></a>goog.provide(&#39;goog.ui.style.app.ButtonRenderer&#39;);
+<a name="line29"></a>
+<a name="line30"></a>goog.require(&#39;goog.ui.Button&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.ControlContent&#39;);
+<a name="line32"></a>goog.require(&#39;goog.ui.CustomButtonRenderer&#39;);
+<a name="line33"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/**
+<a name="line37"></a> * Custom renderer for {@link goog.ui.Button}s. Imageless buttons can contain
+<a name="line38"></a> * almost arbitrary HTML content, will flow like inline elements, but can be
+<a name="line39"></a> * styled like block-level elements.
+<a name="line40"></a> *
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @extends {goog.ui.CustomButtonRenderer}
+<a name="line43"></a> */
+<a name="line44"></a>goog.ui.style.app.ButtonRenderer = function() {
+<a name="line45"></a>  goog.ui.CustomButtonRenderer.call(this);
+<a name="line46"></a>};
+<a name="line47"></a>goog.inherits(goog.ui.style.app.ButtonRenderer, goog.ui.CustomButtonRenderer);
+<a name="line48"></a>goog.addSingletonGetter(goog.ui.style.app.ButtonRenderer);
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line53"></a> * by this renderer.
+<a name="line54"></a> * @type {string}
+<a name="line55"></a> */
+<a name="line56"></a>goog.ui.style.app.ButtonRenderer.CSS_CLASS = &#39;goog-button&#39;;
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Array of arrays of CSS classes that we want composite classes added and
+<a name="line61"></a> * removed for in IE6 and lower as a workaround for lack of multi-class CSS
+<a name="line62"></a> * selector support.
+<a name="line63"></a> * @type {Array.&lt;Array.&lt;string&gt;&gt;}
+<a name="line64"></a> */
+<a name="line65"></a>goog.ui.style.app.ButtonRenderer.IE6_CLASS_COMBINATIONS = [];
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * Returns the button&#39;s contents wrapped in the following DOM structure:
+<a name="line70"></a> *    &lt;div class=&quot;goog-inline-block goog-button-base goog-button&quot;&gt;
+<a name="line71"></a> *      &lt;div class=&quot;goog-inline-block goog-button-base-outer-box&quot;&gt;
+<a name="line72"></a> *        &lt;div class=&quot;goog-button-base-inner-box&quot;&gt;
+<a name="line73"></a> *          &lt;div class=&quot;goog-button-base-pos&quot;&gt;
+<a name="line74"></a> *            &lt;div class=&quot;goog-button-base-top-shadow&quot;&gt;&amp;nbsp;&lt;/div&gt;
+<a name="line75"></a> *            &lt;div class=&quot;goog-button-base-content&quot;&gt;Contents...&lt;/div&gt;
+<a name="line76"></a> *          &lt;/div&gt;
+<a name="line77"></a> *        &lt;/div&gt;
+<a name="line78"></a> *      &lt;/div&gt;
+<a name="line79"></a> *    &lt;/div&gt;
+<a name="line80"></a> * Overrides {@link goog.ui.ButtonRenderer#createDom}.
+<a name="line81"></a> * @param {goog.ui.Button} button Button to render.
+<a name="line82"></a> * @return {Element} Root element for the button.
+<a name="line83"></a> * @override
+<a name="line84"></a> */
+<a name="line85"></a>goog.ui.style.app.ButtonRenderer.prototype.createDom =
+<a name="line86"></a>    goog.ui.style.app.ButtonRenderer.superClass_.createDom;
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/** @inheritDoc */
+<a name="line90"></a>goog.ui.style.app.ButtonRenderer.prototype.getContentElement = function(
+<a name="line91"></a>    element) {
+<a name="line92"></a>  return element &amp;&amp; /** @type {Element} */(
+<a name="line93"></a>      element.firstChild.firstChild.firstChild.lastChild);
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Takes a text caption or existing DOM structure, and returns the content
+<a name="line99"></a> * wrapped in a pseudo-rounded-corner box.  Creates the following DOM structure:
+<a name="line100"></a> *  &lt;div class=&quot;goog-inline-block goog-button-base-outer-box&quot;&gt;
+<a name="line101"></a> *    &lt;div class=&quot;goog-inline-block goog-button-base-inner-box&quot;&gt;
+<a name="line102"></a> *      &lt;div class=&quot;goog-button-base-pos&quot;&gt;
+<a name="line103"></a> *        &lt;div class=&quot;goog-button-base-top-shadow&quot;&gt;&amp;nbsp;&lt;/div&gt;
+<a name="line104"></a> *        &lt;div class=&quot;goog-button-base-content&quot;&gt;Contents...&lt;/div&gt;
+<a name="line105"></a> *      &lt;/div&gt;
+<a name="line106"></a> *    &lt;/div&gt;
+<a name="line107"></a> *  &lt;/div&gt;
+<a name="line108"></a> * Used by both {@link #createDom} and {@link #decorate}.  To be overridden
+<a name="line109"></a> * by subclasses.
+<a name="line110"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure to wrap
+<a name="line111"></a> *     in a box.
+<a name="line112"></a> * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
+<a name="line113"></a> * @return {Element} Pseudo-rounded-corner box containing the content.
+<a name="line114"></a> * @override
+<a name="line115"></a> */
+<a name="line116"></a>goog.ui.style.app.ButtonRenderer.prototype.createButton = function(content,
+<a name="line117"></a>    dom) {
+<a name="line118"></a>  var baseClass = this.getStructuralCssClass();
+<a name="line119"></a>  var inlineBlock = &#39;goog-inline-block &#39;;
+<a name="line120"></a>  return dom.createDom(&#39;div&#39;, inlineBlock + baseClass + &#39;-outer-box&#39;,
+<a name="line121"></a>      dom.createDom(&#39;div&#39;, inlineBlock + baseClass + &#39;-inner-box&#39;,
+<a name="line122"></a>          dom.createDom(&#39;div&#39;, baseClass + &#39;-pos&#39;,
+<a name="line123"></a>              dom.createDom(&#39;div&#39;, baseClass + &#39;-top-shadow&#39;, &#39;\u00A0&#39;),
+<a name="line124"></a>              dom.createDom(&#39;div&#39;, baseClass + &#39;-content&#39;, content))));
+<a name="line125"></a>};
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * Check if the button&#39;s element has a box structure.
+<a name="line130"></a> * @param {goog.ui.Button} button Button instance whose structure is being
+<a name="line131"></a> *     checked.
+<a name="line132"></a> * @param {Element} element Element of the button.
+<a name="line133"></a> * @return {boolean} Whether the element has a box structure.
+<a name="line134"></a> * @protected
+<a name="line135"></a> * @override
+<a name="line136"></a> */
+<a name="line137"></a>goog.ui.style.app.ButtonRenderer.prototype.hasBoxStructure = function(
+<a name="line138"></a>    button, element) {
+<a name="line139"></a>  var outer = button.getDomHelper().getFirstElementChild(element);
+<a name="line140"></a>  if (outer &amp;&amp;
+<a name="line141"></a>      outer.className.indexOf(&#39;goog-button-base-outer-box&#39;) != -1) {
+<a name="line142"></a>    var inner = button.getDomHelper().getFirstElementChild(outer);
+<a name="line143"></a>    if (inner &amp;&amp;
+<a name="line144"></a>        inner.className.indexOf(&#39;goog-button-base-inner-box&#39;) != -1) {
+<a name="line145"></a>      var pos = button.getDomHelper().getFirstElementChild(inner);
+<a name="line146"></a>      if (pos &amp;&amp;
+<a name="line147"></a>          pos.className.indexOf(&#39;goog-button-base-pos&#39;) != -1) {
+<a name="line148"></a>        var shadow = button.getDomHelper().getFirstElementChild(pos);
+<a name="line149"></a>        if (shadow &amp;&amp; shadow.className.indexOf(
+<a name="line150"></a>            &#39;goog-button-base-top-shadow&#39;) != -1) {
+<a name="line151"></a>          var content = button.getDomHelper().getNextElementSibling(shadow);
+<a name="line152"></a>          if (content &amp;&amp;
+<a name="line153"></a>              content.className.indexOf(
+<a name="line154"></a>              &#39;goog-button-base-content&#39;) != -1) {
+<a name="line155"></a>            // We have a proper box structure.
+<a name="line156"></a>            return true;
+<a name="line157"></a>          }
+<a name="line158"></a>        }
+<a name="line159"></a>      }
+<a name="line160"></a>    }
+<a name="line161"></a>  }
+<a name="line162"></a>  return false;
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/** @inheritDoc */
+<a name="line167"></a>goog.ui.style.app.ButtonRenderer.prototype.getCssClass = function() {
+<a name="line168"></a>  return goog.ui.style.app.ButtonRenderer.CSS_CLASS;
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/** @inheritDoc */
+<a name="line173"></a>goog.ui.style.app.ButtonRenderer.prototype.getStructuralCssClass = function() {
+<a name="line174"></a>  // TODO: extract to a constant.
+<a name="line175"></a>  return &#39;goog-button-base&#39;;
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/** @inheritDoc */
+<a name="line180"></a>goog.ui.style.app.ButtonRenderer.prototype.getIe6ClassCombinations =
+<a name="line181"></a>    function() {
+<a name="line182"></a>  return goog.ui.style.app.ButtonRenderer.IE6_CLASS_COMBINATIONS;
+<a name="line183"></a>};
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>// Register a decorator factory function for goog.ui.style.app.ButtonRenderer.
+<a name="line188"></a>goog.ui.registry.setDecoratorByClassName(
+<a name="line189"></a>    goog.ui.style.app.ButtonRenderer.CSS_CLASS,
+<a name="line190"></a>    function() {
+<a name="line191"></a>      return new goog.ui.Button(null,
+<a name="line192"></a>          goog.ui.style.app.ButtonRenderer.getInstance());
+<a name="line193"></a>    });
+</pre>
+
+
+</body>
+</html>

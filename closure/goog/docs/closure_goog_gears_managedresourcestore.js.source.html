@@ -1,0 +1,602 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>managedresourcestore.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_gears_managedresourcestore.js.html">managedresourcestore.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Simple wrapper around a Gears ManagedResourceStore.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.gears.ManagedResourceStore&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.gears.ManagedResourceStore.EventType&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.gears.ManagedResourceStore.UpdateStatus&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.gears.ManagedResourceStoreEvent&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line28"></a>goog.require(&#39;goog.gears&#39;);
+<a name="line29"></a>goog.require(&#39;goog.string&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Creates a ManagedResourceStore with the specified name and update.  This
+<a name="line34"></a> * follows the Closure event model so the COMPLETE event will fire both for
+<a name="line35"></a> * SUCCESS and for ERROR.  You can use {@code isSuccess} in UPDATE to see if the
+<a name="line36"></a> * capture was successful or you can just listen to the different events.
+<a name="line37"></a> *
+<a name="line38"></a> * This supports PROGRESS events, which are fired any time {@code filesComplete}
+<a name="line39"></a> * or {@code filesTotal} changes.  If the Gears version is 0.3.6 or newer this
+<a name="line40"></a> * will reflect the numbers returned by the underlying Gears MRS but for older
+<a name="line41"></a> * Gears versions this will just be {@code 0} or {@code 1}.
+<a name="line42"></a> *
+<a name="line43"></a> * NOTE: This relies on at least the 0.2 version of gears (for timer).
+<a name="line44"></a> *
+<a name="line45"></a> * @param {string} name  The name of the managed store.
+<a name="line46"></a> * @param {string?} requiredCookie  A cookie that must be present for the
+<a name="line47"></a> *     managed store to be active. Should have the form &quot;foo=bar&quot;. Can be null
+<a name="line48"></a> *     if not required.
+<a name="line49"></a> * @param {GearsLocalServer} opt_localServer  Gears local server -- if not set,
+<a name="line50"></a> *     create a new one internally.
+<a name="line51"></a> *
+<a name="line52"></a> * @constructor
+<a name="line53"></a> * @extends {goog.events.EventTarget}
+<a name="line54"></a> *
+<a name="line55"></a> */
+<a name="line56"></a>goog.gears.ManagedResourceStore = function(name, requiredCookie,
+<a name="line57"></a>    opt_localServer) {
+<a name="line58"></a>  this.localServer_ = opt_localServer ||
+<a name="line59"></a>                      goog.gears.getFactory().create(&#39;beta.localserver&#39;, &#39;1.0&#39;);
+<a name="line60"></a>
+<a name="line61"></a>  this.name_ = goog.gears.makeSafeFileName(name);
+<a name="line62"></a>  if (name != this.name_) {
+<a name="line63"></a>    this.logger_.info(
+<a name="line64"></a>        &#39;managed resource store name &#39; + name + &#39;-&gt;&#39; + this.name_);
+<a name="line65"></a>  }
+<a name="line66"></a>
+<a name="line67"></a>  this.requiredCookie_ = requiredCookie ? String(requiredCookie) : null;
+<a name="line68"></a>
+<a name="line69"></a>  // Whether Gears natively has &quot;events&quot; on the MRS.  If it does not we treat
+<a name="line70"></a>  // the progress as 0 to 1
+<a name="line71"></a>  this.supportsEvents_ = goog.string.compareVersions(
+<a name="line72"></a>      goog.gears.getFactory().version, &#39;0.3.6&#39;) &gt;= 0;
+<a name="line73"></a>};
+<a name="line74"></a>goog.inherits(goog.gears.ManagedResourceStore, goog.events.EventTarget);
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * The amount of time between status checks during an update
+<a name="line79"></a> * @type {number}
+<a name="line80"></a> */
+<a name="line81"></a>goog.gears.ManagedResourceStore.UPDATE_INTERVAL_MS = 500;
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Enum for possible values of Gears ManagedResourceStore.updatedStatus
+<a name="line86"></a> * @enum
+<a name="line87"></a> */
+<a name="line88"></a>goog.gears.ManagedResourceStore.UpdateStatus = {
+<a name="line89"></a>  OK: 0,
+<a name="line90"></a>  CHECKING: 1,
+<a name="line91"></a>  DOWNLOADING: 2,
+<a name="line92"></a>  FAILURE: 3
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Logger.
+<a name="line98"></a> * @type {goog.debug.Logger}
+<a name="line99"></a> * @private
+<a name="line100"></a> */
+<a name="line101"></a>goog.gears.ManagedResourceStore.prototype.logger_ =
+<a name="line102"></a>  goog.debug.Logger.getLogger(&#39;goog.gears.ManagedResourceStore&#39;);
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * The Gears local server object.
+<a name="line107"></a> * @type {GearsLocalServer?}
+<a name="line108"></a> * @private
+<a name="line109"></a> */
+<a name="line110"></a>goog.gears.ManagedResourceStore.prototype.localServer_;
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * The name of the managed store.
+<a name="line115"></a> * @type {string?}
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.gears.ManagedResourceStore.prototype.name_;
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * A cookie that must be present for the managed store to be active.
+<a name="line123"></a> * Should have the form &quot;foo=bar&quot;. String cast is a safety measure since
+<a name="line124"></a> * Gears behaves very badly when it gets an unexpected data type.
+<a name="line125"></a> * @type {string?}
+<a name="line126"></a> * @private
+<a name="line127"></a> */
+<a name="line128"></a>goog.gears.ManagedResourceStore.prototype.requiredCookie_;
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * The required cookie, if any, for the managed store.
+<a name="line133"></a> * @type {boolean}
+<a name="line134"></a> * @private
+<a name="line135"></a> */
+<a name="line136"></a>goog.gears.ManagedResourceStore.prototype.supportsEvents_;
+<a name="line137"></a>
+<a name="line138"></a>
+<a name="line139"></a>/**
+<a name="line140"></a> * The Gears ManagedResourceStore instance we are wrapping.
+<a name="line141"></a> * @type {GearsManagedResourceStore?}
+<a name="line142"></a> * @private
+<a name="line143"></a> */
+<a name="line144"></a>goog.gears.ManagedResourceStore.prototype.gearsStore_;
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * The id of the check status timer.
+<a name="line149"></a> * @type {number?}
+<a name="line150"></a> * @private
+<a name="line151"></a> */
+<a name="line152"></a>goog.gears.ManagedResourceStore.prototype.timerId_ = null;
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * The check status timer.
+<a name="line157"></a> * @type {Object?}
+<a name="line158"></a> * @private
+<a name="line159"></a> */
+<a name="line160"></a>goog.gears.ManagedResourceStore.prototype.timer_ = null;
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * Whether we already have an active update check.
+<a name="line165"></a> * @type {boolean}
+<a name="line166"></a> * @private
+<a name="line167"></a> */
+<a name="line168"></a>goog.gears.ManagedResourceStore.prototype.active_ = false;
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * Number of files completed.  This is 0 or 1 if the Gears version does not
+<a name="line173"></a> * support progress events.  If the Gears version supports progress events
+<a name="line174"></a> * this will reflect the number of files that have been completed.
+<a name="line175"></a> * @type {number}
+<a name="line176"></a> * @private
+<a name="line177"></a> */
+<a name="line178"></a>goog.gears.ManagedResourceStore.prototype.filesComplete_ = 0;
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Number of total files to load.  This is 1 if the Gears version does not
+<a name="line183"></a> * support progress events.  If the Gears version supports progress events
+<a name="line184"></a> * this will reflect the number of files that needs to be loaded.
+<a name="line185"></a> * @type {number}
+<a name="line186"></a> * @private
+<a name="line187"></a> */
+<a name="line188"></a>goog.gears.ManagedResourceStore.prototype.filesTotal_ = 0;
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * @return {boolean} Whether there is an active request.
+<a name="line193"></a> */
+<a name="line194"></a>goog.gears.ManagedResourceStore.prototype.isActive = function() {
+<a name="line195"></a>  return this.active_;
+<a name="line196"></a>};
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * @return {boolean} Whether the update has completed.
+<a name="line201"></a> */
+<a name="line202"></a>goog.gears.ManagedResourceStore.prototype.isComplete = function() {
+<a name="line203"></a>  return this.filesComplete_ == this.filesTotal_;
+<a name="line204"></a>};
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * @return {boolean} Whether the update completed with a success.
+<a name="line209"></a> */
+<a name="line210"></a>goog.gears.ManagedResourceStore.prototype.isSuccess = function() {
+<a name="line211"></a>  return this.getStatus() == goog.gears.ManagedResourceStore.UpdateStatus.OK;
+<a name="line212"></a>};
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * Number of total files to load.  This is always 1 if the Gears version does
+<a name="line217"></a> * not support progress events.  If the Gears version supports progress events
+<a name="line218"></a> * this will reflect the number of files that needs to be loaded.
+<a name="line219"></a> * @return {number} The number of files to load.
+<a name="line220"></a> */
+<a name="line221"></a>goog.gears.ManagedResourceStore.prototype.getFilesTotal = function() {
+<a name="line222"></a>  return this.filesTotal_;
+<a name="line223"></a>};
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/**
+<a name="line227"></a> * Get the last error message.
+<a name="line228"></a> * @return {string} Last error message.
+<a name="line229"></a> */
+<a name="line230"></a>goog.gears.ManagedResourceStore.prototype.getLastError = function() {
+<a name="line231"></a>  return this.gearsStore_ ? this.gearsStore_.lastErrorMessage : &#39;&#39;;
+<a name="line232"></a>};
+<a name="line233"></a>
+<a name="line234"></a>
+<a name="line235"></a>/**
+<a name="line236"></a> * Number of files completed.  This is 0 or 1 if the Gears version does not
+<a name="line237"></a> * support progress events.  If the Gears version supports progress events
+<a name="line238"></a> * this will reflect the number of files that have been completed.
+<a name="line239"></a> * @return {number} The number of completed files.
+<a name="line240"></a> */
+<a name="line241"></a>goog.gears.ManagedResourceStore.prototype.getFilesComplete = function() {
+<a name="line242"></a>  return this.filesComplete_;
+<a name="line243"></a>};
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/**
+<a name="line247"></a> * Sets the filesComplete and the filesTotal and dispathces an event when
+<a name="line248"></a> * either changes.
+<a name="line249"></a> * @param {number} complete The count of the downloaded files.
+<a name="line250"></a> * @param {number} total The total number of files.
+<a name="line251"></a> * @private
+<a name="line252"></a> */
+<a name="line253"></a>goog.gears.ManagedResourceStore.prototype.setFilesCounts_ = function(complete,
+<a name="line254"></a>                                                                     total) {
+<a name="line255"></a>  if (this.filesComplete_ != complete || this.filesTotal_ != total) {
+<a name="line256"></a>    this.filesComplete_ = complete;
+<a name="line257"></a>    this.filesTotal_ = total;
+<a name="line258"></a>    this.dispatchEvent(goog.gears.ManagedResourceStore.EventType.PROGRESS);
+<a name="line259"></a>  }
+<a name="line260"></a>};
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * Determine if the ManagedResourceStore has been created in Gears yet
+<a name="line265"></a> * @return {boolean}  true if it has been created.
+<a name="line266"></a> */
+<a name="line267"></a>goog.gears.ManagedResourceStore.prototype.exists = function() {
+<a name="line268"></a>  if (!this.gearsStore_) {
+<a name="line269"></a>    this.gearsStore_ = this.localServer_.openManagedStore(
+<a name="line270"></a>        this.name_, this.requiredCookie_);
+<a name="line271"></a>  }
+<a name="line272"></a>
+<a name="line273"></a>  return !!this.gearsStore_;
+<a name="line274"></a>};
+<a name="line275"></a>
+<a name="line276"></a>
+<a name="line277"></a>/**
+<a name="line278"></a> * Throws an error if the store has not yet been created via create().
+<a name="line279"></a> * @private
+<a name="line280"></a> */
+<a name="line281"></a>goog.gears.ManagedResourceStore.prototype.assertExists_ = function() {
+<a name="line282"></a>  if (!this.exists()) {
+<a name="line283"></a>    throw Error(&#39;Store not yet created&#39;);
+<a name="line284"></a>  }
+<a name="line285"></a>};
+<a name="line286"></a>
+<a name="line287"></a>
+<a name="line288"></a>/**
+<a name="line289"></a> * Throws an error if the store has already been created via create().
+<a name="line290"></a> * @private
+<a name="line291"></a> */
+<a name="line292"></a>goog.gears.ManagedResourceStore.prototype.assertNotExists_ = function() {
+<a name="line293"></a>  if (this.exists()) {
+<a name="line294"></a>    throw Error(&#39;Store already created&#39;);
+<a name="line295"></a>  }
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * Create the ManagedResourceStore in gears
+<a name="line301"></a> * @param {string} opt_manifestUrl  The url of the manifest to associate.
+<a name="line302"></a> */
+<a name="line303"></a>goog.gears.ManagedResourceStore.prototype.create = function(opt_manifestUrl) {
+<a name="line304"></a>  if (!this.exists()) {
+<a name="line305"></a>    this.gearsStore_ = this.localServer_.createManagedStore(
+<a name="line306"></a>        this.name_, this.requiredCookie_);
+<a name="line307"></a>    this.assertExists_();
+<a name="line308"></a>  }
+<a name="line309"></a>
+<a name="line310"></a>  if (opt_manifestUrl) {
+<a name="line311"></a>    // String cast is a safety measure since Gears behaves very badly if it
+<a name="line312"></a>    // gets an unexpected data type (e.g., goog.Uri).
+<a name="line313"></a>    this.gearsStore_.manifestUrl = String(opt_manifestUrl);
+<a name="line314"></a>  }
+<a name="line315"></a>};
+<a name="line316"></a>
+<a name="line317"></a>
+<a name="line318"></a>/**
+<a name="line319"></a> * Starts an asynchronous process to update the ManagedResourcStore
+<a name="line320"></a> */
+<a name="line321"></a>goog.gears.ManagedResourceStore.prototype.update = function() {
+<a name="line322"></a>  if (this.active_) {
+<a name="line323"></a>    // Update already in progress.
+<a name="line324"></a>    return;
+<a name="line325"></a>  }
+<a name="line326"></a>
+<a name="line327"></a>  this.assertExists_();
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>  if (this.supportsEvents_) {
+<a name="line331"></a>    this.gearsStore_.onprogress = goog.bind(this.handleProgress_, this);
+<a name="line332"></a>    this.gearsStore_.oncomplete = goog.bind(this.handleComplete_, this);
+<a name="line333"></a>    this.gearsStore_.onerror = goog.bind(this.handleError_, this);
+<a name="line334"></a>  } else {
+<a name="line335"></a>    this.timer_ = goog.gears.getFactory().create(&#39;beta.timer&#39;, &#39;1.0&#39;);
+<a name="line336"></a>    this.timerId_ = this.timer_.setInterval(
+<a name="line337"></a>        goog.bind(this.checkUpdateStatus_, this),
+<a name="line338"></a>        goog.gears.ManagedResourceStore.UPDATE_INTERVAL_MS);
+<a name="line339"></a>    this.setFilesCounts_(0, 1);
+<a name="line340"></a>  }
+<a name="line341"></a>
+<a name="line342"></a>  this.gearsStore_.checkForUpdate();
+<a name="line343"></a>
+<a name="line344"></a>  this.active_ = true;
+<a name="line345"></a>};
+<a name="line346"></a>
+<a name="line347"></a>
+<a name="line348"></a>/**
+<a name="line349"></a> * @return {string} Store&#39;s current manifest URL.
+<a name="line350"></a> */
+<a name="line351"></a>goog.gears.ManagedResourceStore.prototype.getManifestUrl = function() {
+<a name="line352"></a>  this.assertExists_();
+<a name="line353"></a>  return this.gearsStore_.manifestUrl;
+<a name="line354"></a>};
+<a name="line355"></a>
+<a name="line356"></a>
+<a name="line357"></a>/**
+<a name="line358"></a> * @param {string} url  Store&#39;s new manifest URL.
+<a name="line359"></a> */
+<a name="line360"></a>goog.gears.ManagedResourceStore.prototype.setManifestUrl = function(url) {
+<a name="line361"></a>  this.assertExists_();
+<a name="line362"></a>
+<a name="line363"></a>  // Safety measure since Gears behaves very badly if it gets an unexpected
+<a name="line364"></a>  // data type (e.g., goog.Uri).
+<a name="line365"></a>  this.gearsStore_.manifestUrl = String(url);
+<a name="line366"></a>};
+<a name="line367"></a>
+<a name="line368"></a>
+<a name="line369"></a>/**
+<a name="line370"></a> * @return {string?} The version of the managed store that is currently being
+<a name="line371"></a> *     served.
+<a name="line372"></a> */
+<a name="line373"></a>goog.gears.ManagedResourceStore.prototype.getVersion = function() {
+<a name="line374"></a>  return this.exists() ? this.gearsStore_.currentVersion : null;
+<a name="line375"></a>};
+<a name="line376"></a>
+<a name="line377"></a>
+<a name="line378"></a>/**
+<a name="line379"></a> * @return {goog.gears.ManagedResourceStore.UpdateStatus} The current update
+<a name="line380"></a> *     status.
+<a name="line381"></a> */
+<a name="line382"></a>goog.gears.ManagedResourceStore.prototype.getStatus = function() {
+<a name="line383"></a>  this.assertExists_();
+<a name="line384"></a>  return /** @type {goog.gears.ManagedResourceStore.UpdateStatus} */ (
+<a name="line385"></a>      this.gearsStore_.updateStatus);
+<a name="line386"></a>};
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/**
+<a name="line390"></a> * @return {boolean} Whether the store is currently enabled to serve local
+<a name="line391"></a> *     content.
+<a name="line392"></a> */
+<a name="line393"></a>goog.gears.ManagedResourceStore.prototype.isEnabled = function() {
+<a name="line394"></a>  this.assertExists_();
+<a name="line395"></a>  return this.gearsStore_.enabled;
+<a name="line396"></a>};
+<a name="line397"></a>
+<a name="line398"></a>
+<a name="line399"></a>/**
+<a name="line400"></a> * Sets whether the store is currently enabled to serve local content.
+<a name="line401"></a> * @param {boolean} isEnabled True if the store is enabled and false otherwise.
+<a name="line402"></a> */
+<a name="line403"></a>goog.gears.ManagedResourceStore.prototype.setEnabled = function(isEnabled) {
+<a name="line404"></a>  this.assertExists_();
+<a name="line405"></a>  // !! is a safety measure since Gears behaves very badly if it gets an
+<a name="line406"></a>  //  unexpected data type.
+<a name="line407"></a>  this.gearsStore_.enabled = !!isEnabled;
+<a name="line408"></a>};
+<a name="line409"></a>
+<a name="line410"></a>
+<a name="line411"></a>/**
+<a name="line412"></a> * Remove managed store.
+<a name="line413"></a> */
+<a name="line414"></a>goog.gears.ManagedResourceStore.prototype.remove = function() {
+<a name="line415"></a>  this.assertExists_();
+<a name="line416"></a>  this.localServer_.removeManagedStore(this.name_, this.requiredCookie_);
+<a name="line417"></a>  this.gearsStore_ = null;
+<a name="line418"></a>  this.assertNotExists_();
+<a name="line419"></a>};
+<a name="line420"></a>
+<a name="line421"></a>
+<a name="line422"></a>/**
+<a name="line423"></a> * Called periodically as the update proceeds. If it has completed, fire an
+<a name="line424"></a> * approproiate event and cancel further checks.
+<a name="line425"></a> * @private
+<a name="line426"></a> */
+<a name="line427"></a>goog.gears.ManagedResourceStore.prototype.checkUpdateStatus_ = function() {
+<a name="line428"></a>  var e;
+<a name="line429"></a>
+<a name="line430"></a>  if (this.gearsStore_.updateStatus ==
+<a name="line431"></a>      goog.gears.ManagedResourceStore.UpdateStatus.FAILURE) {
+<a name="line432"></a>    e = new goog.gears.ManagedResourceStoreEvent(
+<a name="line433"></a>        goog.gears.ManagedResourceStore.EventType.ERROR,
+<a name="line434"></a>        this.gearsStore_.lastErrorMessage);
+<a name="line435"></a>    this.setFilesCounts_(0, 1);
+<a name="line436"></a>  } else if (this.gearsStore_.updateStatus ==
+<a name="line437"></a>             goog.gears.ManagedResourceStore.UpdateStatus.OK) {
+<a name="line438"></a>    e = new goog.gears.ManagedResourceStoreEvent(
+<a name="line439"></a>        goog.gears.ManagedResourceStore.EventType.SUCCESS);
+<a name="line440"></a>    this.setFilesCounts_(1, 1);
+<a name="line441"></a>  }
+<a name="line442"></a>
+<a name="line443"></a>  if (e) {
+<a name="line444"></a>    this.cancelStatusCheck_();
+<a name="line445"></a>    this.dispatchEvent(e);
+<a name="line446"></a>    // Fire complete after both error and success
+<a name="line447"></a>    this.dispatchEvent(goog.gears.ManagedResourceStore.EventType.COMPLETE);
+<a name="line448"></a>    this.active_ = false;
+<a name="line449"></a>  }
+<a name="line450"></a>};
+<a name="line451"></a>
+<a name="line452"></a>
+<a name="line453"></a>/**
+<a name="line454"></a> * Cancel periodic status checks.
+<a name="line455"></a> * @private
+<a name="line456"></a> */
+<a name="line457"></a>goog.gears.ManagedResourceStore.prototype.cancelStatusCheck_ = function() {
+<a name="line458"></a>  if (!this.supportsEvents_ &amp;&amp; this.timerId_ != null) {
+<a name="line459"></a>    this.timer_.clearInterval(this.timerId_);
+<a name="line460"></a>    this.timerId_ = null;
+<a name="line461"></a>    this.timer_ = null;
+<a name="line462"></a>  }
+<a name="line463"></a>};
+<a name="line464"></a>
+<a name="line465"></a>
+<a name="line466"></a>/**
+<a name="line467"></a> * Callback for when the Gears managed resource store fires a progress event.
+<a name="line468"></a> * @param {Object} details An object containg two fields, {@code filesComplete}
+<a name="line469"></a> *     and {@code filesTotal}.
+<a name="line470"></a> * @private
+<a name="line471"></a> */
+<a name="line472"></a>goog.gears.ManagedResourceStore.prototype.handleProgress_ = function(details) {
+<a name="line473"></a>  // setFilesCounts_ will dispatch the progress event as needed
+<a name="line474"></a>  this.setFilesCounts_(details[&#39;filesComplete&#39;], details[&#39;filesTotal&#39;]);
+<a name="line475"></a>};
+<a name="line476"></a>
+<a name="line477"></a>
+<a name="line478"></a>/**
+<a name="line479"></a> * Callback for when the Gears managed resource store fires a complete event.
+<a name="line480"></a> * @param {Object} details An object containg one field called
+<a name="line481"></a> *     {@code newVersion}.
+<a name="line482"></a> * @private
+<a name="line483"></a> */
+<a name="line484"></a>goog.gears.ManagedResourceStore.prototype.handleComplete_ = function(details) {
+<a name="line485"></a>  this.dispatchEvent(goog.gears.ManagedResourceStore.EventType.SUCCESS);
+<a name="line486"></a>  this.dispatchEvent(goog.gears.ManagedResourceStore.EventType.COMPLETE);
+<a name="line487"></a>  this.active_ = false;
+<a name="line488"></a>};
+<a name="line489"></a>
+<a name="line490"></a>
+<a name="line491"></a>/**
+<a name="line492"></a> * Callback for when the Gears managed resource store fires an error event.
+<a name="line493"></a> * @param {Object} error An object containg one field called
+<a name="line494"></a> *     {@code message}.
+<a name="line495"></a> * @private
+<a name="line496"></a> */
+<a name="line497"></a>goog.gears.ManagedResourceStore.prototype.handleError_ = function(error) {
+<a name="line498"></a>  this.dispatchEvent(new goog.gears.ManagedResourceStoreEvent(
+<a name="line499"></a>      goog.gears.ManagedResourceStore.EventType.ERROR, error.message));
+<a name="line500"></a>  this.dispatchEvent(goog.gears.ManagedResourceStore.EventType.COMPLETE);
+<a name="line501"></a>  this.active_ = false;
+<a name="line502"></a>};
+<a name="line503"></a>
+<a name="line504"></a>
+<a name="line505"></a>/** @inheritDoc */
+<a name="line506"></a>goog.gears.ManagedResourceStore.prototype.disposeInternal = function() {
+<a name="line507"></a>  goog.gears.ManagedResourceStore.superClass_.disposeInternal.call(this);
+<a name="line508"></a>  if (this.supportsEvents_ &amp;&amp; this.gearsStore_) {
+<a name="line509"></a>    this.gearsStore_.onprogress = null;
+<a name="line510"></a>    this.gearsStore_.oncomplete = null;
+<a name="line511"></a>    this.gearsStore_.onerror = null;
+<a name="line512"></a>  }
+<a name="line513"></a>  this.cancelStatusCheck_();
+<a name="line514"></a>  this.localServer_ = null;
+<a name="line515"></a>  this.gearsStore_ = null;
+<a name="line516"></a>};
+<a name="line517"></a>
+<a name="line518"></a>
+<a name="line519"></a>/**
+<a name="line520"></a> * Enum for event types fired by ManagedResourceStore.
+<a name="line521"></a> * @enum {string}
+<a name="line522"></a> */
+<a name="line523"></a>goog.gears.ManagedResourceStore.EventType = {
+<a name="line524"></a>  COMPLETE: &#39;complete&#39;,
+<a name="line525"></a>  ERROR: &#39;error&#39;,
+<a name="line526"></a>  PROGRESS: &#39;progress&#39;,
+<a name="line527"></a>  SUCCESS: &#39;success&#39;
+<a name="line528"></a>};
+<a name="line529"></a>
+<a name="line530"></a>
+<a name="line531"></a>
+<a name="line532"></a>/**
+<a name="line533"></a> * Event used when a ManagedResourceStore update is complete
+<a name="line534"></a> * @param {string} type  The type of the event.
+<a name="line535"></a> * @param {string} opt_errorMessage  The error message if failure.
+<a name="line536"></a> * @constructor
+<a name="line537"></a> * @extends {goog.events.Event}
+<a name="line538"></a> */
+<a name="line539"></a>goog.gears.ManagedResourceStoreEvent = function(type, opt_errorMessage) {
+<a name="line540"></a>  goog.events.Event.call(this, type);
+<a name="line541"></a>
+<a name="line542"></a>  if (opt_errorMessage) {
+<a name="line543"></a>    this.errorMessage = opt_errorMessage;
+<a name="line544"></a>  }
+<a name="line545"></a>};
+<a name="line546"></a>goog.inherits(goog.gears.ManagedResourceStoreEvent, goog.events.Event);
+<a name="line547"></a>
+<a name="line548"></a>
+<a name="line549"></a>/**
+<a name="line550"></a> * Error message in the case of a failure event.
+<a name="line551"></a> * @type {string?}
+<a name="line552"></a> */
+<a name="line553"></a>goog.gears.ManagedResourceStoreEvent.prototype.errorMessage = null;
+</pre>
+
+
+</body>
+</html>

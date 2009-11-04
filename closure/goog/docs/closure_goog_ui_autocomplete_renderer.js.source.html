@@ -1,0 +1,815 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>renderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_autocomplete_renderer.js.html">renderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Class for rendering the results of an auto complete and
+<a name="line17"></a> * allow the user to select an row.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.AutoComplete.Renderer&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.ui.AutoComplete.Renderer.CustomRenderer&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.a11y&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line28"></a>goog.require(&#39;goog.iter&#39;);
+<a name="line29"></a>goog.require(&#39;goog.string&#39;);
+<a name="line30"></a>goog.require(&#39;goog.style&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.AutoComplete&#39;);
+<a name="line32"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Class for rendering the results of an auto-complete in a drop down list.
+<a name="line37"></a> *
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @param {Element} opt_parentNode optional reference to the parent element that
+<a name="line40"></a> *     will hold the autocomplete elements. goog.dom.getDocument().body will be
+<a name="line41"></a> *     used if this is null.
+<a name="line42"></a> * @param {?({renderRow}|{render})} opt_customRenderer Custom full renderer to
+<a name="line43"></a> *     render each row. Should be something with a renderRow or render method.
+<a name="line44"></a> * @param {boolean} opt_rightAlign Determines if the autocomplete will always be
+<a name="line45"></a> *     right aligned. False by default.
+<a name="line46"></a> * @param {boolean} opt_useStandardHighlighting Determines if standard
+<a name="line47"></a> *     highlighting should be applied to each row of data. Standard highlighting
+<a name="line48"></a> *     bolds every matching substring for a given token in each row.
+<a name="line49"></a> * @extends {goog.events.EventTarget}
+<a name="line50"></a> */
+<a name="line51"></a>goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
+<a name="line52"></a>    opt_rightAlign, opt_useStandardHighlighting) {
+<a name="line53"></a>
+<a name="line54"></a>  /**
+<a name="line55"></a>   * Reference to the parent element that will hold the autocomplete elements
+<a name="line56"></a>   * @type {Element}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.parent_ = opt_parentNode || goog.dom.getDocument().body;
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * Dom helper for the parent element&#39;s document.
+<a name="line63"></a>   * @type {goog.dom.DomHelper}
+<a name="line64"></a>   * @private
+<a name="line65"></a>   */
+<a name="line66"></a>  this.dom_ = goog.dom.getDomHelper(this.parent_);
+<a name="line67"></a>
+<a name="line68"></a>  /**
+<a name="line69"></a>   * Whether to reposition the autocomplete UI below the target node
+<a name="line70"></a>   * @type {boolean}
+<a name="line71"></a>   * @private
+<a name="line72"></a>   */
+<a name="line73"></a>  this.reposition_ = !opt_parentNode;
+<a name="line74"></a>
+<a name="line75"></a>  /**
+<a name="line76"></a>   * Reference to the main element that controls the rendered autocomplete
+<a name="line77"></a>   * @type {Element?}
+<a name="line78"></a>   * @private
+<a name="line79"></a>   */
+<a name="line80"></a>  this.element_ = null;
+<a name="line81"></a>
+<a name="line82"></a>  /**
+<a name="line83"></a>   * The current token that has been entered
+<a name="line84"></a>   * @type {string}
+<a name="line85"></a>   * @private
+<a name="line86"></a>   */
+<a name="line87"></a>  this.token_ = &#39;&#39;;
+<a name="line88"></a>
+<a name="line89"></a>  /**
+<a name="line90"></a>   * Array used to store the current set of rows being displayed
+<a name="line91"></a>   * @type {Array}
+<a name="line92"></a>   * @private
+<a name="line93"></a>   */
+<a name="line94"></a>  this.rows_ = [];
+<a name="line95"></a>
+<a name="line96"></a>  /**
+<a name="line97"></a>   * The index of the currently highlighted row
+<a name="line98"></a>   * @type {number}
+<a name="line99"></a>   * @protected
+<a name="line100"></a>   * @suppress {underscore}
+<a name="line101"></a>   */
+<a name="line102"></a>  this.hilitedRow_ = -1;
+<a name="line103"></a>
+<a name="line104"></a>  /**
+<a name="line105"></a>   * The time that the rendering of the menu rows started
+<a name="line106"></a>   * @type {number}
+<a name="line107"></a>   * @protected
+<a name="line108"></a>   * @suppress {underscore}
+<a name="line109"></a>   */
+<a name="line110"></a>  this.startRenderingRows_ = -1;
+<a name="line111"></a>
+<a name="line112"></a>  /**
+<a name="line113"></a>   * Store the current state for the renderer
+<a name="line114"></a>   * @type {boolean}
+<a name="line115"></a>   * @private
+<a name="line116"></a>   */
+<a name="line117"></a>  this.visible_ = false;
+<a name="line118"></a>
+<a name="line119"></a>  /**
+<a name="line120"></a>   * Classname for the main element
+<a name="line121"></a>   * @type {string}
+<a name="line122"></a>   */
+<a name="line123"></a>  this.className = goog.getCssName(&#39;ac-renderer&#39;);
+<a name="line124"></a>
+<a name="line125"></a>  /**
+<a name="line126"></a>   * Classname for row divs
+<a name="line127"></a>   * @type {string}
+<a name="line128"></a>   */
+<a name="line129"></a>  this.rowClassName = goog.getCssName(&#39;ac-row&#39;);
+<a name="line130"></a>
+<a name="line131"></a>  // TODO: Remove this as soon as we remove references and ensure that
+<a name="line132"></a>  // no groups are pushing javascript using this.
+<a name="line133"></a>  /**
+<a name="line134"></a>   * The old class name for active row.  This name is deprecated because its
+<a name="line135"></a>   * name is generic enough that a typical implementation would require a
+<a name="line136"></a>   * descendant selector.
+<a name="line137"></a>   * Active row will have rowClassName &amp; activeClassName &amp;
+<a name="line138"></a>   * legacyActiveClassName.
+<a name="line139"></a>   * @type {string}
+<a name="line140"></a>   * @private
+<a name="line141"></a>   */
+<a name="line142"></a>  this.legacyActiveClassName_ = goog.getCssName(&#39;active&#39;);
+<a name="line143"></a>
+<a name="line144"></a>  /**
+<a name="line145"></a>   * Class name for active row div.
+<a name="line146"></a>   * Active row will have rowClassName &amp; activeClassName &amp;
+<a name="line147"></a>   * legacyActiveClassName.
+<a name="line148"></a>   * @type {string}
+<a name="line149"></a>   */
+<a name="line150"></a>  this.activeClassName = goog.getCssName(&#39;ac-active&#39;);
+<a name="line151"></a>
+<a name="line152"></a>  /**
+<a name="line153"></a>   * Class name for the bold tag highlighting the matched part of the text.
+<a name="line154"></a>   * @type {string}
+<a name="line155"></a>   */
+<a name="line156"></a>  this.highlightedClassName = goog.getCssName(&#39;ac-highlighted&#39;);
+<a name="line157"></a>
+<a name="line158"></a>  /**
+<a name="line159"></a>   * Custom full renderer
+<a name="line160"></a>   * @type {?({renderRow}|{render})}
+<a name="line161"></a>   * @private
+<a name="line162"></a>   */
+<a name="line163"></a>  this.customRenderer_ = opt_customRenderer || null;
+<a name="line164"></a>
+<a name="line165"></a>  /**
+<a name="line166"></a>   * Flag to indicate whether standard highlighting should be applied.
+<a name="line167"></a>   * this is set to true if left unspecified to retain existing
+<a name="line168"></a>   * behaviour for autocomplete clients
+<a name="line169"></a>   * @type {boolean}
+<a name="line170"></a>   * @private
+<a name="line171"></a>   */
+<a name="line172"></a>  this.useStandardHighlighting_ = opt_useStandardHighlighting != null ?
+<a name="line173"></a>      opt_useStandardHighlighting : true;
+<a name="line174"></a>
+<a name="line175"></a>  /**
+<a name="line176"></a>   * Determines if the autocomplete will always be right aligned
+<a name="line177"></a>   * @type {boolean}
+<a name="line178"></a>   * @private
+<a name="line179"></a>   */
+<a name="line180"></a>  this.rightAlign_ = opt_rightAlign != null ? opt_rightAlign : false;
+<a name="line181"></a>
+<a name="line182"></a>  /**
+<a name="line183"></a>   * Alignment lock that forces all alignment to the give type, RIGHT | LEFT.
+<a name="line184"></a>   * This is set the first time the renderer is aligned.
+<a name="line185"></a>   * @type {string?}
+<a name="line186"></a>   * @private
+<a name="line187"></a>   */
+<a name="line188"></a>  this.keepAligned_ = null;
+<a name="line189"></a>
+<a name="line190"></a>  /**
+<a name="line191"></a>   * Whether to align with top of target field
+<a name="line192"></a>   * @type {boolean}
+<a name="line193"></a>   * @private
+<a name="line194"></a>   */
+<a name="line195"></a>   this.topAlign_ = false;
+<a name="line196"></a>
+<a name="line197"></a>  // TODO: Remove once JSCompiler&#39;s undefined properties warnings
+<a name="line198"></a>  // don&#39;t error for guarded properties.
+<a name="line199"></a>  var magicProps = { renderRow: 0 };
+<a name="line200"></a>
+<a name="line201"></a>};
+<a name="line202"></a>goog.inherits(goog.ui.AutoComplete.Renderer, goog.events.EventTarget);
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * Next unique instance ID of a renderer.
+<a name="line207"></a> * @type {number}
+<a name="line208"></a> * @private
+<a name="line209"></a> */
+<a name="line210"></a>goog.ui.AutoComplete.Renderer.nextId_ = 0;
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * The delay before mouseover events are registered, in milliseconds
+<a name="line215"></a> * @type {number}
+<a name="line216"></a> */
+<a name="line217"></a>goog.ui.AutoComplete.Renderer.DELAY_BEFORE_MOUSEOVER = 300;
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * Set whether to align autocomplete to top of target element
+<a name="line222"></a> * @param {boolean} align If true, align to top.
+<a name="line223"></a> */
+<a name="line224"></a>goog.ui.AutoComplete.Renderer.prototype.setTopAlign = function(align) {
+<a name="line225"></a>  this.topAlign_ = align;
+<a name="line226"></a>};
+<a name="line227"></a>
+<a name="line228"></a>
+<a name="line229"></a>/**
+<a name="line230"></a> * Set whether or not standard highlighting should be used when rendering rows.
+<a name="line231"></a> * @param {boolean} useStandardHighlighting true if standard highlighting used.
+<a name="line232"></a> */
+<a name="line233"></a>goog.ui.AutoComplete.Renderer.prototype.setUseStandardHighlighting =
+<a name="line234"></a>    function(useStandardHighlighting) {
+<a name="line235"></a>  this.useStandardHighlighting_ = useStandardHighlighting;
+<a name="line236"></a>};
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>/**
+<a name="line240"></a> * Render the autocomplete UI
+<a name="line241"></a> *
+<a name="line242"></a> * @param {Array} rows Matching UI rows.
+<a name="line243"></a> * @param {string} token Token we are currently matching against.
+<a name="line244"></a> * @param {Element} opt_target Current HTML node, will position popup beneath
+<a name="line245"></a> *     this node.
+<a name="line246"></a> */
+<a name="line247"></a>goog.ui.AutoComplete.Renderer.prototype.renderRows = function(rows, token,
+<a name="line248"></a>    opt_target) {
+<a name="line249"></a>  this.token_ = token;
+<a name="line250"></a>  this.rows_ = rows;
+<a name="line251"></a>  this.hilitedRow_ = 0;
+<a name="line252"></a>  this.startRenderingRows_ = goog.now();
+<a name="line253"></a>  this.target_ = opt_target;
+<a name="line254"></a>  this.rowDivs_ = [];
+<a name="line255"></a>  this.redraw();
+<a name="line256"></a>};
+<a name="line257"></a>
+<a name="line258"></a>
+<a name="line259"></a>/**
+<a name="line260"></a> * Hide the object.
+<a name="line261"></a> */
+<a name="line262"></a>goog.ui.AutoComplete.Renderer.prototype.dismiss = function() {
+<a name="line263"></a>  if (this.target_) {
+<a name="line264"></a>    goog.dom.a11y.setActiveDescendant(this.target_, null);
+<a name="line265"></a>  }
+<a name="line266"></a>  if (this.visible_) {
+<a name="line267"></a>    this.visible_ = false;
+<a name="line268"></a>    goog.style.showElement(this.element_, false);
+<a name="line269"></a>  }
+<a name="line270"></a>};
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * Show the object.
+<a name="line275"></a> */
+<a name="line276"></a>goog.ui.AutoComplete.Renderer.prototype.show = function() {
+<a name="line277"></a>  if (!this.visible_) {
+<a name="line278"></a>    this.visible_ = true;
+<a name="line279"></a>    goog.style.showElement(this.element_, true);
+<a name="line280"></a>  }
+<a name="line281"></a>};
+<a name="line282"></a>
+<a name="line283"></a>
+<a name="line284"></a>/**
+<a name="line285"></a> * @return {boolean} True if the object is visible.
+<a name="line286"></a> */
+<a name="line287"></a>goog.ui.AutoComplete.Renderer.prototype.isVisible = function() {
+<a name="line288"></a>  return this.visible_;
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * Sets the &#39;active&#39; class of the nth item.
+<a name="line294"></a> * @param {number} index Index of the item to highlight.
+<a name="line295"></a> */
+<a name="line296"></a>goog.ui.AutoComplete.Renderer.prototype.hiliteRow = function(index) {
+<a name="line297"></a>  this.hiliteNone();
+<a name="line298"></a>  this.hilitedRow_ = index;
+<a name="line299"></a>  if (index &gt;= 0 &amp;&amp; index &lt; this.element_.childNodes.length) {
+<a name="line300"></a>    var rowDiv = this.rowDivs_[index];
+<a name="line301"></a>    goog.dom.classes.add(rowDiv, this.activeClassName,
+<a name="line302"></a>        this.legacyActiveClassName_);
+<a name="line303"></a>    if (this.target_) {
+<a name="line304"></a>      goog.dom.a11y.setActiveDescendant(this.target_, rowDiv);
+<a name="line305"></a>    }
+<a name="line306"></a>    goog.style.scrollIntoContainerView(rowDiv, this.element_);
+<a name="line307"></a>  }
+<a name="line308"></a>};
+<a name="line309"></a>
+<a name="line310"></a>
+<a name="line311"></a>/**
+<a name="line312"></a> * Removes the &#39;active&#39; class from the currently selected row.
+<a name="line313"></a> */
+<a name="line314"></a>goog.ui.AutoComplete.Renderer.prototype.hiliteNone = function() {
+<a name="line315"></a>  if (this.hilitedRow_ &gt;= 0) {
+<a name="line316"></a>    goog.dom.classes.remove(this.rowDivs_[this.hilitedRow_],
+<a name="line317"></a>                            this.activeClassName, this.legacyActiveClassName_);
+<a name="line318"></a>  }
+<a name="line319"></a>};
+<a name="line320"></a>
+<a name="line321"></a>
+<a name="line322"></a>/**
+<a name="line323"></a> * Sets the &#39;active&#39; class of the item with a given id.
+<a name="line324"></a> * @param {number} id Id of the row to hilight. If id is -1 then no rows get
+<a name="line325"></a> *     hilited.
+<a name="line326"></a> */
+<a name="line327"></a>goog.ui.AutoComplete.Renderer.prototype.hiliteId = function(id) {
+<a name="line328"></a>  if (id == -1) {
+<a name="line329"></a>    this.hiliteRow(-1);
+<a name="line330"></a>  } else {
+<a name="line331"></a>    for (var i = 0; i &lt; this.rows_.length; i++) {
+<a name="line332"></a>      if (this.rows_[i].id == id) {
+<a name="line333"></a>        this.hiliteRow(i);
+<a name="line334"></a>        return;
+<a name="line335"></a>      }
+<a name="line336"></a>    }
+<a name="line337"></a>  }
+<a name="line338"></a>};
+<a name="line339"></a>
+<a name="line340"></a>
+<a name="line341"></a>/**
+<a name="line342"></a> * Sets CSS classes on autocomplete conatainer element.
+<a name="line343"></a> *
+<a name="line344"></a> * @param {Element} elt The container element.
+<a name="line345"></a> * @private
+<a name="line346"></a> */
+<a name="line347"></a>goog.ui.AutoComplete.Renderer.prototype.setMenuClasses_ = function(elt) {
+<a name="line348"></a>  goog.dom.classes.add(elt, this.className);
+<a name="line349"></a>};
+<a name="line350"></a>
+<a name="line351"></a>
+<a name="line352"></a>/**
+<a name="line353"></a> * If the main HTML element hasn&#39;t been made yet, creates it and appends it
+<a name="line354"></a> * to the parent.
+<a name="line355"></a> * @private
+<a name="line356"></a> */
+<a name="line357"></a>goog.ui.AutoComplete.Renderer.prototype.maybeCreateElement_ = function() {
+<a name="line358"></a>  if (!this.element_) {
+<a name="line359"></a>    // Make element and add it to the parent
+<a name="line360"></a>    var el = this.dom_.createDom(&#39;div&#39;, {style: &#39;display:none&#39;});
+<a name="line361"></a>    this.element_ = el;
+<a name="line362"></a>    this.setMenuClasses_(el);
+<a name="line363"></a>    goog.dom.a11y.setRole(el, goog.dom.a11y.Role.LISTBOX);
+<a name="line364"></a>
+<a name="line365"></a>    var id = el.id = &#39;goog-acr-&#39; + goog.ui.AutoComplete.Renderer.nextId_++;
+<a name="line366"></a>
+<a name="line367"></a>    // Set ARIA roles and states for the target input box.
+<a name="line368"></a>    if (this.target_) {
+<a name="line369"></a>      goog.dom.a11y.setRole(this.target_, goog.dom.a11y.Role.COMBOBOX);
+<a name="line370"></a>      goog.dom.a11y.setState(
+<a name="line371"></a>          this.target_, goog.dom.a11y.State.AUTOCOMPLETE, &#39;list&#39;);
+<a name="line372"></a>      goog.dom.a11y.setState(this.target_, goog.dom.a11y.State.HASPOPUP, true);
+<a name="line373"></a>    }
+<a name="line374"></a>
+<a name="line375"></a>    this.dom_.appendChild(this.parent_, el);
+<a name="line376"></a>
+<a name="line377"></a>    // Add this object as an event handler
+<a name="line378"></a>    goog.events.listen(el, goog.events.EventType.CLICK,
+<a name="line379"></a>                       this.handleClick_, false, this);
+<a name="line380"></a>    goog.events.listen(el, goog.events.EventType.MOUSEDOWN,
+<a name="line381"></a>                       this.handleMouseDown_, false, this);
+<a name="line382"></a>    goog.events.listen(this.dom_.getDocument(),
+<a name="line383"></a>                       goog.events.EventType.CLICK,
+<a name="line384"></a>                       this.handleDocumentClick_, false, this);
+<a name="line385"></a>    goog.events.listen(el, goog.events.EventType.MOUSEOVER,
+<a name="line386"></a>                       this.handleMouseOver_, false, this);
+<a name="line387"></a>  }
+<a name="line388"></a>};
+<a name="line389"></a>
+<a name="line390"></a>
+<a name="line391"></a>/**
+<a name="line392"></a> * Redraw (or draw if this is the first call) the rendered auto-complete drop
+<a name="line393"></a> * down.
+<a name="line394"></a> */
+<a name="line395"></a>goog.ui.AutoComplete.Renderer.prototype.redraw = function() {
+<a name="line396"></a>  // Create the element if it doesn&#39;t yet exist
+<a name="line397"></a>  this.maybeCreateElement_();
+<a name="line398"></a>
+<a name="line399"></a>  // For top aligned with target (= bottom aligned element),
+<a name="line400"></a>  // we need to hide and then add elements while hidden to prevent
+<a name="line401"></a>  // visible repositioning
+<a name="line402"></a>  if (this.topAlign_) {
+<a name="line403"></a>    this.element_.style.visibility = &#39;hidden&#39;;
+<a name="line404"></a>  }
+<a name="line405"></a>
+<a name="line406"></a>  // Remove the current child nodes
+<a name="line407"></a>  this.rowDivs_.length = 0;
+<a name="line408"></a>  this.dom_.removeChildren(this.element_);
+<a name="line409"></a>
+<a name="line410"></a>  // Generate the new rows (use forEach so we can change rows_ from an
+<a name="line411"></a>  // array to a different datastructure if required)
+<a name="line412"></a>  if (this.customRenderer_ &amp;&amp; this.customRenderer_.render) {
+<a name="line413"></a>    this.customRenderer_.render(this, this.element_, this.rows_, this.token_);
+<a name="line414"></a>  } else {
+<a name="line415"></a>    var curRow = null;
+<a name="line416"></a>    goog.iter.forEach(this.rows_, function(row) {
+<a name="line417"></a>      row = this.renderRowHtml(row, this.token_);
+<a name="line418"></a>      if (this.topAlign_) {
+<a name="line419"></a>        // Aligned with top of target = best match at bottom
+<a name="line420"></a>        this.element_.insertBefore(row, curRow);
+<a name="line421"></a>      } else {
+<a name="line422"></a>        this.dom_.appendChild(this.element_, row);
+<a name="line423"></a>      }
+<a name="line424"></a>      curRow = row;
+<a name="line425"></a>    }, this);
+<a name="line426"></a>  }
+<a name="line427"></a>
+<a name="line428"></a>  // Don&#39;t show empty result sets
+<a name="line429"></a>  if (this.rows_.length == 0) {
+<a name="line430"></a>    this.dismiss();
+<a name="line431"></a>    return;
+<a name="line432"></a>  } else {
+<a name="line433"></a>    this.show();
+<a name="line434"></a>  }
+<a name="line435"></a>
+<a name="line436"></a>  // Fix bug on Firefox on Mac where scrollbars can show through a floating div
+<a name="line437"></a>  this.preventMacScrollbarResurface_(this.element_);
+<a name="line438"></a>
+<a name="line439"></a>  this.reposition();
+<a name="line440"></a>
+<a name="line441"></a>  // Make the autocompleter unselectable, so that it
+<a name="line442"></a>  // doesn&#39;t steal focus from the input field when clicked.
+<a name="line443"></a>  goog.style.setUnselectable(this.element_, true);
+<a name="line444"></a>};
+<a name="line445"></a>
+<a name="line446"></a>
+<a name="line447"></a>/**
+<a name="line448"></a> * Repositions the auto complete popup relative to the location node, if it
+<a name="line449"></a> * exists and the auto position has been set.
+<a name="line450"></a> */
+<a name="line451"></a>goog.ui.AutoComplete.Renderer.prototype.reposition = function() {
+<a name="line452"></a>  if (this.target_ &amp;&amp; this.reposition_) {
+<a name="line453"></a>    var topLeft = goog.style.getPageOffset(this.target_);
+<a name="line454"></a>    var locationNodeSize = goog.style.getSize(this.target_);
+<a name="line455"></a>    var viewSize = goog.style.getSize(goog.style.getClientViewportElement(
+<a name="line456"></a>            this.target_));
+<a name="line457"></a>    var elSize = goog.style.getSize(this.element_);
+<a name="line458"></a>    topLeft.y = this.topAlign_ ? topLeft.y - elSize.height :
+<a name="line459"></a>        topLeft.y + locationNodeSize.height;
+<a name="line460"></a>    // If past right edge of screen, align with right side of location node
+<a name="line461"></a>    // Also set param to keep aligning this widget to same side for
+<a name="line462"></a>    // successive renders
+<a name="line463"></a>    if ((this.rightAlign_ || topLeft.x + elSize.width &gt; viewSize.width) &amp;&amp;
+<a name="line464"></a>        this.keepAligned_ != &#39;LEFT&#39;) {
+<a name="line465"></a>      topLeft.x = topLeft.x + locationNodeSize.width - elSize.width;
+<a name="line466"></a>      this.keepAligned_ = &#39;RIGHT&#39;;
+<a name="line467"></a>    } else {
+<a name="line468"></a>      this.keepAligned_ = &#39;LEFT&#39;;
+<a name="line469"></a>    }
+<a name="line470"></a>
+<a name="line471"></a>    goog.style.setPageOffset(this.element_, topLeft);
+<a name="line472"></a>
+<a name="line473"></a>    if (this.topAlign_) {
+<a name="line474"></a>      // This flickers, but is better than the alternative of positioning
+<a name="line475"></a>      // in the wrong place and then moving.
+<a name="line476"></a>      this.element_.style.visibility = &#39;visible&#39;;
+<a name="line477"></a>    }
+<a name="line478"></a>  }
+<a name="line479"></a>};
+<a name="line480"></a>
+<a name="line481"></a>
+<a name="line482"></a>/**
+<a name="line483"></a> * Sets whether the renderer should try to determine where to position the
+<a name="line484"></a> * drop down.
+<a name="line485"></a> * @param {boolean} auto Whether to autoposition the drop down.
+<a name="line486"></a> */
+<a name="line487"></a>goog.ui.AutoComplete.Renderer.prototype.setAutoPosition = function(auto) {
+<a name="line488"></a>  this.reposition_ = auto;
+<a name="line489"></a>};
+<a name="line490"></a>
+<a name="line491"></a>
+<a name="line492"></a>/**
+<a name="line493"></a> * Disposes of the renderer and it&#39;s associated HTML.
+<a name="line494"></a> */
+<a name="line495"></a>goog.ui.AutoComplete.Renderer.prototype.disposeInternal = function() {
+<a name="line496"></a>  goog.ui.AutoComplete.Renderer.superClass_.disposeInternal.call(this);
+<a name="line497"></a>
+<a name="line498"></a>  if (this.element_) {
+<a name="line499"></a>    goog.events.unlisten(this.element_, goog.events.EventType.CLICK,
+<a name="line500"></a>        this.handleClick_, false, this);
+<a name="line501"></a>    goog.events.unlisten(this.element_, goog.events.EventType.MOUSEDOWN,
+<a name="line502"></a>        this.handleMouseDown_, false, this);
+<a name="line503"></a>    goog.events.unlisten(this.dom_.getDocument(),
+<a name="line504"></a>        goog.events.EventType.CLICK, this.handleDocumentClick_, false, this);
+<a name="line505"></a>    goog.events.unlisten(this.element_, goog.events.EventType.MOUSEOVER,
+<a name="line506"></a>        this.handleMouseOver_, false, this);
+<a name="line507"></a>    this.dom_.removeNode(this.element_);
+<a name="line508"></a>    this.element_ = null;
+<a name="line509"></a>    this.visible_ = false;
+<a name="line510"></a>  }
+<a name="line511"></a>
+<a name="line512"></a>  delete this.parent_;
+<a name="line513"></a>};
+<a name="line514"></a>
+<a name="line515"></a>
+<a name="line516"></a>/**
+<a name="line517"></a> * Prevents scrollbars that are below the node from resurfacing through the
+<a name="line518"></a> * node. This is a known bug in Firefox on Mac.
+<a name="line519"></a> *
+<a name="line520"></a> * @param {Node} node The node to prevent scrollbars from resurfacing through.
+<a name="line521"></a> * @private
+<a name="line522"></a> */
+<a name="line523"></a>goog.ui.AutoComplete.Renderer.prototype.preventMacScrollbarResurface_ =
+<a name="line524"></a>    function(node) {
+<a name="line525"></a>  if (goog.userAgent.GECKO &amp;&amp; goog.userAgent.MAC) {
+<a name="line526"></a>    node.style.width = &#39;&#39;;
+<a name="line527"></a>    node.style.overflow = &#39;visible&#39;;
+<a name="line528"></a>    node.style.width = node.offsetWidth;
+<a name="line529"></a>    node.style.overflow = &#39;auto&#39;;
+<a name="line530"></a>  }
+<a name="line531"></a>};
+<a name="line532"></a>
+<a name="line533"></a>
+<a name="line534"></a>/**
+<a name="line535"></a> * Generic function that takes a row and renders a DOM structure for that row.
+<a name="line536"></a> *
+<a name="line537"></a> * Normally this will only be matching a maximum of 20 or so items.  Even with
+<a name="line538"></a> * 40 rows, DOM this building is fine.
+<a name="line539"></a> *
+<a name="line540"></a> * @param {Object} row Object representing row.
+<a name="line541"></a> * @param {string} token Token to highlight.
+<a name="line542"></a> * @param {Node} node The node to render into.
+<a name="line543"></a> * @private
+<a name="line544"></a> */
+<a name="line545"></a>goog.ui.AutoComplete.Renderer.prototype.renderRowContents_ =
+<a name="line546"></a>    function(row, token, node) {
+<a name="line547"></a>  node.innerHTML = goog.string.htmlEscape(row.data.toString());
+<a name="line548"></a>};
+<a name="line549"></a>
+<a name="line550"></a>
+<a name="line551"></a>/**
+<a name="line552"></a> * Goes through a node and all of it&#39;s child nodes, replacing HTML text that
+<a name="line553"></a> * matches a token with &lt;b&gt;token&lt;/b&gt;
+<a name="line554"></a> *
+<a name="line555"></a> * @param {Node} node Node to match.
+<a name="line556"></a> * @param {string | Array} tokenOrArray Token to match or array of tokens to
+<a name="line557"></a> *     match, the first match will be highlighted.
+<a name="line558"></a> * @private
+<a name="line559"></a> */
+<a name="line560"></a>goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
+<a name="line561"></a>    function(node, tokenOrArray) {
+<a name="line562"></a>  if (node.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line563"></a>
+<a name="line564"></a>    var token;
+<a name="line565"></a>    var rest = null;
+<a name="line566"></a>
+<a name="line567"></a>    if (goog.isArray(tokenOrArray)) {
+<a name="line568"></a>      token = tokenOrArray.length &gt; 0 ? tokenOrArray[0] : &#39;&#39;;
+<a name="line569"></a>      if (tokenOrArray.length &gt; 1) {
+<a name="line570"></a>        rest = goog.array.slice(tokenOrArray, 1);
+<a name="line571"></a>      }
+<a name="line572"></a>    } else {
+<a name="line573"></a>      token = tokenOrArray;
+<a name="line574"></a>    }
+<a name="line575"></a>    if (token.length == 0) return;
+<a name="line576"></a>
+<a name="line577"></a>    var text = node.nodeValue;
+<a name="line578"></a>    token = goog.string.regExpEscape(token);
+<a name="line579"></a>    // Create a regular expression to match a token at the beginning of a line
+<a name="line580"></a>    // or preceeded by non-alpha-numeric characters
+<a name="line581"></a>    var re = new RegExp(&#39;(.*?)(^|\\W+)(&#39; + token + &#39;)&#39;, &#39;gi&#39;);
+<a name="line582"></a>    var textNodes = [];
+<a name="line583"></a>    var lastIndex = 0;
+<a name="line584"></a>
+<a name="line585"></a>    // Find all matches
+<a name="line586"></a>    // Note: text.split(re) has inconsistencies between IE and FF, so
+<a name="line587"></a>    // manually recreated the logic
+<a name="line588"></a>    var match = re.exec(text);
+<a name="line589"></a>    while (match) {
+<a name="line590"></a>      textNodes.push(match[1]);
+<a name="line591"></a>      textNodes.push(match[2]);
+<a name="line592"></a>      textNodes.push(match[3]);
+<a name="line593"></a>      lastIndex = re.lastIndex;
+<a name="line594"></a>      match = re.exec(text);
+<a name="line595"></a>    }
+<a name="line596"></a>    textNodes.push(text.substring(lastIndex));
+<a name="line597"></a>
+<a name="line598"></a>    // Replace the tokens with bolded text
+<a name="line599"></a>    if (textNodes.length &gt; 1) {
+<a name="line600"></a>      node.nodeValue = textNodes[0] + textNodes[1];
+<a name="line601"></a>      var boldTag = this.dom_.createElement(&#39;b&#39;);
+<a name="line602"></a>      boldTag.className = this.highlightedClassName;
+<a name="line603"></a>      this.dom_.appendChild(boldTag, this.dom_.createTextNode(textNodes[2]));
+<a name="line604"></a>      boldTag = node.parentNode.insertBefore(boldTag, node.nextSibling);
+<a name="line605"></a>      for (var i = textNodes.length - 1; i &gt;= 3; i--) {
+<a name="line606"></a>        node.parentNode.insertBefore(this.dom_.createTextNode(textNodes[i]),
+<a name="line607"></a>            boldTag.nextSibling);
+<a name="line608"></a>      }
+<a name="line609"></a>    } else if (rest) {
+<a name="line610"></a>      this.hiliteMatchingText_(node, rest);
+<a name="line611"></a>    }
+<a name="line612"></a>  } else {
+<a name="line613"></a>     var child = node.firstChild;
+<a name="line614"></a>     while (child) {
+<a name="line615"></a>       var nextChild = child.nextSibling;
+<a name="line616"></a>       this.hiliteMatchingText_(child, tokenOrArray);
+<a name="line617"></a>       child = nextChild;
+<a name="line618"></a>     }
+<a name="line619"></a>  }
+<a name="line620"></a>};
+<a name="line621"></a>
+<a name="line622"></a>
+<a name="line623"></a>/**
+<a name="line624"></a> * Render a row by creating a div and then calling row rendering callback or
+<a name="line625"></a> * default row handler
+<a name="line626"></a> *
+<a name="line627"></a> * @param {Object} row Object representing row.
+<a name="line628"></a> * @param {string} token Token to highlight.
+<a name="line629"></a> * @return {Element} An element with the rendered HTML.
+<a name="line630"></a> */
+<a name="line631"></a>goog.ui.AutoComplete.Renderer.prototype.renderRowHtml = function(row, token) {
+<a name="line632"></a>  // Create and return the node
+<a name="line633"></a>  var node = this.dom_.createDom(&#39;div&#39;, {
+<a name="line634"></a>    className: this.rowClassName,
+<a name="line635"></a>    id: &#39;goog-acri-&#39; + goog.ui.AutoComplete.Renderer.nextId_++
+<a name="line636"></a>  });
+<a name="line637"></a>  goog.dom.a11y.setRole(node, goog.dom.a11y.Role.OPTION);
+<a name="line638"></a>  if (this.customRenderer_ &amp;&amp; this.customRenderer_.renderRow) {
+<a name="line639"></a>    this.customRenderer_.renderRow(row, token, node);
+<a name="line640"></a>  } else {
+<a name="line641"></a>    this.renderRowContents_(row, token, node);
+<a name="line642"></a>  }
+<a name="line643"></a>
+<a name="line644"></a>  if (token &amp;&amp; this.useStandardHighlighting_) {
+<a name="line645"></a>    this.hiliteMatchingText_(node, token);
+<a name="line646"></a>  }
+<a name="line647"></a>
+<a name="line648"></a>  goog.dom.classes.add(node, this.rowClassName);
+<a name="line649"></a>  this.rowDivs_.push(node);
+<a name="line650"></a>  return node;
+<a name="line651"></a>};
+<a name="line652"></a>
+<a name="line653"></a>
+<a name="line654"></a>/**
+<a name="line655"></a> * Given an event target looks up through the parents till it finds a div.  Once
+<a name="line656"></a> * found it will then look to see if that is one of the childnodes, if it is
+<a name="line657"></a> * then the index is returned, otherwise -1 is returned.
+<a name="line658"></a> * @param {Element} et HtmlElement.
+<a name="line659"></a> * @return {number} Index corresponding to event target.
+<a name="line660"></a> * @private
+<a name="line661"></a> */
+<a name="line662"></a>goog.ui.AutoComplete.Renderer.prototype.getRowFromEventTarget_ = function(et) {
+<a name="line663"></a>  while (et &amp;&amp; et != this.element_ &amp;&amp;
+<a name="line664"></a>      !goog.dom.classes.has(et, this.rowClassName)) {
+<a name="line665"></a>    et = /** @type {Element} */ (et.parentNode);
+<a name="line666"></a>  }
+<a name="line667"></a>  return et ? goog.array.indexOf(this.rowDivs_, et) : -1;
+<a name="line668"></a>};
+<a name="line669"></a>
+<a name="line670"></a>
+<a name="line671"></a>/**
+<a name="line672"></a> * Handle the click events.  These are redirected to the AutoComplete object
+<a name="line673"></a> * which then makes a callback to select the correct row.
+<a name="line674"></a> * @param {goog.events.Event} e Browser event object.
+<a name="line675"></a> * @private
+<a name="line676"></a> */
+<a name="line677"></a>goog.ui.AutoComplete.Renderer.prototype.handleClick_ = function(e) {
+<a name="line678"></a>  var index = this.getRowFromEventTarget_(/** @type {Element} */ (e.target));
+<a name="line679"></a>  if (index &gt;= 0) {
+<a name="line680"></a>    this.dispatchEvent({
+<a name="line681"></a>      type: goog.ui.AutoComplete.EventType.SELECT,
+<a name="line682"></a>      row: this.rows_[index].id
+<a name="line683"></a>    });
+<a name="line684"></a>  }
+<a name="line685"></a>  e.stopPropagation();
+<a name="line686"></a>};
+<a name="line687"></a>
+<a name="line688"></a>
+<a name="line689"></a>/**
+<a name="line690"></a> * Handle the mousedown event and tell the AC not to dimiss.
+<a name="line691"></a> * @param {goog.events.Event} e Browser event object.
+<a name="line692"></a> * @private
+<a name="line693"></a> */
+<a name="line694"></a>goog.ui.AutoComplete.Renderer.prototype.handleMouseDown_ = function(e) {
+<a name="line695"></a>  this.dispatchEvent(goog.ui.AutoComplete.EventType.CANCEL_DISMISS);
+<a name="line696"></a>  e.stopPropagation();
+<a name="line697"></a>  e.preventDefault();
+<a name="line698"></a>};
+<a name="line699"></a>
+<a name="line700"></a>
+<a name="line701"></a>/**
+<a name="line702"></a> * Handles the user clicking on the document.
+<a name="line703"></a> * @param {Object} e The document click event.
+<a name="line704"></a> * @private
+<a name="line705"></a> */
+<a name="line706"></a>goog.ui.AutoComplete.Renderer.prototype.handleDocumentClick_ = function(e) {
+<a name="line707"></a>  this.dispatchEvent(goog.ui.AutoComplete.EventType.DISMISS);
+<a name="line708"></a>};
+<a name="line709"></a>
+<a name="line710"></a>
+<a name="line711"></a>/**
+<a name="line712"></a> * Handle the mousing events.  These are redirected to the AutoComplete object
+<a name="line713"></a> * which then makes a callback to set the correctly highlighted row.  This is
+<a name="line714"></a> * because the AutoComplete can move the focus as well, and there is no sense
+<a name="line715"></a> * duplicating the code
+<a name="line716"></a> * @param {goog.events.Event} e Browser event object.
+<a name="line717"></a> * @private
+<a name="line718"></a> */
+<a name="line719"></a>goog.ui.AutoComplete.Renderer.prototype.handleMouseOver_ = function(e) {
+<a name="line720"></a>  var index = this.getRowFromEventTarget_(/** @type {Element} */ (e.target));
+<a name="line721"></a>  if (index &gt;= 0) {
+<a name="line722"></a>    if ((goog.now() - this.startRenderingRows_) &lt;
+<a name="line723"></a>        goog.ui.AutoComplete.Renderer.DELAY_BEFORE_MOUSEOVER) {
+<a name="line724"></a>      return;
+<a name="line725"></a>    }
+<a name="line726"></a>
+<a name="line727"></a>    this.dispatchEvent({
+<a name="line728"></a>      type: goog.ui.AutoComplete.EventType.HILITE,
+<a name="line729"></a>      row: this.rows_[index].id
+<a name="line730"></a>    });
+<a name="line731"></a>  }
+<a name="line732"></a>};
+<a name="line733"></a>
+<a name="line734"></a>
+<a name="line735"></a>
+<a name="line736"></a>/**
+<a name="line737"></a> * Class allowing different implementations to custom render the autocomplete.
+<a name="line738"></a> * Extending classes should override the render function.
+<a name="line739"></a> * @constructor
+<a name="line740"></a> */
+<a name="line741"></a>goog.ui.AutoComplete.Renderer.CustomRenderer = function() {
+<a name="line742"></a>};
+<a name="line743"></a>
+<a name="line744"></a>
+<a name="line745"></a>/**
+<a name="line746"></a> * Renders the autocomplete box.
+<a name="line747"></a> * @param {goog.ui.AutoComplete.Renderer} renderer The autocomplete renderer.
+<a name="line748"></a> * @param {Element} element The main element that controls the rendered
+<a name="line749"></a> *     autocomplete.
+<a name="line750"></a> * @param {Array} rows The current set of rows being displayed.
+<a name="line751"></a> * @param {string} token The current token that has been entered.
+<a name="line752"></a> */
+<a name="line753"></a>goog.ui.AutoComplete.Renderer.CustomRenderer.prototype.render = function(
+<a name="line754"></a>    renderer, element, rows, token) {
+<a name="line755"></a>};
+<a name="line756"></a>
+<a name="line757"></a>
+<a name="line758"></a>/**
+<a name="line759"></a> * Generic function that takes a row and renders a DOM structure for that row.
+<a name="line760"></a> * @param {Object} row Object representing row.
+<a name="line761"></a> * @param {string} token Token to highlight.
+<a name="line762"></a> * @param {Node} node The node to render into.
+<a name="line763"></a> */
+<a name="line764"></a>goog.ui.AutoComplete.Renderer.CustomRenderer.prototype.renderRow =
+<a name="line765"></a>    function(row, token, node) {
+<a name="line766"></a>};
+</pre>
+
+
+</body>
+</html>

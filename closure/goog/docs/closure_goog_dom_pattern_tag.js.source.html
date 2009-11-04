@@ -1,0 +1,196 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tag.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_dom_pattern_tag.js.html">tag.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview DOM pattern to match a tag.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.dom.pattern.Tag&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom.pattern&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom.pattern.AbstractPattern&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.pattern.MatchType&#39;);
+<a name="line25"></a>goog.require(&#39;goog.object&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Pattern object that matches an tag.
+<a name="line30"></a> *
+<a name="line31"></a> * @param {string|RegExp} tag Name of the tag.  Also will accept a regular
+<a name="line32"></a> *     expression to match against the tag name.
+<a name="line33"></a> * @param {goog.dom.TagWalkType} type Type of token to match.
+<a name="line34"></a> * @param {Object} opt_attrs Optional map of attribute names to desired values.
+<a name="line35"></a> *     This pattern will only match when all attributes are present and match
+<a name="line36"></a> *     the string or regular expression value provided here.
+<a name="line37"></a> * @param {Object} opt_styles Optional map of CSS style names to desired values.
+<a name="line38"></a> *     This pattern will only match when all styles are present and match the
+<a name="line39"></a> *     string or regular expression value provided here.
+<a name="line40"></a> * @param {Function} opt_test Optional function that takes the element as a
+<a name="line41"></a> *     parameter and returns true if this pattern should match it.
+<a name="line42"></a> * @constructor
+<a name="line43"></a> * @extends {goog.dom.pattern.AbstractPattern}
+<a name="line44"></a> */
+<a name="line45"></a>goog.dom.pattern.Tag = function(tag, type, opt_attrs, opt_styles, opt_test) {
+<a name="line46"></a>  if (goog.isString(tag)) {
+<a name="line47"></a>    this.tag_ = tag.toUpperCase();
+<a name="line48"></a>  } else {
+<a name="line49"></a>    this.tag_ = tag;
+<a name="line50"></a>  }
+<a name="line51"></a>
+<a name="line52"></a>  this.type_ = type;
+<a name="line53"></a>
+<a name="line54"></a>  this.attrs_ = opt_attrs || null;
+<a name="line55"></a>  this.styles_ = opt_styles || null;
+<a name="line56"></a>  this.test_ = opt_test || null;
+<a name="line57"></a>};
+<a name="line58"></a>goog.inherits(goog.dom.pattern.Tag, goog.dom.pattern.AbstractPattern);
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * The tag to match.
+<a name="line63"></a> *
+<a name="line64"></a> * @type {string|RegExp}
+<a name="line65"></a> * @private
+<a name="line66"></a> */
+<a name="line67"></a>goog.dom.pattern.Tag.prototype.tag_;
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * The type of token to match.
+<a name="line72"></a> *
+<a name="line73"></a> * @type {goog.dom.TagWalkType}
+<a name="line74"></a> * @private
+<a name="line75"></a> */
+<a name="line76"></a>goog.dom.pattern.Tag.prototype.type_;
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * The attributes to test for.
+<a name="line81"></a> *
+<a name="line82"></a> * @type {Object?}
+<a name="line83"></a> * @private
+<a name="line84"></a> */
+<a name="line85"></a>goog.dom.pattern.Tag.prototype.attrs_ = null;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * The styles to test for.
+<a name="line90"></a> *
+<a name="line91"></a> * @type {Object?}
+<a name="line92"></a> * @private
+<a name="line93"></a> */
+<a name="line94"></a>goog.dom.pattern.Tag.prototype.styles_ = null;
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Function that takes the element as a parameter and returns true if this
+<a name="line99"></a> * pattern should match it.
+<a name="line100"></a> *
+<a name="line101"></a> * @type {Function?}
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.dom.pattern.Tag.prototype.test_ = null;
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Test whether the given token is a tag token which matches the tag name,
+<a name="line109"></a> * style, and attributes provided in the constructor.
+<a name="line110"></a> *
+<a name="line111"></a> * @param {Node} token Token to match against.
+<a name="line112"></a> * @param {goog.dom.TagWalkType} type The type of token.
+<a name="line113"></a> * @return {goog.dom.pattern.MatchType} &lt;code&gt;MATCH&lt;/code&gt; if the pattern
+<a name="line114"></a> *     matches, &lt;code&gt;NO_MATCH&lt;/code&gt; otherwise.
+<a name="line115"></a> */
+<a name="line116"></a>goog.dom.pattern.Tag.prototype.matchToken = function(token, type) {
+<a name="line117"></a>  // Check the direction and tag name.
+<a name="line118"></a>  if (type == this.type_ &amp;&amp;
+<a name="line119"></a>      goog.dom.pattern.matchStringOrRegex(this.tag_, token.nodeName)) {
+<a name="line120"></a>    // Check the attributes.
+<a name="line121"></a>    if (this.attrs_ &amp;&amp;
+<a name="line122"></a>        !goog.object.every(
+<a name="line123"></a>            this.attrs_,
+<a name="line124"></a>            goog.dom.pattern.matchStringOrRegexMap,
+<a name="line125"></a>            token)) {
+<a name="line126"></a>      return goog.dom.pattern.MatchType.NO_MATCH;
+<a name="line127"></a>    }
+<a name="line128"></a>    // Check the styles.
+<a name="line129"></a>    if (this.styles_ &amp;&amp;
+<a name="line130"></a>        !goog.object.every(
+<a name="line131"></a>            this.styles_,
+<a name="line132"></a>            goog.dom.pattern.matchStringOrRegexMap,
+<a name="line133"></a>            token.style)) {
+<a name="line134"></a>      return goog.dom.pattern.MatchType.NO_MATCH;
+<a name="line135"></a>    }
+<a name="line136"></a>
+<a name="line137"></a>    if (this.test_ &amp;&amp; !this.test_(token)) {
+<a name="line138"></a>      return goog.dom.pattern.MatchType.NO_MATCH;
+<a name="line139"></a>    }
+<a name="line140"></a>
+<a name="line141"></a>    // If we reach this point, we have a match and should save it.
+<a name="line142"></a>    this.matchedNode = token;
+<a name="line143"></a>    return goog.dom.pattern.MatchType.MATCH;
+<a name="line144"></a>  }
+<a name="line145"></a>
+<a name="line146"></a>  return goog.dom.pattern.MatchType.NO_MATCH;
+<a name="line147"></a>};
+</pre>
+
+
+</body>
+</html>

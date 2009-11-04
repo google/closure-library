@@ -1,0 +1,266 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>xpc.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_net_xpc_xpc.js.html">xpc.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides the namesspace for client-side communication
+<a name="line17"></a> * between pages originating from different domains (it works also
+<a name="line18"></a> * with pages from the same domain, but doing that is kinda
+<a name="line19"></a> * pointless).
+<a name="line20"></a> *
+<a name="line21"></a> * The only publicly visible class is goog.net.xpc.CrossPageChannel.
+<a name="line22"></a> *
+<a name="line23"></a> * Note: The preferred name for the main class would have been
+<a name="line24"></a> * CrossDomainChannel.  But as there already is a class named like
+<a name="line25"></a> * that (which serves a different purpose) in the maps codebase,
+<a name="line26"></a> * CrossPageChannel was chosen to avoid confusion.
+<a name="line27"></a> *
+<a name="line28"></a> * CrossPageChannel abstracts the underlying transport mechanism to
+<a name="line29"></a> * provide a common interface in all browsers.
+<a name="line30"></a> *
+<a name="line31"></a> */
+<a name="line32"></a>
+<a name="line33"></a>/*
+<a name="line34"></a>TODO
+<a name="line35"></a>- resolve fastback issues in Safari (IframeRelayTransport)
+<a name="line36"></a> */
+<a name="line37"></a>
+<a name="line38"></a>/**
+<a name="line39"></a> * Namespace for CrossPageChannel
+<a name="line40"></a> */
+<a name="line41"></a>goog.provide(&#39;goog.net.xpc&#39;);
+<a name="line42"></a>
+<a name="line43"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Enum used to identify transport types.
+<a name="line48"></a> * @enum {number}
+<a name="line49"></a> */
+<a name="line50"></a>goog.net.xpc.TransportTypes = {
+<a name="line51"></a>  NATIVE_MESSAGING : 1,
+<a name="line52"></a>  FRAME_ELEMENT_METHOD : 2,
+<a name="line53"></a>  IFRAME_RELAY : 3,
+<a name="line54"></a>  IFRAME_POLLING : 4,
+<a name="line55"></a>  FLASH : 5,
+<a name="line56"></a>  NIX: 6
+<a name="line57"></a>};
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * Enum containing transport names. These need to correspond to the
+<a name="line62"></a> * transport class names for createTransport_() to work.
+<a name="line63"></a> * @type {Object}
+<a name="line64"></a> */
+<a name="line65"></a>goog.net.xpc.TransportNames = {
+<a name="line66"></a>  &#39;1&#39;: &#39;NativeMessagingTransport&#39;,
+<a name="line67"></a>  &#39;2&#39;: &#39;FrameElementMethodTransport&#39;,
+<a name="line68"></a>  &#39;3&#39;: &#39;IframeRelayTransport&#39;,
+<a name="line69"></a>  &#39;4&#39;: &#39;IframePollingTransport&#39;,
+<a name="line70"></a>  &#39;5&#39;: &#39;FlashTransport&#39;,
+<a name="line71"></a>  &#39;6&#39;: &#39;NixTransport&#39;
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>// TODO: Add auth token support to other methods.
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Field names used on configuration object.
+<a name="line79"></a> * @type {Object}
+<a name="line80"></a> */
+<a name="line81"></a>goog.net.xpc.CfgFields = {
+<a name="line82"></a>  /**
+<a name="line83"></a>   * Channel name identifier.
+<a name="line84"></a>   * Both peers have to be initialized with
+<a name="line85"></a>   * the same channel name.  If not present, a channel name is
+<a name="line86"></a>   * generated (which then has to transferred to the peer somehow).
+<a name="line87"></a>   */
+<a name="line88"></a>  CHANNEL_NAME : &#39;cn&#39;,
+<a name="line89"></a>  /**
+<a name="line90"></a>   * Authorization token. If set, NIX will use this authorization token
+<a name="line91"></a>   * to validate the setup.
+<a name="line92"></a>   */
+<a name="line93"></a>  AUTH_TOKEN : &#39;at&#39;,
+<a name="line94"></a>  /**
+<a name="line95"></a>   * Remote party&#39;s authorization token. If set, NIX will validate this
+<a name="line96"></a>   * authorization token against that sent by the other party.
+<a name="line97"></a>   */
+<a name="line98"></a>  REMOTE_AUTH_TOKEN : &#39;rat&#39;,
+<a name="line99"></a>  /**
+<a name="line100"></a>   * The URI of the peer page.
+<a name="line101"></a>   */
+<a name="line102"></a>  PEER_URI : &#39;pu&#39;,
+<a name="line103"></a>  /**
+<a name="line104"></a>   * Ifame-ID identifier.
+<a name="line105"></a>   * The id of the iframe element the peer-document lives in.
+<a name="line106"></a>   */
+<a name="line107"></a>  IFRAME_ID : &#39;ifrid&#39;,
+<a name="line108"></a>  /**
+<a name="line109"></a>   * Transport type identifier.
+<a name="line110"></a>   * The transport type to use. Possible values are entries from
+<a name="line111"></a>   * goog.net.xpc.TransportTypes. If not present, the transport is
+<a name="line112"></a>   * determined automatically based on the useragent&#39;s capabilities.
+<a name="line113"></a>   */
+<a name="line114"></a>  TRANSPORT : &#39;tp&#39;,
+<a name="line115"></a>  /**
+<a name="line116"></a>   * Local relay URI identifier (IframeRelayTransport-specific).
+<a name="line117"></a>   * The URI (can&#39;t contain a fragment identifier) used by the peer to
+<a name="line118"></a>   * relay data through.
+<a name="line119"></a>   */
+<a name="line120"></a>  LOCAL_RELAY_URI : &#39;lru&#39;,
+<a name="line121"></a>  /**
+<a name="line122"></a>   * Peer relay URI identifier (IframeRelayTransport-specific).
+<a name="line123"></a>   * The URI (can&#39;t contain a fragment identifier) used to relay data
+<a name="line124"></a>   * to the peer.
+<a name="line125"></a>   */
+<a name="line126"></a>  PEER_RELAY_URI : &#39;pru&#39;,
+<a name="line127"></a>  /**
+<a name="line128"></a>   * Local poll URI identifier (IframePollingTransport-specific).
+<a name="line129"></a>   * The URI  (can&#39;t contain a fragment identifier)which is polled
+<a name="line130"></a>   * to receive data from the peer.
+<a name="line131"></a>   */
+<a name="line132"></a>  LOCAL_POLL_URI : &#39;lpu&#39;,
+<a name="line133"></a>  /**
+<a name="line134"></a>   * Local poll URI identifier (IframePollingTransport-specific).
+<a name="line135"></a>   * The URI (can&#39;t contain a fragment identifier) used to send data
+<a name="line136"></a>   * to the peer.
+<a name="line137"></a>   */
+<a name="line138"></a>  PEER_POLL_URI: &#39;ppu&#39;,
+<a name="line139"></a>  /**
+<a name="line140"></a>   * The hostname of the peer window, including protocol, domain, and port
+<a name="line141"></a>   * (if specified). Used for security sensitive applications that make
+<a name="line142"></a>   * use of NativeMessagingTransport (i.e. most applications).
+<a name="line143"></a>   */
+<a name="line144"></a>  PEER_HOSTNAME: &#39;ph&#39;
+<a name="line145"></a>};
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * @enum {number}
+<a name="line150"></a> */
+<a name="line151"></a>goog.net.xpc.ChannelStates = {
+<a name="line152"></a>  NOT_CONNECTED : 1,
+<a name="line153"></a>  CONNECTED : 2,
+<a name="line154"></a>  CLOSED : 3
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * The name of the transport service (used for internal signalling).
+<a name="line160"></a> * @type {string}
+<a name="line161"></a> * @private
+<a name="line162"></a> */
+<a name="line163"></a>goog.net.xpc.TRANSPORT_SERVICE_ = &#39;tp&#39;;
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Transport signaling message: setup.
+<a name="line168"></a> * @protected
+<a name="line169"></a> */
+<a name="line170"></a>goog.net.xpc.SETUP = &#39;SETUP&#39;;
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Transport signaling message: setup acknoledgement.
+<a name="line175"></a> * @private
+<a name="line176"></a> */
+<a name="line177"></a>goog.net.xpc.SETUP_ACK_ = &#39;SETUP_ACK&#39;;
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * Object holding active channels.
+<a name="line182"></a> * @type {Object}
+<a name="line183"></a> * @private
+<a name="line184"></a> */
+<a name="line185"></a>goog.net.xpc.channels_ = {};
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Returns a random string.
+<a name="line190"></a> * @param {number} length How many characters the string shall contain.
+<a name="line191"></a> * @param {string} opt_characters The characters used.
+<a name="line192"></a> * @return {string} The random string.
+<a name="line193"></a> */
+<a name="line194"></a>goog.net.xpc.getRandomString = function(length, opt_characters) {
+<a name="line195"></a>  var chars = opt_characters || goog.net.xpc.randomStringCharacters_;
+<a name="line196"></a>  var charsLength = chars.length;
+<a name="line197"></a>  var s = &#39;&#39;;
+<a name="line198"></a>  while (length-- &gt; 0) {
+<a name="line199"></a>    s += chars.charAt(Math.floor(Math.random() * charsLength));
+<a name="line200"></a>  }
+<a name="line201"></a>  return s;
+<a name="line202"></a>};
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * The default characters used for random string generation.
+<a name="line207"></a> * @type {string}
+<a name="line208"></a> * @private
+<a name="line209"></a> */
+<a name="line210"></a>goog.net.xpc.randomStringCharacters_ =
+<a name="line211"></a>    &#39;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&#39;;
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * The logger.
+<a name="line215"></a> * @type {goog.debug.Logger}
+<a name="line216"></a> */
+<a name="line217"></a>goog.net.xpc.logger = goog.debug.Logger.getLogger(&#39;goog.net.xpc&#39;);
+</pre>
+
+
+</body>
+</html>

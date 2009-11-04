@@ -1,0 +1,290 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>workerpool.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_gears_workerpool.js.html">workerpool.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This file implements a wrapper around the Gears WorkerPool
+<a name="line17"></a> * with some extra features.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.gears.WorkerPool&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.gears.WorkerPool.Event&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.gears.WorkerPool.EventType&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line27"></a>goog.require(&#39;goog.gears&#39;);
+<a name="line28"></a>goog.require(&#39;goog.gears.Worker&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * This class implements a wrapper around the Gears Worker Pool.
+<a name="line34"></a> *
+<a name="line35"></a> * @constructor
+<a name="line36"></a> * @extends {goog.events.EventTarget}
+<a name="line37"></a> */
+<a name="line38"></a>goog.gears.WorkerPool = function() {
+<a name="line39"></a>  goog.events.EventTarget.call(this);
+<a name="line40"></a>
+<a name="line41"></a>  /**
+<a name="line42"></a>   * Map from thread id to worker object
+<a name="line43"></a>   * @type {Object}
+<a name="line44"></a>   * @private
+<a name="line45"></a>   */
+<a name="line46"></a>  this.workers_ = {};
+<a name="line47"></a>
+<a name="line48"></a>  // If we are in a worker thread we get the global google.gears.workerPool,
+<a name="line49"></a>  // otherwise we create a new Gears WorkerPool using the factory
+<a name="line50"></a>  var workerPool = /** @type {GearsWorkerPool} */
+<a name="line51"></a>      (goog.getObjectByName(&#39;google.gears.workerPool&#39;));
+<a name="line52"></a>  if (workerPool) {
+<a name="line53"></a>    this.workerPool_ = workerPool;
+<a name="line54"></a>  } else {
+<a name="line55"></a>    // use a protected method to let the sub class override
+<a name="line56"></a>    this.workerPool_ = this.getGearsWorkerPool();
+<a name="line57"></a>  }
+<a name="line58"></a>
+<a name="line59"></a>  this.workerPool_.onmessage = goog.bind(this.handleMessage_, this);
+<a name="line60"></a>};
+<a name="line61"></a>goog.inherits(goog.gears.WorkerPool, goog.events.EventTarget);
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * Enum for event types fired by the WorkerPool.
+<a name="line66"></a> * @enum {string}
+<a name="line67"></a> */
+<a name="line68"></a>goog.gears.WorkerPool.EventType = {
+<a name="line69"></a>  UNKNOWN_WORKER: &#39;uknown_worker&#39;
+<a name="line70"></a>};
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * The Gears WorkerPool object.
+<a name="line75"></a> * @type {GearsWorkerPool?}
+<a name="line76"></a> * @private
+<a name="line77"></a> */
+<a name="line78"></a>goog.gears.WorkerPool.prototype.workerPool_ = null;
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * @return {GearsWorkerPool} A Gears WorkerPool object.
+<a name="line83"></a> * @protected
+<a name="line84"></a> */
+<a name="line85"></a>goog.gears.WorkerPool.prototype.getGearsWorkerPool = function() {
+<a name="line86"></a>  var factory = goog.gears.getFactory();
+<a name="line87"></a>  return factory.create(&#39;beta.workerpool&#39;);
+<a name="line88"></a>};
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Sets a last-chance error handler for a worker pool.
+<a name="line93"></a> * WARNING: This will only succeed from inside a worker thread. In main thread,
+<a name="line94"></a> * use window.onerror handler.
+<a name="line95"></a> * @param {function(!GearsErrorObject):boolean} fn An error handler function
+<a name="line96"></a> *     that gets passed an error object with message and line number attributes.
+<a name="line97"></a> *     Returns whether the error was handled. If true stops propagation.
+<a name="line98"></a> * @param {Object} opt_handler This object for the function.
+<a name="line99"></a> */
+<a name="line100"></a>goog.gears.WorkerPool.prototype.setErrorHandler = function(fn, opt_handler) {
+<a name="line101"></a>  this.workerPool_.onerror = goog.bind(fn, opt_handler);
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Creates a new worker.
+<a name="line107"></a> * @param {string} code  The code to execute inside the worker.
+<a name="line108"></a> * @return {goog.gears.Worker} The worker that was just created.
+<a name="line109"></a> */
+<a name="line110"></a>goog.gears.WorkerPool.prototype.createWorker = function(code) {
+<a name="line111"></a>  var workerId = this.workerPool_.createWorker(code);
+<a name="line112"></a>  var worker = new goog.gears.Worker(this, workerId);
+<a name="line113"></a>  this.registerWorker(worker);
+<a name="line114"></a>  return worker;
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * Creates a new worker from a URL.
+<a name="line120"></a> * @param {string} url  URL from which to get the code to execute inside the
+<a name="line121"></a> *     worker.
+<a name="line122"></a> * @return {goog.gears.Worker} The worker that was just created.
+<a name="line123"></a> */
+<a name="line124"></a>goog.gears.WorkerPool.prototype.createWorkerFromUrl = function(url) {
+<a name="line125"></a>  var workerId = this.workerPool_.createWorkerFromUrl(url);
+<a name="line126"></a>  var worker = new goog.gears.Worker(this, workerId);
+<a name="line127"></a>  this.registerWorker(worker);
+<a name="line128"></a>  return worker;
+<a name="line129"></a>};
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Allows the worker who calls this to be used cross origin.
+<a name="line134"></a> */
+<a name="line135"></a>goog.gears.WorkerPool.prototype.allowCrossOrigin = function() {
+<a name="line136"></a>  this.workerPool_.allowCrossOrigin();
+<a name="line137"></a>};
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * Sends a message to a given worker.
+<a name="line142"></a> * @param {*} message The message to send to the worker.
+<a name="line143"></a> * @param {goog.gears.Worker} worker The worker to send the message to.
+<a name="line144"></a> */
+<a name="line145"></a>goog.gears.WorkerPool.prototype.sendMessage = function(message, worker) {
+<a name="line146"></a>  this.workerPool_.sendMessage(message, worker.getId());
+<a name="line147"></a>};
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Callback when this worker recieves a message.
+<a name="line152"></a> * @param {string} message  The message that was sent.
+<a name="line153"></a> * @param {number} senderId  The ID of the worker that sent the message.
+<a name="line154"></a> * @param {GearsMessageObject} messageObject An object containing all
+<a name="line155"></a> *     information about the message.
+<a name="line156"></a> * @private
+<a name="line157"></a> */
+<a name="line158"></a>goog.gears.WorkerPool.prototype.handleMessage_ = function(message,
+<a name="line159"></a>                                                           senderId,
+<a name="line160"></a>                                                           messageObject) {
+<a name="line161"></a>  if (!this.isDisposed()) {
+<a name="line162"></a>    var workers = this.workers_;
+<a name="line163"></a>    if (!workers[senderId]) {
+<a name="line164"></a>      // If the worker is unknown, dispatch an event giving users of the class
+<a name="line165"></a>      // the change to register the worker.
+<a name="line166"></a>      this.dispatchEvent(new goog.gears.WorkerPool.Event(
+<a name="line167"></a>          goog.gears.WorkerPool.EventType.UNKNOWN_WORKER,
+<a name="line168"></a>          senderId,
+<a name="line169"></a>          messageObject));
+<a name="line170"></a>    }
+<a name="line171"></a>
+<a name="line172"></a>    var worker = workers[senderId];
+<a name="line173"></a>    if (worker) {
+<a name="line174"></a>      worker.handleMessage(messageObject);
+<a name="line175"></a>    }
+<a name="line176"></a>  }
+<a name="line177"></a>};
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * Registers a worker object.
+<a name="line182"></a> * @param {goog.gears.Worker} worker  The worker to register.
+<a name="line183"></a> */
+<a name="line184"></a>goog.gears.WorkerPool.prototype.registerWorker = function(worker) {
+<a name="line185"></a>  this.workers_[worker.getId()] = worker;
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Unregisters a worker object.
+<a name="line191"></a> * @param {goog.gears.Worker} worker  The worker to unregister.
+<a name="line192"></a> */
+<a name="line193"></a>goog.gears.WorkerPool.prototype.unregisterWorker = function(worker) {
+<a name="line194"></a>  delete this.workers_[worker.getId()];
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Disposes of the object.
+<a name="line200"></a> */
+<a name="line201"></a>goog.gears.WorkerPool.prototype.disposeInternal = function() {
+<a name="line202"></a>  goog.gears.WorkerPool.superClass_.disposeInternal.call(this);
+<a name="line203"></a>  this.workerPool_ = null;
+<a name="line204"></a>  delete this.workers_;
+<a name="line205"></a>};
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Event used when the workerpool recieves a message
+<a name="line211"></a> * @param {string} type  The type of event.
+<a name="line212"></a> * @param {number} senderId  The id of the sender of the message.
+<a name="line213"></a> * @param {GearsMessageObject} messageObject  The message object.
+<a name="line214"></a> *
+<a name="line215"></a> * @constructor
+<a name="line216"></a> * @extends {goog.events.Event}
+<a name="line217"></a> */
+<a name="line218"></a>goog.gears.WorkerPool.Event = function(
+<a name="line219"></a>    type, senderId, messageObject) {
+<a name="line220"></a>  goog.events.Event.call(this, type);
+<a name="line221"></a>
+<a name="line222"></a>  /**
+<a name="line223"></a>   * The id of the sender of the message.
+<a name="line224"></a>   * @type {number}
+<a name="line225"></a>   */
+<a name="line226"></a>  this.senderId = senderId;
+<a name="line227"></a>
+<a name="line228"></a>  /**
+<a name="line229"></a>   * The message sent from the worker. This is the same as the
+<a name="line230"></a>   * messageObject.body field and is here for convenience.
+<a name="line231"></a>   * @type {*}
+<a name="line232"></a>   */
+<a name="line233"></a>  this.message = messageObject.body;
+<a name="line234"></a>
+<a name="line235"></a>  /**
+<a name="line236"></a>   * The object containing all information about the message.
+<a name="line237"></a>   * @type {GearsMessageObject}
+<a name="line238"></a>   */
+<a name="line239"></a>  this.messageObject = messageObject;
+<a name="line240"></a>};
+<a name="line241"></a>goog.inherits(goog.gears.WorkerPool.Event, goog.events.Event);
+</pre>
+
+
+</body>
+</html>

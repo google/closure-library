@@ -1,0 +1,1340 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>datepicker.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_datepicker.js.html">datepicker.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Date picker implementation.
+<a name="line17"></a> *
+<a name="line18"></a> * @see ../demos/datepicker.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.DatePicker&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.ui.DatePicker.Events&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.ui.DatePickerEvent&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.date&#39;);
+<a name="line26"></a>goog.require(&#39;goog.date.Date&#39;);
+<a name="line27"></a>goog.require(&#39;goog.date.Interval&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.a11y&#39;);
+<a name="line30"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events&#39;);
+<a name="line32"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line33"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line34"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line35"></a>goog.require(&#39;goog.events.KeyHandler&#39;);
+<a name="line36"></a>goog.require(&#39;goog.events.KeyHandler.EventType&#39;);
+<a name="line37"></a>goog.require(&#39;goog.i18n.DateTimeFormat&#39;);
+<a name="line38"></a>goog.require(&#39;goog.i18n.DateTimeSymbols&#39;);
+<a name="line39"></a>goog.require(&#39;goog.style&#39;);
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * DatePicker widget. Allows a single date to be selected from a calendar like
+<a name="line44"></a> * view. Uses goog.date.Date and goog.date.Interval for date representation and
+<a name="line45"></a> * manipulation.
+<a name="line46"></a> *
+<a name="line47"></a> * @extends {goog.events.EventTarget}
+<a name="line48"></a> * @param {goog.date.Date|Date} opt_date Date to initialize the date picker
+<a name="line49"></a> *     with, defaults to the current date.
+<a name="line50"></a> * @constructor
+<a name="line51"></a> * @see goog.date.Date
+<a name="line52"></a> */
+<a name="line53"></a>goog.ui.DatePicker = function(opt_date) {
+<a name="line54"></a>  goog.events.EventTarget.call(this);
+<a name="line55"></a>
+<a name="line56"></a>  // If a standard JavaScript Date object, or anything that looks like a date
+<a name="line57"></a>  // object, was supplied instead of a goog.date.Date one a new new
+<a name="line58"></a>  // goog.date.Date is constructed from it.
+<a name="line59"></a>  var date;
+<a name="line60"></a>  if (goog.isObject(opt_date)) {
+<a name="line61"></a>    date = new goog.date.Date(opt_date);
+<a name="line62"></a>  } else {
+<a name="line63"></a>    date = new goog.date.Date();
+<a name="line64"></a>  }
+<a name="line65"></a>
+<a name="line66"></a>  this.wdayNames_ = goog.i18n.DateTimeSymbols.SHORTWEEKDAYS;
+<a name="line67"></a>  date.setFirstWeekCutOffDay(goog.i18n.DateTimeSymbols.FIRSTWEEKCUTOFFDAY);
+<a name="line68"></a>  date.setFirstDayOfWeek(goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK);
+<a name="line69"></a>
+<a name="line70"></a>  /**
+<a name="line71"></a>   * Selected date.
+<a name="line72"></a>   * @type {goog.date.Date}
+<a name="line73"></a>   * @private
+<a name="line74"></a>   */
+<a name="line75"></a>  this.date_ = date;
+<a name="line76"></a>
+<a name="line77"></a>  /**
+<a name="line78"></a>   * Active month.
+<a name="line79"></a>   * @type {goog.date.Date}
+<a name="line80"></a>   * @private
+<a name="line81"></a>   */
+<a name="line82"></a>  this.activeMonth_ = this.date_.clone();
+<a name="line83"></a>  this.activeMonth_.setDate(1);
+<a name="line84"></a>
+<a name="line85"></a>  /**
+<a name="line86"></a>   * Class names to apply to the weekday columns.
+<a name="line87"></a>   * @type {Array.&lt;string&gt;}
+<a name="line88"></a>   * @private
+<a name="line89"></a>   */
+<a name="line90"></a>  this.wdayStyles_ = [&#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;];
+<a name="line91"></a>  this.wdayStyles_[goog.i18n.DateTimeSymbols.WEEKENDRANGE[0]] =
+<a name="line92"></a>      goog.getCssName(&#39;goog-date-picker-wkend-start&#39;);
+<a name="line93"></a>  this.wdayStyles_[goog.i18n.DateTimeSymbols.WEEKENDRANGE[1]] =
+<a name="line94"></a>      goog.getCssName(&#39;goog-date-picker-wkend-end&#39;);
+<a name="line95"></a>
+<a name="line96"></a>  /**
+<a name="line97"></a>   * Handler for events.
+<a name="line98"></a>   * @type {goog.events.EventHandler}
+<a name="line99"></a>   * @private
+<a name="line100"></a>   */
+<a name="line101"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line102"></a>
+<a name="line103"></a>  /**
+<a name="line104"></a>   * Object that is being used to cache key handlers.
+<a name="line105"></a>   * @type {Object}
+<a name="line106"></a>   * @private
+<a name="line107"></a>   */
+<a name="line108"></a>  this.keyHandlers_ = {};
+<a name="line109"></a>};
+<a name="line110"></a>goog.inherits(goog.ui.DatePicker, goog.events.EventTarget);
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Flag indicating if the number of weeks shown should be fixed.
+<a name="line115"></a> * @type {boolean}
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.ui.DatePicker.prototype.showFixedNumWeeks_ = true;
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Formatter used to generate selected date as tbody&#39;s title. Primarily used
+<a name="line122"></a> * for accessibility purposes.
+<a name="line123"></a> * @type {goog.i18n.DateTimeFormat}
+<a name="line124"></a> * @private
+<a name="line125"></a> */
+<a name="line126"></a>goog.ui.DatePicker.DATE_FORMATTER_ = new goog.i18n.DateTimeFormat(
+<a name="line127"></a>        goog.i18n.DateTimeFormat.Format.FULL_DATE);
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * Flag indicating if days from other months should be shown.
+<a name="line131"></a> * @type {boolean}
+<a name="line132"></a> * @private
+<a name="line133"></a> */
+<a name="line134"></a>goog.ui.DatePicker.prototype.showOtherMonths_ = true;
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Flag indicating if extra week(s) always should be added at the end. If not
+<a name="line138"></a> * set the extra week is added at the beginning if the number of days shown
+<a name="line139"></a> * from the previous month is less then the number from the next month.
+<a name="line140"></a> * @type {boolean}
+<a name="line141"></a> * @private
+<a name="line142"></a> */
+<a name="line143"></a>goog.ui.DatePicker.prototype.extraWeekAtEnd_ = true;
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * Flag indicating if week numbers should be shown.
+<a name="line147"></a> * @type {boolean}
+<a name="line148"></a> * @private
+<a name="line149"></a> */
+<a name="line150"></a>goog.ui.DatePicker.prototype.showWeekNum_ = true;
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * Flag indicating if weekday names should be shown.
+<a name="line154"></a> * @type {boolean}
+<a name="line155"></a> * @private
+<a name="line156"></a> */
+<a name="line157"></a>goog.ui.DatePicker.prototype.showWeekdays_ = true;
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * Flag indicating if none is a valid selection. Also controls if the none
+<a name="line161"></a> * button should be shown or not.
+<a name="line162"></a> * @type {boolean}
+<a name="line163"></a> * @private
+<a name="line164"></a> */
+<a name="line165"></a>goog.ui.DatePicker.prototype.allowNone_ = true;
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Flag indicating if the today button should be shown.
+<a name="line169"></a> * @type {boolean}
+<a name="line170"></a> * @private
+<a name="line171"></a> */
+<a name="line172"></a>goog.ui.DatePicker.prototype.showToday_ = true;
+<a name="line173"></a>
+<a name="line174"></a>/**
+<a name="line175"></a> * Flag indicating if the picker should use a simple navigation menu that only
+<a name="line176"></a> * contains controls for navigating to the next and previous month. The default
+<a name="line177"></a> * navigation menu contains controls for navigating to the next/previous month,
+<a name="line178"></a> * next/previous year, and menus for jumping to specific months and years.
+<a name="line179"></a> * @type {boolean}
+<a name="line180"></a> * @private
+<a name="line181"></a> */
+<a name="line182"></a>goog.ui.DatePicker.prototype.simpleNavigation_ = false;
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * Flag indicating that the widget has been created.
+<a name="line186"></a> * @type {boolean}
+<a name="line187"></a> * @private
+<a name="line188"></a> */
+<a name="line189"></a>goog.ui.DatePicker.prototype.created_ = false;
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * Custom decorator function. Takes a goog.date.Date object, returns a String
+<a name="line193"></a> * representing a CSS class or null if no special styling applies
+<a name="line194"></a> * @type {Function?}
+<a name="line195"></a> * @private
+<a name="line196"></a> */
+<a name="line197"></a>goog.ui.DatePicker.prototype.decoratorFunction_ = null;
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * Next unique instance ID of a datepicker cell.
+<a name="line201"></a> * @type {number}
+<a name="line202"></a> * @private
+<a name="line203"></a> */
+<a name="line204"></a>goog.ui.DatePicker.nextId_ = 0;
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Constants for event names
+<a name="line208"></a> *
+<a name="line209"></a> * @type {Object}
+<a name="line210"></a> */
+<a name="line211"></a>goog.ui.DatePicker.Events = {
+<a name="line212"></a>  CHANGE: &#39;change&#39;,
+<a name="line213"></a>  SELECT: &#39;select&#39;
+<a name="line214"></a>};
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * @return {boolean} Whether or not this DatePicker&#39;s UI has been created.
+<a name="line219"></a> */
+<a name="line220"></a>goog.ui.DatePicker.prototype.isCreated = function() {
+<a name="line221"></a>  return this.created_;
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * @return {number} The first day of week, 0 = Monday, 6 = Sunday.
+<a name="line227"></a> */
+<a name="line228"></a>goog.ui.DatePicker.prototype.getFirstWeekday = function() {
+<a name="line229"></a>  return this.activeMonth_.getFirstDayOfWeek();
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Returns the class name associated with specified weekday.
+<a name="line235"></a> * @param {number} wday The week day number to get the class name for.
+<a name="line236"></a> * @return {string} The class name associated with specified weekday.
+<a name="line237"></a> */
+<a name="line238"></a>goog.ui.DatePicker.prototype.getWeekdayClass = function(wday) {
+<a name="line239"></a>  return this.wdayStyles_[wday];
+<a name="line240"></a>};
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * @return {boolean} Whether a fixed number of weeks should be showed. If not
+<a name="line245"></a> *     only weeks for the current month will be shown.
+<a name="line246"></a> */
+<a name="line247"></a>goog.ui.DatePicker.prototype.getShowFixedNumWeeks = function() {
+<a name="line248"></a>  return this.showFixedNumWeeks_;
+<a name="line249"></a>};
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * @return {boolean} Whether a days from the previous and/or next month should
+<a name="line254"></a> *     be shown.
+<a name="line255"></a> */
+<a name="line256"></a>goog.ui.DatePicker.prototype.getShowOtherMonths = function() {
+<a name="line257"></a>  return this.showOtherMonths_;
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * @return {boolean} Whether a the extra week(s) added always should be at the
+<a name="line263"></a> *     end. Only applicable if a fixed number of weeks are shown.
+<a name="line264"></a> */
+<a name="line265"></a>goog.ui.DatePicker.prototype.getExtraWeekAtEnd = function() {
+<a name="line266"></a>  return this.extraWeekAtEnd_;
+<a name="line267"></a>};
+<a name="line268"></a>
+<a name="line269"></a>
+<a name="line270"></a>/**
+<a name="line271"></a> * @return {boolean} Whether week numbers should be shown.
+<a name="line272"></a> */
+<a name="line273"></a>goog.ui.DatePicker.prototype.getShowWeekNum = function() {
+<a name="line274"></a>  return this.showWeekNum_;
+<a name="line275"></a>};
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a>/**
+<a name="line279"></a> * @return {boolean} Whether weekday names should be shown.
+<a name="line280"></a> */
+<a name="line281"></a>goog.ui.DatePicker.prototype.getShowWeekdayNames = function() {
+<a name="line282"></a>  return this.showWeekdays_;
+<a name="line283"></a>};
+<a name="line284"></a>
+<a name="line285"></a>
+<a name="line286"></a>/**
+<a name="line287"></a> * @return {boolean} Whether none is a valid selection.
+<a name="line288"></a> */
+<a name="line289"></a>goog.ui.DatePicker.prototype.getAllowNone = function() {
+<a name="line290"></a>  return this.allowNone_;
+<a name="line291"></a>};
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * @return {boolean} Whether the today button should be shown.
+<a name="line296"></a> */
+<a name="line297"></a>goog.ui.DatePicker.prototype.getShowToday = function() {
+<a name="line298"></a>  return this.showToday_;
+<a name="line299"></a>};
+<a name="line300"></a>
+<a name="line301"></a>
+<a name="line302"></a>/**
+<a name="line303"></a> * Sets the first day of week
+<a name="line304"></a> *
+<a name="line305"></a> * @param {number} wday Week day, 0 = Monday, 6 = Sunday.
+<a name="line306"></a> */
+<a name="line307"></a>goog.ui.DatePicker.prototype.setFirstWeekday = function(wday) {
+<a name="line308"></a>  this.activeMonth_.setFirstDayOfWeek(wday);
+<a name="line309"></a>  this.updateCalendarGrid_();
+<a name="line310"></a>  this.redrawWeekdays_();
+<a name="line311"></a>};
+<a name="line312"></a>
+<a name="line313"></a>
+<a name="line314"></a>/**
+<a name="line315"></a> * Sets class name associated with specified weekday.
+<a name="line316"></a> *
+<a name="line317"></a> * @param {number} wday Week day, 0 = Monday, 6 = Sunday.
+<a name="line318"></a> * @param {string} className Class name.
+<a name="line319"></a> */
+<a name="line320"></a>goog.ui.DatePicker.prototype.setWeekdayClass = function(wday, className) {
+<a name="line321"></a>  this.wdayStyles_[wday] = className;
+<a name="line322"></a>  this.redrawCalendarGrid_();
+<a name="line323"></a>};
+<a name="line324"></a>
+<a name="line325"></a>
+<a name="line326"></a>/**
+<a name="line327"></a> * Sets whether a fixed number of weeks should be showed. If not only weeks
+<a name="line328"></a> * for the current month will be showed.
+<a name="line329"></a> *
+<a name="line330"></a> * @param {boolean} b Whether a fixed number of weeks should be showed.
+<a name="line331"></a> */
+<a name="line332"></a>goog.ui.DatePicker.prototype.setShowFixedNumWeeks = function(b) {
+<a name="line333"></a>  this.showFixedNumWeeks_ = b;
+<a name="line334"></a>  this.updateCalendarGrid_();
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * Sets whether a days from the previous and/or next month should be shown.
+<a name="line340"></a> *
+<a name="line341"></a> * @param {boolean} b Whether a days from the previous and/or next month should
+<a name="line342"></a> *     be shown.
+<a name="line343"></a> */
+<a name="line344"></a>goog.ui.DatePicker.prototype.setShowOtherMonths = function(b) {
+<a name="line345"></a>  this.showOtherMonths_ = b;
+<a name="line346"></a>  this.redrawCalendarGrid_();
+<a name="line347"></a>};
+<a name="line348"></a>
+<a name="line349"></a>
+<a name="line350"></a>/**
+<a name="line351"></a> * Sets whether the picker should use a simple navigation menu that only
+<a name="line352"></a> * contains controls for navigating to the next and previous month. The default
+<a name="line353"></a> * navigation menu contains controls for navigating to the next/previous month,
+<a name="line354"></a> * next/previous year, and menus for jumping to specific months and years.
+<a name="line355"></a> *
+<a name="line356"></a> * @param {boolean} b Whether to use a simple navigation menu.
+<a name="line357"></a> */
+<a name="line358"></a>goog.ui.DatePicker.prototype.setUseSimpleNavigationMenu = function(b) {
+<a name="line359"></a>  this.simpleNavigation_ = b;
+<a name="line360"></a>  this.updateNavigationRow_();
+<a name="line361"></a>  this.updateCalendarGrid_();
+<a name="line362"></a>};
+<a name="line363"></a>
+<a name="line364"></a>
+<a name="line365"></a>/**
+<a name="line366"></a> * Sets whether a the extra week(s) added always should be at the end. Only
+<a name="line367"></a> * applicable if a fixed number of weeks are shown.
+<a name="line368"></a> *
+<a name="line369"></a> * @param {boolean} b Whether a the extra week(s) added always should be at the
+<a name="line370"></a> *     end.
+<a name="line371"></a> */
+<a name="line372"></a>goog.ui.DatePicker.prototype.setExtraWeekAtEnd = function(b) {
+<a name="line373"></a>  this.extraWeekAtEnd_ = b;
+<a name="line374"></a>  this.updateCalendarGrid_();
+<a name="line375"></a>};
+<a name="line376"></a>
+<a name="line377"></a>
+<a name="line378"></a>/**
+<a name="line379"></a> * Sets whether week numbers should be shown.
+<a name="line380"></a> *
+<a name="line381"></a> * @param {boolean} b Whether week numbers should be shown.
+<a name="line382"></a> */
+<a name="line383"></a>goog.ui.DatePicker.prototype.setShowWeekNum = function(b) {
+<a name="line384"></a>  this.showWeekNum_ = b;
+<a name="line385"></a>  // The navigation row may rely on the number of visible columns,
+<a name="line386"></a>  // so we update it when adding/removing the weeknum column.
+<a name="line387"></a>  this.updateNavigationRow_();
+<a name="line388"></a>  this.updateCalendarGrid_();
+<a name="line389"></a>};
+<a name="line390"></a>
+<a name="line391"></a>
+<a name="line392"></a>/**
+<a name="line393"></a> * Sets whether weekday names should be shown.
+<a name="line394"></a> *
+<a name="line395"></a> * @param {boolean} b Whether weekday names should be shown.
+<a name="line396"></a> */
+<a name="line397"></a>goog.ui.DatePicker.prototype.setShowWeekdayNames = function(b) {
+<a name="line398"></a>  this.showWeekdays_ = b;
+<a name="line399"></a>  this.redrawCalendarGrid_();
+<a name="line400"></a>};
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>/**
+<a name="line404"></a> * Sets whether the picker uses narrow weekday names (&#39;M&#39;, &#39;T&#39;, &#39;W&#39;, ...).
+<a name="line405"></a> *
+<a name="line406"></a> * The default behavior is to use short names (&#39;Mon&#39;, &#39;Tue&#39;, &#39;Wed&#39;, ...).
+<a name="line407"></a> *
+<a name="line408"></a> * @param {boolean} b Whether to use narrow weekday names.
+<a name="line409"></a> */
+<a name="line410"></a>goog.ui.DatePicker.prototype.setUseNarrowWeekdayNames = function(b) {
+<a name="line411"></a>  this.wdayNames_ = b ? goog.i18n.DateTimeSymbols.NARROWWEEKDAYS :
+<a name="line412"></a>      goog.i18n.DateTimeSymbols.SHORTWEEKDAYS;
+<a name="line413"></a>  this.redrawWeekdays_();
+<a name="line414"></a>};
+<a name="line415"></a>
+<a name="line416"></a>
+<a name="line417"></a>/**
+<a name="line418"></a> * Sets whether none is a valid selection.
+<a name="line419"></a> *
+<a name="line420"></a> * @param {boolean} b Whether none is a valid selection.
+<a name="line421"></a> */
+<a name="line422"></a>goog.ui.DatePicker.prototype.setAllowNone = function(b) {
+<a name="line423"></a>  this.allowNone_ = b;
+<a name="line424"></a>  if (this.elNone_) {
+<a name="line425"></a>    goog.style.showElement(this.elNone_, b);
+<a name="line426"></a>  }
+<a name="line427"></a>};
+<a name="line428"></a>
+<a name="line429"></a>
+<a name="line430"></a>/**
+<a name="line431"></a> * Sets whether the today button should be shown.
+<a name="line432"></a> *
+<a name="line433"></a> * @param {boolean} b Whether the today button should be shown.
+<a name="line434"></a> */
+<a name="line435"></a>goog.ui.DatePicker.prototype.setShowToday = function(b) {
+<a name="line436"></a>  this.showToday_ = b;
+<a name="line437"></a>  if (this.elToday_) {
+<a name="line438"></a>    goog.style.showElement(this.elToday_, b);
+<a name="line439"></a>  }
+<a name="line440"></a>};
+<a name="line441"></a>
+<a name="line442"></a>/**
+<a name="line443"></a> * Sets the decorator function. The function should have the interface of
+<a name="line444"></a> *   {String} f({goog.date.Date});
+<a name="line445"></a> * and return a String representing a CSS class to decorate the cell
+<a name="line446"></a> * corresponding to the date specified.
+<a name="line447"></a> *
+<a name="line448"></a> * @param {Function} f The decorator function.
+<a name="line449"></a> */
+<a name="line450"></a>goog.ui.DatePicker.prototype.setDecorator = function(f) {
+<a name="line451"></a>  this.decoratorFunction_ = f;
+<a name="line452"></a>};
+<a name="line453"></a>
+<a name="line454"></a>
+<a name="line455"></a>/**
+<a name="line456"></a> * Changes the active month to the previous one.
+<a name="line457"></a> */
+<a name="line458"></a>goog.ui.DatePicker.prototype.previousMonth = function() {
+<a name="line459"></a>  this.activeMonth_.add(new goog.date.Interval(goog.date.Interval.MONTHS, -1));
+<a name="line460"></a>  this.updateCalendarGrid_();
+<a name="line461"></a>};
+<a name="line462"></a>
+<a name="line463"></a>
+<a name="line464"></a>/**
+<a name="line465"></a> * Changes the active month to the next one.
+<a name="line466"></a> */
+<a name="line467"></a>goog.ui.DatePicker.prototype.nextMonth = function() {
+<a name="line468"></a>  this.activeMonth_.add(new goog.date.Interval(goog.date.Interval.MONTHS, 1));
+<a name="line469"></a>  this.updateCalendarGrid_();
+<a name="line470"></a>};
+<a name="line471"></a>
+<a name="line472"></a>
+<a name="line473"></a>/**
+<a name="line474"></a> * Changes the active year to the previous one.
+<a name="line475"></a> */
+<a name="line476"></a>goog.ui.DatePicker.prototype.previousYear = function() {
+<a name="line477"></a>  this.activeMonth_.add(new goog.date.Interval(goog.date.Interval.YEARS, -1));
+<a name="line478"></a>  this.updateCalendarGrid_();
+<a name="line479"></a>};
+<a name="line480"></a>
+<a name="line481"></a>
+<a name="line482"></a>/**
+<a name="line483"></a> * Changes the active year to the next one.
+<a name="line484"></a> */
+<a name="line485"></a>goog.ui.DatePicker.prototype.nextYear = function() {
+<a name="line486"></a>  this.activeMonth_.add(new goog.date.Interval(goog.date.Interval.YEARS, 1));
+<a name="line487"></a>  this.updateCalendarGrid_();
+<a name="line488"></a>};
+<a name="line489"></a>
+<a name="line490"></a>
+<a name="line491"></a>/**
+<a name="line492"></a> * Selects the current date.
+<a name="line493"></a> */
+<a name="line494"></a>goog.ui.DatePicker.prototype.selectToday = function() {
+<a name="line495"></a>  this.setDate(new goog.date.Date());
+<a name="line496"></a>};
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * Clears the selection.
+<a name="line501"></a> */
+<a name="line502"></a>goog.ui.DatePicker.prototype.selectNone = function() {
+<a name="line503"></a>  if (this.allowNone_) {
+<a name="line504"></a>    this.setDate(null);
+<a name="line505"></a>  }
+<a name="line506"></a>};
+<a name="line507"></a>
+<a name="line508"></a>
+<a name="line509"></a>/**
+<a name="line510"></a> * @return {goog.date.Date} The selected date.
+<a name="line511"></a> */
+<a name="line512"></a>goog.ui.DatePicker.prototype.getDate = function() {
+<a name="line513"></a>  return this.date_;
+<a name="line514"></a>};
+<a name="line515"></a>
+<a name="line516"></a>
+<a name="line517"></a>/**
+<a name="line518"></a> * Sets the selected date.
+<a name="line519"></a> *
+<a name="line520"></a> * @param {goog.date.Date|Date} date Date to select.
+<a name="line521"></a> */
+<a name="line522"></a>goog.ui.DatePicker.prototype.setDate = function(date) {
+<a name="line523"></a>
+<a name="line524"></a>  // Check if date has been changed
+<a name="line525"></a>  var changed = false;
+<a name="line526"></a>  if ((date == null &amp;&amp; this.date_ != null) ||
+<a name="line527"></a>      (date != null &amp;&amp; this.date_ == null)) {
+<a name="line528"></a>    changed = true;
+<a name="line529"></a>  }
+<a name="line530"></a>  else if (date == null) {
+<a name="line531"></a>    changed = false;
+<a name="line532"></a>  }
+<a name="line533"></a>  else if (date.getDate() != this.date_.getDate() ||
+<a name="line534"></a>      date.getMonth() != this.date_.getMonth() ||
+<a name="line535"></a>      date.getFullYear() != this.date_.getFullYear()) {
+<a name="line536"></a>    changed = true;
+<a name="line537"></a>  }
+<a name="line538"></a>
+<a name="line539"></a>  // Set current date to clone of supplied goog.date.Date or Date.
+<a name="line540"></a>  if (goog.isObject(date)) {
+<a name="line541"></a>    this.date_ = new goog.date.Date(date);
+<a name="line542"></a>  }
+<a name="line543"></a>  else {
+<a name="line544"></a>    this.date_ = null;
+<a name="line545"></a>  }
+<a name="line546"></a>
+<a name="line547"></a>  // Set current month
+<a name="line548"></a>  if (date) {
+<a name="line549"></a>    this.activeMonth_.set(this.date_);
+<a name="line550"></a>    this.activeMonth_.setDate(1);
+<a name="line551"></a>  }
+<a name="line552"></a>
+<a name="line553"></a>  // Update calendar grid even if the date has not changed as even if today is
+<a name="line554"></a>  // selected another month can be displayed.
+<a name="line555"></a>  this.updateCalendarGrid_();
+<a name="line556"></a>
+<a name="line557"></a>  // Fire select event
+<a name="line558"></a>  // TODO: Standardize selection and change events with other components.
+<a name="line559"></a>  var selectEvent = new goog.ui.DatePickerEvent(
+<a name="line560"></a>      goog.ui.DatePicker.Events.SELECT, this, this.date_ ? this.date_ : null);
+<a name="line561"></a>  this.dispatchEvent(selectEvent);
+<a name="line562"></a>
+<a name="line563"></a>  // Fire change event
+<a name="line564"></a>  if (changed) {
+<a name="line565"></a>    var changeEvent = new goog.ui.DatePickerEvent(
+<a name="line566"></a>        goog.ui.DatePicker.Events.CHANGE, this, this.date_ ? this.date_ : null);
+<a name="line567"></a>    this.dispatchEvent(changeEvent);
+<a name="line568"></a>  }
+<a name="line569"></a>};
+<a name="line570"></a>
+<a name="line571"></a>
+<a name="line572"></a>/**
+<a name="line573"></a> * Updates the navigation row (navigating months and maybe years) in the navRow_
+<a name="line574"></a> * element of a created picker.
+<a name="line575"></a> * @private
+<a name="line576"></a> */
+<a name="line577"></a>goog.ui.DatePicker.prototype.updateNavigationRow_ = function() {
+<a name="line578"></a>  if (!this.elNavRow_) {
+<a name="line579"></a>    return;
+<a name="line580"></a>  }
+<a name="line581"></a>  var row = this.elNavRow_;
+<a name="line582"></a>
+<a name="line583"></a>  // Clear the navigation row.
+<a name="line584"></a>  while (row.firstChild) {
+<a name="line585"></a>    row.removeChild(row.firstChild);
+<a name="line586"></a>  }
+<a name="line587"></a>  // Populate the navigation row according to the configured navigation mode.
+<a name="line588"></a>  var dom = goog.dom.getDomHelper(row);
+<a name="line589"></a>  var cell, monthCell, yearCell;
+<a name="line590"></a>
+<a name="line591"></a>  if (this.simpleNavigation_) {
+<a name="line592"></a>    cell = dom.createElement(&#39;td&#39;);
+<a name="line593"></a>    cell.colSpan = this.showWeekNum_ ? 1 : 2;
+<a name="line594"></a>    this.createButton_(cell, &#39;\u00AB&#39;, this.previousMonth);  // &lt;&lt;
+<a name="line595"></a>    row.appendChild(cell);
+<a name="line596"></a>
+<a name="line597"></a>    cell = dom.createElement(&#39;td&#39;);
+<a name="line598"></a>    cell.colSpan = this.showWeekNum_ ? 6 : 5;
+<a name="line599"></a>    cell.className = goog.getCssName(&#39;goog-date-picker-monthyear&#39;);
+<a name="line600"></a>    row.appendChild(cell);
+<a name="line601"></a>    this.elMonthYear_ = cell;
+<a name="line602"></a>
+<a name="line603"></a>    cell = dom.createElement(&#39;td&#39;);
+<a name="line604"></a>    this.createButton_(cell, &#39;\u00BB&#39;, this.nextMonth);  // &gt;&gt;
+<a name="line605"></a>    row.appendChild(cell);
+<a name="line606"></a>
+<a name="line607"></a>  } else {
+<a name="line608"></a>    var fullDateFormat = goog.i18n.DateTimeSymbols.DATEFORMATS[
+<a name="line609"></a>        goog.i18n.DateTimeFormat.Format.FULL_DATE].toLowerCase();
+<a name="line610"></a>
+<a name="line611"></a>    monthCell = dom.createElement(&#39;td&#39;);
+<a name="line612"></a>    monthCell.colSpan = 5;
+<a name="line613"></a>    this.createButton_(monthCell, &#39;\u00AB&#39;, this.previousMonth);  // &lt;&lt;
+<a name="line614"></a>    this.elMonth_ = this.createButton_(
+<a name="line615"></a>        monthCell, &#39;&#39;, this.showMonthMenu_,
+<a name="line616"></a>        goog.getCssName(&#39;goog-date-picker-month&#39;));
+<a name="line617"></a>    this.createButton_(monthCell, &#39;\u00BB&#39;, this.nextMonth);  // &gt;&gt;
+<a name="line618"></a>
+<a name="line619"></a>    yearCell = dom.createElement(&#39;td&#39;);
+<a name="line620"></a>    yearCell.colSpan = 3;
+<a name="line621"></a>    this.createButton_(yearCell, &#39;\u00AB&#39;, this.previousYear);  // &lt;&lt;
+<a name="line622"></a>    this.elYear_ = this.createButton_(yearCell, &#39;&#39;, this.showYearMenu_,
+<a name="line623"></a>                                      goog.getCssName(&#39;goog-date-picker-year&#39;));
+<a name="line624"></a>    this.createButton_(yearCell, &#39;\u00BB&#39;, this.nextYear);  // &gt;&gt;
+<a name="line625"></a>
+<a name="line626"></a>    // If the date format has year (&#39;y&#39;) appearing first before month (&#39;m&#39;),
+<a name="line627"></a>    // show the year on the left hand side of the datepicker popup.  Otherwise,
+<a name="line628"></a>    // show the month on the left side.  This check assumes the data to be
+<a name="line629"></a>    // valid, and that all date formats contain month and year.
+<a name="line630"></a>    if (fullDateFormat.indexOf(&#39;y&#39;) &lt; fullDateFormat.indexOf(&#39;m&#39;)) {
+<a name="line631"></a>      row.appendChild(yearCell);
+<a name="line632"></a>      row.appendChild(monthCell);
+<a name="line633"></a>    } else {
+<a name="line634"></a>      row.appendChild(monthCell);
+<a name="line635"></a>      row.appendChild(yearCell);
+<a name="line636"></a>    }
+<a name="line637"></a>  }
+<a name="line638"></a>};
+<a name="line639"></a>
+<a name="line640"></a>
+<a name="line641"></a>/**
+<a name="line642"></a> * Creates date picker widget.
+<a name="line643"></a> *
+<a name="line644"></a> * @param {Element} el Element to create widget out of.
+<a name="line645"></a> */
+<a name="line646"></a>goog.ui.DatePicker.prototype.create = function(el) {
+<a name="line647"></a>  this.el_ = el;
+<a name="line648"></a>  var dom = goog.dom.getDomHelper(el);
+<a name="line649"></a>
+<a name="line650"></a>  el.className = goog.getCssName(&#39;goog-date-picker&#39;);
+<a name="line651"></a>
+<a name="line652"></a>  var table = dom.createElement(&#39;table&#39;);
+<a name="line653"></a>  var thead = dom.createElement(&#39;thead&#39;);
+<a name="line654"></a>  var tbody = dom.createElement(&#39;tbody&#39;);
+<a name="line655"></a>  var tfoot = dom.createElement(&#39;tfoot&#39;);
+<a name="line656"></a>
+<a name="line657"></a>  goog.dom.a11y.setRole(tbody, &#39;grid&#39;);
+<a name="line658"></a>  tbody.tabIndex = &#39;0&#39;;
+<a name="line659"></a>
+<a name="line660"></a>  // As per comment in colorpicker: table.tBodies and table.tFoot should not be
+<a name="line661"></a>  // used because of a bug in Safari, hence using an instance variable
+<a name="line662"></a>  this.tableBody_ = tbody;
+<a name="line663"></a>
+<a name="line664"></a>  var row = dom.createDom(&#39;tr&#39;, goog.getCssName(&#39;goog-date-picker-head&#39;));
+<a name="line665"></a>  this.elNavRow_ = row;
+<a name="line666"></a>  this.updateNavigationRow_();
+<a name="line667"></a>
+<a name="line668"></a>  thead.appendChild(row);
+<a name="line669"></a>
+<a name="line670"></a>  var cell;
+<a name="line671"></a>  this.elTable_ = [];
+<a name="line672"></a>  for (var i = 0; i &lt; 7; i++) {
+<a name="line673"></a>    row = dom.createElement(&#39;tr&#39;);
+<a name="line674"></a>    this.elTable_[i] = [];
+<a name="line675"></a>    for (var j = 0; j &lt; 8; j++) {
+<a name="line676"></a>      cell = dom.createElement(j == 0 || i == 0 ? &#39;th&#39; : &#39;td&#39;);
+<a name="line677"></a>      if ((j == 0 || i == 0) &amp;&amp; j != i) {
+<a name="line678"></a>        cell.className = (j == 0) ? goog.getCssName(&#39;goog-date-picker-week&#39;) :
+<a name="line679"></a>            goog.getCssName(&#39;goog-date-picker-wday&#39;);
+<a name="line680"></a>        goog.dom.a11y.setRole(cell, j == 0 ? &#39;rowheader&#39; : &#39;columnheader&#39;);
+<a name="line681"></a>      }
+<a name="line682"></a>      row.appendChild(cell);
+<a name="line683"></a>      this.elTable_[i][j] = cell;
+<a name="line684"></a>    }
+<a name="line685"></a>    tbody.appendChild(row);
+<a name="line686"></a>  }
+<a name="line687"></a>
+<a name="line688"></a>  row = dom.createDom(&#39;tr&#39;, goog.getCssName(&#39;goog-date-picker-foot&#39;));
+<a name="line689"></a>  cell = dom.createDom(&#39;td&#39;,
+<a name="line690"></a>      {colSpan: 2, className: goog.getCssName(&#39;goog-date-picker-today-cont&#39;)});
+<a name="line691"></a>
+<a name="line692"></a>  /** @desc Label for button that selects the current date. */
+<a name="line693"></a>  var MSG_DATEPICKER_TODAY_BUTTON_LABEL = goog.getMsg(&#39;Today&#39;);
+<a name="line694"></a>  this.elToday_ = this.createButton_(cell, MSG_DATEPICKER_TODAY_BUTTON_LABEL,
+<a name="line695"></a>                                     this.selectToday);
+<a name="line696"></a>  goog.style.showElement(this.elToday_, this.showToday_);
+<a name="line697"></a>  row.appendChild(cell);
+<a name="line698"></a>
+<a name="line699"></a>  cell = dom.createDom(&#39;td&#39;, { colSpan: 4 });
+<a name="line700"></a>  row.appendChild(cell);
+<a name="line701"></a>
+<a name="line702"></a>  cell = dom.createElement(&#39;td&#39;);
+<a name="line703"></a>  cell.colSpan = 2;
+<a name="line704"></a>  cell.className = goog.getCssName(&#39;goog-date-picker-none-cont&#39;);
+<a name="line705"></a>
+<a name="line706"></a>  /**
+<a name="line707"></a>   * @desc Label for button that clears the selection.
+<a name="line708"></a>   */
+<a name="line709"></a>  var MSG_DATEPICKER_NONE = goog.getMsg(&#39;None&#39;);
+<a name="line710"></a>  this.elNone_ = this.createButton_(cell, MSG_DATEPICKER_NONE, this.selectNone);
+<a name="line711"></a>  goog.style.showElement(this.elNone_, this.allowNone_);
+<a name="line712"></a>  row.appendChild(cell);
+<a name="line713"></a>
+<a name="line714"></a>  tfoot.appendChild(row);
+<a name="line715"></a>
+<a name="line716"></a>  table.cellSpacing = &#39;0&#39;;
+<a name="line717"></a>  table.cellPadding = &#39;0&#39;;
+<a name="line718"></a>  table.appendChild(thead);
+<a name="line719"></a>  table.appendChild(tbody);
+<a name="line720"></a>  table.appendChild(tfoot);
+<a name="line721"></a>  el.appendChild(table);
+<a name="line722"></a>
+<a name="line723"></a>  this.created_ = true;
+<a name="line724"></a>  this.redrawWeekdays_();
+<a name="line725"></a>  this.updateCalendarGrid_();
+<a name="line726"></a>
+<a name="line727"></a>  this.eventHandler_.listen(tbody, goog.events.EventType.CLICK,
+<a name="line728"></a>                            this.handleGridClick_);
+<a name="line729"></a>  this.eventHandler_.listen(this.getKeyHandlerForElement_(el),
+<a name="line730"></a>                            goog.events.KeyHandler.EventType.KEY,
+<a name="line731"></a>                            this.handleGridKeyPress_);
+<a name="line732"></a>
+<a name="line733"></a>  el.tabIndex = 0;
+<a name="line734"></a>};
+<a name="line735"></a>
+<a name="line736"></a>
+<a name="line737"></a>/**
+<a name="line738"></a> * Destroys widget and removes all event listeners.
+<a name="line739"></a> */
+<a name="line740"></a>goog.ui.DatePicker.prototype.disposeInternal = function() {
+<a name="line741"></a>  goog.ui.DatePicker.superClass_.disposeInternal.call(this);
+<a name="line742"></a>
+<a name="line743"></a>  this.destroyMenu_();
+<a name="line744"></a>
+<a name="line745"></a>  for (var hashCode in this.keyHandlers_) {
+<a name="line746"></a>    this.keyHandlers_[hashCode].dispose();
+<a name="line747"></a>  }
+<a name="line748"></a>  delete this.keyHandlers_;
+<a name="line749"></a>
+<a name="line750"></a>  if (this.eventHandler_) {
+<a name="line751"></a>    this.eventHandler_.dispose();
+<a name="line752"></a>    delete this.eventHandler_;
+<a name="line753"></a>  }
+<a name="line754"></a>
+<a name="line755"></a>  this.el_.innerHTML = &#39;&#39;;
+<a name="line756"></a>  this.el_ = null;
+<a name="line757"></a>  this.elTable_ = null;
+<a name="line758"></a>  this.elNavRow_ = null;
+<a name="line759"></a>  this.elMonth_ = null;
+<a name="line760"></a>  this.elMonthYear_ = null;
+<a name="line761"></a>  this.elYear_ = null;
+<a name="line762"></a>  this.elToday_ = null;
+<a name="line763"></a>  this.elNone_ = null;
+<a name="line764"></a>};
+<a name="line765"></a>
+<a name="line766"></a>
+<a name="line767"></a>/**
+<a name="line768"></a> * Click handler for date grid.
+<a name="line769"></a> *
+<a name="line770"></a> * @param {goog.events.BrowserEvent} event Click event.
+<a name="line771"></a> * @private
+<a name="line772"></a> */
+<a name="line773"></a>goog.ui.DatePicker.prototype.handleGridClick_ = function(event) {
+<a name="line774"></a>  if (event.target.tagName == &#39;TD&#39;) {
+<a name="line775"></a>    // colIndex/rowIndex is broken in Safari, find position by looping
+<a name="line776"></a>    var el, x = -2, y = -2; // first col/row is for weekday/weeknum
+<a name="line777"></a>    for (el = event.target; el; el = el.previousSibling, x++) {}
+<a name="line778"></a>    for (el = event.target.parentNode; el; el = el.previousSibling, y++) {}
+<a name="line779"></a>    var obj = this.grid_[y][x];
+<a name="line780"></a>    this.setDate(obj.clone());
+<a name="line781"></a>  }
+<a name="line782"></a>};
+<a name="line783"></a>
+<a name="line784"></a>
+<a name="line785"></a>/**
+<a name="line786"></a> * Keypress handler for date grid.
+<a name="line787"></a> *
+<a name="line788"></a> * @param {goog.events.BrowserEvent} event Keypress event.
+<a name="line789"></a> * @private
+<a name="line790"></a> */
+<a name="line791"></a>goog.ui.DatePicker.prototype.handleGridKeyPress_ = function(event) {
+<a name="line792"></a>  var months, days;
+<a name="line793"></a>  switch (event.keyCode) {
+<a name="line794"></a>    case 33: // Page up
+<a name="line795"></a>      event.preventDefault();
+<a name="line796"></a>      months = -1;
+<a name="line797"></a>      break;
+<a name="line798"></a>    case 34: // Page down
+<a name="line799"></a>      event.preventDefault();
+<a name="line800"></a>      months = 1;
+<a name="line801"></a>      break;
+<a name="line802"></a>    case 37: // Left
+<a name="line803"></a>      event.preventDefault();
+<a name="line804"></a>      days = -1;
+<a name="line805"></a>      break;
+<a name="line806"></a>    case 39: // Right
+<a name="line807"></a>      event.preventDefault();
+<a name="line808"></a>      days = 1;
+<a name="line809"></a>      break;
+<a name="line810"></a>    case 38: // Down
+<a name="line811"></a>      event.preventDefault();
+<a name="line812"></a>      days = -7;
+<a name="line813"></a>      break;
+<a name="line814"></a>    case 40: // Up
+<a name="line815"></a>      event.preventDefault();
+<a name="line816"></a>      days = 7;
+<a name="line817"></a>      break;
+<a name="line818"></a>    case 36: // Home
+<a name="line819"></a>      event.preventDefault();
+<a name="line820"></a>      this.selectToday();
+<a name="line821"></a>    case 46: // Delete
+<a name="line822"></a>      event.preventDefault();
+<a name="line823"></a>      this.selectNone();
+<a name="line824"></a>    default:
+<a name="line825"></a>      return;
+<a name="line826"></a>  }
+<a name="line827"></a>  var date;
+<a name="line828"></a>  if (this.date_) {
+<a name="line829"></a>    date = this.date_.clone();
+<a name="line830"></a>    date.add(new goog.date.Interval(0, months, days));
+<a name="line831"></a>  } else {
+<a name="line832"></a>    date = this.activeMonth_.clone();
+<a name="line833"></a>    date.setDate(1);
+<a name="line834"></a>  }
+<a name="line835"></a>  this.setDate(date);
+<a name="line836"></a>};
+<a name="line837"></a>
+<a name="line838"></a>
+<a name="line839"></a>/**
+<a name="line840"></a> * Click handler for month button. Opens month selection menu.
+<a name="line841"></a> *
+<a name="line842"></a> * @param {goog.events.BrowserEvent} event Click event.
+<a name="line843"></a> * @private
+<a name="line844"></a> */
+<a name="line845"></a>goog.ui.DatePicker.prototype.showMonthMenu_ = function(event) {
+<a name="line846"></a>  event.stopPropagation();
+<a name="line847"></a>
+<a name="line848"></a>  var list = [];
+<a name="line849"></a>  for (var i = 0; i &lt; 12; i++) {
+<a name="line850"></a>    list.push(goog.i18n.DateTimeSymbols.MONTHS[i]);
+<a name="line851"></a>  }
+<a name="line852"></a>  this.createMenu_(this.elMonth_, list, this.handleMonthMenuClick_,
+<a name="line853"></a>      goog.i18n.DateTimeSymbols.MONTHS[this.activeMonth_.getMonth()]);
+<a name="line854"></a>};
+<a name="line855"></a>
+<a name="line856"></a>
+<a name="line857"></a>/**
+<a name="line858"></a> * Click handler for year button. Opens year selection menu.
+<a name="line859"></a> *
+<a name="line860"></a> * @param {goog.events.BrowserEvent} event Click event.
+<a name="line861"></a> * @private
+<a name="line862"></a> */
+<a name="line863"></a>goog.ui.DatePicker.prototype.showYearMenu_ = function(event) {
+<a name="line864"></a>  event.stopPropagation();
+<a name="line865"></a>
+<a name="line866"></a>  var list = [];
+<a name="line867"></a>  var year = this.activeMonth_.getFullYear() - 5;
+<a name="line868"></a>  for (var i = 0; i &lt; 11; i++) {
+<a name="line869"></a>    list.push(String(year + i));
+<a name="line870"></a>  }
+<a name="line871"></a>  this.createMenu_(this.elYear_, list, this.handleYearMenuClick_,
+<a name="line872"></a>                   String(this.activeMonth_.getFullYear()));
+<a name="line873"></a>};
+<a name="line874"></a>
+<a name="line875"></a>
+<a name="line876"></a>/**
+<a name="line877"></a> * Call back function for month menu.
+<a name="line878"></a> *
+<a name="line879"></a> * @param {Element} target Selected item.
+<a name="line880"></a> * @private
+<a name="line881"></a> */
+<a name="line882"></a>goog.ui.DatePicker.prototype.handleMonthMenuClick_ = function(target) {
+<a name="line883"></a>  var el = target;
+<a name="line884"></a>  for (var i = -1; el; el = goog.dom.getPreviousElementSibling(el), i++) {}
+<a name="line885"></a>
+<a name="line886"></a>  this.activeMonth_.setMonth(i);
+<a name="line887"></a>  this.updateCalendarGrid_();
+<a name="line888"></a>
+<a name="line889"></a>  if (this.elMonth_.focus) {
+<a name="line890"></a>    this.elMonth_.focus();
+<a name="line891"></a>  }
+<a name="line892"></a>};
+<a name="line893"></a>
+<a name="line894"></a>
+<a name="line895"></a>/**
+<a name="line896"></a> * Call back function for year menu.
+<a name="line897"></a> *
+<a name="line898"></a> * @param {Element} target Selected item.
+<a name="line899"></a> * @private
+<a name="line900"></a> */
+<a name="line901"></a>goog.ui.DatePicker.prototype.handleYearMenuClick_ = function(target) {
+<a name="line902"></a>  if (target.firstChild.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line903"></a>    this.activeMonth_.setFullYear(Number(target.firstChild.nodeValue));
+<a name="line904"></a>    this.updateCalendarGrid_();
+<a name="line905"></a>  }
+<a name="line906"></a>
+<a name="line907"></a>  this.elYear_.focus();
+<a name="line908"></a>};
+<a name="line909"></a>
+<a name="line910"></a>
+<a name="line911"></a>/**
+<a name="line912"></a> * Support function for menu creation.
+<a name="line913"></a> *
+<a name="line914"></a> * @param {Element} srcEl Button to create menu for.
+<a name="line915"></a> * @param {Array.&lt;string&gt;} items List of items to populate menu with.
+<a name="line916"></a> * @param {Function} method Call back method.
+<a name="line917"></a> * @param {string} selected Item to mark as selected in menu.
+<a name="line918"></a> * @private
+<a name="line919"></a> */
+<a name="line920"></a>goog.ui.DatePicker.prototype.createMenu_ = function(srcEl, items, method,
+<a name="line921"></a>                                                    selected) {
+<a name="line922"></a>  this.destroyMenu_();
+<a name="line923"></a>  var dom = goog.dom.getDomHelper(srcEl);
+<a name="line924"></a>
+<a name="line925"></a>  var el = dom.createDom(&#39;div&#39;, goog.getCssName(&#39;goog-date-picker-menu&#39;));
+<a name="line926"></a>
+<a name="line927"></a>  this.menuSelected_ = null;
+<a name="line928"></a>
+<a name="line929"></a>  var ul = dom.createElement(&#39;ul&#39;);
+<a name="line930"></a>  for (var i = 0; i &lt; items.length; i++) {
+<a name="line931"></a>    var li = dom.createDom(&#39;li&#39;, null, items[i]);
+<a name="line932"></a>    if (items[i] == selected) {
+<a name="line933"></a>      this.menuSelected_ = li;
+<a name="line934"></a>    }
+<a name="line935"></a>    ul.appendChild(li);
+<a name="line936"></a>  }
+<a name="line937"></a>  el.appendChild(ul);
+<a name="line938"></a>  el.style.left = srcEl.offsetLeft + srcEl.parentNode.offsetLeft + &#39;px&#39;;
+<a name="line939"></a>  el.style.top = srcEl.offsetTop + &#39;px&#39;;
+<a name="line940"></a>  el.style.width = srcEl.clientWidth + &#39;px&#39;;
+<a name="line941"></a>  this.elMonth_.parentNode.appendChild(el);
+<a name="line942"></a>
+<a name="line943"></a>  this.menu_ = el;
+<a name="line944"></a>  if (!this.menuSelected_) {
+<a name="line945"></a>    this.menuSelected_ = ul.firstChild;
+<a name="line946"></a>  }
+<a name="line947"></a>  this.menuSelected_.className =
+<a name="line948"></a>      goog.getCssName(&#39;goog-date-picker-menu-selected&#39;);
+<a name="line949"></a>  this.menuCallback_ = method;
+<a name="line950"></a>
+<a name="line951"></a>  this.eventHandler_.listen(this.menu_, goog.events.EventType.CLICK,
+<a name="line952"></a>                            this.handleMenuClick_);
+<a name="line953"></a>  this.eventHandler_.listen(this.getKeyHandlerForElement_(this.menu_),
+<a name="line954"></a>                            goog.events.KeyHandler.EventType.KEY,
+<a name="line955"></a>                            this.handleMenuKeyPress_);
+<a name="line956"></a>  this.eventHandler_.listen(dom.getDocument(), goog.events.EventType.CLICK,
+<a name="line957"></a>                            this.destroyMenu_);
+<a name="line958"></a>  el.tabIndex = 0;
+<a name="line959"></a>  el.focus();
+<a name="line960"></a>};
+<a name="line961"></a>
+<a name="line962"></a>
+<a name="line963"></a>/**
+<a name="line964"></a> * Click handler for menu.
+<a name="line965"></a> *
+<a name="line966"></a> * @param {goog.events.BrowserEvent} event Click event.
+<a name="line967"></a> * @private
+<a name="line968"></a> */
+<a name="line969"></a>goog.ui.DatePicker.prototype.handleMenuClick_ = function(event) {
+<a name="line970"></a>  event.stopPropagation();
+<a name="line971"></a>
+<a name="line972"></a>  this.destroyMenu_();
+<a name="line973"></a>  if (this.menuCallback_) {
+<a name="line974"></a>    this.menuCallback_(event.target);
+<a name="line975"></a>  }
+<a name="line976"></a>};
+<a name="line977"></a>
+<a name="line978"></a>
+<a name="line979"></a>/**
+<a name="line980"></a> * Keypress handler for menu.
+<a name="line981"></a> *
+<a name="line982"></a> * @param {goog.events.BrowserEvent} event Keypress event.
+<a name="line983"></a> * @private
+<a name="line984"></a> */
+<a name="line985"></a>goog.ui.DatePicker.prototype.handleMenuKeyPress_ = function(event) {
+<a name="line986"></a>  // Prevent the grid keypress handler from catching the keypress event.
+<a name="line987"></a>  event.stopPropagation();
+<a name="line988"></a>
+<a name="line989"></a>  var el;
+<a name="line990"></a>  var menuSelected = this.menuSelected_;
+<a name="line991"></a>  switch (event.keyCode) {
+<a name="line992"></a>    case 35: // End
+<a name="line993"></a>      event.preventDefault();
+<a name="line994"></a>      el = menuSelected.parentNode.lastChild;
+<a name="line995"></a>      break;
+<a name="line996"></a>    case 36: // Home
+<a name="line997"></a>      event.preventDefault();
+<a name="line998"></a>      el = menuSelected.parentNode.firstChild;
+<a name="line999"></a>      break;
+<a name="line1000"></a>    case 38: // Up
+<a name="line1001"></a>      event.preventDefault();
+<a name="line1002"></a>      el = menuSelected.previousSibling;
+<a name="line1003"></a>      break;
+<a name="line1004"></a>    case 40: // Down
+<a name="line1005"></a>      event.preventDefault();
+<a name="line1006"></a>      el = menuSelected.nextSibling;
+<a name="line1007"></a>      break;
+<a name="line1008"></a>    case 13: // Enter
+<a name="line1009"></a>    case 9: // Tab
+<a name="line1010"></a>    case 0: // Space
+<a name="line1011"></a>      event.preventDefault();
+<a name="line1012"></a>      this.destroyMenu_();
+<a name="line1013"></a>      this.menuCallback_(menuSelected);
+<a name="line1014"></a>      break;
+<a name="line1015"></a>  }
+<a name="line1016"></a>  if (el &amp;&amp; el != menuSelected) {
+<a name="line1017"></a>    menuSelected.className = &#39;&#39;;
+<a name="line1018"></a>    el.className = goog.getCssName(&#39;goog-date-picker-menu-selected&#39;);
+<a name="line1019"></a>    this.menuSelected_ = el;
+<a name="line1020"></a>  }
+<a name="line1021"></a>};
+<a name="line1022"></a>
+<a name="line1023"></a>/**
+<a name="line1024"></a> * Support function for menu destruction.
+<a name="line1025"></a> * @private
+<a name="line1026"></a> */
+<a name="line1027"></a>goog.ui.DatePicker.prototype.destroyMenu_ = function() {
+<a name="line1028"></a>  if (this.menu_) {
+<a name="line1029"></a>    var dom = goog.dom.getDomHelper(this.menu_);
+<a name="line1030"></a>    this.eventHandler_.unlisten(this.menu_, goog.events.EventType.CLICK,
+<a name="line1031"></a>                                this.handleMenuClick_);
+<a name="line1032"></a>    this.eventHandler_.unlisten(this.getKeyHandlerForElement_(this.menu_),
+<a name="line1033"></a>                                goog.events.KeyHandler.EventType.KEY,
+<a name="line1034"></a>                                this.handleMenuKeyPress_);
+<a name="line1035"></a>    this.eventHandler_.unlisten(dom.getDocument(), goog.events.EventType.CLICK,
+<a name="line1036"></a>                                this.destroyMenu_);
+<a name="line1037"></a>    dom.removeNode(this.menu_);
+<a name="line1038"></a>    delete this.menu_;
+<a name="line1039"></a>  }
+<a name="line1040"></a>};
+<a name="line1041"></a>
+<a name="line1042"></a>
+<a name="line1043"></a>/**
+<a name="line1044"></a> * Support function for button creation.
+<a name="line1045"></a> *
+<a name="line1046"></a> * @param {Element} parentNode Container the button should be added to.
+<a name="line1047"></a> * @param {string} label Button label.
+<a name="line1048"></a> * @param {Function} method Event handler.
+<a name="line1049"></a> * @param {string} opt_className Class name for button, which will be used
+<a name="line1050"></a> *    in addition to &quot;goog-date-picker-btn&quot;.
+<a name="line1051"></a> * @private
+<a name="line1052"></a> * @return {Element} The created button element.
+<a name="line1053"></a> */
+<a name="line1054"></a>goog.ui.DatePicker.prototype.createButton_ = function(parentNode, label,
+<a name="line1055"></a>                                                      method, opt_className) {
+<a name="line1056"></a>  var classes = [goog.getCssName(&#39;goog-date-picker-btn&#39;)];
+<a name="line1057"></a>  if (opt_className) {
+<a name="line1058"></a>    classes.push(opt_className);
+<a name="line1059"></a>  }
+<a name="line1060"></a>  var dom = goog.dom.getDomHelper(parentNode);
+<a name="line1061"></a>  var el = dom.createElement(&#39;button&#39;);
+<a name="line1062"></a>  el.className = classes.join(&#39; &#39;);
+<a name="line1063"></a>  el.appendChild(dom.createTextNode(label));
+<a name="line1064"></a>  parentNode.appendChild(el);
+<a name="line1065"></a>  this.eventHandler_.listen(el, goog.events.EventType.CLICK, method);
+<a name="line1066"></a>
+<a name="line1067"></a>  return el;
+<a name="line1068"></a>};
+<a name="line1069"></a>
+<a name="line1070"></a>
+<a name="line1071"></a>/**
+<a name="line1072"></a> * Determines the dates/weekdays for the current month and builds an in memory
+<a name="line1073"></a> * representation of the calendar.
+<a name="line1074"></a> *
+<a name="line1075"></a> * @private
+<a name="line1076"></a> */
+<a name="line1077"></a>goog.ui.DatePicker.prototype.updateCalendarGrid_ = function() {
+<a name="line1078"></a>  if (!this.created_) {
+<a name="line1079"></a>    return;
+<a name="line1080"></a>  }
+<a name="line1081"></a>
+<a name="line1082"></a>  var date = this.activeMonth_.clone();
+<a name="line1083"></a>  date.setDate(1);
+<a name="line1084"></a>
+<a name="line1085"></a>  // Show year name of select month
+<a name="line1086"></a>  if (this.elMonthYear_) {
+<a name="line1087"></a>    goog.dom.setTextContent(this.elMonthYear_,
+<a name="line1088"></a>        goog.date.formatMonthAndYear(
+<a name="line1089"></a>            goog.i18n.DateTimeSymbols.MONTHS[date.getMonth()],
+<a name="line1090"></a>            date.getFullYear()));
+<a name="line1091"></a>  }
+<a name="line1092"></a>  if (this.elMonth_) {
+<a name="line1093"></a>    goog.dom.setTextContent(this.elMonth_,
+<a name="line1094"></a>        goog.i18n.DateTimeSymbols.MONTHS[date.getMonth()]);
+<a name="line1095"></a>  }
+<a name="line1096"></a>  if (this.elYear_) {
+<a name="line1097"></a>    goog.dom.setTextContent(this.elYear_, String(date.getFullYear()));
+<a name="line1098"></a>  }
+<a name="line1099"></a>
+<a name="line1100"></a>  var wday = date.getWeekday();
+<a name="line1101"></a>  var days = date.getNumberOfDaysInMonth();
+<a name="line1102"></a>
+<a name="line1103"></a>  // Determine how many days to show for previous month
+<a name="line1104"></a>  date.add(new goog.date.Interval(goog.date.Interval.MONTHS, -1));
+<a name="line1105"></a>  date.setDate(date.getNumberOfDaysInMonth() - (wday - 1));
+<a name="line1106"></a>
+<a name="line1107"></a>  if (this.showFixedNumWeeks_ &amp;&amp; !this.extraWeekAtEnd_ &amp;&amp; days + wday &lt; 33) {
+<a name="line1108"></a>    date.add(new goog.date.Interval(goog.date.Interval.DAYS, -7));
+<a name="line1109"></a>  }
+<a name="line1110"></a>
+<a name="line1111"></a>  // Create weekday/day grid
+<a name="line1112"></a>  var dayInterval = new goog.date.Interval(goog.date.Interval.DAYS, 1);
+<a name="line1113"></a>  this.grid_ = [];
+<a name="line1114"></a>  for (var y = 0; y &lt; 6; y++) { // Weeks
+<a name="line1115"></a>    this.grid_[y] = [];
+<a name="line1116"></a>    for (var x = 0; x &lt; 7; x++) { // Weekdays
+<a name="line1117"></a>      this.grid_[y][x] = date.clone();
+<a name="line1118"></a>      date.add(dayInterval);
+<a name="line1119"></a>    }
+<a name="line1120"></a>  }
+<a name="line1121"></a>
+<a name="line1122"></a>  this.redrawCalendarGrid_();
+<a name="line1123"></a>};
+<a name="line1124"></a>
+<a name="line1125"></a>
+<a name="line1126"></a>/**
+<a name="line1127"></a> * Draws calendar view from in memory representation and applies class names
+<a name="line1128"></a> * depending on the selection, weekday and whatever the day belongs to the
+<a name="line1129"></a> * active month or not.
+<a name="line1130"></a> * @private
+<a name="line1131"></a> */
+<a name="line1132"></a>goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
+<a name="line1133"></a>  if (!this.created_) {
+<a name="line1134"></a>    return;
+<a name="line1135"></a>  }
+<a name="line1136"></a>
+<a name="line1137"></a>  var month = this.activeMonth_.getMonth();
+<a name="line1138"></a>  var today = new goog.date.Date();
+<a name="line1139"></a>  var todayYear = today.getFullYear();
+<a name="line1140"></a>  var todayMonth = today.getMonth();
+<a name="line1141"></a>  var todayDate = today.getDate();
+<a name="line1142"></a>
+<a name="line1143"></a>  // Draw calendar week by week, a worst case month has six weeks.
+<a name="line1144"></a>  for (var y = 0; y &lt; 6; y++) {
+<a name="line1145"></a>
+<a name="line1146"></a>    // Draw week number, if enabled
+<a name="line1147"></a>    if (this.showWeekNum_) {
+<a name="line1148"></a>      goog.dom.setTextContent(this.elTable_[y + 1][0],
+<a name="line1149"></a>                              this.grid_[y][0].getWeekNumber());
+<a name="line1150"></a>      goog.dom.classes.set(this.elTable_[y + 1][0],
+<a name="line1151"></a>                           goog.getCssName(&#39;goog-date-picker-week&#39;));
+<a name="line1152"></a>    } else {
+<a name="line1153"></a>      goog.dom.setTextContent(this.elTable_[y + 1][0], &#39;&#39;);
+<a name="line1154"></a>      goog.dom.classes.set(this.elTable_[y + 1][0], &#39;&#39;);
+<a name="line1155"></a>    }
+<a name="line1156"></a>
+<a name="line1157"></a>    this.tableBody_.title = this.date_ ?
+<a name="line1158"></a>        goog.ui.DatePicker.DATE_FORMATTER_.format(this.date_) : &#39;&#39;;
+<a name="line1159"></a>
+<a name="line1160"></a>    for (var x = 0; x &lt; 7; x++) {
+<a name="line1161"></a>      var o = this.grid_[y][x];
+<a name="line1162"></a>      var el = this.elTable_[y + 1][x + 1];
+<a name="line1163"></a>
+<a name="line1164"></a>      // Assign a unique element id (required for setting the active descendant
+<a name="line1165"></a>      // ARIA role) unless already set.
+<a name="line1166"></a>      if (!el.id) {
+<a name="line1167"></a>        el.id = &#39;goog-dp-&#39; + goog.ui.DatePicker.nextId_++;
+<a name="line1168"></a>      }
+<a name="line1169"></a>      goog.dom.a11y.setRole(el, &#39;gridcell&#39;);
+<a name="line1170"></a>      var classes = [goog.getCssName(&#39;goog-date-picker-date&#39;)];
+<a name="line1171"></a>      if (this.showOtherMonths_ || o.getMonth() == month) {
+<a name="line1172"></a>        // Date belongs to previous or next month
+<a name="line1173"></a>        if (o.getMonth() != month) {
+<a name="line1174"></a>          classes.push(goog.getCssName(&#39;goog-date-picker-other-month&#39;));
+<a name="line1175"></a>        }
+<a name="line1176"></a>
+<a name="line1177"></a>        // Apply styles set by setWeekdayClass
+<a name="line1178"></a>        var wday = (x + this.activeMonth_.getFirstDayOfWeek() + 7) % 7;
+<a name="line1179"></a>        if (this.wdayStyles_[wday]) {
+<a name="line1180"></a>          classes.push(this.wdayStyles_[wday]);
+<a name="line1181"></a>        }
+<a name="line1182"></a>
+<a name="line1183"></a>        // Current date
+<a name="line1184"></a>        if (o.getDate() == todayDate &amp;&amp; o.getMonth() == todayMonth &amp;&amp;
+<a name="line1185"></a>            o.getFullYear() == todayYear) {
+<a name="line1186"></a>          classes.push(goog.getCssName(&#39;goog-date-picker-today&#39;));
+<a name="line1187"></a>
+<a name="line1188"></a>          /** @desc Title for todays date. */
+<a name="line1189"></a>          var MSG_DATEPICKER_TODAY_TITLE = goog.getMsg(&#39;Today&#39;);
+<a name="line1190"></a>          el.title = MSG_DATEPICKER_TODAY_TITLE;
+<a name="line1191"></a>        }
+<a name="line1192"></a>
+<a name="line1193"></a>        // Selected date
+<a name="line1194"></a>        if (this.date_ &amp;&amp; o.getDate() == this.date_.getDate() &amp;&amp;
+<a name="line1195"></a>            o.getMonth() == this.date_.getMonth() &amp;&amp;
+<a name="line1196"></a>            o.getFullYear() == this.date_.getFullYear()) {
+<a name="line1197"></a>          classes.push(goog.getCssName(&#39;goog-date-picker-selected&#39;));
+<a name="line1198"></a>          goog.dom.a11y.setState(this.tableBody_, &#39;activedescendant&#39;, el.id);
+<a name="line1199"></a>        }
+<a name="line1200"></a>
+<a name="line1201"></a>        // Custom decorator
+<a name="line1202"></a>        if (this.decoratorFunction_) {
+<a name="line1203"></a>          var customClass = this.decoratorFunction_(o);
+<a name="line1204"></a>          if (customClass) {
+<a name="line1205"></a>            classes.push(customClass);
+<a name="line1206"></a>          }
+<a name="line1207"></a>        }
+<a name="line1208"></a>
+<a name="line1209"></a>        // Set cell text to the date and apply classes.
+<a name="line1210"></a>        goog.dom.setTextContent(el, o.getDate());
+<a name="line1211"></a>        // Date belongs to previous or next month and showOtherMonths is false,
+<a name="line1212"></a>        // clear text and classes.
+<a name="line1213"></a>      } else {
+<a name="line1214"></a>        goog.dom.setTextContent(el, &#39;&#39;);
+<a name="line1215"></a>      }
+<a name="line1216"></a>      goog.dom.classes.set(el, classes.join(&#39; &#39;));
+<a name="line1217"></a>    }
+<a name="line1218"></a>
+<a name="line1219"></a>    // Hide the either the last one or last two weeks if they contain no days
+<a name="line1220"></a>    // from the active month and the showFixedNumWeeks is false. The first four
+<a name="line1221"></a>    // weeks are always shown as no month has less than 28 days).
+<a name="line1222"></a>    if (y &gt;= 4) {
+<a name="line1223"></a>      goog.style.showElement(this.elTable_[y + 1][0].parentNode,
+<a name="line1224"></a>                            this.grid_[y][0].getMonth() == month ||
+<a name="line1225"></a>                                this.showFixedNumWeeks_);
+<a name="line1226"></a>    }
+<a name="line1227"></a>  }
+<a name="line1228"></a>};
+<a name="line1229"></a>
+<a name="line1230"></a>
+<a name="line1231"></a>/**
+<a name="line1232"></a> * Draw weekday names, if enabled. Start with whatever day has been set as the
+<a name="line1233"></a> * first day of week.
+<a name="line1234"></a> * @private
+<a name="line1235"></a> */
+<a name="line1236"></a>goog.ui.DatePicker.prototype.redrawWeekdays_ = function() {
+<a name="line1237"></a>  if (!this.created_) {
+<a name="line1238"></a>    return;
+<a name="line1239"></a>  }
+<a name="line1240"></a>  if (this.showWeekdays_) {
+<a name="line1241"></a>    for (var x = 0; x &lt; 7; x++) {
+<a name="line1242"></a>      var el = this.elTable_[0][x + 1];
+<a name="line1243"></a>      var wday = (x + this.activeMonth_.getFirstDayOfWeek() + 7) % 7;
+<a name="line1244"></a>      goog.dom.setTextContent(el, this.wdayNames_[(wday + 1) % 7]);
+<a name="line1245"></a>    }
+<a name="line1246"></a>  }
+<a name="line1247"></a>  goog.style.showElement(this.elTable_[0][0].parentNode, this.showWeekdays_);
+<a name="line1248"></a>};
+<a name="line1249"></a>
+<a name="line1250"></a>
+<a name="line1251"></a>/**
+<a name="line1252"></a> * Returns the key handler for an element and caches it so that it can be
+<a name="line1253"></a> * retrieved at a later point.
+<a name="line1254"></a> * @param {Element} el The element to get the key handler for.
+<a name="line1255"></a> * @return {goog.events.KeyHandler} The key handler for the element.
+<a name="line1256"></a> * @private
+<a name="line1257"></a> */
+<a name="line1258"></a>goog.ui.DatePicker.prototype.getKeyHandlerForElement_ = function(el) {
+<a name="line1259"></a>  var hashCode = goog.getHashCode(el);
+<a name="line1260"></a>  if (!(hashCode in this.keyHandlers_)) {
+<a name="line1261"></a>    this.keyHandlers_[hashCode] = new goog.events.KeyHandler(el);
+<a name="line1262"></a>  }
+<a name="line1263"></a>  return this.keyHandlers_[hashCode];
+<a name="line1264"></a>};
+<a name="line1265"></a>
+<a name="line1266"></a>
+<a name="line1267"></a>/**
+<a name="line1268"></a> * Object representing a date picker event.
+<a name="line1269"></a> *
+<a name="line1270"></a> * @param {string} type Event type.
+<a name="line1271"></a> * @param {goog.ui.DatePicker} target Date picker initiating event.
+<a name="line1272"></a> * @param {goog.date.Date} date Selected date.
+<a name="line1273"></a> * @extends {goog.events.Event}
+<a name="line1274"></a> * @constructor
+<a name="line1275"></a> */
+<a name="line1276"></a>goog.ui.DatePickerEvent = function(type, target, date) {
+<a name="line1277"></a>  goog.events.Event.call(this, type);
+<a name="line1278"></a>
+<a name="line1279"></a>  /**
+<a name="line1280"></a>   * Reference to the date picker initiating the event.
+<a name="line1281"></a>   * @type {goog.ui.DatePicker}
+<a name="line1282"></a>   */
+<a name="line1283"></a>  this.target = target;
+<a name="line1284"></a>
+<a name="line1285"></a>  /**
+<a name="line1286"></a>   * The selected date
+<a name="line1287"></a>   * @type {goog.date.Date}
+<a name="line1288"></a>   */
+<a name="line1289"></a>  this.date = date;
+<a name="line1290"></a>};
+<a name="line1291"></a>goog.inherits(goog.ui.DatePickerEvent, goog.events.Event);
+</pre>
+
+
+</body>
+</html>

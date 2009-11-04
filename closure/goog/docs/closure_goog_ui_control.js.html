@@ -1,0 +1,287 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>control.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">control.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Base class for UI controls such as buttons, menus, menu items,
+ toolbar buttons, etc.  The implementation is based on a generalized version
+ of {@link goog.ui.MenuItem}.
+ TODO:  If the renderer framework works well, pull it into Component.
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="../demos/control.html">Demo</a></li>
+            <li><a href="closure_goog_ui_control.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">goog/ui/control.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Control.html">
+          goog.ui.Control</a><br/>
+        <div class="class-details">Base class for UI controls.  Extends {@link goog.ui.Component} by adding
+the following:
+<ul>
+<li>a {@link goog.events.KeyHandler}, to simplify keyboard handling,
+<li>a pluggable <em>renderer</em> framework, to simplify the creation of
+simple controls without the need to subclass this class,
+<li>the notion of component <em>content</em>, like a text caption or DOM
+structure displayed in the component (e.g. a button label),
+<li>getter and setter for component content, as well as a getter and
+setter specifically for caption text (for convenience),
+<li>support for hiding/showing the component,
+<li>fine-grained control over supported states and state transition
+events, and
+<li>default mouse and keyboard event handling.
+</li></li></li></li></li></li></li></ul>
+This class has sufficient built-in functionality for most simple UI controls.
+All controls dispatch SHOW, HIDE, ENTER, LEAVE, and ACTION events on show,
+hide, mouseover, mouseout, and user action, respectively.  Additional states
+are also supported.  See closure/demos/control.html
+for example usage.</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Control.decorate"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Control.</span><span class="entryName">decorate<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="class_goog_ui_Control.html">goog.ui.Control</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Takes an element, and decorates it with a {@link goog.ui.Control} instance
+if a suitable decorator is found.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="class_goog_ui_Control.html">goog.ui.Control</a></span></div>&nbsp;
+            New control instance that decorates the element (null if none).
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_control.js.source.html#line126">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Control.getDecorator"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Control.</span><span class="entryName">getDecorator<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="class_goog_ui_Control.html">goog.ui.Control</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Takes an element and returns a new instance of {@link goog.ui.Control}
+or a subclass, suitable to decorate it (based on the element&#39;s CSS class).
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="class_goog_ui_Control.html">goog.ui.Control</a></span></div>&nbsp;
+            New control instance to decorate the element (null if none).
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_control.js.source.html#line113">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Control.registerDecorator"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Control.</span><span class="entryName">registerDecorator<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Maps a CSS class name to a function that returns a new instance of
+{@link goog.ui.Control} or a subclass thereof, suitable to decorate
+an element that has the specified CSS class.  UI components that extend
+{@link goog.ui.Control} and want {@link goog.ui.Container}s to be able
+to discover and decorate elements using them should register a factory
+function via this API.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_control.js.source.html#line102">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory goog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="closure" current="goog/ui/control.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

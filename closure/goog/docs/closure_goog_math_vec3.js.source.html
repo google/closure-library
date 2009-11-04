@@ -1,0 +1,374 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>vec3.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_math_vec3.js.html">vec3.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Defines a 3-element vector class that can be used for
+<a name="line17"></a> * coordinate math, useful for animation systems and point manipulation.
+<a name="line18"></a> *
+<a name="line19"></a> * Based heavily on code originally by:
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.math.Vec3&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.math&#39;);
+<a name="line26"></a>goog.require(&#39;goog.math.Coordinate3&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Class for a three-dimensional vector object and assorted functions useful for
+<a name="line31"></a> * manipulation.
+<a name="line32"></a> *
+<a name="line33"></a> * Inherits from goog.math.Coordinate3 so that a Vec3 may be passed in to any
+<a name="line34"></a> * function that requires a Coordinate.
+<a name="line35"></a> *
+<a name="line36"></a> * @param {number} opt_x The x value for the vector.
+<a name="line37"></a> * @param {number} opt_y The y value for the vector.
+<a name="line38"></a> * @param {number} opt_z The z value for the vector.
+<a name="line39"></a> * @constructor
+<a name="line40"></a> * @extends {goog.math.Coordinate3}
+<a name="line41"></a> */
+<a name="line42"></a>goog.math.Vec3 = function(opt_x, opt_y, opt_z) {
+<a name="line43"></a>  /**
+<a name="line44"></a>   * X-value
+<a name="line45"></a>   * @type {number}
+<a name="line46"></a>   */
+<a name="line47"></a>  this.x = Number(opt_x) || 0;
+<a name="line48"></a>
+<a name="line49"></a>  /**
+<a name="line50"></a>   * Y-value
+<a name="line51"></a>   * @type {number}
+<a name="line52"></a>   */
+<a name="line53"></a>  this.y = Number(opt_y) || 0;
+<a name="line54"></a>
+<a name="line55"></a>  /**
+<a name="line56"></a>   * Z-value
+<a name="line57"></a>   * @type {number}
+<a name="line58"></a>   */
+<a name="line59"></a>  this.z = Number(opt_z) || 0;
+<a name="line60"></a>};
+<a name="line61"></a>goog.inherits(goog.math.Vec3, goog.math.Coordinate3);
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * Generates a random unit vector.
+<a name="line66"></a> *
+<a name="line67"></a> * http://mathworld.wolfram.com/SpherePointPicking.html
+<a name="line68"></a> * Using (6), (7), and (8) to generate coordinates.
+<a name="line69"></a> * @return {goog.math.Vec3} A random unit-length vector.
+<a name="line70"></a> */
+<a name="line71"></a>goog.math.Vec3.randomUnit = function() {
+<a name="line72"></a>  var theta = Math.random() * Math.PI * 2;
+<a name="line73"></a>  var phi = Math.random() * Math.PI * 2;
+<a name="line74"></a>
+<a name="line75"></a>  var z = Math.cos(phi);
+<a name="line76"></a>  var x = Math.sqrt(1 - z * z) * Math.cos(theta);
+<a name="line77"></a>  var y = Math.sqrt(1 - z * z) * Math.sin(theta);
+<a name="line78"></a>
+<a name="line79"></a>  return new goog.math.Vec3(x, y, z);
+<a name="line80"></a>};
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Generates a random vector inside the unit sphere.
+<a name="line85"></a> *
+<a name="line86"></a> * @return {goog.math.Vec3} A random vector.
+<a name="line87"></a> */
+<a name="line88"></a>goog.math.Vec3.random = function() {
+<a name="line89"></a>  return new goog.math.Vec3.randomUnit().scale(Math.random());
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Returns a new Vec3 object from a given coordinate.
+<a name="line95"></a> *
+<a name="line96"></a> * @param {goog.math.Coordinate3} a The coordinate.
+<a name="line97"></a> * @return {goog.math.Vec3} A new vector object.
+<a name="line98"></a> */
+<a name="line99"></a>goog.math.Vec3.fromCoordinate3 = function(a) {
+<a name="line100"></a>  return new goog.math.Vec3(a.x, a.y, a.z);
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Creates a new copy of this Vec3.
+<a name="line106"></a> *
+<a name="line107"></a> * @return {goog.math.Vec3} A new vector with the same coordinates as this one.
+<a name="line108"></a> */
+<a name="line109"></a>goog.math.Vec3.prototype.clone = function() {
+<a name="line110"></a>  return new goog.math.Vec3(this.x, this.y, this.z);
+<a name="line111"></a>};
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * Returns the magnitude of the vector measured from the origin.
+<a name="line116"></a> *
+<a name="line117"></a> * @return {number} The length of the vector.
+<a name="line118"></a> */
+<a name="line119"></a>goog.math.Vec3.prototype.magnitude = function() {
+<a name="line120"></a>  return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Returns the squared magnitude of the vector measured from the origin.
+<a name="line126"></a> * NOTE: Leaving out the square root is not a significant
+<a name="line127"></a> * optimization in JavaScript.
+<a name="line128"></a> *
+<a name="line129"></a> * @return {number} The length of the vector, squared.
+<a name="line130"></a> */
+<a name="line131"></a>goog.math.Vec3.prototype.squaredMagnitude = function() {
+<a name="line132"></a>  return this.x * this.x + this.y * this.y + this.z * this.z;
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Scales the current vector by a constant.
+<a name="line138"></a> *
+<a name="line139"></a> * @param {number} s The scale factor.
+<a name="line140"></a> * @return {goog.math.Vec3} This vector, scaled.
+<a name="line141"></a> */
+<a name="line142"></a>goog.math.Vec3.prototype.scale = function(s) {
+<a name="line143"></a>  this.x *= s;
+<a name="line144"></a>  this.y *= s;
+<a name="line145"></a>  this.z *= s;
+<a name="line146"></a>  return this;
+<a name="line147"></a>};
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Reverses the sign of the vector. Equivalent to scaling the vector by -1.
+<a name="line152"></a> *
+<a name="line153"></a> * @return {goog.math.Vec3} This vector, inverted.
+<a name="line154"></a> */
+<a name="line155"></a>goog.math.Vec3.prototype.invert = function() {
+<a name="line156"></a>  this.x = -this.x;
+<a name="line157"></a>  this.y = -this.y;
+<a name="line158"></a>  this.z = -this.z;
+<a name="line159"></a>  return this;
+<a name="line160"></a>};
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * Normalizes the current vector to have a magnitude of 1.
+<a name="line165"></a> *
+<a name="line166"></a> * @return {goog.math.Vec3} This vector, normalized.
+<a name="line167"></a> */
+<a name="line168"></a>goog.math.Vec3.prototype.normalize = function() {
+<a name="line169"></a>  return this.scale(1 / this.magnitude());
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Adds another vector to this vector in-place.
+<a name="line175"></a> *
+<a name="line176"></a> * @param {goog.math.Vec3} b The vector to add.
+<a name="line177"></a> * @return {goog.math.Vec3} This vector with {@code b} added.
+<a name="line178"></a> */
+<a name="line179"></a>goog.math.Vec3.prototype.add = function(b) {
+<a name="line180"></a>  this.x += b.x;
+<a name="line181"></a>  this.y += b.y;
+<a name="line182"></a>  this.z += b.z;
+<a name="line183"></a>  return this;
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Subtracts another vector from this vector in-place.
+<a name="line189"></a> *
+<a name="line190"></a> * @param {goog.math.Vec3} b The vector to subtract.
+<a name="line191"></a> * @return {goog.math.Vec3} This vector with {@code b} subtracted.
+<a name="line192"></a> */
+<a name="line193"></a>goog.math.Vec3.prototype.subtract = function(b) {
+<a name="line194"></a>  this.x -= b.x;
+<a name="line195"></a>  this.y -= b.y;
+<a name="line196"></a>  this.z -= b.z;
+<a name="line197"></a>  return this;
+<a name="line198"></a>};
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * Compares this vector with another for equality.
+<a name="line203"></a> *
+<a name="line204"></a> * @param {goog.math.Vec3} b The other vector.
+<a name="line205"></a> * @return {boolean} True if this vector&#39;s x, y and z equal the given vector&#39;s
+<a name="line206"></a> *     x, y, and z, respectively.
+<a name="line207"></a> */
+<a name="line208"></a>goog.math.Vec3.prototype.equals = function(b) {
+<a name="line209"></a>  return this == b || !!b &amp;&amp; this.x == b.x &amp;&amp; this.y == b.y &amp;&amp; this.z == b.z;
+<a name="line210"></a>};
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Returns the distance between two vectors.
+<a name="line215"></a> *
+<a name="line216"></a> * @param {goog.math.Vec3} a The first vector.
+<a name="line217"></a> * @param {goog.math.Vec3} b The second vector.
+<a name="line218"></a> * @return {number} The distance.
+<a name="line219"></a> */
+<a name="line220"></a>goog.math.Vec3.distance = goog.math.Coordinate3.distance;
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/**
+<a name="line224"></a> * Returns the squared distance between two vectors.
+<a name="line225"></a> *
+<a name="line226"></a> * @param {goog.math.Vec3} a The first vector.
+<a name="line227"></a> * @param {goog.math.Vec3} b The second vector.
+<a name="line228"></a> * @return {number} The squared distance.
+<a name="line229"></a> */
+<a name="line230"></a>goog.math.Vec3.squaredDistance = goog.math.Coordinate3.squaredDistance;
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Returns a new 3x1 matrix object from a given coordinate.
+<a name="line235"></a> *
+<a name="line236"></a> * @param {goog.math.Coordinate3} a The coordinate.
+<a name="line237"></a> * @return {goog.math.Matrix} A new matrix object.
+<a name="line238"></a> */
+<a name="line239"></a>goog.math.Vec3.toMatrix3x1 = goog.math.Coordinate3.toMatrix3x1;
+<a name="line240"></a>
+<a name="line241"></a>
+<a name="line242"></a>/**
+<a name="line243"></a> * Returns a new 4x1 matrix object from a given coordinate.
+<a name="line244"></a> *
+<a name="line245"></a> * @param {goog.math.Coordinate3} a The coordinate.
+<a name="line246"></a> * @return {goog.math.Matrix} A new matrix object.
+<a name="line247"></a> */
+<a name="line248"></a>
+<a name="line249"></a>goog.math.Vec3.toMatrix4x1 = goog.math.Coordinate3.toMatrix4x1;
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * Compares vectors for equality.
+<a name="line254"></a> *
+<a name="line255"></a> * @param {goog.math.Vec3} a The first vector.
+<a name="line256"></a> * @param {goog.math.Vec3} b The second vector.
+<a name="line257"></a> * @return {boolean} True if the vectors have equal x, y, and z coordinates.
+<a name="line258"></a> */
+<a name="line259"></a>goog.math.Vec3.equals = goog.math.Coordinate3.equals;
+<a name="line260"></a>
+<a name="line261"></a>
+<a name="line262"></a>/**
+<a name="line263"></a> * Returns the sum of two vectors as a new Vec3.
+<a name="line264"></a> *
+<a name="line265"></a> * @param {goog.math.Vec3} a The first vector.
+<a name="line266"></a> * @param {goog.math.Vec3} b The second vector.
+<a name="line267"></a> * @return {goog.math.Vec3} The sum vector.
+<a name="line268"></a> */
+<a name="line269"></a>goog.math.Vec3.sum = function(a, b) {
+<a name="line270"></a>  return new goog.math.Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
+<a name="line271"></a>};
+<a name="line272"></a>
+<a name="line273"></a>
+<a name="line274"></a>/**
+<a name="line275"></a> * Returns the difference of two vectors as a new Vec3.
+<a name="line276"></a> *
+<a name="line277"></a> * @param {goog.math.Vec3} a The first vector.
+<a name="line278"></a> * @param {goog.math.Vec3} b The second vector.
+<a name="line279"></a> * @return {goog.math.Vec3} The difference vector.
+<a name="line280"></a> */
+<a name="line281"></a>goog.math.Vec3.difference = function(a, b) {
+<a name="line282"></a>  return new goog.math.Vec3(a.x - b.x, a.y - b.y, a.z - b.z);
+<a name="line283"></a>};
+<a name="line284"></a>
+<a name="line285"></a>
+<a name="line286"></a>/**
+<a name="line287"></a> * Returns the dot-product of two vectors.
+<a name="line288"></a> *
+<a name="line289"></a> * @param {goog.math.Vec3} a The first vector.
+<a name="line290"></a> * @param {goog.math.Vec3} b The second vector.
+<a name="line291"></a> * @return {number} The dot-product of the two vectors.
+<a name="line292"></a> */
+<a name="line293"></a>goog.math.Vec3.dot = function(a, b) {
+<a name="line294"></a>  return a.x * b.x + a.y * b.y + a.z * b.z;
+<a name="line295"></a>};
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>/**
+<a name="line299"></a> * Returns the cross-product of two vectors.
+<a name="line300"></a> *
+<a name="line301"></a> * @param {goog.math.Vec3} a The first vector.
+<a name="line302"></a> * @param {goog.math.Vec3} b The second vector.
+<a name="line303"></a> * @return {goog.math.Vec3} The cross-product of the two vectors.
+<a name="line304"></a> */
+<a name="line305"></a>goog.math.Vec3.cross = function(a, b) {
+<a name="line306"></a>  return new goog.math.Vec3(a.y * b.z - a.z * b.y,
+<a name="line307"></a>                            a.z * b.x - a.x * b.z,
+<a name="line308"></a>                            a.x * b.y - a.y * b.x);
+<a name="line309"></a>};
+<a name="line310"></a>
+<a name="line311"></a>
+<a name="line312"></a>/**
+<a name="line313"></a> * Returns a new Vec3 that is the linear interpolant between vectors a and b at
+<a name="line314"></a> * scale-value x.
+<a name="line315"></a> *
+<a name="line316"></a> * @param {goog.math.Vec3} a Vector a.
+<a name="line317"></a> * @param {goog.math.Vec3} b Vector b.
+<a name="line318"></a> * @param {number} x The proportion between a and b.
+<a name="line319"></a> * @return {goog.math.Vec3} The interpolated vector.
+<a name="line320"></a> */
+<a name="line321"></a>goog.math.Vec3.lerp = function(a, b, x) {
+<a name="line322"></a>  return new goog.math.Vec3(goog.math.lerp(a.x, b.x, x),
+<a name="line323"></a>                            goog.math.lerp(a.y, b.y, x),
+<a name="line324"></a>                            goog.math.lerp(a.z, b.z, x));
+<a name="line325"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>forms.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_dom_forms.js.html">forms.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities for manipulating a form and elements.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.dom.forms&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line23"></a>
+<a name="line24"></a>/**
+<a name="line25"></a> * Returns form data as a map of name to value arrays. This doesn&#39;t
+<a name="line26"></a> * support file inputs.
+<a name="line27"></a> * @param {HTMLFormElement} form The form.
+<a name="line28"></a> * @return {goog.structs.Map} A map of the form data as form name to arrays of
+<a name="line29"></a> *     values.
+<a name="line30"></a> */
+<a name="line31"></a>goog.dom.forms.getFormDataMap = function(form) {
+<a name="line32"></a>  var map = new goog.structs.Map();
+<a name="line33"></a>  goog.dom.forms.getFormDataHelper_(form, map,
+<a name="line34"></a>      goog.dom.forms.addFormDataToMap_);
+<a name="line35"></a>  return map;
+<a name="line36"></a>};
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Returns the form data as an application/x-www-url-encoded string. This
+<a name="line41"></a> * doesn&#39;t support file inputs.
+<a name="line42"></a> * @param {HTMLFormElement} form The form.
+<a name="line43"></a> * @return {string} An application/x-www-url-encoded string.
+<a name="line44"></a> */
+<a name="line45"></a>goog.dom.forms.getFormDataString = function(form) {
+<a name="line46"></a>  var sb = [];
+<a name="line47"></a>  goog.dom.forms.getFormDataHelper_(form, sb,
+<a name="line48"></a>      goog.dom.forms.addFormDataToStringBuffer_);
+<a name="line49"></a>  return sb.join(&#39;&amp;&#39;);
+<a name="line50"></a>};
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Returns the form data as a map or an application/x-www-url-encoded
+<a name="line55"></a> * string. This doesn&#39;t support file inputs.
+<a name="line56"></a> * @param {HTMLFormElement} form The form.
+<a name="line57"></a> * @param {Object} result The object form data is being put in.
+<a name="line58"></a> * @param {Function} fnAppend Function that takes {@code result}, an element
+<a name="line59"></a> *     name, and an element value, and adds the name/value pair to the result
+<a name="line60"></a> *     object.
+<a name="line61"></a> * @private
+<a name="line62"></a> */
+<a name="line63"></a>goog.dom.forms.getFormDataHelper_ = function(form, result, fnAppend) {
+<a name="line64"></a>  var els = form.elements;
+<a name="line65"></a>  for (var el, i = 0; el = els[i]; i++) {
+<a name="line66"></a>    if (el.disabled || el.tagName.toLowerCase() == &#39;fieldset&#39;) {
+<a name="line67"></a>      continue;
+<a name="line68"></a>    }
+<a name="line69"></a>    var name = el.name;
+<a name="line70"></a>    var type = el.type.toLowerCase();
+<a name="line71"></a>    switch (type) {
+<a name="line72"></a>      case &#39;file&#39;:
+<a name="line73"></a>        // file inputs are not supported
+<a name="line74"></a>      case &#39;submit&#39;:
+<a name="line75"></a>      case &#39;reset&#39;:
+<a name="line76"></a>      case &#39;button&#39;:
+<a name="line77"></a>        // don&#39;t submit these
+<a name="line78"></a>        break;
+<a name="line79"></a>      case &#39;select-multiple&#39;:
+<a name="line80"></a>        var values = goog.dom.forms.getValue(el);
+<a name="line81"></a>        if (values != null) {
+<a name="line82"></a>          for (var value, j = 0; value = values[j]; j++) {
+<a name="line83"></a>            fnAppend(result, name, value);
+<a name="line84"></a>          }
+<a name="line85"></a>        }
+<a name="line86"></a>        break;
+<a name="line87"></a>      default:
+<a name="line88"></a>        var value = goog.dom.forms.getValue(el);
+<a name="line89"></a>        if (value != null) {
+<a name="line90"></a>          fnAppend(result, name, value);
+<a name="line91"></a>        }
+<a name="line92"></a>    }
+<a name="line93"></a>  }
+<a name="line94"></a>
+<a name="line95"></a>  // input[type=image] are not included in the elements collection
+<a name="line96"></a>  var inputs = form.getElementsByTagName(&#39;input&#39;);
+<a name="line97"></a>  for (var input, i = 0; input = inputs[i]; i++) {
+<a name="line98"></a>    if (input.form == form &amp;&amp; input.type.toLowerCase() == &#39;image&#39;) {
+<a name="line99"></a>      name = input.name;
+<a name="line100"></a>      fnAppend(result, name, input.value);
+<a name="line101"></a>      fnAppend(result, name + &#39;.x&#39;, &#39;0&#39;);
+<a name="line102"></a>      fnAppend(result, name + &#39;.y&#39;, &#39;0&#39;);
+<a name="line103"></a>    }
+<a name="line104"></a>  }
+<a name="line105"></a>};
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Adds the name/value pair to the map.
+<a name="line110"></a> * @param {goog.structs.Map} map The map to add to.
+<a name="line111"></a> * @param {string} name The name.
+<a name="line112"></a> * @param {string} value The value.
+<a name="line113"></a> * @private
+<a name="line114"></a> */
+<a name="line115"></a>goog.dom.forms.addFormDataToMap_ = function(map, name, value) {
+<a name="line116"></a>  var array = map.get(name);
+<a name="line117"></a>  if (!array) {
+<a name="line118"></a>    array = [];
+<a name="line119"></a>    map.set(name, array);
+<a name="line120"></a>  }
+<a name="line121"></a>  array.push(value);
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Adds a name/value pair to an string buffer array in the form &#39;name=value&#39;.
+<a name="line127"></a> * @param {Array} sb The string buffer array for storing data.
+<a name="line128"></a> * @param {string} name The name.
+<a name="line129"></a> * @param {string} value The value.
+<a name="line130"></a> * @private
+<a name="line131"></a> */
+<a name="line132"></a>goog.dom.forms.addFormDataToStringBuffer_ = function(sb, name, value) {
+<a name="line133"></a>  sb.push(encodeURIComponent(name) + &#39;=&#39; + encodeURIComponent(value));
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Whether the form has a file input.
+<a name="line139"></a> * @param {HTMLFormElement} form The form.
+<a name="line140"></a> * @return {boolean} Whether the form has a file input.
+<a name="line141"></a> */
+<a name="line142"></a>goog.dom.forms.hasFileInput = function(form) {
+<a name="line143"></a>  var els = form.elements;
+<a name="line144"></a>  for (var el, i = 0; el = els[i]; i++) {
+<a name="line145"></a>    if (!el.disabled &amp;&amp; el.type &amp;&amp; el.type.toLowerCase() == &#39;file&#39;) {
+<a name="line146"></a>      return true;
+<a name="line147"></a>    }
+<a name="line148"></a>  }
+<a name="line149"></a>  return false;
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * Enables or disables either all elements in a form or a single form element.
+<a name="line155"></a> * @param {Element} el The element, either a form or an element within a form.
+<a name="line156"></a> * @param {boolean} disabled Whether the element should be disabled.
+<a name="line157"></a> */
+<a name="line158"></a>goog.dom.forms.setDisabled = function(el, disabled) {
+<a name="line159"></a>  // disable all elements in a form
+<a name="line160"></a>  if (el.tagName == &#39;FORM&#39;) {
+<a name="line161"></a>    var els = el.elements;
+<a name="line162"></a>    for (var i = 0; el = els[i]; i++) {
+<a name="line163"></a>      goog.dom.forms.setDisabled(el, disabled);
+<a name="line164"></a>    }
+<a name="line165"></a>  } else {
+<a name="line166"></a>    // makes sure to blur buttons, multi-selects, and any elements which
+<a name="line167"></a>    // maintain keyboard/accessibility focus when disabled
+<a name="line168"></a>    if (disabled == true) {
+<a name="line169"></a>      el.blur();
+<a name="line170"></a>    }
+<a name="line171"></a>    el.disabled = disabled;
+<a name="line172"></a>  }
+<a name="line173"></a>};
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Focuses, and optionally selects the content of, a form element.
+<a name="line178"></a> * @param {Element} el The form element.
+<a name="line179"></a> */
+<a name="line180"></a>goog.dom.forms.focusAndSelect = function(el) {
+<a name="line181"></a>  el.focus();
+<a name="line182"></a>  if (el.select) {
+<a name="line183"></a>    el.select();
+<a name="line184"></a>  }
+<a name="line185"></a>};
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Whether a form element has a value.
+<a name="line190"></a> * @param {Element} el The element.
+<a name="line191"></a> * @return {boolean} Whether the form has a value.
+<a name="line192"></a> */
+<a name="line193"></a>goog.dom.forms.hasValue = function(el) {
+<a name="line194"></a>  var value = goog.dom.forms.getValue(el);
+<a name="line195"></a>  return !!value;
+<a name="line196"></a>};
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * Whether a named form field has a value.
+<a name="line201"></a> * @param {HTMLFormElement} form The form element.
+<a name="line202"></a> * @param {string} name Name of an input to the form.
+<a name="line203"></a> * @return {boolean} Whether the form has a value.
+<a name="line204"></a> */
+<a name="line205"></a>goog.dom.forms.hasValueByName = function(form, name) {
+<a name="line206"></a>  var value = goog.dom.forms.getValueByName(form, name);
+<a name="line207"></a>  return !!value;
+<a name="line208"></a>};
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/**
+<a name="line212"></a> * Gets the current value of any element with a type.
+<a name="line213"></a> * @param {Element} el The element.
+<a name="line214"></a> * @return {string|Array.&lt;string&gt;|null} The current value of the element
+<a name="line215"></a> *     (or null).
+<a name="line216"></a> */
+<a name="line217"></a>goog.dom.forms.getValue = function(el) {
+<a name="line218"></a>  var type = el.type;
+<a name="line219"></a>  if (!goog.isDef(type)) {
+<a name="line220"></a>    return null;
+<a name="line221"></a>  }
+<a name="line222"></a>  switch (type.toLowerCase()) {
+<a name="line223"></a>    case &#39;checkbox&#39;:
+<a name="line224"></a>    case &#39;radio&#39;:
+<a name="line225"></a>      return goog.dom.forms.getInputChecked_(el);
+<a name="line226"></a>    case &#39;select-one&#39;:
+<a name="line227"></a>      return goog.dom.forms.getSelectSingle_(el);
+<a name="line228"></a>    case &#39;select-multiple&#39;:
+<a name="line229"></a>      return goog.dom.forms.getSelectMultiple_(el);
+<a name="line230"></a>    default:
+<a name="line231"></a>      return goog.isDef(el.value) ? el.value : null;
+<a name="line232"></a>  }
+<a name="line233"></a>};
+<a name="line234"></a>
+<a name="line235"></a>
+<a name="line236"></a>/**
+<a name="line237"></a> * Alias for goog.dom.form.element.getValue
+<a name="line238"></a> * @type {Function}
+<a name="line239"></a> */
+<a name="line240"></a>goog.dom.$F = goog.dom.forms.getValue;
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * Returns the value of the named form field. In the case of radio buttons,
+<a name="line245"></a> * returns the value of the checked button with the given name.
+<a name="line246"></a> *
+<a name="line247"></a> * @param {HTMLFormElement} form The form element.
+<a name="line248"></a> * @param {string} name Name of an input to the form.
+<a name="line249"></a> *
+<a name="line250"></a> * @return {Array.&lt;string&gt;|string|null} The value of the form element, or
+<a name="line251"></a> *     null if the form element does not exist or has no value.
+<a name="line252"></a> */
+<a name="line253"></a>goog.dom.forms.getValueByName = function(form, name) {
+<a name="line254"></a>  var els = form.elements[name];
+<a name="line255"></a>
+<a name="line256"></a>  if (els.type) {
+<a name="line257"></a>    return goog.dom.forms.getValue(els);
+<a name="line258"></a>  } else {
+<a name="line259"></a>    for (var i = 0; i &lt; els.length; i++) {
+<a name="line260"></a>      var val = goog.dom.forms.getValue(els[i]);
+<a name="line261"></a>      if (val) {
+<a name="line262"></a>        return val;
+<a name="line263"></a>      }
+<a name="line264"></a>    }
+<a name="line265"></a>
+<a name="line266"></a>    return null;
+<a name="line267"></a>  }
+<a name="line268"></a>};
+<a name="line269"></a>
+<a name="line270"></a>
+<a name="line271"></a>/**
+<a name="line272"></a> * Gets the current value of a checkable input element.
+<a name="line273"></a> * @param {Element} el The element.
+<a name="line274"></a> * @return {string?} The value of the form element (or null).
+<a name="line275"></a> * @private
+<a name="line276"></a> */
+<a name="line277"></a>goog.dom.forms.getInputChecked_ = function(el) {
+<a name="line278"></a>  return el.checked ? el.value : null;
+<a name="line279"></a>};
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>/**
+<a name="line283"></a> * Gets the current value of a select-one element.
+<a name="line284"></a> * @param {Element} el The element.
+<a name="line285"></a> * @return {string?} The value of the form element (or null).
+<a name="line286"></a> * @private
+<a name="line287"></a> */
+<a name="line288"></a>goog.dom.forms.getSelectSingle_ = function(el) {
+<a name="line289"></a>  var selectedIndex = el.selectedIndex;
+<a name="line290"></a>  return selectedIndex &gt;= 0 ? el.options[selectedIndex].value : null;
+<a name="line291"></a>};
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * Gets the current value of a select-multiple element.
+<a name="line296"></a> * @param {Element} el The element.
+<a name="line297"></a> * @return {Array.&lt;string&gt;?} The value of the form element (or null).
+<a name="line298"></a> * @private
+<a name="line299"></a> */
+<a name="line300"></a>goog.dom.forms.getSelectMultiple_ = function(el) {
+<a name="line301"></a>  var values = [];
+<a name="line302"></a>  for (var option, i = 0; option = el.options[i]; i++) {
+<a name="line303"></a>    if (option.selected) {
+<a name="line304"></a>      values.push(option.value);
+<a name="line305"></a>    }
+<a name="line306"></a>  }
+<a name="line307"></a>  return values.length ? values : null;
+<a name="line308"></a>};
+<a name="line309"></a>
+<a name="line310"></a>
+<a name="line311"></a>/**
+<a name="line312"></a> * Sets the current value of any element with a type.
+<a name="line313"></a> * @param {Element} el The element.
+<a name="line314"></a> * @param {string|Array} opt_value The value to give to the element.
+<a name="line315"></a> */
+<a name="line316"></a>goog.dom.forms.setValue = function(el, opt_value) {
+<a name="line317"></a>  var type = el.type;
+<a name="line318"></a>  if (goog.isDef(type)) {
+<a name="line319"></a>    switch (type.toLowerCase()) {
+<a name="line320"></a>      case &#39;checkbox&#39;:
+<a name="line321"></a>      case &#39;radio&#39;:
+<a name="line322"></a>        goog.dom.forms.setInputChecked_(el,
+<a name="line323"></a>            /** @type {string} */ (opt_value));
+<a name="line324"></a>        break;
+<a name="line325"></a>      case &#39;select-one&#39;:
+<a name="line326"></a>        goog.dom.forms.setSelectSingle_(el,
+<a name="line327"></a>            /** @type {string} */ (opt_value));
+<a name="line328"></a>        break;
+<a name="line329"></a>      case &#39;select-multiple&#39;:
+<a name="line330"></a>        goog.dom.forms.setSelectMultiple_(el,
+<a name="line331"></a>            /** @type {Array} */ (opt_value));
+<a name="line332"></a>        break;
+<a name="line333"></a>      default:
+<a name="line334"></a>        el.value = goog.isString(opt_value) ? opt_value : &#39;&#39;;
+<a name="line335"></a>    }
+<a name="line336"></a>  }
+<a name="line337"></a>};
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * Sets a checkable input element&#39;s checked property.
+<a name="line342"></a> * #TODO: This seems potentially unintuitive since it doesn&#39;t set
+<a name="line343"></a> * the value property but my hunch is that the primary use case is to check a
+<a name="line344"></a> * checkbox, not to reset its value property.
+<a name="line345"></a> * @param {Element} el The element.
+<a name="line346"></a> * @param {string|boolean} opt_value The value, sets the element checked if
+<a name="line347"></a> *     val is set.
+<a name="line348"></a> * @private
+<a name="line349"></a> */
+<a name="line350"></a>goog.dom.forms.setInputChecked_ = function(el, opt_value) {
+<a name="line351"></a>  el.checked = opt_value ? &#39;checked&#39; : null;
+<a name="line352"></a>};
+<a name="line353"></a>
+<a name="line354"></a>
+<a name="line355"></a>/**
+<a name="line356"></a> * Sets the value of a select-one element.
+<a name="line357"></a> * @param {Element} el The element.
+<a name="line358"></a> * @param {string} opt_value The value of the selected option element.
+<a name="line359"></a> * @private
+<a name="line360"></a> */
+<a name="line361"></a>goog.dom.forms.setSelectSingle_ = function(el, opt_value) {
+<a name="line362"></a>  // unset any prior selections
+<a name="line363"></a>  el.selectedIndex = -1;
+<a name="line364"></a>  if (goog.isString(opt_value)) {
+<a name="line365"></a>    for (var option, i = 0; option = el.options[i]; i++) {
+<a name="line366"></a>      if (option.value == opt_value) {
+<a name="line367"></a>        option.selected = true;
+<a name="line368"></a>        break;
+<a name="line369"></a>      }
+<a name="line370"></a>    }
+<a name="line371"></a>  }
+<a name="line372"></a>};
+<a name="line373"></a>
+<a name="line374"></a>
+<a name="line375"></a>/**
+<a name="line376"></a> * Sets the value of a select-multiple element.
+<a name="line377"></a> * @param {Element} el The element.
+<a name="line378"></a> * @param {Array.&lt;string&gt;|string} opt_value The value of the selected option
+<a name="line379"></a> *     element(s).
+<a name="line380"></a> * @private
+<a name="line381"></a> */
+<a name="line382"></a>goog.dom.forms.setSelectMultiple_ = function(el, opt_value) {
+<a name="line383"></a>  // reset string opt_values as an array
+<a name="line384"></a>  if (goog.isString(opt_value)) {
+<a name="line385"></a>    opt_value = [opt_value];
+<a name="line386"></a>  }
+<a name="line387"></a>  for (var option, i = 0; option = el.options[i]; i++) {
+<a name="line388"></a>    // we have to reset the other options to false for select-multiple
+<a name="line389"></a>    option.selected = false;
+<a name="line390"></a>    if (opt_value) {
+<a name="line391"></a>      for (var value, j = 0; value = opt_value[j]; j++) {
+<a name="line392"></a>        if (option.value == value) {
+<a name="line393"></a>          option.selected = true;
+<a name="line394"></a>        }
+<a name="line395"></a>      }
+<a name="line396"></a>    }
+<a name="line397"></a>  }
+<a name="line398"></a>};
+</pre>
+
+
+</body>
+</html>

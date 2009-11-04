@@ -1,0 +1,131 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>transport.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_net_xpc_transport.js.html">transport.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>/**
+<a name="line15"></a> * @fileoverview Contains the base class for transports.
+<a name="line16"></a> *
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.net.xpc.Transport&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line23"></a>goog.require(&#39;goog.net.xpc&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * The base class for transports.
+<a name="line28"></a> * @constructor
+<a name="line29"></a> * @extends {goog.Disposable};
+<a name="line30"></a> */
+<a name="line31"></a>goog.net.xpc.Transport = function() {};
+<a name="line32"></a>goog.inherits(goog.net.xpc.Transport, goog.Disposable);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * The transport type.
+<a name="line37"></a> * @type {number}
+<a name="line38"></a> * @protected
+<a name="line39"></a> */
+<a name="line40"></a>goog.net.xpc.Transport.prototype.transportType = 0;
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * @return {number} The transport type identifier.
+<a name="line45"></a> */
+<a name="line46"></a>goog.net.xpc.Transport.prototype.getType = function() {
+<a name="line47"></a>  return this.transportType;
+<a name="line48"></a>};
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * Return the transport name.
+<a name="line53"></a> * @return {string} the transport name.
+<a name="line54"></a> */
+<a name="line55"></a>goog.net.xpc.Transport.prototype.getName = function() {
+<a name="line56"></a>  return goog.net.xpc.TransportNames[this.transportType] || &#39;&#39;;
+<a name="line57"></a>};
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * Handles transport service messages (internal signalling).
+<a name="line62"></a> * @param {string} payload The message content.
+<a name="line63"></a> */
+<a name="line64"></a>goog.net.xpc.Transport.prototype.transportServiceHandler = goog.abstractMethod;
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * Connects this transport.
+<a name="line69"></a> * The transport implementation is expected to call
+<a name="line70"></a> * CrossPageChannel.prototype.notifyConnected_ when the channel is ready
+<a name="line71"></a> * to be used.
+<a name="line72"></a> */
+<a name="line73"></a>goog.net.xpc.Transport.prototype.connect = goog.abstractMethod;
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * Sends a message.
+<a name="line78"></a> * @param {string} service The name off the service the message is to be
+<a name="line79"></a> * delivered to.
+<a name="line80"></a> * @param {string|Object} payload The message content.
+<a name="line81"></a> */
+<a name="line82"></a>goog.net.xpc.Transport.prototype.send = goog.abstractMethod;
+</pre>
+
+
+</body>
+</html>

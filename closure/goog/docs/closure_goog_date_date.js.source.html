@@ -1,0 +1,1647 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>date.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_date_date.js.html">date.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Functions and objects for date representation and manipulation.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.date&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.date.Date&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.date.DateTime&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.date.Interval&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.date.month&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.date.weekDay&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.string&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Constants for weekdays.
+<a name="line32"></a> * @enum {number}
+<a name="line33"></a> */
+<a name="line34"></a>goog.date.weekDay = {
+<a name="line35"></a>  MON: 0,
+<a name="line36"></a>  TUE: 1,
+<a name="line37"></a>  WED: 2,
+<a name="line38"></a>  THU: 3,
+<a name="line39"></a>  FRI: 4,
+<a name="line40"></a>  SAT: 5,
+<a name="line41"></a>  SUN: 6
+<a name="line42"></a>};
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * Constants for months.
+<a name="line47"></a> * @enum {number}
+<a name="line48"></a> */
+<a name="line49"></a>goog.date.month = {
+<a name="line50"></a>  JAN: 0,
+<a name="line51"></a>  FEB: 1,
+<a name="line52"></a>  MAR: 2,
+<a name="line53"></a>  APR: 3,
+<a name="line54"></a>  MAY: 4,
+<a name="line55"></a>  JUN: 5,
+<a name="line56"></a>  JUL: 6,
+<a name="line57"></a>  AUG: 7,
+<a name="line58"></a>  SEP: 8,
+<a name="line59"></a>  OCT: 9,
+<a name="line60"></a>  NOV: 10,
+<a name="line61"></a>  DEC: 11
+<a name="line62"></a>};
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Formats a month/year string.
+<a name="line67"></a> * Example: &quot;January 2008&quot;
+<a name="line68"></a> *
+<a name="line69"></a> * @param {string} monthName The month name to use in the result.
+<a name="line70"></a> * @param {number} yearNum The numeric year to use in the result.
+<a name="line71"></a> * @return {string} A formatted month/year string.
+<a name="line72"></a> */
+<a name="line73"></a>goog.date.formatMonthAndYear = function(monthName, yearNum) {
+<a name="line74"></a>  /** @desc Month/year format given the month name and the numeric year. */
+<a name="line75"></a>  var MSG_MONTH_AND_YEAR = goog.getMsg(
+<a name="line76"></a>      &#39;{$monthName} {$yearNum}&#39;,
+<a name="line77"></a>      { &#39;monthName&#39; : monthName, &#39;yearNum&#39; : yearNum });
+<a name="line78"></a>  return MSG_MONTH_AND_YEAR;
+<a name="line79"></a>};
+<a name="line80"></a>
+<a name="line81"></a>
+<a name="line82"></a>/**
+<a name="line83"></a> * Regular expression for splitting date parts from ISO 8601 styled string.
+<a name="line84"></a> * Examples: &#39;20060210&#39; or &#39;2005-02-22&#39; or &#39;20050222&#39; or &#39;2005-08&#39;
+<a name="line85"></a> * or &#39;2005-W22&#39; or &#39;2005W22&#39; or &#39;2005-W22-4&#39;, etc.
+<a name="line86"></a> * For explanation and more examples, see:
+<a name="line87"></a> * {@link http://en.wikipedia.org/wiki/ISO_8601}
+<a name="line88"></a> *
+<a name="line89"></a> * @type {RegExp}
+<a name="line90"></a> * @private
+<a name="line91"></a> */
+<a name="line92"></a>goog.date.splitDateStringRegex_ = new RegExp(
+<a name="line93"></a>    &#39;^(\\d{4})(?:(?:-?(\\d{2})(?:-?(\\d{2}))?)|&#39; +
+<a name="line94"></a>    &#39;(?:-?(\\d{3}))|(?:-?W(\\d{2})(?:-?([1-7]))?))?$&#39;);
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Regular expression for splitting time parts from ISO 8601 styled string.
+<a name="line99"></a> * Examples: &#39;18:46:39.994&#39; or &#39;184639.994&#39;
+<a name="line100"></a> *
+<a name="line101"></a> * @type {RegExp}
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.date.splitTimeStringRegex_ =
+<a name="line105"></a>    /^(\d{2})(?::?(\d{2})(?::?(\d{2})(\.\d+)?)?)?$/;
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Regular expression for splitting timezone parts from ISO 8601 styled string.
+<a name="line110"></a> * Example: The part after the &#39;+&#39; in &#39;18:46:39+07:00&#39;.  Or &#39;09:30Z&#39; (UTC).
+<a name="line111"></a> *
+<a name="line112"></a> * @type {RegExp}
+<a name="line113"></a> * @private
+<a name="line114"></a> */
+<a name="line115"></a>goog.date.splitTimezoneStringRegex_ = /Z|(?:([-+])(\d{2})(?::?(\d{2}))?)$/;
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * Regular expression for splitting duration parts from ISO 8601 styled string.
+<a name="line120"></a> * Example: &#39;-P1Y2M3DT4H5M6.7S&#39;
+<a name="line121"></a> *
+<a name="line122"></a> * @type {RegExp}
+<a name="line123"></a> * @private
+<a name="line124"></a> */
+<a name="line125"></a>goog.date.splitDurationRegex_ = new RegExp(
+<a name="line126"></a>    &#39;^(-)?P(?:(\\d+)Y)?(?:(\\d+)M)?(?:(\\d+)D)?&#39; +
+<a name="line127"></a>    &#39;(T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+(?:\\.\\d+)?)S)?)?$&#39;);
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Returns whether the given year is a leap year.
+<a name="line132"></a> *
+<a name="line133"></a> * @param {number} year Year part of date.
+<a name="line134"></a> * @return {boolean} Whether the given year is a leap year.
+<a name="line135"></a> */
+<a name="line136"></a>goog.date.isLeapYear = function(year) {
+<a name="line137"></a>  // Leap year logic; the 4-100-400 rule
+<a name="line138"></a>  return year % 4 == 0 &amp;&amp; (year % 100 != 0 || year % 400 == 0);
+<a name="line139"></a>};
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * Returns whether the given year is a long ISO year.
+<a name="line144"></a> * See {@link http://www.phys.uu.nl/~vgent/calendar/isocalendar_text3.htm}.
+<a name="line145"></a> *
+<a name="line146"></a> * @param {number} year Full year part of date.
+<a name="line147"></a> * @return {boolean} Whether the given year is a long ISO year.
+<a name="line148"></a> */
+<a name="line149"></a>goog.date.isLongIsoYear = function(year) {
+<a name="line150"></a>  var n = 5 * year + 12 - 4 * (Math.floor(year / 100) - Math.floor(year / 400));
+<a name="line151"></a>  n += Math.floor((year - 100) / 400) - Math.floor((year - 102) / 400);
+<a name="line152"></a>  n += Math.floor((year - 200) / 400) - Math.floor((year - 199) / 400);
+<a name="line153"></a>
+<a name="line154"></a>  return n % 28 &lt; 5;
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * Returns the number of days for a given month.
+<a name="line160"></a> *
+<a name="line161"></a> * @param {number} year Year part of date.
+<a name="line162"></a> * @param {number} month Month part of date.
+<a name="line163"></a> * @return {number} The number of days for the given month.
+<a name="line164"></a> */
+<a name="line165"></a>goog.date.getNumberOfDaysInMonth = function(year, month) {
+<a name="line166"></a>  switch (month) {
+<a name="line167"></a>    case goog.date.month.FEB:
+<a name="line168"></a>      return goog.date.isLeapYear(year) ? 29 : 28;
+<a name="line169"></a>    case goog.date.month.JUN:
+<a name="line170"></a>    case goog.date.month.SEP:
+<a name="line171"></a>    case goog.date.month.NOV:
+<a name="line172"></a>    case goog.date.month.APR:
+<a name="line173"></a>      return 30;
+<a name="line174"></a>  }
+<a name="line175"></a>  return 31;
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Returns true if the 2 dates are in the same day.
+<a name="line181"></a> * @param {Date} date The time to check.
+<a name="line182"></a> * @param {Date} opt_now The current time.
+<a name="line183"></a> * @return {boolean} Whether the dates are on the same day.
+<a name="line184"></a> */
+<a name="line185"></a>goog.date.isSameDay = function(date, opt_now) {
+<a name="line186"></a>  var now = opt_now || new Date(goog.now());
+<a name="line187"></a>  return date.getDate() == now.getDate() &amp;&amp;
+<a name="line188"></a>      goog.date.isSameMonth(date, now);
+<a name="line189"></a>};
+<a name="line190"></a>
+<a name="line191"></a>
+<a name="line192"></a>/**
+<a name="line193"></a> * Returns true if the 2 dates are in the same month.
+<a name="line194"></a> * @param {Date} date The time to check.
+<a name="line195"></a> * @param {Date} opt_now The current time.
+<a name="line196"></a> * @return {boolean} Whether the dates are in the same calendar month.
+<a name="line197"></a> */
+<a name="line198"></a>goog.date.isSameMonth = function(date, opt_now) {
+<a name="line199"></a>  var now = opt_now || new Date(goog.now());
+<a name="line200"></a>  return date.getMonth() == now.getMonth() &amp;&amp;
+<a name="line201"></a>      goog.date.isSameYear(date, now);
+<a name="line202"></a>};
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * Returns true if the 2 dates are in the same year.
+<a name="line207"></a> * @param {Date} date The time to check.
+<a name="line208"></a> * @param {Date} opt_now The current time.
+<a name="line209"></a> * @return {boolean} Whether the dates are in the same calendar year.
+<a name="line210"></a> */
+<a name="line211"></a>goog.date.isSameYear = function(date, opt_now) {
+<a name="line212"></a>  var now = opt_now || new Date(goog.now());
+<a name="line213"></a>  return date.getFullYear() == now.getFullYear();
+<a name="line214"></a>};
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * Static function for week number calculation. ISO 8601 implementation.
+<a name="line219"></a> *
+<a name="line220"></a> * @param {number} year Year part of date.
+<a name="line221"></a> * @param {number} month Month part of date (0-11).
+<a name="line222"></a> * @param {number} date Day part of date (1-31).
+<a name="line223"></a> * @param {number} opt_weekDay Cut off weekday, defaults to Thursday.
+<a name="line224"></a> * @param {number} opt_firstDayOfWeek First day of the week, defaults to Monday.
+<a name="line225"></a> *     Monday=0, Sunday=6.
+<a name="line226"></a> * @return {number} The week number (1-53).
+<a name="line227"></a> */
+<a name="line228"></a>goog.date.getWeekNumber = function(year, month, date, opt_weekDay,
+<a name="line229"></a>    opt_firstDayOfWeek) {
+<a name="line230"></a>  var d = new Date(year, month, date);
+<a name="line231"></a>
+<a name="line232"></a>  // Default to Thursday for cut off as per ISO 8601.
+<a name="line233"></a>  var cutoff = opt_weekDay || goog.date.weekDay.THU;
+<a name="line234"></a>
+<a name="line235"></a>  // Default to Monday for first day of the week as per ISO 8601.
+<a name="line236"></a>  var firstday = opt_firstDayOfWeek || goog.date.weekDay.MON;
+<a name="line237"></a>
+<a name="line238"></a>  // 1 day in milliseconds.
+<a name="line239"></a>  var ONE_DAY = 24 * 60 * 60 * 1000;
+<a name="line240"></a>
+<a name="line241"></a>  // The d.getDay() has to be converted first to ISO weekday (Monday=0).
+<a name="line242"></a>  var isoday = (d.getDay() + 6) % 7;
+<a name="line243"></a>
+<a name="line244"></a>  // Position of given day in the picker grid w.r.t. first day of week
+<a name="line245"></a>  var daypos = (isoday - firstday + 7) % 7;
+<a name="line246"></a>
+<a name="line247"></a>  // Position of cut off day in the picker grid w.r.t. first day of week
+<a name="line248"></a>  var cutoffpos = (cutoff - firstday + 7) % 7;
+<a name="line249"></a>
+<a name="line250"></a>  // Unix timestamp of the midnight of the cutoff day in the week of &#39;d&#39;.
+<a name="line251"></a>  // There might be +-1 hour shift in the result due to the daylight saving,
+<a name="line252"></a>  // but it doesn&#39;t affect the year.
+<a name="line253"></a>  var cutoffSameWeek = d.valueOf() + (cutoffpos - daypos) * ONE_DAY;
+<a name="line254"></a>
+<a name="line255"></a>  // Unix timestamp of January 1 in the year of &#39;cutoffSameWeek&#39;.
+<a name="line256"></a>  var jan1 = new Date(new Date(cutoffSameWeek).getFullYear(), 0, 1).valueOf();
+<a name="line257"></a>
+<a name="line258"></a>  // Number of week. The round() eliminates the effect of daylight saving.
+<a name="line259"></a>  return Math.floor(Math.round((cutoffSameWeek - jan1) / ONE_DAY) / 7) + 1;
+<a name="line260"></a>};
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * Creates a DateTime from a datetime string expressed in ISO 8601 format.
+<a name="line265"></a> *
+<a name="line266"></a> * @param {string} formatted A date or datetime expressed in ISO 8601 format.
+<a name="line267"></a> * @return {goog.date.DateTime} Parsed date or null if parse fails.
+<a name="line268"></a> */
+<a name="line269"></a>goog.date.fromIsoString = function(formatted) {
+<a name="line270"></a>  var ret = new goog.date.DateTime(2000);
+<a name="line271"></a>  return goog.date.setIso8601DateTime(ret, formatted) ? ret : null;
+<a name="line272"></a>};
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * Parses a datetime string expressed in ISO 8601 format. Overwrites the date
+<a name="line277"></a> * and optionally the time part of the given object with the parsed values.
+<a name="line278"></a> *
+<a name="line279"></a> * @param {!goog.date.DateTime} dateTime Object whose fields will be set.
+<a name="line280"></a> * @param {string} formatted A date or datetime expressed in ISO 8601 format.
+<a name="line281"></a> * @return {boolean} Whether the parsing succeeded.
+<a name="line282"></a> */
+<a name="line283"></a>goog.date.setIso8601DateTime = function(dateTime, formatted) {
+<a name="line284"></a>  formatted = goog.string.trim(formatted);
+<a name="line285"></a>  var delim = formatted.indexOf(&#39;T&#39;) == -1 ? &#39; &#39; : &#39;T&#39;;
+<a name="line286"></a>  var parts = formatted.split(delim);
+<a name="line287"></a>  return goog.date.setIso8601DateOnly_(dateTime, parts[0]) &amp;&amp;
+<a name="line288"></a>      (parts.length &lt; 2 || goog.date.setIso8601TimeOnly_(dateTime, parts[1]));
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * Sets date fields based on an ISO 8601 format string.
+<a name="line294"></a> *
+<a name="line295"></a> * @param {!goog.date.DateTime} d Object whose fields will be set.
+<a name="line296"></a> * @param {string} formatted A date expressed in ISO 8601 format.
+<a name="line297"></a> * @return {boolean} Whether the parsing succeeded.
+<a name="line298"></a> * @private
+<a name="line299"></a> */
+<a name="line300"></a>goog.date.setIso8601DateOnly_ = function(d, formatted) {
+<a name="line301"></a>  // split the formatted ISO date string into its date fields
+<a name="line302"></a>  var parts = formatted.match(goog.date.splitDateStringRegex_);
+<a name="line303"></a>  if (!parts) {
+<a name="line304"></a>    return false;
+<a name="line305"></a>  }
+<a name="line306"></a>
+<a name="line307"></a>  var year = parts[1];
+<a name="line308"></a>  var month = parts[2];
+<a name="line309"></a>  var date = parts[3];
+<a name="line310"></a>  var dayOfYear = parts[4];
+<a name="line311"></a>  var week = parts[5];
+<a name="line312"></a>  // ISO weekdays start with 1, native getDay() values start with 0
+<a name="line313"></a>  var dayOfWeek = parts[6] || 1;
+<a name="line314"></a>
+<a name="line315"></a>  d.setFullYear(year);
+<a name="line316"></a>
+<a name="line317"></a>  if (dayOfYear) {
+<a name="line318"></a>    d.setDate(1);
+<a name="line319"></a>    d.setMonth(0);
+<a name="line320"></a>    var offset = dayOfYear - 1; // offset, so 1-indexed, i.e., skip day 1
+<a name="line321"></a>    d.add(new goog.date.Interval(goog.date.Interval.DAYS, offset));
+<a name="line322"></a>  } else if (week) {
+<a name="line323"></a>    goog.date.setDateFromIso8601Week_(d, week, dayOfWeek);
+<a name="line324"></a>  } else {
+<a name="line325"></a>    if (month) {
+<a name="line326"></a>      d.setDate(1);
+<a name="line327"></a>      d.setMonth(month - 1);
+<a name="line328"></a>    }
+<a name="line329"></a>    if (date) {
+<a name="line330"></a>      d.setDate(date);
+<a name="line331"></a>    }
+<a name="line332"></a>  }
+<a name="line333"></a>
+<a name="line334"></a>  return true;
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * Sets date fields based on an ISO 8601 week string.
+<a name="line340"></a> * See {@link http://en.wikipedia.org/wiki/ISO_week_date}, &quot;Relation with the
+<a name="line341"></a> * Gregorian Calendar&quot;.  The first week of a new ISO year is the week with the
+<a name="line342"></a> * majority of its days in the new Gregorian year.  I.e., ISO Week 1&#39;s Thursday
+<a name="line343"></a> * is in that year.  ISO weeks always start on Monday. So ISO Week 1 can
+<a name="line344"></a> * contain a few days from the previous Gregorian year.  And ISO weeks always
+<a name="line345"></a> * end on Sunday, so the last ISO week (Week 52 or 53) can have a few days from
+<a name="line346"></a> * the following Gregorian year.
+<a name="line347"></a> * Example: &#39;1997-W01&#39; lasts from 1996-12-30 to 1997-01-05.  January 1, 1997 is
+<a name="line348"></a> * a Wednesday. So W01&#39;s Monday is Dec.30, 1996, and Sunday is January 5, 1997.
+<a name="line349"></a> *
+<a name="line350"></a> * @param {goog.date.DateTime} d Object whose fields will be set.
+<a name="line351"></a> * @param {number} week ISO week number.
+<a name="line352"></a> * @param {number} dayOfWeek ISO day of week.
+<a name="line353"></a> * @private
+<a name="line354"></a> */
+<a name="line355"></a>goog.date.setDateFromIso8601Week_ = function(d, week, dayOfWeek) {
+<a name="line356"></a>  // calculate offset for first week
+<a name="line357"></a>  d.setMonth(0);
+<a name="line358"></a>  d.setDate(1);
+<a name="line359"></a>  var jsDay = d.getDay();
+<a name="line360"></a>  // switch Sunday (0) to index 7; ISO days are 1-indexed
+<a name="line361"></a>  var jan1WeekDay = jsDay || 7;
+<a name="line362"></a>
+<a name="line363"></a>  var THURSDAY = 4;
+<a name="line364"></a>  if (jan1WeekDay &lt;= THURSDAY) {
+<a name="line365"></a>    // was extended back to Monday
+<a name="line366"></a>    var startDelta = 1 - jan1WeekDay; // e.g., Thu(4) ==&gt; -3
+<a name="line367"></a>  } else {
+<a name="line368"></a>    // was extended forward to Monday
+<a name="line369"></a>    startDelta = 8 - jan1WeekDay; // e.g., Fri(5) ==&gt; +3
+<a name="line370"></a>  }
+<a name="line371"></a>
+<a name="line372"></a>  // find the absolute number of days to offset from the start of year
+<a name="line373"></a>  // to arrive close to the Gregorian equivalent (pending adjustments above)
+<a name="line374"></a>  // Note: decrement week multiplier by one because 1st week is
+<a name="line375"></a>  // represented by dayOfWeek value
+<a name="line376"></a>  var absoluteDays = Number(dayOfWeek) + (7 * (Number(week) - 1));
+<a name="line377"></a>
+<a name="line378"></a>  // convert from ISO weekday format to Gregorian calendar date
+<a name="line379"></a>  // note: subtract 1 because 1-indexed; offset should not include 1st of month
+<a name="line380"></a>  var delta = startDelta + absoluteDays - 1;
+<a name="line381"></a>  var interval = new goog.date.Interval(goog.date.Interval.DAYS, delta);
+<a name="line382"></a>  d.add(interval);
+<a name="line383"></a>};
+<a name="line384"></a>
+<a name="line385"></a>
+<a name="line386"></a>/**
+<a name="line387"></a> * Sets time fields based on an ISO 8601 format string.
+<a name="line388"></a> * Note: only time fields, not date fields.
+<a name="line389"></a> *
+<a name="line390"></a> * @param {!goog.date.DateTime} d Object whose fields will be set.
+<a name="line391"></a> * @param {string} formatted A time expressed in ISO 8601 format.
+<a name="line392"></a> * @return {boolean} Whether the parsing succeeded.
+<a name="line393"></a> * @private
+<a name="line394"></a> */
+<a name="line395"></a>goog.date.setIso8601TimeOnly_ = function(d, formatted) {
+<a name="line396"></a>  // first strip timezone info from the end
+<a name="line397"></a>  var parts = formatted.match(goog.date.splitTimezoneStringRegex_);
+<a name="line398"></a>
+<a name="line399"></a>  var offset = 0; // local time if no timezone info
+<a name="line400"></a>  if (parts) {
+<a name="line401"></a>    if (parts[0] != &#39;Z&#39;) {
+<a name="line402"></a>      offset = parts[2] * 60 + Number(parts[3]);
+<a name="line403"></a>      offset *= parts[1] == &#39;-&#39; ? 1 : -1;
+<a name="line404"></a>    }
+<a name="line405"></a>    offset -= d.getTimezoneOffset();
+<a name="line406"></a>    formatted = formatted.substr(0, formatted.length - parts[0].length);
+<a name="line407"></a>  }
+<a name="line408"></a>
+<a name="line409"></a>  // then work out the time
+<a name="line410"></a>  parts = formatted.match(goog.date.splitTimeStringRegex_);
+<a name="line411"></a>  if (!parts) {
+<a name="line412"></a>    return false;
+<a name="line413"></a>  }
+<a name="line414"></a>
+<a name="line415"></a>  d.setHours(parts[1]);
+<a name="line416"></a>  d.setMinutes(parts[2] || 0);
+<a name="line417"></a>  d.setSeconds(parts[3] || 0);
+<a name="line418"></a>  d.setMilliseconds(parts[4] ? parts[4] * 1000 : 0);
+<a name="line419"></a>
+<a name="line420"></a>  if (offset != 0) {
+<a name="line421"></a>    // adjust the date and time according to the specified timezone
+<a name="line422"></a>    d.setTime(d.getTime() + offset * 60000);
+<a name="line423"></a>  }
+<a name="line424"></a>
+<a name="line425"></a>  return true;
+<a name="line426"></a>};
+<a name="line427"></a>
+<a name="line428"></a>
+<a name="line429"></a>
+<a name="line430"></a>/**
+<a name="line431"></a> * Class representing a date/time interval. Used for date calculations.
+<a name="line432"></a> * &lt;pre&gt;
+<a name="line433"></a> * new goog.date.Interval(0, 1) // One month
+<a name="line434"></a> * new goog.date.Interval(0, 0, 3, 1) // Three days and one hour
+<a name="line435"></a> * new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
+<a name="line436"></a> * &lt;/pre&gt;
+<a name="line437"></a> *
+<a name="line438"></a> * @param {number|string} opt_years Years or string representing date part.
+<a name="line439"></a> * @param {number} opt_months Months or number of whatever date part specified
+<a name="line440"></a> *     by first parameter.
+<a name="line441"></a> * @param {number} opt_days Days.
+<a name="line442"></a> * @param {number} opt_hours Hours.
+<a name="line443"></a> * @param {number} opt_minutes Minutes.
+<a name="line444"></a> * @param {number} opt_seconds Seconds.
+<a name="line445"></a> * @constructor
+<a name="line446"></a> */
+<a name="line447"></a>goog.date.Interval = function(opt_years, opt_months, opt_days, opt_hours,
+<a name="line448"></a>                              opt_minutes, opt_seconds) {
+<a name="line449"></a>  if (goog.isString(opt_years)) {
+<a name="line450"></a>    var type = opt_years;
+<a name="line451"></a>    var interval = /** @type {number} */ (opt_months);
+<a name="line452"></a>    this.years = type == goog.date.Interval.YEARS ? interval : 0;
+<a name="line453"></a>    this.months = type == goog.date.Interval.MONTHS ? interval : 0;
+<a name="line454"></a>    this.days = type == goog.date.Interval.DAYS ? interval : 0;
+<a name="line455"></a>    this.hours = type == goog.date.Interval.HOURS ? interval : 0;
+<a name="line456"></a>    this.minutes = type == goog.date.Interval.MINUTES ? interval : 0;
+<a name="line457"></a>    this.seconds = type == goog.date.Interval.SECONDS ? interval : 0;
+<a name="line458"></a>  } else {
+<a name="line459"></a>    this.years = /** @type {number} */ (opt_years) || 0;
+<a name="line460"></a>    this.months = opt_months || 0;
+<a name="line461"></a>    this.days = opt_days || 0;
+<a name="line462"></a>    this.hours = opt_hours || 0;
+<a name="line463"></a>    this.minutes = opt_minutes || 0;
+<a name="line464"></a>    this.seconds = opt_seconds || 0;
+<a name="line465"></a>  }
+<a name="line466"></a>};
+<a name="line467"></a>
+<a name="line468"></a>
+<a name="line469"></a>/**
+<a name="line470"></a> * Parses an XML Schema duration (ISO 8601 extended).
+<a name="line471"></a> * @see http://www.w3.org/TR/xmlschema-2/#duration
+<a name="line472"></a> *
+<a name="line473"></a> * @param  {string} duration An XML schema duration in textual format.
+<a name="line474"></a> *     Recurring durations and weeks are not supported.
+<a name="line475"></a> * @return {goog.date.Interval} The duration as a goog.date.Interval or null
+<a name="line476"></a> *     if the parse fails.
+<a name="line477"></a> */
+<a name="line478"></a>goog.date.Interval.fromIsoString = function(duration) {
+<a name="line479"></a>  var parts = duration.match(goog.date.splitDurationRegex_);
+<a name="line480"></a>  if (!parts) {
+<a name="line481"></a>    return null;
+<a name="line482"></a>  }
+<a name="line483"></a>
+<a name="line484"></a>  var timeEmpty = !(parts[6] || parts[7] || parts[8]);
+<a name="line485"></a>  var dateTimeEmpty = timeEmpty &amp;&amp; !(parts[2] || parts[3] || parts[4]);
+<a name="line486"></a>  if (dateTimeEmpty || timeEmpty &amp;&amp; parts[5]) {
+<a name="line487"></a>    return null;
+<a name="line488"></a>  }
+<a name="line489"></a>
+<a name="line490"></a>  var negative = parts[1];
+<a name="line491"></a>  var years = parseInt(parts[2], 10) || 0;
+<a name="line492"></a>  var months = parseInt(parts[3], 10) || 0;
+<a name="line493"></a>  var days = parseInt(parts[4], 10) || 0;
+<a name="line494"></a>  var hours = parseInt(parts[6], 10) || 0;
+<a name="line495"></a>  var minutes = parseInt(parts[7], 10) || 0;
+<a name="line496"></a>  var seconds = parseFloat(parts[8]) || 0;
+<a name="line497"></a>  return negative ? new goog.date.Interval(-years, -months, -days,
+<a name="line498"></a>                                           -hours, -minutes, -seconds) :
+<a name="line499"></a>                    new goog.date.Interval(years, months, days,
+<a name="line500"></a>                                           hours, minutes, seconds);
+<a name="line501"></a>};
+<a name="line502"></a>
+<a name="line503"></a>
+<a name="line504"></a>/**
+<a name="line505"></a> * Serializes goog.date.Interval into XML Schema duration (ISO 8601 extended).
+<a name="line506"></a> * @see http://www.w3.org/TR/xmlschema-2/#duration
+<a name="line507"></a> *
+<a name="line508"></a> * @param {boolean} opt_verbose Include zero fields in the duration string.
+<a name="line509"></a> * @return {?string} An XML schema duration in ISO 8601 extended format,
+<a name="line510"></a> *     or null if the interval contains both positive and negative fields.
+<a name="line511"></a> */
+<a name="line512"></a>goog.date.Interval.prototype.toIsoString = function(opt_verbose) {
+<a name="line513"></a>  var minField = Math.min(this.years, this.months, this.days,
+<a name="line514"></a>                          this.hours, this.minutes, this.seconds);
+<a name="line515"></a>  var maxField = Math.max(this.years, this.months, this.days,
+<a name="line516"></a>                          this.hours, this.minutes, this.seconds);
+<a name="line517"></a>  if (minField &lt; 0 &amp;&amp; maxField &gt; 0) {
+<a name="line518"></a>    return null;
+<a name="line519"></a>  }
+<a name="line520"></a>
+<a name="line521"></a>  // Return 0 seconds if all fields are zero.
+<a name="line522"></a>  if (!opt_verbose &amp;&amp; minField == 0 &amp;&amp; maxField == 0) {
+<a name="line523"></a>    return &#39;PT0S&#39;;
+<a name="line524"></a>  }
+<a name="line525"></a>
+<a name="line526"></a>  var res = [];
+<a name="line527"></a>
+<a name="line528"></a>  // Add sign and &#39;P&#39; prefix.
+<a name="line529"></a>  if (minField &lt; 0) {
+<a name="line530"></a>    res.push(&#39;-&#39;);
+<a name="line531"></a>  }
+<a name="line532"></a>  res.push(&#39;P&#39;);
+<a name="line533"></a>
+<a name="line534"></a>  // Add date.
+<a name="line535"></a>  if (this.years || opt_verbose) {
+<a name="line536"></a>    res.push(Math.abs(this.years) + &#39;Y&#39;);
+<a name="line537"></a>  }
+<a name="line538"></a>  if (this.months || opt_verbose) {
+<a name="line539"></a>    res.push(Math.abs(this.months) + &#39;M&#39;);
+<a name="line540"></a>  }
+<a name="line541"></a>  if (this.days || opt_verbose) {
+<a name="line542"></a>    res.push(Math.abs(this.days) + &#39;D&#39;);
+<a name="line543"></a>  }
+<a name="line544"></a>
+<a name="line545"></a>  // Add time.
+<a name="line546"></a>  if (this.hours || this.minutes || this.seconds || opt_verbose) {
+<a name="line547"></a>    res.push(&#39;T&#39;);
+<a name="line548"></a>    if (this.hours || opt_verbose) {
+<a name="line549"></a>      res.push(Math.abs(this.hours) + &#39;H&#39;);
+<a name="line550"></a>    }
+<a name="line551"></a>    if (this.minutes || opt_verbose) {
+<a name="line552"></a>      res.push(Math.abs(this.minutes) + &#39;M&#39;);
+<a name="line553"></a>    }
+<a name="line554"></a>    if (this.seconds || opt_verbose) {
+<a name="line555"></a>      res.push(Math.abs(this.seconds) + &#39;S&#39;);
+<a name="line556"></a>    }
+<a name="line557"></a>  }
+<a name="line558"></a>
+<a name="line559"></a>  return res.join(&#39;&#39;);
+<a name="line560"></a>};
+<a name="line561"></a>
+<a name="line562"></a>
+<a name="line563"></a>/**
+<a name="line564"></a> * Tests whether the given interval is equal to this interval.
+<a name="line565"></a> * Note, this is a simple field-by-field comparison, it doesn&#39;t
+<a name="line566"></a> * account for comparisons like &quot;12 months == 1 year&quot;.
+<a name="line567"></a> *
+<a name="line568"></a> * @param {goog.date.Interval} other The interval to test.
+<a name="line569"></a> * @return {boolean} Whether the intervals are equal.
+<a name="line570"></a> */
+<a name="line571"></a>goog.date.Interval.prototype.equals = function(other) {
+<a name="line572"></a>  return other.years == this.years &amp;&amp;
+<a name="line573"></a>         other.months == this.months &amp;&amp;
+<a name="line574"></a>         other.days == this.days &amp;&amp;
+<a name="line575"></a>         other.hours == this.hours &amp;&amp;
+<a name="line576"></a>         other.minutes == this.minutes &amp;&amp;
+<a name="line577"></a>         other.seconds == this.seconds;
+<a name="line578"></a>};
+<a name="line579"></a>
+<a name="line580"></a>
+<a name="line581"></a>/**
+<a name="line582"></a> * @return {!goog.date.Interval} A clone of the interval object.
+<a name="line583"></a> */
+<a name="line584"></a>goog.date.Interval.prototype.clone = function() {
+<a name="line585"></a>  return new goog.date.Interval(
+<a name="line586"></a>      this.years, this.months, this.days,
+<a name="line587"></a>      this.hours, this.minutes, this.seconds);
+<a name="line588"></a>};
+<a name="line589"></a>
+<a name="line590"></a>
+<a name="line591"></a>/**
+<a name="line592"></a> * Years constant for the date parts.
+<a name="line593"></a> * @type {string}
+<a name="line594"></a> */
+<a name="line595"></a>goog.date.Interval.YEARS = &#39;y&#39;;
+<a name="line596"></a>
+<a name="line597"></a>
+<a name="line598"></a>/**
+<a name="line599"></a> * Months constant for the date parts.
+<a name="line600"></a> * @type {string}
+<a name="line601"></a> */
+<a name="line602"></a>goog.date.Interval.MONTHS = &#39;m&#39;;
+<a name="line603"></a>
+<a name="line604"></a>
+<a name="line605"></a>/**
+<a name="line606"></a> * Days constant for the date parts.
+<a name="line607"></a> * @type {string}
+<a name="line608"></a> */
+<a name="line609"></a>goog.date.Interval.DAYS = &#39;d&#39;;
+<a name="line610"></a>
+<a name="line611"></a>
+<a name="line612"></a>/**
+<a name="line613"></a> * Hours constant for the date parts.
+<a name="line614"></a> * @type {string}
+<a name="line615"></a> */
+<a name="line616"></a>goog.date.Interval.HOURS = &#39;h&#39;;
+<a name="line617"></a>
+<a name="line618"></a>
+<a name="line619"></a>/**
+<a name="line620"></a> * Minutes constant for the date parts.
+<a name="line621"></a> * @type {string}
+<a name="line622"></a> */
+<a name="line623"></a>goog.date.Interval.MINUTES = &#39;n&#39;;
+<a name="line624"></a>
+<a name="line625"></a>
+<a name="line626"></a>/**
+<a name="line627"></a> *
+<a name="line628"></a> * @type {string}
+<a name="line629"></a> */
+<a name="line630"></a>goog.date.Interval.SECONDS = &#39;s&#39;;
+<a name="line631"></a>
+<a name="line632"></a>
+<a name="line633"></a>/**
+<a name="line634"></a> * @return {!goog.date.Interval} Negative of this interval.
+<a name="line635"></a> */
+<a name="line636"></a>goog.date.Interval.prototype.getInverse = function() {
+<a name="line637"></a>  return new goog.date.Interval(-this.years, -this.months, -this.days,
+<a name="line638"></a>      -this.hours, -this.minutes, -this.seconds);
+<a name="line639"></a>};
+<a name="line640"></a>
+<a name="line641"></a>
+<a name="line642"></a>/**
+<a name="line643"></a> * Adds the Interval in the argument to this Interval field by field.
+<a name="line644"></a> *
+<a name="line645"></a> * @param {goog.date.Interval} interval The Interval to add.
+<a name="line646"></a> */
+<a name="line647"></a>goog.date.Interval.prototype.add = function(interval) {
+<a name="line648"></a>  this.years += interval.years;
+<a name="line649"></a>  this.months += interval.months;
+<a name="line650"></a>  this.days += interval.days;
+<a name="line651"></a>  this.hours += interval.hours;
+<a name="line652"></a>  this.minutes += interval.minutes;
+<a name="line653"></a>  this.seconds += interval.seconds;
+<a name="line654"></a>};
+<a name="line655"></a>
+<a name="line656"></a>
+<a name="line657"></a>
+<a name="line658"></a>/**
+<a name="line659"></a> * Class representing a date. Defaults to current date if none is specified.
+<a name="line660"></a> *
+<a name="line661"></a> * Implements most methods of the native js Date object (except the time related
+<a name="line662"></a> * ones, {@see goog.date.DateTime}) and can be used interchangeably with it just
+<a name="line663"></a> * as if goog.date.Date was a subclass of Date.
+<a name="line664"></a> *
+<a name="line665"></a> * To allow goog.date.Date objects to be passed as arguments to methods
+<a name="line666"></a> * expecting Date objects this class is marked as extending the built in Date
+<a name="line667"></a> * object even though that&#39;s not strictly true.
+<a name="line668"></a> *
+<a name="line669"></a> * @param {number|Object} opt_year Four digit year or a date-like object. If not
+<a name="line670"></a> *     set, the created object will contain the date determined by goog.now().
+<a name="line671"></a> * @param {number} opt_month Month, 0 = Jan, 11 = Dec.
+<a name="line672"></a> * @param {number} opt_date Date of month, 1 - 31.
+<a name="line673"></a> * @constructor
+<a name="line674"></a> * @extends {Date}
+<a name="line675"></a> * @see goog.date.DateTime
+<a name="line676"></a> */
+<a name="line677"></a>goog.date.Date = function(opt_year, opt_month, opt_date) {
+<a name="line678"></a>  // goog.date.DateTime assumes that only this.date_ is added in this ctor.
+<a name="line679"></a>  if (goog.isNumber(opt_year)) {
+<a name="line680"></a>    this.date_ = new Date(opt_year, opt_month || 0, opt_date || 1);
+<a name="line681"></a>    this.maybeFixDst_(opt_date || 1);
+<a name="line682"></a>  } else if (goog.isObject(opt_year)) {
+<a name="line683"></a>    this.date_ = new Date(opt_year.getFullYear(), opt_year.getMonth(),
+<a name="line684"></a>                          opt_year.getDate());
+<a name="line685"></a>    this.maybeFixDst_(opt_year.getDate());
+<a name="line686"></a>  } else {
+<a name="line687"></a>    this.date_ = new Date(goog.now());
+<a name="line688"></a>    this.date_.setHours(0);
+<a name="line689"></a>    this.date_.setMinutes(0);
+<a name="line690"></a>    this.date_.setSeconds(0);
+<a name="line691"></a>    this.date_.setMilliseconds(0);
+<a name="line692"></a>  }
+<a name="line693"></a>};
+<a name="line694"></a>
+<a name="line695"></a>
+<a name="line696"></a>// TODO: It should use DateTimeSymbols
+<a name="line697"></a>/**
+<a name="line698"></a> * First day of week. 0 = Mon, 6 = Sun.
+<a name="line699"></a> * @type {number}
+<a name="line700"></a> * @private
+<a name="line701"></a> */
+<a name="line702"></a>goog.date.Date.prototype.firstDayOfWeek_ = goog.date.weekDay.MON;
+<a name="line703"></a>
+<a name="line704"></a>
+<a name="line705"></a>/**
+<a name="line706"></a> * The cut off weekday used for week number calculations. 0 = Mon, 6 = Sun.
+<a name="line707"></a> * @type {number}
+<a name="line708"></a> * @private
+<a name="line709"></a> */
+<a name="line710"></a>goog.date.Date.prototype.firstWeekCutOffDay_ = goog.date.weekDay.THU;
+<a name="line711"></a>
+<a name="line712"></a>
+<a name="line713"></a>/**
+<a name="line714"></a> * @return {!goog.date.Date} A clone of the date object.
+<a name="line715"></a> */
+<a name="line716"></a>goog.date.Date.prototype.clone = function() {
+<a name="line717"></a>  var date = new goog.date.Date(this.date_);
+<a name="line718"></a>  date.firstDayOfWeek_ = this.firstDayOfWeek_;
+<a name="line719"></a>  date.firstWeekCutOffDay_ = this.firstWeekCutOffDay_;
+<a name="line720"></a>
+<a name="line721"></a>  return date;
+<a name="line722"></a>};
+<a name="line723"></a>
+<a name="line724"></a>
+<a name="line725"></a>/**
+<a name="line726"></a> * @return {number} The four digit year of date.
+<a name="line727"></a> */
+<a name="line728"></a>goog.date.Date.prototype.getFullYear = function() {
+<a name="line729"></a>  return this.date_.getFullYear();
+<a name="line730"></a>};
+<a name="line731"></a>
+<a name="line732"></a>
+<a name="line733"></a>/**
+<a name="line734"></a> * Alias for getFullYear.
+<a name="line735"></a> *
+<a name="line736"></a> * @return {number} The four digit year of date.
+<a name="line737"></a> * @see #getFullyear
+<a name="line738"></a> */
+<a name="line739"></a>goog.date.Date.prototype.getYear = function() {
+<a name="line740"></a>  return this.getFullYear();
+<a name="line741"></a>};
+<a name="line742"></a>
+<a name="line743"></a>
+<a name="line744"></a>/**
+<a name="line745"></a> * @return {number} The month of date, 0 = Jan, 11 = Dec.
+<a name="line746"></a> */
+<a name="line747"></a>goog.date.Date.prototype.getMonth = function() {
+<a name="line748"></a>  return this.date_.getMonth();
+<a name="line749"></a>};
+<a name="line750"></a>
+<a name="line751"></a>
+<a name="line752"></a>/**
+<a name="line753"></a> * @return {number} The date of month.
+<a name="line754"></a> */
+<a name="line755"></a>goog.date.Date.prototype.getDate = function() {
+<a name="line756"></a>  return this.date_.getDate();
+<a name="line757"></a>};
+<a name="line758"></a>
+<a name="line759"></a>
+<a name="line760"></a>/**
+<a name="line761"></a> * Returns the number of milliseconds since 1 January 1970 00:00:00.
+<a name="line762"></a> *
+<a name="line763"></a> * @return {number} The number of milliseconds since 1 January 1970 00:00:00.
+<a name="line764"></a> */
+<a name="line765"></a>goog.date.Date.prototype.getTime = function() {
+<a name="line766"></a>  return this.date_.getTime();
+<a name="line767"></a>};
+<a name="line768"></a>
+<a name="line769"></a>
+<a name="line770"></a>/**
+<a name="line771"></a> * @return {number} The day of week, US style. 0 = Sun, 6 = Sat.
+<a name="line772"></a> */
+<a name="line773"></a>goog.date.Date.prototype.getDay = function() {
+<a name="line774"></a>  return this.date_.getDay();
+<a name="line775"></a>};
+<a name="line776"></a>
+<a name="line777"></a>
+<a name="line778"></a>/**
+<a name="line779"></a> * @return {number} The day of week, ISO style. 0 = Mon, 6 = Sun.
+<a name="line780"></a> */
+<a name="line781"></a>goog.date.Date.prototype.getIsoWeekday = function() {
+<a name="line782"></a>  return (this.getDay() + 6) % 7;
+<a name="line783"></a>};
+<a name="line784"></a>
+<a name="line785"></a>
+<a name="line786"></a>/**
+<a name="line787"></a> * @return {number} The day of week according to firstDayOfWeek setting.
+<a name="line788"></a> */
+<a name="line789"></a>goog.date.Date.prototype.getWeekday = function() {
+<a name="line790"></a>  return (this.getIsoWeekday() - this.firstDayOfWeek_ + 7) % 7;
+<a name="line791"></a>};
+<a name="line792"></a>
+<a name="line793"></a>
+<a name="line794"></a>/**
+<a name="line795"></a> * @return {number} The four digit year of date according to universal time.
+<a name="line796"></a> */
+<a name="line797"></a>goog.date.Date.prototype.getUTCFullYear = function() {
+<a name="line798"></a>  return this.date_.getUTCFullYear();
+<a name="line799"></a>};
+<a name="line800"></a>
+<a name="line801"></a>
+<a name="line802"></a>/**
+<a name="line803"></a> * @return {number} The month of date according to universal time,
+<a name="line804"></a> *     0 = Jan, 11 = Dec.
+<a name="line805"></a> */
+<a name="line806"></a>goog.date.Date.prototype.getUTCMonth = function() {
+<a name="line807"></a>  return this.date_.getUTCMonth();
+<a name="line808"></a>};
+<a name="line809"></a>
+<a name="line810"></a>
+<a name="line811"></a>/**
+<a name="line812"></a> * @return {number} The date of month according to universal time.
+<a name="line813"></a> */
+<a name="line814"></a>goog.date.Date.prototype.getUTCDate = function() {
+<a name="line815"></a>  return this.date_.getUTCDate();
+<a name="line816"></a>};
+<a name="line817"></a>
+<a name="line818"></a>
+<a name="line819"></a>/**
+<a name="line820"></a> * @return {number} The day of week according to universal time, US style.
+<a name="line821"></a> *     0 = Sun, 1 = Mon, 6 = Sat.
+<a name="line822"></a> */
+<a name="line823"></a>goog.date.Date.prototype.getUTCDay = function() {
+<a name="line824"></a>  return this.date_.getDay();
+<a name="line825"></a>};
+<a name="line826"></a>
+<a name="line827"></a>
+<a name="line828"></a>/**
+<a name="line829"></a> * @return {number} The hours value according to universal time.
+<a name="line830"></a> */
+<a name="line831"></a>goog.date.Date.prototype.getUTCHours = function() {
+<a name="line832"></a>  return this.date_.getUTCHours();
+<a name="line833"></a>};
+<a name="line834"></a>
+<a name="line835"></a>
+<a name="line836"></a>/**
+<a name="line837"></a> * @return {number} The hours value according to universal time.
+<a name="line838"></a> */
+<a name="line839"></a>goog.date.Date.prototype.getUTCMinutes = function() {
+<a name="line840"></a>  return this.date_.getUTCMinutes();
+<a name="line841"></a>};
+<a name="line842"></a>
+<a name="line843"></a>
+<a name="line844"></a>/**
+<a name="line845"></a> * @return {number} The day of week according to universal time, ISO style.
+<a name="line846"></a> *     0 = Mon, 6 = Sun.
+<a name="line847"></a> */
+<a name="line848"></a>goog.date.Date.prototype.getUTCIsoWeekday = function() {
+<a name="line849"></a>  return (this.date_.getUTCDay() + 6) % 7;
+<a name="line850"></a>};
+<a name="line851"></a>
+<a name="line852"></a>
+<a name="line853"></a>/**
+<a name="line854"></a> * @return {number} The day of week according to universal time and
+<a name="line855"></a> *     firstDayOfWeek setting.
+<a name="line856"></a> */
+<a name="line857"></a>goog.date.Date.prototype.getUTCWeekday = function() {
+<a name="line858"></a>  return (this.getUTCIsoWeekday() - this.firstDayOfWeek_ + 7) % 7;
+<a name="line859"></a>};
+<a name="line860"></a>
+<a name="line861"></a>
+<a name="line862"></a>/**
+<a name="line863"></a> * @return {number} The first day of the week. 0 = Mon, 6 = Sun.
+<a name="line864"></a> */
+<a name="line865"></a>goog.date.Date.prototype.getFirstDayOfWeek = function() {
+<a name="line866"></a>  return this.firstDayOfWeek_;
+<a name="line867"></a>};
+<a name="line868"></a>
+<a name="line869"></a>
+<a name="line870"></a>/**
+<a name="line871"></a> * @return {number} The cut off weekday used for week number calculations.
+<a name="line872"></a> *     0 = Mon, 6 = Sun.
+<a name="line873"></a> */
+<a name="line874"></a>goog.date.Date.prototype.getFirstWeekCutOffDay = function() {
+<a name="line875"></a>  return this.firstWeekCutOffDay_;
+<a name="line876"></a>};
+<a name="line877"></a>
+<a name="line878"></a>
+<a name="line879"></a>/**
+<a name="line880"></a> * @return {number} The number of days for the selected month.
+<a name="line881"></a> */
+<a name="line882"></a>goog.date.Date.prototype.getNumberOfDaysInMonth = function() {
+<a name="line883"></a>  return goog.date.getNumberOfDaysInMonth(this.getFullYear(), this.getMonth());
+<a name="line884"></a>};
+<a name="line885"></a>
+<a name="line886"></a>
+<a name="line887"></a>/**
+<a name="line888"></a> * @return {number} The week number.
+<a name="line889"></a> */
+<a name="line890"></a>goog.date.Date.prototype.getWeekNumber = function() {
+<a name="line891"></a>  return goog.date.getWeekNumber(
+<a name="line892"></a>    this.getFullYear(), this.getMonth(), this.getDate(),
+<a name="line893"></a>    this.firstWeekCutOffDay_, this.firstDayOfWeek_);
+<a name="line894"></a>};
+<a name="line895"></a>
+<a name="line896"></a>
+<a name="line897"></a>/**
+<a name="line898"></a> * @return {number} The day of year.
+<a name="line899"></a> */
+<a name="line900"></a>goog.date.Date.prototype.getDayOfYear = function() {
+<a name="line901"></a>  var dayOfYear = this.getDate();
+<a name="line902"></a>  var year = this.getFullYear();
+<a name="line903"></a>  for (var m = this.getMonth() - 1; m &gt;= 0; m--) {
+<a name="line904"></a>    dayOfYear += goog.date.getNumberOfDaysInMonth(year, m);
+<a name="line905"></a>  }
+<a name="line906"></a>
+<a name="line907"></a>  return dayOfYear;
+<a name="line908"></a>};
+<a name="line909"></a>
+<a name="line910"></a>
+<a name="line911"></a>/**
+<a name="line912"></a> * Returns timezone offset. The timezone offset is the delta in minutes between
+<a name="line913"></a> * UTC and your local time. E.g., UTC+10 returns -600. Daylight savings time
+<a name="line914"></a> * prevents this value from being constant.
+<a name="line915"></a> *
+<a name="line916"></a> * @return {number} The timezone offset.
+<a name="line917"></a> */
+<a name="line918"></a>goog.date.Date.prototype.getTimezoneOffset = function() {
+<a name="line919"></a>  return this.date_.getTimezoneOffset();
+<a name="line920"></a>};
+<a name="line921"></a>
+<a name="line922"></a>
+<a name="line923"></a>/**
+<a name="line924"></a> * Returns timezone offset as a string. Returns offset in [+-]HH:mm format or Z
+<a name="line925"></a> * for UTC.
+<a name="line926"></a> *
+<a name="line927"></a> * @return {string} The timezone offset as a string.
+<a name="line928"></a> */
+<a name="line929"></a>goog.date.Date.prototype.getTimezoneOffsetString = function() {
+<a name="line930"></a>  var tz;
+<a name="line931"></a>  var offset = this.getTimezoneOffset();
+<a name="line932"></a>
+<a name="line933"></a>  if (offset == 0) {
+<a name="line934"></a>    tz = &#39;Z&#39;;
+<a name="line935"></a>  } else {
+<a name="line936"></a>    var n = Math.abs(offset) / 60;
+<a name="line937"></a>    var h = Math.floor(n);
+<a name="line938"></a>    var m = (n - h) * 60;
+<a name="line939"></a>    tz = (offset &gt; 0 ? &#39;-&#39; : &#39;+&#39;) +
+<a name="line940"></a>        goog.string.padNumber(h, 2) + &#39;:&#39; +
+<a name="line941"></a>        goog.string.padNumber(m, 2);
+<a name="line942"></a>  }
+<a name="line943"></a>
+<a name="line944"></a>  return tz;
+<a name="line945"></a>};
+<a name="line946"></a>
+<a name="line947"></a>
+<a name="line948"></a>/**
+<a name="line949"></a> * Sets the date.
+<a name="line950"></a> *
+<a name="line951"></a> * @param {goog.date.Date} date Date object to set date from.
+<a name="line952"></a> */
+<a name="line953"></a>goog.date.Date.prototype.set = function(date) {
+<a name="line954"></a>  this.date_ = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+<a name="line955"></a>};
+<a name="line956"></a>
+<a name="line957"></a>
+<a name="line958"></a>/**
+<a name="line959"></a> * Sets the year part of the date.
+<a name="line960"></a> *
+<a name="line961"></a> * @param {number} year Four digit year.
+<a name="line962"></a> */
+<a name="line963"></a>goog.date.Date.prototype.setFullYear = function(year) {
+<a name="line964"></a>  this.date_.setFullYear(year);
+<a name="line965"></a>};
+<a name="line966"></a>
+<a name="line967"></a>
+<a name="line968"></a>/**
+<a name="line969"></a> * Alias for setFullYear.
+<a name="line970"></a> *
+<a name="line971"></a> * @param {number} year Four digit year.
+<a name="line972"></a> * @see #setFullYear
+<a name="line973"></a> */
+<a name="line974"></a>goog.date.Date.prototype.setYear = function(year) {
+<a name="line975"></a>  this.setFullYear(year);
+<a name="line976"></a>};
+<a name="line977"></a>
+<a name="line978"></a>
+<a name="line979"></a>/**
+<a name="line980"></a> * Sets the month part of the date.
+<a name="line981"></a> *
+<a name="line982"></a> * @param {number} month The month, where 0 = Jan, 11 = Dec.
+<a name="line983"></a> */
+<a name="line984"></a>goog.date.Date.prototype.setMonth = function(month) {
+<a name="line985"></a>  this.date_.setMonth(month);
+<a name="line986"></a>};
+<a name="line987"></a>
+<a name="line988"></a>
+<a name="line989"></a>/**
+<a name="line990"></a> * Sets the day part of the date.
+<a name="line991"></a> *
+<a name="line992"></a> * @param {number} date The day part.
+<a name="line993"></a> */
+<a name="line994"></a>goog.date.Date.prototype.setDate = function(date) {
+<a name="line995"></a>  this.date_.setDate(date);
+<a name="line996"></a>};
+<a name="line997"></a>
+<a name="line998"></a>
+<a name="line999"></a>/**
+<a name="line1000"></a> * Sets the value of the date object as expressed in the number of milliseconds
+<a name="line1001"></a> * since 1 January 1970 00:00:00.
+<a name="line1002"></a> *
+<a name="line1003"></a> * @param {number} ms Number of milliseconds since 1 Jan 1970.
+<a name="line1004"></a> */
+<a name="line1005"></a>goog.date.Date.prototype.setTime = function(ms) {
+<a name="line1006"></a>  this.date_.setTime(ms);
+<a name="line1007"></a>};
+<a name="line1008"></a>
+<a name="line1009"></a>
+<a name="line1010"></a>/**
+<a name="line1011"></a> * Sets the year part of the date according to universal time.
+<a name="line1012"></a> *
+<a name="line1013"></a> * @param {number} year Four digit year.
+<a name="line1014"></a> */
+<a name="line1015"></a>goog.date.Date.prototype.setUTCFullYear = function(year) {
+<a name="line1016"></a>  this.date_.setUTCFullYear(year);
+<a name="line1017"></a>};
+<a name="line1018"></a>
+<a name="line1019"></a>
+<a name="line1020"></a>/**
+<a name="line1021"></a> * Sets the month part of the date according to universal time.
+<a name="line1022"></a> *
+<a name="line1023"></a> * @param {number} month The month, where 0 = Jan, 11 = Dec.
+<a name="line1024"></a> */
+<a name="line1025"></a>goog.date.Date.prototype.setUTCMonth = function(month) {
+<a name="line1026"></a>  this.date_.setUTCMonth(month);
+<a name="line1027"></a>};
+<a name="line1028"></a>
+<a name="line1029"></a>
+<a name="line1030"></a>/**
+<a name="line1031"></a> * Sets the day part of the date according to universal time.
+<a name="line1032"></a> *
+<a name="line1033"></a> * @param {number} date The UTC date.
+<a name="line1034"></a> */
+<a name="line1035"></a>goog.date.Date.prototype.setUTCDate = function(date) {
+<a name="line1036"></a>  this.date_.setUTCDate(date);
+<a name="line1037"></a>};
+<a name="line1038"></a>
+<a name="line1039"></a>
+<a name="line1040"></a>/**
+<a name="line1041"></a> * Sets the first day of week.
+<a name="line1042"></a> *
+<a name="line1043"></a> * @param {number} day 0 = Mon, 6 = Sun.
+<a name="line1044"></a> */
+<a name="line1045"></a>goog.date.Date.prototype.setFirstDayOfWeek = function(day) {
+<a name="line1046"></a>  this.firstDayOfWeek_ = day;
+<a name="line1047"></a>};
+<a name="line1048"></a>
+<a name="line1049"></a>
+<a name="line1050"></a>/**
+<a name="line1051"></a> * Sets cut off weekday used for week number calculations. 0 = Mon, 6 = Sun.
+<a name="line1052"></a> *
+<a name="line1053"></a> * @param {number} day The cut off weekday.
+<a name="line1054"></a> */
+<a name="line1055"></a>goog.date.Date.prototype.setFirstWeekCutOffDay = function(day) {
+<a name="line1056"></a>  this.firstWeekCutOffDay_ = day;
+<a name="line1057"></a>};
+<a name="line1058"></a>
+<a name="line1059"></a>
+<a name="line1060"></a>/**
+<a name="line1061"></a> * Performs date calculation by adding the supplied interval to the date.
+<a name="line1062"></a> *
+<a name="line1063"></a> * @param {goog.date.Interval} interval Date interval to add.
+<a name="line1064"></a> */
+<a name="line1065"></a>goog.date.Date.prototype.add = function(interval) {
+<a name="line1066"></a>  if (interval.years || interval.months) {
+<a name="line1067"></a>    // As months have different number of days adding a month to Jan 31 by just
+<a name="line1068"></a>    // setting the month would result in a date in early March rather than Feb
+<a name="line1069"></a>    // 28 or 29. Doing it this way overcomes that problem.
+<a name="line1070"></a>
+<a name="line1071"></a>    // adjust year and month, accounting for both directions
+<a name="line1072"></a>    var month = this.getMonth() + interval.months + interval.years * 12;
+<a name="line1073"></a>    var year = this.getYear() + Math.floor(month / 12);
+<a name="line1074"></a>    month %= 12;
+<a name="line1075"></a>    if (month &lt; 0) {
+<a name="line1076"></a>      month += 12;
+<a name="line1077"></a>    }
+<a name="line1078"></a>
+<a name="line1079"></a>    var daysInTargetMonth = goog.date.getNumberOfDaysInMonth(year, month);
+<a name="line1080"></a>    var date = Math.min(daysInTargetMonth, this.getDate());
+<a name="line1081"></a>
+<a name="line1082"></a>    // avoid inadvertently causing rollovers to adjacent months
+<a name="line1083"></a>    this.setDate(1);
+<a name="line1084"></a>
+<a name="line1085"></a>    this.setFullYear(year);
+<a name="line1086"></a>    this.setMonth(month);
+<a name="line1087"></a>    this.setDate(date);
+<a name="line1088"></a>  }
+<a name="line1089"></a>
+<a name="line1090"></a>  if (interval.days) {
+<a name="line1091"></a>    // Convert the days to milliseconds and add it to the UNIX timestamp.
+<a name="line1092"></a>    // Taking noon helps to avoid 1 day error due to the daylight saving.
+<a name="line1093"></a>    var noon = new Date(this.getYear(), this.getMonth(), this.getDate(), 12);
+<a name="line1094"></a>    var result = new Date(noon.getTime() + interval.days * 86400000);
+<a name="line1095"></a>
+<a name="line1096"></a>    // Set date to 1 to prevent rollover caused by setting the year or month.
+<a name="line1097"></a>    this.setDate(1);
+<a name="line1098"></a>    this.setFullYear(result.getFullYear());
+<a name="line1099"></a>    this.setMonth(result.getMonth());
+<a name="line1100"></a>    this.setDate(result.getDate());
+<a name="line1101"></a>
+<a name="line1102"></a>    this.maybeFixDst_(result.getDate());
+<a name="line1103"></a>  }
+<a name="line1104"></a>};
+<a name="line1105"></a>
+<a name="line1106"></a>
+<a name="line1107"></a>/**
+<a name="line1108"></a> * Returns ISO 8601 string representation of date.
+<a name="line1109"></a> *
+<a name="line1110"></a> * @param {boolean} opt_verbose Whether the verbose format should be used
+<a name="line1111"></a> *     instead of the default compact one.
+<a name="line1112"></a> * @param {boolean} opt_tz Whether the timezone offset should be included
+<a name="line1113"></a> *     in the string.
+<a name="line1114"></a> * @return {string} ISO 8601 string representation of date.
+<a name="line1115"></a> */
+<a name="line1116"></a>goog.date.Date.prototype.toIsoString = function(opt_verbose, opt_tz) {
+<a name="line1117"></a>  var str = [
+<a name="line1118"></a>    this.getFullYear(),
+<a name="line1119"></a>    goog.string.padNumber(this.getMonth() + 1, 2),
+<a name="line1120"></a>    goog.string.padNumber(this.getDate(), 2)
+<a name="line1121"></a>  ];
+<a name="line1122"></a>
+<a name="line1123"></a>  return str.join((opt_verbose) ? &#39;-&#39; : &#39;&#39;) +
+<a name="line1124"></a>         (opt_tz ? this.getTimezoneOffsetString() : &#39;&#39;);
+<a name="line1125"></a>};
+<a name="line1126"></a>
+<a name="line1127"></a>
+<a name="line1128"></a>/**
+<a name="line1129"></a> * Returns ISO 8601 string representation of date according to universal time.
+<a name="line1130"></a> *
+<a name="line1131"></a> * @param {boolean} opt_verbose Whether the verbose format should be used
+<a name="line1132"></a> *     instead of the default compact one.
+<a name="line1133"></a> * @param {boolean} opt_tz Whether the timezone offset should be included in
+<a name="line1134"></a> *     the string.
+<a name="line1135"></a> * @return {string} ISO 8601 string representation of date according to
+<a name="line1136"></a> *     universal time.
+<a name="line1137"></a> */
+<a name="line1138"></a>goog.date.Date.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
+<a name="line1139"></a>  var str = [
+<a name="line1140"></a>    this.getUTCFullYear(),
+<a name="line1141"></a>    goog.string.padNumber(this.getUTCMonth() + 1, 2),
+<a name="line1142"></a>    goog.string.padNumber(this.getUTCDate(), 2)
+<a name="line1143"></a>  ];
+<a name="line1144"></a>
+<a name="line1145"></a>  return str.join((opt_verbose) ? &#39;-&#39; : &#39;&#39;) + (opt_tz ? &#39;Z&#39; : &#39;&#39;);
+<a name="line1146"></a>};
+<a name="line1147"></a>
+<a name="line1148"></a>
+<a name="line1149"></a>/**
+<a name="line1150"></a> * Tests whether given date is equal to this Date.
+<a name="line1151"></a> * Note: This ignores units more precise than days (hours and below)
+<a name="line1152"></a> * and also ignores timezone considerations.
+<a name="line1153"></a> *
+<a name="line1154"></a> * @param {goog.date.Date} other The date to compare.
+<a name="line1155"></a> * @return {boolean} Whether the given date is equal to this one.
+<a name="line1156"></a> */
+<a name="line1157"></a>goog.date.Date.prototype.equals = function(other) {
+<a name="line1158"></a>  return this.getYear() == other.getYear() &amp;&amp;
+<a name="line1159"></a>         this.getMonth() == other.getMonth() &amp;&amp;
+<a name="line1160"></a>         this.getDate() == other.getDate();
+<a name="line1161"></a>};
+<a name="line1162"></a>
+<a name="line1163"></a>
+<a name="line1164"></a>/**
+<a name="line1165"></a> * Overloaded toString method for object.
+<a name="line1166"></a> * @return {string} ISO 8601 string representation of date.
+<a name="line1167"></a> */
+<a name="line1168"></a>goog.date.Date.prototype.toString = function() {
+<a name="line1169"></a>  return this.toIsoString();
+<a name="line1170"></a>};
+<a name="line1171"></a>
+<a name="line1172"></a>
+<a name="line1173"></a>/**
+<a name="line1174"></a> * Fixes date to account for daylight savings time in browsers that fail to do
+<a name="line1175"></a> * so automatically.
+<a name="line1176"></a> * @param {number} expected Expected date.
+<a name="line1177"></a> * @private
+<a name="line1178"></a> */
+<a name="line1179"></a>goog.date.Date.prototype.maybeFixDst_ = function(expected) {
+<a name="line1180"></a>  if (this.getDate() != expected) {
+<a name="line1181"></a>    var dir = this.getDate() &lt; expected ? 1 : -1;
+<a name="line1182"></a>    this.date_.setUTCHours(this.date_.getUTCHours() + dir);
+<a name="line1183"></a>  }
+<a name="line1184"></a>};
+<a name="line1185"></a>
+<a name="line1186"></a>
+<a name="line1187"></a>/**
+<a name="line1188"></a> * @return {number} Value of wrapped date.
+<a name="line1189"></a> */
+<a name="line1190"></a>goog.date.Date.prototype.valueOf = function() {
+<a name="line1191"></a>  return this.date_.valueOf();
+<a name="line1192"></a>};
+<a name="line1193"></a>
+<a name="line1194"></a>
+<a name="line1195"></a>
+<a name="line1196"></a>/**
+<a name="line1197"></a> * Class representing a date and time. Defaults to current date and time if none
+<a name="line1198"></a> * is specified.
+<a name="line1199"></a> *
+<a name="line1200"></a> * Implements most methods of the native js Date object and can be used
+<a name="line1201"></a> * interchangeably with it just as if goog.date.DateTime was a subclass of Date.
+<a name="line1202"></a> *
+<a name="line1203"></a> * @param {number|Object} opt_year Four digit year or a date-like object. If not
+<a name="line1204"></a> *     set, the created object will contain the date determined by goog.now().
+<a name="line1205"></a> * @param {number} opt_month Month, 0 = Jan, 11 = Dec.
+<a name="line1206"></a> * @param {number} opt_date Date of month, 1 - 31.
+<a name="line1207"></a> * @param {number} opt_hours Hours, 0 - 24.
+<a name="line1208"></a> * @param {number} opt_minutes Minutes, 0 - 59.
+<a name="line1209"></a> * @param {number} opt_seconds Seconds, 0 - 61.
+<a name="line1210"></a> * @param {number} opt_milliseconds Milliseconds, 0 - 999.
+<a name="line1211"></a> * @constructor
+<a name="line1212"></a> * @extends {goog.date.Date}
+<a name="line1213"></a> */
+<a name="line1214"></a>goog.date.DateTime = function(opt_year, opt_month, opt_date, opt_hours,
+<a name="line1215"></a>                              opt_minutes, opt_seconds, opt_milliseconds) {
+<a name="line1216"></a>  if (goog.isNumber(opt_year)) {
+<a name="line1217"></a>    this.date_ = new Date(opt_year, opt_month || 0, opt_date || 1,
+<a name="line1218"></a>                          opt_hours || 0, opt_minutes || 0, opt_seconds || 0,
+<a name="line1219"></a>                          opt_milliseconds || 0);
+<a name="line1220"></a>  } else {
+<a name="line1221"></a>    this.date_ = new Date(opt_year ? opt_year.getTime() : goog.now());
+<a name="line1222"></a>  }
+<a name="line1223"></a>};
+<a name="line1224"></a>goog.inherits(goog.date.DateTime, goog.date.Date);
+<a name="line1225"></a>
+<a name="line1226"></a>
+<a name="line1227"></a>/**
+<a name="line1228"></a> * Returns the hours part of the datetime.
+<a name="line1229"></a> *
+<a name="line1230"></a> * @return {number} An integer between 0 and 23, representing the hour.
+<a name="line1231"></a> */
+<a name="line1232"></a>goog.date.DateTime.prototype.getHours = function() {
+<a name="line1233"></a>  return this.date_.getHours();
+<a name="line1234"></a>};
+<a name="line1235"></a>
+<a name="line1236"></a>
+<a name="line1237"></a>/**
+<a name="line1238"></a> * Returns the minutes part of the datetime.
+<a name="line1239"></a> *
+<a name="line1240"></a> * @return {number} An integer between 0 and 59, representing the minutes.
+<a name="line1241"></a> */
+<a name="line1242"></a>goog.date.DateTime.prototype.getMinutes = function() {
+<a name="line1243"></a>  return this.date_.getMinutes();
+<a name="line1244"></a>};
+<a name="line1245"></a>
+<a name="line1246"></a>
+<a name="line1247"></a>/**
+<a name="line1248"></a> * Returns the seconds part of the datetime.
+<a name="line1249"></a> *
+<a name="line1250"></a> * @return {number} An integer between 0 and 59, representing the seconds.
+<a name="line1251"></a> */
+<a name="line1252"></a>goog.date.DateTime.prototype.getSeconds = function() {
+<a name="line1253"></a>  return this.date_.getSeconds();
+<a name="line1254"></a>};
+<a name="line1255"></a>
+<a name="line1256"></a>
+<a name="line1257"></a>/**
+<a name="line1258"></a> * Returns the milliseconds part of the datetime.
+<a name="line1259"></a> *
+<a name="line1260"></a> * @return {number} An integer between 0 and 999, representing the milliseconds.
+<a name="line1261"></a> */
+<a name="line1262"></a>goog.date.DateTime.prototype.getMilliseconds = function() {
+<a name="line1263"></a>  return this.date_.getMilliseconds();
+<a name="line1264"></a>};
+<a name="line1265"></a>
+<a name="line1266"></a>
+<a name="line1267"></a>/**
+<a name="line1268"></a> * Returns the day of week according to universal time, US style.
+<a name="line1269"></a> *
+<a name="line1270"></a> * @return {number} Day of week, 0 = Sun, 1 = Mon, 6 = Sat.
+<a name="line1271"></a> */
+<a name="line1272"></a>goog.date.DateTime.prototype.getUTCDay = function() {
+<a name="line1273"></a>  return this.date_.getUTCDay();
+<a name="line1274"></a>};
+<a name="line1275"></a>
+<a name="line1276"></a>
+<a name="line1277"></a>/**
+<a name="line1278"></a> * Returns the hours part of the datetime according to universal time.
+<a name="line1279"></a> *
+<a name="line1280"></a> * @return {number} An integer between 0 and 23, representing the hour.
+<a name="line1281"></a> */
+<a name="line1282"></a>goog.date.DateTime.prototype.getUTCHours = function() {
+<a name="line1283"></a>  return this.date_.getUTCHours();
+<a name="line1284"></a>};
+<a name="line1285"></a>
+<a name="line1286"></a>
+<a name="line1287"></a>/**
+<a name="line1288"></a> * Returns the minutes part of the datetime according to universal time.
+<a name="line1289"></a> *
+<a name="line1290"></a> * @return {number} An integer between 0 and 59, representing the minutes.
+<a name="line1291"></a> */
+<a name="line1292"></a>goog.date.DateTime.prototype.getUTCMinutes = function() {
+<a name="line1293"></a>  return this.date_.getUTCMinutes();
+<a name="line1294"></a>};
+<a name="line1295"></a>
+<a name="line1296"></a>
+<a name="line1297"></a>/**
+<a name="line1298"></a> * Returns the seconds part of the datetime according to universal time.
+<a name="line1299"></a> *
+<a name="line1300"></a> * @return {number} An integer between 0 and 59, representing the seconds.
+<a name="line1301"></a> */
+<a name="line1302"></a>goog.date.DateTime.prototype.getUTCSeconds = function() {
+<a name="line1303"></a>  return this.date_.getUTCSeconds();
+<a name="line1304"></a>};
+<a name="line1305"></a>
+<a name="line1306"></a>
+<a name="line1307"></a>/**
+<a name="line1308"></a> * Returns the milliseconds part of the datetime according to universal time.
+<a name="line1309"></a> *
+<a name="line1310"></a> * @return {number} An integer between 0 and 999, representing the milliseconds.
+<a name="line1311"></a> */
+<a name="line1312"></a>goog.date.DateTime.prototype.getUTCMilliseconds = function() {
+<a name="line1313"></a>  return this.date_.getUTCMilliseconds();
+<a name="line1314"></a>};
+<a name="line1315"></a>
+<a name="line1316"></a>
+<a name="line1317"></a>/**
+<a name="line1318"></a> * Sets the hours part of the datetime.
+<a name="line1319"></a> *
+<a name="line1320"></a> * @param {number} hours An integer between 0 and 23, representing the hour.
+<a name="line1321"></a> */
+<a name="line1322"></a>goog.date.DateTime.prototype.setHours = function(hours) {
+<a name="line1323"></a>  this.date_.setHours(hours);
+<a name="line1324"></a>};
+<a name="line1325"></a>
+<a name="line1326"></a>
+<a name="line1327"></a>/**
+<a name="line1328"></a> * Sets the minutes part of the datetime.
+<a name="line1329"></a> *
+<a name="line1330"></a> * @param {number} minutes Integer between 0 and 59, representing the minutes.
+<a name="line1331"></a> */
+<a name="line1332"></a>goog.date.DateTime.prototype.setMinutes = function(minutes) {
+<a name="line1333"></a>  this.date_.setMinutes(minutes);
+<a name="line1334"></a>};
+<a name="line1335"></a>
+<a name="line1336"></a>
+<a name="line1337"></a>/**
+<a name="line1338"></a> * Sets the seconds part of the datetime.
+<a name="line1339"></a> *
+<a name="line1340"></a> * @param {number} seconds Integer between 0 and 59, representing the seconds.
+<a name="line1341"></a> */
+<a name="line1342"></a>goog.date.DateTime.prototype.setSeconds = function(seconds) {
+<a name="line1343"></a>  this.date_.setSeconds(seconds);
+<a name="line1344"></a>};
+<a name="line1345"></a>
+<a name="line1346"></a>
+<a name="line1347"></a>/**
+<a name="line1348"></a> * Sets the seconds part of the datetime.
+<a name="line1349"></a> *
+<a name="line1350"></a> * @param {number} ms Integer between 0 and 999, representing the milliseconds.
+<a name="line1351"></a> */
+<a name="line1352"></a>goog.date.DateTime.prototype.setMilliseconds = function(ms) {
+<a name="line1353"></a>  this.date_.setMilliseconds(ms);
+<a name="line1354"></a>};
+<a name="line1355"></a>
+<a name="line1356"></a>
+<a name="line1357"></a>/**
+<a name="line1358"></a> * Sets the hours part of the datetime according to universal time.
+<a name="line1359"></a> *
+<a name="line1360"></a> * @param {number} hours An integer between 0 and 23, representing the hour.
+<a name="line1361"></a> */
+<a name="line1362"></a>goog.date.DateTime.prototype.setUTCHours = function(hours) {
+<a name="line1363"></a>  this.date_.setUTCHours(hours);
+<a name="line1364"></a>};
+<a name="line1365"></a>
+<a name="line1366"></a>
+<a name="line1367"></a>/**
+<a name="line1368"></a> * Sets the minutes part of the datetime according to universal time.
+<a name="line1369"></a> *
+<a name="line1370"></a> * @param {number} minutes Integer between 0 and 59, representing the minutes.
+<a name="line1371"></a> */
+<a name="line1372"></a>goog.date.DateTime.prototype.setUTCMinutes = function(minutes) {
+<a name="line1373"></a>  this.date_.setUTCMinutes(minutes);
+<a name="line1374"></a>};
+<a name="line1375"></a>
+<a name="line1376"></a>
+<a name="line1377"></a>/**
+<a name="line1378"></a> * Sets the seconds part of the datetime according to universal time.
+<a name="line1379"></a> *
+<a name="line1380"></a> * @param {number} seconds Integer between 0 and 59, representing the seconds.
+<a name="line1381"></a> */
+<a name="line1382"></a>goog.date.DateTime.prototype.setUTCSeconds = function(seconds) {
+<a name="line1383"></a>  this.date_.setUTCSeconds(seconds);
+<a name="line1384"></a>};
+<a name="line1385"></a>
+<a name="line1386"></a>
+<a name="line1387"></a>/**
+<a name="line1388"></a> * Sets the seconds part of the datetime according to universal time.
+<a name="line1389"></a> *
+<a name="line1390"></a> * @param {number} ms Integer between 0 and 999, representing the milliseconds.
+<a name="line1391"></a> */
+<a name="line1392"></a>goog.date.DateTime.prototype.setUTCMilliseconds = function(ms) {
+<a name="line1393"></a>  this.date_.setUTCMilliseconds(ms);
+<a name="line1394"></a>};
+<a name="line1395"></a>
+<a name="line1396"></a>
+<a name="line1397"></a>/**
+<a name="line1398"></a> * Performs date calculation by adding the supplied interval to the date.
+<a name="line1399"></a> *
+<a name="line1400"></a> * @param {goog.date.Interval} interval Date interval to add.
+<a name="line1401"></a> */
+<a name="line1402"></a>goog.date.DateTime.prototype.add = function(interval) {
+<a name="line1403"></a>  goog.date.Date.prototype.add.call(this, interval);
+<a name="line1404"></a>
+<a name="line1405"></a>  if (interval.hours) {
+<a name="line1406"></a>    this.setHours(this.date_.getHours() + interval.hours);
+<a name="line1407"></a>  }
+<a name="line1408"></a>  if (interval.minutes) {
+<a name="line1409"></a>    this.setMinutes(this.date_.getMinutes() + interval.minutes);
+<a name="line1410"></a>  }
+<a name="line1411"></a>  if (interval.seconds) {
+<a name="line1412"></a>    this.setSeconds(this.date_.getSeconds() + interval.seconds);
+<a name="line1413"></a>  }
+<a name="line1414"></a>};
+<a name="line1415"></a>
+<a name="line1416"></a>
+<a name="line1417"></a>/**
+<a name="line1418"></a> * Returns ISO 8601 string representation of date/time.
+<a name="line1419"></a> *
+<a name="line1420"></a> * @param {boolean} opt_verbose Whether the verbose format should be used
+<a name="line1421"></a> *     instead of the default compact one.
+<a name="line1422"></a> * @param {boolean} opt_tz Whether the timezone offset should be included
+<a name="line1423"></a> *     in the string.
+<a name="line1424"></a> * @return {string} ISO 8601 string representation of date/time.
+<a name="line1425"></a> */
+<a name="line1426"></a>goog.date.DateTime.prototype.toIsoString = function(opt_verbose, opt_tz) {
+<a name="line1427"></a>  var dateString = goog.date.Date.prototype.toIsoString.call(this, opt_verbose);
+<a name="line1428"></a>
+<a name="line1429"></a>  if (opt_verbose) {
+<a name="line1430"></a>    return dateString + &#39; &#39; +
+<a name="line1431"></a>        goog.string.padNumber(this.getHours(), 2) + &#39;:&#39; +
+<a name="line1432"></a>        goog.string.padNumber(this.getMinutes(), 2) + &#39;:&#39; +
+<a name="line1433"></a>        goog.string.padNumber(this.getSeconds(), 2) +
+<a name="line1434"></a>        (opt_tz ? this.getTimezoneOffsetString() : &#39;&#39;);
+<a name="line1435"></a>  }
+<a name="line1436"></a>
+<a name="line1437"></a>  return dateString + &#39;T&#39; +
+<a name="line1438"></a>      goog.string.padNumber(this.getHours(), 2) +
+<a name="line1439"></a>      goog.string.padNumber(this.getMinutes(), 2) +
+<a name="line1440"></a>      goog.string.padNumber(this.getSeconds(), 2) +
+<a name="line1441"></a>      (opt_tz ? this.getTimezoneOffsetString() : &#39;&#39;);
+<a name="line1442"></a>};
+<a name="line1443"></a>
+<a name="line1444"></a>
+<a name="line1445"></a>/**
+<a name="line1446"></a> * Returns XML Schema 2 string representation of date/time.
+<a name="line1447"></a> * The return value is also ISO 8601 compliant.
+<a name="line1448"></a> *
+<a name="line1449"></a> * @param {boolean} opt_timezone Should the timezone offset be included in the
+<a name="line1450"></a> *     string?.
+<a name="line1451"></a> * @return {string} XML Schema 2 string representation of date/time.
+<a name="line1452"></a> */
+<a name="line1453"></a>goog.date.DateTime.prototype.toXmlDateTime = function(opt_timezone) {
+<a name="line1454"></a>  return goog.date.Date.prototype.toIsoString.call(this, true) + &#39;T&#39; +
+<a name="line1455"></a>      goog.string.padNumber(this.getHours(), 2) + &#39;:&#39; +
+<a name="line1456"></a>      goog.string.padNumber(this.getMinutes(), 2) + &#39;:&#39; +
+<a name="line1457"></a>      goog.string.padNumber(this.getSeconds(), 2) +
+<a name="line1458"></a>      (opt_timezone ? this.getTimezoneOffsetString() : &#39;&#39;);
+<a name="line1459"></a>};
+<a name="line1460"></a>
+<a name="line1461"></a>
+<a name="line1462"></a>/**
+<a name="line1463"></a> * Returns ISO 8601 string representation of date/time according to universal
+<a name="line1464"></a> * time.
+<a name="line1465"></a> *
+<a name="line1466"></a> * @param {boolean} opt_verbose Whether the opt_verbose format should be
+<a name="line1467"></a> *     returned instead of the default compact one.
+<a name="line1468"></a> * @param {boolean} opt_tz Whether the the timezone offset should be included
+<a name="line1469"></a> *     in the string.
+<a name="line1470"></a> * @return {string} ISO 8601 string representation of date/time according to
+<a name="line1471"></a> *     universal time.
+<a name="line1472"></a> */
+<a name="line1473"></a>goog.date.DateTime.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
+<a name="line1474"></a>  var dateStr = goog.date.Date.prototype.toUTCIsoString.call(this, opt_verbose);
+<a name="line1475"></a>
+<a name="line1476"></a>  if (opt_verbose) {
+<a name="line1477"></a>    return dateStr + &#39; &#39; +
+<a name="line1478"></a>        goog.string.padNumber(this.getUTCHours(), 2) + &#39;:&#39; +
+<a name="line1479"></a>        goog.string.padNumber(this.getUTCMinutes(), 2) + &#39;:&#39; +
+<a name="line1480"></a>        goog.string.padNumber(this.getUTCSeconds(), 2) +
+<a name="line1481"></a>        (opt_tz ? &#39;Z&#39; : &#39;&#39;);
+<a name="line1482"></a>  }
+<a name="line1483"></a>
+<a name="line1484"></a>  return dateStr + &#39;T&#39; +
+<a name="line1485"></a>      goog.string.padNumber(this.getUTCHours(), 2) +
+<a name="line1486"></a>      goog.string.padNumber(this.getUTCMinutes(), 2) +
+<a name="line1487"></a>      goog.string.padNumber(this.getUTCSeconds(), 2) +
+<a name="line1488"></a>      (opt_tz ? &#39;Z&#39; : &#39;&#39;);
+<a name="line1489"></a>};
+<a name="line1490"></a>
+<a name="line1491"></a>
+<a name="line1492"></a>/**
+<a name="line1493"></a> * Tests whether given datetime is exactly equal to this DateTime.
+<a name="line1494"></a> *
+<a name="line1495"></a> * @param {goog.date.DateTime} other The datetime to compare.
+<a name="line1496"></a> * @return {boolean} Whether the given datetime is exactly equal to this one.
+<a name="line1497"></a> */
+<a name="line1498"></a>goog.date.DateTime.prototype.equals = function(other) {
+<a name="line1499"></a>  return this.getTime() == other.getTime();
+<a name="line1500"></a>};
+<a name="line1501"></a>
+<a name="line1502"></a>
+<a name="line1503"></a>/**
+<a name="line1504"></a> * Overloaded toString method for object.
+<a name="line1505"></a> * @return {string} ISO 8601 string representation of date/time.
+<a name="line1506"></a> */
+<a name="line1507"></a>goog.date.DateTime.prototype.toString = function() {
+<a name="line1508"></a>  return this.toIsoString();
+<a name="line1509"></a>};
+<a name="line1510"></a>
+<a name="line1511"></a>
+<a name="line1512"></a>/**
+<a name="line1513"></a> * Generates time label for the datetime, e.g., &#39;5:30am&#39;.
+<a name="line1514"></a> * By default this does not pad hours (e.g., to &#39;05:30&#39;) and it does add
+<a name="line1515"></a> * an am/pm suffix.
+<a name="line1516"></a> * TODO: i18n -- hardcoding time format like this is bad.  E.g., in CJK
+<a name="line1517"></a> *               locales, need Chinese characters for hour and minute units.
+<a name="line1518"></a> * @param {boolean} opt_padHours Whether to pad hours, e.g., &#39;05:30&#39; vs &#39;5:30&#39;.
+<a name="line1519"></a> * @param {boolean} opt_showAmPm Whether to show the &#39;am&#39; and &#39;pm&#39; suffix.
+<a name="line1520"></a> * @param {boolean} opt_omitZeroMinutes E.g., &#39;5:00pm&#39; becomes &#39;5pm&#39;,
+<a name="line1521"></a> *                                      but &#39;5:01pm&#39; remains &#39;5:01pm&#39;.
+<a name="line1522"></a> * @return {string} The time label.
+<a name="line1523"></a> */
+<a name="line1524"></a>goog.date.DateTime.prototype.toUsTimeString = function(opt_padHours,
+<a name="line1525"></a>                                                       opt_showAmPm,
+<a name="line1526"></a>                                                       opt_omitZeroMinutes) {
+<a name="line1527"></a>  var hours = this.getHours();
+<a name="line1528"></a>
+<a name="line1529"></a>  // show am/pm marker by default
+<a name="line1530"></a>  if (!goog.isDef(opt_showAmPm)) {
+<a name="line1531"></a>    opt_showAmPm = true;
+<a name="line1532"></a>  }
+<a name="line1533"></a>
+<a name="line1534"></a>  // 12pm
+<a name="line1535"></a>  var isPM = hours == 12;
+<a name="line1536"></a>
+<a name="line1537"></a>  // change from 1-24 to 1-12 basis
+<a name="line1538"></a>  if (hours &gt; 12) {
+<a name="line1539"></a>    hours -= 12;
+<a name="line1540"></a>    isPM = true;
+<a name="line1541"></a>  }
+<a name="line1542"></a>
+<a name="line1543"></a>  // midnight is expressed as &quot;12am&quot;, but if am/pm marker omitted, keep as &#39;0&#39;
+<a name="line1544"></a>  if (hours == 0 &amp;&amp; opt_showAmPm) {
+<a name="line1545"></a>    hours = 12;
+<a name="line1546"></a>  }
+<a name="line1547"></a>
+<a name="line1548"></a>  var label = opt_padHours ? goog.string.padNumber(hours, 2) : String(hours);
+<a name="line1549"></a>  var minutes = this.getMinutes();
+<a name="line1550"></a>  if (!opt_omitZeroMinutes || minutes &gt; 0) {
+<a name="line1551"></a>    label += &#39;:&#39; + goog.string.padNumber(minutes, 2);
+<a name="line1552"></a>  }
+<a name="line1553"></a>
+<a name="line1554"></a>  // by default, show am/pm suffix
+<a name="line1555"></a>  if (opt_showAmPm) {
+<a name="line1556"></a>    /**
+<a name="line1557"></a>     * @desc Suffix for morning times.
+<a name="line1558"></a>     */
+<a name="line1559"></a>    var MSG_TIME_AM = goog.getMsg(&#39;am&#39;);
+<a name="line1560"></a>
+<a name="line1561"></a>    /**
+<a name="line1562"></a>     * @desc Suffix for afternoon times.
+<a name="line1563"></a>     */
+<a name="line1564"></a>    var MSG_TIME_PM = goog.getMsg(&#39;pm&#39;);
+<a name="line1565"></a>
+<a name="line1566"></a>    label += isPM ? MSG_TIME_PM : MSG_TIME_AM;
+<a name="line1567"></a>  }
+<a name="line1568"></a>  return label;
+<a name="line1569"></a>};
+<a name="line1570"></a>
+<a name="line1571"></a>
+<a name="line1572"></a>/**
+<a name="line1573"></a> * Generates time label for the datetime in standard ISO 24-hour time format.
+<a name="line1574"></a> * E.g., &#39;06:00:00&#39; or &#39;23:30:15&#39;.
+<a name="line1575"></a> * @param {boolean} opt_showSeconds Whether to shows seconds. Defaults to TRUE.
+<a name="line1576"></a> * @return {string} The time label.
+<a name="line1577"></a> */
+<a name="line1578"></a>goog.date.DateTime.prototype.toIsoTimeString = function(opt_showSeconds) {
+<a name="line1579"></a>  var hours = this.getHours();
+<a name="line1580"></a>  var label = goog.string.padNumber(hours, 2) +
+<a name="line1581"></a>              &#39;:&#39; +
+<a name="line1582"></a>              goog.string.padNumber(this.getMinutes(), 2);
+<a name="line1583"></a>  if (!goog.isDef(opt_showSeconds) || opt_showSeconds) {
+<a name="line1584"></a>    label += &#39;:&#39; + goog.string.padNumber(this.getSeconds(), 2);
+<a name="line1585"></a>  }
+<a name="line1586"></a>  return label;
+<a name="line1587"></a>};
+<a name="line1588"></a>
+<a name="line1589"></a>
+<a name="line1590"></a>/**
+<a name="line1591"></a> * @return {!goog.date.DateTime} A clone of the datetime object.
+<a name="line1592"></a> */
+<a name="line1593"></a>goog.date.DateTime.prototype.clone = function() {
+<a name="line1594"></a>  var date = new goog.date.DateTime(this.date_);
+<a name="line1595"></a>  date.firstDayOfWeek_ = this.firstDayOfWeek_;
+<a name="line1596"></a>  date.firstWeekCutOffDay_ = this.firstWeekCutOffDay_;
+<a name="line1597"></a>  return date;
+<a name="line1598"></a>};
+</pre>
+
+
+</body>
+</html>

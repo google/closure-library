@@ -1,0 +1,177 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>timezonelist.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_locale_timezonelist.js.html">timezonelist.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Functions for listing timezone names.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.locale.TimeZoneList&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.locale&#39;);
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>/**
+<a name="line25"></a> * Returns the displayable list of short timezone names paired with its id for
+<a name="line26"></a> * the current locale, selected based on the region or language provided.
+<a name="line27"></a> *
+<a name="line28"></a> * This method depends on goog.locale.TimeZone*__&lt;locale&gt; available
+<a name="line29"></a> * from http://go/js_locale_data. User of this method
+<a name="line30"></a> * has to add dependacy to this.
+<a name="line31"></a> *
+<a name="line32"></a> * @param {string} opt_regionOrLang If region tag is provided, timezone ids
+<a name="line33"></a> *    specific this region are considered. If language is provided, all regions
+<a name="line34"></a> *    for which this language is defacto official is considered. If
+<a name="line35"></a> *    this parameter is not speficied, current locale is used to
+<a name="line36"></a> *    extract this information.
+<a name="line37"></a> *
+<a name="line38"></a> * @return {Array.&lt;Object&gt;} Localized and relevant list of timezone names
+<a name="line39"></a> *    and ids.
+<a name="line40"></a> */
+<a name="line41"></a>goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
+<a name="line42"></a>  return goog.locale.getTimeZoneNameList_(&#39;TimeZoneSelectedShortNames&#39;,
+<a name="line43"></a>      opt_regionOrLang);
+<a name="line44"></a>};
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Returns the displayable list of long timezone names paired with its id for
+<a name="line49"></a> * the current locale, selected based on the region or language provided.
+<a name="line50"></a> *
+<a name="line51"></a> * This method depends on goog.locale.TimeZone*__&lt;locale&gt; available
+<a name="line52"></a> * from http://go/js_locale_data. User of this method
+<a name="line53"></a> * has to add dependacy to this.
+<a name="line54"></a> *
+<a name="line55"></a> * @param {string} opt_regionOrLang If region tag is provided, timezone ids
+<a name="line56"></a> *    specific this region are considered. If language is provided, all regions
+<a name="line57"></a> *    for which this language is defacto official is considered. If
+<a name="line58"></a> *    this parameter is not speficied, current locale is used to
+<a name="line59"></a> *    extract this information.
+<a name="line60"></a> *
+<a name="line61"></a> * @return {Array.&lt;Object&gt;} Localized and relevant list of timezone names
+<a name="line62"></a> *    and ids.
+<a name="line63"></a> */
+<a name="line64"></a>goog.locale.getTimeZoneSelectedLongNames = function(opt_regionOrLang) {
+<a name="line65"></a>  return goog.locale.getTimeZoneNameList_(&#39;TimeZoneSelectedLongNames&#39;,
+<a name="line66"></a>      opt_regionOrLang);
+<a name="line67"></a>};
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * Returns the displayable list of long timezone names paired with its id for
+<a name="line72"></a> * the current locale.
+<a name="line73"></a> *
+<a name="line74"></a> * This method depends on goog.locale.TimeZoneAllLongNames__&lt;locale&gt; available
+<a name="line75"></a> * from http://go/js_locale_data. User of this method
+<a name="line76"></a> * has to add dependacy to this.
+<a name="line77"></a> *
+<a name="line78"></a> * @return {Array.&lt;Object&gt;} localized and relevant list of timezone names
+<a name="line79"></a> *    and ids.
+<a name="line80"></a> */
+<a name="line81"></a>goog.locale.getTimeZoneAllLongNames = function() {
+<a name="line82"></a>  var locale = goog.locale.getLocale();
+<a name="line83"></a>  return /** @type {Array} */ (
+<a name="line84"></a>      goog.locale.getResource(&#39;TimeZoneAllLongNames&#39;, locale));
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Returns the displayable list of timezone names paired with its id for
+<a name="line90"></a> * the current locale, selected based on the region or language provided.
+<a name="line91"></a> *
+<a name="line92"></a> * This method depends on goog.locale.TimeZone*__&lt;locale&gt; available
+<a name="line93"></a> * from http://go/js_locale_data. User of this method
+<a name="line94"></a> * has to add dependacy to this.
+<a name="line95"></a> *
+<a name="line96"></a> * @param {string} nameType Resource name to be loaded to get the names.
+<a name="line97"></a> *
+<a name="line98"></a> * @param {string} opt_resource If resource is region tag, timezone ids
+<a name="line99"></a> *    specific this region are considered. If it is language, all regions
+<a name="line100"></a> *    for which this language is defacto official is considered. If it is
+<a name="line101"></a> *    undefined, current locale is used to extract this information.
+<a name="line102"></a> *
+<a name="line103"></a> * @return {Array.&lt;Object&gt;} Localized and relevant list of timezone names
+<a name="line104"></a> *    and ids.
+<a name="line105"></a> * @private
+<a name="line106"></a> */
+<a name="line107"></a>goog.locale.getTimeZoneNameList_ = function(nameType, opt_resource) {
+<a name="line108"></a>  var locale = goog.locale.getLocale();
+<a name="line109"></a>
+<a name="line110"></a>  if (!opt_resource) {
+<a name="line111"></a>    opt_resource = goog.locale.getRegionSubTag(locale);
+<a name="line112"></a>  }
+<a name="line113"></a>    // if there is no region subtag, use the language itself as the resource
+<a name="line114"></a>  if (!opt_resource) {
+<a name="line115"></a>    opt_resource = locale;
+<a name="line116"></a>  }
+<a name="line117"></a>
+<a name="line118"></a>  var names = goog.locale.getResource(nameType, locale);
+<a name="line119"></a>  var ids = goog.locale.getResource(&#39;TimeZoneSelectedIds&#39;, opt_resource);
+<a name="line120"></a>  var len = ids.length;
+<a name="line121"></a>  var result = [];
+<a name="line122"></a>
+<a name="line123"></a>  for (var i = 0; i &lt; len; i++) {
+<a name="line124"></a>    var id = ids[i];
+<a name="line125"></a>    result.push({&#39;id&#39;: id, &#39;name&#39;: names[id]});
+<a name="line126"></a>  }
+<a name="line127"></a>  return result;
+<a name="line128"></a>};
+</pre>
+
+
+</body>
+</html>

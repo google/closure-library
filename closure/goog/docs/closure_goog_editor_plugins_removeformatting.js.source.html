@@ -1,0 +1,794 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>removeformatting.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_editor_plugins_removeformatting.js.html">removeformatting.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc.
+<a name="line14"></a>// All Rights Reserved.
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Plugin to handle Remove Formatting.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.editor.plugins.RemoveFormatting&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.Range&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line27"></a>goog.require(&#39;goog.editor.BrowserFeature&#39;);
+<a name="line28"></a>goog.require(&#39;goog.editor.Plugin&#39;);
+<a name="line29"></a>goog.require(&#39;goog.editor.node&#39;);
+<a name="line30"></a>goog.require(&#39;goog.editor.range&#39;);
+<a name="line31"></a>goog.require(&#39;goog.string&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * A plugin to handle removing formatting from selected text.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @extends {goog.editor.Plugin}
+<a name="line38"></a> */
+<a name="line39"></a>goog.editor.plugins.RemoveFormatting = function() {
+<a name="line40"></a>  goog.editor.Plugin.call(this);
+<a name="line41"></a>
+<a name="line42"></a>  /**
+<a name="line43"></a>   * Optional function to perform remove formatting in place of the
+<a name="line44"></a>   * provided removeFormattingWorker_.
+<a name="line45"></a>   * @type {?function(string): string}
+<a name="line46"></a>   * @private
+<a name="line47"></a>   */
+<a name="line48"></a>  this.optRemoveFormattingFunc_ = null;
+<a name="line49"></a>};
+<a name="line50"></a>goog.inherits(goog.editor.plugins.RemoveFormatting, goog.editor.Plugin);
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * The editor command this plugin in handling.
+<a name="line55"></a> * @type {string}
+<a name="line56"></a> */
+<a name="line57"></a>goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND =
+<a name="line58"></a>    &#39;+removeFormat&#39;;
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * Regular expression that matches a block tag name.
+<a name="line63"></a> * @type {RegExp}
+<a name="line64"></a> * @private
+<a name="line65"></a> */
+<a name="line66"></a>goog.editor.plugins.RemoveFormatting.BLOCK_RE_ =
+<a name="line67"></a>    /^(DIV|TR|LI|BLOCKQUOTE|H\d|PRE|XMP)/;
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * Appends a new line to a string buffer.
+<a name="line72"></a> * @param {Array.&lt;string&gt;} sb The string buffer to add to.
+<a name="line73"></a> * @private
+<a name="line74"></a> */
+<a name="line75"></a>goog.editor.plugins.RemoveFormatting.appendNewline_ = function(sb) {
+<a name="line76"></a>  sb.push(&#39;&lt;br&gt;&#39;);
+<a name="line77"></a>};
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * Create a new range delimited by the start point of the first range and
+<a name="line82"></a> * the end point of the second range.
+<a name="line83"></a> * @param {goog.dom.AbstractRange} startRange Use the start point of this
+<a name="line84"></a> *    range as the beginning of the new range.
+<a name="line85"></a> * @param {goog.dom.AbstractRange} endRange Use the end point of this
+<a name="line86"></a> *    range as the end of the new range.
+<a name="line87"></a> * @return {goog.dom.AbstractRange} The new range.
+<a name="line88"></a> * @private
+<a name="line89"></a> */
+<a name="line90"></a>goog.editor.plugins.RemoveFormatting.createRangeDelimitedByRanges_ = function(
+<a name="line91"></a>    startRange, endRange) {
+<a name="line92"></a>  return goog.dom.Range.createFromNodes(
+<a name="line93"></a>      startRange.getStartNode(), startRange.getStartOffset(),
+<a name="line94"></a>      endRange.getEndNode(), endRange.getEndOffset());
+<a name="line95"></a>};
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/** @inheritDoc */
+<a name="line99"></a>goog.editor.plugins.RemoveFormatting.prototype.getTrogClassId = function() {
+<a name="line100"></a>  return &#39;RemoveFormatting&#39;;
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/** @inheritDoc */
+<a name="line105"></a>goog.editor.plugins.RemoveFormatting.prototype.isSupportedCommand = function(
+<a name="line106"></a>    command) {
+<a name="line107"></a>  return command ==
+<a name="line108"></a>       goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND;
+<a name="line109"></a>};
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/** @inheritDoc */
+<a name="line113"></a>goog.editor.plugins.RemoveFormatting.prototype.execCommandInternal =
+<a name="line114"></a>    function(command, var_args) {
+<a name="line115"></a>  if (command ==
+<a name="line116"></a>      goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND) {
+<a name="line117"></a>    this.removeFormatting_();
+<a name="line118"></a>  }
+<a name="line119"></a>};
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Removes formatting from the current selection.  Removes basic formatting
+<a name="line124"></a> * (B/I/U) using the browser&#39;s execCommand.  Then extracts the html from the
+<a name="line125"></a> * selection to convert, calls either a client&#39;s specified removeFormattingFunc
+<a name="line126"></a> * callback or trogedit&#39;s general built-in removeFormattingWorker_,
+<a name="line127"></a> * and then replaces the current selection with the converted text.
+<a name="line128"></a> * @private
+<a name="line129"></a> */
+<a name="line130"></a>goog.editor.plugins.RemoveFormatting.prototype.removeFormatting_ = function() {
+<a name="line131"></a>  var range = this.fieldObject.getRange();
+<a name="line132"></a>  if (range.isCollapsed()) {
+<a name="line133"></a>    return;
+<a name="line134"></a>  }
+<a name="line135"></a>
+<a name="line136"></a>  // Get the html to format and send it off for formatting. Built in
+<a name="line137"></a>  // removeFormat only strips some inline elements and some inline CSS styles
+<a name="line138"></a>  var convFunc = this.optRemoveFormattingFunc_ ||
+<a name="line139"></a>                 goog.bind(this.removeFormattingWorker_, this);
+<a name="line140"></a>  this.convertSelectedHtmlText_(convFunc);
+<a name="line141"></a>
+<a name="line142"></a>  // Do the execCommand last as it needs block elements removed to work
+<a name="line143"></a>  // properly on background/fontColor in FF. There are, unfortunately, still
+<a name="line144"></a>  // cases where background/fontColor are not removed here.
+<a name="line145"></a>  var doc = this.getFieldDomHelper().getDocument();
+<a name="line146"></a>  doc.execCommand(&#39;RemoveFormat&#39;, false, undefined);
+<a name="line147"></a>
+<a name="line148"></a>  if (goog.editor.BrowserFeature.ADDS_NBSPS_IN_REMOVE_FORMAT) {
+<a name="line149"></a>    // WebKit converts spaces to non-breaking spaces when doing a RemoveFormat.
+<a name="line150"></a>    // See: https://bugs.webkit.org/show_bug.cgi?id=14062
+<a name="line151"></a>    this.convertSelectedHtmlText_(function(text) {
+<a name="line152"></a>      // This loses anything that might have legitimately been a non-breaking
+<a name="line153"></a>      // space, but that&#39;s better than the alternative of only having non-
+<a name="line154"></a>      // breaking spaces.
+<a name="line155"></a>      // Old versions of WebKit (Safari 3, Chrome 1) incorrectly match /u00A0
+<a name="line156"></a>      // and newer versions properly match &amp;nbsp;.
+<a name="line157"></a>      var nbspRegExp = goog.userAgent.isVersion(&#39;528&#39;) ? /&amp;nbsp;/g : /\u00A0/g;
+<a name="line158"></a>      return text.replace(nbspRegExp, &#39; &#39;);
+<a name="line159"></a>    });
+<a name="line160"></a>  }
+<a name="line161"></a>};
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>/**
+<a name="line165"></a> * Finds the nearest ancestor of the node that is a table.
+<a name="line166"></a> * @param {Node} nodeToCheck Node to search from.
+<a name="line167"></a> * @return {Node} The table, or null if one was not found.
+<a name="line168"></a> * @private
+<a name="line169"></a> */
+<a name="line170"></a>goog.editor.plugins.RemoveFormatting.getTableAncestor_ = function(nodeToCheck) {
+<a name="line171"></a>  return goog.dom.getAncestor(nodeToCheck,
+<a name="line172"></a>      function(node) { return node.tagName == goog.dom.TagName.TABLE; }, true);
+<a name="line173"></a>};
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Replaces the contents of the selection with html. Does its best to maintain
+<a name="line178"></a> * the original selection. Also does its best to result in a valid DOM.
+<a name="line179"></a> *
+<a name="line180"></a> * TODO: See if there&#39;s any way to make this work on Ranges, and then
+<a name="line181"></a> * move it into goog.editor.range. The Firefox implementation uses execCommand
+<a name="line182"></a> * on the document, so must work on the actual selection.
+<a name="line183"></a> *
+<a name="line184"></a> * @param {string} html The html string to insert into the range.
+<a name="line185"></a> * @private
+<a name="line186"></a> */
+<a name="line187"></a>goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
+<a name="line188"></a>  var range = this.fieldObject.getRange();
+<a name="line189"></a>
+<a name="line190"></a>  var dh = this.getFieldDomHelper();
+<a name="line191"></a>  // Use markers to set the extent of the selection so that we can reselect it
+<a name="line192"></a>  // afterwards. This works better than builtin range manipulation in FF and IE
+<a name="line193"></a>  // because their implementations are so self-inconsistent and buggy.
+<a name="line194"></a>  var startSpanId = goog.string.createUniqueString();
+<a name="line195"></a>  var endSpanId = goog.string.createUniqueString();
+<a name="line196"></a>  html = &#39;&lt;span id=&quot;&#39; + startSpanId + &#39;&quot;&gt;&lt;/span&gt;&#39; + html +
+<a name="line197"></a>      &#39;&lt;span id=&quot;&#39; + endSpanId + &#39;&quot;&gt;&lt;/span&gt;&#39;;
+<a name="line198"></a>  var dummyNodeId = goog.string.createUniqueString();
+<a name="line199"></a>  var dummySpanText = &#39;&lt;span id=&quot;&#39; + dummyNodeId + &#39;&quot;&gt;&lt;/span&gt;&#39;;
+<a name="line200"></a>
+<a name="line201"></a>  if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
+<a name="line202"></a>    // IE&#39;s selection often doesn&#39;t include the outermost tags.
+<a name="line203"></a>    // We want to use pasteHTML to replace the range contents with the newly
+<a name="line204"></a>    // unformatted text, so we have to check to make sure we aren&#39;t just
+<a name="line205"></a>    // pasting into some stray tags.  To do this, we first clear out the
+<a name="line206"></a>    // contents of the range and then delete all empty nodes parenting the now
+<a name="line207"></a>    // empty range. This way, the pasted contents are never re-embedded into
+<a name="line208"></a>    // formated nodes. Pasting purely empty html does not work, since IE moves
+<a name="line209"></a>    // the selection inside the next node, so we insert a dummy span.
+<a name="line210"></a>    var textRange = range.getTextRange(0).getBrowserRangeObject();
+<a name="line211"></a>    textRange.pasteHTML(dummySpanText);
+<a name="line212"></a>    var parent;
+<a name="line213"></a>    while ((parent = textRange.parentElement()) &amp;&amp;
+<a name="line214"></a>           goog.editor.node.isEmpty(parent) &amp;&amp;
+<a name="line215"></a>           !goog.editor.node.isEditableContainer(parent)) {
+<a name="line216"></a>      var tag = parent.nodeName;
+<a name="line217"></a>      // We can&#39;t remove these table tags as it will invalidate the table dom.
+<a name="line218"></a>      if (tag == goog.dom.TagName.TD ||
+<a name="line219"></a>          tag == goog.dom.TagName.TR ||
+<a name="line220"></a>          tag == goog.dom.TagName.TH) {
+<a name="line221"></a>        break;
+<a name="line222"></a>      }
+<a name="line223"></a>
+<a name="line224"></a>      goog.dom.removeNode(parent);
+<a name="line225"></a>    }
+<a name="line226"></a>    textRange.pasteHTML(html);
+<a name="line227"></a>    var dummySpan = dh.getElement(dummyNodeId);
+<a name="line228"></a>    // If we entered the while loop above, the node has already been removed
+<a name="line229"></a>    // since it was a child of parent and parent was removed.
+<a name="line230"></a>    if (dummySpan) {
+<a name="line231"></a>      goog.dom.removeNode(dummySpan);
+<a name="line232"></a>    }
+<a name="line233"></a>  } else if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
+<a name="line234"></a>    // insertHtml and range.insertNode don&#39;t merge blocks correctly.
+<a name="line235"></a>    // (e.g. if your selection spans two paragraphs)
+<a name="line236"></a>    dh.getDocument().execCommand(&#39;insertImage&#39;, false, dummyNodeId);
+<a name="line237"></a>    var dummyImageNodePattern = new RegExp(&#39;&lt;[^&lt;]*&#39; + dummyNodeId + &#39;[^&gt;]*&gt;&#39;);
+<a name="line238"></a>    var parent = this.fieldObject.getRange().getContainerElement();
+<a name="line239"></a>    if (parent.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line240"></a>      // Opera sometimes returns a text node here.
+<a name="line241"></a>      // TODO: perhaps we should modify getParentContainer?
+<a name="line242"></a>      parent = parent.parentNode;
+<a name="line243"></a>    }
+<a name="line244"></a>
+<a name="line245"></a>    // We have to search up the DOM because in some cases, notably when
+<a name="line246"></a>    // selecting li&#39;s within a list, execCommand(&#39;insertImage&#39;) actually splits
+<a name="line247"></a>    // tags in such a way that parent that used to contain the selection does
+<a name="line248"></a>    // not contain inserted image.
+<a name="line249"></a>    while (!dummyImageNodePattern.test(parent.innerHTML)) {
+<a name="line250"></a>      parent = parent.parentNode;
+<a name="line251"></a>    }
+<a name="line252"></a>
+<a name="line253"></a>    // Like the IE case above, sometimes the selection does not include the
+<a name="line254"></a>    // outermost tags.  For Gecko, we have already expanded the range so that
+<a name="line255"></a>    // it does, so we can just replace the dummy image with the final html.
+<a name="line256"></a>    // For WebKit, we use the same approach as we do with IE  - we
+<a name="line257"></a>    // inject a dummy span where we will eventually place the contents, and
+<a name="line258"></a>    // remove parentNodes of the span while they are empty.
+<a name="line259"></a>
+<a name="line260"></a>    if (goog.userAgent.GECKO) {
+<a name="line261"></a>      parent.innerHTML =
+<a name="line262"></a>          parent.innerHTML.replace(dummyImageNodePattern, html);
+<a name="line263"></a>    } else {
+<a name="line264"></a>      parent.innerHTML =
+<a name="line265"></a>          parent.innerHTML.replace(dummyImageNodePattern, dummySpanText);
+<a name="line266"></a>      var dummySpan = dh.getElement(dummyNodeId);
+<a name="line267"></a>      parent = dummySpan;
+<a name="line268"></a>      while ((parent = dummySpan.parentNode) &amp;&amp;
+<a name="line269"></a>             goog.editor.node.isEmpty(parent) &amp;&amp;
+<a name="line270"></a>             !goog.editor.node.isEditableContainer(parent)) {
+<a name="line271"></a>        var tag = parent.nodeName;
+<a name="line272"></a>        // We can&#39;t remove these table tags as it will invalidate the table dom.
+<a name="line273"></a>        if (tag == goog.dom.TagName.TD ||
+<a name="line274"></a>            tag == goog.dom.TagName.TR ||
+<a name="line275"></a>            tag == goog.dom.TagName.TH) {
+<a name="line276"></a>          break;
+<a name="line277"></a>        }
+<a name="line278"></a>
+<a name="line279"></a>        // We can&#39;t just remove parent since dummySpan is inside it, and we need
+<a name="line280"></a>        // to keep dummy span around for the replacement.  So we move the
+<a name="line281"></a>        // dummySpan up as we go.
+<a name="line282"></a>        goog.dom.insertSiblingAfter(dummySpan, parent);
+<a name="line283"></a>        goog.dom.removeNode(parent);
+<a name="line284"></a>      }
+<a name="line285"></a>      parent.innerHTML =
+<a name="line286"></a>          parent.innerHTML.replace(new RegExp(dummySpanText, &#39;i&#39;), html);
+<a name="line287"></a>    }
+<a name="line288"></a>  }
+<a name="line289"></a>
+<a name="line290"></a>  var startSpan = dh.getElement(startSpanId);
+<a name="line291"></a>  var endSpan = dh.getElement(endSpanId);
+<a name="line292"></a>  goog.dom.Range.createFromNodes(startSpan, 0, endSpan,
+<a name="line293"></a>      endSpan.childNodes.length).select();
+<a name="line294"></a>  goog.dom.removeNode(startSpan);
+<a name="line295"></a>  goog.dom.removeNode(endSpan);
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * Gets the html inside the selection to send off for further processing.
+<a name="line301"></a> *
+<a name="line302"></a> * TODO: Make this general so that it can be moved into
+<a name="line303"></a> * goog.editor.range.  The main reason it can&#39;t be moved is becuase we need to
+<a name="line304"></a> * get the range before we do the execCommand and continue to operate on that
+<a name="line305"></a> * same range (reasons are documented above).
+<a name="line306"></a> *
+<a name="line307"></a> * @param {goog.dom.AbstractRange} range The selection.
+<a name="line308"></a> * @return {string} The html string to format.
+<a name="line309"></a> * @private
+<a name="line310"></a> */
+<a name="line311"></a>goog.editor.plugins.RemoveFormatting.prototype.getHtmlText_ = function(range) {
+<a name="line312"></a>  var div = this.getFieldDomHelper().createDom(&#39;div&#39;);
+<a name="line313"></a>  var textRange = range.getBrowserRangeObject();
+<a name="line314"></a>
+<a name="line315"></a>  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
+<a name="line316"></a>    // Get the text to convert.
+<a name="line317"></a>    div.appendChild(textRange.cloneContents());
+<a name="line318"></a>  } else if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
+<a name="line319"></a>    // Trim the whitespace on the ends of the range, so that it the container
+<a name="line320"></a>    // will be the container of only the text content that we are changing.
+<a name="line321"></a>    // This gets around issues in IE where the spaces are included in the
+<a name="line322"></a>    // selection, but ignored sometimes by execCommand, and left orphaned.
+<a name="line323"></a>    var rngText = range.getText();
+<a name="line324"></a>
+<a name="line325"></a>    // BRs get reported as \r\n, but only count as one character for moves.
+<a name="line326"></a>    // Adjust the string so our move counter is correct.
+<a name="line327"></a>    rngText = rngText.replace(/\r\n/g, &#39;\r&#39;);
+<a name="line328"></a>
+<a name="line329"></a>    var rngTextLength = rngText.length;
+<a name="line330"></a>    var left = rngTextLength - goog.string.trimLeft(rngText).length;
+<a name="line331"></a>    var right = rngTextLength - goog.string.trimRight(rngText).length;
+<a name="line332"></a>
+<a name="line333"></a>    textRange.moveStart(&#39;character&#39;, left);
+<a name="line334"></a>    textRange.moveEnd(&#39;character&#39;, -right);
+<a name="line335"></a>
+<a name="line336"></a>    var htmlText = textRange.htmlText;
+<a name="line337"></a>    // Check if in pretag and fix up formatting so that new lines are preserved.
+<a name="line338"></a>    if (textRange.queryCommandValue(&#39;formatBlock&#39;) == &#39;Formatted&#39;) {
+<a name="line339"></a>      htmlText = goog.string.newLineToBr(textRange.htmlText);
+<a name="line340"></a>    }
+<a name="line341"></a>    div.innerHTML = htmlText;
+<a name="line342"></a>  }
+<a name="line343"></a>
+<a name="line344"></a>  // Get the innerHTML of the node instead of just returning the text above
+<a name="line345"></a>  // so that its properly html escaped.
+<a name="line346"></a>  return div.innerHTML;
+<a name="line347"></a>};
+<a name="line348"></a>
+<a name="line349"></a>
+<a name="line350"></a>/**
+<a name="line351"></a> * Move the range so that it doesn&#39;t include any partially selected tables.
+<a name="line352"></a> * @param {goog.dom.AbstractRange} range The range to adjust.
+<a name="line353"></a> * @param {Node} startInTable Table node that the range starts in.
+<a name="line354"></a> * @param {Node} endInTable Table node that the range ends in.
+<a name="line355"></a> * @return {goog.dom.SavedCaretRange} Range to use to restore the
+<a name="line356"></a> *     selection after we run our custom remove formatting.
+<a name="line357"></a> * @private
+<a name="line358"></a> */
+<a name="line359"></a>goog.editor.plugins.RemoveFormatting.prototype.adjustRangeForTables_ =
+<a name="line360"></a>    function(range, startInTable, endInTable) {
+<a name="line361"></a>  // Create placeholders for the current selection so we can restore it
+<a name="line362"></a>  // later.
+<a name="line363"></a>  var savedCaretRange = goog.editor.range.saveUsingNormalizedCarets(range);
+<a name="line364"></a>
+<a name="line365"></a>  var startNode = range.getStartNode();
+<a name="line366"></a>  var startOffset = range.getStartOffset();
+<a name="line367"></a>  var endNode = range.getEndNode();
+<a name="line368"></a>  var endOffset = range.getEndOffset();
+<a name="line369"></a>  var dh = this.getFieldDomHelper();
+<a name="line370"></a>
+<a name="line371"></a>  // Move start after the table.
+<a name="line372"></a>  if (startInTable) {
+<a name="line373"></a>    var textNode = dh.createTextNode(&#39;&#39;);
+<a name="line374"></a>    goog.dom.insertSiblingAfter(textNode, startInTable);
+<a name="line375"></a>    startNode = textNode;
+<a name="line376"></a>    startOffset = 0;
+<a name="line377"></a>  }
+<a name="line378"></a>  // Move end before the table.
+<a name="line379"></a>  if (endInTable) {
+<a name="line380"></a>    var textNode = dh.createTextNode(&#39;&#39;);
+<a name="line381"></a>    goog.dom.insertSiblingBefore(textNode, endInTable);
+<a name="line382"></a>    endNode = textNode;
+<a name="line383"></a>    endOffset = 0;
+<a name="line384"></a>  }
+<a name="line385"></a>
+<a name="line386"></a>  goog.dom.Range.createFromNodes(startNode, startOffset,
+<a name="line387"></a>      endNode, endOffset).select();
+<a name="line388"></a>
+<a name="line389"></a>  return savedCaretRange;
+<a name="line390"></a>};
+<a name="line391"></a>
+<a name="line392"></a>
+<a name="line393"></a>/**
+<a name="line394"></a> * Remove a caret from the dom and hide it in a safe place, so it can
+<a name="line395"></a> * be restored later via restoreCaretsFromCave.
+<a name="line396"></a> * @param {goog.dom.SavedCaretRange} caretRange The caret range to
+<a name="line397"></a> *     get the carets from.
+<a name="line398"></a> * @param {boolean} isStart Whether this is the start or end caret.
+<a name="line399"></a> * @private
+<a name="line400"></a> */
+<a name="line401"></a>goog.editor.plugins.RemoveFormatting.prototype.putCaretInCave_ = function(
+<a name="line402"></a>    caretRange, isStart) {
+<a name="line403"></a>  var cavedCaret = goog.dom.removeNode(caretRange.getCaret(isStart));
+<a name="line404"></a>  if (isStart) {
+<a name="line405"></a>    this.startCaretInCave_ = cavedCaret;
+<a name="line406"></a>  } else {
+<a name="line407"></a>    this.endCaretInCave_ = cavedCaret;
+<a name="line408"></a>  }
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>/**
+<a name="line413"></a> * Restore carets that were hidden away by adding them back into the dom.
+<a name="line414"></a> * Note: this does not restore to the original dom location, as that
+<a name="line415"></a> * will likely have been modified with remove formatting.  The only
+<a name="line416"></a> * guarentees here are that start will still be before end, and that
+<a name="line417"></a> * they will be in the editable region.  This should only be used when
+<a name="line418"></a> * you don&#39;t actually intend to USE the caret again.
+<a name="line419"></a> * @private
+<a name="line420"></a> */
+<a name="line421"></a>goog.editor.plugins.RemoveFormatting.prototype.restoreCaretsFromCave_ =
+<a name="line422"></a>    function() {
+<a name="line423"></a>  // To keep start before end, we put the end caret at the bottom of the field
+<a name="line424"></a>  // and the start caret at the start of the field.
+<a name="line425"></a>  var field = this.fieldObject.getElement();
+<a name="line426"></a>  if (this.startCaretInCave_) {
+<a name="line427"></a>    field.insertBefore(this.startCaretInCave_, field.firstChild);
+<a name="line428"></a>    this.startCaretInCave_ = null;
+<a name="line429"></a>  }
+<a name="line430"></a>  if (this.endCaretInCave_) {
+<a name="line431"></a>    field.appendChild(this.endCaretInCave_);
+<a name="line432"></a>    this.endCaretInCave_ = null;
+<a name="line433"></a>  }
+<a name="line434"></a>};
+<a name="line435"></a>
+<a name="line436"></a>
+<a name="line437"></a>/**
+<a name="line438"></a> * Gets the html inside the current selection, passes it through the given
+<a name="line439"></a> * conversion function, and puts it back into the selection.
+<a name="line440"></a> *
+<a name="line441"></a> * @param {function(string): string} convertFunc A conversion function that
+<a name="line442"></a> *    transforms an html string to new html string.
+<a name="line443"></a> * @private
+<a name="line444"></a> */
+<a name="line445"></a>goog.editor.plugins.RemoveFormatting.prototype.convertSelectedHtmlText_ =
+<a name="line446"></a>    function(convertFunc) {
+<a name="line447"></a>  var range = this.fieldObject.getRange();
+<a name="line448"></a>
+<a name="line449"></a>  // For multiple ranges, it is really hard to do our custom remove formatting
+<a name="line450"></a>  // without invalidating other ranges. So instead of always losing the
+<a name="line451"></a>  // content, this solution at least lets the browser do it&#39;s own remove
+<a name="line452"></a>  // formatting which works correctly most of the time.
+<a name="line453"></a>  if (range.getTextRangeCount() &gt; 1) {
+<a name="line454"></a>    return;
+<a name="line455"></a>  }
+<a name="line456"></a>
+<a name="line457"></a>  if (goog.userAgent.GECKO) {
+<a name="line458"></a>    // Determine if we need to handle tables, since they are special cases.
+<a name="line459"></a>    // If the selection is entirely within a table, there is no extra
+<a name="line460"></a>    // formatting removal we can do.  If a table is fully selected, we will
+<a name="line461"></a>    // just blow it away. If a table is only partially selected, we can
+<a name="line462"></a>    // perform custom remove formatting only on the non table parts, since we
+<a name="line463"></a>    // we can&#39;t just remove the parts and paste back into it (eg. we can&#39;t
+<a name="line464"></a>    // inject html where a TR used to be).
+<a name="line465"></a>    // If the selection contains the table and more, this is automatically
+<a name="line466"></a>    // handled, but if just the table is selected, it can be tricky to figure
+<a name="line467"></a>    // this case out, because of the numerous ways selections can be formed -
+<a name="line468"></a>    // ex. if a table has a single tr with a single td with a single text node
+<a name="line469"></a>    // in it, and the selection is (textNode: 0), (textNode: nextNode.length)
+<a name="line470"></a>    // then the entire table is selected, even though the start and end aren&#39;t
+<a name="line471"></a>    // the table itself. We are truly inside a table if the expanded endpoints
+<a name="line472"></a>    // are still inside the table.
+<a name="line473"></a>
+<a name="line474"></a>    // Expand the selection to include any outermost tags that weren&#39;t included
+<a name="line475"></a>    // in the selection, but have the same visible selection. Stop expanding
+<a name="line476"></a>    // if we reach the top level field.
+<a name="line477"></a>    var expandedRange = goog.editor.range.expand(range,
+<a name="line478"></a>          this.fieldObject.getElement());
+<a name="line479"></a>
+<a name="line480"></a>    var startInTable = goog.editor.plugins.RemoveFormatting.getTableAncestor_(
+<a name="line481"></a>          expandedRange.getStartNode());
+<a name="line482"></a>    var endInTable = goog.editor.plugins.RemoveFormatting.getTableAncestor_(
+<a name="line483"></a>          expandedRange.getEndNode());
+<a name="line484"></a>
+<a name="line485"></a>    if (startInTable || endInTable) {
+<a name="line486"></a>      if (startInTable == endInTable) {
+<a name="line487"></a>        // We are fully contained in the same table, there is no extra
+<a name="line488"></a>        // remove formatting that we can do, just return and run browser
+<a name="line489"></a>        // formatting only.
+<a name="line490"></a>        return;
+<a name="line491"></a>      }
+<a name="line492"></a>
+<a name="line493"></a>      // Adjust the range to not contain any partially selected tables, since
+<a name="line494"></a>      // we don&#39;t want to run our custom remove formatting on them.
+<a name="line495"></a>      var savedCaretRange = this.adjustRangeForTables_(range,
+<a name="line496"></a>          startInTable, endInTable);
+<a name="line497"></a>
+<a name="line498"></a>      // Hack alert!!
+<a name="line499"></a>      // If start is not in a table, then the saved caret will get sent out
+<a name="line500"></a>      // for uber remove formatting, and it will get blown away.  This is
+<a name="line501"></a>      // fine, except that we need to be able to re-create a range from the
+<a name="line502"></a>      // savedCaretRange later on.  So, we just remove it from the dom, and
+<a name="line503"></a>      // put it back later so we can create a range later (not exactly in the
+<a name="line504"></a>      // same spot, but don&#39;t worry we don&#39;t actually try to use it later)
+<a name="line505"></a>      // and then it will be removed when we dispose the range.
+<a name="line506"></a>      if (!startInTable) {
+<a name="line507"></a>        this.putCaretInCave_(savedCaretRange, true);
+<a name="line508"></a>      }
+<a name="line509"></a>      if (!endInTable) {
+<a name="line510"></a>        this.putCaretInCave_(savedCaretRange, false);
+<a name="line511"></a>      }
+<a name="line512"></a>
+<a name="line513"></a>      // Re-fetch the range, and re-expand it, since we just modified it.
+<a name="line514"></a>      range = this.fieldObject.getRange();
+<a name="line515"></a>      expandedRange = goog.editor.range.expand(range,
+<a name="line516"></a>          this.fieldObject.getElement());
+<a name="line517"></a>    }
+<a name="line518"></a>
+<a name="line519"></a>    expandedRange.select();
+<a name="line520"></a>    range = expandedRange;
+<a name="line521"></a>  }
+<a name="line522"></a>
+<a name="line523"></a>  // Convert the selected text to the format-less version, paste back into
+<a name="line524"></a>  // the selection.
+<a name="line525"></a>  var text = this.getHtmlText_(range);
+<a name="line526"></a>  this.pasteHtml_(convertFunc(text));
+<a name="line527"></a>
+<a name="line528"></a>  if (goog.userAgent.GECKO &amp;&amp; savedCaretRange) {
+<a name="line529"></a>    // If we moved the selection, move it back so the user can&#39;t tell we did
+<a name="line530"></a>    // anything crazy and so the browser removeFormat that we call next
+<a name="line531"></a>    // will operate on the entire originally selected range.
+<a name="line532"></a>    range = this.fieldObject.getRange();
+<a name="line533"></a>    this.restoreCaretsFromCave_();
+<a name="line534"></a>    var realSavedCaretRange = savedCaretRange.toAbstractRange();
+<a name="line535"></a>    var startRange = startInTable ? realSavedCaretRange : range;
+<a name="line536"></a>    var endRange = endInTable ? realSavedCaretRange : range;
+<a name="line537"></a>    var restoredRange =
+<a name="line538"></a>        goog.editor.plugins.RemoveFormatting.createRangeDelimitedByRanges_(
+<a name="line539"></a>            startRange, endRange);
+<a name="line540"></a>    restoredRange.select();
+<a name="line541"></a>    savedCaretRange.dispose();
+<a name="line542"></a>  }
+<a name="line543"></a>};
+<a name="line544"></a>
+<a name="line545"></a>
+<a name="line546"></a>/**
+<a name="line547"></a> * Does a best-effort attempt at clobbering all formatting that the
+<a name="line548"></a> * browser&#39;s execCommand couldn&#39;t clobber without being totally inefficient.
+<a name="line549"></a> * Attempts to convert visual line breaks to BRs.
+<a name="line550"></a> * Adapted from Gmail&#39;s MessageUtil&#39;s htmlToPlainText. http://go/messageutil.js
+<a name="line551"></a> * @param {string} html The original html of the message.
+<a name="line552"></a> * @return {string} The unformatted html, which is just text and br&#39;s.
+<a name="line553"></a> * @private
+<a name="line554"></a> */
+<a name="line555"></a>goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
+<a name="line556"></a>    function(html) {
+<a name="line557"></a>  var el = goog.dom.createElement(&#39;div&#39;);
+<a name="line558"></a>  el.innerHTML = html;
+<a name="line559"></a>
+<a name="line560"></a>  // Put everything into a string buffer to avoid lots of expensive string
+<a name="line561"></a>  // concatenation along the way.
+<a name="line562"></a>  var sb = [];
+<a name="line563"></a>  var stack = [el.childNodes, 0];
+<a name="line564"></a>
+<a name="line565"></a>  // Keep separate stacks for places where we need to keep track of
+<a name="line566"></a>  // how deeply embedded we are.  These are analogous to the general stack.
+<a name="line567"></a>  var preTagStack = [];
+<a name="line568"></a>  var preTagLevel = 0;  // Length of the prestack.
+<a name="line569"></a>  var tableStack = [];
+<a name="line570"></a>  var tableLevel = 0;
+<a name="line571"></a>
+<a name="line572"></a>  // sp = stack pointer, pointing to the stack array.
+<a name="line573"></a>  // decrement by 2 since the stack alternates node lists and
+<a name="line574"></a>  // processed node counts
+<a name="line575"></a>  for (var sp = 0; sp &gt;= 0; sp -= 2) {
+<a name="line576"></a>    // Check if we should pop the table level.
+<a name="line577"></a>    var changedLevel = false;
+<a name="line578"></a>    while (tableLevel &gt; 0 &amp;&amp; sp &lt;= tableStack[tableLevel - 1]) {
+<a name="line579"></a>      tableLevel--;
+<a name="line580"></a>      changedLevel = true;
+<a name="line581"></a>    }
+<a name="line582"></a>    if (changedLevel) {
+<a name="line583"></a>      goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+<a name="line584"></a>    }
+<a name="line585"></a>
+<a name="line586"></a>
+<a name="line587"></a>    // Check if we should pop the &lt;pre&gt;/&lt;xmp&gt; level.
+<a name="line588"></a>    changedLevel = false;
+<a name="line589"></a>    while (preTagLevel &gt; 0 &amp;&amp; sp &lt;= preTagStack[preTagLevel - 1]) {
+<a name="line590"></a>      preTagLevel--;
+<a name="line591"></a>      changedLevel = true;
+<a name="line592"></a>    }
+<a name="line593"></a>    if (changedLevel) {
+<a name="line594"></a>      goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+<a name="line595"></a>    }
+<a name="line596"></a>
+<a name="line597"></a>    // The list of of nodes to process at the current stack level.
+<a name="line598"></a>    var nodeList = stack[sp];
+<a name="line599"></a>    // The number of nodes processed so far, stored in the stack immediately
+<a name="line600"></a>    // following the node list for that stack level.
+<a name="line601"></a>    var numNodesProcessed = stack[sp + 1];
+<a name="line602"></a>
+<a name="line603"></a>    while (numNodesProcessed &lt; nodeList.length) {
+<a name="line604"></a>      var node = nodeList[numNodesProcessed++];
+<a name="line605"></a>      var nodeName = node.nodeName;
+<a name="line606"></a>
+<a name="line607"></a>      var formatted = this.getValueForNode(node);
+<a name="line608"></a>      if (formatted) {
+<a name="line609"></a>        sb.push(formatted);
+<a name="line610"></a>        continue;
+<a name="line611"></a>      }
+<a name="line612"></a>
+<a name="line613"></a>      switch (nodeName) {
+<a name="line614"></a>        case &#39;#text&#39;:
+<a name="line615"></a>          // Note that IE does not preserve whitespace in the dom
+<a name="line616"></a>          // values, even in a pre tag, so this is useless for IE.
+<a name="line617"></a>          var nodeValue = preTagLevel &gt; 0 ? node.nodeValue :
+<a name="line618"></a>                          goog.string.stripNewlines(node.nodeValue);
+<a name="line619"></a>          nodeValue = goog.string.htmlEscape(nodeValue);
+<a name="line620"></a>          sb.push(nodeValue);
+<a name="line621"></a>          continue;
+<a name="line622"></a>
+<a name="line623"></a>        case goog.dom.TagName.P:
+<a name="line624"></a>          goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+<a name="line625"></a>          goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+<a name="line626"></a>          break;  // break (not continue) so that child nodes are processed.
+<a name="line627"></a>
+<a name="line628"></a>        case goog.dom.TagName.BR:
+<a name="line629"></a>          goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+<a name="line630"></a>          continue;
+<a name="line631"></a>
+<a name="line632"></a>        case goog.dom.TagName.TABLE:
+<a name="line633"></a>          goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+<a name="line634"></a>          tableStack[tableLevel++] = sp;
+<a name="line635"></a>          break;
+<a name="line636"></a>
+<a name="line637"></a>        case goog.dom.TagName.PRE:
+<a name="line638"></a>        case &#39;XMP&#39;:
+<a name="line639"></a>          // This doesn&#39;t fully handle xmp, since
+<a name="line640"></a>          // it doesn&#39;t actually ignore tags within the xmp tag.
+<a name="line641"></a>          preTagStack[preTagLevel++] = sp;
+<a name="line642"></a>          break;
+<a name="line643"></a>
+<a name="line644"></a>        case goog.dom.TagName.STYLE:
+<a name="line645"></a>        case goog.dom.TagName.SCRIPT:
+<a name="line646"></a>        case goog.dom.TagName.SELECT:
+<a name="line647"></a>          continue;
+<a name="line648"></a>
+<a name="line649"></a>        case goog.dom.TagName.A:
+<a name="line650"></a>          if (node.href &amp;&amp; node.href != &#39;&#39;) {
+<a name="line651"></a>            sb.push(&quot;&lt;a href=&#39;&quot;);
+<a name="line652"></a>            sb.push(node.href);
+<a name="line653"></a>            sb.push(&quot;&#39;&gt;&quot;);
+<a name="line654"></a>            sb.push(this.removeFormattingWorker_(node.innerHTML));
+<a name="line655"></a>            sb.push(&#39;&lt;/a&gt;&#39;);
+<a name="line656"></a>            continue; // Children taken care of.
+<a name="line657"></a>          } else {
+<a name="line658"></a>            break; // Take care of the children.
+<a name="line659"></a>          }
+<a name="line660"></a>
+<a name="line661"></a>        case goog.dom.TagName.IMG:
+<a name="line662"></a>          sb.push(&quot;&lt;img src=&#39;&quot;);
+<a name="line663"></a>          sb.push(node.src);
+<a name="line664"></a>          sb.push(&quot;&#39;&gt;&quot;);
+<a name="line665"></a>          continue;
+<a name="line666"></a>
+<a name="line667"></a>        // TODO: case &#39;EMBED&#39;: case &#39;OBJECT&#39;
+<a name="line668"></a>
+<a name="line669"></a>        case goog.dom.TagName.TD:
+<a name="line670"></a>          // Don&#39;t add a space for the first TD, we only want spaces to
+<a name="line671"></a>          // separate td&#39;s.
+<a name="line672"></a>          if (node.previousSibling) {
+<a name="line673"></a>            sb.push(&#39; &#39;);
+<a name="line674"></a>          }
+<a name="line675"></a>          break;
+<a name="line676"></a>
+<a name="line677"></a>        case goog.dom.TagName.TR:
+<a name="line678"></a>          // Don&#39;t add a newline for the first TR.
+<a name="line679"></a>          if (node.previousSibling) {
+<a name="line680"></a>            goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+<a name="line681"></a>          }
+<a name="line682"></a>          break;
+<a name="line683"></a>
+<a name="line684"></a>        case goog.dom.TagName.DIV:
+<a name="line685"></a>          var parent = node.parentNode;
+<a name="line686"></a>          if (parent.firstChild == node &amp;&amp;
+<a name="line687"></a>              goog.editor.plugins.RemoveFormatting.BLOCK_RE_.test(
+<a name="line688"></a>                  parent.tagName)) {
+<a name="line689"></a>            // If a DIV is the first child of another element that itself is a
+<a name="line690"></a>            // block element, the DIV does not add a new line.
+<a name="line691"></a>            break;
+<a name="line692"></a>          }
+<a name="line693"></a>          // Otherwise, the DIV does add a new line.  Fall through.
+<a name="line694"></a>
+<a name="line695"></a>        default:
+<a name="line696"></a>          if (goog.editor.plugins.RemoveFormatting.BLOCK_RE_.test(nodeName)) {
+<a name="line697"></a>            goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
+<a name="line698"></a>          }
+<a name="line699"></a>      }
+<a name="line700"></a>
+<a name="line701"></a>      // Recurse down the node.
+<a name="line702"></a>      var children = node.childNodes;
+<a name="line703"></a>      if (children.length &gt; 0) {
+<a name="line704"></a>        // Push the current state on the stack.
+<a name="line705"></a>        stack[sp++] = nodeList;
+<a name="line706"></a>        stack[sp++] = numNodesProcessed;
+<a name="line707"></a>
+<a name="line708"></a>        // Iterate through the children nodes.
+<a name="line709"></a>        nodeList = children;
+<a name="line710"></a>        numNodesProcessed = 0;
+<a name="line711"></a>      }
+<a name="line712"></a>    }
+<a name="line713"></a>  }
+<a name="line714"></a>
+<a name="line715"></a>  // Replace &amp;nbsp; with white space.
+<a name="line716"></a>  return goog.string.normalizeSpaces(sb.join(&#39;&#39;));
+<a name="line717"></a>};
+<a name="line718"></a>
+<a name="line719"></a>
+<a name="line720"></a>/**
+<a name="line721"></a> * Handle per node special processing if neccessary. If this function returns
+<a name="line722"></a> * null then standard cleanup is applied. Otherwise this node and all children
+<a name="line723"></a> * are assumed to be cleaned.
+<a name="line724"></a> * NOTE: If an alternate RemoveFormatting processor is provided
+<a name="line725"></a> * (setRemoveFormattingFunc()), this will no longer work.
+<a name="line726"></a> * @param {Element} node The node to clean.
+<a name="line727"></a> * @return {string?} The HTML strig representation of the cleaned data.
+<a name="line728"></a> */
+<a name="line729"></a>goog.editor.plugins.RemoveFormatting.prototype.getValueForNode = function(
+<a name="line730"></a>    node) {
+<a name="line731"></a>  return null;
+<a name="line732"></a>};
+<a name="line733"></a>
+<a name="line734"></a>
+<a name="line735"></a>/**
+<a name="line736"></a> * Sets a function to be used for remove formatting.
+<a name="line737"></a> * @param {function(string): string} removeFormattingFunc - A function that
+<a name="line738"></a> *     takes  a string of html and returns a string of html that does any other
+<a name="line739"></a> *     formatting changes desired.  Use this only if trogedit&#39;s behavior doesn&#39;t
+<a name="line740"></a> *     meet your needs.
+<a name="line741"></a> */
+<a name="line742"></a>goog.editor.plugins.RemoveFormatting.prototype.setRemoveFormattingFunc =
+<a name="line743"></a>    function(removeFormattingFunc) {
+<a name="line744"></a>  this.optRemoveFormattingFunc_ = removeFormattingFunc;
+<a name="line745"></a>};
+</pre>
+
+
+</body>
+</html>

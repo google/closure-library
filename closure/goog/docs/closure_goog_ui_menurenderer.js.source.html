@@ -1,0 +1,164 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>menurenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_menurenderer.js.html">menurenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Renderer for {@link goog.ui.Menu}s.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.ui.MenuRenderer&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom.a11y&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.a11y.Role&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.a11y.State&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.ContainerRenderer&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.Separator&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Default renderer for {@link goog.ui.Menu}s, based on {@link
+<a name="line32"></a> * goog.ui.ContainerRenderer}.
+<a name="line33"></a> * @constructor
+<a name="line34"></a> * @extends {goog.ui.ContainerRenderer}
+<a name="line35"></a> */
+<a name="line36"></a>goog.ui.MenuRenderer = function() {
+<a name="line37"></a>  goog.ui.ContainerRenderer.call(this);
+<a name="line38"></a>};
+<a name="line39"></a>goog.inherits(goog.ui.MenuRenderer, goog.ui.ContainerRenderer);
+<a name="line40"></a>goog.addSingletonGetter(goog.ui.MenuRenderer);
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * Default CSS class to be applied to the root element of toolbars rendered
+<a name="line45"></a> * by this renderer.
+<a name="line46"></a> * @type {string}
+<a name="line47"></a> */
+<a name="line48"></a>goog.ui.MenuRenderer.CSS_CLASS = goog.getCssName(&#39;goog-menu&#39;);
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * Returns the ARIA role to be applied to menus.
+<a name="line53"></a> * @return {string} ARIA role.
+<a name="line54"></a> * @override
+<a name="line55"></a> */
+<a name="line56"></a>goog.ui.MenuRenderer.prototype.getAriaRole = function() {
+<a name="line57"></a>  return goog.dom.a11y.Role.MENU;
+<a name="line58"></a>};
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * Returns whether the element is a UL or acceptable to our superclass.
+<a name="line63"></a> * @param {Element} element Element to decorate.
+<a name="line64"></a> * @return {boolean} Whether the renderer can decorate the element.
+<a name="line65"></a> */
+<a name="line66"></a>goog.ui.MenuRenderer.prototype.canDecorate = function(element) {
+<a name="line67"></a>  return element.tagName == &#39;UL&#39; ||
+<a name="line68"></a>      goog.ui.MenuRenderer.superClass_.canDecorate.call(this, element);
+<a name="line69"></a>};
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Inspects the element, and creates an instance of {@link goog.ui.Control} or
+<a name="line74"></a> * an appropriate subclass best suited to decorate it.  Overrides the superclass
+<a name="line75"></a> * implementation by recognizing HR elements as separators.
+<a name="line76"></a> * @param {Element} element Element to decorate.
+<a name="line77"></a> * @return {goog.ui.Control?} A new control suitable to decorate the element
+<a name="line78"></a> *     (null if none).
+<a name="line79"></a> */
+<a name="line80"></a>goog.ui.MenuRenderer.prototype.getDecoratorForChild = function(element) {
+<a name="line81"></a>  return element.tagName == &#39;HR&#39; ?
+<a name="line82"></a>      new goog.ui.Separator() :
+<a name="line83"></a>      goog.ui.MenuRenderer.superClass_.getDecoratorForChild.call(this,
+<a name="line84"></a>          element);
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Returns whether the given element is contained in the menu&#39;s DOM.
+<a name="line90"></a> * @param {goog.ui.Menu} menu The menu to test.
+<a name="line91"></a> * @param {Element} element The element to test.
+<a name="line92"></a> * @return {boolean} Whether the given element is contained in the menu.
+<a name="line93"></a> */
+<a name="line94"></a>goog.ui.MenuRenderer.prototype.containsElement = function(menu, element) {
+<a name="line95"></a>  return goog.dom.contains(menu.getElement(), element);
+<a name="line96"></a>};
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Returns the CSS class to be applied to the root element of containers
+<a name="line101"></a> * rendered using this renderer.
+<a name="line102"></a> * @return {string} Renderer-specific CSS class.
+<a name="line103"></a> */
+<a name="line104"></a>goog.ui.MenuRenderer.prototype.getCssClass = function() {
+<a name="line105"></a>  return goog.ui.MenuRenderer.CSS_CLASS;
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/** @inheritDoc */
+<a name="line110"></a>goog.ui.MenuRenderer.prototype.initializeDom = function(container) {
+<a name="line111"></a>  goog.ui.MenuRenderer.superClass_.initializeDom.call(this, container);
+<a name="line112"></a>
+<a name="line113"></a>  var element = container.getElement();
+<a name="line114"></a>  goog.dom.a11y.setState(element, goog.dom.a11y.State.HASPOPUP, &#39;true&#39;);
+<a name="line115"></a>};
+</pre>
+
+
+</body>
+</html>

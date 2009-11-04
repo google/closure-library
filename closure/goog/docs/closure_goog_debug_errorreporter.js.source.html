@@ -1,0 +1,198 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>errorreporter.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_debug_errorreporter.js.html">errorreporter.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2009 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the ErrorReporter class, which creates an error
+<a name="line17"></a> * handler that reports any errors raised to a URL.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.debug.ErrorReporter&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line24"></a>goog.require(&#39;goog.debug.ErrorHandler&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events&#39;);
+<a name="line26"></a>goog.require(&#39;goog.net.XhrIo&#39;);
+<a name="line27"></a>goog.require(&#39;goog.string&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Constructs an error reporter. Internal Use Only. To install an error reporter
+<a name="line33"></a> * see the {@see #install} method below.
+<a name="line34"></a> *
+<a name="line35"></a> * @param {string} handlerUrl The URL to which all errors will be reported.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> */
+<a name="line38"></a>goog.debug.ErrorReporter = function(handlerUrl) {
+<a name="line39"></a>  /**
+<a name="line40"></a>   * The URL at which all errors caught by this handler will be logged.
+<a name="line41"></a>   *
+<a name="line42"></a>   * @type {string}
+<a name="line43"></a>   * @private
+<a name="line44"></a>   */
+<a name="line45"></a>  this.handlerUrl_ = handlerUrl;
+<a name="line46"></a>
+<a name="line47"></a>  this.setup_();
+<a name="line48"></a>};
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * The internal error handler used to catch all errors.
+<a name="line53"></a> *
+<a name="line54"></a> * @type {goog.debug.ErrorHandler}
+<a name="line55"></a> * @private
+<a name="line56"></a> */
+<a name="line57"></a>goog.debug.ErrorReporter.prototype.errorHandler_ = null;
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * Logging object.
+<a name="line62"></a> *
+<a name="line63"></a> * @type {goog.debug.Logger}
+<a name="line64"></a> * @private
+<a name="line65"></a> */
+<a name="line66"></a>goog.debug.ErrorReporter.logger_ =
+<a name="line67"></a>    goog.debug.Logger.getLogger(&#39;goog.debug.ErrorReporter&#39;);
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * Installs an error reporter to catch all JavaScript errors raised.
+<a name="line72"></a> *
+<a name="line73"></a> * @param {string} loggingUrl The URL to which the errors caught will be
+<a name="line74"></a> *   reported.
+<a name="line75"></a> * @return {goog.debug.ErrorReporter} The error reporter.
+<a name="line76"></a> */
+<a name="line77"></a>goog.debug.ErrorReporter.install = function(loggingUrl) {
+<a name="line78"></a>  var instance = new goog.debug.ErrorReporter(loggingUrl);
+<a name="line79"></a>  return instance;
+<a name="line80"></a>};
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Sets up the error reporter.
+<a name="line85"></a> * @private
+<a name="line86"></a> */
+<a name="line87"></a>goog.debug.ErrorReporter.prototype.setup_ = function() {
+<a name="line88"></a>  if (goog.userAgent.IE) {
+<a name="line89"></a>    // Use &quot;onerror&quot; because caught exceptions in IE don&#39;t provide line number.
+<a name="line90"></a>    goog.debug.catchErrors(
+<a name="line91"></a>        goog.bind(this.handleException_, this), false, null);
+<a name="line92"></a>  } else {
+<a name="line93"></a>    // &quot;onerror&quot; doesn&#39;t work with FF2 or Chrome
+<a name="line94"></a>    this.errorHandler_ = new goog.debug.ErrorHandler(
+<a name="line95"></a>        goog.bind(this.handleException_, this));
+<a name="line96"></a>
+<a name="line97"></a>    this.errorHandler_.protectWindowSetTimeout();
+<a name="line98"></a>    this.errorHandler_.protectWindowSetInterval();
+<a name="line99"></a>    goog.events.protectBrowserEventEntryPoint(this.errorHandler_);
+<a name="line100"></a>    goog.net.XhrIo.protectEntryPoints(this.errorHandler_);
+<a name="line101"></a>  }
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Handler for caught exceptions. Sends report to the LoggingServlet.
+<a name="line107"></a> *
+<a name="line108"></a> * @param {Error} e The exception.
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.debug.ErrorReporter.prototype.handleException_ = function(e) {
+<a name="line112"></a>  var error = goog.debug.normalizeErrorObject(e);
+<a name="line113"></a>
+<a name="line114"></a>  // Make sure when handling exceptions that the error file name contains only
+<a name="line115"></a>  // the basename (e.g. &quot;file.js&quot;). goog.debug.catchErrors does this stripping,
+<a name="line116"></a>  // but goog.debug.ErrorHandler.protectEntryPoint does not.
+<a name="line117"></a>  var baseName = String(error.fileName).split(/[\/\\]/).pop();
+<a name="line118"></a>
+<a name="line119"></a>  this.sendErrorReport(error.message, baseName, error.lineNumber);
+<a name="line120"></a>};
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Sends an error report to the logging URL.
+<a name="line125"></a> *
+<a name="line126"></a> * @param {string} message Error description.
+<a name="line127"></a> * @param {string} fileName URL of the JavaScript file with the error.
+<a name="line128"></a> * @param {number} line Line number of the error.
+<a name="line129"></a> */
+<a name="line130"></a>goog.debug.ErrorReporter.prototype.sendErrorReport =
+<a name="line131"></a>    function(message, fileName, line) {
+<a name="line132"></a>  try {
+<a name="line133"></a>    // Create the logging URL.
+<a name="line134"></a>    var requestUrl = new goog.Uri(this.handlerUrl_);
+<a name="line135"></a>    requestUrl.setParameterValue(&#39;script&#39;, fileName);
+<a name="line136"></a>    requestUrl.setParameterValue(&#39;error&#39;, message);
+<a name="line137"></a>    requestUrl.setParameterValue(&#39;line&#39;, line);
+<a name="line138"></a>
+<a name="line139"></a>    // Send the request with the contents of the error.
+<a name="line140"></a>    goog.net.XhrIo.send(requestUrl.toString());
+<a name="line141"></a>  } catch (e) {
+<a name="line142"></a>    var logMessage = goog.string.buildString(
+<a name="line143"></a>        &#39;Error occurred in sending an error report.\n\n&#39;,
+<a name="line144"></a>        &#39;script:&#39;, fileName, &#39;\n&#39;,
+<a name="line145"></a>        &#39;line:&#39;, line, &#39;\n&#39;,
+<a name="line146"></a>        &#39;error:&#39;, message);
+<a name="line147"></a>    goog.debug.ErrorReporter.logger_.info(logMessage);
+<a name="line148"></a>  }
+<a name="line149"></a>};
+</pre>
+
+
+</body>
+</html>

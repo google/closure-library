@@ -1,0 +1,122 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>separator.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_separator.js.html">separator.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A class for representing a separator, with renderers for both
+<a name="line17"></a> * horizontal (menu) and vertical (toolbar) separators.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.Separator&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.dom.a11y&#39;);
+<a name="line24"></a>goog.require(&#39;goog.ui.Component.State&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.Control&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.MenuSeparatorRenderer&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Class representing a separator.  Although it extends {@link goog.ui.Control},
+<a name="line32"></a> * the Separator class doesn&#39;t allocate any event handlers, nor does it change
+<a name="line33"></a> * its appearance on mouseover, etc.
+<a name="line34"></a> * @param {goog.ui.MenuSeparatorRenderer} opt_renderer Renderer to render or
+<a name="line35"></a> *    decorate the separator; defaults to {@link goog.ui.MenuSeparatorRenderer}.
+<a name="line36"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+<a name="line37"></a> *    document interaction.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @extends {goog.ui.Control}
+<a name="line40"></a> */
+<a name="line41"></a>goog.ui.Separator = function(opt_renderer, opt_domHelper) {
+<a name="line42"></a>  goog.ui.Control.call(this, null, opt_renderer ||
+<a name="line43"></a>      goog.ui.MenuSeparatorRenderer.getInstance(), opt_domHelper);
+<a name="line44"></a>
+<a name="line45"></a>  this.setSupportedState(goog.ui.Component.State.DISABLED, false);
+<a name="line46"></a>  this.setSupportedState(goog.ui.Component.State.HOVER, false);
+<a name="line47"></a>  this.setSupportedState(goog.ui.Component.State.ACTIVE, false);
+<a name="line48"></a>  this.setSupportedState(goog.ui.Component.State.FOCUSED, false);
+<a name="line49"></a>
+<a name="line50"></a>  // Separators are always considered disabled.
+<a name="line51"></a>  this.setStateInternal(goog.ui.Component.State.DISABLED);
+<a name="line52"></a>};
+<a name="line53"></a>goog.inherits(goog.ui.Separator, goog.ui.Control);
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * Configures the component after its DOM has been rendered.  Overrides
+<a name="line58"></a> * {@link goog.ui.Control#enterDocument} by making sure no event handler
+<a name="line59"></a> * is allocated.
+<a name="line60"></a> */
+<a name="line61"></a>goog.ui.Separator.prototype.enterDocument = function() {
+<a name="line62"></a>  goog.ui.Separator.superClass_.enterDocument.call(this);
+<a name="line63"></a>  goog.dom.a11y.setRole(this.getElement(), &#39;separator&#39;);
+<a name="line64"></a>};
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>// Register a decorator factory function for goog.ui.MenuSeparators.
+<a name="line68"></a>goog.ui.registry.setDecoratorByClassName(
+<a name="line69"></a>    goog.ui.MenuSeparatorRenderer.CSS_CLASS,
+<a name="line70"></a>    function() {
+<a name="line71"></a>      // Separator defaults to using MenuSeparatorRenderer.
+<a name="line72"></a>      return new goog.ui.Separator();
+<a name="line73"></a>    });
+</pre>
+
+
+</body>
+</html>

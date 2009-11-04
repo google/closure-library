@@ -1,0 +1,459 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>labelinput.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_labelinput.js.html">labelinput.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This behavior is applied to a text input and it shows a text
+<a name="line17"></a> * message inside the element if the user hasn&#39;t entered any text.
+<a name="line18"></a> *
+<a name="line19"></a> * This is ported from http://go/labelinput.js
+<a name="line20"></a> *
+<a name="line21"></a> * Known issue: Safari does not allow you get to the window object from a
+<a name="line22"></a> * document. We need that to listen to the onload event. For now we hard code
+<a name="line23"></a> * the window to the current window.
+<a name="line24"></a> *
+<a name="line25"></a> * Known issue: We need to listen to the form submit event but we attach the
+<a name="line26"></a> * event only once (when created or when it is changed) so if you move the DOM
+<a name="line27"></a> * node to another form it will not be cleared correctly before submitting.
+<a name="line28"></a> *
+<a name="line29"></a> * @see ../demos/labelinput.html
+<a name="line30"></a> */
+<a name="line31"></a>
+<a name="line32"></a>goog.provide(&#39;goog.ui.LabelInput&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line36"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line37"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line38"></a>goog.require(&#39;goog.events&#39;);
+<a name="line39"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line40"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line41"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * This creates the label input object.
+<a name="line46"></a> * @param {string} opt_label The text to show as the label.
+<a name="line47"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line48"></a> * @extends {goog.ui.Component}
+<a name="line49"></a> * @constructor
+<a name="line50"></a> */
+<a name="line51"></a>goog.ui.LabelInput = function(opt_label, opt_domHelper) {
+<a name="line52"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line53"></a>
+<a name="line54"></a>  /**
+<a name="line55"></a>   * The text to show as the label.
+<a name="line56"></a>   * @type {string}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.label_ = opt_label || &#39;&#39;;
+<a name="line60"></a>};
+<a name="line61"></a>goog.inherits(goog.ui.LabelInput, goog.ui.Component);
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * Variable used to store the element value on keydown and restore it on
+<a name="line66"></a> * keypress.  See {@link #handleEscapeKeys_}
+<a name="line67"></a> * @type {string?}
+<a name="line68"></a> * @private
+<a name="line69"></a> */
+<a name="line70"></a>goog.ui.LabelInput.prototype.ffKeyRestoreValue_ = null;
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * @type {goog.events.EventHandler}
+<a name="line75"></a> * @private
+<a name="line76"></a> */
+<a name="line77"></a>goog.ui.LabelInput.prototype.eventHandler_;
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * Creates the DOM nodes needed for the label input.
+<a name="line82"></a> */
+<a name="line83"></a>goog.ui.LabelInput.prototype.createDom = function() {
+<a name="line84"></a>  this.setElementInternal(
+<a name="line85"></a>      this.getDomHelper().createDom(&#39;input&#39;, {&#39;type&#39;: &#39;text&#39;}));
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Decorates an existing HTML input element as a label input. If the element
+<a name="line91"></a> * has a &quot;label&quot; attribute then that will be used as the label property for the
+<a name="line92"></a> * label input object.
+<a name="line93"></a> * @param {HTMLInputElement} element The HTML input element to decorate.
+<a name="line94"></a> */
+<a name="line95"></a>goog.ui.LabelInput.prototype.decorateInternal = function(element) {
+<a name="line96"></a>  goog.ui.LabelInput.superClass_.decorateInternal.call(this, element);
+<a name="line97"></a>  if (!this.label_) {
+<a name="line98"></a>    this.label_ = element.getAttribute(&#39;label&#39;) || &#39;&#39;;
+<a name="line99"></a>  }
+<a name="line100"></a>};
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Called when the DOM for the component is for sure in the document.
+<a name="line105"></a> */
+<a name="line106"></a>goog.ui.LabelInput.prototype.enterDocument = function() {
+<a name="line107"></a>  goog.ui.LabelInput.superClass_.enterDocument.call(this);
+<a name="line108"></a>  this.attachEvents_();
+<a name="line109"></a>  this.check_();
+<a name="line110"></a>
+<a name="line111"></a>  // Make it easy for other closure widgets to play nicely with inputs using
+<a name="line112"></a>  // LabelInput:
+<a name="line113"></a>  this.getElement().labelInput_ = this;
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Called when the DOM for the component is removed from the document or
+<a name="line119"></a> * when the component no longer is managing the DOM.
+<a name="line120"></a> */
+<a name="line121"></a>goog.ui.LabelInput.prototype.exitDocument = function() {
+<a name="line122"></a>  goog.ui.LabelInput.superClass_.exitDocument.call(this);
+<a name="line123"></a>  this.detachEvents_();
+<a name="line124"></a>
+<a name="line125"></a>  this.getElement().labelInput_ = null;
+<a name="line126"></a>};
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * Attaches the events we need to listen to.
+<a name="line130"></a> * @private
+<a name="line131"></a> */
+<a name="line132"></a>goog.ui.LabelInput.prototype.attachEvents_ = function() {
+<a name="line133"></a>  var eh = new goog.events.EventHandler(this);
+<a name="line134"></a>  eh.listen(this.getElement(), goog.events.EventType.FOCUS, this.handleFocus_);
+<a name="line135"></a>  eh.listen(this.getElement(), goog.events.EventType.BLUR, this.handleBlur_);
+<a name="line136"></a>
+<a name="line137"></a>  if (goog.userAgent.GECKO) {
+<a name="line138"></a>    eh.listen(this.getElement(), [goog.events.EventType.KEYPRESS,
+<a name="line139"></a>        goog.events.EventType.KEYDOWN, goog.events.EventType.KEYUP],
+<a name="line140"></a>        this.handleEscapeKeys_);
+<a name="line141"></a>  }
+<a name="line142"></a>
+<a name="line143"></a>  // IE sets defaultValue upon load so we need to test that as well.
+<a name="line144"></a>  var d = goog.dom.getOwnerDocument(this.getElement());
+<a name="line145"></a>  var w = goog.dom.getWindow(d);
+<a name="line146"></a>  eh.listen(w, goog.events.EventType.LOAD, this.handleWindowLoad_);
+<a name="line147"></a>
+<a name="line148"></a>  this.eventHandler_ = eh;
+<a name="line149"></a>  this.attachEventsToForm_();
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * Adds a listener to the form so that we can clear the input before it is
+<a name="line155"></a> * submitted.
+<a name="line156"></a> * @private
+<a name="line157"></a> */
+<a name="line158"></a>goog.ui.LabelInput.prototype.attachEventsToForm_ = function() {
+<a name="line159"></a>  // in case we have are in a form we need to make sure the label is not
+<a name="line160"></a>  // submitted
+<a name="line161"></a>  if (!this.formAttached_ &amp;&amp; this.eventHandler_ &amp;&amp; this.getElement().form) {
+<a name="line162"></a>    this.eventHandler_.listen(this.getElement().form,
+<a name="line163"></a>                              goog.events.EventType.SUBMIT,
+<a name="line164"></a>                              this.handleFormSubmit_);
+<a name="line165"></a>    this.formAttached_ = true;
+<a name="line166"></a>  }
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Stops listening to the events.
+<a name="line172"></a> * @private
+<a name="line173"></a> */
+<a name="line174"></a>goog.ui.LabelInput.prototype.detachEvents_ = function() {
+<a name="line175"></a>  if (this.eventHandler_) {
+<a name="line176"></a>    this.eventHandler_.dispose();
+<a name="line177"></a>    this.eventHandler_ = null;
+<a name="line178"></a>  }
+<a name="line179"></a>};
+<a name="line180"></a>
+<a name="line181"></a>
+<a name="line182"></a>/** @inheritDoc */
+<a name="line183"></a>goog.ui.LabelInput.prototype.disposeInternal = function() {
+<a name="line184"></a>  goog.ui.LabelInput.superClass_.disposeInternal.call(this);
+<a name="line185"></a>  this.detachEvents_();
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * The CSS class name to add to the input when the user has not entered a
+<a name="line191"></a> * value.
+<a name="line192"></a> */
+<a name="line193"></a>goog.ui.LabelInput.prototype.LABEL_CLASS_NAME = &#39;label-input-label&#39;;
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Handler for the focus event.
+<a name="line198"></a> * @param {goog.events.Event} e The event object passed in to the event handler.
+<a name="line199"></a> * @private
+<a name="line200"></a> */
+<a name="line201"></a>goog.ui.LabelInput.prototype.handleFocus_ = function(e) {
+<a name="line202"></a>  this.hasFocus_ = true;
+<a name="line203"></a>  goog.dom.classes.remove(this.getElement(), this.LABEL_CLASS_NAME);
+<a name="line204"></a>  if (!this.hasChanged() &amp;&amp; !this.inFocusAndSelect_) {
+<a name="line205"></a>    var me = this;
+<a name="line206"></a>    var clearValue = function() {
+<a name="line207"></a>      me.getElement().value = &#39;&#39;;
+<a name="line208"></a>    };
+<a name="line209"></a>    if (goog.userAgent.IE) {
+<a name="line210"></a>      goog.Timer.callOnce(clearValue, 10);
+<a name="line211"></a>    } else {
+<a name="line212"></a>      clearValue();
+<a name="line213"></a>    }
+<a name="line214"></a>  }
+<a name="line215"></a>};
+<a name="line216"></a>
+<a name="line217"></a>
+<a name="line218"></a>/**
+<a name="line219"></a> * Handler for the blur event.
+<a name="line220"></a> * @param {goog.events.Event} e The event object passed in to the event handler.
+<a name="line221"></a> * @private
+<a name="line222"></a> */
+<a name="line223"></a>goog.ui.LabelInput.prototype.handleBlur_ = function(e) {
+<a name="line224"></a>  this.ffKeyRestoreValue_ = null;
+<a name="line225"></a>  this.hasFocus_ = false;
+<a name="line226"></a>  this.check_();
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Handler for key events in Firefox.
+<a name="line232"></a> *
+<a name="line233"></a> * If the escape key is pressed when a text input has not been changed manually
+<a name="line234"></a> * since being focussed, the text input will revert to it&#39;s previous value.
+<a name="line235"></a> * Firefox does not honor preventDefault for the escape key. The revert happens
+<a name="line236"></a> * after the keydown event and before every keypress. We therefore store the
+<a name="line237"></a> * element&#39;s value on keydown and restore it on keypress. The restore value is
+<a name="line238"></a> * nullified on keyup so that {@link #getValue} returns the correct value.
+<a name="line239"></a> *
+<a name="line240"></a> * IE and Chrome don&#39;t have this problem, Opera blurs in the input box
+<a name="line241"></a> * completely in a way that preventDefault on the escape key has no effect.
+<a name="line242"></a> *
+<a name="line243"></a> * @param {goog.events.BrowserEvent} e The event object passed in to
+<a name="line244"></a> *     the event handler.
+<a name="line245"></a> * @private
+<a name="line246"></a> */
+<a name="line247"></a>goog.ui.LabelInput.prototype.handleEscapeKeys_ = function(e) {
+<a name="line248"></a>  if (e.keyCode == 27) {
+<a name="line249"></a>    if (e.type == goog.events.EventType.KEYDOWN) {
+<a name="line250"></a>      this.ffKeyRestoreValue_ = this.getElement().value;
+<a name="line251"></a>    } else if (e.type == goog.events.EventType.KEYPRESS) {
+<a name="line252"></a>      this.getElement().value = /** @type {string} */ (this.ffKeyRestoreValue_);
+<a name="line253"></a>    } else if (e.type == goog.events.EventType.KEYUP) {
+<a name="line254"></a>      this.ffKeyRestoreValue_ = null;
+<a name="line255"></a>    }
+<a name="line256"></a>    e.preventDefault();
+<a name="line257"></a>  }
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>
+<a name="line262"></a>/**
+<a name="line263"></a> * Handler for the submit event of the form element.
+<a name="line264"></a> * @param {goog.events.Event} e The event object passed in to the event handler.
+<a name="line265"></a> * @private
+<a name="line266"></a> */
+<a name="line267"></a>goog.ui.LabelInput.prototype.handleFormSubmit_ = function(e) {
+<a name="line268"></a>  if (!this.hasChanged()) {
+<a name="line269"></a>    this.getElement().value = &#39;&#39;;
+<a name="line270"></a>    // allow form to be sent before restoring value
+<a name="line271"></a>    goog.Timer.callOnce(this.handleAfterSubmit_, 10, this);
+<a name="line272"></a>  }
+<a name="line273"></a>};
+<a name="line274"></a>
+<a name="line275"></a>
+<a name="line276"></a>/**
+<a name="line277"></a> * Restore value after submit
+<a name="line278"></a> * @param {Event} e The event object passed in to the event handler.
+<a name="line279"></a> * @private
+<a name="line280"></a> */
+<a name="line281"></a>goog.ui.LabelInput.prototype.handleAfterSubmit_ = function(e) {
+<a name="line282"></a>  if (!this.hasChanged()) {
+<a name="line283"></a>    this.getElement().value = this.label_;
+<a name="line284"></a>  }
+<a name="line285"></a>};
+<a name="line286"></a>
+<a name="line287"></a>
+<a name="line288"></a>/**
+<a name="line289"></a> * Handler for the load event the window. This is needed because
+<a name="line290"></a> * IE sets defaultValue upon load.
+<a name="line291"></a> * @param {Event} e The event object passed in to the event handler.
+<a name="line292"></a> * @private
+<a name="line293"></a> */
+<a name="line294"></a>goog.ui.LabelInput.prototype.handleWindowLoad_ = function(e) {
+<a name="line295"></a>  this.check_();
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * @return {boolean} Whether the value has changed been changed by the user.
+<a name="line301"></a> */
+<a name="line302"></a>goog.ui.LabelInput.prototype.hasChanged = function() {
+<a name="line303"></a>  return this.getElement().value != &#39;&#39; &amp;&amp;
+<a name="line304"></a>      this.getElement().value != this.label_;
+<a name="line305"></a>};
+<a name="line306"></a>
+<a name="line307"></a>
+<a name="line308"></a>/**
+<a name="line309"></a> * Clears the value of the input element without resetting the default text.
+<a name="line310"></a> */
+<a name="line311"></a>goog.ui.LabelInput.prototype.clear = function() {
+<a name="line312"></a>  this.getElement().value = &#39;&#39;;
+<a name="line313"></a>
+<a name="line314"></a>  // Reset ffKeyRestoreValue_ when non-null
+<a name="line315"></a>  if (this.ffKeyRestoreValue_ != null) {
+<a name="line316"></a>    this.ffKeyRestoreValue_ = &#39;&#39;;
+<a name="line317"></a>  }
+<a name="line318"></a>};
+<a name="line319"></a>
+<a name="line320"></a>
+<a name="line321"></a>/**
+<a name="line322"></a> * Use this to set the value through script to ensure that the label state is
+<a name="line323"></a> * up to date
+<a name="line324"></a> * @param {string} s The new value for the input.
+<a name="line325"></a> */
+<a name="line326"></a>goog.ui.LabelInput.prototype.setValue = function(s) {
+<a name="line327"></a>  if (this.ffKeyRestoreValue_ != null) {
+<a name="line328"></a>    this.ffKeyRestoreValue_ = s;
+<a name="line329"></a>  }
+<a name="line330"></a>  this.getElement().value = s;
+<a name="line331"></a>  this.check_();
+<a name="line332"></a>};
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * Returns the current value of the text box, returning an empty string if the
+<a name="line337"></a> * search box is the default value
+<a name="line338"></a> * @return {string} The value of the input box.
+<a name="line339"></a> */
+<a name="line340"></a>goog.ui.LabelInput.prototype.getValue = function() {
+<a name="line341"></a>  if (this.ffKeyRestoreValue_ != null) {
+<a name="line342"></a>    // Fix the Firefox from incorrectly reporting the value to calling code
+<a name="line343"></a>    // that attached the listener to keypress before the labelinput
+<a name="line344"></a>    return this.ffKeyRestoreValue_;
+<a name="line345"></a>  }
+<a name="line346"></a>  return this.hasChanged() ? /** @type {string} */ (this.getElement().value) :
+<a name="line347"></a>      &#39;&#39;;
+<a name="line348"></a>};
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>/**
+<a name="line352"></a> * Checks the state of the input element
+<a name="line353"></a> * @private
+<a name="line354"></a> */
+<a name="line355"></a>goog.ui.LabelInput.prototype.check_ = function() {
+<a name="line356"></a>  // if we haven&#39;t got a form yet try now
+<a name="line357"></a>  this.attachEventsToForm_();
+<a name="line358"></a>
+<a name="line359"></a>  if (!this.hasChanged()) {
+<a name="line360"></a>    if (!this.inFocusAndSelect_ &amp;&amp; !this.hasFocus_) {
+<a name="line361"></a>      goog.dom.classes.add(this.getElement(), this.LABEL_CLASS_NAME);
+<a name="line362"></a>    }
+<a name="line363"></a>
+<a name="line364"></a>    // Allow browser to catchup with CSS changes before restoring the label.
+<a name="line365"></a>    goog.Timer.callOnce(this.restoreLabel_, 10, this);
+<a name="line366"></a>  } else {
+<a name="line367"></a>    goog.dom.classes.remove(this.getElement(), this.LABEL_CLASS_NAME);
+<a name="line368"></a>  }
+<a name="line369"></a>};
+<a name="line370"></a>
+<a name="line371"></a>
+<a name="line372"></a>/**
+<a name="line373"></a> * This method focuses the input and if selects all the text. If the value
+<a name="line374"></a> * hasn&#39;t changed it will set the value to the label so that the label text is
+<a name="line375"></a> * selected.
+<a name="line376"></a> */
+<a name="line377"></a>goog.ui.LabelInput.prototype.focusAndSelect = function() {
+<a name="line378"></a>  // We need to check whether the input has changed before focusing
+<a name="line379"></a>  var hc = this.hasChanged();
+<a name="line380"></a>  this.inFocusAndSelect_ = true;
+<a name="line381"></a>  this.getElement().focus();
+<a name="line382"></a>  if (!hc) {
+<a name="line383"></a>    this.getElement().value = this.label_;
+<a name="line384"></a>  }
+<a name="line385"></a>  this.getElement().select();
+<a name="line386"></a>  // set to false in timer to let IE trigger the focus event
+<a name="line387"></a>  goog.Timer.callOnce(this.focusAndSelect_, 10, this);
+<a name="line388"></a>};
+<a name="line389"></a>
+<a name="line390"></a>
+<a name="line391"></a>/**
+<a name="line392"></a> * @private
+<a name="line393"></a> */
+<a name="line394"></a>goog.ui.LabelInput.prototype.focusAndSelect_ = function() {
+<a name="line395"></a>  this.inFocusAndSelect_ = false;
+<a name="line396"></a>};
+<a name="line397"></a>
+<a name="line398"></a>
+<a name="line399"></a>/**
+<a name="line400"></a> * Sets the value of the input element to label.
+<a name="line401"></a> * @private
+<a name="line402"></a> */
+<a name="line403"></a>goog.ui.LabelInput.prototype.restoreLabel_ = function() {
+<a name="line404"></a>  // Check again in case something changed since this was scheduled.
+<a name="line405"></a>  // We check that the element is still there since this is called by a timer
+<a name="line406"></a>  // and the dispose method may have been called prior to this.
+<a name="line407"></a>  if (this.getElement() &amp;&amp; !this.hasChanged()) {
+<a name="line408"></a>    this.getElement().value = this.label_;
+<a name="line409"></a>  }
+<a name="line410"></a>};
+</pre>
+
+
+</body>
+</html>

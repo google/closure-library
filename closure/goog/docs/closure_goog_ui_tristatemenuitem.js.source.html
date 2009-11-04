@@ -1,0 +1,233 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tristatemenuitem.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_tristatemenuitem.js.html">tristatemenuitem.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A menu item class that supports three state checkbox semantics.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.ui.TriStateMenuItem&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.ui.TriStateMenuItem.State&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line24"></a>goog.require(&#39;goog.ui.Component.EventType&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.Component.State&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.ControlContent&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.MenuItem&#39;);
+<a name="line28"></a>goog.require(&#39;goog.ui.TriStateMenuItemRenderer&#39;);
+<a name="line29"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Class representing a three state checkbox menu item.
+<a name="line34"></a> *
+<a name="line35"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure
+<a name="line36"></a> *     to display as the content of the item (use to add icons or styling to
+<a name="line37"></a> *     menus).
+<a name="line38"></a> * @param {Object} opt_model Data/model associated with the menu item.
+<a name="line39"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper used for
+<a name="line40"></a> *     document interactions.
+<a name="line41"></a> * @param {goog.ui.MenuItemRenderer} opt_renderer Optional renderer.
+<a name="line42"></a> * @constructor
+<a name="line43"></a> * @extends {goog.ui.MenuItem}
+<a name="line44"></a> *
+<a name="line45"></a> * TODO: Figure out how to better integrate this into the
+<a name="line46"></a> * goog.ui.Control state management framework.
+<a name="line47"></a> */
+<a name="line48"></a>goog.ui.TriStateMenuItem = function(content, opt_model, opt_domHelper,
+<a name="line49"></a>    opt_renderer) {
+<a name="line50"></a>  goog.ui.MenuItem.call(this, content, opt_model, opt_domHelper,
+<a name="line51"></a>      opt_renderer || new goog.ui.TriStateMenuItemRenderer());
+<a name="line52"></a>  this.setCheckable(true);
+<a name="line53"></a>};
+<a name="line54"></a>goog.inherits(goog.ui.TriStateMenuItem, goog.ui.MenuItem);
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Checked states for component.
+<a name="line59"></a> * @enum {number}
+<a name="line60"></a> */
+<a name="line61"></a>goog.ui.TriStateMenuItem.State = {
+<a name="line62"></a>  /**
+<a name="line63"></a>   * Component is not checked.
+<a name="line64"></a>   */
+<a name="line65"></a>  NOT_CHECKED: 0,
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * Component is partially checked.
+<a name="line69"></a>   */
+<a name="line70"></a>  PARTIALLY_CHECKED: 1,
+<a name="line71"></a>
+<a name="line72"></a>  /**
+<a name="line73"></a>   * Component is fully checked.
+<a name="line74"></a>   */
+<a name="line75"></a>  FULLY_CHECKED: 2
+<a name="line76"></a>};
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Menu item&#39;s checked state.
+<a name="line81"></a> * @type {goog.ui.TriStateMenuItem.State}
+<a name="line82"></a> * @private
+<a name="line83"></a> */
+<a name="line84"></a>goog.ui.TriStateMenuItem.prototype.checkState_ =
+<a name="line85"></a>    goog.ui.TriStateMenuItem.State.NOT_CHECKED;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Whether the partial state can be toggled.
+<a name="line90"></a> * @type {Boolean}
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.ui.TriStateMenuItem.prototype.allowPartial_ = false;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * @return {goog.ui.TriStateMenuItem.State} The menu item&#39;s check state.
+<a name="line98"></a> */
+<a name="line99"></a>goog.ui.TriStateMenuItem.prototype.getCheckedState = function() {
+<a name="line100"></a>  return this.checkState_;
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Sets the checked state.
+<a name="line106"></a> * @param {goog.ui.TriStateMenuItem.State} state The checked state.
+<a name="line107"></a> */
+<a name="line108"></a>goog.ui.TriStateMenuItem.prototype.setCheckedState = function(state) {
+<a name="line109"></a>  this.setCheckedState_(state);
+<a name="line110"></a>  this.allowPartial_ =
+<a name="line111"></a>      state == goog.ui.TriStateMenuItem.State.PARTIALLY_CHECKED;
+<a name="line112"></a>};
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * Sets the checked state and updates the CSS styling. Dispatches a
+<a name="line117"></a> * {@code CHECK} or {@code UNCHECK} event prior to changing the component&#39;s
+<a name="line118"></a> * state, which may be caught and canceled to prevent the component from
+<a name="line119"></a> * changing state.
+<a name="line120"></a> * @param {goog.ui.TriStateMenuItem.State} state The checked state.
+<a name="line121"></a> * @private
+<a name="line122"></a> */
+<a name="line123"></a>goog.ui.TriStateMenuItem.prototype.setCheckedState_ = function(state) {
+<a name="line124"></a>  if (this.dispatchEvent(state != goog.ui.TriStateMenuItem.State.NOT_CHECKED ?
+<a name="line125"></a>        goog.ui.Component.EventType.CHECK :
+<a name="line126"></a>        goog.ui.Component.EventType.UNCHECK)) {
+<a name="line127"></a>    this.setState(goog.ui.Component.State.CHECKED,
+<a name="line128"></a>        state != goog.ui.TriStateMenuItem.State.NOT_CHECKED);
+<a name="line129"></a>    this.checkState_ = state;
+<a name="line130"></a>    this.updatedCheckedStateClassNames_();
+<a name="line131"></a>  }
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/** @inheritDoc */
+<a name="line136"></a>goog.ui.TriStateMenuItem.prototype.performActionInternal = function(e) {
+<a name="line137"></a>  switch (this.getCheckedState()) {
+<a name="line138"></a>    case goog.ui.TriStateMenuItem.State.NOT_CHECKED:
+<a name="line139"></a>      this.setCheckedState_(this.allowPartial_ ?
+<a name="line140"></a>          goog.ui.TriStateMenuItem.State.PARTIALLY_CHECKED :
+<a name="line141"></a>          goog.ui.TriStateMenuItem.State.FULLY_CHECKED);
+<a name="line142"></a>      break;
+<a name="line143"></a>    case goog.ui.TriStateMenuItem.State.PARTIALLY_CHECKED:
+<a name="line144"></a>      this.setCheckedState_(goog.ui.TriStateMenuItem.State.FULLY_CHECKED);
+<a name="line145"></a>      break;
+<a name="line146"></a>    case goog.ui.TriStateMenuItem.State.FULLY_CHECKED:
+<a name="line147"></a>      this.setCheckedState_(goog.ui.TriStateMenuItem.State.NOT_CHECKED);
+<a name="line148"></a>      break;
+<a name="line149"></a>  }
+<a name="line150"></a>
+<a name="line151"></a>  var checkboxClass = goog.getCssName(
+<a name="line152"></a>      this.getRenderer().getCssClass(), &#39;checkbox&#39;);
+<a name="line153"></a>  var clickOnCheckbox = e.target &amp;&amp; goog.dom.classes.has(
+<a name="line154"></a>      /** @type {Element} */ (e.target), checkboxClass);
+<a name="line155"></a>
+<a name="line156"></a>  return this.dispatchEvent(clickOnCheckbox || this.allowPartial_ ?
+<a name="line157"></a>      goog.ui.Component.EventType.CHANGE :
+<a name="line158"></a>      goog.ui.Component.EventType.ACTION);
+<a name="line159"></a>};
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>/**
+<a name="line163"></a> * Updates the extra class names applied to the menu item element.
+<a name="line164"></a> * @private
+<a name="line165"></a> */
+<a name="line166"></a>goog.ui.TriStateMenuItem.prototype.updatedCheckedStateClassNames_ = function() {
+<a name="line167"></a>  var renderer = this.getRenderer();
+<a name="line168"></a>  renderer.enableExtraClassName(
+<a name="line169"></a>      this, goog.getCssName(renderer.getCssClass(), &#39;partially-checked&#39;),
+<a name="line170"></a>      this.getCheckedState() ==
+<a name="line171"></a>      goog.ui.TriStateMenuItem.State.PARTIALLY_CHECKED);
+<a name="line172"></a>  renderer.enableExtraClassName(
+<a name="line173"></a>      this, goog.getCssName(renderer.getCssClass(), &#39;fully-checked&#39;),
+<a name="line174"></a>      this.getCheckedState() == goog.ui.TriStateMenuItem.State.FULLY_CHECKED);
+<a name="line175"></a>};
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>// Register a decorator factory function for goog.ui.TriStateMenuItemRenderer.
+<a name="line179"></a>goog.ui.registry.setDecoratorByClassName(
+<a name="line180"></a>    goog.ui.TriStateMenuItemRenderer.CSS_CLASS,
+<a name="line181"></a>    function() {
+<a name="line182"></a>      // TriStateMenuItem defaults to using TriStateMenuItemRenderer.
+<a name="line183"></a>      return new goog.ui.TriStateMenuItem(null);
+<a name="line184"></a>    });
+</pre>
+
+
+</body>
+</html>

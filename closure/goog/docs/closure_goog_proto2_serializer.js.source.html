@@ -1,0 +1,168 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>serializer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_proto2_serializer.js.html">serializer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Base class for all Protocol Buffer 2 serializers.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.proto2.Serializer&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.proto2.Descriptor&#39;);
+<a name="line22"></a>goog.require(&#39;goog.proto2.FieldDescriptor&#39;);
+<a name="line23"></a>goog.require(&#39;goog.proto2.Message&#39;);
+<a name="line24"></a>goog.require(&#39;goog.proto2.Util&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Abstract base class for PB2 serializers. A serializer is a class which
+<a name="line29"></a> * implements the serialization and deserialization of a Protocol Buffer Message
+<a name="line30"></a> * to/from a specific format.
+<a name="line31"></a> *
+<a name="line32"></a> * @constructor
+<a name="line33"></a> */
+<a name="line34"></a>goog.proto2.Serializer = function() {};
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * Serializes a message to the expected format.
+<a name="line39"></a> *
+<a name="line40"></a> * @param {goog.proto2.Message} message The message to be serialized.
+<a name="line41"></a> *
+<a name="line42"></a> * @return {Object} The serialized form of the message.
+<a name="line43"></a> */
+<a name="line44"></a>goog.proto2.Serializer.prototype.serialize = goog.abstractMethod;
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Returns the serialized form of the given value for the given field
+<a name="line49"></a> * if the field is a Message or Group and returns the value unchanged
+<a name="line50"></a> * otherwise.
+<a name="line51"></a> *
+<a name="line52"></a> * @param {goog.proto2.FieldDescriptor} field The field from which this
+<a name="line53"></a> *     value came.
+<a name="line54"></a> *
+<a name="line55"></a> * @param {Object} value The value of the field.
+<a name="line56"></a> *
+<a name="line57"></a> * @return {Object} The value.
+<a name="line58"></a> * @protected
+<a name="line59"></a> */
+<a name="line60"></a>goog.proto2.Serializer.prototype.getSerializedValue = function(field, value) {
+<a name="line61"></a>  if (field.getFieldType() == goog.proto2.Message.FieldType.MESSAGE ||
+<a name="line62"></a>      field.getFieldType() == goog.proto2.Message.FieldType.GROUP) {
+<a name="line63"></a>      return this.serialize(value);
+<a name="line64"></a>  } else {
+<a name="line65"></a>    return value;
+<a name="line66"></a>  }
+<a name="line67"></a>};
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * Deserializes a message from the expected format.
+<a name="line72"></a> *
+<a name="line73"></a> * @param {goog.proto2.Descriptor} descriptor The descriptor of the message
+<a name="line74"></a> *     to be created.
+<a name="line75"></a> * @param {Object} data The data of the message.
+<a name="line76"></a> *
+<a name="line77"></a> * @return {goog.proto2.Message} The message created.
+<a name="line78"></a> */
+<a name="line79"></a>goog.proto2.Serializer.prototype.deserialize = function(descriptor, data) {
+<a name="line80"></a>  var message = descriptor.createMessageInstance();
+<a name="line81"></a>  this.deserializeTo(message, data);
+<a name="line82"></a>  goog.proto2.Util.assert(message instanceof goog.proto2.Message);
+<a name="line83"></a>  return message;
+<a name="line84"></a>};
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * Deserializes a message from the expected format and places the
+<a name="line89"></a> * data in the message.
+<a name="line90"></a> *
+<a name="line91"></a> * @param {goog.proto2.Message} message The message in which to
+<a name="line92"></a> *     place the information.
+<a name="line93"></a> * @param {Object} data The data of the message.
+<a name="line94"></a> */
+<a name="line95"></a>goog.proto2.Serializer.prototype.deserializeTo = goog.abstractMethod;
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/**
+<a name="line99"></a> * Returns the deserialized form of the given value for the given field
+<a name="line100"></a> * if the field is a Message or Group and returns the value unchanged
+<a name="line101"></a> * otherwise.
+<a name="line102"></a> *
+<a name="line103"></a> * @param {goog.proto2.FieldDescriptor} field The field from which this
+<a name="line104"></a> *     value came.
+<a name="line105"></a> *
+<a name="line106"></a> * @param {Object} value The value of the field.
+<a name="line107"></a> *
+<a name="line108"></a> * @return {Object} The value.
+<a name="line109"></a> * @protected
+<a name="line110"></a> */
+<a name="line111"></a>goog.proto2.Serializer.prototype.getDeserializedValue =
+<a name="line112"></a>  function(field, value) {
+<a name="line113"></a>  if (field.getFieldType() == goog.proto2.Message.FieldType.MESSAGE ||
+<a name="line114"></a>      field.getFieldType() == goog.proto2.Message.FieldType.GROUP) {
+<a name="line115"></a>      return this.deserialize(field.getFieldMessageType(), value);
+<a name="line116"></a>  } else {
+<a name="line117"></a>    return value;
+<a name="line118"></a>  }
+<a name="line119"></a>};
+</pre>
+
+
+</body>
+</html>

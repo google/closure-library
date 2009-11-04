@@ -1,0 +1,477 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>testrunner.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_testing_testrunner.js.html">testrunner.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview The test runner is a singleton object that is used to execute
+<a name="line17"></a> * a goog.testing.TestCases, display the results, and expose the results to
+<a name="line18"></a> * Selenium for automation.  If a TestCase hasn&#39;t been registered with the
+<a name="line19"></a> * runner by the time window.onload occurs, the testRunner will try to auto-
+<a name="line20"></a> * discover JsUnit style test pages.
+<a name="line21"></a> *
+<a name="line22"></a> * The hooks for selenium are :-
+<a name="line23"></a> *  - Boolean G_testRunner.isFinished()
+<a name="line24"></a> *  - Boolean G_testRunner.isSuccess()
+<a name="line25"></a> *  - String G_testRunner.getReport()
+<a name="line26"></a> *  - number G_testRunner.getRunTime()
+<a name="line27"></a> *
+<a name="line28"></a> * Testing code should not have dependencies outside of goog.testing so as to
+<a name="line29"></a> * reduce the chance of masking missing dependencies.
+<a name="line30"></a> *
+<a name="line31"></a> */
+<a name="line32"></a>
+<a name="line33"></a>goog.provide(&#39;goog.testing.TestRunner&#39;);
+<a name="line34"></a>
+<a name="line35"></a>goog.require(&#39;goog.testing.TestCase&#39;);
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * Construct a test runner.
+<a name="line39"></a> *
+<a name="line40"></a> * NOTE: This is currently pretty weird, I&#39;m essentially trying to
+<a name="line41"></a> * create a wrapper that the Selenium test can hook into to query the state of
+<a name="line42"></a> * the running test case, while making goog.testing.TestCase general.
+<a name="line43"></a> *
+<a name="line44"></a> * @constructor
+<a name="line45"></a> */
+<a name="line46"></a>goog.testing.TestRunner = function() {
+<a name="line47"></a>  /**
+<a name="line48"></a>   * Errors that occurred in the window.
+<a name="line49"></a>   * @type {Array.&lt;string&gt;}
+<a name="line50"></a>   */
+<a name="line51"></a>  this.errors = [];
+<a name="line52"></a>};
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * Reference to the active test case.
+<a name="line57"></a> * @type {goog.testing.TestCase?}
+<a name="line58"></a> */
+<a name="line59"></a>goog.testing.TestRunner.prototype.testCase = null;
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Whether the test runner has been initialized yet.
+<a name="line64"></a> * @type {boolean}
+<a name="line65"></a> */
+<a name="line66"></a>goog.testing.TestRunner.prototype.initialized = false;
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * Element created in the document to add test results to.
+<a name="line71"></a> * @type {Element?}
+<a name="line72"></a> * @private
+<a name="line73"></a> */
+<a name="line74"></a>goog.testing.TestRunner.prototype.logEl_ = null;
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Function to use when filtering errors.
+<a name="line79"></a> * @type {(function(string))?}
+<a name="line80"></a> * @private
+<a name="line81"></a> */
+<a name="line82"></a>goog.testing.TestRunner.prototype.errorFilter_ = null;
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Whether an empty test case counts as an error.
+<a name="line87"></a> * @type {boolean}
+<a name="line88"></a> * @private
+<a name="line89"></a> */
+<a name="line90"></a>goog.testing.TestRunner.prototype.strict_ = true;
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Initializes the test runner.
+<a name="line95"></a> * @param {goog.testing.TestCase} testCase The test case to initialize with.
+<a name="line96"></a> */
+<a name="line97"></a>goog.testing.TestRunner.prototype.initialize = function(testCase) {
+<a name="line98"></a>  if (!this.logEl_) {
+<a name="line99"></a>    var el = document.getElementById(&#39;closureTestRunnerLog&#39;);
+<a name="line100"></a>    if (el == null) {
+<a name="line101"></a>      el = document.createElement(&#39;div&#39;);
+<a name="line102"></a>      document.body.appendChild(el);
+<a name="line103"></a>    }
+<a name="line104"></a>    this.logEl_ = el;
+<a name="line105"></a>  }
+<a name="line106"></a>
+<a name="line107"></a>  if (this.testCase &amp;&amp; this.testCase.running) {
+<a name="line108"></a>    throw Error(&#39;The test runner is already waiting for a test to complete&#39;);
+<a name="line109"></a>  }
+<a name="line110"></a>  this.testCase = testCase;
+<a name="line111"></a>  testCase.setTestRunner(this);
+<a name="line112"></a>  this.initialized = true;
+<a name="line113"></a>};
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * By default, the test runner is strict, and fails if it runs an empty
+<a name="line118"></a> * test case.
+<a name="line119"></a> * @param {boolean} strict Whether the test runner should fail on an empty
+<a name="line120"></a> *     test case.
+<a name="line121"></a> */
+<a name="line122"></a>goog.testing.TestRunner.prototype.setStrict = function(strict) {
+<a name="line123"></a>  this.strict_ = strict;
+<a name="line124"></a>};
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * @return {boolean} Whether the test runner should fail on an empty
+<a name="line129"></a> *     test case.
+<a name="line130"></a> */
+<a name="line131"></a>goog.testing.TestRunner.prototype.isStrict = function() {
+<a name="line132"></a>  return this.strict_;
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Returns true if the test runner is initialized.
+<a name="line138"></a> * Used by Selenium Hooks.
+<a name="line139"></a> * @return {boolean} Whether the test runner is active.
+<a name="line140"></a> */
+<a name="line141"></a>goog.testing.TestRunner.prototype.isInitialized = function() {
+<a name="line142"></a>  return this.initialized;
+<a name="line143"></a>};
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>/**
+<a name="line147"></a> * Returns true if the test runner is finished.
+<a name="line148"></a> * Used by Selenium Hooks.
+<a name="line149"></a> * @return {boolean} Whether the test runner is active.
+<a name="line150"></a> */
+<a name="line151"></a>goog.testing.TestRunner.prototype.isFinished = function() {
+<a name="line152"></a>  return this.errors.length &gt; 0 ||
+<a name="line153"></a>      this.initialized &amp;&amp; !!this.testCase &amp;&amp; this.testCase.started &amp;&amp;
+<a name="line154"></a>      !this.testCase.running;
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * Returns true if the test case didn&#39;t fail.
+<a name="line160"></a> * Used by Selenium Hooks.
+<a name="line161"></a> * @return {boolean} Whether the current test returned successfully.
+<a name="line162"></a> */
+<a name="line163"></a>goog.testing.TestRunner.prototype.isSuccess = function() {
+<a name="line164"></a>  return !this.hasErrors() &amp;&amp; !!this.testCase &amp;&amp; this.testCase.isSuccess();
+<a name="line165"></a>};
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * Returns true if the test case runner has errors that were caught outside of
+<a name="line170"></a> * the test case.
+<a name="line171"></a> * @return {boolean} Whether there were JS errors.
+<a name="line172"></a> */
+<a name="line173"></a>goog.testing.TestRunner.prototype.hasErrors = function() {
+<a name="line174"></a>  return this.errors.length &gt; 0;
+<a name="line175"></a>};
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * Logs an error that occurred.  Used in the case of environment setting up
+<a name="line180"></a> * an onerror handler.
+<a name="line181"></a> * @param {string} msg Error message.
+<a name="line182"></a> */
+<a name="line183"></a>goog.testing.TestRunner.prototype.logError = function(msg) {
+<a name="line184"></a>  if (!this.errorFilter_ || this.errorFilter_.call(null, msg)) {
+<a name="line185"></a>    this.errors.push(msg);
+<a name="line186"></a>  }
+<a name="line187"></a>};
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * Log failure in current running test.
+<a name="line192"></a> * @param {Error} ex Exception.
+<a name="line193"></a> */
+<a name="line194"></a>goog.testing.TestRunner.prototype.logTestFailure = function(ex) {
+<a name="line195"></a>  var testName = /** @type {string} */ goog.testing.TestCase.currentTestName;
+<a name="line196"></a>  if (this.testCase) {
+<a name="line197"></a>    this.testCase.logError(testName, ex);
+<a name="line198"></a>  } else {
+<a name="line199"></a>    // NOTE: Do not forget to log the original exception raised.
+<a name="line200"></a>    throw new Error(&#39;Test runner not initialized with a test case. Original &#39; +
+<a name="line201"></a>                    &#39;exception: &#39; + ex.message);
+<a name="line202"></a>  }
+<a name="line203"></a>};
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Sets a function to use as a filter for errors.
+<a name="line208"></a> * @param {function(string)} fn Filter function.
+<a name="line209"></a> */
+<a name="line210"></a>goog.testing.TestRunner.prototype.setErrorFilter = function(fn) {
+<a name="line211"></a>  this.errorFilter_ = fn;
+<a name="line212"></a>};
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * Returns a report of the test case that ran.
+<a name="line217"></a> * Used by Selenium Hooks.
+<a name="line218"></a> * @param {boolean} opt_verbose If true results will include data about all
+<a name="line219"></a> *     tests, not just what failed.
+<a name="line220"></a> * @return {string} A report summary of the test.
+<a name="line221"></a> */
+<a name="line222"></a>goog.testing.TestRunner.prototype.getReport = function(opt_verbose) {
+<a name="line223"></a>  var report = [];
+<a name="line224"></a>  if (this.testCase) {
+<a name="line225"></a>    report.push(this.testCase.getReport(opt_verbose));
+<a name="line226"></a>  }
+<a name="line227"></a>  if (this.errors.length &gt; 0) {
+<a name="line228"></a>    report.push(&#39;JavaScript errors detected by test runner:&#39;);
+<a name="line229"></a>    report.push.apply(report, this.errors);
+<a name="line230"></a>    report.push(&#39;\n&#39;);
+<a name="line231"></a>  }
+<a name="line232"></a>  return report.join(&#39;\n&#39;);
+<a name="line233"></a>};
+<a name="line234"></a>
+<a name="line235"></a>
+<a name="line236"></a>/**
+<a name="line237"></a> * Returns the amount of time it took for the test to run.
+<a name="line238"></a> * Used by Selenium Hooks.
+<a name="line239"></a> * @return {number} The run time, in milliseconds.
+<a name="line240"></a> */
+<a name="line241"></a>goog.testing.TestRunner.prototype.getRunTime = function() {
+<a name="line242"></a>  return this.testCase ? this.testCase.getRunTime() : 0;
+<a name="line243"></a>};
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/**
+<a name="line247"></a> * Returns the number of script files that were loaded in order to run the test.
+<a name="line248"></a> * @return {number} The number of script files.
+<a name="line249"></a> */
+<a name="line250"></a>goog.testing.TestRunner.prototype.getNumFilesLoaded = function() {
+<a name="line251"></a>  return this.testCase ? this.testCase.getNumFilesLoaded() : 0;
+<a name="line252"></a>};
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * Executes a test case and prints the results to the window.
+<a name="line257"></a> */
+<a name="line258"></a>goog.testing.TestRunner.prototype.execute = function() {
+<a name="line259"></a>  if (!this.testCase) {
+<a name="line260"></a>    throw Error(&#39;The test runner must be initialized with a test case before &#39; +
+<a name="line261"></a>                &#39;execute can be called.&#39;);
+<a name="line262"></a>  }
+<a name="line263"></a>  this.testCase.setCompletedCallback(goog.bind(this.onComplete_, this));
+<a name="line264"></a>  this.testCase.runTests();
+<a name="line265"></a>};
+<a name="line266"></a>
+<a name="line267"></a>
+<a name="line268"></a>/**
+<a name="line269"></a> * Writes the results to the document when the test case completes.
+<a name="line270"></a> * @private
+<a name="line271"></a> */
+<a name="line272"></a>goog.testing.TestRunner.prototype.onComplete_ = function() {
+<a name="line273"></a>  var log = this.testCase.getReport(true);
+<a name="line274"></a>  if (this.errors.length &gt; 0) {
+<a name="line275"></a>    log += &#39;\n&#39; + this.errors.join(&#39;\n&#39;);
+<a name="line276"></a>  }
+<a name="line277"></a>
+<a name="line278"></a>  // Remove all children from the log element.
+<a name="line279"></a>  var logEl = this.logEl_;
+<a name="line280"></a>  while (logEl.firstChild) {
+<a name="line281"></a>    logEl.removeChild(logEl.firstChild);
+<a name="line282"></a>  }
+<a name="line283"></a>
+<a name="line284"></a>  this.writeLog(log);
+<a name="line285"></a>
+<a name="line286"></a>  var runAgainLink = document.createElement(&#39;a&#39;);
+<a name="line287"></a>  runAgainLink.style.display = &#39;block&#39;;
+<a name="line288"></a>  runAgainLink.style.fontSize = &#39;small&#39;;
+<a name="line289"></a>  runAgainLink.href = &#39;&#39;;
+<a name="line290"></a>  runAgainLink.onclick = goog.bind(function() {
+<a name="line291"></a>    this.execute();
+<a name="line292"></a>    return false;
+<a name="line293"></a>  }, this);
+<a name="line294"></a>  runAgainLink.innerHTML = &#39;Run again without reloading&#39;;
+<a name="line295"></a>  logEl.appendChild(runAgainLink);
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * Writes a nicely formatted log out to the document.
+<a name="line301"></a> * @param {string} log The string to write.
+<a name="line302"></a> */
+<a name="line303"></a>goog.testing.TestRunner.prototype.writeLog = function(log) {
+<a name="line304"></a>  var lines = log.split(&#39;\n&#39;);
+<a name="line305"></a>  for (var i = 0; i &lt; lines.length; i++) {
+<a name="line306"></a>    var line = lines[i];
+<a name="line307"></a>    var color;
+<a name="line308"></a>    var isFailOrError = /FAILED/.test(line) || /ERROR/.test(line);
+<a name="line309"></a>    if (/PASSED/.test(line)) {
+<a name="line310"></a>      color = &#39;darkgreen&#39;;
+<a name="line311"></a>    } else if (isFailOrError) {
+<a name="line312"></a>      color = &#39;darkred&#39;;
+<a name="line313"></a>    } else {
+<a name="line314"></a>      color = &#39;#333&#39;;
+<a name="line315"></a>    }
+<a name="line316"></a>    var div = document.createElement(&#39;div&#39;);
+<a name="line317"></a>
+<a name="line318"></a>    // If Closure Inspector is installed and running, then convert the line into
+<a name="line319"></a>    // a source link for displaying the code in Firebug.
+<a name="line320"></a>    if (goog.global[&#39;CLOSURE_INSPECTOR___&#39;] &amp;&amp; /CILINK/.test(line)) {
+<a name="line321"></a>      // Format:
+<a name="line322"></a>      // &gt; functionName:CILINK`rootPath`lineNumber`fullPath
+<a name="line323"></a>      var information = line.split(&#39;:&#39;);
+<a name="line324"></a>
+<a name="line325"></a>      // Remove the &#39;&gt; &#39; from the first element to get function name.
+<a name="line326"></a>      var functionName = information.shift().substr(2);
+<a name="line327"></a>
+<a name="line328"></a>      // Build the array of Inspector-specific pieces.
+<a name="line329"></a>      var pieces = information.join(&#39;:&#39;).split(&#39;`&#39;, 5);
+<a name="line330"></a>
+<a name="line331"></a>      // Retrieve the source line information.
+<a name="line332"></a>      var filePath = pieces[1];
+<a name="line333"></a>      var lineNumber = pieces[2];
+<a name="line334"></a>      var fullPath = pieces[3];
+<a name="line335"></a>
+<a name="line336"></a>      // Remove the line number from the full path.
+<a name="line337"></a>      fullPath = fullPath.substring(0, fullPath.lastIndexOf(&#39;:&#39;));
+<a name="line338"></a>
+<a name="line339"></a>      // Create the link&#39;s DOM.
+<a name="line340"></a>      div.appendChild(document.createTextNode(&#39;&gt; &#39;));
+<a name="line341"></a>
+<a name="line342"></a>      var bold = document.createElement(&#39;b&#39;);
+<a name="line343"></a>      bold.appendChild(document.createTextNode(functionName));
+<a name="line344"></a>      div.appendChild(bold);
+<a name="line345"></a>
+<a name="line346"></a>      div.appendChild(document.createTextNode(&#39; - &#39;));
+<a name="line347"></a>
+<a name="line348"></a>      var anchor = document.createElement(&#39;a&#39;);
+<a name="line349"></a>
+<a name="line350"></a>      anchor.appendChild(
+<a name="line351"></a>          document.createTextNode(filePath + &#39; : &#39; + lineNumber));
+<a name="line352"></a>
+<a name="line353"></a>      anchor.href =
+<a name="line354"></a>          &#39;javascript:CLOSURE_INSPECTOR___.showLine(&quot;&#39; + fullPath + &#39;&quot;, &quot;&#39; +
+<a name="line355"></a>          lineNumber + &#39;&quot;)&#39;;
+<a name="line356"></a>
+<a name="line357"></a>      div.appendChild(anchor);
+<a name="line358"></a>
+<a name="line359"></a>    } else {
+<a name="line360"></a>      div.appendChild(document.createTextNode(line));
+<a name="line361"></a>    }
+<a name="line362"></a>
+<a name="line363"></a>    if (isFailOrError) {
+<a name="line364"></a>      var testNameMatch = /(\S+) (\[[^\]]*] )?: (FAILED|ERROR)/.exec(line);
+<a name="line365"></a>      if (testNameMatch) {
+<a name="line366"></a>        // Build a URL to run the test individually.  If this test was already
+<a name="line367"></a>        // part of another subset test, we need to overwrite the old runTests
+<a name="line368"></a>        // query parameter.  We also need to do this without bringing in any
+<a name="line369"></a>        // extra dependencies, otherwise we could mask missing dependency bugs.
+<a name="line370"></a>        var newSearch = &#39;runTests=&#39; + testNameMatch[1];
+<a name="line371"></a>        var search = window.location.search;
+<a name="line372"></a>        if (search) {
+<a name="line373"></a>          var oldTests = /runTests=([^&amp;]*)/.exec(search);
+<a name="line374"></a>          if (oldTests) {
+<a name="line375"></a>            newSearch = search.substr(0, oldTests.index) +
+<a name="line376"></a>                        newSearch +
+<a name="line377"></a>                        search.substr(oldTests.index + oldTests[0].length);
+<a name="line378"></a>          } else {
+<a name="line379"></a>            newSearch = search + &#39;&amp;&#39; + newSearch;
+<a name="line380"></a>          }
+<a name="line381"></a>        } else {
+<a name="line382"></a>          newSearch = &#39;?&#39; + newSearch;
+<a name="line383"></a>        }
+<a name="line384"></a>        var href = window.location.href;
+<a name="line385"></a>        var hash = window.location.hash;
+<a name="line386"></a>        if (hash &amp;&amp; hash.charAt(0) != &#39;#&#39;) {
+<a name="line387"></a>          hash = &#39;#&#39; + hash;
+<a name="line388"></a>        }
+<a name="line389"></a>        href = href.split(&#39;#&#39;)[0].split(&#39;?&#39;)[0] + newSearch + hash;
+<a name="line390"></a>
+<a name="line391"></a>        // Add the link.
+<a name="line392"></a>        var a = document.createElement(&#39;A&#39;);
+<a name="line393"></a>        a.innerHTML = &#39;(run individually)&#39;;
+<a name="line394"></a>        a.style.fontSize = &#39;0.8em&#39;;
+<a name="line395"></a>        a.href = href;
+<a name="line396"></a>        div.appendChild(document.createTextNode(&#39; &#39;));
+<a name="line397"></a>        div.appendChild(a);
+<a name="line398"></a>      }
+<a name="line399"></a>    }
+<a name="line400"></a>
+<a name="line401"></a>    div.style.color = color;
+<a name="line402"></a>    div.style.font = &#39;normal 100% monospace&#39;;
+<a name="line403"></a>
+<a name="line404"></a>    try {
+<a name="line405"></a>      div.style.whiteSpace = &#39;pre-wrap&#39;;
+<a name="line406"></a>    } catch (e) {
+<a name="line407"></a>      // NOTE: IE raises an exception when assigning to pre-wrap.
+<a name="line408"></a>      // Thankfully, it doesn&#39;t collapse whitespace when using monospace fonts,
+<a name="line409"></a>      // so it will display correctly if we ignore the exception.
+<a name="line410"></a>    }
+<a name="line411"></a>
+<a name="line412"></a>    if (i &lt; 2) {
+<a name="line413"></a>      div.style.fontWeight = &#39;bold&#39;;
+<a name="line414"></a>    }
+<a name="line415"></a>    this.logEl_.appendChild(div);
+<a name="line416"></a>  }
+<a name="line417"></a>};
+<a name="line418"></a>
+<a name="line419"></a>
+<a name="line420"></a>/**
+<a name="line421"></a> * Logs a message to the current test case.
+<a name="line422"></a> * @param {string} s The text to output to the log.
+<a name="line423"></a> */
+<a name="line424"></a>goog.testing.TestRunner.prototype.log = function(s) {
+<a name="line425"></a>  if (this.testCase) {
+<a name="line426"></a>    this.testCase.log(s);
+<a name="line427"></a>  }
+<a name="line428"></a>};
+</pre>
+
+
+</body>
+</html>

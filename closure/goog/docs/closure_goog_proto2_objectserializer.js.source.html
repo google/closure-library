@@ -1,0 +1,210 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>objectserializer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_proto2_objectserializer.js.html">objectserializer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Protocol Buffer 2 Serializer which serializes messages
+<a name="line17"></a> *  into anonymous, simplified JSON objects.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.proto2.ObjectSerializer&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.proto2.Descriptor&#39;);
+<a name="line24"></a>goog.require(&#39;goog.proto2.FieldDescriptor&#39;);
+<a name="line25"></a>goog.require(&#39;goog.proto2.Serializer&#39;);
+<a name="line26"></a>goog.require(&#39;goog.proto2.Util&#39;);
+<a name="line27"></a>goog.require(&#39;goog.string&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * ObjectSerializer, a serializer which turns Messages into simplified
+<a name="line33"></a> * ECMAScript objects.
+<a name="line34"></a> *
+<a name="line35"></a> * @param {goog.proto2.ObjectSerializer.KeyOption} opt_keyOption If specified,
+<a name="line36"></a> *     which key option to use when serializing/deserializing.
+<a name="line37"></a> *
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @extends {goog.proto2.Serializer}
+<a name="line40"></a> */
+<a name="line41"></a>goog.proto2.ObjectSerializer = function(opt_keyOption) {
+<a name="line42"></a>  this.keyOption_ = opt_keyOption;
+<a name="line43"></a>};
+<a name="line44"></a>goog.inherits(goog.proto2.ObjectSerializer, goog.proto2.Serializer);
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * An enumeration of the options for how to emit the keys in
+<a name="line49"></a> * the generated simplified object.
+<a name="line50"></a> *
+<a name="line51"></a> * @enum {number}
+<a name="line52"></a> */
+<a name="line53"></a>goog.proto2.ObjectSerializer.KeyOption = {
+<a name="line54"></a>  /**
+<a name="line55"></a>   * Use the tag of the field as the key (default)
+<a name="line56"></a>   */
+<a name="line57"></a>  TAG: 0,
+<a name="line58"></a>
+<a name="line59"></a>  /**
+<a name="line60"></a>   * Use the name of the field as the key. Unknown fields
+<a name="line61"></a>   * will still use their tags as keys.
+<a name="line62"></a>   */
+<a name="line63"></a>  NAME: 1
+<a name="line64"></a>};
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * Serializes a message to an object.
+<a name="line69"></a> *
+<a name="line70"></a> * @param {goog.proto2.Message} message The message to be serialized.
+<a name="line71"></a> *
+<a name="line72"></a> * @return {Object} The serialized form of the message.
+<a name="line73"></a> */
+<a name="line74"></a>goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
+<a name="line75"></a>  var descriptor = message.getDescriptor();
+<a name="line76"></a>  var fields = descriptor.getFields();
+<a name="line77"></a>
+<a name="line78"></a>  var objectValue = {};
+<a name="line79"></a>
+<a name="line80"></a>  // Add the defined fields, recursively.
+<a name="line81"></a>  for (var i = 0; i &lt; fields.length; i++) {
+<a name="line82"></a>    var field = fields[i];
+<a name="line83"></a>
+<a name="line84"></a>    var key =
+<a name="line85"></a>        this.keyOption_ == goog.proto2.ObjectSerializer.KeyOption.NAME ?
+<a name="line86"></a>        field.getName() : field.getTag();
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>    if (message.has(field)) {
+<a name="line90"></a>      if (field.isRepeated()) {
+<a name="line91"></a>        var array = [];
+<a name="line92"></a>        objectValue[key] = array;
+<a name="line93"></a>
+<a name="line94"></a>        for (var j = 0; j &lt; message.countOf(field); j++) {
+<a name="line95"></a>          array.push(this.getSerializedValue(field, message.get(field, j)));
+<a name="line96"></a>        }
+<a name="line97"></a>
+<a name="line98"></a>      } else {
+<a name="line99"></a>        objectValue[key] = this.getSerializedValue(field, message.get(field));
+<a name="line100"></a>      }
+<a name="line101"></a>    }
+<a name="line102"></a>  }
+<a name="line103"></a>
+<a name="line104"></a>  // Add the unknown fields, if any.
+<a name="line105"></a>  message.forEachUnknown(function(tag, value) {
+<a name="line106"></a>    objectValue[tag] = value;
+<a name="line107"></a>  });
+<a name="line108"></a>
+<a name="line109"></a>  return objectValue;
+<a name="line110"></a>};
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Deserializes a message from an object and places the
+<a name="line115"></a> * data in the message.
+<a name="line116"></a> *
+<a name="line117"></a> * @param {goog.proto2.Message} message The message in which to
+<a name="line118"></a> *     place the information.
+<a name="line119"></a> * @param {Object} data The data of the message.
+<a name="line120"></a> */
+<a name="line121"></a>goog.proto2.ObjectSerializer.prototype.deserializeTo = function(message, data) {
+<a name="line122"></a>  var descriptor = message.getDescriptor();
+<a name="line123"></a>
+<a name="line124"></a>  for (var key in data) {
+<a name="line125"></a>    var field;
+<a name="line126"></a>    var value = data[key];
+<a name="line127"></a>
+<a name="line128"></a>    var isNumeric = goog.string.isNumeric(key);
+<a name="line129"></a>
+<a name="line130"></a>    if (isNumeric) {
+<a name="line131"></a>      field = descriptor.findFieldByTag(key);
+<a name="line132"></a>    } else {
+<a name="line133"></a>      // We must be in Key == NAME mode to lookup by name.
+<a name="line134"></a>      goog.proto2.Util.assert(
+<a name="line135"></a>          this.keyOption_ == goog.proto2.ObjectSerializer.KeyOption.NAME);
+<a name="line136"></a>
+<a name="line137"></a>      field = descriptor.findFieldByName(key);
+<a name="line138"></a>    }
+<a name="line139"></a>
+<a name="line140"></a>    if (field) {
+<a name="line141"></a>      if (field.isRepeated()) {
+<a name="line142"></a>        goog.proto2.Util.assert(goog.isArray(value));
+<a name="line143"></a>
+<a name="line144"></a>        for (var j = 0; j &lt; value.length; j++) {
+<a name="line145"></a>          message.add(field, this.getDeserializedValue(field, value[j]));
+<a name="line146"></a>        }
+<a name="line147"></a>      } else {
+<a name="line148"></a>        goog.proto2.Util.assert(!goog.isArray(value));
+<a name="line149"></a>        message.set(field, this.getDeserializedValue(field, value));
+<a name="line150"></a>      }
+<a name="line151"></a>    } else {
+<a name="line152"></a>      if (isNumeric) {
+<a name="line153"></a>        // We have an unknown field.
+<a name="line154"></a>        message.setUnknown(/** @type {number} */ (key), value);
+<a name="line155"></a>      } else {
+<a name="line156"></a>        // Named fields must be present.
+<a name="line157"></a>        goog.proto2.Util.assert(field);
+<a name="line158"></a>      }
+<a name="line159"></a>    }
+<a name="line160"></a>  }
+<a name="line161"></a>};
+</pre>
+
+
+</body>
+</html>

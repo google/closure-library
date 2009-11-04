@@ -1,0 +1,716 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>matrix.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_math_matrix.js.html">matrix.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Class for representing matrices and static helper functions.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.math.Matrix&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.array&#39;);
+<a name="line22"></a>goog.require(&#39;goog.math&#39;);
+<a name="line23"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Class for representing and manipulating matrices.
+<a name="line28"></a> *
+<a name="line29"></a> * The entry that lies in the i-th row and the j-th column of a matrix is
+<a name="line30"></a> * typically referred to as the i,j entry of the matrix.
+<a name="line31"></a> *
+<a name="line32"></a> * The m-by-n matrix A would have its entries referred to as:
+<a name="line33"></a> *   [ a0,0   a0,1   a0,2   ...   a0,j  ...  a0,n ]
+<a name="line34"></a> *   [ a1,0   a1,1   a1,2   ...   a1,j  ...  a1,n ]
+<a name="line35"></a> *   [ a2,0   a2,1   a2,2   ...   a2,j  ...  a2,n ]
+<a name="line36"></a> *   [  .      .      .            .          .   ]
+<a name="line37"></a> *   [  .      .      .            .          .   ]
+<a name="line38"></a> *   [  .      .      .            .          .   ]
+<a name="line39"></a> *   [ ai,0   ai,1   ai,2   ...   ai,j  ...  ai,n ]
+<a name="line40"></a> *   [  .      .      .            .          .   ]
+<a name="line41"></a> *   [  .      .      .            .          .   ]
+<a name="line42"></a> *   [  .      .      .            .          .   ]
+<a name="line43"></a> *   [ am,0   am,1   am,2   ...   am,j  ...  am,n ]
+<a name="line44"></a> *
+<a name="line45"></a> * @param {goog.math.Matrix|Array.&lt;Array.&lt;number&gt;&gt;|goog.math.Size|number} m
+<a name="line46"></a> *     A matrix to copy, a 2D-array to take as a template, a size object for
+<a name="line47"></a> *     dimensions, or the number of rows.
+<a name="line48"></a> * @param {number} opt_n Number of columns of the matrix (only applicable if the
+<a name="line49"></a> *     first argument is also numeric).
+<a name="line50"></a> * @constructor
+<a name="line51"></a> */
+<a name="line52"></a>goog.math.Matrix = function(m, opt_n) {
+<a name="line53"></a>  if (m instanceof goog.math.Matrix) {
+<a name="line54"></a>    this.array_ = m.toArray();
+<a name="line55"></a>  } else if (goog.isArrayLike(m) &amp;&amp;
+<a name="line56"></a>             goog.math.Matrix.isValidArray(/** @type {Array} */ (m))) {
+<a name="line57"></a>    this.array_ = goog.array.clone(/** @type {Array.&lt;Array.&lt;number&gt;&gt;} */ (m));
+<a name="line58"></a>  } else if (m instanceof goog.math.Size) {
+<a name="line59"></a>    this.array_ = goog.math.Matrix.createZeroPaddedArray_(m.height, m.width);
+<a name="line60"></a>  } else if (goog.isNumber(m) &amp;&amp; goog.isNumber(opt_n) &amp;&amp; m &gt; 0 &amp;&amp; opt_n &gt; 0) {
+<a name="line61"></a>    this.array_ = goog.math.Matrix.createZeroPaddedArray_(
+<a name="line62"></a>        /** @type {number} */ (m), opt_n);
+<a name="line63"></a>  } else {
+<a name="line64"></a>    throw Error(&#39;Invalid argument(s) for Matrix contructor&#39;);
+<a name="line65"></a>  }
+<a name="line66"></a>
+<a name="line67"></a>  this.size_ = new goog.math.Size(this.array_[0].length, this.array_.length);
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Creates a square identity matrix. i.e. for n = 3:
+<a name="line73"></a> * &lt;pre&gt;
+<a name="line74"></a> * [ 1 0 0 ]
+<a name="line75"></a> * [ 0 1 0 ]
+<a name="line76"></a> * [ 0 0 1 ]
+<a name="line77"></a> * &lt;/pre&gt;
+<a name="line78"></a> * @param {number} n The size of the square identity matrix.
+<a name="line79"></a> * @return {goog.math.Matrix} Identity matrix of width and height {@code n}.
+<a name="line80"></a> */
+<a name="line81"></a>goog.math.Matrix.createIdentityMatrix = function(n) {
+<a name="line82"></a>  var rv = [];
+<a name="line83"></a>  for (var i = 0; i &lt; n; i++) {
+<a name="line84"></a>    rv[i] = [];
+<a name="line85"></a>    for (var j = 0; j &lt; n; j++) {
+<a name="line86"></a>      rv[i][j] = i == j ? 1 : 0;
+<a name="line87"></a>    }
+<a name="line88"></a>  }
+<a name="line89"></a>  return new goog.math.Matrix(rv);
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Calls a function for each cell in a matrix.
+<a name="line95"></a> * @param {goog.math.Matrix} matrix The matrix to iterate over.
+<a name="line96"></a> * @param {Function} fn The function to call for every element. This function
+<a name="line97"></a> *     takes 4 arguments (value, i, j, and the matrix)
+<a name="line98"></a> *     and the return value is irrelevant.
+<a name="line99"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line100"></a> *     within {@code fn}.
+<a name="line101"></a> */
+<a name="line102"></a>goog.math.Matrix.forEach = function(matrix, fn, opt_obj) {
+<a name="line103"></a>  for (var i = 0; i &lt; matrix.getSize().height; i++) {
+<a name="line104"></a>    for (var j = 0; j &lt; matrix.getSize().width; j++) {
+<a name="line105"></a>      fn.call(opt_obj, matrix.array_[i][j], i, j, matrix);
+<a name="line106"></a>    }
+<a name="line107"></a>  }
+<a name="line108"></a>};
+<a name="line109"></a>
+<a name="line110"></a>
+<a name="line111"></a>/**
+<a name="line112"></a> * Tests whether an array is a valid matrix.  A valid array is an array of
+<a name="line113"></a> * arrays where all arrays are of the same length and all elements are numbers.
+<a name="line114"></a> * @param {Array} arr An array to test.
+<a name="line115"></a> * @return {boolean} Whether the array is a valid matrix.
+<a name="line116"></a> */
+<a name="line117"></a>goog.math.Matrix.isValidArray = function(arr) {
+<a name="line118"></a>  var len = 0;
+<a name="line119"></a>  for (var i = 0; i &lt; arr.length; i++) {
+<a name="line120"></a>    if (!goog.isArrayLike(arr[i]) || len &gt; 0 &amp;&amp; arr[i].length != len) {
+<a name="line121"></a>      return false;
+<a name="line122"></a>    }
+<a name="line123"></a>    for (var j = 0; j &lt; arr[i].length; j++) {
+<a name="line124"></a>      if (!goog.isNumber(arr[i][j])) {
+<a name="line125"></a>        return false;
+<a name="line126"></a>      }
+<a name="line127"></a>    }
+<a name="line128"></a>    if (len == 0) {
+<a name="line129"></a>      len = arr[i].length;
+<a name="line130"></a>    }
+<a name="line131"></a>  }
+<a name="line132"></a>  return len != 0;
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Calls a function for every cell in a matrix and inserts the result into a
+<a name="line138"></a> * new matrix of equal dimensions.
+<a name="line139"></a> * @param {goog.math.Matrix} matrix The matrix to iterate over.
+<a name="line140"></a> * @param {Function} fn The function to call for every element. This function
+<a name="line141"></a> *                     takes 4 arguments (value, i, j and the matrix)
+<a name="line142"></a> *                     and should return something. The result will be inserted
+<a name="line143"></a> *                     into a new matrix.
+<a name="line144"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line145"></a> *     within {@code fn}.
+<a name="line146"></a> * @return {goog.math.Matrix} A new matrix with the results from {@code fn}.
+<a name="line147"></a> */
+<a name="line148"></a>goog.math.Matrix.map = function(matrix, fn, opt_obj) {
+<a name="line149"></a>  var m = new goog.math.Matrix(matrix.getSize());
+<a name="line150"></a>  goog.math.Matrix.forEach(matrix, function(value, i, j) {
+<a name="line151"></a>    m.array_[i][j] = fn.call(opt_obj, value, i, j, matrix);
+<a name="line152"></a>  });
+<a name="line153"></a>  return m;
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Creates a new zero padded matix.
+<a name="line159"></a> * @param {number} m Height of matrix.
+<a name="line160"></a> * @param {number} n Width of matrix.
+<a name="line161"></a> * @return {Array.&lt;Array.&lt;number&gt;&gt;} The new zero padded matrix.
+<a name="line162"></a> * @private
+<a name="line163"></a> */
+<a name="line164"></a>goog.math.Matrix.createZeroPaddedArray_ = function(m, n) {
+<a name="line165"></a>  var rv = [];
+<a name="line166"></a>  for (var i = 0; i &lt; m; i++) {
+<a name="line167"></a>    rv[i] = [];
+<a name="line168"></a>    for (var j = 0; j &lt; n; j++) {
+<a name="line169"></a>      rv[i][j] = 0;
+<a name="line170"></a>    }
+<a name="line171"></a>  }
+<a name="line172"></a>  return rv;
+<a name="line173"></a>};
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Internal array representing the matrix.
+<a name="line178"></a> * @type {Array.&lt;Array.&lt;number&gt;&gt;}
+<a name="line179"></a> * @private
+<a name="line180"></a> */
+<a name="line181"></a>goog.math.Matrix.prototype.array_ = null;
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * After construction the Matrix&#39;s size is constant and stored in this object.
+<a name="line186"></a> * @type {goog.math.Size}
+<a name="line187"></a> * @private
+<a name="line188"></a> */
+<a name="line189"></a>goog.math.Matrix.prototype.size_ = null;
+<a name="line190"></a>
+<a name="line191"></a>
+<a name="line192"></a>/**
+<a name="line193"></a> * Returns a new matrix that is the sum of this and the provided matrix.
+<a name="line194"></a> * @param {goog.math.Matrix} m The matrix to add to this one.
+<a name="line195"></a> * @return {goog.math.Matrix} Resultant sum.
+<a name="line196"></a> */
+<a name="line197"></a>goog.math.Matrix.prototype.add = function(m) {
+<a name="line198"></a>  if (!goog.math.Size.equals(this.size_, m.getSize())) {
+<a name="line199"></a>    throw Error(&#39;Matrix summation is only supported on arrays of equal size&#39;);
+<a name="line200"></a>  }
+<a name="line201"></a>  return goog.math.Matrix.map(this, function(val, i, j) {
+<a name="line202"></a>    return val + m.array_[i][j];
+<a name="line203"></a>  });
+<a name="line204"></a>};
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * Appends the given matrix to the right side of this matrix.
+<a name="line209"></a> * @param {goog.math.Matrix} m The matrix to augment this matrix with.
+<a name="line210"></a> * @return {goog.math.Matrix} A new matrix with additional columns on the right.
+<a name="line211"></a> */
+<a name="line212"></a>goog.math.Matrix.prototype.appendColumns = function(m) {
+<a name="line213"></a>  if (this.size_.height != m.getSize().height) {
+<a name="line214"></a>    throw Error(&#39;The given matrix has height &#39; + m.size_.height + &#39;, but &#39; +
+<a name="line215"></a>        &#39; needs to have height &#39; + this.size_.height + &#39;.&#39;);
+<a name="line216"></a>  }
+<a name="line217"></a>  var result = new goog.math.Matrix(this.size_.height,
+<a name="line218"></a>      this.size_.width + m.size_.width);
+<a name="line219"></a>  goog.math.Matrix.forEach(this, function(value, i, j) {
+<a name="line220"></a>    result.array_[i][j] = value;
+<a name="line221"></a>  });
+<a name="line222"></a>  goog.math.Matrix.forEach(m, function(value, i, j) {
+<a name="line223"></a>    result.array_[i][this.size_.width + j] = value;
+<a name="line224"></a>  }, this);
+<a name="line225"></a>  return result;
+<a name="line226"></a>};
+<a name="line227"></a>
+<a name="line228"></a>
+<a name="line229"></a>/**
+<a name="line230"></a> * Appends the given matrix to the bottom of this matrix.
+<a name="line231"></a> * @param {goog.math.Matrix} m The matrix to augment this matrix with.
+<a name="line232"></a> * @return {goog.math.Matrix} A new matrix with added columns on the bottom.
+<a name="line233"></a> */
+<a name="line234"></a>goog.math.Matrix.prototype.appendRows = function(m) {
+<a name="line235"></a>  if (this.size_.width != m.getSize().width) {
+<a name="line236"></a>    throw Error(&#39;The given matrix has width &#39; + m.size_.width + &#39;, but &#39; +
+<a name="line237"></a>        &#39; needs to have width &#39; + this.size_.width + &#39;.&#39;);
+<a name="line238"></a>  }
+<a name="line239"></a>  var result = new goog.math.Matrix(this.size_.height + m.size_.height,
+<a name="line240"></a>      this.size_.width);
+<a name="line241"></a>  goog.math.Matrix.forEach(this, function(value, i, j) {
+<a name="line242"></a>    result.array_[i][j] = value;
+<a name="line243"></a>  });
+<a name="line244"></a>  goog.math.Matrix.forEach(m, function(value, i, j) {
+<a name="line245"></a>    result.array_[this.size_.height + i][j] = value;
+<a name="line246"></a>  }, this);
+<a name="line247"></a>  return result;
+<a name="line248"></a>};
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>/**
+<a name="line252"></a> * Returns whether the given matrix equals this matrix.
+<a name="line253"></a> * @param {goog.math.Matrix} m The matrix to compare to this one.
+<a name="line254"></a> * @param {number} opt_tolerance The tolerance when comparing array entries.
+<a name="line255"></a> * @return {boolean} Whether the given matrix equals this matrix.
+<a name="line256"></a> */
+<a name="line257"></a>goog.math.Matrix.prototype.equals = function(m, opt_tolerance) {
+<a name="line258"></a>  if (this.size_.width != m.size_.width) {
+<a name="line259"></a>    return false;
+<a name="line260"></a>  }
+<a name="line261"></a>  if (this.size_.height != m.size_.height) {
+<a name="line262"></a>    return false;
+<a name="line263"></a>  }
+<a name="line264"></a>
+<a name="line265"></a>  var tolerance = opt_tolerance || 0;
+<a name="line266"></a>  for (var i = 0; i &lt; this.size_.height; i++) {
+<a name="line267"></a>    for (var j = 0; j &lt; this.size_.width; j++) {
+<a name="line268"></a>      if (!goog.math.nearlyEquals(this.array_[i][j], m.array_[i][j],
+<a name="line269"></a>          tolerance)) {
+<a name="line270"></a>        return false;
+<a name="line271"></a>      }
+<a name="line272"></a>    }
+<a name="line273"></a>  }
+<a name="line274"></a>
+<a name="line275"></a>  return true;
+<a name="line276"></a>};
+<a name="line277"></a>
+<a name="line278"></a>
+<a name="line279"></a>/**
+<a name="line280"></a> * Returns the determinant of this matrix.  The determinant of a matrix A is
+<a name="line281"></a> * often denoted as |A| and can only be applied to a square matrix.
+<a name="line282"></a> * @return {number} The determinant of this matrix.
+<a name="line283"></a> */
+<a name="line284"></a>goog.math.Matrix.prototype.getDeterminant = function() {
+<a name="line285"></a>  if (!this.isSquare()) {
+<a name="line286"></a>    throw Error(&#39;A determinant can only be take on a square matrix&#39;);
+<a name="line287"></a>  }
+<a name="line288"></a>
+<a name="line289"></a>  return this.getDeterminant_();
+<a name="line290"></a>};
+<a name="line291"></a>
+<a name="line292"></a>
+<a name="line293"></a>/**
+<a name="line294"></a> * Returns the inverse of this matrix if it exists or null if the matrix is
+<a name="line295"></a> * not invertible.
+<a name="line296"></a> * @return {goog.math.Matrix?} A new matrix which is the inverse of this matrix.
+<a name="line297"></a> */
+<a name="line298"></a>goog.math.Matrix.prototype.getInverse = function() {
+<a name="line299"></a>  if (!this.isSquare()) {
+<a name="line300"></a>    throw Error(&#39;An inverse can only be taken on a square matrix.&#39;);
+<a name="line301"></a>  }
+<a name="line302"></a>  var identity = goog.math.Matrix.createIdentityMatrix(this.size_.height);
+<a name="line303"></a>  var mi = this.appendColumns(identity).getReducedRowEchelonForm();
+<a name="line304"></a>  var i = mi.getSubmatrixByCoordinates_(
+<a name="line305"></a>      0, 0, identity.size_.width - 1, identity.size_.height - 1);
+<a name="line306"></a>  if (!i.equals(identity)) {
+<a name="line307"></a>    return null;  // This matrix was not invertible
+<a name="line308"></a>  }
+<a name="line309"></a>  return mi.getSubmatrixByCoordinates_(0, identity.size_.width);
+<a name="line310"></a>};
+<a name="line311"></a>
+<a name="line312"></a>
+<a name="line313"></a>/**
+<a name="line314"></a> * Transforms this matrix into reduced row echelon form.
+<a name="line315"></a> * @return {goog.math.Matrix} A new matrix reduced row echelon form.
+<a name="line316"></a> */
+<a name="line317"></a>goog.math.Matrix.prototype.getReducedRowEchelonForm = function() {
+<a name="line318"></a>  var result = new goog.math.Matrix(this);
+<a name="line319"></a>  var col = 0;
+<a name="line320"></a>  // Each iteration puts one row in reduced row echelon form
+<a name="line321"></a>  for (var row = 0; row &lt; result.size_.height; row++) {
+<a name="line322"></a>    if (col &gt;= result.size_.width) {
+<a name="line323"></a>      return result;
+<a name="line324"></a>    }
+<a name="line325"></a>
+<a name="line326"></a>    // Scan each column starting from this row on down for a non-zero value
+<a name="line327"></a>    var i = row;
+<a name="line328"></a>    while (result.array_[i][col] == 0) {
+<a name="line329"></a>      i++
+<a name="line330"></a>      if (i == result.size_.height) {
+<a name="line331"></a>        i = row;
+<a name="line332"></a>        col++;
+<a name="line333"></a>        if (col == result.size_.width) {
+<a name="line334"></a>          return result;
+<a name="line335"></a>        }
+<a name="line336"></a>      }
+<a name="line337"></a>    }
+<a name="line338"></a>
+<a name="line339"></a>    // Make the row we found the current row with a leading 1
+<a name="line340"></a>    this.swapRows_(i, row);
+<a name="line341"></a>    var divisor = result.array_[row][col];
+<a name="line342"></a>    for (var j = col; j &lt; result.size_.width; j++) {
+<a name="line343"></a>      result.array_[row][j] = result.array_[row][j] / divisor;
+<a name="line344"></a>    }
+<a name="line345"></a>
+<a name="line346"></a>    // Subtract a multiple of this row from each other row
+<a name="line347"></a>    // so that all the other entries in this column are 0
+<a name="line348"></a>    for (i = 0; i &lt; result.size_.height; i++) {
+<a name="line349"></a>      if (i != row) {
+<a name="line350"></a>        var multiple = result.array_[i][col];
+<a name="line351"></a>        for (var j = col; j &lt; result.size_.width; j++) {
+<a name="line352"></a>          result.array_[i][j] -= multiple * result.array_[row][j];
+<a name="line353"></a>        }
+<a name="line354"></a>      }
+<a name="line355"></a>    }
+<a name="line356"></a>
+<a name="line357"></a>    // Move on to the next column
+<a name="line358"></a>    col++;
+<a name="line359"></a>  }
+<a name="line360"></a>  return result;
+<a name="line361"></a>};
+<a name="line362"></a>
+<a name="line363"></a>
+<a name="line364"></a>/**
+<a name="line365"></a> * @return {goog.math.Size} The dimensions of the matrix.
+<a name="line366"></a> */
+<a name="line367"></a>goog.math.Matrix.prototype.getSize = function() {
+<a name="line368"></a>  return this.size_;
+<a name="line369"></a>};
+<a name="line370"></a>
+<a name="line371"></a>
+<a name="line372"></a>/**
+<a name="line373"></a> * Return the transpose of this matrix.  For an m-by-n matrix, the transpose
+<a name="line374"></a> * is the n-by-m matrix which results from turning rows into columns and columns
+<a name="line375"></a> * into rows
+<a name="line376"></a> * @return {goog.math.Matrix} A new matrix A^T.
+<a name="line377"></a> */
+<a name="line378"></a>goog.math.Matrix.prototype.getTranspose = function() {
+<a name="line379"></a>  var m = new goog.math.Matrix(this.size_.width, this.size_.height);
+<a name="line380"></a>  goog.math.Matrix.forEach(this, function(value, i, j) {
+<a name="line381"></a>    m.array_[j][i] = value;
+<a name="line382"></a>  });
+<a name="line383"></a>  return m;
+<a name="line384"></a>};
+<a name="line385"></a>
+<a name="line386"></a>
+<a name="line387"></a>/**
+<a name="line388"></a> * Retrieves the value of a particular coordinate in the matrix or null if the
+<a name="line389"></a> * requested coordinates are out of range.
+<a name="line390"></a> * @param {number} i The i index of the coordinate.
+<a name="line391"></a> * @param {number} j The j index of the coordinate.
+<a name="line392"></a> * @return {number?} The value at the specified coordinate.
+<a name="line393"></a> */
+<a name="line394"></a>goog.math.Matrix.prototype.getValueAt = function(i, j) {
+<a name="line395"></a>  if (!this.isInBounds_(i, j)) {
+<a name="line396"></a>    return null;
+<a name="line397"></a>  }
+<a name="line398"></a>  return this.array_[i][j];
+<a name="line399"></a>};
+<a name="line400"></a>
+<a name="line401"></a>
+<a name="line402"></a>/**
+<a name="line403"></a> * @return {boolean} Whether the horizontal and vertical dimensions of this
+<a name="line404"></a> *     matrix are the same.
+<a name="line405"></a> */
+<a name="line406"></a>goog.math.Matrix.prototype.isSquare = function() {
+<a name="line407"></a>  return this.size_.width == this.size_.height;
+<a name="line408"></a>};
+<a name="line409"></a>
+<a name="line410"></a>
+<a name="line411"></a>/**
+<a name="line412"></a> * Sets the value at a particular coordinate (if the coordinate is within the
+<a name="line413"></a> * bounds of the matrix).
+<a name="line414"></a> * @param {number} i The i index of the coordinate.
+<a name="line415"></a> * @param {number} j The j index of the coordinate.
+<a name="line416"></a> * @param {number} value The new value for the coordinate.
+<a name="line417"></a> */
+<a name="line418"></a>goog.math.Matrix.prototype.setValueAt = function(i, j, value) {
+<a name="line419"></a>  if (!this.isInBounds_(i, j)) {
+<a name="line420"></a>    throw Error(
+<a name="line421"></a>        &#39;Index out of bounds when setting matrix value, (&#39; + i + &#39;,&#39; + j +
+<a name="line422"></a>        &#39;) in size (&#39; + this.size_.height + &#39;,&#39; + this.size_.width + &#39;)&#39;);
+<a name="line423"></a>  }
+<a name="line424"></a>  this.array_[i][j] = value;
+<a name="line425"></a>};
+<a name="line426"></a>
+<a name="line427"></a>
+<a name="line428"></a>/**
+<a name="line429"></a> * Performs matrix or scalar multiplication on a matrix and returns the
+<a name="line430"></a> * resultant matrix.
+<a name="line431"></a> *
+<a name="line432"></a> * Matrix multiplication is defined between two matrices only if the number of
+<a name="line433"></a> * columns of the first matrix is the same as the number of rows of the second
+<a name="line434"></a> * matrix. If A is an m-by-n matrix and B is an n-by-p matrix, then their
+<a name="line435"></a> * product AB is an m-by-p matrix
+<a name="line436"></a> *
+<a name="line437"></a> * Scalar multiplication returns a matrix of the same size as the original,
+<a name="line438"></a> * each value multiplied by the given value.
+<a name="line439"></a> *
+<a name="line440"></a> * @param {goog.math.Matrix|number} m Matrix/number to multiply the matrix by.
+<a name="line441"></a> * @return {goog.math.Matrix} Resultant product.
+<a name="line442"></a> */
+<a name="line443"></a>goog.math.Matrix.prototype.multiply = function(m) {
+<a name="line444"></a>  if (m instanceof goog.math.Matrix) {
+<a name="line445"></a>    if (this.size_.width != m.getSize().height) {
+<a name="line446"></a>      throw Error(&#39;Invalid matrices for multiplication. Second matrix &#39; +
+<a name="line447"></a>          &#39;should have the same number of rows as the first has columns.&#39;);
+<a name="line448"></a>    }
+<a name="line449"></a>    return this.matrixMultiply_(/** @type {goog.math.Matrix} */ (m));
+<a name="line450"></a>  } else if (goog.isNumber(m)) {
+<a name="line451"></a>    return this.scalarMultiply_(/** @type {number} */ (m));
+<a name="line452"></a>  } else {
+<a name="line453"></a>    throw Error(&#39;A matrix can only be multiplied by&#39; +
+<a name="line454"></a>        &#39; a number or another matrix.&#39;);
+<a name="line455"></a>  }
+<a name="line456"></a>};
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>/**
+<a name="line460"></a> * Returns a new matrix that is the difference of this and the provided matrix.
+<a name="line461"></a> * @param {goog.math.Matrix} m The matrix to subtract from this one.
+<a name="line462"></a> * @return {goog.math.Matrix} Resultant difference.
+<a name="line463"></a> */
+<a name="line464"></a>goog.math.Matrix.prototype.subtract = function(m) {
+<a name="line465"></a>  if (!goog.math.Size.equals(this.size_, m.getSize())) {
+<a name="line466"></a>    throw Error(
+<a name="line467"></a>        &#39;Matrix subtraction is only supported on arrays of equal size.&#39;);
+<a name="line468"></a>  }
+<a name="line469"></a>  return goog.math.Matrix.map(this, function(val, i, j) {
+<a name="line470"></a>    return val - m.array_[i][j];
+<a name="line471"></a>  });
+<a name="line472"></a>};
+<a name="line473"></a>
+<a name="line474"></a>
+<a name="line475"></a>/**
+<a name="line476"></a> * @return {Array.&lt;Array.&lt;number&gt;&gt;} A 2D internal array representing this
+<a name="line477"></a> *     matrix.  Not a clone.
+<a name="line478"></a> */
+<a name="line479"></a>goog.math.Matrix.prototype.toArray = function() {
+<a name="line480"></a>  return this.array_;
+<a name="line481"></a>};
+<a name="line482"></a>
+<a name="line483"></a>
+<a name="line484"></a>if (goog.DEBUG) {
+<a name="line485"></a>  /**
+<a name="line486"></a>   * Returns a string representation of the matrix.  e.g.
+<a name="line487"></a>   * &lt;pre&gt;
+<a name="line488"></a>   * [ 12  5  9  1 ]
+<a name="line489"></a>   * [  4 16  0 17 ]
+<a name="line490"></a>   * [ 12  5  1 23 ]
+<a name="line491"></a>   * &lt;/pre&gt;
+<a name="line492"></a>   *
+<a name="line493"></a>   * @return {string} A string representation of this matrix.
+<a name="line494"></a>   */
+<a name="line495"></a>  goog.math.Matrix.prototype.toString = function() {
+<a name="line496"></a>    // Calculate correct padding for optimum display of matrix
+<a name="line497"></a>    var maxLen = 0;
+<a name="line498"></a>    goog.math.Matrix.forEach(this, function(val) {
+<a name="line499"></a>      var len = String(val).length;
+<a name="line500"></a>      if (len &gt; maxLen) {
+<a name="line501"></a>        maxLen = len;
+<a name="line502"></a>      }
+<a name="line503"></a>    });
+<a name="line504"></a>
+<a name="line505"></a>    // Build the string
+<a name="line506"></a>    var sb = [];
+<a name="line507"></a>    goog.array.forEach(this.array_, function(row, x) {
+<a name="line508"></a>      sb.push(&#39;[ &#39;);
+<a name="line509"></a>      goog.array.forEach(row, function(val, y) {
+<a name="line510"></a>        val = String(val);
+<a name="line511"></a>        sb.push(goog.string.repeat(&#39; &#39;, maxLen - val.length) + val + &#39; &#39;);
+<a name="line512"></a>      });
+<a name="line513"></a>      sb.push(&#39;]\n&#39;);
+<a name="line514"></a>    });
+<a name="line515"></a>
+<a name="line516"></a>    return sb.join(&#39;&#39;);
+<a name="line517"></a>  };
+<a name="line518"></a>}
+<a name="line519"></a>
+<a name="line520"></a>
+<a name="line521"></a>/**
+<a name="line522"></a> * Returns the signed minor.
+<a name="line523"></a> * @param {number} i The row index.
+<a name="line524"></a> * @param {number} j The column index.
+<a name="line525"></a> * @return {number} The cofactor C[i,j] of this matrix.
+<a name="line526"></a> * @private
+<a name="line527"></a> */
+<a name="line528"></a>goog.math.Matrix.prototype.getCofactor_ = function(i, j) {
+<a name="line529"></a>  return (i + j % 2 == 0 ? 1 : -1) * this.getMinor_(i, j);
+<a name="line530"></a>};
+<a name="line531"></a>
+<a name="line532"></a>
+<a name="line533"></a>/**
+<a name="line534"></a> * Returns the determinant of this matrix.  The determinant of a matrix A is
+<a name="line535"></a> * often denoted as |A| and can only be applied to a square matrix.  Same as
+<a name="line536"></a> * public method but without validation.  Implemented using Laplace&#39;s formula.
+<a name="line537"></a> * @return {number} The determinant of this matrix.
+<a name="line538"></a> * @private
+<a name="line539"></a> */
+<a name="line540"></a>goog.math.Matrix.prototype.getDeterminant_ = function() {
+<a name="line541"></a>  if (this.getSize().area() == 1) {
+<a name="line542"></a>    return this.array_[0][0];
+<a name="line543"></a>  }
+<a name="line544"></a>
+<a name="line545"></a>  // We might want to use matrix decomposition to improve running time
+<a name="line546"></a>  // For now we&#39;ll do a Laplace expansion along the first row
+<a name="line547"></a>  var determinant = 0;
+<a name="line548"></a>  for (var j = 0; j &lt; this.size_.width; j++) {
+<a name="line549"></a>    determinant += (this.array_[0][j] * this.getCofactor_(0, j));
+<a name="line550"></a>  }
+<a name="line551"></a>  return determinant;
+<a name="line552"></a>};
+<a name="line553"></a>
+<a name="line554"></a>
+<a name="line555"></a>/**
+<a name="line556"></a> * Returns the determinant of the submatrix resulting from the deletion of row i
+<a name="line557"></a> * and column j.
+<a name="line558"></a> * @param {number} i The row to delete.
+<a name="line559"></a> * @param {number} j The column to delete.
+<a name="line560"></a> * @return {number} The first minor M[i,j] of this matrix.
+<a name="line561"></a> * @private
+<a name="line562"></a> */
+<a name="line563"></a>goog.math.Matrix.prototype.getMinor_ = function(i, j) {
+<a name="line564"></a>  return this.getSubmatrixByDeletion_(i, j).getDeterminant_();
+<a name="line565"></a>};
+<a name="line566"></a>
+<a name="line567"></a>
+<a name="line568"></a>/**
+<a name="line569"></a> * Returns a submatrix contained within this matrix.
+<a name="line570"></a> * @param {number} i1 The upper row index.
+<a name="line571"></a> * @param {number} j1 The left column index.
+<a name="line572"></a> * @param {number} opt_i2 The lower row index.
+<a name="line573"></a> * @param {number} opt_j2 The right column index.
+<a name="line574"></a> * @return {goog.math.Matrix} The submatrix contained within the given bounds.
+<a name="line575"></a> * @private
+<a name="line576"></a> */
+<a name="line577"></a>goog.math.Matrix.prototype.getSubmatrixByCoordinates_ =
+<a name="line578"></a>    function(i1, j1, opt_i2, opt_j2) {
+<a name="line579"></a>  var i2 = opt_i2 ? opt_i2 : this.size_.height - 1;
+<a name="line580"></a>  var j2 = opt_j2 ? opt_j2 : this.size_.width - 1;
+<a name="line581"></a>  var result = new goog.math.Matrix(i2 - i1 + 1, j2 - j1 + 1);
+<a name="line582"></a>  goog.math.Matrix.forEach(result, function(value, i, j) {
+<a name="line583"></a>    result.array_[i][j] = this.array_[i1 + i][j1 + j];
+<a name="line584"></a>  }, this);
+<a name="line585"></a>  return result;
+<a name="line586"></a>};
+<a name="line587"></a>
+<a name="line588"></a>
+<a name="line589"></a>/**
+<a name="line590"></a> * Returns a new matrix equal to this one, but with row i and column j deleted.
+<a name="line591"></a> * @param {number} i The row index of the coordinate.
+<a name="line592"></a> * @param {number} j The column index of the coordinate.
+<a name="line593"></a> * @return {goog.math.Matrix} The value at the specified coordinate.
+<a name="line594"></a> * @private
+<a name="line595"></a> */
+<a name="line596"></a>goog.math.Matrix.prototype.getSubmatrixByDeletion_ = function(i, j) {
+<a name="line597"></a>  var m = new goog.math.Matrix(this.size_.width - 1, this.size_.height - 1);
+<a name="line598"></a>  goog.math.Matrix.forEach(m, function(value, x, y) {
+<a name="line599"></a>    m.setValueAt(x, y, this.array_[x &gt;= i ? x + 1 : x][y &gt;= j ? y + 1 : y]);
+<a name="line600"></a>  }, this);
+<a name="line601"></a>  return m;
+<a name="line602"></a>};
+<a name="line603"></a>
+<a name="line604"></a>
+<a name="line605"></a>/**
+<a name="line606"></a> * Returns whether the given coordinates are contained within the bounds of the
+<a name="line607"></a> * matrix.
+<a name="line608"></a> * @param {number} i The i index of the coordinate.
+<a name="line609"></a> * @param {number} j The j index of the coordinate.
+<a name="line610"></a> * @return {boolean} The value at the specified coordinate.
+<a name="line611"></a> * @private
+<a name="line612"></a> */
+<a name="line613"></a>goog.math.Matrix.prototype.isInBounds_ = function(i, j) {
+<a name="line614"></a>  return i &gt;= 0 &amp;&amp; i &lt; this.size_.height &amp;&amp;
+<a name="line615"></a>         j &gt;= 0 &amp;&amp; j &lt; this.size_.width;
+<a name="line616"></a>};
+<a name="line617"></a>
+<a name="line618"></a>
+<a name="line619"></a>/**
+<a name="line620"></a> * Matrix multiplication is defined between two matrices only if the number of
+<a name="line621"></a> * columns of the first matrix is the same as the number of rows of the second
+<a name="line622"></a> * matrix. If A is an m-by-n matrix and B is an n-by-p matrix, then their
+<a name="line623"></a> * product AB is an m-by-p matrix
+<a name="line624"></a> *
+<a name="line625"></a> * @param {goog.math.Matrix} m Matrix to multiply the matrix by.
+<a name="line626"></a> * @return {goog.math.Matrix} Resultant product.
+<a name="line627"></a> * @private
+<a name="line628"></a> */
+<a name="line629"></a>goog.math.Matrix.prototype.matrixMultiply_ = function(m) {
+<a name="line630"></a>  var resultMatrix = new goog.math.Matrix(this.size_.height, m.getSize().width);
+<a name="line631"></a>  goog.math.Matrix.forEach(resultMatrix, function(val, x, y) {
+<a name="line632"></a>    var newVal = 0;
+<a name="line633"></a>    for (var i = 0; i &lt; this.size_.width; i++) {
+<a name="line634"></a>      newVal += this.getValueAt(x, i) * m.getValueAt(i, y);
+<a name="line635"></a>    }
+<a name="line636"></a>    resultMatrix.setValueAt(x, y, newVal);
+<a name="line637"></a>  }, this);
+<a name="line638"></a>  return resultMatrix;
+<a name="line639"></a>};
+<a name="line640"></a>
+<a name="line641"></a>
+<a name="line642"></a>/**
+<a name="line643"></a> * Scalar multiplication returns a matrix of the same size as the original,
+<a name="line644"></a> * each value multiplied by the given value.
+<a name="line645"></a> *
+<a name="line646"></a> * @param {number} m number to multiply the matrix by.
+<a name="line647"></a> * @return {goog.math.Matrix} Resultant product.
+<a name="line648"></a> * @private
+<a name="line649"></a> */
+<a name="line650"></a>goog.math.Matrix.prototype.scalarMultiply_ = function(m) {
+<a name="line651"></a>  return goog.math.Matrix.map(this, function(val, x, y) {
+<a name="line652"></a>    return val * m;
+<a name="line653"></a>  });
+<a name="line654"></a>};
+<a name="line655"></a>
+<a name="line656"></a>
+<a name="line657"></a>/**
+<a name="line658"></a> * Swaps two rows.
+<a name="line659"></a> * @param {number} i1 The index of the first row to swap.
+<a name="line660"></a> * @param {number} i2 The index of the second row to swap.
+<a name="line661"></a> * @private
+<a name="line662"></a> */
+<a name="line663"></a>goog.math.Matrix.prototype.swapRows_ = function(i1, i2) {
+<a name="line664"></a>  var tmp = this.array_[i1];
+<a name="line665"></a>  this.array_[i1] = this.array_[i2];
+<a name="line666"></a>  this.array_[i2] = tmp;
+<a name="line667"></a>};
+</pre>
+
+
+</body>
+</html>

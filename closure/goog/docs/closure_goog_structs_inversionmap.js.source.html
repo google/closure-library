@@ -1,0 +1,198 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>inversionmap.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_structs_inversionmap.js.html">inversionmap.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides inversion and inversion map functionality for storing
+<a name="line17"></a> * integer ranges and corresponding values.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.structs.InversionMap&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Maps ranges to values using goog.structs.Inversion.
+<a name="line28"></a> * @param {Array.&lt;number&gt;} rangeArray An array of monotonically
+<a name="line29"></a> *     increasing integer values, with at least one instance.
+<a name="line30"></a> * @param {Array.&lt;*&gt;} valueArray An array of corresponding values.
+<a name="line31"></a> *     Length must be the same as rangeArray.
+<a name="line32"></a> * @param {boolean} opt_delta If true, saves only delta from previous value.
+<a name="line33"></a> * @constructor
+<a name="line34"></a> */
+<a name="line35"></a>goog.structs.InversionMap = function(rangeArray, valueArray, opt_delta) {
+<a name="line36"></a>  if (rangeArray.length != valueArray.length) {
+<a name="line37"></a>    // rangeArray and valueArray has to match in number of entries.
+<a name="line38"></a>    return null;
+<a name="line39"></a>  }
+<a name="line40"></a>  this.storeInversion_(rangeArray, opt_delta);
+<a name="line41"></a>
+<a name="line42"></a>  /**
+<a name="line43"></a>   * @type {Array}
+<a name="line44"></a>   * @protected
+<a name="line45"></a>   */
+<a name="line46"></a>  this.values = valueArray;
+<a name="line47"></a>};
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>/**
+<a name="line51"></a> * @type {Array}
+<a name="line52"></a> * @protected
+<a name="line53"></a> */
+<a name="line54"></a>goog.structs.InversionMap.prototype.rangeArray;
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Stores the integers as ranges (half-open).
+<a name="line59"></a> * If delta is true, the integers are delta from the previous value and
+<a name="line60"></a> * will be restored to the absolute value.
+<a name="line61"></a> * When used as a set, even indices are IN, and odd are OUT.
+<a name="line62"></a> * @param {Array.&lt;number?&gt;} rangeArray An array of monotonically
+<a name="line63"></a> *     increasing integer values, with at least one instance.
+<a name="line64"></a> * @param {boolean} opt_delta If true, saves only delta from previous value.
+<a name="line65"></a> * @private
+<a name="line66"></a> */
+<a name="line67"></a>goog.structs.InversionMap.prototype.storeInversion_ = function(rangeArray,
+<a name="line68"></a>    opt_delta) {
+<a name="line69"></a>  this.rangeArray = rangeArray;
+<a name="line70"></a>
+<a name="line71"></a>  for (var i = 1; i &lt; rangeArray.length; i++) {
+<a name="line72"></a>    if (rangeArray[i] == null) {
+<a name="line73"></a>      rangeArray[i] = rangeArray[i - 1] + 1;
+<a name="line74"></a>    } else if (opt_delta) {
+<a name="line75"></a>      rangeArray[i] += rangeArray[i - 1];
+<a name="line76"></a>    }
+<a name="line77"></a>  }
+<a name="line78"></a>};
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Splices a range -&gt; value map into this inversion map.
+<a name="line83"></a> * @param {Array.&lt;number&gt;} rangeArray An array of monotonically
+<a name="line84"></a> *     increasing integer values, with at least one instance.
+<a name="line85"></a> * @param {Array.&lt;*&gt;} valueArray An array of corresponding values.
+<a name="line86"></a> *     Length must be the same as rangeArray.
+<a name="line87"></a> * @param {boolean} opt_delta If true, saves only delta from previous value.
+<a name="line88"></a> */
+<a name="line89"></a>goog.structs.InversionMap.prototype.spliceInversion = function(
+<a name="line90"></a>    rangeArray, valueArray, opt_delta) {
+<a name="line91"></a>  var otherMap = new goog.structs.InversionMap(
+<a name="line92"></a>      rangeArray, valueArray, opt_delta);
+<a name="line93"></a>  var startRange = otherMap.rangeArray[0];
+<a name="line94"></a>  var endRange =
+<a name="line95"></a>      (/** @type {number} */ goog.array.peek(otherMap.rangeArray));
+<a name="line96"></a>  var startSplice = this.getLeast(startRange);
+<a name="line97"></a>  if (startRange != startSplice) {
+<a name="line98"></a>    startSplice++;
+<a name="line99"></a>  }
+<a name="line100"></a>
+<a name="line101"></a>  var spliceLength = this.getLeast(endRange) - startSplice + 1;
+<a name="line102"></a>  goog.partial(goog.array.splice, this.rangeArray, startSplice,
+<a name="line103"></a>      spliceLength).apply(null, otherMap.rangeArray);
+<a name="line104"></a>  goog.partial(goog.array.splice, this.values, startSplice,
+<a name="line105"></a>      spliceLength).apply(null, otherMap.values);
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Gets the value corresponding to a number from the inversion map.
+<a name="line111"></a> * @param {number} intKey The number for which value needs to be retrieved
+<a name="line112"></a> *     from inversion map.
+<a name="line113"></a> * @return {*} Value retrieved from inversion map; null if not found.
+<a name="line114"></a> */
+<a name="line115"></a>goog.structs.InversionMap.prototype.at = function(intKey) {
+<a name="line116"></a>  var index = this.getLeast(intKey);
+<a name="line117"></a>  if (index &lt; 0) {
+<a name="line118"></a>    return null;
+<a name="line119"></a>  }
+<a name="line120"></a>  return this.values[index];
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Gets the largest index such that rangeArray[index] &lt;= intKey from the
+<a name="line126"></a> * inversion map.
+<a name="line127"></a> * @param {number} intKey The probe for which rangeArray is searched.
+<a name="line128"></a> * @return {number} Largest index such that rangeArray[index] &lt;= intKey.
+<a name="line129"></a> * @protected
+<a name="line130"></a> */
+<a name="line131"></a>goog.structs.InversionMap.prototype.getLeast = function(intKey) {
+<a name="line132"></a>  var arr = this.rangeArray;
+<a name="line133"></a>  var low = 0;
+<a name="line134"></a>  var high = arr.length;
+<a name="line135"></a>  while (high - low &gt; 8) {
+<a name="line136"></a>    var mid = (high + low) &gt;&gt; 1;
+<a name="line137"></a>    if (arr[mid] &lt;= intKey) {
+<a name="line138"></a>      low = mid;
+<a name="line139"></a>    } else {
+<a name="line140"></a>      high = mid;
+<a name="line141"></a>    }
+<a name="line142"></a>  }
+<a name="line143"></a>  for (; low &lt; high; ++low) {
+<a name="line144"></a>    if (intKey &lt; arr[low]) {
+<a name="line145"></a>      break;
+<a name="line146"></a>    }
+<a name="line147"></a>  }
+<a name="line148"></a>  return low - 1;
+<a name="line149"></a>};
+</pre>
+
+
+</body>
+</html>

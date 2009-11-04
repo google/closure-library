@@ -1,0 +1,410 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>advancedtooltip.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_advancedtooltip.js.html">advancedtooltip.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Advanced tooltip widget implementation.
+<a name="line17"></a> *
+<a name="line18"></a> * @see ../demos/advancedtooltip.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.AdvancedTooltip&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line24"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.Tooltip&#39;);
+<a name="line26"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Advanced tooltip widget with cursor tracking abilities. Works like a regular
+<a name="line31"></a> * tooltip but can track the cursor position and direction to determine if the
+<a name="line32"></a> * tooltip should be dismissed or remain open.
+<a name="line33"></a> *
+<a name="line34"></a> * @param {Element|string} opt_el Element to display tooltip for, either element
+<a name="line35"></a> *                                reference or string id.
+<a name="line36"></a> * @param {?string} opt_str Text message to display in tooltip.
+<a name="line37"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @extends {goog.ui.Tooltip}
+<a name="line40"></a> */
+<a name="line41"></a>goog.ui.AdvancedTooltip = function(opt_el, opt_str, opt_domHelper) {
+<a name="line42"></a>  goog.ui.Tooltip.call(this, opt_el, opt_str, opt_domHelper);
+<a name="line43"></a>};
+<a name="line44"></a>goog.inherits(goog.ui.AdvancedTooltip, goog.ui.Tooltip);
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Whether to track the cursor and thereby close the tooltip if it moves away
+<a name="line49"></a> * from the tooltip and keep it open if it moves towards it.
+<a name="line50"></a> *
+<a name="line51"></a> * @type {boolean}
+<a name="line52"></a> * @private
+<a name="line53"></a> */
+<a name="line54"></a>goog.ui.AdvancedTooltip.prototype.cursorTracking_ = false;
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Delay in milliseconds before tooltips are hidden if cursor tracking is
+<a name="line59"></a> * enabled and the cursor is moving away from the tooltip.
+<a name="line60"></a> *
+<a name="line61"></a> * @type {number}
+<a name="line62"></a> * @private
+<a name="line63"></a> */
+<a name="line64"></a>goog.ui.AdvancedTooltip.prototype.cursorTrackingHideDelayMs_ = 100;
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * Box object representing a margin around the tooltip where the cursor is
+<a name="line69"></a> * allowed without dismissing the tooltip.
+<a name="line70"></a> *
+<a name="line71"></a> * @type {goog.math.Box}
+<a name="line72"></a> * @private
+<a name="line73"></a> */
+<a name="line74"></a>goog.ui.AdvancedTooltip.prototype.hotSpotPadding_;
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Bounding box.
+<a name="line79"></a> *
+<a name="line80"></a> * @type {goog.math.Box}
+<a name="line81"></a> * @private
+<a name="line82"></a> */
+<a name="line83"></a>goog.ui.AdvancedTooltip.prototype.boundingBox_;
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Bounding box including padding. If the cursor moves outside of it the tooltip
+<a name="line88"></a> * is closed.
+<a name="line89"></a> * Only used if a cursor padding has been specified.
+<a name="line90"></a> *
+<a name="line91"></a> * @type {goog.math.Box}
+<a name="line92"></a> * @private
+<a name="line93"></a> */
+<a name="line94"></a>goog.ui.AdvancedTooltip.prototype.paddingBox_;
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Anchor bounding box.
+<a name="line99"></a> *
+<a name="line100"></a> * @type {goog.math.Box}
+<a name="line101"></a> * @private
+<a name="line102"></a> */
+<a name="line103"></a>goog.ui.AdvancedTooltip.prototype.anchorBox_;
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Whether the cursor tracking is active.
+<a name="line108"></a> *
+<a name="line109"></a> * @type {boolean}
+<a name="line110"></a> * @private
+<a name="line111"></a> */
+<a name="line112"></a>goog.ui.AdvancedTooltip.prototype.tracking_ = false;
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * Sets margin around the tooltip where the cursor is allowed without dismissing
+<a name="line117"></a> * the tooltip.
+<a name="line118"></a> *
+<a name="line119"></a> * @param {goog.math.Box} opt_box The margin around the tooltip.
+<a name="line120"></a> */
+<a name="line121"></a>goog.ui.AdvancedTooltip.prototype.setHotSpotPadding = function(opt_box) {
+<a name="line122"></a>  this.hotSpotPadding_ = opt_box || null;
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * @return {goog.math.Box} box The margin around the tooltip where the cursor is
+<a name="line128"></a> *     allowed without dismissing the tooltip.
+<a name="line129"></a> */
+<a name="line130"></a>goog.ui.AdvancedTooltip.prototype.getHotSpotPadding = function() {
+<a name="line131"></a>  return this.hotSpotPadding_;
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Sets whether to track the cursor and thereby close the tooltip if it moves
+<a name="line137"></a> * away from the tooltip and keep it open if it moves towards it.
+<a name="line138"></a> *
+<a name="line139"></a> * @param {boolean} b Whether to track the cursor.
+<a name="line140"></a> */
+<a name="line141"></a>goog.ui.AdvancedTooltip.prototype.setCursorTracking = function(b) {
+<a name="line142"></a>  this.cursorTracking_ = b;
+<a name="line143"></a>};
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>/**
+<a name="line147"></a> * @return {boolean} Whether to track the cursor and thereby close the tooltip
+<a name="line148"></a> *     if it moves away from the tooltip and keep it open if it moves towards
+<a name="line149"></a> *     it.
+<a name="line150"></a> */
+<a name="line151"></a>goog.ui.AdvancedTooltip.prototype.getCursorTracking = function() {
+<a name="line152"></a>  return this.cursorTracking_;
+<a name="line153"></a>};
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>/**
+<a name="line157"></a> * Sets delay in milliseconds before tooltips are hidden if cursor tracking is
+<a name="line158"></a> * enabled and the cursor is moving away from the tooltip.
+<a name="line159"></a> *
+<a name="line160"></a> * @param {number} delay The delay in milliseconds.
+<a name="line161"></a> */
+<a name="line162"></a>goog.ui.AdvancedTooltip.prototype.setCursorTrackingHideDelayMs =
+<a name="line163"></a>    function(delay) {
+<a name="line164"></a>  this.cursorTrackingHideDelayMs_ = delay;
+<a name="line165"></a>};
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * @return {number} The delay in milliseconds before tooltips are hidden if
+<a name="line170"></a> *     cursor tracking is enabled and the cursor is moving away from the
+<a name="line171"></a> *     tooltip.
+<a name="line172"></a> */
+<a name="line173"></a>goog.ui.AdvancedTooltip.prototype.getCursorTrackingHideDelayMs = function() {
+<a name="line174"></a>  return this.cursorTrackingHideDelayMs_;
+<a name="line175"></a>};
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * Called after the popup is shown.
+<a name="line180"></a> *
+<a name="line181"></a> * @private
+<a name="line182"></a> */
+<a name="line183"></a>goog.ui.AdvancedTooltip.prototype.onShow_ = function() {
+<a name="line184"></a>  goog.ui.AdvancedTooltip.superClass_.onShow_.call(this);
+<a name="line185"></a>
+<a name="line186"></a>  this.boundingBox_ = goog.style.getBounds(this.getElement()).toBox();
+<a name="line187"></a>  if (this.anchor) {
+<a name="line188"></a>    this.anchorBox_ = goog.style.getBounds(this.anchor).toBox();
+<a name="line189"></a>  }
+<a name="line190"></a>
+<a name="line191"></a>  this.tracking_ = this.cursorTracking_;
+<a name="line192"></a>  goog.events.listen(this.getDomHelper().getDocument(),
+<a name="line193"></a>                     goog.events.EventType.MOUSEMOVE,
+<a name="line194"></a>                     this.handleMouseMove, false, this);
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Called after the popup is hidden.
+<a name="line200"></a> *
+<a name="line201"></a> * @private
+<a name="line202"></a> */
+<a name="line203"></a>goog.ui.AdvancedTooltip.prototype.onHide_ = function() {
+<a name="line204"></a>  goog.events.unlisten(this.getDomHelper().getDocument(),
+<a name="line205"></a>                       goog.events.EventType.MOUSEMOVE,
+<a name="line206"></a>                       this.handleMouseMove, false, this);
+<a name="line207"></a>
+<a name="line208"></a>  this.paddingBox_ = null;
+<a name="line209"></a>  this.boundingBox_ = null;
+<a name="line210"></a>  this.anchorBox_ = null;
+<a name="line211"></a>  this.tracking_ = false;
+<a name="line212"></a>
+<a name="line213"></a>  goog.ui.AdvancedTooltip.superClass_.onHide_.call(this);
+<a name="line214"></a>};
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * Returns true if the mouse is in the tooltip.
+<a name="line219"></a> * @return {boolean} True if the mouse is in the tooltip.
+<a name="line220"></a> */
+<a name="line221"></a>goog.ui.AdvancedTooltip.prototype.isMouseInTooltip = function() {
+<a name="line222"></a>  return this.isCoordinateInTooltip(this.cursorPosition);
+<a name="line223"></a>};
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/**
+<a name="line227"></a> * Checks whether the supplied coordinate is inside the tooltip, including
+<a name="line228"></a> * padding if any.
+<a name="line229"></a> * @param {goog.math.Coordinate} coord Coordinate being tested.
+<a name="line230"></a> * @return {boolean} Whether the coord is in the tooltip.
+<a name="line231"></a> */
+<a name="line232"></a>goog.ui.AdvancedTooltip.prototype.isCoordinateInTooltip = function(coord) {
+<a name="line233"></a>  // Check if coord is inside the bounding box of the tooltip
+<a name="line234"></a>  if (this.paddingBox_) {
+<a name="line235"></a>    return this.paddingBox_.contains(coord);
+<a name="line236"></a>  }
+<a name="line237"></a>
+<a name="line238"></a>  return goog.ui.AdvancedTooltip.superClass_.isCoordinateInTooltip.call(this,
+<a name="line239"></a>                                                                        coord);
+<a name="line240"></a>};
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * Checks if supplied coordinate is in the tooltip, its triggering anchor, or
+<a name="line245"></a> * a tooltip that has been triggered by a child of this tooltip.
+<a name="line246"></a> * Called from handleMouseMove to determine if hide timer should be started,
+<a name="line247"></a> * and from maybeHide to determine if tooltip should be hidden.
+<a name="line248"></a> * @param {goog.math.Coordinate} coord Coordinate being tested.
+<a name="line249"></a> * @return {boolean} Whether coordinate is in the anchor, the tooltip, or any
+<a name="line250"></a> *     tooltip whose anchor is a child of this tooltip.
+<a name="line251"></a> * @private
+<a name="line252"></a> */
+<a name="line253"></a>goog.ui.AdvancedTooltip.prototype.isCoordinateActive_ = function(
+<a name="line254"></a>    coord) {
+<a name="line255"></a>  if ((this.anchorBox_ &amp;&amp; this.anchorBox_.contains(coord)) ||
+<a name="line256"></a>      this.isCoordinateInTooltip(coord)) {
+<a name="line257"></a>    return true;
+<a name="line258"></a>  }
+<a name="line259"></a>
+<a name="line260"></a>  // Check if mouse might be in active child element.
+<a name="line261"></a>  return !!this.childTooltip_ &amp;&amp;
+<a name="line262"></a>         this.childTooltip_.isCoordinateInTooltip(coord);
+<a name="line263"></a>};
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * Called by timer from mouse out handler. Hides tooltip if cursor is still
+<a name="line268"></a> * outside element and tooltip.
+<a name="line269"></a> * @param {Element} el Anchor when hide timer was started.
+<a name="line270"></a> */
+<a name="line271"></a>goog.ui.AdvancedTooltip.prototype.maybeHide = function(el) {
+<a name="line272"></a>  this.hideTimer = undefined;
+<a name="line273"></a>  if (el == this.anchor) {
+<a name="line274"></a>    // Check if cursor is inside the bounding box of the tooltip or the element
+<a name="line275"></a>    // that triggered it, or if tooltip is active (possibly due to receiving
+<a name="line276"></a>    // the focus), or if there is a nested tooltip being shown.
+<a name="line277"></a>    if (!this.isCoordinateActive_(this.cursorPosition) &amp;&amp; !this.activeEl_ &amp;&amp;
+<a name="line278"></a>        !this.hasActiveChild()) {
+<a name="line279"></a>      // Under certain circumstances gecko fires ghost mouse events with the
+<a name="line280"></a>      // coordinates 0, 0 regardless of the cursors position.
+<a name="line281"></a>      if (goog.userAgent.GECKO &amp;&amp; this.cursorPosition.x == 0 &amp;&amp;
+<a name="line282"></a>          this.cursorPosition.y == 0) {
+<a name="line283"></a>        return;
+<a name="line284"></a>      }
+<a name="line285"></a>      this.setVisible(false);
+<a name="line286"></a>    }
+<a name="line287"></a>  }
+<a name="line288"></a>};
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * Handler for mouse move events.
+<a name="line293"></a> *
+<a name="line294"></a> * @param {goog.events.BrowserEvent} event Event object.
+<a name="line295"></a> * @protected
+<a name="line296"></a> */
+<a name="line297"></a>goog.ui.AdvancedTooltip.prototype.handleMouseMove = function(event) {
+<a name="line298"></a>  var startTimer = true;
+<a name="line299"></a>  if (this.boundingBox_) {
+<a name="line300"></a>    var c = new goog.math.Coordinate(event.clientX, event.clientY);
+<a name="line301"></a>    if (this.isCoordinateActive_(c)) {
+<a name="line302"></a>      startTimer = false;
+<a name="line303"></a>    } else if (this.tracking_) {
+<a name="line304"></a>        var prevDist = goog.math.Box.distance(this.boundingBox_,
+<a name="line305"></a>                                              this.cursorPosition);
+<a name="line306"></a>        var currDist = goog.math.Box.distance(this.boundingBox_, c);
+<a name="line307"></a>        startTimer = currDist &gt;= prevDist;
+<a name="line308"></a>    }
+<a name="line309"></a>  }
+<a name="line310"></a>
+<a name="line311"></a>  if (startTimer) {
+<a name="line312"></a>    this.startHideTimer_();
+<a name="line313"></a>
+<a name="line314"></a>    // Even though the mouse coordinate is not on the tooltip (or nested child),
+<a name="line315"></a>    // they may have an activeEl_ because of a focus event.  Don&#39;t let
+<a name="line316"></a>    // that prevent us from taking down the tooltip(s) on this mouse move.
+<a name="line317"></a>    this.activeEl_ = null;
+<a name="line318"></a>    if (this.childTooltip_) {
+<a name="line319"></a>      this.childTooltip_.activeEl_ = null;
+<a name="line320"></a>    }
+<a name="line321"></a>  } else if (this.getState() == goog.ui.Tooltip.State.WAITING_TO_HIDE) {
+<a name="line322"></a>    this.clearHideTimer_();
+<a name="line323"></a>  }
+<a name="line324"></a>
+<a name="line325"></a>  goog.ui.AdvancedTooltip.superClass_.handleMouseMove.call(this, event);
+<a name="line326"></a>};
+<a name="line327"></a>
+<a name="line328"></a>
+<a name="line329"></a>/**
+<a name="line330"></a> * Handler for mouse over events for the tooltip element.
+<a name="line331"></a> *
+<a name="line332"></a> * @param {goog.events.BrowserEvent} event Event object.
+<a name="line333"></a> * @protected
+<a name="line334"></a> */
+<a name="line335"></a>goog.ui.AdvancedTooltip.prototype.handleTooltipMouseOver = function(event) {
+<a name="line336"></a>  if (this.activeEl_ != this.getElement()) {
+<a name="line337"></a>    this.tracking_ = false;
+<a name="line338"></a>    this.activeEl_ = this.getElement();
+<a name="line339"></a>
+<a name="line340"></a>    if (!this.paddingBox_ &amp;&amp; this.hotSpotPadding_) {
+<a name="line341"></a>      this.paddingBox_ = this.boundingBox_.clone().expand(this.hotSpotPadding_);
+<a name="line342"></a>    }
+<a name="line343"></a>  }
+<a name="line344"></a>};
+<a name="line345"></a>
+<a name="line346"></a>
+<a name="line347"></a>/**
+<a name="line348"></a> * Override hide delay with cursor tracking hide delay while tracking.
+<a name="line349"></a> * @return {number} Hide delay to use.
+<a name="line350"></a> */
+<a name="line351"></a>goog.ui.AdvancedTooltip.prototype.getHideDelayMs = function() {
+<a name="line352"></a>  return this.tracking_ ? this.cursorTrackingHideDelayMs_ : this.hideDelayMs_;
+<a name="line353"></a>};
+<a name="line354"></a>
+<a name="line355"></a>
+<a name="line356"></a>/**
+<a name="line357"></a> * Forces the recalculation of the hotspot on the next mouse over event.
+<a name="line358"></a> */
+<a name="line359"></a>goog.ui.AdvancedTooltip.prototype.resetHotSpot = function() {
+<a name="line360"></a>  this.paddingBox_ = null;
+<a name="line361"></a>};
+</pre>
+
+
+</body>
+</html>

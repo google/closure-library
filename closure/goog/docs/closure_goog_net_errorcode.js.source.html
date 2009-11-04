@@ -1,0 +1,179 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>errorcode.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_net_errorcode.js.html">errorcode.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Error codes shared between goog.net.IframeIo and
+<a name="line17"></a> * goog.net.XhrIo.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.net.ErrorCode&#39;);
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>/**
+<a name="line24"></a> * Error codes
+<a name="line25"></a> * @enum {number}
+<a name="line26"></a> */
+<a name="line27"></a>goog.net.ErrorCode = {
+<a name="line28"></a>
+<a name="line29"></a>  /**
+<a name="line30"></a>   * There is no error condition.
+<a name="line31"></a>   */
+<a name="line32"></a>  NO_ERROR: 0,
+<a name="line33"></a>
+<a name="line34"></a>  /**
+<a name="line35"></a>   * The most common error from iframeio, unfortunately, is that the browser
+<a name="line36"></a>   * responded with an error page that is classed as a different domain. The
+<a name="line37"></a>   * situations, are when a browser error page  is shown -- 404, access denied,
+<a name="line38"></a>   * DNS failure, connection reset etc.)
+<a name="line39"></a>   *
+<a name="line40"></a>   */
+<a name="line41"></a>  ACCESS_DENIED: 1,
+<a name="line42"></a>
+<a name="line43"></a>  /**
+<a name="line44"></a>   * Currently the only case where file not found will be caused is when the
+<a name="line45"></a>   * code is running on the local file system and a non-IE browser makes a
+<a name="line46"></a>   * request to a file that doesn&#39;t exist.
+<a name="line47"></a>   */
+<a name="line48"></a>  FILE_NOT_FOUND: 2,
+<a name="line49"></a>
+<a name="line50"></a>  /**
+<a name="line51"></a>   * If Firefox shows a browser error page, such as a connection reset by
+<a name="line52"></a>   * server or access denied, then it will fail silently without the error or
+<a name="line53"></a>   * load handlers firing.
+<a name="line54"></a>   */
+<a name="line55"></a>  FF_SILENT_ERROR: 3,
+<a name="line56"></a>
+<a name="line57"></a>  /**
+<a name="line58"></a>   * Custom error provided by the client through the error check hook.
+<a name="line59"></a>   */
+<a name="line60"></a>  CUSTOM_ERROR: 4,
+<a name="line61"></a>
+<a name="line62"></a>  /**
+<a name="line63"></a>   * Exception was thrown while processing the request.
+<a name="line64"></a>   */
+<a name="line65"></a>  EXCEPTION: 5,
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * The Http response returned a non-successful http status code.
+<a name="line69"></a>   */
+<a name="line70"></a>  HTTP_ERROR: 6,
+<a name="line71"></a>
+<a name="line72"></a>  /**
+<a name="line73"></a>   * The request was aborted.
+<a name="line74"></a>   */
+<a name="line75"></a>  ABORT: 7,
+<a name="line76"></a>
+<a name="line77"></a>  /**
+<a name="line78"></a>   * The request timed out.
+<a name="line79"></a>   */
+<a name="line80"></a>  TIMEOUT: 8,
+<a name="line81"></a>
+<a name="line82"></a>  /**
+<a name="line83"></a>   * The resource is not available offline.
+<a name="line84"></a>   */
+<a name="line85"></a>  OFFLINE: 9
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Returns a friendly error message for an error code. These messages are for
+<a name="line91"></a> * debugging and are not localized.
+<a name="line92"></a> * @param {goog.net.ErrorCode} errorCode An error code.
+<a name="line93"></a> * @return {string} A message for debugging.
+<a name="line94"></a> */
+<a name="line95"></a>goog.net.ErrorCode.getDebugMessage = function(errorCode) {
+<a name="line96"></a>  switch (errorCode) {
+<a name="line97"></a>    case goog.net.ErrorCode.NO_ERROR:
+<a name="line98"></a>      return &#39;No Error&#39;;
+<a name="line99"></a>
+<a name="line100"></a>    case goog.net.ErrorCode.ACCESS_DENIED:
+<a name="line101"></a>      return &#39;Access denied to content document&#39;;
+<a name="line102"></a>
+<a name="line103"></a>    case goog.net.ErrorCode.FILE_NOT_FOUND:
+<a name="line104"></a>      return &#39;File not found&#39;;
+<a name="line105"></a>
+<a name="line106"></a>    case goog.net.ErrorCode.FF_SILENT_ERROR:
+<a name="line107"></a>      return &#39;Firefox silently errored&#39;;
+<a name="line108"></a>
+<a name="line109"></a>    case goog.net.ErrorCode.CUSTOM_ERROR:
+<a name="line110"></a>      return &#39;Application custom error&#39;;
+<a name="line111"></a>
+<a name="line112"></a>    case goog.net.ErrorCode.EXCEPTION:
+<a name="line113"></a>      return &#39;An exception occurred&#39;;
+<a name="line114"></a>
+<a name="line115"></a>    case goog.net.ErrorCode.HTTP_ERROR:
+<a name="line116"></a>      return &#39;Http response at 400 or 500 level&#39;;
+<a name="line117"></a>
+<a name="line118"></a>    case goog.net.ErrorCode.ABORT:
+<a name="line119"></a>      return &#39;Request was aborted&#39;;
+<a name="line120"></a>
+<a name="line121"></a>    case goog.net.ErrorCode.TIMEOUT:
+<a name="line122"></a>      return &#39;Request timed out&#39;;
+<a name="line123"></a>
+<a name="line124"></a>    case goog.net.ErrorCode.OFFLINE:
+<a name="line125"></a>      return &#39;The resource is not available offline&#39;;
+<a name="line126"></a>
+<a name="line127"></a>    default:
+<a name="line128"></a>      return &#39;Unrecognized error code&#39;;
+<a name="line129"></a>  }
+<a name="line130"></a>};
+</pre>
+
+
+</body>
+</html>

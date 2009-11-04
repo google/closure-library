@@ -1,0 +1,37 @@
+/*
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+*/
+
+/* Copyright 2009 Google Inc. All Rights Reserved. */
+/**/
+
+/* Sample 3-state checkbox styles. */
+
+.goog-checkbox {
+  border: 1px solid #1C5180;
+  cursor: pointer;
+  display: -moz-inline-box;
+  display: inline-block;
+  height: 11px;
+  margin: 0 0.4em 0 1px;
+  vertical-align: middle;
+  width: 11px;
+}
+
+.goog-checkbox-checked {
+  background: white url('../images/check.gif') no-repeat center;
+}
+
+.goog-checkbox-disabled {
+  border: 1px solid lightgray;
+  cursor: default !important;
+}
+
+.goog-checkbox-unchecked {
+  background: white;
+}
+
+.goog-checkbox-undetermined {
+  background: #BBB url('../images/check.gif') no-repeat center;
+}

@@ -1,0 +1,138 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>fulltag.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_dom_pattern_fulltag.js.html">fulltag.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview DOM pattern to match a tag and all of its children.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.dom.pattern.FullTag&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom.pattern.MatchType&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom.pattern.StartTag&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.pattern.Tag&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Pattern object that matches a full tag including all its children.
+<a name="line29"></a> *
+<a name="line30"></a> * @param {string|RegExp} tag Name of the tag.  Also will accept a regular
+<a name="line31"></a> *     expression to match against the tag name.
+<a name="line32"></a> * @param {Object} opt_attrs Optional map of attribute names to desired values.
+<a name="line33"></a> *     This pattern will only match when all attributes are present and match
+<a name="line34"></a> *     the string or regular expression value provided here.
+<a name="line35"></a> * @param {Object} opt_styles Optional map of CSS style names to desired values.
+<a name="line36"></a> *     This pattern will only match when all styles are present and match the
+<a name="line37"></a> *     string or regular expression value provided here.
+<a name="line38"></a> * @param {Function} opt_test Optional function that takes the element as a
+<a name="line39"></a> *     parameter and returns true if this pattern should match it.
+<a name="line40"></a> * @constructor
+<a name="line41"></a> * @extends {goog.dom.pattern.StartTag}
+<a name="line42"></a> */
+<a name="line43"></a>goog.dom.pattern.FullTag = function(tag, opt_attrs, opt_styles, opt_test) {
+<a name="line44"></a>  goog.dom.pattern.StartTag.call(
+<a name="line45"></a>      this,
+<a name="line46"></a>      tag,
+<a name="line47"></a>      opt_attrs,
+<a name="line48"></a>      opt_styles,
+<a name="line49"></a>      opt_test);
+<a name="line50"></a>};
+<a name="line51"></a>goog.inherits(goog.dom.pattern.FullTag, goog.dom.pattern.StartTag);
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Tracks the matcher&#39;s depth to detect the end of the tag.
+<a name="line56"></a> *
+<a name="line57"></a> * @type {number}
+<a name="line58"></a> * @private
+<a name="line59"></a> */
+<a name="line60"></a>goog.dom.pattern.FullTag.prototype.depth_ = 0;
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Test whether the given token is a start tag token which matches the tag name,
+<a name="line64"></a> * style, and attributes provided in the constructor.
+<a name="line65"></a> *
+<a name="line66"></a> * @param {Node} token Token to match against.
+<a name="line67"></a> * @param {goog.dom.TagWalkType} type The type of token.
+<a name="line68"></a> * @return {goog.dom.pattern.MatchType} &lt;code&gt;MATCH&lt;/code&gt; at the end of our
+<a name="line69"></a> *    tag, &lt;code&gt;MATCHING&lt;/code&gt; if we are within the tag, and
+<a name="line70"></a> *    &lt;code&gt;NO_MATCH&lt;/code&gt; if the starting tag does not match.
+<a name="line71"></a> */
+<a name="line72"></a>goog.dom.pattern.FullTag.prototype.matchToken = function(token, type) {
+<a name="line73"></a>  if (!this.depth_) {
+<a name="line74"></a>    // If we have not yet started, make sure we match as a StartTag.
+<a name="line75"></a>    if (goog.dom.pattern.Tag.prototype.matchToken.call(this, token, type)) {
+<a name="line76"></a>      this.depth_ = type;
+<a name="line77"></a>      return goog.dom.pattern.MatchType.MATCHING;
+<a name="line78"></a>
+<a name="line79"></a>    } else {
+<a name="line80"></a>      return goog.dom.pattern.MatchType.NO_MATCH;
+<a name="line81"></a>    }
+<a name="line82"></a>  } else {
+<a name="line83"></a>    this.depth_ += type;
+<a name="line84"></a>
+<a name="line85"></a>    return this.depth_ ?
+<a name="line86"></a>           goog.dom.pattern.MatchType.MATCHING :
+<a name="line87"></a>           goog.dom.pattern.MatchType.MATCH;
+<a name="line88"></a>  }
+<a name="line89"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>currencycodemap.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_locale_currencycodemap.js.html">currencycodemap.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Currency code map.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>/**
+<a name="line20"></a> * Namespace for locale number format functions
+<a name="line21"></a> */
+<a name="line22"></a>goog.provide(&#39;goog.locale.currencyCodeMap&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * The mapping of currency symbol through intl currency code.
+<a name="line27"></a> * The source of information is mostly from wikipedia and CLDR. Since there is
+<a name="line28"></a> * no authoritive source, items are judged by personal perception.
+<a name="line29"></a>
+<a name="line30"></a> * If an application need currency support that only available in tier2, it
+<a name="line31"></a> * should extend currencyCodeMap to include tier2 data by doing this:
+<a name="line32"></a> *     goog.object.extend(goog.locale.currencyCodeMap,
+<a name="line33"></a> *                        goog.locale.currencyCodeMapTier2);
+<a name="line34"></a> *
+<a name="line35"></a> * @type {Object}
+<a name="line36"></a> * @const
+<a name="line37"></a> */
+<a name="line38"></a>goog.locale.currencyCodeMap = {
+<a name="line39"></a>  &#39;AED&#39;: &#39;\u062F\u002e\u0625&#39;,
+<a name="line40"></a>  &#39;ARS&#39;: &#39;$&#39;,
+<a name="line41"></a>  &#39;AUD&#39;: &#39;$&#39;,
+<a name="line42"></a>  &#39;BDT&#39;: &#39;\u09F3&#39;,
+<a name="line43"></a>  &#39;BRL&#39;: &#39;R$&#39;,
+<a name="line44"></a>  &#39;CAD&#39;: &#39;$&#39;,
+<a name="line45"></a>  &#39;CHF&#39;: &#39;Fr.&#39;,
+<a name="line46"></a>  &#39;CLP&#39;: &#39;$&#39;,
+<a name="line47"></a>  &#39;CNY&#39;: &#39;\u00a5&#39;,
+<a name="line48"></a>  &#39;COP&#39;: &#39;$&#39;,
+<a name="line49"></a>  &#39;CRC&#39;: &#39;\u20a1&#39;,
+<a name="line50"></a>  &#39;CUP&#39;: &#39;$&#39;,
+<a name="line51"></a>  &#39;CZK&#39;: &#39;K\u010d&#39;,
+<a name="line52"></a>  &#39;DKK&#39;: &#39;kr&#39;,
+<a name="line53"></a>  &#39;DOP&#39;: &#39;$&#39;,
+<a name="line54"></a>  &#39;EGP&#39;: &#39;\u00a3&#39;,
+<a name="line55"></a>  &#39;EUR&#39;: &#39;\u20ac&#39;,
+<a name="line56"></a>  &#39;GBP&#39;: &#39;\u00a3&#39;,
+<a name="line57"></a>  &#39;HKD&#39;: &#39;$&#39;,
+<a name="line58"></a>  &#39;HRK&#39;: &#39;kn&#39;,
+<a name="line59"></a>  &#39;HUF&#39;: &#39;Ft&#39;,
+<a name="line60"></a>  &#39;IDR&#39;: &#39;Rp&#39;,
+<a name="line61"></a>  &#39;ILS&#39;: &#39;\u20AA&#39;,
+<a name="line62"></a>  &#39;INR&#39;: &#39;Rs&#39;,
+<a name="line63"></a>  &#39;IQD&#39;: &#39;\u0639\u062F&#39;,
+<a name="line64"></a>  &#39;ISK&#39;: &#39;kr&#39;,
+<a name="line65"></a>  &#39;JMD&#39;: &#39;$&#39;,
+<a name="line66"></a>  &#39;JPY&#39;: &#39;\u00a5&#39;,
+<a name="line67"></a>  &#39;KRW&#39;: &#39;\u20A9&#39;,
+<a name="line68"></a>  &#39;KWD&#39;: &#39;\u062F\u002e\u0643&#39;,
+<a name="line69"></a>  &#39;LKR&#39;: &#39;Rs&#39;,
+<a name="line70"></a>  &#39;LVL&#39;: &#39;Ls&#39;,
+<a name="line71"></a>  &#39;MNT&#39;: &#39;\u20AE&#39;,
+<a name="line72"></a>  &#39;MXN&#39;: &#39;$&#39;,
+<a name="line73"></a>  &#39;MYR&#39;: &#39;RM&#39;,
+<a name="line74"></a>  &#39;NOK&#39;: &#39;kr&#39;,
+<a name="line75"></a>  &#39;NZD&#39;: &#39;$&#39;,
+<a name="line76"></a>  &#39;PAB&#39;: &#39;B/.&#39;,
+<a name="line77"></a>  &#39;PEN&#39;: &#39;S/.&#39;,
+<a name="line78"></a>  &#39;PHP&#39;: &#39;P&#39;,
+<a name="line79"></a>  &#39;PKR&#39;: &#39;Rs.&#39;,
+<a name="line80"></a>  &#39;PLN&#39;: &#39;z\u0142&#39;,
+<a name="line81"></a>  &#39;RON&#39;: &#39;L&#39;,
+<a name="line82"></a>  &#39;RUB&#39;: &#39;\u0440\u0443\u0431&#39;,
+<a name="line83"></a>  &#39;SAR&#39;: &#39;\u0633\u002E\u0631&#39;,
+<a name="line84"></a>  &#39;SEK&#39;: &#39;kr&#39;,
+<a name="line85"></a>  &#39;SGD&#39;: &#39;$&#39;,
+<a name="line86"></a>  &#39;SKK&#39;: &#39;Sk&#39;,
+<a name="line87"></a>  &#39;SYP&#39;: &#39;SYP&#39;,
+<a name="line88"></a>  &#39;THB&#39;: &#39;\u0e3f&#39;,
+<a name="line89"></a>  &#39;TRY&#39;: &#39;TL&#39;,
+<a name="line90"></a>  &#39;TWD&#39;: &#39;NT$&#39;,
+<a name="line91"></a>  &#39;USD&#39;: &#39;$&#39;,
+<a name="line92"></a>  &#39;UYU&#39;: &#39;$&#39;,
+<a name="line93"></a>  &#39;VEF&#39;: &#39;Bs.F&#39;,
+<a name="line94"></a>  &#39;VND&#39;: &#39;\u20AB&#39;,
+<a name="line95"></a>  &#39;XAF&#39;: &#39;FCFA&#39;,
+<a name="line96"></a>  &#39;XCD&#39;: &#39;$&#39;,
+<a name="line97"></a>  &#39;YER&#39;: &#39;YER&#39;,
+<a name="line98"></a>  &#39;ZAR&#39;: &#39;R&#39;
+<a name="line99"></a>}
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * This group of currency data is unlikely to be used. In case they are,
+<a name="line103"></a> * program need to merge it into goog.locale.CurrencyCodeMap.
+<a name="line104"></a> *
+<a name="line105"></a> * @type {Object}
+<a name="line106"></a> * @const
+<a name="line107"></a> */
+<a name="line108"></a>goog.locale.currencyCodeMapTier2 = {
+<a name="line109"></a>  &#39;AFN&#39;: &#39;\u060b&#39;,
+<a name="line110"></a>  &#39;ALL&#39;: &#39;Lek&#39;,
+<a name="line111"></a>  &#39;AMD&#39;: &#39;\u0564\u0580\u002e&#39;,
+<a name="line112"></a>  &#39;ANG&#39;: &#39;\u0083&#39;,
+<a name="line113"></a>  &#39;AOA&#39;: &#39;Kz&#39;,
+<a name="line114"></a>  &#39;AWG&#39;: &#39;\u0192&#39;,
+<a name="line115"></a>  &#39;AZN&#39;: &#39;m&#39;,
+<a name="line116"></a>  &#39;BAM&#39;: &#39;\u041a\u041c&#39;,
+<a name="line117"></a>  &#39;BBD&#39;: &#39;$&#39;,
+<a name="line118"></a>  &#39;BGN&#39;: &#39;\u043b\u0432&#39;,
+<a name="line119"></a>  &#39;BHD&#39;: &#39;\u0628\u002e\u062f\u002e&#39;,
+<a name="line120"></a>  &#39;BIF&#39;: &#39;FBu&#39;,
+<a name="line121"></a>  &#39;BMD&#39;: &#39;$&#39;,
+<a name="line122"></a>  &#39;BND&#39;: &#39;$&#39;,
+<a name="line123"></a>  &#39;BOB&#39;: &#39;B$&#39;,
+<a name="line124"></a>  &#39;BSD&#39;: &#39;$&#39;,
+<a name="line125"></a>  &#39;BTN&#39;: &#39;Nu.&#39;,
+<a name="line126"></a>  &#39;BWP&#39;: &#39;P&#39;,
+<a name="line127"></a>  &#39;BYR&#39;: &#39;Br&#39;,
+<a name="line128"></a>  &#39;BZD&#39;: &#39;$&#39;,
+<a name="line129"></a>  &#39;CDF&#39;: &#39;F&#39;,
+<a name="line130"></a>  &#39;CVE&#39;: &#39;$&#39;,
+<a name="line131"></a>  &#39;DJF&#39;: &#39;Fdj&#39;,
+<a name="line132"></a>  &#39;DZD&#39;: &#39;\u062f\u062C&#39;,
+<a name="line133"></a>  &#39;EEK&#39;: &#39;EEK&#39;,
+<a name="line134"></a>  &#39;ERN&#39;: &#39;Nfk&#39;,
+<a name="line135"></a>  &#39;ETB&#39;: &#39;Br&#39;,
+<a name="line136"></a>  &#39;FJD&#39;: &#39;$&#39;,
+<a name="line137"></a>  &#39;FKP&#39;: &#39;\u00a3&#39;,
+<a name="line138"></a>  &#39;GEL&#39;: &#39;GEL&#39;,
+<a name="line139"></a>  &#39;GHS&#39;: &#39;\u20B5&#39;,
+<a name="line140"></a>  &#39;GIP&#39;: &#39;\u00a3&#39;,
+<a name="line141"></a>  &#39;GMD&#39;: &#39;D&#39;,
+<a name="line142"></a>  &#39;GNF&#39;: &#39;FG&#39;,
+<a name="line143"></a>  &#39;GTQ&#39;: &#39;Q&#39;,
+<a name="line144"></a>  &#39;GYD&#39;: &#39;$&#39;,
+<a name="line145"></a>  &#39;HNL&#39;: &#39;L&#39;,
+<a name="line146"></a>  &#39;HTG&#39;: &#39;G&#39;,
+<a name="line147"></a>  &#39;IRR&#39;: &#39;\ufdfc&#39;,
+<a name="line148"></a>  &#39;JOD&#39;: &#39;JOD&#39;,
+<a name="line149"></a>  &#39;KES&#39;: &#39;KSh&#39;,
+<a name="line150"></a>  &#39;KGS&#39;: &#39;som&#39;,
+<a name="line151"></a>  &#39;KHR&#39;: &#39;\u17DB&#39;,
+<a name="line152"></a>  &#39;KMF&#39;: &#39;KMF&#39;,
+<a name="line153"></a>  &#39;KPW&#39;: &#39;\u20A9&#39;,
+<a name="line154"></a>  &#39;KYD&#39;: &#39;$&#39;,
+<a name="line155"></a>  &#39;KZT&#39;: &#39;KZT&#39;,
+<a name="line156"></a>  &#39;LAK&#39;: &#39;\u20AD&#39;,
+<a name="line157"></a>  &#39;LBP&#39;: &#39;\u0644\u002e\u0644&#39;,
+<a name="line158"></a>  &#39;LRD&#39;: &#39;$&#39;,
+<a name="line159"></a>  &#39;LSL&#39;: &#39;L&#39;,
+<a name="line160"></a>  &#39;LTL&#39;: &#39;Lt&#39;,
+<a name="line161"></a>  &#39;LYD&#39;: &#39;\u0644\u002e\u062F&#39;,
+<a name="line162"></a>  &#39;MAD&#39;: &#39;\u0645\u002E\u062F\u002E&#39;,
+<a name="line163"></a>  &#39;MDL&#39;: &#39;MDL&#39;,
+<a name="line164"></a>  &#39;MGA&#39;: &#39;MGA&#39;,
+<a name="line165"></a>  &#39;MKD&#39;: &#39;MKD&#39;,
+<a name="line166"></a>  &#39;MMK&#39;: &#39;K&#39;,
+<a name="line167"></a>  &#39;MOP&#39;: &#39;MOP$&#39;,
+<a name="line168"></a>  &#39;MRO&#39;: &#39;UM&#39;,
+<a name="line169"></a>  &#39;MUR&#39;: &#39;Rs&#39;,
+<a name="line170"></a>  &#39;MVR&#39;: &#39;Rf&#39;,
+<a name="line171"></a>  &#39;MWK&#39;: &#39;MK&#39;,
+<a name="line172"></a>  &#39;MZN&#39;: &#39;MTn&#39;,
+<a name="line173"></a>  &#39;NAD&#39;: &#39;$&#39;,
+<a name="line174"></a>  &#39;NGN&#39;: &#39;\u20A6&#39;,
+<a name="line175"></a>  &#39;NIO&#39;: &#39;C$&#39;,
+<a name="line176"></a>  &#39;NPR&#39;: &#39;Rs&#39;,
+<a name="line177"></a>  &#39;OMR&#39;: &#39;\u0639\u002E\u062F\u002E&#39;,
+<a name="line178"></a>  &#39;PGK&#39;: &#39;K&#39;,
+<a name="line179"></a>  &#39;PYG&#39;: &#39;\u20b2&#39;,
+<a name="line180"></a>  &#39;QAR&#39;: &#39;\u0642\u002E\u0631&#39;,
+<a name="line181"></a>  &#39;RSD&#39;: &#39;\u0420\u0421\u0414&#39;,
+<a name="line182"></a>  &#39;RWF&#39;: &#39;RF&#39;,
+<a name="line183"></a>  &#39;SBD&#39;: &#39;$&#39;,
+<a name="line184"></a>  &#39;SCR&#39;: &#39;SR&#39;,
+<a name="line185"></a>  &#39;SDG&#39;: &#39;SDG&#39;,
+<a name="line186"></a>  &#39;SHP&#39;: &#39;\u00a3&#39;,
+<a name="line187"></a>  &#39;SLL&#39;: &#39;Le&#39;,
+<a name="line188"></a>  &#39;SOS&#39;: &#39;So. Sh.&#39;,
+<a name="line189"></a>  &#39;SRD&#39;: &#39;$&#39;,
+<a name="line190"></a>  &#39;STD&#39;: &#39;Db&#39;,
+<a name="line191"></a>  &#39;SZL&#39;: &#39;L&#39;,
+<a name="line192"></a>  &#39;TJS&#39;: &#39;TJS&#39;,
+<a name="line193"></a>  &#39;TMM&#39;: &#39;m&#39;,
+<a name="line194"></a>  &#39;TND&#39;: &#39;\u062F\u002e\u062A &#39;,
+<a name="line195"></a>  &#39;TOP&#39;: &#39;T$&#39;,
+<a name="line196"></a>  &#39;TTD&#39;: &#39;$&#39;,
+<a name="line197"></a>  &#39;TZS&#39;: &#39;TZS&#39;,
+<a name="line198"></a>  &#39;UAH&#39;: &#39;UAH&#39;,
+<a name="line199"></a>  &#39;UGX&#39;: &#39;USh&#39;,
+<a name="line200"></a>  &#39;UZS&#39;: &#39;UZS&#39;,
+<a name="line201"></a>  &#39;VUV&#39;: &#39;Vt&#39;,
+<a name="line202"></a>  &#39;WST&#39;: &#39;WS$&#39;,
+<a name="line203"></a>  &#39;XOF&#39;: &#39;CFA&#39;,
+<a name="line204"></a>  &#39;XPF&#39;: &#39;F&#39;,
+<a name="line205"></a>  &#39;ZMK&#39;: &#39;ZK&#39;,
+<a name="line206"></a>  &#39;ZWL&#39;: &#39;$&#39;
+<a name="line207"></a>};
+</pre>
+
+
+</body>
+</html>

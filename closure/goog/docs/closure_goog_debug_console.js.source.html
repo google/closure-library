@@ -1,0 +1,186 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>console.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_debug_console.js.html">console.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Simple logger that logs to the window console if available.
+<a name="line17"></a> *
+<a name="line18"></a> * Has an autoInstall option which can be put into initialization code, which
+<a name="line19"></a> * will start logging if &quot;Debug=true&quot; is in document.location.href
+<a name="line20"></a> *
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.debug.Console&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.debug.LogManager&#39;);
+<a name="line26"></a>goog.require(&#39;goog.debug.Logger.Level&#39;);
+<a name="line27"></a>goog.require(&#39;goog.debug.TextFormatter&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Create and install a log handler that logs to window.console if available
+<a name="line32"></a> * @constructor
+<a name="line33"></a> */
+<a name="line34"></a>goog.debug.Console = function() {
+<a name="line35"></a>  this.publishHandler_ = goog.bind(this.addLogRecord, this);
+<a name="line36"></a>  this.formatter_ = new goog.debug.TextFormatter();
+<a name="line37"></a>  this.formatter_.showAbsoluteTime = false;
+<a name="line38"></a>  this.formatter_.showExceptionText = false;
+<a name="line39"></a>  this.isCapturing_ = false;
+<a name="line40"></a>  this.logBuffer_ = &#39;&#39;;
+<a name="line41"></a>};
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * Returns the text formatter used by this console
+<a name="line46"></a> * @return {goog.debug.TextFormatter} The text formatter.
+<a name="line47"></a> */
+<a name="line48"></a>goog.debug.Console.prototype.getFormatter = function() {
+<a name="line49"></a>  return this.formatter_;
+<a name="line50"></a>};
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Sets whether we are currently capturing logger output.
+<a name="line55"></a> * @param {boolean} capturing Whether to capture logger output.
+<a name="line56"></a> */
+<a name="line57"></a>goog.debug.Console.prototype.setCapturing = function(capturing) {
+<a name="line58"></a>  if (capturing == this.isCapturing_) {
+<a name="line59"></a>    return;
+<a name="line60"></a>  }
+<a name="line61"></a>
+<a name="line62"></a>  // attach or detach handler from the root logger
+<a name="line63"></a>  var rootLogger = goog.debug.LogManager.getRoot();
+<a name="line64"></a>  if (capturing) {
+<a name="line65"></a>    rootLogger.addHandler(this.publishHandler_);
+<a name="line66"></a>  } else {
+<a name="line67"></a>    rootLogger.removeHandler(this.publishHandler_);
+<a name="line68"></a>    this.logBuffer = &#39;&#39;;
+<a name="line69"></a>  }
+<a name="line70"></a>  this.isCapturing_ = capturing;
+<a name="line71"></a>};
+<a name="line72"></a>
+<a name="line73"></a>
+<a name="line74"></a>/**
+<a name="line75"></a> * Adds a log record.
+<a name="line76"></a> * @param {goog.debug.LogRecord} logRecord The log entry.
+<a name="line77"></a> */
+<a name="line78"></a>goog.debug.Console.prototype.addLogRecord = function(logRecord) {
+<a name="line79"></a>  var record = this.formatter_.formatRecord(logRecord);
+<a name="line80"></a>  if (window.console &amp;&amp; window.console[&#39;firebug&#39;]) {
+<a name="line81"></a>    // NOTE: info, error, warn and debug aren&#39;t in the externs and are
+<a name="line82"></a>    // only available to FireBug, so we need to reference them by array
+<a name="line83"></a>    // notation to stop the compiler complaining.
+<a name="line84"></a>    switch (logRecord.getLevel()) {
+<a name="line85"></a>      case goog.debug.Logger.Level.SHOUT:
+<a name="line86"></a>        window.console[&#39;info&#39;](record);
+<a name="line87"></a>        break;
+<a name="line88"></a>      case goog.debug.Logger.Level.SEVERE:
+<a name="line89"></a>        window.console[&#39;error&#39;](record);
+<a name="line90"></a>        break;
+<a name="line91"></a>      case goog.debug.Logger.Level.WARNING:
+<a name="line92"></a>        window.console[&#39;warn&#39;](record);
+<a name="line93"></a>        break;
+<a name="line94"></a>      default:
+<a name="line95"></a>        window.console[&#39;debug&#39;](record);
+<a name="line96"></a>        break;
+<a name="line97"></a>    }
+<a name="line98"></a>  } else if (window.console) {
+<a name="line99"></a>    window.console.log(record);
+<a name="line100"></a>  } else if (window.opera) {
+<a name="line101"></a>    // window.opera.postError is considered an undefined property reference
+<a name="line102"></a>    // by JSCompiler, so it has to be referenced using array notation instead.
+<a name="line103"></a>    window.opera[&#39;postError&#39;](record);
+<a name="line104"></a>  } else {
+<a name="line105"></a>    this.logBuffer_ += record;
+<a name="line106"></a>  }
+<a name="line107"></a>};
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Global console logger instance
+<a name="line112"></a> * @type {goog.debug.Console}
+<a name="line113"></a> */
+<a name="line114"></a>goog.debug.Console.instance = null;
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Install the console and start capturing if &quot;Debug=true&quot; is in the page URL
+<a name="line119"></a> */
+<a name="line120"></a>goog.debug.Console.autoInstall = function() {
+<a name="line121"></a>  if (!goog.debug.Console.instance) {
+<a name="line122"></a>    goog.debug.Console.instance = new goog.debug.Console();
+<a name="line123"></a>  }
+<a name="line124"></a>
+<a name="line125"></a>  if (window.location.href.indexOf(&#39;Debug=true&#39;) != -1) {
+<a name="line126"></a>    goog.debug.Console.instance.setCapturing(true);
+<a name="line127"></a>  }
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Show an alert with all of the captured debug information.
+<a name="line133"></a> * Information is only captured if console is not available
+<a name="line134"></a> */
+<a name="line135"></a>goog.debug.Console.show = function() {
+<a name="line136"></a>  alert(goog.debug.Console.instance.logBuffer_);
+<a name="line137"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,512 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>positioning.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_positioning_positioning.js.html">positioning.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Common positioning code.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.positioning&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.positioning.Corner&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.positioning.CornerBit&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.positioning.Overflow&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.positioning.OverflowStatus&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line31"></a>goog.require(&#39;goog.math.Box&#39;);
+<a name="line32"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line33"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line34"></a>goog.require(&#39;goog.style&#39;);
+<a name="line35"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Enum for representing an element corner for positioning the popup.
+<a name="line41"></a> *
+<a name="line42"></a> * The START constants map to LEFT if element directionality is left
+<a name="line43"></a> * to right and RIGHT if the directionality is right to left.
+<a name="line44"></a> * Likewise END maps to RIGHT or LEFT depending on the directionality.
+<a name="line45"></a> *
+<a name="line46"></a> * @enum {number}
+<a name="line47"></a> */
+<a name="line48"></a>goog.positioning.Corner = {
+<a name="line49"></a>  TOP_LEFT: 0,
+<a name="line50"></a>  TOP_RIGHT: 2,
+<a name="line51"></a>  BOTTOM_LEFT: 1,
+<a name="line52"></a>  BOTTOM_RIGHT: 3,
+<a name="line53"></a>  TOP_START: 4,
+<a name="line54"></a>  TOP_END: 6,
+<a name="line55"></a>  BOTTOM_START: 5,
+<a name="line56"></a>  BOTTOM_END: 7
+<a name="line57"></a>};
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * Enum for bits in the {@see goog.positioning.Corner) bitmap.
+<a name="line62"></a> *
+<a name="line63"></a> * @enum {number}
+<a name="line64"></a> */
+<a name="line65"></a>goog.positioning.CornerBit = {
+<a name="line66"></a>  BOTTOM: 1,
+<a name="line67"></a>  RIGHT: 2,
+<a name="line68"></a>  FLIP_RTL: 4
+<a name="line69"></a>};
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Enum for representing position handling in cases where the element would be
+<a name="line74"></a> * positioned outside the viewport.
+<a name="line75"></a> *
+<a name="line76"></a> * @enum {number}
+<a name="line77"></a> */
+<a name="line78"></a>goog.positioning.Overflow = {
+<a name="line79"></a>  IGNORE: 0,
+<a name="line80"></a>  ADJUST_X: 1,
+<a name="line81"></a>  FAIL_X: 2,
+<a name="line82"></a>  ADJUST_Y: 4,
+<a name="line83"></a>  FAIL_Y: 8,
+<a name="line84"></a>  RESIZE_WIDTH: 16,
+<a name="line85"></a>  RESIZE_HEIGHT: 32
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Enum for representing the outcome of a positioning call.
+<a name="line91"></a> *
+<a name="line92"></a> * @enum {number}
+<a name="line93"></a> */
+<a name="line94"></a>goog.positioning.OverflowStatus = {
+<a name="line95"></a>  NONE: 0,
+<a name="line96"></a>  ADJUSTED_X: 1,
+<a name="line97"></a>  ADJUSTED_Y: 2,
+<a name="line98"></a>  WIDTH_ADJUSTED: 4,
+<a name="line99"></a>  HEIGHT_ADJUSTED: 8,
+<a name="line100"></a>  FAILED_LEFT: 16,
+<a name="line101"></a>  FAILED_RIGHT: 32,
+<a name="line102"></a>  FAILED_TOP: 64,
+<a name="line103"></a>  FAILED_BOTTOM: 128,
+<a name="line104"></a>  FAILED_OUTSIDE_VIEWPORT: 256
+<a name="line105"></a>};
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Shorthand to check if a status code contains any fail code.
+<a name="line110"></a> * @type {number}
+<a name="line111"></a> */
+<a name="line112"></a>goog.positioning.OverflowStatus.FAILED =
+<a name="line113"></a>    goog.positioning.OverflowStatus.FAILED_LEFT |
+<a name="line114"></a>    goog.positioning.OverflowStatus.FAILED_RIGHT |
+<a name="line115"></a>    goog.positioning.OverflowStatus.FAILED_TOP |
+<a name="line116"></a>    goog.positioning.OverflowStatus.FAILED_BOTTOM |
+<a name="line117"></a>    goog.positioning.OverflowStatus.FAILED_OUTSIDE_VIEWPORT;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Positions a movable element relative to an anchor element. The caller
+<a name="line122"></a> * specifies the corners that should touch. This functions then moves the
+<a name="line123"></a> * movable element accordingly.
+<a name="line124"></a> *
+<a name="line125"></a> * @param {Element} anchorElement The element that is the anchor for where
+<a name="line126"></a> *    the movable element should position itself.
+<a name="line127"></a> * @param {goog.positioning.Corner} anchorElementCorner The corner of the
+<a name="line128"></a> *     anchorElement for positioning the movable element.
+<a name="line129"></a> * @param {Element} movableElement The element to move.
+<a name="line130"></a> * @param {goog.positioning.Corner} movableElementCorner The corner of the
+<a name="line131"></a> *     movableElement that that should be positioned adjacent to the anchor
+<a name="line132"></a> *     element.
+<a name="line133"></a> * @param {goog.math.Coordinate} opt_offset An offset specified in pixels.
+<a name="line134"></a> *    After the normal positioning algorithm is applied, the offset is then
+<a name="line135"></a> *    applied. Positive coordinates move the popup closer to the center of the
+<a name="line136"></a> *    anchor element. Negative coordinates move the popup away from the center
+<a name="line137"></a> *    of the anchor element.
+<a name="line138"></a> * @param {goog.math.Box} opt_margin A margin specified in pixels.
+<a name="line139"></a> *    After the normal positioning algorithm is applied and any offset, the
+<a name="line140"></a> *    margin is then applied. Positive coordinates move the popup away from the
+<a name="line141"></a> *    spot it was positioned towards its center. Negative coordiates move it
+<a name="line142"></a> *    towards the spot it was positioned away from its center.
+<a name="line143"></a> * @param {?number} opt_overflow Overflow handling mode. Defaults to IGNORE if
+<a name="line144"></a> *     not specified. Bitmap, {@see goog.positioning.Overflow}.
+<a name="line145"></a> * @param {goog.math.Size} opt_preferredSize The preferred size of the
+<a name="line146"></a> *     movableElement.
+<a name="line147"></a> * @return {goog.positioning.OverflowStatus} Status bitmap,
+<a name="line148"></a> *     {@see goog.positioning.OverflowStatus}.
+<a name="line149"></a> */
+<a name="line150"></a>goog.positioning.positionAtAnchor = function(anchorElement,
+<a name="line151"></a>                                             anchorElementCorner,
+<a name="line152"></a>                                             movableElement,
+<a name="line153"></a>                                             movableElementCorner,
+<a name="line154"></a>                                             opt_offset,
+<a name="line155"></a>                                             opt_margin,
+<a name="line156"></a>                                             opt_overflow,
+<a name="line157"></a>                                             opt_preferredSize) {
+<a name="line158"></a>  // Ignore offset for the BODY element unless it&#39;s position is non-static.
+<a name="line159"></a>  // For cases where the offset parent is HTML rather than the BODY (such as in
+<a name="line160"></a>  // IE strict mode) there&#39;s no need to get the position of the BODY as it
+<a name="line161"></a>  // doesn&#39;t affect the page offset.
+<a name="line162"></a>  var moveableParentTopLeft;
+<a name="line163"></a>  var parent = movableElement.offsetParent;
+<a name="line164"></a>  if (parent) {
+<a name="line165"></a>    var isBody = parent.tagName == goog.dom.TagName.HTML ||
+<a name="line166"></a>        parent.tagName == goog.dom.TagName.BODY;
+<a name="line167"></a>    if (!isBody ||
+<a name="line168"></a>        goog.style.getComputedPosition(parent) != &#39;static&#39;) {
+<a name="line169"></a>      // Get the top-left corner of the parent, in page coordinates.
+<a name="line170"></a>      moveableParentTopLeft = goog.style.getPageOffset(parent);
+<a name="line171"></a>
+<a name="line172"></a>      if (!isBody) {
+<a name="line173"></a>        moveableParentTopLeft = goog.math.Coordinate.difference(
+<a name="line174"></a>            moveableParentTopLeft,
+<a name="line175"></a>            new goog.math.Coordinate(parent.scrollLeft, parent.scrollTop));
+<a name="line176"></a>      }
+<a name="line177"></a>    }
+<a name="line178"></a>  }
+<a name="line179"></a>
+<a name="line180"></a>  // Get the visible part of the anchor element.  anchorRect is
+<a name="line181"></a>  // relative to anchorElement&#39;s page.
+<a name="line182"></a>  var anchorRect = goog.positioning.getVisiblePart_(anchorElement);
+<a name="line183"></a>
+<a name="line184"></a>  // Translate anchorRect to be relative to movableElement&#39;s page.
+<a name="line185"></a>  goog.style.translateRectForAnotherFrame(
+<a name="line186"></a>      anchorRect,
+<a name="line187"></a>      goog.dom.getDomHelper(anchorElement),
+<a name="line188"></a>      goog.dom.getDomHelper(movableElement));
+<a name="line189"></a>
+<a name="line190"></a>  // Offset based on which corner of the element we want to position against.
+<a name="line191"></a>  var corner = goog.positioning.getEffectiveCorner(anchorElement,
+<a name="line192"></a>                                                   anchorElementCorner);
+<a name="line193"></a>  // absolutePos is a candidate position relative to the
+<a name="line194"></a>  // movableElement&#39;s window.
+<a name="line195"></a>  var absolutePos = new goog.math.Coordinate(
+<a name="line196"></a>      corner &amp; goog.positioning.CornerBit.RIGHT ?
+<a name="line197"></a>          anchorRect.left + anchorRect.width : anchorRect.left,
+<a name="line198"></a>      corner &amp; goog.positioning.CornerBit.BOTTOM ?
+<a name="line199"></a>          anchorRect.top + anchorRect.height : anchorRect.top);
+<a name="line200"></a>
+<a name="line201"></a>  // Translate absolutePos to be relative to the offsetParent.
+<a name="line202"></a>  if (moveableParentTopLeft) {
+<a name="line203"></a>    absolutePos =
+<a name="line204"></a>        goog.math.Coordinate.difference(absolutePos, moveableParentTopLeft);
+<a name="line205"></a>  }
+<a name="line206"></a>
+<a name="line207"></a>  // Apply offset, if specified
+<a name="line208"></a>  if (opt_offset) {
+<a name="line209"></a>    absolutePos.x += (corner &amp; goog.positioning.CornerBit.RIGHT ? -1 : 1) *
+<a name="line210"></a>        opt_offset.x;
+<a name="line211"></a>    absolutePos.y += (corner &amp; goog.positioning.CornerBit.BOTTOM ? -1 : 1) *
+<a name="line212"></a>        opt_offset.y;
+<a name="line213"></a>  }
+<a name="line214"></a>
+<a name="line215"></a>  // Determine dimension of viewport.
+<a name="line216"></a>  var viewport;
+<a name="line217"></a>  if (opt_overflow) {
+<a name="line218"></a>    viewport = goog.style.getVisibleRectForElement(movableElement);
+<a name="line219"></a>    if (viewport &amp;&amp; moveableParentTopLeft) {
+<a name="line220"></a>      viewport.top = Math.max(0, viewport.top - moveableParentTopLeft.y);
+<a name="line221"></a>      viewport.right -= moveableParentTopLeft.x;
+<a name="line222"></a>      viewport.bottom -= moveableParentTopLeft.y;
+<a name="line223"></a>      viewport.left = Math.max(0, viewport.left - moveableParentTopLeft.x);
+<a name="line224"></a>    }
+<a name="line225"></a>  }
+<a name="line226"></a>
+<a name="line227"></a>  return goog.positioning.positionAtCoordinate(absolutePos,
+<a name="line228"></a>                                               movableElement,
+<a name="line229"></a>                                               movableElementCorner,
+<a name="line230"></a>                                               opt_margin,
+<a name="line231"></a>                                               viewport,
+<a name="line232"></a>                                               opt_overflow,
+<a name="line233"></a>                                               opt_preferredSize);
+<a name="line234"></a>};
+<a name="line235"></a>
+<a name="line236"></a>
+<a name="line237"></a>/**
+<a name="line238"></a> * Returns intersection of the specified element and
+<a name="line239"></a> * goog.style.getVisibleRectForElement for it.
+<a name="line240"></a> *
+<a name="line241"></a> * @param {Element} el The target element.
+<a name="line242"></a> * @return {goog.math.Rect} Intersection of getVisibleRectForElement
+<a name="line243"></a> *     and the current bounding rectangle of the element.  If the
+<a name="line244"></a> *     intersection is empty, returns the bounding rectangle.
+<a name="line245"></a> * @private
+<a name="line246"></a> */
+<a name="line247"></a>goog.positioning.getVisiblePart_ = function(el) {
+<a name="line248"></a>  var rect = goog.style.getBounds(el);
+<a name="line249"></a>  var visibleBox = goog.style.getVisibleRectForElement(el);
+<a name="line250"></a>  if (visibleBox) {
+<a name="line251"></a>    rect.intersection(goog.math.Rect.createFromBox(visibleBox));
+<a name="line252"></a>  }
+<a name="line253"></a>  return rect;
+<a name="line254"></a>};
+<a name="line255"></a>
+<a name="line256"></a>
+<a name="line257"></a>/**
+<a name="line258"></a> * Positions the specified corner of the movable element at the
+<a name="line259"></a> * specified coordinate.
+<a name="line260"></a> *
+<a name="line261"></a> * @param {goog.math.Coordinate} absolutePos The coordinate to position the
+<a name="line262"></a> *     element at.
+<a name="line263"></a> * @param {Element} movableElement The element to be positioned.
+<a name="line264"></a> * @param {goog.positioning.Corner} movableElementCorner The corner of the
+<a name="line265"></a> *     movableElement that that should be positioned.
+<a name="line266"></a> * @param {goog.math.Box} opt_margin A margin specified in pixels.
+<a name="line267"></a> *    After the normal positioning algorithm is applied and any offset, the
+<a name="line268"></a> *    margin is then applied. Positive coordinates move the popup away from the
+<a name="line269"></a> *    spot it was positioned towards its center. Negative coordiates move it
+<a name="line270"></a> *    towards the spot it was positioned away from its center.
+<a name="line271"></a> * @param {goog.math.Box} opt_viewport Box object describing the dimensions of
+<a name="line272"></a> *     the viewport. Required if opt_overflow is specified.
+<a name="line273"></a> * @param {?number} opt_overflow Overflow handling mode. Defaults to IGNORE if
+<a name="line274"></a> *     not specified, {@see goog.positioning.Overflow}.
+<a name="line275"></a> * @param {goog.math.Size} opt_preferredSize The preferred size of the
+<a name="line276"></a> *     movableElement. Defaults to the current size.
+<a name="line277"></a> * @return {goog.positioning.OverflowStatus} Status bitmap.
+<a name="line278"></a> */
+<a name="line279"></a>goog.positioning.positionAtCoordinate = function(absolutePos,
+<a name="line280"></a>                                                 movableElement,
+<a name="line281"></a>                                                 movableElementCorner,
+<a name="line282"></a>                                                 opt_margin,
+<a name="line283"></a>                                                 opt_viewport,
+<a name="line284"></a>                                                 opt_overflow,
+<a name="line285"></a>                                                 opt_preferredSize) {
+<a name="line286"></a>  absolutePos = absolutePos.clone();
+<a name="line287"></a>  var status = goog.positioning.OverflowStatus.NONE;
+<a name="line288"></a>
+<a name="line289"></a>  // Offset based on attached corner and desired margin.
+<a name="line290"></a>  var corner = goog.positioning.getEffectiveCorner(movableElement,
+<a name="line291"></a>                                                   movableElementCorner);
+<a name="line292"></a>  var elementSize = goog.style.getSize(movableElement);
+<a name="line293"></a>  var size = opt_preferredSize ? opt_preferredSize.clone() :
+<a name="line294"></a>      elementSize;
+<a name="line295"></a>
+<a name="line296"></a>  if (opt_margin || corner != goog.positioning.Corner.TOP_LEFT) {
+<a name="line297"></a>    if (corner &amp; goog.positioning.CornerBit.RIGHT) {
+<a name="line298"></a>      absolutePos.x -= size.width + (opt_margin ? opt_margin.right : 0);
+<a name="line299"></a>    } else if (opt_margin) {
+<a name="line300"></a>      absolutePos.x += opt_margin.left;
+<a name="line301"></a>    }
+<a name="line302"></a>    if (corner &amp; goog.positioning.CornerBit.BOTTOM) {
+<a name="line303"></a>      absolutePos.y -= size.height + (opt_margin ? opt_margin.bottom : 0);
+<a name="line304"></a>    } else if (opt_margin) {
+<a name="line305"></a>      absolutePos.y += opt_margin.top;
+<a name="line306"></a>    }
+<a name="line307"></a>  }
+<a name="line308"></a>
+<a name="line309"></a>  // Adjust position to fit inside viewport.
+<a name="line310"></a>  if (opt_overflow) {
+<a name="line311"></a>    status = opt_viewport ? goog.positioning.adjustForViewport(absolutePos,
+<a name="line312"></a>                                                               size,
+<a name="line313"></a>                                                               opt_viewport,
+<a name="line314"></a>                                                               opt_overflow) :
+<a name="line315"></a>        goog.positioning.OverflowStatus.FAILED_OUTSIDE_VIEWPORT;
+<a name="line316"></a>    if (status &amp; goog.positioning.OverflowStatus.FAILED) {
+<a name="line317"></a>      return status;
+<a name="line318"></a>    }
+<a name="line319"></a>  }
+<a name="line320"></a>
+<a name="line321"></a>  goog.style.setPosition(movableElement, absolutePos);
+<a name="line322"></a>  if (!goog.math.Size.equals(elementSize, size)) {
+<a name="line323"></a>    goog.style.setSize(movableElement, size);
+<a name="line324"></a>  }
+<a name="line325"></a>
+<a name="line326"></a>  return status;
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Adjusts the position and/or size of an element, identified by it&#39;s position
+<a name="line332"></a> * and size, to fit inside the viewport. If the position or size of the element
+<a name="line333"></a> * is adjusted the pos or size objects, respectively, are modified.
+<a name="line334"></a> *
+<a name="line335"></a> * @param {goog.math.Coordinate} pos Position of element, updated if the
+<a name="line336"></a> *     position is adjusted.
+<a name="line337"></a> * @param {goog.math.Size} size Size of element, updated if the size is
+<a name="line338"></a> *     adjusted.
+<a name="line339"></a> * @param {goog.math.Box} viewport Bounding box describing the viewport.
+<a name="line340"></a> * @param {number} overflow Overflow handling mode,
+<a name="line341"></a> *     {@see goog.positioning.Overflow}.
+<a name="line342"></a> * @return {goog.positioning.OverflowStatus} Status bitmap,
+<a name="line343"></a> *     {@see goog.positioning.OverflowStatus}.
+<a name="line344"></a> */
+<a name="line345"></a>goog.positioning.adjustForViewport = function(pos, size, viewport, overflow) {
+<a name="line346"></a>  var status = goog.positioning.OverflowStatus.NONE;
+<a name="line347"></a>
+<a name="line348"></a>  // Left edge outside viewport, try to move it.
+<a name="line349"></a>  if (pos.x &lt; viewport.left &amp;&amp; overflow &amp; goog.positioning.Overflow.ADJUST_X) {
+<a name="line350"></a>    pos.x = viewport.left;
+<a name="line351"></a>    status |= goog.positioning.OverflowStatus.ADJUSTED_X;
+<a name="line352"></a>  }
+<a name="line353"></a>
+<a name="line354"></a>  // Left edge inside and right edge outside viewport, try to resize it.
+<a name="line355"></a>  if (pos.x &lt; viewport.left &amp;&amp;
+<a name="line356"></a>      pos.x + size.width &gt; viewport.right &amp;&amp;
+<a name="line357"></a>      overflow &amp; goog.positioning.Overflow.RESIZE_WIDTH) {
+<a name="line358"></a>    size.width -= (pos.x + size.width) - viewport.right;
+<a name="line359"></a>    status |= goog.positioning.OverflowStatus.WIDTH_ADJUSTED;
+<a name="line360"></a>  }
+<a name="line361"></a>
+<a name="line362"></a>  // Right edge outside viewport, try to move it.
+<a name="line363"></a>  if (pos.x + size.width &gt; viewport.right &amp;&amp;
+<a name="line364"></a>      overflow &amp; goog.positioning.Overflow.ADJUST_X) {
+<a name="line365"></a>    pos.x = Math.max(viewport.right - size.width, viewport.left);
+<a name="line366"></a>    status |= goog.positioning.OverflowStatus.ADJUSTED_X;
+<a name="line367"></a>  }
+<a name="line368"></a>
+<a name="line369"></a>  // Left or right edge still outside viewport, fail if the FAIL_X option was
+<a name="line370"></a>  // specified, ignore it otherwise.
+<a name="line371"></a>  if (overflow &amp; goog.positioning.Overflow.FAIL_X) {
+<a name="line372"></a>    status |= (pos.x &lt; viewport.left ?
+<a name="line373"></a>                  goog.positioning.OverflowStatus.FAILED_LEFT : 0) |
+<a name="line374"></a>              (pos.x + size.width &gt; viewport.right ?
+<a name="line375"></a>                  goog.positioning.OverflowStatus.FAILED_RIGHT : 0);
+<a name="line376"></a>  }
+<a name="line377"></a>
+<a name="line378"></a>  // Top edge outside viewport, try to move it.
+<a name="line379"></a>  if (pos.y &lt; viewport.top &amp;&amp; overflow &amp; goog.positioning.Overflow.ADJUST_Y) {
+<a name="line380"></a>    pos.y = viewport.top;
+<a name="line381"></a>    status |= goog.positioning.OverflowStatus.ADJUSTED_Y;
+<a name="line382"></a>  }
+<a name="line383"></a>
+<a name="line384"></a>  // Top edge inside and bottom edge outside viewport, try to resize it.
+<a name="line385"></a>  if (pos.y &gt;= viewport.top &amp;&amp;
+<a name="line386"></a>      pos.y + size.height &gt; viewport.bottom &amp;&amp;
+<a name="line387"></a>      overflow &amp; goog.positioning.Overflow.RESIZE_HEIGHT) {
+<a name="line388"></a>    size.height -= (pos.y + size.height) - viewport.bottom;
+<a name="line389"></a>    status |= goog.positioning.OverflowStatus.HEIGHT_ADJUSTED;
+<a name="line390"></a>  }
+<a name="line391"></a>
+<a name="line392"></a>  // Bottom edge outside viewport, try to move it.
+<a name="line393"></a>  if (pos.y + size.height &gt; viewport.bottom &amp;&amp;
+<a name="line394"></a>      overflow &amp; goog.positioning.Overflow.ADJUST_Y) {
+<a name="line395"></a>    pos.y = Math.max(viewport.bottom - size.height, viewport.top);
+<a name="line396"></a>    status |= goog.positioning.OverflowStatus.ADJUSTED_Y;
+<a name="line397"></a>  }
+<a name="line398"></a>
+<a name="line399"></a>  // Top or bottom edge still outside viewport, fail if the FAIL_Y option was
+<a name="line400"></a>  // specified, ignore it otherwise.
+<a name="line401"></a>  if (overflow &amp; goog.positioning.Overflow.FAIL_Y) {
+<a name="line402"></a>    status |= (pos.y &lt; viewport.top ?
+<a name="line403"></a>                  goog.positioning.OverflowStatus.FAILED_TOP : 0) |
+<a name="line404"></a>              (pos.y + size.height &gt; viewport.bottom ?
+<a name="line405"></a>                  goog.positioning.OverflowStatus.FAILED_BOTTOM : 0);
+<a name="line406"></a>  }
+<a name="line407"></a>
+<a name="line408"></a>  return status;
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>/**
+<a name="line413"></a> * Returns an absolute corner (top/bottom left/right) given an absolute
+<a name="line414"></a> * or relative (top/bottom start/end) corner and the direction of an element.
+<a name="line415"></a> * Absolute corners remain unchanged.
+<a name="line416"></a> * @param {Element} element DOM element to test for RTL direction.
+<a name="line417"></a> * @param {goog.positioning.Corner} corner The popup corner used for
+<a name="line418"></a> *     positioning.
+<a name="line419"></a> * @return {goog.positioning.Corner} Effective corner.
+<a name="line420"></a> */
+<a name="line421"></a>goog.positioning.getEffectiveCorner = function(element, corner) {
+<a name="line422"></a>  return /** @type {goog.positioning.Corner} */ (
+<a name="line423"></a>      (corner &amp; goog.positioning.CornerBit.FLIP_RTL &amp;&amp;
+<a name="line424"></a>          goog.style.isRightToLeft(element) ?
+<a name="line425"></a>          corner ^ goog.positioning.CornerBit.RIGHT :
+<a name="line426"></a>          corner
+<a name="line427"></a>      ) &amp; ~goog.positioning.CornerBit.FLIP_RTL);
+<a name="line428"></a>};
+<a name="line429"></a>
+<a name="line430"></a>
+<a name="line431"></a>/**
+<a name="line432"></a> * Returns the corner opposite the given one horizontally.
+<a name="line433"></a> * @param {goog.positioning.Corner} corner The popup corner used to flip.
+<a name="line434"></a> * @return {goog.positioning.Corner} The opposite corner horizontally.
+<a name="line435"></a> */
+<a name="line436"></a>goog.positioning.flipCornerHorizontal = function(corner) {
+<a name="line437"></a>  return /** @type {goog.positioning.Corner} */ (corner ^
+<a name="line438"></a>      goog.positioning.CornerBit.RIGHT);
+<a name="line439"></a>};
+<a name="line440"></a>
+<a name="line441"></a>
+<a name="line442"></a>/**
+<a name="line443"></a> * Returns the corner opposite the given one vertically.
+<a name="line444"></a> * @param {goog.positioning.Corner} corner The popup corner used to flip.
+<a name="line445"></a> * @return {goog.positioning.Corner} The opposite corner vertically.
+<a name="line446"></a> */
+<a name="line447"></a>goog.positioning.flipCornerVertical = function(corner) {
+<a name="line448"></a>  return /** @type {goog.positioning.Corner} */ (corner ^
+<a name="line449"></a>      goog.positioning.CornerBit.BOTTOM);
+<a name="line450"></a>};
+<a name="line451"></a>
+<a name="line452"></a>
+<a name="line453"></a>/**
+<a name="line454"></a> * Returns the corner opposite the given one horizontally and vertically.
+<a name="line455"></a> * @param {goog.positioning.Corner} corner The popup corner used to flip.
+<a name="line456"></a> * @return {goog.positioning.Corner} The opposite corner horizontally and
+<a name="line457"></a> *     vertically.
+<a name="line458"></a> */
+<a name="line459"></a>goog.positioning.flipCorner = function(corner) {
+<a name="line460"></a>  return /** @type {goog.positioning.Corner} */ (corner ^
+<a name="line461"></a>      goog.positioning.CornerBit.BOTTOM ^
+<a name="line462"></a>      goog.positioning.CornerBit.RIGHT);
+<a name="line463"></a>};
+</pre>
+
+
+</body>
+</html>

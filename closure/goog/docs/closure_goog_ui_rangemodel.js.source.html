@@ -1,0 +1,349 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>rangemodel.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_rangemodel.js.html">rangemodel.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Implementation of a range model. This is an implementation of
+<a name="line17"></a> * the BoundedRangeModel as described by Java at
+<a name="line18"></a> * http://java.sun.com/javase/6/docs/api/javax/swing/BoundedRangeModel.html.
+<a name="line19"></a> *
+<a name="line20"></a> * One good way to understand the range model is to think of a scroll bar for
+<a name="line21"></a> * a scrollable element. In that case minimum is 0, maximum is scrollHeight,
+<a name="line22"></a> * value is scrollTop and extent is clientHeight.
+<a name="line23"></a> *
+<a name="line24"></a> * Based on http://webfx.eae.net/dhtml/slider/js/range.js
+<a name="line25"></a> *
+<a name="line26"></a> */
+<a name="line27"></a>
+<a name="line28"></a>goog.provide(&#39;goog.ui.RangeModel&#39;);
+<a name="line29"></a>
+<a name="line30"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.Component.EventType&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Creates a range model
+<a name="line36"></a> * @extends {goog.events.EventTarget}
+<a name="line37"></a> * @constructor
+<a name="line38"></a> */
+<a name="line39"></a>goog.ui.RangeModel = function() {
+<a name="line40"></a>  goog.events.EventTarget.call(this);
+<a name="line41"></a>};
+<a name="line42"></a>goog.inherits(goog.ui.RangeModel, goog.events.EventTarget);
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * @type {number}
+<a name="line47"></a> * @private
+<a name="line48"></a> */
+<a name="line49"></a>goog.ui.RangeModel.prototype.value_ = 0;
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>/**
+<a name="line53"></a> * @type {number}
+<a name="line54"></a> * @private
+<a name="line55"></a> */
+<a name="line56"></a>goog.ui.RangeModel.prototype.minimum_ = 0;
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * @type {number}
+<a name="line61"></a> * @private
+<a name="line62"></a> */
+<a name="line63"></a>goog.ui.RangeModel.prototype.maximum_ = 100;
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * @type {number}
+<a name="line68"></a> * @private
+<a name="line69"></a> */
+<a name="line70"></a>goog.ui.RangeModel.prototype.extent_ = 0;
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * @type {number?}
+<a name="line75"></a> * @private
+<a name="line76"></a> */
+<a name="line77"></a>goog.ui.RangeModel.prototype.step_ = 1;
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * This is true if something is changed as a side effect. This happens when for
+<a name="line82"></a> * example we set the maximum below the current value.
+<a name="line83"></a> * @type {boolean}
+<a name="line84"></a> * @private
+<a name="line85"></a> */
+<a name="line86"></a>goog.ui.RangeModel.prototype.isChanging_ = false;
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * If set to true, we do not fire any change events.
+<a name="line91"></a> * @type {boolean}
+<a name="line92"></a> * @private
+<a name="line93"></a> */
+<a name="line94"></a>goog.ui.RangeModel.prototype.mute_ = false;
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Sets the model to mute / unmute.
+<a name="line99"></a> * @param {boolean} muteValue Whether or not to mute the range, i.e.,
+<a name="line100"></a> *     suppress any CHANGE events.
+<a name="line101"></a> */
+<a name="line102"></a>goog.ui.RangeModel.prototype.setMute = function(muteValue) {
+<a name="line103"></a>  this.mute_ = muteValue;
+<a name="line104"></a>};
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Sets the value.
+<a name="line109"></a> * @param {number} value The new value.
+<a name="line110"></a> */
+<a name="line111"></a>goog.ui.RangeModel.prototype.setValue = function(value) {
+<a name="line112"></a>  value = this.roundToStepWithMin(value);
+<a name="line113"></a>  if (this.value_ != value) {
+<a name="line114"></a>    if (value + this.extent_ &gt; this.maximum_) {
+<a name="line115"></a>      this.value_ = this.maximum_ - this.extent_;
+<a name="line116"></a>    } else if (value &lt; this.minimum_) {
+<a name="line117"></a>      this.value_ = this.minimum_;
+<a name="line118"></a>    } else {
+<a name="line119"></a>      this.value_ = value;
+<a name="line120"></a>    }
+<a name="line121"></a>    if (!this.isChanging_ &amp;&amp; !this.mute_) {
+<a name="line122"></a>      this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line123"></a>    }
+<a name="line124"></a>  }
+<a name="line125"></a>};
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * @return {number} the current value.
+<a name="line130"></a> */
+<a name="line131"></a>goog.ui.RangeModel.prototype.getValue = function() {
+<a name="line132"></a>  return this.roundToStepWithMin(this.value_);
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Sets the extent. The extent is the &#39;size&#39; of the value.
+<a name="line138"></a> * @param {number} extent The new extent.
+<a name="line139"></a> */
+<a name="line140"></a>goog.ui.RangeModel.prototype.setExtent = function(extent) {
+<a name="line141"></a>  extent = this.roundToStepWithMin(extent);
+<a name="line142"></a>  if (this.extent_ != extent) {
+<a name="line143"></a>    if (extent &lt; 0) {
+<a name="line144"></a>      this.extent_ = 0;
+<a name="line145"></a>    } else if (this.value_ + extent &gt; this.maximum_) {
+<a name="line146"></a>      this.extent_ = this.maximum_ - this.value_;
+<a name="line147"></a>    } else {
+<a name="line148"></a>      this.extent_ = extent;
+<a name="line149"></a>    }
+<a name="line150"></a>    if (!this.isChanging_ &amp;&amp; !this.mute_) {
+<a name="line151"></a>      this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line152"></a>    }
+<a name="line153"></a>  }
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * @return {number} The extent for the range model.
+<a name="line159"></a> */
+<a name="line160"></a>goog.ui.RangeModel.prototype.getExtent = function() {
+<a name="line161"></a>  return this.roundToStep(this.extent_);
+<a name="line162"></a>};
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * Sets the minimum
+<a name="line167"></a> * @param {number} minimum The new minimum.
+<a name="line168"></a> */
+<a name="line169"></a>goog.ui.RangeModel.prototype.setMinimum = function(minimum) {
+<a name="line170"></a>  // Don&#39;t round minimum because it is the base
+<a name="line171"></a>  if (this.minimum_ != minimum) {
+<a name="line172"></a>    var oldIsChanging = this.isChanging_;
+<a name="line173"></a>    this.isChanging_ = true;
+<a name="line174"></a>
+<a name="line175"></a>    this.minimum_ = minimum;
+<a name="line176"></a>
+<a name="line177"></a>    if (minimum + this.extent_ &gt; this.maximum_) {
+<a name="line178"></a>      this.extent_ = this.maximum_ - this.minimum_;
+<a name="line179"></a>    }
+<a name="line180"></a>    if (minimum &gt; this.value_) {
+<a name="line181"></a>      this.setValue(minimum);
+<a name="line182"></a>    }
+<a name="line183"></a>    if (minimum &gt; this.maximum_) {
+<a name="line184"></a>      this.extent_ = 0;
+<a name="line185"></a>      this.setMaximum(minimum);
+<a name="line186"></a>      this.setValue(minimum)
+<a name="line187"></a>    }
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>    this.isChanging_ = oldIsChanging;
+<a name="line191"></a>    if (!this.isChanging_ &amp;&amp; !this.mute_) {
+<a name="line192"></a>      this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line193"></a>    }
+<a name="line194"></a>  }
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * @return {number} The minimum value for the range model.
+<a name="line200"></a> */
+<a name="line201"></a>goog.ui.RangeModel.prototype.getMinimum = function() {
+<a name="line202"></a>  return this.roundToStepWithMin(this.minimum_);
+<a name="line203"></a>};
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Sets the maximum
+<a name="line208"></a> * @param {number} maximum The new maximum.
+<a name="line209"></a> */
+<a name="line210"></a>goog.ui.RangeModel.prototype.setMaximum = function(maximum) {
+<a name="line211"></a>  maximum = this.roundToStepWithMin(maximum);
+<a name="line212"></a>  if (this.maximum_ != maximum) {
+<a name="line213"></a>    var oldIsChanging = this.isChanging_;
+<a name="line214"></a>    this.isChanging_ = true;
+<a name="line215"></a>
+<a name="line216"></a>    this.maximum_ = maximum;
+<a name="line217"></a>
+<a name="line218"></a>    if (maximum &lt; this.value_ + this.extent_) {
+<a name="line219"></a>      this.setValue(maximum - this.extent_);
+<a name="line220"></a>    }
+<a name="line221"></a>    if (maximum &lt; this.minimum_) {
+<a name="line222"></a>      this.extent_ = 0;
+<a name="line223"></a>      this.setMinimum(maximum);
+<a name="line224"></a>      this.setValue(this.maximum_);
+<a name="line225"></a>    }
+<a name="line226"></a>    if (maximum &lt; this.minimum_ + this.extent_) {
+<a name="line227"></a>      this.extent_ = this.maximum_ - this.minimum_;
+<a name="line228"></a>    }
+<a name="line229"></a>
+<a name="line230"></a>    this.isChanging_ = oldIsChanging;
+<a name="line231"></a>    if (!this.isChanging_ &amp;&amp; !this.mute_) {
+<a name="line232"></a>      this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line233"></a>    }
+<a name="line234"></a>  }
+<a name="line235"></a>};
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>/**
+<a name="line239"></a> * @return {number} The maximimum value for the range model.
+<a name="line240"></a> */
+<a name="line241"></a>goog.ui.RangeModel.prototype.getMaximum = function() {
+<a name="line242"></a>  return this.roundToStepWithMin(this.maximum_);
+<a name="line243"></a>};
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/**
+<a name="line247"></a> * Returns the step value. The step value is used to determine how to round the
+<a name="line248"></a> * value.
+<a name="line249"></a> * @return {number?} The maximimum value for the range model.
+<a name="line250"></a> */
+<a name="line251"></a>goog.ui.RangeModel.prototype.getStep = function() {
+<a name="line252"></a>  return this.step_;
+<a name="line253"></a>};
+<a name="line254"></a>
+<a name="line255"></a>
+<a name="line256"></a>/**
+<a name="line257"></a> * Sets the step. The step value is used to determine how to round the value.
+<a name="line258"></a> * @param {number?} step  The step size.
+<a name="line259"></a> */
+<a name="line260"></a>goog.ui.RangeModel.prototype.setStep = function(step) {
+<a name="line261"></a>  if (this.step_ != step) {
+<a name="line262"></a>    this.step_ = step;
+<a name="line263"></a>
+<a name="line264"></a>    // adjust value, extent and maximum
+<a name="line265"></a>    var oldIsChanging = this.isChanging_;
+<a name="line266"></a>    this.isChanging_ = true;
+<a name="line267"></a>
+<a name="line268"></a>    this.setMaximum(this.getMaximum());
+<a name="line269"></a>    this.setExtent(this.getExtent());
+<a name="line270"></a>    this.setValue(this.getValue());
+<a name="line271"></a>
+<a name="line272"></a>    this.isChanging_ = oldIsChanging;
+<a name="line273"></a>    if (!this.isChanging_ &amp;&amp; !this.mute_) {
+<a name="line274"></a>      this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line275"></a>    }
+<a name="line276"></a>  }
+<a name="line277"></a>};
+<a name="line278"></a>
+<a name="line279"></a>
+<a name="line280"></a>/**
+<a name="line281"></a> * Rounds to the closest step using the minimum value as the base.
+<a name="line282"></a> * @param {number} value  The number to round.
+<a name="line283"></a> * @return {number} The number rounded to the closest step.
+<a name="line284"></a> */
+<a name="line285"></a>goog.ui.RangeModel.prototype.roundToStepWithMin = function(value) {
+<a name="line286"></a>  if (this.step_ == null) return value;
+<a name="line287"></a>  return this.minimum_ +
+<a name="line288"></a>      Math.round((value - this.minimum_) / this.step_) * this.step_;
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * Rounds to the closest step.
+<a name="line294"></a> * @param {number} value  The number to round.
+<a name="line295"></a> * @return {number} The number rounded to the closest step.
+<a name="line296"></a> */
+<a name="line297"></a>goog.ui.RangeModel.prototype.roundToStep = function(value) {
+<a name="line298"></a>  if (this.step_ == null) return value;
+<a name="line299"></a>  return Math.round(value / this.step_) * this.step_;
+<a name="line300"></a>};
+</pre>
+
+
+</body>
+</html>

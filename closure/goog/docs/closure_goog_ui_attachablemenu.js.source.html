@@ -1,0 +1,506 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>attachablemenu.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_attachablemenu.js.html">attachablemenu.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the AttachableMenu class.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.ui.AttachableMenu&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom.a11y&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom.a11y.State&#39;);
+<a name="line24"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.ItemEvent&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.MenuBase&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * An implementation of a menu that can attach itself to DOM element that
+<a name="line31"></a> * are annotated appropriately.
+<a name="line32"></a> *
+<a name="line33"></a> * The following attributes are used by the AttachableMenu
+<a name="line34"></a> *
+<a name="line35"></a> * menu-item - Should be set on DOM elements that function as items in the
+<a name="line36"></a> * menu that can be selected.
+<a name="line37"></a> * classNameSelected - A class that will be added to the element&#39;s class names
+<a name="line38"></a> * when the item is selected via keyboard or mouse.
+<a name="line39"></a> *
+<a name="line40"></a> * @param {Element} opt_element A DOM element for the popup.
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @extends {goog.ui.MenuBase}
+<a name="line43"></a> * @deprecated Use goog.ui.PopupMenu.
+<a name="line44"></a> */
+<a name="line45"></a>goog.ui.AttachableMenu = function(opt_element) {
+<a name="line46"></a>  goog.ui.MenuBase.call(this, opt_element);
+<a name="line47"></a>};
+<a name="line48"></a>goog.inherits(goog.ui.AttachableMenu, goog.ui.MenuBase);
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * The currently selected element (mouse was moved over it or keyboard arrows)
+<a name="line53"></a> * @type {Element?}
+<a name="line54"></a> * @private
+<a name="line55"></a> */
+<a name="line56"></a>goog.ui.AttachableMenu.prototype.selectedElement_ = null;
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Class name to append to a menu item&#39;s class when it&#39;s selected
+<a name="line61"></a> * @type {string}
+<a name="line62"></a> * @private
+<a name="line63"></a> */
+<a name="line64"></a>goog.ui.AttachableMenu.prototype.itemClassName_ = &#39;menu-item&#39;;
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * Class name to append to a menu item&#39;s class when it&#39;s selected
+<a name="line68"></a> * @type {string}
+<a name="line69"></a> * @private
+<a name="line70"></a> */
+<a name="line71"></a>goog.ui.AttachableMenu.prototype.selectedItemClassName_ = &#39;menu-item-selected&#39;;
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * Keep track of when the last key was pressed so that a keydown-scroll doesn&#39;t
+<a name="line75"></a> * trigger a mouseover event
+<a name="line76"></a> * @type {number}
+<a name="line77"></a> * @private
+<a name="line78"></a> */
+<a name="line79"></a>goog.ui.AttachableMenu.prototype.lastKeyDown_ = goog.now();
+<a name="line80"></a>
+<a name="line81"></a>
+<a name="line82"></a>/** @inheritDoc */
+<a name="line83"></a>goog.ui.AttachableMenu.prototype.disposeInternal = function() {
+<a name="line84"></a>  goog.ui.AttachableMenu.superClass_.disposeInternal.call(this);
+<a name="line85"></a>  this.selectedElement_ = null;
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Sets the class name to use for menu items
+<a name="line91"></a> *
+<a name="line92"></a> * @return {string} The class name to use for items.
+<a name="line93"></a> */
+<a name="line94"></a>goog.ui.AttachableMenu.prototype.getItemClassName = function() {
+<a name="line95"></a>  return this.itemClassName_;
+<a name="line96"></a>};
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Sets the class name to use for menu items
+<a name="line101"></a> *
+<a name="line102"></a> * @param {string} name The class name to use for items.
+<a name="line103"></a> */
+<a name="line104"></a>goog.ui.AttachableMenu.prototype.setItemClassName = function(name) {
+<a name="line105"></a>  this.itemClassName_ = name;
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Sets the class name to use for selected menu items
+<a name="line110"></a> * TODO - reevaluate if we can simulate pseudo classes in IE
+<a name="line111"></a> *
+<a name="line112"></a> * @return {string} The class name to use for selected items.
+<a name="line113"></a> */
+<a name="line114"></a>goog.ui.AttachableMenu.prototype.getSelectedItemClassName = function() {
+<a name="line115"></a>  return this.selectedItemClassName_;
+<a name="line116"></a>};
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Sets the class name to use for selected menu items
+<a name="line121"></a> * TODO - reevaluate if we can simulate pseudo classes in IE
+<a name="line122"></a> *
+<a name="line123"></a> * @param {string} name The class name to use for selected items.
+<a name="line124"></a> */
+<a name="line125"></a>goog.ui.AttachableMenu.prototype.setSelectedItemClassName = function(name) {
+<a name="line126"></a>  this.selectedItemClassName_ = name;
+<a name="line127"></a>};
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Returns the selected item
+<a name="line132"></a> *
+<a name="line133"></a> * @return {Element?} The item selected or null if no item is selected.
+<a name="line134"></a> */
+<a name="line135"></a>goog.ui.AttachableMenu.prototype.getSelectedItem = function() {
+<a name="line136"></a>  return this.selectedElement_;
+<a name="line137"></a>};
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * Sets the specified item as the selected element.
+<a name="line142"></a> *
+<a name="line143"></a> * @param {Element?} elt The item to select. The type of this item is specific
+<a name="line144"></a> * to the menu class.
+<a name="line145"></a> */
+<a name="line146"></a>goog.ui.AttachableMenu.prototype.setSelectedItem = function(elt) {
+<a name="line147"></a>  if (this.selectedElement_) {
+<a name="line148"></a>    goog.dom.classes.remove(this.selectedElement_, this.selectedItemClassName_);
+<a name="line149"></a>  }
+<a name="line150"></a>
+<a name="line151"></a>  this.selectedElement_ = elt;
+<a name="line152"></a>
+<a name="line153"></a>  if (this.selectedElement_) {
+<a name="line154"></a>    goog.dom.classes.add(this.selectedElement_, this.selectedItemClassName_);
+<a name="line155"></a>
+<a name="line156"></a>    if (elt.id) {
+<a name="line157"></a>      // Update activedescendant to reflect the new selection. ARIA roles for
+<a name="line158"></a>      // menu and menuitem can be set statically (thru Soy templates, for
+<a name="line159"></a>      // example) whereas this needs to be updated as the selection changes.
+<a name="line160"></a>      goog.dom.a11y.setState(this.element_,
+<a name="line161"></a>          goog.dom.a11y.State.ACTIVEDESCENDANT,
+<a name="line162"></a>          elt.id);
+<a name="line163"></a>    }
+<a name="line164"></a>
+<a name="line165"></a>    var top = this.selectedElement_.offsetTop;
+<a name="line166"></a>    var height = this.selectedElement_.offsetHeight;
+<a name="line167"></a>    var scrollTop = this.element_.scrollTop;
+<a name="line168"></a>    var scrollHeight = this.element_.offsetHeight;
+<a name="line169"></a>
+<a name="line170"></a>    // If the menu is scrollable this scrolls the selected item into view
+<a name="line171"></a>    // (this has no effect when the menu doesn&#39;t scroll)
+<a name="line172"></a>    if (top &lt; scrollTop) {
+<a name="line173"></a>      this.element_.scrollTop = top;
+<a name="line174"></a>    } else if (top + height &gt; scrollTop + scrollHeight) {
+<a name="line175"></a>      this.element_.scrollTop = top + height - scrollHeight;
+<a name="line176"></a>    }
+<a name="line177"></a>  } else {
+<a name="line178"></a>    // Clear off activedescendant to reflect no selection.
+<a name="line179"></a>    goog.dom.a11y.setState(this.element_,
+<a name="line180"></a>        goog.dom.a11y.State.ACTIVEDESCENDANT,
+<a name="line181"></a>        &#39;&#39;);
+<a name="line182"></a>  }
+<a name="line183"></a>};
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/** @inheritDoc */
+<a name="line187"></a>goog.ui.AttachableMenu.prototype.showPopupElement = function() {
+<a name="line188"></a>  // The scroll position cannot be set for hidden (display: none) elements in
+<a name="line189"></a>  // gecko browsers.
+<a name="line190"></a>  goog.style.showElement(/** @type {Element} */ (this.element_), true);
+<a name="line191"></a>  this.element_.scrollTop = 0;
+<a name="line192"></a>  this.element_.style.visibility = &#39;visible&#39;;
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Called after the menu is shown.
+<a name="line198"></a> *
+<a name="line199"></a> * @private
+<a name="line200"></a> */
+<a name="line201"></a>goog.ui.AttachableMenu.prototype.onShow_ = function() {
+<a name="line202"></a>  goog.ui.AttachableMenu.superClass_.onShow_.call(this);
+<a name="line203"></a>
+<a name="line204"></a>  // In IE, focusing the menu causes weird scrolling to happen. Focusing the
+<a name="line205"></a>  // first child makes the scroll behavior better, and the key handling still
+<a name="line206"></a>  // works. In FF, focusing the first child causes us to lose key events, so we
+<a name="line207"></a>  // still focus the menu.
+<a name="line208"></a>  goog.userAgent.IE ? this.element_.firstChild.focus() :
+<a name="line209"></a>    this.element_.focus();
+<a name="line210"></a>};
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Returns the next or previous item. Used for up/down arrows.
+<a name="line215"></a> *
+<a name="line216"></a> * @param {boolean} prev True to go to the previous element instead of next.
+<a name="line217"></a> * @return {Element?} The next or previous element.
+<a name="line218"></a> * @protected
+<a name="line219"></a> */
+<a name="line220"></a>goog.ui.AttachableMenu.prototype.getNextPrevItem = function(prev) {
+<a name="line221"></a>  // first find the index of the next element
+<a name="line222"></a>  var elements = this.element_.getElementsByTagName(&#39;*&#39;);
+<a name="line223"></a>  var elementCount = elements.length;
+<a name="line224"></a>  var index;
+<a name="line225"></a>  // if there is a selected element, find its index and then inc/dec by one
+<a name="line226"></a>  if (this.selectedElement_) {
+<a name="line227"></a>    for (var i = 0; i &lt; elementCount; i++) {
+<a name="line228"></a>      if (elements[i] == this.selectedElement_) {
+<a name="line229"></a>        index = prev ? i - 1 : i + 1;
+<a name="line230"></a>        break;
+<a name="line231"></a>      }
+<a name="line232"></a>    }
+<a name="line233"></a>  }
+<a name="line234"></a>
+<a name="line235"></a>  // if no selected element, start from beginning or end
+<a name="line236"></a>  if (!goog.isDef(index)) {
+<a name="line237"></a>    index = prev ? elementCount - 1 : 0;
+<a name="line238"></a>  }
+<a name="line239"></a>
+<a name="line240"></a>  // iterate forward or backwards through the elements finding the next
+<a name="line241"></a>  // menu item
+<a name="line242"></a>  for (var i = 0; i &lt; elementCount; i++) {
+<a name="line243"></a>    var multiplier = prev ? -1 : 1;
+<a name="line244"></a>    var nextIndex = index + (multiplier * i) % elementCount;
+<a name="line245"></a>
+<a name="line246"></a>    // if overflowed/underflowed, wrap around
+<a name="line247"></a>    if (nextIndex &lt; 0) {
+<a name="line248"></a>      nextIndex += elementCount;
+<a name="line249"></a>    } else if (nextIndex &gt;= elementCount) {
+<a name="line250"></a>      nextIndex -= elementCount;
+<a name="line251"></a>    }
+<a name="line252"></a>
+<a name="line253"></a>    if (this.isMenuItem_(elements[nextIndex])) {
+<a name="line254"></a>      return elements[nextIndex];
+<a name="line255"></a>    }
+<a name="line256"></a>  }
+<a name="line257"></a>  return null;
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * Mouse over handler for the menu.
+<a name="line263"></a> * @param {goog.events.Event} e The event object.
+<a name="line264"></a> * @protected
+<a name="line265"></a> */
+<a name="line266"></a>goog.ui.AttachableMenu.prototype.onMouseOver = function(e) {
+<a name="line267"></a>  var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
+<a name="line268"></a>  if (eltItem == null) {
+<a name="line269"></a>    return;
+<a name="line270"></a>  }
+<a name="line271"></a>
+<a name="line272"></a>  // Stop the keydown triggering a mouseover in FF.
+<a name="line273"></a>  if (goog.now() - this.lastKeyDown_ &gt; goog.ui.PopupBase.DEBOUNCE_DELAY_MS) {
+<a name="line274"></a>    this.setSelectedItem(eltItem);
+<a name="line275"></a>  }
+<a name="line276"></a>};
+<a name="line277"></a>
+<a name="line278"></a>
+<a name="line279"></a>/**
+<a name="line280"></a> * Mouse out handler for the menu.
+<a name="line281"></a> * @param {goog.events.Event} e The event object.
+<a name="line282"></a> * @protected
+<a name="line283"></a> */
+<a name="line284"></a>goog.ui.AttachableMenu.prototype.onMouseOut = function(e) {
+<a name="line285"></a>  var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
+<a name="line286"></a>  if (eltItem == null) {
+<a name="line287"></a>    return;
+<a name="line288"></a>  }
+<a name="line289"></a>
+<a name="line290"></a>  // Stop the keydown triggering a mouseout in FF.
+<a name="line291"></a>  if (goog.now() - this.lastKeyDown_ &gt; goog.ui.PopupBase.DEBOUNCE_DELAY_MS) {
+<a name="line292"></a>    this.setSelectedItem(null);
+<a name="line293"></a>  }
+<a name="line294"></a>};
+<a name="line295"></a>
+<a name="line296"></a>
+<a name="line297"></a>/**
+<a name="line298"></a> * Mouse down handler for the menu.
+<a name="line299"></a> * @param {goog.events.Event} e The event object.
+<a name="line300"></a> * @protected
+<a name="line301"></a> */
+<a name="line302"></a>goog.ui.AttachableMenu.prototype.onMouseDown = function(e) {
+<a name="line303"></a>  // prevent default to avoid text selecton
+<a name="line304"></a>  e.preventDefault();
+<a name="line305"></a>};
+<a name="line306"></a>
+<a name="line307"></a>/**
+<a name="line308"></a> * Mouse up handler for the menu.
+<a name="line309"></a> * @param {goog.events.Event} e The event object.
+<a name="line310"></a> * @protected
+<a name="line311"></a> */
+<a name="line312"></a>goog.ui.AttachableMenu.prototype.onMouseUp = function(e) {
+<a name="line313"></a>  var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
+<a name="line314"></a>  if (eltItem == null) {
+<a name="line315"></a>    return;
+<a name="line316"></a>  }
+<a name="line317"></a>  this.setVisible(false);
+<a name="line318"></a>  this.onItemSelected_(eltItem);
+<a name="line319"></a>};
+<a name="line320"></a>
+<a name="line321"></a>
+<a name="line322"></a>/**
+<a name="line323"></a> * Key down handler for the menu.
+<a name="line324"></a> * @param {goog.events.KeyEvent} e The event object.
+<a name="line325"></a> * @protected
+<a name="line326"></a> */
+<a name="line327"></a>goog.ui.AttachableMenu.prototype.onKeyDown = function(e) {
+<a name="line328"></a>  switch (e.keyCode) {
+<a name="line329"></a>    case goog.events.KeyCodes.DOWN:
+<a name="line330"></a>      this.setSelectedItem(this.getNextPrevItem(false));
+<a name="line331"></a>      this.lastKeyDown_ = goog.now();
+<a name="line332"></a>      break;
+<a name="line333"></a>    case goog.events.KeyCodes.UP:
+<a name="line334"></a>      this.setSelectedItem(this.getNextPrevItem(true));
+<a name="line335"></a>      this.lastKeyDown_ = goog.now();
+<a name="line336"></a>      break;
+<a name="line337"></a>    case goog.events.KeyCodes.ENTER:
+<a name="line338"></a>      if (this.selectedElement_) {
+<a name="line339"></a>        this.onItemSelected_();
+<a name="line340"></a>        this.setVisible(false);
+<a name="line341"></a>      }
+<a name="line342"></a>      break;
+<a name="line343"></a>    case goog.events.KeyCodes.ESC:
+<a name="line344"></a>      this.setVisible(false);
+<a name="line345"></a>      break;
+<a name="line346"></a>    default:
+<a name="line347"></a>      if (e.charCode) {
+<a name="line348"></a>        var charStr = String.fromCharCode(e.charCode);
+<a name="line349"></a>        this.selectByName_(charStr, 1, true);
+<a name="line350"></a>      }
+<a name="line351"></a>      break;
+<a name="line352"></a>  }
+<a name="line353"></a>  // Prevent the browser&#39;s default keydown behaviour when the menu is open,
+<a name="line354"></a>  // e.g. keyboard scrolling.
+<a name="line355"></a>  e.preventDefault();
+<a name="line356"></a>
+<a name="line357"></a>  // Stop propagation to prevent application level keyboard shortcuts from
+<a name="line358"></a>  // firing.
+<a name="line359"></a>  e.stopPropagation();
+<a name="line360"></a>
+<a name="line361"></a>  this.dispatchEvent(e);
+<a name="line362"></a>};
+<a name="line363"></a>
+<a name="line364"></a>/**
+<a name="line365"></a> * Find an item that has the given prefix and select it.
+<a name="line366"></a> *
+<a name="line367"></a> * @param {string} prefix The entered prefix, so far.
+<a name="line368"></a> * @param {number} opt_direction 1 to search forward from the selection
+<a name="line369"></a> *     (default), -1 to search backward (e.g. to go to the previous match).
+<a name="line370"></a> * @param {boolean} opt_skip True if should skip the current selection,
+<a name="line371"></a> *     unless no other item has the given prefix.
+<a name="line372"></a> * @private
+<a name="line373"></a> */
+<a name="line374"></a>goog.ui.AttachableMenu.prototype.selectByName_ =
+<a name="line375"></a>    function(prefix, opt_direction, opt_skip) {
+<a name="line376"></a>  var elements = this.element_.getElementsByTagName(&#39;*&#39;);
+<a name="line377"></a>  var elementCount = elements.length;
+<a name="line378"></a>  var index;
+<a name="line379"></a>
+<a name="line380"></a>  if (elementCount == 0) {
+<a name="line381"></a>    return;
+<a name="line382"></a>  }
+<a name="line383"></a>
+<a name="line384"></a>  if (!this.selectedElement_ ||
+<a name="line385"></a>      (index = goog.array.indexOf(elements, this.selectedElement_)) == -1) {
+<a name="line386"></a>    // no selection or selection isn&#39;t known =&gt; start at the beginning
+<a name="line387"></a>    index = 0;
+<a name="line388"></a>  }
+<a name="line389"></a>
+<a name="line390"></a>  var start = index;
+<a name="line391"></a>  var re = new RegExp(&#39;^&#39; + goog.string.regExpEscape(prefix), &#39;i&#39;);
+<a name="line392"></a>  var skip = opt_skip &amp;&amp; this.selectedElement_;
+<a name="line393"></a>  var dir = opt_direction || 1;
+<a name="line394"></a>
+<a name="line395"></a>  do {
+<a name="line396"></a>    if (elements[index] != skip &amp;&amp; this.isMenuItem_(elements[index])) {
+<a name="line397"></a>      var name = goog.dom.getTextContent(elements[index]);
+<a name="line398"></a>      if (name.match(re)) {
+<a name="line399"></a>        break;
+<a name="line400"></a>      }
+<a name="line401"></a>    }
+<a name="line402"></a>    index += dir;
+<a name="line403"></a>    if (index == elementCount) {
+<a name="line404"></a>      index = 0;
+<a name="line405"></a>    } else if (index &lt; 0) {
+<a name="line406"></a>      index = elementCount - 1;
+<a name="line407"></a>    }
+<a name="line408"></a>  } while (index != start);
+<a name="line409"></a>
+<a name="line410"></a>  if (this.selectedElement_ != elements[index]) {
+<a name="line411"></a>    this.setSelectedItem(elements[index]);
+<a name="line412"></a>  }
+<a name="line413"></a>};
+<a name="line414"></a>
+<a name="line415"></a>
+<a name="line416"></a>/**
+<a name="line417"></a> * Dispatch an ITEM_ACTION event when an item is selected
+<a name="line418"></a> * @param {Object} opt_item Item selected.
+<a name="line419"></a> * @private
+<a name="line420"></a> */
+<a name="line421"></a>goog.ui.AttachableMenu.prototype.onItemSelected_ = function(opt_item) {
+<a name="line422"></a>  this.dispatchEvent(new goog.ui.ItemEvent(goog.ui.MenuBase.Events.ITEM_ACTION,
+<a name="line423"></a>      this, opt_item || this.selectedElement_));
+<a name="line424"></a>};
+<a name="line425"></a>
+<a name="line426"></a>
+<a name="line427"></a>/**
+<a name="line428"></a> * Returns whether the specified element is a menu item.
+<a name="line429"></a> * @param {Element|undefined} elt The element to find a menu item ancestor of.
+<a name="line430"></a> * @return {boolean} Whether the specified element is a menu item.
+<a name="line431"></a> * @private
+<a name="line432"></a> */
+<a name="line433"></a>goog.ui.AttachableMenu.prototype.isMenuItem_ = function(elt) {
+<a name="line434"></a>  return !!elt &amp;&amp; goog.dom.classes.has(elt, this.itemClassName_);
+<a name="line435"></a>};
+<a name="line436"></a>
+<a name="line437"></a>
+<a name="line438"></a>/**
+<a name="line439"></a> * Returns the menu-item scoping the specified element, or null if there is
+<a name="line440"></a> * none.
+<a name="line441"></a> * @param {Element|undefined} elt The element to find a menu item ancestor of.
+<a name="line442"></a> * @return {Element} The menu-item scoping the specified element, or null if
+<a name="line443"></a> *     there is none.
+<a name="line444"></a> * @private
+<a name="line445"></a> */
+<a name="line446"></a>goog.ui.AttachableMenu.prototype.getAncestorMenuItem_ = function(elt) {
+<a name="line447"></a>  if (elt) {
+<a name="line448"></a>    var ownerDocumentBody = goog.dom.getOwnerDocument(elt).body;
+<a name="line449"></a>    while (elt != null &amp;&amp; elt != ownerDocumentBody) {
+<a name="line450"></a>      if (this.isMenuItem_(elt)) {
+<a name="line451"></a>        return elt;
+<a name="line452"></a>      }
+<a name="line453"></a>      elt = /** @type {Element} */ (elt.parentNode);
+<a name="line454"></a>    }
+<a name="line455"></a>  }
+<a name="line456"></a>  return null;
+<a name="line457"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,890 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>splitpane.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_splitpane.js.html">splitpane.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview  Class for splitting two areas with draggable control for
+<a name="line17"></a> * changing size.
+<a name="line18"></a> *
+<a name="line19"></a> * The DOM that is created (or that can be decorated) looks like this:
+<a name="line20"></a> * &lt;div class=&#39;goog-splitpane&#39;&gt;
+<a name="line21"></a> *   &lt;div class=&#39;goog-splitpane-first-container&#39;&gt;&lt;/div&gt;
+<a name="line22"></a> *   &lt;div class=&#39;goog-splitpane-second-container&#39;&gt;&lt;/div&gt;
+<a name="line23"></a> *   &lt;div class=&#39;goog-splitpane-handle&#39;&gt;&lt;/div&gt;
+<a name="line24"></a> * &lt;/div&gt;
+<a name="line25"></a> *
+<a name="line26"></a> * The content to be split goes in the first and second DIVs, the third one
+<a name="line27"></a> * is for managing (and styling) the splitter handle.
+<a name="line28"></a> *
+<a name="line29"></a> * @see ../demos/splitpane.html
+<a name="line30"></a> */
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>goog.provide(&#39;goog.ui.SplitPane&#39;);
+<a name="line34"></a>goog.provide(&#39;goog.ui.SplitPane.Orientation&#39;);
+<a name="line35"></a>
+<a name="line36"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line37"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line38"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line39"></a>goog.require(&#39;goog.fx.Dragger&#39;);
+<a name="line40"></a>goog.require(&#39;goog.fx.Dragger.EventType&#39;);
+<a name="line41"></a>goog.require(&#39;goog.math.Rect&#39;);
+<a name="line42"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line43"></a>goog.require(&#39;goog.style&#39;);
+<a name="line44"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line45"></a>goog.require(&#39;goog.ui.Component.EventType&#39;);
+<a name="line46"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>/**
+<a name="line51"></a> * A left/right up/down Container SplitPane.
+<a name="line52"></a> * Create SplitPane with two goog.ui.Component opjects to split.
+<a name="line53"></a> * TODO: Support minimum splitpane size.
+<a name="line54"></a> * TODO: Allow component change/orientation after init.
+<a name="line55"></a> * TODO: Support hiding either side of handle (plus handle).
+<a name="line56"></a> * TODO: Look at setBorderBoxSize fixes and revist borderwidth code.
+<a name="line57"></a> *
+<a name="line58"></a> * @param {goog.ui.Component} firstComponent Left or Top component.
+<a name="line59"></a> * @param {goog.ui.Component} secondComponent Right or Bottom component.
+<a name="line60"></a> * @param {goog.ui.SplitPane.Orientation} orientation SplitPane orientation.
+<a name="line61"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line62"></a> * @extends {goog.ui.Component}
+<a name="line63"></a> * @constructor
+<a name="line64"></a> */
+<a name="line65"></a>goog.ui.SplitPane = function(firstComponent, secondComponent, orientation,
+<a name="line66"></a>    opt_domHelper) {
+<a name="line67"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line68"></a>
+<a name="line69"></a>  /**
+<a name="line70"></a>   * The orientation of the containers.
+<a name="line71"></a>   * @type {goog.ui.SplitPane.Orientation}
+<a name="line72"></a>   * @private
+<a name="line73"></a>   */
+<a name="line74"></a>  this.orientation_ = orientation;
+<a name="line75"></a>
+<a name="line76"></a>  /**
+<a name="line77"></a>   * The left/top component.
+<a name="line78"></a>   * @type {goog.ui.Component}
+<a name="line79"></a>   * @private
+<a name="line80"></a>   */
+<a name="line81"></a>  this.firstComponent_ = firstComponent;
+<a name="line82"></a>  this.addChild(firstComponent);
+<a name="line83"></a>
+<a name="line84"></a>  /**
+<a name="line85"></a>   * The right/bottom component.
+<a name="line86"></a>   * @type {goog.ui.Component}
+<a name="line87"></a>   * @private
+<a name="line88"></a>   */
+<a name="line89"></a>  this.secondComponent_ = secondComponent;
+<a name="line90"></a>  this.addChild(secondComponent);
+<a name="line91"></a>};
+<a name="line92"></a>goog.inherits(goog.ui.SplitPane, goog.ui.Component);
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * CSS class names for splitpane outer container.
+<a name="line97"></a> * @type {string}
+<a name="line98"></a> * @private
+<a name="line99"></a> */
+<a name="line100"></a>goog.ui.SplitPane.CLASS_NAME_ = &#39;goog-splitpane&#39;;
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * CSS class name for first splitpane container.
+<a name="line105"></a> * @type {string}
+<a name="line106"></a> * @private
+<a name="line107"></a> */
+<a name="line108"></a>goog.ui.SplitPane.FIRST_CONTAINER_CLASS_NAME_ =
+<a name="line109"></a>    &#39;goog-splitpane-first-container&#39;;
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * CSS class name for second splitpane container.
+<a name="line114"></a> * @type {string}
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.SplitPane.SECOND_CONTAINER_CLASS_NAME_ =
+<a name="line118"></a>    &#39;goog-splitpane-second-container&#39;;
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * CSS class name for the splitpane handle.
+<a name="line123"></a> * @type {string}
+<a name="line124"></a> * @private
+<a name="line125"></a> */
+<a name="line126"></a>goog.ui.SplitPane.HANDLE_CLASS_NAME_ = &#39;goog-splitpane-handle&#39;;
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * CSS class name for the splitpane handle in horizontal orientation.
+<a name="line131"></a> * @type {string}
+<a name="line132"></a> * @private
+<a name="line133"></a> */
+<a name="line134"></a>goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_ =
+<a name="line135"></a>    &#39;goog-splitpane-handle-horizontal&#39;;
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/**
+<a name="line139"></a> * CSS class name for the splitpane handle in horizontal orientation.
+<a name="line140"></a> * @type {string}
+<a name="line141"></a> * @private
+<a name="line142"></a> */
+<a name="line143"></a>goog.ui.SplitPane.HANDLE_CLASS_NAME_VERTICAL_ =
+<a name="line144"></a>    &#39;goog-splitpane-handle-vertical&#39;;
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a>  * The dragger to move the drag handle.
+<a name="line149"></a>  * @type {goog.fx.Dragger?}
+<a name="line150"></a>  * @private
+<a name="line151"></a>  */
+<a name="line152"></a>goog.ui.SplitPane.prototype.splitDragger_ = null;
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * The left/top component dom container.
+<a name="line157"></a> * @type {Element?}
+<a name="line158"></a> * @private
+<a name="line159"></a> */
+<a name="line160"></a>goog.ui.SplitPane.prototype.firstComponentContainer_ = null;
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * The right/bottom component dom container.
+<a name="line165"></a> * @type {Element?}
+<a name="line166"></a> * @private
+<a name="line167"></a> */
+<a name="line168"></a>goog.ui.SplitPane.prototype.secondComponentContainer_ = null;
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * The size (width or height) of the splitpane handle, default = 5.
+<a name="line173"></a> * @type {number}
+<a name="line174"></a> * @private
+<a name="line175"></a> */
+<a name="line176"></a>goog.ui.SplitPane.prototype.handleSize_ = 5;
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * The initial size (width or height) of the left or top component.
+<a name="line181"></a> * @type {number?}
+<a name="line182"></a> * @private
+<a name="line183"></a> */
+<a name="line184"></a>goog.ui.SplitPane.prototype.initialSize_ = null;
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * The saved size (width or height) of the left or top component on a
+<a name="line189"></a> * double-click (snap).
+<a name="line190"></a> * This needs to be saved so it can be restored after another double-click.
+<a name="line191"></a> * @type {number?}
+<a name="line192"></a> * @private
+<a name="line193"></a> */
+<a name="line194"></a>goog.ui.SplitPane.prototype.savedSnapSize_ = null;
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * The first component size, so we don&#39;t change it on a window resize.
+<a name="line199"></a> * @type {number?}
+<a name="line200"></a> * @private
+<a name="line201"></a> */
+<a name="line202"></a>goog.ui.SplitPane.prototype.firstComponentSize_ = null;
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * If we resize as they user moves the handle (default = true).
+<a name="line207"></a> * @type {boolean}
+<a name="line208"></a> * @private
+<a name="line209"></a> */
+<a name="line210"></a>goog.ui.SplitPane.prototype.continuousResize_ = true;
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Iframe overlay to prevent iframes from grabbing events.
+<a name="line215"></a> * @type {Element?}
+<a name="line216"></a> * @private
+<a name="line217"></a> */
+<a name="line218"></a>goog.ui.SplitPane.prototype.iframeOverlay_ = null;
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Z indices for iframe overlay and splitter handle.
+<a name="line223"></a> * @enum {number}
+<a name="line224"></a> * @private
+<a name="line225"></a> */
+<a name="line226"></a>goog.ui.SplitPane.prototype.iframeOverlayIndex_ = {
+<a name="line227"></a>  HIDDEN: -1,
+<a name="line228"></a>  OVERLAY: 1,
+<a name="line229"></a>  SPLITTER_HANDLE: 2
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a>* Orientation values for the splitpane.
+<a name="line235"></a>* @enum {string}
+<a name="line236"></a>*/
+<a name="line237"></a>goog.ui.SplitPane.Orientation = {
+<a name="line238"></a>
+<a name="line239"></a>  /**
+<a name="line240"></a>   * Horizontal orientation means splitter moves right-left.
+<a name="line241"></a>   */
+<a name="line242"></a>  HORIZONTAL: &#39;horizontal&#39;,
+<a name="line243"></a>
+<a name="line244"></a>  /**
+<a name="line245"></a>   * Vertical orientation means splitter moves up-down.
+<a name="line246"></a>   */
+<a name="line247"></a>  VERTICAL: &#39;vertical&#39;
+<a name="line248"></a>};
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>/**
+<a name="line252"></a> * Create the DOM node &amp; text node needed for the splitpane.
+<a name="line253"></a> */
+<a name="line254"></a>goog.ui.SplitPane.prototype.createDom = function() {
+<a name="line255"></a>  var dom = this.getDomHelper();
+<a name="line256"></a>
+<a name="line257"></a>  // Create the components.
+<a name="line258"></a>  var firstContainer = dom.createDom(&#39;div&#39;,
+<a name="line259"></a>      goog.ui.SplitPane.FIRST_CONTAINER_CLASS_NAME_);
+<a name="line260"></a>  var secondContainer = dom.createDom(&#39;div&#39;,
+<a name="line261"></a>      goog.ui.SplitPane.SECOND_CONTAINER_CLASS_NAME_);
+<a name="line262"></a>  var splitterHandle = dom.createDom(&#39;div&#39;,
+<a name="line263"></a>      goog.ui.SplitPane.HANDLE_CLASS_NAME_);
+<a name="line264"></a>
+<a name="line265"></a>  // Create the primary element, a DIV that holds the two containers and handle.
+<a name="line266"></a>  this.setElementInternal(dom.createDom(&#39;div&#39;, goog.ui.SplitPane.CLASS_NAME_,
+<a name="line267"></a>      firstContainer, secondContainer, splitterHandle));
+<a name="line268"></a>
+<a name="line269"></a>  this.firstComponentContainer_ = firstContainer;
+<a name="line270"></a>  this.secondComponentContainer_ = secondContainer;
+<a name="line271"></a>  this.splitpaneHandle_ = splitterHandle;
+<a name="line272"></a>  this.setUpHandle_();
+<a name="line273"></a>
+<a name="line274"></a>  this.finishSetup_();
+<a name="line275"></a>};
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a> /**
+<a name="line279"></a> * Determines if a given element can be decorated by this type of component.
+<a name="line280"></a> * @param {Element} element Element to decorate.
+<a name="line281"></a> * @return {boolean} True if the element can be decorated, false otherwise.
+<a name="line282"></a> */
+<a name="line283"></a>goog.ui.SplitPane.prototype.canDecorate = function(element) {
+<a name="line284"></a>  var className = goog.ui.SplitPane.FIRST_CONTAINER_CLASS_NAME_;
+<a name="line285"></a>  var firstContainer = goog.dom.$$(null, className, element)[0];
+<a name="line286"></a>  if (!firstContainer) {
+<a name="line287"></a>    return false;
+<a name="line288"></a>  }
+<a name="line289"></a>  // Since we have this component, save it so we don&#39;t have to get it
+<a name="line290"></a>  // again in decorateInternal.  Same w/other components.
+<a name="line291"></a>  this.firstComponentContainer_ = firstContainer;
+<a name="line292"></a>
+<a name="line293"></a>  className = goog.ui.SplitPane.SECOND_CONTAINER_CLASS_NAME_;
+<a name="line294"></a>  var secondContainer = goog.dom.$$(null, className, element)[0];
+<a name="line295"></a>  if (!secondContainer) {
+<a name="line296"></a>    return false;
+<a name="line297"></a>  }
+<a name="line298"></a>  this.secondComponentContainer_ = secondContainer;
+<a name="line299"></a>
+<a name="line300"></a>  className = goog.ui.SplitPane.HANDLE_CLASS_NAME_;
+<a name="line301"></a>  var splitpaneHandle = goog.dom.$$(null, className, element)[0];
+<a name="line302"></a>  if (!splitpaneHandle) {
+<a name="line303"></a>    return false;
+<a name="line304"></a>  }
+<a name="line305"></a>  this.splitpaneHandle_ = splitpaneHandle;
+<a name="line306"></a>
+<a name="line307"></a>  // We found all the components we&#39;re looking for, so return true.
+<a name="line308"></a>  return true;
+<a name="line309"></a>};
+<a name="line310"></a>
+<a name="line311"></a>
+<a name="line312"></a>/**
+<a name="line313"></a> * Decorates the given HTML element as a SplitPane.  Overrides {@link
+<a name="line314"></a> * goog.ui.Component#decorateInternal}.  Considered protected.
+<a name="line315"></a> * @param {Element} element Element (SplitPane div) to decorate.
+<a name="line316"></a> * @protected
+<a name="line317"></a> */
+<a name="line318"></a>goog.ui.SplitPane.prototype.decorateInternal = function(element) {
+<a name="line319"></a>  goog.ui.SplitPane.superClass_.decorateInternal.call(this, element);
+<a name="line320"></a>
+<a name="line321"></a>  this.setUpHandle_();
+<a name="line322"></a>
+<a name="line323"></a>  var elSize = goog.style.getBorderBoxSize(element);
+<a name="line324"></a>  this.setSize(new goog.math.Size(elSize.width, elSize.height));
+<a name="line325"></a>
+<a name="line326"></a>  this.finishSetup_();
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Parent the passed in components to the split containers.  Call their
+<a name="line332"></a> * createDom methods if necessary.
+<a name="line333"></a> * @private
+<a name="line334"></a> */
+<a name="line335"></a>goog.ui.SplitPane.prototype.finishSetup_ = function() {
+<a name="line336"></a>  var dom = this.getDomHelper();
+<a name="line337"></a>
+<a name="line338"></a>  if (!this.firstComponent_.getElement()) {
+<a name="line339"></a>    this.firstComponent_.createDom();
+<a name="line340"></a>  }
+<a name="line341"></a>
+<a name="line342"></a>  dom.appendChild(this.firstComponentContainer_,
+<a name="line343"></a>      this.firstComponent_.getElement());
+<a name="line344"></a>
+<a name="line345"></a>  if (!this.secondComponent_.getElement()) {
+<a name="line346"></a>    this.secondComponent_.createDom();
+<a name="line347"></a>  }
+<a name="line348"></a>
+<a name="line349"></a>  dom.appendChild(this.secondComponentContainer_,
+<a name="line350"></a>      this.secondComponent_.getElement());
+<a name="line351"></a>
+<a name="line352"></a>  this.splitDragger_ = new goog.fx.Dragger(this.splitpaneHandle_,
+<a name="line353"></a>      this.splitpaneHandle_);
+<a name="line354"></a>
+<a name="line355"></a>  this.firstComponentContainer_.style.position = &#39;absolute&#39;;
+<a name="line356"></a>  this.secondComponentContainer_.style.position = &#39;absolute&#39;;
+<a name="line357"></a>  var handleStyle = this.splitpaneHandle_.style;
+<a name="line358"></a>  handleStyle.position = &#39;absolute&#39;;
+<a name="line359"></a>  handleStyle.overflow = &#39;hidden&#39;;
+<a name="line360"></a>  handleStyle.zIndex =
+<a name="line361"></a>      goog.ui.SplitPane.prototype.iframeOverlayIndex_.SPLITTER_HANDLE;
+<a name="line362"></a>};
+<a name="line363"></a>
+<a name="line364"></a>
+<a name="line365"></a>/**
+<a name="line366"></a> * Setup all events and do an initial resize.
+<a name="line367"></a> */
+<a name="line368"></a>goog.ui.SplitPane.prototype.enterDocument = function() {
+<a name="line369"></a>  goog.ui.SplitPane.superClass_.enterDocument.call(this);
+<a name="line370"></a>
+<a name="line371"></a>  // If position is not set in the inline style of the element, it is not
+<a name="line372"></a>  // possible to get the element&#39;s real CSS position until the element is in
+<a name="line373"></a>  // the document.
+<a name="line374"></a>  // When position:relative is set in the CSS and the element is not in the
+<a name="line375"></a>  // document, Safari, Chrome, and Opera always return the empty string; while
+<a name="line376"></a>  // IE always return &quot;static&quot;.
+<a name="line377"></a>  // Do the final check to see if element&#39;s position is set as &quot;relative&quot;,
+<a name="line378"></a>  // &quot;absolute&quot; or &quot;fixed&quot;.
+<a name="line379"></a>  var element = this.getElement();
+<a name="line380"></a>  if (goog.style.getComputedPosition(element) == &#39;static&#39;) {
+<a name="line381"></a>    element.style.position = &#39;relative&#39;;
+<a name="line382"></a>  }
+<a name="line383"></a>
+<a name="line384"></a>  this.getHandler().
+<a name="line385"></a>      listen(this.splitpaneHandle_, goog.events.EventType.DBLCLICK,
+<a name="line386"></a>          this.handleDoubleClick_).
+<a name="line387"></a>      listen(this.splitDragger_, goog.fx.Dragger.EventType.START,
+<a name="line388"></a>          this.handleDragStart_).
+<a name="line389"></a>      listen(this.splitDragger_, goog.fx.Dragger.EventType.DRAG,
+<a name="line390"></a>          this.handleDrag_).
+<a name="line391"></a>      listen(this.splitDragger_, goog.fx.Dragger.EventType.END,
+<a name="line392"></a>          this.handleDragEnd_);
+<a name="line393"></a>
+<a name="line394"></a>  this.setFirstComponentSize(this.initialSize_);
+<a name="line395"></a>};
+<a name="line396"></a>
+<a name="line397"></a>
+<a name="line398"></a>/**
+<a name="line399"></a> * Sets the initial size of the left or top component.
+<a name="line400"></a> * @param {number} size The size in Pixels of the container.
+<a name="line401"></a> */
+<a name="line402"></a>goog.ui.SplitPane.prototype.setInitialSize = function(size) {
+<a name="line403"></a>  this.initialSize_ = size;
+<a name="line404"></a>};
+<a name="line405"></a>
+<a name="line406"></a>
+<a name="line407"></a>/**
+<a name="line408"></a> * Sets the SplitPane handle size.
+<a name="line409"></a> * TODO: Make sure this works after initialization.
+<a name="line410"></a> * @param {number} size The size of the handle in pixels.
+<a name="line411"></a> */
+<a name="line412"></a>goog.ui.SplitPane.prototype.setHandleSize = function(size) {
+<a name="line413"></a>  this.handleSize_ = size;
+<a name="line414"></a>};
+<a name="line415"></a>
+<a name="line416"></a>
+<a name="line417"></a>/**
+<a name="line418"></a> * Sets whether we resize on handle drag.
+<a name="line419"></a> * @param {boolean} continuous The continuous resize value.
+<a name="line420"></a> */
+<a name="line421"></a>goog.ui.SplitPane.prototype.setContinuousResize = function(continuous) {
+<a name="line422"></a>  this.continuousResize_ = continuous;
+<a name="line423"></a>};
+<a name="line424"></a>
+<a name="line425"></a>
+<a name="line426"></a>/**
+<a name="line427"></a> * Returns whether the orientation for the split pane is vertical
+<a name="line428"></a> * or not.
+<a name="line429"></a> * @return {boolean} True if the orientation is vertical, false otherwise.
+<a name="line430"></a> * @private
+<a name="line431"></a> */
+<a name="line432"></a>goog.ui.SplitPane.prototype.isVertical_ = function() {
+<a name="line433"></a>  return this.orientation_ == goog.ui.SplitPane.Orientation.VERTICAL;
+<a name="line434"></a>};
+<a name="line435"></a>
+<a name="line436"></a>
+<a name="line437"></a>/**
+<a name="line438"></a> * Initializes the handle by assigning the correct height/width and adding
+<a name="line439"></a> * the correct class as per the orientation.
+<a name="line440"></a> * @private
+<a name="line441"></a> */
+<a name="line442"></a>goog.ui.SplitPane.prototype.setUpHandle_ = function() {
+<a name="line443"></a>  if (this.isVertical_()) {
+<a name="line444"></a>    this.splitpaneHandle_.style.height = this.handleSize_ + &#39;px&#39;;
+<a name="line445"></a>    goog.dom.classes.add(this.splitpaneHandle_,
+<a name="line446"></a>        goog.ui.SplitPane.HANDLE_CLASS_NAME_VERTICAL_);
+<a name="line447"></a>  } else {
+<a name="line448"></a>    this.splitpaneHandle_.style.width = this.handleSize_ + &#39;px&#39;;
+<a name="line449"></a>    goog.dom.classes.add(this.splitpaneHandle_,
+<a name="line450"></a>        goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_);
+<a name="line451"></a>  }
+<a name="line452"></a>};
+<a name="line453"></a>
+<a name="line454"></a>
+<a name="line455"></a>/**
+<a name="line456"></a> * Sets the orientation class for the split pane handle.
+<a name="line457"></a> * @protected
+<a name="line458"></a> */
+<a name="line459"></a>goog.ui.SplitPane.prototype.setOrientationClassForHandle = function() {
+<a name="line460"></a>  if (this.isVertical_()) {
+<a name="line461"></a>    goog.dom.classes.swap(this.splitpaneHandle_,
+<a name="line462"></a>                          goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_,
+<a name="line463"></a>                          goog.ui.SplitPane.HANDLE_CLASS_NAME_VERTICAL_);
+<a name="line464"></a>  } else {
+<a name="line465"></a>    goog.dom.classes.swap(this.splitpaneHandle_,
+<a name="line466"></a>                          goog.ui.SplitPane.HANDLE_CLASS_NAME_VERTICAL_,
+<a name="line467"></a>                          goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_);
+<a name="line468"></a>  }
+<a name="line469"></a>};
+<a name="line470"></a>
+<a name="line471"></a>
+<a name="line472"></a>/**
+<a name="line473"></a> * Sets the orientation of the split pane.
+<a name="line474"></a> * @param {goog.ui.SplitPane.Orientation} orientation SplitPane orientation.
+<a name="line475"></a> */
+<a name="line476"></a>goog.ui.SplitPane.prototype.setOrientation = function(orientation) {
+<a name="line477"></a>  if (this.orientation_ != orientation) {
+<a name="line478"></a>    this.orientation_ = orientation;
+<a name="line479"></a>    var isVertical = this.isVertical_();
+<a name="line480"></a>
+<a name="line481"></a>    // If the split pane is already in document, then the positions and sizes
+<a name="line482"></a>    // need to be adjusted.
+<a name="line483"></a>    if (this.isInDocument()) {
+<a name="line484"></a>      this.setOrientationClassForHandle();
+<a name="line485"></a>      // TODO: Should handleSize_ and initialSize_ also be adjusted ?
+<a name="line486"></a>      if (goog.isNumber(this.firstComponentSize_)) {
+<a name="line487"></a>        var splitpaneSize = goog.style.getBorderBoxSize(this.getElement());
+<a name="line488"></a>        var ratio = isVertical ? splitpaneSize.height / splitpaneSize.width :
+<a name="line489"></a>            splitpaneSize.width / splitpaneSize.height;
+<a name="line490"></a>        // TODO: Fix the behaviour for the case when the handle is
+<a name="line491"></a>        // placed on either of  the edges of the split pane. Also, similar
+<a name="line492"></a>        // behaviour is present in {@link #setSize}. Probably need to modify
+<a name="line493"></a>        // {@link #setFirstComponentSize}.
+<a name="line494"></a>        this.setFirstComponentSize(this.firstComponentSize_ * ratio);
+<a name="line495"></a>      } else {
+<a name="line496"></a>        this.setFirstComponentSize();
+<a name="line497"></a>      }
+<a name="line498"></a>    }
+<a name="line499"></a>  }
+<a name="line500"></a>};
+<a name="line501"></a>
+<a name="line502"></a>
+<a name="line503"></a>/**
+<a name="line504"></a> * Gets the orientation of the split pane.
+<a name="line505"></a> * @return {goog.ui.SplitPane.Orientation} The orientation.
+<a name="line506"></a> */
+<a name="line507"></a>goog.ui.SplitPane.prototype.getOrientation = function() {
+<a name="line508"></a>  return this.orientation_;
+<a name="line509"></a>};
+<a name="line510"></a>
+<a name="line511"></a>
+<a name="line512"></a>/**
+<a name="line513"></a> * Move and resize a container.  The sizing changes the BorderBoxSize.
+<a name="line514"></a> * @param {Element} element The element to move and size.
+<a name="line515"></a> * @param {goog.math.Rect} rect The top, left, width and height to change to.
+<a name="line516"></a> * @private
+<a name="line517"></a> */
+<a name="line518"></a>goog.ui.SplitPane.prototype.moveAndSize_ = function(element, rect) {
+<a name="line519"></a>
+<a name="line520"></a>  goog.style.setPosition(element, rect.left, rect.top);
+<a name="line521"></a>  // TODO: Add a goog.math.Size.max call for below.
+<a name="line522"></a>  goog.style.setBorderBoxSize(element,
+<a name="line523"></a>      new goog.math.Size(Math.max(rect.width, 0), Math.max(rect.height, 0)));
+<a name="line524"></a>};
+<a name="line525"></a>
+<a name="line526"></a>
+<a name="line527"></a>/**
+<a name="line528"></a> * @return {number?} The size of the left/top component.
+<a name="line529"></a> */
+<a name="line530"></a>goog.ui.SplitPane.prototype.getFirstComponentSize = function() {
+<a name="line531"></a>  return this.firstComponentSize_;
+<a name="line532"></a>};
+<a name="line533"></a>
+<a name="line534"></a>
+<a name="line535"></a>/**
+<a name="line536"></a> * Set the size of the left/top component, and resize the other component based
+<a name="line537"></a> * on that size and handle size.
+<a name="line538"></a> * @param {number?} opt_size The size of the top or left, in pixels.
+<a name="line539"></a> */
+<a name="line540"></a>goog.ui.SplitPane.prototype.setFirstComponentSize = function(opt_size) {
+<a name="line541"></a>  var top = 0, left = 0;
+<a name="line542"></a>  var splitpaneSize = goog.style.getBorderBoxSize(this.getElement());
+<a name="line543"></a>
+<a name="line544"></a>  var isVertical = this.isVertical_();
+<a name="line545"></a>  // Figure out first component size; it&#39;s either passed in, taken from the
+<a name="line546"></a>  // saved size, or is half of the total size.
+<a name="line547"></a>  var firstComponentSize = goog.isNumber(opt_size) ? opt_size :
+<a name="line548"></a>        goog.isNumber(this.firstComponentSize_) ? this.firstComponentSize_ :
+<a name="line549"></a>        Math.floor((isVertical ? splitpaneSize.height :
+<a name="line550"></a>            splitpaneSize.width) / 2);
+<a name="line551"></a>  this.firstComponentSize_ = firstComponentSize;
+<a name="line552"></a>
+<a name="line553"></a>  var firstComponentWidth;
+<a name="line554"></a>  var firstComponentHeight;
+<a name="line555"></a>  var secondComponentWidth;
+<a name="line556"></a>  var secondComponentHeight;
+<a name="line557"></a>  var handleWidth;
+<a name="line558"></a>  var handleHeight;
+<a name="line559"></a>  var secondComponentLeft;
+<a name="line560"></a>  var secondComponentTop;
+<a name="line561"></a>  var handleLeft;
+<a name="line562"></a>  var handleTop;
+<a name="line563"></a>
+<a name="line564"></a>  if (isVertical) {
+<a name="line565"></a>
+<a name="line566"></a>    // Width for the handle and the first and second components will be the
+<a name="line567"></a>    // width of the split pane. The height for the first component will be
+<a name="line568"></a>    // the calculated first component size. The height for the second component
+<a name="line569"></a>    // will be the  total height minus the heights of the first component and
+<a name="line570"></a>    // the handle.
+<a name="line571"></a>    firstComponentHeight = firstComponentSize;
+<a name="line572"></a>    firstComponentWidth = splitpaneSize.width;
+<a name="line573"></a>    handleWidth = splitpaneSize.width;
+<a name="line574"></a>    handleHeight = this.handleSize_;
+<a name="line575"></a>    secondComponentHeight = splitpaneSize.height - firstComponentHeight -
+<a name="line576"></a>        handleHeight;
+<a name="line577"></a>    secondComponentWidth = splitpaneSize.width;
+<a name="line578"></a>    handleTop = top + firstComponentHeight;
+<a name="line579"></a>    handleLeft = left;
+<a name="line580"></a>    secondComponentTop = handleTop + handleHeight;
+<a name="line581"></a>    secondComponentLeft = left;
+<a name="line582"></a>  } else {
+<a name="line583"></a>
+<a name="line584"></a>    // Height for the handle and the first and second components will be the
+<a name="line585"></a>    // height of the split pane. The width for the first component will be
+<a name="line586"></a>    // the calculated first component size. The width for the second component
+<a name="line587"></a>    // will be the  total width minus the widths of the first component and
+<a name="line588"></a>    // the handle.
+<a name="line589"></a>    firstComponentWidth = firstComponentSize;
+<a name="line590"></a>    firstComponentHeight = splitpaneSize.height;
+<a name="line591"></a>    handleWidth = this.handleSize_;
+<a name="line592"></a>    handleHeight = splitpaneSize.height;
+<a name="line593"></a>    secondComponentWidth = splitpaneSize.width - firstComponentWidth -
+<a name="line594"></a>        handleWidth;
+<a name="line595"></a>    secondComponentHeight = splitpaneSize.height;
+<a name="line596"></a>    handleLeft = left + firstComponentWidth;
+<a name="line597"></a>    handleTop = top;
+<a name="line598"></a>    secondComponentLeft = handleLeft + handleWidth;
+<a name="line599"></a>    secondComponentTop = top;
+<a name="line600"></a>  }
+<a name="line601"></a>
+<a name="line602"></a>  // Now move and size the containers.
+<a name="line603"></a>  this.moveAndSize_(this.firstComponentContainer_,
+<a name="line604"></a>      new goog.math.Rect(left, top, firstComponentWidth, firstComponentHeight));
+<a name="line605"></a>
+<a name="line606"></a>  if (typeof this.firstComponent_.resize == &#39;function&#39;) {
+<a name="line607"></a>    this.firstComponent_.resize(new goog.math.Size(
+<a name="line608"></a>        firstComponentWidth, firstComponentHeight));
+<a name="line609"></a>  }
+<a name="line610"></a>
+<a name="line611"></a>  this.moveAndSize_(this.splitpaneHandle_, new goog.math.Rect(handleLeft,
+<a name="line612"></a>      handleTop, handleWidth, handleHeight));
+<a name="line613"></a>
+<a name="line614"></a>  this.moveAndSize_(this.secondComponentContainer_,
+<a name="line615"></a>      new goog.math.Rect(secondComponentLeft, secondComponentTop,
+<a name="line616"></a>          secondComponentWidth, secondComponentHeight));
+<a name="line617"></a>
+<a name="line618"></a>  if (typeof this.secondComponent_.resize == &#39;function&#39;) {
+<a name="line619"></a>    this.secondComponent_.resize(new goog.math.Size(secondComponentWidth,
+<a name="line620"></a>        secondComponentHeight));
+<a name="line621"></a>  }
+<a name="line622"></a>  // Fire a CHANGE event.
+<a name="line623"></a>  this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line624"></a>};
+<a name="line625"></a>
+<a name="line626"></a>
+<a name="line627"></a>/**
+<a name="line628"></a> * Dummy object to work around compiler warning.
+<a name="line629"></a> * TODO: Fix compiler or refactor to not depend on resize()
+<a name="line630"></a> * @private
+<a name="line631"></a> * @type {Object}
+<a name="line632"></a> */
+<a name="line633"></a>goog.ui.SplitPane.resizeWarningWorkaround_ = {
+<a name="line634"></a>  /**
+<a name="line635"></a>   * @param {goog.math.Size} size The new size.
+<a name="line636"></a>   */
+<a name="line637"></a>  resize: function(size) {}
+<a name="line638"></a>};
+<a name="line639"></a>
+<a name="line640"></a>
+<a name="line641"></a>/**
+<a name="line642"></a>  * Set the size of the splitpane.  This is usually called by the controlling
+<a name="line643"></a>  * application.  This will set the SplitPane BorderBoxSize.
+<a name="line644"></a>  * @param {goog.math.Size} size The size to set the splitpane.
+<a name="line645"></a>  */
+<a name="line646"></a>goog.ui.SplitPane.prototype.setSize = function(size) {
+<a name="line647"></a>  goog.style.setBorderBoxSize(this.getElement(), size);
+<a name="line648"></a>  if (this.iframeOverlay_) {
+<a name="line649"></a>    goog.style.setBorderBoxSize(this.iframeOverlay_, size);
+<a name="line650"></a>  }
+<a name="line651"></a>  this.setFirstComponentSize();
+<a name="line652"></a>};
+<a name="line653"></a>
+<a name="line654"></a>
+<a name="line655"></a>/**
+<a name="line656"></a> * Snap the container to the left or top on a Double-click.
+<a name="line657"></a> * @private
+<a name="line658"></a> */
+<a name="line659"></a>goog.ui.SplitPane.prototype.snapIt_ = function() {
+<a name="line660"></a>  var handlePos = goog.style.getRelativePosition(this.splitpaneHandle_,
+<a name="line661"></a>      this.firstComponentContainer_);
+<a name="line662"></a>  var firstBorderBoxSize =
+<a name="line663"></a>      goog.style.getBorderBoxSize(this.firstComponentContainer_);
+<a name="line664"></a>  var firstContentBoxSize =
+<a name="line665"></a>      goog.style.getContentBoxSize(this.firstComponentContainer_);
+<a name="line666"></a>
+<a name="line667"></a>  var isVertical = this.isVertical_();
+<a name="line668"></a>
+<a name="line669"></a>  // Where do we snap the handle (what size to make the component) and what
+<a name="line670"></a>  // is the current handle position.
+<a name="line671"></a>  var snapSize;
+<a name="line672"></a>  var handlePosition;
+<a name="line673"></a>  if (isVertical) {
+<a name="line674"></a>    snapSize = firstBorderBoxSize.height - firstContentBoxSize.height;
+<a name="line675"></a>    handlePosition = handlePos.y;
+<a name="line676"></a>  } else {
+<a name="line677"></a>    snapSize = firstBorderBoxSize.width - firstContentBoxSize.width;
+<a name="line678"></a>    handlePosition = handlePos.x;
+<a name="line679"></a>  }
+<a name="line680"></a>
+<a name="line681"></a>  if (snapSize == handlePosition) {
+<a name="line682"></a>    // This means we&#39;re &#39;unsnapping&#39;, set it back to where it was.
+<a name="line683"></a>    this.setFirstComponentSize(this.savedSnapSize_);
+<a name="line684"></a>  } else {
+<a name="line685"></a>    // This means we&#39;re &#39;snapping&#39;, set the size to snapSize, and hide the
+<a name="line686"></a>    // first component.
+<a name="line687"></a>    if (isVertical) {
+<a name="line688"></a>      this.savedSnapSize_ = goog.style.getBorderBoxSize(
+<a name="line689"></a>          this.firstComponentContainer_).height;
+<a name="line690"></a>    } else {
+<a name="line691"></a>      this.savedSnapSize_ = goog.style.getBorderBoxSize(
+<a name="line692"></a>          this.firstComponentContainer_).width;
+<a name="line693"></a>    }
+<a name="line694"></a>    this.setFirstComponentSize(snapSize);
+<a name="line695"></a>  }
+<a name="line696"></a>};
+<a name="line697"></a>
+<a name="line698"></a>
+<a name="line699"></a>/**
+<a name="line700"></a> * Handle the start drag event - set up the dragger.
+<a name="line701"></a> * @param {goog.events.Event} e The event.
+<a name="line702"></a> * @private
+<a name="line703"></a> */
+<a name="line704"></a>goog.ui.SplitPane.prototype.handleDragStart_ = function(e) {
+<a name="line705"></a>
+<a name="line706"></a>  // Setup iframe overlay to prevent iframes from grabbing events.
+<a name="line707"></a>  if (!this.iframeOverlay_) {
+<a name="line708"></a>    // Create the overlay.
+<a name="line709"></a>    var cssStyles = &#39;position: relative&#39;;
+<a name="line710"></a>
+<a name="line711"></a>    if (goog.userAgent.IE) {
+<a name="line712"></a>      // IE doesn&#39;t look at this div unless it has a background, so we&#39;ll
+<a name="line713"></a>      // put one on, but make it opaque.
+<a name="line714"></a>      cssStyles += &#39;;background-color: #000;filter: Alpha(Opacity=0)&#39;;
+<a name="line715"></a>    }
+<a name="line716"></a>    this.iframeOverlay_ =
+<a name="line717"></a>        this.getDomHelper().createDom(&#39;div&#39;, {&#39;style&#39;: cssStyles});
+<a name="line718"></a>
+<a name="line719"></a>    this.getDomHelper().appendChild(this.getElement(), this.iframeOverlay_);
+<a name="line720"></a>  }
+<a name="line721"></a>  this.iframeOverlay_.style.zIndex =
+<a name="line722"></a>      goog.ui.SplitPane.prototype.iframeOverlayIndex_.OVERLAY;
+<a name="line723"></a>
+<a name="line724"></a>  goog.style.setBorderBoxSize(this.iframeOverlay_,
+<a name="line725"></a>      goog.style.getBorderBoxSize(this.getElement()));
+<a name="line726"></a>
+<a name="line727"></a>  var pos = goog.style.getPosition(this.firstComponentContainer_);
+<a name="line728"></a>
+<a name="line729"></a>  // For the size of the limiting box, we add the container content box sizes
+<a name="line730"></a>  // so that if the handle is placed all the way to the end or the start, the
+<a name="line731"></a>  // border doesn&#39;t exceed the total size. For position, we add the difference
+<a name="line732"></a>  // between the border box and content box sizes of the first container to the
+<a name="line733"></a>  // position of the first container. The start position should be such that
+<a name="line734"></a>  // there is no overlap of borders.
+<a name="line735"></a>  var limitWidth = 0;
+<a name="line736"></a>  var limitHeight = 0;
+<a name="line737"></a>  var limitx = pos.x;
+<a name="line738"></a>  var limity = pos.y;
+<a name="line739"></a>  var firstBorderBoxSize =
+<a name="line740"></a>      goog.style.getBorderBoxSize(this.firstComponentContainer_);
+<a name="line741"></a>  var firstContentBoxSize =
+<a name="line742"></a>      goog.style.getContentBoxSize(this.firstComponentContainer_);
+<a name="line743"></a>  var secondContentBoxSize =
+<a name="line744"></a>      goog.style.getContentBoxSize(this.secondComponentContainer_);
+<a name="line745"></a>  if (this.isVertical_()) {
+<a name="line746"></a>    limitHeight = firstContentBoxSize.height + secondContentBoxSize.height;
+<a name="line747"></a>    limity += firstBorderBoxSize.height - firstContentBoxSize.height;
+<a name="line748"></a>  } else {
+<a name="line749"></a>    limitWidth = firstContentBoxSize.width + secondContentBoxSize.width;
+<a name="line750"></a>    limitx += firstBorderBoxSize.width - firstContentBoxSize.width;
+<a name="line751"></a>  }
+<a name="line752"></a>  var limits = new goog.math.Rect(limitx, limity, limitWidth, limitHeight);
+<a name="line753"></a>  this.splitDragger_.setLimits(limits);
+<a name="line754"></a>};
+<a name="line755"></a>
+<a name="line756"></a>
+<a name="line757"></a>/**
+<a name="line758"></a> * Find the location relative to the splitpane.
+<a name="line759"></a> * @param {number} left The x location relative to the window.
+<a name="line760"></a> * @return {number} The relative x location.
+<a name="line761"></a> * @private
+<a name="line762"></a> */
+<a name="line763"></a>goog.ui.SplitPane.prototype.getRelativeLeft_ = function(left) {
+<a name="line764"></a>  return left - goog.style.getPosition(this.firstComponentContainer_).x;
+<a name="line765"></a>};
+<a name="line766"></a>
+<a name="line767"></a>
+<a name="line768"></a>/**
+<a name="line769"></a> * Find the location relative to the splitpane.
+<a name="line770"></a> * @param {number} top The y location relative to the window.
+<a name="line771"></a> * @return {number} The relative y location.
+<a name="line772"></a> * @private
+<a name="line773"></a> */
+<a name="line774"></a>goog.ui.SplitPane.prototype.getRelativeTop_ = function(top) {
+<a name="line775"></a>  return top - goog.style.getPosition(this.firstComponentContainer_).y;
+<a name="line776"></a>};
+<a name="line777"></a>
+<a name="line778"></a>
+<a name="line779"></a>/**
+<a name="line780"></a> * Handle the drag event. Move the containers.
+<a name="line781"></a> * @param {goog.events.Event} e The event.
+<a name="line782"></a> * @private
+<a name="line783"></a> */
+<a name="line784"></a>goog.ui.SplitPane.prototype.handleDrag_ = function(e) {
+<a name="line785"></a>  if (this.continuousResize_) {
+<a name="line786"></a>    if (this.isVertical_()) {
+<a name="line787"></a>      var top = this.getRelativeTop_(e.top);
+<a name="line788"></a>      this.setFirstComponentSize(top);
+<a name="line789"></a>    } else {
+<a name="line790"></a>      var left = this.getRelativeLeft_(e.left);
+<a name="line791"></a>      this.setFirstComponentSize(left);
+<a name="line792"></a>    }
+<a name="line793"></a>  }
+<a name="line794"></a>};
+<a name="line795"></a>
+<a name="line796"></a>
+<a name="line797"></a>/**
+<a name="line798"></a> * Handle the drag end event. If we&#39;re not doing continuous resize,
+<a name="line799"></a> * resize the component.  If we&#39;re doing continuous resize, the component
+<a name="line800"></a> * is already the correct size.
+<a name="line801"></a> * @param {goog.events.Event} e The event.
+<a name="line802"></a> * @private
+<a name="line803"></a> */
+<a name="line804"></a>goog.ui.SplitPane.prototype.handleDragEnd_ = function(e) {
+<a name="line805"></a>  // Push iframe overlay down.
+<a name="line806"></a>  this.iframeOverlay_.style.zIndex =
+<a name="line807"></a>      goog.ui.SplitPane.prototype.iframeOverlayIndex_.HIDDEN;
+<a name="line808"></a>  if (this.continuousResize_) {
+<a name="line809"></a>    return;
+<a name="line810"></a>  }
+<a name="line811"></a>  if (this.isVertical_()) {
+<a name="line812"></a>    var top = this.getRelativeTop_(e.top);
+<a name="line813"></a>    this.setFirstComponentSize(top);
+<a name="line814"></a>  } else {
+<a name="line815"></a>    var left = this.getRelativeLeft_(e.left);
+<a name="line816"></a>    this.setFirstComponentSize(left);
+<a name="line817"></a>  }
+<a name="line818"></a>};
+<a name="line819"></a>
+<a name="line820"></a>
+<a name="line821"></a>/**
+<a name="line822"></a> * Handle the Double-click. Call the snapIt method which snaps the container
+<a name="line823"></a> * to the top or left.
+<a name="line824"></a> * @param {goog.events.Event} e The event.
+<a name="line825"></a> * @private
+<a name="line826"></a> */
+<a name="line827"></a>goog.ui.SplitPane.prototype.handleDoubleClick_ = function(e) {
+<a name="line828"></a>  this.snapIt_();
+<a name="line829"></a>};
+<a name="line830"></a>
+<a name="line831"></a>
+<a name="line832"></a>/** @inheritDoc */
+<a name="line833"></a>goog.ui.SplitPane.prototype.disposeInternal = function() {
+<a name="line834"></a>  goog.ui.SplitPane.superClass_.disposeInternal.call(this);
+<a name="line835"></a>
+<a name="line836"></a>  this.splitDragger_.dispose();
+<a name="line837"></a>  this.splitDragger_ = null;
+<a name="line838"></a>
+<a name="line839"></a>  goog.dom.removeNode(this.iframeOverlay_);
+<a name="line840"></a>  this.iframeOverlay_ = null;
+<a name="line841"></a>};
+</pre>
+
+
+</body>
+</html>

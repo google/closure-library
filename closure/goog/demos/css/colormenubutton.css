@@ -1,0 +1,28 @@
+/*
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+*/
+
+/* Copyright 2008 Google Inc.  All Rights Reserved. */
+/**/
+
+
+/* We need goog-inline-block from common.css, menu button styles
+   from menubutton.css, palette styles from palette.css, and toolbar
+   button styles from toolbar.css. */
+@import url(common.css);
+@import url(menubutton.css);
+@import url(palette.css);
+@import url(toolbar.css);
+
+/* Thinner padding for color picker buttons, to leave room for the indicator. */
+.goog-color-menu-button .goog-menu-button-inner-box,
+.goog-toolbar-color-menu-button .goog-toolbar-menu-button-inner-box {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* Color indicator. */
+.goog-color-menu-button-indicator {
+  border-bottom: 4px solid #f0f0f0;
+}

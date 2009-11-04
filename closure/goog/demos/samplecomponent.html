@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--
+Copyright 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+  <title>goog.ui.Component</title>
+  <meta charset="utf-8">
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.ui.Component');
+    goog.require('goog.Timer');
+  </script>
+  <script src="../demos/samplecomponent.js"></script>
+  <script>
+    function initPage() {
+      // Shows default initial label
+      var box1 = new goog.demos.SampleComponent();
+      box1.render(goog.dom.getElement('target1'));
+
+      // Shows label taken from DIV text
+      var box2 = new goog.demos.SampleComponent();
+      box2.decorate(goog.dom.getElement('target2'));
+
+      // Shows initial Label + setting label
+      var box3 = new goog.demos.SampleComponent('Counting...');
+      box3.decorate(goog.dom.getElement('target3'));
+
+      var t = new goog.Timer(2000);
+      var value = 0;
+      goog.events.listen(t, goog.Timer.TICK, function (e) {
+          box3.setLabelText((++value).toString());
+      });
+      t.start();
+    }
+    goog.events.listen(window, goog.events.EventType.LOAD, initPage);
+  </script>
+
+  <link rel="stylesheet" href="css/demo.css">
+  <style>
+    .goog-sample-component {
+      height: 1em;
+      padding: 1em;
+      color: white;
+      text-align: center;
+      font-size: 150%;
+    }
+  </style>
+</head>
+<body>
+  <h1>goog.ui.Component</h1>
+
+  <!-- This div will have a Sample Component added to its contents. -->
+  <div id="target1">
+    <p>Click on this big, colored box:</p>
+  </div>
+
+  <hr />
+
+  <div>
+    <p>Or this box:</p>
+    <!-- This div will have it's contents decorated by a Sample Component. -->
+    <div style="width: 50%" id="target2">Label from decorated DIV.</div>
+  </div>
+
+  <hr />
+  <p>This box's label keeps changing:</p>
+  <!-- This div will also have it's contents decorated by a Sample Component. -->
+  <div style="width: 50%; float: right;" id="target3"></div>
+
+</body>
+</html>

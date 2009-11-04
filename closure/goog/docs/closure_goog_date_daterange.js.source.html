@@ -1,0 +1,434 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>daterange.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_date_daterange.js.html">daterange.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Date range data structure. Based loosely on
+<a name="line17"></a> * com.google.common.util.DateRange.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.date.DateRange&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.date.DateRange.Iterator&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.date.DateRange.StandardDateRangeKeys&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.date.Date&#39;);
+<a name="line26"></a>goog.require(&#39;goog.date.Interval&#39;);
+<a name="line27"></a>goog.require(&#39;goog.iter.Iterator&#39;);
+<a name="line28"></a>goog.require(&#39;goog.iter.StopIteration&#39;);
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Constructs a date range.
+<a name="line32"></a> * @constructor
+<a name="line33"></a> * @param {Date} startDate The start date of the range.
+<a name="line34"></a> * @param {Date} endDate The end date of the range.
+<a name="line35"></a> */
+<a name="line36"></a>goog.date.DateRange = function(startDate, endDate) {
+<a name="line37"></a>  /**
+<a name="line38"></a>   * The start date.
+<a name="line39"></a>   * @type {goog.date.Date}
+<a name="line40"></a>   * @private
+<a name="line41"></a>   */
+<a name="line42"></a>   this.startDate_ = new goog.date.Date(startDate);
+<a name="line43"></a>
+<a name="line44"></a>  /**
+<a name="line45"></a>   * The end date.
+<a name="line46"></a>   * @type {goog.date.Date}
+<a name="line47"></a>   * @private
+<a name="line48"></a>   */
+<a name="line49"></a>   this.endDate_ = new goog.date.Date(endDate);
+<a name="line50"></a>};
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * The first possible day, as far as this class is concerned.
+<a name="line55"></a> * @type {goog.date.Date}
+<a name="line56"></a> */
+<a name="line57"></a>goog.date.DateRange.MINIMUM_DATE = new goog.date.Date(0000, 0, 1);
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * The last possible day, as far as this class is concerned.
+<a name="line62"></a> * @type {goog.date.Date}
+<a name="line63"></a> */
+<a name="line64"></a>goog.date.DateRange.MAXIMUM_DATE = new goog.date.Date(9999, 11, 31);
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * @return {goog.date.Date} The start date.
+<a name="line69"></a> */
+<a name="line70"></a>goog.date.DateRange.prototype.getStartDate = function() {
+<a name="line71"></a>  return this.startDate_;
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * @return {goog.date.Date} The end date.
+<a name="line77"></a> */
+<a name="line78"></a>goog.date.DateRange.prototype.getEndDate = function() {
+<a name="line79"></a>  return this.endDate_;
+<a name="line80"></a>};
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * @return {goog.iter.Iterator} An iterator over the date range.
+<a name="line85"></a> */
+<a name="line86"></a>goog.date.DateRange.prototype.iterator = function() {
+<a name="line87"></a>  return new goog.date.DateRange.Iterator(this);
+<a name="line88"></a>};
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Tests two {@link goog.date.DateRange} objects for equality.
+<a name="line93"></a> * @param {goog.date.DateRange} a A date range.
+<a name="line94"></a> * @param {goog.date.DateRange} b A date range.
+<a name="line95"></a> * @return {boolean} Whether |a| is the same range as |b|.
+<a name="line96"></a> */
+<a name="line97"></a>goog.date.DateRange.equals = function(a, b) {
+<a name="line98"></a>  // Test for same object reference; type conversion is irrelevant.
+<a name="line99"></a>  if (a === b) {
+<a name="line100"></a>    return true;
+<a name="line101"></a>  }
+<a name="line102"></a>
+<a name="line103"></a>  if (a == null || b == null) {
+<a name="line104"></a>    return false;
+<a name="line105"></a>  }
+<a name="line106"></a>
+<a name="line107"></a>  return a.startDate_.equals(b.startDate_) &amp;&amp; a.endDate_.equals(b.endDate_);
+<a name="line108"></a>};
+<a name="line109"></a>
+<a name="line110"></a>
+<a name="line111"></a>/**
+<a name="line112"></a> * Calculates a date that is a number of days after a date. Does not modify its
+<a name="line113"></a> * input.
+<a name="line114"></a> * @param {Date} date The input date.
+<a name="line115"></a> * @param {number} offset Number of days.
+<a name="line116"></a> * @return {goog.date.Date} The date that is |offset| days after |date|.
+<a name="line117"></a> * @private
+<a name="line118"></a> */
+<a name="line119"></a>goog.date.DateRange.offsetInDays_ = function(date, offset) {
+<a name="line120"></a>  var newDate = new goog.date.Date(date);
+<a name="line121"></a>  newDate.add(new goog.date.Interval(goog.date.Interval.DAYS, offset));
+<a name="line122"></a>  return newDate;
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * Calculates the Monday before a date. If the input is a Monday, returns the
+<a name="line128"></a> * input. Does not modify its input.
+<a name="line129"></a> * @param {Date} date The input date.
+<a name="line130"></a> * @return {goog.date.Date} If |date| is a Monday, return |date|; otherwise
+<a name="line131"></a> *     return the Monday before |date|.
+<a name="line132"></a> * @private
+<a name="line133"></a> */
+<a name="line134"></a>goog.date.DateRange.currentOrLastMonday_ = function(date) {
+<a name="line135"></a>  var newDate = new goog.date.Date(date);
+<a name="line136"></a>  newDate.add(new goog.date.Interval(goog.date.Interval.DAYS,
+<a name="line137"></a>      -newDate.getIsoWeekday()));
+<a name="line138"></a>  return newDate;
+<a name="line139"></a>};
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * Calculates a date that is a number of months after the first day in the
+<a name="line144"></a> * month that contains its input. Does not modify its input.
+<a name="line145"></a> * @param {Date} date The input date.
+<a name="line146"></a> * @param {number} offset Number of months.
+<a name="line147"></a> * @return {goog.date.Date} The date that is |offset| months after the first
+<a name="line148"></a> *     day in the month that contains |date|.
+<a name="line149"></a> * @private
+<a name="line150"></a> */
+<a name="line151"></a>goog.date.DateRange.offsetInMonths_ = function(date, offset) {
+<a name="line152"></a>  var newDate = new goog.date.Date(date);
+<a name="line153"></a>  newDate.setDate(1);
+<a name="line154"></a>  newDate.add(new goog.date.Interval(goog.date.Interval.MONTHS, offset));
+<a name="line155"></a>  return newDate;
+<a name="line156"></a>};
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * Returns the range from yesterday to yesterday.
+<a name="line161"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line162"></a> * @return {goog.date.DateRange} The range that includes only yesterday.
+<a name="line163"></a> */
+<a name="line164"></a>goog.date.DateRange.yesterday = function(opt_today) {
+<a name="line165"></a>  var today = new goog.date.Date(opt_today);
+<a name="line166"></a>  var yesterday = goog.date.DateRange.offsetInDays_(today, -1);
+<a name="line167"></a>  return new goog.date.DateRange(yesterday, yesterday);
+<a name="line168"></a>};
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * Returns the range from today to today.
+<a name="line173"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line174"></a> * @return {goog.date.DateRange} The range that includes only today.
+<a name="line175"></a> */
+<a name="line176"></a>goog.date.DateRange.today = function(opt_today) {
+<a name="line177"></a>  var today = new goog.date.Date(opt_today);
+<a name="line178"></a>  return new goog.date.DateRange(today, today);
+<a name="line179"></a>};
+<a name="line180"></a>
+<a name="line181"></a>
+<a name="line182"></a>/**
+<a name="line183"></a> * Returns the range that includes the seven days that end yesterday.
+<a name="line184"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line185"></a> * @return {goog.date.DateRange} The range that includes the seven days that
+<a name="line186"></a> *     end yesterday.
+<a name="line187"></a> */
+<a name="line188"></a>goog.date.DateRange.last7Days = function(opt_today) {
+<a name="line189"></a>  var today = new goog.date.Date(opt_today);
+<a name="line190"></a>  var yesterday = goog.date.DateRange.offsetInDays_(today, -1);
+<a name="line191"></a>  return new goog.date.DateRange(goog.date.DateRange.offsetInDays_(today, -7),
+<a name="line192"></a>      yesterday);
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Returns the range that starts the first of this month and ends the last day
+<a name="line198"></a> * of this month.
+<a name="line199"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line200"></a> * @return {goog.date.DateRange} The range that starts the first of this month
+<a name="line201"></a> *     and ends the last day of this month.
+<a name="line202"></a> */
+<a name="line203"></a>goog.date.DateRange.thisMonth = function(opt_today) {
+<a name="line204"></a>  var today = new goog.date.Date(opt_today);
+<a name="line205"></a>  return new goog.date.DateRange(
+<a name="line206"></a>      goog.date.DateRange.offsetInMonths_(today, 0),
+<a name="line207"></a>      goog.date.DateRange.offsetInDays_(
+<a name="line208"></a>          goog.date.DateRange.offsetInMonths_(today, 1),
+<a name="line209"></a>          -1));
+<a name="line210"></a>};
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Returns the range that starts the first of last month and ends the last day
+<a name="line215"></a> * of last month.
+<a name="line216"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line217"></a> * @return {goog.date.DateRange} The range that starts the first of last month
+<a name="line218"></a> *     and ends the last day of last month.
+<a name="line219"></a> */
+<a name="line220"></a>goog.date.DateRange.lastMonth = function(opt_today) {
+<a name="line221"></a>  var today = new goog.date.Date(opt_today);
+<a name="line222"></a>  return new goog.date.DateRange(
+<a name="line223"></a>      goog.date.DateRange.offsetInMonths_(today, -1),
+<a name="line224"></a>      goog.date.DateRange.offsetInDays_(
+<a name="line225"></a>          goog.date.DateRange.offsetInMonths_(today, 0),
+<a name="line226"></a>          -1));
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Returns the range that starts the Monday on or before today and ends the
+<a name="line232"></a> * Sunday on or after today.
+<a name="line233"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line234"></a> * @return {goog.date.DateRange} The range that starts the Monday on or before
+<a name="line235"></a> *     today and ends the Sunday on or after today.
+<a name="line236"></a> */
+<a name="line237"></a>goog.date.DateRange.thisWeek = function(opt_today) {
+<a name="line238"></a>  var today = new goog.date.Date(opt_today);
+<a name="line239"></a>  var start = goog.date.DateRange.offsetInDays_(today, -today.getIsoWeekday());
+<a name="line240"></a>  var end = goog.date.DateRange.offsetInDays_(start, 6);
+<a name="line241"></a>  return new goog.date.DateRange(start, end);
+<a name="line242"></a>};
+<a name="line243"></a>
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * Returns the range that starts seven days before the Monday on or before
+<a name="line247"></a> * today and ends the Sunday on or before yesterday.
+<a name="line248"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line249"></a> * @return {goog.date.DateRange} The range that starts seven days before the
+<a name="line250"></a> *     Monday on or before today and ends the Sunday on or before yesterday.
+<a name="line251"></a> */
+<a name="line252"></a>goog.date.DateRange.lastWeek = function(opt_today) {
+<a name="line253"></a>  var today = new goog.date.Date(opt_today);
+<a name="line254"></a>  var start = goog.date.DateRange.offsetInDays_(today,
+<a name="line255"></a>      - 7 - today.getIsoWeekday());
+<a name="line256"></a>  var end = goog.date.DateRange.offsetInDays_(start, 6);
+<a name="line257"></a>  return new goog.date.DateRange(start, end);
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * Returns the range that starts seven days before the Monday on or before
+<a name="line263"></a> * today and ends the Friday before today.
+<a name="line264"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line265"></a> * @return {goog.date.DateRange} The range that starts seven days before the
+<a name="line266"></a> *     Monday on or before today and ends the Friday before today.
+<a name="line267"></a> */
+<a name="line268"></a>goog.date.DateRange.lastBusinessWeek = function(opt_today) {
+<a name="line269"></a>  var today = new goog.date.Date(opt_today);
+<a name="line270"></a>  var start = goog.date.DateRange.offsetInDays_(today,
+<a name="line271"></a>      - 7 - today.getIsoWeekday());
+<a name="line272"></a>  var end = goog.date.DateRange.offsetInDays_(start, 4);
+<a name="line273"></a>  return new goog.date.DateRange(start, end);
+<a name="line274"></a>};
+<a name="line275"></a>
+<a name="line276"></a>
+<a name="line277"></a>/**
+<a name="line278"></a> * Returns the range that includes all days between January 1, 1900 and
+<a name="line279"></a> * December 31, 9999.
+<a name="line280"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line281"></a> * @return {goog.date.DateRange} The range that includes all days between
+<a name="line282"></a> *     January 1, 1900 and December 31, 9999.
+<a name="line283"></a> */
+<a name="line284"></a>goog.date.DateRange.allTime = function(opt_today) {
+<a name="line285"></a>  return new goog.date.DateRange(
+<a name="line286"></a>      goog.date.DateRange.MINIMUM_DATE,
+<a name="line287"></a>      goog.date.DateRange.MAXIMUM_DATE);
+<a name="line288"></a>};
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * Standard date range keys. Equivalent to the enum IDs in
+<a name="line293"></a> * DateRange.java http://go/datarange.java
+<a name="line294"></a> *
+<a name="line295"></a> * @enum {string}
+<a name="line296"></a> */
+<a name="line297"></a>goog.date.DateRange.StandardDateRangeKeys = {
+<a name="line298"></a>  YESTERDAY: &#39;yesterday&#39;,
+<a name="line299"></a>  TODAY: &#39;today&#39;,
+<a name="line300"></a>  LAST_7_DAYS: &#39;last7days&#39;,
+<a name="line301"></a>  THIS_MONTH: &#39;thismonth&#39;,
+<a name="line302"></a>  LAST_MONTH: &#39;lastmonth&#39;,
+<a name="line303"></a>  THIS_WEEK: &#39;thisweek&#39;,
+<a name="line304"></a>  LAST_WEEK: &#39;lastweek&#39;,
+<a name="line305"></a>  LAST_BUSINESS_WEEK: &#39;lastbusinessweek&#39;,
+<a name="line306"></a>  ALL_TIME: &#39;alltime&#39;
+<a name="line307"></a>};
+<a name="line308"></a>
+<a name="line309"></a>
+<a name="line310"></a>/**
+<a name="line311"></a> * @param {string} dateRangeKey A standard date range key.
+<a name="line312"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line313"></a> * @return {goog.date.DateRange} The date range that corresponds to that key.
+<a name="line314"></a> * @throws {Error} If no standard date range with that key exists.
+<a name="line315"></a> */
+<a name="line316"></a>goog.date.DateRange.standardDateRange = function(dateRangeKey, opt_today) {
+<a name="line317"></a>  switch (dateRangeKey) {
+<a name="line318"></a>    case goog.date.DateRange.StandardDateRangeKeys.YESTERDAY:
+<a name="line319"></a>      return goog.date.DateRange.yesterday(opt_today);
+<a name="line320"></a>
+<a name="line321"></a>    case goog.date.DateRange.StandardDateRangeKeys.TODAY:
+<a name="line322"></a>      return goog.date.DateRange.today(opt_today);
+<a name="line323"></a>
+<a name="line324"></a>    case goog.date.DateRange.StandardDateRangeKeys.LAST_7_DAYS:
+<a name="line325"></a>      return goog.date.DateRange.last7Days(opt_today);
+<a name="line326"></a>
+<a name="line327"></a>    case goog.date.DateRange.StandardDateRangeKeys.THIS_MONTH:
+<a name="line328"></a>      return goog.date.DateRange.thisMonth(opt_today);
+<a name="line329"></a>
+<a name="line330"></a>    case goog.date.DateRange.StandardDateRangeKeys.LAST_MONTH:
+<a name="line331"></a>      return goog.date.DateRange.lastMonth(opt_today);
+<a name="line332"></a>
+<a name="line333"></a>    case goog.date.DateRange.StandardDateRangeKeys.THIS_WEEK:
+<a name="line334"></a>      return goog.date.DateRange.thisWeek(opt_today);
+<a name="line335"></a>
+<a name="line336"></a>    case goog.date.DateRange.StandardDateRangeKeys.LAST_WEEK:
+<a name="line337"></a>      return goog.date.DateRange.lastWeek(opt_today);
+<a name="line338"></a>
+<a name="line339"></a>    case goog.date.DateRange.StandardDateRangeKeys.LAST_BUSINESS_WEEK:
+<a name="line340"></a>      return goog.date.DateRange.lastBusinessWeek(opt_today);
+<a name="line341"></a>
+<a name="line342"></a>    case goog.date.DateRange.StandardDateRangeKeys.ALL_TIME:
+<a name="line343"></a>      return goog.date.DateRange.allTime(opt_today);
+<a name="line344"></a>
+<a name="line345"></a>    default:
+<a name="line346"></a>      throw Error(&#39;no such date range key: &#39; + dateRangeKey);
+<a name="line347"></a>  }
+<a name="line348"></a>};
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>
+<a name="line352"></a>/**
+<a name="line353"></a> * Creates an iterator over the dates in a {@link goog.date.DateRange}.
+<a name="line354"></a> * @constructor
+<a name="line355"></a> * @extends {goog.iter.Iterator}
+<a name="line356"></a> * @param {goog.date.DateRange} dateRange The date range to iterate.
+<a name="line357"></a> */
+<a name="line358"></a>goog.date.DateRange.Iterator = function(dateRange) {
+<a name="line359"></a>  /**
+<a name="line360"></a>   * The next date.
+<a name="line361"></a>   * @type {goog.date.Date}
+<a name="line362"></a>   * @private
+<a name="line363"></a>   */
+<a name="line364"></a>  this.nextDate_ = dateRange.getStartDate().clone();
+<a name="line365"></a>
+<a name="line366"></a>  /**
+<a name="line367"></a>   * The end date, expressed as an integer: YYYYMMDD.
+<a name="line368"></a>   * @type {number}
+<a name="line369"></a>   * @private
+<a name="line370"></a>   */
+<a name="line371"></a>  this.endDate_ = Number(dateRange.getEndDate().toIsoString());
+<a name="line372"></a>};
+<a name="line373"></a>goog.inherits(goog.date.DateRange.Iterator, goog.iter.Iterator);
+<a name="line374"></a>
+<a name="line375"></a>
+<a name="line376"></a>/** @inheritDoc */
+<a name="line377"></a>goog.date.DateRange.Iterator.prototype.next = function() {
+<a name="line378"></a>  if (Number(this.nextDate_.toIsoString()) &gt; this.endDate_) {
+<a name="line379"></a>    throw goog.iter.StopIteration;
+<a name="line380"></a>  }
+<a name="line381"></a>
+<a name="line382"></a>  var rv = this.nextDate_.clone();
+<a name="line383"></a>  this.nextDate_.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
+<a name="line384"></a>  return rv;
+<a name="line385"></a>};
+</pre>
+
+
+</body>
+</html>

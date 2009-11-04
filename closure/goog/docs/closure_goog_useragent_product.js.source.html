@@ -1,0 +1,276 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>product.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_useragent_product.js.html">product.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Detects the specific browser and not just the rendering engine.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.userAgent.product&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * @define {boolean} Whether the code is running on the Firefox web browser.
+<a name="line27"></a> */
+<a name="line28"></a>goog.userAgent.product.ASSUME_FIREFOX = false;
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * @define {boolean} Whether the code is running on the Camino web browser.
+<a name="line33"></a> */
+<a name="line34"></a>goog.userAgent.product.ASSUME_CAMINO = false;
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * @define {boolean} Whether we know at compile-time that the product is an
+<a name="line39"></a> *     iPhone.
+<a name="line40"></a> */
+<a name="line41"></a>goog.userAgent.product.ASSUME_IPHONE = false;
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * @define {boolean} Whether we know at compile-time that the product is an
+<a name="line46"></a> *     Android phone.
+<a name="line47"></a> */
+<a name="line48"></a>goog.userAgent.product.ASSUME_ANDROID = false;
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * @define {boolean} Whether the code is running on the Chrome web browser.
+<a name="line53"></a> */
+<a name="line54"></a>goog.userAgent.product.ASSUME_CHROME = false;
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * @define {boolean} Whether the code is running on the Safari web browser.
+<a name="line59"></a> */
+<a name="line60"></a>goog.userAgent.product.ASSUME_SAFARI = false;
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Whether we know the product type at compile-time.
+<a name="line65"></a> * @type {boolean}
+<a name="line66"></a> * @private
+<a name="line67"></a> */
+<a name="line68"></a>goog.userAgent.product.PRODUCT_KNOWN_ =
+<a name="line69"></a>    goog.userAgent.ASSUME_IE ||
+<a name="line70"></a>    goog.userAgent.ASSUME_OPERA ||
+<a name="line71"></a>    goog.userAgent.product.ASSUME_FIREFOX ||
+<a name="line72"></a>    goog.userAgent.product.ASSUME_CAMINO ||
+<a name="line73"></a>    goog.userAgent.product.ASSUME_IPHONE ||
+<a name="line74"></a>    goog.userAgent.product.ASSUME_ANDROID ||
+<a name="line75"></a>    goog.userAgent.product.ASSUME_CHROME ||
+<a name="line76"></a>    goog.userAgent.product.ASSUME_SAFARI;
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Right now we just focus on Tier 1-3 browsers at:
+<a name="line81"></a> * http://wiki/Nonconf/ProductPlatformGuidelines
+<a name="line82"></a> * As well as the YUI grade A browsers at:
+<a name="line83"></a> * http://developer.yahoo.com/yui/articles/gbs/
+<a name="line84"></a> *
+<a name="line85"></a> * @private
+<a name="line86"></a> */
+<a name="line87"></a>goog.userAgent.product.init_ = function() {
+<a name="line88"></a>
+<a name="line89"></a>  /**
+<a name="line90"></a>   * Whether the code is running on the Firefox web browser.
+<a name="line91"></a>   * @type {boolean}
+<a name="line92"></a>   * @private
+<a name="line93"></a>   */
+<a name="line94"></a>  goog.userAgent.product.detectedFirefox_ = false;
+<a name="line95"></a>
+<a name="line96"></a>  /**
+<a name="line97"></a>   * Whether the code is running on the Camino web browser.
+<a name="line98"></a>   * @type {boolean}
+<a name="line99"></a>   * @private
+<a name="line100"></a>   */
+<a name="line101"></a>  goog.userAgent.product.detectedCamino_ = false;
+<a name="line102"></a>
+<a name="line103"></a>  /**
+<a name="line104"></a>   * Whether the code is running on an iPhone or iPod touch.
+<a name="line105"></a>   * @type {boolean}
+<a name="line106"></a>   * @private
+<a name="line107"></a>   */
+<a name="line108"></a>  goog.userAgent.product.detectedIphone_ = false;
+<a name="line109"></a>
+<a name="line110"></a>  /**
+<a name="line111"></a>   * Whether the code is running on the default browser on an Android phone.
+<a name="line112"></a>   * @type {boolean}
+<a name="line113"></a>   * @private
+<a name="line114"></a>   */
+<a name="line115"></a>  goog.userAgent.product.detectedAndroid_ = false;
+<a name="line116"></a>
+<a name="line117"></a>  /**
+<a name="line118"></a>   * Whether the code is running on the Chrome web browser.
+<a name="line119"></a>   * @type {boolean}
+<a name="line120"></a>   * @private
+<a name="line121"></a>   */
+<a name="line122"></a>  goog.userAgent.product.detectedChrome_ = false;
+<a name="line123"></a>
+<a name="line124"></a>  /**
+<a name="line125"></a>   * Whether the code is running on the Safari web browser.
+<a name="line126"></a>   * @type {boolean}
+<a name="line127"></a>   * @private
+<a name="line128"></a>   */
+<a name="line129"></a>  goog.userAgent.product.detectedSafari_ = false;
+<a name="line130"></a>
+<a name="line131"></a>  var ua = goog.userAgent.getUserAgentString();
+<a name="line132"></a>  if (!ua) {
+<a name="line133"></a>    return;
+<a name="line134"></a>  }
+<a name="line135"></a>
+<a name="line136"></a>  // The order of the if-statements in the following code is important.
+<a name="line137"></a>  // For example, in the WebKit section, we put Chrome in front of Safari
+<a name="line138"></a>  // because the string &#39;Safari&#39; is present on both of those browsers&#39;
+<a name="line139"></a>  // userAgent strings as well as the string we are looking for.
+<a name="line140"></a>  // The idea is to prevent accidental detection of more than one client.
+<a name="line141"></a>
+<a name="line142"></a>  if (ua.indexOf(&#39;Firefox&#39;) != -1) {
+<a name="line143"></a>    goog.userAgent.product.detectedFirefox_ = true;
+<a name="line144"></a>  } else if (ua.indexOf(&#39;Camino&#39;) != -1) {
+<a name="line145"></a>    goog.userAgent.product.detectedCamino_ = true;
+<a name="line146"></a>  } else if (ua.indexOf(&#39;iPhone&#39;) != -1 || ua.indexOf(&#39;iPod&#39;) != -1) {
+<a name="line147"></a>    goog.userAgent.product.detectedIphone_ = true;
+<a name="line148"></a>  } else if (ua.indexOf(&#39;Android&#39;) != -1) {
+<a name="line149"></a>    goog.userAgent.product.detectedAndroid_ = true;
+<a name="line150"></a>  } else if (ua.indexOf(&#39;Chrome&#39;) != -1) {
+<a name="line151"></a>    goog.userAgent.product.detectedChrome_ = true;
+<a name="line152"></a>  } else if (ua.indexOf(&#39;Safari&#39;) != -1) {
+<a name="line153"></a>    goog.userAgent.product.detectedSafari_ = true;
+<a name="line154"></a>  }
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>if (!goog.userAgent.product.PRODUCT_KNOWN_) {
+<a name="line158"></a>  goog.userAgent.product.init_();
+<a name="line159"></a>}
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>/**
+<a name="line163"></a> * Whether the code is running on the Opera web browser.
+<a name="line164"></a> * @type {boolean}
+<a name="line165"></a> */
+<a name="line166"></a>goog.userAgent.product.OPERA = goog.userAgent.OPERA;
+<a name="line167"></a>
+<a name="line168"></a>
+<a name="line169"></a>/**
+<a name="line170"></a> * Whether the code is running on an IE web browser.
+<a name="line171"></a> * @type {boolean}
+<a name="line172"></a> */
+<a name="line173"></a>goog.userAgent.product.IE = goog.userAgent.IE;
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Whether the code is running on the Firefox web browser.
+<a name="line178"></a> * @type {boolean}
+<a name="line179"></a> */
+<a name="line180"></a>goog.userAgent.product.FIREFOX = goog.userAgent.product.PRODUCT_KNOWN_ ?
+<a name="line181"></a>    goog.userAgent.product.ASSUME_FIREFOX :
+<a name="line182"></a>    goog.userAgent.product.detectedFirefox_;
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Whether the code is running on the Camino web browser.
+<a name="line187"></a> * @type {boolean}
+<a name="line188"></a> */
+<a name="line189"></a>goog.userAgent.product.CAMINO = goog.userAgent.product.PRODUCT_KNOWN_ ?
+<a name="line190"></a>    goog.userAgent.product.ASSUME_CAMINO :
+<a name="line191"></a>    goog.userAgent.product.detectedCamino_;
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>/**
+<a name="line195"></a> * Whether the code is running on an iPhone or iPod touch.
+<a name="line196"></a> * @type {boolean}
+<a name="line197"></a> */
+<a name="line198"></a>goog.userAgent.product.IPHONE = goog.userAgent.product.PRODUCT_KNOWN_ ?
+<a name="line199"></a>    goog.userAgent.product.ASSUME_IPHONE :
+<a name="line200"></a>    goog.userAgent.product.detectedIphone_;
+<a name="line201"></a>
+<a name="line202"></a>
+<a name="line203"></a>/**
+<a name="line204"></a> * Whether the code is running on the default browser on an Android phone.
+<a name="line205"></a> * @type {boolean}
+<a name="line206"></a> */
+<a name="line207"></a>goog.userAgent.product.ANDROID = goog.userAgent.product.PRODUCT_KNOWN_ ?
+<a name="line208"></a>    goog.userAgent.product.ASSUME_ANDROID :
+<a name="line209"></a>    goog.userAgent.product.detectedAndroid_;
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Whether the code is running on the Chrome web browser.
+<a name="line214"></a> * @type {boolean}
+<a name="line215"></a> */
+<a name="line216"></a>goog.userAgent.product.CHROME = goog.userAgent.product.PRODUCT_KNOWN_ ?
+<a name="line217"></a>    goog.userAgent.product.ASSUME_CHROME :
+<a name="line218"></a>    goog.userAgent.product.detectedChrome_;
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Whether the code is running on the Safari web browser.
+<a name="line223"></a> * @type {boolean}
+<a name="line224"></a> */
+<a name="line225"></a>goog.userAgent.product.SAFARI = goog.userAgent.product.PRODUCT_KNOWN_ ?
+<a name="line226"></a>    goog.userAgent.product.ASSUME_SAFARI :
+<a name="line227"></a>    goog.userAgent.product.detectedSafari_;
+</pre>
+
+
+</body>
+</html>

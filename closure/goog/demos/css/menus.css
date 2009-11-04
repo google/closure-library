@@ -1,0 +1,206 @@
+/*
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+*/
+
+/* Copyright 2007 Google Inc.  All Rights Reserved. */
+/**/
+
+
+
+/*
+ * goog.ui.Menu
+ */
+
+/* State: resting. */
+.goog-menu {
+  background-color: #fff;
+  border-color: #ccc #666 #666 #ccc;
+  border-style: solid;
+  border-width: 1px;
+  cursor: default;
+  margin: 0;
+  outline: none;
+  padding: 4px 0;
+  position: absolute;
+}
+
+/*
+ * goog.ui.MenuItem
+ */
+
+/* State: resting. */
+.goog-menuitem {
+  color: #000;
+  font: normal 12px Arial, sans-serif;
+  list-style: none;
+  margin: 0;
+  /* 28px on the left for icon or checkbox; 10ex on the right for shortcut. */ 
+  padding: 4px 10ex 4px 28px;
+  white-space: nowrap;
+}
+
+/* BiDi override for the resting state. */
+.goog-menuitem-rtl {
+  /* Flip left/right padding for BiDi. */
+  padding: 4px 28px 4px 10ex !important;
+}
+
+/* State: disabled. */
+.goog-menuitem-disabled {
+  color: #ccc;
+}
+
+/* State: hover. */
+.goog-menuitem-highlight,
+.goog-menuitem-hover {
+  background-color: #d6e9f8;
+}
+
+/* State: selected/checked. */
+.goog-menuitem-checkbox,
+.goog-menuitem-icon {
+  height: 16px;
+  left: 6px;
+  position: absolute;
+  width: 16px;
+}
+.goog-option-selected .goog-menuitem-checkbox,
+.goog-option-selected .goog-menuitem-icon {
+  background: transparent url(../images/check.gif) no-repeat center center;
+}
+
+/* BiDi override for the selected/checked state. */
+.goog-menuitem-rtl .goog-menuitem-checkbox,
+.goog-menuitem-rtl .goog-menuitem-icon {
+  /* Flip left/right positioning. */
+  right: 6px;
+  left: auto;
+}
+
+/* Keyboard shortcut ("accelerator") style. */
+.goog-menuitem-accel {
+  color: #999;
+  padding: 0 6px;
+  position: absolute;
+  right: 0;
+  text-align: right;
+}
+
+/* BiDi override for shortcut style. */
+.goog-menuitem-rtl .goog-menuitem-accel {
+  /* Flip left/right positioning and text alignment. */
+  left: 0;
+  right: auto;
+  text-align: left;
+}
+
+/*
+ * goog.ui.MenuSeparator
+ */
+
+/* State: resting. */
+.goog-menuseparator {
+  border-top: 1px solid #ccc;
+  margin: 4px 0;
+  padding: 0;
+  position: relative;
+}
+
+
+/* goog.ui.SubMenu */
+
+.goog-submenu-arrow {
+  text-align: right;
+  position: absolute;
+  right: 0;
+  left: auto;
+}
+
+.goog-menuitem-rtl .goog-submenu-arrow {
+  text-align: left;
+  position: absolute;
+  left: 0;
+  right: auto;
+}
+
+.goog-menuitem-disabled .goog-submenu-arrow {
+  display: none;
+}
+
+
+/* goog.ui.FilteredMenu */
+
+.goog-menu-filter {
+  margin: 2px;
+  border: 1px solid silver;
+  background: white;
+  overflow: hidden;
+}
+
+.goog-menu-filter div {
+  color: gray;
+  position: absolute;
+  padding: 1px;
+}
+
+.goog-menu-filter input {
+  margin: 0;
+  border: 0;
+  background: transparent;
+  width: 100%;
+}
+
+
+/* goog.ui.TriStateMenuItem */
+
+.goog-tristatemenuitem {
+  padding: 2px 5px;
+  margin: 0;
+  list-style: none;
+}
+
+.goog-tristatemenuitem-highlight {
+  background-color: #4279A5;
+  color: #FFF;
+}
+
+.goog-tristatemenuitem-disabled {
+  color: #999;
+}
+
+.goog-tristatemenuitem-checkbox {
+  float: left;
+  width: 10px;
+  height: 1.1em;
+}
+
+.goog-tristatemenuitem-partially-checked {
+  background-image: url(../images/check-outline.gif);
+  background-position: 4px 50%;
+  background-repeat: no-repeat;
+}
+
+.goog-tristatemenuitem-fully-checked {
+  background-image: url(../images/check.gif);
+  background-position: 4px 50%;
+  background-repeat: no-repeat;
+}
+
+
+/* goog.ui.FilterObservingMenuItem */
+
+.goog-filterobsmenuitem {
+  padding: 2px 5px;
+  margin: 0;
+  list-style: none;
+}
+
+.goog-filterobsmenuitem-highlight {
+  background-color: #4279A5;
+  color: #FFF;
+}
+
+.goog-filterobsmenuitem-disabled {
+  color: #999;
+}

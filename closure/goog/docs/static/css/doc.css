@@ -1,0 +1,442 @@
+/**
+   TEMP: Change the way pre displays code to prevent stretching the layout.
+*/
+pre {
+  white-space: pre-wrap;
+}
+
+/* 2 column layout */
+/* column container */
+.colmask {
+  position: relative;  /* This fixes the IE7 overflow hidden bug */
+  clear: both;
+  float: left;
+  width: 99%;  /* width of whole page */
+  overflow: hidden;  /* This chops off any overhanging divs */
+}
+
+/* common column settings */
+.colleft {
+  float: left;
+  width: 100%;
+  position: relative;
+}
+
+.col1,
+.col2 {
+  float: left;
+  position: relative;
+  padding: 0 0 1em 0;
+}
+
+/* 2 Column (right menu) settings */
+.rightmenu {
+  background: white;  /* right column background colour */
+}
+
+.rightmenu .colleft {
+  right:23%;  /* right column width */
+  background: white;  /* left column background colour */
+}
+
+.rightmenu .col1 {
+  /* left column content width (left column width minus left and
+     right padding) */
+  width:75%;
+  left:24%;  /* (right column width) plus (left column left padding) */
+}
+
+.rightmenu .col2 {
+  /* right column content width (right column width minus left and
+     right padding) */
+  width:23%;
+  /* (right column width) plus (left column left and right padding)
+     plus (right column left padding) */
+  left:25%;
+}
+
+
+.g-section,
+.g-unit {
+  margin: .5em 0;
+}
+
+.g-c {
+  padding: 0 2px;
+  overflow: hidden;
+}
+
+.g-c-cell {
+  padding: 0 12px;
+  overflow: hidden;
+}
+
+
+/* useful links */
+
+#useful-links {
+  font-size: 1em;
+}
+
+#useful-links .title {
+  padding: 4px;
+  background-color: #c3d9ff;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+#useful-links a {
+  color: #668cd9;
+}
+
+#useful-links .title {
+  color: black;
+  font-weight: bold;
+}
+
+#useful-links ol {
+  list-style: none;
+  padding: 0;
+  margin: 0 2px;
+}
+
+#useful-links li {
+  padding-top: 5px;
+}
+
+#description {
+  font-size: 1.05em;
+}
+
+/* tables */
+table {
+  border-collapse: collapse;
+  margin-bottom: 6px;
+  margin-top: 0;
+  width: 100%;
+}
+table.horiz-rule {
+  margin: .5em 0 3em;
+}
+table.horiz-rule,
+table.horiz-rule td {
+  border: 1px solid #E0E7F2;
+  border-left: 0;
+  border-right: 0;
+  vertical-align: top;
+  padding: 5px 5px 4px 5px;
+  margin: 4px 0;
+  font-size: 1em;
+  font-family: inherit;
+}
+
+
+.entryDetails table {
+  font-family: inherit;
+  font-size: 1em;
+}
+
+.entryDetails table td {
+  border: 0;
+  vertical-align: top;
+  padding: 5px 5px 4px 1em;
+}
+
+div.fullType {
+  display: inline;
+}
+
+table.horiz-rule td.type-col {
+  text-align: right;
+  white-space: nonwrap;
+  width: 150px;
+}
+
+/*
+tr.odd {
+  background-color: #f4f6ff;
+}
+*/
+
+tr.even {
+  background-color: #fff;
+}
+
+.col1 h2 {
+  color: black;
+  font-weight: bold;
+  font-size: 1.4em;
+  margin-top: 1.5em;
+  margin-bottom: 0.2em;
+}
+
+.col1 h2.g-first {
+  margin-top: 0;
+}
+
+.col1 h3 {
+  margin-bottom: 2px;
+  color: #000;
+}
+
+.fn-name a {
+  color: #3355cc;
+  font-weight: bold;
+}
+
+
+/* various other formatters */
+
+#title {
+  border-bottom: 1px solid #e9e9e9;
+}
+
+#title .fn {
+  font-size: 35px;
+  font-weight: bold;
+  color: black;
+}
+
+.fn-constructor {
+  font-size: 1.5em;
+  color: black;
+}
+
+.fn-constructor a {
+  color: #668CD9;
+}
+
+
+.code-label {
+  font-weight: bold;
+  position: static;
+}
+
+.param-type {
+  color: #008000;
+  font-weight: bold;
+}
+
+.code-sample {
+  font-size: 1em;
+}
+
+.desc {
+  font-size: 1.1em;
+  margin: 2px 0;
+}
+
+/* rules for current page highlighting */
+
+#abstractdragdrop #abstractdragdrop_link,
+#dragdrop #dragdrop_link,
+#dragdropevent #dragdropevent_link {
+  background-color: #668cd9;
+  color: white;
+}
+
+
+.entry img {
+  width: 19px;
+  height: 16px;
+}
+
+th.argHeader {
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+
+.ac-row .goog-tree-icon {
+  background-image: url(../images/tree.png);
+}
+
+.goog-checkbox-checked {
+  background-image: url(../images/check.gif);
+  height: 7px;
+  width: 7px;
+}
+
+.goog-checkbox-unchecked {
+  background-image:url(../images/check-outline.gif);
+  height: 10px;
+  width: 10px;
+}
+
+div#acls {
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+.detailsSection {
+  padding-top: 10px;
+}
+
+.class-details {
+  font-size: 12px;
+}
+
+.entryName {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.detailsSection .entryName {
+  font-weight: normal;
+}
+
+.entryName .args {
+  color: #888;
+  font-weight: normal;
+  margin-left: 4px;
+}
+
+.entryDetails,
+.entryOverview {
+  margin: 3px 0 0 20px;
+}
+
+.entryNamespace {
+  font-weight: normal;
+  font-size: 11px;
+  color: #888;
+}
+
+.fullType {
+  white-space: nowrap;
+}
+
+.type {
+  color: #008800;
+  font-size: 95%;
+}
+
+.type a {
+  color: #008800;
+}
+
+.access {
+  width: 6px;
+  padding: 0px !important;
+  border-right: 1px solid #E0E7F2;
+  background: green; /** public mode only. **/
+  opacity: 0.6;
+}
+
+.protected .access {
+  background: goldenrod;
+}
+
+.private .access {
+  background: red;
+}
+
+.legend {
+  padding-right: 10px;
+  float: right;
+  text-align: top;
+  line-height: 1;
+}
+
+.key {
+  display: inline-block;
+  width: 6px;
+  height: .8em;
+  margin: .3em 3px 0 5px;
+  vertical-align: top;
+}
+
+.key-bg {
+  display: inline-block;
+  margin: 0 3px 0 5px;
+  padding: 1px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+
+.key-bg input {
+  margin: 0;
+}
+
+.publickey,
+tr.funcs-hidden-public td.access {
+  border: 1px outset green;
+  background: green;
+  background: rgba(0, 100, 0, .6);
+}
+
+.protectedkey,
+tr.funcs-hidden-protected td.access {
+  border: 1px outset goldenrod;
+  background: goldenrod;
+  background: rgba(218, 165, 32, .6);
+}
+
+.privatekey,
+tr.funcs-hidden-private td.access {
+  border: 1px outset red;
+  background: red;
+  background: rgba(255, 0, 0, .6);
+}
+
+tr.funcs-hidden-public td.access,
+tr.funcs-hidden-protected td.access,
+tr.funcs-hidden-private td.access {
+  border: 0;
+}
+
+/* The legend checkboxes use these to collapse rows by their accessibility. */
+.func-hide-publickey .public,
+.func-hide-protectedkey .protected,
+.func-hide-privatekey .private {
+  display: none;
+}
+
+/* Initially, these feedback rows should be hidden. */
+.funcs-hidden-public,
+.funcs-hidden-protected,
+.funcs-hidden-private {
+  display: none;
+}
+
+.funcs-hidden-public td.publickey-toggle,
+.funcs-hidden-protected td.protectedkey-toggle,
+.funcs-hidden-private td.privatekey-toggle {
+  /*background-image: url('../images/plus.png');
+  background-repeat: no-repeat;
+  background-position: 5px center;*/
+  padding-right: 0;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+/* And this will make them visible when the functions/props are hidden. */
+.func-hide-publickey .funcs-hidden-public,
+.func-hide-protectedkey .funcs-hidden-protected,
+.func-hide-privatekey .funcs-hidden-private {
+  display: table-row;
+}
+
+.prettyprint {
+  font-size: 14px !important;
+}
+
+pre.prettyprint {
+  display: block;
+  margin: 2px;
+  padding: 4px;
+  background: #EEEEEE;
+  border: 1px solid #CCCCCC;
+}
+
+.view-code {
+  width: 50px;
+  text-align: right;
+}
+
+.view-code a {
+  color: #668CD9;
+}

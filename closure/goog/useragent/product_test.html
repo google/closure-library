@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+  Copyright 2008 Google Inc. All Rights Reserved.
+
+
+-->
+<head>
+<title>Closure Unit Tests - goog.userAgent.product</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.array');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.MockUserAgent');
+  goog.require('goog.userAgent.product');
+</script>
+</head>
+<body>
+<script>
+  var mockAgent;
+
+  function setUp() {
+    mockAgent = new goog.testing.MockUserAgent();
+    mockAgent.install();
+  }
+
+  function updateUserAgentUtils() {
+    goog.userAgent.init_();
+    goog.userAgent.product.init_();
+  }
+
+  // The set of products whose corresponding goog.userAgent.product value is set
+  // in goog.userAgent.product.init_().
+  var DETECTED_BROWSER_KEYS =
+      ['FIREFOX', 'CAMINO', 'IPHONE', 'ANDROID', 'CHROME', 'SAFARI'];
+
+  function assertIsBrowser(browser) {
+    function createDetectedBrowserKey(browser) {
+      switch (browser) {
+        case 'FIREFOX': return 'detectedFirefox_';
+        case 'CAMINO': return 'detectedCamino_';
+        case 'IPHONE': return 'detectedIphone_';
+        case 'ANDROID': return 'detectedAndroid_';
+        case 'CHROME': return 'detectedChrome_';
+        case 'SAFARI': return 'detectedSafari_';
+      }
+      throw Error('Unknown browser: ' + browser);
+    }
+
+    var productKey = createDetectedBrowserKey(browser);
+    assertTrue(goog.userAgent.product[productKey]);
+    // Make sure we don't have any false positives for other browsers.
+    goog.array.forEach(DETECTED_BROWSER_KEYS, function(el) {
+      if (el != browser) {
+        assertFalse('useragent should not match: ' + el,
+            goog.userAgent.product[createDetectedBrowserKey(el)]);
+      }
+    });
+  }
+
+  function checkEachUserAgentDetected(userAgents, browser) {
+    goog.array.forEach(userAgents, function(uaString) {
+      mockAgent.setUserAgentString(uaString);
+      updateUserAgentUtils();
+      assertIsBrowser(browser);
+    });
+  }
+
+  function testInternetExplorer() {
+    assertEquals(goog.userAgent.IE, goog.userAgent.product.IE);
+  }
+
+  function testOpera() {
+    assertEquals(goog.userAgent.OPERA, goog.userAgent.product.OPERA);
+  }
+
+  function testFirefox() {
+    var userAgents = [
+      'Mozilla/6.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; ' +
+          'rv:2.0.0.0) Gecko/20061028 Firefox/3.0',
+      'Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; ' +
+          'rv:1.8.1.4) Gecko/20070515 Firefox/2.0.4'
+    ];
+    checkEachUserAgentDetected(userAgents, 'FIREFOX');
+  }
+
+  function testCamino() {
+    var userAgents = [
+      'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en; rv:1.8.1.11) ' +
+          'Gecko/20071128 Camino/1.5.4',
+      'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.0.10) ' +
+          'Gecko/20070228 Camino/1.0.4'
+    ];
+    checkEachUserAgentDetected(userAgents, 'CAMINO');
+  }
+
+  function testChrome() {
+    var userAgents = [
+      'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) AppleWebKit/525.19 ' +
+          '(KHTML, like Gecko) Chrome/0.2.153.0 Safari/525.19',
+      'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) AppleWebKit/525.13 ' +
+          '(KHTML, like Gecko) Chrome/0.2.149.30 Safari/525.13'
+    ];
+    checkEachUserAgentDetected(userAgents, 'CHROME');
+  }
+
+  function testSafari() {
+    var userAgents = [
+      'Mozilla/5.0 (Windows; U; Windows NT 6.0; pl-PL) AppleWebKit/525.19 ' +
+          '(KHTML, like Gecko) Version/3.1.2 Safari/525.21',
+      'Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10_5_3; en-us) ' +
+          'AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.20'
+    ];
+    checkEachUserAgentDetected(userAgents, 'SAFARI');
+  }
+
+  function testIphone() {
+    var userAgents = [
+      'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ ' +
+          '(KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3',
+      'Mozilla/5.0 (iPod; U; CPU like Mac OS X; en) AppleWebKit/420.1 ' +
+          '(KHTML, like Gecko) Version/3.0 Mobile/3A100a Safari/419.3'
+    ];
+    checkEachUserAgentDetected(userAgents, 'IPHONE');
+  }
+
+  function testAndroid() {
+    var userAgents = [
+      'Mozilla/5.0 (Linux; U; Android 0.5; en-us) AppleWebKit/522+ ' +
+          '(KHTML, like Gecko) Safari/419.3',
+      'Mozilla/5.0 (Linux; U; Android 1.0; en-us; dream) AppleWebKit/525.10+ ' +
+          '(KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2'
+    ];
+    checkEachUserAgentDetected(userAgents, 'ANDROID');
+  }
+
+  function tearDown() {
+    mockAgent.dispose();
+    updateUserAgentUtils();
+  }
+</script>
+</body>
+</html>

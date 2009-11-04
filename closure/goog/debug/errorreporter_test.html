@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+  Copyright 2009 Google Inc. All Rights Reserved.
+
+-->
+<head>
+<title>Closure Unit Tests - goog.debug.ErrorReporter</title>
+<!-- These paths should be relative to the test -->
+<script src="../base.js" type="text/javascript"></script>
+<script type="text/javascript">
+  goog.require('goog.debug.ErrorReporter');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.PropertyReplacer');
+  goog.require('goog.userAgent');
+</script>
+</head>
+<body>
+<script type="text/javascript">
+  MockXhrIo = function() {};
+
+  MockXhrIo.protectEntryPoints = function() {};
+
+  MockXhrIo.lastUrl = null;
+
+  MockXhrIo.send = function(url) {
+    MockXhrIo.lastUrl = url;
+  };
+
+  var stubs = new goog.testing.PropertyReplacer();
+
+  function setUp() {
+    stubs.set(goog.net, 'XhrIo', MockXhrIo);
+  }
+
+  function tearDown() {
+    stubs.reset();
+    MockXhrIo.lastUrl = null;
+  }
+
+  function throwAnErrorWith(script, line, message) {
+    var error = {
+        message: message,
+        fileName: script,
+        lineNumber: line};
+    throw error;
+  }
+
+  function test_nonInternetExplorerSendErrorReport() {
+    stubs.set(goog.userAgent, 'IE', false);
+    stubs.set(goog.global, 'setTimeout',
+        function(fcn, time) {
+          fcn.call();
+        });
+
+    goog.debug.ErrorReporter.install("/errorreporter");
+
+    var errorFunction = goog.bind(
+      throwAnErrorWith, null, "http://www.my.tst/some/bogus.js", 5, "Hello :)");
+
+    try {
+      goog.global.setTimeout(errorFunction, 0);
+    } catch (e) {
+      // Expected. The error is rethrown after sending.
+    }
+
+    assertEquals("/errorreporter?script=bogus.js&error=Hello%20%3A)&line=5",
+        MockXhrIo.lastUrl);
+  }
+
+  function test_internetExplorerSendErrorReport() {
+    stubs.set(goog.userAgent, 'IE', true);
+
+    // Remove test runner's onerror handler so the test doesn't fail.
+    stubs.set(goog.global, 'onerror', null);
+
+    goog.debug.ErrorReporter.install("/errorreporter");
+    goog.global.onerror("Goodbye :(", "http://www.your.tst/more/bogus.js", 22);
+    assertEquals("/errorreporter?script=bogus.js&error=Goodbye%20%3A(&line=22",
+        MockXhrIo.lastUrl);
+  }
+</script>
+</body>
+</html>

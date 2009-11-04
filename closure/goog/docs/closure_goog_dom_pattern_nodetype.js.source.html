@@ -1,0 +1,105 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>nodetype.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_dom_pattern_nodetype.js.html">nodetype.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview DOM pattern to match a node of the given type.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.dom.pattern.NodeType&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom.pattern.AbstractPattern&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom.pattern.MatchType&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Pattern object that matches any node of the given type.
+<a name="line29"></a> * @param {goog.dom.NodeType} nodeType The node type to match.
+<a name="line30"></a> * @constructor
+<a name="line31"></a> * @extends {goog.dom.pattern.AbstractPattern}
+<a name="line32"></a> */
+<a name="line33"></a>goog.dom.pattern.NodeType = function(nodeType) {
+<a name="line34"></a>  /**
+<a name="line35"></a>   * The node type to match.
+<a name="line36"></a>   * @type {goog.dom.NodeType}
+<a name="line37"></a>   * @private
+<a name="line38"></a>   */
+<a name="line39"></a>  this.nodeType_ = nodeType;
+<a name="line40"></a>};
+<a name="line41"></a>goog.inherits(goog.dom.pattern.NodeType, goog.dom.pattern.AbstractPattern);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * Test whether the given token is a text token which matches the string or
+<a name="line46"></a> * regular expression provided in the constructor.
+<a name="line47"></a> * @param {Node} token Token to match against.
+<a name="line48"></a> * @param {goog.dom.TagWalkType} type The type of token.
+<a name="line49"></a> * @return {goog.dom.pattern.MatchType} &lt;code&gt;MATCH&lt;/code&gt; if the pattern
+<a name="line50"></a> *     matches, &lt;code&gt;NO_MATCH&lt;/code&gt; otherwise.
+<a name="line51"></a> */
+<a name="line52"></a>goog.dom.pattern.NodeType.prototype.matchToken = function(token, type) {
+<a name="line53"></a>  return token.nodeType == this.nodeType_ ?
+<a name="line54"></a>      goog.dom.pattern.MatchType.MATCH :
+<a name="line55"></a>      goog.dom.pattern.MatchType.NO_MATCH;
+<a name="line56"></a>};
+</pre>
+
+
+</body>
+</html>

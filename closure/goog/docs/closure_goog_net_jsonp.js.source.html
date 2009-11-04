@@ -1,0 +1,418 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>jsonp.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_net_jsonp.js.html">jsonp.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>// The original file lives here: http://go/cross_domain_channel.js
+<a name="line16"></a>
+<a name="line17"></a>/**
+<a name="line18"></a> * @fileoverview Implements a cross-domain communication channel. A
+<a name="line19"></a> * typical web page is prevented by browser security from sending
+<a name="line20"></a> * request, such as a XMLHttpRequest, to other servers than the ones
+<a name="line21"></a> * from which it came. The Jsonp class provides a workound, by
+<a name="line22"></a> * using dynamically generated script tags. Typical usage:.
+<a name="line23"></a> *
+<a name="line24"></a> * var jsonp = new goog.net.Jsonp(new goog.Uri(&#39;http://my.host.com/servlet&#39;));
+<a name="line25"></a> * var payload = { &#39;foo&#39;: 1, &#39;bar&#39;: true };
+<a name="line26"></a> * jsonp.send(payload, function(reply) { alert(reply) });
+<a name="line27"></a> *
+<a name="line28"></a> * This script works in all browsers that are currently supported by
+<a name="line29"></a> * the Google Maps API, which is IE 6.0+, Firefox 0.8+, Safari 1.2.4+,
+<a name="line30"></a> * Netscape 7.1+, Mozilla 1.4+, Opera 8.02+.
+<a name="line31"></a> *
+<a name="line32"></a> */
+<a name="line33"></a>
+<a name="line34"></a>goog.provide(&#39;goog.net.Jsonp&#39;);
+<a name="line35"></a>
+<a name="line36"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line37"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line38"></a>
+<a name="line39"></a>// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+<a name="line40"></a>//
+<a name="line41"></a>// This class allows us (Google) to send data from non-Google and thus
+<a name="line42"></a>// UNTRUSTED pages to our servers. Under NO CIRCUMSTANCES return
+<a name="line43"></a>// anything sensitive, such as session or cookie specific data. Return
+<a name="line44"></a>// only data that you want parties external to Google to have. Also
+<a name="line45"></a>// NEVER use this method to send data from web pages to untrusted
+<a name="line46"></a>// servers, or redirects to unknown servers (www.google.com/cache,
+<a name="line47"></a>// /q=xx&amp;btnl, /url, www.googlepages.com, etc.)
+<a name="line48"></a>//
+<a name="line49"></a>// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * Creates a new cross domain channel that sends data to the specified
+<a name="line53"></a> * host URL. By default, if no reply arrives within 5s, the channel
+<a name="line54"></a> * assumes the call failed to complete successfully.
+<a name="line55"></a> *
+<a name="line56"></a> * @param {goog.Uri|string} uri The Uri of the server side code that receives
+<a name="line57"></a> *     data posted through this channel (e.g.,
+<a name="line58"></a> *     &quot;http://maps.google.com/maps/geo&quot;).
+<a name="line59"></a> *
+<a name="line60"></a> * @param {string} opt_callbackParamName The parameter name that is used to
+<a name="line61"></a> *     specify the callback. Defaults to &quot;callback&quot;.
+<a name="line62"></a> *
+<a name="line63"></a> * @constructor
+<a name="line64"></a> */
+<a name="line65"></a>goog.net.Jsonp = function(uri, opt_callbackParamName) {
+<a name="line66"></a>  /**
+<a name="line67"></a>   * The uri_ object will be used to encode the paylod that is sent to the
+<a name="line68"></a>   * server.
+<a name="line69"></a>   * @type {goog.Uri}
+<a name="line70"></a>   * @private
+<a name="line71"></a>   */
+<a name="line72"></a>  this.uri_ = new goog.Uri(uri);
+<a name="line73"></a>
+<a name="line74"></a>  /**
+<a name="line75"></a>   * This is the callback parameter name that is added to the uri.
+<a name="line76"></a>   * @type {string}
+<a name="line77"></a>   * @private
+<a name="line78"></a>   */
+<a name="line79"></a>  this.callbackParamName_ = opt_callbackParamName ?
+<a name="line80"></a>      opt_callbackParamName : &#39;callback&#39;;
+<a name="line81"></a>
+<a name="line82"></a>  /**
+<a name="line83"></a>   * The length of time, in milliseconds, this channel is prepared
+<a name="line84"></a>   * to wait for for a request to complete. The default value is 5 seconds.
+<a name="line85"></a>   * @type {number}
+<a name="line86"></a>   * @private
+<a name="line87"></a>   */
+<a name="line88"></a>  this.timeout_ = 5000;
+<a name="line89"></a>};
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * The name of the property of goog.global under which the callback is
+<a name="line94"></a> * stored.
+<a name="line95"></a> */
+<a name="line96"></a>goog.net.Jsonp.CALLBACKS = &#39;_callbacks_&#39;;
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Used to generate unique callback IDs. The counter must be global because
+<a name="line101"></a> * all channels share a common callback object.
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.net.Jsonp.scriptCounter_ = 0;
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Sets the length of time, in milliseconds, this channel is prepared
+<a name="line109"></a> * to wait for for a request to complete. If the call is not competed
+<a name="line110"></a> * within the set time span, it is assumed to have failed. To wait
+<a name="line111"></a> * indefinitely for a request to complete set the timout to a negative
+<a name="line112"></a> * number.
+<a name="line113"></a> *
+<a name="line114"></a> * @param {number} timeout The length of time before calls are
+<a name="line115"></a> * interrupted.
+<a name="line116"></a> */
+<a name="line117"></a>goog.net.Jsonp.prototype.setRequestTimeout = function(timeout) {
+<a name="line118"></a>  this.timeout_ = timeout;
+<a name="line119"></a>};
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Returns the current timeout value, in milliseconds.
+<a name="line124"></a> *
+<a name="line125"></a> * @return {number} The timeout value.
+<a name="line126"></a> */
+<a name="line127"></a>goog.net.Jsonp.prototype.getRequestTimeout = function() {
+<a name="line128"></a>  return this.timeout_;
+<a name="line129"></a>};
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Sends the given payload to the URL specified at the construction
+<a name="line134"></a> * time. The reply is delivered to the given replyCallback. If the
+<a name="line135"></a> * errorCallback is specified and the reply does not arrive within the
+<a name="line136"></a> * timeout period set on this channel, the errorCallback is invoked
+<a name="line137"></a> * with the original payload.
+<a name="line138"></a> *
+<a name="line139"></a> * If no reply callback is specified, then the response is expected to
+<a name="line140"></a> * consist of calls to globally registered functions. No &amp;callback=
+<a name="line141"></a> * URL parameter will be sent in the request, and the script element
+<a name="line142"></a> * will be cleaned up after the timeout.
+<a name="line143"></a> *
+<a name="line144"></a> * @param {Object} payload Name-value pairs.
+<a name="line145"></a> *
+<a name="line146"></a> * @param {Function} opt_replyCallback A function expecting one
+<a name="line147"></a> *     argument, called when the reply arrives, with the response data.
+<a name="line148"></a> *
+<a name="line149"></a> * @param {Function} opt_errorCallback A function expecting one
+<a name="line150"></a> *     argument, called on timeout, with the payload.
+<a name="line151"></a> *
+<a name="line152"></a> * @param {string} opt_callbackParamValue Value to be used as the
+<a name="line153"></a> *     parameter value for the callback parameter (callbackParamName).
+<a name="line154"></a> *     To be used when the value needs to be fixed by the client for a
+<a name="line155"></a> *     particular request, to make use of the cached responses for the request.
+<a name="line156"></a> *     NOTE: If multiple requests are made with the same
+<a name="line157"></a> *     opt_callbackParamValue, only the last call will work whenever the
+<a name="line158"></a> *     response comes back.
+<a name="line159"></a> *
+<a name="line160"></a> * @return {Object?} A request descriptor that may be used to cancel this
+<a name="line161"></a> *     transmission, or null, if the message may not be cancelled.
+<a name="line162"></a> */
+<a name="line163"></a>goog.net.Jsonp.prototype.send = function(payload,
+<a name="line164"></a>                                         opt_replyCallback,
+<a name="line165"></a>                                         opt_errorCallback,
+<a name="line166"></a>                                         opt_callbackParamValue) {
+<a name="line167"></a>
+<a name="line168"></a>  // This is a safeguard that we don&#39;t accidentally call appendChild
+<a name="line169"></a>  // on a null.
+<a name="line170"></a>  if (!document.documentElement.firstChild) {
+<a name="line171"></a>    if (opt_errorCallback) {
+<a name="line172"></a>      opt_errorCallback(payload);
+<a name="line173"></a>    }
+<a name="line174"></a>    return null;
+<a name="line175"></a>  }
+<a name="line176"></a>
+<a name="line177"></a>  var id = opt_callbackParamValue ||
+<a name="line178"></a>      &#39;_&#39; + (goog.net.Jsonp.scriptCounter_++).toString(36) +
+<a name="line179"></a>       goog.now().toString(36);
+<a name="line180"></a>
+<a name="line181"></a>  if (!goog.global[goog.net.Jsonp.CALLBACKS]) {
+<a name="line182"></a>    goog.global[goog.net.Jsonp.CALLBACKS] = {};
+<a name="line183"></a>  }
+<a name="line184"></a>
+<a name="line185"></a>  var script = goog.dom.createElement(&#39;script&#39;);
+<a name="line186"></a>
+<a name="line187"></a>  var timeout = null;
+<a name="line188"></a>  if (this.timeout_ &gt; 0) {
+<a name="line189"></a>    var error = goog.net.Jsonp.newErrorHandler_(id, script, payload,
+<a name="line190"></a>                                                opt_errorCallback);
+<a name="line191"></a>    timeout = goog.global.setTimeout(error, this.timeout_);
+<a name="line192"></a>  }
+<a name="line193"></a>
+<a name="line194"></a>  // Create a new Uri object onto which this payload will be added
+<a name="line195"></a>  var uri = this.uri_.clone();
+<a name="line196"></a>  goog.net.Jsonp.addPayloadToUri_(payload, uri);
+<a name="line197"></a>
+<a name="line198"></a>  if (opt_replyCallback) {
+<a name="line199"></a>    var reply = goog.net.Jsonp.newReplyHandler_(id, script, opt_replyCallback,
+<a name="line200"></a>                                                timeout);
+<a name="line201"></a>    goog.global[goog.net.Jsonp.CALLBACKS][id] = reply;
+<a name="line202"></a>
+<a name="line203"></a>    uri.setParameterValues(this.callbackParamName_,
+<a name="line204"></a>                           goog.net.Jsonp.CALLBACKS + &#39;.&#39; + id);
+<a name="line205"></a>  }
+<a name="line206"></a>
+<a name="line207"></a>  goog.dom.setProperties(script, {
+<a name="line208"></a>    &#39;type&#39;: &#39;text/javascript&#39;,
+<a name="line209"></a>    &#39;id&#39;: id,
+<a name="line210"></a>    &#39;charset&#39;: &#39;UTF-8&#39;,
+<a name="line211"></a>    // NOTE: Safari never loads the script if we don&#39;t set
+<a name="line212"></a>    // the src attribute before appending.
+<a name="line213"></a>    &#39;src&#39;: uri.toString()
+<a name="line214"></a>  });
+<a name="line215"></a>
+<a name="line216"></a>  goog.dom.appendChild(document.getElementsByTagName(&#39;head&#39;)[0], script);
+<a name="line217"></a>  return { id_: id, timeout_: timeout };
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Cancels a given request. The request must be exactly the object returned by
+<a name="line223"></a> * the send method.
+<a name="line224"></a> *
+<a name="line225"></a> * @param {Object} request The request object returned by the send method.
+<a name="line226"></a> */
+<a name="line227"></a>goog.net.Jsonp.prototype.cancel = function(request) {
+<a name="line228"></a>  if (request &amp;&amp; request.id_) {
+<a name="line229"></a>    var scriptNode = goog.dom.getElement(request.id_);
+<a name="line230"></a>
+<a name="line231"></a>    if (scriptNode &amp;&amp; scriptNode.tagName == &#39;SCRIPT&#39; &amp;&amp;
+<a name="line232"></a>        typeof goog.global[goog.net.Jsonp.CALLBACKS][request.id_] ==
+<a name="line233"></a>           &#39;function&#39;) {
+<a name="line234"></a>      request.timeout_ &amp;&amp; goog.global.clearTimeout(request.timeout_);
+<a name="line235"></a>      goog.net.Jsonp.cleanup_(request.id_, scriptNode, false);
+<a name="line236"></a>    }
+<a name="line237"></a>  }
+<a name="line238"></a>};
+<a name="line239"></a>
+<a name="line240"></a>
+<a name="line241"></a>/**
+<a name="line242"></a> * Creates a timeout callback that removes the script node and calls
+<a name="line243"></a> * the given timeoutCallback with the original payload.
+<a name="line244"></a> *
+<a name="line245"></a> * @param {string} id The id of the script node.
+<a name="line246"></a> * @param {Element} scriptNode Script element.
+<a name="line247"></a> * @param {Object} payload The payload that was sent to the server.
+<a name="line248"></a> * @param {Function} opt_errorCallback The function called on timeout.
+<a name="line249"></a> * @return {Function} A zero argument function that handles callback duties.
+<a name="line250"></a> * @private
+<a name="line251"></a> */
+<a name="line252"></a>goog.net.Jsonp.newErrorHandler_ = function(id,
+<a name="line253"></a>                                           scriptNode,
+<a name="line254"></a>                                           payload,
+<a name="line255"></a>                                           opt_errorCallback) {
+<a name="line256"></a>  /**
+<a name="line257"></a>   * When we call across domains with a request, this function is the
+<a name="line258"></a>   * timeout handler. Once it&#39;s done executing the user-specified
+<a name="line259"></a>   * error-handler, it removes the script node and original function.
+<a name="line260"></a>   */
+<a name="line261"></a>  return function() {
+<a name="line262"></a>    goog.net.Jsonp.cleanup_(id, scriptNode, false);
+<a name="line263"></a>    if (opt_errorCallback) {
+<a name="line264"></a>      opt_errorCallback(payload);
+<a name="line265"></a>    }
+<a name="line266"></a>  }
+<a name="line267"></a>};
+<a name="line268"></a>
+<a name="line269"></a>
+<a name="line270"></a>/**
+<a name="line271"></a> * Creates a reply callback that removes the script node and calls the
+<a name="line272"></a> * given replyCallback with data returned by the server.
+<a name="line273"></a> *
+<a name="line274"></a> * @param {string} id The id of the script node.
+<a name="line275"></a> * @param {Element} scriptNode Script element.
+<a name="line276"></a> * @param {Function} replyCallback The function called on reply.
+<a name="line277"></a> * @param {Object} timeout A timeout call that needs to be cleared.
+<a name="line278"></a> * @return {Function} A reply callback function.
+<a name="line279"></a> * @private
+<a name="line280"></a> */
+<a name="line281"></a>goog.net.Jsonp.newReplyHandler_ = function(id,
+<a name="line282"></a>                                           scriptNode,
+<a name="line283"></a>                                           replyCallback,
+<a name="line284"></a>                                           timeout) {
+<a name="line285"></a>  /**
+<a name="line286"></a>   * This function is the handler for the all-is-well response. It
+<a name="line287"></a>   * clears the error timeout handler, calls the user&#39;s handler, then
+<a name="line288"></a>   * removes the script node and itself.
+<a name="line289"></a>   *
+<a name="line290"></a>   * @param {Object} var_args The response data sent from the server.
+<a name="line291"></a>   */
+<a name="line292"></a>  return function(var_args) {
+<a name="line293"></a>    goog.global.clearTimeout(timeout);
+<a name="line294"></a>    goog.net.Jsonp.cleanup_(id, scriptNode, true);
+<a name="line295"></a>    replyCallback.apply(undefined, arguments);
+<a name="line296"></a>  }
+<a name="line297"></a>};
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * Removes the script node and reply handler with the given id.
+<a name="line302"></a> *
+<a name="line303"></a> * @param {string} id The id of the script node to be removed.
+<a name="line304"></a> * @param {Node} scriptNode The node to be removed.
+<a name="line305"></a> * @param {boolean} deleteReplyHandler If true, delete the reply handler
+<a name="line306"></a> *     instead of setting it to nullFunction (if we know the callback could
+<a name="line307"></a> *     never be called again).
+<a name="line308"></a> * @private
+<a name="line309"></a> */
+<a name="line310"></a>goog.net.Jsonp.cleanup_ = function(id, scriptNode, deleteReplyHandler) {
+<a name="line311"></a>  // Do this after a delay (removing the script node of a running script can
+<a name="line312"></a>  // confuse older IEs).
+<a name="line313"></a>  goog.global.setTimeout(function() {
+<a name="line314"></a>    goog.dom.removeNode(scriptNode);
+<a name="line315"></a>  }, 0);
+<a name="line316"></a>
+<a name="line317"></a>  if (goog.global[goog.net.Jsonp.CALLBACKS][id]) {
+<a name="line318"></a>    if (deleteReplyHandler) {
+<a name="line319"></a>      delete goog.global[goog.net.Jsonp.CALLBACKS][id];
+<a name="line320"></a>    } else {
+<a name="line321"></a>      // Removing the script tag doesn&#39;t necessarily prevent the script
+<a name="line322"></a>      // from firing, so we make the callback a noop.
+<a name="line323"></a>      goog.global[goog.net.Jsonp.CALLBACKS][id] = goog.nullFunction;
+<a name="line324"></a>    }
+<a name="line325"></a>  }
+<a name="line326"></a>};
+<a name="line327"></a>
+<a name="line328"></a>
+<a name="line329"></a>/**
+<a name="line330"></a> * Returns URL encoded payload. The payload is assumed to be a list of
+<a name="line331"></a> * value name pairs, in the form {&quot;foo&quot;: 1, &quot;bar&quot;: true, ...}.
+<a name="line332"></a> *
+<a name="line333"></a> * &lt;p&gt;The method uses hasOwnProperty() to assure the properties are on the
+<a name="line334"></a> * object, not on its prototype.
+<a name="line335"></a> *
+<a name="line336"></a> * @param {Object} payload A list of value name pairs to be encoded.
+<a name="line337"></a> *     A value may be specified as an array, in which case a query parameter
+<a name="line338"></a> *     will be created for each value, e.g.:
+<a name="line339"></a> *     {&quot;foo&quot;: [1,2]} will encode to &quot;foo=1&amp;foo=2&quot;.
+<a name="line340"></a> *
+<a name="line341"></a> * @param {goog.Uri} uri A Uri object onto which the payload key value pairs
+<a name="line342"></a> *     will be encoded.
+<a name="line343"></a> *
+<a name="line344"></a> * @return {goog.Uri} A reference to the Uri sent as a parameter.
+<a name="line345"></a> * @private
+<a name="line346"></a> */
+<a name="line347"></a>goog.net.Jsonp.addPayloadToUri_ = function(payload, uri) {
+<a name="line348"></a>  for (var name in payload) {
+<a name="line349"></a>    // NOTE: Safari/1.3 doesn&#39;t have hasOwnProperty(). In that
+<a name="line350"></a>    // case, we iterate over all properties as a very lame workaround.
+<a name="line351"></a>    if (!payload.hasOwnProperty || payload.hasOwnProperty(name)) {
+<a name="line352"></a>      uri.setParameterValues(name, payload[name]);
+<a name="line353"></a>    }
+<a name="line354"></a>  }
+<a name="line355"></a>  return uri;
+<a name="line356"></a>};
+<a name="line357"></a>
+<a name="line358"></a>
+<a name="line359"></a>// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+<a name="line360"></a>//
+<a name="line361"></a>// This class allows us (Google) to send data from non-Google and thus
+<a name="line362"></a>// UNTRUSTED pages to our servers. Under NO CIRCUMSTANCES return
+<a name="line363"></a>// anything sensitive, such as session or cookie specific data. Return
+<a name="line364"></a>// only data that you want parties external to Google to have. Also
+<a name="line365"></a>// NEVER use this method to send data from web pages to untrusted
+<a name="line366"></a>// servers, or redirects to unknown servers (www.google.com/cache,
+<a name="line367"></a>// /q=xx&amp;btnl, /url, www.googlepages.com, etc.)
+<a name="line368"></a>//
+<a name="line369"></a>// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tabrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_tabrenderer.js.html">tabrenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2008 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Default renderer for {@link goog.ui.Tab}s.  Based on the
+<a name="line17"></a> * original {@code TabPane} code.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.TabRenderer&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.dom.a11y.Role&#39;);
+<a name="line24"></a>goog.require(&#39;goog.ui.Component.State&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.ControlRenderer&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Default renderer for {@link goog.ui.Tab}s, based on the {@code TabPane} code.
+<a name="line31"></a> * @constructor
+<a name="line32"></a> * @extends {goog.ui.ControlRenderer}
+<a name="line33"></a> */
+<a name="line34"></a>goog.ui.TabRenderer = function() {
+<a name="line35"></a>  goog.ui.ControlRenderer.call(this);
+<a name="line36"></a>};
+<a name="line37"></a>goog.inherits(goog.ui.TabRenderer, goog.ui.ControlRenderer);
+<a name="line38"></a>goog.addSingletonGetter(goog.ui.TabRenderer);
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/**
+<a name="line42"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line43"></a> * by this renderer.
+<a name="line44"></a> * @type {string}
+<a name="line45"></a> */
+<a name="line46"></a>goog.ui.TabRenderer.CSS_CLASS = goog.getCssName(&#39;goog-tab&#39;);
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>/**
+<a name="line50"></a> * Returns the CSS class name to be applied to the root element of all tabs
+<a name="line51"></a> * rendered or decorated using this renderer.
+<a name="line52"></a> * @return {string} Renderer-specific CSS class name.
+<a name="line53"></a> * @override
+<a name="line54"></a> */
+<a name="line55"></a>goog.ui.TabRenderer.prototype.getCssClass = function() {
+<a name="line56"></a>  return goog.ui.TabRenderer.CSS_CLASS;
+<a name="line57"></a>};
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * Returns the ARIA role to be applied to the tab element.
+<a name="line62"></a> * See http://wiki/Main/ARIA for more info.
+<a name="line63"></a> * @return {goog.dom.a11y.Role} ARIA role.
+<a name="line64"></a> * @override
+<a name="line65"></a> */
+<a name="line66"></a>goog.ui.TabRenderer.prototype.getAriaRole = function() {
+<a name="line67"></a>  return goog.dom.a11y.Role.TAB;
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Returns the tab&#39;s contents wrapped in a DIV, with the renderer&#39;s own CSS
+<a name="line73"></a> * class and additional state-specific classes applied to it.  Creates the
+<a name="line74"></a> * following DOM structure:
+<a name="line75"></a> * &lt;pre&gt;
+<a name="line76"></a> *   &lt;div class=&quot;goog-tab&quot; title=&quot;Title&quot;&gt;Content&lt;/div&gt;
+<a name="line77"></a> * &lt;/pre&gt;
+<a name="line78"></a> * @param {goog.ui.Control} tab Tab to render.
+<a name="line79"></a> * @return {Element} Root element for the tab.
+<a name="line80"></a> * @override
+<a name="line81"></a> */
+<a name="line82"></a>goog.ui.TabRenderer.prototype.createDom = function(tab) {
+<a name="line83"></a>  var element = goog.ui.TabRenderer.superClass_.createDom.call(this, tab);
+<a name="line84"></a>
+<a name="line85"></a>  var tooltip = tab.getTooltip();
+<a name="line86"></a>  if (tooltip) {
+<a name="line87"></a>    // Only update the element if the tab has a tooltip.
+<a name="line88"></a>    this.setTooltip(element, tooltip);
+<a name="line89"></a>  }
+<a name="line90"></a>
+<a name="line91"></a>  return element;
+<a name="line92"></a>};
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * Decorates the element with the tab.  Initializes the tab&#39;s ID, content,
+<a name="line97"></a> * tooltip, and state based on the ID of the element, its title, child nodes,
+<a name="line98"></a> * and CSS classes, respectively.  Returns the element.
+<a name="line99"></a> * @param {goog.ui.Control} tab Tab to decorate the element.
+<a name="line100"></a> * @param {Element} element Element to decorate.
+<a name="line101"></a> * @return {Element} Decorated element.
+<a name="line102"></a> * @override
+<a name="line103"></a> */
+<a name="line104"></a>goog.ui.TabRenderer.prototype.decorate = function(tab, element) {
+<a name="line105"></a>  element = goog.ui.TabRenderer.superClass_.decorate.call(this, tab, element);
+<a name="line106"></a>
+<a name="line107"></a>  var tooltip = this.getTooltip(element);
+<a name="line108"></a>  if (tooltip) {
+<a name="line109"></a>    // Only update the tab if the element has a tooltip.
+<a name="line110"></a>    tab.setTooltipInternal(tooltip);
+<a name="line111"></a>  }
+<a name="line112"></a>
+<a name="line113"></a>  // If the tab is selected and hosted in a tab bar, update the tab bar&#39;s
+<a name="line114"></a>  // selection model.
+<a name="line115"></a>  if (tab.isSelected()) {
+<a name="line116"></a>    var tabBar = tab.getParent();
+<a name="line117"></a>    if (tabBar &amp;&amp; goog.isFunction(tabBar.setSelectedTab)) {
+<a name="line118"></a>      // We need to temporarily deselect the tab, so the tab bar can re-select
+<a name="line119"></a>      // it and thereby correctly initialize its state.  We use the protected
+<a name="line120"></a>      // setState() method to avoid dispatching useless events.
+<a name="line121"></a>      tab.setState(goog.ui.Component.State.SELECTED, false);
+<a name="line122"></a>      tabBar.setSelectedTab(tab);
+<a name="line123"></a>    }
+<a name="line124"></a>  }
+<a name="line125"></a>
+<a name="line126"></a>  return element;
+<a name="line127"></a>};
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Takes a tab&#39;s root element, and returns its tooltip text, or the empty
+<a name="line132"></a> * string if the element has no tooltip.
+<a name="line133"></a> * @param {Element} element The tab&#39;s root element.
+<a name="line134"></a> * @return {string} The tooltip text (empty string if none).
+<a name="line135"></a> */
+<a name="line136"></a>goog.ui.TabRenderer.prototype.getTooltip = function(element) {
+<a name="line137"></a>  return element.title || &#39;&#39;;
+<a name="line138"></a>};
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * Takes a tab&#39;s root element and a tooltip string, and updates the element
+<a name="line143"></a> * with the new tooltip.  If the new tooltip is null or undefined, sets the
+<a name="line144"></a> * element&#39;s title to the empty string.
+<a name="line145"></a> * @param {Element?} element The tab&#39;s root element.
+<a name="line146"></a> * @param {string|null|undefined} tooltip New tooltip text (if any).
+<a name="line147"></a> */
+<a name="line148"></a>goog.ui.TabRenderer.prototype.setTooltip = function(element, tooltip) {
+<a name="line149"></a>  if (element) {
+<a name="line150"></a>    element.title = tooltip || &#39;&#39;;
+<a name="line151"></a>  }
+<a name="line152"></a>};
+</pre>
+
+
+</body>
+</html>

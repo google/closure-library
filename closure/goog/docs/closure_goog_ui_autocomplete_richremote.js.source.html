@@ -1,0 +1,156 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>richremote.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_autocomplete_richremote.js.html">richremote.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Factory class to create a rich autocomplete that will match
+<a name="line17"></a> * from an array of data provided via ajax.  The server returns a complex data
+<a name="line18"></a> * structure that is used with client-side javascript functions to render the
+<a name="line19"></a> * results.
+<a name="line20"></a> *
+<a name="line21"></a> * The server sends a list of the form:
+<a name="line22"></a> *   [[&quot;type1&quot;, {...}, {...}, ...], [&quot;type2&quot;, {...}, {...}, ...], ...]
+<a name="line23"></a> * The first element of each sublist is a string designating the type of the
+<a name="line24"></a> * hashes in the sublist, each of which represents one match.  The type string
+<a name="line25"></a> * must be the name of a function(item) which converts the hash into a rich
+<a name="line26"></a> * row that contains both a render(node, token) and a select(target) method.
+<a name="line27"></a> * The render method is called by the renderer when rendering the rich row,
+<a name="line28"></a> * and the select method is called by the RichInputHandler when the rich row is
+<a name="line29"></a> * selected.
+<a name="line30"></a> *
+<a name="line31"></a> */
+<a name="line32"></a>
+<a name="line33"></a>goog.provide(&#39;goog.ui.AutoComplete.RichRemote&#39;);
+<a name="line34"></a>
+<a name="line35"></a>goog.require(&#39;goog.ui.AutoComplete&#39;);
+<a name="line36"></a>goog.require(&#39;goog.ui.AutoComplete.Remote&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.AutoComplete.Renderer&#39;);
+<a name="line38"></a>goog.require(&#39;goog.ui.AutoComplete.RichInputHandler&#39;);
+<a name="line39"></a>goog.require(&#39;goog.ui.AutoComplete.RichRemoteArrayMatcher&#39;);
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * Factory class to create a rich autocomplete widget that autocompletes an
+<a name="line45"></a> * inputbox or textarea from data provided via ajax.  The server returns a
+<a name="line46"></a> * complex data structure that is used with client-side javascript functions to
+<a name="line47"></a> * render the results.
+<a name="line48"></a> * @param {string} url The Uri which generates the auto complete matches.
+<a name="line49"></a> * @param {Element} input Input element or text area.
+<a name="line50"></a> * @param {boolean} opt_multi Whether to allow multiple entries; defaults
+<a name="line51"></a> *     to false.
+<a name="line52"></a> * @param {boolean} opt_useSimilar Whether to use similar matches; e.g.
+<a name="line53"></a> *     &quot;gost&quot; =&gt; &quot;ghost&quot;.
+<a name="line54"></a> * @constructor
+<a name="line55"></a> * @extends {goog.ui.AutoComplete.Remote}
+<a name="line56"></a> */
+<a name="line57"></a>goog.ui.AutoComplete.RichRemote = function(url, input, opt_multi,
+<a name="line58"></a>    opt_useSimilar) {
+<a name="line59"></a>  // Create a custom renderer that renders rich rows.  The renderer calls
+<a name="line60"></a>  // row.render(node, token) for each row.
+<a name="line61"></a>  var customRenderer = {};
+<a name="line62"></a>  customRenderer.renderRow = function(row, token, node) {
+<a name="line63"></a>    return row.data.render(node, token);
+<a name="line64"></a>  };
+<a name="line65"></a>
+<a name="line66"></a>  /**
+<a name="line67"></a>   * A standard renderer that uses a custom row renderer to display the
+<a name="line68"></a>   * rich rows generated by this autocomplete widget.
+<a name="line69"></a>   * @type {goog.ui.AutoComplete.Renderer}
+<a name="line70"></a>   * @private
+<a name="line71"></a>   */
+<a name="line72"></a>  var renderer = new goog.ui.AutoComplete.Renderer(null, customRenderer);
+<a name="line73"></a>  this.renderer_ = renderer;
+<a name="line74"></a>
+<a name="line75"></a>  /**
+<a name="line76"></a>   * A remote matcher that parses rich results returned by the server.
+<a name="line77"></a>   * @type {goog.ui.AutoComplete.RichRemoteArrayMatcher}
+<a name="line78"></a>   * @private
+<a name="line79"></a>   */
+<a name="line80"></a>  var matcher = new goog.ui.AutoComplete.RichRemoteArrayMatcher(url,
+<a name="line81"></a>      !opt_useSimilar);
+<a name="line82"></a>  this.matcher_ = matcher;
+<a name="line83"></a>
+<a name="line84"></a>  /**
+<a name="line85"></a>   * An input handler that calls select on a row when it is selected.
+<a name="line86"></a>   * @type {goog.ui.AutoComplete.RichInputHandler}
+<a name="line87"></a>   * @private
+<a name="line88"></a>   */
+<a name="line89"></a>  var inputhandler = new goog.ui.AutoComplete.RichInputHandler(null, null,
+<a name="line90"></a>      !!opt_multi, 300);
+<a name="line91"></a>
+<a name="line92"></a>  // Create the widget and connect it to the input handler.
+<a name="line93"></a>  goog.ui.AutoComplete.call(this, matcher, renderer, inputhandler);
+<a name="line94"></a>  inputhandler.attachAutoComplete(this);
+<a name="line95"></a>  inputhandler.attachInputs(input);
+<a name="line96"></a>};
+<a name="line97"></a>goog.inherits(goog.ui.AutoComplete.RichRemote, goog.ui.AutoComplete.Remote);
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Set the filter that is called before the array matches are returned.
+<a name="line102"></a> * @param {Function} rowFilter A function(rows) that returns an array of rows as
+<a name="line103"></a> *     a subset of the rows input array.
+<a name="line104"></a> */
+<a name="line105"></a>goog.ui.AutoComplete.RichRemote.prototype.setRowFilter = function(rowFilter) {
+<a name="line106"></a>  this.matcher_.setRowFilter(rowFilter);
+<a name="line107"></a>};
+</pre>
+
+
+</body>
+</html>

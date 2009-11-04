@@ -1,0 +1,618 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>debugwindow.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_debug_debugwindow.js.html">debugwindow.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the DebugWindow class. Please minimize
+<a name="line17"></a> * dependencies this file has on other closure classes as any dependency it
+<a name="line18"></a> * takes won&#39;t be able to use the logging infrastructure.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.debug.DebugWindow&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.debug.HtmlFormatter&#39;);
+<a name="line25"></a>goog.require(&#39;goog.debug.LogManager&#39;);
+<a name="line26"></a>goog.require(&#39;goog.structs.CircularBuffer&#39;);
+<a name="line27"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Provides a debug DebugWindow that is bound to the goog.debug.Logger.
+<a name="line33"></a> * It handles log messages and writes them to the DebugWindow. This doesn&#39;t
+<a name="line34"></a> * provide a lot of functionality that the old Gmail logging infrastructure
+<a name="line35"></a> * provided like saving debug logs for exporting to the server. Now that we
+<a name="line36"></a> * have an event-based logging infrastructure, we can encapsulate that
+<a name="line37"></a> * functionality in a separate class.
+<a name="line38"></a> *
+<a name="line39"></a> * @constructor
+<a name="line40"></a> * @param {string} opt_identifier Identifier for this logging class.
+<a name="line41"></a> * @param {string} opt_prefix Prefix prepended to messages.
+<a name="line42"></a> */
+<a name="line43"></a>goog.debug.DebugWindow = function(opt_identifier, opt_prefix) {
+<a name="line44"></a>  /**
+<a name="line45"></a>   * Identifier for this logging class
+<a name="line46"></a>   * @type {string}
+<a name="line47"></a>   * @protected
+<a name="line48"></a>   * @suppress {underscore}
+<a name="line49"></a>   */
+<a name="line50"></a>  this.identifier_ = opt_identifier || &#39;&#39;;
+<a name="line51"></a>
+<a name="line52"></a>  /**
+<a name="line53"></a>   * Optional prefix to be prepended to error strings
+<a name="line54"></a>   * @type {string}
+<a name="line55"></a>   * @private
+<a name="line56"></a>   */
+<a name="line57"></a>  this.prefix_ = opt_prefix || &#39;&#39;;
+<a name="line58"></a>
+<a name="line59"></a>  /**
+<a name="line60"></a>   * Array used to buffer log output
+<a name="line61"></a>   * @type {Array}
+<a name="line62"></a>   * @protected
+<a name="line63"></a>   * @suppress {underscore}
+<a name="line64"></a>   */
+<a name="line65"></a>  this.outputBuffer_ = [];
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * Buffer for saving the last 1000 messages
+<a name="line69"></a>   * @type {goog.structs.CircularBuffer}
+<a name="line70"></a>   * @private
+<a name="line71"></a>   */
+<a name="line72"></a>  this.savedMessages_ =
+<a name="line73"></a>      new goog.structs.CircularBuffer(goog.debug.DebugWindow.MAX_SAVED);
+<a name="line74"></a>
+<a name="line75"></a>  /**
+<a name="line76"></a>   * Save the publish handler so it can be removed
+<a name="line77"></a>   * @type {Function}
+<a name="line78"></a>   * @private
+<a name="line79"></a>   */
+<a name="line80"></a>  this.publishHandler_ = goog.bind(this.addLogRecord, this);
+<a name="line81"></a>
+<a name="line82"></a>  /**
+<a name="line83"></a>   * Formatter for formatted output
+<a name="line84"></a>   * @type {goog.debug.Formatter}
+<a name="line85"></a>   * @private
+<a name="line86"></a>   */
+<a name="line87"></a>  this.formatter_ = new goog.debug.HtmlFormatter(this.prefix_);
+<a name="line88"></a>
+<a name="line89"></a>  /**
+<a name="line90"></a>   * Loggers that we shouldn&#39;t output
+<a name="line91"></a>   * @type {Object}
+<a name="line92"></a>   * @private
+<a name="line93"></a>   */
+<a name="line94"></a>  this.filteredLoggers_ = {};
+<a name="line95"></a>
+<a name="line96"></a>  // enable by default
+<a name="line97"></a>  this.setCapturing(true);
+<a name="line98"></a>
+<a name="line99"></a>  /**
+<a name="line100"></a>   * Whether we are currently enabled. When the DebugWindow is enabled, it tries
+<a name="line101"></a>   * to keep its window open. When it&#39;s disabled, it can still be capturing log
+<a name="line102"></a>   * output if, but it won&#39;t try to write them to the DebugWindow window until
+<a name="line103"></a>   * it&#39;s enabled.
+<a name="line104"></a>   * @type {boolean}
+<a name="line105"></a>   * @private
+<a name="line106"></a>   */
+<a name="line107"></a>  this.enabled_ = goog.debug.DebugWindow.isEnabled(this.identifier_);
+<a name="line108"></a>
+<a name="line109"></a>  // timer to save the DebugWindow&#39;s window position in a cookie
+<a name="line110"></a>  goog.global.setInterval(goog.bind(this.saveWindowPositionSize_, this), 7500);
+<a name="line111"></a>};
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * Max number of messages to be saved
+<a name="line116"></a> * @type {number}
+<a name="line117"></a> */
+<a name="line118"></a>goog.debug.DebugWindow.MAX_SAVED = 500;
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * How long to keep the cookies for in milliseconds
+<a name="line123"></a> * @type {number}
+<a name="line124"></a> */
+<a name="line125"></a>goog.debug.DebugWindow.COOKIE_TIME = 30 * 24 * 60 * 60 * 1000; // 30-days
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * HTML string printed when the debug window opens
+<a name="line130"></a> * @type {string}
+<a name="line131"></a> * @protected
+<a name="line132"></a> */
+<a name="line133"></a>goog.debug.DebugWindow.prototype.welcomeMessage = &#39;LOGGING&#39;;
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Reference to debug window
+<a name="line137"></a> * @type {Window?}
+<a name="line138"></a> * @protected
+<a name="line139"></a> * @suppress {underscore}
+<a name="line140"></a> */
+<a name="line141"></a>goog.debug.DebugWindow.prototype.win_ = null;
+<a name="line142"></a>
+<a name="line143"></a>/**
+<a name="line144"></a> * In the process of opening the window
+<a name="line145"></a> * @type {boolean}
+<a name="line146"></a> * @private
+<a name="line147"></a> */
+<a name="line148"></a>goog.debug.DebugWindow.prototype.winOpening_ = false;
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Whether we are currently capturing logger output.
+<a name="line152"></a> *
+<a name="line153"></a> * @type {boolean}
+<a name="line154"></a> * @private
+<a name="line155"></a> */
+<a name="line156"></a>goog.debug.DebugWindow.prototype.isCapturing_ = false;
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * Whether we already showed an alert that the DebugWindow was blocked.
+<a name="line161"></a> * @type {boolean}
+<a name="line162"></a> * @private
+<a name="line163"></a> */
+<a name="line164"></a>goog.debug.DebugWindow.showedBlockedAlert_ = false;
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Reference to timeout used to buffer the output stream.
+<a name="line169"></a> * @type {number?}
+<a name="line170"></a> * @private
+<a name="line171"></a> */
+<a name="line172"></a>goog.debug.DebugWindow.prototype.bufferTimeout_ = null;
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * Timestamp for the last time the log was written to.
+<a name="line177"></a> * @type {number}
+<a name="line178"></a> * @protected
+<a name="line179"></a> * @suppress {underscore}
+<a name="line180"></a> */
+<a name="line181"></a>goog.debug.DebugWindow.prototype.lastCall_ = goog.now();
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * Sets the welcome message shown when the window is first opened or reset.
+<a name="line186"></a> *
+<a name="line187"></a> * @param {string} msg An HTML string.
+<a name="line188"></a> */
+<a name="line189"></a>goog.debug.DebugWindow.prototype.setWelcomeMessage = function(msg) {
+<a name="line190"></a>  this.welcomeMessage = msg;
+<a name="line191"></a>};
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>/**
+<a name="line195"></a> * Initializes the debug window.
+<a name="line196"></a> */
+<a name="line197"></a>goog.debug.DebugWindow.prototype.init = function() {
+<a name="line198"></a>  if (this.enabled_) {
+<a name="line199"></a>    this.openWindow_();
+<a name="line200"></a>  }
+<a name="line201"></a>};
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Whether the DebugWindow is enabled. When the DebugWindow is enabled, it
+<a name="line206"></a> * tries to keep its window open and logs all messages to the window.  When the
+<a name="line207"></a> * DebugWindow is disabled, it stops logging messages to its window.
+<a name="line208"></a> *
+<a name="line209"></a> * @return {boolean} Whether the DebugWindow is enabled.
+<a name="line210"></a> */
+<a name="line211"></a>goog.debug.DebugWindow.prototype.isEnabled = function() {
+<a name="line212"></a>  return this.enabled_;
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Sets whether the DebugWindow is enabled. When the DebugWindow is enabled, it
+<a name="line218"></a> * tries to keep its window open and log all messages to the window. When the
+<a name="line219"></a> * DebugWindow is disabled, it stops logging messages to its window. The
+<a name="line220"></a> * DebugWindow also saves this state to a cookie so that it&#39;s persisted across
+<a name="line221"></a> * application refreshes.
+<a name="line222"></a> * @param {boolean} enable Whether the DebugWindow is enabled.
+<a name="line223"></a> */
+<a name="line224"></a>goog.debug.DebugWindow.prototype.setEnabled = function(enable) {
+<a name="line225"></a>  this.enabled_ = enable;
+<a name="line226"></a>
+<a name="line227"></a>  if (this.enabled_) {
+<a name="line228"></a>    this.openWindow_();
+<a name="line229"></a>
+<a name="line230"></a>    if (this.win_) {
+<a name="line231"></a>      this.writeInitialDocument_();
+<a name="line232"></a>    }
+<a name="line233"></a>  }
+<a name="line234"></a>
+<a name="line235"></a>  this.setCookie_(&#39;enabled&#39;, enable ? &#39;1&#39; : &#39;0&#39;);
+<a name="line236"></a>};
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>/**
+<a name="line240"></a> * Whether we are currently capturing logger output.
+<a name="line241"></a> * @return {boolean} whether we are currently capturing logger output.
+<a name="line242"></a> */
+<a name="line243"></a>goog.debug.DebugWindow.prototype.isCapturing = function() {
+<a name="line244"></a>  return this.isCapturing_;
+<a name="line245"></a>};
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * Sets whether we are currently capturing logger output.
+<a name="line250"></a> * @param {boolean} capturing Whether to capture logger output.
+<a name="line251"></a> */
+<a name="line252"></a>goog.debug.DebugWindow.prototype.setCapturing = function(capturing) {
+<a name="line253"></a>  if (capturing == this.isCapturing_) {
+<a name="line254"></a>    return;
+<a name="line255"></a>  }
+<a name="line256"></a>  this.isCapturing_ = capturing;
+<a name="line257"></a>
+<a name="line258"></a>  // attach or detach handler from the root logger
+<a name="line259"></a>  var rootLogger = goog.debug.LogManager.getRoot();
+<a name="line260"></a>  if (capturing) {
+<a name="line261"></a>    rootLogger.addHandler(this.publishHandler_);
+<a name="line262"></a>  } else {
+<a name="line263"></a>    rootLogger.removeHandler(this.publishHandler_);
+<a name="line264"></a>  }
+<a name="line265"></a>};
+<a name="line266"></a>
+<a name="line267"></a>
+<a name="line268"></a>/**
+<a name="line269"></a> * Gets the formatter for outputting to the debug window. The default formatter
+<a name="line270"></a> * is an instance of goog.debug.HtmlFormatter
+<a name="line271"></a> * @return {goog.debug.Formatter} The formatter in use.
+<a name="line272"></a> */
+<a name="line273"></a>goog.debug.DebugWindow.prototype.getFormatter = function() {
+<a name="line274"></a>  return this.formatter_;
+<a name="line275"></a>};
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a>/**
+<a name="line279"></a> * Sets the formatter for outputting to the debug window.
+<a name="line280"></a> * @param {goog.debug.Formatter} formatter The formatter to use.
+<a name="line281"></a> */
+<a name="line282"></a>goog.debug.DebugWindow.prototype.setFormatter = function(formatter) {
+<a name="line283"></a>  this.formatter_ = formatter;
+<a name="line284"></a>};
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>/**
+<a name="line288"></a> * Adds a separator to the debug window.
+<a name="line289"></a> */
+<a name="line290"></a>goog.debug.DebugWindow.prototype.addSeparator = function() {
+<a name="line291"></a>  this.write_(&#39;&lt;hr&gt;&#39;);
+<a name="line292"></a>};
+<a name="line293"></a>
+<a name="line294"></a>
+<a name="line295"></a>/**
+<a name="line296"></a> * Clears the contents of the debug window
+<a name="line297"></a> * @protected
+<a name="line298"></a> * @suppress {underscore}
+<a name="line299"></a> */
+<a name="line300"></a>goog.debug.DebugWindow.prototype.clear_ = function() {
+<a name="line301"></a>  this.savedMessages_.clear();
+<a name="line302"></a>  if (this.win_) {
+<a name="line303"></a>    this.writeInitialDocument_();
+<a name="line304"></a>  }
+<a name="line305"></a>};
+<a name="line306"></a>
+<a name="line307"></a>
+<a name="line308"></a>/**
+<a name="line309"></a> * Adds a log record.
+<a name="line310"></a> * @param {goog.debug.LogRecord} logRecord the LogRecord.
+<a name="line311"></a> */
+<a name="line312"></a>goog.debug.DebugWindow.prototype.addLogRecord = function(logRecord) {
+<a name="line313"></a>  if (this.filteredLoggers_[logRecord.getLoggerName()]) {
+<a name="line314"></a>    return;
+<a name="line315"></a>  }
+<a name="line316"></a>  var html = this.formatter_.formatRecord(logRecord);
+<a name="line317"></a>  this.write_(html);
+<a name="line318"></a>};
+<a name="line319"></a>
+<a name="line320"></a>
+<a name="line321"></a>/**
+<a name="line322"></a> * Writes a message to the log, possibly opening up the window if it&#39;s enabled,
+<a name="line323"></a> * or saving it if it&#39;s disabled.
+<a name="line324"></a> * @param {string} html The HTML to write.
+<a name="line325"></a> * @private
+<a name="line326"></a> */
+<a name="line327"></a>goog.debug.DebugWindow.prototype.write_ = function(html) {
+<a name="line328"></a>  // If the logger is enabled, open window and write html message to log
+<a name="line329"></a>  // otherwise save it
+<a name="line330"></a>  if (this.enabled_) {
+<a name="line331"></a>    this.openWindow_();
+<a name="line332"></a>    this.savedMessages_.add(html);
+<a name="line333"></a>    this.writeToLog_(html);
+<a name="line334"></a>  } else {
+<a name="line335"></a>    this.savedMessages_.add(html);
+<a name="line336"></a>  }
+<a name="line337"></a>};
+<a name="line338"></a>
+<a name="line339"></a>/**
+<a name="line340"></a> * Write to the buffer.  If a message hasn&#39;t been sent for more than 750ms just
+<a name="line341"></a> * write, otherwise delay for a minimum of 250ms.
+<a name="line342"></a> * @param {string} html HTML to post to the log.
+<a name="line343"></a> * @private
+<a name="line344"></a> */
+<a name="line345"></a>goog.debug.DebugWindow.prototype.writeToLog_ = function(html) {
+<a name="line346"></a>  this.outputBuffer_.push(html);
+<a name="line347"></a>  goog.global.clearTimeout(this.bufferTimeout_);
+<a name="line348"></a>
+<a name="line349"></a>  if (goog.now() - this.lastCall_ &gt; 750) {
+<a name="line350"></a>    this.writeBufferToLog_();
+<a name="line351"></a>  } else {
+<a name="line352"></a>    this.bufferTimeout_ =
+<a name="line353"></a>        goog.global.setTimeout(goog.bind(this.writeBufferToLog_, this), 250);
+<a name="line354"></a>  }
+<a name="line355"></a>};
+<a name="line356"></a>
+<a name="line357"></a>
+<a name="line358"></a>/**
+<a name="line359"></a> * Write to the log and maybe scroll into view
+<a name="line360"></a> * @protected
+<a name="line361"></a> * @suppress {underscore}
+<a name="line362"></a> */
+<a name="line363"></a>goog.debug.DebugWindow.prototype.writeBufferToLog_ = function() {
+<a name="line364"></a>  this.lastCall_ = goog.now();
+<a name="line365"></a>  if (this.win_) {
+<a name="line366"></a>    var body = this.win_.document.body;
+<a name="line367"></a>    var scroll = body &amp;&amp;
+<a name="line368"></a>               body.scrollHeight - (body.scrollTop + body.clientHeight) &lt;= 100;
+<a name="line369"></a>
+<a name="line370"></a>    this.win_.document.write(this.outputBuffer_.join(&#39;&#39;));
+<a name="line371"></a>    this.outputBuffer_.length = 0;
+<a name="line372"></a>
+<a name="line373"></a>    if (scroll) {
+<a name="line374"></a>      this.win_.scrollTo(0, 1000000);
+<a name="line375"></a>    }
+<a name="line376"></a>  }
+<a name="line377"></a>};
+<a name="line378"></a>
+<a name="line379"></a>
+<a name="line380"></a>/**
+<a name="line381"></a> * Writes all saved messages to the DebugWindow.
+<a name="line382"></a> * @protected
+<a name="line383"></a> * @suppress {underscore}
+<a name="line384"></a> */
+<a name="line385"></a>goog.debug.DebugWindow.prototype.writeSavedMessages_ = function() {
+<a name="line386"></a>  var messages = this.savedMessages_.getValues();
+<a name="line387"></a>  for (var i = 0; i &lt; messages.length; i++) {
+<a name="line388"></a>    this.writeToLog_(messages[i]);
+<a name="line389"></a>  }
+<a name="line390"></a>};
+<a name="line391"></a>
+<a name="line392"></a>
+<a name="line393"></a>/**
+<a name="line394"></a> * Opens the debug window if it is not already referenced
+<a name="line395"></a> * @private
+<a name="line396"></a> */
+<a name="line397"></a>goog.debug.DebugWindow.prototype.openWindow_ = function() {
+<a name="line398"></a>  if ((this.win_ &amp;&amp; !this.win_.closed) || this.winOpening_) {
+<a name="line399"></a>    return;
+<a name="line400"></a>  }
+<a name="line401"></a>
+<a name="line402"></a>  var winpos = this.getCookie_(&#39;dbg&#39;, &#39;0,0,800,500&#39;).split(&#39;,&#39;);
+<a name="line403"></a>  var x = Number(winpos[0]);
+<a name="line404"></a>  var y = Number(winpos[1]);
+<a name="line405"></a>  var w = Number(winpos[2]);
+<a name="line406"></a>  var h = Number(winpos[3]);
+<a name="line407"></a>
+<a name="line408"></a>  this.winOpening_ = true;
+<a name="line409"></a>  this.win_ = window.open(&#39;&#39;, this.getWindowName_(), &#39;width=&#39; + w +
+<a name="line410"></a>                          &#39;,height=&#39; + h + &#39;,toolbar=no,resizable=yes,&#39; +
+<a name="line411"></a>                          &#39;scrollbars=yes,left=&#39; + x + &#39;,top=&#39; + y +
+<a name="line412"></a>                          &#39;,status=no,screenx=&#39; + x + &#39;,screeny=&#39; + y);
+<a name="line413"></a>
+<a name="line414"></a>  if (!this.win_) {
+<a name="line415"></a>    if (!this.showedBlockedAlert_) {
+<a name="line416"></a>      // only show this once
+<a name="line417"></a>      alert(&#39;Logger popup was blocked&#39;);
+<a name="line418"></a>      this.showedBlockedAlert_ = true;
+<a name="line419"></a>    }
+<a name="line420"></a>  }
+<a name="line421"></a>
+<a name="line422"></a>  this.winOpening_ = false;
+<a name="line423"></a>
+<a name="line424"></a>  if (this.win_) {
+<a name="line425"></a>    this.writeInitialDocument_();
+<a name="line426"></a>  }
+<a name="line427"></a>};
+<a name="line428"></a>
+<a name="line429"></a>
+<a name="line430"></a>/**
+<a name="line431"></a> * Gets a valid window name for the debug window. Replaces invalid characters in
+<a name="line432"></a> * IE.
+<a name="line433"></a> * @return {string} Valid window name.
+<a name="line434"></a> * @private
+<a name="line435"></a> */
+<a name="line436"></a>goog.debug.DebugWindow.prototype.getWindowName_ = function() {
+<a name="line437"></a>  return goog.userAgent.IE ?
+<a name="line438"></a>      this.identifier_.replace(/[\s\-\.\,]/g, &#39;_&#39;) : this.identifier_;
+<a name="line439"></a>};
+<a name="line440"></a>
+<a name="line441"></a>
+<a name="line442"></a>/**
+<a name="line443"></a> * @return {string} The style rule text, for inclusion in the initial HTML.
+<a name="line444"></a> */
+<a name="line445"></a>goog.debug.DebugWindow.prototype.getStyleRules = function() {
+<a name="line446"></a>  return &#39;*{font:normal 14px monospace;}&#39; +
+<a name="line447"></a>         &#39;.dbg-sev{color:#F00}&#39; +
+<a name="line448"></a>         &#39;.dbg-w{color:#E92}&#39; +
+<a name="line449"></a>         &#39;.dbg-sh{background-color:#fd4;font-weight:bold;color:#000}&#39; +
+<a name="line450"></a>         &#39;.dbg-i{color:#666}&#39; +
+<a name="line451"></a>         &#39;.dbg-f{color:#999}&#39; +
+<a name="line452"></a>         &#39;.dbg-ev{color:#0A0}&#39; +
+<a name="line453"></a>         &#39;.dbg-m{color:#990}&#39;;
+<a name="line454"></a>};
+<a name="line455"></a>
+<a name="line456"></a>
+<a name="line457"></a>/**
+<a name="line458"></a> * Writes the initial HTML of the debug window
+<a name="line459"></a> * @protected
+<a name="line460"></a> * @suppress {underscore}
+<a name="line461"></a> */
+<a name="line462"></a>goog.debug.DebugWindow.prototype.writeInitialDocument_ = function() {
+<a name="line463"></a>  if (!this.win_) {
+<a name="line464"></a>    return;
+<a name="line465"></a>  }
+<a name="line466"></a>
+<a name="line467"></a>  this.win_.document.open();
+<a name="line468"></a>
+<a name="line469"></a>  var html = &#39;&lt;style&gt;&#39; + this.getStyleRules() + &#39;&lt;/style&gt;&#39; +
+<a name="line470"></a>             &#39;&lt;hr&gt;&lt;div class=&quot;dbg-ev&quot; style=&quot;text-align:center&quot;&gt;&#39; +
+<a name="line471"></a>             this.welcomeMessage + &#39;&lt;br&gt;&lt;small&gt;Logger: &#39; +
+<a name="line472"></a>             this.identifier_ + &#39;&lt;/small&gt;&lt;/div&gt;&lt;hr&gt;&#39;;
+<a name="line473"></a>
+<a name="line474"></a>  this.writeToLog_(html);
+<a name="line475"></a>  this.writeSavedMessages_();
+<a name="line476"></a>};
+<a name="line477"></a>
+<a name="line478"></a>
+<a name="line479"></a>/**
+<a name="line480"></a> * Save persistent data (using cookies) for 1 month (cookie specific to this
+<a name="line481"></a> * logger object)
+<a name="line482"></a> * @param {string} key Data name.
+<a name="line483"></a> * @param {string} value Data value.
+<a name="line484"></a> * @private
+<a name="line485"></a> */
+<a name="line486"></a>goog.debug.DebugWindow.prototype.setCookie_ = function(key, value) {
+<a name="line487"></a>  key += this.identifier_;
+<a name="line488"></a>  document.cookie = key + &#39;=&#39; + encodeURIComponent(value) + &#39;;expires=&#39; +
+<a name="line489"></a>    (new Date(goog.now() + goog.debug.DebugWindow.COOKIE_TIME)).toUTCString();
+<a name="line490"></a>};
+<a name="line491"></a>
+<a name="line492"></a>
+<a name="line493"></a>/**
+<a name="line494"></a> * Retrieve data (using cookies).
+<a name="line495"></a> * @param {string} key Data name.
+<a name="line496"></a> * @param {string} opt_default Optional default value if cookie doesn&#39;t exist.
+<a name="line497"></a> * @return {string} Cookie value.
+<a name="line498"></a> * @private
+<a name="line499"></a> */
+<a name="line500"></a>goog.debug.DebugWindow.prototype.getCookie_ = function(key, opt_default) {
+<a name="line501"></a>  return goog.debug.DebugWindow.getCookieValue_(
+<a name="line502"></a>      this.identifier_, key, opt_default);
+<a name="line503"></a>};
+<a name="line504"></a>
+<a name="line505"></a>
+<a name="line506"></a>/**
+<a name="line507"></a> * Retrieve data (using cookies).
+<a name="line508"></a> * @param {string} identifier Identifier for logging class.
+<a name="line509"></a> * @param {string} key Data name.
+<a name="line510"></a> * @param {string} opt_default Optional default value if cookie doesn&#39;t exist.
+<a name="line511"></a> * @return {string} Cookie value.
+<a name="line512"></a> * @private
+<a name="line513"></a> */
+<a name="line514"></a>goog.debug.DebugWindow.getCookieValue_ = function(
+<a name="line515"></a>      identifier, key, opt_default) {
+<a name="line516"></a>  var fullKey = key + identifier;
+<a name="line517"></a>  var cookie = String(document.cookie);
+<a name="line518"></a>  var start = cookie.indexOf(fullKey + &#39;=&#39;);
+<a name="line519"></a>  if (start != -1) {
+<a name="line520"></a>    var end = cookie.indexOf(&#39;;&#39;, start);
+<a name="line521"></a>    return decodeURIComponent(cookie.substring(start + fullKey.length + 1,
+<a name="line522"></a>        end == -1 ? cookie.length : end));
+<a name="line523"></a>  } else {
+<a name="line524"></a>    return opt_default || &#39;&#39;;
+<a name="line525"></a>  }
+<a name="line526"></a>};
+<a name="line527"></a>
+<a name="line528"></a>
+<a name="line529"></a>/**
+<a name="line530"></a> * @param {string} identifier Identifier for logging class.
+<a name="line531"></a> * @return {boolean} Whether the DebugWindow is enabled.
+<a name="line532"></a> */
+<a name="line533"></a>goog.debug.DebugWindow.isEnabled = function(identifier) {
+<a name="line534"></a>  return goog.debug.DebugWindow.getCookieValue_(identifier, &#39;enabled&#39;) == &#39;1&#39;;
+<a name="line535"></a>};
+<a name="line536"></a>
+<a name="line537"></a>
+<a name="line538"></a>/**
+<a name="line539"></a> * Saves the window position size to a cookie
+<a name="line540"></a> * @private
+<a name="line541"></a> */
+<a name="line542"></a>goog.debug.DebugWindow.prototype.saveWindowPositionSize_ = function() {
+<a name="line543"></a>  if (!this.win_ || this.win_.closed) {
+<a name="line544"></a>    return;
+<a name="line545"></a>  }
+<a name="line546"></a>  var x = this.win_.screenX || this.win_.screenLeft || 0;
+<a name="line547"></a>  var y = this.win_.screenY || this.win_.screenTop || 0;
+<a name="line548"></a>  var w = this.win_.outerWidth || 800
+<a name="line549"></a>  var h = this.win_.outerHeight || 500;
+<a name="line550"></a>  this.setCookie_(&#39;dbg&#39;, x + &#39;,&#39; + y + &#39;,&#39; + w + &#39;,&#39; + h);
+<a name="line551"></a>};
+<a name="line552"></a>
+<a name="line553"></a>
+<a name="line554"></a>/**
+<a name="line555"></a> * Adds a logger name to be filtered.
+<a name="line556"></a> * @param {string} loggerName the logger name to add.
+<a name="line557"></a> */
+<a name="line558"></a>goog.debug.DebugWindow.prototype.addFilter = function(loggerName) {
+<a name="line559"></a>  this.filteredLoggers_[loggerName] = 1;
+<a name="line560"></a>};
+<a name="line561"></a>
+<a name="line562"></a>
+<a name="line563"></a>/**
+<a name="line564"></a> * Removes a logger name to be filtered.
+<a name="line565"></a> * @param {string} loggerName the logger name to remove.
+<a name="line566"></a> */
+<a name="line567"></a>goog.debug.DebugWindow.prototype.removeFilter = function(loggerName) {
+<a name="line568"></a>  delete this.filteredLoggers_[loggerName];
+<a name="line569"></a>};
+</pre>
+
+
+</body>
+</html>

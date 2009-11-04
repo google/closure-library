@@ -1,0 +1,480 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>popupcolorpicker.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_popupcolorpicker.js.html">popupcolorpicker.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Popup Color Picker implementation.  This is intended to be
+<a name="line17"></a> * less general than goog.ui.ColorPicker and presents a default set of colors
+<a name="line18"></a> * that CCC apps currently use in their color pickers.
+<a name="line19"></a> *
+<a name="line20"></a> * @see ../demos/popupcolorpicker.html
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.ui.PopupColorPicker&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line27"></a>goog.require(&#39;goog.positioning.AnchoredPosition&#39;);
+<a name="line28"></a>goog.require(&#39;goog.positioning.Corner&#39;);
+<a name="line29"></a>goog.require(&#39;goog.ui.ColorPicker&#39;);
+<a name="line30"></a>goog.require(&#39;goog.ui.ColorPicker.EventType&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line32"></a>goog.require(&#39;goog.ui.Popup&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Popup color picker widget.
+<a name="line37"></a> *
+<a name="line38"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line39"></a> * @param {goog.ui.ColorPicker} opt_colorPicker Optional color picker to use
+<a name="line40"></a> *     for this popup.
+<a name="line41"></a> * @extends {goog.ui.Component}
+<a name="line42"></a> * @constructor
+<a name="line43"></a> */
+<a name="line44"></a>goog.ui.PopupColorPicker = function(opt_domHelper, opt_colorPicker) {
+<a name="line45"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line46"></a>
+<a name="line47"></a>  if (opt_colorPicker) {
+<a name="line48"></a>    this.colorPicker_ = opt_colorPicker;
+<a name="line49"></a>  }
+<a name="line50"></a>};
+<a name="line51"></a>goog.inherits(goog.ui.PopupColorPicker, goog.ui.Component);
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Instance of a color picker control.
+<a name="line56"></a> * @type {goog.ui.ColorPicker}
+<a name="line57"></a> * @private
+<a name="line58"></a> */
+<a name="line59"></a>goog.ui.PopupColorPicker.prototype.colorPicker_ = null;
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Instance of goog.ui.Popup used to manage the behavior of the color picker.
+<a name="line64"></a> * @type {goog.ui.Popup}
+<a name="line65"></a> * @private
+<a name="line66"></a> */
+<a name="line67"></a>goog.ui.PopupColorPicker.prototype.popup_ = null;
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * Corner of the popup which is pinned to the attaching element.
+<a name="line72"></a> * @type {goog.positioning.Corner}
+<a name="line73"></a> * @private
+<a name="line74"></a> */
+<a name="line75"></a>goog.ui.PopupColorPicker.prototype.pinnedCorner_ =
+<a name="line76"></a>    goog.positioning.Corner.TOP_START;
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Corner of the attaching element where the popup shows.
+<a name="line81"></a> * @type {goog.positioning.Corner}
+<a name="line82"></a> * @private
+<a name="line83"></a> */
+<a name="line84"></a>goog.ui.PopupColorPicker.prototype.popupCorner_ =
+<a name="line85"></a>    goog.positioning.Corner.BOTTOM_START;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Reference to the element that triggered the last popup.
+<a name="line90"></a> * @type {Element?}
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.ui.PopupColorPicker.prototype.lastTarget_ = null;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Whether the color picker can move the focus to it&#39;s key event target when it
+<a name="line98"></a> * is shown.  The default is true.  Setting to false can break keyboard
+<a name="line99"></a> * navigation, but this is needed for certain scenarios, for example the
+<a name="line100"></a> * toolbar menu in trogedit which can&#39;t have the selection changed.
+<a name="line101"></a> * @type {boolean}
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.ui.PopupColorPicker.prototype.allowAutoFocus_ = true;
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Whether the color picker can accept focus.
+<a name="line109"></a> * @type {boolean}
+<a name="line110"></a> * @private
+<a name="line111"></a> */
+<a name="line112"></a>goog.ui.PopupColorPicker.prototype.focusable_ = true;
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * If true, then the colorpicker will toggle off if it is already visible.
+<a name="line117"></a> *
+<a name="line118"></a> * @type {boolean}
+<a name="line119"></a> * @private
+<a name="line120"></a> */
+<a name="line121"></a>goog.ui.PopupColorPicker.prototype.toggleMode_ = true;
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/** @inheritDoc */
+<a name="line125"></a>goog.ui.PopupColorPicker.prototype.createDom = function() {
+<a name="line126"></a>  goog.ui.PopupColorPicker.superClass_.createDom.call(this);
+<a name="line127"></a>  this.popup_ = new goog.ui.Popup(this.getElement());
+<a name="line128"></a>  this.popup_.setPinnedCorner(this.pinnedCorner_);
+<a name="line129"></a>  goog.dom.classes.set(this.getElement(),
+<a name="line130"></a>      goog.getCssName(&#39;goog-popupcolorpicker&#39;));
+<a name="line131"></a>  this.getElement().unselectable = &#39;on&#39;;
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/** @inheritDoc */
+<a name="line136"></a>goog.ui.PopupColorPicker.prototype.disposeInternal = function() {
+<a name="line137"></a>  goog.ui.PopupColorPicker.superClass_.disposeInternal.call(this);
+<a name="line138"></a>  this.colorPicker_ = null;
+<a name="line139"></a>  this.lastTarget_ = null;
+<a name="line140"></a>  if (this.popup_) {
+<a name="line141"></a>    this.popup_.dispose();
+<a name="line142"></a>    this.popup_ = null;
+<a name="line143"></a>  }
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * ColorPickers cannot be used to decorate pre-existing html, since the
+<a name="line149"></a> * structure they build is fairly complicated.
+<a name="line150"></a> * @param {Element} element Element to decorate.
+<a name="line151"></a> * @return {boolean} Returns always false.
+<a name="line152"></a> */
+<a name="line153"></a>goog.ui.PopupColorPicker.prototype.canDecorate = function(element) {
+<a name="line154"></a>  return false;
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * @return {goog.ui.ColorPicker} The color picker instance.
+<a name="line160"></a> */
+<a name="line161"></a>goog.ui.PopupColorPicker.prototype.getColorPicker = function() {
+<a name="line162"></a>  return this.colorPicker_;
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Returns whether the Popup dismisses itself when the user clicks outside of
+<a name="line168"></a> * it.
+<a name="line169"></a> * @return {boolean} Whether the Popup autohides on an external click.
+<a name="line170"></a> */
+<a name="line171"></a>goog.ui.PopupColorPicker.prototype.getAutoHide = function() {
+<a name="line172"></a>  return !!this.popup_ &amp;&amp; this.popup_.getAutoHide();
+<a name="line173"></a>};
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Sets whether the Popup dismisses itself when the user clicks outside of it -
+<a name="line178"></a> * must be called after the Popup has been created (in createDom()),
+<a name="line179"></a> * otherwise it does nothing.
+<a name="line180"></a> *
+<a name="line181"></a> * @param {boolean} autoHide Whether to autohide on an external click.
+<a name="line182"></a> */
+<a name="line183"></a>goog.ui.PopupColorPicker.prototype.setAutoHide = function(autoHide) {
+<a name="line184"></a>  if (this.popup_) {
+<a name="line185"></a>    this.popup_.setAutoHide(autoHide);
+<a name="line186"></a>  }
+<a name="line187"></a>};
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * Returns the region inside which the Popup dismisses itself when the user
+<a name="line192"></a> * clicks, or null if it was not set. Null indicates the entire document is
+<a name="line193"></a> * the autohide region.
+<a name="line194"></a> * @return {Element?} The DOM element for autohide, or null if it hasn&#39;t been
+<a name="line195"></a> *     set.
+<a name="line196"></a> */
+<a name="line197"></a>goog.ui.PopupColorPicker.prototype.getAutoHideRegion = function() {
+<a name="line198"></a>  return this.popup_ &amp;&amp; this.popup_.getAutoHideRegion();
+<a name="line199"></a>};
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>/**
+<a name="line203"></a> * Sets the region inside which the Popup dismisses itself when the user
+<a name="line204"></a> * clicks - must be called after the Popup has been created (in createDom()),
+<a name="line205"></a> * otherwise it does nothing.
+<a name="line206"></a> *
+<a name="line207"></a> * @param {Element} element The DOM element for autohide.
+<a name="line208"></a> */
+<a name="line209"></a>goog.ui.PopupColorPicker.prototype.setAutoHideRegion = function(element) {
+<a name="line210"></a>  if (this.popup_) {
+<a name="line211"></a>    this.popup_.setAutoHideRegion(element);
+<a name="line212"></a>  }
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Returns the {@link goog.ui.PopupBase} from this picker. Returns null if the
+<a name="line218"></a> * popup has not yet been created.
+<a name="line219"></a> *
+<a name="line220"></a> * NOTE: This should *ONLY* be called from tests. If called before createDom(),
+<a name="line221"></a> * this should return null.
+<a name="line222"></a> *
+<a name="line223"></a> * @return {goog.ui.PopupBase?} The popup or null if it hasn&#39;t been created.
+<a name="line224"></a> */
+<a name="line225"></a>goog.ui.PopupColorPicker.prototype.getPopup = function() {
+<a name="line226"></a>  return this.popup_;
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * @return {Element?} The last element that triggered the popup.
+<a name="line232"></a> */
+<a name="line233"></a>goog.ui.PopupColorPicker.prototype.getLastTarget = function() {
+<a name="line234"></a>  return this.lastTarget_;
+<a name="line235"></a>};
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>/**
+<a name="line239"></a> * Attaches the popup color picker to an element.
+<a name="line240"></a> * @param {Element} element The element to attach to.
+<a name="line241"></a> */
+<a name="line242"></a>goog.ui.PopupColorPicker.prototype.attach = function(element) {
+<a name="line243"></a>  this.getHandler().listen(element, goog.events.EventType.MOUSEDOWN,
+<a name="line244"></a>      this.show_);
+<a name="line245"></a>};
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * Detatches the popup color picker from an element.
+<a name="line250"></a> * @param {Element} element The element to detach from.
+<a name="line251"></a> */
+<a name="line252"></a>goog.ui.PopupColorPicker.prototype.detach = function(element) {
+<a name="line253"></a>  this.getHandler().unlisten(element, goog.events.EventType.MOUSEDOWN,
+<a name="line254"></a>      this.show_);
+<a name="line255"></a>};
+<a name="line256"></a>
+<a name="line257"></a>
+<a name="line258"></a>/**
+<a name="line259"></a> * Gets the color that is currently selected in this color picker.
+<a name="line260"></a> * @return {string?} The hex string of the color selected, or null if no
+<a name="line261"></a> *     color is selected.
+<a name="line262"></a> */
+<a name="line263"></a>goog.ui.PopupColorPicker.prototype.getSelectedColor = function() {
+<a name="line264"></a>  return this.colorPicker_.getSelectedColor();
+<a name="line265"></a>};
+<a name="line266"></a>
+<a name="line267"></a>
+<a name="line268"></a>/**
+<a name="line269"></a> * Sets whether the color picker can accept focus.
+<a name="line270"></a> * @param {boolean} focusable True iff the color picker can accept focus.
+<a name="line271"></a> */
+<a name="line272"></a>goog.ui.PopupColorPicker.prototype.setFocusable = function(focusable) {
+<a name="line273"></a>  this.focusable_ = focusable;
+<a name="line274"></a>  if (this.colorPicker_) {
+<a name="line275"></a>    // TODO: In next revision sort the behavior of passing state to
+<a name="line276"></a>    // children correctly
+<a name="line277"></a>    this.colorPicker_.setFocusable(focusable);
+<a name="line278"></a>  }
+<a name="line279"></a>};
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>/**
+<a name="line283"></a> * Sets whether the color picker can automatically move focus to it&#39;s key event
+<a name="line284"></a> * target when it is set to visible.
+<a name="line285"></a> * @param {boolean} allow Whether to allow auto focus.
+<a name="line286"></a> */
+<a name="line287"></a>goog.ui.PopupColorPicker.prototype.setAllowAutoFocus = function(allow) {
+<a name="line288"></a>  this.allowAutoFocus_ = allow;
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * @return {boolean} Whether the color picker can automatically move focus to
+<a name="line294"></a> *     it&#39;s key event target when it is set to visible.
+<a name="line295"></a> */
+<a name="line296"></a>goog.ui.PopupColorPicker.prototype.getAllowAutoFocus = function() {
+<a name="line297"></a>  return this.allowAutoFocus_;
+<a name="line298"></a>};
+<a name="line299"></a>
+<a name="line300"></a>
+<a name="line301"></a>/**
+<a name="line302"></a> * Sets whether the color picker should toggle off if it is already open.
+<a name="line303"></a> * @param {boolean} toggle The new toggle mode.
+<a name="line304"></a> */
+<a name="line305"></a>goog.ui.PopupColorPicker.prototype.setToggleMode = function(toggle) {
+<a name="line306"></a>  this.toggleMode_ = toggle;
+<a name="line307"></a>};
+<a name="line308"></a>
+<a name="line309"></a>
+<a name="line310"></a>/**
+<a name="line311"></a> * Gets whether the colorpicker is in toggle mode
+<a name="line312"></a> * @return {boolean} toggle.
+<a name="line313"></a> */
+<a name="line314"></a>goog.ui.PopupColorPicker.prototype.getToggleMode = function() {
+<a name="line315"></a>  return this.toggleMode_;
+<a name="line316"></a>};
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/**
+<a name="line320"></a> * Sets whether the picker remembers the last selected color between popups.
+<a name="line321"></a> *
+<a name="line322"></a> * @param {boolean} remember Whether to remember the selection.
+<a name="line323"></a> */
+<a name="line324"></a>goog.ui.PopupColorPicker.prototype.setRememberSelection = function(remember) {
+<a name="line325"></a>  this.rememberSelection_ = remember;
+<a name="line326"></a>};
+<a name="line327"></a>
+<a name="line328"></a>
+<a name="line329"></a>/**
+<a name="line330"></a> * @return {boolean} Whether the picker remembers the last selected color
+<a name="line331"></a> *     between popups.
+<a name="line332"></a> */
+<a name="line333"></a>goog.ui.PopupColorPicker.prototype.getRememberSelection = function() {
+<a name="line334"></a>  return this.rememberSelection_;
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * Add an array of colors to the colors displayed by the color picker.
+<a name="line340"></a> * Does not add duplicated colors.
+<a name="line341"></a> * @param {Array.&lt;string&gt;} colors The array of colors to be added.
+<a name="line342"></a> */
+<a name="line343"></a>goog.ui.PopupColorPicker.prototype.addColors = function(colors) {
+<a name="line344"></a>
+<a name="line345"></a>};
+<a name="line346"></a>
+<a name="line347"></a>
+<a name="line348"></a>/**
+<a name="line349"></a> * Clear the colors displayed by the color picker.
+<a name="line350"></a> */
+<a name="line351"></a>goog.ui.PopupColorPicker.prototype.clearColors = function() {
+<a name="line352"></a>
+<a name="line353"></a>};
+<a name="line354"></a>
+<a name="line355"></a>
+<a name="line356"></a>/**
+<a name="line357"></a> * Set the pinned corner of the popup.
+<a name="line358"></a> * @param {goog.positioning.Corner} corner The corner of the popup which is
+<a name="line359"></a> *     pinned to the attaching element.
+<a name="line360"></a> */
+<a name="line361"></a>goog.ui.PopupColorPicker.prototype.setPinnedCorner = function(corner) {
+<a name="line362"></a>  this.pinnedCorner_ = corner;
+<a name="line363"></a>  if (this.popup_) {
+<a name="line364"></a>    this.popup_.setPinnedCorner(this.pinnedCorner_);
+<a name="line365"></a>  }
+<a name="line366"></a>};
+<a name="line367"></a>
+<a name="line368"></a>
+<a name="line369"></a>/**
+<a name="line370"></a> * Sets which corner of the attaching element this popup shows up.
+<a name="line371"></a> * @param {goog.positioning.Corner} corner The corner of the attaching element
+<a name="line372"></a> *     where to show the popup.
+<a name="line373"></a> */
+<a name="line374"></a>goog.ui.PopupColorPicker.prototype.setPopupCorner = function(corner) {
+<a name="line375"></a>  this.popupCorner_ = corner;
+<a name="line376"></a>};
+<a name="line377"></a>
+<a name="line378"></a>
+<a name="line379"></a>/**
+<a name="line380"></a> * Handles click events on the targets and shows the color picker.
+<a name="line381"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line382"></a> * @private
+<a name="line383"></a> */
+<a name="line384"></a>goog.ui.PopupColorPicker.prototype.show_ = function(e) {
+<a name="line385"></a>  if (!this.colorPicker_) {
+<a name="line386"></a>    this.colorPicker_ =
+<a name="line387"></a>        goog.ui.ColorPicker.createSimpleColorGrid(this.getDomHelper());
+<a name="line388"></a>    this.colorPicker_.setFocusable(this.focusable_);
+<a name="line389"></a>    this.addChild(this.colorPicker_);
+<a name="line390"></a>    this.colorPicker_.render(this.getElement());
+<a name="line391"></a>    this.getHandler().listen(this.colorPicker_,
+<a name="line392"></a>        goog.ui.ColorPicker.EventType.CHANGE, this.onColorPicked_);
+<a name="line393"></a>  }
+<a name="line394"></a>
+<a name="line395"></a>  if (this.popup_.isOrWasRecentlyVisible() &amp;&amp; this.toggleMode_ &amp;&amp;
+<a name="line396"></a>      this.lastTarget_ == e.currentTarget) {
+<a name="line397"></a>    this.popup_.setVisible(false);
+<a name="line398"></a>    return;
+<a name="line399"></a>  }
+<a name="line400"></a>
+<a name="line401"></a>  this.lastTarget_ = /** @type {Element} */ (e.currentTarget);
+<a name="line402"></a>  this.popup_.setPosition(new goog.positioning.AnchoredPosition(
+<a name="line403"></a>      this.lastTarget_, this.popupCorner_));
+<a name="line404"></a>  if (!this.rememberSelection_) {
+<a name="line405"></a>    this.colorPicker_.setSelectedIndex(-1);
+<a name="line406"></a>  }
+<a name="line407"></a>  this.popup_.setVisible(true);
+<a name="line408"></a>  if (this.allowAutoFocus_) {
+<a name="line409"></a>    this.colorPicker_.focus();
+<a name="line410"></a>  }
+<a name="line411"></a>};
+<a name="line412"></a>
+<a name="line413"></a>
+<a name="line414"></a>/**
+<a name="line415"></a> * Handles the color change event.
+<a name="line416"></a> * @param {goog.events.Event} e The event.
+<a name="line417"></a> * @private
+<a name="line418"></a> */
+<a name="line419"></a>goog.ui.PopupColorPicker.prototype.onColorPicked_ = function(e) {
+<a name="line420"></a>  // When we show the color picker we reset the color, which triggers an event.
+<a name="line421"></a>  // Here we block that event so that it doesn&#39;t dismiss the popup
+<a name="line422"></a>  // TODO: Update the colorpicker to allow selection to be cleared
+<a name="line423"></a>  if (this.colorPicker_.getSelectedIndex() == -1) {
+<a name="line424"></a>    e.stopPropagation();
+<a name="line425"></a>    return;
+<a name="line426"></a>  }
+<a name="line427"></a>  this.popup_.setVisible(false);
+<a name="line428"></a>  if (this.allowAutoFocus_) {
+<a name="line429"></a>    this.lastTarget_.focus();
+<a name="line430"></a>  }
+<a name="line431"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+  Copyright 2009 Google Inc. All Rights Reserved.
+
+-->
+<head>
+<title>Closure Unit Tests - goog.ui.tree.BaseNode</title>
+<script src="../../base.js"></script>
+<script>
+
+goog.require('goog.testing.jsunit');
+goog.require('goog.ui.tree.TreeControl');
+goog.require('goog.ui.tree.BaseNode');
+goog.require('goog.ui.tree.BaseNode.EventType');
+
+</script>
+</head>
+<body>
+<script>
+
+function testExpandEvents() {
+  var n = new goog.ui.tree.BaseNode('');
+  n.getTree = function() {};
+  var expanded = false;
+  n.setExpanded(expanded);
+  assertEquals(expanded, n.getExpanded());
+  var callCount = 0;
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.BEFORE_EXPAND,
+      function(e) {
+        assertEquals(expanded, n.getExpanded());
+        callCount++;
+      });
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.EXPAND,
+      function(e) {
+        assertEquals(!expanded, n.getExpanded());
+        callCount++;
+      });
+  n.setExpanded(!expanded);
+  assertEquals(2, callCount);
+}
+
+function testExpandEvents2() {
+  var n = new goog.ui.tree.BaseNode('');
+  n.getTree = function() {};
+  var expanded = true;
+  n.setExpanded(expanded);
+  assertEquals(expanded, n.getExpanded());
+  var callCount = 0;
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.BEFORE_COLLAPSE,
+      function(e) {
+        assertEquals(expanded, n.getExpanded());
+        callCount++;
+      });
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.COLLAPSE,
+      function(e) {
+        assertEquals(!expanded, n.getExpanded());
+        callCount++;
+      });
+  n.setExpanded(!expanded);
+  assertEquals(2, callCount);
+}
+
+function testExpandEventsPreventDefault() {
+  var n = new goog.ui.tree.BaseNode('');
+  n.getTree = function() {};
+  var expanded = true;
+  n.setExpanded(expanded);
+  assertEquals(expanded, n.getExpanded());
+  var callCount = 0;
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.BEFORE_COLLAPSE,
+      function(e) {
+        assertEquals(expanded, n.getExpanded());
+        e.preventDefault();
+        callCount++;
+      });
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.COLLAPSE,
+      function(e) {
+        fail('Should not fire COLLAPSE');
+      });
+  n.setExpanded(!expanded);
+  assertEquals(1, callCount);
+}
+
+function testExpandEventsPreventDefault2() {
+  var n = new goog.ui.tree.BaseNode('');
+  n.getTree = function() {};
+  var expanded = false;
+  n.setExpanded(expanded);
+  assertEquals(expanded, n.getExpanded());
+  var callCount = 0;
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.BEFORE_EXPAND,
+      function(e) {
+        assertEquals(expanded, n.getExpanded());
+        e.preventDefault();
+        callCount++;
+      });
+  n.addEventListener(goog.ui.tree.BaseNode.EventType.EXPAND,
+      function(e) {
+        fail('Should not fire EXPAND');
+      });
+  n.setExpanded(!expanded);
+  assertEquals(1, callCount);
+}
+
+</script>
+</body>
+</html>

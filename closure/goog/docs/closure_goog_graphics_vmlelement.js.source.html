@@ -1,0 +1,368 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>vmlelement.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_graphics_vmlelement.js.html">vmlelement.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Thin wrappers around the DOM element returned from
+<a name="line18"></a> * the different draw methods of the graphics. This is the VML implementation.
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.graphics.VmlEllipseElement&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.graphics.VmlGroupElement&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.graphics.VmlImageElement&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.graphics.VmlPathElement&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.graphics.VmlRectElement&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.graphics.VmlTextElement&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line30"></a>goog.require(&#39;goog.graphics.EllipseElement&#39;);
+<a name="line31"></a>goog.require(&#39;goog.graphics.GroupElement&#39;);
+<a name="line32"></a>goog.require(&#39;goog.graphics.ImageElement&#39;);
+<a name="line33"></a>goog.require(&#39;goog.graphics.PathElement&#39;);
+<a name="line34"></a>goog.require(&#39;goog.graphics.RectElement&#39;);
+<a name="line35"></a>goog.require(&#39;goog.graphics.TextElement&#39;);
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>/**
+<a name="line39"></a> * Thin wrapper for VML group elements.
+<a name="line40"></a> * This is an implementation of the goog.graphics.GroupElement interface.
+<a name="line41"></a> * You should not construct objects from this constructor. The graphics
+<a name="line42"></a> * will return the object for you.
+<a name="line43"></a> * @param {Element} element The DOM element to wrap.
+<a name="line44"></a> * @param {goog.graphics.VmlGraphics} graphics The graphics creating
+<a name="line45"></a> *     this element.
+<a name="line46"></a> * @constructor
+<a name="line47"></a> * @extends {goog.graphics.GroupElement}
+<a name="line48"></a> */
+<a name="line49"></a>goog.graphics.VmlGroupElement = function(element, graphics) {
+<a name="line50"></a>  goog.graphics.GroupElement.call(this, element, graphics);
+<a name="line51"></a>};
+<a name="line52"></a>goog.inherits(goog.graphics.VmlGroupElement, goog.graphics.GroupElement);
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * Remove all drawing elements from the group.
+<a name="line57"></a> */
+<a name="line58"></a>goog.graphics.VmlGroupElement.prototype.clear = function() {
+<a name="line59"></a>  goog.dom.removeChildren(this.getElement());
+<a name="line60"></a>};
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * @return {boolean} True if this group is the root canvas element.
+<a name="line65"></a> * @private
+<a name="line66"></a> */
+<a name="line67"></a>goog.graphics.VmlGroupElement.prototype.isRootElement_ = function() {
+<a name="line68"></a>  return this.getGraphics().getCanvasElement() == this;
+<a name="line69"></a>};
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Set the size of the group element.
+<a name="line74"></a> * @param {number} width The width of the group element.
+<a name="line75"></a> * @param {number} height The height of the group element.
+<a name="line76"></a> */
+<a name="line77"></a>goog.graphics.VmlGroupElement.prototype.setSize = function(width, height) {
+<a name="line78"></a>  var element = this.getElement();
+<a name="line79"></a>
+<a name="line80"></a>  var style = element.style;
+<a name="line81"></a>  style.width = goog.graphics.VmlGraphics.toSizePx(width);
+<a name="line82"></a>  style.height = goog.graphics.VmlGraphics.toSizePx(height);
+<a name="line83"></a>
+<a name="line84"></a>  element.coordsize = goog.graphics.VmlGraphics.toSizeCoord(width) + &#39; &#39; +
+<a name="line85"></a>      goog.graphics.VmlGraphics.toSizeCoord(height);
+<a name="line86"></a>
+<a name="line87"></a>  // Don&#39;t overwrite the root element&#39;s origin.
+<a name="line88"></a>  if (!this.isRootElement_()) {
+<a name="line89"></a>    element.coordorigin = &#39;0 0&#39;;
+<a name="line90"></a>  }
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Thin wrapper for VML ellipse elements.
+<a name="line96"></a> * This is an implementation of the goog.graphics.EllipseElement interface.
+<a name="line97"></a> * You should not construct objects from this constructor. The graphics
+<a name="line98"></a> * will return the object for you.
+<a name="line99"></a> * @param {Element} element The DOM element to wrap.
+<a name="line100"></a> * @param {goog.graphics.VmlGraphics} graphics  The graphics creating
+<a name="line101"></a> *     this element.
+<a name="line102"></a> * @param {number} cx Center X coordinate.
+<a name="line103"></a> * @param {number} cy Center Y coordinate.
+<a name="line104"></a> * @param {number} rx Radius length for the x-axis.
+<a name="line105"></a> * @param {number} ry Radius length for the y-axis.
+<a name="line106"></a> * @param {goog.graphics.Stroke?} stroke The stroke to use for this element.
+<a name="line107"></a> * @param {goog.graphics.Fill?} fill The fill to use for this element.
+<a name="line108"></a> * @constructor
+<a name="line109"></a> * @extends {goog.graphics.EllipseElement}
+<a name="line110"></a> */
+<a name="line111"></a>goog.graphics.VmlEllipseElement = function(element, graphics,
+<a name="line112"></a>    cx, cy, rx, ry, stroke, fill) {
+<a name="line113"></a>  goog.graphics.EllipseElement.call(this, element, graphics, stroke, fill);
+<a name="line114"></a>
+<a name="line115"></a>  // Store center and radius for future calls to setRadius or setCenter.
+<a name="line116"></a>
+<a name="line117"></a>  /**
+<a name="line118"></a>   * X coordinate of the ellipse center.
+<a name="line119"></a>   * @type {number}
+<a name="line120"></a>   */
+<a name="line121"></a>  this.cx = cx;
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>  /**
+<a name="line125"></a>   * Y coordinate of the ellipse center.
+<a name="line126"></a>   * @type {number}
+<a name="line127"></a>   */
+<a name="line128"></a>  this.cy = cy;
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>  /**
+<a name="line132"></a>   * Radius length for the x-axis.
+<a name="line133"></a>   * @type {number}
+<a name="line134"></a>   */
+<a name="line135"></a>  this.rx = rx;
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>  /**
+<a name="line139"></a>   * Radius length for the y-axis.
+<a name="line140"></a>   * @type {number}
+<a name="line141"></a>   */
+<a name="line142"></a>  this.ry = ry;
+<a name="line143"></a>};
+<a name="line144"></a>goog.inherits(goog.graphics.VmlEllipseElement, goog.graphics.EllipseElement);
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * Update the center point of the ellipse.
+<a name="line149"></a> * @param {number} cx Center X coordinate.
+<a name="line150"></a> * @param {number} cy Center Y coordinate.
+<a name="line151"></a> */
+<a name="line152"></a>goog.graphics.VmlEllipseElement.prototype.setCenter = function(cx, cy) {
+<a name="line153"></a>  this.cx = cx;
+<a name="line154"></a>  this.cy = cy;
+<a name="line155"></a>  goog.graphics.VmlGraphics.setPositionAndSize(this.getElement(),
+<a name="line156"></a>      cx - this.rx, cy - this.ry, this.rx * 2, this.ry * 2);
+<a name="line157"></a>};
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Update the radius of the ellipse.
+<a name="line162"></a> * @param {number} rx Center X coordinate.
+<a name="line163"></a> * @param {number} ry Center Y coordinate.
+<a name="line164"></a> */
+<a name="line165"></a>goog.graphics.VmlEllipseElement.prototype.setRadius = function(rx, ry) {
+<a name="line166"></a>  this.rx = rx;
+<a name="line167"></a>  this.ry = ry;
+<a name="line168"></a>  goog.graphics.VmlGraphics.setPositionAndSize(this.getElement(),
+<a name="line169"></a>      this.cx - rx, this.cy - ry, rx * 2, ry * 2);
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Thin wrapper for VML rectangle elements.
+<a name="line175"></a> * This is an implementation of the goog.graphics.RectElement interface.
+<a name="line176"></a> * You should not construct objects from this constructor. The graphics
+<a name="line177"></a> * will return the object for you.
+<a name="line178"></a> * @param {Element} element The DOM element to wrap.
+<a name="line179"></a> * @param {goog.graphics.VmlGraphics} graphics The graphics creating
+<a name="line180"></a> *     this element.
+<a name="line181"></a> * @param {goog.graphics.Stroke?} stroke The stroke to use for this element.
+<a name="line182"></a> * @param {goog.graphics.Fill?} fill The fill to use for this element.
+<a name="line183"></a> * @constructor
+<a name="line184"></a> * @extends {goog.graphics.RectElement}
+<a name="line185"></a> */
+<a name="line186"></a>goog.graphics.VmlRectElement = function(element, graphics, stroke, fill) {
+<a name="line187"></a>  goog.graphics.RectElement.call(this, element, graphics, stroke, fill);
+<a name="line188"></a>};
+<a name="line189"></a>goog.inherits(goog.graphics.VmlRectElement, goog.graphics.RectElement);
+<a name="line190"></a>
+<a name="line191"></a>
+<a name="line192"></a>/**
+<a name="line193"></a> * Update the position of the rectangle.
+<a name="line194"></a> * @param {number} x X coordinate (left).
+<a name="line195"></a> * @param {number} y Y coordinate (top).
+<a name="line196"></a> */
+<a name="line197"></a>goog.graphics.VmlRectElement.prototype.setPosition = function(x, y) {
+<a name="line198"></a>  var style = this.getElement().style;
+<a name="line199"></a>  style.left = goog.graphics.VmlGraphics.toPosPx(x);
+<a name="line200"></a>  style.top = goog.graphics.VmlGraphics.toPosPx(y);
+<a name="line201"></a>};
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Update the size of the rectangle.
+<a name="line206"></a> * @param {number} width Width of rectangle.
+<a name="line207"></a> * @param {number} height Height of rectangle.
+<a name="line208"></a> */
+<a name="line209"></a>goog.graphics.VmlRectElement.prototype.setSize = function(width, height) {
+<a name="line210"></a>  var style = this.getElement().style;
+<a name="line211"></a>  style.width = goog.graphics.VmlGraphics.toSizePx(width);
+<a name="line212"></a>  style.height = goog.graphics.VmlGraphics.toSizePx(height);
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Thin wrapper for VML path elements.
+<a name="line218"></a> * This is an implementation of the goog.graphics.PathElement interface.
+<a name="line219"></a> * You should not construct objects from this constructor. The graphics
+<a name="line220"></a> * will return the object for you.
+<a name="line221"></a> * @param {Element} element The DOM element to wrap.
+<a name="line222"></a> * @param {goog.graphics.VmlGraphics} graphics The graphics creating
+<a name="line223"></a> *     this element.
+<a name="line224"></a> * @param {goog.graphics.Stroke?} stroke The stroke to use for this element.
+<a name="line225"></a> * @param {goog.graphics.Fill?} fill The fill to use for this element.
+<a name="line226"></a> * @constructor
+<a name="line227"></a> * @extends {goog.graphics.PathElement}
+<a name="line228"></a> */
+<a name="line229"></a>goog.graphics.VmlPathElement = function(element, graphics, stroke, fill) {
+<a name="line230"></a>  goog.graphics.PathElement.call(this, element, graphics, stroke, fill);
+<a name="line231"></a>};
+<a name="line232"></a>goog.inherits(goog.graphics.VmlPathElement, goog.graphics.PathElement);
+<a name="line233"></a>
+<a name="line234"></a>
+<a name="line235"></a>/**
+<a name="line236"></a> * Update the underlying path.
+<a name="line237"></a> * @param {goog.graphics.Path} path The path object to draw.
+<a name="line238"></a> */
+<a name="line239"></a>goog.graphics.VmlPathElement.prototype.setPath = function(path) {
+<a name="line240"></a>  this.getElement().setAttribute(
+<a name="line241"></a>      &#39;path&#39;, goog.graphics.VmlGraphics.getVmlPath(path));
+<a name="line242"></a>};
+<a name="line243"></a>
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * Thin wrapper for VML text elements.
+<a name="line247"></a> * This is an implementation of the goog.graphics.TextElement interface.
+<a name="line248"></a> * You should not construct objects from this constructor. The graphics
+<a name="line249"></a> * will return the object for you.
+<a name="line250"></a> * @param {Element} element The DOM element to wrap.
+<a name="line251"></a> * @param {goog.graphics.VmlGraphics} graphics The graphics creating
+<a name="line252"></a> *     this element.
+<a name="line253"></a> * @param {goog.graphics.Stroke?} stroke The stroke to use for this element.
+<a name="line254"></a> * @param {goog.graphics.Fill?} fill The fill to use for this element.
+<a name="line255"></a> * @constructor
+<a name="line256"></a> * @extends {goog.graphics.TextElement}
+<a name="line257"></a> */
+<a name="line258"></a>goog.graphics.VmlTextElement = function(element, graphics, stroke, fill) {
+<a name="line259"></a>  goog.graphics.TextElement.call(this, element, graphics, stroke, fill);
+<a name="line260"></a>};
+<a name="line261"></a>goog.inherits(goog.graphics.VmlTextElement, goog.graphics.TextElement);
+<a name="line262"></a>
+<a name="line263"></a>
+<a name="line264"></a>/**
+<a name="line265"></a> * Update the displayed text of the element.
+<a name="line266"></a> * @param {string} text The text to draw.
+<a name="line267"></a> */
+<a name="line268"></a>goog.graphics.VmlTextElement.prototype.setText = function(text) {
+<a name="line269"></a>  this.getElement().childNodes[1].setAttribute(&#39;string&#39;, text);
+<a name="line270"></a>};
+<a name="line271"></a>
+<a name="line272"></a>/**
+<a name="line273"></a> * Thin wrapper for VML image elements.
+<a name="line274"></a> * This is an implementation of the goog.graphics.ImageElement interface.
+<a name="line275"></a> * You should not construct objects from this constructor. The graphics
+<a name="line276"></a> * will return the object for you.
+<a name="line277"></a> * @param {Element} element The DOM element to wrap.
+<a name="line278"></a> * @param {goog.graphics.VmlGraphics} graphics The graphics creating
+<a name="line279"></a> *     this element.
+<a name="line280"></a> * @constructor
+<a name="line281"></a> * @extends {goog.graphics.ImageElement}
+<a name="line282"></a> */
+<a name="line283"></a>goog.graphics.VmlImageElement = function(element, graphics) {
+<a name="line284"></a>  goog.graphics.ImageElement.call(this, element, graphics);
+<a name="line285"></a>};
+<a name="line286"></a>goog.inherits(goog.graphics.VmlImageElement, goog.graphics.ImageElement);
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * Update the position of the image.
+<a name="line291"></a> * @param {number} x X coordinate (left).
+<a name="line292"></a> * @param {number} y Y coordinate (top).
+<a name="line293"></a> */
+<a name="line294"></a>goog.graphics.VmlImageElement.prototype.setPosition = function(x, y) {
+<a name="line295"></a>  var style = this.getElement().style;
+<a name="line296"></a>  style.left = goog.graphics.VmlGraphics.toPosPx(x);
+<a name="line297"></a>  style.top = goog.graphics.VmlGraphics.toPosPx(y);
+<a name="line298"></a>};
+<a name="line299"></a>
+<a name="line300"></a>
+<a name="line301"></a>/**
+<a name="line302"></a> * Update the size of the image.
+<a name="line303"></a> * @param {number} width Width of rectangle.
+<a name="line304"></a> * @param {number} height Height of rectangle.
+<a name="line305"></a> */
+<a name="line306"></a>goog.graphics.VmlImageElement.prototype.setSize = function(width, height) {
+<a name="line307"></a>  var style = this.getElement().style;
+<a name="line308"></a>  style.width = goog.graphics.VmlGraphics.toPosPx(width);
+<a name="line309"></a>  style.height = goog.graphics.VmlGraphics.toPosPx(height);
+<a name="line310"></a>};
+<a name="line311"></a>
+<a name="line312"></a>
+<a name="line313"></a>/**
+<a name="line314"></a> * Update the source of the image.
+<a name="line315"></a> * @param {string} src Source of the image.
+<a name="line316"></a> */
+<a name="line317"></a>goog.graphics.VmlImageElement.prototype.setSource = function(src) {
+<a name="line318"></a>  this.getElement().setAttribute(&#39;src&#39;, src);
+<a name="line319"></a>};
+</pre>
+
+
+</body>
+</html>

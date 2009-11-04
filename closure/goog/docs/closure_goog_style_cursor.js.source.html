@@ -1,0 +1,172 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>cursor.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_style_cursor.js.html">cursor.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2005 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Functions to create special cursor styles, like &quot;draggable&quot;
+<a name="line17"></a> * (open hand) or &quot;dragging&quot; (closed hand).
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.style.cursor&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * The file name for the open-hand (draggable) cursor.
+<a name="line27"></a> * @type {string}
+<a name="line28"></a> */
+<a name="line29"></a>goog.style.cursor.OPENHAND_FILE = &#39;openhand.cur&#39;;
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * The file name for the close-hand (dragging) cursor.
+<a name="line34"></a> * @type {string}
+<a name="line35"></a> */
+<a name="line36"></a>goog.style.cursor.CLOSEDHAND_FILE = &#39;closedhand.cur&#39;;
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Create the style for the draggable cursor based on browser and OS.
+<a name="line41"></a> * The value can be extended to be &#39;!important&#39; if needed.
+<a name="line42"></a> *
+<a name="line43"></a> * @param {string} absoluteDotCurFilePath The absolute base path of
+<a name="line44"></a> *     &#39;openhand.cur&#39; file to be used if the browser supports it.
+<a name="line45"></a> * @param {boolean} opt_important Whether to use the &#39;!important&#39; CSS
+<a name="line46"></a> *     modifier.
+<a name="line47"></a> * @return {string} The &quot;draggable&quot; mouse cursor style value.
+<a name="line48"></a> */
+<a name="line49"></a>goog.style.cursor.getDraggableCursorStyle = function(
+<a name="line50"></a>    absoluteDotCurFilePath, opt_important) {
+<a name="line51"></a>  return goog.style.cursor.getCursorStyle_(
+<a name="line52"></a>      &#39;-moz-grab&#39;,
+<a name="line53"></a>      absoluteDotCurFilePath + goog.style.cursor.OPENHAND_FILE,
+<a name="line54"></a>      &#39;default&#39;,
+<a name="line55"></a>      opt_important);
+<a name="line56"></a>};
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Create the style for the dragging cursor based on browser and OS.
+<a name="line61"></a> * The value can be extended to be &#39;!important&#39; if needed.
+<a name="line62"></a> *
+<a name="line63"></a> * @param {string} absoluteDotCurFilePath The absolute base path of
+<a name="line64"></a> *     &#39;closedhand.cur&#39; file to be used if the browser supports it.
+<a name="line65"></a> * @param {boolean} opt_important Whether to use the &#39;!important&#39; CSS
+<a name="line66"></a> *     modifier.
+<a name="line67"></a> * @return {string} The &quot;dragging&quot; mouse cursor style value.
+<a name="line68"></a> */
+<a name="line69"></a>goog.style.cursor.getDraggingCursorStyle = function(
+<a name="line70"></a>    absoluteDotCurFilePath, opt_important) {
+<a name="line71"></a>  return goog.style.cursor.getCursorStyle_(
+<a name="line72"></a>      &#39;-moz-grabbing&#39;,
+<a name="line73"></a>      absoluteDotCurFilePath + goog.style.cursor.CLOSEDHAND_FILE,
+<a name="line74"></a>      &#39;move&#39;,
+<a name="line75"></a>      opt_important);
+<a name="line76"></a>};
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Create the style for the cursor based on browser and OS.
+<a name="line81"></a> *
+<a name="line82"></a> * @param {string} geckoNonWinBuiltInStyleValue The Gecko on non-Windows OS,
+<a name="line83"></a> *     built in cursor style.
+<a name="line84"></a> * @param {string} absoluteDotCurFilePath The .cur file absolute file to be
+<a name="line85"></a> *     used if the browser supports it.
+<a name="line86"></a> * @param {string} defaultStyle The default fallback cursor style.
+<a name="line87"></a> * @param {boolean} opt_important Whether to use the &#39;!important&#39; CSS
+<a name="line88"></a> *     modifier (not included for FF).
+<a name="line89"></a> * @return {string} The computed mouse cursor style value.
+<a name="line90"></a> * @private
+<a name="line91"></a> */
+<a name="line92"></a>goog.style.cursor.getCursorStyle_ = function(geckoNonWinBuiltInStyleValue,
+<a name="line93"></a>    absoluteDotCurFilePath, defaultStyle, opt_important) {
+<a name="line94"></a>  // Use built in cursors for Gecko on non Windows OS.
+<a name="line95"></a>  // We prefer our custom cursor, but Firefox Mac and Firefox Linux
+<a name="line96"></a>  // cannot do custom cursors. They do have a built-in hand, so use it:
+<a name="line97"></a>  if (goog.userAgent.GECKO &amp;&amp; !goog.userAgent.WINDOWS) {
+<a name="line98"></a>    return geckoNonWinBuiltInStyleValue;
+<a name="line99"></a>  }
+<a name="line100"></a>
+<a name="line101"></a>  // Use the custom cursor file.
+<a name="line102"></a>  var cursorStyleValue = &#39;url(&quot;&#39; + absoluteDotCurFilePath + &#39;&quot;)&#39;;
+<a name="line103"></a>  // Change hot-spot for Safari.
+<a name="line104"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line105"></a>    // Safari seems to ignore the hotspot specified in the .cur file (it uses
+<a name="line106"></a>    // 0,0 instead).  This causes the cursor to jump as it transitions between
+<a name="line107"></a>    // openhand and pointer which is especially annoying when trying to hover
+<a name="line108"></a>    // over the route for draggable routes.  We specify the hotspot here as 7,5
+<a name="line109"></a>    // in the css - unfortunately ie6 can&#39;t understand this and falls back to
+<a name="line110"></a>    // the builtin cursors so we just do this for safari (but ie DOES correctly
+<a name="line111"></a>    // use the hotspot specified in the file so this is ok).  The appropriate
+<a name="line112"></a>    // coordinates were determined by looking at a hex dump and the format
+<a name="line113"></a>    // description from wikipedia.
+<a name="line114"></a>    cursorStyleValue += &#39; 7 5&#39;;
+<a name="line115"></a>  }
+<a name="line116"></a>  // Add default cursor fallback.
+<a name="line117"></a>  cursorStyleValue += &#39;, &#39; + defaultStyle;
+<a name="line118"></a>  // Force the style. Do not do it for FF on Windows as it breaks the style.
+<a name="line119"></a>  if (!goog.userAgent.GECKO &amp;&amp; opt_important) {
+<a name="line120"></a>    cursorStyleValue += &#39; !important&#39;;
+<a name="line121"></a>  }
+<a name="line122"></a>  return cursorStyleValue;
+<a name="line123"></a>};
+</pre>
+
+
+</body>
+</html>

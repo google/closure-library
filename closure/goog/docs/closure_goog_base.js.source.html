@@ -1,0 +1,1260 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>base.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_base.js.html">base.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Bootstrap for the Google JS Library (Closure).
+<a name="line17"></a> *
+<a name="line18"></a> * In uncompiled mode base.js will write out Closure&#39;s deps file, unless the
+<a name="line19"></a> * global &lt;code&gt;CLOSURE_NO_DEPS&lt;/code&gt; is set to true.  This allows projects to
+<a name="line20"></a> * include their own deps file(s) from different locations.
+<a name="line21"></a> *
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>/**
+<a name="line25"></a> * @define {boolean} Overridden to true by the compiler when --closure_pass
+<a name="line26"></a> *     or --mark_as_compiled is specified.
+<a name="line27"></a> */
+<a name="line28"></a>var COMPILED = false;
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Base namespace for the Closure library.  Checks to see goog is
+<a name="line33"></a> * already defined in the current scope before assigning to prevent
+<a name="line34"></a> * clobbering if base.js is loaded more than once.
+<a name="line35"></a> */
+<a name="line36"></a>var goog = goog || {}; // Check to see if already defined in current scope
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Reference to the global context.  In most cases this will be &#39;window&#39;.
+<a name="line41"></a> */
+<a name="line42"></a>goog.global = this;
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * @define {boolean} DEBUG is provided as a convenience so that debugging code
+<a name="line47"></a> * that should not be included in a production js_binary can be easily stripped
+<a name="line48"></a> * by specifying --define goog.DEBUG=false to the JSCompiler. For example, most
+<a name="line49"></a> * toString() methods should be declared inside an &quot;if (goog.DEBUG)&quot; conditional
+<a name="line50"></a> * because they are generally used for debugging purposes and it is difficult
+<a name="line51"></a> * for the JSCompiler to statically determine whether they are used.
+<a name="line52"></a> */
+<a name="line53"></a>goog.DEBUG = true;
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * @define {string} LOCALE defines the locale being used for compilation. It is
+<a name="line58"></a> * used to select locale specific data to be compiled in js binary. BUILD rule
+<a name="line59"></a> * can specify this value by &quot;--define goog.LOCALE=&lt;locale_name&gt;&quot; as JSCompiler
+<a name="line60"></a> * option.
+<a name="line61"></a> *
+<a name="line62"></a> * Take into account that the locale code format is important. You should use
+<a name="line63"></a> * the canonical Unicode format with hyphen as a delimiter. Language must be
+<a name="line64"></a> * lowercase, Language Script - Capitalized, Region - UPPERCASE.
+<a name="line65"></a> * There are few examples: pt-BR, en, en-US, sr-Latin-BO, zh-Hans-CN.
+<a name="line66"></a> *
+<a name="line67"></a> * See more info about locale codes here:
+<a name="line68"></a> * http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers
+<a name="line69"></a> *
+<a name="line70"></a> * For language codes you should use values defined by ISO 693-1. See it here
+<a name="line71"></a> * http://www.w3.org/WAI/ER/IG/ert/iso639.htm. There is only one exception from
+<a name="line72"></a> * this rule: the Hebrew language. For legacy reasons the old code (iw) should
+<a name="line73"></a> * be used instead of the new code (he), see http://wiki/Main/IIISynonyms.
+<a name="line74"></a> */
+<a name="line75"></a>goog.LOCALE = &#39;en&#39;;  // default to en
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Indicates whether or not we can call &#39;eval&#39; directly to eval code in the
+<a name="line80"></a> * global scope. Set to a Boolean by the first call to goog.globalEval (which
+<a name="line81"></a> * empirically tests whether eval works for globals). @see goog.globalEval
+<a name="line82"></a> * @type {boolean?}
+<a name="line83"></a> * @private
+<a name="line84"></a> */
+<a name="line85"></a>goog.evalWorksForGlobals_ = null;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Creates object stubs for a namespace. When present in a file, goog.provide
+<a name="line90"></a> * also indicates that the file defines the indicated object. Calls to
+<a name="line91"></a> * goog.provide are resolved by the compiler if --closure_pass is set.
+<a name="line92"></a> * @param {string} name name of the object that this file defines.
+<a name="line93"></a> */
+<a name="line94"></a>goog.provide = function(name) {
+<a name="line95"></a>  if (!COMPILED) {
+<a name="line96"></a>    // Ensure that the same namespace isn&#39;t provided twice. This is intended
+<a name="line97"></a>    // to teach new developers that &#39;goog.provide&#39; is effectively a variable
+<a name="line98"></a>    // declaration. And when JSCompiler transforms goog.provide into a real
+<a name="line99"></a>    // variable declaration, the compiled JS should work the same as the raw
+<a name="line100"></a>    // JS--even when the raw JS uses goog.provide incorrectly.
+<a name="line101"></a>    if (goog.getObjectByName(name) &amp;&amp; !goog.implicitNamespaces_[name]) {
+<a name="line102"></a>      throw Error(&#39;Namespace &quot;&#39; + name + &#39;&quot; already declared.&#39;);
+<a name="line103"></a>    }
+<a name="line104"></a>
+<a name="line105"></a>    var namespace = name;
+<a name="line106"></a>    while ((namespace = namespace.substring(0, namespace.lastIndexOf(&#39;.&#39;)))) {
+<a name="line107"></a>      goog.implicitNamespaces_[namespace] = true;
+<a name="line108"></a>    }
+<a name="line109"></a>  }
+<a name="line110"></a>
+<a name="line111"></a>  goog.exportPath_(name);
+<a name="line112"></a>};
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>if (!COMPILED) {
+<a name="line116"></a>  /**
+<a name="line117"></a>   * Namespaces implicitly defined by goog.provide. For example,
+<a name="line118"></a>   * goog.provide(&#39;goog.events.Event&#39;) implicitly declares
+<a name="line119"></a>   * that &#39;goog&#39; and &#39;goog.events&#39; must be namespaces.
+<a name="line120"></a>   *
+<a name="line121"></a>   * @type {Object}
+<a name="line122"></a>   * @private
+<a name="line123"></a>   */
+<a name="line124"></a>  goog.implicitNamespaces_ = {};
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * Builds an object structure for the provided namespace path,
+<a name="line130"></a> * ensuring that names that already exist are not overwritten. For
+<a name="line131"></a> * example:
+<a name="line132"></a> * &quot;a.b.c&quot; -&gt; a = {};a.b={};a.b.c={};
+<a name="line133"></a> * Used by goog.provide and goog.exportSymbol.
+<a name="line134"></a> * @param {string} name name of the object that this file defines.
+<a name="line135"></a> * @param {Object} opt_object the object to expose at the end of the path.
+<a name="line136"></a> * @param {Object} opt_objectToExportTo The object to add the path to; default
+<a name="line137"></a> *     is |goog.global|.
+<a name="line138"></a> * @private
+<a name="line139"></a> */
+<a name="line140"></a>goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
+<a name="line141"></a>  var parts = name.split(&#39;.&#39;);
+<a name="line142"></a>  var cur = opt_objectToExportTo || goog.global;
+<a name="line143"></a>
+<a name="line144"></a>  // Internet Explorer exhibits strange behavior when throwing errors from
+<a name="line145"></a>  // methods externed in this manner.  See the testExportSymbolExceptions in
+<a name="line146"></a>  // base_test.html for an example.
+<a name="line147"></a>  if (!(parts[0] in cur) &amp;&amp; cur.execScript) {
+<a name="line148"></a>    cur.execScript(&#39;var &#39; + parts[0]);
+<a name="line149"></a>  }
+<a name="line150"></a>
+<a name="line151"></a>  // Certain browsers cannot parse code in the form for((a in b); c;);
+<a name="line152"></a>  // This pattern is produced by the JSCompiler when it collapses the
+<a name="line153"></a>  // statement above into the conditional loop below. To prevent this from
+<a name="line154"></a>  // happening, use a for-loop and reserve the init logic as below.
+<a name="line155"></a>
+<a name="line156"></a>  // Parentheses added to eliminate strict JS warning in Firefox.
+<a name="line157"></a>  for (var part; parts.length &amp;&amp; (part = parts.shift());) {
+<a name="line158"></a>    if (!parts.length &amp;&amp; goog.isDef(opt_object)) {
+<a name="line159"></a>      // last part and we have an object; use it
+<a name="line160"></a>      cur[part] = opt_object;
+<a name="line161"></a>    } else if (cur[part]) {
+<a name="line162"></a>      cur = cur[part];
+<a name="line163"></a>    } else {
+<a name="line164"></a>      cur = cur[part] = {};
+<a name="line165"></a>    }
+<a name="line166"></a>  }
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Returns an object based on its fully qualified external name.  If you are
+<a name="line172"></a> * using a compilation pass that renames property names beware that using this
+<a name="line173"></a> * function will not find renamed properties.
+<a name="line174"></a> *
+<a name="line175"></a> * @param {string} name The fully qualified name.
+<a name="line176"></a> * @param {Object} opt_obj The object within which to look; default is
+<a name="line177"></a> *     |goog.global|.
+<a name="line178"></a> * @return {Object?} The object or, if not found, null.
+<a name="line179"></a> */
+<a name="line180"></a>goog.getObjectByName = function(name, opt_obj) {
+<a name="line181"></a>  var parts = name.split(&#39;.&#39;);
+<a name="line182"></a>  var cur = opt_obj || goog.global;
+<a name="line183"></a>  for (var part; part = parts.shift(); ) {
+<a name="line184"></a>    if (cur[part]) {
+<a name="line185"></a>      cur = cur[part];
+<a name="line186"></a>    } else {
+<a name="line187"></a>      return null;
+<a name="line188"></a>    }
+<a name="line189"></a>  }
+<a name="line190"></a>  return cur;
+<a name="line191"></a>};
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>/**
+<a name="line195"></a> * Globalizes a whole namespace, such as goog or goog.lang.
+<a name="line196"></a> *
+<a name="line197"></a> * @param {Object} obj The namespace to globalize.
+<a name="line198"></a> * @param {Object} opt_global The object to add the properties to.
+<a name="line199"></a> * @deprecated Properties may be explicitly exported to the global scope, but
+<a name="line200"></a> *     this should no longer be done in bulk.
+<a name="line201"></a> */
+<a name="line202"></a>goog.globalize = function(obj, opt_global) {
+<a name="line203"></a>  var global = opt_global || goog.global;
+<a name="line204"></a>  for (var x in obj) {
+<a name="line205"></a>    global[x] = obj[x];
+<a name="line206"></a>  }
+<a name="line207"></a>};
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * Adds a dependency from a file to the files it requires.
+<a name="line212"></a> * @param {string} relPath The path to the js file.
+<a name="line213"></a> * @param {Array} provides An array of strings with the names of the objects
+<a name="line214"></a> *                         this file provides.
+<a name="line215"></a> * @param {Array} requires An array of strings with the names of the objects
+<a name="line216"></a> *                         this file requires.
+<a name="line217"></a> */
+<a name="line218"></a>goog.addDependency = function(relPath, provides, requires) {
+<a name="line219"></a>  if (!COMPILED) {
+<a name="line220"></a>    var provide, require;
+<a name="line221"></a>    var path = relPath.replace(/\\/g, &#39;/&#39;);
+<a name="line222"></a>    var deps = goog.dependencies_;
+<a name="line223"></a>    for (var i = 0; provide = provides[i]; i++) {
+<a name="line224"></a>      deps.nameToPath[provide] = path;
+<a name="line225"></a>      if (!(path in deps.pathToNames)) {
+<a name="line226"></a>        deps.pathToNames[path] = {};
+<a name="line227"></a>      }
+<a name="line228"></a>      deps.pathToNames[path][provide] = true;
+<a name="line229"></a>    }
+<a name="line230"></a>    for (var j = 0; require = requires[j]; j++) {
+<a name="line231"></a>      if (!(path in deps.requires)) {
+<a name="line232"></a>        deps.requires[path] = {};
+<a name="line233"></a>      }
+<a name="line234"></a>      deps.requires[path][require] = true;
+<a name="line235"></a>    }
+<a name="line236"></a>  }
+<a name="line237"></a>};
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * Implements a system for the dynamic resolution of dependencies
+<a name="line242"></a> * that works in parallel with the BUILD system. Note that all calls
+<a name="line243"></a> * to goog.require will be stripped by the JSCompiler when the
+<a name="line244"></a> * --closure_pass option is used.
+<a name="line245"></a> * @param {string} rule Rule to include, in the form goog.package.part.
+<a name="line246"></a> */
+<a name="line247"></a>goog.require = function(rule) {
+<a name="line248"></a>
+<a name="line249"></a>  // if the object already exists we do not need do do anything
+<a name="line250"></a>  // TODO: If we start to support require based on file name this has
+<a name="line251"></a>  //            to change
+<a name="line252"></a>  // TODO: If we allow goog.foo.* this has to change
+<a name="line253"></a>  // TODO: If we implement dynamic load after page load we should probably
+<a name="line254"></a>  //            not remove this code for the compiled output
+<a name="line255"></a>  if (!COMPILED) {
+<a name="line256"></a>    if (goog.getObjectByName(rule)) {
+<a name="line257"></a>      return;
+<a name="line258"></a>    }
+<a name="line259"></a>    var path = goog.getPathFromDeps_(rule);
+<a name="line260"></a>    if (path) {
+<a name="line261"></a>      goog.included_[path] = true;
+<a name="line262"></a>      goog.writeScripts_();
+<a name="line263"></a>    } else {
+<a name="line264"></a>      // NOTE: We could always throw an error, but this would break
+<a name="line265"></a>      // legacy users that depended on this failing silently. Instead, the
+<a name="line266"></a>      // compiler should warn us when there are invalid goog.require calls.
+<a name="line267"></a>      // For now, we simply give clients a way to turn strict mode on.
+<a name="line268"></a>      if (goog.useStrictRequires) {
+<a name="line269"></a>        throw new Error(&#39;goog.require could not find: &#39; + rule);
+<a name="line270"></a>      }
+<a name="line271"></a>    }
+<a name="line272"></a>  }
+<a name="line273"></a>};
+<a name="line274"></a>
+<a name="line275"></a>
+<a name="line276"></a>/**
+<a name="line277"></a> * Whether goog.require should throw an exception if it fails.
+<a name="line278"></a> * @type {boolean}
+<a name="line279"></a> */
+<a name="line280"></a>goog.useStrictRequires = false;
+<a name="line281"></a>
+<a name="line282"></a>
+<a name="line283"></a>/**
+<a name="line284"></a> * Path for included scripts
+<a name="line285"></a> * @type {string}
+<a name="line286"></a> */
+<a name="line287"></a>goog.basePath = &#39;&#39;;
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * A hook for overriding the base path.
+<a name="line292"></a> * @type {string|undefined}
+<a name="line293"></a> */
+<a name="line294"></a>goog.global.CLOSURE_BASE_PATH;
+<a name="line295"></a>
+<a name="line296"></a>
+<a name="line297"></a>/**
+<a name="line298"></a> * Whether to write out Closure&#39;s deps file. By default,
+<a name="line299"></a> * the deps are written.
+<a name="line300"></a> * @type {boolean|undefined}
+<a name="line301"></a> */
+<a name="line302"></a>goog.global.CLOSURE_NO_DEPS;
+<a name="line303"></a>
+<a name="line304"></a>
+<a name="line305"></a>/**
+<a name="line306"></a> * Null function used for default values of callbacks, etc.
+<a name="line307"></a> * @type {!Function}
+<a name="line308"></a> */
+<a name="line309"></a>goog.nullFunction = function() {};
+<a name="line310"></a>
+<a name="line311"></a>
+<a name="line312"></a>/**
+<a name="line313"></a> * The identity function. Returns its first argument.
+<a name="line314"></a> *
+<a name="line315"></a> * @param {*} var_args The arguments of the function.
+<a name="line316"></a> * @return {*} The first argument.
+<a name="line317"></a> * @deprecated Use goog.functions.identity instead.
+<a name="line318"></a> */
+<a name="line319"></a>goog.identityFunction = function(var_args) {
+<a name="line320"></a>  return arguments[0];
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * When defining a class Foo with an abstract method bar(), you can do:
+<a name="line326"></a> *
+<a name="line327"></a> * Foo.prototype.bar = goog.abstractMethod
+<a name="line328"></a> *
+<a name="line329"></a> * Now if a subclass of Foo fails to override bar(), an error
+<a name="line330"></a> * will be thrown when bar() is invoked.
+<a name="line331"></a> *
+<a name="line332"></a> * Note: This does not take the name of the function to override as
+<a name="line333"></a> * an argument because that would make it more difficult to obfuscate
+<a name="line334"></a> * our JavaScript code.
+<a name="line335"></a> *
+<a name="line336"></a> * @type {!Function}
+<a name="line337"></a> * @throws {Error} when invoked to indicate the method should be
+<a name="line338"></a> *   overridden.
+<a name="line339"></a> */
+<a name="line340"></a>goog.abstractMethod = function() {
+<a name="line341"></a>  throw Error(&#39;unimplemented abstract method&#39;);
+<a name="line342"></a>};
+<a name="line343"></a>
+<a name="line344"></a>
+<a name="line345"></a>/**
+<a name="line346"></a> * Adds a {@code getInstance} static method that always return the same instance
+<a name="line347"></a> * object.
+<a name="line348"></a> * @param {!Function} ctor The constructor for the class to add the static
+<a name="line349"></a> *     method to.
+<a name="line350"></a> */
+<a name="line351"></a>goog.addSingletonGetter = function(ctor) {
+<a name="line352"></a>  ctor.getInstance = function() {
+<a name="line353"></a>    return ctor.instance_ || (ctor.instance_ = new ctor());
+<a name="line354"></a>  };
+<a name="line355"></a>};
+<a name="line356"></a>
+<a name="line357"></a>
+<a name="line358"></a>if (!COMPILED) {
+<a name="line359"></a>  /**
+<a name="line360"></a>   * Object used to keep track of urls that have already been added. This
+<a name="line361"></a>   * record allows the prevention of circular dependencies.
+<a name="line362"></a>   * @type {Object}
+<a name="line363"></a>   * @private
+<a name="line364"></a>   */
+<a name="line365"></a>  goog.included_ = {};
+<a name="line366"></a>
+<a name="line367"></a>
+<a name="line368"></a>  /**
+<a name="line369"></a>   * This object is used to keep track of dependencies and other data that is
+<a name="line370"></a>   * used for loading scripts
+<a name="line371"></a>   * @private
+<a name="line372"></a>   * @type {Object}
+<a name="line373"></a>   */
+<a name="line374"></a>  goog.dependencies_ = {
+<a name="line375"></a>    pathToNames: {}, // 1 to many
+<a name="line376"></a>    nameToPath: {}, // 1 to 1
+<a name="line377"></a>    requires: {}, // 1 to many
+<a name="line378"></a>    visited: {}, // used when resolving dependencies to prevent us from
+<a name="line379"></a>                 // visiting the file twice
+<a name="line380"></a>    written: {} // used to keep track of script files we have written
+<a name="line381"></a>  };
+<a name="line382"></a>
+<a name="line383"></a>
+<a name="line384"></a>  /**
+<a name="line385"></a>   * Tries to detect whether is in the context of an HTML document.
+<a name="line386"></a>   * @return {boolean} True if it looks like HTML document.
+<a name="line387"></a>   * @private
+<a name="line388"></a>   */
+<a name="line389"></a>  goog.inHtmlDocument_ = function() {
+<a name="line390"></a>    var doc = goog.global.document;
+<a name="line391"></a>    return typeof doc != &#39;undefined&#39; &amp;&amp;
+<a name="line392"></a>           &#39;write&#39; in doc;  // XULDocument misses write.
+<a name="line393"></a>  };
+<a name="line394"></a>
+<a name="line395"></a>
+<a name="line396"></a>  /**
+<a name="line397"></a>   * Tries to detect the base path of the base.js script that bootstraps Closure
+<a name="line398"></a>   * @private
+<a name="line399"></a>   */
+<a name="line400"></a>  goog.findBasePath_ = function() {
+<a name="line401"></a>    if (!goog.inHtmlDocument_()) {
+<a name="line402"></a>      return;
+<a name="line403"></a>    }
+<a name="line404"></a>    var doc = goog.global.document;
+<a name="line405"></a>    if (goog.global.CLOSURE_BASE_PATH) {
+<a name="line406"></a>      goog.basePath = goog.global.CLOSURE_BASE_PATH;
+<a name="line407"></a>      return;
+<a name="line408"></a>    }
+<a name="line409"></a>    var scripts = doc.getElementsByTagName(&#39;script&#39;);
+<a name="line410"></a>    for (var script, i = 0; script = scripts[i]; i++) {
+<a name="line411"></a>      var src = script.src;
+<a name="line412"></a>      var l = src.length;
+<a name="line413"></a>      if (src.substr(l - 7) == &#39;base.js&#39;) {
+<a name="line414"></a>        goog.basePath = src.substr(0, l - 7);
+<a name="line415"></a>        return;
+<a name="line416"></a>      }
+<a name="line417"></a>    }
+<a name="line418"></a>  };
+<a name="line419"></a>
+<a name="line420"></a>
+<a name="line421"></a>  /**
+<a name="line422"></a>   * Writes a script tag if, and only if, that script hasn&#39;t already been added
+<a name="line423"></a>   * to the document.  (Must be called at execution time)
+<a name="line424"></a>   * @param {string} src Script source.
+<a name="line425"></a>   * @private
+<a name="line426"></a>   */
+<a name="line427"></a>  goog.writeScriptTag_ = function(src) {
+<a name="line428"></a>    if (goog.inHtmlDocument_() &amp;&amp;
+<a name="line429"></a>        !goog.dependencies_.written[src]) {
+<a name="line430"></a>      goog.dependencies_.written[src] = true;
+<a name="line431"></a>      var doc = goog.global.document;
+<a name="line432"></a>      doc.write(&#39;&lt;script type=&quot;text/javascript&quot; src=&quot;&#39; +
+<a name="line433"></a>                src + &#39;&quot;&gt;&lt;/&#39; + &#39;script&gt;&#39;);
+<a name="line434"></a>    }
+<a name="line435"></a>  };
+<a name="line436"></a>
+<a name="line437"></a>
+<a name="line438"></a>  /**
+<a name="line439"></a>   * Resolves dependencies based on the dependencies added using addDependency
+<a name="line440"></a>   * and calls writeScriptTag_ in the correct order.
+<a name="line441"></a>   * @private
+<a name="line442"></a>   */
+<a name="line443"></a>  goog.writeScripts_ = function() {
+<a name="line444"></a>    // the scripts we need to write this time
+<a name="line445"></a>    var scripts = [];
+<a name="line446"></a>    var seenScript = {};
+<a name="line447"></a>    var deps = goog.dependencies_;
+<a name="line448"></a>
+<a name="line449"></a>    function visitNode(path) {
+<a name="line450"></a>      if (path in deps.written) {
+<a name="line451"></a>        return;
+<a name="line452"></a>      }
+<a name="line453"></a>
+<a name="line454"></a>      // we have already visited this one. We can get here if we have cyclic
+<a name="line455"></a>      // dependencies
+<a name="line456"></a>      if (path in deps.visited) {
+<a name="line457"></a>        if (!(path in seenScript)) {
+<a name="line458"></a>          seenScript[path] = true;
+<a name="line459"></a>          scripts.push(path);
+<a name="line460"></a>        }
+<a name="line461"></a>        return;
+<a name="line462"></a>      }
+<a name="line463"></a>
+<a name="line464"></a>      deps.visited[path] = true;
+<a name="line465"></a>
+<a name="line466"></a>      if (path in deps.requires) {
+<a name="line467"></a>        for (var requireName in deps.requires[path]) {
+<a name="line468"></a>          if (requireName in deps.nameToPath) {
+<a name="line469"></a>            visitNode(deps.nameToPath[requireName]);
+<a name="line470"></a>          } else if (!goog.getObjectByName(requireName)) {
+<a name="line471"></a>            // If the required name is defined, we assume that this
+<a name="line472"></a>            // dependency was bootstapped by other means. Otherwise,
+<a name="line473"></a>            // throw an exception.
+<a name="line474"></a>            throw Error(&#39;Undefined nameToPath for &#39; + requireName);
+<a name="line475"></a>          }
+<a name="line476"></a>        }
+<a name="line477"></a>      }
+<a name="line478"></a>
+<a name="line479"></a>      if (!(path in seenScript)) {
+<a name="line480"></a>        seenScript[path] = true;
+<a name="line481"></a>        scripts.push(path);
+<a name="line482"></a>      }
+<a name="line483"></a>    }
+<a name="line484"></a>
+<a name="line485"></a>    for (var path in goog.included_) {
+<a name="line486"></a>      if (!deps.written[path]) {
+<a name="line487"></a>        visitNode(path);
+<a name="line488"></a>      }
+<a name="line489"></a>    }
+<a name="line490"></a>
+<a name="line491"></a>    for (var i = 0; i &lt; scripts.length; i++) {
+<a name="line492"></a>      if (scripts[i]) {
+<a name="line493"></a>        goog.writeScriptTag_(goog.basePath + scripts[i]);
+<a name="line494"></a>      } else {
+<a name="line495"></a>        throw Error(&#39;Undefined script input&#39;);
+<a name="line496"></a>      }
+<a name="line497"></a>    }
+<a name="line498"></a>  };
+<a name="line499"></a>
+<a name="line500"></a>
+<a name="line501"></a>  /**
+<a name="line502"></a>   * Looks at the dependency rules and tries to determine the script file that
+<a name="line503"></a>   * fulfills a particular rule.
+<a name="line504"></a>   * @param {string} rule In the form goog.namespace.Class or project.script.
+<a name="line505"></a>   * @return {string?} Url corresponding to the rule, or null.
+<a name="line506"></a>   * @private
+<a name="line507"></a>   */
+<a name="line508"></a>  goog.getPathFromDeps_ = function(rule) {
+<a name="line509"></a>    if (rule in goog.dependencies_.nameToPath) {
+<a name="line510"></a>      return goog.dependencies_.nameToPath[rule];
+<a name="line511"></a>    } else {
+<a name="line512"></a>      return null;
+<a name="line513"></a>    }
+<a name="line514"></a>  };
+<a name="line515"></a>
+<a name="line516"></a>  goog.findBasePath_();
+<a name="line517"></a>
+<a name="line518"></a>  // Allow projects to manage the deps files themselves.
+<a name="line519"></a>  if (!goog.global.CLOSURE_NO_DEPS) {
+<a name="line520"></a>    goog.writeScriptTag_(goog.basePath + &#39;deps.js&#39;);
+<a name="line521"></a>  }
+<a name="line522"></a>}
+<a name="line523"></a>
+<a name="line524"></a>
+<a name="line525"></a>
+<a name="line526"></a>//==============================================================================
+<a name="line527"></a>// Language Enhancements
+<a name="line528"></a>//==============================================================================
+<a name="line529"></a>
+<a name="line530"></a>
+<a name="line531"></a>/**
+<a name="line532"></a> * This is a &quot;fixed&quot; version of the typeof operator.  It differs from the typeof
+<a name="line533"></a> * operator in such a way that null returns &#39;null&#39; and arrays return &#39;array&#39;.
+<a name="line534"></a> * @param {*} value The value to get the type of.
+<a name="line535"></a> * @return {string} The name of the type.
+<a name="line536"></a> */
+<a name="line537"></a>goog.typeOf = function(value) {
+<a name="line538"></a>  var s = typeof value;
+<a name="line539"></a>  if (s == &#39;object&#39;) {
+<a name="line540"></a>    if (value) {
+<a name="line541"></a>      // We cannot use constructor == Array or instanceof Array because
+<a name="line542"></a>      // different frames have different Array objects. In IE6, if the iframe
+<a name="line543"></a>      // where the array was created is destroyed, the array loses its
+<a name="line544"></a>      // prototype. Then dereferencing val.splice here throws an exception, so
+<a name="line545"></a>      // we can&#39;t use goog.isFunction. Calling typeof directly returns &#39;unknown&#39;
+<a name="line546"></a>      // so that will work. In this case, this function will return false and
+<a name="line547"></a>      // most array functions will still work because the array is still
+<a name="line548"></a>      // array-like (supports length and []) even though it has lost its
+<a name="line549"></a>      // prototype.
+<a name="line550"></a>      // Mark Miller noticed that Object.prototype.toString
+<a name="line551"></a>      // allows access to the unforgeable [[Class]] property.
+<a name="line552"></a>      //  15.2.4.2 Object.prototype.toString ( )
+<a name="line553"></a>      //  When the toString method is called, the following steps are taken:
+<a name="line554"></a>      //      1. Get the [[Class]] property of this object.
+<a name="line555"></a>      //      2. Compute a string value by concatenating the three strings
+<a name="line556"></a>      //         &quot;[object &quot;, Result(1), and &quot;]&quot;.
+<a name="line557"></a>      //      3. Return Result(2).
+<a name="line558"></a>      // and this behavior survives the destruction of the execution context.
+<a name="line559"></a>      if (value instanceof Array ||  // Works quickly in same execution context.
+<a name="line560"></a>          // If value is from a different execution context then
+<a name="line561"></a>          // !(value instanceof Object), which lets us early out in the common
+<a name="line562"></a>          // case when value is from the same context but not an array.
+<a name="line563"></a>          // The {if (value)} check above means we don&#39;t have to worry about
+<a name="line564"></a>          // undefined behavior of Object.prototype.toString on null/undefined.
+<a name="line565"></a>          //
+<a name="line566"></a>          // HACK: In order to use an Object prototype method on the arbitrary
+<a name="line567"></a>          //   value, the compiler requires the value be cast to type Object,
+<a name="line568"></a>          //   even though the ECMA spec explicitly allows it.
+<a name="line569"></a>          (!(value instanceof Object) &amp;&amp;
+<a name="line570"></a>           (Object.prototype.toString.call(
+<a name="line571"></a>               /** @type {Object} */ (value)) == &#39;[object Array]&#39;) ||
+<a name="line572"></a>
+<a name="line573"></a>           // In IE all non value types are wrapped as objects across window
+<a name="line574"></a>           // boundaries (not iframe though) so we have to do object detection
+<a name="line575"></a>           // for this edge case
+<a name="line576"></a>           typeof value.length == &#39;number&#39; &amp;&amp;
+<a name="line577"></a>           typeof value.splice != &#39;undefined&#39; &amp;&amp;
+<a name="line578"></a>           typeof value.propertyIsEnumerable != &#39;undefined&#39; &amp;&amp;
+<a name="line579"></a>           !value.propertyIsEnumerable(&#39;splice&#39;)
+<a name="line580"></a>
+<a name="line581"></a>          )) {
+<a name="line582"></a>        return &#39;array&#39;;
+<a name="line583"></a>      }
+<a name="line584"></a>      // HACK: There is still an array case that fails.
+<a name="line585"></a>      //     function ArrayImpostor() {}
+<a name="line586"></a>      //     ArrayImpostor.prototype = [];
+<a name="line587"></a>      //     var impostor = new ArrayImpostor;
+<a name="line588"></a>      // this can be fixed by getting rid of the fast path
+<a name="line589"></a>      // (value instanceof Array) and solely relying on
+<a name="line590"></a>      // (value &amp;&amp; Object.prototype.toString.vall(value) === &#39;[object Array]&#39;)
+<a name="line591"></a>      // but that would require many more function calls and is not warranted
+<a name="line592"></a>      // unless closure code is receiving objects from untrusted sources.
+<a name="line593"></a>
+<a name="line594"></a>      // IE in cross-window calls does not correctly marshal the function type
+<a name="line595"></a>      // (it appears just as an object) so we cannot use just typeof val ==
+<a name="line596"></a>      // &#39;function&#39;. However, if the object has a call property, it is a
+<a name="line597"></a>      // function.
+<a name="line598"></a>      if (!(value instanceof Object) &amp;&amp;
+<a name="line599"></a>          (Object.prototype.toString.call(
+<a name="line600"></a>              /** @type {Object} */ (value)) == &#39;[object Function]&#39; ||
+<a name="line601"></a>          typeof value.call != &#39;undefined&#39; &amp;&amp;
+<a name="line602"></a>          typeof value.propertyIsEnumerable != &#39;undefined&#39; &amp;&amp;
+<a name="line603"></a>          !value.propertyIsEnumerable(&#39;call&#39;))) {
+<a name="line604"></a>        return &#39;function&#39;;
+<a name="line605"></a>      }
+<a name="line606"></a>
+<a name="line607"></a>
+<a name="line608"></a>    } else {
+<a name="line609"></a>      return &#39;null&#39;;
+<a name="line610"></a>    }
+<a name="line611"></a>
+<a name="line612"></a>  // In Safari typeof nodeList returns &#39;function&#39;, and on Firefox
+<a name="line613"></a>  // typeof behaves similarly for HTML{Applet,Embed,Object}Elements
+<a name="line614"></a>  // and RegExps.  We would like to return object for those and we can
+<a name="line615"></a>  // detect an invalid function by making sure that the function
+<a name="line616"></a>  // object has a call method.
+<a name="line617"></a>  } else if (s == &#39;function&#39; &amp;&amp; typeof value.call == &#39;undefined&#39;) {
+<a name="line618"></a>    return &#39;object&#39;;
+<a name="line619"></a>  }
+<a name="line620"></a>  return s;
+<a name="line621"></a>};
+<a name="line622"></a>
+<a name="line623"></a>
+<a name="line624"></a>/**
+<a name="line625"></a> * Safe way to test whether a property is enumarable.  It allows testing
+<a name="line626"></a> * for enumerable on objects where &#39;propertyIsEnumerable&#39; is overridden or
+<a name="line627"></a> * does not exist (like DOM nodes in IE). Does not use browser native
+<a name="line628"></a> * Object.propertyIsEnumerable.
+<a name="line629"></a> * @param {Object} object The object to test if the property is enumerable.
+<a name="line630"></a> * @param {string} propName The property name to check for.
+<a name="line631"></a> * @return {boolean} True if the property is enumarable.
+<a name="line632"></a> * @private
+<a name="line633"></a> */
+<a name="line634"></a>goog.propertyIsEnumerableCustom_ = function(object, propName) {
+<a name="line635"></a>  // KJS in Safari 2 is not ECMAScript compatible and lacks crucial methods
+<a name="line636"></a>  // such as propertyIsEnumerable.  We therefore use a workaround.
+<a name="line637"></a>  // Does anyone know a more efficient work around?
+<a name="line638"></a>  if (propName in object) {
+<a name="line639"></a>    for (var key in object) {
+<a name="line640"></a>      if (key == propName &amp;&amp;
+<a name="line641"></a>          Object.prototype.hasOwnProperty.call(object, propName)) {
+<a name="line642"></a>        return true;
+<a name="line643"></a>      }
+<a name="line644"></a>    }
+<a name="line645"></a>  }
+<a name="line646"></a>  return false;
+<a name="line647"></a>};
+<a name="line648"></a>
+<a name="line649"></a>
+<a name="line650"></a>/**
+<a name="line651"></a> * Safe way to test whether a property is enumarable.  It allows testing
+<a name="line652"></a> * for enumerable on objects where &#39;propertyIsEnumerable&#39; is overridden or
+<a name="line653"></a> * does not exist (like DOM nodes in IE).
+<a name="line654"></a> * @param {Object} object The object to test if the property is enumerable.
+<a name="line655"></a> * @param {string} propName The property name to check for.
+<a name="line656"></a> * @return {boolean} True if the property is enumarable.
+<a name="line657"></a> * @private
+<a name="line658"></a> */
+<a name="line659"></a>goog.propertyIsEnumerable_ = function(object, propName) {
+<a name="line660"></a>  // In IE if object is from another window, cannot use propertyIsEnumerable
+<a name="line661"></a>  // from this window&#39;s Object. Will raise a &#39;JScript object expected&#39; error.
+<a name="line662"></a>  if (object instanceof Object) {
+<a name="line663"></a>    return Object.prototype.propertyIsEnumerable.call(object, propName);
+<a name="line664"></a>  } else {
+<a name="line665"></a>    return goog.propertyIsEnumerableCustom_(object, propName);
+<a name="line666"></a>  }
+<a name="line667"></a>};
+<a name="line668"></a>
+<a name="line669"></a>
+<a name="line670"></a>/**
+<a name="line671"></a> * Returns true if the specified value is not |undefined|.
+<a name="line672"></a> * WARNING: Do not use this to test if an object has a property. Use the in
+<a name="line673"></a> * operator instead.  Additionally, this function assumes that the global
+<a name="line674"></a> * undefined variable has not been redefined.
+<a name="line675"></a> * @param {*} val Variable to test.
+<a name="line676"></a> * @return {boolean} Whether variable is defined.
+<a name="line677"></a> */
+<a name="line678"></a>goog.isDef = function(val) {
+<a name="line679"></a>  return val !== undefined;
+<a name="line680"></a>};
+<a name="line681"></a>
+<a name="line682"></a>
+<a name="line683"></a>/**
+<a name="line684"></a> * Returns true if the specified value is |null|
+<a name="line685"></a> * @param {*} val Variable to test.
+<a name="line686"></a> * @return {boolean} Whether variable is null.
+<a name="line687"></a> */
+<a name="line688"></a>goog.isNull = function(val) {
+<a name="line689"></a>  return val === null;
+<a name="line690"></a>};
+<a name="line691"></a>
+<a name="line692"></a>
+<a name="line693"></a>/**
+<a name="line694"></a> * Returns true if the specified value is defined and not null
+<a name="line695"></a> * @param {*} val Variable to test.
+<a name="line696"></a> * @return {boolean} Whether variable is defined and not null.
+<a name="line697"></a> */
+<a name="line698"></a>goog.isDefAndNotNull = function(val) {
+<a name="line699"></a>  // Note that undefined == null.
+<a name="line700"></a>  return val != null;
+<a name="line701"></a>};
+<a name="line702"></a>
+<a name="line703"></a>
+<a name="line704"></a>/**
+<a name="line705"></a> * Returns true if the specified value is an array
+<a name="line706"></a> * @param {*} val Variable to test.
+<a name="line707"></a> * @return {boolean} Whether variable is an array.
+<a name="line708"></a> */
+<a name="line709"></a>goog.isArray = function(val) {
+<a name="line710"></a>  return goog.typeOf(val) == &#39;array&#39;;
+<a name="line711"></a>};
+<a name="line712"></a>
+<a name="line713"></a>
+<a name="line714"></a>/**
+<a name="line715"></a> * Returns true if the object looks like an array. To qualify as array like
+<a name="line716"></a> * the value needs to be either a NodeList or an object with a Number length
+<a name="line717"></a> * property.
+<a name="line718"></a> * @param {*} val Variable to test.
+<a name="line719"></a> * @return {boolean} Whether variable is an array.
+<a name="line720"></a> */
+<a name="line721"></a>goog.isArrayLike = function(val) {
+<a name="line722"></a>  var type = goog.typeOf(val);
+<a name="line723"></a>  return type == &#39;array&#39; || type == &#39;object&#39; &amp;&amp; typeof val.length == &#39;number&#39;;
+<a name="line724"></a>};
+<a name="line725"></a>
+<a name="line726"></a>
+<a name="line727"></a>/**
+<a name="line728"></a> * Returns true if the object looks like a Date. To qualify as Date-like
+<a name="line729"></a> * the value needs to be an object and have a getFullYear() function.
+<a name="line730"></a> * @param {*} val Variable to test.
+<a name="line731"></a> * @return {boolean} Whether variable is a like a Date.
+<a name="line732"></a> */
+<a name="line733"></a>goog.isDateLike = function(val) {
+<a name="line734"></a>  return goog.isObject(val) &amp;&amp; typeof val.getFullYear == &#39;function&#39;;
+<a name="line735"></a>};
+<a name="line736"></a>
+<a name="line737"></a>
+<a name="line738"></a>/**
+<a name="line739"></a> * Returns true if the specified value is a string
+<a name="line740"></a> * @param {*} val Variable to test.
+<a name="line741"></a> * @return {boolean} Whether variable is a string.
+<a name="line742"></a> */
+<a name="line743"></a>goog.isString = function(val) {
+<a name="line744"></a>  return typeof val == &#39;string&#39;;
+<a name="line745"></a>};
+<a name="line746"></a>
+<a name="line747"></a>
+<a name="line748"></a>/**
+<a name="line749"></a> * Returns true if the specified value is a boolean
+<a name="line750"></a> * @param {*} val Variable to test.
+<a name="line751"></a> * @return {boolean} Whether variable is boolean.
+<a name="line752"></a> */
+<a name="line753"></a>goog.isBoolean = function(val) {
+<a name="line754"></a>  return typeof val == &#39;boolean&#39;;
+<a name="line755"></a>};
+<a name="line756"></a>
+<a name="line757"></a>
+<a name="line758"></a>/**
+<a name="line759"></a> * Returns true if the specified value is a number
+<a name="line760"></a> * @param {*} val Variable to test.
+<a name="line761"></a> * @return {boolean} Whether variable is a number.
+<a name="line762"></a> */
+<a name="line763"></a>goog.isNumber = function(val) {
+<a name="line764"></a>  return typeof val == &#39;number&#39;;
+<a name="line765"></a>};
+<a name="line766"></a>
+<a name="line767"></a>
+<a name="line768"></a>/**
+<a name="line769"></a> * Returns true if the specified value is a function
+<a name="line770"></a> * @param {*} val Variable to test.
+<a name="line771"></a> * @return {boolean} Whether variable is a function.
+<a name="line772"></a> */
+<a name="line773"></a>goog.isFunction = function(val) {
+<a name="line774"></a>  return goog.typeOf(val) == &#39;function&#39;;
+<a name="line775"></a>};
+<a name="line776"></a>
+<a name="line777"></a>
+<a name="line778"></a>/**
+<a name="line779"></a> * Returns true if the specified value is an object.  This includes arrays
+<a name="line780"></a> * and functions.
+<a name="line781"></a> * @param {*} val Variable to test.
+<a name="line782"></a> * @return {boolean} Whether variable is an object.
+<a name="line783"></a> */
+<a name="line784"></a>goog.isObject = function(val) {
+<a name="line785"></a>  var type = goog.typeOf(val);
+<a name="line786"></a>  return type == &#39;object&#39; || type == &#39;array&#39; || type == &#39;function&#39;;
+<a name="line787"></a>};
+<a name="line788"></a>
+<a name="line789"></a>
+<a name="line790"></a>/**
+<a name="line791"></a> * Adds a hash code field to an object. The hash code is unique for the
+<a name="line792"></a> * given object.
+<a name="line793"></a> * @param {Object} obj The object to get the hash code for.
+<a name="line794"></a> * @return {number} The hash code for the object.
+<a name="line795"></a> */
+<a name="line796"></a>goog.getHashCode = function(obj) {
+<a name="line797"></a>  // In IE, DOM nodes do not extend Object so they do not have this method.
+<a name="line798"></a>  // we need to check hasOwnProperty because the proto might have this set.
+<a name="line799"></a>
+<a name="line800"></a>  // TODO: There is a proposal to add hashcode as a global function to JS2
+<a name="line801"></a>  //            we should keep track of this process so we can use that whenever
+<a name="line802"></a>  //            it starts to show up in the real world.
+<a name="line803"></a>  if (obj.hasOwnProperty &amp;&amp; obj.hasOwnProperty(goog.HASH_CODE_PROPERTY_)) {
+<a name="line804"></a>    return obj[goog.HASH_CODE_PROPERTY_];
+<a name="line805"></a>  }
+<a name="line806"></a>  if (!obj[goog.HASH_CODE_PROPERTY_]) {
+<a name="line807"></a>    obj[goog.HASH_CODE_PROPERTY_] = ++goog.hashCodeCounter_;
+<a name="line808"></a>  }
+<a name="line809"></a>  return obj[goog.HASH_CODE_PROPERTY_];
+<a name="line810"></a>};
+<a name="line811"></a>
+<a name="line812"></a>
+<a name="line813"></a>/**
+<a name="line814"></a> * Removes the hash code field from an object.
+<a name="line815"></a> * @param {Object} obj The object to remove the field from.
+<a name="line816"></a> */
+<a name="line817"></a>goog.removeHashCode = function(obj) {
+<a name="line818"></a>  // DOM nodes in IE are not instance of Object and throws exception
+<a name="line819"></a>  // for delete. Instead we try to use removeAttribute
+<a name="line820"></a>  if (&#39;removeAttribute&#39; in obj) {
+<a name="line821"></a>    obj.removeAttribute(goog.HASH_CODE_PROPERTY_);
+<a name="line822"></a>  }
+<a name="line823"></a>  /** @preserveTry */
+<a name="line824"></a>  try {
+<a name="line825"></a>    delete obj[goog.HASH_CODE_PROPERTY_];
+<a name="line826"></a>  } catch (ex) {
+<a name="line827"></a>  }
+<a name="line828"></a>};
+<a name="line829"></a>
+<a name="line830"></a>
+<a name="line831"></a>/**
+<a name="line832"></a> * Name for hash code property. Initialized in a way to help avoid collisions
+<a name="line833"></a> * with other closure javascript on the same page.
+<a name="line834"></a> * @type {string}
+<a name="line835"></a> * @private
+<a name="line836"></a> */
+<a name="line837"></a>goog.HASH_CODE_PROPERTY_ = &#39;closure_hashCode_&#39; +
+<a name="line838"></a>    Math.floor(Math.random() * 2147483648).toString(36);
+<a name="line839"></a>
+<a name="line840"></a>
+<a name="line841"></a>/**
+<a name="line842"></a> * Counter for hash codes.
+<a name="line843"></a> * @type {number}
+<a name="line844"></a> * @private
+<a name="line845"></a> */
+<a name="line846"></a>goog.hashCodeCounter_ = 0;
+<a name="line847"></a>
+<a name="line848"></a>
+<a name="line849"></a>/**
+<a name="line850"></a> * Clone an object/array (recursively)
+<a name="line851"></a> * @param {Object} proto Object to clone.
+<a name="line852"></a> * @return {Object} Clone of x;.
+<a name="line853"></a> */
+<a name="line854"></a>goog.cloneObject = function(proto) {
+<a name="line855"></a>  var type = goog.typeOf(proto);
+<a name="line856"></a>  if (type == &#39;object&#39; || type == &#39;array&#39;) {
+<a name="line857"></a>    if (proto.clone) {
+<a name="line858"></a>      // TODO Change to proto.clone() once # args warn is removed
+<a name="line859"></a>      return proto.clone.call(proto);
+<a name="line860"></a>    }
+<a name="line861"></a>    var clone = type == &#39;array&#39; ? [] : {};
+<a name="line862"></a>    for (var key in proto) {
+<a name="line863"></a>      clone[key] = goog.cloneObject(proto[key]);
+<a name="line864"></a>    }
+<a name="line865"></a>    return clone;
+<a name="line866"></a>  }
+<a name="line867"></a>
+<a name="line868"></a>  return proto;
+<a name="line869"></a>};
+<a name="line870"></a>
+<a name="line871"></a>
+<a name="line872"></a>/**
+<a name="line873"></a> * Forward declaration for the clone method. This is necessary until the
+<a name="line874"></a> * compiler can better support duck-typing constructs as used in
+<a name="line875"></a> * goog.cloneObject.
+<a name="line876"></a> *
+<a name="line877"></a> * TODO: Remove once the JSCompiler can infer that the check for
+<a name="line878"></a> * proto.clone is safe in goog.cloneObject.
+<a name="line879"></a> *
+<a name="line880"></a> * @type {Function}
+<a name="line881"></a> */
+<a name="line882"></a>Object.prototype.clone;
+<a name="line883"></a>
+<a name="line884"></a>
+<a name="line885"></a>/**
+<a name="line886"></a> * Partially applies this function to a particular &#39;this object&#39; and zero or
+<a name="line887"></a> * more arguments. The result is a new function with some arguments of the first
+<a name="line888"></a> * function pre-filled and the value of |this| &#39;pre-specified&#39;.&lt;br&gt;&lt;br&gt;
+<a name="line889"></a> *
+<a name="line890"></a> * Remaining arguments specified at call-time are appended to the pre-
+<a name="line891"></a> * specified ones.&lt;br&gt;&lt;br&gt;
+<a name="line892"></a> *
+<a name="line893"></a> * Also see: {@link #partial}.&lt;br&gt;&lt;br&gt;
+<a name="line894"></a> *
+<a name="line895"></a> * Usage:
+<a name="line896"></a> * &lt;pre&gt;var barMethBound = bind(myFunction, myObj, &#39;arg1&#39;, &#39;arg2&#39;);
+<a name="line897"></a> * barMethBound(&#39;arg3&#39;, &#39;arg4&#39;);&lt;/pre&gt;
+<a name="line898"></a> *
+<a name="line899"></a> * @param {Function} fn A function to partially apply.
+<a name="line900"></a> * @param {Object|undefined} selfObj Specifies the object which |this| should
+<a name="line901"></a> *     point to when the function is run. If the value is null or undefined, it
+<a name="line902"></a> *     will default to the global object.
+<a name="line903"></a> * @param {*} var_args Additional arguments that are partially
+<a name="line904"></a> *     applied to the function.
+<a name="line905"></a> *
+<a name="line906"></a> * @return {!Function} A partially-applied form of the function bind() was
+<a name="line907"></a> *     invoked as a method of.
+<a name="line908"></a> */
+<a name="line909"></a>goog.bind = function(fn, selfObj, var_args) {
+<a name="line910"></a>  var context = selfObj || goog.global;
+<a name="line911"></a>
+<a name="line912"></a>  if (arguments.length &gt; 2) {
+<a name="line913"></a>    var boundArgs = Array.prototype.slice.call(arguments, 2);
+<a name="line914"></a>    return function() {
+<a name="line915"></a>      // Prepend the bound arguments to the current arguments.
+<a name="line916"></a>      var newArgs = Array.prototype.slice.call(arguments);
+<a name="line917"></a>      Array.prototype.unshift.apply(newArgs, boundArgs);
+<a name="line918"></a>      return fn.apply(context, newArgs);
+<a name="line919"></a>    };
+<a name="line920"></a>
+<a name="line921"></a>  } else {
+<a name="line922"></a>    return function() {
+<a name="line923"></a>      return fn.apply(context, arguments);
+<a name="line924"></a>    };
+<a name="line925"></a>  }
+<a name="line926"></a>};
+<a name="line927"></a>
+<a name="line928"></a>
+<a name="line929"></a>/**
+<a name="line930"></a> * Like bind(), except that a &#39;this object&#39; is not required. Useful when the
+<a name="line931"></a> * target function is already bound.
+<a name="line932"></a> *
+<a name="line933"></a> * Usage:
+<a name="line934"></a> * var g = partial(f, arg1, arg2);
+<a name="line935"></a> * g(arg3, arg4);
+<a name="line936"></a> *
+<a name="line937"></a> * @param {Function} fn A function to partially apply.
+<a name="line938"></a> * @param {*} var_args Additional arguments that are partially
+<a name="line939"></a> *     applied to fn.
+<a name="line940"></a> * @return {!Function} A partially-applied form of the function bind() was
+<a name="line941"></a> *     invoked as a method of.
+<a name="line942"></a> */
+<a name="line943"></a>goog.partial = function(fn, var_args) {
+<a name="line944"></a>  var args = Array.prototype.slice.call(arguments, 1);
+<a name="line945"></a>  return function() {
+<a name="line946"></a>    // Prepend the bound arguments to the current arguments.
+<a name="line947"></a>    var newArgs = Array.prototype.slice.call(arguments);
+<a name="line948"></a>    newArgs.unshift.apply(newArgs, args);
+<a name="line949"></a>    return fn.apply(this, newArgs);
+<a name="line950"></a>  };
+<a name="line951"></a>};
+<a name="line952"></a>
+<a name="line953"></a>
+<a name="line954"></a>/**
+<a name="line955"></a> * Copies all the members of a source object to a target object.
+<a name="line956"></a> * @param {Object} target Target.
+<a name="line957"></a> * @param {Object} source Source.
+<a name="line958"></a> * @deprecated Use goog.object.extend instead.
+<a name="line959"></a> */
+<a name="line960"></a>goog.mixin = function(target, source) {
+<a name="line961"></a>  for (var x in source) {
+<a name="line962"></a>    target[x] = source[x];
+<a name="line963"></a>  }
+<a name="line964"></a>
+<a name="line965"></a>  // For IE the for-in-loop does not contain any properties that are not
+<a name="line966"></a>  // enumerable on the prototype object (for example, isPrototypeOf from
+<a name="line967"></a>  // Object.prototype) but also it will not include &#39;replace&#39; on objects that
+<a name="line968"></a>  // extend String and change &#39;replace&#39; (not that it is common for anyone to
+<a name="line969"></a>  // extend anything except Object).
+<a name="line970"></a>};
+<a name="line971"></a>
+<a name="line972"></a>
+<a name="line973"></a>/**
+<a name="line974"></a> * A simple wrapper for new Date().getTime().
+<a name="line975"></a> *
+<a name="line976"></a> * @return {number} An integer value representing the number of milliseconds
+<a name="line977"></a> *     between midnight, January 1, 1970 and the current time.
+<a name="line978"></a> */
+<a name="line979"></a>goog.now = Date.now || (function() {
+<a name="line980"></a>  return new Date().getTime();
+<a name="line981"></a>});
+<a name="line982"></a>
+<a name="line983"></a>
+<a name="line984"></a>/**
+<a name="line985"></a> * Evals javascript in the global scope.  In IE this uses execScript, other
+<a name="line986"></a> * browsers use goog.global.eval. If goog.global.eval does not evaluate in the
+<a name="line987"></a> * global scope (for example, in Safari), appends a script tag instead.
+<a name="line988"></a> * Throws an exception if neither execScript or eval is defined.
+<a name="line989"></a> * @param {string} script JavaScript string.
+<a name="line990"></a> */
+<a name="line991"></a>goog.globalEval = function(script) {
+<a name="line992"></a>  if (goog.global.execScript) {
+<a name="line993"></a>    goog.global.execScript(script, &#39;JavaScript&#39;);
+<a name="line994"></a>  } else if (goog.global.eval) {
+<a name="line995"></a>    // Test to see if eval works
+<a name="line996"></a>    if (goog.evalWorksForGlobals_ == null) {
+<a name="line997"></a>      goog.global.eval(&#39;var _et_ = 1;&#39;);
+<a name="line998"></a>      if (typeof goog.global[&#39;_et_&#39;] != &#39;undefined&#39;) {
+<a name="line999"></a>        delete goog.global[&#39;_et_&#39;];
+<a name="line1000"></a>        goog.evalWorksForGlobals_ = true;
+<a name="line1001"></a>      } else {
+<a name="line1002"></a>        goog.evalWorksForGlobals_ = false;
+<a name="line1003"></a>      }
+<a name="line1004"></a>    }
+<a name="line1005"></a>
+<a name="line1006"></a>    if (goog.evalWorksForGlobals_) {
+<a name="line1007"></a>      goog.global.eval(script);
+<a name="line1008"></a>    } else {
+<a name="line1009"></a>      var doc = goog.global.document;
+<a name="line1010"></a>      var scriptElt = doc.createElement(&#39;script&#39;);
+<a name="line1011"></a>      scriptElt.type = &#39;text/javascript&#39;;
+<a name="line1012"></a>      scriptElt.defer = false;
+<a name="line1013"></a>      // NOTE: can&#39;t use .innerHTML since &quot;t(&#39;&lt;test&gt;&#39;)&quot; will fail and
+<a name="line1014"></a>      // .text doesn&#39;t work in Safari 2.  Therefore we append a text node.
+<a name="line1015"></a>      scriptElt.appendChild(doc.createTextNode(script));
+<a name="line1016"></a>      doc.body.appendChild(scriptElt);
+<a name="line1017"></a>      doc.body.removeChild(scriptElt);
+<a name="line1018"></a>    }
+<a name="line1019"></a>  } else {
+<a name="line1020"></a>    throw Error(&#39;goog.globalEval not available&#39;);
+<a name="line1021"></a>  }
+<a name="line1022"></a>};
+<a name="line1023"></a>
+<a name="line1024"></a>
+<a name="line1025"></a>/**
+<a name="line1026"></a> * A macro for defining composite types.
+<a name="line1027"></a> *
+<a name="line1028"></a> * By assigning goog.typedef to a name, this tells JSCompiler that this is not
+<a name="line1029"></a> * the name of a class, but rather it&#39;s the name of a composite type.
+<a name="line1030"></a> *
+<a name="line1031"></a> * For example,
+<a name="line1032"></a> * /** @type {Array|NodeList} / goog.ArrayLike = goog.typedef;
+<a name="line1033"></a> * will tell JSCompiler to replace all appearances of goog.ArrayLike in type
+<a name="line1034"></a> * definitions with the union of Array and NodeList.
+<a name="line1035"></a> *
+<a name="line1036"></a> * Does nothing in uncompiled code.
+<a name="line1037"></a> */
+<a name="line1038"></a>goog.typedef = true;
+<a name="line1039"></a>
+<a name="line1040"></a>
+<a name="line1041"></a>/**
+<a name="line1042"></a> * Optional map of CSS class names to obfuscated names used with
+<a name="line1043"></a> * goog.getCssName().
+<a name="line1044"></a> * @type {Object|undefined}
+<a name="line1045"></a> * @private
+<a name="line1046"></a> * @see goog.setCssNameMapping
+<a name="line1047"></a> */
+<a name="line1048"></a>goog.cssNameMapping_;
+<a name="line1049"></a>
+<a name="line1050"></a>
+<a name="line1051"></a>/**
+<a name="line1052"></a> * Handles strings that are intended to be used as CSS class names.
+<a name="line1053"></a> *
+<a name="line1054"></a> * Without JS Compiler the arguments are simple joined with a hyphen and passed
+<a name="line1055"></a> * through unaltered.
+<a name="line1056"></a> *
+<a name="line1057"></a> * With the JS Compiler the arguments are inlined, e.g:
+<a name="line1058"></a> *     var x = goog.getCssName(&#39;foo&#39;);
+<a name="line1059"></a> *     var y = goog.getCssName(this.baseClass, &#39;active&#39;);
+<a name="line1060"></a> *  becomes:
+<a name="line1061"></a> *     var x= &#39;foo&#39;;
+<a name="line1062"></a> *     var y = this.baseClass + &#39;-active&#39;;
+<a name="line1063"></a> *
+<a name="line1064"></a> * If a CSS renaming map is passed to the compiler it will replace symbols in
+<a name="line1065"></a> * the classname.  If one argument is passed it will be processed, if two are
+<a name="line1066"></a> * passed only the modifier will be processed, as it is assumed the first
+<a name="line1067"></a> * argument was generated as a result of calling goog.getCssName.
+<a name="line1068"></a> *
+<a name="line1069"></a> * Names are split on &#39;hyphen&#39; and processed in parts such that the following
+<a name="line1070"></a> * are equivalent:
+<a name="line1071"></a> *   var base = goog.getCssName(&#39;baseclass&#39;);
+<a name="line1072"></a> *   goog.getCssName(base, &#39;modifier&#39;);
+<a name="line1073"></a> *   goog.getCSsName(&#39;baseclass-modifier&#39;);
+<a name="line1074"></a> *
+<a name="line1075"></a> * If any part does not appear in the renaming map a warning is logged and the
+<a name="line1076"></a> * original, unobfuscated class name is inlined.
+<a name="line1077"></a> *
+<a name="line1078"></a> * @param {string} className The class name.
+<a name="line1079"></a> * @param {string} opt_modifier A modifier to be appended to the class name.
+<a name="line1080"></a> * @return {string} The class name or the concatenation of the class name and
+<a name="line1081"></a> *     the modifier.
+<a name="line1082"></a> */
+<a name="line1083"></a>goog.getCssName = function(className, opt_modifier) {
+<a name="line1084"></a>  var cssName = className + (opt_modifier ? &#39;-&#39; + opt_modifier : &#39;&#39;);
+<a name="line1085"></a>  return (goog.cssNameMapping_ &amp;&amp; (cssName in goog.cssNameMapping_)) ?
+<a name="line1086"></a>      goog.cssNameMapping_[cssName] : cssName;
+<a name="line1087"></a>};
+<a name="line1088"></a>
+<a name="line1089"></a>
+<a name="line1090"></a>/**
+<a name="line1091"></a> * Sets the map to check when returning a value from goog.getCssName(). Example:
+<a name="line1092"></a> * &lt;pre&gt;
+<a name="line1093"></a> * goog.setCssNameMapping({
+<a name="line1094"></a> *   &quot;goog-menu&quot;: &quot;a&quot;,
+<a name="line1095"></a> *   &quot;goog-menu-disabled&quot;: &quot;a-b&quot;,
+<a name="line1096"></a> *   &quot;CSS_LOGO&quot;: &quot;b&quot;,
+<a name="line1097"></a> *   &quot;hidden&quot;: &quot;c&quot;
+<a name="line1098"></a> * });
+<a name="line1099"></a> *
+<a name="line1100"></a> * // The following evaluates to: &quot;a a-b&quot;.
+<a name="line1101"></a> * goog.getCssName(&#39;goog-menu&#39;) + &#39; &#39; + goog.getCssName(&#39;goog-menu&#39;, &#39;disabled&#39;)
+<a name="line1102"></a> * &lt;/pre&gt;
+<a name="line1103"></a> * When declared as a map of string literals to string literals, the JSCompiler
+<a name="line1104"></a> * will replace all calls to goog.getCssName() using the supplied map if the
+<a name="line1105"></a> * --closure_pass flag is set.
+<a name="line1106"></a> *
+<a name="line1107"></a> * @param {!Object} mapping A map of strings to strings where keys are possible
+<a name="line1108"></a> *     arguments to goog.getCssName() and values are the corresponding values
+<a name="line1109"></a> *     that should be returned.
+<a name="line1110"></a> */
+<a name="line1111"></a>goog.setCssNameMapping = function(mapping) {
+<a name="line1112"></a>  goog.cssNameMapping_ = mapping;
+<a name="line1113"></a>};
+<a name="line1114"></a>
+<a name="line1115"></a>
+<a name="line1116"></a>/**
+<a name="line1117"></a> * Abstract implementation of goog.getMsg for use with localized messages.
+<a name="line1118"></a> * @param {string} str Translatable string, places holders in the form {$foo}.
+<a name="line1119"></a> * @param {Object} opt_values Map of place holder name to value.
+<a name="line1120"></a> * @return {string} message with placeholders filled.
+<a name="line1121"></a> */
+<a name="line1122"></a>goog.getMsg = function(str, opt_values) {
+<a name="line1123"></a>  var values = opt_values || {};
+<a name="line1124"></a>  for (var key in values) {
+<a name="line1125"></a>    str = str.replace(new RegExp(&#39;\\{\\$&#39; + key + &#39;\\}&#39;, &#39;gi&#39;), values[key]);
+<a name="line1126"></a>  }
+<a name="line1127"></a>  return str;
+<a name="line1128"></a>};
+<a name="line1129"></a>
+<a name="line1130"></a>
+<a name="line1131"></a>/**
+<a name="line1132"></a> * Exposes an unobfuscated global namespace path for the given object.
+<a name="line1133"></a> * Note that fields of the exported object *will* be obfuscated,
+<a name="line1134"></a> * unless they are exported in turn via this function or
+<a name="line1135"></a> * goog.exportProperty
+<a name="line1136"></a> *
+<a name="line1137"></a> * &lt;p&gt;Also handy for making public items that are defined in anonymous
+<a name="line1138"></a> * closures.
+<a name="line1139"></a> *
+<a name="line1140"></a> * ex. goog.exportSymbol(&#39;Foo&#39;, Foo);
+<a name="line1141"></a> *
+<a name="line1142"></a> * ex. goog.exportSymbol(&#39;public.path.Foo.staticFunction&#39;,
+<a name="line1143"></a> *                       Foo.staticFunction);
+<a name="line1144"></a> *     public.path.Foo.staticFunction();
+<a name="line1145"></a> *
+<a name="line1146"></a> * ex. goog.exportSymbol(&#39;public.path.Foo.prototype.myMethod&#39;,
+<a name="line1147"></a> *                       Foo.prototype.myMethod);
+<a name="line1148"></a> *     new public.path.Foo().myMethod();
+<a name="line1149"></a> *
+<a name="line1150"></a> * @param {string} publicPath Unobfuscated name to export.
+<a name="line1151"></a> * @param {Object} object Object the name should point to.
+<a name="line1152"></a> * @param {Object} opt_objectToExportTo The object to add the path to; default
+<a name="line1153"></a> *     is |goog.global|.
+<a name="line1154"></a> */
+<a name="line1155"></a>goog.exportSymbol = function(publicPath, object, opt_objectToExportTo) {
+<a name="line1156"></a>  goog.exportPath_(publicPath, object, opt_objectToExportTo);
+<a name="line1157"></a>};
+<a name="line1158"></a>
+<a name="line1159"></a>
+<a name="line1160"></a>/**
+<a name="line1161"></a> * Exports a property unobfuscated into the object&#39;s namespace.
+<a name="line1162"></a> * ex. goog.exportProperty(Foo, &#39;staticFunction&#39;, Foo.staticFunction);
+<a name="line1163"></a> * ex. goog.exportProperty(Foo.prototype, &#39;myMethod&#39;, Foo.prototype.myMethod);
+<a name="line1164"></a> * @param {Object} object Object whose static property is being exported.
+<a name="line1165"></a> * @param {string} publicName Unobfuscated name to export.
+<a name="line1166"></a> * @param {Object} symbol Object the name should point to.
+<a name="line1167"></a> */
+<a name="line1168"></a>goog.exportProperty = function(object, publicName, symbol) {
+<a name="line1169"></a>  object[publicName] = symbol;
+<a name="line1170"></a>};
+<a name="line1171"></a>
+<a name="line1172"></a>
+<a name="line1173"></a>/**
+<a name="line1174"></a> * Inherit the prototype methods from one constructor into another.
+<a name="line1175"></a> *
+<a name="line1176"></a> * Usage:
+<a name="line1177"></a> * &lt;pre&gt;
+<a name="line1178"></a> * function ParentClass(a, b) { }
+<a name="line1179"></a> * ParentClass.prototype.foo = function(a) { }
+<a name="line1180"></a> *
+<a name="line1181"></a> * function ChildClass(a, b, c) {
+<a name="line1182"></a> *   ParentClass.call(this, a, b);
+<a name="line1183"></a> * }
+<a name="line1184"></a> *
+<a name="line1185"></a> * goog.inherits(ChildClass, ParentClass);
+<a name="line1186"></a> *
+<a name="line1187"></a> * var child = new ChildClass(&#39;a&#39;, &#39;b&#39;, &#39;see&#39;);
+<a name="line1188"></a> * child.foo(); // works
+<a name="line1189"></a> * &lt;/pre&gt;
+<a name="line1190"></a> *
+<a name="line1191"></a> * In addition, a superclass&#39; implementation of a method can be invoked
+<a name="line1192"></a> * as follows:
+<a name="line1193"></a> *
+<a name="line1194"></a> * &lt;pre&gt;
+<a name="line1195"></a> * ChildClass.prototype.foo = function(a) {
+<a name="line1196"></a> *   ChildClass.superClass_.foo.call(this, a);
+<a name="line1197"></a> *   // other code
+<a name="line1198"></a> * };
+<a name="line1199"></a> * &lt;/pre&gt;
+<a name="line1200"></a> *
+<a name="line1201"></a> * @param {Function} childCtor Child class.
+<a name="line1202"></a> * @param {Function} parentCtor Parent class.
+<a name="line1203"></a> */
+<a name="line1204"></a>goog.inherits = function(childCtor, parentCtor) {
+<a name="line1205"></a>  /** @constructor */
+<a name="line1206"></a>  function tempCtor() {};
+<a name="line1207"></a>  tempCtor.prototype = parentCtor.prototype;
+<a name="line1208"></a>  childCtor.superClass_ = parentCtor.prototype;
+<a name="line1209"></a>  childCtor.prototype = new tempCtor();
+<a name="line1210"></a>  childCtor.prototype.constructor = childCtor;
+<a name="line1211"></a>};
+</pre>
+
+
+</body>
+</html>

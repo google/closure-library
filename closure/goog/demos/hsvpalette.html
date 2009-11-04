@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+  Copyright 2008 Google Inc. All Rights Reserved.
+
+-->
+  <head>
+    <title>HSV Palette</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/hsvpalette.css" />
+    <script type="text/javascript" src="../base.js"></script>
+    <script type="text/javascript">
+    goog.require('goog.color');
+    goog.require('goog.dom');
+    goog.require('goog.dom.DomHelper');
+    goog.require('goog.events');
+    goog.require('goog.events.Event');
+    goog.require('goog.events.EventHandler');
+    goog.require('goog.events.InputHandler');
+    goog.require('goog.events.EventType');
+    goog.require('goog.ui.Component');
+    goog.require('goog.ui.HsvPalette');
+    goog.require('goog.style');
+    goog.require('goog.userAgent');
+    </script>
+  </head>
+  <body>
+
+    <h2>HSV Color Picker (goog.ui.HsvPalette)</h2>
+
+    <h3>Normal Size</h3>
+
+    <script>
+
+    var p = new goog.ui.HsvPalette;
+    p.render();
+
+    </script>
+
+    <h3>Smaller Size</h3>
+
+    <script>
+
+    var pSmall = new goog.ui.HsvPalette(null, null, 'goog-hsv-palette-sm');
+    pSmall.render();
+
+    p.other = pSmall;
+    pSmall.other = p;
+    var linkColors = function(e) {
+      e.target.other.setColor(e.target.getColor());
+    };
+    goog.events.listen(p, goog.ui.Component.EventType.ACTION, linkColors);
+    goog.events.listen(pSmall, goog.ui.Component.EventType.ACTION, linkColors);
+
+    </script>
+
+  </body>
+</html>

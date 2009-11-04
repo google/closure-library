@@ -1,0 +1,273 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mp3.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_media_mp3.js.html">mp3.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2009 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview provides a reusable mp3 UI component given a mp3 URL.
+<a name="line17"></a> *
+<a name="line18"></a> * goog.ui.media.Mp3 is actually a {@link goog.ui.ControlRenderer}, a stateless
+<a name="line19"></a> * class - that could/should be used as a Singleton with the static method
+<a name="line20"></a> * {@code goog.ui.media.Mp3.getInstance} -, that knows how to render Mp3s. It is
+<a name="line21"></a> * designed to be used with a {@link goog.ui.Control}, which will actually
+<a name="line22"></a> * control the media renderer and provide the {@link goog.ui.Component} base.
+<a name="line23"></a> * This design guarantees that all different types of medias will behave alike
+<a name="line24"></a> * but will look different.
+<a name="line25"></a> *
+<a name="line26"></a> * goog.ui.media.Mp3 expects mp3 urls on {@code goog.ui.Control.getModel} as
+<a name="line27"></a> * data models, and render a flash object that will play that URL.
+<a name="line28"></a> *
+<a name="line29"></a> * Example of usage:
+<a name="line30"></a> *
+<a name="line31"></a> * &lt;pre&gt;
+<a name="line32"></a> *   goog.ui.media.Mp3.newControl(&#39;http://hostname/file.mp3&#39;).render();
+<a name="line33"></a> * &lt;/pre&gt;
+<a name="line34"></a> *
+<a name="line35"></a> * Mp3 medias currently support the following states:
+<a name="line36"></a> *
+<a name="line37"></a> * &lt;ul&gt;
+<a name="line38"></a> *   &lt;li&gt; {@link goog.ui.Component.State.DISABLED}: shows &#39;flash not available&#39;
+<a name="line39"></a> *   &lt;li&gt; {@link goog.ui.Component.State.HOVER}: mouse cursor is over the mp3
+<a name="line40"></a> *   &lt;li&gt; {@link goog.ui.Component.State.SELECTED}: mp3 is playing
+<a name="line41"></a> * &lt;/ul&gt;
+<a name="line42"></a> *
+<a name="line43"></a> * Which can be accessed by
+<a name="line44"></a> *
+<a name="line45"></a> * &lt;pre&gt;
+<a name="line46"></a> *   mp3.setEnabled(true);
+<a name="line47"></a> *   mp3.setHighlighted(true);
+<a name="line48"></a> *   mp3.setSelected(true);
+<a name="line49"></a> * &lt;/pre&gt;
+<a name="line50"></a> *
+<a name="line51"></a> *
+<a name="line52"></a> * @supported IE6, FF2+, Safari. Requires flash to actually work.
+<a name="line53"></a> *
+<a name="line54"></a> * TODO: test on other browsers
+<a name="line55"></a> */
+<a name="line56"></a>
+<a name="line57"></a>goog.provide(&#39;goog.ui.media.Mp3&#39;);
+<a name="line58"></a>
+<a name="line59"></a>goog.require(&#39;goog.string&#39;);
+<a name="line60"></a>goog.require(&#39;goog.ui.media.FlashObject&#39;);
+<a name="line61"></a>goog.require(&#39;goog.ui.media.Media&#39;);
+<a name="line62"></a>goog.require(&#39;goog.ui.media.MediaRenderer&#39;);
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Subclasses a goog.ui.media.MediaRenderer to provide a Mp3 specific media
+<a name="line67"></a> * renderer.
+<a name="line68"></a> *
+<a name="line69"></a> * This class knows how to parse mp3 URLs, and render the DOM structure
+<a name="line70"></a> * of mp3 flash players. This class is meant to be used as a singleton static
+<a name="line71"></a> * stateless class, that takes {@code goog.ui.media.Media} instances and renders
+<a name="line72"></a> * it. It expects {@code goog.ui.media.Media.getModel} to return a well formed,
+<a name="line73"></a> * previously checked, mp3 URL {@see goog.ui.media.PicasaAlbum.parseUrl},
+<a name="line74"></a> * which is the data model this renderer will use to construct the DOM
+<a name="line75"></a> * structure. {@see goog.ui.media.PicasaAlbum.newControl} for an example of
+<a name="line76"></a> * constructing a control with this renderer.
+<a name="line77"></a> *
+<a name="line78"></a> * This design is patterned after http://go/closure_control_subclassing
+<a name="line79"></a> *
+<a name="line80"></a> * It uses {@link goog.ui.media.FlashObject} to embed the flash object.
+<a name="line81"></a> *
+<a name="line82"></a> * @constructor
+<a name="line83"></a> * @extends {goog.ui.media.MediaRenderer}
+<a name="line84"></a> */
+<a name="line85"></a>goog.ui.media.Mp3 = function() {
+<a name="line86"></a>  goog.ui.media.MediaRenderer.call(this);
+<a name="line87"></a>};
+<a name="line88"></a>goog.inherits(goog.ui.media.Mp3, goog.ui.media.MediaRenderer);
+<a name="line89"></a>goog.addSingletonGetter(goog.ui.media.Mp3);
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * Flash player arguments. We expect that {@code flashUrl_} will contain a flash
+<a name="line94"></a> * movie that takes an audioUrl parameter on its URL, containing the URL of the
+<a name="line95"></a> * mp3 to be played.
+<a name="line96"></a> *
+<a name="line97"></a> * @type {string}
+<a name="line98"></a> * @private
+<a name="line99"></a> */
+<a name="line100"></a>goog.ui.media.Mp3.PLAYER_ARGUMENTS_ = &#39;audioUrl=%s&#39;;
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line105"></a> * by this renderer.
+<a name="line106"></a> *
+<a name="line107"></a> * @type {string}
+<a name="line108"></a> */
+<a name="line109"></a>goog.ui.media.Mp3.CSS_CLASS = &#39;goog-ui-media-mp3&#39;;
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Flash player URL. Uses Google Reader&#39;s mp3 flash player by default.
+<a name="line114"></a> *
+<a name="line115"></a> * @type {string}
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.ui.media.Mp3.flashUrl_ =
+<a name="line119"></a>    &#39;http://www.google.com/reader/ui/3247397568-audio-player.swf&#39;;
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Regular expression to check if a given URL is a valid mp3 URL.
+<a name="line124"></a> *
+<a name="line125"></a> * Copied from http://go/markdownlite.js.
+<a name="line126"></a>
+<a name="line127"></a> *
+<a name="line128"></a> * NOTE: although it would be easier to use goog.string.endsWith(&#39;.mp3&#39;),
+<a name="line129"></a> * in the future, we want to provide media inlining, which is basically getting
+<a name="line130"></a> * a text and replacing all mp3 references with an mp3 player, so it makes sense
+<a name="line131"></a> * to share the same regular expression to match everything.
+<a name="line132"></a> *
+<a name="line133"></a> * @type {RegExp}
+<a name="line134"></a> */
+<a name="line135"></a>goog.ui.media.Mp3.MATCHER =
+<a name="line136"></a>    /(https?:\/\/[a-zA-Z0-9-_%&amp;\/.=:#\+~\(\)]+\.(mp3)+(\?[a-zA-Z0-9-_%&amp;\/.=:#\+~\(\)]+)?)/i;
+<a name="line137"></a>
+<a name="line138"></a>
+<a name="line139"></a>/**
+<a name="line140"></a> * A static convenient method to construct a goog.ui.media.Media control out of
+<a name="line141"></a> * a mp3 URL. It checks the mp3 URL, sets it as the data model
+<a name="line142"></a> * goog.ui.media.Mp3 renderer uses, sets the states supported by the renderer,
+<a name="line143"></a> * and returns a Control that binds everything together. This is what you
+<a name="line144"></a> * should be using for constructing Mp3 videos, except if you need more fine
+<a name="line145"></a> * control over the configuration.
+<a name="line146"></a> *
+<a name="line147"></a> * @param {goog.ui.media.MediaModel} dataModel A media model that must contain
+<a name="line148"></a> *     an mp3 url on {@code dataModel.getUrl}.
+<a name="line149"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+<a name="line150"></a> *     document interaction.
+<a name="line151"></a> * @return {goog.ui.media.Media} A goog.ui.Control subclass with the mp3
+<a name="line152"></a> *     renderer.
+<a name="line153"></a> */
+<a name="line154"></a>goog.ui.media.Mp3.newControl = function(dataModel, opt_domHelper) {
+<a name="line155"></a>  var control = new goog.ui.media.Media(
+<a name="line156"></a>      dataModel,
+<a name="line157"></a>      goog.ui.media.Mp3.getInstance(),
+<a name="line158"></a>      opt_domHelper);
+<a name="line159"></a>  // mp3 ui doesn&#39;t have a non selected view: it shows the mp3 player by
+<a name="line160"></a>  // default.
+<a name="line161"></a>  control.setSelected(true);
+<a name="line162"></a>  return control;
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * A static method that sets which flash URL this class should use. Use this if
+<a name="line168"></a> * you want to host your own flash mp3 player.
+<a name="line169"></a> *
+<a name="line170"></a> * @param {string} flashUrl The URL of the flash mp3 player.
+<a name="line171"></a> */
+<a name="line172"></a>goog.ui.media.Mp3.setFlashUrl = function(flashUrl) {
+<a name="line173"></a>  goog.ui.media.Mp3.flashUrl_ = flashUrl;
+<a name="line174"></a>};
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * A static method that builds a URL that will contain the flash player that
+<a name="line179"></a> * will play the {@code mp3Url}.
+<a name="line180"></a> *
+<a name="line181"></a> * @param {string} mp3Url The URL of the mp3 music.
+<a name="line182"></a> * @return {string} An URL of a flash player that will know how to play the
+<a name="line183"></a> *     given {@code mp3Url}.
+<a name="line184"></a> */
+<a name="line185"></a>goog.ui.media.Mp3.buildFlashUrl = function(mp3Url) {
+<a name="line186"></a>  var flashUrl = goog.ui.media.Mp3.flashUrl_ + &#39;?&#39; + goog.string.subs(
+<a name="line187"></a>      goog.ui.media.Mp3.PLAYER_ARGUMENTS_,
+<a name="line188"></a>      goog.string.urlEncode(mp3Url));
+<a name="line189"></a>  return flashUrl;
+<a name="line190"></a>};
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Creates the initial DOM structure of a mp3 video, which is basically a
+<a name="line195"></a> * the flash object pointing to a flash mp3 player.
+<a name="line196"></a> *
+<a name="line197"></a> * @param {goog.ui.media.Media} control The media control.
+<a name="line198"></a> * @return {Element} A DOM structure that represents the control.
+<a name="line199"></a> */
+<a name="line200"></a>goog.ui.media.Mp3.prototype.createDom = function(control) {
+<a name="line201"></a>  var div = goog.ui.media.Mp3.superClass_.createDom.call(this, control);
+<a name="line202"></a>
+<a name="line203"></a>  var dataModel =
+<a name="line204"></a>      /** @type {goog.ui.media.MediaModel} */ (control.getDataModel());
+<a name="line205"></a>  var flashUrl = goog.ui.media.Mp3.flashUrl_ + &#39;?&#39; + goog.string.subs(
+<a name="line206"></a>      goog.ui.media.Mp3.PLAYER_ARGUMENTS_,
+<a name="line207"></a>      goog.string.urlEncode(dataModel.getUrl()));
+<a name="line208"></a>  var flash = new goog.ui.media.FlashObject(
+<a name="line209"></a>      dataModel.getPlayer().getUrl(), control.getDomHelper());
+<a name="line210"></a>  flash.setFlashVars(&#39;playerMode&#39;, &#39;embedded&#39;);
+<a name="line211"></a>  flash.render(div);
+<a name="line212"></a>
+<a name="line213"></a>  return div;
+<a name="line214"></a>};
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * Returns the CSS class to be applied to the root element of components
+<a name="line219"></a> * rendered using this renderer.
+<a name="line220"></a> * @return {string} Renderer-specific CSS class.
+<a name="line221"></a> */
+<a name="line222"></a>goog.ui.media.Mp3.prototype.getCssClass = function() {
+<a name="line223"></a>  return goog.ui.media.Mp3.CSS_CLASS;
+<a name="line224"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,730 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>continuationtestcase.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_testing_continuationtestcase.js.html">continuationtestcase.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2009 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Defines test classes for tests that can wait for conditions.
+<a name="line17"></a> *
+<a name="line18"></a> * Normal unit tests must complete their test logic within a single function
+<a name="line19"></a> * execution. This is ideal for most tests, but makes it difficult to test
+<a name="line20"></a> * routines that require real time to complete. The tests and TestCase in this
+<a name="line21"></a> * file allow for tests that can wait until a condition is true before
+<a name="line22"></a> * continuing execution.
+<a name="line23"></a> *
+<a name="line24"></a> * Each test has the typical three phases of execution: setUp, the test itself,
+<a name="line25"></a> * and tearDown. During each phase, the test function may add wait conditions,
+<a name="line26"></a> * which result in new test steps being added for that phase. All steps in a
+<a name="line27"></a> * given phase must complete before moving on to the next phase. An error in
+<a name="line28"></a> * any phase will stop that test and report the error to the test runner.
+<a name="line29"></a> *
+<a name="line30"></a> * This class should not be used where adequate mocks exist. Time-based routines
+<a name="line31"></a> * should use the MockClock, which runs much faster and provides equivalent
+<a name="line32"></a> * results. Continuation tests should be used for testing code that depends on
+<a name="line33"></a> * browser behaviors that are difficult to mock. For example, testing code that
+<a name="line34"></a> * relies on Iframe load events, event or layout code that requires a setTimeout
+<a name="line35"></a> * to become valid, and other browser-dependent native object interactions for
+<a name="line36"></a> * which mocks are insufficient.
+<a name="line37"></a> *
+<a name="line38"></a> * Sample usage:
+<a name="line39"></a> *
+<a name="line40"></a> * &lt;pre&gt;
+<a name="line41"></a> * var testCase = new goog.testing.ContinuationTestCase();
+<a name="line42"></a> * testCase.autoDiscoverTests();
+<a name="line43"></a> *
+<a name="line44"></a> * if (typeof G_testRunner != &#39;undefined&#39;) {
+<a name="line45"></a> *   G_testRunner.initialize(testCase);
+<a name="line46"></a> * }
+<a name="line47"></a> *
+<a name="line48"></a> * function testWaiting() {
+<a name="line49"></a> *   var someVar = true;
+<a name="line50"></a> *   waitForTimeout(function() {
+<a name="line51"></a> *     assertTrue(someVar)
+<a name="line52"></a> *   }, 500);
+<a name="line53"></a> * }
+<a name="line54"></a> *
+<a name="line55"></a> * function testWaitForEvent() {
+<a name="line56"></a> *   var et = goog.events.EventTarget();
+<a name="line57"></a> *   waitForEvent(et, &#39;test&#39;, function() {
+<a name="line58"></a> *     // Test step runs after the event fires.
+<a name="line59"></a> *   })
+<a name="line60"></a> *   et.dispatchEvent(et, &#39;test&#39;);
+<a name="line61"></a> * }
+<a name="line62"></a> *
+<a name="line63"></a> * function testWaitForCondition() {
+<a name="line64"></a> *   var counter = 0;
+<a name="line65"></a> *
+<a name="line66"></a> *   waitForCondition(function() {
+<a name="line67"></a> *     // This function is evaluated periodically until it returns true, or it
+<a name="line68"></a> *     // times out.
+<a name="line69"></a> *     return ++counter &gt;= 3;
+<a name="line70"></a> *   }, function() {
+<a name="line71"></a> *     // This test step is run once the condition becomes true.
+<a name="line72"></a> *     assertEquals(3, counter);
+<a name="line73"></a> *   });
+<a name="line74"></a> * }
+<a name="line75"></a> * &lt;/pre&gt;
+<a name="line76"></a> *
+<a name="line77"></a> */
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>goog.provide(&#39;goog.testing.ContinuationTestCase&#39;);
+<a name="line81"></a>goog.provide(&#39;goog.testing.ContinuationTestCase.Step&#39;);
+<a name="line82"></a>goog.provide(&#39;goog.testing.ContinuationTestCase.Test&#39;);
+<a name="line83"></a>
+<a name="line84"></a>goog.require(&#39;goog.array&#39;);
+<a name="line85"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line86"></a>goog.require(&#39;goog.testing.TestCase&#39;);
+<a name="line87"></a>goog.require(&#39;goog.testing.TestCase.Test&#39;);
+<a name="line88"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Constructs a test case that supports tests with continuations. Test functions
+<a name="line93"></a> * may issue &quot;wait&quot; commands that suspend the test temporarily and continue once
+<a name="line94"></a> * the wait condition is met.
+<a name="line95"></a> *
+<a name="line96"></a> * @param {string} opt_name Optional name for the test case.
+<a name="line97"></a> * @constructor
+<a name="line98"></a> * @extends {goog.testing.TestCase}
+<a name="line99"></a> */
+<a name="line100"></a>goog.testing.ContinuationTestCase = function(opt_name) {
+<a name="line101"></a>  goog.testing.TestCase.call(this, opt_name);
+<a name="line102"></a>
+<a name="line103"></a>  /**
+<a name="line104"></a>   * An event handler for waiting on Closure or browser events during tests.
+<a name="line105"></a>   * @type {goog.events.EventHandler}
+<a name="line106"></a>   * @private
+<a name="line107"></a>   */
+<a name="line108"></a>  this.handler_ = new goog.events.EventHandler(this);
+<a name="line109"></a>};
+<a name="line110"></a>goog.inherits(goog.testing.ContinuationTestCase, goog.testing.TestCase);
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * The default maximum time to wait for a single test step in milliseconds.
+<a name="line115"></a> * @type {number}
+<a name="line116"></a> */
+<a name="line117"></a>goog.testing.ContinuationTestCase.MAX_TIMEOUT = 1000;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Lock used to prevent multiple test steps from running recursively.
+<a name="line122"></a> * @type {boolean}
+<a name="line123"></a> * @private
+<a name="line124"></a> */
+<a name="line125"></a>goog.testing.ContinuationTestCase.locked_ = false;
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * The current test being run.
+<a name="line130"></a> * @type {goog.testing.ContinuationTestCase.Test}
+<a name="line131"></a> * @private
+<a name="line132"></a> */
+<a name="line133"></a>goog.testing.ContinuationTestCase.prototype.currentTest_ = null;
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Enables or disables the wait functions in the global scope.
+<a name="line138"></a> * @param {boolean} enable Whether the wait functions should be exported.
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.testing.ContinuationTestCase.prototype.enableWaitFunctions_ =
+<a name="line142"></a>    function(enable) {
+<a name="line143"></a>  if (enable) {
+<a name="line144"></a>    goog.exportSymbol(&#39;waitForCondition&#39;,
+<a name="line145"></a>                      goog.bind(this.waitForCondition, this));
+<a name="line146"></a>    goog.exportSymbol(&#39;waitForEvent&#39;, goog.bind(this.waitForEvent, this));
+<a name="line147"></a>    goog.exportSymbol(&#39;waitForTimeout&#39;, goog.bind(this.waitForTimeout, this));
+<a name="line148"></a>  } else {
+<a name="line149"></a>    // Internet Explorer doesn&#39;t allow deletion of properties on the window.
+<a name="line150"></a>    goog.global[&#39;waitForCondition&#39;] = undefined;
+<a name="line151"></a>    goog.global[&#39;waitForEvent&#39;] = undefined;
+<a name="line152"></a>    goog.global[&#39;waitForTimeout&#39;] = undefined;
+<a name="line153"></a>  }
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/** @inheritDoc */
+<a name="line158"></a>goog.testing.ContinuationTestCase.prototype.runTests = function() {
+<a name="line159"></a>  this.enableWaitFunctions_(true);
+<a name="line160"></a>  goog.testing.ContinuationTestCase.superClass_.runTests.call(this);
+<a name="line161"></a>};
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>/** @inheritDoc */
+<a name="line165"></a>goog.testing.ContinuationTestCase.prototype.finalize = function() {
+<a name="line166"></a>  this.enableWaitFunctions_(false);
+<a name="line167"></a>  goog.testing.ContinuationTestCase.superClass_.finalize.call(this);
+<a name="line168"></a>};
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/** @inheritDoc */
+<a name="line172"></a>goog.testing.ContinuationTestCase.prototype.cycleTests = function() {
+<a name="line173"></a>  // Get the next test in the queue.
+<a name="line174"></a>  if (!this.currentTest_) {
+<a name="line175"></a>    this.currentTest_ = this.createNextTest_();
+<a name="line176"></a>  }
+<a name="line177"></a>
+<a name="line178"></a>  // Run the next step of the current test, or exit if all tests are complete.
+<a name="line179"></a>  if (this.currentTest_) {
+<a name="line180"></a>    this.runNextStep_();
+<a name="line181"></a>  } else {
+<a name="line182"></a>    this.finalize();
+<a name="line183"></a>  }
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Creates the next test in the queue.
+<a name="line189"></a> * @return {goog.testing.ContinuationTestCase.Test} The next test to execute, or
+<a name="line190"></a> *     null if no pending tests remain.
+<a name="line191"></a> * @private
+<a name="line192"></a> */
+<a name="line193"></a>goog.testing.ContinuationTestCase.prototype.createNextTest_ = function() {
+<a name="line194"></a>  var test = this.next();
+<a name="line195"></a>  if (!test) {
+<a name="line196"></a>    return null;
+<a name="line197"></a>  }
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>  var name = test.name;
+<a name="line201"></a>  goog.testing.TestCase.currentTestName = name;
+<a name="line202"></a>  this.result_.runCount++;
+<a name="line203"></a>  this.log(&#39;Running test: &#39; + name);
+<a name="line204"></a>
+<a name="line205"></a>  return new goog.testing.ContinuationTestCase.Test(
+<a name="line206"></a>      new goog.testing.TestCase.Test(name, this.setUp, this),
+<a name="line207"></a>      test,
+<a name="line208"></a>      new goog.testing.TestCase.Test(name, this.tearDown, this));
+<a name="line209"></a>};
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Cleans up a finished test and cycles to the next test.
+<a name="line214"></a> * @private
+<a name="line215"></a> */
+<a name="line216"></a>goog.testing.ContinuationTestCase.prototype.finishTest_ = function() {
+<a name="line217"></a>  var err = this.currentTest_.getError();
+<a name="line218"></a>  if (err) {
+<a name="line219"></a>    this.doError(this.currentTest_, err)
+<a name="line220"></a>  } else {
+<a name="line221"></a>    this.doSuccess(this.currentTest_);
+<a name="line222"></a>  }
+<a name="line223"></a>
+<a name="line224"></a>  goog.testing.TestCase.currentTestName = null;
+<a name="line225"></a>  this.currentTest_ = null;
+<a name="line226"></a>  this.locked_ = false;
+<a name="line227"></a>  this.handler_.removeAll();
+<a name="line228"></a>
+<a name="line229"></a>  this.timeout(goog.bind(this.cycleTests, this), 0);
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Executes the next step in the current phase, advancing through each phase as
+<a name="line235"></a> * all steps are completed.
+<a name="line236"></a> * @private
+<a name="line237"></a> */
+<a name="line238"></a>goog.testing.ContinuationTestCase.prototype.runNextStep_ = function() {
+<a name="line239"></a>  if (this.locked_) {
+<a name="line240"></a>    // Attempting to run a step before the previous step has finished. Try again
+<a name="line241"></a>    // after that step has released the lock.
+<a name="line242"></a>    return;
+<a name="line243"></a>  }
+<a name="line244"></a>
+<a name="line245"></a>  var phase = this.currentTest_.getCurrentPhase();
+<a name="line246"></a>
+<a name="line247"></a>  if (!phase || !phase.length) {
+<a name="line248"></a>    // No more steps for this test.
+<a name="line249"></a>    this.finishTest_();
+<a name="line250"></a>    return;
+<a name="line251"></a>  }
+<a name="line252"></a>
+<a name="line253"></a>  // Find the next step that is not in a wait state.
+<a name="line254"></a>  var stepIndex = goog.array.findIndex(phase, function(step) {
+<a name="line255"></a>    return !step.waiting;
+<a name="line256"></a>  });
+<a name="line257"></a>
+<a name="line258"></a>  if (stepIndex &lt; 0) {
+<a name="line259"></a>    // All active steps are currently waiting. Return until one wakes up.
+<a name="line260"></a>    return;
+<a name="line261"></a>  }
+<a name="line262"></a>
+<a name="line263"></a>  this.locked_ = true;
+<a name="line264"></a>  var step = phase[stepIndex];
+<a name="line265"></a>
+<a name="line266"></a>  try {
+<a name="line267"></a>    step.execute();
+<a name="line268"></a>    // Remove the successfully completed step. If an error is thrown, all steps
+<a name="line269"></a>    // will be removed for this phase.
+<a name="line270"></a>    goog.array.removeAt(phase, stepIndex);
+<a name="line271"></a>
+<a name="line272"></a>  } catch (e) {
+<a name="line273"></a>    this.currentTest_.setError(e);
+<a name="line274"></a>
+<a name="line275"></a>    // An assertion has failed, or an exception was raised. Clear the current
+<a name="line276"></a>    // phase, whether it is setUp, test, or tearDown.
+<a name="line277"></a>    this.currentTest_.cancelCurrentPhase();
+<a name="line278"></a>
+<a name="line279"></a>    // Cancel the setUp and test phase no matter where the error occurred. The
+<a name="line280"></a>    // tearDown phase will still run if it has pending steps.
+<a name="line281"></a>    this.currentTest_.cancelTestPhase();
+<a name="line282"></a>  }
+<a name="line283"></a>
+<a name="line284"></a>  this.locked_ = false;
+<a name="line285"></a>  this.runNextStep_();
+<a name="line286"></a>};
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * Creates a new test step that will run after a user-specified timeout.
+<a name="line291"></a> * @param {Function} continuation The test function to invoke after the timeout.
+<a name="line292"></a> * @param {number} opt_duration The length of the timeout in milliseconds.
+<a name="line293"></a> */
+<a name="line294"></a>goog.testing.ContinuationTestCase.prototype.waitForTimeout =
+<a name="line295"></a>    function(continuation, opt_duration) {
+<a name="line296"></a>  var step = this.addStep_(continuation);
+<a name="line297"></a>  step.setTimeout(goog.bind(this.handleComplete_, this, step),
+<a name="line298"></a>                  opt_duration || 0);
+<a name="line299"></a>};
+<a name="line300"></a>
+<a name="line301"></a>
+<a name="line302"></a>/**
+<a name="line303"></a> * Creates a new test step that will run after an event has fired. If the event
+<a name="line304"></a> * does not fire within a reasonable timeout, the test will fail.
+<a name="line305"></a> * @param {goog.events.EventTarget|EventTarget} eventTarget The target that will
+<a name="line306"></a> *     fire the event.
+<a name="line307"></a> * @param {string} eventType The type of event to listen for.
+<a name="line308"></a> * @param {Function} continuation The test function to invoke after the event
+<a name="line309"></a> *     fires.
+<a name="line310"></a> */
+<a name="line311"></a>goog.testing.ContinuationTestCase.prototype.waitForEvent = function(
+<a name="line312"></a>    eventTarget,
+<a name="line313"></a>    eventType,
+<a name="line314"></a>    continuation) {
+<a name="line315"></a>
+<a name="line316"></a>  var step = this.addStep_(continuation);
+<a name="line317"></a>
+<a name="line318"></a>  var duration = goog.testing.ContinuationTestCase.MAX_TIMEOUT;
+<a name="line319"></a>  step.setTimeout(goog.bind(this.handleTimeout_, this, step, duration),
+<a name="line320"></a>                  duration);
+<a name="line321"></a>
+<a name="line322"></a>  this.handler_.listenOnce(eventTarget,
+<a name="line323"></a>                           eventType,
+<a name="line324"></a>                           goog.bind(this.handleComplete_, this, step));
+<a name="line325"></a>};
+<a name="line326"></a>
+<a name="line327"></a>
+<a name="line328"></a>/**
+<a name="line329"></a> * Creates a new test step which will run once a condition becomes true. The
+<a name="line330"></a> * condition will be polled at a user-specified interval until it becomes true,
+<a name="line331"></a> * or until a maximum timeout is reached.
+<a name="line332"></a> * @param {Function} condition The condition to poll.
+<a name="line333"></a> * @param {Function} continuation The test code to evaluate once the condition
+<a name="line334"></a> *     becomes true.
+<a name="line335"></a> * @param {number} opt_interval The polling interval in milliseconds.
+<a name="line336"></a> * @param {number} opt_maxTimeout The maximum amount of time to wait for the
+<a name="line337"></a> *     condition in milliseconds (defaults to 1000).
+<a name="line338"></a> */
+<a name="line339"></a>goog.testing.ContinuationTestCase.prototype.waitForCondition = function(
+<a name="line340"></a>    condition,
+<a name="line341"></a>    continuation,
+<a name="line342"></a>    opt_interval,
+<a name="line343"></a>    opt_maxTimeout) {
+<a name="line344"></a>
+<a name="line345"></a>  var interval = opt_interval || 100
+<a name="line346"></a>  var timeout = opt_maxTimeout || goog.testing.ContinuationTestCase.MAX_TIMEOUT;
+<a name="line347"></a>
+<a name="line348"></a>  var step = this.addStep_(continuation);
+<a name="line349"></a>  this.testCondition_(step, condition, goog.now(), interval, timeout);
+<a name="line350"></a>};
+<a name="line351"></a>
+<a name="line352"></a>
+<a name="line353"></a>/**
+<a name="line354"></a> * Creates a new asynchronous test step which will be added to the current test
+<a name="line355"></a> * phase.
+<a name="line356"></a> * @param {Function} func The test function that will be executed for this step.
+<a name="line357"></a> * @return {goog.testing.ContinuationTestCase.Step} A new test step.
+<a name="line358"></a> * @private
+<a name="line359"></a> */
+<a name="line360"></a>goog.testing.ContinuationTestCase.prototype.addStep_ = function(func) {
+<a name="line361"></a>  if (!this.currentTest_) {
+<a name="line362"></a>    throw Error(&#39;Cannot add test steps outside of a running test.&#39;);
+<a name="line363"></a>  }
+<a name="line364"></a>
+<a name="line365"></a>  var step = new goog.testing.ContinuationTestCase.Step(
+<a name="line366"></a>      this.currentTest_.name,
+<a name="line367"></a>      func,
+<a name="line368"></a>      this.currentTest_.scope);
+<a name="line369"></a>  this.currentTest_.addStep(step);
+<a name="line370"></a>  return step;
+<a name="line371"></a>};
+<a name="line372"></a>
+<a name="line373"></a>
+<a name="line374"></a>/**
+<a name="line375"></a> * Handles completion of a step&#39;s wait condition. Advances the test, allowing
+<a name="line376"></a> * the step&#39;s test method to run.
+<a name="line377"></a> * @param {goog.testing.ContinuationTestCase.Step} step The step that has
+<a name="line378"></a> *     finished waiting.
+<a name="line379"></a> * @private
+<a name="line380"></a> */
+<a name="line381"></a>goog.testing.ContinuationTestCase.prototype.handleComplete_ = function(step) {
+<a name="line382"></a>  step.clearTimeout();
+<a name="line383"></a>  step.waiting = false;
+<a name="line384"></a>  this.runNextStep_();
+<a name="line385"></a>};
+<a name="line386"></a>
+<a name="line387"></a>
+<a name="line388"></a>/**
+<a name="line389"></a> * Handles the timeout event for a step that has exceeded the maximum time. This
+<a name="line390"></a> * causes the current test to fail.
+<a name="line391"></a> * @param {goog.testing.ContinuationTestCase.Step} step The timed-out step.
+<a name="line392"></a> * @param {number} duration The length of the timeout in milliseconds.
+<a name="line393"></a> * @private
+<a name="line394"></a> */
+<a name="line395"></a>goog.testing.ContinuationTestCase.prototype.handleTimeout_ =
+<a name="line396"></a>    function(step, duration) {
+<a name="line397"></a>  step.ref = function() {
+<a name="line398"></a>    fail(&#39;Continuation timed out after &#39; + duration + &#39;ms.&#39;);
+<a name="line399"></a>  };
+<a name="line400"></a>
+<a name="line401"></a>  // Since the test is failing, cancel any other pending event listeners.
+<a name="line402"></a>  this.handler_.removeAll();
+<a name="line403"></a>  this.handleComplete_(step);
+<a name="line404"></a>};
+<a name="line405"></a>
+<a name="line406"></a>
+<a name="line407"></a>/**
+<a name="line408"></a> * Tests a wait condition and executes the associated test step once the
+<a name="line409"></a> * condition is true.
+<a name="line410"></a> *
+<a name="line411"></a> * If the condition does not become true before the maximum duration, the
+<a name="line412"></a> * interval will stop and the test step will fail in the kill timer.
+<a name="line413"></a> *
+<a name="line414"></a> * @param {goog.testing.ContinuationTestCase.Step} step The waiting test step.
+<a name="line415"></a> * @param {Function} condition The test condition.
+<a name="line416"></a> * @param {number} startTime Time when the test step began waiting.
+<a name="line417"></a> * @param {number} interval The duration in milliseconds to wait between tests.
+<a name="line418"></a> * @param {number} timeout The maximum amount of time to wait for the condition
+<a name="line419"></a> *     to become true. Measured from the startTime in milliseconds.
+<a name="line420"></a> * @private
+<a name="line421"></a> */
+<a name="line422"></a>goog.testing.ContinuationTestCase.prototype.testCondition_ = function(
+<a name="line423"></a>    step,
+<a name="line424"></a>    condition,
+<a name="line425"></a>    startTime,
+<a name="line426"></a>    interval,
+<a name="line427"></a>    timeout) {
+<a name="line428"></a>
+<a name="line429"></a>  var duration = goog.now() - startTime;
+<a name="line430"></a>
+<a name="line431"></a>  if (condition()) {
+<a name="line432"></a>    this.handleComplete_(step);
+<a name="line433"></a>  } else if (duration &lt; timeout) {
+<a name="line434"></a>    step.setTimeout(goog.bind(this.testCondition_,
+<a name="line435"></a>                              this,
+<a name="line436"></a>                              step,
+<a name="line437"></a>                              condition,
+<a name="line438"></a>                              startTime,
+<a name="line439"></a>                              interval,
+<a name="line440"></a>                              timeout),
+<a name="line441"></a>                    interval);
+<a name="line442"></a>  } else {
+<a name="line443"></a>    this.handleTimeout_(step, duration);
+<a name="line444"></a>  }
+<a name="line445"></a>};
+<a name="line446"></a>
+<a name="line447"></a>
+<a name="line448"></a>
+<a name="line449"></a>/**
+<a name="line450"></a> * Creates a continuation test case, which consists of multiple test steps that
+<a name="line451"></a> * occur in several phases.
+<a name="line452"></a> *
+<a name="line453"></a> * The steps are distributed between setUp, test, and tearDown phases. During
+<a name="line454"></a> * the execution of each step, 0 or more steps may be added to the current
+<a name="line455"></a> * phase. Once all steps in a phase have completed, the next phase will be
+<a name="line456"></a> * executed.
+<a name="line457"></a> *
+<a name="line458"></a> * If any errors occur (such as an assertion failure), the setUp and Test phases
+<a name="line459"></a> * will be cancelled immediately. The tearDown phase will always start, but may
+<a name="line460"></a> * be cancelled as well if it raises an error.
+<a name="line461"></a> *
+<a name="line462"></a> * @param {goog.testing.TestCase.Test} setUp A setUp test method to run before
+<a name="line463"></a> *     the main test phase.
+<a name="line464"></a> * @param {goog.testing.TestCase.Test} test A test method to run.
+<a name="line465"></a> * @param {goog.testing.TestCase.Test} tearDown A tearDown test method to run
+<a name="line466"></a> *     after the test method completes or fails.
+<a name="line467"></a> * @constructor
+<a name="line468"></a> * @extends {goog.testing.TestCase.Test}
+<a name="line469"></a> */
+<a name="line470"></a>goog.testing.ContinuationTestCase.Test = function(setUp, test, tearDown) {
+<a name="line471"></a>  // This test container has a name, but no evaluation function or scope.
+<a name="line472"></a>  goog.testing.TestCase.Test.call(this, test.name, null, null);
+<a name="line473"></a>
+<a name="line474"></a>  /**
+<a name="line475"></a>   * The list of test steps to run during setUp.
+<a name="line476"></a>   * @type {Array.&lt;goog.testing.TestCase.Test&gt;}
+<a name="line477"></a>   * @private
+<a name="line478"></a>   */
+<a name="line479"></a>  this.setUp_ = [setUp];
+<a name="line480"></a>
+<a name="line481"></a>  /**
+<a name="line482"></a>   * The list of test steps to run for the actual test.
+<a name="line483"></a>   * @type {Array.&lt;goog.testing.TestCase.Test&gt;}
+<a name="line484"></a>   * @private
+<a name="line485"></a>   */
+<a name="line486"></a>  this.test_ = [test];
+<a name="line487"></a>
+<a name="line488"></a>  /**
+<a name="line489"></a>   * The list of test steps to run during the tearDown phase.
+<a name="line490"></a>   * @type {Array.&lt;goog.testing.TestCase.Test&gt;}
+<a name="line491"></a>   * @private
+<a name="line492"></a>   */
+<a name="line493"></a>  this.tearDown_ = [tearDown];
+<a name="line494"></a>};
+<a name="line495"></a>goog.inherits(goog.testing.ContinuationTestCase.Test,
+<a name="line496"></a>              goog.testing.TestCase.Test);
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * The first error encountered during the test run, if any.
+<a name="line501"></a> * @type {Error}
+<a name="line502"></a> * @private
+<a name="line503"></a> */
+<a name="line504"></a>goog.testing.ContinuationTestCase.Test.prototype.error_ = null;
+<a name="line505"></a>
+<a name="line506"></a>
+<a name="line507"></a>/**
+<a name="line508"></a> * @return {Error} The first error to be raised during the test run or null if
+<a name="line509"></a> *     no errors occurred.
+<a name="line510"></a> */
+<a name="line511"></a>goog.testing.ContinuationTestCase.Test.prototype.getError = function() {
+<a name="line512"></a>  return this.error_;
+<a name="line513"></a>};
+<a name="line514"></a>
+<a name="line515"></a>
+<a name="line516"></a>/**
+<a name="line517"></a> * Sets an error for the test so it can be reported. Only the first error set
+<a name="line518"></a> * during a test will be reported. Additional errors that occur in later test
+<a name="line519"></a> * phases will be discarded.
+<a name="line520"></a> * @param {Error} e An error.
+<a name="line521"></a> */
+<a name="line522"></a>goog.testing.ContinuationTestCase.Test.prototype.setError = function(e) {
+<a name="line523"></a>  this.error_ = this.error_ || e;
+<a name="line524"></a>};
+<a name="line525"></a>
+<a name="line526"></a>
+<a name="line527"></a>/**
+<a name="line528"></a> * @return {Array.&lt;goog.testing.TestCase.Test&gt;} The current phase of steps
+<a name="line529"></a> *    being processed. Returns null if all steps have been completed.
+<a name="line530"></a> */
+<a name="line531"></a>goog.testing.ContinuationTestCase.Test.prototype.getCurrentPhase = function() {
+<a name="line532"></a>  if (this.setUp_.length) {
+<a name="line533"></a>    return this.setUp_;
+<a name="line534"></a>  }
+<a name="line535"></a>
+<a name="line536"></a>  if (this.test_.length) {
+<a name="line537"></a>    return this.test_;
+<a name="line538"></a>  }
+<a name="line539"></a>
+<a name="line540"></a>  if (this.tearDown_.length) {
+<a name="line541"></a>    return this.tearDown_;
+<a name="line542"></a>  }
+<a name="line543"></a>
+<a name="line544"></a>  return null;
+<a name="line545"></a>};
+<a name="line546"></a>
+<a name="line547"></a>
+<a name="line548"></a>/**
+<a name="line549"></a> * Adds a new test step to the end of the current phase. The new step will wait
+<a name="line550"></a> * for a condition to be met before running, or will fail after a timeout.
+<a name="line551"></a> * @param {goog.testing.ContinuationTestCase.Step} step The test step to add.
+<a name="line552"></a> */
+<a name="line553"></a>goog.testing.ContinuationTestCase.Test.prototype.addStep = function(step) {
+<a name="line554"></a>  var phase = this.getCurrentPhase();
+<a name="line555"></a>  if (phase) {
+<a name="line556"></a>    phase.push(step);
+<a name="line557"></a>  } else {
+<a name="line558"></a>    throw Error(&#39;Attempted to add a step to a completed test.&#39;);
+<a name="line559"></a>  }
+<a name="line560"></a>};
+<a name="line561"></a>
+<a name="line562"></a>
+<a name="line563"></a>/**
+<a name="line564"></a> * Cancels all remaining steps in the current phase. Called after an error in
+<a name="line565"></a> * any phase occurs.
+<a name="line566"></a> */
+<a name="line567"></a>goog.testing.ContinuationTestCase.Test.prototype.cancelCurrentPhase =
+<a name="line568"></a>    function() {
+<a name="line569"></a>  this.cancelPhase_(this.getCurrentPhase());
+<a name="line570"></a>};
+<a name="line571"></a>
+<a name="line572"></a>
+<a name="line573"></a>/**
+<a name="line574"></a> * Skips the rest of the setUp and test phases, but leaves the tearDown phase to
+<a name="line575"></a> * clean up.
+<a name="line576"></a> */
+<a name="line577"></a>goog.testing.ContinuationTestCase.Test.prototype.cancelTestPhase = function() {
+<a name="line578"></a>  this.cancelPhase_(this.setUp_);
+<a name="line579"></a>  this.cancelPhase_(this.test_);
+<a name="line580"></a>};
+<a name="line581"></a>
+<a name="line582"></a>
+<a name="line583"></a>/**
+<a name="line584"></a> * Clears a test phase and cancels any pending steps found.
+<a name="line585"></a> * @param {Array.&lt;goog.testing.TestCase.Test&gt;} phase A list of test steps.
+<a name="line586"></a> * @private
+<a name="line587"></a> */
+<a name="line588"></a>goog.testing.ContinuationTestCase.Test.prototype.cancelPhase_ =
+<a name="line589"></a>    function(phase) {
+<a name="line590"></a>  while (phase &amp;&amp; phase.length) {
+<a name="line591"></a>    var step = phase.pop();
+<a name="line592"></a>    if (step instanceof goog.testing.ContinuationTestCase.Step) {
+<a name="line593"></a>      step.clearTimeout();
+<a name="line594"></a>    }
+<a name="line595"></a>  }
+<a name="line596"></a>};
+<a name="line597"></a>
+<a name="line598"></a>
+<a name="line599"></a>
+<a name="line600"></a>/**
+<a name="line601"></a> * Constructs a single step in a larger continuation test. Each step is similar
+<a name="line602"></a> * to a typical TestCase test, except it may wait for an event or timeout to
+<a name="line603"></a> * occur before running the test function.
+<a name="line604"></a> *
+<a name="line605"></a> * @param {string} name The test name.
+<a name="line606"></a> * @param {Function} ref The test function to run.
+<a name="line607"></a> * @param {Object} opt_scope The object context to run the test in.
+<a name="line608"></a> * @constructor
+<a name="line609"></a> * @extends {goog.testing.TestCase.Test}
+<a name="line610"></a> */
+<a name="line611"></a>goog.testing.ContinuationTestCase.Step = function(name, ref, opt_scope) {
+<a name="line612"></a>  goog.testing.TestCase.Test.call(this, name, ref, opt_scope);
+<a name="line613"></a>};
+<a name="line614"></a>goog.inherits(goog.testing.ContinuationTestCase.Step,
+<a name="line615"></a>              goog.testing.TestCase.Test);
+<a name="line616"></a>
+<a name="line617"></a>
+<a name="line618"></a>/**
+<a name="line619"></a> * Whether the step is currently waiting for a condition to continue. All new
+<a name="line620"></a> * steps begin in wait state.
+<a name="line621"></a> * @type {boolean}
+<a name="line622"></a> */
+<a name="line623"></a>goog.testing.ContinuationTestCase.Step.prototype.waiting = true;
+<a name="line624"></a>
+<a name="line625"></a>
+<a name="line626"></a>/**
+<a name="line627"></a> * A saved reference to window.clearTimeout so that MockClock or other overrides
+<a name="line628"></a> * don&#39;t affect continuation timeouts.
+<a name="line629"></a> * @type {Function}
+<a name="line630"></a> * @private
+<a name="line631"></a> */
+<a name="line632"></a>goog.testing.ContinuationTestCase.Step.protectedClearTimeout_ =
+<a name="line633"></a>    window.clearTimeout;
+<a name="line634"></a>
+<a name="line635"></a>
+<a name="line636"></a>/**
+<a name="line637"></a> * A saved reference to window.setTimeout so that MockClock or other overrides
+<a name="line638"></a> * don&#39;t affect continuation timeouts.
+<a name="line639"></a> * @type {Function}
+<a name="line640"></a> * @private
+<a name="line641"></a> */
+<a name="line642"></a>goog.testing.ContinuationTestCase.Step.protectedSetTimeout_ = window.setTimeout;
+<a name="line643"></a>
+<a name="line644"></a>
+<a name="line645"></a>/**
+<a name="line646"></a> * Key to this step&#39;s timeout. If the step is waiting for an event, the timeout
+<a name="line647"></a> * will be used as a kill timer. If the step is waiting
+<a name="line648"></a> * @type {number}
+<a name="line649"></a> * @private
+<a name="line650"></a> */
+<a name="line651"></a>goog.testing.ContinuationTestCase.Step.prototype.timeout_;
+<a name="line652"></a>
+<a name="line653"></a>
+<a name="line654"></a>/**
+<a name="line655"></a> * Starts a timeout for this step. Each step may have only one timeout active at
+<a name="line656"></a> * a time.
+<a name="line657"></a> * @param {Function} func The function to call after the timeout.
+<a name="line658"></a> * @param {number} duration The number of milliseconds to wait before invoking
+<a name="line659"></a> *     the function.
+<a name="line660"></a> */
+<a name="line661"></a>goog.testing.ContinuationTestCase.Step.prototype.setTimeout =
+<a name="line662"></a>    function(func, duration) {
+<a name="line663"></a>
+<a name="line664"></a>  this.clearTimeout();
+<a name="line665"></a>
+<a name="line666"></a>  var setTimeout = goog.testing.ContinuationTestCase.Step.protectedSetTimeout_;
+<a name="line667"></a>  this.timeout_ = setTimeout(func, duration);
+<a name="line668"></a>};
+<a name="line669"></a>
+<a name="line670"></a>
+<a name="line671"></a>/**
+<a name="line672"></a> * Clears the current timeout if it is active.
+<a name="line673"></a> */
+<a name="line674"></a>goog.testing.ContinuationTestCase.Step.prototype.clearTimeout = function() {
+<a name="line675"></a>  if (this.timeout_) {
+<a name="line676"></a>    var clear = goog.testing.ContinuationTestCase.Step.protectedClearTimeout_;
+<a name="line677"></a>
+<a name="line678"></a>    clear(this.timeout_);
+<a name="line679"></a>    delete this.timeout_;
+<a name="line680"></a>  }
+<a name="line681"></a>};
+</pre>
+
+
+</body>
+</html>

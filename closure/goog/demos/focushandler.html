@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+Copyright 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+<title>goog.events.FocusHandler</title>
+<script src="../base.js"></script>
+<script>
+goog.require('goog.dom');
+goog.require('goog.events');
+goog.require('goog.events.FocusHandler');
+</script>
+<link rel="stylesheet" href="css/demo.css">
+</head>
+<body>
+<h1>goog.events.FocusHandler</h1>
+<p>i1: <input id=i1>
+
+
+<p>i2 <input id=i2>
+
+
+<p>i3: <input id=i3>
+
+<p id=out>
+
+<script>
+
+var $ = goog.dom.getElement;
+
+function updateText(e) {
+  var target = e.target;
+  $('out').appendChild(document.createTextNode(target.tagName + "#" +
+                                               target.id + ": " + e.type));
+  $('out').appendChild(document.createElement('br'));
+}
+
+var focusHandler = new goog.events.FocusHandler(document.body);
+
+goog.events.listen(focusHandler, goog.events.FocusHandler.EventType.FOCUSIN,
+                   updateText);
+goog.events.listen(focusHandler, goog.events.FocusHandler.EventType.FOCUSOUT,
+                   updateText);
+
+goog.events.listen(window, 'unload', function() {
+  goog.events.unlisten(focusHandler, goog.events.FocusHandler.EventType.FOCUSIN,
+                       updateText);
+  goog.events.unlisten(focusHandler,
+                       goog.events.FocusHandler.EventType.FOCUSOUT, updateText);
+});
+
+</script>
+</body>
+</html>

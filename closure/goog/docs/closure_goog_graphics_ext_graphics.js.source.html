@@ -1,0 +1,255 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>graphics.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_graphics_ext_graphics.js.html">graphics.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Graphics surface type.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.graphics.ext.Graphics&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.graphics.ext.Group&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Wrapper for a graphics surface.
+<a name="line28"></a> * @param {string|number} width The width in pixels.  Strings
+<a name="line29"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
+<a name="line30"></a> * @param {string|number} height The height in pixels.  Strings
+<a name="line31"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
+<a name="line32"></a> * @param {number?} opt_coordWidth The coordinate width - if
+<a name="line33"></a> *     omitted or null, defaults to same as width.
+<a name="line34"></a> * @param {number?} opt_coordHeight The coordinate height. - if
+<a name="line35"></a> *     omitted or null, defaults to same as height.
+<a name="line36"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+<a name="line37"></a> *     document we want to render in.
+<a name="line38"></a> * @param {boolean} opt_isSimple Flag used to indicate the graphics object will
+<a name="line39"></a> *     be drawn to in a single pass, and the fastest implementation for this
+<a name="line40"></a> *     scenario should be favored.  NOTE: Setting to true may result in
+<a name="line41"></a> *     degradation of text support.
+<a name="line42"></a> * @constructor
+<a name="line43"></a> * @extends {goog.graphics.ext.Group}
+<a name="line44"></a> */
+<a name="line45"></a>goog.graphics.ext.Graphics = function(width, height, opt_coordWidth,
+<a name="line46"></a>    opt_coordHeight, opt_domHelper, opt_isSimple) {
+<a name="line47"></a>  var surface = opt_isSimple ?
+<a name="line48"></a>      goog.graphics.createSimpleGraphics(width, height,
+<a name="line49"></a>          opt_coordWidth, opt_coordHeight, opt_domHelper) :
+<a name="line50"></a>      goog.graphics.createGraphics(width, height,
+<a name="line51"></a>          opt_coordWidth, opt_coordHeight, opt_domHelper);
+<a name="line52"></a>  this.implementation_ = surface;
+<a name="line53"></a>
+<a name="line54"></a>  goog.graphics.ext.Group.call(this, null, surface.getCanvasElement());
+<a name="line55"></a>
+<a name="line56"></a>  goog.events.listen(surface, goog.events.EventType.RESIZE,
+<a name="line57"></a>      this.updateChildren, false, this);
+<a name="line58"></a>};
+<a name="line59"></a>goog.inherits(goog.graphics.ext.Graphics, goog.graphics.ext.Group);
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * The root level graphics implementation.
+<a name="line64"></a> * @type {goog.graphics.AbstractGraphics}
+<a name="line65"></a> * @private
+<a name="line66"></a> */
+<a name="line67"></a>goog.graphics.ext.Graphics.prototype.implementation_;
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * @return {goog.graphics.AbstractGraphics} The graphics implementation layer.
+<a name="line72"></a> */
+<a name="line73"></a>goog.graphics.ext.Graphics.prototype.getImplementation = function() {
+<a name="line74"></a>  return this.implementation_;
+<a name="line75"></a>};
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Changes the coordinate size.
+<a name="line80"></a> * @param {number} coordWidth The coordinate width.
+<a name="line81"></a> * @param {number} coordHeight The coordinate height.
+<a name="line82"></a> */
+<a name="line83"></a>goog.graphics.ext.Graphics.prototype.setCoordSize = function(coordWidth,
+<a name="line84"></a>                                                             coordHeight) {
+<a name="line85"></a>  this.implementation_.setCoordSize(coordWidth, coordHeight);
+<a name="line86"></a>  goog.graphics.ext.Graphics.superClass_.setSize.call(this, coordWidth,
+<a name="line87"></a>      coordHeight);
+<a name="line88"></a>};
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * @return {goog.math.Size} The coordinate size.
+<a name="line93"></a> */
+<a name="line94"></a>goog.graphics.ext.Graphics.prototype.getCoordSize = function() {
+<a name="line95"></a>  return this.implementation_.getCoordSize();
+<a name="line96"></a>};
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Changes the coordinate system position.
+<a name="line101"></a> * @param {number} left The coordinate system left bound.
+<a name="line102"></a> * @param {number} top The coordinate system top bound.
+<a name="line103"></a> */
+<a name="line104"></a>goog.graphics.ext.Graphics.prototype.setCoordOrigin = function(left, top) {
+<a name="line105"></a>  this.implementation_.setCoordOrigin(left, top);
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * @return {goog.math.Coordinate} The coordinate system position.
+<a name="line111"></a> */
+<a name="line112"></a>goog.graphics.ext.Graphics.prototype.getCoordOrigin = function() {
+<a name="line113"></a>  return this.implementation_.getCoordOrigin();
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Change the size of the canvas.
+<a name="line119"></a> * @param {number} pixelWidth The width in pixels.
+<a name="line120"></a> * @param {number} pixelHeight The height in pixels.
+<a name="line121"></a> */
+<a name="line122"></a>goog.graphics.ext.Graphics.prototype.setPixelSize = function(pixelWidth,
+<a name="line123"></a>                                                        pixelHeight) {
+<a name="line124"></a>  this.implementation_.setSize(pixelWidth, pixelHeight);
+<a name="line125"></a>
+<a name="line126"></a>  var coordSize = this.getCoordSize();
+<a name="line127"></a>  goog.graphics.ext.Graphics.superClass_.setSize.call(this, coordSize.width,
+<a name="line128"></a>      coordSize.height);
+<a name="line129"></a>};
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * @return {goog.math.Size?} Returns the number of pixels spanned by the
+<a name="line134"></a> *     surface, or null if the size could not be computed due to the size being
+<a name="line135"></a> *     specified in percentage points and the component not being in the
+<a name="line136"></a> *     document.
+<a name="line137"></a> */
+<a name="line138"></a>goog.graphics.ext.Graphics.prototype.getPixelSize = function() {
+<a name="line139"></a>  return this.implementation_.getPixelSize();
+<a name="line140"></a>};
+<a name="line141"></a>
+<a name="line142"></a>
+<a name="line143"></a>/**
+<a name="line144"></a> * @return {number} The coordinate width of the canvas.
+<a name="line145"></a> */
+<a name="line146"></a>goog.graphics.ext.Graphics.prototype.getWidth = function() {
+<a name="line147"></a>  return this.implementation_.getCoordSize().width;
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * @return {number} The coordinate width of the canvas.
+<a name="line153"></a> */
+<a name="line154"></a>goog.graphics.ext.Graphics.prototype.getHeight = function() {
+<a name="line155"></a>  return this.implementation_.getCoordSize().height;
+<a name="line156"></a>};
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * @return {number} Returns the number of pixels per unit in the x direction.
+<a name="line161"></a> */
+<a name="line162"></a>goog.graphics.ext.Graphics.prototype.getPixelScaleX = function() {
+<a name="line163"></a>  return this.implementation_.getPixelScaleX();
+<a name="line164"></a>};
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * @return {number} Returns the number of pixels per unit in the y direction.
+<a name="line169"></a> */
+<a name="line170"></a>goog.graphics.ext.Graphics.prototype.getPixelScaleY = function() {
+<a name="line171"></a>  return this.implementation_.getPixelScaleY();
+<a name="line172"></a>};
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * @return {Element} The root element of the graphics surface.
+<a name="line177"></a> */
+<a name="line178"></a>goog.graphics.ext.Graphics.prototype.getElement = function() {
+<a name="line179"></a>  return this.implementation_.getElement();
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Renders the underlying graphics.
+<a name="line185"></a> *
+<a name="line186"></a> * @param {Element} parentElement Parent element to render the component into.
+<a name="line187"></a> */
+<a name="line188"></a>goog.graphics.ext.Graphics.prototype.render = function(parentElement) {
+<a name="line189"></a>  this.implementation_.render(parentElement);
+<a name="line190"></a>};
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Never transform a surface.
+<a name="line195"></a> */
+<a name="line196"></a>goog.graphics.ext.Graphics.prototype.transform = goog.nullFunction;
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * Called from the parent class, this method resets any pre-computed positions
+<a name="line201"></a> * and sizes.
+<a name="line202"></a> * @protected
+<a name="line203"></a> */
+<a name="line204"></a>goog.graphics.ext.Graphics.prototype.redraw = function() {
+<a name="line205"></a>  this.transformChildren();
+<a name="line206"></a>};
+</pre>
+
+
+</body>
+</html>

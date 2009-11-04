@@ -1,0 +1,171 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>slider.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_ui_slider.js.html">slider.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2006 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A slider implementation that allows to select a value within a
+<a name="line17"></a> * range by dragging a thumb. The selected value is exposed through getValue().
+<a name="line18"></a> *
+<a name="line19"></a> * To decorate, the slider should be bound to an element with the class name
+<a name="line20"></a> * &#39;goog-slider-[vertical / horizontal]&#39; containing a child with the classname
+<a name="line21"></a> * &#39;goog-slider-thumb&#39;.
+<a name="line22"></a> *
+<a name="line23"></a> * Decorate Example:
+<a name="line24"></a> * &lt;div id=&quot;slider&quot; class=&quot;goog-slider-horizontal&quot;&gt;
+<a name="line25"></a> *   &lt;div class=&quot;goog-twothumbslider-thumb&quot;&gt;
+<a name="line26"></a> * &lt;/div&gt;
+<a name="line27"></a> * &lt;script&gt;
+<a name="line28"></a> *
+<a name="line29"></a> * var slider = new goog.ui.Slider;
+<a name="line30"></a> * slider.decorate(document.getElementById(&#39;slider&#39;));
+<a name="line31"></a> *
+<a name="line32"></a> * @see ../demos/slider.html
+<a name="line33"></a> */
+<a name="line34"></a>
+<a name="line35"></a>// Implementation note: We implement slider by inheriting from baseslider,
+<a name="line36"></a>// which allows to select sub-ranges within a range using two thumbs. All we do
+<a name="line37"></a>// is we co-locate the two thumbs into one.
+<a name="line38"></a>
+<a name="line39"></a>goog.provide(&#39;goog.ui.Slider&#39;);
+<a name="line40"></a>goog.provide(&#39;goog.ui.Slider.Orientation&#39;);
+<a name="line41"></a>
+<a name="line42"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line43"></a>goog.require(&#39;goog.dom.a11y&#39;);
+<a name="line44"></a>goog.require(&#39;goog.dom.a11y.Role&#39;);
+<a name="line45"></a>goog.require(&#39;goog.ui.SliderBase&#39;);
+<a name="line46"></a>goog.require(&#39;goog.ui.SliderBase.Orientation&#39;);
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>/**
+<a name="line50"></a> * This creates a slider object.
+<a name="line51"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line52"></a> * @constructor
+<a name="line53"></a> * @extends {goog.ui.SliderBase}
+<a name="line54"></a> */
+<a name="line55"></a>goog.ui.Slider = function(opt_domHelper) {
+<a name="line56"></a>  goog.ui.SliderBase.call(this, opt_domHelper);
+<a name="line57"></a>  this.rangeModel.setExtent(0);
+<a name="line58"></a>};
+<a name="line59"></a>goog.inherits(goog.ui.Slider, goog.ui.SliderBase);
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Expose Enum of superclass (representing the orientation of the slider) within
+<a name="line64"></a> * Slider namespace.
+<a name="line65"></a> *
+<a name="line66"></a> * @enum {string}
+<a name="line67"></a> */
+<a name="line68"></a>goog.ui.Slider.Orientation = goog.ui.SliderBase.Orientation;
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * The prefix we use for the CSS class names for the slider and its elements.
+<a name="line73"></a> * @type {string}
+<a name="line74"></a> */
+<a name="line75"></a>goog.ui.Slider.CSS_CLASS_PREFIX = goog.getCssName(&#39;goog-slider&#39;);
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * CSS class name for the single thumb element.
+<a name="line80"></a> * @type {string}
+<a name="line81"></a> */
+<a name="line82"></a>goog.ui.Slider.THUMB_CSS_CLASS =
+<a name="line83"></a>    goog.getCssName(goog.ui.Slider.CSS_CLASS_PREFIX, &#39;thumb&#39;);
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Returns CSS class applied to the slider element.
+<a name="line88"></a> * @param {goog.ui.SliderBase.Orientation} orient Orientation of the slider.
+<a name="line89"></a> * @return {string} The CSS class applied to the slider element.
+<a name="line90"></a> * @protected
+<a name="line91"></a> */
+<a name="line92"></a>goog.ui.Slider.prototype.getCssClass = function(orient) {
+<a name="line93"></a>  return orient == goog.ui.SliderBase.Orientation.VERTICAL ?
+<a name="line94"></a>      goog.getCssName(goog.ui.Slider.CSS_CLASS_PREFIX, &#39;vertical&#39;) :
+<a name="line95"></a>      goog.getCssName(goog.ui.Slider.CSS_CLASS_PREFIX, &#39;horizontal&#39;);
+<a name="line96"></a>};
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/** @inheritDoc */
+<a name="line100"></a>goog.ui.Slider.prototype.createThumbs = function() {
+<a name="line101"></a>  // find thumb
+<a name="line102"></a>  var element = this.getElement();
+<a name="line103"></a>  var thumb = goog.dom.$$(null, goog.ui.Slider.THUMB_CSS_CLASS, element)[0];
+<a name="line104"></a>  if (!thumb) {
+<a name="line105"></a>    thumb = this.createThumb_();
+<a name="line106"></a>    element.appendChild(thumb);
+<a name="line107"></a>  }
+<a name="line108"></a>  this.valueThumb = this.extentThumb = thumb;
+<a name="line109"></a>};
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Creates the thumb element.
+<a name="line114"></a> * @return {HTMLDivElement} The created thumb element.
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.Slider.prototype.createThumb_ = function() {
+<a name="line118"></a>  var thumb =
+<a name="line119"></a>      this.getDomHelper().createDom(&#39;div&#39;, goog.ui.Slider.THUMB_CSS_CLASS);
+<a name="line120"></a>  goog.dom.a11y.setRole(thumb, goog.dom.a11y.Role.BUTTON);
+<a name="line121"></a>  return /** @type {HTMLDivElement} */ (thumb);
+<a name="line122"></a>};
+</pre>
+
+
+</body>
+</html>

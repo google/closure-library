@@ -1,0 +1,126 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>httprequest.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_gears_httprequest.js.html">httprequest.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2007 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This file contains functions for setting up the standard
+<a name="line17"></a> * goog.net.XmlHttp factory (and, therefore, goog.net.XhrIo) to work using
+<a name="line18"></a> * the HttpRequest object Gears provides.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.gears.HttpRequest&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line26"></a>goog.require(&#39;goog.gears&#39;);
+<a name="line27"></a>goog.require(&#39;goog.net.XmlHttp&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Sets up the Gears HttpRequest&#39;s to be the default HttpRequest&#39;s used via
+<a name="line32"></a> * the goog.net.XmlHttp factory.
+<a name="line33"></a> */
+<a name="line34"></a>goog.gears.HttpRequest.setup = function() {
+<a name="line35"></a>  // Set the XmlHttp factory.
+<a name="line36"></a>  goog.net.XmlHttp.setFactory(
+<a name="line37"></a>      goog.gears.HttpRequest.factory_, goog.gears.HttpRequest.optionsFactory_);
+<a name="line38"></a>
+<a name="line39"></a>  // Use the Gears timer as the default timer object to ensure that the XhrIo
+<a name="line40"></a>  // timeouts function in the Workers.
+<a name="line41"></a>  goog.Timer.defaultTimerObject = goog.gears.getFactory().create(
+<a name="line42"></a>      &#39;beta.timer&#39;, &#39;1.0&#39;);
+<a name="line43"></a>};
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * The factory for creating Gears HttpRequest&#39;s.
+<a name="line48"></a> * @return {XMLHttpRequest} The request object.
+<a name="line49"></a> * @private
+<a name="line50"></a> */
+<a name="line51"></a>goog.gears.HttpRequest.factory_ = function() {
+<a name="line52"></a>  return goog.gears.getFactory().create(&#39;beta.httprequest&#39;, &#39;1.0&#39;);
+<a name="line53"></a>};
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * The options object for the Gears HttpRequest.
+<a name="line58"></a> * @type {Object}
+<a name="line59"></a> * @private
+<a name="line60"></a> */
+<a name="line61"></a>goog.gears.HttpRequest.options_ = {};
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>// As of Gears API v.2 (build version 0.1.56.0), setting onreadystatechange to
+<a name="line65"></a>// null in FF will cause the browser to crash.
+<a name="line66"></a>goog.gears.HttpRequest.options_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] =
+<a name="line67"></a>    true;
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * The factory for creating the options object for Gears HttpRequest&#39;s.
+<a name="line72"></a> * @return {Object} The options.
+<a name="line73"></a> * @private
+<a name="line74"></a> */
+<a name="line75"></a>goog.gears.HttpRequest.optionsFactory_ = function() {
+<a name="line76"></a>  return goog.gears.HttpRequest.options_;
+<a name="line77"></a>};
+</pre>
+
+
+</body>
+</html>

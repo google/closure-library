@@ -1,0 +1,146 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>event.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+  <meta name="date" content="2009-10-3">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_events_event.js.html">event.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2005 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A base class for event objects.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.events.Event&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * A base class for event objects, so that they can support preventDefault and
+<a name="line28"></a> * stopPropagation.
+<a name="line29"></a> *
+<a name="line30"></a> * @param {string} type Event Type.
+<a name="line31"></a> * @param {Object} opt_target Reference to the object that is the target of this
+<a name="line32"></a> *     event.
+<a name="line33"></a> * @constructor
+<a name="line34"></a> * @extends {goog.Disposable}
+<a name="line35"></a> */
+<a name="line36"></a>goog.events.Event = function(type, opt_target) {
+<a name="line37"></a>  goog.Disposable.call(this);
+<a name="line38"></a>
+<a name="line39"></a>  /**
+<a name="line40"></a>   * Event type.
+<a name="line41"></a>   * @type {string}
+<a name="line42"></a>   */
+<a name="line43"></a>  this.type = type;
+<a name="line44"></a>
+<a name="line45"></a>  /**
+<a name="line46"></a>   * Target of the event.
+<a name="line47"></a>   * @type {Object|undefined}
+<a name="line48"></a>   */
+<a name="line49"></a>  this.target = opt_target;
+<a name="line50"></a>
+<a name="line51"></a>  /**
+<a name="line52"></a>   * Object that had the listener attached.
+<a name="line53"></a>   * @type {Object|undefined}
+<a name="line54"></a>   */
+<a name="line55"></a>  this.currentTarget = this.target;
+<a name="line56"></a>};
+<a name="line57"></a>goog.inherits(goog.events.Event, goog.Disposable);
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/** @inheritDoc */
+<a name="line61"></a>goog.events.Event.prototype.disposeInternal = function() {
+<a name="line62"></a>  delete this.type;
+<a name="line63"></a>  delete this.target;
+<a name="line64"></a>  delete this.currentTarget;
+<a name="line65"></a>};
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * Whether to cancel the event in internal capture/bubble processing for IE.
+<a name="line70"></a> * @type {boolean}
+<a name="line71"></a> * @private
+<a name="line72"></a> */
+<a name="line73"></a>goog.events.Event.prototype.propagationStopped_ = false;
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * Return value for in internal capture/bubble processing for IE.
+<a name="line78"></a> * @type {boolean}
+<a name="line79"></a> * @private
+<a name="line80"></a> */
+<a name="line81"></a>goog.events.Event.prototype.returnValue_ = true;
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Stops event propagation.
+<a name="line86"></a> */
+<a name="line87"></a>goog.events.Event.prototype.stopPropagation = function() {
+<a name="line88"></a>  this.propagationStopped_ = true;
+<a name="line89"></a>};
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * Prevents the default action, for example a link redirecting to a url.
+<a name="line94"></a> */
+<a name="line95"></a>goog.events.Event.prototype.preventDefault = function() {
+<a name="line96"></a>  this.returnValue_ = false;
+<a name="line97"></a>};
+</pre>
+
+
+</body>
+</html>
