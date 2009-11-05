@@ -432,6 +432,33 @@ function testSetMultiAxisLabelStyle() {
           goog.ui.ServerChart.UriParam.MULTI_AXIS_STYLE));
 }
 
+function testSetBackgroundFill() {
+  var chart = new goog.ui.ServerChart(
+      goog.ui.ServerChart.ChartType.HORIZONTAL_STACKED_BAR, 300, 200);
+  assertEquals(0, chart.getBackgroundFill().length);
+  chart.setBackgroundFill([{color: '00ff00'}]);
+  assertObjectEquals({
+    area: 'bg',
+    effect: 's',
+    color: '00ff00'}, chart.getBackgroundFill()[0]);
+  chart.setBackgroundFill([
+      {color: '00ff00'},
+      {area: 'c', color: '00ff00'}
+  ]);
+  assertObjectEquals({
+    area: 'bg',
+    effect: 's',
+    color: '00ff00'}, chart.getBackgroundFill()[0]);
+  assertObjectEquals({
+    area: 'c',
+    effect: 's',
+    color: '00ff00'}, chart.getBackgroundFill()[1]);
+  
+  chart.setParameterValue(goog.ui.ServerChart.UriParam.BACKGROUND_FILL,
+      'bg,s,00ff00|c,lg,45,ff00ff|bg,s,ff00ff');
+  assertEquals(0, chart.getBackgroundFill().length);
+}
+
 function testSetMultiAxisRange() {
   var chart = new goog.ui.ServerChart(
       goog.ui.ServerChart.ChartType.HORIZONTAL_STACKED_BAR, 300, 200);

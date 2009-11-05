@@ -17,7 +17,7 @@
   </script>
 
   <meta charset="utf8">
-  <meta name="date" content="2009-10-3">
+  <meta name="date" content="2009-10-4">
 </head>
 
 <body onload="prettyPrint()">
@@ -335,7 +335,7 @@
 <a name="line291"></a>goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
 <a name="line292"></a>  if (goog.events.KeyHandler.USES_KEYDOWN_ &amp;&amp;
 <a name="line293"></a>      !goog.events.KeyCodes.firesKeyPressEvent(e.keyCode,
-<a name="line294"></a>          this.lastKey_, e.shiftKey, e.ctrlKey)) {
+<a name="line294"></a>          this.lastKey_, e.shiftKey, e.ctrlKey, e.altKey)) {
 <a name="line295"></a>    this.handleEvent(e);
 <a name="line296"></a>  } else {
 <a name="line297"></a>    if (goog.userAgent.GECKO &amp;&amp;

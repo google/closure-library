@@ -19,6 +19,7 @@
  * surrounding page, and is always a fixed height.
  *
  * @see ../demos/editor/editor.html
+ * @see ../demos/editor/field_basic.html
  */
 
 goog.provide('goog.editor.Field');

@@ -17,7 +17,7 @@
   </script>
 
   <meta charset="utf8">
-  <meta name="date" content="2009-10-3">
+  <meta name="date" content="2009-10-4">
 </head>
 
 <body onload="prettyPrint()">
@@ -249,85 +249,95 @@
 <a name="line205"></a> * @param {number} opt_heldKeyCode Key code of a currently-held key.
 <a name="line206"></a> * @param {boolean} opt_shiftKey Whether the shift key is held down.
 <a name="line207"></a> * @param {boolean} opt_ctrlKey Whether the control key is held down.
-<a name="line208"></a> * @return {boolean} Whether it&#39;s a key that fires a keypress event.
-<a name="line209"></a> */
-<a name="line210"></a>goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
-<a name="line211"></a>    opt_shiftKey, opt_ctrlKey) {
-<a name="line212"></a>  if (!goog.userAgent.IE &amp;&amp;
-<a name="line213"></a>      !(goog.userAgent.WEBKIT &amp;&amp; goog.userAgent.isVersion(&#39;525&#39;))) {
-<a name="line214"></a>    return true;
-<a name="line215"></a>  }
-<a name="line216"></a>
-<a name="line217"></a>  // Saves Ctrl or Alt + key for IE7, which won&#39;t fire keypress.
-<a name="line218"></a>  if (goog.userAgent.IE &amp;&amp;
-<a name="line219"></a>      !opt_shiftKey &amp;&amp;
-<a name="line220"></a>      (opt_heldKeyCode == goog.events.KeyCodes.CTRL ||
-<a name="line221"></a>       opt_heldKeyCode == goog.events.KeyCodes.ALT)) {
-<a name="line222"></a>    return false;
-<a name="line223"></a>  }
-<a name="line224"></a>
-<a name="line225"></a>  // When Ctrl+&lt;somekey&gt; is held in IE, it only fires a keypress once, but it
-<a name="line226"></a>  // continues to fire keydown events as the event repeats.
-<a name="line227"></a>  if (goog.userAgent.IE &amp;&amp; opt_ctrlKey &amp;&amp; opt_heldKeyCode == keyCode) {
-<a name="line228"></a>    return false;
-<a name="line229"></a>  }
-<a name="line230"></a>
-<a name="line231"></a>  switch (keyCode) {
-<a name="line232"></a>    case goog.events.KeyCodes.ENTER:
-<a name="line233"></a>      return true;
-<a name="line234"></a>    case goog.events.KeyCodes.ESC:
-<a name="line235"></a>      return !goog.userAgent.WEBKIT;
-<a name="line236"></a>  }
-<a name="line237"></a>
-<a name="line238"></a>  return goog.events.KeyCodes.isCharacterKey(keyCode);
-<a name="line239"></a>};
+<a name="line208"></a> * @param {boolean} opt_altKey Whether the alt key is held down.
+<a name="line209"></a> * @return {boolean} Whether it&#39;s a key that fires a keypress event.
+<a name="line210"></a> */
+<a name="line211"></a>goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
+<a name="line212"></a>    opt_shiftKey, opt_ctrlKey, opt_altKey) {
+<a name="line213"></a>  if (!goog.userAgent.IE &amp;&amp;
+<a name="line214"></a>      !(goog.userAgent.WEBKIT &amp;&amp; goog.userAgent.isVersion(&#39;525&#39;))) {
+<a name="line215"></a>    return true;
+<a name="line216"></a>  }
+<a name="line217"></a>
+<a name="line218"></a>  if (goog.userAgent.MAC &amp;&amp; opt_altKey) {
+<a name="line219"></a>    return goog.events.KeyCodes.isCharacterKey(keyCode);
+<a name="line220"></a>  }
+<a name="line221"></a>
+<a name="line222"></a>  // Alt but not AltGr which is represented as Alt+Ctrl.
+<a name="line223"></a>  if (opt_altKey &amp;&amp; !opt_ctrlKey) {
+<a name="line224"></a>    return false;
+<a name="line225"></a>  }
+<a name="line226"></a>
+<a name="line227"></a>  // Saves Ctrl or Alt + key for IE7, which won&#39;t fire keypress.
+<a name="line228"></a>  if (goog.userAgent.IE &amp;&amp;
+<a name="line229"></a>      !opt_shiftKey &amp;&amp;
+<a name="line230"></a>      (opt_heldKeyCode == goog.events.KeyCodes.CTRL ||
+<a name="line231"></a>       opt_heldKeyCode == goog.events.KeyCodes.ALT)) {
+<a name="line232"></a>    return false;
+<a name="line233"></a>  }
+<a name="line234"></a>
+<a name="line235"></a>  // When Ctrl+&lt;somekey&gt; is held in IE, it only fires a keypress once, but it
+<a name="line236"></a>  // continues to fire keydown events as the event repeats.
+<a name="line237"></a>  if (goog.userAgent.IE &amp;&amp; opt_ctrlKey &amp;&amp; opt_heldKeyCode == keyCode) {
+<a name="line238"></a>    return false;
+<a name="line239"></a>  }
 <a name="line240"></a>
-<a name="line241"></a>
-<a name="line242"></a>/**
-<a name="line243"></a> * Returns true if the key produces a character.
-<a name="line244"></a> *
-<a name="line245"></a> * @param {number} keyCode A key code.
-<a name="line246"></a> * @return {boolean} Whether it&#39;s a character key.
-<a name="line247"></a> */
-<a name="line248"></a>goog.events.KeyCodes.isCharacterKey = function(keyCode) {
-<a name="line249"></a>  if (keyCode &gt;= goog.events.KeyCodes.ZERO &amp;&amp;
-<a name="line250"></a>      keyCode &lt;= goog.events.KeyCodes.NINE) {
-<a name="line251"></a>    return true;
-<a name="line252"></a>  }
-<a name="line253"></a>
-<a name="line254"></a>  if (keyCode &gt;= goog.events.KeyCodes.NUM_ZERO &amp;&amp;
-<a name="line255"></a>      keyCode &lt;= goog.events.KeyCodes.NUM_MULTIPLY) {
-<a name="line256"></a>    return true;
-<a name="line257"></a>  }
-<a name="line258"></a>
-<a name="line259"></a>  if (keyCode &gt;= goog.events.KeyCodes.A &amp;&amp;
-<a name="line260"></a>      keyCode &lt;= goog.events.KeyCodes.Z) {
+<a name="line241"></a>  switch (keyCode) {
+<a name="line242"></a>    case goog.events.KeyCodes.ENTER:
+<a name="line243"></a>      return true;
+<a name="line244"></a>    case goog.events.KeyCodes.ESC:
+<a name="line245"></a>      return !goog.userAgent.WEBKIT;
+<a name="line246"></a>  }
+<a name="line247"></a>
+<a name="line248"></a>  return goog.events.KeyCodes.isCharacterKey(keyCode);
+<a name="line249"></a>};
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * Returns true if the key produces a character.
+<a name="line254"></a> *
+<a name="line255"></a> * @param {number} keyCode A key code.
+<a name="line256"></a> * @return {boolean} Whether it&#39;s a character key.
+<a name="line257"></a> */
+<a name="line258"></a>goog.events.KeyCodes.isCharacterKey = function(keyCode) {
+<a name="line259"></a>  if (keyCode &gt;= goog.events.KeyCodes.ZERO &amp;&amp;
+<a name="line260"></a>      keyCode &lt;= goog.events.KeyCodes.NINE) {
 <a name="line261"></a>    return true;
 <a name="line262"></a>  }
 <a name="line263"></a>
-<a name="line264"></a>  switch (keyCode) {
-<a name="line265"></a>    case goog.events.KeyCodes.SPACE:
-<a name="line266"></a>    case goog.events.KeyCodes.QUESTION_MARK:
-<a name="line267"></a>    case goog.events.KeyCodes.NUM_PLUS:
-<a name="line268"></a>    case goog.events.KeyCodes.NUM_MINUS:
-<a name="line269"></a>    case goog.events.KeyCodes.NUM_PERIOD:
-<a name="line270"></a>    case goog.events.KeyCodes.NUM_DIVISION:
-<a name="line271"></a>    case goog.events.KeyCodes.SEMICOLON:
-<a name="line272"></a>    case goog.events.KeyCodes.DASH:
-<a name="line273"></a>    case goog.events.KeyCodes.EQUALS:
-<a name="line274"></a>    case goog.events.KeyCodes.COMMA:
-<a name="line275"></a>    case goog.events.KeyCodes.PERIOD:
-<a name="line276"></a>    case goog.events.KeyCodes.SLASH:
-<a name="line277"></a>    case goog.events.KeyCodes.APOSTROPHE:
-<a name="line278"></a>    case goog.events.KeyCodes.SINGLE_QUOTE:
-<a name="line279"></a>    case goog.events.KeyCodes.OPEN_SQUARE_BRACKET:
-<a name="line280"></a>    case goog.events.KeyCodes.BACKSLASH:
-<a name="line281"></a>    case goog.events.KeyCodes.CLOSE_SQUARE_BRACKET:
-<a name="line282"></a>      return true;
-<a name="line283"></a>    default:
-<a name="line284"></a>      return false;
-<a name="line285"></a>  }
-<a name="line286"></a>};
+<a name="line264"></a>  if (keyCode &gt;= goog.events.KeyCodes.NUM_ZERO &amp;&amp;
+<a name="line265"></a>      keyCode &lt;= goog.events.KeyCodes.NUM_MULTIPLY) {
+<a name="line266"></a>    return true;
+<a name="line267"></a>  }
+<a name="line268"></a>
+<a name="line269"></a>  if (keyCode &gt;= goog.events.KeyCodes.A &amp;&amp;
+<a name="line270"></a>      keyCode &lt;= goog.events.KeyCodes.Z) {
+<a name="line271"></a>    return true;
+<a name="line272"></a>  }
+<a name="line273"></a>
+<a name="line274"></a>  switch (keyCode) {
+<a name="line275"></a>    case goog.events.KeyCodes.SPACE:
+<a name="line276"></a>    case goog.events.KeyCodes.QUESTION_MARK:
+<a name="line277"></a>    case goog.events.KeyCodes.NUM_PLUS:
+<a name="line278"></a>    case goog.events.KeyCodes.NUM_MINUS:
+<a name="line279"></a>    case goog.events.KeyCodes.NUM_PERIOD:
+<a name="line280"></a>    case goog.events.KeyCodes.NUM_DIVISION:
+<a name="line281"></a>    case goog.events.KeyCodes.SEMICOLON:
+<a name="line282"></a>    case goog.events.KeyCodes.DASH:
+<a name="line283"></a>    case goog.events.KeyCodes.EQUALS:
+<a name="line284"></a>    case goog.events.KeyCodes.COMMA:
+<a name="line285"></a>    case goog.events.KeyCodes.PERIOD:
+<a name="line286"></a>    case goog.events.KeyCodes.SLASH:
+<a name="line287"></a>    case goog.events.KeyCodes.APOSTROPHE:
+<a name="line288"></a>    case goog.events.KeyCodes.SINGLE_QUOTE:
+<a name="line289"></a>    case goog.events.KeyCodes.OPEN_SQUARE_BRACKET:
+<a name="line290"></a>    case goog.events.KeyCodes.BACKSLASH:
+<a name="line291"></a>    case goog.events.KeyCodes.CLOSE_SQUARE_BRACKET:
+<a name="line292"></a>      return true;
+<a name="line293"></a>    default:
+<a name="line294"></a>      return false;
+<a name="line295"></a>  }
+<a name="line296"></a>};
 </pre>
 
 

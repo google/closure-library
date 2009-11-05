@@ -116,7 +116,8 @@ function testSucceedFail() {
   d = d.addCallback(assertEqualsCallback('wrapped fail', 'web taco'));
 
   // default unwrapped error
-  d = Deferred.fail(Error('ugh')).addCallback(neverHappen).addErrback(catchStuff);
+  d = Deferred.fail(Error('ugh')).addCallback(neverHappen).addErrback(
+      catchStuff);
   d = d.addCallback(assertEqualsCallback('unwrapped fail', 'ugh'));
 
   assertEquals(1, count);
@@ -136,7 +137,8 @@ function testDeferredDependencies() {
     return Deferred.fail(res);
   }
 
-  d = Deferred.succeed('ugh').addCallback(deferredFailure).addErrback(catchStuff);
+  d = Deferred.succeed('ugh').addCallback(deferredFailure).addErrback(
+      catchStuff);
   d = d.addCallback(assertEqualsCallback('dependent deferred fail', 'ugh'));
 }
 
@@ -212,9 +214,9 @@ function testIncorrectUsage2() {
 
 function testIncorrectUsage3() {
   var d = new Deferred();
-  (new Deferred()).addCallback(function () { return d; }).callback(1);
+  (new Deferred()).addCallback(function() {return d;}).callback(1);
   try {
-    d.addCallback(function () {});
+    d.addCallback(function() {});
     neverHappen();
   } catch (ex) {
     assertTrue('chained deferred not allowed to be re-used',
@@ -279,14 +281,14 @@ function testChainedDeferred1() {
   var calls = [];
 
   var d2 = new Deferred();
-  d2.addCallback(function() { calls.push('B1'); });
-  d2.addCallback(function() { calls.push('B2'); });
+  d2.addCallback(function() {calls.push('B1');});
+  d2.addCallback(function() {calls.push('B2');});
 
   var d1 = new Deferred();
-  d1.addCallback(function() { calls.push('A1'); });
-  d1.addCallback(function() { calls.push('A2'); });
+  d1.addCallback(function() {calls.push('A1');});
+  d1.addCallback(function() {calls.push('A2');});
   d1.chainDeferred(d2);
-  d1.addCallback(function() { calls.push('A3'); });
+  d1.addCallback(function() {calls.push('A3');});
 
   d1.callback();
   assertEquals('A1,A2,B1,B2,A3', calls.join(','));
@@ -296,14 +298,14 @@ function testChainedDeferred2() {
   var calls = [];
 
   var d2 = new Deferred();
-  d2.addCallback(function() { calls.push('B1'); });
-  d2.addErrback(function(err) { calls.push('B2'); throw Error('x'); });
+  d2.addCallback(function() {calls.push('B1');});
+  d2.addErrback(function(err) {calls.push('B2'); throw Error('x');});
 
   var d1 = new Deferred();
-  d1.addCallback(function(err) { throw Error('foo'); });
+  d1.addCallback(function(err) {throw Error('foo');});
   d1.chainDeferred(d2);
-  d1.addCallback(function() { calls.push('A1'); });
-  d1.addErrback(function() { calls.push('A2'); });
+  d1.addCallback(function() {calls.push('A1');});
+  d1.addErrback(function() {calls.push('A2');});
 
   d1.callback();
   assertEquals('B2,A2', calls.join(','));
@@ -312,10 +314,10 @@ function testChainedDeferred2() {
 function testUndefinedResultAndCallbackSequence() {
   var results = [];
   var d = new Deferred();
-  d.addCallback(function(res) { return 'foo'; });
-  d.addCallback(function(res) { results.push(res); return 'bar'; });
-  d.addCallback(function(res) { results.push(res); });
-  d.addCallback(function(res) { results.push(res); });
+  d.addCallback(function(res) {return 'foo';});
+  d.addCallback(function(res) {results.push(res); return 'bar';});
+  d.addCallback(function(res) {results.push(res);});
+  d.addCallback(function(res) {results.push(res);});
   d.callback();
   assertEquals('foo,bar,bar', results.join(','));
 }
@@ -323,12 +325,25 @@ function testUndefinedResultAndCallbackSequence() {
 function testUndefinedResultAndErrbackSequence() {
   var results = [];
   var d = new Deferred();
-  d.addCallback(function(res) { throw Error('uh oh'); });
-  d.addErrback(function(res) { results.push('A'); });
-  d.addCallback(function(res) { results.push('B'); });
-  d.addErrback(function(res) { results.push('C'); });
+  d.addCallback(function(res) {throw Error('uh oh');});
+  d.addErrback(function(res) {results.push('A');});
+  d.addCallback(function(res) {results.push('B');});
+  d.addErrback(function(res) {results.push('C');});
   d.callback();
   assertEquals('A,C', results.join(','));
+}
+
+function testHasFired() {
+  var d1 = new Deferred();
+  var d2 = new Deferred();
+
+  assertFalse(d1.hasFired());
+  assertFalse(d2.hasFired());
+
+  d1.callback();
+  d2.errback();
+  assertTrue(d1.hasFired());
+  assertTrue(d2.hasFired());
 }
 
 </script>

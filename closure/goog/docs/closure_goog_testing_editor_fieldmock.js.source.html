@@ -17,7 +17,7 @@
   </script>
 
   <meta charset="utf8">
-  <meta name="date" content="2009-10-3">
+  <meta name="date" content="2009-10-4">
 </head>
 
 <body onload="prettyPrint()">
@@ -107,8 +107,27 @@
 <a name="line63"></a>  this.getBaseZindex();
 <a name="line64"></a>  this.$anyTimes();
 <a name="line65"></a>  this.$returns(0);
-<a name="line66"></a>};
-<a name="line67"></a>goog.inherits(goog.testing.editor.FieldMock, goog.testing.LooseMock);
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>  // These methods cannot be set on the prototype, because the prototype
+<a name="line69"></a>  // gets stepped on by the mock framework.
+<a name="line70"></a>  var inModalMode = false;
+<a name="line71"></a>
+<a name="line72"></a>  /**
+<a name="line73"></a>   * @return {boolean} Whether we&#39;re in modal interaction mode.
+<a name="line74"></a>   */
+<a name="line75"></a>  this.inModalMode = function() {
+<a name="line76"></a>    return inModalMode;
+<a name="line77"></a>  };
+<a name="line78"></a>
+<a name="line79"></a>  /**
+<a name="line80"></a>   * @param {boolean} mode Sets whether we&#39;re in modal interaction mode.
+<a name="line81"></a>   */
+<a name="line82"></a>  this.setModalMode = function(mode) {
+<a name="line83"></a>    inModalMode = mode;
+<a name="line84"></a>  };
+<a name="line85"></a>};
+<a name="line86"></a>goog.inherits(goog.testing.editor.FieldMock, goog.testing.LooseMock);
 </pre>
 
 

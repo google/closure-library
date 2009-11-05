@@ -574,6 +574,58 @@ goog.ui.ServerChart.UriParam = {
 
 
 /**
+ * Sets the background fill.
+ *
+ * @param {Array.<Object>} fill An array of background fill specification
+ *     objects. Each object may have the following properties:
+ *     {string} area The area to fill, either 'bg' for background or 'c' for
+ *         chart area.  The default is 'bg'.
+ *     {string} color (required) The color of the background fill.
+ *     // TODO: Add support for gradient/stripes, which requires
+ *     // a different object structure.
+ */
+goog.ui.ServerChart.prototype.setBackgroundFill = function(fill) {
+  var value = [];
+  goog.array.forEach(fill, function(spec) {
+    spec.area = spec.area || 'bg';
+    spec.effect = spec.effect || 's';
+    value.push([spec.area, spec.effect, spec.color].join(','));
+  });
+  value = value.join('|');
+  this.setParameterValue(goog.ui.ServerChart.UriParam.BACKGROUND_FILL, value);
+};
+
+
+/**
+ * Returns the background fill.
+ *
+ * @return {Array.<Object>} An array of background fill specifications. 
+ *     If the fill specification string is in an unsupported format, the method
+ *    returns an empty array.
+ */
+goog.ui.ServerChart.prototype.getBackgroundFill = function() {
+  var value =
+      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.BACKGROUND_FILL);
+  var result = [];
+  if (goog.isDefAndNotNull(value)) {
+    var fillSpecifications = value.split('|');
+    var valid = true;
+    goog.array.forEach(fillSpecifications, function(spec) {
+      spec = spec.split(',');
+      if (valid && spec[1] == 's') {
+        result.push({area: spec[0], effect: spec[1], color: spec[2]});
+      } else {
+        // If the format is unsupported, return an empty array.
+        result = [];
+        valid = false;
+      }
+    });
+  }
+  return result;
+};
+
+
+/**
  * Sets the encoding type.
  *
  * @param {goog.ui.ServerChart.EncodingType} type Desired data encoding type.

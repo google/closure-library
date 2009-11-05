@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+
+<!--
+ Copyright 2008 Google Inc.  All Rights Reserved.
+
+
+-->
+
+<html>
+<head>
+<title>Closure Unit Tests - goog.demos.editor.HelloWorld</title>
+<script type="text/javascript" src="../../base.js"></script>
+<script type="text/javascript" src="deps.js"></script>
+<script type="text/javascript">
+  goog.require('goog.dom');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.demos.editor.HelloWorld');
+  goog.require('goog.testing.editor.TestHelper');
+  goog.require('goog.testing.editor.FieldMock');
+</script>
+</head>
+
+<body>
+
+<div id="field">&nbsp;</div>
+
+<script type="text/javascript">
+
+var FIELD = goog.dom.$('field');
+var plugin;
+var fieldMock;
+var testHelper = new goog.testing.editor.TestHelper(FIELD);
+
+function setUp() {
+  testHelper.setUpEditableElement();
+  FIELD.focus();
+  plugin = new goog.demos.editor.HelloWorld();
+  fieldMock = new goog.testing.editor.FieldMock();
+  plugin.registerFieldObject(fieldMock);
+}
+
+function tearDown() {
+  testHelper.tearDownEditableElement();
+}
+
+function testIsSupportedCommand() {
+  fieldMock.$replay();
+  assertTrue('+helloWorld should be suported',
+      plugin.isSupportedCommand('+helloWorld'));
+  assertFalse('other commands should not be supported',
+      plugin.isSupportedCommand('blah'));
+  fieldMock.$verify();
+}
+
+function testExecCommandInternal() {
+  fieldMock.$replay();
+  var result = plugin.execCommandInternal(
+      goog.demos.editor.HelloWorld.COMMAND.HELLO_WORLD);
+  assertUndefined(result);
+  var spans = FIELD.getElementsByTagName('span');
+  assertEquals(1, spans.length);
+  var helloWorldSpan = spans.item(0);
+  assertEquals('Hello World!', goog.dom.getTextContent(helloWorldSpan));
+  fieldMock.$verify();
+}
+
+</script>
+</body>
+</html>

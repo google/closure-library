@@ -17,7 +17,7 @@
   </script>
 
   <meta charset="utf8">
-  <meta name="date" content="2009-10-3">
+  <meta name="date" content="2009-10-4">
 </head>
 
 <body onload="prettyPrint()">
@@ -284,8 +284,12 @@
 <a name="line240"></a>  // size, the browser creates a font tag, but the font size in the style attr
 <a name="line241"></a>  // overrides the font tag. Only webkit removes that font size from the style
 <a name="line242"></a>  // attr.
-<a name="line243"></a>  DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR: !goog.userAgent.WEBKIT
-<a name="line244"></a>};
+<a name="line243"></a>  DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR: !goog.userAgent.WEBKIT,
+<a name="line244"></a>
+<a name="line245"></a>  // Changing the href of a link in IE automatically updates the anchor
+<a name="line246"></a>  // text too.  See http://b/issue?id=2182147.
+<a name="line247"></a>  SETTING_HREF_RESETS_ANCHOR_TEXT: goog.userAgent.IE
+<a name="line248"></a>};
 </pre>
 
 

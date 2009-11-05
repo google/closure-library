@@ -340,7 +340,7 @@ goog.ui.editor.AbstractDialog.prototype.getButtonElement = function(buttonId) {
  * event to listeners, or returns null to prevent the dialog from closing.
  * Subclasses should override this to return their own subclass of
  * goog.events.Event that includes all data a plugin would need from the dialog.
- * @param {goog.events.Event} e The event object dispatched by the closure
+ * @param {goog.events.Event} e The event object dispatched by the wrapped
  *     dialog.
  * @return {goog.events.Event} The event object to be used when dispatching the
  *     OK event to listeners.

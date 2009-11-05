@@ -193,3 +193,10 @@ See the COPYING file for details.
   background: url(../images/toolbar_icons.gif) no-repeat -176px;
   vertical-align: top;
 }
+
+/*
+ * goog.ui.SelectionMenuButton
+ */
+.goog-selectionmenubutton-checkbox {
+  margin: -4px 0px 0px 0px;
+}

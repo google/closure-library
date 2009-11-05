@@ -17,7 +17,7 @@
   </script>
 
   <meta charset="utf8">
-  <meta name="date" content="2009-10-3">
+  <meta name="date" content="2009-10-4">
 </head>
 
 <body onload="prettyPrint()">
@@ -92,50 +92,46 @@
 <a name="line48"></a>goog.editor.plugins.SpacesTabHandler.prototype.handleTabKey = function(e) {
 <a name="line49"></a>  var dh = this.getFieldDomHelper();
 <a name="line50"></a>  var range = this.fieldObject.getRange();
-<a name="line51"></a>  if (!goog.dom.getAncestorByTagNameAndClass(range.getContainerElement(),
-<a name="line52"></a>                                             goog.dom.TagName.LI) &amp;&amp;
-<a name="line53"></a>      !goog.iter.some(range, function(node) {
-<a name="line54"></a>        return node.tagName == goog.dom.TagName.LI;
-<a name="line55"></a>      })) {
-<a name="line56"></a>    // In the shift + tab case we don&#39;t want to insert spaces, but we don&#39;t
-<a name="line57"></a>    // want focus to move either so skip the spacing logic and just prevent
-<a name="line58"></a>    // default.
-<a name="line59"></a>    if (!e.shiftKey) {
-<a name="line60"></a>      // Not in a list but we want to insert 4 spaces.
-<a name="line61"></a>
-<a name="line62"></a>      // Stop change events while we make multiple field changes.
-<a name="line63"></a>      this.fieldObject.stopChangeEvents(true, true);
-<a name="line64"></a>
-<a name="line65"></a>      // Inserting nodes below completely messes up the selection, doing the
-<a name="line66"></a>      // deletion here before it&#39;s messed up. Only delete if text is selected,
-<a name="line67"></a>      // otherwise we would remove the character to the right of the cursor.
-<a name="line68"></a>      if (!range.isCollapsed()) {
-<a name="line69"></a>        dh.getDocument().execCommand(&#39;delete&#39;, false, null);
-<a name="line70"></a>        // Safari 3 has some DOM exceptions if we don&#39;t reget the range here,
-<a name="line71"></a>        // doing it all the time just to be safe.
-<a name="line72"></a>        range = this.fieldObject.getRange();
-<a name="line73"></a>      }
-<a name="line74"></a>
-<a name="line75"></a>      // Emulate tab by removing selection and inserting 4 spaces
-<a name="line76"></a>      // Two breaking spaces in a row can be collapsed by the browser into one
-<a name="line77"></a>      // space. Inserting the string below because it is guaranteed to never
-<a name="line78"></a>      // collapse to less than four spaces, regardless of what is adjacent to
-<a name="line79"></a>      // the inserted spaces. This might make line wrapping slightly
-<a name="line80"></a>      // sub-optimal around a grouping of non-breaking spaces.
-<a name="line81"></a>      var elem = dh.createDom(&#39;span&#39;, null, &#39;\u00a0\u00a0 \u00a0&#39;);
-<a name="line82"></a>      elem = range.insertNode(elem, false);
-<a name="line83"></a>
-<a name="line84"></a>      this.fieldObject.dispatchChange();
-<a name="line85"></a>      goog.editor.range.placeCursorNextTo(elem, false);
-<a name="line86"></a>      this.fieldObject.dispatchSelectionChangeEvent();
-<a name="line87"></a>    }
+<a name="line51"></a>  if (!goog.editor.range.intersectsTag(range, goog.dom.TagName.LI)) {
+<a name="line52"></a>    // In the shift + tab case we don&#39;t want to insert spaces, but we don&#39;t
+<a name="line53"></a>    // want focus to move either so skip the spacing logic and just prevent
+<a name="line54"></a>    // default.
+<a name="line55"></a>    if (!e.shiftKey) {
+<a name="line56"></a>      // Not in a list but we want to insert 4 spaces.
+<a name="line57"></a>
+<a name="line58"></a>      // Stop change events while we make multiple field changes.
+<a name="line59"></a>      this.fieldObject.stopChangeEvents(true, true);
+<a name="line60"></a>
+<a name="line61"></a>      // Inserting nodes below completely messes up the selection, doing the
+<a name="line62"></a>      // deletion here before it&#39;s messed up. Only delete if text is selected,
+<a name="line63"></a>      // otherwise we would remove the character to the right of the cursor.
+<a name="line64"></a>      if (!range.isCollapsed()) {
+<a name="line65"></a>        dh.getDocument().execCommand(&#39;delete&#39;, false, null);
+<a name="line66"></a>        // Safari 3 has some DOM exceptions if we don&#39;t reget the range here,
+<a name="line67"></a>        // doing it all the time just to be safe.
+<a name="line68"></a>        range = this.fieldObject.getRange();
+<a name="line69"></a>      }
+<a name="line70"></a>
+<a name="line71"></a>      // Emulate tab by removing selection and inserting 4 spaces
+<a name="line72"></a>      // Two breaking spaces in a row can be collapsed by the browser into one
+<a name="line73"></a>      // space. Inserting the string below because it is guaranteed to never
+<a name="line74"></a>      // collapse to less than four spaces, regardless of what is adjacent to
+<a name="line75"></a>      // the inserted spaces. This might make line wrapping slightly
+<a name="line76"></a>      // sub-optimal around a grouping of non-breaking spaces.
+<a name="line77"></a>      var elem = dh.createDom(&#39;span&#39;, null, &#39;\u00a0\u00a0 \u00a0&#39;);
+<a name="line78"></a>      elem = range.insertNode(elem, false);
+<a name="line79"></a>
+<a name="line80"></a>      this.fieldObject.dispatchChange();
+<a name="line81"></a>      goog.editor.range.placeCursorNextTo(elem, false);
+<a name="line82"></a>      this.fieldObject.dispatchSelectionChangeEvent();
+<a name="line83"></a>    }
+<a name="line84"></a>
+<a name="line85"></a>    e.preventDefault();
+<a name="line86"></a>    return true;
+<a name="line87"></a>  }
 <a name="line88"></a>
-<a name="line89"></a>    e.preventDefault();
-<a name="line90"></a>    return true;
-<a name="line91"></a>  }
-<a name="line92"></a>
-<a name="line93"></a>  return false;
-<a name="line94"></a>};
+<a name="line89"></a>  return false;
+<a name="line90"></a>};
 </pre>
 
 

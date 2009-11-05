@@ -15,7 +15,7 @@
 /**
  * @fileoverview Definition of the Tracer class and associated classes.
  *
- * @see ../demos/../tracer.html
+ * @see ../demos/tracer.html
  */
 
 goog.provide('goog.debug.Trace');

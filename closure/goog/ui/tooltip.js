@@ -354,7 +354,7 @@ goog.ui.Tooltip.prototype.setElement = function(el) {
   goog.ui.Tooltip.superClass_.setElement.call(this, el);
   if (el) {
     var body = this.dom_.getDocument().body;
-    body.insertBefore(el, body.firstChild);
+    body.insertBefore(el, body.lastChild);
   }
 };
 

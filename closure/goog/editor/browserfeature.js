@@ -240,5 +240,9 @@ goog.editor.BrowserFeature = {
   // size, the browser creates a font tag, but the font size in the style attr
   // overrides the font tag. Only webkit removes that font size from the style
   // attr.
-  DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR: !goog.userAgent.WEBKIT
+  DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR: !goog.userAgent.WEBKIT,
+
+  // Changing the href of a link in IE automatically updates the anchor
+  // text too.  See http://b/issue?id=2182147.
+  SETTING_HREF_RESETS_ANCHOR_TEXT: goog.userAgent.IE
 };

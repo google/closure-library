@@ -17,7 +17,7 @@
   </script>
 
   <meta charset="utf8">
-  <meta name="date" content="2009-10-3">
+  <meta name="date" content="2009-10-4">
 </head>
 
 <body onload="prettyPrint()">
@@ -58,61 +58,62 @@
 <a name="line14"></a>
 <a name="line15"></a>/**
 <a name="line16"></a> * @fileoverview Commands that the editor can execute.
-<a name="line17"></a> */
-<a name="line18"></a>goog.provide(&#39;goog.editor.Command&#39;);
-<a name="line19"></a>
+<a name="line17"></a> * @see ../demos/editor/editor.html
+<a name="line18"></a> */
+<a name="line19"></a>goog.provide(&#39;goog.editor.Command&#39;);
 <a name="line20"></a>
-<a name="line21"></a>/**
-<a name="line22"></a> * Commands that the editor can excute via execCommand or queryCommandValue.
-<a name="line23"></a> * @enum {string}
-<a name="line24"></a> */
-<a name="line25"></a>goog.editor.Command = {
-<a name="line26"></a>  // Prepend all the strings of built in execCommands with a plus to ensure
-<a name="line27"></a>  // that there&#39;s no conflict if a client wants to use the
-<a name="line28"></a>  // browser&#39;s execCommand.
-<a name="line29"></a>  UNDO: &#39;+undo&#39;,
-<a name="line30"></a>  REDO: &#39;+redo&#39;,
-<a name="line31"></a>  LINK: &#39;+link&#39;,
-<a name="line32"></a>  FORMAT_BLOCK: &#39;+formatBlock&#39;,
-<a name="line33"></a>  INDENT: &#39;+indent&#39;,
-<a name="line34"></a>  OUTDENT: &#39;+outdent&#39;,
-<a name="line35"></a>  REMOVE_FORMAT: &#39;+removeFormat&#39;,
-<a name="line36"></a>  STRIKE_THROUGH: &#39;+strikeThrough&#39;,
-<a name="line37"></a>  HORIZONTAL_RULE: &#39;+insertHorizontalRule&#39;,
-<a name="line38"></a>  SUBSCRIPT: &#39;+subscript&#39;,
-<a name="line39"></a>  SUPERSCRIPT: &#39;+superscript&#39;,
-<a name="line40"></a>  UNDERLINE: &#39;+underline&#39;,
-<a name="line41"></a>  UNLINK: &#39;+unlink&#39;,
-<a name="line42"></a>  BOLD: &#39;+bold&#39;,
-<a name="line43"></a>  ITALIC: &#39;+italic&#39;,
-<a name="line44"></a>  FONT_SIZE: &#39;+fontSize&#39;,
-<a name="line45"></a>  FONT_FACE: &#39;+fontName&#39;,
-<a name="line46"></a>  FONT_COLOR: &#39;+foreColor&#39;,
-<a name="line47"></a>  EMOTICON: &#39;+emoticon&#39;,
-<a name="line48"></a>  BACKGROUND_COLOR: &#39;+backColor&#39;,
-<a name="line49"></a>  ORDERED_LIST: &#39;+insertOrderedList&#39;,
-<a name="line50"></a>  UNORDERED_LIST: &#39;+insertUnorderedList&#39;,
-<a name="line51"></a>  TABLE: &#39;+table&#39;,
-<a name="line52"></a>  JUSTIFY_CENTER: &#39;+justifyCenter&#39;,
-<a name="line53"></a>  JUSTIFY_FULL: &#39;+justifyFull&#39;,
-<a name="line54"></a>  JUSTIFY_RIGHT: &#39;+justifyRight&#39;,
-<a name="line55"></a>  JUSTIFY_LEFT: &#39;+justifyLeft&#39;,
-<a name="line56"></a>  BLOCKQUOTE: &#39;+BLOCKQUOTE&#39;, // This is a nodename. Should be all caps.
-<a name="line57"></a>  DIR_LTR: &#39;ltr&#39;, // should be exactly &#39;ltr&#39; as it becomes dir attribute value
-<a name="line58"></a>  DIR_RTL: &#39;rtl&#39;, // same here
-<a name="line59"></a>  IMAGE: &#39;image&#39;,
-<a name="line60"></a>  EDIT_HTML: &#39;editHtml&#39;,
-<a name="line61"></a>
-<a name="line62"></a>  // queryCommandValue only: returns the default tag name used in the field.
-<a name="line63"></a>  // DIV should be considered the default if no plugin responds.
-<a name="line64"></a>  DEFAULT_TAG: &#39;+defaultTag&#39;,
-<a name="line65"></a>
-<a name="line66"></a>  // TODO: Try to give clients an API so that they don&#39;t need
-<a name="line67"></a>  // these execCommands.
-<a name="line68"></a>  CLEAR_LOREM: &#39;clearlorem&#39;,
-<a name="line69"></a>  UPDATE_LOREM: &#39;updatelorem&#39;,
-<a name="line70"></a>  USING_LOREM: &#39;usinglorem&#39;
-<a name="line71"></a>};
+<a name="line21"></a>
+<a name="line22"></a>/**
+<a name="line23"></a> * Commands that the editor can excute via execCommand or queryCommandValue.
+<a name="line24"></a> * @enum {string}
+<a name="line25"></a> */
+<a name="line26"></a>goog.editor.Command = {
+<a name="line27"></a>  // Prepend all the strings of built in execCommands with a plus to ensure
+<a name="line28"></a>  // that there&#39;s no conflict if a client wants to use the
+<a name="line29"></a>  // browser&#39;s execCommand.
+<a name="line30"></a>  UNDO: &#39;+undo&#39;,
+<a name="line31"></a>  REDO: &#39;+redo&#39;,
+<a name="line32"></a>  LINK: &#39;+link&#39;,
+<a name="line33"></a>  FORMAT_BLOCK: &#39;+formatBlock&#39;,
+<a name="line34"></a>  INDENT: &#39;+indent&#39;,
+<a name="line35"></a>  OUTDENT: &#39;+outdent&#39;,
+<a name="line36"></a>  REMOVE_FORMAT: &#39;+removeFormat&#39;,
+<a name="line37"></a>  STRIKE_THROUGH: &#39;+strikeThrough&#39;,
+<a name="line38"></a>  HORIZONTAL_RULE: &#39;+insertHorizontalRule&#39;,
+<a name="line39"></a>  SUBSCRIPT: &#39;+subscript&#39;,
+<a name="line40"></a>  SUPERSCRIPT: &#39;+superscript&#39;,
+<a name="line41"></a>  UNDERLINE: &#39;+underline&#39;,
+<a name="line42"></a>  UNLINK: &#39;+unlink&#39;,
+<a name="line43"></a>  BOLD: &#39;+bold&#39;,
+<a name="line44"></a>  ITALIC: &#39;+italic&#39;,
+<a name="line45"></a>  FONT_SIZE: &#39;+fontSize&#39;,
+<a name="line46"></a>  FONT_FACE: &#39;+fontName&#39;,
+<a name="line47"></a>  FONT_COLOR: &#39;+foreColor&#39;,
+<a name="line48"></a>  EMOTICON: &#39;+emoticon&#39;,
+<a name="line49"></a>  BACKGROUND_COLOR: &#39;+backColor&#39;,
+<a name="line50"></a>  ORDERED_LIST: &#39;+insertOrderedList&#39;,
+<a name="line51"></a>  UNORDERED_LIST: &#39;+insertUnorderedList&#39;,
+<a name="line52"></a>  TABLE: &#39;+table&#39;,
+<a name="line53"></a>  JUSTIFY_CENTER: &#39;+justifyCenter&#39;,
+<a name="line54"></a>  JUSTIFY_FULL: &#39;+justifyFull&#39;,
+<a name="line55"></a>  JUSTIFY_RIGHT: &#39;+justifyRight&#39;,
+<a name="line56"></a>  JUSTIFY_LEFT: &#39;+justifyLeft&#39;,
+<a name="line57"></a>  BLOCKQUOTE: &#39;+BLOCKQUOTE&#39;, // This is a nodename. Should be all caps.
+<a name="line58"></a>  DIR_LTR: &#39;ltr&#39;, // should be exactly &#39;ltr&#39; as it becomes dir attribute value
+<a name="line59"></a>  DIR_RTL: &#39;rtl&#39;, // same here
+<a name="line60"></a>  IMAGE: &#39;image&#39;,
+<a name="line61"></a>  EDIT_HTML: &#39;editHtml&#39;,
+<a name="line62"></a>
+<a name="line63"></a>  // queryCommandValue only: returns the default tag name used in the field.
+<a name="line64"></a>  // DIV should be considered the default if no plugin responds.
+<a name="line65"></a>  DEFAULT_TAG: &#39;+defaultTag&#39;,
+<a name="line66"></a>
+<a name="line67"></a>  // TODO: Try to give clients an API so that they don&#39;t need
+<a name="line68"></a>  // these execCommands.
+<a name="line69"></a>  CLEAR_LOREM: &#39;clearlorem&#39;,
+<a name="line70"></a>  UPDATE_LOREM: &#39;updatelorem&#39;,
+<a name="line71"></a>  USING_LOREM: &#39;usinglorem&#39;
+<a name="line72"></a>};
 </pre>
 
 

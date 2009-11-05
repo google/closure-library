@@ -17,7 +17,7 @@
   </script>
 
   <meta charset="utf8">
-  <meta name="date" content="2009-10-3">
+  <meta name="date" content="2009-10-4">
 </head>
 
 <body onload="prettyPrint()">
@@ -190,212 +190,214 @@
 <a name="line146"></a>  // Fire keydown, keypress, and keyup. Note that if the keydown is
 <a name="line147"></a>  // prevent-defaulted, then the keypress will not fire on IE.
 <a name="line148"></a>  var result = goog.testing.events.fireBrowserEvent(keydown);
-<a name="line149"></a>  if (goog.events.KeyCodes.firesKeyPressEvent(keyCode) &amp;&amp;
-<a name="line150"></a>      !(goog.userAgent.IE &amp;&amp; !result)) {
-<a name="line151"></a>    result &amp;= goog.testing.events.fireBrowserEvent(keypress);
-<a name="line152"></a>  }
-<a name="line153"></a>  return !!(result &amp; goog.testing.events.fireBrowserEvent(keyup));
-<a name="line154"></a>};
-<a name="line155"></a>
-<a name="line156"></a>
-<a name="line157"></a>/**
-<a name="line158"></a> * Simulates a mouseover event on the given target.
-<a name="line159"></a> * @param {EventTarget} target The target for the event.
-<a name="line160"></a> * @param {EventTarget} relatedTarget The related target for the event (e.g.,
-<a name="line161"></a> *     the node that the mouse is being moved out of).
-<a name="line162"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
-<a name="line163"></a> *     called on it, true otherwise.
-<a name="line164"></a> */
-<a name="line165"></a>goog.testing.events.fireMouseOverEvent = function(target, relatedTarget) {
-<a name="line166"></a>  var mouseover =
-<a name="line167"></a>      new goog.testing.events.Event(goog.events.EventType.MOUSEOVER, target);
-<a name="line168"></a>  mouseover.relatedTarget = relatedTarget;
-<a name="line169"></a>  return goog.testing.events.fireBrowserEvent(mouseover);
-<a name="line170"></a>};
-<a name="line171"></a>
-<a name="line172"></a>
-<a name="line173"></a>/**
-<a name="line174"></a> * Simulates a mousemove event on the given target.
-<a name="line175"></a> * @param {EventTarget} target The target for the event.
-<a name="line176"></a> * @param {goog.math.Coordinate} opt_coords Position of mouse.
-<a name="line177"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
-<a name="line178"></a> *     called on it, true otherwise.
-<a name="line179"></a> */
-<a name="line180"></a>goog.testing.events.fireMouseMoveEvent = function(target, opt_coords) {
-<a name="line181"></a>  var mousemove =
-<a name="line182"></a>      new goog.testing.events.Event(goog.events.EventType.MOUSEMOVE, target);
-<a name="line183"></a>  mousemove.clientX = opt_coords ? opt_coords.x : 0;
-<a name="line184"></a>  mousemove.clientY = opt_coords ? opt_coords.y : 0;
-<a name="line185"></a>  return goog.testing.events.fireBrowserEvent(mousemove);
-<a name="line186"></a>};
-<a name="line187"></a>
-<a name="line188"></a>
-<a name="line189"></a>/**
-<a name="line190"></a> * Simulates a mouseout event on the given target.
-<a name="line191"></a> * @param {EventTarget} target The target for the event.
-<a name="line192"></a> * @param {EventTarget} relatedTarget The related target for the event (e.g.,
-<a name="line193"></a> *     the node that the mouse is being moved into).
-<a name="line194"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
-<a name="line195"></a> *     called on it, true otherwise.
-<a name="line196"></a> */
-<a name="line197"></a>goog.testing.events.fireMouseOutEvent = function(target, relatedTarget) {
-<a name="line198"></a>  var mouseout =
-<a name="line199"></a>      new goog.testing.events.Event(goog.events.EventType.MOUSEOUT, target);
-<a name="line200"></a>  mouseout.relatedTarget = relatedTarget;
-<a name="line201"></a>  return goog.testing.events.fireBrowserEvent(mouseout);
-<a name="line202"></a>};
-<a name="line203"></a>
-<a name="line204"></a>
-<a name="line205"></a>/**
-<a name="line206"></a> * Simulates a mousedown event on the given target.
-<a name="line207"></a> * @param {EventTarget} target The target for the event.
-<a name="line208"></a> * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
-<a name="line209"></a> *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
-<a name="line210"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
-<a name="line211"></a> *     called on it, true otherwise.
-<a name="line212"></a> */
-<a name="line213"></a>goog.testing.events.fireMouseDownEvent = function(target, opt_button) {
-<a name="line214"></a>  var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
-<a name="line215"></a>  var mousedown =
-<a name="line216"></a>      new goog.testing.events.Event(goog.events.EventType.MOUSEDOWN, target);
-<a name="line217"></a>  mousedown.button = goog.userAgent.IE ?
-<a name="line218"></a>      goog.events.BrowserEvent.IEButtonMap_[button] : button;
-<a name="line219"></a>  return goog.testing.events.fireBrowserEvent(mousedown);
-<a name="line220"></a>};
-<a name="line221"></a>
-<a name="line222"></a>
-<a name="line223"></a>/**
-<a name="line224"></a> * Simulates a mouseup event on the given target.
-<a name="line225"></a> * @param {EventTarget} target The target for the event.
-<a name="line226"></a> * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
-<a name="line227"></a> *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
-<a name="line228"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
-<a name="line229"></a> *     called on it, true otherwise.
-<a name="line230"></a> */
-<a name="line231"></a>goog.testing.events.fireMouseUpEvent = function(target, opt_button) {
-<a name="line232"></a>  var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
-<a name="line233"></a>  var mouseup =
-<a name="line234"></a>      new goog.testing.events.Event(goog.events.EventType.MOUSEUP, target);
-<a name="line235"></a>  mouseup.button = goog.userAgent.IE ?
-<a name="line236"></a>      goog.events.BrowserEvent.IEButtonMap_[button] : button;
-<a name="line237"></a>  return goog.testing.events.fireBrowserEvent(mouseup);
-<a name="line238"></a>};
-<a name="line239"></a>
-<a name="line240"></a>
-<a name="line241"></a>/**
-<a name="line242"></a> * Simulates a click event on the given target.  IE only supports click with
-<a name="line243"></a> * the left mouse button.
-<a name="line244"></a> * @param {EventTarget} target The target for the event.
-<a name="line245"></a> * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
-<a name="line246"></a> *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
-<a name="line247"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
-<a name="line248"></a> *     called on it, true otherwise.
-<a name="line249"></a> */
-<a name="line250"></a>goog.testing.events.fireClickEvent = function(target, opt_button) {
-<a name="line251"></a>  var click =
-<a name="line252"></a>      new goog.testing.events.Event(goog.events.EventType.CLICK, target);
-<a name="line253"></a>  click.button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
-<a name="line254"></a>  return goog.testing.events.fireBrowserEvent(click);
-<a name="line255"></a>};
-<a name="line256"></a>
-<a name="line257"></a>
-<a name="line258"></a>/**
-<a name="line259"></a> * Simulates a double-click event on the given target. Always double-clicks
-<a name="line260"></a> * with the left mouse button since no browser supports double-clicking with
-<a name="line261"></a> * any other buttons.
-<a name="line262"></a> * @param {EventTarget} target The target for the event.
-<a name="line263"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
-<a name="line264"></a> *     called on it, true otherwise.
-<a name="line265"></a> */
-<a name="line266"></a>goog.testing.events.fireDoubleClickEvent = function(target) {
-<a name="line267"></a>  var dblclick =
-<a name="line268"></a>      new goog.testing.events.Event(goog.events.EventType.DBLCLICK, target);
-<a name="line269"></a>  dblclick.button = goog.events.BrowserEvent.MouseButton.LEFT;
-<a name="line270"></a>  return goog.testing.events.fireBrowserEvent(dblclick);
-<a name="line271"></a>};
-<a name="line272"></a>
-<a name="line273"></a>
-<a name="line274"></a>/**
-<a name="line275"></a> * Simulates a contextmenu event on the given target.
-<a name="line276"></a> * @param {EventTarget} target The target for the event.
-<a name="line277"></a> * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
-<a name="line278"></a> *     defaults to {@code goog.events.BrowserEvent.MouseButton.RIGHT}.
-<a name="line279"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
-<a name="line280"></a> *     called on it, true otherwise.
-<a name="line281"></a> */
-<a name="line282"></a>goog.testing.events.fireContextMenuEvent = function(target, opt_button) {
-<a name="line283"></a>  var button = opt_button || goog.events.BrowserEvent.MouseButton.RIGHT;
-<a name="line284"></a>  var contextmenu =
-<a name="line285"></a>      new goog.testing.events.Event(goog.events.EventType.CONTEXTMENU, target);
-<a name="line286"></a>  contextmenu.button = goog.userAgent.IE ?
-<a name="line287"></a>      goog.events.BrowserEvent.IEButtonMap_[button] : button;
-<a name="line288"></a>  return goog.testing.events.fireBrowserEvent(contextmenu);
-<a name="line289"></a>};
-<a name="line290"></a>
-<a name="line291"></a>
-<a name="line292"></a>/**
-<a name="line293"></a> * Simulates a mousedown, contextmenu, and the mouseup on the given event
-<a name="line294"></a> * target, with the right mouse button.
-<a name="line295"></a> * @param {EventTarget} target The target for the event.
-<a name="line296"></a> * @return {boolean} The returnValue of the sequence: false if preventDefault()
-<a name="line297"></a> *     was called on any of the events, true otherwise.
-<a name="line298"></a> */
-<a name="line299"></a>goog.testing.events.fireContextMenuSequence = function(target) {
-<a name="line300"></a>  if (goog.userAgent.WINDOWS) {
-<a name="line301"></a>    return !!(goog.testing.events.fireMouseDownEvent(target,
-<a name="line302"></a>                  goog.events.BrowserEvent.MouseButton.RIGHT) &amp;
-<a name="line303"></a>              goog.testing.events.fireMouseUpEvent(target,
+<a name="line149"></a>  if (goog.events.KeyCodes.firesKeyPressEvent(
+<a name="line150"></a>          keyCode, undefined, keydown.shiftKey, keydown.ctrlKey,
+<a name="line151"></a>          keydown.altKey) &amp;&amp;
+<a name="line152"></a>      !(goog.userAgent.IE &amp;&amp; !result)) {
+<a name="line153"></a>    result &amp;= goog.testing.events.fireBrowserEvent(keypress);
+<a name="line154"></a>  }
+<a name="line155"></a>  return !!(result &amp; goog.testing.events.fireBrowserEvent(keyup));
+<a name="line156"></a>};
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * Simulates a mouseover event on the given target.
+<a name="line161"></a> * @param {EventTarget} target The target for the event.
+<a name="line162"></a> * @param {EventTarget} relatedTarget The related target for the event (e.g.,
+<a name="line163"></a> *     the node that the mouse is being moved out of).
+<a name="line164"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
+<a name="line165"></a> *     called on it, true otherwise.
+<a name="line166"></a> */
+<a name="line167"></a>goog.testing.events.fireMouseOverEvent = function(target, relatedTarget) {
+<a name="line168"></a>  var mouseover =
+<a name="line169"></a>      new goog.testing.events.Event(goog.events.EventType.MOUSEOVER, target);
+<a name="line170"></a>  mouseover.relatedTarget = relatedTarget;
+<a name="line171"></a>  return goog.testing.events.fireBrowserEvent(mouseover);
+<a name="line172"></a>};
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * Simulates a mousemove event on the given target.
+<a name="line177"></a> * @param {EventTarget} target The target for the event.
+<a name="line178"></a> * @param {goog.math.Coordinate} opt_coords Position of mouse.
+<a name="line179"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
+<a name="line180"></a> *     called on it, true otherwise.
+<a name="line181"></a> */
+<a name="line182"></a>goog.testing.events.fireMouseMoveEvent = function(target, opt_coords) {
+<a name="line183"></a>  var mousemove =
+<a name="line184"></a>      new goog.testing.events.Event(goog.events.EventType.MOUSEMOVE, target);
+<a name="line185"></a>  mousemove.clientX = opt_coords ? opt_coords.x : 0;
+<a name="line186"></a>  mousemove.clientY = opt_coords ? opt_coords.y : 0;
+<a name="line187"></a>  return goog.testing.events.fireBrowserEvent(mousemove);
+<a name="line188"></a>};
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * Simulates a mouseout event on the given target.
+<a name="line193"></a> * @param {EventTarget} target The target for the event.
+<a name="line194"></a> * @param {EventTarget} relatedTarget The related target for the event (e.g.,
+<a name="line195"></a> *     the node that the mouse is being moved into).
+<a name="line196"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
+<a name="line197"></a> *     called on it, true otherwise.
+<a name="line198"></a> */
+<a name="line199"></a>goog.testing.events.fireMouseOutEvent = function(target, relatedTarget) {
+<a name="line200"></a>  var mouseout =
+<a name="line201"></a>      new goog.testing.events.Event(goog.events.EventType.MOUSEOUT, target);
+<a name="line202"></a>  mouseout.relatedTarget = relatedTarget;
+<a name="line203"></a>  return goog.testing.events.fireBrowserEvent(mouseout);
+<a name="line204"></a>};
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * Simulates a mousedown event on the given target.
+<a name="line209"></a> * @param {EventTarget} target The target for the event.
+<a name="line210"></a> * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
+<a name="line211"></a> *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+<a name="line212"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
+<a name="line213"></a> *     called on it, true otherwise.
+<a name="line214"></a> */
+<a name="line215"></a>goog.testing.events.fireMouseDownEvent = function(target, opt_button) {
+<a name="line216"></a>  var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
+<a name="line217"></a>  var mousedown =
+<a name="line218"></a>      new goog.testing.events.Event(goog.events.EventType.MOUSEDOWN, target);
+<a name="line219"></a>  mousedown.button = goog.userAgent.IE ?
+<a name="line220"></a>      goog.events.BrowserEvent.IEButtonMap_[button] : button;
+<a name="line221"></a>  return goog.testing.events.fireBrowserEvent(mousedown);
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * Simulates a mouseup event on the given target.
+<a name="line227"></a> * @param {EventTarget} target The target for the event.
+<a name="line228"></a> * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
+<a name="line229"></a> *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+<a name="line230"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
+<a name="line231"></a> *     called on it, true otherwise.
+<a name="line232"></a> */
+<a name="line233"></a>goog.testing.events.fireMouseUpEvent = function(target, opt_button) {
+<a name="line234"></a>  var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
+<a name="line235"></a>  var mouseup =
+<a name="line236"></a>      new goog.testing.events.Event(goog.events.EventType.MOUSEUP, target);
+<a name="line237"></a>  mouseup.button = goog.userAgent.IE ?
+<a name="line238"></a>      goog.events.BrowserEvent.IEButtonMap_[button] : button;
+<a name="line239"></a>  return goog.testing.events.fireBrowserEvent(mouseup);
+<a name="line240"></a>};
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * Simulates a click event on the given target.  IE only supports click with
+<a name="line245"></a> * the left mouse button.
+<a name="line246"></a> * @param {EventTarget} target The target for the event.
+<a name="line247"></a> * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
+<a name="line248"></a> *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+<a name="line249"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
+<a name="line250"></a> *     called on it, true otherwise.
+<a name="line251"></a> */
+<a name="line252"></a>goog.testing.events.fireClickEvent = function(target, opt_button) {
+<a name="line253"></a>  var click =
+<a name="line254"></a>      new goog.testing.events.Event(goog.events.EventType.CLICK, target);
+<a name="line255"></a>  click.button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
+<a name="line256"></a>  return goog.testing.events.fireBrowserEvent(click);
+<a name="line257"></a>};
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/**
+<a name="line261"></a> * Simulates a double-click event on the given target. Always double-clicks
+<a name="line262"></a> * with the left mouse button since no browser supports double-clicking with
+<a name="line263"></a> * any other buttons.
+<a name="line264"></a> * @param {EventTarget} target The target for the event.
+<a name="line265"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
+<a name="line266"></a> *     called on it, true otherwise.
+<a name="line267"></a> */
+<a name="line268"></a>goog.testing.events.fireDoubleClickEvent = function(target) {
+<a name="line269"></a>  var dblclick =
+<a name="line270"></a>      new goog.testing.events.Event(goog.events.EventType.DBLCLICK, target);
+<a name="line271"></a>  dblclick.button = goog.events.BrowserEvent.MouseButton.LEFT;
+<a name="line272"></a>  return goog.testing.events.fireBrowserEvent(dblclick);
+<a name="line273"></a>};
+<a name="line274"></a>
+<a name="line275"></a>
+<a name="line276"></a>/**
+<a name="line277"></a> * Simulates a contextmenu event on the given target.
+<a name="line278"></a> * @param {EventTarget} target The target for the event.
+<a name="line279"></a> * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
+<a name="line280"></a> *     defaults to {@code goog.events.BrowserEvent.MouseButton.RIGHT}.
+<a name="line281"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
+<a name="line282"></a> *     called on it, true otherwise.
+<a name="line283"></a> */
+<a name="line284"></a>goog.testing.events.fireContextMenuEvent = function(target, opt_button) {
+<a name="line285"></a>  var button = opt_button || goog.events.BrowserEvent.MouseButton.RIGHT;
+<a name="line286"></a>  var contextmenu =
+<a name="line287"></a>      new goog.testing.events.Event(goog.events.EventType.CONTEXTMENU, target);
+<a name="line288"></a>  contextmenu.button = goog.userAgent.IE ?
+<a name="line289"></a>      goog.events.BrowserEvent.IEButtonMap_[button] : button;
+<a name="line290"></a>  return goog.testing.events.fireBrowserEvent(contextmenu);
+<a name="line291"></a>};
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * Simulates a mousedown, contextmenu, and the mouseup on the given event
+<a name="line296"></a> * target, with the right mouse button.
+<a name="line297"></a> * @param {EventTarget} target The target for the event.
+<a name="line298"></a> * @return {boolean} The returnValue of the sequence: false if preventDefault()
+<a name="line299"></a> *     was called on any of the events, true otherwise.
+<a name="line300"></a> */
+<a name="line301"></a>goog.testing.events.fireContextMenuSequence = function(target) {
+<a name="line302"></a>  if (goog.userAgent.WINDOWS) {
+<a name="line303"></a>    return !!(goog.testing.events.fireMouseDownEvent(target,
 <a name="line304"></a>                  goog.events.BrowserEvent.MouseButton.RIGHT) &amp;
-<a name="line305"></a>        goog.testing.events.fireContextMenuEvent(target));
-<a name="line306"></a>  } else {
-<a name="line307"></a>    var result = goog.testing.events.fireMouseDownEvent(target,
-<a name="line308"></a>        goog.events.BrowserEvent.MouseButton.RIGHT) &amp;
-<a name="line309"></a>        goog.testing.events.fireContextMenuEvent(target);
-<a name="line310"></a>    if (goog.userAgent.GECKO) {
-<a name="line311"></a>      result = result &amp;
-<a name="line312"></a>          goog.testing.events.fireMouseUpEvent(target,
-<a name="line313"></a>              goog.events.BrowserEvent.MouseButton.RIGHT);
-<a name="line314"></a>    }
-<a name="line315"></a>    return !!result;
-<a name="line316"></a>  }
-<a name="line317"></a>};
-<a name="line318"></a>
-<a name="line319"></a>
-<a name="line320"></a>/**
-<a name="line321"></a> * Simulates an event&#39;s capturing and bubbling phases.
-<a name="line322"></a> * @param {Event} event A simulated native event. It will be wrapped in a
-<a name="line323"></a> *     normalized BrowserEvent and dispatched to Closure listeners on all
-<a name="line324"></a> *     ancestors of its target (inclusive).
-<a name="line325"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
-<a name="line326"></a> *     called on it, true otherwise.
-<a name="line327"></a> */
-<a name="line328"></a>goog.testing.events.fireBrowserEvent = function(event) {
-<a name="line329"></a>  event.returnValue_ = true;
-<a name="line330"></a>
-<a name="line331"></a>  // generate a list of ancestors
-<a name="line332"></a>  var ancestors = [];
-<a name="line333"></a>  for (var current = event.target; current; current = current.parentNode) {
-<a name="line334"></a>    ancestors.push(current);
-<a name="line335"></a>  }
-<a name="line336"></a>
-<a name="line337"></a>  // dispatch capturing listeners
-<a name="line338"></a>  for (var j = ancestors.length - 1;
-<a name="line339"></a>       j &gt;= 0 &amp;&amp; !event.propagationStopped_;
-<a name="line340"></a>       j--) {
-<a name="line341"></a>    goog.events.fireListeners(ancestors[j], event.type, true,
-<a name="line342"></a>        new goog.events.BrowserEvent(event, ancestors[j]));
-<a name="line343"></a>  }
-<a name="line344"></a>
-<a name="line345"></a>  // dispatch bubbling listeners
-<a name="line346"></a>  for (var j = 0;
-<a name="line347"></a>       j &lt; ancestors.length &amp;&amp; !event.propagationStopped_;
-<a name="line348"></a>       j++) {
-<a name="line349"></a>    goog.events.fireListeners(ancestors[j], event.type, false,
-<a name="line350"></a>        new goog.events.BrowserEvent(event, ancestors[j]));
-<a name="line351"></a>  }
-<a name="line352"></a>
-<a name="line353"></a>  return event.returnValue_;
-<a name="line354"></a>};
+<a name="line305"></a>              goog.testing.events.fireMouseUpEvent(target,
+<a name="line306"></a>                  goog.events.BrowserEvent.MouseButton.RIGHT) &amp;
+<a name="line307"></a>        goog.testing.events.fireContextMenuEvent(target));
+<a name="line308"></a>  } else {
+<a name="line309"></a>    var result = goog.testing.events.fireMouseDownEvent(target,
+<a name="line310"></a>        goog.events.BrowserEvent.MouseButton.RIGHT) &amp;
+<a name="line311"></a>        goog.testing.events.fireContextMenuEvent(target);
+<a name="line312"></a>    if (goog.userAgent.GECKO) {
+<a name="line313"></a>      result = result &amp;
+<a name="line314"></a>          goog.testing.events.fireMouseUpEvent(target,
+<a name="line315"></a>              goog.events.BrowserEvent.MouseButton.RIGHT);
+<a name="line316"></a>    }
+<a name="line317"></a>    return !!result;
+<a name="line318"></a>  }
+<a name="line319"></a>};
+<a name="line320"></a>
+<a name="line321"></a>
+<a name="line322"></a>/**
+<a name="line323"></a> * Simulates an event&#39;s capturing and bubbling phases.
+<a name="line324"></a> * @param {Event} event A simulated native event. It will be wrapped in a
+<a name="line325"></a> *     normalized BrowserEvent and dispatched to Closure listeners on all
+<a name="line326"></a> *     ancestors of its target (inclusive).
+<a name="line327"></a> * @return {boolean} The returnValue of the event: false if preventDefault() was
+<a name="line328"></a> *     called on it, true otherwise.
+<a name="line329"></a> */
+<a name="line330"></a>goog.testing.events.fireBrowserEvent = function(event) {
+<a name="line331"></a>  event.returnValue_ = true;
+<a name="line332"></a>
+<a name="line333"></a>  // generate a list of ancestors
+<a name="line334"></a>  var ancestors = [];
+<a name="line335"></a>  for (var current = event.target; current; current = current.parentNode) {
+<a name="line336"></a>    ancestors.push(current);
+<a name="line337"></a>  }
+<a name="line338"></a>
+<a name="line339"></a>  // dispatch capturing listeners
+<a name="line340"></a>  for (var j = ancestors.length - 1;
+<a name="line341"></a>       j &gt;= 0 &amp;&amp; !event.propagationStopped_;
+<a name="line342"></a>       j--) {
+<a name="line343"></a>    goog.events.fireListeners(ancestors[j], event.type, true,
+<a name="line344"></a>        new goog.events.BrowserEvent(event, ancestors[j]));
+<a name="line345"></a>  }
+<a name="line346"></a>
+<a name="line347"></a>  // dispatch bubbling listeners
+<a name="line348"></a>  for (var j = 0;
+<a name="line349"></a>       j &lt; ancestors.length &amp;&amp; !event.propagationStopped_;
+<a name="line350"></a>       j++) {
+<a name="line351"></a>    goog.events.fireListeners(ancestors[j], event.type, false,
+<a name="line352"></a>        new goog.events.BrowserEvent(event, ancestors[j]));
+<a name="line353"></a>  }
+<a name="line354"></a>
+<a name="line355"></a>  return event.returnValue_;
+<a name="line356"></a>};
 </pre>
 
 
