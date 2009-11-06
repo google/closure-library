@@ -15,6 +15,7 @@
 /**
  * @fileoverview Tristate checkbox widget.
  *
+ * @see ../demos/checkbox.html
  */
 
 goog.provide('goog.ui.Checkbox');

@@ -35,8 +35,9 @@ goog.require('goog.events.KeyCodes');
  * the visibility of the content.
  *
  * @extends {goog.events.EventTarget}
- * @param {Element|string} header Header element, either element reference or
- *                         string id.
+ * @param {Element|string|null} header Header element, either element
+ *                              reference, string id or null if no header
+ *                              exists.
  * @param {Element|string} opt_content Content element (if any), either element
  *                         reference or string id.  If skipped, the caller
  *                         should handle the TOGGLE event in its own way.
@@ -48,11 +49,11 @@ goog.ui.Zippy = function(header, opt_content, opt_expanded) {
   goog.events.EventTarget.call(this);
 
   /**
-   * Header element.
-   * @type {Element}
+   * Header element or null if no header exists.
+   * @type {?Element}
    * @private
    */
-  this.elHeader_ = goog.dom.getElement(header);
+  this.elHeader_ = goog.dom.getElement(header) || null;
 
   /**
    * Content element.
@@ -68,12 +69,14 @@ goog.ui.Zippy = function(header, opt_content, opt_expanded) {
    */
   this.expanded_ = opt_expanded == true;
 
-  // Listen for click and keydown events on header
-  this.elHeader_.tabIndex = 0;
-  goog.events.listen(this.elHeader_, goog.events.EventType.CLICK,
-      this.onHeaderClick_, false, this);
-  goog.events.listen(this.elHeader_, goog.events.EventType.KEYDOWN,
-      this.onHeaderKeyDown_, false, this);
+  if (this.elHeader_) {
+    // Listen for click and keydown events on header
+    this.elHeader_.tabIndex = 0;
+    goog.events.listen(this.elHeader_, goog.events.EventType.CLICK,
+        this.onHeaderClick_, false, this);
+    goog.events.listen(this.elHeader_, goog.events.EventType.KEYDOWN,
+        this.onHeaderKeyDown_, false, this);
+  }
 
   // initialize based on expanded state
   this.setExpanded(this.expanded_);
@@ -94,7 +97,9 @@ goog.ui.Zippy.Events = {
  * Destroys widget and removes all event listeners.
  */
 goog.ui.Zippy.prototype.disposeInternal = function() {
-  goog.events.removeAll(this.elHeader_);
+  if (this.elHeader_) {
+    goog.events.removeAll(this.elHeader_);
+  }
   goog.ui.Zippy.superClass_.disposeInternal.call(this);
 };
 
@@ -159,12 +164,14 @@ goog.ui.Zippy.prototype.isExpanded = function() {
  * @private
  */
 goog.ui.Zippy.prototype.updateHeaderClassName_ = function(expanded) {
-  if (expanded) {
-    goog.dom.classes.remove(this.elHeader_, 'goog-zippy-collapsed');
-    goog.dom.classes.add(this.elHeader_, 'goog-zippy-expanded');
-  } else {
-    goog.dom.classes.remove(this.elHeader_, 'goog-zippy-expanded');
-    goog.dom.classes.add(this.elHeader_, 'goog-zippy-collapsed');
+  if (this.elHeader_) {
+    if (expanded) {
+      goog.dom.classes.remove(this.elHeader_, 'goog-zippy-collapsed');
+      goog.dom.classes.add(this.elHeader_, 'goog-zippy-expanded');
+    } else {
+      goog.dom.classes.remove(this.elHeader_, 'goog-zippy-expanded');
+      goog.dom.classes.add(this.elHeader_, 'goog-zippy-collapsed');
+    }
   }
 };
 

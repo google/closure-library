@@ -314,48 +314,9 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
       color = '#333';
     }
     var div = document.createElement('div');
-
-    // If Closure Inspector is installed and running, then convert the line into
-    // a source link for displaying the code in Firebug.
-    if (goog.global['CLOSURE_INSPECTOR___'] && /CILINK/.test(line)) {
-      // Format:
-      // > functionName:CILINK`rootPath`lineNumber`fullPath
-      var information = line.split(':');
-
-      // Remove the '> ' from the first element to get function name.
-      var functionName = information.shift().substr(2);
-
-      // Build the array of Inspector-specific pieces.
-      var pieces = information.join(':').split('`', 5);
-
-      // Retrieve the source line information.
-      var filePath = pieces[1];
-      var lineNumber = pieces[2];
-      var fullPath = pieces[3];
-
-      // Remove the line number from the full path.
-      fullPath = fullPath.substring(0, fullPath.lastIndexOf(':'));
-
-      // Create the link's DOM.
-      div.appendChild(document.createTextNode('> '));
-
-      var bold = document.createElement('b');
-      bold.appendChild(document.createTextNode(functionName));
-      div.appendChild(bold);
-
-      div.appendChild(document.createTextNode(' - '));
-
-      var anchor = document.createElement('a');
-
-      anchor.appendChild(
-          document.createTextNode(filePath + ' : ' + lineNumber));
-
-      anchor.href =
-          'javascript:CLOSURE_INSPECTOR___.showLine("' + fullPath + '", "' +
-          lineNumber + '")';
-
-      div.appendChild(anchor);
-
+    if (line.substr(0, 2) == '> ') {
+      // The stack trace may contain links so it has to be interpreted as HTML.
+      div.innerHTML = line;
     } else {
       div.appendChild(document.createTextNode(line));
     }

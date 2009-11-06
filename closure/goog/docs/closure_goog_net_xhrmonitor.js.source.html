@@ -17,7 +17,7 @@
   </script>
 
   <meta charset="utf8">
-  <meta name="date" content="2009-10-4">
+  <meta name="date" content="2009-10-6">
 </head>
 
 <body onload="prettyPrint()">
@@ -144,138 +144,157 @@
 <a name="line100"></a>
 <a name="line101"></a>
 <a name="line102"></a>/**
-<a name="line103"></a> * Pushes a new context onto the stack.
-<a name="line104"></a> * @param {Object|string} context An object or string indicating the source of
-<a name="line105"></a> *     the execution context.
-<a name="line106"></a> */
-<a name="line107"></a>goog.net.XhrMonitor_.prototype.pushContext = function(context) {
-<a name="line108"></a>  if (!goog.userAgent.GECKO) return;
-<a name="line109"></a>
-<a name="line110"></a>  var key = goog.net.XhrMonitor_.getKey(context);
-<a name="line111"></a>  this.logger_.finest(&#39;Pushing context: &#39; + context + &#39; (&#39; + key + &#39;)&#39;);
-<a name="line112"></a>  this.stack_.push(key);
-<a name="line113"></a>};
-<a name="line114"></a>
-<a name="line115"></a>
-<a name="line116"></a>/**
-<a name="line117"></a> * Pops the most recent context off the stack.
-<a name="line118"></a> */
-<a name="line119"></a>goog.net.XhrMonitor_.prototype.popContext = function() {
-<a name="line120"></a>  if (!goog.userAgent.GECKO) return;
-<a name="line121"></a>
-<a name="line122"></a>  var context = this.stack_.pop();
-<a name="line123"></a>  this.logger_.finest(&#39;Popping context: &#39; + context);
-<a name="line124"></a>  this.updateDependentContexts_(context);
-<a name="line125"></a>};
-<a name="line126"></a>
-<a name="line127"></a>
-<a name="line128"></a>/**
-<a name="line129"></a> * Checks to see if there are any outstanding XmlHttpRequests that were
-<a name="line130"></a> * started in the given context.
-<a name="line131"></a> * @param {Object|string} context An object or string indicating the execution
-<a name="line132"></a> *     context to check.
-<a name="line133"></a> * @return {boolean} Whether there are any outstanding requests linked to the
-<a name="line134"></a> *     context.
-<a name="line135"></a> */
-<a name="line136"></a>goog.net.XhrMonitor_.prototype.isContextSafe = function(context) {
-<a name="line137"></a>  if (!goog.userAgent.GECKO) return true;
-<a name="line138"></a>
-<a name="line139"></a>  var deps = this.contextsToXhr_[goog.net.XhrMonitor_.getKey(context)];
-<a name="line140"></a>  this.logger_.fine(&#39;Context is safe : &#39; + context + &#39; - &#39; + deps);
-<a name="line141"></a>  return !deps;
-<a name="line142"></a>};
-<a name="line143"></a>
-<a name="line144"></a>
-<a name="line145"></a>/**
-<a name="line146"></a> * Marks an XHR object as being open.
-<a name="line147"></a> * @param {Object} xhr An XmlHttpRequest object that is about to be opened.
-<a name="line148"></a> */
-<a name="line149"></a>goog.net.XhrMonitor_.prototype.markXhrOpen = function(xhr) {
-<a name="line150"></a>  if (!goog.userAgent.GECKO) return;
-<a name="line151"></a>
-<a name="line152"></a>  var hc = goog.getHashCode(xhr);
-<a name="line153"></a>  this.logger_.fine(&#39;Opening XHR : &#39; + hc);
-<a name="line154"></a>
-<a name="line155"></a>  // Update all contexts that are currently on the stack.
-<a name="line156"></a>  for (var i = 0; i &lt; this.stack_.length; i++) {
-<a name="line157"></a>    var context = this.stack_[i];
-<a name="line158"></a>    this.addToMap_(this.contextsToXhr_, context, hc);
-<a name="line159"></a>    this.addToMap_(this.xhrToContexts_, hc, context);
-<a name="line160"></a>  }
+<a name="line103"></a> * Flag indicating that the monitor should be used.
+<a name="line104"></a> * Should be set to false for worker threads as they do not have access
+<a name="line105"></a> * to iframes, which is what the monitor is needed for.
+<a name="line106"></a> * @type {boolean}
+<a name="line107"></a> * @private
+<a name="line108"></a> */
+<a name="line109"></a>goog.net.XhrMonitor_.prototype.enabled_ = goog.userAgent.GECKO;
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Set the enabled flag.
+<a name="line114"></a> * @param {boolean} val The new value.
+<a name="line115"></a> */
+<a name="line116"></a>goog.net.XhrMonitor_.prototype.setEnabled = function(val) {
+<a name="line117"></a>  this.enabled_ = goog.userAgent.GECKO &amp;&amp; val;
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Pushes a new context onto the stack.
+<a name="line123"></a> * @param {Object|string} context An object or string indicating the source of
+<a name="line124"></a> *     the execution context.
+<a name="line125"></a> */
+<a name="line126"></a>goog.net.XhrMonitor_.prototype.pushContext = function(context) {
+<a name="line127"></a>  if (!this.enabled_) return;
+<a name="line128"></a>
+<a name="line129"></a>  var key = goog.net.XhrMonitor_.getKey(context);
+<a name="line130"></a>  this.logger_.finest(&#39;Pushing context: &#39; + context + &#39; (&#39; + key + &#39;)&#39;);
+<a name="line131"></a>  this.stack_.push(key);
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Pops the most recent context off the stack.
+<a name="line137"></a> */
+<a name="line138"></a>goog.net.XhrMonitor_.prototype.popContext = function() {
+<a name="line139"></a>  if (!this.enabled_) return;
+<a name="line140"></a>
+<a name="line141"></a>  var context = this.stack_.pop();
+<a name="line142"></a>  this.logger_.finest(&#39;Popping context: &#39; + context);
+<a name="line143"></a>  this.updateDependentContexts_(context);
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * Checks to see if there are any outstanding XmlHttpRequests that were
+<a name="line149"></a> * started in the given context.
+<a name="line150"></a> * @param {Object|string} context An object or string indicating the execution
+<a name="line151"></a> *     context to check.
+<a name="line152"></a> * @return {boolean} Whether there are any outstanding requests linked to the
+<a name="line153"></a> *     context.
+<a name="line154"></a> */
+<a name="line155"></a>goog.net.XhrMonitor_.prototype.isContextSafe = function(context) {
+<a name="line156"></a>  if (!this.enabled_) return true;
+<a name="line157"></a>
+<a name="line158"></a>  var deps = this.contextsToXhr_[goog.net.XhrMonitor_.getKey(context)];
+<a name="line159"></a>  this.logger_.fine(&#39;Context is safe : &#39; + context + &#39; - &#39; + deps);
+<a name="line160"></a>  return !deps;
 <a name="line161"></a>};
 <a name="line162"></a>
 <a name="line163"></a>
 <a name="line164"></a>/**
-<a name="line165"></a> * Marks an XHR object as being closed.
-<a name="line166"></a> * @param {Object} xhr An XmlHttpRequest object whose request has completed.
+<a name="line165"></a> * Marks an XHR object as being open.
+<a name="line166"></a> * @param {Object} xhr An XmlHttpRequest object that is about to be opened.
 <a name="line167"></a> */
-<a name="line168"></a>goog.net.XhrMonitor_.prototype.markXhrClosed = function(xhr) {
-<a name="line169"></a>  if (!goog.userAgent.GECKO) return;
+<a name="line168"></a>goog.net.XhrMonitor_.prototype.markXhrOpen = function(xhr) {
+<a name="line169"></a>  if (!this.enabled_) return;
 <a name="line170"></a>
 <a name="line171"></a>  var hc = goog.getHashCode(xhr);
-<a name="line172"></a>  this.logger_.fine(&#39;Closing XHR : &#39; + hc);
+<a name="line172"></a>  this.logger_.fine(&#39;Opening XHR : &#39; + hc);
 <a name="line173"></a>
-<a name="line174"></a>  // Delete the XHR look up and remove the XHR from any contexts.
-<a name="line175"></a>  delete this.xhrToContexts_[hc];
-<a name="line176"></a>  for (var context in this.contextsToXhr_) {
-<a name="line177"></a>    goog.array.remove(this.contextsToXhr_[context], hc);
-<a name="line178"></a>    if (this.contextsToXhr_[context].length == 0) {
-<a name="line179"></a>      delete this.contextsToXhr_[context];
-<a name="line180"></a>    }
-<a name="line181"></a>  }
-<a name="line182"></a>};
-<a name="line183"></a>
-<a name="line184"></a>
-<a name="line185"></a>/**
-<a name="line186"></a> * Updates any contexts that were dependent on the given XHR request with any
-<a name="line187"></a> * XHRs that were opened by the same XHR.  This is used to track Iframes that
-<a name="line188"></a> * open XHRs which then in turn open an XHR.
-<a name="line189"></a> * @param {string} xhrHc The hashcode for the XHR to update.
-<a name="line190"></a> * @private
-<a name="line191"></a> */
-<a name="line192"></a>goog.net.XhrMonitor_.prototype.updateDependentContexts_ = function(xhrHc) {
-<a name="line193"></a>  // Update any contexts that are dependent on this XHR with any requests
-<a name="line194"></a>  // registered with the XHR as a base context.  This is used for the situation
-<a name="line195"></a>  // when an XHR event triggers another XHR.  The original XHR is closed, but
-<a name="line196"></a>  // the source context needs to be informed about any XHRs that were opened as
-<a name="line197"></a>  // a result of the first.
-<a name="line198"></a>  var contexts = this.xhrToContexts_[xhrHc];
-<a name="line199"></a>  var xhrs = this.contextsToXhr_[xhrHc];
-<a name="line200"></a>  if (contexts &amp;&amp; xhrs) {
-<a name="line201"></a>    this.logger_.finest(&#39;Updating dependent contexts&#39;);
-<a name="line202"></a>    goog.array.forEach(contexts, function(context) {
-<a name="line203"></a>      goog.array.forEach(xhrs, function(xhr) {
-<a name="line204"></a>        this.addToMap_(this.contextsToXhr_, context, xhr);
-<a name="line205"></a>        this.addToMap_(this.xhrToContexts_, xhr, context);
-<a name="line206"></a>      }, this);
-<a name="line207"></a>    }, this);
-<a name="line208"></a>  }
-<a name="line209"></a>};
-<a name="line210"></a>
-<a name="line211"></a>
-<a name="line212"></a>/**
-<a name="line213"></a> * Adds a value to a map of arrays.  If an array hasn&#39;t been created for the
-<a name="line214"></a> * provided key, then one is created.
-<a name="line215"></a> * @param {Object} map The map to add to.
-<a name="line216"></a> * @param {string|number} key the key.
-<a name="line217"></a> * @param {string|number} value The value.
-<a name="line218"></a> * @private
-<a name="line219"></a> */
-<a name="line220"></a>goog.net.XhrMonitor_.prototype.addToMap_ = function(map, key, value) {
-<a name="line221"></a>  if (!map[key]) {
-<a name="line222"></a>    map[key] = [];
-<a name="line223"></a>  }
-<a name="line224"></a>  if (!goog.array.contains(map[key], value)) {
-<a name="line225"></a>    map[key].push(value);
-<a name="line226"></a>  }
-<a name="line227"></a>};
-<a name="line228"></a>
+<a name="line174"></a>  // Update all contexts that are currently on the stack.
+<a name="line175"></a>  for (var i = 0; i &lt; this.stack_.length; i++) {
+<a name="line176"></a>    var context = this.stack_[i];
+<a name="line177"></a>    this.addToMap_(this.contextsToXhr_, context, hc);
+<a name="line178"></a>    this.addToMap_(this.xhrToContexts_, hc, context);
+<a name="line179"></a>  }
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Marks an XHR object as being closed.
+<a name="line185"></a> * @param {Object} xhr An XmlHttpRequest object whose request has completed.
+<a name="line186"></a> */
+<a name="line187"></a>goog.net.XhrMonitor_.prototype.markXhrClosed = function(xhr) {
+<a name="line188"></a>  if (!this.enabled_) return;
+<a name="line189"></a>
+<a name="line190"></a>  var hc = goog.getHashCode(xhr);
+<a name="line191"></a>  this.logger_.fine(&#39;Closing XHR : &#39; + hc);
+<a name="line192"></a>
+<a name="line193"></a>  // Delete the XHR look up and remove the XHR from any contexts.
+<a name="line194"></a>  delete this.xhrToContexts_[hc];
+<a name="line195"></a>  for (var context in this.contextsToXhr_) {
+<a name="line196"></a>    goog.array.remove(this.contextsToXhr_[context], hc);
+<a name="line197"></a>    if (this.contextsToXhr_[context].length == 0) {
+<a name="line198"></a>      delete this.contextsToXhr_[context];
+<a name="line199"></a>    }
+<a name="line200"></a>  }
+<a name="line201"></a>};
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Updates any contexts that were dependent on the given XHR request with any
+<a name="line206"></a> * XHRs that were opened by the same XHR.  This is used to track Iframes that
+<a name="line207"></a> * open XHRs which then in turn open an XHR.
+<a name="line208"></a> * @param {string} xhrHc The hashcode for the XHR to update.
+<a name="line209"></a> * @private
+<a name="line210"></a> */
+<a name="line211"></a>goog.net.XhrMonitor_.prototype.updateDependentContexts_ = function(xhrHc) {
+<a name="line212"></a>  // Update any contexts that are dependent on this XHR with any requests
+<a name="line213"></a>  // registered with the XHR as a base context.  This is used for the situation
+<a name="line214"></a>  // when an XHR event triggers another XHR.  The original XHR is closed, but
+<a name="line215"></a>  // the source context needs to be informed about any XHRs that were opened as
+<a name="line216"></a>  // a result of the first.
+<a name="line217"></a>  var contexts = this.xhrToContexts_[xhrHc];
+<a name="line218"></a>  var xhrs = this.contextsToXhr_[xhrHc];
+<a name="line219"></a>  if (contexts &amp;&amp; xhrs) {
+<a name="line220"></a>    this.logger_.finest(&#39;Updating dependent contexts&#39;);
+<a name="line221"></a>    goog.array.forEach(contexts, function(context) {
+<a name="line222"></a>      goog.array.forEach(xhrs, function(xhr) {
+<a name="line223"></a>        this.addToMap_(this.contextsToXhr_, context, xhr);
+<a name="line224"></a>        this.addToMap_(this.xhrToContexts_, xhr, context);
+<a name="line225"></a>      }, this);
+<a name="line226"></a>    }, this);
+<a name="line227"></a>  }
+<a name="line228"></a>};
 <a name="line229"></a>
-<a name="line230"></a>/**
-<a name="line231"></a> * Singleton XhrMonitor object
-<a name="line232"></a> * @type {goog.net.XhrMonitor_}
-<a name="line233"></a> */
-<a name="line234"></a>goog.net.xhrMonitor = new goog.net.XhrMonitor_();
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Adds a value to a map of arrays.  If an array hasn&#39;t been created for the
+<a name="line233"></a> * provided key, then one is created.
+<a name="line234"></a> * @param {Object} map The map to add to.
+<a name="line235"></a> * @param {string|number} key the key.
+<a name="line236"></a> * @param {string|number} value The value.
+<a name="line237"></a> * @private
+<a name="line238"></a> */
+<a name="line239"></a>goog.net.XhrMonitor_.prototype.addToMap_ = function(map, key, value) {
+<a name="line240"></a>  if (!map[key]) {
+<a name="line241"></a>    map[key] = [];
+<a name="line242"></a>  }
+<a name="line243"></a>  if (!goog.array.contains(map[key], value)) {
+<a name="line244"></a>    map[key].push(value);
+<a name="line245"></a>  }
+<a name="line246"></a>};
+<a name="line247"></a>
+<a name="line248"></a>
+<a name="line249"></a>/**
+<a name="line250"></a> * Singleton XhrMonitor object
+<a name="line251"></a> * @type {goog.net.XhrMonitor_}
+<a name="line252"></a> */
+<a name="line253"></a>goog.net.xhrMonitor = new goog.net.XhrMonitor_();
 </pre>
 
 

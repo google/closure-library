@@ -39,7 +39,7 @@ function ArrayIterator(array) {
   this.current_ = 0;
 }
 
-ArrayIterator.inherits(goog.iter.Iterator);
+goog.inherits(ArrayIterator, goog.iter.Iterator);
 
 ArrayIterator.prototype.next = function() {
   if (this.current_ >= this.array_.length) {

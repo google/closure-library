@@ -17,13 +17,19 @@ limitations under the License.
 
 <html>
 <head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
   <title>goog.ui.DatePicker</title>
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
     goog.require('goog.date');
+    goog.require('goog.i18n.DateTimeSymbols');
+    goog.require('goog.i18n.DateTimeSymbols_en_ISO');
+    goog.require('goog.i18n.DateTimeSymbols_en_US');
+    goog.require('goog.i18n.DateTimeSymbols_de');
+    goog.require('goog.i18n.DateTimeSymbols_ml');
+    goog.require('goog.i18n.DateTimeSymbols_ar_YE');
     goog.require('goog.locale');
-    goog.require('goog.locale.formatting');
     goog.require('goog.ui.DatePicker');
   </script>
   <link rel="stylesheet" href="css/demo.css">
@@ -73,7 +79,7 @@ limitations under the License.
   </td>
   <td valign="top">
 
-  <h2>English(US)</h2>
+  <h2>English (US)</h2>
   <div id="widget_en_US"></div>
   <div style="clear: both;">&nbsp;</div>
   <span id="label_en_US"></span>
@@ -91,29 +97,16 @@ limitations under the License.
   <span id="label_ml"></span>
   <br><br>
 
-  <h2>Arabic(Yemen)</h2>
+  <h2>Arabic (Yemen)</h2>
   <div dir=rtl id="widget_ar_YE"></div>
   <div style="clear: both;">&nbsp;</div>
   <span id="label_ar_YE"></span>
   <br><br>
   </td></tr></table>
 
-  <script type="text/javascript"
-    src="../../../googledata/i18n/js_locale_data/DateTimeConstants__en_US.js">
-  </script>
-  <script type="text/javascript"
-    src="../../../googledata/i18n/js_locale_data/DateTimeConstants__de.js">
-  </script>
-  <script type="text/javascript"
-    src="../../../googledata/i18n/js_locale_data/DateTimeConstants__ml.js">
-  </script>
-  <script type="text/javascript"
-    src="../../../googledata/i18n/js_locale_data/DateTimeConstants__ar_YE.js">
-  </script>
-
   <script type="text/javascript">
     // Standard: ISO 8601
-    goog.locale.setLocale('und');
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_ISO;
     var dp_iso_8601 = new goog.ui.DatePicker();
     dp_iso_8601.create(document.getElementById('widget_iso_8601'));
 
@@ -141,8 +134,8 @@ limitations under the License.
     goog.dom.setTextContent(document.getElementById('label_custom'),
                             dp_custom.getDate().toIsoString(true));
 
-    // English(US)
-    goog.locale.setLocale('en_US');
+    // English (US)
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_US;
 
     var dp_en_US = new goog.ui.DatePicker();
     dp_en_US.create(document.getElementById('widget_en_US'));
@@ -157,7 +150,7 @@ limitations under the License.
                             dp_en_US.getDate().toIsoString(true));
 
     // German
-    goog.locale.setLocale('de');
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
 
     dp_de = new goog.ui.DatePicker();
     dp_de.create(document.getElementById('widget_de'));
@@ -171,7 +164,7 @@ limitations under the License.
                             dp_de.getDate().toIsoString(true));
 
     // Malayalam
-    goog.locale.setLocale('ml');
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ml;
 
     var dp_ml = new goog.ui.DatePicker();
     dp_ml.create(document.getElementById('widget_ml'));
@@ -184,10 +177,8 @@ limitations under the License.
     goog.dom.setTextContent(document.getElementById('label_ml'),
                             dp_ml.getDate().toIsoString(true));
 
-    // Arabic(Yemen)
-    goog.locale.setLocale('ar_YE');
-
-    var dp_ar_YE = new goog.ui.DatePicker();
+    // Arabic (Yemen)
+    var dp_ar_YE = new goog.ui.DatePicker(null, goog.i18n.DateTimeSymbols_ar_YE);
     dp_ar_YE.create(document.getElementById('widget_ar_YE'));
 
     goog.events.listen(dp_ar_YE, goog.ui.DatePicker.Events.CHANGE,
@@ -198,7 +189,6 @@ limitations under the License.
 
     goog.dom.setTextContent(document.getElementById('label_ar_YE'),
                             dp_ar_YE.getDate().toIsoString(true));
-
   </script>
 </body>
 </html>

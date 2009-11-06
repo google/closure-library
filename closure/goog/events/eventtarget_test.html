@@ -35,7 +35,7 @@ limitations under the License.
   function TargetClass() {
     this.count = 0;
   };
-  TargetClass.inherits(goog.events.EventTarget);
+  goog.inherits(TargetClass, goog.events.EventTarget);
 
   TargetClass.prototype.increment = function() {
     this.count++;
@@ -94,7 +94,7 @@ limitations under the License.
   function MyEvent(obj) {
     this.type = 'count';
   }
-  MyEvent.inherits(goog.events.Event);
+  goog.inherits(MyEvent, goog.events.Event);
 
   /**
    * No listeners

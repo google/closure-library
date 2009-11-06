@@ -37,7 +37,7 @@ limitations under the License.
 
     var CustomGaugeTheme = function() {
     }
-    CustomGaugeTheme.inherits(goog.ui.GaugeTheme);
+    goog.inherits(CustomGaugeTheme, goog.ui.GaugeTheme);
 
     CustomGaugeTheme.prototype.getInternalBorderFill = function(cx, cy, r) {
       return new goog.graphics.SolidFill("#8080ff");

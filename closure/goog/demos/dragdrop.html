@@ -123,7 +123,7 @@ List 2 (source only, can be dropped on list 1 or button 2)
   function FooDrag(element, opt_data) {
     goog.fx.DragDrop.call(this, element, opt_data);
   }
-  FooDrag.inherits(goog.fx.DragDrop);
+  goog.inherits(FooDrag, goog.fx.DragDrop);
 
   FooDrag.prototype.createDragElement = function(sourceEl) {
     return goog.dom.createDom('div', 'foo', 'Custom drag element');

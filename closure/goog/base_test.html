@@ -755,7 +755,7 @@ function testGlobalEvalWithHtml() {
 function testInherits() {
   function Foo() {};
   function Bar() {};
-  Bar.inherits(Foo);
+  goog.inherits(Bar, Foo);
   var bar = new Bar();
 
   assert('object should be instance of constructor',
@@ -767,7 +767,7 @@ function testInherits() {
 function testInherits_constructor() {
   function Foo() {};
   function Bar() {};
-  Bar.inherits(Foo);
+  goog.inherits(Bar, Foo);
   var bar = new Bar();
 
   assertEquals('constructor property should match constructor function',

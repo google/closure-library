@@ -26,7 +26,7 @@ limitations under the License.
 <body>
 
   <script type="text/javascript">
-	
+
   var preventDefault = false;
   var stopPropagation = false;
 
@@ -42,7 +42,7 @@ limitations under the License.
 
 
   function Something() { }
-  Something.inherits(goog.events.EventTarget);
+  goog.inherits(Something, goog.events.EventTarget);
 
   Something.prototype.DoSomething = function() {
     alert('Doing something');
@@ -53,7 +53,7 @@ limitations under the License.
     this.type = 'synth';
     this.arg = arg;
   }
-  DemoEventObject.inherits(goog.events.Event);
+  goog.inherits(DemoEventObject, goog.events.Event);
 
   var st = new Something();
 

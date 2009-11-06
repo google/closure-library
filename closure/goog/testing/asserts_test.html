@@ -71,7 +71,7 @@ limitations under the License.
         fail('Did not expect a JsUnitException');
       }
       if (ex.description != expectedDescription) {
-        fail('Expected descrption [' + expectedDescription + '] but got [' +
+        fail('Expected description [' + expectedDescription + '] but got [' +
             ex.description + ']');
       }
       failed = true;
@@ -88,10 +88,10 @@ limitations under the License.
         'Call to assertTrue(boolean) with false');
     assertFailure(function() { assertTrue('Should be true', false); },
         'Should be true\nCall to assertTrue(boolean) with false');
-    assertError('Bad argument to assertTrue(boolean)',
-        function() { assertTrue(null); });
-    assertError('Bad argument to assertTrue(boolean)',
-        function() { assertTrue(undefined); });
+    assertFailure(function() { assertTrue(null); },
+        'Bad argument to assertTrue(boolean)');
+    assertFailure(function() { assertTrue(undefined); },
+        'Bad argument to assertTrue(boolean)');
   }
 
   function testAssertFalse() {
@@ -101,10 +101,10 @@ limitations under the License.
         'Call to assertFalse(boolean) with true');
     assertFailure(function() { assertFalse('Should be false', true); },
         'Should be false\nCall to assertFalse(boolean) with true');
-    assertError('Bad argument to assertFalse(boolean)',
-        function() { assertFalse(null); });
-    assertError('Bad argument to assertFalse(boolean)',
-        function() { assertFalse(undefined); });
+    assertFailure(function() { assertFalse(null); },
+        'Bad argument to assertFalse(boolean)');
+    assertFailure(function() { assertFalse(undefined); },
+        'Bad argument to assertFalse(boolean)');
   }
 
   function testAssertEqualsWithString() {

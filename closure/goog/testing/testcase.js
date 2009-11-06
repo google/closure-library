@@ -30,6 +30,8 @@ goog.provide('goog.testing.TestCase.Result');
 goog.provide('goog.testing.TestCase.Test');
 
 goog.require('goog.testing.asserts');
+goog.require('goog.testing.stacktrace');
+
 
 
 /**
@@ -751,9 +753,8 @@ goog.testing.TestCase.prototype.logError = function(name, opt_e) {
       errMsg = opt_e;
     } else {
       errMsg = opt_e.message || opt_e.description || opt_e.toString();
-      stack = opt_e.stack ?
-          goog.testing.asserts.formatErrorStack(opt_e) :
-          opt_e.stackTrace;
+      stack = opt_e.stack ? goog.testing.stacktrace.canonicalize(opt_e.stack) :
+          opt_e['stackTrace'];
     }
   } else {
     errMsg = 'An unknown error occurred';
@@ -950,4 +951,3 @@ goog.testing.TestCase.Error.prototype.toString = function() {
   return 'ERROR in ' + this.source + '\n' +
       this.message + (this.stack ? '\n' + this.stack : '');
 };
-

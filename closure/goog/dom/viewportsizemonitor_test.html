@@ -36,7 +36,7 @@ limitations under the License.
 
   function FakeWindow() {
   };
-  FakeWindow.inherits(goog.events.EventTarget);
+  goog.inherits(FakeWindow, goog.events.EventTarget);
 
 
   FakeWindow.prototype.fireResize = function() {
@@ -47,7 +47,7 @@ limitations under the License.
   function FakeResizeEvent(obj) {
     this.type = goog.events.EventType.RESIZE;
   }
-  FakeResizeEvent.inherits(goog.events.Event);
+  goog.inherits(FakeResizeEvent, goog.events.Event);
 
 
   function getViewportSize() {

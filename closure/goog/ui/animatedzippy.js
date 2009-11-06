@@ -32,8 +32,8 @@ goog.require('goog.ui.ZippyEvent');
  * Zippy widget. Expandable/collapsible container, clicking the header toggles
  * the visibility of the content.
  *
- * @param {Element|string} header Header element, either element reference or
- *     string id.
+ * @param {Element|string|null} header Header element, either element
+ *     reference, string id or null if no header exists.
  * @param {Element|string} content Content element, either element reference or
  *     string id.
  * @param {boolean} opt_expanded Initial expanded/visibility state. Defaults to

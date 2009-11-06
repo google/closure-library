@@ -15,6 +15,8 @@
 goog.provide('goog.testing.JsUnitException');
 goog.provide('goog.testing.asserts');
 
+goog.require('goog.testing.stacktrace');
+
 // TODO: Copied from JsUnit with some small modifications, we should
 // reimplement the asserters.
 
@@ -107,13 +109,6 @@ function fail(failureMessage) {
   goog.testing.asserts.raiseException_('Call to fail()', failureMessage);
 }
 
-function error(errorMessage) {
-  var errorObject = new Object();
-  errorObject.description = errorMessage;
-  errorObject.stackTrace = getStackTrace();
-  throw errorObject;
-}
-
 function argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
   return args.length == expectedNumberOfNonCommentArgs + 1;
 }
@@ -134,11 +129,10 @@ function nonCommentArg(desiredNonCommentArgIndex,
 }
 
 function _validateArguments(expectedNumberOfNonCommentArgs, args) {
-  if (!(args.length == expectedNumberOfNonCommentArgs ||
-      (args.length == expectedNumberOfNonCommentArgs + 1 &&
-      typeof(args[0]) == 'string'))) {
-    error('Incorrect arguments passed to assert function');
-  }
+  var valid = args.length == expectedNumberOfNonCommentArgs ||
+      args.length == expectedNumberOfNonCommentArgs + 1 &&
+      goog.isString(args[0]);
+  _assert(null, valid, 'Incorrect arguments passed to assert function');
 }
 
 function _assert(comment, booleanValue, failureMessage) {
@@ -149,14 +143,12 @@ function _assert(comment, booleanValue, failureMessage) {
 
 function assert(a, opt_b) {
   _validateArguments(1, arguments);
+  var comment = commentArg(1, arguments);
   var booleanValue = nonCommentArg(1, 1, arguments);
 
-  if (typeof(booleanValue) != 'boolean') {
-    error('Bad argument to assert(boolean)');
-  }
-
-  _assert(commentArg(1, arguments), booleanValue === true,
-      'Call to assert(boolean) with false');
+  _assert(comment, goog.isBoolean(booleanValue),
+      'Bad argument to assert(boolean)');
+  _assert(comment, booleanValue, 'Call to assert(boolean) with false');
 }
 
 function assertThrows(a, opt_b) {
@@ -194,26 +186,22 @@ function assertNotThrows(a, opt_b) {
 
 function assertTrue(a, opt_b) {
   _validateArguments(1, arguments);
+  var comment = commentArg(1, arguments);
   var booleanValue = nonCommentArg(1, 1, arguments);
 
-  if (typeof(booleanValue) != 'boolean') {
-    error('Bad argument to assertTrue(boolean)');
-  }
-
-  _assert(commentArg(1, arguments), booleanValue === true,
-      'Call to assertTrue(boolean) with false');
+  _assert(comment, goog.isBoolean(booleanValue),
+      'Bad argument to assertTrue(boolean)');
+  _assert(comment, booleanValue, 'Call to assertTrue(boolean) with false');
 }
 
 function assertFalse(a, opt_b) {
   _validateArguments(1, arguments);
+  var comment = commentArg(1, arguments);
   var booleanValue = nonCommentArg(1, 1, arguments);
 
-  if (typeof(booleanValue) != 'boolean') {
-    error('Bad argument to assertFalse(boolean)');
-  }
-
-  _assert(commentArg(1, arguments), booleanValue === false,
-      'Call to assertFalse(boolean) with true');
+  _assert(comment, goog.isBoolean(booleanValue),
+      'Bad argument to assertFalse(boolean)');
+  _assert(comment, !booleanValue, 'Call to assertFalse(boolean) with true');
 }
 
 function assertEquals(a, b, opt_c) {
@@ -619,133 +607,6 @@ function standardizeCSSValue(propertyName, value) {
   return styleDeclaration[propertyName];
 }
 
-function getFunctionName(aFunction) {
-  var regexpResult = aFunction.toString().match(/function(\s*)(\w*)/);
-  if (regexpResult && regexpResult.length >= 2 && regexpResult[2]) {
-    return goog.testing.asserts.maybeDeobfuscateFunctionName(regexpResult[2]);
-  }
-  return 'anonymous';
-}
-
-/**
- * Function to deobfuscate function names.
- * @type {function(string): string}
- */
-goog.testing.asserts.deobfuscateFunctionName;
-
-/**
- * Sets function to deobfuscate function names.
- * @param {function(string) : string} fn function to deobfuscate function names.
- */
-goog.testing.asserts.setDeobfuscateFunctionName = function(fn) {
-  goog.testing.asserts.deobfuscateFunctionName = fn;
-};
-
-/**
- * Deobfuscate function name if possible.
- * @param {string} name function name.
- * @return {string} The deobfuscated function name.
- */
-goog.testing.asserts.maybeDeobfuscateFunctionName = function(name) {
-  if (goog.testing.asserts.deobfuscateFunctionName) {
-    return goog.testing.asserts.deobfuscateFunctionName(name);
-  }
-  return name;
-};
-
-function getStackTrace() {
-  var result = '';
-
-  if (typeof(arguments.caller) != 'undefined') { // IE, not ECMA
-    for (var a = arguments.caller; a != null; a = a.caller) {
-      result += '> ' + getFunctionName(a.callee) + '\n';
-      if (a.caller == a) {
-        result += '*';
-        break;
-      }
-    }
-  } else { // Mozilla, not ECMA
-    // fake an exception so we can get Mozilla's error stack
-    try {
-      eval('var var;');
-    } catch (testExcp) {
-      result += goog.testing.asserts.formatErrorStack(testExcp);
-    }
-  }
-
-  return result;
-}
-
-function parseErrorStack(excp) {
-  var stack = [];
-  var name;
-  var line;
-
-  if (!excp || !excp.stack) {
-    return stack;
-  }
-
-  var stacklist = excp.stack.split('\n');
-
-  for (var i = 0; i < stacklist.length - 1; i++) {
-    var framedata = stacklist[i];
-
-    name = framedata.match(/^([a-zA-Z0-9_$]*)/)[1];
-    if (name) {
-      name = goog.testing.asserts.maybeDeobfuscateFunctionName(name);
-    } else {
-      name = 'anonymous';
-    }
-
-    // Find a line with a valid JS resource URL on it. We support
-    // file://, http:// and https://.
-    var fileResult = framedata.match(/(file:\/\/|http:\/\/|https:\/\/)(.*)/);
-
-    line = fileResult && fileResult[2];
-
-    if (line && goog.global['CLOSURE_INSPECTOR___'] &&
-        goog.global['CLOSURE_INSPECTOR___']['supportsJSUnit']) {
-
-      // Separate out the functions line number from the frame's location in
-      // the source file. We then piece these items back together in the form:
-      // CILINK`rootpath`filePath`lineNumber`fullFilePath;
-      var atIndex = framedata.indexOf('@');
-      var fullPath = framedata.substr(atIndex + 1);
-      var parts = line.split(':', 2);
-      line = 'CILINK`' + parts[0] + '`' + parts[1] + '`' + fullPath;
-    }
-
-    if (!line) {
-      line = '(unknown)';
-    }
-
-    stack[stack.length] = name + ' : ' + line
-  }
-
-  // remove top level anonymous functions to match IE
-  var omitRegexp = /^anonymous :/;
-  while (stack.length && omitRegexp.exec(stack[stack.length - 1])) {
-    stack.length = stack.length - 1;
-  }
-
-  return stack;
-}
-
-
-/**
- * Pretty prints an exception's stack, if it has one.
- * @param {*} e An error.
- * @return {string} The pretty stack.
- */
-goog.testing.asserts.formatErrorStack = function(e) {
-  var stack = parseErrorStack(e);
-  var result = '';
-  for (var i = 0; i < stack.length; i++) {
-    result += '> ' + stack[i] + '\n';
-  }
-  return result;
-};
-
 
 /**
  * Raises a JsUnit exception with the given comment.
@@ -754,8 +615,8 @@ goog.testing.asserts.formatErrorStack = function(e) {
  * @private
  */
 goog.testing.asserts.raiseException_ = function(comment, opt_message) {
- if (goog.global['CLOSURE_INSPECTOR___'] &&
-     goog.global['CLOSURE_INSPECTOR___']['supportsJSUnit']) {
+  if (goog.global['CLOSURE_INSPECTOR___'] &&
+      goog.global['CLOSURE_INSPECTOR___']['supportsJSUnit']) {
     goog.global['CLOSURE_INSPECTOR___']['jsUnitFailure'](comment, opt_message);
   }
 
@@ -773,7 +634,7 @@ goog.testing.JsUnitException = function(comment, opt_message) {
   this.message = (comment ? comment : '') +
                  (comment && opt_message ? '\n' : '') +
                  (opt_message ? opt_message : '');
-  this.stackTrace = getStackTrace();
+  this.stackTrace = goog.testing.stacktrace.get();
 };
 
 /** @inheritDoc */
@@ -784,7 +645,6 @@ goog.testing.JsUnitException.prototype.toString = function() {
 };
 
 goog.exportSymbol('fail', fail);
-goog.exportSymbol('error', error);
 goog.exportSymbol('assert', assert);
 goog.exportSymbol('assertThrows', assertThrows);
 goog.exportSymbol('assertNotThrows', assertNotThrows);
@@ -809,5 +669,3 @@ goog.exportSymbol('assertHashEquals', assertHashEquals);
 goog.exportSymbol('assertRoughlyEquals', assertRoughlyEquals);
 goog.exportSymbol('assertContains', assertContains);
 goog.exportSymbol('assertNotContains', assertNotContains);
-goog.exportSymbol('setDeobfuscateFunctionName',
-                  goog.testing.asserts.setDeobfuscateFunctionName);

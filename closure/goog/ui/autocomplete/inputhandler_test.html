@@ -38,7 +38,7 @@ limitations under the License.
     this.setAttribute = function(key, value) { this[key] = value; };
     this.ownerDocument = document;
   }
-  MockElement.inherits(goog.events.EventTarget);
+  goog.inherits(MockElement, goog.events.EventTarget);
 
 
   function MockAutoCompleter() {
@@ -62,7 +62,7 @@ limitations under the License.
 
     this.attachInput(mockElement);
   }
-  MockInputHandler.inherits(goog.ui.AutoComplete.InputHandler);
+  goog.inherits(MockInputHandler, goog.ui.AutoComplete.InputHandler);
 
   /** Checks for updates to the text area, should not happen during IME. */
   MockInputHandler.prototype.update = function() {

@@ -3164,7 +3164,7 @@ a.tick_ = function() {
     var elapsed = goog.now() - this.last_;
     if(elapsed > 0 && elapsed < this.interval_ * goog.Timer.intervalScale)this.timer_ = this.timerObject_.setTimeout(this.boundTick_, this.interval_ - elapsed);
     else {
-      this.dispatchTick_();
+      this.dispatchTick();
       if(this.enabled) {
         this.timer_ = this.timerObject_.setTimeout(this.boundTick_, this.interval_);
         this.last_ = goog.now()
@@ -3172,7 +3172,7 @@ a.tick_ = function() {
     }
   }
 };
-a.dispatchTick_ = function() {
+a.dispatchTick = function() {
   this.dispatchEvent(goog.Timer.TICK)
 };
 a.start = function() {
@@ -3241,22 +3241,26 @@ goog.net.XhrMonitor_.getKey = function(obj) {
 };
 a = goog.net.XhrMonitor_.prototype;
 a.logger_ = goog.debug.Logger.getLogger("goog.net.xhrMonitor");
+a.enabled_ = goog.userAgent.GECKO;
+a.setEnabled = function(val) {
+  this.enabled_ = goog.userAgent.GECKO && val
+};
 a.pushContext = function(context) {
-  if(goog.userAgent.GECKO) {
+  if(this.enabled_) {
     var key = goog.net.XhrMonitor_.getKey(context);
     this.logger_.finest("Pushing context: " + context + " (" + key + ")");
     this.stack_.push(key)
   }
 };
 a.popContext = function() {
-  if(goog.userAgent.GECKO) {
+  if(this.enabled_) {
     var context = this.stack_.pop();
     this.logger_.finest("Popping context: " + context);
     this.updateDependentContexts_(context)
   }
 };
 a.markXhrOpen = function(xhr) {
-  if(goog.userAgent.GECKO) {
+  if(this.enabled_) {
     var hc = goog.getHashCode(xhr);
     this.logger_.fine("Opening XHR : " + hc);
     for(var i = 0;i < this.stack_.length;i++) {
@@ -3267,7 +3271,7 @@ a.markXhrOpen = function(xhr) {
   }
 };
 a.markXhrClosed = function(xhr) {
-  if(goog.userAgent.GECKO) {
+  if(this.enabled_) {
     var hc = goog.getHashCode(xhr);
     this.logger_.fine("Closing XHR : " + hc);
     delete this.xhrToContexts_[hc];
@@ -3509,8 +3513,7 @@ a.onReadyStateChangeHelper_ = function() {
 };
 a.cleanUpXhr_ = function(opt_fromDispose) {
   if(this.xhr_) {
-    this.xhr_.onreadystatechange = this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ? goog.nullFunction : null;
-    var xhr = this.xhr_;
+    var xhr = this.xhr_, clearedOnReadyStateChange = this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ? goog.nullFunction : null;
     this.xhrOptions_ = this.xhr_ = null;
     if(this.timeoutId_) {
       goog.Timer.defaultTimerObject.clearTimeout(this.timeoutId_);
@@ -3519,7 +3522,12 @@ a.cleanUpXhr_ = function(opt_fromDispose) {
       goog.net.xhrMonitor.pushContext(xhr);
       this.dispatchEvent(goog.net.EventType.READY);
       goog.net.xhrMonitor.popContext()
-    }goog.net.xhrMonitor.markXhrClosed(xhr)
+    }goog.net.xhrMonitor.markXhrClosed(xhr);
+    try {
+      xhr.onreadystatechange = clearedOnReadyStateChange
+    }catch(e) {
+      this.logger_.severe("Problem encountered resetting onreadystatechange: " + e.message)
+    }
   }
 };
 a.isActive = function() {
@@ -5354,19 +5362,20 @@ goog.fx.AnimationEvent = function(type, anim) {
 };
 goog.inherits(goog.fx.AnimationEvent, goog.events.Event);goog.ui.Zippy = function(header, opt_content, opt_expanded) {
   goog.events.EventTarget.call(this);
-  this.elHeader_ = goog.dom.getElement(header);
+  this.elHeader_ = goog.dom.getElement(header) || null;
   this.elContent_ = opt_content ? goog.dom.getElement(opt_content) : null;
   this.expanded_ = opt_expanded == true;
-  this.elHeader_.tabIndex = 0;
-  goog.events.listen(this.elHeader_, goog.events.EventType.CLICK, this.onHeaderClick_, false, this);
-  goog.events.listen(this.elHeader_, goog.events.EventType.KEYDOWN, this.onHeaderKeyDown_, false, this);
-  this.setExpanded(this.expanded_)
+  if(this.elHeader_) {
+    this.elHeader_.tabIndex = 0;
+    goog.events.listen(this.elHeader_, goog.events.EventType.CLICK, this.onHeaderClick_, false, this);
+    goog.events.listen(this.elHeader_, goog.events.EventType.KEYDOWN, this.onHeaderKeyDown_, false, this)
+  }this.setExpanded(this.expanded_)
 };
 goog.inherits(goog.ui.Zippy, goog.events.EventTarget);
 goog.ui.Zippy.Events = {TOGGLE:"toggle"};
 a = goog.ui.Zippy.prototype;
 a.disposeInternal = function() {
-  goog.events.removeAll(this.elHeader_);
+  this.elHeader_ && goog.events.removeAll(this.elHeader_);
   goog.ui.Zippy.superClass_.disposeInternal.call(this)
 };
 a.collapse = function() {
@@ -5382,7 +5391,7 @@ a.setExpanded = function(expanded) {
   this.dispatchEvent(new goog.ui.ZippyEvent(goog.ui.Zippy.Events.TOGGLE, this, this.expanded_))
 };
 a.updateHeaderClassName_ = function(expanded) {
-  if(expanded) {
+  if(this.elHeader_)if(expanded) {
     goog.dom.classes.remove(this.elHeader_, "goog-zippy-collapsed");
     goog.dom.classes.add(this.elHeader_, "goog-zippy-expanded")
   }else {

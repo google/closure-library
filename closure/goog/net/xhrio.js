@@ -659,17 +659,12 @@ goog.net.XhrIo.prototype.onReadyStateChangeHelper_ = function() {
  */
 goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
   if (this.xhr_) {
-
-    // NOTE: Not nullifying in FireFox can still leak if the callbacks
-    // are defined in the same scope as the instance of XhrIo. But, IE doesn't
-    // allow you to set the onreadystatechange to NULL so nullFunction is used.
-    this.xhr_.onreadystatechange =
-        this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ?
-        goog.nullFunction : null;
-
     // Save reference so we can mark it as closed after the READY event.  The
     // READY event may trigger another request, thus we must nullify this.xhr_
     var xhr = this.xhr_;
+    var clearedOnReadyStateChange =
+        this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ?
+              goog.nullFunction : null;
     this.xhr_ = null;
     this.xhrOptions_ = null;
 
@@ -678,6 +673,7 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
       goog.Timer.defaultTimerObject.clearTimeout(this.timeoutId_);
       this.timeoutId_ = null;
     }
+
     if (!opt_fromDispose) {
       goog.net.xhrMonitor.pushContext(xhr);
       this.dispatchEvent(goog.net.EventType.READY);
@@ -686,6 +682,20 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
 
     // Mark the request as having completed.
     goog.net.xhrMonitor.markXhrClosed(xhr);
+
+    try {
+      // NOTE: Not nullifying in FireFox can still leak if the callbacks
+      // are defined in the same scope as the instance of XhrIo. But, IE doesn't
+      // allow you to set the onreadystatechange to NULL so nullFunction is
+      // used.
+      xhr.onreadystatechange = clearedOnReadyStateChange;
+    } catch (e) {
+      // This seems to occur with a Gears HTTP request. Delayed the setting of
+      // this onreadystatechange until after READY is sent out and catching the
+      // error to see if we can track down the problem.
+      this.logger_.severe('Problem encountered resetting onreadystatechange: ' +
+                          e.message);
+    }
   }
 };
 

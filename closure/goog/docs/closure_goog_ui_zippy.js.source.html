@@ -17,7 +17,7 @@
   </script>
 
   <meta charset="utf8">
-  <meta name="date" content="2009-10-4">
+  <meta name="date" content="2009-10-6">
 </head>
 
 <body onload="prettyPrint()">
@@ -79,192 +79,199 @@
 <a name="line35"></a> * the visibility of the content.
 <a name="line36"></a> *
 <a name="line37"></a> * @extends {goog.events.EventTarget}
-<a name="line38"></a> * @param {Element|string} header Header element, either element reference or
-<a name="line39"></a> *                         string id.
-<a name="line40"></a> * @param {Element|string} opt_content Content element (if any), either element
-<a name="line41"></a> *                         reference or string id.  If skipped, the caller
-<a name="line42"></a> *                         should handle the TOGGLE event in its own way.
-<a name="line43"></a> * @param {boolean} opt_expanded Initial expanded/visibility state. Defaults to
-<a name="line44"></a> *                  false.
-<a name="line45"></a> * @constructor
-<a name="line46"></a> */
-<a name="line47"></a>goog.ui.Zippy = function(header, opt_content, opt_expanded) {
-<a name="line48"></a>  goog.events.EventTarget.call(this);
-<a name="line49"></a>
-<a name="line50"></a>  /**
-<a name="line51"></a>   * Header element.
-<a name="line52"></a>   * @type {Element}
-<a name="line53"></a>   * @private
-<a name="line54"></a>   */
-<a name="line55"></a>  this.elHeader_ = goog.dom.getElement(header);
-<a name="line56"></a>
-<a name="line57"></a>  /**
-<a name="line58"></a>   * Content element.
-<a name="line59"></a>   * @type {?Element}
-<a name="line60"></a>   * @private
-<a name="line61"></a>   */
-<a name="line62"></a>  this.elContent_ = opt_content ? goog.dom.getElement(opt_content) : null;
-<a name="line63"></a>
-<a name="line64"></a>  /**
-<a name="line65"></a>   * Expanded state.
-<a name="line66"></a>   * @type {boolean}
-<a name="line67"></a>   * @private
-<a name="line68"></a>   */
-<a name="line69"></a>  this.expanded_ = opt_expanded == true;
-<a name="line70"></a>
-<a name="line71"></a>  // Listen for click and keydown events on header
-<a name="line72"></a>  this.elHeader_.tabIndex = 0;
-<a name="line73"></a>  goog.events.listen(this.elHeader_, goog.events.EventType.CLICK,
-<a name="line74"></a>      this.onHeaderClick_, false, this);
-<a name="line75"></a>  goog.events.listen(this.elHeader_, goog.events.EventType.KEYDOWN,
-<a name="line76"></a>      this.onHeaderKeyDown_, false, this);
-<a name="line77"></a>
-<a name="line78"></a>  // initialize based on expanded state
-<a name="line79"></a>  this.setExpanded(this.expanded_);
-<a name="line80"></a>};
-<a name="line81"></a>goog.inherits(goog.ui.Zippy, goog.events.EventTarget);
-<a name="line82"></a>
-<a name="line83"></a>
-<a name="line84"></a>/**
-<a name="line85"></a> * Constants for event names
-<a name="line86"></a> *
-<a name="line87"></a> * @type {Object}
-<a name="line88"></a> */
-<a name="line89"></a>goog.ui.Zippy.Events = {
-<a name="line90"></a>  TOGGLE: &#39;toggle&#39;
-<a name="line91"></a>};
-<a name="line92"></a>
-<a name="line93"></a>/**
-<a name="line94"></a> * Destroys widget and removes all event listeners.
-<a name="line95"></a> */
-<a name="line96"></a>goog.ui.Zippy.prototype.disposeInternal = function() {
-<a name="line97"></a>  goog.events.removeAll(this.elHeader_);
-<a name="line98"></a>  goog.ui.Zippy.superClass_.disposeInternal.call(this);
-<a name="line99"></a>};
-<a name="line100"></a>
-<a name="line101"></a>/**
-<a name="line102"></a> * Expands content pane.
-<a name="line103"></a> */
-<a name="line104"></a>goog.ui.Zippy.prototype.expand = function() {
-<a name="line105"></a>  this.setExpanded(true);
-<a name="line106"></a>};
-<a name="line107"></a>
-<a name="line108"></a>
-<a name="line109"></a>/**
-<a name="line110"></a> * Collapses content pane.
-<a name="line111"></a> */
-<a name="line112"></a>goog.ui.Zippy.prototype.collapse = function() {
-<a name="line113"></a>  this.setExpanded(false);
-<a name="line114"></a>};
-<a name="line115"></a>
-<a name="line116"></a>
-<a name="line117"></a>/**
-<a name="line118"></a> * Toggles expanded state.
-<a name="line119"></a> */
-<a name="line120"></a>goog.ui.Zippy.prototype.toggle = function() {
-<a name="line121"></a>  this.setExpanded(!this.expanded_);
-<a name="line122"></a>};
-<a name="line123"></a>
-<a name="line124"></a>
-<a name="line125"></a>/**
-<a name="line126"></a> * Sets expanded state.
-<a name="line127"></a> *
-<a name="line128"></a> * @param {boolean} expanded Expanded/visibility state.
-<a name="line129"></a> */
-<a name="line130"></a>goog.ui.Zippy.prototype.setExpanded = function(expanded) {
-<a name="line131"></a>
-<a name="line132"></a>  if (this.elContent_) {
-<a name="line133"></a>    // Hide the element, if one is provided.
-<a name="line134"></a>    this.elContent_.style.display = expanded ? &#39;&#39; : &#39;none&#39;;
-<a name="line135"></a>  }
-<a name="line136"></a>  // Update header image, if any.
-<a name="line137"></a>  this.updateHeaderClassName_(expanded);
-<a name="line138"></a>
-<a name="line139"></a>  this.expanded_ = expanded;
-<a name="line140"></a>
-<a name="line141"></a>  // Fire toggle event
-<a name="line142"></a>  this.dispatchEvent(new goog.ui.ZippyEvent(goog.ui.Zippy.Events.TOGGLE,
-<a name="line143"></a>                                            this, this.expanded_));
-<a name="line144"></a>};
+<a name="line38"></a> * @param {Element|string|null} header Header element, either element
+<a name="line39"></a> *                              reference, string id or null if no header
+<a name="line40"></a> *                              exists.
+<a name="line41"></a> * @param {Element|string} opt_content Content element (if any), either element
+<a name="line42"></a> *                         reference or string id.  If skipped, the caller
+<a name="line43"></a> *                         should handle the TOGGLE event in its own way.
+<a name="line44"></a> * @param {boolean} opt_expanded Initial expanded/visibility state. Defaults to
+<a name="line45"></a> *                  false.
+<a name="line46"></a> * @constructor
+<a name="line47"></a> */
+<a name="line48"></a>goog.ui.Zippy = function(header, opt_content, opt_expanded) {
+<a name="line49"></a>  goog.events.EventTarget.call(this);
+<a name="line50"></a>
+<a name="line51"></a>  /**
+<a name="line52"></a>   * Header element or null if no header exists.
+<a name="line53"></a>   * @type {?Element}
+<a name="line54"></a>   * @private
+<a name="line55"></a>   */
+<a name="line56"></a>  this.elHeader_ = goog.dom.getElement(header) || null;
+<a name="line57"></a>
+<a name="line58"></a>  /**
+<a name="line59"></a>   * Content element.
+<a name="line60"></a>   * @type {?Element}
+<a name="line61"></a>   * @private
+<a name="line62"></a>   */
+<a name="line63"></a>  this.elContent_ = opt_content ? goog.dom.getElement(opt_content) : null;
+<a name="line64"></a>
+<a name="line65"></a>  /**
+<a name="line66"></a>   * Expanded state.
+<a name="line67"></a>   * @type {boolean}
+<a name="line68"></a>   * @private
+<a name="line69"></a>   */
+<a name="line70"></a>  this.expanded_ = opt_expanded == true;
+<a name="line71"></a>
+<a name="line72"></a>  if (this.elHeader_) {
+<a name="line73"></a>    // Listen for click and keydown events on header
+<a name="line74"></a>    this.elHeader_.tabIndex = 0;
+<a name="line75"></a>    goog.events.listen(this.elHeader_, goog.events.EventType.CLICK,
+<a name="line76"></a>        this.onHeaderClick_, false, this);
+<a name="line77"></a>    goog.events.listen(this.elHeader_, goog.events.EventType.KEYDOWN,
+<a name="line78"></a>        this.onHeaderKeyDown_, false, this);
+<a name="line79"></a>  }
+<a name="line80"></a>
+<a name="line81"></a>  // initialize based on expanded state
+<a name="line82"></a>  this.setExpanded(this.expanded_);
+<a name="line83"></a>};
+<a name="line84"></a>goog.inherits(goog.ui.Zippy, goog.events.EventTarget);
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * Constants for event names
+<a name="line89"></a> *
+<a name="line90"></a> * @type {Object}
+<a name="line91"></a> */
+<a name="line92"></a>goog.ui.Zippy.Events = {
+<a name="line93"></a>  TOGGLE: &#39;toggle&#39;
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Destroys widget and removes all event listeners.
+<a name="line98"></a> */
+<a name="line99"></a>goog.ui.Zippy.prototype.disposeInternal = function() {
+<a name="line100"></a>  if (this.elHeader_) {
+<a name="line101"></a>    goog.events.removeAll(this.elHeader_);
+<a name="line102"></a>  }
+<a name="line103"></a>  goog.ui.Zippy.superClass_.disposeInternal.call(this);
+<a name="line104"></a>};
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Expands content pane.
+<a name="line108"></a> */
+<a name="line109"></a>goog.ui.Zippy.prototype.expand = function() {
+<a name="line110"></a>  this.setExpanded(true);
+<a name="line111"></a>};
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * Collapses content pane.
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.Zippy.prototype.collapse = function() {
+<a name="line118"></a>  this.setExpanded(false);
+<a name="line119"></a>};
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Toggles expanded state.
+<a name="line124"></a> */
+<a name="line125"></a>goog.ui.Zippy.prototype.toggle = function() {
+<a name="line126"></a>  this.setExpanded(!this.expanded_);
+<a name="line127"></a>};
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Sets expanded state.
+<a name="line132"></a> *
+<a name="line133"></a> * @param {boolean} expanded Expanded/visibility state.
+<a name="line134"></a> */
+<a name="line135"></a>goog.ui.Zippy.prototype.setExpanded = function(expanded) {
+<a name="line136"></a>
+<a name="line137"></a>  if (this.elContent_) {
+<a name="line138"></a>    // Hide the element, if one is provided.
+<a name="line139"></a>    this.elContent_.style.display = expanded ? &#39;&#39; : &#39;none&#39;;
+<a name="line140"></a>  }
+<a name="line141"></a>  // Update header image, if any.
+<a name="line142"></a>  this.updateHeaderClassName_(expanded);
+<a name="line143"></a>
+<a name="line144"></a>  this.expanded_ = expanded;
 <a name="line145"></a>
-<a name="line146"></a>
-<a name="line147"></a>/**
-<a name="line148"></a> * @return {boolean} Whether the zippy is expanded.
-<a name="line149"></a> */
-<a name="line150"></a>goog.ui.Zippy.prototype.isExpanded = function() {
-<a name="line151"></a>  return this.expanded_;
-<a name="line152"></a>};
-<a name="line153"></a>
-<a name="line154"></a>
-<a name="line155"></a>/**
-<a name="line156"></a> * Updates the header element&#39;s className
-<a name="line157"></a> *
-<a name="line158"></a> * @param {boolean} expanded Expanded/visibility state.
-<a name="line159"></a> * @private
-<a name="line160"></a> */
-<a name="line161"></a>goog.ui.Zippy.prototype.updateHeaderClassName_ = function(expanded) {
-<a name="line162"></a>  if (expanded) {
-<a name="line163"></a>    goog.dom.classes.remove(this.elHeader_, &#39;goog-zippy-collapsed&#39;);
-<a name="line164"></a>    goog.dom.classes.add(this.elHeader_, &#39;goog-zippy-expanded&#39;);
-<a name="line165"></a>  } else {
-<a name="line166"></a>    goog.dom.classes.remove(this.elHeader_, &#39;goog-zippy-expanded&#39;);
-<a name="line167"></a>    goog.dom.classes.add(this.elHeader_, &#39;goog-zippy-collapsed&#39;);
-<a name="line168"></a>  }
-<a name="line169"></a>};
-<a name="line170"></a>
-<a name="line171"></a>
-<a name="line172"></a>/**
-<a name="line173"></a> * KeyDown event handler for header element. Enter and space toggles expanded
-<a name="line174"></a> * state.
-<a name="line175"></a> *
-<a name="line176"></a> * @param {goog.events.BrowserEvent} event KeyDown event.
-<a name="line177"></a> * @private
-<a name="line178"></a> */
-<a name="line179"></a>goog.ui.Zippy.prototype.onHeaderKeyDown_ = function(event) {
-<a name="line180"></a>  if (event.keyCode == goog.events.KeyCodes.ENTER ||
-<a name="line181"></a>      event.keyCode == goog.events.KeyCodes.SPACE) {
-<a name="line182"></a>
-<a name="line183"></a>    this.toggle();
-<a name="line184"></a>
-<a name="line185"></a>    // Prevent enter key from submiting form.
-<a name="line186"></a>    event.preventDefault();
-<a name="line187"></a>
-<a name="line188"></a>    event.stopPropagation();
-<a name="line189"></a>  }
-<a name="line190"></a>};
+<a name="line146"></a>  // Fire toggle event
+<a name="line147"></a>  this.dispatchEvent(new goog.ui.ZippyEvent(goog.ui.Zippy.Events.TOGGLE,
+<a name="line148"></a>                                            this, this.expanded_));
+<a name="line149"></a>};
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * @return {boolean} Whether the zippy is expanded.
+<a name="line154"></a> */
+<a name="line155"></a>goog.ui.Zippy.prototype.isExpanded = function() {
+<a name="line156"></a>  return this.expanded_;
+<a name="line157"></a>};
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Updates the header element&#39;s className
+<a name="line162"></a> *
+<a name="line163"></a> * @param {boolean} expanded Expanded/visibility state.
+<a name="line164"></a> * @private
+<a name="line165"></a> */
+<a name="line166"></a>goog.ui.Zippy.prototype.updateHeaderClassName_ = function(expanded) {
+<a name="line167"></a>  if (this.elHeader_) {
+<a name="line168"></a>    if (expanded) {
+<a name="line169"></a>      goog.dom.classes.remove(this.elHeader_, &#39;goog-zippy-collapsed&#39;);
+<a name="line170"></a>      goog.dom.classes.add(this.elHeader_, &#39;goog-zippy-expanded&#39;);
+<a name="line171"></a>    } else {
+<a name="line172"></a>      goog.dom.classes.remove(this.elHeader_, &#39;goog-zippy-expanded&#39;);
+<a name="line173"></a>      goog.dom.classes.add(this.elHeader_, &#39;goog-zippy-collapsed&#39;);
+<a name="line174"></a>    }
+<a name="line175"></a>  }
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * KeyDown event handler for header element. Enter and space toggles expanded
+<a name="line181"></a> * state.
+<a name="line182"></a> *
+<a name="line183"></a> * @param {goog.events.BrowserEvent} event KeyDown event.
+<a name="line184"></a> * @private
+<a name="line185"></a> */
+<a name="line186"></a>goog.ui.Zippy.prototype.onHeaderKeyDown_ = function(event) {
+<a name="line187"></a>  if (event.keyCode == goog.events.KeyCodes.ENTER ||
+<a name="line188"></a>      event.keyCode == goog.events.KeyCodes.SPACE) {
+<a name="line189"></a>
+<a name="line190"></a>    this.toggle();
 <a name="line191"></a>
-<a name="line192"></a>
-<a name="line193"></a>/**
-<a name="line194"></a> * Click event handler for header element.
-<a name="line195"></a> *
-<a name="line196"></a> * @param {goog.events.BrowserEvent} event Click event.
-<a name="line197"></a> * @private
-<a name="line198"></a> */
-<a name="line199"></a>goog.ui.Zippy.prototype.onHeaderClick_ = function(event) {
-<a name="line200"></a>  this.toggle();
-<a name="line201"></a>};
-<a name="line202"></a>
-<a name="line203"></a>
-<a name="line204"></a>
-<a name="line205"></a>/**
-<a name="line206"></a> * Object representing a zippy toggle event.
-<a name="line207"></a> *
-<a name="line208"></a> * @param {string} type Event type.
-<a name="line209"></a> * @param {goog.ui.Zippy} target Zippy widget initiating event.
-<a name="line210"></a> * @param {boolean} expanded Expanded state.
-<a name="line211"></a> * @extends {goog.events.Event}
-<a name="line212"></a> * @constructor
-<a name="line213"></a> */
-<a name="line214"></a>goog.ui.ZippyEvent = function(type, target, expanded) {
-<a name="line215"></a>  goog.events.Event.call(this, type, target);
-<a name="line216"></a>
-<a name="line217"></a>  /**
-<a name="line218"></a>   * The expanded state.
-<a name="line219"></a>   * @type {boolean}
-<a name="line220"></a>   */
-<a name="line221"></a>  this.expanded = expanded;
-<a name="line222"></a>};
-<a name="line223"></a>goog.inherits(goog.ui.ZippyEvent, goog.events.Event);
+<a name="line192"></a>    // Prevent enter key from submiting form.
+<a name="line193"></a>    event.preventDefault();
+<a name="line194"></a>
+<a name="line195"></a>    event.stopPropagation();
+<a name="line196"></a>  }
+<a name="line197"></a>};
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Click event handler for header element.
+<a name="line202"></a> *
+<a name="line203"></a> * @param {goog.events.BrowserEvent} event Click event.
+<a name="line204"></a> * @private
+<a name="line205"></a> */
+<a name="line206"></a>goog.ui.Zippy.prototype.onHeaderClick_ = function(event) {
+<a name="line207"></a>  this.toggle();
+<a name="line208"></a>};
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Object representing a zippy toggle event.
+<a name="line214"></a> *
+<a name="line215"></a> * @param {string} type Event type.
+<a name="line216"></a> * @param {goog.ui.Zippy} target Zippy widget initiating event.
+<a name="line217"></a> * @param {boolean} expanded Expanded state.
+<a name="line218"></a> * @extends {goog.events.Event}
+<a name="line219"></a> * @constructor
+<a name="line220"></a> */
+<a name="line221"></a>goog.ui.ZippyEvent = function(type, target, expanded) {
+<a name="line222"></a>  goog.events.Event.call(this, type, target);
+<a name="line223"></a>
+<a name="line224"></a>  /**
+<a name="line225"></a>   * The expanded state.
+<a name="line226"></a>   * @type {boolean}
+<a name="line227"></a>   */
+<a name="line228"></a>  this.expanded = expanded;
+<a name="line229"></a>};
+<a name="line230"></a>goog.inherits(goog.ui.ZippyEvent, goog.events.Event);
 </pre>
 
 

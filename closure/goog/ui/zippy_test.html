@@ -72,7 +72,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
 <script>
 
-  var zippy, fakeZippy1, fakeZippy2, contentlessZippy;
+  var zippy, fakeZippy1, fakeZippy2, contentlessZippy, headerlessZippy;
 
   function setUp() {
     zippy = new goog.ui.Zippy(goog.dom.$('t1'), goog.dom.$('c1'));
@@ -86,6 +86,8 @@ Copyright 2008 Google Inc. All Rights Reserved.
         fakeContentEl.cloneNode(true), false);
     contentlessZippy = new goog.ui.Zippy(fakeControlEl.cloneNode(true),
         undefined, true);
+    headerlessZippy = new goog.ui.Zippy(null, fakeContentEl.cloneNode(true),
+        true);
   }
 
   function testConstructor() {
@@ -96,20 +98,27 @@ Copyright 2008 Google Inc. All Rights Reserved.
     assertEquals("Default expanded must be false", false, zippy.isExpanded());
     assertEquals("Expanded must be true", true, fakeZippy1.isExpanded());
     assertEquals("Expanded must be false", false, fakeZippy2.isExpanded());
+    assertEquals("Expanded must be true", true, headerlessZippy.isExpanded());
   }
 
   function tearDown() {
     zippy.disposeInternal();
     fakeZippy1.disposeInternal();
     fakeZippy2.disposeInternal();
+    contentlessZippy.disposeInternal();
+    headerlessZippy.disposeInternal();
   }
 
   function testExpandCollapse() {
     zippy.expand();
+    headerlessZippy.expand();
     assertEquals("expanded must be true", true, zippy.isExpanded());
+    assertEquals("expanded must be true", true, headerlessZippy.isExpanded());
 
     zippy.collapse();
+    headerlessZippy.collapse();
     assertEquals("expanded must be false", false, zippy.isExpanded());
+    assertEquals("expanded must be false", false, headerlessZippy.isExpanded());
   }
 
   function testSetExpand() {
@@ -140,6 +149,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     doTest(zippy);
     doTest(fakeZippy1);
     doTest(contentlessZippy);
+    doTest(headerlessZippy);
   }
 
   function testBasicZippyBehavior() {

@@ -34,7 +34,7 @@ limitations under the License.
 function NoObjectReusePool(opt_min, opt_max) {
   goog.structs.Pool.call(this, opt_min, opt_max);
 };
-NoObjectReusePool.inherits(goog.structs.Pool);
+goog.inherits(NoObjectReusePool, goog.structs.Pool);
 
 NoObjectReusePool.prototype.objectCanBeReused = function(obj) {
   return false;

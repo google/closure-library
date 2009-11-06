@@ -100,12 +100,31 @@ goog.net.XhrMonitor_.prototype.logger_ =
 
 
 /**
+ * Flag indicating that the monitor should be used.
+ * Should be set to false for worker threads as they do not have access
+ * to iframes, which is what the monitor is needed for.
+ * @type {boolean}
+ * @private
+ */
+goog.net.XhrMonitor_.prototype.enabled_ = goog.userAgent.GECKO;
+
+
+/**
+ * Set the enabled flag.
+ * @param {boolean} val The new value.
+ */
+goog.net.XhrMonitor_.prototype.setEnabled = function(val) {
+  this.enabled_ = goog.userAgent.GECKO && val;
+};
+
+
+/**
  * Pushes a new context onto the stack.
  * @param {Object|string} context An object or string indicating the source of
  *     the execution context.
  */
 goog.net.XhrMonitor_.prototype.pushContext = function(context) {
-  if (!goog.userAgent.GECKO) return;
+  if (!this.enabled_) return;
 
   var key = goog.net.XhrMonitor_.getKey(context);
   this.logger_.finest('Pushing context: ' + context + ' (' + key + ')');
@@ -117,7 +136,7 @@ goog.net.XhrMonitor_.prototype.pushContext = function(context) {
  * Pops the most recent context off the stack.
  */
 goog.net.XhrMonitor_.prototype.popContext = function() {
-  if (!goog.userAgent.GECKO) return;
+  if (!this.enabled_) return;
 
   var context = this.stack_.pop();
   this.logger_.finest('Popping context: ' + context);
@@ -134,7 +153,7 @@ goog.net.XhrMonitor_.prototype.popContext = function() {
  *     context.
  */
 goog.net.XhrMonitor_.prototype.isContextSafe = function(context) {
-  if (!goog.userAgent.GECKO) return true;
+  if (!this.enabled_) return true;
 
   var deps = this.contextsToXhr_[goog.net.XhrMonitor_.getKey(context)];
   this.logger_.fine('Context is safe : ' + context + ' - ' + deps);
@@ -147,7 +166,7 @@ goog.net.XhrMonitor_.prototype.isContextSafe = function(context) {
  * @param {Object} xhr An XmlHttpRequest object that is about to be opened.
  */
 goog.net.XhrMonitor_.prototype.markXhrOpen = function(xhr) {
-  if (!goog.userAgent.GECKO) return;
+  if (!this.enabled_) return;
 
   var hc = goog.getHashCode(xhr);
   this.logger_.fine('Opening XHR : ' + hc);
@@ -166,7 +185,7 @@ goog.net.XhrMonitor_.prototype.markXhrOpen = function(xhr) {
  * @param {Object} xhr An XmlHttpRequest object whose request has completed.
  */
 goog.net.XhrMonitor_.prototype.markXhrClosed = function(xhr) {
-  if (!goog.userAgent.GECKO) return;
+  if (!this.enabled_) return;
 
   var hc = goog.getHashCode(xhr);
   this.logger_.fine('Closing XHR : ' + hc);

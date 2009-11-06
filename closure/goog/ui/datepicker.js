@@ -47,10 +47,12 @@ goog.require('goog.style');
  * @extends {goog.events.EventTarget}
  * @param {goog.date.Date|Date} opt_date Date to initialize the date picker
  *     with, defaults to the current date.
+ * @param {Object} opt_dateTimeSymbols Date and time symbols to use. Defaults to
+ *     goog.i18n.DateTimeSymbols if not set.
  * @constructor
  * @see goog.date.Date
  */
-goog.ui.DatePicker = function(opt_date) {
+goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols) {
   goog.events.EventTarget.call(this);
 
   // If a standard JavaScript Date object, or anything that looks like a date
@@ -63,9 +65,16 @@ goog.ui.DatePicker = function(opt_date) {
     date = new goog.date.Date();
   }
 
-  this.wdayNames_ = goog.i18n.DateTimeSymbols.SHORTWEEKDAYS;
-  date.setFirstWeekCutOffDay(goog.i18n.DateTimeSymbols.FIRSTWEEKCUTOFFDAY);
-  date.setFirstDayOfWeek(goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK);
+  /**
+   * Date and time symbols to use.
+   * @type {Object}
+   * @private
+   */
+  this.symbols_ = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
+
+  this.wdayNames_ = this.symbols_.SHORTWEEKDAYS;
+  date.setFirstWeekCutOffDay(this.symbols_.FIRSTWEEKCUTOFFDAY);
+  date.setFirstDayOfWeek(this.symbols_.FIRSTDAYOFWEEK);
 
   /**
    * Selected date.
@@ -88,9 +97,9 @@ goog.ui.DatePicker = function(opt_date) {
    * @private
    */
   this.wdayStyles_ = ['', '', '', '', '', '', ''];
-  this.wdayStyles_[goog.i18n.DateTimeSymbols.WEEKENDRANGE[0]] =
+  this.wdayStyles_[this.symbols_.WEEKENDRANGE[0]] =
       goog.getCssName('goog-date-picker-wkend-start');
-  this.wdayStyles_[goog.i18n.DateTimeSymbols.WEEKENDRANGE[1]] =
+  this.wdayStyles_[this.symbols_.WEEKENDRANGE[1]] =
       goog.getCssName('goog-date-picker-wkend-end');
 
   /**
@@ -408,8 +417,8 @@ goog.ui.DatePicker.prototype.setShowWeekdayNames = function(b) {
  * @param {boolean} b Whether to use narrow weekday names.
  */
 goog.ui.DatePicker.prototype.setUseNarrowWeekdayNames = function(b) {
-  this.wdayNames_ = b ? goog.i18n.DateTimeSymbols.NARROWWEEKDAYS :
-      goog.i18n.DateTimeSymbols.SHORTWEEKDAYS;
+  this.wdayNames_ = b ? this.symbols_.NARROWWEEKDAYS :
+      this.symbols_.SHORTWEEKDAYS;
   this.redrawWeekdays_();
 };
 
@@ -618,7 +627,7 @@ goog.ui.DatePicker.prototype.updateNavigationRow_ = function() {
     row.appendChild(cell);
 
   } else {
-    var fullDateFormat = goog.i18n.DateTimeSymbols.DATEFORMATS[
+    var fullDateFormat = this.symbols_.DATEFORMATS[
         goog.i18n.DateTimeFormat.Format.FULL_DATE].toLowerCase();
 
     monthCell = dom.createElement('td');
@@ -862,10 +871,10 @@ goog.ui.DatePicker.prototype.showMonthMenu_ = function(event) {
 
   var list = [];
   for (var i = 0; i < 12; i++) {
-    list.push(goog.i18n.DateTimeSymbols.MONTHS[i]);
+    list.push(this.symbols_.MONTHS[i]);
   }
   this.createMenu_(this.elMonth_, list, this.handleMonthMenuClick_,
-      goog.i18n.DateTimeSymbols.MONTHS[this.activeMonth_.getMonth()]);
+      this.symbols_.MONTHS[this.activeMonth_.getMonth()]);
 };
 
 
@@ -1101,12 +1110,12 @@ goog.ui.DatePicker.prototype.updateCalendarGrid_ = function() {
   if (this.elMonthYear_) {
     goog.dom.setTextContent(this.elMonthYear_,
         goog.date.formatMonthAndYear(
-            goog.i18n.DateTimeSymbols.MONTHS[date.getMonth()],
+            this.symbols_.MONTHS[date.getMonth()],
             date.getFullYear()));
   }
   if (this.elMonth_) {
     goog.dom.setTextContent(this.elMonth_,
-        goog.i18n.DateTimeSymbols.MONTHS[date.getMonth()]);
+        this.symbols_.MONTHS[date.getMonth()]);
   }
   if (this.elYear_) {
     goog.dom.setTextContent(this.elYear_, String(date.getFullYear()));

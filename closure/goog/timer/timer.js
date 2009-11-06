@@ -165,7 +165,7 @@ goog.Timer.prototype.tick_ = function() {
       return;
     }
 
-    this.dispatchTick_();
+    this.dispatchTick();
     // The timer could be stopped in the timer event handler.
     if (this.enabled) {
       this.timer_ = this.timerObject_.setTimeout(this.boundTick_,
@@ -178,9 +178,8 @@ goog.Timer.prototype.tick_ = function() {
 
 /**
  * Dispatches the TICK event. This is its own method so subclasses can override.
- * @private
  */
-goog.Timer.prototype.dispatchTick_ = function() {
+goog.Timer.prototype.dispatchTick = function() {
   this.dispatchEvent(goog.Timer.TICK);
 };
 

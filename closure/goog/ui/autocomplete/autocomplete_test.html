@@ -44,7 +44,7 @@ function MockDS() {
     '"Arthur Dent" <has.no.tea@gmail.com>',
     '"Marvin The Paranoid Android" <marv@googlemail.com>',
     'the.mice@magrathea.com',
-    'the.mice@myotherdomain.com'    
+    'the.mice@myotherdomain.com'
   ];
 }
 
@@ -69,7 +69,7 @@ MockDS.prototype.requestMatchingRows = function(token, maxMatches,
 
 function MockSelect() {
 };
-MockSelect.inherits(goog.events.EventTarget);
+goog.inherits(MockSelect, goog.events.EventTarget);
 
 MockSelect.prototype.selectRow = function(row) {
   this.selectedRow = row;
@@ -82,7 +82,7 @@ MockSelect.prototype.selectRow = function(row) {
 function TestRend() {
   goog.ui.AutoComplete.Renderer.call(this);
 }
-TestRend.inherits(goog.ui.AutoComplete.Renderer);
+goog.inherits(TestRend, goog.ui.AutoComplete.Renderer);
 
 TestRend.prototype.getRenderedRows = function() {
   return this.rows_;

@@ -37,7 +37,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   function FakeModule() {
     goog.module.BaseModule.call(this);
   };
-  FakeModule.inherits(goog.module.BaseModule);
+  goog.inherits(FakeModule, goog.module.BaseModule);
 
   function setUpPage() {
     clock = new goog.testing.MockClock(true);

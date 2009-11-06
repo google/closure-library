@@ -17,7 +17,7 @@
   </script>
 
   <meta charset="utf8">
-  <meta name="date" content="2009-10-4">
+  <meta name="date" content="2009-10-6">
 </head>
 
 <body onload="prettyPrint()">
@@ -209,7 +209,7 @@
 <a name="line165"></a>      return;
 <a name="line166"></a>    }
 <a name="line167"></a>
-<a name="line168"></a>    this.dispatchTick_();
+<a name="line168"></a>    this.dispatchTick();
 <a name="line169"></a>    // The timer could be stopped in the timer event handler.
 <a name="line170"></a>    if (this.enabled) {
 <a name="line171"></a>      this.timer_ = this.timerObject_.setTimeout(this.boundTick_,
@@ -222,107 +222,106 @@
 <a name="line178"></a>
 <a name="line179"></a>/**
 <a name="line180"></a> * Dispatches the TICK event. This is its own method so subclasses can override.
-<a name="line181"></a> * @private
-<a name="line182"></a> */
-<a name="line183"></a>goog.Timer.prototype.dispatchTick_ = function() {
-<a name="line184"></a>  this.dispatchEvent(goog.Timer.TICK);
-<a name="line185"></a>};
+<a name="line181"></a> */
+<a name="line182"></a>goog.Timer.prototype.dispatchTick = function() {
+<a name="line183"></a>  this.dispatchEvent(goog.Timer.TICK);
+<a name="line184"></a>};
+<a name="line185"></a>
 <a name="line186"></a>
-<a name="line187"></a>
-<a name="line188"></a>/**
-<a name="line189"></a> * Starts the timer.
-<a name="line190"></a> */
-<a name="line191"></a>goog.Timer.prototype.start = function() {
-<a name="line192"></a>  this.enabled = true;
-<a name="line193"></a>
-<a name="line194"></a>  // If there is no interval already registered, start it now
-<a name="line195"></a>  if (!this.timer_) {
-<a name="line196"></a>    // IMPORTANT!
-<a name="line197"></a>    // window.setInterval in FireFox has a bug - it fires based on
-<a name="line198"></a>    // absolute time, rather than on relative time. What this means
-<a name="line199"></a>    // is that if a computer is sleeping/hibernating for 24 hours
-<a name="line200"></a>    // and the timer interval was configured to fire every 1000ms,
-<a name="line201"></a>    // then after the PC wakes up the timer will fire, in rapid
-<a name="line202"></a>    // succession, 3600*24 times.
-<a name="line203"></a>    // This bug is described here and is already fixed, but it will
-<a name="line204"></a>    // take time to propagate, so for now I am switching this over
-<a name="line205"></a>    // to setTimeout logic.
-<a name="line206"></a>    //     https://bugzilla.mozilla.org/show_bug.cgi?id=376643
-<a name="line207"></a>    //
-<a name="line208"></a>    this.timer_ = this.timerObject_.setTimeout(this.boundTick_,
-<a name="line209"></a>        this.interval_);
-<a name="line210"></a>    this.last_ = goog.now();
-<a name="line211"></a>  }
-<a name="line212"></a>};
+<a name="line187"></a>/**
+<a name="line188"></a> * Starts the timer.
+<a name="line189"></a> */
+<a name="line190"></a>goog.Timer.prototype.start = function() {
+<a name="line191"></a>  this.enabled = true;
+<a name="line192"></a>
+<a name="line193"></a>  // If there is no interval already registered, start it now
+<a name="line194"></a>  if (!this.timer_) {
+<a name="line195"></a>    // IMPORTANT!
+<a name="line196"></a>    // window.setInterval in FireFox has a bug - it fires based on
+<a name="line197"></a>    // absolute time, rather than on relative time. What this means
+<a name="line198"></a>    // is that if a computer is sleeping/hibernating for 24 hours
+<a name="line199"></a>    // and the timer interval was configured to fire every 1000ms,
+<a name="line200"></a>    // then after the PC wakes up the timer will fire, in rapid
+<a name="line201"></a>    // succession, 3600*24 times.
+<a name="line202"></a>    // This bug is described here and is already fixed, but it will
+<a name="line203"></a>    // take time to propagate, so for now I am switching this over
+<a name="line204"></a>    // to setTimeout logic.
+<a name="line205"></a>    //     https://bugzilla.mozilla.org/show_bug.cgi?id=376643
+<a name="line206"></a>    //
+<a name="line207"></a>    this.timer_ = this.timerObject_.setTimeout(this.boundTick_,
+<a name="line208"></a>        this.interval_);
+<a name="line209"></a>    this.last_ = goog.now();
+<a name="line210"></a>  }
+<a name="line211"></a>};
+<a name="line212"></a>
 <a name="line213"></a>
-<a name="line214"></a>
-<a name="line215"></a>/**
-<a name="line216"></a> * Stops the timer.
-<a name="line217"></a> */
-<a name="line218"></a>goog.Timer.prototype.stop = function() {
-<a name="line219"></a>  this.enabled = false;
-<a name="line220"></a>  if (this.timer_) {
-<a name="line221"></a>    this.timerObject_.clearTimeout(this.timer_);
-<a name="line222"></a>    this.timer_ = null;
-<a name="line223"></a>  }
-<a name="line224"></a>};
+<a name="line214"></a>/**
+<a name="line215"></a> * Stops the timer.
+<a name="line216"></a> */
+<a name="line217"></a>goog.Timer.prototype.stop = function() {
+<a name="line218"></a>  this.enabled = false;
+<a name="line219"></a>  if (this.timer_) {
+<a name="line220"></a>    this.timerObject_.clearTimeout(this.timer_);
+<a name="line221"></a>    this.timer_ = null;
+<a name="line222"></a>  }
+<a name="line223"></a>};
+<a name="line224"></a>
 <a name="line225"></a>
-<a name="line226"></a>
-<a name="line227"></a>/**
-<a name="line228"></a> * Disposes of the timer.
-<a name="line229"></a> */
-<a name="line230"></a>goog.Timer.prototype.disposeInternal = function() {
-<a name="line231"></a>  goog.Timer.superClass_.disposeInternal.call(this);
-<a name="line232"></a>  this.stop();
-<a name="line233"></a>  delete this.timerObject_;
-<a name="line234"></a>};
+<a name="line226"></a>/**
+<a name="line227"></a> * Disposes of the timer.
+<a name="line228"></a> */
+<a name="line229"></a>goog.Timer.prototype.disposeInternal = function() {
+<a name="line230"></a>  goog.Timer.superClass_.disposeInternal.call(this);
+<a name="line231"></a>  this.stop();
+<a name="line232"></a>  delete this.timerObject_;
+<a name="line233"></a>};
+<a name="line234"></a>
 <a name="line235"></a>
-<a name="line236"></a>
-<a name="line237"></a>/**
-<a name="line238"></a> * Constant for the timer&#39;s event type
-<a name="line239"></a> * @type {string}
-<a name="line240"></a> */
-<a name="line241"></a>goog.Timer.TICK = &#39;tick&#39;;
+<a name="line236"></a>/**
+<a name="line237"></a> * Constant for the timer&#39;s event type
+<a name="line238"></a> * @type {string}
+<a name="line239"></a> */
+<a name="line240"></a>goog.Timer.TICK = &#39;tick&#39;;
+<a name="line241"></a>
 <a name="line242"></a>
-<a name="line243"></a>
-<a name="line244"></a>/**
-<a name="line245"></a> * Calls the given function once, after the optional pause
-<a name="line246"></a> * @param {Function} listener Function or object that has a handleEvent method.
-<a name="line247"></a> * @param {number} opt_interval Number of ms between ticks (Default: 1ms).
-<a name="line248"></a> * @param {Object} opt_handler Object in whose scope to call the listener.
-<a name="line249"></a> * @return {number} A handle to the timer ID.
-<a name="line250"></a> */
-<a name="line251"></a>goog.Timer.callOnce = function(listener, opt_interval, opt_handler) {
-<a name="line252"></a>  if (goog.isFunction(listener)) {
-<a name="line253"></a>    if (opt_handler) {
-<a name="line254"></a>      listener = goog.bind(listener, opt_handler);
-<a name="line255"></a>    }
-<a name="line256"></a>  } else if (listener &amp;&amp; typeof listener.handleEvent == &#39;function&#39;) {
-<a name="line257"></a>    // using typeof to prevent strict js warning
-<a name="line258"></a>    listener = goog.bind(listener.handleEvent, listener);
-<a name="line259"></a>  } else {
-<a name="line260"></a>   throw Error(&#39;Invalid listener argument&#39;);
-<a name="line261"></a>  }
-<a name="line262"></a>
-<a name="line263"></a>  if (opt_interval &gt; goog.Timer.MAX_TIMEOUT_) {
-<a name="line264"></a>    // Timeouts greater than MAX_INT return immediately due to integer
-<a name="line265"></a>    // overflow in many browsers.  Since MAX_INT is 24.8 days, just don&#39;t
-<a name="line266"></a>    // schedule anything at all.
-<a name="line267"></a>    return -1;
-<a name="line268"></a>  } else {
-<a name="line269"></a>    return goog.Timer.defaultTimerObject.setTimeout(
-<a name="line270"></a>        listener, opt_interval || 0);
-<a name="line271"></a>  }
-<a name="line272"></a>};
+<a name="line243"></a>/**
+<a name="line244"></a> * Calls the given function once, after the optional pause
+<a name="line245"></a> * @param {Function} listener Function or object that has a handleEvent method.
+<a name="line246"></a> * @param {number} opt_interval Number of ms between ticks (Default: 1ms).
+<a name="line247"></a> * @param {Object} opt_handler Object in whose scope to call the listener.
+<a name="line248"></a> * @return {number} A handle to the timer ID.
+<a name="line249"></a> */
+<a name="line250"></a>goog.Timer.callOnce = function(listener, opt_interval, opt_handler) {
+<a name="line251"></a>  if (goog.isFunction(listener)) {
+<a name="line252"></a>    if (opt_handler) {
+<a name="line253"></a>      listener = goog.bind(listener, opt_handler);
+<a name="line254"></a>    }
+<a name="line255"></a>  } else if (listener &amp;&amp; typeof listener.handleEvent == &#39;function&#39;) {
+<a name="line256"></a>    // using typeof to prevent strict js warning
+<a name="line257"></a>    listener = goog.bind(listener.handleEvent, listener);
+<a name="line258"></a>  } else {
+<a name="line259"></a>   throw Error(&#39;Invalid listener argument&#39;);
+<a name="line260"></a>  }
+<a name="line261"></a>
+<a name="line262"></a>  if (opt_interval &gt; goog.Timer.MAX_TIMEOUT_) {
+<a name="line263"></a>    // Timeouts greater than MAX_INT return immediately due to integer
+<a name="line264"></a>    // overflow in many browsers.  Since MAX_INT is 24.8 days, just don&#39;t
+<a name="line265"></a>    // schedule anything at all.
+<a name="line266"></a>    return -1;
+<a name="line267"></a>  } else {
+<a name="line268"></a>    return goog.Timer.defaultTimerObject.setTimeout(
+<a name="line269"></a>        listener, opt_interval || 0);
+<a name="line270"></a>  }
+<a name="line271"></a>};
+<a name="line272"></a>
 <a name="line273"></a>
-<a name="line274"></a>
-<a name="line275"></a>/**
-<a name="line276"></a> * Clears a timeout initiated by callOnce
-<a name="line277"></a> * @param {number?} timerId a timer ID.
-<a name="line278"></a> */
-<a name="line279"></a>goog.Timer.clear = function(timerId) {
-<a name="line280"></a>  goog.Timer.defaultTimerObject.clearTimeout(timerId);
-<a name="line281"></a>};
+<a name="line274"></a>/**
+<a name="line275"></a> * Clears a timeout initiated by callOnce
+<a name="line276"></a> * @param {number?} timerId a timer ID.
+<a name="line277"></a> */
+<a name="line278"></a>goog.Timer.clear = function(timerId) {
+<a name="line279"></a>  goog.Timer.defaultTimerObject.clearTimeout(timerId);
+<a name="line280"></a>};
 </pre>
 
 

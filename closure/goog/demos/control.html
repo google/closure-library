@@ -328,7 +328,7 @@ limitations under the License.
     function SampleCustomRenderer() {
       goog.ui.ControlRenderer.call(this);
     }
-    SampleCustomRenderer.inherits(goog.ui.ControlRenderer);
+    goog.inherits(SampleCustomRenderer, goog.ui.ControlRenderer);
 
     // See goog.ui.ControlRenderer#createDom for documentation.
     SampleCustomRenderer.prototype.createDom = function(control) {

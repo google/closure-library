@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+  Copyright 2009 Google Inc. All Rights Reserved.
+
+-->
+<head>
+<title>Closure Unit Tests - goog.net.BrowserChannel</title>
+<script type="text/javascript" src="../base.js"></script>
+<script type="text/javascript">
+  goog.require('goog.Timer');
+  goog.require('goog.dom');
+  goog.require('goog.net.BrowserChannel');
+  goog.require('goog.string.StringBuffer');
+  goog.require('goog.structs.Map');
+  goog.require('goog.testing.MockClock');
+  goog.require('goog.testing.asserts');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+
+<!-- Define unit tests. -->
+<script type="text/javascript" >
+
+var browserChannel;
+var handler;
+var mockClock;
+var sb;
+
+// Set to true to see the channel debug output in the browser window.
+var debug = false;
+
+function debugToWindow(message) {
+  if (debug) {
+    sb.append(message + '<br>');
+    goog.dom.$('debug').innerHTML = sb.toString();
+  }
+}
+
+
+/**
+ * Mock ChannelRequest.
+ */
+function MockChannelRequest() {}
+MockChannelRequest = function(channel, channelDebug, opt_sessionId,
+    opt_requestId) {
+  this.channel_ = channel;
+  this.channelDebug_ = channelDebug;
+  this.sessionId_ = opt_sessionId;
+  this.requestId_ = opt_requestId;
+
+  // For debugging, keep track of whether this is a back or forward channel.
+  this.isBack = !!(opt_requestId == 'rpc');
+  this.isForward = !this.isBack;
+};
+
+MockChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {};
+
+MockChannelRequest.prototype.setMaxRetries = function(maxRetries) {};
+
+MockChannelRequest.prototype.setRetryTimeout = function(retryTimeout) {};
+
+MockChannelRequest.prototype.xmlHttpPost = function(uri, postData,
+    decodeChunks) {
+  this.channelDebug_.debug('---> POST: ' + uri + ', ' + postData + ', ' +
+      decodeChunks);
+};
+
+MockChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
+    opt_noClose) {
+  this.channelDebug_.debug('<--- GET: ' + uri + ', ' + decodeChunks + ', ' +
+      opt_noClose);
+};
+
+MockChannelRequest.prototype.tridentGet = function(uri, usingSecondaryDomain) {
+};
+
+MockChannelRequest.prototype.sendUsingImgTag = function(uri) {};
+
+MockChannelRequest.prototype.cancel = function() {};
+
+MockChannelRequest.prototype.getSuccess = function() {
+  return true;
+};
+
+MockChannelRequest.prototype.getLastError = function() {};
+
+MockChannelRequest.prototype.getLastStatusCode = function() {
+  return 200;
+};
+
+MockChannelRequest.prototype.getSessionId = function() {
+  return this.sessionId_;
+};
+
+MockChannelRequest.prototype.getRequestId = function() {
+  return this.requestId_;
+};
+
+
+function setUpPage() {
+  goog.net.ChannelRequest = MockChannelRequest;
+  sb = new goog.string.StringBuffer();
+}
+
+
+function setUp() {
+  mockClock = new goog.testing.MockClock(true);
+  browserChannel = new goog.net.BrowserChannel('1');
+
+  handler = new goog.net.BrowserChannel.Handler();
+  handler.channelOpened = function() {};
+  handler.channelError = function(channel, error) {};
+  handler.channelClosed = function() {};
+  handler.channelHandleMultipleArrays = function() {};
+  handler.channelHandleArray = function() {};
+  browserChannel.setHandler(handler);
+
+  var channelDebug = new goog.net.ChannelDebug();
+  channelDebug.debug = function(message) {
+    debugToWindow(message);
+  };
+  browserChannel.setChannelDebug(channelDebug);
+}
+
+
+function tearDown() {
+  mockClock.dispose();
+  debugToWindow('<hr>');
+}
+
+
+function connect() {
+  browserChannel.connect('/test', '/bind', null);
+  mockClock.tick(0);
+  completeTestConnection();
+  completeForwardChannel();
+  completeBackChannel();
+}
+
+
+function completeTestConnection() {
+  completeForwardTestConnection();
+  completeBackTestConnection();
+  assertEquals(goog.net.BrowserChannel.State.OPENING,
+      browserChannel.getState());
+}
+
+
+function completeForwardTestConnection() {
+  browserChannel.connectionTest_.onRequestData(
+      browserChannel.connectionTest_,
+      '["b"]');
+  browserChannel.connectionTest_.onRequestComplete(
+      browserChannel.connectionTest_);
+  mockClock.tick(0);
+}
+
+
+function completeBackTestConnection() {
+  browserChannel.connectionTest_.onRequestData(
+      browserChannel.connectionTest_,
+      '11111');
+  browserChannel.connectionTest_.onRequestComplete(
+      browserChannel.connectionTest_);
+  mockClock.tick(0);
+}
+
+
+function completeForwardChannel() {
+  browserChannel.onRequestData(
+      browserChannel.forwardChannelRequest_,
+      '[[0,["c","1234567890ABCDEF"]]]');
+  browserChannel.onRequestComplete(
+      browserChannel.forwardChannelRequest_);
+  mockClock.tick(0);
+}
+
+
+function completeBackChannel() {
+  browserChannel.onRequestData(
+      browserChannel.backChannelRequest_,
+      '[[1,["foo"]]]');
+  browserChannel.onRequestComplete(
+      browserChannel.backChannelRequest_);
+  mockClock.tick(0);
+}
+
+
+function response() {
+  browserChannel.onRequestData(
+      browserChannel.forwardChannelRequest_,
+      goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE);
+  browserChannel.onRequestComplete(
+      browserChannel.forwardChannelRequest_);
+  mockClock.tick(0);
+}
+
+
+function receive(data) {
+  browserChannel.onRequestData(
+      browserChannel.backChannelRequest_,
+      '[[1,' + data + ']]');
+  browserChannel.onRequestComplete(
+      browserChannel.backChannelRequest_);
+  mockClock.tick(0);
+}
+
+
+function sendMap(key, value) {
+  var map = new goog.structs.Map();
+  map.set(key, value);
+  browserChannel.sendMap(map);
+  mockClock.tick(0);
+}
+
+
+function hasForwardChannel() {
+  return !!browserChannel.forwardChannelRequest_;
+}
+
+
+function hasBackChannel() {
+  return !!browserChannel.backChannelRequest_;
+}
+
+
+function assertHasForwardChannel() {
+  assertTrue('Forward channel missing.', hasForwardChannel());
+}
+
+
+function assertHasBackChannel() {
+  assertTrue('Back channel missing.', hasBackChannel());
+}
+
+
+function testConnect() {
+  connect();
+  assertEquals(goog.net.BrowserChannel.State.OPENED,
+      browserChannel.getState());
+}
+
+
+function testConnect_backChannelEstablished() {
+  connect();
+  assertHasBackChannel();
+}
+
+
+function testSendMap() {
+  connect();
+  sendMap('foo', 'bar');
+  response();
+}
+
+
+function testSendMap_twice() {
+  connect();
+  sendMap('foo1', 'bar1');
+  response();
+  sendMap('foo2', 'bar2');
+  response();
+}
+
+
+function testSendMap_andReceive() {
+  connect();
+  sendMap('foo', 'bar');
+  response();
+  receive('["the server reply"]');
+}
+
+
+function testReceive() {
+  connect();
+  receive('["message from server"]');
+  assertHasBackChannel();
+}
+
+
+function testReceive_twice() {
+  connect();
+  receive('["message one from server"]');
+  receive('["message two from server"]');
+  assertHasBackChannel();
+}
+
+
+function testReceive_andSendMap() {
+  connect();
+  receive('["the server reply"]');
+  sendMap('foo', 'bar');
+  response();
+  assertHasBackChannel();
+}
+
+
+function testBackChannelRemainsEstablished_afterSingleSendMap() {
+  connect();
+
+  sendMap('foo', 'bar');
+  response();
+  receive('["ack"]');
+
+  assertHasBackChannel();
+}
+
+
+function testBackChannelRemainsEstablished_afterDoubleSendMap() {
+  connect();
+
+  sendMap('foo1', 'bar1');
+  sendMap('foo2', 'bar2');
+  response();
+  receive('["ack"]');
+
+  // This assertion would fail prior to CL 13302660.
+  assertHasBackChannel();
+}
+
+
+</script>
+<div id="debug" style="font-size: small"></div>
+</body>
+</html>

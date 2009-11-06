@@ -34,7 +34,7 @@ limitations under the License.
 function NoObjectReusePriorityPool(opt_min, opt_max) {
   goog.structs.PriorityPool.call(this, opt_min, opt_max);
 };
-NoObjectReusePriorityPool.inherits(goog.structs.PriorityPool);
+goog.inherits(NoObjectReusePriorityPool, goog.structs.PriorityPool);
 
 NoObjectReusePriorityPool.prototype.objectCanBeReused = function(obj) {
   return false;
