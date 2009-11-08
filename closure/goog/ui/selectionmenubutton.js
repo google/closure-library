@@ -23,7 +23,7 @@
  */
 
 goog.provide('goog.ui.SelectionMenuButton');
-goog.provide('goog.ui.SelectionMenuButton.ActionType');
+goog.provide('goog.ui.SelectionMenuButton.SelectionState');
 
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Menu');
@@ -62,21 +62,31 @@ goog.inherits(goog.ui.SelectionMenuButton, goog.ui.MenuButton);
 
 
 /**
+ * Constants for menu action types.
+ * @enum {number}
+ */
+goog.ui.SelectionMenuButton.SelectionState = {
+  ALL: 0,
+  SOME: 1,
+  NONE: 2
+};
+
+
+/**
+ * Select button state
+ * @type {goog.ui.SelectionMenuButton.SelectionState}
+ * @private
+ */
+goog.ui.SelectionMenuButton.prototype.selectionState_ =
+    goog.ui.SelectionMenuButton.SelectionState.NONE;
+
+
+/**
  * Item renderer used for the first 2 items, 'select all' and 'select none'.
  * @type {goog.ui.MenuItemRenderer}
  * @private
  */
 goog.ui.SelectionMenuButton.prototype.initialItemRenderer_;
-
-
-/**
- * Constants for menu action types.
- * @enum {string}
- */
-goog.ui.SelectionMenuButton.ActionType = {
-  ALL: 'all',
-  NONE: 'none'
-};
 
 
 /**
@@ -120,11 +130,17 @@ goog.ui.SelectionMenuButton.prototype.getCheckbox_ = function() {
  */
 goog.ui.SelectionMenuButton.prototype.handleCheckboxClick_ = function(e) {
   if (e.target.checked) {
-    this.getItemAt(0).dispatchEvent(  // 'All' item
-        goog.ui.Component.EventType.ACTION);
+    this.setSelectionState(goog.ui.SelectionMenuButton.SelectionState.ALL);
+    if (this.getItemAt(0)) {
+      this.getItemAt(0).dispatchEvent(  // 'All' item
+          goog.ui.Component.EventType.ACTION);
+    }
   } else {
-    this.getItemAt(1).dispatchEvent(  // 'None' item
-        goog.ui.Component.EventType.ACTION);
+    this.setSelectionState(goog.ui.SelectionMenuButton.SelectionState.NONE);
+    if (this.getItemAt(1)) {
+      this.getItemAt(1).dispatchEvent(  // 'None' item
+          goog.ui.Component.EventType.ACTION);
+    }
   }
 };
 
@@ -135,10 +151,25 @@ goog.ui.SelectionMenuButton.prototype.handleCheckboxClick_ = function(e) {
  * @private
  */
 goog.ui.SelectionMenuButton.prototype.handleMenuAction_ = function(e) {
-  if (e.target.getModel() == goog.ui.SelectionMenuButton.ActionType.ALL) {
-    this.getCheckbox_().checked = true;
+  if (e.target.getModel() == goog.ui.SelectionMenuButton.SelectionState.ALL) {
+    this.setSelectionState(goog.ui.SelectionMenuButton.SelectionState.ALL);
   } else {
-    this.getCheckbox_().checked = false;
+    this.setSelectionState(goog.ui.SelectionMenuButton.SelectionState.NONE);
+  }
+};
+
+
+/**
+ * Set up events related to the menu items.
+ * @private
+ */
+goog.ui.SelectionMenuButton.prototype.addMenuEvent_ = function() {
+  if (this.getItemAt(0) && this.getItemAt(1)) {
+    this.getHandler().listen(this.getMenu(),
+                             goog.ui.Component.EventType.ACTION,
+                             this.handleMenuAction_);
+    this.getItemAt(0).setModel(goog.ui.SelectionMenuButton.SelectionState.ALL);
+    this.getItemAt(1).setModel(goog.ui.SelectionMenuButton.SelectionState.NONE);
   }
 };
 
@@ -151,11 +182,6 @@ goog.ui.SelectionMenuButton.prototype.addCheckboxEvent_ = function() {
   this.getHandler().listen(this.getCheckbox_(),
                            goog.events.EventType.CLICK,
                            this.handleCheckboxClick_);
-  this.getHandler().listen(this.getMenu(),
-                           goog.ui.Component.EventType.ACTION,
-                           this.handleMenuAction_);
-  this.getItemAt(0).setModel(goog.ui.SelectionMenuButton.ActionType.ALL);
-  this.getItemAt(1).setModel(goog.ui.SelectionMenuButton.ActionType.NONE);
 };
 
 
@@ -189,6 +215,7 @@ goog.ui.SelectionMenuButton.prototype.createDom = function() {
   this.addItem(itemNone);
 
   this.addCheckboxEvent_();
+  this.addMenuEvent_();
 };
 
 
@@ -196,6 +223,46 @@ goog.ui.SelectionMenuButton.prototype.createDom = function() {
 goog.ui.SelectionMenuButton.prototype.decorateInternal = function(element) {
   goog.ui.SelectionMenuButton.superClass_.decorateInternal.call(this, element);
   this.addCheckboxEvent_();
+  this.addMenuEvent_();
+};
+
+
+/** @inheritDoc */
+goog.ui.SelectionMenuButton.prototype.setMenu = function(menu) {
+  goog.ui.SelectionMenuButton.superClass_.setMenu.call(this, menu);
+  this.addMenuEvent_();
+};
+
+
+/**
+ * Set selection state and update checkbox.
+ * @param {goog.ui.SelectionMenuButton.SelectionState} state Selection state.
+ */
+goog.ui.SelectionMenuButton.prototype.setSelectionState = function(state) {
+  if (this.selectionState_ != state) {
+    var checkbox = this.getCheckbox_();
+    if (state == goog.ui.SelectionMenuButton.SelectionState.ALL) {
+      checkbox.checked = true;
+      goog.style.setOpacity(checkbox, 1);
+    } else if (state == goog.ui.SelectionMenuButton.SelectionState.SOME) {
+      checkbox.checked = true;
+      // TODO: Get UX help to style this
+      goog.style.setOpacity(checkbox, 0.5);
+    } else { // NONE
+      checkbox.checked = false;
+      goog.style.setOpacity(checkbox, 1);
+    }
+    this.selectionState_ = state;
+  }
+};
+
+
+/**
+* Get selection state.
+* @return {goog.ui.SelectionMenuButton.SelectionState} Selection state.
+*/
+goog.ui.SelectionMenuButton.prototype.getSelectionState = function() {
+  return this.selectionState_;
 };
 
 

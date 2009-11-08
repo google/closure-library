@@ -15,6 +15,7 @@
 /**
  * @fileoverview Tab bar UI component.
  *
+ * @see ../demos/tabbar.html
  */
 
 goog.provide('goog.ui.TabBar');

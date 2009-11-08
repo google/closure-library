@@ -51,7 +51,7 @@ var clonedSelectionMenuButtonDom;
 
 
 function setUp() {
-  clonedSelectionMenuButtonDom = 
+  clonedSelectionMenuButtonDom =
       goog.dom.$('demoSelectionMenuButton').cloneNode(true);
 
   selectionMenuButton = new goog.ui.SelectionMenuButton();
@@ -147,6 +147,40 @@ function testCheckboxReceiveEvents() {
 
 
 /**
+ * Tests that set/getSelectionState correctly changes the state
+ */
+function testSelectionState() {
+  var node = goog.dom.$('demoSelectionMenuButton');
+  selectionMenuButton.decorate(node);
+
+  var checkbox = goog.dom.$('demoCheckbox');
+  assertFalse('Checkbox must be unchecked (i.e. unselected)', checkbox.checked);
+
+  selectionMenuButton.setSelectionState(
+      goog.ui.SelectionMenuButton.SelectionState.ALL);
+  assertTrue('Checkbox should be checked when selecting all', checkbox.checked);
+  assertEquals('selectionState should be ALL',
+      selectionMenuButton.getSelectionState(),
+      goog.ui.SelectionMenuButton.SelectionState.ALL);
+
+  selectionMenuButton.setSelectionState(
+      goog.ui.SelectionMenuButton.SelectionState.NONE);
+  assertFalse('Checkbox should be checked when selecting all',
+      checkbox.checked);
+  assertEquals('selectionState should be NONE',
+      selectionMenuButton.getSelectionState(),
+      goog.ui.SelectionMenuButton.SelectionState.NONE);
+
+  selectionMenuButton.setSelectionState(
+      goog.ui.SelectionMenuButton.SelectionState.SOME);
+  assertTrue('Checkbox should be checked when selecting all', checkbox.checked);
+  assertEquals('selectionState should be SOME',
+      selectionMenuButton.getSelectionState(),
+      goog.ui.SelectionMenuButton.SelectionState.SOME);
+}
+
+
+/**
  * Tests that the checkbox gets disabled when the button is disabled
  */
 function testCheckboxDisabled() {
@@ -180,7 +214,7 @@ function testCheckboxClickMenuClosed() {
   selectionMenuButton.setOpen(true);
   goog.testing.events.fireClickSequence(checkbox);
   assertFalse('Menu must close when clickin checkbox', selectionMenuButton.isOpen());
-  
+
 }
 
 

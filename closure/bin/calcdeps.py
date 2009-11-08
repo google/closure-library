@@ -1,4 +1,4 @@
-#!/usr/bin/python2.4
+#!/usr/bin/env python
 #
 # Copyright 2006 Google Inc. All Rights Reserved.
 
@@ -195,8 +195,45 @@ def CalculateDependencies(paths, inputs):
       file_handle.close()
     result_list.append(input_file)
 
+  # All files depend on base.js, so put it first.
+  base_js_path = FindClosureBasePath(paths)
+  if base_js_path:
+    result_list.insert(0, base_js_path)
+  else:
+    logging.warning('Closure Library base.js not found.')
+
   return result_list
 
+
+def FindClosureBasePath(paths):
+  """Given a list of file paths, return Closure base.js path, if any.
+
+  Args:
+    paths: A list of paths.
+
+  Returns:
+    The path to Closure's base.js file, if found.
+  """
+
+  for path in paths:
+    pathname, filename = os.path.split(path)
+
+    if filename is 'base.js':
+      f = open(path)
+
+      is_base = False
+
+      # Sanity check that this is the Closure base file.  Check that this
+      # is where goog is defined.
+      for line in f:
+        if line.startswith('var goog = goog || {};'):
+          is_base = True
+        break
+
+      f.close()
+
+      if is_base:
+        return path
 
 def ResolveDependencies(require, search_hash, result_list, seen_list):
   """Takes a given requirement and resolves all of the dependencies for it.

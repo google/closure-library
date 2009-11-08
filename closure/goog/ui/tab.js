@@ -15,6 +15,7 @@
 /**
  * @fileoverview A tab control, designed to be used in {@link goog.ui.TabBar}s.
  *
+ * @see ../demos/tabbar.html
  */
 
 goog.provide('goog.ui.Tab');
