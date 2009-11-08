@@ -218,7 +218,7 @@ def FindClosureBasePath(paths):
   for path in paths:
     pathname, filename = os.path.split(path)
 
-    if filename is 'base.js':
+    if filename == 'base.js':
       f = open(path)
 
       is_base = False
@@ -228,7 +228,7 @@ def FindClosureBasePath(paths):
       for line in f:
         if line.startswith('var goog = goog || {};'):
           is_base = True
-        break
+          break
 
       f.close()
 
