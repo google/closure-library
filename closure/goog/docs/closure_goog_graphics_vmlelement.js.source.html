@@ -280,8 +280,8 @@
 <a name="line237"></a> * @param {goog.graphics.Path} path The path object to draw.
 <a name="line238"></a> */
 <a name="line239"></a>goog.graphics.VmlPathElement.prototype.setPath = function(path) {
-<a name="line240"></a>  this.getElement().setAttribute(
-<a name="line241"></a>      &#39;path&#39;, goog.graphics.VmlGraphics.getVmlPath(path));
+<a name="line240"></a>  goog.graphics.VmlGraphics.setAttribute(
+<a name="line241"></a>      this.getElement(), &#39;path&#39;, goog.graphics.VmlGraphics.getVmlPath(path));
 <a name="line242"></a>};
 <a name="line243"></a>
 <a name="line244"></a>
@@ -309,57 +309,58 @@
 <a name="line266"></a> * @param {string} text The text to draw.
 <a name="line267"></a> */
 <a name="line268"></a>goog.graphics.VmlTextElement.prototype.setText = function(text) {
-<a name="line269"></a>  this.getElement().childNodes[1].setAttribute(&#39;string&#39;, text);
-<a name="line270"></a>};
-<a name="line271"></a>
-<a name="line272"></a>/**
-<a name="line273"></a> * Thin wrapper for VML image elements.
-<a name="line274"></a> * This is an implementation of the goog.graphics.ImageElement interface.
-<a name="line275"></a> * You should not construct objects from this constructor. The graphics
-<a name="line276"></a> * will return the object for you.
-<a name="line277"></a> * @param {Element} element The DOM element to wrap.
-<a name="line278"></a> * @param {goog.graphics.VmlGraphics} graphics The graphics creating
-<a name="line279"></a> *     this element.
-<a name="line280"></a> * @constructor
-<a name="line281"></a> * @extends {goog.graphics.ImageElement}
-<a name="line282"></a> */
-<a name="line283"></a>goog.graphics.VmlImageElement = function(element, graphics) {
-<a name="line284"></a>  goog.graphics.ImageElement.call(this, element, graphics);
-<a name="line285"></a>};
-<a name="line286"></a>goog.inherits(goog.graphics.VmlImageElement, goog.graphics.ImageElement);
-<a name="line287"></a>
+<a name="line269"></a>  goog.graphics.VmlGraphics.setAttribute(this.getElement().childNodes[1],
+<a name="line270"></a>      &#39;string&#39;, text);
+<a name="line271"></a>};
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * Thin wrapper for VML image elements.
+<a name="line275"></a> * This is an implementation of the goog.graphics.ImageElement interface.
+<a name="line276"></a> * You should not construct objects from this constructor. The graphics
+<a name="line277"></a> * will return the object for you.
+<a name="line278"></a> * @param {Element} element The DOM element to wrap.
+<a name="line279"></a> * @param {goog.graphics.VmlGraphics} graphics The graphics creating
+<a name="line280"></a> *     this element.
+<a name="line281"></a> * @constructor
+<a name="line282"></a> * @extends {goog.graphics.ImageElement}
+<a name="line283"></a> */
+<a name="line284"></a>goog.graphics.VmlImageElement = function(element, graphics) {
+<a name="line285"></a>  goog.graphics.ImageElement.call(this, element, graphics);
+<a name="line286"></a>};
+<a name="line287"></a>goog.inherits(goog.graphics.VmlImageElement, goog.graphics.ImageElement);
 <a name="line288"></a>
-<a name="line289"></a>/**
-<a name="line290"></a> * Update the position of the image.
-<a name="line291"></a> * @param {number} x X coordinate (left).
-<a name="line292"></a> * @param {number} y Y coordinate (top).
-<a name="line293"></a> */
-<a name="line294"></a>goog.graphics.VmlImageElement.prototype.setPosition = function(x, y) {
-<a name="line295"></a>  var style = this.getElement().style;
-<a name="line296"></a>  style.left = goog.graphics.VmlGraphics.toPosPx(x);
-<a name="line297"></a>  style.top = goog.graphics.VmlGraphics.toPosPx(y);
-<a name="line298"></a>};
-<a name="line299"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * Update the position of the image.
+<a name="line292"></a> * @param {number} x X coordinate (left).
+<a name="line293"></a> * @param {number} y Y coordinate (top).
+<a name="line294"></a> */
+<a name="line295"></a>goog.graphics.VmlImageElement.prototype.setPosition = function(x, y) {
+<a name="line296"></a>  var style = this.getElement().style;
+<a name="line297"></a>  style.left = goog.graphics.VmlGraphics.toPosPx(x);
+<a name="line298"></a>  style.top = goog.graphics.VmlGraphics.toPosPx(y);
+<a name="line299"></a>};
 <a name="line300"></a>
-<a name="line301"></a>/**
-<a name="line302"></a> * Update the size of the image.
-<a name="line303"></a> * @param {number} width Width of rectangle.
-<a name="line304"></a> * @param {number} height Height of rectangle.
-<a name="line305"></a> */
-<a name="line306"></a>goog.graphics.VmlImageElement.prototype.setSize = function(width, height) {
-<a name="line307"></a>  var style = this.getElement().style;
-<a name="line308"></a>  style.width = goog.graphics.VmlGraphics.toPosPx(width);
-<a name="line309"></a>  style.height = goog.graphics.VmlGraphics.toPosPx(height);
-<a name="line310"></a>};
-<a name="line311"></a>
+<a name="line301"></a>
+<a name="line302"></a>/**
+<a name="line303"></a> * Update the size of the image.
+<a name="line304"></a> * @param {number} width Width of rectangle.
+<a name="line305"></a> * @param {number} height Height of rectangle.
+<a name="line306"></a> */
+<a name="line307"></a>goog.graphics.VmlImageElement.prototype.setSize = function(width, height) {
+<a name="line308"></a>  var style = this.getElement().style;
+<a name="line309"></a>  style.width = goog.graphics.VmlGraphics.toPosPx(width);
+<a name="line310"></a>  style.height = goog.graphics.VmlGraphics.toPosPx(height);
+<a name="line311"></a>};
 <a name="line312"></a>
-<a name="line313"></a>/**
-<a name="line314"></a> * Update the source of the image.
-<a name="line315"></a> * @param {string} src Source of the image.
-<a name="line316"></a> */
-<a name="line317"></a>goog.graphics.VmlImageElement.prototype.setSource = function(src) {
-<a name="line318"></a>  this.getElement().setAttribute(&#39;src&#39;, src);
-<a name="line319"></a>};
+<a name="line313"></a>
+<a name="line314"></a>/**
+<a name="line315"></a> * Update the source of the image.
+<a name="line316"></a> * @param {string} src Source of the image.
+<a name="line317"></a> */
+<a name="line318"></a>goog.graphics.VmlImageElement.prototype.setSource = function(src) {
+<a name="line319"></a>  goog.graphics.VmlGraphics.setAttribute(this.getElement(), &#39;src&#39;, src);
+<a name="line320"></a>};
 </pre>
 
 

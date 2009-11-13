@@ -62,648 +62,650 @@
 <a name="line19"></a> *
 <a name="line20"></a> * Provides extensible functionality for drag &amp; drop behaviour.
 <a name="line21"></a> *
-<a name="line22"></a> */
-<a name="line23"></a>
-<a name="line24"></a>
-<a name="line25"></a>goog.provide(&#39;goog.fx.DragEvent&#39;);
-<a name="line26"></a>goog.provide(&#39;goog.fx.Dragger&#39;);
-<a name="line27"></a>goog.provide(&#39;goog.fx.Dragger.EventType&#39;);
-<a name="line28"></a>
-<a name="line29"></a>goog.require(&#39;goog.dom&#39;);
-<a name="line30"></a>goog.require(&#39;goog.dom.TagName&#39;);
-<a name="line31"></a>goog.require(&#39;goog.events&#39;);
-<a name="line32"></a>goog.require(&#39;goog.events.BrowserEvent.MouseButton&#39;);
-<a name="line33"></a>goog.require(&#39;goog.events.Event&#39;);
-<a name="line34"></a>goog.require(&#39;goog.events.EventHandler&#39;);
-<a name="line35"></a>goog.require(&#39;goog.events.EventTarget&#39;);
-<a name="line36"></a>goog.require(&#39;goog.events.EventType&#39;);
-<a name="line37"></a>goog.require(&#39;goog.math.Coordinate&#39;);
-<a name="line38"></a>goog.require(&#39;goog.math.Rect&#39;);
-<a name="line39"></a>goog.require(&#39;goog.userAgent&#39;);
-<a name="line40"></a>
-<a name="line41"></a>
-<a name="line42"></a>/**
-<a name="line43"></a> * A class that allows mouse based dragging (moving) of an element
-<a name="line44"></a> *
-<a name="line45"></a> * @param {Element} target The element that will be dragged.
-<a name="line46"></a> * @param {Element} opt_handle An optional handle to control the drag, if null
-<a name="line47"></a> *     the target is used.
-<a name="line48"></a> * @param {goog.math.Rect} opt_limits Object containing left, top, width,
-<a name="line49"></a> *     and height.
-<a name="line50"></a> *
-<a name="line51"></a> * @extends {goog.events.EventTarget}
-<a name="line52"></a> * @constructor
-<a name="line53"></a> */
-<a name="line54"></a>goog.fx.Dragger = function(target, opt_handle, opt_limits) {
-<a name="line55"></a>  this.target = target;
-<a name="line56"></a>  this.handle = opt_handle || target;
-<a name="line57"></a>  this.limits = opt_limits || new goog.math.Rect(NaN, NaN, NaN, NaN);
-<a name="line58"></a>
-<a name="line59"></a>  this.document_ = goog.dom.getOwnerDocument(target);
-<a name="line60"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
-<a name="line61"></a>
-<a name="line62"></a>  // Add listeners
-<a name="line63"></a>  goog.events.listen(this.handle, goog.events.EventType.MOUSEDOWN,
-<a name="line64"></a>                     this.startDrag, false, this);
-<a name="line65"></a>};
-<a name="line66"></a>goog.inherits(goog.fx.Dragger, goog.events.EventTarget);
-<a name="line67"></a>
-<a name="line68"></a>
-<a name="line69"></a>/**
-<a name="line70"></a> * Whether setCapture is supported by the browser.
-<a name="line71"></a> * @type {boolean}
-<a name="line72"></a> * @private
-<a name="line73"></a> */
-<a name="line74"></a>goog.fx.Dragger.HAS_SET_CAPTURE_ =
-<a name="line75"></a>    // IE and Gecko after 1.9.3 has setCapture
-<a name="line76"></a>    // WebKit does not yet: https://bugs.webkit.org/show_bug.cgi?id=27330
-<a name="line77"></a>    goog.userAgent.IE ||
-<a name="line78"></a>    goog.userAgent.GECKO &amp;&amp; goog.userAgent.isVersion(&#39;1.9.3&#39;);
-<a name="line79"></a>
-<a name="line80"></a>
-<a name="line81"></a>/**
-<a name="line82"></a> * Constants for event names.
-<a name="line83"></a> * @enum {string}
-<a name="line84"></a> */
-<a name="line85"></a>goog.fx.Dragger.EventType = {
-<a name="line86"></a>  START: &#39;start&#39;,
-<a name="line87"></a>  BEFOREDRAG: &#39;beforedrag&#39;,
-<a name="line88"></a>  DRAG: &#39;drag&#39;,
-<a name="line89"></a>  END: &#39;end&#39;
-<a name="line90"></a>};
-<a name="line91"></a>
-<a name="line92"></a>
-<a name="line93"></a>/**
-<a name="line94"></a> * Reference to drag target element.
-<a name="line95"></a> * @type {Element}
-<a name="line96"></a> */
-<a name="line97"></a>goog.fx.Dragger.prototype.target;
-<a name="line98"></a>
-<a name="line99"></a>
-<a name="line100"></a>/**
-<a name="line101"></a> * Reference to the handler that inititates the drag.
-<a name="line102"></a> * @type {Element}
-<a name="line103"></a> */
-<a name="line104"></a>goog.fx.Dragger.prototype.handle;
-<a name="line105"></a>
-<a name="line106"></a>
-<a name="line107"></a>/**
-<a name="line108"></a> * Object representing the limits of the drag region.
-<a name="line109"></a> * @type {goog.math.Rect}
-<a name="line110"></a> */
-<a name="line111"></a>goog.fx.Dragger.prototype.limits;
-<a name="line112"></a>
-<a name="line113"></a>
-<a name="line114"></a>/**
-<a name="line115"></a> * Current x position of mouse relative to screen.
-<a name="line116"></a> * @type {number}
-<a name="line117"></a> */
-<a name="line118"></a>goog.fx.Dragger.prototype.screenX = 0;
-<a name="line119"></a>
-<a name="line120"></a>
-<a name="line121"></a>/**
-<a name="line122"></a> * Current y position of mouse relative to screen.
-<a name="line123"></a> * @type {number}
-<a name="line124"></a> */
-<a name="line125"></a>goog.fx.Dragger.prototype.screenY = 0;
-<a name="line126"></a>
-<a name="line127"></a>
-<a name="line128"></a>/**
-<a name="line129"></a> * The x position where the first mousedown occurred.
-<a name="line130"></a> * @type {number}
-<a name="line131"></a> */
-<a name="line132"></a>goog.fx.Dragger.prototype.startX = 0;
-<a name="line133"></a>
-<a name="line134"></a>
-<a name="line135"></a>/**
-<a name="line136"></a> * The y position where the first mousedown occurred.
-<a name="line137"></a> * @type {number}
-<a name="line138"></a> */
-<a name="line139"></a>goog.fx.Dragger.prototype.startY = 0;
-<a name="line140"></a>
-<a name="line141"></a>
-<a name="line142"></a>/**
-<a name="line143"></a> * Current x position of drag relative to target&#39;s parent.
-<a name="line144"></a> * @type {number}
-<a name="line145"></a> */
-<a name="line146"></a>goog.fx.Dragger.prototype.deltaX = 0;
-<a name="line147"></a>
-<a name="line148"></a>
-<a name="line149"></a>/**
-<a name="line150"></a> * Current y position of drag relative to target&#39;s parent.
-<a name="line151"></a> * @type {number}
-<a name="line152"></a> */
-<a name="line153"></a>goog.fx.Dragger.prototype.deltaY = 0;
-<a name="line154"></a>
-<a name="line155"></a>
-<a name="line156"></a>/**
-<a name="line157"></a> * The current page scroll value.
-<a name="line158"></a> * @type {goog.math.Coordinate}
-<a name="line159"></a> */
-<a name="line160"></a>goog.fx.Dragger.prototype.pageScroll;
-<a name="line161"></a>
-<a name="line162"></a>
-<a name="line163"></a>/**
-<a name="line164"></a> * Whether dragging is currently enabled.
-<a name="line165"></a> * @type {boolean}
-<a name="line166"></a> * @private
-<a name="line167"></a> */
-<a name="line168"></a>goog.fx.Dragger.prototype.enabled_ = true;
-<a name="line169"></a>
-<a name="line170"></a>
-<a name="line171"></a>/**
-<a name="line172"></a> * Whether object is currently being dragged.
-<a name="line173"></a> * @type {boolean}
-<a name="line174"></a> * @private
-<a name="line175"></a> */
-<a name="line176"></a>goog.fx.Dragger.prototype.dragging_ = false;
-<a name="line177"></a>
-<a name="line178"></a>
-<a name="line179"></a>/**
-<a name="line180"></a> * The amount of distance, in pixels, after which a mousedown is considered a
-<a name="line181"></a> * drag.
-<a name="line182"></a> * @type {number}
-<a name="line183"></a> * @private
-<a name="line184"></a> */
-<a name="line185"></a>goog.fx.Dragger.prototype.hysteresisDistanceSquared_ = 0;
-<a name="line186"></a>
-<a name="line187"></a>
-<a name="line188"></a>/**
-<a name="line189"></a> * Tiemstamp of when the mouse down occurred.
-<a name="line190"></a> * @type {number}
-<a name="line191"></a> * @private
-<a name="line192"></a> */
-<a name="line193"></a>goog.fx.Dragger.prototype.mouseDownTime_ = 0;
-<a name="line194"></a>
-<a name="line195"></a>
-<a name="line196"></a>/**
-<a name="line197"></a> * Reference to a document object to use for the events.
-<a name="line198"></a> * @type {Document}
-<a name="line199"></a> * @private
-<a name="line200"></a> */
-<a name="line201"></a>goog.fx.Dragger.prototype.document_;
-<a name="line202"></a>
-<a name="line203"></a>
-<a name="line204"></a>/**
-<a name="line205"></a> * Event handler used to simplify managing events.
-<a name="line206"></a> * @type {goog.events.EventHandler}
-<a name="line207"></a> * @private
-<a name="line208"></a> */
-<a name="line209"></a>goog.fx.Dragger.prototype.eventHandler_;
-<a name="line210"></a>
-<a name="line211"></a>
-<a name="line212"></a>/**
-<a name="line213"></a> * The SCROLL event target used to make drag element follow scrolling.
-<a name="line214"></a> * @type {EventTarget}
-<a name="line215"></a> * @private
-<a name="line216"></a> */
-<a name="line217"></a>goog.fx.Dragger.prototype.scrollTarget_;
-<a name="line218"></a>
-<a name="line219"></a>
-<a name="line220"></a>/**
-<a name="line221"></a> * Whether IE drag events cancelling is on.
-<a name="line222"></a> * @type {boolean}
-<a name="line223"></a> * @private
-<a name="line224"></a> */
-<a name="line225"></a>goog.fx.Dragger.prototype.ieDragStartCancellingOn_ = false;
-<a name="line226"></a>
-<a name="line227"></a>
-<a name="line228"></a>/**
-<a name="line229"></a> * Event handler used to cancel IE&#39;s &#39;ondragstart&#39; event.
-<a name="line230"></a> * @param {goog.events.BrowserEvent} e The drag-start event.
-<a name="line231"></a> */
-<a name="line232"></a>goog.fx.Dragger.cancelIeDragStart = function(e) {
-<a name="line233"></a>  e.preventDefault();
-<a name="line234"></a>};
-<a name="line235"></a>
-<a name="line236"></a>
-<a name="line237"></a>/**
-<a name="line238"></a> * Sets (or reset) the Drag limits after a Dragger is created.
-<a name="line239"></a> * @param {goog.math.Rect?} limits Object containing left, top, width,
-<a name="line240"></a> *     height for new Dragger limits.
-<a name="line241"></a> */
-<a name="line242"></a>goog.fx.Dragger.prototype.setLimits = function(limits) {
-<a name="line243"></a>  this.limits = limits || new goog.math.Rect(NaN, NaN, NaN, NaN);
-<a name="line244"></a>};
-<a name="line245"></a>
-<a name="line246"></a>
-<a name="line247"></a>/**
-<a name="line248"></a> * Sets the distance the user has to drag the element before a drag operation is
-<a name="line249"></a> * started.
-<a name="line250"></a> * @param {number} distance The number of pixels after which a mousedown and
-<a name="line251"></a> *     move is considered a drag.
-<a name="line252"></a> */
-<a name="line253"></a>goog.fx.Dragger.prototype.setHysteresis = function(distance) {
-<a name="line254"></a>  this.hysteresisDistanceSquared_ = Math.pow(distance, 2);
-<a name="line255"></a>};
-<a name="line256"></a>
-<a name="line257"></a>
-<a name="line258"></a>/**
-<a name="line259"></a> * Gets the distance the user has to drag the element before a drag operation is
-<a name="line260"></a> * started.
-<a name="line261"></a> * @return {number} distance The number of pixels after which a mousedown and
-<a name="line262"></a> *     move is considered a drag.
-<a name="line263"></a> */
-<a name="line264"></a>goog.fx.Dragger.prototype.getHysteresis = function() {
-<a name="line265"></a>  return Math.sqrt(this.hysteresisDistanceSquared_);
-<a name="line266"></a>};
-<a name="line267"></a>
-<a name="line268"></a>
-<a name="line269"></a>/**
-<a name="line270"></a> * Sets the SCROLL event target to make drag element follow scrolling.
-<a name="line271"></a> *
-<a name="line272"></a> * @param {EventTarget} scrollTarget The event target that dispatches SCROLL
-<a name="line273"></a> *     events.
-<a name="line274"></a> */
-<a name="line275"></a>goog.fx.Dragger.prototype.setScrollTarget = function(scrollTarget) {
-<a name="line276"></a>  this.scrollTarget_ = scrollTarget;
-<a name="line277"></a>};
-<a name="line278"></a>
-<a name="line279"></a>
-<a name="line280"></a>/**
-<a name="line281"></a> * Enables cancelling of built-in IE drag events.
-<a name="line282"></a> * @param {boolean} cancelIeDragStart Whether to enable cancelling of IE
-<a name="line283"></a> *     dragstart event.
-<a name="line284"></a> */
-<a name="line285"></a>goog.fx.Dragger.prototype.setCancelIeDragStart = function(cancelIeDragStart) {
-<a name="line286"></a>  this.ieDragStartCancellingOn_ = cancelIeDragStart;
-<a name="line287"></a>};
-<a name="line288"></a>
-<a name="line289"></a>
-<a name="line290"></a>/**
-<a name="line291"></a> * @return {boolean} Whether the dragger is enabled.
-<a name="line292"></a> */
-<a name="line293"></a>goog.fx.Dragger.prototype.getEnabled = function() {
-<a name="line294"></a>  return this.enabled_;
-<a name="line295"></a>};
-<a name="line296"></a>
-<a name="line297"></a>
-<a name="line298"></a>/**
-<a name="line299"></a> * Set whether dragger is enabled
-<a name="line300"></a> * @param {boolean} enabled Whether dragger is enabled.
-<a name="line301"></a> */
-<a name="line302"></a>goog.fx.Dragger.prototype.setEnabled = function(enabled) {
-<a name="line303"></a>  this.enabled_ = enabled;
-<a name="line304"></a>};
-<a name="line305"></a>
-<a name="line306"></a>
-<a name="line307"></a>/**
-<a name="line308"></a> * Tears down the drag object, removes listeners, and nullifies references.
-<a name="line309"></a> */
-<a name="line310"></a>goog.fx.Dragger.prototype.disposeInternal = function() {
-<a name="line311"></a>  goog.fx.Dragger.superClass_.disposeInternal.call(this);
-<a name="line312"></a>
-<a name="line313"></a>  goog.events.unlisten(this.handle, goog.events.EventType.MOUSEDOWN,
-<a name="line314"></a>                       this.startDrag, false, this);
-<a name="line315"></a>  this.eventHandler_.dispose();
-<a name="line316"></a>
-<a name="line317"></a>  delete this.target;
-<a name="line318"></a>  delete this.handle;
-<a name="line319"></a>  delete this.eventHandler_;
-<a name="line320"></a>};
-<a name="line321"></a>
-<a name="line322"></a>
-<a name="line323"></a>/**
-<a name="line324"></a> * Event handler that is used to start the drag
-<a name="line325"></a> * @param {goog.events.BrowserEvent} e Event object.
-<a name="line326"></a> */
-<a name="line327"></a>goog.fx.Dragger.prototype.startDrag = function(e) {
-<a name="line328"></a>  if (this.enabled_ &amp;&amp; !this.dragging_ &amp;&amp;
-<a name="line329"></a>      // Dragger.startDrag() can be called by AbstractDragDrop with a mousemove
-<a name="line330"></a>      // event and IE does not report pressed mouse buttons on mousemove, also
-<a name="line331"></a>      // it does not make sense to check for the button if user is already
-<a name="line332"></a>      // dragging.
-<a name="line333"></a>      (e.type != goog.events.EventType.MOUSEDOWN ||
-<a name="line334"></a>      e.isButton(goog.events.BrowserEvent.MouseButton.LEFT))) {
-<a name="line335"></a>    if (this.hysteresisDistanceSquared_ == 0) {
-<a name="line336"></a>      this.initializeDrag_(e);
-<a name="line337"></a>      if (this.dragging_) {
-<a name="line338"></a>        e.preventDefault();
-<a name="line339"></a>      } else {
-<a name="line340"></a>        // If the start drag is cancelled, don&#39;t setup for a drag.
-<a name="line341"></a>        return;
-<a name="line342"></a>      }
-<a name="line343"></a>    } else {
-<a name="line344"></a>      // Need to preventDefault for hysteresis to prevent page getting selected.
-<a name="line345"></a>      e.preventDefault();
-<a name="line346"></a>    }
-<a name="line347"></a>
-<a name="line348"></a>    this.setupDragHandlers();
+<a name="line22"></a> * @see ../demos/drag.html
+<a name="line23"></a> * @see ../demos/dragger.html
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.fx.DragEvent&#39;);
+<a name="line28"></a>goog.provide(&#39;goog.fx.Dragger&#39;);
+<a name="line29"></a>goog.provide(&#39;goog.fx.Dragger.EventType&#39;);
+<a name="line30"></a>
+<a name="line31"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line32"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line33"></a>goog.require(&#39;goog.events&#39;);
+<a name="line34"></a>goog.require(&#39;goog.events.BrowserEvent.MouseButton&#39;);
+<a name="line35"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line36"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line37"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line38"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line39"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line40"></a>goog.require(&#39;goog.math.Rect&#39;);
+<a name="line41"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * A class that allows mouse based dragging (moving) of an element
+<a name="line46"></a> *
+<a name="line47"></a> * @param {Element} target The element that will be dragged.
+<a name="line48"></a> * @param {Element} opt_handle An optional handle to control the drag, if null
+<a name="line49"></a> *     the target is used.
+<a name="line50"></a> * @param {goog.math.Rect} opt_limits Object containing left, top, width,
+<a name="line51"></a> *     and height.
+<a name="line52"></a> *
+<a name="line53"></a> * @extends {goog.events.EventTarget}
+<a name="line54"></a> * @constructor
+<a name="line55"></a> */
+<a name="line56"></a>goog.fx.Dragger = function(target, opt_handle, opt_limits) {
+<a name="line57"></a>  this.target = target;
+<a name="line58"></a>  this.handle = opt_handle || target;
+<a name="line59"></a>  this.limits = opt_limits || new goog.math.Rect(NaN, NaN, NaN, NaN);
+<a name="line60"></a>
+<a name="line61"></a>  this.document_ = goog.dom.getOwnerDocument(target);
+<a name="line62"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line63"></a>
+<a name="line64"></a>  // Add listeners
+<a name="line65"></a>  goog.events.listen(this.handle, goog.events.EventType.MOUSEDOWN,
+<a name="line66"></a>                     this.startDrag, false, this);
+<a name="line67"></a>};
+<a name="line68"></a>goog.inherits(goog.fx.Dragger, goog.events.EventTarget);
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Whether setCapture is supported by the browser.
+<a name="line73"></a> * @type {boolean}
+<a name="line74"></a> * @private
+<a name="line75"></a> */
+<a name="line76"></a>goog.fx.Dragger.HAS_SET_CAPTURE_ =
+<a name="line77"></a>    // IE and Gecko after 1.9.3 has setCapture
+<a name="line78"></a>    // WebKit does not yet: https://bugs.webkit.org/show_bug.cgi?id=27330
+<a name="line79"></a>    goog.userAgent.IE ||
+<a name="line80"></a>    goog.userAgent.GECKO &amp;&amp; goog.userAgent.isVersion(&#39;1.9.3&#39;);
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Constants for event names.
+<a name="line85"></a> * @enum {string}
+<a name="line86"></a> */
+<a name="line87"></a>goog.fx.Dragger.EventType = {
+<a name="line88"></a>  START: &#39;start&#39;,
+<a name="line89"></a>  BEFOREDRAG: &#39;beforedrag&#39;,
+<a name="line90"></a>  DRAG: &#39;drag&#39;,
+<a name="line91"></a>  END: &#39;end&#39;
+<a name="line92"></a>};
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * Reference to drag target element.
+<a name="line97"></a> * @type {Element}
+<a name="line98"></a> */
+<a name="line99"></a>goog.fx.Dragger.prototype.target;
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Reference to the handler that inititates the drag.
+<a name="line104"></a> * @type {Element}
+<a name="line105"></a> */
+<a name="line106"></a>goog.fx.Dragger.prototype.handle;
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Object representing the limits of the drag region.
+<a name="line111"></a> * @type {goog.math.Rect}
+<a name="line112"></a> */
+<a name="line113"></a>goog.fx.Dragger.prototype.limits;
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Current x position of mouse relative to screen.
+<a name="line118"></a> * @type {number}
+<a name="line119"></a> */
+<a name="line120"></a>goog.fx.Dragger.prototype.screenX = 0;
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Current y position of mouse relative to screen.
+<a name="line125"></a> * @type {number}
+<a name="line126"></a> */
+<a name="line127"></a>goog.fx.Dragger.prototype.screenY = 0;
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * The x position where the first mousedown occurred.
+<a name="line132"></a> * @type {number}
+<a name="line133"></a> */
+<a name="line134"></a>goog.fx.Dragger.prototype.startX = 0;
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * The y position where the first mousedown occurred.
+<a name="line139"></a> * @type {number}
+<a name="line140"></a> */
+<a name="line141"></a>goog.fx.Dragger.prototype.startY = 0;
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Current x position of drag relative to target&#39;s parent.
+<a name="line146"></a> * @type {number}
+<a name="line147"></a> */
+<a name="line148"></a>goog.fx.Dragger.prototype.deltaX = 0;
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Current y position of drag relative to target&#39;s parent.
+<a name="line153"></a> * @type {number}
+<a name="line154"></a> */
+<a name="line155"></a>goog.fx.Dragger.prototype.deltaY = 0;
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * The current page scroll value.
+<a name="line160"></a> * @type {goog.math.Coordinate}
+<a name="line161"></a> */
+<a name="line162"></a>goog.fx.Dragger.prototype.pageScroll;
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * Whether dragging is currently enabled.
+<a name="line167"></a> * @type {boolean}
+<a name="line168"></a> * @private
+<a name="line169"></a> */
+<a name="line170"></a>goog.fx.Dragger.prototype.enabled_ = true;
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Whether object is currently being dragged.
+<a name="line175"></a> * @type {boolean}
+<a name="line176"></a> * @private
+<a name="line177"></a> */
+<a name="line178"></a>goog.fx.Dragger.prototype.dragging_ = false;
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * The amount of distance, in pixels, after which a mousedown is considered a
+<a name="line183"></a> * drag.
+<a name="line184"></a> * @type {number}
+<a name="line185"></a> * @private
+<a name="line186"></a> */
+<a name="line187"></a>goog.fx.Dragger.prototype.hysteresisDistanceSquared_ = 0;
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * Tiemstamp of when the mouse down occurred.
+<a name="line192"></a> * @type {number}
+<a name="line193"></a> * @private
+<a name="line194"></a> */
+<a name="line195"></a>goog.fx.Dragger.prototype.mouseDownTime_ = 0;
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Reference to a document object to use for the events.
+<a name="line200"></a> * @type {Document}
+<a name="line201"></a> * @private
+<a name="line202"></a> */
+<a name="line203"></a>goog.fx.Dragger.prototype.document_;
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Event handler used to simplify managing events.
+<a name="line208"></a> * @type {goog.events.EventHandler}
+<a name="line209"></a> * @private
+<a name="line210"></a> */
+<a name="line211"></a>goog.fx.Dragger.prototype.eventHandler_;
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/**
+<a name="line215"></a> * The SCROLL event target used to make drag element follow scrolling.
+<a name="line216"></a> * @type {EventTarget}
+<a name="line217"></a> * @private
+<a name="line218"></a> */
+<a name="line219"></a>goog.fx.Dragger.prototype.scrollTarget_;
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * Whether IE drag events cancelling is on.
+<a name="line224"></a> * @type {boolean}
+<a name="line225"></a> * @private
+<a name="line226"></a> */
+<a name="line227"></a>goog.fx.Dragger.prototype.ieDragStartCancellingOn_ = false;
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Event handler used to cancel IE&#39;s &#39;ondragstart&#39; event.
+<a name="line232"></a> * @param {goog.events.BrowserEvent} e The drag-start event.
+<a name="line233"></a> */
+<a name="line234"></a>goog.fx.Dragger.cancelIeDragStart = function(e) {
+<a name="line235"></a>  e.preventDefault();
+<a name="line236"></a>};
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>/**
+<a name="line240"></a> * Sets (or reset) the Drag limits after a Dragger is created.
+<a name="line241"></a> * @param {goog.math.Rect?} limits Object containing left, top, width,
+<a name="line242"></a> *     height for new Dragger limits.
+<a name="line243"></a> */
+<a name="line244"></a>goog.fx.Dragger.prototype.setLimits = function(limits) {
+<a name="line245"></a>  this.limits = limits || new goog.math.Rect(NaN, NaN, NaN, NaN);
+<a name="line246"></a>};
+<a name="line247"></a>
+<a name="line248"></a>
+<a name="line249"></a>/**
+<a name="line250"></a> * Sets the distance the user has to drag the element before a drag operation is
+<a name="line251"></a> * started.
+<a name="line252"></a> * @param {number} distance The number of pixels after which a mousedown and
+<a name="line253"></a> *     move is considered a drag.
+<a name="line254"></a> */
+<a name="line255"></a>goog.fx.Dragger.prototype.setHysteresis = function(distance) {
+<a name="line256"></a>  this.hysteresisDistanceSquared_ = Math.pow(distance, 2);
+<a name="line257"></a>};
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/**
+<a name="line261"></a> * Gets the distance the user has to drag the element before a drag operation is
+<a name="line262"></a> * started.
+<a name="line263"></a> * @return {number} distance The number of pixels after which a mousedown and
+<a name="line264"></a> *     move is considered a drag.
+<a name="line265"></a> */
+<a name="line266"></a>goog.fx.Dragger.prototype.getHysteresis = function() {
+<a name="line267"></a>  return Math.sqrt(this.hysteresisDistanceSquared_);
+<a name="line268"></a>};
+<a name="line269"></a>
+<a name="line270"></a>
+<a name="line271"></a>/**
+<a name="line272"></a> * Sets the SCROLL event target to make drag element follow scrolling.
+<a name="line273"></a> *
+<a name="line274"></a> * @param {EventTarget} scrollTarget The event target that dispatches SCROLL
+<a name="line275"></a> *     events.
+<a name="line276"></a> */
+<a name="line277"></a>goog.fx.Dragger.prototype.setScrollTarget = function(scrollTarget) {
+<a name="line278"></a>  this.scrollTarget_ = scrollTarget;
+<a name="line279"></a>};
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>/**
+<a name="line283"></a> * Enables cancelling of built-in IE drag events.
+<a name="line284"></a> * @param {boolean} cancelIeDragStart Whether to enable cancelling of IE
+<a name="line285"></a> *     dragstart event.
+<a name="line286"></a> */
+<a name="line287"></a>goog.fx.Dragger.prototype.setCancelIeDragStart = function(cancelIeDragStart) {
+<a name="line288"></a>  this.ieDragStartCancellingOn_ = cancelIeDragStart;
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * @return {boolean} Whether the dragger is enabled.
+<a name="line294"></a> */
+<a name="line295"></a>goog.fx.Dragger.prototype.getEnabled = function() {
+<a name="line296"></a>  return this.enabled_;
+<a name="line297"></a>};
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * Set whether dragger is enabled
+<a name="line302"></a> * @param {boolean} enabled Whether dragger is enabled.
+<a name="line303"></a> */
+<a name="line304"></a>goog.fx.Dragger.prototype.setEnabled = function(enabled) {
+<a name="line305"></a>  this.enabled_ = enabled;
+<a name="line306"></a>};
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>/**
+<a name="line310"></a> * Tears down the drag object, removes listeners, and nullifies references.
+<a name="line311"></a> */
+<a name="line312"></a>goog.fx.Dragger.prototype.disposeInternal = function() {
+<a name="line313"></a>  goog.fx.Dragger.superClass_.disposeInternal.call(this);
+<a name="line314"></a>
+<a name="line315"></a>  goog.events.unlisten(this.handle, goog.events.EventType.MOUSEDOWN,
+<a name="line316"></a>                       this.startDrag, false, this);
+<a name="line317"></a>  this.eventHandler_.dispose();
+<a name="line318"></a>
+<a name="line319"></a>  delete this.target;
+<a name="line320"></a>  delete this.handle;
+<a name="line321"></a>  delete this.eventHandler_;
+<a name="line322"></a>};
+<a name="line323"></a>
+<a name="line324"></a>
+<a name="line325"></a>/**
+<a name="line326"></a> * Event handler that is used to start the drag
+<a name="line327"></a> * @param {goog.events.BrowserEvent} e Event object.
+<a name="line328"></a> */
+<a name="line329"></a>goog.fx.Dragger.prototype.startDrag = function(e) {
+<a name="line330"></a>  if (this.enabled_ &amp;&amp; !this.dragging_ &amp;&amp;
+<a name="line331"></a>      // Dragger.startDrag() can be called by AbstractDragDrop with a mousemove
+<a name="line332"></a>      // event and IE does not report pressed mouse buttons on mousemove, also
+<a name="line333"></a>      // it does not make sense to check for the button if user is already
+<a name="line334"></a>      // dragging.
+<a name="line335"></a>      (e.type != goog.events.EventType.MOUSEDOWN ||
+<a name="line336"></a>      e.isButton(goog.events.BrowserEvent.MouseButton.LEFT))) {
+<a name="line337"></a>    if (this.hysteresisDistanceSquared_ == 0) {
+<a name="line338"></a>      this.initializeDrag_(e);
+<a name="line339"></a>      if (this.dragging_) {
+<a name="line340"></a>        e.preventDefault();
+<a name="line341"></a>      } else {
+<a name="line342"></a>        // If the start drag is cancelled, don&#39;t setup for a drag.
+<a name="line343"></a>        return;
+<a name="line344"></a>      }
+<a name="line345"></a>    } else {
+<a name="line346"></a>      // Need to preventDefault for hysteresis to prevent page getting selected.
+<a name="line347"></a>      e.preventDefault();
+<a name="line348"></a>    }
 <a name="line349"></a>
-<a name="line350"></a>    this.screenX = this.startX = e.screenX;
-<a name="line351"></a>    this.screenY = this.startY = e.screenY;
-<a name="line352"></a>    this.deltaX = this.target.offsetLeft;
-<a name="line353"></a>    this.deltaY = this.target.offsetTop;
-<a name="line354"></a>    this.pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
-<a name="line355"></a>
-<a name="line356"></a>    this.mouseDownTime_ = goog.now();
-<a name="line357"></a>  }
-<a name="line358"></a>};
-<a name="line359"></a>
-<a name="line360"></a>
-<a name="line361"></a>/**
-<a name="line362"></a> * Sets up event handlers when dragging starts.
-<a name="line363"></a> * @protected
-<a name="line364"></a> */
-<a name="line365"></a>goog.fx.Dragger.prototype.setupDragHandlers = function() {
-<a name="line366"></a>  var doc = this.document_;
-<a name="line367"></a>  var docEl = doc.documentElement;
-<a name="line368"></a>  this.eventHandler_.listen(doc, goog.events.EventType.MOUSEMOVE,
-<a name="line369"></a>                            this.mouseMoved_, true);
-<a name="line370"></a>  this.eventHandler_.listen(doc, goog.events.EventType.MOUSEUP,
-<a name="line371"></a>                            this.endDrag, true);
-<a name="line372"></a>
-<a name="line373"></a>  if (goog.fx.Dragger.HAS_SET_CAPTURE_) {
-<a name="line374"></a>    docEl.setCapture(false);
-<a name="line375"></a>    this.eventHandler_.listen(docEl,
-<a name="line376"></a>                              goog.events.EventType.LOSECAPTURE,
-<a name="line377"></a>                              this.endDrag);
-<a name="line378"></a>  } else {
-<a name="line379"></a>    // Make sure we stop the dragging if the window loses focus.
-<a name="line380"></a>    // Don&#39;t use capture in this listener because we only want to end the drag
-<a name="line381"></a>    // if the actual window loses focus. Since blur events do not bubble we use
-<a name="line382"></a>    // a bubbling listener on the window.
-<a name="line383"></a>    this.eventHandler_.listen(goog.dom.getWindow(doc),
-<a name="line384"></a>                              goog.events.EventType.BLUR,
-<a name="line385"></a>                              this.endDrag);
-<a name="line386"></a>  }
-<a name="line387"></a>
-<a name="line388"></a>  if (goog.userAgent.IE &amp;&amp; this.ieDragStartCancellingOn_) {
-<a name="line389"></a>    this.eventHandler_.listen(doc, goog.events.EventType.DRAGSTART,
-<a name="line390"></a>                              goog.fx.Dragger.cancelIeDragStart);
-<a name="line391"></a>  }
-<a name="line392"></a>
-<a name="line393"></a>  if (this.scrollTarget_) {
-<a name="line394"></a>    this.eventHandler_.listen(this.scrollTarget_, goog.events.EventType.SCROLL,
-<a name="line395"></a>                              this.onScroll_, true);
-<a name="line396"></a>  }
-<a name="line397"></a>};
-<a name="line398"></a>
-<a name="line399"></a>
-<a name="line400"></a>/**
-<a name="line401"></a> * Event handler that is used to start the drag
-<a name="line402"></a> * @param {goog.events.BrowserEvent|goog.events.Event} e Event object.
-<a name="line403"></a> * @private
-<a name="line404"></a> */
-<a name="line405"></a>goog.fx.Dragger.prototype.initializeDrag_ = function(e) {
-<a name="line406"></a>  var rv = this.dispatchEvent(new goog.fx.DragEvent(
-<a name="line407"></a>      goog.fx.Dragger.EventType.START, this, e.clientX, e.clientY,
-<a name="line408"></a>                                /** @type {goog.events.BrowserEvent} */(e)));
-<a name="line409"></a>  if (rv !== false) {
-<a name="line410"></a>    this.dragging_ = true;
-<a name="line411"></a>  }
-<a name="line412"></a>};
-<a name="line413"></a>
-<a name="line414"></a>
-<a name="line415"></a>/**
-<a name="line416"></a> * Event handler that is used to end the drag
-<a name="line417"></a> * @param {goog.events.BrowserEvent} e Event object.
-<a name="line418"></a> * @param {boolean} opt_dragCanceled Whether the drag has been canceled.
-<a name="line419"></a> */
-<a name="line420"></a>goog.fx.Dragger.prototype.endDrag = function(e, opt_dragCanceled) {
-<a name="line421"></a>  this.eventHandler_.removeAll();
-<a name="line422"></a>
-<a name="line423"></a>  if (goog.fx.Dragger.HAS_SET_CAPTURE_) {
-<a name="line424"></a>    this.document_.releaseCapture();
-<a name="line425"></a>  }
-<a name="line426"></a>
-<a name="line427"></a>  if (this.dragging_) {
-<a name="line428"></a>    this.dragging_ = false;
-<a name="line429"></a>
-<a name="line430"></a>    var x = this.limitX(this.deltaX);
-<a name="line431"></a>    var y = this.limitY(this.deltaY);
-<a name="line432"></a>
-<a name="line433"></a>    this.dispatchEvent(new goog.fx.DragEvent(
-<a name="line434"></a>        goog.fx.Dragger.EventType.END, this, e.clientX, e.clientY, e, x, y,
-<a name="line435"></a>        opt_dragCanceled));
-<a name="line436"></a>  }
-<a name="line437"></a>};
-<a name="line438"></a>
-<a name="line439"></a>
-<a name="line440"></a>/**
-<a name="line441"></a> * Event handler that is used to end the drag by cancelling it.
-<a name="line442"></a> * @param {goog.events.BrowserEvent} e Event object.
-<a name="line443"></a> */
-<a name="line444"></a>goog.fx.Dragger.prototype.endDragCancel = function(e) {
-<a name="line445"></a>  this.endDrag(e, true);
-<a name="line446"></a>};
-<a name="line447"></a>
-<a name="line448"></a>
-<a name="line449"></a>/**
-<a name="line450"></a> * Event handler that is used on mouse move to update the drag
-<a name="line451"></a> * @param {goog.events.BrowserEvent} e Event object.
-<a name="line452"></a> * @private
-<a name="line453"></a> */
-<a name="line454"></a>goog.fx.Dragger.prototype.mouseMoved_ = function(e) {
-<a name="line455"></a>  if (this.enabled_) {
-<a name="line456"></a>    var dx = e.screenX - this.screenX;
-<a name="line457"></a>    var dy = e.screenY - this.screenY;
-<a name="line458"></a>    this.screenX = e.screenX;
-<a name="line459"></a>    this.screenY = e.screenY;
-<a name="line460"></a>
-<a name="line461"></a>    if (!this.dragging_) {
-<a name="line462"></a>      var diffX = this.startX - this.screenX;
-<a name="line463"></a>      var diffY = this.startY - this.screenY;
-<a name="line464"></a>      var distance = diffX * diffX + diffY * diffY;
-<a name="line465"></a>      if (distance &gt; this.hysteresisDistanceSquared_) {
-<a name="line466"></a>        this.initializeDrag_(e);
-<a name="line467"></a>        if (!this.dragging_) {
-<a name="line468"></a>          // If the start drag is cancelled, stop trying to drag.
-<a name="line469"></a>          this.endDrag(e);
-<a name="line470"></a>          return;
-<a name="line471"></a>        }
-<a name="line472"></a>      }
-<a name="line473"></a>    }
-<a name="line474"></a>
-<a name="line475"></a>    var pos = this.calculatePosition_(dx, dy);
-<a name="line476"></a>    var x = pos.x;
-<a name="line477"></a>    var y = pos.y;
-<a name="line478"></a>
-<a name="line479"></a>    if (this.dragging_) {
+<a name="line350"></a>    this.setupDragHandlers();
+<a name="line351"></a>
+<a name="line352"></a>    this.screenX = this.startX = e.screenX;
+<a name="line353"></a>    this.screenY = this.startY = e.screenY;
+<a name="line354"></a>    this.deltaX = this.target.offsetLeft;
+<a name="line355"></a>    this.deltaY = this.target.offsetTop;
+<a name="line356"></a>    this.pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
+<a name="line357"></a>
+<a name="line358"></a>    this.mouseDownTime_ = goog.now();
+<a name="line359"></a>  }
+<a name="line360"></a>};
+<a name="line361"></a>
+<a name="line362"></a>
+<a name="line363"></a>/**
+<a name="line364"></a> * Sets up event handlers when dragging starts.
+<a name="line365"></a> * @protected
+<a name="line366"></a> */
+<a name="line367"></a>goog.fx.Dragger.prototype.setupDragHandlers = function() {
+<a name="line368"></a>  var doc = this.document_;
+<a name="line369"></a>  var docEl = doc.documentElement;
+<a name="line370"></a>  this.eventHandler_.listen(doc, goog.events.EventType.MOUSEMOVE,
+<a name="line371"></a>                            this.mouseMoved_, true);
+<a name="line372"></a>  this.eventHandler_.listen(doc, goog.events.EventType.MOUSEUP,
+<a name="line373"></a>                            this.endDrag, true);
+<a name="line374"></a>
+<a name="line375"></a>  if (goog.fx.Dragger.HAS_SET_CAPTURE_) {
+<a name="line376"></a>    docEl.setCapture(false);
+<a name="line377"></a>    this.eventHandler_.listen(docEl,
+<a name="line378"></a>                              goog.events.EventType.LOSECAPTURE,
+<a name="line379"></a>                              this.endDrag);
+<a name="line380"></a>  } else {
+<a name="line381"></a>    // Make sure we stop the dragging if the window loses focus.
+<a name="line382"></a>    // Don&#39;t use capture in this listener because we only want to end the drag
+<a name="line383"></a>    // if the actual window loses focus. Since blur events do not bubble we use
+<a name="line384"></a>    // a bubbling listener on the window.
+<a name="line385"></a>    this.eventHandler_.listen(goog.dom.getWindow(doc),
+<a name="line386"></a>                              goog.events.EventType.BLUR,
+<a name="line387"></a>                              this.endDrag);
+<a name="line388"></a>  }
+<a name="line389"></a>
+<a name="line390"></a>  if (goog.userAgent.IE &amp;&amp; this.ieDragStartCancellingOn_) {
+<a name="line391"></a>    this.eventHandler_.listen(doc, goog.events.EventType.DRAGSTART,
+<a name="line392"></a>                              goog.fx.Dragger.cancelIeDragStart);
+<a name="line393"></a>  }
+<a name="line394"></a>
+<a name="line395"></a>  if (this.scrollTarget_) {
+<a name="line396"></a>    this.eventHandler_.listen(this.scrollTarget_, goog.events.EventType.SCROLL,
+<a name="line397"></a>                              this.onScroll_, true);
+<a name="line398"></a>  }
+<a name="line399"></a>};
+<a name="line400"></a>
+<a name="line401"></a>
+<a name="line402"></a>/**
+<a name="line403"></a> * Event handler that is used to start the drag
+<a name="line404"></a> * @param {goog.events.BrowserEvent|goog.events.Event} e Event object.
+<a name="line405"></a> * @private
+<a name="line406"></a> */
+<a name="line407"></a>goog.fx.Dragger.prototype.initializeDrag_ = function(e) {
+<a name="line408"></a>  var rv = this.dispatchEvent(new goog.fx.DragEvent(
+<a name="line409"></a>      goog.fx.Dragger.EventType.START, this, e.clientX, e.clientY,
+<a name="line410"></a>                                /** @type {goog.events.BrowserEvent} */(e)));
+<a name="line411"></a>  if (rv !== false) {
+<a name="line412"></a>    this.dragging_ = true;
+<a name="line413"></a>  }
+<a name="line414"></a>};
+<a name="line415"></a>
+<a name="line416"></a>
+<a name="line417"></a>/**
+<a name="line418"></a> * Event handler that is used to end the drag
+<a name="line419"></a> * @param {goog.events.BrowserEvent} e Event object.
+<a name="line420"></a> * @param {boolean} opt_dragCanceled Whether the drag has been canceled.
+<a name="line421"></a> */
+<a name="line422"></a>goog.fx.Dragger.prototype.endDrag = function(e, opt_dragCanceled) {
+<a name="line423"></a>  this.eventHandler_.removeAll();
+<a name="line424"></a>
+<a name="line425"></a>  if (goog.fx.Dragger.HAS_SET_CAPTURE_) {
+<a name="line426"></a>    this.document_.releaseCapture();
+<a name="line427"></a>  }
+<a name="line428"></a>
+<a name="line429"></a>  if (this.dragging_) {
+<a name="line430"></a>    this.dragging_ = false;
+<a name="line431"></a>
+<a name="line432"></a>    var x = this.limitX(this.deltaX);
+<a name="line433"></a>    var y = this.limitY(this.deltaY);
+<a name="line434"></a>
+<a name="line435"></a>    this.dispatchEvent(new goog.fx.DragEvent(
+<a name="line436"></a>        goog.fx.Dragger.EventType.END, this, e.clientX, e.clientY, e, x, y,
+<a name="line437"></a>        opt_dragCanceled));
+<a name="line438"></a>  }
+<a name="line439"></a>};
+<a name="line440"></a>
+<a name="line441"></a>
+<a name="line442"></a>/**
+<a name="line443"></a> * Event handler that is used to end the drag by cancelling it.
+<a name="line444"></a> * @param {goog.events.BrowserEvent} e Event object.
+<a name="line445"></a> */
+<a name="line446"></a>goog.fx.Dragger.prototype.endDragCancel = function(e) {
+<a name="line447"></a>  this.endDrag(e, true);
+<a name="line448"></a>};
+<a name="line449"></a>
+<a name="line450"></a>
+<a name="line451"></a>/**
+<a name="line452"></a> * Event handler that is used on mouse move to update the drag
+<a name="line453"></a> * @param {goog.events.BrowserEvent} e Event object.
+<a name="line454"></a> * @private
+<a name="line455"></a> */
+<a name="line456"></a>goog.fx.Dragger.prototype.mouseMoved_ = function(e) {
+<a name="line457"></a>  if (this.enabled_) {
+<a name="line458"></a>    var dx = e.screenX - this.screenX;
+<a name="line459"></a>    var dy = e.screenY - this.screenY;
+<a name="line460"></a>    this.screenX = e.screenX;
+<a name="line461"></a>    this.screenY = e.screenY;
+<a name="line462"></a>
+<a name="line463"></a>    if (!this.dragging_) {
+<a name="line464"></a>      var diffX = this.startX - this.screenX;
+<a name="line465"></a>      var diffY = this.startY - this.screenY;
+<a name="line466"></a>      var distance = diffX * diffX + diffY * diffY;
+<a name="line467"></a>      if (distance &gt; this.hysteresisDistanceSquared_) {
+<a name="line468"></a>        this.initializeDrag_(e);
+<a name="line469"></a>        if (!this.dragging_) {
+<a name="line470"></a>          // If the start drag is cancelled, stop trying to drag.
+<a name="line471"></a>          this.endDrag(e);
+<a name="line472"></a>          return;
+<a name="line473"></a>        }
+<a name="line474"></a>      }
+<a name="line475"></a>    }
+<a name="line476"></a>
+<a name="line477"></a>    var pos = this.calculatePosition_(dx, dy);
+<a name="line478"></a>    var x = pos.x;
+<a name="line479"></a>    var y = pos.y;
 <a name="line480"></a>
-<a name="line481"></a>      var rv = this.dispatchEvent(new goog.fx.DragEvent(
-<a name="line482"></a>          goog.fx.Dragger.EventType.BEFOREDRAG, this, e.clientX, e.clientY,
-<a name="line483"></a>          e, x, y));
-<a name="line484"></a>
-<a name="line485"></a>      // Only do the defaultAction and dispatch drag event if predrag didn&#39;t
-<a name="line486"></a>      // prevent default
-<a name="line487"></a>      if (rv !== false) {
-<a name="line488"></a>        this.doDrag(e, x, y, false);
-<a name="line489"></a>        e.preventDefault();
-<a name="line490"></a>      }
-<a name="line491"></a>    }
-<a name="line492"></a>  }
-<a name="line493"></a>};
-<a name="line494"></a>
-<a name="line495"></a>
-<a name="line496"></a>/**
-<a name="line497"></a> * Calculates the drag position.
-<a name="line498"></a> *
-<a name="line499"></a> * @param {number} dx The horizontal movement delta.
-<a name="line500"></a> * @param {number} dy The vertical movement delta.
-<a name="line501"></a> * @return {goog.math.Coordinate} The newly calculated drag element position.
-<a name="line502"></a> * @private
-<a name="line503"></a> */
-<a name="line504"></a>goog.fx.Dragger.prototype.calculatePosition_ = function(dx, dy) {
-<a name="line505"></a>  // Update the position for any change in body scrolling
-<a name="line506"></a>  var pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
-<a name="line507"></a>  dx += pageScroll.x - this.pageScroll.x;
-<a name="line508"></a>  dy += pageScroll.y - this.pageScroll.y;
-<a name="line509"></a>  this.pageScroll = pageScroll;
-<a name="line510"></a>
-<a name="line511"></a>  this.deltaX += dx;
-<a name="line512"></a>  this.deltaY += dy;
-<a name="line513"></a>
-<a name="line514"></a>  var x = this.limitX(this.deltaX);
-<a name="line515"></a>  var y = this.limitY(this.deltaY);
-<a name="line516"></a>  return new goog.math.Coordinate(x, y);
-<a name="line517"></a>};
-<a name="line518"></a>
-<a name="line519"></a>
-<a name="line520"></a>/**
-<a name="line521"></a> * Event handler for scroll target scrolling.
-<a name="line522"></a> * @param {goog.events.BrowserEvent} e The event.
-<a name="line523"></a> * @private
-<a name="line524"></a> */
-<a name="line525"></a>goog.fx.Dragger.prototype.onScroll_ = function(e) {
-<a name="line526"></a>  var pos = this.calculatePosition_(0, 0);
-<a name="line527"></a>  e.clientX = this.pageScroll.x - this.screenX;
-<a name="line528"></a>  e.clientY = this.pageScroll.x - this.screenY;
-<a name="line529"></a>  this.doDrag(e, pos.x, pos.y, true);
-<a name="line530"></a>};
-<a name="line531"></a>
-<a name="line532"></a>
-<a name="line533"></a>/**
-<a name="line534"></a> * @param {goog.events.BrowserEvent} e The closure object
-<a name="line535"></a> *     representing the browser event that caused a drag event.
-<a name="line536"></a> * @param {number} x The new horizontal position for the drag element.
-<a name="line537"></a> * @param {number} y The new vertical position for the drag element.
-<a name="line538"></a> * @param {boolean} dragFromScroll Whether dragging was caused by scrolling
-<a name="line539"></a> *     the associated scroll target.
-<a name="line540"></a> * @protected
-<a name="line541"></a> */
-<a name="line542"></a>goog.fx.Dragger.prototype.doDrag = function(e, x, y, dragFromScroll) {
-<a name="line543"></a>  this.defaultAction(x, y);
-<a name="line544"></a>  this.dispatchEvent(new goog.fx.DragEvent(
-<a name="line545"></a>      goog.fx.Dragger.EventType.DRAG, this, e.clientX, e.clientY,
-<a name="line546"></a>          e, x, y));
-<a name="line547"></a>};
-<a name="line548"></a>
-<a name="line549"></a>
-<a name="line550"></a>/**
-<a name="line551"></a> * Returns the &#39;real&#39; x after limits are applied (allows for some
-<a name="line552"></a> * limits to be undefined).
-<a name="line553"></a> * @param {number} x X-coordinate to limit.
-<a name="line554"></a> * @return {number} The &#39;real&#39; X-coordinate after limits are applied.
-<a name="line555"></a> */
-<a name="line556"></a>goog.fx.Dragger.prototype.limitX = function(x) {
-<a name="line557"></a>  var rect = this.limits;
-<a name="line558"></a>  var left = !isNaN(rect.left) ? rect.left : null;
-<a name="line559"></a>  var width = !isNaN(rect.width) ? rect.width : 0;
-<a name="line560"></a>  var maxX = left != null ? left + width : Infinity;
-<a name="line561"></a>  var minX = left != null ? left : -Infinity;
-<a name="line562"></a>  return Math.min(maxX, Math.max(minX, x));
-<a name="line563"></a>};
-<a name="line564"></a>
-<a name="line565"></a>
-<a name="line566"></a>/**
-<a name="line567"></a> * Returns the &#39;real&#39; y after limits are applied (allows for some
-<a name="line568"></a> * limits to be undefined).
-<a name="line569"></a> * @param {number} y Y-coordinate to limit.
-<a name="line570"></a> * @return {number} The &#39;real&#39; Y-coordinate after limits are applied.
-<a name="line571"></a> */
-<a name="line572"></a>goog.fx.Dragger.prototype.limitY = function(y) {
-<a name="line573"></a>  var rect = this.limits;
-<a name="line574"></a>  var top = !isNaN(rect.top) ? rect.top : null;
-<a name="line575"></a>  var height = !isNaN(rect.height) ? rect.height : 0;
-<a name="line576"></a>  var maxY = top != null ? top + height : Infinity;
-<a name="line577"></a>  var minY = top != null ? top : -Infinity;
-<a name="line578"></a>  return Math.min(maxY, Math.max(minY, y));
-<a name="line579"></a>};
-<a name="line580"></a>
-<a name="line581"></a>
-<a name="line582"></a>/**
-<a name="line583"></a> * Overridable function for handling the default action of the drag behaviour.
-<a name="line584"></a> * Normally this is simply moving the element to x,y though in some cases it
-<a name="line585"></a> * might be used to resize the layer.  This is basically a shortcut to
-<a name="line586"></a> * implementing a default ondrag event handler.
-<a name="line587"></a> * @param {number} x X-coordinate for target element.
-<a name="line588"></a> * @param {number} y Y-coordinate for target element.
-<a name="line589"></a> */
-<a name="line590"></a>goog.fx.Dragger.prototype.defaultAction = function(x, y) {
-<a name="line591"></a>  this.target.style.left = x + &#39;px&#39;;
-<a name="line592"></a>  this.target.style.top = y + &#39;px&#39;;
-<a name="line593"></a>};
-<a name="line594"></a>
-<a name="line595"></a>
-<a name="line596"></a>/**
-<a name="line597"></a> * Object representing a drag event
-<a name="line598"></a> * @param {string} type Event type.
-<a name="line599"></a> * @param {goog.fx.Dragger} dragobj Drag object initiating event.
-<a name="line600"></a> * @param {number} clientX X-coordinate relative to the window.
-<a name="line601"></a> * @param {number} clientY Y-coordinate relative to the window.
-<a name="line602"></a> * @param {goog.events.BrowserEvent} browserEvent The closure object
-<a name="line603"></a> *   representing the browser event that caused this drag event.
-<a name="line604"></a> * @param {number} opt_actX Optional actual x for drag if it has been limited.
-<a name="line605"></a> * @param {number} opt_actY Optional actual y for drag if it has been limited.
-<a name="line606"></a> * @param {boolean} opt_dragCanceled Whether the drag has been canceled.
-<a name="line607"></a> * @constructor
-<a name="line608"></a> * @extends {goog.events.Event}
-<a name="line609"></a> */
-<a name="line610"></a>goog.fx.DragEvent = function(type, dragobj, clientX, clientY, browserEvent,
-<a name="line611"></a>                             opt_actX, opt_actY, opt_dragCanceled) {
-<a name="line612"></a>  goog.events.Event.call(this, type);
-<a name="line613"></a>
-<a name="line614"></a>  /**
-<a name="line615"></a>   * X-coordinate relative to the window
-<a name="line616"></a>   * @type {number}
-<a name="line617"></a>   */
-<a name="line618"></a>  this.clientX = clientX;
-<a name="line619"></a>
-<a name="line620"></a>  /**
-<a name="line621"></a>   * Y-coordinate relative to the window
-<a name="line622"></a>   * @type {number}
-<a name="line623"></a>   */
-<a name="line624"></a>  this.clientY = clientY;
-<a name="line625"></a>
-<a name="line626"></a>  /**
-<a name="line627"></a>   * The closure object representing the browser event that caused this drag
-<a name="line628"></a>   * event.
-<a name="line629"></a>   * @type {goog.events.BrowserEvent}
-<a name="line630"></a>   */
-<a name="line631"></a>  this.browserEvent = browserEvent;
-<a name="line632"></a>
-<a name="line633"></a>  /**
-<a name="line634"></a>   * The real x-position of the drag if it has been limited
-<a name="line635"></a>   * @type {number}
-<a name="line636"></a>   */
-<a name="line637"></a>  this.left = goog.isDef(opt_actX) ? opt_actX : dragobj.deltaX;
-<a name="line638"></a>
-<a name="line639"></a>  /**
-<a name="line640"></a>   * The real y-position of the drag if it has been limited
-<a name="line641"></a>   * @type {number}
-<a name="line642"></a>   */
-<a name="line643"></a>  this.top = goog.isDef(opt_actY) ? opt_actY : dragobj.deltaY;
-<a name="line644"></a>
-<a name="line645"></a>  /**
-<a name="line646"></a>   * Reference to the drag object for this event
-<a name="line647"></a>   * @type {goog.fx.Dragger}
-<a name="line648"></a>   */
-<a name="line649"></a>  this.dragger = dragobj;
-<a name="line650"></a>
-<a name="line651"></a>  /**
-<a name="line652"></a>   * Whether drag was canceled with this event. Used to differentiate between
-<a name="line653"></a>   * a legitimate drag END that can result in an action and a drag END which is
-<a name="line654"></a>   * a result of a drag cancelation. For now it can happen 1) with drag END
-<a name="line655"></a>   * event on FireFox when user drags the mouse out of the window, 2) With
-<a name="line656"></a>   * drag END event on IE7 which is generated on MOUSEMOVE event when user
-<a name="line657"></a>   * moves the mouse into the document after the mouse button has been
-<a name="line658"></a>   * released.
-<a name="line659"></a>   * @type {boolean}
-<a name="line660"></a>   */
-<a name="line661"></a>  this.dragCanceled = !!opt_dragCanceled;
-<a name="line662"></a>};
-<a name="line663"></a>goog.inherits(goog.fx.DragEvent, goog.events.Event);
+<a name="line481"></a>    if (this.dragging_) {
+<a name="line482"></a>
+<a name="line483"></a>      var rv = this.dispatchEvent(new goog.fx.DragEvent(
+<a name="line484"></a>          goog.fx.Dragger.EventType.BEFOREDRAG, this, e.clientX, e.clientY,
+<a name="line485"></a>          e, x, y));
+<a name="line486"></a>
+<a name="line487"></a>      // Only do the defaultAction and dispatch drag event if predrag didn&#39;t
+<a name="line488"></a>      // prevent default
+<a name="line489"></a>      if (rv !== false) {
+<a name="line490"></a>        this.doDrag(e, x, y, false);
+<a name="line491"></a>        e.preventDefault();
+<a name="line492"></a>      }
+<a name="line493"></a>    }
+<a name="line494"></a>  }
+<a name="line495"></a>};
+<a name="line496"></a>
+<a name="line497"></a>
+<a name="line498"></a>/**
+<a name="line499"></a> * Calculates the drag position.
+<a name="line500"></a> *
+<a name="line501"></a> * @param {number} dx The horizontal movement delta.
+<a name="line502"></a> * @param {number} dy The vertical movement delta.
+<a name="line503"></a> * @return {goog.math.Coordinate} The newly calculated drag element position.
+<a name="line504"></a> * @private
+<a name="line505"></a> */
+<a name="line506"></a>goog.fx.Dragger.prototype.calculatePosition_ = function(dx, dy) {
+<a name="line507"></a>  // Update the position for any change in body scrolling
+<a name="line508"></a>  var pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
+<a name="line509"></a>  dx += pageScroll.x - this.pageScroll.x;
+<a name="line510"></a>  dy += pageScroll.y - this.pageScroll.y;
+<a name="line511"></a>  this.pageScroll = pageScroll;
+<a name="line512"></a>
+<a name="line513"></a>  this.deltaX += dx;
+<a name="line514"></a>  this.deltaY += dy;
+<a name="line515"></a>
+<a name="line516"></a>  var x = this.limitX(this.deltaX);
+<a name="line517"></a>  var y = this.limitY(this.deltaY);
+<a name="line518"></a>  return new goog.math.Coordinate(x, y);
+<a name="line519"></a>};
+<a name="line520"></a>
+<a name="line521"></a>
+<a name="line522"></a>/**
+<a name="line523"></a> * Event handler for scroll target scrolling.
+<a name="line524"></a> * @param {goog.events.BrowserEvent} e The event.
+<a name="line525"></a> * @private
+<a name="line526"></a> */
+<a name="line527"></a>goog.fx.Dragger.prototype.onScroll_ = function(e) {
+<a name="line528"></a>  var pos = this.calculatePosition_(0, 0);
+<a name="line529"></a>  e.clientX = this.pageScroll.x - this.screenX;
+<a name="line530"></a>  e.clientY = this.pageScroll.x - this.screenY;
+<a name="line531"></a>  this.doDrag(e, pos.x, pos.y, true);
+<a name="line532"></a>};
+<a name="line533"></a>
+<a name="line534"></a>
+<a name="line535"></a>/**
+<a name="line536"></a> * @param {goog.events.BrowserEvent} e The closure object
+<a name="line537"></a> *     representing the browser event that caused a drag event.
+<a name="line538"></a> * @param {number} x The new horizontal position for the drag element.
+<a name="line539"></a> * @param {number} y The new vertical position for the drag element.
+<a name="line540"></a> * @param {boolean} dragFromScroll Whether dragging was caused by scrolling
+<a name="line541"></a> *     the associated scroll target.
+<a name="line542"></a> * @protected
+<a name="line543"></a> */
+<a name="line544"></a>goog.fx.Dragger.prototype.doDrag = function(e, x, y, dragFromScroll) {
+<a name="line545"></a>  this.defaultAction(x, y);
+<a name="line546"></a>  this.dispatchEvent(new goog.fx.DragEvent(
+<a name="line547"></a>      goog.fx.Dragger.EventType.DRAG, this, e.clientX, e.clientY,
+<a name="line548"></a>          e, x, y));
+<a name="line549"></a>};
+<a name="line550"></a>
+<a name="line551"></a>
+<a name="line552"></a>/**
+<a name="line553"></a> * Returns the &#39;real&#39; x after limits are applied (allows for some
+<a name="line554"></a> * limits to be undefined).
+<a name="line555"></a> * @param {number} x X-coordinate to limit.
+<a name="line556"></a> * @return {number} The &#39;real&#39; X-coordinate after limits are applied.
+<a name="line557"></a> */
+<a name="line558"></a>goog.fx.Dragger.prototype.limitX = function(x) {
+<a name="line559"></a>  var rect = this.limits;
+<a name="line560"></a>  var left = !isNaN(rect.left) ? rect.left : null;
+<a name="line561"></a>  var width = !isNaN(rect.width) ? rect.width : 0;
+<a name="line562"></a>  var maxX = left != null ? left + width : Infinity;
+<a name="line563"></a>  var minX = left != null ? left : -Infinity;
+<a name="line564"></a>  return Math.min(maxX, Math.max(minX, x));
+<a name="line565"></a>};
+<a name="line566"></a>
+<a name="line567"></a>
+<a name="line568"></a>/**
+<a name="line569"></a> * Returns the &#39;real&#39; y after limits are applied (allows for some
+<a name="line570"></a> * limits to be undefined).
+<a name="line571"></a> * @param {number} y Y-coordinate to limit.
+<a name="line572"></a> * @return {number} The &#39;real&#39; Y-coordinate after limits are applied.
+<a name="line573"></a> */
+<a name="line574"></a>goog.fx.Dragger.prototype.limitY = function(y) {
+<a name="line575"></a>  var rect = this.limits;
+<a name="line576"></a>  var top = !isNaN(rect.top) ? rect.top : null;
+<a name="line577"></a>  var height = !isNaN(rect.height) ? rect.height : 0;
+<a name="line578"></a>  var maxY = top != null ? top + height : Infinity;
+<a name="line579"></a>  var minY = top != null ? top : -Infinity;
+<a name="line580"></a>  return Math.min(maxY, Math.max(minY, y));
+<a name="line581"></a>};
+<a name="line582"></a>
+<a name="line583"></a>
+<a name="line584"></a>/**
+<a name="line585"></a> * Overridable function for handling the default action of the drag behaviour.
+<a name="line586"></a> * Normally this is simply moving the element to x,y though in some cases it
+<a name="line587"></a> * might be used to resize the layer.  This is basically a shortcut to
+<a name="line588"></a> * implementing a default ondrag event handler.
+<a name="line589"></a> * @param {number} x X-coordinate for target element.
+<a name="line590"></a> * @param {number} y Y-coordinate for target element.
+<a name="line591"></a> */
+<a name="line592"></a>goog.fx.Dragger.prototype.defaultAction = function(x, y) {
+<a name="line593"></a>  this.target.style.left = x + &#39;px&#39;;
+<a name="line594"></a>  this.target.style.top = y + &#39;px&#39;;
+<a name="line595"></a>};
+<a name="line596"></a>
+<a name="line597"></a>
+<a name="line598"></a>/**
+<a name="line599"></a> * Object representing a drag event
+<a name="line600"></a> * @param {string} type Event type.
+<a name="line601"></a> * @param {goog.fx.Dragger} dragobj Drag object initiating event.
+<a name="line602"></a> * @param {number} clientX X-coordinate relative to the window.
+<a name="line603"></a> * @param {number} clientY Y-coordinate relative to the window.
+<a name="line604"></a> * @param {goog.events.BrowserEvent} browserEvent The closure object
+<a name="line605"></a> *   representing the browser event that caused this drag event.
+<a name="line606"></a> * @param {number} opt_actX Optional actual x for drag if it has been limited.
+<a name="line607"></a> * @param {number} opt_actY Optional actual y for drag if it has been limited.
+<a name="line608"></a> * @param {boolean} opt_dragCanceled Whether the drag has been canceled.
+<a name="line609"></a> * @constructor
+<a name="line610"></a> * @extends {goog.events.Event}
+<a name="line611"></a> */
+<a name="line612"></a>goog.fx.DragEvent = function(type, dragobj, clientX, clientY, browserEvent,
+<a name="line613"></a>                             opt_actX, opt_actY, opt_dragCanceled) {
+<a name="line614"></a>  goog.events.Event.call(this, type);
+<a name="line615"></a>
+<a name="line616"></a>  /**
+<a name="line617"></a>   * X-coordinate relative to the window
+<a name="line618"></a>   * @type {number}
+<a name="line619"></a>   */
+<a name="line620"></a>  this.clientX = clientX;
+<a name="line621"></a>
+<a name="line622"></a>  /**
+<a name="line623"></a>   * Y-coordinate relative to the window
+<a name="line624"></a>   * @type {number}
+<a name="line625"></a>   */
+<a name="line626"></a>  this.clientY = clientY;
+<a name="line627"></a>
+<a name="line628"></a>  /**
+<a name="line629"></a>   * The closure object representing the browser event that caused this drag
+<a name="line630"></a>   * event.
+<a name="line631"></a>   * @type {goog.events.BrowserEvent}
+<a name="line632"></a>   */
+<a name="line633"></a>  this.browserEvent = browserEvent;
+<a name="line634"></a>
+<a name="line635"></a>  /**
+<a name="line636"></a>   * The real x-position of the drag if it has been limited
+<a name="line637"></a>   * @type {number}
+<a name="line638"></a>   */
+<a name="line639"></a>  this.left = goog.isDef(opt_actX) ? opt_actX : dragobj.deltaX;
+<a name="line640"></a>
+<a name="line641"></a>  /**
+<a name="line642"></a>   * The real y-position of the drag if it has been limited
+<a name="line643"></a>   * @type {number}
+<a name="line644"></a>   */
+<a name="line645"></a>  this.top = goog.isDef(opt_actY) ? opt_actY : dragobj.deltaY;
+<a name="line646"></a>
+<a name="line647"></a>  /**
+<a name="line648"></a>   * Reference to the drag object for this event
+<a name="line649"></a>   * @type {goog.fx.Dragger}
+<a name="line650"></a>   */
+<a name="line651"></a>  this.dragger = dragobj;
+<a name="line652"></a>
+<a name="line653"></a>  /**
+<a name="line654"></a>   * Whether drag was canceled with this event. Used to differentiate between
+<a name="line655"></a>   * a legitimate drag END that can result in an action and a drag END which is
+<a name="line656"></a>   * a result of a drag cancelation. For now it can happen 1) with drag END
+<a name="line657"></a>   * event on FireFox when user drags the mouse out of the window, 2) With
+<a name="line658"></a>   * drag END event on IE7 which is generated on MOUSEMOVE event when user
+<a name="line659"></a>   * moves the mouse into the document after the mouse button has been
+<a name="line660"></a>   * released.
+<a name="line661"></a>   * @type {boolean}
+<a name="line662"></a>   */
+<a name="line663"></a>  this.dragCanceled = !!opt_dragCanceled;
+<a name="line664"></a>};
+<a name="line665"></a>goog.inherits(goog.fx.DragEvent, goog.events.Event);
 </pre>
 
 

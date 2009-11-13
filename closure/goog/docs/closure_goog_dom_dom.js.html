@@ -61,7 +61,7 @@
  var $A = goog.bind(goog.dom.createDom, goog.dom, &#39;a&#39;);<br>
  var $TABLE = goog.bind(goog.dom.createDom, goog.dom, &#39;table&#39;);<br>
 
- You can use {@link goog.dom.DomHelper} to create new dom helpers that refer
+ You can use goog.dom.DomHelper to create new dom helpers that refer
  to a different document object.  This is useful if you are working with
  frames or multiple windows.
   </div>
@@ -178,7 +178,7 @@
 
 
      <div class="entryOverview">
-       Alias for {@code getElementsByTagNameAndClass}.
+       Alias for <code>getElementsByTagNameAndClass</code>.
      </div>
 
 
@@ -224,7 +224,7 @@
 
 
      <div class="entryOverview">
-       Alias for {@code createDom}.
+       Alias for <code>createDom</code>.
      </div>
 
 
@@ -481,7 +481,7 @@ before the I node.
 
      <div class="entryOverview">
        Utility function to compare the position of two nodes, when
-{@code textNode}&#39;s parent is an ancestor of {@code node}.  If this entry
+<code>textNode</code>&#39;s parent is an ancestor of <code>node</code>.  If this entry
 condition is not met, this function will attempt to reference a null object.
      </div>
 
@@ -789,7 +789,7 @@ would return a div with two child paragraphs
 
 
      <div class="entryOverview">
-       Helper for {@code createDom}.
+       Helper for <code>createDom</code>.
      </div>
 
 
@@ -818,7 +818,7 @@ would return a div with two child paragraphs
      <td>
         <span class="entryName">args</span>
         : <div class="fullType"><span class="type">Arguments</span></div>
-        <div class="entryOverview">Argument object passed from the callers. See {@code goog.dom.createDom} for details.</div>
+        <div class="entryOverview">Argument object passed from the callers. See <code>goog.dom.createDom</code> for details.</div>
      </td>
    </tr>
   </table>
@@ -1060,7 +1060,7 @@ would return a div with two child paragraphs
        Finds the first descendant node that matches the filter function, using
 a depth first search. This function offers the most general purpose way
 of finding a matching element. You may also wish to consider
-{@code goog.dom.query} which can express many matching criteria using
+<code>goog.dom.query</code> which can express many matching criteria using
 CSS selector expressions. These expressions often result in a more
 compact representation of the desired result.
      </div>
@@ -1138,7 +1138,7 @@ compact representation of the desired result.
        Finds all the descendant nodes that match the filter function, using a
 a depth first search. This function offers the most general-purpose way
 of finding a set of matching elements. You may also wish to consider
-{@code goog.dom.query} which can express many matching criteria using
+<code>goog.dom.query</code> which can express many matching criteria using
 CSS selector expressions. These expressions often result in a more
 compact representation of the desired result.
      </div>
@@ -1840,7 +1840,7 @@ gadgets.window.adjustHeight(opt_height)
 
 
      <div class="entryOverview">
-       Helper for {@code getDocumentScrollElement}.
+       Helper for <code>getDocumentScrollElement</code>.
      </div>
 
 
@@ -1905,7 +1905,7 @@ gadgets.window.adjustHeight(opt_height)
 
 
      <div class="entryOverview">
-       Helper for {@code getDocumentScroll}.
+       Helper for <code>getDocumentScroll</code>.
      </div>
 
 
@@ -2102,10 +2102,10 @@ that.
 
      <div class="entryOverview">
        Looks up elements by both tag and class name, using browser native functions
-({@code querySelectorAll}, {@code getElementsByTagName} or
-{@code getElementsByClassName}) where possible. This function
+(<code>querySelectorAll</code>, <code>getElementsByTagName</code> or
+<code>getElementsByClassName</code>) where possible. This function
 is a useful, if limited, way of collecting a list of DOM elements
-with certain characteristics.  {@code goog.dom.query} offers a
+with certain characteristics.  <code>goog.dom.query</code> offers a
 more powerful and general solution which allows matching on CSS3
 selector expressions, but at increased cost in code size. If all you
 need is particular tags belonging to a single class, this function
@@ -2190,7 +2190,7 @@ is fast and sleek.
 
 
      <div class="entryOverview">
-       Helper for {@code getElementsByTagNameAndClass}.
+       Helper for <code>getElementsByTagNameAndClass</code>.
      </div>
 
 
@@ -2308,7 +2308,7 @@ is fast and sleek.
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
-            The first child node of {@code node} that is an element.
+            The first child node of <code>node</code> that is an element.
       </div>
   
     </div>
@@ -2503,7 +2503,7 @@ is fast and sleek.
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
-            The last child node of {@code node} that is an element.
+            The last child node of <code>node</code> that is an element.
       </div>
   
     </div>
@@ -2540,7 +2540,7 @@ is fast and sleek.
 
      <div class="entryOverview">
        Returns the first node that is an element in the specified direction,
-starting with {@code node}.
+starting with <code>node</code>.
      </div>
 
 
@@ -2642,7 +2642,7 @@ starting with {@code node}.
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
-            The next sibling of {@code node} that is an element.
+            The next sibling of <code>node</code> that is an element.
       </div>
   
     </div>
@@ -2793,7 +2793,7 @@ lines are ignored.
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>&nbsp;
-            The length of {@code node}&#39;s text content.
+            The length of <code>node</code>&#39;s text content.
       </div>
   
     </div>
@@ -3128,7 +3128,7 @@ actually contains the HTML of the node itself.
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
-            The first previous sibling of {@code node} that is an element.
+            The first previous sibling of <code>node</code> that is an element.
       </div>
   
     </div>
@@ -3166,7 +3166,7 @@ actually contains the HTML of the node itself.
      <div class="entryOverview">
        Returns the text content of the current node, without markup.
 
-Unlike {@code getTextContent} this method does not collapse whitespaces
+Unlike <code>getTextContent</code> this method does not collapse whitespaces
 or normalize lines breaks.
      </div>
 
@@ -3502,7 +3502,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
 
 
      <div class="entryOverview">
-       Helper for {@code getViewportSize}.
+       Helper for <code>getViewportSize</code>.
      </div>
 
 
@@ -3632,7 +3632,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
 
 
      <div class="entryOverview">
-       Helper for {@code getWindow}.
+       Helper for <code>getWindow</code>.
      </div>
 
 
@@ -3762,7 +3762,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
 
 
      <div class="entryOverview">
-       Helper for {@code htmlToDocumentFragment}.
+       Helper for <code>htmlToDocumentFragment</code>.
      </div>
 
 
@@ -4219,7 +4219,7 @@ natively support keyboard focus, even if they have no tab index.  See
 
 
      <div class="entryOverview">
-       Returns true if the object is a {@code NodeList}.  To qualify as a NodeList,
+       Returns true if the object is a <code>NodeList</code>.  To qualify as a NodeList,
 the object must have a numeric length property and an item function (which
 has type &#39;string&#39; on IE for some reason).
      </div>
@@ -4410,7 +4410,7 @@ has type &#39;string&#39; on IE for some reason).
 
 
      <div class="entryOverview">
-       Replaces a node in the DOM tree. Will do nothing if {@code oldNode} has no
+       Replaces a node in the DOM tree. Will do nothing if <code>oldNode</code> has no
 parent.
      </div>
 
@@ -4480,7 +4480,7 @@ parent.
 
      <div class="entryOverview">
        Enables or disables keyboard focus support on the element via its tab index.
-Only elements for which {@link goog.dom.isFocusableTabIndex} returns true
+Only elements for which goog.dom.isFocusableTabIndex returns true
 (or elements that natively support keyboard focus, like form elements) can
 receive keyboard focus.  See <a href="http://go/tabindex">http://go/tabindex</a> for more info.
      </div>

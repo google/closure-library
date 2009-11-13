@@ -10,7 +10,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2005 Google Inc. All Rights Reserved
+// Copyright 2005 Google Inc. All Rights Reserved.
 
 /**
  * @fileoverview Event Manager.
@@ -38,7 +38,8 @@
  *
  * @supported IE6+, FF1.5+, WebKit, Opera.
  * @see ../demos/events.html
- * @see ../demos/event-propogation.html
+ * @see ../demos/event-propagation.html
+ * @see ../demos/stopevent.html
  */
 
 

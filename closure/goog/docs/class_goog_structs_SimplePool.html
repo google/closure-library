@@ -66,7 +66,7 @@ IMPORTANT: If the objects being pooled are arrays or maps that can have
 unlimited number of properties, they need to be cleaned before being
 returned to the pool.
 
-Also note that {@see goog.object.clean} actually allocates an array to clean
+Also note that goog.object.clean actually allocates an array to clean
 the object passed to it, so simply using this function would defy the
 purpose of using the pool.
   </div>
@@ -563,7 +563,7 @@ the pool and frees up its space.
 
 
      <div class="entryOverview">
-       Sets the {@code createObject} function which is used for creating a new
+       Sets the <code>createObject</code> function which is used for creating a new
 object in the pool.
      </div>
 
@@ -624,7 +624,7 @@ object in the pool.
 
 
      <div class="entryOverview">
-       Sets the {@code disposeObject} function which is used for disposing of an
+       Sets the <code>disposeObject</code> function which is used for disposing of an
 object in the pool.
      </div>
 
@@ -743,7 +743,7 @@ object in the pool.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {

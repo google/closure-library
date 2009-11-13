@@ -678,7 +678,7 @@ that is expected in the pool.
      <div class="entryOverview">
        Should be overriden to dispose of an object. Default implementation is to
 remove all its members, which should render it useless. Calls the object&#39;s
-{@code dispose()} method, if available.
+<code>dispose()</code> method, if available.
      </div>
 
 
@@ -971,7 +971,7 @@ remove all its members, which should render it useless. Calls the object&#39;s
      <div class="entryOverview">
        Should be overriden to determine whether an object has become unusable and
 should not be returned by getObject(). Calls the object&#39;s
-{@code canBeReused()}  method, if available.
+<code>canBeReused()</code>  method, if available.
      </div>
 
 
@@ -1329,7 +1329,7 @@ If min is greater than the max count of the pool, an error is thrown.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {

@@ -57,1010 +57,1012 @@
 <a name="line14"></a>
 <a name="line15"></a>/**
 <a name="line16"></a> * @fileoverview Class definitions for imageless rounded corners.
-<a name="line17"></a> * @supported IE 6.0+, Safari 2.0+, Firefox 1.5+, Opera 9.2+.
-<a name="line18"></a> */
-<a name="line19"></a>
-<a name="line20"></a>goog.provide(&#39;goog.ui.AbstractImagelessRoundedCorner&#39;);
-<a name="line21"></a>goog.provide(&#39;goog.ui.CanvasRoundedCorner&#39;);
-<a name="line22"></a>goog.provide(&#39;goog.ui.ImagelessRoundedCorner&#39;);
-<a name="line23"></a>goog.provide(&#39;goog.ui.VmlRoundedCorner&#39;);
-<a name="line24"></a>
-<a name="line25"></a>goog.require(&#39;goog.dom.DomHelper&#39;);
-<a name="line26"></a>goog.require(&#39;goog.graphics.SolidFill&#39;);
-<a name="line27"></a>goog.require(&#39;goog.graphics.Stroke&#39;);
-<a name="line28"></a>goog.require(&#39;goog.graphics.VmlGraphics&#39;);
-<a name="line29"></a>goog.require(&#39;goog.userAgent&#39;);
-<a name="line30"></a>
-<a name="line31"></a>
-<a name="line32"></a>/**
-<a name="line33"></a> * Returns an instance of goog.ui.ImagelessRoundedCorner that can render a
-<a name="line34"></a> * rounded corner, with the implementation varying depending on the current
-<a name="line35"></a> * platform. The rounded corner contains 3 components: horizontal filler, arc,
-<a name="line36"></a> * and vertical filler. Horizontal and/or vertical fillers are added if the
-<a name="line37"></a> * radius of the rounded corner is less than the width and/or height of the
-<a name="line38"></a> * containing element. This is a factory method for image-less rounded corner
-<a name="line39"></a> * classes.
-<a name="line40"></a> * @param {Element} element The container element for the rounded corner.
-<a name="line41"></a> * @param {number} width The width of the element excluding the border, in
-<a name="line42"></a> *     pixels.
-<a name="line43"></a> * @param {number} height The height of the element excluding the border, in
+<a name="line17"></a> *
+<a name="line18"></a> * @supported IE 6.0+, Safari 2.0+, Firefox 1.5+, Opera 9.2+.
+<a name="line19"></a> * @see ../demos/imagelessroundedcorner.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.AbstractImagelessRoundedCorner&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.ui.CanvasRoundedCorner&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.ui.ImagelessRoundedCorner&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.ui.VmlRoundedCorner&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.dom.DomHelper&#39;);
+<a name="line28"></a>goog.require(&#39;goog.graphics.SolidFill&#39;);
+<a name="line29"></a>goog.require(&#39;goog.graphics.Stroke&#39;);
+<a name="line30"></a>goog.require(&#39;goog.graphics.VmlGraphics&#39;);
+<a name="line31"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Returns an instance of goog.ui.ImagelessRoundedCorner that can render a
+<a name="line36"></a> * rounded corner, with the implementation varying depending on the current
+<a name="line37"></a> * platform. The rounded corner contains 3 components: horizontal filler, arc,
+<a name="line38"></a> * and vertical filler. Horizontal and/or vertical fillers are added if the
+<a name="line39"></a> * radius of the rounded corner is less than the width and/or height of the
+<a name="line40"></a> * containing element. This is a factory method for image-less rounded corner
+<a name="line41"></a> * classes.
+<a name="line42"></a> * @param {Element} element The container element for the rounded corner.
+<a name="line43"></a> * @param {number} width The width of the element excluding the border, in
 <a name="line44"></a> *     pixels.
-<a name="line45"></a> * @param {number} borderWidth The thickness of the rounded corner, in pixels.
-<a name="line46"></a> * @param {number} radius The radius of the rounded corner, in pixels. The
-<a name="line47"></a> *     radius must be less than or equal to the width or height (whichever
-<a name="line48"></a> *     is greater).
-<a name="line49"></a> * @param {number} location Location of the rounded corner. This should be a
-<a name="line50"></a> *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
-<a name="line51"></a> *     BOTTOM_LEFT, or BOTTOM_RIGHT.
-<a name="line52"></a> * @param {string} borderColor The color of the rounded corner.
-<a name="line53"></a> * @param {string} opt_backgroundColor The background color of the rounded
-<a name="line54"></a> *     corner.
-<a name="line55"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
-<a name="line56"></a> *     document we want to render in.
-<a name="line57"></a> * @return {goog.ui.AbstractImagelessRoundedCorner|undefined} Imageless rounded
-<a name="line58"></a> *     corner instance.
-<a name="line59"></a> */
-<a name="line60"></a>goog.ui.ImagelessRoundedCorner.create = function(element,
-<a name="line61"></a>                                                 width,
-<a name="line62"></a>                                                 height,
-<a name="line63"></a>                                                 borderWidth,
-<a name="line64"></a>                                                 radius,
-<a name="line65"></a>                                                 location,
-<a name="line66"></a>                                                 borderColor,
-<a name="line67"></a>                                                 opt_backgroundColor,
-<a name="line68"></a>                                                 opt_domHelper) {
-<a name="line69"></a>  // Check for invalid values.
-<a name="line70"></a>  if (width &lt;= 0 ||
-<a name="line71"></a>      height &lt;= 0 ||
-<a name="line72"></a>      borderWidth &lt;= 0 ||
-<a name="line73"></a>      radius &lt; 0) {
-<a name="line74"></a>    return;
-<a name="line75"></a>  }
-<a name="line76"></a>
-<a name="line77"></a>  // Instantiate the proper rounded corner, based on user-agent.
-<a name="line78"></a>  var roundedCorner;
-<a name="line79"></a>  var version = parseFloat(goog.userAgent.VERSION);
-<a name="line80"></a>  if (goog.userAgent.IE) {
-<a name="line81"></a>    roundedCorner = new goog.ui.VmlRoundedCorner(element,
-<a name="line82"></a>                                                 width,
-<a name="line83"></a>                                                 height,
-<a name="line84"></a>                                                 borderWidth,
-<a name="line85"></a>                                                 radius,
-<a name="line86"></a>                                                 location,
-<a name="line87"></a>                                                 borderColor,
-<a name="line88"></a>                                                 opt_backgroundColor,
-<a name="line89"></a>                                                 opt_domHelper);
-<a name="line90"></a>  } else {
-<a name="line91"></a>    roundedCorner = new goog.ui.CanvasRoundedCorner(element,
-<a name="line92"></a>                                                    width,
-<a name="line93"></a>                                                    height,
-<a name="line94"></a>                                                    borderWidth,
-<a name="line95"></a>                                                    radius,
-<a name="line96"></a>                                                    location,
-<a name="line97"></a>                                                    borderColor,
-<a name="line98"></a>                                                    opt_backgroundColor,
-<a name="line99"></a>                                                    opt_domHelper);
-<a name="line100"></a>  }
-<a name="line101"></a>
-<a name="line102"></a>  return roundedCorner;
-<a name="line103"></a>};
-<a name="line104"></a>
-<a name="line105"></a>
-<a name="line106"></a>/**
-<a name="line107"></a> * Enum for specifying which corners to render.
-<a name="line108"></a> * @enum {number}
-<a name="line109"></a> */
-<a name="line110"></a>goog.ui.ImagelessRoundedCorner.Corner = {
-<a name="line111"></a>  TOP_LEFT: 1,
-<a name="line112"></a>  TOP_RIGHT: 2,
-<a name="line113"></a>  BOTTOM_LEFT: 4,
-<a name="line114"></a>  BOTTOM_RIGHT: 8
-<a name="line115"></a>};
-<a name="line116"></a>
-<a name="line117"></a>
-<a name="line118"></a>/**
-<a name="line119"></a> * Specifies the top-left and bottom-left corners.
-<a name="line120"></a> * @type {number}
-<a name="line121"></a> */
-<a name="line122"></a>goog.ui.ImagelessRoundedCorner.Corner.LEFT =
-<a name="line123"></a>    goog.ui.ImagelessRoundedCorner.Corner.TOP_LEFT |
-<a name="line124"></a>    goog.ui.ImagelessRoundedCorner.Corner.BOTTOM_LEFT;
-<a name="line125"></a>
-<a name="line126"></a>
-<a name="line127"></a>/**
-<a name="line128"></a> * Specifies the top-right and bottom-right corners.
-<a name="line129"></a> * @type {number}
-<a name="line130"></a> */
-<a name="line131"></a>goog.ui.ImagelessRoundedCorner.Corner.RIGHT =
-<a name="line132"></a>    goog.ui.ImagelessRoundedCorner.Corner.TOP_RIGHT |
-<a name="line133"></a>    goog.ui.ImagelessRoundedCorner.Corner.BOTTOM_RIGHT;
-<a name="line134"></a>
-<a name="line135"></a>
-<a name="line136"></a>/**
-<a name="line137"></a> * Specifies the top-left and top-right corners.
-<a name="line138"></a> * @type {number}
-<a name="line139"></a> */
-<a name="line140"></a>goog.ui.ImagelessRoundedCorner.Corner.TOP =
-<a name="line141"></a>    goog.ui.ImagelessRoundedCorner.Corner.TOP_LEFT |
-<a name="line142"></a>    goog.ui.ImagelessRoundedCorner.Corner.TOP_RIGHT;
-<a name="line143"></a>
-<a name="line144"></a>
-<a name="line145"></a>/**
-<a name="line146"></a> * Specifies the bottom-left and bottom-right corners.
-<a name="line147"></a> * @type {number}
-<a name="line148"></a> */
-<a name="line149"></a>goog.ui.ImagelessRoundedCorner.Corner.BOTTOM =
-<a name="line150"></a>    goog.ui.ImagelessRoundedCorner.Corner.BOTTOM_LEFT |
-<a name="line151"></a>    goog.ui.ImagelessRoundedCorner.Corner.BOTTOM_RIGHT;
-<a name="line152"></a>
-<a name="line153"></a>
-<a name="line154"></a>/**
-<a name="line155"></a> * Specifies all corners.
-<a name="line156"></a> * @type {number}
-<a name="line157"></a> */
-<a name="line158"></a>goog.ui.ImagelessRoundedCorner.Corner.ALL =
-<a name="line159"></a>    goog.ui.ImagelessRoundedCorner.Corner.TOP |
-<a name="line160"></a>    goog.ui.ImagelessRoundedCorner.Corner.BOTTOM;
-<a name="line161"></a>
-<a name="line162"></a>
+<a name="line45"></a> * @param {number} height The height of the element excluding the border, in
+<a name="line46"></a> *     pixels.
+<a name="line47"></a> * @param {number} borderWidth The thickness of the rounded corner, in pixels.
+<a name="line48"></a> * @param {number} radius The radius of the rounded corner, in pixels. The
+<a name="line49"></a> *     radius must be less than or equal to the width or height (whichever
+<a name="line50"></a> *     is greater).
+<a name="line51"></a> * @param {number} location Location of the rounded corner. This should be a
+<a name="line52"></a> *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
+<a name="line53"></a> *     BOTTOM_LEFT, or BOTTOM_RIGHT.
+<a name="line54"></a> * @param {string} borderColor The color of the rounded corner.
+<a name="line55"></a> * @param {string} opt_backgroundColor The background color of the rounded
+<a name="line56"></a> *     corner.
+<a name="line57"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+<a name="line58"></a> *     document we want to render in.
+<a name="line59"></a> * @return {goog.ui.AbstractImagelessRoundedCorner|undefined} Imageless rounded
+<a name="line60"></a> *     corner instance.
+<a name="line61"></a> */
+<a name="line62"></a>goog.ui.ImagelessRoundedCorner.create = function(element,
+<a name="line63"></a>                                                 width,
+<a name="line64"></a>                                                 height,
+<a name="line65"></a>                                                 borderWidth,
+<a name="line66"></a>                                                 radius,
+<a name="line67"></a>                                                 location,
+<a name="line68"></a>                                                 borderColor,
+<a name="line69"></a>                                                 opt_backgroundColor,
+<a name="line70"></a>                                                 opt_domHelper) {
+<a name="line71"></a>  // Check for invalid values.
+<a name="line72"></a>  if (width &lt;= 0 ||
+<a name="line73"></a>      height &lt;= 0 ||
+<a name="line74"></a>      borderWidth &lt;= 0 ||
+<a name="line75"></a>      radius &lt; 0) {
+<a name="line76"></a>    return;
+<a name="line77"></a>  }
+<a name="line78"></a>
+<a name="line79"></a>  // Instantiate the proper rounded corner, based on user-agent.
+<a name="line80"></a>  var roundedCorner;
+<a name="line81"></a>  var version = parseFloat(goog.userAgent.VERSION);
+<a name="line82"></a>  if (goog.userAgent.IE) {
+<a name="line83"></a>    roundedCorner = new goog.ui.VmlRoundedCorner(element,
+<a name="line84"></a>                                                 width,
+<a name="line85"></a>                                                 height,
+<a name="line86"></a>                                                 borderWidth,
+<a name="line87"></a>                                                 radius,
+<a name="line88"></a>                                                 location,
+<a name="line89"></a>                                                 borderColor,
+<a name="line90"></a>                                                 opt_backgroundColor,
+<a name="line91"></a>                                                 opt_domHelper);
+<a name="line92"></a>  } else {
+<a name="line93"></a>    roundedCorner = new goog.ui.CanvasRoundedCorner(element,
+<a name="line94"></a>                                                    width,
+<a name="line95"></a>                                                    height,
+<a name="line96"></a>                                                    borderWidth,
+<a name="line97"></a>                                                    radius,
+<a name="line98"></a>                                                    location,
+<a name="line99"></a>                                                    borderColor,
+<a name="line100"></a>                                                    opt_backgroundColor,
+<a name="line101"></a>                                                    opt_domHelper);
+<a name="line102"></a>  }
+<a name="line103"></a>
+<a name="line104"></a>  return roundedCorner;
+<a name="line105"></a>};
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Enum for specifying which corners to render.
+<a name="line110"></a> * @enum {number}
+<a name="line111"></a> */
+<a name="line112"></a>goog.ui.ImagelessRoundedCorner.Corner = {
+<a name="line113"></a>  TOP_LEFT: 1,
+<a name="line114"></a>  TOP_RIGHT: 2,
+<a name="line115"></a>  BOTTOM_LEFT: 4,
+<a name="line116"></a>  BOTTOM_RIGHT: 8
+<a name="line117"></a>};
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Specifies the top-left and bottom-left corners.
+<a name="line122"></a> * @type {number}
+<a name="line123"></a> */
+<a name="line124"></a>goog.ui.ImagelessRoundedCorner.Corner.LEFT =
+<a name="line125"></a>    goog.ui.ImagelessRoundedCorner.Corner.TOP_LEFT |
+<a name="line126"></a>    goog.ui.ImagelessRoundedCorner.Corner.BOTTOM_LEFT;
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * Specifies the top-right and bottom-right corners.
+<a name="line131"></a> * @type {number}
+<a name="line132"></a> */
+<a name="line133"></a>goog.ui.ImagelessRoundedCorner.Corner.RIGHT =
+<a name="line134"></a>    goog.ui.ImagelessRoundedCorner.Corner.TOP_RIGHT |
+<a name="line135"></a>    goog.ui.ImagelessRoundedCorner.Corner.BOTTOM_RIGHT;
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/**
+<a name="line139"></a> * Specifies the top-left and top-right corners.
+<a name="line140"></a> * @type {number}
+<a name="line141"></a> */
+<a name="line142"></a>goog.ui.ImagelessRoundedCorner.Corner.TOP =
+<a name="line143"></a>    goog.ui.ImagelessRoundedCorner.Corner.TOP_LEFT |
+<a name="line144"></a>    goog.ui.ImagelessRoundedCorner.Corner.TOP_RIGHT;
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * Specifies the bottom-left and bottom-right corners.
+<a name="line149"></a> * @type {number}
+<a name="line150"></a> */
+<a name="line151"></a>goog.ui.ImagelessRoundedCorner.Corner.BOTTOM =
+<a name="line152"></a>    goog.ui.ImagelessRoundedCorner.Corner.BOTTOM_LEFT |
+<a name="line153"></a>    goog.ui.ImagelessRoundedCorner.Corner.BOTTOM_RIGHT;
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>/**
+<a name="line157"></a> * Specifies all corners.
+<a name="line158"></a> * @type {number}
+<a name="line159"></a> */
+<a name="line160"></a>goog.ui.ImagelessRoundedCorner.Corner.ALL =
+<a name="line161"></a>    goog.ui.ImagelessRoundedCorner.Corner.TOP |
+<a name="line162"></a>    goog.ui.ImagelessRoundedCorner.Corner.BOTTOM;
 <a name="line163"></a>
-<a name="line164"></a>/**
-<a name="line165"></a> * Base class for various image-less rounded corner classes. Do not create
-<a name="line166"></a> * instances of this class. Instead, utilize
-<a name="line167"></a> * goog.ui.ImagelessRoundedCorner.create().
-<a name="line168"></a> * @param {Element} element The container element for the rounded corner.
-<a name="line169"></a> * @param {number} width The width of the element excluding the border, in
-<a name="line170"></a> *     pixels.
-<a name="line171"></a> * @param {number} height The height of the element excluding the border, in
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Base class for various image-less rounded corner classes. Do not create
+<a name="line168"></a> * instances of this class. Instead, utilize
+<a name="line169"></a> * goog.ui.ImagelessRoundedCorner.create().
+<a name="line170"></a> * @param {Element} element The container element for the rounded corner.
+<a name="line171"></a> * @param {number} width The width of the element excluding the border, in
 <a name="line172"></a> *     pixels.
-<a name="line173"></a> * @param {number} borderWidth The thickness of the rounded corner, in pixels.
-<a name="line174"></a> * @param {number} radius The radius of the rounded corner, in pixels. The
-<a name="line175"></a> *     radius must be less than or equal to the width or height (whichever
-<a name="line176"></a> *     is greater).
-<a name="line177"></a> * @param {number} location Location of the rounded corner. This should be a
-<a name="line178"></a> *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
-<a name="line179"></a> *     BOTTOM_LEFT, or BOTTOM_RIGHT.
-<a name="line180"></a> * @param {string} borderColor The color of the rounded corner.
-<a name="line181"></a> * @param {string} opt_backgroundColor The background color of the
-<a name="line182"></a> *     rounded corner.
-<a name="line183"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
-<a name="line184"></a> *     document we want to render in.
-<a name="line185"></a> * @constructor
-<a name="line186"></a> */
-<a name="line187"></a>goog.ui.AbstractImagelessRoundedCorner = function(element,
-<a name="line188"></a>                                                  width,
-<a name="line189"></a>                                                  height,
-<a name="line190"></a>                                                  borderWidth,
-<a name="line191"></a>                                                  radius,
-<a name="line192"></a>                                                  location,
-<a name="line193"></a>                                                  borderColor,
-<a name="line194"></a>                                                  opt_backgroundColor,
-<a name="line195"></a>                                                  opt_domHelper) {
-<a name="line196"></a>  /**
-<a name="line197"></a>   * The container element for the rounded corner.
-<a name="line198"></a>   * @type {Element}
-<a name="line199"></a>   * @private
-<a name="line200"></a>   */
-<a name="line201"></a>  this.element_ = element;
-<a name="line202"></a>
-<a name="line203"></a>  /**
-<a name="line204"></a>   * The width of the container element for the rounded corner, in pixels.
-<a name="line205"></a>   * @type {number}
-<a name="line206"></a>   * @private
-<a name="line207"></a>   */
-<a name="line208"></a>  this.width_ = width;
-<a name="line209"></a>
-<a name="line210"></a>  /**
-<a name="line211"></a>   * The height of the container element for the rounded corner, in pixels.
-<a name="line212"></a>   * @type {number}
-<a name="line213"></a>   * @private
-<a name="line214"></a>   */
-<a name="line215"></a>  this.height_ = height;
-<a name="line216"></a>
-<a name="line217"></a>  /**
-<a name="line218"></a>   * The color of the rounded corner.
-<a name="line219"></a>   * @type {string}
-<a name="line220"></a>   * @private
-<a name="line221"></a>   */
-<a name="line222"></a>  this.borderColor_ = borderColor;
-<a name="line223"></a>
-<a name="line224"></a>  /**
-<a name="line225"></a>   * The background color of the rounded corner.
-<a name="line226"></a>   * @type {string|undefined}
-<a name="line227"></a>   * @private
-<a name="line228"></a>   */
-<a name="line229"></a>  this.backgroundColor_ = opt_backgroundColor;
-<a name="line230"></a>
-<a name="line231"></a>  /**
-<a name="line232"></a>   * The thickness of the rounded corner, in pixels.
-<a name="line233"></a>   * @type {number}
-<a name="line234"></a>   * @private
-<a name="line235"></a>   */
-<a name="line236"></a>  this.borderWidth_ = borderWidth;
-<a name="line237"></a>
-<a name="line238"></a>  /**
-<a name="line239"></a>   * The radius of the rounded corner, in pixels.
-<a name="line240"></a>   * @type {number}
-<a name="line241"></a>   * @private
-<a name="line242"></a>   */
-<a name="line243"></a>  this.radius_ = radius;
-<a name="line244"></a>
-<a name="line245"></a>  /**
-<a name="line246"></a>   * Indicates if this is a left rounded corner (ex. top left or bottom left).
-<a name="line247"></a>   * @type {boolean}
-<a name="line248"></a>   * @private
-<a name="line249"></a>   */
-<a name="line250"></a>  this.isLeft_ = !!(location &amp; goog.ui.ImagelessRoundedCorner.Corner.LEFT);
-<a name="line251"></a>
-<a name="line252"></a>  /**
-<a name="line253"></a>   * Indicates if this is a top rounded corner (ex. top left or top right).
-<a name="line254"></a>   * @type {boolean}
-<a name="line255"></a>   * @private
-<a name="line256"></a>   */
-<a name="line257"></a>  this.isTop_ = !!(location &amp; goog.ui.ImagelessRoundedCorner.Corner.TOP);
-<a name="line258"></a>
-<a name="line259"></a>  /**
-<a name="line260"></a>   * The DOM helper object for the document we want to render in.
-<a name="line261"></a>   * @type {goog.dom.DomHelper}
-<a name="line262"></a>   * @private
-<a name="line263"></a>   */
-<a name="line264"></a>  this.domHelper_ = opt_domHelper || goog.dom.getDomHelper(this.element_);
-<a name="line265"></a>
-<a name="line266"></a>  /**
-<a name="line267"></a>   * The start angle of the rounded corner arc
-<a name="line268"></a>   * @type {number}
-<a name="line269"></a>   * @private
-<a name="line270"></a>   */
-<a name="line271"></a>  this.startAngle_ = this.getStartAngle();
-<a name="line272"></a>
-<a name="line273"></a>  /**
-<a name="line274"></a>   * The end angle of the rounded corner arc
-<a name="line275"></a>   * @type {number}
-<a name="line276"></a>   * @private
-<a name="line277"></a>   */
-<a name="line278"></a>  this.endAngle_ = this.getEndAngle();
-<a name="line279"></a>
-<a name="line280"></a>  /**
-<a name="line281"></a>   * The x and y coordinates indicating where to begin drawing.
-<a name="line282"></a>   * @type {Array.&lt;number&gt;}
-<a name="line283"></a>   * @private
-<a name="line284"></a>   */
-<a name="line285"></a>  this.start_ = [];
-<a name="line286"></a>
-<a name="line287"></a>  /**
-<a name="line288"></a>   * The x and y coordinates indicating where to stop drawing.
-<a name="line289"></a>   * @type {Array.&lt;number&gt;}
-<a name="line290"></a>   * @private
-<a name="line291"></a>   */
-<a name="line292"></a>  this.end_ = [];
-<a name="line293"></a>
-<a name="line294"></a>
-<a name="line295"></a>  // Define the circle center of the arc, and the start/end points. The
-<a name="line296"></a>  // start/end points, and the circle center for the arc are moved inward,
-<a name="line297"></a>  // depending on the borderWidth of the stroke.
-<a name="line298"></a>  var borderWidthOffset = this.getBorderWidthOffset();
-<a name="line299"></a>  if (this.isLeft_) {
-<a name="line300"></a>    this.start_[0] = this.width_;
-<a name="line301"></a>    this.xCenter_ = this.radius_ + borderWidthOffset;
-<a name="line302"></a>    this.end_[0] = borderWidthOffset;
-<a name="line303"></a>  } else {
-<a name="line304"></a>    this.start_[0] = 0;
-<a name="line305"></a>    this.xCenter_ = this.width_ - this.radius_ - borderWidthOffset;
-<a name="line306"></a>    this.end_[0] = this.width_ - borderWidthOffset;
-<a name="line307"></a>  }
-<a name="line308"></a>  if (this.isTop_) {
-<a name="line309"></a>    this.start_[1] = borderWidthOffset;
-<a name="line310"></a>    this.yCenter_ = this.radius_ + borderWidthOffset;
-<a name="line311"></a>    this.end_[1] = this.height_;
-<a name="line312"></a>  } else {
-<a name="line313"></a>    this.start_[1] = this.height_ - borderWidthOffset;
-<a name="line314"></a>    this.yCenter_ = this.height_ - this.radius_ - borderWidthOffset;
-<a name="line315"></a>    this.end_[1] = 0;
-<a name="line316"></a>  }
-<a name="line317"></a>};
-<a name="line318"></a>
-<a name="line319"></a>
-<a name="line320"></a>/**
-<a name="line321"></a> * X-axis coordinate of the circle center that the rounded corner arc is
-<a name="line322"></a> * based on.
-<a name="line323"></a> * @type {number}
-<a name="line324"></a> * @private
-<a name="line325"></a> */
-<a name="line326"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.xCenter_;
-<a name="line327"></a>
-<a name="line328"></a>
-<a name="line329"></a>/**
-<a name="line330"></a> * Y-axis coordinate of the circle center that the rounded corner arc is
-<a name="line331"></a> * based on.
-<a name="line332"></a> * @type {number}
-<a name="line333"></a> * @private
-<a name="line334"></a> */
-<a name="line335"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.yCenter_;
-<a name="line336"></a>
-<a name="line337"></a>
-<a name="line338"></a>/**
-<a name="line339"></a> * Thickness constant used as an offset to help determine where to start
-<a name="line340"></a> * rendering.
-<a name="line341"></a> * @type {number}
-<a name="line342"></a> */
-<a name="line343"></a>goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR = 1 / 2;
-<a name="line344"></a>
-<a name="line345"></a>
-<a name="line346"></a>/**
-<a name="line347"></a> * Returns the end angle of the arc for the rounded corner.
-<a name="line348"></a> * @return {number} The end angle, in degrees or radians.
-<a name="line349"></a> * @protected
-<a name="line350"></a> */
-<a name="line351"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getEndAngle =
-<a name="line352"></a>    goog.abstractMethod;
-<a name="line353"></a>
-<a name="line354"></a>
-<a name="line355"></a>/**
-<a name="line356"></a> * Returns the start angle of the arc for the rounded corner.
-<a name="line357"></a> * @return {number} The start angle, in degrees or radians.
-<a name="line358"></a> * @protected
-<a name="line359"></a> */
-<a name="line360"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getStartAngle =
-<a name="line361"></a>    goog.abstractMethod;
-<a name="line362"></a>
-<a name="line363"></a>
-<a name="line364"></a>/**
-<a name="line365"></a> * Returns the thickness offset used for accurately rendering the corner
-<a name="line366"></a> * within its container.
-<a name="line367"></a> * @return {number} The thickness offset, in pixels.
-<a name="line368"></a> * @protected
-<a name="line369"></a> */
-<a name="line370"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getBorderWidthOffset =
-<a name="line371"></a>    function() {
-<a name="line372"></a>  return this.borderWidth_ *
-<a name="line373"></a>      goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line374"></a>};
-<a name="line375"></a>
-<a name="line376"></a>
-<a name="line377"></a>/**
-<a name="line378"></a> * Returns the underlying DOM element containing the rounded corner.
-<a name="line379"></a> * @return {Element} The underlying DOM element.
-<a name="line380"></a> * @protected
-<a name="line381"></a> */
-<a name="line382"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getElement =
-<a name="line383"></a>    goog.abstractMethod;
-<a name="line384"></a>
-<a name="line385"></a>
-<a name="line386"></a>/**
-<a name="line387"></a> * Renders the rounded corner.
-<a name="line388"></a> */
-<a name="line389"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.draw = goog.abstractMethod;
-<a name="line390"></a>
-<a name="line391"></a>
-<a name="line392"></a>/**
-<a name="line393"></a> * Returns the height of the element containing the rounded corner.
-<a name="line394"></a> * @return {number} The height of the element, in pixels.
-<a name="line395"></a> */
-<a name="line396"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getHeight = function() {
-<a name="line397"></a>  return this.height_;
-<a name="line398"></a>};
-<a name="line399"></a>
-<a name="line400"></a>
-<a name="line401"></a>/**
-<a name="line402"></a> * Sets the height of the element containing the rounded corner.
-<a name="line403"></a> * @param {number} height The height of the element, in pixels.
-<a name="line404"></a> */
-<a name="line405"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setHeight = function(height) {
-<a name="line406"></a>  this.height_ = height;
-<a name="line407"></a>};
-<a name="line408"></a>
-<a name="line409"></a>
-<a name="line410"></a>/**
-<a name="line411"></a> * Returns the width of the element containing the rounded corner.
-<a name="line412"></a> * @return {number} The width of the element, in pixels.
-<a name="line413"></a> */
-<a name="line414"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getWidth = function() {
-<a name="line415"></a>  return this.width_;
-<a name="line416"></a>};
-<a name="line417"></a>
-<a name="line418"></a>
-<a name="line419"></a>/**
-<a name="line420"></a> * Sets the width of the element containing the rounded corner.
-<a name="line421"></a> * @param {number} width The width of the element, in pixels.
-<a name="line422"></a> */
-<a name="line423"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setWidth = function(width) {
-<a name="line424"></a>  this.width_ = width;
-<a name="line425"></a>};
-<a name="line426"></a>
-<a name="line427"></a>
-<a name="line428"></a>/**
-<a name="line429"></a> * Returns the thickness of the rounded corner.
-<a name="line430"></a> * @return {number} The thickness of the rounded corner, in pixels.
-<a name="line431"></a> */
-<a name="line432"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getLineWidth =
-<a name="line433"></a>    function() {
-<a name="line434"></a>  return this.borderWidth_;
-<a name="line435"></a>};
-<a name="line436"></a>
-<a name="line437"></a>
-<a name="line438"></a>/**
-<a name="line439"></a> * Sets the thickness of the rounded corner.
-<a name="line440"></a> * @param {number} thickness The thickness of the rounded corner, in pixels.
-<a name="line441"></a> */
-<a name="line442"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setLineWidth =
-<a name="line443"></a>    function(thickness) {
-<a name="line444"></a>  this.borderWidth_ = thickness;
-<a name="line445"></a>};
-<a name="line446"></a>
-<a name="line447"></a>
-<a name="line448"></a>/**
-<a name="line449"></a> * Returns the radius of the rounded corner.
-<a name="line450"></a> * @return {number} The radius of the rounded corner, in pixels.
-<a name="line451"></a> */
-<a name="line452"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getRadius = function() {
-<a name="line453"></a>  return this.radius_;
-<a name="line454"></a>};
-<a name="line455"></a>
-<a name="line456"></a>
-<a name="line457"></a>/**
-<a name="line458"></a> * Sets the radius of the rounded corner.
-<a name="line459"></a> * @param {number} radius The radius of the rounded corner, in pixels.
-<a name="line460"></a> */
-<a name="line461"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setRadius = function(radius) {
-<a name="line462"></a>  this.radius_ = radius;
-<a name="line463"></a>};
-<a name="line464"></a>
-<a name="line465"></a>
-<a name="line466"></a>/**
-<a name="line467"></a> * Returns the color of the rounded corner.
-<a name="line468"></a> * @return {string} The color of the rounded corner.
-<a name="line469"></a> */
-<a name="line470"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getBorderColor = function() {
-<a name="line471"></a>  return this.borderColor_;
-<a name="line472"></a>};
-<a name="line473"></a>
-<a name="line474"></a>
-<a name="line475"></a>/**
-<a name="line476"></a> * Sets the color of the rounded corner.
-<a name="line477"></a> * @param {string} borderColor The color of the rounded corner.
-<a name="line478"></a> */
-<a name="line479"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setBorderColor =
-<a name="line480"></a>    function(borderColor) {
-<a name="line481"></a>  this.borderColor_ = borderColor;
-<a name="line482"></a>};
-<a name="line483"></a>
-<a name="line484"></a>
-<a name="line485"></a>/**
-<a name="line486"></a> * Returns the background color of the rounded corner.
-<a name="line487"></a> * @return {string|undefined} The background color of the rounded corner.
-<a name="line488"></a> */
-<a name="line489"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getBackgroundColor =
-<a name="line490"></a>    function() {
-<a name="line491"></a>  return this.backgroundColor_;
-<a name="line492"></a>};
-<a name="line493"></a>
-<a name="line494"></a>
-<a name="line495"></a>/**
-<a name="line496"></a> * Sets the background color of the rounded corner.
-<a name="line497"></a> * @param {string} backgroundColor The background color of the rounded corner.
-<a name="line498"></a> */
-<a name="line499"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setBackgroundColor =
-<a name="line500"></a>    function(backgroundColor) {
-<a name="line501"></a>  this.backgroundColor_ = backgroundColor;
-<a name="line502"></a>};
-<a name="line503"></a>
-<a name="line504"></a>
+<a name="line173"></a> * @param {number} height The height of the element excluding the border, in
+<a name="line174"></a> *     pixels.
+<a name="line175"></a> * @param {number} borderWidth The thickness of the rounded corner, in pixels.
+<a name="line176"></a> * @param {number} radius The radius of the rounded corner, in pixels. The
+<a name="line177"></a> *     radius must be less than or equal to the width or height (whichever
+<a name="line178"></a> *     is greater).
+<a name="line179"></a> * @param {number} location Location of the rounded corner. This should be a
+<a name="line180"></a> *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
+<a name="line181"></a> *     BOTTOM_LEFT, or BOTTOM_RIGHT.
+<a name="line182"></a> * @param {string} borderColor The color of the rounded corner.
+<a name="line183"></a> * @param {string} opt_backgroundColor The background color of the
+<a name="line184"></a> *     rounded corner.
+<a name="line185"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+<a name="line186"></a> *     document we want to render in.
+<a name="line187"></a> * @constructor
+<a name="line188"></a> */
+<a name="line189"></a>goog.ui.AbstractImagelessRoundedCorner = function(element,
+<a name="line190"></a>                                                  width,
+<a name="line191"></a>                                                  height,
+<a name="line192"></a>                                                  borderWidth,
+<a name="line193"></a>                                                  radius,
+<a name="line194"></a>                                                  location,
+<a name="line195"></a>                                                  borderColor,
+<a name="line196"></a>                                                  opt_backgroundColor,
+<a name="line197"></a>                                                  opt_domHelper) {
+<a name="line198"></a>  /**
+<a name="line199"></a>   * The container element for the rounded corner.
+<a name="line200"></a>   * @type {Element}
+<a name="line201"></a>   * @private
+<a name="line202"></a>   */
+<a name="line203"></a>  this.element_ = element;
+<a name="line204"></a>
+<a name="line205"></a>  /**
+<a name="line206"></a>   * The width of the container element for the rounded corner, in pixels.
+<a name="line207"></a>   * @type {number}
+<a name="line208"></a>   * @private
+<a name="line209"></a>   */
+<a name="line210"></a>  this.width_ = width;
+<a name="line211"></a>
+<a name="line212"></a>  /**
+<a name="line213"></a>   * The height of the container element for the rounded corner, in pixels.
+<a name="line214"></a>   * @type {number}
+<a name="line215"></a>   * @private
+<a name="line216"></a>   */
+<a name="line217"></a>  this.height_ = height;
+<a name="line218"></a>
+<a name="line219"></a>  /**
+<a name="line220"></a>   * The color of the rounded corner.
+<a name="line221"></a>   * @type {string}
+<a name="line222"></a>   * @private
+<a name="line223"></a>   */
+<a name="line224"></a>  this.borderColor_ = borderColor;
+<a name="line225"></a>
+<a name="line226"></a>  /**
+<a name="line227"></a>   * The background color of the rounded corner.
+<a name="line228"></a>   * @type {string|undefined}
+<a name="line229"></a>   * @private
+<a name="line230"></a>   */
+<a name="line231"></a>  this.backgroundColor_ = opt_backgroundColor;
+<a name="line232"></a>
+<a name="line233"></a>  /**
+<a name="line234"></a>   * The thickness of the rounded corner, in pixels.
+<a name="line235"></a>   * @type {number}
+<a name="line236"></a>   * @private
+<a name="line237"></a>   */
+<a name="line238"></a>  this.borderWidth_ = borderWidth;
+<a name="line239"></a>
+<a name="line240"></a>  /**
+<a name="line241"></a>   * The radius of the rounded corner, in pixels.
+<a name="line242"></a>   * @type {number}
+<a name="line243"></a>   * @private
+<a name="line244"></a>   */
+<a name="line245"></a>  this.radius_ = radius;
+<a name="line246"></a>
+<a name="line247"></a>  /**
+<a name="line248"></a>   * Indicates if this is a left rounded corner (ex. top left or bottom left).
+<a name="line249"></a>   * @type {boolean}
+<a name="line250"></a>   * @private
+<a name="line251"></a>   */
+<a name="line252"></a>  this.isLeft_ = !!(location &amp; goog.ui.ImagelessRoundedCorner.Corner.LEFT);
+<a name="line253"></a>
+<a name="line254"></a>  /**
+<a name="line255"></a>   * Indicates if this is a top rounded corner (ex. top left or top right).
+<a name="line256"></a>   * @type {boolean}
+<a name="line257"></a>   * @private
+<a name="line258"></a>   */
+<a name="line259"></a>  this.isTop_ = !!(location &amp; goog.ui.ImagelessRoundedCorner.Corner.TOP);
+<a name="line260"></a>
+<a name="line261"></a>  /**
+<a name="line262"></a>   * The DOM helper object for the document we want to render in.
+<a name="line263"></a>   * @type {goog.dom.DomHelper}
+<a name="line264"></a>   * @private
+<a name="line265"></a>   */
+<a name="line266"></a>  this.domHelper_ = opt_domHelper || goog.dom.getDomHelper(this.element_);
+<a name="line267"></a>
+<a name="line268"></a>  /**
+<a name="line269"></a>   * The start angle of the rounded corner arc
+<a name="line270"></a>   * @type {number}
+<a name="line271"></a>   * @private
+<a name="line272"></a>   */
+<a name="line273"></a>  this.startAngle_ = this.getStartAngle();
+<a name="line274"></a>
+<a name="line275"></a>  /**
+<a name="line276"></a>   * The end angle of the rounded corner arc
+<a name="line277"></a>   * @type {number}
+<a name="line278"></a>   * @private
+<a name="line279"></a>   */
+<a name="line280"></a>  this.endAngle_ = this.getEndAngle();
+<a name="line281"></a>
+<a name="line282"></a>  /**
+<a name="line283"></a>   * The x and y coordinates indicating where to begin drawing.
+<a name="line284"></a>   * @type {Array.&lt;number&gt;}
+<a name="line285"></a>   * @private
+<a name="line286"></a>   */
+<a name="line287"></a>  this.start_ = [];
+<a name="line288"></a>
+<a name="line289"></a>  /**
+<a name="line290"></a>   * The x and y coordinates indicating where to stop drawing.
+<a name="line291"></a>   * @type {Array.&lt;number&gt;}
+<a name="line292"></a>   * @private
+<a name="line293"></a>   */
+<a name="line294"></a>  this.end_ = [];
+<a name="line295"></a>
+<a name="line296"></a>
+<a name="line297"></a>  // Define the circle center of the arc, and the start/end points. The
+<a name="line298"></a>  // start/end points, and the circle center for the arc are moved inward,
+<a name="line299"></a>  // depending on the borderWidth of the stroke.
+<a name="line300"></a>  var borderWidthOffset = this.getBorderWidthOffset();
+<a name="line301"></a>  if (this.isLeft_) {
+<a name="line302"></a>    this.start_[0] = this.width_;
+<a name="line303"></a>    this.xCenter_ = this.radius_ + borderWidthOffset;
+<a name="line304"></a>    this.end_[0] = borderWidthOffset;
+<a name="line305"></a>  } else {
+<a name="line306"></a>    this.start_[0] = 0;
+<a name="line307"></a>    this.xCenter_ = this.width_ - this.radius_ - borderWidthOffset;
+<a name="line308"></a>    this.end_[0] = this.width_ - borderWidthOffset;
+<a name="line309"></a>  }
+<a name="line310"></a>  if (this.isTop_) {
+<a name="line311"></a>    this.start_[1] = borderWidthOffset;
+<a name="line312"></a>    this.yCenter_ = this.radius_ + borderWidthOffset;
+<a name="line313"></a>    this.end_[1] = this.height_;
+<a name="line314"></a>  } else {
+<a name="line315"></a>    this.start_[1] = this.height_ - borderWidthOffset;
+<a name="line316"></a>    this.yCenter_ = this.height_ - this.radius_ - borderWidthOffset;
+<a name="line317"></a>    this.end_[1] = 0;
+<a name="line318"></a>  }
+<a name="line319"></a>};
+<a name="line320"></a>
+<a name="line321"></a>
+<a name="line322"></a>/**
+<a name="line323"></a> * X-axis coordinate of the circle center that the rounded corner arc is
+<a name="line324"></a> * based on.
+<a name="line325"></a> * @type {number}
+<a name="line326"></a> * @private
+<a name="line327"></a> */
+<a name="line328"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.xCenter_;
+<a name="line329"></a>
+<a name="line330"></a>
+<a name="line331"></a>/**
+<a name="line332"></a> * Y-axis coordinate of the circle center that the rounded corner arc is
+<a name="line333"></a> * based on.
+<a name="line334"></a> * @type {number}
+<a name="line335"></a> * @private
+<a name="line336"></a> */
+<a name="line337"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.yCenter_;
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * Thickness constant used as an offset to help determine where to start
+<a name="line342"></a> * rendering.
+<a name="line343"></a> * @type {number}
+<a name="line344"></a> */
+<a name="line345"></a>goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR = 1 / 2;
+<a name="line346"></a>
+<a name="line347"></a>
+<a name="line348"></a>/**
+<a name="line349"></a> * Returns the end angle of the arc for the rounded corner.
+<a name="line350"></a> * @return {number} The end angle, in degrees or radians.
+<a name="line351"></a> * @protected
+<a name="line352"></a> */
+<a name="line353"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getEndAngle =
+<a name="line354"></a>    goog.abstractMethod;
+<a name="line355"></a>
+<a name="line356"></a>
+<a name="line357"></a>/**
+<a name="line358"></a> * Returns the start angle of the arc for the rounded corner.
+<a name="line359"></a> * @return {number} The start angle, in degrees or radians.
+<a name="line360"></a> * @protected
+<a name="line361"></a> */
+<a name="line362"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getStartAngle =
+<a name="line363"></a>    goog.abstractMethod;
+<a name="line364"></a>
+<a name="line365"></a>
+<a name="line366"></a>/**
+<a name="line367"></a> * Returns the thickness offset used for accurately rendering the corner
+<a name="line368"></a> * within its container.
+<a name="line369"></a> * @return {number} The thickness offset, in pixels.
+<a name="line370"></a> * @protected
+<a name="line371"></a> */
+<a name="line372"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getBorderWidthOffset =
+<a name="line373"></a>    function() {
+<a name="line374"></a>  return this.borderWidth_ *
+<a name="line375"></a>      goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line376"></a>};
+<a name="line377"></a>
+<a name="line378"></a>
+<a name="line379"></a>/**
+<a name="line380"></a> * Returns the underlying DOM element containing the rounded corner.
+<a name="line381"></a> * @return {Element} The underlying DOM element.
+<a name="line382"></a> * @protected
+<a name="line383"></a> */
+<a name="line384"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getElement =
+<a name="line385"></a>    goog.abstractMethod;
+<a name="line386"></a>
+<a name="line387"></a>
+<a name="line388"></a>/**
+<a name="line389"></a> * Renders the rounded corner.
+<a name="line390"></a> */
+<a name="line391"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.draw = goog.abstractMethod;
+<a name="line392"></a>
+<a name="line393"></a>
+<a name="line394"></a>/**
+<a name="line395"></a> * Returns the height of the element containing the rounded corner.
+<a name="line396"></a> * @return {number} The height of the element, in pixels.
+<a name="line397"></a> */
+<a name="line398"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getHeight = function() {
+<a name="line399"></a>  return this.height_;
+<a name="line400"></a>};
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>/**
+<a name="line404"></a> * Sets the height of the element containing the rounded corner.
+<a name="line405"></a> * @param {number} height The height of the element, in pixels.
+<a name="line406"></a> */
+<a name="line407"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setHeight = function(height) {
+<a name="line408"></a>  this.height_ = height;
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>/**
+<a name="line413"></a> * Returns the width of the element containing the rounded corner.
+<a name="line414"></a> * @return {number} The width of the element, in pixels.
+<a name="line415"></a> */
+<a name="line416"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getWidth = function() {
+<a name="line417"></a>  return this.width_;
+<a name="line418"></a>};
+<a name="line419"></a>
+<a name="line420"></a>
+<a name="line421"></a>/**
+<a name="line422"></a> * Sets the width of the element containing the rounded corner.
+<a name="line423"></a> * @param {number} width The width of the element, in pixels.
+<a name="line424"></a> */
+<a name="line425"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setWidth = function(width) {
+<a name="line426"></a>  this.width_ = width;
+<a name="line427"></a>};
+<a name="line428"></a>
+<a name="line429"></a>
+<a name="line430"></a>/**
+<a name="line431"></a> * Returns the thickness of the rounded corner.
+<a name="line432"></a> * @return {number} The thickness of the rounded corner, in pixels.
+<a name="line433"></a> */
+<a name="line434"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getLineWidth =
+<a name="line435"></a>    function() {
+<a name="line436"></a>  return this.borderWidth_;
+<a name="line437"></a>};
+<a name="line438"></a>
+<a name="line439"></a>
+<a name="line440"></a>/**
+<a name="line441"></a> * Sets the thickness of the rounded corner.
+<a name="line442"></a> * @param {number} thickness The thickness of the rounded corner, in pixels.
+<a name="line443"></a> */
+<a name="line444"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setLineWidth =
+<a name="line445"></a>    function(thickness) {
+<a name="line446"></a>  this.borderWidth_ = thickness;
+<a name="line447"></a>};
+<a name="line448"></a>
+<a name="line449"></a>
+<a name="line450"></a>/**
+<a name="line451"></a> * Returns the radius of the rounded corner.
+<a name="line452"></a> * @return {number} The radius of the rounded corner, in pixels.
+<a name="line453"></a> */
+<a name="line454"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getRadius = function() {
+<a name="line455"></a>  return this.radius_;
+<a name="line456"></a>};
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>/**
+<a name="line460"></a> * Sets the radius of the rounded corner.
+<a name="line461"></a> * @param {number} radius The radius of the rounded corner, in pixels.
+<a name="line462"></a> */
+<a name="line463"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setRadius = function(radius) {
+<a name="line464"></a>  this.radius_ = radius;
+<a name="line465"></a>};
+<a name="line466"></a>
+<a name="line467"></a>
+<a name="line468"></a>/**
+<a name="line469"></a> * Returns the color of the rounded corner.
+<a name="line470"></a> * @return {string} The color of the rounded corner.
+<a name="line471"></a> */
+<a name="line472"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getBorderColor = function() {
+<a name="line473"></a>  return this.borderColor_;
+<a name="line474"></a>};
+<a name="line475"></a>
+<a name="line476"></a>
+<a name="line477"></a>/**
+<a name="line478"></a> * Sets the color of the rounded corner.
+<a name="line479"></a> * @param {string} borderColor The color of the rounded corner.
+<a name="line480"></a> */
+<a name="line481"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setBorderColor =
+<a name="line482"></a>    function(borderColor) {
+<a name="line483"></a>  this.borderColor_ = borderColor;
+<a name="line484"></a>};
+<a name="line485"></a>
+<a name="line486"></a>
+<a name="line487"></a>/**
+<a name="line488"></a> * Returns the background color of the rounded corner.
+<a name="line489"></a> * @return {string|undefined} The background color of the rounded corner.
+<a name="line490"></a> */
+<a name="line491"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.getBackgroundColor =
+<a name="line492"></a>    function() {
+<a name="line493"></a>  return this.backgroundColor_;
+<a name="line494"></a>};
+<a name="line495"></a>
+<a name="line496"></a>
+<a name="line497"></a>/**
+<a name="line498"></a> * Sets the background color of the rounded corner.
+<a name="line499"></a> * @param {string} backgroundColor The background color of the rounded corner.
+<a name="line500"></a> */
+<a name="line501"></a>goog.ui.AbstractImagelessRoundedCorner.prototype.setBackgroundColor =
+<a name="line502"></a>    function(backgroundColor) {
+<a name="line503"></a>  this.backgroundColor_ = backgroundColor;
+<a name="line504"></a>};
 <a name="line505"></a>
-<a name="line506"></a>/**
-<a name="line507"></a> * Class for rendering a Canvas-based rounded corner (Gecko and Safari3+).
-<a name="line508"></a> * Horizontal and/or vertical fillers are added if the radius of the rounded
-<a name="line509"></a> * corner is less than the width and/or height of the containing element.
-<a name="line510"></a> * The line is drawn as a single, continuous line, starting with the horizontal
-<a name="line511"></a> * filler, then the arc, then finishing with the vertical filler.
-<a name="line512"></a> * Do not instantiate this class directly. Instead, use
-<a name="line513"></a> * goog.ui.ImagelessRoundedCorner.create().
-<a name="line514"></a> * @param {Element} element The element to be turned into a rounded corner.
-<a name="line515"></a> * @param {number} width The width of the element excluding the border, in
-<a name="line516"></a> *     pixels.
-<a name="line517"></a> * @param {number} height The height of the element excluding the border, in
+<a name="line506"></a>
+<a name="line507"></a>
+<a name="line508"></a>/**
+<a name="line509"></a> * Class for rendering a Canvas-based rounded corner (Gecko and Safari3+).
+<a name="line510"></a> * Horizontal and/or vertical fillers are added if the radius of the rounded
+<a name="line511"></a> * corner is less than the width and/or height of the containing element.
+<a name="line512"></a> * The line is drawn as a single, continuous line, starting with the horizontal
+<a name="line513"></a> * filler, then the arc, then finishing with the vertical filler.
+<a name="line514"></a> * Do not instantiate this class directly. Instead, use
+<a name="line515"></a> * goog.ui.ImagelessRoundedCorner.create().
+<a name="line516"></a> * @param {Element} element The element to be turned into a rounded corner.
+<a name="line517"></a> * @param {number} width The width of the element excluding the border, in
 <a name="line518"></a> *     pixels.
-<a name="line519"></a> * @param {number} borderWidth The thickness of the rounded corner, in pixels.
-<a name="line520"></a> * @param {number} radius The radius of the rounded corner, in pixels. The
-<a name="line521"></a> *     radius must be less than or equal to the width or height (whichever
-<a name="line522"></a> *     is greater).
-<a name="line523"></a> * @param {number} location Location of the rounded corner. This should be a
-<a name="line524"></a> *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
-<a name="line525"></a> *     BOTTOM_LEFT, or BOTTOM_RIGHT.
-<a name="line526"></a> * @param {string} borderColor The color of the rounded corner.
-<a name="line527"></a> * @param {string} opt_backgroundColor The background color of the rounded
-<a name="line528"></a> *     corner.
-<a name="line529"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
-<a name="line530"></a> *     document we want to render in.
-<a name="line531"></a> * @constructor
-<a name="line532"></a> * @extends {goog.ui.AbstractImagelessRoundedCorner}
-<a name="line533"></a> */
-<a name="line534"></a>goog.ui.CanvasRoundedCorner = function(element,
-<a name="line535"></a>                                       width,
-<a name="line536"></a>                                       height,
-<a name="line537"></a>                                       borderWidth,
-<a name="line538"></a>                                       radius,
-<a name="line539"></a>                                       location,
-<a name="line540"></a>                                       borderColor,
-<a name="line541"></a>                                       opt_backgroundColor,
-<a name="line542"></a>                                       opt_domHelper) {
-<a name="line543"></a>  goog.ui.AbstractImagelessRoundedCorner.call(this,
-<a name="line544"></a>                                              element,
-<a name="line545"></a>                                              width,
-<a name="line546"></a>                                              height,
-<a name="line547"></a>                                              borderWidth,
-<a name="line548"></a>                                              radius,
-<a name="line549"></a>                                              location,
-<a name="line550"></a>                                              borderColor,
-<a name="line551"></a>                                              opt_backgroundColor,
-<a name="line552"></a>                                              opt_domHelper);
-<a name="line553"></a>
-<a name="line554"></a>  /**
-<a name="line555"></a>   * The canvas containing the rounded corner.
-<a name="line556"></a>   * @type {Element}
-<a name="line557"></a>   * @private
-<a name="line558"></a>   */
-<a name="line559"></a>  this.canvas_ = this.domHelper_.createDom(&#39;canvas&#39;, {
-<a name="line560"></a>    &#39;height&#39; : height,
-<a name="line561"></a>    &#39;width&#39; : width
-<a name="line562"></a>  });
-<a name="line563"></a>
-<a name="line564"></a>  // If background color is defined, adjust the current end point, define the
-<a name="line565"></a>  // opposite corner, and end at the start offset. Account for thickness
-<a name="line566"></a>  // offsets in these calculations. The enclosed area will be filled by
-<a name="line567"></a>  // backgroundColor
-<a name="line568"></a>  if (this.backgroundColor_) {
-<a name="line569"></a>    var borderWidthOffset = this.getBorderWidthOffset();
-<a name="line570"></a>    this.oppositeCorner_ = [];
-<a name="line571"></a>
-<a name="line572"></a>    // Move one pixel more in the direction the line is being drawn. Then draw
-<a name="line573"></a>    // a line to the opposite corner + the diagonal offset.  Then draw a line
-<a name="line574"></a>    // to the start, offset by 1px.
-<a name="line575"></a>    if (this.isLeft_) {
-<a name="line576"></a>      this.oppositeCorner_[0] = this.width_ + borderWidthOffset;
-<a name="line577"></a>      this.xStartOffset_ = this.start_[0] + borderWidthOffset;
-<a name="line578"></a>    } else {
-<a name="line579"></a>      this.oppositeCorner_[0] = -borderWidthOffset;
-<a name="line580"></a>      this.xStartOffset_ = -borderWidthOffset;
-<a name="line581"></a>    }
-<a name="line582"></a>    if (this.isTop_) {
-<a name="line583"></a>      this.end_[1] += borderWidthOffset;
-<a name="line584"></a>      this.oppositeCorner_[1] = this.height_ + borderWidthOffset;
-<a name="line585"></a>    } else {
-<a name="line586"></a>      this.end_[1] -= borderWidthOffset;
-<a name="line587"></a>      this.oppositeCorner_[1] = -borderWidthOffset;
-<a name="line588"></a>    }
-<a name="line589"></a>  }
-<a name="line590"></a>
-<a name="line591"></a>  // Safari requires the canvas to be added to the DOM before defining the
-<a name="line592"></a>  // graphics context. Otherwise, rendering will fail.
-<a name="line593"></a>  this.domHelper_.appendChild(this.element_, this.canvas_);
-<a name="line594"></a>};
-<a name="line595"></a>goog.inherits(goog.ui.CanvasRoundedCorner,
-<a name="line596"></a>              goog.ui.AbstractImagelessRoundedCorner);
-<a name="line597"></a>
-<a name="line598"></a>
-<a name="line599"></a>/**
-<a name="line600"></a> * The x and y coordinates of the corner opposite the rounded corner arc,
-<a name="line601"></a> * with the stroke thickness offset added. This is defined if
-<a name="line602"></a> * backgroundColor_ is defined.
-<a name="line603"></a> * @type {Array.&lt;number&gt;?}
-<a name="line604"></a> * @private
-<a name="line605"></a> */
-<a name="line606"></a>goog.ui.CanvasRoundedCorner.prototype.oppositeCorner_;
-<a name="line607"></a>
-<a name="line608"></a>
-<a name="line609"></a>/**
-<a name="line610"></a> * The x coordinate of the path&#39;s end, when enclosing the path. This is
-<a name="line611"></a> * defined if backgroundColor_ is defined.
-<a name="line612"></a> * @type {number}
-<a name="line613"></a> * @private
-<a name="line614"></a> */
-<a name="line615"></a>goog.ui.CanvasRoundedCorner.prototype.xStartOffset_;
-<a name="line616"></a>
-<a name="line617"></a>
-<a name="line618"></a>/**
-<a name="line619"></a> * Half a radian.
-<a name="line620"></a> * @type {number}
-<a name="line621"></a> * @private
-<a name="line622"></a> */
-<a name="line623"></a>goog.ui.CanvasRoundedCorner.RADIANS_HALF_ = Math.PI / 2;
-<a name="line624"></a>
-<a name="line625"></a>
-<a name="line626"></a>/**
-<a name="line627"></a> * One radian.
-<a name="line628"></a> * @type {number}
-<a name="line629"></a> * @private
-<a name="line630"></a> */
-<a name="line631"></a>goog.ui.CanvasRoundedCorner.RADIANS_ONE_ = Math.PI;
-<a name="line632"></a>
-<a name="line633"></a>
-<a name="line634"></a>/**
-<a name="line635"></a> * Three halves of a radian.
-<a name="line636"></a> * @type {number}
-<a name="line637"></a> * @private
-<a name="line638"></a> */
-<a name="line639"></a>goog.ui.CanvasRoundedCorner.RADIANS_THREE_HALVES_ = 1.5 * Math.PI;
-<a name="line640"></a>
-<a name="line641"></a>
-<a name="line642"></a>/**
-<a name="line643"></a> * Two radians.
-<a name="line644"></a> * @type {number}
-<a name="line645"></a> * @private
-<a name="line646"></a> */
-<a name="line647"></a>goog.ui.CanvasRoundedCorner.RADIANS_TWO_ = 2 * Math.PI;
-<a name="line648"></a>
-<a name="line649"></a>
-<a name="line650"></a>/**
-<a name="line651"></a> * Returns the end angle of the arc for the rounded corner.
-<a name="line652"></a> * @return {number} The end angle, in radians.
-<a name="line653"></a> * @protected
-<a name="line654"></a> */
-<a name="line655"></a>goog.ui.CanvasRoundedCorner.prototype.getEndAngle = function() {
-<a name="line656"></a>  return this.isLeft_ ?
-<a name="line657"></a>      goog.ui.CanvasRoundedCorner.RADIANS_ONE_ :
-<a name="line658"></a>      goog.ui.CanvasRoundedCorner.RADIANS_TWO_;
-<a name="line659"></a>};
-<a name="line660"></a>
-<a name="line661"></a>
-<a name="line662"></a>/**
-<a name="line663"></a> * Returns the start angle of the arc for the rounded corner.
-<a name="line664"></a> * @return {number} The start angle, in radians.
-<a name="line665"></a> * @protected
-<a name="line666"></a> */
-<a name="line667"></a>goog.ui.CanvasRoundedCorner.prototype.getStartAngle = function() {
-<a name="line668"></a>  return this.isTop_ ?
-<a name="line669"></a>      goog.ui.CanvasRoundedCorner.RADIANS_THREE_HALVES_ :
-<a name="line670"></a>      goog.ui.CanvasRoundedCorner.RADIANS_HALF_;
-<a name="line671"></a>};
-<a name="line672"></a>
-<a name="line673"></a>
-<a name="line674"></a>/**
-<a name="line675"></a> * Returns the underlying DOM element containing the rounded corner.
-<a name="line676"></a> * @return {Element} The underlying DOM element.
-<a name="line677"></a> * @protected
-<a name="line678"></a> */
-<a name="line679"></a>goog.ui.CanvasRoundedCorner.prototype.getElement = function() {
-<a name="line680"></a>  return this.canvas_;
-<a name="line681"></a>};
-<a name="line682"></a>
-<a name="line683"></a>
-<a name="line684"></a>/**
-<a name="line685"></a> * Renders the rounded corner.
-<a name="line686"></a> */
-<a name="line687"></a>goog.ui.CanvasRoundedCorner.prototype.draw = function() {
-<a name="line688"></a>  // Determine which direction to draw, and obtain the context.
-<a name="line689"></a>  var counterClockwise = this.isLeft_ &amp;&amp; this.isTop_ ||
-<a name="line690"></a>                         !this.isLeft_ &amp;&amp; !this.isTop_;
-<a name="line691"></a>  var context = this.canvas_.getContext(&#39;2d&#39;);
-<a name="line692"></a>
-<a name="line693"></a>  var version = parseFloat(goog.userAgent.VERSION);
-<a name="line694"></a>  if (goog.userAgent.WEBKIT &amp;&amp;
-<a name="line695"></a>      goog.userAgent.isVersion(&#39;500&#39;) &amp;&amp;
-<a name="line696"></a>      this.oppositeCorner_ &amp;&amp;
-<a name="line697"></a>      this.xStartOffset_) {
-<a name="line698"></a>    // For Safari2, we must render the rounded corner differently when
-<a name="line699"></a>    // backgroundColor_ is specified. Safari2 cannot render the stroke using
-<a name="line700"></a>    // one color, while filling the enclosed path with another color.
-<a name="line701"></a>    this.drawSafari2WithBackground_(context, counterClockwise);
-<a name="line702"></a>  } else {
-<a name="line703"></a>    // Specify the stroke style and line width.
-<a name="line704"></a>    context.strokeStyle = this.borderColor_;
-<a name="line705"></a>    context.lineWidth = this.borderWidth_;
-<a name="line706"></a>
-<a name="line707"></a>    // Draw the defined path.
-<a name="line708"></a>    context.beginPath();
-<a name="line709"></a>    context.moveTo(this.start_[0], this.start_[1]);
-<a name="line710"></a>    context.arc(this.xCenter_,
-<a name="line711"></a>                this.yCenter_,
-<a name="line712"></a>                this.radius_,
-<a name="line713"></a>                this.startAngle_,
-<a name="line714"></a>                this.endAngle_,
-<a name="line715"></a>                counterClockwise);
-<a name="line716"></a>    context.lineTo(this.end_[0], this.end_[1]);
-<a name="line717"></a>
-<a name="line718"></a>    // If backgroundColor_ is defined, render and enclose the rest of the path,
-<a name="line719"></a>    // and fill the background.
-<a name="line720"></a>    if (this.oppositeCorner_ &amp;&amp; this.xStartOffset_) {
-<a name="line721"></a>      context.lineTo(this.oppositeCorner_[0],
-<a name="line722"></a>                     this.oppositeCorner_[1]);
-<a name="line723"></a>      context.lineTo(this.xStartOffset_,
-<a name="line724"></a>                     this.start_[1]);
-<a name="line725"></a>      context.closePath();
-<a name="line726"></a>      context.fillStyle = this.backgroundColor_;
-<a name="line727"></a>      context.fill();
-<a name="line728"></a>    }
-<a name="line729"></a>
-<a name="line730"></a>    // Render the defined path.
-<a name="line731"></a>    context.stroke();
-<a name="line732"></a>  }
-<a name="line733"></a>};
-<a name="line734"></a>
-<a name="line735"></a>
-<a name="line736"></a>/**
-<a name="line737"></a> * Safari2-specific implementation for rendering a rounded corner with
-<a name="line738"></a> * a background color. The background is filled, followed by the rounded
-<a name="line739"></a> * corner path.
-<a name="line740"></a> * @param {Object} context Graphics context used for drawing.
-<a name="line741"></a> * @param {boolean} counterClockwise Specify true to draw in a
-<a name="line742"></a> *     counter-clockwise direction, and false to draw clockwise.
-<a name="line743"></a> * @private
-<a name="line744"></a> */
-<a name="line745"></a>goog.ui.CanvasRoundedCorner.prototype.drawSafari2WithBackground_ =
-<a name="line746"></a>    function(context, counterClockwise) {
-<a name="line747"></a>  // If backgroundColor_ is defined, outline the path,
-<a name="line748"></a>  // and fill the enclosed area.
-<a name="line749"></a>  if (this.oppositeCorner_ &amp;&amp; this.xStartOffset_) {
-<a name="line750"></a>    // Draw the defined path.
-<a name="line751"></a>    context.strokeStyle = this.backgroundColor_;
-<a name="line752"></a>    context.lineWidth = 1;
-<a name="line753"></a>    context.beginPath();
-<a name="line754"></a>    context.moveTo(this.start_[0], this.start_[1]);
-<a name="line755"></a>    context.arc(this.xCenter_,
-<a name="line756"></a>                this.yCenter_,
-<a name="line757"></a>                this.radius_,
-<a name="line758"></a>                this.startAngle_,
-<a name="line759"></a>                this.endAngle_,
-<a name="line760"></a>                counterClockwise);
-<a name="line761"></a>    context.lineTo(this.end_[0], this.end_[1]);
-<a name="line762"></a>    context.lineTo(this.oppositeCorner_[0],
-<a name="line763"></a>                   this.oppositeCorner_[1]);
-<a name="line764"></a>    context.lineTo(this.xStartOffset_,
-<a name="line765"></a>                   this.start_[1]);
-<a name="line766"></a>    context.closePath();
-<a name="line767"></a>    context.fillStyle = this.backgroundColor_;
-<a name="line768"></a>    context.fill();
-<a name="line769"></a>  }
-<a name="line770"></a>
-<a name="line771"></a>  // Draw the rounded corner arc and filler(s).
-<a name="line772"></a>  context.strokeStyle = this.borderColor_;
-<a name="line773"></a>  context.borderWidth = this.borderWidth_;
-<a name="line774"></a>  context.beginPath();
-<a name="line775"></a>  context.moveTo(this.start_[0], this.start_[1]);
-<a name="line776"></a>  context.arc(this.xCenter_,
-<a name="line777"></a>              this.yCenter_,
-<a name="line778"></a>              this.radius_,
-<a name="line779"></a>              this.startAngle_,
-<a name="line780"></a>              this.endAngle_,
-<a name="line781"></a>              counterClockwise);
-<a name="line782"></a>  context.lineTo(this.end_[0], this.end_[1]);
-<a name="line783"></a>  context.stroke();
-<a name="line784"></a>};
-<a name="line785"></a>
-<a name="line786"></a>
+<a name="line519"></a> * @param {number} height The height of the element excluding the border, in
+<a name="line520"></a> *     pixels.
+<a name="line521"></a> * @param {number} borderWidth The thickness of the rounded corner, in pixels.
+<a name="line522"></a> * @param {number} radius The radius of the rounded corner, in pixels. The
+<a name="line523"></a> *     radius must be less than or equal to the width or height (whichever
+<a name="line524"></a> *     is greater).
+<a name="line525"></a> * @param {number} location Location of the rounded corner. This should be a
+<a name="line526"></a> *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
+<a name="line527"></a> *     BOTTOM_LEFT, or BOTTOM_RIGHT.
+<a name="line528"></a> * @param {string} borderColor The color of the rounded corner.
+<a name="line529"></a> * @param {string} opt_backgroundColor The background color of the rounded
+<a name="line530"></a> *     corner.
+<a name="line531"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+<a name="line532"></a> *     document we want to render in.
+<a name="line533"></a> * @constructor
+<a name="line534"></a> * @extends {goog.ui.AbstractImagelessRoundedCorner}
+<a name="line535"></a> */
+<a name="line536"></a>goog.ui.CanvasRoundedCorner = function(element,
+<a name="line537"></a>                                       width,
+<a name="line538"></a>                                       height,
+<a name="line539"></a>                                       borderWidth,
+<a name="line540"></a>                                       radius,
+<a name="line541"></a>                                       location,
+<a name="line542"></a>                                       borderColor,
+<a name="line543"></a>                                       opt_backgroundColor,
+<a name="line544"></a>                                       opt_domHelper) {
+<a name="line545"></a>  goog.ui.AbstractImagelessRoundedCorner.call(this,
+<a name="line546"></a>                                              element,
+<a name="line547"></a>                                              width,
+<a name="line548"></a>                                              height,
+<a name="line549"></a>                                              borderWidth,
+<a name="line550"></a>                                              radius,
+<a name="line551"></a>                                              location,
+<a name="line552"></a>                                              borderColor,
+<a name="line553"></a>                                              opt_backgroundColor,
+<a name="line554"></a>                                              opt_domHelper);
+<a name="line555"></a>
+<a name="line556"></a>  /**
+<a name="line557"></a>   * The canvas containing the rounded corner.
+<a name="line558"></a>   * @type {Element}
+<a name="line559"></a>   * @private
+<a name="line560"></a>   */
+<a name="line561"></a>  this.canvas_ = this.domHelper_.createDom(&#39;canvas&#39;, {
+<a name="line562"></a>    &#39;height&#39; : height,
+<a name="line563"></a>    &#39;width&#39; : width
+<a name="line564"></a>  });
+<a name="line565"></a>
+<a name="line566"></a>  // If background color is defined, adjust the current end point, define the
+<a name="line567"></a>  // opposite corner, and end at the start offset. Account for thickness
+<a name="line568"></a>  // offsets in these calculations. The enclosed area will be filled by
+<a name="line569"></a>  // backgroundColor
+<a name="line570"></a>  if (this.backgroundColor_) {
+<a name="line571"></a>    var borderWidthOffset = this.getBorderWidthOffset();
+<a name="line572"></a>    this.oppositeCorner_ = [];
+<a name="line573"></a>
+<a name="line574"></a>    // Move one pixel more in the direction the line is being drawn. Then draw
+<a name="line575"></a>    // a line to the opposite corner + the diagonal offset.  Then draw a line
+<a name="line576"></a>    // to the start, offset by 1px.
+<a name="line577"></a>    if (this.isLeft_) {
+<a name="line578"></a>      this.oppositeCorner_[0] = this.width_ + borderWidthOffset;
+<a name="line579"></a>      this.xStartOffset_ = this.start_[0] + borderWidthOffset;
+<a name="line580"></a>    } else {
+<a name="line581"></a>      this.oppositeCorner_[0] = -borderWidthOffset;
+<a name="line582"></a>      this.xStartOffset_ = -borderWidthOffset;
+<a name="line583"></a>    }
+<a name="line584"></a>    if (this.isTop_) {
+<a name="line585"></a>      this.end_[1] += borderWidthOffset;
+<a name="line586"></a>      this.oppositeCorner_[1] = this.height_ + borderWidthOffset;
+<a name="line587"></a>    } else {
+<a name="line588"></a>      this.end_[1] -= borderWidthOffset;
+<a name="line589"></a>      this.oppositeCorner_[1] = -borderWidthOffset;
+<a name="line590"></a>    }
+<a name="line591"></a>  }
+<a name="line592"></a>
+<a name="line593"></a>  // Safari requires the canvas to be added to the DOM before defining the
+<a name="line594"></a>  // graphics context. Otherwise, rendering will fail.
+<a name="line595"></a>  this.domHelper_.appendChild(this.element_, this.canvas_);
+<a name="line596"></a>};
+<a name="line597"></a>goog.inherits(goog.ui.CanvasRoundedCorner,
+<a name="line598"></a>              goog.ui.AbstractImagelessRoundedCorner);
+<a name="line599"></a>
+<a name="line600"></a>
+<a name="line601"></a>/**
+<a name="line602"></a> * The x and y coordinates of the corner opposite the rounded corner arc,
+<a name="line603"></a> * with the stroke thickness offset added. This is defined if
+<a name="line604"></a> * backgroundColor_ is defined.
+<a name="line605"></a> * @type {Array.&lt;number&gt;?}
+<a name="line606"></a> * @private
+<a name="line607"></a> */
+<a name="line608"></a>goog.ui.CanvasRoundedCorner.prototype.oppositeCorner_;
+<a name="line609"></a>
+<a name="line610"></a>
+<a name="line611"></a>/**
+<a name="line612"></a> * The x coordinate of the path&#39;s end, when enclosing the path. This is
+<a name="line613"></a> * defined if backgroundColor_ is defined.
+<a name="line614"></a> * @type {number}
+<a name="line615"></a> * @private
+<a name="line616"></a> */
+<a name="line617"></a>goog.ui.CanvasRoundedCorner.prototype.xStartOffset_;
+<a name="line618"></a>
+<a name="line619"></a>
+<a name="line620"></a>/**
+<a name="line621"></a> * Half a radian.
+<a name="line622"></a> * @type {number}
+<a name="line623"></a> * @private
+<a name="line624"></a> */
+<a name="line625"></a>goog.ui.CanvasRoundedCorner.RADIANS_HALF_ = Math.PI / 2;
+<a name="line626"></a>
+<a name="line627"></a>
+<a name="line628"></a>/**
+<a name="line629"></a> * One radian.
+<a name="line630"></a> * @type {number}
+<a name="line631"></a> * @private
+<a name="line632"></a> */
+<a name="line633"></a>goog.ui.CanvasRoundedCorner.RADIANS_ONE_ = Math.PI;
+<a name="line634"></a>
+<a name="line635"></a>
+<a name="line636"></a>/**
+<a name="line637"></a> * Three halves of a radian.
+<a name="line638"></a> * @type {number}
+<a name="line639"></a> * @private
+<a name="line640"></a> */
+<a name="line641"></a>goog.ui.CanvasRoundedCorner.RADIANS_THREE_HALVES_ = 1.5 * Math.PI;
+<a name="line642"></a>
+<a name="line643"></a>
+<a name="line644"></a>/**
+<a name="line645"></a> * Two radians.
+<a name="line646"></a> * @type {number}
+<a name="line647"></a> * @private
+<a name="line648"></a> */
+<a name="line649"></a>goog.ui.CanvasRoundedCorner.RADIANS_TWO_ = 2 * Math.PI;
+<a name="line650"></a>
+<a name="line651"></a>
+<a name="line652"></a>/**
+<a name="line653"></a> * Returns the end angle of the arc for the rounded corner.
+<a name="line654"></a> * @return {number} The end angle, in radians.
+<a name="line655"></a> * @protected
+<a name="line656"></a> */
+<a name="line657"></a>goog.ui.CanvasRoundedCorner.prototype.getEndAngle = function() {
+<a name="line658"></a>  return this.isLeft_ ?
+<a name="line659"></a>      goog.ui.CanvasRoundedCorner.RADIANS_ONE_ :
+<a name="line660"></a>      goog.ui.CanvasRoundedCorner.RADIANS_TWO_;
+<a name="line661"></a>};
+<a name="line662"></a>
+<a name="line663"></a>
+<a name="line664"></a>/**
+<a name="line665"></a> * Returns the start angle of the arc for the rounded corner.
+<a name="line666"></a> * @return {number} The start angle, in radians.
+<a name="line667"></a> * @protected
+<a name="line668"></a> */
+<a name="line669"></a>goog.ui.CanvasRoundedCorner.prototype.getStartAngle = function() {
+<a name="line670"></a>  return this.isTop_ ?
+<a name="line671"></a>      goog.ui.CanvasRoundedCorner.RADIANS_THREE_HALVES_ :
+<a name="line672"></a>      goog.ui.CanvasRoundedCorner.RADIANS_HALF_;
+<a name="line673"></a>};
+<a name="line674"></a>
+<a name="line675"></a>
+<a name="line676"></a>/**
+<a name="line677"></a> * Returns the underlying DOM element containing the rounded corner.
+<a name="line678"></a> * @return {Element} The underlying DOM element.
+<a name="line679"></a> * @protected
+<a name="line680"></a> */
+<a name="line681"></a>goog.ui.CanvasRoundedCorner.prototype.getElement = function() {
+<a name="line682"></a>  return this.canvas_;
+<a name="line683"></a>};
+<a name="line684"></a>
+<a name="line685"></a>
+<a name="line686"></a>/**
+<a name="line687"></a> * Renders the rounded corner.
+<a name="line688"></a> */
+<a name="line689"></a>goog.ui.CanvasRoundedCorner.prototype.draw = function() {
+<a name="line690"></a>  // Determine which direction to draw, and obtain the context.
+<a name="line691"></a>  var counterClockwise = this.isLeft_ &amp;&amp; this.isTop_ ||
+<a name="line692"></a>                         !this.isLeft_ &amp;&amp; !this.isTop_;
+<a name="line693"></a>  var context = this.canvas_.getContext(&#39;2d&#39;);
+<a name="line694"></a>
+<a name="line695"></a>  var version = parseFloat(goog.userAgent.VERSION);
+<a name="line696"></a>  if (goog.userAgent.WEBKIT &amp;&amp;
+<a name="line697"></a>      goog.userAgent.isVersion(&#39;500&#39;) &amp;&amp;
+<a name="line698"></a>      this.oppositeCorner_ &amp;&amp;
+<a name="line699"></a>      this.xStartOffset_) {
+<a name="line700"></a>    // For Safari2, we must render the rounded corner differently when
+<a name="line701"></a>    // backgroundColor_ is specified. Safari2 cannot render the stroke using
+<a name="line702"></a>    // one color, while filling the enclosed path with another color.
+<a name="line703"></a>    this.drawSafari2WithBackground_(context, counterClockwise);
+<a name="line704"></a>  } else {
+<a name="line705"></a>    // Specify the stroke style and line width.
+<a name="line706"></a>    context.strokeStyle = this.borderColor_;
+<a name="line707"></a>    context.lineWidth = this.borderWidth_;
+<a name="line708"></a>
+<a name="line709"></a>    // Draw the defined path.
+<a name="line710"></a>    context.beginPath();
+<a name="line711"></a>    context.moveTo(this.start_[0], this.start_[1]);
+<a name="line712"></a>    context.arc(this.xCenter_,
+<a name="line713"></a>                this.yCenter_,
+<a name="line714"></a>                this.radius_,
+<a name="line715"></a>                this.startAngle_,
+<a name="line716"></a>                this.endAngle_,
+<a name="line717"></a>                counterClockwise);
+<a name="line718"></a>    context.lineTo(this.end_[0], this.end_[1]);
+<a name="line719"></a>
+<a name="line720"></a>    // If backgroundColor_ is defined, render and enclose the rest of the path,
+<a name="line721"></a>    // and fill the background.
+<a name="line722"></a>    if (this.oppositeCorner_ &amp;&amp; this.xStartOffset_) {
+<a name="line723"></a>      context.lineTo(this.oppositeCorner_[0],
+<a name="line724"></a>                     this.oppositeCorner_[1]);
+<a name="line725"></a>      context.lineTo(this.xStartOffset_,
+<a name="line726"></a>                     this.start_[1]);
+<a name="line727"></a>      context.closePath();
+<a name="line728"></a>      context.fillStyle = this.backgroundColor_;
+<a name="line729"></a>      context.fill();
+<a name="line730"></a>    }
+<a name="line731"></a>
+<a name="line732"></a>    // Render the defined path.
+<a name="line733"></a>    context.stroke();
+<a name="line734"></a>  }
+<a name="line735"></a>};
+<a name="line736"></a>
+<a name="line737"></a>
+<a name="line738"></a>/**
+<a name="line739"></a> * Safari2-specific implementation for rendering a rounded corner with
+<a name="line740"></a> * a background color. The background is filled, followed by the rounded
+<a name="line741"></a> * corner path.
+<a name="line742"></a> * @param {Object} context Graphics context used for drawing.
+<a name="line743"></a> * @param {boolean} counterClockwise Specify true to draw in a
+<a name="line744"></a> *     counter-clockwise direction, and false to draw clockwise.
+<a name="line745"></a> * @private
+<a name="line746"></a> */
+<a name="line747"></a>goog.ui.CanvasRoundedCorner.prototype.drawSafari2WithBackground_ =
+<a name="line748"></a>    function(context, counterClockwise) {
+<a name="line749"></a>  // If backgroundColor_ is defined, outline the path,
+<a name="line750"></a>  // and fill the enclosed area.
+<a name="line751"></a>  if (this.oppositeCorner_ &amp;&amp; this.xStartOffset_) {
+<a name="line752"></a>    // Draw the defined path.
+<a name="line753"></a>    context.strokeStyle = this.backgroundColor_;
+<a name="line754"></a>    context.lineWidth = 1;
+<a name="line755"></a>    context.beginPath();
+<a name="line756"></a>    context.moveTo(this.start_[0], this.start_[1]);
+<a name="line757"></a>    context.arc(this.xCenter_,
+<a name="line758"></a>                this.yCenter_,
+<a name="line759"></a>                this.radius_,
+<a name="line760"></a>                this.startAngle_,
+<a name="line761"></a>                this.endAngle_,
+<a name="line762"></a>                counterClockwise);
+<a name="line763"></a>    context.lineTo(this.end_[0], this.end_[1]);
+<a name="line764"></a>    context.lineTo(this.oppositeCorner_[0],
+<a name="line765"></a>                   this.oppositeCorner_[1]);
+<a name="line766"></a>    context.lineTo(this.xStartOffset_,
+<a name="line767"></a>                   this.start_[1]);
+<a name="line768"></a>    context.closePath();
+<a name="line769"></a>    context.fillStyle = this.backgroundColor_;
+<a name="line770"></a>    context.fill();
+<a name="line771"></a>  }
+<a name="line772"></a>
+<a name="line773"></a>  // Draw the rounded corner arc and filler(s).
+<a name="line774"></a>  context.strokeStyle = this.borderColor_;
+<a name="line775"></a>  context.borderWidth = this.borderWidth_;
+<a name="line776"></a>  context.beginPath();
+<a name="line777"></a>  context.moveTo(this.start_[0], this.start_[1]);
+<a name="line778"></a>  context.arc(this.xCenter_,
+<a name="line779"></a>              this.yCenter_,
+<a name="line780"></a>              this.radius_,
+<a name="line781"></a>              this.startAngle_,
+<a name="line782"></a>              this.endAngle_,
+<a name="line783"></a>              counterClockwise);
+<a name="line784"></a>  context.lineTo(this.end_[0], this.end_[1]);
+<a name="line785"></a>  context.stroke();
+<a name="line786"></a>};
 <a name="line787"></a>
-<a name="line788"></a>/**
-<a name="line789"></a> * Class for rendering an imageless, VML-based rounded corner. Horizontal
-<a name="line790"></a> * and/or vertical fillers are added if the radius of the rounded corner is less
-<a name="line791"></a> * than the width and/or height of the containing element. The line is drawn as
-<a name="line792"></a> * a single, continuous line, starting with the horizontal filler, then the arc,
-<a name="line793"></a> * then finishing with the vertical filler. Do not instantiate this class
-<a name="line794"></a> * directly. Instead, use goog.ui.ImagelessRoundedCorner.create().
-<a name="line795"></a> * @param {Element} element The element to be turned into a rounded corner.
-<a name="line796"></a> * @param {number} width The width of the element excluding the border, in
-<a name="line797"></a> *     pixels.
-<a name="line798"></a> * @param {number} height The height of the element excluding the border, in
+<a name="line788"></a>
+<a name="line789"></a>
+<a name="line790"></a>/**
+<a name="line791"></a> * Class for rendering an imageless, VML-based rounded corner. Horizontal
+<a name="line792"></a> * and/or vertical fillers are added if the radius of the rounded corner is less
+<a name="line793"></a> * than the width and/or height of the containing element. The line is drawn as
+<a name="line794"></a> * a single, continuous line, starting with the horizontal filler, then the arc,
+<a name="line795"></a> * then finishing with the vertical filler. Do not instantiate this class
+<a name="line796"></a> * directly. Instead, use goog.ui.ImagelessRoundedCorner.create().
+<a name="line797"></a> * @param {Element} element The element to be turned into a rounded corner.
+<a name="line798"></a> * @param {number} width The width of the element excluding the border, in
 <a name="line799"></a> *     pixels.
-<a name="line800"></a> * @param {number} borderWidth The thickness of the rounded corner, in pixels.
-<a name="line801"></a> * @param {number} radius The radius of the rounded corner, in pixels. The
-<a name="line802"></a> *     radius must be less than or equal to the width or height (whichever
-<a name="line803"></a> *     is greater).
-<a name="line804"></a> * @param {number} location Location of the rounded corner. This should be a
-<a name="line805"></a> *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
-<a name="line806"></a> *     BOTTOM_LEFT, or BOTTOM_RIGHT.
-<a name="line807"></a> * @param {string} borderColor The color of the rounded corner.
-<a name="line808"></a> * @param {string} opt_backgroundColor The background color of the rounded
-<a name="line809"></a> *     corner.
-<a name="line810"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
-<a name="line811"></a> *     document we want to render in.
-<a name="line812"></a> * @constructor
-<a name="line813"></a> * @extends {goog.ui.AbstractImagelessRoundedCorner}
-<a name="line814"></a> */
-<a name="line815"></a>goog.ui.VmlRoundedCorner = function(element,
-<a name="line816"></a>                                    width,
-<a name="line817"></a>                                    height,
-<a name="line818"></a>                                    borderWidth,
-<a name="line819"></a>                                    radius,
-<a name="line820"></a>                                    location,
-<a name="line821"></a>                                    borderColor,
-<a name="line822"></a>                                    opt_backgroundColor,
-<a name="line823"></a>                                    opt_domHelper) {
-<a name="line824"></a>  goog.ui.AbstractImagelessRoundedCorner.call(this,
-<a name="line825"></a>                                              element,
-<a name="line826"></a>                                              width,
-<a name="line827"></a>                                              height,
-<a name="line828"></a>                                              borderWidth,
-<a name="line829"></a>                                              radius,
-<a name="line830"></a>                                              location,
-<a name="line831"></a>                                              borderColor,
-<a name="line832"></a>                                              opt_backgroundColor,
-<a name="line833"></a>                                              opt_domHelper);
-<a name="line834"></a>
-<a name="line835"></a>  // An offset is subtracted to accommodate the subpixel rendering calculations
-<a name="line836"></a>  // specific to VmlGraphics.
-<a name="line837"></a>  this.start_[0] -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line838"></a>  this.end_[0] -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line839"></a>  this.xCenter_ -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line840"></a>  this.start_[1] -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line841"></a>  this.end_[1] -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line842"></a>  this.yCenter_ -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line843"></a>
-<a name="line844"></a>  /**
-<a name="line845"></a>   * VML wrapper API object.
-<a name="line846"></a>   * @type {goog.graphics.VmlGraphics}
-<a name="line847"></a>   * @private
-<a name="line848"></a>   */
-<a name="line849"></a>  this.graphics_ = new goog.graphics.VmlGraphics(this.width_,
-<a name="line850"></a>                                                 this.height_,
-<a name="line851"></a>                                                 this.width_,
+<a name="line800"></a> * @param {number} height The height of the element excluding the border, in
+<a name="line801"></a> *     pixels.
+<a name="line802"></a> * @param {number} borderWidth The thickness of the rounded corner, in pixels.
+<a name="line803"></a> * @param {number} radius The radius of the rounded corner, in pixels. The
+<a name="line804"></a> *     radius must be less than or equal to the width or height (whichever
+<a name="line805"></a> *     is greater).
+<a name="line806"></a> * @param {number} location Location of the rounded corner. This should be a
+<a name="line807"></a> *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
+<a name="line808"></a> *     BOTTOM_LEFT, or BOTTOM_RIGHT.
+<a name="line809"></a> * @param {string} borderColor The color of the rounded corner.
+<a name="line810"></a> * @param {string} opt_backgroundColor The background color of the rounded
+<a name="line811"></a> *     corner.
+<a name="line812"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+<a name="line813"></a> *     document we want to render in.
+<a name="line814"></a> * @constructor
+<a name="line815"></a> * @extends {goog.ui.AbstractImagelessRoundedCorner}
+<a name="line816"></a> */
+<a name="line817"></a>goog.ui.VmlRoundedCorner = function(element,
+<a name="line818"></a>                                    width,
+<a name="line819"></a>                                    height,
+<a name="line820"></a>                                    borderWidth,
+<a name="line821"></a>                                    radius,
+<a name="line822"></a>                                    location,
+<a name="line823"></a>                                    borderColor,
+<a name="line824"></a>                                    opt_backgroundColor,
+<a name="line825"></a>                                    opt_domHelper) {
+<a name="line826"></a>  goog.ui.AbstractImagelessRoundedCorner.call(this,
+<a name="line827"></a>                                              element,
+<a name="line828"></a>                                              width,
+<a name="line829"></a>                                              height,
+<a name="line830"></a>                                              borderWidth,
+<a name="line831"></a>                                              radius,
+<a name="line832"></a>                                              location,
+<a name="line833"></a>                                              borderColor,
+<a name="line834"></a>                                              opt_backgroundColor,
+<a name="line835"></a>                                              opt_domHelper);
+<a name="line836"></a>
+<a name="line837"></a>  // An offset is subtracted to accommodate the subpixel rendering calculations
+<a name="line838"></a>  // specific to VmlGraphics.
+<a name="line839"></a>  this.start_[0] -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line840"></a>  this.end_[0] -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line841"></a>  this.xCenter_ -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line842"></a>  this.start_[1] -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line843"></a>  this.end_[1] -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line844"></a>  this.yCenter_ -= goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line845"></a>
+<a name="line846"></a>  /**
+<a name="line847"></a>   * VML wrapper API object.
+<a name="line848"></a>   * @type {goog.graphics.VmlGraphics}
+<a name="line849"></a>   * @private
+<a name="line850"></a>   */
+<a name="line851"></a>  this.graphics_ = new goog.graphics.VmlGraphics(this.width_,
 <a name="line852"></a>                                                 this.height_,
-<a name="line853"></a>                                                 this.domHelper_);
-<a name="line854"></a>  /**
-<a name="line855"></a>   * Container element that will contain the actual rounded corner.
-<a name="line856"></a>   * @type {Element}
-<a name="line857"></a>   * @private
-<a name="line858"></a>   */
-<a name="line859"></a>  this.container_ = this.domHelper_.createDom(&#39;div&#39;, {
-<a name="line860"></a>    &#39;style&#39; : &#39;overflow:hidden;position:relative;&#39; +
-<a name="line861"></a>              &#39;width:&#39; + this.width_ + &#39;px;&#39; +
-<a name="line862"></a>              &#39;height:&#39; + this.height_ + &#39;px;&#39;
-<a name="line863"></a>  });
-<a name="line864"></a>};
-<a name="line865"></a>goog.inherits(goog.ui.VmlRoundedCorner, goog.ui.AbstractImagelessRoundedCorner);
-<a name="line866"></a>
-<a name="line867"></a>
-<a name="line868"></a>/**
-<a name="line869"></a> * Returns the end angle of the arc for the rounded corner.
-<a name="line870"></a> * @return {number} The end angle, in degrees.
-<a name="line871"></a> * @protected
-<a name="line872"></a> */
-<a name="line873"></a>goog.ui.VmlRoundedCorner.prototype.getEndAngle = function() {
-<a name="line874"></a>  return this.isLeft_ ? 180 : 360;
-<a name="line875"></a>};
-<a name="line876"></a>
-<a name="line877"></a>
-<a name="line878"></a>/**
-<a name="line879"></a> * Returns the start angle of the arc for the rounded corner.
-<a name="line880"></a> * @return {number} The start angle, in degrees.
-<a name="line881"></a> * @protected
-<a name="line882"></a> */
-<a name="line883"></a>goog.ui.VmlRoundedCorner.prototype.getStartAngle = function() {
-<a name="line884"></a>  return this.isTop_ ? 270 : 90;
-<a name="line885"></a>};
-<a name="line886"></a>
-<a name="line887"></a>
-<a name="line888"></a>/**
-<a name="line889"></a> * Returns the underlying DOM element containing the rounded corner.
-<a name="line890"></a> * @return {Element} The underlying DOM element.
-<a name="line891"></a> * @protected
-<a name="line892"></a> */
-<a name="line893"></a>goog.ui.VmlRoundedCorner.prototype.getElement = function() {
-<a name="line894"></a>  return this.container_;
-<a name="line895"></a>};
-<a name="line896"></a>
-<a name="line897"></a>
-<a name="line898"></a>/**
-<a name="line899"></a> * Renders the rounded corner.
-<a name="line900"></a> */
-<a name="line901"></a>goog.ui.VmlRoundedCorner.prototype.draw = function() {
-<a name="line902"></a>  // Determine which direction to draw, and enable VML.
-<a name="line903"></a>  var clockwise = this.isLeft_ &amp;&amp; !this.isTop_ ||
-<a name="line904"></a>                  !this.isLeft_ &amp;&amp; this.isTop_;
-<a name="line905"></a>  this.graphics_.createDom();
-<a name="line906"></a>
-<a name="line907"></a>  // If needed, fill the background color.
-<a name="line908"></a>  if (this.backgroundColor_) {
-<a name="line909"></a>    this.drawBackground_(clockwise);
-<a name="line910"></a>  }
-<a name="line911"></a>
-<a name="line912"></a>  // Draw the defined path.
-<a name="line913"></a>  var path = this.graphics_.createPath();
-<a name="line914"></a>  path.moveTo(this.start_[0], this.start_[1]);
-<a name="line915"></a>  path.arc(this.xCenter_,
-<a name="line916"></a>           this.yCenter_,
-<a name="line917"></a>           this.radius_,
-<a name="line918"></a>           this.radius_,
-<a name="line919"></a>           this.startAngle_,
-<a name="line920"></a>           clockwise ? 90 : -90,
-<a name="line921"></a>           true);
-<a name="line922"></a>  path.lineTo(this.end_[0], this.end_[1]);
-<a name="line923"></a>  var stroke = new goog.graphics.Stroke(this.borderWidth_,
-<a name="line924"></a>                                        this.borderColor_);
-<a name="line925"></a>  this.graphics_.drawPath(path, stroke, null);
-<a name="line926"></a>
-<a name="line927"></a>  // Extract the shape node, append it to the container, and set the
-<a name="line928"></a>  // container styles. Then append the container to the DOM.
-<a name="line929"></a>  var shapeNode = this.extractShapeNode_();
-<a name="line930"></a>  this.domHelper_.appendChild(this.container_, shapeNode);
-<a name="line931"></a>  this.domHelper_.appendChild(this.element_, this.container_);
-<a name="line932"></a>};
-<a name="line933"></a>
-<a name="line934"></a>
-<a name="line935"></a>/**
-<a name="line936"></a> * Renders a 1-coordinate wide path, following the same path as the rounded
-<a name="line937"></a> * corner, then going along the adjacent horizontal edge, then along the
-<a name="line938"></a> * adjacent vertical edge, and back to the start of the rounded corner path.
-<a name="line939"></a> * @param {boolean} clockwise Use true to render the arc in a clockwise
-<a name="line940"></a> *     direction, and false in the counter-clockwise direction.
-<a name="line941"></a> * @private
-<a name="line942"></a> */
-<a name="line943"></a>goog.ui.VmlRoundedCorner.prototype.drawBackground_ =
-<a name="line944"></a>    function(clockwise) {
-<a name="line945"></a>  // Calculate key points in the path: the end of the arc, the corner opposite
-<a name="line946"></a>  // the arc, and the end of the path.
-<a name="line947"></a>  var arcEnd = [];
-<a name="line948"></a>  arcEnd[0] = this.isLeft_ ?
-<a name="line949"></a>      goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR :
-<a name="line950"></a>      this.width_ - goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line951"></a>  arcEnd[1] = this.isTop_ ?
-<a name="line952"></a>      this.height_ - goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR:
-<a name="line953"></a>      goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line954"></a>  var oppositeCorner = [];
-<a name="line955"></a>  oppositeCorner[0] = this.isLeft_ ?
-<a name="line956"></a>      this.width_ - goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR :
-<a name="line957"></a>      goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line958"></a>  oppositeCorner[1] = arcEnd[1];
-<a name="line959"></a>  var endX = this.isLeft_ ?
-<a name="line960"></a>      this.start_[0] -
-<a name="line961"></a>          goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR :
-<a name="line962"></a>      goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-<a name="line963"></a>  var path = this.graphics_.createPath();
-<a name="line964"></a>
-<a name="line965"></a>  // Draw out the path according to the points just defined.
-<a name="line966"></a>  path.moveTo(this.start_[0], this.start_[1]);
-<a name="line967"></a>  path.arc(this.xCenter_,
-<a name="line968"></a>           this.yCenter_,
-<a name="line969"></a>           this.radius_,
-<a name="line970"></a>           this.radius_,
-<a name="line971"></a>           this.startAngle_,
-<a name="line972"></a>           clockwise ? 90 : -90,
-<a name="line973"></a>           true);
-<a name="line974"></a>  path.lineTo(arcEnd[0], arcEnd[1]);
-<a name="line975"></a>  path.lineTo(oppositeCorner[0],
-<a name="line976"></a>              oppositeCorner[1]);
-<a name="line977"></a>  path.lineTo(endX,
-<a name="line978"></a>              this.start_[1]);
-<a name="line979"></a>
-<a name="line980"></a>  // Render the path and fill, then append the generated path to the DOM.
-<a name="line981"></a>  var stroke = new goog.graphics.Stroke(1,
-<a name="line982"></a>      /** @type {string} */ (this.backgroundColor_));
-<a name="line983"></a>  var fill = new goog.graphics.SolidFill(
-<a name="line984"></a>      /** @type {string} */ (this.backgroundColor_), 1);
-<a name="line985"></a>  this.graphics_.drawPath(path, stroke, fill);
-<a name="line986"></a>  var shapeNode = this.extractShapeNode_();
-<a name="line987"></a>  this.domHelper_.appendChild(this.container_, shapeNode);
-<a name="line988"></a>};
-<a name="line989"></a>
-<a name="line990"></a>
-<a name="line991"></a>/**
-<a name="line992"></a> * Helper method that extracts the &#39;shape&#39; node from the private
-<a name="line993"></a> * goog.graphics.VmlGraphics instance, sets the size to this.width_ and
-<a name="line994"></a> * this.height_, and sets the position to (0, 0).
-<a name="line995"></a> * @return {Element} The VML shape element.
-<a name="line996"></a> * @private
-<a name="line997"></a> */
-<a name="line998"></a>goog.ui.VmlRoundedCorner.prototype.extractShapeNode_ = function() {
-<a name="line999"></a>  var shapeNode = /** @type {Element} */ (
-<a name="line1000"></a>      goog.dom.findNode(this.graphics_.getElement(),
-<a name="line1001"></a>          goog.ui.VmlRoundedCorner.isShapeNode_));
-<a name="line1002"></a>  goog.style.setSize(shapeNode,
-<a name="line1003"></a>                     this.width_,
-<a name="line1004"></a>                     this.height_);
-<a name="line1005"></a>  goog.style.setPosition(shapeNode, 0, 0);
-<a name="line1006"></a>  return shapeNode;
-<a name="line1007"></a>};
-<a name="line1008"></a>
-<a name="line1009"></a>
-<a name="line1010"></a>/**
-<a name="line1011"></a> * Indicates if the specified node is a &#39;shape&#39; node.
-<a name="line1012"></a> * @param {Object} node The DOM node to inspect.
-<a name="line1013"></a> * @return {boolean} true if the node is an element node with the name &#39;shape&#39;,
-<a name="line1014"></a> *     and false otherwise.
-<a name="line1015"></a> * @private
-<a name="line1016"></a> */
-<a name="line1017"></a>goog.ui.VmlRoundedCorner.isShapeNode_ = function(node) {
-<a name="line1018"></a>  return node.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp;
-<a name="line1019"></a>      node.nodeName == &#39;shape&#39;;
-<a name="line1020"></a>};
+<a name="line853"></a>                                                 this.width_,
+<a name="line854"></a>                                                 this.height_,
+<a name="line855"></a>                                                 this.domHelper_);
+<a name="line856"></a>  /**
+<a name="line857"></a>   * Container element that will contain the actual rounded corner.
+<a name="line858"></a>   * @type {Element}
+<a name="line859"></a>   * @private
+<a name="line860"></a>   */
+<a name="line861"></a>  this.container_ = this.domHelper_.createDom(&#39;div&#39;, {
+<a name="line862"></a>    &#39;style&#39; : &#39;overflow:hidden;position:relative;&#39; +
+<a name="line863"></a>              &#39;width:&#39; + this.width_ + &#39;px;&#39; +
+<a name="line864"></a>              &#39;height:&#39; + this.height_ + &#39;px;&#39;
+<a name="line865"></a>  });
+<a name="line866"></a>};
+<a name="line867"></a>goog.inherits(goog.ui.VmlRoundedCorner, goog.ui.AbstractImagelessRoundedCorner);
+<a name="line868"></a>
+<a name="line869"></a>
+<a name="line870"></a>/**
+<a name="line871"></a> * Returns the end angle of the arc for the rounded corner.
+<a name="line872"></a> * @return {number} The end angle, in degrees.
+<a name="line873"></a> * @protected
+<a name="line874"></a> */
+<a name="line875"></a>goog.ui.VmlRoundedCorner.prototype.getEndAngle = function() {
+<a name="line876"></a>  return this.isLeft_ ? 180 : 360;
+<a name="line877"></a>};
+<a name="line878"></a>
+<a name="line879"></a>
+<a name="line880"></a>/**
+<a name="line881"></a> * Returns the start angle of the arc for the rounded corner.
+<a name="line882"></a> * @return {number} The start angle, in degrees.
+<a name="line883"></a> * @protected
+<a name="line884"></a> */
+<a name="line885"></a>goog.ui.VmlRoundedCorner.prototype.getStartAngle = function() {
+<a name="line886"></a>  return this.isTop_ ? 270 : 90;
+<a name="line887"></a>};
+<a name="line888"></a>
+<a name="line889"></a>
+<a name="line890"></a>/**
+<a name="line891"></a> * Returns the underlying DOM element containing the rounded corner.
+<a name="line892"></a> * @return {Element} The underlying DOM element.
+<a name="line893"></a> * @protected
+<a name="line894"></a> */
+<a name="line895"></a>goog.ui.VmlRoundedCorner.prototype.getElement = function() {
+<a name="line896"></a>  return this.container_;
+<a name="line897"></a>};
+<a name="line898"></a>
+<a name="line899"></a>
+<a name="line900"></a>/**
+<a name="line901"></a> * Renders the rounded corner.
+<a name="line902"></a> */
+<a name="line903"></a>goog.ui.VmlRoundedCorner.prototype.draw = function() {
+<a name="line904"></a>  // Determine which direction to draw, and enable VML.
+<a name="line905"></a>  var clockwise = this.isLeft_ &amp;&amp; !this.isTop_ ||
+<a name="line906"></a>                  !this.isLeft_ &amp;&amp; this.isTop_;
+<a name="line907"></a>  this.graphics_.createDom();
+<a name="line908"></a>
+<a name="line909"></a>  // If needed, fill the background color.
+<a name="line910"></a>  if (this.backgroundColor_) {
+<a name="line911"></a>    this.drawBackground_(clockwise);
+<a name="line912"></a>  }
+<a name="line913"></a>
+<a name="line914"></a>  // Draw the defined path.
+<a name="line915"></a>  var path = this.graphics_.createPath();
+<a name="line916"></a>  path.moveTo(this.start_[0], this.start_[1]);
+<a name="line917"></a>  path.arc(this.xCenter_,
+<a name="line918"></a>           this.yCenter_,
+<a name="line919"></a>           this.radius_,
+<a name="line920"></a>           this.radius_,
+<a name="line921"></a>           this.startAngle_,
+<a name="line922"></a>           clockwise ? 90 : -90,
+<a name="line923"></a>           true);
+<a name="line924"></a>  path.lineTo(this.end_[0], this.end_[1]);
+<a name="line925"></a>  var stroke = new goog.graphics.Stroke(this.borderWidth_,
+<a name="line926"></a>                                        this.borderColor_);
+<a name="line927"></a>  this.graphics_.drawPath(path, stroke, null);
+<a name="line928"></a>
+<a name="line929"></a>  // Extract the shape node, append it to the container, and set the
+<a name="line930"></a>  // container styles. Then append the container to the DOM.
+<a name="line931"></a>  var shapeNode = this.extractShapeNode_();
+<a name="line932"></a>  this.domHelper_.appendChild(this.container_, shapeNode);
+<a name="line933"></a>  this.domHelper_.appendChild(this.element_, this.container_);
+<a name="line934"></a>};
+<a name="line935"></a>
+<a name="line936"></a>
+<a name="line937"></a>/**
+<a name="line938"></a> * Renders a 1-coordinate wide path, following the same path as the rounded
+<a name="line939"></a> * corner, then going along the adjacent horizontal edge, then along the
+<a name="line940"></a> * adjacent vertical edge, and back to the start of the rounded corner path.
+<a name="line941"></a> * @param {boolean} clockwise Use true to render the arc in a clockwise
+<a name="line942"></a> *     direction, and false in the counter-clockwise direction.
+<a name="line943"></a> * @private
+<a name="line944"></a> */
+<a name="line945"></a>goog.ui.VmlRoundedCorner.prototype.drawBackground_ =
+<a name="line946"></a>    function(clockwise) {
+<a name="line947"></a>  // Calculate key points in the path: the end of the arc, the corner opposite
+<a name="line948"></a>  // the arc, and the end of the path.
+<a name="line949"></a>  var arcEnd = [];
+<a name="line950"></a>  arcEnd[0] = this.isLeft_ ?
+<a name="line951"></a>      goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR :
+<a name="line952"></a>      this.width_ - goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line953"></a>  arcEnd[1] = this.isTop_ ?
+<a name="line954"></a>      this.height_ - goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR:
+<a name="line955"></a>      goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line956"></a>  var oppositeCorner = [];
+<a name="line957"></a>  oppositeCorner[0] = this.isLeft_ ?
+<a name="line958"></a>      this.width_ - goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR :
+<a name="line959"></a>      goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line960"></a>  oppositeCorner[1] = arcEnd[1];
+<a name="line961"></a>  var endX = this.isLeft_ ?
+<a name="line962"></a>      this.start_[0] -
+<a name="line963"></a>          goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR :
+<a name="line964"></a>      goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
+<a name="line965"></a>  var path = this.graphics_.createPath();
+<a name="line966"></a>
+<a name="line967"></a>  // Draw out the path according to the points just defined.
+<a name="line968"></a>  path.moveTo(this.start_[0], this.start_[1]);
+<a name="line969"></a>  path.arc(this.xCenter_,
+<a name="line970"></a>           this.yCenter_,
+<a name="line971"></a>           this.radius_,
+<a name="line972"></a>           this.radius_,
+<a name="line973"></a>           this.startAngle_,
+<a name="line974"></a>           clockwise ? 90 : -90,
+<a name="line975"></a>           true);
+<a name="line976"></a>  path.lineTo(arcEnd[0], arcEnd[1]);
+<a name="line977"></a>  path.lineTo(oppositeCorner[0],
+<a name="line978"></a>              oppositeCorner[1]);
+<a name="line979"></a>  path.lineTo(endX,
+<a name="line980"></a>              this.start_[1]);
+<a name="line981"></a>
+<a name="line982"></a>  // Render the path and fill, then append the generated path to the DOM.
+<a name="line983"></a>  var stroke = new goog.graphics.Stroke(1,
+<a name="line984"></a>      /** @type {string} */ (this.backgroundColor_));
+<a name="line985"></a>  var fill = new goog.graphics.SolidFill(
+<a name="line986"></a>      /** @type {string} */ (this.backgroundColor_), 1);
+<a name="line987"></a>  this.graphics_.drawPath(path, stroke, fill);
+<a name="line988"></a>  var shapeNode = this.extractShapeNode_();
+<a name="line989"></a>  this.domHelper_.appendChild(this.container_, shapeNode);
+<a name="line990"></a>};
+<a name="line991"></a>
+<a name="line992"></a>
+<a name="line993"></a>/**
+<a name="line994"></a> * Helper method that extracts the &#39;shape&#39; node from the private
+<a name="line995"></a> * goog.graphics.VmlGraphics instance, sets the size to this.width_ and
+<a name="line996"></a> * this.height_, and sets the position to (0, 0).
+<a name="line997"></a> * @return {Element} The VML shape element.
+<a name="line998"></a> * @private
+<a name="line999"></a> */
+<a name="line1000"></a>goog.ui.VmlRoundedCorner.prototype.extractShapeNode_ = function() {
+<a name="line1001"></a>  var shapeNode = /** @type {Element} */ (
+<a name="line1002"></a>      goog.dom.findNode(this.graphics_.getElement(),
+<a name="line1003"></a>          goog.ui.VmlRoundedCorner.isShapeNode_));
+<a name="line1004"></a>  goog.style.setSize(shapeNode,
+<a name="line1005"></a>                     this.width_,
+<a name="line1006"></a>                     this.height_);
+<a name="line1007"></a>  goog.style.setPosition(shapeNode, 0, 0);
+<a name="line1008"></a>  return shapeNode;
+<a name="line1009"></a>};
+<a name="line1010"></a>
+<a name="line1011"></a>
+<a name="line1012"></a>/**
+<a name="line1013"></a> * Indicates if the specified node is a &#39;shape&#39; node.
+<a name="line1014"></a> * @param {Object} node The DOM node to inspect.
+<a name="line1015"></a> * @return {boolean} true if the node is an element node with the name &#39;shape&#39;,
+<a name="line1016"></a> *     and false otherwise.
+<a name="line1017"></a> * @private
+<a name="line1018"></a> */
+<a name="line1019"></a>goog.ui.VmlRoundedCorner.isShapeNode_ = function(node) {
+<a name="line1020"></a>  return node.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp;
+<a name="line1021"></a>      node.nodeName == &#39;shape&#39;;
+<a name="line1022"></a>};
 </pre>
 
 

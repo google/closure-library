@@ -335,6 +335,81 @@ Object
 
 
   <td>
+    <a name="goog.testing.MockControl.prototype.createConstructorMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createConstructorMock<span class="args">(<span class="arg">scope</span>,&nbsp;<span class="arg">constructorName</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_testing_MethodMock.html">goog.testing.MethodMock</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a controlled MethodMock for a constructor.  Passes its arguments
+through to the MethodMock constructor. See
+goog.testing.createConstructorMock for details.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">scope</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">The scope of the constructor to be mocked out.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">constructorName</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The name of the function we&#39;re going to mock.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_testing_MethodMock.html">goog.testing.MethodMock</a></span></div>&nbsp;
+            The mocked method.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_testing_mockcontrol.js.source.html#line188">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
     <a name="goog.testing.MockControl.prototype.createFunctionMock"></a>
 
 
@@ -392,7 +467,7 @@ FunctionMock constructor.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -453,12 +528,12 @@ GlobalFunctionMock constructor.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_mockcontrol.js.source.html#line186">code &raquo;</a>
+     <a href="closure_goog_testing_mockcontrol.js.source.html#line202">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -548,7 +623,7 @@ LooseMock constructor.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -622,7 +697,7 @@ MethodMock constructor.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 

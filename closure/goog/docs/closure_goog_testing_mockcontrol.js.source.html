@@ -221,17 +221,33 @@
 <a name="line178"></a>
 <a name="line179"></a>
 <a name="line180"></a>/**
-<a name="line181"></a> * Creates a controlled GlobalFunctionMock.  Passes its arguments through to the
-<a name="line182"></a> * GlobalFunctionMock constructor.
-<a name="line183"></a> * @param {string} functionName The name of the function we&#39;re going to mock.
-<a name="line184"></a> * @return {goog.testing.GlobalFunctionMock} The mocked function.
-<a name="line185"></a> */
-<a name="line186"></a>goog.testing.MockControl.prototype.createGlobalFunctionMock = function(
-<a name="line187"></a>    functionName) {
-<a name="line188"></a>  var m = goog.testing.createGlobalFunctionMock(functionName);
-<a name="line189"></a>  this.addMock(m);
-<a name="line190"></a>  return m;
-<a name="line191"></a>};
+<a name="line181"></a> * Creates a controlled MethodMock for a constructor.  Passes its arguments
+<a name="line182"></a> * through to the MethodMock constructor. See
+<a name="line183"></a> * {@link goog.testing.createConstructorMock} for details.
+<a name="line184"></a> * @param {Object} scope The scope of the constructor to be mocked out.
+<a name="line185"></a> * @param {string} constructorName The name of the function we&#39;re going to mock.
+<a name="line186"></a> * @return {goog.testing.MethodMock} The mocked method.
+<a name="line187"></a> */
+<a name="line188"></a>goog.testing.MockControl.prototype.createConstructorMock = function(
+<a name="line189"></a>    scope, constructorName) {
+<a name="line190"></a>  var m = goog.testing.createConstructorMock(scope, constructorName);
+<a name="line191"></a>  this.addMock(m);
+<a name="line192"></a>  return m;
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Creates a controlled GlobalFunctionMock.  Passes its arguments through to the
+<a name="line198"></a> * GlobalFunctionMock constructor.
+<a name="line199"></a> * @param {string} functionName The name of the function we&#39;re going to mock.
+<a name="line200"></a> * @return {goog.testing.GlobalFunctionMock} The mocked function.
+<a name="line201"></a> */
+<a name="line202"></a>goog.testing.MockControl.prototype.createGlobalFunctionMock = function(
+<a name="line203"></a>    functionName) {
+<a name="line204"></a>  var m = goog.testing.createGlobalFunctionMock(functionName);
+<a name="line205"></a>  this.addMock(m);
+<a name="line206"></a>  return m;
+<a name="line207"></a>};
 </pre>
 
 

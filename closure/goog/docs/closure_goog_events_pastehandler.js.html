@@ -62,7 +62,7 @@
  Known issue: will not detect paste events in FF2 if you pasted exactly the
  same existing text.
  Known issue: Opera + Mac doesn&#39;t work properly because of the meta key. We
- can probably fix that. TODO: {@link KeyboardShortcutHandler} does not
+ can probably fix that. TODO: KeyboardShortcutHandler does not
  work either very well with opera + mac. fix that.
   </div>
   
@@ -70,6 +70,7 @@
         <div class="g-unit" id="useful-links">
           <div class="title">Useful links</div>
           <ol>
+            <li><a href="../demos/pastehandler.html">Demo</a></li>
             <li><a href="closure_goog_events_pastehandler.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
           </ol>
         </div>
@@ -88,10 +89,10 @@
  <div class="fn-constructor">
         <a href="class_goog_events_PasteHandler.html">
           goog.events.PasteHandler</a><br/>
-        <div class="class-details">A paste event detector. Gets an {@code element} as parameter and fires
-{@code goog.events.PasteHandler.EventType.PASTE} events when text is
-pasted in the {@code element}. Uses heuristics to detect paste events in FF2.
-See more details of the heuristic on {@link #handleEvent_}.</div>
+        <div class="class-details">A paste event detector. Gets an <code>element</code> as parameter and fires
+<code>goog.events.PasteHandler.EventType.PASTE</code> events when text is
+pasted in the <code>element</code>. Uses heuristics to detect paste events in FF2.
+See more details of the heuristic on #handleEvent_.</div>
  </div>
       
 <br/>
@@ -137,7 +138,7 @@ See more details of the heuristic on {@link #handleEvent_}.</div>
 
 
      <div class="entryOverview">
-       The mandatory delay we expect between two {@code input} events, used to
+       The mandatory delay we expect between two <code>input</code> events, used to
 differentiated between non key paste events and key events.
      </div>
 
@@ -145,7 +146,7 @@ differentiated between non key paste events and key events.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_pastehandler.js.source.html#line124">Code &raquo;</a>
+     <a href="closure_goog_events_pastehandler.js.source.html#line125">Code &raquo;</a>
   </td>
      </tr>
 

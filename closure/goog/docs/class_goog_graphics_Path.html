@@ -62,7 +62,7 @@ closed. Path uses the EVEN-ODD fill rule for determining the interior of the
 path. A path must start with a moveTo command.
 
 A &quot;simple&quot; path does not contain any arcs and may be transformed using
-the {@code transform} method.
+the <code>transform</code> method.
   </div>
 
 
@@ -216,9 +216,9 @@ Object
 
 
      <div class="entryOverview">
-       Adds a path command to draw an arc centered at the point {@code (cx, cy)}
-with radius {@code rx} along the x-axis and {@code ry} along the y-axis from
-{@code startAngle} through {@code extent} degrees. Positive rotation is in
+       Adds a path command to draw an arc centered at the point <code>(cx, cy)</code>
+with radius <code>rx</code> along the x-axis and <code>ry</code> along the y-axis from
+<code>startAngle</code> through <code>extent</code> degrees. Positive rotation is in
 the direction from positive x-axis to positive y-axis.
      </div>
 
@@ -333,8 +333,8 @@ the direction from positive x-axis to positive y-axis.
 
      <div class="entryOverview">
        Adds a path command to draw an arc starting at the path&#39;s current point,
-with radius {@code rx} along the x-axis and {@code ry} along the y-axis from
-{@code startAngle} through {@code extent} degrees. Positive rotation is in
+with radius <code>rx</code> along the x-axis and <code>ry</code> along the y-axis from
+<code>startAngle</code> through <code>extent</code> degrees. Positive rotation is in
 the direction from positive x-axis to positive y-axis.
 
 This method makes the path non-simple.
@@ -426,9 +426,9 @@ This method makes the path non-simple.
 
 
      <div class="entryOverview">
-       Same as {@code arcTo}, but approximates the arc using bezier curves.
+       Same as <code>arcTo</code>, but approximates the arc using bezier curves.
 .* As a result, this method does not affect the simplified status of this path.
-The algorithm is adapted from {@code java.awt.geom.ArcIterator}.
+The algorithm is adapted from <code>java.awt.geom.ArcIterator</code>.
      </div>
 
 
@@ -657,7 +657,7 @@ last point to the first point.
 
      <div class="entryOverview">
        Creates a transformed copy of this path. The path is simplified
-{@see #createSimplifiedPath} prior to transformation.
+#createSimplifiedPath prior to transformation.
      </div>
 
 
@@ -745,7 +745,7 @@ point of the curve.
      <td>
         <span class="entryName">var_args</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">The coordinates specifiying each curve in sets of 6 points: {@code [x1, y1]} the first control point, {@code [x2, y2]} the second control point and {@code [x, y]} the end point.</div>
+        <div class="entryOverview">The coordinates specifiying each curve in sets of 6 points: <code>[x1, y1]</code> the first control point, <code>[x2, y2]</code> the second control point and <code>[x, y]</code> the end point.</div>
      </td>
    </tr>
   </table>
@@ -792,12 +792,12 @@ point of the curve.
 segment. The arguments to the callback function are the segment type and
 an array of its arguments.
 
-The {@code LINETO} and {@code CURVETO} arrays can contain multiple
+The <code>LINETO</code> and <code>CURVETO</code> arrays can contain multiple
 segments of the same type. The number of segments is the length of the
 array divided by the segment length (2 for lines, 6 for  curves).
 
-As a convenience the {@code ARCTO} segment also includes the end point as the
-last two arguments: {@code rx, ry, fromAngle, extent, x, y}.
+As a convenience the <code>ARCTO</code> segment also includes the end point as the
+last two arguments: <code>rx, ry, fromAngle, extent, x, y</code>.
      </div>
 
 
@@ -868,7 +868,7 @@ last two arguments: {@code rx, ry, fromAngle, extent, x, y}.
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;</div>&nbsp;
-            An array containing the ending coordinates of the path of the form {@code [x, y]}.
+            An array containing the ending coordinates of the path of the form <code>[x, y]</code>.
       </div>
   
     </div>
@@ -951,7 +951,7 @@ last two arguments: {@code rx, ry, fromAngle, extent, x, y}.
 
      <div class="entryOverview">
        Returns true if this path contains no arcs. Simplified paths can be
-created using {@code createSimplifiedPath}.
+created using <code>createSimplifiedPath</code>.
      </div>
 
 
@@ -1354,8 +1354,8 @@ last moveTo command).
 
 
      <div class="entryOverview">
-       Creates a copy of the given path, replacing {@code arcTo} with
-{@code arcToAsCurves}. The resulting path is simplified and can
+       Creates a copy of the given path, replacing <code>arcTo</code> with
+<code>arcToAsCurves</code>. The resulting path is simplified and can
 be transformed.
      </div>
 

@@ -17,6 +17,7 @@
  * plugin is intended to be an example of a very simple plugin for plugin
  * developers.
  *
+ * @see helloworld.html
  */
 
 goog.provide('goog.demos.editor.HelloWorld');

@@ -2484,10 +2484,10 @@ and previous autocomplete entries.
 
      <div class="entryOverview">
        Splits an input string of text at the occurance of a character in
-{@link goog.ui.AutoComplete.InputHandler.prototype.separators_} and creates
+goog.ui.AutoComplete.InputHandler.prototype.separators_ and creates
 an array of tokens.  Each token may contain additional whitespace and
 formatting marks.  If necessary use
-{@link goog.ui.AutoComplete.InputHandler.prototype.trim_} to clean up the
+goog.ui.AutoComplete.InputHandler.prototype.trim_ to clean up the
 entries.
      </div>
 
@@ -2804,7 +2804,7 @@ token.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {

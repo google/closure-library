@@ -488,9 +488,11 @@ goog.ui.ComboBox.prototype.createMenu_ = function() {
  * Shows the menu if it isn't already showing.  Also positions the menu
  * correctly, resets the menu item visibilities and highlights the relevent
  * item.
+ * @param {boolean} showAll Whether to show all items, with the first matching
+ *     item highlighted.
  * @private
  */
-goog.ui.ComboBox.prototype.maybeShowMenu_ = function() {
+goog.ui.ComboBox.prototype.maybeShowMenu_ = function(showAll) {
   var isVisible = this.menu_.isVisible();
   var numVisibleItems = this.getNumberOfVisibleItems_();
 
@@ -499,10 +501,11 @@ goog.ui.ComboBox.prototype.maybeShowMenu_ = function() {
     this.hideMenu_();
 
   } else if (!isVisible && numVisibleItems > 0) {
-    this.logger_.fine('showing menu');
-    this.setItemVisibilityFromToken_('');
-    this.setItemHighlightFromToken_(this.getToken());
-
+    if (showAll) {
+      this.logger_.fine('showing menu');
+      this.setItemVisibilityFromToken_('');
+      this.setItemHighlightFromToken_(this.getToken());
+    }
     // In Safari 2.0, when clicking on the combox box, the blur event is
     // received after the click event that invokes this function. Since we want
     // to cancel the dismissal after the blur event is processed, we have to
@@ -562,7 +565,7 @@ goog.ui.ComboBox.prototype.onComboMouseDown_ = function(e) {
       this.dismiss();
     } else {
       this.logger_.fine('Opening dropdown');
-      this.maybeShowMenu_();
+      this.maybeShowMenu_(true);
       if (goog.userAgent.OPERA) {
         // select() doesn't focus <input> elements in Opera.
         this.input_.focus();
@@ -667,7 +670,7 @@ goog.ui.ComboBox.prototype.handleKeyEvent = function(e) {
       // If the menu is hidden and the user hit the up/down arrow, show it.
       if (!isMenuVisible) {
         this.logger_.fine('Up/Down - maybe show menu');
-        this.maybeShowMenu_();
+        this.maybeShowMenu_(true);
         handled = true;
       }
       break;
@@ -691,7 +694,7 @@ goog.ui.ComboBox.prototype.onInputChange_ = function(e) {
   this.logger_.fine('Key is modifying: ' + this.labelInput_.getValue());
   var token = this.getToken();
   this.setItemVisibilityFromToken_(token);
-  this.maybeShowMenu_();
+  this.maybeShowMenu_(false);
   var highlighted = this.menu_.getHighlighted();
   if (token == '' || !highlighted || !highlighted.isVisible()) {
     this.setItemHighlightFromToken_(token);

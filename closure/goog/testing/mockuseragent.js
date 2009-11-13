@@ -35,17 +35,31 @@ goog.testing.MockUserAgent = function() {
 
   /**
    * The userAgent string used by goog.userAgent.
-   * @type {string}
+   * @type {?string}
    * @private
    */
   this.userAgent_ = goog.userAgent.getUserAgentString();
 
   /**
    * The original goog.userAgent.getUserAgentString function.
-   * @type {Function}
+   * @type {function():?string}
    * @private
    */
   this.originalUserAgentFunction_ = goog.userAgent.getUserAgentString;
+
+  /**
+   * The navigator object used by goog.userAgent
+   * @type {Object}
+   * @private
+   */
+  this.navigator_ = goog.userAgent.getNavigator();
+
+  /**
+   * The original goog.userAgent.getNavigator function
+   * @type {function():Object}
+   * @private
+   */
+  this.originalNavigatorFunction_ = goog.userAgent.getNavigator;
 };
 goog.inherits(goog.testing.MockUserAgent, goog.Disposable);
 
@@ -65,13 +79,14 @@ goog.testing.MockUserAgent.prototype.install = function() {
   if (!this.installed_) {
     goog.userAgent.getUserAgentString =
         goog.bind(this.getUserAgentString, this);
+    goog.userAgent.getNavigator = goog.bind(this.getNavigator, this);
     this.installed_ = true;
   }
 };
 
 
 /**
- * @return {string} The userAgent set in this class.
+ * @return {?string} The userAgent set in this class.
  */
 goog.testing.MockUserAgent.prototype.getUserAgentString = function() {
   return this.userAgent_;
@@ -87,11 +102,28 @@ goog.testing.MockUserAgent.prototype.setUserAgentString = function(userAgent) {
 
 
 /**
+ * @return {?Object} The Navigator set in this class.
+ */
+goog.testing.MockUserAgent.prototype.getNavigator = function() {
+  return this.navigator_;
+};
+
+
+/**
+ * @param {Object} navigator The desired Navigator object to use.
+ */
+goog.testing.MockUserAgent.prototype.setNavigator = function(navigator) {
+  this.navigator_ = navigator;
+};
+
+
+/**
  * Uninstalls the MockUserAgent.
  */
 goog.testing.MockUserAgent.prototype.uninstall = function() {
   if (this.installed_) {
     goog.userAgent.getUserAgentString = this.originalUserAgentFunction_;
+    goog.userAgent.getNavigator = this.originalNavigatorFunction_;
     this.installed_ = false;
   }
 };
@@ -104,5 +136,7 @@ goog.testing.MockUserAgent.prototype.disposeInternal = function() {
   this.uninstall();
   delete this.userAgent_;
   delete this.originalUserAgentFunction_;
+  delete this.navigator_;
+  delete this.originalNavigatorFunction_;
   goog.testing.MockUserAgent.superClass_.disposeInternal.call(this);
 };

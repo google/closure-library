@@ -57,7 +57,7 @@
 
 <div class="g-section g-tpl-75-25">
   <div class="g-unit g-first" id="description">
-    Default renderer for {@link goog.ui.TriStateMenuItemRenderer}s. Each item has
+    Default renderer for goog.ui.TriStateMenuItemRenderers. Each item has
 the following structure:
 <div class="goog-tristatemenuitem">
 <div class="goog-tristatemenuitem-checkbox"></div>
@@ -153,7 +153,7 @@ Object
 
 
      <div class="entryOverview">
-       Overrides {@link goog.ui.ControlRenderer#decorate} by initializing the
+       Overrides goog.ui.ControlRenderer#decorate by initializing the
 menu item to checkable based on whether the element to be decorated has
 extra styling indicating that it should be.
      </div>
@@ -372,7 +372,7 @@ containing the menu item&#39;s contents.
 
 
      <div class="entryOverview">
-       Overrides {@link goog.ui.ControlRenderer#createDom} by adding extra markup
+       Overrides goog.ui.ControlRenderer#createDom by adding extra markup
 and stying to the menu item&#39;s element if it is selectable or checkable.
      </div>
 
@@ -438,7 +438,7 @@ and stying to the menu item&#39;s element if it is selectable or checkable.
 
 
      <div class="entryOverview">
-       Overrides {@link goog.ui.ControlRenderer#decorate} by initializing the
+       Overrides goog.ui.ControlRenderer#decorate by initializing the
 menu item to checkable based on whether the element to be decorated has
 extra stying indicating that it should be.
      </div>
@@ -559,7 +559,7 @@ extra stying indicating that it should be.
 
 
      <div class="entryOverview">
-       Takes a single {@link goog.ui.Component.State}, and returns the
+       Takes a single goog.ui.Component.State, and returns the
 corresponding CSS class name (null if none).  Overrides the superclass
 implementation by using &#39;highlight&#39; as opposed to &#39;hover&#39; as the CSS
 class name suffix for the HOVER state, for backwards compatibility.
@@ -1134,7 +1134,7 @@ items) is preserved.
      <div class="entryOverview">
        Adds or removes extra markup and CSS styling to the menu item to make it
 selectable or non-selectable, depending on the value of the
-{@code selectable} argument.
+<code>selectable</code> argument.
      </div>
 
 
@@ -1510,7 +1510,7 @@ CSS class and additional state-specific classes applied to it.
 
 
      <div class="entryOverview">
-       Default implementation of {@code decorate} for {@link goog.ui.Control}s.
+       Default implementation of <code>decorate</code> for goog.ui.Controls.
 Initializes the control&#39;s ID, content, and state based on the ID of the
 element, its child nodes, and its CSS classes, respectively.  Returns the
 element.
@@ -1744,7 +1744,7 @@ name to/from its element.
      <div class="entryOverview">
        Returns an array of all the combined class names that should be applied based
 on the given list of classes. Checks the result of
-{@link getIe6ClassCombinations} for any combinations that have all
+getIe6ClassCombinations for any combinations that have all
 members contained in classes. If a combination matches, the members are
 joined with an underscore (in order), and added to the return array.
 
@@ -1870,7 +1870,7 @@ See <a href="http://wiki/Main/ARIA">http://wiki/Main/ARIA</a> for more info.
 
 
      <div class="entryOverview">
-       Takes a single {@link goog.ui.Component.State}, and returns the
+       Takes a single goog.ui.Component.State, and returns the
 corresponding CSS class name (null if none).
      </div>
 
@@ -1939,16 +1939,16 @@ corresponding CSS class name (null if none).
        Returns all CSS class names applicable to the given control, based on its
 state.  The return value is an array of strings containing
 <ol>
-<li>the renderer-specific CSS class returned by {@link #getCssClass},
+<li>the renderer-specific CSS class returned by #getCssClass,
 followed by
-<li>the structural CSS class returned by {@link getStructuralCssClass} (if
+<li>the structural CSS class returned by getStructuralCssClass (if
 different from the renderer-specific CSS class), followed by
-<li>any state-specific classes returned by {@link #getClassNamesForState},
+<li>any state-specific classes returned by #getClassNamesForState,
 followed by
-<li>any extra classes returned by the control&#39;s {@code getExtraClassNames}
+<li>any extra classes returned by the control&#39;s <code>getExtraClassNames</code>
 method and
 <li>for IE6 and lower, additional combined classes from
-{@link getAppliedCombinedClassNames_}.
+getAppliedCombinedClassNames_.
 </li></li></li></li></li></ol>
 Since all controls have at least one renderer-specific CSS class name, this
 method is guaranteed to return an array of at least one element.
@@ -2016,11 +2016,11 @@ method is guaranteed to return an array of at least one element.
 
 
      <div class="entryOverview">
-       Takes a bit mask of {@link goog.ui.Component.State}s, and returns an array
+       Takes a bit mask of goog.ui.Component.States, and returns an array
 of the appropriate class names representing the given state, suitable to be
 applied to the root element of a component rendered using this renderer, or
 null if no state-specific classes need to be applied.  This default
-implementation uses the renderer&#39;s {@link getClassForState} method to
+implementation uses the renderer&#39;s getClassForState method to
 generate each state-specific class.
      </div>
 
@@ -2204,8 +2204,8 @@ renderer classes are expected to share the same CSS class name.
 
      <div class="entryOverview">
        Returns an array of combinations of classes to apply combined class names for
-in IE6 and below. See {@link IE6_CLASS_COMBINATIONS} for more detail. This
-method doesn&#39;t reference {@link IE6_CLASS_COMBINATIONS} so that it can be
+in IE6 and below. See IE6_CLASS_COMBINATIONS for more detail. This
+method doesn&#39;t reference IE6_CLASS_COMBINATIONS so that it can be
 compiled out, but subclasses should return their IE6_CLASS_COMBINATIONS
 static contasnt instead.
      </div>
@@ -2388,12 +2388,12 @@ returns the corresponding component state (0x00 if none).
      <div class="entryOverview">
        Returns the name of a DOM structure-specific CSS class to be applied to the
 root element of all components rendered or decorated using this renderer.
-Unlike the class name returned by {@link #getCssClass}, the structural class
+Unlike the class name returned by #getCssClass, the structural class
 name may be shared among different renderers that generate similar DOM
 structures.  The structural class name also serves as the basis of derived
 class names used to identify and style structural elements of the control&#39;s
 DOM, as well as the basis for state-specific class names.  The default
-implementation returns the same class name as {@link #getCssClass}, but
+implementation returns the same class name as #getCssClass, but
 subclasses are expected to override this method as needed.
      </div>
 
@@ -2441,7 +2441,7 @@ subclasses are expected to override this method as needed.
      <div class="entryOverview">
        Initializes the control&#39;s DOM by configuring properties that can only be set
 after the DOM has entered the document.  This implementation sets up BiDi
-and keyboard focus.  Called from {@link goog.ui.Control#enterDocument}.
+and keyboard focus.  Called from goog.ui.Control#enterDocument.
      </div>
 
 
@@ -2503,7 +2503,7 @@ and keyboard focus.  Called from {@link goog.ui.Control#enterDocument}.
 
      <div class="entryOverview">
        Returns true if the control&#39;s key event target supports keyboard focus
-(based on its {@code tabIndex} attribute), false otherwise.
+(based on its <code>tabIndex</code> attribute), false otherwise.
      </div>
 
 
@@ -2767,8 +2767,8 @@ must override this method accordingly.
 
      <div class="entryOverview">
        Updates the control&#39;s key event target to make it focusable or non-focusable
-via its {@code tabIndex} attribute.  Does nothing if the control doesn&#39;t
-support the {@code FOCUSED} state, or if it has no key event target.
+via its <code>tabIndex</code> attribute.  Does nothing if the control doesn&#39;t
+support the <code>FOCUSED</code> state, or if it has no key event target.
      </div>
 
 

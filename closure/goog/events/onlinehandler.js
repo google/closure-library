@@ -23,6 +23,7 @@
  * Note that this class only reflects what the browser tells us and this usually
  * only reflects changes to the File -> Work Offline menu item.
  *
+ * @see ../demos/onlinehandler.html
  */
 
 // TODO: We should probably implement some kind of polling service and/or

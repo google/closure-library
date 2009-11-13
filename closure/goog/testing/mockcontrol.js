@@ -178,6 +178,22 @@ goog.testing.MockControl.prototype.createMethodMock = function(
 
 
 /**
+ * Creates a controlled MethodMock for a constructor.  Passes its arguments
+ * through to the MethodMock constructor. See
+ * {@link goog.testing.createConstructorMock} for details.
+ * @param {Object} scope The scope of the constructor to be mocked out.
+ * @param {string} constructorName The name of the function we're going to mock.
+ * @return {goog.testing.MethodMock} The mocked method.
+ */
+goog.testing.MockControl.prototype.createConstructorMock = function(
+    scope, constructorName) {
+  var m = goog.testing.createConstructorMock(scope, constructorName);
+  this.addMock(m);
+  return m;
+};
+
+
+/**
  * Creates a controlled GlobalFunctionMock.  Passes its arguments through to the
  * GlobalFunctionMock constructor.
  * @param {string} functionName The name of the function we're going to mock.

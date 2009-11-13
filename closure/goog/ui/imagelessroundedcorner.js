@@ -14,7 +14,9 @@
 
 /**
  * @fileoverview Class definitions for imageless rounded corners.
+ *
  * @supported IE 6.0+, Safari 2.0+, Firefox 1.5+, Opera 9.2+.
+ * @see ../demos/imagelessroundedcorner.html
  */
 
 goog.provide('goog.ui.AbstractImagelessRoundedCorner');

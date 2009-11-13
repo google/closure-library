@@ -58,12 +58,12 @@
 <div class="g-section g-tpl-75-25">
   <div class="g-unit g-first" id="description">
     A class for managing the editor toolbar.  Acts as a bridge between
-a {@link goog.editor.Field} and a {@link goog.ui.Toolbar}.
+a goog.editor.Field and a goog.ui.Toolbar.
 
-The {@code toolbar} argument must be an instance of {@link goog.ui.Toolbar}
+The <code>toolbar</code> argument must be an instance of goog.ui.Toolbar
 or a subclass.  This class doesn&#39;t care how the toolbar was created.  As
 long as one or more controls hosted  in the toolbar have IDs that match
-built-in {@link goog.editor.Command}s, they will function as expected.  It is
+built-in goog.editor.Commands, they will function as expected.  It is
 the caller&#39;s responsibility to ensure that the toolbar is already rendered
 or that it decorates an existing element.
   </div>
@@ -250,7 +250,7 @@ Object
 
 
      <div class="entryOverview">
-       Returns the {@link goog.editor.Command} constant
+       Returns the goog.editor.Command constant
 that corresponds to the given Closure component ID.  Subclasses may override
 this method if they want to use a custom mapping scheme from controls to
 commands.
@@ -319,7 +319,7 @@ commands.
 
      <div class="entryOverview">
        Returns the Closure component ID of the control that corresponds to the
-given {@link goog.editor.Command} constant.
+given goog.editor.Command constant.
 Subclasses may override this method if they want to use a custom mapping
 scheme from commands to controls.
      </div>
@@ -387,7 +387,7 @@ scheme from commands to controls.
 
      <div class="entryOverview">
        Returns the field instance managed by the toolbar.  Useful for
-classes that extend {@code goog.ui.editor.ToolbarController}.
+classes that extend <code>goog.ui.editor.ToolbarController</code>.
      </div>
 
 
@@ -434,7 +434,7 @@ classes that extend {@code goog.ui.editor.ToolbarController}.
 
      <div class="entryOverview">
        Returns the event handler object for the editor toolbar.  Useful for classes
-that extend {@code goog.ui.editor.ToolbarController}.
+that extend <code>goog.ui.editor.ToolbarController</code>.
      </div>
 
 
@@ -481,7 +481,7 @@ that extend {@code goog.ui.editor.ToolbarController}.
 
      <div class="entryOverview">
        Returns the toolbar UI component that manages the editor.  Useful for
-classes that extend {@code goog.ui.editor.ToolbarController}.
+classes that extend <code>goog.ui.editor.ToolbarController</code>.
      </div>
 
 
@@ -526,7 +526,7 @@ classes that extend {@code goog.ui.editor.ToolbarController}.
 
 
      <div class="entryOverview">
-       Handles {@code ACTION} events dispatched by toolbar buttons in response to
+       Handles <code>ACTION</code> events dispatched by toolbar buttons in response to
 user actions by executing the corresponding field command.
      </div>
 
@@ -800,7 +800,7 @@ user actions by executing the corresponding field command.
 
      <div class="entryOverview">
        Updates the toolbar in response to editor events.  Specifically, updates
-button states based on {@code COMMAND_VALUE_CHANGE} events, reflecting the
+button states based on <code>COMMAND_VALUE_CHANGE</code> events, reflecting the
 effective formatting of the selection.
      </div>
 
@@ -1007,7 +1007,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line134">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line136">code &raquo;</a>
   </td>
      </tr>
 
@@ -1078,7 +1078,7 @@ stopPropagation, then the bubble listeners won&#39;t fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line172">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line174">code &raquo;</a>
   </td>
      </tr>
 
@@ -1120,7 +1120,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line189">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line191">code &raquo;</a>
   </td>
      </tr>
 
@@ -1166,7 +1166,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line102">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line104">code &raquo;</a>
   </td>
      </tr>
 
@@ -1252,7 +1252,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line153">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line155">code &raquo;</a>
   </td>
      </tr>
 
@@ -1312,7 +1312,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line112">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line114">code &raquo;</a>
   </td>
      </tr>
 
@@ -1396,7 +1396,7 @@ nothing is done.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {
@@ -1579,7 +1579,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line85">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line87">Code &raquo;</a>
   </td>
      </tr>
 
@@ -1612,7 +1612,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line93">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line95">Code &raquo;</a>
   </td>
      </tr>
 

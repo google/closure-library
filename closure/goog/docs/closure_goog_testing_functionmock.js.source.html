@@ -151,7 +151,7 @@
 <a name="line108"></a>
 <a name="line109"></a>
 <a name="line110"></a>/**
-<a name="line111"></a> * Convenience method for creating a mocks for a method.
+<a name="line111"></a> * Convenience method for creating a mock for a method.
 <a name="line112"></a> * @param {Object} scope The scope of the method to be mocked out.
 <a name="line113"></a> * @param {string} functionName the name of the function we&#39;re going to mock.
 <a name="line114"></a> * @return {goog.testing.MethodMock} the mocked global function.
@@ -162,13 +162,34 @@
 <a name="line119"></a>
 <a name="line120"></a>
 <a name="line121"></a>/**
-<a name="line122"></a> * Convenience method for creating a mocks for a global / top-level function.
-<a name="line123"></a> * @param {string} functionName the name of the function we&#39;re going to mock.
-<a name="line124"></a> * @return {goog.testing.GlobalFunctionMock} the mocked global function.
-<a name="line125"></a> */
-<a name="line126"></a>goog.testing.createGlobalFunctionMock = function(functionName) {
-<a name="line127"></a>  return new goog.testing.GlobalFunctionMock(functionName);
-<a name="line128"></a>};
+<a name="line122"></a> * Convenience method for creating a mock for a constructor.
+<a name="line123"></a> *
+<a name="line124"></a> * &lt;p&gt;When mocking a constructor to return a mocked instance, remember to create
+<a name="line125"></a> * the instance mock before mocking the constructor. If you mock the constructor
+<a name="line126"></a> * first, then the mock framework will be unable to examine the prototype chain
+<a name="line127"></a> * when creating the mock instance.
+<a name="line128"></a> * @param {Object} scope The scope of the constructor to be mocked out.
+<a name="line129"></a> * @param {string} constructorName the name of the constructor we&#39;re going to
+<a name="line130"></a> *     mock.
+<a name="line131"></a> * @return {goog.testing.MethodMock} the mocked constructor.
+<a name="line132"></a> */
+<a name="line133"></a>goog.testing.createConstructorMock = function(scope, constructorName) {
+<a name="line134"></a>  // The return value is a MethodMock and there is no difference in
+<a name="line135"></a>  // implementation between this method and createMethodMock. This alias is
+<a name="line136"></a>  // provided just to make code clearer and to make it easier to introduce a
+<a name="line137"></a>  // more specialized implementation if that is ever necessary.
+<a name="line138"></a>  return new goog.testing.MethodMock(scope, constructorName);
+<a name="line139"></a>};
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * Convenience method for creating a mocks for a global / top-level function.
+<a name="line144"></a> * @param {string} functionName the name of the function we&#39;re going to mock.
+<a name="line145"></a> * @return {goog.testing.GlobalFunctionMock} the mocked global function.
+<a name="line146"></a> */
+<a name="line147"></a>goog.testing.createGlobalFunctionMock = function(functionName) {
+<a name="line148"></a>  return new goog.testing.GlobalFunctionMock(functionName);
+<a name="line149"></a>};
 </pre>
 
 

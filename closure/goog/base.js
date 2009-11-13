@@ -406,8 +406,10 @@ if (!COMPILED) {
       return;
     }
     var scripts = doc.getElementsByTagName('script');
-    for (var script, i = 0; script = scripts[i]; i++) {
-      var src = script.src;
+    // Search backwards since the current script is in almost all cases the one
+    // that has base.js.
+    for (var i = scripts.length - 1; i >= 0; --i) {
+      var src = scripts[i].src;
       var l = src.length;
       if (src.substr(l - 7) == 'base.js') {
         goog.basePath = src.substr(0, l - 7);
@@ -970,13 +972,13 @@ goog.mixin = function(target, source) {
 
 
 /**
- * A simple wrapper for new Date().getTime().
- *
  * @return {number} An integer value representing the number of milliseconds
  *     between midnight, January 1, 1970 and the current time.
  */
 goog.now = Date.now || (function() {
-  return new Date().getTime();
+  // Unary plus operator converts its operand to a number which in the case of
+  // a date is done by calling getTime().
+  return +new Date();
 });
 
 

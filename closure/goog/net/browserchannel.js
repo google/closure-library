@@ -43,6 +43,7 @@ goog.require('goog.Uri');
 goog.require('goog.debug.TextFormatter');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
+goog.require('goog.json');
 goog.require('goog.net.BrowserTestChannel');
 goog.require('goog.net.ChannelDebug');
 goog.require('goog.net.ChannelRequest');
@@ -883,7 +884,6 @@ goog.net.BrowserChannel.prototype.startForwardChannel_ = function() {
  */
 goog.net.BrowserChannel.prototype.open_ = function() {
   this.channelDebug_.debug('open_()');
-  this.state_ = goog.net.BrowserChannel.State.OPENING;
   this.nextRid_ = Math.floor(Math.random() * 100000);
 
   var rid = this.nextRid_++;

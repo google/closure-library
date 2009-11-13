@@ -354,12 +354,12 @@ function initSeamlessField(innerHTML, styles) {
 }
 
 /**
- * Make sure that the original field element for the given EditableField has
+ * Make sure that the original field element for the given goog.editor.Field has
  * the same size before and after attaching the given iframe. If this is not
  * true, then the field will fidget while we're initializing the field,
  * and that's not what we want.
  *
- * @param {TR_EditableField} fieldObj
+ * @param {goog.editor.Field} fieldObj
  * @param {Element} iframe
  */
 function assertAttachSeamlessIframeSizesCorrectly(fieldObj, iframe) {

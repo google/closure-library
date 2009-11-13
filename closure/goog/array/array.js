@@ -38,6 +38,13 @@ goog.array.peek = function(array) {
 
 
 /**
+ * Reference to the original {@code Array.prototype}.
+ * @private
+ */
+goog.array.ARRAY_PROTOTYPE_ = Array.prototype;
+
+
+/**
  * Returns the index of the first element of an array with a specified
  * value, or -1 if the element is not present in the array.
  *
@@ -49,23 +56,20 @@ goog.array.peek = function(array) {
  *     omitted the search starts at index 0.
  * @return {number} The index of the first matching array element.
  */
-goog.array.indexOf = function(arr, obj, opt_fromIndex) {
-  if (arr.indexOf) {
-    return arr.indexOf(obj, opt_fromIndex);
-  }
-  if (Array.indexOf) {
-    return Array.indexOf(arr, obj, opt_fromIndex);
-  }
-
-  var fromIndex = opt_fromIndex == null ?
-      0 : (opt_fromIndex < 0 ?
-           Math.max(0, arr.length + opt_fromIndex) : opt_fromIndex);
-  for (var i = fromIndex; i < arr.length; i++) {
-    if (i in arr && arr[i] === obj)
-      return i;
-  }
-  return -1;
-};
+goog.array.indexOf = goog.array.ARRAY_PROTOTYPE_.indexOf ?
+    function(arr, obj, opt_fromIndex) {
+      return goog.array.ARRAY_PROTOTYPE_.indexOf.call(arr, obj, opt_fromIndex);
+    } :
+    function(arr, obj, opt_fromIndex) {
+      var fromIndex = opt_fromIndex == null ?
+          0 : (opt_fromIndex < 0 ?
+               Math.max(0, arr.length + opt_fromIndex) : opt_fromIndex);
+      for (var i = fromIndex; i < arr.length; i++) {
+        if (i in arr && arr[i] === obj)
+          return i;
+      }
+      return -1;
+    };
 
 
 /**
@@ -80,27 +84,25 @@ goog.array.indexOf = function(arr, obj, opt_fromIndex) {
  *     omitted the search starts at the end of the array.
  * @return {number} The index of the last matching array element.
  */
-goog.array.lastIndexOf = function(arr, obj, opt_fromIndex) {
-  // if undefined or null are passed then that is treated as 0 which will
-  // always return -1;
-  var fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
+goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ?
+    function(arr, obj, opt_fromIndex) {
+      // Firefox treats undefined and null as 0 in the fromIndex argument which
+      // leads it to always return -1
+      var fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
+      return goog.array.ARRAY_PROTOTYPE_.lastIndexOf.call(arr, obj, fromIndex);
+    } :
+    function(arr, obj, opt_fromIndex) {
+      var fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
 
-  if (arr.lastIndexOf) {
-    return arr.lastIndexOf(obj, fromIndex);
-  }
-  if (Array.lastIndexOf) {
-    return Array.lastIndexOf(arr, obj, fromIndex);
-  }
-
-  if (fromIndex < 0) {
-    fromIndex = Math.max(0, arr.length + fromIndex);
-  }
-  for (var i = fromIndex; i >= 0; i--) {
-    if (i in arr && arr[i] === obj)
-      return i;
-  }
-  return -1;
-};
+      if (fromIndex < 0) {
+        fromIndex = Math.max(0, arr.length + fromIndex);
+      }
+      for (var i = fromIndex; i >= 0; i--) {
+        if (i in arr && arr[i] === obj)
+          return i;
+      }
+      return -1;
+    };
 
 
 /**
@@ -121,21 +123,19 @@ goog.array.lastIndexOf = function(arr, obj, opt_fromIndex) {
  * @param {Object} opt_obj The object to be used as the value of 'this'
  *     within f.
  */
-goog.array.forEach = function(arr, f, opt_obj) {
-  if (arr.forEach) {
-    arr.forEach(f, opt_obj);
-  } else if (Array.forEach) {
-    Array.forEach(/** @type {Array} */ (arr), f, opt_obj);
-  } else {
-    var l = arr.length;  // must be fixed during loop... see docs
-    var arr2 = goog.isString(arr) ? arr.split('') : arr;
-    for (var i = 0; i < l; i++) {
-      if (i in arr2) {
-        f.call(opt_obj, arr2[i], i, arr);
+goog.array.forEach = goog.array.ARRAY_PROTOTYPE_.forEach ?
+    function(arr, f, opt_obj) {
+      goog.array.ARRAY_PROTOTYPE_.forEach.call(arr, f, opt_obj);
+    } :
+    function(arr, f, opt_obj) {
+      var l = arr.length;  // must be fixed during loop... see docs
+      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      for (var i = 0; i < l; i++) {
+        if (i in arr2) {
+          f.call(opt_obj, arr2[i], i, arr);
+        }
       }
-    }
-  }
-};
+    };
 
 
 /**
@@ -176,28 +176,25 @@ goog.array.forEachRight = function(arr, f, opt_obj) {
  * @return {!Array} a new array in which only elements that passed the test are
  *     present.
  */
-goog.array.filter = function(arr, f, opt_obj) {
-  if (arr.filter) {
-    return arr.filter(f, opt_obj);
-  }
-  if (Array.filter) {
-    return Array.filter(arr, f, opt_obj);
-  }
-
-  var l = arr.length;  // must be fixed during loop... see docs
-  var res = [];
-  var resLength = 0;
-  var arr2 = goog.isString(arr) ? arr.split('') : arr;
-  for (var i = 0; i < l; i++) {
-    if (i in arr2) {
-      var val = arr2[i];  // in case f mutates arr2
-      if (f.call(opt_obj, val, i, arr)) {
-        res[resLength++] = val;
+goog.array.filter = goog.array.ARRAY_PROTOTYPE_.filter ?
+    function(arr, f, opt_obj) {
+      return goog.array.ARRAY_PROTOTYPE_.filter.call(arr, f, opt_obj);
+    } :
+    function(arr, f, opt_obj) {
+      var l = arr.length;  // must be fixed during loop... see docs
+      var res = [];
+      var resLength = 0;
+      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      for (var i = 0; i < l; i++) {
+        if (i in arr2) {
+          var val = arr2[i];  // in case f mutates arr2
+          if (f.call(opt_obj, val, i, arr)) {
+            res[resLength++] = val;
+          }
+        }
       }
-    }
-  }
-  return res;
-};
+      return res;
+    };
 
 
 /**
@@ -214,25 +211,22 @@ goog.array.filter = function(arr, f, opt_obj) {
  *     within f.
  * @return {!Array} a new array with the results from f.
  */
-goog.array.map = function(arr, f, opt_obj) {
-  if (arr.map) {
-    return arr.map(f, opt_obj);
-  }
-  if (Array.map) {
-    return Array.map(arr, f, opt_obj);
-  }
-
-  var l = arr.length;  // must be fixed during loop... see docs
-  var res = [];
-  var resLength = 0;
-  var arr2 = goog.isString(arr) ? arr.split('') : arr;
-  for (var i = 0; i < l; i++) {
-    if (i in arr2) {
-      res[resLength++] = f.call(opt_obj, arr2[i], i, arr);
-    }
-  }
-  return res;
-};
+goog.array.map = goog.array.ARRAY_PROTOTYPE_.map ?
+    function(arr, f, opt_obj) {
+      return goog.array.ARRAY_PROTOTYPE_.map.call(arr, f, opt_obj);
+    } :
+    function(arr, f, opt_obj) {
+      var l = arr.length;  // must be fixed during loop... see docs
+      var res = [];
+      var resLength = 0;
+      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      for (var i = 0; i < l; i++) {
+        if (i in arr2) {
+          res[resLength++] = f.call(opt_obj, arr2[i], i, arr);
+        }
+      }
+      return res;
+    };
 
 
 /**
@@ -335,23 +329,20 @@ goog.array.reduceRight = function(arr, f, val, opt_obj) {
  *     within f.
  * @return {boolean} true if any element passes the test.
  */
-goog.array.some = function(arr, f, opt_obj) {
-  if (arr.some) {
-    return arr.some(f, opt_obj);
-  }
-  if (Array.some) {
-    return Array.some(arr, f, opt_obj);
-  }
-
-  var l = arr.length;  // must be fixed during loop... see docs
-  var arr2 = goog.isString(arr) ? arr.split('') : arr;
-  for (var i = 0; i < l; i++) {
-    if (i in arr2 && f.call(opt_obj, arr2[i], i, arr)) {
-      return true;
-    }
-  }
-  return false;
-};
+goog.array.some = goog.array.ARRAY_PROTOTYPE_.some ?
+    function(arr, f, opt_obj) {
+      return goog.array.ARRAY_PROTOTYPE_.some.call(arr, f, opt_obj);
+    } :
+    function(arr, f, opt_obj) {
+      var l = arr.length;  // must be fixed during loop... see docs
+      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      for (var i = 0; i < l; i++) {
+        if (i in arr2 && f.call(opt_obj, arr2[i], i, arr)) {
+          return true;
+        }
+      }
+      return false;
+    };
 
 
 /**
@@ -369,23 +360,20 @@ goog.array.some = function(arr, f, opt_obj) {
  *     within f.
  * @return {boolean} false if any element fails the test.
  */
-goog.array.every = function(arr, f, opt_obj) {
-  if (arr.every) {
-    return arr.every(f, opt_obj);
-  }
-  if (Array.every) {
-    return Array.every(arr, f, opt_obj);
-  }
-
-  var l = arr.length;  // must be fixed during loop... see docs
-  var arr2 = goog.isString(arr) ? arr.split('') : arr;
-  for (var i = 0; i < l; i++) {
-    if (i in arr2 && !f.call(opt_obj, arr2[i], i, arr)) {
-      return false;
-    }
-  }
-  return true;
-};
+goog.array.every = goog.array.ARRAY_PROTOTYPE_.every ?
+    function(arr, f, opt_obj) {
+      return goog.array.ARRAY_PROTOTYPE_.every.call(arr, f, opt_obj);
+    } :
+    function(arr, f, opt_obj) {
+      var l = arr.length;  // must be fixed during loop... see docs
+      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      for (var i = 0; i < l; i++) {
+        if (i in arr2 && !f.call(opt_obj, arr2[i], i, arr)) {
+          return false;
+        }
+      }
+      return true;
+    };
 
 
 /**
@@ -476,11 +464,7 @@ goog.array.findIndexRight = function(arr, f, opt_obj) {
  * @return {boolean} true if obj is present.
  */
 goog.array.contains = function(arr, obj) {
-  if (arr.contains) {
-    return arr.contains(obj);
-  }
-
-  return goog.array.indexOf(arr, obj) > -1;
+  return goog.array.indexOf(arr, obj) >= 0;
 };
 
 
@@ -499,8 +483,8 @@ goog.array.isEmpty = function(arr) {
  * @param {goog.array.ArrayLike} arr Array or array like object to clear.
  */
 goog.array.clear = function(arr) {
-  // for non real arrays we don't have the magic length so we delete the
-  // indices
+  // For non real arrays we don't have the magic length so we delete the
+  // indices.
   if (!goog.isArray(arr)) {
     for (var i = arr.length - 1; i >= 0; i--) {
       delete arr[i];
@@ -555,7 +539,7 @@ goog.array.insertArrayAt = function(arr, elementsToAdd, opt_i) {
  */
 goog.array.insertBefore = function(arr, obj, opt_obj2) {
   var i;
-  if (arguments.length == 2 || (i = goog.array.indexOf(arr, opt_obj2)) == -1) {
+  if (arguments.length == 2 || (i = goog.array.indexOf(arr, opt_obj2)) < 0) {
     arr.push(obj);
   } else {
     goog.array.insertAt(arr, obj, i);
@@ -572,7 +556,7 @@ goog.array.insertBefore = function(arr, obj, opt_obj2) {
 goog.array.remove = function(arr, obj) {
   var i = goog.array.indexOf(arr, obj);
   var rv;
-  if ((rv = i != -1)) {
+  if ((rv = i >= 0)) {
     goog.array.removeAt(arr, i);
   }
   return rv;
@@ -590,7 +574,7 @@ goog.array.removeAt = function(arr, i) {
   // use generic form of splice
   // splice returns the removed items and if successful the length of that
   // will be 1
-  return Array.prototype.splice.call(arr, i, 1).length == 1;
+  return goog.array.ARRAY_PROTOTYPE_.splice.call(arr, i, 1).length == 1;
 };
 
 
@@ -698,7 +682,8 @@ goog.array.extend = function(arr1, var_args) {
  * @return {!Array} the removed elements.
  */
 goog.array.splice = function(arr, index, howMany, var_args) {
-  return Array.prototype.splice.apply(arr, goog.array.slice(arguments, 1));
+  return goog.array.ARRAY_PROTOTYPE_.splice.apply(
+      arr, goog.array.slice(arguments, 1));
 };
 
 
@@ -719,9 +704,9 @@ goog.array.slice = function(arr, start, opt_end) {
   // we could use slice on the arguments object and then use apply instead of
   // testing the length
   if (arguments.length <= 2) {
-    return Array.prototype.slice.call(arr, start);
+    return goog.array.ARRAY_PROTOTYPE_.slice.call(arr, start);
   } else {
-    return Array.prototype.slice.call(arr, start, opt_end);
+    return goog.array.ARRAY_PROTOTYPE_.slice.call(arr, start, opt_end);
   }
 };
 
@@ -819,7 +804,8 @@ goog.array.binarySearch = function(arr, target, opt_compareFn) {
  *     first argument is less than, equal to, or greater than the second.
  */
 goog.array.sort = function(arr, opt_compareFn) {
-  Array.prototype.sort.call(arr, opt_compareFn || goog.array.defaultCompare);
+  goog.array.ARRAY_PROTOTYPE_.sort.call(
+      arr, opt_compareFn || goog.array.defaultCompare);
 };
 
 
@@ -1061,9 +1047,9 @@ goog.array.rotate = function(array, n) {
   if (array.length) {
     n %= array.length;
     if (n > 0) {
-      Array.prototype.unshift.apply(array, array.splice(-n, n));
+      goog.array.ARRAY_PROTOTYPE_.unshift.apply(array, array.splice(-n, n));
     } else if (n < 0) {
-      Array.prototype.push.apply(array, array.splice(0, -n));
+      goog.array.ARRAY_PROTOTYPE_.push.apply(array, array.splice(0, -n));
     }
   }
   return array;

@@ -193,7 +193,43 @@ Object
   <table class="horiz-rule">
 
 
-     <tr class="even entry public">
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.History.prototype.check_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">check_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Checks the state of the document fragment and the iframe title to detect
+navigation changes. If <code>goog.History.HAS_ONHASHCHANGE_</code> is
+<code>false</code>, then this runs approximately twenty times per second.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_history_history.js.source.html#line817">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -227,7 +263,7 @@ Object
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -273,12 +309,12 @@ null in that case.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line758">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line764">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -341,12 +377,12 @@ be returned as label//root.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line611">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line613">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -387,12 +423,12 @@ be returned as label//root.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line563">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line565">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry protected">
+     <tr class="odd entry protected">
        <td class="access"></td>
 
 
@@ -431,7 +467,7 @@ object will actually be enabled at this point.
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -453,8 +489,8 @@ object will actually be enabled at this point.
 
      <div class="entryOverview">
        Handles HTML5 onhashchange events on browsers where it is supported.
-This is very similar to {@link #poll_}, except that it is not executed
-continuously. It is only used when {@code goog.History.HAS_ONHASHCHANGE_} is
+This is very similar to #check_, except that it is not executed
+continuously. It is only used when <code>goog.History.HAS_ONHASHCHANGE_</code> is
 true.
      </div>
 
@@ -494,7 +530,7 @@ true.
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -555,7 +591,7 @@ correct state can be restored in the hash or iframe.
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -592,42 +628,7 @@ unstick itself as the user wiggles the mouse in frustration.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line883">code &raquo;</a>
-  </td>
-     </tr>
-
-
-     <tr class="even entry private">
-       <td class="access"></td>
-
-
-
-
-
-
-  <td>
-    <a name="goog.History.prototype.poll_"></a>
-
-
-     <div class="arg">
-       <img align="left" src="static/images/blank.gif">
-
-        <span class="entryName">poll_<span class="args">()</span>
-        </span>
-      </div>
-
-
-     <div class="entryOverview">
-       Polls the state of the document fragment and the iframe title to detect
-navigation changes. Runs approximately twenty times per second.
-     </div>
-
-   
-  </td>
-
-
-  <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line810">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line890">code &raquo;</a>
   </td>
      </tr>
 
@@ -696,7 +697,7 @@ stack.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line597">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line599">code &raquo;</a>
   </td>
      </tr>
 
@@ -845,7 +846,7 @@ window.location.replace replaces the current state from the history stack.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line678">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line684">code &raquo;</a>
   </td>
      </tr>
 
@@ -924,7 +925,7 @@ affecting the length of the stack.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line631">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line633">code &raquo;</a>
   </td>
      </tr>
 
@@ -1004,7 +1005,7 @@ Older versions of webkit cannot set the iframe, so ignore those browsers.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line708">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line714">code &raquo;</a>
   </td>
      </tr>
 
@@ -1064,7 +1065,7 @@ Older versions of webkit cannot set the iframe, so ignore those browsers.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line862">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line869">code &raquo;</a>
   </td>
      </tr>
 
@@ -1136,7 +1137,7 @@ problem, the app can pass in a title to use with the hidden iframe.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line585">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line587">code &raquo;</a>
   </td>
      </tr>
 
@@ -1197,7 +1198,7 @@ to the location or the iframe state is detected by poll_.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line839">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line846">code &raquo;</a>
   </td>
      </tr>
 
@@ -1309,7 +1310,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line134">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line136">code &raquo;</a>
   </td>
      </tr>
 
@@ -1380,7 +1381,7 @@ stopPropagation, then the bubble listeners won&#39;t fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line172">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line174">code &raquo;</a>
   </td>
      </tr>
 
@@ -1422,7 +1423,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line189">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line191">code &raquo;</a>
   </td>
      </tr>
 
@@ -1468,7 +1469,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line102">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line104">code &raquo;</a>
   </td>
      </tr>
 
@@ -1554,7 +1555,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line153">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line155">code &raquo;</a>
   </td>
      </tr>
 
@@ -1614,7 +1615,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line112">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line114">code &raquo;</a>
   </td>
      </tr>
 
@@ -1698,7 +1699,7 @@ nothing is done.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {
@@ -2045,7 +2046,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line85">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line87">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2078,7 +2079,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line93">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line95">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2236,7 +2237,7 @@ body innerHTML.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line907">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line914">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2269,7 +2270,7 @@ body innerHTML.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line915">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line922">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2303,7 +2304,7 @@ timer (@see goog.History#operaDefibrillator_).
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line895">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line902">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2336,7 +2337,7 @@ timer (@see goog.History#operaDefibrillator_).
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line923">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line930">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2370,7 +2371,7 @@ Used to create unique IDs.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line933">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line940">Code &raquo;</a>
   </td>
      </tr>
 

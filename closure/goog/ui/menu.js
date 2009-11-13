@@ -33,11 +33,12 @@
  * menu.decorate(goog.dom.getElement('menu'));
  *
  * TESTED=FireFox 2.0, IE6, Opera 9, Chrome.
- * TODO: Key handling is flakey in Opera and Chrome
+ * TODO: Key handling is flaky in Opera and Chrome
  * TODO: Rename all references of "item" to child since menu is
  * essentially very generic and could, in theory, host a date or color picker.
  *
  * @see ../demos/menu.html
+ * @see ../demos/menus.html
  */
 
 goog.provide('goog.ui.Menu');
@@ -50,7 +51,7 @@ goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Container');
 goog.require('goog.ui.Container.Orientation');
-// The following dependencies (MenuItem & MenuSeparator) are impicit.
+// The following dependencies (MenuItem & MenuSeparator) are implicit.
 // There are no references in the code, but we need to load these
 // classes before goog.ui.Menu.
 goog.require('goog.ui.MenuItem');

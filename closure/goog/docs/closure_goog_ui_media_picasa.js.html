@@ -58,16 +58,16 @@
  TODO: implement the javascript viewer, for users without flash. Get it
  from the Gmail Picasa gadget.
 
- goog.ui.media.PicasaAlbum is actually a {@link goog.ui.ControlRenderer}, a
+ goog.ui.media.PicasaAlbum is actually a goog.ui.ControlRenderer, a
  stateless class - that could/should be used as a Singleton with the static
- method {@code goog.ui.media.PicasaAlbum.getInstance} -, that knows how to
+ method <code>goog.ui.media.PicasaAlbum.getInstance</code> -, that knows how to
  render picasa albums. It is designed to be used with a
- {@link goog.ui.Control}, which will actually control the media renderer and
- provide the {@link goog.ui.Component} base. This design guarantees that all
+ goog.ui.Control, which will actually control the media renderer and
+ provide the goog.ui.Component base. This design guarantees that all
  different types of medias will behave alike but will look different.
 
- goog.ui.media.PicasaAlbum expects {@code goog.ui.media.PicasaAlbumModel}s on
- {@code goog.ui.Control.getModel} as data models, and render a flash object
+ goog.ui.media.PicasaAlbum expects <code>goog.ui.media.PicasaAlbumModel</code>s on
+ <code>goog.ui.Control.getModel</code> as data models, and render a flash object
  that will show a slideshow with the contents of that album URL.
 
  Example of usage:
@@ -81,9 +81,9 @@
  picasa medias currently support the following states:
 
  <ul>
- <li> {@link goog.ui.Component.State.DISABLED}: shows &#39;flash not available&#39;
- <li> {@link goog.ui.Component.State.HOVER}: mouse cursor is over the album
- <li> {@link goog.ui.Component.State.SELECTED}: flash album is shown
+ <li> goog.ui.Component.State.DISABLED: shows &#39;flash not available&#39;
+ <li> goog.ui.Component.State.HOVER: mouse cursor is over the album
+ <li> goog.ui.Component.State.SELECTED: flash album is shown
  </li></li></li></ul>
 
  Which can be accessed by
@@ -122,12 +122,12 @@ renderer.
 
 This class knows how to parse picasa URLs, and render the DOM structure
 of picasa album players and previews. This class is meant to be used as a
-singleton static stateless class, that takes {@code goog.ui.media.Media}
-instances and renders it. It expects {@code goog.ui.media.Media.getModel} to
+singleton static stateless class, that takes <code>goog.ui.media.Media</code>
+instances and renders it. It expects <code>goog.ui.media.Media.getModel</code> to
 return a well formed, previously constructed, object with a user and album
-fields {@see goog.ui.media.PicasaAlbum.parseUrl}, which is the data model
+fields goog.ui.media.PicasaAlbum.parseUrl, which is the data model
 this renderer will use to construct the DOM structure.
-{@see goog.ui.media.PicasaAlbum.newControl} for a example of constructing a
+goog.ui.media.PicasaAlbum.newControl for a example of constructing a
 control with this renderer.
 
 goog.ui.media.PicasaAlbum currently displays a picasa-made flash slideshow
@@ -136,13 +136,13 @@ in case flash is not available.
 
 This design is patterned after <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
 
-It uses {@link goog.ui.media.FlashObject} to embed the flash object.</div>
+It uses goog.ui.media.FlashObject to embed the flash object.</div>
  </div>
  <div class="fn-constructor">
         <a href="class_goog_ui_media_PicasaAlbumModel.html">
           goog.ui.media.PicasaAlbumModel</a><br/>
-        <div class="class-details">The {@code goog.ui.media.PicasaAlbum} media data model. It stores a required
-{@code userId} and {@code albumId} fields, sets the picasa album URL, and
+        <div class="class-details">The <code>goog.ui.media.PicasaAlbum</code> media data model. It stores a required
+<code>userId</code> and <code>albumId</code> fields, sets the picasa album URL, and
 allows a few optional parameters.</div>
  </div>
       
@@ -187,8 +187,8 @@ allows a few optional parameters.</div>
 
 
      <div class="entryOverview">
-       The opposite of {@code newInstance}: takes an {@code userId} and an
-{@code albumId} and builds a URL.
+       The opposite of <code>newInstance</code>: takes an <code>userId</code> and an
+<code>albumId</code> and builds a URL.
      </div>
 
 
@@ -264,7 +264,7 @@ allows a few optional parameters.</div>
 picasa URLs.
 
 Copied from <a href="http://go/markdownlite.js">http://go/markdownlite.js</a>,
-and {@link PicasaWebExtractor.xml}.
+and PicasaWebExtractor.xml.
      </div>
 
    
@@ -377,7 +377,7 @@ configuration.
 
 
      <div class="entryOverview">
-       Gets a {@code picasaUrl} and extracts the user and album id.
+       Gets a <code>picasaUrl</code> and extracts the user and album id.
      </div>
 
 

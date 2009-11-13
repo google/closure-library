@@ -64,183 +64,184 @@
 <a name="line21"></a> * Based on the Custom Buttons 3.1 visual specification, see
 <a name="line22"></a> * http://go/custombuttons
 <a name="line23"></a> *
-<a name="line24"></a> */
-<a name="line25"></a>
-<a name="line26"></a>goog.provide(&#39;goog.ui.ImagelessButtonRenderer&#39;);
-<a name="line27"></a>
-<a name="line28"></a>goog.require(&#39;goog.ui.Button&#39;);
-<a name="line29"></a>goog.require(&#39;goog.ui.ControlContent&#39;);
-<a name="line30"></a>goog.require(&#39;goog.ui.CustomButtonRenderer&#39;);
-<a name="line31"></a>goog.require(&#39;goog.ui.registry&#39;);
-<a name="line32"></a>
+<a name="line24"></a> * @see ../demos/imagelessbutton.html
+<a name="line25"></a> */
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.ui.ImagelessButtonRenderer&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.ui.Button&#39;);
+<a name="line30"></a>goog.require(&#39;goog.ui.ControlContent&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.CustomButtonRenderer&#39;);
+<a name="line32"></a>goog.require(&#39;goog.ui.registry&#39;);
 <a name="line33"></a>
-<a name="line34"></a>/**
-<a name="line35"></a> * Custom renderer for {@link goog.ui.Button}s. Imageless buttons can contain
-<a name="line36"></a> * almost arbitrary HTML content, will flow like inline elements, but can be
-<a name="line37"></a> * styled like block-level elements.
-<a name="line38"></a> *
-<a name="line39"></a> * @constructor
-<a name="line40"></a> * @extends {goog.ui.CustomButtonRenderer}
-<a name="line41"></a> */
-<a name="line42"></a>goog.ui.ImagelessButtonRenderer = function() {
-<a name="line43"></a>  goog.ui.CustomButtonRenderer.call(this);
-<a name="line44"></a>};
-<a name="line45"></a>goog.inherits(goog.ui.ImagelessButtonRenderer, goog.ui.CustomButtonRenderer);
-<a name="line46"></a>
-<a name="line47"></a>/**
-<a name="line48"></a> * The singleton instance of this renderer class.
-<a name="line49"></a> * @type {goog.ui.ImagelessButtonRenderer?}
-<a name="line50"></a> * @private
-<a name="line51"></a> */
-<a name="line52"></a>goog.ui.ImagelessButtonRenderer.instance_ = null;
-<a name="line53"></a>goog.addSingletonGetter(goog.ui.ImagelessButtonRenderer);
-<a name="line54"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Custom renderer for {@link goog.ui.Button}s. Imageless buttons can contain
+<a name="line37"></a> * almost arbitrary HTML content, will flow like inline elements, but can be
+<a name="line38"></a> * styled like block-level elements.
+<a name="line39"></a> *
+<a name="line40"></a> * @constructor
+<a name="line41"></a> * @extends {goog.ui.CustomButtonRenderer}
+<a name="line42"></a> */
+<a name="line43"></a>goog.ui.ImagelessButtonRenderer = function() {
+<a name="line44"></a>  goog.ui.CustomButtonRenderer.call(this);
+<a name="line45"></a>};
+<a name="line46"></a>goog.inherits(goog.ui.ImagelessButtonRenderer, goog.ui.CustomButtonRenderer);
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * The singleton instance of this renderer class.
+<a name="line50"></a> * @type {goog.ui.ImagelessButtonRenderer?}
+<a name="line51"></a> * @private
+<a name="line52"></a> */
+<a name="line53"></a>goog.ui.ImagelessButtonRenderer.instance_ = null;
+<a name="line54"></a>goog.addSingletonGetter(goog.ui.ImagelessButtonRenderer);
 <a name="line55"></a>
-<a name="line56"></a>/**
-<a name="line57"></a> * Default CSS class to be applied to the root element of components rendered
-<a name="line58"></a> * by this renderer.
-<a name="line59"></a> * @type {string}
-<a name="line60"></a> */
-<a name="line61"></a>goog.ui.ImagelessButtonRenderer.CSS_CLASS =
-<a name="line62"></a>    goog.getCssName(&#39;goog-imageless-button&#39;);
-<a name="line63"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line59"></a> * by this renderer.
+<a name="line60"></a> * @type {string}
+<a name="line61"></a> */
+<a name="line62"></a>goog.ui.ImagelessButtonRenderer.CSS_CLASS =
+<a name="line63"></a>    goog.getCssName(&#39;goog-imageless-button&#39;);
 <a name="line64"></a>
-<a name="line65"></a>/**
-<a name="line66"></a> * Returns the button&#39;s contents wrapped in the following DOM structure:
-<a name="line67"></a> *    &lt;div class=&quot;goog-inline-block goog-imageless-button&quot;&gt;
-<a name="line68"></a> *      &lt;div class=&quot;goog-inline-block goog-imageless-button-outer-box&quot;&gt;
-<a name="line69"></a> *        &lt;div class=&quot;goog-imageless-button-inner-box&quot;&gt;
-<a name="line70"></a> *          &lt;div class=&quot;goog-imageless-button-pos-box&quot;&gt;
-<a name="line71"></a> *            &lt;div class=&quot;goog-imageless-button-top-shadow&quot;&gt;&amp;nbsp;&lt;/div&gt;
-<a name="line72"></a> *            &lt;div class=&quot;goog-imageless-button-content&quot;&gt;Contents...&lt;/div&gt;
-<a name="line73"></a> *          &lt;/div&gt;
-<a name="line74"></a> *        &lt;/div&gt;
-<a name="line75"></a> *      &lt;/div&gt;
-<a name="line76"></a> *    &lt;/div&gt;
-<a name="line77"></a> * Overrides {@link goog.ui.ButtonRenderer#createDom}.
-<a name="line78"></a> * @param {goog.ui.Button} button Button to render.
-<a name="line79"></a> * @return {Element} Root element for the button.
-<a name="line80"></a> * @override
-<a name="line81"></a> */
-<a name="line82"></a>goog.ui.ImagelessButtonRenderer.prototype.createDom =
-<a name="line83"></a>    goog.ui.ImagelessButtonRenderer.superClass_.createDom;
-<a name="line84"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * Returns the button&#39;s contents wrapped in the following DOM structure:
+<a name="line68"></a> *    &lt;div class=&quot;goog-inline-block goog-imageless-button&quot;&gt;
+<a name="line69"></a> *      &lt;div class=&quot;goog-inline-block goog-imageless-button-outer-box&quot;&gt;
+<a name="line70"></a> *        &lt;div class=&quot;goog-imageless-button-inner-box&quot;&gt;
+<a name="line71"></a> *          &lt;div class=&quot;goog-imageless-button-pos-box&quot;&gt;
+<a name="line72"></a> *            &lt;div class=&quot;goog-imageless-button-top-shadow&quot;&gt;&amp;nbsp;&lt;/div&gt;
+<a name="line73"></a> *            &lt;div class=&quot;goog-imageless-button-content&quot;&gt;Contents...&lt;/div&gt;
+<a name="line74"></a> *          &lt;/div&gt;
+<a name="line75"></a> *        &lt;/div&gt;
+<a name="line76"></a> *      &lt;/div&gt;
+<a name="line77"></a> *    &lt;/div&gt;
+<a name="line78"></a> * Overrides {@link goog.ui.ButtonRenderer#createDom}.
+<a name="line79"></a> * @param {goog.ui.Button} button Button to render.
+<a name="line80"></a> * @return {Element} Root element for the button.
+<a name="line81"></a> * @override
+<a name="line82"></a> */
+<a name="line83"></a>goog.ui.ImagelessButtonRenderer.prototype.createDom =
+<a name="line84"></a>    goog.ui.ImagelessButtonRenderer.superClass_.createDom;
 <a name="line85"></a>
-<a name="line86"></a>/** @inheritDoc */
-<a name="line87"></a>goog.ui.ImagelessButtonRenderer.prototype.getContentElement = function(
-<a name="line88"></a>    element) {
-<a name="line89"></a>  return (/** @type {Element} */ element &amp;&amp; element.firstChild &amp;&amp;
-<a name="line90"></a>      element.firstChild.firstChild &amp;&amp;
-<a name="line91"></a>      element.firstChild.firstChild.firstChild.lastChild);
-<a name="line92"></a>};
-<a name="line93"></a>
+<a name="line86"></a>
+<a name="line87"></a>/** @inheritDoc */
+<a name="line88"></a>goog.ui.ImagelessButtonRenderer.prototype.getContentElement = function(
+<a name="line89"></a>    element) {
+<a name="line90"></a>  return (/** @type {Element} */ element &amp;&amp; element.firstChild &amp;&amp;
+<a name="line91"></a>      element.firstChild.firstChild &amp;&amp;
+<a name="line92"></a>      element.firstChild.firstChild.firstChild.lastChild);
+<a name="line93"></a>};
 <a name="line94"></a>
-<a name="line95"></a>/**
-<a name="line96"></a> * Takes a text caption or existing DOM structure, and returns the content
-<a name="line97"></a> * wrapped in a pseudo-rounded-corner box.  Creates the following DOM structure:
-<a name="line98"></a> *  &lt;div class=&quot;goog-inline-block goog-imageless-button-outer-box&quot;&gt;
-<a name="line99"></a> *    &lt;div class=&quot;goog-inline-block goog-imageless-button-inner-box&quot;&gt;
-<a name="line100"></a> *      &lt;div class=&quot;goog-imageless-button-pos&quot;&gt;
-<a name="line101"></a> *        &lt;div class=&quot;goog-imageless-button-top-shadow&quot;&gt;&amp;nbsp;&lt;/div&gt;
-<a name="line102"></a> *        &lt;div class=&quot;goog-imageless-button-content&quot;&gt;Contents...&lt;/div&gt;
-<a name="line103"></a> *      &lt;/div&gt;
-<a name="line104"></a> *    &lt;/div&gt;
-<a name="line105"></a> *  &lt;/div&gt;
-<a name="line106"></a> * Used by both {@link #createDom} and {@link #decorate}.  To be overridden
-<a name="line107"></a> * by subclasses.
-<a name="line108"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure to wrap
-<a name="line109"></a> *     in a box.
-<a name="line110"></a> * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
-<a name="line111"></a> * @return {Element} Pseudo-rounded-corner box containing the content.
-<a name="line112"></a> * @override
-<a name="line113"></a> */
-<a name="line114"></a>goog.ui.ImagelessButtonRenderer.prototype.createButton = function(content,
-<a name="line115"></a>                                                                  dom) {
-<a name="line116"></a>  var baseClass = this.getCssClass();
-<a name="line117"></a>  var inlineBlock = goog.getCssName(&#39;goog-inline-block&#39;) + &#39; &#39;;
-<a name="line118"></a>  return dom.createDom(&#39;div&#39;,
-<a name="line119"></a>      inlineBlock + goog.getCssName(baseClass, &#39;outer-box&#39;),
-<a name="line120"></a>      dom.createDom(&#39;div&#39;,
-<a name="line121"></a>          inlineBlock + goog.getCssName(baseClass, &#39;inner-box&#39;),
-<a name="line122"></a>          dom.createDom(&#39;div&#39;, goog.getCssName(baseClass, &#39;pos&#39;),
-<a name="line123"></a>              dom.createDom(&#39;div&#39;, goog.getCssName(baseClass, &#39;top-shadow&#39;),
-<a name="line124"></a>                  &#39;\u00A0&#39;),
-<a name="line125"></a>              dom.createDom(&#39;div&#39;, goog.getCssName(baseClass, &#39;content&#39;),
-<a name="line126"></a>                  content))));
-<a name="line127"></a>};
-<a name="line128"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Takes a text caption or existing DOM structure, and returns the content
+<a name="line98"></a> * wrapped in a pseudo-rounded-corner box.  Creates the following DOM structure:
+<a name="line99"></a> *  &lt;div class=&quot;goog-inline-block goog-imageless-button-outer-box&quot;&gt;
+<a name="line100"></a> *    &lt;div class=&quot;goog-inline-block goog-imageless-button-inner-box&quot;&gt;
+<a name="line101"></a> *      &lt;div class=&quot;goog-imageless-button-pos&quot;&gt;
+<a name="line102"></a> *        &lt;div class=&quot;goog-imageless-button-top-shadow&quot;&gt;&amp;nbsp;&lt;/div&gt;
+<a name="line103"></a> *        &lt;div class=&quot;goog-imageless-button-content&quot;&gt;Contents...&lt;/div&gt;
+<a name="line104"></a> *      &lt;/div&gt;
+<a name="line105"></a> *    &lt;/div&gt;
+<a name="line106"></a> *  &lt;/div&gt;
+<a name="line107"></a> * Used by both {@link #createDom} and {@link #decorate}.  To be overridden
+<a name="line108"></a> * by subclasses.
+<a name="line109"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure to wrap
+<a name="line110"></a> *     in a box.
+<a name="line111"></a> * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
+<a name="line112"></a> * @return {Element} Pseudo-rounded-corner box containing the content.
+<a name="line113"></a> * @override
+<a name="line114"></a> */
+<a name="line115"></a>goog.ui.ImagelessButtonRenderer.prototype.createButton = function(content,
+<a name="line116"></a>                                                                  dom) {
+<a name="line117"></a>  var baseClass = this.getCssClass();
+<a name="line118"></a>  var inlineBlock = goog.getCssName(&#39;goog-inline-block&#39;) + &#39; &#39;;
+<a name="line119"></a>  return dom.createDom(&#39;div&#39;,
+<a name="line120"></a>      inlineBlock + goog.getCssName(baseClass, &#39;outer-box&#39;),
+<a name="line121"></a>      dom.createDom(&#39;div&#39;,
+<a name="line122"></a>          inlineBlock + goog.getCssName(baseClass, &#39;inner-box&#39;),
+<a name="line123"></a>          dom.createDom(&#39;div&#39;, goog.getCssName(baseClass, &#39;pos&#39;),
+<a name="line124"></a>              dom.createDom(&#39;div&#39;, goog.getCssName(baseClass, &#39;top-shadow&#39;),
+<a name="line125"></a>                  &#39;\u00A0&#39;),
+<a name="line126"></a>              dom.createDom(&#39;div&#39;, goog.getCssName(baseClass, &#39;content&#39;),
+<a name="line127"></a>                  content))));
+<a name="line128"></a>};
 <a name="line129"></a>
-<a name="line130"></a>/**
-<a name="line131"></a> * Check if the button&#39;s element has a box structure.
-<a name="line132"></a> * @param {goog.ui.Button} button Button instance whose structure is being
-<a name="line133"></a> *     checked.
-<a name="line134"></a> * @param {Element} element Element of the button.
-<a name="line135"></a> * @return {boolean} Whether the element has a box structure.
-<a name="line136"></a> * @protected
-<a name="line137"></a> * @override
-<a name="line138"></a> */
-<a name="line139"></a>goog.ui.ImagelessButtonRenderer.prototype.hasBoxStructure = function(
-<a name="line140"></a>    button, element) {
-<a name="line141"></a>  var outer = button.getDomHelper().getFirstElementChild(element);
-<a name="line142"></a>  if (outer &amp;&amp;
-<a name="line143"></a>      outer.className.indexOf(
-<a name="line144"></a>          goog.getCssName(this.getCssClass(), &#39;outer-box&#39;)) != -1) {
-<a name="line145"></a>    var inner = button.getDomHelper().getFirstElementChild(outer);
-<a name="line146"></a>    if (inner &amp;&amp;
-<a name="line147"></a>        inner.className.indexOf(
-<a name="line148"></a>            goog.getCssName(this.getCssClass(), &#39;inner-box&#39;)) != -1) {
-<a name="line149"></a>      var pos = button.getDomHelper().getFirstElementChild(inner);
-<a name="line150"></a>      if (pos &amp;&amp;
-<a name="line151"></a>          pos.className.indexOf(
-<a name="line152"></a>              goog.getCssName(this.getCssClass(), &#39;pos&#39;)) != -1) {
-<a name="line153"></a>        var shadow = button.getDomHelper().getFirstElementChild(pos);
-<a name="line154"></a>        if (shadow &amp;&amp; shadow.className.indexOf(
-<a name="line155"></a>              goog.getCssName(this.getCssClass(), &#39;top-shadow&#39;)) != -1) {
-<a name="line156"></a>          var content = button.getDomHelper().getNextElementSibling(shadow);
-<a name="line157"></a>          if (content &amp;&amp;
-<a name="line158"></a>              content.className.indexOf(
-<a name="line159"></a>                goog.getCssName(this.getCssClass(), &#39;content&#39;)) != -1) {
-<a name="line160"></a>            // We have a proper box structure.
-<a name="line161"></a>            return true;
-<a name="line162"></a>          }
-<a name="line163"></a>        }
-<a name="line164"></a>      }
-<a name="line165"></a>    }
-<a name="line166"></a>  }
-<a name="line167"></a>  return false;
-<a name="line168"></a>};
-<a name="line169"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Check if the button&#39;s element has a box structure.
+<a name="line133"></a> * @param {goog.ui.Button} button Button instance whose structure is being
+<a name="line134"></a> *     checked.
+<a name="line135"></a> * @param {Element} element Element of the button.
+<a name="line136"></a> * @return {boolean} Whether the element has a box structure.
+<a name="line137"></a> * @protected
+<a name="line138"></a> * @override
+<a name="line139"></a> */
+<a name="line140"></a>goog.ui.ImagelessButtonRenderer.prototype.hasBoxStructure = function(
+<a name="line141"></a>    button, element) {
+<a name="line142"></a>  var outer = button.getDomHelper().getFirstElementChild(element);
+<a name="line143"></a>  if (outer &amp;&amp;
+<a name="line144"></a>      outer.className.indexOf(
+<a name="line145"></a>          goog.getCssName(this.getCssClass(), &#39;outer-box&#39;)) != -1) {
+<a name="line146"></a>    var inner = button.getDomHelper().getFirstElementChild(outer);
+<a name="line147"></a>    if (inner &amp;&amp;
+<a name="line148"></a>        inner.className.indexOf(
+<a name="line149"></a>            goog.getCssName(this.getCssClass(), &#39;inner-box&#39;)) != -1) {
+<a name="line150"></a>      var pos = button.getDomHelper().getFirstElementChild(inner);
+<a name="line151"></a>      if (pos &amp;&amp;
+<a name="line152"></a>          pos.className.indexOf(
+<a name="line153"></a>              goog.getCssName(this.getCssClass(), &#39;pos&#39;)) != -1) {
+<a name="line154"></a>        var shadow = button.getDomHelper().getFirstElementChild(pos);
+<a name="line155"></a>        if (shadow &amp;&amp; shadow.className.indexOf(
+<a name="line156"></a>              goog.getCssName(this.getCssClass(), &#39;top-shadow&#39;)) != -1) {
+<a name="line157"></a>          var content = button.getDomHelper().getNextElementSibling(shadow);
+<a name="line158"></a>          if (content &amp;&amp;
+<a name="line159"></a>              content.className.indexOf(
+<a name="line160"></a>                goog.getCssName(this.getCssClass(), &#39;content&#39;)) != -1) {
+<a name="line161"></a>            // We have a proper box structure.
+<a name="line162"></a>            return true;
+<a name="line163"></a>          }
+<a name="line164"></a>        }
+<a name="line165"></a>      }
+<a name="line166"></a>    }
+<a name="line167"></a>  }
+<a name="line168"></a>  return false;
+<a name="line169"></a>};
 <a name="line170"></a>
-<a name="line171"></a>/**
-<a name="line172"></a> * Returns the CSS class to be applied to the root element of components
-<a name="line173"></a> * rendered using this renderer.
-<a name="line174"></a> * @return {string} Renderer-specific CSS class.
-<a name="line175"></a> * @override
-<a name="line176"></a> */
-<a name="line177"></a>goog.ui.ImagelessButtonRenderer.prototype.getCssClass = function() {
-<a name="line178"></a>  return goog.ui.ImagelessButtonRenderer.CSS_CLASS;
-<a name="line179"></a>};
-<a name="line180"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Returns the CSS class to be applied to the root element of components
+<a name="line174"></a> * rendered using this renderer.
+<a name="line175"></a> * @return {string} Renderer-specific CSS class.
+<a name="line176"></a> * @override
+<a name="line177"></a> */
+<a name="line178"></a>goog.ui.ImagelessButtonRenderer.prototype.getCssClass = function() {
+<a name="line179"></a>  return goog.ui.ImagelessButtonRenderer.CSS_CLASS;
+<a name="line180"></a>};
 <a name="line181"></a>
-<a name="line182"></a>// Register a decorator factory function for goog.ui.ImagelessButtonRenderer.
-<a name="line183"></a>goog.ui.registry.setDecoratorByClassName(
-<a name="line184"></a>    goog.ui.ImagelessButtonRenderer.CSS_CLASS,
-<a name="line185"></a>    function() {
-<a name="line186"></a>      return new goog.ui.Button(null,
-<a name="line187"></a>          goog.ui.ImagelessButtonRenderer.getInstance());
-<a name="line188"></a>    });
-<a name="line189"></a>
+<a name="line182"></a>
+<a name="line183"></a>// Register a decorator factory function for goog.ui.ImagelessButtonRenderer.
+<a name="line184"></a>goog.ui.registry.setDecoratorByClassName(
+<a name="line185"></a>    goog.ui.ImagelessButtonRenderer.CSS_CLASS,
+<a name="line186"></a>    function() {
+<a name="line187"></a>      return new goog.ui.Button(null,
+<a name="line188"></a>          goog.ui.ImagelessButtonRenderer.getInstance());
+<a name="line189"></a>    });
 <a name="line190"></a>
-<a name="line191"></a>// Register a decorator factory function for toggle buttons using the
-<a name="line192"></a>// goog.ui.ImagelessButtonRenderer.
-<a name="line193"></a>goog.ui.registry.setDecoratorByClassName(
-<a name="line194"></a>    goog.getCssName(&#39;goog-imageless-toggle-button&#39;),
-<a name="line195"></a>    function() {
-<a name="line196"></a>      var button = new goog.ui.Button(null,
-<a name="line197"></a>          goog.ui.ImagelessButtonRenderer.getInstance());
-<a name="line198"></a>      button.setSupportedState(goog.ui.Component.State.CHECKED, true);
-<a name="line199"></a>      return button;
-<a name="line200"></a>    });
+<a name="line191"></a>
+<a name="line192"></a>// Register a decorator factory function for toggle buttons using the
+<a name="line193"></a>// goog.ui.ImagelessButtonRenderer.
+<a name="line194"></a>goog.ui.registry.setDecoratorByClassName(
+<a name="line195"></a>    goog.getCssName(&#39;goog-imageless-toggle-button&#39;),
+<a name="line196"></a>    function() {
+<a name="line197"></a>      var button = new goog.ui.Button(null,
+<a name="line198"></a>          goog.ui.ImagelessButtonRenderer.getInstance());
+<a name="line199"></a>      button.setSupportedState(goog.ui.Component.State.CHECKED, true);
+<a name="line200"></a>      return button;
+<a name="line201"></a>    });
 </pre>
 
 

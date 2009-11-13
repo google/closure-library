@@ -116,7 +116,7 @@
 
      <div class="entryOverview">
        Adds a menu item to the given font menu button.  The first font listed in
-the {@code value} argument is considered the font ID, so adding two items
+the <code>value</code> argument is considered the font ID, so adding two items
 whose CSS style starts with the same font may lead to unpredictable results.
      </div>
 
@@ -193,7 +193,7 @@ whose CSS style starts with the same font may lead to unpredictable results.
 
 
      <div class="entryOverview">
-       Adds a menu item to the given font size menu button.  The {@code value}
+       Adds a menu item to the given font size menu button.  The <code>value</code>
 argument must be a legacy HTML font size in the 0-7 range.
      </div>
 
@@ -274,8 +274,8 @@ argument must be a legacy HTML font size in the 0-7 range.
 be an array of font size descriptor objects, each of which must have the
 following attributes:
 <ul>
-<li>{@code caption} - Caption to show in the font size menu (e.g. &#39;Huge&#39;)
-<li>{@code value} - Value for the corresponding HTML font size (e.g. 6)
+<li><code>caption</code> - Caption to show in the font size menu (e.g. &#39;Huge&#39;)
+<li><code>value</code> - Value for the corresponding HTML font size (e.g. 6)
 </li></li></ul>
      </div>
 
@@ -348,8 +348,8 @@ following attributes:
 array of font descriptor objects, each of which must have the following
 attributes:
 <ul>
-<li>{@code caption} - Caption to show in the font menu (e.g. &#39;Tahoma&#39;)
-<li>{@code value} - Value for the corresponding &#39;font-family&#39; CSS style
+<li><code>caption</code> - Caption to show in the font menu (e.g. &#39;Tahoma&#39;)
+<li><code>value</code> - Value for the corresponding &#39;font-family&#39; CSS style
 (e.g. &#39;Tahoma, Arial, sans-serif&#39;)
 </li></li></ul>
      </div>
@@ -499,8 +499,8 @@ attributes:
 argument must be an array of format option descriptor objects, each of
 which must have the following attributes:
 <ul>
-<li>{@code caption} - Caption to show in the menu (e.g. &#39;Minor heading&#39;)
-<li>{@code command} - Corresponding {@link goog.dom.TagName} (e.g.
+<li><code>caption</code> - Caption to show in the menu (e.g. &#39;Minor heading&#39;)
+<li><code>command</code> - Corresponding goog.dom.TagName (e.g.
 &#39;H4&#39;)
 </li></li></ul>
      </div>
@@ -720,7 +720,7 @@ primary font name, normalized to lowercase (e.g. &quot;arial&quot;).
 
      <div class="entryOverview">
        Converts a legacy font size specification into an equivalent pixel size.
-For example, {@code &lt;font size=&quot;6&quot;&gt;} is {@code font-size: 32px;}, etc.
+For example, <code>&lt;font size=&quot;6&quot;&gt;</code> is <code>font-size: 32px;</code>, etc.
      </div>
 
 
@@ -807,7 +807,7 @@ any custom CSS class names to the button&#39;s caption element.
      <td>
         <span class="entryName">id</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Button ID; must equal a {@link goog.editor.Command} for built-in buttons, anything else for custom buttons.</div>
+        <div class="entryOverview">Button ID; must equal a goog.editor.Command for built-in buttons, anything else for custom buttons.</div>
      </td>
    </tr>
      
@@ -839,7 +839,7 @@ any custom CSS class names to the button&#39;s caption element.
      <td>
         <span class="entryName">opt_renderer</span>
         : <div class="fullType"><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></div>
-        <div class="entryOverview">Button renderer; defaults to {@link goog.ui.ToolbarButtonRenderer} if unspecified.</div>
+        <div class="entryOverview">Button renderer; defaults to goog.ui.ToolbarButtonRenderer if unspecified.</div>
      </td>
    </tr>
      
@@ -915,7 +915,7 @@ palettes.
      <td>
         <span class="entryName">id</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Button ID; must equal a {@link goog.editor.Command} for built-in toolbar buttons, but can be anything else for custom buttons.</div>
+        <div class="entryOverview">Button ID; must equal a goog.editor.Command for built-in toolbar buttons, but can be anything else for custom buttons.</div>
      </td>
    </tr>
      
@@ -947,7 +947,7 @@ palettes.
      <td>
         <span class="entryName">opt_renderer</span>
         : <div class="fullType"><span class="type"><a href="class_goog_ui_ColorMenuButtonRenderer.html">goog.ui.ColorMenuButtonRenderer</a></span></div>
-        <div class="entryOverview">Button renderer; defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer} if unspecified.</div>
+        <div class="entryOverview">Button renderer; defaults to goog.ui.ToolbarColorMenuButtonRenderer if unspecified.</div>
      </td>
    </tr>
      
@@ -1002,7 +1002,7 @@ palettes.
        Creates a menu button with the given ID, tooltip, and caption. Applies
 any custom CSS class names to the button&#39;s caption element.  The button
 returned doesn&#39;t have an actual menu attached; use {@link
-goog.ui.MenuButton#setMenu} to attach a {@link goog.ui.Menu} to the
+goog.ui.MenuButton#setMenu} to attach a goog.ui.Menu to the
 button.
      </div>
 
@@ -1024,7 +1024,7 @@ button.
      <td>
         <span class="entryName">id</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Button ID; must equal a {@link goog.editor.Command} for built-in buttons, anything else for custom buttons.</div>
+        <div class="entryOverview">Button ID; must equal a goog.editor.Command for built-in buttons, anything else for custom buttons.</div>
      </td>
    </tr>
      
@@ -1056,7 +1056,7 @@ button.
      <td>
         <span class="entryName">opt_renderer</span>
         : <div class="fullType"><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></div>
-        <div class="entryOverview">Button renderer; defaults to {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.</div>
+        <div class="entryOverview">Button renderer; defaults to goog.ui.ToolbarMenuButtonRenderer if unspecified.</div>
      </td>
    </tr>
      
@@ -1111,8 +1111,8 @@ button.
        Creates a select button with the given ID, tooltip, and caption. Applies
 any custom CSS class names to the button&#39;s root element.  The button
 returned doesn&#39;t have an actual menu attached; use {@link
-goog.ui.Select#setMenu} to attach a {@link goog.ui.Menu} containing
-{@link goog.ui.Option}s to the select button.
+goog.ui.Select#setMenu} to attach a goog.ui.Menu containing
+goog.ui.Options to the select button.
      </div>
 
 
@@ -1133,7 +1133,7 @@ goog.ui.Select#setMenu} to attach a {@link goog.ui.Menu} containing
      <td>
         <span class="entryName">id</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Button ID; must equal a {@link goog.editor.Command} for built-in buttons, anything else for custom buttons.</div>
+        <div class="entryOverview">Button ID; must equal a goog.editor.Command for built-in buttons, anything else for custom buttons.</div>
      </td>
    </tr>
      
@@ -1165,7 +1165,7 @@ goog.ui.Select#setMenu} to attach a {@link goog.ui.Menu} containing
      <td>
         <span class="entryName">opt_renderer</span>
         : <div class="fullType"><span class="type"><a href="class_goog_ui_MenuButtonRenderer.html">goog.ui.MenuButtonRenderer</a></span></div>
-        <div class="entryOverview">Button renderer; defaults to {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.</div>
+        <div class="entryOverview">Button renderer; defaults to goog.ui.ToolbarMenuButtonRenderer if unspecified.</div>
      </td>
    </tr>
      
@@ -1240,7 +1240,7 @@ returned has checkbox-like toggle semantics.
      <td>
         <span class="entryName">id</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Button ID; must equal a {@link goog.editor.Command} for built-in buttons, anything else for custom buttons.</div>
+        <div class="entryOverview">Button ID; must equal a goog.editor.Command for built-in buttons, anything else for custom buttons.</div>
      </td>
    </tr>
      
@@ -1272,7 +1272,7 @@ returned has checkbox-like toggle semantics.
      <td>
         <span class="entryName">opt_renderer</span>
         : <div class="fullType"><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></div>
-        <div class="entryOverview">Button renderer; defaults to {@link goog.ui.ToolbarButtonRenderer} if unspecified.</div>
+        <div class="entryOverview">Button renderer; defaults to goog.ui.ToolbarButtonRenderer if unspecified.</div>
      </td>
    </tr>
      
@@ -1324,9 +1324,9 @@ returned has checkbox-like toggle semantics.
 
 
      <div class="entryOverview">
-       Creates a {@link goog.ui.Toolbar} containing the specified set of
+       Creates a goog.ui.Toolbar containing the specified set of
 toolbar buttons, and renders it into the given parent element.  Each
-item in the {@code items} array must a {@link goog.ui.Control}.
+item in the <code>items</code> array must a goog.ui.Control.
      </div>
 
 
@@ -1347,7 +1347,7 @@ item in the {@code items} array must a {@link goog.ui.Control}.
      <td>
         <span class="entryName">items</span>
         : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="class_goog_ui_Control.html">goog.ui.Control</a></span>&gt;</div>
-        <div class="entryOverview">Toolbar items; each must be a {@link goog.ui.Control}.</div>
+        <div class="entryOverview">Toolbar items; each must be a goog.ui.Control.</div>
      </td>
    </tr>
      

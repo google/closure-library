@@ -21,9 +21,9 @@ limitations under the License.
   <script src="../base.js"></script>
 
   <script>
+    goog.require('goog.dom');
     goog.require('goog.events');
     goog.require('goog.ui.Component');
-    goog.require('goog.ui.Dom');
     goog.require('goog.ui.Ratings');
     goog.require('goog.ui.ServerChart');
     goog.require('goog.ui.SplitPane');
@@ -172,7 +172,7 @@ limitations under the License.
     var rhs = new goog.ui.Component();
 
     // Set up splitpane with already existing DOM.
-    var splitpane1 = new goog.ui.SplitPane (lhs, rhs,
+    var splitpane1 = new goog.ui.SplitPane(lhs, rhs,
         goog.ui.SplitPane.Orientation.HORIZONTAL);
 
     // Listen for change events and call showWidth.
@@ -251,4 +251,3 @@ limitations under the License.
 
 </body>
 </html>
-

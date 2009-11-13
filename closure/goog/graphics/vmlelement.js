@@ -237,8 +237,8 @@ goog.inherits(goog.graphics.VmlPathElement, goog.graphics.PathElement);
  * @param {goog.graphics.Path} path The path object to draw.
  */
 goog.graphics.VmlPathElement.prototype.setPath = function(path) {
-  this.getElement().setAttribute(
-      'path', goog.graphics.VmlGraphics.getVmlPath(path));
+  goog.graphics.VmlGraphics.setAttribute(
+      this.getElement(), 'path', goog.graphics.VmlGraphics.getVmlPath(path));
 };
 
 
@@ -266,7 +266,8 @@ goog.inherits(goog.graphics.VmlTextElement, goog.graphics.TextElement);
  * @param {string} text The text to draw.
  */
 goog.graphics.VmlTextElement.prototype.setText = function(text) {
-  this.getElement().childNodes[1].setAttribute('string', text);
+  goog.graphics.VmlGraphics.setAttribute(this.getElement().childNodes[1],
+      'string', text);
 };
 
 /**
@@ -315,5 +316,5 @@ goog.graphics.VmlImageElement.prototype.setSize = function(width, height) {
  * @param {string} src Source of the image.
  */
 goog.graphics.VmlImageElement.prototype.setSource = function(src) {
-  this.getElement().setAttribute('src', src);
+  goog.graphics.VmlGraphics.setAttribute(this.getElement(), 'src', src);
 };

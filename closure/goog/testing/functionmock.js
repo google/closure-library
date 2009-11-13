@@ -108,13 +108,34 @@ goog.testing.createFunctionMock = function(opt_functionName) {
 
 
 /**
- * Convenience method for creating a mocks for a method.
+ * Convenience method for creating a mock for a method.
  * @param {Object} scope The scope of the method to be mocked out.
  * @param {string} functionName the name of the function we're going to mock.
  * @return {goog.testing.MethodMock} the mocked global function.
  */
 goog.testing.createMethodMock = function(scope, functionName) {
   return new goog.testing.MethodMock(scope, functionName);
+};
+
+
+/**
+ * Convenience method for creating a mock for a constructor.
+ *
+ * <p>When mocking a constructor to return a mocked instance, remember to create
+ * the instance mock before mocking the constructor. If you mock the constructor
+ * first, then the mock framework will be unable to examine the prototype chain
+ * when creating the mock instance.
+ * @param {Object} scope The scope of the constructor to be mocked out.
+ * @param {string} constructorName the name of the constructor we're going to
+ *     mock.
+ * @return {goog.testing.MethodMock} the mocked constructor.
+ */
+goog.testing.createConstructorMock = function(scope, constructorName) {
+  // The return value is a MethodMock and there is no difference in
+  // implementation between this method and createMethodMock. This alias is
+  // provided just to make code clearer and to make it easier to introduce a
+  // more specialized implementation if that is ever necessary.
+  return new goog.testing.MethodMock(scope, constructorName);
 };
 
 

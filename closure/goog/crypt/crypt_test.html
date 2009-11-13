@@ -53,6 +53,12 @@ limitations under the License.
     assertEquals('Sch\u00f6n', goog.crypt.utf8ByteArrayToString(
         [83, 99, 104, 195, 182, 110]));
   }
+
+  function testByteArrayToString() {
+    assertEquals('', goog.crypt.byteArrayToString([]));
+    assertEquals('abc', goog.crypt.byteArrayToString([97, 98, 99]));      
+  }
+
 </script>
 </body>
 </html>

@@ -56,16 +56,16 @@
  contains metadata (such as captions, description, thumbnail/high resolution
  versions, etc).
 
- goog.ui.media.Photo is actually a {@link goog.ui.ControlRenderer},
+ goog.ui.media.Photo is actually a goog.ui.ControlRenderer,
  a stateless class - that could/should be used as a Singleton with the static
- method {@code goog.ui.media.Photo.getInstance} -, that knows how to render
- Photos. It is designed to be used with a {@link goog.ui.Control}, which will
- actually control the media renderer and provide the {@link goog.ui.Component}
+ method <code>goog.ui.media.Photo.getInstance</code> -, that knows how to render
+ Photos. It is designed to be used with a goog.ui.Control, which will
+ actually control the media renderer and provide the goog.ui.Component
  base. This design guarantees that all different types of medias will behave
  alike but will look different.
 
- goog.ui.media.Photo expects {@code goog.ui.media.MediaModel} on
- {@code goog.ui.Control.getModel} as data models.
+ goog.ui.media.Photo expects <code>goog.ui.media.MediaModel</code> on
+ <code>goog.ui.Control.getModel</code> as data models.
 
  Example of usage:
 
@@ -78,8 +78,8 @@
  Photo medias currently support the following states:
 
  <ul>
- <li> {@link goog.ui.Component.State.HOVER}: mouse cursor is over the photo.
- <li> {@link goog.ui.Component.State.SELECTED}: photo is being displayed.
+ <li> goog.ui.Component.State.HOVER: mouse cursor is over the photo.
+ <li> goog.ui.Component.State.SELECTED: photo is being displayed.
  </li></li></ul>
 
  Which can be accessed by
@@ -117,7 +117,7 @@ renderer. Provides a base class for any other renderer that wants to display
 photos.
 
 This class is meant to be used as a singleton static stateless class, that
-takes {@code goog.ui.media.Media} instances and renders it.
+takes <code>goog.ui.media.Media</code> instances and renders it.
 
 This design is patterned after
 <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a></div>
@@ -165,7 +165,7 @@ This design is patterned after
 
      <div class="entryOverview">
        A static convenient method to construct a goog.ui.media.Media control out of
-a photo {@code goog.ui.media.MediaModel}. It sets it as the data model
+a photo <code>goog.ui.media.MediaModel</code>. It sets it as the data model
 goog.ui.media.Photo renderer uses, sets the states supported by the renderer,
 and returns a Control that binds everything together. This is what you
 should be using for constructing Photos, except if you need finer control

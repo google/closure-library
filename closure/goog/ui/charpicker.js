@@ -15,6 +15,7 @@
 /**
  * @fileoverview Character Picker widget for picking any Unicode character.
  *
+ * @see ../demos/charpicker.html
  */
 
 goog.provide('goog.ui.CharPicker');
@@ -24,7 +25,6 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.InputHandler');
 goog.require('goog.i18n.CharListDecompressor');
-goog.require('goog.i18n.charPickerData');
 goog.require('goog.i18n.uChar');
 goog.require('goog.structs.Set');
 goog.require('goog.style');
@@ -44,6 +44,7 @@ goog.require('goog.ui.MenuItem');
  * hex value.
  *
  * See charpicker.html demo for example usage.
+ * @param {goog.i18n.CharPickerData} charPickerData Category names and charlist.
  * @param {Array.<string>} opt_recents List of characters to be displayed in
  *     resently selected characters area.
  * @param {number} opt_initCategory Sequence number of initial category.
@@ -54,9 +55,17 @@ goog.require('goog.ui.MenuItem');
  * @constructor
  * @extends {goog.ui.Component}
  */
-goog.ui.CharPicker = function(opt_recents, opt_initCategory,
-    opt_initSubcategory, opt_rowCount, opt_columnCount, opt_domHelper) {
+goog.ui.CharPicker = function(charPickerData, opt_recents, opt_initCategory,
+                              opt_initSubcategory, opt_rowCount,
+                              opt_columnCount, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
+
+  /**
+   * Object containing character lists and category names.
+   * @type {goog.i18n.CharPickerData}
+   * @private
+   */
+  this.data_ = charPickerData;
 
   /**
    * The category number to be used on widget init.
@@ -290,8 +299,8 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
 
   this.menu_ = new goog.ui.Menu();
 
-  var categories = goog.i18n.charPickerData.Categories;
-  for (var i = 0; i < categories.length; i++) {
+  var categories = this.data_.categories;
+  for (var i = 0; i < this.data_.categories.length; i++) {
       this.menu_.addChild(this.createMenuItem_(i, categories[i]), true);
   }
 
@@ -324,9 +333,13 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
   this.addChild(this.notice_, true);
 
   // The component used for displaying 'Recent Selections' label.
+  /**
+   * @desc The text label above the list of recently selected characters.
+   */
+  var MSG_CHAR_PICKER_RECENT_SELECTIONS = goog.getMsg('Recent Selections:');
   var recenttext = new goog.ui.Component();
   recenttext.setElementInternal(goog.dom.createDom('span', null,
-      'Recent Selections:'));
+      MSG_CHAR_PICKER_RECENT_SELECTIONS));
   this.addChild(recenttext, true);
 
   this.recentgrid_ = new goog.ui.Component();
@@ -337,7 +350,11 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
   uplus.setElementInternal(goog.dom.createDom('span', null, 'U+'));
   this.addChild(uplus, true);
 
-  this.input_ = new goog.ui.LabelInput('Hex Input');
+  /**
+   * @desc The text inside the input box to specify the hex code of a character.
+   */
+  var MSG_CHAR_PICKER_HEX_INPUT = goog.getMsg('Hex Input');
+  this.input_ = new goog.ui.LabelInput(MSG_CHAR_PICKER_HEX_INPUT);
   this.addChild(this.input_, true);
 
   this.okbutton_ = new goog.ui.Button('OK');
@@ -581,15 +598,15 @@ goog.ui.CharPicker.prototype.createMenuItem_ = function(id, caption) {
 goog.ui.CharPicker.prototype.setSelectedCategory_ = function(category,
                                                              opt_subcategory) {
   this.category = category;
-  this.menubutton_.setCaption(goog.i18n.charPickerData.Categories[category]);
+  this.menubutton_.setCaption(this.data_.categories[category]);
   while (this.submenu_.hasChildren()) {
     this.submenu_.removeChildAt(0, true).dispose();
   }
 
-  var subcategories = goog.i18n.charPickerData.Subcategories[category];
+  var subcategories = this.data_.subcategories[category];
+  var charList = this.data_.charList[category];
   for (var i = 0; i < subcategories.length; i++) {
-    var subtitle =
-        (goog.i18n.charPickerData.CharList[category][i].length == 0);
+    var subtitle = charList[i].length == 0;
     var item = this.createMenuItem_(i, subcategories[i]);
     this.submenu_.addChild(item, true);
   }
@@ -603,8 +620,8 @@ goog.ui.CharPicker.prototype.setSelectedCategory_ = function(category,
  * @private
  */
 goog.ui.CharPicker.prototype.setSelectedSubcategory_ = function(subcategory) {
-  var name =
-      goog.i18n.charPickerData.Subcategories[this.category][subcategory];
+  var subcategories = this.data_.subcategories;
+  var name = subcategories[this.category][subcategory];
   this.submenubutton_.setCaption(name);
   this.setSelectedGrid_(this.category, subcategory);
 };
@@ -618,8 +635,9 @@ goog.ui.CharPicker.prototype.setSelectedSubcategory_ = function(subcategory) {
  */
 goog.ui.CharPicker.prototype.setSelectedGrid_ = function(category,
      subcategory) {
-  var str = goog.i18n.charPickerData.CharList[category][subcategory];
-  var content = this.decompressor_.toCharList(str);
+  var charLists = this.data_.charList;
+  var charListStr = charLists[category][subcategory];
+  var content = this.decompressor_.toCharList(charListStr);
   this.updateGrid_(this.grid_, content);
 };
 

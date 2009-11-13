@@ -112,6 +112,15 @@ function testActionSelectsItemWithData() {
       assertEquals('Blue>Data', input.value);
 }
 
+function testRedisplayMenuAfterBackspace() {
+  input.value = 'mx';
+  comboBox.onInputChange_();
+  input.value = 'm';
+  comboBox.onInputChange_();
+  assertEquals('Three items should be displayed',
+      3, comboBox.getNumberOfVisibleItems_());
+}
+
 </script>
 </body>
 </html>

@@ -29,18 +29,12 @@ limitations under the License.
   <link type="text/css" rel="stylesheet" href="css/charpicker.css">
 
   <script src="../base.js"></script>
-  <script src="../deps.js"></script>
   <script>
-    /* required includes for char picker */
+    goog.require('goog.i18n.CharPickerData');
     goog.require('goog.ui.CharPicker');
-
-    /* includes only for this demo */
-    goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.Logger');
-    goog.require('goog.debug.LogManager');
   </script>
 
-  <style type="text/css">
+  <style>
     body {
       background-color: #ffe;
     }
@@ -63,8 +57,8 @@ limitations under the License.
 <div id="char-picker"></div>
 
 <script>
-
-  var picker = new goog.ui.CharPicker(["\uD869\uDED6", "a", "b", "c"], 10, 1);
+  var picker = new goog.ui.CharPicker(new goog.i18n.CharPickerData(),
+      ["\uD869\uDED6", "a", "b", "c"], 10, 1);
   var el = goog.dom.getElement('char-picker');
   picker.decorate(el);
 

@@ -91,64 +91,60 @@
 <a name="line48"></a> * @return {string} Stringification of the array.
 <a name="line49"></a> */
 <a name="line50"></a>goog.crypt.byteArrayToString = function(array) {
-<a name="line51"></a>  var output = [];
-<a name="line52"></a>  for (var i = 0; i &lt; array.length; i++) {
-<a name="line53"></a>    output[i] = String.fromCharCode(array[i]);
-<a name="line54"></a>  }
-<a name="line55"></a>  return output.join(&#39;&#39;);
-<a name="line56"></a>};
-<a name="line57"></a>
-<a name="line58"></a>
-<a name="line59"></a>/**
-<a name="line60"></a> * Converts a JS string to a UTF-8 &quot;byte&quot; array.
-<a name="line61"></a> * @param {string} str 16-bit unicode string.
-<a name="line62"></a> * @return {Array.&lt;number&gt;} UTF-8 byte array.
-<a name="line63"></a> */
-<a name="line64"></a>goog.crypt.stringToUtf8ByteArray = function(str) {
-<a name="line65"></a>  // TODO: Use native implementations if/when available
-<a name="line66"></a>  str = str.replace(/\r\n/g, &#39;\n&#39;);
-<a name="line67"></a>  var out = [], p = 0;
-<a name="line68"></a>  for (var i = 0; i &lt; str.length; i++) {
-<a name="line69"></a>    var c = str.charCodeAt(i);
-<a name="line70"></a>    if (c &lt; 128) {
-<a name="line71"></a>      out[p++] = c;
-<a name="line72"></a>    } else if (c &lt; 2048) {
-<a name="line73"></a>      out[p++] = (c &gt;&gt; 6) | 192;
+<a name="line51"></a>  return String.fromCharCode.apply(null, array);
+<a name="line52"></a>};
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * Converts a JS string to a UTF-8 &quot;byte&quot; array.
+<a name="line57"></a> * @param {string} str 16-bit unicode string.
+<a name="line58"></a> * @return {Array.&lt;number&gt;} UTF-8 byte array.
+<a name="line59"></a> */
+<a name="line60"></a>goog.crypt.stringToUtf8ByteArray = function(str) {
+<a name="line61"></a>  // TODO: Use native implementations if/when available
+<a name="line62"></a>  str = str.replace(/\r\n/g, &#39;\n&#39;);
+<a name="line63"></a>  var out = [], p = 0;
+<a name="line64"></a>  for (var i = 0; i &lt; str.length; i++) {
+<a name="line65"></a>    var c = str.charCodeAt(i);
+<a name="line66"></a>    if (c &lt; 128) {
+<a name="line67"></a>      out[p++] = c;
+<a name="line68"></a>    } else if (c &lt; 2048) {
+<a name="line69"></a>      out[p++] = (c &gt;&gt; 6) | 192;
+<a name="line70"></a>      out[p++] = (c &amp; 63) | 128;
+<a name="line71"></a>    } else {
+<a name="line72"></a>      out[p++] = (c &gt;&gt; 12) | 224;
+<a name="line73"></a>      out[p++] = ((c &gt;&gt; 6) &amp; 63) | 128;
 <a name="line74"></a>      out[p++] = (c &amp; 63) | 128;
-<a name="line75"></a>    } else {
-<a name="line76"></a>      out[p++] = (c &gt;&gt; 12) | 224;
-<a name="line77"></a>      out[p++] = ((c &gt;&gt; 6) &amp; 63) | 128;
-<a name="line78"></a>      out[p++] = (c &amp; 63) | 128;
-<a name="line79"></a>    }
-<a name="line80"></a>  }
-<a name="line81"></a>  return out;
-<a name="line82"></a>};
-<a name="line83"></a>
-<a name="line84"></a>
-<a name="line85"></a>/**
-<a name="line86"></a> * Converts a UTF-8 byte array to JavaScript&#39;s 16-bit Unicode.
-<a name="line87"></a> * @param {Array.&lt;number&gt;} bytes UTF-8 byte array.
-<a name="line88"></a> * @return {string} 16-bit Unicode string.
-<a name="line89"></a> */
-<a name="line90"></a>goog.crypt.utf8ByteArrayToString = function(bytes) {
-<a name="line91"></a>  // TODO: Use native implementations if/when available
-<a name="line92"></a>  var out = [], pos = 0, c = 0;
-<a name="line93"></a>  while (pos &lt; bytes.length) {
-<a name="line94"></a>    var c1 = bytes[pos++];
-<a name="line95"></a>    if (c1 &lt; 128) {
-<a name="line96"></a>      out[c++] = String.fromCharCode(c1);
-<a name="line97"></a>    } else if (c1 &gt; 191 &amp;&amp; c1 &lt; 224) {
-<a name="line98"></a>      var c2 = bytes[pos++];
-<a name="line99"></a>      out[c++] = String.fromCharCode((c1 &amp; 31) &lt;&lt; 6 | c2 &amp; 63);
-<a name="line100"></a>    } else {
-<a name="line101"></a>      var c2 = bytes[pos++];
-<a name="line102"></a>      var c3 = bytes[pos++];
-<a name="line103"></a>      out[c++] = String.fromCharCode(
-<a name="line104"></a>          (c1 &amp; 15) &lt;&lt; 12 | (c2 &amp; 63) &lt;&lt; 6 | c3 &amp; 63);
-<a name="line105"></a>    }
-<a name="line106"></a>  }
-<a name="line107"></a>  return out.join(&#39;&#39;);
-<a name="line108"></a>};
+<a name="line75"></a>    }
+<a name="line76"></a>  }
+<a name="line77"></a>  return out;
+<a name="line78"></a>};
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Converts a UTF-8 byte array to JavaScript&#39;s 16-bit Unicode.
+<a name="line83"></a> * @param {Array.&lt;number&gt;} bytes UTF-8 byte array.
+<a name="line84"></a> * @return {string} 16-bit Unicode string.
+<a name="line85"></a> */
+<a name="line86"></a>goog.crypt.utf8ByteArrayToString = function(bytes) {
+<a name="line87"></a>  // TODO: Use native implementations if/when available
+<a name="line88"></a>  var out = [], pos = 0, c = 0;
+<a name="line89"></a>  while (pos &lt; bytes.length) {
+<a name="line90"></a>    var c1 = bytes[pos++];
+<a name="line91"></a>    if (c1 &lt; 128) {
+<a name="line92"></a>      out[c++] = String.fromCharCode(c1);
+<a name="line93"></a>    } else if (c1 &gt; 191 &amp;&amp; c1 &lt; 224) {
+<a name="line94"></a>      var c2 = bytes[pos++];
+<a name="line95"></a>      out[c++] = String.fromCharCode((c1 &amp; 31) &lt;&lt; 6 | c2 &amp; 63);
+<a name="line96"></a>    } else {
+<a name="line97"></a>      var c2 = bytes[pos++];
+<a name="line98"></a>      var c3 = bytes[pos++];
+<a name="line99"></a>      out[c++] = String.fromCharCode(
+<a name="line100"></a>          (c1 &amp; 15) &lt;&lt; 12 | (c2 &amp; 63) &lt;&lt; 6 | c3 &amp; 63);
+<a name="line101"></a>    }
+<a name="line102"></a>  }
+<a name="line103"></a>  return out.join(&#39;&#39;);
+<a name="line104"></a>};
 </pre>
 
 

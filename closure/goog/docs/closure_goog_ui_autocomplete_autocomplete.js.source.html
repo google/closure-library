@@ -568,6 +568,34 @@
 <a name="line525"></a>goog.ui.AutoComplete.prototype.getIdOfIndex_ = function(index) {
 <a name="line526"></a>  return this.firstRowId_ + index;
 <a name="line527"></a>};
+<a name="line528"></a>
+<a name="line529"></a>
+<a name="line530"></a>/**
+<a name="line531"></a> * Attach text areas or input boxes to the autocomplete by DOM reference.  After
+<a name="line532"></a> * elements are attached to the autocomplete, when a user types they will see
+<a name="line533"></a> * the autocomplete drop down.
+<a name="line534"></a> * @param {Element} var_args Variable args: Input or text area elements to
+<a name="line535"></a> *     attach the autocomplete too.
+<a name="line536"></a> */
+<a name="line537"></a>goog.ui.AutoComplete.prototype.attachInputs = function(var_args) {
+<a name="line538"></a>  // Delegate to the input handler
+<a name="line539"></a>  var inputHandler = /** @type {goog.ui.AutoComplete.InputHandler} */
+<a name="line540"></a>      (this.selectionHandler_);
+<a name="line541"></a>  inputHandler.attachInputs.apply(inputHandler, arguments);
+<a name="line542"></a>};
+<a name="line543"></a>
+<a name="line544"></a>
+<a name="line545"></a>/**
+<a name="line546"></a> * Detach text areas or input boxes to the autocomplete by DOM reference.
+<a name="line547"></a> * @param {Element} var_args Variable args: Input or text area elements to
+<a name="line548"></a> *     detach from the autocomplete.
+<a name="line549"></a> */
+<a name="line550"></a>goog.ui.AutoComplete.prototype.detachInputs = function(var_args) {
+<a name="line551"></a>  // Delegate to the input handler
+<a name="line552"></a>  var inputHandler = /** @type {goog.ui.AutoComplete.InputHandler} */
+<a name="line553"></a>      (this.selectionHandler_);
+<a name="line554"></a>  inputHandler.detachInputs.apply(inputHandler, arguments);
+<a name="line555"></a>};
 </pre>
 
 

@@ -59,10 +59,10 @@
   <div class="g-unit g-first" id="description">
     A ConditionalDelay object invokes the associated function after a specified
 interval delay and checks it&#39;s return value. If the function returns
-{@code true} the conditional delay is cancelled and {@see #onSuccess}
+<code>true</code> the conditional delay is cancelled and #onSuccess
 is called. Otherwise this object keeps to invoke the deferred function until
-either it returns {@code true} or the timeout is exceeded. In the latter case
-the {@see #onFailure} method will be called.
+either it returns <code>true</code> or the timeout is exceeded. In the latter case
+the #onFailure method will be called.
 
 The interval duration and timeout can be specified each time the delay is
 started. Calling start on an active delay will reset the timer.
@@ -110,7 +110,7 @@ Object
      <td>
         <span class="entryName">listener</span>
         : <div class="fullType"><span class="type">function():boolean</span></div>
-        <div class="entryOverview">Function to call when the delay completes. Should return a value that type-converts to {@code true} if the call succeeded and this delay should be stopped.</div>
+        <div class="entryOverview">Function to call when the delay completes. Should return a value that type-converts to <code>true</code> if the call succeeded and this delay should be stopped.</div>
      </td>
    </tr>
      
@@ -270,7 +270,7 @@ Object
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
-            True if the listener has been executed and returned {@code true} since the last call to {@see #start}.
+            True if the listener has been executed and returned <code>true</code> since the last call to #start.
       </div>
   
     </div>
@@ -373,11 +373,11 @@ Object
 
 
      <div class="entryOverview">
-       A callback function for the underlying {@code goog.async.Delay} object. When
-executed the listener function is called, and if it returns {@code true}
-the delay is stopped and the {@see #onSuccess} method is invoked.
+       A callback function for the underlying <code>goog.async.Delay</code> object. When
+executed the listener function is called, and if it returns <code>true</code>
+the delay is stopped and the #onSuccess method is invoked.
 If the timeout is exceeded the delay is stopped and the
-{@see #onFailure} method is called.
+#onFailure method is called.
      </div>
 
    
@@ -413,7 +413,7 @@ If the timeout is exceeded the delay is stopped and the
      <div class="entryOverview">
        Starts the delay timer. The provided listener function will be called
 repeatedly after the specified interval until the function returns
-{@code true} or the timeout is exceeded. Calling start on an active timer
+<code>true</code> or the timeout is exceeded. Calling start on an active timer
 will stop the timer first.
      </div>
 
@@ -443,7 +443,7 @@ will stop the timer first.
      <td>
         <span class="entryName">opt_timeout</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">The timeout interval (in milliseconds). Takes precedence over the {@code opt_interval}, i.e. if the timeout is less than the invocation interval, the function will be called when the timeout is exceeded. A negative value means no timeout. Default is 0.</div>
+        <div class="entryOverview">The timeout interval (in milliseconds). Takes precedence over the <code>opt_interval</code>, i.e. if the timeout is less than the invocation interval, the function will be called when the timeout is exceeded. A negative value means no timeout. Default is 0.</div>
      </td>
    </tr>
   </table>
@@ -574,7 +574,7 @@ will stop the timer first.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {
@@ -784,7 +784,7 @@ timeout is exceeded.
 
 
      <div class="entryOverview">
-       True if the listener has been executed, and it returned {@code true}.
+       True if the listener has been executed, and it returned <code>true</code>.
      </div>
 
   </td>

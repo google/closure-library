@@ -1,0 +1,147 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>product_isversion.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_useragent_product_isversion.js.html">product_isversion.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2009 Google Inc. All rights reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Functions for understanding the version of the browser.
+<a name="line17"></a> * This is pulled out of product.js to ensure that only builds that need
+<a name="line18"></a> * this functionality actually get it, without having to rely on the compiler
+<a name="line19"></a> * to strip out unneeded pieces.
+<a name="line20"></a> */
+<a name="line21"></a>goog.provide(&#39;goog.userAgent.product.isVersion&#39;);
+<a name="line22"></a>goog.require(&#39;goog.userAgent.product&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * @return {string} The string that describes the version number of the user
+<a name="line27"></a> *     agent product.
+<a name="line28"></a> * @private
+<a name="line29"></a> */
+<a name="line30"></a>goog.userAgent.product.determineVersion_ = function() {
+<a name="line31"></a>  // All browsers have different ways to detect the version and they all have
+<a name="line32"></a>  // different naming schemes.
+<a name="line33"></a>
+<a name="line34"></a>  // version is a string rather than a number because it may contain &#39;b&#39;, &#39;a&#39;,
+<a name="line35"></a>  // and so on.
+<a name="line36"></a>  var version = &#39;&#39;, re, combine;
+<a name="line37"></a>
+<a name="line38"></a>  if (goog.userAgent.product.FIREFOX) {
+<a name="line39"></a>    // Firefox/2.0.0.1 or Firefox/3.5.3
+<a name="line40"></a>    re = /Firefox\/([0-9.]+)/;
+<a name="line41"></a>  } else if (goog.userAgent.product.IE || goog.userAgent.product.OPERA) {
+<a name="line42"></a>    return goog.userAgent.VERSION;
+<a name="line43"></a>  } else if (goog.userAgent.product.CHROME) {
+<a name="line44"></a>    // Chrome/4.0.223.1
+<a name="line45"></a>    re = /Chrome\/([0-9.]+)/;
+<a name="line46"></a>  } else if (goog.userAgent.product.SAFARI) {
+<a name="line47"></a>    // Safari/530.19.1
+<a name="line48"></a>    re = /Safari\/([0-9.]+)/;
+<a name="line49"></a>  } else if (goog.userAgent.product.IPHONE) {
+<a name="line50"></a>    // Mozilla/5.0 (iPod; U; CPU like Mac OS X; en) AppleWebKit/420.1
+<a name="line51"></a>    // (KHTML, like Gecko) Version/3.0 Mobile/3A100a Safari/419.3
+<a name="line52"></a>    // Version is the browser version, Mobile is the build number. We combine
+<a name="line53"></a>    // the version string with the build number: 3.0.3A100a for the example.
+<a name="line54"></a>    re = /Version\/(\S+).*Mobile\/(\S+)/;
+<a name="line55"></a>    combine = true;
+<a name="line56"></a>  } else if (goog.userAgent.product.ANDROID) {
+<a name="line57"></a>    // Mozilla/5.0 (Linux; U; Android 0.5; en-us) AppleWebKit/522+
+<a name="line58"></a>    // (KHTML, like Gecko) Safari/419.3
+<a name="line59"></a>    //
+<a name="line60"></a>    // Mozilla/5.0 (Linux; U; Android 1.0; en-us; dream) AppleWebKit/525.10+
+<a name="line61"></a>    // (KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2
+<a name="line62"></a>    //
+<a name="line63"></a>    // Prefer Version number if present, else make do with the OS number
+<a name="line64"></a>    re = /Android\s+([0-9.]+)(?:.*Version\/([0-9.]+))?/;
+<a name="line65"></a>  } else if (goog.userAgent.product.CAMINO) {
+<a name="line66"></a>    re = /Camino\/([0-9.]+)/;
+<a name="line67"></a>  }
+<a name="line68"></a>  if (re) {
+<a name="line69"></a>    var arr = re.exec(goog.userAgent.getUserAgentString());
+<a name="line70"></a>    if (arr) {
+<a name="line71"></a>      version = combine ? arr[1] + &#39;.&#39; + arr[2] : (arr[2] || arr[1]);
+<a name="line72"></a>    } else {
+<a name="line73"></a>      version = &#39;&#39;;
+<a name="line74"></a>    }
+<a name="line75"></a>  }
+<a name="line76"></a>  return version;
+<a name="line77"></a>};
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * The version of the user agent. This is a string because it might contain
+<a name="line82"></a> * &#39;b&#39; (as in beta) as well as multiple dots.
+<a name="line83"></a> * @type {string}
+<a name="line84"></a> */
+<a name="line85"></a>goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Whether the user agent product version is higher or the same as the given
+<a name="line90"></a> * version.
+<a name="line91"></a> *
+<a name="line92"></a> * @param {string|number} version The version to check.
+<a name="line93"></a> * @return {boolean} Whether the user agent product version is higher or the
+<a name="line94"></a> *     same as the given version.
+<a name="line95"></a> */
+<a name="line96"></a>goog.userAgent.product.isVersion = function(version) {
+<a name="line97"></a>  return goog.string.compareVersions(
+<a name="line98"></a>             goog.userAgent.product.VERSION, version) &gt;= 0;
+<a name="line99"></a>};
+</pre>
+
+
+</body>
+</html>

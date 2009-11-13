@@ -55,16 +55,16 @@
     provides a reusable Vimeo video UI component given a public
  Vimeo video URL.
 
- goog.ui.media.Vimeo is actually a {@link goog.ui.ControlRenderer}, a
+ goog.ui.media.Vimeo is actually a goog.ui.ControlRenderer, a
  stateless class - that could/should be used as a Singleton with the static
- method {@code goog.ui.media.Vimeo.getInstance} -, that knows how to render
- video videos. It is designed to be used with a {@link goog.ui.Control},
+ method <code>goog.ui.media.Vimeo.getInstance</code> -, that knows how to render
+ video videos. It is designed to be used with a goog.ui.Control,
  which will actually control the media renderer and provide the
- {@link goog.ui.Component} base. This design guarantees that all different
+ goog.ui.Component base. This design guarantees that all different
  types of medias will behave alike but will look different.
 
  goog.ui.media.Vimeo expects vimeo video IDs on
- {@code goog.ui.Control.getModel} as data models, and renders a flash object
+ <code>goog.ui.Control.getModel</code> as data models, and renders a flash object
  that will show the contents of that video.
 
  Example of usage:
@@ -77,9 +77,9 @@
  Vimeo medias currently support the following states:
 
  <ul>
- <li> {@link goog.ui.Component.State.DISABLED}: shows &#39;flash not available&#39;
- <li> {@link goog.ui.Component.State.HOVER}: mouse cursor is over the video
- <li> {@link goog.ui.Component.State.SELECTED}: flash video is shown
+ <li> goog.ui.Component.State.DISABLED: shows &#39;flash not available&#39;
+ <li> goog.ui.Component.State.HOVER: mouse cursor is over the video
+ <li> goog.ui.Component.State.SELECTED: flash video is shown
  </li></li></li></ul>
 
  Which can be accessed by
@@ -117,22 +117,22 @@ renderer.
 
 This class knows how to parse Vimeo URLs, and render the DOM structure
 of vimeo video players. This class is meant to be used as a singleton static
-stateless class, that takes {@code goog.ui.media.Media} instances and renders
-it. It expects {@code goog.ui.media.Media.getModel} to return a well formed,
-previously constructed, vimeoId {@see goog.ui.media.Vimeo.parseUrl}, which is
+stateless class, that takes <code>goog.ui.media.Media</code> instances and renders
+it. It expects <code>goog.ui.media.Media.getModel</code> to return a well formed,
+previously constructed, vimeoId goog.ui.media.Vimeo.parseUrl, which is
 the data model this renderer will use to construct the DOM structure.
-{@see goog.ui.media.Vimeo.newControl} for a example of constructing a control
+goog.ui.media.Vimeo.newControl for a example of constructing a control
 with this renderer.
 
 This design is patterned after <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
 
-It uses {@link goog.ui.media.FlashObject} to embed the flash object.</div>
+It uses goog.ui.media.FlashObject to embed the flash object.</div>
  </div>
  <div class="fn-constructor">
         <a href="class_goog_ui_media_VimeoModel.html">
           goog.ui.media.VimeoModel</a><br/>
-        <div class="class-details">The {@code goog.ui.media.Vimeo} media data model. It stores a required
-{@code videoId} field, sets the vimeo URL, and allows a few optional
+        <div class="class-details">The <code>goog.ui.media.Vimeo</code> media data model. It stores a required
+<code>videoId</code> field, sets the vimeo URL, and allows a few optional
 parameters.</div>
  </div>
       
@@ -177,7 +177,7 @@ parameters.</div>
 
 
      <div class="entryOverview">
-       Builds a flash url from the vimeo {@code videoId}.
+       Builds a flash url from the vimeo <code>videoId</code>.
      </div>
 
 
@@ -242,7 +242,7 @@ parameters.</div>
 
 
      <div class="entryOverview">
-       The opposite of {@code goog.ui.media.Vimeo.parseUrl}: it takes a videoId
+       The opposite of <code>goog.ui.media.Vimeo.parseUrl</code>: it takes a videoId
 and returns a vimeo URL.
      </div>
 
@@ -424,7 +424,7 @@ except if you need more fine control over the configuration.
 
 
      <div class="entryOverview">
-       Takes a {@code vimeoUrl} and extracts the video id.
+       Takes a <code>vimeoUrl</code> and extracts the video id.
      </div>
 
 

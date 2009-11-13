@@ -38,13 +38,6 @@ goog.userAgent.ASSUME_GECKO = false;
 
 
 /**
- * @define {boolean} Whether we know at compile-time that the browser is CAMINO.
- * @deprecated Use goog.userAgent.product.ASSUME_CAMINO instead.
- */
-goog.userAgent.ASSUME_CAMINO = false;
-
-
-/**
  * @define {boolean} Whether we know at compile-time that the browser is WEBKIT.
  */
 goog.userAgent.ASSUME_WEBKIT = false;
@@ -71,7 +64,6 @@ goog.userAgent.ASSUME_OPERA = false;
 goog.userAgent.BROWSER_KNOWN_ =
     goog.userAgent.ASSUME_IE ||
     goog.userAgent.ASSUME_GECKO ||
-    goog.userAgent.ASSUME_CAMINO ||
     goog.userAgent.ASSUME_MOBILE_WEBKIT ||
     goog.userAgent.ASSUME_WEBKIT ||
     goog.userAgent.ASSUME_OPERA;
@@ -147,13 +139,6 @@ goog.userAgent.init_ = function() {
    */
   goog.userAgent.detectedGecko_ = false;
 
-  /**
-   * Whether the user agent is Camino.
-   * @type {boolean}
-   * @private
-   */
-  goog.userAgent.detectedCamino_ = false;
-
   var ua;
   if (!goog.userAgent.BROWSER_KNOWN_ &&
       (ua = goog.userAgent.getUserAgentString())) {
@@ -168,8 +153,6 @@ goog.userAgent.init_ = function() {
         ua.indexOf('Mobile') != -1;
     goog.userAgent.detectedGecko_ = !goog.userAgent.detectedOpera_ &&
         !goog.userAgent.detectedWebkit_ && navigator.product == 'Gecko';
-    goog.userAgent.detectedCamino_ = goog.userAgent.detectedGecko_ &&
-        navigator.vendor == 'Camino';
   }
 };
 
@@ -202,18 +185,8 @@ goog.userAgent.IE = goog.userAgent.BROWSER_KNOWN_ ?
  * @type {boolean}
  */
 goog.userAgent.GECKO = goog.userAgent.BROWSER_KNOWN_ ?
-    goog.userAgent.ASSUME_GECKO || goog.userAgent.ASSUME_CAMINO :
+    goog.userAgent.ASSUME_GECKO :
     goog.userAgent.detectedGecko_;
-
-
-/**
- * Whether the user agent is Camino.
- * @type {boolean}
- * @deprecated Use {@link goog.userAgent.product.CAMINO} instead.
- * TODO: Delete this from goog.userAgent.
- */
-goog.userAgent.CAMINO = goog.userAgent.BROWSER_KNOWN_ ?
-    goog.userAgent.ASSUME_CAMINO : goog.userAgent.detectedCamino_;
 
 
 /**
@@ -394,9 +367,6 @@ goog.userAgent.determineVersion_ = function() {
   // and so on.
   var version = '', re;
 
-  // goog.userAgent.X and goog.userAgent.DETECTED_X_ are both checked so this
-  // code can be tested in useragent_test.html but also be compiled efficiently
-  // as verified in CompileUserAgentTest.java.
   if (goog.userAgent.OPERA && goog.global['opera']) {
     var operaVersion = goog.global['opera'].version;
     version = typeof operaVersion == 'function' ? operaVersion() : operaVersion;
@@ -432,7 +402,7 @@ goog.userAgent.VERSION = goog.userAgent.determineVersion_();
  * @param {string} v1 Version of first item.
  * @param {string} v2 Version of second item.
  *
- * @return {Number}  1 if first argument is higher
+ * @return {number}  1 if first argument is higher
  *                   0 if arguments are equal
  *                  -1 if second argument is higher.
  * @deprecated Use goog.string.compareVersions.

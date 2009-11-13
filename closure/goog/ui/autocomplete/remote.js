@@ -16,6 +16,7 @@
  * @fileoverview Factory class to create a simple autocomplete that will match
  * from an array of data provided via ajax.
  *
+ * @see ../../demos/autocompleteremote.html
  */
 
 goog.provide('goog.ui.AutoComplete.Remote');

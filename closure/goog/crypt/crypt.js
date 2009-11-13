@@ -48,11 +48,7 @@ goog.crypt.stringToByteArray = function(str) {
  * @return {string} Stringification of the array.
  */
 goog.crypt.byteArrayToString = function(array) {
-  var output = [];
-  for (var i = 0; i < array.length; i++) {
-    output[i] = String.fromCharCode(array[i]);
-  }
-  return output.join('');
+  return String.fromCharCode.apply(null, array);
 };
 
 

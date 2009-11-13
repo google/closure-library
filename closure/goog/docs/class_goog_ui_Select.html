@@ -57,7 +57,7 @@
 
 <div class="g-section g-tpl-75-25">
   <div class="g-unit g-first" id="description">
-    A selection control.  Extends {@link goog.ui.MenuButton} by composing a
+    A selection control.  Extends goog.ui.MenuButton by composing a
 menu with a selection model, and automatically updating the button&#39;s caption
 based on the current selection.
   </div>
@@ -126,7 +126,7 @@ Object
      <td>
         <span class="entryName">opt_renderer</span>
         : <div class="fullType"><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></div>
-        <div class="entryOverview">Renderer used to render or decorate the control; defaults to {@link goog.ui.MenuButtonRenderer}.</div>
+        <div class="entryOverview">Renderer used to render or decorate the control; defaults to goog.ui.MenuButtonRenderer.</div>
      </td>
    </tr>
      
@@ -324,7 +324,7 @@ Object
 
      <div class="entryOverview">
        Creates a new selection model and sets up an event listener to handle
-{@link goog.events.EventType.SELECT} events dispatched by it.
+goog.events.EventType.SELECT events dispatched by it.
      </div>
 
 
@@ -697,11 +697,11 @@ implementation by initializing the default caption on the select button.
 
 
      <div class="entryOverview">
-       Handles {@link goog.ui.Component.EventType.ACTION} events dispatched by
+       Handles goog.ui.Component.EventType.ACTION events dispatched by
 the menu item clicked by the user.  Updates the selection model, calls
 the superclass implementation to hide the menu, stops the propagation of
 the event, and dispatches an ACTION event on behalf of the select control
-itself.  Overrides {@link goog.ui.MenuButton#handleMenuAction}.
+itself.  Overrides goog.ui.MenuButton#handleMenuAction.
      </div>
 
 
@@ -761,7 +761,7 @@ itself.  Overrides {@link goog.ui.MenuButton#handleMenuAction}.
 
 
      <div class="entryOverview">
-       Handles {@link goog.events.EventType.SELECT} events raised by the
+       Handles goog.events.EventType.SELECT events raised by the
 selection model when the selection changes.  Updates the contents of the
 select button.
      </div>
@@ -1006,7 +1006,7 @@ select button.
      <div class="entryOverview">
        Replaces the menu currently attached to the control (if any) with the given
 argument, and updates the selection model.  Does nothing if the new menu is
-the same as the old one.  Overrides {@link goog.ui.MenuButton#setMenu}.
+the same as the old one.  Overrides goog.ui.MenuButton#setMenu.
      </div>
 
 
@@ -1070,7 +1070,7 @@ the same as the old one.  Overrides {@link goog.ui.MenuButton#setMenu}.
 
 
      <div class="entryOverview">
-       Opens or closes the menu.  Overrides {@link goog.ui.MenuButton#setOpen} by
+       Opens or closes the menu.  Overrides goog.ui.MenuButton#setOpen by
 highlighting the currently selected option on open.
      </div>
 
@@ -1576,7 +1576,7 @@ Called each time a menu is attached to or detached from the button.
        Attaches or detaches event listeners depending on whether the popup menu
 is being shown or hidden.  Starts listening for document mousedown events
 and for menu blur events when the menu is shown, and stops listening for
-these events when it is hidden.  Called from {@link #setOpen}.
+these events when it is hidden.  Called from #setOpen.
      </div>
 
 
@@ -2087,7 +2087,7 @@ TODO: Reconcile this with goog.ui.Popup (and handle frames/windows).
 
 
      <div class="entryOverview">
-       Handles {@code HIGHLIGHT} events dispatched by the attached menu.
+       Handles <code>HIGHLIGHT</code> events dispatched by the attached menu.
      </div>
 
 
@@ -2207,7 +2207,7 @@ TODO: Reconcile this with goog.ui.Popup (and handle frames/windows).
 
 
      <div class="entryOverview">
-       Handles {@code ACTION} events dispatched by an activated menu item.
+       Handles <code>ACTION</code> events dispatched by an activated menu item.
      </div>
 
 
@@ -2267,7 +2267,7 @@ TODO: Reconcile this with goog.ui.Popup (and handle frames/windows).
 
 
      <div class="entryOverview">
-       Handles {@code BLUR} events dispatched by the popup menu by closing it.
+       Handles <code>BLUR</code> events dispatched by the popup menu by closing it.
 Only registered if the menu is focusable.
      </div>
 
@@ -2747,7 +2747,7 @@ an ACTION event and deactivate the button.
        Performs the appropriate action when the menu button is activated by the
 user.  Overrides the superclass implementation by not dispatching an {@code
 ACTION} event, because menu buttons exist only to reveal menus, not to
-perform actions themselves.  Calls {@link #setActive} to deactivate the
+perform actions themselves.  Calls #setActive to deactivate the
 button.
      </div>
 
@@ -3633,8 +3633,8 @@ the popup menu if the button is being hidden.
      <div class="entryOverview">
        Attempts to handle a keyboard event; returns true if the event was handled,
 false otherwise.  If the button is enabled and the Enter/Space key was
-pressed, handles the event by dispatching an {@code ACTION} event,
-and returns true. Overrides {@link goog.ui.Control#handleKeyEventInternal}.
+pressed, handles the event by dispatching an <code>ACTION</code> event,
+and returns true. Overrides goog.ui.Control#handleKeyEventInternal.
      </div>
 
 
@@ -3721,7 +3721,7 @@ multiple targets.
      <td>
         <span class="entryName">sides</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Bitmap of one or more {@link goog.ui.Button.Side}s for which borders should be collapsed.</div>
+        <div class="entryOverview">Bitmap of one or more goog.ui.Button.Sides for which borders should be collapsed.</div>
      </td>
    </tr>
   </table>
@@ -3820,7 +3820,7 @@ multiple targets.
 
 
      <div class="entryOverview">
-       Sets the tooltip for the button.  Unlike {@link #setTooltip}, doesn&#39;t update
+       Sets the tooltip for the button.  Unlike #setTooltip, doesn&#39;t update
 the button&#39;s DOM.  Considered protected; to be called only by renderer code
 during element decoration.
      </div>
@@ -3942,7 +3942,7 @@ during element decoration.
 
 
      <div class="entryOverview">
-       Sets the value associated with the button.  Unlike {@link #setValue},
+       Sets the value associated with the button.  Unlike #setValue,
 doesn&#39;t update the button&#39;s DOM.  Considered protected; to be called only
 by renderer code during element decoration.
      </div>
@@ -4090,7 +4090,7 @@ component&#39;s root element.
 
      <div class="entryOverview">
        Returns true if the given element can be decorated by this component.
-Overrides {@link goog.ui.Component#canDecorate}.
+Overrides goog.ui.Component#canDecorate.
      </div>
 
 
@@ -4154,7 +4154,7 @@ Overrides {@link goog.ui.Component#canDecorate}.
 
 
      <div class="entryOverview">
-       Creates the control&#39;s DOM.  Overrides {@link goog.ui.Component#createDom} by
+       Creates the control&#39;s DOM.  Overrides goog.ui.Component#createDom by
 delegating DOM manipulation to the control&#39;s renderer.
      </div>
 
@@ -4415,7 +4415,7 @@ applied to the component&#39;s root element.
 
      <div class="entryOverview">
        Configures the component after its DOM has been rendered, and sets up event
-handling.  Overrides {@link goog.ui.Component#enterDocument}.
+handling.  Overrides goog.ui.Component#enterDocument.
      </div>
 
    
@@ -4450,7 +4450,7 @@ handling.  Overrides {@link goog.ui.Component#enterDocument}.
 
      <div class="entryOverview">
        Cleans up the component before its DOM is removed from the document, and
-removes event handlers.  Overrides {@link goog.ui.Component#exitDocument}
+removes event handlers.  Overrides goog.ui.Component#exitDocument
 by making sure that components that are removed from the document aren&#39;t
 focusable (i.e. have no tab index).
      </div>
@@ -4581,7 +4581,7 @@ focusable (i.e. have no tab index).
      <div class="entryOverview">
        Returns the DOM element into which child components are to be rendered,
 or null if the control itself hasn&#39;t been rendered yet.  Overrides
-{@link goog.ui.Component#getContentElement} by delegating to the renderer.
+goog.ui.Component#getContentElement by delegating to the renderer.
      </div>
 
 
@@ -4929,7 +4929,7 @@ asynchronously!
      <div class="entryOverview">
        Handles dblclick events.  Should only be registered if the user agent is
 IE.  If the component is enabled, performs its associated action by calling
-{@link performActionInternal}.  This is used to allow more performant
+performActionInternal.  This is used to allow more performant
 buttons in IE.  In IE, no mousedown event is fired when that mousedown will
 trigger a dblclick event.  Because of this, a user clicking quickly will
 only cause ACTION events to fire on every other click.  This is a workaround
@@ -5062,7 +5062,7 @@ blur events asynchronously!
 
      <div class="entryOverview">
        Attempts to handle a keyboard event, if the component is enabled and visible,
-by calling {@link handleKeyEventInternal}.  Considered protected; should only
+by calling handleKeyEventInternal.  Considered protected; should only
 be used within this package and by subclasses.
      </div>
 
@@ -5385,7 +5385,7 @@ within this package and by subclasses.
      <div class="entryOverview">
        Handles mouseup events.  If the component is enabled, highlights it.  If
 the component has previously been activated, performs its associated action
-by calling {@link performActionInternal}, then deactivates it.  Considered
+by calling performActionInternal, then deactivates it.  Considered
 protected; should only be used within this package and by subclasses.
      </div>
 
@@ -5833,7 +5833,7 @@ given state, false otherwise.
 
      <div class="entryOverview">
        Returns true if the component is styled to indicate that it has keyboard
-focus, false otherwise.  Note that {@code isFocused()} returning true
+focus, false otherwise.  Note that <code>isFocused()</code> returning true
 doesn&#39;t guarantee that the component&#39;s key event target has keyborad focus,
 only that it is styled as such.
      </div>
@@ -5882,7 +5882,7 @@ only that it is styled as such.
 
      <div class="entryOverview">
        Returns true if the control is configured to handle its own mouse events,
-false otherwise.  Controls not hosted in {@link goog.ui.Container}s have
+false otherwise.  Controls not hosted in goog.ui.Containers have
 to handle their own mouse events, but controls hosted in containers may
 allow their parent to handle mouse events on their behalf.  Considered
 protected; should only be used within this package and by subclasses.
@@ -6586,7 +6586,7 @@ transition is disallowed.
      <td>
         <span class="entryName">states</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Bit mask of {@link goog.ui.Component.State}s for which default event handling is to be enabled or disabled.</div>
+        <div class="entryOverview">Bit mask of goog.ui.Component.States for which default event handling is to be enabled or disabled.</div>
      </td>
    </tr>
      
@@ -6817,7 +6817,7 @@ not an array-like object.)
 
      <div class="entryOverview">
        Sets the component&#39;s content to the given text caption, element, or array
-of nodes.  Unlike {@link #setContent}, doesn&#39;t modify the component&#39;s DOM.
+of nodes.  Unlike #setContent, doesn&#39;t modify the component&#39;s DOM.
 Called by renderers during element decoration.  Considered protected; should
 only be used within this package and by subclasses.
      </div>
@@ -6902,7 +6902,7 @@ transition events if explicitly requested to do so by calling this mentod.
      <td>
         <span class="entryName">states</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Bit mask of {@link goog.ui.Component.State}s for which transition events should be enabled or disabled.</div>
+        <div class="entryOverview">Bit mask of goog.ui.Component.States for which transition events should be enabled or disabled.</div>
      </td>
    </tr>
      
@@ -6954,7 +6954,7 @@ is disallowed.  If the component is both visible and focusable, updates its
 focused state and tab index as needed.  If the component is being disabled,
 ensures that it is also deactivated and un-highlighted first.  Note that the
 component&#39;s enabled/disabled state is &quot;locked&quot; as long as it is hosted in a
-{@link goog.ui.Container} that is itself disabled; this is to prevent clients
+goog.ui.Container that is itself disabled; this is to prevent clients
 from accidentally re-enabling a control that is in a disabled container.
      </div>
 
@@ -7018,7 +7018,7 @@ from accidentally re-enabling a control that is in a disabled container.
        Applies or removes styling indicating that the component has keyboard focus.
 Note that unlike the other &quot;set&quot; methods, this method is called as a result
 of the component&#39;s element having received or lost keyboard focus, not the
-other way around, so calling {@code setFocused(true)} doesn&#39;t guarantee that
+other way around, so calling <code>setFocused(true)</code> doesn&#39;t guarantee that
 the component&#39;s key event target has keyboard focus, only that it is styled
 as such.
      </div>
@@ -7519,7 +7519,7 @@ transition events; use advisedly.
 
      <div class="entryOverview">
        Sets the component&#39;s state to the state represented by a bit mask of
-{@link goog.ui.Component.State}s.  Unlike {@link #setState}, doesn&#39;t
+goog.ui.Component.States.  Unlike #setState, doesn&#39;t
 update the component&#39;s styling, and doesn&#39;t reject unsupported states.
 Called by renderers during element decoration.  Considered protected;
 should only be used within this package and by subclasses.
@@ -7753,7 +7753,7 @@ and focusable, blurs its key target and removes its tab index.
 
      <div class="entryOverview">
        Adds the specified component as the last child of this component.  See
-{@link goog.ui.Component#addChildAt} for detailed semantics.
+goog.ui.Component#addChildAt for detailed semantics.
      </div>
 
 
@@ -7795,7 +7795,7 @@ and focusable, blurs its key target and removes its tab index.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line847">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line848">code &raquo;</a>
   </td>
      </tr>
 
@@ -7824,25 +7824,25 @@ and focusable, blurs its key target and removes its tab index.
        Adds the specified component as a child of this component at the given
 0-based index.
 
-Both {@code addChild} and {@code addChildAt} assume the following contract
+Both <code>addChild</code> and <code>addChildAt</code> assume the following contract
 between parent and child components:
 <ul>
 <li>the child component&#39;s element must be a descendant of the parent
 component&#39;s element, and
 <li>the DOM state of the child component must be consistent with the DOM
-state of the parent component (see {@code isInDocument}).
+state of the parent component (see <code>isInDocument</code>).
 </li></li></ul>
 
-In particular, {@code parent.addChild(child)} will throw an error if the
+In particular, <code>parent.addChild(child)</code> will throw an error if the
 child component is already in the document, but the parent isn&#39;t.
 
-Clients of this API may call {@code addChild} and {@code addChildAt} with
-{@code opt_render} set to true.  If {@code opt_render} is true, calling these
+Clients of this API may call <code>addChild</code> and <code>addChildAt</code> with
+<code>opt_render</code> set to true.  If <code>opt_render</code> is true, calling these
 methods will automatically render the child component&#39;s element into the
-parent component&#39;s element.  However, {@code parent.addChild(child, true)}
+parent component&#39;s element.  However, <code>parent.addChild(child, true)</code>
 will throw an error if:
 <ul>
-<li>the parent component has no DOM (i.e. {@code parent.getElement()} is
+<li>the parent component has no DOM (i.e. <code>parent.getElement()</code> is
 null), or
 <li>the child component is already in the document, regardless of the
 parent&#39;s DOM state.
@@ -7899,7 +7899,7 @@ different parent, or the given index is out of bounds.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line890">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line891">code &raquo;</a>
   </td>
      </tr>
 
@@ -7965,7 +7965,7 @@ This method should be overridden by inheriting objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line673">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line674">code &raquo;</a>
   </td>
      </tr>
 
@@ -7999,7 +7999,7 @@ This method should be overridden by inheriting objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line566">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line567">code &raquo;</a>
   </td>
      </tr>
 
@@ -8059,7 +8059,7 @@ This method should be overridden by inheriting objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line646">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line647">code &raquo;</a>
   </td>
      </tr>
 
@@ -8122,7 +8122,7 @@ afterwards. This method is considered protected.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line694">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line695">code &raquo;</a>
   </td>
      </tr>
 
@@ -8148,7 +8148,7 @@ afterwards. This method is considered protected.
 
 
      <div class="entryOverview">
-       Disposes of the component.  Calls {@code exitDocument}, which is expected to
+       Disposes of the component.  Calls <code>exitDocument</code>, which is expected to
 remove event handlers and clean up the component.  Propagates the call to
 the component&#39;s children, if any. Removes the component&#39;s DOM from the
 document unless it was decorated.
@@ -8159,7 +8159,7 @@ document unless it was decorated.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line752">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line753">code &raquo;</a>
   </td>
      </tr>
 
@@ -8193,7 +8193,7 @@ document unless it was decorated.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line706">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line707">code &raquo;</a>
   </td>
      </tr>
 
@@ -8227,7 +8227,7 @@ document unless it was decorated.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line729">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line730">code &raquo;</a>
   </td>
      </tr>
 
@@ -8254,7 +8254,7 @@ document unless it was decorated.
 
      <div class="entryOverview">
        Calls the given function on each of this component&#39;s children in order.  If
-{@code opt_obj} is provided, it will be used as the &#39;this&#39; object in the
+<code>opt_obj</code> is provided, it will be used as the &#39;this&#39; object in the
 function when called.  The function should take two arguments:  the child
 component and its 0-based index.  The return value is ignored.
      </div>
@@ -8298,7 +8298,7 @@ component and its 0-based index.  The return value is ignored.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line1066">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line1067">code &raquo;</a>
   </td>
      </tr>
 
@@ -8363,7 +8363,7 @@ component and its 0-based index.  The return value is ignored.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line1039">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line1040">code &raquo;</a>
   </td>
      </tr>
 
@@ -8428,7 +8428,7 @@ component and its 0-based index.  The return value is ignored.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line1051">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line1052">code &raquo;</a>
   </td>
      </tr>
 
@@ -8474,7 +8474,7 @@ component and its 0-based index.  The return value is ignored.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line1010">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line1011">code &raquo;</a>
   </td>
      </tr>
 
@@ -8521,7 +8521,7 @@ empty array if the component has no children.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line1020">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line1021">code &raquo;</a>
   </td>
      </tr>
 
@@ -8570,7 +8570,7 @@ complex DOM structures must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line962">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line963">code &raquo;</a>
   </td>
      </tr>
 
@@ -8616,7 +8616,7 @@ complex DOM structures must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line548">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line549">code &raquo;</a>
   </td>
      </tr>
 
@@ -8662,7 +8662,7 @@ complex DOM structures must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line465">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line466">code &raquo;</a>
   </td>
      </tr>
 
@@ -8728,7 +8728,7 @@ generated using makeId().
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line830">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line831">code &raquo;</a>
   </td>
      </tr>
 
@@ -8794,7 +8794,7 @@ makeId().
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line818">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line819">code &raquo;</a>
   </td>
      </tr>
 
@@ -8841,7 +8841,7 @@ this method is called.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line487">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line488">code &raquo;</a>
   </td>
      </tr>
 
@@ -8888,7 +8888,7 @@ doesn&#39;t already have an ID, generates one on the fly.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line436">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line437">code &raquo;</a>
   </td>
      </tr>
 
@@ -8934,7 +8934,7 @@ doesn&#39;t already have an ID, generates one on the fly.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line798">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line799">code &raquo;</a>
   </td>
      </tr>
 
@@ -8980,7 +8980,7 @@ doesn&#39;t already have an ID, generates one on the fly.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line525">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line526">code &raquo;</a>
   </td>
      </tr>
 
@@ -9026,7 +9026,7 @@ doesn&#39;t already have an ID, generates one on the fly.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line1001">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line1002">code &raquo;</a>
   </td>
      </tr>
 
@@ -9092,7 +9092,7 @@ child is found.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line1079">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line1080">code &raquo;</a>
   </td>
      </tr>
 
@@ -9138,7 +9138,7 @@ child is found.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line557">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line558">code &raquo;</a>
   </td>
      </tr>
 
@@ -9186,7 +9186,7 @@ is set if it has not been already.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line973">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line974">code &raquo;</a>
   </td>
      </tr>
 
@@ -9253,7 +9253,7 @@ generate unique string ids for DOM elements
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line789">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line790">code &raquo;</a>
   </td>
      </tr>
 
@@ -9285,7 +9285,7 @@ if the argument is invalid or if the specified child isn&#39;t found in the
 parent component.  The argument can either be a string (interpreted as the
 ID of the child component to remove) or the child component itself.
 
-If {@code opt_unrender} is true, calls {@link goog.ui.component#exitDocument}
+If <code>opt_unrender</code> is true, calls goog.ui.component#exitDocument
 on the removed child, and subsequently detaches the child&#39;s DOM from the
 document.  Otherwise it is the caller&#39;s responsibility to clean up the child
 component&#39;s DOM.
@@ -9317,7 +9317,7 @@ component&#39;s DOM.
      <td>
         <span class="entryName">opt_unrender</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">If true, calls {@code exitDocument} on the removed child component, and detaches its DOM from the document.</div>
+        <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
      </td>
    </tr>
   </table>
@@ -9334,7 +9334,7 @@ component&#39;s DOM.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line1103">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line1104">code &raquo;</a>
   </td>
      </tr>
 
@@ -9363,7 +9363,7 @@ component&#39;s DOM.
      <div class="entryOverview">
        Removes the child at the given index from this component, and returns it.
 Throws an error if the argument is out of bounds, or if the specified child
-isn&#39;t found in the parent.  See {@link goog.ui.Component#removeChild} for
+isn&#39;t found in the parent.  See goog.ui.Component#removeChild for
 detailed semantics.
      </div>
 
@@ -9393,7 +9393,7 @@ detailed semantics.
      <td>
         <span class="entryName">opt_unrender</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">If true, calls {@code exitDocument} on the removed child component, and detaches its DOM from the document.</div>
+        <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
      </td>
    </tr>
   </table>
@@ -9410,7 +9410,7 @@ detailed semantics.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line1149">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line1150">code &raquo;</a>
   </td>
      </tr>
 
@@ -9457,7 +9457,7 @@ detailed semantics.
      <td>
         <span class="entryName">opt_unrender</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">If true, calls {@link #exitDocument} on the removed child components, and detaches their DOM from the document.</div>
+        <div class="entryOverview">If true, calls #exitDocument on the removed child components, and detaches their DOM from the document.</div>
      </td>
    </tr>
   </table>
@@ -9470,7 +9470,7 @@ detailed semantics.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line1162">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line1163">code &raquo;</a>
   </td>
      </tr>
 
@@ -9535,7 +9535,7 @@ Throws an Error if the component is already rendered.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line582">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line583">code &raquo;</a>
   </td>
      </tr>
 
@@ -9598,7 +9598,7 @@ Throws an Error if the component is already rendered.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line595">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line596">code &raquo;</a>
   </td>
      </tr>
 
@@ -9671,7 +9671,7 @@ Throws an Error if the component is already rendered.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line615">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line616">code &raquo;</a>
   </td>
      </tr>
 
@@ -9732,7 +9732,7 @@ protected and final.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line476">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line477">code &raquo;</a>
   </td>
      </tr>
 
@@ -9796,7 +9796,7 @@ that conflicts with the new ID.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line449">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line450">code &raquo;</a>
   </td>
      </tr>
 
@@ -9856,7 +9856,7 @@ that conflicts with the new ID.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line807">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line808">code &raquo;</a>
   </td>
      </tr>
 
@@ -9884,8 +9884,8 @@ that conflicts with the new ID.
      <div class="entryOverview">
        Sets the parent of this component to use for event bubbling.  Throws an error
 if the component already has a parent or if an attempt is made to add a
-component to itself as a child.  Callers must use {@code removeChild}
-or {@code removeChildAt} to remove components from their containers before
+component to itself as a child.  Callers must use <code>removeChild</code>
+or <code>removeChildAt</code> to remove components from their containers before
 calling this method.
      </div>
 
@@ -9920,7 +9920,7 @@ calling this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line503">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line504">code &raquo;</a>
   </td>
      </tr>
 
@@ -9946,7 +9946,7 @@ calling this method.
 
 
      <div class="entryOverview">
-       Overrides {@link goog.events.EventTarget#setParentEventTarget} to throw an
+       Overrides goog.events.EventTarget#setParentEventTarget to throw an
 error if the parent component is set, and the argument is not the parent.
      </div>
 
@@ -9981,7 +9981,7 @@ error if the parent component is set, and the argument is not the parent.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line536">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line537">code &raquo;</a>
   </td>
      </tr>
 
@@ -10009,7 +10009,7 @@ error if the parent component is set, and the argument is not the parent.
      <div class="entryOverview">
        Set is right-to-left. This function should be used if the component needs
 to know the rendering direction during dom creation (i.e. before
-{@link #enterDocument} is called and is right-to-left is set).
+#enterDocument is called and is right-to-left is set).
      </div>
 
 
@@ -10043,7 +10043,7 @@ to know the rendering direction during dom creation (i.e. before
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line989">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line990">code &raquo;</a>
   </td>
      </tr>
 
@@ -10089,7 +10089,7 @@ to know the rendering direction during dom creation (i.e. before
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line681">code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line682">code &raquo;</a>
   </td>
      </tr>
 
@@ -10201,7 +10201,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line134">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line136">code &raquo;</a>
   </td>
      </tr>
 
@@ -10272,7 +10272,7 @@ stopPropagation, then the bubble listeners won&#39;t fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line172">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line174">code &raquo;</a>
   </td>
      </tr>
 
@@ -10314,7 +10314,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line189">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line191">code &raquo;</a>
   </td>
      </tr>
 
@@ -10360,7 +10360,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line102">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line104">code &raquo;</a>
   </td>
      </tr>
 
@@ -10446,7 +10446,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line153">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line155">code &raquo;</a>
   </td>
      </tr>
 
@@ -10506,7 +10506,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line112">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line114">code &raquo;</a>
   </td>
      </tr>
 
@@ -10590,7 +10590,7 @@ nothing is done.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {
@@ -10891,7 +10891,7 @@ button; defaults to true (align to start).
        Whether the attached popup menu is focusable or not (defaults to false).
 Popup menus attached to menu buttons usually don&#39;t need to be focusable,
 i.e. the button retains keyboard focus, and forwards key events to the
-menu for processing.  However, menus like {@link goog.ui.FilteredMenu}
+menu for processing.  However, menus like goog.ui.FilteredMenu
 need to be focusable.
      </div>
 
@@ -11016,11 +11016,11 @@ menu on overflow rather then scroll.
 
 
      <div class="entryOverview">
-       A bit mask of {@link goog.ui.Component.State}s for which this component
+       A bit mask of goog.ui.Component.States for which this component
 provides default event handling.  For example, a component that handles
 the HOVER state automatically will highlight itself on mouseover, whereas
 a component that doesn&#39;t handle HOVER automatically will only dispatch
-ENTER and LEAVE events but not call {@link setHighlighted} on itself.
+ENTER and LEAVE events but not call setHighlighted on itself.
 By default, components provide default event handling for all states.
 Controls hosted in containers (e.g. menu items in a menu, or buttons in a
 toolbar) will typically want to have their container manage their highlight
@@ -11158,7 +11158,7 @@ true.
 
 
      <div class="entryOverview">
-       Current component state; a bit mask of {@link goog.ui.Component.State}s.
+       Current component state; a bit mask of goog.ui.Component.States.
      </div>
 
   </td>
@@ -11191,10 +11191,10 @@ true.
 
 
      <div class="entryOverview">
-       A bit mask of {@link goog.ui.Component.State}s for which this component
+       A bit mask of goog.ui.Component.States for which this component
 dispatches state transition events.  Because events are expensive, the
 default behavior is to not dispatch any state transition events at all.
-Use the {@link #setDispatchTransitionEvents} API to request transition
+Use the #setDispatchTransitionEvents API to request transition
 events  as needed.  Subclasses may enable transition events by default.
 Controls hosted in containers or managed by a selection model will typically
 want to dispatch transition events.
@@ -11230,7 +11230,7 @@ want to dispatch transition events.
 
 
      <div class="entryOverview">
-       A bit mask of {@link goog.ui.Component.State}s this component supports.
+       A bit mask of goog.ui.Component.States this component supports.
      </div>
 
   </td>
@@ -11321,10 +11321,10 @@ want to dispatch transition events.
      <div class="entryOverview">
        Map of child component IDs to child components.  Used for constant-time
 random access to child components by ID.  Lazily initialized on first use.
-Must be kept in sync with {@code children_}.  This property is strictly
+Must be kept in sync with <code>children_</code>.  This property is strictly
 private and must not be accessed directly outside of this class!
 
-We use a plain Object, not a {@link goog.structs.Map}, for simplicity.
+We use a plain Object, not a goog.structs.Map, for simplicity.
 This means components can&#39;t have children with IDs such as &#39;constructor&#39; or
 &#39;valueOf&#39;, but this shouldn&#39;t really be an issue in practice, and if it is,
 we can always fix it later without changing the API.
@@ -11334,7 +11334,7 @@ we can always fix it later without changing the API.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line418">Code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line419">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11361,7 +11361,7 @@ we can always fix it later without changing the API.
 
      <div class="entryOverview">
        Array of child components.  Lazily initialized on first use.  Must be kept in
-sync with {@code childIndex_}.  This property is strictly private and must
+sync with <code>childIndex_</code>.  This property is strictly private and must
 not be accessed directly outside of this class!
      </div>
 
@@ -11369,7 +11369,7 @@ not be accessed directly outside of this class!
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line401">Code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line402">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11403,7 +11403,7 @@ created in a different window.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line336">Code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line337">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11436,7 +11436,7 @@ created in a different window.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line353">Code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line354">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11469,7 +11469,7 @@ created in a different window.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line60">Code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line61">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11504,7 +11504,7 @@ must not be accessed directly outside of this class!
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line326">Code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line327">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11537,7 +11537,7 @@ must not be accessed directly outside of this class!
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line344">Code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line345">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11571,7 +11571,7 @@ strictly private and must not be accessed directly outside of this class!
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line391">Code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line392">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11598,15 +11598,15 @@ strictly private and must not be accessed directly outside of this class!
 
      <div class="entryOverview">
        Whether the component is rendered right-to-left.  Right-to-left is set
-lazily when {@link #isRightToLeft} is called the first time, unless it has
-been set by calling {@link #setRightToLeft} explicitly.
+lazily when #isRightToLeft is called the first time, unless it has
+been set by calling #setRightToLeft explicitly.
      </div>
 
   </td>
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line374">Code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line375">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11641,7 +11641,7 @@ dispose will remove the node from the document, it is left up to the app.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_component.js.source.html#line428">Code &raquo;</a>
+     <a href="closure_goog_ui_component.js.source.html#line429">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11698,7 +11698,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line85">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line87">Code &raquo;</a>
   </td>
      </tr>
 
@@ -11731,7 +11731,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line93">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line95">Code &raquo;</a>
   </td>
      </tr>
 

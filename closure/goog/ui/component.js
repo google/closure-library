@@ -16,6 +16,7 @@
  * @fileoverview Abstract class for all UI components. This defines the standard
  * design pattern that all UI components should follow.
  *
+ * @see ../demos/samplecomponent.html
  */
 
 goog.provide('goog.ui.Component');

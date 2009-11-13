@@ -57,1768 +57,1770 @@
 <a name="line14"></a>
 <a name="line15"></a>
 <a name="line16"></a>/**
-<a name="line17"></a> * @fileoverview Component for generating chart PNGs using Google&#39;s Chartserver.
-<a name="line18"></a> */
-<a name="line19"></a>
-<a name="line20"></a>
-<a name="line21"></a>/**
-<a name="line22"></a> * Namespace for chart functions
-<a name="line23"></a> */
-<a name="line24"></a>goog.provide(&#39;goog.ui.ServerChart&#39;);
-<a name="line25"></a>goog.provide(&#39;goog.ui.ServerChart.AxisDisplayType&#39;);
-<a name="line26"></a>goog.provide(&#39;goog.ui.ServerChart.ChartType&#39;);
-<a name="line27"></a>goog.provide(&#39;goog.ui.ServerChart.EncodingType&#39;);
-<a name="line28"></a>goog.provide(&#39;goog.ui.ServerChart.Event&#39;);
-<a name="line29"></a>goog.provide(&#39;goog.ui.ServerChart.LegendPosition&#39;);
-<a name="line30"></a>goog.provide(&#39;goog.ui.ServerChart.MaximumValue&#39;);
-<a name="line31"></a>goog.provide(&#39;goog.ui.ServerChart.MultiAxisAlignment&#39;);
-<a name="line32"></a>goog.provide(&#39;goog.ui.ServerChart.MultiAxisType&#39;);
-<a name="line33"></a>goog.provide(&#39;goog.ui.ServerChart.UriParam&#39;);
-<a name="line34"></a>goog.provide(&#39;goog.ui.ServerChart.UriTooLongEvent&#39;);
-<a name="line35"></a>
-<a name="line36"></a>goog.require(&#39;goog.Uri&#39;);
-<a name="line37"></a>goog.require(&#39;goog.array&#39;);
-<a name="line38"></a>goog.require(&#39;goog.asserts&#39;);
-<a name="line39"></a>goog.require(&#39;goog.events.Event&#39;);
-<a name="line40"></a>goog.require(&#39;goog.string&#39;);
-<a name="line41"></a>goog.require(&#39;goog.ui.Component&#39;);
-<a name="line42"></a>
-<a name="line43"></a>
-<a name="line44"></a>/**
-<a name="line45"></a> * Will construct a chart using Google&#39;s chartserver.
-<a name="line46"></a> *
-<a name="line47"></a> * @param {goog.ui.ServerChart.ChartType} type The chart type.
-<a name="line48"></a> * @param {number} opt_width The width of the chart.
-<a name="line49"></a> * @param {number} opt_height The height of the chart.
-<a name="line50"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM Helper.
-<a name="line51"></a> * @param {string} opt_uri Optional uri used to connect to the chart server, if
-<a name="line52"></a> *     different than goog.ui.ServerChart.CHART_SERVER_URI.
-<a name="line53"></a> * @constructor
-<a name="line54"></a> * @extends {goog.ui.Component}
-<a name="line55"></a> */
-<a name="line56"></a>goog.ui.ServerChart = function(type, opt_width, opt_height, opt_domHelper,
-<a name="line57"></a>    opt_uri) {
-<a name="line58"></a>  goog.ui.Component.call(this, opt_domHelper);
-<a name="line59"></a>
-<a name="line60"></a>  /**
-<a name="line61"></a>   * Image URI.
-<a name="line62"></a>   * @type {goog.Uri}
-<a name="line63"></a>   * @private
-<a name="line64"></a>   */
-<a name="line65"></a>  this.uri_ = new goog.Uri(opt_uri || goog.ui.ServerChart.CHART_SERVER_URI);
-<a name="line66"></a>
-<a name="line67"></a>  /**
-<a name="line68"></a>   * Encoding method for the URI data format.
-<a name="line69"></a>   * @type {goog.ui.ServerChart.EncodingType}
-<a name="line70"></a>   * @private
-<a name="line71"></a>   */
-<a name="line72"></a>  this.encodingType_ = goog.ui.ServerChart.EncodingType.AUTOMATIC;
-<a name="line73"></a>
-<a name="line74"></a>  /**
-<a name="line75"></a>   * Two-dimensional array of the data sets on the chart.
-<a name="line76"></a>   * @type {Array.&lt;Array.&lt;number&gt;&gt;}
-<a name="line77"></a>   * @private
-<a name="line78"></a>   */
-<a name="line79"></a>  this.dataSets_ = [];
-<a name="line80"></a>
-<a name="line81"></a>  /**
-<a name="line82"></a>   * Colors for each data set.
-<a name="line83"></a>   * @type {Array.&lt;string&gt;}
-<a name="line84"></a>   * @private
-<a name="line85"></a>   */
-<a name="line86"></a>  this.setColors_ = [];
-<a name="line87"></a>
-<a name="line88"></a>  /**
-<a name="line89"></a>   * Legend texts for each data set.
-<a name="line90"></a>   * @type {Array.&lt;string&gt;}
-<a name="line91"></a>   * @private
-<a name="line92"></a>   */
-<a name="line93"></a>  this.setLegendTexts_ = [];
-<a name="line94"></a>
-<a name="line95"></a>  /**
-<a name="line96"></a>   * Labels on the X-axis.
-<a name="line97"></a>   * @type {Array.&lt;string&gt;}
-<a name="line98"></a>   * @private
-<a name="line99"></a>   */
-<a name="line100"></a>  this.xLabels_ = [];
-<a name="line101"></a>
-<a name="line102"></a>  /**
-<a name="line103"></a>   * Labels on the left along the Y-axis.
-<a name="line104"></a>   * @type {Array.&lt;string&gt;}
-<a name="line105"></a>   * @private
-<a name="line106"></a>   */
-<a name="line107"></a>  this.leftLabels_ = [];
-<a name="line108"></a>
-<a name="line109"></a>  /**
-<a name="line110"></a>   * Labels on the right along the Y-axis.
-<a name="line111"></a>   * @type {Array.&lt;string&gt;}
-<a name="line112"></a>   * @private
-<a name="line113"></a>   */
-<a name="line114"></a>  this.rightLabels_ = [];
-<a name="line115"></a>
-<a name="line116"></a>  /**
-<a name="line117"></a>   * Axis type for each multi-axis in the chart. The indices into this array
-<a name="line118"></a>   * also work as the reference index for all other multi-axis properties.
-<a name="line119"></a>   * @type {Array.&lt;goog.ui.ServerChart.MultiAxisType&gt;}
-<a name="line120"></a>   * @private
-<a name="line121"></a>   */
-<a name="line122"></a>  this.multiAxisType_ = [];
-<a name="line123"></a>
-<a name="line124"></a>  /**
-<a name="line125"></a>   * Axis text for each multi-axis in the chart, indexed by the indices from
-<a name="line126"></a>   * multiAxisType_ in a sparse array.
-<a name="line127"></a>   * @type {Object}
-<a name="line128"></a>   * @private
-<a name="line129"></a>   */
-<a name="line130"></a>  this.multiAxisLabelText_ = {};
-<a name="line131"></a>
-<a name="line132"></a>
-<a name="line133"></a>  /**
-<a name="line134"></a>   * Axis position for each multi-axis in the chart, indexed by the indices
-<a name="line135"></a>   * from multiAxisType_ in a sparse array.
-<a name="line136"></a>   * @type {Object}
-<a name="line137"></a>   * @private
-<a name="line138"></a>   */
-<a name="line139"></a>  this.multiAxisLabelPosition_ = {};
-<a name="line140"></a>
-<a name="line141"></a>  /**
-<a name="line142"></a>   * Axis range for each multi-axis in the chart, indexed by the indices from
-<a name="line143"></a>   * multiAxisType_ in a sparse array.
-<a name="line144"></a>   * @type {Object}
-<a name="line145"></a>   * @private
-<a name="line146"></a>   */
-<a name="line147"></a>  this.multiAxisRange_ = {};
-<a name="line148"></a>
-<a name="line149"></a>  /**
-<a name="line150"></a>   * Axis style for each multi-axis in the chart, indexed by the indices from
-<a name="line151"></a>   * multiAxisType_ in a sparse array.
-<a name="line152"></a>   * @type {Object}
-<a name="line153"></a>   * @private
-<a name="line154"></a>   */
-<a name="line155"></a>  this.multiAxisLabelStyle_ = {};
-<a name="line156"></a>
-<a name="line157"></a>  this.setType(type);
-<a name="line158"></a>  this.setSize(opt_width, opt_height);
-<a name="line159"></a>
-<a name="line160"></a>  /**
-<a name="line161"></a>   * Minimum value for the chart (used for normalization). By default,
-<a name="line162"></a>   * this is set to infinity, and is eventually updated to the lowest given
-<a name="line163"></a>   * value in the data. The minimum value is then subtracted from all other
-<a name="line164"></a>   * values. For a pie chart, subtracting the minimum value does not make
-<a name="line165"></a>   * sense, so minValue_ is set to zero because 0 is the additive identity.
-<a name="line166"></a>   * @type {number}
-<a name="line167"></a>   * @private
-<a name="line168"></a>   */
-<a name="line169"></a>  this.minValue_ = this.isPieChart() ? 0 : Infinity;
-<a name="line170"></a>};
-<a name="line171"></a>goog.inherits(goog.ui.ServerChart, goog.ui.Component);
-<a name="line172"></a>
-<a name="line173"></a>
-<a name="line174"></a>/**
-<a name="line175"></a> * Base URI for the chart renderer.
-<a name="line176"></a> * @type {string}
-<a name="line177"></a> */
-<a name="line178"></a>goog.ui.ServerChart.CHART_SERVER_URI = &#39;http://chart.apis.google.com/chart&#39;;
-<a name="line179"></a>
-<a name="line180"></a>
-<a name="line181"></a>/**
-<a name="line182"></a> * Base HTTPS URI for the chart renderer.
-<a name="line183"></a> * @type {string}
-<a name="line184"></a> */
-<a name="line185"></a>goog.ui.ServerChart.CHART_SERVER_HTTPS_URI = &#39;https://www.google.com/chart&#39;;
-<a name="line186"></a>
-<a name="line187"></a>
-<a name="line188"></a>/**
-<a name="line189"></a> * The 0 - 1.0 (&quot;fraction of the range&quot;) value to use when getMinValue() ==
-<a name="line190"></a> * getMaxValue(). This determines, for example, the vertical position
-<a name="line191"></a> * of the line in a flat line-chart.
-<a name="line192"></a> * @type {number}
-<a name="line193"></a> */
-<a name="line194"></a>goog.ui.ServerChart.DEFAULT_NORMALIZATION = 0.5;
-<a name="line195"></a>
-<a name="line196"></a>
-<a name="line197"></a>/**
-<a name="line198"></a> * The upper limit on the length of the chart image URI, after encoding.
-<a name="line199"></a> * If the URI&#39;s length equals or exceeds it, goog.ui.ServerChart.UriTooLongEvent
-<a name="line200"></a> * is dispatched on the goog.ui.ServerChart object.
-<a name="line201"></a> * @type {number}
-<a name="line202"></a> * @private
-<a name="line203"></a> */
-<a name="line204"></a>goog.ui.ServerChart.prototype.uriLengthLimit_ = 2048;
-<a name="line205"></a>
-<a name="line206"></a>
-<a name="line207"></a>/**
-<a name="line208"></a> * Number of gridlines along the X-axis.
-<a name="line209"></a> * @type {number}
-<a name="line210"></a> * @private
-<a name="line211"></a> */
-<a name="line212"></a>goog.ui.ServerChart.prototype.gridX_ = 0;
-<a name="line213"></a>
-<a name="line214"></a>
-<a name="line215"></a>/**
-<a name="line216"></a> * Number of gridlines along the Y-axis.
-<a name="line217"></a> * @type {number}
-<a name="line218"></a> * @private
-<a name="line219"></a> */
-<a name="line220"></a>goog.ui.ServerChart.prototype.gridY_ = 0;
-<a name="line221"></a>
-<a name="line222"></a>
-<a name="line223"></a>/**
-<a name="line224"></a> * Maximum value for the chart (used for normalization). The minimum is
-<a name="line225"></a> * declared in the constructor.
-<a name="line226"></a> * @type {number}
-<a name="line227"></a> * @private
-<a name="line228"></a> */
-<a name="line229"></a>goog.ui.ServerChart.prototype.maxValue_ = -Infinity;
-<a name="line230"></a>
-<a name="line231"></a>
-<a name="line232"></a>/**
-<a name="line233"></a> * Chart title.
-<a name="line234"></a> * @type {string?}
-<a name="line235"></a> * @private
-<a name="line236"></a> */
-<a name="line237"></a>goog.ui.ServerChart.prototype.title_ = null;
-<a name="line238"></a>
-<a name="line239"></a>/**
-<a name="line240"></a> * Chart title size.
-<a name="line241"></a> * @type {number}
-<a name="line242"></a> * @private
-<a name="line243"></a> */
-<a name="line244"></a>goog.ui.ServerChart.prototype.titleSize_ = 13.5;
-<a name="line245"></a>
-<a name="line246"></a>/**
-<a name="line247"></a> * Chart title color.
-<a name="line248"></a> * @type {string}
-<a name="line249"></a> * @private
-<a name="line250"></a> */
-<a name="line251"></a>goog.ui.ServerChart.prototype.titleColor_ = &#39;333333&#39;;
-<a name="line252"></a>
-<a name="line253"></a>/**
-<a name="line254"></a> * Chart legend.
-<a name="line255"></a> * @type {Array.&lt;string&gt;?}
-<a name="line256"></a> * @private
-<a name="line257"></a> */
-<a name="line258"></a>goog.ui.ServerChart.prototype.legend_ = null;
-<a name="line259"></a>
-<a name="line260"></a>
-<a name="line261"></a>/**
-<a name="line262"></a> * ChartServer supports using data sets to position markers. A data set
-<a name="line263"></a> * that is being used for positioning only can be made &quot;invisible&quot;, in other
-<a name="line264"></a> * words, the caller can indicate to ChartServer that ordinary chart elements
-<a name="line265"></a> * (e.g. bars in a bar chart) should not be drawn on the data points of the
-<a name="line266"></a> * invisible data set. Such data sets must be provided at the end of the
-<a name="line267"></a> * chd parameter, and if invisible data sets are being used, the chd
-<a name="line268"></a> * parameter must indicate the number of visible data sets.
-<a name="line269"></a> * @type {number?}
-<a name="line270"></a> * @private
-<a name="line271"></a> */
-<a name="line272"></a>goog.ui.ServerChart.prototype.numVisibleDataSets_ = null;
-<a name="line273"></a>
-<a name="line274"></a>
-<a name="line275"></a>/**
-<a name="line276"></a> * Creates the DOM node (image) needed for the Chart
-<a name="line277"></a> */
-<a name="line278"></a>goog.ui.ServerChart.prototype.createDom = function() {
-<a name="line279"></a>  var size = this.getSize();
-<a name="line280"></a>  this.setElementInternal(this.getDomHelper().createDom(
-<a name="line281"></a>      &#39;img&#39;, {&#39;src&#39;: this.getUri(),
-<a name="line282"></a>      &#39;class&#39;: goog.getCssName(&#39;goog-serverchart-image&#39;),
-<a name="line283"></a>      &#39;width&#39;: size[0], &#39;height&#39;: size[1]}));
-<a name="line284"></a>};
-<a name="line285"></a>
-<a name="line286"></a>
-<a name="line287"></a>/**
-<a name="line288"></a> * Decorate an image already in the DOM.
-<a name="line289"></a> * Expects the following structure:
-<a name="line290"></a> * &lt;pre&gt;
-<a name="line291"></a> *   - img
-<a name="line292"></a> * &lt;/pre&gt;
-<a name="line293"></a> *
-<a name="line294"></a> * @param {Element} img Image to decorate.
-<a name="line295"></a> */
-<a name="line296"></a>goog.ui.ServerChart.prototype.decorateInternal = function(img) {
-<a name="line297"></a>  img.src = this.getUri();
-<a name="line298"></a>  this.setElementInternal(img);
-<a name="line299"></a>};
-<a name="line300"></a>
-<a name="line301"></a>
-<a name="line302"></a>/**
-<a name="line303"></a> * Updates the image if any of the data or settings have changed.
-<a name="line304"></a> */
-<a name="line305"></a>goog.ui.ServerChart.prototype.updateChart = function() {
-<a name="line306"></a>  if (this.getElement()) {
-<a name="line307"></a>    this.getElement().src = this.getUri();
-<a name="line308"></a>  }
-<a name="line309"></a>};
-<a name="line310"></a>
-<a name="line311"></a>
-<a name="line312"></a>/**
-<a name="line313"></a> * Sets the URI of the chart.
-<a name="line314"></a> *
-<a name="line315"></a> * @param {goog.Uri} uri The chart URI.
-<a name="line316"></a> */
-<a name="line317"></a>goog.ui.ServerChart.prototype.setUri = function(uri) {
-<a name="line318"></a>  this.uri_ = uri;
-<a name="line319"></a>};
-<a name="line320"></a>
-<a name="line321"></a>
-<a name="line322"></a>/**
-<a name="line323"></a> * Returns the URI of the chart.
-<a name="line324"></a> *
-<a name="line325"></a> * @return {goog.Uri} The chart URI.
-<a name="line326"></a> */
-<a name="line327"></a>goog.ui.ServerChart.prototype.getUri = function() {
-<a name="line328"></a>  this.computeDataString_();
-<a name="line329"></a>  return this.uri_;
-<a name="line330"></a>};
-<a name="line331"></a>
-<a name="line332"></a>
-<a name="line333"></a>/**
-<a name="line334"></a> * Returns the upper limit on the length of the chart image URI, after encoding.
-<a name="line335"></a> * If the URI&#39;s length equals or exceeds it, goog.ui.ServerChart.UriTooLongEvent
-<a name="line336"></a> * is dispatched on the goog.ui.ServerChart object.
-<a name="line337"></a> *
-<a name="line338"></a> * @return {number} The chart URI length limit.
-<a name="line339"></a> */
-<a name="line340"></a>goog.ui.ServerChart.prototype.getUriLengthLimit = function() {
-<a name="line341"></a>  return this.uriLengthLimit_;
-<a name="line342"></a>};
-<a name="line343"></a>
-<a name="line344"></a>
-<a name="line345"></a>/**
-<a name="line346"></a> * Sets the upper limit on the length of the chart image URI, after encoding.
-<a name="line347"></a> * If the URI&#39;s length equals or exceeds it, goog.ui.ServerChart.UriTooLongEvent
-<a name="line348"></a> * is dispatched on the goog.ui.ServerChart object.
-<a name="line349"></a> *
-<a name="line350"></a> * @param {number} uriLengthLimit The chart URI length limit.
-<a name="line351"></a> */
-<a name="line352"></a>goog.ui.ServerChart.prototype.setUriLengthLimit = function(uriLengthLimit) {
-<a name="line353"></a>  this.uriLengthLimit_ = uriLengthLimit;
-<a name="line354"></a>};
-<a name="line355"></a>
-<a name="line356"></a>
-<a name="line357"></a>/**
-<a name="line358"></a> * Sets the &#39;chg&#39; parameter of the chart Uri.
-<a name="line359"></a> * This is used by various types of charts to specify Grids.
-<a name="line360"></a> *
-<a name="line361"></a> * @param {string} value Value for the &#39;chg&#39; parameter in the chart Uri.
-<a name="line362"></a> */
-<a name="line363"></a>goog.ui.ServerChart.prototype.setGridParameter = function(value) {
-<a name="line364"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.GRID, value);
-<a name="line365"></a>};
-<a name="line366"></a>
-<a name="line367"></a>
-<a name="line368"></a>/**
-<a name="line369"></a> * Returns the &#39;chg&#39; parameter of the chart Uri.
-<a name="line370"></a> * This is used by various types of charts to specify Grids.
-<a name="line371"></a> *
-<a name="line372"></a> * @return {string|undefined} The &#39;chg&#39; parameter of the chart Uri.
-<a name="line373"></a> */
-<a name="line374"></a>goog.ui.ServerChart.prototype.getGridParameter = function() {
-<a name="line375"></a>  return /** @type {string} */ (
-<a name="line376"></a>      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.GRID));
-<a name="line377"></a>};
-<a name="line378"></a>
-<a name="line379"></a>
-<a name="line380"></a>/**
-<a name="line381"></a> * Sets the &#39;chm&#39; parameter of the chart Uri.
-<a name="line382"></a> * This is used by various types of charts to specify Markers.
-<a name="line383"></a> *
-<a name="line384"></a> * @param {string} value Value for the &#39;chm&#39; parameter in the chart Uri.
-<a name="line385"></a> */
-<a name="line386"></a>goog.ui.ServerChart.prototype.setMarkerParameter = function(value) {
-<a name="line387"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.MARKERS, value);
-<a name="line388"></a>};
-<a name="line389"></a>
-<a name="line390"></a>
-<a name="line391"></a>/**
-<a name="line392"></a> * Returns the &#39;chm&#39; parameter of the chart Uri.
-<a name="line393"></a> * This is used by various types of charts to specify Markers.
-<a name="line394"></a> *
-<a name="line395"></a> * @return {string|undefined} The &#39;chm&#39; parameter of the chart Uri.
-<a name="line396"></a> */
-<a name="line397"></a>goog.ui.ServerChart.prototype.getMarkerParameter = function() {
-<a name="line398"></a>  return /** @type {string} */ (
-<a name="line399"></a>      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.MARKERS));
-<a name="line400"></a>};
-<a name="line401"></a>
-<a name="line402"></a>
-<a name="line403"></a>/**
-<a name="line404"></a> * Sets the &#39;chp&#39; parameter of the chart Uri.
-<a name="line405"></a> * This is used by various types of charts to specify certain options.
-<a name="line406"></a> * e.g., finance charts use this to designate which line is the 0 axis.
-<a name="line407"></a> *
-<a name="line408"></a> * @param {string|number} value Value for the &#39;chp&#39; parameter in the chart Uri.
-<a name="line409"></a> */
-<a name="line410"></a>goog.ui.ServerChart.prototype.setMiscParameter = function(value) {
-<a name="line411"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.MISC_PARAMS,
-<a name="line412"></a>                              String(value));
-<a name="line413"></a>};
-<a name="line414"></a>
-<a name="line415"></a>
-<a name="line416"></a>/**
-<a name="line417"></a> * Returns the &#39;chp&#39; parameter of the chart Uri.
-<a name="line418"></a> * This is used by various types of charts to specify certain options.
-<a name="line419"></a> * e.g., finance charts use this to designate which line is the 0 axis.
-<a name="line420"></a> *
-<a name="line421"></a> * @return {string|undefined} The &#39;chp&#39; parameter of the chart Uri.
-<a name="line422"></a> */
-<a name="line423"></a>goog.ui.ServerChart.prototype.getMiscParameter = function() {
-<a name="line424"></a>  return /** @type {string} */ (
-<a name="line425"></a>      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.MISC_PARAMS));
-<a name="line426"></a>};
-<a name="line427"></a>
-<a name="line428"></a>
-<a name="line429"></a>/**
-<a name="line430"></a> * Enum of chart data encoding types
-<a name="line431"></a> *
-<a name="line432"></a> * @enum {string}
-<a name="line433"></a> */
-<a name="line434"></a>goog.ui.ServerChart.EncodingType = {
-<a name="line435"></a>  AUTOMATIC: &#39;&#39;,
-<a name="line436"></a>  EXTENDED: &#39;e&#39;,
-<a name="line437"></a>  SIMPLE: &#39;s&#39;,
-<a name="line438"></a>  TEXT: &#39;t&#39;
-<a name="line439"></a>};
-<a name="line440"></a>
-<a name="line441"></a>
-<a name="line442"></a>/**
-<a name="line443"></a> * Enum of chart types with their short names used by the chartserver.
-<a name="line444"></a> *
-<a name="line445"></a> * @enum {string}
-<a name="line446"></a> */
-<a name="line447"></a>goog.ui.ServerChart.ChartType = {
-<a name="line448"></a>  BAR: &#39;br&#39;,
-<a name="line449"></a>  CLOCK: &#39;cf&#39;,
-<a name="line450"></a>  CONCENTRIC_PIE: &#39;pc&#39;,
-<a name="line451"></a>  FILLEDLINE: &#39;lr&#39;,
-<a name="line452"></a>  FINANCE: &#39;lfi&#39;,
-<a name="line453"></a>  GOOGLEOMETER: &#39;gom&#39;,
-<a name="line454"></a>  HORIZONTAL_GROUPED_BAR: &#39;bhg&#39;,
-<a name="line455"></a>  HORIZONTAL_STACKED_BAR: &#39;bhs&#39;,
-<a name="line456"></a>  LINE: &#39;lc&#39;,
-<a name="line457"></a>  MAP: &#39;t&#39;,
-<a name="line458"></a>  MAPUSA: &#39;tuss&#39;,
-<a name="line459"></a>  MAPWORLD: &#39;twoc&#39;,
-<a name="line460"></a>  PIE: &#39;p&#39;,
-<a name="line461"></a>  PIE3D: &#39;p3&#39;,
-<a name="line462"></a>  RADAR: &#39;rs&#39;,
-<a name="line463"></a>  SCATTER: &#39;s&#39;,
-<a name="line464"></a>  SPARKLINE: &#39;ls&#39;,
-<a name="line465"></a>  VENN: &#39;v&#39;,
-<a name="line466"></a>  VERTICAL_GROUPED_BAR: &#39;bvg&#39;,
-<a name="line467"></a>  VERTICAL_STACKED_BAR: &#39;bvs&#39;,
-<a name="line468"></a>  XYLINE: &#39;lxy&#39;
-<a name="line469"></a>};
-<a name="line470"></a>
-<a name="line471"></a>
-<a name="line472"></a>/**
-<a name="line473"></a> * Enum of multi-axis types.
-<a name="line474"></a> *
-<a name="line475"></a> * @enum {string}
-<a name="line476"></a> */
-<a name="line477"></a>goog.ui.ServerChart.MultiAxisType = {
-<a name="line478"></a>  X_AXIS: &#39;x&#39;,
-<a name="line479"></a>  LEFT_Y_AXIS: &#39;y&#39;,
-<a name="line480"></a>  RIGHT_Y_AXIS: &#39;r&#39;,
-<a name="line481"></a>  TOP_AXIS: &#39;t&#39;
-<a name="line482"></a>};
-<a name="line483"></a>
-<a name="line484"></a>
-<a name="line485"></a>/**
-<a name="line486"></a> * Enum of multi-axis alignments.
-<a name="line487"></a> *
-<a name="line488"></a> * @enum {number}
-<a name="line489"></a> */
-<a name="line490"></a>goog.ui.ServerChart.MultiAxisAlignment = {
-<a name="line491"></a>  ALIGN_LEFT: -1,
-<a name="line492"></a>  ALIGN_CENTER: 0,
-<a name="line493"></a>  ALIGN_RIGHT: 1
-<a name="line494"></a>};
-<a name="line495"></a>
-<a name="line496"></a>
-<a name="line497"></a>/**
-<a name="line498"></a> * Enum of legend positions.
-<a name="line499"></a> *
-<a name="line500"></a> * @enum {string}
-<a name="line501"></a> */
-<a name="line502"></a>goog.ui.ServerChart.LegendPosition = {
-<a name="line503"></a>  TOP: &#39;t&#39;,
-<a name="line504"></a>  BOTTOM: &#39;b&#39;,
-<a name="line505"></a>  LEFT: &#39;l&#39;,
-<a name="line506"></a>  RIGHT: &#39;r&#39;
-<a name="line507"></a>};
-<a name="line508"></a>
-<a name="line509"></a>
-<a name="line510"></a>/**
-<a name="line511"></a> * Enum of line and tick options for an axis.
-<a name="line512"></a> *
-<a name="line513"></a> * @enum {string}
-<a name="line514"></a> */
-<a name="line515"></a>goog.ui.ServerChart.AxisDisplayType = {
-<a name="line516"></a>  LINE_AND_TICKS: &#39;lt&#39;,
-<a name="line517"></a>  LINE: &#39;l&#39;,
-<a name="line518"></a>  TICKS: &#39;t&#39;
-<a name="line519"></a>};
-<a name="line520"></a>
-<a name="line521"></a>
-<a name="line522"></a>/**
-<a name="line523"></a> * Enum of chart maximum values in pixels, as listed at:
-<a name="line524"></a> * http://code.google.com/apis/chart/basics.html
-<a name="line525"></a> *
-<a name="line526"></a> * @enum {number}
-<a name="line527"></a> */
-<a name="line528"></a>goog.ui.ServerChart.MaximumValue = {
-<a name="line529"></a>  WIDTH: 1000,
-<a name="line530"></a>  HEIGHT: 1000,
-<a name="line531"></a>  MAP_WIDTH: 440,
-<a name="line532"></a>  MAP_HEIGHT: 220,
-<a name="line533"></a>  TOTAL_AREA: 300000
-<a name="line534"></a>};
-<a name="line535"></a>
-<a name="line536"></a>
-<a name="line537"></a>/**
-<a name="line538"></a> * Enum of ChartServer URI parameters.
-<a name="line539"></a> *
-<a name="line540"></a> * @enum {string}
-<a name="line541"></a> */
-<a name="line542"></a>goog.ui.ServerChart.UriParam = {
-<a name="line543"></a>  TYPE: &#39;cht&#39;,
-<a name="line544"></a>  SIZE: &#39;chs&#39;,
-<a name="line545"></a>  DATA: &#39;chd&#39;,
-<a name="line546"></a>  X_LABELS: &#39;chl&#39;,
-<a name="line547"></a>  LEFT_Y_LABELS: &#39;chly&#39;,
-<a name="line548"></a>  DATA_LABELS: &#39;chld&#39;,
-<a name="line549"></a>  RIGHT_LABELS: &#39;chlr&#39;,
-<a name="line550"></a>  RIGHT_LABEL_POSITIONS: &#39;chlrp&#39;,
-<a name="line551"></a>  MISC_PARAMS: &#39;chp&#39;,
-<a name="line552"></a>  DATA_COLORS: &#39;chco&#39;,
-<a name="line553"></a>  DATA_SCALING: &#39;chds&#39;,
-<a name="line554"></a>  LEGEND_TEXTS: &#39;chdl&#39;,
-<a name="line555"></a>  LEGEND_POSITION: &#39;chdlp&#39;,
-<a name="line556"></a>  LABEL_COLORS: &#39;chlc&#39;,
-<a name="line557"></a>  BAR_HEIGHT: &#39;chbh&#39;,
-<a name="line558"></a>  LINE_STYLES: &#39;chls&#39;,
-<a name="line559"></a>  GRID: &#39;chg&#39;,
-<a name="line560"></a>  X_AXIS_STYLE: &#39;chx&#39;,
-<a name="line561"></a>  MARKERS: &#39;chm&#39;,
-<a name="line562"></a>  BACKGROUND_FILL: &#39;chf&#39;,
-<a name="line563"></a>  DIGITAL_SIGNATURE: &#39;sig&#39;,
-<a name="line564"></a>  TITLE: &#39;chtt&#39;,
-<a name="line565"></a>  TITLE_FORMAT: &#39;chts&#39;,
-<a name="line566"></a>  LEGEND: &#39;chdl&#39;,
-<a name="line567"></a>  MULTI_AXIS_TYPES: &#39;chxt&#39;,
-<a name="line568"></a>  MULTI_AXIS_LABEL_TEXT: &#39;chxl&#39;,
-<a name="line569"></a>  MULTI_AXIS_LABEL_POSITION: &#39;chxp&#39;,
-<a name="line570"></a>  MULTI_AXIS_RANGE: &#39;chxr&#39;,
-<a name="line571"></a>  MULTI_AXIS_STYLE: &#39;chxs&#39;,
-<a name="line572"></a>  GEOGRAPHICAL_REGION: &#39;chtm&#39;
-<a name="line573"></a>};
-<a name="line574"></a>
-<a name="line575"></a>
-<a name="line576"></a>/**
-<a name="line577"></a> * Sets the background fill.
-<a name="line578"></a> *
-<a name="line579"></a> * @param {Array.&lt;Object&gt;} fill An array of background fill specification
-<a name="line580"></a> *     objects. Each object may have the following properties:
-<a name="line581"></a> *     {string} area The area to fill, either &#39;bg&#39; for background or &#39;c&#39; for
-<a name="line582"></a> *         chart area.  The default is &#39;bg&#39;.
-<a name="line583"></a> *     {string} color (required) The color of the background fill.
-<a name="line584"></a> *     // TODO: Add support for gradient/stripes, which requires
-<a name="line585"></a> *     // a different object structure.
-<a name="line586"></a> */
-<a name="line587"></a>goog.ui.ServerChart.prototype.setBackgroundFill = function(fill) {
-<a name="line588"></a>  var value = [];
-<a name="line589"></a>  goog.array.forEach(fill, function(spec) {
-<a name="line590"></a>    spec.area = spec.area || &#39;bg&#39;;
-<a name="line591"></a>    spec.effect = spec.effect || &#39;s&#39;;
-<a name="line592"></a>    value.push([spec.area, spec.effect, spec.color].join(&#39;,&#39;));
-<a name="line593"></a>  });
-<a name="line594"></a>  value = value.join(&#39;|&#39;);
-<a name="line595"></a>  this.setParameterValue(goog.ui.ServerChart.UriParam.BACKGROUND_FILL, value);
-<a name="line596"></a>};
-<a name="line597"></a>
-<a name="line598"></a>
-<a name="line599"></a>/**
-<a name="line600"></a> * Returns the background fill.
-<a name="line601"></a> *
-<a name="line602"></a> * @return {Array.&lt;Object&gt;} An array of background fill specifications. 
-<a name="line603"></a> *     If the fill specification string is in an unsupported format, the method
-<a name="line604"></a> *    returns an empty array.
-<a name="line605"></a> */
-<a name="line606"></a>goog.ui.ServerChart.prototype.getBackgroundFill = function() {
-<a name="line607"></a>  var value =
-<a name="line608"></a>      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.BACKGROUND_FILL);
-<a name="line609"></a>  var result = [];
-<a name="line610"></a>  if (goog.isDefAndNotNull(value)) {
-<a name="line611"></a>    var fillSpecifications = value.split(&#39;|&#39;);
-<a name="line612"></a>    var valid = true;
-<a name="line613"></a>    goog.array.forEach(fillSpecifications, function(spec) {
-<a name="line614"></a>      spec = spec.split(&#39;,&#39;);
-<a name="line615"></a>      if (valid &amp;&amp; spec[1] == &#39;s&#39;) {
-<a name="line616"></a>        result.push({area: spec[0], effect: spec[1], color: spec[2]});
-<a name="line617"></a>      } else {
-<a name="line618"></a>        // If the format is unsupported, return an empty array.
-<a name="line619"></a>        result = [];
-<a name="line620"></a>        valid = false;
-<a name="line621"></a>      }
-<a name="line622"></a>    });
-<a name="line623"></a>  }
-<a name="line624"></a>  return result;
-<a name="line625"></a>};
-<a name="line626"></a>
-<a name="line627"></a>
-<a name="line628"></a>/**
-<a name="line629"></a> * Sets the encoding type.
-<a name="line630"></a> *
-<a name="line631"></a> * @param {goog.ui.ServerChart.EncodingType} type Desired data encoding type.
-<a name="line632"></a> */
-<a name="line633"></a>goog.ui.ServerChart.prototype.setEncodingType = function(type) {
-<a name="line634"></a>  this.encodingType_ = type;
-<a name="line635"></a>};
-<a name="line636"></a>
-<a name="line637"></a>
-<a name="line638"></a>/**
-<a name="line639"></a> * Gets the encoding type.
-<a name="line640"></a> *
-<a name="line641"></a> * @return {goog.ui.ServerChart.EncodingType} The encoding type.
-<a name="line642"></a> */
-<a name="line643"></a>goog.ui.ServerChart.prototype.getEncodingType = function() {
-<a name="line644"></a>  return this.encodingType_;
-<a name="line645"></a>};
-<a name="line646"></a>
-<a name="line647"></a>
-<a name="line648"></a>/**
-<a name="line649"></a> * Sets the chart type.
-<a name="line650"></a> *
-<a name="line651"></a> * @param {goog.ui.ServerChart.ChartType} type The desired chart type.
-<a name="line652"></a> */
-<a name="line653"></a>goog.ui.ServerChart.prototype.setType = function(type) {
-<a name="line654"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.TYPE, type);
-<a name="line655"></a>};
-<a name="line656"></a>
-<a name="line657"></a>
-<a name="line658"></a>/**
-<a name="line659"></a> * Returns the chart type.
-<a name="line660"></a> *
-<a name="line661"></a> * @return {goog.ui.ServerChart.ChartType} The chart type.
-<a name="line662"></a> */
-<a name="line663"></a>goog.ui.ServerChart.prototype.getType = function() {
-<a name="line664"></a>  return /** @type {goog.ui.ServerChart.ChartType} */ (
-<a name="line665"></a>      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.TYPE));
-<a name="line666"></a>};
-<a name="line667"></a>
-<a name="line668"></a>
-<a name="line669"></a>/**
-<a name="line670"></a> * Sets the chart size.
-<a name="line671"></a> *
-<a name="line672"></a> * @param {number} opt_width Optional chart width, defaults to 300.
-<a name="line673"></a> * @param {number} opt_height Optional chart height, defaults to 150.
-<a name="line674"></a> */
-<a name="line675"></a>goog.ui.ServerChart.prototype.setSize = function(opt_width, opt_height) {
-<a name="line676"></a>  var sizeString = [opt_width || 300, opt_height || 150].join(&#39;x&#39;);
-<a name="line677"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.SIZE, sizeString);
-<a name="line678"></a>};
-<a name="line679"></a>
-<a name="line680"></a>
-<a name="line681"></a>/**
-<a name="line682"></a> * Returns the chart size.
-<a name="line683"></a> *
-<a name="line684"></a> * @return {Array.&lt;string&gt;} [Width, Height].
-<a name="line685"></a> */
-<a name="line686"></a>goog.ui.ServerChart.prototype.getSize = function() {
-<a name="line687"></a>  var sizeStr = this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.SIZE);
-<a name="line688"></a>  return sizeStr.split(&#39;x&#39;);
-<a name="line689"></a>};
-<a name="line690"></a>
-<a name="line691"></a>
-<a name="line692"></a>/**
-<a name="line693"></a> * Sets the minimum value of the chart.
-<a name="line694"></a> *
-<a name="line695"></a> * @param {number} minValue The minimum value of the chart.
-<a name="line696"></a> */
-<a name="line697"></a>goog.ui.ServerChart.prototype.setMinValue = function(minValue) {
-<a name="line698"></a>  this.minValue_ = minValue;
-<a name="line699"></a>};
-<a name="line700"></a>
-<a name="line701"></a>
-<a name="line702"></a>/**
-<a name="line703"></a> * @return {number} The minimum value of the chart.
-<a name="line704"></a> */
-<a name="line705"></a>goog.ui.ServerChart.prototype.getMinValue = function() {
-<a name="line706"></a>  return this.minValue_;
-<a name="line707"></a>};
-<a name="line708"></a>
-<a name="line709"></a>
-<a name="line710"></a>/**
-<a name="line711"></a> * Sets the maximum value of the chart.
-<a name="line712"></a> *
-<a name="line713"></a> * @param {number} maxValue The maximum value of the chart.
-<a name="line714"></a> */
-<a name="line715"></a>goog.ui.ServerChart.prototype.setMaxValue = function(maxValue) {
-<a name="line716"></a>  this.maxValue_ = maxValue;
-<a name="line717"></a>};
-<a name="line718"></a>
-<a name="line719"></a>
-<a name="line720"></a>/**
-<a name="line721"></a> * @return {number} The maximum value of the chart.
-<a name="line722"></a> */
-<a name="line723"></a>goog.ui.ServerChart.prototype.getMaxValue = function() {
-<a name="line724"></a>  return this.maxValue_;
-<a name="line725"></a>};
-<a name="line726"></a>
-<a name="line727"></a>
-<a name="line728"></a>/**
-<a name="line729"></a> * Sets the number of grid lines along the X-axis.
-<a name="line730"></a> *
-<a name="line731"></a> * @param {number} gridlines The number of X-axis grid lines.
-<a name="line732"></a> */
-<a name="line733"></a>goog.ui.ServerChart.prototype.setGridX = function(gridlines) {
-<a name="line734"></a>  // Need data for this to work.
-<a name="line735"></a>  this.gridX_ = gridlines;
-<a name="line736"></a>  this.setGrids_(this.gridX_, this.gridY_);
-<a name="line737"></a>};
-<a name="line738"></a>
-<a name="line739"></a>
-<a name="line740"></a>/**
-<a name="line741"></a> * @return {number} The number of gridlines along the X-axis.
-<a name="line742"></a> */
-<a name="line743"></a>goog.ui.ServerChart.prototype.getGridX = function() {
-<a name="line744"></a>  return this.gridX_;
-<a name="line745"></a>};
-<a name="line746"></a>
-<a name="line747"></a>
-<a name="line748"></a>/**
-<a name="line749"></a> * Sets the number of grid lines along the Y-axis.
-<a name="line750"></a> *
-<a name="line751"></a> * @param {number} gridlines The number of Y-axis grid lines.
-<a name="line752"></a> */
-<a name="line753"></a>goog.ui.ServerChart.prototype.setGridY = function(gridlines) {
-<a name="line754"></a>  // Need data for this to work.
-<a name="line755"></a>  this.gridY_ = gridlines;
-<a name="line756"></a>  this.setGrids_(this.gridX_, this.gridY_);
-<a name="line757"></a>};
-<a name="line758"></a>
-<a name="line759"></a>
-<a name="line760"></a>/**
-<a name="line761"></a> * @return {number} The number of gridlines along the Y-axis.
-<a name="line762"></a> */
-<a name="line763"></a>goog.ui.ServerChart.prototype.getGridY = function() {
-<a name="line764"></a>  return this.gridY_;
-<a name="line765"></a>};
-<a name="line766"></a>
-<a name="line767"></a>
-<a name="line768"></a>/**
-<a name="line769"></a> * Sets the grids for the chart
-<a name="line770"></a> *
-<a name="line771"></a> * @private
-<a name="line772"></a> * @param {number} x The number of grid lines along the x-axis.
-<a name="line773"></a> * @param {number} y The number of grid lines along the y-axis.
-<a name="line774"></a> */
-<a name="line775"></a>goog.ui.ServerChart.prototype.setGrids_ = function(x, y) {
-<a name="line776"></a>  var gridArray = [x == 0 ? 0 : 100 / x,
-<a name="line777"></a>                   y == 0 ? 0 : 100 / y];
-<a name="line778"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.GRID,
-<a name="line779"></a>                              gridArray.join(&#39;,&#39;));
-<a name="line780"></a>};
-<a name="line781"></a>
-<a name="line782"></a>
-<a name="line783"></a>/**
-<a name="line784"></a> * Sets the X Labels for the chart.
-<a name="line785"></a> *
-<a name="line786"></a> * @param {Array.&lt;string&gt;} labels The X Labels for the chart.
-<a name="line787"></a> */
-<a name="line788"></a>goog.ui.ServerChart.prototype.setXLabels = function(labels) {
-<a name="line789"></a>  this.xLabels_ = labels;
-<a name="line790"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.X_LABELS,
-<a name="line791"></a>                              this.xLabels_.join(&#39;|&#39;));
-<a name="line792"></a>};
-<a name="line793"></a>
-<a name="line794"></a>
-<a name="line795"></a>/**
-<a name="line796"></a> * @return {Array.&lt;string&gt;} The X Labels for the chart.
-<a name="line797"></a> */
-<a name="line798"></a>goog.ui.ServerChart.prototype.getXLabels = function() {
-<a name="line799"></a>  return this.xLabels_;
-<a name="line800"></a>};
-<a name="line801"></a>
-<a name="line802"></a>
-<a name="line803"></a>/**
-<a name="line804"></a> * @return {boolean} Whether the chart is a bar chart.
-<a name="line805"></a> */
-<a name="line806"></a>goog.ui.ServerChart.prototype.isBarChart = function() {
-<a name="line807"></a>  var type = this.getType();
-<a name="line808"></a>  return type == goog.ui.ServerChart.ChartType.BAR ||
-<a name="line809"></a>      type == goog.ui.ServerChart.ChartType.HORIZONTAL_GROUPED_BAR ||
-<a name="line810"></a>      type == goog.ui.ServerChart.ChartType.HORIZONTAL_STACKED_BAR ||
-<a name="line811"></a>      type == goog.ui.ServerChart.ChartType.VERTICAL_GROUPED_BAR ||
-<a name="line812"></a>      type == goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR;
-<a name="line813"></a>};
-<a name="line814"></a>
-<a name="line815"></a>
-<a name="line816"></a>/**
-<a name="line817"></a> * @return {boolean} Whether the chart is a pie chart.
-<a name="line818"></a> */
-<a name="line819"></a>goog.ui.ServerChart.prototype.isPieChart = function() {
-<a name="line820"></a>  var type = this.getType();
-<a name="line821"></a>  return type == goog.ui.ServerChart.ChartType.PIE ||
-<a name="line822"></a>      type == goog.ui.ServerChart.ChartType.PIE3D ||
-<a name="line823"></a>      type == goog.ui.ServerChart.ChartType.CONCENTRIC_PIE;
-<a name="line824"></a>};
-<a name="line825"></a>
-<a name="line826"></a>
-<a name="line827"></a>/**
-<a name="line828"></a> * @return {boolean} Whether the chart is a grouped bar chart.
-<a name="line829"></a> */
-<a name="line830"></a>goog.ui.ServerChart.prototype.isGroupedBarChart = function() {
-<a name="line831"></a>  var type = this.getType();
-<a name="line832"></a>  return type == goog.ui.ServerChart.ChartType.HORIZONTAL_GROUPED_BAR ||
-<a name="line833"></a>      type == goog.ui.ServerChart.ChartType.VERTICAL_GROUPED_BAR;
-<a name="line834"></a>};
-<a name="line835"></a>
-<a name="line836"></a>
-<a name="line837"></a>/**
-<a name="line838"></a> * @return {boolean} Whether the chart is a horizontal bar chart.
-<a name="line839"></a> */
-<a name="line840"></a>goog.ui.ServerChart.prototype.isHorizontalBarChart = function() {
-<a name="line841"></a>  var type = this.getType();
-<a name="line842"></a>  return type == goog.ui.ServerChart.ChartType.BAR ||
-<a name="line843"></a>      type == goog.ui.ServerChart.ChartType.HORIZONTAL_GROUPED_BAR ||
-<a name="line844"></a>      type == goog.ui.ServerChart.ChartType.HORIZONTAL_STACKED_BAR;
-<a name="line845"></a>};
-<a name="line846"></a>
-<a name="line847"></a>
-<a name="line848"></a>/**
-<a name="line849"></a> * @return {boolean} Whether the chart is a line chart.
-<a name="line850"></a> */
-<a name="line851"></a>goog.ui.ServerChart.prototype.isLineChart = function() {
-<a name="line852"></a>  var type = this.getType();
-<a name="line853"></a>  return type == goog.ui.ServerChart.ChartType.FILLEDLINE ||
-<a name="line854"></a>      type == goog.ui.ServerChart.ChartType.LINE ||
-<a name="line855"></a>      type == goog.ui.ServerChart.ChartType.SPARKLINE ||
-<a name="line856"></a>      type == goog.ui.ServerChart.ChartType.XYLINE;
-<a name="line857"></a>};
-<a name="line858"></a>
-<a name="line859"></a>
-<a name="line860"></a>/**
-<a name="line861"></a> * @return {boolean} Whether the chart is a map.
-<a name="line862"></a> */
-<a name="line863"></a>goog.ui.ServerChart.prototype.isMap = function() {
-<a name="line864"></a>  var type = this.getType();
-<a name="line865"></a>  return type == goog.ui.ServerChart.ChartType.MAP ||
-<a name="line866"></a>      type == goog.ui.ServerChart.ChartType.MAPUSA ||
-<a name="line867"></a>      type == goog.ui.ServerChart.ChartType.MAPWORLD;
-<a name="line868"></a>};
-<a name="line869"></a>
-<a name="line870"></a>
-<a name="line871"></a>/**
-<a name="line872"></a> * @return {boolean} Whether the chart is a stacked bar chart.
-<a name="line873"></a> */
-<a name="line874"></a>goog.ui.ServerChart.prototype.isStackedBarChart = function() {
-<a name="line875"></a>  var type = this.getType();
-<a name="line876"></a>  return type == goog.ui.ServerChart.ChartType.BAR ||
-<a name="line877"></a>      type == goog.ui.ServerChart.ChartType.HORIZONTAL_STACKED_BAR ||
-<a name="line878"></a>      type == goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR;
-<a name="line879"></a>};
-<a name="line880"></a>
-<a name="line881"></a>
-<a name="line882"></a>/**
-<a name="line883"></a> * @return {boolean} Whether the chart is a vertical bar chart.
-<a name="line884"></a> */
-<a name="line885"></a>goog.ui.ServerChart.prototype.isVerticalBarChart = function() {
-<a name="line886"></a>  var type = this.getType();
-<a name="line887"></a>  return type == goog.ui.ServerChart.ChartType.VERTICAL_GROUPED_BAR ||
-<a name="line888"></a>      type == goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR;
-<a name="line889"></a>};
-<a name="line890"></a>
-<a name="line891"></a>
-<a name="line892"></a>/**
-<a name="line893"></a> * Sets the Left Labels for the chart.
-<a name="line894"></a> * NOTE: The array should start with the lowest value, and then
-<a name="line895"></a> *       move progessively up the axis. So if you want labels
-<a name="line896"></a> *       from 0 to 100 with 0 at bottom of the graph, then you would
-<a name="line897"></a> *       want to pass something like [0,25,50,75,100].
-<a name="line898"></a> *
-<a name="line899"></a> * @param {Array.&lt;string&gt;} labels The Left Labels for the chart.
-<a name="line900"></a> */
-<a name="line901"></a>goog.ui.ServerChart.prototype.setLeftLabels = function(labels) {
-<a name="line902"></a>  this.leftLabels_ = labels;
-<a name="line903"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.LEFT_Y_LABELS,
-<a name="line904"></a>                              this.leftLabels_.reverse().join(&#39;|&#39;));
-<a name="line905"></a>};
-<a name="line906"></a>
-<a name="line907"></a>
-<a name="line908"></a>/**
-<a name="line909"></a> * @return {Array.&lt;string&gt;} The Left Labels for the chart.
-<a name="line910"></a> */
-<a name="line911"></a>goog.ui.ServerChart.prototype.getLeftLabels = function() {
-<a name="line912"></a>  return this.leftLabels_;
-<a name="line913"></a>};
-<a name="line914"></a>
-<a name="line915"></a>
-<a name="line916"></a>/**
-<a name="line917"></a> * Sets the given ChartServer parameter.
-<a name="line918"></a> *
-<a name="line919"></a> * @param {goog.ui.ServerChart.UriParam} key The ChartServer parameter to set.
-<a name="line920"></a> * @param {string} value The value to set for the ChartServer parameter.
-<a name="line921"></a> */
-<a name="line922"></a>goog.ui.ServerChart.prototype.setParameterValue = function(key, value) {
-<a name="line923"></a>  this.uri_.setParameterValue(key, value);
-<a name="line924"></a>};
-<a name="line925"></a>
-<a name="line926"></a>
-<a name="line927"></a>/**
-<a name="line928"></a> * Removes the given ChartServer parameter.
-<a name="line929"></a> *
-<a name="line930"></a> * @param {goog.ui.ServerChart.UriParam} key The ChartServer parameter to
-<a name="line931"></a> *     remove.
-<a name="line932"></a> */
-<a name="line933"></a>goog.ui.ServerChart.prototype.removeParameter = function(key) {
-<a name="line934"></a>  this.uri_.removeParameter(key);
-<a name="line935"></a>};
-<a name="line936"></a>
-<a name="line937"></a>
-<a name="line938"></a>/**
-<a name="line939"></a> * Sets the Right Labels for the chart.
-<a name="line940"></a> * NOTE: The array should start with the lowest value, and then
-<a name="line941"></a> *       move progessively up the axis. So if you want labels
-<a name="line942"></a> *       from 0 to 100 with 0 at bottom of the graph, then you would
-<a name="line943"></a> *       want to pass something like [0,25,50,75,100].
-<a name="line944"></a> *
-<a name="line945"></a> * @param {Array.&lt;string&gt;} labels The Right Labels for the chart.
-<a name="line946"></a> */
-<a name="line947"></a>goog.ui.ServerChart.prototype.setRightLabels = function(labels) {
-<a name="line948"></a>  this.rightLabels_ = labels;
-<a name="line949"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.RIGHT_LABELS,
-<a name="line950"></a>                              this.rightLabels_.reverse().join(&#39;|&#39;));
-<a name="line951"></a>};
-<a name="line952"></a>
-<a name="line953"></a>
-<a name="line954"></a>/**
-<a name="line955"></a> * @return {Array.&lt;string&gt;} The Right Labels for the chart.
-<a name="line956"></a> */
-<a name="line957"></a>goog.ui.ServerChart.prototype.getRightLabels = function() {
-<a name="line958"></a>  return this.rightLabels_;
-<a name="line959"></a>};
-<a name="line960"></a>
-<a name="line961"></a>
-<a name="line962"></a>/**
-<a name="line963"></a> * Sets the position relative to the chart where the legend is to be displayed.
-<a name="line964"></a> *
-<a name="line965"></a> * @param {goog.ui.ServerChart.LegendPosition} value Legend position.
-<a name="line966"></a> */
-<a name="line967"></a>goog.ui.ServerChart.prototype.setLegendPosition = function(value) {
-<a name="line968"></a>  this.uri_.setParameterValue(
-<a name="line969"></a>      goog.ui.ServerChart.UriParam.LEGEND_POSITION, value);
-<a name="line970"></a>};
-<a name="line971"></a>
-<a name="line972"></a>
-<a name="line973"></a>/**
-<a name="line974"></a> * Returns the position relative to the chart where the legend is to be
-<a name="line975"></a> * displayed.
-<a name="line976"></a> *
-<a name="line977"></a> * @return {goog.ui.ServerChart.LegendPosition} Legend position.
-<a name="line978"></a> */
-<a name="line979"></a>goog.ui.ServerChart.prototype.getLegendPosition = function() {
-<a name="line980"></a>  return /** @type {goog.ui.ServerChart.LegendPosition} */ (
-<a name="line981"></a>      this.uri_.getParameterValue(
-<a name="line982"></a>          goog.ui.ServerChart.UriParam.LEGEND_POSITION));
-<a name="line983"></a>};
-<a name="line984"></a>
-<a name="line985"></a>
-<a name="line986"></a>/**
-<a name="line987"></a> * Sets the number of &quot;visible&quot; data sets. All data sets that come after
-<a name="line988"></a> * the visible data set are not drawn as part of the chart. Instead, they
-<a name="line989"></a> * are available for positioning markers.
-<a name="line990"></a>
-<a name="line991"></a> * @param {number?} n The number of visible data sets, or null if all data
-<a name="line992"></a> * sets are to be visible.
-<a name="line993"></a> */
-<a name="line994"></a>goog.ui.ServerChart.prototype.setNumVisibleDataSets = function(n) {
-<a name="line995"></a>  this.numVisibleDataSets_ = n;
-<a name="line996"></a>};
-<a name="line997"></a>
-<a name="line998"></a>
-<a name="line999"></a>/**
-<a name="line1000"></a> * Returns the number of &quot;visible&quot; data sets. All data sets that come after
-<a name="line1001"></a> * the visible data set are not drawn as part of the chart. Instead, they
-<a name="line1002"></a> * are available for positioning markers.
-<a name="line1003"></a> *
-<a name="line1004"></a> * @return {number?} The number of visible data sets, or null if all data
-<a name="line1005"></a> * sets are visible.
-<a name="line1006"></a> */
-<a name="line1007"></a>goog.ui.ServerChart.prototype.getNumVisibleDataSets = function() {
-<a name="line1008"></a>  return this.numVisibleDataSets_;
-<a name="line1009"></a>};
-<a name="line1010"></a>
-<a name="line1011"></a>
-<a name="line1012"></a>/**
-<a name="line1013"></a> * Sets the weight function for a Venn Diagram along with the associated
-<a name="line1014"></a> *     colors and legend text. Weights are assigned as follows:
-<a name="line1015"></a> *     weights[0] is relative area of circle A.
-<a name="line1016"></a> *     weights[1] is relative area of circle B.
-<a name="line1017"></a> *     weights[2] is relative area of circle C.
-<a name="line1018"></a> *     weights[3] is relative area of overlap of circles A and B.
-<a name="line1019"></a> *     weights[4] is relative area of overlap of circles A and C.
-<a name="line1020"></a> *     weights[5] is relative area of overlap of circles B and C.
-<a name="line1021"></a> *     weights[6] is relative area of overlap of circles A, B and C.
-<a name="line1022"></a> * For a two circle Venn Diagram the weights are assigned as follows:
-<a name="line1023"></a> *     weights[0] is relative area of circle A.
-<a name="line1024"></a> *     weights[1] is relative area of circle B.
-<a name="line1025"></a> *     weights[2] is relative area of overlap of circles A and B.
-<a name="line1026"></a> *
-<a name="line1027"></a> * @param {Array.&lt;number&gt;} weights The relative weights of the circles.
-<a name="line1028"></a> * @param {Array.&lt;string&gt;} opt_legendText The legend labels for the circles.
-<a name="line1029"></a> * @param {Array.&lt;string&gt;} opt_colors The colors for the circles.
-<a name="line1030"></a> */
-<a name="line1031"></a>goog.ui.ServerChart.prototype.setVennSeries = function(
-<a name="line1032"></a>    weights, opt_legendText, opt_colors) {
-<a name="line1033"></a>  if (this.getType() != goog.ui.ServerChart.ChartType.VENN) {
-<a name="line1034"></a>    throw Error(&#39;Can only set a weight function for a Venn diagram.&#39;);
-<a name="line1035"></a>  }
-<a name="line1036"></a>  var dataMin = this.arrayMin_(weights);
-<a name="line1037"></a>  if (dataMin &lt; this.minValue_) {
-<a name="line1038"></a>    this.minValue_ = dataMin;
-<a name="line1039"></a>  }
-<a name="line1040"></a>  var dataMax = this.arrayMax_(weights);
-<a name="line1041"></a>  if (dataMax &gt; this.maxValue_) {
-<a name="line1042"></a>    this.maxValue_ = dataMax;
-<a name="line1043"></a>  }
-<a name="line1044"></a>  if (goog.isDef(opt_legendText)) {
-<a name="line1045"></a>    goog.array.forEach(
-<a name="line1046"></a>        opt_legendText,
-<a name="line1047"></a>        goog.bind(function(legend) {
-<a name="line1048"></a>          this.setLegendTexts_.push(legend);
-<a name="line1049"></a>        }, this));
-<a name="line1050"></a>    this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.LEGEND_TEXTS,
-<a name="line1051"></a>                                this.setLegendTexts_.join(&#39;|&#39;));
-<a name="line1052"></a>  }
-<a name="line1053"></a>  // If the caller only gave three weights, then they wanted a two circle
-<a name="line1054"></a>  // Venn Diagram. Create a 3 circle weight function where circle C has
-<a name="line1055"></a>  // area zero.
-<a name="line1056"></a>  if (weights.length == 3) {
-<a name="line1057"></a>    weights[3] = weights[2];
-<a name="line1058"></a>    weights[2] = 0.0;
-<a name="line1059"></a>  }
-<a name="line1060"></a>  this.dataSets_.push(weights);
-<a name="line1061"></a>  if (goog.isDef(opt_colors)) {
-<a name="line1062"></a>    goog.array.forEach(opt_colors, goog.bind(function(color) {
-<a name="line1063"></a>      this.setColors_.push(color);
-<a name="line1064"></a>    }, this));
-<a name="line1065"></a>    this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.DATA_COLORS,
-<a name="line1066"></a>                                this.setColors_.join(&#39;,&#39;));
-<a name="line1067"></a>  }
-<a name="line1068"></a>};
-<a name="line1069"></a>
-<a name="line1070"></a>
-<a name="line1071"></a>/**
-<a name="line1072"></a> * Sets the title of the chart.
-<a name="line1073"></a> *
-<a name="line1074"></a> * @param {string} title The chart title.
-<a name="line1075"></a> */
-<a name="line1076"></a>goog.ui.ServerChart.prototype.setTitle = function(title) {
-<a name="line1077"></a>  this.title_ = title;
-<a name="line1078"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.TITLE,
-<a name="line1079"></a>                              this.title_.replace(/\n/g, &#39;|&#39;));
-<a name="line1080"></a>};
-<a name="line1081"></a>
-<a name="line1082"></a>
-<a name="line1083"></a>/**
-<a name="line1084"></a> * Sets the size of the chart title.
-<a name="line1085"></a> *
-<a name="line1086"></a> * @param {number} size The title size, in points.
-<a name="line1087"></a> */
-<a name="line1088"></a>goog.ui.ServerChart.prototype.setTitleSize = function(size) {
-<a name="line1089"></a>  this.titleSize_ = size;
-<a name="line1090"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.TITLE_FORMAT,
-<a name="line1091"></a>                              this.titleColor_ + &#39;,&#39; + this.titleSize_);
-<a name="line1092"></a>};
-<a name="line1093"></a>
-<a name="line1094"></a>
-<a name="line1095"></a>/**
-<a name="line1096"></a> * @return {number} size The title size, in points.
-<a name="line1097"></a> */
-<a name="line1098"></a>goog.ui.ServerChart.prototype.getTitleSize = function() {
-<a name="line1099"></a>  return this.titleSize_;
-<a name="line1100"></a>};
-<a name="line1101"></a>
-<a name="line1102"></a>
-<a name="line1103"></a>/**
-<a name="line1104"></a> * Sets the color of the chart title.
-<a name="line1105"></a> *
-<a name="line1106"></a> * NOTE: The color string should NOT have a &#39;#&#39; at the beginning of it.
+<a name="line17"></a> * @fileoverview Component for generating chart PNGs using Google Chart Server.
+<a name="line18"></a> *
+<a name="line19"></a> * @see ../demos/serverchart.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>/**
+<a name="line24"></a> * Namespace for chart functions
+<a name="line25"></a> */
+<a name="line26"></a>goog.provide(&#39;goog.ui.ServerChart&#39;);
+<a name="line27"></a>goog.provide(&#39;goog.ui.ServerChart.AxisDisplayType&#39;);
+<a name="line28"></a>goog.provide(&#39;goog.ui.ServerChart.ChartType&#39;);
+<a name="line29"></a>goog.provide(&#39;goog.ui.ServerChart.EncodingType&#39;);
+<a name="line30"></a>goog.provide(&#39;goog.ui.ServerChart.Event&#39;);
+<a name="line31"></a>goog.provide(&#39;goog.ui.ServerChart.LegendPosition&#39;);
+<a name="line32"></a>goog.provide(&#39;goog.ui.ServerChart.MaximumValue&#39;);
+<a name="line33"></a>goog.provide(&#39;goog.ui.ServerChart.MultiAxisAlignment&#39;);
+<a name="line34"></a>goog.provide(&#39;goog.ui.ServerChart.MultiAxisType&#39;);
+<a name="line35"></a>goog.provide(&#39;goog.ui.ServerChart.UriParam&#39;);
+<a name="line36"></a>goog.provide(&#39;goog.ui.ServerChart.UriTooLongEvent&#39;);
+<a name="line37"></a>
+<a name="line38"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line39"></a>goog.require(&#39;goog.array&#39;);
+<a name="line40"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line41"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line42"></a>goog.require(&#39;goog.string&#39;);
+<a name="line43"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Will construct a chart using Google&#39;s chartserver.
+<a name="line48"></a> *
+<a name="line49"></a> * @param {goog.ui.ServerChart.ChartType} type The chart type.
+<a name="line50"></a> * @param {number} opt_width The width of the chart.
+<a name="line51"></a> * @param {number} opt_height The height of the chart.
+<a name="line52"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM Helper.
+<a name="line53"></a> * @param {string} opt_uri Optional uri used to connect to the chart server, if
+<a name="line54"></a> *     different than goog.ui.ServerChart.CHART_SERVER_URI.
+<a name="line55"></a> * @constructor
+<a name="line56"></a> * @extends {goog.ui.Component}
+<a name="line57"></a> */
+<a name="line58"></a>goog.ui.ServerChart = function(type, opt_width, opt_height, opt_domHelper,
+<a name="line59"></a>    opt_uri) {
+<a name="line60"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line61"></a>
+<a name="line62"></a>  /**
+<a name="line63"></a>   * Image URI.
+<a name="line64"></a>   * @type {goog.Uri}
+<a name="line65"></a>   * @private
+<a name="line66"></a>   */
+<a name="line67"></a>  this.uri_ = new goog.Uri(opt_uri || goog.ui.ServerChart.CHART_SERVER_URI);
+<a name="line68"></a>
+<a name="line69"></a>  /**
+<a name="line70"></a>   * Encoding method for the URI data format.
+<a name="line71"></a>   * @type {goog.ui.ServerChart.EncodingType}
+<a name="line72"></a>   * @private
+<a name="line73"></a>   */
+<a name="line74"></a>  this.encodingType_ = goog.ui.ServerChart.EncodingType.AUTOMATIC;
+<a name="line75"></a>
+<a name="line76"></a>  /**
+<a name="line77"></a>   * Two-dimensional array of the data sets on the chart.
+<a name="line78"></a>   * @type {Array.&lt;Array.&lt;number&gt;&gt;}
+<a name="line79"></a>   * @private
+<a name="line80"></a>   */
+<a name="line81"></a>  this.dataSets_ = [];
+<a name="line82"></a>
+<a name="line83"></a>  /**
+<a name="line84"></a>   * Colors for each data set.
+<a name="line85"></a>   * @type {Array.&lt;string&gt;}
+<a name="line86"></a>   * @private
+<a name="line87"></a>   */
+<a name="line88"></a>  this.setColors_ = [];
+<a name="line89"></a>
+<a name="line90"></a>  /**
+<a name="line91"></a>   * Legend texts for each data set.
+<a name="line92"></a>   * @type {Array.&lt;string&gt;}
+<a name="line93"></a>   * @private
+<a name="line94"></a>   */
+<a name="line95"></a>  this.setLegendTexts_ = [];
+<a name="line96"></a>
+<a name="line97"></a>  /**
+<a name="line98"></a>   * Labels on the X-axis.
+<a name="line99"></a>   * @type {Array.&lt;string&gt;}
+<a name="line100"></a>   * @private
+<a name="line101"></a>   */
+<a name="line102"></a>  this.xLabels_ = [];
+<a name="line103"></a>
+<a name="line104"></a>  /**
+<a name="line105"></a>   * Labels on the left along the Y-axis.
+<a name="line106"></a>   * @type {Array.&lt;string&gt;}
+<a name="line107"></a>   * @private
+<a name="line108"></a>   */
+<a name="line109"></a>  this.leftLabels_ = [];
+<a name="line110"></a>
+<a name="line111"></a>  /**
+<a name="line112"></a>   * Labels on the right along the Y-axis.
+<a name="line113"></a>   * @type {Array.&lt;string&gt;}
+<a name="line114"></a>   * @private
+<a name="line115"></a>   */
+<a name="line116"></a>  this.rightLabels_ = [];
+<a name="line117"></a>
+<a name="line118"></a>  /**
+<a name="line119"></a>   * Axis type for each multi-axis in the chart. The indices into this array
+<a name="line120"></a>   * also work as the reference index for all other multi-axis properties.
+<a name="line121"></a>   * @type {Array.&lt;goog.ui.ServerChart.MultiAxisType&gt;}
+<a name="line122"></a>   * @private
+<a name="line123"></a>   */
+<a name="line124"></a>  this.multiAxisType_ = [];
+<a name="line125"></a>
+<a name="line126"></a>  /**
+<a name="line127"></a>   * Axis text for each multi-axis in the chart, indexed by the indices from
+<a name="line128"></a>   * multiAxisType_ in a sparse array.
+<a name="line129"></a>   * @type {Object}
+<a name="line130"></a>   * @private
+<a name="line131"></a>   */
+<a name="line132"></a>  this.multiAxisLabelText_ = {};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>  /**
+<a name="line136"></a>   * Axis position for each multi-axis in the chart, indexed by the indices
+<a name="line137"></a>   * from multiAxisType_ in a sparse array.
+<a name="line138"></a>   * @type {Object}
+<a name="line139"></a>   * @private
+<a name="line140"></a>   */
+<a name="line141"></a>  this.multiAxisLabelPosition_ = {};
+<a name="line142"></a>
+<a name="line143"></a>  /**
+<a name="line144"></a>   * Axis range for each multi-axis in the chart, indexed by the indices from
+<a name="line145"></a>   * multiAxisType_ in a sparse array.
+<a name="line146"></a>   * @type {Object}
+<a name="line147"></a>   * @private
+<a name="line148"></a>   */
+<a name="line149"></a>  this.multiAxisRange_ = {};
+<a name="line150"></a>
+<a name="line151"></a>  /**
+<a name="line152"></a>   * Axis style for each multi-axis in the chart, indexed by the indices from
+<a name="line153"></a>   * multiAxisType_ in a sparse array.
+<a name="line154"></a>   * @type {Object}
+<a name="line155"></a>   * @private
+<a name="line156"></a>   */
+<a name="line157"></a>  this.multiAxisLabelStyle_ = {};
+<a name="line158"></a>
+<a name="line159"></a>  this.setType(type);
+<a name="line160"></a>  this.setSize(opt_width, opt_height);
+<a name="line161"></a>
+<a name="line162"></a>  /**
+<a name="line163"></a>   * Minimum value for the chart (used for normalization). By default,
+<a name="line164"></a>   * this is set to infinity, and is eventually updated to the lowest given
+<a name="line165"></a>   * value in the data. The minimum value is then subtracted from all other
+<a name="line166"></a>   * values. For a pie chart, subtracting the minimum value does not make
+<a name="line167"></a>   * sense, so minValue_ is set to zero because 0 is the additive identity.
+<a name="line168"></a>   * @type {number}
+<a name="line169"></a>   * @private
+<a name="line170"></a>   */
+<a name="line171"></a>  this.minValue_ = this.isPieChart() ? 0 : Infinity;
+<a name="line172"></a>};
+<a name="line173"></a>goog.inherits(goog.ui.ServerChart, goog.ui.Component);
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Base URI for the chart renderer.
+<a name="line178"></a> * @type {string}
+<a name="line179"></a> */
+<a name="line180"></a>goog.ui.ServerChart.CHART_SERVER_URI = &#39;http://chart.apis.google.com/chart&#39;;
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Base HTTPS URI for the chart renderer.
+<a name="line185"></a> * @type {string}
+<a name="line186"></a> */
+<a name="line187"></a>goog.ui.ServerChart.CHART_SERVER_HTTPS_URI = &#39;https://www.google.com/chart&#39;;
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * The 0 - 1.0 (&quot;fraction of the range&quot;) value to use when getMinValue() ==
+<a name="line192"></a> * getMaxValue(). This determines, for example, the vertical position
+<a name="line193"></a> * of the line in a flat line-chart.
+<a name="line194"></a> * @type {number}
+<a name="line195"></a> */
+<a name="line196"></a>goog.ui.ServerChart.DEFAULT_NORMALIZATION = 0.5;
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * The upper limit on the length of the chart image URI, after encoding.
+<a name="line201"></a> * If the URI&#39;s length equals or exceeds it, goog.ui.ServerChart.UriTooLongEvent
+<a name="line202"></a> * is dispatched on the goog.ui.ServerChart object.
+<a name="line203"></a> * @type {number}
+<a name="line204"></a> * @private
+<a name="line205"></a> */
+<a name="line206"></a>goog.ui.ServerChart.prototype.uriLengthLimit_ = 2048;
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Number of gridlines along the X-axis.
+<a name="line211"></a> * @type {number}
+<a name="line212"></a> * @private
+<a name="line213"></a> */
+<a name="line214"></a>goog.ui.ServerChart.prototype.gridX_ = 0;
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * Number of gridlines along the Y-axis.
+<a name="line219"></a> * @type {number}
+<a name="line220"></a> * @private
+<a name="line221"></a> */
+<a name="line222"></a>goog.ui.ServerChart.prototype.gridY_ = 0;
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * Maximum value for the chart (used for normalization). The minimum is
+<a name="line227"></a> * declared in the constructor.
+<a name="line228"></a> * @type {number}
+<a name="line229"></a> * @private
+<a name="line230"></a> */
+<a name="line231"></a>goog.ui.ServerChart.prototype.maxValue_ = -Infinity;
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>/**
+<a name="line235"></a> * Chart title.
+<a name="line236"></a> * @type {string?}
+<a name="line237"></a> * @private
+<a name="line238"></a> */
+<a name="line239"></a>goog.ui.ServerChart.prototype.title_ = null;
+<a name="line240"></a>
+<a name="line241"></a>/**
+<a name="line242"></a> * Chart title size.
+<a name="line243"></a> * @type {number}
+<a name="line244"></a> * @private
+<a name="line245"></a> */
+<a name="line246"></a>goog.ui.ServerChart.prototype.titleSize_ = 13.5;
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * Chart title color.
+<a name="line250"></a> * @type {string}
+<a name="line251"></a> * @private
+<a name="line252"></a> */
+<a name="line253"></a>goog.ui.ServerChart.prototype.titleColor_ = &#39;333333&#39;;
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * Chart legend.
+<a name="line257"></a> * @type {Array.&lt;string&gt;?}
+<a name="line258"></a> * @private
+<a name="line259"></a> */
+<a name="line260"></a>goog.ui.ServerChart.prototype.legend_ = null;
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * ChartServer supports using data sets to position markers. A data set
+<a name="line265"></a> * that is being used for positioning only can be made &quot;invisible&quot;, in other
+<a name="line266"></a> * words, the caller can indicate to ChartServer that ordinary chart elements
+<a name="line267"></a> * (e.g. bars in a bar chart) should not be drawn on the data points of the
+<a name="line268"></a> * invisible data set. Such data sets must be provided at the end of the
+<a name="line269"></a> * chd parameter, and if invisible data sets are being used, the chd
+<a name="line270"></a> * parameter must indicate the number of visible data sets.
+<a name="line271"></a> * @type {number?}
+<a name="line272"></a> * @private
+<a name="line273"></a> */
+<a name="line274"></a>goog.ui.ServerChart.prototype.numVisibleDataSets_ = null;
+<a name="line275"></a>
+<a name="line276"></a>
+<a name="line277"></a>/**
+<a name="line278"></a> * Creates the DOM node (image) needed for the Chart
+<a name="line279"></a> */
+<a name="line280"></a>goog.ui.ServerChart.prototype.createDom = function() {
+<a name="line281"></a>  var size = this.getSize();
+<a name="line282"></a>  this.setElementInternal(this.getDomHelper().createDom(
+<a name="line283"></a>      &#39;img&#39;, {&#39;src&#39;: this.getUri(),
+<a name="line284"></a>      &#39;class&#39;: goog.getCssName(&#39;goog-serverchart-image&#39;),
+<a name="line285"></a>      &#39;width&#39;: size[0], &#39;height&#39;: size[1]}));
+<a name="line286"></a>};
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * Decorate an image already in the DOM.
+<a name="line291"></a> * Expects the following structure:
+<a name="line292"></a> * &lt;pre&gt;
+<a name="line293"></a> *   - img
+<a name="line294"></a> * &lt;/pre&gt;
+<a name="line295"></a> *
+<a name="line296"></a> * @param {Element} img Image to decorate.
+<a name="line297"></a> */
+<a name="line298"></a>goog.ui.ServerChart.prototype.decorateInternal = function(img) {
+<a name="line299"></a>  img.src = this.getUri();
+<a name="line300"></a>  this.setElementInternal(img);
+<a name="line301"></a>};
+<a name="line302"></a>
+<a name="line303"></a>
+<a name="line304"></a>/**
+<a name="line305"></a> * Updates the image if any of the data or settings have changed.
+<a name="line306"></a> */
+<a name="line307"></a>goog.ui.ServerChart.prototype.updateChart = function() {
+<a name="line308"></a>  if (this.getElement()) {
+<a name="line309"></a>    this.getElement().src = this.getUri();
+<a name="line310"></a>  }
+<a name="line311"></a>};
+<a name="line312"></a>
+<a name="line313"></a>
+<a name="line314"></a>/**
+<a name="line315"></a> * Sets the URI of the chart.
+<a name="line316"></a> *
+<a name="line317"></a> * @param {goog.Uri} uri The chart URI.
+<a name="line318"></a> */
+<a name="line319"></a>goog.ui.ServerChart.prototype.setUri = function(uri) {
+<a name="line320"></a>  this.uri_ = uri;
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Returns the URI of the chart.
+<a name="line326"></a> *
+<a name="line327"></a> * @return {goog.Uri} The chart URI.
+<a name="line328"></a> */
+<a name="line329"></a>goog.ui.ServerChart.prototype.getUri = function() {
+<a name="line330"></a>  this.computeDataString_();
+<a name="line331"></a>  return this.uri_;
+<a name="line332"></a>};
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * Returns the upper limit on the length of the chart image URI, after encoding.
+<a name="line337"></a> * If the URI&#39;s length equals or exceeds it, goog.ui.ServerChart.UriTooLongEvent
+<a name="line338"></a> * is dispatched on the goog.ui.ServerChart object.
+<a name="line339"></a> *
+<a name="line340"></a> * @return {number} The chart URI length limit.
+<a name="line341"></a> */
+<a name="line342"></a>goog.ui.ServerChart.prototype.getUriLengthLimit = function() {
+<a name="line343"></a>  return this.uriLengthLimit_;
+<a name="line344"></a>};
+<a name="line345"></a>
+<a name="line346"></a>
+<a name="line347"></a>/**
+<a name="line348"></a> * Sets the upper limit on the length of the chart image URI, after encoding.
+<a name="line349"></a> * If the URI&#39;s length equals or exceeds it, goog.ui.ServerChart.UriTooLongEvent
+<a name="line350"></a> * is dispatched on the goog.ui.ServerChart object.
+<a name="line351"></a> *
+<a name="line352"></a> * @param {number} uriLengthLimit The chart URI length limit.
+<a name="line353"></a> */
+<a name="line354"></a>goog.ui.ServerChart.prototype.setUriLengthLimit = function(uriLengthLimit) {
+<a name="line355"></a>  this.uriLengthLimit_ = uriLengthLimit;
+<a name="line356"></a>};
+<a name="line357"></a>
+<a name="line358"></a>
+<a name="line359"></a>/**
+<a name="line360"></a> * Sets the &#39;chg&#39; parameter of the chart Uri.
+<a name="line361"></a> * This is used by various types of charts to specify Grids.
+<a name="line362"></a> *
+<a name="line363"></a> * @param {string} value Value for the &#39;chg&#39; parameter in the chart Uri.
+<a name="line364"></a> */
+<a name="line365"></a>goog.ui.ServerChart.prototype.setGridParameter = function(value) {
+<a name="line366"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.GRID, value);
+<a name="line367"></a>};
+<a name="line368"></a>
+<a name="line369"></a>
+<a name="line370"></a>/**
+<a name="line371"></a> * Returns the &#39;chg&#39; parameter of the chart Uri.
+<a name="line372"></a> * This is used by various types of charts to specify Grids.
+<a name="line373"></a> *
+<a name="line374"></a> * @return {string|undefined} The &#39;chg&#39; parameter of the chart Uri.
+<a name="line375"></a> */
+<a name="line376"></a>goog.ui.ServerChart.prototype.getGridParameter = function() {
+<a name="line377"></a>  return /** @type {string} */ (
+<a name="line378"></a>      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.GRID));
+<a name="line379"></a>};
+<a name="line380"></a>
+<a name="line381"></a>
+<a name="line382"></a>/**
+<a name="line383"></a> * Sets the &#39;chm&#39; parameter of the chart Uri.
+<a name="line384"></a> * This is used by various types of charts to specify Markers.
+<a name="line385"></a> *
+<a name="line386"></a> * @param {string} value Value for the &#39;chm&#39; parameter in the chart Uri.
+<a name="line387"></a> */
+<a name="line388"></a>goog.ui.ServerChart.prototype.setMarkerParameter = function(value) {
+<a name="line389"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.MARKERS, value);
+<a name="line390"></a>};
+<a name="line391"></a>
+<a name="line392"></a>
+<a name="line393"></a>/**
+<a name="line394"></a> * Returns the &#39;chm&#39; parameter of the chart Uri.
+<a name="line395"></a> * This is used by various types of charts to specify Markers.
+<a name="line396"></a> *
+<a name="line397"></a> * @return {string|undefined} The &#39;chm&#39; parameter of the chart Uri.
+<a name="line398"></a> */
+<a name="line399"></a>goog.ui.ServerChart.prototype.getMarkerParameter = function() {
+<a name="line400"></a>  return /** @type {string} */ (
+<a name="line401"></a>      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.MARKERS));
+<a name="line402"></a>};
+<a name="line403"></a>
+<a name="line404"></a>
+<a name="line405"></a>/**
+<a name="line406"></a> * Sets the &#39;chp&#39; parameter of the chart Uri.
+<a name="line407"></a> * This is used by various types of charts to specify certain options.
+<a name="line408"></a> * e.g., finance charts use this to designate which line is the 0 axis.
+<a name="line409"></a> *
+<a name="line410"></a> * @param {string|number} value Value for the &#39;chp&#39; parameter in the chart Uri.
+<a name="line411"></a> */
+<a name="line412"></a>goog.ui.ServerChart.prototype.setMiscParameter = function(value) {
+<a name="line413"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.MISC_PARAMS,
+<a name="line414"></a>                              String(value));
+<a name="line415"></a>};
+<a name="line416"></a>
+<a name="line417"></a>
+<a name="line418"></a>/**
+<a name="line419"></a> * Returns the &#39;chp&#39; parameter of the chart Uri.
+<a name="line420"></a> * This is used by various types of charts to specify certain options.
+<a name="line421"></a> * e.g., finance charts use this to designate which line is the 0 axis.
+<a name="line422"></a> *
+<a name="line423"></a> * @return {string|undefined} The &#39;chp&#39; parameter of the chart Uri.
+<a name="line424"></a> */
+<a name="line425"></a>goog.ui.ServerChart.prototype.getMiscParameter = function() {
+<a name="line426"></a>  return /** @type {string} */ (
+<a name="line427"></a>      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.MISC_PARAMS));
+<a name="line428"></a>};
+<a name="line429"></a>
+<a name="line430"></a>
+<a name="line431"></a>/**
+<a name="line432"></a> * Enum of chart data encoding types
+<a name="line433"></a> *
+<a name="line434"></a> * @enum {string}
+<a name="line435"></a> */
+<a name="line436"></a>goog.ui.ServerChart.EncodingType = {
+<a name="line437"></a>  AUTOMATIC: &#39;&#39;,
+<a name="line438"></a>  EXTENDED: &#39;e&#39;,
+<a name="line439"></a>  SIMPLE: &#39;s&#39;,
+<a name="line440"></a>  TEXT: &#39;t&#39;
+<a name="line441"></a>};
+<a name="line442"></a>
+<a name="line443"></a>
+<a name="line444"></a>/**
+<a name="line445"></a> * Enum of chart types with their short names used by the chartserver.
+<a name="line446"></a> *
+<a name="line447"></a> * @enum {string}
+<a name="line448"></a> */
+<a name="line449"></a>goog.ui.ServerChart.ChartType = {
+<a name="line450"></a>  BAR: &#39;br&#39;,
+<a name="line451"></a>  CLOCK: &#39;cf&#39;,
+<a name="line452"></a>  CONCENTRIC_PIE: &#39;pc&#39;,
+<a name="line453"></a>  FILLEDLINE: &#39;lr&#39;,
+<a name="line454"></a>  FINANCE: &#39;lfi&#39;,
+<a name="line455"></a>  GOOGLEOMETER: &#39;gom&#39;,
+<a name="line456"></a>  HORIZONTAL_GROUPED_BAR: &#39;bhg&#39;,
+<a name="line457"></a>  HORIZONTAL_STACKED_BAR: &#39;bhs&#39;,
+<a name="line458"></a>  LINE: &#39;lc&#39;,
+<a name="line459"></a>  MAP: &#39;t&#39;,
+<a name="line460"></a>  MAPUSA: &#39;tuss&#39;,
+<a name="line461"></a>  MAPWORLD: &#39;twoc&#39;,
+<a name="line462"></a>  PIE: &#39;p&#39;,
+<a name="line463"></a>  PIE3D: &#39;p3&#39;,
+<a name="line464"></a>  RADAR: &#39;rs&#39;,
+<a name="line465"></a>  SCATTER: &#39;s&#39;,
+<a name="line466"></a>  SPARKLINE: &#39;ls&#39;,
+<a name="line467"></a>  VENN: &#39;v&#39;,
+<a name="line468"></a>  VERTICAL_GROUPED_BAR: &#39;bvg&#39;,
+<a name="line469"></a>  VERTICAL_STACKED_BAR: &#39;bvs&#39;,
+<a name="line470"></a>  XYLINE: &#39;lxy&#39;
+<a name="line471"></a>};
+<a name="line472"></a>
+<a name="line473"></a>
+<a name="line474"></a>/**
+<a name="line475"></a> * Enum of multi-axis types.
+<a name="line476"></a> *
+<a name="line477"></a> * @enum {string}
+<a name="line478"></a> */
+<a name="line479"></a>goog.ui.ServerChart.MultiAxisType = {
+<a name="line480"></a>  X_AXIS: &#39;x&#39;,
+<a name="line481"></a>  LEFT_Y_AXIS: &#39;y&#39;,
+<a name="line482"></a>  RIGHT_Y_AXIS: &#39;r&#39;,
+<a name="line483"></a>  TOP_AXIS: &#39;t&#39;
+<a name="line484"></a>};
+<a name="line485"></a>
+<a name="line486"></a>
+<a name="line487"></a>/**
+<a name="line488"></a> * Enum of multi-axis alignments.
+<a name="line489"></a> *
+<a name="line490"></a> * @enum {number}
+<a name="line491"></a> */
+<a name="line492"></a>goog.ui.ServerChart.MultiAxisAlignment = {
+<a name="line493"></a>  ALIGN_LEFT: -1,
+<a name="line494"></a>  ALIGN_CENTER: 0,
+<a name="line495"></a>  ALIGN_RIGHT: 1
+<a name="line496"></a>};
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * Enum of legend positions.
+<a name="line501"></a> *
+<a name="line502"></a> * @enum {string}
+<a name="line503"></a> */
+<a name="line504"></a>goog.ui.ServerChart.LegendPosition = {
+<a name="line505"></a>  TOP: &#39;t&#39;,
+<a name="line506"></a>  BOTTOM: &#39;b&#39;,
+<a name="line507"></a>  LEFT: &#39;l&#39;,
+<a name="line508"></a>  RIGHT: &#39;r&#39;
+<a name="line509"></a>};
+<a name="line510"></a>
+<a name="line511"></a>
+<a name="line512"></a>/**
+<a name="line513"></a> * Enum of line and tick options for an axis.
+<a name="line514"></a> *
+<a name="line515"></a> * @enum {string}
+<a name="line516"></a> */
+<a name="line517"></a>goog.ui.ServerChart.AxisDisplayType = {
+<a name="line518"></a>  LINE_AND_TICKS: &#39;lt&#39;,
+<a name="line519"></a>  LINE: &#39;l&#39;,
+<a name="line520"></a>  TICKS: &#39;t&#39;
+<a name="line521"></a>};
+<a name="line522"></a>
+<a name="line523"></a>
+<a name="line524"></a>/**
+<a name="line525"></a> * Enum of chart maximum values in pixels, as listed at:
+<a name="line526"></a> * http://code.google.com/apis/chart/basics.html
+<a name="line527"></a> *
+<a name="line528"></a> * @enum {number}
+<a name="line529"></a> */
+<a name="line530"></a>goog.ui.ServerChart.MaximumValue = {
+<a name="line531"></a>  WIDTH: 1000,
+<a name="line532"></a>  HEIGHT: 1000,
+<a name="line533"></a>  MAP_WIDTH: 440,
+<a name="line534"></a>  MAP_HEIGHT: 220,
+<a name="line535"></a>  TOTAL_AREA: 300000
+<a name="line536"></a>};
+<a name="line537"></a>
+<a name="line538"></a>
+<a name="line539"></a>/**
+<a name="line540"></a> * Enum of ChartServer URI parameters.
+<a name="line541"></a> *
+<a name="line542"></a> * @enum {string}
+<a name="line543"></a> */
+<a name="line544"></a>goog.ui.ServerChart.UriParam = {
+<a name="line545"></a>  TYPE: &#39;cht&#39;,
+<a name="line546"></a>  SIZE: &#39;chs&#39;,
+<a name="line547"></a>  DATA: &#39;chd&#39;,
+<a name="line548"></a>  X_LABELS: &#39;chl&#39;,
+<a name="line549"></a>  LEFT_Y_LABELS: &#39;chly&#39;,
+<a name="line550"></a>  DATA_LABELS: &#39;chld&#39;,
+<a name="line551"></a>  RIGHT_LABELS: &#39;chlr&#39;,
+<a name="line552"></a>  RIGHT_LABEL_POSITIONS: &#39;chlrp&#39;,
+<a name="line553"></a>  MISC_PARAMS: &#39;chp&#39;,
+<a name="line554"></a>  DATA_COLORS: &#39;chco&#39;,
+<a name="line555"></a>  DATA_SCALING: &#39;chds&#39;,
+<a name="line556"></a>  LEGEND_TEXTS: &#39;chdl&#39;,
+<a name="line557"></a>  LEGEND_POSITION: &#39;chdlp&#39;,
+<a name="line558"></a>  LABEL_COLORS: &#39;chlc&#39;,
+<a name="line559"></a>  BAR_HEIGHT: &#39;chbh&#39;,
+<a name="line560"></a>  LINE_STYLES: &#39;chls&#39;,
+<a name="line561"></a>  GRID: &#39;chg&#39;,
+<a name="line562"></a>  X_AXIS_STYLE: &#39;chx&#39;,
+<a name="line563"></a>  MARKERS: &#39;chm&#39;,
+<a name="line564"></a>  BACKGROUND_FILL: &#39;chf&#39;,
+<a name="line565"></a>  DIGITAL_SIGNATURE: &#39;sig&#39;,
+<a name="line566"></a>  TITLE: &#39;chtt&#39;,
+<a name="line567"></a>  TITLE_FORMAT: &#39;chts&#39;,
+<a name="line568"></a>  LEGEND: &#39;chdl&#39;,
+<a name="line569"></a>  MULTI_AXIS_TYPES: &#39;chxt&#39;,
+<a name="line570"></a>  MULTI_AXIS_LABEL_TEXT: &#39;chxl&#39;,
+<a name="line571"></a>  MULTI_AXIS_LABEL_POSITION: &#39;chxp&#39;,
+<a name="line572"></a>  MULTI_AXIS_RANGE: &#39;chxr&#39;,
+<a name="line573"></a>  MULTI_AXIS_STYLE: &#39;chxs&#39;,
+<a name="line574"></a>  GEOGRAPHICAL_REGION: &#39;chtm&#39;
+<a name="line575"></a>};
+<a name="line576"></a>
+<a name="line577"></a>
+<a name="line578"></a>/**
+<a name="line579"></a> * Sets the background fill.
+<a name="line580"></a> *
+<a name="line581"></a> * @param {Array.&lt;Object&gt;} fill An array of background fill specification
+<a name="line582"></a> *     objects. Each object may have the following properties:
+<a name="line583"></a> *     {string} area The area to fill, either &#39;bg&#39; for background or &#39;c&#39; for
+<a name="line584"></a> *         chart area.  The default is &#39;bg&#39;.
+<a name="line585"></a> *     {string} color (required) The color of the background fill.
+<a name="line586"></a> *     // TODO: Add support for gradient/stripes, which requires
+<a name="line587"></a> *     // a different object structure.
+<a name="line588"></a> */
+<a name="line589"></a>goog.ui.ServerChart.prototype.setBackgroundFill = function(fill) {
+<a name="line590"></a>  var value = [];
+<a name="line591"></a>  goog.array.forEach(fill, function(spec) {
+<a name="line592"></a>    spec.area = spec.area || &#39;bg&#39;;
+<a name="line593"></a>    spec.effect = spec.effect || &#39;s&#39;;
+<a name="line594"></a>    value.push([spec.area, spec.effect, spec.color].join(&#39;,&#39;));
+<a name="line595"></a>  });
+<a name="line596"></a>  value = value.join(&#39;|&#39;);
+<a name="line597"></a>  this.setParameterValue(goog.ui.ServerChart.UriParam.BACKGROUND_FILL, value);
+<a name="line598"></a>};
+<a name="line599"></a>
+<a name="line600"></a>
+<a name="line601"></a>/**
+<a name="line602"></a> * Returns the background fill.
+<a name="line603"></a> *
+<a name="line604"></a> * @return {Array.&lt;Object&gt;} An array of background fill specifications.
+<a name="line605"></a> *     If the fill specification string is in an unsupported format, the method
+<a name="line606"></a> *    returns an empty array.
+<a name="line607"></a> */
+<a name="line608"></a>goog.ui.ServerChart.prototype.getBackgroundFill = function() {
+<a name="line609"></a>  var value =
+<a name="line610"></a>      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.BACKGROUND_FILL);
+<a name="line611"></a>  var result = [];
+<a name="line612"></a>  if (goog.isDefAndNotNull(value)) {
+<a name="line613"></a>    var fillSpecifications = value.split(&#39;|&#39;);
+<a name="line614"></a>    var valid = true;
+<a name="line615"></a>    goog.array.forEach(fillSpecifications, function(spec) {
+<a name="line616"></a>      spec = spec.split(&#39;,&#39;);
+<a name="line617"></a>      if (valid &amp;&amp; spec[1] == &#39;s&#39;) {
+<a name="line618"></a>        result.push({area: spec[0], effect: spec[1], color: spec[2]});
+<a name="line619"></a>      } else {
+<a name="line620"></a>        // If the format is unsupported, return an empty array.
+<a name="line621"></a>        result = [];
+<a name="line622"></a>        valid = false;
+<a name="line623"></a>      }
+<a name="line624"></a>    });
+<a name="line625"></a>  }
+<a name="line626"></a>  return result;
+<a name="line627"></a>};
+<a name="line628"></a>
+<a name="line629"></a>
+<a name="line630"></a>/**
+<a name="line631"></a> * Sets the encoding type.
+<a name="line632"></a> *
+<a name="line633"></a> * @param {goog.ui.ServerChart.EncodingType} type Desired data encoding type.
+<a name="line634"></a> */
+<a name="line635"></a>goog.ui.ServerChart.prototype.setEncodingType = function(type) {
+<a name="line636"></a>  this.encodingType_ = type;
+<a name="line637"></a>};
+<a name="line638"></a>
+<a name="line639"></a>
+<a name="line640"></a>/**
+<a name="line641"></a> * Gets the encoding type.
+<a name="line642"></a> *
+<a name="line643"></a> * @return {goog.ui.ServerChart.EncodingType} The encoding type.
+<a name="line644"></a> */
+<a name="line645"></a>goog.ui.ServerChart.prototype.getEncodingType = function() {
+<a name="line646"></a>  return this.encodingType_;
+<a name="line647"></a>};
+<a name="line648"></a>
+<a name="line649"></a>
+<a name="line650"></a>/**
+<a name="line651"></a> * Sets the chart type.
+<a name="line652"></a> *
+<a name="line653"></a> * @param {goog.ui.ServerChart.ChartType} type The desired chart type.
+<a name="line654"></a> */
+<a name="line655"></a>goog.ui.ServerChart.prototype.setType = function(type) {
+<a name="line656"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.TYPE, type);
+<a name="line657"></a>};
+<a name="line658"></a>
+<a name="line659"></a>
+<a name="line660"></a>/**
+<a name="line661"></a> * Returns the chart type.
+<a name="line662"></a> *
+<a name="line663"></a> * @return {goog.ui.ServerChart.ChartType} The chart type.
+<a name="line664"></a> */
+<a name="line665"></a>goog.ui.ServerChart.prototype.getType = function() {
+<a name="line666"></a>  return /** @type {goog.ui.ServerChart.ChartType} */ (
+<a name="line667"></a>      this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.TYPE));
+<a name="line668"></a>};
+<a name="line669"></a>
+<a name="line670"></a>
+<a name="line671"></a>/**
+<a name="line672"></a> * Sets the chart size.
+<a name="line673"></a> *
+<a name="line674"></a> * @param {number} opt_width Optional chart width, defaults to 300.
+<a name="line675"></a> * @param {number} opt_height Optional chart height, defaults to 150.
+<a name="line676"></a> */
+<a name="line677"></a>goog.ui.ServerChart.prototype.setSize = function(opt_width, opt_height) {
+<a name="line678"></a>  var sizeString = [opt_width || 300, opt_height || 150].join(&#39;x&#39;);
+<a name="line679"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.SIZE, sizeString);
+<a name="line680"></a>};
+<a name="line681"></a>
+<a name="line682"></a>
+<a name="line683"></a>/**
+<a name="line684"></a> * Returns the chart size.
+<a name="line685"></a> *
+<a name="line686"></a> * @return {Array.&lt;string&gt;} [Width, Height].
+<a name="line687"></a> */
+<a name="line688"></a>goog.ui.ServerChart.prototype.getSize = function() {
+<a name="line689"></a>  var sizeStr = this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.SIZE);
+<a name="line690"></a>  return sizeStr.split(&#39;x&#39;);
+<a name="line691"></a>};
+<a name="line692"></a>
+<a name="line693"></a>
+<a name="line694"></a>/**
+<a name="line695"></a> * Sets the minimum value of the chart.
+<a name="line696"></a> *
+<a name="line697"></a> * @param {number} minValue The minimum value of the chart.
+<a name="line698"></a> */
+<a name="line699"></a>goog.ui.ServerChart.prototype.setMinValue = function(minValue) {
+<a name="line700"></a>  this.minValue_ = minValue;
+<a name="line701"></a>};
+<a name="line702"></a>
+<a name="line703"></a>
+<a name="line704"></a>/**
+<a name="line705"></a> * @return {number} The minimum value of the chart.
+<a name="line706"></a> */
+<a name="line707"></a>goog.ui.ServerChart.prototype.getMinValue = function() {
+<a name="line708"></a>  return this.minValue_;
+<a name="line709"></a>};
+<a name="line710"></a>
+<a name="line711"></a>
+<a name="line712"></a>/**
+<a name="line713"></a> * Sets the maximum value of the chart.
+<a name="line714"></a> *
+<a name="line715"></a> * @param {number} maxValue The maximum value of the chart.
+<a name="line716"></a> */
+<a name="line717"></a>goog.ui.ServerChart.prototype.setMaxValue = function(maxValue) {
+<a name="line718"></a>  this.maxValue_ = maxValue;
+<a name="line719"></a>};
+<a name="line720"></a>
+<a name="line721"></a>
+<a name="line722"></a>/**
+<a name="line723"></a> * @return {number} The maximum value of the chart.
+<a name="line724"></a> */
+<a name="line725"></a>goog.ui.ServerChart.prototype.getMaxValue = function() {
+<a name="line726"></a>  return this.maxValue_;
+<a name="line727"></a>};
+<a name="line728"></a>
+<a name="line729"></a>
+<a name="line730"></a>/**
+<a name="line731"></a> * Sets the number of grid lines along the X-axis.
+<a name="line732"></a> *
+<a name="line733"></a> * @param {number} gridlines The number of X-axis grid lines.
+<a name="line734"></a> */
+<a name="line735"></a>goog.ui.ServerChart.prototype.setGridX = function(gridlines) {
+<a name="line736"></a>  // Need data for this to work.
+<a name="line737"></a>  this.gridX_ = gridlines;
+<a name="line738"></a>  this.setGrids_(this.gridX_, this.gridY_);
+<a name="line739"></a>};
+<a name="line740"></a>
+<a name="line741"></a>
+<a name="line742"></a>/**
+<a name="line743"></a> * @return {number} The number of gridlines along the X-axis.
+<a name="line744"></a> */
+<a name="line745"></a>goog.ui.ServerChart.prototype.getGridX = function() {
+<a name="line746"></a>  return this.gridX_;
+<a name="line747"></a>};
+<a name="line748"></a>
+<a name="line749"></a>
+<a name="line750"></a>/**
+<a name="line751"></a> * Sets the number of grid lines along the Y-axis.
+<a name="line752"></a> *
+<a name="line753"></a> * @param {number} gridlines The number of Y-axis grid lines.
+<a name="line754"></a> */
+<a name="line755"></a>goog.ui.ServerChart.prototype.setGridY = function(gridlines) {
+<a name="line756"></a>  // Need data for this to work.
+<a name="line757"></a>  this.gridY_ = gridlines;
+<a name="line758"></a>  this.setGrids_(this.gridX_, this.gridY_);
+<a name="line759"></a>};
+<a name="line760"></a>
+<a name="line761"></a>
+<a name="line762"></a>/**
+<a name="line763"></a> * @return {number} The number of gridlines along the Y-axis.
+<a name="line764"></a> */
+<a name="line765"></a>goog.ui.ServerChart.prototype.getGridY = function() {
+<a name="line766"></a>  return this.gridY_;
+<a name="line767"></a>};
+<a name="line768"></a>
+<a name="line769"></a>
+<a name="line770"></a>/**
+<a name="line771"></a> * Sets the grids for the chart
+<a name="line772"></a> *
+<a name="line773"></a> * @private
+<a name="line774"></a> * @param {number} x The number of grid lines along the x-axis.
+<a name="line775"></a> * @param {number} y The number of grid lines along the y-axis.
+<a name="line776"></a> */
+<a name="line777"></a>goog.ui.ServerChart.prototype.setGrids_ = function(x, y) {
+<a name="line778"></a>  var gridArray = [x == 0 ? 0 : 100 / x,
+<a name="line779"></a>                   y == 0 ? 0 : 100 / y];
+<a name="line780"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.GRID,
+<a name="line781"></a>                              gridArray.join(&#39;,&#39;));
+<a name="line782"></a>};
+<a name="line783"></a>
+<a name="line784"></a>
+<a name="line785"></a>/**
+<a name="line786"></a> * Sets the X Labels for the chart.
+<a name="line787"></a> *
+<a name="line788"></a> * @param {Array.&lt;string&gt;} labels The X Labels for the chart.
+<a name="line789"></a> */
+<a name="line790"></a>goog.ui.ServerChart.prototype.setXLabels = function(labels) {
+<a name="line791"></a>  this.xLabels_ = labels;
+<a name="line792"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.X_LABELS,
+<a name="line793"></a>                              this.xLabels_.join(&#39;|&#39;));
+<a name="line794"></a>};
+<a name="line795"></a>
+<a name="line796"></a>
+<a name="line797"></a>/**
+<a name="line798"></a> * @return {Array.&lt;string&gt;} The X Labels for the chart.
+<a name="line799"></a> */
+<a name="line800"></a>goog.ui.ServerChart.prototype.getXLabels = function() {
+<a name="line801"></a>  return this.xLabels_;
+<a name="line802"></a>};
+<a name="line803"></a>
+<a name="line804"></a>
+<a name="line805"></a>/**
+<a name="line806"></a> * @return {boolean} Whether the chart is a bar chart.
+<a name="line807"></a> */
+<a name="line808"></a>goog.ui.ServerChart.prototype.isBarChart = function() {
+<a name="line809"></a>  var type = this.getType();
+<a name="line810"></a>  return type == goog.ui.ServerChart.ChartType.BAR ||
+<a name="line811"></a>      type == goog.ui.ServerChart.ChartType.HORIZONTAL_GROUPED_BAR ||
+<a name="line812"></a>      type == goog.ui.ServerChart.ChartType.HORIZONTAL_STACKED_BAR ||
+<a name="line813"></a>      type == goog.ui.ServerChart.ChartType.VERTICAL_GROUPED_BAR ||
+<a name="line814"></a>      type == goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR;
+<a name="line815"></a>};
+<a name="line816"></a>
+<a name="line817"></a>
+<a name="line818"></a>/**
+<a name="line819"></a> * @return {boolean} Whether the chart is a pie chart.
+<a name="line820"></a> */
+<a name="line821"></a>goog.ui.ServerChart.prototype.isPieChart = function() {
+<a name="line822"></a>  var type = this.getType();
+<a name="line823"></a>  return type == goog.ui.ServerChart.ChartType.PIE ||
+<a name="line824"></a>      type == goog.ui.ServerChart.ChartType.PIE3D ||
+<a name="line825"></a>      type == goog.ui.ServerChart.ChartType.CONCENTRIC_PIE;
+<a name="line826"></a>};
+<a name="line827"></a>
+<a name="line828"></a>
+<a name="line829"></a>/**
+<a name="line830"></a> * @return {boolean} Whether the chart is a grouped bar chart.
+<a name="line831"></a> */
+<a name="line832"></a>goog.ui.ServerChart.prototype.isGroupedBarChart = function() {
+<a name="line833"></a>  var type = this.getType();
+<a name="line834"></a>  return type == goog.ui.ServerChart.ChartType.HORIZONTAL_GROUPED_BAR ||
+<a name="line835"></a>      type == goog.ui.ServerChart.ChartType.VERTICAL_GROUPED_BAR;
+<a name="line836"></a>};
+<a name="line837"></a>
+<a name="line838"></a>
+<a name="line839"></a>/**
+<a name="line840"></a> * @return {boolean} Whether the chart is a horizontal bar chart.
+<a name="line841"></a> */
+<a name="line842"></a>goog.ui.ServerChart.prototype.isHorizontalBarChart = function() {
+<a name="line843"></a>  var type = this.getType();
+<a name="line844"></a>  return type == goog.ui.ServerChart.ChartType.BAR ||
+<a name="line845"></a>      type == goog.ui.ServerChart.ChartType.HORIZONTAL_GROUPED_BAR ||
+<a name="line846"></a>      type == goog.ui.ServerChart.ChartType.HORIZONTAL_STACKED_BAR;
+<a name="line847"></a>};
+<a name="line848"></a>
+<a name="line849"></a>
+<a name="line850"></a>/**
+<a name="line851"></a> * @return {boolean} Whether the chart is a line chart.
+<a name="line852"></a> */
+<a name="line853"></a>goog.ui.ServerChart.prototype.isLineChart = function() {
+<a name="line854"></a>  var type = this.getType();
+<a name="line855"></a>  return type == goog.ui.ServerChart.ChartType.FILLEDLINE ||
+<a name="line856"></a>      type == goog.ui.ServerChart.ChartType.LINE ||
+<a name="line857"></a>      type == goog.ui.ServerChart.ChartType.SPARKLINE ||
+<a name="line858"></a>      type == goog.ui.ServerChart.ChartType.XYLINE;
+<a name="line859"></a>};
+<a name="line860"></a>
+<a name="line861"></a>
+<a name="line862"></a>/**
+<a name="line863"></a> * @return {boolean} Whether the chart is a map.
+<a name="line864"></a> */
+<a name="line865"></a>goog.ui.ServerChart.prototype.isMap = function() {
+<a name="line866"></a>  var type = this.getType();
+<a name="line867"></a>  return type == goog.ui.ServerChart.ChartType.MAP ||
+<a name="line868"></a>      type == goog.ui.ServerChart.ChartType.MAPUSA ||
+<a name="line869"></a>      type == goog.ui.ServerChart.ChartType.MAPWORLD;
+<a name="line870"></a>};
+<a name="line871"></a>
+<a name="line872"></a>
+<a name="line873"></a>/**
+<a name="line874"></a> * @return {boolean} Whether the chart is a stacked bar chart.
+<a name="line875"></a> */
+<a name="line876"></a>goog.ui.ServerChart.prototype.isStackedBarChart = function() {
+<a name="line877"></a>  var type = this.getType();
+<a name="line878"></a>  return type == goog.ui.ServerChart.ChartType.BAR ||
+<a name="line879"></a>      type == goog.ui.ServerChart.ChartType.HORIZONTAL_STACKED_BAR ||
+<a name="line880"></a>      type == goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR;
+<a name="line881"></a>};
+<a name="line882"></a>
+<a name="line883"></a>
+<a name="line884"></a>/**
+<a name="line885"></a> * @return {boolean} Whether the chart is a vertical bar chart.
+<a name="line886"></a> */
+<a name="line887"></a>goog.ui.ServerChart.prototype.isVerticalBarChart = function() {
+<a name="line888"></a>  var type = this.getType();
+<a name="line889"></a>  return type == goog.ui.ServerChart.ChartType.VERTICAL_GROUPED_BAR ||
+<a name="line890"></a>      type == goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR;
+<a name="line891"></a>};
+<a name="line892"></a>
+<a name="line893"></a>
+<a name="line894"></a>/**
+<a name="line895"></a> * Sets the Left Labels for the chart.
+<a name="line896"></a> * NOTE: The array should start with the lowest value, and then
+<a name="line897"></a> *       move progessively up the axis. So if you want labels
+<a name="line898"></a> *       from 0 to 100 with 0 at bottom of the graph, then you would
+<a name="line899"></a> *       want to pass something like [0,25,50,75,100].
+<a name="line900"></a> *
+<a name="line901"></a> * @param {Array.&lt;string&gt;} labels The Left Labels for the chart.
+<a name="line902"></a> */
+<a name="line903"></a>goog.ui.ServerChart.prototype.setLeftLabels = function(labels) {
+<a name="line904"></a>  this.leftLabels_ = labels;
+<a name="line905"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.LEFT_Y_LABELS,
+<a name="line906"></a>                              this.leftLabels_.reverse().join(&#39;|&#39;));
+<a name="line907"></a>};
+<a name="line908"></a>
+<a name="line909"></a>
+<a name="line910"></a>/**
+<a name="line911"></a> * @return {Array.&lt;string&gt;} The Left Labels for the chart.
+<a name="line912"></a> */
+<a name="line913"></a>goog.ui.ServerChart.prototype.getLeftLabels = function() {
+<a name="line914"></a>  return this.leftLabels_;
+<a name="line915"></a>};
+<a name="line916"></a>
+<a name="line917"></a>
+<a name="line918"></a>/**
+<a name="line919"></a> * Sets the given ChartServer parameter.
+<a name="line920"></a> *
+<a name="line921"></a> * @param {goog.ui.ServerChart.UriParam} key The ChartServer parameter to set.
+<a name="line922"></a> * @param {string} value The value to set for the ChartServer parameter.
+<a name="line923"></a> */
+<a name="line924"></a>goog.ui.ServerChart.prototype.setParameterValue = function(key, value) {
+<a name="line925"></a>  this.uri_.setParameterValue(key, value);
+<a name="line926"></a>};
+<a name="line927"></a>
+<a name="line928"></a>
+<a name="line929"></a>/**
+<a name="line930"></a> * Removes the given ChartServer parameter.
+<a name="line931"></a> *
+<a name="line932"></a> * @param {goog.ui.ServerChart.UriParam} key The ChartServer parameter to
+<a name="line933"></a> *     remove.
+<a name="line934"></a> */
+<a name="line935"></a>goog.ui.ServerChart.prototype.removeParameter = function(key) {
+<a name="line936"></a>  this.uri_.removeParameter(key);
+<a name="line937"></a>};
+<a name="line938"></a>
+<a name="line939"></a>
+<a name="line940"></a>/**
+<a name="line941"></a> * Sets the Right Labels for the chart.
+<a name="line942"></a> * NOTE: The array should start with the lowest value, and then
+<a name="line943"></a> *       move progessively up the axis. So if you want labels
+<a name="line944"></a> *       from 0 to 100 with 0 at bottom of the graph, then you would
+<a name="line945"></a> *       want to pass something like [0,25,50,75,100].
+<a name="line946"></a> *
+<a name="line947"></a> * @param {Array.&lt;string&gt;} labels The Right Labels for the chart.
+<a name="line948"></a> */
+<a name="line949"></a>goog.ui.ServerChart.prototype.setRightLabels = function(labels) {
+<a name="line950"></a>  this.rightLabels_ = labels;
+<a name="line951"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.RIGHT_LABELS,
+<a name="line952"></a>                              this.rightLabels_.reverse().join(&#39;|&#39;));
+<a name="line953"></a>};
+<a name="line954"></a>
+<a name="line955"></a>
+<a name="line956"></a>/**
+<a name="line957"></a> * @return {Array.&lt;string&gt;} The Right Labels for the chart.
+<a name="line958"></a> */
+<a name="line959"></a>goog.ui.ServerChart.prototype.getRightLabels = function() {
+<a name="line960"></a>  return this.rightLabels_;
+<a name="line961"></a>};
+<a name="line962"></a>
+<a name="line963"></a>
+<a name="line964"></a>/**
+<a name="line965"></a> * Sets the position relative to the chart where the legend is to be displayed.
+<a name="line966"></a> *
+<a name="line967"></a> * @param {goog.ui.ServerChart.LegendPosition} value Legend position.
+<a name="line968"></a> */
+<a name="line969"></a>goog.ui.ServerChart.prototype.setLegendPosition = function(value) {
+<a name="line970"></a>  this.uri_.setParameterValue(
+<a name="line971"></a>      goog.ui.ServerChart.UriParam.LEGEND_POSITION, value);
+<a name="line972"></a>};
+<a name="line973"></a>
+<a name="line974"></a>
+<a name="line975"></a>/**
+<a name="line976"></a> * Returns the position relative to the chart where the legend is to be
+<a name="line977"></a> * displayed.
+<a name="line978"></a> *
+<a name="line979"></a> * @return {goog.ui.ServerChart.LegendPosition} Legend position.
+<a name="line980"></a> */
+<a name="line981"></a>goog.ui.ServerChart.prototype.getLegendPosition = function() {
+<a name="line982"></a>  return /** @type {goog.ui.ServerChart.LegendPosition} */ (
+<a name="line983"></a>      this.uri_.getParameterValue(
+<a name="line984"></a>          goog.ui.ServerChart.UriParam.LEGEND_POSITION));
+<a name="line985"></a>};
+<a name="line986"></a>
+<a name="line987"></a>
+<a name="line988"></a>/**
+<a name="line989"></a> * Sets the number of &quot;visible&quot; data sets. All data sets that come after
+<a name="line990"></a> * the visible data set are not drawn as part of the chart. Instead, they
+<a name="line991"></a> * are available for positioning markers.
+<a name="line992"></a>
+<a name="line993"></a> * @param {number?} n The number of visible data sets, or null if all data
+<a name="line994"></a> * sets are to be visible.
+<a name="line995"></a> */
+<a name="line996"></a>goog.ui.ServerChart.prototype.setNumVisibleDataSets = function(n) {
+<a name="line997"></a>  this.numVisibleDataSets_ = n;
+<a name="line998"></a>};
+<a name="line999"></a>
+<a name="line1000"></a>
+<a name="line1001"></a>/**
+<a name="line1002"></a> * Returns the number of &quot;visible&quot; data sets. All data sets that come after
+<a name="line1003"></a> * the visible data set are not drawn as part of the chart. Instead, they
+<a name="line1004"></a> * are available for positioning markers.
+<a name="line1005"></a> *
+<a name="line1006"></a> * @return {number?} The number of visible data sets, or null if all data
+<a name="line1007"></a> * sets are visible.
+<a name="line1008"></a> */
+<a name="line1009"></a>goog.ui.ServerChart.prototype.getNumVisibleDataSets = function() {
+<a name="line1010"></a>  return this.numVisibleDataSets_;
+<a name="line1011"></a>};
+<a name="line1012"></a>
+<a name="line1013"></a>
+<a name="line1014"></a>/**
+<a name="line1015"></a> * Sets the weight function for a Venn Diagram along with the associated
+<a name="line1016"></a> *     colors and legend text. Weights are assigned as follows:
+<a name="line1017"></a> *     weights[0] is relative area of circle A.
+<a name="line1018"></a> *     weights[1] is relative area of circle B.
+<a name="line1019"></a> *     weights[2] is relative area of circle C.
+<a name="line1020"></a> *     weights[3] is relative area of overlap of circles A and B.
+<a name="line1021"></a> *     weights[4] is relative area of overlap of circles A and C.
+<a name="line1022"></a> *     weights[5] is relative area of overlap of circles B and C.
+<a name="line1023"></a> *     weights[6] is relative area of overlap of circles A, B and C.
+<a name="line1024"></a> * For a two circle Venn Diagram the weights are assigned as follows:
+<a name="line1025"></a> *     weights[0] is relative area of circle A.
+<a name="line1026"></a> *     weights[1] is relative area of circle B.
+<a name="line1027"></a> *     weights[2] is relative area of overlap of circles A and B.
+<a name="line1028"></a> *
+<a name="line1029"></a> * @param {Array.&lt;number&gt;} weights The relative weights of the circles.
+<a name="line1030"></a> * @param {Array.&lt;string&gt;} opt_legendText The legend labels for the circles.
+<a name="line1031"></a> * @param {Array.&lt;string&gt;} opt_colors The colors for the circles.
+<a name="line1032"></a> */
+<a name="line1033"></a>goog.ui.ServerChart.prototype.setVennSeries = function(
+<a name="line1034"></a>    weights, opt_legendText, opt_colors) {
+<a name="line1035"></a>  if (this.getType() != goog.ui.ServerChart.ChartType.VENN) {
+<a name="line1036"></a>    throw Error(&#39;Can only set a weight function for a Venn diagram.&#39;);
+<a name="line1037"></a>  }
+<a name="line1038"></a>  var dataMin = this.arrayMin_(weights);
+<a name="line1039"></a>  if (dataMin &lt; this.minValue_) {
+<a name="line1040"></a>    this.minValue_ = dataMin;
+<a name="line1041"></a>  }
+<a name="line1042"></a>  var dataMax = this.arrayMax_(weights);
+<a name="line1043"></a>  if (dataMax &gt; this.maxValue_) {
+<a name="line1044"></a>    this.maxValue_ = dataMax;
+<a name="line1045"></a>  }
+<a name="line1046"></a>  if (goog.isDef(opt_legendText)) {
+<a name="line1047"></a>    goog.array.forEach(
+<a name="line1048"></a>        opt_legendText,
+<a name="line1049"></a>        goog.bind(function(legend) {
+<a name="line1050"></a>          this.setLegendTexts_.push(legend);
+<a name="line1051"></a>        }, this));
+<a name="line1052"></a>    this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.LEGEND_TEXTS,
+<a name="line1053"></a>                                this.setLegendTexts_.join(&#39;|&#39;));
+<a name="line1054"></a>  }
+<a name="line1055"></a>  // If the caller only gave three weights, then they wanted a two circle
+<a name="line1056"></a>  // Venn Diagram. Create a 3 circle weight function where circle C has
+<a name="line1057"></a>  // area zero.
+<a name="line1058"></a>  if (weights.length == 3) {
+<a name="line1059"></a>    weights[3] = weights[2];
+<a name="line1060"></a>    weights[2] = 0.0;
+<a name="line1061"></a>  }
+<a name="line1062"></a>  this.dataSets_.push(weights);
+<a name="line1063"></a>  if (goog.isDef(opt_colors)) {
+<a name="line1064"></a>    goog.array.forEach(opt_colors, goog.bind(function(color) {
+<a name="line1065"></a>      this.setColors_.push(color);
+<a name="line1066"></a>    }, this));
+<a name="line1067"></a>    this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.DATA_COLORS,
+<a name="line1068"></a>                                this.setColors_.join(&#39;,&#39;));
+<a name="line1069"></a>  }
+<a name="line1070"></a>};
+<a name="line1071"></a>
+<a name="line1072"></a>
+<a name="line1073"></a>/**
+<a name="line1074"></a> * Sets the title of the chart.
+<a name="line1075"></a> *
+<a name="line1076"></a> * @param {string} title The chart title.
+<a name="line1077"></a> */
+<a name="line1078"></a>goog.ui.ServerChart.prototype.setTitle = function(title) {
+<a name="line1079"></a>  this.title_ = title;
+<a name="line1080"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.TITLE,
+<a name="line1081"></a>                              this.title_.replace(/\n/g, &#39;|&#39;));
+<a name="line1082"></a>};
+<a name="line1083"></a>
+<a name="line1084"></a>
+<a name="line1085"></a>/**
+<a name="line1086"></a> * Sets the size of the chart title.
+<a name="line1087"></a> *
+<a name="line1088"></a> * @param {number} size The title size, in points.
+<a name="line1089"></a> */
+<a name="line1090"></a>goog.ui.ServerChart.prototype.setTitleSize = function(size) {
+<a name="line1091"></a>  this.titleSize_ = size;
+<a name="line1092"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.TITLE_FORMAT,
+<a name="line1093"></a>                              this.titleColor_ + &#39;,&#39; + this.titleSize_);
+<a name="line1094"></a>};
+<a name="line1095"></a>
+<a name="line1096"></a>
+<a name="line1097"></a>/**
+<a name="line1098"></a> * @return {number} size The title size, in points.
+<a name="line1099"></a> */
+<a name="line1100"></a>goog.ui.ServerChart.prototype.getTitleSize = function() {
+<a name="line1101"></a>  return this.titleSize_;
+<a name="line1102"></a>};
+<a name="line1103"></a>
+<a name="line1104"></a>
+<a name="line1105"></a>/**
+<a name="line1106"></a> * Sets the color of the chart title.
 <a name="line1107"></a> *
-<a name="line1108"></a> * @param {string} color The hex value for the title color.
-<a name="line1109"></a> */
-<a name="line1110"></a>goog.ui.ServerChart.prototype.setTitleColor = function(color) {
-<a name="line1111"></a>  this.titleColor_ = color;
-<a name="line1112"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.TITLE_FORMAT,
-<a name="line1113"></a>                              this.titleColor_ + &#39;,&#39; + this.titleSize_);
-<a name="line1114"></a>};
-<a name="line1115"></a>
-<a name="line1116"></a>
-<a name="line1117"></a>/**
-<a name="line1118"></a> * @return {string} color The hex value for the title color.
-<a name="line1119"></a> */
-<a name="line1120"></a>goog.ui.ServerChart.prototype.getTitleColor = function() {
-<a name="line1121"></a>  return this.titleColor_;
-<a name="line1122"></a>};
-<a name="line1123"></a>
-<a name="line1124"></a>
-<a name="line1125"></a>/**
-<a name="line1126"></a> * Adds a legend to the chart.
-<a name="line1127"></a> *
-<a name="line1128"></a> * @param {Array.&lt;string&gt;} legend The legend to add.
-<a name="line1129"></a> */
-<a name="line1130"></a>goog.ui.ServerChart.prototype.setLegend = function(legend) {
-<a name="line1131"></a>  this.legend_ = legend;
-<a name="line1132"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.LEGEND,
-<a name="line1133"></a>                              this.legend_.join(&#39;|&#39;));
-<a name="line1134"></a>};
-<a name="line1135"></a>
-<a name="line1136"></a>
-<a name="line1137"></a>/**
-<a name="line1138"></a> * Sets the data scaling.
-<a name="line1139"></a> * NOTE: This also changes the encoding type because data scaling will
-<a name="line1140"></a> *     only work with {@code goog.ui.ServerChart.EncodingType.TEXT}
-<a name="line1141"></a> *     encoding.
-<a name="line1142"></a> * @param {number} minimum The lowest number to apply to the data.
-<a name="line1143"></a> * @param {number} maximum The highest number to apply to the data.
-<a name="line1144"></a> */
-<a name="line1145"></a>goog.ui.ServerChart.prototype.setDataScaling = function(minimum, maximum) {
-<a name="line1146"></a>  this.encodingType_ = goog.ui.ServerChart.EncodingType.TEXT;
-<a name="line1147"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.DATA_SCALING,
-<a name="line1148"></a>                              minimum + &#39;,&#39; + maximum);
-<a name="line1149"></a>};
-<a name="line1150"></a>
-<a name="line1151"></a>
-<a name="line1152"></a>/**
-<a name="line1153"></a> * Sets the widths of the bars and the spaces between the bars in a bar
-<a name="line1154"></a> * chart.
-<a name="line1155"></a> * NOTE: If the space between groups is specified but the space between
-<a name="line1156"></a> *     bars is left undefined, the space between groups will be interpreted
-<a name="line1157"></a> *     as the space between bars because this is the behavior exposed
-<a name="line1158"></a> *     in the external developers guide.
-<a name="line1159"></a> * @param {number} barWidth The width of a bar in pixels.
-<a name="line1160"></a> * @param {number} opt_spaceBars The width of the space between
-<a name="line1161"></a> *     bars in a group in pixels.
-<a name="line1162"></a> * @param {number} opt_spaceGroups The width of the space between
-<a name="line1163"></a> *     groups.
-<a name="line1164"></a> */
-<a name="line1165"></a>goog.ui.ServerChart.prototype.setBarSpaceWidths = function(barWidth,
-<a name="line1166"></a>                                                           opt_spaceBars,
-<a name="line1167"></a>                                                           opt_spaceGroups) {
-<a name="line1168"></a>  var widths = [barWidth];
-<a name="line1169"></a>  if (goog.isDef(opt_spaceBars)) {
-<a name="line1170"></a>    widths.push(opt_spaceBars);
-<a name="line1171"></a>  }
-<a name="line1172"></a>  if (goog.isDef(opt_spaceGroups)) {
-<a name="line1173"></a>    widths.push(opt_spaceGroups);
-<a name="line1174"></a>  }
-<a name="line1175"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.BAR_HEIGHT,
-<a name="line1176"></a>                              widths.join(&#39;,&#39;));
-<a name="line1177"></a>};
-<a name="line1178"></a>
-<a name="line1179"></a>
-<a name="line1180"></a>/**
-<a name="line1181"></a> * Specifies that the bar width in a bar chart should be calculated
-<a name="line1182"></a> * automatically given the space available in the chart, while optionally
-<a name="line1183"></a> * setting the spaces between the bars.
-<a name="line1184"></a> * NOTE: If the space between groups is specified but the space between
-<a name="line1185"></a> *     bars is left undefined, the space between groups will be interpreted
-<a name="line1186"></a> *     as the space between bars because this is the behavior exposed
-<a name="line1187"></a> *     in the external developers guide.
-<a name="line1188"></a> * @param {number} opt_spaceBars The width of the space between
-<a name="line1189"></a> *     bars in a group in pixels.
-<a name="line1190"></a> * @param {number} opt_spaceGroups The width of the space between
-<a name="line1191"></a> *     groups.
-<a name="line1192"></a> */
-<a name="line1193"></a>goog.ui.ServerChart.prototype.setAutomaticBarWidth = function(opt_spaceBars,
-<a name="line1194"></a>                                                              opt_spaceGroups) {
-<a name="line1195"></a>  var widths = [&#39;a&#39;];
-<a name="line1196"></a>  if (goog.isDef(opt_spaceBars)) {
-<a name="line1197"></a>    widths.push(opt_spaceBars);
-<a name="line1198"></a>  }
-<a name="line1199"></a>  if (goog.isDef(opt_spaceGroups)) {
-<a name="line1200"></a>    widths.push(opt_spaceGroups);
-<a name="line1201"></a>  }
-<a name="line1202"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.BAR_HEIGHT,
-<a name="line1203"></a>                              widths.join(&#39;,&#39;));
-<a name="line1204"></a>};
-<a name="line1205"></a>
-<a name="line1206"></a>
-<a name="line1207"></a>/**
-<a name="line1208"></a> * Adds a multi-axis to the chart, and sets its type. Multiple axes of the same
-<a name="line1209"></a> * type can be added.
-<a name="line1210"></a> *
-<a name="line1211"></a> * @param {goog.ui.ServerChart.MultiAxisType} axisType The desired axis type.
-<a name="line1212"></a> * @return {number} The index of the newly inserted axis, suitable for feeding
-<a name="line1213"></a> *     to the setMultiAxis*() functions.
-<a name="line1214"></a> */
-<a name="line1215"></a>goog.ui.ServerChart.prototype.addMultiAxis = function(axisType) {
-<a name="line1216"></a>  this.multiAxisType_.push(axisType);
-<a name="line1217"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.MULTI_AXIS_TYPES,
-<a name="line1218"></a>                              this.multiAxisType_.join(&#39;,&#39;));
-<a name="line1219"></a>  return this.multiAxisType_.length - 1;
-<a name="line1220"></a>};
-<a name="line1221"></a>
-<a name="line1222"></a>
-<a name="line1223"></a>/**
-<a name="line1224"></a> * Returns the axis type for the given axis, or all of them in an array if the
-<a name="line1225"></a> * axis number is not given.
-<a name="line1226"></a> *
-<a name="line1227"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
-<a name="line1228"></a> * @return {goog.ui.ServerChart.MultiAxisType|
-<a name="line1229"></a> *     Array.&lt;goog.ui.ServerChart.MultiAxisType&gt;}
-<a name="line1230"></a> *     The axis type for the given axis, or all of them in an array if the
-<a name="line1231"></a> *     axis number is not given.
-<a name="line1232"></a> */
-<a name="line1233"></a>goog.ui.ServerChart.prototype.getMultiAxisType = function(opt_axisNumber) {
-<a name="line1234"></a>  if (goog.isDef(opt_axisNumber)) {
-<a name="line1235"></a>    return this.multiAxisType_[opt_axisNumber];
-<a name="line1236"></a>  }
-<a name="line1237"></a>  return this.multiAxisType_;
-<a name="line1238"></a>};
-<a name="line1239"></a>
-<a name="line1240"></a>
-<a name="line1241"></a>/**
-<a name="line1242"></a> * Sets the label text (usually multiple values) for a given axis, overwriting
-<a name="line1243"></a> * any existing values.
-<a name="line1244"></a> *
-<a name="line1245"></a> * @param {number} axisNumber The axis index, as returned by addMultiAxis.
-<a name="line1246"></a> * @param {Array.&lt;string&gt;} labelText The actual label text to be added.
-<a name="line1247"></a> */
-<a name="line1248"></a>goog.ui.ServerChart.prototype.setMultiAxisLabelText = function(axisNumber,
-<a name="line1249"></a>                                                               labelText) {
-<a name="line1250"></a>  this.multiAxisLabelText_[axisNumber] = labelText;
-<a name="line1251"></a>
-<a name="line1252"></a>  var axisString = this.computeMultiAxisDataString_(this.multiAxisLabelText_,
-<a name="line1253"></a>                                                    &#39;:|&#39;,
-<a name="line1254"></a>                                                    &#39;|&#39;,
-<a name="line1255"></a>                                                    &#39;|&#39;);
-<a name="line1256"></a>  this.uri_.setParameterValue(
-<a name="line1257"></a>      goog.ui.ServerChart.UriParam.MULTI_AXIS_LABEL_TEXT,
-<a name="line1258"></a>      axisString);
-<a name="line1259"></a>};
-<a name="line1260"></a>
-<a name="line1261"></a>
-<a name="line1262"></a>/**
-<a name="line1263"></a> * Returns the label text, or all of them in a two-dimensional array if the
-<a name="line1264"></a> * axis number is not given.
-<a name="line1265"></a> *
-<a name="line1266"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
-<a name="line1267"></a> * @return {Object|Array.&lt;string&gt;} The label text, or all of them in a
-<a name="line1268"></a> *     two-dimensional array if the axis number is not given.
-<a name="line1269"></a> */
-<a name="line1270"></a>goog.ui.ServerChart.prototype.getMultiAxisLabelText = function(opt_axisNumber) {
-<a name="line1271"></a>  if (goog.isDef(opt_axisNumber)) {
-<a name="line1272"></a>    return this.multiAxisLabelText_[opt_axisNumber];
-<a name="line1273"></a>  }
-<a name="line1274"></a>  return this.multiAxisLabelText_;
-<a name="line1275"></a>};
-<a name="line1276"></a>
-<a name="line1277"></a>
-<a name="line1278"></a>/**
-<a name="line1279"></a> * Sets the label positions for a given axis, overwriting any existing values.
-<a name="line1280"></a> * The label positions are assumed to be floating-point numbers within the
-<a name="line1281"></a> * range of the axis.
-<a name="line1282"></a> *
-<a name="line1283"></a> * @param {number} axisNumber The axis index, as returned by addMultiAxis.
-<a name="line1284"></a> * @param {Array.&lt;number&gt;} labelPosition The actual label positions to be added.
-<a name="line1285"></a> */
-<a name="line1286"></a>goog.ui.ServerChart.prototype.setMultiAxisLabelPosition = function(
-<a name="line1287"></a>    axisNumber, labelPosition) {
-<a name="line1288"></a>  this.multiAxisLabelPosition_[axisNumber] = labelPosition;
-<a name="line1289"></a>
-<a name="line1290"></a>  var positionString = this.computeMultiAxisDataString_(
-<a name="line1291"></a>      this.multiAxisLabelPosition_,
-<a name="line1292"></a>      &#39;,&#39;,
-<a name="line1293"></a>      &#39;,&#39;,
-<a name="line1294"></a>      &#39;|&#39;);
-<a name="line1295"></a>  this.uri_.setParameterValue(
-<a name="line1296"></a>      goog.ui.ServerChart.UriParam.MULTI_AXIS_LABEL_POSITION,
-<a name="line1297"></a>      positionString);
-<a name="line1298"></a>};
-<a name="line1299"></a>
-<a name="line1300"></a>
-<a name="line1301"></a>/**
-<a name="line1302"></a> * Returns the label positions for a given axis number, or all of them in a
-<a name="line1303"></a> * two-dimensional array if the axis number is not given.
-<a name="line1304"></a> *
-<a name="line1305"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
-<a name="line1306"></a> * @return {Object|Array.&lt;number&gt;} The label positions for a given axis number,
-<a name="line1307"></a> *     or all of them in a two-dimensional array if the axis number is not
-<a name="line1308"></a> *     given.
-<a name="line1309"></a> */
-<a name="line1310"></a>goog.ui.ServerChart.prototype.getMultiAxisLabelPosition =
-<a name="line1311"></a>    function(opt_axisNumber) {
-<a name="line1312"></a>  if (goog.isDef(opt_axisNumber)) {
-<a name="line1313"></a>    return this.multiAxisLabelPosition_[opt_axisNumber];
-<a name="line1314"></a>  }
-<a name="line1315"></a>  return this.multiAxisLabelPosition_;
-<a name="line1316"></a>};
-<a name="line1317"></a>
-<a name="line1318"></a>
-<a name="line1319"></a>/**
-<a name="line1320"></a> * Sets the label range for a given axis, overwriting any existing range.
-<a name="line1321"></a> * The default range is from 0 to 100. If the start value is larger than the
-<a name="line1322"></a> * end value, the axis direction is reversed.  rangeStart and rangeEnd must
-<a name="line1323"></a> * be two different finite numbers.
-<a name="line1324"></a> *
-<a name="line1325"></a> * @param {number} axisNumber The axis index, as returned by addMultiAxis.
-<a name="line1326"></a> * @param {number} rangeStart The new start of the range.
-<a name="line1327"></a> * @param {number} rangeEnd The new end of the range.
-<a name="line1328"></a> * @param {number} opt_interval The interval between axis labels.
-<a name="line1329"></a> */
-<a name="line1330"></a>goog.ui.ServerChart.prototype.setMultiAxisRange = function(axisNumber,
-<a name="line1331"></a>                                                           rangeStart,
-<a name="line1332"></a>                                                           rangeEnd,
-<a name="line1333"></a>                                                           opt_interval) {
-<a name="line1334"></a>  goog.asserts.assert(rangeStart != rangeEnd,
-<a name="line1335"></a>      &#39;Range start and end cannot be the same value.&#39;);
-<a name="line1336"></a>  goog.asserts.assert(isFinite(rangeStart) &amp;&amp; isFinite(rangeEnd),
-<a name="line1337"></a>      &#39;Range start and end must be finite numbers.&#39;);
-<a name="line1338"></a>  this.multiAxisRange_[axisNumber] = [rangeStart, rangeEnd];
-<a name="line1339"></a>  if (goog.isDef(opt_interval)) {
-<a name="line1340"></a>    this.multiAxisRange_[axisNumber].push(opt_interval);
-<a name="line1341"></a>  }
-<a name="line1342"></a>  var rangeString = this.computeMultiAxisDataString_(this.multiAxisRange_,
-<a name="line1343"></a>      &#39;,&#39;, &#39;,&#39;, &#39;|&#39;);
-<a name="line1344"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.MULTI_AXIS_RANGE,
-<a name="line1345"></a>      rangeString);
-<a name="line1346"></a>};
-<a name="line1347"></a>
-<a name="line1348"></a>
-<a name="line1349"></a>/**
-<a name="line1350"></a> * Returns the label range for a given axis number as a two-element array of
-<a name="line1351"></a> * (range start, range end), or all of them in a two-dimensional array if the
-<a name="line1352"></a> * axis number is not given.
-<a name="line1353"></a> *
-<a name="line1354"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
-<a name="line1355"></a> * @return {Object|Array.&lt;number&gt;} The label range for a given axis number as a
-<a name="line1356"></a> *     two-element array of (range start, range end), or all of them in a
-<a name="line1357"></a> *     two-dimensional array if the axis number is not given.
-<a name="line1358"></a> */
-<a name="line1359"></a>goog.ui.ServerChart.prototype.getMultiAxisRange = function(opt_axisNumber) {
-<a name="line1360"></a>  if (goog.isDef(opt_axisNumber)) {
-<a name="line1361"></a>    return this.multiAxisRange_[opt_axisNumber];
-<a name="line1362"></a>  }
-<a name="line1363"></a>  return this.multiAxisRange_;
-<a name="line1364"></a>};
-<a name="line1365"></a>
-<a name="line1366"></a>
-<a name="line1367"></a>/**
-<a name="line1368"></a> * Sets the label style for a given axis, overwriting any existing style.
-<a name="line1369"></a> * The default style is as follows: Default is x-axis labels are centered, left
-<a name="line1370"></a> * hand y-axis labels are right aligned, right hand y-axis labels are left
-<a name="line1371"></a> * aligned. The font size and alignment are optional parameters.
-<a name="line1372"></a> *
-<a name="line1373"></a> * NOTE: The color string should NOT have a &#39;#&#39; at the beginning of it.
+<a name="line1108"></a> * NOTE: The color string should NOT have a &#39;#&#39; at the beginning of it.
+<a name="line1109"></a> *
+<a name="line1110"></a> * @param {string} color The hex value for the title color.
+<a name="line1111"></a> */
+<a name="line1112"></a>goog.ui.ServerChart.prototype.setTitleColor = function(color) {
+<a name="line1113"></a>  this.titleColor_ = color;
+<a name="line1114"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.TITLE_FORMAT,
+<a name="line1115"></a>                              this.titleColor_ + &#39;,&#39; + this.titleSize_);
+<a name="line1116"></a>};
+<a name="line1117"></a>
+<a name="line1118"></a>
+<a name="line1119"></a>/**
+<a name="line1120"></a> * @return {string} color The hex value for the title color.
+<a name="line1121"></a> */
+<a name="line1122"></a>goog.ui.ServerChart.prototype.getTitleColor = function() {
+<a name="line1123"></a>  return this.titleColor_;
+<a name="line1124"></a>};
+<a name="line1125"></a>
+<a name="line1126"></a>
+<a name="line1127"></a>/**
+<a name="line1128"></a> * Adds a legend to the chart.
+<a name="line1129"></a> *
+<a name="line1130"></a> * @param {Array.&lt;string&gt;} legend The legend to add.
+<a name="line1131"></a> */
+<a name="line1132"></a>goog.ui.ServerChart.prototype.setLegend = function(legend) {
+<a name="line1133"></a>  this.legend_ = legend;
+<a name="line1134"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.LEGEND,
+<a name="line1135"></a>                              this.legend_.join(&#39;|&#39;));
+<a name="line1136"></a>};
+<a name="line1137"></a>
+<a name="line1138"></a>
+<a name="line1139"></a>/**
+<a name="line1140"></a> * Sets the data scaling.
+<a name="line1141"></a> * NOTE: This also changes the encoding type because data scaling will
+<a name="line1142"></a> *     only work with {@code goog.ui.ServerChart.EncodingType.TEXT}
+<a name="line1143"></a> *     encoding.
+<a name="line1144"></a> * @param {number} minimum The lowest number to apply to the data.
+<a name="line1145"></a> * @param {number} maximum The highest number to apply to the data.
+<a name="line1146"></a> */
+<a name="line1147"></a>goog.ui.ServerChart.prototype.setDataScaling = function(minimum, maximum) {
+<a name="line1148"></a>  this.encodingType_ = goog.ui.ServerChart.EncodingType.TEXT;
+<a name="line1149"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.DATA_SCALING,
+<a name="line1150"></a>                              minimum + &#39;,&#39; + maximum);
+<a name="line1151"></a>};
+<a name="line1152"></a>
+<a name="line1153"></a>
+<a name="line1154"></a>/**
+<a name="line1155"></a> * Sets the widths of the bars and the spaces between the bars in a bar
+<a name="line1156"></a> * chart.
+<a name="line1157"></a> * NOTE: If the space between groups is specified but the space between
+<a name="line1158"></a> *     bars is left undefined, the space between groups will be interpreted
+<a name="line1159"></a> *     as the space between bars because this is the behavior exposed
+<a name="line1160"></a> *     in the external developers guide.
+<a name="line1161"></a> * @param {number} barWidth The width of a bar in pixels.
+<a name="line1162"></a> * @param {number} opt_spaceBars The width of the space between
+<a name="line1163"></a> *     bars in a group in pixels.
+<a name="line1164"></a> * @param {number} opt_spaceGroups The width of the space between
+<a name="line1165"></a> *     groups.
+<a name="line1166"></a> */
+<a name="line1167"></a>goog.ui.ServerChart.prototype.setBarSpaceWidths = function(barWidth,
+<a name="line1168"></a>                                                           opt_spaceBars,
+<a name="line1169"></a>                                                           opt_spaceGroups) {
+<a name="line1170"></a>  var widths = [barWidth];
+<a name="line1171"></a>  if (goog.isDef(opt_spaceBars)) {
+<a name="line1172"></a>    widths.push(opt_spaceBars);
+<a name="line1173"></a>  }
+<a name="line1174"></a>  if (goog.isDef(opt_spaceGroups)) {
+<a name="line1175"></a>    widths.push(opt_spaceGroups);
+<a name="line1176"></a>  }
+<a name="line1177"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.BAR_HEIGHT,
+<a name="line1178"></a>                              widths.join(&#39;,&#39;));
+<a name="line1179"></a>};
+<a name="line1180"></a>
+<a name="line1181"></a>
+<a name="line1182"></a>/**
+<a name="line1183"></a> * Specifies that the bar width in a bar chart should be calculated
+<a name="line1184"></a> * automatically given the space available in the chart, while optionally
+<a name="line1185"></a> * setting the spaces between the bars.
+<a name="line1186"></a> * NOTE: If the space between groups is specified but the space between
+<a name="line1187"></a> *     bars is left undefined, the space between groups will be interpreted
+<a name="line1188"></a> *     as the space between bars because this is the behavior exposed
+<a name="line1189"></a> *     in the external developers guide.
+<a name="line1190"></a> * @param {number} opt_spaceBars The width of the space between
+<a name="line1191"></a> *     bars in a group in pixels.
+<a name="line1192"></a> * @param {number} opt_spaceGroups The width of the space between
+<a name="line1193"></a> *     groups.
+<a name="line1194"></a> */
+<a name="line1195"></a>goog.ui.ServerChart.prototype.setAutomaticBarWidth = function(opt_spaceBars,
+<a name="line1196"></a>                                                              opt_spaceGroups) {
+<a name="line1197"></a>  var widths = [&#39;a&#39;];
+<a name="line1198"></a>  if (goog.isDef(opt_spaceBars)) {
+<a name="line1199"></a>    widths.push(opt_spaceBars);
+<a name="line1200"></a>  }
+<a name="line1201"></a>  if (goog.isDef(opt_spaceGroups)) {
+<a name="line1202"></a>    widths.push(opt_spaceGroups);
+<a name="line1203"></a>  }
+<a name="line1204"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.BAR_HEIGHT,
+<a name="line1205"></a>                              widths.join(&#39;,&#39;));
+<a name="line1206"></a>};
+<a name="line1207"></a>
+<a name="line1208"></a>
+<a name="line1209"></a>/**
+<a name="line1210"></a> * Adds a multi-axis to the chart, and sets its type. Multiple axes of the same
+<a name="line1211"></a> * type can be added.
+<a name="line1212"></a> *
+<a name="line1213"></a> * @param {goog.ui.ServerChart.MultiAxisType} axisType The desired axis type.
+<a name="line1214"></a> * @return {number} The index of the newly inserted axis, suitable for feeding
+<a name="line1215"></a> *     to the setMultiAxis*() functions.
+<a name="line1216"></a> */
+<a name="line1217"></a>goog.ui.ServerChart.prototype.addMultiAxis = function(axisType) {
+<a name="line1218"></a>  this.multiAxisType_.push(axisType);
+<a name="line1219"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.MULTI_AXIS_TYPES,
+<a name="line1220"></a>                              this.multiAxisType_.join(&#39;,&#39;));
+<a name="line1221"></a>  return this.multiAxisType_.length - 1;
+<a name="line1222"></a>};
+<a name="line1223"></a>
+<a name="line1224"></a>
+<a name="line1225"></a>/**
+<a name="line1226"></a> * Returns the axis type for the given axis, or all of them in an array if the
+<a name="line1227"></a> * axis number is not given.
+<a name="line1228"></a> *
+<a name="line1229"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1230"></a> * @return {goog.ui.ServerChart.MultiAxisType|
+<a name="line1231"></a> *     Array.&lt;goog.ui.ServerChart.MultiAxisType&gt;}
+<a name="line1232"></a> *     The axis type for the given axis, or all of them in an array if the
+<a name="line1233"></a> *     axis number is not given.
+<a name="line1234"></a> */
+<a name="line1235"></a>goog.ui.ServerChart.prototype.getMultiAxisType = function(opt_axisNumber) {
+<a name="line1236"></a>  if (goog.isDef(opt_axisNumber)) {
+<a name="line1237"></a>    return this.multiAxisType_[opt_axisNumber];
+<a name="line1238"></a>  }
+<a name="line1239"></a>  return this.multiAxisType_;
+<a name="line1240"></a>};
+<a name="line1241"></a>
+<a name="line1242"></a>
+<a name="line1243"></a>/**
+<a name="line1244"></a> * Sets the label text (usually multiple values) for a given axis, overwriting
+<a name="line1245"></a> * any existing values.
+<a name="line1246"></a> *
+<a name="line1247"></a> * @param {number} axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1248"></a> * @param {Array.&lt;string&gt;} labelText The actual label text to be added.
+<a name="line1249"></a> */
+<a name="line1250"></a>goog.ui.ServerChart.prototype.setMultiAxisLabelText = function(axisNumber,
+<a name="line1251"></a>                                                               labelText) {
+<a name="line1252"></a>  this.multiAxisLabelText_[axisNumber] = labelText;
+<a name="line1253"></a>
+<a name="line1254"></a>  var axisString = this.computeMultiAxisDataString_(this.multiAxisLabelText_,
+<a name="line1255"></a>                                                    &#39;:|&#39;,
+<a name="line1256"></a>                                                    &#39;|&#39;,
+<a name="line1257"></a>                                                    &#39;|&#39;);
+<a name="line1258"></a>  this.uri_.setParameterValue(
+<a name="line1259"></a>      goog.ui.ServerChart.UriParam.MULTI_AXIS_LABEL_TEXT,
+<a name="line1260"></a>      axisString);
+<a name="line1261"></a>};
+<a name="line1262"></a>
+<a name="line1263"></a>
+<a name="line1264"></a>/**
+<a name="line1265"></a> * Returns the label text, or all of them in a two-dimensional array if the
+<a name="line1266"></a> * axis number is not given.
+<a name="line1267"></a> *
+<a name="line1268"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1269"></a> * @return {Object|Array.&lt;string&gt;} The label text, or all of them in a
+<a name="line1270"></a> *     two-dimensional array if the axis number is not given.
+<a name="line1271"></a> */
+<a name="line1272"></a>goog.ui.ServerChart.prototype.getMultiAxisLabelText = function(opt_axisNumber) {
+<a name="line1273"></a>  if (goog.isDef(opt_axisNumber)) {
+<a name="line1274"></a>    return this.multiAxisLabelText_[opt_axisNumber];
+<a name="line1275"></a>  }
+<a name="line1276"></a>  return this.multiAxisLabelText_;
+<a name="line1277"></a>};
+<a name="line1278"></a>
+<a name="line1279"></a>
+<a name="line1280"></a>/**
+<a name="line1281"></a> * Sets the label positions for a given axis, overwriting any existing values.
+<a name="line1282"></a> * The label positions are assumed to be floating-point numbers within the
+<a name="line1283"></a> * range of the axis.
+<a name="line1284"></a> *
+<a name="line1285"></a> * @param {number} axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1286"></a> * @param {Array.&lt;number&gt;} labelPosition The actual label positions to be added.
+<a name="line1287"></a> */
+<a name="line1288"></a>goog.ui.ServerChart.prototype.setMultiAxisLabelPosition = function(
+<a name="line1289"></a>    axisNumber, labelPosition) {
+<a name="line1290"></a>  this.multiAxisLabelPosition_[axisNumber] = labelPosition;
+<a name="line1291"></a>
+<a name="line1292"></a>  var positionString = this.computeMultiAxisDataString_(
+<a name="line1293"></a>      this.multiAxisLabelPosition_,
+<a name="line1294"></a>      &#39;,&#39;,
+<a name="line1295"></a>      &#39;,&#39;,
+<a name="line1296"></a>      &#39;|&#39;);
+<a name="line1297"></a>  this.uri_.setParameterValue(
+<a name="line1298"></a>      goog.ui.ServerChart.UriParam.MULTI_AXIS_LABEL_POSITION,
+<a name="line1299"></a>      positionString);
+<a name="line1300"></a>};
+<a name="line1301"></a>
+<a name="line1302"></a>
+<a name="line1303"></a>/**
+<a name="line1304"></a> * Returns the label positions for a given axis number, or all of them in a
+<a name="line1305"></a> * two-dimensional array if the axis number is not given.
+<a name="line1306"></a> *
+<a name="line1307"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1308"></a> * @return {Object|Array.&lt;number&gt;} The label positions for a given axis number,
+<a name="line1309"></a> *     or all of them in a two-dimensional array if the axis number is not
+<a name="line1310"></a> *     given.
+<a name="line1311"></a> */
+<a name="line1312"></a>goog.ui.ServerChart.prototype.getMultiAxisLabelPosition =
+<a name="line1313"></a>    function(opt_axisNumber) {
+<a name="line1314"></a>  if (goog.isDef(opt_axisNumber)) {
+<a name="line1315"></a>    return this.multiAxisLabelPosition_[opt_axisNumber];
+<a name="line1316"></a>  }
+<a name="line1317"></a>  return this.multiAxisLabelPosition_;
+<a name="line1318"></a>};
+<a name="line1319"></a>
+<a name="line1320"></a>
+<a name="line1321"></a>/**
+<a name="line1322"></a> * Sets the label range for a given axis, overwriting any existing range.
+<a name="line1323"></a> * The default range is from 0 to 100. If the start value is larger than the
+<a name="line1324"></a> * end value, the axis direction is reversed.  rangeStart and rangeEnd must
+<a name="line1325"></a> * be two different finite numbers.
+<a name="line1326"></a> *
+<a name="line1327"></a> * @param {number} axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1328"></a> * @param {number} rangeStart The new start of the range.
+<a name="line1329"></a> * @param {number} rangeEnd The new end of the range.
+<a name="line1330"></a> * @param {number} opt_interval The interval between axis labels.
+<a name="line1331"></a> */
+<a name="line1332"></a>goog.ui.ServerChart.prototype.setMultiAxisRange = function(axisNumber,
+<a name="line1333"></a>                                                           rangeStart,
+<a name="line1334"></a>                                                           rangeEnd,
+<a name="line1335"></a>                                                           opt_interval) {
+<a name="line1336"></a>  goog.asserts.assert(rangeStart != rangeEnd,
+<a name="line1337"></a>      &#39;Range start and end cannot be the same value.&#39;);
+<a name="line1338"></a>  goog.asserts.assert(isFinite(rangeStart) &amp;&amp; isFinite(rangeEnd),
+<a name="line1339"></a>      &#39;Range start and end must be finite numbers.&#39;);
+<a name="line1340"></a>  this.multiAxisRange_[axisNumber] = [rangeStart, rangeEnd];
+<a name="line1341"></a>  if (goog.isDef(opt_interval)) {
+<a name="line1342"></a>    this.multiAxisRange_[axisNumber].push(opt_interval);
+<a name="line1343"></a>  }
+<a name="line1344"></a>  var rangeString = this.computeMultiAxisDataString_(this.multiAxisRange_,
+<a name="line1345"></a>      &#39;,&#39;, &#39;,&#39;, &#39;|&#39;);
+<a name="line1346"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.MULTI_AXIS_RANGE,
+<a name="line1347"></a>      rangeString);
+<a name="line1348"></a>};
+<a name="line1349"></a>
+<a name="line1350"></a>
+<a name="line1351"></a>/**
+<a name="line1352"></a> * Returns the label range for a given axis number as a two-element array of
+<a name="line1353"></a> * (range start, range end), or all of them in a two-dimensional array if the
+<a name="line1354"></a> * axis number is not given.
+<a name="line1355"></a> *
+<a name="line1356"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1357"></a> * @return {Object|Array.&lt;number&gt;} The label range for a given axis number as a
+<a name="line1358"></a> *     two-element array of (range start, range end), or all of them in a
+<a name="line1359"></a> *     two-dimensional array if the axis number is not given.
+<a name="line1360"></a> */
+<a name="line1361"></a>goog.ui.ServerChart.prototype.getMultiAxisRange = function(opt_axisNumber) {
+<a name="line1362"></a>  if (goog.isDef(opt_axisNumber)) {
+<a name="line1363"></a>    return this.multiAxisRange_[opt_axisNumber];
+<a name="line1364"></a>  }
+<a name="line1365"></a>  return this.multiAxisRange_;
+<a name="line1366"></a>};
+<a name="line1367"></a>
+<a name="line1368"></a>
+<a name="line1369"></a>/**
+<a name="line1370"></a> * Sets the label style for a given axis, overwriting any existing style.
+<a name="line1371"></a> * The default style is as follows: Default is x-axis labels are centered, left
+<a name="line1372"></a> * hand y-axis labels are right aligned, right hand y-axis labels are left
+<a name="line1373"></a> * aligned. The font size and alignment are optional parameters.
 <a name="line1374"></a> *
-<a name="line1375"></a> * @param {number} axisNumber The axis index, as returned by addMultiAxis.
-<a name="line1376"></a> * @param {string} color The hex value for this label&#39;s color.
-<a name="line1377"></a> * @param {number} opt_fontSize The label font size, in pixels.
-<a name="line1378"></a> * @param {goog.ui.ServerChart.MultiAxisAlignment} opt_alignment The label
-<a name="line1379"></a> *     alignment.
-<a name="line1380"></a> * @param {goog.ui.ServerChart.AxisDisplayType} opt_axisDisplay The axis
-<a name="line1381"></a> *     line and ticks.
-<a name="line1382"></a> */
-<a name="line1383"></a>goog.ui.ServerChart.prototype.setMultiAxisLabelStyle = function(axisNumber,
-<a name="line1384"></a>                                                                color,
-<a name="line1385"></a>                                                                opt_fontSize,
-<a name="line1386"></a>                                                                opt_alignment,
-<a name="line1387"></a>                                                             opt_axisDisplay) {
-<a name="line1388"></a>  var style = [color];
-<a name="line1389"></a>  if (goog.isDef(opt_fontSize) || goog.isDef(opt_alignment)) {
-<a name="line1390"></a>    style.push(opt_fontSize || &#39;&#39;);
-<a name="line1391"></a>  }
-<a name="line1392"></a>  if (goog.isDef(opt_alignment)) {
-<a name="line1393"></a>    style.push(opt_alignment);
-<a name="line1394"></a>  }
-<a name="line1395"></a>  if (opt_axisDisplay) {
-<a name="line1396"></a>    style.push(opt_axisDisplay);
-<a name="line1397"></a>  }
-<a name="line1398"></a>  this.multiAxisLabelStyle_[axisNumber] = style;
-<a name="line1399"></a>  var styleString = this.computeMultiAxisDataString_(this.multiAxisLabelStyle_,
-<a name="line1400"></a>                                                     &#39;,&#39;,
-<a name="line1401"></a>                                                     &#39;,&#39;,
-<a name="line1402"></a>                                                     &#39;|&#39;);
-<a name="line1403"></a>  this.uri_.setParameterValue(
-<a name="line1404"></a>      goog.ui.ServerChart.UriParam.MULTI_AXIS_STYLE,
-<a name="line1405"></a>      styleString);
-<a name="line1406"></a>};
-<a name="line1407"></a>
-<a name="line1408"></a>
-<a name="line1409"></a>/**
-<a name="line1410"></a> * Returns the label style for a given axis number as a one- to three-element
-<a name="line1411"></a> * array, or all of them in a two-dimensional array if the axis number is not
-<a name="line1412"></a> * given.
-<a name="line1413"></a> *
-<a name="line1414"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
-<a name="line1415"></a> * @return {Object|Array.&lt;number&gt;} The label style for a given axis number as a
-<a name="line1416"></a> *     one- to three-element array, or all of them in a two-dimensional array if
-<a name="line1417"></a> *     the axis number is not given.
-<a name="line1418"></a> */
-<a name="line1419"></a>goog.ui.ServerChart.prototype.getMultiAxisLabelStyle =
-<a name="line1420"></a>    function(opt_axisNumber) {
-<a name="line1421"></a>  if (goog.isDef(opt_axisNumber)) {
-<a name="line1422"></a>    return this.multiAxisLabelStyle_[opt_axisNumber];
-<a name="line1423"></a>  }
-<a name="line1424"></a>  return this.multiAxisLabelStyle_;
-<a name="line1425"></a>};
-<a name="line1426"></a>
-<a name="line1427"></a>
-<a name="line1428"></a>/**
-<a name="line1429"></a> * Adds a data set.
-<a name="line1430"></a> * NOTE: The color string should NOT have a &#39;#&#39; at the beginning of it.
-<a name="line1431"></a> *
-<a name="line1432"></a> * @param {Array.&lt;number|null&gt;} data An array of numbers (values can be
-<a name="line1433"></a> *     NaN or null).
-<a name="line1434"></a> * @param {string} color The hex value for this data set&#39;s color.
-<a name="line1435"></a> * @param {string} opt_legendText The legend text, if any, for this data
-<a name="line1436"></a> *     series. NOTE: If specified, all previously added data sets must also
-<a name="line1437"></a> *     have a legend text.
-<a name="line1438"></a> */
-<a name="line1439"></a>goog.ui.ServerChart.prototype.addDataSet = function(data,
-<a name="line1440"></a>                                                    color,
-<a name="line1441"></a>                                                    opt_legendText) {
-<a name="line1442"></a>  var dataMin = this.arrayMin_(data);
-<a name="line1443"></a>  if (dataMin &lt; this.minValue_) {
-<a name="line1444"></a>    this.minValue_ = dataMin;
-<a name="line1445"></a>  }
-<a name="line1446"></a>
-<a name="line1447"></a>  var dataMax = this.arrayMax_(data);
-<a name="line1448"></a>  if (dataMax &gt; this.maxValue_) {
-<a name="line1449"></a>    this.maxValue_ = dataMax;
-<a name="line1450"></a>  }
-<a name="line1451"></a>
-<a name="line1452"></a>  if (goog.isDef(opt_legendText)) {
-<a name="line1453"></a>    if (this.setLegendTexts_.length &lt; this.dataSets_.length) {
-<a name="line1454"></a>      throw Error(&#39;Cannot start adding legends text after first element.&#39;);
-<a name="line1455"></a>    }
-<a name="line1456"></a>    this.setLegendTexts_.push(opt_legendText);
-<a name="line1457"></a>    this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.LEGEND_TEXTS,
-<a name="line1458"></a>                                this.setLegendTexts_.join(&#39;|&#39;));
-<a name="line1459"></a>  }
-<a name="line1460"></a>
-<a name="line1461"></a>  this.dataSets_.push(data);
-<a name="line1462"></a>  this.setColors_.push(color);
-<a name="line1463"></a>
-<a name="line1464"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.DATA_COLORS,
-<a name="line1465"></a>                              this.setColors_.join(&#39;,&#39;));
-<a name="line1466"></a>};
-<a name="line1467"></a>
-<a name="line1468"></a>
-<a name="line1469"></a>/**
-<a name="line1470"></a> * Clears the data sets from the graph. All data, including the colors and
-<a name="line1471"></a> * legend text, is cleared.
-<a name="line1472"></a> */
-<a name="line1473"></a>goog.ui.ServerChart.prototype.clearDataSets = function() {
-<a name="line1474"></a>  var queryData = this.uri_.getQueryData();
-<a name="line1475"></a>  queryData.remove(goog.ui.ServerChart.UriParam.LEGEND_TEXTS);
-<a name="line1476"></a>  queryData.remove(goog.ui.ServerChart.UriParam.DATA_COLORS);
-<a name="line1477"></a>  queryData.remove(goog.ui.ServerChart.UriParam.DATA);
-<a name="line1478"></a>  this.setLegendTexts_.length = 0;
-<a name="line1479"></a>  this.setColors_.length = 0;
-<a name="line1480"></a>  this.dataSets_.length = 0;
-<a name="line1481"></a>};
-<a name="line1482"></a>
-<a name="line1483"></a>
-<a name="line1484"></a>/**
-<a name="line1485"></a> * Returns the given data set or all of them in a two-dimensional array if
-<a name="line1486"></a> * the set number is not given.
-<a name="line1487"></a> *
-<a name="line1488"></a> * @param {number} opt_setNumber Optional data set number to get.
-<a name="line1489"></a> * @return {Array} The given data set or all of them in a two-dimensional array
-<a name="line1490"></a> *     if the set number is not given.
-<a name="line1491"></a> */
-<a name="line1492"></a>goog.ui.ServerChart.prototype.getData = function(opt_setNumber) {
-<a name="line1493"></a>  if (goog.isDef(opt_setNumber)) {
-<a name="line1494"></a>    return this.dataSets_[opt_setNumber];
-<a name="line1495"></a>  }
-<a name="line1496"></a>  return this.dataSets_;
-<a name="line1497"></a>};
-<a name="line1498"></a>
-<a name="line1499"></a>
-<a name="line1500"></a>/**
-<a name="line1501"></a> * Computes the data string using the data in this.dataSets_ and sets
-<a name="line1502"></a> * the object&#39;s URI accordingly. If the URI&#39;s length equals or exceeds the
-<a name="line1503"></a> * limit, goog.ui.ServerChart.UriTooLongEvent is dispatched on the
-<a name="line1504"></a> * goog.ui.ServerChart object.
-<a name="line1505"></a> * @private
-<a name="line1506"></a> */
-<a name="line1507"></a>goog.ui.ServerChart.prototype.computeDataString_ = function() {
-<a name="line1508"></a>  var ok;
-<a name="line1509"></a>  if (this.encodingType_ != goog.ui.ServerChart.EncodingType.AUTOMATIC) {
-<a name="line1510"></a>    ok = this.computeDataStringForEncoding_(this.encodingType_);
-<a name="line1511"></a>  } else {
-<a name="line1512"></a>    ok = this.computeDataStringForEncoding_(
-<a name="line1513"></a>        goog.ui.ServerChart.EncodingType.EXTENDED);
-<a name="line1514"></a>    if (!ok) {
-<a name="line1515"></a>        ok = this.computeDataStringForEncoding_(
-<a name="line1516"></a>            goog.ui.ServerChart.EncodingType.SIMPLE);
-<a name="line1517"></a>    }
-<a name="line1518"></a>  }
-<a name="line1519"></a>  if (!ok) {
-<a name="line1520"></a>    this.dispatchEvent(
-<a name="line1521"></a>        new goog.ui.ServerChart.UriTooLongEvent(this.uri_.toString()));
-<a name="line1522"></a>  }
-<a name="line1523"></a>};
-<a name="line1524"></a>
-<a name="line1525"></a>
-<a name="line1526"></a>/**
-<a name="line1527"></a> * Computes the data string using the data in this.dataSets_ and the encoding
-<a name="line1528"></a> * specified by the encoding parameter, which must not be AUTOMATIC, and sets
-<a name="line1529"></a> * the object&#39;s URI accordingly.
-<a name="line1530"></a> * @param {goog.ui.ServerChart.EncodingType} encoding The data encoding to use;
-<a name="line1531"></a> *     must not be AUTOMATIC.
-<a name="line1532"></a> * @return {boolean} False if the resulting URI is too long.
-<a name="line1533"></a> * @private
-<a name="line1534"></a> */
-<a name="line1535"></a>goog.ui.ServerChart.prototype.computeDataStringForEncoding_ = function(
-<a name="line1536"></a>    encoding) {
-<a name="line1537"></a>  var dataStrings = [];
-<a name="line1538"></a>  for (var i = 0, setLen = this.dataSets_.length; i &lt; setLen; ++i) {
-<a name="line1539"></a>    dataStrings[i] = this.getChartServerValues_(this.dataSets_[i],
-<a name="line1540"></a>                                                this.minValue_,
-<a name="line1541"></a>                                                this.maxValue_,
-<a name="line1542"></a>                                                encoding);
-<a name="line1543"></a>  }
-<a name="line1544"></a>  var delimiter = encoding == goog.ui.ServerChart.EncodingType.TEXT ? &#39;|&#39; : &#39;,&#39;;
-<a name="line1545"></a>  dataStrings = dataStrings.join(delimiter);
-<a name="line1546"></a>  var data;
-<a name="line1547"></a>  if (this.numVisibleDataSets_ == null) {
-<a name="line1548"></a>    data = goog.string.buildString(encoding, &#39;:&#39;, dataStrings);
-<a name="line1549"></a>  } else {
-<a name="line1550"></a>    data = goog.string.buildString(encoding, this.numVisibleDataSets_, &#39;:&#39;,
-<a name="line1551"></a>        dataStrings);
-<a name="line1552"></a>  }
-<a name="line1553"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.DATA, data);
-<a name="line1554"></a>  return this.uri_.toString().length &lt; this.uriLengthLimit_;
-<a name="line1555"></a>};
-<a name="line1556"></a>
-<a name="line1557"></a>
-<a name="line1558"></a>/**
-<a name="line1559"></a> * Computes a multi-axis data string from the given data and separators. The
-<a name="line1560"></a> * general data format for each index/element in the array will be
-<a name="line1561"></a> * &quot;&lt;arrayIndex&gt;&lt;indexSeparator&gt;&lt;arrayElement.join(elementSeparator)&gt;&quot;, with
-<a name="line1562"></a> * axisSeparator used between multiple elements.
-<a name="line1563"></a> * @param {Object} data The data to compute the data string for, as a
-<a name="line1564"></a> *     sparse array of arrays. NOTE: The function uses the length of
-<a name="line1565"></a> *     multiAxisType_ to determine the upper bound for the outer array.
-<a name="line1566"></a> * @param {string} indexSeparator The separator string inserted between each
-<a name="line1567"></a> *     index and the data itself, commonly a comma (,).
-<a name="line1568"></a> * @param {string} elementSeparator The separator string inserted between each
-<a name="line1569"></a> *     element inside each sub-array in the data, if there are more than one;
-<a name="line1570"></a> *     commonly a comma (,).
-<a name="line1571"></a> * @param {string} axisSeparator The separator string inserted between each
-<a name="line1572"></a> *     axis specification, if there are more than one; usually a pipe sign (|).
-<a name="line1573"></a> * @return {string} The multi-axis data string.
-<a name="line1574"></a> * @private
-<a name="line1575"></a> */
-<a name="line1576"></a>goog.ui.ServerChart.prototype.computeMultiAxisDataString_ = function(
-<a name="line1577"></a>    data,
-<a name="line1578"></a>    indexSeparator,
-<a name="line1579"></a>    elementSeparator,
-<a name="line1580"></a>    axisSeparator) {
-<a name="line1581"></a>  var elementStrings = [];
-<a name="line1582"></a>  for (var i = 0, setLen = this.multiAxisType_.length; i &lt; setLen; ++i) {
-<a name="line1583"></a>    if (data[i]) {
-<a name="line1584"></a>      elementStrings.push(i + indexSeparator + data[i].join(elementSeparator));
-<a name="line1585"></a>    }
-<a name="line1586"></a>  }
-<a name="line1587"></a>  return elementStrings.join(axisSeparator);
-<a name="line1588"></a>};
-<a name="line1589"></a>
-<a name="line1590"></a>
-<a name="line1591"></a>/**
-<a name="line1592"></a> * Array of possible ChartServer data values
-<a name="line1593"></a> * @type {string}
-<a name="line1594"></a> */
-<a name="line1595"></a>goog.ui.ServerChart.CHART_VALUES = &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39; +
-<a name="line1596"></a>                                   &#39;abcdefghijklmnopqrstuvwxyz&#39; +
-<a name="line1597"></a>                                   &#39;0123456789&#39;;
-<a name="line1598"></a>
-<a name="line1599"></a>
-<a name="line1600"></a>/**
-<a name="line1601"></a> * Array of extended ChartServer data values
-<a name="line1602"></a> * @type {string}
-<a name="line1603"></a> */
-<a name="line1604"></a>goog.ui.ServerChart.CHART_VALUES_EXTENDED = goog.ui.ServerChart.CHART_VALUES +
-<a name="line1605"></a>                                            &#39;-.&#39;;
-<a name="line1606"></a>
-<a name="line1607"></a>/**
-<a name="line1608"></a> * Upper bound for extended values
-<a name="line1609"></a> */
-<a name="line1610"></a>goog.ui.ServerChart.EXTENDED_UPPER_BOUND =
-<a name="line1611"></a>    Math.pow(goog.ui.ServerChart.CHART_VALUES_EXTENDED.length, 2) - 1;
-<a name="line1612"></a>
-<a name="line1613"></a>
-<a name="line1614"></a>/**
-<a name="line1615"></a> * Converts a number --&gt; letter[s] suitable for graphing in ChartServer.
-<a name="line1616"></a> *
-<a name="line1617"></a> * @private
-<a name="line1618"></a> * @param {number} value The value to convert.
-<a name="line1619"></a> * @param {number} minValue The minimum value (used for normalization).
-<a name="line1620"></a> * @param {number} maxValue The maximum value (used for normalization).
-<a name="line1621"></a> * @param {goog.ui.ServerChart.EncodingType} encoding The data encoding to use;
-<a name="line1622"></a> *     must not be AUTOMATIC.
-<a name="line1623"></a> * @return {string} The converted number.
-<a name="line1624"></a> */
-<a name="line1625"></a>goog.ui.ServerChart.prototype.getConvertedValue_ = function(value,
-<a name="line1626"></a>                                                            minValue,
-<a name="line1627"></a>                                                            maxValue,
-<a name="line1628"></a>                                                            encoding) {
-<a name="line1629"></a>  if (minValue &gt; maxValue) {
-<a name="line1630"></a>    throw Error(&#39;minValue is greater than maxValue&#39;);
-<a name="line1631"></a>  }
-<a name="line1632"></a>  var isExtended = encoding == goog.ui.ServerChart.EncodingType.EXTENDED;
-<a name="line1633"></a>
-<a name="line1634"></a>  if (!goog.isDefAndNotNull(value) || isNaN(value)) {
-<a name="line1635"></a>    return isExtended ? &#39;__&#39; : &#39;_&#39;;
-<a name="line1636"></a>  }
-<a name="line1637"></a>
-<a name="line1638"></a>  if (encoding == goog.ui.ServerChart.EncodingType.TEXT) {
-<a name="line1639"></a>    return String(value);
-<a name="line1640"></a>  }
-<a name="line1641"></a>
-<a name="line1642"></a>  var frac = goog.ui.ServerChart.DEFAULT_NORMALIZATION;
-<a name="line1643"></a>  if (maxValue &gt; minValue) {
-<a name="line1644"></a>    frac = (value - minValue) / (maxValue - minValue);
-<a name="line1645"></a>  }
-<a name="line1646"></a>
-<a name="line1647"></a>  if (isExtended) {
-<a name="line1648"></a>    var maxIndex = goog.ui.ServerChart.CHART_VALUES_EXTENDED.length;
-<a name="line1649"></a>    var upperBound = goog.ui.ServerChart.EXTENDED_UPPER_BOUND;
-<a name="line1650"></a>    var index1 = Math.floor(frac * upperBound / maxIndex);
-<a name="line1651"></a>    var index2 = Math.floor((frac * upperBound) % maxIndex);
-<a name="line1652"></a>    var extendedVals = goog.ui.ServerChart.CHART_VALUES_EXTENDED;
-<a name="line1653"></a>    return extendedVals.charAt(index1) + extendedVals.charAt(index2);
-<a name="line1654"></a>  }
-<a name="line1655"></a>
-<a name="line1656"></a>  var index = Math.round(frac * (goog.ui.ServerChart.CHART_VALUES.length - 1));
-<a name="line1657"></a>  return goog.ui.ServerChart.CHART_VALUES.charAt(index);
-<a name="line1658"></a>};
-<a name="line1659"></a>
-<a name="line1660"></a>
-<a name="line1661"></a>/**
-<a name="line1662"></a> * Creates the chd string for chartserver.
-<a name="line1663"></a> *
-<a name="line1664"></a> * @private
-<a name="line1665"></a> * @param {Array.&lt;number&gt;} values An array of numbers to graph.
-<a name="line1666"></a> * @param {number} minValue The minimum value (used for normalization).
-<a name="line1667"></a> * @param {number} maxValue The maximum value (used for normalization).
-<a name="line1668"></a> * @param {goog.ui.ServerChart.EncodingType} encoding The data encoding to use;
-<a name="line1669"></a> *     must not be AUTOMATIC.
-<a name="line1670"></a> * @return {string} The chd string for chartserver.
-<a name="line1671"></a> */
-<a name="line1672"></a>goog.ui.ServerChart.prototype.getChartServerValues_ = function(values,
-<a name="line1673"></a>                                                               minValue,
-<a name="line1674"></a>                                                               maxValue,
-<a name="line1675"></a>                                                               encoding) {
-<a name="line1676"></a>  var s = [];
-<a name="line1677"></a>  for (var i = 0, valuesLen = values.length; i &lt; valuesLen; ++i) {
-<a name="line1678"></a>    s.push(this.getConvertedValue_(values[i], minValue,
-<a name="line1679"></a>                                   maxValue, encoding));
-<a name="line1680"></a>  }
-<a name="line1681"></a>  return s.join(
-<a name="line1682"></a>      this.encodingType_ == goog.ui.ServerChart.EncodingType.TEXT ? &#39;,&#39; : &#39;&#39;);
-<a name="line1683"></a>};
-<a name="line1684"></a>
-<a name="line1685"></a>
-<a name="line1686"></a>/**
-<a name="line1687"></a> * Finds the minimum value in an array and returns it.
-<a name="line1688"></a> * Needed because Math.min does not handle sparse arrays the way we want.
-<a name="line1689"></a> *
-<a name="line1690"></a> * @param {Array.&lt;number?&gt;} ary An array of values.
-<a name="line1691"></a> * @return {number} The minimum value.
-<a name="line1692"></a> * @private
-<a name="line1693"></a> */
-<a name="line1694"></a>goog.ui.ServerChart.prototype.arrayMin_ = function(ary) {
-<a name="line1695"></a>  var min = Infinity;
-<a name="line1696"></a>  for (var i = 0, aryLen = ary.length; i &lt; aryLen; ++i) {
-<a name="line1697"></a>    var value = ary[i];
-<a name="line1698"></a>    if (value != null &amp;&amp; value &lt; min) {
-<a name="line1699"></a>      min = value;
-<a name="line1700"></a>    }
-<a name="line1701"></a>  }
-<a name="line1702"></a>  return min;
-<a name="line1703"></a>};
-<a name="line1704"></a>
-<a name="line1705"></a>
-<a name="line1706"></a>/**
-<a name="line1707"></a> * Finds the maximum value in an array and returns it.
-<a name="line1708"></a> * Needed because Math.max does not handle sparse arrays the way we want.
-<a name="line1709"></a> *
-<a name="line1710"></a> * @param {Array.&lt;number?&gt;} ary An array of values.
-<a name="line1711"></a> * @return {number} The maximum value.
-<a name="line1712"></a> * @private
-<a name="line1713"></a> */
-<a name="line1714"></a>goog.ui.ServerChart.prototype.arrayMax_ = function(ary) {
-<a name="line1715"></a>  var max = -Infinity;
-<a name="line1716"></a>  for (var i = 0, aryLen = ary.length; i &lt; aryLen; ++i) {
-<a name="line1717"></a>    var value = ary[i];
-<a name="line1718"></a>    if (value != null &amp;&amp; value &gt; max) {
-<a name="line1719"></a>      max = value;
-<a name="line1720"></a>    }
-<a name="line1721"></a>  }
-<a name="line1722"></a>  return max;
-<a name="line1723"></a>};
-<a name="line1724"></a>
-<a name="line1725"></a>
-<a name="line1726"></a>/** @inheritDoc */
-<a name="line1727"></a>goog.ui.ServerChart.prototype.disposeInternal = function() {
-<a name="line1728"></a>  goog.ui.ServerChart.superClass_.disposeInternal.call(this);
-<a name="line1729"></a>  delete this.xLabels_;
-<a name="line1730"></a>  delete this.leftLabels_;
-<a name="line1731"></a>  delete this.rightLabels_;
-<a name="line1732"></a>  delete this.gridX_;
-<a name="line1733"></a>  delete this.gridY_;
-<a name="line1734"></a>  delete this.setColors_;
-<a name="line1735"></a>  delete this.setLegendTexts_;
-<a name="line1736"></a>  delete this.dataSets_;
-<a name="line1737"></a>  this.uri_ = null;
-<a name="line1738"></a>  delete this.minValue_;
-<a name="line1739"></a>  delete this.maxValue_;
-<a name="line1740"></a>  this.title_ = null;
-<a name="line1741"></a>  delete this.multiAxisType_;
-<a name="line1742"></a>  delete this.multiAxisLabelText_;
-<a name="line1743"></a>  delete this.multiAxisLabelPosition_;
-<a name="line1744"></a>  delete this.multiAxisRange_;
-<a name="line1745"></a>  delete this.multiAxisLabelStyle_;
-<a name="line1746"></a>  this.legend_ = null;
-<a name="line1747"></a>};
-<a name="line1748"></a>
-<a name="line1749"></a>
-<a name="line1750"></a>/**
-<a name="line1751"></a> * Event types dispatched by the ServerChart object
-<a name="line1752"></a> * @enum {string}
-<a name="line1753"></a> */
-<a name="line1754"></a>goog.ui.ServerChart.Event = {
-<a name="line1755"></a>  /**
-<a name="line1756"></a>   * Dispatched when the resulting URI reaches or exceeds the URI length limit.
-<a name="line1757"></a>   */
-<a name="line1758"></a>  URI_TOO_LONG: &#39;uritoolong&#39;
-<a name="line1759"></a>};
-<a name="line1760"></a>
-<a name="line1761"></a>
-<a name="line1762"></a>/**
-<a name="line1763"></a> * Class for the event dispatched on the ServerChart when the resulting URI
-<a name="line1764"></a> * exceeds the URI length limit.
-<a name="line1765"></a> * @constructor
-<a name="line1766"></a> * @param {string} uri The overly-long URI string.
-<a name="line1767"></a> * @extends {goog.events.Event}
-<a name="line1768"></a> */
-<a name="line1769"></a>goog.ui.ServerChart.UriTooLongEvent = function(uri) {
-<a name="line1770"></a>  goog.events.Event.call(this, goog.ui.ServerChart.Event.URI_TOO_LONG);
-<a name="line1771"></a>
-<a name="line1772"></a>  /**
-<a name="line1773"></a>   * The overly-long URI string.
-<a name="line1774"></a>   * @type {string}
-<a name="line1775"></a>   */
-<a name="line1776"></a>  this.uri = uri;
-<a name="line1777"></a>};
-<a name="line1778"></a>goog.inherits(goog.ui.ServerChart.UriTooLongEvent, goog.events.Event);
+<a name="line1375"></a> * NOTE: The color string should NOT have a &#39;#&#39; at the beginning of it.
+<a name="line1376"></a> *
+<a name="line1377"></a> * @param {number} axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1378"></a> * @param {string} color The hex value for this label&#39;s color.
+<a name="line1379"></a> * @param {number} opt_fontSize The label font size, in pixels.
+<a name="line1380"></a> * @param {goog.ui.ServerChart.MultiAxisAlignment} opt_alignment The label
+<a name="line1381"></a> *     alignment.
+<a name="line1382"></a> * @param {goog.ui.ServerChart.AxisDisplayType} opt_axisDisplay The axis
+<a name="line1383"></a> *     line and ticks.
+<a name="line1384"></a> */
+<a name="line1385"></a>goog.ui.ServerChart.prototype.setMultiAxisLabelStyle = function(axisNumber,
+<a name="line1386"></a>                                                                color,
+<a name="line1387"></a>                                                                opt_fontSize,
+<a name="line1388"></a>                                                                opt_alignment,
+<a name="line1389"></a>                                                             opt_axisDisplay) {
+<a name="line1390"></a>  var style = [color];
+<a name="line1391"></a>  if (goog.isDef(opt_fontSize) || goog.isDef(opt_alignment)) {
+<a name="line1392"></a>    style.push(opt_fontSize || &#39;&#39;);
+<a name="line1393"></a>  }
+<a name="line1394"></a>  if (goog.isDef(opt_alignment)) {
+<a name="line1395"></a>    style.push(opt_alignment);
+<a name="line1396"></a>  }
+<a name="line1397"></a>  if (opt_axisDisplay) {
+<a name="line1398"></a>    style.push(opt_axisDisplay);
+<a name="line1399"></a>  }
+<a name="line1400"></a>  this.multiAxisLabelStyle_[axisNumber] = style;
+<a name="line1401"></a>  var styleString = this.computeMultiAxisDataString_(this.multiAxisLabelStyle_,
+<a name="line1402"></a>                                                     &#39;,&#39;,
+<a name="line1403"></a>                                                     &#39;,&#39;,
+<a name="line1404"></a>                                                     &#39;|&#39;);
+<a name="line1405"></a>  this.uri_.setParameterValue(
+<a name="line1406"></a>      goog.ui.ServerChart.UriParam.MULTI_AXIS_STYLE,
+<a name="line1407"></a>      styleString);
+<a name="line1408"></a>};
+<a name="line1409"></a>
+<a name="line1410"></a>
+<a name="line1411"></a>/**
+<a name="line1412"></a> * Returns the label style for a given axis number as a one- to three-element
+<a name="line1413"></a> * array, or all of them in a two-dimensional array if the axis number is not
+<a name="line1414"></a> * given.
+<a name="line1415"></a> *
+<a name="line1416"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1417"></a> * @return {Object|Array.&lt;number&gt;} The label style for a given axis number as a
+<a name="line1418"></a> *     one- to three-element array, or all of them in a two-dimensional array if
+<a name="line1419"></a> *     the axis number is not given.
+<a name="line1420"></a> */
+<a name="line1421"></a>goog.ui.ServerChart.prototype.getMultiAxisLabelStyle =
+<a name="line1422"></a>    function(opt_axisNumber) {
+<a name="line1423"></a>  if (goog.isDef(opt_axisNumber)) {
+<a name="line1424"></a>    return this.multiAxisLabelStyle_[opt_axisNumber];
+<a name="line1425"></a>  }
+<a name="line1426"></a>  return this.multiAxisLabelStyle_;
+<a name="line1427"></a>};
+<a name="line1428"></a>
+<a name="line1429"></a>
+<a name="line1430"></a>/**
+<a name="line1431"></a> * Adds a data set.
+<a name="line1432"></a> * NOTE: The color string should NOT have a &#39;#&#39; at the beginning of it.
+<a name="line1433"></a> *
+<a name="line1434"></a> * @param {Array.&lt;number|null&gt;} data An array of numbers (values can be
+<a name="line1435"></a> *     NaN or null).
+<a name="line1436"></a> * @param {string} color The hex value for this data set&#39;s color.
+<a name="line1437"></a> * @param {string} opt_legendText The legend text, if any, for this data
+<a name="line1438"></a> *     series. NOTE: If specified, all previously added data sets must also
+<a name="line1439"></a> *     have a legend text.
+<a name="line1440"></a> */
+<a name="line1441"></a>goog.ui.ServerChart.prototype.addDataSet = function(data,
+<a name="line1442"></a>                                                    color,
+<a name="line1443"></a>                                                    opt_legendText) {
+<a name="line1444"></a>  var dataMin = this.arrayMin_(data);
+<a name="line1445"></a>  if (dataMin &lt; this.minValue_) {
+<a name="line1446"></a>    this.minValue_ = dataMin;
+<a name="line1447"></a>  }
+<a name="line1448"></a>
+<a name="line1449"></a>  var dataMax = this.arrayMax_(data);
+<a name="line1450"></a>  if (dataMax &gt; this.maxValue_) {
+<a name="line1451"></a>    this.maxValue_ = dataMax;
+<a name="line1452"></a>  }
+<a name="line1453"></a>
+<a name="line1454"></a>  if (goog.isDef(opt_legendText)) {
+<a name="line1455"></a>    if (this.setLegendTexts_.length &lt; this.dataSets_.length) {
+<a name="line1456"></a>      throw Error(&#39;Cannot start adding legends text after first element.&#39;);
+<a name="line1457"></a>    }
+<a name="line1458"></a>    this.setLegendTexts_.push(opt_legendText);
+<a name="line1459"></a>    this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.LEGEND_TEXTS,
+<a name="line1460"></a>                                this.setLegendTexts_.join(&#39;|&#39;));
+<a name="line1461"></a>  }
+<a name="line1462"></a>
+<a name="line1463"></a>  this.dataSets_.push(data);
+<a name="line1464"></a>  this.setColors_.push(color);
+<a name="line1465"></a>
+<a name="line1466"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.DATA_COLORS,
+<a name="line1467"></a>                              this.setColors_.join(&#39;,&#39;));
+<a name="line1468"></a>};
+<a name="line1469"></a>
+<a name="line1470"></a>
+<a name="line1471"></a>/**
+<a name="line1472"></a> * Clears the data sets from the graph. All data, including the colors and
+<a name="line1473"></a> * legend text, is cleared.
+<a name="line1474"></a> */
+<a name="line1475"></a>goog.ui.ServerChart.prototype.clearDataSets = function() {
+<a name="line1476"></a>  var queryData = this.uri_.getQueryData();
+<a name="line1477"></a>  queryData.remove(goog.ui.ServerChart.UriParam.LEGEND_TEXTS);
+<a name="line1478"></a>  queryData.remove(goog.ui.ServerChart.UriParam.DATA_COLORS);
+<a name="line1479"></a>  queryData.remove(goog.ui.ServerChart.UriParam.DATA);
+<a name="line1480"></a>  this.setLegendTexts_.length = 0;
+<a name="line1481"></a>  this.setColors_.length = 0;
+<a name="line1482"></a>  this.dataSets_.length = 0;
+<a name="line1483"></a>};
+<a name="line1484"></a>
+<a name="line1485"></a>
+<a name="line1486"></a>/**
+<a name="line1487"></a> * Returns the given data set or all of them in a two-dimensional array if
+<a name="line1488"></a> * the set number is not given.
+<a name="line1489"></a> *
+<a name="line1490"></a> * @param {number} opt_setNumber Optional data set number to get.
+<a name="line1491"></a> * @return {Array} The given data set or all of them in a two-dimensional array
+<a name="line1492"></a> *     if the set number is not given.
+<a name="line1493"></a> */
+<a name="line1494"></a>goog.ui.ServerChart.prototype.getData = function(opt_setNumber) {
+<a name="line1495"></a>  if (goog.isDef(opt_setNumber)) {
+<a name="line1496"></a>    return this.dataSets_[opt_setNumber];
+<a name="line1497"></a>  }
+<a name="line1498"></a>  return this.dataSets_;
+<a name="line1499"></a>};
+<a name="line1500"></a>
+<a name="line1501"></a>
+<a name="line1502"></a>/**
+<a name="line1503"></a> * Computes the data string using the data in this.dataSets_ and sets
+<a name="line1504"></a> * the object&#39;s URI accordingly. If the URI&#39;s length equals or exceeds the
+<a name="line1505"></a> * limit, goog.ui.ServerChart.UriTooLongEvent is dispatched on the
+<a name="line1506"></a> * goog.ui.ServerChart object.
+<a name="line1507"></a> * @private
+<a name="line1508"></a> */
+<a name="line1509"></a>goog.ui.ServerChart.prototype.computeDataString_ = function() {
+<a name="line1510"></a>  var ok;
+<a name="line1511"></a>  if (this.encodingType_ != goog.ui.ServerChart.EncodingType.AUTOMATIC) {
+<a name="line1512"></a>    ok = this.computeDataStringForEncoding_(this.encodingType_);
+<a name="line1513"></a>  } else {
+<a name="line1514"></a>    ok = this.computeDataStringForEncoding_(
+<a name="line1515"></a>        goog.ui.ServerChart.EncodingType.EXTENDED);
+<a name="line1516"></a>    if (!ok) {
+<a name="line1517"></a>        ok = this.computeDataStringForEncoding_(
+<a name="line1518"></a>            goog.ui.ServerChart.EncodingType.SIMPLE);
+<a name="line1519"></a>    }
+<a name="line1520"></a>  }
+<a name="line1521"></a>  if (!ok) {
+<a name="line1522"></a>    this.dispatchEvent(
+<a name="line1523"></a>        new goog.ui.ServerChart.UriTooLongEvent(this.uri_.toString()));
+<a name="line1524"></a>  }
+<a name="line1525"></a>};
+<a name="line1526"></a>
+<a name="line1527"></a>
+<a name="line1528"></a>/**
+<a name="line1529"></a> * Computes the data string using the data in this.dataSets_ and the encoding
+<a name="line1530"></a> * specified by the encoding parameter, which must not be AUTOMATIC, and sets
+<a name="line1531"></a> * the object&#39;s URI accordingly.
+<a name="line1532"></a> * @param {goog.ui.ServerChart.EncodingType} encoding The data encoding to use;
+<a name="line1533"></a> *     must not be AUTOMATIC.
+<a name="line1534"></a> * @return {boolean} False if the resulting URI is too long.
+<a name="line1535"></a> * @private
+<a name="line1536"></a> */
+<a name="line1537"></a>goog.ui.ServerChart.prototype.computeDataStringForEncoding_ = function(
+<a name="line1538"></a>    encoding) {
+<a name="line1539"></a>  var dataStrings = [];
+<a name="line1540"></a>  for (var i = 0, setLen = this.dataSets_.length; i &lt; setLen; ++i) {
+<a name="line1541"></a>    dataStrings[i] = this.getChartServerValues_(this.dataSets_[i],
+<a name="line1542"></a>                                                this.minValue_,
+<a name="line1543"></a>                                                this.maxValue_,
+<a name="line1544"></a>                                                encoding);
+<a name="line1545"></a>  }
+<a name="line1546"></a>  var delimiter = encoding == goog.ui.ServerChart.EncodingType.TEXT ? &#39;|&#39; : &#39;,&#39;;
+<a name="line1547"></a>  dataStrings = dataStrings.join(delimiter);
+<a name="line1548"></a>  var data;
+<a name="line1549"></a>  if (this.numVisibleDataSets_ == null) {
+<a name="line1550"></a>    data = goog.string.buildString(encoding, &#39;:&#39;, dataStrings);
+<a name="line1551"></a>  } else {
+<a name="line1552"></a>    data = goog.string.buildString(encoding, this.numVisibleDataSets_, &#39;:&#39;,
+<a name="line1553"></a>        dataStrings);
+<a name="line1554"></a>  }
+<a name="line1555"></a>  this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.DATA, data);
+<a name="line1556"></a>  return this.uri_.toString().length &lt; this.uriLengthLimit_;
+<a name="line1557"></a>};
+<a name="line1558"></a>
+<a name="line1559"></a>
+<a name="line1560"></a>/**
+<a name="line1561"></a> * Computes a multi-axis data string from the given data and separators. The
+<a name="line1562"></a> * general data format for each index/element in the array will be
+<a name="line1563"></a> * &quot;&lt;arrayIndex&gt;&lt;indexSeparator&gt;&lt;arrayElement.join(elementSeparator)&gt;&quot;, with
+<a name="line1564"></a> * axisSeparator used between multiple elements.
+<a name="line1565"></a> * @param {Object} data The data to compute the data string for, as a
+<a name="line1566"></a> *     sparse array of arrays. NOTE: The function uses the length of
+<a name="line1567"></a> *     multiAxisType_ to determine the upper bound for the outer array.
+<a name="line1568"></a> * @param {string} indexSeparator The separator string inserted between each
+<a name="line1569"></a> *     index and the data itself, commonly a comma (,).
+<a name="line1570"></a> * @param {string} elementSeparator The separator string inserted between each
+<a name="line1571"></a> *     element inside each sub-array in the data, if there are more than one;
+<a name="line1572"></a> *     commonly a comma (,).
+<a name="line1573"></a> * @param {string} axisSeparator The separator string inserted between each
+<a name="line1574"></a> *     axis specification, if there are more than one; usually a pipe sign (|).
+<a name="line1575"></a> * @return {string} The multi-axis data string.
+<a name="line1576"></a> * @private
+<a name="line1577"></a> */
+<a name="line1578"></a>goog.ui.ServerChart.prototype.computeMultiAxisDataString_ = function(
+<a name="line1579"></a>    data,
+<a name="line1580"></a>    indexSeparator,
+<a name="line1581"></a>    elementSeparator,
+<a name="line1582"></a>    axisSeparator) {
+<a name="line1583"></a>  var elementStrings = [];
+<a name="line1584"></a>  for (var i = 0, setLen = this.multiAxisType_.length; i &lt; setLen; ++i) {
+<a name="line1585"></a>    if (data[i]) {
+<a name="line1586"></a>      elementStrings.push(i + indexSeparator + data[i].join(elementSeparator));
+<a name="line1587"></a>    }
+<a name="line1588"></a>  }
+<a name="line1589"></a>  return elementStrings.join(axisSeparator);
+<a name="line1590"></a>};
+<a name="line1591"></a>
+<a name="line1592"></a>
+<a name="line1593"></a>/**
+<a name="line1594"></a> * Array of possible ChartServer data values
+<a name="line1595"></a> * @type {string}
+<a name="line1596"></a> */
+<a name="line1597"></a>goog.ui.ServerChart.CHART_VALUES = &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39; +
+<a name="line1598"></a>                                   &#39;abcdefghijklmnopqrstuvwxyz&#39; +
+<a name="line1599"></a>                                   &#39;0123456789&#39;;
+<a name="line1600"></a>
+<a name="line1601"></a>
+<a name="line1602"></a>/**
+<a name="line1603"></a> * Array of extended ChartServer data values
+<a name="line1604"></a> * @type {string}
+<a name="line1605"></a> */
+<a name="line1606"></a>goog.ui.ServerChart.CHART_VALUES_EXTENDED = goog.ui.ServerChart.CHART_VALUES +
+<a name="line1607"></a>                                            &#39;-.&#39;;
+<a name="line1608"></a>
+<a name="line1609"></a>/**
+<a name="line1610"></a> * Upper bound for extended values
+<a name="line1611"></a> */
+<a name="line1612"></a>goog.ui.ServerChart.EXTENDED_UPPER_BOUND =
+<a name="line1613"></a>    Math.pow(goog.ui.ServerChart.CHART_VALUES_EXTENDED.length, 2) - 1;
+<a name="line1614"></a>
+<a name="line1615"></a>
+<a name="line1616"></a>/**
+<a name="line1617"></a> * Converts a number --&gt; letter[s] suitable for graphing in ChartServer.
+<a name="line1618"></a> *
+<a name="line1619"></a> * @private
+<a name="line1620"></a> * @param {number} value The value to convert.
+<a name="line1621"></a> * @param {number} minValue The minimum value (used for normalization).
+<a name="line1622"></a> * @param {number} maxValue The maximum value (used for normalization).
+<a name="line1623"></a> * @param {goog.ui.ServerChart.EncodingType} encoding The data encoding to use;
+<a name="line1624"></a> *     must not be AUTOMATIC.
+<a name="line1625"></a> * @return {string} The converted number.
+<a name="line1626"></a> */
+<a name="line1627"></a>goog.ui.ServerChart.prototype.getConvertedValue_ = function(value,
+<a name="line1628"></a>                                                            minValue,
+<a name="line1629"></a>                                                            maxValue,
+<a name="line1630"></a>                                                            encoding) {
+<a name="line1631"></a>  if (minValue &gt; maxValue) {
+<a name="line1632"></a>    throw Error(&#39;minValue is greater than maxValue&#39;);
+<a name="line1633"></a>  }
+<a name="line1634"></a>  var isExtended = encoding == goog.ui.ServerChart.EncodingType.EXTENDED;
+<a name="line1635"></a>
+<a name="line1636"></a>  if (!goog.isDefAndNotNull(value) || isNaN(value)) {
+<a name="line1637"></a>    return isExtended ? &#39;__&#39; : &#39;_&#39;;
+<a name="line1638"></a>  }
+<a name="line1639"></a>
+<a name="line1640"></a>  if (encoding == goog.ui.ServerChart.EncodingType.TEXT) {
+<a name="line1641"></a>    return String(value);
+<a name="line1642"></a>  }
+<a name="line1643"></a>
+<a name="line1644"></a>  var frac = goog.ui.ServerChart.DEFAULT_NORMALIZATION;
+<a name="line1645"></a>  if (maxValue &gt; minValue) {
+<a name="line1646"></a>    frac = (value - minValue) / (maxValue - minValue);
+<a name="line1647"></a>  }
+<a name="line1648"></a>
+<a name="line1649"></a>  if (isExtended) {
+<a name="line1650"></a>    var maxIndex = goog.ui.ServerChart.CHART_VALUES_EXTENDED.length;
+<a name="line1651"></a>    var upperBound = goog.ui.ServerChart.EXTENDED_UPPER_BOUND;
+<a name="line1652"></a>    var index1 = Math.floor(frac * upperBound / maxIndex);
+<a name="line1653"></a>    var index2 = Math.floor((frac * upperBound) % maxIndex);
+<a name="line1654"></a>    var extendedVals = goog.ui.ServerChart.CHART_VALUES_EXTENDED;
+<a name="line1655"></a>    return extendedVals.charAt(index1) + extendedVals.charAt(index2);
+<a name="line1656"></a>  }
+<a name="line1657"></a>
+<a name="line1658"></a>  var index = Math.round(frac * (goog.ui.ServerChart.CHART_VALUES.length - 1));
+<a name="line1659"></a>  return goog.ui.ServerChart.CHART_VALUES.charAt(index);
+<a name="line1660"></a>};
+<a name="line1661"></a>
+<a name="line1662"></a>
+<a name="line1663"></a>/**
+<a name="line1664"></a> * Creates the chd string for chartserver.
+<a name="line1665"></a> *
+<a name="line1666"></a> * @private
+<a name="line1667"></a> * @param {Array.&lt;number&gt;} values An array of numbers to graph.
+<a name="line1668"></a> * @param {number} minValue The minimum value (used for normalization).
+<a name="line1669"></a> * @param {number} maxValue The maximum value (used for normalization).
+<a name="line1670"></a> * @param {goog.ui.ServerChart.EncodingType} encoding The data encoding to use;
+<a name="line1671"></a> *     must not be AUTOMATIC.
+<a name="line1672"></a> * @return {string} The chd string for chartserver.
+<a name="line1673"></a> */
+<a name="line1674"></a>goog.ui.ServerChart.prototype.getChartServerValues_ = function(values,
+<a name="line1675"></a>                                                               minValue,
+<a name="line1676"></a>                                                               maxValue,
+<a name="line1677"></a>                                                               encoding) {
+<a name="line1678"></a>  var s = [];
+<a name="line1679"></a>  for (var i = 0, valuesLen = values.length; i &lt; valuesLen; ++i) {
+<a name="line1680"></a>    s.push(this.getConvertedValue_(values[i], minValue,
+<a name="line1681"></a>                                   maxValue, encoding));
+<a name="line1682"></a>  }
+<a name="line1683"></a>  return s.join(
+<a name="line1684"></a>      this.encodingType_ == goog.ui.ServerChart.EncodingType.TEXT ? &#39;,&#39; : &#39;&#39;);
+<a name="line1685"></a>};
+<a name="line1686"></a>
+<a name="line1687"></a>
+<a name="line1688"></a>/**
+<a name="line1689"></a> * Finds the minimum value in an array and returns it.
+<a name="line1690"></a> * Needed because Math.min does not handle sparse arrays the way we want.
+<a name="line1691"></a> *
+<a name="line1692"></a> * @param {Array.&lt;number?&gt;} ary An array of values.
+<a name="line1693"></a> * @return {number} The minimum value.
+<a name="line1694"></a> * @private
+<a name="line1695"></a> */
+<a name="line1696"></a>goog.ui.ServerChart.prototype.arrayMin_ = function(ary) {
+<a name="line1697"></a>  var min = Infinity;
+<a name="line1698"></a>  for (var i = 0, aryLen = ary.length; i &lt; aryLen; ++i) {
+<a name="line1699"></a>    var value = ary[i];
+<a name="line1700"></a>    if (value != null &amp;&amp; value &lt; min) {
+<a name="line1701"></a>      min = value;
+<a name="line1702"></a>    }
+<a name="line1703"></a>  }
+<a name="line1704"></a>  return min;
+<a name="line1705"></a>};
+<a name="line1706"></a>
+<a name="line1707"></a>
+<a name="line1708"></a>/**
+<a name="line1709"></a> * Finds the maximum value in an array and returns it.
+<a name="line1710"></a> * Needed because Math.max does not handle sparse arrays the way we want.
+<a name="line1711"></a> *
+<a name="line1712"></a> * @param {Array.&lt;number?&gt;} ary An array of values.
+<a name="line1713"></a> * @return {number} The maximum value.
+<a name="line1714"></a> * @private
+<a name="line1715"></a> */
+<a name="line1716"></a>goog.ui.ServerChart.prototype.arrayMax_ = function(ary) {
+<a name="line1717"></a>  var max = -Infinity;
+<a name="line1718"></a>  for (var i = 0, aryLen = ary.length; i &lt; aryLen; ++i) {
+<a name="line1719"></a>    var value = ary[i];
+<a name="line1720"></a>    if (value != null &amp;&amp; value &gt; max) {
+<a name="line1721"></a>      max = value;
+<a name="line1722"></a>    }
+<a name="line1723"></a>  }
+<a name="line1724"></a>  return max;
+<a name="line1725"></a>};
+<a name="line1726"></a>
+<a name="line1727"></a>
+<a name="line1728"></a>/** @inheritDoc */
+<a name="line1729"></a>goog.ui.ServerChart.prototype.disposeInternal = function() {
+<a name="line1730"></a>  goog.ui.ServerChart.superClass_.disposeInternal.call(this);
+<a name="line1731"></a>  delete this.xLabels_;
+<a name="line1732"></a>  delete this.leftLabels_;
+<a name="line1733"></a>  delete this.rightLabels_;
+<a name="line1734"></a>  delete this.gridX_;
+<a name="line1735"></a>  delete this.gridY_;
+<a name="line1736"></a>  delete this.setColors_;
+<a name="line1737"></a>  delete this.setLegendTexts_;
+<a name="line1738"></a>  delete this.dataSets_;
+<a name="line1739"></a>  this.uri_ = null;
+<a name="line1740"></a>  delete this.minValue_;
+<a name="line1741"></a>  delete this.maxValue_;
+<a name="line1742"></a>  this.title_ = null;
+<a name="line1743"></a>  delete this.multiAxisType_;
+<a name="line1744"></a>  delete this.multiAxisLabelText_;
+<a name="line1745"></a>  delete this.multiAxisLabelPosition_;
+<a name="line1746"></a>  delete this.multiAxisRange_;
+<a name="line1747"></a>  delete this.multiAxisLabelStyle_;
+<a name="line1748"></a>  this.legend_ = null;
+<a name="line1749"></a>};
+<a name="line1750"></a>
+<a name="line1751"></a>
+<a name="line1752"></a>/**
+<a name="line1753"></a> * Event types dispatched by the ServerChart object
+<a name="line1754"></a> * @enum {string}
+<a name="line1755"></a> */
+<a name="line1756"></a>goog.ui.ServerChart.Event = {
+<a name="line1757"></a>  /**
+<a name="line1758"></a>   * Dispatched when the resulting URI reaches or exceeds the URI length limit.
+<a name="line1759"></a>   */
+<a name="line1760"></a>  URI_TOO_LONG: &#39;uritoolong&#39;
+<a name="line1761"></a>};
+<a name="line1762"></a>
+<a name="line1763"></a>
+<a name="line1764"></a>/**
+<a name="line1765"></a> * Class for the event dispatched on the ServerChart when the resulting URI
+<a name="line1766"></a> * exceeds the URI length limit.
+<a name="line1767"></a> * @constructor
+<a name="line1768"></a> * @param {string} uri The overly-long URI string.
+<a name="line1769"></a> * @extends {goog.events.Event}
+<a name="line1770"></a> */
+<a name="line1771"></a>goog.ui.ServerChart.UriTooLongEvent = function(uri) {
+<a name="line1772"></a>  goog.events.Event.call(this, goog.ui.ServerChart.Event.URI_TOO_LONG);
+<a name="line1773"></a>
+<a name="line1774"></a>  /**
+<a name="line1775"></a>   * The overly-long URI string.
+<a name="line1776"></a>   * @type {string}
+<a name="line1777"></a>   */
+<a name="line1778"></a>  this.uri = uri;
+<a name="line1779"></a>};
+<a name="line1780"></a>goog.inherits(goog.ui.ServerChart.UriTooLongEvent, goog.events.Event);
 </pre>
 
 

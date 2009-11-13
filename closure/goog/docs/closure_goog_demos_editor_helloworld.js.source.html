@@ -60,66 +60,67 @@
 <a name="line17"></a> * plugin is intended to be an example of a very simple plugin for plugin
 <a name="line18"></a> * developers.
 <a name="line19"></a> *
-<a name="line20"></a> */
-<a name="line21"></a>
-<a name="line22"></a>goog.provide(&#39;goog.demos.editor.HelloWorld&#39;);
-<a name="line23"></a>
-<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
-<a name="line25"></a>goog.require(&#39;goog.dom.TagName&#39;);
-<a name="line26"></a>goog.require(&#39;goog.editor.Plugin&#39;);
-<a name="line27"></a>
+<a name="line20"></a> * @see helloworld.html
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.demos.editor.HelloWorld&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line27"></a>goog.require(&#39;goog.editor.Plugin&#39;);
 <a name="line28"></a>
 <a name="line29"></a>
-<a name="line30"></a>/**
-<a name="line31"></a> * Plugin to insert &#39;Hello World!&#39; into an editable field.
-<a name="line32"></a> * @constructor
-<a name="line33"></a> * @extends {goog.editor.Plugin}
-<a name="line34"></a> */
-<a name="line35"></a>goog.demos.editor.HelloWorld = function() {
-<a name="line36"></a>  goog.editor.Plugin.call(this);
-<a name="line37"></a>};
-<a name="line38"></a>goog.inherits(goog.demos.editor.HelloWorld, goog.editor.Plugin);
-<a name="line39"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Plugin to insert &#39;Hello World!&#39; into an editable field.
+<a name="line33"></a> * @constructor
+<a name="line34"></a> * @extends {goog.editor.Plugin}
+<a name="line35"></a> */
+<a name="line36"></a>goog.demos.editor.HelloWorld = function() {
+<a name="line37"></a>  goog.editor.Plugin.call(this);
+<a name="line38"></a>};
+<a name="line39"></a>goog.inherits(goog.demos.editor.HelloWorld, goog.editor.Plugin);
 <a name="line40"></a>
-<a name="line41"></a>/** @inheritDoc */
-<a name="line42"></a>goog.demos.editor.HelloWorld.prototype.getTrogClassId = function() {
-<a name="line43"></a>  return &#39;HelloWorld&#39;;
-<a name="line44"></a>};
-<a name="line45"></a>
+<a name="line41"></a>
+<a name="line42"></a>/** @inheritDoc */
+<a name="line43"></a>goog.demos.editor.HelloWorld.prototype.getTrogClassId = function() {
+<a name="line44"></a>  return &#39;HelloWorld&#39;;
+<a name="line45"></a>};
 <a name="line46"></a>
-<a name="line47"></a>/**
-<a name="line48"></a> * Commands implemented by this plugin.
-<a name="line49"></a> * @enum {string}
-<a name="line50"></a> */
-<a name="line51"></a>goog.demos.editor.HelloWorld.COMMAND = {
-<a name="line52"></a>  HELLO_WORLD: &#39;+helloWorld&#39;
-<a name="line53"></a>};
-<a name="line54"></a>
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * Commands implemented by this plugin.
+<a name="line50"></a> * @enum {string}
+<a name="line51"></a> */
+<a name="line52"></a>goog.demos.editor.HelloWorld.COMMAND = {
+<a name="line53"></a>  HELLO_WORLD: &#39;+helloWorld&#39;
+<a name="line54"></a>};
 <a name="line55"></a>
-<a name="line56"></a>/** @inheritDoc */
-<a name="line57"></a>goog.demos.editor.HelloWorld.prototype.isSupportedCommand = function(
-<a name="line58"></a>    command) {
-<a name="line59"></a>  return command == goog.demos.editor.HelloWorld.COMMAND.HELLO_WORLD;
-<a name="line60"></a>};
-<a name="line61"></a>
+<a name="line56"></a>
+<a name="line57"></a>/** @inheritDoc */
+<a name="line58"></a>goog.demos.editor.HelloWorld.prototype.isSupportedCommand = function(
+<a name="line59"></a>    command) {
+<a name="line60"></a>  return command == goog.demos.editor.HelloWorld.COMMAND.HELLO_WORLD;
+<a name="line61"></a>};
 <a name="line62"></a>
-<a name="line63"></a>/**
-<a name="line64"></a> * Executes a command. Does not fire any BEFORECHANGE, CHANGE, or
-<a name="line65"></a> * SELECTIONCHANGE events (these are handled by the super class implementation
-<a name="line66"></a> * of {@code execCommand}.
-<a name="line67"></a> * @param {string} command Command to execute.
-<a name="line68"></a> * @override
-<a name="line69"></a> * @protected
-<a name="line70"></a> */
-<a name="line71"></a>goog.demos.editor.HelloWorld.prototype.execCommandInternal = function(
-<a name="line72"></a>    command) {
-<a name="line73"></a>  var domHelper = this.fieldObject.getEditableDomHelper();
-<a name="line74"></a>  var range = this.fieldObject.getRange();
-<a name="line75"></a>  range.removeContents();
-<a name="line76"></a>  var newNode =
-<a name="line77"></a>      domHelper.createDom(goog.dom.TagName.SPAN, null, &#39;Hello World!&#39;);
-<a name="line78"></a>  range.insertNode(newNode, false);
-<a name="line79"></a>};
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * Executes a command. Does not fire any BEFORECHANGE, CHANGE, or
+<a name="line66"></a> * SELECTIONCHANGE events (these are handled by the super class implementation
+<a name="line67"></a> * of {@code execCommand}.
+<a name="line68"></a> * @param {string} command Command to execute.
+<a name="line69"></a> * @override
+<a name="line70"></a> * @protected
+<a name="line71"></a> */
+<a name="line72"></a>goog.demos.editor.HelloWorld.prototype.execCommandInternal = function(
+<a name="line73"></a>    command) {
+<a name="line74"></a>  var domHelper = this.fieldObject.getEditableDomHelper();
+<a name="line75"></a>  var range = this.fieldObject.getRange();
+<a name="line76"></a>  range.removeContents();
+<a name="line77"></a>  var newNode =
+<a name="line78"></a>      domHelper.createDom(goog.dom.TagName.SPAN, null, &#39;Hello World!&#39;);
+<a name="line79"></a>  range.insertNode(newNode, false);
+<a name="line80"></a>};
 </pre>
 
 

@@ -46,12 +46,17 @@ var UserAgents = {
  */
 function reinitializeUserAgent() {
   goog.userAgent.init_();
+
+  // Unfortunately we can't isolate the useragent setting in a function
+  // we can call, because things rely on it compiling to nothing when
+  // one of the ASSUME flags is set, and the compiler isn't smart enough
+  // to do that when the setting is done inside a function that's inlined.
   goog.userAgent.OPERA = goog.userAgent.detectedOpera_;
   goog.userAgent.IE = goog.userAgent.detectedIe_;
-  goog.userAgent.WEBKIT = goog.userAgent.detectedWebkit_;
-  goog.userAgent.MOBILE = goog.userAgent.DETECTED_MOBILE_;
   goog.userAgent.GECKO = goog.userAgent.detectedGecko_;
-  goog.userAgent.CAMINO = goog.userAgent.detectedCamino_;
+  goog.userAgent.WEBKIT = goog.userAgent.detectedWebkit_;
+  goog.userAgent.MOBILE = goog.userAgent.detectedMobile_;
+  goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
 
   goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
   goog.userAgent.initPlatform_();

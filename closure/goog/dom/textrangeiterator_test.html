@@ -22,6 +22,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.dom');
+  goog.require('goog.dom.TagName');
   goog.require('goog.dom.TextRangeIterator');
   goog.require('goog.testing.dom');
   goog.require('goog.testing.jsunit');
@@ -109,6 +110,44 @@ Copyright 2008 Google Inc. All Rights Reserved.
     var iterator = new goog.dom.TextRangeIterator(
         goog.dom.$('b1').firstChild, 0, goog.dom.$('b1'), 1);
     goog.testing.dom.assertNodesMatch(iterator, ['e', '#b1']);
+  }
+
+  function testSkipTagDoesNotSkipEnd() {
+    // Iterate over 'Tex'.
+    var iterator = new goog.dom.TextRangeIterator(
+        test.firstChild.firstChild, 0,
+        test.firstChild.lastChild, 1);
+
+    var node = iterator.next();
+    assertEquals('T', node.nodeValue);
+
+    node = iterator.next();
+    assertEquals(goog.dom.TagName.B, node.tagName);
+
+    iterator.skipTag();
+
+    node = iterator.next();
+    assertEquals('xt', node.nodeValue);
+  }
+
+  function testSkipTagSkipsEnd() {
+    // Iterate over 'Te'.
+    var iterator = new goog.dom.TextRangeIterator(
+        test.firstChild.firstChild, 0,
+        test.getElementsByTagName(goog.dom.TagName.B)[0].firstChild, 1);
+
+    var node = iterator.next();
+    assertEquals('T', node.nodeValue);
+
+    node = iterator.next();
+    assertEquals(goog.dom.TagName.B, node.tagName);
+
+    try {
+      iterator.skipTag();
+      fail('Should stop iteration when skipping B');
+    } catch (ex) {
+      assertEquals(goog.iter.StopIteration, ex);
+    }
   }
 </script>
 </body>

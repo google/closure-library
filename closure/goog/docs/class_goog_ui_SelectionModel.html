@@ -57,7 +57,7 @@
 
 <div class="g-section g-tpl-75-25">
   <div class="g-unit g-first" id="description">
-    Single-selection model.  Dispatches a {@link goog.events.EventType.SELECT}
+    Single-selection model.  Dispatches a goog.events.EventType.SELECT
 event when a selection is made.
   </div>
 
@@ -294,7 +294,7 @@ Object
 
      <div class="entryOverview">
        Bulk-adds items to the selection model.  This is more efficient than calling
-{@link #addItem} for each new item.
+#addItem for each new item.
      </div>
 
 
@@ -830,7 +830,7 @@ the internal selection state of items under its control.
 
 
      <div class="entryOverview">
-       Removes the given item (if it exists).  Dispatches a {@code SELECT} event if
+       Removes the given item (if it exists).  Dispatches a <code>SELECT</code> event if
 the removed item was the currently selected item.
      </div>
 
@@ -952,9 +952,9 @@ the removed item was the currently selected item.
 
      <div class="entryOverview">
        Private helper; selects or deselects the given item based on the value of
-the {@code select} argument.  If a selection handler has been registered
-(via {@link #setSelectionHandler}, calls it to update the internal selection
-state of the item.  Otherwise, attempts to call {@code setSelected(Boolean)}
+the <code>select</code> argument.  If a selection handler has been registered
+(via #setSelectionHandler, calls it to update the internal selection
+state of the item.  Otherwise, attempts to call <code>setSelected(Boolean)</code>
 on the item itself, provided the object supports that interface.
      </div>
 
@@ -1060,7 +1060,7 @@ be selected or deselected).
 
      <div class="entryOverview">
        Selects the item at the given index, deselecting any previously selected
-item, and dispatches a {@code SELECT} event.
+item, and dispatches a <code>SELECT</code> event.
      </div>
 
 
@@ -1121,7 +1121,7 @@ item, and dispatches a {@code SELECT} event.
 
      <div class="entryOverview">
        Selects the given item, deselecting any previously selected item, and
-dispatches a {@code SELECT} event.
+dispatches a <code>SELECT</code> event.
      </div>
 
 
@@ -1186,7 +1186,7 @@ change the internal selection state of items under its control.  The
 function must take two arguments:  an item and a Boolean to indicate whether
 the item is to be selected or deselected.  Selection handler functions are
 only needed if the items in the selection model don&#39;t natively support the
-{@code setSelected(Boolean)} interface.
+<code>setSelected(Boolean)</code> interface.
      </div>
 
 
@@ -1332,7 +1332,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line134">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line136">code &raquo;</a>
   </td>
      </tr>
 
@@ -1403,7 +1403,7 @@ stopPropagation, then the bubble listeners won&#39;t fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line172">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line174">code &raquo;</a>
   </td>
      </tr>
 
@@ -1445,7 +1445,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line189">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line191">code &raquo;</a>
   </td>
      </tr>
 
@@ -1491,7 +1491,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line102">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line104">code &raquo;</a>
   </td>
      </tr>
 
@@ -1577,7 +1577,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line153">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line155">code &raquo;</a>
   </td>
      </tr>
 
@@ -1637,7 +1637,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line112">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line114">code &raquo;</a>
   </td>
      </tr>
 
@@ -1721,7 +1721,7 @@ nothing is done.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {
@@ -1960,7 +1960,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line85">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line87">Code &raquo;</a>
   </td>
      </tr>
 
@@ -1993,7 +1993,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line93">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line95">Code &raquo;</a>
   </td>
      </tr>
 

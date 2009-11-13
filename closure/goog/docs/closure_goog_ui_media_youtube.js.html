@@ -55,16 +55,16 @@
     provides a reusable youtube UI component given a youtube data
  model.
 
- goog.ui.media.Youtube is actually a {@link goog.ui.ControlRenderer}, a
+ goog.ui.media.Youtube is actually a goog.ui.ControlRenderer, a
  stateless class - that could/should be used as a Singleton with the static
- method {@code goog.ui.media.Youtube.getInstance} -, that knows how to render
- youtube videos. It is designed to be used with a {@link goog.ui.Control},
+ method <code>goog.ui.media.Youtube.getInstance</code> -, that knows how to render
+ youtube videos. It is designed to be used with a goog.ui.Control,
  which will actually control the media renderer and provide the
- {@link goog.ui.Component} base. This design guarantees that all different
+ goog.ui.Component base. This design guarantees that all different
  types of medias will behave alike but will look different.
 
- goog.ui.media.Youtube expects {@code goog.ui.media.YoutubeModel} on
- {@code goog.ui.Control.getModel} as data models, and render a flash object
+ goog.ui.media.Youtube expects <code>goog.ui.media.YoutubeModel</code> on
+ <code>goog.ui.Control.getModel</code> as data models, and render a flash object
  that will play that URL.
 
  Example of usage:
@@ -78,10 +78,10 @@
  youtube medias currently support the following states:
 
  <ul>
- <li> {@link goog.ui.Component.State.DISABLED}: shows &#39;flash not available&#39;
- <li> {@link goog.ui.Component.State.HOVER}: mouse cursor is over the video
- <li> {@link !goog.ui.Component.State.SELECTED}: a static thumbnail is shown
- <li> {@link goog.ui.Component.State.SELECTED}: video is playing
+ <li> goog.ui.Component.State.DISABLED: shows &#39;flash not available&#39;
+ <li> goog.ui.Component.State.HOVER: mouse cursor is over the video
+ <li> !goog.ui.Component.State.SELECTED: a static thumbnail is shown
+ <li> goog.ui.Component.State.SELECTED: video is playing
  </li></li></li></li></ul>
 
  Which can be accessed by
@@ -126,14 +126,14 @@ renderer.
 
 This class knows how to parse youtube urls, and render the DOM structure
 of youtube video players and previews. This class is meant to be used as a
-singleton static stateless class, that takes {@code goog.ui.media.Media}
-instances and renders it. It expects {@code goog.ui.media.Media.getModel} to
+singleton static stateless class, that takes <code>goog.ui.media.Media</code>
+instances and renders it. It expects <code>goog.ui.media.Media.getModel</code> to
 return a well formed, previously constructed, youtube video id, which is the
 data model this renderer will use to construct the DOM structure.
-{@see goog.ui.media.Youtube.newControl} for a example of constructing a
+goog.ui.media.Youtube.newControl for a example of constructing a
 control with this renderer.
 
-goog.ui.media.Youtube currently supports all {@link goog.ui.Component.State}.
+goog.ui.media.Youtube currently supports all goog.ui.Component.State.
 It will change its DOM structure between SELECTED and !SELECTED, and rely on
 CSS definitions on the others. On !SELECTED, the renderer will render a
 youtube static <img>, with a thumbnail of the video. On SELECTED, the
@@ -142,13 +142,13 @@ video.
 
 This design is patterned after <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
 
-It uses {@link goog.ui.media.FlashObject} to embed the flash object.</div>
+It uses goog.ui.media.FlashObject to embed the flash object.</div>
  </div>
  <div class="fn-constructor">
         <a href="class_goog_ui_media_YoutubeModel.html">
           goog.ui.media.YoutubeModel</a><br/>
-        <div class="class-details">The {@code goog.ui.media.Youtube} media data model. It stores a required
-{@code videoId} field, sets the youtube URL, and allows a few optional
+        <div class="class-details">The <code>goog.ui.media.Youtube</code> media data model. It stores a required
+<code>videoId</code> field, sets the youtube URL, and allows a few optional
 parameters.</div>
  </div>
       
@@ -193,7 +193,7 @@ parameters.</div>
 
 
      <div class="entryOverview">
-       The opposite of {@code goog.ui.media.Youtube.newInstance}: it takes a videoId
+       The opposite of <code>goog.ui.media.Youtube.newInstance</code>: it takes a videoId
 and returns a youtube URL.
      </div>
 

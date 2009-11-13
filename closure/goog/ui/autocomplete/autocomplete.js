@@ -525,3 +525,31 @@ goog.ui.AutoComplete.prototype.getIndexOfId = function(id) {
 goog.ui.AutoComplete.prototype.getIdOfIndex_ = function(index) {
   return this.firstRowId_ + index;
 };
+
+
+/**
+ * Attach text areas or input boxes to the autocomplete by DOM reference.  After
+ * elements are attached to the autocomplete, when a user types they will see
+ * the autocomplete drop down.
+ * @param {Element} var_args Variable args: Input or text area elements to
+ *     attach the autocomplete too.
+ */
+goog.ui.AutoComplete.prototype.attachInputs = function(var_args) {
+  // Delegate to the input handler
+  var inputHandler = /** @type {goog.ui.AutoComplete.InputHandler} */
+      (this.selectionHandler_);
+  inputHandler.attachInputs.apply(inputHandler, arguments);
+};
+
+
+/**
+ * Detach text areas or input boxes to the autocomplete by DOM reference.
+ * @param {Element} var_args Variable args: Input or text area elements to
+ *     detach from the autocomplete.
+ */
+goog.ui.AutoComplete.prototype.detachInputs = function(var_args) {
+  // Delegate to the input handler
+  var inputHandler = /** @type {goog.ui.AutoComplete.InputHandler} */
+      (this.selectionHandler_);
+  inputHandler.detachInputs.apply(inputHandler, arguments);
+};

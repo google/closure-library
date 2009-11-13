@@ -17,13 +17,12 @@ limitations under the License.
 <!--
   Copyright 2007 Google Inc. All Rights Reserved.
 
-  FOR INTERNAL USE ONLY
 -->
 <head>
 <title>Closure AutoComplete RichRemote Demo</title>
 <script type="text/javascript" src="../base.js"></script>
 <script type="text/javascript">
-  goog.require('goog.array.filter');
+  goog.require('goog.array');
   goog.require('goog.dom');
   goog.require('goog.ui.AutoComplete.RichRemote');
 </script>
@@ -73,8 +72,7 @@ limitations under the License.
   <label for='setHighlighting'>standard highlighting</label>
   <br>
   <small>This data is being pulled from the server at
-    <a href='autocompleterichremotedata.js'>
-      google3/closure/goog/demos/autocompleterichremotedata.js</a>.
+    <a href='autocompleterichremotedata.js'>autocompleterichremotedata.js</a>.
     Ideally the server would perform a search on the query and would only
     return relevant results; however, this response is static.
   </small>

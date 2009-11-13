@@ -487,16 +487,16 @@
 <a name="line444"></a>      this.ackSender_.send(&#39;ACK:&#39; + seq);
 <a name="line445"></a>
 <a name="line446"></a>      var partInfo = head.substring(pos + 1).split(&#39;/&#39;);
-<a name="line447"></a>      partInfo[0] = parseInt(partInfo[0], 10);
-<a name="line448"></a>      partInfo[1] = parseInt(partInfo[1], 10);
+<a name="line447"></a>      var part0 = parseInt(partInfo[0], 10);
+<a name="line448"></a>      var part1 = parseInt(partInfo[1], 10);
 <a name="line449"></a>      // create an array to accumulate the parts if this is the
 <a name="line450"></a>      // first frame of a message
-<a name="line451"></a>      if (partInfo[0] == 1) {
+<a name="line451"></a>      if (part0 == 1) {
 <a name="line452"></a>        this.parts_ = [];
 <a name="line453"></a>      }
 <a name="line454"></a>      this.parts_.push(frame);
 <a name="line455"></a>      // deliver the message if this was the last frame of a message
-<a name="line456"></a>      if (partInfo[0] == partInfo[1]) {
+<a name="line456"></a>      if (part0 == part1) {
 <a name="line457"></a>        this.deliverPayload_(this.parts_.join(&#39;&#39;));
 <a name="line458"></a>        delete this.parts_;
 <a name="line459"></a>      }

@@ -197,10 +197,10 @@ goog.net.ChannelRequest.prototype.xmlHttp_ = null;
 /**
  * The position of where the next unprocessed chunk starts in the response
  * text.
- * @type {number?}
+ * @type {number}
  * @private
  */
-goog.net.ChannelRequest.prototype.xmlHttpChunkStart_ = null;
+goog.net.ChannelRequest.prototype.xmlHttpChunkStart_ = 0;
 
 
 /**

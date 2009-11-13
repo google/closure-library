@@ -14,7 +14,9 @@
 
 
 /**
- * @fileoverview Component for generating chart PNGs using Google's Chartserver.
+ * @fileoverview Component for generating chart PNGs using Google Chart Server.
+ *
+ * @see ../demos/serverchart.html
  */
 
 
@@ -599,7 +601,7 @@ goog.ui.ServerChart.prototype.setBackgroundFill = function(fill) {
 /**
  * Returns the background fill.
  *
- * @return {Array.<Object>} An array of background fill specifications. 
+ * @return {Array.<Object>} An array of background fill specifications.
  *     If the fill specification string is in an unsupported format, the method
  *    returns an empty array.
  */

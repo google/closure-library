@@ -676,15 +676,15 @@ grokdoc.IconRowRenderer = function(blankImgUrl) {
  * CSS class for the default icon.
  * @type {string}
  */
-grokdoc.IconRowRenderer.DEFAULT_ICON_KIND_CLASS = 'grokdoc-ac-file-icon';
+grokdoc.IconRowRenderer.DEFAULT_ICON_KIND_CLASS = 'gdoc-ac-file-icon';
 
 /**
  * A map from kind of node to the css class used for the node icon.
  * @type {Object}
  */
 grokdoc.IconRowRenderer.KIND_ICON_MAP = {
-  'class': 'grokdoc-ac-class-icon',
-  'file': 'grokdoc-ac-file-icon'
+  'class': 'gdoc-ac-class-icon',
+  'file': 'gdoc-ac-file-icon'
 };
 
 /**
@@ -845,18 +845,18 @@ goog.inherits(grokdoc.TypedTreeNode, goog.ui.tree.TreeNode);
  * @type {Object}
  */
 grokdoc.TypedTreeNode.KIND_ICON_MAP = {
-  'class': 'grokdoc-tree-class-icon',
-  'file': 'grokdoc-tree-file-icon'
+  'class': 'gdoc-tree-class-icon',
+  'file': 'gdoc-tree-file-icon'
 };
 
 /**
  * A map from kind of node to the css class used for the node label.
  */
 grokdoc.TypedTreeNode.KIND_LABEL_MAP = {
-  'class': 'grokdoc-tree-class-label',
-  'namespace': 'grokdoc-tree-namespace-label',
-  'file': 'grokdoc-tree-class-label',
-  'folder': 'grokdoc-tree-namespace-label'
+  'class': 'gdoc-tree-class-label',
+  'namespace': 'gdoc-tree-namespace-label',
+  'file': 'gdoc-tree-class-label',
+  'folder': 'gdoc-tree-namespace-label'
 };
 
 /**
@@ -1004,7 +1004,7 @@ grokdoc.TypedTreeNode.prototype.toHtml = function(sb) {
   var nonEmptyAndExpanded = this.getExpanded() && this.hasChildren();
 
   // Allow nodes with children to be styled specially.
-  var parentClass = this.hasChildren() ? ' grokdoc-treenodewithchildren' : '';
+  var parentClass = this.hasChildren() ? ' gdoc-treenodewithchildren' : '';
 
   sb.append('<div class="', this.config_.cssItem, parentClass,
     '" id="', this.getId(), '">',

@@ -146,7 +146,7 @@ Object
      <td>
         <span class="entryName">opt_alwaysSpan</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether {@link #spanWrap} should always use a &#39;span&#39; tag, even when the input directionality is neutral or matches the context, so that the DOM structure of the output does not depend on the combination of directionalities. Default: false.</div>
+        <div class="entryOverview">Whether #spanWrap should always use a &#39;span&#39; tag, even when the input directionality is neutral or matches the context, so that the DOM structure of the output does not depend on the combination of directionalities. Default: false.</div>
      </td>
    </tr>
   </table>
@@ -282,7 +282,7 @@ Note: the implementation is based on the numeric values of the Dir enum.
 
 
      <div class="entryOverview">
-       Returns &quot;dir=ltr&quot; or &quot;dir=rtl&quot;, depending on {@code str}&#39;s estimated
+       Returns &quot;dir=ltr&quot; or &quot;dir=rtl&quot;, depending on <code>str</code>&#39;s estimated
 directionality, if it is not the same as the context directionality.
 Otherwise, returns the empty string.
      </div>
@@ -313,7 +313,7 @@ Otherwise, returns the empty string.
      <td>
         <span class="entryName">opt_isHtml</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether {@code str} is HTML / HTML-escaped. Default: false.</div>
+        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
      </td>
    </tr>
   </table>
@@ -357,7 +357,7 @@ Otherwise, returns the empty string.
 
 
      <div class="entryOverview">
-       Returns &quot;rtl&quot; if {@code str}&#39;s estimated directionality is RTL, and &quot;ltr&quot; if
+       Returns &quot;rtl&quot; if <code>str</code>&#39;s estimated directionality is RTL, and &quot;ltr&quot; if
 it is LTR. In case it&#39;s UNKNOWN, returns &quot;rtl&quot; if the context directionality
 is RTL, and &quot;ltr&quot; otherwise.
 Needed for GXP, which can&#39;t handle dirAttr.
@@ -391,7 +391,7 @@ Example use case:
      <td>
         <span class="entryName">opt_isHtml</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether {@code str} is HTML / HTML-escaped. Default: false.</div>
+        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
      </td>
    </tr>
   </table>
@@ -436,8 +436,8 @@ Example use case:
 
      <div class="entryOverview">
        Returns a unicode BiDi mark matching the context directionality (LRM or
-RLM) if {@code opt_dirReset}, and if either the directionality or the exit
-directionality of {@code str} is opposite to the context directionality.
+RLM) if <code>opt_dirReset</code>, and if either the directionality or the exit
+directionality of <code>str</code> is opposite to the context directionality.
 Otherwise returns the empty string.
      </div>
 
@@ -467,7 +467,7 @@ Otherwise returns the empty string.
      <td>
         <span class="entryName">dir</span>
         : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>
-        <div class="entryOverview">{@code str}&#39;s overall directionality.</div>
+        <div class="entryOverview"><code>str</code>&#39;s overall directionality.</div>
      </td>
    </tr>
      
@@ -475,7 +475,7 @@ Otherwise returns the empty string.
      <td>
         <span class="entryName">opt_isHtml</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether {@code str} is HTML / HTML-escaped. Default: false.</div>
+        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
      </td>
    </tr>
      
@@ -574,8 +574,8 @@ unknown context directionality) returns &#39;right&#39;.
 
 
      <div class="entryOverview">
-       Returns the directionality of input argument {@code str}.
-Identical to {@link goog.i18n.bidi.estimateDirection}.
+       Returns the directionality of input argument <code>str</code>.
+Identical to goog.i18n.bidi.estimateDirection.
      </div>
 
 
@@ -585,7 +585,7 @@ Identical to {@link goog.i18n.bidi.estimateDirection}.
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>&nbsp;
-            Estimated overall directionality of {@code str}.
+            Estimated overall directionality of <code>str</code>.
       </div>
   
     </div>
@@ -896,7 +896,7 @@ empty string for neutral / unknown context directionality.
 
      <div class="entryOverview">
        Returns a Unicode BiDi mark matching the context directionality (LRM or RLM)
-if the directionality or the exit directionality of {@code str} are opposite
+if the directionality or the exit directionality of <code>str</code> are opposite
 to the context directionality. Otherwise returns the empty string.
      </div>
 
@@ -926,7 +926,7 @@ to the context directionality. Otherwise returns the empty string.
      <td>
         <span class="entryName">opt_isHtml</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether {@code str} is HTML / HTML-escaped. Default: false.</div>
+        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
      </td>
    </tr>
   </table>
@@ -990,7 +990,7 @@ to the context directionality. Otherwise returns the empty string.
      <td>
         <span class="entryName">alwaysSpan</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether {@link #spanWrap} should always use a &#39;span&#39; tag, even when the input directionality is neutral or matches the context, so that the DOM structure of the output does not depend on the combination of directionalities.</div>
+        <div class="entryOverview">Whether #spanWrap should always use a &#39;span&#39; tag, even when the input directionality is neutral or matches the context, so that the DOM structure of the output does not depend on the combination of directionalities.</div>
      </td>
    </tr>
   </table>
@@ -1093,18 +1093,18 @@ to the context directionality. Otherwise returns the empty string.
        Formats a string of unknown directionality for use in HTML output of the
 context directionality, so an opposite-directionality string is neither
 garbled nor garbles what follows it.
-The algorithm: estimates the directionality of input argument {@code str}. In
+The algorithm: estimates the directionality of input argument <code>str</code>. In
 case its directionality doesn&#39;t match the context directionality, wraps it
 with a &#39;span&#39; tag and adds a &quot;dir&quot; attribute (either &#39;dir=rtl&#39; or &#39;dir=ltr&#39;).
 If setAlwaysSpan(true) was used, the input is always wrapped with &#39;span&#39;,
 skipping just the dir attribute when it&#39;s not needed.
 
-If {@code opt_dirReset}, and if the overall directionality or the exit
-directionality of {@code str} are opposite to the context directionality, a
+If <code>opt_dirReset</code>, and if the overall directionality or the exit
+directionality of <code>str</code> are opposite to the context directionality, a
 trailing unicode BiDi mark matching the context directionality is appened
 (LRM or RLM).
 
-If !{@code opt_isHtml}, HTML-escapes {@code str} regardless of wrapping.
+If !<code>opt_isHtml</code>, HTML-escapes <code>str</code> regardless of wrapping.
      </div>
 
 
@@ -1133,7 +1133,7 @@ If !{@code opt_isHtml}, HTML-escapes {@code str} regardless of wrapping.
      <td>
         <span class="entryName">opt_isHtml</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether {@code str} is HTML / HTML-escaped. Default: false.</div>
+        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
      </td>
    </tr>
      
@@ -1141,7 +1141,7 @@ If !{@code opt_isHtml}, HTML-escapes {@code str} regardless of wrapping.
      <td>
         <span class="entryName">opt_dirReset</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow {@code str}. Default: true.</div>
+        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow <code>str</code>. Default: true.</div>
      </td>
    </tr>
   </table>
@@ -1188,16 +1188,16 @@ If !{@code opt_isHtml}, HTML-escapes {@code str} regardless of wrapping.
        Formats a string of given directionality for use in HTML output of the
 context directionality, so an opposite-directionality string is neither
 garbled nor garbles what follows it.
-The algorithm: If {@code dir} doesn&#39;t match the context directionality, wraps
-{@code str} with a &#39;span&#39; tag and adds a &quot;dir&quot; attribute (either &#39;dir=rtl&#39; or
+The algorithm: If <code>dir</code> doesn&#39;t match the context directionality, wraps
+<code>str</code> with a &#39;span&#39; tag and adds a &quot;dir&quot; attribute (either &#39;dir=rtl&#39; or
 &#39;dir=ltr&#39;). If setAlwaysSpan(true) was used, the input is always wrapped with
 &#39;span&#39;, skipping just the dir attribute when it&#39;s not needed.
 
-If {@code opt_dirReset}, and if {@code dir} or the exit directionality of
-{@code str} are opposite to the context directionality, a trailing unicode
+If <code>opt_dirReset</code>, and if <code>dir</code> or the exit directionality of
+<code>str</code> are opposite to the context directionality, a trailing unicode
 BiDi mark matching the context directionality is appened (LRM or RLM).
 
-If !{@code opt_isHtml}, HTML-escapes {@code str} regardless of wrapping.
+If !<code>opt_isHtml</code>, HTML-escapes <code>str</code> regardless of wrapping.
      </div>
 
 
@@ -1218,7 +1218,7 @@ If !{@code opt_isHtml}, HTML-escapes {@code str} regardless of wrapping.
      <td>
         <span class="entryName">dir</span>
         : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>
-        <div class="entryOverview">{@code str}&#39;s overall directionality.</div>
+        <div class="entryOverview"><code>str</code>&#39;s overall directionality.</div>
      </td>
    </tr>
      
@@ -1234,7 +1234,7 @@ If !{@code opt_isHtml}, HTML-escapes {@code str} regardless of wrapping.
      <td>
         <span class="entryName">opt_isHtml</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether {@code str} is HTML / HTML-escaped. Default: false.</div>
+        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
      </td>
    </tr>
      
@@ -1242,7 +1242,7 @@ If !{@code opt_isHtml}, HTML-escapes {@code str} regardless of wrapping.
      <td>
         <span class="entryName">opt_dirReset</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow {@code str}. Default: true.</div>
+        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow <code>str</code>. Default: true.</div>
      </td>
    </tr>
   </table>
@@ -1336,20 +1336,20 @@ unknown context directionality) returns &#39;left&#39;.
        Formats a string of unknown directionality for use in plain-text output of
 the context directionality, so an opposite-directionality string is neither
 garbled nor garbles what follows it.
-As opposed to {@link #spanWrap}, this makes use of unicode BiDi formatting
+As opposed to #spanWrap, this makes use of unicode BiDi formatting
 characters. In HTML, its *only* valid use is inside of elements that do not
 allow mark-up, e.g. an &#39;option&#39; tag.
-The algorithm: estimates the directionality of input argument {@code str}.
+The algorithm: estimates the directionality of input argument <code>str</code>.
 In case it doesn&#39;t match  the context directionality, wraps it with Unicode
 BiDi formatting characters: RLE{@code str}PDF for RTL text, and
 LRE{@code str}PDF for LTR text.
 
-If {@code opt_dirReset}, and if the overall directionality or the exit
-directionality of {@code str} are opposite to the context directionality, a
+If <code>opt_dirReset</code>, and if the overall directionality or the exit
+directionality of <code>str</code> are opposite to the context directionality, a
 trailing unicode BiDi mark matching the context directionality is appended
 (LRM or RLM).
 
-Does *not* do HTML-escaping regardless of the value of {@code opt_isHtml}.
+Does *not* do HTML-escaping regardless of the value of <code>opt_isHtml</code>.
 The return value can be HTML-escaped as necessary.
      </div>
 
@@ -1379,7 +1379,7 @@ The return value can be HTML-escaped as necessary.
      <td>
         <span class="entryName">opt_isHtml</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether {@code str} is HTML / HTML-escaped. Default: false.</div>
+        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
      </td>
    </tr>
      
@@ -1387,7 +1387,7 @@ The return value can be HTML-escaped as necessary.
      <td>
         <span class="entryName">opt_dirReset</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow {@code str}. Default: true.</div>
+        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow <code>str</code>. Default: true.</div>
      </td>
    </tr>
   </table>
@@ -1434,19 +1434,19 @@ The return value can be HTML-escaped as necessary.
        Formats a string of given directionality for use in plain-text output of the
 context directionality, so an opposite-directionality string is neither
 garbled nor garbles what follows it.
-As opposed to {@link #spanWrapWithKnownDir}, makes use of unicode BiDi
+As opposed to #spanWrapWithKnownDir, makes use of unicode BiDi
 formatting characters. In HTML, its *only* valid use is inside of elements
 that do not allow mark-up, e.g. an &#39;option&#39; tag.
-The algorithm: If {@code dir} doesn&#39;t match the context directionality, wraps
-{@code str} with Unicode BiDi formatting characters: RLE{@code str}PDF for
+The algorithm: If <code>dir</code> doesn&#39;t match the context directionality, wraps
+<code>str</code> with Unicode BiDi formatting characters: RLE{@code str}PDF for
 RTL text, and LRE{@code str}PDF for LTR text.
 
-If {@code opt_dirReset}, and if the overall directionality or the exit
-directionality of {@code str} are opposite to the context directionality, a
+If <code>opt_dirReset</code>, and if the overall directionality or the exit
+directionality of <code>str</code> are opposite to the context directionality, a
 trailing unicode BiDi mark matching the context directionality is appended
 (LRM or RLM).
 
-Does *not* do HTML-escaping regardless of the value of {@code opt_isHtml}.
+Does *not* do HTML-escaping regardless of the value of <code>opt_isHtml</code>.
 The return value can be HTML-escaped as necessary.
      </div>
 
@@ -1468,7 +1468,7 @@ The return value can be HTML-escaped as necessary.
      <td>
         <span class="entryName">dir</span>
         : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>
-        <div class="entryOverview">{@code str}&#39;s overall directionality.</div>
+        <div class="entryOverview"><code>str</code>&#39;s overall directionality.</div>
      </td>
    </tr>
      
@@ -1484,7 +1484,7 @@ The return value can be HTML-escaped as necessary.
      <td>
         <span class="entryName">opt_isHtml</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether {@code str} is HTML / HTML-escaped. Default: false.</div>
+        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
      </td>
    </tr>
      
@@ -1492,7 +1492,7 @@ The return value can be HTML-escaped as necessary.
      <td>
         <span class="entryName">opt_dirReset</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow {@code str}. Default: true.</div>
+        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow <code>str</code>. Default: true.</div>
      </td>
    </tr>
   </table>

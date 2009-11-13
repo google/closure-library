@@ -17,6 +17,7 @@
  * animations.  AnimationParallelQueue and AnimationSerialQueue provide
  * specific implementations of the abstract class AnimationQueue.
  *
+ * @see ../demos/animationqueue.html
  */
 
 goog.provide('goog.fx.AnimationParallelQueue');

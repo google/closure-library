@@ -1244,9 +1244,9 @@ aborted, or 0 if no timeout is set.
 
 
      <div class="entryOverview">
-       Helper for {@link #onReadyStateChange_}.  This is used so that
-entry point calls to {@link #onReadyStateChange_} can be routed through
-{@link #onReadyStateChangeEntryPoint_}.
+       Helper for #onReadyStateChange_.  This is used so that
+entry point calls to #onReadyStateChange_ can be routed through
+#onReadyStateChangeEntryPoint_.
      </div>
 
    
@@ -1402,7 +1402,7 @@ nullified.
 
      <div class="entryOverview">
        Sets the number of milliseconds after which an incomplete request will be
-aborted and a {@link goog.net.EventType.TIMEOUT} event raised; 0 means no
+aborted and a goog.net.EventType.TIMEOUT event raised; 0 means no
 timeout is set.
      </div>
 
@@ -1463,8 +1463,8 @@ timeout is set.
 
 
      <div class="entryOverview">
-       The request didn&#39;t complete after {@link goog.net.XhrIo#timeoutInterval_}
-milliseconds; raises a {@link goog.net.EventType.TIMEOUT} event and aborts
+       The request didn&#39;t complete after goog.net.XhrIo#timeoutInterval_
+milliseconds; raises a goog.net.EventType.TIMEOUT event and aborts
 the request.
      </div>
 
@@ -1585,7 +1585,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line134">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line136">code &raquo;</a>
   </td>
      </tr>
 
@@ -1656,7 +1656,7 @@ stopPropagation, then the bubble listeners won&#39;t fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line172">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line174">code &raquo;</a>
   </td>
      </tr>
 
@@ -1698,7 +1698,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line189">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line191">code &raquo;</a>
   </td>
      </tr>
 
@@ -1744,7 +1744,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line102">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line104">code &raquo;</a>
   </td>
      </tr>
 
@@ -1830,7 +1830,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line153">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line155">code &raquo;</a>
   </td>
      </tr>
 
@@ -1890,7 +1890,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line112">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line114">code &raquo;</a>
   </td>
      </tr>
 
@@ -1974,7 +1974,7 @@ nothing is done.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {
@@ -2220,7 +2220,7 @@ exception.
 
 
      <div class="entryOverview">
-       Used in determining if a call to {@link #onReadyStateChange_} is from within
+       Used in determining if a call to #onReadyStateChange_ is from within
 a call to this.xhr_.abort.
      </div>
 
@@ -2254,7 +2254,7 @@ a call to this.xhr_.abort.
 
 
      <div class="entryOverview">
-       Used in determining if a call to {@link #onReadyStateChange_} is from within
+       Used in determining if a call to #onReadyStateChange_ is from within
 a call to this.xhr_.open.
      </div>
 
@@ -2488,7 +2488,7 @@ completes successfully.
 
      <div class="entryOverview">
        Number of milliseconds after which an incomplete request will be aborted and
-a {@link goog.net.EventType.TIMEOUT} event raised; 0 means no timeout is set.
+a goog.net.EventType.TIMEOUT event raised; 0 means no timeout is set.
      </div>
 
   </td>
@@ -2618,7 +2618,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line85">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line87">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2651,7 +2651,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line93">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line95">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2786,8 +2786,8 @@ get listen() calling addEventListener() and vice-versa.
 
      <div class="entryOverview">
        Disposes of the specified goog.net.XhrIo created by
-{@link goog.net.XhrIo.send} and removes it from
-{@link goog.net.XhrIo.pendingStaticSendInstances_}.
+goog.net.XhrIo.send and removes it from
+goog.net.XhrIo.pendingStaticSendInstances_.
      </div>
 
 
@@ -2808,7 +2808,7 @@ get listen() calling addEventListener() and vice-versa.
      <td>
         <span class="entryName">XhrIo</span>
         : <div class="fullType"><span class="type"><a href="class_goog_net_XhrIo.html">goog.net.XhrIo</a></span></div>
-        <div class="entryOverview">An XhrIo created by {@link goog.net.XhrIo.send}.</div>
+        <div class="entryOverview">An XhrIo created by goog.net.XhrIo.send.</div>
      </td>
    </tr>
   </table>
@@ -2849,9 +2849,9 @@ get listen() calling addEventListener() and vice-versa.
      <div class="entryOverview">
        Installs exception protection for all entry point introduced by
 goog.net.XhrIo instances which are not protected by
-{@link goog.debug.ErrorHandler#protectWindowSetTimeout},
-{@link goog.debug.ErrorHandler#protectWindowSetInterval}, or
-{@link goog.events.protectBrowserEventEntryPoint}.
+goog.debug.ErrorHandler#protectWindowSetTimeout,
+goog.debug.ErrorHandler#protectWindowSetInterval, or
+goog.events.protectBrowserEventEntryPoint.
      </div>
 
 
@@ -3103,7 +3103,7 @@ request.
 
      <div class="entryOverview">
        All non-disposed instances of goog.net.XhrIo created
-by {@link goog.net.XhrIo.send} are in this Array.
+by goog.net.XhrIo.send are in this Array.
      </div>
 
   </td>

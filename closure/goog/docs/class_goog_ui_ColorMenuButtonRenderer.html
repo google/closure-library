@@ -57,7 +57,7 @@
 
 <div class="g-section g-tpl-75-25">
   <div class="g-unit g-first" id="description">
-    Renderer for {@link goog.ui.ColorMenuButton}s.
+    Renderer for goog.ui.ColorMenuButtons.
   </div>
 
 
@@ -295,7 +295,7 @@ initialized.
      <div class="entryOverview">
        Takes a color menu button control&#39;s root element and a value object
 (which is assumed to be a color), and updates the button&#39;s DOM to reflect
-the new color.  Overrides {@link goog.ui.ButtonRenderer#setValue}.
+the new color.  Overrides goog.ui.ButtonRenderer#setValue.
      </div>
 
 
@@ -619,7 +619,7 @@ Creates the following DOM structure:
 
      <div class="entryOverview">
        Takes an element, decorates it with the menu button control, and returns
-the element.  Overrides {@link goog.ui.CustomButtonRenderer#decorate} by
+the element.  Overrides goog.ui.CustomButtonRenderer#decorate by
 looking for a child element that can be decorated by a menu, and if it
 finds one, decorates it and attaches it to the menu button.
      </div>
@@ -903,7 +903,7 @@ override the default implementation to take this into account.
 
      <div class="entryOverview">
        Returns true if this renderer can decorate the element.  Overrides
-{@link goog.ui.ButtonRenderer#canDecorate} by returning true if the
+goog.ui.ButtonRenderer#canDecorate by returning true if the
 element is a DIV, false otherwise.
      </div>
 
@@ -976,7 +976,7 @@ wrapped in a pseudo-rounded-corner box.  Creates the following DOM structure:
 Contents...
 </div>
 </div>
-Used by both {@link #createDom} and {@link #decorate}.  To be overridden
+Used by both #createDom and #decorate.  To be overridden
 by subclasses.
      </div>
 
@@ -1058,7 +1058,7 @@ Contents...
 </div>
 </div>
 </div>
-Overrides {@link goog.ui.ButtonRenderer#createDom}.
+Overrides goog.ui.ButtonRenderer#createDom.
      </div>
 
 
@@ -1126,7 +1126,7 @@ Overrides {@link goog.ui.ButtonRenderer#createDom}.
        Takes an existing element and decorates it with the custom button control.
 Initializes the control&#39;s ID, content, tooltip, value, and state based
 on the ID of the element, its child nodes, and its CSS classes, respectively.
-Returns the element.  Overrides {@link goog.ui.ButtonRenderer#decorate}.
+Returns the element.  Overrides goog.ui.ButtonRenderer#decorate.
      </div>
 
 
@@ -1759,7 +1759,7 @@ multiple targets.
      <td>
         <span class="entryName">sides</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Bitmap of one or more {@link goog.ui.Button.Side}s for which borders should be collapsed.</div>
+        <div class="entryOverview">Bitmap of one or more goog.ui.Button.Sides for which borders should be collapsed.</div>
      </td>
    </tr>
   </table>
@@ -2203,7 +2203,7 @@ CSS class and additional state-specific classes applied to it.
 
 
      <div class="entryOverview">
-       Default implementation of {@code decorate} for {@link goog.ui.Control}s.
+       Default implementation of <code>decorate</code> for goog.ui.Controls.
 Initializes the control&#39;s ID, content, and state based on the ID of the
 element, its child nodes, and its CSS classes, respectively.  Returns the
 element.
@@ -2437,7 +2437,7 @@ name to/from its element.
      <div class="entryOverview">
        Returns an array of all the combined class names that should be applied based
 on the given list of classes. Checks the result of
-{@link getIe6ClassCombinations} for any combinations that have all
+getIe6ClassCombinations for any combinations that have all
 members contained in classes. If a combination matches, the members are
 joined with an underscore (in order), and added to the return array.
 
@@ -2563,7 +2563,7 @@ See <a href="http://wiki/Main/ARIA">http://wiki/Main/ARIA</a> for more info.
 
 
      <div class="entryOverview">
-       Takes a single {@link goog.ui.Component.State}, and returns the
+       Takes a single goog.ui.Component.State, and returns the
 corresponding CSS class name (null if none).
      </div>
 
@@ -2632,16 +2632,16 @@ corresponding CSS class name (null if none).
        Returns all CSS class names applicable to the given control, based on its
 state.  The return value is an array of strings containing
 <ol>
-<li>the renderer-specific CSS class returned by {@link #getCssClass},
+<li>the renderer-specific CSS class returned by #getCssClass,
 followed by
-<li>the structural CSS class returned by {@link getStructuralCssClass} (if
+<li>the structural CSS class returned by getStructuralCssClass (if
 different from the renderer-specific CSS class), followed by
-<li>any state-specific classes returned by {@link #getClassNamesForState},
+<li>any state-specific classes returned by #getClassNamesForState,
 followed by
-<li>any extra classes returned by the control&#39;s {@code getExtraClassNames}
+<li>any extra classes returned by the control&#39;s <code>getExtraClassNames</code>
 method and
 <li>for IE6 and lower, additional combined classes from
-{@link getAppliedCombinedClassNames_}.
+getAppliedCombinedClassNames_.
 </li></li></li></li></li></ol>
 Since all controls have at least one renderer-specific CSS class name, this
 method is guaranteed to return an array of at least one element.
@@ -2709,11 +2709,11 @@ method is guaranteed to return an array of at least one element.
 
 
      <div class="entryOverview">
-       Takes a bit mask of {@link goog.ui.Component.State}s, and returns an array
+       Takes a bit mask of goog.ui.Component.States, and returns an array
 of the appropriate class names representing the given state, suitable to be
 applied to the root element of a component rendered using this renderer, or
 null if no state-specific classes need to be applied.  This default
-implementation uses the renderer&#39;s {@link getClassForState} method to
+implementation uses the renderer&#39;s getClassForState method to
 generate each state-specific class.
      </div>
 
@@ -2897,8 +2897,8 @@ renderer classes are expected to share the same CSS class name.
 
      <div class="entryOverview">
        Returns an array of combinations of classes to apply combined class names for
-in IE6 and below. See {@link IE6_CLASS_COMBINATIONS} for more detail. This
-method doesn&#39;t reference {@link IE6_CLASS_COMBINATIONS} so that it can be
+in IE6 and below. See IE6_CLASS_COMBINATIONS for more detail. This
+method doesn&#39;t reference IE6_CLASS_COMBINATIONS so that it can be
 compiled out, but subclasses should return their IE6_CLASS_COMBINATIONS
 static contasnt instead.
      </div>
@@ -3081,12 +3081,12 @@ returns the corresponding component state (0x00 if none).
      <div class="entryOverview">
        Returns the name of a DOM structure-specific CSS class to be applied to the
 root element of all components rendered or decorated using this renderer.
-Unlike the class name returned by {@link #getCssClass}, the structural class
+Unlike the class name returned by #getCssClass, the structural class
 name may be shared among different renderers that generate similar DOM
 structures.  The structural class name also serves as the basis of derived
 class names used to identify and style structural elements of the control&#39;s
 DOM, as well as the basis for state-specific class names.  The default
-implementation returns the same class name as {@link #getCssClass}, but
+implementation returns the same class name as #getCssClass, but
 subclasses are expected to override this method as needed.
      </div>
 
@@ -3134,7 +3134,7 @@ subclasses are expected to override this method as needed.
      <div class="entryOverview">
        Initializes the control&#39;s DOM by configuring properties that can only be set
 after the DOM has entered the document.  This implementation sets up BiDi
-and keyboard focus.  Called from {@link goog.ui.Control#enterDocument}.
+and keyboard focus.  Called from goog.ui.Control#enterDocument.
      </div>
 
 
@@ -3196,7 +3196,7 @@ and keyboard focus.  Called from {@link goog.ui.Control#enterDocument}.
 
      <div class="entryOverview">
        Returns true if the control&#39;s key event target supports keyboard focus
-(based on its {@code tabIndex} attribute), false otherwise.
+(based on its <code>tabIndex</code> attribute), false otherwise.
      </div>
 
 
@@ -3460,8 +3460,8 @@ must override this method accordingly.
 
      <div class="entryOverview">
        Updates the control&#39;s key event target to make it focusable or non-focusable
-via its {@code tabIndex} attribute.  Does nothing if the control doesn&#39;t
-support the {@code FOCUSED} state, or if it has no key event target.
+via its <code>tabIndex</code> attribute.  Does nothing if the control doesn&#39;t
+support the <code>FOCUSED</code> state, or if it has no key event target.
      </div>
 
 

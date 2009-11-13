@@ -79,13 +79,13 @@
         <a href="class_goog_dom_ViewportSizeMonitor.html">
           goog.dom.ViewportSizeMonitor</a><br/>
         <div class="class-details">This class can be used to monitor changes in the viewport size.  Instances
-dispatch a {@link goog.events.EventType.RESIZE} event when the viewport size
-changes.  Handlers can call {@link goog.dom.ViewportSizeMonitor#getSize} to
+dispatch a goog.events.EventType.RESIZE event when the viewport size
+changes.  Handlers can call goog.dom.ViewportSizeMonitor#getSize to
 get the new viewport size.
 
 Use this class if you want to execute resize/reflow logic each time the
 user resizes the browser window.  This class is guaranteed to only dispatch
-{@code RESIZE} events when the pixel dimensions of the viewport change.
+<code>RESIZE</code> events when the pixel dimensions of the viewport change.
 (Internet Explorer fires resize events if any element on the page is resized,
 even if the viewport dimensions are unchanged, which can lead to infinite
 resize loops.)
@@ -98,7 +98,7 @@ alert(&#39;Viewport size changed to &#39; + vsm.getSize());
 });
 </pre>
 
-Manually verified on IE6, IE7, FF2, Opera 9, and WebKit.  {@code getSize}
+Manually verified on IE6, IE7, FF2, Opera 9, and WebKit.  <code>getSize</code>
 doesn&#39;t always return the correct viewport height on Safari 2.0.4.</div>
  </div>
       

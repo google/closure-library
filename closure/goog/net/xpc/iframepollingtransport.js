@@ -444,16 +444,16 @@ goog.net.xpc.IframePollingTransport.prototype.processIncomingMsg =
       this.ackSender_.send('ACK:' + seq);
 
       var partInfo = head.substring(pos + 1).split('/');
-      partInfo[0] = parseInt(partInfo[0], 10);
-      partInfo[1] = parseInt(partInfo[1], 10);
+      var part0 = parseInt(partInfo[0], 10);
+      var part1 = parseInt(partInfo[1], 10);
       // create an array to accumulate the parts if this is the
       // first frame of a message
-      if (partInfo[0] == 1) {
+      if (part0 == 1) {
         this.parts_ = [];
       }
       this.parts_.push(frame);
       // deliver the message if this was the last frame of a message
-      if (partInfo[0] == partInfo[1]) {
+      if (part0 == part1) {
         this.deliverPayload_(this.parts_.join(''));
         delete this.parts_;
       }

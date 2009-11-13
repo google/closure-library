@@ -59,13 +59,13 @@
   <div class="g-unit g-first" id="description">
     Creates a ManagedResourceStore with the specified name and update.  This
 follows the Closure event model so the COMPLETE event will fire both for
-SUCCESS and for ERROR.  You can use {@code isSuccess} in UPDATE to see if the
+SUCCESS and for ERROR.  You can use <code>isSuccess</code> in UPDATE to see if the
 capture was successful or you can just listen to the different events.
 
-This supports PROGRESS events, which are fired any time {@code filesComplete}
-or {@code filesTotal} changes.  If the Gears version is 0.3.6 or newer this
+This supports PROGRESS events, which are fired any time <code>filesComplete</code>
+or <code>filesTotal</code> changes.  If the Gears version is 0.3.6 or newer this
 will reflect the numbers returned by the underlying Gears MRS but for older
-Gears versions this will just be {@code 0} or {@code 1}.
+Gears versions this will just be <code>0</code> or <code>1</code>.
 
 NOTE: This relies on at least the 0.2 version of gears (for timer).
   </div>
@@ -768,7 +768,7 @@ this will reflect the number of files that needs to be loaded.
      <td>
         <span class="entryName">details</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">An object containg one field called {@code newVersion}.</div>
+        <div class="entryOverview">An object containg one field called <code>newVersion</code>.</div>
      </td>
    </tr>
   </table>
@@ -828,7 +828,7 @@ this will reflect the number of files that needs to be loaded.
      <td>
         <span class="entryName">error</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">An object containg one field called {@code message}.</div>
+        <div class="entryOverview">An object containg one field called <code>message</code>.</div>
      </td>
    </tr>
   </table>
@@ -888,7 +888,7 @@ this will reflect the number of files that needs to be loaded.
      <td>
         <span class="entryName">details</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">An object containg two fields, {@code filesComplete} and {@code filesTotal}.</div>
+        <div class="entryOverview">An object containg two fields, <code>filesComplete</code> and <code>filesTotal</code>.</div>
      </td>
    </tr>
   </table>
@@ -1454,7 +1454,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line134">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line136">code &raquo;</a>
   </td>
      </tr>
 
@@ -1525,7 +1525,7 @@ stopPropagation, then the bubble listeners won&#39;t fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line172">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line174">code &raquo;</a>
   </td>
      </tr>
 
@@ -1567,7 +1567,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line189">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line191">code &raquo;</a>
   </td>
      </tr>
 
@@ -1613,7 +1613,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line102">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line104">code &raquo;</a>
   </td>
      </tr>
 
@@ -1699,7 +1699,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line153">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line155">code &raquo;</a>
   </td>
      </tr>
 
@@ -1759,7 +1759,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line112">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line114">code &raquo;</a>
   </td>
      </tr>
 
@@ -1843,7 +1843,7 @@ nothing is done.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {
@@ -2251,7 +2251,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line85">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line87">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2284,7 +2284,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line93">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line95">Code &raquo;</a>
   </td>
      </tr>
 

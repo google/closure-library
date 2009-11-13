@@ -107,14 +107,14 @@
   background-position: -24px -24px;
 }
 
-.grokdoc-tree-class-icon {
+.gdoc-tree-class-icon {
   vertical-align: middle;
   height: 0px;
   width: 0px;
   background-position: -70px -24px;
 }
 
-.grokdoc-tree-file-icon {
+.gdoc-tree-file-icon {
   vertical-align: middle;
   height: 0px;
   width: 0px;
@@ -142,13 +142,13 @@
   display: none;
 }
 
-.grokdoc-tree-class-label a {
+.gdoc-tree-class-label a {
   color: #668CD9;
   font-weight: bold;
   font-family: Arial;
 }
 
-.grokdoc-tree-namespace-label {
+.gdoc-tree-namespace-label {
   color: black;
   font-weight: bold;
   font-family: Arial;

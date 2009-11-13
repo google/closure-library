@@ -461,7 +461,7 @@
 <a name="line418"></a> */
 <a name="line419"></a>goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
 <a name="line420"></a>    opt_keyUp) {
-<a name="line421"></a>  // SelectionUtil&#39;s getParentContainer does not work here.  The problem is
+<a name="line421"></a>  // The range&#39;s getContainerElement does not work here.  The problem is
 <a name="line422"></a>  // that IE seems to be in the middle of adding the element to the dom, and the
 <a name="line423"></a>  // current dom is inconsistent.  Specfically, the element&#39;s innerHTML,
 <a name="line424"></a>  // outerHTML, and childNode&#39;s say the element is empty (innerHTML = &quot;&quot;,

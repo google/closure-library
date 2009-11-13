@@ -248,31 +248,43 @@
 <a name="line205"></a>};
 <a name="line206"></a>
 <a name="line207"></a>
-<a name="line208"></a>/**
-<a name="line209"></a> * Replace this iterator&#39;s values with values from another.
-<a name="line210"></a> * @param {goog.dom.TextRangeIterator} other The iterator to copy.
-<a name="line211"></a> * @protected
-<a name="line212"></a> */
-<a name="line213"></a>goog.dom.TextRangeIterator.prototype.copyFrom = function(other) {
-<a name="line214"></a>  this.startNode_ = other.startNode_;
-<a name="line215"></a>  this.endNode_ = other.endNode_;
-<a name="line216"></a>  this.startOffset_ = other.startOffset_;
-<a name="line217"></a>  this.endOffset_ = other.endOffset_;
-<a name="line218"></a>  this.isReversed_ = other.isReversed_;
+<a name="line208"></a>/** @inheritDoc */
+<a name="line209"></a>goog.dom.TextRangeIterator.prototype.skipTag = function() {
+<a name="line210"></a>  goog.dom.TextRangeIterator.superClass_.skipTag.apply(this);
+<a name="line211"></a>
+<a name="line212"></a>  // If the node we are skipping contains the end node, we just skipped past
+<a name="line213"></a>  // the end, so we stop the iteration.
+<a name="line214"></a>  if (goog.dom.contains(this.node, this.endNode_)) {
+<a name="line215"></a>    throw goog.iter.StopIteration;
+<a name="line216"></a>  }
+<a name="line217"></a>};
+<a name="line218"></a>
 <a name="line219"></a>
-<a name="line220"></a>  goog.dom.TextRangeIterator.superClass_.copyFrom.call(this, other);
-<a name="line221"></a>};
-<a name="line222"></a>
-<a name="line223"></a>
-<a name="line224"></a>/**
-<a name="line225"></a> * @return {goog.dom.TextRangeIterator} An identical iterator.
-<a name="line226"></a> */
-<a name="line227"></a>goog.dom.TextRangeIterator.prototype.clone = function() {
-<a name="line228"></a>  var copy = new goog.dom.TextRangeIterator(this.startNode_,
-<a name="line229"></a>      this.startOffset_, this.endNode_, this.endOffset_, this.isReversed_);
-<a name="line230"></a>  copy.copyFrom(this);
-<a name="line231"></a>  return copy;
-<a name="line232"></a>};
+<a name="line220"></a>/**
+<a name="line221"></a> * Replace this iterator&#39;s values with values from another.
+<a name="line222"></a> * @param {goog.dom.TextRangeIterator} other The iterator to copy.
+<a name="line223"></a> * @protected
+<a name="line224"></a> */
+<a name="line225"></a>goog.dom.TextRangeIterator.prototype.copyFrom = function(other) {
+<a name="line226"></a>  this.startNode_ = other.startNode_;
+<a name="line227"></a>  this.endNode_ = other.endNode_;
+<a name="line228"></a>  this.startOffset_ = other.startOffset_;
+<a name="line229"></a>  this.endOffset_ = other.endOffset_;
+<a name="line230"></a>  this.isReversed_ = other.isReversed_;
+<a name="line231"></a>
+<a name="line232"></a>  goog.dom.TextRangeIterator.superClass_.copyFrom.call(this, other);
+<a name="line233"></a>};
+<a name="line234"></a>
+<a name="line235"></a>
+<a name="line236"></a>/**
+<a name="line237"></a> * @return {goog.dom.TextRangeIterator} An identical iterator.
+<a name="line238"></a> */
+<a name="line239"></a>goog.dom.TextRangeIterator.prototype.clone = function() {
+<a name="line240"></a>  var copy = new goog.dom.TextRangeIterator(this.startNode_,
+<a name="line241"></a>      this.startOffset_, this.endNode_, this.endOffset_, this.isReversed_);
+<a name="line242"></a>  copy.copyFrom(this);
+<a name="line243"></a>  return copy;
+<a name="line244"></a>};
 </pre>
 
 

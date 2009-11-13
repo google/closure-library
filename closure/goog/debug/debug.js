@@ -409,57 +409,6 @@ goog.debug.getFunctionName = function(fn) {
 
 
 /**
- * Tries to get an anonymous functions name by searching the entire object tree,
- * this currently is only known to work in FF and is slow.
- * @param {Function} fn Function to get name of.
- * @param {Object} opt_obj Object to look in (recursive).
- * @param {string} opt_prefix Object path calculated so far.
- * @param {number} opt_depth Recursion depth (max = 6).
- * @return {string} Function's name.
- * @private
- */
-goog.debug.getAnonFunctionName_ = function(fn, opt_obj, opt_prefix, opt_depth) {
-  // This doesn't work in IE, so do a loose check and return
-  if (goog.getObjectByName('document.all')) {
-    return '';
-  }
-
-  var obj = opt_obj || goog.global;
-  var prefix = opt_prefix || '';
-  var depth = opt_depth || 0;
-
-  if (obj == fn) {
-    return prefix;
-  }
-
-  for (var i in obj) {
-
-    // If java is not installed, accessing the prototype of Packages will crash
-    // FF. See https://bugzilla.mozilla.org/show_bug.cgi?id=312946 for details.
-    if (i == 'Packages' || i == 'sun' || i == 'netscape' || i == 'java') {
-      continue;
-    }
-
-    if (obj[i] == fn) {
-      return prefix + i;
-    }
-
-    if ((typeof obj[i] == 'function' || typeof obj[i] == 'object') &&
-        obj[i] != goog.global &&
-        obj[i] != goog.getObjectByName('document') &&
-        obj.hasOwnProperty(i) &&
-        depth < 6) {
-      var rv = goog.debug.getAnonFunctionName_(fn, obj[i],
-                                               prefix + i + '.', depth + 1);
-      if (rv) return rv;
-    }
-  }
-
-  return '';
-};
-
-
-/**
  * Makes whitespace visible by replacing it with printable characters.
  * This is useful in finding diffrences between the expected and the actual
  * output strings of a testcase.

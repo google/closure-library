@@ -481,7 +481,7 @@ goog.History.prototype.setEnabled = function(enable) {
     } else if (!goog.userAgent.IE || this.documentLoaded) {
       // Start dispatching history events if all necessary loading has
       // completed (always true for browsers other than IE.)
-      this.eventHandler_.listen(this.timer_, goog.Timer.TICK, this.poll_);
+      this.eventHandler_.listen(this.timer_, goog.Timer.TICK, this.check_);
 
       this.enabled_ = true;
 
@@ -545,7 +545,7 @@ goog.History.prototype.onShow_ = function(e) {
 
 /**
  * Handles HTML5 onhashchange events on browsers where it is supported.
- * This is very similar to {@link #poll_}, except that it is not executed
+ * This is very similar to {@link #check_}, except that it is not executed
  * continuously. It is only used when {@code goog.History.HAS_ONHASHCHANGE_} is
  * true.
  * @param {goog.events.BrowserEvent} e The browser event.
@@ -553,7 +553,9 @@ goog.History.prototype.onShow_ = function(e) {
  */
 goog.History.prototype.onHashChange_ = function(e) {
   var hash = this.getLocationFragment_(this.window_);
-  this.update_(hash);
+  if (hash != this.lastToken_) {
+    this.update_(hash);
+  }
 };
 
 
@@ -638,9 +640,13 @@ goog.History.prototype.setHistoryState_ = function(token, replace, opt_title) {
           // IE must save state using the iframe.
           this.setIframeToken_(token, replace, opt_title);
         }
-        if (this.enabled_) {
-          this.poll_();
-        }
+      }
+
+      // This condition needs to be called even if
+      // goog.History.HAS_ONHASHCHANGE_ is true so the NAVIGATE event fires
+      // sychronously.
+      if (this.enabled_) {
+        this.check_();
       }
     } else {
       // Fire the event immediately so that setting history is synchronous, but
@@ -803,11 +809,12 @@ goog.History.prototype.getIframeToken_ = function() {
 
 
 /**
- * Polls the state of the document fragment and the iframe title to detect
- * navigation changes. Runs approximately twenty times per second.
+ * Checks the state of the document fragment and the iframe title to detect
+ * navigation changes. If {@code goog.History.HAS_ONHASHCHANGE_} is
+ * {@code false}, then this runs approximately twenty times per second.
  * @private
  */
-goog.History.prototype.poll_ = function() {
+goog.History.prototype.check_ = function() {
   if (this.userVisible_) {
     var hash = this.getLocationFragment_(this.window_);
     if (hash != this.lastToken_) {

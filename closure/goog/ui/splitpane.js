@@ -97,7 +97,7 @@ goog.inherits(goog.ui.SplitPane, goog.ui.Component);
  * @type {string}
  * @private
  */
-goog.ui.SplitPane.CLASS_NAME_ = 'goog-splitpane';
+goog.ui.SplitPane.CLASS_NAME_ = goog.getCssName('goog-splitpane');
 
 
 /**
@@ -106,7 +106,7 @@ goog.ui.SplitPane.CLASS_NAME_ = 'goog-splitpane';
  * @private
  */
 goog.ui.SplitPane.FIRST_CONTAINER_CLASS_NAME_ =
-    'goog-splitpane-first-container';
+    goog.getCssName('goog-splitpane-first-container');
 
 
 /**
@@ -115,7 +115,7 @@ goog.ui.SplitPane.FIRST_CONTAINER_CLASS_NAME_ =
  * @private
  */
 goog.ui.SplitPane.SECOND_CONTAINER_CLASS_NAME_ =
-    'goog-splitpane-second-container';
+    goog.getCssName('goog-splitpane-second-container');
 
 
 /**
@@ -123,7 +123,7 @@ goog.ui.SplitPane.SECOND_CONTAINER_CLASS_NAME_ =
  * @type {string}
  * @private
  */
-goog.ui.SplitPane.HANDLE_CLASS_NAME_ = 'goog-splitpane-handle';
+goog.ui.SplitPane.HANDLE_CLASS_NAME_ = goog.getCssName('goog-splitpane-handle');
 
 
 /**
@@ -132,7 +132,7 @@ goog.ui.SplitPane.HANDLE_CLASS_NAME_ = 'goog-splitpane-handle';
  * @private
  */
 goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_ =
-    'goog-splitpane-handle-horizontal';
+    goog.getCssName('goog-splitpane-handle-horizontal');
 
 
 /**
@@ -141,7 +141,7 @@ goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_ =
  * @private
  */
 goog.ui.SplitPane.HANDLE_CLASS_NAME_VERTICAL_ =
-    'goog-splitpane-handle-vertical';
+    goog.getCssName('goog-splitpane-handle-vertical');
 
 
 /**

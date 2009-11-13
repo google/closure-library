@@ -58,13 +58,13 @@
 <div class="g-section g-tpl-75-25">
   <div class="g-unit g-first" id="description">
     This class can be used to monitor changes in the viewport size.  Instances
-dispatch a {@link goog.events.EventType.RESIZE} event when the viewport size
-changes.  Handlers can call {@link goog.dom.ViewportSizeMonitor#getSize} to
+dispatch a goog.events.EventType.RESIZE event when the viewport size
+changes.  Handlers can call goog.dom.ViewportSizeMonitor#getSize to
 get the new viewport size.
 
 Use this class if you want to execute resize/reflow logic each time the
 user resizes the browser window.  This class is guaranteed to only dispatch
-{@code RESIZE} events when the pixel dimensions of the viewport change.
+<code>RESIZE</code> events when the pixel dimensions of the viewport change.
 (Internet Explorer fires resize events if any element on the page is resized,
 even if the viewport dimensions are unchanged, which can lead to infinite
 resize loops.)
@@ -77,7 +77,7 @@ alert(&#39;Viewport size changed to &#39; + vsm.getSize());
 });
 </pre>
 
-Manually verified on IE6, IE7, FF2, Opera 9, and WebKit.  {@code getSize}
+Manually verified on IE6, IE7, FF2, Opera 9, and WebKit.  <code>getSize</code>
 doesn&#39;t always return the correct viewport height on Safari 2.0.4.
   </div>
 
@@ -187,7 +187,7 @@ Object
 
      <div class="entryOverview">
        Measures the dimensions of the viewport and dispatches a
-{@link goog.events.EventType.RESIZE} event if the current dimensions are
+goog.events.EventType.RESIZE event if the current dimensions are
 different from the previous ones.
      </div>
 
@@ -304,7 +304,7 @@ return null if no window resize event has been handled yet.
 
      <div class="entryOverview">
        Handles window resize events by measuring the dimensions of the
-viewport and dispatching a {@link goog.events.EventType.RESIZE} event if the
+viewport and dispatching a goog.events.EventType.RESIZE event if the
 current dimensions are different from the previous ones.
      </div>
 
@@ -498,7 +498,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line134">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line136">code &raquo;</a>
   </td>
      </tr>
 
@@ -569,7 +569,7 @@ stopPropagation, then the bubble listeners won&#39;t fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line172">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line174">code &raquo;</a>
   </td>
      </tr>
 
@@ -611,7 +611,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line189">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line191">code &raquo;</a>
   </td>
      </tr>
 
@@ -657,7 +657,7 @@ MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line102">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line104">code &raquo;</a>
   </td>
      </tr>
 
@@ -743,7 +743,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line153">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line155">code &raquo;</a>
   </td>
      </tr>
 
@@ -803,7 +803,7 @@ nothing is done.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line112">code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line114">code &raquo;</a>
   </td>
      </tr>
 
@@ -887,7 +887,7 @@ nothing is done.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {
@@ -1063,7 +1063,7 @@ mypackage.MyClass.superClass_.disposeInternal.call(this);
 
      <div class="entryOverview">
        Event listener key for window the window resize handler, as returned by
-{@link goog.events.listen}.
+goog.events.listen.
      </div>
 
   </td>
@@ -1227,7 +1227,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line85">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line87">Code &raquo;</a>
   </td>
      </tr>
 
@@ -1260,7 +1260,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_eventtarget.js.source.html#line93">Code &raquo;</a>
+     <a href="closure_goog_events_eventtarget.js.source.html#line95">Code &raquo;</a>
   </td>
      </tr>
 

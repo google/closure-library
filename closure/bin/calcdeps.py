@@ -14,16 +14,19 @@ required for compilation.\n
 
 
 
+import distutils.version
 import logging
 import optparse
 import os
 import re
+import subprocess
 import sys
 
 
 req_regex = re.compile('goog\.require\([\'\"]([^\)]+)[\'\"]\)')
 prov_regex = re.compile('goog\.provide\([\'\"]([^\)]+)[\'\"]\)')
 ns_regex = re.compile('^ns:((\w+\.)*(\w+))$')
+version_regex = re.compile('[\.0-9]+')
 
 
 def IsValidFile(ref):
@@ -104,7 +107,11 @@ def BuildDependenciesFromFiles(files):
   """
   result = []
   for filename in files:
-    file_handle = open(filename, 'r')
+    # Python 3 requires the file encoding to be specified
+    if (sys.version_info[0] < 3):
+      file_handle = open(filename, 'r')
+    else:
+      file_handle = open(filename, 'r', encoding='utf8')
     dep = DependencyInfo(filename)
     try:
       for line in file_handle:
@@ -290,6 +297,14 @@ def PrintScript(source_paths):
     f.close()
 
 
+def GetJavaVersion():
+  """Returns the string for the current version of Java installed."""
+  proc = subprocess.Popen(['java', '-version'], stderr=subprocess.PIPE)
+  proc.wait()
+  version_line = proc.stderr.read().splitlines()[0]
+  return version_regex.search(version_line).group()
+
+
 def Compile(compiler_jar_path, source_paths, flags=None):
   """Prepares command-line call to Closure compiler.
 
@@ -385,11 +400,21 @@ def main():
     for dep in deps:
       PrintLine(dep)
   elif output_mode == 'compiled':
-    if options.compiler_jar:
-      Compile(options.compiler_jar, deps, options.compiler_flags)
-    else:
+    # Make sure a .jar is specified.
+    if not options.compiler_jar:
       logging.error('--compiler_jar flag must be specified if --output is '
                     '"compiled"')
+      sys.exit(-1)
+
+    # User friendly version check.
+    if not (distutils.version.LooseVersion(GetJavaVersion()) >
+      distutils.version.LooseVersion('1.6')):
+      logging.error('Closure Compiler requires Java 1.6 or higher.')
+      logging.error('Please visit http://www.java.com/getjava')
+      sys.exit(-1)
+
+    Compile(options.compiler_jar, deps, options.compiler_flags)
+
   else:
     logging.error('Invalid value for --output flag.')
     sys.exit(-1)

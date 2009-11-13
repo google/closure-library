@@ -53,7 +53,7 @@
 <a name="line10"></a>// See the License for the specific language governing permissions and
 <a name="line11"></a>// limitations under the License.
 <a name="line12"></a>
-<a name="line13"></a>// Copyright 2005 Google Inc. All Rights Reserved
+<a name="line13"></a>// Copyright 2005 Google Inc. All Rights Reserved.
 <a name="line14"></a>
 <a name="line15"></a>/**
 <a name="line16"></a> * @fileoverview Event Manager.
@@ -81,1077 +81,1078 @@
 <a name="line38"></a> *
 <a name="line39"></a> * @supported IE6+, FF1.5+, WebKit, Opera.
 <a name="line40"></a> * @see ../demos/events.html
-<a name="line41"></a> * @see ../demos/event-propogation.html
-<a name="line42"></a> */
-<a name="line43"></a>
+<a name="line41"></a> * @see ../demos/event-propagation.html
+<a name="line42"></a> * @see ../demos/stopevent.html
+<a name="line43"></a> */
 <a name="line44"></a>
-<a name="line45"></a>// This uses 3 lookup tables/trees.
-<a name="line46"></a>// listenerTree_ is a tree of type -&gt; capture -&gt; src hash code -&gt; [Listener]
-<a name="line47"></a>// listeners_ is a map of key -&gt; [Listener]
-<a name="line48"></a>//
-<a name="line49"></a>// The key is a field of the Listener. The Listener class also has the type,
-<a name="line50"></a>// capture and the src so one can always trace back in the tree
-<a name="line51"></a>//
-<a name="line52"></a>// sources_: src hc -&gt; [Listener]
-<a name="line53"></a>
+<a name="line45"></a>
+<a name="line46"></a>// This uses 3 lookup tables/trees.
+<a name="line47"></a>// listenerTree_ is a tree of type -&gt; capture -&gt; src hash code -&gt; [Listener]
+<a name="line48"></a>// listeners_ is a map of key -&gt; [Listener]
+<a name="line49"></a>//
+<a name="line50"></a>// The key is a field of the Listener. The Listener class also has the type,
+<a name="line51"></a>// capture and the src so one can always trace back in the tree
+<a name="line52"></a>//
+<a name="line53"></a>// sources_: src hc -&gt; [Listener]
 <a name="line54"></a>
-<a name="line55"></a>goog.provide(&#39;goog.events&#39;);
-<a name="line56"></a>goog.provide(&#39;goog.events.EventType&#39;);
-<a name="line57"></a>
-<a name="line58"></a>goog.require(&#39;goog.array&#39;);
-<a name="line59"></a>goog.require(&#39;goog.debug.errorHandlerWeakDep&#39;);
-<a name="line60"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
-<a name="line61"></a>goog.require(&#39;goog.events.Event&#39;);
-<a name="line62"></a>goog.require(&#39;goog.events.EventWrapper&#39;);
-<a name="line63"></a>goog.require(&#39;goog.events.pools&#39;);
-<a name="line64"></a>goog.require(&#39;goog.object&#39;);
-<a name="line65"></a>goog.require(&#39;goog.userAgent&#39;);
-<a name="line66"></a>
+<a name="line55"></a>
+<a name="line56"></a>goog.provide(&#39;goog.events&#39;);
+<a name="line57"></a>goog.provide(&#39;goog.events.EventType&#39;);
+<a name="line58"></a>
+<a name="line59"></a>goog.require(&#39;goog.array&#39;);
+<a name="line60"></a>goog.require(&#39;goog.debug.errorHandlerWeakDep&#39;);
+<a name="line61"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
+<a name="line62"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line63"></a>goog.require(&#39;goog.events.EventWrapper&#39;);
+<a name="line64"></a>goog.require(&#39;goog.events.pools&#39;);
+<a name="line65"></a>goog.require(&#39;goog.object&#39;);
+<a name="line66"></a>goog.require(&#39;goog.userAgent&#39;);
 <a name="line67"></a>
 <a name="line68"></a>
-<a name="line69"></a>/**
-<a name="line70"></a> * Container for storing event listeners and their proxies
-<a name="line71"></a> * @private
-<a name="line72"></a> * @type {Object.&lt;goog.events.Listener&gt;}
-<a name="line73"></a> */
-<a name="line74"></a>goog.events.listeners_ = {};
-<a name="line75"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * Container for storing event listeners and their proxies
+<a name="line72"></a> * @private
+<a name="line73"></a> * @type {Object.&lt;goog.events.Listener&gt;}
+<a name="line74"></a> */
+<a name="line75"></a>goog.events.listeners_ = {};
 <a name="line76"></a>
-<a name="line77"></a>/**
-<a name="line78"></a> * The root of the listener tree
-<a name="line79"></a> * @private
-<a name="line80"></a> * @type {Object}
-<a name="line81"></a> */
-<a name="line82"></a>goog.events.listenerTree_ = {};
-<a name="line83"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * The root of the listener tree
+<a name="line80"></a> * @private
+<a name="line81"></a> * @type {Object}
+<a name="line82"></a> */
+<a name="line83"></a>goog.events.listenerTree_ = {};
 <a name="line84"></a>
-<a name="line85"></a>/**
-<a name="line86"></a> * Lookup for mapping source hash codes to listeners
-<a name="line87"></a> * @private
-<a name="line88"></a> * @type {Object}
-<a name="line89"></a> */
-<a name="line90"></a>goog.events.sources_ = {};
-<a name="line91"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Lookup for mapping source hash codes to listeners
+<a name="line88"></a> * @private
+<a name="line89"></a> * @type {Object}
+<a name="line90"></a> */
+<a name="line91"></a>goog.events.sources_ = {};
 <a name="line92"></a>
-<a name="line93"></a>/**
-<a name="line94"></a> * String used to prepend to IE event types.  Not a constant so that it is not
-<a name="line95"></a> * inlined.
-<a name="line96"></a> * @type {string}
-<a name="line97"></a> * @private
-<a name="line98"></a> */
-<a name="line99"></a>goog.events.onString_ = &#39;on&#39;;
-<a name="line100"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * String used to prepend to IE event types.  Not a constant so that it is not
+<a name="line96"></a> * inlined.
+<a name="line97"></a> * @type {string}
+<a name="line98"></a> * @private
+<a name="line99"></a> */
+<a name="line100"></a>goog.events.onString_ = &#39;on&#39;;
 <a name="line101"></a>
-<a name="line102"></a>/**
-<a name="line103"></a> * Map of computed on strings for IE event types. Caching this removes an extra
-<a name="line104"></a> * object allocation in goog.events.listen which improves IE6 performance.
-<a name="line105"></a> * @type {Object}
-<a name="line106"></a> * @private
-<a name="line107"></a> */
-<a name="line108"></a>goog.events.onStringMap_ = {};
-<a name="line109"></a>
-<a name="line110"></a>/**
-<a name="line111"></a> * Separator used to split up the various parts of an event key, to help avoid
-<a name="line112"></a> * the possibilities of collisions.
-<a name="line113"></a> * @type {string}
-<a name="line114"></a> * @private
-<a name="line115"></a> */
-<a name="line116"></a>goog.events.keySeparator_ = &#39;_&#39;;
-<a name="line117"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Map of computed on strings for IE event types. Caching this removes an extra
+<a name="line105"></a> * object allocation in goog.events.listen which improves IE6 performance.
+<a name="line106"></a> * @type {Object}
+<a name="line107"></a> * @private
+<a name="line108"></a> */
+<a name="line109"></a>goog.events.onStringMap_ = {};
+<a name="line110"></a>
+<a name="line111"></a>/**
+<a name="line112"></a> * Separator used to split up the various parts of an event key, to help avoid
+<a name="line113"></a> * the possibilities of collisions.
+<a name="line114"></a> * @type {string}
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.events.keySeparator_ = &#39;_&#39;;
 <a name="line118"></a>
-<a name="line119"></a>/**
-<a name="line120"></a> * Adds an event listener for a specific event on a DOM Node or an object that
-<a name="line121"></a> * has implemented {@link goog.events.EventTarget}. A listener can only be
-<a name="line122"></a> * added once to an object and if it is added again the key for the listener
-<a name="line123"></a> * is returned.
-<a name="line124"></a> *
-<a name="line125"></a> * @param {EventTarget|goog.events.EventTarget} src The node to listen to
-<a name="line126"></a> *     events on.
-<a name="line127"></a> * @param {string|Array.&lt;string&gt;} type Event type or array of event types.
-<a name="line128"></a> * @param {Function|Object} listener Callback method, or an object with a
-<a name="line129"></a> *     handleEvent function.
-<a name="line130"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
-<a name="line131"></a> *     false).
-<a name="line132"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
-<a name="line133"></a> * @return {number?} Unique key for the listener.
-<a name="line134"></a> */
-<a name="line135"></a>goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
-<a name="line136"></a>  if (!type) {
-<a name="line137"></a>    throw Error(&#39;Invalid event type&#39;);
-<a name="line138"></a>  } else if (goog.isArray(type)) {
-<a name="line139"></a>    for (var i = 0; i &lt; type.length; i++) {
-<a name="line140"></a>      goog.events.listen(src, type[i], listener, opt_capt, opt_handler);
-<a name="line141"></a>    }
-<a name="line142"></a>    return null;
-<a name="line143"></a>  } else {
-<a name="line144"></a>    var capture = !!opt_capt;
-<a name="line145"></a>    var map = goog.events.listenerTree_;
-<a name="line146"></a>
-<a name="line147"></a>    if (!(type in map)) {
-<a name="line148"></a>      map[type] = goog.events.pools.getObject();
-<a name="line149"></a>    }
-<a name="line150"></a>    map = map[type];
-<a name="line151"></a>
-<a name="line152"></a>    if (!(capture in map)) {
-<a name="line153"></a>      map[capture] = goog.events.pools.getObject();
-<a name="line154"></a>      map.count_++;
-<a name="line155"></a>    }
-<a name="line156"></a>    map = map[capture];
-<a name="line157"></a>
-<a name="line158"></a>    var srcHashCode = goog.getHashCode(src);
-<a name="line159"></a>    var listenerArray, listenerObj;
-<a name="line160"></a>
-<a name="line161"></a>    // The remaining_ property is used to be able to short circuit the iteration
-<a name="line162"></a>    // of the event listeners.
-<a name="line163"></a>    //
-<a name="line164"></a>    // Increment the remaining event listeners to call even if this event might
-<a name="line165"></a>    // already have been fired. At this point we do not know if the event has
-<a name="line166"></a>    // been fired and it is too expensive to find out. By incrementing it we are
-<a name="line167"></a>    // guaranteed that we will not skip any event listeners.
-<a name="line168"></a>    map.remaining_++;
-<a name="line169"></a>
-<a name="line170"></a>    // Do not use srcHashCode in map here since that will cast the number to a
-<a name="line171"></a>    // string which will allocate one string object.
-<a name="line172"></a>    if (!map[srcHashCode]) {
-<a name="line173"></a>      listenerArray = map[srcHashCode] = goog.events.pools.getArray();
-<a name="line174"></a>      map.count_++;
-<a name="line175"></a>    } else {
-<a name="line176"></a>      listenerArray = map[srcHashCode];
-<a name="line177"></a>      // Ensure that the listeners do not already contain the current listener
-<a name="line178"></a>      for (var i = 0; i &lt; listenerArray.length; i++) {
-<a name="line179"></a>        listenerObj = listenerArray[i];
-<a name="line180"></a>        if (listenerObj.listener == listener &amp;&amp;
-<a name="line181"></a>            listenerObj.handler == opt_handler) {
-<a name="line182"></a>
-<a name="line183"></a>          // If this listener has been removed we should not return its key. It
-<a name="line184"></a>          // is OK that we create new listenerObj below since the removed one
-<a name="line185"></a>          // will be cleaned up later.
-<a name="line186"></a>          if (listenerObj.removed) {
-<a name="line187"></a>            break;
-<a name="line188"></a>          }
-<a name="line189"></a>
-<a name="line190"></a>          // We already have this listener. Return its key.
-<a name="line191"></a>          return listenerArray[i].key;
-<a name="line192"></a>        }
-<a name="line193"></a>      }
-<a name="line194"></a>    }
-<a name="line195"></a>
-<a name="line196"></a>    var proxy = goog.events.pools.getProxy();
-<a name="line197"></a>    proxy.src = src;
-<a name="line198"></a>    listenerObj = goog.events.pools.getListener();
-<a name="line199"></a>    listenerObj.init(listener, proxy, src, type, capture, opt_handler);
-<a name="line200"></a>    var key = listenerObj.key;
-<a name="line201"></a>    proxy.key = key;
-<a name="line202"></a>
-<a name="line203"></a>    listenerArray.push(listenerObj);
-<a name="line204"></a>    goog.events.listeners_[key] = listenerObj;
-<a name="line205"></a>
-<a name="line206"></a>    if (!goog.events.sources_[srcHashCode]) {
-<a name="line207"></a>      goog.events.sources_[srcHashCode] = goog.events.pools.getArray();
-<a name="line208"></a>    }
-<a name="line209"></a>    goog.events.sources_[srcHashCode].push(listenerObj);
-<a name="line210"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Adds an event listener for a specific event on a DOM Node or an object that
+<a name="line122"></a> * has implemented {@link goog.events.EventTarget}. A listener can only be
+<a name="line123"></a> * added once to an object and if it is added again the key for the listener
+<a name="line124"></a> * is returned.
+<a name="line125"></a> *
+<a name="line126"></a> * @param {EventTarget|goog.events.EventTarget} src The node to listen to
+<a name="line127"></a> *     events on.
+<a name="line128"></a> * @param {string|Array.&lt;string&gt;} type Event type or array of event types.
+<a name="line129"></a> * @param {Function|Object} listener Callback method, or an object with a
+<a name="line130"></a> *     handleEvent function.
+<a name="line131"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+<a name="line132"></a> *     false).
+<a name="line133"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line134"></a> * @return {number?} Unique key for the listener.
+<a name="line135"></a> */
+<a name="line136"></a>goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
+<a name="line137"></a>  if (!type) {
+<a name="line138"></a>    throw Error(&#39;Invalid event type&#39;);
+<a name="line139"></a>  } else if (goog.isArray(type)) {
+<a name="line140"></a>    for (var i = 0; i &lt; type.length; i++) {
+<a name="line141"></a>      goog.events.listen(src, type[i], listener, opt_capt, opt_handler);
+<a name="line142"></a>    }
+<a name="line143"></a>    return null;
+<a name="line144"></a>  } else {
+<a name="line145"></a>    var capture = !!opt_capt;
+<a name="line146"></a>    var map = goog.events.listenerTree_;
+<a name="line147"></a>
+<a name="line148"></a>    if (!(type in map)) {
+<a name="line149"></a>      map[type] = goog.events.pools.getObject();
+<a name="line150"></a>    }
+<a name="line151"></a>    map = map[type];
+<a name="line152"></a>
+<a name="line153"></a>    if (!(capture in map)) {
+<a name="line154"></a>      map[capture] = goog.events.pools.getObject();
+<a name="line155"></a>      map.count_++;
+<a name="line156"></a>    }
+<a name="line157"></a>    map = map[capture];
+<a name="line158"></a>
+<a name="line159"></a>    var srcHashCode = goog.getHashCode(src);
+<a name="line160"></a>    var listenerArray, listenerObj;
+<a name="line161"></a>
+<a name="line162"></a>    // The remaining_ property is used to be able to short circuit the iteration
+<a name="line163"></a>    // of the event listeners.
+<a name="line164"></a>    //
+<a name="line165"></a>    // Increment the remaining event listeners to call even if this event might
+<a name="line166"></a>    // already have been fired. At this point we do not know if the event has
+<a name="line167"></a>    // been fired and it is too expensive to find out. By incrementing it we are
+<a name="line168"></a>    // guaranteed that we will not skip any event listeners.
+<a name="line169"></a>    map.remaining_++;
+<a name="line170"></a>
+<a name="line171"></a>    // Do not use srcHashCode in map here since that will cast the number to a
+<a name="line172"></a>    // string which will allocate one string object.
+<a name="line173"></a>    if (!map[srcHashCode]) {
+<a name="line174"></a>      listenerArray = map[srcHashCode] = goog.events.pools.getArray();
+<a name="line175"></a>      map.count_++;
+<a name="line176"></a>    } else {
+<a name="line177"></a>      listenerArray = map[srcHashCode];
+<a name="line178"></a>      // Ensure that the listeners do not already contain the current listener
+<a name="line179"></a>      for (var i = 0; i &lt; listenerArray.length; i++) {
+<a name="line180"></a>        listenerObj = listenerArray[i];
+<a name="line181"></a>        if (listenerObj.listener == listener &amp;&amp;
+<a name="line182"></a>            listenerObj.handler == opt_handler) {
+<a name="line183"></a>
+<a name="line184"></a>          // If this listener has been removed we should not return its key. It
+<a name="line185"></a>          // is OK that we create new listenerObj below since the removed one
+<a name="line186"></a>          // will be cleaned up later.
+<a name="line187"></a>          if (listenerObj.removed) {
+<a name="line188"></a>            break;
+<a name="line189"></a>          }
+<a name="line190"></a>
+<a name="line191"></a>          // We already have this listener. Return its key.
+<a name="line192"></a>          return listenerArray[i].key;
+<a name="line193"></a>        }
+<a name="line194"></a>      }
+<a name="line195"></a>    }
+<a name="line196"></a>
+<a name="line197"></a>    var proxy = goog.events.pools.getProxy();
+<a name="line198"></a>    proxy.src = src;
+<a name="line199"></a>    listenerObj = goog.events.pools.getListener();
+<a name="line200"></a>    listenerObj.init(listener, proxy, src, type, capture, opt_handler);
+<a name="line201"></a>    var key = listenerObj.key;
+<a name="line202"></a>    proxy.key = key;
+<a name="line203"></a>
+<a name="line204"></a>    listenerArray.push(listenerObj);
+<a name="line205"></a>    goog.events.listeners_[key] = listenerObj;
+<a name="line206"></a>
+<a name="line207"></a>    if (!goog.events.sources_[srcHashCode]) {
+<a name="line208"></a>      goog.events.sources_[srcHashCode] = goog.events.pools.getArray();
+<a name="line209"></a>    }
+<a name="line210"></a>    goog.events.sources_[srcHashCode].push(listenerObj);
 <a name="line211"></a>
-<a name="line212"></a>    // Attach the proxy through the browser&#39;s API
-<a name="line213"></a>    if (src.addEventListener) {
-<a name="line214"></a>      if (src == goog.global || !src.customEvent_) {
-<a name="line215"></a>        src.addEventListener(type, proxy, capture);
-<a name="line216"></a>      }
-<a name="line217"></a>    } else {
-<a name="line218"></a>      // The else above used to be else if (src.attachEvent) and then there was
-<a name="line219"></a>      // another else statement that threw an exception warning the developer
-<a name="line220"></a>      // they made a mistake. This resulted in an extra object allocation in IE6
-<a name="line221"></a>      // due to a wrapper object that had to be implemented around the element
-<a name="line222"></a>      // and so was removed.
-<a name="line223"></a>      src.attachEvent(goog.events.getOnString_(type), proxy);
-<a name="line224"></a>    }
-<a name="line225"></a>
-<a name="line226"></a>    return key;
-<a name="line227"></a>  }
-<a name="line228"></a>};
-<a name="line229"></a>
+<a name="line212"></a>
+<a name="line213"></a>    // Attach the proxy through the browser&#39;s API
+<a name="line214"></a>    if (src.addEventListener) {
+<a name="line215"></a>      if (src == goog.global || !src.customEvent_) {
+<a name="line216"></a>        src.addEventListener(type, proxy, capture);
+<a name="line217"></a>      }
+<a name="line218"></a>    } else {
+<a name="line219"></a>      // The else above used to be else if (src.attachEvent) and then there was
+<a name="line220"></a>      // another else statement that threw an exception warning the developer
+<a name="line221"></a>      // they made a mistake. This resulted in an extra object allocation in IE6
+<a name="line222"></a>      // due to a wrapper object that had to be implemented around the element
+<a name="line223"></a>      // and so was removed.
+<a name="line224"></a>      src.attachEvent(goog.events.getOnString_(type), proxy);
+<a name="line225"></a>    }
+<a name="line226"></a>
+<a name="line227"></a>    return key;
+<a name="line228"></a>  }
+<a name="line229"></a>};
 <a name="line230"></a>
-<a name="line231"></a>/**
-<a name="line232"></a> * Adds an event listener for a specific event on a DomNode or an object that
-<a name="line233"></a> * has implemented {@link goog.events.EventTarget}. After the event has fired
-<a name="line234"></a> * the event listener is removed from the target.
-<a name="line235"></a> *
-<a name="line236"></a> * @param {EventTarget|goog.events.EventTarget} src The node to listen to
-<a name="line237"></a> *     events on.
-<a name="line238"></a> * @param {string|Array.&lt;string&gt;} type Event type or array of event types.
-<a name="line239"></a> * @param {Function|Object} listener Callback method.
-<a name="line240"></a> * @param {boolean} opt_capt Fire in capture phase?.
-<a name="line241"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
-<a name="line242"></a> * @return {number?} Unique key for the listener.
-<a name="line243"></a> */
-<a name="line244"></a>goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
-<a name="line245"></a>  if (goog.isArray(type)) {
-<a name="line246"></a>    for (var i = 0; i &lt; type.length; i++) {
-<a name="line247"></a>      goog.events.listenOnce(src, type[i], listener, opt_capt, opt_handler);
-<a name="line248"></a>    }
-<a name="line249"></a>    return null;
-<a name="line250"></a>  }
-<a name="line251"></a>
-<a name="line252"></a>  var key = goog.events.listen(src, type, listener, opt_capt, opt_handler);
-<a name="line253"></a>  var listenerObj = goog.events.listeners_[key];
-<a name="line254"></a>  listenerObj.callOnce = true;
-<a name="line255"></a>  return key;
-<a name="line256"></a>};
-<a name="line257"></a>
+<a name="line231"></a>
+<a name="line232"></a>/**
+<a name="line233"></a> * Adds an event listener for a specific event on a DomNode or an object that
+<a name="line234"></a> * has implemented {@link goog.events.EventTarget}. After the event has fired
+<a name="line235"></a> * the event listener is removed from the target.
+<a name="line236"></a> *
+<a name="line237"></a> * @param {EventTarget|goog.events.EventTarget} src The node to listen to
+<a name="line238"></a> *     events on.
+<a name="line239"></a> * @param {string|Array.&lt;string&gt;} type Event type or array of event types.
+<a name="line240"></a> * @param {Function|Object} listener Callback method.
+<a name="line241"></a> * @param {boolean} opt_capt Fire in capture phase?.
+<a name="line242"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line243"></a> * @return {number?} Unique key for the listener.
+<a name="line244"></a> */
+<a name="line245"></a>goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
+<a name="line246"></a>  if (goog.isArray(type)) {
+<a name="line247"></a>    for (var i = 0; i &lt; type.length; i++) {
+<a name="line248"></a>      goog.events.listenOnce(src, type[i], listener, opt_capt, opt_handler);
+<a name="line249"></a>    }
+<a name="line250"></a>    return null;
+<a name="line251"></a>  }
+<a name="line252"></a>
+<a name="line253"></a>  var key = goog.events.listen(src, type, listener, opt_capt, opt_handler);
+<a name="line254"></a>  var listenerObj = goog.events.listeners_[key];
+<a name="line255"></a>  listenerObj.callOnce = true;
+<a name="line256"></a>  return key;
+<a name="line257"></a>};
 <a name="line258"></a>
-<a name="line259"></a>/**
-<a name="line260"></a> * Adds an event listener with a specific event wrapper on a DOM Node or an
-<a name="line261"></a> * object that has implemented {@link goog.events.EventTarget}. A listener can
-<a name="line262"></a> * only be added once to an object.
-<a name="line263"></a> *
-<a name="line264"></a> * @param {EventTarget|goog.events.EventTarget} src The node to listen to
-<a name="line265"></a> *     events on.
-<a name="line266"></a> * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
-<a name="line267"></a> * @param {Function|Object} listener Callback method, or an object with a
-<a name="line268"></a> *     handleEvent function.
-<a name="line269"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
-<a name="line270"></a> *     false).
-<a name="line271"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
-<a name="line272"></a> */
-<a name="line273"></a>goog.events.listenWithWrapper = function(src, wrapper, listener, opt_capt,
-<a name="line274"></a>    opt_handler) {
-<a name="line275"></a>  wrapper.listen(src, listener, opt_capt, opt_handler);
-<a name="line276"></a>};
-<a name="line277"></a>
+<a name="line259"></a>
+<a name="line260"></a>/**
+<a name="line261"></a> * Adds an event listener with a specific event wrapper on a DOM Node or an
+<a name="line262"></a> * object that has implemented {@link goog.events.EventTarget}. A listener can
+<a name="line263"></a> * only be added once to an object.
+<a name="line264"></a> *
+<a name="line265"></a> * @param {EventTarget|goog.events.EventTarget} src The node to listen to
+<a name="line266"></a> *     events on.
+<a name="line267"></a> * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
+<a name="line268"></a> * @param {Function|Object} listener Callback method, or an object with a
+<a name="line269"></a> *     handleEvent function.
+<a name="line270"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+<a name="line271"></a> *     false).
+<a name="line272"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line273"></a> */
+<a name="line274"></a>goog.events.listenWithWrapper = function(src, wrapper, listener, opt_capt,
+<a name="line275"></a>    opt_handler) {
+<a name="line276"></a>  wrapper.listen(src, listener, opt_capt, opt_handler);
+<a name="line277"></a>};
 <a name="line278"></a>
-<a name="line279"></a>/**
-<a name="line280"></a> * Removes an event listener which was added with listen().
-<a name="line281"></a> *
-<a name="line282"></a> * @param {EventTarget|goog.events.EventTarget} src The target to stop
-<a name="line283"></a> *     listening to events on.
-<a name="line284"></a> * @param {string|Array.&lt;string&gt;} type The name of the event without the &#39;on&#39;
-<a name="line285"></a> *     prefix.
-<a name="line286"></a> * @param {Function|Object} listener The listener function to remove.
-<a name="line287"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
-<a name="line288"></a> *     whether the listener is fired during the capture or bubble phase of the
-<a name="line289"></a> *     event.
-<a name="line290"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
-<a name="line291"></a> * @return {boolean?} indicating whether the listener was there to remove.
-<a name="line292"></a> */
-<a name="line293"></a>goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
-<a name="line294"></a>  if (goog.isArray(type)) {
-<a name="line295"></a>    for (var i = 0; i &lt; type.length; i++) {
-<a name="line296"></a>      goog.events.unlisten(src, type[i], listener, opt_capt, opt_handler);
-<a name="line297"></a>    }
-<a name="line298"></a>    return null;
-<a name="line299"></a>  }
-<a name="line300"></a>
-<a name="line301"></a>  var capture = !!opt_capt;
-<a name="line302"></a>
-<a name="line303"></a>  var listenerArray = goog.events.getListeners_(src, type, capture);
-<a name="line304"></a>  if (!listenerArray) {
-<a name="line305"></a>    return false;
-<a name="line306"></a>  }
-<a name="line307"></a>
-<a name="line308"></a>  for (var i = 0; i &lt; listenerArray.length; i++) {
-<a name="line309"></a>    if (listenerArray[i].listener == listener &amp;&amp;
-<a name="line310"></a>        listenerArray[i].capture == capture &amp;&amp;
-<a name="line311"></a>        listenerArray[i].handler == opt_handler) {
-<a name="line312"></a>      return goog.events.unlistenByKey(listenerArray[i].key);
-<a name="line313"></a>    }
-<a name="line314"></a>  }
-<a name="line315"></a>
-<a name="line316"></a>  return false;
-<a name="line317"></a>};
-<a name="line318"></a>
+<a name="line279"></a>
+<a name="line280"></a>/**
+<a name="line281"></a> * Removes an event listener which was added with listen().
+<a name="line282"></a> *
+<a name="line283"></a> * @param {EventTarget|goog.events.EventTarget} src The target to stop
+<a name="line284"></a> *     listening to events on.
+<a name="line285"></a> * @param {string|Array.&lt;string&gt;} type The name of the event without the &#39;on&#39;
+<a name="line286"></a> *     prefix.
+<a name="line287"></a> * @param {Function|Object} listener The listener function to remove.
+<a name="line288"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+<a name="line289"></a> *     whether the listener is fired during the capture or bubble phase of the
+<a name="line290"></a> *     event.
+<a name="line291"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line292"></a> * @return {boolean?} indicating whether the listener was there to remove.
+<a name="line293"></a> */
+<a name="line294"></a>goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
+<a name="line295"></a>  if (goog.isArray(type)) {
+<a name="line296"></a>    for (var i = 0; i &lt; type.length; i++) {
+<a name="line297"></a>      goog.events.unlisten(src, type[i], listener, opt_capt, opt_handler);
+<a name="line298"></a>    }
+<a name="line299"></a>    return null;
+<a name="line300"></a>  }
+<a name="line301"></a>
+<a name="line302"></a>  var capture = !!opt_capt;
+<a name="line303"></a>
+<a name="line304"></a>  var listenerArray = goog.events.getListeners_(src, type, capture);
+<a name="line305"></a>  if (!listenerArray) {
+<a name="line306"></a>    return false;
+<a name="line307"></a>  }
+<a name="line308"></a>
+<a name="line309"></a>  for (var i = 0; i &lt; listenerArray.length; i++) {
+<a name="line310"></a>    if (listenerArray[i].listener == listener &amp;&amp;
+<a name="line311"></a>        listenerArray[i].capture == capture &amp;&amp;
+<a name="line312"></a>        listenerArray[i].handler == opt_handler) {
+<a name="line313"></a>      return goog.events.unlistenByKey(listenerArray[i].key);
+<a name="line314"></a>    }
+<a name="line315"></a>  }
+<a name="line316"></a>
+<a name="line317"></a>  return false;
+<a name="line318"></a>};
 <a name="line319"></a>
-<a name="line320"></a>/**
-<a name="line321"></a> * Removes an event listener which was added with listen() by the key
-<a name="line322"></a> * returned by listen().
-<a name="line323"></a> *
-<a name="line324"></a> * @param {number?} key The key returned by listen() for this event listener.
-<a name="line325"></a> * @return {boolean} indicating whether the listener was there to remove.
-<a name="line326"></a> */
-<a name="line327"></a>goog.events.unlistenByKey = function(key) {
-<a name="line328"></a>  // Do not use key in listeners here since that will cast the number to a
-<a name="line329"></a>  // string which will allocate one string object.
-<a name="line330"></a>  if (!goog.events.listeners_[key]) {
-<a name="line331"></a>    return false;
-<a name="line332"></a>  }
-<a name="line333"></a>  var listener = goog.events.listeners_[key];
-<a name="line334"></a>
-<a name="line335"></a>  if (listener.removed) {
-<a name="line336"></a>    return false;
-<a name="line337"></a>  }
-<a name="line338"></a>
-<a name="line339"></a>  var src = listener.src;
-<a name="line340"></a>  var type = listener.type;
-<a name="line341"></a>  var proxy = listener.proxy;
-<a name="line342"></a>  var capture = listener.capture;
-<a name="line343"></a>
-<a name="line344"></a>  if (src.removeEventListener) {
-<a name="line345"></a>    // EventTarget calls unlisten so we need to ensure that the source is not
-<a name="line346"></a>    // an event target to prevent re-entry.
-<a name="line347"></a>    // TODO: What is this goog.global for? Why would anyone listen to
-<a name="line348"></a>    // events on the [[Global]] object? Is it supposed to be window? Why would
-<a name="line349"></a>    // we not want to allow removing event listeners on the window?
-<a name="line350"></a>    if (src == goog.global || !src.customEvent_) {
-<a name="line351"></a>      src.removeEventListener(type, proxy, capture);
-<a name="line352"></a>    }
-<a name="line353"></a>  } else if (src.detachEvent) {
-<a name="line354"></a>    src.detachEvent(goog.events.getOnString_(type), proxy);
-<a name="line355"></a>  }
-<a name="line356"></a>
-<a name="line357"></a>  var srcHashCode = goog.getHashCode(src);
-<a name="line358"></a>  var listenerArray = goog.events.listenerTree_[type][capture][srcHashCode];
-<a name="line359"></a>
-<a name="line360"></a>  // In a perfect implementation we would decrement the remaining_ field here
-<a name="line361"></a>  // but then we would need to know if the listener has already been fired or
-<a name="line362"></a>  // not. We therefore skip doing this and in this uncommon case the entire
-<a name="line363"></a>  // ancestor chain will need to be traversed as before.
-<a name="line364"></a>
-<a name="line365"></a>  // Remove from sources_
-<a name="line366"></a>  if (goog.events.sources_[srcHashCode]) {
-<a name="line367"></a>    var sourcesArray = goog.events.sources_[srcHashCode];
-<a name="line368"></a>    goog.array.remove(sourcesArray, listener);
-<a name="line369"></a>    if (sourcesArray.length == 0) {
-<a name="line370"></a>      delete goog.events.sources_[srcHashCode];
-<a name="line371"></a>    }
-<a name="line372"></a>  }
-<a name="line373"></a>
-<a name="line374"></a>  listener.removed = true;
-<a name="line375"></a>  listenerArray.needsCleanup_ = true;
-<a name="line376"></a>  goog.events.cleanUp_(type, capture, srcHashCode, listenerArray);
-<a name="line377"></a>
-<a name="line378"></a>  delete goog.events.listeners_[key];
-<a name="line379"></a>
-<a name="line380"></a>  return true;
-<a name="line381"></a>};
-<a name="line382"></a>
+<a name="line320"></a>
+<a name="line321"></a>/**
+<a name="line322"></a> * Removes an event listener which was added with listen() by the key
+<a name="line323"></a> * returned by listen().
+<a name="line324"></a> *
+<a name="line325"></a> * @param {number?} key The key returned by listen() for this event listener.
+<a name="line326"></a> * @return {boolean} indicating whether the listener was there to remove.
+<a name="line327"></a> */
+<a name="line328"></a>goog.events.unlistenByKey = function(key) {
+<a name="line329"></a>  // Do not use key in listeners here since that will cast the number to a
+<a name="line330"></a>  // string which will allocate one string object.
+<a name="line331"></a>  if (!goog.events.listeners_[key]) {
+<a name="line332"></a>    return false;
+<a name="line333"></a>  }
+<a name="line334"></a>  var listener = goog.events.listeners_[key];
+<a name="line335"></a>
+<a name="line336"></a>  if (listener.removed) {
+<a name="line337"></a>    return false;
+<a name="line338"></a>  }
+<a name="line339"></a>
+<a name="line340"></a>  var src = listener.src;
+<a name="line341"></a>  var type = listener.type;
+<a name="line342"></a>  var proxy = listener.proxy;
+<a name="line343"></a>  var capture = listener.capture;
+<a name="line344"></a>
+<a name="line345"></a>  if (src.removeEventListener) {
+<a name="line346"></a>    // EventTarget calls unlisten so we need to ensure that the source is not
+<a name="line347"></a>    // an event target to prevent re-entry.
+<a name="line348"></a>    // TODO: What is this goog.global for? Why would anyone listen to
+<a name="line349"></a>    // events on the [[Global]] object? Is it supposed to be window? Why would
+<a name="line350"></a>    // we not want to allow removing event listeners on the window?
+<a name="line351"></a>    if (src == goog.global || !src.customEvent_) {
+<a name="line352"></a>      src.removeEventListener(type, proxy, capture);
+<a name="line353"></a>    }
+<a name="line354"></a>  } else if (src.detachEvent) {
+<a name="line355"></a>    src.detachEvent(goog.events.getOnString_(type), proxy);
+<a name="line356"></a>  }
+<a name="line357"></a>
+<a name="line358"></a>  var srcHashCode = goog.getHashCode(src);
+<a name="line359"></a>  var listenerArray = goog.events.listenerTree_[type][capture][srcHashCode];
+<a name="line360"></a>
+<a name="line361"></a>  // In a perfect implementation we would decrement the remaining_ field here
+<a name="line362"></a>  // but then we would need to know if the listener has already been fired or
+<a name="line363"></a>  // not. We therefore skip doing this and in this uncommon case the entire
+<a name="line364"></a>  // ancestor chain will need to be traversed as before.
+<a name="line365"></a>
+<a name="line366"></a>  // Remove from sources_
+<a name="line367"></a>  if (goog.events.sources_[srcHashCode]) {
+<a name="line368"></a>    var sourcesArray = goog.events.sources_[srcHashCode];
+<a name="line369"></a>    goog.array.remove(sourcesArray, listener);
+<a name="line370"></a>    if (sourcesArray.length == 0) {
+<a name="line371"></a>      delete goog.events.sources_[srcHashCode];
+<a name="line372"></a>    }
+<a name="line373"></a>  }
+<a name="line374"></a>
+<a name="line375"></a>  listener.removed = true;
+<a name="line376"></a>  listenerArray.needsCleanup_ = true;
+<a name="line377"></a>  goog.events.cleanUp_(type, capture, srcHashCode, listenerArray);
+<a name="line378"></a>
+<a name="line379"></a>  delete goog.events.listeners_[key];
+<a name="line380"></a>
+<a name="line381"></a>  return true;
+<a name="line382"></a>};
 <a name="line383"></a>
-<a name="line384"></a>/**
-<a name="line385"></a> * Removes an event listener which was added with listenWithWrapper().
-<a name="line386"></a> *
-<a name="line387"></a> * @param {EventTarget|goog.events.EventTarget} src The target to stop
-<a name="line388"></a> *     listening to events on.
-<a name="line389"></a> * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
-<a name="line390"></a> * @param {Function|Object} listener The listener function to remove.
-<a name="line391"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
-<a name="line392"></a> *     whether the listener is fired during the capture or bubble phase of the
-<a name="line393"></a> *     event.
-<a name="line394"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
-<a name="line395"></a> */
-<a name="line396"></a>goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
-<a name="line397"></a>    opt_handler) {
-<a name="line398"></a>  wrapper.unlisten(src, listener, opt_capt, opt_handler);
-<a name="line399"></a>};
-<a name="line400"></a>
+<a name="line384"></a>
+<a name="line385"></a>/**
+<a name="line386"></a> * Removes an event listener which was added with listenWithWrapper().
+<a name="line387"></a> *
+<a name="line388"></a> * @param {EventTarget|goog.events.EventTarget} src The target to stop
+<a name="line389"></a> *     listening to events on.
+<a name="line390"></a> * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
+<a name="line391"></a> * @param {Function|Object} listener The listener function to remove.
+<a name="line392"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+<a name="line393"></a> *     whether the listener is fired during the capture or bubble phase of the
+<a name="line394"></a> *     event.
+<a name="line395"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line396"></a> */
+<a name="line397"></a>goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
+<a name="line398"></a>    opt_handler) {
+<a name="line399"></a>  wrapper.unlisten(src, listener, opt_capt, opt_handler);
+<a name="line400"></a>};
 <a name="line401"></a>
-<a name="line402"></a>/**
-<a name="line403"></a> * Cleans up the listener array as well as the listener tree
-<a name="line404"></a> * @param {string} type  The type of the event.
-<a name="line405"></a> * @param {boolean} capture Whether to clean up capture phase listeners instead
-<a name="line406"></a> *     bubble phase listeners.
-<a name="line407"></a> * @param {number} srcHashCode  The hash code of the source.
-<a name="line408"></a> * @param {Array.&lt;goog.events.Listener&gt;} listenerArray The array being cleaned.
-<a name="line409"></a> * @private
-<a name="line410"></a> */
-<a name="line411"></a>goog.events.cleanUp_ = function(type, capture, srcHashCode, listenerArray) {
-<a name="line412"></a>  // The listener array gets locked during the dispatch phase so that removals
-<a name="line413"></a>  // of listeners during this phase does not screw up the indeces. This method
-<a name="line414"></a>  // is called after we have removed a listener as well as after the dispatch
-<a name="line415"></a>  // phase in case any listeners were removed.
-<a name="line416"></a>  if (!listenerArray.locked_) { // catches both 0 and not set
-<a name="line417"></a>    if (listenerArray.needsCleanup_) {
-<a name="line418"></a>      // Loop over the listener array and remove listeners that have removed set
-<a name="line419"></a>      // to true. This could have been done with filter or something similar but
-<a name="line420"></a>      // we want to change the array in place and we want to minimize
-<a name="line421"></a>      // allocations. Adding a listener during this phase adds to the end of the
-<a name="line422"></a>      // array so that works fine as long as the length is rechecked every in
-<a name="line423"></a>      // iteration.
-<a name="line424"></a>      for (var oldIndex = 0, newIndex = 0;
-<a name="line425"></a>           oldIndex &lt; listenerArray.length;
-<a name="line426"></a>           oldIndex++) {
-<a name="line427"></a>        if (listenerArray[oldIndex].removed) {
-<a name="line428"></a>          var proxy = listenerArray[oldIndex].proxy;
-<a name="line429"></a>          proxy.src = null;
-<a name="line430"></a>          goog.events.pools.releaseProxy(proxy);
-<a name="line431"></a>          goog.events.pools.releaseListener(listenerArray[oldIndex]);
-<a name="line432"></a>          continue;
-<a name="line433"></a>        }
-<a name="line434"></a>        if (oldIndex != newIndex) {
-<a name="line435"></a>          listenerArray[newIndex] = listenerArray[oldIndex];
-<a name="line436"></a>        }
-<a name="line437"></a>        newIndex++;
-<a name="line438"></a>      }
-<a name="line439"></a>      listenerArray.length = newIndex;
-<a name="line440"></a>
-<a name="line441"></a>      listenerArray.needsCleanup_ = false;
-<a name="line442"></a>
-<a name="line443"></a>      // In case the length is now zero we release the object.
-<a name="line444"></a>      if (newIndex == 0) {
-<a name="line445"></a>        goog.events.pools.releaseArray(listenerArray);
-<a name="line446"></a>        delete goog.events.listenerTree_[type][capture][srcHashCode];
-<a name="line447"></a>        goog.events.listenerTree_[type][capture].count_--;
-<a name="line448"></a>
-<a name="line449"></a>        if (goog.events.listenerTree_[type][capture].count_ == 0) {
-<a name="line450"></a>          goog.events.pools.releaseObject(
-<a name="line451"></a>              goog.events.listenerTree_[type][capture]);
-<a name="line452"></a>          delete goog.events.listenerTree_[type][capture];
-<a name="line453"></a>          goog.events.listenerTree_[type].count_--;
-<a name="line454"></a>        }
-<a name="line455"></a>
-<a name="line456"></a>        if (goog.events.listenerTree_[type].count_ == 0) {
-<a name="line457"></a>          goog.events.pools.releaseObject(goog.events.listenerTree_[type]);
-<a name="line458"></a>          delete goog.events.listenerTree_[type];
-<a name="line459"></a>        }
-<a name="line460"></a>      }
-<a name="line461"></a>
-<a name="line462"></a>    }
-<a name="line463"></a>  }
-<a name="line464"></a>};
-<a name="line465"></a>
+<a name="line402"></a>
+<a name="line403"></a>/**
+<a name="line404"></a> * Cleans up the listener array as well as the listener tree
+<a name="line405"></a> * @param {string} type  The type of the event.
+<a name="line406"></a> * @param {boolean} capture Whether to clean up capture phase listeners instead
+<a name="line407"></a> *     bubble phase listeners.
+<a name="line408"></a> * @param {number} srcHashCode  The hash code of the source.
+<a name="line409"></a> * @param {Array.&lt;goog.events.Listener&gt;} listenerArray The array being cleaned.
+<a name="line410"></a> * @private
+<a name="line411"></a> */
+<a name="line412"></a>goog.events.cleanUp_ = function(type, capture, srcHashCode, listenerArray) {
+<a name="line413"></a>  // The listener array gets locked during the dispatch phase so that removals
+<a name="line414"></a>  // of listeners during this phase does not screw up the indeces. This method
+<a name="line415"></a>  // is called after we have removed a listener as well as after the dispatch
+<a name="line416"></a>  // phase in case any listeners were removed.
+<a name="line417"></a>  if (!listenerArray.locked_) { // catches both 0 and not set
+<a name="line418"></a>    if (listenerArray.needsCleanup_) {
+<a name="line419"></a>      // Loop over the listener array and remove listeners that have removed set
+<a name="line420"></a>      // to true. This could have been done with filter or something similar but
+<a name="line421"></a>      // we want to change the array in place and we want to minimize
+<a name="line422"></a>      // allocations. Adding a listener during this phase adds to the end of the
+<a name="line423"></a>      // array so that works fine as long as the length is rechecked every in
+<a name="line424"></a>      // iteration.
+<a name="line425"></a>      for (var oldIndex = 0, newIndex = 0;
+<a name="line426"></a>           oldIndex &lt; listenerArray.length;
+<a name="line427"></a>           oldIndex++) {
+<a name="line428"></a>        if (listenerArray[oldIndex].removed) {
+<a name="line429"></a>          var proxy = listenerArray[oldIndex].proxy;
+<a name="line430"></a>          proxy.src = null;
+<a name="line431"></a>          goog.events.pools.releaseProxy(proxy);
+<a name="line432"></a>          goog.events.pools.releaseListener(listenerArray[oldIndex]);
+<a name="line433"></a>          continue;
+<a name="line434"></a>        }
+<a name="line435"></a>        if (oldIndex != newIndex) {
+<a name="line436"></a>          listenerArray[newIndex] = listenerArray[oldIndex];
+<a name="line437"></a>        }
+<a name="line438"></a>        newIndex++;
+<a name="line439"></a>      }
+<a name="line440"></a>      listenerArray.length = newIndex;
+<a name="line441"></a>
+<a name="line442"></a>      listenerArray.needsCleanup_ = false;
+<a name="line443"></a>
+<a name="line444"></a>      // In case the length is now zero we release the object.
+<a name="line445"></a>      if (newIndex == 0) {
+<a name="line446"></a>        goog.events.pools.releaseArray(listenerArray);
+<a name="line447"></a>        delete goog.events.listenerTree_[type][capture][srcHashCode];
+<a name="line448"></a>        goog.events.listenerTree_[type][capture].count_--;
+<a name="line449"></a>
+<a name="line450"></a>        if (goog.events.listenerTree_[type][capture].count_ == 0) {
+<a name="line451"></a>          goog.events.pools.releaseObject(
+<a name="line452"></a>              goog.events.listenerTree_[type][capture]);
+<a name="line453"></a>          delete goog.events.listenerTree_[type][capture];
+<a name="line454"></a>          goog.events.listenerTree_[type].count_--;
+<a name="line455"></a>        }
+<a name="line456"></a>
+<a name="line457"></a>        if (goog.events.listenerTree_[type].count_ == 0) {
+<a name="line458"></a>          goog.events.pools.releaseObject(goog.events.listenerTree_[type]);
+<a name="line459"></a>          delete goog.events.listenerTree_[type];
+<a name="line460"></a>        }
+<a name="line461"></a>      }
+<a name="line462"></a>
+<a name="line463"></a>    }
+<a name="line464"></a>  }
+<a name="line465"></a>};
 <a name="line466"></a>
-<a name="line467"></a>/**
-<a name="line468"></a> * Removes all listeners from an object, if no object is specified it will
-<a name="line469"></a> * remove all listeners that have been registered.  You can also optionally
-<a name="line470"></a> * remove listeners of a particular type or capture phase.
-<a name="line471"></a> *
-<a name="line472"></a> * @param {Object} opt_obj Object to remove listeners from.
-<a name="line473"></a> * @param {string} opt_type Type of event to, default is all types.
-<a name="line474"></a> * @param {boolean} opt_capt Whether to remove the listeners from the capture or
-<a name="line475"></a> * bubble phase.  If unspecified, will remove both.
-<a name="line476"></a> * @return {number} Number of listeners removed.
-<a name="line477"></a> */
-<a name="line478"></a>goog.events.removeAll = function(opt_obj, opt_type, opt_capt) {
-<a name="line479"></a>  var count = 0;
-<a name="line480"></a>
-<a name="line481"></a>  var noObj = opt_obj == null;
-<a name="line482"></a>  var noType = opt_type == null;
-<a name="line483"></a>  var noCapt = opt_capt == null;
-<a name="line484"></a>  opt_capt = !!opt_capt;
-<a name="line485"></a>
-<a name="line486"></a>  if (!noObj) {
-<a name="line487"></a>    var srcHashCode = goog.getHashCode(/** @type {Object} */ (opt_obj));
-<a name="line488"></a>    if (goog.events.sources_[srcHashCode]) {
-<a name="line489"></a>      var sourcesArray = goog.events.sources_[srcHashCode];
-<a name="line490"></a>      for (var i = sourcesArray.length - 1; i &gt;= 0; i--) {
-<a name="line491"></a>        var listener = sourcesArray[i];
-<a name="line492"></a>        if ((noType || opt_type == listener.type) &amp;&amp;
-<a name="line493"></a>            (noCapt || opt_capt == listener.capture)) {
-<a name="line494"></a>          goog.events.unlistenByKey(listener.key);
-<a name="line495"></a>          count++;
-<a name="line496"></a>        }
-<a name="line497"></a>      }
-<a name="line498"></a>    }
-<a name="line499"></a>  } else {
-<a name="line500"></a>    // Loop over the sources_ map instead of over the listeners_ since it is
-<a name="line501"></a>    // smaller which results in fewer allocations.
-<a name="line502"></a>    goog.object.forEach(goog.events.sources_, function(listeners) {
-<a name="line503"></a>      for (var i = listeners.length - 1; i &gt;= 0; i--) {
-<a name="line504"></a>        var listener = listeners[i];
-<a name="line505"></a>        if ((noType || opt_type == listener.type) &amp;&amp;
-<a name="line506"></a>            (noCapt || opt_capt == listener.capture)) {
-<a name="line507"></a>          goog.events.unlistenByKey(listener.key);
-<a name="line508"></a>          count++;
-<a name="line509"></a>        }
-<a name="line510"></a>      }
-<a name="line511"></a>    });
-<a name="line512"></a>  }
-<a name="line513"></a>
-<a name="line514"></a>  return count;
-<a name="line515"></a>};
-<a name="line516"></a>
+<a name="line467"></a>
+<a name="line468"></a>/**
+<a name="line469"></a> * Removes all listeners from an object, if no object is specified it will
+<a name="line470"></a> * remove all listeners that have been registered.  You can also optionally
+<a name="line471"></a> * remove listeners of a particular type or capture phase.
+<a name="line472"></a> *
+<a name="line473"></a> * @param {Object} opt_obj Object to remove listeners from.
+<a name="line474"></a> * @param {string} opt_type Type of event to, default is all types.
+<a name="line475"></a> * @param {boolean} opt_capt Whether to remove the listeners from the capture or
+<a name="line476"></a> * bubble phase.  If unspecified, will remove both.
+<a name="line477"></a> * @return {number} Number of listeners removed.
+<a name="line478"></a> */
+<a name="line479"></a>goog.events.removeAll = function(opt_obj, opt_type, opt_capt) {
+<a name="line480"></a>  var count = 0;
+<a name="line481"></a>
+<a name="line482"></a>  var noObj = opt_obj == null;
+<a name="line483"></a>  var noType = opt_type == null;
+<a name="line484"></a>  var noCapt = opt_capt == null;
+<a name="line485"></a>  opt_capt = !!opt_capt;
+<a name="line486"></a>
+<a name="line487"></a>  if (!noObj) {
+<a name="line488"></a>    var srcHashCode = goog.getHashCode(/** @type {Object} */ (opt_obj));
+<a name="line489"></a>    if (goog.events.sources_[srcHashCode]) {
+<a name="line490"></a>      var sourcesArray = goog.events.sources_[srcHashCode];
+<a name="line491"></a>      for (var i = sourcesArray.length - 1; i &gt;= 0; i--) {
+<a name="line492"></a>        var listener = sourcesArray[i];
+<a name="line493"></a>        if ((noType || opt_type == listener.type) &amp;&amp;
+<a name="line494"></a>            (noCapt || opt_capt == listener.capture)) {
+<a name="line495"></a>          goog.events.unlistenByKey(listener.key);
+<a name="line496"></a>          count++;
+<a name="line497"></a>        }
+<a name="line498"></a>      }
+<a name="line499"></a>    }
+<a name="line500"></a>  } else {
+<a name="line501"></a>    // Loop over the sources_ map instead of over the listeners_ since it is
+<a name="line502"></a>    // smaller which results in fewer allocations.
+<a name="line503"></a>    goog.object.forEach(goog.events.sources_, function(listeners) {
+<a name="line504"></a>      for (var i = listeners.length - 1; i &gt;= 0; i--) {
+<a name="line505"></a>        var listener = listeners[i];
+<a name="line506"></a>        if ((noType || opt_type == listener.type) &amp;&amp;
+<a name="line507"></a>            (noCapt || opt_capt == listener.capture)) {
+<a name="line508"></a>          goog.events.unlistenByKey(listener.key);
+<a name="line509"></a>          count++;
+<a name="line510"></a>        }
+<a name="line511"></a>      }
+<a name="line512"></a>    });
+<a name="line513"></a>  }
+<a name="line514"></a>
+<a name="line515"></a>  return count;
+<a name="line516"></a>};
 <a name="line517"></a>
-<a name="line518"></a>/**
-<a name="line519"></a> * Gets the listeners for a given object, type and capture phase.
-<a name="line520"></a> *
-<a name="line521"></a> * @param {Object} obj Object to get listeners for.
-<a name="line522"></a> * @param {string} type Event type.
-<a name="line523"></a> * @param {boolean} capture Capture phase?.
-<a name="line524"></a> * @return {Array.&lt;goog.events.Listener&gt;} Array of listener objects.
-<a name="line525"></a> */
-<a name="line526"></a>goog.events.getListeners = function(obj, type, capture) {
-<a name="line527"></a>  return goog.events.getListeners_(obj, type, capture) || [];
-<a name="line528"></a>};
-<a name="line529"></a>
+<a name="line518"></a>
+<a name="line519"></a>/**
+<a name="line520"></a> * Gets the listeners for a given object, type and capture phase.
+<a name="line521"></a> *
+<a name="line522"></a> * @param {Object} obj Object to get listeners for.
+<a name="line523"></a> * @param {string} type Event type.
+<a name="line524"></a> * @param {boolean} capture Capture phase?.
+<a name="line525"></a> * @return {Array.&lt;goog.events.Listener&gt;} Array of listener objects.
+<a name="line526"></a> */
+<a name="line527"></a>goog.events.getListeners = function(obj, type, capture) {
+<a name="line528"></a>  return goog.events.getListeners_(obj, type, capture) || [];
+<a name="line529"></a>};
 <a name="line530"></a>
-<a name="line531"></a>/**
-<a name="line532"></a> * Gets the listeners for a given object, type and capture phase.
-<a name="line533"></a> *
-<a name="line534"></a> * @param {Object} obj Object to get listeners for.
-<a name="line535"></a> * @param {string?} type Event type.
-<a name="line536"></a> * @param {boolean} capture Capture phase?.
-<a name="line537"></a> * @return {Array.&lt;goog.events.Listener&gt;?} Array of listener objects.
-<a name="line538"></a> *     Returns null if object has no lsiteners of that type.
-<a name="line539"></a> * @private
-<a name="line540"></a> */
-<a name="line541"></a>goog.events.getListeners_ = function(obj, type, capture) {
-<a name="line542"></a>  var map = goog.events.listenerTree_;
-<a name="line543"></a>  if (type in map) {
-<a name="line544"></a>    map = map[type];
-<a name="line545"></a>    if (capture in map) {
-<a name="line546"></a>      map = map[capture];
-<a name="line547"></a>      var objHashCode = goog.getHashCode(obj);
-<a name="line548"></a>      if (map[objHashCode]) {
-<a name="line549"></a>        return map[objHashCode];
-<a name="line550"></a>      }
-<a name="line551"></a>    }
-<a name="line552"></a>  }
-<a name="line553"></a>
-<a name="line554"></a>  return null;
-<a name="line555"></a>};
-<a name="line556"></a>
+<a name="line531"></a>
+<a name="line532"></a>/**
+<a name="line533"></a> * Gets the listeners for a given object, type and capture phase.
+<a name="line534"></a> *
+<a name="line535"></a> * @param {Object} obj Object to get listeners for.
+<a name="line536"></a> * @param {string?} type Event type.
+<a name="line537"></a> * @param {boolean} capture Capture phase?.
+<a name="line538"></a> * @return {Array.&lt;goog.events.Listener&gt;?} Array of listener objects.
+<a name="line539"></a> *     Returns null if object has no lsiteners of that type.
+<a name="line540"></a> * @private
+<a name="line541"></a> */
+<a name="line542"></a>goog.events.getListeners_ = function(obj, type, capture) {
+<a name="line543"></a>  var map = goog.events.listenerTree_;
+<a name="line544"></a>  if (type in map) {
+<a name="line545"></a>    map = map[type];
+<a name="line546"></a>    if (capture in map) {
+<a name="line547"></a>      map = map[capture];
+<a name="line548"></a>      var objHashCode = goog.getHashCode(obj);
+<a name="line549"></a>      if (map[objHashCode]) {
+<a name="line550"></a>        return map[objHashCode];
+<a name="line551"></a>      }
+<a name="line552"></a>    }
+<a name="line553"></a>  }
+<a name="line554"></a>
+<a name="line555"></a>  return null;
+<a name="line556"></a>};
 <a name="line557"></a>
-<a name="line558"></a>/**
-<a name="line559"></a> * Gets the goog.events.Listener for the event or null if no such listener is
-<a name="line560"></a> * in use.
-<a name="line561"></a> *
-<a name="line562"></a> * @param {EventTarget|goog.events.EventTarget} src The node to stop
-<a name="line563"></a> *     listening to events on.
-<a name="line564"></a> * @param {string?} type The name of the event without the &#39;on&#39; prefix.
-<a name="line565"></a> * @param {Function|Object} listener The listener function to remove.
-<a name="line566"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
-<a name="line567"></a> *                            whether the listener is fired during the
-<a name="line568"></a> *                            capture or bubble phase of the event.
-<a name="line569"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
-<a name="line570"></a> * @return {goog.events.Listener?} the found listener or null if not found.
-<a name="line571"></a> */
-<a name="line572"></a>goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
-<a name="line573"></a>  var capture = !!opt_capt;
-<a name="line574"></a>  var listenerArray = goog.events.getListeners_(src, type, capture);
-<a name="line575"></a>  if (listenerArray) {
-<a name="line576"></a>    for (var i = 0; i &lt; listenerArray.length; i++) {
-<a name="line577"></a>      if (listenerArray[i].listener == listener &amp;&amp;
-<a name="line578"></a>          listenerArray[i].capture == capture &amp;&amp;
-<a name="line579"></a>          listenerArray[i].handler == opt_handler) {
-<a name="line580"></a>        // We already have this listener. Return its key.
-<a name="line581"></a>        return listenerArray[i];
-<a name="line582"></a>      }
-<a name="line583"></a>    }
-<a name="line584"></a>  }
-<a name="line585"></a>  return null;
-<a name="line586"></a>};
-<a name="line587"></a>
+<a name="line558"></a>
+<a name="line559"></a>/**
+<a name="line560"></a> * Gets the goog.events.Listener for the event or null if no such listener is
+<a name="line561"></a> * in use.
+<a name="line562"></a> *
+<a name="line563"></a> * @param {EventTarget|goog.events.EventTarget} src The node to stop
+<a name="line564"></a> *     listening to events on.
+<a name="line565"></a> * @param {string?} type The name of the event without the &#39;on&#39; prefix.
+<a name="line566"></a> * @param {Function|Object} listener The listener function to remove.
+<a name="line567"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+<a name="line568"></a> *                            whether the listener is fired during the
+<a name="line569"></a> *                            capture or bubble phase of the event.
+<a name="line570"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line571"></a> * @return {goog.events.Listener?} the found listener or null if not found.
+<a name="line572"></a> */
+<a name="line573"></a>goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
+<a name="line574"></a>  var capture = !!opt_capt;
+<a name="line575"></a>  var listenerArray = goog.events.getListeners_(src, type, capture);
+<a name="line576"></a>  if (listenerArray) {
+<a name="line577"></a>    for (var i = 0; i &lt; listenerArray.length; i++) {
+<a name="line578"></a>      if (listenerArray[i].listener == listener &amp;&amp;
+<a name="line579"></a>          listenerArray[i].capture == capture &amp;&amp;
+<a name="line580"></a>          listenerArray[i].handler == opt_handler) {
+<a name="line581"></a>        // We already have this listener. Return its key.
+<a name="line582"></a>        return listenerArray[i];
+<a name="line583"></a>      }
+<a name="line584"></a>    }
+<a name="line585"></a>  }
+<a name="line586"></a>  return null;
+<a name="line587"></a>};
 <a name="line588"></a>
-<a name="line589"></a>/**
-<a name="line590"></a> * Returns whether an event target has any active listeners matching the
-<a name="line591"></a> * specified signature. If either the type or capture parameters are
-<a name="line592"></a> * unspecified, the function will match on the remaining criteria.
-<a name="line593"></a> *
-<a name="line594"></a> * @param {EventTarget|goog.events.EventTarget} obj Target to get listeners for.
-<a name="line595"></a> * @param {string} opt_type Event type.
-<a name="line596"></a> * @param {boolean} opt_capture Whether to check for capture or bubble-phase
-<a name="line597"></a> *     listeners.
-<a name="line598"></a> * @return {boolean} Whether an event target has one or more listeners matching
-<a name="line599"></a> *     the requested type and/or capture phase.
-<a name="line600"></a> */
-<a name="line601"></a>goog.events.hasListener = function(obj, opt_type, opt_capture) {
-<a name="line602"></a>  var objHashCode = goog.getHashCode(obj)
-<a name="line603"></a>  var listeners = goog.events.sources_[objHashCode];
-<a name="line604"></a>
-<a name="line605"></a>  if (listeners) {
-<a name="line606"></a>    var hasType = goog.isDef(opt_type);
-<a name="line607"></a>    var hasCapture = goog.isDef(opt_capture);
-<a name="line608"></a>
-<a name="line609"></a>    if (hasType &amp;&amp; hasCapture) {
-<a name="line610"></a>      // Lookup in the listener tree whether the specified listener exists.
-<a name="line611"></a>      var map = goog.events.listenerTree_[opt_type]
-<a name="line612"></a>      return !!map &amp;&amp; !!map[opt_capture] &amp;&amp; objHashCode in map[opt_capture];
-<a name="line613"></a>
-<a name="line614"></a>    } else if (!(hasType || hasCapture)) {
-<a name="line615"></a>      // Simple check for whether the event target has any listeners at all.
-<a name="line616"></a>      return true;
-<a name="line617"></a>
-<a name="line618"></a>    } else {
-<a name="line619"></a>      // Iterate through the listeners for the event target to find a match.
-<a name="line620"></a>      return goog.array.some(listeners, function(listener) {
-<a name="line621"></a>          return (hasType &amp;&amp; listener.type == opt_type) ||
-<a name="line622"></a>            (hasCapture &amp;&amp; listener.capture == opt_capture);
-<a name="line623"></a>      });
-<a name="line624"></a>    }
-<a name="line625"></a>  }
-<a name="line626"></a>
-<a name="line627"></a>  return false;
-<a name="line628"></a>};
-<a name="line629"></a>
+<a name="line589"></a>
+<a name="line590"></a>/**
+<a name="line591"></a> * Returns whether an event target has any active listeners matching the
+<a name="line592"></a> * specified signature. If either the type or capture parameters are
+<a name="line593"></a> * unspecified, the function will match on the remaining criteria.
+<a name="line594"></a> *
+<a name="line595"></a> * @param {EventTarget|goog.events.EventTarget} obj Target to get listeners for.
+<a name="line596"></a> * @param {string} opt_type Event type.
+<a name="line597"></a> * @param {boolean} opt_capture Whether to check for capture or bubble-phase
+<a name="line598"></a> *     listeners.
+<a name="line599"></a> * @return {boolean} Whether an event target has one or more listeners matching
+<a name="line600"></a> *     the requested type and/or capture phase.
+<a name="line601"></a> */
+<a name="line602"></a>goog.events.hasListener = function(obj, opt_type, opt_capture) {
+<a name="line603"></a>  var objHashCode = goog.getHashCode(obj)
+<a name="line604"></a>  var listeners = goog.events.sources_[objHashCode];
+<a name="line605"></a>
+<a name="line606"></a>  if (listeners) {
+<a name="line607"></a>    var hasType = goog.isDef(opt_type);
+<a name="line608"></a>    var hasCapture = goog.isDef(opt_capture);
+<a name="line609"></a>
+<a name="line610"></a>    if (hasType &amp;&amp; hasCapture) {
+<a name="line611"></a>      // Lookup in the listener tree whether the specified listener exists.
+<a name="line612"></a>      var map = goog.events.listenerTree_[opt_type]
+<a name="line613"></a>      return !!map &amp;&amp; !!map[opt_capture] &amp;&amp; objHashCode in map[opt_capture];
+<a name="line614"></a>
+<a name="line615"></a>    } else if (!(hasType || hasCapture)) {
+<a name="line616"></a>      // Simple check for whether the event target has any listeners at all.
+<a name="line617"></a>      return true;
+<a name="line618"></a>
+<a name="line619"></a>    } else {
+<a name="line620"></a>      // Iterate through the listeners for the event target to find a match.
+<a name="line621"></a>      return goog.array.some(listeners, function(listener) {
+<a name="line622"></a>          return (hasType &amp;&amp; listener.type == opt_type) ||
+<a name="line623"></a>            (hasCapture &amp;&amp; listener.capture == opt_capture);
+<a name="line624"></a>      });
+<a name="line625"></a>    }
+<a name="line626"></a>  }
+<a name="line627"></a>
+<a name="line628"></a>  return false;
+<a name="line629"></a>};
 <a name="line630"></a>
-<a name="line631"></a>/**
-<a name="line632"></a> * Provides a nice string showing the normalized event objects public members
-<a name="line633"></a> * @param {Object} e Event Object.
-<a name="line634"></a> * @return {string} String of the public members of the normalized event object.
-<a name="line635"></a> */
-<a name="line636"></a>goog.events.expose = function(e) {
-<a name="line637"></a>  var str = [];
-<a name="line638"></a>  for (var key in e) {
-<a name="line639"></a>    if (e[key] &amp;&amp; e[key].id) {
-<a name="line640"></a>      str.push(key + &#39; = &#39; + e[key] + &#39; (&#39; + e[key].id + &#39;)&#39;);
-<a name="line641"></a>    } else {
-<a name="line642"></a>      str.push(key + &#39; = &#39; + e[key]);
-<a name="line643"></a>    }
-<a name="line644"></a>  }
-<a name="line645"></a>  return str.join(&#39;\n&#39;);
-<a name="line646"></a>};
-<a name="line647"></a>
+<a name="line631"></a>
+<a name="line632"></a>/**
+<a name="line633"></a> * Provides a nice string showing the normalized event objects public members
+<a name="line634"></a> * @param {Object} e Event Object.
+<a name="line635"></a> * @return {string} String of the public members of the normalized event object.
+<a name="line636"></a> */
+<a name="line637"></a>goog.events.expose = function(e) {
+<a name="line638"></a>  var str = [];
+<a name="line639"></a>  for (var key in e) {
+<a name="line640"></a>    if (e[key] &amp;&amp; e[key].id) {
+<a name="line641"></a>      str.push(key + &#39; = &#39; + e[key] + &#39; (&#39; + e[key].id + &#39;)&#39;);
+<a name="line642"></a>    } else {
+<a name="line643"></a>      str.push(key + &#39; = &#39; + e[key]);
+<a name="line644"></a>    }
+<a name="line645"></a>  }
+<a name="line646"></a>  return str.join(&#39;\n&#39;);
+<a name="line647"></a>};
 <a name="line648"></a>
-<a name="line649"></a>/**
-<a name="line650"></a> * Constants for event names.
-<a name="line651"></a> * @enum {string}
-<a name="line652"></a> */
-<a name="line653"></a>// TODO: Move to its own file.
-<a name="line654"></a>goog.events.EventType = {
-<a name="line655"></a>  // Mouse events
-<a name="line656"></a>  CLICK: &#39;click&#39;,
-<a name="line657"></a>  DBLCLICK: &#39;dblclick&#39;,
-<a name="line658"></a>  MOUSEDOWN: &#39;mousedown&#39;,
-<a name="line659"></a>  MOUSEUP: &#39;mouseup&#39;,
-<a name="line660"></a>  MOUSEOVER: &#39;mouseover&#39;,
-<a name="line661"></a>  MOUSEOUT: &#39;mouseout&#39;,
-<a name="line662"></a>  MOUSEMOVE: &#39;mousemove&#39;,
-<a name="line663"></a>  SELECTSTART: &#39;selectstart&#39;, // IE, Safari, Chrome
-<a name="line664"></a>
-<a name="line665"></a>  // Key events
-<a name="line666"></a>  KEYPRESS: &#39;keypress&#39;,
-<a name="line667"></a>  KEYDOWN: &#39;keydown&#39;,
-<a name="line668"></a>  KEYUP: &#39;keyup&#39;,
-<a name="line669"></a>
-<a name="line670"></a>  // Focus
-<a name="line671"></a>  BLUR: &#39;blur&#39;,
-<a name="line672"></a>  FOCUS: &#39;focus&#39;,
-<a name="line673"></a>  DEACTIVATE: &#39;deactivate&#39;, // IE only
-<a name="line674"></a>  // TODO: Test these. I experienced problems with DOMFocusIn, the event
-<a name="line675"></a>  // just wasn&#39;t firing.
-<a name="line676"></a>  FOCUSIN: goog.userAgent.IE ? &#39;focusin&#39; : &#39;DOMFocusIn&#39;,
-<a name="line677"></a>  FOCUSOUT: goog.userAgent.IE ? &#39;focusout&#39; : &#39;DOMFocusOut&#39;,
-<a name="line678"></a>
-<a name="line679"></a>  // Forms
-<a name="line680"></a>  CHANGE: &#39;change&#39;,
-<a name="line681"></a>  SELECT: &#39;select&#39;,
-<a name="line682"></a>  SUBMIT: &#39;submit&#39;,
-<a name="line683"></a>
-<a name="line684"></a>  // Misc
-<a name="line685"></a>  CONTEXTMENU: &#39;contextmenu&#39;,
-<a name="line686"></a>  DRAGSTART: &#39;dragstart&#39;,
-<a name="line687"></a>  ERROR: &#39;error&#39;,
-<a name="line688"></a>  HASHCHANGE: &#39;hashchange&#39;,
-<a name="line689"></a>  HELP: &#39;help&#39;,
-<a name="line690"></a>  LOAD: &#39;load&#39;,
-<a name="line691"></a>  LOSECAPTURE: &#39;losecapture&#39;,
-<a name="line692"></a>  READYSTATECHANGE: &#39;readystatechange&#39;,
-<a name="line693"></a>  RESIZE: &#39;resize&#39;,
-<a name="line694"></a>  SCROLL: &#39;scroll&#39;,
-<a name="line695"></a>  UNLOAD: &#39;unload&#39;
-<a name="line696"></a>};
-<a name="line697"></a>
+<a name="line649"></a>
+<a name="line650"></a>/**
+<a name="line651"></a> * Constants for event names.
+<a name="line652"></a> * @enum {string}
+<a name="line653"></a> */
+<a name="line654"></a>// TODO: Move to its own file.
+<a name="line655"></a>goog.events.EventType = {
+<a name="line656"></a>  // Mouse events
+<a name="line657"></a>  CLICK: &#39;click&#39;,
+<a name="line658"></a>  DBLCLICK: &#39;dblclick&#39;,
+<a name="line659"></a>  MOUSEDOWN: &#39;mousedown&#39;,
+<a name="line660"></a>  MOUSEUP: &#39;mouseup&#39;,
+<a name="line661"></a>  MOUSEOVER: &#39;mouseover&#39;,
+<a name="line662"></a>  MOUSEOUT: &#39;mouseout&#39;,
+<a name="line663"></a>  MOUSEMOVE: &#39;mousemove&#39;,
+<a name="line664"></a>  SELECTSTART: &#39;selectstart&#39;, // IE, Safari, Chrome
+<a name="line665"></a>
+<a name="line666"></a>  // Key events
+<a name="line667"></a>  KEYPRESS: &#39;keypress&#39;,
+<a name="line668"></a>  KEYDOWN: &#39;keydown&#39;,
+<a name="line669"></a>  KEYUP: &#39;keyup&#39;,
+<a name="line670"></a>
+<a name="line671"></a>  // Focus
+<a name="line672"></a>  BLUR: &#39;blur&#39;,
+<a name="line673"></a>  FOCUS: &#39;focus&#39;,
+<a name="line674"></a>  DEACTIVATE: &#39;deactivate&#39;, // IE only
+<a name="line675"></a>  // TODO: Test these. I experienced problems with DOMFocusIn, the event
+<a name="line676"></a>  // just wasn&#39;t firing.
+<a name="line677"></a>  FOCUSIN: goog.userAgent.IE ? &#39;focusin&#39; : &#39;DOMFocusIn&#39;,
+<a name="line678"></a>  FOCUSOUT: goog.userAgent.IE ? &#39;focusout&#39; : &#39;DOMFocusOut&#39;,
+<a name="line679"></a>
+<a name="line680"></a>  // Forms
+<a name="line681"></a>  CHANGE: &#39;change&#39;,
+<a name="line682"></a>  SELECT: &#39;select&#39;,
+<a name="line683"></a>  SUBMIT: &#39;submit&#39;,
+<a name="line684"></a>
+<a name="line685"></a>  // Misc
+<a name="line686"></a>  CONTEXTMENU: &#39;contextmenu&#39;,
+<a name="line687"></a>  DRAGSTART: &#39;dragstart&#39;,
+<a name="line688"></a>  ERROR: &#39;error&#39;,
+<a name="line689"></a>  HASHCHANGE: &#39;hashchange&#39;,
+<a name="line690"></a>  HELP: &#39;help&#39;,
+<a name="line691"></a>  LOAD: &#39;load&#39;,
+<a name="line692"></a>  LOSECAPTURE: &#39;losecapture&#39;,
+<a name="line693"></a>  READYSTATECHANGE: &#39;readystatechange&#39;,
+<a name="line694"></a>  RESIZE: &#39;resize&#39;,
+<a name="line695"></a>  SCROLL: &#39;scroll&#39;,
+<a name="line696"></a>  UNLOAD: &#39;unload&#39;
+<a name="line697"></a>};
 <a name="line698"></a>
-<a name="line699"></a>/**
-<a name="line700"></a> * Returns a string wth on prepended to the specified type. This is used for IE
-<a name="line701"></a> * which expects &quot;on&quot; to be prepended. This function caches the string in order
-<a name="line702"></a> * to avoid extra allocations in steady state.
-<a name="line703"></a> * @param {string} type Event type strng.
-<a name="line704"></a> * @return {string} The type string with &#39;on&#39; prepended.
-<a name="line705"></a> * @private
-<a name="line706"></a> */
-<a name="line707"></a>goog.events.getOnString_ = function(type) {
-<a name="line708"></a>  if (type in goog.events.onStringMap_) {
-<a name="line709"></a>    return goog.events.onStringMap_[type];
-<a name="line710"></a>  }
-<a name="line711"></a>  return goog.events.onStringMap_[type] = goog.events.onString_ + type;
-<a name="line712"></a>};
-<a name="line713"></a>
+<a name="line699"></a>
+<a name="line700"></a>/**
+<a name="line701"></a> * Returns a string wth on prepended to the specified type. This is used for IE
+<a name="line702"></a> * which expects &quot;on&quot; to be prepended. This function caches the string in order
+<a name="line703"></a> * to avoid extra allocations in steady state.
+<a name="line704"></a> * @param {string} type Event type strng.
+<a name="line705"></a> * @return {string} The type string with &#39;on&#39; prepended.
+<a name="line706"></a> * @private
+<a name="line707"></a> */
+<a name="line708"></a>goog.events.getOnString_ = function(type) {
+<a name="line709"></a>  if (type in goog.events.onStringMap_) {
+<a name="line710"></a>    return goog.events.onStringMap_[type];
+<a name="line711"></a>  }
+<a name="line712"></a>  return goog.events.onStringMap_[type] = goog.events.onString_ + type;
+<a name="line713"></a>};
 <a name="line714"></a>
-<a name="line715"></a>/**
-<a name="line716"></a> * Fires an object&#39;s listeners of a particular type and phase
-<a name="line717"></a> *
-<a name="line718"></a> * @param {Object} obj Object whose listeners to call.
-<a name="line719"></a> * @param {string} type Event type.
-<a name="line720"></a> * @param {boolean} capture Which event phase.
-<a name="line721"></a> * @param {Object} eventObject Event object to be passed to listener.
-<a name="line722"></a> * @return {boolean} True if all listeners returned true else false.
-<a name="line723"></a> */
-<a name="line724"></a>goog.events.fireListeners = function(obj, type, capture, eventObject) {
-<a name="line725"></a>  var map = goog.events.listenerTree_;
-<a name="line726"></a>  if (type in map) {
-<a name="line727"></a>    map = map[type];
-<a name="line728"></a>    if (capture in map) {
-<a name="line729"></a>      return goog.events.fireListeners_(map[capture], obj, type,
-<a name="line730"></a>                                        capture, eventObject);
-<a name="line731"></a>    }
-<a name="line732"></a>  }
-<a name="line733"></a>  return true;
-<a name="line734"></a>};
-<a name="line735"></a>
+<a name="line715"></a>
+<a name="line716"></a>/**
+<a name="line717"></a> * Fires an object&#39;s listeners of a particular type and phase
+<a name="line718"></a> *
+<a name="line719"></a> * @param {Object} obj Object whose listeners to call.
+<a name="line720"></a> * @param {string} type Event type.
+<a name="line721"></a> * @param {boolean} capture Which event phase.
+<a name="line722"></a> * @param {Object} eventObject Event object to be passed to listener.
+<a name="line723"></a> * @return {boolean} True if all listeners returned true else false.
+<a name="line724"></a> */
+<a name="line725"></a>goog.events.fireListeners = function(obj, type, capture, eventObject) {
+<a name="line726"></a>  var map = goog.events.listenerTree_;
+<a name="line727"></a>  if (type in map) {
+<a name="line728"></a>    map = map[type];
+<a name="line729"></a>    if (capture in map) {
+<a name="line730"></a>      return goog.events.fireListeners_(map[capture], obj, type,
+<a name="line731"></a>                                        capture, eventObject);
+<a name="line732"></a>    }
+<a name="line733"></a>  }
+<a name="line734"></a>  return true;
+<a name="line735"></a>};
 <a name="line736"></a>
-<a name="line737"></a>/**
-<a name="line738"></a> * Fires an object&#39;s listeners of a particular type and phase.
-<a name="line739"></a> *
-<a name="line740"></a> * @param {Object} map Object with listeners in it.
-<a name="line741"></a> * @param {Object} obj Object whose listeners to call.
-<a name="line742"></a> * @param {string} type Event type.
-<a name="line743"></a> * @param {boolean} capture Which event phase.
-<a name="line744"></a> * @param {Object} eventObject Event object to be passed to listener.
-<a name="line745"></a> * @return {boolean} True if all listeners returned true else false.
-<a name="line746"></a> * @private
-<a name="line747"></a> */
-<a name="line748"></a>goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
-<a name="line749"></a>  var retval = 1;
-<a name="line750"></a>
-<a name="line751"></a>  var objHashCode = goog.getHashCode(obj);
-<a name="line752"></a>  if (map[objHashCode]) {
-<a name="line753"></a>    map.remaining_--;
-<a name="line754"></a>    var listenerArray = map[objHashCode];
-<a name="line755"></a>
-<a name="line756"></a>    // If locked_ is not set (and if already 0) initialize it to 1.
-<a name="line757"></a>    if (!listenerArray.locked_) {
-<a name="line758"></a>      listenerArray.locked_ = 1;
-<a name="line759"></a>    } else {
-<a name="line760"></a>      listenerArray.locked_++;
-<a name="line761"></a>    }
-<a name="line762"></a>
-<a name="line763"></a>    try {
-<a name="line764"></a>      // Events added in the dispatch phase should not be dispatched in
-<a name="line765"></a>      // the current dispatch phase. They will be included in the next
-<a name="line766"></a>      // dispatch phase though.
-<a name="line767"></a>      var length = listenerArray.length;
-<a name="line768"></a>      for (var i = 0; i &lt; length; i++) {
-<a name="line769"></a>        var listener = listenerArray[i];
-<a name="line770"></a>        // We might not have a listener if the listener was removed.
-<a name="line771"></a>        if (listener &amp;&amp; !listener.removed) {
-<a name="line772"></a>          retval &amp;=
-<a name="line773"></a>              goog.events.fireListener(listener, eventObject) !== false;
-<a name="line774"></a>        }
-<a name="line775"></a>      }
-<a name="line776"></a>    } finally {
-<a name="line777"></a>      listenerArray.locked_--;
-<a name="line778"></a>      goog.events.cleanUp_(type, capture, objHashCode, listenerArray);
-<a name="line779"></a>    }
-<a name="line780"></a>  }
-<a name="line781"></a>
-<a name="line782"></a>  return Boolean(retval);
-<a name="line783"></a>};
-<a name="line784"></a>
+<a name="line737"></a>
+<a name="line738"></a>/**
+<a name="line739"></a> * Fires an object&#39;s listeners of a particular type and phase.
+<a name="line740"></a> *
+<a name="line741"></a> * @param {Object} map Object with listeners in it.
+<a name="line742"></a> * @param {Object} obj Object whose listeners to call.
+<a name="line743"></a> * @param {string} type Event type.
+<a name="line744"></a> * @param {boolean} capture Which event phase.
+<a name="line745"></a> * @param {Object} eventObject Event object to be passed to listener.
+<a name="line746"></a> * @return {boolean} True if all listeners returned true else false.
+<a name="line747"></a> * @private
+<a name="line748"></a> */
+<a name="line749"></a>goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
+<a name="line750"></a>  var retval = 1;
+<a name="line751"></a>
+<a name="line752"></a>  var objHashCode = goog.getHashCode(obj);
+<a name="line753"></a>  if (map[objHashCode]) {
+<a name="line754"></a>    map.remaining_--;
+<a name="line755"></a>    var listenerArray = map[objHashCode];
+<a name="line756"></a>
+<a name="line757"></a>    // If locked_ is not set (and if already 0) initialize it to 1.
+<a name="line758"></a>    if (!listenerArray.locked_) {
+<a name="line759"></a>      listenerArray.locked_ = 1;
+<a name="line760"></a>    } else {
+<a name="line761"></a>      listenerArray.locked_++;
+<a name="line762"></a>    }
+<a name="line763"></a>
+<a name="line764"></a>    try {
+<a name="line765"></a>      // Events added in the dispatch phase should not be dispatched in
+<a name="line766"></a>      // the current dispatch phase. They will be included in the next
+<a name="line767"></a>      // dispatch phase though.
+<a name="line768"></a>      var length = listenerArray.length;
+<a name="line769"></a>      for (var i = 0; i &lt; length; i++) {
+<a name="line770"></a>        var listener = listenerArray[i];
+<a name="line771"></a>        // We might not have a listener if the listener was removed.
+<a name="line772"></a>        if (listener &amp;&amp; !listener.removed) {
+<a name="line773"></a>          retval &amp;=
+<a name="line774"></a>              goog.events.fireListener(listener, eventObject) !== false;
+<a name="line775"></a>        }
+<a name="line776"></a>      }
+<a name="line777"></a>    } finally {
+<a name="line778"></a>      listenerArray.locked_--;
+<a name="line779"></a>      goog.events.cleanUp_(type, capture, objHashCode, listenerArray);
+<a name="line780"></a>    }
+<a name="line781"></a>  }
+<a name="line782"></a>
+<a name="line783"></a>  return Boolean(retval);
+<a name="line784"></a>};
 <a name="line785"></a>
-<a name="line786"></a>/**
-<a name="line787"></a> * Fires a listener with a set of arguments
-<a name="line788"></a> *
-<a name="line789"></a> * @param {goog.events.Listener} listener The listener object to call.
-<a name="line790"></a> * @param {Object} eventObject The event object to pass to the listener.
-<a name="line791"></a> * @return {boolean} Result of listener.
-<a name="line792"></a> */
-<a name="line793"></a>goog.events.fireListener = function(listener, eventObject) {
-<a name="line794"></a>  var rv = listener.handleEvent(eventObject);
-<a name="line795"></a>  if (listener.callOnce) {
-<a name="line796"></a>    goog.events.unlistenByKey(listener.key);
-<a name="line797"></a>  }
-<a name="line798"></a>  return rv;
-<a name="line799"></a>};
-<a name="line800"></a>
+<a name="line786"></a>
+<a name="line787"></a>/**
+<a name="line788"></a> * Fires a listener with a set of arguments
+<a name="line789"></a> *
+<a name="line790"></a> * @param {goog.events.Listener} listener The listener object to call.
+<a name="line791"></a> * @param {Object} eventObject The event object to pass to the listener.
+<a name="line792"></a> * @return {boolean} Result of listener.
+<a name="line793"></a> */
+<a name="line794"></a>goog.events.fireListener = function(listener, eventObject) {
+<a name="line795"></a>  var rv = listener.handleEvent(eventObject);
+<a name="line796"></a>  if (listener.callOnce) {
+<a name="line797"></a>    goog.events.unlistenByKey(listener.key);
+<a name="line798"></a>  }
+<a name="line799"></a>  return rv;
+<a name="line800"></a>};
 <a name="line801"></a>
-<a name="line802"></a>/**
-<a name="line803"></a> * Gets the total number of listeners currently in the system.
-<a name="line804"></a> * @return {number} Number of listeners.
-<a name="line805"></a> */
-<a name="line806"></a>goog.events.getTotalListenerCount = function() {
-<a name="line807"></a>  return goog.object.getCount(goog.events.listeners_);
-<a name="line808"></a>};
-<a name="line809"></a>
+<a name="line802"></a>
+<a name="line803"></a>/**
+<a name="line804"></a> * Gets the total number of listeners currently in the system.
+<a name="line805"></a> * @return {number} Number of listeners.
+<a name="line806"></a> */
+<a name="line807"></a>goog.events.getTotalListenerCount = function() {
+<a name="line808"></a>  return goog.object.getCount(goog.events.listeners_);
+<a name="line809"></a>};
 <a name="line810"></a>
-<a name="line811"></a>/**
-<a name="line812"></a> * Dispatches an event (or event like object) and calls all listeners
-<a name="line813"></a> * listening for events of this type. The type of the event is decided by the
-<a name="line814"></a> * type property on the event object.
-<a name="line815"></a> *
-<a name="line816"></a> * If any of the listeners returns false OR calls preventDefault then this
-<a name="line817"></a> * function will return false.  If one of the capture listeners calls
-<a name="line818"></a> * stopPropagation, then the bubble listeners won&#39;t fire.
-<a name="line819"></a> *
-<a name="line820"></a> * @param {goog.events.EventTarget} src  The event target.
-<a name="line821"></a> * @param {string|Object|goog.events.Event} e Event object.
-<a name="line822"></a> * @return {boolean} If anyone called preventDefault on the event object (or
-<a name="line823"></a> *     if any of the handlers returns false) this will also return false.
-<a name="line824"></a> *     If there are no handlers, or if all handlers return true, this returns
-<a name="line825"></a> *     true.
-<a name="line826"></a> */
-<a name="line827"></a>goog.events.dispatchEvent = function(src, e) {
-<a name="line828"></a>  // If accepting a string or object, create a custom event object so that
-<a name="line829"></a>  // preventDefault and stopPropagation work with the event.
-<a name="line830"></a>  if (goog.isString(e)) {
-<a name="line831"></a>    e = new goog.events.Event(e, src);
-<a name="line832"></a>  } else if (!(e instanceof goog.events.Event)) {
-<a name="line833"></a>    var oldEvent = e;
-<a name="line834"></a>    e = new goog.events.Event(e.type, src);
-<a name="line835"></a>    goog.object.extend(e, oldEvent);
-<a name="line836"></a>  } else {
-<a name="line837"></a>    e.target = e.target || src;
-<a name="line838"></a>  }
-<a name="line839"></a>
-<a name="line840"></a>  var rv = 1, ancestors;
-<a name="line841"></a>
-<a name="line842"></a>  var type = e.type;
-<a name="line843"></a>  var map = goog.events.listenerTree_;
-<a name="line844"></a>
-<a name="line845"></a>  if (!(type in map)) {
-<a name="line846"></a>    return true;
-<a name="line847"></a>  }
-<a name="line848"></a>
-<a name="line849"></a>  map = map[type];
-<a name="line850"></a>  var hasCapture = true in map;
-<a name="line851"></a>  var targetsMap;
-<a name="line852"></a>
-<a name="line853"></a>  if (hasCapture) {
-<a name="line854"></a>    // Build ancestors now
-<a name="line855"></a>    ancestors = [];
-<a name="line856"></a>    for (var parent = src; parent; parent = parent.getParentEventTarget()) {
-<a name="line857"></a>      ancestors.push(parent);
-<a name="line858"></a>    }
-<a name="line859"></a>
-<a name="line860"></a>    targetsMap = map[true];
-<a name="line861"></a>    targetsMap.remaining_ = targetsMap.count_;
-<a name="line862"></a>
-<a name="line863"></a>    // Call capture listeners
-<a name="line864"></a>    for (var i = ancestors.length - 1;
-<a name="line865"></a>         !e.propagationStopped_ &amp;&amp; i &gt;= 0 &amp;&amp; targetsMap.remaining_;
-<a name="line866"></a>         i--) {
-<a name="line867"></a>      e.currentTarget = ancestors[i];
-<a name="line868"></a>      rv &amp;= goog.events.fireListeners_(targetsMap, ancestors[i], e.type,
-<a name="line869"></a>                                       true, e) &amp;&amp;
-<a name="line870"></a>            e.returnValue_ != false;
-<a name="line871"></a>    }
-<a name="line872"></a>  }
-<a name="line873"></a>
-<a name="line874"></a>  var hasBubble = false in map;
-<a name="line875"></a>  if (hasBubble) {
-<a name="line876"></a>    targetsMap = map[false];
-<a name="line877"></a>    targetsMap.remaining_ = targetsMap.count_;
-<a name="line878"></a>
-<a name="line879"></a>    if (hasCapture) { // We have the ancestors.
-<a name="line880"></a>
-<a name="line881"></a>      // Call bubble listeners
-<a name="line882"></a>      for (var i = 0; !e.propagationStopped_ &amp;&amp; i &lt; ancestors.length &amp;&amp;
-<a name="line883"></a>           targetsMap.remaining_;
-<a name="line884"></a>           i++) {
-<a name="line885"></a>        e.currentTarget = ancestors[i];
-<a name="line886"></a>        rv &amp;= goog.events.fireListeners_(targetsMap, ancestors[i], e.type,
-<a name="line887"></a>                                         false, e) &amp;&amp;
-<a name="line888"></a>              e.returnValue_ != false;
-<a name="line889"></a>      }
-<a name="line890"></a>    } else {
-<a name="line891"></a>      // In case we don&#39;t have capture we don&#39;t have to build up the
-<a name="line892"></a>      // ancestors array.
-<a name="line893"></a>
-<a name="line894"></a>      for (var current = src;
-<a name="line895"></a>           !e.propagationStopped_ &amp;&amp; current &amp;&amp; targetsMap.remaining_;
-<a name="line896"></a>           current = current.getParentEventTarget()) {
-<a name="line897"></a>        e.currentTarget = current;
-<a name="line898"></a>        rv &amp;= goog.events.fireListeners_(targetsMap, current, e.type,
-<a name="line899"></a>                                         false, e) &amp;&amp;
-<a name="line900"></a>              e.returnValue_ != false;
-<a name="line901"></a>      }
-<a name="line902"></a>    }
-<a name="line903"></a>  }
-<a name="line904"></a>
-<a name="line905"></a>  return Boolean(rv);
-<a name="line906"></a>};
-<a name="line907"></a>
+<a name="line811"></a>
+<a name="line812"></a>/**
+<a name="line813"></a> * Dispatches an event (or event like object) and calls all listeners
+<a name="line814"></a> * listening for events of this type. The type of the event is decided by the
+<a name="line815"></a> * type property on the event object.
+<a name="line816"></a> *
+<a name="line817"></a> * If any of the listeners returns false OR calls preventDefault then this
+<a name="line818"></a> * function will return false.  If one of the capture listeners calls
+<a name="line819"></a> * stopPropagation, then the bubble listeners won&#39;t fire.
+<a name="line820"></a> *
+<a name="line821"></a> * @param {goog.events.EventTarget} src  The event target.
+<a name="line822"></a> * @param {string|Object|goog.events.Event} e Event object.
+<a name="line823"></a> * @return {boolean} If anyone called preventDefault on the event object (or
+<a name="line824"></a> *     if any of the handlers returns false) this will also return false.
+<a name="line825"></a> *     If there are no handlers, or if all handlers return true, this returns
+<a name="line826"></a> *     true.
+<a name="line827"></a> */
+<a name="line828"></a>goog.events.dispatchEvent = function(src, e) {
+<a name="line829"></a>  // If accepting a string or object, create a custom event object so that
+<a name="line830"></a>  // preventDefault and stopPropagation work with the event.
+<a name="line831"></a>  if (goog.isString(e)) {
+<a name="line832"></a>    e = new goog.events.Event(e, src);
+<a name="line833"></a>  } else if (!(e instanceof goog.events.Event)) {
+<a name="line834"></a>    var oldEvent = e;
+<a name="line835"></a>    e = new goog.events.Event(e.type, src);
+<a name="line836"></a>    goog.object.extend(e, oldEvent);
+<a name="line837"></a>  } else {
+<a name="line838"></a>    e.target = e.target || src;
+<a name="line839"></a>  }
+<a name="line840"></a>
+<a name="line841"></a>  var rv = 1, ancestors;
+<a name="line842"></a>
+<a name="line843"></a>  var type = e.type;
+<a name="line844"></a>  var map = goog.events.listenerTree_;
+<a name="line845"></a>
+<a name="line846"></a>  if (!(type in map)) {
+<a name="line847"></a>    return true;
+<a name="line848"></a>  }
+<a name="line849"></a>
+<a name="line850"></a>  map = map[type];
+<a name="line851"></a>  var hasCapture = true in map;
+<a name="line852"></a>  var targetsMap;
+<a name="line853"></a>
+<a name="line854"></a>  if (hasCapture) {
+<a name="line855"></a>    // Build ancestors now
+<a name="line856"></a>    ancestors = [];
+<a name="line857"></a>    for (var parent = src; parent; parent = parent.getParentEventTarget()) {
+<a name="line858"></a>      ancestors.push(parent);
+<a name="line859"></a>    }
+<a name="line860"></a>
+<a name="line861"></a>    targetsMap = map[true];
+<a name="line862"></a>    targetsMap.remaining_ = targetsMap.count_;
+<a name="line863"></a>
+<a name="line864"></a>    // Call capture listeners
+<a name="line865"></a>    for (var i = ancestors.length - 1;
+<a name="line866"></a>         !e.propagationStopped_ &amp;&amp; i &gt;= 0 &amp;&amp; targetsMap.remaining_;
+<a name="line867"></a>         i--) {
+<a name="line868"></a>      e.currentTarget = ancestors[i];
+<a name="line869"></a>      rv &amp;= goog.events.fireListeners_(targetsMap, ancestors[i], e.type,
+<a name="line870"></a>                                       true, e) &amp;&amp;
+<a name="line871"></a>            e.returnValue_ != false;
+<a name="line872"></a>    }
+<a name="line873"></a>  }
+<a name="line874"></a>
+<a name="line875"></a>  var hasBubble = false in map;
+<a name="line876"></a>  if (hasBubble) {
+<a name="line877"></a>    targetsMap = map[false];
+<a name="line878"></a>    targetsMap.remaining_ = targetsMap.count_;
+<a name="line879"></a>
+<a name="line880"></a>    if (hasCapture) { // We have the ancestors.
+<a name="line881"></a>
+<a name="line882"></a>      // Call bubble listeners
+<a name="line883"></a>      for (var i = 0; !e.propagationStopped_ &amp;&amp; i &lt; ancestors.length &amp;&amp;
+<a name="line884"></a>           targetsMap.remaining_;
+<a name="line885"></a>           i++) {
+<a name="line886"></a>        e.currentTarget = ancestors[i];
+<a name="line887"></a>        rv &amp;= goog.events.fireListeners_(targetsMap, ancestors[i], e.type,
+<a name="line888"></a>                                         false, e) &amp;&amp;
+<a name="line889"></a>              e.returnValue_ != false;
+<a name="line890"></a>      }
+<a name="line891"></a>    } else {
+<a name="line892"></a>      // In case we don&#39;t have capture we don&#39;t have to build up the
+<a name="line893"></a>      // ancestors array.
+<a name="line894"></a>
+<a name="line895"></a>      for (var current = src;
+<a name="line896"></a>           !e.propagationStopped_ &amp;&amp; current &amp;&amp; targetsMap.remaining_;
+<a name="line897"></a>           current = current.getParentEventTarget()) {
+<a name="line898"></a>        e.currentTarget = current;
+<a name="line899"></a>        rv &amp;= goog.events.fireListeners_(targetsMap, current, e.type,
+<a name="line900"></a>                                         false, e) &amp;&amp;
+<a name="line901"></a>              e.returnValue_ != false;
+<a name="line902"></a>      }
+<a name="line903"></a>    }
+<a name="line904"></a>  }
+<a name="line905"></a>
+<a name="line906"></a>  return Boolean(rv);
+<a name="line907"></a>};
 <a name="line908"></a>
-<a name="line909"></a>/**
-<a name="line910"></a> * Installs exception protection for the browser event entry point using the
-<a name="line911"></a> * given error handler.
-<a name="line912"></a> *
-<a name="line913"></a> * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
-<a name="line914"></a> *     protect the entry point.
-<a name="line915"></a> * @param {boolean} opt_tracers Whether to install tracers around the browser
-<a name="line916"></a> *     event entry point.
-<a name="line917"></a> */
-<a name="line918"></a>goog.events.protectBrowserEventEntryPoint = function(
-<a name="line919"></a>    errorHandler, opt_tracers) {
-<a name="line920"></a>  goog.events.handleBrowserEvent_ = errorHandler.protectEntryPoint(
-<a name="line921"></a>      goog.events.handleBrowserEvent_, opt_tracers);
-<a name="line922"></a>  goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_);
-<a name="line923"></a>};
-<a name="line924"></a>
+<a name="line909"></a>
+<a name="line910"></a>/**
+<a name="line911"></a> * Installs exception protection for the browser event entry point using the
+<a name="line912"></a> * given error handler.
+<a name="line913"></a> *
+<a name="line914"></a> * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
+<a name="line915"></a> *     protect the entry point.
+<a name="line916"></a> * @param {boolean} opt_tracers Whether to install tracers around the browser
+<a name="line917"></a> *     event entry point.
+<a name="line918"></a> */
+<a name="line919"></a>goog.events.protectBrowserEventEntryPoint = function(
+<a name="line920"></a>    errorHandler, opt_tracers) {
+<a name="line921"></a>  goog.events.handleBrowserEvent_ = errorHandler.protectEntryPoint(
+<a name="line922"></a>      goog.events.handleBrowserEvent_, opt_tracers);
+<a name="line923"></a>  goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_);
+<a name="line924"></a>};
 <a name="line925"></a>
-<a name="line926"></a>/**
-<a name="line927"></a> * Handles an event and dispatches it to the correct listeners. This
-<a name="line928"></a> * function is a proxy for the real listener the user specified.
-<a name="line929"></a> *
-<a name="line930"></a> * @param {string} key Unique key for the listener.
-<a name="line931"></a> * @param {Event} opt_evt Optional event object that gets passed in via the
-<a name="line932"></a> *     native event handlers.
-<a name="line933"></a> * @return {boolean} Result of the event handler.
-<a name="line934"></a> * @this {goog.events.EventTarget|Object} The object or Element that
-<a name="line935"></a> *     fired the event.
-<a name="line936"></a> * @private
-<a name="line937"></a> */
-<a name="line938"></a>goog.events.handleBrowserEvent_ = function(key, opt_evt) {
-<a name="line939"></a>  // If the listener isn&#39;t there it was probably removed when processing
-<a name="line940"></a>  // another listener on the same event (e.g. the later listener is
-<a name="line941"></a>  // not managed by closure so that they are both fired under IE)
-<a name="line942"></a>  if (!goog.events.listeners_[key]) {
-<a name="line943"></a>    return true;
-<a name="line944"></a>  }
-<a name="line945"></a>
-<a name="line946"></a>  var listener = goog.events.listeners_[key];
-<a name="line947"></a>  var type = listener.type;
-<a name="line948"></a>  var map = goog.events.listenerTree_;
-<a name="line949"></a>
-<a name="line950"></a>  if (!(type in map)) {
-<a name="line951"></a>    return true;
-<a name="line952"></a>  }
-<a name="line953"></a>  map = map[type];
-<a name="line954"></a>  var retval, targetsMap;
-<a name="line955"></a>  if (goog.userAgent.IE) {
-<a name="line956"></a>    var ieEvent = opt_evt ||
-<a name="line957"></a>        /** @type {Event} */ (goog.getObjectByName(&#39;window.event&#39;));
-<a name="line958"></a>
-<a name="line959"></a>    // Check if we have any capturing event listeners for this type.
-<a name="line960"></a>    var hasCapture = true in map;
-<a name="line961"></a>    var hasBubble = false in map;
-<a name="line962"></a>
-<a name="line963"></a>    if (hasCapture) {
-<a name="line964"></a>      if (goog.events.isMarkedIeEvent_(ieEvent)) {
-<a name="line965"></a>        return true;
-<a name="line966"></a>      }
-<a name="line967"></a>
-<a name="line968"></a>      goog.events.markIeEvent_(ieEvent);
-<a name="line969"></a>    }
-<a name="line970"></a>
-<a name="line971"></a>    var evt = goog.events.pools.getEvent();
-<a name="line972"></a>    evt.init(ieEvent, this);
-<a name="line973"></a>
-<a name="line974"></a>    retval = true;
-<a name="line975"></a>    try {
-<a name="line976"></a>      if (hasCapture) {
-<a name="line977"></a>        var ancestors = goog.events.pools.getArray();
-<a name="line978"></a>
-<a name="line979"></a>        for (var parent = evt.currentTarget;
-<a name="line980"></a>             parent;
-<a name="line981"></a>             parent = parent.parentNode) {
-<a name="line982"></a>          ancestors.push(parent);
-<a name="line983"></a>        }
-<a name="line984"></a>
-<a name="line985"></a>        targetsMap = map[true];
-<a name="line986"></a>        targetsMap.remaining_ = targetsMap.count_;
-<a name="line987"></a>
-<a name="line988"></a>        // Call capture listeners
-<a name="line989"></a>        for (var i = ancestors.length - 1;
-<a name="line990"></a>             !evt.propagationStopped_ &amp;&amp; i &gt;= 0 &amp;&amp; targetsMap.remaining_;
-<a name="line991"></a>             i--) {
-<a name="line992"></a>          evt.currentTarget = ancestors[i];
-<a name="line993"></a>          retval &amp;= goog.events.fireListeners_(targetsMap, ancestors[i], type,
-<a name="line994"></a>                                               true, evt);
-<a name="line995"></a>        }
-<a name="line996"></a>
-<a name="line997"></a>        if (hasBubble) {
-<a name="line998"></a>          targetsMap = map[false];
-<a name="line999"></a>          targetsMap.remaining_ = targetsMap.count_;
-<a name="line1000"></a>
-<a name="line1001"></a>          // Call bubble listeners
-<a name="line1002"></a>          for (var i = 0;
-<a name="line1003"></a>               !evt.propagationStopped_ &amp;&amp; i &lt; ancestors.length &amp;&amp;
-<a name="line1004"></a>               targetsMap.remaining_;
-<a name="line1005"></a>               i++) {
-<a name="line1006"></a>            evt.currentTarget = ancestors[i];
-<a name="line1007"></a>            retval &amp;= goog.events.fireListeners_(targetsMap, ancestors[i], type,
-<a name="line1008"></a>                                                 false, evt);
-<a name="line1009"></a>          }
-<a name="line1010"></a>        }
-<a name="line1011"></a>
-<a name="line1012"></a>      } else {
-<a name="line1013"></a>        // Bubbling, let IE handle the propagation.
-<a name="line1014"></a>        retval = goog.events.fireListener(listener, evt);
-<a name="line1015"></a>      }
-<a name="line1016"></a>
-<a name="line1017"></a>    } finally {
-<a name="line1018"></a>      if (ancestors) {
-<a name="line1019"></a>        ancestors.length = 0;
-<a name="line1020"></a>        goog.events.pools.releaseArray(ancestors);
-<a name="line1021"></a>      }
-<a name="line1022"></a>      evt.dispose();
-<a name="line1023"></a>      goog.events.pools.releaseEvent(evt);
-<a name="line1024"></a>    }
-<a name="line1025"></a>    return retval;
-<a name="line1026"></a>  } // IE
-<a name="line1027"></a>
-<a name="line1028"></a>  // Caught a non-IE DOM event. 1 additional argument which is the event object
-<a name="line1029"></a>  var be = new goog.events.BrowserEvent(opt_evt, this);
-<a name="line1030"></a>  try {
-<a name="line1031"></a>    retval = goog.events.fireListener(listener, be);
-<a name="line1032"></a>  } finally {
-<a name="line1033"></a>    be.dispose();
-<a name="line1034"></a>  }
-<a name="line1035"></a>  return retval;
-<a name="line1036"></a>};
-<a name="line1037"></a>
+<a name="line926"></a>
+<a name="line927"></a>/**
+<a name="line928"></a> * Handles an event and dispatches it to the correct listeners. This
+<a name="line929"></a> * function is a proxy for the real listener the user specified.
+<a name="line930"></a> *
+<a name="line931"></a> * @param {string} key Unique key for the listener.
+<a name="line932"></a> * @param {Event} opt_evt Optional event object that gets passed in via the
+<a name="line933"></a> *     native event handlers.
+<a name="line934"></a> * @return {boolean} Result of the event handler.
+<a name="line935"></a> * @this {goog.events.EventTarget|Object} The object or Element that
+<a name="line936"></a> *     fired the event.
+<a name="line937"></a> * @private
+<a name="line938"></a> */
+<a name="line939"></a>goog.events.handleBrowserEvent_ = function(key, opt_evt) {
+<a name="line940"></a>  // If the listener isn&#39;t there it was probably removed when processing
+<a name="line941"></a>  // another listener on the same event (e.g. the later listener is
+<a name="line942"></a>  // not managed by closure so that they are both fired under IE)
+<a name="line943"></a>  if (!goog.events.listeners_[key]) {
+<a name="line944"></a>    return true;
+<a name="line945"></a>  }
+<a name="line946"></a>
+<a name="line947"></a>  var listener = goog.events.listeners_[key];
+<a name="line948"></a>  var type = listener.type;
+<a name="line949"></a>  var map = goog.events.listenerTree_;
+<a name="line950"></a>
+<a name="line951"></a>  if (!(type in map)) {
+<a name="line952"></a>    return true;
+<a name="line953"></a>  }
+<a name="line954"></a>  map = map[type];
+<a name="line955"></a>  var retval, targetsMap;
+<a name="line956"></a>  if (goog.userAgent.IE) {
+<a name="line957"></a>    var ieEvent = opt_evt ||
+<a name="line958"></a>        /** @type {Event} */ (goog.getObjectByName(&#39;window.event&#39;));
+<a name="line959"></a>
+<a name="line960"></a>    // Check if we have any capturing event listeners for this type.
+<a name="line961"></a>    var hasCapture = true in map;
+<a name="line962"></a>    var hasBubble = false in map;
+<a name="line963"></a>
+<a name="line964"></a>    if (hasCapture) {
+<a name="line965"></a>      if (goog.events.isMarkedIeEvent_(ieEvent)) {
+<a name="line966"></a>        return true;
+<a name="line967"></a>      }
+<a name="line968"></a>
+<a name="line969"></a>      goog.events.markIeEvent_(ieEvent);
+<a name="line970"></a>    }
+<a name="line971"></a>
+<a name="line972"></a>    var evt = goog.events.pools.getEvent();
+<a name="line973"></a>    evt.init(ieEvent, this);
+<a name="line974"></a>
+<a name="line975"></a>    retval = true;
+<a name="line976"></a>    try {
+<a name="line977"></a>      if (hasCapture) {
+<a name="line978"></a>        var ancestors = goog.events.pools.getArray();
+<a name="line979"></a>
+<a name="line980"></a>        for (var parent = evt.currentTarget;
+<a name="line981"></a>             parent;
+<a name="line982"></a>             parent = parent.parentNode) {
+<a name="line983"></a>          ancestors.push(parent);
+<a name="line984"></a>        }
+<a name="line985"></a>
+<a name="line986"></a>        targetsMap = map[true];
+<a name="line987"></a>        targetsMap.remaining_ = targetsMap.count_;
+<a name="line988"></a>
+<a name="line989"></a>        // Call capture listeners
+<a name="line990"></a>        for (var i = ancestors.length - 1;
+<a name="line991"></a>             !evt.propagationStopped_ &amp;&amp; i &gt;= 0 &amp;&amp; targetsMap.remaining_;
+<a name="line992"></a>             i--) {
+<a name="line993"></a>          evt.currentTarget = ancestors[i];
+<a name="line994"></a>          retval &amp;= goog.events.fireListeners_(targetsMap, ancestors[i], type,
+<a name="line995"></a>                                               true, evt);
+<a name="line996"></a>        }
+<a name="line997"></a>
+<a name="line998"></a>        if (hasBubble) {
+<a name="line999"></a>          targetsMap = map[false];
+<a name="line1000"></a>          targetsMap.remaining_ = targetsMap.count_;
+<a name="line1001"></a>
+<a name="line1002"></a>          // Call bubble listeners
+<a name="line1003"></a>          for (var i = 0;
+<a name="line1004"></a>               !evt.propagationStopped_ &amp;&amp; i &lt; ancestors.length &amp;&amp;
+<a name="line1005"></a>               targetsMap.remaining_;
+<a name="line1006"></a>               i++) {
+<a name="line1007"></a>            evt.currentTarget = ancestors[i];
+<a name="line1008"></a>            retval &amp;= goog.events.fireListeners_(targetsMap, ancestors[i], type,
+<a name="line1009"></a>                                                 false, evt);
+<a name="line1010"></a>          }
+<a name="line1011"></a>        }
+<a name="line1012"></a>
+<a name="line1013"></a>      } else {
+<a name="line1014"></a>        // Bubbling, let IE handle the propagation.
+<a name="line1015"></a>        retval = goog.events.fireListener(listener, evt);
+<a name="line1016"></a>      }
+<a name="line1017"></a>
+<a name="line1018"></a>    } finally {
+<a name="line1019"></a>      if (ancestors) {
+<a name="line1020"></a>        ancestors.length = 0;
+<a name="line1021"></a>        goog.events.pools.releaseArray(ancestors);
+<a name="line1022"></a>      }
+<a name="line1023"></a>      evt.dispose();
+<a name="line1024"></a>      goog.events.pools.releaseEvent(evt);
+<a name="line1025"></a>    }
+<a name="line1026"></a>    return retval;
+<a name="line1027"></a>  } // IE
+<a name="line1028"></a>
+<a name="line1029"></a>  // Caught a non-IE DOM event. 1 additional argument which is the event object
+<a name="line1030"></a>  var be = new goog.events.BrowserEvent(opt_evt, this);
+<a name="line1031"></a>  try {
+<a name="line1032"></a>    retval = goog.events.fireListener(listener, be);
+<a name="line1033"></a>  } finally {
+<a name="line1034"></a>    be.dispose();
+<a name="line1035"></a>  }
+<a name="line1036"></a>  return retval;
+<a name="line1037"></a>};
 <a name="line1038"></a>
-<a name="line1039"></a>// Set the callback for the proxy pool. This is done here to prevent circular
-<a name="line1040"></a>// dependencies.
-<a name="line1041"></a>goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_);
-<a name="line1042"></a>
+<a name="line1039"></a>
+<a name="line1040"></a>// Set the callback for the proxy pool. This is done here to prevent circular
+<a name="line1041"></a>// dependencies.
+<a name="line1042"></a>goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_);
 <a name="line1043"></a>
-<a name="line1044"></a>/**
-<a name="line1045"></a> * This is used to mark the IE event object so we do not do the Closure pass
-<a name="line1046"></a> * twice for a bubbling event.
-<a name="line1047"></a> * @param {Event} e The IE browser event.
-<a name="line1048"></a> * @private
-<a name="line1049"></a> */
-<a name="line1050"></a>goog.events.markIeEvent_ = function(e) {
-<a name="line1051"></a>  // Only the keyCode and the returnValue can be changed. We use keyCode for
-<a name="line1052"></a>  // non keyboard events.
-<a name="line1053"></a>  // event.returnValue is a bit more tricky. It is undefined by default. A
-<a name="line1054"></a>  // boolean false prevents the default action. In a window.onbeforeunload and
-<a name="line1055"></a>  // the returnValue is non undefined it will be alerted. However, we will only
-<a name="line1056"></a>  // modify the returnValue for keyboard events. We can get a problem if non
-<a name="line1057"></a>  // closure events sets the keyCode or the returnValue
-<a name="line1058"></a>
-<a name="line1059"></a>  var useReturnValue = false;
-<a name="line1060"></a>
-<a name="line1061"></a>  if (e.keyCode == 0) {
-<a name="line1062"></a>    // We cannot change the keyCode in case that srcElement is input[type=file].
-<a name="line1063"></a>    // We could test that that is the case but that would allocate 3 objects.
-<a name="line1064"></a>    // If we use try/catch we will only allocate extra objects in the case of a
-<a name="line1065"></a>    // failure.
-<a name="line1066"></a>    /** @preserveTry */
-<a name="line1067"></a>    try {
-<a name="line1068"></a>      e.keyCode = -1;
-<a name="line1069"></a>      return;
-<a name="line1070"></a>    } catch (ex) {
-<a name="line1071"></a>      useReturnValue = true;
-<a name="line1072"></a>    }
-<a name="line1073"></a>  }
-<a name="line1074"></a>
-<a name="line1075"></a>  if (useReturnValue ||
-<a name="line1076"></a>      /** @type {boolean|undefined} */ (e.returnValue) == undefined) {
-<a name="line1077"></a>    e.returnValue = true;
-<a name="line1078"></a>  }
-<a name="line1079"></a>};
-<a name="line1080"></a>
+<a name="line1044"></a>
+<a name="line1045"></a>/**
+<a name="line1046"></a> * This is used to mark the IE event object so we do not do the Closure pass
+<a name="line1047"></a> * twice for a bubbling event.
+<a name="line1048"></a> * @param {Event} e The IE browser event.
+<a name="line1049"></a> * @private
+<a name="line1050"></a> */
+<a name="line1051"></a>goog.events.markIeEvent_ = function(e) {
+<a name="line1052"></a>  // Only the keyCode and the returnValue can be changed. We use keyCode for
+<a name="line1053"></a>  // non keyboard events.
+<a name="line1054"></a>  // event.returnValue is a bit more tricky. It is undefined by default. A
+<a name="line1055"></a>  // boolean false prevents the default action. In a window.onbeforeunload and
+<a name="line1056"></a>  // the returnValue is non undefined it will be alerted. However, we will only
+<a name="line1057"></a>  // modify the returnValue for keyboard events. We can get a problem if non
+<a name="line1058"></a>  // closure events sets the keyCode or the returnValue
+<a name="line1059"></a>
+<a name="line1060"></a>  var useReturnValue = false;
+<a name="line1061"></a>
+<a name="line1062"></a>  if (e.keyCode == 0) {
+<a name="line1063"></a>    // We cannot change the keyCode in case that srcElement is input[type=file].
+<a name="line1064"></a>    // We could test that that is the case but that would allocate 3 objects.
+<a name="line1065"></a>    // If we use try/catch we will only allocate extra objects in the case of a
+<a name="line1066"></a>    // failure.
+<a name="line1067"></a>    /** @preserveTry */
+<a name="line1068"></a>    try {
+<a name="line1069"></a>      e.keyCode = -1;
+<a name="line1070"></a>      return;
+<a name="line1071"></a>    } catch (ex) {
+<a name="line1072"></a>      useReturnValue = true;
+<a name="line1073"></a>    }
+<a name="line1074"></a>  }
+<a name="line1075"></a>
+<a name="line1076"></a>  if (useReturnValue ||
+<a name="line1077"></a>      /** @type {boolean|undefined} */ (e.returnValue) == undefined) {
+<a name="line1078"></a>    e.returnValue = true;
+<a name="line1079"></a>  }
+<a name="line1080"></a>};
 <a name="line1081"></a>
-<a name="line1082"></a>/**
-<a name="line1083"></a> * This is used to check if an IE event has already been handled by the Closure
-<a name="line1084"></a> * system so we do not do the Closure pass twice for a bubbling event.
-<a name="line1085"></a> * @param {Event} e  The IE browser event.
-<a name="line1086"></a> * @return {boolean} True if the event object has been marked.
-<a name="line1087"></a> * @private
-<a name="line1088"></a> * @notypecheck TODO: Fix this.
-<a name="line1089"></a> */
-<a name="line1090"></a>goog.events.isMarkedIeEvent_ = function(e) {
-<a name="line1091"></a>  return e.keyCode &lt; 0 || e.returnValue != undefined;
-<a name="line1092"></a>};
-<a name="line1093"></a>
+<a name="line1082"></a>
+<a name="line1083"></a>/**
+<a name="line1084"></a> * This is used to check if an IE event has already been handled by the Closure
+<a name="line1085"></a> * system so we do not do the Closure pass twice for a bubbling event.
+<a name="line1086"></a> * @param {Event} e  The IE browser event.
+<a name="line1087"></a> * @return {boolean} True if the event object has been marked.
+<a name="line1088"></a> * @private
+<a name="line1089"></a> * @notypecheck TODO: Fix this.
+<a name="line1090"></a> */
+<a name="line1091"></a>goog.events.isMarkedIeEvent_ = function(e) {
+<a name="line1092"></a>  return e.keyCode &lt; 0 || e.returnValue != undefined;
+<a name="line1093"></a>};
 <a name="line1094"></a>
-<a name="line1095"></a>/**
-<a name="line1096"></a> * Counter to create unique event ids.
-<a name="line1097"></a> * @type {number}
-<a name="line1098"></a> * @private
-<a name="line1099"></a> */
-<a name="line1100"></a>goog.events.uniqueIdCounter_ = 0;
-<a name="line1101"></a>
+<a name="line1095"></a>
+<a name="line1096"></a>/**
+<a name="line1097"></a> * Counter to create unique event ids.
+<a name="line1098"></a> * @type {number}
+<a name="line1099"></a> * @private
+<a name="line1100"></a> */
+<a name="line1101"></a>goog.events.uniqueIdCounter_ = 0;
 <a name="line1102"></a>
-<a name="line1103"></a>/**
-<a name="line1104"></a> * Creates a unique event id.
-<a name="line1105"></a> *
-<a name="line1106"></a> * @param {string} identifier The identifier.
-<a name="line1107"></a> * @return {string} A unique identifier.
-<a name="line1108"></a> */
-<a name="line1109"></a>goog.events.getUniqueId = function(identifier) {
-<a name="line1110"></a>  return identifier + &#39;_&#39; + goog.events.uniqueIdCounter_++;
-<a name="line1111"></a>};
+<a name="line1103"></a>
+<a name="line1104"></a>/**
+<a name="line1105"></a> * Creates a unique event id.
+<a name="line1106"></a> *
+<a name="line1107"></a> * @param {string} identifier The identifier.
+<a name="line1108"></a> * @return {string} A unique identifier.
+<a name="line1109"></a> */
+<a name="line1110"></a>goog.events.getUniqueId = function(identifier) {
+<a name="line1111"></a>  return identifier + &#39;_&#39; + goog.events.uniqueIdCounter_++;
+<a name="line1112"></a>};
 </pre>
 
 

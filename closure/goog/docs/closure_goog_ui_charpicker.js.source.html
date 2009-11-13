@@ -58,16 +58,16 @@
 <a name="line15"></a>/**
 <a name="line16"></a> * @fileoverview Character Picker widget for picking any Unicode character.
 <a name="line17"></a> *
-<a name="line18"></a> */
-<a name="line19"></a>
-<a name="line20"></a>goog.provide(&#39;goog.ui.CharPicker&#39;);
-<a name="line21"></a>
-<a name="line22"></a>goog.require(&#39;goog.array&#39;);
-<a name="line23"></a>goog.require(&#39;goog.dom&#39;);
-<a name="line24"></a>goog.require(&#39;goog.events&#39;);
-<a name="line25"></a>goog.require(&#39;goog.events.InputHandler&#39;);
-<a name="line26"></a>goog.require(&#39;goog.i18n.CharListDecompressor&#39;);
-<a name="line27"></a>goog.require(&#39;goog.i18n.charPickerData&#39;);
+<a name="line18"></a> * @see ../demos/charpicker.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.CharPicker&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.InputHandler&#39;);
+<a name="line27"></a>goog.require(&#39;goog.i18n.CharListDecompressor&#39;);
 <a name="line28"></a>goog.require(&#39;goog.i18n.uChar&#39;);
 <a name="line29"></a>goog.require(&#39;goog.structs.Set&#39;);
 <a name="line30"></a>goog.require(&#39;goog.style&#39;);
@@ -87,736 +87,754 @@
 <a name="line44"></a> * hex value.
 <a name="line45"></a> *
 <a name="line46"></a> * See charpicker.html demo for example usage.
-<a name="line47"></a> * @param {Array.&lt;string&gt;} opt_recents List of characters to be displayed in
-<a name="line48"></a> *     resently selected characters area.
-<a name="line49"></a> * @param {number} opt_initCategory Sequence number of initial category.
-<a name="line50"></a> * @param {number} opt_initSubcategory Sequence number of initial subcategory.
-<a name="line51"></a> * @param {number} opt_rowCount Number of rows in the grid.
-<a name="line52"></a> * @param {number} opt_columnCount Number of columns in the grid.
-<a name="line53"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
-<a name="line54"></a> * @constructor
-<a name="line55"></a> * @extends {goog.ui.Component}
-<a name="line56"></a> */
-<a name="line57"></a>goog.ui.CharPicker = function(opt_recents, opt_initCategory,
-<a name="line58"></a>    opt_initSubcategory, opt_rowCount, opt_columnCount, opt_domHelper) {
-<a name="line59"></a>  goog.ui.Component.call(this, opt_domHelper);
-<a name="line60"></a>
-<a name="line61"></a>  /**
-<a name="line62"></a>   * The category number to be used on widget init.
-<a name="line63"></a>   * @type {number}
-<a name="line64"></a>   * @private
-<a name="line65"></a>   */
-<a name="line66"></a>  this.initCategory_ = opt_initCategory || 0;
-<a name="line67"></a>
-<a name="line68"></a>  /**
-<a name="line69"></a>   * The subcategory number to be used on widget init.
-<a name="line70"></a>   * @type {number}
-<a name="line71"></a>   * @private
-<a name="line72"></a>   */
-<a name="line73"></a>  this.initSubcategory_ = opt_initSubcategory || 0;
-<a name="line74"></a>
-<a name="line75"></a>  /**
-<a name="line76"></a>   * Number of columns in the grid.
-<a name="line77"></a>   * @type {number}
-<a name="line78"></a>   * @private
-<a name="line79"></a>   */
-<a name="line80"></a>  this.columnCount_ = opt_columnCount || 10;
-<a name="line81"></a>
-<a name="line82"></a>  /**
-<a name="line83"></a>   * Number of entries to be added to the grid.
-<a name="line84"></a>   * @type {number}
-<a name="line85"></a>   * @private
-<a name="line86"></a>   */
-<a name="line87"></a>  this.gridsize_ = (opt_rowCount || 10) * this.columnCount_;
-<a name="line88"></a>
-<a name="line89"></a>  /**
-<a name="line90"></a>   * Number of the recently selected characters displayed.
-<a name="line91"></a>   * @type {number}
-<a name="line92"></a>   * @private
-<a name="line93"></a>   */
-<a name="line94"></a>  this.recentwidth_ = this.columnCount_ + 1;
-<a name="line95"></a>
-<a name="line96"></a>  /**
-<a name="line97"></a>   * List of recently used characters.
-<a name="line98"></a>   * @type {Array.&lt;string&gt;}
-<a name="line99"></a>   * @private
-<a name="line100"></a>   */
-<a name="line101"></a>  this.recents_ = opt_recents || [];
-<a name="line102"></a>
-<a name="line103"></a>  /**
-<a name="line104"></a>   * Handler for events.
-<a name="line105"></a>   * @type {goog.events.EventHandler}
-<a name="line106"></a>   * @private
-<a name="line107"></a>   */
-<a name="line108"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
-<a name="line109"></a>
-<a name="line110"></a>  /**
-<a name="line111"></a>   * Decompressor used to get the list of characters from a base88 encoded
-<a name="line112"></a>   * character list.
-<a name="line113"></a>   * @type {Object}
-<a name="line114"></a>   * @private
-<a name="line115"></a>   */
-<a name="line116"></a>  this.decompressor_ = new goog.i18n.CharListDecompressor();
-<a name="line117"></a>};
-<a name="line118"></a>goog.inherits(goog.ui.CharPicker, goog.ui.Component);
-<a name="line119"></a>
-<a name="line120"></a>
-<a name="line121"></a>/**
-<a name="line122"></a> * The last selected character.
-<a name="line123"></a> * @type {?string}
-<a name="line124"></a> * @private
-<a name="line125"></a> */
-<a name="line126"></a>goog.ui.CharPicker.prototype.selectedChar_ = null;
-<a name="line127"></a>
+<a name="line47"></a> * @param {goog.i18n.CharPickerData} charPickerData Category names and charlist.
+<a name="line48"></a> * @param {Array.&lt;string&gt;} opt_recents List of characters to be displayed in
+<a name="line49"></a> *     resently selected characters area.
+<a name="line50"></a> * @param {number} opt_initCategory Sequence number of initial category.
+<a name="line51"></a> * @param {number} opt_initSubcategory Sequence number of initial subcategory.
+<a name="line52"></a> * @param {number} opt_rowCount Number of rows in the grid.
+<a name="line53"></a> * @param {number} opt_columnCount Number of columns in the grid.
+<a name="line54"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line55"></a> * @constructor
+<a name="line56"></a> * @extends {goog.ui.Component}
+<a name="line57"></a> */
+<a name="line58"></a>goog.ui.CharPicker = function(charPickerData, opt_recents, opt_initCategory,
+<a name="line59"></a>                              opt_initSubcategory, opt_rowCount,
+<a name="line60"></a>                              opt_columnCount, opt_domHelper) {
+<a name="line61"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line62"></a>
+<a name="line63"></a>  /**
+<a name="line64"></a>   * Object containing character lists and category names.
+<a name="line65"></a>   * @type {goog.i18n.CharPickerData}
+<a name="line66"></a>   * @private
+<a name="line67"></a>   */
+<a name="line68"></a>  this.data_ = charPickerData;
+<a name="line69"></a>
+<a name="line70"></a>  /**
+<a name="line71"></a>   * The category number to be used on widget init.
+<a name="line72"></a>   * @type {number}
+<a name="line73"></a>   * @private
+<a name="line74"></a>   */
+<a name="line75"></a>  this.initCategory_ = opt_initCategory || 0;
+<a name="line76"></a>
+<a name="line77"></a>  /**
+<a name="line78"></a>   * The subcategory number to be used on widget init.
+<a name="line79"></a>   * @type {number}
+<a name="line80"></a>   * @private
+<a name="line81"></a>   */
+<a name="line82"></a>  this.initSubcategory_ = opt_initSubcategory || 0;
+<a name="line83"></a>
+<a name="line84"></a>  /**
+<a name="line85"></a>   * Number of columns in the grid.
+<a name="line86"></a>   * @type {number}
+<a name="line87"></a>   * @private
+<a name="line88"></a>   */
+<a name="line89"></a>  this.columnCount_ = opt_columnCount || 10;
+<a name="line90"></a>
+<a name="line91"></a>  /**
+<a name="line92"></a>   * Number of entries to be added to the grid.
+<a name="line93"></a>   * @type {number}
+<a name="line94"></a>   * @private
+<a name="line95"></a>   */
+<a name="line96"></a>  this.gridsize_ = (opt_rowCount || 10) * this.columnCount_;
+<a name="line97"></a>
+<a name="line98"></a>  /**
+<a name="line99"></a>   * Number of the recently selected characters displayed.
+<a name="line100"></a>   * @type {number}
+<a name="line101"></a>   * @private
+<a name="line102"></a>   */
+<a name="line103"></a>  this.recentwidth_ = this.columnCount_ + 1;
+<a name="line104"></a>
+<a name="line105"></a>  /**
+<a name="line106"></a>   * List of recently used characters.
+<a name="line107"></a>   * @type {Array.&lt;string&gt;}
+<a name="line108"></a>   * @private
+<a name="line109"></a>   */
+<a name="line110"></a>  this.recents_ = opt_recents || [];
+<a name="line111"></a>
+<a name="line112"></a>  /**
+<a name="line113"></a>   * Handler for events.
+<a name="line114"></a>   * @type {goog.events.EventHandler}
+<a name="line115"></a>   * @private
+<a name="line116"></a>   */
+<a name="line117"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line118"></a>
+<a name="line119"></a>  /**
+<a name="line120"></a>   * Decompressor used to get the list of characters from a base88 encoded
+<a name="line121"></a>   * character list.
+<a name="line122"></a>   * @type {Object}
+<a name="line123"></a>   * @private
+<a name="line124"></a>   */
+<a name="line125"></a>  this.decompressor_ = new goog.i18n.CharListDecompressor();
+<a name="line126"></a>};
+<a name="line127"></a>goog.inherits(goog.ui.CharPicker, goog.ui.Component);
 <a name="line128"></a>
-<a name="line129"></a>/**
-<a name="line130"></a> * Set of formatting characters whose display need to be swapped with nbsp
-<a name="line131"></a> * to prevent layout issues.
-<a name="line132"></a> * @type {goog.structs.Set}
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * The last selected character.
+<a name="line132"></a> * @type {?string}
 <a name="line133"></a> * @private
 <a name="line134"></a> */
-<a name="line135"></a>goog.ui.CharPicker.prototype.layoutAlteringChars_ = null;
+<a name="line135"></a>goog.ui.CharPicker.prototype.selectedChar_ = null;
 <a name="line136"></a>
 <a name="line137"></a>
 <a name="line138"></a>/**
-<a name="line139"></a> * The top category menu.
-<a name="line140"></a> * @type {goog.ui.Menu}
-<a name="line141"></a> * @private
-<a name="line142"></a> */
-<a name="line143"></a>goog.ui.CharPicker.prototype.menu_ = null;
-<a name="line144"></a>
+<a name="line139"></a> * Set of formatting characters whose display need to be swapped with nbsp
+<a name="line140"></a> * to prevent layout issues.
+<a name="line141"></a> * @type {goog.structs.Set}
+<a name="line142"></a> * @private
+<a name="line143"></a> */
+<a name="line144"></a>goog.ui.CharPicker.prototype.layoutAlteringChars_ = null;
 <a name="line145"></a>
-<a name="line146"></a>/**
-<a name="line147"></a> * The top category menu button.
-<a name="line148"></a> * @type {goog.ui.MenuButton}
-<a name="line149"></a> * @private
-<a name="line150"></a> */
-<a name="line151"></a>goog.ui.CharPicker.prototype.menubutton_ = null;
-<a name="line152"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * The top category menu.
+<a name="line149"></a> * @type {goog.ui.Menu}
+<a name="line150"></a> * @private
+<a name="line151"></a> */
+<a name="line152"></a>goog.ui.CharPicker.prototype.menu_ = null;
 <a name="line153"></a>
-<a name="line154"></a>/**
-<a name="line155"></a> * The subcategory menu.
-<a name="line156"></a> * @type {goog.ui.Menu}
-<a name="line157"></a> * @private
-<a name="line158"></a> */
-<a name="line159"></a>goog.ui.CharPicker.prototype.submenu_ = null;
-<a name="line160"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * The top category menu button.
+<a name="line157"></a> * @type {goog.ui.MenuButton}
+<a name="line158"></a> * @private
+<a name="line159"></a> */
+<a name="line160"></a>goog.ui.CharPicker.prototype.menubutton_ = null;
 <a name="line161"></a>
-<a name="line162"></a>/**
-<a name="line163"></a> * The subcategory menu button.
-<a name="line164"></a> * @type {goog.ui.MenuButton}
-<a name="line165"></a> * @private
-<a name="line166"></a> */
-<a name="line167"></a>goog.ui.CharPicker.prototype.submenubutton_ = null;
-<a name="line168"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * The subcategory menu.
+<a name="line165"></a> * @type {goog.ui.Menu}
+<a name="line166"></a> * @private
+<a name="line167"></a> */
+<a name="line168"></a>goog.ui.CharPicker.prototype.submenu_ = null;
 <a name="line169"></a>
-<a name="line170"></a>/**
-<a name="line171"></a> * The element representing the number of rows visible in the grid.
-<a name="line172"></a> * This along with goog.ui.CharPicker.stick_ would help to create a scrollbar
-<a name="line173"></a> * of right size.
-<a name="line174"></a> * @type {Element}
-<a name="line175"></a> * @private
-<a name="line176"></a> */
-<a name="line177"></a>goog.ui.CharPicker.prototype.stickwrap_ = null;
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * The subcategory menu button.
+<a name="line173"></a> * @type {goog.ui.MenuButton}
+<a name="line174"></a> * @private
+<a name="line175"></a> */
+<a name="line176"></a>goog.ui.CharPicker.prototype.submenubutton_ = null;
+<a name="line177"></a>
 <a name="line178"></a>
-<a name="line179"></a>
-<a name="line180"></a>/**
-<a name="line181"></a> * The component containing all the buttons for each character in display.
-<a name="line182"></a> * @type {goog.ui.Component}
-<a name="line183"></a> * @private
-<a name="line184"></a> */
-<a name="line185"></a>goog.ui.CharPicker.prototype.grid_ = null;
-<a name="line186"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * The element representing the number of rows visible in the grid.
+<a name="line181"></a> * This along with goog.ui.CharPicker.stick_ would help to create a scrollbar
+<a name="line182"></a> * of right size.
+<a name="line183"></a> * @type {Element}
+<a name="line184"></a> * @private
+<a name="line185"></a> */
+<a name="line186"></a>goog.ui.CharPicker.prototype.stickwrap_ = null;
 <a name="line187"></a>
-<a name="line188"></a>/**
-<a name="line189"></a> * The component used for extra information about the character set displayed.
-<a name="line190"></a> * @type {goog.ui.Component}
-<a name="line191"></a> * @private
-<a name="line192"></a> */
-<a name="line193"></a>goog.ui.CharPicker.prototype.notice_ = null;
-<a name="line194"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * The component containing all the buttons for each character in display.
+<a name="line191"></a> * @type {goog.ui.Component}
+<a name="line192"></a> * @private
+<a name="line193"></a> */
+<a name="line194"></a>goog.ui.CharPicker.prototype.grid_ = null;
 <a name="line195"></a>
-<a name="line196"></a>/**
-<a name="line197"></a> * Grid displaying recently selected characters.
-<a name="line198"></a> * @type {goog.ui.Component}
-<a name="line199"></a> * @private
-<a name="line200"></a> */
-<a name="line201"></a>goog.ui.CharPicker.prototype.recentgrid_ = null;
-<a name="line202"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * The component used for extra information about the character set displayed.
+<a name="line199"></a> * @type {goog.ui.Component}
+<a name="line200"></a> * @private
+<a name="line201"></a> */
+<a name="line202"></a>goog.ui.CharPicker.prototype.notice_ = null;
 <a name="line203"></a>
-<a name="line204"></a>/**
-<a name="line205"></a> * Input field for entering the hex value of the character.
-<a name="line206"></a> * @type {goog.ui.Component}
-<a name="line207"></a> * @private
-<a name="line208"></a> */
-<a name="line209"></a>goog.ui.CharPicker.prototype.input_ = null;
-<a name="line210"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * Grid displaying recently selected characters.
+<a name="line207"></a> * @type {goog.ui.Component}
+<a name="line208"></a> * @private
+<a name="line209"></a> */
+<a name="line210"></a>goog.ui.CharPicker.prototype.recentgrid_ = null;
 <a name="line211"></a>
-<a name="line212"></a>/**
-<a name="line213"></a> * OK button for entering hex value of the character.
-<a name="line214"></a> * @type {goog.ui.Component}
-<a name="line215"></a> * @private
-<a name="line216"></a> */
-<a name="line217"></a>goog.ui.CharPicker.prototype.okbutton_ = null;
-<a name="line218"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Input field for entering the hex value of the character.
+<a name="line215"></a> * @type {goog.ui.Component}
+<a name="line216"></a> * @private
+<a name="line217"></a> */
+<a name="line218"></a>goog.ui.CharPicker.prototype.input_ = null;
 <a name="line219"></a>
-<a name="line220"></a>/**
-<a name="line221"></a> * Element displaying character in preview.
-<a name="line222"></a> * @type {Element}
-<a name="line223"></a> * @private
-<a name="line224"></a> */
-<a name="line225"></a>goog.ui.CharPicker.prototype.zoomEl_ = null;
-<a name="line226"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * OK button for entering hex value of the character.
+<a name="line223"></a> * @type {goog.ui.Component}
+<a name="line224"></a> * @private
+<a name="line225"></a> */
+<a name="line226"></a>goog.ui.CharPicker.prototype.okbutton_ = null;
 <a name="line227"></a>
-<a name="line228"></a>/**
-<a name="line229"></a> * Element displaying character name or number in preview.
-<a name="line230"></a> * @type {Element}
-<a name="line231"></a> * @private
-<a name="line232"></a> */
-<a name="line233"></a>goog.ui.CharPicker.prototype.unicodeEl_ = null;
-<a name="line234"></a>
+<a name="line228"></a>
+<a name="line229"></a>/**
+<a name="line230"></a> * Element displaying character in preview.
+<a name="line231"></a> * @type {Element}
+<a name="line232"></a> * @private
+<a name="line233"></a> */
+<a name="line234"></a>goog.ui.CharPicker.prototype.zoomEl_ = null;
 <a name="line235"></a>
-<a name="line236"></a>/**
-<a name="line237"></a> * Hover card for displaying the preview of a character.
-<a name="line238"></a> * Preview would contain character in large size and its U+ notation. It would
-<a name="line239"></a> * also display the name, if available.
-<a name="line240"></a> * @type {goog.ui.HoverCard}
-<a name="line241"></a> * @private
-<a name="line242"></a> */
-<a name="line243"></a>goog.ui.CharPicker.prototype.hc_ = null;
+<a name="line236"></a>
+<a name="line237"></a>/**
+<a name="line238"></a> * Element displaying character name or number in preview.
+<a name="line239"></a> * @type {Element}
+<a name="line240"></a> * @private
+<a name="line241"></a> */
+<a name="line242"></a>goog.ui.CharPicker.prototype.unicodeEl_ = null;
+<a name="line243"></a>
 <a name="line244"></a>
-<a name="line245"></a>
-<a name="line246"></a>/**
-<a name="line247"></a> * Gets the last selected character.
-<a name="line248"></a> * @return {?string} The last selected character.
-<a name="line249"></a> */
-<a name="line250"></a>goog.ui.CharPicker.prototype.getSelectedChar = function() {
-<a name="line251"></a>  return this.selectedChar_;
-<a name="line252"></a>};
+<a name="line245"></a>/**
+<a name="line246"></a> * Hover card for displaying the preview of a character.
+<a name="line247"></a> * Preview would contain character in large size and its U+ notation. It would
+<a name="line248"></a> * also display the name, if available.
+<a name="line249"></a> * @type {goog.ui.HoverCard}
+<a name="line250"></a> * @private
+<a name="line251"></a> */
+<a name="line252"></a>goog.ui.CharPicker.prototype.hc_ = null;
 <a name="line253"></a>
 <a name="line254"></a>
 <a name="line255"></a>/**
-<a name="line256"></a> * Gets the list of characters user selected recently.
-<a name="line257"></a> * @return {Array.&lt;string&gt;} The recent character list.
+<a name="line256"></a> * Gets the last selected character.
+<a name="line257"></a> * @return {?string} The last selected character.
 <a name="line258"></a> */
-<a name="line259"></a>goog.ui.CharPicker.prototype.getRecentChars = function() {
-<a name="line260"></a>  return this.recents_;
+<a name="line259"></a>goog.ui.CharPicker.prototype.getSelectedChar = function() {
+<a name="line260"></a>  return this.selectedChar_;
 <a name="line261"></a>};
 <a name="line262"></a>
 <a name="line263"></a>
-<a name="line264"></a>/** @inheritDoc */
-<a name="line265"></a>goog.ui.CharPicker.prototype.createDom = function() {
-<a name="line266"></a>  goog.ui.CharPicker.superClass_.createDom.call(this);
-<a name="line267"></a>
-<a name="line268"></a>  this.decorateInternal(this.getDomHelper().createElement(&#39;div&#39;));
-<a name="line269"></a>};
-<a name="line270"></a>
+<a name="line264"></a>/**
+<a name="line265"></a> * Gets the list of characters user selected recently.
+<a name="line266"></a> * @return {Array.&lt;string&gt;} The recent character list.
+<a name="line267"></a> */
+<a name="line268"></a>goog.ui.CharPicker.prototype.getRecentChars = function() {
+<a name="line269"></a>  return this.recents_;
+<a name="line270"></a>};
 <a name="line271"></a>
-<a name="line272"></a>/** @inheritDoc */
-<a name="line273"></a>goog.ui.CharPicker.prototype.disposeInternal = function() {
-<a name="line274"></a>  this.hc_.dispose();
-<a name="line275"></a>  this.hc_ = null;
-<a name="line276"></a>  this.eventHandler_.dispose();
-<a name="line277"></a>  this.eventHandler_ = null;
-<a name="line278"></a>  goog.ui.CharPicker.superClass_.disposeInternal.call(this);
-<a name="line279"></a>};
+<a name="line272"></a>
+<a name="line273"></a>/** @inheritDoc */
+<a name="line274"></a>goog.ui.CharPicker.prototype.createDom = function() {
+<a name="line275"></a>  goog.ui.CharPicker.superClass_.createDom.call(this);
+<a name="line276"></a>
+<a name="line277"></a>  this.decorateInternal(this.getDomHelper().createElement(&#39;div&#39;));
+<a name="line278"></a>};
+<a name="line279"></a>
 <a name="line280"></a>
-<a name="line281"></a>
-<a name="line282"></a>/** @inheritDoc */
-<a name="line283"></a>goog.ui.CharPicker.prototype.decorateInternal = function(element) {
-<a name="line284"></a>  goog.ui.CharPicker.superClass_.decorateInternal.call(this, element);
-<a name="line285"></a>
-<a name="line286"></a>  // The chars below cause layout disruption or too narrow to hover:
-<a name="line287"></a>  // \u0020, \u00AD, \u2000 - \u200f, \u2028 - \u202f, \u3000, \ufeff
-<a name="line288"></a>  var chrs = this.decompressor_.toCharList(&#39;:2%C^O80V1H2s2G40Q%s0&#39;);
-<a name="line289"></a>  this.layoutAlteringChars_ = new goog.structs.Set(chrs);
+<a name="line281"></a>/** @inheritDoc */
+<a name="line282"></a>goog.ui.CharPicker.prototype.disposeInternal = function() {
+<a name="line283"></a>  this.hc_.dispose();
+<a name="line284"></a>  this.hc_ = null;
+<a name="line285"></a>  this.eventHandler_.dispose();
+<a name="line286"></a>  this.eventHandler_ = null;
+<a name="line287"></a>  goog.ui.CharPicker.superClass_.disposeInternal.call(this);
+<a name="line288"></a>};
+<a name="line289"></a>
 <a name="line290"></a>
-<a name="line291"></a>  this.menu_ = new goog.ui.Menu();
-<a name="line292"></a>
-<a name="line293"></a>  var categories = goog.i18n.charPickerData.Categories;
-<a name="line294"></a>  for (var i = 0; i &lt; categories.length; i++) {
-<a name="line295"></a>      this.menu_.addChild(this.createMenuItem_(i, categories[i]), true);
-<a name="line296"></a>  }
-<a name="line297"></a>
-<a name="line298"></a>  this.menubutton_ = new goog.ui.MenuButton(&#39;Category Menu&#39;, this.menu_);
-<a name="line299"></a>  this.addChild(this.menubutton_, true);
-<a name="line300"></a>
-<a name="line301"></a>  this.submenu_ = new goog.ui.Menu();
-<a name="line302"></a>
-<a name="line303"></a>  this.submenubutton_ = new goog.ui.MenuButton(&#39;Subcategory Menu&#39;,
-<a name="line304"></a>      this.submenu_);
-<a name="line305"></a>  this.addChild(this.submenubutton_, true);
+<a name="line291"></a>/** @inheritDoc */
+<a name="line292"></a>goog.ui.CharPicker.prototype.decorateInternal = function(element) {
+<a name="line293"></a>  goog.ui.CharPicker.superClass_.decorateInternal.call(this, element);
+<a name="line294"></a>
+<a name="line295"></a>  // The chars below cause layout disruption or too narrow to hover:
+<a name="line296"></a>  // \u0020, \u00AD, \u2000 - \u200f, \u2028 - \u202f, \u3000, \ufeff
+<a name="line297"></a>  var chrs = this.decompressor_.toCharList(&#39;:2%C^O80V1H2s2G40Q%s0&#39;);
+<a name="line298"></a>  this.layoutAlteringChars_ = new goog.structs.Set(chrs);
+<a name="line299"></a>
+<a name="line300"></a>  this.menu_ = new goog.ui.Menu();
+<a name="line301"></a>
+<a name="line302"></a>  var categories = this.data_.categories;
+<a name="line303"></a>  for (var i = 0; i &lt; this.data_.categories.length; i++) {
+<a name="line304"></a>      this.menu_.addChild(this.createMenuItem_(i, categories[i]), true);
+<a name="line305"></a>  }
 <a name="line306"></a>
-<a name="line307"></a>  // The containing compnent for grid component and the scroller.
-<a name="line308"></a>  var gridcontainer = new goog.ui.Component();
-<a name="line309"></a>  this.addChild(gridcontainer, true);
-<a name="line310"></a>
-<a name="line311"></a>  var stickwrap = new goog.ui.Component();
-<a name="line312"></a>  gridcontainer.addChild(stickwrap, true);
-<a name="line313"></a>  this.stickwrap_ = stickwrap.getElement();
-<a name="line314"></a>
-<a name="line315"></a>  var stick = new goog.ui.Component();
-<a name="line316"></a>  stickwrap.addChild(stick, true);
-<a name="line317"></a>  this.stick_ = stick.getElement();
-<a name="line318"></a>
-<a name="line319"></a>  this.grid_ = new goog.ui.Component();
-<a name="line320"></a>  gridcontainer.addChild(this.grid_, true);
-<a name="line321"></a>
-<a name="line322"></a>  this.notice_ = new goog.ui.Component();
-<a name="line323"></a>  this.notice_.setElementInternal(goog.dom.createDom(&#39;div&#39;));
-<a name="line324"></a>  this.addChild(this.notice_, true);
-<a name="line325"></a>
-<a name="line326"></a>  // The component used for displaying &#39;Recent Selections&#39; label.
-<a name="line327"></a>  var recenttext = new goog.ui.Component();
-<a name="line328"></a>  recenttext.setElementInternal(goog.dom.createDom(&#39;span&#39;, null,
-<a name="line329"></a>      &#39;Recent Selections:&#39;));
-<a name="line330"></a>  this.addChild(recenttext, true);
-<a name="line331"></a>
-<a name="line332"></a>  this.recentgrid_ = new goog.ui.Component();
-<a name="line333"></a>  this.addChild(this.recentgrid_, true);
+<a name="line307"></a>  this.menubutton_ = new goog.ui.MenuButton(&#39;Category Menu&#39;, this.menu_);
+<a name="line308"></a>  this.addChild(this.menubutton_, true);
+<a name="line309"></a>
+<a name="line310"></a>  this.submenu_ = new goog.ui.Menu();
+<a name="line311"></a>
+<a name="line312"></a>  this.submenubutton_ = new goog.ui.MenuButton(&#39;Subcategory Menu&#39;,
+<a name="line313"></a>      this.submenu_);
+<a name="line314"></a>  this.addChild(this.submenubutton_, true);
+<a name="line315"></a>
+<a name="line316"></a>  // The containing compnent for grid component and the scroller.
+<a name="line317"></a>  var gridcontainer = new goog.ui.Component();
+<a name="line318"></a>  this.addChild(gridcontainer, true);
+<a name="line319"></a>
+<a name="line320"></a>  var stickwrap = new goog.ui.Component();
+<a name="line321"></a>  gridcontainer.addChild(stickwrap, true);
+<a name="line322"></a>  this.stickwrap_ = stickwrap.getElement();
+<a name="line323"></a>
+<a name="line324"></a>  var stick = new goog.ui.Component();
+<a name="line325"></a>  stickwrap.addChild(stick, true);
+<a name="line326"></a>  this.stick_ = stick.getElement();
+<a name="line327"></a>
+<a name="line328"></a>  this.grid_ = new goog.ui.Component();
+<a name="line329"></a>  gridcontainer.addChild(this.grid_, true);
+<a name="line330"></a>
+<a name="line331"></a>  this.notice_ = new goog.ui.Component();
+<a name="line332"></a>  this.notice_.setElementInternal(goog.dom.createDom(&#39;div&#39;));
+<a name="line333"></a>  this.addChild(this.notice_, true);
 <a name="line334"></a>
-<a name="line335"></a>  // The component used for displaying &#39;U+&#39;.
-<a name="line336"></a>  var uplus = new goog.ui.Component();
-<a name="line337"></a>  uplus.setElementInternal(goog.dom.createDom(&#39;span&#39;, null, &#39;U+&#39;));
-<a name="line338"></a>  this.addChild(uplus, true);
-<a name="line339"></a>
-<a name="line340"></a>  this.input_ = new goog.ui.LabelInput(&#39;Hex Input&#39;);
-<a name="line341"></a>  this.addChild(this.input_, true);
-<a name="line342"></a>
-<a name="line343"></a>  this.okbutton_ = new goog.ui.Button(&#39;OK&#39;);
-<a name="line344"></a>  this.addChild(this.okbutton_, true);
-<a name="line345"></a>  this.okbutton_.setEnabled(false);
-<a name="line346"></a>
-<a name="line347"></a>  this.zoomEl_ = goog.dom.createDom(&#39;div&#39;, {
-<a name="line348"></a>      &#39;id&#39;: &#39;zoom&#39;,
-<a name="line349"></a>      &#39;className&#39;: &#39;goog-char-picker-char-zoom&#39;});
-<a name="line350"></a>
-<a name="line351"></a>  this.unicodeEl_ = goog.dom.createDom(&#39;div&#39;, {
-<a name="line352"></a>      &#39;id&#39;: &#39;unicode&#39;,
-<a name="line353"></a>      &#39;className&#39;: &#39;goog-char-picker-unicode&#39;});
-<a name="line354"></a>
-<a name="line355"></a>  var card = goog.dom.createDom(&#39;div&#39;, {&#39;id&#39;: &#39;preview&#39;}, this.zoomEl_,
-<a name="line356"></a>      this.unicodeEl_);
-<a name="line357"></a>  goog.style.showElement(card, false);
-<a name="line358"></a>  this.hc_ = new goog.ui.HoverCard({&#39;DIV&#39;: &#39;char&#39;});
-<a name="line359"></a>  this.hc_.setElement(card);
-<a name="line360"></a>  var self = this;
-<a name="line361"></a>
-<a name="line362"></a>  /**
-<a name="line363"></a>   * Function called by hover card just before it is visible to collect data.
-<a name="line364"></a>   */
-<a name="line365"></a>  function onBeforeShow() {
-<a name="line366"></a>    var trigger = self.hc_.getAnchorElement();
-<a name="line367"></a>    var ch = self.getChar_(trigger);
-<a name="line368"></a>    if (ch) {
-<a name="line369"></a>      self.zoomEl_.innerHTML = self.displayChar_(ch);
-<a name="line370"></a>      self.unicodeEl_.innerHTML = self.getTagFromChar_(ch);
-<a name="line371"></a>    }
-<a name="line372"></a>  }
-<a name="line373"></a>
-<a name="line374"></a>  goog.events.listen(this.hc_, goog.ui.HoverCard.EventType.BEFORE_SHOW,
-<a name="line375"></a>                     onBeforeShow);
-<a name="line376"></a>
-<a name="line377"></a>  goog.dom.classes.add(element, &#39;goog-char-picker&#39;);
-<a name="line378"></a>  goog.dom.classes.add(this.stick_, &#39;goog-stick&#39;);
-<a name="line379"></a>  goog.dom.classes.add(this.stickwrap_, &#39;goog-stickwrap&#39;);
-<a name="line380"></a>  goog.dom.classes.add(gridcontainer.getElement(),
-<a name="line381"></a>      &#39;goog-char-picker-grid-container&#39;);
-<a name="line382"></a>  goog.dom.classes.add(this.grid_.getElement(), &#39;goog-char-picker-grid&#39;);
-<a name="line383"></a>  goog.dom.classes.add(this.recentgrid_.getElement(), &#39;goog-char-picker-grid&#39;);
-<a name="line384"></a>  goog.dom.classes.add(this.recentgrid_.getElement(),
-<a name="line385"></a>      &#39;goog-char-picker-recents&#39;);
-<a name="line386"></a>
-<a name="line387"></a>  goog.dom.classes.add(this.notice_.getElement(), &#39;goog-char-picker-notice&#39;);
-<a name="line388"></a>  goog.dom.classes.add(uplus.getElement(), &#39;goog-char-picker-uplus&#39;);
-<a name="line389"></a>  goog.dom.classes.add(this.input_.getElement(), &#39;goog-char-picker-input-box&#39;);
-<a name="line390"></a>  goog.dom.classes.add(this.okbutton_.getElement(),
-<a name="line391"></a>                       &#39;goog-char-picker-okbutton&#39;);
-<a name="line392"></a>  goog.dom.classes.add(card, &#39;goog-char-picker-hovercard&#39;);
-<a name="line393"></a>  this.hc_.className = &#39;goog-char-picker-hovercard&#39;;
-<a name="line394"></a>
-<a name="line395"></a>  this.grid_.buttoncount = this.gridsize_;
-<a name="line396"></a>  this.recentgrid_.buttoncount = this.recentwidth_;
-<a name="line397"></a>  this.populateGridWithButtons_(this.grid_);
-<a name="line398"></a>  this.populateGridWithButtons_(this.recentgrid_);
-<a name="line399"></a>
-<a name="line400"></a>  this.updateGrid_(this.recentgrid_, this.recents_);
-<a name="line401"></a>  this.setSelectedCategory_(this.initCategory_, this.initSubcategory_);
-<a name="line402"></a>  new goog.ui.ContainerScroller(this.menu_);
-<a name="line403"></a>  new goog.ui.ContainerScroller(this.submenu_);
-<a name="line404"></a>
-<a name="line405"></a>  goog.dom.classes.add(this.menu_.getElement(), &#39;goog-char-picker-menu&#39;);
-<a name="line406"></a>  goog.dom.classes.add(this.submenu_.getElement(), &#39;goog-char-picker-menu&#39;);
-<a name="line407"></a>};
-<a name="line408"></a>
-<a name="line409"></a>
-<a name="line410"></a>/** @inheritDoc */
-<a name="line411"></a>goog.ui.CharPicker.prototype.enterDocument = function() {
-<a name="line412"></a>  goog.ui.CharPicker.superClass_.enterDocument.call(this);
-<a name="line413"></a>  var inputkh = new goog.events.InputHandler(this.input_.getElement());
-<a name="line414"></a>  this.keyHandler_ = new goog.events.KeyHandler(this.input_.getElement());
-<a name="line415"></a>
-<a name="line416"></a>  // Use this function to stop menu click event in the bubbling phase.
-<a name="line417"></a>  // If stopped at capture phase, the button will not be set to normal state.
-<a name="line418"></a>  // If not stopped, the user widget will receive the event, which is
-<a name="line419"></a>  // undesired. User widget should receive an event only on the character
-<a name="line420"></a>  // click.
-<a name="line421"></a>  var stopPropagationFn = function(e) {
-<a name="line422"></a>    e.stopPropagation();
-<a name="line423"></a>  };
-<a name="line424"></a>
-<a name="line425"></a>  this.eventHandler_.listen(
-<a name="line426"></a>      this.menubutton_,
-<a name="line427"></a>      goog.ui.Component.EventType.ACTION,
-<a name="line428"></a>      stopPropagationFn).listen(
-<a name="line429"></a>          this.submenubutton_,
-<a name="line430"></a>          goog.ui.Component.EventType.ACTION,
-<a name="line431"></a>          stopPropagationFn).listen(
-<a name="line432"></a>              this,
-<a name="line433"></a>              goog.ui.Component.EventType.ACTION,
-<a name="line434"></a>              this.handleSelectedItem_,
-<a name="line435"></a>              true).listen(
-<a name="line436"></a>                  inputkh,
-<a name="line437"></a>                  goog.events.InputHandler.EventType.INPUT,
-<a name="line438"></a>                  this.handleInput_).listen(
-<a name="line439"></a>                      this.keyHandler_,
-<a name="line440"></a>                      goog.events.KeyHandler.EventType.KEY,
-<a name="line441"></a>                      this.handleEnter_);
-<a name="line442"></a>
-<a name="line443"></a>  goog.events.listen(this.okbutton_.getElement(),
-<a name="line444"></a>      goog.events.EventType.MOUSEDOWN, this.handleOkClick_, true, this);
-<a name="line445"></a>
-<a name="line446"></a>  goog.events.listen(this.stickwrap_, goog.events.EventType.SCROLL,
-<a name="line447"></a>      this.handleScroll_, true, this);
-<a name="line448"></a>};
-<a name="line449"></a>
-<a name="line450"></a>
-<a name="line451"></a>/**
-<a name="line452"></a> * On scroll, updates the grid with characters correct to the scroll position.
-<a name="line453"></a> * @param {goog.events.Event} e Scroll event to handle.
-<a name="line454"></a> * @private
-<a name="line455"></a> */
-<a name="line456"></a>goog.ui.CharPicker.prototype.handleScroll_ = function(e) {
-<a name="line457"></a>  var height = e.target.scrollHeight;
-<a name="line458"></a>  var top = e.target.scrollTop;
-<a name="line459"></a>  var itempos = Math.ceil(top * this.items.length / (this.columnCount_ *
-<a name="line460"></a>      height)) * this.columnCount_;
-<a name="line461"></a>  if (this.itempos != itempos) {
-<a name="line462"></a>    this.itempos = itempos;
-<a name="line463"></a>    this.modifyGridWithItems_(this.grid_, this.items, itempos);
-<a name="line464"></a>  }
-<a name="line465"></a>  e.stopPropagation();
-<a name="line466"></a>};
+<a name="line335"></a>  // The component used for displaying &#39;Recent Selections&#39; label.
+<a name="line336"></a>  /**
+<a name="line337"></a>   * @desc The text label above the list of recently selected characters.
+<a name="line338"></a>   */
+<a name="line339"></a>  var MSG_CHAR_PICKER_RECENT_SELECTIONS = goog.getMsg(&#39;Recent Selections:&#39;);
+<a name="line340"></a>  var recenttext = new goog.ui.Component();
+<a name="line341"></a>  recenttext.setElementInternal(goog.dom.createDom(&#39;span&#39;, null,
+<a name="line342"></a>      MSG_CHAR_PICKER_RECENT_SELECTIONS));
+<a name="line343"></a>  this.addChild(recenttext, true);
+<a name="line344"></a>
+<a name="line345"></a>  this.recentgrid_ = new goog.ui.Component();
+<a name="line346"></a>  this.addChild(this.recentgrid_, true);
+<a name="line347"></a>
+<a name="line348"></a>  // The component used for displaying &#39;U+&#39;.
+<a name="line349"></a>  var uplus = new goog.ui.Component();
+<a name="line350"></a>  uplus.setElementInternal(goog.dom.createDom(&#39;span&#39;, null, &#39;U+&#39;));
+<a name="line351"></a>  this.addChild(uplus, true);
+<a name="line352"></a>
+<a name="line353"></a>  /**
+<a name="line354"></a>   * @desc The text inside the input box to specify the hex code of a character.
+<a name="line355"></a>   */
+<a name="line356"></a>  var MSG_CHAR_PICKER_HEX_INPUT = goog.getMsg(&#39;Hex Input&#39;);
+<a name="line357"></a>  this.input_ = new goog.ui.LabelInput(MSG_CHAR_PICKER_HEX_INPUT);
+<a name="line358"></a>  this.addChild(this.input_, true);
+<a name="line359"></a>
+<a name="line360"></a>  this.okbutton_ = new goog.ui.Button(&#39;OK&#39;);
+<a name="line361"></a>  this.addChild(this.okbutton_, true);
+<a name="line362"></a>  this.okbutton_.setEnabled(false);
+<a name="line363"></a>
+<a name="line364"></a>  this.zoomEl_ = goog.dom.createDom(&#39;div&#39;, {
+<a name="line365"></a>      &#39;id&#39;: &#39;zoom&#39;,
+<a name="line366"></a>      &#39;className&#39;: &#39;goog-char-picker-char-zoom&#39;});
+<a name="line367"></a>
+<a name="line368"></a>  this.unicodeEl_ = goog.dom.createDom(&#39;div&#39;, {
+<a name="line369"></a>      &#39;id&#39;: &#39;unicode&#39;,
+<a name="line370"></a>      &#39;className&#39;: &#39;goog-char-picker-unicode&#39;});
+<a name="line371"></a>
+<a name="line372"></a>  var card = goog.dom.createDom(&#39;div&#39;, {&#39;id&#39;: &#39;preview&#39;}, this.zoomEl_,
+<a name="line373"></a>      this.unicodeEl_);
+<a name="line374"></a>  goog.style.showElement(card, false);
+<a name="line375"></a>  this.hc_ = new goog.ui.HoverCard({&#39;DIV&#39;: &#39;char&#39;});
+<a name="line376"></a>  this.hc_.setElement(card);
+<a name="line377"></a>  var self = this;
+<a name="line378"></a>
+<a name="line379"></a>  /**
+<a name="line380"></a>   * Function called by hover card just before it is visible to collect data.
+<a name="line381"></a>   */
+<a name="line382"></a>  function onBeforeShow() {
+<a name="line383"></a>    var trigger = self.hc_.getAnchorElement();
+<a name="line384"></a>    var ch = self.getChar_(trigger);
+<a name="line385"></a>    if (ch) {
+<a name="line386"></a>      self.zoomEl_.innerHTML = self.displayChar_(ch);
+<a name="line387"></a>      self.unicodeEl_.innerHTML = self.getTagFromChar_(ch);
+<a name="line388"></a>    }
+<a name="line389"></a>  }
+<a name="line390"></a>
+<a name="line391"></a>  goog.events.listen(this.hc_, goog.ui.HoverCard.EventType.BEFORE_SHOW,
+<a name="line392"></a>                     onBeforeShow);
+<a name="line393"></a>
+<a name="line394"></a>  goog.dom.classes.add(element, &#39;goog-char-picker&#39;);
+<a name="line395"></a>  goog.dom.classes.add(this.stick_, &#39;goog-stick&#39;);
+<a name="line396"></a>  goog.dom.classes.add(this.stickwrap_, &#39;goog-stickwrap&#39;);
+<a name="line397"></a>  goog.dom.classes.add(gridcontainer.getElement(),
+<a name="line398"></a>      &#39;goog-char-picker-grid-container&#39;);
+<a name="line399"></a>  goog.dom.classes.add(this.grid_.getElement(), &#39;goog-char-picker-grid&#39;);
+<a name="line400"></a>  goog.dom.classes.add(this.recentgrid_.getElement(), &#39;goog-char-picker-grid&#39;);
+<a name="line401"></a>  goog.dom.classes.add(this.recentgrid_.getElement(),
+<a name="line402"></a>      &#39;goog-char-picker-recents&#39;);
+<a name="line403"></a>
+<a name="line404"></a>  goog.dom.classes.add(this.notice_.getElement(), &#39;goog-char-picker-notice&#39;);
+<a name="line405"></a>  goog.dom.classes.add(uplus.getElement(), &#39;goog-char-picker-uplus&#39;);
+<a name="line406"></a>  goog.dom.classes.add(this.input_.getElement(), &#39;goog-char-picker-input-box&#39;);
+<a name="line407"></a>  goog.dom.classes.add(this.okbutton_.getElement(),
+<a name="line408"></a>                       &#39;goog-char-picker-okbutton&#39;);
+<a name="line409"></a>  goog.dom.classes.add(card, &#39;goog-char-picker-hovercard&#39;);
+<a name="line410"></a>  this.hc_.className = &#39;goog-char-picker-hovercard&#39;;
+<a name="line411"></a>
+<a name="line412"></a>  this.grid_.buttoncount = this.gridsize_;
+<a name="line413"></a>  this.recentgrid_.buttoncount = this.recentwidth_;
+<a name="line414"></a>  this.populateGridWithButtons_(this.grid_);
+<a name="line415"></a>  this.populateGridWithButtons_(this.recentgrid_);
+<a name="line416"></a>
+<a name="line417"></a>  this.updateGrid_(this.recentgrid_, this.recents_);
+<a name="line418"></a>  this.setSelectedCategory_(this.initCategory_, this.initSubcategory_);
+<a name="line419"></a>  new goog.ui.ContainerScroller(this.menu_);
+<a name="line420"></a>  new goog.ui.ContainerScroller(this.submenu_);
+<a name="line421"></a>
+<a name="line422"></a>  goog.dom.classes.add(this.menu_.getElement(), &#39;goog-char-picker-menu&#39;);
+<a name="line423"></a>  goog.dom.classes.add(this.submenu_.getElement(), &#39;goog-char-picker-menu&#39;);
+<a name="line424"></a>};
+<a name="line425"></a>
+<a name="line426"></a>
+<a name="line427"></a>/** @inheritDoc */
+<a name="line428"></a>goog.ui.CharPicker.prototype.enterDocument = function() {
+<a name="line429"></a>  goog.ui.CharPicker.superClass_.enterDocument.call(this);
+<a name="line430"></a>  var inputkh = new goog.events.InputHandler(this.input_.getElement());
+<a name="line431"></a>  this.keyHandler_ = new goog.events.KeyHandler(this.input_.getElement());
+<a name="line432"></a>
+<a name="line433"></a>  // Use this function to stop menu click event in the bubbling phase.
+<a name="line434"></a>  // If stopped at capture phase, the button will not be set to normal state.
+<a name="line435"></a>  // If not stopped, the user widget will receive the event, which is
+<a name="line436"></a>  // undesired. User widget should receive an event only on the character
+<a name="line437"></a>  // click.
+<a name="line438"></a>  var stopPropagationFn = function(e) {
+<a name="line439"></a>    e.stopPropagation();
+<a name="line440"></a>  };
+<a name="line441"></a>
+<a name="line442"></a>  this.eventHandler_.listen(
+<a name="line443"></a>      this.menubutton_,
+<a name="line444"></a>      goog.ui.Component.EventType.ACTION,
+<a name="line445"></a>      stopPropagationFn).listen(
+<a name="line446"></a>          this.submenubutton_,
+<a name="line447"></a>          goog.ui.Component.EventType.ACTION,
+<a name="line448"></a>          stopPropagationFn).listen(
+<a name="line449"></a>              this,
+<a name="line450"></a>              goog.ui.Component.EventType.ACTION,
+<a name="line451"></a>              this.handleSelectedItem_,
+<a name="line452"></a>              true).listen(
+<a name="line453"></a>                  inputkh,
+<a name="line454"></a>                  goog.events.InputHandler.EventType.INPUT,
+<a name="line455"></a>                  this.handleInput_).listen(
+<a name="line456"></a>                      this.keyHandler_,
+<a name="line457"></a>                      goog.events.KeyHandler.EventType.KEY,
+<a name="line458"></a>                      this.handleEnter_);
+<a name="line459"></a>
+<a name="line460"></a>  goog.events.listen(this.okbutton_.getElement(),
+<a name="line461"></a>      goog.events.EventType.MOUSEDOWN, this.handleOkClick_, true, this);
+<a name="line462"></a>
+<a name="line463"></a>  goog.events.listen(this.stickwrap_, goog.events.EventType.SCROLL,
+<a name="line464"></a>      this.handleScroll_, true, this);
+<a name="line465"></a>};
+<a name="line466"></a>
 <a name="line467"></a>
-<a name="line468"></a>
-<a name="line469"></a>/**
-<a name="line470"></a> * On a menu click, sets correct character set in the grid; on a grid click
-<a name="line471"></a> * accept the character as the selected one and adds to recent selection, if not
-<a name="line472"></a> * already present.
-<a name="line473"></a> * @param {goog.events.Event} e Event for the click on menus or grid.
-<a name="line474"></a> * @private
-<a name="line475"></a> */
-<a name="line476"></a>goog.ui.CharPicker.prototype.handleSelectedItem_ = function(e) {
-<a name="line477"></a>  if (e.target.getParent() == this.menu_) {
-<a name="line478"></a>    this.menu_.setVisible(false);
-<a name="line479"></a>    this.setSelectedCategory_(e.target.getValue());
-<a name="line480"></a>  } else if (e.target.getParent() == this.submenu_) {
-<a name="line481"></a>    this.submenu_.setVisible(false);
-<a name="line482"></a>    this.setSelectedSubcategory_(e.target.getValue());
-<a name="line483"></a>  } else if (e.target.getParent() == this.grid_) {
-<a name="line484"></a>    var button = e.target.getElement();
-<a name="line485"></a>    this.selectedChar_ = this.getChar_(button);
-<a name="line486"></a>    this.updateRecents_(this.selectedChar_);
-<a name="line487"></a>  } else if (e.target.getParent() == this.recentgrid_) {
-<a name="line488"></a>    this.selectedChar_ = this.getChar_(e.target.getElement());
-<a name="line489"></a>  }
-<a name="line490"></a>};
-<a name="line491"></a>
-<a name="line492"></a>
-<a name="line493"></a>/**
-<a name="line494"></a> * When user types the characters displays the preview. Enables the OK button,
-<a name="line495"></a> * if the character is valid.
-<a name="line496"></a> * @param {goog.events.Event} e Event for typing in input field.
-<a name="line497"></a> * @private
-<a name="line498"></a> */
-<a name="line499"></a>goog.ui.CharPicker.prototype.handleInput_ = function(e) {
-<a name="line500"></a>  var ch = this.getInputChar_();
-<a name="line501"></a>  if (ch) {
-<a name="line502"></a>    var unicode = this.getTagFromChar_(ch);
-<a name="line503"></a>    this.zoomEl_.innerHTML = ch;
-<a name="line504"></a>    this.unicodeEl_.innerHTML = unicode;
-<a name="line505"></a>    var coord =
-<a name="line506"></a>        new goog.ui.Tooltip.ElementTooltipPosition(this.input_.getElement());
-<a name="line507"></a>    this.hc_.setPosition(coord);
-<a name="line508"></a>    this.hc_.triggerForElement(this.input_.getElement());
-<a name="line509"></a>    this.okbutton_.setEnabled(true);
-<a name="line510"></a>  } else {
-<a name="line511"></a>    this.hc_.cancelTrigger();
-<a name="line512"></a>    this.hc_.setVisible(false);
-<a name="line513"></a>    this.okbutton_.setEnabled(false);
-<a name="line514"></a>  }
-<a name="line515"></a>};
-<a name="line516"></a>
-<a name="line517"></a>
-<a name="line518"></a>/**
-<a name="line519"></a> * On OK click accepts the character and updates the recent char list.
-<a name="line520"></a> * @param {goog.events.Event} opt_event Event for click on OK button.
-<a name="line521"></a> * @return {boolean} Indicates whether to propagate event.
-<a name="line522"></a> * @private
-<a name="line523"></a> */
-<a name="line524"></a>goog.ui.CharPicker.prototype.handleOkClick_ = function(opt_event) {
-<a name="line525"></a>  var ch = this.getInputChar_();
-<a name="line526"></a>  if (ch &amp;&amp; ch.charCodeAt(0)) {
-<a name="line527"></a>    this.selectedChar_ = ch;
-<a name="line528"></a>    this.updateRecents_(ch);
-<a name="line529"></a>    return true;
-<a name="line530"></a>  }
-<a name="line531"></a>  return false;
+<a name="line468"></a>/**
+<a name="line469"></a> * On scroll, updates the grid with characters correct to the scroll position.
+<a name="line470"></a> * @param {goog.events.Event} e Scroll event to handle.
+<a name="line471"></a> * @private
+<a name="line472"></a> */
+<a name="line473"></a>goog.ui.CharPicker.prototype.handleScroll_ = function(e) {
+<a name="line474"></a>  var height = e.target.scrollHeight;
+<a name="line475"></a>  var top = e.target.scrollTop;
+<a name="line476"></a>  var itempos = Math.ceil(top * this.items.length / (this.columnCount_ *
+<a name="line477"></a>      height)) * this.columnCount_;
+<a name="line478"></a>  if (this.itempos != itempos) {
+<a name="line479"></a>    this.itempos = itempos;
+<a name="line480"></a>    this.modifyGridWithItems_(this.grid_, this.items, itempos);
+<a name="line481"></a>  }
+<a name="line482"></a>  e.stopPropagation();
+<a name="line483"></a>};
+<a name="line484"></a>
+<a name="line485"></a>
+<a name="line486"></a>/**
+<a name="line487"></a> * On a menu click, sets correct character set in the grid; on a grid click
+<a name="line488"></a> * accept the character as the selected one and adds to recent selection, if not
+<a name="line489"></a> * already present.
+<a name="line490"></a> * @param {goog.events.Event} e Event for the click on menus or grid.
+<a name="line491"></a> * @private
+<a name="line492"></a> */
+<a name="line493"></a>goog.ui.CharPicker.prototype.handleSelectedItem_ = function(e) {
+<a name="line494"></a>  if (e.target.getParent() == this.menu_) {
+<a name="line495"></a>    this.menu_.setVisible(false);
+<a name="line496"></a>    this.setSelectedCategory_(e.target.getValue());
+<a name="line497"></a>  } else if (e.target.getParent() == this.submenu_) {
+<a name="line498"></a>    this.submenu_.setVisible(false);
+<a name="line499"></a>    this.setSelectedSubcategory_(e.target.getValue());
+<a name="line500"></a>  } else if (e.target.getParent() == this.grid_) {
+<a name="line501"></a>    var button = e.target.getElement();
+<a name="line502"></a>    this.selectedChar_ = this.getChar_(button);
+<a name="line503"></a>    this.updateRecents_(this.selectedChar_);
+<a name="line504"></a>  } else if (e.target.getParent() == this.recentgrid_) {
+<a name="line505"></a>    this.selectedChar_ = this.getChar_(e.target.getElement());
+<a name="line506"></a>  }
+<a name="line507"></a>};
+<a name="line508"></a>
+<a name="line509"></a>
+<a name="line510"></a>/**
+<a name="line511"></a> * When user types the characters displays the preview. Enables the OK button,
+<a name="line512"></a> * if the character is valid.
+<a name="line513"></a> * @param {goog.events.Event} e Event for typing in input field.
+<a name="line514"></a> * @private
+<a name="line515"></a> */
+<a name="line516"></a>goog.ui.CharPicker.prototype.handleInput_ = function(e) {
+<a name="line517"></a>  var ch = this.getInputChar_();
+<a name="line518"></a>  if (ch) {
+<a name="line519"></a>    var unicode = this.getTagFromChar_(ch);
+<a name="line520"></a>    this.zoomEl_.innerHTML = ch;
+<a name="line521"></a>    this.unicodeEl_.innerHTML = unicode;
+<a name="line522"></a>    var coord =
+<a name="line523"></a>        new goog.ui.Tooltip.ElementTooltipPosition(this.input_.getElement());
+<a name="line524"></a>    this.hc_.setPosition(coord);
+<a name="line525"></a>    this.hc_.triggerForElement(this.input_.getElement());
+<a name="line526"></a>    this.okbutton_.setEnabled(true);
+<a name="line527"></a>  } else {
+<a name="line528"></a>    this.hc_.cancelTrigger();
+<a name="line529"></a>    this.hc_.setVisible(false);
+<a name="line530"></a>    this.okbutton_.setEnabled(false);
+<a name="line531"></a>  }
 <a name="line532"></a>};
 <a name="line533"></a>
 <a name="line534"></a>
 <a name="line535"></a>/**
-<a name="line536"></a> * Behaves exactly like the OK button on Enter key.
-<a name="line537"></a> * @param {goog.events.KeyEvent} e Event for enter on the input field.
+<a name="line536"></a> * On OK click accepts the character and updates the recent char list.
+<a name="line537"></a> * @param {goog.events.Event} opt_event Event for click on OK button.
 <a name="line538"></a> * @return {boolean} Indicates whether to propagate event.
 <a name="line539"></a> * @private
 <a name="line540"></a> */
-<a name="line541"></a>goog.ui.CharPicker.prototype.handleEnter_ = function(e) {
-<a name="line542"></a>  if (e.keyCode == goog.events.KeyCodes.ENTER) {
-<a name="line543"></a>    return this.handleOkClick_() ?
-<a name="line544"></a>        this.dispatchEvent(goog.ui.Component.EventType.ACTION): false;
-<a name="line545"></a>  }
-<a name="line546"></a>};
-<a name="line547"></a>
-<a name="line548"></a>
-<a name="line549"></a>/**
-<a name="line550"></a> * Gets the character from the event target.
-<a name="line551"></a> * @param {Element} e Event target containing the &#39;char&#39; attribute.
-<a name="line552"></a> * @return {string} The character specified in the event.
-<a name="line553"></a> * @private
-<a name="line554"></a> */
-<a name="line555"></a>goog.ui.CharPicker.prototype.getChar_ = function(e) {
-<a name="line556"></a>  return e.getAttribute(&#39;char&#39;);
-<a name="line557"></a>};
-<a name="line558"></a>
-<a name="line559"></a>
-<a name="line560"></a>/**
-<a name="line561"></a> * Creates a menu entry for either the category listing or subcategory listing.
-<a name="line562"></a> * @param {number} id Id to be used for the entry.
-<a name="line563"></a> * @param {string} caption Text displayed for the menu item.
-<a name="line564"></a> * @return {goog.ui.MenuItem} Menu item to be added to the menu listing.
-<a name="line565"></a> * @private
-<a name="line566"></a> */
-<a name="line567"></a>goog.ui.CharPicker.prototype.createMenuItem_ = function(id, caption) {
-<a name="line568"></a>  var item = new goog.ui.MenuItem(caption);
-<a name="line569"></a>  item.setValue(id);
-<a name="line570"></a>  item.setVisible(true);
-<a name="line571"></a>  return item;
-<a name="line572"></a>};
-<a name="line573"></a>
-<a name="line574"></a>
-<a name="line575"></a>/**
-<a name="line576"></a> * Sets the category and updates the submenu items and grid accordingly.
-<a name="line577"></a> * @param {number} category Category index used to index the data tables.
-<a name="line578"></a> * @param {number} opt_subcategory Subcategory index used with category index.
-<a name="line579"></a> * @private
-<a name="line580"></a> */
-<a name="line581"></a>goog.ui.CharPicker.prototype.setSelectedCategory_ = function(category,
-<a name="line582"></a>                                                             opt_subcategory) {
-<a name="line583"></a>  this.category = category;
-<a name="line584"></a>  this.menubutton_.setCaption(goog.i18n.charPickerData.Categories[category]);
-<a name="line585"></a>  while (this.submenu_.hasChildren()) {
-<a name="line586"></a>    this.submenu_.removeChildAt(0, true).dispose();
-<a name="line587"></a>  }
-<a name="line588"></a>
-<a name="line589"></a>  var subcategories = goog.i18n.charPickerData.Subcategories[category];
-<a name="line590"></a>  for (var i = 0; i &lt; subcategories.length; i++) {
-<a name="line591"></a>    var subtitle =
-<a name="line592"></a>        (goog.i18n.charPickerData.CharList[category][i].length == 0);
-<a name="line593"></a>    var item = this.createMenuItem_(i, subcategories[i]);
-<a name="line594"></a>    this.submenu_.addChild(item, true);
-<a name="line595"></a>  }
-<a name="line596"></a>  this.setSelectedSubcategory_(opt_subcategory || 0);
-<a name="line597"></a>};
-<a name="line598"></a>
-<a name="line599"></a>
-<a name="line600"></a>/**
-<a name="line601"></a> * Sets the subcategory and updates the grid accordingly.
-<a name="line602"></a> * @param {number} subcategory Sub-category index used to index the data tables.
-<a name="line603"></a> * @private
-<a name="line604"></a> */
-<a name="line605"></a>goog.ui.CharPicker.prototype.setSelectedSubcategory_ = function(subcategory) {
-<a name="line606"></a>  var name =
-<a name="line607"></a>      goog.i18n.charPickerData.Subcategories[this.category][subcategory];
-<a name="line608"></a>  this.submenubutton_.setCaption(name);
-<a name="line609"></a>  this.setSelectedGrid_(this.category, subcategory);
-<a name="line610"></a>};
-<a name="line611"></a>
-<a name="line612"></a>
-<a name="line613"></a>/**
-<a name="line614"></a> * Updates the grid according to a given category and subcategory.
-<a name="line615"></a> * @param {number} category Index to the category table.
-<a name="line616"></a> * @param {number} subcategory Index to the subcategory table.
-<a name="line617"></a> * @private
-<a name="line618"></a> */
-<a name="line619"></a>goog.ui.CharPicker.prototype.setSelectedGrid_ = function(category,
-<a name="line620"></a>     subcategory) {
-<a name="line621"></a>  var str = goog.i18n.charPickerData.CharList[category][subcategory];
-<a name="line622"></a>  var content = this.decompressor_.toCharList(str);
-<a name="line623"></a>  this.updateGrid_(this.grid_, content);
-<a name="line624"></a>};
-<a name="line625"></a>
-<a name="line626"></a>
-<a name="line627"></a>/**
-<a name="line628"></a> * Updates the grid with new character list.
-<a name="line629"></a> * @param {goog.ui.Component} grid The grid which is updated with a new set of
-<a name="line630"></a> *     characters.
-<a name="line631"></a> * @param {Array.&lt;string&gt;} items Characters to be added to the grid.
-<a name="line632"></a> * @private
-<a name="line633"></a> */
-<a name="line634"></a>goog.ui.CharPicker.prototype.updateGrid_ = function(grid, items) {
-<a name="line635"></a>  if (grid == this.grid_) {
-<a name="line636"></a>    /**
-<a name="line637"></a>     * @desc The message used when there are invisible characters like space
-<a name="line638"></a>     *     or format control characters.
-<a name="line639"></a>     */
-<a name="line640"></a>    var MSG_PLEASE_HOVER =
-<a name="line641"></a>        goog.getMsg(&#39;Please hover over each cell for the character name.&#39;);
-<a name="line642"></a>
-<a name="line643"></a>    this.notice_.getElement().innerHTML = goog.i18n.uChar.toName(items[0]) ?
-<a name="line644"></a>        MSG_PLEASE_HOVER : &#39;&#39;;
-<a name="line645"></a>    this.items = items;
-<a name="line646"></a>    if (this.stickwrap_.offsetHeight &gt; 0) {
-<a name="line647"></a>      this.stick_.style.height =
-<a name="line648"></a>          this.stickwrap_.offsetHeight * items.length / this.gridsize_ + &#39;px&#39;;
-<a name="line649"></a>    } else {
-<a name="line650"></a>      // This is the last ditch effort if height is not avaialble.
-<a name="line651"></a>      // Maximum of 3em is assumed to the the cell height. Extra space after
-<a name="line652"></a>      // last character in the grid is OK.
-<a name="line653"></a>      this.stick_.style.height = 3 * this.columnCount_ * items.length /
-<a name="line654"></a>          this.gridsize_ + &#39;em&#39;;
-<a name="line655"></a>    }
-<a name="line656"></a>    this.stickwrap_.scrollTop = 0;
-<a name="line657"></a>  }
-<a name="line658"></a>
-<a name="line659"></a>  this.modifyGridWithItems_(grid, items, 0);
-<a name="line660"></a>};
-<a name="line661"></a>
-<a name="line662"></a>
-<a name="line663"></a>/**
-<a name="line664"></a> * Updates the grid with new character list for a given starting point.
-<a name="line665"></a> * @param {goog.ui.Component} grid The grid which is updated with a new set of
-<a name="line666"></a> *     characters.
-<a name="line667"></a> * @param {Array.&lt;string&gt;} items Characters to be added to the grid.
-<a name="line668"></a> * @param {number} start The index from which the characters should be
-<a name="line669"></a> *     displayed.
-<a name="line670"></a> * @private
-<a name="line671"></a> */
-<a name="line672"></a>goog.ui.CharPicker.prototype.modifyGridWithItems_ = function(grid, items,
-<a name="line673"></a>    start) {
-<a name="line674"></a>  for (var buttonpos = 0, itempos = start;
-<a name="line675"></a>       buttonpos &lt; grid.buttoncount &amp;&amp; itempos &lt; items.length;
-<a name="line676"></a>       buttonpos++, itempos++) {
-<a name="line677"></a>    this.modifyCharNode_(grid.getChildAt(buttonpos), items[itempos]);
-<a name="line678"></a>  }
+<a name="line541"></a>goog.ui.CharPicker.prototype.handleOkClick_ = function(opt_event) {
+<a name="line542"></a>  var ch = this.getInputChar_();
+<a name="line543"></a>  if (ch &amp;&amp; ch.charCodeAt(0)) {
+<a name="line544"></a>    this.selectedChar_ = ch;
+<a name="line545"></a>    this.updateRecents_(ch);
+<a name="line546"></a>    return true;
+<a name="line547"></a>  }
+<a name="line548"></a>  return false;
+<a name="line549"></a>};
+<a name="line550"></a>
+<a name="line551"></a>
+<a name="line552"></a>/**
+<a name="line553"></a> * Behaves exactly like the OK button on Enter key.
+<a name="line554"></a> * @param {goog.events.KeyEvent} e Event for enter on the input field.
+<a name="line555"></a> * @return {boolean} Indicates whether to propagate event.
+<a name="line556"></a> * @private
+<a name="line557"></a> */
+<a name="line558"></a>goog.ui.CharPicker.prototype.handleEnter_ = function(e) {
+<a name="line559"></a>  if (e.keyCode == goog.events.KeyCodes.ENTER) {
+<a name="line560"></a>    return this.handleOkClick_() ?
+<a name="line561"></a>        this.dispatchEvent(goog.ui.Component.EventType.ACTION): false;
+<a name="line562"></a>  }
+<a name="line563"></a>};
+<a name="line564"></a>
+<a name="line565"></a>
+<a name="line566"></a>/**
+<a name="line567"></a> * Gets the character from the event target.
+<a name="line568"></a> * @param {Element} e Event target containing the &#39;char&#39; attribute.
+<a name="line569"></a> * @return {string} The character specified in the event.
+<a name="line570"></a> * @private
+<a name="line571"></a> */
+<a name="line572"></a>goog.ui.CharPicker.prototype.getChar_ = function(e) {
+<a name="line573"></a>  return e.getAttribute(&#39;char&#39;);
+<a name="line574"></a>};
+<a name="line575"></a>
+<a name="line576"></a>
+<a name="line577"></a>/**
+<a name="line578"></a> * Creates a menu entry for either the category listing or subcategory listing.
+<a name="line579"></a> * @param {number} id Id to be used for the entry.
+<a name="line580"></a> * @param {string} caption Text displayed for the menu item.
+<a name="line581"></a> * @return {goog.ui.MenuItem} Menu item to be added to the menu listing.
+<a name="line582"></a> * @private
+<a name="line583"></a> */
+<a name="line584"></a>goog.ui.CharPicker.prototype.createMenuItem_ = function(id, caption) {
+<a name="line585"></a>  var item = new goog.ui.MenuItem(caption);
+<a name="line586"></a>  item.setValue(id);
+<a name="line587"></a>  item.setVisible(true);
+<a name="line588"></a>  return item;
+<a name="line589"></a>};
+<a name="line590"></a>
+<a name="line591"></a>
+<a name="line592"></a>/**
+<a name="line593"></a> * Sets the category and updates the submenu items and grid accordingly.
+<a name="line594"></a> * @param {number} category Category index used to index the data tables.
+<a name="line595"></a> * @param {number} opt_subcategory Subcategory index used with category index.
+<a name="line596"></a> * @private
+<a name="line597"></a> */
+<a name="line598"></a>goog.ui.CharPicker.prototype.setSelectedCategory_ = function(category,
+<a name="line599"></a>                                                             opt_subcategory) {
+<a name="line600"></a>  this.category = category;
+<a name="line601"></a>  this.menubutton_.setCaption(this.data_.categories[category]);
+<a name="line602"></a>  while (this.submenu_.hasChildren()) {
+<a name="line603"></a>    this.submenu_.removeChildAt(0, true).dispose();
+<a name="line604"></a>  }
+<a name="line605"></a>
+<a name="line606"></a>  var subcategories = this.data_.subcategories[category];
+<a name="line607"></a>  var charList = this.data_.charList[category];
+<a name="line608"></a>  for (var i = 0; i &lt; subcategories.length; i++) {
+<a name="line609"></a>    var subtitle = charList[i].length == 0;
+<a name="line610"></a>    var item = this.createMenuItem_(i, subcategories[i]);
+<a name="line611"></a>    this.submenu_.addChild(item, true);
+<a name="line612"></a>  }
+<a name="line613"></a>  this.setSelectedSubcategory_(opt_subcategory || 0);
+<a name="line614"></a>};
+<a name="line615"></a>
+<a name="line616"></a>
+<a name="line617"></a>/**
+<a name="line618"></a> * Sets the subcategory and updates the grid accordingly.
+<a name="line619"></a> * @param {number} subcategory Sub-category index used to index the data tables.
+<a name="line620"></a> * @private
+<a name="line621"></a> */
+<a name="line622"></a>goog.ui.CharPicker.prototype.setSelectedSubcategory_ = function(subcategory) {
+<a name="line623"></a>  var subcategories = this.data_.subcategories;
+<a name="line624"></a>  var name = subcategories[this.category][subcategory];
+<a name="line625"></a>  this.submenubutton_.setCaption(name);
+<a name="line626"></a>  this.setSelectedGrid_(this.category, subcategory);
+<a name="line627"></a>};
+<a name="line628"></a>
+<a name="line629"></a>
+<a name="line630"></a>/**
+<a name="line631"></a> * Updates the grid according to a given category and subcategory.
+<a name="line632"></a> * @param {number} category Index to the category table.
+<a name="line633"></a> * @param {number} subcategory Index to the subcategory table.
+<a name="line634"></a> * @private
+<a name="line635"></a> */
+<a name="line636"></a>goog.ui.CharPicker.prototype.setSelectedGrid_ = function(category,
+<a name="line637"></a>     subcategory) {
+<a name="line638"></a>  var charLists = this.data_.charList;
+<a name="line639"></a>  var charListStr = charLists[category][subcategory];
+<a name="line640"></a>  var content = this.decompressor_.toCharList(charListStr);
+<a name="line641"></a>  this.updateGrid_(this.grid_, content);
+<a name="line642"></a>};
+<a name="line643"></a>
+<a name="line644"></a>
+<a name="line645"></a>/**
+<a name="line646"></a> * Updates the grid with new character list.
+<a name="line647"></a> * @param {goog.ui.Component} grid The grid which is updated with a new set of
+<a name="line648"></a> *     characters.
+<a name="line649"></a> * @param {Array.&lt;string&gt;} items Characters to be added to the grid.
+<a name="line650"></a> * @private
+<a name="line651"></a> */
+<a name="line652"></a>goog.ui.CharPicker.prototype.updateGrid_ = function(grid, items) {
+<a name="line653"></a>  if (grid == this.grid_) {
+<a name="line654"></a>    /**
+<a name="line655"></a>     * @desc The message used when there are invisible characters like space
+<a name="line656"></a>     *     or format control characters.
+<a name="line657"></a>     */
+<a name="line658"></a>    var MSG_PLEASE_HOVER =
+<a name="line659"></a>        goog.getMsg(&#39;Please hover over each cell for the character name.&#39;);
+<a name="line660"></a>
+<a name="line661"></a>    this.notice_.getElement().innerHTML = goog.i18n.uChar.toName(items[0]) ?
+<a name="line662"></a>        MSG_PLEASE_HOVER : &#39;&#39;;
+<a name="line663"></a>    this.items = items;
+<a name="line664"></a>    if (this.stickwrap_.offsetHeight &gt; 0) {
+<a name="line665"></a>      this.stick_.style.height =
+<a name="line666"></a>          this.stickwrap_.offsetHeight * items.length / this.gridsize_ + &#39;px&#39;;
+<a name="line667"></a>    } else {
+<a name="line668"></a>      // This is the last ditch effort if height is not avaialble.
+<a name="line669"></a>      // Maximum of 3em is assumed to the the cell height. Extra space after
+<a name="line670"></a>      // last character in the grid is OK.
+<a name="line671"></a>      this.stick_.style.height = 3 * this.columnCount_ * items.length /
+<a name="line672"></a>          this.gridsize_ + &#39;em&#39;;
+<a name="line673"></a>    }
+<a name="line674"></a>    this.stickwrap_.scrollTop = 0;
+<a name="line675"></a>  }
+<a name="line676"></a>
+<a name="line677"></a>  this.modifyGridWithItems_(grid, items, 0);
+<a name="line678"></a>};
 <a name="line679"></a>
-<a name="line680"></a>  for (;buttonpos &lt; grid.buttoncount; buttonpos++) {
-<a name="line681"></a>    grid.getChildAt(buttonpos).setVisible(false);
-<a name="line682"></a>  }
-<a name="line683"></a>  var first = grid.getChildAt(0);
-<a name="line684"></a>  first.getElement().setAttribute(&#39;tabindex&#39;, 0);
-<a name="line685"></a>};
-<a name="line686"></a>
-<a name="line687"></a>
-<a name="line688"></a>/**
-<a name="line689"></a> * Creates the grid for characters to displayed for selection.
-<a name="line690"></a> * @param {goog.ui.Component} grid The grid which is updated with a new set of
-<a name="line691"></a> *     characters.
-<a name="line692"></a> * @private
-<a name="line693"></a> */
-<a name="line694"></a>goog.ui.CharPicker.prototype.populateGridWithButtons_ = function(grid) {
-<a name="line695"></a>  for (var i = 0; i &lt; grid.buttoncount; i++) {
-<a name="line696"></a>    var button = new goog.ui.Button(&#39; &#39;,
-<a name="line697"></a>                                    goog.ui.FlatButtonRenderer.getInstance());
-<a name="line698"></a>    grid.addChild(button, true);
-<a name="line699"></a>    button.setVisible(false);
-<a name="line700"></a>
-<a name="line701"></a>    var buttonEl = button.getElement();
-<a name="line702"></a>    goog.dom.a11y.setRole(buttonEl, &#39;gridcell&#39;);
-<a name="line703"></a>  }
-<a name="line704"></a>};
+<a name="line680"></a>
+<a name="line681"></a>/**
+<a name="line682"></a> * Updates the grid with new character list for a given starting point.
+<a name="line683"></a> * @param {goog.ui.Component} grid The grid which is updated with a new set of
+<a name="line684"></a> *     characters.
+<a name="line685"></a> * @param {Array.&lt;string&gt;} items Characters to be added to the grid.
+<a name="line686"></a> * @param {number} start The index from which the characters should be
+<a name="line687"></a> *     displayed.
+<a name="line688"></a> * @private
+<a name="line689"></a> */
+<a name="line690"></a>goog.ui.CharPicker.prototype.modifyGridWithItems_ = function(grid, items,
+<a name="line691"></a>    start) {
+<a name="line692"></a>  for (var buttonpos = 0, itempos = start;
+<a name="line693"></a>       buttonpos &lt; grid.buttoncount &amp;&amp; itempos &lt; items.length;
+<a name="line694"></a>       buttonpos++, itempos++) {
+<a name="line695"></a>    this.modifyCharNode_(grid.getChildAt(buttonpos), items[itempos]);
+<a name="line696"></a>  }
+<a name="line697"></a>
+<a name="line698"></a>  for (;buttonpos &lt; grid.buttoncount; buttonpos++) {
+<a name="line699"></a>    grid.getChildAt(buttonpos).setVisible(false);
+<a name="line700"></a>  }
+<a name="line701"></a>  var first = grid.getChildAt(0);
+<a name="line702"></a>  first.getElement().setAttribute(&#39;tabindex&#39;, 0);
+<a name="line703"></a>};
+<a name="line704"></a>
 <a name="line705"></a>
-<a name="line706"></a>
-<a name="line707"></a>/**
-<a name="line708"></a> * Updates the grid cell with new character.
-<a name="line709"></a> * @param {goog.ui.Component} button This button is proped up for new character.
-<a name="line710"></a> * @param {string} ch Character to be displayed by the button.
-<a name="line711"></a> * @private
-<a name="line712"></a> */
-<a name="line713"></a>goog.ui.CharPicker.prototype.modifyCharNode_ = function(button, ch) {
-<a name="line714"></a>  var text = this.displayChar_(ch);
-<a name="line715"></a>  var buttonEl = button.getElement();
-<a name="line716"></a>  buttonEl.innerHTML = text;
-<a name="line717"></a>  buttonEl.setAttribute(&#39;char&#39;, ch);
-<a name="line718"></a>  buttonEl.removeAttribute(&#39;tabindex&#39;);
-<a name="line719"></a>  button.setVisible(true);
-<a name="line720"></a>};
-<a name="line721"></a>
-<a name="line722"></a>
-<a name="line723"></a>/**
-<a name="line724"></a> * Adds a given character to the recent character list.
-<a name="line725"></a> * @param {string} character Character to be added to the recent list.
-<a name="line726"></a> * @private
-<a name="line727"></a> */
-<a name="line728"></a>goog.ui.CharPicker.prototype.updateRecents_ = function(character) {
-<a name="line729"></a>  if (character &amp;&amp; character.charCodeAt(0) &amp;&amp;
-<a name="line730"></a>      !goog.array.contains(this.recents_, character)) {
-<a name="line731"></a>    this.recents_.unshift(character);
-<a name="line732"></a>    if (this.recents_.length &gt; this.recentwidth_) {
-<a name="line733"></a>      this.recents_.pop();
-<a name="line734"></a>    }
-<a name="line735"></a>    this.updateGrid_(this.recentgrid_, this.recents_);
-<a name="line736"></a>  }
-<a name="line737"></a>};
-<a name="line738"></a>
+<a name="line706"></a>/**
+<a name="line707"></a> * Creates the grid for characters to displayed for selection.
+<a name="line708"></a> * @param {goog.ui.Component} grid The grid which is updated with a new set of
+<a name="line709"></a> *     characters.
+<a name="line710"></a> * @private
+<a name="line711"></a> */
+<a name="line712"></a>goog.ui.CharPicker.prototype.populateGridWithButtons_ = function(grid) {
+<a name="line713"></a>  for (var i = 0; i &lt; grid.buttoncount; i++) {
+<a name="line714"></a>    var button = new goog.ui.Button(&#39; &#39;,
+<a name="line715"></a>                                    goog.ui.FlatButtonRenderer.getInstance());
+<a name="line716"></a>    grid.addChild(button, true);
+<a name="line717"></a>    button.setVisible(false);
+<a name="line718"></a>
+<a name="line719"></a>    var buttonEl = button.getElement();
+<a name="line720"></a>    goog.dom.a11y.setRole(buttonEl, &#39;gridcell&#39;);
+<a name="line721"></a>  }
+<a name="line722"></a>};
+<a name="line723"></a>
+<a name="line724"></a>
+<a name="line725"></a>/**
+<a name="line726"></a> * Updates the grid cell with new character.
+<a name="line727"></a> * @param {goog.ui.Component} button This button is proped up for new character.
+<a name="line728"></a> * @param {string} ch Character to be displayed by the button.
+<a name="line729"></a> * @private
+<a name="line730"></a> */
+<a name="line731"></a>goog.ui.CharPicker.prototype.modifyCharNode_ = function(button, ch) {
+<a name="line732"></a>  var text = this.displayChar_(ch);
+<a name="line733"></a>  var buttonEl = button.getElement();
+<a name="line734"></a>  buttonEl.innerHTML = text;
+<a name="line735"></a>  buttonEl.setAttribute(&#39;char&#39;, ch);
+<a name="line736"></a>  buttonEl.removeAttribute(&#39;tabindex&#39;);
+<a name="line737"></a>  button.setVisible(true);
+<a name="line738"></a>};
 <a name="line739"></a>
-<a name="line740"></a>/**
-<a name="line741"></a> * Gets the user inputed unicode character.
-<a name="line742"></a> * @return {string} Unicode character inputed by user.
-<a name="line743"></a> * @private
-<a name="line744"></a> */
-<a name="line745"></a>goog.ui.CharPicker.prototype.getInputChar_ = function() {
-<a name="line746"></a>  var text = this.input_.getValue();
-<a name="line747"></a>  var code = parseInt(text, 16);
-<a name="line748"></a>  return /** @type {string} */ (goog.i18n.uChar.fromCharCode(code));
-<a name="line749"></a>};
-<a name="line750"></a>
-<a name="line751"></a>
-<a name="line752"></a>/**
-<a name="line753"></a> * Gets the description text for the given character.
-<a name="line754"></a> * @param {string} ch Character whose description is fetched.
-<a name="line755"></a> * @return {string} The description of the given character.
-<a name="line756"></a> * @private
-<a name="line757"></a> */
-<a name="line758"></a>goog.ui.CharPicker.prototype.getTagFromChar_ = function(ch) {
-<a name="line759"></a>  var unicodetext = goog.i18n.uChar.toHexString(ch);
-<a name="line760"></a>  var name = goog.i18n.uChar.toName(ch);
-<a name="line761"></a>  if (name) {
-<a name="line762"></a>    unicodetext += &#39; &#39; + name;
-<a name="line763"></a>  }
-<a name="line764"></a>  return unicodetext;
-<a name="line765"></a>};
-<a name="line766"></a>
-<a name="line767"></a>
-<a name="line768"></a>/**
-<a name="line769"></a> * Gets the display character for the given character.
-<a name="line770"></a> * @param {string} ch Character whose display is fetched.
-<a name="line771"></a> * @return {string} The display of the given character.
-<a name="line772"></a> * @private
-<a name="line773"></a> */
-<a name="line774"></a>goog.ui.CharPicker.prototype.displayChar_ = function(ch) {
-<a name="line775"></a>  return this.layoutAlteringChars_.contains(ch) ? &#39;\u00A0&#39; : ch;
-<a name="line776"></a>};
+<a name="line740"></a>
+<a name="line741"></a>/**
+<a name="line742"></a> * Adds a given character to the recent character list.
+<a name="line743"></a> * @param {string} character Character to be added to the recent list.
+<a name="line744"></a> * @private
+<a name="line745"></a> */
+<a name="line746"></a>goog.ui.CharPicker.prototype.updateRecents_ = function(character) {
+<a name="line747"></a>  if (character &amp;&amp; character.charCodeAt(0) &amp;&amp;
+<a name="line748"></a>      !goog.array.contains(this.recents_, character)) {
+<a name="line749"></a>    this.recents_.unshift(character);
+<a name="line750"></a>    if (this.recents_.length &gt; this.recentwidth_) {
+<a name="line751"></a>      this.recents_.pop();
+<a name="line752"></a>    }
+<a name="line753"></a>    this.updateGrid_(this.recentgrid_, this.recents_);
+<a name="line754"></a>  }
+<a name="line755"></a>};
+<a name="line756"></a>
+<a name="line757"></a>
+<a name="line758"></a>/**
+<a name="line759"></a> * Gets the user inputed unicode character.
+<a name="line760"></a> * @return {string} Unicode character inputed by user.
+<a name="line761"></a> * @private
+<a name="line762"></a> */
+<a name="line763"></a>goog.ui.CharPicker.prototype.getInputChar_ = function() {
+<a name="line764"></a>  var text = this.input_.getValue();
+<a name="line765"></a>  var code = parseInt(text, 16);
+<a name="line766"></a>  return /** @type {string} */ (goog.i18n.uChar.fromCharCode(code));
+<a name="line767"></a>};
+<a name="line768"></a>
+<a name="line769"></a>
+<a name="line770"></a>/**
+<a name="line771"></a> * Gets the description text for the given character.
+<a name="line772"></a> * @param {string} ch Character whose description is fetched.
+<a name="line773"></a> * @return {string} The description of the given character.
+<a name="line774"></a> * @private
+<a name="line775"></a> */
+<a name="line776"></a>goog.ui.CharPicker.prototype.getTagFromChar_ = function(ch) {
+<a name="line777"></a>  var unicodetext = goog.i18n.uChar.toHexString(ch);
+<a name="line778"></a>  var name = goog.i18n.uChar.toName(ch);
+<a name="line779"></a>  if (name) {
+<a name="line780"></a>    unicodetext += &#39; &#39; + name;
+<a name="line781"></a>  }
+<a name="line782"></a>  return unicodetext;
+<a name="line783"></a>};
+<a name="line784"></a>
+<a name="line785"></a>
+<a name="line786"></a>/**
+<a name="line787"></a> * Gets the display character for the given character.
+<a name="line788"></a> * @param {string} ch Character whose display is fetched.
+<a name="line789"></a> * @return {string} The display of the given character.
+<a name="line790"></a> * @private
+<a name="line791"></a> */
+<a name="line792"></a>goog.ui.CharPicker.prototype.displayChar_ = function(ch) {
+<a name="line793"></a>  return this.layoutAlteringChars_.contains(ch) ? &#39;\u00A0&#39; : ch;
+<a name="line794"></a>};
 </pre>
 
 

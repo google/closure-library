@@ -80,6 +80,23 @@ goog.graphics.VmlGraphics.VML_NS_ = 'urn:schemas-microsoft-com:vml';
 
 
 /**
+ * The VML behavior URL.
+ * @private
+ * @type {string}
+ */
+goog.graphics.VmlGraphics.VML_IMPORT_ = '#default#VML';
+
+
+/**
+ * Whether the document is using IE8 standards mode, and therefore needs hacks.
+ * @private
+ * @type {boolean}
+ */
+goog.graphics.VmlGraphics.IE8_MODE_ = document.documentMode &&
+    document.documentMode >= 8;
+
+
+/**
  * The coordinate multiplier to allow sub-pixel rendering
  * @type {number}
  */
@@ -157,6 +174,23 @@ goog.graphics.VmlGraphics.toSizeCoord = function(number) {
  */
 goog.graphics.VmlGraphics.toSizePx = function(number) {
   return goog.graphics.VmlGraphics.toSizeCoord(number) + 'px';
+};
+
+
+/**
+ * Sets an attribute on the given VML element, in the way best suited to the
+ * current version of IE.  Should only be used in the goog.graphics package.
+ * @param {Element} element The element to set an attribute
+ *     on.
+ * @param {string} name The name of the attribute to set.
+ * @param {string} value The value to set it to.
+ */
+goog.graphics.VmlGraphics.setAttribute = function(element, name, value) {
+  if (goog.graphics.VmlGraphics.IE8_MODE_) {
+    element[name] = value;
+  } else {
+    element.setAttribute(name, value);
+  }
 };
 
 
@@ -379,8 +413,14 @@ goog.graphics.VmlGraphics.prototype.createDom = function() {
 
   // Add the namespace.
   if (!doc.namespaces[goog.graphics.VmlGraphics.VML_PREFIX_]) {
-    doc.namespaces.add(goog.graphics.VmlGraphics.VML_PREFIX_,
-                       goog.graphics.VmlGraphics.VML_NS_);
+    if (goog.graphics.VmlGraphics.IE8_MODE_) {
+      doc.namespaces.add(goog.graphics.VmlGraphics.VML_PREFIX_,
+                         goog.graphics.VmlGraphics.VML_NS_,
+                         goog.graphics.VmlGraphics.VML_IMPORT_);
+    } else {
+      doc.namespaces.add(goog.graphics.VmlGraphics.VML_PREFIX_,
+                         goog.graphics.VmlGraphics.VML_NS_);
+    }
 
     // We assume that we only need to add the CSS if the namespace was not
     // present
@@ -604,7 +644,7 @@ goog.graphics.VmlGraphics.prototype.drawImage = function(x, y, width, height,
     src, opt_group) {
   var element = this.createVmlElement('image');
   goog.graphics.VmlGraphics.setPositionAndSize(element, x, y, width, height);
-  element.setAttribute('src', src)
+  goog.graphics.VmlGraphics.setAttribute(element, 'src', src);
   var wrapper = new goog.graphics.VmlImageElement(element, this);
   this.append_(wrapper, opt_group);
   return wrapper;
@@ -637,8 +677,8 @@ goog.graphics.VmlGraphics.prototype.drawTextOnLine = function(
              goog.graphics.VmlGraphics.toPosCoord(y1) + 'L' +
              goog.graphics.VmlGraphics.toPosCoord(x2) + ',' +
              goog.graphics.VmlGraphics.toPosCoord(y2) + 'E';
-  pathElement.setAttribute('v', path);
-  pathElement.setAttribute('textpathok', 'true');
+  goog.graphics.VmlGraphics.setAttribute(pathElement, 'v', path);
+  goog.graphics.VmlGraphics.setAttribute(pathElement, 'textpathok', 'true');
 
   var textPathElement = this.createVmlElement('textpath');
   textPathElement.setAttribute('on', 'true');
@@ -646,7 +686,7 @@ goog.graphics.VmlGraphics.prototype.drawTextOnLine = function(
   style.fontSize = font.size * this.getPixelScaleX();
   style.fontFamily = font.family;
   if (align != null) {
-    style.setAttribute('v-text-align', align);
+    style['v-text-align'] = align;
   }
   if (font.bold) {
     style.fontWeight = 'bold';
@@ -654,7 +694,7 @@ goog.graphics.VmlGraphics.prototype.drawTextOnLine = function(
   if (font.italic) {
     style.fontStyle = 'italic';
   }
-  textPathElement.setAttribute('string', text);
+  goog.graphics.VmlGraphics.setAttribute(textPathElement, 'string', text);
 
   shape.appendChild(pathElement);
   shape.appendChild(textPathElement);
@@ -678,8 +718,8 @@ goog.graphics.VmlGraphics.prototype.drawTextOnLine = function(
 goog.graphics.VmlGraphics.prototype.drawPath = function(path, stroke, fill,
     opt_group) {
   var element = this.createFullSizeElement_('shape');
-  element.setAttribute(
-      'path', goog.graphics.VmlGraphics.getVmlPath(path));
+  goog.graphics.VmlGraphics.setAttribute(element, 'path',
+      goog.graphics.VmlGraphics.getVmlPath(path));
 
   var wrapper = new goog.graphics.VmlPathElement(element, this, stroke, fill);
   this.append_(wrapper, opt_group);

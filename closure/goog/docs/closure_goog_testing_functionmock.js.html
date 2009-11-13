@@ -124,6 +124,84 @@ in the global scope with the name specified by functionName.</div>
 
 
   <td>
+    <a name="goog.testing.createConstructorMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">createConstructorMock<span class="args">(<span class="arg">scope</span>,&nbsp;<span class="arg">constructorName</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_testing_MethodMock.html">goog.testing.MethodMock</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Convenience method for creating a mock for a constructor.
+
+<p>When mocking a constructor to return a mocked instance, remember to create
+the instance mock before mocking the constructor. If you mock the constructor
+first, then the mock framework will be unable to examine the prototype chain
+when creating the mock instance.</p>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">scope</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">The scope of the constructor to be mocked out.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">constructorName</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">the name of the constructor we&#39;re going to mock.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_testing_MethodMock.html">goog.testing.MethodMock</a></span></div>&nbsp;
+            the mocked constructor.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_testing_functionmock.js.source.html#line133">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
     <a name="goog.testing.createFunctionMock"></a>
 
 
@@ -180,7 +258,7 @@ in the global scope with the name specified by functionName.</div>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -240,12 +318,12 @@ in the global scope with the name specified by functionName.</div>
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_functionmock.js.source.html#line126">code &raquo;</a>
+     <a href="closure_goog_testing_functionmock.js.source.html#line147">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -267,7 +345,7 @@ in the global scope with the name specified by functionName.</div>
 
 
      <div class="entryOverview">
-       Convenience method for creating a mocks for a method.
+       Convenience method for creating a mock for a method.
      </div>
 
 

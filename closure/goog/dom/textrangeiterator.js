@@ -205,6 +205,18 @@ goog.dom.TextRangeIterator.prototype.next = function() {
 };
 
 
+/** @inheritDoc */
+goog.dom.TextRangeIterator.prototype.skipTag = function() {
+  goog.dom.TextRangeIterator.superClass_.skipTag.apply(this);
+
+  // If the node we are skipping contains the end node, we just skipped past
+  // the end, so we stop the iteration.
+  if (goog.dom.contains(this.node, this.endNode_)) {
+    throw goog.iter.StopIteration;
+  }
+};
+
+
 /**
  * Replace this iterator's values with values from another.
  * @param {goog.dom.TextRangeIterator} other The iterator to copy.

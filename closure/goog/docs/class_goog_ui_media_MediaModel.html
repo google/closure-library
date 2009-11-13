@@ -64,13 +64,13 @@ specification {@link <a href="http://search.yahoo.com/mrss/">http://search.yahoo
 
 The current common data shared by medias is to have URLs, mime types,
 captions, descriptions, thumbnails and players. Some of these may not be
-available, or applications may not want to render them, so {@code null}
-values are allowed. {@code goog.ui.media.MediaRenderer} checks whether the
+available, or applications may not want to render them, so <code>null</code>
+values are allowed. <code>goog.ui.media.MediaRenderer</code> checks whether the
 values are available before creating DOMs for them.
 
 TODO: support asynchronous data models by subclassing
-{@link goog.events.EventTarget} or {@link goog.ds.DataNode}. Understand why
-{@link fava.data.Node} is under fava, and not available in closure. Add
+goog.events.EventTarget or goog.ds.DataNode. Understand why
+fava.data.Node is under fava, and not available in closure. Add
 setters to MediaModel once this is supported.
   </div>
 

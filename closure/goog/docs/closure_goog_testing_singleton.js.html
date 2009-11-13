@@ -53,21 +53,21 @@
 <div class="g-section g-tpl-75-25">
   <div class="g-unit g-first" id="description">
     This module simplifies testing code which uses many stateful
- singletons. The {@link goog.testing.singleton.addSingletonGetter} function
- adds a static {@code getInstance} method to the class, which in addition to
+ singletons. The goog.testing.singleton.addSingletonGetter function
+ adds a static <code>getInstance</code> method to the class, which in addition to
  creating and returning a singleton instance, registers it in a global
- repository. This way the effect of all {@code getInstance} calls can be
- simply reset in {@code tearDown} without knowing what singletons were
+ repository. This way the effect of all <code>getInstance</code> calls can be
+ simply reset in <code>tearDown</code> without knowing what singletons were
  instantiated in the tests.
 
  Usage:
  <ol>
- <li>Load {@code base.js}.
- <li>Load {@code goog.testing.singleton}. It overrides
- {@link goog.addSingletonGetter} by
- {@link goog.testing.addSingletonGetter}.
+ <li>Load <code>base.js</code>.
+ <li>Load <code>goog.testing.singleton</code>. It overrides
+ goog.addSingletonGetter by
+ goog.testing.addSingletonGetter.
  <li>Load the code to test.
- <li>Call {@link goog.testing.singleton.reset} in the {@code tearDown}.
+ <li>Call goog.testing.singleton.reset in the <code>tearDown</code>.
  </li></li></li></li></ol>
   </div>
   
@@ -130,7 +130,7 @@
 
 
      <div class="entryOverview">
-       Adds a {@code getInstance} static method to the given class which in addition
+       Adds a <code>getInstance</code> static method to the given class which in addition
 to always returning the same instance object, registers the constructor in a
 global array.
      </div>

@@ -30,6 +30,7 @@ limitations under the License.
   goog.require('goog.testing.FunctionMock');
   goog.require('goog.testing.GlobalFunctionMock');
   goog.require('goog.testing.MethodMock');
+  goog.require('goog.testing.StrictMock');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -272,6 +273,60 @@ function testMethodMockCanOnlyMockExistingMethods() {
   assertThrows(function() {
     goog.testing.createMethodMock(mynamespace, 'doesNotExist');
   });
+}
+
+//----- Functions for goog.testing.createConstructorMock to mock
+
+var constructornamespace = {};
+
+constructornamespace.MyConstructor = function() {
+};
+
+constructornamespace.MyConstructor.prototype.myMethod = function() {
+  return 'I should be mocked.';
+};
+
+constructornamespace.MyConstructorWithArgument = function(argument) {
+  this.argument_ = argument;
+};
+
+constructornamespace.MyConstructorWithArgument.prototype.myMethod = function() {
+  return this.argument_;
+};
+
+function testConstructorMock() {
+  var mockObject =
+      new goog.testing.StrictMock(constructornamespace.MyConstructor);
+  var mockConstructor = goog.testing.createConstructorMock(
+      constructornamespace, 'MyConstructor');
+  mockConstructor().$returns(mockObject);
+  mockObject.myMethod().$returns('I have been mocked!');
+
+  mockConstructor.$replay();
+  mockObject.$replay();
+  assertEquals('I have been mocked!',
+      new constructornamespace.MyConstructor().myMethod());
+  mockConstructor.$verify();
+  mockObject.$verify();
+  mockConstructor.$tearDown();
+}
+
+function testConstructorMockWithArgument() {
+  var mockObject = new goog.testing.StrictMock(
+      constructornamespace.MyConstructorWithArgument);
+  var mockConstructor = goog.testing.createConstructorMock(
+      constructornamespace, 'MyConstructorWithArgument');
+  mockConstructor(goog.testing.mockmatchers.isString).$returns(mockObject);
+  mockObject.myMethod().$returns('I have been mocked!');
+
+  mockConstructor.$replay();
+  mockObject.$replay();
+  assertEquals('I have been mocked!',
+      new constructornamespace.MyConstructorWithArgument('I should be mocked.')
+          .myMethod());
+  mockConstructor.$verify();
+  mockObject.$verify();
+  mockConstructor.$tearDown();
 }
 
 //----- Helper assertions

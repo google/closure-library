@@ -55,16 +55,16 @@
     provides a reusable FlickrSet photo UI component given a public
  FlickrSetModel.
 
- goog.ui.media.FlickrSet is actually a {@link goog.ui.ControlRenderer}, a
+ goog.ui.media.FlickrSet is actually a goog.ui.ControlRenderer, a
  stateless class - that could/should be used as a Singleton with the static
- method {@code goog.ui.media.FlickrSet.getInstance} -, that knows how to
- render Flickr sets. It is designed to be used with a {@link goog.ui.Control},
+ method <code>goog.ui.media.FlickrSet.getInstance</code> -, that knows how to
+ render Flickr sets. It is designed to be used with a goog.ui.Control,
  which will actually control the media renderer and provide the
- {@link goog.ui.Component} base. This design guarantees that all different
+ goog.ui.Component base. This design guarantees that all different
  types of medias will behave alike but will look different.
 
- goog.ui.media.FlickrSet expects a {@code goog.ui.media.FlickrSetModel} on
- {@code goog.ui.Control.getModel} as data models, and renders a flash object
+ goog.ui.media.FlickrSet expects a <code>goog.ui.media.FlickrSetModel</code> on
+ <code>goog.ui.Control.getModel</code> as data models, and renders a flash object
  that will show the contents of that set.
 
  Example of usage:
@@ -77,9 +77,9 @@
  FlickrSet medias currently support the following states:
 
  <ul>
- <li> {@link goog.ui.Component.State.DISABLED}: shows &#39;flash not available&#39;
- <li> {@link goog.ui.Component.State.HOVER}: mouse cursor is over the video
- <li> {@link goog.ui.Component.State.SELECTED}: flash video is shown
+ <li> goog.ui.Component.State.DISABLED: shows &#39;flash not available&#39;
+ <li> goog.ui.Component.State.HOVER: mouse cursor is over the video
+ <li> goog.ui.Component.State.SELECTED: flash video is shown
  </li></li></li></ul>
 
  Which can be accessed by
@@ -117,23 +117,23 @@ media renderer.
 
 This class knows how to parse FlickrSet URLs, and render the DOM structure
 of flickr set players. This class is meant to be used as a singleton static
-stateless class, that takes {@code goog.ui.media.Media} instances and renders
-it. It expects {@code goog.ui.media.Media.getModel} to return a well formed,
-previously constructed, set id {@see goog.ui.media.FlickrSet.parseUrl},
+stateless class, that takes <code>goog.ui.media.Media</code> instances and renders
+it. It expects <code>goog.ui.media.Media.getModel</code> to return a well formed,
+previously constructed, set id goog.ui.media.FlickrSet.parseUrl,
 which is the data model this renderer will use to construct the DOM
-structure. {@see goog.ui.media.FlickrSet.newControl} for a example of
+structure. goog.ui.media.FlickrSet.newControl for a example of
 constructing a control with this renderer.
 
 This design is patterned after
 <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
 
-It uses {@link goog.ui.media.FlashObject} to embed the flash object.</div>
+It uses goog.ui.media.FlashObject to embed the flash object.</div>
  </div>
  <div class="fn-constructor">
         <a href="class_goog_ui_media_FlickrSetModel.html">
           goog.ui.media.FlickrSetModel</a><br/>
-        <div class="class-details">The {@code goog.ui.media.FlickrAlbum} media data model. It stores a required
-{@code userId} and {@code setId} fields, sets the flickr Set URL, and
+        <div class="class-details">The <code>goog.ui.media.FlickrAlbum</code> media data model. It stores a required
+<code>userId</code> and <code>setId</code> fields, sets the flickr Set URL, and
 allows a few optional parameters.</div>
  </div>
       
@@ -253,7 +253,7 @@ allows a few optional parameters.</div>
        Regular expression used to extract the username and set id out of the flickr
 URLs.
 
-Copied from <a href="http://go/markdownlite.js">http://go/markdownlite.js</a> and {@link FlickrExtractor.xml}.
+Copied from <a href="http://go/markdownlite.js">http://go/markdownlite.js</a> and FlickrExtractor.xml.
      </div>
 
    
@@ -366,7 +366,7 @@ except if you need more fine control over the configuration.
 
 
      <div class="entryOverview">
-       Takes a {@code flickrSetUrl} and extracts the flickr username and set id.
+       Takes a <code>flickrSetUrl</code> and extracts the flickr username and set id.
      </div>
 
 

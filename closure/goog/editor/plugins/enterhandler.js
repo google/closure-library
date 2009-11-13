@@ -418,7 +418,7 @@ goog.editor.plugins.EnterHandler.isBrElem = function(node) {
  */
 goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
     opt_keyUp) {
-  // SelectionUtil's getParentContainer does not work here.  The problem is
+  // The range's getContainerElement does not work here.  The problem is
   // that IE seems to be in the middle of adding the element to the dom, and the
   // current dom is inconsistent.  Specfically, the element's innerHTML,
   // outerHTML, and childNode's say the element is empty (innerHTML = "",

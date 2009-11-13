@@ -452,78 +452,27 @@
 <a name="line409"></a>
 <a name="line410"></a>
 <a name="line411"></a>/**
-<a name="line412"></a> * Tries to get an anonymous functions name by searching the entire object tree,
-<a name="line413"></a> * this currently is only known to work in FF and is slow.
-<a name="line414"></a> * @param {Function} fn Function to get name of.
-<a name="line415"></a> * @param {Object} opt_obj Object to look in (recursive).
-<a name="line416"></a> * @param {string} opt_prefix Object path calculated so far.
-<a name="line417"></a> * @param {number} opt_depth Recursion depth (max = 6).
-<a name="line418"></a> * @return {string} Function&#39;s name.
-<a name="line419"></a> * @private
-<a name="line420"></a> */
-<a name="line421"></a>goog.debug.getAnonFunctionName_ = function(fn, opt_obj, opt_prefix, opt_depth) {
-<a name="line422"></a>  // This doesn&#39;t work in IE, so do a loose check and return
-<a name="line423"></a>  if (goog.getObjectByName(&#39;document.all&#39;)) {
-<a name="line424"></a>    return &#39;&#39;;
-<a name="line425"></a>  }
+<a name="line412"></a> * Makes whitespace visible by replacing it with printable characters.
+<a name="line413"></a> * This is useful in finding diffrences between the expected and the actual
+<a name="line414"></a> * output strings of a testcase.
+<a name="line415"></a> * @param {string} string whose whitespace needs to be made visible.
+<a name="line416"></a> * @return {string} string whose whitespace is made visible.
+<a name="line417"></a> */
+<a name="line418"></a>goog.debug.makeWhitespaceVisible = function(string) {
+<a name="line419"></a>  return string.replace(/ /g, &#39;[_]&#39;)
+<a name="line420"></a>               .replace(/\f/g, &#39;[f]&#39;)
+<a name="line421"></a>               .replace(/\n/g, &#39;[n]\n&#39;)
+<a name="line422"></a>               .replace(/\r/g, &#39;[r]&#39;)
+<a name="line423"></a>               .replace(/\t/g, &#39;[t]&#39;);
+<a name="line424"></a>};
+<a name="line425"></a>
 <a name="line426"></a>
-<a name="line427"></a>  var obj = opt_obj || goog.global;
-<a name="line428"></a>  var prefix = opt_prefix || &#39;&#39;;
-<a name="line429"></a>  var depth = opt_depth || 0;
-<a name="line430"></a>
-<a name="line431"></a>  if (obj == fn) {
-<a name="line432"></a>    return prefix;
-<a name="line433"></a>  }
-<a name="line434"></a>
-<a name="line435"></a>  for (var i in obj) {
-<a name="line436"></a>
-<a name="line437"></a>    // If java is not installed, accessing the prototype of Packages will crash
-<a name="line438"></a>    // FF. See https://bugzilla.mozilla.org/show_bug.cgi?id=312946 for details.
-<a name="line439"></a>    if (i == &#39;Packages&#39; || i == &#39;sun&#39; || i == &#39;netscape&#39; || i == &#39;java&#39;) {
-<a name="line440"></a>      continue;
-<a name="line441"></a>    }
-<a name="line442"></a>
-<a name="line443"></a>    if (obj[i] == fn) {
-<a name="line444"></a>      return prefix + i;
-<a name="line445"></a>    }
-<a name="line446"></a>
-<a name="line447"></a>    if ((typeof obj[i] == &#39;function&#39; || typeof obj[i] == &#39;object&#39;) &amp;&amp;
-<a name="line448"></a>        obj[i] != goog.global &amp;&amp;
-<a name="line449"></a>        obj[i] != goog.getObjectByName(&#39;document&#39;) &amp;&amp;
-<a name="line450"></a>        obj.hasOwnProperty(i) &amp;&amp;
-<a name="line451"></a>        depth &lt; 6) {
-<a name="line452"></a>      var rv = goog.debug.getAnonFunctionName_(fn, obj[i],
-<a name="line453"></a>                                               prefix + i + &#39;.&#39;, depth + 1);
-<a name="line454"></a>      if (rv) return rv;
-<a name="line455"></a>    }
-<a name="line456"></a>  }
-<a name="line457"></a>
-<a name="line458"></a>  return &#39;&#39;;
-<a name="line459"></a>};
-<a name="line460"></a>
-<a name="line461"></a>
-<a name="line462"></a>/**
-<a name="line463"></a> * Makes whitespace visible by replacing it with printable characters.
-<a name="line464"></a> * This is useful in finding diffrences between the expected and the actual
-<a name="line465"></a> * output strings of a testcase.
-<a name="line466"></a> * @param {string} string whose whitespace needs to be made visible.
-<a name="line467"></a> * @return {string} string whose whitespace is made visible.
-<a name="line468"></a> */
-<a name="line469"></a>goog.debug.makeWhitespaceVisible = function(string) {
-<a name="line470"></a>  return string.replace(/ /g, &#39;[_]&#39;)
-<a name="line471"></a>               .replace(/\f/g, &#39;[f]&#39;)
-<a name="line472"></a>               .replace(/\n/g, &#39;[n]\n&#39;)
-<a name="line473"></a>               .replace(/\r/g, &#39;[r]&#39;)
-<a name="line474"></a>               .replace(/\t/g, &#39;[t]&#39;);
-<a name="line475"></a>};
-<a name="line476"></a>
-<a name="line477"></a>
-<a name="line478"></a>/**
-<a name="line479"></a> * Hash map for storing function names that have already been looked up.
-<a name="line480"></a> * @type {Object}
-<a name="line481"></a> * @private
-<a name="line482"></a> */
-<a name="line483"></a>goog.debug.fnNameCache_ = {};
+<a name="line427"></a>/**
+<a name="line428"></a> * Hash map for storing function names that have already been looked up.
+<a name="line429"></a> * @type {Object}
+<a name="line430"></a> * @private
+<a name="line431"></a> */
+<a name="line432"></a>goog.debug.fnNameCache_ = {};
 </pre>
 
 

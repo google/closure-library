@@ -54,15 +54,15 @@
   <div class="g-unit g-first" id="description">
     provides a reusable mp3 UI component given a mp3 URL.
 
- goog.ui.media.Mp3 is actually a {@link goog.ui.ControlRenderer}, a stateless
+ goog.ui.media.Mp3 is actually a goog.ui.ControlRenderer, a stateless
  class - that could/should be used as a Singleton with the static method
- {@code goog.ui.media.Mp3.getInstance} -, that knows how to render Mp3s. It is
- designed to be used with a {@link goog.ui.Control}, which will actually
- control the media renderer and provide the {@link goog.ui.Component} base.
+ <code>goog.ui.media.Mp3.getInstance</code> -, that knows how to render Mp3s. It is
+ designed to be used with a goog.ui.Control, which will actually
+ control the media renderer and provide the goog.ui.Component base.
  This design guarantees that all different types of medias will behave alike
  but will look different.
 
- goog.ui.media.Mp3 expects mp3 urls on {@code goog.ui.Control.getModel} as
+ goog.ui.media.Mp3 expects mp3 urls on <code>goog.ui.Control.getModel</code> as
  data models, and render a flash object that will play that URL.
 
  Example of usage:
@@ -74,9 +74,9 @@
  Mp3 medias currently support the following states:
 
  <ul>
- <li> {@link goog.ui.Component.State.DISABLED}: shows &#39;flash not available&#39;
- <li> {@link goog.ui.Component.State.HOVER}: mouse cursor is over the mp3
- <li> {@link goog.ui.Component.State.SELECTED}: mp3 is playing
+ <li> goog.ui.Component.State.DISABLED: shows &#39;flash not available&#39;
+ <li> goog.ui.Component.State.HOVER: mouse cursor is over the mp3
+ <li> goog.ui.Component.State.SELECTED: mp3 is playing
  </li></li></li></ul>
 
  Which can be accessed by
@@ -115,16 +115,16 @@ renderer.
 
 This class knows how to parse mp3 URLs, and render the DOM structure
 of mp3 flash players. This class is meant to be used as a singleton static
-stateless class, that takes {@code goog.ui.media.Media} instances and renders
-it. It expects {@code goog.ui.media.Media.getModel} to return a well formed,
-previously checked, mp3 URL {@see goog.ui.media.PicasaAlbum.parseUrl},
+stateless class, that takes <code>goog.ui.media.Media</code> instances and renders
+it. It expects <code>goog.ui.media.Media.getModel</code> to return a well formed,
+previously checked, mp3 URL goog.ui.media.PicasaAlbum.parseUrl,
 which is the data model this renderer will use to construct the DOM
-structure. {@see goog.ui.media.PicasaAlbum.newControl} for an example of
+structure. goog.ui.media.PicasaAlbum.newControl for an example of
 constructing a control with this renderer.
 
 This design is patterned after <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
 
-It uses {@link goog.ui.media.FlashObject} to embed the flash object.</div>
+It uses goog.ui.media.FlashObject to embed the flash object.</div>
  </div>
       
 <br/>
@@ -211,7 +211,7 @@ to share the same regular expression to match everything.
 
      <div class="entryOverview">
        A static method that builds a URL that will contain the flash player that
-will play the {@code mp3Url}.
+will play the <code>mp3Url</code>.
      </div>
 
 
@@ -240,7 +240,7 @@ will play the {@code mp3Url}.
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
-            An URL of a flash player that will know how to play the given {@code mp3Url}.
+            An URL of a flash player that will know how to play the given <code>mp3Url</code>.
       </div>
   
     </div>
@@ -302,7 +302,7 @@ control over the configuration.
      <td>
         <span class="entryName">dataModel</span>
         : <div class="fullType"><span class="type"><a href="class_goog_ui_media_MediaModel.html">goog.ui.media.MediaModel</a></span></div>
-        <div class="entryOverview">A media model that must contain an mp3 url on {@code dataModel.getUrl}.</div>
+        <div class="entryOverview">A media model that must contain an mp3 url on <code>dataModel.getUrl</code>.</div>
      </td>
    </tr>
      
@@ -463,7 +463,7 @@ by this renderer.
 
 
      <div class="entryOverview">
-       Flash player arguments. We expect that {@code flashUrl_} will contain a flash
+       Flash player arguments. We expect that <code>flashUrl_</code> will contain a flash
 movie that takes an audioUrl parameter on its URL, containing the URL of the
 mp3 to be played.
      </div>

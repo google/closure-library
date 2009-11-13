@@ -390,11 +390,11 @@ the functions throws an uncaught error, publishing is aborted.
 
      <div class="entryOverview">
        Subscribes a function to a topic.  The function is invoked as a method on
-the given {@code opt_context} object, or in the global scope if no context
+the given <code>opt_context</code> object, or in the global scope if no context
 is specified.  Subscribing the same function to the same topic multiple
 times will result in multiple function invocations while publishing.
 Returns a subscription key that can be used to unsubscribe the function from
-the topic via {@link #unsubscribeByKey}.
+the topic via #unsubscribeByKey.
      </div>
 
 
@@ -476,10 +476,10 @@ the topic via {@link #unsubscribeByKey}.
 
      <div class="entryOverview">
        Subscribes a single-use function to a topic.  The function is invoked as a
-method on the given {@code opt_context} object, or in the global scope if
+method on the given <code>opt_context</code> object, or in the global scope if
 no context is specified, and is then unsubscribed.  Returns a subscription
 key that can be used to unsubscribe the function from the topic via
-{@link #unsubscribeByKey}.
+#unsubscribeByKey.
      </div>
 
 
@@ -642,7 +642,7 @@ Returns a Boolean indicating whether a subscription was removed.
 
 
      <div class="entryOverview">
-       Removes a subscription based on the key returned by {@link #subscribe}.
+       Removes a subscription based on the key returned by #subscribe.
 No-op if no matching subscription is found.  Returns a Boolean indicating
 whether a subscription was removed.
      </div>
@@ -766,7 +766,7 @@ whether a subscription was removed.
 
      <div class="entryOverview">
        Deletes or nulls out any references to COM objects, DOM nodes, or other
-disposable objects. Classes that extend {@code goog.Disposable} should
+disposable objects. Classes that extend <code>goog.Disposable</code> should
 override this method.  For example:
 <pre class="lang-js">
 mypackage.MyClass = function() {
@@ -976,7 +976,7 @@ sparse array of subscriptions.
 
      <div class="entryOverview">
        Lock to prevent the removal of subscriptions during publishing.  Incremented
-at the beginning of {@link #publish}, and decremented at the end.
+at the beginning of #publish, and decremented at the end.
      </div>
 
   </td>

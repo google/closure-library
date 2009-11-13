@@ -17,6 +17,7 @@
  * user to visually select a row and column count.
  *
  * @see ../demos/dimensionpicker.html
+ * @see ../demos/dimensionpicker_rtl.html
  */
 
 goog.provide('goog.ui.DimensionPicker');

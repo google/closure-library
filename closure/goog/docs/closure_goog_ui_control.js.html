@@ -54,7 +54,7 @@
   <div class="g-unit g-first" id="description">
     Base class for UI controls such as buttons, menus, menu items,
  toolbar buttons, etc.  The implementation is based on a generalized version
- of {@link goog.ui.MenuItem}.
+ of goog.ui.MenuItem.
  TODO:  If the renderer framework works well, pull it into Component.
   </div>
   
@@ -81,10 +81,10 @@
  <div class="fn-constructor">
         <a href="class_goog_ui_Control.html">
           goog.ui.Control</a><br/>
-        <div class="class-details">Base class for UI controls.  Extends {@link goog.ui.Component} by adding
+        <div class="class-details">Base class for UI controls.  Extends goog.ui.Component by adding
 the following:
 <ul>
-<li>a {@link goog.events.KeyHandler}, to simplify keyboard handling,
+<li>a goog.events.KeyHandler, to simplify keyboard handling,
 <li>a pluggable <em>renderer</em> framework, to simplify the creation of
 simple controls without the need to subclass this class,
 <li>the notion of component <em>content</em>, like a text caption or DOM
@@ -144,7 +144,7 @@ for example usage.</div>
 
 
      <div class="entryOverview">
-       Takes an element, and decorates it with a {@link goog.ui.Control} instance
+       Takes an element, and decorates it with a goog.ui.Control instance
 if a suitable decorator is found.
      </div>
 
@@ -191,7 +191,7 @@ if a suitable decorator is found.
 
 
      <div class="entryOverview">
-       Takes an element and returns a new instance of {@link goog.ui.Control}
+       Takes an element and returns a new instance of goog.ui.Control
 or a subclass, suitable to decorate it (based on the element&#39;s CSS class).
      </div>
 
@@ -238,9 +238,9 @@ or a subclass, suitable to decorate it (based on the element&#39;s CSS class).
 
      <div class="entryOverview">
        Maps a CSS class name to a function that returns a new instance of
-{@link goog.ui.Control} or a subclass thereof, suitable to decorate
+goog.ui.Control or a subclass thereof, suitable to decorate
 an element that has the specified CSS class.  UI components that extend
-{@link goog.ui.Control} and want {@link goog.ui.Container}s to be able
+goog.ui.Control and want goog.ui.Containers to be able
 to discover and decorate elements using them should register a factory
 function via this API.
      </div>
