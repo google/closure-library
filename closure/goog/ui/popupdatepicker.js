@@ -67,7 +67,7 @@ goog.ui.PopupDatePicker.prototype.popup_ = null;
 
 /**
  * Reference to the element that triggered the last popup.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.PopupDatePicker.prototype.lastTarget_ = null;
@@ -157,7 +157,7 @@ goog.ui.PopupDatePicker.prototype.setDate = function(date) {
 
 
 /**
- * @return {Element?} The last element that triggered the popup.
+ * @return {Element} The last element that triggered the popup.
  */
 goog.ui.PopupDatePicker.prototype.getLastTarget = function() {
   return this.lastTarget_;

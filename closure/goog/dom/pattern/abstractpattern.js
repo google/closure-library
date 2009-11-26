@@ -33,7 +33,7 @@ goog.dom.pattern.AbstractPattern = function() {
 
 /**
  * The first node matched by this pattern.
- * @type {Node?}
+ * @type {Node}
  */
 goog.dom.pattern.AbstractPattern.prototype.matchedNode = null;
 

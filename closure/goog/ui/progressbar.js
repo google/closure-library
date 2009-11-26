@@ -372,7 +372,7 @@ goog.ui.ProgressBar.prototype.disposeInternal = function() {
 
 
 /**
- * @return {number?} The step value used to determine how to round the value.
+ * @return {?number} The step value used to determine how to round the value.
  */
 goog.ui.ProgressBar.prototype.getStep = function() {
   return this.rangeModel_.getStep();
@@ -382,7 +382,7 @@ goog.ui.ProgressBar.prototype.getStep = function() {
 /**
  * Sets the step value. The step value is used to determine how to round the
  * value.
- * @param {number?} step  The step size.
+ * @param {?number} step  The step size.
  */
 goog.ui.ProgressBar.prototype.setStep = function(step) {
   this.rangeModel_.setStep(step);

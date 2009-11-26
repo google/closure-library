@@ -154,7 +154,7 @@ goog.module.requireMultipleSymbolsHelper_ = function(symbolRequests, i,
 /**
  * Checks if the given element is null.
  *
- * @param {Object?} el The element to check if null.
+ * @param {Object} el The element to check if null.
  * @param {number} i The index of the element.
  * @param {Array.<Object>} arr The array that contains the element.
  * @return {boolean} TRUE iff the element is null.

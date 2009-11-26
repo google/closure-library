@@ -394,7 +394,7 @@ goog.ui.TabPane.prototype.getSelectedPage = function() {
 
 
 /**
- * @return {Element?} The element that contains the tab pages.
+ * @return {Element} The element that contains the tab pages.
  */
 goog.ui.TabPane.prototype.getContentElement = function() {
   return this.elContent_ || null;
@@ -402,7 +402,7 @@ goog.ui.TabPane.prototype.getContentElement = function() {
 
 
 /**
- * @return {Element?} The main element for the tabpane.
+ * @return {Element} The main element for the tabpane.
  */
 goog.ui.TabPane.prototype.getElement = function() {
   return this.el_ || null;
@@ -521,7 +521,7 @@ goog.ui.TabPane.TabPage = function(opt_el, opt_title, opt_domHelper) {
 
   /**
    * Index for page in tab pane.
-   * @type {number?}
+   * @type {?number}
    * @private
    */
   this.index_ = null;
@@ -570,7 +570,7 @@ goog.ui.TabPane.TabPage.prototype.getContentElement = function() {
 
 
 /**
- * @return {number?} The index of page in tab pane.
+ * @return {?number} The index of page in tab pane.
  */
 goog.ui.TabPane.TabPage.prototype.getIndex = function() {
   return this.index_;

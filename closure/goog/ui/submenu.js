@@ -71,7 +71,7 @@ goog.ui.SubMenu.MENU_DELAY_MS = 350;
 
 /**
  * Timer used to dismiss the submenu when the item becomes unhighlighted.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.ui.SubMenu.prototype.dismissTimer_ = null;
@@ -79,7 +79,7 @@ goog.ui.SubMenu.prototype.dismissTimer_ = null;
 
 /**
  * Timer used to show the submenu on mouseover.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.ui.SubMenu.prototype.showTimer_ = null;

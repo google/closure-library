@@ -188,6 +188,8 @@ goog.inherits = function(childCtor, parentCtor) {
   childCtor.prototype = new tempCtor;
   childCtor.prototype.constructor = childCtor
 };
+goog.base = function() {
+};
 goog.MODIFY_FUNCTION_PROTOTYPES = true;
 if(goog.MODIFY_FUNCTION_PROTOTYPES) {
   Function.prototype.bind = function(selfObj) {
@@ -217,7 +219,11 @@ goog.array.ARRAY_PROTOTYPE_ = Array.prototype;
 goog.array.indexOf = goog.array.ARRAY_PROTOTYPE_.indexOf ? function(arr, obj, opt_fromIndex) {
   return goog.array.ARRAY_PROTOTYPE_.indexOf.call(arr, obj, opt_fromIndex)
 } : function(arr, obj, opt_fromIndex) {
-  for(var i = opt_fromIndex == null ? 0 : opt_fromIndex < 0 ? Math.max(0, arr.length + opt_fromIndex) : opt_fromIndex;i < arr.length;i++)if(i in arr && arr[i] === obj)return i;
+  var fromIndex = opt_fromIndex == null ? 0 : opt_fromIndex < 0 ? Math.max(0, arr.length + opt_fromIndex) : opt_fromIndex;
+  if(goog.isString(arr)) {
+    if(!goog.isString(obj) || obj.length != 1)return-1;
+    return arr.indexOf(obj, fromIndex)
+  }for(var i = fromIndex;i < arr.length;i++)if(i in arr && arr[i] === obj)return i;
   return-1
 };
 goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ? function(arr, obj, opt_fromIndex) {
@@ -225,7 +231,10 @@ goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ? function(arr,
 } : function(arr, obj, opt_fromIndex) {
   var fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
   if(fromIndex < 0)fromIndex = Math.max(0, arr.length + fromIndex);
-  for(var i = fromIndex;i >= 0;i--)if(i in arr && arr[i] === obj)return i;
+  if(goog.isString(arr)) {
+    if(!goog.isString(obj) || obj.length != 1)return-1;
+    return arr.lastIndexOf(obj, fromIndex)
+  }for(var i = fromIndex;i >= 0;i--)if(i in arr && arr[i] === obj)return i;
   return-1
 };
 goog.array.forEach = goog.array.ARRAY_PROTOTYPE_.forEach ? function(arr, f, opt_obj) {
@@ -379,11 +388,11 @@ goog.array.sort = function(arr, opt_compareFn) {
   goog.array.ARRAY_PROTOTYPE_.sort.call(arr, opt_compareFn || goog.array.defaultCompare)
 };
 goog.array.stableSort = function(arr, opt_compareFn) {
-  for(var i = 0;i < arr.length;i++)arr[i] = {index:i, value:arr[i]};
-  var valueCompareFn = opt_compareFn || goog.array.defaultCompare;
   function stableCompareFn(obj1, obj2) {
     return valueCompareFn(obj1.value, obj2.value) || obj1.index - obj2.index
   }
+  for(var i = 0;i < arr.length;i++)arr[i] = {index:i, value:arr[i]};
+  var valueCompareFn = opt_compareFn || goog.array.defaultCompare;
   goog.array.sort(arr, stableCompareFn);
   for(i = 0;i < arr.length;i++)arr[i] = arr[i].value
 };
@@ -1148,14 +1157,11 @@ goog.dom.createDom_ = function(doc, args) {
   }var element = doc.createElement(tagName);
   if(attributes)if(goog.isString(attributes))element.className = attributes;
   else goog.dom.setProperties(element, attributes);
-  if(args.length > 2) {
-    function childHandler(child) {
-      if(child)element.appendChild(goog.isString(child) ? doc.createTextNode(child) : child)
-    }
-    for(var i = 2;i < args.length;i++) {
-      var arg = args[i];
-      goog.isArrayLike(arg) && !goog.dom.isNodeLike(arg) ? goog.array.forEach(goog.dom.isNodeList(arg) ? goog.array.clone(arg) : arg, childHandler) : childHandler(arg)
-    }
+  if(args.length > 2)for(var childHandler = function(child) {
+    if(child)element.appendChild(goog.isString(child) ? doc.createTextNode(child) : child)
+  }, i = 2;i < args.length;i++) {
+    var arg = args[i];
+    goog.isArrayLike(arg) && !goog.dom.isNodeLike(arg) ? goog.array.forEach(goog.dom.isNodeList(arg) ? goog.array.clone(arg) : arg, childHandler) : childHandler(arg)
   }return element
 };
 goog.dom.$dom = goog.dom.createDom;
@@ -1194,6 +1200,8 @@ goog.dom.canHaveChildren = function(node) {
     case goog.dom.TagName.APPLET:
     ;
     case goog.dom.TagName.AREA:
+    ;
+    case goog.dom.TagName.BASE:
     ;
     case goog.dom.TagName.BR:
     ;
@@ -1815,17 +1823,12 @@ a.handleEvent = function(eventObject) {
   return this.listener.handleEvent.call(this.listener, eventObject)
 };goog.events.pools = {};
 (function() {
-  var BAD_GC = goog.userAgent.jscript.HAS_JSCRIPT && !goog.userAgent.jscript.isVersion("5.7");
   function getObject() {
     return{count_:0, remaining_:0}
   }
   function getArray() {
     return[]
   }
-  var proxyCallbackFunction;
-  goog.events.pools.setProxyCallbackFunction = function(cb) {
-    proxyCallbackFunction = cb
-  };
   function getProxy() {
     var f = function(eventObject) {
       return proxyCallbackFunction.call(f.src, f.key, eventObject)
@@ -1838,6 +1841,10 @@ a.handleEvent = function(eventObject) {
   function getEvent() {
     return new goog.events.BrowserEvent
   }
+  var BAD_GC = goog.userAgent.jscript.HAS_JSCRIPT && !goog.userAgent.jscript.isVersion("5.7"), proxyCallbackFunction;
+  goog.events.pools.setProxyCallbackFunction = function(cb) {
+    proxyCallbackFunction = cb
+  };
   if(BAD_GC) {
     goog.events.pools.getObject = function() {
       return objectPool.getObject()
@@ -2845,13 +2852,11 @@ goog.debug.expose = function(obj, opt_showFn) {
 };
 goog.debug.deepExpose = function(obj, opt_showFn) {
   var previous = new goog.structs.Set, str = [], helper = function(obj, space) {
-    var nestspace = space + "  ", indentMultiline = function(str) {
-      return str.replace(/\n/g, "\n" + space)
-    };
+    var nestspace = space + "  ";
     try {
       if(goog.isDef(obj))if(goog.isNull(obj))str.push("NULL");
-      else if(goog.isString(obj))str.push('"' + indentMultiline(obj) + '"');
-      else if(goog.isFunction(obj))str.push(indentMultiline(String(obj)));
+      else if(goog.isString(obj))str.push('"' + obj.replace(/\n/g, "\n" + space) + '"');
+      else if(goog.isFunction(obj))str.push(String(obj).replace(/\n/g, "\n" + space));
       else if(goog.isObject(obj))if(previous.contains(obj))str.push("*** reference loop detected ***");
       else {
         previous.add(obj);
@@ -3005,7 +3010,7 @@ goog.debug.Logger.Level.prototype.toString = function() {
 };
 goog.debug.Logger.Level.OFF = new goog.debug.Logger.Level("OFF", Infinity);
 goog.debug.Logger.Level.SHOUT = new goog.debug.Logger.Level("SHOUT", 1200);
-goog.debug.Logger.Level.SEVERE = new goog.debug.Logger.Level("SEVERE", 1000);
+goog.debug.Logger.Level.SEVERE = new goog.debug.Logger.Level("SEVERE", 1E3);
 goog.debug.Logger.Level.WARNING = new goog.debug.Logger.Level("WARNING", 900);
 goog.debug.Logger.Level.INFO = new goog.debug.Logger.Level("INFO", 800);
 goog.debug.Logger.Level.CONFIG = new goog.debug.Logger.Level("CONFIG", 700);
@@ -5278,7 +5283,7 @@ a.disposeInternal = function() {
 a.cycle = function(now) {
   this.progress = (now - this.startTime) / (this.endTime - this.startTime);
   if(this.progress >= 1)this.progress = 1;
-  this.fps_ = 1000 / (now - this.lastFrame);
+  this.fps_ = 1E3 / (now - this.lastFrame);
   this.lastFrame = now;
   goog.isFunction(this.accel_) ? this.updateCoords_(this.accel_(this.progress)) : this.updateCoords_(this.progress);
   if(this.progress == 1) {
@@ -8283,45 +8288,8 @@ window._pr_isIE6 = function() {
   return isIE6
 };
 (function() {
-  var REGEXP_PRECEDER_PATTERN = function() {
-    for(var preceders = ["!", "!=", "!==", "#", "%", "%=", "&", "&&", "&&=", "&=", "(", "*", "*=", "+=", ",", "-=", "->", "/", "/=", ":", "::", ";", "<", "<<", "<<=", "<=", "=", "==", "===", ">", ">=", ">>", ">>=", ">>>", ">>>=", "?", "@", "[", "^", "^=", "^^", "^^=", "{", "|", "|=", "||", "||=", "~", "break", "case", "continue", "delete", "do", "else", "finally", "instanceof", "return", "throw", "try", "typeof"], pattern = "(?:^^|[+-]", i = 0;i < preceders.length;++i)pattern += "|" + preceders[i].replace(/([^=<>:&a-z])/g, 
-    "\\$1");
-    pattern += ")\\s*";
-    return pattern
-  }(), pr_amp = /&/g, pr_lt = /</g, pr_gt = />/g, pr_quot = /\"/g;
-  function attribToHtml(str) {
-    return str.replace(pr_amp, "&amp;").replace(pr_lt, "&lt;").replace(pr_gt, "&gt;").replace(pr_quot, "&quot;")
-  }
   function textToHtml(str) {
     return str.replace(pr_amp, "&amp;").replace(pr_lt, "&lt;").replace(pr_gt, "&gt;")
-  }
-  var pr_ltEnt = /&lt;/g, pr_gtEnt = /&gt;/g, pr_aposEnt = /&apos;/g, pr_quotEnt = /&quot;/g, pr_ampEnt = /&amp;/g, pr_nbspEnt = /&nbsp;/g;
-  function htmlToText(html) {
-    var pos = html.indexOf("&");
-    if(pos < 0)return html;
-    for(--pos;(pos = html.indexOf("&#", pos + 1)) >= 0;) {
-      var end = html.indexOf(";", pos);
-      if(end >= 0) {
-        var num = html.substring(pos + 3, end), radix = 10;
-        if(num && num.charAt(0) === "x") {
-          num = num.substring(1);
-          radix = 16
-        }var codePoint = parseInt(num, radix);
-        isNaN(codePoint) || (html = html.substring(0, pos) + String.fromCharCode(codePoint) + html.substring(end + 1))
-      }
-    }return html.replace(pr_ltEnt, "<").replace(pr_gtEnt, ">").replace(pr_aposEnt, "'").replace(pr_quotEnt, '"').replace(pr_nbspEnt, " ").replace(pr_ampEnt, "&")
-  }
-  function isRawContent(node) {
-    return"XMP" === node.tagName
-  }
-  var newlineRe = /[\r\n]/g;
-  function isPreformatted(node, content) {
-    if("PRE" === node.tagName)return true;
-    if(!newlineRe.test(content))return true;
-    var whitespace;
-    if(node.currentStyle)whitespace = node.currentStyle.whiteSpace;
-    else if(window.getComputedStyle)whitespace = window.getComputedStyle(node, null).whiteSpace;
-    return!whitespace || whitespace === "pre"
   }
   function normalizedHtml(node, out) {
     switch(node.nodeType) {
@@ -8339,7 +8307,7 @@ window._pr_isIE6 = function() {
         if(node.firstChild || !/^(?:br|link|img)$/.test(name))out.push("</", name, ">");
         break;
       case 2:
-        out.push(node.name.toLowerCase(), '="', attribToHtml(node.value), '"');
+        out.push(node.name.toLowerCase(), '="', node.value.replace(pr_amp, "&amp;").replace(pr_lt, "&lt;").replace(pr_gt, "&gt;").replace(pr_quot, "&quot;"), '"');
         break;
       case 3:
       ;
@@ -8349,15 +8317,7 @@ window._pr_isIE6 = function() {
     }
   }
   function combinePrefixPatterns(regexs) {
-    for(var capturedGroupIndex = 0, needToFoldCase = false, ignoreCase = false, i = 0, n = regexs.length;i < n;++i) {
-      var regex = regexs[i];
-      if(regex.ignoreCase)ignoreCase = true;
-      else if(/[a-z]/i.test(regex.source.replace(/\\u[0-9a-f]{4}|\\x[0-9a-f]{2}|\\[^ux]/gi, ""))) {
-        needToFoldCase = true;
-        ignoreCase = false;
-        break
-      }
-    }function decodeEscape(charsetPart) {
+    function decodeEscape(charsetPart) {
       if(charsetPart.charAt(0) !== "\\")return charsetPart.charCodeAt(0);
       switch(charsetPart.charAt(1)) {
         case "b":
@@ -8482,26 +8442,20 @@ window._pr_isIE6 = function() {
         })
       }return parts.join("")
     }
-    var rewritten = [];
+    for(var capturedGroupIndex = 0, needToFoldCase = false, ignoreCase = false, i = 0, n = regexs.length;i < n;++i) {
+      var regex = regexs[i];
+      if(regex.ignoreCase)ignoreCase = true;
+      else if(/[a-z]/i.test(regex.source.replace(/\\u[0-9a-f]{4}|\\x[0-9a-f]{2}|\\[^ux]/gi, ""))) {
+        needToFoldCase = true;
+        ignoreCase = false;
+        break
+      }
+    }var rewritten = [];
     i = 0;
     for(n = regexs.length;i < n;++i) {
       regex = regexs[i];
       if(regex.global || regex.multiline)throw new Error("" + regex);rewritten.push("(?:" + allowAnywhereFoldCaseAndRenumberGroups(regex) + ")")
     }return new RegExp(rewritten.join("|"), ignoreCase ? "gi" : "g")
-  }
-  var PR_innerHtmlWorks = null;
-  function getInnerHtml(node) {
-    if(null === PR_innerHtmlWorks) {
-      var testNode = document.createElement("PRE");
-      testNode.appendChild(document.createTextNode('<!DOCTYPE foo PUBLIC "foo bar">\n<foo />'));
-      PR_innerHtmlWorks = !/</.test(testNode.innerHTML)
-    }if(PR_innerHtmlWorks) {
-      var content = node.innerHTML;
-      if(isRawContent(node))content = textToHtml(content);
-      else isPreformatted(node, content) || (content = content.replace(/(<br\s*\/?>)[\r\n]+/g, "$1").replace(/(?:[\r\n]+[ \t]*)+/g, " "));
-      return content
-    }for(var out = [], child = node.firstChild;child;child = child.nextSibling)normalizedHtml(child, out);
-    return out.join("")
   }
   function makeTabExpander(tabWidth) {
     var charInLine = 0;
@@ -8523,41 +8477,6 @@ window._pr_isIE6 = function() {
       out.push(plainText.substring(pos));
       return out.join("")
     }
-  }
-  var pr_chunkPattern = new RegExp("[^<]+|<!--[\\s\\S]*?--\>|<!\\[CDATA\\[[\\s\\S]*?\\]\\]>|</?[a-zA-Z](?:[^>\"']|'[^']*'|\"[^\"]*\")*>|<", "g"), pr_commentPrefix = /^<\!--/, pr_cdataPrefix = /^<!\[CDATA\[/, pr_brPrefix = /^<br\b/i, pr_tagNameRe = /^<(\/?)([a-zA-Z][a-zA-Z0-9]*)/;
-  function extractTags(s) {
-    var matches = s.match(pr_chunkPattern), sourceBuf = [], sourceBufLen = 0, extractedTags = [];
-    if(matches)for(var i = 0, n = matches.length;i < n;++i) {
-      var match = matches[i];
-      if(match.length > 1 && match.charAt(0) === "<") {
-        if(!pr_commentPrefix.test(match))if(pr_cdataPrefix.test(match)) {
-          sourceBuf.push(match.substring(9, match.length - 3));
-          sourceBufLen += match.length - 12
-        }else if(pr_brPrefix.test(match)) {
-          sourceBuf.push("\n");
-          ++sourceBufLen
-        }else if(match.indexOf("nocode") >= 0 && isNoCodeTag(match)) {
-          var name = match.match(pr_tagNameRe)[2], depth = 1, j;
-          j = i + 1;
-          a:for(;j < n;++j) {
-            var name2 = matches[j].match(pr_tagNameRe);
-            if(name2 && name2[2] === name)if(name2[1] === "/") {
-              if(--depth === 0)break a
-            }else++depth
-          }if(j < n) {
-            extractedTags.push(sourceBufLen, matches.slice(i, j + 1).join(""));
-            i = j
-          }else extractedTags.push(sourceBufLen, match)
-        }else extractedTags.push(sourceBufLen, match)
-      }else {
-        var literalText = htmlToText(match);
-        sourceBuf.push(literalText);
-        sourceBufLen += literalText.length
-      }
-    }return{source:sourceBuf.join(""), tags:extractedTags}
-  }
-  function isNoCodeTag(tag) {
-    return!!tag.replace(/\s(\w+)\s*=\s*(?:\"([^\"]*)\"|'([^\']*)'|(\S+))/g, ' $1="$2$3$4"').match(/[cC][lL][aA][sS][sS]=\"[^\"]*\bnocode\b/)
   }
   function appendDecorations(basePos, sourceCode, langHandler, out) {
     if(sourceCode) {
@@ -8628,10 +8547,7 @@ window._pr_isIE6 = function() {
     fallthroughStylePatterns.push(["lit", /^@[a-z_$][a-z_$@0-9]*/i, null, "@"], ["typ", /^@?[A-Z]+[a-z][A-Za-z_$@0-9]*/, null], ["pln", /^[a-z_$][a-z_$@0-9]*/i, null], ["lit", /^(?:0x[a-f0-9]+|(?:\d(?:_\d+)*\d*(?:\.\d*)?|\.\d\+)(?:e[+\-]?\d+)?)[a-z]*/i, null, "0123456789"], ["pun", /^.[^\s\w\.$@\'\"\`\/\#]*/, null]);
     return createSimpleLexer(shortcutStylePatterns, fallthroughStylePatterns)
   }
-  var decorateSource = sourceDecorator({keywords:"break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try alignof align_union asm axiom bool concept concept_map const_cast constexpr decltype dynamic_cast explicit export friend inline late_check mutable namespace nullptr reinterpret_cast static_assert static_cast template typeid typename typeof using virtual wchar_t where break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try boolean byte extends final finally implements import instanceof null native package strictfp super synchronized throws transient as base by checked decimal delegate descending event fixed foreach from group implicit in interface internal into is lock object out override orderby params partial readonly ref sbyte sealed stackalloc string select uint ulong unchecked unsafe ushort var break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try debugger eval export function get null set undefined var with Infinity NaN caller delete die do dump elsif eval exit foreach for goto if import last local my next no our print package redo require sub undef unless until use wantarray while BEGIN END break continue do else for if return while and as assert class def del elif except exec finally from global import in is lambda nonlocal not or pass print raise try with yield False True None break continue do else for if return while alias and begin case class def defined elsif end ensure false in module next nil not or redo rescue retry self super then true undef unless until when yield BEGIN END break continue do else for if return while case done elif esac eval fi function in local set then until ", 
-  hashComments:true, cStyleComments:true, multiLineStrings:true, regexLiterals:true});
   function recombineTagsAndDecorations(job) {
-    var sourceText = job.source, extractedTags = job.extractedTags, decorations = job.decorations, html = [], outputIdx = 0, openDecoration = null, currentDecoration = null, tagPos = 0, decPos = 0, tabExpander = makeTabExpander(window.PR_TAB_WIDTH), adjacentSpaceRe = /([\r\n ]) /g, startOrSpaceRe = /(^| ) /gm, newlineRe = /\r\n?|\n/g, trailingSpaceRe = /[ \r\n]$/, lastWasSpace = true;
     function emitTextUpTo(sourceIdx) {
       if(sourceIdx > outputIdx) {
         if(openDecoration && openDecoration !== currentDecoration) {
@@ -8647,7 +8563,8 @@ window._pr_isIE6 = function() {
         outputIdx = sourceIdx
       }
     }
-    for(;1;)if(tagPos < extractedTags.length ? decPos < decorations.length ? extractedTags[tagPos] <= decorations[decPos] : true : false) {
+    for(var sourceText = job.source, extractedTags = job.extractedTags, decorations = job.decorations, html = [], outputIdx = 0, openDecoration = null, currentDecoration = null, tagPos = 0, decPos = 0, tabExpander = makeTabExpander(window.PR_TAB_WIDTH), adjacentSpaceRe = /([\r\n ]) /g, startOrSpaceRe = /(^| ) /gm, newlineRe = /\r\n?|\n/g, trailingSpaceRe = /[ \r\n]$/, lastWasSpace = true;1;)if(tagPos < extractedTags.length ? decPos < decorations.length ? extractedTags[tagPos] <= decorations[decPos] : 
+    true : false) {
       emitTextUpTo(extractedTags[tagPos]);
       if(openDecoration) {
         html.push("</span>");
@@ -8663,7 +8580,6 @@ window._pr_isIE6 = function() {
     openDecoration && html.push("</span>");
     job.prettyPrintedHtml = html.join("")
   }
-  var langHandlerRegistry = {};
   function registerLangHandler(handler, fileExtensions) {
     for(var i = fileExtensions.length;--i >= 0;) {
       var ext = fileExtensions[i];
@@ -8675,29 +8591,54 @@ window._pr_isIE6 = function() {
     extension && langHandlerRegistry.hasOwnProperty(extension) || (extension = /^\s*</.test(source) ? "default-markup" : "default-code");
     return langHandlerRegistry[extension]
   }
-  registerLangHandler(decorateSource, ["default-code"]);
-  registerLangHandler(createSimpleLexer([], [["pln", /^[^<?]+/], ["dec", /^<!\w[^>]*(?:>|$)/], ["com", /^<\!--[\s\S]*?(?:-\->|$)/], ["lang-", /^<\?([\s\S]+?)(?:\?>|$)/], ["lang-", /^<%([\s\S]+?)(?:%>|$)/], ["pun", /^(?:<[%?]|[%?]>)/], ["lang-", /^<xmp\b[^>]*>([\s\S]+?)<\/xmp\b[^>]*>/i], ["lang-js", /^<script\b[^>]*>([\s\S]+?)<\/script\b[^>]*>/i], ["lang-css", /^<style\b[^>]*>([\s\S]+?)<\/style\b[^>]*>/i], ["lang-in.tag", /^(<\/?[a-z][^<>]*>)/i]]), ["default-markup", "htm", "html", "mxml", "xhtml", 
-  "xml", "xsl"]);
-  registerLangHandler(createSimpleLexer([["pln", /^[\s]+/, null, " \t\r\n"], ["atv", /^(?:\"[^\"]*\"?|\'[^\']*\'?)/, null, "\"'"]], [["tag", /^^<\/?[a-z](?:[\w:-]*\w)?|\/?>$/], ["atn", /^(?!style\b|on)[a-z](?:[\w:-]*\w)?/], ["lang-uq.val", /^=\s*([^>\'\"\s]*(?:[^>\'\"\s\/]|\/(?=\s)))/], ["pun", /^[=<>\/]+/], ["lang-js", /^on\w+\s*=\s*\"([^\"]+)\"/i], ["lang-js", /^on\w+\s*=\s*\'([^\']+)\'/i], ["lang-js", /^on\w+\s*=\s*([^\"\'>\s]+)/i], ["lang-css", /^sty\w+\s*=\s*\"([^\"]+)\"/i], ["lang-css", /^sty\w+\s*=\s*\'([^\']+)\'/i], 
-  ["lang-css", /^sty\w+\s*=\s*([^\"\'>\s]+)/i]]), ["in.tag"]);
-  registerLangHandler(createSimpleLexer([], [["atv", /^[\s\S]+/]]), ["uq.val"]);
-  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try alignof align_union asm axiom bool concept concept_map const_cast constexpr decltype dynamic_cast explicit export friend inline late_check mutable namespace nullptr reinterpret_cast static_assert static_cast template typeid typename typeof using virtual wchar_t where ", 
-  hashComments:true, cStyleComments:true}), ["c", "cc", "cpp", "cxx", "cyc", "m"]);
-  registerLangHandler(sourceDecorator({keywords:"null true false"}), ["json"]);
-  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try boolean byte extends final finally implements import instanceof null native package strictfp super synchronized throws transient as base by checked decimal delegate descending event fixed foreach from group implicit in interface internal into is lock object out override orderby params partial readonly ref sbyte sealed stackalloc string select uint ulong unchecked unsafe ushort var ", 
-  hashComments:true, cStyleComments:true}), ["cs"]);
-  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try boolean byte extends final finally implements import instanceof null native package strictfp super synchronized throws transient ", cStyleComments:true}), ["java"]);
-  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while case done elif esac eval fi function in local set then until ", hashComments:true, multiLineStrings:true}), ["bsh", "csh", "sh"]);
-  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while and as assert class def del elif except exec finally from global import in is lambda nonlocal not or pass print raise try with yield False True None ", hashComments:true, multiLineStrings:true, tripleQuotedStrings:true}), ["cv", "py"]);
-  registerLangHandler(sourceDecorator({keywords:"caller delete die do dump elsif eval exit foreach for goto if import last local my next no our print package redo require sub undef unless until use wantarray while BEGIN END ", hashComments:true, multiLineStrings:true, regexLiterals:true}), ["perl", "pl", "pm"]);
-  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while alias and begin case class def defined elsif end ensure false in module next nil not or redo rescue retry self super then true undef unless until when yield BEGIN END ", hashComments:true, multiLineStrings:true, regexLiterals:true}), ["rb"]);
-  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try debugger eval export function get null set undefined var with Infinity NaN ", cStyleComments:true, regexLiterals:true}), ["js"]);
-  registerLangHandler(createSimpleLexer([], [["str", /^[\s\S]+/]]), ["regex"]);
   function applyDecorator(job) {
     var sourceCodeHtml = job.sourceCodeHtml, opt_langExtension = job.langExtension;
     job.prettyPrintedHtml = sourceCodeHtml;
     try {
-      var sourceAndExtractedTags = extractTags(sourceCodeHtml), source = sourceAndExtractedTags.source;
+      var sourceAndExtractedTags, JSCompiler_inline_matches = sourceCodeHtml.match(pr_chunkPattern), JSCompiler_inline_sourceBuf_15 = [], JSCompiler_inline_sourceBufLen_16 = 0, JSCompiler_inline_extractedTags_17 = [];
+      if(JSCompiler_inline_matches)for(var JSCompiler_inline_i = 0, JSCompiler_inline_n = JSCompiler_inline_matches.length;JSCompiler_inline_i < JSCompiler_inline_n;++JSCompiler_inline_i) {
+        var JSCompiler_inline_match = JSCompiler_inline_matches[JSCompiler_inline_i];
+        if(JSCompiler_inline_match.length > 1 && JSCompiler_inline_match.charAt(0) === "<") {
+          if(!pr_commentPrefix.test(JSCompiler_inline_match))if(pr_cdataPrefix.test(JSCompiler_inline_match)) {
+            JSCompiler_inline_sourceBuf_15.push(JSCompiler_inline_match.substring(9, JSCompiler_inline_match.length - 3));
+            JSCompiler_inline_sourceBufLen_16 += JSCompiler_inline_match.length - 12
+          }else if(pr_brPrefix.test(JSCompiler_inline_match)) {
+            JSCompiler_inline_sourceBuf_15.push("\n");
+            ++JSCompiler_inline_sourceBufLen_16
+          }else if(JSCompiler_inline_match.indexOf("nocode") >= 0 && JSCompiler_inline_match.replace(/\s(\w+)\s*=\s*(?:\"([^\"]*)\"|'([^\']*)'|(\S+))/g, ' $1="$2$3$4"').match(/[cC][lL][aA][sS][sS]=\"[^\"]*\bnocode\b/)) {
+            var JSCompiler_inline_name = JSCompiler_inline_match.match(pr_tagNameRe)[2], JSCompiler_inline_depth = 1, JSCompiler_inline_j;
+            JSCompiler_inline_j = JSCompiler_inline_i + 1;
+            a:for(;JSCompiler_inline_j < JSCompiler_inline_n;++JSCompiler_inline_j) {
+              var JSCompiler_inline_name2_24 = JSCompiler_inline_matches[JSCompiler_inline_j].match(pr_tagNameRe);
+              if(JSCompiler_inline_name2_24 && JSCompiler_inline_name2_24[2] === JSCompiler_inline_name)if(JSCompiler_inline_name2_24[1] === "/") {
+                if(--JSCompiler_inline_depth === 0)break a
+              }else++JSCompiler_inline_depth
+            }if(JSCompiler_inline_j < JSCompiler_inline_n) {
+              JSCompiler_inline_extractedTags_17.push(JSCompiler_inline_sourceBufLen_16, JSCompiler_inline_matches.slice(JSCompiler_inline_i, JSCompiler_inline_j + 1).join(""));
+              JSCompiler_inline_i = JSCompiler_inline_j
+            }else JSCompiler_inline_extractedTags_17.push(JSCompiler_inline_sourceBufLen_16, JSCompiler_inline_match)
+          }else JSCompiler_inline_extractedTags_17.push(JSCompiler_inline_sourceBufLen_16, JSCompiler_inline_match)
+        }else {
+          var JSCompiler_inline_literalText_25;
+          var JSCompiler_inline_html = JSCompiler_inline_match, JSCompiler_inline_pos = JSCompiler_inline_html.indexOf("&");
+          if(JSCompiler_inline_pos < 0)JSCompiler_inline_literalText_25 = JSCompiler_inline_html;
+          else {
+            for(--JSCompiler_inline_pos;(JSCompiler_inline_pos = JSCompiler_inline_html.indexOf("&#", JSCompiler_inline_pos + 1)) >= 0;) {
+              var JSCompiler_inline_end = JSCompiler_inline_html.indexOf(";", JSCompiler_inline_pos);
+              if(JSCompiler_inline_end >= 0) {
+                var JSCompiler_inline_num = JSCompiler_inline_html.substring(JSCompiler_inline_pos + 3, JSCompiler_inline_end), JSCompiler_inline_radix_88 = 10;
+                if(JSCompiler_inline_num && JSCompiler_inline_num.charAt(0) === "x") {
+                  JSCompiler_inline_num = JSCompiler_inline_num.substring(1);
+                  JSCompiler_inline_radix_88 = 16
+                }var JSCompiler_inline_codePoint_89 = parseInt(JSCompiler_inline_num, JSCompiler_inline_radix_88);
+                isNaN(JSCompiler_inline_codePoint_89) || (JSCompiler_inline_html = JSCompiler_inline_html.substring(0, JSCompiler_inline_pos) + String.fromCharCode(JSCompiler_inline_codePoint_89) + JSCompiler_inline_html.substring(JSCompiler_inline_end + 1))
+              }
+            }JSCompiler_inline_literalText_25 = JSCompiler_inline_html.replace(pr_ltEnt, "<").replace(pr_gtEnt, ">").replace(pr_aposEnt, "'").replace(pr_quotEnt, '"').replace(pr_nbspEnt, " ").replace(pr_ampEnt, "&")
+          }JSCompiler_inline_sourceBuf_15.push(JSCompiler_inline_literalText_25);
+          JSCompiler_inline_sourceBufLen_16 += JSCompiler_inline_literalText_25.length
+        }
+      }sourceAndExtractedTags = {source:JSCompiler_inline_sourceBuf_15.join(""), tags:JSCompiler_inline_extractedTags_17};
+      var source = sourceAndExtractedTags.source;
       job.source = source;
       job.basePos = 0;
       job.extractedTags = sourceAndExtractedTags.tags;
@@ -8716,13 +8657,6 @@ window._pr_isIE6 = function() {
     return job.prettyPrintedHtml
   }
   function prettyPrint(opt_whenDone) {
-    for(var isIE6 = window._pr_isIE6(), codeSegments = [document.getElementsByTagName("pre"), document.getElementsByTagName("code"), document.getElementsByTagName("xmp")], elements = [], i = 0;i < codeSegments.length;++i)for(var j = 0, n = codeSegments[i].length;j < n;++j)elements.push(codeSegments[i][j]);
-    codeSegments = null;
-    var clock = Date;
-    clock.now || (clock = {now:function() {
-      return(new Date).getTime()
-    }});
-    var k = 0, prettyPrintingJob;
     function doWork() {
       for(var endTime = window.PR_SHOULD_USE_CONTINUATION ? clock.now() + 250 : Infinity;k < elements.length && clock.now() < endTime;k++) {
         var cs = elements[k];
@@ -8733,37 +8667,88 @@ window._pr_isIE6 = function() {
             nested = true;
             break
           }if(!nested) {
-            var content = getInnerHtml(cs);
-            content = content.replace(/(?:\r\n?|\n)$/, "");
+            var content;
+            if(null === PR_innerHtmlWorks) {
+              var JSCompiler_inline_testNode_33 = document.createElement("PRE");
+              JSCompiler_inline_testNode_33.appendChild(document.createTextNode('<!DOCTYPE foo PUBLIC "foo bar">\n<foo />'));
+              PR_innerHtmlWorks = !/</.test(JSCompiler_inline_testNode_33.innerHTML)
+            }if(PR_innerHtmlWorks) {
+              var JSCompiler_inline_content = cs.innerHTML;
+              if("XMP" === cs.tagName)JSCompiler_inline_content = textToHtml(JSCompiler_inline_content);
+              else {
+                var JSCompiler_inline_result_91;
+                if("PRE" === cs.tagName)JSCompiler_inline_result_91 = true;
+                else if(newlineRe.test(JSCompiler_inline_content)) {
+                  var JSCompiler_inline_whitespace_97 = undefined;
+                  if(cs.currentStyle)JSCompiler_inline_whitespace_97 = cs.currentStyle.whiteSpace;
+                  else if(window.getComputedStyle)JSCompiler_inline_whitespace_97 = window.getComputedStyle(cs, null).whiteSpace;
+                  JSCompiler_inline_result_91 = !JSCompiler_inline_whitespace_97 || JSCompiler_inline_whitespace_97 === "pre"
+                }else JSCompiler_inline_result_91 = true;
+                JSCompiler_inline_result_91 || (JSCompiler_inline_content = JSCompiler_inline_content.replace(/(<br\s*\/?>)[\r\n]+/g, "$1").replace(/(?:[\r\n]+[ \t]*)+/g, " "))
+              }content = JSCompiler_inline_content
+            }else {
+              for(var JSCompiler_inline_out = [], JSCompiler_inline_child = cs.firstChild;JSCompiler_inline_child;JSCompiler_inline_child = JSCompiler_inline_child.nextSibling)normalizedHtml(JSCompiler_inline_child, JSCompiler_inline_out);
+              content = JSCompiler_inline_out.join("")
+            }content = content.replace(/(?:\r\n?|\n)$/, "");
             prettyPrintingJob = {sourceCodeHtml:content, langExtension:langExtension, sourceNode:cs};
             applyDecorator(prettyPrintingJob);
-            replaceWithPrettyPrintedHtml()
+            var JSCompiler_inline_newContent_46 = prettyPrintingJob.prettyPrintedHtml;
+            if(JSCompiler_inline_newContent_46) {
+              var JSCompiler_inline_cs = prettyPrintingJob.sourceNode;
+              if("XMP" === JSCompiler_inline_cs.tagName) {
+                for(var JSCompiler_inline_pre_48 = document.createElement("PRE"), JSCompiler_inline_i = 0;JSCompiler_inline_i < JSCompiler_inline_cs.attributes.length;++JSCompiler_inline_i) {
+                  var JSCompiler_inline_a = JSCompiler_inline_cs.attributes[JSCompiler_inline_i];
+                  if(JSCompiler_inline_a.specified)if(JSCompiler_inline_a.name.toLowerCase() === "class")JSCompiler_inline_pre_48.className = JSCompiler_inline_a.value;
+                  else JSCompiler_inline_pre_48.setAttribute(JSCompiler_inline_a.name, JSCompiler_inline_a.value)
+                }JSCompiler_inline_pre_48.innerHTML = JSCompiler_inline_newContent_46;
+                JSCompiler_inline_cs.parentNode.replaceChild(JSCompiler_inline_pre_48, JSCompiler_inline_cs);
+                JSCompiler_inline_cs = JSCompiler_inline_pre_48
+              }else JSCompiler_inline_cs.innerHTML = JSCompiler_inline_newContent_46;
+              if(isIE6 && JSCompiler_inline_cs.tagName === "PRE")for(var JSCompiler_inline_lineBreaks_51 = JSCompiler_inline_cs.getElementsByTagName("br"), JSCompiler_inline_j = JSCompiler_inline_lineBreaks_51.length;--JSCompiler_inline_j >= 0;) {
+                var JSCompiler_inline_lineBreak_53 = JSCompiler_inline_lineBreaks_51[JSCompiler_inline_j];
+                JSCompiler_inline_lineBreak_53.parentNode.replaceChild(document.createTextNode("\r"), JSCompiler_inline_lineBreak_53)
+              }
+            }
           }
         }
       }if(k < elements.length)setTimeout(doWork, 250);
       else opt_whenDone && opt_whenDone()
     }
-    function replaceWithPrettyPrintedHtml() {
-      var newContent = prettyPrintingJob.prettyPrintedHtml;
-      if(newContent) {
-        var cs = prettyPrintingJob.sourceNode;
-        if(isRawContent(cs)) {
-          for(var pre = document.createElement("PRE"), i = 0;i < cs.attributes.length;++i) {
-            var a = cs.attributes[i];
-            if(a.specified)if(a.name.toLowerCase() === "class")pre.className = a.value;
-            else pre.setAttribute(a.name, a.value)
-          }pre.innerHTML = newContent;
-          cs.parentNode.replaceChild(pre, cs);
-          cs = pre
-        }else cs.innerHTML = newContent;
-        if(isIE6 && cs.tagName === "PRE")for(var lineBreaks = cs.getElementsByTagName("br"), j = lineBreaks.length;--j >= 0;) {
-          var lineBreak = lineBreaks[j];
-          lineBreak.parentNode.replaceChild(document.createTextNode("\r"), lineBreak)
-        }
-      }
-    }
+    for(var isIE6 = window._pr_isIE6(), codeSegments = [document.getElementsByTagName("pre"), document.getElementsByTagName("code"), document.getElementsByTagName("xmp")], elements = [], i = 0;i < codeSegments.length;++i)for(var j = 0, n = codeSegments[i].length;j < n;++j)elements.push(codeSegments[i][j]);
+    codeSegments = null;
+    var clock = Date;
+    clock.now || (clock = {now:function() {
+      return(new Date).getTime()
+    }});
+    var k = 0, prettyPrintingJob;
     doWork()
   }
+  var REGEXP_PRECEDER_PATTERN = function() {
+    for(var preceders = ["!", "!=", "!==", "#", "%", "%=", "&", "&&", "&&=", "&=", "(", "*", "*=", "+=", ",", "-=", "->", "/", "/=", ":", "::", ";", "<", "<<", "<<=", "<=", "=", "==", "===", ">", ">=", ">>", ">>=", ">>>", ">>>=", "?", "@", "[", "^", "^=", "^^", "^^=", "{", "|", "|=", "||", "||=", "~", "break", "case", "continue", "delete", "do", "else", "finally", "instanceof", "return", "throw", "try", "typeof"], pattern = "(?:^^|[+-]", i = 0;i < preceders.length;++i)pattern += "|" + preceders[i].replace(/([^=<>:&a-z])/g, 
+    "\\$1");
+    pattern += ")\\s*";
+    return pattern
+  }(), pr_amp = /&/g, pr_lt = /</g, pr_gt = />/g, pr_quot = /\"/g, pr_ltEnt = /&lt;/g, pr_gtEnt = /&gt;/g, pr_aposEnt = /&apos;/g, pr_quotEnt = /&quot;/g, pr_ampEnt = /&amp;/g, pr_nbspEnt = /&nbsp;/g, newlineRe = /[\r\n]/g, PR_innerHtmlWorks = null, pr_chunkPattern = new RegExp("[^<]+|<!--[\\s\\S]*?--\>|<!\\[CDATA\\[[\\s\\S]*?\\]\\]>|</?[a-zA-Z](?:[^>\"']|'[^']*'|\"[^\"]*\")*>|<", "g"), pr_commentPrefix = /^<\!--/, pr_cdataPrefix = /^<!\[CDATA\[/, pr_brPrefix = /^<br\b/i, pr_tagNameRe = /^<(\/?)([a-zA-Z][a-zA-Z0-9]*)/, 
+  decorateSource = sourceDecorator({keywords:"break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try alignof align_union asm axiom bool concept concept_map const_cast constexpr decltype dynamic_cast explicit export friend inline late_check mutable namespace nullptr reinterpret_cast static_assert static_cast template typeid typename typeof using virtual wchar_t where break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try boolean byte extends final finally implements import instanceof null native package strictfp super synchronized throws transient as base by checked decimal delegate descending event fixed foreach from group implicit in interface internal into is lock object out override orderby params partial readonly ref sbyte sealed stackalloc string select uint ulong unchecked unsafe ushort var break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try debugger eval export function get null set undefined var with Infinity NaN caller delete die do dump elsif eval exit foreach for goto if import last local my next no our print package redo require sub undef unless until use wantarray while BEGIN END break continue do else for if return while and as assert class def del elif except exec finally from global import in is lambda nonlocal not or pass print raise try with yield False True None break continue do else for if return while alias and begin case class def defined elsif end ensure false in module next nil not or redo rescue retry self super then true undef unless until when yield BEGIN END break continue do else for if return while case done elif esac eval fi function in local set then until ", 
+  hashComments:true, cStyleComments:true, multiLineStrings:true, regexLiterals:true}), langHandlerRegistry = {};
+  registerLangHandler(decorateSource, ["default-code"]);
+  registerLangHandler(createSimpleLexer([], [["pln", /^[^<?]+/], ["dec", /^<!\w[^>]*(?:>|$)/], ["com", /^<\!--[\s\S]*?(?:-\->|$)/], ["lang-", /^<\?([\s\S]+?)(?:\?>|$)/], ["lang-", /^<%([\s\S]+?)(?:%>|$)/], ["pun", /^(?:<[%?]|[%?]>)/], ["lang-", /^<xmp\b[^>]*>([\s\S]+?)<\/xmp\b[^>]*>/i], ["lang-js", /^<script\b[^>]*>([\s\S]+?)<\/script\b[^>]*>/i], ["lang-css", /^<style\b[^>]*>([\s\S]+?)<\/style\b[^>]*>/i], ["lang-in.tag", /^(<\/?[a-z][^<>]*>)/i]]), ["default-markup", "htm", "html", "mxml", "xhtml", 
+  "xml", "xsl"]);
+  registerLangHandler(createSimpleLexer([["pln", /^[\s]+/, null, " \t\r\n"], ["atv", /^(?:\"[^\"]*\"?|\'[^\']*\'?)/, null, "\"'"]], [["tag", /^^<\/?[a-z](?:[\w:-]*\w)?|\/?>$/], ["atn", /^(?!style\b|on)[a-z](?:[\w:-]*\w)?/], ["lang-uq.val", /^=\s*([^>\'\"\s]*(?:[^>\'\"\s\/]|\/(?=\s)))/], ["pun", /^[=<>\/]+/], ["lang-js", /^on\w+\s*=\s*\"([^\"]+)\"/i], ["lang-js", /^on\w+\s*=\s*\'([^\']+)\'/i], ["lang-js", /^on\w+\s*=\s*([^\"\'>\s]+)/i], ["lang-css", /^sty\w+\s*=\s*\"([^\"]+)\"/i], ["lang-css", /^sty\w+\s*=\s*\'([^\']+)\'/i], 
+  ["lang-css", /^sty\w+\s*=\s*([^\"\'>\s]+)/i]]), ["in.tag"]);
+  registerLangHandler(createSimpleLexer([], [["atv", /^[\s\S]+/]]), ["uq.val"]);
+  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try alignof align_union asm axiom bool concept concept_map const_cast constexpr decltype dynamic_cast explicit export friend inline late_check mutable namespace nullptr reinterpret_cast static_assert static_cast template typeid typename typeof using virtual wchar_t where ", 
+  hashComments:true, cStyleComments:true}), ["c", "cc", "cpp", "cxx", "cyc", "m"]);
+  registerLangHandler(sourceDecorator({keywords:"null true false"}), ["json"]);
+  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try boolean byte extends final finally implements import instanceof null native package strictfp super synchronized throws transient as base by checked decimal delegate descending event fixed foreach from group implicit in interface internal into is lock object out override orderby params partial readonly ref sbyte sealed stackalloc string select uint ulong unchecked unsafe ushort var ", 
+  hashComments:true, cStyleComments:true}), ["cs"]);
+  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try boolean byte extends final finally implements import instanceof null native package strictfp super synchronized throws transient ", cStyleComments:true}), ["java"]);
+  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while case done elif esac eval fi function in local set then until ", hashComments:true, multiLineStrings:true}), ["bsh", "csh", "sh"]);
+  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while and as assert class def del elif except exec finally from global import in is lambda nonlocal not or pass print raise try with yield False True None ", hashComments:true, multiLineStrings:true, tripleQuotedStrings:true}), ["cv", "py"]);
+  registerLangHandler(sourceDecorator({keywords:"caller delete die do dump elsif eval exit foreach for goto if import last local my next no our print package redo require sub undef unless until use wantarray while BEGIN END ", hashComments:true, multiLineStrings:true, regexLiterals:true}), ["perl", "pl", "pm"]);
+  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while alias and begin case class def defined elsif end ensure false in module next nil not or redo rescue retry self super then true undef unless until when yield BEGIN END ", hashComments:true, multiLineStrings:true, regexLiterals:true}), ["rb"]);
+  registerLangHandler(sourceDecorator({keywords:"break continue do else for if return while auto case char const default double enum extern float goto int long register short signed sizeof static struct switch typedef union unsigned void volatile catch class delete false import new operator private protected public this throw true try debugger eval export function get null set undefined var with Infinity NaN ", cStyleComments:true, regexLiterals:true}), ["js"]);
+  registerLangHandler(createSimpleLexer([], [["str", /^[\s\S]+/]]), ["regex"]);
   window.PR_normalizedHtml = normalizedHtml;
   window.prettyPrintOne = prettyPrintOne;
   window.prettyPrint = prettyPrint;
@@ -9301,19 +9286,13 @@ function load() {
     }
   }
   function makeSideIndex(sideIndexElt, isTypeIndex, data) {
-    var currentNodePath = sideIndexElt.getAttribute("current"), rootPath = sideIndexElt.getAttribute("rootPath"), separator = isTypeIndex ? "." : "/", root = grokdoc.makeTree('<span style="display:none;"></span>', sideIndexElt, getRoot(isTypeIndex ? data.typeIndex : data.fileIndex, rootPath, separator));
+    for(var currentNodePath = sideIndexElt.getAttribute("current"), rootPath = sideIndexElt.getAttribute("rootPath"), separator = isTypeIndex ? "." : "/", JSCompiler_inline_nodeNames = rootPath.split(separator), JSCompiler_inline_root = isTypeIndex ? data.typeIndex : data.fileIndex, JSCompiler_inline_i = 0;JSCompiler_inline_i < JSCompiler_inline_nodeNames.length;JSCompiler_inline_i++)JSCompiler_inline_root = JSCompiler_inline_root[2][JSCompiler_inline_nodeNames[JSCompiler_inline_i]];
+    var root = grokdoc.makeTree('<span style="display:none;"></span>', sideIndexElt, JSCompiler_inline_root);
     grokdoc.TypedTreeNode.followPath(separator, currentNodePath, root, null, buildLocalView)
-  }
-  function getRoot(data, rootPath, separator) {
-    for(var nodeNames = rootPath.split(separator), root = data, i = 0;i < nodeNames.length;i++)root = root[2][nodeNames[i]];
-    return root
-  }
-  function toggleClass(classname, visible) {
-    for(var elts = goog.dom.getElementsByTagNameAndClass(null, classname), i = 0;i < elts.length;i++)goog.style.showElement(elts[i], visible)
   }
   function getAclListener(classname) {
     return function() {
-      toggleClass(classname, this.isChecked())
+      for(var JSCompiler_inline_visible = this.isChecked(), JSCompiler_inline_elts_75 = goog.dom.getElementsByTagNameAndClass(null, classname), JSCompiler_inline_i = 0;JSCompiler_inline_i < JSCompiler_inline_elts_75.length;JSCompiler_inline_i++)goog.style.showElement(JSCompiler_inline_elts_75[JSCompiler_inline_i], JSCompiler_inline_visible)
     }
   }
   function initDom() {
@@ -9343,4 +9322,22 @@ function load() {
   goog.events.listen(imgLoader, goog.net.EventType.COMPLETE, initDom);
   imgLoader.start()
 }
-goog.events.listenOnce(window, "load", load);
+goog.events.listenOnce(window, "load", load);grokdoc.gviz = {};
+grokdoc.gviz.decorators = {};
+grokdoc.gviz.decorators["gviz-org-chart"] = function(table) {
+  var data = new google.visualization.DataTable;
+  data.addColumn("string", "Name");
+  data.addColumn("string", "Parent");
+  for(var i = 0, row = table.rows[0];row = table.rows[i];i++)row.cells.length >= 2 && data.addRows([[row.cells[0].innerHTML, row.cells[1].innerHTML]]);
+  var chartRoot = goog.dom.$dom("div", "goog-inline-block");
+  table.parentNode.replaceChild(chartRoot, table);
+  (new google.visualization.OrgChart(chartRoot)).draw(data, {allowHtml:true, allowCollapse:true})
+};
+grokdoc.gviz.init = function() {
+  for(var tables = goog.dom.$$("table"), table, i = 0;table = tables[i++];) {
+    var fn = grokdoc.gviz.decorators[table.className];
+    fn && fn(table)
+  }
+};
+goog.exportSymbol("grokdoc.gviz.init", grokdoc.gviz.init);
+document.write('<script type="text/javascript" src="http://www.google.com/jsapi"><\/script><script type="text/javascript"> google.load("visualization", "1", {packages:["orgchart"]}); google.setOnLoadCallback(grokdoc.gviz.init); <\/script>');

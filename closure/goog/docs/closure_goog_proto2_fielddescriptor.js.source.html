@@ -163,7 +163,7 @@
 <a name="line120"></a>
 <a name="line121"></a>/**
 <a name="line122"></a> * Returns the name of the field that this descriptor represents.
-<a name="line123"></a> * @return {String} The name.
+<a name="line123"></a> * @return {string} The name.
 <a name="line124"></a> */
 <a name="line125"></a>goog.proto2.FieldDescriptor.prototype.getName = function() {
 <a name="line126"></a>  return this.name_;
@@ -224,7 +224,7 @@
 <a name="line181"></a>
 <a name="line182"></a>/**
 <a name="line183"></a> * Returns whether the field described by this descriptor is repeating.
-<a name="line184"></a> * @return {Boolean} Whether the field is repeated.
+<a name="line184"></a> * @return {boolean} Whether the field is repeated.
 <a name="line185"></a> */
 <a name="line186"></a>goog.proto2.FieldDescriptor.prototype.isRepeated = function() {
 <a name="line187"></a>  return this.isRepeated_;
@@ -233,7 +233,7 @@
 <a name="line190"></a>
 <a name="line191"></a>/**
 <a name="line192"></a> * Returns whether the field described by this descriptor is required.
-<a name="line193"></a> * @return {Boolean} Whether the field is required.
+<a name="line193"></a> * @return {boolean} Whether the field is required.
 <a name="line194"></a> */
 <a name="line195"></a>goog.proto2.FieldDescriptor.prototype.isRequired = function() {
 <a name="line196"></a>  return this.isRequired_;
@@ -242,7 +242,7 @@
 <a name="line199"></a>
 <a name="line200"></a>/**
 <a name="line201"></a> * Returns whether the field described by this descriptor is optional.
-<a name="line202"></a> * @return {Boolean} Whether the field is optional.
+<a name="line202"></a> * @return {boolean} Whether the field is optional.
 <a name="line203"></a> */
 <a name="line204"></a>goog.proto2.FieldDescriptor.prototype.isOptional = function() {
 <a name="line205"></a>  return !this.isRepeated_ &amp;&amp; !this.isRequired_;

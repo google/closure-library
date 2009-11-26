@@ -26,6 +26,8 @@ limitations under the License.
 
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
+goog.require('goog.string');
+goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 
 </script>
@@ -37,9 +39,25 @@ var Deferred = goog.async.Deferred;
 var AlreadyCalledError = goog.async.Deferred.AlreadyCalledError;
 var CancelledError = goog.async.Deferred.CancelledError;
 
+// Unhandled errors may be sent to the browser on a timeout.
+var mockClock = new goog.testing.MockClock();
+
+function setUp() {
+  mockClock.install();
+}
+
+function tearDown() {
+  // Advance the mockClock to fire any unhandled exception timeouts.
+  mockClock.tick();
+  mockClock.uninstall();
+}
+
 function assertEqualsCallback(msg, expected) {
   return function(res) {
     assertEquals(msg, expected, res);
+    // Since the assertion is an exception that will be caught inside the
+    // Deferred object, we must advance the clock to see if it has failed.
+    mockClock.tick();
     return res;
   };
 }
@@ -53,7 +71,11 @@ function throwStuff(res) {
 }
 
 function catchStuff(res) {
-  return res.message;
+  // IE handles numbers passed to the Error object in a non-standard way. Treat
+  // an error number as the message if no message is present.
+  // See http://msdn.microsoft.com/en-us/library/t9zk6eay(VS.71).aspx
+  var message = res.message || res.number;
+  return goog.string.isNumeric(message) ? Number(message) : message;
 }
 
 function returnError(res) {
@@ -78,7 +100,6 @@ function testNormal() {
   d.addCallback(neverHappen);
   d.addErrback(catchStuff);
   d.addCallback(assertEqualsCallback('return -> err, catch -> succcess', 2));
-
 }
 
 function testCancel() {
@@ -309,6 +330,14 @@ function testChainedDeferred2() {
 
   d1.callback();
   assertEquals('B2,A2', calls.join(','));
+
+  try {
+    mockClock.tick();
+    neverHappen();
+  } catch (ex) {
+    assertEquals('In debug mode, should catch unhandled throw from d2.',
+                 'x', ex.message);
+  }
 }
 
 function testUndefinedResultAndCallbackSequence() {
@@ -344,6 +373,46 @@ function testHasFired() {
   d2.errback();
   assertTrue(d1.hasFired());
   assertTrue(d2.hasFired());
+}
+
+function testUnhandledErrors() {
+  var d = new Deferred();
+  d.addCallback(throwStuff);
+
+  try {
+    d.callback(1);
+    mockClock.tick();
+    neverHappen();
+  } catch (ex) {
+    assertTrue('In debug mode, unhandled exceptions should hit the browser.',
+               ex instanceof Error);
+  }
+
+  try {
+    d.addErrback(catchStuff);
+    mockClock.tick();
+  } catch (ex) {
+    fail('Errbacks added after a failure should resume.');
+  }
+
+  d.addCallback(assertEqualsCallback('Should recover after throw.', 1));
+  mockClock.tick();
+}
+
+function testSynchronousErrorCancelling() {
+  var d = new Deferred();
+  d.addCallback(throwStuff);
+
+  try {
+    d.callback(1);
+    d.addErrback(catchStuff);
+    mockClock.tick();
+  } catch (ex) {
+    fail('Adding an errback to the end of a failing Deferred should cancel ' +
+         'the unhandled error timeout.');
+  }
+
+  d.addCallback(assertEqualsCallback('Callback should fire', 1));
 }
 
 </script>

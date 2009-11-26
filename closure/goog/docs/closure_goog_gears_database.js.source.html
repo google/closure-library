@@ -310,7 +310,7 @@
 <a name="line267"></a> * the object.
 <a name="line268"></a> *
 <a name="line269"></a> * @param {GearsResultSet} rs the result set returned by execute.
-<a name="line270"></a> * @return {Object?} a hash map with the key-value-pairs from the first row.
+<a name="line270"></a> * @return {Object} a hash map with the key-value-pairs from the first row.
 <a name="line271"></a> *     Returns null is there are no matching rows.
 <a name="line272"></a> */
 <a name="line273"></a>goog.gears.Database.resultSetToObject = function(rs) {
@@ -953,24 +953,25 @@
 <a name="line910"></a>
 <a name="line911"></a>/**
 <a name="line912"></a> * Determines if the exception is a locking error.
-<a name="line913"></a> * @param {Error} ex The exception object.
+<a name="line913"></a> * @param {Error|string} ex The exception object or error string.
 <a name="line914"></a> * @return {boolean} Whether this is a database locked exception.
 <a name="line915"></a> */
 <a name="line916"></a>goog.gears.Database.isLockedException = function(ex) {
 <a name="line917"></a>  // TODO: change the test when gears provides a reasonable
 <a name="line918"></a>  // error code to check.
-<a name="line919"></a>  return !!ex.message &amp;&amp; ex.message.indexOf(&#39;database is locked&#39;) &gt;= 0;
-<a name="line920"></a>};
-<a name="line921"></a>
+<a name="line919"></a>  var message = goog.isString(ex) ? ex : ex.message;
+<a name="line920"></a>  return !!message &amp;&amp; message.indexOf(&#39;database is locked&#39;) &gt;= 0;
+<a name="line921"></a>};
 <a name="line922"></a>
-<a name="line923"></a>/**
-<a name="line924"></a> * Removes the database.
-<a name="line925"></a> * @throws {Error} This requires Gears 0.5 or newer and will throw an error if
-<a name="line926"></a> *     called on a too old version of Gears.
-<a name="line927"></a> */
-<a name="line928"></a>goog.gears.Database.prototype.remove = function() {
-<a name="line929"></a>  this.database_.remove();
-<a name="line930"></a>};
+<a name="line923"></a>
+<a name="line924"></a>/**
+<a name="line925"></a> * Removes the database.
+<a name="line926"></a> * @throws {Error} This requires Gears 0.5 or newer and will throw an error if
+<a name="line927"></a> *     called on a too old version of Gears.
+<a name="line928"></a> */
+<a name="line929"></a>goog.gears.Database.prototype.remove = function() {
+<a name="line930"></a>  this.database_.remove();
+<a name="line931"></a>};
 </pre>
 
 

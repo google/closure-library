@@ -172,7 +172,7 @@
 <a name="line129"></a>
 <a name="line130"></a>/**
 <a name="line131"></a> * Port, e.g. 8080.
-<a name="line132"></a> * @type {number?}
+<a name="line132"></a> * @type {?number}
 <a name="line133"></a> * @private
 <a name="line134"></a> */
 <a name="line135"></a>goog.Uri.prototype.port_ = null;
@@ -462,7 +462,7 @@
 <a name="line419"></a>
 <a name="line420"></a>
 <a name="line421"></a>/**
-<a name="line422"></a> * @return {number?} The port number.
+<a name="line422"></a> * @return {?number} The port number.
 <a name="line423"></a> */
 <a name="line424"></a>goog.Uri.prototype.getPort = function() {
 <a name="line425"></a>  return this.port_;
@@ -943,7 +943,7 @@
 <a name="line900"></a>/**
 <a name="line901"></a> * URI encode a string, or return null if it&#39;s not a string.
 <a name="line902"></a> * @param {*} unescapedPart Unescaped string.
-<a name="line903"></a> * @return {string?} Escaped string.
+<a name="line903"></a> * @return {?string} Escaped string.
 <a name="line904"></a> * @private
 <a name="line905"></a> */
 <a name="line906"></a>goog.Uri.encodeString_ = function(unescapedPart) {
@@ -969,7 +969,7 @@
 <a name="line926"></a> *
 <a name="line927"></a> * @param {*} unescapedPart The string to encode.
 <a name="line928"></a> * @param {RegExp} extra A character set of characters in [\01-\177].
-<a name="line929"></a> * @return {string?} null iff unescapedPart == null.
+<a name="line929"></a> * @return {?string} null iff unescapedPart == null.
 <a name="line930"></a> * @private
 <a name="line931"></a> */
 <a name="line932"></a>goog.Uri.encodeSpecialChars_ = function(unescapedPart, extra) {
@@ -1062,7 +1062,7 @@
 <a name="line1019"></a> *
 <a name="line1020"></a> * Has the same interface as the collections in goog.structs.
 <a name="line1021"></a> *
-<a name="line1022"></a> * @param {string?} opt_query Optional encoded query string to parse into
+<a name="line1022"></a> * @param {?string} opt_query Optional encoded query string to parse into
 <a name="line1023"></a> *     the object.
 <a name="line1024"></a> * @param {goog.Uri} opt_uri Optional uri object that should have it&#39;s cache
 <a name="line1025"></a> *     invalidated when this object updates.
@@ -1073,7 +1073,7 @@
 <a name="line1030"></a>goog.Uri.QueryData = function(opt_query, opt_uri, opt_ignoreCase) {
 <a name="line1031"></a>  /**
 <a name="line1032"></a>   * Encoded query string, or null if it requires computing from the key map.
-<a name="line1033"></a>   * @type {string?}
+<a name="line1033"></a>   * @type {?string}
 <a name="line1034"></a>   * @private
 <a name="line1035"></a>   */
 <a name="line1036"></a>  this.encodedQuery_ = opt_query || null;
@@ -1182,7 +1182,7 @@
 <a name="line1139"></a> * We need to use a Map because we cannot guarantee that the key names will
 <a name="line1140"></a> * not be problematic for IE.
 <a name="line1141"></a> *
-<a name="line1142"></a> * @type {Object?}
+<a name="line1142"></a> * @type {Object}
 <a name="line1143"></a> * @private
 <a name="line1144"></a> */
 <a name="line1145"></a>goog.Uri.QueryData.prototype.keyMap_ = null;
@@ -1190,7 +1190,7 @@
 <a name="line1147"></a>
 <a name="line1148"></a>/**
 <a name="line1149"></a> * The number of params, or null if it requires computing.
-<a name="line1150"></a> * @type {number?}
+<a name="line1150"></a> * @type {?number}
 <a name="line1151"></a> * @private
 <a name="line1152"></a> */
 <a name="line1153"></a>goog.Uri.QueryData.prototype.count_ = null;
@@ -1198,14 +1198,14 @@
 <a name="line1155"></a>
 <a name="line1156"></a>/**
 <a name="line1157"></a> * Decoded query string, or null if it requires computing.
-<a name="line1158"></a> * @type {string?}
+<a name="line1158"></a> * @type {?string}
 <a name="line1159"></a> * @private
 <a name="line1160"></a> */
 <a name="line1161"></a>goog.Uri.QueryData.decodedQuery_ = null;
 <a name="line1162"></a>
 <a name="line1163"></a>
 <a name="line1164"></a>/**
-<a name="line1165"></a> * @return {Number} The number of parameters.
+<a name="line1165"></a> * @return {?number} The number of parameters.
 <a name="line1166"></a> */
 <a name="line1167"></a>goog.Uri.QueryData.prototype.getCount = function() {
 <a name="line1168"></a>  this.ensureKeyMapInitialized_();

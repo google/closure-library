@@ -116,7 +116,7 @@ goog.ui.MenuBase.prototype.onHide_ = function(opt_target) {
 /**
  * Returns the selected item
  *
- * @return {Object?} The item selected or null if no item is selected.
+ * @return {Object} The item selected or null if no item is selected.
  */
 goog.ui.MenuBase.prototype.getSelectedItem = function() {
   return null;

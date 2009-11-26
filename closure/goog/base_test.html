@@ -965,6 +965,75 @@ function testAddDependency() {
   assert(goog.isObject(testDep.bar));
 }
 
+function testBaseMethod() {
+  function A() {}
+  A.prototype.foo = function(x, y) {
+    return x + y;
+  };
+
+  function B() {}
+  goog.inherits(B, A);
+  B.prototype.foo = function(x, y) {
+    return 2 + goog.base(this, 'foo', x, y);
+  };
+
+  function C() {}
+  goog.inherits(C, B);
+  C.prototype.foo = function(x, y) {
+    return 4 + goog.base(this, 'foo', x, y);
+  };
+
+  var d = new C();
+  d.foo = function(x, y) {
+    return 8 + goog.base(this, 'foo', x, y);
+  };
+
+  assertEquals(15, d.foo(1, 0));
+  assertEquals(16, d.foo(1, 1));
+  assertEquals(16, d.foo(2, 0));
+  assertEquals(7, (new C()).foo(1, 0));
+  assertEquals(3, (new B()).foo(1, 0));
+  assertThrows(function() {
+    goog.base(d, 'foo', 1, 0);
+  });
+
+  delete B.prototype.foo;
+  assertEquals(13, d.foo(1, 0));
+
+  delete C.prototype.foo;
+  assertEquals(9, d.foo(1, 0));
+}
+
+function testBaseClass() {
+  function A(x, y) {
+    this.foo = x + y;
+  }
+
+  function B(x, y) {
+    goog.base(this, x, y);
+    this.foo += 2;
+  }
+  goog.inherits(B, A);
+
+  function C(x, y) {
+    goog.base(this, x, y);
+    this.foo += 4;
+  }
+  goog.inherits(C, B);
+
+  function D(x, y) {
+    goog.base(this, x, y);
+    this.foo += 8;
+  }
+  goog.inherits(D, C);
+
+  assertEquals(15, (new D(1, 0)).foo);
+  assertEquals(16, (new D(1, 1)).foo);
+  assertEquals(16, (new D(2, 0)).foo);
+  assertEquals(7, (new C(1, 0)).foo);
+  assertEquals(3, (new B(1, 0)).foo);
+}
+
 </script>
 </body>
 </html>

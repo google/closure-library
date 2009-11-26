@@ -155,7 +155,7 @@
 <a name="line112"></a>/**
 <a name="line113"></a> * Returns true if the element has a valid tab index (defined as &gt;= 0), false
 <a name="line114"></a> * otherwise.  Only elements with a valid tab index can receive focus.
-<a name="line115"></a> * @param {Element?} element Element to check.
+<a name="line115"></a> * @param {Element} element Element to check.
 <a name="line116"></a> * @return {boolean} Whether the element has a tab index.
 <a name="line117"></a> */
 <a name="line118"></a>goog.ui.ContainerRenderer.prototype.hasTabIndex = function(element) {
@@ -205,9 +205,9 @@
 <a name="line162"></a>/**
 <a name="line163"></a> * Returns the DOM element into which child components are to be rendered,
 <a name="line164"></a> * or null if the container hasn&#39;t been rendered yet.
-<a name="line165"></a> * @param {Element?} element Root element of the container whose content element
+<a name="line165"></a> * @param {Element} element Root element of the container whose content element
 <a name="line166"></a> *     is to be returned.
-<a name="line167"></a> * @return {Element?} Element to contain child elements (null if none).
+<a name="line167"></a> * @return {Element} Element to contain child elements (null if none).
 <a name="line168"></a> */
 <a name="line169"></a>goog.ui.ContainerRenderer.prototype.getContentElement = function(element) {
 <a name="line170"></a>  return element;

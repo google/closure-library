@@ -42,7 +42,7 @@ goog.require('goog.testing.asserts');
  * if the given criteria is met.
  * @param {Function} opt_matchFn A function that evaluates a given argument
  *     and returns true if it meets a given criteria.
- * @param {string?} opt_matchName The name expressing intent as part of
+ * @param {?string} opt_matchName The name expressing intent as part of
  *      an error message for when a match fails.
  * @constructor
  */
@@ -51,14 +51,14 @@ goog.testing.mockmatchers.ArgumentMatcher =
   /**
    * A function that evaluates a given argument and returns true if it meets a
    * given criteria.
-   * @type {Function?}
+   * @type {Function}
    * @private
    */
   this.matchFn_ = opt_matchFn || null;
 
   /**
    * A string indicating the match intent (e.g. isBoolean or isString).
-   * @type {string?}
+   * @type {?string}
    * @private
    */
   this.matchName_ = opt_matchName || null;
@@ -209,7 +209,7 @@ goog.testing.mockmatchers.ObjectEquals.prototype.matches =
  * @param {goog.testing.mockmatchers.ArgumentMatcher|Function} opt_matcher
  *     Argument matcher or matching function that will be used to validate the
  *     argument.  By default, argument will always be valid.
- * @param {string?} opt_matchName The name expressing intent as part of
+ * @param {?string} opt_matchName The name expressing intent as part of
  *      an error message for when a match fails.
  * @constructor
  * @extends {goog.testing.mockmatchers.ArgumentMatcher}

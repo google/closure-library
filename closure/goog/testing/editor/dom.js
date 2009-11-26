@@ -237,7 +237,7 @@ goog.testing.editor.dom.assertRangeBetweenText = function(before,
  *     after it.
  * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
  *     to this node's subtree).
- * @return {string?} The text that follows the given range, or null if no
+ * @return {?string} The text that follows the given range, or null if no
  *     non-empty text node is found.
  * @private
  */

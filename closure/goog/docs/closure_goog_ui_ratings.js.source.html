@@ -284,7 +284,7 @@
 <a name="line241"></a>
 <a name="line242"></a>/**
 <a name="line243"></a> * Returns the rating value of the currently selected rating
-<a name="line244"></a> * @return {string?} The value of the currently selected rating (or null).
+<a name="line244"></a> * @return {?string} The value of the currently selected rating (or null).
 <a name="line245"></a> */
 <a name="line246"></a>goog.ui.Ratings.prototype.getValue = function() {
 <a name="line247"></a>  return this.selectedIndex_ == -1 ? null : this.ratings_[this.selectedIndex_];
@@ -304,7 +304,7 @@
 <a name="line261"></a>/**
 <a name="line262"></a> * Returns the value of the currently highlighted rating, null if the mouse
 <a name="line263"></a> * isn&#39;t currently over the widget
-<a name="line264"></a> * @return {string?} The value of the currently highlighted rating, or null.
+<a name="line264"></a> * @return {?string} The value of the currently highlighted rating, or null.
 <a name="line265"></a> */
 <a name="line266"></a>goog.ui.Ratings.prototype.getHighlightedValue = function() {
 <a name="line267"></a>  return this.highlightedIndex_ == -1 ? null :

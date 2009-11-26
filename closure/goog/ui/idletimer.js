@@ -91,7 +91,7 @@ goog.ui.IdleTimer.prototype.hasActivityListener_ = false;
 
 /**
  * Handle to the timer ID used for checking ongoing activity, or null
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.ui.IdleTimer.prototype.onActivityTimerId_ = null;

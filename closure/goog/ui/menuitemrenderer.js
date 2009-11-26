@@ -213,7 +213,7 @@ goog.ui.MenuItemRenderer.prototype.createContent = function(content, dom) {
 /**
  * Enables/disables radio button semantics on the menu item.
  * @param {goog.ui.Control} item Menu item to update.
- * @param {Element?} element Menu item element to update (may be null if the
+ * @param {Element} element Menu item element to update (may be null if the
  *     item hasn't been rendered yet).
  * @param {boolean} selectable Whether the item should be selectable.
  */
@@ -230,7 +230,7 @@ goog.ui.MenuItemRenderer.prototype.setSelectable = function(item, element,
 /**
  * Enables/disables checkbox semantics on the menu item.
  * @param {goog.ui.Control} item Menu item to update.
- * @param {Element?} element Menu item element to update (may be null if the
+ * @param {Element} element Menu item element to update (may be null if the
  *     item hasn't been rendered yet).
  * @param {boolean} checkable Whether the item should be checkable.
  */

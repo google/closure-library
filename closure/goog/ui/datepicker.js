@@ -200,7 +200,7 @@ goog.ui.DatePicker.prototype.created_ = false;
 /**
  * Custom decorator function. Takes a goog.date.Date object, returns a String
  * representing a CSS class or null if no special styling applies
- * @type {Function?}
+ * @type {Function}
  * @private
  */
 goog.ui.DatePicker.prototype.decoratorFunction_ = null;
@@ -463,7 +463,7 @@ goog.ui.DatePicker.prototype.updateTodayAndNone_ = function() {
 
 /**
  * Sets the decorator function. The function should have the interface of
- *   {String} f({goog.date.Date});
+ *   {string} f({goog.date.Date});
  * and return a String representing a CSS class to decorate the cell
  * corresponding to the date specified.
  *

@@ -183,7 +183,7 @@ goog.ui.Dialog.prototype.disposeOnHide_ = false;
 
 /**
  * Element for the background which obscures the UI and blocks events.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.Dialog.prototype.bgEl_ = null;
@@ -192,7 +192,7 @@ goog.ui.Dialog.prototype.bgEl_ = null;
 /**
  * Iframe element that is only used for IE as a workaround to keep select-type
  * elements from burning through background.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.Dialog.prototype.bgIframeEl_ = null;
@@ -200,7 +200,7 @@ goog.ui.Dialog.prototype.bgIframeEl_ = null;
 
 /**
  * Element for the title bar.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.Dialog.prototype.titleEl_ = null;
@@ -208,7 +208,7 @@ goog.ui.Dialog.prototype.titleEl_ = null;
 
 /**
  * Element for the text area of the title bar.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.Dialog.prototype.titleTextEl_ = null;
@@ -217,7 +217,7 @@ goog.ui.Dialog.prototype.titleTextEl_ = null;
 
 /**
  * Id of element for the text area of the title bar.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.Dialog.prototype.titleId_ = null;
@@ -225,7 +225,7 @@ goog.ui.Dialog.prototype.titleId_ = null;
 
 /**
  * Element for the close box area of the title bar.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.Dialog.prototype.titleCloseEl_ = null;
@@ -233,7 +233,7 @@ goog.ui.Dialog.prototype.titleCloseEl_ = null;
 
 /**
  * Element for the content area.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.Dialog.prototype.contentEl_ = null;
@@ -241,7 +241,7 @@ goog.ui.Dialog.prototype.contentEl_ = null;
 
 /**
  * Element for the button bar.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.Dialog.prototype.buttonEl_ = null;
@@ -951,7 +951,14 @@ goog.ui.Dialog.prototype.reposition = function() {
   var left = Math.max(x + viewSize.width / 2 - dialogSize.width / 2, 0);
   var top = Math.max(y + viewSize.height / 2 - dialogSize.height / 2, 0);
 
-  goog.style.setPosition(this.getElement(), left, top);
+  var el = this.getElement()
+  if (this.isRightToLeft()) {
+    // Round the values since that's what setPosition does.
+    el.style.right = Math.round(left) + 'px';
+    el.style.top = Math.round(top) + 'px';
+  } else {
+    goog.style.setPosition(el, left, top);
+  }
 };
 
 
@@ -1070,7 +1077,7 @@ goog.ui.Dialog.prototype.onButtonClick_ = function(e) {
  * Finds the parent button of an element (or null if there was no button
  * parent).
  * @param {Element} element The element that was clicked on.
- * @return {Element?} Returns the parent button or null if not found.
+ * @return {Element} Returns the parent button or null if not found.
  * @private
  */
 goog.ui.Dialog.prototype.findParentButton_ = function(element) {
@@ -1265,7 +1272,7 @@ goog.ui.Dialog.ButtonSet.prototype.class_ = goog.getCssName('goog-buttonset');
 
 /**
  * The button that has default focus (references key in buttons_ map).
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.Dialog.ButtonSet.prototype.defaultButton_ = null;
@@ -1273,7 +1280,7 @@ goog.ui.Dialog.ButtonSet.prototype.defaultButton_ = null;
 
 /**
  * Optional container the button set should be rendered into.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.Dialog.ButtonSet.prototype.element_ = null;
@@ -1282,7 +1289,7 @@ goog.ui.Dialog.ButtonSet.prototype.element_ = null;
 /**
  * The button whose action is associated with the escape key and the X button
  * on the dialog.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.Dialog.ButtonSet.prototype.cancelButton_ = null;
@@ -1381,7 +1388,7 @@ goog.ui.Dialog.ButtonSet.prototype.decorate = function(element) {
 
 /**
  * Sets the default button.
- * @param {string?} key The default button.
+ * @param {?string} key The default button.
  */
 goog.ui.Dialog.ButtonSet.prototype.setDefault = function(key) {
   this.defaultButton_ = key;
@@ -1390,7 +1397,7 @@ goog.ui.Dialog.ButtonSet.prototype.setDefault = function(key) {
 
 /**
  * Returns the default button.
- * @return {string?} The default button.
+ * @return {?string} The default button.
  */
 goog.ui.Dialog.ButtonSet.prototype.getDefault = function() {
   return this.defaultButton_;
@@ -1399,7 +1406,7 @@ goog.ui.Dialog.ButtonSet.prototype.getDefault = function() {
 
 /**
  * Sets the cancel button.
- * @param {string?} key The cancel button.
+ * @param {?string} key The cancel button.
  */
 goog.ui.Dialog.ButtonSet.prototype.setCancel = function(key) {
   this.cancelButton_ = key;
@@ -1408,7 +1415,7 @@ goog.ui.Dialog.ButtonSet.prototype.setCancel = function(key) {
 
 /**
  * Returns the cancel button.
- * @return {string?} The cancel button.
+ * @return {?string} The cancel button.
  */
 goog.ui.Dialog.ButtonSet.prototype.getCancel = function() {
   return this.cancelButton_;
@@ -1418,7 +1425,7 @@ goog.ui.Dialog.ButtonSet.prototype.getCancel = function() {
 /**
  * Returns the HTML Button element.
  * @param {string} key The button to return.
- * @return {Element?} The button, if found else null.
+ * @return {Element} The button, if found else null.
  */
 goog.ui.Dialog.ButtonSet.prototype.getButton = function(key) {
   var buttons = this.getAllButtons();
@@ -1479,7 +1486,7 @@ goog.ui.Dialog.DefaultButtonKeys = {
   var MSG_DIALOG_CONTINUE = goog.getMsg('Continue');
 
   goog.ui.Dialog.ButtonSet.OK = new goog.ui.Dialog.ButtonSet()
-      .set(goog.ui.Dialog.DefaultButtonKeys.OK, MSG_DIALOG_OK, true);
+      .set(goog.ui.Dialog.DefaultButtonKeys.OK, MSG_DIALOG_OK, true, true);
 
   goog.ui.Dialog.ButtonSet.OK_CANCEL = new goog.ui.Dialog.ButtonSet()
       .set(goog.ui.Dialog.DefaultButtonKeys.OK, MSG_DIALOG_OK, true)

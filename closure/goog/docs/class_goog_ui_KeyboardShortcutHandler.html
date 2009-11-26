@@ -82,12 +82,17 @@ plus at leat one modifier) and a sequence of keys or strokes.
 
 
 <h2 class="g-first">Inheritance</h2>
-<pre class="inheritance">
-Object
-     <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span>
-          <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span>
-               <img src="static/images/inherit.gif">goog.ui.KeyboardShortcutHandler
-</pre>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+  <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
+  <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
+  <tr><td>goog.ui.KeyboardShortcutHandler</td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+</table>
+</div>
 
 
 
@@ -848,8 +853,8 @@ are pressed.
        Verifies if a particular keyboard shortcut is registered already. It has
 the same interface as the unregistering of shortcuts.
 
-param {Number} keyCode Numeric code for key
-param {Number} opt_modifiers Bitmap indicating required modifier keys.
+param {number} keyCode Numeric code for key
+param {number} opt_modifiers Bitmap indicating required modifier keys.
 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
 ALT, or META.
 
@@ -1286,8 +1291,8 @@ even if entered in a textarea or input field.
        Unregisters a keyboard shortcut by keyCode and modifiers or string
 representation of sequence.
 
-param {Number} keyCode Numeric code for key
-param {Number} opt_modifiers Bitmap indicating required modifier keys.
+param {number} keyCode Numeric code for key
+param {number} opt_modifiers Bitmap indicating required modifier keys.
 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
 ALT, or META.
 

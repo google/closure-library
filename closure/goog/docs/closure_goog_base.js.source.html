@@ -122,7 +122,7 @@
 <a name="line79"></a> * Indicates whether or not we can call &#39;eval&#39; directly to eval code in the
 <a name="line80"></a> * global scope. Set to a Boolean by the first call to goog.globalEval (which
 <a name="line81"></a> * empirically tests whether eval works for globals). @see goog.globalEval
-<a name="line82"></a> * @type {boolean?}
+<a name="line82"></a> * @type {?boolean}
 <a name="line83"></a> * @private
 <a name="line84"></a> */
 <a name="line85"></a>goog.evalWorksForGlobals_ = null;
@@ -175,8 +175,8 @@
 <a name="line132"></a> * &quot;a.b.c&quot; -&gt; a = {};a.b={};a.b.c={};
 <a name="line133"></a> * Used by goog.provide and goog.exportSymbol.
 <a name="line134"></a> * @param {string} name name of the object that this file defines.
-<a name="line135"></a> * @param {Object} opt_object the object to expose at the end of the path.
-<a name="line136"></a> * @param {Object} opt_objectToExportTo The object to add the path to; default
+<a name="line135"></a> * @param {Object=} opt_object the object to expose at the end of the path.
+<a name="line136"></a> * @param {Object=} opt_objectToExportTo The object to add the path to; default
 <a name="line137"></a> *     is |goog.global|.
 <a name="line138"></a> * @private
 <a name="line139"></a> */
@@ -216,9 +216,9 @@
 <a name="line173"></a> * function will not find renamed properties.
 <a name="line174"></a> *
 <a name="line175"></a> * @param {string} name The fully qualified name.
-<a name="line176"></a> * @param {Object} opt_obj The object within which to look; default is
+<a name="line176"></a> * @param {Object=} opt_obj The object within which to look; default is
 <a name="line177"></a> *     |goog.global|.
-<a name="line178"></a> * @return {Object?} The object or, if not found, null.
+<a name="line178"></a> * @return {Object} The object or, if not found, null.
 <a name="line179"></a> */
 <a name="line180"></a>goog.getObjectByName = function(name, opt_obj) {
 <a name="line181"></a>  var parts = name.split(&#39;.&#39;);
@@ -238,7 +238,7 @@
 <a name="line195"></a> * Globalizes a whole namespace, such as goog or goog.lang.
 <a name="line196"></a> *
 <a name="line197"></a> * @param {Object} obj The namespace to globalize.
-<a name="line198"></a> * @param {Object} opt_global The object to add the properties to.
+<a name="line198"></a> * @param {Object=} opt_global The object to add the properties to.
 <a name="line199"></a> * @deprecated Properties may be explicitly exported to the global scope, but
 <a name="line200"></a> *     this should no longer be done in bulk.
 <a name="line201"></a> */
@@ -354,7 +354,7 @@
 <a name="line311"></a>/**
 <a name="line312"></a> * The identity function. Returns its first argument.
 <a name="line313"></a> *
-<a name="line314"></a> * @param {*} var_args The arguments of the function.
+<a name="line314"></a> * @param {...*} var_args The arguments of the function.
 <a name="line315"></a> * @return {*} The first argument.
 <a name="line316"></a> * @deprecated Use goog.functions.identity instead.
 <a name="line317"></a> */
@@ -546,7 +546,7 @@
 <a name="line503"></a>   * Looks at the dependency rules and tries to determine the script file that
 <a name="line504"></a>   * fulfills a particular rule.
 <a name="line505"></a>   * @param {string} rule In the form goog.namespace.Class or project.script.
-<a name="line506"></a>   * @return {string?} Url corresponding to the rule, or null.
+<a name="line506"></a>   * @return {?string} Url corresponding to the rule, or null.
 <a name="line507"></a>   * @private
 <a name="line508"></a>   */
 <a name="line509"></a>  goog.getPathFromDeps_ = function(rule) {
@@ -944,7 +944,7 @@
 <a name="line901"></a> * @param {Object|undefined} selfObj Specifies the object which |this| should
 <a name="line902"></a> *     point to when the function is run. If the value is null or undefined, it
 <a name="line903"></a> *     will default to the global object.
-<a name="line904"></a> * @param {*} var_args Additional arguments that are partially
+<a name="line904"></a> * @param {...*} var_args Additional arguments that are partially
 <a name="line905"></a> *     applied to the function.
 <a name="line906"></a> *
 <a name="line907"></a> * @return {!Function} A partially-applied form of the function bind() was
@@ -979,7 +979,7 @@
 <a name="line936"></a> * g(arg3, arg4);
 <a name="line937"></a> *
 <a name="line938"></a> * @param {Function} fn A function to partially apply.
-<a name="line939"></a> * @param {*} var_args Additional arguments that are partially
+<a name="line939"></a> * @param {...*} var_args Additional arguments that are partially
 <a name="line940"></a> *     applied to fn.
 <a name="line941"></a> * @return {!Function} A partially-applied form of the function bind() was
 <a name="line942"></a> *     invoked as a method of.
@@ -1120,7 +1120,7 @@
 <a name="line1077"></a> * original, unobfuscated class name is inlined.
 <a name="line1078"></a> *
 <a name="line1079"></a> * @param {string} className The class name.
-<a name="line1080"></a> * @param {string} opt_modifier A modifier to be appended to the class name.
+<a name="line1080"></a> * @param {string=} opt_modifier A modifier to be appended to the class name.
 <a name="line1081"></a> * @return {string} The class name or the concatenation of the class name and
 <a name="line1082"></a> *     the modifier.
 <a name="line1083"></a> */
@@ -1160,7 +1160,7 @@
 <a name="line1117"></a>/**
 <a name="line1118"></a> * Abstract implementation of goog.getMsg for use with localized messages.
 <a name="line1119"></a> * @param {string} str Translatable string, places holders in the form {$foo}.
-<a name="line1120"></a> * @param {Object} opt_values Map of place holder name to value.
+<a name="line1120"></a> * @param {Object=} opt_values Map of place holder name to value.
 <a name="line1121"></a> * @return {string} message with placeholders filled.
 <a name="line1122"></a> */
 <a name="line1123"></a>goog.getMsg = function(str, opt_values) {
@@ -1193,7 +1193,7 @@
 <a name="line1150"></a> *
 <a name="line1151"></a> * @param {string} publicPath Unobfuscated name to export.
 <a name="line1152"></a> * @param {Object} object Object the name should point to.
-<a name="line1153"></a> * @param {Object} opt_objectToExportTo The object to add the path to; default
+<a name="line1153"></a> * @param {Object=} opt_objectToExportTo The object to add the path to; default
 <a name="line1154"></a> *     is |goog.global|.
 <a name="line1155"></a> */
 <a name="line1156"></a>goog.exportSymbol = function(publicPath, object, opt_objectToExportTo) {
@@ -1253,6 +1253,66 @@
 <a name="line1210"></a>  childCtor.prototype = new tempCtor();
 <a name="line1211"></a>  childCtor.prototype.constructor = childCtor;
 <a name="line1212"></a>};
+<a name="line1213"></a>
+<a name="line1214"></a>
+<a name="line1215"></a>/**
+<a name="line1216"></a> * Call up to the superclass.
+<a name="line1217"></a> *
+<a name="line1218"></a> * If this is called from a constructor, then this calls the superclass
+<a name="line1219"></a> * contructor with arguments 1-N.
+<a name="line1220"></a> *
+<a name="line1221"></a> * If this is called from a prototype method, then you must pass
+<a name="line1222"></a> * the name of the method as the second argument to this function. If
+<a name="line1223"></a> * you do not, you will get a runtime error. This calls the superclass&#39;
+<a name="line1224"></a> * method with arguments 2-N.
+<a name="line1225"></a> *
+<a name="line1226"></a> * This function only works if you use goog.inherits to express
+<a name="line1227"></a> * inheritance relationships between your classes.
+<a name="line1228"></a> *
+<a name="line1229"></a> * This function is a compiler primitive. At compile-time, the
+<a name="line1230"></a> * compiler will do macro expansion to remove a lot of
+<a name="line1231"></a> * the extra overhead that this function introduces. The compiler
+<a name="line1232"></a> * will also enforce a lot of the assumptions that this function
+<a name="line1233"></a> * makes, and treat it as a compiler error if you break them.
+<a name="line1234"></a> *
+<a name="line1235"></a> * @param {!Object} me Should always be &quot;this&quot;.
+<a name="line1236"></a> * @param {*=} opt_methodName The method name if calling a super method.
+<a name="line1237"></a> * @param {...*} var_args The rest of the arguments.
+<a name="line1238"></a> * @return {*} The return value of the superclass method.
+<a name="line1239"></a> */
+<a name="line1240"></a>goog.base = function(me, opt_methodName, var_args) {
+<a name="line1241"></a>  if (!COMPILED) {
+<a name="line1242"></a>    var caller = arguments.callee.caller;
+<a name="line1243"></a>    if (caller.superClass_) {
+<a name="line1244"></a>      // This is a constructor. Call the superclass constructor.
+<a name="line1245"></a>      return caller.superClass_.constructor.apply(
+<a name="line1246"></a>          me, Array.prototype.slice.call(arguments, 1));
+<a name="line1247"></a>    }
+<a name="line1248"></a>
+<a name="line1249"></a>    var args = Array.prototype.slice.call(arguments, 2);
+<a name="line1250"></a>    var foundCaller = false;
+<a name="line1251"></a>    for (var ctor = me.constructor;
+<a name="line1252"></a>         ctor; ctor = ctor.superClass_ &amp;&amp; ctor.superClass_.constructor) {
+<a name="line1253"></a>      if (ctor.prototype[opt_methodName] === caller) {
+<a name="line1254"></a>        foundCaller = true;
+<a name="line1255"></a>      } else if (foundCaller) {
+<a name="line1256"></a>        return ctor.prototype[opt_methodName].apply(me, args);
+<a name="line1257"></a>      }
+<a name="line1258"></a>    }
+<a name="line1259"></a>
+<a name="line1260"></a>    // If we did not find the caller in the prototype chain,
+<a name="line1261"></a>    // then one of two things happened:
+<a name="line1262"></a>    // 1) The caller is an instance method.
+<a name="line1263"></a>    // 2) This method was not called by the right caller.
+<a name="line1264"></a>    if (me[opt_methodName] === caller) {
+<a name="line1265"></a>      return me.constructor.prototype[opt_methodName].apply(me, args);
+<a name="line1266"></a>    } else {
+<a name="line1267"></a>      throw Error(
+<a name="line1268"></a>          &#39;goog.base called from a method of one name &#39; +
+<a name="line1269"></a>          &#39;to a method of a different name&#39;);
+<a name="line1270"></a>    }
+<a name="line1271"></a>  }
+<a name="line1272"></a>};
 </pre>
 
 

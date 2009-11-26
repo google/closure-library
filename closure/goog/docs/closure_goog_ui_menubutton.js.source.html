@@ -302,7 +302,7 @@
 <a name="line259"></a>/**
 <a name="line260"></a> * Returns true if the given element is to be considered part of the component,
 <a name="line261"></a> * even if it isn&#39;t a DOM descendant of the component&#39;s root element.
-<a name="line262"></a> * @param {Element?} element Element to test (if any).
+<a name="line262"></a> * @param {Element} element Element to test (if any).
 <a name="line263"></a> * @return {boolean} Whether the element is considered part of the component.
 <a name="line264"></a> * @protected
 <a name="line265"></a> */
@@ -652,8 +652,8 @@
 <a name="line609"></a>
 <a name="line610"></a>
 <a name="line611"></a>/**
-<a name="line612"></a> * Positions the menu under the button.
-<a name="line613"></a> * @protected
+<a name="line612"></a> * Positions the menu under the button.  May be called directly in cases when
+<a name="line613"></a> * the menu size is known to change.
 <a name="line614"></a> */
 <a name="line615"></a>goog.ui.MenuButton.prototype.positionMenu = function() {
 <a name="line616"></a>  var anchorCorner = this.isAlignMenuToStart() ?

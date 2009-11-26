@@ -237,7 +237,7 @@ goog.ds.FastDataNode.prototype.getChildNode = function(name, opt_create) {
  * instance by calling getChildNode.
  *
  * @param {string} name Name of child node.
- * @param {Object?} value Value of child node.
+ * @param {Object} value Value of child node.
  */
 goog.ds.FastDataNode.prototype.setChildNode = function(name, value) {
   if (value != null) {
@@ -254,7 +254,7 @@ goog.ds.FastDataNode.prototype.setChildNode = function(name, value) {
  * Returns the value of a child node. By using this method you can avoid
  * the need to create PrimitiveFastData nodes.
  * @param {string} name Name of child node.
- * @return {Object?} Value of child node.
+ * @return {Object} Value of child node.
  */
 goog.ds.FastDataNode.prototype.getChildNodeValue = function(name) {
   var child = this[name];
@@ -451,7 +451,7 @@ goog.ds.PrimitiveFastDataNode.prototype.getChildNode = function(name) {
 /**
  * Returns the value of a child node. Always returns null.
  * @param {string} name Name of child node.
- * @return {Object?} Value of child node.
+ * @return {Object} Value of child node.
  */
 goog.ds.PrimitiveFastDataNode.prototype.getChildNodeValue = function(name) {
   return null;
@@ -461,7 +461,7 @@ goog.ds.PrimitiveFastDataNode.prototype.getChildNodeValue = function(name) {
 /**
  * Not supported by primitive data nodes.
  * @param {string} name Name of child node.
- * @param {Object?} value Value of child node.
+ * @param {Object} value Value of child node.
  */
 goog.ds.PrimitiveFastDataNode.prototype.setChildNode =
     function(name, value) {
@@ -573,7 +573,7 @@ goog.ds.FastListNode.prototype.getChildNodeValue = function(key) {
 /**
  * Tries to interpret key as a numeric index enclosed by square brakcets.
  * @param {string} key Key that should be interpreted as a number.
- * @return {number?} Numeric index or null if key is not of the form
+ * @return {?number} Numeric index or null if key is not of the form
  *  described above.
  * @private
  */
@@ -597,7 +597,7 @@ goog.ds.FastListNode.prototype.getKeyAsNumber_ = function(key) {
  * instance by calling getChildNode.
  *
  * @param {string} key Name of child node.
- * @param {Object?} value Value of child node.
+ * @param {Object} value Value of child node.
  */
 goog.ds.FastListNode.prototype.setChildNode = function(key, value) {
   var count = this.values_.length;

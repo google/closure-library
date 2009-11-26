@@ -81,7 +81,7 @@ goog.dom.TagWalkType = {
  * that it will continue iterating until the end of the document instead of
  * until exiting the start node.
  *
- * @param {Node?} opt_node The start node.  If unspecified or null, defaults to
+ * @param {Node} opt_node The start node.  If unspecified or null, defaults to
  *     an empty iterator.
  * @param {boolean} opt_reversed Whether to traverse the tree in reverse.
  * @param {boolean} opt_unconstrained Whether the iterator is not constrained to
@@ -110,7 +110,7 @@ goog.inherits(goog.dom.TagIterator, goog.iter.Iterator);
 
 /**
  * The node this position is located on.
- * @type {Node?}
+ * @type {Node}
  */
 goog.dom.TagIterator.prototype.node = null;
 

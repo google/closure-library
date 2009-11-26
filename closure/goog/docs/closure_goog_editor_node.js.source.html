@@ -110,8 +110,8 @@
 <a name="line67"></a>
 <a name="line68"></a>/**
 <a name="line69"></a> * Get the right-most non-ignorable leaf node of the given node.
-<a name="line70"></a> * @param {Node?} parent The parent ndoe.
-<a name="line71"></a> * @return {Node?} The right-most non-ignorable leaf node.
+<a name="line70"></a> * @param {Node} parent The parent ndoe.
+<a name="line71"></a> * @return {Node} The right-most non-ignorable leaf node.
 <a name="line72"></a> */
 <a name="line73"></a>goog.editor.node.getRightMostLeaf = function(parent) {
 <a name="line74"></a>  var temp;
@@ -124,8 +124,8 @@
 <a name="line81"></a>
 <a name="line82"></a>/**
 <a name="line83"></a> * Get the left-most non-ignorable leaf node of the given node.
-<a name="line84"></a> * @param {Node?} parent The parent ndoe.
-<a name="line85"></a> * @return {Node?} The left-most non-ignorable leaf node.
+<a name="line84"></a> * @param {Node} parent The parent ndoe.
+<a name="line85"></a> * @return {Node} The left-most non-ignorable leaf node.
 <a name="line86"></a> */
 <a name="line87"></a>goog.editor.node.getLeftMostLeaf = function(parent) {
 <a name="line88"></a>  var temp;
@@ -139,8 +139,8 @@
 <a name="line96"></a>/**
 <a name="line97"></a> * Version of firstChild that skips nodes that are entirely
 <a name="line98"></a> * whitespace and comments.
-<a name="line99"></a> * @param {Node?} parent The reference node.
-<a name="line100"></a> * @return {Node?} The first child of sibling that is important according to
+<a name="line99"></a> * @param {Node} parent The reference node.
+<a name="line100"></a> * @return {Node} The first child of sibling that is important according to
 <a name="line101"></a> *     goog.editor.node.isImportant, or null if no such node exists.
 <a name="line102"></a> */
 <a name="line103"></a>goog.editor.node.getFirstChild = function(parent) {
@@ -152,8 +152,8 @@
 <a name="line109"></a> * Version of lastChild that skips nodes that are entirely whitespace or
 <a name="line110"></a> * comments.  (Normally lastChild is a property of all DOM nodes that gives the
 <a name="line111"></a> * last of the nodes contained directly in the reference node.)
-<a name="line112"></a> * @param {Node?} parent The reference node.
-<a name="line113"></a> * @return {Node?} The last child of sibling that is important according to
+<a name="line112"></a> * @param {Node} parent The reference node.
+<a name="line113"></a> * @return {Node} The last child of sibling that is important according to
 <a name="line114"></a> *     goog.editor.node.isImportant, or null if no such node exists.
 <a name="line115"></a> */
 <a name="line116"></a>goog.editor.node.getLastChild = function(parent) {
@@ -168,12 +168,12 @@
 <a name="line125"></a> * a child of the same parent, that occurs immediately before the
 <a name="line126"></a> * reference node.)
 <a name="line127"></a> * @param {Node} sibling The reference node.
-<a name="line128"></a> * @return {Node?} The closest previous sibling to sibling that is
+<a name="line128"></a> * @return {Node} The closest previous sibling to sibling that is
 <a name="line129"></a> *     important according to goog.editor.node.isImportant, or null if no such
 <a name="line130"></a> *     node exists.
 <a name="line131"></a> */
 <a name="line132"></a>goog.editor.node.getPreviousSibling = function(sibling) {
-<a name="line133"></a>  return /** @type {Node?} */ (goog.editor.node.getFirstValue_(
+<a name="line133"></a>  return /** @type {Node} */ (goog.editor.node.getFirstValue_(
 <a name="line134"></a>      goog.iter.filter(new goog.dom.iter.SiblingIterator(sibling, false, true),
 <a name="line135"></a>      goog.editor.node.isImportant)));
 <a name="line136"></a>};
@@ -183,12 +183,12 @@
 <a name="line140"></a> * Version of nextSibling that skips nodes that are entirely whitespace or
 <a name="line141"></a> * comments.
 <a name="line142"></a> * @param {Node} sibling The reference node.
-<a name="line143"></a> * @return {Node?} The closest next sibling to sibling that is important
+<a name="line143"></a> * @return {Node} The closest next sibling to sibling that is important
 <a name="line144"></a> *     according to goog.editor.node.isImportant, or null if no
 <a name="line145"></a> *     such node exists.
 <a name="line146"></a> */
 <a name="line147"></a>goog.editor.node.getNextSibling = function(sibling) {
-<a name="line148"></a>  return /** @type {Node?} */ (goog.editor.node.getFirstValue_(
+<a name="line148"></a>  return /** @type {Node} */ (goog.editor.node.getFirstValue_(
 <a name="line149"></a>      goog.iter.filter(new goog.dom.iter.SiblingIterator(sibling),
 <a name="line150"></a>      goog.editor.node.isImportant)));
 <a name="line151"></a>};
@@ -197,16 +197,16 @@
 <a name="line154"></a>/**
 <a name="line155"></a> * Internal helper for lastChild/firstChild that skips nodes that are entirely
 <a name="line156"></a> * whitespace or comments.
-<a name="line157"></a> * @param {Node?} parent The reference node.
+<a name="line157"></a> * @param {Node} parent The reference node.
 <a name="line158"></a> * @param {boolean} isReversed Whether children should be traversed forward
 <a name="line159"></a> *     or backward.
-<a name="line160"></a> * @return {Node?} The first/last child of sibling that is important according
+<a name="line160"></a> * @return {Node} The first/last child of sibling that is important according
 <a name="line161"></a> *     to goog.editor.node.isImportant, or null if no such node exists.
 <a name="line162"></a> * @private
 <a name="line163"></a> */
 <a name="line164"></a>goog.editor.node.getChildHelper_ = function(parent, isReversed) {
 <a name="line165"></a>  return (!parent || parent.nodeType != goog.dom.NodeType.ELEMENT) ? null :
-<a name="line166"></a>      /** @type {Node?} */ (goog.editor.node.getFirstValue_(goog.iter.filter(
+<a name="line166"></a>      /** @type {Node} */ (goog.editor.node.getFirstValue_(goog.iter.filter(
 <a name="line167"></a>          new goog.dom.iter.ChildIterator(
 <a name="line168"></a>              /** @type {Element} */ (parent), isReversed),
 <a name="line169"></a>          goog.editor.node.isImportant)));
@@ -281,7 +281,7 @@
 <a name="line238"></a>/**
 <a name="line239"></a> * Determines the active element in the given document.  IE only.
 <a name="line240"></a> * @param {Document} doc The document to look in.
-<a name="line241"></a> * @return {Element?} The active element in IE.
+<a name="line241"></a> * @return {Element} The active element in IE.
 <a name="line242"></a> */
 <a name="line243"></a>goog.editor.node.getActiveElementIE = function(doc) {
 <a name="line244"></a>  try {
@@ -318,7 +318,7 @@
 <a name="line275"></a> * @param {Node} parent The parent node to search.
 <a name="line276"></a> * @param {function(Node):boolean} hasProperty A function that takes a child
 <a name="line277"></a> *    node as a parameter and returns true if it meets the criteria.
-<a name="line278"></a> * @return {number?} The index of the node found, or null if no node is found.
+<a name="line278"></a> * @return {?number} The index of the node found, or null if no node is found.
 <a name="line279"></a> */
 <a name="line280"></a>goog.editor.node.findInChildren = function(parent, hasProperty) {
 <a name="line281"></a>  for (var i = 0, len = parent.childNodes.length; i &lt; len; i++) {
@@ -404,7 +404,7 @@
 <a name="line361"></a> * @param {function(Node) : boolean} criteria A function that takes a DOM node
 <a name="line362"></a> *     as a parameter and returns a boolean to indicate whether the node meets
 <a name="line363"></a> *     the criteria or not.
-<a name="line364"></a> * @return {Node?} The DOM node if found, or null.
+<a name="line364"></a> * @return {Node} The DOM node if found, or null.
 <a name="line365"></a> */
 <a name="line366"></a>goog.editor.node.findTopMostEditableAncestor = function(node, criteria) {
 <a name="line367"></a>  var targetNode = null;

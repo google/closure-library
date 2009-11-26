@@ -233,7 +233,7 @@ goog.ui.AutoComplete.InputHandler.prototype.defaultSeparator_;
 
 /**
  * Regular expression used from trimming tokens or null for no trimming.
- * @type {RegExp?}
+ * @type {RegExp}
  * @private
  */
 goog.ui.AutoComplete.InputHandler.prototype.trimmer_;
@@ -563,7 +563,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setGenerateNewTokenOnLiteral =
  * Sets the regular expression used to trim the tokens before passing them to
  * the matcher:  every substring that matches the given regular expression will
  * be removed.  This can also be set to null to disable trimming.
- * @param {RegExp?} trimmer Regexp to use for trimming or null to disable it.
+ * @param {RegExp} trimmer Regexp to use for trimming or null to disable it.
  */
 goog.ui.AutoComplete.InputHandler.prototype.setTrimmingRegExp =
     function(trimmer) {

@@ -74,7 +74,7 @@ goog.userAgent.BROWSER_KNOWN_ =
  * Some user agents (I'm thinking of you, Gears WorkerPool) do not expose a
  * navigator object off the global scope.  In that case we return null.
  *
- * @return {string?} The userAgent string or null if there is none.
+ * @return {?string} The userAgent string or null if there is none.
  */
 goog.userAgent.getUserAgentString = function() {
   return goog.global['navigator'] ? goog.global['navigator'].userAgent : null;

@@ -423,7 +423,7 @@ goog.graphics.CanvasPathElement.prototype.draw = function(ctx) {
  * @param {number} y1 Y coordinate of start of line.
  * @param {number} x2 X coordinate of end of line.
  * @param {number} y2 Y coordinate of end of line.
- * @param {string?} align Horizontal alignment: left (default), center, right.
+ * @param {?string} align Horizontal alignment: left (default), center, right.
  * @param {!goog.graphics.Font} font Font describing the font properties.
  * @param {goog.graphics.Stroke} stroke The stroke to use for this element.
  * @param {goog.graphics.Fill} fill The fill to use for this element.

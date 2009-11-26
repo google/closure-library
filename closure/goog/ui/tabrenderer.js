@@ -142,7 +142,7 @@ goog.ui.TabRenderer.prototype.getTooltip = function(element) {
  * Takes a tab's root element and a tooltip string, and updates the element
  * with the new tooltip.  If the new tooltip is null or undefined, sets the
  * element's title to the empty string.
- * @param {Element?} element The tab's root element.
+ * @param {Element} element The tab's root element.
  * @param {string|null|undefined} tooltip New tooltip text (if any).
  */
 goog.ui.TabRenderer.prototype.setTooltip = function(element, tooltip) {

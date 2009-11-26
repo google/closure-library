@@ -44,11 +44,18 @@ goog.array.peek = function(array) {
 goog.array.ARRAY_PROTOTYPE_ = Array.prototype;
 
 
+// NOTE: Since most of the array functions are generic it allows you to
+// pass an array-like object. Strings have a length and are considered array-
+// like. However, the 'in' operator does not work on strings so we cannot just
+// use the array path even if the browser supports indexing into strings. We
+// therefore end up splitting the string.
+
+
 /**
  * Returns the index of the first element of an array with a specified
  * value, or -1 if the element is not present in the array.
  *
- * See {@link http://tinyurl.com/nga8b}
+ * See {@link http://tinyurl.com/developer-mozilla-org-array-indexof}
  *
  * @param {goog.array.ArrayLike} arr The array to be searched.
  * @param {*} obj The object for which we are searching.
@@ -64,6 +71,15 @@ goog.array.indexOf = goog.array.ARRAY_PROTOTYPE_.indexOf ?
       var fromIndex = opt_fromIndex == null ?
           0 : (opt_fromIndex < 0 ?
                Math.max(0, arr.length + opt_fromIndex) : opt_fromIndex);
+
+      if (goog.isString(arr)) {
+        // Array.prototype.indexOf uses === so only strings should be found.
+        if (!goog.isString(obj) || obj.length != 1) {
+          return -1;
+        }
+        return arr.indexOf(obj, fromIndex);
+      }
+
       for (var i = fromIndex; i < arr.length; i++) {
         if (i in arr && arr[i] === obj)
           return i;
@@ -76,11 +92,11 @@ goog.array.indexOf = goog.array.ARRAY_PROTOTYPE_.indexOf ?
  * Returns the index of the last element of an array with a specified value, or
  * -1 if the element is not present in the array.
  *
- * See {@link http://tinyurl.com/ru6lg}
+ * See {@link http://tinyurl.com/developer-mozilla-org-array-lastindexof}
  *
  * @param {goog.array.ArrayLike} arr The array to be searched.
  * @param {*} obj The object for which we are searching.
- * @param {number?} opt_fromIndex The index at which to start the search. If
+ * @param {?number} opt_fromIndex The index at which to start the search. If
  *     omitted the search starts at the end of the array.
  * @return {number} The index of the last matching array element.
  */
@@ -97,6 +113,15 @@ goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ?
       if (fromIndex < 0) {
         fromIndex = Math.max(0, arr.length + fromIndex);
       }
+
+      if (goog.isString(arr)) {
+        // Array.prototype.lastIndexOf uses === so only strings should be found.
+        if (!goog.isString(obj) || obj.length != 1) {
+          return -1;
+        }
+        return arr.lastIndexOf(obj, fromIndex);
+      }
+
       for (var i = fromIndex; i >= 0; i--) {
         if (i in arr && arr[i] === obj)
           return i;
@@ -108,7 +133,7 @@ goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ?
 /**
  * Calls a function for each element in an array.
  *
- * See {@link http://tinyurl.com/jrvcb}
+ * See {@link http://tinyurl.com/developer-mozilla-org-array-foreach}
  *
  * @param {goog.array.ArrayLike} arr Array or array like object over
  *     which to iterate.
@@ -116,9 +141,7 @@ goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ?
  *     takes 3 arguments (the element, the index and the array). The return
  *     value is ignored. The function is called only for indexes of the array
  *     which have assigned values; it is not called for indexes which have
- *     been deleted or which have never been assigned values. See {@link
- *     https://developer.mozilla.org/En/Core_JavaScript_1.5_Reference:Objects:
- *     Array:forEach}.
+ *     been deleted or which have never been assigned values.
  *
  * @param {Object} opt_obj The object to be used as the value of 'this'
  *     within f.
@@ -164,7 +187,7 @@ goog.array.forEachRight = function(arr, f, opt_obj) {
  * Calls a function for each element in an array, and if the function returns
  * true adds the element to a new array.
  *
- * See {@link http://tinyurl.com/rmtuo}
+ * See {@link http://tinyurl.com/developer-mozilla-org-array-filter}
  *
  * @param {goog.array.ArrayLike} arr The array over which to iterate.
  * @param {Function} f The function to call for every element. This function
@@ -201,7 +224,7 @@ goog.array.filter = goog.array.ARRAY_PROTOTYPE_.filter ?
  * Calls a function for each element in an array and inserts the result into a
  * new array.
  *
- * See {@link http://tinyurl.com/hlx5p}
+ * See {@link http://tinyurl.com/developer-mozilla-org-array-map}
  *
  * @param {goog.array.ArrayLike} arr The array over which to iterate.
  * @param {Function} f The function to call for every element. This function
@@ -231,12 +254,8 @@ goog.array.map = goog.array.ARRAY_PROTOTYPE_.map ?
 
 /**
  * Passes every element of an array into a function and accumulates the result.
- * We're google; we can't have "map" without "reduce" can we?
  *
- * Passes through to:
- *     http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:
- *     Objects:Array:reduce
- * when available.
+ * See {@link http://tinyurl.com/developer-mozilla-org-array-reduce}
  *
  * For example:
  * var a = [1, 2, 3, 4];
@@ -253,7 +272,6 @@ goog.array.map = goog.array.ARRAY_PROTOTYPE_.map ?
  * @param {Object} opt_obj  The object to be used as the value of 'this'
  *     within f.
  * @return {*} Result of evaluating f repeatedly across the values of the array.
- * @notypecheck See http://b/1342779
  */
 goog.array.reduce = function(arr, f, val, opt_obj) {
   if (arr.reduce) {
@@ -275,10 +293,7 @@ goog.array.reduce = function(arr, f, val, opt_obj) {
  * Passes every element of an array into a function and accumulates the result,
  * starting from the last element and working towards the first.
  *
- * Passes through to:
- *     http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:
- *     Objects:Array:reduceRight
- * when available.
+ * See {@link http://tinyurl.com/developer-mozilla-org-array-reduceright}
  *
  * For example:
  * var a = ['a', 'b', 'c'];
@@ -296,7 +311,6 @@ goog.array.reduce = function(arr, f, val, opt_obj) {
  *     within f.
  * @return {*} Object returned as a result of evaluating f repeatedly across the
  *     values of the array.
- * @notypecheck See http://b/1342779
  */
 goog.array.reduceRight = function(arr, f, val, opt_obj) {
   if (arr.reduceRight) {
@@ -319,7 +333,7 @@ goog.array.reduceRight = function(arr, f, val, opt_obj) {
  * returns true (without checking the remaining elements). If all calls
  * return false, some() returns false.
  *
- * See {@link http://tinyurl.com/ekkc2}
+ * See {@link http://tinyurl.com/developer-mozilla-org-array-some}
  *
  * @param {goog.array.ArrayLike} arr The array to check.
  * @param {Function} f The function to call for every element. This function
@@ -350,7 +364,7 @@ goog.array.some = goog.array.ARRAY_PROTOTYPE_.some ?
  * returns true. If any call returns false, every() returns false and
  * does not continue to check the remaining elements.
  *
- * See {@link http://tinyurl.com/rx3mg}
+ * See {@link http://tinyurl.com/developer-mozilla-org-array-every}
  *
  * @param {goog.array.ArrayLike} arr The array to check.
  * @param {Function} f The function to call for every element. This function
@@ -717,7 +731,7 @@ goog.array.slice = function(arr, start, opt_end) {
  * array in place and doesn't change the order of the non-duplicate items.
  *
  * For objects, duplicates are identified as having the same hash code property
- * as defined by {@see goog.getHashCode}.
+ * as defined by {@link goog.getHashCode}.
  *
  * Runtime: N,
  * Worstcase space: 2N (no dupes)

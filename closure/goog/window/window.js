@@ -60,7 +60,10 @@ goog.window.DEFAULT_POPUP_TARGET = 'google_popup';
  *  'location': (boolean) show location
  *  'statusbar': (boolean) show statusbar
  *  'menubar': (boolean) show menubar
- *  'resizable': (boolean) resizable.
+ *  'resizable': (boolean) resizable
+ *  'noreferrer': (boolean) whether to attempt to remove the referrer header
+ *      from the request headers. Does this by opening a blank window that
+ *      then redirects to the target url, so users may see some flickering.
  *
  * @param {Window} opt_parentWin Parent window that should be used to open the
  *                 new window.
@@ -93,6 +96,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
         sb.push(option + '=' + opt_options[option]);
         break;
       case 'target':
+      case 'noreferrer':
         break;
       default:
         sb.push(option + '=' + (opt_options[option] ? 1 : 0));
@@ -100,7 +104,19 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   }
   var optionString = sb.join(',');
 
-  var newWin = parentWin.open(href, target, optionString);
+  var newWin;
+  if (opt_options['noreferrer']) {
+    // Use a meta-refresh to stop the referrer from being included in the
+    // request headers.
+    newWin = parentWin.open('', target, optionString);
+    if (newWin) {
+      newWin.document.write('<META HTTP-EQUIV="refresh" content="0; url=' +
+                            encodeURI(href) + '">');
+      newWin.document.close();
+    }
+  } else {
+    newWin = parentWin.open(href, target, optionString);
+  }
   // newWin is null if a popup blocker prevented the window open.
   return newWin;
 };

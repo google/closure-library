@@ -278,7 +278,7 @@
 <a name="line235"></a>/**
 <a name="line236"></a> * Sets the filter label (the label displayed in the filter input element if no
 <a name="line237"></a> * text has been entered).
-<a name="line238"></a> * @param {string?} label Label text.
+<a name="line238"></a> * @param {?string} label Label text.
 <a name="line239"></a> */
 <a name="line240"></a>goog.ui.FilteredMenu.prototype.setFilterLabel = function(label) {
 <a name="line241"></a>  this.label_ = label || &#39;&#39;;
@@ -298,7 +298,7 @@
 <a name="line255"></a>
 <a name="line256"></a>/**
 <a name="line257"></a> * Sets the filter string.
-<a name="line258"></a> * @param {string?} str Filter string.
+<a name="line258"></a> * @param {?string} str Filter string.
 <a name="line259"></a> */
 <a name="line260"></a>goog.ui.FilteredMenu.prototype.setFilter = function(str) {
 <a name="line261"></a>  if (this.filterInput_) {

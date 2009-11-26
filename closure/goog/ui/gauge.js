@@ -319,7 +319,7 @@ goog.ui.Gauge.prototype.value_ = 0;
 /**
  * The current value formatted into a String.
  * @private
- * @type {string?}
+ * @type {?string}
  */
 goog.ui.Gauge.prototype.formattedValue_ = null;
 
@@ -335,7 +335,7 @@ goog.ui.Gauge.prototype.theme_ = null;
 /**
  * Title to display above the gauge center.
  * @private
- * @type {string?}
+ * @type {?string}
  */
 goog.ui.Gauge.prototype.titleTop_ = null;
 
@@ -343,7 +343,7 @@ goog.ui.Gauge.prototype.titleTop_ = null;
 /**
  * Title to display below the gauge center.
  * @private
- * @type {string?}
+ * @type {?string}
  */
 goog.ui.Gauge.prototype.titleBottom_ = null;
 
@@ -408,7 +408,7 @@ goog.ui.Gauge.prototype.needleGroup_ = null;
 /**
  * The current position (0-1) of the visible needle.
  * Initially set to null to prevent animation on first opening of the gauge.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.ui.Gauge.prototype.needleValuePosition_ = null;

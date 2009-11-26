@@ -238,7 +238,7 @@ goog.proto2.Message.prototype.countOf = function(field) {
  * @param {number} opt_index If the field is repeated, the index to use when
  *     looking up the value.
  *
- * @return {Object?} The value found or undefined if none.
+ * @return {Object} The value found or undefined if none.
  */
 goog.proto2.Message.prototype.get = function(field, opt_index) {
   goog.proto2.Util.assert(
@@ -258,7 +258,7 @@ goog.proto2.Message.prototype.get = function(field, opt_index) {
  * @param {number} opt_index If the field is repeated, the index to use when
  *     looking up the value.
  *
- * @return {Object?} The value found or the default if none.
+ * @return {Object} The value found or the default if none.
  */
 goog.proto2.Message.prototype.getOrDefault = function(field, opt_index) {
   goog.proto2.Util.assert(
@@ -383,7 +383,7 @@ goog.proto2.Message.prototype.lazyDeserialize_ = function(field) {
  * @param {number} opt_index If the field is a repeated field, the index
  *     at which to get the value.
  *
- * @return {Object?} The value found or undefined for none.
+ * @return {Object} The value found or undefined for none.
  */
 goog.proto2.Message.prototype.get$Value = function(tag, opt_index) {
   var field = this.getFieldByTag_(tag);
@@ -487,7 +487,7 @@ goog.proto2.Message.prototype.count$Values = function(tag) {
  * GENERATED CODE USE ONLY. Basis of the set{Field} methods.
  *
  * @param {number} tag The field's tag index.
- * @param {Object?} value The field's value.
+ * @param {Object} value The field's value.
  */
 goog.proto2.Message.prototype.set$Value = function(tag, value) {
   if (goog.proto2.Util.conductChecks()) {
@@ -509,7 +509,7 @@ goog.proto2.Message.prototype.set$Value = function(tag, value) {
  * GENERATED CODE USE ONLY. Basis of the add{Field} methods.
  *
  * @param {number} tag The field's tag index.
- * @param {Object?} value The value to add.
+ * @param {Object} value The value to add.
  */
 goog.proto2.Message.prototype.add$Value = function(tag, value) {
   if (goog.proto2.Util.conductChecks()) {
@@ -534,7 +534,7 @@ goog.proto2.Message.prototype.add$Value = function(tag, value) {
  * is valid.
  *
  * @param {goog.proto2.FieldDescriptor} field The field being assigned.
- * @param {Object?} value The value being assigned.
+ * @param {Object} value The value being assigned.
  * @private
  */
 goog.proto2.Message.prototype.checkFieldType_ = function(field, value) {

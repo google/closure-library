@@ -78,13 +78,18 @@ only very new browsers render background-image progressively.
 
 
 <h2 class="g-first">Inheritance</h2>
-<pre class="inheritance">
-Object
-     <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_ui_ControlRenderer.html">goog.ui.ControlRenderer</a></span>
-          <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_ui_PaletteRenderer.html">goog.ui.PaletteRenderer</a></span>
-               <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_ui_emoji_EmojiPaletteRenderer.html">goog.ui.emoji.EmojiPaletteRenderer</a></span>
-                    <img src="static/images/inherit.gif">goog.ui.emoji.ProgressiveEmojiPaletteRenderer
-</pre>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+  <tr><td><span class="type"><a href="class_goog_ui_ControlRenderer.html">goog.ui.ControlRenderer</a></span></td><td></td></tr>
+  <tr><td><span class="type"><a href="class_goog_ui_PaletteRenderer.html">goog.ui.PaletteRenderer</a></span></td><td><span class="type"><a href="class_goog_ui_ControlRenderer.html">goog.ui.ControlRenderer</a></span></td></tr>
+  <tr><td><span class="type"><a href="class_goog_ui_emoji_EmojiPaletteRenderer.html">goog.ui.emoji.EmojiPaletteRenderer</a></span></td><td><span class="type"><a href="class_goog_ui_PaletteRenderer.html">goog.ui.PaletteRenderer</a></span></td></tr>
+  <tr><td>goog.ui.emoji.ProgressiveEmojiPaletteRenderer</td><td><span class="type"><a href="class_goog_ui_emoji_EmojiPaletteRenderer.html">goog.ui.emoji.EmojiPaletteRenderer</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+</table>
+</div>
 
 
 
@@ -569,7 +574,7 @@ Object
 
         <span class="entryName">getContainingItem<span class="args">(<span class="arg">palette</span>,&nbsp;<span class="arg">node</span>)</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
       </div>
 
 
@@ -611,7 +616,7 @@ neither a palette cell nor part of a palette item.
       </div>
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>&nbsp;
             The corresponding palette item (null if not found).
       </div>
   
@@ -1245,7 +1250,7 @@ palettes don&#39;t support the decorate flow (for now).
 
         <span class="entryName">getContainingItem<span class="args">(<span class="arg">palette</span>,&nbsp;<span class="arg">node</span>)</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
       </div>
 
 
@@ -1287,7 +1292,7 @@ neither a palette cell nor part of a palette item.
       </div>
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>&nbsp;
             The corresponding palette item (null if not found).
       </div>
   
@@ -2392,7 +2397,7 @@ generate each state-specific class.
 
         <span class="entryName">getContentElement<span class="args">(<span class="arg">element</span>)</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
 
 
@@ -2420,7 +2425,7 @@ with more complex DOM structures must override this method as needed.
    <tr class="even">
      <td>
         <span class="entryName">element</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
         <div class="entryOverview">Root element of the control whose content element is to be returned.</div>
      </td>
    </tr>
@@ -2428,7 +2433,7 @@ with more complex DOM structures must override this method as needed.
       </div>
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
             The control&#39;s content element.
       </div>
   

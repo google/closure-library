@@ -76,14 +76,21 @@ implementations of menu controls.
 
 
 <h2 class="g-first">Inheritance</h2>
-<pre class="inheritance">
-Object
-     <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span>
-          <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span>
-               <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_ui_PopupBase.html">goog.ui.PopupBase</a></span>
-                    <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_ui_Popup.html">goog.ui.Popup</a></span>
-                         <img src="static/images/inherit.gif">goog.ui.MenuBase
-</pre>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+  <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
+  <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
+  <tr><td><span class="type"><a href="class_goog_ui_PopupBase.html">goog.ui.PopupBase</a></span></td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
+  <tr><td><span class="type"><a href="class_goog_ui_Popup.html">goog.ui.Popup</a></span></td><td><span class="type"><a href="class_goog_ui_PopupBase.html">goog.ui.PopupBase</a></span></td></tr>
+  <tr><td>goog.ui.MenuBase</td><td><span class="type"><a href="class_goog_ui_Popup.html">goog.ui.Popup</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+      <tr><td><span class="type"><a href="class_goog_ui_BasicMenu.html">goog.ui.BasicMenu</a></span></td><td><span class="type"><a href="class_goog_ui_AttachableMenu.html">goog.ui.AttachableMenu</a></span></td></tr>
+        <tr><td><span class="type"><a href="class_goog_ui_AttachableMenu.html">goog.ui.AttachableMenu</a></span></td><td>goog.ui.MenuBase</td></tr>
+  </table>
+</div>
 
 
 
@@ -197,7 +204,7 @@ Object
 
         <span class="entryName">getSelectedItem<span class="args">()</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
       </div>
 
 
@@ -211,7 +218,7 @@ Object
 
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>&nbsp;
             The item selected or null if no item is selected.
       </div>
   
@@ -1236,7 +1243,7 @@ it.
 
         <span class="entryName">getAutoHideRegion<span class="args">()</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
 
 
@@ -1251,7 +1258,7 @@ clicks, or null if it&#39;s the entire document.
 
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
             The DOM element for autohide, or null if it hasn&#39;t been set.
       </div>
   
@@ -1283,7 +1290,7 @@ clicks, or null if it&#39;s the entire document.
 
         <span class="entryName">getElement<span class="args">()</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
 
 
@@ -1297,7 +1304,7 @@ clicks, or null if it&#39;s the entire document.
 
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
             The popup element.
       </div>
   
@@ -2368,7 +2375,7 @@ clicks.
    <tr class="even">
      <td>
         <span class="entryName">elt</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
         <div class="entryOverview">A DOM element for the popup.</div>
      </td>
    </tr>
@@ -2550,7 +2557,7 @@ instead of synchronously.
    <tr class="even">
      <td>
         <span class="entryName">b</span>
-        : <div class="fullType"><span class="type">Boolean</span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
         <div class="entryOverview">Whether to hide async.</div>
      </td>
    </tr>
@@ -2752,7 +2759,7 @@ instead of synchronously.
 
         <span class="entryName">shouldHideAsync<span class="args">()</span>
         </span>
-        &#8658; <div class="fullType"><span class="type">Boolean</span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
 
 
@@ -2767,7 +2774,7 @@ instead of synchronously.
 
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type">Boolean</span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
             Whether to hide async.
       </div>
   
@@ -3516,7 +3523,7 @@ mypackage.MyClass.superClass_.disposeInternal.call(this);
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">autoHideRegion_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
      </div>
 
 
@@ -3586,7 +3593,7 @@ popup loses focus
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">element_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
      </div>
 
 
@@ -3784,7 +3791,7 @@ popup loses focus
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">shouldHideAsync_</span>
-        : <div class="fullType"><span class="type">Boolean</span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
      </div>
 
 

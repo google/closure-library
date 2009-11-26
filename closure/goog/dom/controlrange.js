@@ -75,7 +75,7 @@ goog.dom.ControlRange.createFromElements = function(var_args) {
 
 /**
  * The IE control range obejct.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.dom.ControlRange.prototype.range_ = null;
@@ -407,7 +407,7 @@ goog.inherits(goog.dom.ControlRangeIterator, goog.dom.RangeIterator);
 
 /**
  * The first node in the selection.
- * @type {Node?}
+ * @type {Node}
  * @private
  */
 goog.dom.ControlRangeIterator.prototype.startNode_ = null;
@@ -415,7 +415,7 @@ goog.dom.ControlRangeIterator.prototype.startNode_ = null;
 
 /**
  * The last node in the selection.
- * @type {Node?}
+ * @type {Node}
  * @private
  */
 goog.dom.ControlRangeIterator.prototype.endNode_ = null;

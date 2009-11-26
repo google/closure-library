@@ -42,9 +42,9 @@ goog.require('goog.math.Size');
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
  * @param {string|number} height The (non-zero) height in pixels.  Strings
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
- * @param {number?} opt_coordWidth The coordinate width - if
+ * @param {?number} opt_coordWidth The coordinate width - if
  *     omitted or null, defaults to same as width.
- * @param {number?} opt_coordHeight The coordinate height - if
+ * @param {?number} opt_coordHeight The coordinate height - if
  *     omitted or null, defaults to same as height.
  * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
  *     document we want to render in.
@@ -485,7 +485,7 @@ goog.graphics.CanvasGraphics.prototype.drawImage = function(x, y, width, height,
  * @param {number} y1 Y coordinate of start of line.
  * @param {number} x2 X coordinate of end of line.
  * @param {number} y2 Y coordinate of end of line.
- * @param {string?} align Horizontal alignment: left (default), center, right.
+ * @param {?string} align Horizontal alignment: left (default), center, right.
  * @param {!goog.graphics.Font} font Font describing the font properties.
  * @param {goog.graphics.Stroke} stroke Stroke object describing the stroke.
  * @param {goog.graphics.Fill} fill Fill object describing the fill.

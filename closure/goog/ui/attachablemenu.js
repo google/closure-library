@@ -50,7 +50,7 @@ goog.inherits(goog.ui.AttachableMenu, goog.ui.MenuBase);
 
 /**
  * The currently selected element (mouse was moved over it or keyboard arrows)
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.AttachableMenu.prototype.selectedElement_ = null;
@@ -130,7 +130,7 @@ goog.ui.AttachableMenu.prototype.setSelectedItemClassName = function(name) {
 /**
  * Returns the selected item
  *
- * @return {Element?} The item selected or null if no item is selected.
+ * @return {Element} The item selected or null if no item is selected.
  */
 goog.ui.AttachableMenu.prototype.getSelectedItem = function() {
   return this.selectedElement_;
@@ -140,7 +140,7 @@ goog.ui.AttachableMenu.prototype.getSelectedItem = function() {
 /**
  * Sets the specified item as the selected element.
  *
- * @param {Element?} elt The item to select. The type of this item is specific
+ * @param {Element} elt The item to select. The type of this item is specific
  * to the menu class.
  */
 goog.ui.AttachableMenu.prototype.setSelectedItem = function(elt) {
@@ -214,7 +214,7 @@ goog.ui.AttachableMenu.prototype.onShow_ = function() {
  * Returns the next or previous item. Used for up/down arrows.
  *
  * @param {boolean} prev True to go to the previous element instead of next.
- * @return {Element?} The next or previous element.
+ * @return {Element} The next or previous element.
  * @protected
  */
 goog.ui.AttachableMenu.prototype.getNextPrevItem = function(prev) {

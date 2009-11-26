@@ -324,6 +324,32 @@ limitations under the License.
     assertEquals('Iframe mask created for modal dialog', 1, iframes.length);
   }
 
+  function testRepositionInRtlContext() {
+    dialog.dispose();
+    // LTR is the default.
+    dialog = new goog.ui.Dialog();
+    dialog.setVisible(true);
+    var el = dialog.getElement();
+    var left = el.style.left;
+
+    dialog.dispose();
+    dialog = new goog.ui.Dialog();
+    dialog.setRightToLeft(true);
+    dialog.setVisible(true);
+    el = dialog.getElement();
+    var right = el.style.right;
+
+    // We'll allow for up to 1px of variance between LTR and RTL to handle
+    // possible subpixel rounding issues in either LTR or RTL
+    // (noticed in Safari 3 & 4/Mac).
+    var acceptableVariance = 1;
+    var variance = Math.abs(parseInt(left, 10) - parseInt(right));
+
+    // Note: we have to round these values due to subpixel issues.
+    assertTrue('LTR left position ~equals RTL right position.',
+        variance <= acceptableVariance);
+  }
+
   /**
    * Assert that the dialog has buttons with the given keys in the correct
    * order.
@@ -337,6 +363,17 @@ limitations under the License.
       actualKeys[i] = buttons[i].name;
     }
     assertArrayEquals(keys, actualKeys);
+  }
+
+  function testButtonSetOkFiresDialogEventOnEscape() {
+    dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
+    var wasCalled = false;
+    var callRecorder = function() { wasCalled = true; };
+    goog.events.listen(dialog, goog.ui.Dialog.EventType.SELECT,
+        callRecorder);
+    goog.testing.events.fireKeySequence(
+        dialog.getElement(), goog.events.KeyCodes.ESC);
+    assertTrue(wasCalled);
   }
 </script>
 </body>

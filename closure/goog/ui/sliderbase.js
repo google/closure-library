@@ -960,7 +960,7 @@ goog.ui.SliderBase.prototype.setUnitIncrement = function(value) {
 
 
 /**
- * @return {number?} The step value used to determine how to round the value.
+ * @return {?number} The step value used to determine how to round the value.
  */
 goog.ui.SliderBase.prototype.getStep = function() {
   return this.rangeModel.getStep();
@@ -970,7 +970,7 @@ goog.ui.SliderBase.prototype.getStep = function() {
 /**
  * Sets the step value. The step value is used to determine how to round the
  * value.
- * @param {number?} step  The step size.
+ * @param {?number} step  The step size.
  */
 goog.ui.SliderBase.prototype.setStep = function(step) {
   this.rangeModel.setStep(step);

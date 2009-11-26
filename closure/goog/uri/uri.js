@@ -129,7 +129,7 @@ goog.Uri.prototype.domain_ = '';
 
 /**
  * Port, e.g. 8080.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.Uri.prototype.port_ = null;
@@ -419,7 +419,7 @@ goog.Uri.prototype.hasDomain = function() {
 
 
 /**
- * @return {number?} The port number.
+ * @return {?number} The port number.
  */
 goog.Uri.prototype.getPort = function() {
   return this.port_;
@@ -900,7 +900,7 @@ goog.Uri.decodeOrEmpty_ = function(val) {
 /**
  * URI encode a string, or return null if it's not a string.
  * @param {*} unescapedPart Unescaped string.
- * @return {string?} Escaped string.
+ * @return {?string} Escaped string.
  * @private
  */
 goog.Uri.encodeString_ = function(unescapedPart) {
@@ -926,7 +926,7 @@ goog.Uri.encodeSpecialRegExp_ = /^[a-zA-Z0-9\-_.!~*'():\/;?]*$/;
  *
  * @param {*} unescapedPart The string to encode.
  * @param {RegExp} extra A character set of characters in [\01-\177].
- * @return {string?} null iff unescapedPart == null.
+ * @return {?string} null iff unescapedPart == null.
  * @private
  */
 goog.Uri.encodeSpecialChars_ = function(unescapedPart, extra) {
@@ -1019,7 +1019,7 @@ goog.Uri.haveSameDomain = function(uri1String, uri2String) {
  *
  * Has the same interface as the collections in goog.structs.
  *
- * @param {string?} opt_query Optional encoded query string to parse into
+ * @param {?string} opt_query Optional encoded query string to parse into
  *     the object.
  * @param {goog.Uri} opt_uri Optional uri object that should have it's cache
  *     invalidated when this object updates.
@@ -1030,7 +1030,7 @@ goog.Uri.haveSameDomain = function(uri1String, uri2String) {
 goog.Uri.QueryData = function(opt_query, opt_uri, opt_ignoreCase) {
   /**
    * Encoded query string, or null if it requires computing from the key map.
-   * @type {string?}
+   * @type {?string}
    * @private
    */
   this.encodedQuery_ = opt_query || null;
@@ -1139,7 +1139,7 @@ goog.Uri.QueryData.createFromKeysValues = function(
  * We need to use a Map because we cannot guarantee that the key names will
  * not be problematic for IE.
  *
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.Uri.QueryData.prototype.keyMap_ = null;
@@ -1147,7 +1147,7 @@ goog.Uri.QueryData.prototype.keyMap_ = null;
 
 /**
  * The number of params, or null if it requires computing.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.Uri.QueryData.prototype.count_ = null;
@@ -1155,14 +1155,14 @@ goog.Uri.QueryData.prototype.count_ = null;
 
 /**
  * Decoded query string, or null if it requires computing.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.Uri.QueryData.decodedQuery_ = null;
 
 
 /**
- * @return {Number} The number of parameters.
+ * @return {?number} The number of parameters.
  */
 goog.Uri.QueryData.prototype.getCount = function() {
   this.ensureKeyMapInitialized_();
@@ -1570,4 +1570,3 @@ goog.Uri.QueryData.prototype.extend = function(var_args) {
     }, this);
   }
 };
-

@@ -64,6 +64,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 <script>
 
 var sandbox = goog.dom.$('sandbox');
+var sandboxHtml = sandbox.innerHTML;
 var container;
 var mockClock;
 var scroller;
@@ -84,6 +85,7 @@ function tearDown() {
   // Tick one second to clear all the extra registered events.
   mockClock.tick(1000);
   mockClock.uninstall();
+  sandbox.innerHTML = sandboxHtml;
 }
 
 function testHighlightFirstStaysAtTop() {
@@ -215,6 +217,15 @@ function testFailsInUncompiledModeWhenContainerHasVerticalPadding() {
     // Should throw an exception in uncompiled mode.
   }
   container.getElement().style.paddingTop = '';
+}
+
+function testHidingMenuItemsDoesntAffectContainerScroller() {
+  scroller = new goog.ui.ContainerScroller(container);
+  container.getElement = function() {
+    fail('getElement() must not be called when a control in the container is ' +
+         'being hidden');
+  };
+  container.getChildAt(0).setVisible(false);
 }
 
 </script>

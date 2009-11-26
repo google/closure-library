@@ -418,7 +418,7 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
  * @param {number|undefined|null} id The id of the tracer that is ending.
  * @param {number} opt_silenceThreshold Threshold below which the tracer is
  *    silenced.
- * @return {number?} The elapsed time for the tracer or null if the tracer
+ * @return {?number} The elapsed time for the tracer or null if the tracer
  *    identitifer was not recognized.
  */
 goog.debug.Trace_.prototype.stopTracer = function(id, opt_silenceThreshold) {

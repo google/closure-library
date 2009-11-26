@@ -829,105 +829,110 @@
 <a name="line786"></a>  for (var tag in goog.dom.TagName) {
 <a name="line787"></a>    var expected = true;
 <a name="line788"></a>    switch (tag) {
-<a name="line789"></a>      case goog.dom.TagName.APPLET:
-<a name="line790"></a>      case goog.dom.TagName.AREA:
-<a name="line791"></a>      case goog.dom.TagName.BR:
-<a name="line792"></a>      case goog.dom.TagName.COL:
-<a name="line793"></a>      case goog.dom.TagName.FRAME:
-<a name="line794"></a>      case goog.dom.TagName.HR:
-<a name="line795"></a>      case goog.dom.TagName.IMG:
-<a name="line796"></a>      case goog.dom.TagName.INPUT:
-<a name="line797"></a>      case goog.dom.TagName.IFRAME:
-<a name="line798"></a>      case goog.dom.TagName.ISINDEX:
-<a name="line799"></a>      case goog.dom.TagName.LINK:
-<a name="line800"></a>      case goog.dom.TagName.NOFRAMES:
-<a name="line801"></a>      case goog.dom.TagName.NOSCRIPT:
-<a name="line802"></a>      case goog.dom.TagName.META:
-<a name="line803"></a>      case goog.dom.TagName.OBJECT:
-<a name="line804"></a>      case goog.dom.TagName.PARAM:
-<a name="line805"></a>      case goog.dom.TagName.SCRIPT:
-<a name="line806"></a>      case goog.dom.TagName.STYLE:
-<a name="line807"></a>        expected = false;
-<a name="line808"></a>    }
-<a name="line809"></a>    var node = goog.dom.createDom(tag);
-<a name="line810"></a>    assertEquals(tag + &#39; should &#39; + (expected ? &#39;&#39; : &#39;not &#39;) +
-<a name="line811"></a>        &#39;have children&#39;, expected, goog.dom.canHaveChildren(node));
-<a name="line812"></a>  }
-<a name="line813"></a>}
-<a name="line814"></a>
-<a name="line815"></a>function testGetAncestorNoMatch() {
-<a name="line816"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line817"></a>  assertNull(goog.dom.getAncestor(elem, function() {return false;}));
+<a name="line789"></a>      case goog.dom.TagName.BASE:
+<a name="line790"></a>        // Before version 8, IE incorrectly reports that BASE can have children.
+<a name="line791"></a>        expected = goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(8);
+<a name="line792"></a>        break;
+<a name="line793"></a>      case goog.dom.TagName.APPLET:
+<a name="line794"></a>      case goog.dom.TagName.AREA:
+<a name="line795"></a>      case goog.dom.TagName.BR:
+<a name="line796"></a>      case goog.dom.TagName.COL:
+<a name="line797"></a>      case goog.dom.TagName.FRAME:
+<a name="line798"></a>      case goog.dom.TagName.HR:
+<a name="line799"></a>      case goog.dom.TagName.IMG:
+<a name="line800"></a>      case goog.dom.TagName.INPUT:
+<a name="line801"></a>      case goog.dom.TagName.IFRAME:
+<a name="line802"></a>      case goog.dom.TagName.ISINDEX:
+<a name="line803"></a>      case goog.dom.TagName.LINK:
+<a name="line804"></a>      case goog.dom.TagName.NOFRAMES:
+<a name="line805"></a>      case goog.dom.TagName.NOSCRIPT:
+<a name="line806"></a>      case goog.dom.TagName.META:
+<a name="line807"></a>      case goog.dom.TagName.OBJECT:
+<a name="line808"></a>      case goog.dom.TagName.PARAM:
+<a name="line809"></a>      case goog.dom.TagName.SCRIPT:
+<a name="line810"></a>      case goog.dom.TagName.STYLE:
+<a name="line811"></a>        expected = false;
+<a name="line812"></a>        break;
+<a name="line813"></a>    }
+<a name="line814"></a>    var node = goog.dom.createDom(tag);
+<a name="line815"></a>    assertEquals(tag + &#39; should &#39; + (expected ? &#39;&#39; : &#39;not &#39;) +
+<a name="line816"></a>        &#39;have children&#39;, expected, goog.dom.canHaveChildren(node));
+<a name="line817"></a>  }
 <a name="line818"></a>}
 <a name="line819"></a>
-<a name="line820"></a>function testGetAncestorMatchSelf() {
+<a name="line820"></a>function testGetAncestorNoMatch() {
 <a name="line821"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line822"></a>  var matched = goog.dom.getAncestor(elem, function() {return true;}, true);
-<a name="line823"></a>  assertEquals(elem, matched);
-<a name="line824"></a>}
-<a name="line825"></a>
-<a name="line826"></a>function testGetAncestorNoMatchSelf() {
-<a name="line827"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line828"></a>  var matched = goog.dom.getAncestor(elem, function() {return true;});
-<a name="line829"></a>  assertEquals(elem.parentNode, matched);
-<a name="line830"></a>}
-<a name="line831"></a>
-<a name="line832"></a>function testGetAncestorWithMaxSearchStepsMatchSelf()  {
-<a name="line833"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line834"></a>  var matched = goog.dom.getAncestor(
-<a name="line835"></a>      elem, function() {return true;}, true, 2);
-<a name="line836"></a>  assertEquals(elem, matched);
-<a name="line837"></a>}
-<a name="line838"></a>
-<a name="line839"></a>function testGetAncestorWithMaxSearchStepsMatch() {
-<a name="line840"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line841"></a>  var searchEl = elem.parentNode.parentNode;
-<a name="line842"></a>  var matched = goog.dom.getAncestor(
-<a name="line843"></a>      elem, function(el) {return el == searchEl;}, false, 1);
-<a name="line844"></a>  assertEquals(searchEl, matched);
-<a name="line845"></a>}
-<a name="line846"></a>
-<a name="line847"></a>function testGetAncestorWithMaxSearchStepsNoMatch() {
-<a name="line848"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line849"></a>  var searchEl = elem.parentNode.parentNode;
-<a name="line850"></a>  var matched = goog.dom.getAncestor(
-<a name="line851"></a>      elem, function(el) {return el == searchEl;}, false, 0);
-<a name="line852"></a>  assertNull(matched);
-<a name="line853"></a>}
-<a name="line854"></a>
-<a name="line855"></a>function testGetAncestorByTagNameNoMatch() {
-<a name="line856"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line857"></a>  assertNull(
-<a name="line858"></a>      goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.IMG));
-<a name="line859"></a>}
-<a name="line860"></a>
-<a name="line861"></a>function testGetAncestorByTagNameOnly() {
-<a name="line862"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line863"></a>  var expected = goog.dom.$(&#39;testAncestorDiv&#39;);
-<a name="line864"></a>  assertEquals(expected,
-<a name="line865"></a>      goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV));
-<a name="line866"></a>}
-<a name="line867"></a>
-<a name="line868"></a>function testGetAncestorByClassNameNoMatch() {
-<a name="line869"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line870"></a>  assertNull(
-<a name="line871"></a>      goog.dom.getAncestorByTagNameAndClass(elem, null, &#39;bogusClassName&#39;));
-<a name="line872"></a>}
-<a name="line873"></a>
-<a name="line874"></a>function testGetAncestorByClassName() {
-<a name="line875"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line876"></a>  var expected = goog.dom.$(&#39;testAncestorP&#39;);
-<a name="line877"></a>  assertEquals(expected,
-<a name="line878"></a>      goog.dom.getAncestorByTagNameAndClass(elem, null, &#39;testAncestor&#39;));
-<a name="line879"></a>}
-<a name="line880"></a>
-<a name="line881"></a>function testGetAncestorByTagNameAndClass() {
-<a name="line882"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
-<a name="line883"></a>  var expected = goog.dom.$(&#39;testAncestorDiv&#39;);
-<a name="line884"></a>  assertEquals(expected,
-<a name="line885"></a>      goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV,
-<a name="line886"></a>          &#39;testAncestor&#39;));
-<a name="line887"></a>}
+<a name="line822"></a>  assertNull(goog.dom.getAncestor(elem, function() {return false;}));
+<a name="line823"></a>}
+<a name="line824"></a>
+<a name="line825"></a>function testGetAncestorMatchSelf() {
+<a name="line826"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
+<a name="line827"></a>  var matched = goog.dom.getAncestor(elem, function() {return true;}, true);
+<a name="line828"></a>  assertEquals(elem, matched);
+<a name="line829"></a>}
+<a name="line830"></a>
+<a name="line831"></a>function testGetAncestorNoMatchSelf() {
+<a name="line832"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
+<a name="line833"></a>  var matched = goog.dom.getAncestor(elem, function() {return true;});
+<a name="line834"></a>  assertEquals(elem.parentNode, matched);
+<a name="line835"></a>}
+<a name="line836"></a>
+<a name="line837"></a>function testGetAncestorWithMaxSearchStepsMatchSelf()  {
+<a name="line838"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
+<a name="line839"></a>  var matched = goog.dom.getAncestor(
+<a name="line840"></a>      elem, function() {return true;}, true, 2);
+<a name="line841"></a>  assertEquals(elem, matched);
+<a name="line842"></a>}
+<a name="line843"></a>
+<a name="line844"></a>function testGetAncestorWithMaxSearchStepsMatch() {
+<a name="line845"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
+<a name="line846"></a>  var searchEl = elem.parentNode.parentNode;
+<a name="line847"></a>  var matched = goog.dom.getAncestor(
+<a name="line848"></a>      elem, function(el) {return el == searchEl;}, false, 1);
+<a name="line849"></a>  assertEquals(searchEl, matched);
+<a name="line850"></a>}
+<a name="line851"></a>
+<a name="line852"></a>function testGetAncestorWithMaxSearchStepsNoMatch() {
+<a name="line853"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
+<a name="line854"></a>  var searchEl = elem.parentNode.parentNode;
+<a name="line855"></a>  var matched = goog.dom.getAncestor(
+<a name="line856"></a>      elem, function(el) {return el == searchEl;}, false, 0);
+<a name="line857"></a>  assertNull(matched);
+<a name="line858"></a>}
+<a name="line859"></a>
+<a name="line860"></a>function testGetAncestorByTagNameNoMatch() {
+<a name="line861"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
+<a name="line862"></a>  assertNull(
+<a name="line863"></a>      goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.IMG));
+<a name="line864"></a>}
+<a name="line865"></a>
+<a name="line866"></a>function testGetAncestorByTagNameOnly() {
+<a name="line867"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
+<a name="line868"></a>  var expected = goog.dom.$(&#39;testAncestorDiv&#39;);
+<a name="line869"></a>  assertEquals(expected,
+<a name="line870"></a>      goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV));
+<a name="line871"></a>}
+<a name="line872"></a>
+<a name="line873"></a>function testGetAncestorByClassNameNoMatch() {
+<a name="line874"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
+<a name="line875"></a>  assertNull(
+<a name="line876"></a>      goog.dom.getAncestorByTagNameAndClass(elem, null, &#39;bogusClassName&#39;));
+<a name="line877"></a>}
+<a name="line878"></a>
+<a name="line879"></a>function testGetAncestorByClassName() {
+<a name="line880"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
+<a name="line881"></a>  var expected = goog.dom.$(&#39;testAncestorP&#39;);
+<a name="line882"></a>  assertEquals(expected,
+<a name="line883"></a>      goog.dom.getAncestorByTagNameAndClass(elem, null, &#39;testAncestor&#39;));
+<a name="line884"></a>}
+<a name="line885"></a>
+<a name="line886"></a>function testGetAncestorByTagNameAndClass() {
+<a name="line887"></a>  var elem = goog.dom.$(&#39;nestedElement&#39;);
+<a name="line888"></a>  var expected = goog.dom.$(&#39;testAncestorDiv&#39;);
+<a name="line889"></a>  assertEquals(expected,
+<a name="line890"></a>      goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV,
+<a name="line891"></a>          &#39;testAncestor&#39;));
+<a name="line892"></a>}
 </pre>
 
 

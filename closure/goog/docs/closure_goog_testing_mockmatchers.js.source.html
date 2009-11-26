@@ -85,7 +85,7 @@
 <a name="line42"></a> * if the given criteria is met.
 <a name="line43"></a> * @param {Function} opt_matchFn A function that evaluates a given argument
 <a name="line44"></a> *     and returns true if it meets a given criteria.
-<a name="line45"></a> * @param {string?} opt_matchName The name expressing intent as part of
+<a name="line45"></a> * @param {?string} opt_matchName The name expressing intent as part of
 <a name="line46"></a> *      an error message for when a match fails.
 <a name="line47"></a> * @constructor
 <a name="line48"></a> */
@@ -94,14 +94,14 @@
 <a name="line51"></a>  /**
 <a name="line52"></a>   * A function that evaluates a given argument and returns true if it meets a
 <a name="line53"></a>   * given criteria.
-<a name="line54"></a>   * @type {Function?}
+<a name="line54"></a>   * @type {Function}
 <a name="line55"></a>   * @private
 <a name="line56"></a>   */
 <a name="line57"></a>  this.matchFn_ = opt_matchFn || null;
 <a name="line58"></a>
 <a name="line59"></a>  /**
 <a name="line60"></a>   * A string indicating the match intent (e.g. isBoolean or isString).
-<a name="line61"></a>   * @type {string?}
+<a name="line61"></a>   * @type {?string}
 <a name="line62"></a>   * @private
 <a name="line63"></a>   */
 <a name="line64"></a>  this.matchName_ = opt_matchName || null;
@@ -252,7 +252,7 @@
 <a name="line209"></a> * @param {goog.testing.mockmatchers.ArgumentMatcher|Function} opt_matcher
 <a name="line210"></a> *     Argument matcher or matching function that will be used to validate the
 <a name="line211"></a> *     argument.  By default, argument will always be valid.
-<a name="line212"></a> * @param {string?} opt_matchName The name expressing intent as part of
+<a name="line212"></a> * @param {?string} opt_matchName The name expressing intent as part of
 <a name="line213"></a> *      an error message for when a match fails.
 <a name="line214"></a> * @constructor
 <a name="line215"></a> * @extends {goog.testing.mockmatchers.ArgumentMatcher}

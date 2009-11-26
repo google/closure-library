@@ -39,9 +39,9 @@ goog.require('goog.userAgent');
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
  * @param {string|number} height The height in pixels.  Strings
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
- * @param {number?} opt_coordWidth The optional coordinate width - if
+ * @param {?number} opt_coordWidth The optional coordinate width - if
  *     omitted or null, defaults to same as width.
- * @param {number?} opt_coordHeight The optional coordinate height - if
+ * @param {?number} opt_coordHeight The optional coordinate height - if
  *     omitted or null, defaults to same as height.
  * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
  *     document we want to render in.
@@ -77,9 +77,9 @@ goog.graphics.createGraphics = function(width, height, opt_coordWidth,
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
  * @param {string|number} height The height in pixels.   Strings
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
- * @param {number?} opt_coordWidth The optional coordinate width, defaults to
+ * @param {?number} opt_coordWidth The optional coordinate width, defaults to
  *     same as width.
- * @param {number?} opt_coordHeight The optional coordinate height, defaults to
+ * @param {?number} opt_coordHeight The optional coordinate height, defaults to
  *     same as height.
  * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
  *     document we want to render in.

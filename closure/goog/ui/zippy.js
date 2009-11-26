@@ -50,14 +50,14 @@ goog.ui.Zippy = function(header, opt_content, opt_expanded) {
 
   /**
    * Header element or null if no header exists.
-   * @type {?Element}
+   * @type {Element}
    * @private
    */
   this.elHeader_ = goog.dom.getElement(header) || null;
 
   /**
    * Content element.
-   * @type {?Element}
+   * @type {Element}
    * @private
    */
   this.elContent_ = opt_content ? goog.dom.getElement(opt_content) : null;

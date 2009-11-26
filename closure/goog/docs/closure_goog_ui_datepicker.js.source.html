@@ -243,7 +243,7 @@
 <a name="line200"></a>/**
 <a name="line201"></a> * Custom decorator function. Takes a goog.date.Date object, returns a String
 <a name="line202"></a> * representing a CSS class or null if no special styling applies
-<a name="line203"></a> * @type {Function?}
+<a name="line203"></a> * @type {Function}
 <a name="line204"></a> * @private
 <a name="line205"></a> */
 <a name="line206"></a>goog.ui.DatePicker.prototype.decoratorFunction_ = null;
@@ -506,7 +506,7 @@
 <a name="line463"></a>
 <a name="line464"></a>/**
 <a name="line465"></a> * Sets the decorator function. The function should have the interface of
-<a name="line466"></a> *   {String} f({goog.date.Date});
+<a name="line466"></a> *   {string} f({goog.date.Date});
 <a name="line467"></a> * and return a String representing a CSS class to decorate the cell
 <a name="line468"></a> * corresponding to the date specified.
 <a name="line469"></a> *

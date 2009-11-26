@@ -136,94 +136,92 @@
 <a name="line93"></a>    callback(false);
 <a name="line94"></a>    return;
 <a name="line95"></a>  }
-<a name="line96"></a>  if (!opt_pauseBetweenRetriesMS) {
-<a name="line97"></a>    opt_pauseBetweenRetriesMS = 0;
-<a name="line98"></a>  }
-<a name="line99"></a>
-<a name="line100"></a>  retries--;
-<a name="line101"></a>  goog.net.testLoadImage(url, timeout, function(succeeded) {
-<a name="line102"></a>    if (succeeded) {
-<a name="line103"></a>      callback(true);
-<a name="line104"></a>    } else {
-<a name="line105"></a>      // try again
-<a name="line106"></a>      goog.global.setTimeout(function() {
-<a name="line107"></a>        goog.net.testLoadImageWithRetries(url, timeout, callback, retries,
-<a name="line108"></a>            opt_pauseBetweenRetriesMS);
-<a name="line109"></a>        }, opt_pauseBetweenRetriesMS);
-<a name="line110"></a>    }
-<a name="line111"></a>  });
-<a name="line112"></a>};
-<a name="line113"></a>
-<a name="line114"></a>
-<a name="line115"></a>/**
-<a name="line116"></a> * Test loading the given image.
-<a name="line117"></a> * @param {string} url URL to the iamge.
-<a name="line118"></a> * @param {number} timeout Milliseconds before giving up.
-<a name="line119"></a> * @param {Function} callback Function to call with results.
-<a name="line120"></a> */
-<a name="line121"></a>goog.net.testLoadImage = function(url, timeout, callback) {
-<a name="line122"></a>  var channelDebug = new goog.net.ChannelDebug();
-<a name="line123"></a>  channelDebug.debug(&#39;TestLoadImage: loading &#39; + url);
-<a name="line124"></a>  var img = new Image();
-<a name="line125"></a>  img.onload = function() {
-<a name="line126"></a>    try {
-<a name="line127"></a>      channelDebug.debug(&#39;TestLoadImage: loaded&#39;);
-<a name="line128"></a>      goog.net.clearImageCallbacks_(img);
-<a name="line129"></a>      callback(true);
-<a name="line130"></a>    } catch (e) {
-<a name="line131"></a>      channelDebug.dumpException(e);
-<a name="line132"></a>    }
-<a name="line133"></a>  };
-<a name="line134"></a>  img.onerror = function() {
-<a name="line135"></a>    try {
-<a name="line136"></a>      channelDebug.debug(&#39;TestLoadImage: error&#39;);
-<a name="line137"></a>      goog.net.clearImageCallbacks_(img);
-<a name="line138"></a>      callback(false);
-<a name="line139"></a>    } catch (e) {
-<a name="line140"></a>      channelDebug.dumpException(e);
-<a name="line141"></a>    }
-<a name="line142"></a>  };
-<a name="line143"></a>  img.onabort = function() {
-<a name="line144"></a>    try {
-<a name="line145"></a>      channelDebug.debug(&#39;TestLoadImage: abort&#39;);
-<a name="line146"></a>      goog.net.clearImageCallbacks_(img);
-<a name="line147"></a>      callback(false);
-<a name="line148"></a>    } catch (e) {
-<a name="line149"></a>      channelDebug.dumpException(e);
-<a name="line150"></a>    }
-<a name="line151"></a>  };
-<a name="line152"></a>  img.ontimeout = function() {
-<a name="line153"></a>    try {
-<a name="line154"></a>      channelDebug.debug(&#39;TestLoadImage: timeout&#39;);
-<a name="line155"></a>      goog.net.clearImageCallbacks_(img);
-<a name="line156"></a>      callback(false);
-<a name="line157"></a>    } catch (e) {
-<a name="line158"></a>      channelDebug.dumpException(e);
-<a name="line159"></a>    }
-<a name="line160"></a>  };
-<a name="line161"></a>
-<a name="line162"></a>  goog.global.setTimeout(function() {
-<a name="line163"></a>    if (img.ontimeout) {
-<a name="line164"></a>      img.ontimeout();
-<a name="line165"></a>    }
-<a name="line166"></a>  }, timeout);
-<a name="line167"></a>  img.src = url;
-<a name="line168"></a>};
-<a name="line169"></a>
-<a name="line170"></a>
-<a name="line171"></a>/**
-<a name="line172"></a> * Clear handlers to avoid memory leaks.
-<a name="line173"></a> * @param {Image} img The image to clear handlers from.
-<a name="line174"></a> * @private
-<a name="line175"></a> */
-<a name="line176"></a>goog.net.clearImageCallbacks_ = function(img) {
-<a name="line177"></a>  // NOTE: Nullified individually to avoid compiler warnings
-<a name="line178"></a>  // (BUG 658126)
-<a name="line179"></a>  img.onload = null;
-<a name="line180"></a>  img.onerror = null;
-<a name="line181"></a>  img.onabort = null;
-<a name="line182"></a>  img.ontimeout = null;
-<a name="line183"></a>};
+<a name="line96"></a>
+<a name="line97"></a>  var pauseBetweenRetries = opt_pauseBetweenRetriesMS || 0;
+<a name="line98"></a>  retries--;
+<a name="line99"></a>  goog.net.testLoadImage(url, timeout, function(succeeded) {
+<a name="line100"></a>    if (succeeded) {
+<a name="line101"></a>      callback(true);
+<a name="line102"></a>    } else {
+<a name="line103"></a>      // try again
+<a name="line104"></a>      goog.global.setTimeout(function() {
+<a name="line105"></a>        goog.net.testLoadImageWithRetries(url, timeout, callback, retries,
+<a name="line106"></a>            pauseBetweenRetries);
+<a name="line107"></a>        }, pauseBetweenRetries);
+<a name="line108"></a>    }
+<a name="line109"></a>  });
+<a name="line110"></a>};
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Test loading the given image.
+<a name="line115"></a> * @param {string} url URL to the iamge.
+<a name="line116"></a> * @param {number} timeout Milliseconds before giving up.
+<a name="line117"></a> * @param {Function} callback Function to call with results.
+<a name="line118"></a> */
+<a name="line119"></a>goog.net.testLoadImage = function(url, timeout, callback) {
+<a name="line120"></a>  var channelDebug = new goog.net.ChannelDebug();
+<a name="line121"></a>  channelDebug.debug(&#39;TestLoadImage: loading &#39; + url);
+<a name="line122"></a>  var img = new Image();
+<a name="line123"></a>  img.onload = function() {
+<a name="line124"></a>    try {
+<a name="line125"></a>      channelDebug.debug(&#39;TestLoadImage: loaded&#39;);
+<a name="line126"></a>      goog.net.clearImageCallbacks_(img);
+<a name="line127"></a>      callback(true);
+<a name="line128"></a>    } catch (e) {
+<a name="line129"></a>      channelDebug.dumpException(e);
+<a name="line130"></a>    }
+<a name="line131"></a>  };
+<a name="line132"></a>  img.onerror = function() {
+<a name="line133"></a>    try {
+<a name="line134"></a>      channelDebug.debug(&#39;TestLoadImage: error&#39;);
+<a name="line135"></a>      goog.net.clearImageCallbacks_(img);
+<a name="line136"></a>      callback(false);
+<a name="line137"></a>    } catch (e) {
+<a name="line138"></a>      channelDebug.dumpException(e);
+<a name="line139"></a>    }
+<a name="line140"></a>  };
+<a name="line141"></a>  img.onabort = function() {
+<a name="line142"></a>    try {
+<a name="line143"></a>      channelDebug.debug(&#39;TestLoadImage: abort&#39;);
+<a name="line144"></a>      goog.net.clearImageCallbacks_(img);
+<a name="line145"></a>      callback(false);
+<a name="line146"></a>    } catch (e) {
+<a name="line147"></a>      channelDebug.dumpException(e);
+<a name="line148"></a>    }
+<a name="line149"></a>  };
+<a name="line150"></a>  img.ontimeout = function() {
+<a name="line151"></a>    try {
+<a name="line152"></a>      channelDebug.debug(&#39;TestLoadImage: timeout&#39;);
+<a name="line153"></a>      goog.net.clearImageCallbacks_(img);
+<a name="line154"></a>      callback(false);
+<a name="line155"></a>    } catch (e) {
+<a name="line156"></a>      channelDebug.dumpException(e);
+<a name="line157"></a>    }
+<a name="line158"></a>  };
+<a name="line159"></a>
+<a name="line160"></a>  goog.global.setTimeout(function() {
+<a name="line161"></a>    if (img.ontimeout) {
+<a name="line162"></a>      img.ontimeout();
+<a name="line163"></a>    }
+<a name="line164"></a>  }, timeout);
+<a name="line165"></a>  img.src = url;
+<a name="line166"></a>};
+<a name="line167"></a>
+<a name="line168"></a>
+<a name="line169"></a>/**
+<a name="line170"></a> * Clear handlers to avoid memory leaks.
+<a name="line171"></a> * @param {Image} img The image to clear handlers from.
+<a name="line172"></a> * @private
+<a name="line173"></a> */
+<a name="line174"></a>goog.net.clearImageCallbacks_ = function(img) {
+<a name="line175"></a>  // NOTE: Nullified individually to avoid compiler warnings
+<a name="line176"></a>  // (BUG 658126)
+<a name="line177"></a>  img.onload = null;
+<a name="line178"></a>  img.onerror = null;
+<a name="line179"></a>  img.onabort = null;
+<a name="line180"></a>  img.ontimeout = null;
+<a name="line181"></a>};
 </pre>
 
 

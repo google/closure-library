@@ -89,7 +89,7 @@
 <a name="line46"></a> * @param {Node} node Node to get style of.
 <a name="line47"></a> * @param {string} stylePropertyName Property to get (must be camelCase,
 <a name="line48"></a> *     not css-style).
-<a name="line49"></a> * @return {string?} Style value, or null if this is not an element node.
+<a name="line49"></a> * @return {?string} Style value, or null if this is not an element node.
 <a name="line50"></a> * @private
 <a name="line51"></a> */
 <a name="line52"></a>goog.editor.style.getComputedOrCascadedStyle_ =
@@ -123,7 +123,7 @@
 <a name="line80"></a> * other inline elements and are thus, not containers. Containers are elements
 <a name="line81"></a> * that should not be broken up when wrapping selections with a node of an
 <a name="line82"></a> * inline block styling.
-<a name="line83"></a> * @param {Node?} element The element to check.
+<a name="line83"></a> * @param {Node} element The element to check.
 <a name="line84"></a> * @return {boolean} Whether the element is a container.
 <a name="line85"></a> */
 <a name="line86"></a>goog.editor.style.isContainer = function(element) {
@@ -139,7 +139,7 @@
 <a name="line96"></a>/**
 <a name="line97"></a> * Return the first ancestor of this node that is a container, inclusive.
 <a name="line98"></a> * @see isContainer
-<a name="line99"></a> * @param {Node?} node Node to find the container of.
+<a name="line99"></a> * @param {Node} node Node to find the container of.
 <a name="line100"></a> * @return {Element} The element which contains node.
 <a name="line101"></a> */
 <a name="line102"></a>goog.editor.style.getContainer = function(node) {

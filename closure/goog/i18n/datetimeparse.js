@@ -884,67 +884,67 @@ goog.i18n.DateTimeParse.MyDate_ = function(){};
 
 /**
  * The date's era.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.era;
 
 /**
  * The date's year.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.year;
 
 /**
  * The date's month.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.month;
 
 /**
  * The date's day of month.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.day;
 
 /**
  * The date's hour.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.hours;
 
 /**
  * The date's before/afternoon denominator.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.ampm;
 
 /**
  * The date's minutes.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.minutes;
 
 /**
  * The date's seconds.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.seconds;
 
 /**
  * The date's milliseconds.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.milliseconds;
 
 /**
  * The date's timezone offset.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.tzOffset;
 
 /**
  * The date's day of week. Sunday is 0, Saturday is 6.
- * @type {number?}
+ * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.dayOfWeek;
 

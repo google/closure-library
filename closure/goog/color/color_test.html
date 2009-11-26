@@ -27,6 +27,7 @@ limitations under the License.
   goog.require('goog.testing.jsunit');
 </script>
 </head>
+<body>
 <script>
 
 function testIsValidHexColor() {
@@ -282,7 +283,7 @@ function testHsvToHex() {
  *     red, green, and blue values respectively, in the range [0, 255].
  * @param {Array.<number>} rgb2 Color represented by a 3-element array with
  *     red, green, and blue values respectively, in the range [0, 255].
- * @returns {Boolean} True if the colors are the same, false otherwise.
+ * @returns {boolean} True if the colors are the same, false otherwise.
  */
 function rgbColorsAreEqual(rgb1, rgb2) {
   return (rgb1[0] == rgb2[0] &&
@@ -671,8 +672,5 @@ function assertColorFuzzyEquals(str, expected, actual, delta) {
 }
 
 </script>
-
-</head>
-<body>
 </body>
 </html>

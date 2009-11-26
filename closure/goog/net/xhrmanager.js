@@ -282,7 +282,7 @@ goog.net.XhrManager.prototype.handleAvailableXhr_ = function(id, xhrIo) {
  * Handles all events fired by the XhrIo object for a given request.
  * @param {string} id The id of the request.
  * @param {goog.events.Event} e The event.
- * @return {Object?} The return value from the handler, if any.
+ * @return {Object} The return value from the handler, if any.
  * @private
  */
 goog.net.XhrManager.prototype.handleEvent_ = function(id, e) {
@@ -349,7 +349,7 @@ goog.net.XhrManager.prototype.retry_ = function(id, xhrIo) {
  * @param {string} id The id of the request.
  * @param {goog.net.XhrIo} xhrIo The XhrIo object.
  * @param {goog.events.Event} e The original event.
- * @return {Object?} The return value from the callback, if any.
+ * @return {Object} The return value from the callback, if any.
  * @private
  */
 goog.net.XhrManager.prototype.handleComplete_ = function(id, xhrIo, e) {

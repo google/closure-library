@@ -107,7 +107,7 @@ goog.dom.xml.serialize = function(xml) {
  * Selects a single node using an Xpath expression and a root node
  * @param {Node} node The root node.
  * @param {string} path Xpath selector.
- * @return {Node?} The selected node, or null if no matching node.
+ * @return {Node} The selected node, or null if no matching node.
  */
 goog.dom.xml.selectSingleNode = function(node, path) {
   if (typeof node.selectSingleNode != 'undefined') {

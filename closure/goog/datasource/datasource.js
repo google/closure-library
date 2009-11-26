@@ -196,7 +196,7 @@ goog.ds.BaseDataNode.prototype.getChildNode = function(name, opt_canCreate) {
 /**
  * Gets the value of a child node
  * @param {string} name The node name.
- * @return {Object?} The value of the node, or null if no value or the
+ * @return {Object} The value of the node, or null if no value or the
  *     child node doesn't exist.
  */
 goog.ds.BaseDataNode.prototype.getChildNodeValue = function(name) {
@@ -238,7 +238,7 @@ goog.ds.BaseDataNode.prototype.getLoadState = function() {
 
 /**
  * Gets the parent node. Subclasses implement this function
- * @type {Function?}
+ * @type {Function}
  * @protected
  * @suppress {underscore}
  */

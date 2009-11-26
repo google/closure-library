@@ -233,7 +233,7 @@ goog.ui.ServerChart.prototype.maxValue_ = -Infinity;
 
 /**
  * Chart title.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.ServerChart.prototype.title_ = null;
@@ -268,7 +268,7 @@ goog.ui.ServerChart.prototype.legend_ = null;
  * invisible data set. Such data sets must be provided at the end of the
  * chd parameter, and if invisible data sets are being used, the chd
  * parameter must indicate the number of visible data sets.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.ui.ServerChart.prototype.numVisibleDataSets_ = null;
@@ -990,7 +990,7 @@ goog.ui.ServerChart.prototype.getLegendPosition = function() {
  * the visible data set are not drawn as part of the chart. Instead, they
  * are available for positioning markers.
 
- * @param {number?} n The number of visible data sets, or null if all data
+ * @param {?number} n The number of visible data sets, or null if all data
  * sets are to be visible.
  */
 goog.ui.ServerChart.prototype.setNumVisibleDataSets = function(n) {
@@ -1003,7 +1003,7 @@ goog.ui.ServerChart.prototype.setNumVisibleDataSets = function(n) {
  * the visible data set are not drawn as part of the chart. Instead, they
  * are available for positioning markers.
  *
- * @return {number?} The number of visible data sets, or null if all data
+ * @return {?number} The number of visible data sets, or null if all data
  * sets are visible.
  */
 goog.ui.ServerChart.prototype.getNumVisibleDataSets = function() {

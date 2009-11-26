@@ -85,7 +85,7 @@ goog.style.getStyle = function(element, style) {
  *
  * @param {Element} element Element to get style of.
  * @param {string} style Property to get (camel-case).
- * @return {string?} Style value.
+ * @return {?string} Style value.
  */
 goog.style.getComputedStyle = function(element, style) {
   var doc = goog.dom.getOwnerDocument(element);
@@ -292,6 +292,9 @@ goog.style.getClientViewportElement = function(opt_node) {
  * This utility patches common browser bugs in getClientBoundingRect. It
  * will fail if getClientBoundingRect is unsupported.
  *
+ * If the element is not in the DOM, the result is undefined, and an error may
+ * be thrown depending on user agent.
+ *
  * @param {Element} el The element whose bounding rectangle is being queried.
  * @return {Object} A native bounding rectangle with numerical left, top,
  *     right, and bottom.  Reported by Firefox to be of object type ClientRect.
@@ -327,7 +330,7 @@ goog.style.getBoundingClientRect_ = function(el) {
 /**
  * Returns the first parent that could affect the position of a given element.
  * @param {Element} element The element to get the offset parent for.
- * @return {Element?} The first offset parent or null if one cannot be found.
+ * @return {Element} The first offset parent or null if one cannot be found.
  */
 goog.style.getOffsetParent = function(element) {
   // element.offsetParent does the right thing in IE, in other browser it
@@ -1154,7 +1157,7 @@ goog.style.isRightToLeft = function(el) {
  * The CSS style property corresponding to an element being
  * unselectable on the current browser platform (null if none).
  * Opera and IE instead use a DOM attribute 'unselectable'.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.style.unselectableStyle_ =
@@ -1566,7 +1569,7 @@ goog.style.lengthUnitRegex_ = /[^\d]+$/;
 /**
  * Returns the units used for a CSS length measurement.
  * @param {string} value  A CSS length quantity.
- * @return {string?} The units of measurement.
+ * @return {?string} The units of measurement.
  */
 goog.style.getLengthUnits = function(value) {
   var units = value.match(goog.style.lengthUnitRegex_);

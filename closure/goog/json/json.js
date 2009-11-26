@@ -129,7 +129,7 @@ goog.json.Serializer = function() {
 /**
  * Serializes an object or a value to a JSON string.
  *
- * @param {Object?} object The object to serialize.
+ * @param {Object} object The object to serialize.
  * @throws Error if there are loops in the object graph.
  * @return {string} A JSON string representation of the input.
  */

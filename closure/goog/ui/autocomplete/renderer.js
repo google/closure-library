@@ -74,7 +74,7 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
 
   /**
    * Reference to the main element that controls the rendered autocomplete
-   * @type {Element?}
+   * @type {Element}
    * @private
    */
   this.element_ = null;
@@ -182,7 +182,7 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
   /**
    * Alignment lock that forces all alignment to the give type, RIGHT | LEFT.
    * This is set the first time the renderer is aligned.
-   * @type {string?}
+   * @type {?string}
    * @private
    */
   this.keepAligned_ = null;

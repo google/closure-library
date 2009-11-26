@@ -125,7 +125,7 @@
 <a name="line82"></a>/**
 <a name="line83"></a> * The time for of the first result part. We use timing in IE as a
 <a name="line84"></a> * heuristic for whether we&#39;re behind a buffering proxy.
-<a name="line85"></a> * @type {number?}
+<a name="line85"></a> * @type {?number}
 <a name="line86"></a> * @private
 <a name="line87"></a> */
 <a name="line88"></a>goog.net.BrowserTestChannel.prototype.firstTime_ = null;
@@ -133,14 +133,14 @@
 <a name="line90"></a>/**
 <a name="line91"></a> * The time for of the last result part. We use timing in IE as a
 <a name="line92"></a> * heuristic for whether we&#39;re behind a buffering proxy.
-<a name="line93"></a> * @type {number?}
+<a name="line93"></a> * @type {?number}
 <a name="line94"></a> * @private
 <a name="line95"></a> */
 <a name="line96"></a>goog.net.BrowserTestChannel.prototype.lastTime_ = null;
 <a name="line97"></a>
 <a name="line98"></a>/**
 <a name="line99"></a> * The relative path for test requests.
-<a name="line100"></a> * @type {string?}
+<a name="line100"></a> * @type {?string}
 <a name="line101"></a> * @private
 <a name="line102"></a> */
 <a name="line103"></a>goog.net.BrowserTestChannel.prototype.path_ = null;
@@ -148,7 +148,7 @@
 <a name="line105"></a>/**
 <a name="line106"></a> * The state of the state machine for this object.
 <a name="line107"></a> *
-<a name="line108"></a> * @type {number?}
+<a name="line108"></a> * @type {?number}
 <a name="line109"></a> * @private
 <a name="line110"></a> */
 <a name="line111"></a>goog.net.BrowserTestChannel.prototype.state_ = null;
@@ -163,7 +163,7 @@
 <a name="line120"></a>/**
 <a name="line121"></a> * A subdomain prefix for using a subdomain in IE for the backchannel
 <a name="line122"></a> * requests.
-<a name="line123"></a> * @type {string?}
+<a name="line123"></a> * @type {?string}
 <a name="line124"></a> * @private
 <a name="line125"></a> */
 <a name="line126"></a>goog.net.BrowserTestChannel.prototype.hostPrefix_ = null;
@@ -171,7 +171,7 @@
 <a name="line128"></a>/**
 <a name="line129"></a> * A subdomain prefix for testing whether the channel was disabled by
 <a name="line130"></a> * a network administrator;
-<a name="line131"></a> * @type {string?}
+<a name="line131"></a> * @type {?string}
 <a name="line132"></a> * @private
 <a name="line133"></a> */
 <a name="line134"></a>goog.net.BrowserTestChannel.prototype.blockedPrefix_ = null;

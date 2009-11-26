@@ -53,7 +53,7 @@ goog.ds.JsDataSource = function(root, dataName, opt_parent) {
 
 /**
  * The root JS object. Can be null.
- * @type {?Object}
+ * @type {Object}
  * @protected
  * @suppress {underscore}
  */
@@ -62,7 +62,7 @@ goog.ds.JsDataSource.prototype.root_;
 
 /**
  * Sets the root JS object
- * @param {Object?} root The root JS object. Can be null.
+ * @param {Object} root The root JS object. Can be null.
  *
  * @protected
  */
@@ -77,7 +77,7 @@ goog.ds.JsDataSource.prototype.setRoot = function(root) {
  * - Are assumed to have child nodes of all of the same type of data
  * - Fire data changes on the root node of the list whenever children
  *     are added or removed
- * @param {boolean?} isList True to use list semantics.
+ * @param {?boolean} isList True to use list semantics.
  * @private
  */
 goog.ds.JsDataSource.prototype.setIsList_ = function(isList) {
@@ -221,7 +221,7 @@ goog.ds.JsDataSource.prototype.getChildNode = function(name, opt_canCreate) {
 /**
  * Gets the value of a child node
  * @param {string} name The node name.
- * @return {Object?} The value of the node, or null if no value or the child
+ * @return {Object} The value of the node, or null if no value or the child
  *    node doesn't exist.
  */
 goog.ds.JsDataSource.prototype.getChildNodeValue = function(name) {
@@ -240,9 +240,9 @@ goog.ds.JsDataSource.prototype.getChildNodeValue = function(name) {
  * Sets a named child node of the current node.
  * If value is null, removes the child node.
  * @param {string} name The node name.
- * @param {Object?} value The value to set, can be DataNode, object,
+ * @param {Object} value The value to set, can be DataNode, object,
  *     property, or null.
- * @return {Object?} The child node, if set.
+ * @return {Object} The child node, if set.
  */
 goog.ds.JsDataSource.prototype.setChildNode = function(name, value) {
   var removedPath = null;

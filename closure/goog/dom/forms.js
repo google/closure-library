@@ -271,7 +271,7 @@ goog.dom.forms.getValueByName = function(form, name) {
 /**
  * Gets the current value of a checkable input element.
  * @param {Element} el The element.
- * @return {string?} The value of the form element (or null).
+ * @return {?string} The value of the form element (or null).
  * @private
  */
 goog.dom.forms.getInputChecked_ = function(el) {
@@ -282,7 +282,7 @@ goog.dom.forms.getInputChecked_ = function(el) {
 /**
  * Gets the current value of a select-one element.
  * @param {Element} el The element.
- * @return {string?} The value of the form element (or null).
+ * @return {?string} The value of the form element (or null).
  * @private
  */
 goog.dom.forms.getSelectSingle_ = function(el) {

@@ -143,7 +143,7 @@ goog.module.ModuleManager.prototype.loader_ = null;
 // TODO: Remove tracer.
 /**
  * Tracer that measures how long it takes to load a module.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.module.ModuleManager.prototype.loadTracer_ = null;
@@ -179,7 +179,7 @@ goog.module.ModuleManager.prototype.userLastActive_ = false;
 
 /**
  * The module context needed for module initialization.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.module.ModuleManager.prototype.moduleContext_ = null;

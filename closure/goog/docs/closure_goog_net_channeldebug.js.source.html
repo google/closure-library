@@ -101,7 +101,7 @@
 <a name="line58"></a> * @param {goog.Uri} uri The request destination.
 <a name="line59"></a> * @param {string|number|undefined} id The request id.
 <a name="line60"></a> * @param {number} attempt Which attempt # the request was.
-<a name="line61"></a> * @param {string?} postData The data posted in the request.
+<a name="line61"></a> * @param {?string} postData The data posted in the request.
 <a name="line62"></a> */
 <a name="line63"></a>goog.net.ChannelDebug.prototype.xmlHttpChannelRequest =
 <a name="line64"></a>    function(verb, uri, id, attempt, postData) {
@@ -132,8 +132,8 @@
 <a name="line89"></a>/**
 <a name="line90"></a> * Logs the response data received from an XmlHttp request.
 <a name="line91"></a> * @param {string|number|undefined} id The request id.
-<a name="line92"></a> * @param {string?} responseText The response text.
-<a name="line93"></a> * @param {string?} opt_desc Optional request description.
+<a name="line92"></a> * @param {?string} responseText The response text.
+<a name="line93"></a> * @param {?string} opt_desc Optional request description.
 <a name="line94"></a> */
 <a name="line95"></a>goog.net.ChannelDebug.prototype.xmlHttpChannelResponseText =
 <a name="line96"></a>    function(id, responseText, opt_desc) {
@@ -242,8 +242,8 @@
 <a name="line199"></a>/**
 <a name="line200"></a> * Removes potentially private data from a response so that we don&#39;t
 <a name="line201"></a> * accidentally save private and personal data to the server logs.
-<a name="line202"></a> * @param {string?} responseText A JSON response to clean.
-<a name="line203"></a> * @return {string?} The cleaned response.
+<a name="line202"></a> * @param {?string} responseText A JSON response to clean.
+<a name="line203"></a> * @return {?string} The cleaned response.
 <a name="line204"></a> * @private
 <a name="line205"></a> */
 <a name="line206"></a>goog.net.ChannelDebug.prototype.redactResponse_ = function(responseText) {
@@ -301,8 +301,8 @@
 <a name="line258"></a>/**
 <a name="line259"></a> * Removes potentially private data from a request POST body so that we don&#39;t
 <a name="line260"></a> * accidentally save private and personal data to the server logs.
-<a name="line261"></a> * @param {string?} data The data string to clean.
-<a name="line262"></a> * @return {string?} The data string with sensitive data replaced by &#39;redacted&#39;.
+<a name="line261"></a> * @param {?string} data The data string to clean.
+<a name="line262"></a> * @return {?string} The data string with sensitive data replaced by &#39;redacted&#39;.
 <a name="line263"></a> * @private
 <a name="line264"></a> */
 <a name="line265"></a>goog.net.ChannelDebug.prototype.maybeRedactPostData_ = function(data) {

@@ -128,7 +128,7 @@ goog.ui.ColorMenuButton.newColorMenu = function(opt_extraItems, opt_domHelper) {
 
 /**
  * Returns the currently selected color (null if none).
- * @return {string?} The selected color.
+ * @return {?string} The selected color.
  */
 goog.ui.ColorMenuButton.prototype.getSelectedColor = function() {
   return /** @type {string} */ (this.getValue());
@@ -138,7 +138,7 @@ goog.ui.ColorMenuButton.prototype.getSelectedColor = function() {
 /**
  * Sets the selected color, or clears the selected color if the argument is
  * null or not any of the available color choices.
- * @param {string?} color New color.
+ * @param {?string} color New color.
  */
 goog.ui.ColorMenuButton.prototype.setSelectedColor = function(color) {
   this.setValue(color);
@@ -149,7 +149,7 @@ goog.ui.ColorMenuButton.prototype.setSelectedColor = function(color) {
  * Sets the value associated with the color menu button.  Overrides
  * {@link goog.ui.Button#setValue} by interpreting the value as a color
  * spec string.
- * @param {string?} color New button value; should be a color spec string.
+ * @param {?string} color New button value; should be a color spec string.
  */
 goog.ui.ColorMenuButton.prototype.setValue = function(color) {
   for (var i = 0, item; item = this.getItemAt(i); i++) {
@@ -193,7 +193,7 @@ goog.ui.ColorMenuButton.prototype.setOpen = function(open) {
   if (open && this.getItemCount() == 0) {
     this.setMenu(
         goog.ui.ColorMenuButton.newColorMenu(null, this.getDomHelper()));
-    this.setValue(/** @type {string?} */ (this.getValue()));
+    this.setValue(/** @type {?string} */ (this.getValue()));
   }
   goog.ui.ColorMenuButton.superClass_.setOpen.call(this, open);
 };

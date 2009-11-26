@@ -21,6 +21,10 @@
 
 goog.provide('goog.graphics.AffineTransform');
 
+goog.require('goog.math');
+
+
+
 /**
  * Creates a 2D affine transform. An affine transform performs a linear
  * mapping from 2D coordinates to other 2D coordinates that preserves the

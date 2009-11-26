@@ -258,7 +258,7 @@ goog.ui.emoji.EmojiPalette.prototype.disposeInternal = function() {
  * exists for that element.
  *
  * @param {Element} el The element to get the Goomoji id from.
- * @return {string?} A goomoji id from an img or the containing td, or null if
+ * @return {?string} A goomoji id from an img or the containing td, or null if
  *     none exists for that element.
  * @private
  */

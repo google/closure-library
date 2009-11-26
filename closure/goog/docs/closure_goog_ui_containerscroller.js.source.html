@@ -212,52 +212,54 @@
 <a name="line169"></a> * @private
 <a name="line170"></a> */
 <a name="line171"></a>goog.ui.ContainerScroller.prototype.onHide_ = function(e) {
-<a name="line172"></a>  this.lastEnterTarget_ = null;
-<a name="line173"></a>  this.scrollTopBeforeHide_ = this.container_.getElement().scrollTop;
-<a name="line174"></a>};
-<a name="line175"></a>
-<a name="line176"></a>
-<a name="line177"></a>/**
-<a name="line178"></a> * Centers the currently highlighted item, if this is scrollable.
-<a name="line179"></a> * @param {boolean} opt_center Whether to center the highlighted element
-<a name="line180"></a> *     rather than simply ensure it is in view.  Useful for the first
-<a name="line181"></a> *     render.
-<a name="line182"></a> * @private
-<a name="line183"></a> */
-<a name="line184"></a>goog.ui.ContainerScroller.prototype.doScrolling_ = function(opt_center) {
-<a name="line185"></a>  var highlighted = this.container_.getHighlighted();
-<a name="line186"></a>
-<a name="line187"></a>  // Only scroll if we&#39;re visible and there is a highlighted item.
-<a name="line188"></a>  if (this.container_.isVisible() &amp;&amp; highlighted &amp;&amp;
-<a name="line189"></a>      highlighted != this.lastEnterTarget_) {
-<a name="line190"></a>    var element = this.container_.getElement();
-<a name="line191"></a>    goog.style.scrollIntoContainerView(highlighted.getElement(), element,
-<a name="line192"></a>        opt_center);
-<a name="line193"></a>    this.temporarilyDisableHover_();
-<a name="line194"></a>    this.lastEnterTarget_ = null;
-<a name="line195"></a>  }
-<a name="line196"></a>};
-<a name="line197"></a>
-<a name="line198"></a>
-<a name="line199"></a>/**
-<a name="line200"></a> * Temporarily disables hover events from changing highlight.
-<a name="line201"></a> * @see #onEnter_
-<a name="line202"></a> * @private
-<a name="line203"></a> */
-<a name="line204"></a>goog.ui.ContainerScroller.prototype.temporarilyDisableHover_ = function() {
-<a name="line205"></a>  this.disableHover_ = true;
-<a name="line206"></a>  goog.Timer.callOnce(function() {
-<a name="line207"></a>    this.disableHover_ = false;
-<a name="line208"></a>  }, 0, this);
-<a name="line209"></a>};
-<a name="line210"></a>
-<a name="line211"></a>
-<a name="line212"></a>/** @inheritDoc */
-<a name="line213"></a>goog.ui.ContainerScroller.prototype.disposeInternal = function() {
-<a name="line214"></a>  goog.ui.ContainerScroller.superClass_.disposeInternal.call(this);
-<a name="line215"></a>  this.eventHandler_.dispose();
-<a name="line216"></a>  this.lastEnterTarget_ = null;
-<a name="line217"></a>};
+<a name="line172"></a>  if (e.target == this.container_) {
+<a name="line173"></a>    this.lastEnterTarget_ = null;
+<a name="line174"></a>    this.scrollTopBeforeHide_ = this.container_.getElement().scrollTop;
+<a name="line175"></a>  }
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Centers the currently highlighted item, if this is scrollable.
+<a name="line181"></a> * @param {boolean} opt_center Whether to center the highlighted element
+<a name="line182"></a> *     rather than simply ensure it is in view.  Useful for the first
+<a name="line183"></a> *     render.
+<a name="line184"></a> * @private
+<a name="line185"></a> */
+<a name="line186"></a>goog.ui.ContainerScroller.prototype.doScrolling_ = function(opt_center) {
+<a name="line187"></a>  var highlighted = this.container_.getHighlighted();
+<a name="line188"></a>
+<a name="line189"></a>  // Only scroll if we&#39;re visible and there is a highlighted item.
+<a name="line190"></a>  if (this.container_.isVisible() &amp;&amp; highlighted &amp;&amp;
+<a name="line191"></a>      highlighted != this.lastEnterTarget_) {
+<a name="line192"></a>    var element = this.container_.getElement();
+<a name="line193"></a>    goog.style.scrollIntoContainerView(highlighted.getElement(), element,
+<a name="line194"></a>        opt_center);
+<a name="line195"></a>    this.temporarilyDisableHover_();
+<a name="line196"></a>    this.lastEnterTarget_ = null;
+<a name="line197"></a>  }
+<a name="line198"></a>};
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * Temporarily disables hover events from changing highlight.
+<a name="line203"></a> * @see #onEnter_
+<a name="line204"></a> * @private
+<a name="line205"></a> */
+<a name="line206"></a>goog.ui.ContainerScroller.prototype.temporarilyDisableHover_ = function() {
+<a name="line207"></a>  this.disableHover_ = true;
+<a name="line208"></a>  goog.Timer.callOnce(function() {
+<a name="line209"></a>    this.disableHover_ = false;
+<a name="line210"></a>  }, 0, this);
+<a name="line211"></a>};
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/** @inheritDoc */
+<a name="line215"></a>goog.ui.ContainerScroller.prototype.disposeInternal = function() {
+<a name="line216"></a>  goog.ui.ContainerScroller.superClass_.disposeInternal.call(this);
+<a name="line217"></a>  this.eventHandler_.dispose();
+<a name="line218"></a>  this.lastEnterTarget_ = null;
+<a name="line219"></a>};
 </pre>
 
 

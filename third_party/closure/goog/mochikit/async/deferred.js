@@ -34,6 +34,7 @@ goog.provide('goog.async.Deferred');
 goog.provide('goog.async.Deferred.AlreadyCalledError');
 goog.provide('goog.async.Deferred.CancelledError');
 
+goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.debug.Error');
 
@@ -54,23 +55,6 @@ goog.async.Deferred = function(opt_canceller, opt_defaultScope) {
    * @private
    */
   this.chain_ = [];
-
-  /**
-   * Whether the deferred has fired already:
-   *   -1 means that it hasn't fired
-   *    0 means that it fired a success
-   *    1 means that if fired a failure
-   * @type {number}
-   * @private
-   */
-  this.fired_ = -1;
-
-  /**
-   * The number of times this deferred has been paused.
-   * @type {number}
-   * @private
-   */
-  this.paused_ = 0;
 
   /**
    * The results. The first element is used for the successful result and the
@@ -94,23 +78,53 @@ goog.async.Deferred = function(opt_canceller, opt_defaultScope) {
    * @private
    */
   this.defaultScope_ = opt_defaultScope || null;
-
-  /**
-   * If the deferred was cancelled but it did not have a canceller then this
-   * gets set to true.
-   * @type {boolean}
-   * @private
-   */
-  this.silentlyCancelled_ = false;
-
-  /**
-   * If a callback returns a deferred then this deferred is considered a chained
-   * deferred and once it is chained we cannot add more callbacks.
-   * @type {boolean}
-   * @private
-   */
-  this.chained_ = false;
 };
+
+
+/**
+ * Whether the deferred has fired already:
+ *   -1 means that it hasn't fired
+ *    0 means that it fired a success
+ *    1 means that if fired a failure
+ * @type {number}
+ * @private
+ */
+goog.async.Deferred.prototype.fired_ = -1;
+
+
+/**
+ * The number of times this deferred has been paused.
+ * @type {number}
+ * @private
+ */
+goog.async.Deferred.prototype.paused_ = 0;
+
+
+/**
+ * If the deferred was cancelled but it did not have a canceller then this gets
+ * set to true.
+ * @type {boolean}
+ * @private
+ */
+goog.async.Deferred.prototype.silentlyCancelled_ = false;
+
+/**
+ * If a callback returns a deferred then this deferred is considered a chained
+ * deferred and once it is chained we cannot add more callbacks.
+ * @type {boolean}
+ * @private
+ */
+goog.async.Deferred.prototype.chained_ = false;
+
+
+/**
+ * If an error is thrown during Deferred execution with no errback to catch it,
+ * the error is rethrown after a timeout. Reporting the error after a timeout
+ * allows execution to continue in the calling context.
+ * @type {number}
+ * @private
+ */
+goog.async.Deferred.prototype.unhandledExceptionTimeoutId_;
 
 
 /**
@@ -310,10 +324,20 @@ goog.async.Deferred.prototype.hasFired = function() {
  * @private
  */
 goog.async.Deferred.prototype.fire_ = function() {
+  if (this.unhandledExceptionTimeoutId_ && this.fired_ != 0) {
+    // It is possible to add errbacks after the Deferred has fired. If a new
+    // errback is added immediately after the Deferred encountered an unhandled
+    // error, but before that error is rethrown, cancel the rethrow.
+    goog.Timer.clear(this.unhandledExceptionTimeoutId_);
+    delete this.unhandledExceptionTimeoutId_;
+  }
+
   var chain = this.chain_;
   var fired = this.fired_;
   var res = this.results_[fired];
+  var unhandledException = false;
   var cb;
+
   while (chain.length > 0 && this.paused_ == 0) {
     var pair = chain.shift();
     var f = pair[fired];
@@ -332,6 +356,12 @@ goog.async.Deferred.prototype.fire_ = function() {
       } catch (ex) {
         fired = 1;
         res = ex;
+
+        if (!chain.length) {
+          // If an error is thrown with no additional errbacks in the queue,
+          // prepare to rethrow the error.
+          unhandledException = true;
+        }
       }
     }
   }
@@ -340,6 +370,15 @@ goog.async.Deferred.prototype.fire_ = function() {
   if (cb && this.paused_) {
     res.addBoth(cb);
     res.chained_ = true;
+  }
+
+  if (unhandledException) {
+    // Rethrow the unhandled error after a timeout. Execution will continue, but
+    // the error will be seen by global handlers and the user. The rethrow will
+    // be canceled if another errback is appended before the timeout executes.
+    this.unhandledExceptionTimeoutId_ = goog.Timer.callOnce(function() {
+      throw res;
+    });
   }
 };
 

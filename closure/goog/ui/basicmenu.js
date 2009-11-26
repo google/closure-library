@@ -91,7 +91,7 @@ goog.inherits(goog.ui.BasicMenu, goog.ui.AttachableMenu);
 
 /**
  * Key for the event used to trigger the menu
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.BasicMenu.prototype.evtKey_ = null;
@@ -99,7 +99,7 @@ goog.ui.BasicMenu.prototype.evtKey_ = null;
 
 /**
  * Key for the window resize event listener
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.BasicMenu.prototype.resizeEvtKey_ = null;

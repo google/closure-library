@@ -130,7 +130,7 @@
 <a name="line87"></a>
 <a name="line88"></a>/**
 <a name="line89"></a> * Reference to the element that triggered the last popup.
-<a name="line90"></a> * @type {Element?}
+<a name="line90"></a> * @type {Element}
 <a name="line91"></a> * @private
 <a name="line92"></a> */
 <a name="line93"></a>goog.ui.PopupColorPicker.prototype.lastTarget_ = null;
@@ -234,7 +234,7 @@
 <a name="line191"></a> * Returns the region inside which the Popup dismisses itself when the user
 <a name="line192"></a> * clicks, or null if it was not set. Null indicates the entire document is
 <a name="line193"></a> * the autohide region.
-<a name="line194"></a> * @return {Element?} The DOM element for autohide, or null if it hasn&#39;t been
+<a name="line194"></a> * @return {Element} The DOM element for autohide, or null if it hasn&#39;t been
 <a name="line195"></a> *     set.
 <a name="line196"></a> */
 <a name="line197"></a>goog.ui.PopupColorPicker.prototype.getAutoHideRegion = function() {
@@ -271,7 +271,7 @@
 <a name="line228"></a>
 <a name="line229"></a>
 <a name="line230"></a>/**
-<a name="line231"></a> * @return {Element?} The last element that triggered the popup.
+<a name="line231"></a> * @return {Element} The last element that triggered the popup.
 <a name="line232"></a> */
 <a name="line233"></a>goog.ui.PopupColorPicker.prototype.getLastTarget = function() {
 <a name="line234"></a>  return this.lastTarget_;
@@ -300,7 +300,7 @@
 <a name="line257"></a>
 <a name="line258"></a>/**
 <a name="line259"></a> * Gets the color that is currently selected in this color picker.
-<a name="line260"></a> * @return {string?} The hex string of the color selected, or null if no
+<a name="line260"></a> * @return {?string} The hex string of the color selected, or null if no
 <a name="line261"></a> *     color is selected.
 <a name="line262"></a> */
 <a name="line263"></a>goog.ui.PopupColorPicker.prototype.getSelectedColor = function() {

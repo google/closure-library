@@ -286,6 +286,104 @@ object.
 
 
   <td>
+    <a name="goog.base"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.</span><span class="entryName">base<span class="args">(<span class="arg">me</span>,&nbsp;<span class="arg">opt_methodName</span>,&nbsp;<span class="arg">var_args</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type">*</span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Call up to the superclass.
+
+If this is called from a constructor, then this calls the superclass
+contructor with arguments 1-N.
+
+If this is called from a prototype method, then you must pass
+the name of the method as the second argument to this function. If
+you do not, you will get a runtime error. This calls the superclass&#39;
+method with arguments 2-N.
+
+This function only works if you use goog.inherits to express
+inheritance relationships between your classes.
+
+This function is a compiler primitive. At compile-time, the
+compiler will do macro expansion to remove a lot of
+the extra overhead that this function introduces. The compiler
+will also enforce a lot of the assumptions that this function
+makes, and treat it as a compiler error if you break them.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">me</span>
+        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        <div class="entryOverview">Should always be &quot;this&quot;.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_methodName</span>
+        : <div class="fullType"><span class="type">*=</span></div>
+        <div class="entryOverview">The method name if calling a super method.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">var_args</span>
+        : <div class="fullType"><span class="type">...*</span></div>
+        <div class="entryOverview">The rest of the arguments.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type">*</span></div>&nbsp;
+            The return value of the superclass method.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_base.js.source.html#line1240">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
     <a name="goog.bind"></a>
 
 
@@ -346,7 +444,7 @@ barMethBound(&#39;arg3&#39;, &#39;arg4&#39;);</pre>
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type">*</span></div>
+        : <div class="fullType"><span class="type">...*</span></div>
         <div class="entryOverview">Additional arguments that are partially applied to the function.</div>
      </td>
    </tr>
@@ -369,7 +467,7 @@ barMethBound(&#39;arg3&#39;, &#39;arg4&#39;);</pre>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -434,7 +532,7 @@ barMethBound(&#39;arg3&#39;, &#39;arg4&#39;);</pre>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -487,7 +585,7 @@ Used by goog.provide and goog.exportSymbol.
    <tr class="odd">
      <td>
         <span class="entryName">opt_object</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">the object to expose at the end of the path.</div>
      </td>
    </tr>
@@ -495,7 +593,7 @@ Used by goog.provide and goog.exportSymbol.
    <tr class="even">
      <td>
         <span class="entryName">opt_objectToExportTo</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object to add the path to; default is |goog.global|.</div>
      </td>
    </tr>
@@ -514,7 +612,7 @@ Used by goog.provide and goog.exportSymbol.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -592,7 +690,7 @@ ex. goog.exportProperty(Foo.prototype, &#39;myMethod&#39;, Foo.prototype.myMetho
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -665,7 +763,7 @@ new public.path.Foo().myMethod();</p>
    <tr class="even">
      <td>
         <span class="entryName">opt_objectToExportTo</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object to add the path to; default is |goog.global|.</div>
      </td>
    </tr>
@@ -684,7 +782,7 @@ new public.path.Foo().myMethod();</p>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -718,7 +816,7 @@ new public.path.Foo().myMethod();</p>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -792,7 +890,7 @@ original, unobfuscated class name is inlined.
    <tr class="odd">
      <td>
         <span class="entryName">opt_modifier</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">A modifier to be appended to the class name.</div>
      </td>
    </tr>
@@ -815,7 +913,7 @@ original, unobfuscated class name is inlined.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -881,7 +979,7 @@ given object.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -931,7 +1029,7 @@ given object.
    <tr class="odd">
      <td>
         <span class="entryName">opt_values</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Map of place holder name to value.</div>
      </td>
    </tr>
@@ -954,7 +1052,7 @@ given object.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -971,7 +1069,7 @@ given object.
 
         <span class="entryNamespace">goog.</span><span class="entryName">getObjectByName<span class="args">(<span class="arg">name</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
       </div>
 
 
@@ -1006,7 +1104,7 @@ function will not find renamed properties.
    <tr class="odd">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object within which to look; default is |goog.global|.</div>
      </td>
    </tr>
@@ -1014,7 +1112,7 @@ function will not find renamed properties.
       </div>
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>&nbsp;
             The object or, if not found, null.
       </div>
   
@@ -1029,7 +1127,7 @@ function will not find renamed properties.
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -1095,7 +1193,7 @@ fulfills a particular rule.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1158,7 +1256,7 @@ Throws an exception if neither execScript or eval is defined.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1207,7 +1305,7 @@ Throws an exception if neither execScript or eval is defined.
    <tr class="odd">
      <td>
         <span class="entryName">opt_global</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object to add the properties to.</div>
      </td>
    </tr>
@@ -1226,7 +1324,7 @@ Throws an exception if neither execScript or eval is defined.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1268,7 +1366,7 @@ Throws an exception if neither execScript or eval is defined.
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type">*</span></div>
+        : <div class="fullType"><span class="type">...*</span></div>
         <div class="entryOverview">The arguments of the function.</div>
      </td>
    </tr>
@@ -1291,7 +1389,7 @@ Throws an exception if neither execScript or eval is defined.
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -1337,7 +1435,7 @@ Throws an exception if neither execScript or eval is defined.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1430,7 +1528,7 @@ ChildClass.superClass_.foo.call(this, a);
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1495,7 +1593,7 @@ ChildClass.superClass_.foo.call(this, a);
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1562,7 +1660,7 @@ property.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1627,7 +1725,7 @@ property.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1693,7 +1791,7 @@ the value needs to be an object and have a getFullYear() function.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1761,7 +1859,7 @@ undefined variable has not been redefined.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1826,7 +1924,7 @@ undefined variable has not been redefined.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1891,7 +1989,7 @@ undefined variable has not been redefined.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1956,7 +2054,7 @@ undefined variable has not been redefined.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2021,7 +2119,7 @@ undefined variable has not been redefined.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2087,7 +2185,7 @@ and functions.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2152,7 +2250,7 @@ and functions.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2220,7 +2318,7 @@ and functions.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2266,7 +2364,7 @@ and functions.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2300,7 +2398,7 @@ and functions.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2355,7 +2453,7 @@ g(arg3, arg4);
    <tr class="odd">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type">*</span></div>
+        : <div class="fullType"><span class="type">...*</span></div>
         <div class="entryOverview">Additional arguments that are partially applied to fn.</div>
      </td>
    </tr>
@@ -2378,7 +2476,7 @@ g(arg3, arg4);
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -2454,7 +2552,7 @@ Object.propertyIsEnumerable.
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -2529,7 +2627,7 @@ does not exist (like DOM nodes in IE).
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2591,7 +2689,7 @@ goog.provide are resolved by the compiler if --closure_pass is set.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2651,7 +2749,7 @@ goog.provide are resolved by the compiler if --closure_pass is set.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2714,7 +2812,7 @@ to goog.require will be stripped by the JSCompiler when the
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2788,7 +2886,7 @@ will replace all calls to goog.getCssName() using the supplied map if the
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2854,7 +2952,7 @@ operator in such a way that null returns &#39;null&#39; and arrays return &#39;a
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -2915,7 +3013,7 @@ to the document.  (Must be called at execution time)
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 

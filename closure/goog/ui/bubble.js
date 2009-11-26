@@ -102,7 +102,7 @@ goog.inherits(goog.ui.Bubble, goog.ui.Component);
 /**
  * In milliseconds, timeout after which the button auto-hides. Null means
  * infinite.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.ui.Bubble.prototype.timeout_ = null;
@@ -123,7 +123,7 @@ goog.ui.Bubble.prototype.listener_ = null;
 
 /**
  * Key returned by the listen function for the close button.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.Bubble.prototype.anchor_ = null;

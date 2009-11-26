@@ -688,7 +688,7 @@ goog.ui.emoji.EmojiPicker.prototype.getSelectedEmoji = function() {
 /**
  * Returns the number of emoji groups in this picker.
  *
- * @return {Number} The number of emoji groups in this picker.
+ * @return {number} The number of emoji groups in this picker.
  */
 goog.ui.emoji.EmojiPicker.prototype.getNumEmojiGroups = function() {
   return this.emoji_.length;

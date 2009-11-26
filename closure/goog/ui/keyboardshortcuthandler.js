@@ -300,8 +300,8 @@ goog.ui.KeyboardShortcutHandler.prototype.registerShortcut = function(
  * Unregisters a keyboard shortcut by keyCode and modifiers or string
  * representation of sequence.
  *
- * param {Number} keyCode Numeric code for key
- * param {Number} opt_modifiers Bitmap indicating required modifier keys.
+ * param {number} keyCode Numeric code for key
+ * param {number} opt_modifiers Bitmap indicating required modifier keys.
  *                 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
  *                 ALT, or META.
  *
@@ -327,8 +327,8 @@ goog.ui.KeyboardShortcutHandler.prototype.unregisterShortcut = function(
  * Verifies if a particular keyboard shortcut is registered already. It has
  * the same interface as the unregistering of shortcuts.
  *
- * param {Number} keyCode Numeric code for key
- * param {Number} opt_modifiers Bitmap indicating required modifier keys.
+ * param {number} keyCode Numeric code for key
+ * param {number} opt_modifiers Bitmap indicating required modifier keys.
  *                 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
  *                 ALT, or META.
  *

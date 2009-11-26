@@ -257,7 +257,7 @@
 <a name="line214"></a>
 <a name="line215"></a>/**
 <a name="line216"></a> * The options to use with the current XMLHttpRequest object.
-<a name="line217"></a> * @type {Object?}
+<a name="line217"></a> * @type {Object}
 <a name="line218"></a> * @private
 <a name="line219"></a> */
 <a name="line220"></a>goog.net.XhrIo.prototype.xhrOptions_ = null;
@@ -344,7 +344,7 @@
 <a name="line301"></a>/**
 <a name="line302"></a> * Window timeout ID used to cancel the timeout event handler if the request
 <a name="line303"></a> * completes successfully.
-<a name="line304"></a> * @type {Object?}
+<a name="line304"></a> * @type {Object}
 <a name="line305"></a> * @private
 <a name="line306"></a> */
 <a name="line307"></a>goog.net.XhrIo.prototype.timeoutId_ = null;
@@ -854,7 +854,7 @@
 <a name="line811"></a>/**
 <a name="line812"></a> * Get the response XML from the Xhr object
 <a name="line813"></a> * Will only return correct result when called from the context of a callback
-<a name="line814"></a> * @return {Document?} The DOM Document representing the XML file.
+<a name="line814"></a> * @return {Document} The DOM Document representing the XML file.
 <a name="line815"></a> */
 <a name="line816"></a>goog.net.XhrIo.prototype.getResponseXml = function() {
 <a name="line817"></a>  return this.xhr_ ? this.xhr_.responseXML : null;

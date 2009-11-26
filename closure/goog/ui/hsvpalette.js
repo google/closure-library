@@ -131,7 +131,7 @@ goog.ui.HsvPalette.prototype.inputHandler_;
 
 /**
  * Listener key for the mousemove event (during a drag operation).
- * @type {Number}
+ * @type {?number}
  * @private
  */
 goog.ui.HsvPalette.prototype.mouseMoveListener_;
@@ -139,7 +139,7 @@ goog.ui.HsvPalette.prototype.mouseMoveListener_;
 
 /**
  * Listener key for the mouseup event (during a drag operation).
- * @type {Number}
+ * @type {?number}
  * @private
  */
 goog.ui.HsvPalette.prototype.mouseUpListener_;
@@ -204,9 +204,9 @@ goog.ui.HsvPalette.prototype.setColor_ = function(color) {
 /**
  * Alters the hue, saturation, and/or value of the currently selected color and
  * updates the UI.
- * @param {Number} opt_hue (optional) hue in [0, 1].
- * @param {Number} opt_saturation (optional) saturation in [0, 1].
- * @param {Number} opt_value (optional) value in [0, 255].
+ * @param {?number} opt_hue (optional) hue in [0, 1].
+ * @param {?number} opt_saturation (optional) saturation in [0, 1].
+ * @param {?number} opt_value (optional) value in [0, 255].
  */
 goog.ui.HsvPalette.prototype.setHsv = function(opt_hue,
                                                opt_saturation,
@@ -221,9 +221,9 @@ goog.ui.HsvPalette.prototype.setHsv = function(opt_hue,
 
 /**
  * Alters the hue, saturation, and/or value of the currently selected color.
- * @param {Number} opt_hue (optional) hue in [0, 1].
- * @param {Number} opt_saturation (optional) saturation in [0, 1].
- * @param {Number} opt_value (optional) value in [0, 255].
+ * @param {?number} opt_hue (optional) hue in [0, 1].
+ * @param {?number} opt_saturation (optional) saturation in [0, 1].
+ * @param {?number} opt_value (optional) value in [0, 255].
  * @private
  */
 goog.ui.HsvPalette.prototype.setHsv_ = function(opt_hue,
@@ -247,7 +247,7 @@ goog.ui.HsvPalette.prototype.setHsv_ = function(opt_hue,
  * HsvPalettes cannot be used to decorate pre-existing html, since the
  * structure they build is fairly complicated.
  * @param {Element} element Element to decorate.
- * @return {Boolean} Returns always false.
+ * @return {boolean} Returns always false.
  */
 goog.ui.HsvPalette.prototype.canDecorate = function(element) {
   return false;

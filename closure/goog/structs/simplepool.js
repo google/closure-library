@@ -74,7 +74,7 @@ goog.inherits(goog.structs.SimplePool, goog.Disposable);
 /**
  * Function for overriding createObject. The avoids a common case requiring
  * subclassing this class.
- * @type {Function?}
+ * @type {Function}
  * @private
  */
 goog.structs.SimplePool.prototype.createObjectFn_ = null;
@@ -83,7 +83,7 @@ goog.structs.SimplePool.prototype.createObjectFn_ = null;
 /**
  * Function for overriding disposeObject. The avoids a common case requiring
  * subclassing this class.
- * @type {Function?}
+ * @type {Function}
  * @private
  */
 goog.structs.SimplePool.prototype.disposeObjectFn_ = null;

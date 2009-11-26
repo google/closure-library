@@ -79,7 +79,7 @@ goog.dom.pattern.Tag.prototype.type_;
 /**
  * The attributes to test for.
  *
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.dom.pattern.Tag.prototype.attrs_ = null;
@@ -88,7 +88,7 @@ goog.dom.pattern.Tag.prototype.attrs_ = null;
 /**
  * The styles to test for.
  *
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.dom.pattern.Tag.prototype.styles_ = null;
@@ -98,7 +98,7 @@ goog.dom.pattern.Tag.prototype.styles_ = null;
  * Function that takes the element as a parameter and returns true if this
  * pattern should match it.
  *
- * @type {Function?}
+ * @type {Function}
  * @private
  */
 goog.dom.pattern.Tag.prototype.test_ = null;

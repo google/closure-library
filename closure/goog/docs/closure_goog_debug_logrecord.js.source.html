@@ -119,14 +119,14 @@
 <a name="line76"></a>
 <a name="line77"></a>/**
 <a name="line78"></a> * Exception associated with the record
-<a name="line79"></a> * @type {Object?}
+<a name="line79"></a> * @type {Object}
 <a name="line80"></a> * @private
 <a name="line81"></a> */
 <a name="line82"></a>goog.debug.LogRecord.prototype.exception_ = null;
 <a name="line83"></a>
 <a name="line84"></a>/**
 <a name="line85"></a> * Exception text associated with the record
-<a name="line86"></a> * @type {string?}
+<a name="line86"></a> * @type {?string}
 <a name="line87"></a> * @private
 <a name="line88"></a> */
 <a name="line89"></a>goog.debug.LogRecord.prototype.exceptionText_ = null;
@@ -154,7 +154,7 @@
 <a name="line111"></a>/**
 <a name="line112"></a> * Get the exception that is part of the log record.
 <a name="line113"></a> *
-<a name="line114"></a> * @return {Object?} the exception.
+<a name="line114"></a> * @return {Object} the exception.
 <a name="line115"></a> */
 <a name="line116"></a>goog.debug.LogRecord.prototype.getException = function() {
 <a name="line117"></a>  return this.exception_;
@@ -174,7 +174,7 @@
 <a name="line131"></a>/**
 <a name="line132"></a> * Get the exception text that is part of the log record.
 <a name="line133"></a> *
-<a name="line134"></a> * @return {string?} Exception text.
+<a name="line134"></a> * @return {?string} Exception text.
 <a name="line135"></a> */
 <a name="line136"></a>goog.debug.LogRecord.prototype.getExceptionText = function() {
 <a name="line137"></a>  return this.exceptionText_;

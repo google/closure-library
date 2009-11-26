@@ -106,7 +106,7 @@
 <a name="line63"></a>
 <a name="line64"></a>/**
 <a name="line65"></a> * The default right to left value.
-<a name="line66"></a> * @type {boolean?}
+<a name="line66"></a> * @type {?boolean}
 <a name="line67"></a> * @private
 <a name="line68"></a> */
 <a name="line69"></a>goog.ui.Component.defaultRightToLeft_ = null;
@@ -352,7 +352,7 @@
 <a name="line309"></a> * this point foward to have the given value. This is useful for cases where
 <a name="line310"></a> * a given page is always in one directionality, avoiding unnecessary
 <a name="line311"></a> * right to left determinations.
-<a name="line312"></a> * @param {boolean?} rightToLeft Whether the components should be rendered
+<a name="line312"></a> * @param {?boolean} rightToLeft Whether the components should be rendered
 <a name="line313"></a> *     right-to-left. Null iff components should determine their directionality.
 <a name="line314"></a> */
 <a name="line315"></a>goog.ui.Component.setDefaultRightToLeft = function(rightToLeft) {
@@ -364,7 +364,7 @@
 <a name="line321"></a> * Unique ID of the component, lazily initialized in {@link
 <a name="line322"></a> * goog.ui.Component#getId} if needed.  This property is strictly private and
 <a name="line323"></a> * must not be accessed directly outside of this class!
-<a name="line324"></a> * @type {string?}
+<a name="line324"></a> * @type {?string}
 <a name="line325"></a> * @private
 <a name="line326"></a> */
 <a name="line327"></a>goog.ui.Component.prototype.id_ = null;
@@ -391,7 +391,7 @@
 <a name="line348"></a>// TODO: Stop referring to this private field in subclasses.
 <a name="line349"></a>/**
 <a name="line350"></a> * The DOM element for the component.
-<a name="line351"></a> * @type {Element?}
+<a name="line351"></a> * @type {Element}
 <a name="line352"></a> * @private
 <a name="line353"></a> */
 <a name="line354"></a>goog.ui.Component.prototype.element_ = null;
@@ -412,7 +412,7 @@
 <a name="line369"></a> * Whether the component is rendered right-to-left.  Right-to-left is set
 <a name="line370"></a> * lazily when {@link #isRightToLeft} is called the first time, unless it has
 <a name="line371"></a> * been set by calling {@link #setRightToLeft} explicitly.
-<a name="line372"></a> * @type {boolean?}
+<a name="line372"></a> * @type {?boolean}
 <a name="line373"></a> * @private
 <a name="line374"></a> */
 <a name="line375"></a>goog.ui.Component.prototype.rightToLeft_ = null;
@@ -456,7 +456,7 @@
 <a name="line413"></a> * &#39;valueOf&#39;, but this shouldn&#39;t really be an issue in practice, and if it is,
 <a name="line414"></a> * we can always fix it later without changing the API.
 <a name="line415"></a> *
-<a name="line416"></a> * @type {Object?}
+<a name="line416"></a> * @type {Object}
 <a name="line417"></a> * @private
 <a name="line418"></a> */
 <a name="line419"></a>goog.ui.Component.prototype.childIndex_ = null;
@@ -504,7 +504,7 @@
 <a name="line461"></a>
 <a name="line462"></a>/**
 <a name="line463"></a> * Gets the component&#39;s element.
-<a name="line464"></a> * @return {Element?} The element for the component.
+<a name="line464"></a> * @return {Element} The element for the component.
 <a name="line465"></a> */
 <a name="line466"></a>goog.ui.Component.prototype.getElement = function() {
 <a name="line467"></a>  return this.element_;
@@ -868,7 +868,7 @@
 <a name="line825"></a> * Helper function for returning an element in the document with a unique id
 <a name="line826"></a> * generated using makeId().
 <a name="line827"></a> * @param {string} idFragment The partial id.
-<a name="line828"></a> * @return {Element?} The element with the unique id, or null if it cannot be
+<a name="line828"></a> * @return {Element} The element with the unique id, or null if it cannot be
 <a name="line829"></a> *     found.
 <a name="line830"></a> */
 <a name="line831"></a>goog.ui.Component.prototype.getElementByFragment = function(idFragment) {
@@ -1001,7 +1001,7 @@
 <a name="line958"></a> * or null if the component itself hasn&#39;t been rendered yet.  This default
 <a name="line959"></a> * implementation returns the component&#39;s root element.  Subclasses with
 <a name="line960"></a> * complex DOM structures must override this method.
-<a name="line961"></a> * @return {Element?} Element to contain child elements (null if none).
+<a name="line961"></a> * @return {Element} Element to contain child elements (null if none).
 <a name="line962"></a> */
 <a name="line963"></a>goog.ui.Component.prototype.getContentElement = function() {
 <a name="line964"></a>  return this.element_;

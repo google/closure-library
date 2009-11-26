@@ -847,7 +847,7 @@ goog.ui.OfflineInstallDialog.InstallScreen.prototype.getContent = function() {
 
 /**
  * Creats the html for a step.
- * @param {Number} stepNumber The number of the step.
+ * @param {number} stepNumber The number of the step.
  * @param {string} description The description of the step.
  * @private
  * @return {string} The step HTML in string form.

@@ -127,7 +127,7 @@
 <a name="line84"></a>
 <a name="line85"></a>  /**
 <a name="line86"></a>   * Currently typed token which will be used for completion.
-<a name="line87"></a>   * @type {string?}
+<a name="line87"></a>   * @type {?string}
 <a name="line88"></a>   * @protected
 <a name="line89"></a>   * @suppress {underscore}
 <a name="line90"></a>   */
@@ -168,7 +168,7 @@
 <a name="line125"></a>
 <a name="line126"></a>  /**
 <a name="line127"></a>   * The timer id for dismissing autocomplete menu with a delay.
-<a name="line128"></a>   * @type {number?}
+<a name="line128"></a>   * @type {?number}
 <a name="line129"></a>   * @private
 <a name="line130"></a>   */
 <a name="line131"></a>  this.dismissTimer_ = null;
@@ -313,7 +313,7 @@
 <a name="line270"></a> * &lt;code&gt;renderer.renderRows()&lt;/code&gt;.
 <a name="line271"></a> *
 <a name="line272"></a> * @param {string} token The string for which to search in the Matcher.
-<a name="line273"></a> * @param {String} opt_fullString Optionally, the full string in the input
+<a name="line273"></a> * @param {string} opt_fullString Optionally, the full string in the input
 <a name="line274"></a> *     field.
 <a name="line275"></a> */
 <a name="line276"></a>goog.ui.AutoComplete.prototype.setToken = function(token, opt_fullString) {
@@ -329,7 +329,7 @@
 <a name="line286"></a>
 <a name="line287"></a>/**
 <a name="line288"></a> * Gets the current target HTML node for displaying autocomplete UI.
-<a name="line289"></a> * @return {Element?} The current target HTML node for displaying autocomplete
+<a name="line289"></a> * @return {Element} The current target HTML node for displaying autocomplete
 <a name="line290"></a> *     UI.
 <a name="line291"></a> */
 <a name="line292"></a>goog.ui.AutoComplete.prototype.getTarget = function() {

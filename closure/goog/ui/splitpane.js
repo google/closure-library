@@ -154,7 +154,7 @@ goog.ui.SplitPane.prototype.splitDragger_ = null;
 
 /**
  * The left/top component dom container.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.SplitPane.prototype.firstComponentContainer_ = null;
@@ -162,7 +162,7 @@ goog.ui.SplitPane.prototype.firstComponentContainer_ = null;
 
 /**
  * The right/bottom component dom container.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.SplitPane.prototype.secondComponentContainer_ = null;
@@ -178,7 +178,7 @@ goog.ui.SplitPane.prototype.handleSize_ = 5;
 
 /**
  * The initial size (width or height) of the left or top component.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.ui.SplitPane.prototype.initialSize_ = null;
@@ -188,7 +188,7 @@ goog.ui.SplitPane.prototype.initialSize_ = null;
  * The saved size (width or height) of the left or top component on a
  * double-click (snap).
  * This needs to be saved so it can be restored after another double-click.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.ui.SplitPane.prototype.savedSnapSize_ = null;
@@ -196,7 +196,7 @@ goog.ui.SplitPane.prototype.savedSnapSize_ = null;
 
 /**
  * The first component size, so we don't change it on a window resize.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.ui.SplitPane.prototype.firstComponentSize_ = null;
@@ -212,7 +212,7 @@ goog.ui.SplitPane.prototype.continuousResize_ = true;
 
 /**
  * Iframe overlay to prevent iframes from grabbing events.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.SplitPane.prototype.iframeOverlay_ = null;
@@ -525,7 +525,7 @@ goog.ui.SplitPane.prototype.moveAndSize_ = function(element, rect) {
 
 
 /**
- * @return {number?} The size of the left/top component.
+ * @return {?number} The size of the left/top component.
  */
 goog.ui.SplitPane.prototype.getFirstComponentSize = function() {
   return this.firstComponentSize_;
@@ -535,7 +535,7 @@ goog.ui.SplitPane.prototype.getFirstComponentSize = function() {
 /**
  * Set the size of the left/top component, and resize the other component based
  * on that size and handle size.
- * @param {number?} opt_size The size of the top or left, in pixels.
+ * @param {?number} opt_size The size of the top or left, in pixels.
  */
 goog.ui.SplitPane.prototype.setFirstComponentSize = function(opt_size) {
   var top = 0, left = 0;

@@ -76,14 +76,14 @@ goog.debug.LogRecord = function(level, msg, loggerName,
 
 /**
  * Exception associated with the record
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.debug.LogRecord.prototype.exception_ = null;
 
 /**
  * Exception text associated with the record
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.debug.LogRecord.prototype.exceptionText_ = null;
@@ -111,7 +111,7 @@ goog.debug.LogRecord.prototype.getLoggerName = function() {
 /**
  * Get the exception that is part of the log record.
  *
- * @return {Object?} the exception.
+ * @return {Object} the exception.
  */
 goog.debug.LogRecord.prototype.getException = function() {
   return this.exception_;
@@ -131,7 +131,7 @@ goog.debug.LogRecord.prototype.setException = function(exception) {
 /**
  * Get the exception text that is part of the log record.
  *
- * @return {string?} Exception text.
+ * @return {?string} Exception text.
  */
 goog.debug.LogRecord.prototype.getExceptionText = function() {
   return this.exceptionText_;

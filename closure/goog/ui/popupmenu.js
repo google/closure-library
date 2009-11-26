@@ -95,7 +95,7 @@ goog.ui.PopupMenu.prototype.lastHide_ = 0;
 
 /**
  * Current element where the popup menu is anchored.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.PopupMenu.prototype.currentAnchor_ = null;
@@ -256,7 +256,7 @@ goog.ui.PopupMenu.prototype.isAttachTarget = function(element) {
 
 
 /**
- * @return {Element?} The current element where the popup is anchored, if it's
+ * @return {Element} The current element where the popup is anchored, if it's
  *     visible.
  */
 goog.ui.PopupMenu.prototype.getAttachedElement = function() {

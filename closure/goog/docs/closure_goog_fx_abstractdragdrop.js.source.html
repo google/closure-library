@@ -151,7 +151,7 @@
 <a name="line108"></a>/**
 <a name="line109"></a> * Subtargeting function accepting args:
 <a name="line110"></a> * (Element, goog.math.Box, number, number)
-<a name="line111"></a> * @type {Function?}
+<a name="line111"></a> * @type {Function}
 <a name="line112"></a> * @private
 <a name="line113"></a> */
 <a name="line114"></a>goog.fx.AbstractDragDrop.prototype.subtargetFunction_;
@@ -159,7 +159,7 @@
 <a name="line116"></a>
 <a name="line117"></a>/**
 <a name="line118"></a> * Last active subtarget.
-<a name="line119"></a> * @type {Object?}
+<a name="line119"></a> * @type {Object}
 <a name="line120"></a> * @private
 <a name="line121"></a> */
 <a name="line122"></a>goog.fx.AbstractDragDrop.prototype.activeSubtarget_;
@@ -167,7 +167,7 @@
 <a name="line124"></a>
 <a name="line125"></a>/**
 <a name="line126"></a> * Class name to add to source elements being dragged. Set by setDragClass.
-<a name="line127"></a> * @type {string?}
+<a name="line127"></a> * @type {?string}
 <a name="line128"></a> * @private
 <a name="line129"></a> */
 <a name="line130"></a>goog.fx.AbstractDragDrop.prototype.dragClass_;
@@ -175,7 +175,7 @@
 <a name="line132"></a>
 <a name="line133"></a>/**
 <a name="line134"></a> * Class name to add to source elements. Set by setSourceClass.
-<a name="line135"></a> * @type {string?}
+<a name="line135"></a> * @type {?string}
 <a name="line136"></a> * @private
 <a name="line137"></a> */
 <a name="line138"></a>goog.fx.AbstractDragDrop.prototype.sourceClass_;
@@ -183,7 +183,7 @@
 <a name="line140"></a>
 <a name="line141"></a>/**
 <a name="line142"></a> * Class name to add to target elements. Set by setTargetClass.
-<a name="line143"></a> * @type {string?}
+<a name="line143"></a> * @type {?string}
 <a name="line144"></a> * @private
 <a name="line145"></a> */
 <a name="line146"></a>goog.fx.AbstractDragDrop.prototype.targetClass_;
@@ -760,7 +760,7 @@
 <a name="line717"></a> * box is the current window coordinates occupied by element
 <a name="line718"></a> * x, y is the mouse position in window coordinates
 <a name="line719"></a> *
-<a name="line720"></a> * @param {Function?} f The new subtarget function.
+<a name="line720"></a> * @param {Function} f The new subtarget function.
 <a name="line721"></a> */
 <a name="line722"></a>goog.fx.AbstractDragDrop.prototype.setSubtargetFunction = function(f) {
 <a name="line723"></a>  this.subtargetFunction_ = f;
@@ -1017,7 +1017,7 @@
 <a name="line974"></a> *
 <a name="line975"></a> * @param {number} x Cursor position on the x-axis.
 <a name="line976"></a> * @param {number} y Cursor position on the y-axis.
-<a name="line977"></a> * @return {Object?} Target for position or null if no target was defined
+<a name="line977"></a> * @return {Object} Target for position or null if no target was defined
 <a name="line978"></a> *     for the given position.
 <a name="line979"></a> * @private
 <a name="line980"></a> */
@@ -1223,7 +1223,7 @@
 <a name="line1180"></a>/**
 <a name="line1181"></a> * The current element being dragged. This is needed because a DragDropItem can
 <a name="line1182"></a> * have multiple elements that can be dragged.
-<a name="line1183"></a> * @type {Element?}
+<a name="line1183"></a> * @type {Element}
 <a name="line1184"></a> * @private
 <a name="line1185"></a> */
 <a name="line1186"></a>goog.fx.DragDropItem.prototype.currentDragElement_ = null;
@@ -1245,7 +1245,7 @@
 <a name="line1202"></a> * can determine what element should actually be dragged.
 <a name="line1203"></a> *
 <a name="line1204"></a> * @param {Element} target The target that was attempted to be dragged.
-<a name="line1205"></a> * @return {Element?} The element that is draggable given the target. If
+<a name="line1205"></a> * @return {Element} The element that is draggable given the target. If
 <a name="line1206"></a> *     none are draggable, this will return null.
 <a name="line1207"></a> */
 <a name="line1208"></a>goog.fx.DragDropItem.prototype.getDraggableElement = function(target) {
@@ -1256,7 +1256,7 @@
 <a name="line1213"></a>/**
 <a name="line1214"></a> * Gets the element that is currently being dragged.
 <a name="line1215"></a> *
-<a name="line1216"></a> * @return {Element?} The element that is currently being dragged.
+<a name="line1216"></a> * @return {Element} The element that is currently being dragged.
 <a name="line1217"></a> */
 <a name="line1218"></a>goog.fx.DragDropItem.prototype.getCurrentDragElement = function() {
 <a name="line1219"></a>  return this.currentDragElement_;

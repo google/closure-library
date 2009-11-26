@@ -177,7 +177,7 @@ goog.ui.ColorPicker.prototype.setSelectedIndex = function(ind) {
 
 /**
  * Gets the color that is currently selected in this color picker.
- * @return {string?} The hex string of the color selected, or null if no
+ * @return {?string} The hex string of the color selected, or null if no
  *     color is selected.
  */
 goog.ui.ColorPicker.prototype.getSelectedColor = function() {

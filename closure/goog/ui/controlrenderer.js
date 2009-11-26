@@ -183,9 +183,9 @@ goog.ui.ControlRenderer.prototype.createDom = function(control) {
  * control's contents.  Since by default controls are rendered as a single
  * DIV, the default implementation returns the element itself.  Subclasses
  * with more complex DOM structures must override this method as needed.
- * @param {Element?} element Root element of the control whose content element
+ * @param {Element} element Root element of the control whose content element
  *     is to be returned.
- * @return {Element?} The control's content element.
+ * @return {Element} The control's content element.
  */
 goog.ui.ControlRenderer.prototype.getContentElement = function(element) {
   return element;
@@ -533,7 +533,7 @@ goog.ui.ControlRenderer.prototype.setContent = function(element, content) {
       if (goog.isString(content)) {
         goog.dom.setTextContent(contentElem, content);
       } else {
-        function childHandler(child) {
+        var childHandler = function(child) {
           if (child) {
             var doc = goog.dom.getOwnerDocument(contentElem);
             contentElem.appendChild(goog.isString(child) ?
@@ -686,7 +686,7 @@ goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
  * opt_includedClass is added to classes as well.
  * @param {Array.<string>} classes Array of classes to return matching combined
  *     classes for.
- * @param {string?} opt_includedClass If provided, get only the combined classes
+ * @param {?string} opt_includedClass If provided, get only the combined classes
  *     that include this one.
  * @return {Array.<string>} Array of combined class names that should be
  *     applied.

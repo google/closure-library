@@ -270,7 +270,7 @@ goog.ui.Control.prototype.setHandleMouseEvents = function(enable) {
 /**
  * Returns the DOM element on which the control is listening for keyboard
  * events (null if none).
- * @return {Element?} Element on which the control is listening for key
+ * @return {Element} Element on which the control is listening for key
  *     events.
  */
 goog.ui.Control.prototype.getKeyEventTarget = function() {
@@ -426,7 +426,7 @@ goog.ui.Control.prototype.createDom = function() {
  * Returns the DOM element into which child components are to be rendered,
  * or null if the control itself hasn't been rendered yet.  Overrides
  * {@link goog.ui.Component#getContentElement} by delegating to the renderer.
- * @return {Element?} Element to contain child elements (null if none).
+ * @return {Element} Element to contain child elements (null if none).
  */
 goog.ui.Control.prototype.getContentElement = function() {
   // Delegate to renderer.
@@ -627,7 +627,7 @@ goog.ui.Control.prototype.setContentInternal = function(content) {
 
 /**
  * Returns the text caption of the component.
- * @return {string?} Text caption of the component (null if none).
+ * @return {?string} Text caption of the component (null if none).
  */
 goog.ui.Control.prototype.getCaption = function() {
   var content = this.getContent();

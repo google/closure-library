@@ -120,7 +120,7 @@ goog.proto2.FieldDescriptor.prototype.getContainingType = function() {
 
 /**
  * Returns the name of the field that this descriptor represents.
- * @return {String} The name.
+ * @return {string} The name.
  */
 goog.proto2.FieldDescriptor.prototype.getName = function() {
   return this.name_;
@@ -181,7 +181,7 @@ goog.proto2.FieldDescriptor.prototype.getFieldMessageType = function() {
 
 /**
  * Returns whether the field described by this descriptor is repeating.
- * @return {Boolean} Whether the field is repeated.
+ * @return {boolean} Whether the field is repeated.
  */
 goog.proto2.FieldDescriptor.prototype.isRepeated = function() {
   return this.isRepeated_;
@@ -190,7 +190,7 @@ goog.proto2.FieldDescriptor.prototype.isRepeated = function() {
 
 /**
  * Returns whether the field described by this descriptor is required.
- * @return {Boolean} Whether the field is required.
+ * @return {boolean} Whether the field is required.
  */
 goog.proto2.FieldDescriptor.prototype.isRequired = function() {
   return this.isRequired_;
@@ -199,7 +199,7 @@ goog.proto2.FieldDescriptor.prototype.isRequired = function() {
 
 /**
  * Returns whether the field described by this descriptor is optional.
- * @return {Boolean} Whether the field is optional.
+ * @return {boolean} Whether the field is optional.
  */
 goog.proto2.FieldDescriptor.prototype.isOptional = function() {
   return !this.isRepeated_ && !this.isRequired_;

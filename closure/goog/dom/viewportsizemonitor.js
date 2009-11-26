@@ -98,7 +98,7 @@ goog.dom.ViewportSizeMonitor.prototype.listenerKey_ = null;
 
 /**
  * The window to monitor.  Defaults to the window in which the code is running.
- * @type {Window?}
+ * @type {Window}
  * @private
  */
 goog.dom.ViewportSizeMonitor.prototype.window_ = null;
@@ -115,7 +115,7 @@ goog.dom.ViewportSizeMonitor.prototype.size_ = null;
 /**
  * Identifier for the interval used for polling the window size on Windows
  * Safari.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.dom.ViewportSizeMonitor.prototype.windowSizePollInterval_ = null;

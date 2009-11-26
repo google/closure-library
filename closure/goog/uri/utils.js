@@ -69,15 +69,15 @@ goog.uri.utils.CharCode_ = {
  * No encoding is performed.  Any component may be omitted as either null or
  * undefined.
  *
- * @param {string?} opt_scheme The scheme such as 'http'.
- * @param {string?} opt_userInfo The user name before the '@'.
- * @param {string?} opt_domain The domain such as 'www.google.com', already
+ * @param {?string} opt_scheme The scheme such as 'http'.
+ * @param {?string} opt_userInfo The user name before the '@'.
+ * @param {?string} opt_domain The domain such as 'www.google.com', already
  *     URI-encoded.
  * @param {string|number|null} opt_port The port number.
- * @param {string?} opt_path The path, already URI-encoded.  If it is not
+ * @param {?string} opt_path The path, already URI-encoded.  If it is not
  *     empty, it must begin with a slash.
- * @param {string?} opt_queryData The URI-encoded query data.
- * @param {string?} opt_fragment The URI-encoded fragment identifier.
+ * @param {?string} opt_queryData The URI-encoded query data.
+ * @param {?string} opt_fragment The URI-encoded fragment identifier.
  * @return {string} The fully combined URI.
  */
 goog.uri.utils.buildFromEncodedParts = function(opt_scheme, opt_userInfo,
@@ -234,8 +234,8 @@ goog.uri.utils.split = function(uri) {
 
 
 /**
- * @param {string?} uri A possibly null string.
- * @return {string?} The string URI-decoded, or null if uri is null.
+ * @param {?string} uri A possibly null string.
+ * @return {?string} The string URI-decoded, or null if uri is null.
  * @private
  */
 goog.uri.utils.decodeIfPossible_ = function(uri) {
@@ -251,7 +251,7 @@ goog.uri.utils.decodeIfPossible_ = function(uri) {
  *
  * @param {goog.uri.utils.ComponentIndex} componentIndex The component index.
  * @param {string} uri The URI to examine.
- * @return {string?} The still-encoded component, or null if the component
+ * @return {?string} The still-encoded component, or null if the component
  *     is not present.
  * @private
  */
@@ -263,7 +263,7 @@ goog.uri.utils.getComponentByIndex_ = function(componentIndex, uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {string?} The protocol or scheme, or null if none.  Does not
+ * @return {?string} The protocol or scheme, or null if none.  Does not
  *     include trailing colons or slashes.
  */
 goog.uri.utils.getScheme = function(uri) {
@@ -274,7 +274,7 @@ goog.uri.utils.getScheme = function(uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {string?} The user name still encoded, or null if none.
+ * @return {?string} The user name still encoded, or null if none.
  */
 goog.uri.utils.getUserInfoEncoded = function(uri) {
   return goog.uri.utils.getComponentByIndex_(
@@ -284,7 +284,7 @@ goog.uri.utils.getUserInfoEncoded = function(uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {string?} The decoded user info, or null if none.
+ * @return {?string} The decoded user info, or null if none.
  */
 goog.uri.utils.getUserInfo = function(uri) {
   return goog.uri.utils.decodeIfPossible_(
@@ -294,7 +294,7 @@ goog.uri.utils.getUserInfo = function(uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {string?} The domain name still encoded, or null if none.
+ * @return {?string} The domain name still encoded, or null if none.
  */
 goog.uri.utils.getDomainEncoded = function(uri) {
   return goog.uri.utils.getComponentByIndex_(
@@ -304,7 +304,7 @@ goog.uri.utils.getDomainEncoded = function(uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {string?} The decoded domain, or null if none.
+ * @return {?string} The decoded domain, or null if none.
  */
 goog.uri.utils.getDomain = function(uri) {
   return goog.uri.utils.decodeIfPossible_(goog.uri.utils.getDomainEncoded(uri));
@@ -313,7 +313,7 @@ goog.uri.utils.getDomain = function(uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {number?} The port number, or null if none.
+ * @return {?number} The port number, or null if none.
  */
 goog.uri.utils.getPort = function(uri) {
   // Coerce to a number.  If the result of getComponentByIndex_ is null or
@@ -327,7 +327,7 @@ goog.uri.utils.getPort = function(uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {string?} The path still encoded, or null if none. Includes the
+ * @return {?string} The path still encoded, or null if none. Includes the
  *     leading slash, if any.
  */
 goog.uri.utils.getPathEncoded = function(uri) {
@@ -338,7 +338,7 @@ goog.uri.utils.getPathEncoded = function(uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {string?} The decoded path, or null if none.  Includes the leading
+ * @return {?string} The decoded path, or null if none.  Includes the leading
  *     slash, if any.
  */
 goog.uri.utils.getPath = function(uri) {
@@ -348,7 +348,7 @@ goog.uri.utils.getPath = function(uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {string?} The query data still encoded, or null if none.  Does not
+ * @return {?string} The query data still encoded, or null if none.  Does not
  *     include the question mark itself.
  */
 goog.uri.utils.getQueryData = function(uri) {
@@ -359,7 +359,7 @@ goog.uri.utils.getQueryData = function(uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {string?} The fragment identifier, or null if none.  Does not
+ * @return {?string} The fragment identifier, or null if none.  Does not
  *     include the hash mark itself.
  */
 goog.uri.utils.getFragmentEncoded = function(uri) {
@@ -371,7 +371,7 @@ goog.uri.utils.getFragmentEncoded = function(uri) {
 
 /**
  * @param {string} uri The URI to examine.
- * @return {string?} The decoded fragment identifier, or null if none.  Does
+ * @return {?string} The decoded fragment identifier, or null if none.  Does
  *     not include the hash mark.
  */
 goog.uri.utils.getFragment = function(uri) {
@@ -398,7 +398,7 @@ goog.uri.utils.getHost = function(uri) {
 /**
  * Extracts the path of the URL and everything after.
  * @param {string} uri The URI string.
- * @return {string?} The URI, starting at the path and including the query
+ * @return {?string} The URI, starting at the path and including the query
  *     parameters and fragment identifier.
  */
 goog.uri.utils.getPathAndAfter = function(uri) {
@@ -785,7 +785,7 @@ goog.uri.utils.hasParam = function(uri, keyEncoded) {
  * Gets the first value of a query parameter.
  * @param {string} uri The URI to process.  May contain a fragment.
  * @param {string} keyEncoded The URI-encoded key.  Case-sensitive.
- * @return {string?} The first value of the parameter (URI-decoded), or null
+ * @return {?string} The first value of the parameter (URI-decoded), or null
  *     if the parameter is not found.
  */
 goog.uri.utils.getParamValue = function(uri, keyEncoded) {

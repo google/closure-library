@@ -48,12 +48,14 @@ goog.editor.plugins.UndoRedoManager = function() {
   /**
    * The undo stack.
    * @type {Array.<goog.editor.plugins.UndoRedoState>}
+   * @private
    */
   this.undoStack_ = [];
 
   /**
    * The redo stack.
    * @type {Array.<goog.editor.plugins.UndoRedoState>}
+   * @private
    */
   this.redoStack_ = [];
 
@@ -110,7 +112,7 @@ goog.editor.plugins.UndoRedoManager.EventType = {
 /**
  * The key for the listener for the completion of the asynchronous state whose
  * undo or redo action is in progress. Null if no action is in progress.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.editor.plugins.UndoRedoManager.prototype.inProgressActionKey_ = null;

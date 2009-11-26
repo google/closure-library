@@ -89,7 +89,7 @@ goog.Throttle.prototype.pauseCount_ = 0;
 
 /**
  * Timer for scheduling the next callback
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.Throttle.prototype.timer_ = null;

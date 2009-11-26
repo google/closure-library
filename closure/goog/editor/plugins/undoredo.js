@@ -59,7 +59,7 @@ goog.editor.plugins.UndoRedo = function(opt_manager) {
   this.currentStates_ = {};
 
   /**
-   * @type {string?}
+   * @type {?string}
    * @private
    */
   this.initialFieldChange_ = null;
@@ -209,7 +209,7 @@ goog.editor.plugins.UndoRedo.prototype.getCurrentFieldObject = function() {
 
 /**
  * This is so subclasses can deal with multifield undo-redo.
- * @param {String} fieldHashCode The Field's hashcode.
+ * @param {string} fieldHashCode The Field's hashcode.
  * @return {goog.editor.Field} The field object with the hashcode.
  */
 goog.editor.plugins.UndoRedo.prototype.getFieldObject = function(

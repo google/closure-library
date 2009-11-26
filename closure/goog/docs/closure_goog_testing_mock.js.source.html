@@ -230,7 +230,7 @@
 <a name="line187"></a>/**
 <a name="line188"></a> * A proxy for the mock.  This can be used for dependency injection in lieu of
 <a name="line189"></a> * the mock if the test requires a strict instanceof check.
-<a name="line190"></a> * @type {Object?}
+<a name="line190"></a> * @type {Object}
 <a name="line191"></a> */
 <a name="line192"></a>goog.testing.Mock.prototype.$proxy = null;
 <a name="line193"></a>
@@ -480,7 +480,7 @@
 <a name="line437"></a>/**
 <a name="line438"></a> * Throws an exception and records that an exception was thrown.
 <a name="line439"></a> * @param {string} comment A short comment about the exception.
-<a name="line440"></a> * @param {string?} opt_message A longer message about the exception.
+<a name="line440"></a> * @param {?string} opt_message A longer message about the exception.
 <a name="line441"></a> * @throws {Object} JsUnitException object.
 <a name="line442"></a> * @protected
 <a name="line443"></a> */
@@ -529,7 +529,7 @@
 <a name="line486"></a>/**
 <a name="line487"></a> * Verifies that a method call matches an expectation.
 <a name="line488"></a> * @param {goog.testing.MockExpectation} expectation The expectation to check.
-<a name="line489"></a> * @param {String} name The name of the called method.
+<a name="line489"></a> * @param {string} name The name of the called method.
 <a name="line490"></a> * @param {Array.&lt;*&gt;?} args The arguments passed to the mock.
 <a name="line491"></a> * @return {boolean} Whether the call matches the expectation.
 <a name="line492"></a> */

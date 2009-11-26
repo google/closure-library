@@ -28,7 +28,7 @@ goog.require('goog.string');
 
 /**
  * Returns a new Gears factory object.
- * @return {Object?} the Gears factory object if available or null otherwise.
+ * @return {Object} the Gears factory object if available or null otherwise.
  */
 goog.gears.getFactory = function() {
   if (goog.gears.factory_ != undefined) {

@@ -79,796 +79,797 @@
 <a name="line36"></a>goog.require(&#39;goog.graphics.VmlRectElement&#39;);
 <a name="line37"></a>goog.require(&#39;goog.graphics.VmlTextElement&#39;);
 <a name="line38"></a>goog.require(&#39;goog.math.Size&#39;);
-<a name="line39"></a>
+<a name="line39"></a>goog.require(&#39;goog.string&#39;);
 <a name="line40"></a>
-<a name="line41"></a>/**
-<a name="line42"></a> * A Graphics implementation for drawing using VML.
-<a name="line43"></a> * @param {string|number} width The (non-zero) width in pixels.  Strings
-<a name="line44"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
-<a name="line45"></a> * @param {string|number} height The (non-zero) height in pixels.  Strings
-<a name="line46"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
-<a name="line47"></a> * @param {number?} opt_coordWidth The coordinate width - if
-<a name="line48"></a> *     omitted or null, defaults to same as width.
-<a name="line49"></a> * @param {number?} opt_coordHeight The coordinate height - if
-<a name="line50"></a> *     omitted or null, defaults to same as height.
-<a name="line51"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
-<a name="line52"></a> *     document we want to render in.
-<a name="line53"></a> * @constructor
-<a name="line54"></a> * @extends {goog.graphics.AbstractGraphics}
-<a name="line55"></a> */
-<a name="line56"></a>goog.graphics.VmlGraphics = function(width, height,
-<a name="line57"></a>                                     opt_coordWidth, opt_coordHeight,
-<a name="line58"></a>                                     opt_domHelper) {
-<a name="line59"></a>  goog.graphics.AbstractGraphics.call(this, width, height,
-<a name="line60"></a>                                      opt_coordWidth, opt_coordHeight,
-<a name="line61"></a>                                      opt_domHelper);
-<a name="line62"></a>  this.handler_ = new goog.events.EventHandler(this);
-<a name="line63"></a>};
-<a name="line64"></a>goog.inherits(goog.graphics.VmlGraphics, goog.graphics.AbstractGraphics);
-<a name="line65"></a>
-<a name="line66"></a>/**
-<a name="line67"></a> * The prefix to use for VML elements
-<a name="line68"></a> * @private
-<a name="line69"></a> * @type {string}
-<a name="line70"></a> */
-<a name="line71"></a>goog.graphics.VmlGraphics.VML_PREFIX_ = &#39;g_vml_&#39;;
-<a name="line72"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * A Graphics implementation for drawing using VML.
+<a name="line44"></a> * @param {string|number} width The (non-zero) width in pixels.  Strings
+<a name="line45"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
+<a name="line46"></a> * @param {string|number} height The (non-zero) height in pixels.  Strings
+<a name="line47"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
+<a name="line48"></a> * @param {?number} opt_coordWidth The coordinate width - if
+<a name="line49"></a> *     omitted or null, defaults to same as width.
+<a name="line50"></a> * @param {?number} opt_coordHeight The coordinate height - if
+<a name="line51"></a> *     omitted or null, defaults to same as height.
+<a name="line52"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+<a name="line53"></a> *     document we want to render in.
+<a name="line54"></a> * @constructor
+<a name="line55"></a> * @extends {goog.graphics.AbstractGraphics}
+<a name="line56"></a> */
+<a name="line57"></a>goog.graphics.VmlGraphics = function(width, height,
+<a name="line58"></a>                                     opt_coordWidth, opt_coordHeight,
+<a name="line59"></a>                                     opt_domHelper) {
+<a name="line60"></a>  goog.graphics.AbstractGraphics.call(this, width, height,
+<a name="line61"></a>                                      opt_coordWidth, opt_coordHeight,
+<a name="line62"></a>                                      opt_domHelper);
+<a name="line63"></a>  this.handler_ = new goog.events.EventHandler(this);
+<a name="line64"></a>};
+<a name="line65"></a>goog.inherits(goog.graphics.VmlGraphics, goog.graphics.AbstractGraphics);
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * The prefix to use for VML elements
+<a name="line69"></a> * @private
+<a name="line70"></a> * @type {string}
+<a name="line71"></a> */
+<a name="line72"></a>goog.graphics.VmlGraphics.VML_PREFIX_ = &#39;g_vml_&#39;;
 <a name="line73"></a>
-<a name="line74"></a>/**
-<a name="line75"></a> * The VML namespace URN
-<a name="line76"></a> * @private
-<a name="line77"></a> * @type {string}
-<a name="line78"></a> */
-<a name="line79"></a>goog.graphics.VmlGraphics.VML_NS_ = &#39;urn:schemas-microsoft-com:vml&#39;;
-<a name="line80"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * The VML namespace URN
+<a name="line77"></a> * @private
+<a name="line78"></a> * @type {string}
+<a name="line79"></a> */
+<a name="line80"></a>goog.graphics.VmlGraphics.VML_NS_ = &#39;urn:schemas-microsoft-com:vml&#39;;
 <a name="line81"></a>
-<a name="line82"></a>/**
-<a name="line83"></a> * The VML behavior URL.
-<a name="line84"></a> * @private
-<a name="line85"></a> * @type {string}
-<a name="line86"></a> */
-<a name="line87"></a>goog.graphics.VmlGraphics.VML_IMPORT_ = &#39;#default#VML&#39;;
-<a name="line88"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * The VML behavior URL.
+<a name="line85"></a> * @private
+<a name="line86"></a> * @type {string}
+<a name="line87"></a> */
+<a name="line88"></a>goog.graphics.VmlGraphics.VML_IMPORT_ = &#39;#default#VML&#39;;
 <a name="line89"></a>
-<a name="line90"></a>/**
-<a name="line91"></a> * Whether the document is using IE8 standards mode, and therefore needs hacks.
-<a name="line92"></a> * @private
-<a name="line93"></a> * @type {boolean}
-<a name="line94"></a> */
-<a name="line95"></a>goog.graphics.VmlGraphics.IE8_MODE_ = document.documentMode &amp;&amp;
-<a name="line96"></a>    document.documentMode &gt;= 8;
-<a name="line97"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Whether the document is using IE8 standards mode, and therefore needs hacks.
+<a name="line93"></a> * @private
+<a name="line94"></a> * @type {boolean}
+<a name="line95"></a> */
+<a name="line96"></a>goog.graphics.VmlGraphics.IE8_MODE_ = document.documentMode &amp;&amp;
+<a name="line97"></a>    document.documentMode &gt;= 8;
 <a name="line98"></a>
-<a name="line99"></a>/**
-<a name="line100"></a> * The coordinate multiplier to allow sub-pixel rendering
-<a name="line101"></a> * @type {number}
-<a name="line102"></a> */
-<a name="line103"></a>goog.graphics.VmlGraphics.COORD_MULTIPLIER = 100;
-<a name="line104"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * The coordinate multiplier to allow sub-pixel rendering
+<a name="line102"></a> * @type {number}
+<a name="line103"></a> */
+<a name="line104"></a>goog.graphics.VmlGraphics.COORD_MULTIPLIER = 100;
 <a name="line105"></a>
-<a name="line106"></a>/**
-<a name="line107"></a> * Converts the given size to a css size.  If it is a percentage, leaves it
-<a name="line108"></a> * alone.  Otherwise assumes px.
-<a name="line109"></a> *
-<a name="line110"></a> * @param {number|string} size The size to use.
-<a name="line111"></a> * @return {string} The position adjusted for COORD_MULTIPLIER.
-<a name="line112"></a> */
-<a name="line113"></a>goog.graphics.VmlGraphics.toCssSize = function(size) {
-<a name="line114"></a>  return goog.isString(size) &amp;&amp; goog.string.endsWith(size, &#39;%&#39;) ?
-<a name="line115"></a>         size : parseFloat(size.toString()) + &#39;px&#39;;
-<a name="line116"></a>};
-<a name="line117"></a>
-<a name="line118"></a>/**
-<a name="line119"></a> * Multiplies positioning coordinates by COORD_MULTIPLIER to allow sub-pixel
-<a name="line120"></a> * coordinates.  Also adds a half pixel offset to match SVG.
-<a name="line121"></a> *
-<a name="line122"></a> * This function is internal for the VML supporting classes, and
-<a name="line123"></a> * should not be used externally.
-<a name="line124"></a> *
-<a name="line125"></a> * @param {number|string} number A position in pixels.
-<a name="line126"></a> * @return {number} The position adjusted for COORD_MULTIPLIER.
-<a name="line127"></a> */
-<a name="line128"></a>goog.graphics.VmlGraphics.toPosCoord = function(number) {
-<a name="line129"></a>  return Math.round((parseFloat(number.toString()) - 0.5) *
-<a name="line130"></a>      goog.graphics.VmlGraphics.COORD_MULTIPLIER);
-<a name="line131"></a>};
-<a name="line132"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Converts the given size to a css size.  If it is a percentage, leaves it
+<a name="line109"></a> * alone.  Otherwise assumes px.
+<a name="line110"></a> *
+<a name="line111"></a> * @param {number|string} size The size to use.
+<a name="line112"></a> * @return {string} The position adjusted for COORD_MULTIPLIER.
+<a name="line113"></a> */
+<a name="line114"></a>goog.graphics.VmlGraphics.toCssSize = function(size) {
+<a name="line115"></a>  return goog.isString(size) &amp;&amp; goog.string.endsWith(size, &#39;%&#39;) ?
+<a name="line116"></a>         size : parseFloat(size.toString()) + &#39;px&#39;;
+<a name="line117"></a>};
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Multiplies positioning coordinates by COORD_MULTIPLIER to allow sub-pixel
+<a name="line121"></a> * coordinates.  Also adds a half pixel offset to match SVG.
+<a name="line122"></a> *
+<a name="line123"></a> * This function is internal for the VML supporting classes, and
+<a name="line124"></a> * should not be used externally.
+<a name="line125"></a> *
+<a name="line126"></a> * @param {number|string} number A position in pixels.
+<a name="line127"></a> * @return {number} The position adjusted for COORD_MULTIPLIER.
+<a name="line128"></a> */
+<a name="line129"></a>goog.graphics.VmlGraphics.toPosCoord = function(number) {
+<a name="line130"></a>  return Math.round((parseFloat(number.toString()) - 0.5) *
+<a name="line131"></a>      goog.graphics.VmlGraphics.COORD_MULTIPLIER);
+<a name="line132"></a>};
 <a name="line133"></a>
-<a name="line134"></a>/**
-<a name="line135"></a> * Add a &quot;px&quot; suffix to a number of pixels, and multiplies all coordinates by
-<a name="line136"></a> * COORD_MULTIPLIER to allow sub-pixel coordinates.
-<a name="line137"></a> *
-<a name="line138"></a> * This function is internal for the VML supporting classes, and
-<a name="line139"></a> * should not be used externally.
-<a name="line140"></a> *
-<a name="line141"></a> * @param {number|string} number A position in pixels.
-<a name="line142"></a> * @return {string} The position with suffix &#39;px&#39;.
-<a name="line143"></a> */
-<a name="line144"></a>goog.graphics.VmlGraphics.toPosPx = function(number) {
-<a name="line145"></a>  return goog.graphics.VmlGraphics.toPosCoord(number) + &#39;px&#39;;
-<a name="line146"></a>};
-<a name="line147"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Add a &quot;px&quot; suffix to a number of pixels, and multiplies all coordinates by
+<a name="line137"></a> * COORD_MULTIPLIER to allow sub-pixel coordinates.
+<a name="line138"></a> *
+<a name="line139"></a> * This function is internal for the VML supporting classes, and
+<a name="line140"></a> * should not be used externally.
+<a name="line141"></a> *
+<a name="line142"></a> * @param {number|string} number A position in pixels.
+<a name="line143"></a> * @return {string} The position with suffix &#39;px&#39;.
+<a name="line144"></a> */
+<a name="line145"></a>goog.graphics.VmlGraphics.toPosPx = function(number) {
+<a name="line146"></a>  return goog.graphics.VmlGraphics.toPosCoord(number) + &#39;px&#39;;
+<a name="line147"></a>};
 <a name="line148"></a>
-<a name="line149"></a>/**
-<a name="line150"></a> * Multiplies the width or height coordinate by COORD_MULTIPLIER to allow
-<a name="line151"></a> * sub-pixel coordinates.
-<a name="line152"></a> *
-<a name="line153"></a> * This function is internal for the VML supporting classes, and
-<a name="line154"></a> * should not be used externally.
-<a name="line155"></a> *
-<a name="line156"></a> * @param {string|number} number A size in units.
-<a name="line157"></a> * @return {number} The size multiplied by the correct factor.
-<a name="line158"></a> */
-<a name="line159"></a>goog.graphics.VmlGraphics.toSizeCoord = function(number) {
-<a name="line160"></a>  return Math.round(parseFloat(number.toString()) *
-<a name="line161"></a>      goog.graphics.VmlGraphics.COORD_MULTIPLIER);
-<a name="line162"></a>};
-<a name="line163"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Multiplies the width or height coordinate by COORD_MULTIPLIER to allow
+<a name="line152"></a> * sub-pixel coordinates.
+<a name="line153"></a> *
+<a name="line154"></a> * This function is internal for the VML supporting classes, and
+<a name="line155"></a> * should not be used externally.
+<a name="line156"></a> *
+<a name="line157"></a> * @param {string|number} number A size in units.
+<a name="line158"></a> * @return {number} The size multiplied by the correct factor.
+<a name="line159"></a> */
+<a name="line160"></a>goog.graphics.VmlGraphics.toSizeCoord = function(number) {
+<a name="line161"></a>  return Math.round(parseFloat(number.toString()) *
+<a name="line162"></a>      goog.graphics.VmlGraphics.COORD_MULTIPLIER);
+<a name="line163"></a>};
 <a name="line164"></a>
-<a name="line165"></a>/**
-<a name="line166"></a> * Add a &quot;px&quot; suffix to a number of pixels, and multiplies all coordinates by
-<a name="line167"></a> * COORD_MULTIPLIER to allow sub-pixel coordinates.
-<a name="line168"></a> *
-<a name="line169"></a> * This function is internal for the VML supporting classes, and
-<a name="line170"></a> * should not be used externally.
-<a name="line171"></a> *
-<a name="line172"></a> * @param {number} number A size in pixels.
-<a name="line173"></a> * @return {string} The size with suffix &#39;px&#39;.
-<a name="line174"></a> */
-<a name="line175"></a>goog.graphics.VmlGraphics.toSizePx = function(number) {
-<a name="line176"></a>  return goog.graphics.VmlGraphics.toSizeCoord(number) + &#39;px&#39;;
-<a name="line177"></a>};
-<a name="line178"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Add a &quot;px&quot; suffix to a number of pixels, and multiplies all coordinates by
+<a name="line168"></a> * COORD_MULTIPLIER to allow sub-pixel coordinates.
+<a name="line169"></a> *
+<a name="line170"></a> * This function is internal for the VML supporting classes, and
+<a name="line171"></a> * should not be used externally.
+<a name="line172"></a> *
+<a name="line173"></a> * @param {number} number A size in pixels.
+<a name="line174"></a> * @return {string} The size with suffix &#39;px&#39;.
+<a name="line175"></a> */
+<a name="line176"></a>goog.graphics.VmlGraphics.toSizePx = function(number) {
+<a name="line177"></a>  return goog.graphics.VmlGraphics.toSizeCoord(number) + &#39;px&#39;;
+<a name="line178"></a>};
 <a name="line179"></a>
-<a name="line180"></a>/**
-<a name="line181"></a> * Sets an attribute on the given VML element, in the way best suited to the
-<a name="line182"></a> * current version of IE.  Should only be used in the goog.graphics package.
-<a name="line183"></a> * @param {Element} element The element to set an attribute
-<a name="line184"></a> *     on.
-<a name="line185"></a> * @param {string} name The name of the attribute to set.
-<a name="line186"></a> * @param {string} value The value to set it to.
-<a name="line187"></a> */
-<a name="line188"></a>goog.graphics.VmlGraphics.setAttribute = function(element, name, value) {
-<a name="line189"></a>  if (goog.graphics.VmlGraphics.IE8_MODE_) {
-<a name="line190"></a>    element[name] = value;
-<a name="line191"></a>  } else {
-<a name="line192"></a>    element.setAttribute(name, value);
-<a name="line193"></a>  }
-<a name="line194"></a>};
-<a name="line195"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Sets an attribute on the given VML element, in the way best suited to the
+<a name="line183"></a> * current version of IE.  Should only be used in the goog.graphics package.
+<a name="line184"></a> * @param {Element} element The element to set an attribute
+<a name="line185"></a> *     on.
+<a name="line186"></a> * @param {string} name The name of the attribute to set.
+<a name="line187"></a> * @param {string} value The value to set it to.
+<a name="line188"></a> */
+<a name="line189"></a>goog.graphics.VmlGraphics.setAttribute = function(element, name, value) {
+<a name="line190"></a>  if (goog.graphics.VmlGraphics.IE8_MODE_) {
+<a name="line191"></a>    element[name] = value;
+<a name="line192"></a>  } else {
+<a name="line193"></a>    element.setAttribute(name, value);
+<a name="line194"></a>  }
+<a name="line195"></a>};
 <a name="line196"></a>
-<a name="line197"></a>/**
-<a name="line198"></a> * Event handler.
-<a name="line199"></a> * @type {goog.events.EventHandler}
-<a name="line200"></a> * @private
-<a name="line201"></a> */
-<a name="line202"></a>goog.graphics.VmlGraphics.prototype.handler_;
-<a name="line203"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Event handler.
+<a name="line200"></a> * @type {goog.events.EventHandler}
+<a name="line201"></a> * @private
+<a name="line202"></a> */
+<a name="line203"></a>goog.graphics.VmlGraphics.prototype.handler_;
 <a name="line204"></a>
-<a name="line205"></a>/**
-<a name="line206"></a> * Creates a VML element. Used internally and by different VML classes.
-<a name="line207"></a> * @param {string} tagName The type of element to create.
-<a name="line208"></a> * @return {Element} The created element.
-<a name="line209"></a> */
-<a name="line210"></a>goog.graphics.VmlGraphics.prototype.createVmlElement = function(tagName) {
-<a name="line211"></a>  return this.dom_.createElement(goog.graphics.VmlGraphics.VML_PREFIX_ + &#39;:&#39; +
-<a name="line212"></a>                                 tagName);
-<a name="line213"></a>};
-<a name="line214"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Creates a VML element. Used internally and by different VML classes.
+<a name="line208"></a> * @param {string} tagName The type of element to create.
+<a name="line209"></a> * @return {Element} The created element.
+<a name="line210"></a> */
+<a name="line211"></a>goog.graphics.VmlGraphics.prototype.createVmlElement = function(tagName) {
+<a name="line212"></a>  return this.dom_.createElement(goog.graphics.VmlGraphics.VML_PREFIX_ + &#39;:&#39; +
+<a name="line213"></a>                                 tagName);
+<a name="line214"></a>};
 <a name="line215"></a>
-<a name="line216"></a>/**
-<a name="line217"></a> * Appends an element.
-<a name="line218"></a> *
-<a name="line219"></a> * @param {goog.graphics.Element} element The element wrapper.
-<a name="line220"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
-<a name="line221"></a> *     to append to. If not specified, appends to the main canvas.
-<a name="line222"></a> * @private
-<a name="line223"></a> */
-<a name="line224"></a>goog.graphics.VmlGraphics.prototype.append_ = function(element, opt_group) {
-<a name="line225"></a>  var parent = opt_group || this.canvasElement;
-<a name="line226"></a>  parent.getElement().appendChild(element.getElement());
-<a name="line227"></a>};
-<a name="line228"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * Appends an element.
+<a name="line219"></a> *
+<a name="line220"></a> * @param {goog.graphics.Element} element The element wrapper.
+<a name="line221"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+<a name="line222"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line223"></a> * @private
+<a name="line224"></a> */
+<a name="line225"></a>goog.graphics.VmlGraphics.prototype.append_ = function(element, opt_group) {
+<a name="line226"></a>  var parent = opt_group || this.canvasElement;
+<a name="line227"></a>  parent.getElement().appendChild(element.getElement());
+<a name="line228"></a>};
 <a name="line229"></a>
-<a name="line230"></a>/**
-<a name="line231"></a> * Sets the fill for the given element.
-<a name="line232"></a> * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
-<a name="line233"></a> * @param {goog.graphics.Fill?} fill The fill object.
-<a name="line234"></a> */
-<a name="line235"></a>goog.graphics.VmlGraphics.prototype.setElementFill = function(element, fill) {
-<a name="line236"></a>  var vmlElement = element.getElement();
-<a name="line237"></a>  this.removeFill(vmlElement);
-<a name="line238"></a>  if (fill instanceof goog.graphics.SolidFill) {
-<a name="line239"></a>    // NOTE: VML does not understand &#39;transparent&#39; so hard code support
-<a name="line240"></a>    // for it.
-<a name="line241"></a>    if (fill.getColor() == &#39;transparent&#39;) {
-<a name="line242"></a>      vmlElement.filled = false;
-<a name="line243"></a>    } else if (fill.getOpacity() != 1) {
-<a name="line244"></a>      vmlElement.filled = true;
-<a name="line245"></a>      // Set opacity (number 0-1 is translated to percent)
-<a name="line246"></a>      var fillNode = this.createVmlElement(&#39;fill&#39;);
-<a name="line247"></a>      fillNode.opacity = Math.round(fill.getOpacity() * 100) + &#39;%&#39;;
-<a name="line248"></a>      fillNode.color = fill.getColor();
-<a name="line249"></a>      vmlElement.appendChild(fillNode);
-<a name="line250"></a>    } else {
-<a name="line251"></a>      vmlElement.filled = true;
-<a name="line252"></a>      vmlElement.fillcolor = fill.getColor();
-<a name="line253"></a>    }
-<a name="line254"></a>  } else if (fill instanceof goog.graphics.LinearGradient) {
-<a name="line255"></a>    vmlElement.filled = true;
-<a name="line256"></a>    // Add a &#39;fill&#39; element
-<a name="line257"></a>    var gradient = this.createVmlElement(&#39;fill&#39;);
-<a name="line258"></a>    gradient.color = fill.getColor1();
-<a name="line259"></a>    gradient.color2 = fill.getColor2();
-<a name="line260"></a>    var angle = goog.math.angle(fill.getX1(), fill.getY1(),
-<a name="line261"></a>        fill.getX2(), fill.getY2());
-<a name="line262"></a>    // Our angles start from 0 to the right, and grow clockwise.
-<a name="line263"></a>    // MSIE starts from 0 to top, and grows anti-clockwise.
-<a name="line264"></a>    angle = Math.round(goog.math.standardAngle(270 - angle));
-<a name="line265"></a>    gradient.angle = angle;
-<a name="line266"></a>    gradient.type = &#39;gradient&#39;;
-<a name="line267"></a>    vmlElement.appendChild(gradient);
-<a name="line268"></a>  } else {
-<a name="line269"></a>    vmlElement.filled = false;
-<a name="line270"></a>  }
-<a name="line271"></a>};
-<a name="line272"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Sets the fill for the given element.
+<a name="line233"></a> * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
+<a name="line234"></a> * @param {goog.graphics.Fill?} fill The fill object.
+<a name="line235"></a> */
+<a name="line236"></a>goog.graphics.VmlGraphics.prototype.setElementFill = function(element, fill) {
+<a name="line237"></a>  var vmlElement = element.getElement();
+<a name="line238"></a>  this.removeFill(vmlElement);
+<a name="line239"></a>  if (fill instanceof goog.graphics.SolidFill) {
+<a name="line240"></a>    // NOTE: VML does not understand &#39;transparent&#39; so hard code support
+<a name="line241"></a>    // for it.
+<a name="line242"></a>    if (fill.getColor() == &#39;transparent&#39;) {
+<a name="line243"></a>      vmlElement.filled = false;
+<a name="line244"></a>    } else if (fill.getOpacity() != 1) {
+<a name="line245"></a>      vmlElement.filled = true;
+<a name="line246"></a>      // Set opacity (number 0-1 is translated to percent)
+<a name="line247"></a>      var fillNode = this.createVmlElement(&#39;fill&#39;);
+<a name="line248"></a>      fillNode.opacity = Math.round(fill.getOpacity() * 100) + &#39;%&#39;;
+<a name="line249"></a>      fillNode.color = fill.getColor();
+<a name="line250"></a>      vmlElement.appendChild(fillNode);
+<a name="line251"></a>    } else {
+<a name="line252"></a>      vmlElement.filled = true;
+<a name="line253"></a>      vmlElement.fillcolor = fill.getColor();
+<a name="line254"></a>    }
+<a name="line255"></a>  } else if (fill instanceof goog.graphics.LinearGradient) {
+<a name="line256"></a>    vmlElement.filled = true;
+<a name="line257"></a>    // Add a &#39;fill&#39; element
+<a name="line258"></a>    var gradient = this.createVmlElement(&#39;fill&#39;);
+<a name="line259"></a>    gradient.color = fill.getColor1();
+<a name="line260"></a>    gradient.color2 = fill.getColor2();
+<a name="line261"></a>    var angle = goog.math.angle(fill.getX1(), fill.getY1(),
+<a name="line262"></a>        fill.getX2(), fill.getY2());
+<a name="line263"></a>    // Our angles start from 0 to the right, and grow clockwise.
+<a name="line264"></a>    // MSIE starts from 0 to top, and grows anti-clockwise.
+<a name="line265"></a>    angle = Math.round(goog.math.standardAngle(270 - angle));
+<a name="line266"></a>    gradient.angle = angle;
+<a name="line267"></a>    gradient.type = &#39;gradient&#39;;
+<a name="line268"></a>    vmlElement.appendChild(gradient);
+<a name="line269"></a>  } else {
+<a name="line270"></a>    vmlElement.filled = false;
+<a name="line271"></a>  }
+<a name="line272"></a>};
 <a name="line273"></a>
-<a name="line274"></a>/**
-<a name="line275"></a> * Sets the stroke for the given element.
-<a name="line276"></a> * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
-<a name="line277"></a> * @param {goog.graphics.Stroke?} stroke The stroke object.
-<a name="line278"></a> */
-<a name="line279"></a>goog.graphics.VmlGraphics.prototype.setElementStroke = function(element,
-<a name="line280"></a>    stroke) {
-<a name="line281"></a>  var vmlElement = element.getElement();
-<a name="line282"></a>  if (stroke) {
-<a name="line283"></a>    vmlElement.stroked = true;
-<a name="line284"></a>
-<a name="line285"></a>    var width = stroke.getWidth();
-<a name="line286"></a>    if (goog.isString(width) &amp;&amp; width.indexOf(&#39;px&#39;) == -1) {
-<a name="line287"></a>      width = parseFloat(width);
-<a name="line288"></a>    } else {
-<a name="line289"></a>      width = width * this.getPixelScaleX();
-<a name="line290"></a>    }
-<a name="line291"></a>
-<a name="line292"></a>    var strokeElement = vmlElement.getElementsByTagName(&#39;stroke&#39;)[0];
-<a name="line293"></a>    if (width &lt; 1) {
-<a name="line294"></a>      strokeElement = strokeElement || this.createVmlElement(&#39;stroke&#39;);
-<a name="line295"></a>      strokeElement.opacity = width;
-<a name="line296"></a>      strokeElement.weight = &#39;1px&#39;;
-<a name="line297"></a>      strokeElement.color = stroke.getColor();
-<a name="line298"></a>      vmlElement.appendChild(strokeElement);
-<a name="line299"></a>    } else {
-<a name="line300"></a>      if (strokeElement) {
-<a name="line301"></a>        vmlElement.removeChild(strokeElement);
-<a name="line302"></a>      }
-<a name="line303"></a>      vmlElement.strokecolor = stroke.getColor();
-<a name="line304"></a>      vmlElement.strokeweight = width + &#39;px&#39;;
-<a name="line305"></a>    }
-<a name="line306"></a>  } else {
-<a name="line307"></a>    vmlElement.stroked = false;
-<a name="line308"></a>  }
-<a name="line309"></a>};
-<a name="line310"></a>
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * Sets the stroke for the given element.
+<a name="line277"></a> * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
+<a name="line278"></a> * @param {goog.graphics.Stroke?} stroke The stroke object.
+<a name="line279"></a> */
+<a name="line280"></a>goog.graphics.VmlGraphics.prototype.setElementStroke = function(element,
+<a name="line281"></a>    stroke) {
+<a name="line282"></a>  var vmlElement = element.getElement();
+<a name="line283"></a>  if (stroke) {
+<a name="line284"></a>    vmlElement.stroked = true;
+<a name="line285"></a>
+<a name="line286"></a>    var width = stroke.getWidth();
+<a name="line287"></a>    if (goog.isString(width) &amp;&amp; width.indexOf(&#39;px&#39;) == -1) {
+<a name="line288"></a>      width = parseFloat(width);
+<a name="line289"></a>    } else {
+<a name="line290"></a>      width = width * this.getPixelScaleX();
+<a name="line291"></a>    }
+<a name="line292"></a>
+<a name="line293"></a>    var strokeElement = vmlElement.getElementsByTagName(&#39;stroke&#39;)[0];
+<a name="line294"></a>    if (width &lt; 1) {
+<a name="line295"></a>      strokeElement = strokeElement || this.createVmlElement(&#39;stroke&#39;);
+<a name="line296"></a>      strokeElement.opacity = width;
+<a name="line297"></a>      strokeElement.weight = &#39;1px&#39;;
+<a name="line298"></a>      strokeElement.color = stroke.getColor();
+<a name="line299"></a>      vmlElement.appendChild(strokeElement);
+<a name="line300"></a>    } else {
+<a name="line301"></a>      if (strokeElement) {
+<a name="line302"></a>        vmlElement.removeChild(strokeElement);
+<a name="line303"></a>      }
+<a name="line304"></a>      vmlElement.strokecolor = stroke.getColor();
+<a name="line305"></a>      vmlElement.strokeweight = width + &#39;px&#39;;
+<a name="line306"></a>    }
+<a name="line307"></a>  } else {
+<a name="line308"></a>    vmlElement.stroked = false;
+<a name="line309"></a>  }
+<a name="line310"></a>};
 <a name="line311"></a>
-<a name="line312"></a>/**
-<a name="line313"></a> * Set the transformation of an element.
-<a name="line314"></a> * @param {goog.graphics.Element} element The element wrapper.
-<a name="line315"></a> * @param {number} x The x coordinate of the translation transform.
-<a name="line316"></a> * @param {number} y The y coordinate of the translation transform.
-<a name="line317"></a> * @param {number} angle The angle of the rotation transform.
-<a name="line318"></a> * @param {number} centerX The horizontal center of the rotation transform.
-<a name="line319"></a> * @param {number} centerY The vertical center of the rotation transform.
-<a name="line320"></a> */
-<a name="line321"></a>goog.graphics.VmlGraphics.prototype.setElementTransform = function(element, x,
-<a name="line322"></a>    y, angle, centerX, centerY) {
-<a name="line323"></a>  var el = element.getElement();
-<a name="line324"></a>
-<a name="line325"></a>  el.style.left = goog.graphics.VmlGraphics.toPosPx(x);
-<a name="line326"></a>  el.style.top = goog.graphics.VmlGraphics.toPosPx(y);
-<a name="line327"></a>  if (angle || el.rotation) {
-<a name="line328"></a>    el.rotation = angle;
-<a name="line329"></a>    el.coordsize = goog.graphics.VmlGraphics.toSizeCoord(centerX * 2) + &#39; &#39; +
-<a name="line330"></a>        goog.graphics.VmlGraphics.toSizeCoord(centerY * 2);
-<a name="line331"></a>  }
-<a name="line332"></a>};
-<a name="line333"></a>
+<a name="line312"></a>
+<a name="line313"></a>/**
+<a name="line314"></a> * Set the transformation of an element.
+<a name="line315"></a> * @param {goog.graphics.Element} element The element wrapper.
+<a name="line316"></a> * @param {number} x The x coordinate of the translation transform.
+<a name="line317"></a> * @param {number} y The y coordinate of the translation transform.
+<a name="line318"></a> * @param {number} angle The angle of the rotation transform.
+<a name="line319"></a> * @param {number} centerX The horizontal center of the rotation transform.
+<a name="line320"></a> * @param {number} centerY The vertical center of the rotation transform.
+<a name="line321"></a> */
+<a name="line322"></a>goog.graphics.VmlGraphics.prototype.setElementTransform = function(element, x,
+<a name="line323"></a>    y, angle, centerX, centerY) {
+<a name="line324"></a>  var el = element.getElement();
+<a name="line325"></a>
+<a name="line326"></a>  el.style.left = goog.graphics.VmlGraphics.toPosPx(x);
+<a name="line327"></a>  el.style.top = goog.graphics.VmlGraphics.toPosPx(y);
+<a name="line328"></a>  if (angle || el.rotation) {
+<a name="line329"></a>    el.rotation = angle;
+<a name="line330"></a>    el.coordsize = goog.graphics.VmlGraphics.toSizeCoord(centerX * 2) + &#39; &#39; +
+<a name="line331"></a>        goog.graphics.VmlGraphics.toSizeCoord(centerY * 2);
+<a name="line332"></a>  }
+<a name="line333"></a>};
 <a name="line334"></a>
-<a name="line335"></a>/**
-<a name="line336"></a> * Removes the fill information from a dom element.
-<a name="line337"></a> * @param {Element} element DOM element.
-<a name="line338"></a> */
-<a name="line339"></a>goog.graphics.VmlGraphics.prototype.removeFill = function(element) {
-<a name="line340"></a>  element.fillcolor = &#39;&#39;;
-<a name="line341"></a>  var v = element.childNodes.length;
-<a name="line342"></a>  for (var i = 0; i &lt; element.childNodes.length; i++) {
-<a name="line343"></a>    var child = element.childNodes[i];
-<a name="line344"></a>    if (child.tagName == &#39;fill&#39;) {
-<a name="line345"></a>      element.removeChild(child);
-<a name="line346"></a>    }
-<a name="line347"></a>  }
-<a name="line348"></a>};
-<a name="line349"></a>
+<a name="line335"></a>
+<a name="line336"></a>/**
+<a name="line337"></a> * Removes the fill information from a dom element.
+<a name="line338"></a> * @param {Element} element DOM element.
+<a name="line339"></a> */
+<a name="line340"></a>goog.graphics.VmlGraphics.prototype.removeFill = function(element) {
+<a name="line341"></a>  element.fillcolor = &#39;&#39;;
+<a name="line342"></a>  var v = element.childNodes.length;
+<a name="line343"></a>  for (var i = 0; i &lt; element.childNodes.length; i++) {
+<a name="line344"></a>    var child = element.childNodes[i];
+<a name="line345"></a>    if (child.tagName == &#39;fill&#39;) {
+<a name="line346"></a>      element.removeChild(child);
+<a name="line347"></a>    }
+<a name="line348"></a>  }
+<a name="line349"></a>};
 <a name="line350"></a>
-<a name="line351"></a>/**
-<a name="line352"></a> * Set top, left, width and height for an element.
-<a name="line353"></a> * This function is internal for the VML supporting classes, and
-<a name="line354"></a> * should not be used externally.
-<a name="line355"></a> *
-<a name="line356"></a> * @param {Element} element DOM element.
-<a name="line357"></a> * @param {number} left Left ccordinate in pixels.
-<a name="line358"></a> * @param {number} top Top ccordinate in pixels.
-<a name="line359"></a> * @param {number} width Width in pixels.
-<a name="line360"></a> * @param {number} height Height in pixels.
-<a name="line361"></a> */
-<a name="line362"></a>goog.graphics.VmlGraphics.setPositionAndSize = function(
-<a name="line363"></a>    element, left, top, width, height) {
-<a name="line364"></a>  var style = element.style;
-<a name="line365"></a>  style.position = &#39;absolute&#39;;
-<a name="line366"></a>  style.left = goog.graphics.VmlGraphics.toPosPx(left);
-<a name="line367"></a>  style.top = goog.graphics.VmlGraphics.toPosPx(top);
-<a name="line368"></a>  style.width = goog.graphics.VmlGraphics.toSizePx(width);
-<a name="line369"></a>  style.height = goog.graphics.VmlGraphics.toSizePx(height);
-<a name="line370"></a>
-<a name="line371"></a>  if (element.tagName == &#39;shape&#39;) {
-<a name="line372"></a>    element.coordsize = goog.graphics.VmlGraphics.toSizeCoord(width) + &#39; &#39; +
-<a name="line373"></a>                        goog.graphics.VmlGraphics.toSizeCoord(height);
-<a name="line374"></a>  }
-<a name="line375"></a>};
-<a name="line376"></a>
+<a name="line351"></a>
+<a name="line352"></a>/**
+<a name="line353"></a> * Set top, left, width and height for an element.
+<a name="line354"></a> * This function is internal for the VML supporting classes, and
+<a name="line355"></a> * should not be used externally.
+<a name="line356"></a> *
+<a name="line357"></a> * @param {Element} element DOM element.
+<a name="line358"></a> * @param {number} left Left ccordinate in pixels.
+<a name="line359"></a> * @param {number} top Top ccordinate in pixels.
+<a name="line360"></a> * @param {number} width Width in pixels.
+<a name="line361"></a> * @param {number} height Height in pixels.
+<a name="line362"></a> */
+<a name="line363"></a>goog.graphics.VmlGraphics.setPositionAndSize = function(
+<a name="line364"></a>    element, left, top, width, height) {
+<a name="line365"></a>  var style = element.style;
+<a name="line366"></a>  style.position = &#39;absolute&#39;;
+<a name="line367"></a>  style.left = goog.graphics.VmlGraphics.toPosPx(left);
+<a name="line368"></a>  style.top = goog.graphics.VmlGraphics.toPosPx(top);
+<a name="line369"></a>  style.width = goog.graphics.VmlGraphics.toSizePx(width);
+<a name="line370"></a>  style.height = goog.graphics.VmlGraphics.toSizePx(height);
+<a name="line371"></a>
+<a name="line372"></a>  if (element.tagName == &#39;shape&#39;) {
+<a name="line373"></a>    element.coordsize = goog.graphics.VmlGraphics.toSizeCoord(width) + &#39; &#39; +
+<a name="line374"></a>                        goog.graphics.VmlGraphics.toSizeCoord(height);
+<a name="line375"></a>  }
+<a name="line376"></a>};
 <a name="line377"></a>
-<a name="line378"></a>/**
-<a name="line379"></a> * Creates an element spanning the surface.
-<a name="line380"></a> *
-<a name="line381"></a> * @param {string} type The type of element to create.
-<a name="line382"></a> * @return {Element} The created, positioned, and sized element.
-<a name="line383"></a> * @private
-<a name="line384"></a> */
-<a name="line385"></a>goog.graphics.VmlGraphics.prototype.createFullSizeElement_ = function(type) {
-<a name="line386"></a>  var element = this.createVmlElement(type);
-<a name="line387"></a>  var size = this.getCoordSize();
-<a name="line388"></a>  goog.graphics.VmlGraphics.setPositionAndSize(element, 0, 0, size.width,
-<a name="line389"></a>      size.height);
-<a name="line390"></a>  return element;
-<a name="line391"></a>};
-<a name="line392"></a>
+<a name="line378"></a>
+<a name="line379"></a>/**
+<a name="line380"></a> * Creates an element spanning the surface.
+<a name="line381"></a> *
+<a name="line382"></a> * @param {string} type The type of element to create.
+<a name="line383"></a> * @return {Element} The created, positioned, and sized element.
+<a name="line384"></a> * @private
+<a name="line385"></a> */
+<a name="line386"></a>goog.graphics.VmlGraphics.prototype.createFullSizeElement_ = function(type) {
+<a name="line387"></a>  var element = this.createVmlElement(type);
+<a name="line388"></a>  var size = this.getCoordSize();
+<a name="line389"></a>  goog.graphics.VmlGraphics.setPositionAndSize(element, 0, 0, size.width,
+<a name="line390"></a>      size.height);
+<a name="line391"></a>  return element;
+<a name="line392"></a>};
 <a name="line393"></a>
-<a name="line394"></a>/**
-<a name="line395"></a> * IE magic - if this &quot;no-op&quot; line is not here, the if statement below will
-<a name="line396"></a> * fail intermittently.  The eval is used to prevent the JsCompiler from
-<a name="line397"></a> * stripping this piece of code, which it quite reasonably thinks is doing
-<a name="line398"></a> * nothing. Put it in try-catch block to prevent &quot;Unspecified Error&quot; when
-<a name="line399"></a> * this statement is executed in a defer JS in IE.
-<a name="line400"></a> * More info here:
-<a name="line401"></a> * http://www.mail-archive.com/users@openlayers.org/msg01838.html
-<a name="line402"></a> */
-<a name="line403"></a>try {
-<a name="line404"></a>  eval(&#39;document.namespaces&#39;);
-<a name="line405"></a>} catch (ex) {}
-<a name="line406"></a>
+<a name="line394"></a>
+<a name="line395"></a>/**
+<a name="line396"></a> * IE magic - if this &quot;no-op&quot; line is not here, the if statement below will
+<a name="line397"></a> * fail intermittently.  The eval is used to prevent the JsCompiler from
+<a name="line398"></a> * stripping this piece of code, which it quite reasonably thinks is doing
+<a name="line399"></a> * nothing. Put it in try-catch block to prevent &quot;Unspecified Error&quot; when
+<a name="line400"></a> * this statement is executed in a defer JS in IE.
+<a name="line401"></a> * More info here:
+<a name="line402"></a> * http://www.mail-archive.com/users@openlayers.org/msg01838.html
+<a name="line403"></a> */
+<a name="line404"></a>try {
+<a name="line405"></a>  eval(&#39;document.namespaces&#39;);
+<a name="line406"></a>} catch (ex) {}
 <a name="line407"></a>
-<a name="line408"></a>/**
-<a name="line409"></a> * Creates the DOM representation of the graphics area.
-<a name="line410"></a> */
-<a name="line411"></a>goog.graphics.VmlGraphics.prototype.createDom = function() {
-<a name="line412"></a>  var doc = this.dom_.getDocument();
-<a name="line413"></a>
-<a name="line414"></a>  // Add the namespace.
-<a name="line415"></a>  if (!doc.namespaces[goog.graphics.VmlGraphics.VML_PREFIX_]) {
-<a name="line416"></a>    if (goog.graphics.VmlGraphics.IE8_MODE_) {
-<a name="line417"></a>      doc.namespaces.add(goog.graphics.VmlGraphics.VML_PREFIX_,
-<a name="line418"></a>                         goog.graphics.VmlGraphics.VML_NS_,
-<a name="line419"></a>                         goog.graphics.VmlGraphics.VML_IMPORT_);
-<a name="line420"></a>    } else {
-<a name="line421"></a>      doc.namespaces.add(goog.graphics.VmlGraphics.VML_PREFIX_,
-<a name="line422"></a>                         goog.graphics.VmlGraphics.VML_NS_);
-<a name="line423"></a>    }
-<a name="line424"></a>
-<a name="line425"></a>    // We assume that we only need to add the CSS if the namespace was not
-<a name="line426"></a>    // present
-<a name="line427"></a>    var ss = doc.createStyleSheet();
-<a name="line428"></a>    ss.cssText = goog.graphics.VmlGraphics.VML_PREFIX_ + &#39;\\:*&#39; +
-<a name="line429"></a>                 &#39;{behavior:url(#default#VML)}&#39;;
-<a name="line430"></a>  }
-<a name="line431"></a>
-<a name="line432"></a>  // Outer a DIV with overflow hidden for clipping.
-<a name="line433"></a>  // All inner elements are absolutly positioned on-top of this div.
-<a name="line434"></a>  var pixelWidth = this.width;
-<a name="line435"></a>  var pixelHeight = this.height;
-<a name="line436"></a>  var divElement = this.dom_.createDom(&#39;div&#39;, {
-<a name="line437"></a>    &#39;style&#39;: &#39;overflow:hidden;position:relative;width:&#39; +
-<a name="line438"></a>             goog.graphics.VmlGraphics.toCssSize(pixelWidth) + &#39;;height:&#39; +
-<a name="line439"></a>             goog.graphics.VmlGraphics.toCssSize(pixelHeight)
-<a name="line440"></a>  });
-<a name="line441"></a>
-<a name="line442"></a>  this.setElementInternal(divElement);
-<a name="line443"></a>
-<a name="line444"></a>  var group = this.createVmlElement(&#39;group&#39;);
-<a name="line445"></a>  var style = group.style;
-<a name="line446"></a>
-<a name="line447"></a>  style.position = &#39;absolute&#39;;
-<a name="line448"></a>  style.left = style.top = 0;
-<a name="line449"></a>  style.width = this.width;
-<a name="line450"></a>  style.height = this.height;
-<a name="line451"></a>  if (this.coordWidth) {
-<a name="line452"></a>    group.coordsize =
-<a name="line453"></a>        goog.graphics.VmlGraphics.toSizeCoord(this.coordWidth) + &#39; &#39; +
-<a name="line454"></a>        goog.graphics.VmlGraphics.toSizeCoord(
-<a name="line455"></a>            /** @type {number} */ (this.coordHeight));
-<a name="line456"></a>  } else {
-<a name="line457"></a>    group.coordsize = goog.graphics.VmlGraphics.toSizeCoord(pixelWidth) + &#39; &#39; +
-<a name="line458"></a>        goog.graphics.VmlGraphics.toSizeCoord(pixelHeight);
-<a name="line459"></a>  }
-<a name="line460"></a>
-<a name="line461"></a>  if (goog.isDef(this.coordLeft)) {
-<a name="line462"></a>    group.coordorigin = goog.graphics.VmlGraphics.toSizeCoord(this.coordLeft) +
-<a name="line463"></a>        &#39; &#39; + goog.graphics.VmlGraphics.toSizeCoord(this.coordTop);
-<a name="line464"></a>  } else {
-<a name="line465"></a>    group.coordorigin = &#39;0 0&#39;;
-<a name="line466"></a>  }
-<a name="line467"></a>  divElement.appendChild(group);
-<a name="line468"></a>
-<a name="line469"></a>  this.canvasElement = new goog.graphics.VmlGroupElement(group, this);
-<a name="line470"></a>
-<a name="line471"></a>  goog.events.listen(divElement, goog.events.EventType.RESIZE, goog.bind(
-<a name="line472"></a>      this.handleContainerResize_, this));
-<a name="line473"></a>};
-<a name="line474"></a>
+<a name="line408"></a>
+<a name="line409"></a>/**
+<a name="line410"></a> * Creates the DOM representation of the graphics area.
+<a name="line411"></a> */
+<a name="line412"></a>goog.graphics.VmlGraphics.prototype.createDom = function() {
+<a name="line413"></a>  var doc = this.dom_.getDocument();
+<a name="line414"></a>
+<a name="line415"></a>  // Add the namespace.
+<a name="line416"></a>  if (!doc.namespaces[goog.graphics.VmlGraphics.VML_PREFIX_]) {
+<a name="line417"></a>    if (goog.graphics.VmlGraphics.IE8_MODE_) {
+<a name="line418"></a>      doc.namespaces.add(goog.graphics.VmlGraphics.VML_PREFIX_,
+<a name="line419"></a>                         goog.graphics.VmlGraphics.VML_NS_,
+<a name="line420"></a>                         goog.graphics.VmlGraphics.VML_IMPORT_);
+<a name="line421"></a>    } else {
+<a name="line422"></a>      doc.namespaces.add(goog.graphics.VmlGraphics.VML_PREFIX_,
+<a name="line423"></a>                         goog.graphics.VmlGraphics.VML_NS_);
+<a name="line424"></a>    }
+<a name="line425"></a>
+<a name="line426"></a>    // We assume that we only need to add the CSS if the namespace was not
+<a name="line427"></a>    // present
+<a name="line428"></a>    var ss = doc.createStyleSheet();
+<a name="line429"></a>    ss.cssText = goog.graphics.VmlGraphics.VML_PREFIX_ + &#39;\\:*&#39; +
+<a name="line430"></a>                 &#39;{behavior:url(#default#VML)}&#39;;
+<a name="line431"></a>  }
+<a name="line432"></a>
+<a name="line433"></a>  // Outer a DIV with overflow hidden for clipping.
+<a name="line434"></a>  // All inner elements are absolutly positioned on-top of this div.
+<a name="line435"></a>  var pixelWidth = this.width;
+<a name="line436"></a>  var pixelHeight = this.height;
+<a name="line437"></a>  var divElement = this.dom_.createDom(&#39;div&#39;, {
+<a name="line438"></a>    &#39;style&#39;: &#39;overflow:hidden;position:relative;width:&#39; +
+<a name="line439"></a>             goog.graphics.VmlGraphics.toCssSize(pixelWidth) + &#39;;height:&#39; +
+<a name="line440"></a>             goog.graphics.VmlGraphics.toCssSize(pixelHeight)
+<a name="line441"></a>  });
+<a name="line442"></a>
+<a name="line443"></a>  this.setElementInternal(divElement);
+<a name="line444"></a>
+<a name="line445"></a>  var group = this.createVmlElement(&#39;group&#39;);
+<a name="line446"></a>  var style = group.style;
+<a name="line447"></a>
+<a name="line448"></a>  style.position = &#39;absolute&#39;;
+<a name="line449"></a>  style.left = style.top = 0;
+<a name="line450"></a>  style.width = this.width;
+<a name="line451"></a>  style.height = this.height;
+<a name="line452"></a>  if (this.coordWidth) {
+<a name="line453"></a>    group.coordsize =
+<a name="line454"></a>        goog.graphics.VmlGraphics.toSizeCoord(this.coordWidth) + &#39; &#39; +
+<a name="line455"></a>        goog.graphics.VmlGraphics.toSizeCoord(
+<a name="line456"></a>            /** @type {number} */ (this.coordHeight));
+<a name="line457"></a>  } else {
+<a name="line458"></a>    group.coordsize = goog.graphics.VmlGraphics.toSizeCoord(pixelWidth) + &#39; &#39; +
+<a name="line459"></a>        goog.graphics.VmlGraphics.toSizeCoord(pixelHeight);
+<a name="line460"></a>  }
+<a name="line461"></a>
+<a name="line462"></a>  if (goog.isDef(this.coordLeft)) {
+<a name="line463"></a>    group.coordorigin = goog.graphics.VmlGraphics.toSizeCoord(this.coordLeft) +
+<a name="line464"></a>        &#39; &#39; + goog.graphics.VmlGraphics.toSizeCoord(this.coordTop);
+<a name="line465"></a>  } else {
+<a name="line466"></a>    group.coordorigin = &#39;0 0&#39;;
+<a name="line467"></a>  }
+<a name="line468"></a>  divElement.appendChild(group);
+<a name="line469"></a>
+<a name="line470"></a>  this.canvasElement = new goog.graphics.VmlGroupElement(group, this);
+<a name="line471"></a>
+<a name="line472"></a>  goog.events.listen(divElement, goog.events.EventType.RESIZE, goog.bind(
+<a name="line473"></a>      this.handleContainerResize_, this));
+<a name="line474"></a>};
 <a name="line475"></a>
-<a name="line476"></a>/**
-<a name="line477"></a> * Changes the canvas element size to match the container element size.
-<a name="line478"></a> * @private
-<a name="line479"></a> */
-<a name="line480"></a>goog.graphics.VmlGraphics.prototype.handleContainerResize_ = function() {
-<a name="line481"></a>  var size = goog.style.getSize(this.getElement());
-<a name="line482"></a>  var style = this.canvasElement.getElement().style;
-<a name="line483"></a>
-<a name="line484"></a>  if (size.width) {
-<a name="line485"></a>    style.width = size.width + &#39;px&#39;;
-<a name="line486"></a>    style.height = size.height + &#39;px&#39;;
-<a name="line487"></a>  } else {
-<a name="line488"></a>    var current = this.getElement();
-<a name="line489"></a>    while (current &amp;&amp; current.currentStyle &amp;&amp;
-<a name="line490"></a>        current.currentStyle.display != &#39;none&#39;) {
-<a name="line491"></a>      current = current.parentNode;
-<a name="line492"></a>    }
-<a name="line493"></a>    if (current &amp;&amp; current.currentStyle) {
-<a name="line494"></a>      this.handler_.listen(current, &#39;propertychange&#39;,
-<a name="line495"></a>          this.handleContainerResize_);
-<a name="line496"></a>    }
-<a name="line497"></a>  }
-<a name="line498"></a>
-<a name="line499"></a>  this.dispatchEvent(goog.events.EventType.RESIZE);
-<a name="line500"></a>};
-<a name="line501"></a>
+<a name="line476"></a>
+<a name="line477"></a>/**
+<a name="line478"></a> * Changes the canvas element size to match the container element size.
+<a name="line479"></a> * @private
+<a name="line480"></a> */
+<a name="line481"></a>goog.graphics.VmlGraphics.prototype.handleContainerResize_ = function() {
+<a name="line482"></a>  var size = goog.style.getSize(this.getElement());
+<a name="line483"></a>  var style = this.canvasElement.getElement().style;
+<a name="line484"></a>
+<a name="line485"></a>  if (size.width) {
+<a name="line486"></a>    style.width = size.width + &#39;px&#39;;
+<a name="line487"></a>    style.height = size.height + &#39;px&#39;;
+<a name="line488"></a>  } else {
+<a name="line489"></a>    var current = this.getElement();
+<a name="line490"></a>    while (current &amp;&amp; current.currentStyle &amp;&amp;
+<a name="line491"></a>        current.currentStyle.display != &#39;none&#39;) {
+<a name="line492"></a>      current = current.parentNode;
+<a name="line493"></a>    }
+<a name="line494"></a>    if (current &amp;&amp; current.currentStyle) {
+<a name="line495"></a>      this.handler_.listen(current, &#39;propertychange&#39;,
+<a name="line496"></a>          this.handleContainerResize_);
+<a name="line497"></a>    }
+<a name="line498"></a>  }
+<a name="line499"></a>
+<a name="line500"></a>  this.dispatchEvent(goog.events.EventType.RESIZE);
+<a name="line501"></a>};
 <a name="line502"></a>
-<a name="line503"></a>/**
-<a name="line504"></a> * Handle property changes on hidden ancestors.
-<a name="line505"></a> * @param {goog.events.BrowserEvent} e The browser event.
-<a name="line506"></a> * @private
-<a name="line507"></a> */
-<a name="line508"></a>goog.graphics.VmlGraphics.prototype.handlePropertyChange_ = function(e) {
-<a name="line509"></a>  var prop = e.getBrowserEvent().propertyName;
-<a name="line510"></a>  if (prop == &#39;display&#39; || prop == &#39;className&#39;) {
-<a name="line511"></a>    this.handler_.unlisten(/** @type {Element} */(e.target),
-<a name="line512"></a>        &#39;propertychange&#39;, this.handlePropertyChange_);
-<a name="line513"></a>    this.handleContainerResize_();
-<a name="line514"></a>  }
-<a name="line515"></a>};
-<a name="line516"></a>
+<a name="line503"></a>
+<a name="line504"></a>/**
+<a name="line505"></a> * Handle property changes on hidden ancestors.
+<a name="line506"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line507"></a> * @private
+<a name="line508"></a> */
+<a name="line509"></a>goog.graphics.VmlGraphics.prototype.handlePropertyChange_ = function(e) {
+<a name="line510"></a>  var prop = e.getBrowserEvent().propertyName;
+<a name="line511"></a>  if (prop == &#39;display&#39; || prop == &#39;className&#39;) {
+<a name="line512"></a>    this.handler_.unlisten(/** @type {Element} */(e.target),
+<a name="line513"></a>        &#39;propertychange&#39;, this.handlePropertyChange_);
+<a name="line514"></a>    this.handleContainerResize_();
+<a name="line515"></a>  }
+<a name="line516"></a>};
 <a name="line517"></a>
-<a name="line518"></a>/**
-<a name="line519"></a> * Changes the coordinate system position.
-<a name="line520"></a> * @param {number} left The coordinate system left bound.
-<a name="line521"></a> * @param {number} top The coordinate system top bound.
-<a name="line522"></a> */
-<a name="line523"></a>goog.graphics.VmlGraphics.prototype.setCoordOrigin = function(left, top) {
-<a name="line524"></a>  this.coordLeft = left;
-<a name="line525"></a>  this.coordTop = top;
-<a name="line526"></a>
-<a name="line527"></a>  this.canvasElement.getElement().coordorigin =
-<a name="line528"></a>      goog.graphics.VmlGraphics.toSizeCoord(this.coordLeft) + &#39; &#39; +
-<a name="line529"></a>      goog.graphics.VmlGraphics.toSizeCoord(this.coordTop);
-<a name="line530"></a>};
-<a name="line531"></a>
+<a name="line518"></a>
+<a name="line519"></a>/**
+<a name="line520"></a> * Changes the coordinate system position.
+<a name="line521"></a> * @param {number} left The coordinate system left bound.
+<a name="line522"></a> * @param {number} top The coordinate system top bound.
+<a name="line523"></a> */
+<a name="line524"></a>goog.graphics.VmlGraphics.prototype.setCoordOrigin = function(left, top) {
+<a name="line525"></a>  this.coordLeft = left;
+<a name="line526"></a>  this.coordTop = top;
+<a name="line527"></a>
+<a name="line528"></a>  this.canvasElement.getElement().coordorigin =
+<a name="line529"></a>      goog.graphics.VmlGraphics.toSizeCoord(this.coordLeft) + &#39; &#39; +
+<a name="line530"></a>      goog.graphics.VmlGraphics.toSizeCoord(this.coordTop);
+<a name="line531"></a>};
 <a name="line532"></a>
-<a name="line533"></a>/**
-<a name="line534"></a> * Changes the coordinate size.
-<a name="line535"></a> * @param {number} coordWidth The coordinate width.
-<a name="line536"></a> * @param {number} coordHeight The coordinate height.
-<a name="line537"></a> */
-<a name="line538"></a>goog.graphics.VmlGraphics.prototype.setCoordSize = function(coordWidth,
-<a name="line539"></a>                                                            coordHeight) {
-<a name="line540"></a>  goog.graphics.VmlGraphics.superClass_.setCoordSize.apply(this, arguments);
-<a name="line541"></a>
-<a name="line542"></a>  this.canvasElement.getElement().coordsize =
-<a name="line543"></a>      goog.graphics.VmlGraphics.toSizeCoord(coordWidth) + &#39; &#39; +
-<a name="line544"></a>      goog.graphics.VmlGraphics.toSizeCoord(coordHeight);
-<a name="line545"></a>};
-<a name="line546"></a>
+<a name="line533"></a>
+<a name="line534"></a>/**
+<a name="line535"></a> * Changes the coordinate size.
+<a name="line536"></a> * @param {number} coordWidth The coordinate width.
+<a name="line537"></a> * @param {number} coordHeight The coordinate height.
+<a name="line538"></a> */
+<a name="line539"></a>goog.graphics.VmlGraphics.prototype.setCoordSize = function(coordWidth,
+<a name="line540"></a>                                                            coordHeight) {
+<a name="line541"></a>  goog.graphics.VmlGraphics.superClass_.setCoordSize.apply(this, arguments);
+<a name="line542"></a>
+<a name="line543"></a>  this.canvasElement.getElement().coordsize =
+<a name="line544"></a>      goog.graphics.VmlGraphics.toSizeCoord(coordWidth) + &#39; &#39; +
+<a name="line545"></a>      goog.graphics.VmlGraphics.toSizeCoord(coordHeight);
+<a name="line546"></a>};
 <a name="line547"></a>
-<a name="line548"></a>/**
-<a name="line549"></a> * Change the size of the canvas.
-<a name="line550"></a> * @param {number} pixelWidth The width in pixels.
-<a name="line551"></a> * @param {number} pixelHeight The height in pixels.
-<a name="line552"></a> */
-<a name="line553"></a>goog.graphics.VmlGraphics.prototype.setSize = function(pixelWidth,
-<a name="line554"></a>    pixelHeight) {
-<a name="line555"></a>  // TODO: Implement
-<a name="line556"></a>};
-<a name="line557"></a>
+<a name="line548"></a>
+<a name="line549"></a>/**
+<a name="line550"></a> * Change the size of the canvas.
+<a name="line551"></a> * @param {number} pixelWidth The width in pixels.
+<a name="line552"></a> * @param {number} pixelHeight The height in pixels.
+<a name="line553"></a> */
+<a name="line554"></a>goog.graphics.VmlGraphics.prototype.setSize = function(pixelWidth,
+<a name="line555"></a>    pixelHeight) {
+<a name="line556"></a>  // TODO: Implement
+<a name="line557"></a>};
 <a name="line558"></a>
-<a name="line559"></a>/**
-<a name="line560"></a> * @return {goog.math.Size} Returns the number of pixels spanned by the surface.
-<a name="line561"></a> */
-<a name="line562"></a>goog.graphics.VmlGraphics.prototype.getPixelSize = function() {
-<a name="line563"></a>  var el = this.getElement();
-<a name="line564"></a>  // The following relies on the fact that the size can never be 0.
-<a name="line565"></a>  return new goog.math.Size(el.style.pixelWidth || el.offsetWidth || 1,
-<a name="line566"></a>      el.style.pixelHeight || el.offsetHeight || 1);
-<a name="line567"></a>};
-<a name="line568"></a>
+<a name="line559"></a>
+<a name="line560"></a>/**
+<a name="line561"></a> * @return {goog.math.Size} Returns the number of pixels spanned by the surface.
+<a name="line562"></a> */
+<a name="line563"></a>goog.graphics.VmlGraphics.prototype.getPixelSize = function() {
+<a name="line564"></a>  var el = this.getElement();
+<a name="line565"></a>  // The following relies on the fact that the size can never be 0.
+<a name="line566"></a>  return new goog.math.Size(el.style.pixelWidth || el.offsetWidth || 1,
+<a name="line567"></a>      el.style.pixelHeight || el.offsetHeight || 1);
+<a name="line568"></a>};
 <a name="line569"></a>
-<a name="line570"></a>/**
-<a name="line571"></a> * Remove all drawing elements from the graphics.
-<a name="line572"></a> */
-<a name="line573"></a>goog.graphics.VmlGraphics.prototype.clear = function() {
-<a name="line574"></a>  this.canvasElement.clear();
-<a name="line575"></a>};
-<a name="line576"></a>
+<a name="line570"></a>
+<a name="line571"></a>/**
+<a name="line572"></a> * Remove all drawing elements from the graphics.
+<a name="line573"></a> */
+<a name="line574"></a>goog.graphics.VmlGraphics.prototype.clear = function() {
+<a name="line575"></a>  this.canvasElement.clear();
+<a name="line576"></a>};
 <a name="line577"></a>
-<a name="line578"></a>/**
-<a name="line579"></a> * Draw an ellipse.
-<a name="line580"></a> *
-<a name="line581"></a> * @param {number} cx Center X coordinate.
-<a name="line582"></a> * @param {number} cy Center Y coordinate.
-<a name="line583"></a> * @param {number} rx Radius length for the x-axis.
-<a name="line584"></a> * @param {number} ry Radius length for the y-axis.
-<a name="line585"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
-<a name="line586"></a> *    stroke.
-<a name="line587"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line588"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
-<a name="line589"></a> *     to append to. If not specified, appends to the main canvas.
-<a name="line590"></a> *
-<a name="line591"></a> * @return {goog.graphics.EllipseElement} The newly created element.
-<a name="line592"></a> */
-<a name="line593"></a>goog.graphics.VmlGraphics.prototype.drawEllipse = function(cx, cy, rx, ry,
-<a name="line594"></a>    stroke, fill, opt_group) {
-<a name="line595"></a>  var element = this.createVmlElement(&#39;oval&#39;);
-<a name="line596"></a>  goog.graphics.VmlGraphics.setPositionAndSize(element, cx - rx, cy - ry,
-<a name="line597"></a>      rx * 2, ry * 2);
-<a name="line598"></a>  var wrapper = new goog.graphics.VmlEllipseElement(element, this,
-<a name="line599"></a>      cx, cy, rx, ry, stroke, fill);
-<a name="line600"></a>  this.append_(wrapper, opt_group);
-<a name="line601"></a>  return wrapper;
-<a name="line602"></a>};
-<a name="line603"></a>
+<a name="line578"></a>
+<a name="line579"></a>/**
+<a name="line580"></a> * Draw an ellipse.
+<a name="line581"></a> *
+<a name="line582"></a> * @param {number} cx Center X coordinate.
+<a name="line583"></a> * @param {number} cy Center Y coordinate.
+<a name="line584"></a> * @param {number} rx Radius length for the x-axis.
+<a name="line585"></a> * @param {number} ry Radius length for the y-axis.
+<a name="line586"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line587"></a> *    stroke.
+<a name="line588"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line589"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+<a name="line590"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line591"></a> *
+<a name="line592"></a> * @return {goog.graphics.EllipseElement} The newly created element.
+<a name="line593"></a> */
+<a name="line594"></a>goog.graphics.VmlGraphics.prototype.drawEllipse = function(cx, cy, rx, ry,
+<a name="line595"></a>    stroke, fill, opt_group) {
+<a name="line596"></a>  var element = this.createVmlElement(&#39;oval&#39;);
+<a name="line597"></a>  goog.graphics.VmlGraphics.setPositionAndSize(element, cx - rx, cy - ry,
+<a name="line598"></a>      rx * 2, ry * 2);
+<a name="line599"></a>  var wrapper = new goog.graphics.VmlEllipseElement(element, this,
+<a name="line600"></a>      cx, cy, rx, ry, stroke, fill);
+<a name="line601"></a>  this.append_(wrapper, opt_group);
+<a name="line602"></a>  return wrapper;
+<a name="line603"></a>};
 <a name="line604"></a>
-<a name="line605"></a>/**
-<a name="line606"></a> * Draw a rectangle.
-<a name="line607"></a> *
-<a name="line608"></a> * @param {number} x X coordinate (left).
-<a name="line609"></a> * @param {number} y Y coordinate (top).
-<a name="line610"></a> * @param {number} width Width of rectangle.
-<a name="line611"></a> * @param {number} height Height of rectangle.
-<a name="line612"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
-<a name="line613"></a> *    stroke.
-<a name="line614"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line615"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
-<a name="line616"></a> *     to append to. If not specified, appends to the main canvas.
-<a name="line617"></a> *
-<a name="line618"></a> * @return {goog.graphics.RectElement} The newly created element.
-<a name="line619"></a> */
-<a name="line620"></a>goog.graphics.VmlGraphics.prototype.drawRect = function(x, y, width, height,
-<a name="line621"></a>    stroke, fill, opt_group) {
-<a name="line622"></a>  var element = this.createVmlElement(&#39;rect&#39;);
-<a name="line623"></a>  goog.graphics.VmlGraphics.setPositionAndSize(element, x, y, width, height);
-<a name="line624"></a>  var wrapper = new goog.graphics.VmlRectElement(element, this, stroke, fill);
-<a name="line625"></a>  this.append_(wrapper, opt_group);
-<a name="line626"></a>  return wrapper;
-<a name="line627"></a>};
-<a name="line628"></a>
+<a name="line605"></a>
+<a name="line606"></a>/**
+<a name="line607"></a> * Draw a rectangle.
+<a name="line608"></a> *
+<a name="line609"></a> * @param {number} x X coordinate (left).
+<a name="line610"></a> * @param {number} y Y coordinate (top).
+<a name="line611"></a> * @param {number} width Width of rectangle.
+<a name="line612"></a> * @param {number} height Height of rectangle.
+<a name="line613"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line614"></a> *    stroke.
+<a name="line615"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line616"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+<a name="line617"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line618"></a> *
+<a name="line619"></a> * @return {goog.graphics.RectElement} The newly created element.
+<a name="line620"></a> */
+<a name="line621"></a>goog.graphics.VmlGraphics.prototype.drawRect = function(x, y, width, height,
+<a name="line622"></a>    stroke, fill, opt_group) {
+<a name="line623"></a>  var element = this.createVmlElement(&#39;rect&#39;);
+<a name="line624"></a>  goog.graphics.VmlGraphics.setPositionAndSize(element, x, y, width, height);
+<a name="line625"></a>  var wrapper = new goog.graphics.VmlRectElement(element, this, stroke, fill);
+<a name="line626"></a>  this.append_(wrapper, opt_group);
+<a name="line627"></a>  return wrapper;
+<a name="line628"></a>};
 <a name="line629"></a>
-<a name="line630"></a>/**
-<a name="line631"></a> * Draw an image.
-<a name="line632"></a> *
-<a name="line633"></a> * @param {number} x X coordinate (left).
-<a name="line634"></a> * @param {number} y Y coordinate (top).
-<a name="line635"></a> * @param {number} width Width of image.
-<a name="line636"></a> * @param {number} height Height of image.
-<a name="line637"></a> * @param {string} src Source of the image.
-<a name="line638"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
-<a name="line639"></a> *     to append to. If not specified, appends to the main canvas.
-<a name="line640"></a> *
-<a name="line641"></a> * @return {goog.graphics.ImageElement} The newly created element.
-<a name="line642"></a> */
-<a name="line643"></a>goog.graphics.VmlGraphics.prototype.drawImage = function(x, y, width, height,
-<a name="line644"></a>    src, opt_group) {
-<a name="line645"></a>  var element = this.createVmlElement(&#39;image&#39;);
-<a name="line646"></a>  goog.graphics.VmlGraphics.setPositionAndSize(element, x, y, width, height);
-<a name="line647"></a>  goog.graphics.VmlGraphics.setAttribute(element, &#39;src&#39;, src);
-<a name="line648"></a>  var wrapper = new goog.graphics.VmlImageElement(element, this);
-<a name="line649"></a>  this.append_(wrapper, opt_group);
-<a name="line650"></a>  return wrapper;
-<a name="line651"></a>};
-<a name="line652"></a>
+<a name="line630"></a>
+<a name="line631"></a>/**
+<a name="line632"></a> * Draw an image.
+<a name="line633"></a> *
+<a name="line634"></a> * @param {number} x X coordinate (left).
+<a name="line635"></a> * @param {number} y Y coordinate (top).
+<a name="line636"></a> * @param {number} width Width of image.
+<a name="line637"></a> * @param {number} height Height of image.
+<a name="line638"></a> * @param {string} src Source of the image.
+<a name="line639"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+<a name="line640"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line641"></a> *
+<a name="line642"></a> * @return {goog.graphics.ImageElement} The newly created element.
+<a name="line643"></a> */
+<a name="line644"></a>goog.graphics.VmlGraphics.prototype.drawImage = function(x, y, width, height,
+<a name="line645"></a>    src, opt_group) {
+<a name="line646"></a>  var element = this.createVmlElement(&#39;image&#39;);
+<a name="line647"></a>  goog.graphics.VmlGraphics.setPositionAndSize(element, x, y, width, height);
+<a name="line648"></a>  goog.graphics.VmlGraphics.setAttribute(element, &#39;src&#39;, src);
+<a name="line649"></a>  var wrapper = new goog.graphics.VmlImageElement(element, this);
+<a name="line650"></a>  this.append_(wrapper, opt_group);
+<a name="line651"></a>  return wrapper;
+<a name="line652"></a>};
 <a name="line653"></a>
-<a name="line654"></a>/**
-<a name="line655"></a> * Draw a text string vertically centered on a given line.
-<a name="line656"></a> *
-<a name="line657"></a> * @param {string} text The text to draw.
-<a name="line658"></a> * @param {number} x1 X coordinate of start of line.
-<a name="line659"></a> * @param {number} y1 Y coordinate of start of line.
-<a name="line660"></a> * @param {number} x2 X coordinate of end of line.
-<a name="line661"></a> * @param {number} y2 Y coordinate of end of line.
-<a name="line662"></a> * @param {string?} align Horizontal alignment: left (default), center, right.
-<a name="line663"></a> * @param {goog.graphics.Font} font Font describing the font properties.
-<a name="line664"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the stroke.
-<a name="line665"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line666"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
-<a name="line667"></a> *     to append to. If not specified, appends to the main canvas.
-<a name="line668"></a> *
-<a name="line669"></a> * @return {goog.graphics.TextElement} The newly created element.
-<a name="line670"></a> */
-<a name="line671"></a>goog.graphics.VmlGraphics.prototype.drawTextOnLine = function(
-<a name="line672"></a>    text, x1, y1, x2, y2, align, font, stroke, fill, opt_group) {
-<a name="line673"></a>  var shape = this.createFullSizeElement_(&#39;shape&#39;);
-<a name="line674"></a>
-<a name="line675"></a>  var pathElement = this.createVmlElement(&#39;path&#39;);
-<a name="line676"></a>  var path = &#39;M&#39; + goog.graphics.VmlGraphics.toPosCoord(x1) + &#39;,&#39; +
-<a name="line677"></a>             goog.graphics.VmlGraphics.toPosCoord(y1) + &#39;L&#39; +
-<a name="line678"></a>             goog.graphics.VmlGraphics.toPosCoord(x2) + &#39;,&#39; +
-<a name="line679"></a>             goog.graphics.VmlGraphics.toPosCoord(y2) + &#39;E&#39;;
-<a name="line680"></a>  goog.graphics.VmlGraphics.setAttribute(pathElement, &#39;v&#39;, path);
-<a name="line681"></a>  goog.graphics.VmlGraphics.setAttribute(pathElement, &#39;textpathok&#39;, &#39;true&#39;);
-<a name="line682"></a>
-<a name="line683"></a>  var textPathElement = this.createVmlElement(&#39;textpath&#39;);
-<a name="line684"></a>  textPathElement.setAttribute(&#39;on&#39;, &#39;true&#39;);
-<a name="line685"></a>  var style = textPathElement.style;
-<a name="line686"></a>  style.fontSize = font.size * this.getPixelScaleX();
-<a name="line687"></a>  style.fontFamily = font.family;
-<a name="line688"></a>  if (align != null) {
-<a name="line689"></a>    style[&#39;v-text-align&#39;] = align;
-<a name="line690"></a>  }
-<a name="line691"></a>  if (font.bold) {
-<a name="line692"></a>    style.fontWeight = &#39;bold&#39;;
-<a name="line693"></a>  }
-<a name="line694"></a>  if (font.italic) {
-<a name="line695"></a>    style.fontStyle = &#39;italic&#39;;
-<a name="line696"></a>  }
-<a name="line697"></a>  goog.graphics.VmlGraphics.setAttribute(textPathElement, &#39;string&#39;, text);
-<a name="line698"></a>
-<a name="line699"></a>  shape.appendChild(pathElement);
-<a name="line700"></a>  shape.appendChild(textPathElement);
-<a name="line701"></a>  var wrapper = new goog.graphics.VmlTextElement(shape, this, stroke, fill);
-<a name="line702"></a>  this.append_(wrapper, opt_group);
-<a name="line703"></a>  return wrapper;
-<a name="line704"></a>};
-<a name="line705"></a>
+<a name="line654"></a>
+<a name="line655"></a>/**
+<a name="line656"></a> * Draw a text string vertically centered on a given line.
+<a name="line657"></a> *
+<a name="line658"></a> * @param {string} text The text to draw.
+<a name="line659"></a> * @param {number} x1 X coordinate of start of line.
+<a name="line660"></a> * @param {number} y1 Y coordinate of start of line.
+<a name="line661"></a> * @param {number} x2 X coordinate of end of line.
+<a name="line662"></a> * @param {number} y2 Y coordinate of end of line.
+<a name="line663"></a> * @param {?string} align Horizontal alignment: left (default), center, right.
+<a name="line664"></a> * @param {goog.graphics.Font} font Font describing the font properties.
+<a name="line665"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the stroke.
+<a name="line666"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line667"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+<a name="line668"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line669"></a> *
+<a name="line670"></a> * @return {goog.graphics.TextElement} The newly created element.
+<a name="line671"></a> */
+<a name="line672"></a>goog.graphics.VmlGraphics.prototype.drawTextOnLine = function(
+<a name="line673"></a>    text, x1, y1, x2, y2, align, font, stroke, fill, opt_group) {
+<a name="line674"></a>  var shape = this.createFullSizeElement_(&#39;shape&#39;);
+<a name="line675"></a>
+<a name="line676"></a>  var pathElement = this.createVmlElement(&#39;path&#39;);
+<a name="line677"></a>  var path = &#39;M&#39; + goog.graphics.VmlGraphics.toPosCoord(x1) + &#39;,&#39; +
+<a name="line678"></a>             goog.graphics.VmlGraphics.toPosCoord(y1) + &#39;L&#39; +
+<a name="line679"></a>             goog.graphics.VmlGraphics.toPosCoord(x2) + &#39;,&#39; +
+<a name="line680"></a>             goog.graphics.VmlGraphics.toPosCoord(y2) + &#39;E&#39;;
+<a name="line681"></a>  goog.graphics.VmlGraphics.setAttribute(pathElement, &#39;v&#39;, path);
+<a name="line682"></a>  goog.graphics.VmlGraphics.setAttribute(pathElement, &#39;textpathok&#39;, &#39;true&#39;);
+<a name="line683"></a>
+<a name="line684"></a>  var textPathElement = this.createVmlElement(&#39;textpath&#39;);
+<a name="line685"></a>  textPathElement.setAttribute(&#39;on&#39;, &#39;true&#39;);
+<a name="line686"></a>  var style = textPathElement.style;
+<a name="line687"></a>  style.fontSize = font.size * this.getPixelScaleX();
+<a name="line688"></a>  style.fontFamily = font.family;
+<a name="line689"></a>  if (align != null) {
+<a name="line690"></a>    style[&#39;v-text-align&#39;] = align;
+<a name="line691"></a>  }
+<a name="line692"></a>  if (font.bold) {
+<a name="line693"></a>    style.fontWeight = &#39;bold&#39;;
+<a name="line694"></a>  }
+<a name="line695"></a>  if (font.italic) {
+<a name="line696"></a>    style.fontStyle = &#39;italic&#39;;
+<a name="line697"></a>  }
+<a name="line698"></a>  goog.graphics.VmlGraphics.setAttribute(textPathElement, &#39;string&#39;, text);
+<a name="line699"></a>
+<a name="line700"></a>  shape.appendChild(pathElement);
+<a name="line701"></a>  shape.appendChild(textPathElement);
+<a name="line702"></a>  var wrapper = new goog.graphics.VmlTextElement(shape, this, stroke, fill);
+<a name="line703"></a>  this.append_(wrapper, opt_group);
+<a name="line704"></a>  return wrapper;
+<a name="line705"></a>};
 <a name="line706"></a>
-<a name="line707"></a>/**
-<a name="line708"></a> * Draw a path.
-<a name="line709"></a> *
-<a name="line710"></a> * @param {goog.graphics.Path} path The path object to draw.
-<a name="line711"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the stroke.
-<a name="line712"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line713"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
-<a name="line714"></a> *     to append to. If not specified, appends to the main canvas.
-<a name="line715"></a> *
-<a name="line716"></a> * @return {goog.graphics.PathElement} The newly created element.
-<a name="line717"></a> */
-<a name="line718"></a>goog.graphics.VmlGraphics.prototype.drawPath = function(path, stroke, fill,
-<a name="line719"></a>    opt_group) {
-<a name="line720"></a>  var element = this.createFullSizeElement_(&#39;shape&#39;);
-<a name="line721"></a>  goog.graphics.VmlGraphics.setAttribute(element, &#39;path&#39;,
-<a name="line722"></a>      goog.graphics.VmlGraphics.getVmlPath(path));
-<a name="line723"></a>
-<a name="line724"></a>  var wrapper = new goog.graphics.VmlPathElement(element, this, stroke, fill);
-<a name="line725"></a>  this.append_(wrapper, opt_group);
-<a name="line726"></a>  return wrapper;
-<a name="line727"></a>};
-<a name="line728"></a>
+<a name="line707"></a>
+<a name="line708"></a>/**
+<a name="line709"></a> * Draw a path.
+<a name="line710"></a> *
+<a name="line711"></a> * @param {goog.graphics.Path} path The path object to draw.
+<a name="line712"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the stroke.
+<a name="line713"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line714"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+<a name="line715"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line716"></a> *
+<a name="line717"></a> * @return {goog.graphics.PathElement} The newly created element.
+<a name="line718"></a> */
+<a name="line719"></a>goog.graphics.VmlGraphics.prototype.drawPath = function(path, stroke, fill,
+<a name="line720"></a>    opt_group) {
+<a name="line721"></a>  var element = this.createFullSizeElement_(&#39;shape&#39;);
+<a name="line722"></a>  goog.graphics.VmlGraphics.setAttribute(element, &#39;path&#39;,
+<a name="line723"></a>      goog.graphics.VmlGraphics.getVmlPath(path));
+<a name="line724"></a>
+<a name="line725"></a>  var wrapper = new goog.graphics.VmlPathElement(element, this, stroke, fill);
+<a name="line726"></a>  this.append_(wrapper, opt_group);
+<a name="line727"></a>  return wrapper;
+<a name="line728"></a>};
 <a name="line729"></a>
-<a name="line730"></a>/**
-<a name="line731"></a> * Returns a string representation of a logical path suitable for use in
-<a name="line732"></a> * a VML element.
-<a name="line733"></a> *
-<a name="line734"></a> * @param {goog.graphics.Path} path The logical path.
-<a name="line735"></a> * @return {string} The VML path representation.
-<a name="line736"></a> */
-<a name="line737"></a>goog.graphics.VmlGraphics.getVmlPath = function(path) {
-<a name="line738"></a>  var list = [];
-<a name="line739"></a>  path.forEachSegment(function(segment, args) {
-<a name="line740"></a>    switch (segment) {
-<a name="line741"></a>      case goog.graphics.Path.Segment.MOVETO:
-<a name="line742"></a>        list.push(&#39;m&#39;);
-<a name="line743"></a>        Array.prototype.push.apply(list, goog.array.map(args,
-<a name="line744"></a>            goog.graphics.VmlGraphics.toSizeCoord));
-<a name="line745"></a>        break;
-<a name="line746"></a>      case goog.graphics.Path.Segment.LINETO:
-<a name="line747"></a>        list.push(&#39;l&#39;);
-<a name="line748"></a>        Array.prototype.push.apply(list, goog.array.map(args,
-<a name="line749"></a>            goog.graphics.VmlGraphics.toSizeCoord));
-<a name="line750"></a>        break;
-<a name="line751"></a>      case goog.graphics.Path.Segment.CURVETO:
-<a name="line752"></a>        list.push(&#39;c&#39;);
-<a name="line753"></a>        Array.prototype.push.apply(list, goog.array.map(args,
-<a name="line754"></a>            goog.graphics.VmlGraphics.toSizeCoord));
-<a name="line755"></a>        break;
-<a name="line756"></a>      case goog.graphics.Path.Segment.CLOSE:
-<a name="line757"></a>        list.push(&#39;x&#39;);
-<a name="line758"></a>        break;
-<a name="line759"></a>      case goog.graphics.Path.Segment.ARCTO:
-<a name="line760"></a>        var toAngle = args[2] + args[3];
-<a name="line761"></a>        var cx = goog.graphics.VmlGraphics.toSizeCoord(
-<a name="line762"></a>            args[4] - goog.math.angleDx(toAngle, args[0]));
-<a name="line763"></a>        var cy = goog.graphics.VmlGraphics.toSizeCoord(
-<a name="line764"></a>            args[5] - goog.math.angleDy(toAngle, args[1]));
-<a name="line765"></a>        var rx = goog.graphics.VmlGraphics.toSizeCoord(args[0]);
-<a name="line766"></a>        var ry = goog.graphics.VmlGraphics.toSizeCoord(args[1]);
-<a name="line767"></a>        // VML angles are in fd units (see http://www.w3.org/TR/NOTE-VML) and
-<a name="line768"></a>        // are positive counter-clockwise.
-<a name="line769"></a>        var fromAngle = Math.round(args[2] * -65536);
-<a name="line770"></a>        var extent = Math.round(args[3] * -65536);
-<a name="line771"></a>        list.push(&#39;ae&#39;, cx, cy, rx, ry, fromAngle, extent);
-<a name="line772"></a>        break;
-<a name="line773"></a>    }
-<a name="line774"></a>  });
-<a name="line775"></a>  return list.join(&#39; &#39;);
-<a name="line776"></a>};
-<a name="line777"></a>
+<a name="line730"></a>
+<a name="line731"></a>/**
+<a name="line732"></a> * Returns a string representation of a logical path suitable for use in
+<a name="line733"></a> * a VML element.
+<a name="line734"></a> *
+<a name="line735"></a> * @param {goog.graphics.Path} path The logical path.
+<a name="line736"></a> * @return {string} The VML path representation.
+<a name="line737"></a> */
+<a name="line738"></a>goog.graphics.VmlGraphics.getVmlPath = function(path) {
+<a name="line739"></a>  var list = [];
+<a name="line740"></a>  path.forEachSegment(function(segment, args) {
+<a name="line741"></a>    switch (segment) {
+<a name="line742"></a>      case goog.graphics.Path.Segment.MOVETO:
+<a name="line743"></a>        list.push(&#39;m&#39;);
+<a name="line744"></a>        Array.prototype.push.apply(list, goog.array.map(args,
+<a name="line745"></a>            goog.graphics.VmlGraphics.toSizeCoord));
+<a name="line746"></a>        break;
+<a name="line747"></a>      case goog.graphics.Path.Segment.LINETO:
+<a name="line748"></a>        list.push(&#39;l&#39;);
+<a name="line749"></a>        Array.prototype.push.apply(list, goog.array.map(args,
+<a name="line750"></a>            goog.graphics.VmlGraphics.toSizeCoord));
+<a name="line751"></a>        break;
+<a name="line752"></a>      case goog.graphics.Path.Segment.CURVETO:
+<a name="line753"></a>        list.push(&#39;c&#39;);
+<a name="line754"></a>        Array.prototype.push.apply(list, goog.array.map(args,
+<a name="line755"></a>            goog.graphics.VmlGraphics.toSizeCoord));
+<a name="line756"></a>        break;
+<a name="line757"></a>      case goog.graphics.Path.Segment.CLOSE:
+<a name="line758"></a>        list.push(&#39;x&#39;);
+<a name="line759"></a>        break;
+<a name="line760"></a>      case goog.graphics.Path.Segment.ARCTO:
+<a name="line761"></a>        var toAngle = args[2] + args[3];
+<a name="line762"></a>        var cx = goog.graphics.VmlGraphics.toSizeCoord(
+<a name="line763"></a>            args[4] - goog.math.angleDx(toAngle, args[0]));
+<a name="line764"></a>        var cy = goog.graphics.VmlGraphics.toSizeCoord(
+<a name="line765"></a>            args[5] - goog.math.angleDy(toAngle, args[1]));
+<a name="line766"></a>        var rx = goog.graphics.VmlGraphics.toSizeCoord(args[0]);
+<a name="line767"></a>        var ry = goog.graphics.VmlGraphics.toSizeCoord(args[1]);
+<a name="line768"></a>        // VML angles are in fd units (see http://www.w3.org/TR/NOTE-VML) and
+<a name="line769"></a>        // are positive counter-clockwise.
+<a name="line770"></a>        var fromAngle = Math.round(args[2] * -65536);
+<a name="line771"></a>        var extent = Math.round(args[3] * -65536);
+<a name="line772"></a>        list.push(&#39;ae&#39;, cx, cy, rx, ry, fromAngle, extent);
+<a name="line773"></a>        break;
+<a name="line774"></a>    }
+<a name="line775"></a>  });
+<a name="line776"></a>  return list.join(&#39; &#39;);
+<a name="line777"></a>};
 <a name="line778"></a>
-<a name="line779"></a>/**
-<a name="line780"></a> * Create an empty group of drawing elements.
-<a name="line781"></a> *
-<a name="line782"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
-<a name="line783"></a> *     to append to. If not specified, appends to the main canvas.
-<a name="line784"></a> *
-<a name="line785"></a> * @return {goog.graphics.GroupElement} The newly created group.
-<a name="line786"></a> */
-<a name="line787"></a>goog.graphics.VmlGraphics.prototype.createGroup = function(opt_group) {
-<a name="line788"></a>  var element = this.createFullSizeElement_(&#39;group&#39;);
-<a name="line789"></a>  var parent = opt_group || this.canvasElement;
-<a name="line790"></a>  parent.getElement().appendChild(element);
-<a name="line791"></a>  return new goog.graphics.VmlGroupElement(element, this);
-<a name="line792"></a>};
-<a name="line793"></a>
+<a name="line779"></a>
+<a name="line780"></a>/**
+<a name="line781"></a> * Create an empty group of drawing elements.
+<a name="line782"></a> *
+<a name="line783"></a> * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+<a name="line784"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line785"></a> *
+<a name="line786"></a> * @return {goog.graphics.GroupElement} The newly created group.
+<a name="line787"></a> */
+<a name="line788"></a>goog.graphics.VmlGraphics.prototype.createGroup = function(opt_group) {
+<a name="line789"></a>  var element = this.createFullSizeElement_(&#39;group&#39;);
+<a name="line790"></a>  var parent = opt_group || this.canvasElement;
+<a name="line791"></a>  parent.getElement().appendChild(element);
+<a name="line792"></a>  return new goog.graphics.VmlGroupElement(element, this);
+<a name="line793"></a>};
 <a name="line794"></a>
-<a name="line795"></a>/**
-<a name="line796"></a> * Measure and return the width (in pixels) of a given text string.
-<a name="line797"></a> * Text measurement is needed to make sure a text can fit in the allocated
-<a name="line798"></a> * area. The way text length is measured is by writing it into a div that is
-<a name="line799"></a> * after the visible area, measure the div width, and immediatly erase the
-<a name="line800"></a> * written value.
-<a name="line801"></a> *
-<a name="line802"></a> * @param {string} text The text string to measure.
-<a name="line803"></a> * @param {goog.graphics.Font} font The font object describing the font style.
-<a name="line804"></a> *
-<a name="line805"></a> * @return {number} The width in pixels of the text strings.
-<a name="line806"></a> *
-<a name="line807"></a> */
-<a name="line808"></a>goog.graphics.VmlGraphics.prototype.getTextWidth = function(text, font) {
-<a name="line809"></a>  // TODO: Implement
-<a name="line810"></a>  return 0;
-<a name="line811"></a>};
-<a name="line812"></a>
+<a name="line795"></a>
+<a name="line796"></a>/**
+<a name="line797"></a> * Measure and return the width (in pixels) of a given text string.
+<a name="line798"></a> * Text measurement is needed to make sure a text can fit in the allocated
+<a name="line799"></a> * area. The way text length is measured is by writing it into a div that is
+<a name="line800"></a> * after the visible area, measure the div width, and immediatly erase the
+<a name="line801"></a> * written value.
+<a name="line802"></a> *
+<a name="line803"></a> * @param {string} text The text string to measure.
+<a name="line804"></a> * @param {goog.graphics.Font} font The font object describing the font style.
+<a name="line805"></a> *
+<a name="line806"></a> * @return {number} The width in pixels of the text strings.
+<a name="line807"></a> *
+<a name="line808"></a> */
+<a name="line809"></a>goog.graphics.VmlGraphics.prototype.getTextWidth = function(text, font) {
+<a name="line810"></a>  // TODO: Implement
+<a name="line811"></a>  return 0;
+<a name="line812"></a>};
 <a name="line813"></a>
-<a name="line814"></a>/** @inheritDoc */
-<a name="line815"></a>goog.graphics.VmlGraphics.prototype.enterDocument = function() {
-<a name="line816"></a>  goog.graphics.VmlGraphics.superClass_.enterDocument.call(this);
-<a name="line817"></a>  this.handleContainerResize_();
-<a name="line818"></a>};
-<a name="line819"></a>
+<a name="line814"></a>
+<a name="line815"></a>/** @inheritDoc */
+<a name="line816"></a>goog.graphics.VmlGraphics.prototype.enterDocument = function() {
+<a name="line817"></a>  goog.graphics.VmlGraphics.superClass_.enterDocument.call(this);
+<a name="line818"></a>  this.handleContainerResize_();
+<a name="line819"></a>};
 <a name="line820"></a>
-<a name="line821"></a>/**
-<a name="line822"></a> * Disposes of the component by removing event handlers, detacing DOM nodes from
-<a name="line823"></a> * the document body, and removing references to them.
-<a name="line824"></a> */
-<a name="line825"></a>goog.graphics.VmlGraphics.prototype.disposeInternal = function() {
-<a name="line826"></a>  this.canvasElement = null;
-<a name="line827"></a>  goog.graphics.VmlGraphics.superClass_.disposeInternal.call(this);
-<a name="line828"></a>};
+<a name="line821"></a>
+<a name="line822"></a>/**
+<a name="line823"></a> * Disposes of the component by removing event handlers, detacing DOM nodes from
+<a name="line824"></a> * the document body, and removing references to them.
+<a name="line825"></a> */
+<a name="line826"></a>goog.graphics.VmlGraphics.prototype.disposeInternal = function() {
+<a name="line827"></a>  this.canvasElement = null;
+<a name="line828"></a>  goog.graphics.VmlGraphics.superClass_.disposeInternal.call(this);
+<a name="line829"></a>};
 </pre>
 
 

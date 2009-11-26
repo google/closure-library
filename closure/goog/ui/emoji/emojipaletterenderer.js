@@ -28,7 +28,7 @@ goog.require('goog.ui.emoji.SpriteInfo');
 /**
  * Renders an emoji palette.
  *
- * @param {string?} defaultImgUrl Url of the img that should be used to fill up
+ * @param {?string} defaultImgUrl Url of the img that should be used to fill up
  *     the cells in the emoji table, to prevent jittering. Will be stretched
  *     to the emoji cell size. A good image is a transparent dot.
  * @constructor
@@ -56,7 +56,7 @@ goog.ui.emoji.EmojiPaletteRenderer.cellId_ = 0;
  * not filled with emoji, i.e., after all the emoji have already been placed
  * on a page.
  *
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.emoji.EmojiPaletteRenderer.prototype.defaultImgUrl_ = null;
@@ -189,7 +189,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.createCell = function(node, dom) {
  * neither a palette cell nor part of a palette item.
  * @param {goog.ui.Palette} palette Palette in which to look for the item.
  * @param {Node} node Node to look for.
- * @return {Node?} The corresponding palette item (null if not found).
+ * @return {Node} The corresponding palette item (null if not found).
  */
 goog.ui.emoji.EmojiPaletteRenderer.prototype.getContainingItem =
     function(palette, node) {

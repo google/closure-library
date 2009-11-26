@@ -127,7 +127,7 @@ goog.net.NetworkTester.prototype.pauseBetweenRetriesMs_ = 0;
 
 /**
  * Timer for timeouts.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.NetworkTester.prototype.timeoutTimer_ = null;
@@ -135,7 +135,7 @@ goog.net.NetworkTester.prototype.timeoutTimer_ = null;
 
 /**
  * Timer for pauses between retries.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.NetworkTester.prototype.pauseTimer_ = null;

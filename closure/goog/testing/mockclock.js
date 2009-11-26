@@ -86,7 +86,7 @@ goog.testing.MockClock.prototype.installed_ = false;
 /**
  * Map of deleted keys.  These keys represents keys that were deleted in a
  * clearInterval, timeoutid -> object.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.testing.MockClock.prototype.deletedKeys_ = null;

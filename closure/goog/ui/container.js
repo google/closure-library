@@ -195,7 +195,7 @@ goog.ui.Container.prototype.allowFocusableChildren_ = false;
  * control's root element; each value is a reference to the child control
  * itself.  Used for looking up the child control corresponding to a DOM
  * node in O(1) time.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.ui.Container.prototype.childElementIdMap_ = null;
@@ -207,7 +207,7 @@ goog.ui.Container.prototype.childElementIdMap_ = null;
 /**
  * Returns the DOM element on which the container is listening for keyboard
  * events (null if none).
- * @return {Element?} Element on which the container is listening for key
+ * @return {Element} Element on which the container is listening for key
  *     events.
  */
 goog.ui.Container.prototype.getKeyEventTarget = function() {
@@ -301,7 +301,7 @@ goog.ui.Container.prototype.createDom = function() {
  * Returns the DOM element into which child components are to be rendered,
  * or null if the container itself hasn't been rendered yet.  Overrides
  * {@link goog.ui.Component#getContentElement} by delegating to the renderer.
- * @return {Element?} Element to contain child elements (null if none).
+ * @return {Element} Element to contain child elements (null if none).
  */
 goog.ui.Container.prototype.getContentElement = function() {
   // Delegate to renderer.

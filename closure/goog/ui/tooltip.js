@@ -77,7 +77,7 @@ goog.ui.Tooltip = function(opt_el, opt_str, opt_domHelper) {
   /**
    * Active element reference. Used by the delayed show functionality to keep
    * track of the element the mouse is over or the element with focus.
-   * @type {Element?}
+   * @type {Element}
    * @private
    */
   this.activeEl_ = null;
@@ -608,7 +608,7 @@ goog.ui.Tooltip.prototype.handleMouseOver = function(event) {
  * Find anchor containing the given element, if any.
  *
  * @param {Element} el Element that triggered event.
- * @return {Element?} Element in elements_ array that contains given element,
+ * @return {Element} Element in elements_ array that contains given element,
  *     or null if not found.
  * @protected
  */
@@ -622,7 +622,7 @@ goog.ui.Tooltip.prototype.getAnchorFromElement = function(el) {
   // See https://bugzilla.mozilla.org/show_bug.cgi?id=330961
   try {
     while (el && !this.elements_.contains(el)) {
-      el = /** @type {Element?} */ (el.parentNode);
+      el = /** @type {Element} */ (el.parentNode);
     }
     return el;
   } catch (e) {

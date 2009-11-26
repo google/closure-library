@@ -91,7 +91,7 @@ goog.ui.ColorPalette.prototype.setColors = function(colors) {
 
 
 /**
- * @return {string?} The current selected color in hex, or null.
+ * @return {?string} The current selected color in hex, or null.
  */
 goog.ui.ColorPalette.prototype.getSelectedColor = function() {
   var selectedItem = /** @type {Element} */ (this.getSelectedItem());
@@ -107,7 +107,7 @@ goog.ui.ColorPalette.prototype.getSelectedColor = function() {
 /**
  * Sets the selected color.  Clears the selection if the argument is null or
  * can't be parsed as a color.
- * @param {string?} color The color to set as selected; null clears the
+ * @param {?string} color The color to set as selected; null clears the
  *     selection.
  */
 goog.ui.ColorPalette.prototype.setSelectedColor = function(color) {
@@ -143,8 +143,8 @@ goog.ui.ColorPalette.prototype.createColorNodes_ = function() {
 /**
  * Takes a string, attempts to parse it as a color spec, and returns a
  * normalized hex color spec if successful (null otherwise).
- * @param {string?} color String possibly containing a color spec; may be null.
- * @return {string?} Normalized hex color spec, or null if the argument can't
+ * @param {?string} color String possibly containing a color spec; may be null.
+ * @return {?string} Normalized hex color spec, or null if the argument can't
  *     be parsed as a color.
  * @private
  */

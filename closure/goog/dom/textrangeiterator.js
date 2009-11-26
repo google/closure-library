@@ -99,7 +99,7 @@ goog.inherits(goog.dom.TextRangeIterator, goog.dom.RangeIterator);
 
 /**
  * The first node in the selection.
- * @type {Node?}
+ * @type {Node}
  * @private
  */
 goog.dom.TextRangeIterator.prototype.startNode_ = null;
@@ -107,7 +107,7 @@ goog.dom.TextRangeIterator.prototype.startNode_ = null;
 
 /**
  * The last node in the selection.
- * @type {Node?}
+ * @type {Node}
  * @private
  */
 goog.dom.TextRangeIterator.prototype.endNode_ = null;

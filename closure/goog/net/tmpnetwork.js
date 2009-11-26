@@ -93,10 +93,8 @@ goog.net.testLoadImageWithRetries = function(url, timeout, callback, retries,
     callback(false);
     return;
   }
-  if (!opt_pauseBetweenRetriesMS) {
-    opt_pauseBetweenRetriesMS = 0;
-  }
 
+  var pauseBetweenRetries = opt_pauseBetweenRetriesMS || 0;
   retries--;
   goog.net.testLoadImage(url, timeout, function(succeeded) {
     if (succeeded) {
@@ -105,8 +103,8 @@ goog.net.testLoadImageWithRetries = function(url, timeout, callback, retries,
       // try again
       goog.global.setTimeout(function() {
         goog.net.testLoadImageWithRetries(url, timeout, callback, retries,
-            opt_pauseBetweenRetriesMS);
-        }, opt_pauseBetweenRetriesMS);
+            pauseBetweenRetries);
+        }, pauseBetweenRetries);
     }
   });
 };

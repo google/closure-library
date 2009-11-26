@@ -276,7 +276,7 @@
 <a name="line233"></a>
 <a name="line234"></a>/**
 <a name="line235"></a> * Chart title.
-<a name="line236"></a> * @type {string?}
+<a name="line236"></a> * @type {?string}
 <a name="line237"></a> * @private
 <a name="line238"></a> */
 <a name="line239"></a>goog.ui.ServerChart.prototype.title_ = null;
@@ -311,7 +311,7 @@
 <a name="line268"></a> * invisible data set. Such data sets must be provided at the end of the
 <a name="line269"></a> * chd parameter, and if invisible data sets are being used, the chd
 <a name="line270"></a> * parameter must indicate the number of visible data sets.
-<a name="line271"></a> * @type {number?}
+<a name="line271"></a> * @type {?number}
 <a name="line272"></a> * @private
 <a name="line273"></a> */
 <a name="line274"></a>goog.ui.ServerChart.prototype.numVisibleDataSets_ = null;
@@ -1033,7 +1033,7 @@
 <a name="line990"></a> * the visible data set are not drawn as part of the chart. Instead, they
 <a name="line991"></a> * are available for positioning markers.
 <a name="line992"></a>
-<a name="line993"></a> * @param {number?} n The number of visible data sets, or null if all data
+<a name="line993"></a> * @param {?number} n The number of visible data sets, or null if all data
 <a name="line994"></a> * sets are to be visible.
 <a name="line995"></a> */
 <a name="line996"></a>goog.ui.ServerChart.prototype.setNumVisibleDataSets = function(n) {
@@ -1046,7 +1046,7 @@
 <a name="line1003"></a> * the visible data set are not drawn as part of the chart. Instead, they
 <a name="line1004"></a> * are available for positioning markers.
 <a name="line1005"></a> *
-<a name="line1006"></a> * @return {number?} The number of visible data sets, or null if all data
+<a name="line1006"></a> * @return {?number} The number of visible data sets, or null if all data
 <a name="line1007"></a> * sets are visible.
 <a name="line1008"></a> */
 <a name="line1009"></a>goog.ui.ServerChart.prototype.getNumVisibleDataSets = function() {

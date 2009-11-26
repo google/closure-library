@@ -178,7 +178,7 @@ goog.testing.net.XhrIo.prototype.timeoutInterval_ = 0;
 /**
  * Window timeout ID used to cancel the timeout event handler if the request
  * completes successfully.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.testing.net.XhrIo.prototype.timeoutId_ = null;
@@ -423,7 +423,7 @@ goog.testing.net.XhrIo.prototype.getResponseJson = function() {
 /**
  * Gets the response XML from the Xhr object.  Will only return correct result
  * when called from the context of a callback.
- * @return {Document?} Result from the server if it was XML.
+ * @return {Document} Result from the server if it was XML.
  */
 goog.testing.net.XhrIo.prototype.getResponseXml = function() {
   // NOTE: I haven't found out how to check in Internet Explorer

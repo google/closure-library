@@ -96,7 +96,7 @@ goog.ui.Prompt.prototype.defaultValue_ = '';
 
 /**
  * Element in which user enters response (HTML <input> text box)
- * @type {HTMLInputElement?}
+ * @type {HTMLInputElement}
  * @private
  */
 goog.ui.Prompt.prototype.userInputEl_ = null;

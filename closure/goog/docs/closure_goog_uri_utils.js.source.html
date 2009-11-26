@@ -112,15 +112,15 @@
 <a name="line69"></a> * No encoding is performed.  Any component may be omitted as either null or
 <a name="line70"></a> * undefined.
 <a name="line71"></a> *
-<a name="line72"></a> * @param {string?} opt_scheme The scheme such as &#39;http&#39;.
-<a name="line73"></a> * @param {string?} opt_userInfo The user name before the &#39;@&#39;.
-<a name="line74"></a> * @param {string?} opt_domain The domain such as &#39;www.google.com&#39;, already
+<a name="line72"></a> * @param {?string} opt_scheme The scheme such as &#39;http&#39;.
+<a name="line73"></a> * @param {?string} opt_userInfo The user name before the &#39;@&#39;.
+<a name="line74"></a> * @param {?string} opt_domain The domain such as &#39;www.google.com&#39;, already
 <a name="line75"></a> *     URI-encoded.
 <a name="line76"></a> * @param {string|number|null} opt_port The port number.
-<a name="line77"></a> * @param {string?} opt_path The path, already URI-encoded.  If it is not
+<a name="line77"></a> * @param {?string} opt_path The path, already URI-encoded.  If it is not
 <a name="line78"></a> *     empty, it must begin with a slash.
-<a name="line79"></a> * @param {string?} opt_queryData The URI-encoded query data.
-<a name="line80"></a> * @param {string?} opt_fragment The URI-encoded fragment identifier.
+<a name="line79"></a> * @param {?string} opt_queryData The URI-encoded query data.
+<a name="line80"></a> * @param {?string} opt_fragment The URI-encoded fragment identifier.
 <a name="line81"></a> * @return {string} The fully combined URI.
 <a name="line82"></a> */
 <a name="line83"></a>goog.uri.utils.buildFromEncodedParts = function(opt_scheme, opt_userInfo,
@@ -277,8 +277,8 @@
 <a name="line234"></a>
 <a name="line235"></a>
 <a name="line236"></a>/**
-<a name="line237"></a> * @param {string?} uri A possibly null string.
-<a name="line238"></a> * @return {string?} The string URI-decoded, or null if uri is null.
+<a name="line237"></a> * @param {?string} uri A possibly null string.
+<a name="line238"></a> * @return {?string} The string URI-decoded, or null if uri is null.
 <a name="line239"></a> * @private
 <a name="line240"></a> */
 <a name="line241"></a>goog.uri.utils.decodeIfPossible_ = function(uri) {
@@ -294,7 +294,7 @@
 <a name="line251"></a> *
 <a name="line252"></a> * @param {goog.uri.utils.ComponentIndex} componentIndex The component index.
 <a name="line253"></a> * @param {string} uri The URI to examine.
-<a name="line254"></a> * @return {string?} The still-encoded component, or null if the component
+<a name="line254"></a> * @return {?string} The still-encoded component, or null if the component
 <a name="line255"></a> *     is not present.
 <a name="line256"></a> * @private
 <a name="line257"></a> */
@@ -306,7 +306,7 @@
 <a name="line263"></a>
 <a name="line264"></a>/**
 <a name="line265"></a> * @param {string} uri The URI to examine.
-<a name="line266"></a> * @return {string?} The protocol or scheme, or null if none.  Does not
+<a name="line266"></a> * @return {?string} The protocol or scheme, or null if none.  Does not
 <a name="line267"></a> *     include trailing colons or slashes.
 <a name="line268"></a> */
 <a name="line269"></a>goog.uri.utils.getScheme = function(uri) {
@@ -317,7 +317,7 @@
 <a name="line274"></a>
 <a name="line275"></a>/**
 <a name="line276"></a> * @param {string} uri The URI to examine.
-<a name="line277"></a> * @return {string?} The user name still encoded, or null if none.
+<a name="line277"></a> * @return {?string} The user name still encoded, or null if none.
 <a name="line278"></a> */
 <a name="line279"></a>goog.uri.utils.getUserInfoEncoded = function(uri) {
 <a name="line280"></a>  return goog.uri.utils.getComponentByIndex_(
@@ -327,7 +327,7 @@
 <a name="line284"></a>
 <a name="line285"></a>/**
 <a name="line286"></a> * @param {string} uri The URI to examine.
-<a name="line287"></a> * @return {string?} The decoded user info, or null if none.
+<a name="line287"></a> * @return {?string} The decoded user info, or null if none.
 <a name="line288"></a> */
 <a name="line289"></a>goog.uri.utils.getUserInfo = function(uri) {
 <a name="line290"></a>  return goog.uri.utils.decodeIfPossible_(
@@ -337,7 +337,7 @@
 <a name="line294"></a>
 <a name="line295"></a>/**
 <a name="line296"></a> * @param {string} uri The URI to examine.
-<a name="line297"></a> * @return {string?} The domain name still encoded, or null if none.
+<a name="line297"></a> * @return {?string} The domain name still encoded, or null if none.
 <a name="line298"></a> */
 <a name="line299"></a>goog.uri.utils.getDomainEncoded = function(uri) {
 <a name="line300"></a>  return goog.uri.utils.getComponentByIndex_(
@@ -347,7 +347,7 @@
 <a name="line304"></a>
 <a name="line305"></a>/**
 <a name="line306"></a> * @param {string} uri The URI to examine.
-<a name="line307"></a> * @return {string?} The decoded domain, or null if none.
+<a name="line307"></a> * @return {?string} The decoded domain, or null if none.
 <a name="line308"></a> */
 <a name="line309"></a>goog.uri.utils.getDomain = function(uri) {
 <a name="line310"></a>  return goog.uri.utils.decodeIfPossible_(goog.uri.utils.getDomainEncoded(uri));
@@ -356,7 +356,7 @@
 <a name="line313"></a>
 <a name="line314"></a>/**
 <a name="line315"></a> * @param {string} uri The URI to examine.
-<a name="line316"></a> * @return {number?} The port number, or null if none.
+<a name="line316"></a> * @return {?number} The port number, or null if none.
 <a name="line317"></a> */
 <a name="line318"></a>goog.uri.utils.getPort = function(uri) {
 <a name="line319"></a>  // Coerce to a number.  If the result of getComponentByIndex_ is null or
@@ -370,7 +370,7 @@
 <a name="line327"></a>
 <a name="line328"></a>/**
 <a name="line329"></a> * @param {string} uri The URI to examine.
-<a name="line330"></a> * @return {string?} The path still encoded, or null if none. Includes the
+<a name="line330"></a> * @return {?string} The path still encoded, or null if none. Includes the
 <a name="line331"></a> *     leading slash, if any.
 <a name="line332"></a> */
 <a name="line333"></a>goog.uri.utils.getPathEncoded = function(uri) {
@@ -381,7 +381,7 @@
 <a name="line338"></a>
 <a name="line339"></a>/**
 <a name="line340"></a> * @param {string} uri The URI to examine.
-<a name="line341"></a> * @return {string?} The decoded path, or null if none.  Includes the leading
+<a name="line341"></a> * @return {?string} The decoded path, or null if none.  Includes the leading
 <a name="line342"></a> *     slash, if any.
 <a name="line343"></a> */
 <a name="line344"></a>goog.uri.utils.getPath = function(uri) {
@@ -391,7 +391,7 @@
 <a name="line348"></a>
 <a name="line349"></a>/**
 <a name="line350"></a> * @param {string} uri The URI to examine.
-<a name="line351"></a> * @return {string?} The query data still encoded, or null if none.  Does not
+<a name="line351"></a> * @return {?string} The query data still encoded, or null if none.  Does not
 <a name="line352"></a> *     include the question mark itself.
 <a name="line353"></a> */
 <a name="line354"></a>goog.uri.utils.getQueryData = function(uri) {
@@ -402,7 +402,7 @@
 <a name="line359"></a>
 <a name="line360"></a>/**
 <a name="line361"></a> * @param {string} uri The URI to examine.
-<a name="line362"></a> * @return {string?} The fragment identifier, or null if none.  Does not
+<a name="line362"></a> * @return {?string} The fragment identifier, or null if none.  Does not
 <a name="line363"></a> *     include the hash mark itself.
 <a name="line364"></a> */
 <a name="line365"></a>goog.uri.utils.getFragmentEncoded = function(uri) {
@@ -414,7 +414,7 @@
 <a name="line371"></a>
 <a name="line372"></a>/**
 <a name="line373"></a> * @param {string} uri The URI to examine.
-<a name="line374"></a> * @return {string?} The decoded fragment identifier, or null if none.  Does
+<a name="line374"></a> * @return {?string} The decoded fragment identifier, or null if none.  Does
 <a name="line375"></a> *     not include the hash mark.
 <a name="line376"></a> */
 <a name="line377"></a>goog.uri.utils.getFragment = function(uri) {
@@ -441,7 +441,7 @@
 <a name="line398"></a>/**
 <a name="line399"></a> * Extracts the path of the URL and everything after.
 <a name="line400"></a> * @param {string} uri The URI string.
-<a name="line401"></a> * @return {string?} The URI, starting at the path and including the query
+<a name="line401"></a> * @return {?string} The URI, starting at the path and including the query
 <a name="line402"></a> *     parameters and fragment identifier.
 <a name="line403"></a> */
 <a name="line404"></a>goog.uri.utils.getPathAndAfter = function(uri) {
@@ -828,7 +828,7 @@
 <a name="line785"></a> * Gets the first value of a query parameter.
 <a name="line786"></a> * @param {string} uri The URI to process.  May contain a fragment.
 <a name="line787"></a> * @param {string} keyEncoded The URI-encoded key.  Case-sensitive.
-<a name="line788"></a> * @return {string?} The first value of the parameter (URI-decoded), or null
+<a name="line788"></a> * @return {?string} The first value of the parameter (URI-decoded), or null
 <a name="line789"></a> *     if the parameter is not found.
 <a name="line790"></a> */
 <a name="line791"></a>goog.uri.utils.getParamValue = function(uri, keyEncoded) {

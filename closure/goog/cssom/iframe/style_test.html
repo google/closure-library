@@ -227,7 +227,7 @@ limitations under the License.
         // originalBackgroundPositionY - elementOffsetLeft
         // 70px - (1px + 10px + 5px) == 54px;
         assertTrue('Background image position should be adjusted correctly',
-            /body{[^{]*background-position:31px54px/.test(normalizedCssText))
+            /body{[^{]*background-position:31px54px/.test(normalizedCssText));
       }
     }
 
@@ -274,6 +274,22 @@ limitations under the License.
                 normalizedCssText))
       }
       iframe.parentNode.removeChild(iframe);
+    }
+
+    function testCopyFontFaceRules() {
+      var isFontFaceCssomSupported =
+          goog.userAgent.WEBKIT ||
+          goog.userAgent.OPERA ||
+          (goog.userAgent.GECKO && goog.userAgent.isVersion('1.9.1'));
+      // We cannot use goog.testing.ExpectedFailures since it dynamically
+      // brings in CSS which causes the background context tests to fail
+      // in IE6.
+      if (isFontFaceCssomSupported) {
+        var cssText = goog.cssom.iframe.style.getElementContext(
+            document.getElementById('cavalier'));
+        assertTrue('The font face rule should have been copied correctly',
+                   /@font-face/.test(cssText));
+      }
     }
 
   </script>
@@ -328,7 +344,14 @@ limitations under the License.
       font-style: italic;
     }
   </style>
-
+  <style type="text/css">
+    @font-face {
+      font-family: Cavalier;
+    }
+    #cavalier {
+      font-family: Cavalier;
+    }
+  </style>
 </head>
 <body>
 
@@ -367,6 +390,7 @@ limitations under the License.
   </div>
 </div>
 
+<div id="cavalier"></div>
  </div>
 
  </div>

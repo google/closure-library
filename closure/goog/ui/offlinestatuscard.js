@@ -89,7 +89,7 @@ goog.ui.OfflineStatusCard.prototype.status_ =
 
 /**
  * The element that holds the status message.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.OfflineStatusCard.prototype.statusEl_ = null;
@@ -98,7 +98,7 @@ goog.ui.OfflineStatusCard.prototype.statusEl_ = null;
 /**
  * The element that, when clicked, performs the appropriate action (such as
  * pausing synchronization).
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.OfflineStatusCard.prototype.actionEl_ = null;
@@ -106,7 +106,7 @@ goog.ui.OfflineStatusCard.prototype.actionEl_ = null;
 
 /**
  * The element that displays additional messaging.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.OfflineStatusCard.prototype.messageEl_ = null;
@@ -114,7 +114,7 @@ goog.ui.OfflineStatusCard.prototype.messageEl_ = null;
 
 /**
  * The element that holds the progress bar and progress status.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.OfflineStatusCard.prototype.progressEl_ = null;
@@ -122,7 +122,7 @@ goog.ui.OfflineStatusCard.prototype.progressEl_ = null;
 
 /**
  * The element that holds the progress status.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.OfflineStatusCard.prototype.progressStatusEl_ = null;
@@ -130,7 +130,7 @@ goog.ui.OfflineStatusCard.prototype.progressStatusEl_ = null;
 
 /**
  * The element that holds the close button.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.OfflineStatusCard.prototype.closeEl_ = null;

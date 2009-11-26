@@ -27,7 +27,7 @@ goog.require('goog.iter.StopIteration');
 
 /**
  * Iterator over a Node's siblings.
- * @param {Node?} node The node to start with.
+ * @param {Node} node The node to start with.
  * @param {boolean} opt_includeNode Whether to return the given node as the
  *     first return value from next.
  * @param {boolean} opt_reverse Whether to traverse siblings in reverse
@@ -38,7 +38,7 @@ goog.require('goog.iter.StopIteration');
 goog.dom.iter.SiblingIterator = function(node, opt_includeNode, opt_reverse) {
   /**
    * The current node, or null if iteration is finished.
-   * @type {Node?}
+   * @type {Node}
    * @private
    */
   this.node_ = node;
@@ -90,7 +90,7 @@ goog.inherits(goog.dom.iter.ChildIterator, goog.dom.iter.SiblingIterator);
 
 /**
  * Iterator over a Node's ancestors, stopping after the document body.
- * @param {Node?} node The node to start with.
+ * @param {Node} node The node to start with.
  * @param {boolean} opt_includeNode Whether to return the given node as the
  *     first return value from next.
  * @constructor
@@ -99,7 +99,7 @@ goog.inherits(goog.dom.iter.ChildIterator, goog.dom.iter.SiblingIterator);
 goog.dom.iter.AncestorIterator = function(node, opt_includeNode) {
   /**
    * The current node, or null if iteration is finished.
-   * @type {Node?}
+   * @type {Node}
    * @private
    */
   this.node_ = node;

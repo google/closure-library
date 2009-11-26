@@ -101,12 +101,17 @@ h.setToken(&#39;foo&#39;);
 
 
 <h2 class="g-first">Inheritance</h2>
-<pre class="inheritance">
-Object
-     <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span>
-          <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span>
-               <img src="static/images/inherit.gif">goog.History
-</pre>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+  <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
+  <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
+  <tr><td>goog.History</td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+</table>
+</div>
 
 
 
@@ -215,7 +220,7 @@ Object
 
      <div class="entryOverview">
        Checks the state of the document fragment and the iframe title to detect
-navigation changes. If <code>goog.History.HAS_ONHASHCHANGE_</code> is
+navigation changes. If <code>goog.History.HAS_ONHASHCHANGE</code> is
 <code>false</code>, then this runs approximately twenty times per second.
      </div>
 
@@ -490,7 +495,7 @@ object will actually be enabled at this point.
      <div class="entryOverview">
        Handles HTML5 onhashchange events on browsers where it is supported.
 This is very similar to #check_, except that it is not executed
-continuously. It is only used when <code>goog.History.HAS_ONHASHCHANGE_</code> is
+continuously. It is only used when <code>goog.History.HAS_ONHASHCHANGE</code> is
 true.
      </div>
 
@@ -2173,14 +2178,14 @@ get listen() calling addEventListener() and vice-versa.
   <table class="horiz-rule">
 
 
-     <tr class="even entry private">
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
 
 
 
-  <a name="goog.History.HAS_ONHASHCHANGE_"></a>
+  <a name="goog.History.HAS_ONHASHCHANGE"></a>
 
   <td>
 
@@ -2188,7 +2193,7 @@ get listen() calling addEventListener() and vice-versa.
      <div class="arg">
         <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.History.</span><span class="entryName">HAS_ONHASHCHANGE_</span>
+        <span class="entryNamespace">goog.History.</span><span class="entryName">HAS_ONHASHCHANGE</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
      </div>
 

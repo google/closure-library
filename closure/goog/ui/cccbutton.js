@@ -114,7 +114,7 @@ goog.ui.CccButton.prototype.getNextUniqueId_ = function() {
 
 /**
  * Element that directly contains the caption for the component.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.DeprecatedButton.prototype.captionEl_ = null;

@@ -86,7 +86,7 @@
 <a name="line43"></a> * NOTE: This relies on at least the 0.2 version of gears (for timer).
 <a name="line44"></a> *
 <a name="line45"></a> * @param {string} name  The name of the managed store.
-<a name="line46"></a> * @param {string?} requiredCookie  A cookie that must be present for the
+<a name="line46"></a> * @param {?string} requiredCookie  A cookie that must be present for the
 <a name="line47"></a> *     managed store to be active. Should have the form &quot;foo=bar&quot;. Can be null
 <a name="line48"></a> *     if not required.
 <a name="line49"></a> * @param {GearsLocalServer} opt_localServer  Gears local server -- if not set,
@@ -147,7 +147,7 @@
 <a name="line104"></a>
 <a name="line105"></a>/**
 <a name="line106"></a> * The Gears local server object.
-<a name="line107"></a> * @type {GearsLocalServer?}
+<a name="line107"></a> * @type {GearsLocalServer}
 <a name="line108"></a> * @private
 <a name="line109"></a> */
 <a name="line110"></a>goog.gears.ManagedResourceStore.prototype.localServer_;
@@ -155,7 +155,7 @@
 <a name="line112"></a>
 <a name="line113"></a>/**
 <a name="line114"></a> * The name of the managed store.
-<a name="line115"></a> * @type {string?}
+<a name="line115"></a> * @type {?string}
 <a name="line116"></a> * @private
 <a name="line117"></a> */
 <a name="line118"></a>goog.gears.ManagedResourceStore.prototype.name_;
@@ -165,7 +165,7 @@
 <a name="line122"></a> * A cookie that must be present for the managed store to be active.
 <a name="line123"></a> * Should have the form &quot;foo=bar&quot;. String cast is a safety measure since
 <a name="line124"></a> * Gears behaves very badly when it gets an unexpected data type.
-<a name="line125"></a> * @type {string?}
+<a name="line125"></a> * @type {?string}
 <a name="line126"></a> * @private
 <a name="line127"></a> */
 <a name="line128"></a>goog.gears.ManagedResourceStore.prototype.requiredCookie_;
@@ -181,7 +181,7 @@
 <a name="line138"></a>
 <a name="line139"></a>/**
 <a name="line140"></a> * The Gears ManagedResourceStore instance we are wrapping.
-<a name="line141"></a> * @type {GearsManagedResourceStore?}
+<a name="line141"></a> * @type {GearsManagedResourceStore}
 <a name="line142"></a> * @private
 <a name="line143"></a> */
 <a name="line144"></a>goog.gears.ManagedResourceStore.prototype.gearsStore_;
@@ -189,7 +189,7 @@
 <a name="line146"></a>
 <a name="line147"></a>/**
 <a name="line148"></a> * The id of the check status timer.
-<a name="line149"></a> * @type {number?}
+<a name="line149"></a> * @type {?number}
 <a name="line150"></a> * @private
 <a name="line151"></a> */
 <a name="line152"></a>goog.gears.ManagedResourceStore.prototype.timerId_ = null;
@@ -197,7 +197,7 @@
 <a name="line154"></a>
 <a name="line155"></a>/**
 <a name="line156"></a> * The check status timer.
-<a name="line157"></a> * @type {Object?}
+<a name="line157"></a> * @type {Object}
 <a name="line158"></a> * @private
 <a name="line159"></a> */
 <a name="line160"></a>goog.gears.ManagedResourceStore.prototype.timer_ = null;
@@ -410,7 +410,7 @@
 <a name="line367"></a>
 <a name="line368"></a>
 <a name="line369"></a>/**
-<a name="line370"></a> * @return {string?} The version of the managed store that is currently being
+<a name="line370"></a> * @return {?string} The version of the managed store that is currently being
 <a name="line371"></a> *     served.
 <a name="line372"></a> */
 <a name="line373"></a>goog.gears.ManagedResourceStore.prototype.getVersion = function() {
@@ -591,7 +591,7 @@
 <a name="line548"></a>
 <a name="line549"></a>/**
 <a name="line550"></a> * Error message in the case of a failure event.
-<a name="line551"></a> * @type {string?}
+<a name="line551"></a> * @type {?string}
 <a name="line552"></a> */
 <a name="line553"></a>goog.gears.ManagedResourceStoreEvent.prototype.errorMessage = null;
 </pre>

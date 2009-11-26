@@ -173,7 +173,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line330">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line375">code &raquo;</a>
   </td>
      </tr>
 
@@ -193,14 +193,14 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireClickEvent<span class="args">(<span class="arg">target</span>,&nbsp;<span class="arg">opt_button</span>)</span>
+        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireClickEvent<span class="args">(<span class="arg">target</span>,&nbsp;<span class="arg">opt_button</span>,&nbsp;<span class="arg">opt_coords</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
 
 
      <div class="entryOverview">
-       Simulates a click event on the given target.  IE only supports click with
+       Simulates a click event on the given target. IE only supports click with
 the left mouse button.
      </div>
 
@@ -233,6 +233,14 @@ the left mouse button.
         <div class="entryOverview">Mouse button; defaults to <code>goog.events.BrowserEvent.MouseButton.LEFT</code>.</div>
      </td>
    </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_coords</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        <div class="entryOverview">Position of mouse.</div>
+     </td>
+   </tr>
   </table>
       </div>
    
@@ -247,7 +255,7 @@ the left mouse button.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line252">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line290">code &raquo;</a>
   </td>
      </tr>
 
@@ -267,7 +275,7 @@ the left mouse button.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireClickSequence<span class="args">(<span class="arg">target</span>)</span>
+        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireClickSequence<span class="args">(<span class="arg">target</span>,&nbsp;<span class="arg">opt_button</span>,&nbsp;<span class="arg">opt_coords</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -299,6 +307,22 @@ with the left mouse button.
         <div class="entryOverview">The target for the event.</div>
      </td>
    </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_button</span>
+        : <div class="fullType"><span class="type">goog.events.BrowserEvent.MouseButton</span></div>
+        <div class="entryOverview">Mouse button; defaults to <code>goog.events.BrowserEvent.MouseButton.LEFT</code>.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_coords</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        <div class="entryOverview">Position of mouse.</div>
+     </td>
+   </tr>
   </table>
       </div>
    
@@ -313,7 +337,7 @@ with the left mouse button.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line86">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line101">code &raquo;</a>
   </td>
      </tr>
 
@@ -386,7 +410,7 @@ with the left mouse button.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line284">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line329">code &raquo;</a>
   </td>
      </tr>
 
@@ -452,7 +476,7 @@ target, with the right mouse button.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line301">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line346">code &raquo;</a>
   </td>
      </tr>
 
@@ -472,7 +496,7 @@ target, with the right mouse button.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireDoubleClickEvent<span class="args">(<span class="arg">target</span>)</span>
+        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireDoubleClickEvent<span class="args">(<span class="arg">target</span>,&nbsp;<span class="arg">opt_coords</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -505,6 +529,14 @@ any other buttons.
         <div class="entryOverview">The target for the event.</div>
      </td>
    </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_coords</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        <div class="entryOverview">Position of mouse.</div>
+     </td>
+   </tr>
   </table>
       </div>
    
@@ -519,7 +551,7 @@ any other buttons.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line268">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line310">code &raquo;</a>
   </td>
      </tr>
 
@@ -539,7 +571,7 @@ any other buttons.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireDoubleClickSequence<span class="args">(<span class="arg">target</span>)</span>
+        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireDoubleClickSequence<span class="args">(<span class="arg">target</span>,&nbsp;<span class="arg">opt_coords</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -571,6 +603,14 @@ clicks the given target.
         <div class="entryOverview">The target for the event.</div>
      </td>
    </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_coords</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        <div class="entryOverview">Position of mouse.</div>
+     </td>
+   </tr>
   </table>
       </div>
    
@@ -585,7 +625,7 @@ clicks the given target.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line101">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line121">code &raquo;</a>
   </td>
      </tr>
 
@@ -667,7 +707,7 @@ if preventDefault is called on the keydown, the keypress will not fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line130">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line151">code &raquo;</a>
   </td>
      </tr>
 
@@ -687,7 +727,7 @@ if preventDefault is called on the keydown, the keypress will not fire.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireMouseDownEvent<span class="args">(<span class="arg">target</span>,&nbsp;<span class="arg">opt_button</span>)</span>
+        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireMouseDownEvent<span class="args">(<span class="arg">target</span>,&nbsp;<span class="arg">opt_button</span>,&nbsp;<span class="arg">opt_coords</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -726,6 +766,14 @@ if preventDefault is called on the keydown, the keypress will not fire.
         <div class="entryOverview">Mouse button; defaults to <code>goog.events.BrowserEvent.MouseButton.LEFT</code>.</div>
      </td>
    </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_coords</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        <div class="entryOverview">Position of mouse.</div>
+     </td>
+   </tr>
   </table>
       </div>
    
@@ -740,7 +788,7 @@ if preventDefault is called on the keydown, the keypress will not fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line215">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line242">code &raquo;</a>
   </td>
      </tr>
 
@@ -813,7 +861,7 @@ if preventDefault is called on the keydown, the keypress will not fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line182">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line203">code &raquo;</a>
   </td>
      </tr>
 
@@ -886,7 +934,7 @@ if preventDefault is called on the keydown, the keypress will not fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line199">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line225">code &raquo;</a>
   </td>
      </tr>
 
@@ -959,7 +1007,7 @@ if preventDefault is called on the keydown, the keypress will not fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line167">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line188">code &raquo;</a>
   </td>
      </tr>
 
@@ -979,7 +1027,7 @@ if preventDefault is called on the keydown, the keypress will not fire.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireMouseUpEvent<span class="args">(<span class="arg">target</span>,&nbsp;<span class="arg">opt_button</span>)</span>
+        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">fireMouseUpEvent<span class="args">(<span class="arg">target</span>,&nbsp;<span class="arg">opt_button</span>,&nbsp;<span class="arg">opt_coords</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -1018,6 +1066,14 @@ if preventDefault is called on the keydown, the keypress will not fire.
         <div class="entryOverview">Mouse button; defaults to <code>goog.events.BrowserEvent.MouseButton.LEFT</code>.</div>
      </td>
    </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_coords</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        <div class="entryOverview">Position of mouse.</div>
+     </td>
+   </tr>
   </table>
       </div>
    
@@ -1032,7 +1088,75 @@ if preventDefault is called on the keydown, the keypress will not fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_testing_events_events.js.source.html#line233">code &raquo;</a>
+     <a href="closure_goog_testing_events_events.js.source.html#line266">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.events.setEventClientXY_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.events.</span><span class="entryName">setEventClientXY_<span class="args">(<span class="arg">event</span>,&nbsp;<span class="arg">coords</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       A static helper function that sets the mouse position to the event.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">event</span>
+        : <div class="fullType"><span class="type">Event</span></div>
+        <div class="entryOverview">A simulated native event.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">coords</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        <div class="entryOverview">Position of mouse.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_testing_events_events.js.source.html#line85">code &raquo;</a>
   </td>
      </tr>
 

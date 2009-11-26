@@ -37,6 +37,11 @@ limitations under the License.
         0x0300, true));
   }
 
+  function testBreakSurrogates() {
+    assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xDA00, 0xDC00, true));
+    assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xDBFF, 0xDFFF, true));
+  }
+
   function testBreakHangLxL() {
     assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x1100, 0x1100, true));
   }

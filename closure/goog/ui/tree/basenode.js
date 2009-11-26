@@ -63,7 +63,7 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
 
   /**
    * Extra data associated with the node.
-   * @type {Object?}
+   * @type {Object}
    * @private
    */
   this.clientData_ = null;
@@ -120,7 +120,7 @@ goog.ui.tree.BaseNode.prototype.expanded_ = false;
 
 /**
  * Tooltip for the tree item
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.tree.BaseNode.prototype.toolTip_ = null;
@@ -1060,7 +1060,7 @@ goog.ui.tree.BaseNode.prototype.getRowElement = function() {
 
 
 /**
- * @return {Element?} The expanded icon element.
+ * @return {Element} The expanded icon element.
  */
 goog.ui.tree.BaseNode.prototype.getExpandIconElement = function() {
   var el = this.getRowElement();
@@ -1069,7 +1069,7 @@ goog.ui.tree.BaseNode.prototype.getExpandIconElement = function() {
 
 
 /**
- * @return {Element?} The icon element.
+ * @return {Element} The icon element.
  */
 goog.ui.tree.BaseNode.prototype.getIconElement = function() {
   var el = this.getRowElement();
@@ -1078,7 +1078,7 @@ goog.ui.tree.BaseNode.prototype.getIconElement = function() {
 
 
 /**
- * @return {Element?} The label element.
+ * @return {Element} The label element.
  */
 goog.ui.tree.BaseNode.prototype.getLabelElement = function() {
   var el = this.getRowElement();
@@ -1090,7 +1090,7 @@ goog.ui.tree.BaseNode.prototype.getLabelElement = function() {
 
 
 /**
- * @return {Element?} The element after the label.
+ * @return {Element} The element after the label.
  */
 goog.ui.tree.BaseNode.prototype.getAfterLabelElement = function() {
   var el = this.getRowElement();
@@ -1099,7 +1099,7 @@ goog.ui.tree.BaseNode.prototype.getAfterLabelElement = function() {
 
 
 /**
- * @return {Element?} The div containing the children.
+ * @return {Element} The div containing the children.
  */
 goog.ui.tree.BaseNode.prototype.getChildrenElement = function() {
   var el = this.getElement();
@@ -1210,7 +1210,7 @@ goog.ui.tree.BaseNode.prototype.setToolTip = function(s) {
 
 /**
  * Returns the text of the tooltip.
- * @return {string?} The tooltip text.
+ * @return {?string} The tooltip text.
  */
 goog.ui.tree.BaseNode.prototype.getToolTip = function() {
   return this.toolTip_;
@@ -1461,7 +1461,7 @@ goog.ui.tree.BaseNode.prototype.getPreviousShownNode = function() {
 
 
 /**
- * @return {Object?} Data set by the client.
+ * @return {Object} Data set by the client.
  */
 goog.ui.tree.BaseNode.prototype.getClientData = function() {
   return this.clientData_;

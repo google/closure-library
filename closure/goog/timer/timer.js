@@ -120,7 +120,7 @@ goog.Timer.intervalScale = 0.8;
 
 /**
  * Variable for storing the result of setInterval
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.Timer.prototype.timer_ = null;
@@ -273,7 +273,7 @@ goog.Timer.callOnce = function(listener, opt_interval, opt_handler) {
 
 /**
  * Clears a timeout initiated by callOnce
- * @param {number?} timerId a timer ID.
+ * @param {?number} timerId a timer ID.
  */
 goog.Timer.clear = function(timerId) {
   goog.Timer.defaultTimerObject.clearTimeout(timerId);

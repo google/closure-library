@@ -78,9 +78,9 @@
 <a name="line35"></a> * @constructor
 <a name="line36"></a> * @extends {goog.events.EventTarget}
 <a name="line37"></a> * @param {string} name The name of the ResourceStore to capture the URLs to.
-<a name="line38"></a> * @param {string?} requiredCookie  A cookie that must be present for the
+<a name="line38"></a> * @param {?string} requiredCookie  A cookie that must be present for the
 <a name="line39"></a> *     managed store to be active. Should have the form &quot;foo=bar&quot;.
-<a name="line40"></a> * @param {GearsResourceStore?} opt_localServer The LocalServer for gears.
+<a name="line40"></a> * @param {GearsResourceStore} opt_localServer The LocalServer for gears.
 <a name="line41"></a> */
 <a name="line42"></a>goog.gears.UrlCapture = function(name, requiredCookie, opt_localServer) {
 <a name="line43"></a>  goog.events.EventTarget.call(this);
@@ -100,7 +100,7 @@
 <a name="line57"></a>   * A cookie that must be present for the store to be active.
 <a name="line58"></a>   * Should have the form &quot;foo=bar&quot;. String cast is a safety measure since
 <a name="line59"></a>   * Gears behaves very badly when it gets an unexpected data type.
-<a name="line60"></a>   * @type {string?}
+<a name="line60"></a>   * @type {?string}
 <a name="line61"></a>   * @private
 <a name="line62"></a>   */
 <a name="line63"></a>  this.requiredCookie_ = requiredCookie ? String(requiredCookie) : null;
@@ -148,7 +148,7 @@
 <a name="line105"></a>
 <a name="line106"></a>/**
 <a name="line107"></a> * The ResourceStore for gears, used to capture URLs.
-<a name="line108"></a> * @type {GearsResourceStore?}
+<a name="line108"></a> * @type {GearsResourceStore}
 <a name="line109"></a> * @private
 <a name="line110"></a> */
 <a name="line111"></a>goog.gears.UrlCapture.prototype.resourceStore_ = null;

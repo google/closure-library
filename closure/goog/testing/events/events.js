@@ -77,17 +77,36 @@ goog.object.extend(
 
 
 /**
+ * A static helper function that sets the mouse position to the event.
+ * @param {Event} event A simulated native event.
+ * @param {goog.math.Coordinate} coords Position of mouse.
+ * @private
+ */
+goog.testing.events.setEventClientXY_ = function(event, coords) {
+  event.clientX = coords.x;
+  event.clientY = coords.y;
+};
+
+
+/**
  * Simulates a mousedown, mouseup, and then click on the given event target,
  * with the left mouse button.
  * @param {EventTarget} target The target for the event.
+ * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
+ *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+ * @param {goog.math.Coordinate} opt_coords Position of mouse.
  * @return {boolean} The returnValue of the sequence: false if preventDefault()
  *     was called on any of the events, true otherwise.
  */
-goog.testing.events.fireClickSequence = function(target) {
+goog.testing.events.fireClickSequence =
+    function(target, opt_button, opt_coords) {
   // Fire mousedown, mouseup, and click. Then return the bitwise AND of the 3.
-  return !!(goog.testing.events.fireMouseDownEvent(target) &
-            goog.testing.events.fireMouseUpEvent(target) &
-            goog.testing.events.fireClickEvent(target));
+  return !!(goog.testing.events.
+              fireMouseDownEvent(target, opt_button, opt_coords) &
+            goog.testing.events.
+              fireMouseUpEvent(target, opt_button, opt_coords) &
+            goog.testing.events.
+              fireClickEvent(target, opt_button, opt_coords));
 };
 
 
@@ -95,24 +114,26 @@ goog.testing.events.fireClickSequence = function(target) {
  * Simulates the sequence of events fired by the browser when the user double-
  * clicks the given target.
  * @param {EventTarget} target The target for the event.
+ * @param {goog.math.Coordinate} opt_coords Position of mouse.
  * @return {boolean} The returnValue of the sequence: false if preventDefault()
  *     was called on any of the events, true otherwise.
  */
-goog.testing.events.fireDoubleClickSequence = function(target) {
+goog.testing.events.fireDoubleClickSequence = function(target, opt_coords) {
   // Fire mousedown, mouseup, click, mousedown, mouseup, click, dblclick.
   // Then return the bitwise AND of the 7.
-  return !!(goog.testing.events.fireMouseDownEvent(target) &
-            goog.testing.events.fireMouseUpEvent(target) &
-            goog.testing.events.fireClickEvent(target) &
+  var btn = goog.events.BrowserEvent.MouseButton.LEFT;
+  return !!(goog.testing.events.fireMouseDownEvent(target, btn, opt_coords) &
+            goog.testing.events.fireMouseUpEvent(target, btn, opt_coords) &
+            goog.testing.events.fireClickEvent(target, btn, opt_coords) &
             // IE fires a selectstart instead of the second mousedown in a
             // dblclick, but we don't care about selectstart.
             (goog.userAgent.IE ||
-             goog.testing.events.fireMouseDownEvent(target)) &
-            goog.testing.events.fireMouseUpEvent(target) &
+            goog.testing.events.fireMouseDownEvent(target, btn, opt_coords)) &
+            goog.testing.events.fireMouseUpEvent(target, btn, opt_coords) &
             // IE doesn't fire the second click in a dblclick.
             (goog.userAgent.IE ||
-            goog.testing.events.fireClickEvent(target)) &
-            goog.testing.events.fireDoubleClickEvent(target));
+            goog.testing.events.fireClickEvent(target, btn, opt_coords)) &
+            goog.testing.events.fireDoubleClickEvent(target, opt_coords));
 };
 
 
@@ -182,8 +203,13 @@ goog.testing.events.fireMouseOverEvent = function(target, relatedTarget) {
 goog.testing.events.fireMouseMoveEvent = function(target, opt_coords) {
   var mousemove =
       new goog.testing.events.Event(goog.events.EventType.MOUSEMOVE, target);
-  mousemove.clientX = opt_coords ? opt_coords.x : 0;
-  mousemove.clientY = opt_coords ? opt_coords.y : 0;
+
+  if (!opt_coords) {
+    mousemove.clientX = 0;
+    mousemove.clientY = 0;
+  } else {
+    goog.testing.events.setEventClientXY_(mousemove, opt_coords);
+  }
   return goog.testing.events.fireBrowserEvent(mousemove);
 };
 
@@ -209,15 +235,21 @@ goog.testing.events.fireMouseOutEvent = function(target, relatedTarget) {
  * @param {EventTarget} target The target for the event.
  * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
  *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+ * @param {goog.math.Coordinate} opt_coords Position of mouse.
  * @return {boolean} The returnValue of the event: false if preventDefault() was
  *     called on it, true otherwise.
  */
-goog.testing.events.fireMouseDownEvent = function(target, opt_button) {
+goog.testing.events.fireMouseDownEvent =
+    function(target, opt_button, opt_coords) {
   var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
   var mousedown =
       new goog.testing.events.Event(goog.events.EventType.MOUSEDOWN, target);
   mousedown.button = goog.userAgent.IE ?
       goog.events.BrowserEvent.IEButtonMap_[button] : button;
+
+  if (opt_coords) {
+    goog.testing.events.setEventClientXY_(mousedown, opt_coords);
+  }
   return goog.testing.events.fireBrowserEvent(mousedown);
 };
 
@@ -227,32 +259,41 @@ goog.testing.events.fireMouseDownEvent = function(target, opt_button) {
  * @param {EventTarget} target The target for the event.
  * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
  *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+ * @param {goog.math.Coordinate} opt_coords Position of mouse.
  * @return {boolean} The returnValue of the event: false if preventDefault() was
  *     called on it, true otherwise.
  */
-goog.testing.events.fireMouseUpEvent = function(target, opt_button) {
+goog.testing.events.fireMouseUpEvent =
+    function(target, opt_button, opt_coords) {
   var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
   var mouseup =
       new goog.testing.events.Event(goog.events.EventType.MOUSEUP, target);
   mouseup.button = goog.userAgent.IE ?
       goog.events.BrowserEvent.IEButtonMap_[button] : button;
+  if (opt_coords) {
+    goog.testing.events.setEventClientXY_(mouseup, opt_coords);
+  }
   return goog.testing.events.fireBrowserEvent(mouseup);
 };
 
 
 /**
- * Simulates a click event on the given target.  IE only supports click with
+ * Simulates a click event on the given target. IE only supports click with
  * the left mouse button.
  * @param {EventTarget} target The target for the event.
  * @param {goog.events.BrowserEvent.MouseButton} opt_button Mouse button;
  *     defaults to {@code goog.events.BrowserEvent.MouseButton.LEFT}.
+ * @param {goog.math.Coordinate} opt_coords Position of mouse.
  * @return {boolean} The returnValue of the event: false if preventDefault() was
  *     called on it, true otherwise.
  */
-goog.testing.events.fireClickEvent = function(target, opt_button) {
+goog.testing.events.fireClickEvent = function(target, opt_button, opt_coords) {
   var click =
       new goog.testing.events.Event(goog.events.EventType.CLICK, target);
   click.button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
+  if (opt_coords) {
+    goog.testing.events.setEventClientXY_(click, opt_coords);
+  }
   return goog.testing.events.fireBrowserEvent(click);
 };
 
@@ -262,13 +303,17 @@ goog.testing.events.fireClickEvent = function(target, opt_button) {
  * with the left mouse button since no browser supports double-clicking with
  * any other buttons.
  * @param {EventTarget} target The target for the event.
+ * @param {goog.math.Coordinate} opt_coords Position of mouse.
  * @return {boolean} The returnValue of the event: false if preventDefault() was
  *     called on it, true otherwise.
  */
-goog.testing.events.fireDoubleClickEvent = function(target) {
+goog.testing.events.fireDoubleClickEvent = function(target, opt_coords) {
   var dblclick =
       new goog.testing.events.Event(goog.events.EventType.DBLCLICK, target);
   dblclick.button = goog.events.BrowserEvent.MouseButton.LEFT;
+  if (opt_coords) {
+    goog.testing.events.setEventClientXY_(dblclick, opt_coords);
+  }
   return goog.testing.events.fireBrowserEvent(dblclick);
 };
 

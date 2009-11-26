@@ -32,7 +32,22 @@ limitations under the License.
 var cookies = goog.net.cookies;
 var baseCount = 0;
 
+function checkForCookies() {
+  if (!goog.net.cookies.isEnabled()) {
+    var message = 'Cookies must be enabled to run this test.';
+    if (location.protocol == 'file:') {
+      message += '\nNote that cookies for local files are disabled in some ' +
+          'browsers.\nThey can be enabled in Chrome with the ' +
+          '--enable-file-cookies flag.';
+    }
+
+    fail(message);
+  }
+}
+
 function setUp() {
+  checkForCookies();
+
   // Make sure there are no cookies set by previous, bad tests.
   cookies.clear();
   baseCount = cookies.getCount();

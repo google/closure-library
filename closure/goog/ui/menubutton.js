@@ -259,7 +259,7 @@ goog.ui.MenuButton.prototype.handleDocumentMouseDown = function(e) {
 /**
  * Returns true if the given element is to be considered part of the component,
  * even if it isn't a DOM descendant of the component's root element.
- * @param {Element?} element Element to test (if any).
+ * @param {Element} element Element to test (if any).
  * @return {boolean} Whether the element is considered part of the component.
  * @protected
  */
@@ -609,8 +609,8 @@ goog.ui.MenuButton.prototype.setOpen = function(open) {
 
 
 /**
- * Positions the menu under the button.
- * @protected
+ * Positions the menu under the button.  May be called directly in cases when
+ * the menu size is known to change.
  */
 goog.ui.MenuButton.prototype.positionMenu = function() {
   var anchorCorner = this.isAlignMenuToStart() ?

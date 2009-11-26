@@ -96,7 +96,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.timer_ = 0;
 /**
  * Holds the function to send messages to the peer
  * (once it becomes available).
- * @type {Function?}
+ * @type {Function}
  * @private
  */
 goog.net.xpc.FrameElementMethodTransport.outgoing_ = null;

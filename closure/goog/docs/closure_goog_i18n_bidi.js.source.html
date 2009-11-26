@@ -497,7 +497,7 @@
 <a name="line454"></a> * @private
 <a name="line455"></a> */
 <a name="line456"></a>goog.i18n.bidi.bracketGuardHtmlRe_ =
-<a name="line457"></a>    /(\([^\)]*\))|(\[[^\]]*\])|({[^}]*})|(&amp;lt;[^&amp;]*&amp;gt;)/g;
+<a name="line457"></a>    /(\(.*?\)+)|(\[.*?\]+)|(\{.*?\}+)|(&amp;lt;.*?(&amp;gt;)+)/g;
 <a name="line458"></a>
 <a name="line459"></a>
 <a name="line460"></a>/**
@@ -506,274 +506,286 @@
 <a name="line463"></a> * @private
 <a name="line464"></a> */
 <a name="line465"></a>goog.i18n.bidi.bracketGuardTextRe_ =
-<a name="line466"></a>    /(\([^\)]*\))|(\[[^\]]*\])|({[^}]*})|(&lt;[^&gt;]*&gt;)/g;
+<a name="line466"></a>    /(\(.*?\)+)|(\[.*?\]+)|(\{.*?\}+)|(&lt;.*?&gt;+)/g;
 <a name="line467"></a>
 <a name="line468"></a>
 <a name="line469"></a>/**
 <a name="line470"></a> * Apply bracket guard using html span tag. This is to address the problem of
 <a name="line471"></a> * messy bracket display frequently happens in RTL layout.
 <a name="line472"></a> * @param {string} s The string that need to be processed.
-<a name="line473"></a> * @return {string} The processed string, with all bracket guarded.
-<a name="line474"></a> */
-<a name="line475"></a>goog.i18n.bidi.guardBracketInHtml = function(s) {
-<a name="line476"></a>  if (goog.i18n.bidi.hasAnyRtl(s)) {
-<a name="line477"></a>    return s.replace(goog.i18n.bidi.bracketGuardHtmlRe_,
-<a name="line478"></a>        &#39;&lt;span dir=rtl&gt;$&amp;&lt;/span&gt;&#39;);
-<a name="line479"></a>  }
-<a name="line480"></a>  return s.replace(goog.i18n.bidi.bracketGuardHtmlRe_,
-<a name="line481"></a>      &#39;&lt;span dir=ltr&gt;$&amp;&lt;/span&gt;&#39;);
-<a name="line482"></a>};
-<a name="line483"></a>
-<a name="line484"></a>
-<a name="line485"></a>/**
-<a name="line486"></a> * Apply bracket guard using LRM and RLM. This is to address the problem of
-<a name="line487"></a> * messy bracket display frequently happens in RTL layout.
-<a name="line488"></a> * This version works for both plain text and html. But it does not work as
-<a name="line489"></a> * good as guardBracketInHtml in some cases.
-<a name="line490"></a> * @param {string} s The string that need to be processed.
-<a name="line491"></a> * @return {string} The processed string, with all bracket guarded.
-<a name="line492"></a> */
-<a name="line493"></a>goog.i18n.bidi.guardBracketInText = function(s) {
-<a name="line494"></a>  var mark = goog.i18n.bidi.hasAnyRtl(s) ? goog.i18n.bidi.Format.RLM :
-<a name="line495"></a>      goog.i18n.bidi.Format.LRM;
-<a name="line496"></a>  return s.replace(goog.i18n.bidi.bracketGuardTextRe_, mark + &#39;$&amp;&#39; + mark);
-<a name="line497"></a>};
-<a name="line498"></a>
-<a name="line499"></a>/**
-<a name="line500"></a> * Enforce the html snippet in RTL directionality regardless overall context.
-<a name="line501"></a> * If the html piece was enclosed by tag, dir will be applied to existing
-<a name="line502"></a> * tag, otherwise a span tag will be added as wrapper. For this reason, if
-<a name="line503"></a> * html snippet start with with tag, this tag must enclose the whole piece. If
-<a name="line504"></a> * the tag already has a dir specified, this new one will override existing
-<a name="line505"></a> * one in behavior (tested on FF and IE).
-<a name="line506"></a> * @param {string} html The string that need to be processed.
-<a name="line507"></a> * @return {string} The processed string, with directionality enforced to RTL.
-<a name="line508"></a> */
-<a name="line509"></a>goog.i18n.bidi.enforceRtlInHtml = function(html) {
-<a name="line510"></a>  if (html.charAt(0) == &#39;&lt;&#39;) {
-<a name="line511"></a>    return html.replace(/&lt;\w+/, &#39;$&amp; dir=rtl&#39;);
-<a name="line512"></a>  }
-<a name="line513"></a>  // &#39;\n&#39; is important for FF so that it won&#39;t incorrectly merge span groups
-<a name="line514"></a>  return &#39;\n&lt;span dir=rtl&gt;&#39; + html + &#39;&lt;/span&gt;&#39;;
-<a name="line515"></a>};
-<a name="line516"></a>
-<a name="line517"></a>/**
-<a name="line518"></a> * Enforce RTL on both end of the given text piece using unicode BiDi formatting
-<a name="line519"></a> * characters RLE and PDF.
-<a name="line520"></a> * @param {string} text The piece of text that need to be wrapped.
-<a name="line521"></a> * @return {string} The wrapped string after process.
-<a name="line522"></a> */
-<a name="line523"></a>goog.i18n.bidi.enforceRtlInText = function(text) {
-<a name="line524"></a>  return goog.i18n.bidi.Format.RLE + text + goog.i18n.bidi.Format.PDF;
-<a name="line525"></a>};
-<a name="line526"></a>
-<a name="line527"></a>/**
-<a name="line528"></a> * Enforce the html snippet in RTL directionality regardless overall context.
-<a name="line529"></a> * If the html piece was enclosed by tag, dir will be applied to existing
-<a name="line530"></a> * tag, otherwise a span tag will be added as wrapper. For this reason, if
-<a name="line531"></a> * html snippet start with with tag, this tag must enclose the whole piece. If
-<a name="line532"></a> * the tag already has a dir specified, this new one will override existing
-<a name="line533"></a> * one in behavior (tested on FF and IE).
-<a name="line534"></a> * @param {string} html The string that need to be processed.
-<a name="line535"></a> * @return {string} The processed string, with directionality enforced to RTL.
-<a name="line536"></a> */
-<a name="line537"></a>goog.i18n.bidi.enforceLtrInHtml = function(html) {
-<a name="line538"></a>  if (html.charAt(0) == &#39;&lt;&#39;) {
-<a name="line539"></a>    return html.replace(/&lt;\w+/, &#39;$&amp; dir=ltr&#39;);
-<a name="line540"></a>  }
-<a name="line541"></a>  // &#39;\n&#39; is important for FF so that it won&#39;t incorrectly merge span groups
-<a name="line542"></a>  return &#39;\n&lt;span dir=ltr&gt;&#39; + html + &#39;&lt;/span&gt;&#39;;
-<a name="line543"></a>};
-<a name="line544"></a>
-<a name="line545"></a>/**
-<a name="line546"></a> * Enforce LTR on both end of the given text piece using unicode BiDi formatting
-<a name="line547"></a> * characters LRE and PDF.
-<a name="line548"></a> * @param {string} text The piece of text that need to be wrapped.
-<a name="line549"></a> * @return {string} The wrapped string after process.
-<a name="line550"></a> */
-<a name="line551"></a>goog.i18n.bidi.enforceLtrInText = function(text) {
-<a name="line552"></a>  return goog.i18n.bidi.Format.LRE + text + goog.i18n.bidi.Format.PDF;
+<a name="line473"></a> * @param {boolean} opt_isRtlContext specifies default direction (usually
+<a name="line474"></a> *     direction of the UI).
+<a name="line475"></a> * @return {string} The processed string, with all bracket guarded.
+<a name="line476"></a> */
+<a name="line477"></a>goog.i18n.bidi.guardBracketInHtml = function(s, opt_isRtlContext) {
+<a name="line478"></a>  var useRtl = opt_isRtlContext === undefined ?
+<a name="line479"></a>      goog.i18n.bidi.hasAnyRtl(s) : opt_isRtlContext;
+<a name="line480"></a>  if (useRtl) {
+<a name="line481"></a>    return s.replace(goog.i18n.bidi.bracketGuardHtmlRe_,
+<a name="line482"></a>        &#39;&lt;span dir=rtl&gt;$&amp;&lt;/span&gt;&#39;);
+<a name="line483"></a>  }
+<a name="line484"></a>  return s.replace(goog.i18n.bidi.bracketGuardHtmlRe_,
+<a name="line485"></a>      &#39;&lt;span dir=ltr&gt;$&amp;&lt;/span&gt;&#39;);
+<a name="line486"></a>};
+<a name="line487"></a>
+<a name="line488"></a>
+<a name="line489"></a>/**
+<a name="line490"></a> * Apply bracket guard using LRM and RLM. This is to address the problem of
+<a name="line491"></a> * messy bracket display frequently happens in RTL layout.
+<a name="line492"></a> * This version works for both plain text and html. But it does not work as
+<a name="line493"></a> * good as guardBracketInHtml in some cases.
+<a name="line494"></a> * @param {string} s The string that need to be processed.
+<a name="line495"></a> * @param {boolean} opt_isRtlContext specifies default direction (usually
+<a name="line496"></a> *     direction of the UI).
+<a name="line497"></a> * @return {string} The processed string, with all bracket guarded.
+<a name="line498"></a> */
+<a name="line499"></a>goog.i18n.bidi.guardBracketInText = function(s, opt_isRtlContext) {
+<a name="line500"></a>  var useRtl = opt_isRtlContext === undefined ?
+<a name="line501"></a>      goog.i18n.bidi.hasAnyRtl(s) : opt_isRtlContext;
+<a name="line502"></a>  var mark = useRtl ? goog.i18n.bidi.Format.RLM : goog.i18n.bidi.Format.LRM;
+<a name="line503"></a>  return s.replace(goog.i18n.bidi.bracketGuardTextRe_, mark + &#39;$&amp;&#39; + mark);
+<a name="line504"></a>};
+<a name="line505"></a>
+<a name="line506"></a>
+<a name="line507"></a>/**
+<a name="line508"></a> * Enforce the html snippet in RTL directionality regardless overall context.
+<a name="line509"></a> * If the html piece was enclosed by tag, dir will be applied to existing
+<a name="line510"></a> * tag, otherwise a span tag will be added as wrapper. For this reason, if
+<a name="line511"></a> * html snippet start with with tag, this tag must enclose the whole piece. If
+<a name="line512"></a> * the tag already has a dir specified, this new one will override existing
+<a name="line513"></a> * one in behavior (tested on FF and IE).
+<a name="line514"></a> * @param {string} html The string that need to be processed.
+<a name="line515"></a> * @return {string} The processed string, with directionality enforced to RTL.
+<a name="line516"></a> */
+<a name="line517"></a>goog.i18n.bidi.enforceRtlInHtml = function(html) {
+<a name="line518"></a>  if (html.charAt(0) == &#39;&lt;&#39;) {
+<a name="line519"></a>    return html.replace(/&lt;\w+/, &#39;$&amp; dir=rtl&#39;);
+<a name="line520"></a>  }
+<a name="line521"></a>  // &#39;\n&#39; is important for FF so that it won&#39;t incorrectly merge span groups
+<a name="line522"></a>  return &#39;\n&lt;span dir=rtl&gt;&#39; + html + &#39;&lt;/span&gt;&#39;;
+<a name="line523"></a>};
+<a name="line524"></a>
+<a name="line525"></a>
+<a name="line526"></a>/**
+<a name="line527"></a> * Enforce RTL on both end of the given text piece using unicode BiDi formatting
+<a name="line528"></a> * characters RLE and PDF.
+<a name="line529"></a> * @param {string} text The piece of text that need to be wrapped.
+<a name="line530"></a> * @return {string} The wrapped string after process.
+<a name="line531"></a> */
+<a name="line532"></a>goog.i18n.bidi.enforceRtlInText = function(text) {
+<a name="line533"></a>  return goog.i18n.bidi.Format.RLE + text + goog.i18n.bidi.Format.PDF;
+<a name="line534"></a>};
+<a name="line535"></a>
+<a name="line536"></a>
+<a name="line537"></a>/**
+<a name="line538"></a> * Enforce the html snippet in RTL directionality regardless overall context.
+<a name="line539"></a> * If the html piece was enclosed by tag, dir will be applied to existing
+<a name="line540"></a> * tag, otherwise a span tag will be added as wrapper. For this reason, if
+<a name="line541"></a> * html snippet start with with tag, this tag must enclose the whole piece. If
+<a name="line542"></a> * the tag already has a dir specified, this new one will override existing
+<a name="line543"></a> * one in behavior (tested on FF and IE).
+<a name="line544"></a> * @param {string} html The string that need to be processed.
+<a name="line545"></a> * @return {string} The processed string, with directionality enforced to RTL.
+<a name="line546"></a> */
+<a name="line547"></a>goog.i18n.bidi.enforceLtrInHtml = function(html) {
+<a name="line548"></a>  if (html.charAt(0) == &#39;&lt;&#39;) {
+<a name="line549"></a>    return html.replace(/&lt;\w+/, &#39;$&amp; dir=ltr&#39;);
+<a name="line550"></a>  }
+<a name="line551"></a>  // &#39;\n&#39; is important for FF so that it won&#39;t incorrectly merge span groups
+<a name="line552"></a>  return &#39;\n&lt;span dir=ltr&gt;&#39; + html + &#39;&lt;/span&gt;&#39;;
 <a name="line553"></a>};
 <a name="line554"></a>
-<a name="line555"></a>/**
-<a name="line556"></a> * Regular expression to find dimensions such as &quot;padding: .3 0.4ex 5px 6;&quot;
-<a name="line557"></a> * @type {RegExp}
-<a name="line558"></a> * @private
-<a name="line559"></a> */
-<a name="line560"></a>goog.i18n.bidi.dimensionsRe_ =
-<a name="line561"></a>     /:\s*([.\d][.\w]*)\s+([.\d][.\w]*)\s+([.\d][.\w]*)\s+([.\d][.\w]*)/g;
-<a name="line562"></a>
-<a name="line563"></a>
-<a name="line564"></a>/**
-<a name="line565"></a> * Regular expression for left.
-<a name="line566"></a> * @type {RegExp}
-<a name="line567"></a> * @private
-<a name="line568"></a> */
-<a name="line569"></a>goog.i18n.bidi.leftRe_ = /left/gi;
-<a name="line570"></a>
-<a name="line571"></a>
-<a name="line572"></a>/**
-<a name="line573"></a> * Regular expression for right.
-<a name="line574"></a> * @type {RegExp}
-<a name="line575"></a> * @private
-<a name="line576"></a> */
-<a name="line577"></a>goog.i18n.bidi.rightRe_ = /right/gi;
-<a name="line578"></a>
-<a name="line579"></a>
-<a name="line580"></a>/**
-<a name="line581"></a> * Placeholder regular expression for swapping.
-<a name="line582"></a> * @type {RegExp}
-<a name="line583"></a> * @private
-<a name="line584"></a> */
-<a name="line585"></a>goog.i18n.bidi.tempRe_ = /%%%%/g;
-<a name="line586"></a>
-<a name="line587"></a>
-<a name="line588"></a>/**
-<a name="line589"></a> * Swap location parameters and &#39;left&#39;/&#39;right&#39; in CSS specification. The
-<a name="line590"></a> * processed string will be suited for RTL layout. Though this function can
-<a name="line591"></a> * cover most cases, there are always exceptions. It is suggested to put
-<a name="line592"></a> * those exceptions in separate group of CSS string.
-<a name="line593"></a> * @param {string} cssStr CSS spefication string.
-<a name="line594"></a> * @return {string} Processed CSS specification string.
-<a name="line595"></a> */
-<a name="line596"></a>goog.i18n.bidi.mirrorCSS = function(cssStr) {
-<a name="line597"></a>  return cssStr.
-<a name="line598"></a>    // reverse dimensions
-<a name="line599"></a>    replace(goog.i18n.bidi.dimensionsRe_, &#39;:$1 $4 $3 $2&#39;).
-<a name="line600"></a>    replace(goog.i18n.bidi.leftRe_, &#39;%%%%&#39;).          // swap left and right
-<a name="line601"></a>    replace(goog.i18n.bidi.rightRe_, goog.i18n.bidi.LEFT).
-<a name="line602"></a>    replace(goog.i18n.bidi.tempRe_, goog.i18n.bidi.RIGHT);
-<a name="line603"></a>};
-<a name="line604"></a>
-<a name="line605"></a>
-<a name="line606"></a>/**
-<a name="line607"></a> * Regular expression for hebrew double quote substitution, finding quote
-<a name="line608"></a> * directly after hebrew characters.
-<a name="line609"></a> * @type {RegExp}
-<a name="line610"></a> * @private
-<a name="line611"></a> */
-<a name="line612"></a>goog.i18n.bidi.doubleQuoteSubstituteRe_ = /([\u0591-\u05f2])&quot;/g;
-<a name="line613"></a>
-<a name="line614"></a>
-<a name="line615"></a>/**
-<a name="line616"></a> * Regular expression for hebrew single quote substitution, finding quote
-<a name="line617"></a> * directly after hebrew characters.
-<a name="line618"></a> * @type {RegExp}
-<a name="line619"></a> * @private
-<a name="line620"></a> */
-<a name="line621"></a>goog.i18n.bidi.singleQuoteSubstituteRe_ = /([\u0591-\u05f2])&#39;/g;
-<a name="line622"></a>
-<a name="line623"></a>
-<a name="line624"></a>/**
-<a name="line625"></a> * Replace the double and single quote directly after a Hebrew character with
-<a name="line626"></a> * GERESH and GERSHAYIM. In such case, most likely that&#39;s user intention.
-<a name="line627"></a> * @param {string} str String that need to be processed.
-<a name="line628"></a> * @return {string} Processed string with double/single quote replaced.
-<a name="line629"></a> */
-<a name="line630"></a>goog.i18n.bidi.normalizeHebrewQuote = function(str) {
-<a name="line631"></a>  return str.
-<a name="line632"></a>    replace(goog.i18n.bidi.doubleQuoteSubstituteRe_, &#39;$1\u05f4&#39;).
-<a name="line633"></a>    replace(goog.i18n.bidi.singleQuoteSubstituteRe_, &#39;$1\u05f3&#39;);
-<a name="line634"></a>};
+<a name="line555"></a>
+<a name="line556"></a>/**
+<a name="line557"></a> * Enforce LTR on both end of the given text piece using unicode BiDi formatting
+<a name="line558"></a> * characters LRE and PDF.
+<a name="line559"></a> * @param {string} text The piece of text that need to be wrapped.
+<a name="line560"></a> * @return {string} The wrapped string after process.
+<a name="line561"></a> */
+<a name="line562"></a>goog.i18n.bidi.enforceLtrInText = function(text) {
+<a name="line563"></a>  return goog.i18n.bidi.Format.LRE + text + goog.i18n.bidi.Format.PDF;
+<a name="line564"></a>};
+<a name="line565"></a>
+<a name="line566"></a>
+<a name="line567"></a>/**
+<a name="line568"></a> * Regular expression to find dimensions such as &quot;padding: .3 0.4ex 5px 6;&quot;
+<a name="line569"></a> * @type {RegExp}
+<a name="line570"></a> * @private
+<a name="line571"></a> */
+<a name="line572"></a>goog.i18n.bidi.dimensionsRe_ =
+<a name="line573"></a>     /:\s*([.\d][.\w]*)\s+([.\d][.\w]*)\s+([.\d][.\w]*)\s+([.\d][.\w]*)/g;
+<a name="line574"></a>
+<a name="line575"></a>
+<a name="line576"></a>/**
+<a name="line577"></a> * Regular expression for left.
+<a name="line578"></a> * @type {RegExp}
+<a name="line579"></a> * @private
+<a name="line580"></a> */
+<a name="line581"></a>goog.i18n.bidi.leftRe_ = /left/gi;
+<a name="line582"></a>
+<a name="line583"></a>
+<a name="line584"></a>/**
+<a name="line585"></a> * Regular expression for right.
+<a name="line586"></a> * @type {RegExp}
+<a name="line587"></a> * @private
+<a name="line588"></a> */
+<a name="line589"></a>goog.i18n.bidi.rightRe_ = /right/gi;
+<a name="line590"></a>
+<a name="line591"></a>
+<a name="line592"></a>/**
+<a name="line593"></a> * Placeholder regular expression for swapping.
+<a name="line594"></a> * @type {RegExp}
+<a name="line595"></a> * @private
+<a name="line596"></a> */
+<a name="line597"></a>goog.i18n.bidi.tempRe_ = /%%%%/g;
+<a name="line598"></a>
+<a name="line599"></a>
+<a name="line600"></a>/**
+<a name="line601"></a> * Swap location parameters and &#39;left&#39;/&#39;right&#39; in CSS specification. The
+<a name="line602"></a> * processed string will be suited for RTL layout. Though this function can
+<a name="line603"></a> * cover most cases, there are always exceptions. It is suggested to put
+<a name="line604"></a> * those exceptions in separate group of CSS string.
+<a name="line605"></a> * @param {string} cssStr CSS spefication string.
+<a name="line606"></a> * @return {string} Processed CSS specification string.
+<a name="line607"></a> */
+<a name="line608"></a>goog.i18n.bidi.mirrorCSS = function(cssStr) {
+<a name="line609"></a>  return cssStr.
+<a name="line610"></a>    // reverse dimensions
+<a name="line611"></a>    replace(goog.i18n.bidi.dimensionsRe_, &#39;:$1 $4 $3 $2&#39;).
+<a name="line612"></a>    replace(goog.i18n.bidi.leftRe_, &#39;%%%%&#39;).          // swap left and right
+<a name="line613"></a>    replace(goog.i18n.bidi.rightRe_, goog.i18n.bidi.LEFT).
+<a name="line614"></a>    replace(goog.i18n.bidi.tempRe_, goog.i18n.bidi.RIGHT);
+<a name="line615"></a>};
+<a name="line616"></a>
+<a name="line617"></a>
+<a name="line618"></a>/**
+<a name="line619"></a> * Regular expression for hebrew double quote substitution, finding quote
+<a name="line620"></a> * directly after hebrew characters.
+<a name="line621"></a> * @type {RegExp}
+<a name="line622"></a> * @private
+<a name="line623"></a> */
+<a name="line624"></a>goog.i18n.bidi.doubleQuoteSubstituteRe_ = /([\u0591-\u05f2])&quot;/g;
+<a name="line625"></a>
+<a name="line626"></a>
+<a name="line627"></a>/**
+<a name="line628"></a> * Regular expression for hebrew single quote substitution, finding quote
+<a name="line629"></a> * directly after hebrew characters.
+<a name="line630"></a> * @type {RegExp}
+<a name="line631"></a> * @private
+<a name="line632"></a> */
+<a name="line633"></a>goog.i18n.bidi.singleQuoteSubstituteRe_ = /([\u0591-\u05f2])&#39;/g;
+<a name="line634"></a>
 <a name="line635"></a>
-<a name="line636"></a>
-<a name="line637"></a>/**
-<a name="line638"></a> * Regular expression to split a string into &quot;words&quot; for directionality
-<a name="line639"></a> * estimation based on relative word counts.
-<a name="line640"></a> * @type {RegExp}
-<a name="line641"></a> * @private
-<a name="line642"></a> */
-<a name="line643"></a>goog.i18n.bidi.wordSeparatorRe_ = /\s+/;
-<a name="line644"></a>
-<a name="line645"></a>
-<a name="line646"></a>/**
-<a name="line647"></a> * Regular expression to check if a string contains any numerals. Used to
-<a name="line648"></a> * differentiate between completely neutral strings and those containing
-<a name="line649"></a> * numbers, which are weakly LTR.
-<a name="line650"></a> * @type {RegExp}
-<a name="line651"></a> * @private
-<a name="line652"></a> */
-<a name="line653"></a>goog.i18n.bidi.hasNumeralsRe_ = /\d/;
-<a name="line654"></a>
-<a name="line655"></a>
-<a name="line656"></a>/**
-<a name="line657"></a> * This constant controls threshold of RTL directionality.
-<a name="line658"></a> * @type {number}
-<a name="line659"></a> * @private
-<a name="line660"></a> */
-<a name="line661"></a>goog.i18n.bidi.rtlDetectionThreshold_ = 0.40;
-<a name="line662"></a>
-<a name="line663"></a>
-<a name="line664"></a>/**
-<a name="line665"></a> * Estimates the directionality of a string based on relative word counts.
-<a name="line666"></a> * If the number of RTL words is above a certain percentage of the total number
-<a name="line667"></a> * of strongly directional words, returns RTL.
-<a name="line668"></a> * Otherwise, if any words are strongly or weakly LTR, returns LTR.
-<a name="line669"></a> * Otherwise, returns UNKNOWN, which is used to mean &quot;neutral&quot;.
-<a name="line670"></a> * Numbers are counted as weakly LTR.
-<a name="line671"></a> * @param {string} str The string to be checked.
-<a name="line672"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
-<a name="line673"></a> *     Default: false.
-<a name="line674"></a> * @return {goog.i18n.bidi.Dir} Estimated overall directionality of {@code str}.
-<a name="line675"></a> */
-<a name="line676"></a>goog.i18n.bidi.estimateDirection = function(str, opt_isHtml) {
-<a name="line677"></a>  var rtlCount = 0;
-<a name="line678"></a>  var totalCount = 0;
-<a name="line679"></a>  var hasWeaklyLtr = false;
-<a name="line680"></a>  var tokens = goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml).
-<a name="line681"></a>      split(goog.i18n.bidi.wordSeparatorRe_);
-<a name="line682"></a>  for (var i = 0; i &lt; tokens.length; i++) {
-<a name="line683"></a>    var token = tokens[i];
-<a name="line684"></a>    if (goog.i18n.bidi.startsWithRtl(token)) {
-<a name="line685"></a>      rtlCount++;
-<a name="line686"></a>      totalCount++;
-<a name="line687"></a>    } else if (goog.i18n.bidi.isRequiredLtrRe_.test(token)) {
-<a name="line688"></a>      hasWeaklyLtr = true;
-<a name="line689"></a>    } else if (goog.i18n.bidi.hasAnyLtr(token)) {
-<a name="line690"></a>      totalCount++;
-<a name="line691"></a>    } else if (goog.i18n.bidi.hasNumeralsRe_.test(token)) {
-<a name="line692"></a>      hasWeaklyLtr = true;
-<a name="line693"></a>    }
-<a name="line694"></a>  }
-<a name="line695"></a>
-<a name="line696"></a>  return totalCount == 0 ?
-<a name="line697"></a>      (hasWeaklyLtr ? goog.i18n.bidi.Dir.LTR : goog.i18n.bidi.Dir.UNKNOWN) :
-<a name="line698"></a>      (rtlCount / totalCount &gt; goog.i18n.bidi.rtlDetectionThreshold_ ?
-<a name="line699"></a>          goog.i18n.bidi.Dir.RTL : goog.i18n.bidi.Dir.LTR);
-<a name="line700"></a>};
-<a name="line701"></a>
-<a name="line702"></a>
-<a name="line703"></a>/**
-<a name="line704"></a> * Check the directionality of a piece of text, return true if the piece of
-<a name="line705"></a> * text should be laid out in RTL direction.
-<a name="line706"></a> * @param {string} str The piece of text that need to be detected.
-<a name="line707"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
-<a name="line708"></a> *     Default: false.
-<a name="line709"></a> * @return {boolean} Whether this piece of text should be laid out in RTL.
-<a name="line710"></a> */
-<a name="line711"></a>goog.i18n.bidi.detectRtlDirectionality = function(str, opt_isHtml) {
-<a name="line712"></a>  return goog.i18n.bidi.estimateDirection(str, opt_isHtml) ==
-<a name="line713"></a>      goog.i18n.bidi.Dir.RTL;
-<a name="line714"></a>};
-<a name="line715"></a>
-<a name="line716"></a>
-<a name="line717"></a>/**
-<a name="line718"></a> * Sets text input element&#39;s directionality and text alignment based on a
-<a name="line719"></a> * given directionality.
-<a name="line720"></a> * @param {Element} element Input field element to set directionality to.
-<a name="line721"></a> * @param {goog.i18n.bidi.Dir|number|boolean} dir Desired directionality, given
-<a name="line722"></a> *     in one of the following formats:
-<a name="line723"></a> *     1. A goog.i18n.bidi.Dir constant.
-<a name="line724"></a> *     2. A number (positive = LRT, negative = RTL, 0 = unknown).
-<a name="line725"></a> *     3. A boolean (true = RTL, false = LTR).
-<a name="line726"></a> */
-<a name="line727"></a>goog.i18n.bidi.setElementDirAndAlign = function(element, dir) {
-<a name="line728"></a>  if (element &amp;&amp;
-<a name="line729"></a>      (dir = goog.i18n.bidi.toDir(dir)) != goog.i18n.bidi.Dir.UNKNOWN) {
-<a name="line730"></a>    element.style.textAlign = dir == goog.i18n.bidi.Dir.RTL ? &#39;right&#39; : &#39;left&#39;;
-<a name="line731"></a>    element.dir = dir == goog.i18n.bidi.Dir.RTL ? &#39;rtl&#39; : &#39;ltr&#39;;
-<a name="line732"></a>  }
-<a name="line733"></a>};
+<a name="line636"></a>/**
+<a name="line637"></a> * Replace the double and single quote directly after a Hebrew character with
+<a name="line638"></a> * GERESH and GERSHAYIM. In such case, most likely that&#39;s user intention.
+<a name="line639"></a> * @param {string} str String that need to be processed.
+<a name="line640"></a> * @return {string} Processed string with double/single quote replaced.
+<a name="line641"></a> */
+<a name="line642"></a>goog.i18n.bidi.normalizeHebrewQuote = function(str) {
+<a name="line643"></a>  return str.
+<a name="line644"></a>    replace(goog.i18n.bidi.doubleQuoteSubstituteRe_, &#39;$1\u05f4&#39;).
+<a name="line645"></a>    replace(goog.i18n.bidi.singleQuoteSubstituteRe_, &#39;$1\u05f3&#39;);
+<a name="line646"></a>};
+<a name="line647"></a>
+<a name="line648"></a>
+<a name="line649"></a>/**
+<a name="line650"></a> * Regular expression to split a string into &quot;words&quot; for directionality
+<a name="line651"></a> * estimation based on relative word counts.
+<a name="line652"></a> * @type {RegExp}
+<a name="line653"></a> * @private
+<a name="line654"></a> */
+<a name="line655"></a>goog.i18n.bidi.wordSeparatorRe_ = /\s+/;
+<a name="line656"></a>
+<a name="line657"></a>
+<a name="line658"></a>/**
+<a name="line659"></a> * Regular expression to check if a string contains any numerals. Used to
+<a name="line660"></a> * differentiate between completely neutral strings and those containing
+<a name="line661"></a> * numbers, which are weakly LTR.
+<a name="line662"></a> * @type {RegExp}
+<a name="line663"></a> * @private
+<a name="line664"></a> */
+<a name="line665"></a>goog.i18n.bidi.hasNumeralsRe_ = /\d/;
+<a name="line666"></a>
+<a name="line667"></a>
+<a name="line668"></a>/**
+<a name="line669"></a> * This constant controls threshold of RTL directionality.
+<a name="line670"></a> * @type {number}
+<a name="line671"></a> * @private
+<a name="line672"></a> */
+<a name="line673"></a>goog.i18n.bidi.rtlDetectionThreshold_ = 0.40;
+<a name="line674"></a>
+<a name="line675"></a>
+<a name="line676"></a>/**
+<a name="line677"></a> * Estimates the directionality of a string based on relative word counts.
+<a name="line678"></a> * If the number of RTL words is above a certain percentage of the total number
+<a name="line679"></a> * of strongly directional words, returns RTL.
+<a name="line680"></a> * Otherwise, if any words are strongly or weakly LTR, returns LTR.
+<a name="line681"></a> * Otherwise, returns UNKNOWN, which is used to mean &quot;neutral&quot;.
+<a name="line682"></a> * Numbers are counted as weakly LTR.
+<a name="line683"></a> * @param {string} str The string to be checked.
+<a name="line684"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line685"></a> *     Default: false.
+<a name="line686"></a> * @return {goog.i18n.bidi.Dir} Estimated overall directionality of {@code str}.
+<a name="line687"></a> */
+<a name="line688"></a>goog.i18n.bidi.estimateDirection = function(str, opt_isHtml) {
+<a name="line689"></a>  var rtlCount = 0;
+<a name="line690"></a>  var totalCount = 0;
+<a name="line691"></a>  var hasWeaklyLtr = false;
+<a name="line692"></a>  var tokens = goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml).
+<a name="line693"></a>      split(goog.i18n.bidi.wordSeparatorRe_);
+<a name="line694"></a>  for (var i = 0; i &lt; tokens.length; i++) {
+<a name="line695"></a>    var token = tokens[i];
+<a name="line696"></a>    if (goog.i18n.bidi.startsWithRtl(token)) {
+<a name="line697"></a>      rtlCount++;
+<a name="line698"></a>      totalCount++;
+<a name="line699"></a>    } else if (goog.i18n.bidi.isRequiredLtrRe_.test(token)) {
+<a name="line700"></a>      hasWeaklyLtr = true;
+<a name="line701"></a>    } else if (goog.i18n.bidi.hasAnyLtr(token)) {
+<a name="line702"></a>      totalCount++;
+<a name="line703"></a>    } else if (goog.i18n.bidi.hasNumeralsRe_.test(token)) {
+<a name="line704"></a>      hasWeaklyLtr = true;
+<a name="line705"></a>    }
+<a name="line706"></a>  }
+<a name="line707"></a>
+<a name="line708"></a>  return totalCount == 0 ?
+<a name="line709"></a>      (hasWeaklyLtr ? goog.i18n.bidi.Dir.LTR : goog.i18n.bidi.Dir.UNKNOWN) :
+<a name="line710"></a>      (rtlCount / totalCount &gt; goog.i18n.bidi.rtlDetectionThreshold_ ?
+<a name="line711"></a>          goog.i18n.bidi.Dir.RTL : goog.i18n.bidi.Dir.LTR);
+<a name="line712"></a>};
+<a name="line713"></a>
+<a name="line714"></a>
+<a name="line715"></a>/**
+<a name="line716"></a> * Check the directionality of a piece of text, return true if the piece of
+<a name="line717"></a> * text should be laid out in RTL direction.
+<a name="line718"></a> * @param {string} str The piece of text that need to be detected.
+<a name="line719"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line720"></a> *     Default: false.
+<a name="line721"></a> * @return {boolean} Whether this piece of text should be laid out in RTL.
+<a name="line722"></a> */
+<a name="line723"></a>goog.i18n.bidi.detectRtlDirectionality = function(str, opt_isHtml) {
+<a name="line724"></a>  return goog.i18n.bidi.estimateDirection(str, opt_isHtml) ==
+<a name="line725"></a>      goog.i18n.bidi.Dir.RTL;
+<a name="line726"></a>};
+<a name="line727"></a>
+<a name="line728"></a>
+<a name="line729"></a>/**
+<a name="line730"></a> * Sets text input element&#39;s directionality and text alignment based on a
+<a name="line731"></a> * given directionality.
+<a name="line732"></a> * @param {Element} element Input field element to set directionality to.
+<a name="line733"></a> * @param {goog.i18n.bidi.Dir|number|boolean} dir Desired directionality, given
+<a name="line734"></a> *     in one of the following formats:
+<a name="line735"></a> *     1. A goog.i18n.bidi.Dir constant.
+<a name="line736"></a> *     2. A number (positive = LRT, negative = RTL, 0 = unknown).
+<a name="line737"></a> *     3. A boolean (true = RTL, false = LTR).
+<a name="line738"></a> */
+<a name="line739"></a>goog.i18n.bidi.setElementDirAndAlign = function(element, dir) {
+<a name="line740"></a>  if (element &amp;&amp;
+<a name="line741"></a>      (dir = goog.i18n.bidi.toDir(dir)) != goog.i18n.bidi.Dir.UNKNOWN) {
+<a name="line742"></a>    element.style.textAlign = dir == goog.i18n.bidi.Dir.RTL ? &#39;right&#39; : &#39;left&#39;;
+<a name="line743"></a>    element.dir = dir == goog.i18n.bidi.Dir.RTL ? &#39;rtl&#39; : &#39;ltr&#39;;
+<a name="line744"></a>  }
+<a name="line745"></a>};
 </pre>
 
 

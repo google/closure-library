@@ -197,7 +197,7 @@
 <a name="line154"></a>
 <a name="line155"></a>/**
 <a name="line156"></a> * The left/top component dom container.
-<a name="line157"></a> * @type {Element?}
+<a name="line157"></a> * @type {Element}
 <a name="line158"></a> * @private
 <a name="line159"></a> */
 <a name="line160"></a>goog.ui.SplitPane.prototype.firstComponentContainer_ = null;
@@ -205,7 +205,7 @@
 <a name="line162"></a>
 <a name="line163"></a>/**
 <a name="line164"></a> * The right/bottom component dom container.
-<a name="line165"></a> * @type {Element?}
+<a name="line165"></a> * @type {Element}
 <a name="line166"></a> * @private
 <a name="line167"></a> */
 <a name="line168"></a>goog.ui.SplitPane.prototype.secondComponentContainer_ = null;
@@ -221,7 +221,7 @@
 <a name="line178"></a>
 <a name="line179"></a>/**
 <a name="line180"></a> * The initial size (width or height) of the left or top component.
-<a name="line181"></a> * @type {number?}
+<a name="line181"></a> * @type {?number}
 <a name="line182"></a> * @private
 <a name="line183"></a> */
 <a name="line184"></a>goog.ui.SplitPane.prototype.initialSize_ = null;
@@ -231,7 +231,7 @@
 <a name="line188"></a> * The saved size (width or height) of the left or top component on a
 <a name="line189"></a> * double-click (snap).
 <a name="line190"></a> * This needs to be saved so it can be restored after another double-click.
-<a name="line191"></a> * @type {number?}
+<a name="line191"></a> * @type {?number}
 <a name="line192"></a> * @private
 <a name="line193"></a> */
 <a name="line194"></a>goog.ui.SplitPane.prototype.savedSnapSize_ = null;
@@ -239,7 +239,7 @@
 <a name="line196"></a>
 <a name="line197"></a>/**
 <a name="line198"></a> * The first component size, so we don&#39;t change it on a window resize.
-<a name="line199"></a> * @type {number?}
+<a name="line199"></a> * @type {?number}
 <a name="line200"></a> * @private
 <a name="line201"></a> */
 <a name="line202"></a>goog.ui.SplitPane.prototype.firstComponentSize_ = null;
@@ -255,7 +255,7 @@
 <a name="line212"></a>
 <a name="line213"></a>/**
 <a name="line214"></a> * Iframe overlay to prevent iframes from grabbing events.
-<a name="line215"></a> * @type {Element?}
+<a name="line215"></a> * @type {Element}
 <a name="line216"></a> * @private
 <a name="line217"></a> */
 <a name="line218"></a>goog.ui.SplitPane.prototype.iframeOverlay_ = null;
@@ -568,7 +568,7 @@
 <a name="line525"></a>
 <a name="line526"></a>
 <a name="line527"></a>/**
-<a name="line528"></a> * @return {number?} The size of the left/top component.
+<a name="line528"></a> * @return {?number} The size of the left/top component.
 <a name="line529"></a> */
 <a name="line530"></a>goog.ui.SplitPane.prototype.getFirstComponentSize = function() {
 <a name="line531"></a>  return this.firstComponentSize_;
@@ -578,7 +578,7 @@
 <a name="line535"></a>/**
 <a name="line536"></a> * Set the size of the left/top component, and resize the other component based
 <a name="line537"></a> * on that size and handle size.
-<a name="line538"></a> * @param {number?} opt_size The size of the top or left, in pixels.
+<a name="line538"></a> * @param {?number} opt_size The size of the top or left, in pixels.
 <a name="line539"></a> */
 <a name="line540"></a>goog.ui.SplitPane.prototype.setFirstComponentSize = function(opt_size) {
 <a name="line541"></a>  var top = 0, left = 0;

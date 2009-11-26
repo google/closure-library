@@ -184,7 +184,7 @@
 <a name="line141"></a>
 <a name="line142"></a>/**
 <a name="line143"></a> * Gets the last part of the expression.
-<a name="line144"></a> * @return {string?} Last part of the expression.
+<a name="line144"></a> * @return {?string} Last part of the expression.
 <a name="line145"></a> */
 <a name="line146"></a>goog.ds.Expr.prototype.getLast = function() {
 <a name="line147"></a>  return this.last_;
@@ -230,7 +230,7 @@
 <a name="line187"></a> *
 <a name="line188"></a> * @param {goog.ds.DataNode} opt_ds Optional datasource to evaluate against.
 <a name="line189"></a> *     If not provided, evaluates against DataManager global root.
-<a name="line190"></a> * @return {Object?} Value of the node, or null if doesn&#39;t exist.
+<a name="line190"></a> * @return {Object} Value of the node, or null if doesn&#39;t exist.
 <a name="line191"></a> */
 <a name="line192"></a>goog.ds.Expr.prototype.getValue = function(opt_ds) {
 <a name="line193"></a>  if (opt_ds == null) {
@@ -367,7 +367,7 @@
 <a name="line324"></a>/**
 <a name="line325"></a> * Number of paths in the expression
 <a name="line326"></a> *
-<a name="line327"></a> * @type {number?}
+<a name="line327"></a> * @type {?number}
 <a name="line328"></a> * @private
 <a name="line329"></a> */
 <a name="line330"></a>goog.ds.Expr.prototype.size_ = null;
@@ -385,7 +385,7 @@
 <a name="line342"></a>/**
 <a name="line343"></a> * The last path in the expression
 <a name="line344"></a> *
-<a name="line345"></a> * @type {string?}
+<a name="line345"></a> * @type {?string}
 <a name="line346"></a> * @private
 <a name="line347"></a> */
 <a name="line348"></a>goog.ds.Expr.prototype.last_ = null;
@@ -439,7 +439,7 @@
 <a name="line396"></a>/**
 <a name="line397"></a> * The function used by this expression
 <a name="line398"></a> *
-<a name="line399"></a> * @type {string?}
+<a name="line399"></a> * @type {?string}
 <a name="line400"></a> * @private
 <a name="line401"></a> */
 <a name="line402"></a>goog.ds.Expr.prototype.exprFn_ = null;

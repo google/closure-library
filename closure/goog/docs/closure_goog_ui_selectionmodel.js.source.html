@@ -96,7 +96,7 @@
 <a name="line53"></a>
 <a name="line54"></a>/**
 <a name="line55"></a> * The currently selected item (null if none).
-<a name="line56"></a> * @type {Object?}
+<a name="line56"></a> * @type {Object}
 <a name="line57"></a> * @private
 <a name="line58"></a> */
 <a name="line59"></a>goog.ui.SelectionModel.prototype.selectedItem_ = null;
@@ -106,7 +106,7 @@
 <a name="line63"></a> * Selection handler function.  Called with two arguments (the item to be
 <a name="line64"></a> * selected or deselected, and a Boolean indicating whether the item is to
 <a name="line65"></a> * be selected or deselected).
-<a name="line66"></a> * @type {Function?}
+<a name="line66"></a> * @type {Function}
 <a name="line67"></a> * @private
 <a name="line68"></a> */
 <a name="line69"></a>goog.ui.SelectionModel.prototype.selectionHandler_ = null;
@@ -115,7 +115,7 @@
 <a name="line72"></a>/**
 <a name="line73"></a> * Returns the selection handler function used by the selection model to change
 <a name="line74"></a> * the internal selection state of items under its control.
-<a name="line75"></a> * @return {Function?} Selection handler function (null if none).
+<a name="line75"></a> * @return {Function} Selection handler function (null if none).
 <a name="line76"></a> */
 <a name="line77"></a>goog.ui.SelectionModel.prototype.getSelectionHandler = function() {
 <a name="line78"></a>  return this.selectionHandler_;
@@ -177,7 +177,7 @@
 <a name="line134"></a>/**
 <a name="line135"></a> * Returns the item at the given 0-based index.
 <a name="line136"></a> * @param {number} index Index of the item to return.
-<a name="line137"></a> * @return {Object?} Item at the given index (null if none).
+<a name="line137"></a> * @return {Object} Item at the given index (null if none).
 <a name="line138"></a> */
 <a name="line139"></a>goog.ui.SelectionModel.prototype.getItemAt = function(index) {
 <a name="line140"></a>  return this.items_[index] || null;
@@ -226,7 +226,7 @@
 <a name="line183"></a>/**
 <a name="line184"></a> * Removes the given item (if it exists).  Dispatches a {@code SELECT} event if
 <a name="line185"></a> * the removed item was the currently selected item.
-<a name="line186"></a> * @param {Object?} item Item to remove.
+<a name="line186"></a> * @param {Object} item Item to remove.
 <a name="line187"></a> */
 <a name="line188"></a>goog.ui.SelectionModel.prototype.removeItem = function(item) {
 <a name="line189"></a>  if (item &amp;&amp; goog.array.remove(this.items_, item)) {
@@ -258,7 +258,7 @@
 <a name="line215"></a>/**
 <a name="line216"></a> * Selects the given item, deselecting any previously selected item, and
 <a name="line217"></a> * dispatches a {@code SELECT} event.
-<a name="line218"></a> * @param {Object?} item Item to select (null to clear the selection).
+<a name="line218"></a> * @param {Object} item Item to select (null to clear the selection).
 <a name="line219"></a> */
 <a name="line220"></a>goog.ui.SelectionModel.prototype.setSelectedItem = function(item) {
 <a name="line221"></a>  if (item != this.selectedItem_) {

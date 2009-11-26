@@ -22,16 +22,19 @@ limitations under the License.
 <title>Closure Unit Tests - goog.testing.stacktrace</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.testing.ExpectedFailures');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.asserts');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.stacktrace');
+  goog.require('goog.userAgent');
 </script>
 </head>
 <body>
 <script>
 
 var stubs = new goog.testing.PropertyReplacer();
+var expectedFailures = new goog.testing.ExpectedFailures();
 
 function setUp() {
   stubs.set(goog.testing.stacktrace, 'isClosureInspectorActive_', function() {
@@ -41,6 +44,7 @@ function setUp() {
 
 function tearDown() {
   stubs.reset();
+  expectedFailures.handleTearDown();
 }
 
 function testParseStackFrameInChrome() {
@@ -148,6 +152,35 @@ function testFramesToString() {
   var frames = [normalFrame, anonFrame, null, anonFrame];
   var stack = goog.testing.stacktrace.framesToString_(frames);
   assertEquals('framesToString', '> foo\n> anonymous\n> (unknown)\n', stack);
+}
+
+function testFollowCallChain() {
+  var func = function(var_args) {
+    return goog.testing.stacktrace.followCallChain_();
+  };
+
+  var frames = func(undefined, null, false, 0, '', {}, goog.nullFunction);
+
+  // Opera before version 10 doesn't support the caller attribute. In that
+  // browser followCallChain_() returns empty stack trace.
+  expectedFailures.expectFailureFor(goog.userAgent.OPERA &&
+      !goog.userAgent.isVersion('10'));
+  try {
+    assertTrue('The stack trace consists of >=2 frames', frames.length >= 2)
+  } catch (e) {
+    expectedFailures.handleException(e);
+  }
+
+  if (frames.length >= 2) {
+    assertEquals('innermost function is anonymous', '', frames[0].getName());
+    // There are white space differences how browsers convert functions to
+    // strings.
+    var expected = '(undefined,null,false,0,"",[objectObject],function(){})';
+    assertEquals('arguments of the innermost function (ignoring whitespaces)',
+        expected, frames[0].args_.replace(/\s/g, ''));
+    assertEquals('test function name', 'testFollowCallChain',
+        frames[1].getName());
+  }
 }
 
 </script>

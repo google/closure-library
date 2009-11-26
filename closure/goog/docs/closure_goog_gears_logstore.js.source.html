@@ -75,7 +75,7 @@
 <a name="line32"></a>/**
 <a name="line33"></a> * Implements a store for goog.debug.Logger data.
 <a name="line34"></a> * @param {goog.gears.Database} database Database.
-<a name="line35"></a> * @param {string?} opt_tableName Name of logging table to use.
+<a name="line35"></a> * @param {?string} opt_tableName Name of logging table to use.
 <a name="line36"></a> * @extends {goog.gears.BaseStore}
 <a name="line37"></a> * @constructor
 <a name="line38"></a> */
@@ -255,8 +255,8 @@
 <a name="line212"></a>/**
 <a name="line213"></a> * Create new delay object for auto-pruning. Does not stop or
 <a name="line214"></a> * start auto-pruning, call #startAutoPrune and #startAutoPrune for that.
-<a name="line215"></a> * @param {number?} opt_count Number of records of recent hitory to keep.
-<a name="line216"></a> * @param {number?} opt_interval Milliseconds to wait before next pruning.
+<a name="line215"></a> * @param {?number} opt_count Number of records of recent hitory to keep.
+<a name="line216"></a> * @param {?number} opt_interval Milliseconds to wait before next pruning.
 <a name="line217"></a> */
 <a name="line218"></a>goog.gears.LogStore.prototype.createAutoPruneDelay = function(
 <a name="line219"></a>    opt_count, opt_interval) {
@@ -305,7 +305,7 @@
 <a name="line262"></a>
 <a name="line263"></a>/**
 <a name="line264"></a> * Prune, and schedule next pruning.
-<a name="line265"></a> * @param {number?} opt_count Number of records of recent hitory to keep.
+<a name="line265"></a> * @param {?number} opt_count Number of records of recent hitory to keep.
 <a name="line266"></a> * @private
 <a name="line267"></a> */
 <a name="line268"></a>goog.gears.LogStore.prototype.autoPrune_ = function(opt_count) {
@@ -316,7 +316,7 @@
 <a name="line273"></a>
 <a name="line274"></a>/**
 <a name="line275"></a> * Keep some number of most recent log records and delete all older ones.
-<a name="line276"></a> * @param {number?} opt_count Number of records of recent history to keep. If
+<a name="line276"></a> * @param {?number} opt_count Number of records of recent history to keep. If
 <a name="line277"></a> *     unspecified, we use #goog.gears.LogStore.DEFAULT_PRUNE_KEEPER_COUNT_.
 <a name="line278"></a> *     Pass in 0 to delete all log records.
 <a name="line279"></a> */

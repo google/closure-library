@@ -87,7 +87,7 @@ goog.ui.PopupColorPicker.prototype.popupCorner_ =
 
 /**
  * Reference to the element that triggered the last popup.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.PopupColorPicker.prototype.lastTarget_ = null;
@@ -191,7 +191,7 @@ goog.ui.PopupColorPicker.prototype.setAutoHide = function(autoHide) {
  * Returns the region inside which the Popup dismisses itself when the user
  * clicks, or null if it was not set. Null indicates the entire document is
  * the autohide region.
- * @return {Element?} The DOM element for autohide, or null if it hasn't been
+ * @return {Element} The DOM element for autohide, or null if it hasn't been
  *     set.
  */
 goog.ui.PopupColorPicker.prototype.getAutoHideRegion = function() {
@@ -228,7 +228,7 @@ goog.ui.PopupColorPicker.prototype.getPopup = function() {
 
 
 /**
- * @return {Element?} The last element that triggered the popup.
+ * @return {Element} The last element that triggered the popup.
  */
 goog.ui.PopupColorPicker.prototype.getLastTarget = function() {
   return this.lastTarget_;
@@ -257,7 +257,7 @@ goog.ui.PopupColorPicker.prototype.detach = function(element) {
 
 /**
  * Gets the color that is currently selected in this color picker.
- * @return {string?} The hex string of the color selected, or null if no
+ * @return {?string} The hex string of the color selected, or null if no
  *     color is selected.
  */
 goog.ui.PopupColorPicker.prototype.getSelectedColor = function() {

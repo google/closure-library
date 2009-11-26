@@ -71,7 +71,7 @@
 <a name="line28"></a>/**
 <a name="line29"></a> * Renders an emoji palette.
 <a name="line30"></a> *
-<a name="line31"></a> * @param {string?} defaultImgUrl Url of the img that should be used to fill up
+<a name="line31"></a> * @param {?string} defaultImgUrl Url of the img that should be used to fill up
 <a name="line32"></a> *     the cells in the emoji table, to prevent jittering. Will be stretched
 <a name="line33"></a> *     to the emoji cell size. A good image is a transparent dot.
 <a name="line34"></a> * @constructor
@@ -99,7 +99,7 @@
 <a name="line56"></a> * not filled with emoji, i.e., after all the emoji have already been placed
 <a name="line57"></a> * on a page.
 <a name="line58"></a> *
-<a name="line59"></a> * @type {string?}
+<a name="line59"></a> * @type {?string}
 <a name="line60"></a> * @private
 <a name="line61"></a> */
 <a name="line62"></a>goog.ui.emoji.EmojiPaletteRenderer.prototype.defaultImgUrl_ = null;
@@ -232,7 +232,7 @@
 <a name="line189"></a> * neither a palette cell nor part of a palette item.
 <a name="line190"></a> * @param {goog.ui.Palette} palette Palette in which to look for the item.
 <a name="line191"></a> * @param {Node} node Node to look for.
-<a name="line192"></a> * @return {Node?} The corresponding palette item (null if not found).
+<a name="line192"></a> * @return {Node} The corresponding palette item (null if not found).
 <a name="line193"></a> */
 <a name="line194"></a>goog.ui.emoji.EmojiPaletteRenderer.prototype.getContainingItem =
 <a name="line195"></a>    function(palette, node) {

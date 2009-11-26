@@ -200,7 +200,7 @@
 <a name="line157"></a>/**
 <a name="line158"></a> * The start node of the range.  This can be null if one of the other
 <a name="line159"></a> * representations of the range is specified.
-<a name="line160"></a> * @type {Node?}
+<a name="line160"></a> * @type {Node}
 <a name="line161"></a> * @private
 <a name="line162"></a> */
 <a name="line163"></a>goog.dom.TextRange.prototype.startNode_ = null;
@@ -209,7 +209,7 @@
 <a name="line166"></a>/**
 <a name="line167"></a> * The start offset of the range.  This can be null if one of the other
 <a name="line168"></a> * representations of the range is specified.
-<a name="line169"></a> * @type {number?}
+<a name="line169"></a> * @type {?number}
 <a name="line170"></a> * @private
 <a name="line171"></a> */
 <a name="line172"></a>goog.dom.TextRange.prototype.startOffset_ = null;
@@ -218,7 +218,7 @@
 <a name="line175"></a>/**
 <a name="line176"></a> * The end node of the range.  This can be null if one of the other
 <a name="line177"></a> * representations of the range is specified.
-<a name="line178"></a> * @type {Node?}
+<a name="line178"></a> * @type {Node}
 <a name="line179"></a> * @private
 <a name="line180"></a> */
 <a name="line181"></a>goog.dom.TextRange.prototype.endNode_ = null;
@@ -227,7 +227,7 @@
 <a name="line184"></a>/**
 <a name="line185"></a> * The end offset of the range.  This can be null if one of the other
 <a name="line186"></a> * representations of the range is specified.
-<a name="line187"></a> * @type {number?}
+<a name="line187"></a> * @type {?number}
 <a name="line188"></a> * @private
 <a name="line189"></a> */
 <a name="line190"></a>goog.dom.TextRange.prototype.endOffset_ = null;
@@ -529,9 +529,9 @@
 <a name="line486"></a> * clone of the specified element (on IE).  Returns a reference to the
 <a name="line487"></a> * surrounding element if the operation was successful; returns null if the
 <a name="line488"></a> * operation failed.
-<a name="line489"></a> * @param {Element?} element The element with which the selection is to be
+<a name="line489"></a> * @param {Element} element The element with which the selection is to be
 <a name="line490"></a> *    surrounded.
-<a name="line491"></a> * @return {Element?} The surrounding element (same as the argument on Mozilla,
+<a name="line491"></a> * @return {Element} The surrounding element (same as the argument on Mozilla,
 <a name="line492"></a> *    but not on IE), or null if unsuccessful.
 <a name="line493"></a> */
 <a name="line494"></a>goog.dom.TextRange.prototype.surroundContents = function(element) {

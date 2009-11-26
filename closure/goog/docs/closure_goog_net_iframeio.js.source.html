@@ -404,7 +404,7 @@
 <a name="line361"></a>
 <a name="line362"></a>/**
 <a name="line363"></a> * Reference to form element that gets reused for requests to the iframe.
-<a name="line364"></a> * @type {HTMLFormElement?}
+<a name="line364"></a> * @type {HTMLFormElement}
 <a name="line365"></a> * @private
 <a name="line366"></a> */
 <a name="line367"></a>goog.net.IframeIo.prototype.form_ = null;
@@ -413,7 +413,7 @@
 <a name="line370"></a>/**
 <a name="line371"></a> * Reference to the iframe being used for the current request, or null if no
 <a name="line372"></a> * request is currently active.
-<a name="line373"></a> * @type {HTMLIFrameElement?}
+<a name="line373"></a> * @type {HTMLIFrameElement}
 <a name="line374"></a> * @private
 <a name="line375"></a> */
 <a name="line376"></a>goog.net.IframeIo.prototype.iframe_ = null;
@@ -422,7 +422,7 @@
 <a name="line379"></a>/**
 <a name="line380"></a> * Name of the iframe being used for the current request, or null if no
 <a name="line381"></a> * request is currently active.
-<a name="line382"></a> * @type {string?}
+<a name="line382"></a> * @type {?string}
 <a name="line383"></a> * @private
 <a name="line384"></a> */
 <a name="line385"></a>goog.net.IframeIo.prototype.iframeName_ = null;
@@ -430,7 +430,7 @@
 <a name="line387"></a>
 <a name="line388"></a>/**
 <a name="line389"></a> * Next id so that iframe names are unique.
-<a name="line390"></a> * @type {Number}
+<a name="line390"></a> * @type {number}
 <a name="line391"></a> * @private
 <a name="line392"></a> */
 <a name="line393"></a>goog.net.IframeIo.prototype.nextIframeId_ = 0;
@@ -470,7 +470,7 @@
 <a name="line427"></a>
 <a name="line428"></a>/**
 <a name="line429"></a> * The text content of the last request.
-<a name="line430"></a> * @type {string?}
+<a name="line430"></a> * @type {?string}
 <a name="line431"></a> * @private
 <a name="line432"></a> */
 <a name="line433"></a>goog.net.IframeIo.prototype.lastContent_ = null;
@@ -496,7 +496,7 @@
 <a name="line453"></a>/**
 <a name="line454"></a> * Window timeout ID used to cancel the timeout event handler if the request
 <a name="line455"></a> * completes successfully.
-<a name="line456"></a> * @type {number?}
+<a name="line456"></a> * @type {?number}
 <a name="line457"></a> * @private
 <a name="line458"></a> */
 <a name="line459"></a>goog.net.IframeIo.prototype.timeoutId_ = null;
@@ -504,7 +504,7 @@
 <a name="line461"></a>
 <a name="line462"></a>/**
 <a name="line463"></a> * Window timeout ID used to detect when firefox silently fails.
-<a name="line464"></a> * @type {number?}
+<a name="line464"></a> * @type {?number}
 <a name="line465"></a> * @private
 <a name="line466"></a> */
 <a name="line467"></a>goog.net.IframeIo.prototype.firefoxSilentErrorTimeout_ = null;
@@ -512,7 +512,7 @@
 <a name="line469"></a>
 <a name="line470"></a>/**
 <a name="line471"></a> * Window timeout ID used by the timer that disposes the iframes.
-<a name="line472"></a> * @type {number?}
+<a name="line472"></a> * @type {?number}
 <a name="line473"></a> * @private
 <a name="line474"></a> */
 <a name="line475"></a>goog.net.IframeIo.prototype.iframeDisposalTimer_ = null;
@@ -711,7 +711,7 @@
 <a name="line668"></a>/**
 <a name="line669"></a> * Returns the last response text (i.e. the text content of the iframe).
 <a name="line670"></a> * Assumes plain text!
-<a name="line671"></a> * @return {string?} Result from the server.
+<a name="line671"></a> * @return {?string} Result from the server.
 <a name="line672"></a> */
 <a name="line673"></a>goog.net.IframeIo.prototype.getResponseText = function() {
 <a name="line674"></a>  return this.lastContent_;
@@ -720,7 +720,7 @@
 <a name="line677"></a>
 <a name="line678"></a>/**
 <a name="line679"></a> * Returns the last response html (i.e. the innerHtml of the iframe).
-<a name="line680"></a> * @return {string?} Result from the server.
+<a name="line680"></a> * @return {?string} Result from the server.
 <a name="line681"></a> */
 <a name="line682"></a>goog.net.IframeIo.prototype.getResponseHtml = function() {
 <a name="line683"></a> return this.lastContentHtml_;
@@ -742,7 +742,7 @@
 <a name="line699"></a>/**
 <a name="line700"></a> * Returns the document object from the last request.  Not truely XML, but
 <a name="line701"></a> * used to mirror the XhrIo interface.
-<a name="line702"></a> * @return {HTMLDocument?} The document object from the last request.
+<a name="line702"></a> * @return {HTMLDocument} The document object from the last request.
 <a name="line703"></a> */
 <a name="line704"></a>goog.net.IframeIo.prototype.getResponseXml = function() {
 <a name="line705"></a>  if (!this.iframe_) return null;
@@ -1290,7 +1290,7 @@
 <a name="line1247"></a>
 <a name="line1248"></a>
 <a name="line1249"></a>/**
-<a name="line1250"></a> * @return {HTMLDocument?} The appropriate content document.
+<a name="line1250"></a> * @return {HTMLDocument} The appropriate content document.
 <a name="line1251"></a> * @private
 <a name="line1252"></a> */
 <a name="line1253"></a>goog.net.IframeIo.prototype.getContentDocument_ = function() {
@@ -1303,7 +1303,7 @@
 <a name="line1260"></a>
 <a name="line1261"></a>
 <a name="line1262"></a>/**
-<a name="line1263"></a> * @return {HTMLIFrameElement?} The appropriate iframe to use for requests
+<a name="line1263"></a> * @return {HTMLIFrameElement} The appropriate iframe to use for requests
 <a name="line1264"></a> *     (created in sendForm_).
 <a name="line1265"></a> * @private
 <a name="line1266"></a> */

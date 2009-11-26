@@ -27,7 +27,7 @@ goog.require('goog.crypt');
 
 /**
  * Maps bytes to characters.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.crypt.base64.byteToCharMap_ = null;
@@ -35,7 +35,7 @@ goog.crypt.base64.byteToCharMap_ = null;
 
 /**
  * Maps characters to bytes.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.crypt.base64.charToByteMap_ = null;
@@ -43,7 +43,7 @@ goog.crypt.base64.charToByteMap_ = null;
 
 /**
  * Maps bytes to websafe characters.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.crypt.base64.byteToCharMapWebSafe_ = null;
@@ -51,7 +51,7 @@ goog.crypt.base64.byteToCharMapWebSafe_ = null;
 
 /**
  * Maps websafe characters to bytes.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.crypt.base64.charToByteMapWebSafe_ = null;

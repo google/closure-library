@@ -281,7 +281,7 @@
 <a name="line238"></a> * @param {number} opt_index If the field is repeated, the index to use when
 <a name="line239"></a> *     looking up the value.
 <a name="line240"></a> *
-<a name="line241"></a> * @return {Object?} The value found or undefined if none.
+<a name="line241"></a> * @return {Object} The value found or undefined if none.
 <a name="line242"></a> */
 <a name="line243"></a>goog.proto2.Message.prototype.get = function(field, opt_index) {
 <a name="line244"></a>  goog.proto2.Util.assert(
@@ -301,7 +301,7 @@
 <a name="line258"></a> * @param {number} opt_index If the field is repeated, the index to use when
 <a name="line259"></a> *     looking up the value.
 <a name="line260"></a> *
-<a name="line261"></a> * @return {Object?} The value found or the default if none.
+<a name="line261"></a> * @return {Object} The value found or the default if none.
 <a name="line262"></a> */
 <a name="line263"></a>goog.proto2.Message.prototype.getOrDefault = function(field, opt_index) {
 <a name="line264"></a>  goog.proto2.Util.assert(
@@ -426,7 +426,7 @@
 <a name="line383"></a> * @param {number} opt_index If the field is a repeated field, the index
 <a name="line384"></a> *     at which to get the value.
 <a name="line385"></a> *
-<a name="line386"></a> * @return {Object?} The value found or undefined for none.
+<a name="line386"></a> * @return {Object} The value found or undefined for none.
 <a name="line387"></a> */
 <a name="line388"></a>goog.proto2.Message.prototype.get$Value = function(tag, opt_index) {
 <a name="line389"></a>  var field = this.getFieldByTag_(tag);
@@ -530,7 +530,7 @@
 <a name="line487"></a> * GENERATED CODE USE ONLY. Basis of the set{Field} methods.
 <a name="line488"></a> *
 <a name="line489"></a> * @param {number} tag The field&#39;s tag index.
-<a name="line490"></a> * @param {Object?} value The field&#39;s value.
+<a name="line490"></a> * @param {Object} value The field&#39;s value.
 <a name="line491"></a> */
 <a name="line492"></a>goog.proto2.Message.prototype.set$Value = function(tag, value) {
 <a name="line493"></a>  if (goog.proto2.Util.conductChecks()) {
@@ -552,7 +552,7 @@
 <a name="line509"></a> * GENERATED CODE USE ONLY. Basis of the add{Field} methods.
 <a name="line510"></a> *
 <a name="line511"></a> * @param {number} tag The field&#39;s tag index.
-<a name="line512"></a> * @param {Object?} value The value to add.
+<a name="line512"></a> * @param {Object} value The value to add.
 <a name="line513"></a> */
 <a name="line514"></a>goog.proto2.Message.prototype.add$Value = function(tag, value) {
 <a name="line515"></a>  if (goog.proto2.Util.conductChecks()) {
@@ -577,7 +577,7 @@
 <a name="line534"></a> * is valid.
 <a name="line535"></a> *
 <a name="line536"></a> * @param {goog.proto2.FieldDescriptor} field The field being assigned.
-<a name="line537"></a> * @param {Object?} value The value being assigned.
+<a name="line537"></a> * @param {Object} value The value being assigned.
 <a name="line538"></a> * @private
 <a name="line539"></a> */
 <a name="line540"></a>goog.proto2.Message.prototype.checkFieldType_ = function(field, value) {

@@ -786,6 +786,10 @@ function testCanHaveChildren() {
   for (var tag in goog.dom.TagName) {
     var expected = true;
     switch (tag) {
+      case goog.dom.TagName.BASE:
+        // Before version 8, IE incorrectly reports that BASE can have children.
+        expected = goog.userAgent.IE && !goog.userAgent.isVersion(8);
+        break;
       case goog.dom.TagName.APPLET:
       case goog.dom.TagName.AREA:
       case goog.dom.TagName.BR:
@@ -805,6 +809,7 @@ function testCanHaveChildren() {
       case goog.dom.TagName.SCRIPT:
       case goog.dom.TagName.STYLE:
         expected = false;
+        break;
     }
     var node = goog.dom.createDom(tag);
     assertEquals(tag + ' should ' + (expected ? '' : 'not ') +

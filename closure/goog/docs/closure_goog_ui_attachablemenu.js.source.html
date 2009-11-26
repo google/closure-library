@@ -93,7 +93,7 @@
 <a name="line50"></a>
 <a name="line51"></a>/**
 <a name="line52"></a> * The currently selected element (mouse was moved over it or keyboard arrows)
-<a name="line53"></a> * @type {Element?}
+<a name="line53"></a> * @type {Element}
 <a name="line54"></a> * @private
 <a name="line55"></a> */
 <a name="line56"></a>goog.ui.AttachableMenu.prototype.selectedElement_ = null;
@@ -173,7 +173,7 @@
 <a name="line130"></a>/**
 <a name="line131"></a> * Returns the selected item
 <a name="line132"></a> *
-<a name="line133"></a> * @return {Element?} The item selected or null if no item is selected.
+<a name="line133"></a> * @return {Element} The item selected or null if no item is selected.
 <a name="line134"></a> */
 <a name="line135"></a>goog.ui.AttachableMenu.prototype.getSelectedItem = function() {
 <a name="line136"></a>  return this.selectedElement_;
@@ -183,7 +183,7 @@
 <a name="line140"></a>/**
 <a name="line141"></a> * Sets the specified item as the selected element.
 <a name="line142"></a> *
-<a name="line143"></a> * @param {Element?} elt The item to select. The type of this item is specific
+<a name="line143"></a> * @param {Element} elt The item to select. The type of this item is specific
 <a name="line144"></a> * to the menu class.
 <a name="line145"></a> */
 <a name="line146"></a>goog.ui.AttachableMenu.prototype.setSelectedItem = function(elt) {
@@ -257,7 +257,7 @@
 <a name="line214"></a> * Returns the next or previous item. Used for up/down arrows.
 <a name="line215"></a> *
 <a name="line216"></a> * @param {boolean} prev True to go to the previous element instead of next.
-<a name="line217"></a> * @return {Element?} The next or previous element.
+<a name="line217"></a> * @return {Element} The next or previous element.
 <a name="line218"></a> * @protected
 <a name="line219"></a> */
 <a name="line220"></a>goog.ui.AttachableMenu.prototype.getNextPrevItem = function(prev) {

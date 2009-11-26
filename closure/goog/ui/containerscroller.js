@@ -169,8 +169,10 @@ goog.ui.ContainerScroller.prototype.onAfterShow_ = function(e) {
  * @private
  */
 goog.ui.ContainerScroller.prototype.onHide_ = function(e) {
-  this.lastEnterTarget_ = null;
-  this.scrollTopBeforeHide_ = this.container_.getElement().scrollTop;
+  if (e.target == this.container_) {
+    this.lastEnterTarget_ = null;
+    this.scrollTopBeforeHide_ = this.container_.getElement().scrollTop;
+  }
 };
 
 

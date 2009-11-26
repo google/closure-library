@@ -171,7 +171,7 @@
 <a name="line128"></a>
 <a name="line129"></a>/**
 <a name="line130"></a> * Returns the currently selected color (null if none).
-<a name="line131"></a> * @return {string?} The selected color.
+<a name="line131"></a> * @return {?string} The selected color.
 <a name="line132"></a> */
 <a name="line133"></a>goog.ui.ColorMenuButton.prototype.getSelectedColor = function() {
 <a name="line134"></a>  return /** @type {string} */ (this.getValue());
@@ -181,7 +181,7 @@
 <a name="line138"></a>/**
 <a name="line139"></a> * Sets the selected color, or clears the selected color if the argument is
 <a name="line140"></a> * null or not any of the available color choices.
-<a name="line141"></a> * @param {string?} color New color.
+<a name="line141"></a> * @param {?string} color New color.
 <a name="line142"></a> */
 <a name="line143"></a>goog.ui.ColorMenuButton.prototype.setSelectedColor = function(color) {
 <a name="line144"></a>  this.setValue(color);
@@ -192,7 +192,7 @@
 <a name="line149"></a> * Sets the value associated with the color menu button.  Overrides
 <a name="line150"></a> * {@link goog.ui.Button#setValue} by interpreting the value as a color
 <a name="line151"></a> * spec string.
-<a name="line152"></a> * @param {string?} color New button value; should be a color spec string.
+<a name="line152"></a> * @param {?string} color New button value; should be a color spec string.
 <a name="line153"></a> */
 <a name="line154"></a>goog.ui.ColorMenuButton.prototype.setValue = function(color) {
 <a name="line155"></a>  for (var i = 0, item; item = this.getItemAt(i); i++) {
@@ -236,7 +236,7 @@
 <a name="line193"></a>  if (open &amp;&amp; this.getItemCount() == 0) {
 <a name="line194"></a>    this.setMenu(
 <a name="line195"></a>        goog.ui.ColorMenuButton.newColorMenu(null, this.getDomHelper()));
-<a name="line196"></a>    this.setValue(/** @type {string?} */ (this.getValue()));
+<a name="line196"></a>    this.setValue(/** @type {?string} */ (this.getValue()));
 <a name="line197"></a>  }
 <a name="line198"></a>  goog.ui.ColorMenuButton.superClass_.setOpen.call(this, open);
 <a name="line199"></a>};

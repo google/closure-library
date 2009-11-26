@@ -146,7 +146,7 @@ goog.ui.ButtonRenderer.prototype.getValue = goog.nullFunction;
 /**
  * Takes a button's root element and a value, and updates the element to reflect
  * the new value.  No-op in the base class.
- * @param {Element?} element The button's root element.
+ * @param {Element} element The button's root element.
  * @param {string} value New value.
  * @protected
  */
@@ -166,7 +166,7 @@ goog.ui.ButtonRenderer.prototype.getTooltip = function(element) {
 /**
  * Takes a button's root element and a tooltip string, and updates the element
  * with the new tooltip.
- * @param {Element?} element The button's root element.
+ * @param {Element} element The button's root element.
  * @param {string} tooltip New tooltip text.
  * @protected
  */

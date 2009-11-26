@@ -107,7 +107,7 @@ goog.net.xpc.CrossPageChannel.prototype.isConnected = function() {
 
 /**
  * Reference to the window-object of the peer page.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.net.xpc.CrossPageChannel.prototype.peerWindowObject_ = null;
@@ -115,7 +115,7 @@ goog.net.xpc.CrossPageChannel.prototype.peerWindowObject_ = null;
 
 /**
  * Reference to the iframe-element.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.net.xpc.CrossPageChannel.prototype.iframeElement_ = null;

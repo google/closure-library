@@ -183,7 +183,7 @@ goog.dom.annotate.NONWORD_RE_ = /\W/;
  *
  * @param {string} text  The plain text to be searched.
  * @param {Array} terms  An array of
- *   [{String} searchTerm, {Boolean} matchWholeWordOnly] tuples.
+ *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
  *   The matchWholeWordOnly value is a per-term attribute because some terms
  *   may be CJK, while others are not. (For correctness, matchWholeWordOnly
  *   should always be false for CJK terms.).
@@ -194,7 +194,7 @@ goog.dom.annotate.NONWORD_RE_ = /\W/;
  *   and returns the annotated term as an HTML string.
  * @param {*} opt_ignoreCase  Whether to ignore the case of the query
  *   terms when looking for matches.
- * @return {string?} The HTML equivalent of {@code text} with terms
+ * @return {?string} The HTML equivalent of {@code text} with terms
  *   annotated, or null if the text did not contain any of the terms.
  */
 goog.dom.annotate.annotateText = function(text, terms, annotateFn,
@@ -215,7 +215,7 @@ goog.dom.annotate.annotateText = function(text, terms, annotateFn,
  *
  * @param {string} text  The plain text to be searched.
  * @param {Array} terms  An array of
- *   [{String} searchTerm, {Boolean} matchWholeWordOnly] tuples.
+ *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
  *   If {@code ignoreCase} is true, each search term must already be lowercase.
  *   The matchWholeWordOnly value is a per-term attribute because some terms
  *   may be CJK, while others are not. (For correctness, matchWholeWordOnly
@@ -227,7 +227,7 @@ goog.dom.annotate.annotateText = function(text, terms, annotateFn,
  *   and returns the annotated term as an HTML string.
  * @param {*} ignoreCase  Whether to ignore the case of the query terms
  *   when looking for matches.
- * @return {string?} The HTML equivalent of {@code text} with terms
+ * @return {?string} The HTML equivalent of {@code text} with terms
  *   annotated, or null if the text did not contain any of the terms.
  * @private
  */
@@ -337,9 +337,9 @@ goog.dom.annotate.helpAnnotateText_ = function(text, terms, annotateFn,
  * Converts terms to lowercase.
  *
  * @param {Array} terms  An array of
- *   [{String} searchTerm, {Boolean} matchWholeWordOnly] tuples.
+ *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
  * @return {Array}  An array of
- *   [{String} searchTerm, {Boolean} matchWholeWordOnly] tuples.
+ *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
  * @private
  */
 goog.dom.annotate.lowercaseTerms_ = function(terms) {

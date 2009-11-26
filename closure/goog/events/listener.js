@@ -55,7 +55,7 @@ goog.events.Listener.prototype.listener;
 
 /**
  * Proxy for callback that passes through {@link goog.events#HandleEvent_}
- * @type {Function?}
+ * @type {Function}
  */
 goog.events.Listener.prototype.proxy;
 

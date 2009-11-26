@@ -52,7 +52,7 @@ goog.events.MouseWheelHandler = function(element) {
 
   /**
    * The key returned from the goog.events.listen.
-   * @type {number?}
+   * @type {?number}
    * @private
    */
   this.listenKey_ = goog.events.listen(this.element_, type, this);

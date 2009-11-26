@@ -221,7 +221,7 @@
 <a name="line178"></a>/**
 <a name="line179"></a> * Window timeout ID used to cancel the timeout event handler if the request
 <a name="line180"></a> * completes successfully.
-<a name="line181"></a> * @type {Object?}
+<a name="line181"></a> * @type {Object}
 <a name="line182"></a> * @private
 <a name="line183"></a> */
 <a name="line184"></a>goog.testing.net.XhrIo.prototype.timeoutId_ = null;
@@ -466,7 +466,7 @@
 <a name="line423"></a>/**
 <a name="line424"></a> * Gets the response XML from the Xhr object.  Will only return correct result
 <a name="line425"></a> * when called from the context of a callback.
-<a name="line426"></a> * @return {Document?} Result from the server if it was XML.
+<a name="line426"></a> * @return {Document} Result from the server if it was XML.
 <a name="line427"></a> */
 <a name="line428"></a>goog.testing.net.XhrIo.prototype.getResponseXml = function() {
 <a name="line429"></a>  // NOTE: I haven&#39;t found out how to check in Internet Explorer

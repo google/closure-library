@@ -25,6 +25,9 @@ goog.provide('goog.graphics.Element');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.graphics.AffineTransform');
+goog.require('goog.math');
+
+
 
 /**
  * Base class for a thin wrapper around the DOM element returned from
@@ -58,7 +61,7 @@ goog.graphics.Element.prototype.graphics_ = null;
 
 /**
  * The native browser element this class wraps.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.graphics.Element.prototype.element_ = null;

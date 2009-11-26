@@ -651,13 +651,13 @@ goog.dom.createDom_ = function(doc, args) {
   }
 
   if (args.length > 2) {
-    function childHandler(child) {
+    var childHandler = function(child) {
       // TODO: More coercion, ala MochiKit?
       if (child) {
         element.appendChild(goog.isString(child) ?
             doc.createTextNode(child) : child);
       }
-    }
+    };
 
     for (var i = 2; i < args.length; i++) {
       var arg = args[i];
@@ -797,6 +797,7 @@ goog.dom.canHaveChildren = function(node) {
   switch (node.tagName) {
     case goog.dom.TagName.APPLET:
     case goog.dom.TagName.AREA:
+    case goog.dom.TagName.BASE:
     case goog.dom.TagName.BR:
     case goog.dom.TagName.COL:
     case goog.dom.TagName.FRAME:
@@ -873,7 +874,7 @@ goog.dom.insertSiblingAfter = function(newNode, refNode) {
 /**
  * Removes a node from its parent.
  * @param {Node} node The node to remove.
- * @return {Node?} The node removed if removed; else, null.
+ * @return {Node} The node removed if removed; else, null.
  */
 goog.dom.removeNode = function(node) {
   return node && node.parentNode ? node.parentNode.removeChild(node) : null;
@@ -924,7 +925,7 @@ goog.dom.flattenElement = function(element) {
 /**
  * Returns the first child node that is an element.
  * @param {Node} node The node to get the first child element of.
- * @return {Element?} The first child node of {@code node} that is an element.
+ * @return {Element} The first child node of {@code node} that is an element.
  */
 goog.dom.getFirstElementChild = function(node) {
   return goog.dom.getNextElementNode_(node.firstChild, true);
@@ -934,7 +935,7 @@ goog.dom.getFirstElementChild = function(node) {
 /**
  * Returns the last child node that is an element.
  * @param {Node} node The node to get the last child element of.
- * @return {Element?} The last child node of {@code node} that is an element.
+ * @return {Element} The last child node of {@code node} that is an element.
  */
 goog.dom.getLastElementChild = function(node) {
   return goog.dom.getNextElementNode_(node.lastChild, false);
@@ -944,7 +945,7 @@ goog.dom.getLastElementChild = function(node) {
 /**
  * Returns the first next sibling that is an element.
  * @param {Node} node The node to get the next sibling element of.
- * @return {Element?} The next sibling of {@code node} that is an element.
+ * @return {Element} The next sibling of {@code node} that is an element.
  */
 goog.dom.getNextElementSibling = function(node) {
   return goog.dom.getNextElementNode_(node.nextSibling, true);
@@ -954,7 +955,7 @@ goog.dom.getNextElementSibling = function(node) {
 /**
  * Returns the first previous sibling that is an element.
  * @param {Node} node The node to get the previous sibling element of.
- * @return {Element?} The first previous sibling of {@code node} that is
+ * @return {Element} The first previous sibling of {@code node} that is
  *     an element.
  */
 goog.dom.getPreviousElementSibling = function(node) {
@@ -965,9 +966,9 @@ goog.dom.getPreviousElementSibling = function(node) {
 /**
  * Returns the first node that is an element in the specified direction,
  * starting with {@code node}.
- * @param {Node?} node The node to get the next element from.
+ * @param {Node} node The node to get the next element from.
  * @param {boolean} forward Whether to look forwards or backwards.
- * @return {Element?} The first element.
+ * @return {Element} The first element.
  * @private
  */
 goog.dom.getNextElementNode_ = function(node, forward) {
@@ -975,7 +976,7 @@ goog.dom.getNextElementNode_ = function(node, forward) {
     node = forward ? node.nextSibling : node.previousSibling;
   }
 
-  return /** @type {Element?} */ (node);
+  return /** @type {Element} */ (node);
 };
 
 
@@ -1148,7 +1149,7 @@ goog.dom.compareSiblingOrder_ = function(node1, node2) {
 /**
  * Find the deepest common ancestor of the given nodes.
  * @param {Node} var_args The nodes to find a common ancestor of.
- * @return {Node?} The common ancestor of the nodes, or null if there is none.
+ * @return {Node} The common ancestor of the nodes, or null if there is none.
  *     null will only be returned if two or more of the nodes are from different
  *     documents.
  */
@@ -1316,7 +1317,7 @@ goog.dom.findNodes = function(root, p) {
 /**
  * Finds the first or all the descendant nodes that match the filter function,
  * using a depth first search.
- * @param {Node?} root The root of the tree to search.
+ * @param {Node} root The root of the tree to search.
  * @param {function(Node) : boolean} p The filter function.
  * @param {Array.<Node>} rv The found nodes are added to this array.
  * @param {boolean} findOne If true we exit after the first found node.
@@ -1567,7 +1568,7 @@ goog.dom.getNodeAtOffset = function(parent, offset, opt_result) {
  * Returns true if the object is a {@code NodeList}.  To qualify as a NodeList,
  * the object must have a numeric length property and an item function (which
  * has type 'string' on IE for some reason).
- * @param {Object?} val Object to test.
+ * @param {Object} val Object to test.
  * @return {boolean} Whether the object is a NodeList.
  */
 goog.dom.isNodeList = function(val) {
@@ -1601,7 +1602,7 @@ goog.dom.isNodeList = function(val) {
  *     any node regardless of tag name). Must be uppercase (goog.dom.TagName).
  * @param {?string} opt_class The class name to match (or null/undefined to
  *     match any node regardless of class name).
- * @return {Node?} The first ancestor that matches the passed criteria, or
+ * @return {Node} The first ancestor that matches the passed criteria, or
  *     null if none match.
  */
 goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
@@ -1624,7 +1625,7 @@ goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
  *     the node to test).
  * @param {number} opt_maxSearchSteps Maximum number of levels to search up the
  *     dom.
- * @return {Node?} DOM node that matched the matcher, or null if there was
+ * @return {Node} DOM node that matched the matcher, or null if there was
  *     no match.
  */
 goog.dom.getAncestor = function(
@@ -1941,7 +1942,7 @@ goog.dom.DomHelper.prototype.insertSiblingAfter = goog.dom.insertSiblingAfter;
 /**
  * Removes a node from its parent.
  * @param {Node} node The node to remove.
- * @return {Node?} The node removed if removed; else, null.
+ * @return {Node} The node removed if removed; else, null.
  */
 goog.dom.DomHelper.prototype.removeNode = goog.dom.removeNode;
 
@@ -2120,7 +2121,7 @@ goog.dom.DomHelper.prototype.getNodeTextOffset = goog.dom.getNodeTextOffset;
  *     any node regardless of tag name). Must be uppercase (goog.dom.TagName).
  * @param {?string} opt_class The class name to match (or null/undefined to
  *     match any node regardless of class name).
- * @return {Node?} The first ancestor that matches the passed criteria, or
+ * @return {Node} The first ancestor that matches the passed criteria, or
  *     null if none match.
  */
 goog.dom.DomHelper.prototype.getAncestorByTagNameAndClass =
@@ -2138,7 +2139,7 @@ goog.dom.DomHelper.prototype.getAncestorByTagNameAndClass =
  *     the node to test).
  * @param {number} opt_maxSearchSteps Maximum number of levels to search up the
  *     dom.
- * @return {Node?} DOM node that matched the matcher, or null if there was
+ * @return {Node} DOM node that matched the matcher, or null if there was
  *     no match.
  */
 goog.dom.DomHelper.prototype.getAncestor = goog.dom.getAncestor;

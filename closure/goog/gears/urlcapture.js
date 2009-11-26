@@ -35,9 +35,9 @@ goog.require('goog.gears');
  * @constructor
  * @extends {goog.events.EventTarget}
  * @param {string} name The name of the ResourceStore to capture the URLs to.
- * @param {string?} requiredCookie  A cookie that must be present for the
+ * @param {?string} requiredCookie  A cookie that must be present for the
  *     managed store to be active. Should have the form "foo=bar".
- * @param {GearsResourceStore?} opt_localServer The LocalServer for gears.
+ * @param {GearsResourceStore} opt_localServer The LocalServer for gears.
  */
 goog.gears.UrlCapture = function(name, requiredCookie, opt_localServer) {
   goog.events.EventTarget.call(this);
@@ -57,7 +57,7 @@ goog.gears.UrlCapture = function(name, requiredCookie, opt_localServer) {
    * A cookie that must be present for the store to be active.
    * Should have the form "foo=bar". String cast is a safety measure since
    * Gears behaves very badly when it gets an unexpected data type.
-   * @type {string?}
+   * @type {?string}
    * @private
    */
   this.requiredCookie_ = requiredCookie ? String(requiredCookie) : null;
@@ -105,7 +105,7 @@ goog.gears.UrlCapture.prototype.logger_ =
 
 /**
  * The ResourceStore for gears, used to capture URLs.
- * @type {GearsResourceStore?}
+ * @type {GearsResourceStore}
  * @private
  */
 goog.gears.UrlCapture.prototype.resourceStore_ = null;

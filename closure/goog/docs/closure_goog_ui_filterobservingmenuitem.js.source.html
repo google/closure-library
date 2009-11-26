@@ -94,7 +94,7 @@
 <a name="line51"></a>
 <a name="line52"></a>/**
 <a name="line53"></a> * Function called when the filter text changes.
-<a name="line54"></a> * @type {Function?} function(goog.ui.FilterObservingMenuItem, string)
+<a name="line54"></a> * @type {Function} function(goog.ui.FilterObservingMenuItem, string)
 <a name="line55"></a> * @private
 <a name="line56"></a> */
 <a name="line57"></a>goog.ui.FilterObservingMenuItem.prototype.observer_ = null;
@@ -109,7 +109,7 @@
 <a name="line66"></a>
 <a name="line67"></a>/**
 <a name="line68"></a> * Sets the observer functions.
-<a name="line69"></a> * @param {Function?} f function(goog.ui.FilterObservingMenuItem, string).
+<a name="line69"></a> * @param {Function} f function(goog.ui.FilterObservingMenuItem, string).
 <a name="line70"></a> */
 <a name="line71"></a>goog.ui.FilterObservingMenuItem.prototype.setObserver = function(f) {
 <a name="line72"></a>  this.observer_ = f;

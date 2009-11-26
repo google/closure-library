@@ -51,7 +51,7 @@ goog.inherits(goog.ui.FilterObservingMenuItem, goog.ui.MenuItem);
 
 /**
  * Function called when the filter text changes.
- * @type {Function?} function(goog.ui.FilterObservingMenuItem, string)
+ * @type {Function} function(goog.ui.FilterObservingMenuItem, string)
  * @private
  */
 goog.ui.FilterObservingMenuItem.prototype.observer_ = null;
@@ -66,7 +66,7 @@ goog.ui.FilterObservingMenuItem.prototype.enterDocument = function() {
 
 /**
  * Sets the observer functions.
- * @param {Function?} f function(goog.ui.FilterObservingMenuItem, string).
+ * @param {Function} f function(goog.ui.FilterObservingMenuItem, string).
  */
 goog.ui.FilterObservingMenuItem.prototype.setObserver = function(f) {
   this.observer_ = f;

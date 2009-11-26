@@ -454,7 +454,7 @@ goog.i18n.bidi.isRtlLanguage = function(lang) {
  * @private
  */
 goog.i18n.bidi.bracketGuardHtmlRe_ =
-    /(\([^\)]*\))|(\[[^\]]*\])|({[^}]*})|(&lt;[^&]*&gt;)/g;
+    /(\(.*?\)+)|(\[.*?\]+)|(\{.*?\}+)|(&lt;.*?(&gt;)+)/g;
 
 
 /**
@@ -463,17 +463,21 @@ goog.i18n.bidi.bracketGuardHtmlRe_ =
  * @private
  */
 goog.i18n.bidi.bracketGuardTextRe_ =
-    /(\([^\)]*\))|(\[[^\]]*\])|({[^}]*})|(<[^>]*>)/g;
+    /(\(.*?\)+)|(\[.*?\]+)|(\{.*?\}+)|(<.*?>+)/g;
 
 
 /**
  * Apply bracket guard using html span tag. This is to address the problem of
  * messy bracket display frequently happens in RTL layout.
  * @param {string} s The string that need to be processed.
+ * @param {boolean} opt_isRtlContext specifies default direction (usually
+ *     direction of the UI).
  * @return {string} The processed string, with all bracket guarded.
  */
-goog.i18n.bidi.guardBracketInHtml = function(s) {
-  if (goog.i18n.bidi.hasAnyRtl(s)) {
+goog.i18n.bidi.guardBracketInHtml = function(s, opt_isRtlContext) {
+  var useRtl = opt_isRtlContext === undefined ?
+      goog.i18n.bidi.hasAnyRtl(s) : opt_isRtlContext;
+  if (useRtl) {
     return s.replace(goog.i18n.bidi.bracketGuardHtmlRe_,
         '<span dir=rtl>$&</span>');
   }
@@ -488,13 +492,17 @@ goog.i18n.bidi.guardBracketInHtml = function(s) {
  * This version works for both plain text and html. But it does not work as
  * good as guardBracketInHtml in some cases.
  * @param {string} s The string that need to be processed.
+ * @param {boolean} opt_isRtlContext specifies default direction (usually
+ *     direction of the UI).
  * @return {string} The processed string, with all bracket guarded.
  */
-goog.i18n.bidi.guardBracketInText = function(s) {
-  var mark = goog.i18n.bidi.hasAnyRtl(s) ? goog.i18n.bidi.Format.RLM :
-      goog.i18n.bidi.Format.LRM;
+goog.i18n.bidi.guardBracketInText = function(s, opt_isRtlContext) {
+  var useRtl = opt_isRtlContext === undefined ?
+      goog.i18n.bidi.hasAnyRtl(s) : opt_isRtlContext;
+  var mark = useRtl ? goog.i18n.bidi.Format.RLM : goog.i18n.bidi.Format.LRM;
   return s.replace(goog.i18n.bidi.bracketGuardTextRe_, mark + '$&' + mark);
 };
+
 
 /**
  * Enforce the html snippet in RTL directionality regardless overall context.
@@ -514,6 +522,7 @@ goog.i18n.bidi.enforceRtlInHtml = function(html) {
   return '\n<span dir=rtl>' + html + '</span>';
 };
 
+
 /**
  * Enforce RTL on both end of the given text piece using unicode BiDi formatting
  * characters RLE and PDF.
@@ -523,6 +532,7 @@ goog.i18n.bidi.enforceRtlInHtml = function(html) {
 goog.i18n.bidi.enforceRtlInText = function(text) {
   return goog.i18n.bidi.Format.RLE + text + goog.i18n.bidi.Format.PDF;
 };
+
 
 /**
  * Enforce the html snippet in RTL directionality regardless overall context.
@@ -542,6 +552,7 @@ goog.i18n.bidi.enforceLtrInHtml = function(html) {
   return '\n<span dir=ltr>' + html + '</span>';
 };
 
+
 /**
  * Enforce LTR on both end of the given text piece using unicode BiDi formatting
  * characters LRE and PDF.
@@ -551,6 +562,7 @@ goog.i18n.bidi.enforceLtrInHtml = function(html) {
 goog.i18n.bidi.enforceLtrInText = function(text) {
   return goog.i18n.bidi.Format.LRE + text + goog.i18n.bidi.Format.PDF;
 };
+
 
 /**
  * Regular expression to find dimensions such as "padding: .3 0.4ex 5px 6;"

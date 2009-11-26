@@ -134,7 +134,7 @@
 <a name="line91"></a>
 <a name="line92"></a>
 <a name="line93"></a>/**
-<a name="line94"></a> * @return {string?} The current selected color in hex, or null.
+<a name="line94"></a> * @return {?string} The current selected color in hex, or null.
 <a name="line95"></a> */
 <a name="line96"></a>goog.ui.ColorPalette.prototype.getSelectedColor = function() {
 <a name="line97"></a>  var selectedItem = /** @type {Element} */ (this.getSelectedItem());
@@ -150,7 +150,7 @@
 <a name="line107"></a>/**
 <a name="line108"></a> * Sets the selected color.  Clears the selection if the argument is null or
 <a name="line109"></a> * can&#39;t be parsed as a color.
-<a name="line110"></a> * @param {string?} color The color to set as selected; null clears the
+<a name="line110"></a> * @param {?string} color The color to set as selected; null clears the
 <a name="line111"></a> *     selection.
 <a name="line112"></a> */
 <a name="line113"></a>goog.ui.ColorPalette.prototype.setSelectedColor = function(color) {
@@ -186,8 +186,8 @@
 <a name="line143"></a>/**
 <a name="line144"></a> * Takes a string, attempts to parse it as a color spec, and returns a
 <a name="line145"></a> * normalized hex color spec if successful (null otherwise).
-<a name="line146"></a> * @param {string?} color String possibly containing a color spec; may be null.
-<a name="line147"></a> * @return {string?} Normalized hex color spec, or null if the argument can&#39;t
+<a name="line146"></a> * @param {?string} color String possibly containing a color spec; may be null.
+<a name="line147"></a> * @return {?string} Normalized hex color spec, or null if the argument can&#39;t
 <a name="line148"></a> *     be parsed as a color.
 <a name="line149"></a> * @private
 <a name="line150"></a> */

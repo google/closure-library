@@ -102,7 +102,7 @@
 <a name="line59"></a>  this.currentStates_ = {};
 <a name="line60"></a>
 <a name="line61"></a>  /**
-<a name="line62"></a>   * @type {string?}
+<a name="line62"></a>   * @type {?string}
 <a name="line63"></a>   * @private
 <a name="line64"></a>   */
 <a name="line65"></a>  this.initialFieldChange_ = null;
@@ -252,7 +252,7 @@
 <a name="line209"></a>
 <a name="line210"></a>/**
 <a name="line211"></a> * This is so subclasses can deal with multifield undo-redo.
-<a name="line212"></a> * @param {String} fieldHashCode The Field&#39;s hashcode.
+<a name="line212"></a> * @param {string} fieldHashCode The Field&#39;s hashcode.
 <a name="line213"></a> * @return {goog.editor.Field} The field object with the hashcode.
 <a name="line214"></a> */
 <a name="line215"></a>goog.editor.plugins.UndoRedo.prototype.getFieldObject = function(

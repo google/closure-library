@@ -241,7 +241,7 @@ goog.ui.Ratings.prototype.getSelectedIndex = function() {
 
 /**
  * Returns the rating value of the currently selected rating
- * @return {string?} The value of the currently selected rating (or null).
+ * @return {?string} The value of the currently selected rating (or null).
  */
 goog.ui.Ratings.prototype.getValue = function() {
   return this.selectedIndex_ == -1 ? null : this.ratings_[this.selectedIndex_];
@@ -261,7 +261,7 @@ goog.ui.Ratings.prototype.getHighlightedIndex = function() {
 /**
  * Returns the value of the currently highlighted rating, null if the mouse
  * isn't currently over the widget
- * @return {string?} The value of the currently highlighted rating, or null.
+ * @return {?string} The value of the currently highlighted rating, or null.
  */
 goog.ui.Ratings.prototype.getHighlightedValue = function() {
   return this.highlightedIndex_ == -1 ? null :

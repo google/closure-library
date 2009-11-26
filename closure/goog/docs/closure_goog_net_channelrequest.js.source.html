@@ -174,7 +174,7 @@
 <a name="line131"></a>
 <a name="line132"></a>/**
 <a name="line133"></a> * The TimerID of the timer used to detect if the request has timed-out.
-<a name="line134"></a> * @type {number?}
+<a name="line134"></a> * @type {?number}
 <a name="line135"></a> * @private
 <a name="line136"></a> */
 <a name="line137"></a>goog.net.ChannelRequest.prototype.watchDogTimerId_ = null;
@@ -182,7 +182,7 @@
 <a name="line139"></a>
 <a name="line140"></a>/**
 <a name="line141"></a> * The time in the future when the request will timeout.
-<a name="line142"></a> * @type {number?}
+<a name="line142"></a> * @type {?number}
 <a name="line143"></a> * @private
 <a name="line144"></a> */
 <a name="line145"></a>goog.net.ChannelRequest.prototype.watchDogTimeoutTime_ = null;
@@ -198,7 +198,7 @@
 <a name="line155"></a>
 <a name="line156"></a>/**
 <a name="line157"></a> * The type of request (XMLHTTP, IMG, Trident)
-<a name="line158"></a> * @type {number?}
+<a name="line158"></a> * @type {?number}
 <a name="line159"></a> * @private
 <a name="line160"></a> */
 <a name="line161"></a>goog.net.ChannelRequest.prototype.type_ = null;
@@ -223,7 +223,7 @@
 <a name="line180"></a>
 <a name="line181"></a>/**
 <a name="line182"></a> * The post data, if the request is a post.
-<a name="line183"></a> * @type {string?}
+<a name="line183"></a> * @type {?string}
 <a name="line184"></a> * @private
 <a name="line185"></a> */
 <a name="line186"></a>goog.net.ChannelRequest.prototype.postData_ = null;
@@ -248,7 +248,7 @@
 <a name="line205"></a>
 <a name="line206"></a>/**
 <a name="line207"></a> * The Trident instance if the request is using Trident.
-<a name="line208"></a> * @type {ActiveXObject?}
+<a name="line208"></a> * @type {ActiveXObject}
 <a name="line209"></a> * @private
 <a name="line210"></a> */
 <a name="line211"></a>goog.net.ChannelRequest.prototype.trident_ = null;
@@ -256,7 +256,7 @@
 <a name="line213"></a>
 <a name="line214"></a>/**
 <a name="line215"></a> * The verb (Get or Post) for the request.
-<a name="line216"></a> * @type {string?}
+<a name="line216"></a> * @type {?string}
 <a name="line217"></a> * @private
 <a name="line218"></a> */
 <a name="line219"></a>goog.net.ChannelRequest.prototype.verb_ = null;

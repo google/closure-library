@@ -108,7 +108,7 @@ goog.testing.editor.TestHelper.prototype.assertHtmlMatches = function(
  * Finds the first text node descendant of root with the given content.
  * @param {string|RegExp} textOrRegexp The text to find, or a regular
  *     expression to find a match of.
- * @return {Node?} The first text node that matches, or null if none is found.
+ * @return {Node} The first text node that matches, or null if none is found.
  */
 goog.testing.editor.TestHelper.prototype.findTextNode = function(textOrRegexp) {
   return goog.testing.dom.findTextNode(textOrRegexp, this.root_);

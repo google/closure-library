@@ -232,7 +232,7 @@ goog.debug.Logger.Level.PREDEFINED_LEVELS = [
 /**
  * A lookup map used to find the level object based on the name or value of
  * the level object.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.debug.Logger.Level.predefinedLevelsCache_ = null;

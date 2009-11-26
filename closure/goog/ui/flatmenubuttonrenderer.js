@@ -86,12 +86,12 @@ goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(button) {
 /**
  * Takes the button's root element and returns the parent element of the
  * button's contents.
- * @param {Element?} element Root element of the button whose content
+ * @param {Element} element Root element of the button whose content
  * element is to be returned.
- * @return {Element?} The button's content element (if any).
+ * @return {Element} The button's content element (if any).
  */
 goog.ui.FlatMenuButtonRenderer.prototype.getContentElement = function(element) {
-  return element && /** @type {Element?} */ (element.firstChild);
+  return element && /** @type {Element} */ (element.firstChild);
 };
 
 

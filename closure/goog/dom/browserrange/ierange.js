@@ -209,7 +209,7 @@ goog.dom.browserrange.IeRange.createFromNodes = function(startNode,
 
 /**
  * Lazy cache of the node containing the entire selection.
- * @type {Node?}
+ * @type {Node}
  * @private
  */
 goog.dom.browserrange.IeRange.prototype.parentNode_ = null;
@@ -217,7 +217,7 @@ goog.dom.browserrange.IeRange.prototype.parentNode_ = null;
 
 /**
  * Lazy cache of the node containing the start of the selection.
- * @type {Node?}
+ * @type {Node}
  * @private
  */
 goog.dom.browserrange.IeRange.prototype.startNode_ = null;
@@ -225,7 +225,7 @@ goog.dom.browserrange.IeRange.prototype.startNode_ = null;
 
 /**
  * Lazy cache of the node containing the end of the selection.
- * @type {Node?}
+ * @type {Node}
  * @private
  */
 goog.dom.browserrange.IeRange.prototype.endNode_ = null;

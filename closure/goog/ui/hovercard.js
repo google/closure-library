@@ -319,7 +319,7 @@ goog.ui.HoverCard.prototype.onCancelTrigger = function() {
  * Gets the DOM element that triggered the current hovercard.  Note that in
  * the TRIGGER or CANCEL_TRIGGER events, the current hovercard's anchor may not
  * be the one that caused the event, so use the event's anchor property instead.
- * @return {Element?} Object that caused the currently displayed hovercard (or
+ * @return {Element} Object that caused the currently displayed hovercard (or
  *     pending hovercard if none is displayed) to be triggered.
  */
 goog.ui.HoverCard.prototype.getAnchorElement = function() {

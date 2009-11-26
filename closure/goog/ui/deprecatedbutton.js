@@ -127,7 +127,7 @@ goog.ui.DeprecatedButton.prototype.rendered_ = false;
 
 /**
  * HTML caption displayed in the component.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.DeprecatedButton.prototype.caption_ = null;
@@ -135,7 +135,7 @@ goog.ui.DeprecatedButton.prototype.caption_ = null;
 
 /**
  * Tooltip for the component.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.DeprecatedButton.prototype.tooltip_ = null;
@@ -143,7 +143,7 @@ goog.ui.DeprecatedButton.prototype.tooltip_ = null;
 
 /**
  * Value associated with the component.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.ui.DeprecatedButton.prototype.value_ = null;
@@ -151,7 +151,7 @@ goog.ui.DeprecatedButton.prototype.value_ = null;
 
 /**
  * Main element for the component.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.DeprecatedButton.prototype.element_ = null;
@@ -159,7 +159,7 @@ goog.ui.DeprecatedButton.prototype.element_ = null;
 
 /**
  * Gets the caption for the component.
- * @return {string?} The caption.
+ * @return {?string} The caption.
  */
 goog.ui.DeprecatedButton.prototype.getCaption = function() {
   return this.caption_;
@@ -183,7 +183,7 @@ goog.ui.DeprecatedButton.prototype.setCaption = function(caption) {
 
 /**
  * Gets the tooltip for the component.
- * @return {string?} The tooltip.
+ * @return {?string} The tooltip.
  */
 goog.ui.DeprecatedButton.prototype.getTooltip = function() {
   return this.tooltip_;
@@ -204,7 +204,7 @@ goog.ui.DeprecatedButton.prototype.setTooltip = function(tooltip) {
 
 /**
  * Gets the value for the component.
- * @return {Object?} The value.
+ * @return {Object} The value.
  */
 goog.ui.DeprecatedButton.prototype.getValue = function() {
   return this.value_;
@@ -256,7 +256,7 @@ goog.ui.DeprecatedButton.prototype.getClass = function() {
 
 /**
  * Gets the element representing the UI component.
- * @return {Element?} Element representing component if any. Otherwise, null.
+ * @return {Element} Element representing component if any. Otherwise, null.
  */
 goog.ui.DeprecatedButton.prototype.getElement = function() {
   return this.element_;

@@ -17,23 +17,23 @@
  *
  * <pre>
  * The patched event object contains the following members:
- * - type           {String}    Event type, e.g. 'click'
+ * - type           {string}    Event type, e.g. 'click'
  * - timestamp      {Date}      A date object for when the event was fired
  * - target         {Object}    The element that actually triggered the event
  * - currentTarget  {Object}    The element the listener is attached to
  * - relatedTarget  {Object}    For mouseover and mouseout, the previous object
- * - offsetX        {Number}    X-coordinate relative to target
- * - offsetY        {Number}    Y-coordinate relative to target
- * - clientX        {Number}    X-coordinate relative to viewport
- * - clientY        {Number}    Y-coordinate relative to viewport
- * - screenX        {Number}    X-coordinate relative to the edge of the screen
- * - screenY        {Number}    Y-coordinate relative to the edge of the screen
- * - button         {Number}    Mouse button. Use isButton() to test.
- * - keyCode        {Number}    Key-code
- * - ctrlKey        {Boolean}   Was ctrl key depressed
- * - altKey         {Boolean}   Was alt key depressed
- * - shiftKey       {Boolean}   Was shift key depressed
- * - metaKey        {Boolean}   Was meta key depressed
+ * - offsetX        {number}    X-coordinate relative to target
+ * - offsetY        {number}    Y-coordinate relative to target
+ * - clientX        {number}    X-coordinate relative to viewport
+ * - clientY        {number}    Y-coordinate relative to viewport
+ * - screenX        {number}    X-coordinate relative to the edge of the screen
+ * - screenY        {number}    Y-coordinate relative to the edge of the screen
+ * - button         {number}    Mouse button. Use isButton() to test.
+ * - keyCode        {number}    Key-code
+ * - ctrlKey        {boolean}   Was ctrl key depressed
+ * - altKey         {boolean}   Was alt key depressed
+ * - shiftKey       {boolean}   Was shift key depressed
+ * - metaKey        {boolean}   Was meta key depressed
  *
  * NOTE: The keyCode member contains the raw browser keyCode. For normalized
  * key and character code use {@link goog.events.KeyHandler}.

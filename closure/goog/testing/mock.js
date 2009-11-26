@@ -187,7 +187,7 @@ goog.testing.Mock = function(objectToMock, opt_mockStaticMethods,
 /**
  * A proxy for the mock.  This can be used for dependency injection in lieu of
  * the mock if the test requires a strict instanceof check.
- * @type {Object?}
+ * @type {Object}
  */
 goog.testing.Mock.prototype.$proxy = null;
 
@@ -437,7 +437,7 @@ goog.testing.Mock.prototype.$reset = function() {
 /**
  * Throws an exception and records that an exception was thrown.
  * @param {string} comment A short comment about the exception.
- * @param {string?} opt_message A longer message about the exception.
+ * @param {?string} opt_message A longer message about the exception.
  * @throws {Object} JsUnitException object.
  * @protected
  */
@@ -486,7 +486,7 @@ goog.testing.Mock.prototype.$verify = function() {
 /**
  * Verifies that a method call matches an expectation.
  * @param {goog.testing.MockExpectation} expectation The expectation to check.
- * @param {String} name The name of the called method.
+ * @param {string} name The name of the called method.
  * @param {Array.<*>?} args The arguments passed to the mock.
  * @return {boolean} Whether the call matches the expectation.
  */

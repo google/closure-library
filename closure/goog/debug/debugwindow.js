@@ -134,7 +134,7 @@ goog.debug.DebugWindow.prototype.welcomeMessage = 'LOGGING';
 
 /**
  * Reference to debug window
- * @type {Window?}
+ * @type {Window}
  * @protected
  * @suppress {underscore}
  */
@@ -166,7 +166,7 @@ goog.debug.DebugWindow.showedBlockedAlert_ = false;
 
 /**
  * Reference to timeout used to buffer the output stream.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.debug.DebugWindow.prototype.bufferTimeout_ = null;

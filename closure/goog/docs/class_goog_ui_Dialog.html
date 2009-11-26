@@ -95,13 +95,20 @@ Element         Function                Class-name, modal-dialog = default
 
 
 <h2 class="g-first">Inheritance</h2>
-<pre class="inheritance">
-Object
-     <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span>
-          <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span>
-               <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span>
-                    <img src="static/images/inherit.gif">goog.ui.Dialog
-</pre>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+  <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
+  <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
+  <tr><td><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
+  <tr><td>goog.ui.Dialog</td><td><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+      <tr><td><span class="type"><a href="class_goog_ui_Prompt.html">goog.ui.Prompt</a></span></td><td>goog.ui.Dialog</td></tr>
+      <tr><td><span class="type"><a href="class_goog_ui_OfflineInstallDialog.html">goog.ui.OfflineInstallDialog</a></span></td><td>goog.ui.Dialog</td></tr>
+  </table>
+</div>
 
 
 
@@ -417,7 +424,7 @@ goog.ui.Component#decorateInternal}.  Considered protected.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line998">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line1005">code &raquo;</a>
   </td>
      </tr>
 
@@ -507,7 +514,7 @@ goog.ui.Component#decorateInternal}.  Considered protected.
 
         <span class="entryName">findParentButton_<span class="args">(<span class="arg">element</span>)</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
 
 
@@ -541,7 +548,7 @@ parent).
       </div>
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
             Returns the parent button or null if not found.
       </div>
   
@@ -551,7 +558,7 @@ parent).
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line1076">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line1083">code &raquo;</a>
   </td>
      </tr>
 
@@ -585,7 +592,7 @@ parent).
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line1189">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line1196">code &raquo;</a>
   </td>
      </tr>
 
@@ -771,7 +778,7 @@ the button area.  Lazily renders the component if needed.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line1047">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line1054">code &raquo;</a>
   </td>
      </tr>
 
@@ -1004,7 +1011,7 @@ the dialog box.  Lazily renders the component if needed.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line992">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line999">code &raquo;</a>
   </td>
      </tr>
 
@@ -1423,7 +1430,7 @@ with the text of the title.  Lazily renders the component if needed.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line1057">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line1064">code &raquo;</a>
   </td>
      </tr>
 
@@ -1484,7 +1491,7 @@ elements in the dialog, the focus wraps back to the beginning.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line1178">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line1185">code &raquo;</a>
   </td>
      </tr>
 
@@ -1545,7 +1552,7 @@ there is a cancel action in the ButtonSet, than that will be fired.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line1094">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line1101">code &raquo;</a>
   </td>
      </tr>
 
@@ -1605,7 +1612,7 @@ there is a cancel action in the ButtonSet, than that will be fired.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line1167">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line1174">code &raquo;</a>
   </td>
      </tr>
 
@@ -1665,7 +1672,7 @@ there is a cancel action in the ButtonSet, than that will be fired.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line963">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line970">code &raquo;</a>
   </td>
      </tr>
 
@@ -2045,7 +2052,7 @@ Note: Passing in null will cause no button set to be rendered.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line1031">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line1038">code &raquo;</a>
   </td>
      </tr>
 
@@ -2166,7 +2173,7 @@ dialogs are not disposed when they are hidden.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line984">code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line991">code &raquo;</a>
   </td>
      </tr>
 
@@ -3249,7 +3256,7 @@ empty array if the component has no children.
 
         <span class="entryName">getContentElement<span class="args">()</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
 
 
@@ -3266,7 +3273,7 @@ complex DOM structures must override this method.
 
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
             Element to contain child elements (null if none).
       </div>
   
@@ -3344,7 +3351,7 @@ complex DOM structures must override this method.
 
         <span class="entryName">getElement<span class="args">()</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
 
 
@@ -3358,7 +3365,7 @@ complex DOM structures must override this method.
 
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
             The element for the component.
       </div>
   
@@ -3390,7 +3397,7 @@ complex DOM structures must override this method.
 
         <span class="entryName">getElementByFragment<span class="args">(<span class="arg">idFragment</span>)</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
 
 
@@ -3424,7 +3431,7 @@ generated using makeId().
       </div>
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
             The element with the unique id, or null if it cannot be found.
       </div>
   
@@ -5499,7 +5506,7 @@ mypackage.MyClass.superClass_.disposeInternal.call(this);
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">bgEl_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
      </div>
 
 
@@ -5532,7 +5539,7 @@ mypackage.MyClass.superClass_.disposeInternal.call(this);
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">bgIframeEl_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
      </div>
 
 
@@ -5566,7 +5573,7 @@ elements from burning through background.
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">buttonEl_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
      </div>
 
 
@@ -5632,7 +5639,7 @@ elements from burning through background.
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">contentEl_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
      </div>
 
 
@@ -5830,7 +5837,7 @@ elements from burning through background.
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">titleCloseEl_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
      </div>
 
 
@@ -5863,7 +5870,7 @@ elements from burning through background.
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">titleEl_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
      </div>
 
 
@@ -5929,7 +5936,7 @@ elements from burning through background.
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">titleTextEl_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
      </div>
 
 
@@ -6085,7 +6092,7 @@ around z-order issues.  Defaults to false.
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">childIndex_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
      </div>
 
 
@@ -6145,7 +6152,7 @@ not be accessed directly outside of this class!
      </tr>
 
 
-     <tr class="even entry protected">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -6195,7 +6202,7 @@ created in a different window.
         <img align="left" src="static/images/blank.gif">
 
         <span class="entryName">element_</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
      </div>
 
 
@@ -6625,7 +6632,7 @@ TODO: Change this to goog.ui.Dialog.EventType.SELECT.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_dialog.js.source.html#line1220">Code &raquo;</a>
+     <a href="closure_goog_ui_dialog.js.source.html#line1227">Code &raquo;</a>
   </td>
      </tr>
 

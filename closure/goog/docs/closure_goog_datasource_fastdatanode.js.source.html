@@ -280,7 +280,7 @@
 <a name="line237"></a> * instance by calling getChildNode.
 <a name="line238"></a> *
 <a name="line239"></a> * @param {string} name Name of child node.
-<a name="line240"></a> * @param {Object?} value Value of child node.
+<a name="line240"></a> * @param {Object} value Value of child node.
 <a name="line241"></a> */
 <a name="line242"></a>goog.ds.FastDataNode.prototype.setChildNode = function(name, value) {
 <a name="line243"></a>  if (value != null) {
@@ -297,7 +297,7 @@
 <a name="line254"></a> * Returns the value of a child node. By using this method you can avoid
 <a name="line255"></a> * the need to create PrimitiveFastData nodes.
 <a name="line256"></a> * @param {string} name Name of child node.
-<a name="line257"></a> * @return {Object?} Value of child node.
+<a name="line257"></a> * @return {Object} Value of child node.
 <a name="line258"></a> */
 <a name="line259"></a>goog.ds.FastDataNode.prototype.getChildNodeValue = function(name) {
 <a name="line260"></a>  var child = this[name];
@@ -494,7 +494,7 @@
 <a name="line451"></a>/**
 <a name="line452"></a> * Returns the value of a child node. Always returns null.
 <a name="line453"></a> * @param {string} name Name of child node.
-<a name="line454"></a> * @return {Object?} Value of child node.
+<a name="line454"></a> * @return {Object} Value of child node.
 <a name="line455"></a> */
 <a name="line456"></a>goog.ds.PrimitiveFastDataNode.prototype.getChildNodeValue = function(name) {
 <a name="line457"></a>  return null;
@@ -504,7 +504,7 @@
 <a name="line461"></a>/**
 <a name="line462"></a> * Not supported by primitive data nodes.
 <a name="line463"></a> * @param {string} name Name of child node.
-<a name="line464"></a> * @param {Object?} value Value of child node.
+<a name="line464"></a> * @param {Object} value Value of child node.
 <a name="line465"></a> */
 <a name="line466"></a>goog.ds.PrimitiveFastDataNode.prototype.setChildNode =
 <a name="line467"></a>    function(name, value) {
@@ -616,7 +616,7 @@
 <a name="line573"></a>/**
 <a name="line574"></a> * Tries to interpret key as a numeric index enclosed by square brakcets.
 <a name="line575"></a> * @param {string} key Key that should be interpreted as a number.
-<a name="line576"></a> * @return {number?} Numeric index or null if key is not of the form
+<a name="line576"></a> * @return {?number} Numeric index or null if key is not of the form
 <a name="line577"></a> *  described above.
 <a name="line578"></a> * @private
 <a name="line579"></a> */
@@ -640,7 +640,7 @@
 <a name="line597"></a> * instance by calling getChildNode.
 <a name="line598"></a> *
 <a name="line599"></a> * @param {string} key Name of child node.
-<a name="line600"></a> * @param {Object?} value Value of child node.
+<a name="line600"></a> * @param {Object} value Value of child node.
 <a name="line601"></a> */
 <a name="line602"></a>goog.ds.FastListNode.prototype.setChildNode = function(key, value) {
 <a name="line603"></a>  var count = this.values_.length;

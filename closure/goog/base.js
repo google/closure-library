@@ -79,7 +79,7 @@ goog.LOCALE = 'en';  // default to en
  * Indicates whether or not we can call 'eval' directly to eval code in the
  * global scope. Set to a Boolean by the first call to goog.globalEval (which
  * empirically tests whether eval works for globals). @see goog.globalEval
- * @type {boolean?}
+ * @type {?boolean}
  * @private
  */
 goog.evalWorksForGlobals_ = null;
@@ -132,8 +132,8 @@ if (!COMPILED) {
  * "a.b.c" -> a = {};a.b={};a.b.c={};
  * Used by goog.provide and goog.exportSymbol.
  * @param {string} name name of the object that this file defines.
- * @param {Object} opt_object the object to expose at the end of the path.
- * @param {Object} opt_objectToExportTo The object to add the path to; default
+ * @param {Object=} opt_object the object to expose at the end of the path.
+ * @param {Object=} opt_objectToExportTo The object to add the path to; default
  *     is |goog.global|.
  * @private
  */
@@ -173,9 +173,9 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
  * function will not find renamed properties.
  *
  * @param {string} name The fully qualified name.
- * @param {Object} opt_obj The object within which to look; default is
+ * @param {Object=} opt_obj The object within which to look; default is
  *     |goog.global|.
- * @return {Object?} The object or, if not found, null.
+ * @return {Object} The object or, if not found, null.
  */
 goog.getObjectByName = function(name, opt_obj) {
   var parts = name.split('.');
@@ -195,7 +195,7 @@ goog.getObjectByName = function(name, opt_obj) {
  * Globalizes a whole namespace, such as goog or goog.lang.
  *
  * @param {Object} obj The namespace to globalize.
- * @param {Object} opt_global The object to add the properties to.
+ * @param {Object=} opt_global The object to add the properties to.
  * @deprecated Properties may be explicitly exported to the global scope, but
  *     this should no longer be done in bulk.
  */
@@ -311,7 +311,7 @@ goog.nullFunction = function() {};
 /**
  * The identity function. Returns its first argument.
  *
- * @param {*} var_args The arguments of the function.
+ * @param {...*} var_args The arguments of the function.
  * @return {*} The first argument.
  * @deprecated Use goog.functions.identity instead.
  */
@@ -503,7 +503,7 @@ if (!COMPILED) {
    * Looks at the dependency rules and tries to determine the script file that
    * fulfills a particular rule.
    * @param {string} rule In the form goog.namespace.Class or project.script.
-   * @return {string?} Url corresponding to the rule, or null.
+   * @return {?string} Url corresponding to the rule, or null.
    * @private
    */
   goog.getPathFromDeps_ = function(rule) {
@@ -901,7 +901,7 @@ Object.prototype.clone;
  * @param {Object|undefined} selfObj Specifies the object which |this| should
  *     point to when the function is run. If the value is null or undefined, it
  *     will default to the global object.
- * @param {*} var_args Additional arguments that are partially
+ * @param {...*} var_args Additional arguments that are partially
  *     applied to the function.
  *
  * @return {!Function} A partially-applied form of the function bind() was
@@ -936,7 +936,7 @@ goog.bind = function(fn, selfObj, var_args) {
  * g(arg3, arg4);
  *
  * @param {Function} fn A function to partially apply.
- * @param {*} var_args Additional arguments that are partially
+ * @param {...*} var_args Additional arguments that are partially
  *     applied to fn.
  * @return {!Function} A partially-applied form of the function bind() was
  *     invoked as a method of.
@@ -1077,7 +1077,7 @@ goog.cssNameMapping_;
  * original, unobfuscated class name is inlined.
  *
  * @param {string} className The class name.
- * @param {string} opt_modifier A modifier to be appended to the class name.
+ * @param {string=} opt_modifier A modifier to be appended to the class name.
  * @return {string} The class name or the concatenation of the class name and
  *     the modifier.
  */
@@ -1117,7 +1117,7 @@ goog.setCssNameMapping = function(mapping) {
 /**
  * Abstract implementation of goog.getMsg for use with localized messages.
  * @param {string} str Translatable string, places holders in the form {$foo}.
- * @param {Object} opt_values Map of place holder name to value.
+ * @param {Object=} opt_values Map of place holder name to value.
  * @return {string} message with placeholders filled.
  */
 goog.getMsg = function(str, opt_values) {
@@ -1150,7 +1150,7 @@ goog.getMsg = function(str, opt_values) {
  *
  * @param {string} publicPath Unobfuscated name to export.
  * @param {Object} object Object the name should point to.
- * @param {Object} opt_objectToExportTo The object to add the path to; default
+ * @param {Object=} opt_objectToExportTo The object to add the path to; default
  *     is |goog.global|.
  */
 goog.exportSymbol = function(publicPath, object, opt_objectToExportTo) {
@@ -1209,6 +1209,66 @@ goog.inherits = function(childCtor, parentCtor) {
   childCtor.superClass_ = parentCtor.prototype;
   childCtor.prototype = new tempCtor();
   childCtor.prototype.constructor = childCtor;
+};
+
+
+/**
+ * Call up to the superclass.
+ *
+ * If this is called from a constructor, then this calls the superclass
+ * contructor with arguments 1-N.
+ *
+ * If this is called from a prototype method, then you must pass
+ * the name of the method as the second argument to this function. If
+ * you do not, you will get a runtime error. This calls the superclass'
+ * method with arguments 2-N.
+ *
+ * This function only works if you use goog.inherits to express
+ * inheritance relationships between your classes.
+ *
+ * This function is a compiler primitive. At compile-time, the
+ * compiler will do macro expansion to remove a lot of
+ * the extra overhead that this function introduces. The compiler
+ * will also enforce a lot of the assumptions that this function
+ * makes, and treat it as a compiler error if you break them.
+ *
+ * @param {!Object} me Should always be "this".
+ * @param {*=} opt_methodName The method name if calling a super method.
+ * @param {...*} var_args The rest of the arguments.
+ * @return {*} The return value of the superclass method.
+ */
+goog.base = function(me, opt_methodName, var_args) {
+  if (!COMPILED) {
+    var caller = arguments.callee.caller;
+    if (caller.superClass_) {
+      // This is a constructor. Call the superclass constructor.
+      return caller.superClass_.constructor.apply(
+          me, Array.prototype.slice.call(arguments, 1));
+    }
+
+    var args = Array.prototype.slice.call(arguments, 2);
+    var foundCaller = false;
+    for (var ctor = me.constructor;
+         ctor; ctor = ctor.superClass_ && ctor.superClass_.constructor) {
+      if (ctor.prototype[opt_methodName] === caller) {
+        foundCaller = true;
+      } else if (foundCaller) {
+        return ctor.prototype[opt_methodName].apply(me, args);
+      }
+    }
+
+    // If we did not find the caller in the prototype chain,
+    // then one of two things happened:
+    // 1) The caller is an instance method.
+    // 2) This method was not called by the right caller.
+    if (me[opt_methodName] === caller) {
+      return me.constructor.prototype[opt_methodName].apply(me, args);
+    } else {
+      throw Error(
+          'goog.base called from a method of one name ' +
+          'to a method of a different name');
+    }
+  }
 };
 
 

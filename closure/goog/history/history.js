@@ -300,7 +300,7 @@ goog.History = function(opt_invisible, opt_blankPageUrl, opt_input,
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
 
-  if (opt_invisible || goog.userAgent.IE && !goog.History.HAS_ONHASHCHANGE_) {
+  if (opt_invisible || goog.userAgent.IE && !goog.History.HAS_ONHASHCHANGE) {
     var iframe;
     if (opt_iframe) {
       iframe = opt_iframe;
@@ -332,7 +332,7 @@ goog.History = function(opt_invisible, opt_blankPageUrl, opt_input,
     this.unsetIframe_ = true;
   }
 
-  if (goog.userAgent.IE && !goog.History.HAS_ONHASHCHANGE_) {
+  if (goog.userAgent.IE && !goog.History.HAS_ONHASHCHANGE) {
     // IE relies on the hidden input to restore the history state from previous
     // sessions, but input values are only restored after window.onload. Set up
     // a callback to poll the value after the onload event.
@@ -393,7 +393,7 @@ goog.History.prototype.longerPolling_ = false;
 
 /**
  * The last token set by the history object, used to poll for changes.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.History.prototype.lastToken_ = null;
@@ -403,9 +403,9 @@ goog.History.prototype.lastToken_ = null;
  * Whether the browser supports HTML5 history  management.
  * {@link http://www.w3.org/TR/html5/history.html}.
  * @type {boolean}
- * @private
+ * @protected
  */
-goog.History.HAS_ONHASHCHANGE_ =
+goog.History.HAS_ONHASHCHANGE =
     goog.userAgent.IE && document.documentMode >= 8 ||
     goog.userAgent.GECKO && goog.userAgent.isVersion('1.9.2') ||
     goog.userAgent.WEBKIT && goog.userAgent.isVersion('532.1');
@@ -415,7 +415,7 @@ goog.History.HAS_ONHASHCHANGE_ =
  * If not null, polling in the user invisible mode will be disabled until this
  * token is seen. This is used to prevent a race condition where the iframe
  * hangs temporarily while the location is changed.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.History.prototype.lockedToken_ = null;
@@ -449,7 +449,7 @@ goog.History.prototype.setEnabled = function(enable) {
     return;
   }
 
-  if (goog.userAgent.IE && !goog.History.HAS_ONHASHCHANGE_ &&
+  if (goog.userAgent.IE && !goog.History.HAS_ONHASHCHANGE &&
       !this.documentLoaded) {
     // Wait until the document has actually loaded before enabling the
     // object or any saved state from a previous session will be lost.
@@ -473,7 +473,7 @@ goog.History.prototype.setEnabled = function(enable) {
 
     // TODO: make HTML5 and invisible history work by listening to the
     // iframe # changes instead of the window.
-    if (goog.History.HAS_ONHASHCHANGE_ && this.userVisible_) {
+    if (goog.History.HAS_ONHASHCHANGE && this.userVisible_) {
       this.eventHandler_.listen(
           this.window_, goog.events.EventType.HASHCHANGE, this.onHashChange_);
       this.enabled_ = true;
@@ -546,7 +546,7 @@ goog.History.prototype.onShow_ = function(e) {
 /**
  * Handles HTML5 onhashchange events on browsers where it is supported.
  * This is very similar to {@link #check_}, except that it is not executed
- * continuously. It is only used when {@code goog.History.HAS_ONHASHCHANGE_} is
+ * continuously. It is only used when {@code goog.History.HAS_ONHASHCHANGE} is
  * true.
  * @param {goog.events.BrowserEvent} e The browser event.
  * @private
@@ -635,7 +635,7 @@ goog.History.prototype.setHistoryState_ = function(token, replace, opt_title) {
     if (this.userVisible_) {
       this.setHash_(token, replace);
 
-      if (!goog.History.HAS_ONHASHCHANGE_) {
+      if (!goog.History.HAS_ONHASHCHANGE) {
         if (goog.userAgent.IE) {
           // IE must save state using the iframe.
           this.setIframeToken_(token, replace, opt_title);
@@ -643,7 +643,7 @@ goog.History.prototype.setHistoryState_ = function(token, replace, opt_title) {
       }
 
       // This condition needs to be called even if
-      // goog.History.HAS_ONHASHCHANGE_ is true so the NAVIGATE event fires
+      // goog.History.HAS_ONHASHCHANGE is true so the NAVIGATE event fires
       // sychronously.
       if (this.enabled_) {
         this.check_();
@@ -757,7 +757,7 @@ goog.History.prototype.setIframeToken_ = function(token,
  * Older versions of webkit cannot access the iframe location, so always return
  * null in that case.
  *
- * @return {string?} The state token saved in the iframe (possibly null if the
+ * @return {?string} The state token saved in the iframe (possibly null if the
  *     iframe has never loaded.).
  * @private
  */
@@ -810,7 +810,7 @@ goog.History.prototype.getIframeToken_ = function() {
 
 /**
  * Checks the state of the document fragment and the iframe title to detect
- * navigation changes. If {@code goog.History.HAS_ONHASHCHANGE_} is
+ * navigation changes. If {@code goog.History.HAS_ONHASHCHANGE} is
  * {@code false}, then this runs approximately twenty times per second.
  * @private
  */
@@ -824,7 +824,7 @@ goog.History.prototype.check_ = function() {
 
   // IE uses the iframe for state for both the visible and non-visible version.
   if (!this.userVisible_ || goog.userAgent.IE &&
-      !goog.History.HAS_ONHASHCHANGE_) {
+      !goog.History.HAS_ONHASHCHANGE) {
     var token = this.getIframeToken_() || '';
     if (this.lockedToken_ == null || token == this.lockedToken_) {
       this.lockedToken_ = null;
@@ -847,7 +847,7 @@ goog.History.prototype.update_ = function(token) {
   this.lastToken_ = this.hiddenInput_.value = token;
 
   if (this.userVisible_) {
-    if (goog.userAgent.IE && !goog.History.HAS_ONHASHCHANGE_) {
+    if (goog.userAgent.IE && !goog.History.HAS_ONHASHCHANGE) {
       this.setIframeToken_(token);
     }
 

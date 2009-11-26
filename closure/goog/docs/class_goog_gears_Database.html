@@ -75,12 +75,17 @@
 
 
 <h2 class="g-first">Inheritance</h2>
-<pre class="inheritance">
-Object
-     <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span>
-          <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span>
-               <img src="static/images/inherit.gif">goog.gears.Database
-</pre>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+  <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
+  <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
+  <tr><td>goog.gears.Database</td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+</table>
+</div>
 
 
 
@@ -1815,7 +1820,7 @@ column.
 
 
   <td class="view-code">
-     <a href="closure_goog_gears_database.js.source.html#line928">code &raquo;</a>
+     <a href="closure_goog_gears_database.js.source.html#line929">code &raquo;</a>
   </td>
      </tr>
 
@@ -3095,8 +3100,8 @@ get listen() calling addEventListener() and vice-versa.
    <tr class="even">
      <td>
         <span class="entryName">ex</span>
-        : <div class="fullType"><span class="type">Error</span></div>
-        <div class="entryOverview">The exception object.</div>
+        : <div class="fullType"><span class="type">Error</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The exception object or error string.</div>
      </td>
    </tr>
   </table>
@@ -3267,7 +3272,7 @@ result values
 
         <span class="entryNamespace">goog.gears.Database.</span><span class="entryName">resultSetToObject<span class="args">(<span class="arg">rs</span>)</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
       </div>
 
 
@@ -3302,7 +3307,7 @@ the object.
       </div>
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>&nbsp;
             a hash map with the key-value-pairs from the first row. Returns null is there are no matching rows.
       </div>
   

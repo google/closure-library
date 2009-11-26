@@ -918,7 +918,7 @@ goog.graphics.ext.Element.Position_.prototype.isParentDependent = function() {
  * top/left edge expressed in the parent's coordinate system.  We cache this
  * because it is most freqeuently requested by the element and it is easy to
  * compute middle and end values from it.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.graphics.ext.Element.Position_.prototype.cachedValue_ = null;
@@ -926,7 +926,7 @@ goog.graphics.ext.Element.Position_.prototype.cachedValue_ = null;
 
 /**
  * A cache of computed x coordinates.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.graphics.ext.Element.Position_.prototype.coordinateCache_ = null;

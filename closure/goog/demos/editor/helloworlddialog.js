@@ -139,7 +139,7 @@ goog.demos.editor.HelloWorldDialog.prototype.createContent_ = function() {
 
 /**
  * Returns the hello world message currently typed into the dialog's input.
- * @return {string?} The hello world message currently typed into the dialog's
+ * @return {?string} The hello world message currently typed into the dialog's
  *     input, or null if called before the input is created.
  * @private
  */

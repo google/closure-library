@@ -153,7 +153,7 @@ goog.structs.Trie.prototype.get = function(key) {
  *
  * @param {string} key The key to use for lookup. The given key as well as all
  *     prefixes of the key are retrieved.
- * @param {number?} opt_keyStartIndex Optional position in key to start lookup
+ * @param {?number} opt_keyStartIndex Optional position in key to start lookup
  *     from. Defaults to 0 if not specified.
  * @return {Object} Map of end index of matching prefixes and corresponding
  *     values. Empty if no match found.

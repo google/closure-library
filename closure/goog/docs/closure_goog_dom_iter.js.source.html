@@ -70,7 +70,7 @@
 <a name="line27"></a>
 <a name="line28"></a>/**
 <a name="line29"></a> * Iterator over a Node&#39;s siblings.
-<a name="line30"></a> * @param {Node?} node The node to start with.
+<a name="line30"></a> * @param {Node} node The node to start with.
 <a name="line31"></a> * @param {boolean} opt_includeNode Whether to return the given node as the
 <a name="line32"></a> *     first return value from next.
 <a name="line33"></a> * @param {boolean} opt_reverse Whether to traverse siblings in reverse
@@ -81,7 +81,7 @@
 <a name="line38"></a>goog.dom.iter.SiblingIterator = function(node, opt_includeNode, opt_reverse) {
 <a name="line39"></a>  /**
 <a name="line40"></a>   * The current node, or null if iteration is finished.
-<a name="line41"></a>   * @type {Node?}
+<a name="line41"></a>   * @type {Node}
 <a name="line42"></a>   * @private
 <a name="line43"></a>   */
 <a name="line44"></a>  this.node_ = node;
@@ -133,7 +133,7 @@
 <a name="line90"></a>
 <a name="line91"></a>/**
 <a name="line92"></a> * Iterator over a Node&#39;s ancestors, stopping after the document body.
-<a name="line93"></a> * @param {Node?} node The node to start with.
+<a name="line93"></a> * @param {Node} node The node to start with.
 <a name="line94"></a> * @param {boolean} opt_includeNode Whether to return the given node as the
 <a name="line95"></a> *     first return value from next.
 <a name="line96"></a> * @constructor
@@ -142,7 +142,7 @@
 <a name="line99"></a>goog.dom.iter.AncestorIterator = function(node, opt_includeNode) {
 <a name="line100"></a>  /**
 <a name="line101"></a>   * The current node, or null if iteration is finished.
-<a name="line102"></a>   * @type {Node?}
+<a name="line102"></a>   * @type {Node}
 <a name="line103"></a>   * @private
 <a name="line104"></a>   */
 <a name="line105"></a>  this.node_ = node;

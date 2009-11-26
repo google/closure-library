@@ -343,7 +343,7 @@
 <a name="line300"></a>   */
 <a name="line301"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
 <a name="line302"></a>
-<a name="line303"></a>  if (opt_invisible || goog.userAgent.IE &amp;&amp; !goog.History.HAS_ONHASHCHANGE_) {
+<a name="line303"></a>  if (opt_invisible || goog.userAgent.IE &amp;&amp; !goog.History.HAS_ONHASHCHANGE) {
 <a name="line304"></a>    var iframe;
 <a name="line305"></a>    if (opt_iframe) {
 <a name="line306"></a>      iframe = opt_iframe;
@@ -375,7 +375,7 @@
 <a name="line332"></a>    this.unsetIframe_ = true;
 <a name="line333"></a>  }
 <a name="line334"></a>
-<a name="line335"></a>  if (goog.userAgent.IE &amp;&amp; !goog.History.HAS_ONHASHCHANGE_) {
+<a name="line335"></a>  if (goog.userAgent.IE &amp;&amp; !goog.History.HAS_ONHASHCHANGE) {
 <a name="line336"></a>    // IE relies on the hidden input to restore the history state from previous
 <a name="line337"></a>    // sessions, but input values are only restored after window.onload. Set up
 <a name="line338"></a>    // a callback to poll the value after the onload event.
@@ -436,7 +436,7 @@
 <a name="line393"></a>
 <a name="line394"></a>/**
 <a name="line395"></a> * The last token set by the history object, used to poll for changes.
-<a name="line396"></a> * @type {string?}
+<a name="line396"></a> * @type {?string}
 <a name="line397"></a> * @private
 <a name="line398"></a> */
 <a name="line399"></a>goog.History.prototype.lastToken_ = null;
@@ -446,9 +446,9 @@
 <a name="line403"></a> * Whether the browser supports HTML5 history  management.
 <a name="line404"></a> * {@link http://www.w3.org/TR/html5/history.html}.
 <a name="line405"></a> * @type {boolean}
-<a name="line406"></a> * @private
+<a name="line406"></a> * @protected
 <a name="line407"></a> */
-<a name="line408"></a>goog.History.HAS_ONHASHCHANGE_ =
+<a name="line408"></a>goog.History.HAS_ONHASHCHANGE =
 <a name="line409"></a>    goog.userAgent.IE &amp;&amp; document.documentMode &gt;= 8 ||
 <a name="line410"></a>    goog.userAgent.GECKO &amp;&amp; goog.userAgent.isVersion(&#39;1.9.2&#39;) ||
 <a name="line411"></a>    goog.userAgent.WEBKIT &amp;&amp; goog.userAgent.isVersion(&#39;532.1&#39;);
@@ -458,7 +458,7 @@
 <a name="line415"></a> * If not null, polling in the user invisible mode will be disabled until this
 <a name="line416"></a> * token is seen. This is used to prevent a race condition where the iframe
 <a name="line417"></a> * hangs temporarily while the location is changed.
-<a name="line418"></a> * @type {string?}
+<a name="line418"></a> * @type {?string}
 <a name="line419"></a> * @private
 <a name="line420"></a> */
 <a name="line421"></a>goog.History.prototype.lockedToken_ = null;
@@ -492,7 +492,7 @@
 <a name="line449"></a>    return;
 <a name="line450"></a>  }
 <a name="line451"></a>
-<a name="line452"></a>  if (goog.userAgent.IE &amp;&amp; !goog.History.HAS_ONHASHCHANGE_ &amp;&amp;
+<a name="line452"></a>  if (goog.userAgent.IE &amp;&amp; !goog.History.HAS_ONHASHCHANGE &amp;&amp;
 <a name="line453"></a>      !this.documentLoaded) {
 <a name="line454"></a>    // Wait until the document has actually loaded before enabling the
 <a name="line455"></a>    // object or any saved state from a previous session will be lost.
@@ -516,7 +516,7 @@
 <a name="line473"></a>
 <a name="line474"></a>    // TODO: make HTML5 and invisible history work by listening to the
 <a name="line475"></a>    // iframe # changes instead of the window.
-<a name="line476"></a>    if (goog.History.HAS_ONHASHCHANGE_ &amp;&amp; this.userVisible_) {
+<a name="line476"></a>    if (goog.History.HAS_ONHASHCHANGE &amp;&amp; this.userVisible_) {
 <a name="line477"></a>      this.eventHandler_.listen(
 <a name="line478"></a>          this.window_, goog.events.EventType.HASHCHANGE, this.onHashChange_);
 <a name="line479"></a>      this.enabled_ = true;
@@ -589,7 +589,7 @@
 <a name="line546"></a>/**
 <a name="line547"></a> * Handles HTML5 onhashchange events on browsers where it is supported.
 <a name="line548"></a> * This is very similar to {@link #check_}, except that it is not executed
-<a name="line549"></a> * continuously. It is only used when {@code goog.History.HAS_ONHASHCHANGE_} is
+<a name="line549"></a> * continuously. It is only used when {@code goog.History.HAS_ONHASHCHANGE} is
 <a name="line550"></a> * true.
 <a name="line551"></a> * @param {goog.events.BrowserEvent} e The browser event.
 <a name="line552"></a> * @private
@@ -678,7 +678,7 @@
 <a name="line635"></a>    if (this.userVisible_) {
 <a name="line636"></a>      this.setHash_(token, replace);
 <a name="line637"></a>
-<a name="line638"></a>      if (!goog.History.HAS_ONHASHCHANGE_) {
+<a name="line638"></a>      if (!goog.History.HAS_ONHASHCHANGE) {
 <a name="line639"></a>        if (goog.userAgent.IE) {
 <a name="line640"></a>          // IE must save state using the iframe.
 <a name="line641"></a>          this.setIframeToken_(token, replace, opt_title);
@@ -686,7 +686,7 @@
 <a name="line643"></a>      }
 <a name="line644"></a>
 <a name="line645"></a>      // This condition needs to be called even if
-<a name="line646"></a>      // goog.History.HAS_ONHASHCHANGE_ is true so the NAVIGATE event fires
+<a name="line646"></a>      // goog.History.HAS_ONHASHCHANGE is true so the NAVIGATE event fires
 <a name="line647"></a>      // sychronously.
 <a name="line648"></a>      if (this.enabled_) {
 <a name="line649"></a>        this.check_();
@@ -800,7 +800,7 @@
 <a name="line757"></a> * Older versions of webkit cannot access the iframe location, so always return
 <a name="line758"></a> * null in that case.
 <a name="line759"></a> *
-<a name="line760"></a> * @return {string?} The state token saved in the iframe (possibly null if the
+<a name="line760"></a> * @return {?string} The state token saved in the iframe (possibly null if the
 <a name="line761"></a> *     iframe has never loaded.).
 <a name="line762"></a> * @private
 <a name="line763"></a> */
@@ -853,7 +853,7 @@
 <a name="line810"></a>
 <a name="line811"></a>/**
 <a name="line812"></a> * Checks the state of the document fragment and the iframe title to detect
-<a name="line813"></a> * navigation changes. If {@code goog.History.HAS_ONHASHCHANGE_} is
+<a name="line813"></a> * navigation changes. If {@code goog.History.HAS_ONHASHCHANGE} is
 <a name="line814"></a> * {@code false}, then this runs approximately twenty times per second.
 <a name="line815"></a> * @private
 <a name="line816"></a> */
@@ -867,7 +867,7 @@
 <a name="line824"></a>
 <a name="line825"></a>  // IE uses the iframe for state for both the visible and non-visible version.
 <a name="line826"></a>  if (!this.userVisible_ || goog.userAgent.IE &amp;&amp;
-<a name="line827"></a>      !goog.History.HAS_ONHASHCHANGE_) {
+<a name="line827"></a>      !goog.History.HAS_ONHASHCHANGE) {
 <a name="line828"></a>    var token = this.getIframeToken_() || &#39;&#39;;
 <a name="line829"></a>    if (this.lockedToken_ == null || token == this.lockedToken_) {
 <a name="line830"></a>      this.lockedToken_ = null;
@@ -890,7 +890,7 @@
 <a name="line847"></a>  this.lastToken_ = this.hiddenInput_.value = token;
 <a name="line848"></a>
 <a name="line849"></a>  if (this.userVisible_) {
-<a name="line850"></a>    if (goog.userAgent.IE &amp;&amp; !goog.History.HAS_ONHASHCHANGE_) {
+<a name="line850"></a>    if (goog.userAgent.IE &amp;&amp; !goog.History.HAS_ONHASHCHANGE) {
 <a name="line851"></a>      this.setIframeToken_(token);
 <a name="line852"></a>    }
 <a name="line853"></a>

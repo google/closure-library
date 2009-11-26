@@ -87,7 +87,7 @@ goog.ui.TriStateMenuItem.prototype.checkState_ =
 
 /**
  * Whether the partial state can be toggled.
- * @type {Boolean}
+ * @type {boolean}
  * @private
  */
 goog.ui.TriStateMenuItem.prototype.allowPartial_ = false;

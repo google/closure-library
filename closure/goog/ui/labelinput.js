@@ -64,7 +64,7 @@ goog.inherits(goog.ui.LabelInput, goog.ui.Component);
 /**
  * Variable used to store the element value on keydown and restore it on
  * keypress.  See {@link #handleEscapeKeys_}
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.LabelInput.prototype.ffKeyRestoreValue_ = null;

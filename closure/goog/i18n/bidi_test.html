@@ -147,15 +147,57 @@ limitations under the License.
   }
 
   function testGuardBracketInHtml() {
-    var str = 'asc \u05d0 (\u05d0\u05d0\u05d0)';
-    assertEquals('asc \u05d0 <span dir=rtl>(\u05d0\u05d0\u05d0)</span>',
-        goog.i18n.bidi.guardBracketInHtml(str));
+    var strWithRtl = "asc \u05d0 (\u05d0\u05d0\u05d0)";
+    assertEquals("asc \u05d0 <span dir=rtl>(\u05d0\u05d0\u05d0)</span>",
+        goog.i18n.bidi.guardBracketInHtml(strWithRtl));
+    assertEquals("asc \u05d0 <span dir=rtl>(\u05d0\u05d0\u05d0)</span>",
+        goog.i18n.bidi.guardBracketInHtml(strWithRtl, true));
+    assertEquals("asc \u05d0 <span dir=ltr>(\u05d0\u05d0\u05d0)</span>",
+        goog.i18n.bidi.guardBracketInHtml(strWithRtl, false));
+
+    var strWithRtl2 = "\u05d0 a (asc:))";
+    assertEquals("\u05d0 a <span dir=rtl>(asc:))</span>",
+        goog.i18n.bidi.guardBracketInHtml(strWithRtl2));
+    assertEquals("\u05d0 a <span dir=rtl>(asc:))</span>",
+        goog.i18n.bidi.guardBracketInHtml(strWithRtl2, true));
+    assertEquals("\u05d0 a <span dir=ltr>(asc:))</span>",
+        goog.i18n.bidi.guardBracketInHtml(strWithRtl2, false));
+
+    var strWithoutRtl = "a (asc) {{123}}";
+        assertEquals("a <span dir=ltr>(asc)</span> <span dir=ltr>{{123}}</span>",
+    goog.i18n.bidi.guardBracketInHtml(strWithoutRtl));
+        assertEquals("a <span dir=rtl>(asc)</span> <span dir=rtl>{{123}}</span>",
+    goog.i18n.bidi.guardBracketInHtml(strWithoutRtl, true));
+    assertEquals("a <span dir=ltr>(asc)</span> <span dir=ltr>{{123}}</span>",
+          goog.i18n.bidi.guardBracketInHtml(strWithoutRtl, false));
+
   }
 
   function testGuardBracketInText() {
-    var str = 'asc \u05d0 (\u05d0\u05d0\u05d0)'
-    assertEquals('asc \u05d0 ' + RLM + '(\u05d0\u05d0\u05d0)' + RLM,
-                goog.i18n.bidi.guardBracketInText(str));
+    var strWithRtl = "asc \u05d0 (\u05d0\u05d0\u05d0)";
+    assertEquals("asc \u05d0 \u200f(\u05d0\u05d0\u05d0)\u200f",
+        goog.i18n.bidi.guardBracketInText(strWithRtl));
+    assertEquals("asc \u05d0 \u200f(\u05d0\u05d0\u05d0)\u200f",
+        goog.i18n.bidi.guardBracketInText(strWithRtl, true));
+    assertEquals("asc \u05d0 \u200e(\u05d0\u05d0\u05d0)\u200e",
+        goog.i18n.bidi.guardBracketInText(strWithRtl, false));
+
+    var strWithRtl2 = "\u05d0 a (asc:))";
+    assertEquals("\u05d0 a \u200f(asc:))\u200f",
+        goog.i18n.bidi.guardBracketInText(strWithRtl2));
+    assertEquals("\u05d0 a \u200f(asc:))\u200f",
+        goog.i18n.bidi.guardBracketInText(strWithRtl2, true));
+    assertEquals("\u05d0 a \u200e(asc:))\u200e",
+        goog.i18n.bidi.guardBracketInText(strWithRtl2, false));
+
+    var strWithoutRtl = "a (asc) {{123}}";
+    assertEquals("a \u200e(asc)\u200e \u200e{{123}}\u200e",
+        goog.i18n.bidi.guardBracketInText(strWithoutRtl));
+    assertEquals("a \u200f(asc)\u200f \u200f{{123}}\u200f",
+        goog.i18n.bidi.guardBracketInText(strWithoutRtl, true));
+    assertEquals("a \u200e(asc)\u200e \u200e{{123}}\u200e",
+        goog.i18n.bidi.guardBracketInText(strWithoutRtl, false));
+
   }
 
   function testEnforceRtlInHtml() {

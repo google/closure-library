@@ -36,6 +36,7 @@ goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.icontent');
 goog.require('goog.editor.icontent.FieldFormatInfo');
+goog.require('goog.editor.icontent.FieldStyleInfo');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.events');
@@ -292,7 +293,7 @@ goog.editor.Field.DEBOUNCE_TIME_MS_ = 500;
 /**
  * There is at most one "active" field at a time.  By "active" field, we mean
  * a field that has focus and is being used.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.editor.Field.activeFieldId_ = null;
@@ -325,7 +326,7 @@ goog.editor.Field.prototype.originalDomHelper;
 
 /**
  * Sets the active field id.
- * @param {string?} fieldId The active field id.
+ * @param {?string} fieldId The active field id.
  */
 goog.editor.Field.setActiveFieldId = function(fieldId) {
   goog.editor.Field.activeFieldId_ = fieldId;
@@ -333,7 +334,7 @@ goog.editor.Field.setActiveFieldId = function(fieldId) {
 
 
 /**
- * @return {string?} The id of the active field.
+ * @return {?string} The id of the active field.
  */
 goog.editor.Field.getActiveFieldId = function() {
   return goog.editor.Field.activeFieldId_;
@@ -1407,7 +1408,7 @@ goog.editor.Field.prototype.handleDrop_ = function(e) {
 
 
 /**
- * @return {HTMLIFrameElement?} The iframe that's body is editable.
+ * @return {HTMLIFrameElement} The iframe that's body is editable.
  * @protected
  */
 goog.editor.Field.prototype.getEditableIframe = function() {
@@ -1938,7 +1939,7 @@ goog.editor.Field.prototype.getFieldCopy = function() {
  * Sets the contents of the field.
  * @param {boolean} addParas Boolean to specify whether to add paragraphs
  *    to long fields.
- * @param {string?} html html to insert.  If html=null, then this defaults
+ * @param {?string} html html to insert.  If html=null, then this defaults
  *    to a nsbp for mozilla and an empty string for IE.
  * @param {boolean} opt_dontFireDelayedChange True to make this content change
  *    not fire a delayed change event.
@@ -2000,7 +2001,7 @@ goog.editor.Field.prototype.setHtml = function(
 /**
  * Sets the inner HTML of the field. Works on both editable and
  * uneditable fields.
- * @param {string?} html The new inner HTML of the field.
+ * @param {?string} html The new inner HTML of the field.
  * @private
  */
 goog.editor.Field.prototype.setInnerHtml_ = function(html) {

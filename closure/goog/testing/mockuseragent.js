@@ -102,7 +102,7 @@ goog.testing.MockUserAgent.prototype.setUserAgentString = function(userAgent) {
 
 
 /**
- * @return {?Object} The Navigator set in this class.
+ * @return {Object} The Navigator set in this class.
  */
 goog.testing.MockUserAgent.prototype.getNavigator = function() {
   return this.navigator_;

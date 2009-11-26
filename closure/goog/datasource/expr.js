@@ -141,7 +141,7 @@ goog.ds.Expr.prototype.getSource = function() {
 
 /**
  * Gets the last part of the expression.
- * @return {string?} Last part of the expression.
+ * @return {?string} Last part of the expression.
  */
 goog.ds.Expr.prototype.getLast = function() {
   return this.last_;
@@ -187,7 +187,7 @@ goog.ds.Expr.prototype.getNext = function() {
  *
  * @param {goog.ds.DataNode} opt_ds Optional datasource to evaluate against.
  *     If not provided, evaluates against DataManager global root.
- * @return {Object?} Value of the node, or null if doesn't exist.
+ * @return {Object} Value of the node, or null if doesn't exist.
  */
 goog.ds.Expr.prototype.getValue = function(opt_ds) {
   if (opt_ds == null) {
@@ -324,7 +324,7 @@ goog.ds.Expr.prototype.parts_ = [];
 /**
  * Number of paths in the expression
  *
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.ds.Expr.prototype.size_ = null;
@@ -342,7 +342,7 @@ goog.ds.Expr.prototype.root_;
 /**
  * The last path in the expression
  *
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ds.Expr.prototype.last_ = null;
@@ -396,7 +396,7 @@ goog.ds.Expr.prototype.isAllElements_ = false;
 /**
  * The function used by this expression
  *
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ds.Expr.prototype.exprFn_ = null;

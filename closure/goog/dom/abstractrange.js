@@ -53,21 +53,30 @@ goog.dom.AbstractRange = function() {
 /**
  * Gets the browser native selection object from the given window.
  * @param {Window} win The window to get the selection object from.
- * @return {Object?} The browser native selection object, or null if it could
+ * @return {Object} The browser native selection object, or null if it could
  *     not be retrieved.
  */
 goog.dom.AbstractRange.getBrowserSelectionForWindow = function(win) {
   if (win.getSelection) {
-    return win.getSelection(); // Gecko + Safari
+    // W3C
+    return win.getSelection();
   } else {
+    // IE
     var doc = win.document;
     var sel = doc.selection;
     if (sel) {
-      // IE
+      // IE has a bug where it sometimes returns a selection from the wrong
+      // document. Catching these cases now helps us avoid problems later.
       try {
-        if (sel.createRange().parentElement().document != doc) {
-          // IE has a bug where it sometimes returns a selection
-          // from the wrong document.
+        var range = sel.createRange();
+        // Only TextRanges have a parentElement method.
+        if (range.parentElement) {
+          if (range.parentElement().document != doc) {
+            return null;
+          }
+        // For ControlRanges, check that the range has items, and that
+        // the first item in the range is in the correct document.
+        } else if (!range.length || range.item(0).document != doc) {
           return null;
         }
       } catch (e) {
@@ -458,7 +467,7 @@ goog.dom.AbstractRange.prototype.collapse = goog.abstractMethod;
 /**
  * Subclass of goog.dom.TagIterator that iterates over a DOM range.  It
  * adds functions to determine the portion of each text node that is selected.
- * @param {Node?} node The node to start traversal at.  When null, creates an
+ * @param {Node} node The node to start traversal at.  When null, creates an
  *     empty iterator.
  * @param {boolean} opt_reverse Whether to traverse nodes in reverse.
  * @constructor

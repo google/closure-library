@@ -120,7 +120,7 @@
 <a name="line77"></a>  /**
 <a name="line78"></a>   * Active element reference. Used by the delayed show functionality to keep
 <a name="line79"></a>   * track of the element the mouse is over or the element with focus.
-<a name="line80"></a>   * @type {Element?}
+<a name="line80"></a>   * @type {Element}
 <a name="line81"></a>   * @private
 <a name="line82"></a>   */
 <a name="line83"></a>  this.activeEl_ = null;
@@ -651,7 +651,7 @@
 <a name="line608"></a> * Find anchor containing the given element, if any.
 <a name="line609"></a> *
 <a name="line610"></a> * @param {Element} el Element that triggered event.
-<a name="line611"></a> * @return {Element?} Element in elements_ array that contains given element,
+<a name="line611"></a> * @return {Element} Element in elements_ array that contains given element,
 <a name="line612"></a> *     or null if not found.
 <a name="line613"></a> * @protected
 <a name="line614"></a> */
@@ -665,7 +665,7 @@
 <a name="line622"></a>  // See https://bugzilla.mozilla.org/show_bug.cgi?id=330961
 <a name="line623"></a>  try {
 <a name="line624"></a>    while (el &amp;&amp; !this.elements_.contains(el)) {
-<a name="line625"></a>      el = /** @type {Element?} */ (el.parentNode);
+<a name="line625"></a>      el = /** @type {Element} */ (el.parentNode);
 <a name="line626"></a>    }
 <a name="line627"></a>    return el;
 <a name="line628"></a>  } catch (e) {

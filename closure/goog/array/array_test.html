@@ -45,9 +45,18 @@ function testArrayIndexOfOmitsDeleted() {
   assertEquals(goog.array.indexOf(a, undefined), -1);
 }
 
+function testArrayIndexOfString() {
+  assertEquals(goog.array.indexOf('abcd', 'd'), 3);
+  assertEquals(goog.array.indexOf('abbb', 'b', 2), 2);
+  assertEquals(goog.array.indexOf('abcd', 'e'), -1);
+  assertEquals(goog.array.indexOf('abcd', 'cd'), -1);
+  assertEquals(goog.array.indexOf('0123', 1), -1);
+}
+
 function testArrayLastIndexOf() {
   assertEquals(goog.array.lastIndexOf([0, 1, 2, 3], 1), 1);
   assertEquals(goog.array.lastIndexOf([0, 1, 1, 1], 1), 3);
+  assertEquals(goog.array.lastIndexOf([0, 1, 1, 1], 1, 2), 2);
 }
 
 function testArrayLastIndexOfOmitsDeleted() {
@@ -55,6 +64,14 @@ function testArrayLastIndexOfOmitsDeleted() {
   delete a[1];
   delete a[3];
   assertEquals(goog.array.lastIndexOf(a, undefined), -1);
+}
+
+function testArrayLastIndexOfString() {
+  assertEquals(goog.array.lastIndexOf('abcd', 'b'), 1);
+  assertEquals(goog.array.lastIndexOf('abbb', 'b'), 3);
+  assertEquals(goog.array.lastIndexOf('abbb', 'b', 2), 2);
+  assertEquals(goog.array.lastIndexOf('abcd', 'cd'), -1);
+  assertEquals(goog.array.lastIndexOf('0123', 1), -1);
 }
 
 function testArrayForEachBasic() {
@@ -557,6 +574,10 @@ function testArrayContains() {
   var a = [0, 1, 2, 3];
   assertTrue('contain, Should contain 3', goog.array.contains(a, 3));
   assertFalse('contain, Should not contain 4', goog.array.contains(a, 4));
+
+  var s = 'abcd';
+  assertTrue('contain, Should contain d', goog.array.contains(s, 'd'));
+  assertFalse('contain, Should not contain e', goog.array.contains(s, 'e'));
 }
 
 function testArrayContainsOmitsDeleted() {
@@ -1301,6 +1322,7 @@ function testRotate() {
   assertRotated([0, 1, 2, 3, 4], [0, 1, 2, 3, 4], 5);
   assertRotated([4, 0, 1, 2, 3], [0, 1, 2, 3, 4], 6);
 }
+
 </script>
 </body>
 </html>

@@ -131,7 +131,7 @@ goog.net.ChannelRequest.prototype.successful_ = false;
 
 /**
  * The TimerID of the timer used to detect if the request has timed-out.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.ChannelRequest.prototype.watchDogTimerId_ = null;
@@ -139,7 +139,7 @@ goog.net.ChannelRequest.prototype.watchDogTimerId_ = null;
 
 /**
  * The time in the future when the request will timeout.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.ChannelRequest.prototype.watchDogTimeoutTime_ = null;
@@ -155,7 +155,7 @@ goog.net.ChannelRequest.prototype.retryCount_ = 0;
 
 /**
  * The type of request (XMLHTTP, IMG, Trident)
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.ChannelRequest.prototype.type_ = null;
@@ -180,7 +180,7 @@ goog.net.ChannelRequest.prototype.requestUri_ = null;
 
 /**
  * The post data, if the request is a post.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.net.ChannelRequest.prototype.postData_ = null;
@@ -205,7 +205,7 @@ goog.net.ChannelRequest.prototype.xmlHttpChunkStart_ = 0;
 
 /**
  * The Trident instance if the request is using Trident.
- * @type {ActiveXObject?}
+ * @type {ActiveXObject}
  * @private
  */
 goog.net.ChannelRequest.prototype.trident_ = null;
@@ -213,7 +213,7 @@ goog.net.ChannelRequest.prototype.trident_ = null;
 
 /**
  * The verb (Get or Post) for the request.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.net.ChannelRequest.prototype.verb_ = null;

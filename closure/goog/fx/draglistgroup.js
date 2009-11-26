@@ -720,7 +720,7 @@ goog.fx.DragListGroup.prototype.getItemsInDragList_ = function(dragList) {
  *
  * @param {goog.math.Coordinate} draggerElCenter The center position of the
  *     dragger element.
- * @return {Element?} If currently hovering over a drag list, returns the drag
+ * @return {Element} If currently hovering over a drag list, returns the drag
  *     list element. Else returns null.
  * @private
  */
@@ -776,10 +776,10 @@ goog.fx.DragListGroup.prototype.isInRect_ = function(pos, rect) {
  * the drag action ends right now, it would become the item after the current
  * drag item.)
  *
- * @param {Element?} hoverList The drag list that we're hovering over.
+ * @param {Element} hoverList The drag list that we're hovering over.
  * @param {goog.math.Coordinate} draggerElCenter The center position of the
  *     dragger element.
- * @return {Element?} Returns the earliest item in the hover list that belongs
+ * @return {Element} Returns the earliest item in the hover list that belongs
  *     after the current position of the dragger element. If all items in the
  *     list should come before the current drag item, then returns null.
  * @private

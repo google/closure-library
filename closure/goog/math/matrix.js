@@ -389,7 +389,7 @@ goog.math.Matrix.prototype.getTranspose = function() {
  * requested coordinates are out of range.
  * @param {number} i The i index of the coordinate.
  * @param {number} j The j index of the coordinate.
- * @return {number?} The value at the specified coordinate.
+ * @return {?number} The value at the specified coordinate.
  */
 goog.math.Matrix.prototype.getValueAt = function(i, j) {
   if (!this.isInBounds_(i, j)) {

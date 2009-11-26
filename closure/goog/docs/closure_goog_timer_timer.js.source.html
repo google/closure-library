@@ -163,7 +163,7 @@
 <a name="line120"></a>
 <a name="line121"></a>/**
 <a name="line122"></a> * Variable for storing the result of setInterval
-<a name="line123"></a> * @type {number?}
+<a name="line123"></a> * @type {?number}
 <a name="line124"></a> * @private
 <a name="line125"></a> */
 <a name="line126"></a>goog.Timer.prototype.timer_ = null;
@@ -316,7 +316,7 @@
 <a name="line273"></a>
 <a name="line274"></a>/**
 <a name="line275"></a> * Clears a timeout initiated by callOnce
-<a name="line276"></a> * @param {number?} timerId a timer ID.
+<a name="line276"></a> * @param {?number} timerId a timer ID.
 <a name="line277"></a> */
 <a name="line278"></a>goog.Timer.clear = function(timerId) {
 <a name="line279"></a>  goog.Timer.defaultTimerObject.clearTimeout(timerId);

@@ -150,7 +150,7 @@ goog.ui.RoundedCorners.prototype.padding_ = '';
 
 /**
  * An explicit height for the HTML. If null, no height is specified
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.RoundedCorners.prototype.height_ = null;
@@ -318,7 +318,7 @@ goog.ui.RoundedCorners.prototype.setBorderThickness = function(size) {
  * set in certain cases in IE because of an off-by-1 bug in IE's bottom
  * positioning code.
  *
- * @return {string?} The height as a style string (e.g. '2px' or '3em').
+ * @return {?string} The height as a style string (e.g. '2px' or '3em').
  */
 goog.ui.RoundedCorners.prototype.getExplicitHeight = function() {
   return this.height_;

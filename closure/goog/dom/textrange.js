@@ -157,7 +157,7 @@ goog.dom.TextRange.prototype.browserRangeWrapper_ = null;
 /**
  * The start node of the range.  This can be null if one of the other
  * representations of the range is specified.
- * @type {Node?}
+ * @type {Node}
  * @private
  */
 goog.dom.TextRange.prototype.startNode_ = null;
@@ -166,7 +166,7 @@ goog.dom.TextRange.prototype.startNode_ = null;
 /**
  * The start offset of the range.  This can be null if one of the other
  * representations of the range is specified.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.dom.TextRange.prototype.startOffset_ = null;
@@ -175,7 +175,7 @@ goog.dom.TextRange.prototype.startOffset_ = null;
 /**
  * The end node of the range.  This can be null if one of the other
  * representations of the range is specified.
- * @type {Node?}
+ * @type {Node}
  * @private
  */
 goog.dom.TextRange.prototype.endNode_ = null;
@@ -184,7 +184,7 @@ goog.dom.TextRange.prototype.endNode_ = null;
 /**
  * The end offset of the range.  This can be null if one of the other
  * representations of the range is specified.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.dom.TextRange.prototype.endOffset_ = null;
@@ -486,9 +486,9 @@ goog.dom.TextRange.prototype.removeContents = function() {
  * clone of the specified element (on IE).  Returns a reference to the
  * surrounding element if the operation was successful; returns null if the
  * operation failed.
- * @param {Element?} element The element with which the selection is to be
+ * @param {Element} element The element with which the selection is to be
  *    surrounded.
- * @return {Element?} The surrounding element (same as the argument on Mozilla,
+ * @return {Element} The surrounding element (same as the argument on Mozilla,
  *    but not on IE), or null if unsuccessful.
  */
 goog.dom.TextRange.prototype.surroundContents = function(element) {

@@ -71,7 +71,7 @@
 <a name="line28"></a> * sprited via CSS, then only the first parameter needs a value. If the image
 <a name="line29"></a> * is sprited via metadata, then the first parameter should be left null.
 <a name="line30"></a> *
-<a name="line31"></a> * @param {string?} cssClass CSS class to properly display the sprited image.
+<a name="line31"></a> * @param {?string} cssClass CSS class to properly display the sprited image.
 <a name="line32"></a> * @param {string} opt_url Url of the sprite image.
 <a name="line33"></a> * @param {number} opt_width Width of the image being sprited.
 <a name="line34"></a> * @param {number} opt_height Height of the image being sprited.
@@ -162,7 +162,7 @@
 <a name="line119"></a>
 <a name="line120"></a>/**
 <a name="line121"></a> * Returns the css class of the sprited image.
-<a name="line122"></a> * @return {string?} Name of the CSS class to properly display the sprited
+<a name="line122"></a> * @return {?string} Name of the CSS class to properly display the sprited
 <a name="line123"></a> *     image.
 <a name="line124"></a> */
 <a name="line125"></a>goog.ui.emoji.SpriteInfo.prototype.getCssClass = function() {
@@ -172,7 +172,7 @@
 <a name="line129"></a>
 <a name="line130"></a>/**
 <a name="line131"></a> * Returns the url of the sprite image.
-<a name="line132"></a> * @return {string?} Url of the sprite image.
+<a name="line132"></a> * @return {?string} Url of the sprite image.
 <a name="line133"></a> */
 <a name="line134"></a>goog.ui.emoji.SpriteInfo.prototype.getUrl = function() {
 <a name="line135"></a>  return this.url_ || null;

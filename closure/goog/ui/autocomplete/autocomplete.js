@@ -84,7 +84,7 @@ goog.ui.AutoComplete = function(matcher, renderer, selectionHandler) {
 
   /**
    * Currently typed token which will be used for completion.
-   * @type {string?}
+   * @type {?string}
    * @protected
    * @suppress {underscore}
    */
@@ -125,7 +125,7 @@ goog.ui.AutoComplete = function(matcher, renderer, selectionHandler) {
 
   /**
    * The timer id for dismissing autocomplete menu with a delay.
-   * @type {number?}
+   * @type {?number}
    * @private
    */
   this.dismissTimer_ = null;
@@ -270,7 +270,7 @@ goog.ui.AutoComplete.prototype.setTriggerSuggestionsOnUpdate = function(
  * <code>renderer.renderRows()</code>.
  *
  * @param {string} token The string for which to search in the Matcher.
- * @param {String} opt_fullString Optionally, the full string in the input
+ * @param {string} opt_fullString Optionally, the full string in the input
  *     field.
  */
 goog.ui.AutoComplete.prototype.setToken = function(token, opt_fullString) {
@@ -286,7 +286,7 @@ goog.ui.AutoComplete.prototype.setToken = function(token, opt_fullString) {
 
 /**
  * Gets the current target HTML node for displaying autocomplete UI.
- * @return {Element?} The current target HTML node for displaying autocomplete
+ * @return {Element} The current target HTML node for displaying autocomplete
  *     UI.
  */
 goog.ui.AutoComplete.prototype.getTarget = function() {

@@ -110,7 +110,7 @@
 <a name="line67"></a>
 <a name="line68"></a>  /**
 <a name="line69"></a>   * Set of test names to execute, or null if all tests should be executed.
-<a name="line70"></a>   * @type {Object?}
+<a name="line70"></a>   * @type {Object}
 <a name="line71"></a>   * @private
 <a name="line72"></a>   */
 <a name="line73"></a>  this.testsToRun_ = null;
@@ -200,7 +200,7 @@
 <a name="line157"></a>/**
 <a name="line158"></a> * TODO replace this with prototype.currentTest.
 <a name="line159"></a> * Name of the current test that is running, or null if none is running.
-<a name="line160"></a> * @type {string?}
+<a name="line160"></a> * @type {?string}
 <a name="line161"></a> */
 <a name="line162"></a>goog.testing.TestCase.currentTestName = null;
 <a name="line163"></a>
@@ -256,7 +256,7 @@
 <a name="line213"></a>
 <a name="line214"></a>/**
 <a name="line215"></a> * Optional callback that will be executed when the test has finalized.
-<a name="line216"></a> * @type {Function?}
+<a name="line216"></a> * @type {Function}
 <a name="line217"></a> * @private
 <a name="line218"></a> */
 <a name="line219"></a>goog.testing.TestCase.prototype.onCompleteCallback_ = null;
@@ -721,279 +721,278 @@
 <a name="line678"></a>  var d = new Date;
 <a name="line679"></a>
 <a name="line680"></a>  // Ensure millis are always 3-digits
-<a name="line681"></a>  var millis = d.getMilliseconds();
-<a name="line682"></a>  if (millis &lt; 10) millis += &#39;00&#39;;
-<a name="line683"></a>  else if (millis &lt; 100) millis += &#39;0&#39;;
-<a name="line684"></a>
-<a name="line685"></a>  return this.pad_(d.getHours()) + &#39;:&#39; + this.pad_(d.getMinutes()) + &#39;:&#39; +
-<a name="line686"></a>         this.pad_(d.getSeconds()) + &#39;.&#39; + millis;
-<a name="line687"></a>};
+<a name="line681"></a>  var millis = &#39;00&#39; + d.getMilliseconds();
+<a name="line682"></a>  millis = millis.substr(millis.length - 3);
+<a name="line683"></a>
+<a name="line684"></a>  return this.pad_(d.getHours()) + &#39;:&#39; + this.pad_(d.getMinutes()) + &#39;:&#39; +
+<a name="line685"></a>         this.pad_(d.getSeconds()) + &#39;.&#39; + millis;
+<a name="line686"></a>};
+<a name="line687"></a>
 <a name="line688"></a>
-<a name="line689"></a>
-<a name="line690"></a>/**
-<a name="line691"></a> * Pads a number to make it have a leading zero if it&#39;s less than 10.
-<a name="line692"></a> * @param {number} number The number to pad.
-<a name="line693"></a> * @return {string} The resulting string.
-<a name="line694"></a> * @private
-<a name="line695"></a> */
-<a name="line696"></a>goog.testing.TestCase.prototype.pad_ = function(number) {
-<a name="line697"></a>  return number &lt; 10 ? &#39;0&#39; + number : String(number);
-<a name="line698"></a>};
+<a name="line689"></a>/**
+<a name="line690"></a> * Pads a number to make it have a leading zero if it&#39;s less than 10.
+<a name="line691"></a> * @param {number} number The number to pad.
+<a name="line692"></a> * @return {string} The resulting string.
+<a name="line693"></a> * @private
+<a name="line694"></a> */
+<a name="line695"></a>goog.testing.TestCase.prototype.pad_ = function(number) {
+<a name="line696"></a>  return number &lt; 10 ? &#39;0&#39; + number : String(number);
+<a name="line697"></a>};
+<a name="line698"></a>
 <a name="line699"></a>
-<a name="line700"></a>
-<a name="line701"></a>/**
-<a name="line702"></a> * Trims a path to be only that after google3.
-<a name="line703"></a> * @param {string} path The path to trim.
-<a name="line704"></a> * @return {string} The resulting string.
-<a name="line705"></a> * @private
-<a name="line706"></a> */
-<a name="line707"></a>goog.testing.TestCase.prototype.trimPath_ = function(path) {
-<a name="line708"></a>  return path.substring(path.indexOf(&#39;google3&#39;) + 8);
-<a name="line709"></a>};
+<a name="line700"></a>/**
+<a name="line701"></a> * Trims a path to be only that after google3.
+<a name="line702"></a> * @param {string} path The path to trim.
+<a name="line703"></a> * @return {string} The resulting string.
+<a name="line704"></a> * @private
+<a name="line705"></a> */
+<a name="line706"></a>goog.testing.TestCase.prototype.trimPath_ = function(path) {
+<a name="line707"></a>  return path.substring(path.indexOf(&#39;google3&#39;) + 8);
+<a name="line708"></a>};
+<a name="line709"></a>
 <a name="line710"></a>
-<a name="line711"></a>
-<a name="line712"></a>/**
-<a name="line713"></a> * Handles a test that passed.
-<a name="line714"></a> * @param {goog.testing.TestCase.Test} test The test that passed.
-<a name="line715"></a> * @protected
-<a name="line716"></a> */
-<a name="line717"></a>goog.testing.TestCase.prototype.doSuccess = function(test) {
-<a name="line718"></a>  this.result_.successCount++;
-<a name="line719"></a>  var message = test.name + &#39; : PASSED&#39;;
-<a name="line720"></a>  this.saveMessage(message);
-<a name="line721"></a>  this.log(message);
-<a name="line722"></a>};
+<a name="line711"></a>/**
+<a name="line712"></a> * Handles a test that passed.
+<a name="line713"></a> * @param {goog.testing.TestCase.Test} test The test that passed.
+<a name="line714"></a> * @protected
+<a name="line715"></a> */
+<a name="line716"></a>goog.testing.TestCase.prototype.doSuccess = function(test) {
+<a name="line717"></a>  this.result_.successCount++;
+<a name="line718"></a>  var message = test.name + &#39; : PASSED&#39;;
+<a name="line719"></a>  this.saveMessage(message);
+<a name="line720"></a>  this.log(message);
+<a name="line721"></a>};
+<a name="line722"></a>
 <a name="line723"></a>
-<a name="line724"></a>
-<a name="line725"></a>/**
-<a name="line726"></a> * Handles a test that failed.
-<a name="line727"></a> * @param {goog.testing.TestCase.Test} test The test that failed.
-<a name="line728"></a> * @param {string|Error} opt_e The exception object associated with the
-<a name="line729"></a> *     failure or a string.
-<a name="line730"></a> * @protected
-<a name="line731"></a> */
-<a name="line732"></a>goog.testing.TestCase.prototype.doError = function(test, opt_e) {
-<a name="line733"></a>  var message = test.name + &#39; : FAILED&#39;;
-<a name="line734"></a>  this.log(message);
-<a name="line735"></a>  this.saveMessage(message);
-<a name="line736"></a>  var err = this.logError(test.name, opt_e);
-<a name="line737"></a>  this.result_.errors.push(err);
-<a name="line738"></a>};
+<a name="line724"></a>/**
+<a name="line725"></a> * Handles a test that failed.
+<a name="line726"></a> * @param {goog.testing.TestCase.Test} test The test that failed.
+<a name="line727"></a> * @param {string|Error} opt_e The exception object associated with the
+<a name="line728"></a> *     failure or a string.
+<a name="line729"></a> * @protected
+<a name="line730"></a> */
+<a name="line731"></a>goog.testing.TestCase.prototype.doError = function(test, opt_e) {
+<a name="line732"></a>  var message = test.name + &#39; : FAILED&#39;;
+<a name="line733"></a>  this.log(message);
+<a name="line734"></a>  this.saveMessage(message);
+<a name="line735"></a>  var err = this.logError(test.name, opt_e);
+<a name="line736"></a>  this.result_.errors.push(err);
+<a name="line737"></a>};
+<a name="line738"></a>
 <a name="line739"></a>
-<a name="line740"></a>
-<a name="line741"></a>/**
-<a name="line742"></a> * @param {string} name Failed test name.
-<a name="line743"></a> * @param {string|Error} opt_e The exception object associated with the
-<a name="line744"></a> *     failure or a string.
-<a name="line745"></a> * @return {goog.testing.TestCase.Error} Error object.
-<a name="line746"></a> */
-<a name="line747"></a>goog.testing.TestCase.prototype.logError = function(name, opt_e) {
-<a name="line748"></a>  var errMsg = null;
-<a name="line749"></a>  var stack = null;
-<a name="line750"></a>  if (opt_e) {
-<a name="line751"></a>    this.log(opt_e);
-<a name="line752"></a>    if (goog.isString(opt_e)) {
-<a name="line753"></a>      errMsg = opt_e;
-<a name="line754"></a>    } else {
-<a name="line755"></a>      errMsg = opt_e.message || opt_e.description || opt_e.toString();
-<a name="line756"></a>      stack = opt_e.stack ? goog.testing.stacktrace.canonicalize(opt_e.stack) :
-<a name="line757"></a>          opt_e[&#39;stackTrace&#39;];
-<a name="line758"></a>    }
-<a name="line759"></a>  } else {
-<a name="line760"></a>    errMsg = &#39;An unknown error occurred&#39;;
-<a name="line761"></a>  }
-<a name="line762"></a>  var err = new goog.testing.TestCase.Error(name, errMsg, stack);
-<a name="line763"></a>
-<a name="line764"></a>  // Avoid double logging.
-<a name="line765"></a>  if (!opt_e || !opt_e[&#39;isJsUnitException&#39;] ||
-<a name="line766"></a>      !opt_e[&#39;loggedJsUnitException&#39;]) {
-<a name="line767"></a>    this.saveMessage(err.toString());
-<a name="line768"></a>  }
-<a name="line769"></a>  if (opt_e &amp;&amp; opt_e[&#39;isJsUnitException&#39;]) {
-<a name="line770"></a>    opt_e[&#39;loggedJsUnitException&#39;] = true;
-<a name="line771"></a>  }
-<a name="line772"></a>
-<a name="line773"></a>  return err;
-<a name="line774"></a>};
+<a name="line740"></a>/**
+<a name="line741"></a> * @param {string} name Failed test name.
+<a name="line742"></a> * @param {string|Error} opt_e The exception object associated with the
+<a name="line743"></a> *     failure or a string.
+<a name="line744"></a> * @return {goog.testing.TestCase.Error} Error object.
+<a name="line745"></a> */
+<a name="line746"></a>goog.testing.TestCase.prototype.logError = function(name, opt_e) {
+<a name="line747"></a>  var errMsg = null;
+<a name="line748"></a>  var stack = null;
+<a name="line749"></a>  if (opt_e) {
+<a name="line750"></a>    this.log(opt_e);
+<a name="line751"></a>    if (goog.isString(opt_e)) {
+<a name="line752"></a>      errMsg = opt_e;
+<a name="line753"></a>    } else {
+<a name="line754"></a>      errMsg = opt_e.message || opt_e.description || opt_e.toString();
+<a name="line755"></a>      stack = opt_e.stack ? goog.testing.stacktrace.canonicalize(opt_e.stack) :
+<a name="line756"></a>          opt_e[&#39;stackTrace&#39;];
+<a name="line757"></a>    }
+<a name="line758"></a>  } else {
+<a name="line759"></a>    errMsg = &#39;An unknown error occurred&#39;;
+<a name="line760"></a>  }
+<a name="line761"></a>  var err = new goog.testing.TestCase.Error(name, errMsg, stack);
+<a name="line762"></a>
+<a name="line763"></a>  // Avoid double logging.
+<a name="line764"></a>  if (!opt_e || !opt_e[&#39;isJsUnitException&#39;] ||
+<a name="line765"></a>      !opt_e[&#39;loggedJsUnitException&#39;]) {
+<a name="line766"></a>    this.saveMessage(err.toString());
+<a name="line767"></a>  }
+<a name="line768"></a>  if (opt_e &amp;&amp; opt_e[&#39;isJsUnitException&#39;]) {
+<a name="line769"></a>    opt_e[&#39;loggedJsUnitException&#39;] = true;
+<a name="line770"></a>  }
+<a name="line771"></a>
+<a name="line772"></a>  return err;
+<a name="line773"></a>};
+<a name="line774"></a>
 <a name="line775"></a>
-<a name="line776"></a>
-<a name="line777"></a>/**
-<a name="line778"></a> * A class representing a single test function.
-<a name="line779"></a> * @param {string} name The test name.
-<a name="line780"></a> * @param {Function} ref Reference to the test function.
-<a name="line781"></a> * @param {Object} opt_scope Optional scope that the test function should be
-<a name="line782"></a> *     called in.
-<a name="line783"></a> * @constructor
-<a name="line784"></a> */
-<a name="line785"></a>goog.testing.TestCase.Test = function(name, ref, opt_scope) {
-<a name="line786"></a>  /**
-<a name="line787"></a>   * The name of the test.
-<a name="line788"></a>   * @type {string}
-<a name="line789"></a>   */
-<a name="line790"></a>  this.name = name;
-<a name="line791"></a>
-<a name="line792"></a>  /**
-<a name="line793"></a>   * Reference to the test function.
-<a name="line794"></a>   * @type {Function}
-<a name="line795"></a>   */
-<a name="line796"></a>  this.ref = ref;
-<a name="line797"></a>
-<a name="line798"></a>  /**
-<a name="line799"></a>   * Scope that the test function should be called in.
-<a name="line800"></a>   * @type {Object?}
-<a name="line801"></a>   */
-<a name="line802"></a>  this.scope = opt_scope || null;
-<a name="line803"></a>};
+<a name="line776"></a>/**
+<a name="line777"></a> * A class representing a single test function.
+<a name="line778"></a> * @param {string} name The test name.
+<a name="line779"></a> * @param {Function} ref Reference to the test function.
+<a name="line780"></a> * @param {Object} opt_scope Optional scope that the test function should be
+<a name="line781"></a> *     called in.
+<a name="line782"></a> * @constructor
+<a name="line783"></a> */
+<a name="line784"></a>goog.testing.TestCase.Test = function(name, ref, opt_scope) {
+<a name="line785"></a>  /**
+<a name="line786"></a>   * The name of the test.
+<a name="line787"></a>   * @type {string}
+<a name="line788"></a>   */
+<a name="line789"></a>  this.name = name;
+<a name="line790"></a>
+<a name="line791"></a>  /**
+<a name="line792"></a>   * Reference to the test function.
+<a name="line793"></a>   * @type {Function}
+<a name="line794"></a>   */
+<a name="line795"></a>  this.ref = ref;
+<a name="line796"></a>
+<a name="line797"></a>  /**
+<a name="line798"></a>   * Scope that the test function should be called in.
+<a name="line799"></a>   * @type {Object}
+<a name="line800"></a>   */
+<a name="line801"></a>  this.scope = opt_scope || null;
+<a name="line802"></a>};
+<a name="line803"></a>
 <a name="line804"></a>
-<a name="line805"></a>
-<a name="line806"></a>/**
-<a name="line807"></a> * Executes the test function.
-<a name="line808"></a> */
-<a name="line809"></a>goog.testing.TestCase.Test.prototype.execute = function() {
-<a name="line810"></a>  this.ref.call(this.scope);
-<a name="line811"></a>};
+<a name="line805"></a>/**
+<a name="line806"></a> * Executes the test function.
+<a name="line807"></a> */
+<a name="line808"></a>goog.testing.TestCase.Test.prototype.execute = function() {
+<a name="line809"></a>  this.ref.call(this.scope);
+<a name="line810"></a>};
+<a name="line811"></a>
 <a name="line812"></a>
 <a name="line813"></a>
-<a name="line814"></a>
-<a name="line815"></a>/**
-<a name="line816"></a> * A class for representing test results.  A bag of public properties.
-<a name="line817"></a> * @param {goog.testing.TestCase} testCase The test case that owns this result.
-<a name="line818"></a> * @constructor
-<a name="line819"></a> */
-<a name="line820"></a>goog.testing.TestCase.Result = function(testCase) {
-<a name="line821"></a>
-<a name="line822"></a>  /**
-<a name="line823"></a>   * The test case that owns this result.
-<a name="line824"></a>   * @type {goog.testing.TestCase}
-<a name="line825"></a>   * @private
-<a name="line826"></a>   */
-<a name="line827"></a>  this.testCase_ = testCase;
-<a name="line828"></a>
-<a name="line829"></a>  /**
-<a name="line830"></a>   * Total number of tests that should have been run.
-<a name="line831"></a>   * @type {number}
-<a name="line832"></a>   */
-<a name="line833"></a>  this.totalCount = 0;
-<a name="line834"></a>
-<a name="line835"></a>  /**
-<a name="line836"></a>   * Total number of tests that were actually run.
-<a name="line837"></a>   * @type {number}
-<a name="line838"></a>   */
-<a name="line839"></a>  this.runCount = 0;
-<a name="line840"></a>
-<a name="line841"></a>  /**
-<a name="line842"></a>   * Number of successful tests.
-<a name="line843"></a>   * @type {number}
-<a name="line844"></a>   */
-<a name="line845"></a>  this.successCount = 0;
-<a name="line846"></a>
-<a name="line847"></a>  /**
-<a name="line848"></a>   * The amount of time the tests took to run.
-<a name="line849"></a>   * @type {number}
-<a name="line850"></a>   */
-<a name="line851"></a>  this.runTime = 0;
-<a name="line852"></a>
-<a name="line853"></a>  /**
-<a name="line854"></a>   * The number of files loaded to run this test.
-<a name="line855"></a>   * @type {number}
-<a name="line856"></a>   */
-<a name="line857"></a>  this.numFilesLoaded = 0;
-<a name="line858"></a>
-<a name="line859"></a>  /**
-<a name="line860"></a>   * Errors encountered while running the test.
-<a name="line861"></a>   * @type {Array.&lt;goog.testing.TestCase.Error&gt;}
-<a name="line862"></a>   */
-<a name="line863"></a>  this.errors = [];
-<a name="line864"></a>
-<a name="line865"></a>  /**
-<a name="line866"></a>   * Messages to show the user after running the test.
-<a name="line867"></a>   * @type {Array.&lt;string&gt;}
-<a name="line868"></a>   */
-<a name="line869"></a>  this.messages = [];
-<a name="line870"></a>};
+<a name="line814"></a>/**
+<a name="line815"></a> * A class for representing test results.  A bag of public properties.
+<a name="line816"></a> * @param {goog.testing.TestCase} testCase The test case that owns this result.
+<a name="line817"></a> * @constructor
+<a name="line818"></a> */
+<a name="line819"></a>goog.testing.TestCase.Result = function(testCase) {
+<a name="line820"></a>
+<a name="line821"></a>  /**
+<a name="line822"></a>   * The test case that owns this result.
+<a name="line823"></a>   * @type {goog.testing.TestCase}
+<a name="line824"></a>   * @private
+<a name="line825"></a>   */
+<a name="line826"></a>  this.testCase_ = testCase;
+<a name="line827"></a>
+<a name="line828"></a>  /**
+<a name="line829"></a>   * Total number of tests that should have been run.
+<a name="line830"></a>   * @type {number}
+<a name="line831"></a>   */
+<a name="line832"></a>  this.totalCount = 0;
+<a name="line833"></a>
+<a name="line834"></a>  /**
+<a name="line835"></a>   * Total number of tests that were actually run.
+<a name="line836"></a>   * @type {number}
+<a name="line837"></a>   */
+<a name="line838"></a>  this.runCount = 0;
+<a name="line839"></a>
+<a name="line840"></a>  /**
+<a name="line841"></a>   * Number of successful tests.
+<a name="line842"></a>   * @type {number}
+<a name="line843"></a>   */
+<a name="line844"></a>  this.successCount = 0;
+<a name="line845"></a>
+<a name="line846"></a>  /**
+<a name="line847"></a>   * The amount of time the tests took to run.
+<a name="line848"></a>   * @type {number}
+<a name="line849"></a>   */
+<a name="line850"></a>  this.runTime = 0;
+<a name="line851"></a>
+<a name="line852"></a>  /**
+<a name="line853"></a>   * The number of files loaded to run this test.
+<a name="line854"></a>   * @type {number}
+<a name="line855"></a>   */
+<a name="line856"></a>  this.numFilesLoaded = 0;
+<a name="line857"></a>
+<a name="line858"></a>  /**
+<a name="line859"></a>   * Errors encountered while running the test.
+<a name="line860"></a>   * @type {Array.&lt;goog.testing.TestCase.Error&gt;}
+<a name="line861"></a>   */
+<a name="line862"></a>  this.errors = [];
+<a name="line863"></a>
+<a name="line864"></a>  /**
+<a name="line865"></a>   * Messages to show the user after running the test.
+<a name="line866"></a>   * @type {Array.&lt;string&gt;}
+<a name="line867"></a>   */
+<a name="line868"></a>  this.messages = [];
+<a name="line869"></a>};
+<a name="line870"></a>
 <a name="line871"></a>
-<a name="line872"></a>
-<a name="line873"></a>/**
-<a name="line874"></a> * @return {boolean} Whether the test was successful.
-<a name="line875"></a> */
-<a name="line876"></a>goog.testing.TestCase.Result.prototype.isSuccess = function() {
-<a name="line877"></a>  var noErrors = this.runCount == this.successCount &amp;&amp; this.errors.length == 0;
-<a name="line878"></a>  if (noErrors &amp;&amp; this.isStrict()) {
-<a name="line879"></a>    return this.runCount &gt; 0;
-<a name="line880"></a>  }
-<a name="line881"></a>  return noErrors;
-<a name="line882"></a>};
+<a name="line872"></a>/**
+<a name="line873"></a> * @return {boolean} Whether the test was successful.
+<a name="line874"></a> */
+<a name="line875"></a>goog.testing.TestCase.Result.prototype.isSuccess = function() {
+<a name="line876"></a>  var noErrors = this.runCount == this.successCount &amp;&amp; this.errors.length == 0;
+<a name="line877"></a>  if (noErrors &amp;&amp; this.isStrict()) {
+<a name="line878"></a>    return this.runCount &gt; 0;
+<a name="line879"></a>  }
+<a name="line880"></a>  return noErrors;
+<a name="line881"></a>};
+<a name="line882"></a>
 <a name="line883"></a>
-<a name="line884"></a>
-<a name="line885"></a>/**
-<a name="line886"></a> * @return {string} A summary of the tests, including total number of tests that
-<a name="line887"></a> *     passed, failed, and the time taken.
-<a name="line888"></a> */
-<a name="line889"></a>goog.testing.TestCase.Result.prototype.getSummary = function() {
-<a name="line890"></a>  var summary = this.runCount + &#39; of &#39; + this.totalCount + &#39; tests run in &#39; +
-<a name="line891"></a>      this.runTime + &#39;ms.\n&#39;;
-<a name="line892"></a>  if (this.runCount == 0) {
-<a name="line893"></a>    summary += &#39;No tests found.  &#39;;
-<a name="line894"></a>    if (this.isStrict()) {
-<a name="line895"></a>      summary +=
-<a name="line896"></a>          &#39;Call G_testRunner.setStrict(false) if this is expected behavior.  &#39;;
-<a name="line897"></a>    }
-<a name="line898"></a>  } else {
-<a name="line899"></a>    summary += this.successCount + &#39; passed, &#39; +
-<a name="line900"></a>        (this.totalCount - this.successCount) + &#39; failed.\n&#39; +
-<a name="line901"></a>        Math.round(this.runTime / this.runCount) + &#39; ms/test. &#39; +
-<a name="line902"></a>        this.numFilesLoaded + &#39; files loaded.&#39;;
-<a name="line903"></a>  }
-<a name="line904"></a>
-<a name="line905"></a>  return summary;
-<a name="line906"></a>};
+<a name="line884"></a>/**
+<a name="line885"></a> * @return {string} A summary of the tests, including total number of tests that
+<a name="line886"></a> *     passed, failed, and the time taken.
+<a name="line887"></a> */
+<a name="line888"></a>goog.testing.TestCase.Result.prototype.getSummary = function() {
+<a name="line889"></a>  var summary = this.runCount + &#39; of &#39; + this.totalCount + &#39; tests run in &#39; +
+<a name="line890"></a>      this.runTime + &#39;ms.\n&#39;;
+<a name="line891"></a>  if (this.runCount == 0) {
+<a name="line892"></a>    summary += &#39;No tests found.  &#39;;
+<a name="line893"></a>    if (this.isStrict()) {
+<a name="line894"></a>      summary +=
+<a name="line895"></a>          &#39;Call G_testRunner.setStrict(false) if this is expected behavior.  &#39;;
+<a name="line896"></a>    }
+<a name="line897"></a>  } else {
+<a name="line898"></a>    summary += this.successCount + &#39; passed, &#39; +
+<a name="line899"></a>        (this.totalCount - this.successCount) + &#39; failed.\n&#39; +
+<a name="line900"></a>        Math.round(this.runTime / this.runCount) + &#39; ms/test. &#39; +
+<a name="line901"></a>        this.numFilesLoaded + &#39; files loaded.&#39;;
+<a name="line902"></a>  }
+<a name="line903"></a>
+<a name="line904"></a>  return summary;
+<a name="line905"></a>};
+<a name="line906"></a>
 <a name="line907"></a>
-<a name="line908"></a>
-<a name="line909"></a>/**
-<a name="line910"></a> * Determines whether the test result should report failure if no tests are run.
-<a name="line911"></a> * @return {boolean} Whether this is strict.
-<a name="line912"></a> */
-<a name="line913"></a>goog.testing.TestCase.Result.prototype.isStrict = function() {
-<a name="line914"></a>  return this.testCase_.testRunner_.isStrict();
-<a name="line915"></a>};
+<a name="line908"></a>/**
+<a name="line909"></a> * Determines whether the test result should report failure if no tests are run.
+<a name="line910"></a> * @return {boolean} Whether this is strict.
+<a name="line911"></a> */
+<a name="line912"></a>goog.testing.TestCase.Result.prototype.isStrict = function() {
+<a name="line913"></a>  return this.testCase_.testRunner_.isStrict();
+<a name="line914"></a>};
+<a name="line915"></a>
 <a name="line916"></a>
-<a name="line917"></a>
-<a name="line918"></a>/**
-<a name="line919"></a> * A class representing an error thrown by the test
-<a name="line920"></a> * @param {string} source The name of the test which threw the error.
-<a name="line921"></a> * @param {string} message The error message.
-<a name="line922"></a> * @param {string} opt_stack A string showing the execution stack.
-<a name="line923"></a> * @constructor
-<a name="line924"></a> */
-<a name="line925"></a>goog.testing.TestCase.Error = function(source, message, opt_stack) {
-<a name="line926"></a>  /**
-<a name="line927"></a>   * The name of the test which threw the error.
-<a name="line928"></a>   * @type {string}
-<a name="line929"></a>   */
-<a name="line930"></a>  this.source = source;
-<a name="line931"></a>
-<a name="line932"></a>  /**
-<a name="line933"></a>   * Reference to the test function.
-<a name="line934"></a>   * @type {string}
-<a name="line935"></a>   */
-<a name="line936"></a>  this.message = message;
-<a name="line937"></a>
-<a name="line938"></a>  /**
-<a name="line939"></a>   * Scope that the test function should be called in.
-<a name="line940"></a>   * @type {string?}
-<a name="line941"></a>   */
-<a name="line942"></a>  this.stack = opt_stack || null;
-<a name="line943"></a>};
+<a name="line917"></a>/**
+<a name="line918"></a> * A class representing an error thrown by the test
+<a name="line919"></a> * @param {string} source The name of the test which threw the error.
+<a name="line920"></a> * @param {string} message The error message.
+<a name="line921"></a> * @param {string} opt_stack A string showing the execution stack.
+<a name="line922"></a> * @constructor
+<a name="line923"></a> */
+<a name="line924"></a>goog.testing.TestCase.Error = function(source, message, opt_stack) {
+<a name="line925"></a>  /**
+<a name="line926"></a>   * The name of the test which threw the error.
+<a name="line927"></a>   * @type {string}
+<a name="line928"></a>   */
+<a name="line929"></a>  this.source = source;
+<a name="line930"></a>
+<a name="line931"></a>  /**
+<a name="line932"></a>   * Reference to the test function.
+<a name="line933"></a>   * @type {string}
+<a name="line934"></a>   */
+<a name="line935"></a>  this.message = message;
+<a name="line936"></a>
+<a name="line937"></a>  /**
+<a name="line938"></a>   * Scope that the test function should be called in.
+<a name="line939"></a>   * @type {?string}
+<a name="line940"></a>   */
+<a name="line941"></a>  this.stack = opt_stack || null;
+<a name="line942"></a>};
+<a name="line943"></a>
 <a name="line944"></a>
-<a name="line945"></a>
-<a name="line946"></a>/**
-<a name="line947"></a> * Returns a string representing the error object.
-<a name="line948"></a> * @return {string} A string representation of the error.
-<a name="line949"></a> */
-<a name="line950"></a>goog.testing.TestCase.Error.prototype.toString = function() {
-<a name="line951"></a>  return &#39;ERROR in &#39; + this.source + &#39;\n&#39; +
-<a name="line952"></a>      this.message + (this.stack ? &#39;\n&#39; + this.stack : &#39;&#39;);
-<a name="line953"></a>};
+<a name="line945"></a>/**
+<a name="line946"></a> * Returns a string representing the error object.
+<a name="line947"></a> * @return {string} A string representation of the error.
+<a name="line948"></a> */
+<a name="line949"></a>goog.testing.TestCase.Error.prototype.toString = function() {
+<a name="line950"></a>  return &#39;ERROR in &#39; + this.source + &#39;\n&#39; +
+<a name="line951"></a>      this.message + (this.stack ? &#39;\n&#39; + this.stack : &#39;&#39;);
+<a name="line952"></a>};
 </pre>
 
 

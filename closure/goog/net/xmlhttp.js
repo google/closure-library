@@ -41,7 +41,7 @@ goog.net.XmlHttp.getOptions = function() {
 
 /**
  * The factory for creating XMLHttpRequest objets.
- * @type {Function?}
+ * @type {Function}
  * @private
  */
 goog.net.XmlHttp.factory_ = null;
@@ -50,7 +50,7 @@ goog.net.XmlHttp.factory_ = null;
 /**
  * The factory for creating the Options for the XMLHttpRequest objets given
  * from the factory.
- * @type {Function?}
+ * @type {Function}
  * @private
  */
 goog.net.XmlHttp.optionsFactory_ = null;
@@ -58,7 +58,7 @@ goog.net.XmlHttp.optionsFactory_ = null;
 
 /**
  * The cached options object used to minimize object allocations.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.net.XmlHttp.cachedOptions_ = null;
@@ -170,7 +170,7 @@ goog.net.XmlHttp.ReadyState = {
 
 /**
  * The ActiveX PROG ID string to use to create xhr's in IE. Lazily initialized.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.net.XmlHttp.ieProgId_ = null;

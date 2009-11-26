@@ -67,7 +67,7 @@ goog.ui.PopupBase.Type = {
 
 /**
  * The popup dom element that this Popup wraps.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.PopupBase.prototype.element_ = null;
@@ -85,7 +85,7 @@ goog.ui.PopupBase.prototype.autoHide_ = true;
  * hide if autoHide_ is true. If this is null, then the entire document is used.
  * For example, you can use a body-size div so that clicks on the browser
  * scrollbar do not dismiss the popup.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.PopupBase.prototype.autoHideRegion_ = null;
@@ -102,7 +102,7 @@ goog.ui.PopupBase.prototype.isVisible_ = false;
  * there are cases where hiding the element in mouse down handler in IE can
  * cause textinputs to get into a bad state if the element that had focus is
  * hidden.
- * @type {Boolean}
+ * @type {boolean}
  * @private
  */
 goog.ui.PopupBase.prototype.shouldHideAsync_ = false;
@@ -193,7 +193,7 @@ goog.ui.PopupBase.prototype.setType = function(type) {
 /**
  * Returns whether the popup should hide itself asynchronously using a timeout
  * instead of synchronously.
- * @return {Boolean} Whether to hide async.
+ * @return {boolean} Whether to hide async.
  */
 goog.ui.PopupBase.prototype.shouldHideAsync = function() {
   return this.shouldHideAsync_;
@@ -203,7 +203,7 @@ goog.ui.PopupBase.prototype.shouldHideAsync = function() {
 /**
  * Sets whether the popup should hide itself asynchronously using a timeout
  * instead of synchronously.
- * @param {Boolean} b Whether to hide async.
+ * @param {boolean} b Whether to hide async.
  */
 goog.ui.PopupBase.prototype.setShouldHideAsync = function(b) {
   this.shouldHideAsync_ = b;
@@ -213,7 +213,7 @@ goog.ui.PopupBase.prototype.setShouldHideAsync = function(b) {
 /**
  * Returns the dom element that should be used for the popup.
  *
- * @return {Element?} The popup element.
+ * @return {Element} The popup element.
  */
 goog.ui.PopupBase.prototype.getElement = function() {
   return this.element_;
@@ -223,7 +223,7 @@ goog.ui.PopupBase.prototype.getElement = function() {
 /**
  * Specifies the dom element that should be used for the popup.
  *
- * @param {Element?} elt A DOM element for the popup.
+ * @param {Element} elt A DOM element for the popup.
  */
 goog.ui.PopupBase.prototype.setElement = function(elt) {
   this.ensureNotVisible_();
@@ -290,7 +290,7 @@ goog.ui.PopupBase.prototype.setEnableCrossIframeDismissal = function(enable) {
 /**
  * Returns the region inside which the Popup dismisses itself when the user
  * clicks, or null if it's the entire document.
- * @return {Element?} The DOM element for autohide, or null if it hasn't been
+ * @return {Element} The DOM element for autohide, or null if it hasn't been
  *     set.
  */
 goog.ui.PopupBase.prototype.getAutoHideRegion = function() {

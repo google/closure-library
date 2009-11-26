@@ -240,7 +240,7 @@
 <a name="line197"></a>
 <a name="line198"></a>/**
 <a name="line199"></a> * Reference to the start button element.
-<a name="line200"></a> * @type {Element?}
+<a name="line200"></a> * @type {Element}
 <a name="line201"></a> * @private
 <a name="line202"></a> */
 <a name="line203"></a>goog.testing.MultiTestRunner.prototype.startButtonEl_ = null;
@@ -248,7 +248,7 @@
 <a name="line205"></a>
 <a name="line206"></a>/**
 <a name="line207"></a> * Reference to the stop button element.
-<a name="line208"></a> * @type {Element?}
+<a name="line208"></a> * @type {Element}
 <a name="line209"></a> * @private
 <a name="line210"></a> */
 <a name="line211"></a>goog.testing.MultiTestRunner.prototype.stopButtonEl_ = null;
@@ -256,7 +256,7 @@
 <a name="line213"></a>
 <a name="line214"></a>/**
 <a name="line215"></a> * Reference to the log element.
-<a name="line216"></a> * @type {Element?}
+<a name="line216"></a> * @type {Element}
 <a name="line217"></a> * @private
 <a name="line218"></a> */
 <a name="line219"></a>goog.testing.MultiTestRunner.prototype.logEl_ = null;
@@ -264,7 +264,7 @@
 <a name="line221"></a>
 <a name="line222"></a>/**
 <a name="line223"></a> * Reference to the report element.
-<a name="line224"></a> * @type {Element?}
+<a name="line224"></a> * @type {Element}
 <a name="line225"></a> * @private
 <a name="line226"></a> */
 <a name="line227"></a>goog.testing.MultiTestRunner.prototype.reportEl_ = null;
@@ -272,7 +272,7 @@
 <a name="line229"></a>
 <a name="line230"></a>/**
 <a name="line231"></a> * Reference to the stats element.
-<a name="line232"></a> * @type {Element?}
+<a name="line232"></a> * @type {Element}
 <a name="line233"></a> * @private
 <a name="line234"></a> */
 <a name="line235"></a>goog.testing.MultiTestRunner.prototype.statsEl_ = null;
@@ -280,7 +280,7 @@
 <a name="line237"></a>
 <a name="line238"></a>/**
 <a name="line239"></a> * Reference to the progress bar&#39;s element.
-<a name="line240"></a> * @type {Element?}
+<a name="line240"></a> * @type {Element}
 <a name="line241"></a> * @private
 <a name="line242"></a> */
 <a name="line243"></a>goog.testing.MultiTestRunner.prototype.progressEl_ = null;
@@ -288,7 +288,7 @@
 <a name="line245"></a>
 <a name="line246"></a>/**
 <a name="line247"></a> * Reference to the progress bar&#39;s inner row element.
-<a name="line248"></a> * @type {Element?}
+<a name="line248"></a> * @type {Element}
 <a name="line249"></a> * @private
 <a name="line250"></a> */
 <a name="line251"></a>goog.testing.MultiTestRunner.prototype.progressRow_ = null;
@@ -296,7 +296,7 @@
 <a name="line253"></a>
 <a name="line254"></a>/**
 <a name="line255"></a> * Reference to the log tab.
-<a name="line256"></a> * @type {Element?}
+<a name="line256"></a> * @type {Element}
 <a name="line257"></a> * @private
 <a name="line258"></a> */
 <a name="line259"></a>goog.testing.MultiTestRunner.prototype.logTabEl_ = null;
@@ -304,7 +304,7 @@
 <a name="line261"></a>
 <a name="line262"></a>/**
 <a name="line263"></a> * Reference to the report tab.
-<a name="line264"></a> * @type {Element?}
+<a name="line264"></a> * @type {Element}
 <a name="line265"></a> * @private
 <a name="line266"></a> */
 <a name="line267"></a>goog.testing.MultiTestRunner.prototype.reportTabEl_ = null;
@@ -312,7 +312,7 @@
 <a name="line269"></a>
 <a name="line270"></a>/**
 <a name="line271"></a> * Reference to the stats tab.
-<a name="line272"></a> * @type {Element?}
+<a name="line272"></a> * @type {Element}
 <a name="line273"></a> * @private
 <a name="line274"></a> */
 <a name="line275"></a>goog.testing.MultiTestRunner.prototype.statsTabEl_ = null;
@@ -1190,7 +1190,7 @@
 <a name="line1147"></a>
 <a name="line1148"></a>/**
 <a name="line1149"></a> * Reference to the iframe.
-<a name="line1150"></a> * @type {HTMLIFrameElement?}
+<a name="line1150"></a> * @type {HTMLIFrameElement}
 <a name="line1151"></a> * @private
 <a name="line1152"></a> */
 <a name="line1153"></a>goog.testing.MultiTestRunner.TestFrame.prototype.iframeEl_ = null;
@@ -1246,7 +1246,7 @@
 <a name="line1203"></a>
 <a name="line1204"></a>/**
 <a name="line1205"></a> * Whether the test was successful, null if no result has been returned yet.
-<a name="line1206"></a> * @type {boolean?}
+<a name="line1206"></a> * @type {?boolean}
 <a name="line1207"></a> * @private
 <a name="line1208"></a> */
 <a name="line1209"></a>goog.testing.MultiTestRunner.TestFrame.prototype.isSuccess_ = null;
@@ -1349,7 +1349,7 @@
 <a name="line1306"></a>
 <a name="line1307"></a>
 <a name="line1308"></a>/**
-<a name="line1309"></a> * @return {boolean?} Whether the test frame had a success.
+<a name="line1309"></a> * @return {?boolean} Whether the test frame had a success.
 <a name="line1310"></a> */
 <a name="line1311"></a>goog.testing.MultiTestRunner.TestFrame.prototype.isSuccess = function() {
 <a name="line1312"></a>  return this.isSuccess_;

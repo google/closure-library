@@ -72,7 +72,7 @@ goog.gears.WorkerPool.EventType = {
 
 /**
  * The Gears WorkerPool object.
- * @type {GearsWorkerPool?}
+ * @type {GearsWorkerPool}
  * @private
  */
 goog.gears.WorkerPool.prototype.workerPool_ = null;

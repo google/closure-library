@@ -235,7 +235,7 @@ goog.ui.FilteredMenu.prototype.disposeInternal = function() {
 /**
  * Sets the filter label (the label displayed in the filter input element if no
  * text has been entered).
- * @param {string?} label Label text.
+ * @param {?string} label Label text.
  */
 goog.ui.FilteredMenu.prototype.setFilterLabel = function(label) {
   this.label_ = label || '';
@@ -255,7 +255,7 @@ goog.ui.FilteredMenu.prototype.getFilterLabel = function() {
 
 /**
  * Sets the filter string.
- * @param {string?} str Filter string.
+ * @param {?string} str Filter string.
  */
 goog.ui.FilteredMenu.prototype.setFilter = function(str) {
   if (this.filterInput_) {

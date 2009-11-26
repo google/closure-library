@@ -84,7 +84,7 @@ goog.dom.NodeOffset.prototype.toString = function() {
  * @param {Node} baseNode The node to start walking from.  Should be equivalent
  *     to the node passed in to the constructor, in that it should have the
  *     same contents.
- * @return {Node?} The node relative to baseNode, or null on failure.
+ * @return {Node} The node relative to baseNode, or null on failure.
  */
 goog.dom.NodeOffset.prototype.findTargetNode = function(baseNode) {
   var name;

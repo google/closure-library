@@ -55,7 +55,7 @@ goog.fx.CssSpriteAnimation = function(element, size, box, time, opt_acc) {
 
   /**
    * HTML element that will be used in the animation.
-   * @type {Element?}
+   * @type {Element}
    * @private
    */
   this.element_ = element;

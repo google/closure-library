@@ -249,7 +249,7 @@ goog.ui.PaletteRenderer.prototype.setContent = function(element, items) {
  * neither a palette cell nor part of a palette item.
  * @param {goog.ui.Palette} palette Palette in which to look for the item.
  * @param {Node} node Node to look for.
- * @return {Node?} The corresponding palette item (null if not found).
+ * @return {Node} The corresponding palette item (null if not found).
  */
 goog.ui.PaletteRenderer.prototype.getContainingItem = function(palette, node) {
   var root = palette.getElement();

@@ -117,7 +117,7 @@ goog.ui.BidiInput.prototype.setDirection_ = function() {
 
 /**
  * Returns the direction of the input element.
- * @return {string?} Return 'rtl' for right-to-left text,
+ * @return {?string} Return 'rtl' for right-to-left text,
  *     'ltr' for left-to-right text, or null if the value itself is not
  *     enough to determine directionality (e.g. an empty value), and the
  *     direction is inherited from a parent element (typically the body

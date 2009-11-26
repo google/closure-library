@@ -276,7 +276,7 @@
 <a name="line233"></a>
 <a name="line234"></a>/**
 <a name="line235"></a> * Regular expression used from trimming tokens or null for no trimming.
-<a name="line236"></a> * @type {RegExp?}
+<a name="line236"></a> * @type {RegExp}
 <a name="line237"></a> * @private
 <a name="line238"></a> */
 <a name="line239"></a>goog.ui.AutoComplete.InputHandler.prototype.trimmer_;
@@ -606,7 +606,7 @@
 <a name="line563"></a> * Sets the regular expression used to trim the tokens before passing them to
 <a name="line564"></a> * the matcher:  every substring that matches the given regular expression will
 <a name="line565"></a> * be removed.  This can also be set to null to disable trimming.
-<a name="line566"></a> * @param {RegExp?} trimmer Regexp to use for trimming or null to disable it.
+<a name="line566"></a> * @param {RegExp} trimmer Regexp to use for trimming or null to disable it.
 <a name="line567"></a> */
 <a name="line568"></a>goog.ui.AutoComplete.InputHandler.prototype.setTrimmingRegExp =
 <a name="line569"></a>    function(trimmer) {

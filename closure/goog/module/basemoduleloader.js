@@ -56,7 +56,7 @@ goog.module.BaseModuleLoader.prototype.debugMode_ = false;
 /**
  * The postfix to check for in code received from the server before it is
  * evaluated on the client.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.module.BaseModuleLoader.prototype.codePostfix_ = null;

@@ -68,7 +68,7 @@ goog.testing.TestRunner.prototype.initialized = false;
 
 /**
  * Element created in the document to add test results to.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.testing.TestRunner.prototype.logEl_ = null;

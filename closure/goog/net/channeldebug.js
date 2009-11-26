@@ -58,7 +58,7 @@ goog.net.ChannelDebug.prototype.getLogger = function() {
  * @param {goog.Uri} uri The request destination.
  * @param {string|number|undefined} id The request id.
  * @param {number} attempt Which attempt # the request was.
- * @param {string?} postData The data posted in the request.
+ * @param {?string} postData The data posted in the request.
  */
 goog.net.ChannelDebug.prototype.xmlHttpChannelRequest =
     function(verb, uri, id, attempt, postData) {
@@ -89,8 +89,8 @@ goog.net.ChannelDebug.prototype.xmlHttpChannelResponseMetaData =
 /**
  * Logs the response data received from an XmlHttp request.
  * @param {string|number|undefined} id The request id.
- * @param {string?} responseText The response text.
- * @param {string?} opt_desc Optional request description.
+ * @param {?string} responseText The response text.
+ * @param {?string} opt_desc Optional request description.
  */
 goog.net.ChannelDebug.prototype.xmlHttpChannelResponseText =
     function(id, responseText, opt_desc) {
@@ -199,8 +199,8 @@ goog.net.ChannelDebug.prototype.severe = function(text) {
 /**
  * Removes potentially private data from a response so that we don't
  * accidentally save private and personal data to the server logs.
- * @param {string?} responseText A JSON response to clean.
- * @return {string?} The cleaned response.
+ * @param {?string} responseText A JSON response to clean.
+ * @return {?string} The cleaned response.
  * @private
  */
 goog.net.ChannelDebug.prototype.redactResponse_ = function(responseText) {
@@ -258,8 +258,8 @@ goog.net.ChannelDebug.prototype.maybeRedactArray_ = function(array) {
 /**
  * Removes potentially private data from a request POST body so that we don't
  * accidentally save private and personal data to the server logs.
- * @param {string?} data The data string to clean.
- * @return {string?} The data string with sensitive data replaced by 'redacted'.
+ * @param {?string} data The data string to clean.
+ * @return {?string} The data string with sensitive data replaced by 'redacted'.
  * @private
  */
 goog.net.ChannelDebug.prototype.maybeRedactPostData_ = function(data) {

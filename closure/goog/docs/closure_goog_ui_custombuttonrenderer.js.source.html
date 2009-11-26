@@ -123,12 +123,12 @@
 <a name="line80"></a> * Takes the button&#39;s root element and returns the parent element of the
 <a name="line81"></a> * button&#39;s contents.  Overrides the superclass implementation by taking
 <a name="line82"></a> * the nested DIV structure of custom buttons into account.
-<a name="line83"></a> * @param {Element?} element Root element of the button whose content
+<a name="line83"></a> * @param {Element} element Root element of the button whose content
 <a name="line84"></a> *     element is to be returned.
-<a name="line85"></a> * @return {Element?} The button&#39;s content element (if any).
+<a name="line85"></a> * @return {Element} The button&#39;s content element (if any).
 <a name="line86"></a> */
 <a name="line87"></a>goog.ui.CustomButtonRenderer.prototype.getContentElement = function(element) {
-<a name="line88"></a>  return element &amp;&amp; /** @type {Element?} */ (element.firstChild.firstChild);
+<a name="line88"></a>  return element &amp;&amp; /** @type {Element} */ (element.firstChild.firstChild);
 <a name="line89"></a>};
 <a name="line90"></a>
 <a name="line91"></a>

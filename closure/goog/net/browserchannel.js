@@ -100,7 +100,7 @@ goog.net.BrowserChannel.prototype.extraHeaders_ = null;
 
 /**
  * Extra parameters to add to all the requests sent to the server.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.net.BrowserChannel.prototype.extraParams_ = null;
@@ -122,7 +122,7 @@ goog.net.BrowserChannel.prototype.backChannelRequest_ = null;
 /**
  * The relative path (in the context of the the page hosting the browser
  * channel) for making requests to the server.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.net.BrowserChannel.prototype.path_ = null;
@@ -144,7 +144,7 @@ goog.net.BrowserChannel.prototype.backChannelUri_ = null;
 /**
  * A subdomain prefix for using a subdomain in IE for the backchannel
  * requests.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.net.BrowserChannel.prototype.hostPrefix_ = null;
@@ -179,14 +179,14 @@ goog.net.BrowserChannel.prototype.handler_ = null;
 
 /**
  * Timer identifier for asynchronously making a forward channel request.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.BrowserChannel.prototype.forwardChannelTimerId_ = null;
 
 /**
  * Timer identifier for asynchronously making a back channel request.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.BrowserChannel.prototype.backChannelTimerId_ = null;
@@ -201,7 +201,7 @@ goog.net.BrowserChannel.prototype.connectionTest_ = null;
 
 /**
  * Whether the client's network conditions can support chunked responses.
- * @type {boolean?}
+ * @type {?boolean}
  * @private
  */
 goog.net.BrowserChannel.prototype.useChunked_ = null;
@@ -512,19 +512,27 @@ goog.net.BrowserChannel.endExecutionHook_ = function() { };
  * @param {string} channelPath  The path for the channel connection.
  * @param {Object} extraParams  Extra parameter keys and values to add to the
  *     requests.
+ * @param {string} opt_oldSessionId  Session ID from a previous session.
+ * @param {number} opt_oldArrayId  The last array ID from a previous session.
  */
 goog.net.BrowserChannel.prototype.connect = function(testPath, channelPath,
-                                                     extraParams) {
+    extraParams, opt_oldSessionId, opt_oldArrayId) {
   this.channelDebug_.debug('connect()');
 
   goog.net.BrowserChannel.notifyStatEvent(
       goog.net.BrowserChannel.Stat.CONNECT_ATTEMPT);
 
   this.path_ = channelPath;
-  this.extraParams_ = extraParams;
+  this.extraParams_ = extraParams || {};
+
+  // Attach parameters about the previous session if reconnecting.
+  if (opt_oldSessionId && goog.isDef(opt_oldArrayId)) {
+    this.extraParams_['OSID'] = opt_oldSessionId;
+    this.extraParams_['OAID'] = opt_oldArrayId;
+  }
+
   this.connectTest_(testPath);
 };
-
 
 /**
  * Disconnects and closes the channel.
@@ -774,12 +782,21 @@ goog.net.BrowserChannel.prototype.getState = function() {
   return this.state_;
 };
 
+
 /**
  * Return the last status code received for a request.
  * @return {number} The last status code received for a request.
  */
 goog.net.BrowserChannel.prototype.getLastStatusCode = function() {
   return this.lastStatusCode_;
+};
+
+
+/**
+ * @return {number} The last array id received.
+ */
+goog.net.BrowserChannel.prototype.getLastArrayId = function() {
+  return this.lastArrayId_;
 };
 
 
@@ -1339,7 +1356,7 @@ goog.net.BrowserChannel.prototype.getForwardChannelUri =
 
 /**
  * Gets the Uri used for the connection that receives data from the server.
- * @param {string?} hostPrefix The host prefix.
+ * @param {?string} hostPrefix The host prefix.
  * @param {string} path The path on the host.
  * @return {goog.Uri} The back channel URI.
  */
@@ -1354,7 +1371,7 @@ goog.net.BrowserChannel.prototype.getBackChannelUri =
 /**
  * Creates a data Uri applying logic for secondary hostprefix, port
  * overrides, and versioning.
- * @param {string?} hostPrefix The host prefix.
+ * @param {?string} hostPrefix The host prefix.
  * @param {string} path The path on the host.
  * @param {number} opt_overridePort Optional override port.
  * @return {goog.Uri} The data URI.
@@ -1552,7 +1569,7 @@ goog.net.BrowserChannel.Handler = function() {
 /**
  * Callback handler for when a batch of response arrays is received from the
  * server.
- * @type {Function?}
+ * @type {Function}
  */
 goog.net.BrowserChannel.Handler.prototype.channelHandleMultipleArrays = null;
 

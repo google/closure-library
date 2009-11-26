@@ -437,7 +437,7 @@
 <a name="line394"></a>
 <a name="line395"></a>
 <a name="line396"></a>/**
-<a name="line397"></a> * @return {Element?} The element that contains the tab pages.
+<a name="line397"></a> * @return {Element} The element that contains the tab pages.
 <a name="line398"></a> */
 <a name="line399"></a>goog.ui.TabPane.prototype.getContentElement = function() {
 <a name="line400"></a>  return this.elContent_ || null;
@@ -445,7 +445,7 @@
 <a name="line402"></a>
 <a name="line403"></a>
 <a name="line404"></a>/**
-<a name="line405"></a> * @return {Element?} The main element for the tabpane.
+<a name="line405"></a> * @return {Element} The main element for the tabpane.
 <a name="line406"></a> */
 <a name="line407"></a>goog.ui.TabPane.prototype.getElement = function() {
 <a name="line408"></a>  return this.el_ || null;
@@ -564,7 +564,7 @@
 <a name="line521"></a>
 <a name="line522"></a>  /**
 <a name="line523"></a>   * Index for page in tab pane.
-<a name="line524"></a>   * @type {number?}
+<a name="line524"></a>   * @type {?number}
 <a name="line525"></a>   * @private
 <a name="line526"></a>   */
 <a name="line527"></a>  this.index_ = null;
@@ -613,7 +613,7 @@
 <a name="line570"></a>
 <a name="line571"></a>
 <a name="line572"></a>/**
-<a name="line573"></a> * @return {number?} The index of page in tab pane.
+<a name="line573"></a> * @return {?number} The index of page in tab pane.
 <a name="line574"></a> */
 <a name="line575"></a>goog.ui.TabPane.TabPage.prototype.getIndex = function() {
 <a name="line576"></a>  return this.index_;

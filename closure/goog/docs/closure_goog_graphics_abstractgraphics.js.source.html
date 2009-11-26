@@ -75,9 +75,9 @@
 <a name="line32"></a> * of this class. Instead us goog.graphics.createGraphics
 <a name="line33"></a> * @param {number|string} width The width in pixels or percent.
 <a name="line34"></a> * @param {number|string} height The height in pixels or percent.
-<a name="line35"></a> * @param {number?} opt_coordWidth Optional coordinate system width - if
+<a name="line35"></a> * @param {?number} opt_coordWidth Optional coordinate system width - if
 <a name="line36"></a> *     omitted or null, defaults to same as width.
-<a name="line37"></a> * @param {number?} opt_coordHeight Optional coordinate system height - if
+<a name="line37"></a> * @param {?number} opt_coordHeight Optional coordinate system height - if
 <a name="line38"></a> *     omitted or null, defaults to same as height.
 <a name="line39"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
 <a name="line40"></a> *     document we want to render in.
@@ -105,14 +105,14 @@
 <a name="line62"></a>
 <a name="line63"></a>  /**
 <a name="line64"></a>   * Width of coordinate system in units.
-<a name="line65"></a>   * @type {number?}
+<a name="line65"></a>   * @type {?number}
 <a name="line66"></a>   * @protected
 <a name="line67"></a>   */
 <a name="line68"></a>  this.coordWidth = opt_coordWidth || null;
 <a name="line69"></a>
 <a name="line70"></a>  /**
 <a name="line71"></a>   * Height of coordinate system in units.
-<a name="line72"></a>   * @type {number?}
+<a name="line72"></a>   * @type {?number}
 <a name="line73"></a>   * @protected
 <a name="line74"></a>   */
 <a name="line75"></a>  this.coordHeight = opt_coordHeight || null;

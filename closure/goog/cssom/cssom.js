@@ -365,7 +365,7 @@ goog.cssom.addCssText = function(cssText, opt_domHelper) {
  * the full path.
  * @param {!StyleSheet} styleSheet Any valid StyleSheet object with an href.
  * @throws {Error} When there's no href property found.
- * @return {string?} filename The filename, or null if not an external
+ * @return {?string} filename The filename, or null if not an external
  *    styleSheet.
  */
 goog.cssom.getFileNameFromStyleSheet = function(styleSheet) {

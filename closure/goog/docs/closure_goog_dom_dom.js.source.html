@@ -694,13 +694,13 @@
 <a name="line651"></a>  }
 <a name="line652"></a>
 <a name="line653"></a>  if (args.length &gt; 2) {
-<a name="line654"></a>    function childHandler(child) {
+<a name="line654"></a>    var childHandler = function(child) {
 <a name="line655"></a>      // TODO: More coercion, ala MochiKit?
 <a name="line656"></a>      if (child) {
 <a name="line657"></a>        element.appendChild(goog.isString(child) ?
 <a name="line658"></a>            doc.createTextNode(child) : child);
 <a name="line659"></a>      }
-<a name="line660"></a>    }
+<a name="line660"></a>    };
 <a name="line661"></a>
 <a name="line662"></a>    for (var i = 2; i &lt; args.length; i++) {
 <a name="line663"></a>      var arg = args[i];
@@ -840,1351 +840,1352 @@
 <a name="line797"></a>  switch (node.tagName) {
 <a name="line798"></a>    case goog.dom.TagName.APPLET:
 <a name="line799"></a>    case goog.dom.TagName.AREA:
-<a name="line800"></a>    case goog.dom.TagName.BR:
-<a name="line801"></a>    case goog.dom.TagName.COL:
-<a name="line802"></a>    case goog.dom.TagName.FRAME:
-<a name="line803"></a>    case goog.dom.TagName.HR:
-<a name="line804"></a>    case goog.dom.TagName.IMG:
-<a name="line805"></a>    case goog.dom.TagName.INPUT:
-<a name="line806"></a>    case goog.dom.TagName.IFRAME:
-<a name="line807"></a>    case goog.dom.TagName.ISINDEX:
-<a name="line808"></a>    case goog.dom.TagName.LINK:
-<a name="line809"></a>    case goog.dom.TagName.NOFRAMES:
-<a name="line810"></a>    case goog.dom.TagName.NOSCRIPT:
-<a name="line811"></a>    case goog.dom.TagName.META:
-<a name="line812"></a>    case goog.dom.TagName.OBJECT:
-<a name="line813"></a>    case goog.dom.TagName.PARAM:
-<a name="line814"></a>    case goog.dom.TagName.SCRIPT:
-<a name="line815"></a>    case goog.dom.TagName.STYLE:
-<a name="line816"></a>      return false;
-<a name="line817"></a>  }
-<a name="line818"></a>  return true;
-<a name="line819"></a>};
-<a name="line820"></a>
+<a name="line800"></a>    case goog.dom.TagName.BASE:
+<a name="line801"></a>    case goog.dom.TagName.BR:
+<a name="line802"></a>    case goog.dom.TagName.COL:
+<a name="line803"></a>    case goog.dom.TagName.FRAME:
+<a name="line804"></a>    case goog.dom.TagName.HR:
+<a name="line805"></a>    case goog.dom.TagName.IMG:
+<a name="line806"></a>    case goog.dom.TagName.INPUT:
+<a name="line807"></a>    case goog.dom.TagName.IFRAME:
+<a name="line808"></a>    case goog.dom.TagName.ISINDEX:
+<a name="line809"></a>    case goog.dom.TagName.LINK:
+<a name="line810"></a>    case goog.dom.TagName.NOFRAMES:
+<a name="line811"></a>    case goog.dom.TagName.NOSCRIPT:
+<a name="line812"></a>    case goog.dom.TagName.META:
+<a name="line813"></a>    case goog.dom.TagName.OBJECT:
+<a name="line814"></a>    case goog.dom.TagName.PARAM:
+<a name="line815"></a>    case goog.dom.TagName.SCRIPT:
+<a name="line816"></a>    case goog.dom.TagName.STYLE:
+<a name="line817"></a>      return false;
+<a name="line818"></a>  }
+<a name="line819"></a>  return true;
+<a name="line820"></a>};
 <a name="line821"></a>
-<a name="line822"></a>/**
-<a name="line823"></a> * Appends a child to a node.
-<a name="line824"></a> * @param {Node} parent Parent.
-<a name="line825"></a> * @param {Node} child Child.
-<a name="line826"></a> */
-<a name="line827"></a>goog.dom.appendChild = function(parent, child) {
-<a name="line828"></a>  parent.appendChild(child);
-<a name="line829"></a>};
-<a name="line830"></a>
+<a name="line822"></a>
+<a name="line823"></a>/**
+<a name="line824"></a> * Appends a child to a node.
+<a name="line825"></a> * @param {Node} parent Parent.
+<a name="line826"></a> * @param {Node} child Child.
+<a name="line827"></a> */
+<a name="line828"></a>goog.dom.appendChild = function(parent, child) {
+<a name="line829"></a>  parent.appendChild(child);
+<a name="line830"></a>};
 <a name="line831"></a>
-<a name="line832"></a>/**
-<a name="line833"></a> * Removes all the child nodes on a DOM node.
-<a name="line834"></a> * @param {Node} node Node to remove children from.
-<a name="line835"></a> */
-<a name="line836"></a>goog.dom.removeChildren = function(node) {
-<a name="line837"></a>  // Note: Iterations over live collections can be slow, this is the fastest
-<a name="line838"></a>  // we could find. The double parenthesis are used to prevent JsCompiler and
-<a name="line839"></a>  // strict warnings.
-<a name="line840"></a>  var child;
-<a name="line841"></a>  while ((child = node.firstChild)) {
-<a name="line842"></a>    node.removeChild(child);
-<a name="line843"></a>  }
-<a name="line844"></a>};
-<a name="line845"></a>
+<a name="line832"></a>
+<a name="line833"></a>/**
+<a name="line834"></a> * Removes all the child nodes on a DOM node.
+<a name="line835"></a> * @param {Node} node Node to remove children from.
+<a name="line836"></a> */
+<a name="line837"></a>goog.dom.removeChildren = function(node) {
+<a name="line838"></a>  // Note: Iterations over live collections can be slow, this is the fastest
+<a name="line839"></a>  // we could find. The double parenthesis are used to prevent JsCompiler and
+<a name="line840"></a>  // strict warnings.
+<a name="line841"></a>  var child;
+<a name="line842"></a>  while ((child = node.firstChild)) {
+<a name="line843"></a>    node.removeChild(child);
+<a name="line844"></a>  }
+<a name="line845"></a>};
 <a name="line846"></a>
-<a name="line847"></a>/**
-<a name="line848"></a> * Inserts a new node before an existing reference node (i.e. as the previous
-<a name="line849"></a> * sibling). If the reference node has no parent, then does nothing.
-<a name="line850"></a> * @param {Node} newNode Node to insert.
-<a name="line851"></a> * @param {Node} refNode Reference node to insert before.
-<a name="line852"></a> */
-<a name="line853"></a>goog.dom.insertSiblingBefore = function(newNode, refNode) {
-<a name="line854"></a>  if (refNode.parentNode) {
-<a name="line855"></a>    refNode.parentNode.insertBefore(newNode, refNode);
-<a name="line856"></a>  }
-<a name="line857"></a>};
-<a name="line858"></a>
+<a name="line847"></a>
+<a name="line848"></a>/**
+<a name="line849"></a> * Inserts a new node before an existing reference node (i.e. as the previous
+<a name="line850"></a> * sibling). If the reference node has no parent, then does nothing.
+<a name="line851"></a> * @param {Node} newNode Node to insert.
+<a name="line852"></a> * @param {Node} refNode Reference node to insert before.
+<a name="line853"></a> */
+<a name="line854"></a>goog.dom.insertSiblingBefore = function(newNode, refNode) {
+<a name="line855"></a>  if (refNode.parentNode) {
+<a name="line856"></a>    refNode.parentNode.insertBefore(newNode, refNode);
+<a name="line857"></a>  }
+<a name="line858"></a>};
 <a name="line859"></a>
-<a name="line860"></a>/**
-<a name="line861"></a> * Inserts a new node after an existing reference node (i.e. as the next
-<a name="line862"></a> * sibling). If the reference node has no parent, then does nothing.
-<a name="line863"></a> * @param {Node} newNode Node to insert.
-<a name="line864"></a> * @param {Node} refNode Reference node to insert after.
-<a name="line865"></a> */
-<a name="line866"></a>goog.dom.insertSiblingAfter = function(newNode, refNode) {
-<a name="line867"></a>  if (refNode.parentNode) {
-<a name="line868"></a>    refNode.parentNode.insertBefore(newNode, refNode.nextSibling);
-<a name="line869"></a>  }
-<a name="line870"></a>};
-<a name="line871"></a>
+<a name="line860"></a>
+<a name="line861"></a>/**
+<a name="line862"></a> * Inserts a new node after an existing reference node (i.e. as the next
+<a name="line863"></a> * sibling). If the reference node has no parent, then does nothing.
+<a name="line864"></a> * @param {Node} newNode Node to insert.
+<a name="line865"></a> * @param {Node} refNode Reference node to insert after.
+<a name="line866"></a> */
+<a name="line867"></a>goog.dom.insertSiblingAfter = function(newNode, refNode) {
+<a name="line868"></a>  if (refNode.parentNode) {
+<a name="line869"></a>    refNode.parentNode.insertBefore(newNode, refNode.nextSibling);
+<a name="line870"></a>  }
+<a name="line871"></a>};
 <a name="line872"></a>
-<a name="line873"></a>/**
-<a name="line874"></a> * Removes a node from its parent.
-<a name="line875"></a> * @param {Node} node The node to remove.
-<a name="line876"></a> * @return {Node?} The node removed if removed; else, null.
-<a name="line877"></a> */
-<a name="line878"></a>goog.dom.removeNode = function(node) {
-<a name="line879"></a>  return node &amp;&amp; node.parentNode ? node.parentNode.removeChild(node) : null;
-<a name="line880"></a>};
-<a name="line881"></a>
+<a name="line873"></a>
+<a name="line874"></a>/**
+<a name="line875"></a> * Removes a node from its parent.
+<a name="line876"></a> * @param {Node} node The node to remove.
+<a name="line877"></a> * @return {Node} The node removed if removed; else, null.
+<a name="line878"></a> */
+<a name="line879"></a>goog.dom.removeNode = function(node) {
+<a name="line880"></a>  return node &amp;&amp; node.parentNode ? node.parentNode.removeChild(node) : null;
+<a name="line881"></a>};
 <a name="line882"></a>
-<a name="line883"></a>/**
-<a name="line884"></a> * Replaces a node in the DOM tree. Will do nothing if {@code oldNode} has no
-<a name="line885"></a> * parent.
-<a name="line886"></a> * @param {Node} newNode Node to insert.
-<a name="line887"></a> * @param {Node} oldNode Node to replace.
-<a name="line888"></a> */
-<a name="line889"></a>goog.dom.replaceNode = function(newNode, oldNode) {
-<a name="line890"></a>  var parent = oldNode.parentNode;
-<a name="line891"></a>  if (parent) {
-<a name="line892"></a>    parent.replaceChild(newNode, oldNode);
-<a name="line893"></a>  }
-<a name="line894"></a>};
-<a name="line895"></a>
+<a name="line883"></a>
+<a name="line884"></a>/**
+<a name="line885"></a> * Replaces a node in the DOM tree. Will do nothing if {@code oldNode} has no
+<a name="line886"></a> * parent.
+<a name="line887"></a> * @param {Node} newNode Node to insert.
+<a name="line888"></a> * @param {Node} oldNode Node to replace.
+<a name="line889"></a> */
+<a name="line890"></a>goog.dom.replaceNode = function(newNode, oldNode) {
+<a name="line891"></a>  var parent = oldNode.parentNode;
+<a name="line892"></a>  if (parent) {
+<a name="line893"></a>    parent.replaceChild(newNode, oldNode);
+<a name="line894"></a>  }
+<a name="line895"></a>};
 <a name="line896"></a>
-<a name="line897"></a>/**
-<a name="line898"></a> * Flattens an element. That is, removes it and replace it with its children.
-<a name="line899"></a> * Does nothing if the element is not in the document.
-<a name="line900"></a> * @param {Element} element The element to flatten.
-<a name="line901"></a> * @return {Element|undefined} The original element, detached from the document
-<a name="line902"></a> *     tree, sans children; or undefined, if the element was not in the
-<a name="line903"></a> *     document to begin with.
-<a name="line904"></a> */
-<a name="line905"></a>goog.dom.flattenElement = function(element) {
-<a name="line906"></a>  var child, parent = element.parentNode;
-<a name="line907"></a>  if (parent &amp;&amp; parent.nodeType != goog.dom.NodeType.DOCUMENT_FRAGMENT) {
-<a name="line908"></a>    // Use IE DOM method (supported by Opera too) if available
-<a name="line909"></a>    if (element.removeNode) {
-<a name="line910"></a>      return /** @type {Element} */ (element.removeNode(false));
-<a name="line911"></a>    } else {
-<a name="line912"></a>      // Move all children of the original node up one level.
-<a name="line913"></a>      while ((child = element.firstChild)) {
-<a name="line914"></a>        parent.insertBefore(child, element);
-<a name="line915"></a>      }
-<a name="line916"></a>
-<a name="line917"></a>      // Detach the original element.
-<a name="line918"></a>      return /** @type {Element} */ (goog.dom.removeNode(element));
-<a name="line919"></a>    }
-<a name="line920"></a>  }
-<a name="line921"></a>};
-<a name="line922"></a>
+<a name="line897"></a>
+<a name="line898"></a>/**
+<a name="line899"></a> * Flattens an element. That is, removes it and replace it with its children.
+<a name="line900"></a> * Does nothing if the element is not in the document.
+<a name="line901"></a> * @param {Element} element The element to flatten.
+<a name="line902"></a> * @return {Element|undefined} The original element, detached from the document
+<a name="line903"></a> *     tree, sans children; or undefined, if the element was not in the
+<a name="line904"></a> *     document to begin with.
+<a name="line905"></a> */
+<a name="line906"></a>goog.dom.flattenElement = function(element) {
+<a name="line907"></a>  var child, parent = element.parentNode;
+<a name="line908"></a>  if (parent &amp;&amp; parent.nodeType != goog.dom.NodeType.DOCUMENT_FRAGMENT) {
+<a name="line909"></a>    // Use IE DOM method (supported by Opera too) if available
+<a name="line910"></a>    if (element.removeNode) {
+<a name="line911"></a>      return /** @type {Element} */ (element.removeNode(false));
+<a name="line912"></a>    } else {
+<a name="line913"></a>      // Move all children of the original node up one level.
+<a name="line914"></a>      while ((child = element.firstChild)) {
+<a name="line915"></a>        parent.insertBefore(child, element);
+<a name="line916"></a>      }
+<a name="line917"></a>
+<a name="line918"></a>      // Detach the original element.
+<a name="line919"></a>      return /** @type {Element} */ (goog.dom.removeNode(element));
+<a name="line920"></a>    }
+<a name="line921"></a>  }
+<a name="line922"></a>};
 <a name="line923"></a>
-<a name="line924"></a>/**
-<a name="line925"></a> * Returns the first child node that is an element.
-<a name="line926"></a> * @param {Node} node The node to get the first child element of.
-<a name="line927"></a> * @return {Element?} The first child node of {@code node} that is an element.
-<a name="line928"></a> */
-<a name="line929"></a>goog.dom.getFirstElementChild = function(node) {
-<a name="line930"></a>  return goog.dom.getNextElementNode_(node.firstChild, true);
-<a name="line931"></a>};
-<a name="line932"></a>
+<a name="line924"></a>
+<a name="line925"></a>/**
+<a name="line926"></a> * Returns the first child node that is an element.
+<a name="line927"></a> * @param {Node} node The node to get the first child element of.
+<a name="line928"></a> * @return {Element} The first child node of {@code node} that is an element.
+<a name="line929"></a> */
+<a name="line930"></a>goog.dom.getFirstElementChild = function(node) {
+<a name="line931"></a>  return goog.dom.getNextElementNode_(node.firstChild, true);
+<a name="line932"></a>};
 <a name="line933"></a>
-<a name="line934"></a>/**
-<a name="line935"></a> * Returns the last child node that is an element.
-<a name="line936"></a> * @param {Node} node The node to get the last child element of.
-<a name="line937"></a> * @return {Element?} The last child node of {@code node} that is an element.
-<a name="line938"></a> */
-<a name="line939"></a>goog.dom.getLastElementChild = function(node) {
-<a name="line940"></a>  return goog.dom.getNextElementNode_(node.lastChild, false);
-<a name="line941"></a>};
-<a name="line942"></a>
+<a name="line934"></a>
+<a name="line935"></a>/**
+<a name="line936"></a> * Returns the last child node that is an element.
+<a name="line937"></a> * @param {Node} node The node to get the last child element of.
+<a name="line938"></a> * @return {Element} The last child node of {@code node} that is an element.
+<a name="line939"></a> */
+<a name="line940"></a>goog.dom.getLastElementChild = function(node) {
+<a name="line941"></a>  return goog.dom.getNextElementNode_(node.lastChild, false);
+<a name="line942"></a>};
 <a name="line943"></a>
-<a name="line944"></a>/**
-<a name="line945"></a> * Returns the first next sibling that is an element.
-<a name="line946"></a> * @param {Node} node The node to get the next sibling element of.
-<a name="line947"></a> * @return {Element?} The next sibling of {@code node} that is an element.
-<a name="line948"></a> */
-<a name="line949"></a>goog.dom.getNextElementSibling = function(node) {
-<a name="line950"></a>  return goog.dom.getNextElementNode_(node.nextSibling, true);
-<a name="line951"></a>};
-<a name="line952"></a>
+<a name="line944"></a>
+<a name="line945"></a>/**
+<a name="line946"></a> * Returns the first next sibling that is an element.
+<a name="line947"></a> * @param {Node} node The node to get the next sibling element of.
+<a name="line948"></a> * @return {Element} The next sibling of {@code node} that is an element.
+<a name="line949"></a> */
+<a name="line950"></a>goog.dom.getNextElementSibling = function(node) {
+<a name="line951"></a>  return goog.dom.getNextElementNode_(node.nextSibling, true);
+<a name="line952"></a>};
 <a name="line953"></a>
-<a name="line954"></a>/**
-<a name="line955"></a> * Returns the first previous sibling that is an element.
-<a name="line956"></a> * @param {Node} node The node to get the previous sibling element of.
-<a name="line957"></a> * @return {Element?} The first previous sibling of {@code node} that is
-<a name="line958"></a> *     an element.
-<a name="line959"></a> */
-<a name="line960"></a>goog.dom.getPreviousElementSibling = function(node) {
-<a name="line961"></a>  return goog.dom.getNextElementNode_(node.previousSibling, false);
-<a name="line962"></a>};
-<a name="line963"></a>
+<a name="line954"></a>
+<a name="line955"></a>/**
+<a name="line956"></a> * Returns the first previous sibling that is an element.
+<a name="line957"></a> * @param {Node} node The node to get the previous sibling element of.
+<a name="line958"></a> * @return {Element} The first previous sibling of {@code node} that is
+<a name="line959"></a> *     an element.
+<a name="line960"></a> */
+<a name="line961"></a>goog.dom.getPreviousElementSibling = function(node) {
+<a name="line962"></a>  return goog.dom.getNextElementNode_(node.previousSibling, false);
+<a name="line963"></a>};
 <a name="line964"></a>
-<a name="line965"></a>/**
-<a name="line966"></a> * Returns the first node that is an element in the specified direction,
-<a name="line967"></a> * starting with {@code node}.
-<a name="line968"></a> * @param {Node?} node The node to get the next element from.
-<a name="line969"></a> * @param {boolean} forward Whether to look forwards or backwards.
-<a name="line970"></a> * @return {Element?} The first element.
-<a name="line971"></a> * @private
-<a name="line972"></a> */
-<a name="line973"></a>goog.dom.getNextElementNode_ = function(node, forward) {
-<a name="line974"></a>  while (node &amp;&amp; node.nodeType != goog.dom.NodeType.ELEMENT) {
-<a name="line975"></a>    node = forward ? node.nextSibling : node.previousSibling;
-<a name="line976"></a>  }
-<a name="line977"></a>
-<a name="line978"></a>  return /** @type {Element?} */ (node);
-<a name="line979"></a>};
-<a name="line980"></a>
+<a name="line965"></a>
+<a name="line966"></a>/**
+<a name="line967"></a> * Returns the first node that is an element in the specified direction,
+<a name="line968"></a> * starting with {@code node}.
+<a name="line969"></a> * @param {Node} node The node to get the next element from.
+<a name="line970"></a> * @param {boolean} forward Whether to look forwards or backwards.
+<a name="line971"></a> * @return {Element} The first element.
+<a name="line972"></a> * @private
+<a name="line973"></a> */
+<a name="line974"></a>goog.dom.getNextElementNode_ = function(node, forward) {
+<a name="line975"></a>  while (node &amp;&amp; node.nodeType != goog.dom.NodeType.ELEMENT) {
+<a name="line976"></a>    node = forward ? node.nextSibling : node.previousSibling;
+<a name="line977"></a>  }
+<a name="line978"></a>
+<a name="line979"></a>  return /** @type {Element} */ (node);
+<a name="line980"></a>};
 <a name="line981"></a>
-<a name="line982"></a>/**
-<a name="line983"></a> * Whether the object looks like a DOM node.
-<a name="line984"></a> * @param {Object} obj The object being tested for node likeness.
-<a name="line985"></a> * @return {boolean} Whether the object looks like a DOM node.
-<a name="line986"></a> */
-<a name="line987"></a>goog.dom.isNodeLike = function(obj) {
-<a name="line988"></a>  return goog.isObject(obj) &amp;&amp; obj.nodeType &gt; 0;
-<a name="line989"></a>};
-<a name="line990"></a>
+<a name="line982"></a>
+<a name="line983"></a>/**
+<a name="line984"></a> * Whether the object looks like a DOM node.
+<a name="line985"></a> * @param {Object} obj The object being tested for node likeness.
+<a name="line986"></a> * @return {boolean} Whether the object looks like a DOM node.
+<a name="line987"></a> */
+<a name="line988"></a>goog.dom.isNodeLike = function(obj) {
+<a name="line989"></a>  return goog.isObject(obj) &amp;&amp; obj.nodeType &gt; 0;
+<a name="line990"></a>};
 <a name="line991"></a>
-<a name="line992"></a>/**
-<a name="line993"></a> * Safari contains is broken, but appears to be fixed in WebKit 522+
-<a name="line994"></a> * @type {boolean}
-<a name="line995"></a> * @private
-<a name="line996"></a> */
-<a name="line997"></a>goog.dom.BAD_CONTAINS_WEBKIT_ = goog.userAgent.WEBKIT &amp;&amp;
-<a name="line998"></a>    goog.userAgent.isVersion(&#39;522&#39;);
-<a name="line999"></a>
+<a name="line992"></a>
+<a name="line993"></a>/**
+<a name="line994"></a> * Safari contains is broken, but appears to be fixed in WebKit 522+
+<a name="line995"></a> * @type {boolean}
+<a name="line996"></a> * @private
+<a name="line997"></a> */
+<a name="line998"></a>goog.dom.BAD_CONTAINS_WEBKIT_ = goog.userAgent.WEBKIT &amp;&amp;
+<a name="line999"></a>    goog.userAgent.isVersion(&#39;522&#39;);
 <a name="line1000"></a>
-<a name="line1001"></a>/**
-<a name="line1002"></a> * Whether a node contains another node.
-<a name="line1003"></a> * @param {Node} parent The node that should contain the other node.
-<a name="line1004"></a> * @param {Node} descendant The node to test presence of.
-<a name="line1005"></a> * @return {boolean} Whether the parent node contains the descendent node.
-<a name="line1006"></a> */
-<a name="line1007"></a>goog.dom.contains = function(parent, descendant) {
-<a name="line1008"></a>  // We use browser specific methods for this if available since it is faster
-<a name="line1009"></a>  // that way.
-<a name="line1010"></a>
-<a name="line1011"></a>  // IE / Safari(some) DOM
-<a name="line1012"></a>  if (typeof parent.contains != &#39;undefined&#39; &amp;&amp; !goog.dom.BAD_CONTAINS_WEBKIT_ &amp;&amp;
-<a name="line1013"></a>      descendant.nodeType == goog.dom.NodeType.ELEMENT) {
-<a name="line1014"></a>    return parent == descendant || parent.contains(descendant);
-<a name="line1015"></a>  }
-<a name="line1016"></a>
-<a name="line1017"></a>  // W3C DOM Level 3
-<a name="line1018"></a>  if (typeof parent.compareDocumentPosition != &#39;undefined&#39;) {
-<a name="line1019"></a>    return parent == descendant ||
-<a name="line1020"></a>        Boolean(parent.compareDocumentPosition(descendant) &amp; 16);
-<a name="line1021"></a>  }
-<a name="line1022"></a>
-<a name="line1023"></a>  // W3C DOM Level 1
-<a name="line1024"></a>  while (descendant &amp;&amp; parent != descendant) {
-<a name="line1025"></a>    descendant = descendant.parentNode;
-<a name="line1026"></a>  }
-<a name="line1027"></a>  return descendant == parent;
-<a name="line1028"></a>};
-<a name="line1029"></a>
+<a name="line1001"></a>
+<a name="line1002"></a>/**
+<a name="line1003"></a> * Whether a node contains another node.
+<a name="line1004"></a> * @param {Node} parent The node that should contain the other node.
+<a name="line1005"></a> * @param {Node} descendant The node to test presence of.
+<a name="line1006"></a> * @return {boolean} Whether the parent node contains the descendent node.
+<a name="line1007"></a> */
+<a name="line1008"></a>goog.dom.contains = function(parent, descendant) {
+<a name="line1009"></a>  // We use browser specific methods for this if available since it is faster
+<a name="line1010"></a>  // that way.
+<a name="line1011"></a>
+<a name="line1012"></a>  // IE / Safari(some) DOM
+<a name="line1013"></a>  if (typeof parent.contains != &#39;undefined&#39; &amp;&amp; !goog.dom.BAD_CONTAINS_WEBKIT_ &amp;&amp;
+<a name="line1014"></a>      descendant.nodeType == goog.dom.NodeType.ELEMENT) {
+<a name="line1015"></a>    return parent == descendant || parent.contains(descendant);
+<a name="line1016"></a>  }
+<a name="line1017"></a>
+<a name="line1018"></a>  // W3C DOM Level 3
+<a name="line1019"></a>  if (typeof parent.compareDocumentPosition != &#39;undefined&#39;) {
+<a name="line1020"></a>    return parent == descendant ||
+<a name="line1021"></a>        Boolean(parent.compareDocumentPosition(descendant) &amp; 16);
+<a name="line1022"></a>  }
+<a name="line1023"></a>
+<a name="line1024"></a>  // W3C DOM Level 1
+<a name="line1025"></a>  while (descendant &amp;&amp; parent != descendant) {
+<a name="line1026"></a>    descendant = descendant.parentNode;
+<a name="line1027"></a>  }
+<a name="line1028"></a>  return descendant == parent;
+<a name="line1029"></a>};
 <a name="line1030"></a>
-<a name="line1031"></a>/**
-<a name="line1032"></a> * Compares the document order of two nodes, returning 0 if they are the same
-<a name="line1033"></a> * node, a negative number if node1 is before node2, and a positive number if
-<a name="line1034"></a> * node2 is before node1.  Note that we compare the order the tags appear in the
-<a name="line1035"></a> * document so in the tree &lt;b&gt;&lt;i&gt;text&lt;/i&gt;&lt;/b&gt; the B node is considered to be
-<a name="line1036"></a> * before the I node.
-<a name="line1037"></a> *
-<a name="line1038"></a> * @param {Node} node1 The first node to compare.
-<a name="line1039"></a> * @param {Node} node2 The second node to compare.
-<a name="line1040"></a> * @return {number} 0 if the nodes are the same node, a negative number if node1
-<a name="line1041"></a> *     is before node2, and a positive number if node2 is before node1.
-<a name="line1042"></a> */
-<a name="line1043"></a>goog.dom.compareNodeOrder = function(node1, node2) {
-<a name="line1044"></a>  // Fall out quickly for equality.
-<a name="line1045"></a>  if (node1 == node2) {
-<a name="line1046"></a>    return 0;
-<a name="line1047"></a>  }
-<a name="line1048"></a>
-<a name="line1049"></a>  // Use compareDocumentPosition where available
-<a name="line1050"></a>  if (node1.compareDocumentPosition) {
-<a name="line1051"></a>    // 4 is the bitmask for FOLLOWS.
-<a name="line1052"></a>    return node1.compareDocumentPosition(node2) &amp; 2 ? 1 : -1;
-<a name="line1053"></a>  }
-<a name="line1054"></a>
-<a name="line1055"></a>  // Process in IE using sourceIndex - we check to see if the first node has
-<a name="line1056"></a>  // a source index or if it&#39;s parent has one.
-<a name="line1057"></a>  if (&#39;sourceIndex&#39; in node1 ||
-<a name="line1058"></a>      (node1.parentNode &amp;&amp; &#39;sourceIndex&#39; in node1.parentNode)) {
-<a name="line1059"></a>    var isElement1 = node1.nodeType == goog.dom.NodeType.ELEMENT;
-<a name="line1060"></a>    var isElement2 = node2.nodeType == goog.dom.NodeType.ELEMENT;
-<a name="line1061"></a>
-<a name="line1062"></a>    if (isElement1 &amp;&amp; isElement2) {
-<a name="line1063"></a>      return node1.sourceIndex - node2.sourceIndex;
-<a name="line1064"></a>    } else {
-<a name="line1065"></a>      var parent1 = node1.parentNode;
-<a name="line1066"></a>      var parent2 = node2.parentNode;
-<a name="line1067"></a>
-<a name="line1068"></a>      if (parent1 == parent2) {
-<a name="line1069"></a>        return goog.dom.compareSiblingOrder_(node1, node2);
-<a name="line1070"></a>      }
-<a name="line1071"></a>
-<a name="line1072"></a>      if (!isElement1 &amp;&amp; goog.dom.contains(parent1, node2)) {
-<a name="line1073"></a>        return -1 * goog.dom.compareParentsDescendantNodeIe_(node1, node2);
-<a name="line1074"></a>      }
-<a name="line1075"></a>
+<a name="line1031"></a>
+<a name="line1032"></a>/**
+<a name="line1033"></a> * Compares the document order of two nodes, returning 0 if they are the same
+<a name="line1034"></a> * node, a negative number if node1 is before node2, and a positive number if
+<a name="line1035"></a> * node2 is before node1.  Note that we compare the order the tags appear in the
+<a name="line1036"></a> * document so in the tree &lt;b&gt;&lt;i&gt;text&lt;/i&gt;&lt;/b&gt; the B node is considered to be
+<a name="line1037"></a> * before the I node.
+<a name="line1038"></a> *
+<a name="line1039"></a> * @param {Node} node1 The first node to compare.
+<a name="line1040"></a> * @param {Node} node2 The second node to compare.
+<a name="line1041"></a> * @return {number} 0 if the nodes are the same node, a negative number if node1
+<a name="line1042"></a> *     is before node2, and a positive number if node2 is before node1.
+<a name="line1043"></a> */
+<a name="line1044"></a>goog.dom.compareNodeOrder = function(node1, node2) {
+<a name="line1045"></a>  // Fall out quickly for equality.
+<a name="line1046"></a>  if (node1 == node2) {
+<a name="line1047"></a>    return 0;
+<a name="line1048"></a>  }
+<a name="line1049"></a>
+<a name="line1050"></a>  // Use compareDocumentPosition where available
+<a name="line1051"></a>  if (node1.compareDocumentPosition) {
+<a name="line1052"></a>    // 4 is the bitmask for FOLLOWS.
+<a name="line1053"></a>    return node1.compareDocumentPosition(node2) &amp; 2 ? 1 : -1;
+<a name="line1054"></a>  }
+<a name="line1055"></a>
+<a name="line1056"></a>  // Process in IE using sourceIndex - we check to see if the first node has
+<a name="line1057"></a>  // a source index or if it&#39;s parent has one.
+<a name="line1058"></a>  if (&#39;sourceIndex&#39; in node1 ||
+<a name="line1059"></a>      (node1.parentNode &amp;&amp; &#39;sourceIndex&#39; in node1.parentNode)) {
+<a name="line1060"></a>    var isElement1 = node1.nodeType == goog.dom.NodeType.ELEMENT;
+<a name="line1061"></a>    var isElement2 = node2.nodeType == goog.dom.NodeType.ELEMENT;
+<a name="line1062"></a>
+<a name="line1063"></a>    if (isElement1 &amp;&amp; isElement2) {
+<a name="line1064"></a>      return node1.sourceIndex - node2.sourceIndex;
+<a name="line1065"></a>    } else {
+<a name="line1066"></a>      var parent1 = node1.parentNode;
+<a name="line1067"></a>      var parent2 = node2.parentNode;
+<a name="line1068"></a>
+<a name="line1069"></a>      if (parent1 == parent2) {
+<a name="line1070"></a>        return goog.dom.compareSiblingOrder_(node1, node2);
+<a name="line1071"></a>      }
+<a name="line1072"></a>
+<a name="line1073"></a>      if (!isElement1 &amp;&amp; goog.dom.contains(parent1, node2)) {
+<a name="line1074"></a>        return -1 * goog.dom.compareParentsDescendantNodeIe_(node1, node2);
+<a name="line1075"></a>      }
 <a name="line1076"></a>
-<a name="line1077"></a>      if (!isElement2 &amp;&amp; goog.dom.contains(parent2, node1)) {
-<a name="line1078"></a>        return goog.dom.compareParentsDescendantNodeIe_(node2, node1);
-<a name="line1079"></a>      }
-<a name="line1080"></a>
-<a name="line1081"></a>      return (isElement1 ? node1.sourceIndex : parent1.sourceIndex) -
-<a name="line1082"></a>             (isElement2 ? node2.sourceIndex : parent2.sourceIndex);
-<a name="line1083"></a>    }
-<a name="line1084"></a>  }
-<a name="line1085"></a>
-<a name="line1086"></a>  // For Safari, we compare ranges.
-<a name="line1087"></a>  var doc = goog.dom.getOwnerDocument(node1);
-<a name="line1088"></a>
-<a name="line1089"></a>  var range1, range2;
-<a name="line1090"></a>  range1 = doc.createRange();
-<a name="line1091"></a>  range1.selectNode(node1);
-<a name="line1092"></a>  range1.collapse(true);
-<a name="line1093"></a>
-<a name="line1094"></a>  range2 = doc.createRange();
-<a name="line1095"></a>  range2.selectNode(node2);
-<a name="line1096"></a>  range2.collapse(true);
-<a name="line1097"></a>
-<a name="line1098"></a>  return range1.compareBoundaryPoints(goog.global[&#39;Range&#39;].START_TO_END,
-<a name="line1099"></a>      range2);
-<a name="line1100"></a>};
-<a name="line1101"></a>
+<a name="line1077"></a>
+<a name="line1078"></a>      if (!isElement2 &amp;&amp; goog.dom.contains(parent2, node1)) {
+<a name="line1079"></a>        return goog.dom.compareParentsDescendantNodeIe_(node2, node1);
+<a name="line1080"></a>      }
+<a name="line1081"></a>
+<a name="line1082"></a>      return (isElement1 ? node1.sourceIndex : parent1.sourceIndex) -
+<a name="line1083"></a>             (isElement2 ? node2.sourceIndex : parent2.sourceIndex);
+<a name="line1084"></a>    }
+<a name="line1085"></a>  }
+<a name="line1086"></a>
+<a name="line1087"></a>  // For Safari, we compare ranges.
+<a name="line1088"></a>  var doc = goog.dom.getOwnerDocument(node1);
+<a name="line1089"></a>
+<a name="line1090"></a>  var range1, range2;
+<a name="line1091"></a>  range1 = doc.createRange();
+<a name="line1092"></a>  range1.selectNode(node1);
+<a name="line1093"></a>  range1.collapse(true);
+<a name="line1094"></a>
+<a name="line1095"></a>  range2 = doc.createRange();
+<a name="line1096"></a>  range2.selectNode(node2);
+<a name="line1097"></a>  range2.collapse(true);
+<a name="line1098"></a>
+<a name="line1099"></a>  return range1.compareBoundaryPoints(goog.global[&#39;Range&#39;].START_TO_END,
+<a name="line1100"></a>      range2);
+<a name="line1101"></a>};
 <a name="line1102"></a>
-<a name="line1103"></a>/**
-<a name="line1104"></a> * Utility function to compare the position of two nodes, when
-<a name="line1105"></a> * {@code textNode}&#39;s parent is an ancestor of {@code node}.  If this entry
-<a name="line1106"></a> * condition is not met, this function will attempt to reference a null object.
-<a name="line1107"></a> * @param {Node} textNode The textNode to compare.
-<a name="line1108"></a> * @param {Node} node The node to compare.
-<a name="line1109"></a> * @return {number} -1 if node is before textNode, +1 otherwise.
-<a name="line1110"></a> * @private
-<a name="line1111"></a> */
-<a name="line1112"></a>goog.dom.compareParentsDescendantNodeIe_ = function(textNode, node) {
-<a name="line1113"></a>  var parent = textNode.parentNode;
-<a name="line1114"></a>  if (parent == node) {
-<a name="line1115"></a>    // If textNode is a child of node, then node comes first.
-<a name="line1116"></a>    return -1;
-<a name="line1117"></a>  }
-<a name="line1118"></a>  var sibling = node;
-<a name="line1119"></a>  while (sibling.parentNode != parent) {
-<a name="line1120"></a>    sibling = sibling.parentNode;
-<a name="line1121"></a>  }
-<a name="line1122"></a>  return goog.dom.compareSiblingOrder_(sibling, textNode);
-<a name="line1123"></a>};
-<a name="line1124"></a>
+<a name="line1103"></a>
+<a name="line1104"></a>/**
+<a name="line1105"></a> * Utility function to compare the position of two nodes, when
+<a name="line1106"></a> * {@code textNode}&#39;s parent is an ancestor of {@code node}.  If this entry
+<a name="line1107"></a> * condition is not met, this function will attempt to reference a null object.
+<a name="line1108"></a> * @param {Node} textNode The textNode to compare.
+<a name="line1109"></a> * @param {Node} node The node to compare.
+<a name="line1110"></a> * @return {number} -1 if node is before textNode, +1 otherwise.
+<a name="line1111"></a> * @private
+<a name="line1112"></a> */
+<a name="line1113"></a>goog.dom.compareParentsDescendantNodeIe_ = function(textNode, node) {
+<a name="line1114"></a>  var parent = textNode.parentNode;
+<a name="line1115"></a>  if (parent == node) {
+<a name="line1116"></a>    // If textNode is a child of node, then node comes first.
+<a name="line1117"></a>    return -1;
+<a name="line1118"></a>  }
+<a name="line1119"></a>  var sibling = node;
+<a name="line1120"></a>  while (sibling.parentNode != parent) {
+<a name="line1121"></a>    sibling = sibling.parentNode;
+<a name="line1122"></a>  }
+<a name="line1123"></a>  return goog.dom.compareSiblingOrder_(sibling, textNode);
+<a name="line1124"></a>};
 <a name="line1125"></a>
-<a name="line1126"></a>/**
-<a name="line1127"></a> * Utility function to compare the position of two nodes known to be non-equal
-<a name="line1128"></a> * siblings.
-<a name="line1129"></a> * @param {Node} node1 The first node to compare.
-<a name="line1130"></a> * @param {Node} node2 The second node to compare.
-<a name="line1131"></a> * @return {number} -1 if node1 is before node2, +1 otherwise.
-<a name="line1132"></a> * @private
-<a name="line1133"></a> */
-<a name="line1134"></a>goog.dom.compareSiblingOrder_ = function(node1, node2) {
-<a name="line1135"></a>  var s = node2;
-<a name="line1136"></a>  while ((s = s.previousSibling)) {
-<a name="line1137"></a>    if (s == node1) {
-<a name="line1138"></a>      // We just found node1 before node2.
-<a name="line1139"></a>      return -1;
-<a name="line1140"></a>    }
-<a name="line1141"></a>  }
-<a name="line1142"></a>
-<a name="line1143"></a>  // Since we didn&#39;t find it, node1 must be after node2.
-<a name="line1144"></a>  return 1;
-<a name="line1145"></a>};
-<a name="line1146"></a>
+<a name="line1126"></a>
+<a name="line1127"></a>/**
+<a name="line1128"></a> * Utility function to compare the position of two nodes known to be non-equal
+<a name="line1129"></a> * siblings.
+<a name="line1130"></a> * @param {Node} node1 The first node to compare.
+<a name="line1131"></a> * @param {Node} node2 The second node to compare.
+<a name="line1132"></a> * @return {number} -1 if node1 is before node2, +1 otherwise.
+<a name="line1133"></a> * @private
+<a name="line1134"></a> */
+<a name="line1135"></a>goog.dom.compareSiblingOrder_ = function(node1, node2) {
+<a name="line1136"></a>  var s = node2;
+<a name="line1137"></a>  while ((s = s.previousSibling)) {
+<a name="line1138"></a>    if (s == node1) {
+<a name="line1139"></a>      // We just found node1 before node2.
+<a name="line1140"></a>      return -1;
+<a name="line1141"></a>    }
+<a name="line1142"></a>  }
+<a name="line1143"></a>
+<a name="line1144"></a>  // Since we didn&#39;t find it, node1 must be after node2.
+<a name="line1145"></a>  return 1;
+<a name="line1146"></a>};
 <a name="line1147"></a>
-<a name="line1148"></a>/**
-<a name="line1149"></a> * Find the deepest common ancestor of the given nodes.
-<a name="line1150"></a> * @param {Node} var_args The nodes to find a common ancestor of.
-<a name="line1151"></a> * @return {Node?} The common ancestor of the nodes, or null if there is none.
-<a name="line1152"></a> *     null will only be returned if two or more of the nodes are from different
-<a name="line1153"></a> *     documents.
-<a name="line1154"></a> */
-<a name="line1155"></a>goog.dom.findCommonAncestor = function(var_args) {
-<a name="line1156"></a>  var i, count = arguments.length;
-<a name="line1157"></a>  if (!count) {
-<a name="line1158"></a>    return null;
-<a name="line1159"></a>  } else if (count == 1) {
-<a name="line1160"></a>    return arguments[0];
-<a name="line1161"></a>  }
-<a name="line1162"></a>
-<a name="line1163"></a>  var paths = [];
-<a name="line1164"></a>  var minLength = Infinity;
-<a name="line1165"></a>  for (i = 0; i &lt; count; i++) {
-<a name="line1166"></a>    // Compute the list of ancestors.
-<a name="line1167"></a>    var ancestors = [];
-<a name="line1168"></a>    var node = arguments[i];
-<a name="line1169"></a>    while (node) {
-<a name="line1170"></a>      ancestors.unshift(node);
-<a name="line1171"></a>      node = node.parentNode;
-<a name="line1172"></a>    }
-<a name="line1173"></a>
-<a name="line1174"></a>    // Save the list for comparison.
-<a name="line1175"></a>    paths.push(ancestors);
-<a name="line1176"></a>    minLength = Math.min(minLength, ancestors.length);
-<a name="line1177"></a>  }
-<a name="line1178"></a>  var output = null;
-<a name="line1179"></a>  for (i = 0; i &lt; minLength; i++) {
-<a name="line1180"></a>    var first = paths[0][i];
-<a name="line1181"></a>    for (var j = 1; j &lt; count; j++) {
-<a name="line1182"></a>      if (first != paths[j][i]) {
-<a name="line1183"></a>        return output;
-<a name="line1184"></a>      }
-<a name="line1185"></a>    }
-<a name="line1186"></a>    output = first;
-<a name="line1187"></a>  }
-<a name="line1188"></a>  return output;
-<a name="line1189"></a>};
-<a name="line1190"></a>
+<a name="line1148"></a>
+<a name="line1149"></a>/**
+<a name="line1150"></a> * Find the deepest common ancestor of the given nodes.
+<a name="line1151"></a> * @param {Node} var_args The nodes to find a common ancestor of.
+<a name="line1152"></a> * @return {Node} The common ancestor of the nodes, or null if there is none.
+<a name="line1153"></a> *     null will only be returned if two or more of the nodes are from different
+<a name="line1154"></a> *     documents.
+<a name="line1155"></a> */
+<a name="line1156"></a>goog.dom.findCommonAncestor = function(var_args) {
+<a name="line1157"></a>  var i, count = arguments.length;
+<a name="line1158"></a>  if (!count) {
+<a name="line1159"></a>    return null;
+<a name="line1160"></a>  } else if (count == 1) {
+<a name="line1161"></a>    return arguments[0];
+<a name="line1162"></a>  }
+<a name="line1163"></a>
+<a name="line1164"></a>  var paths = [];
+<a name="line1165"></a>  var minLength = Infinity;
+<a name="line1166"></a>  for (i = 0; i &lt; count; i++) {
+<a name="line1167"></a>    // Compute the list of ancestors.
+<a name="line1168"></a>    var ancestors = [];
+<a name="line1169"></a>    var node = arguments[i];
+<a name="line1170"></a>    while (node) {
+<a name="line1171"></a>      ancestors.unshift(node);
+<a name="line1172"></a>      node = node.parentNode;
+<a name="line1173"></a>    }
+<a name="line1174"></a>
+<a name="line1175"></a>    // Save the list for comparison.
+<a name="line1176"></a>    paths.push(ancestors);
+<a name="line1177"></a>    minLength = Math.min(minLength, ancestors.length);
+<a name="line1178"></a>  }
+<a name="line1179"></a>  var output = null;
+<a name="line1180"></a>  for (i = 0; i &lt; minLength; i++) {
+<a name="line1181"></a>    var first = paths[0][i];
+<a name="line1182"></a>    for (var j = 1; j &lt; count; j++) {
+<a name="line1183"></a>      if (first != paths[j][i]) {
+<a name="line1184"></a>        return output;
+<a name="line1185"></a>      }
+<a name="line1186"></a>    }
+<a name="line1187"></a>    output = first;
+<a name="line1188"></a>  }
+<a name="line1189"></a>  return output;
+<a name="line1190"></a>};
 <a name="line1191"></a>
-<a name="line1192"></a>/**
-<a name="line1193"></a> * Returns the owner document for a node.
-<a name="line1194"></a> * @param {Node|Window} node The node to get the document for.
-<a name="line1195"></a> * @return {!Document} The document owning the node.
-<a name="line1196"></a> */
-<a name="line1197"></a>goog.dom.getOwnerDocument = function(node) {
-<a name="line1198"></a>  // TODO: Remove IE5 code.
-<a name="line1199"></a>  // IE5 uses document instead of ownerDocument
-<a name="line1200"></a>  return /** @type {!Document} */ (
-<a name="line1201"></a>      node.nodeType == goog.dom.NodeType.DOCUMENT ? node :
-<a name="line1202"></a>      node.ownerDocument || node.document);
-<a name="line1203"></a>};
-<a name="line1204"></a>
+<a name="line1192"></a>
+<a name="line1193"></a>/**
+<a name="line1194"></a> * Returns the owner document for a node.
+<a name="line1195"></a> * @param {Node|Window} node The node to get the document for.
+<a name="line1196"></a> * @return {!Document} The document owning the node.
+<a name="line1197"></a> */
+<a name="line1198"></a>goog.dom.getOwnerDocument = function(node) {
+<a name="line1199"></a>  // TODO: Remove IE5 code.
+<a name="line1200"></a>  // IE5 uses document instead of ownerDocument
+<a name="line1201"></a>  return /** @type {!Document} */ (
+<a name="line1202"></a>      node.nodeType == goog.dom.NodeType.DOCUMENT ? node :
+<a name="line1203"></a>      node.ownerDocument || node.document);
+<a name="line1204"></a>};
 <a name="line1205"></a>
-<a name="line1206"></a>/**
-<a name="line1207"></a> * Cross-browser function for getting the document element of a frame or iframe.
-<a name="line1208"></a> * @param {Element} frame Frame element.
-<a name="line1209"></a> * @return {!Document} The frame content document.
-<a name="line1210"></a> */
-<a name="line1211"></a>goog.dom.getFrameContentDocument = function(frame) {
-<a name="line1212"></a>  var doc;
-<a name="line1213"></a>  if (goog.userAgent.WEBKIT) {
-<a name="line1214"></a>    doc = (frame.document || frame.contentWindow.document);
-<a name="line1215"></a>  } else {
-<a name="line1216"></a>    doc = (frame.contentDocument || frame.contentWindow.document);
-<a name="line1217"></a>  }
-<a name="line1218"></a>  return doc;
-<a name="line1219"></a>};
-<a name="line1220"></a>
+<a name="line1206"></a>
+<a name="line1207"></a>/**
+<a name="line1208"></a> * Cross-browser function for getting the document element of a frame or iframe.
+<a name="line1209"></a> * @param {Element} frame Frame element.
+<a name="line1210"></a> * @return {!Document} The frame content document.
+<a name="line1211"></a> */
+<a name="line1212"></a>goog.dom.getFrameContentDocument = function(frame) {
+<a name="line1213"></a>  var doc;
+<a name="line1214"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line1215"></a>    doc = (frame.document || frame.contentWindow.document);
+<a name="line1216"></a>  } else {
+<a name="line1217"></a>    doc = (frame.contentDocument || frame.contentWindow.document);
+<a name="line1218"></a>  }
+<a name="line1219"></a>  return doc;
+<a name="line1220"></a>};
 <a name="line1221"></a>
-<a name="line1222"></a>/**
-<a name="line1223"></a> * Cross-browser function for getting the window of a frame or iframe.
-<a name="line1224"></a> * @param {HTMLIFrameElement|HTMLFrameElement} frame Frame element.
-<a name="line1225"></a> * @return {Window} The window associated with the given frame.
-<a name="line1226"></a> */
-<a name="line1227"></a>goog.dom.getFrameContentWindow = function(frame) {
-<a name="line1228"></a>  return frame.contentWindow ||
-<a name="line1229"></a>      goog.dom.getWindow_(goog.dom.getFrameContentDocument(frame));
-<a name="line1230"></a>};
-<a name="line1231"></a>
+<a name="line1222"></a>
+<a name="line1223"></a>/**
+<a name="line1224"></a> * Cross-browser function for getting the window of a frame or iframe.
+<a name="line1225"></a> * @param {HTMLIFrameElement|HTMLFrameElement} frame Frame element.
+<a name="line1226"></a> * @return {Window} The window associated with the given frame.
+<a name="line1227"></a> */
+<a name="line1228"></a>goog.dom.getFrameContentWindow = function(frame) {
+<a name="line1229"></a>  return frame.contentWindow ||
+<a name="line1230"></a>      goog.dom.getWindow_(goog.dom.getFrameContentDocument(frame));
+<a name="line1231"></a>};
 <a name="line1232"></a>
-<a name="line1233"></a>/**
-<a name="line1234"></a> * Cross-browser function for setting the text content of an element.
-<a name="line1235"></a> * @param {Element} element The element to change the text content of.
-<a name="line1236"></a> * @param {string} text The string that should replace the current element
-<a name="line1237"></a> *     content.
-<a name="line1238"></a> */
-<a name="line1239"></a>goog.dom.setTextContent = function(element, text) {
-<a name="line1240"></a>  if (&#39;textContent&#39; in element) {
-<a name="line1241"></a>    element.textContent = text;
-<a name="line1242"></a>  } else if (element.firstChild &amp;&amp;
-<a name="line1243"></a>             element.firstChild.nodeType == goog.dom.NodeType.TEXT) {
-<a name="line1244"></a>    // If the first child is a text node we just change its data and remove the
-<a name="line1245"></a>    // rest of the children.
-<a name="line1246"></a>    while (element.lastChild != element.firstChild) {
-<a name="line1247"></a>      element.removeChild(element.lastChild);
-<a name="line1248"></a>    }
-<a name="line1249"></a>    element.firstChild.data = text;
-<a name="line1250"></a>  } else {
-<a name="line1251"></a>    goog.dom.removeChildren(element);
-<a name="line1252"></a>    var doc = goog.dom.getOwnerDocument(element);
-<a name="line1253"></a>    element.appendChild(doc.createTextNode(text));
-<a name="line1254"></a>  }
-<a name="line1255"></a>};
-<a name="line1256"></a>
+<a name="line1233"></a>
+<a name="line1234"></a>/**
+<a name="line1235"></a> * Cross-browser function for setting the text content of an element.
+<a name="line1236"></a> * @param {Element} element The element to change the text content of.
+<a name="line1237"></a> * @param {string} text The string that should replace the current element
+<a name="line1238"></a> *     content.
+<a name="line1239"></a> */
+<a name="line1240"></a>goog.dom.setTextContent = function(element, text) {
+<a name="line1241"></a>  if (&#39;textContent&#39; in element) {
+<a name="line1242"></a>    element.textContent = text;
+<a name="line1243"></a>  } else if (element.firstChild &amp;&amp;
+<a name="line1244"></a>             element.firstChild.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line1245"></a>    // If the first child is a text node we just change its data and remove the
+<a name="line1246"></a>    // rest of the children.
+<a name="line1247"></a>    while (element.lastChild != element.firstChild) {
+<a name="line1248"></a>      element.removeChild(element.lastChild);
+<a name="line1249"></a>    }
+<a name="line1250"></a>    element.firstChild.data = text;
+<a name="line1251"></a>  } else {
+<a name="line1252"></a>    goog.dom.removeChildren(element);
+<a name="line1253"></a>    var doc = goog.dom.getOwnerDocument(element);
+<a name="line1254"></a>    element.appendChild(doc.createTextNode(text));
+<a name="line1255"></a>  }
+<a name="line1256"></a>};
 <a name="line1257"></a>
-<a name="line1258"></a>/**
-<a name="line1259"></a> * Gets the outerHTML of a node, which islike innerHTML, except that it
-<a name="line1260"></a> * actually contains the HTML of the node itself.
-<a name="line1261"></a> * @param {Element} element The element to get the HTML of.
-<a name="line1262"></a> * @return {string} The outerHTML of the given element.
-<a name="line1263"></a> */
-<a name="line1264"></a>goog.dom.getOuterHtml = function(element) {
-<a name="line1265"></a>  // IE, Opera and WebKit all have outerHTML.
-<a name="line1266"></a>  if (&#39;outerHTML&#39; in element) {
-<a name="line1267"></a>    return element.outerHTML;
-<a name="line1268"></a>  } else {
-<a name="line1269"></a>    var doc = goog.dom.getOwnerDocument(element);
-<a name="line1270"></a>    var div = doc.createElement(&#39;div&#39;);
-<a name="line1271"></a>    div.appendChild(element.cloneNode(true));
-<a name="line1272"></a>    return div.innerHTML;
-<a name="line1273"></a>  }
-<a name="line1274"></a>};
-<a name="line1275"></a>
+<a name="line1258"></a>
+<a name="line1259"></a>/**
+<a name="line1260"></a> * Gets the outerHTML of a node, which islike innerHTML, except that it
+<a name="line1261"></a> * actually contains the HTML of the node itself.
+<a name="line1262"></a> * @param {Element} element The element to get the HTML of.
+<a name="line1263"></a> * @return {string} The outerHTML of the given element.
+<a name="line1264"></a> */
+<a name="line1265"></a>goog.dom.getOuterHtml = function(element) {
+<a name="line1266"></a>  // IE, Opera and WebKit all have outerHTML.
+<a name="line1267"></a>  if (&#39;outerHTML&#39; in element) {
+<a name="line1268"></a>    return element.outerHTML;
+<a name="line1269"></a>  } else {
+<a name="line1270"></a>    var doc = goog.dom.getOwnerDocument(element);
+<a name="line1271"></a>    var div = doc.createElement(&#39;div&#39;);
+<a name="line1272"></a>    div.appendChild(element.cloneNode(true));
+<a name="line1273"></a>    return div.innerHTML;
+<a name="line1274"></a>  }
+<a name="line1275"></a>};
 <a name="line1276"></a>
-<a name="line1277"></a>/**
-<a name="line1278"></a> * Finds the first descendant node that matches the filter function, using
-<a name="line1279"></a> * a depth first search. This function offers the most general purpose way
-<a name="line1280"></a> * of finding a matching element. You may also wish to consider
-<a name="line1281"></a> * {@code goog.dom.query} which can express many matching criteria using
-<a name="line1282"></a> * CSS selector expressions. These expressions often result in a more
-<a name="line1283"></a> * compact representation of the desired result.
-<a name="line1284"></a> * @see goog.dom.query
-<a name="line1285"></a> *
-<a name="line1286"></a> * @param {Node} root The root of the tree to search.
-<a name="line1287"></a> * @param {function(Node) : boolean} p The filter function.
-<a name="line1288"></a> * @return {Node|undefined} The found node or undefined if none is found.
-<a name="line1289"></a> */
-<a name="line1290"></a>goog.dom.findNode = function(root, p) {
-<a name="line1291"></a>  var rv = [];
-<a name="line1292"></a>  var found = goog.dom.findNodes_(root, p, rv, true);
-<a name="line1293"></a>  return found ? rv[0] : undefined;
-<a name="line1294"></a>};
-<a name="line1295"></a>
+<a name="line1277"></a>
+<a name="line1278"></a>/**
+<a name="line1279"></a> * Finds the first descendant node that matches the filter function, using
+<a name="line1280"></a> * a depth first search. This function offers the most general purpose way
+<a name="line1281"></a> * of finding a matching element. You may also wish to consider
+<a name="line1282"></a> * {@code goog.dom.query} which can express many matching criteria using
+<a name="line1283"></a> * CSS selector expressions. These expressions often result in a more
+<a name="line1284"></a> * compact representation of the desired result.
+<a name="line1285"></a> * @see goog.dom.query
+<a name="line1286"></a> *
+<a name="line1287"></a> * @param {Node} root The root of the tree to search.
+<a name="line1288"></a> * @param {function(Node) : boolean} p The filter function.
+<a name="line1289"></a> * @return {Node|undefined} The found node or undefined if none is found.
+<a name="line1290"></a> */
+<a name="line1291"></a>goog.dom.findNode = function(root, p) {
+<a name="line1292"></a>  var rv = [];
+<a name="line1293"></a>  var found = goog.dom.findNodes_(root, p, rv, true);
+<a name="line1294"></a>  return found ? rv[0] : undefined;
+<a name="line1295"></a>};
 <a name="line1296"></a>
-<a name="line1297"></a>/**
-<a name="line1298"></a> * Finds all the descendant nodes that match the filter function, using a
-<a name="line1299"></a> * a depth first search. This function offers the most general-purpose way
-<a name="line1300"></a> * of finding a set of matching elements. You may also wish to consider
-<a name="line1301"></a> * {@code goog.dom.query} which can express many matching criteria using
-<a name="line1302"></a> * CSS selector expressions. These expressions often result in a more
-<a name="line1303"></a> * compact representation of the desired result.
-<a name="line1304"></a>
-<a name="line1305"></a> * @param {Node} root The root of the tree to search.
-<a name="line1306"></a> * @param {function(Node) : boolean} p The filter function.
-<a name="line1307"></a> * @return {Array.&lt;Node&gt;} The found nodes or an empty array if none are found.
-<a name="line1308"></a> */
-<a name="line1309"></a>goog.dom.findNodes = function(root, p) {
-<a name="line1310"></a>  var rv = [];
-<a name="line1311"></a>  goog.dom.findNodes_(root, p, rv, false);
-<a name="line1312"></a>  return rv;
-<a name="line1313"></a>};
-<a name="line1314"></a>
+<a name="line1297"></a>
+<a name="line1298"></a>/**
+<a name="line1299"></a> * Finds all the descendant nodes that match the filter function, using a
+<a name="line1300"></a> * a depth first search. This function offers the most general-purpose way
+<a name="line1301"></a> * of finding a set of matching elements. You may also wish to consider
+<a name="line1302"></a> * {@code goog.dom.query} which can express many matching criteria using
+<a name="line1303"></a> * CSS selector expressions. These expressions often result in a more
+<a name="line1304"></a> * compact representation of the desired result.
+<a name="line1305"></a>
+<a name="line1306"></a> * @param {Node} root The root of the tree to search.
+<a name="line1307"></a> * @param {function(Node) : boolean} p The filter function.
+<a name="line1308"></a> * @return {Array.&lt;Node&gt;} The found nodes or an empty array if none are found.
+<a name="line1309"></a> */
+<a name="line1310"></a>goog.dom.findNodes = function(root, p) {
+<a name="line1311"></a>  var rv = [];
+<a name="line1312"></a>  goog.dom.findNodes_(root, p, rv, false);
+<a name="line1313"></a>  return rv;
+<a name="line1314"></a>};
 <a name="line1315"></a>
-<a name="line1316"></a>/**
-<a name="line1317"></a> * Finds the first or all the descendant nodes that match the filter function,
-<a name="line1318"></a> * using a depth first search.
-<a name="line1319"></a> * @param {Node?} root The root of the tree to search.
-<a name="line1320"></a> * @param {function(Node) : boolean} p The filter function.
-<a name="line1321"></a> * @param {Array.&lt;Node&gt;} rv The found nodes are added to this array.
-<a name="line1322"></a> * @param {boolean} findOne If true we exit after the first found node.
-<a name="line1323"></a> * @return {boolean} Whether the search is complete or not. True in case findOne
-<a name="line1324"></a> *     is true and the node is found. False otherwise.
-<a name="line1325"></a> * @private
-<a name="line1326"></a> */
-<a name="line1327"></a>goog.dom.findNodes_ = function(root, p, rv, findOne) {
-<a name="line1328"></a>  if (root != null) {
-<a name="line1329"></a>    for (var i = 0, child; child = root.childNodes[i]; i++) {
-<a name="line1330"></a>      if (p(child)) {
-<a name="line1331"></a>        rv.push(child);
-<a name="line1332"></a>        if (findOne) {
-<a name="line1333"></a>          return true;
-<a name="line1334"></a>        }
-<a name="line1335"></a>      }
-<a name="line1336"></a>      if (goog.dom.findNodes_(child, p, rv, findOne)) {
-<a name="line1337"></a>        return true;
-<a name="line1338"></a>      }
-<a name="line1339"></a>    }
-<a name="line1340"></a>  }
-<a name="line1341"></a>  return false;
-<a name="line1342"></a>};
-<a name="line1343"></a>
+<a name="line1316"></a>
+<a name="line1317"></a>/**
+<a name="line1318"></a> * Finds the first or all the descendant nodes that match the filter function,
+<a name="line1319"></a> * using a depth first search.
+<a name="line1320"></a> * @param {Node} root The root of the tree to search.
+<a name="line1321"></a> * @param {function(Node) : boolean} p The filter function.
+<a name="line1322"></a> * @param {Array.&lt;Node&gt;} rv The found nodes are added to this array.
+<a name="line1323"></a> * @param {boolean} findOne If true we exit after the first found node.
+<a name="line1324"></a> * @return {boolean} Whether the search is complete or not. True in case findOne
+<a name="line1325"></a> *     is true and the node is found. False otherwise.
+<a name="line1326"></a> * @private
+<a name="line1327"></a> */
+<a name="line1328"></a>goog.dom.findNodes_ = function(root, p, rv, findOne) {
+<a name="line1329"></a>  if (root != null) {
+<a name="line1330"></a>    for (var i = 0, child; child = root.childNodes[i]; i++) {
+<a name="line1331"></a>      if (p(child)) {
+<a name="line1332"></a>        rv.push(child);
+<a name="line1333"></a>        if (findOne) {
+<a name="line1334"></a>          return true;
+<a name="line1335"></a>        }
+<a name="line1336"></a>      }
+<a name="line1337"></a>      if (goog.dom.findNodes_(child, p, rv, findOne)) {
+<a name="line1338"></a>        return true;
+<a name="line1339"></a>      }
+<a name="line1340"></a>    }
+<a name="line1341"></a>  }
+<a name="line1342"></a>  return false;
+<a name="line1343"></a>};
 <a name="line1344"></a>
-<a name="line1345"></a>/**
-<a name="line1346"></a> * Map of tags whose content to ignore when calculating text length.
-<a name="line1347"></a> * @type {Object}
-<a name="line1348"></a> * @private
-<a name="line1349"></a> */
-<a name="line1350"></a>goog.dom.TAGS_TO_IGNORE_ = {
-<a name="line1351"></a>  &#39;SCRIPT&#39;: 1,
-<a name="line1352"></a>  &#39;STYLE&#39;: 1,
-<a name="line1353"></a>  &#39;HEAD&#39;: 1,
-<a name="line1354"></a>  &#39;IFRAME&#39;: 1,
-<a name="line1355"></a>  &#39;OBJECT&#39;: 1
-<a name="line1356"></a>};
-<a name="line1357"></a>
+<a name="line1345"></a>
+<a name="line1346"></a>/**
+<a name="line1347"></a> * Map of tags whose content to ignore when calculating text length.
+<a name="line1348"></a> * @type {Object}
+<a name="line1349"></a> * @private
+<a name="line1350"></a> */
+<a name="line1351"></a>goog.dom.TAGS_TO_IGNORE_ = {
+<a name="line1352"></a>  &#39;SCRIPT&#39;: 1,
+<a name="line1353"></a>  &#39;STYLE&#39;: 1,
+<a name="line1354"></a>  &#39;HEAD&#39;: 1,
+<a name="line1355"></a>  &#39;IFRAME&#39;: 1,
+<a name="line1356"></a>  &#39;OBJECT&#39;: 1
+<a name="line1357"></a>};
 <a name="line1358"></a>
-<a name="line1359"></a>/**
-<a name="line1360"></a> * Map of tags which have predefined values with regard to whitespace.
-<a name="line1361"></a> * @type {Object}
-<a name="line1362"></a> * @private
-<a name="line1363"></a> */
-<a name="line1364"></a>goog.dom.PREDEFINED_TAG_VALUES_ = {&#39;IMG&#39;: &#39; &#39;, &#39;BR&#39;: &#39;\n&#39;};
-<a name="line1365"></a>
+<a name="line1359"></a>
+<a name="line1360"></a>/**
+<a name="line1361"></a> * Map of tags which have predefined values with regard to whitespace.
+<a name="line1362"></a> * @type {Object}
+<a name="line1363"></a> * @private
+<a name="line1364"></a> */
+<a name="line1365"></a>goog.dom.PREDEFINED_TAG_VALUES_ = {&#39;IMG&#39;: &#39; &#39;, &#39;BR&#39;: &#39;\n&#39;};
 <a name="line1366"></a>
-<a name="line1367"></a>/**
-<a name="line1368"></a> * Returns true if the element has a tab index that allows it to receive
-<a name="line1369"></a> * keyboard focus (tabIndex &gt;= 0), false otherwise.  Note that form elements
-<a name="line1370"></a> * natively support keyboard focus, even if they have no tab index.  See
-<a name="line1371"></a> * http://go/tabindex for more info.
-<a name="line1372"></a> * @param {Element} element Element to check.
-<a name="line1373"></a> * @return {boolean} Whether the element has a tab index that allows keyboard
-<a name="line1374"></a> *     focus.
-<a name="line1375"></a> */
-<a name="line1376"></a>goog.dom.isFocusableTabIndex = function(element) {
-<a name="line1377"></a>  // IE returns 0 for an unset tabIndex, so we must use getAttributeNode(),
-<a name="line1378"></a>  // which returns an object with a &#39;specified&#39; property if tabIndex is
-<a name="line1379"></a>  // specified.  This works on other browsers, too.
-<a name="line1380"></a>  var attrNode = element.getAttributeNode(&#39;tabindex&#39;); // Must be lowercase!
-<a name="line1381"></a>  if (attrNode &amp;&amp; attrNode.specified) {
-<a name="line1382"></a>    var index = element.tabIndex;
-<a name="line1383"></a>    return goog.isNumber(index) &amp;&amp; index &gt;= 0;
-<a name="line1384"></a>  }
-<a name="line1385"></a>  return false;
-<a name="line1386"></a>};
-<a name="line1387"></a>
+<a name="line1367"></a>
+<a name="line1368"></a>/**
+<a name="line1369"></a> * Returns true if the element has a tab index that allows it to receive
+<a name="line1370"></a> * keyboard focus (tabIndex &gt;= 0), false otherwise.  Note that form elements
+<a name="line1371"></a> * natively support keyboard focus, even if they have no tab index.  See
+<a name="line1372"></a> * http://go/tabindex for more info.
+<a name="line1373"></a> * @param {Element} element Element to check.
+<a name="line1374"></a> * @return {boolean} Whether the element has a tab index that allows keyboard
+<a name="line1375"></a> *     focus.
+<a name="line1376"></a> */
+<a name="line1377"></a>goog.dom.isFocusableTabIndex = function(element) {
+<a name="line1378"></a>  // IE returns 0 for an unset tabIndex, so we must use getAttributeNode(),
+<a name="line1379"></a>  // which returns an object with a &#39;specified&#39; property if tabIndex is
+<a name="line1380"></a>  // specified.  This works on other browsers, too.
+<a name="line1381"></a>  var attrNode = element.getAttributeNode(&#39;tabindex&#39;); // Must be lowercase!
+<a name="line1382"></a>  if (attrNode &amp;&amp; attrNode.specified) {
+<a name="line1383"></a>    var index = element.tabIndex;
+<a name="line1384"></a>    return goog.isNumber(index) &amp;&amp; index &gt;= 0;
+<a name="line1385"></a>  }
+<a name="line1386"></a>  return false;
+<a name="line1387"></a>};
 <a name="line1388"></a>
-<a name="line1389"></a>/**
-<a name="line1390"></a> * Enables or disables keyboard focus support on the element via its tab index.
-<a name="line1391"></a> * Only elements for which {@link goog.dom.isFocusableTabIndex} returns true
-<a name="line1392"></a> * (or elements that natively support keyboard focus, like form elements) can
-<a name="line1393"></a> * receive keyboard focus.  See http://go/tabindex for more info.
-<a name="line1394"></a> * @param {Element} element Element whose tab index is to be changed.
-<a name="line1395"></a> * @param {boolean} enable Whether to set or remove a tab index on the element
-<a name="line1396"></a> *     that supports keyboard focus.
-<a name="line1397"></a> */
-<a name="line1398"></a>goog.dom.setFocusableTabIndex = function(element, enable) {
-<a name="line1399"></a>  if (enable) {
-<a name="line1400"></a>    element.tabIndex = 0;
-<a name="line1401"></a>  } else {
-<a name="line1402"></a>    element.removeAttribute(&#39;tabIndex&#39;); // Must be camelCase!
-<a name="line1403"></a>  }
-<a name="line1404"></a>};
-<a name="line1405"></a>
+<a name="line1389"></a>
+<a name="line1390"></a>/**
+<a name="line1391"></a> * Enables or disables keyboard focus support on the element via its tab index.
+<a name="line1392"></a> * Only elements for which {@link goog.dom.isFocusableTabIndex} returns true
+<a name="line1393"></a> * (or elements that natively support keyboard focus, like form elements) can
+<a name="line1394"></a> * receive keyboard focus.  See http://go/tabindex for more info.
+<a name="line1395"></a> * @param {Element} element Element whose tab index is to be changed.
+<a name="line1396"></a> * @param {boolean} enable Whether to set or remove a tab index on the element
+<a name="line1397"></a> *     that supports keyboard focus.
+<a name="line1398"></a> */
+<a name="line1399"></a>goog.dom.setFocusableTabIndex = function(element, enable) {
+<a name="line1400"></a>  if (enable) {
+<a name="line1401"></a>    element.tabIndex = 0;
+<a name="line1402"></a>  } else {
+<a name="line1403"></a>    element.removeAttribute(&#39;tabIndex&#39;); // Must be camelCase!
+<a name="line1404"></a>  }
+<a name="line1405"></a>};
 <a name="line1406"></a>
-<a name="line1407"></a>/**
-<a name="line1408"></a> * Returns the text content of the current node, without markup and invisible
-<a name="line1409"></a> * symbols. New lines are stripped and whitespace is collapsed,
-<a name="line1410"></a> * such that each character would be visible.
-<a name="line1411"></a> *
-<a name="line1412"></a> * In browsers that support it, innerText is used.  Other browsers attempt to
-<a name="line1413"></a> * simulate it via node traversal.  Line breaks are canonicalized in IE.
-<a name="line1414"></a> *
-<a name="line1415"></a> * @param {Node} node The node from which we are getting content.
-<a name="line1416"></a> * @return {string} The text content.
-<a name="line1417"></a> */
-<a name="line1418"></a>goog.dom.getTextContent = function(node) {
-<a name="line1419"></a>  var textContent;
-<a name="line1420"></a>  // NOTE: Both Opera and Safara 3 supports innerText but they include
-<a name="line1421"></a>  // text nodes in script tags. So we revert to use a user agent test here.
-<a name="line1422"></a>  if (goog.userAgent.IE &amp;&amp; (&#39;innerText&#39; in node)) {
-<a name="line1423"></a>    textContent = goog.string.canonicalizeNewlines(node.innerText);
-<a name="line1424"></a>    // Unfortunately .innerText() returns text with &amp;shy; symbols
-<a name="line1425"></a>    // We need to filter it out and then remove duplicate whitespaces
-<a name="line1426"></a>  } else {
-<a name="line1427"></a>    var buf = [];
-<a name="line1428"></a>    goog.dom.getTextContent_(node, buf, true);
-<a name="line1429"></a>    textContent = buf.join(&#39;&#39;);
-<a name="line1430"></a>  }
-<a name="line1431"></a>
-<a name="line1432"></a>  // Strip &amp;shy; entities. goog.format.insertWordBreaks inserts them in Opera.
-<a name="line1433"></a>  textContent = textContent.replace(/\xAD/g, &#39;&#39;);
-<a name="line1434"></a>
-<a name="line1435"></a>  textContent = textContent.replace(/ +/g, &#39; &#39;);
-<a name="line1436"></a>  if (textContent != &#39; &#39;) {
-<a name="line1437"></a>    textContent = textContent.replace(/^\s*/, &#39;&#39;);
-<a name="line1438"></a>  }
-<a name="line1439"></a>
-<a name="line1440"></a>  return textContent;
-<a name="line1441"></a>};
-<a name="line1442"></a>
+<a name="line1407"></a>
+<a name="line1408"></a>/**
+<a name="line1409"></a> * Returns the text content of the current node, without markup and invisible
+<a name="line1410"></a> * symbols. New lines are stripped and whitespace is collapsed,
+<a name="line1411"></a> * such that each character would be visible.
+<a name="line1412"></a> *
+<a name="line1413"></a> * In browsers that support it, innerText is used.  Other browsers attempt to
+<a name="line1414"></a> * simulate it via node traversal.  Line breaks are canonicalized in IE.
+<a name="line1415"></a> *
+<a name="line1416"></a> * @param {Node} node The node from which we are getting content.
+<a name="line1417"></a> * @return {string} The text content.
+<a name="line1418"></a> */
+<a name="line1419"></a>goog.dom.getTextContent = function(node) {
+<a name="line1420"></a>  var textContent;
+<a name="line1421"></a>  // NOTE: Both Opera and Safara 3 supports innerText but they include
+<a name="line1422"></a>  // text nodes in script tags. So we revert to use a user agent test here.
+<a name="line1423"></a>  if (goog.userAgent.IE &amp;&amp; (&#39;innerText&#39; in node)) {
+<a name="line1424"></a>    textContent = goog.string.canonicalizeNewlines(node.innerText);
+<a name="line1425"></a>    // Unfortunately .innerText() returns text with &amp;shy; symbols
+<a name="line1426"></a>    // We need to filter it out and then remove duplicate whitespaces
+<a name="line1427"></a>  } else {
+<a name="line1428"></a>    var buf = [];
+<a name="line1429"></a>    goog.dom.getTextContent_(node, buf, true);
+<a name="line1430"></a>    textContent = buf.join(&#39;&#39;);
+<a name="line1431"></a>  }
+<a name="line1432"></a>
+<a name="line1433"></a>  // Strip &amp;shy; entities. goog.format.insertWordBreaks inserts them in Opera.
+<a name="line1434"></a>  textContent = textContent.replace(/\xAD/g, &#39;&#39;);
+<a name="line1435"></a>
+<a name="line1436"></a>  textContent = textContent.replace(/ +/g, &#39; &#39;);
+<a name="line1437"></a>  if (textContent != &#39; &#39;) {
+<a name="line1438"></a>    textContent = textContent.replace(/^\s*/, &#39;&#39;);
+<a name="line1439"></a>  }
+<a name="line1440"></a>
+<a name="line1441"></a>  return textContent;
+<a name="line1442"></a>};
 <a name="line1443"></a>
-<a name="line1444"></a>/**
-<a name="line1445"></a> * Returns the text content of the current node, without markup.
-<a name="line1446"></a> *
-<a name="line1447"></a> * Unlike {@code getTextContent} this method does not collapse whitespaces
-<a name="line1448"></a> * or normalize lines breaks.
-<a name="line1449"></a> *
-<a name="line1450"></a> * @param {Node} node The node from which we are getting content.
-<a name="line1451"></a> * @return {string} The raw text content.
-<a name="line1452"></a> */
-<a name="line1453"></a>goog.dom.getRawTextContent = function(node) {
-<a name="line1454"></a>  var buf = [];
-<a name="line1455"></a>  goog.dom.getTextContent_(node, buf, false);
-<a name="line1456"></a>
-<a name="line1457"></a>  return buf.join(&#39;&#39;);
-<a name="line1458"></a>};
-<a name="line1459"></a>
+<a name="line1444"></a>
+<a name="line1445"></a>/**
+<a name="line1446"></a> * Returns the text content of the current node, without markup.
+<a name="line1447"></a> *
+<a name="line1448"></a> * Unlike {@code getTextContent} this method does not collapse whitespaces
+<a name="line1449"></a> * or normalize lines breaks.
+<a name="line1450"></a> *
+<a name="line1451"></a> * @param {Node} node The node from which we are getting content.
+<a name="line1452"></a> * @return {string} The raw text content.
+<a name="line1453"></a> */
+<a name="line1454"></a>goog.dom.getRawTextContent = function(node) {
+<a name="line1455"></a>  var buf = [];
+<a name="line1456"></a>  goog.dom.getTextContent_(node, buf, false);
+<a name="line1457"></a>
+<a name="line1458"></a>  return buf.join(&#39;&#39;);
+<a name="line1459"></a>};
 <a name="line1460"></a>
-<a name="line1461"></a>/**
-<a name="line1462"></a> * Recursive support function for text content retrieval.
-<a name="line1463"></a> *
-<a name="line1464"></a> * @param {Node} node The node from which we are getting content.
-<a name="line1465"></a> * @param {Array} buf string buffer.
-<a name="line1466"></a> * @param {boolean} normalizeWhitespace Whether to normalize whitespace.
-<a name="line1467"></a> * @private
-<a name="line1468"></a> */
-<a name="line1469"></a>goog.dom.getTextContent_ = function(node, buf, normalizeWhitespace) {
-<a name="line1470"></a>  if (node.nodeName in goog.dom.TAGS_TO_IGNORE_) {
-<a name="line1471"></a>    // ignore certain tags
-<a name="line1472"></a>  } else if (node.nodeType == goog.dom.NodeType.TEXT) {
-<a name="line1473"></a>    if (normalizeWhitespace) {
-<a name="line1474"></a>      buf.push(String(node.nodeValue).replace(/(\r\n|\r|\n)/g, &#39;&#39;));
-<a name="line1475"></a>    } else {
-<a name="line1476"></a>      buf.push(node.nodeValue);
-<a name="line1477"></a>    }
-<a name="line1478"></a>  } else if (node.nodeName in goog.dom.PREDEFINED_TAG_VALUES_) {
-<a name="line1479"></a>    buf.push(goog.dom.PREDEFINED_TAG_VALUES_[node.nodeName]);
-<a name="line1480"></a>  } else {
-<a name="line1481"></a>    var child = node.firstChild;
-<a name="line1482"></a>    while (child) {
-<a name="line1483"></a>      goog.dom.getTextContent_(child, buf, normalizeWhitespace);
-<a name="line1484"></a>      child = child.nextSibling;
-<a name="line1485"></a>    }
-<a name="line1486"></a>  }
-<a name="line1487"></a>};
-<a name="line1488"></a>
+<a name="line1461"></a>
+<a name="line1462"></a>/**
+<a name="line1463"></a> * Recursive support function for text content retrieval.
+<a name="line1464"></a> *
+<a name="line1465"></a> * @param {Node} node The node from which we are getting content.
+<a name="line1466"></a> * @param {Array} buf string buffer.
+<a name="line1467"></a> * @param {boolean} normalizeWhitespace Whether to normalize whitespace.
+<a name="line1468"></a> * @private
+<a name="line1469"></a> */
+<a name="line1470"></a>goog.dom.getTextContent_ = function(node, buf, normalizeWhitespace) {
+<a name="line1471"></a>  if (node.nodeName in goog.dom.TAGS_TO_IGNORE_) {
+<a name="line1472"></a>    // ignore certain tags
+<a name="line1473"></a>  } else if (node.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line1474"></a>    if (normalizeWhitespace) {
+<a name="line1475"></a>      buf.push(String(node.nodeValue).replace(/(\r\n|\r|\n)/g, &#39;&#39;));
+<a name="line1476"></a>    } else {
+<a name="line1477"></a>      buf.push(node.nodeValue);
+<a name="line1478"></a>    }
+<a name="line1479"></a>  } else if (node.nodeName in goog.dom.PREDEFINED_TAG_VALUES_) {
+<a name="line1480"></a>    buf.push(goog.dom.PREDEFINED_TAG_VALUES_[node.nodeName]);
+<a name="line1481"></a>  } else {
+<a name="line1482"></a>    var child = node.firstChild;
+<a name="line1483"></a>    while (child) {
+<a name="line1484"></a>      goog.dom.getTextContent_(child, buf, normalizeWhitespace);
+<a name="line1485"></a>      child = child.nextSibling;
+<a name="line1486"></a>    }
+<a name="line1487"></a>  }
+<a name="line1488"></a>};
 <a name="line1489"></a>
-<a name="line1490"></a>/**
-<a name="line1491"></a> * Returns the text length of the text contained in a node, without markup. This
-<a name="line1492"></a> * is equivalent to the selection length if the node was selected, or the number
-<a name="line1493"></a> * of cursor movements to traverse the node. Images &amp; BRs take one space.  New
-<a name="line1494"></a> * lines are ignored.
-<a name="line1495"></a> *
-<a name="line1496"></a> * @param {Node} node The node whose text content length is being calculated.
-<a name="line1497"></a> * @return {number} The length of {@code node}&#39;s text content.
-<a name="line1498"></a> */
-<a name="line1499"></a>goog.dom.getNodeTextLength = function(node) {
-<a name="line1500"></a>  return goog.dom.getTextContent(node).length;
-<a name="line1501"></a>};
-<a name="line1502"></a>
+<a name="line1490"></a>
+<a name="line1491"></a>/**
+<a name="line1492"></a> * Returns the text length of the text contained in a node, without markup. This
+<a name="line1493"></a> * is equivalent to the selection length if the node was selected, or the number
+<a name="line1494"></a> * of cursor movements to traverse the node. Images &amp; BRs take one space.  New
+<a name="line1495"></a> * lines are ignored.
+<a name="line1496"></a> *
+<a name="line1497"></a> * @param {Node} node The node whose text content length is being calculated.
+<a name="line1498"></a> * @return {number} The length of {@code node}&#39;s text content.
+<a name="line1499"></a> */
+<a name="line1500"></a>goog.dom.getNodeTextLength = function(node) {
+<a name="line1501"></a>  return goog.dom.getTextContent(node).length;
+<a name="line1502"></a>};
 <a name="line1503"></a>
-<a name="line1504"></a>/**
-<a name="line1505"></a> * Returns the text offset of a node relative to one of its ancestors. The text
-<a name="line1506"></a> * length is the same as the length calculated by goog.dom.getNodeTextLength.
-<a name="line1507"></a> *
-<a name="line1508"></a> * @param {Node} node The node whose offset is being calculated.
-<a name="line1509"></a> * @param {Node} opt_offsetParent The node relative to which the offset will
-<a name="line1510"></a> *     be calculated. Defaults to the node&#39;s owner document&#39;s body.
-<a name="line1511"></a> * @return {number} The text offset.
-<a name="line1512"></a> */
-<a name="line1513"></a>goog.dom.getNodeTextOffset = function(node, opt_offsetParent) {
-<a name="line1514"></a>  var root = opt_offsetParent || goog.dom.getOwnerDocument(node).body;
-<a name="line1515"></a>  var buf = [];
-<a name="line1516"></a>  while (node &amp;&amp; node != root) {
-<a name="line1517"></a>    var cur = node;
-<a name="line1518"></a>    while ((cur = cur.previousSibling)) {
-<a name="line1519"></a>      buf.unshift(goog.dom.getTextContent(cur));
-<a name="line1520"></a>    }
-<a name="line1521"></a>    node = node.parentNode;
-<a name="line1522"></a>  }
-<a name="line1523"></a>  // Trim left to deal with FF cases when there might be line breaks and empty
-<a name="line1524"></a>  // nodes at the front of the text
-<a name="line1525"></a>  return goog.string.trimLeft(buf.join(&#39;&#39;)).replace(/ +/g, &#39; &#39;).length;
-<a name="line1526"></a>};
-<a name="line1527"></a>
+<a name="line1504"></a>
+<a name="line1505"></a>/**
+<a name="line1506"></a> * Returns the text offset of a node relative to one of its ancestors. The text
+<a name="line1507"></a> * length is the same as the length calculated by goog.dom.getNodeTextLength.
+<a name="line1508"></a> *
+<a name="line1509"></a> * @param {Node} node The node whose offset is being calculated.
+<a name="line1510"></a> * @param {Node} opt_offsetParent The node relative to which the offset will
+<a name="line1511"></a> *     be calculated. Defaults to the node&#39;s owner document&#39;s body.
+<a name="line1512"></a> * @return {number} The text offset.
+<a name="line1513"></a> */
+<a name="line1514"></a>goog.dom.getNodeTextOffset = function(node, opt_offsetParent) {
+<a name="line1515"></a>  var root = opt_offsetParent || goog.dom.getOwnerDocument(node).body;
+<a name="line1516"></a>  var buf = [];
+<a name="line1517"></a>  while (node &amp;&amp; node != root) {
+<a name="line1518"></a>    var cur = node;
+<a name="line1519"></a>    while ((cur = cur.previousSibling)) {
+<a name="line1520"></a>      buf.unshift(goog.dom.getTextContent(cur));
+<a name="line1521"></a>    }
+<a name="line1522"></a>    node = node.parentNode;
+<a name="line1523"></a>  }
+<a name="line1524"></a>  // Trim left to deal with FF cases when there might be line breaks and empty
+<a name="line1525"></a>  // nodes at the front of the text
+<a name="line1526"></a>  return goog.string.trimLeft(buf.join(&#39;&#39;)).replace(/ +/g, &#39; &#39;).length;
+<a name="line1527"></a>};
 <a name="line1528"></a>
-<a name="line1529"></a>/**
-<a name="line1530"></a> * Returns the node at a given offset in a parent node.  If an object is
-<a name="line1531"></a> * provided for the optional third parameter, the node and the remainder of the
-<a name="line1532"></a> * offset will stored as properties of this object.
-<a name="line1533"></a> * @param {Node} parent The parent node.
-<a name="line1534"></a> * @param {number} offset The offset into the parent node.
-<a name="line1535"></a> * @param {Object} opt_result Object to be used to store the return value. The
-<a name="line1536"></a> *     return value will be stored in the form {node: Node, remainder: number}
-<a name="line1537"></a> *     if this object is provided.
-<a name="line1538"></a> * @return {Node} The node at the given offset.
-<a name="line1539"></a> */
-<a name="line1540"></a>goog.dom.getNodeAtOffset = function(parent, offset, opt_result) {
-<a name="line1541"></a>  var stack = [parent], pos = 0, cur;
-<a name="line1542"></a>  while (stack.length &gt; 0 &amp;&amp; pos &lt; offset) {
-<a name="line1543"></a>    cur = stack.pop();
-<a name="line1544"></a>    if (cur.nodeName in goog.dom.TAGS_TO_IGNORE_) {
-<a name="line1545"></a>      // ignore certain tags
-<a name="line1546"></a>    } else if (cur.nodeType == goog.dom.NodeType.TEXT) {
-<a name="line1547"></a>      var text = cur.nodeValue.replace(/(\r\n|\r|\n)/g, &#39;&#39;).replace(/ +/g, &#39; &#39;);
-<a name="line1548"></a>      pos += text.length;
-<a name="line1549"></a>    } else if (cur.nodeName in goog.dom.PREDEFINED_TAG_VALUES_) {
-<a name="line1550"></a>      pos += goog.dom.PREDEFINED_TAG_VALUES_[cur.nodeName].length;
-<a name="line1551"></a>    } else {
-<a name="line1552"></a>      for (var i = cur.childNodes.length - 1; i &gt;= 0; i--) {
-<a name="line1553"></a>        stack.push(cur.childNodes[i]);
-<a name="line1554"></a>      }
-<a name="line1555"></a>    }
-<a name="line1556"></a>  }
-<a name="line1557"></a>  if (goog.isObject(opt_result)) {
-<a name="line1558"></a>    opt_result.remainder = cur ? cur.nodeValue.length + offset - pos - 1 : 0;
-<a name="line1559"></a>    opt_result.node = cur;
-<a name="line1560"></a>  }
-<a name="line1561"></a>
-<a name="line1562"></a>  return cur;
-<a name="line1563"></a>};
-<a name="line1564"></a>
+<a name="line1529"></a>
+<a name="line1530"></a>/**
+<a name="line1531"></a> * Returns the node at a given offset in a parent node.  If an object is
+<a name="line1532"></a> * provided for the optional third parameter, the node and the remainder of the
+<a name="line1533"></a> * offset will stored as properties of this object.
+<a name="line1534"></a> * @param {Node} parent The parent node.
+<a name="line1535"></a> * @param {number} offset The offset into the parent node.
+<a name="line1536"></a> * @param {Object} opt_result Object to be used to store the return value. The
+<a name="line1537"></a> *     return value will be stored in the form {node: Node, remainder: number}
+<a name="line1538"></a> *     if this object is provided.
+<a name="line1539"></a> * @return {Node} The node at the given offset.
+<a name="line1540"></a> */
+<a name="line1541"></a>goog.dom.getNodeAtOffset = function(parent, offset, opt_result) {
+<a name="line1542"></a>  var stack = [parent], pos = 0, cur;
+<a name="line1543"></a>  while (stack.length &gt; 0 &amp;&amp; pos &lt; offset) {
+<a name="line1544"></a>    cur = stack.pop();
+<a name="line1545"></a>    if (cur.nodeName in goog.dom.TAGS_TO_IGNORE_) {
+<a name="line1546"></a>      // ignore certain tags
+<a name="line1547"></a>    } else if (cur.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line1548"></a>      var text = cur.nodeValue.replace(/(\r\n|\r|\n)/g, &#39;&#39;).replace(/ +/g, &#39; &#39;);
+<a name="line1549"></a>      pos += text.length;
+<a name="line1550"></a>    } else if (cur.nodeName in goog.dom.PREDEFINED_TAG_VALUES_) {
+<a name="line1551"></a>      pos += goog.dom.PREDEFINED_TAG_VALUES_[cur.nodeName].length;
+<a name="line1552"></a>    } else {
+<a name="line1553"></a>      for (var i = cur.childNodes.length - 1; i &gt;= 0; i--) {
+<a name="line1554"></a>        stack.push(cur.childNodes[i]);
+<a name="line1555"></a>      }
+<a name="line1556"></a>    }
+<a name="line1557"></a>  }
+<a name="line1558"></a>  if (goog.isObject(opt_result)) {
+<a name="line1559"></a>    opt_result.remainder = cur ? cur.nodeValue.length + offset - pos - 1 : 0;
+<a name="line1560"></a>    opt_result.node = cur;
+<a name="line1561"></a>  }
+<a name="line1562"></a>
+<a name="line1563"></a>  return cur;
+<a name="line1564"></a>};
 <a name="line1565"></a>
-<a name="line1566"></a>/**
-<a name="line1567"></a> * Returns true if the object is a {@code NodeList}.  To qualify as a NodeList,
-<a name="line1568"></a> * the object must have a numeric length property and an item function (which
-<a name="line1569"></a> * has type &#39;string&#39; on IE for some reason).
-<a name="line1570"></a> * @param {Object?} val Object to test.
-<a name="line1571"></a> * @return {boolean} Whether the object is a NodeList.
-<a name="line1572"></a> */
-<a name="line1573"></a>goog.dom.isNodeList = function(val) {
-<a name="line1574"></a>  // TODO: Now the isNodeList is part of goog.dom we can use
-<a name="line1575"></a>  // goog.userAgent to make this simpler.
-<a name="line1576"></a>  // A NodeList must have a length property of type &#39;number&#39; on all platforms.
-<a name="line1577"></a>  if (val &amp;&amp; typeof val.length == &#39;number&#39;) {
-<a name="line1578"></a>    // A NodeList is an object everywhere except Safari, where it&#39;s a function.
-<a name="line1579"></a>    if (goog.isObject(val)) {
-<a name="line1580"></a>      // A NodeList must have an item function (on non-IE platforms) or an item
-<a name="line1581"></a>      // property of type &#39;string&#39; (on IE).
-<a name="line1582"></a>      return typeof val.item == &#39;function&#39; || typeof val.item == &#39;string&#39;;
-<a name="line1583"></a>    } else if (goog.isFunction(val)) {
-<a name="line1584"></a>      // On Safari, a NodeList is a function with an item property that is also
-<a name="line1585"></a>      // a function.
-<a name="line1586"></a>      return typeof val.item == &#39;function&#39;;
-<a name="line1587"></a>    }
-<a name="line1588"></a>  }
-<a name="line1589"></a>
-<a name="line1590"></a>  // Not a NodeList.
-<a name="line1591"></a>  return false;
-<a name="line1592"></a>};
-<a name="line1593"></a>
+<a name="line1566"></a>
+<a name="line1567"></a>/**
+<a name="line1568"></a> * Returns true if the object is a {@code NodeList}.  To qualify as a NodeList,
+<a name="line1569"></a> * the object must have a numeric length property and an item function (which
+<a name="line1570"></a> * has type &#39;string&#39; on IE for some reason).
+<a name="line1571"></a> * @param {Object} val Object to test.
+<a name="line1572"></a> * @return {boolean} Whether the object is a NodeList.
+<a name="line1573"></a> */
+<a name="line1574"></a>goog.dom.isNodeList = function(val) {
+<a name="line1575"></a>  // TODO: Now the isNodeList is part of goog.dom we can use
+<a name="line1576"></a>  // goog.userAgent to make this simpler.
+<a name="line1577"></a>  // A NodeList must have a length property of type &#39;number&#39; on all platforms.
+<a name="line1578"></a>  if (val &amp;&amp; typeof val.length == &#39;number&#39;) {
+<a name="line1579"></a>    // A NodeList is an object everywhere except Safari, where it&#39;s a function.
+<a name="line1580"></a>    if (goog.isObject(val)) {
+<a name="line1581"></a>      // A NodeList must have an item function (on non-IE platforms) or an item
+<a name="line1582"></a>      // property of type &#39;string&#39; (on IE).
+<a name="line1583"></a>      return typeof val.item == &#39;function&#39; || typeof val.item == &#39;string&#39;;
+<a name="line1584"></a>    } else if (goog.isFunction(val)) {
+<a name="line1585"></a>      // On Safari, a NodeList is a function with an item property that is also
+<a name="line1586"></a>      // a function.
+<a name="line1587"></a>      return typeof val.item == &#39;function&#39;;
+<a name="line1588"></a>    }
+<a name="line1589"></a>  }
+<a name="line1590"></a>
+<a name="line1591"></a>  // Not a NodeList.
+<a name="line1592"></a>  return false;
+<a name="line1593"></a>};
 <a name="line1594"></a>
-<a name="line1595"></a>/**
-<a name="line1596"></a> * Walks up the DOM hierarchy returning the first ancestor that has the passed
-<a name="line1597"></a> * tag name and/or class name. If the passed element matches the specified
-<a name="line1598"></a> * criteria, the element itself is returned.
-<a name="line1599"></a> * @param {Node} element The DOM node to start with.
-<a name="line1600"></a> * @param {?string} opt_tag The tag name to match (or null/undefined to match
-<a name="line1601"></a> *     any node regardless of tag name). Must be uppercase (goog.dom.TagName).
-<a name="line1602"></a> * @param {?string} opt_class The class name to match (or null/undefined to
-<a name="line1603"></a> *     match any node regardless of class name).
-<a name="line1604"></a> * @return {Node?} The first ancestor that matches the passed criteria, or
-<a name="line1605"></a> *     null if none match.
-<a name="line1606"></a> */
-<a name="line1607"></a>goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
-<a name="line1608"></a>  return goog.dom.getAncestor(element,
-<a name="line1609"></a>      function(node) {
-<a name="line1610"></a>        return (!opt_tag || node.nodeName == opt_tag) &amp;&amp;
-<a name="line1611"></a>               (!opt_class || goog.dom.classes.has(node, opt_class));
-<a name="line1612"></a>      }, true);
-<a name="line1613"></a>};
-<a name="line1614"></a>
+<a name="line1595"></a>
+<a name="line1596"></a>/**
+<a name="line1597"></a> * Walks up the DOM hierarchy returning the first ancestor that has the passed
+<a name="line1598"></a> * tag name and/or class name. If the passed element matches the specified
+<a name="line1599"></a> * criteria, the element itself is returned.
+<a name="line1600"></a> * @param {Node} element The DOM node to start with.
+<a name="line1601"></a> * @param {?string} opt_tag The tag name to match (or null/undefined to match
+<a name="line1602"></a> *     any node regardless of tag name). Must be uppercase (goog.dom.TagName).
+<a name="line1603"></a> * @param {?string} opt_class The class name to match (or null/undefined to
+<a name="line1604"></a> *     match any node regardless of class name).
+<a name="line1605"></a> * @return {Node} The first ancestor that matches the passed criteria, or
+<a name="line1606"></a> *     null if none match.
+<a name="line1607"></a> */
+<a name="line1608"></a>goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
+<a name="line1609"></a>  return goog.dom.getAncestor(element,
+<a name="line1610"></a>      function(node) {
+<a name="line1611"></a>        return (!opt_tag || node.nodeName == opt_tag) &amp;&amp;
+<a name="line1612"></a>               (!opt_class || goog.dom.classes.has(node, opt_class));
+<a name="line1613"></a>      }, true);
+<a name="line1614"></a>};
 <a name="line1615"></a>
-<a name="line1616"></a>/**
-<a name="line1617"></a> * Walks up the DOM hierarchy returning the first ancestor that passes the
-<a name="line1618"></a> * matcher function.
-<a name="line1619"></a> * @param {Node} element The DOM node to start with.
-<a name="line1620"></a> * @param {function(Node) : boolean} matcher A function that returns true if the
-<a name="line1621"></a> *     passed node matches the desired criteria.
-<a name="line1622"></a> * @param {boolean} opt_includeNode If true, the node itself is included in
-<a name="line1623"></a> *     the search (the first call to the matcher will pass startElement as
-<a name="line1624"></a> *     the node to test).
-<a name="line1625"></a> * @param {number} opt_maxSearchSteps Maximum number of levels to search up the
-<a name="line1626"></a> *     dom.
-<a name="line1627"></a> * @return {Node?} DOM node that matched the matcher, or null if there was
-<a name="line1628"></a> *     no match.
-<a name="line1629"></a> */
-<a name="line1630"></a>goog.dom.getAncestor = function(
-<a name="line1631"></a>    element, matcher, opt_includeNode, opt_maxSearchSteps) {
-<a name="line1632"></a>  if (!opt_includeNode) {
-<a name="line1633"></a>    element = element.parentNode;
-<a name="line1634"></a>  }
-<a name="line1635"></a>  var ignoreSearchSteps = opt_maxSearchSteps == null;
-<a name="line1636"></a>  var steps = 0;
-<a name="line1637"></a>  while (element &amp;&amp; (ignoreSearchSteps || steps &lt;= opt_maxSearchSteps)) {
-<a name="line1638"></a>    if (matcher(element)) {
-<a name="line1639"></a>      return element;
-<a name="line1640"></a>    }
-<a name="line1641"></a>    element = element.parentNode;
-<a name="line1642"></a>    steps++;
-<a name="line1643"></a>  }
-<a name="line1644"></a>  // Reached the root of the DOM without a match
-<a name="line1645"></a>  return null;
-<a name="line1646"></a>};
-<a name="line1647"></a>
+<a name="line1616"></a>
+<a name="line1617"></a>/**
+<a name="line1618"></a> * Walks up the DOM hierarchy returning the first ancestor that passes the
+<a name="line1619"></a> * matcher function.
+<a name="line1620"></a> * @param {Node} element The DOM node to start with.
+<a name="line1621"></a> * @param {function(Node) : boolean} matcher A function that returns true if the
+<a name="line1622"></a> *     passed node matches the desired criteria.
+<a name="line1623"></a> * @param {boolean} opt_includeNode If true, the node itself is included in
+<a name="line1624"></a> *     the search (the first call to the matcher will pass startElement as
+<a name="line1625"></a> *     the node to test).
+<a name="line1626"></a> * @param {number} opt_maxSearchSteps Maximum number of levels to search up the
+<a name="line1627"></a> *     dom.
+<a name="line1628"></a> * @return {Node} DOM node that matched the matcher, or null if there was
+<a name="line1629"></a> *     no match.
+<a name="line1630"></a> */
+<a name="line1631"></a>goog.dom.getAncestor = function(
+<a name="line1632"></a>    element, matcher, opt_includeNode, opt_maxSearchSteps) {
+<a name="line1633"></a>  if (!opt_includeNode) {
+<a name="line1634"></a>    element = element.parentNode;
+<a name="line1635"></a>  }
+<a name="line1636"></a>  var ignoreSearchSteps = opt_maxSearchSteps == null;
+<a name="line1637"></a>  var steps = 0;
+<a name="line1638"></a>  while (element &amp;&amp; (ignoreSearchSteps || steps &lt;= opt_maxSearchSteps)) {
+<a name="line1639"></a>    if (matcher(element)) {
+<a name="line1640"></a>      return element;
+<a name="line1641"></a>    }
+<a name="line1642"></a>    element = element.parentNode;
+<a name="line1643"></a>    steps++;
+<a name="line1644"></a>  }
+<a name="line1645"></a>  // Reached the root of the DOM without a match
+<a name="line1646"></a>  return null;
+<a name="line1647"></a>};
 <a name="line1648"></a>
-<a name="line1649"></a>/**
-<a name="line1650"></a> * Create an instance of a DOM helper with a new document object.
-<a name="line1651"></a> * @param {Document} opt_document Document object to associate with this
-<a name="line1652"></a> *     DOM helper.
-<a name="line1653"></a> * @constructor
-<a name="line1654"></a> */
-<a name="line1655"></a>goog.dom.DomHelper = function(opt_document) {
-<a name="line1656"></a>  /**
-<a name="line1657"></a>   * Reference to the document object to use
-<a name="line1658"></a>   * @type {!Document}
-<a name="line1659"></a>   * @private
-<a name="line1660"></a>   */
-<a name="line1661"></a>  this.document_ = opt_document || goog.global.document || document;
-<a name="line1662"></a>};
-<a name="line1663"></a>
+<a name="line1649"></a>
+<a name="line1650"></a>/**
+<a name="line1651"></a> * Create an instance of a DOM helper with a new document object.
+<a name="line1652"></a> * @param {Document} opt_document Document object to associate with this
+<a name="line1653"></a> *     DOM helper.
+<a name="line1654"></a> * @constructor
+<a name="line1655"></a> */
+<a name="line1656"></a>goog.dom.DomHelper = function(opt_document) {
+<a name="line1657"></a>  /**
+<a name="line1658"></a>   * Reference to the document object to use
+<a name="line1659"></a>   * @type {!Document}
+<a name="line1660"></a>   * @private
+<a name="line1661"></a>   */
+<a name="line1662"></a>  this.document_ = opt_document || goog.global.document || document;
+<a name="line1663"></a>};
 <a name="line1664"></a>
-<a name="line1665"></a>/**
-<a name="line1666"></a> * Gets the dom helper object for the document where the element resides.
-<a name="line1667"></a> * @param {Node} opt_node If present, gets the DomHelper for this node.
-<a name="line1668"></a> * @return {!goog.dom.DomHelper} The DomHelper.
-<a name="line1669"></a> */
-<a name="line1670"></a>goog.dom.DomHelper.prototype.getDomHelper = goog.dom.getDomHelper;
-<a name="line1671"></a>
+<a name="line1665"></a>
+<a name="line1666"></a>/**
+<a name="line1667"></a> * Gets the dom helper object for the document where the element resides.
+<a name="line1668"></a> * @param {Node} opt_node If present, gets the DomHelper for this node.
+<a name="line1669"></a> * @return {!goog.dom.DomHelper} The DomHelper.
+<a name="line1670"></a> */
+<a name="line1671"></a>goog.dom.DomHelper.prototype.getDomHelper = goog.dom.getDomHelper;
 <a name="line1672"></a>
-<a name="line1673"></a>/**
-<a name="line1674"></a> * Sets the document object.
-<a name="line1675"></a> * @param {!Document} document Document object.
-<a name="line1676"></a> */
-<a name="line1677"></a>goog.dom.DomHelper.prototype.setDocument = function(document) {
-<a name="line1678"></a>  this.document_ = document;
-<a name="line1679"></a>};
-<a name="line1680"></a>
+<a name="line1673"></a>
+<a name="line1674"></a>/**
+<a name="line1675"></a> * Sets the document object.
+<a name="line1676"></a> * @param {!Document} document Document object.
+<a name="line1677"></a> */
+<a name="line1678"></a>goog.dom.DomHelper.prototype.setDocument = function(document) {
+<a name="line1679"></a>  this.document_ = document;
+<a name="line1680"></a>};
 <a name="line1681"></a>
-<a name="line1682"></a>/**
-<a name="line1683"></a> * Gets the document object being used by the dom library.
-<a name="line1684"></a> * @return {!Document} Document object.
-<a name="line1685"></a> */
-<a name="line1686"></a>goog.dom.DomHelper.prototype.getDocument = function() {
-<a name="line1687"></a>  return this.document_;
-<a name="line1688"></a>};
-<a name="line1689"></a>
+<a name="line1682"></a>
+<a name="line1683"></a>/**
+<a name="line1684"></a> * Gets the document object being used by the dom library.
+<a name="line1685"></a> * @return {!Document} Document object.
+<a name="line1686"></a> */
+<a name="line1687"></a>goog.dom.DomHelper.prototype.getDocument = function() {
+<a name="line1688"></a>  return this.document_;
+<a name="line1689"></a>};
 <a name="line1690"></a>
-<a name="line1691"></a>/**
-<a name="line1692"></a> * Alias for {@code getElementById}. If a DOM node is passed in then we just
-<a name="line1693"></a> * return that.
-<a name="line1694"></a> * @param {string|Element} element Element ID or a DOM node.
-<a name="line1695"></a> * @return {Element} The element with the given ID, or the node passed in.
-<a name="line1696"></a> */
-<a name="line1697"></a>goog.dom.DomHelper.prototype.getElement = function(element) {
-<a name="line1698"></a>  if (goog.isString(element)) {
-<a name="line1699"></a>    return this.document_.getElementById(element);
-<a name="line1700"></a>  } else {
-<a name="line1701"></a>    return element;
-<a name="line1702"></a>  }
-<a name="line1703"></a>};
-<a name="line1704"></a>
+<a name="line1691"></a>
+<a name="line1692"></a>/**
+<a name="line1693"></a> * Alias for {@code getElementById}. If a DOM node is passed in then we just
+<a name="line1694"></a> * return that.
+<a name="line1695"></a> * @param {string|Element} element Element ID or a DOM node.
+<a name="line1696"></a> * @return {Element} The element with the given ID, or the node passed in.
+<a name="line1697"></a> */
+<a name="line1698"></a>goog.dom.DomHelper.prototype.getElement = function(element) {
+<a name="line1699"></a>  if (goog.isString(element)) {
+<a name="line1700"></a>    return this.document_.getElementById(element);
+<a name="line1701"></a>  } else {
+<a name="line1702"></a>    return element;
+<a name="line1703"></a>  }
+<a name="line1704"></a>};
 <a name="line1705"></a>
-<a name="line1706"></a>/**
-<a name="line1707"></a> * Alias for {@code getElement}.
-<a name="line1708"></a> * @param {string|Element} element Element ID or a DOM node.
-<a name="line1709"></a> * @return {Element} The element with the given ID, or the node passed in.
-<a name="line1710"></a> */
-<a name="line1711"></a>goog.dom.DomHelper.prototype.$ = goog.dom.DomHelper.prototype.getElement;
-<a name="line1712"></a>
+<a name="line1706"></a>
+<a name="line1707"></a>/**
+<a name="line1708"></a> * Alias for {@code getElement}.
+<a name="line1709"></a> * @param {string|Element} element Element ID or a DOM node.
+<a name="line1710"></a> * @return {Element} The element with the given ID, or the node passed in.
+<a name="line1711"></a> */
+<a name="line1712"></a>goog.dom.DomHelper.prototype.$ = goog.dom.DomHelper.prototype.getElement;
 <a name="line1713"></a>
-<a name="line1714"></a>/**
-<a name="line1715"></a> * Looks up elements by both tag and class name, using browser native functions
-<a name="line1716"></a> * ({@code querySelectorAll}, {@code getElementsByTagName} or
-<a name="line1717"></a> * {@code getElementsByClassName}) where possible. The returned array is a live
-<a name="line1718"></a> * NodeList or a static list depending on the code path taken.
-<a name="line1719"></a> *
-<a name="line1720"></a> * @see goog.dom.query
-<a name="line1721"></a> *
-<a name="line1722"></a> * @param {?string} opt_tag Element tag name or * for all tags.
-<a name="line1723"></a> * @param {?string} opt_class Optional class name.
-<a name="line1724"></a> * @param {Element} opt_el Optional element to look in.
-<a name="line1725"></a> * @return { {length: number} } Array-like list of elements (only a length
-<a name="line1726"></a> *     property and numerical indices are guaranteed to exist).
-<a name="line1727"></a> */
-<a name="line1728"></a>goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(opt_tag,
-<a name="line1729"></a>                                                                     opt_class,
-<a name="line1730"></a>                                                                     opt_el) {
-<a name="line1731"></a>  return goog.dom.getElementsByTagNameAndClass_(this.document_, opt_tag,
-<a name="line1732"></a>                                                opt_class, opt_el);
-<a name="line1733"></a>};
-<a name="line1734"></a>
+<a name="line1714"></a>
+<a name="line1715"></a>/**
+<a name="line1716"></a> * Looks up elements by both tag and class name, using browser native functions
+<a name="line1717"></a> * ({@code querySelectorAll}, {@code getElementsByTagName} or
+<a name="line1718"></a> * {@code getElementsByClassName}) where possible. The returned array is a live
+<a name="line1719"></a> * NodeList or a static list depending on the code path taken.
+<a name="line1720"></a> *
+<a name="line1721"></a> * @see goog.dom.query
+<a name="line1722"></a> *
+<a name="line1723"></a> * @param {?string} opt_tag Element tag name or * for all tags.
+<a name="line1724"></a> * @param {?string} opt_class Optional class name.
+<a name="line1725"></a> * @param {Element} opt_el Optional element to look in.
+<a name="line1726"></a> * @return { {length: number} } Array-like list of elements (only a length
+<a name="line1727"></a> *     property and numerical indices are guaranteed to exist).
+<a name="line1728"></a> */
+<a name="line1729"></a>goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(opt_tag,
+<a name="line1730"></a>                                                                     opt_class,
+<a name="line1731"></a>                                                                     opt_el) {
+<a name="line1732"></a>  return goog.dom.getElementsByTagNameAndClass_(this.document_, opt_tag,
+<a name="line1733"></a>                                                opt_class, opt_el);
+<a name="line1734"></a>};
 <a name="line1735"></a>
-<a name="line1736"></a>/**
-<a name="line1737"></a> * Alias for {@code getElementsByTagNameAndClass}.
-<a name="line1738"></a> * @deprecated Use DomHelper getElementsByTagNameAndClass.
-<a name="line1739"></a> * @see goog.dom.query
-<a name="line1740"></a> *
-<a name="line1741"></a> * @param {?string} opt_tag Element tag name.
-<a name="line1742"></a> * @param {?string} opt_class Optional class name.
-<a name="line1743"></a> * @param {Element} opt_el Optional element to look in.
-<a name="line1744"></a> * @return { {length: number} } Array-like list of elements (only a length
-<a name="line1745"></a> *     property and numerical indices are guaranteed to exist).
-<a name="line1746"></a> */
-<a name="line1747"></a>goog.dom.DomHelper.prototype.$$ =
-<a name="line1748"></a>    goog.dom.DomHelper.prototype.getElementsByTagNameAndClass;
-<a name="line1749"></a>
+<a name="line1736"></a>
+<a name="line1737"></a>/**
+<a name="line1738"></a> * Alias for {@code getElementsByTagNameAndClass}.
+<a name="line1739"></a> * @deprecated Use DomHelper getElementsByTagNameAndClass.
+<a name="line1740"></a> * @see goog.dom.query
+<a name="line1741"></a> *
+<a name="line1742"></a> * @param {?string} opt_tag Element tag name.
+<a name="line1743"></a> * @param {?string} opt_class Optional class name.
+<a name="line1744"></a> * @param {Element} opt_el Optional element to look in.
+<a name="line1745"></a> * @return { {length: number} } Array-like list of elements (only a length
+<a name="line1746"></a> *     property and numerical indices are guaranteed to exist).
+<a name="line1747"></a> */
+<a name="line1748"></a>goog.dom.DomHelper.prototype.$$ =
+<a name="line1749"></a>    goog.dom.DomHelper.prototype.getElementsByTagNameAndClass;
 <a name="line1750"></a>
-<a name="line1751"></a>/**
-<a name="line1752"></a> * Sets a number of properties on a node.
-<a name="line1753"></a> * @param {Element} element DOM node to set properties on.
-<a name="line1754"></a> * @param {Object} properties Hash of property:value pairs.
-<a name="line1755"></a> */
-<a name="line1756"></a>goog.dom.DomHelper.prototype.setProperties = goog.dom.setProperties;
-<a name="line1757"></a>
+<a name="line1751"></a>
+<a name="line1752"></a>/**
+<a name="line1753"></a> * Sets a number of properties on a node.
+<a name="line1754"></a> * @param {Element} element DOM node to set properties on.
+<a name="line1755"></a> * @param {Object} properties Hash of property:value pairs.
+<a name="line1756"></a> */
+<a name="line1757"></a>goog.dom.DomHelper.prototype.setProperties = goog.dom.setProperties;
 <a name="line1758"></a>
-<a name="line1759"></a>/**
-<a name="line1760"></a> * Gets the dimensions of the viewport.
-<a name="line1761"></a> * @param {Window} opt_window Optional window element to test. Defaults to
-<a name="line1762"></a> *     the window of the Dom Helper.
-<a name="line1763"></a> * @return {!goog.math.Size} Object with values &#39;width&#39; and &#39;height&#39;.
-<a name="line1764"></a> */
-<a name="line1765"></a>goog.dom.DomHelper.prototype.getViewportSize = function(opt_window) {
-<a name="line1766"></a>  // TODO: This should not take an argument. That breaks the rule of a
-<a name="line1767"></a>  // a DomHelper representing a single frame/window/document.
-<a name="line1768"></a>  return goog.dom.getViewportSize(opt_window || this.getWindow());
-<a name="line1769"></a>};
-<a name="line1770"></a>
+<a name="line1759"></a>
+<a name="line1760"></a>/**
+<a name="line1761"></a> * Gets the dimensions of the viewport.
+<a name="line1762"></a> * @param {Window} opt_window Optional window element to test. Defaults to
+<a name="line1763"></a> *     the window of the Dom Helper.
+<a name="line1764"></a> * @return {!goog.math.Size} Object with values &#39;width&#39; and &#39;height&#39;.
+<a name="line1765"></a> */
+<a name="line1766"></a>goog.dom.DomHelper.prototype.getViewportSize = function(opt_window) {
+<a name="line1767"></a>  // TODO: This should not take an argument. That breaks the rule of a
+<a name="line1768"></a>  // a DomHelper representing a single frame/window/document.
+<a name="line1769"></a>  return goog.dom.getViewportSize(opt_window || this.getWindow());
+<a name="line1770"></a>};
 <a name="line1771"></a>
-<a name="line1772"></a>/**
-<a name="line1773"></a> * Calculates the height of the document.
-<a name="line1774"></a> *
-<a name="line1775"></a> * @return {number} The height of the document.
-<a name="line1776"></a> */
-<a name="line1777"></a>goog.dom.DomHelper.prototype.getDocumentHeight = function() {
-<a name="line1778"></a>  return goog.dom.getDocumentHeight_(this.getWindow());
-<a name="line1779"></a>};
-<a name="line1780"></a>
+<a name="line1772"></a>
+<a name="line1773"></a>/**
+<a name="line1774"></a> * Calculates the height of the document.
+<a name="line1775"></a> *
+<a name="line1776"></a> * @return {number} The height of the document.
+<a name="line1777"></a> */
+<a name="line1778"></a>goog.dom.DomHelper.prototype.getDocumentHeight = function() {
+<a name="line1779"></a>  return goog.dom.getDocumentHeight_(this.getWindow());
+<a name="line1780"></a>};
 <a name="line1781"></a>
-<a name="line1782"></a>/**
-<a name="line1783"></a> * Returns a dom node with a set of attributes.  This function accepts varargs
-<a name="line1784"></a> * for subsequent nodes to be added.  Subsequent nodes will be added to the
-<a name="line1785"></a> * first node as childNodes.
-<a name="line1786"></a> *
-<a name="line1787"></a> * So:
-<a name="line1788"></a> * &lt;code&gt;createDom(&#39;div&#39;, null, createDom(&#39;p&#39;), createDom(&#39;p&#39;));&lt;/code&gt;
-<a name="line1789"></a> * would return a div with two child paragraphs
-<a name="line1790"></a> *
-<a name="line1791"></a> * An easy way to move all child nodes of an existing element to a new parent
-<a name="line1792"></a> * element is:
-<a name="line1793"></a> * &lt;code&gt;createDom(&#39;div&#39;, null, oldElement.childNodes);&lt;/code&gt;
-<a name="line1794"></a> * which will remove all child nodes from the old element and add them as
-<a name="line1795"></a> * child nodes of the new DIV.
-<a name="line1796"></a> *
-<a name="line1797"></a> * @param {string} tagName Tag to create.
-<a name="line1798"></a> * @param {Object|string} opt_attributes If object, then a map of name-value
-<a name="line1799"></a> *     pairs for attributes. If a string, then this is the className of the new
-<a name="line1800"></a> *     element.
-<a name="line1801"></a> * @param {Object|string|Array|NodeList} var_args Further DOM nodes or strings
-<a name="line1802"></a> *     for text nodes. If one of the var_args is an array or NodeList, its
-<a name="line1803"></a> *     elements will be added as childNodes instead.
-<a name="line1804"></a> * @return {!Element} Reference to a DOM node.
-<a name="line1805"></a> */
-<a name="line1806"></a>goog.dom.DomHelper.prototype.createDom = function(tagName,
-<a name="line1807"></a>                                                  opt_attributes,
-<a name="line1808"></a>                                                  var_args) {
-<a name="line1809"></a>  return goog.dom.createDom_(this.document_, arguments);
-<a name="line1810"></a>};
-<a name="line1811"></a>
+<a name="line1782"></a>
+<a name="line1783"></a>/**
+<a name="line1784"></a> * Returns a dom node with a set of attributes.  This function accepts varargs
+<a name="line1785"></a> * for subsequent nodes to be added.  Subsequent nodes will be added to the
+<a name="line1786"></a> * first node as childNodes.
+<a name="line1787"></a> *
+<a name="line1788"></a> * So:
+<a name="line1789"></a> * &lt;code&gt;createDom(&#39;div&#39;, null, createDom(&#39;p&#39;), createDom(&#39;p&#39;));&lt;/code&gt;
+<a name="line1790"></a> * would return a div with two child paragraphs
+<a name="line1791"></a> *
+<a name="line1792"></a> * An easy way to move all child nodes of an existing element to a new parent
+<a name="line1793"></a> * element is:
+<a name="line1794"></a> * &lt;code&gt;createDom(&#39;div&#39;, null, oldElement.childNodes);&lt;/code&gt;
+<a name="line1795"></a> * which will remove all child nodes from the old element and add them as
+<a name="line1796"></a> * child nodes of the new DIV.
+<a name="line1797"></a> *
+<a name="line1798"></a> * @param {string} tagName Tag to create.
+<a name="line1799"></a> * @param {Object|string} opt_attributes If object, then a map of name-value
+<a name="line1800"></a> *     pairs for attributes. If a string, then this is the className of the new
+<a name="line1801"></a> *     element.
+<a name="line1802"></a> * @param {Object|string|Array|NodeList} var_args Further DOM nodes or strings
+<a name="line1803"></a> *     for text nodes. If one of the var_args is an array or NodeList, its
+<a name="line1804"></a> *     elements will be added as childNodes instead.
+<a name="line1805"></a> * @return {!Element} Reference to a DOM node.
+<a name="line1806"></a> */
+<a name="line1807"></a>goog.dom.DomHelper.prototype.createDom = function(tagName,
+<a name="line1808"></a>                                                  opt_attributes,
+<a name="line1809"></a>                                                  var_args) {
+<a name="line1810"></a>  return goog.dom.createDom_(this.document_, arguments);
+<a name="line1811"></a>};
 <a name="line1812"></a>
-<a name="line1813"></a>/**
-<a name="line1814"></a> * Alias for {@code createDom}.
-<a name="line1815"></a> * @param {string} tagName Tag to create.
-<a name="line1816"></a> * @param {Object|string} opt_attributes If object, then a map of name-value
-<a name="line1817"></a> *     pairs for attributes. If a string, then this is the className of the new
-<a name="line1818"></a> *     element.
-<a name="line1819"></a> * @param {Object|Array} var_args Further DOM nodes or strings for text nodes.
-<a name="line1820"></a> *     If one of the var_args is an array, its children will be added as
-<a name="line1821"></a> *     childNodes instead.
-<a name="line1822"></a> * @return {!Element} Reference to a DOM node.
-<a name="line1823"></a> */
-<a name="line1824"></a>goog.dom.DomHelper.prototype.$dom = goog.dom.DomHelper.prototype.createDom;
-<a name="line1825"></a>
+<a name="line1813"></a>
+<a name="line1814"></a>/**
+<a name="line1815"></a> * Alias for {@code createDom}.
+<a name="line1816"></a> * @param {string} tagName Tag to create.
+<a name="line1817"></a> * @param {Object|string} opt_attributes If object, then a map of name-value
+<a name="line1818"></a> *     pairs for attributes. If a string, then this is the className of the new
+<a name="line1819"></a> *     element.
+<a name="line1820"></a> * @param {Object|Array} var_args Further DOM nodes or strings for text nodes.
+<a name="line1821"></a> *     If one of the var_args is an array, its children will be added as
+<a name="line1822"></a> *     childNodes instead.
+<a name="line1823"></a> * @return {!Element} Reference to a DOM node.
+<a name="line1824"></a> */
+<a name="line1825"></a>goog.dom.DomHelper.prototype.$dom = goog.dom.DomHelper.prototype.createDom;
 <a name="line1826"></a>
-<a name="line1827"></a>/**
-<a name="line1828"></a> * Creates a new element.
-<a name="line1829"></a> * @param {string} name Tag name.
-<a name="line1830"></a> * @return {!Element} The new element.
-<a name="line1831"></a> */
-<a name="line1832"></a>goog.dom.DomHelper.prototype.createElement = function(name) {
-<a name="line1833"></a>  return this.document_.createElement(name);
-<a name="line1834"></a>};
-<a name="line1835"></a>
+<a name="line1827"></a>
+<a name="line1828"></a>/**
+<a name="line1829"></a> * Creates a new element.
+<a name="line1830"></a> * @param {string} name Tag name.
+<a name="line1831"></a> * @return {!Element} The new element.
+<a name="line1832"></a> */
+<a name="line1833"></a>goog.dom.DomHelper.prototype.createElement = function(name) {
+<a name="line1834"></a>  return this.document_.createElement(name);
+<a name="line1835"></a>};
 <a name="line1836"></a>
-<a name="line1837"></a>/**
-<a name="line1838"></a> * Creates a new text node.
-<a name="line1839"></a> * @param {string} content Content.
-<a name="line1840"></a> * @return {!Text} The new text node.
-<a name="line1841"></a> */
-<a name="line1842"></a>goog.dom.DomHelper.prototype.createTextNode = function(content) {
-<a name="line1843"></a>  return this.document_.createTextNode(content);
-<a name="line1844"></a>};
-<a name="line1845"></a>
+<a name="line1837"></a>
+<a name="line1838"></a>/**
+<a name="line1839"></a> * Creates a new text node.
+<a name="line1840"></a> * @param {string} content Content.
+<a name="line1841"></a> * @return {!Text} The new text node.
+<a name="line1842"></a> */
+<a name="line1843"></a>goog.dom.DomHelper.prototype.createTextNode = function(content) {
+<a name="line1844"></a>  return this.document_.createTextNode(content);
+<a name="line1845"></a>};
 <a name="line1846"></a>
-<a name="line1847"></a>/**
-<a name="line1848"></a> * Converts an HTML string into a node or a document fragment.  A single Node
-<a name="line1849"></a> * is used if the {@code htmlString} only generates a single node.  If the
-<a name="line1850"></a> * {@code htmlString} generates multiple nodes then these are put inside a
-<a name="line1851"></a> * {@code DocumentFragment}.
-<a name="line1852"></a> *
-<a name="line1853"></a> * @param {string} htmlString The HTML string to convert.
-<a name="line1854"></a> * @return {!Node} The resulting node.
-<a name="line1855"></a> */
-<a name="line1856"></a>goog.dom.DomHelper.prototype.htmlToDocumentFragment = function(htmlString) {
-<a name="line1857"></a>  return goog.dom.htmlToDocumentFragment_(this.document_, htmlString);
-<a name="line1858"></a>};
-<a name="line1859"></a>
+<a name="line1847"></a>
+<a name="line1848"></a>/**
+<a name="line1849"></a> * Converts an HTML string into a node or a document fragment.  A single Node
+<a name="line1850"></a> * is used if the {@code htmlString} only generates a single node.  If the
+<a name="line1851"></a> * {@code htmlString} generates multiple nodes then these are put inside a
+<a name="line1852"></a> * {@code DocumentFragment}.
+<a name="line1853"></a> *
+<a name="line1854"></a> * @param {string} htmlString The HTML string to convert.
+<a name="line1855"></a> * @return {!Node} The resulting node.
+<a name="line1856"></a> */
+<a name="line1857"></a>goog.dom.DomHelper.prototype.htmlToDocumentFragment = function(htmlString) {
+<a name="line1858"></a>  return goog.dom.htmlToDocumentFragment_(this.document_, htmlString);
+<a name="line1859"></a>};
 <a name="line1860"></a>
-<a name="line1861"></a>/**
-<a name="line1862"></a> * Returns the compatMode of the document.
-<a name="line1863"></a> * @return {string} The result is either CSS1Compat or BackCompat.
-<a name="line1864"></a> * @deprecated use goog.dom.DomHelper.prototype.isCss1CompatMode instead.
-<a name="line1865"></a> */
-<a name="line1866"></a>goog.dom.DomHelper.prototype.getCompatMode = function() {
-<a name="line1867"></a>  return this.isCss1CompatMode() ? &#39;CSS1Compat&#39; : &#39;BackCompat&#39;;
-<a name="line1868"></a>};
-<a name="line1869"></a>
+<a name="line1861"></a>
+<a name="line1862"></a>/**
+<a name="line1863"></a> * Returns the compatMode of the document.
+<a name="line1864"></a> * @return {string} The result is either CSS1Compat or BackCompat.
+<a name="line1865"></a> * @deprecated use goog.dom.DomHelper.prototype.isCss1CompatMode instead.
+<a name="line1866"></a> */
+<a name="line1867"></a>goog.dom.DomHelper.prototype.getCompatMode = function() {
+<a name="line1868"></a>  return this.isCss1CompatMode() ? &#39;CSS1Compat&#39; : &#39;BackCompat&#39;;
+<a name="line1869"></a>};
 <a name="line1870"></a>
-<a name="line1871"></a>/**
-<a name="line1872"></a> * Returns true if the browser is in &quot;CSS1-compatible&quot; (standards-compliant)
-<a name="line1873"></a> * mode, false otherwise.
-<a name="line1874"></a> * @return {boolean} True if in CSS1-compatible mode.
-<a name="line1875"></a> */
-<a name="line1876"></a>goog.dom.DomHelper.prototype.isCss1CompatMode = function() {
-<a name="line1877"></a>  return goog.dom.isCss1CompatMode_(this.document_);
-<a name="line1878"></a>};
-<a name="line1879"></a>
+<a name="line1871"></a>
+<a name="line1872"></a>/**
+<a name="line1873"></a> * Returns true if the browser is in &quot;CSS1-compatible&quot; (standards-compliant)
+<a name="line1874"></a> * mode, false otherwise.
+<a name="line1875"></a> * @return {boolean} True if in CSS1-compatible mode.
+<a name="line1876"></a> */
+<a name="line1877"></a>goog.dom.DomHelper.prototype.isCss1CompatMode = function() {
+<a name="line1878"></a>  return goog.dom.isCss1CompatMode_(this.document_);
+<a name="line1879"></a>};
 <a name="line1880"></a>
-<a name="line1881"></a>/**
-<a name="line1882"></a> * Gets the window object associated with the document.
-<a name="line1883"></a> * @return {!Window} The window associated with the given document.
-<a name="line1884"></a> */
-<a name="line1885"></a>goog.dom.DomHelper.prototype.getWindow = function() {
-<a name="line1886"></a>  return goog.dom.getWindow_(this.document_);
-<a name="line1887"></a>};
-<a name="line1888"></a>
+<a name="line1881"></a>
+<a name="line1882"></a>/**
+<a name="line1883"></a> * Gets the window object associated with the document.
+<a name="line1884"></a> * @return {!Window} The window associated with the given document.
+<a name="line1885"></a> */
+<a name="line1886"></a>goog.dom.DomHelper.prototype.getWindow = function() {
+<a name="line1887"></a>  return goog.dom.getWindow_(this.document_);
+<a name="line1888"></a>};
 <a name="line1889"></a>
-<a name="line1890"></a>/**
-<a name="line1891"></a> * Gets the document scroll element.
-<a name="line1892"></a> * @return {Element} Scrolling element.
-<a name="line1893"></a> */
-<a name="line1894"></a>goog.dom.DomHelper.prototype.getDocumentScrollElement = function() {
-<a name="line1895"></a>  return goog.dom.getDocumentScrollElement_(this.document_);
-<a name="line1896"></a>};
-<a name="line1897"></a>
+<a name="line1890"></a>
+<a name="line1891"></a>/**
+<a name="line1892"></a> * Gets the document scroll element.
+<a name="line1893"></a> * @return {Element} Scrolling element.
+<a name="line1894"></a> */
+<a name="line1895"></a>goog.dom.DomHelper.prototype.getDocumentScrollElement = function() {
+<a name="line1896"></a>  return goog.dom.getDocumentScrollElement_(this.document_);
+<a name="line1897"></a>};
 <a name="line1898"></a>
-<a name="line1899"></a>/**
-<a name="line1900"></a> * Gets the document scroll distance as a coordinate object.
-<a name="line1901"></a> * @return {!goog.math.Coordinate} Object with properties &#39;x&#39; and &#39;y&#39;.
-<a name="line1902"></a> */
-<a name="line1903"></a>goog.dom.DomHelper.prototype.getDocumentScroll = function() {
-<a name="line1904"></a>  return goog.dom.getDocumentScroll_(this.document_);
-<a name="line1905"></a>};
-<a name="line1906"></a>
+<a name="line1899"></a>
+<a name="line1900"></a>/**
+<a name="line1901"></a> * Gets the document scroll distance as a coordinate object.
+<a name="line1902"></a> * @return {!goog.math.Coordinate} Object with properties &#39;x&#39; and &#39;y&#39;.
+<a name="line1903"></a> */
+<a name="line1904"></a>goog.dom.DomHelper.prototype.getDocumentScroll = function() {
+<a name="line1905"></a>  return goog.dom.getDocumentScroll_(this.document_);
+<a name="line1906"></a>};
 <a name="line1907"></a>
-<a name="line1908"></a>/**
-<a name="line1909"></a> * Appends a child to a node.
-<a name="line1910"></a> * @param {Node} parent Parent.
-<a name="line1911"></a> * @param {Node} child Child.
-<a name="line1912"></a> */
-<a name="line1913"></a>goog.dom.DomHelper.prototype.appendChild = goog.dom.appendChild;
-<a name="line1914"></a>
+<a name="line1908"></a>
+<a name="line1909"></a>/**
+<a name="line1910"></a> * Appends a child to a node.
+<a name="line1911"></a> * @param {Node} parent Parent.
+<a name="line1912"></a> * @param {Node} child Child.
+<a name="line1913"></a> */
+<a name="line1914"></a>goog.dom.DomHelper.prototype.appendChild = goog.dom.appendChild;
 <a name="line1915"></a>
-<a name="line1916"></a>/**
-<a name="line1917"></a> * Removes all the child nodes on a DOM node.
-<a name="line1918"></a> * @param {Node} node Node to remove children from.
-<a name="line1919"></a> */
-<a name="line1920"></a>goog.dom.DomHelper.prototype.removeChildren = goog.dom.removeChildren;
-<a name="line1921"></a>
+<a name="line1916"></a>
+<a name="line1917"></a>/**
+<a name="line1918"></a> * Removes all the child nodes on a DOM node.
+<a name="line1919"></a> * @param {Node} node Node to remove children from.
+<a name="line1920"></a> */
+<a name="line1921"></a>goog.dom.DomHelper.prototype.removeChildren = goog.dom.removeChildren;
 <a name="line1922"></a>
-<a name="line1923"></a>/**
-<a name="line1924"></a> * Inserts a new node before an existing reference node (i.e., as the previous
-<a name="line1925"></a> * sibling). If the reference node has no parent, then does nothing.
-<a name="line1926"></a> * @param {Node} newNode Node to insert.
-<a name="line1927"></a> * @param {Node} refNode Reference node to insert before.
-<a name="line1928"></a> */
-<a name="line1929"></a>goog.dom.DomHelper.prototype.insertSiblingBefore = goog.dom.insertSiblingBefore;
-<a name="line1930"></a>
+<a name="line1923"></a>
+<a name="line1924"></a>/**
+<a name="line1925"></a> * Inserts a new node before an existing reference node (i.e., as the previous
+<a name="line1926"></a> * sibling). If the reference node has no parent, then does nothing.
+<a name="line1927"></a> * @param {Node} newNode Node to insert.
+<a name="line1928"></a> * @param {Node} refNode Reference node to insert before.
+<a name="line1929"></a> */
+<a name="line1930"></a>goog.dom.DomHelper.prototype.insertSiblingBefore = goog.dom.insertSiblingBefore;
 <a name="line1931"></a>
-<a name="line1932"></a>/**
-<a name="line1933"></a> * Inserts a new node after an existing reference node (i.e., as the next
-<a name="line1934"></a> * sibling). If the reference node has no parent, then does nothing.
-<a name="line1935"></a> * @param {Node} newNode Node to insert.
-<a name="line1936"></a> * @param {Node} refNode Reference node to insert after.
-<a name="line1937"></a> */
-<a name="line1938"></a>goog.dom.DomHelper.prototype.insertSiblingAfter = goog.dom.insertSiblingAfter;
-<a name="line1939"></a>
+<a name="line1932"></a>
+<a name="line1933"></a>/**
+<a name="line1934"></a> * Inserts a new node after an existing reference node (i.e., as the next
+<a name="line1935"></a> * sibling). If the reference node has no parent, then does nothing.
+<a name="line1936"></a> * @param {Node} newNode Node to insert.
+<a name="line1937"></a> * @param {Node} refNode Reference node to insert after.
+<a name="line1938"></a> */
+<a name="line1939"></a>goog.dom.DomHelper.prototype.insertSiblingAfter = goog.dom.insertSiblingAfter;
 <a name="line1940"></a>
-<a name="line1941"></a>/**
-<a name="line1942"></a> * Removes a node from its parent.
-<a name="line1943"></a> * @param {Node} node The node to remove.
-<a name="line1944"></a> * @return {Node?} The node removed if removed; else, null.
-<a name="line1945"></a> */
-<a name="line1946"></a>goog.dom.DomHelper.prototype.removeNode = goog.dom.removeNode;
-<a name="line1947"></a>
+<a name="line1941"></a>
+<a name="line1942"></a>/**
+<a name="line1943"></a> * Removes a node from its parent.
+<a name="line1944"></a> * @param {Node} node The node to remove.
+<a name="line1945"></a> * @return {Node} The node removed if removed; else, null.
+<a name="line1946"></a> */
+<a name="line1947"></a>goog.dom.DomHelper.prototype.removeNode = goog.dom.removeNode;
 <a name="line1948"></a>
-<a name="line1949"></a>/**
-<a name="line1950"></a> * Replaces a node in the DOM tree. Will do nothing if {@code oldNode} has no
-<a name="line1951"></a> * parent.
-<a name="line1952"></a> * @param {Node} newNode Node to insert.
-<a name="line1953"></a> * @param {Node} oldNode Node to replace.
-<a name="line1954"></a> */
-<a name="line1955"></a>goog.dom.DomHelper.prototype.replaceNode = goog.dom.replaceNode;
-<a name="line1956"></a>
+<a name="line1949"></a>
+<a name="line1950"></a>/**
+<a name="line1951"></a> * Replaces a node in the DOM tree. Will do nothing if {@code oldNode} has no
+<a name="line1952"></a> * parent.
+<a name="line1953"></a> * @param {Node} newNode Node to insert.
+<a name="line1954"></a> * @param {Node} oldNode Node to replace.
+<a name="line1955"></a> */
+<a name="line1956"></a>goog.dom.DomHelper.prototype.replaceNode = goog.dom.replaceNode;
 <a name="line1957"></a>
-<a name="line1958"></a>/**
-<a name="line1959"></a> * Flattens an element. That is, removes it and replace it with its children.
-<a name="line1960"></a> * @param {Element} element The element to flatten.
-<a name="line1961"></a> * @return {Element|undefined} The original element, detached from the document
-<a name="line1962"></a> *     tree, sans children, or undefined if the element was already not in the
-<a name="line1963"></a> *     document.
-<a name="line1964"></a> */
-<a name="line1965"></a>goog.dom.DomHelper.prototype.flattenElement = goog.dom.flattenElement;
-<a name="line1966"></a>
+<a name="line1958"></a>
+<a name="line1959"></a>/**
+<a name="line1960"></a> * Flattens an element. That is, removes it and replace it with its children.
+<a name="line1961"></a> * @param {Element} element The element to flatten.
+<a name="line1962"></a> * @return {Element|undefined} The original element, detached from the document
+<a name="line1963"></a> *     tree, sans children, or undefined if the element was already not in the
+<a name="line1964"></a> *     document.
+<a name="line1965"></a> */
+<a name="line1966"></a>goog.dom.DomHelper.prototype.flattenElement = goog.dom.flattenElement;
 <a name="line1967"></a>
-<a name="line1968"></a>/**
-<a name="line1969"></a> * Returns the first child node that is an element.
-<a name="line1970"></a> * @param {Node} node The node to get the first child element of.
-<a name="line1971"></a> * @return {Element} The first child node of {@code node} that is an element.
-<a name="line1972"></a> */
-<a name="line1973"></a>goog.dom.DomHelper.prototype.getFirstElementChild =
-<a name="line1974"></a>    goog.dom.getFirstElementChild;
-<a name="line1975"></a>
+<a name="line1968"></a>
+<a name="line1969"></a>/**
+<a name="line1970"></a> * Returns the first child node that is an element.
+<a name="line1971"></a> * @param {Node} node The node to get the first child element of.
+<a name="line1972"></a> * @return {Element} The first child node of {@code node} that is an element.
+<a name="line1973"></a> */
+<a name="line1974"></a>goog.dom.DomHelper.prototype.getFirstElementChild =
+<a name="line1975"></a>    goog.dom.getFirstElementChild;
 <a name="line1976"></a>
-<a name="line1977"></a>/**
-<a name="line1978"></a> * Returns the last child node that is an element.
-<a name="line1979"></a> * @param {Node} node The node to get the last child element of.
-<a name="line1980"></a> * @return {Element} The last child node of {@code node} that is an element.
-<a name="line1981"></a> */
-<a name="line1982"></a>goog.dom.DomHelper.prototype.getLastElementChild = goog.dom.getLastElementChild;
-<a name="line1983"></a>
+<a name="line1977"></a>
+<a name="line1978"></a>/**
+<a name="line1979"></a> * Returns the last child node that is an element.
+<a name="line1980"></a> * @param {Node} node The node to get the last child element of.
+<a name="line1981"></a> * @return {Element} The last child node of {@code node} that is an element.
+<a name="line1982"></a> */
+<a name="line1983"></a>goog.dom.DomHelper.prototype.getLastElementChild = goog.dom.getLastElementChild;
 <a name="line1984"></a>
-<a name="line1985"></a>/**
-<a name="line1986"></a> * Returns the first next sibling that is an element.
-<a name="line1987"></a> * @param {Node} node The node to get the next sibling element of.
-<a name="line1988"></a> * @return {Element} The next sibling of {@code node} that is an element.
-<a name="line1989"></a> */
-<a name="line1990"></a>goog.dom.DomHelper.prototype.getNextElementSibling =
-<a name="line1991"></a>    goog.dom.getNextElementSibling;
-<a name="line1992"></a>
+<a name="line1985"></a>
+<a name="line1986"></a>/**
+<a name="line1987"></a> * Returns the first next sibling that is an element.
+<a name="line1988"></a> * @param {Node} node The node to get the next sibling element of.
+<a name="line1989"></a> * @return {Element} The next sibling of {@code node} that is an element.
+<a name="line1990"></a> */
+<a name="line1991"></a>goog.dom.DomHelper.prototype.getNextElementSibling =
+<a name="line1992"></a>    goog.dom.getNextElementSibling;
 <a name="line1993"></a>
-<a name="line1994"></a>/**
-<a name="line1995"></a> * Returns the first previous sibling that is an element.
-<a name="line1996"></a> * @param {Node} node The node to get the previous sibling element of.
-<a name="line1997"></a> * @return {Element} The first previous sibling of {@code node} that is
-<a name="line1998"></a> *     an element.
-<a name="line1999"></a> */
-<a name="line2000"></a>goog.dom.DomHelper.prototype.getPreviousElementSibling =
-<a name="line2001"></a>    goog.dom.getPreviousElementSibling;
-<a name="line2002"></a>
+<a name="line1994"></a>
+<a name="line1995"></a>/**
+<a name="line1996"></a> * Returns the first previous sibling that is an element.
+<a name="line1997"></a> * @param {Node} node The node to get the previous sibling element of.
+<a name="line1998"></a> * @return {Element} The first previous sibling of {@code node} that is
+<a name="line1999"></a> *     an element.
+<a name="line2000"></a> */
+<a name="line2001"></a>goog.dom.DomHelper.prototype.getPreviousElementSibling =
+<a name="line2002"></a>    goog.dom.getPreviousElementSibling;
 <a name="line2003"></a>
-<a name="line2004"></a>/**
-<a name="line2005"></a> * Whether the object looks like a DOM node.
-<a name="line2006"></a> * @param {Object} obj The object being tested for node likeness.
-<a name="line2007"></a> * @return {boolean} Whether the object looks like a DOM node.
-<a name="line2008"></a> */
-<a name="line2009"></a>goog.dom.DomHelper.prototype.isNodeLike = goog.dom.isNodeLike;
-<a name="line2010"></a>
+<a name="line2004"></a>
+<a name="line2005"></a>/**
+<a name="line2006"></a> * Whether the object looks like a DOM node.
+<a name="line2007"></a> * @param {Object} obj The object being tested for node likeness.
+<a name="line2008"></a> * @return {boolean} Whether the object looks like a DOM node.
+<a name="line2009"></a> */
+<a name="line2010"></a>goog.dom.DomHelper.prototype.isNodeLike = goog.dom.isNodeLike;
 <a name="line2011"></a>
-<a name="line2012"></a>/**
-<a name="line2013"></a> * Whether a node contains another node.
-<a name="line2014"></a> * @param {Node} parent The node that should contain the other node.
-<a name="line2015"></a> * @param {Node} descendant The node to test presence of.
-<a name="line2016"></a> * @return {boolean} Whether the parent node contains the descendent node.
-<a name="line2017"></a> */
-<a name="line2018"></a>goog.dom.DomHelper.prototype.contains = goog.dom.contains;
-<a name="line2019"></a>
+<a name="line2012"></a>
+<a name="line2013"></a>/**
+<a name="line2014"></a> * Whether a node contains another node.
+<a name="line2015"></a> * @param {Node} parent The node that should contain the other node.
+<a name="line2016"></a> * @param {Node} descendant The node to test presence of.
+<a name="line2017"></a> * @return {boolean} Whether the parent node contains the descendent node.
+<a name="line2018"></a> */
+<a name="line2019"></a>goog.dom.DomHelper.prototype.contains = goog.dom.contains;
 <a name="line2020"></a>
-<a name="line2021"></a>/**
-<a name="line2022"></a> * Returns the owner document for a node.
-<a name="line2023"></a> * @param {Node} node The node to get the document for.
-<a name="line2024"></a> * @return {!Document} The document owning the node.
-<a name="line2025"></a> */
-<a name="line2026"></a>goog.dom.DomHelper.prototype.getOwnerDocument = goog.dom.getOwnerDocument;
-<a name="line2027"></a>
+<a name="line2021"></a>
+<a name="line2022"></a>/**
+<a name="line2023"></a> * Returns the owner document for a node.
+<a name="line2024"></a> * @param {Node} node The node to get the document for.
+<a name="line2025"></a> * @return {!Document} The document owning the node.
+<a name="line2026"></a> */
+<a name="line2027"></a>goog.dom.DomHelper.prototype.getOwnerDocument = goog.dom.getOwnerDocument;
 <a name="line2028"></a>
-<a name="line2029"></a>/**
-<a name="line2030"></a> * Cross browser function for getting the document element of an iframe.
-<a name="line2031"></a> * @param {HTMLIFrameElement|HTMLFrameElement} iframe Iframe element.
-<a name="line2032"></a> * @return {!HTMLDocument} The frame content document.
-<a name="line2033"></a> */
-<a name="line2034"></a>goog.dom.DomHelper.prototype.getFrameContentDocument =
-<a name="line2035"></a>    goog.dom.getFrameContentDocument;
-<a name="line2036"></a>
+<a name="line2029"></a>
+<a name="line2030"></a>/**
+<a name="line2031"></a> * Cross browser function for getting the document element of an iframe.
+<a name="line2032"></a> * @param {HTMLIFrameElement|HTMLFrameElement} iframe Iframe element.
+<a name="line2033"></a> * @return {!HTMLDocument} The frame content document.
+<a name="line2034"></a> */
+<a name="line2035"></a>goog.dom.DomHelper.prototype.getFrameContentDocument =
+<a name="line2036"></a>    goog.dom.getFrameContentDocument;
 <a name="line2037"></a>
-<a name="line2038"></a>/**
-<a name="line2039"></a> * Cross browser function for getting the window of a frame or iframe.
-<a name="line2040"></a> * @param {HTMLIFrameElement|HTMLFrameElement} frame Frame element.
-<a name="line2041"></a> * @return {Window} The window associated with the given frame.
-<a name="line2042"></a> */
-<a name="line2043"></a>goog.dom.DomHelper.prototype.getFrameContentWindow =
-<a name="line2044"></a>    goog.dom.getFrameContentWindow;
-<a name="line2045"></a>
+<a name="line2038"></a>
+<a name="line2039"></a>/**
+<a name="line2040"></a> * Cross browser function for getting the window of a frame or iframe.
+<a name="line2041"></a> * @param {HTMLIFrameElement|HTMLFrameElement} frame Frame element.
+<a name="line2042"></a> * @return {Window} The window associated with the given frame.
+<a name="line2043"></a> */
+<a name="line2044"></a>goog.dom.DomHelper.prototype.getFrameContentWindow =
+<a name="line2045"></a>    goog.dom.getFrameContentWindow;
 <a name="line2046"></a>
-<a name="line2047"></a>/**
-<a name="line2048"></a> * Cross browser function for setting the text content of an element.
-<a name="line2049"></a> * @param {Element} element The element to change the text content of.
-<a name="line2050"></a> * @param {string} text The string that should replace the current element
-<a name="line2051"></a> *     content with.
-<a name="line2052"></a> */
-<a name="line2053"></a>goog.dom.DomHelper.prototype.setTextContent = goog.dom.setTextContent;
-<a name="line2054"></a>
+<a name="line2047"></a>
+<a name="line2048"></a>/**
+<a name="line2049"></a> * Cross browser function for setting the text content of an element.
+<a name="line2050"></a> * @param {Element} element The element to change the text content of.
+<a name="line2051"></a> * @param {string} text The string that should replace the current element
+<a name="line2052"></a> *     content with.
+<a name="line2053"></a> */
+<a name="line2054"></a>goog.dom.DomHelper.prototype.setTextContent = goog.dom.setTextContent;
 <a name="line2055"></a>
-<a name="line2056"></a>/**
-<a name="line2057"></a> * Finds the first descendant node that matches the filter function. This does
-<a name="line2058"></a> * a depth first search.
-<a name="line2059"></a> * @param {Node} root The root of the tree to search.
-<a name="line2060"></a> * @param {function(Node) : boolean} p The filter function.
-<a name="line2061"></a> * @return {(Node, undefined)} The found node or undefined if none is found.
-<a name="line2062"></a> */
-<a name="line2063"></a>goog.dom.DomHelper.prototype.findNode = goog.dom.findNode;
-<a name="line2064"></a>
+<a name="line2056"></a>
+<a name="line2057"></a>/**
+<a name="line2058"></a> * Finds the first descendant node that matches the filter function. This does
+<a name="line2059"></a> * a depth first search.
+<a name="line2060"></a> * @param {Node} root The root of the tree to search.
+<a name="line2061"></a> * @param {function(Node) : boolean} p The filter function.
+<a name="line2062"></a> * @return {(Node, undefined)} The found node or undefined if none is found.
+<a name="line2063"></a> */
+<a name="line2064"></a>goog.dom.DomHelper.prototype.findNode = goog.dom.findNode;
 <a name="line2065"></a>
-<a name="line2066"></a>/**
-<a name="line2067"></a> * Finds all the descendant nodes that matches the filter function. This does a
-<a name="line2068"></a> * depth first search.
-<a name="line2069"></a> * @param {Node} root The root of the tree to search.
-<a name="line2070"></a> * @param {function(Node) : boolean} p The filter function.
-<a name="line2071"></a> * @return {Array.&lt;Node&gt;} The found nodes or an empty array if none are found.
-<a name="line2072"></a> */
-<a name="line2073"></a>goog.dom.DomHelper.prototype.findNodes = goog.dom.findNodes;
-<a name="line2074"></a>
+<a name="line2066"></a>
+<a name="line2067"></a>/**
+<a name="line2068"></a> * Finds all the descendant nodes that matches the filter function. This does a
+<a name="line2069"></a> * depth first search.
+<a name="line2070"></a> * @param {Node} root The root of the tree to search.
+<a name="line2071"></a> * @param {function(Node) : boolean} p The filter function.
+<a name="line2072"></a> * @return {Array.&lt;Node&gt;} The found nodes or an empty array if none are found.
+<a name="line2073"></a> */
+<a name="line2074"></a>goog.dom.DomHelper.prototype.findNodes = goog.dom.findNodes;
 <a name="line2075"></a>
-<a name="line2076"></a>/**
-<a name="line2077"></a> * Returns the text contents of the current node, without markup. New lines are
-<a name="line2078"></a> * stripped and whitespace is collapsed, such that each character would be
-<a name="line2079"></a> * visible.
-<a name="line2080"></a> *
-<a name="line2081"></a> * In browsers that support it, innerText is used.  Other browsers attempt to
-<a name="line2082"></a> * simulate it via node traversal.  Line breaks are canonicalized in IE.
-<a name="line2083"></a> *
-<a name="line2084"></a> * @param {Node} node The node from which we are getting content.
-<a name="line2085"></a> * @return {string} The text content.
-<a name="line2086"></a> */
-<a name="line2087"></a>goog.dom.DomHelper.prototype.getTextContent = goog.dom.getTextContent;
-<a name="line2088"></a>
+<a name="line2076"></a>
+<a name="line2077"></a>/**
+<a name="line2078"></a> * Returns the text contents of the current node, without markup. New lines are
+<a name="line2079"></a> * stripped and whitespace is collapsed, such that each character would be
+<a name="line2080"></a> * visible.
+<a name="line2081"></a> *
+<a name="line2082"></a> * In browsers that support it, innerText is used.  Other browsers attempt to
+<a name="line2083"></a> * simulate it via node traversal.  Line breaks are canonicalized in IE.
+<a name="line2084"></a> *
+<a name="line2085"></a> * @param {Node} node The node from which we are getting content.
+<a name="line2086"></a> * @return {string} The text content.
+<a name="line2087"></a> */
+<a name="line2088"></a>goog.dom.DomHelper.prototype.getTextContent = goog.dom.getTextContent;
 <a name="line2089"></a>
-<a name="line2090"></a>/**
-<a name="line2091"></a> * Returns the text length of the text contained in a node, without markup. This
-<a name="line2092"></a> * is equivalent to the selection length if the node was selected, or the number
-<a name="line2093"></a> * of cursor movements to traverse the node. Images &amp; BRs take one space.  New
-<a name="line2094"></a> * lines are ignored.
-<a name="line2095"></a> *
-<a name="line2096"></a> * @param {Node} node The node whose text content length is being calculated.
-<a name="line2097"></a> * @return {number} The length of {@code node}&#39;s text content.
-<a name="line2098"></a> */
-<a name="line2099"></a>goog.dom.DomHelper.prototype.getNodeTextLength = goog.dom.getNodeTextLength;
-<a name="line2100"></a>
+<a name="line2090"></a>
+<a name="line2091"></a>/**
+<a name="line2092"></a> * Returns the text length of the text contained in a node, without markup. This
+<a name="line2093"></a> * is equivalent to the selection length if the node was selected, or the number
+<a name="line2094"></a> * of cursor movements to traverse the node. Images &amp; BRs take one space.  New
+<a name="line2095"></a> * lines are ignored.
+<a name="line2096"></a> *
+<a name="line2097"></a> * @param {Node} node The node whose text content length is being calculated.
+<a name="line2098"></a> * @return {number} The length of {@code node}&#39;s text content.
+<a name="line2099"></a> */
+<a name="line2100"></a>goog.dom.DomHelper.prototype.getNodeTextLength = goog.dom.getNodeTextLength;
 <a name="line2101"></a>
-<a name="line2102"></a>/**
-<a name="line2103"></a> * Returns the text offset of a node relative to one of its ancestors. The text
-<a name="line2104"></a> * length is the same as the length calculated by
-<a name="line2105"></a> * {@code goog.dom.getNodeTextLength}.
-<a name="line2106"></a> *
-<a name="line2107"></a> * @param {Node} node The node whose offset is being calculated.
-<a name="line2108"></a> * @param {Node} opt_offsetParent Defaults to the node&#39;s owner document&#39;s body.
-<a name="line2109"></a> * @return {number} The text offset.
-<a name="line2110"></a> */
-<a name="line2111"></a>goog.dom.DomHelper.prototype.getNodeTextOffset = goog.dom.getNodeTextOffset;
-<a name="line2112"></a>
+<a name="line2102"></a>
+<a name="line2103"></a>/**
+<a name="line2104"></a> * Returns the text offset of a node relative to one of its ancestors. The text
+<a name="line2105"></a> * length is the same as the length calculated by
+<a name="line2106"></a> * {@code goog.dom.getNodeTextLength}.
+<a name="line2107"></a> *
+<a name="line2108"></a> * @param {Node} node The node whose offset is being calculated.
+<a name="line2109"></a> * @param {Node} opt_offsetParent Defaults to the node&#39;s owner document&#39;s body.
+<a name="line2110"></a> * @return {number} The text offset.
+<a name="line2111"></a> */
+<a name="line2112"></a>goog.dom.DomHelper.prototype.getNodeTextOffset = goog.dom.getNodeTextOffset;
 <a name="line2113"></a>
-<a name="line2114"></a>/**
-<a name="line2115"></a> * Walks up the DOM hierarchy returning the first ancestor that has the passed
-<a name="line2116"></a> * tag name and/or class name. If the passed element matches the specified
-<a name="line2117"></a> * criteria, the element itself is returned.
-<a name="line2118"></a> * @param {Node} element The DOM node to start with.
-<a name="line2119"></a> * @param {?string} opt_tag The tag name to match (or null/undefined to match
-<a name="line2120"></a> *     any node regardless of tag name). Must be uppercase (goog.dom.TagName).
-<a name="line2121"></a> * @param {?string} opt_class The class name to match (or null/undefined to
-<a name="line2122"></a> *     match any node regardless of class name).
-<a name="line2123"></a> * @return {Node?} The first ancestor that matches the passed criteria, or
-<a name="line2124"></a> *     null if none match.
-<a name="line2125"></a> */
-<a name="line2126"></a>goog.dom.DomHelper.prototype.getAncestorByTagNameAndClass =
-<a name="line2127"></a>    goog.dom.getAncestorByTagNameAndClass;
-<a name="line2128"></a>
+<a name="line2114"></a>
+<a name="line2115"></a>/**
+<a name="line2116"></a> * Walks up the DOM hierarchy returning the first ancestor that has the passed
+<a name="line2117"></a> * tag name and/or class name. If the passed element matches the specified
+<a name="line2118"></a> * criteria, the element itself is returned.
+<a name="line2119"></a> * @param {Node} element The DOM node to start with.
+<a name="line2120"></a> * @param {?string} opt_tag The tag name to match (or null/undefined to match
+<a name="line2121"></a> *     any node regardless of tag name). Must be uppercase (goog.dom.TagName).
+<a name="line2122"></a> * @param {?string} opt_class The class name to match (or null/undefined to
+<a name="line2123"></a> *     match any node regardless of class name).
+<a name="line2124"></a> * @return {Node} The first ancestor that matches the passed criteria, or
+<a name="line2125"></a> *     null if none match.
+<a name="line2126"></a> */
+<a name="line2127"></a>goog.dom.DomHelper.prototype.getAncestorByTagNameAndClass =
+<a name="line2128"></a>    goog.dom.getAncestorByTagNameAndClass;
 <a name="line2129"></a>
-<a name="line2130"></a>/**
-<a name="line2131"></a> * Walks up the DOM hierarchy returning the first ancestor that passes the
-<a name="line2132"></a> * matcher function.
-<a name="line2133"></a> * @param {Node} element The DOM node to start with.
-<a name="line2134"></a> * @param {function(Node) : boolean} matcher A function that returns true if the
-<a name="line2135"></a> *     passed node matches the desired criteria.
-<a name="line2136"></a> * @param {boolean} opt_includeNode If true, the node itself is included in
-<a name="line2137"></a> *     the search (the first call to the matcher will pass startElement as
-<a name="line2138"></a> *     the node to test).
-<a name="line2139"></a> * @param {number} opt_maxSearchSteps Maximum number of levels to search up the
-<a name="line2140"></a> *     dom.
-<a name="line2141"></a> * @return {Node?} DOM node that matched the matcher, or null if there was
-<a name="line2142"></a> *     no match.
-<a name="line2143"></a> */
-<a name="line2144"></a>goog.dom.DomHelper.prototype.getAncestor = goog.dom.getAncestor;
+<a name="line2130"></a>
+<a name="line2131"></a>/**
+<a name="line2132"></a> * Walks up the DOM hierarchy returning the first ancestor that passes the
+<a name="line2133"></a> * matcher function.
+<a name="line2134"></a> * @param {Node} element The DOM node to start with.
+<a name="line2135"></a> * @param {function(Node) : boolean} matcher A function that returns true if the
+<a name="line2136"></a> *     passed node matches the desired criteria.
+<a name="line2137"></a> * @param {boolean} opt_includeNode If true, the node itself is included in
+<a name="line2138"></a> *     the search (the first call to the matcher will pass startElement as
+<a name="line2139"></a> *     the node to test).
+<a name="line2140"></a> * @param {number} opt_maxSearchSteps Maximum number of levels to search up the
+<a name="line2141"></a> *     dom.
+<a name="line2142"></a> * @return {Node} DOM node that matched the matcher, or null if there was
+<a name="line2143"></a> *     no match.
+<a name="line2144"></a> */
+<a name="line2145"></a>goog.dom.DomHelper.prototype.getAncestor = goog.dom.getAncestor;
 </pre>
 
 

@@ -32,9 +32,9 @@ goog.require('goog.ui.Component');
  * of this class. Instead us goog.graphics.createGraphics
  * @param {number|string} width The width in pixels or percent.
  * @param {number|string} height The height in pixels or percent.
- * @param {number?} opt_coordWidth Optional coordinate system width - if
+ * @param {?number} opt_coordWidth Optional coordinate system width - if
  *     omitted or null, defaults to same as width.
- * @param {number?} opt_coordHeight Optional coordinate system height - if
+ * @param {?number} opt_coordHeight Optional coordinate system height - if
  *     omitted or null, defaults to same as height.
  * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
  *     document we want to render in.
@@ -62,14 +62,14 @@ goog.graphics.AbstractGraphics = function(width, height,
 
   /**
    * Width of coordinate system in units.
-   * @type {number?}
+   * @type {?number}
    * @protected
    */
   this.coordWidth = opt_coordWidth || null;
 
   /**
    * Height of coordinate system in units.
-   * @type {number?}
+   * @type {?number}
    * @protected
    */
   this.coordHeight = opt_coordHeight || null;

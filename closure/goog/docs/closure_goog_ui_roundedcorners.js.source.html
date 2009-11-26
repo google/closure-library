@@ -193,7 +193,7 @@
 <a name="line150"></a>
 <a name="line151"></a>/**
 <a name="line152"></a> * An explicit height for the HTML. If null, no height is specified
-<a name="line153"></a> * @type {string?}
+<a name="line153"></a> * @type {?string}
 <a name="line154"></a> * @private
 <a name="line155"></a> */
 <a name="line156"></a>goog.ui.RoundedCorners.prototype.height_ = null;
@@ -361,7 +361,7 @@
 <a name="line318"></a> * set in certain cases in IE because of an off-by-1 bug in IE&#39;s bottom
 <a name="line319"></a> * positioning code.
 <a name="line320"></a> *
-<a name="line321"></a> * @return {string?} The height as a style string (e.g. &#39;2px&#39; or &#39;3em&#39;).
+<a name="line321"></a> * @return {?string} The height as a style string (e.g. &#39;2px&#39; or &#39;3em&#39;).
 <a name="line322"></a> */
 <a name="line323"></a>goog.ui.RoundedCorners.prototype.getExplicitHeight = function() {
 <a name="line324"></a>  return this.height_;

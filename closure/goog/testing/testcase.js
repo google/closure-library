@@ -67,7 +67,7 @@ goog.testing.TestCase = function(opt_name) {
 
   /**
    * Set of test names to execute, or null if all tests should be executed.
-   * @type {Object?}
+   * @type {Object}
    * @private
    */
   this.testsToRun_ = null;
@@ -157,7 +157,7 @@ goog.testing.TestCase.setTimeoutAsString_ = String(window.setTimeout);
 /**
  * TODO replace this with prototype.currentTest.
  * Name of the current test that is running, or null if none is running.
- * @type {string?}
+ * @type {?string}
  */
 goog.testing.TestCase.currentTestName = null;
 
@@ -213,7 +213,7 @@ goog.testing.TestCase.prototype.currentTestPointer_ = 0;
 
 /**
  * Optional callback that will be executed when the test has finalized.
- * @type {Function?}
+ * @type {Function}
  * @private
  */
 goog.testing.TestCase.prototype.onCompleteCallback_ = null;
@@ -678,9 +678,8 @@ goog.testing.TestCase.prototype.getTimeStamp_ = function() {
   var d = new Date;
 
   // Ensure millis are always 3-digits
-  var millis = d.getMilliseconds();
-  if (millis < 10) millis += '00';
-  else if (millis < 100) millis += '0';
+  var millis = '00' + d.getMilliseconds();
+  millis = millis.substr(millis.length - 3);
 
   return this.pad_(d.getHours()) + ':' + this.pad_(d.getMinutes()) + ':' +
          this.pad_(d.getSeconds()) + '.' + millis;
@@ -797,7 +796,7 @@ goog.testing.TestCase.Test = function(name, ref, opt_scope) {
 
   /**
    * Scope that the test function should be called in.
-   * @type {Object?}
+   * @type {Object}
    */
   this.scope = opt_scope || null;
 };
@@ -937,7 +936,7 @@ goog.testing.TestCase.Error = function(source, message, opt_stack) {
 
   /**
    * Scope that the test function should be called in.
-   * @type {string?}
+   * @type {?string}
    */
   this.stack = opt_stack || null;
 };

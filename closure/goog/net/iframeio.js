@@ -361,7 +361,7 @@ goog.net.IframeIo.prototype.logger_ =
 
 /**
  * Reference to form element that gets reused for requests to the iframe.
- * @type {HTMLFormElement?}
+ * @type {HTMLFormElement}
  * @private
  */
 goog.net.IframeIo.prototype.form_ = null;
@@ -370,7 +370,7 @@ goog.net.IframeIo.prototype.form_ = null;
 /**
  * Reference to the iframe being used for the current request, or null if no
  * request is currently active.
- * @type {HTMLIFrameElement?}
+ * @type {HTMLIFrameElement}
  * @private
  */
 goog.net.IframeIo.prototype.iframe_ = null;
@@ -379,7 +379,7 @@ goog.net.IframeIo.prototype.iframe_ = null;
 /**
  * Name of the iframe being used for the current request, or null if no
  * request is currently active.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.net.IframeIo.prototype.iframeName_ = null;
@@ -387,7 +387,7 @@ goog.net.IframeIo.prototype.iframeName_ = null;
 
 /**
  * Next id so that iframe names are unique.
- * @type {Number}
+ * @type {number}
  * @private
  */
 goog.net.IframeIo.prototype.nextIframeId_ = 0;
@@ -427,7 +427,7 @@ goog.net.IframeIo.prototype.lastUri_ = null;
 
 /**
  * The text content of the last request.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.net.IframeIo.prototype.lastContent_ = null;
@@ -453,7 +453,7 @@ goog.net.IframeIo.prototype.timeoutInterval_ = 0;
 /**
  * Window timeout ID used to cancel the timeout event handler if the request
  * completes successfully.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.IframeIo.prototype.timeoutId_ = null;
@@ -461,7 +461,7 @@ goog.net.IframeIo.prototype.timeoutId_ = null;
 
 /**
  * Window timeout ID used to detect when firefox silently fails.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.IframeIo.prototype.firefoxSilentErrorTimeout_ = null;
@@ -469,7 +469,7 @@ goog.net.IframeIo.prototype.firefoxSilentErrorTimeout_ = null;
 
 /**
  * Window timeout ID used by the timer that disposes the iframes.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.IframeIo.prototype.iframeDisposalTimer_ = null;
@@ -668,7 +668,7 @@ goog.net.IframeIo.prototype.isActive = function() {
 /**
  * Returns the last response text (i.e. the text content of the iframe).
  * Assumes plain text!
- * @return {string?} Result from the server.
+ * @return {?string} Result from the server.
  */
 goog.net.IframeIo.prototype.getResponseText = function() {
   return this.lastContent_;
@@ -677,7 +677,7 @@ goog.net.IframeIo.prototype.getResponseText = function() {
 
 /**
  * Returns the last response html (i.e. the innerHtml of the iframe).
- * @return {string?} Result from the server.
+ * @return {?string} Result from the server.
  */
 goog.net.IframeIo.prototype.getResponseHtml = function() {
  return this.lastContentHtml_;
@@ -699,7 +699,7 @@ goog.net.IframeIo.prototype.getResponseJson = function() {
 /**
  * Returns the document object from the last request.  Not truely XML, but
  * used to mirror the XhrIo interface.
- * @return {HTMLDocument?} The document object from the last request.
+ * @return {HTMLDocument} The document object from the last request.
  */
 goog.net.IframeIo.prototype.getResponseXml = function() {
   if (!this.iframe_) return null;
@@ -1247,7 +1247,7 @@ goog.net.IframeIo.prototype.disposeForm_ = function() {
 
 
 /**
- * @return {HTMLDocument?} The appropriate content document.
+ * @return {HTMLDocument} The appropriate content document.
  * @private
  */
 goog.net.IframeIo.prototype.getContentDocument_ = function() {
@@ -1260,7 +1260,7 @@ goog.net.IframeIo.prototype.getContentDocument_ = function() {
 
 
 /**
- * @return {HTMLIFrameElement?} The appropriate iframe to use for requests
+ * @return {HTMLIFrameElement} The appropriate iframe to use for requests
  *     (created in sendForm_).
  * @private
  */

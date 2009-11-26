@@ -174,7 +174,7 @@
 <a name="line131"></a>
 <a name="line132"></a>/**
 <a name="line133"></a> * Listener key for the mousemove event (during a drag operation).
-<a name="line134"></a> * @type {Number}
+<a name="line134"></a> * @type {?number}
 <a name="line135"></a> * @private
 <a name="line136"></a> */
 <a name="line137"></a>goog.ui.HsvPalette.prototype.mouseMoveListener_;
@@ -182,7 +182,7 @@
 <a name="line139"></a>
 <a name="line140"></a>/**
 <a name="line141"></a> * Listener key for the mouseup event (during a drag operation).
-<a name="line142"></a> * @type {Number}
+<a name="line142"></a> * @type {?number}
 <a name="line143"></a> * @private
 <a name="line144"></a> */
 <a name="line145"></a>goog.ui.HsvPalette.prototype.mouseUpListener_;
@@ -247,9 +247,9 @@
 <a name="line204"></a>/**
 <a name="line205"></a> * Alters the hue, saturation, and/or value of the currently selected color and
 <a name="line206"></a> * updates the UI.
-<a name="line207"></a> * @param {Number} opt_hue (optional) hue in [0, 1].
-<a name="line208"></a> * @param {Number} opt_saturation (optional) saturation in [0, 1].
-<a name="line209"></a> * @param {Number} opt_value (optional) value in [0, 255].
+<a name="line207"></a> * @param {?number} opt_hue (optional) hue in [0, 1].
+<a name="line208"></a> * @param {?number} opt_saturation (optional) saturation in [0, 1].
+<a name="line209"></a> * @param {?number} opt_value (optional) value in [0, 255].
 <a name="line210"></a> */
 <a name="line211"></a>goog.ui.HsvPalette.prototype.setHsv = function(opt_hue,
 <a name="line212"></a>                                               opt_saturation,
@@ -264,9 +264,9 @@
 <a name="line221"></a>
 <a name="line222"></a>/**
 <a name="line223"></a> * Alters the hue, saturation, and/or value of the currently selected color.
-<a name="line224"></a> * @param {Number} opt_hue (optional) hue in [0, 1].
-<a name="line225"></a> * @param {Number} opt_saturation (optional) saturation in [0, 1].
-<a name="line226"></a> * @param {Number} opt_value (optional) value in [0, 255].
+<a name="line224"></a> * @param {?number} opt_hue (optional) hue in [0, 1].
+<a name="line225"></a> * @param {?number} opt_saturation (optional) saturation in [0, 1].
+<a name="line226"></a> * @param {?number} opt_value (optional) value in [0, 255].
 <a name="line227"></a> * @private
 <a name="line228"></a> */
 <a name="line229"></a>goog.ui.HsvPalette.prototype.setHsv_ = function(opt_hue,
@@ -290,7 +290,7 @@
 <a name="line247"></a> * HsvPalettes cannot be used to decorate pre-existing html, since the
 <a name="line248"></a> * structure they build is fairly complicated.
 <a name="line249"></a> * @param {Element} element Element to decorate.
-<a name="line250"></a> * @return {Boolean} Returns always false.
+<a name="line250"></a> * @return {boolean} Returns always false.
 <a name="line251"></a> */
 <a name="line252"></a>goog.ui.HsvPalette.prototype.canDecorate = function(element) {
 <a name="line253"></a>  return false;

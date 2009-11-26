@@ -279,9 +279,9 @@ goog.dom.browserrange.AbstractRange.prototype.removeContents =
  * clone of the specified element (on IE).  Returns a reference to the
  * surrounding element if the operation was successful; returns null if the
  * operation failed.
- * @param {Element?} element The element with which the selection is to be
+ * @param {Element} element The element with which the selection is to be
  *    surrounded.
- * @return {Element?} The surrounding element (same as the argument on Mozilla,
+ * @return {Element} The surrounding element (same as the argument on Mozilla,
  *    but not on IE), or null if unsuccessful.
  */
 goog.dom.browserrange.AbstractRange.prototype.surroundContents =

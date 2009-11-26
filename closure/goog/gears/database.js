@@ -267,7 +267,7 @@ goog.gears.Database.resultSetToValue = function(rs) {
  * the object.
  *
  * @param {GearsResultSet} rs the result set returned by execute.
- * @return {Object?} a hash map with the key-value-pairs from the first row.
+ * @return {Object} a hash map with the key-value-pairs from the first row.
  *     Returns null is there are no matching rows.
  */
 goog.gears.Database.resultSetToObject = function(rs) {
@@ -910,13 +910,14 @@ goog.gears.Database.prototype.disposeInternal = function() {
 
 /**
  * Determines if the exception is a locking error.
- * @param {Error} ex The exception object.
+ * @param {Error|string} ex The exception object or error string.
  * @return {boolean} Whether this is a database locked exception.
  */
 goog.gears.Database.isLockedException = function(ex) {
   // TODO: change the test when gears provides a reasonable
   // error code to check.
-  return !!ex.message && ex.message.indexOf('database is locked') >= 0;
+  var message = goog.isString(ex) ? ex : ex.message;
+  return !!message && message.indexOf('database is locked') >= 0;
 };
 
 

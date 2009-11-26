@@ -77,13 +77,20 @@ styled like block-level elements.
 
 
 <h2 class="g-first">Inheritance</h2>
-<pre class="inheritance">
-Object
-     <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_ui_ControlRenderer.html">goog.ui.ControlRenderer</a></span>
-          <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span>
-               <img src="static/images/inherit.gif"><span class="type"><a href="class_goog_ui_CustomButtonRenderer.html">goog.ui.CustomButtonRenderer</a></span>
-                    <img src="static/images/inherit.gif">goog.ui.style.app.ButtonRenderer
-</pre>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+  <tr><td><span class="type"><a href="class_goog_ui_ControlRenderer.html">goog.ui.ControlRenderer</a></span></td><td></td></tr>
+  <tr><td><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></td><td><span class="type"><a href="class_goog_ui_ControlRenderer.html">goog.ui.ControlRenderer</a></span></td></tr>
+  <tr><td><span class="type"><a href="class_goog_ui_CustomButtonRenderer.html">goog.ui.CustomButtonRenderer</a></span></td><td><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></td></tr>
+  <tr><td>goog.ui.style.app.ButtonRenderer</td><td><span class="type"><a href="class_goog_ui_CustomButtonRenderer.html">goog.ui.CustomButtonRenderer</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart'>
+      <tr><td><span class="type"><a href="class_goog_ui_style_app_MenuButtonRenderer.html">goog.ui.style.app.MenuButtonRenderer</a></span></td><td>goog.ui.style.app.ButtonRenderer</td></tr>
+      <tr><td><span class="type"><a href="class_goog_ui_style_app_PrimaryActionButtonRenderer.html">goog.ui.style.app.PrimaryActionButtonRenderer</a></span></td><td>goog.ui.style.app.ButtonRenderer</td></tr>
+  </table>
+</div>
 
 
 
@@ -842,7 +849,7 @@ Returns the element.  Overrides goog.ui.ButtonRenderer#decorate.
 
         <span class="entryName">getContentElement<span class="args">(<span class="arg">element</span>)</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
 
 
@@ -869,7 +876,7 @@ the nested DIV structure of custom buttons into account.
    <tr class="even">
      <td>
         <span class="entryName">element</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
         <div class="entryOverview">Root element of the button whose content element is to be returned.</div>
      </td>
    </tr>
@@ -877,7 +884,7 @@ the nested DIV structure of custom buttons into account.
       </div>
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
             The button&#39;s content element (if any).
       </div>
   
@@ -1467,7 +1474,7 @@ with the new tooltip.
    <tr class="even">
      <td>
         <span class="entryName">element</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
         <div class="entryOverview">The button&#39;s root element.</div>
      </td>
    </tr>
@@ -2422,7 +2429,7 @@ generate each state-specific class.
 
         <span class="entryName">getContentElement<span class="args">(<span class="arg">element</span>)</span>
         </span>
-        &#8658; <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
 
 
@@ -2450,7 +2457,7 @@ with more complex DOM structures must override this method as needed.
    <tr class="even">
      <td>
         <span class="entryName">element</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
         <div class="entryOverview">Root element of the control whose content element is to be returned.</div>
      </td>
    </tr>
@@ -2458,7 +2465,7 @@ with more complex DOM structures must override this method as needed.
       </div>
    
       <div class="detailsSection">
-        <b>Returns:</b>&nbsp;<div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
             The control&#39;s content element.
       </div>
   

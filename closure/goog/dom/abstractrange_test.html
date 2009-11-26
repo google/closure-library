@@ -35,6 +35,9 @@ Copyright 2009 Google Inc. All Rights Reserved.
 <iframe src="javascript:&quot;<html><body contenteditable>asdf&quot;"
         id="b">
 </iframe>
+<iframe src="javascript:&quot;<html><body contenteditable><img>&quot;"
+        id="c">
+</iframe>
 <script>
   function testCorrectDocument() {
     var a = goog.dom.$('a').contentWindow;
@@ -61,6 +64,18 @@ Copyright 2009 Google Inc. All Rights Reserved.
                    'the correct document', a.document, range.getDocument());
     } else {
       assertNull(selection);
+    }
+  }
+
+  function testSelectionIsControlRange() {
+    var c = goog.dom.$('c').contentWindow;
+    // Only IE supports control ranges
+    if (c.document.body.createControlRange) {
+      var controlRange = c.document.body.createControlRange();
+      controlRange.add(c.document.getElementsByTagName('img')[0]);
+      controlRange.select();
+      var selection = goog.dom.AbstractRange.getBrowserSelectionForWindow(c);
+      assertNotNull('Selection must not be null', selection);
     }
   }
 </script>

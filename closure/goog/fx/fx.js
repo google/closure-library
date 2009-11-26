@@ -211,7 +211,7 @@ goog.fx.Animation.activeAnimations_ = {};
 
 /**
  * An interval ID for the global timer.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.fx.Animation.globalTimer_ = null;
@@ -302,7 +302,7 @@ goog.fx.Animation.prototype.progress = 0;
 
 /**
  * Timestamp for when animation was started.
- * @type {number?}
+ * @type {?number}
  * @protected
  */
 goog.fx.Animation.prototype.startTime = null;
@@ -310,7 +310,7 @@ goog.fx.Animation.prototype.startTime = null;
 
 /**
  * Timestamp for when animation was started.
- * @type {number?}
+ * @type {?number}
  * @protected
  */
 goog.fx.Animation.prototype.endTime = null;
@@ -318,7 +318,7 @@ goog.fx.Animation.prototype.endTime = null;
 
 /**
  * Timestamp for when last frame was run.
- * @type {number?}
+ * @type {?number}
  * @protected
  */
 goog.fx.Animation.prototype.lastFrame = null;

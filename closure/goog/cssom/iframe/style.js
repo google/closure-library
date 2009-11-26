@@ -128,19 +128,19 @@ goog.cssom.iframe.style.CssRuleSet_ = function() {
  *
  * @param {CSSRule} cssRule The {@code CSSRule} to initialize from.
  * @return {boolean} True if initialization succeeded. We only support
- *     {@code CSSStyleRule} objects.
+ *     {@code CSSStyleRule} and {@code CSSFontFaceRule} objects.
  */
 goog.cssom.iframe.style.CssRuleSet_.prototype.initializeFromCssRule =
     function(cssRule) {
-  var cssSelectorMatch = /([^\{]+)\{/;
-  var selectorText = cssRule.selectorText;
-  if (!selectorText) {
+  var ruleStyle = cssRule.style; // Cache object for performance.
+  if (!ruleStyle) {
     return false;
   }
-  var ruleStyle = cssRule.style; // Cache object for performance.
-  var selector = '';
+  var selector;
   var declarations;
-  if (ruleStyle && (declarations = ruleStyle.cssText)) {
+  if (ruleStyle &&
+      (selector = cssRule.selectorText) &&
+      (declarations = ruleStyle.cssText)) {
     // IE get confused about cssText context if a stylesheet uses the
     // mid-pass hack, and it ends up with an open comment (/*) but no
     // closing comment. This will effectively comment out large parts
@@ -151,14 +151,15 @@ goog.cssom.iframe.style.CssRuleSet_.prototype.initializeFromCssRule =
     if (goog.userAgent.IE) {
       declarations += '/* */';
     }
-    selector = selectorText;
   } else if (cssRule.cssText) {
+    var cssSelectorMatch = /([^\{]+)\{/;
+    var endTagMatch = /\}[^\}]*$/g;
     // cssRule.cssText contains both selector and declarations:
     // parse them out.
     selector = cssSelectorMatch.exec(cssRule.cssText)[1];
     // Remove selector, {, and trailing }.
     declarations = cssRule.cssText.replace(cssSelectorMatch, '').replace(
-        /\}[^\}]*$/g, '');
+        endTagMatch, '');
   }
   if (selector) {
     this.setSelectorsFromString(selector);
@@ -357,7 +358,7 @@ goog.cssom.iframe.style.CssSelector_.prototype.setPartsFromString_ =
  * </p>
  * @param {goog.cssom.iframe.style.NodeAncestry_} elementAncestry Object
  *     representing an element and its ancestors.
- * @return {Object?} Object with the properties elementIndex and
+ * @return {Object} Object with the properties elementIndex and
  *     selectorPartIndex, or null if there was no match.
  */
 goog.cssom.iframe.style.CssSelector_.prototype.matchElementAncestry =

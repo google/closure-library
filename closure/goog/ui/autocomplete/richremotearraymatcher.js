@@ -44,7 +44,7 @@ goog.ui.AutoComplete.RichRemoteArrayMatcher = function(url, opt_noSimilar) {
    * A function(rows) that is called before the array matches are returned.
    * It runs client-side and filters the results given by the server before
    * being rendered by the client.
-   * @type {Function?}
+   * @type {Function}
    * @private
    */
   this.rowFilter_ = null;

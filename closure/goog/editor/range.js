@@ -250,7 +250,7 @@ goog.editor.range.selectionPreservingNormalize = function(node) {
  *
  * May also normalize things outside the node, if it is more efficient to do so.
  *
- * @param {Node?} node The node to normalize.
+ * @param {Node} node The node to normalize.
  * @param {goog.dom.AbstractRange?} range The range to normalize.
  * @return {goog.dom.AbstractRange?} The range, adjusted for normalization.
  * @private

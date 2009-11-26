@@ -24,6 +24,7 @@ limitations under the License.
   <script src="../../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.math.Coordinate');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
     goog.require('goog.userAgent');
@@ -31,24 +32,30 @@ limitations under the License.
 </head>
 <body>
 <div id="root"></div>
-<input id='testButton' type='input' value='Click Me'></input>
+<input id='testButton' type='input' value='Click Me' />
 <div id='input'>Prevent Default these events:<br/></div>
 <div id='log' style='position:absolute;right:0;top:0'>Logged events:</div>
 <script type="text/javascript">
   var firedEventTypes;
+  var firedEventCoordinates;
   var root = goog.dom.$('root');
   var log = goog.dom.$('log');
   var input = goog.dom.$('input');
   var testButton = goog.dom.$('testButton');
+  var coordinate = new goog.math.Coordinate(123, 456);
+  var coordTestString = '(123, 456)';
 
   function setUp() {
     goog.events.removeAll();
     root.innerHTML = '';
-
     firedEventTypes = [];
+    firedEventCoordinates = [];
+
     for (var key in goog.events.EventType) {
       goog.events.listen(root, goog.events.EventType[key], function(e) {
         firedEventTypes.push(e.type);
+        var coord = new goog.math.Coordinate(e.clientX, e.clientY);
+        firedEventCoordinates.push(coord.toString());
       });
     }
   }
@@ -80,10 +87,21 @@ limitations under the License.
     assertEventTypes(['mousedown', 'mouseup', 'click']);
   }
 
+  function testClickSequenceWithCoordinate() {
+    assertTrue(goog.testing.events.fireClickSequence(root, null,coordinate));
+    assertCoordinates([coordTestString, coordTestString, coordTestString]);
+  }
+
   function testClickSequenceCancellingMousedown() {
     preventDefaultEventType('mousedown');
     assertFalse(goog.testing.events.fireClickSequence(root));
     assertEventTypes(['mousedown', 'mouseup', 'click']);
+  }
+
+  function testClickSequenceCancellingMousedownWithCoordinate() {
+    preventDefaultEventType('mousedown');
+    assertFalse(goog.testing.events.fireClickSequence(root, null,coordinate));
+    assertCoordinates([coordTestString, coordTestString, coordTestString]);
   }
 
   function testClickSequenceCancellingMouseup() {
@@ -92,10 +110,22 @@ limitations under the License.
     assertEventTypes(['mousedown', 'mouseup', 'click']);
   }
 
+  function testClickSequenceCancellingMouseupWithCoordinate() {
+    preventDefaultEventType('mouseup');
+    assertFalse(goog.testing.events.fireClickSequence(root, null,coordinate));
+    assertCoordinates([coordTestString, coordTestString, coordTestString]);
+  }
+
   function testClickSequenceCancellingClick() {
     preventDefaultEventType('click');
     assertFalse(goog.testing.events.fireClickSequence(root));
     assertEventTypes(['mousedown', 'mouseup', 'click']);
+  }
+
+  function testClickSequenceCancellingClickWithCoordinate() {
+    preventDefaultEventType('click');
+    assertFalse(goog.testing.events.fireClickSequence(root, null,coordinate));
+    assertCoordinates([coordTestString, coordTestString, coordTestString]);
   }
 
   // For a double click, IE fires selectstart instead of the second mousedown,
@@ -114,9 +144,25 @@ limitations under the License.
                        'click',
                        'dblclick']);
 
+
+  var DBLCLICK_SEQ_COORDS = function() {
+    var list = [];
+    var length = DBLCLICK_SEQ.length;
+    while (length > 0) {
+      list.push(coordTestString);
+      length--;
+    }
+    return list;
+  }();
+
   function testDoubleClickSequence() {
     assertTrue(goog.testing.events.fireDoubleClickSequence(root));
     assertEventTypes(DBLCLICK_SEQ);
+  }
+
+  function testDoubleClickSequenceWithCoordinate() {
+    assertTrue(goog.testing.events.fireDoubleClickSequence(root, coordinate));
+    assertCoordinates(DBLCLICK_SEQ_COORDS);
   }
 
   function testDoubleClickSequenceCancellingMousedown() {
@@ -125,10 +171,22 @@ limitations under the License.
     assertEventTypes(DBLCLICK_SEQ);
   }
 
+  function testDoubleClickSequenceCancellingMousedownWithCoordinate() {
+    preventDefaultEventType('mousedown');
+    assertFalse(goog.testing.events.fireDoubleClickSequence(root, coordinate));
+    assertCoordinates(DBLCLICK_SEQ_COORDS);
+  }
+
   function testDoubleClickSequenceCancellingMouseup() {
     preventDefaultEventType('mouseup');
     assertFalse(goog.testing.events.fireDoubleClickSequence(root));
     assertEventTypes(DBLCLICK_SEQ);
+  }
+
+  function testDoubleClickSequenceCancellingMouseupWithCoordinate() {
+    preventDefaultEventType('mouseup');
+    assertFalse(goog.testing.events.fireDoubleClickSequence(root, coordinate));
+    assertCoordinates(DBLCLICK_SEQ_COORDS);
   }
 
   function testDoubleClickSequenceCancellingClick() {
@@ -137,10 +195,22 @@ limitations under the License.
     assertEventTypes(DBLCLICK_SEQ);
   }
 
+  function testDoubleClickSequenceCancellingClickWithCoordinate() {
+    preventDefaultEventType('click');
+    assertFalse(goog.testing.events.fireDoubleClickSequence(root, coordinate));
+    assertCoordinates(DBLCLICK_SEQ_COORDS);
+  }
+
   function testDoubleClickSequenceCancellingDoubleClick() {
     preventDefaultEventType('dblclick');
     assertFalse(goog.testing.events.fireDoubleClickSequence(root));
     assertEventTypes(DBLCLICK_SEQ);
+  }
+
+  function testDoubleClickSequenceCancellingDoubleClickWithCoordinate() {
+    preventDefaultEventType('dblclick');
+    assertFalse(goog.testing.events.fireDoubleClickSequence(root, coordinate));
+    assertCoordinates(DBLCLICK_SEQ_COORDS);
   }
 
   function testKeySequence() {
@@ -226,6 +296,13 @@ limitations under the License.
    */
   function assertEventTypes(list) {
     assertArrayEquals(list, firedEventTypes);
+  }
+
+  /**
+   * Assert that the list of event coordinates given was caught, in that order.
+   */
+  function assertCoordinates(list) {
+    assertArrayEquals(list, firedEventCoordinates);
   }
 
   /** Prevent default the event of the given type on the root element. */

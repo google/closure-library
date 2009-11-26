@@ -388,6 +388,21 @@ function testMultipleBegins() {
 };
 
 
+function testIsLockedExceptionMessage() {
+  if (!database) {
+    return;
+  }
+
+  var lockedExStr = 'Database operation failed. ERROR: database is locked ' +
+      'DETAILS: database is locked';
+
+  assertTrue(goog.gears.Database.isLockedException(lockedExStr));
+  assertFalse(goog.gears.Database.isLockedException(
+      'Database operation failed. ERROR: invalid SQL operation'));
+
+  assertTrue(goog.gears.Database.isLockedException(Error(lockedExStr)));
+}
+
 function testNestedBegins() {
   if (!database) {
     return;

@@ -55,7 +55,7 @@ goog.module.Loader = function() {
 
   /**
    * The base url to load modules from. This property will be set in init().
-   * @type {string?}
+   * @type {?string}
    * @private
    */
   this.urlBase_ = null;

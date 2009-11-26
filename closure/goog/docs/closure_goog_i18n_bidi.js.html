@@ -230,7 +230,7 @@ text should be laid out in RTL direction.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line711">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line723">code &raquo;</a>
   </td>
      </tr>
 
@@ -264,7 +264,7 @@ text should be laid out in RTL direction.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line560">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line572">code &raquo;</a>
   </td>
      </tr>
 
@@ -299,7 +299,7 @@ directly after hebrew characters.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line612">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line624">code &raquo;</a>
   </td>
      </tr>
 
@@ -517,7 +517,7 @@ one in behavior (tested on FF and IE).
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line537">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line547">code &raquo;</a>
   </td>
      </tr>
 
@@ -583,7 +583,7 @@ characters LRE and PDF.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line551">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line562">code &raquo;</a>
   </td>
      </tr>
 
@@ -653,7 +653,7 @@ one in behavior (tested on FF and IE).
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line509">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line517">code &raquo;</a>
   </td>
      </tr>
 
@@ -719,7 +719,7 @@ characters RLE and PDF.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line523">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line532">code &raquo;</a>
   </td>
      </tr>
 
@@ -797,7 +797,7 @@ Numbers are counted as weakly LTR.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line676">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line688">code &raquo;</a>
   </td>
      </tr>
 
@@ -817,7 +817,7 @@ Numbers are counted as weakly LTR.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.i18n.bidi.</span><span class="entryName">guardBracketInHtml<span class="args">(<span class="arg">s</span>)</span>
+        <span class="entryNamespace">goog.i18n.bidi.</span><span class="entryName">guardBracketInHtml<span class="args">(<span class="arg">s</span>,&nbsp;<span class="arg">opt_isRtlContext</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -849,6 +849,14 @@ messy bracket display frequently happens in RTL layout.
         <div class="entryOverview">The string that need to be processed.</div>
      </td>
    </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_isRtlContext</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">specifies default direction (usually direction of the UI).</div>
+     </td>
+   </tr>
   </table>
       </div>
    
@@ -863,7 +871,7 @@ messy bracket display frequently happens in RTL layout.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line475">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line477">code &raquo;</a>
   </td>
      </tr>
 
@@ -883,7 +891,7 @@ messy bracket display frequently happens in RTL layout.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.i18n.bidi.</span><span class="entryName">guardBracketInText<span class="args">(<span class="arg">s</span>)</span>
+        <span class="entryNamespace">goog.i18n.bidi.</span><span class="entryName">guardBracketInText<span class="args">(<span class="arg">s</span>,&nbsp;<span class="arg">opt_isRtlContext</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -917,6 +925,14 @@ good as guardBracketInHtml in some cases.
         <div class="entryOverview">The string that need to be processed.</div>
      </td>
    </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_isRtlContext</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">specifies default direction (usually direction of the UI).</div>
+     </td>
+   </tr>
   </table>
       </div>
    
@@ -931,7 +947,7 @@ good as guardBracketInHtml in some cases.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line493">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line499">code &raquo;</a>
   </td>
      </tr>
 
@@ -1113,7 +1129,7 @@ numbers, which are weakly LTR.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line653">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line665">code &raquo;</a>
   </td>
      </tr>
 
@@ -1803,7 +1819,7 @@ ignored.</p></p>
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line569">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line581">code &raquo;</a>
   </td>
      </tr>
 
@@ -2010,7 +2026,7 @@ those exceptions in separate group of CSS string.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line596">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line608">code &raquo;</a>
   </td>
      </tr>
 
@@ -2076,7 +2092,7 @@ GERESH and GERSHAYIM. In such case, most likely that&#39;s user intention.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line630">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line642">code &raquo;</a>
   </td>
      </tr>
 
@@ -2110,7 +2126,7 @@ GERESH and GERSHAYIM. In such case, most likely that&#39;s user intention.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line577">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line589">code &raquo;</a>
   </td>
      </tr>
 
@@ -2353,7 +2369,7 @@ given directionality.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line727">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line739">code &raquo;</a>
   </td>
      </tr>
 
@@ -2388,7 +2404,7 @@ directly after hebrew characters.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line621">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line633">code &raquo;</a>
   </td>
      </tr>
 
@@ -2646,7 +2662,7 @@ estimation purposes.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line585">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line597">code &raquo;</a>
   </td>
      </tr>
 
@@ -2748,7 +2764,7 @@ estimation based on relative word counts.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line643">code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line655">code &raquo;</a>
   </td>
      </tr>
 
@@ -2932,7 +2948,7 @@ for performance and small code size.
 
 
   <td class="view-code">
-     <a href="closure_goog_i18n_bidi.js.source.html#line661">Code &raquo;</a>
+     <a href="closure_goog_i18n_bidi.js.source.html#line673">Code &raquo;</a>
   </td>
      </tr>
 

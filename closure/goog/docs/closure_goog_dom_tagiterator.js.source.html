@@ -124,7 +124,7 @@
 <a name="line81"></a> * that it will continue iterating until the end of the document instead of
 <a name="line82"></a> * until exiting the start node.
 <a name="line83"></a> *
-<a name="line84"></a> * @param {Node?} opt_node The start node.  If unspecified or null, defaults to
+<a name="line84"></a> * @param {Node} opt_node The start node.  If unspecified or null, defaults to
 <a name="line85"></a> *     an empty iterator.
 <a name="line86"></a> * @param {boolean} opt_reversed Whether to traverse the tree in reverse.
 <a name="line87"></a> * @param {boolean} opt_unconstrained Whether the iterator is not constrained to
@@ -153,7 +153,7 @@
 <a name="line110"></a>
 <a name="line111"></a>/**
 <a name="line112"></a> * The node this position is located on.
-<a name="line113"></a> * @type {Node?}
+<a name="line113"></a> * @type {Node}
 <a name="line114"></a> */
 <a name="line115"></a>goog.dom.TagIterator.prototype.node = null;
 <a name="line116"></a>

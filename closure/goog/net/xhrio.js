@@ -214,7 +214,7 @@ goog.net.XhrIo.prototype.xhr_ = null;
 
 /**
  * The options to use with the current XMLHttpRequest object.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.net.XhrIo.prototype.xhrOptions_ = null;
@@ -301,7 +301,7 @@ goog.net.XhrIo.prototype.timeoutInterval_ = 0;
 /**
  * Window timeout ID used to cancel the timeout event handler if the request
  * completes successfully.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.net.XhrIo.prototype.timeoutId_ = null;
@@ -811,7 +811,7 @@ goog.net.XhrIo.prototype.getResponseText = function() {
 /**
  * Get the response XML from the Xhr object
  * Will only return correct result when called from the context of a callback
- * @return {Document?} The DOM Document representing the XML file.
+ * @return {Document} The DOM Document representing the XML file.
  */
 goog.net.XhrIo.prototype.getResponseXml = function() {
   return this.xhr_ ? this.xhr_.responseXML : null;

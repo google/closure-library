@@ -261,3 +261,25 @@ div.clear {
   padding: 3px;
   margin: 0 5px;
 }
+
+html>body .goog-inline-block {
+  display: -moz-inline-box;
+  display: inline-block;
+}
+
+.goog-inline-block {
+  position: relative;
+  display: inline-block;
+}
+
+* html .goog-inline-block {
+  display: inline;
+}
+
+*:first-child+html .goog-inline-block {
+  display: inline;
+}
+
+.gviz-org-chart-container {
+  margin: 1em;
+}

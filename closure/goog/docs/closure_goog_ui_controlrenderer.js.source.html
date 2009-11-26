@@ -226,9 +226,9 @@
 <a name="line183"></a> * control&#39;s contents.  Since by default controls are rendered as a single
 <a name="line184"></a> * DIV, the default implementation returns the element itself.  Subclasses
 <a name="line185"></a> * with more complex DOM structures must override this method as needed.
-<a name="line186"></a> * @param {Element?} element Root element of the control whose content element
+<a name="line186"></a> * @param {Element} element Root element of the control whose content element
 <a name="line187"></a> *     is to be returned.
-<a name="line188"></a> * @return {Element?} The control&#39;s content element.
+<a name="line188"></a> * @return {Element} The control&#39;s content element.
 <a name="line189"></a> */
 <a name="line190"></a>goog.ui.ControlRenderer.prototype.getContentElement = function(element) {
 <a name="line191"></a>  return element;
@@ -576,7 +576,7 @@
 <a name="line533"></a>      if (goog.isString(content)) {
 <a name="line534"></a>        goog.dom.setTextContent(contentElem, content);
 <a name="line535"></a>      } else {
-<a name="line536"></a>        function childHandler(child) {
+<a name="line536"></a>        var childHandler = function(child) {
 <a name="line537"></a>          if (child) {
 <a name="line538"></a>            var doc = goog.dom.getOwnerDocument(contentElem);
 <a name="line539"></a>            contentElem.appendChild(goog.isString(child) ?
@@ -729,7 +729,7 @@
 <a name="line686"></a> * opt_includedClass is added to classes as well.
 <a name="line687"></a> * @param {Array.&lt;string&gt;} classes Array of classes to return matching combined
 <a name="line688"></a> *     classes for.
-<a name="line689"></a> * @param {string?} opt_includedClass If provided, get only the combined classes
+<a name="line689"></a> * @param {?string} opt_includedClass If provided, get only the combined classes
 <a name="line690"></a> *     that include this one.
 <a name="line691"></a> * @return {Array.&lt;string&gt;} Array of combined class names that should be
 <a name="line692"></a> *     applied.

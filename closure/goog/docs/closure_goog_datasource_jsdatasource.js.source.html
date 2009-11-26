@@ -96,7 +96,7 @@
 <a name="line53"></a>
 <a name="line54"></a>/**
 <a name="line55"></a> * The root JS object. Can be null.
-<a name="line56"></a> * @type {?Object}
+<a name="line56"></a> * @type {Object}
 <a name="line57"></a> * @protected
 <a name="line58"></a> * @suppress {underscore}
 <a name="line59"></a> */
@@ -105,7 +105,7 @@
 <a name="line62"></a>
 <a name="line63"></a>/**
 <a name="line64"></a> * Sets the root JS object
-<a name="line65"></a> * @param {Object?} root The root JS object. Can be null.
+<a name="line65"></a> * @param {Object} root The root JS object. Can be null.
 <a name="line66"></a> *
 <a name="line67"></a> * @protected
 <a name="line68"></a> */
@@ -120,7 +120,7 @@
 <a name="line77"></a> * - Are assumed to have child nodes of all of the same type of data
 <a name="line78"></a> * - Fire data changes on the root node of the list whenever children
 <a name="line79"></a> *     are added or removed
-<a name="line80"></a> * @param {boolean?} isList True to use list semantics.
+<a name="line80"></a> * @param {?boolean} isList True to use list semantics.
 <a name="line81"></a> * @private
 <a name="line82"></a> */
 <a name="line83"></a>goog.ds.JsDataSource.prototype.setIsList_ = function(isList) {
@@ -264,7 +264,7 @@
 <a name="line221"></a>/**
 <a name="line222"></a> * Gets the value of a child node
 <a name="line223"></a> * @param {string} name The node name.
-<a name="line224"></a> * @return {Object?} The value of the node, or null if no value or the child
+<a name="line224"></a> * @return {Object} The value of the node, or null if no value or the child
 <a name="line225"></a> *    node doesn&#39;t exist.
 <a name="line226"></a> */
 <a name="line227"></a>goog.ds.JsDataSource.prototype.getChildNodeValue = function(name) {
@@ -283,9 +283,9 @@
 <a name="line240"></a> * Sets a named child node of the current node.
 <a name="line241"></a> * If value is null, removes the child node.
 <a name="line242"></a> * @param {string} name The node name.
-<a name="line243"></a> * @param {Object?} value The value to set, can be DataNode, object,
+<a name="line243"></a> * @param {Object} value The value to set, can be DataNode, object,
 <a name="line244"></a> *     property, or null.
-<a name="line245"></a> * @return {Object?} The child node, if set.
+<a name="line245"></a> * @return {Object} The child node, if set.
 <a name="line246"></a> */
 <a name="line247"></a>goog.ds.JsDataSource.prototype.setChildNode = function(name, value) {
 <a name="line248"></a>  var removedPath = null;

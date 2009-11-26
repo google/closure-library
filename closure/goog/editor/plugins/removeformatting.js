@@ -724,7 +724,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
  * NOTE: If an alternate RemoveFormatting processor is provided
  * (setRemoveFormattingFunc()), this will no longer work.
  * @param {Element} node The node to clean.
- * @return {string?} The HTML strig representation of the cleaned data.
+ * @return {?string} The HTML strig representation of the cleaned data.
  */
 goog.editor.plugins.RemoveFormatting.prototype.getValueForNode = function(
     node) {

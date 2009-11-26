@@ -68,147 +68,150 @@
 <a name="line25"></a>goog.require(&#39;goog.events&#39;);
 <a name="line26"></a>goog.require(&#39;goog.events.EventTarget&#39;);
 <a name="line27"></a>goog.require(&#39;goog.graphics.AffineTransform&#39;);
-<a name="line28"></a>
-<a name="line29"></a>/**
-<a name="line30"></a> * Base class for a thin wrapper around the DOM element returned from
-<a name="line31"></a> * the different draw methods of the graphics.
-<a name="line32"></a> * You should not construct objects from this constructor. The graphics
-<a name="line33"></a> * will return the object for you.
-<a name="line34"></a> * @param {Element} element  The DOM element to wrap.
-<a name="line35"></a> * @param {goog.graphics.AbstractGraphics} graphics  The graphics creating
-<a name="line36"></a> *     this element.
-<a name="line37"></a> * @constructor
-<a name="line38"></a> * @extends {goog.events.EventTarget}
-<a name="line39"></a> */
-<a name="line40"></a>goog.graphics.Element = function(element, graphics) {
-<a name="line41"></a>  goog.events.EventTarget.call(this);
-<a name="line42"></a>  this.element_ = element;
-<a name="line43"></a>  this.graphics_ = graphics;
-<a name="line44"></a>  // Overloading EventTarget field to state that this is not a custom event.
-<a name="line45"></a>  // TODO Should be handled in EventTarget.js (see bug 846824).
-<a name="line46"></a>  this.customEvent_ = false;
-<a name="line47"></a>};
-<a name="line48"></a>goog.inherits(goog.graphics.Element, goog.events.EventTarget);
-<a name="line49"></a>
-<a name="line50"></a>
-<a name="line51"></a>/**
-<a name="line52"></a> * The graphics object that contains this element.
-<a name="line53"></a> * @type {goog.graphics.AbstractGraphics?}
-<a name="line54"></a> * @private
-<a name="line55"></a> */
-<a name="line56"></a>goog.graphics.Element.prototype.graphics_ = null;
-<a name="line57"></a>
-<a name="line58"></a>
-<a name="line59"></a>/**
-<a name="line60"></a> * The native browser element this class wraps.
-<a name="line61"></a> * @type {Element?}
-<a name="line62"></a> * @private
-<a name="line63"></a> */
-<a name="line64"></a>goog.graphics.Element.prototype.element_ = null;
-<a name="line65"></a>
-<a name="line66"></a>
-<a name="line67"></a>/**
-<a name="line68"></a> * The transformation applied to this element.
-<a name="line69"></a> * @type {goog.graphics.AffineTransform?}
-<a name="line70"></a> * @private
-<a name="line71"></a> */
-<a name="line72"></a>goog.graphics.Element.prototype.transform_ = null;
-<a name="line73"></a>
-<a name="line74"></a>
-<a name="line75"></a>/**
-<a name="line76"></a> * Returns the underlying object.
-<a name="line77"></a> * @return {Element} The underlying element.
-<a name="line78"></a> */
-<a name="line79"></a>goog.graphics.Element.prototype.getElement = function() {
-<a name="line80"></a>  return this.element_;
-<a name="line81"></a>};
-<a name="line82"></a>
-<a name="line83"></a>
-<a name="line84"></a>/**
-<a name="line85"></a> * Returns the graphics.
-<a name="line86"></a> * @return {goog.graphics.AbstractGraphics} The graphics that created the
-<a name="line87"></a> *     element.
-<a name="line88"></a> */
-<a name="line89"></a>goog.graphics.Element.prototype.getGraphics = function() {
-<a name="line90"></a>  return this.graphics_;
-<a name="line91"></a>};
-<a name="line92"></a>
-<a name="line93"></a>
-<a name="line94"></a>/**
-<a name="line95"></a> * Set the transformation of the element.
-<a name="line96"></a> * @param {number} x The x coordinate of the translation transform.
-<a name="line97"></a> * @param {number} y The y coordinate of the translation transform.
-<a name="line98"></a> * @param {number} rotate The angle of the rotation transform.
-<a name="line99"></a> * @param {number} centerX The horizontal center of the rotation transform.
-<a name="line100"></a> * @param {number} centerY The vertical center of the rotation transform.
-<a name="line101"></a> */
-<a name="line102"></a>goog.graphics.Element.prototype.setTransformation = function(x, y, rotate,
-<a name="line103"></a>    centerX, centerY) {
-<a name="line104"></a>  // TODO: Add skew and scale.
-<a name="line105"></a>
-<a name="line106"></a>  this.transform_ = goog.graphics.AffineTransform.getRotateInstance(
-<a name="line107"></a>      goog.math.toRadians(rotate), centerX, centerY).translate(x, y);
-<a name="line108"></a>  this.getGraphics().setElementTransform(this, x, y, rotate, centerX, centerY);
-<a name="line109"></a>};
-<a name="line110"></a>
-<a name="line111"></a>
-<a name="line112"></a>/**
-<a name="line113"></a> * @return {goog.graphics.AffineTransform} The transformation applied to
-<a name="line114"></a> *     this element.
-<a name="line115"></a> */
-<a name="line116"></a>goog.graphics.Element.prototype.getTransform = function() {
-<a name="line117"></a>  return this.transform_ ? this.transform_.clone() :
-<a name="line118"></a>    new goog.graphics.AffineTransform();
-<a name="line119"></a>};
-<a name="line120"></a>
-<a name="line121"></a>
-<a name="line122"></a>/**
-<a name="line123"></a> * Adds an event listener to the element.
-<a name="line124"></a> *
-<a name="line125"></a> * @param {string} type The type of the event to listen for.
-<a name="line126"></a> * @param {Function} handler The function to handle the event. The handler can
-<a name="line127"></a> *     also be an object that implements the handleEvent method which takes the
-<a name="line128"></a> *     event object as argument.
-<a name="line129"></a> * @param {boolean} opt_capture In DOM-compliant browsers, this determines
-<a name="line130"></a> *     whether the listener is fired during the capture or bubble phase of the
-<a name="line131"></a> *     event.
-<a name="line132"></a> * @param {Object} opt_handlerScope Object in whose scope to call the listener.
-<a name="line133"></a> */
-<a name="line134"></a>goog.graphics.Element.prototype.addEventListener = function(
-<a name="line135"></a>    type, handler, opt_capture, opt_handlerScope) {
-<a name="line136"></a>  goog.events.listen(this.element_, type, handler, opt_capture,
-<a name="line137"></a>      opt_handlerScope);
-<a name="line138"></a>};
-<a name="line139"></a>
-<a name="line140"></a>
-<a name="line141"></a>/**
-<a name="line142"></a> * Removes an event listener from the element. The handler must be the
-<a name="line143"></a> * same object as the one added. If the handler has not been added then
-<a name="line144"></a> * nothing is done.
-<a name="line145"></a> *
-<a name="line146"></a> * @param {string} type The type of the event to listen for.
-<a name="line147"></a> * @param {Function} handler The function to handle the event. The handler can
-<a name="line148"></a> *     can also be an object that implements thehandleEvent method which takes
-<a name="line149"></a> *     the event obejct as argument.
-<a name="line150"></a> * @param {boolean} opt_capture In DOM-compliant browsers, this determines
-<a name="line151"></a> *     whether the listener is fired during the capture or bubble phase of the
-<a name="line152"></a> *     event.
-<a name="line153"></a> * @param {Object} opt_handlerScope Object in whose scope to call the listener.
-<a name="line154"></a> */
-<a name="line155"></a>goog.graphics.Element.prototype.removeEventListener = function(
-<a name="line156"></a>    type, handler, opt_capture, opt_handlerScope) {
-<a name="line157"></a>  goog.events.unlisten(this.element_, type, handler, opt_capture,
-<a name="line158"></a>      opt_handlerScope);
-<a name="line159"></a>};
-<a name="line160"></a>
-<a name="line161"></a>
-<a name="line162"></a>/**
-<a name="line163"></a> * Unattaches listeners from this element.
-<a name="line164"></a> */
-<a name="line165"></a>goog.graphics.Element.prototype.disposeInternal = function() {
-<a name="line166"></a>  goog.graphics.Element.superClass_.disposeInternal.call(this);
-<a name="line167"></a>  goog.events.removeAll(this.element_);
-<a name="line168"></a>};
+<a name="line28"></a>goog.require(&#39;goog.math&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Base class for a thin wrapper around the DOM element returned from
+<a name="line34"></a> * the different draw methods of the graphics.
+<a name="line35"></a> * You should not construct objects from this constructor. The graphics
+<a name="line36"></a> * will return the object for you.
+<a name="line37"></a> * @param {Element} element  The DOM element to wrap.
+<a name="line38"></a> * @param {goog.graphics.AbstractGraphics} graphics  The graphics creating
+<a name="line39"></a> *     this element.
+<a name="line40"></a> * @constructor
+<a name="line41"></a> * @extends {goog.events.EventTarget}
+<a name="line42"></a> */
+<a name="line43"></a>goog.graphics.Element = function(element, graphics) {
+<a name="line44"></a>  goog.events.EventTarget.call(this);
+<a name="line45"></a>  this.element_ = element;
+<a name="line46"></a>  this.graphics_ = graphics;
+<a name="line47"></a>  // Overloading EventTarget field to state that this is not a custom event.
+<a name="line48"></a>  // TODO Should be handled in EventTarget.js (see bug 846824).
+<a name="line49"></a>  this.customEvent_ = false;
+<a name="line50"></a>};
+<a name="line51"></a>goog.inherits(goog.graphics.Element, goog.events.EventTarget);
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * The graphics object that contains this element.
+<a name="line56"></a> * @type {goog.graphics.AbstractGraphics?}
+<a name="line57"></a> * @private
+<a name="line58"></a> */
+<a name="line59"></a>goog.graphics.Element.prototype.graphics_ = null;
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * The native browser element this class wraps.
+<a name="line64"></a> * @type {Element}
+<a name="line65"></a> * @private
+<a name="line66"></a> */
+<a name="line67"></a>goog.graphics.Element.prototype.element_ = null;
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * The transformation applied to this element.
+<a name="line72"></a> * @type {goog.graphics.AffineTransform?}
+<a name="line73"></a> * @private
+<a name="line74"></a> */
+<a name="line75"></a>goog.graphics.Element.prototype.transform_ = null;
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Returns the underlying object.
+<a name="line80"></a> * @return {Element} The underlying element.
+<a name="line81"></a> */
+<a name="line82"></a>goog.graphics.Element.prototype.getElement = function() {
+<a name="line83"></a>  return this.element_;
+<a name="line84"></a>};
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * Returns the graphics.
+<a name="line89"></a> * @return {goog.graphics.AbstractGraphics} The graphics that created the
+<a name="line90"></a> *     element.
+<a name="line91"></a> */
+<a name="line92"></a>goog.graphics.Element.prototype.getGraphics = function() {
+<a name="line93"></a>  return this.graphics_;
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Set the transformation of the element.
+<a name="line99"></a> * @param {number} x The x coordinate of the translation transform.
+<a name="line100"></a> * @param {number} y The y coordinate of the translation transform.
+<a name="line101"></a> * @param {number} rotate The angle of the rotation transform.
+<a name="line102"></a> * @param {number} centerX The horizontal center of the rotation transform.
+<a name="line103"></a> * @param {number} centerY The vertical center of the rotation transform.
+<a name="line104"></a> */
+<a name="line105"></a>goog.graphics.Element.prototype.setTransformation = function(x, y, rotate,
+<a name="line106"></a>    centerX, centerY) {
+<a name="line107"></a>  // TODO: Add skew and scale.
+<a name="line108"></a>
+<a name="line109"></a>  this.transform_ = goog.graphics.AffineTransform.getRotateInstance(
+<a name="line110"></a>      goog.math.toRadians(rotate), centerX, centerY).translate(x, y);
+<a name="line111"></a>  this.getGraphics().setElementTransform(this, x, y, rotate, centerX, centerY);
+<a name="line112"></a>};
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * @return {goog.graphics.AffineTransform} The transformation applied to
+<a name="line117"></a> *     this element.
+<a name="line118"></a> */
+<a name="line119"></a>goog.graphics.Element.prototype.getTransform = function() {
+<a name="line120"></a>  return this.transform_ ? this.transform_.clone() :
+<a name="line121"></a>    new goog.graphics.AffineTransform();
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Adds an event listener to the element.
+<a name="line127"></a> *
+<a name="line128"></a> * @param {string} type The type of the event to listen for.
+<a name="line129"></a> * @param {Function} handler The function to handle the event. The handler can
+<a name="line130"></a> *     also be an object that implements the handleEvent method which takes the
+<a name="line131"></a> *     event object as argument.
+<a name="line132"></a> * @param {boolean} opt_capture In DOM-compliant browsers, this determines
+<a name="line133"></a> *     whether the listener is fired during the capture or bubble phase of the
+<a name="line134"></a> *     event.
+<a name="line135"></a> * @param {Object} opt_handlerScope Object in whose scope to call the listener.
+<a name="line136"></a> */
+<a name="line137"></a>goog.graphics.Element.prototype.addEventListener = function(
+<a name="line138"></a>    type, handler, opt_capture, opt_handlerScope) {
+<a name="line139"></a>  goog.events.listen(this.element_, type, handler, opt_capture,
+<a name="line140"></a>      opt_handlerScope);
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Removes an event listener from the element. The handler must be the
+<a name="line146"></a> * same object as the one added. If the handler has not been added then
+<a name="line147"></a> * nothing is done.
+<a name="line148"></a> *
+<a name="line149"></a> * @param {string} type The type of the event to listen for.
+<a name="line150"></a> * @param {Function} handler The function to handle the event. The handler can
+<a name="line151"></a> *     can also be an object that implements thehandleEvent method which takes
+<a name="line152"></a> *     the event obejct as argument.
+<a name="line153"></a> * @param {boolean} opt_capture In DOM-compliant browsers, this determines
+<a name="line154"></a> *     whether the listener is fired during the capture or bubble phase of the
+<a name="line155"></a> *     event.
+<a name="line156"></a> * @param {Object} opt_handlerScope Object in whose scope to call the listener.
+<a name="line157"></a> */
+<a name="line158"></a>goog.graphics.Element.prototype.removeEventListener = function(
+<a name="line159"></a>    type, handler, opt_capture, opt_handlerScope) {
+<a name="line160"></a>  goog.events.unlisten(this.element_, type, handler, opt_capture,
+<a name="line161"></a>      opt_handlerScope);
+<a name="line162"></a>};
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * Unattaches listeners from this element.
+<a name="line167"></a> */
+<a name="line168"></a>goog.graphics.Element.prototype.disposeInternal = function() {
+<a name="line169"></a>  goog.graphics.Element.superClass_.disposeInternal.call(this);
+<a name="line170"></a>  goog.events.removeAll(this.element_);
+<a name="line171"></a>};
 </pre>
 
 

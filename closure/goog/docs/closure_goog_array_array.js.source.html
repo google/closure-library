@@ -87,1016 +87,1030 @@
 <a name="line44"></a>goog.array.ARRAY_PROTOTYPE_ = Array.prototype;
 <a name="line45"></a>
 <a name="line46"></a>
-<a name="line47"></a>/**
-<a name="line48"></a> * Returns the index of the first element of an array with a specified
-<a name="line49"></a> * value, or -1 if the element is not present in the array.
-<a name="line50"></a> *
-<a name="line51"></a> * See {@link http://tinyurl.com/nga8b}
-<a name="line52"></a> *
-<a name="line53"></a> * @param {goog.array.ArrayLike} arr The array to be searched.
-<a name="line54"></a> * @param {*} obj The object for which we are searching.
-<a name="line55"></a> * @param {number} opt_fromIndex The index at which to start the search. If
-<a name="line56"></a> *     omitted the search starts at index 0.
-<a name="line57"></a> * @return {number} The index of the first matching array element.
-<a name="line58"></a> */
-<a name="line59"></a>goog.array.indexOf = goog.array.ARRAY_PROTOTYPE_.indexOf ?
-<a name="line60"></a>    function(arr, obj, opt_fromIndex) {
-<a name="line61"></a>      return goog.array.ARRAY_PROTOTYPE_.indexOf.call(arr, obj, opt_fromIndex);
-<a name="line62"></a>    } :
-<a name="line63"></a>    function(arr, obj, opt_fromIndex) {
-<a name="line64"></a>      var fromIndex = opt_fromIndex == null ?
-<a name="line65"></a>          0 : (opt_fromIndex &lt; 0 ?
-<a name="line66"></a>               Math.max(0, arr.length + opt_fromIndex) : opt_fromIndex);
-<a name="line67"></a>      for (var i = fromIndex; i &lt; arr.length; i++) {
-<a name="line68"></a>        if (i in arr &amp;&amp; arr[i] === obj)
-<a name="line69"></a>          return i;
-<a name="line70"></a>      }
-<a name="line71"></a>      return -1;
-<a name="line72"></a>    };
-<a name="line73"></a>
+<a name="line47"></a>// NOTE: Since most of the array functions are generic it allows you to
+<a name="line48"></a>// pass an array-like object. Strings have a length and are considered array-
+<a name="line49"></a>// like. However, the &#39;in&#39; operator does not work on strings so we cannot just
+<a name="line50"></a>// use the array path even if the browser supports indexing into strings. We
+<a name="line51"></a>// therefore end up splitting the string.
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Returns the index of the first element of an array with a specified
+<a name="line56"></a> * value, or -1 if the element is not present in the array.
+<a name="line57"></a> *
+<a name="line58"></a> * See {@link http://tinyurl.com/developer-mozilla-org-array-indexof}
+<a name="line59"></a> *
+<a name="line60"></a> * @param {goog.array.ArrayLike} arr The array to be searched.
+<a name="line61"></a> * @param {*} obj The object for which we are searching.
+<a name="line62"></a> * @param {number} opt_fromIndex The index at which to start the search. If
+<a name="line63"></a> *     omitted the search starts at index 0.
+<a name="line64"></a> * @return {number} The index of the first matching array element.
+<a name="line65"></a> */
+<a name="line66"></a>goog.array.indexOf = goog.array.ARRAY_PROTOTYPE_.indexOf ?
+<a name="line67"></a>    function(arr, obj, opt_fromIndex) {
+<a name="line68"></a>      return goog.array.ARRAY_PROTOTYPE_.indexOf.call(arr, obj, opt_fromIndex);
+<a name="line69"></a>    } :
+<a name="line70"></a>    function(arr, obj, opt_fromIndex) {
+<a name="line71"></a>      var fromIndex = opt_fromIndex == null ?
+<a name="line72"></a>          0 : (opt_fromIndex &lt; 0 ?
+<a name="line73"></a>               Math.max(0, arr.length + opt_fromIndex) : opt_fromIndex);
 <a name="line74"></a>
-<a name="line75"></a>/**
-<a name="line76"></a> * Returns the index of the last element of an array with a specified value, or
-<a name="line77"></a> * -1 if the element is not present in the array.
-<a name="line78"></a> *
-<a name="line79"></a> * See {@link http://tinyurl.com/ru6lg}
-<a name="line80"></a> *
-<a name="line81"></a> * @param {goog.array.ArrayLike} arr The array to be searched.
-<a name="line82"></a> * @param {*} obj The object for which we are searching.
-<a name="line83"></a> * @param {number?} opt_fromIndex The index at which to start the search. If
-<a name="line84"></a> *     omitted the search starts at the end of the array.
-<a name="line85"></a> * @return {number} The index of the last matching array element.
-<a name="line86"></a> */
-<a name="line87"></a>goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ?
-<a name="line88"></a>    function(arr, obj, opt_fromIndex) {
-<a name="line89"></a>      // Firefox treats undefined and null as 0 in the fromIndex argument which
-<a name="line90"></a>      // leads it to always return -1
-<a name="line91"></a>      var fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
-<a name="line92"></a>      return goog.array.ARRAY_PROTOTYPE_.lastIndexOf.call(arr, obj, fromIndex);
-<a name="line93"></a>    } :
-<a name="line94"></a>    function(arr, obj, opt_fromIndex) {
-<a name="line95"></a>      var fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
-<a name="line96"></a>
-<a name="line97"></a>      if (fromIndex &lt; 0) {
-<a name="line98"></a>        fromIndex = Math.max(0, arr.length + fromIndex);
-<a name="line99"></a>      }
-<a name="line100"></a>      for (var i = fromIndex; i &gt;= 0; i--) {
-<a name="line101"></a>        if (i in arr &amp;&amp; arr[i] === obj)
-<a name="line102"></a>          return i;
-<a name="line103"></a>      }
-<a name="line104"></a>      return -1;
-<a name="line105"></a>    };
-<a name="line106"></a>
-<a name="line107"></a>
-<a name="line108"></a>/**
-<a name="line109"></a> * Calls a function for each element in an array.
-<a name="line110"></a> *
-<a name="line111"></a> * See {@link http://tinyurl.com/jrvcb}
-<a name="line112"></a> *
-<a name="line113"></a> * @param {goog.array.ArrayLike} arr Array or array like object over
-<a name="line114"></a> *     which to iterate.
-<a name="line115"></a> * @param {Function} f The function to call for every element. This function
-<a name="line116"></a> *     takes 3 arguments (the element, the index and the array). The return
-<a name="line117"></a> *     value is ignored. The function is called only for indexes of the array
-<a name="line118"></a> *     which have assigned values; it is not called for indexes which have
-<a name="line119"></a> *     been deleted or which have never been assigned values. See {@link
-<a name="line120"></a> *     https://developer.mozilla.org/En/Core_JavaScript_1.5_Reference:Objects:
-<a name="line121"></a> *     Array:forEach}.
-<a name="line122"></a> *
-<a name="line123"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
-<a name="line124"></a> *     within f.
-<a name="line125"></a> */
-<a name="line126"></a>goog.array.forEach = goog.array.ARRAY_PROTOTYPE_.forEach ?
-<a name="line127"></a>    function(arr, f, opt_obj) {
-<a name="line128"></a>      goog.array.ARRAY_PROTOTYPE_.forEach.call(arr, f, opt_obj);
-<a name="line129"></a>    } :
-<a name="line130"></a>    function(arr, f, opt_obj) {
-<a name="line131"></a>      var l = arr.length;  // must be fixed during loop... see docs
-<a name="line132"></a>      var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
-<a name="line133"></a>      for (var i = 0; i &lt; l; i++) {
-<a name="line134"></a>        if (i in arr2) {
-<a name="line135"></a>          f.call(opt_obj, arr2[i], i, arr);
-<a name="line136"></a>        }
-<a name="line137"></a>      }
-<a name="line138"></a>    };
-<a name="line139"></a>
-<a name="line140"></a>
-<a name="line141"></a>/**
-<a name="line142"></a> * Calls a function for each element in an array, starting from the last
-<a name="line143"></a> * element rather than the first.
-<a name="line144"></a> *
-<a name="line145"></a> * @param {goog.array.ArrayLike} arr The array over which to iterate.
-<a name="line146"></a> * @param {Function} f The function to call for every element. This function
-<a name="line147"></a> *     takes 3 arguments (the element, the index and the array). The return
-<a name="line148"></a> *     value is ignored.
-<a name="line149"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
-<a name="line150"></a> *     within f.
-<a name="line151"></a> */
-<a name="line152"></a>goog.array.forEachRight = function(arr, f, opt_obj) {
-<a name="line153"></a>  var l = arr.length;  // must be fixed during loop... see docs
-<a name="line154"></a>  var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
-<a name="line155"></a>  for (var i = l - 1; i &gt;= 0; --i) {
-<a name="line156"></a>    if (i in arr2) {
-<a name="line157"></a>      f.call(opt_obj, arr2[i], i, arr);
-<a name="line158"></a>    }
-<a name="line159"></a>  }
-<a name="line160"></a>};
-<a name="line161"></a>
+<a name="line75"></a>      if (goog.isString(arr)) {
+<a name="line76"></a>        // Array.prototype.indexOf uses === so only strings should be found.
+<a name="line77"></a>        if (!goog.isString(obj) || obj.length != 1) {
+<a name="line78"></a>          return -1;
+<a name="line79"></a>        }
+<a name="line80"></a>        return arr.indexOf(obj, fromIndex);
+<a name="line81"></a>      }
+<a name="line82"></a>
+<a name="line83"></a>      for (var i = fromIndex; i &lt; arr.length; i++) {
+<a name="line84"></a>        if (i in arr &amp;&amp; arr[i] === obj)
+<a name="line85"></a>          return i;
+<a name="line86"></a>      }
+<a name="line87"></a>      return -1;
+<a name="line88"></a>    };
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Returns the index of the last element of an array with a specified value, or
+<a name="line93"></a> * -1 if the element is not present in the array.
+<a name="line94"></a> *
+<a name="line95"></a> * See {@link http://tinyurl.com/developer-mozilla-org-array-lastindexof}
+<a name="line96"></a> *
+<a name="line97"></a> * @param {goog.array.ArrayLike} arr The array to be searched.
+<a name="line98"></a> * @param {*} obj The object for which we are searching.
+<a name="line99"></a> * @param {?number} opt_fromIndex The index at which to start the search. If
+<a name="line100"></a> *     omitted the search starts at the end of the array.
+<a name="line101"></a> * @return {number} The index of the last matching array element.
+<a name="line102"></a> */
+<a name="line103"></a>goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ?
+<a name="line104"></a>    function(arr, obj, opt_fromIndex) {
+<a name="line105"></a>      // Firefox treats undefined and null as 0 in the fromIndex argument which
+<a name="line106"></a>      // leads it to always return -1
+<a name="line107"></a>      var fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
+<a name="line108"></a>      return goog.array.ARRAY_PROTOTYPE_.lastIndexOf.call(arr, obj, fromIndex);
+<a name="line109"></a>    } :
+<a name="line110"></a>    function(arr, obj, opt_fromIndex) {
+<a name="line111"></a>      var fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
+<a name="line112"></a>
+<a name="line113"></a>      if (fromIndex &lt; 0) {
+<a name="line114"></a>        fromIndex = Math.max(0, arr.length + fromIndex);
+<a name="line115"></a>      }
+<a name="line116"></a>
+<a name="line117"></a>      if (goog.isString(arr)) {
+<a name="line118"></a>        // Array.prototype.lastIndexOf uses === so only strings should be found.
+<a name="line119"></a>        if (!goog.isString(obj) || obj.length != 1) {
+<a name="line120"></a>          return -1;
+<a name="line121"></a>        }
+<a name="line122"></a>        return arr.lastIndexOf(obj, fromIndex);
+<a name="line123"></a>      }
+<a name="line124"></a>
+<a name="line125"></a>      for (var i = fromIndex; i &gt;= 0; i--) {
+<a name="line126"></a>        if (i in arr &amp;&amp; arr[i] === obj)
+<a name="line127"></a>          return i;
+<a name="line128"></a>      }
+<a name="line129"></a>      return -1;
+<a name="line130"></a>    };
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Calls a function for each element in an array.
+<a name="line135"></a> *
+<a name="line136"></a> * See {@link http://tinyurl.com/developer-mozilla-org-array-foreach}
+<a name="line137"></a> *
+<a name="line138"></a> * @param {goog.array.ArrayLike} arr Array or array like object over
+<a name="line139"></a> *     which to iterate.
+<a name="line140"></a> * @param {Function} f The function to call for every element. This function
+<a name="line141"></a> *     takes 3 arguments (the element, the index and the array). The return
+<a name="line142"></a> *     value is ignored. The function is called only for indexes of the array
+<a name="line143"></a> *     which have assigned values; it is not called for indexes which have
+<a name="line144"></a> *     been deleted or which have never been assigned values.
+<a name="line145"></a> *
+<a name="line146"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line147"></a> *     within f.
+<a name="line148"></a> */
+<a name="line149"></a>goog.array.forEach = goog.array.ARRAY_PROTOTYPE_.forEach ?
+<a name="line150"></a>    function(arr, f, opt_obj) {
+<a name="line151"></a>      goog.array.ARRAY_PROTOTYPE_.forEach.call(arr, f, opt_obj);
+<a name="line152"></a>    } :
+<a name="line153"></a>    function(arr, f, opt_obj) {
+<a name="line154"></a>      var l = arr.length;  // must be fixed during loop... see docs
+<a name="line155"></a>      var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
+<a name="line156"></a>      for (var i = 0; i &lt; l; i++) {
+<a name="line157"></a>        if (i in arr2) {
+<a name="line158"></a>          f.call(opt_obj, arr2[i], i, arr);
+<a name="line159"></a>        }
+<a name="line160"></a>      }
+<a name="line161"></a>    };
 <a name="line162"></a>
-<a name="line163"></a>/**
-<a name="line164"></a> * Calls a function for each element in an array, and if the function returns
-<a name="line165"></a> * true adds the element to a new array.
-<a name="line166"></a> *
-<a name="line167"></a> * See {@link http://tinyurl.com/rmtuo}
-<a name="line168"></a> *
-<a name="line169"></a> * @param {goog.array.ArrayLike} arr The array over which to iterate.
-<a name="line170"></a> * @param {Function} f The function to call for every element. This function
-<a name="line171"></a> *     takes 3 arguments (the element, the index and the array) and must
-<a name="line172"></a> *     return a Boolean. If the return value is true the element is added to the
-<a name="line173"></a> *     result array. If it is false the element is not included.
-<a name="line174"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
-<a name="line175"></a> *     within f.
-<a name="line176"></a> * @return {!Array} a new array in which only elements that passed the test are
-<a name="line177"></a> *     present.
-<a name="line178"></a> */
-<a name="line179"></a>goog.array.filter = goog.array.ARRAY_PROTOTYPE_.filter ?
-<a name="line180"></a>    function(arr, f, opt_obj) {
-<a name="line181"></a>      return goog.array.ARRAY_PROTOTYPE_.filter.call(arr, f, opt_obj);
-<a name="line182"></a>    } :
-<a name="line183"></a>    function(arr, f, opt_obj) {
-<a name="line184"></a>      var l = arr.length;  // must be fixed during loop... see docs
-<a name="line185"></a>      var res = [];
-<a name="line186"></a>      var resLength = 0;
-<a name="line187"></a>      var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
-<a name="line188"></a>      for (var i = 0; i &lt; l; i++) {
-<a name="line189"></a>        if (i in arr2) {
-<a name="line190"></a>          var val = arr2[i];  // in case f mutates arr2
-<a name="line191"></a>          if (f.call(opt_obj, val, i, arr)) {
-<a name="line192"></a>            res[resLength++] = val;
-<a name="line193"></a>          }
-<a name="line194"></a>        }
-<a name="line195"></a>      }
-<a name="line196"></a>      return res;
-<a name="line197"></a>    };
-<a name="line198"></a>
-<a name="line199"></a>
-<a name="line200"></a>/**
-<a name="line201"></a> * Calls a function for each element in an array and inserts the result into a
-<a name="line202"></a> * new array.
-<a name="line203"></a> *
-<a name="line204"></a> * See {@link http://tinyurl.com/hlx5p}
-<a name="line205"></a> *
-<a name="line206"></a> * @param {goog.array.ArrayLike} arr The array over which to iterate.
-<a name="line207"></a> * @param {Function} f The function to call for every element. This function
-<a name="line208"></a> *     takes 3 arguments (the element, the index and the array) and should
-<a name="line209"></a> *     return something. The result will be inserted into a new array.
-<a name="line210"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
-<a name="line211"></a> *     within f.
-<a name="line212"></a> * @return {!Array} a new array with the results from f.
-<a name="line213"></a> */
-<a name="line214"></a>goog.array.map = goog.array.ARRAY_PROTOTYPE_.map ?
-<a name="line215"></a>    function(arr, f, opt_obj) {
-<a name="line216"></a>      return goog.array.ARRAY_PROTOTYPE_.map.call(arr, f, opt_obj);
-<a name="line217"></a>    } :
-<a name="line218"></a>    function(arr, f, opt_obj) {
-<a name="line219"></a>      var l = arr.length;  // must be fixed during loop... see docs
-<a name="line220"></a>      var res = [];
-<a name="line221"></a>      var resLength = 0;
-<a name="line222"></a>      var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
-<a name="line223"></a>      for (var i = 0; i &lt; l; i++) {
-<a name="line224"></a>        if (i in arr2) {
-<a name="line225"></a>          res[resLength++] = f.call(opt_obj, arr2[i], i, arr);
-<a name="line226"></a>        }
-<a name="line227"></a>      }
-<a name="line228"></a>      return res;
-<a name="line229"></a>    };
-<a name="line230"></a>
-<a name="line231"></a>
-<a name="line232"></a>/**
-<a name="line233"></a> * Passes every element of an array into a function and accumulates the result.
-<a name="line234"></a> * We&#39;re google; we can&#39;t have &quot;map&quot; without &quot;reduce&quot; can we?
-<a name="line235"></a> *
-<a name="line236"></a> * Passes through to:
-<a name="line237"></a> *     http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:
-<a name="line238"></a> *     Objects:Array:reduce
-<a name="line239"></a> * when available.
-<a name="line240"></a> *
-<a name="line241"></a> * For example:
-<a name="line242"></a> * var a = [1, 2, 3, 4];
-<a name="line243"></a> * goog.array.reduce(a, function(r, v, i, arr) {return r + v;}, 0);
-<a name="line244"></a> * returns 10
-<a name="line245"></a> *
-<a name="line246"></a> * @param {goog.array.ArrayLike} arr The array over which to iterate.
-<a name="line247"></a> * @param {Function} f The function to call for every element. This function
-<a name="line248"></a> *     takes 4 arguments (the function&#39;s previous result or the initial value,
-<a name="line249"></a> *     the value of the current array element, the current array index, and the
-<a name="line250"></a> *     array itself)
-<a name="line251"></a> *     function(previousValue, currentValue, index, array).
-<a name="line252"></a> * @param {*} val The initial value to pass into the function on the first call.
-<a name="line253"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
-<a name="line254"></a> *     within f.
-<a name="line255"></a> * @return {*} Result of evaluating f repeatedly across the values of the array.
-<a name="line256"></a> * @notypecheck See http://b/1342779
-<a name="line257"></a> */
-<a name="line258"></a>goog.array.reduce = function(arr, f, val, opt_obj) {
-<a name="line259"></a>  if (arr.reduce) {
-<a name="line260"></a>    if (opt_obj) {
-<a name="line261"></a>      return arr.reduce(goog.bind(f, opt_obj), val);
-<a name="line262"></a>    } else {
-<a name="line263"></a>      return arr.reduce(f, val);
-<a name="line264"></a>    }
-<a name="line265"></a>  }
-<a name="line266"></a>  var rval = val;
-<a name="line267"></a>  goog.array.forEach(arr, function(val, index) {
-<a name="line268"></a>    rval = f.call(opt_obj, rval, val, index, arr);
-<a name="line269"></a>  });
-<a name="line270"></a>  return rval;
-<a name="line271"></a>};
-<a name="line272"></a>
-<a name="line273"></a>
-<a name="line274"></a>/**
-<a name="line275"></a> * Passes every element of an array into a function and accumulates the result,
-<a name="line276"></a> * starting from the last element and working towards the first.
-<a name="line277"></a> *
-<a name="line278"></a> * Passes through to:
-<a name="line279"></a> *     http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:
-<a name="line280"></a> *     Objects:Array:reduceRight
-<a name="line281"></a> * when available.
-<a name="line282"></a> *
-<a name="line283"></a> * For example:
-<a name="line284"></a> * var a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;];
-<a name="line285"></a> * goog.array.reduceRight(a, function(r, v, i, arr) {return r + v;}, &#39;&#39;);
-<a name="line286"></a> * returns &#39;cba&#39;
-<a name="line287"></a> *
-<a name="line288"></a> * @param {goog.array.ArrayLike} arr The array over which to iterate.
-<a name="line289"></a> * @param {Function} f The function to call for every element. This function
-<a name="line290"></a> *     takes 4 arguments (the function&#39;s previous result or the initial value,
-<a name="line291"></a> *     the value of the current array element, the current array index, and the
-<a name="line292"></a> *     array itself)
-<a name="line293"></a> *     function(previousValue, currentValue, index, array).
-<a name="line294"></a> * @param {*} val The initial value to pass into the function on the first call.
-<a name="line295"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
-<a name="line296"></a> *     within f.
-<a name="line297"></a> * @return {*} Object returned as a result of evaluating f repeatedly across the
-<a name="line298"></a> *     values of the array.
-<a name="line299"></a> * @notypecheck See http://b/1342779
-<a name="line300"></a> */
-<a name="line301"></a>goog.array.reduceRight = function(arr, f, val, opt_obj) {
-<a name="line302"></a>  if (arr.reduceRight) {
-<a name="line303"></a>    if (opt_obj) {
-<a name="line304"></a>      return arr.reduceRight(goog.bind(f, opt_obj), val);
-<a name="line305"></a>    } else {
-<a name="line306"></a>      return arr.reduceRight(f, val);
-<a name="line307"></a>    }
-<a name="line308"></a>  }
-<a name="line309"></a>  var rval = val;
-<a name="line310"></a>  goog.array.forEachRight(arr, function(val, index) {
-<a name="line311"></a>    rval = f.call(opt_obj, rval, val, index, arr);
-<a name="line312"></a>  });
-<a name="line313"></a>  return rval;
-<a name="line314"></a>};
-<a name="line315"></a>
-<a name="line316"></a>
-<a name="line317"></a>/**
-<a name="line318"></a> * Calls f for each element of an array. If any call returns true, some()
-<a name="line319"></a> * returns true (without checking the remaining elements). If all calls
-<a name="line320"></a> * return false, some() returns false.
-<a name="line321"></a> *
-<a name="line322"></a> * See {@link http://tinyurl.com/ekkc2}
-<a name="line323"></a> *
-<a name="line324"></a> * @param {goog.array.ArrayLike} arr The array to check.
-<a name="line325"></a> * @param {Function} f The function to call for every element. This function
-<a name="line326"></a> *     takes 3 arguments (the element, the index and the array) and must
-<a name="line327"></a> *     return a Boolean.
-<a name="line328"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
-<a name="line329"></a> *     within f.
-<a name="line330"></a> * @return {boolean} true if any element passes the test.
-<a name="line331"></a> */
-<a name="line332"></a>goog.array.some = goog.array.ARRAY_PROTOTYPE_.some ?
-<a name="line333"></a>    function(arr, f, opt_obj) {
-<a name="line334"></a>      return goog.array.ARRAY_PROTOTYPE_.some.call(arr, f, opt_obj);
-<a name="line335"></a>    } :
-<a name="line336"></a>    function(arr, f, opt_obj) {
-<a name="line337"></a>      var l = arr.length;  // must be fixed during loop... see docs
-<a name="line338"></a>      var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
-<a name="line339"></a>      for (var i = 0; i &lt; l; i++) {
-<a name="line340"></a>        if (i in arr2 &amp;&amp; f.call(opt_obj, arr2[i], i, arr)) {
-<a name="line341"></a>          return true;
-<a name="line342"></a>        }
-<a name="line343"></a>      }
-<a name="line344"></a>      return false;
-<a name="line345"></a>    };
-<a name="line346"></a>
-<a name="line347"></a>
-<a name="line348"></a>/**
-<a name="line349"></a> * Call f for each element of an array. If all calls return true, every()
-<a name="line350"></a> * returns true. If any call returns false, every() returns false and
-<a name="line351"></a> * does not continue to check the remaining elements.
-<a name="line352"></a> *
-<a name="line353"></a> * See {@link http://tinyurl.com/rx3mg}
-<a name="line354"></a> *
-<a name="line355"></a> * @param {goog.array.ArrayLike} arr The array to check.
-<a name="line356"></a> * @param {Function} f The function to call for every element. This function
-<a name="line357"></a> *     takes 3 arguments (the element, the index and the array) and must
-<a name="line358"></a> *     return a Boolean.
-<a name="line359"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
-<a name="line360"></a> *     within f.
-<a name="line361"></a> * @return {boolean} false if any element fails the test.
-<a name="line362"></a> */
-<a name="line363"></a>goog.array.every = goog.array.ARRAY_PROTOTYPE_.every ?
-<a name="line364"></a>    function(arr, f, opt_obj) {
-<a name="line365"></a>      return goog.array.ARRAY_PROTOTYPE_.every.call(arr, f, opt_obj);
-<a name="line366"></a>    } :
-<a name="line367"></a>    function(arr, f, opt_obj) {
-<a name="line368"></a>      var l = arr.length;  // must be fixed during loop... see docs
-<a name="line369"></a>      var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
-<a name="line370"></a>      for (var i = 0; i &lt; l; i++) {
-<a name="line371"></a>        if (i in arr2 &amp;&amp; !f.call(opt_obj, arr2[i], i, arr)) {
-<a name="line372"></a>          return false;
-<a name="line373"></a>        }
-<a name="line374"></a>      }
-<a name="line375"></a>      return true;
-<a name="line376"></a>    };
-<a name="line377"></a>
-<a name="line378"></a>
-<a name="line379"></a>/**
-<a name="line380"></a> * Search an array for the first element that satisfies a given condition and
-<a name="line381"></a> * return that element.
-<a name="line382"></a> * @param {goog.array.ArrayLike} arr The array to search.
-<a name="line383"></a> * @param {Function} f The function to call for every element. This function
-<a name="line384"></a> *     takes 3 arguments (the element, the index and the array) and should
-<a name="line385"></a> *     return a boolean.
-<a name="line386"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
-<a name="line387"></a> * @return {*} The first array element that passes the test, or null if no
-<a name="line388"></a> *     element is found.
-<a name="line389"></a> */
-<a name="line390"></a>goog.array.find = function(arr, f, opt_obj) {
-<a name="line391"></a>  var i = goog.array.findIndex(arr, f, opt_obj);
-<a name="line392"></a>  return i &lt; 0 ? null : goog.isString(arr) ? arr.charAt(i) : arr[i];
-<a name="line393"></a>};
-<a name="line394"></a>
-<a name="line395"></a>
-<a name="line396"></a>/**
-<a name="line397"></a> * Search an array for the first element that satisfies a given condition and
-<a name="line398"></a> * return its index.
-<a name="line399"></a> * @param {goog.array.ArrayLike} arr The array to search.
-<a name="line400"></a> * @param {Function} f The function to call for every element. This function
-<a name="line401"></a> *     takes 3 arguments (the element, the index and the array) and should
-<a name="line402"></a> *     return a boolean.
-<a name="line403"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
-<a name="line404"></a> * @return {number} The index of the first array element that passes the test,
-<a name="line405"></a> *     or -1 if no element is found.
-<a name="line406"></a> */
-<a name="line407"></a>goog.array.findIndex = function(arr, f, opt_obj) {
-<a name="line408"></a>  var l = arr.length;  // must be fixed during loop... see docs
-<a name="line409"></a>  var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
-<a name="line410"></a>  for (var i = 0; i &lt; l; i++) {
-<a name="line411"></a>    if (i in arr2 &amp;&amp; f.call(opt_obj, arr2[i], i, arr)) {
-<a name="line412"></a>      return i;
-<a name="line413"></a>    }
-<a name="line414"></a>  }
-<a name="line415"></a>  return -1;
-<a name="line416"></a>};
-<a name="line417"></a>
-<a name="line418"></a>
-<a name="line419"></a>/**
-<a name="line420"></a> * Search an array (in reverse order) for the last element that satisfies a
-<a name="line421"></a> * given condition and return that element.
-<a name="line422"></a> * @param {goog.array.ArrayLike} arr The array to search.
-<a name="line423"></a> * @param {Function} f The function to call for every element. This function
-<a name="line424"></a> *     takes 3 arguments (the element, the index and the array) and should
-<a name="line425"></a> *     return a boolean.
-<a name="line426"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
-<a name="line427"></a> * @return {*} The last array element that passes the test, or null if no
-<a name="line428"></a> *     element is found.
-<a name="line429"></a> */
-<a name="line430"></a>goog.array.findRight = function(arr, f, opt_obj) {
-<a name="line431"></a>  var i = goog.array.findIndexRight(arr, f, opt_obj);
-<a name="line432"></a>  return i &lt; 0 ? null : goog.isString(arr) ? arr.charAt(i) : arr[i];
-<a name="line433"></a>};
-<a name="line434"></a>
-<a name="line435"></a>
-<a name="line436"></a>/**
-<a name="line437"></a> * Search an array (in reverse order) for the last element that satisfies a
-<a name="line438"></a> * given condition and return its index.
-<a name="line439"></a> * @param {goog.array.ArrayLike} arr The array to search.
-<a name="line440"></a> * @param {Function} f The function to call for every element. This function
-<a name="line441"></a> *     takes 3 arguments (the element, the index and the array) and should
-<a name="line442"></a> *     return a boolean.
-<a name="line443"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
-<a name="line444"></a> * @return {number} The index of the last array element that passes the test,
-<a name="line445"></a> *     or -1 if no element is found.
-<a name="line446"></a> */
-<a name="line447"></a>goog.array.findIndexRight = function(arr, f, opt_obj) {
-<a name="line448"></a>  var l = arr.length;  // must be fixed during loop... see docs
-<a name="line449"></a>  var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
-<a name="line450"></a>  for (var i = l - 1; i &gt;= 0; i--) {
-<a name="line451"></a>    if (i in arr2 &amp;&amp; f.call(opt_obj, arr2[i], i, arr)) {
-<a name="line452"></a>      return i;
-<a name="line453"></a>    }
-<a name="line454"></a>  }
-<a name="line455"></a>  return -1;
-<a name="line456"></a>};
-<a name="line457"></a>
-<a name="line458"></a>
-<a name="line459"></a>/**
-<a name="line460"></a> * Whether the array contains the given object.
-<a name="line461"></a> * @param {goog.array.ArrayLike} arr The array to test for the presence of the
-<a name="line462"></a> *     element.
-<a name="line463"></a> * @param {*} obj The object for which to test.
-<a name="line464"></a> * @return {boolean} true if obj is present.
-<a name="line465"></a> */
-<a name="line466"></a>goog.array.contains = function(arr, obj) {
-<a name="line467"></a>  return goog.array.indexOf(arr, obj) &gt;= 0;
-<a name="line468"></a>};
-<a name="line469"></a>
-<a name="line470"></a>
-<a name="line471"></a>/**
-<a name="line472"></a> * Whether the array is empty.
-<a name="line473"></a> * @param {goog.array.ArrayLike} arr The array to test.
-<a name="line474"></a> * @return {boolean} true if empty.
-<a name="line475"></a> */
-<a name="line476"></a>goog.array.isEmpty = function(arr) {
-<a name="line477"></a>  return arr.length == 0;
-<a name="line478"></a>};
-<a name="line479"></a>
-<a name="line480"></a>
-<a name="line481"></a>/**
-<a name="line482"></a> * Clears the array.
-<a name="line483"></a> * @param {goog.array.ArrayLike} arr Array or array like object to clear.
-<a name="line484"></a> */
-<a name="line485"></a>goog.array.clear = function(arr) {
-<a name="line486"></a>  // For non real arrays we don&#39;t have the magic length so we delete the
-<a name="line487"></a>  // indices.
-<a name="line488"></a>  if (!goog.isArray(arr)) {
-<a name="line489"></a>    for (var i = arr.length - 1; i &gt;= 0; i--) {
-<a name="line490"></a>      delete arr[i];
-<a name="line491"></a>    }
-<a name="line492"></a>  }
-<a name="line493"></a>  arr.length = 0;
-<a name="line494"></a>};
-<a name="line495"></a>
-<a name="line496"></a>
-<a name="line497"></a>/**
-<a name="line498"></a> * Pushes an item into an array, if it&#39;s not already in the array.
-<a name="line499"></a> * @param {Array} arr Array into which to insert the item.
-<a name="line500"></a> * @param {*} obj Value to add.
-<a name="line501"></a> */
-<a name="line502"></a>goog.array.insert = function(arr, obj) {
-<a name="line503"></a>  if (!goog.array.contains(arr, obj)) {
-<a name="line504"></a>    arr.push(obj);
-<a name="line505"></a>  }
-<a name="line506"></a>};
-<a name="line507"></a>
-<a name="line508"></a>
-<a name="line509"></a>/**
-<a name="line510"></a> * Inserts an object at the given index of the array.
-<a name="line511"></a> * @param {goog.array.ArrayLike} arr The array to modify.
-<a name="line512"></a> * @param {*} obj The object to insert.
-<a name="line513"></a> * @param {number} opt_i The index at which to insert the object. If omitted,
-<a name="line514"></a> *      treated as 0. A negative index is counted from the end of the array.
+<a name="line163"></a>
+<a name="line164"></a>/**
+<a name="line165"></a> * Calls a function for each element in an array, starting from the last
+<a name="line166"></a> * element rather than the first.
+<a name="line167"></a> *
+<a name="line168"></a> * @param {goog.array.ArrayLike} arr The array over which to iterate.
+<a name="line169"></a> * @param {Function} f The function to call for every element. This function
+<a name="line170"></a> *     takes 3 arguments (the element, the index and the array). The return
+<a name="line171"></a> *     value is ignored.
+<a name="line172"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line173"></a> *     within f.
+<a name="line174"></a> */
+<a name="line175"></a>goog.array.forEachRight = function(arr, f, opt_obj) {
+<a name="line176"></a>  var l = arr.length;  // must be fixed during loop... see docs
+<a name="line177"></a>  var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
+<a name="line178"></a>  for (var i = l - 1; i &gt;= 0; --i) {
+<a name="line179"></a>    if (i in arr2) {
+<a name="line180"></a>      f.call(opt_obj, arr2[i], i, arr);
+<a name="line181"></a>    }
+<a name="line182"></a>  }
+<a name="line183"></a>};
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * Calls a function for each element in an array, and if the function returns
+<a name="line188"></a> * true adds the element to a new array.
+<a name="line189"></a> *
+<a name="line190"></a> * See {@link http://tinyurl.com/developer-mozilla-org-array-filter}
+<a name="line191"></a> *
+<a name="line192"></a> * @param {goog.array.ArrayLike} arr The array over which to iterate.
+<a name="line193"></a> * @param {Function} f The function to call for every element. This function
+<a name="line194"></a> *     takes 3 arguments (the element, the index and the array) and must
+<a name="line195"></a> *     return a Boolean. If the return value is true the element is added to the
+<a name="line196"></a> *     result array. If it is false the element is not included.
+<a name="line197"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line198"></a> *     within f.
+<a name="line199"></a> * @return {!Array} a new array in which only elements that passed the test are
+<a name="line200"></a> *     present.
+<a name="line201"></a> */
+<a name="line202"></a>goog.array.filter = goog.array.ARRAY_PROTOTYPE_.filter ?
+<a name="line203"></a>    function(arr, f, opt_obj) {
+<a name="line204"></a>      return goog.array.ARRAY_PROTOTYPE_.filter.call(arr, f, opt_obj);
+<a name="line205"></a>    } :
+<a name="line206"></a>    function(arr, f, opt_obj) {
+<a name="line207"></a>      var l = arr.length;  // must be fixed during loop... see docs
+<a name="line208"></a>      var res = [];
+<a name="line209"></a>      var resLength = 0;
+<a name="line210"></a>      var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
+<a name="line211"></a>      for (var i = 0; i &lt; l; i++) {
+<a name="line212"></a>        if (i in arr2) {
+<a name="line213"></a>          var val = arr2[i];  // in case f mutates arr2
+<a name="line214"></a>          if (f.call(opt_obj, val, i, arr)) {
+<a name="line215"></a>            res[resLength++] = val;
+<a name="line216"></a>          }
+<a name="line217"></a>        }
+<a name="line218"></a>      }
+<a name="line219"></a>      return res;
+<a name="line220"></a>    };
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/**
+<a name="line224"></a> * Calls a function for each element in an array and inserts the result into a
+<a name="line225"></a> * new array.
+<a name="line226"></a> *
+<a name="line227"></a> * See {@link http://tinyurl.com/developer-mozilla-org-array-map}
+<a name="line228"></a> *
+<a name="line229"></a> * @param {goog.array.ArrayLike} arr The array over which to iterate.
+<a name="line230"></a> * @param {Function} f The function to call for every element. This function
+<a name="line231"></a> *     takes 3 arguments (the element, the index and the array) and should
+<a name="line232"></a> *     return something. The result will be inserted into a new array.
+<a name="line233"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line234"></a> *     within f.
+<a name="line235"></a> * @return {!Array} a new array with the results from f.
+<a name="line236"></a> */
+<a name="line237"></a>goog.array.map = goog.array.ARRAY_PROTOTYPE_.map ?
+<a name="line238"></a>    function(arr, f, opt_obj) {
+<a name="line239"></a>      return goog.array.ARRAY_PROTOTYPE_.map.call(arr, f, opt_obj);
+<a name="line240"></a>    } :
+<a name="line241"></a>    function(arr, f, opt_obj) {
+<a name="line242"></a>      var l = arr.length;  // must be fixed during loop... see docs
+<a name="line243"></a>      var res = [];
+<a name="line244"></a>      var resLength = 0;
+<a name="line245"></a>      var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
+<a name="line246"></a>      for (var i = 0; i &lt; l; i++) {
+<a name="line247"></a>        if (i in arr2) {
+<a name="line248"></a>          res[resLength++] = f.call(opt_obj, arr2[i], i, arr);
+<a name="line249"></a>        }
+<a name="line250"></a>      }
+<a name="line251"></a>      return res;
+<a name="line252"></a>    };
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * Passes every element of an array into a function and accumulates the result.
+<a name="line257"></a> *
+<a name="line258"></a> * See {@link http://tinyurl.com/developer-mozilla-org-array-reduce}
+<a name="line259"></a> *
+<a name="line260"></a> * For example:
+<a name="line261"></a> * var a = [1, 2, 3, 4];
+<a name="line262"></a> * goog.array.reduce(a, function(r, v, i, arr) {return r + v;}, 0);
+<a name="line263"></a> * returns 10
+<a name="line264"></a> *
+<a name="line265"></a> * @param {goog.array.ArrayLike} arr The array over which to iterate.
+<a name="line266"></a> * @param {Function} f The function to call for every element. This function
+<a name="line267"></a> *     takes 4 arguments (the function&#39;s previous result or the initial value,
+<a name="line268"></a> *     the value of the current array element, the current array index, and the
+<a name="line269"></a> *     array itself)
+<a name="line270"></a> *     function(previousValue, currentValue, index, array).
+<a name="line271"></a> * @param {*} val The initial value to pass into the function on the first call.
+<a name="line272"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line273"></a> *     within f.
+<a name="line274"></a> * @return {*} Result of evaluating f repeatedly across the values of the array.
+<a name="line275"></a> */
+<a name="line276"></a>goog.array.reduce = function(arr, f, val, opt_obj) {
+<a name="line277"></a>  if (arr.reduce) {
+<a name="line278"></a>    if (opt_obj) {
+<a name="line279"></a>      return arr.reduce(goog.bind(f, opt_obj), val);
+<a name="line280"></a>    } else {
+<a name="line281"></a>      return arr.reduce(f, val);
+<a name="line282"></a>    }
+<a name="line283"></a>  }
+<a name="line284"></a>  var rval = val;
+<a name="line285"></a>  goog.array.forEach(arr, function(val, index) {
+<a name="line286"></a>    rval = f.call(opt_obj, rval, val, index, arr);
+<a name="line287"></a>  });
+<a name="line288"></a>  return rval;
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * Passes every element of an array into a function and accumulates the result,
+<a name="line294"></a> * starting from the last element and working towards the first.
+<a name="line295"></a> *
+<a name="line296"></a> * See {@link http://tinyurl.com/developer-mozilla-org-array-reduceright}
+<a name="line297"></a> *
+<a name="line298"></a> * For example:
+<a name="line299"></a> * var a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;];
+<a name="line300"></a> * goog.array.reduceRight(a, function(r, v, i, arr) {return r + v;}, &#39;&#39;);
+<a name="line301"></a> * returns &#39;cba&#39;
+<a name="line302"></a> *
+<a name="line303"></a> * @param {goog.array.ArrayLike} arr The array over which to iterate.
+<a name="line304"></a> * @param {Function} f The function to call for every element. This function
+<a name="line305"></a> *     takes 4 arguments (the function&#39;s previous result or the initial value,
+<a name="line306"></a> *     the value of the current array element, the current array index, and the
+<a name="line307"></a> *     array itself)
+<a name="line308"></a> *     function(previousValue, currentValue, index, array).
+<a name="line309"></a> * @param {*} val The initial value to pass into the function on the first call.
+<a name="line310"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line311"></a> *     within f.
+<a name="line312"></a> * @return {*} Object returned as a result of evaluating f repeatedly across the
+<a name="line313"></a> *     values of the array.
+<a name="line314"></a> */
+<a name="line315"></a>goog.array.reduceRight = function(arr, f, val, opt_obj) {
+<a name="line316"></a>  if (arr.reduceRight) {
+<a name="line317"></a>    if (opt_obj) {
+<a name="line318"></a>      return arr.reduceRight(goog.bind(f, opt_obj), val);
+<a name="line319"></a>    } else {
+<a name="line320"></a>      return arr.reduceRight(f, val);
+<a name="line321"></a>    }
+<a name="line322"></a>  }
+<a name="line323"></a>  var rval = val;
+<a name="line324"></a>  goog.array.forEachRight(arr, function(val, index) {
+<a name="line325"></a>    rval = f.call(opt_obj, rval, val, index, arr);
+<a name="line326"></a>  });
+<a name="line327"></a>  return rval;
+<a name="line328"></a>};
+<a name="line329"></a>
+<a name="line330"></a>
+<a name="line331"></a>/**
+<a name="line332"></a> * Calls f for each element of an array. If any call returns true, some()
+<a name="line333"></a> * returns true (without checking the remaining elements). If all calls
+<a name="line334"></a> * return false, some() returns false.
+<a name="line335"></a> *
+<a name="line336"></a> * See {@link http://tinyurl.com/developer-mozilla-org-array-some}
+<a name="line337"></a> *
+<a name="line338"></a> * @param {goog.array.ArrayLike} arr The array to check.
+<a name="line339"></a> * @param {Function} f The function to call for every element. This function
+<a name="line340"></a> *     takes 3 arguments (the element, the index and the array) and must
+<a name="line341"></a> *     return a Boolean.
+<a name="line342"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line343"></a> *     within f.
+<a name="line344"></a> * @return {boolean} true if any element passes the test.
+<a name="line345"></a> */
+<a name="line346"></a>goog.array.some = goog.array.ARRAY_PROTOTYPE_.some ?
+<a name="line347"></a>    function(arr, f, opt_obj) {
+<a name="line348"></a>      return goog.array.ARRAY_PROTOTYPE_.some.call(arr, f, opt_obj);
+<a name="line349"></a>    } :
+<a name="line350"></a>    function(arr, f, opt_obj) {
+<a name="line351"></a>      var l = arr.length;  // must be fixed during loop... see docs
+<a name="line352"></a>      var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
+<a name="line353"></a>      for (var i = 0; i &lt; l; i++) {
+<a name="line354"></a>        if (i in arr2 &amp;&amp; f.call(opt_obj, arr2[i], i, arr)) {
+<a name="line355"></a>          return true;
+<a name="line356"></a>        }
+<a name="line357"></a>      }
+<a name="line358"></a>      return false;
+<a name="line359"></a>    };
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * Call f for each element of an array. If all calls return true, every()
+<a name="line364"></a> * returns true. If any call returns false, every() returns false and
+<a name="line365"></a> * does not continue to check the remaining elements.
+<a name="line366"></a> *
+<a name="line367"></a> * See {@link http://tinyurl.com/developer-mozilla-org-array-every}
+<a name="line368"></a> *
+<a name="line369"></a> * @param {goog.array.ArrayLike} arr The array to check.
+<a name="line370"></a> * @param {Function} f The function to call for every element. This function
+<a name="line371"></a> *     takes 3 arguments (the element, the index and the array) and must
+<a name="line372"></a> *     return a Boolean.
+<a name="line373"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line374"></a> *     within f.
+<a name="line375"></a> * @return {boolean} false if any element fails the test.
+<a name="line376"></a> */
+<a name="line377"></a>goog.array.every = goog.array.ARRAY_PROTOTYPE_.every ?
+<a name="line378"></a>    function(arr, f, opt_obj) {
+<a name="line379"></a>      return goog.array.ARRAY_PROTOTYPE_.every.call(arr, f, opt_obj);
+<a name="line380"></a>    } :
+<a name="line381"></a>    function(arr, f, opt_obj) {
+<a name="line382"></a>      var l = arr.length;  // must be fixed during loop... see docs
+<a name="line383"></a>      var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
+<a name="line384"></a>      for (var i = 0; i &lt; l; i++) {
+<a name="line385"></a>        if (i in arr2 &amp;&amp; !f.call(opt_obj, arr2[i], i, arr)) {
+<a name="line386"></a>          return false;
+<a name="line387"></a>        }
+<a name="line388"></a>      }
+<a name="line389"></a>      return true;
+<a name="line390"></a>    };
+<a name="line391"></a>
+<a name="line392"></a>
+<a name="line393"></a>/**
+<a name="line394"></a> * Search an array for the first element that satisfies a given condition and
+<a name="line395"></a> * return that element.
+<a name="line396"></a> * @param {goog.array.ArrayLike} arr The array to search.
+<a name="line397"></a> * @param {Function} f The function to call for every element. This function
+<a name="line398"></a> *     takes 3 arguments (the element, the index and the array) and should
+<a name="line399"></a> *     return a boolean.
+<a name="line400"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
+<a name="line401"></a> * @return {*} The first array element that passes the test, or null if no
+<a name="line402"></a> *     element is found.
+<a name="line403"></a> */
+<a name="line404"></a>goog.array.find = function(arr, f, opt_obj) {
+<a name="line405"></a>  var i = goog.array.findIndex(arr, f, opt_obj);
+<a name="line406"></a>  return i &lt; 0 ? null : goog.isString(arr) ? arr.charAt(i) : arr[i];
+<a name="line407"></a>};
+<a name="line408"></a>
+<a name="line409"></a>
+<a name="line410"></a>/**
+<a name="line411"></a> * Search an array for the first element that satisfies a given condition and
+<a name="line412"></a> * return its index.
+<a name="line413"></a> * @param {goog.array.ArrayLike} arr The array to search.
+<a name="line414"></a> * @param {Function} f The function to call for every element. This function
+<a name="line415"></a> *     takes 3 arguments (the element, the index and the array) and should
+<a name="line416"></a> *     return a boolean.
+<a name="line417"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
+<a name="line418"></a> * @return {number} The index of the first array element that passes the test,
+<a name="line419"></a> *     or -1 if no element is found.
+<a name="line420"></a> */
+<a name="line421"></a>goog.array.findIndex = function(arr, f, opt_obj) {
+<a name="line422"></a>  var l = arr.length;  // must be fixed during loop... see docs
+<a name="line423"></a>  var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
+<a name="line424"></a>  for (var i = 0; i &lt; l; i++) {
+<a name="line425"></a>    if (i in arr2 &amp;&amp; f.call(opt_obj, arr2[i], i, arr)) {
+<a name="line426"></a>      return i;
+<a name="line427"></a>    }
+<a name="line428"></a>  }
+<a name="line429"></a>  return -1;
+<a name="line430"></a>};
+<a name="line431"></a>
+<a name="line432"></a>
+<a name="line433"></a>/**
+<a name="line434"></a> * Search an array (in reverse order) for the last element that satisfies a
+<a name="line435"></a> * given condition and return that element.
+<a name="line436"></a> * @param {goog.array.ArrayLike} arr The array to search.
+<a name="line437"></a> * @param {Function} f The function to call for every element. This function
+<a name="line438"></a> *     takes 3 arguments (the element, the index and the array) and should
+<a name="line439"></a> *     return a boolean.
+<a name="line440"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
+<a name="line441"></a> * @return {*} The last array element that passes the test, or null if no
+<a name="line442"></a> *     element is found.
+<a name="line443"></a> */
+<a name="line444"></a>goog.array.findRight = function(arr, f, opt_obj) {
+<a name="line445"></a>  var i = goog.array.findIndexRight(arr, f, opt_obj);
+<a name="line446"></a>  return i &lt; 0 ? null : goog.isString(arr) ? arr.charAt(i) : arr[i];
+<a name="line447"></a>};
+<a name="line448"></a>
+<a name="line449"></a>
+<a name="line450"></a>/**
+<a name="line451"></a> * Search an array (in reverse order) for the last element that satisfies a
+<a name="line452"></a> * given condition and return its index.
+<a name="line453"></a> * @param {goog.array.ArrayLike} arr The array to search.
+<a name="line454"></a> * @param {Function} f The function to call for every element. This function
+<a name="line455"></a> *     takes 3 arguments (the element, the index and the array) and should
+<a name="line456"></a> *     return a boolean.
+<a name="line457"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
+<a name="line458"></a> * @return {number} The index of the last array element that passes the test,
+<a name="line459"></a> *     or -1 if no element is found.
+<a name="line460"></a> */
+<a name="line461"></a>goog.array.findIndexRight = function(arr, f, opt_obj) {
+<a name="line462"></a>  var l = arr.length;  // must be fixed during loop... see docs
+<a name="line463"></a>  var arr2 = goog.isString(arr) ? arr.split(&#39;&#39;) : arr;
+<a name="line464"></a>  for (var i = l - 1; i &gt;= 0; i--) {
+<a name="line465"></a>    if (i in arr2 &amp;&amp; f.call(opt_obj, arr2[i], i, arr)) {
+<a name="line466"></a>      return i;
+<a name="line467"></a>    }
+<a name="line468"></a>  }
+<a name="line469"></a>  return -1;
+<a name="line470"></a>};
+<a name="line471"></a>
+<a name="line472"></a>
+<a name="line473"></a>/**
+<a name="line474"></a> * Whether the array contains the given object.
+<a name="line475"></a> * @param {goog.array.ArrayLike} arr The array to test for the presence of the
+<a name="line476"></a> *     element.
+<a name="line477"></a> * @param {*} obj The object for which to test.
+<a name="line478"></a> * @return {boolean} true if obj is present.
+<a name="line479"></a> */
+<a name="line480"></a>goog.array.contains = function(arr, obj) {
+<a name="line481"></a>  return goog.array.indexOf(arr, obj) &gt;= 0;
+<a name="line482"></a>};
+<a name="line483"></a>
+<a name="line484"></a>
+<a name="line485"></a>/**
+<a name="line486"></a> * Whether the array is empty.
+<a name="line487"></a> * @param {goog.array.ArrayLike} arr The array to test.
+<a name="line488"></a> * @return {boolean} true if empty.
+<a name="line489"></a> */
+<a name="line490"></a>goog.array.isEmpty = function(arr) {
+<a name="line491"></a>  return arr.length == 0;
+<a name="line492"></a>};
+<a name="line493"></a>
+<a name="line494"></a>
+<a name="line495"></a>/**
+<a name="line496"></a> * Clears the array.
+<a name="line497"></a> * @param {goog.array.ArrayLike} arr Array or array like object to clear.
+<a name="line498"></a> */
+<a name="line499"></a>goog.array.clear = function(arr) {
+<a name="line500"></a>  // For non real arrays we don&#39;t have the magic length so we delete the
+<a name="line501"></a>  // indices.
+<a name="line502"></a>  if (!goog.isArray(arr)) {
+<a name="line503"></a>    for (var i = arr.length - 1; i &gt;= 0; i--) {
+<a name="line504"></a>      delete arr[i];
+<a name="line505"></a>    }
+<a name="line506"></a>  }
+<a name="line507"></a>  arr.length = 0;
+<a name="line508"></a>};
+<a name="line509"></a>
+<a name="line510"></a>
+<a name="line511"></a>/**
+<a name="line512"></a> * Pushes an item into an array, if it&#39;s not already in the array.
+<a name="line513"></a> * @param {Array} arr Array into which to insert the item.
+<a name="line514"></a> * @param {*} obj Value to add.
 <a name="line515"></a> */
-<a name="line516"></a>goog.array.insertAt = function(arr, obj, opt_i) {
-<a name="line517"></a>  goog.array.splice(arr, opt_i, 0, obj);
-<a name="line518"></a>};
-<a name="line519"></a>
-<a name="line520"></a>
-<a name="line521"></a>/**
-<a name="line522"></a> * Inserts at the given index of the array, all elements of another array.
-<a name="line523"></a> * @param {goog.array.ArrayLike} arr The array to modify.
-<a name="line524"></a> * @param {goog.array.ArrayLike} elementsToAdd The array of elements to add.
-<a name="line525"></a> * @param {number} opt_i The index at which to insert the object. If omitted,
-<a name="line526"></a> *      treated as 0. A negative index is counted from the end of the array.
-<a name="line527"></a> */
-<a name="line528"></a>goog.array.insertArrayAt = function(arr, elementsToAdd, opt_i) {
-<a name="line529"></a>  goog.partial(goog.array.splice, arr, opt_i, 0).apply(null, elementsToAdd);
-<a name="line530"></a>};
-<a name="line531"></a>
-<a name="line532"></a>
-<a name="line533"></a>/**
-<a name="line534"></a> * Inserts an object into an array before a specified object.
-<a name="line535"></a> * @param {Array} arr The array to modify.
-<a name="line536"></a> * @param {*} obj The object to insert.
-<a name="line537"></a> * @param {*} opt_obj2 The object before which obj should be inserted. If obj2
-<a name="line538"></a> *     is omitted or not found, obj is inserted at the end of the array.
-<a name="line539"></a> */
-<a name="line540"></a>goog.array.insertBefore = function(arr, obj, opt_obj2) {
-<a name="line541"></a>  var i;
-<a name="line542"></a>  if (arguments.length == 2 || (i = goog.array.indexOf(arr, opt_obj2)) &lt; 0) {
-<a name="line543"></a>    arr.push(obj);
-<a name="line544"></a>  } else {
-<a name="line545"></a>    goog.array.insertAt(arr, obj, i);
-<a name="line546"></a>  }
-<a name="line547"></a>};
-<a name="line548"></a>
-<a name="line549"></a>
-<a name="line550"></a>/**
-<a name="line551"></a> * Removes the first occurrence of a particular value from an array.
-<a name="line552"></a> * @param {goog.array.ArrayLike} arr Array from which to remove value.
-<a name="line553"></a> * @param {*} obj Object to remove.
-<a name="line554"></a> * @return {boolean} True if an element was removed.
-<a name="line555"></a> */
-<a name="line556"></a>goog.array.remove = function(arr, obj) {
-<a name="line557"></a>  var i = goog.array.indexOf(arr, obj);
-<a name="line558"></a>  var rv;
-<a name="line559"></a>  if ((rv = i &gt;= 0)) {
-<a name="line560"></a>    goog.array.removeAt(arr, i);
-<a name="line561"></a>  }
-<a name="line562"></a>  return rv;
-<a name="line563"></a>};
-<a name="line564"></a>
-<a name="line565"></a>
-<a name="line566"></a>/**
-<a name="line567"></a> * Removes from an array the element at index i
-<a name="line568"></a> * @param {goog.array.ArrayLike} arr Array or array like object from which to
-<a name="line569"></a> *     remove value.
-<a name="line570"></a> * @param {number} i The index to remove.
-<a name="line571"></a> * @return {boolean} True if an element was removed.
-<a name="line572"></a> */
-<a name="line573"></a>goog.array.removeAt = function(arr, i) {
-<a name="line574"></a>  // use generic form of splice
-<a name="line575"></a>  // splice returns the removed items and if successful the length of that
-<a name="line576"></a>  // will be 1
-<a name="line577"></a>  return goog.array.ARRAY_PROTOTYPE_.splice.call(arr, i, 1).length == 1;
-<a name="line578"></a>};
+<a name="line516"></a>goog.array.insert = function(arr, obj) {
+<a name="line517"></a>  if (!goog.array.contains(arr, obj)) {
+<a name="line518"></a>    arr.push(obj);
+<a name="line519"></a>  }
+<a name="line520"></a>};
+<a name="line521"></a>
+<a name="line522"></a>
+<a name="line523"></a>/**
+<a name="line524"></a> * Inserts an object at the given index of the array.
+<a name="line525"></a> * @param {goog.array.ArrayLike} arr The array to modify.
+<a name="line526"></a> * @param {*} obj The object to insert.
+<a name="line527"></a> * @param {number} opt_i The index at which to insert the object. If omitted,
+<a name="line528"></a> *      treated as 0. A negative index is counted from the end of the array.
+<a name="line529"></a> */
+<a name="line530"></a>goog.array.insertAt = function(arr, obj, opt_i) {
+<a name="line531"></a>  goog.array.splice(arr, opt_i, 0, obj);
+<a name="line532"></a>};
+<a name="line533"></a>
+<a name="line534"></a>
+<a name="line535"></a>/**
+<a name="line536"></a> * Inserts at the given index of the array, all elements of another array.
+<a name="line537"></a> * @param {goog.array.ArrayLike} arr The array to modify.
+<a name="line538"></a> * @param {goog.array.ArrayLike} elementsToAdd The array of elements to add.
+<a name="line539"></a> * @param {number} opt_i The index at which to insert the object. If omitted,
+<a name="line540"></a> *      treated as 0. A negative index is counted from the end of the array.
+<a name="line541"></a> */
+<a name="line542"></a>goog.array.insertArrayAt = function(arr, elementsToAdd, opt_i) {
+<a name="line543"></a>  goog.partial(goog.array.splice, arr, opt_i, 0).apply(null, elementsToAdd);
+<a name="line544"></a>};
+<a name="line545"></a>
+<a name="line546"></a>
+<a name="line547"></a>/**
+<a name="line548"></a> * Inserts an object into an array before a specified object.
+<a name="line549"></a> * @param {Array} arr The array to modify.
+<a name="line550"></a> * @param {*} obj The object to insert.
+<a name="line551"></a> * @param {*} opt_obj2 The object before which obj should be inserted. If obj2
+<a name="line552"></a> *     is omitted or not found, obj is inserted at the end of the array.
+<a name="line553"></a> */
+<a name="line554"></a>goog.array.insertBefore = function(arr, obj, opt_obj2) {
+<a name="line555"></a>  var i;
+<a name="line556"></a>  if (arguments.length == 2 || (i = goog.array.indexOf(arr, opt_obj2)) &lt; 0) {
+<a name="line557"></a>    arr.push(obj);
+<a name="line558"></a>  } else {
+<a name="line559"></a>    goog.array.insertAt(arr, obj, i);
+<a name="line560"></a>  }
+<a name="line561"></a>};
+<a name="line562"></a>
+<a name="line563"></a>
+<a name="line564"></a>/**
+<a name="line565"></a> * Removes the first occurrence of a particular value from an array.
+<a name="line566"></a> * @param {goog.array.ArrayLike} arr Array from which to remove value.
+<a name="line567"></a> * @param {*} obj Object to remove.
+<a name="line568"></a> * @return {boolean} True if an element was removed.
+<a name="line569"></a> */
+<a name="line570"></a>goog.array.remove = function(arr, obj) {
+<a name="line571"></a>  var i = goog.array.indexOf(arr, obj);
+<a name="line572"></a>  var rv;
+<a name="line573"></a>  if ((rv = i &gt;= 0)) {
+<a name="line574"></a>    goog.array.removeAt(arr, i);
+<a name="line575"></a>  }
+<a name="line576"></a>  return rv;
+<a name="line577"></a>};
+<a name="line578"></a>
 <a name="line579"></a>
-<a name="line580"></a>
-<a name="line581"></a>/**
-<a name="line582"></a> * Removes the first value that satisfies the given condition.
-<a name="line583"></a> * @param {goog.array.ArrayLike} arr Array from which to remove value.
-<a name="line584"></a> * @param {Function} f The function to call for every element. This function
-<a name="line585"></a> *     takes 3 arguments (the element, the index and the array) and should
-<a name="line586"></a> *     return a boolean.
-<a name="line587"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
-<a name="line588"></a> * @return {boolean} True if an element was removed.
-<a name="line589"></a> */
-<a name="line590"></a>goog.array.removeIf = function(arr, f, opt_obj) {
-<a name="line591"></a>  var i = goog.array.findIndex(arr, f, opt_obj);
-<a name="line592"></a>  if (i &gt;= 0) {
-<a name="line593"></a>    goog.array.removeAt(arr, i);
-<a name="line594"></a>    return true;
-<a name="line595"></a>  }
-<a name="line596"></a>  return false;
-<a name="line597"></a>};
-<a name="line598"></a>
-<a name="line599"></a>
-<a name="line600"></a>/**
-<a name="line601"></a> * Does a shallow copy of an array.
-<a name="line602"></a> * @param {goog.array.ArrayLike} arr  Array or array-like object to clone.
-<a name="line603"></a> * @return {!Array} Clone of the input array.
-<a name="line604"></a> */
-<a name="line605"></a>goog.array.clone = function(arr) {
-<a name="line606"></a>  if (goog.isArray(arr)) {
-<a name="line607"></a>    // Generic concat does not seem to work so lets just use the plain old
-<a name="line608"></a>    // instance method.
-<a name="line609"></a>    return arr.concat();
-<a name="line610"></a>  } else { // array like
-<a name="line611"></a>    // Concat does not work with non arrays
-<a name="line612"></a>    var rv = [];
-<a name="line613"></a>    for (var i = 0, len = arr.length; i &lt; len; i++) {
-<a name="line614"></a>      rv[i] = arr[i];
-<a name="line615"></a>    }
-<a name="line616"></a>    return rv;
-<a name="line617"></a>  }
-<a name="line618"></a>};
-<a name="line619"></a>
-<a name="line620"></a>
-<a name="line621"></a>/**
-<a name="line622"></a> * Converts an object to an array.
-<a name="line623"></a> * @param {goog.array.ArrayLike} object  The object to convert to an array.
-<a name="line624"></a> * @return {!Array} The object converted into an array. If object has a
-<a name="line625"></a> *     length property, every property indexed with a non-negative number
-<a name="line626"></a> *     less than length will be included in the result. If object does not
-<a name="line627"></a> *     have a length property, an empty array will be returned.
-<a name="line628"></a> */
-<a name="line629"></a>goog.array.toArray = function(object) {
-<a name="line630"></a>  if (goog.isArray(object)) {
-<a name="line631"></a>    // This fixes the JS compiler warning and forces the Object to an Array type
-<a name="line632"></a>    return object.concat();
-<a name="line633"></a>  }
-<a name="line634"></a>  // Clone what we hope to be an array-like object to an array.
-<a name="line635"></a>  // We could check isArrayLike() first, but no check we perform would be as
-<a name="line636"></a>  // reliable as simply making the call.
-<a name="line637"></a>  return goog.array.clone(/** @type {Array} */ (object));
-<a name="line638"></a>};
-<a name="line639"></a>
-<a name="line640"></a>
-<a name="line641"></a>/**
-<a name="line642"></a> * Extends an array with another array, element, or &quot;array like&quot; object.
-<a name="line643"></a> * This function operates &#39;in-place&#39;, it does not create a new Array.
-<a name="line644"></a> *
-<a name="line645"></a> * Example:
-<a name="line646"></a> * var a = [];
-<a name="line647"></a> * goog.array.extend(a, [0, 1]);
-<a name="line648"></a> * a; // [0, 1]
-<a name="line649"></a> * goog.array.extend(a, 2);
-<a name="line650"></a> * a; // [0, 1, 2]
-<a name="line651"></a> *
-<a name="line652"></a> * @param {Array} arr1  The array to modify.
-<a name="line653"></a> * @param {*} var_args The elements or arrays of elements to add to arr1.
-<a name="line654"></a> */
-<a name="line655"></a>goog.array.extend = function(arr1, var_args) {
-<a name="line656"></a>  for (var i = 1; i &lt; arguments.length; i++) {
-<a name="line657"></a>    var arr2 = arguments[i];
-<a name="line658"></a>    if (goog.isArrayLike(arr2)) {
-<a name="line659"></a>      // Make sure arr2 is a real array, and not just &quot;array like.&quot;
-<a name="line660"></a>      arr2 = goog.array.toArray(arr2);
-<a name="line661"></a>      arr1.push.apply(arr1, arr2);
-<a name="line662"></a>    } else {
-<a name="line663"></a>      arr1.push(arr2);
-<a name="line664"></a>    }
-<a name="line665"></a>  }
-<a name="line666"></a>};
-<a name="line667"></a>
-<a name="line668"></a>
-<a name="line669"></a>/**
-<a name="line670"></a> * Adds or removes elements from an array. This is a generic version of Array
-<a name="line671"></a> * splice. This means that it might work on other objects similar to arrays,
-<a name="line672"></a> * such as the arguments object.
-<a name="line673"></a> *
-<a name="line674"></a> * @param {goog.array.ArrayLike} arr The array to modify.
-<a name="line675"></a> * @param {number|undefined} index The index at which to start changing the
-<a name="line676"></a> *     array. If not defined, treated as 0.
-<a name="line677"></a> * @param {number} howMany How many elements to remove (0 means no removal. A
-<a name="line678"></a> *     value below 0 is treated as zero and so is any other non number. Numbers
-<a name="line679"></a> *     are floored).
-<a name="line680"></a> * @param {*} var_args Optional, additional elements to insert into the
-<a name="line681"></a> *     array.
-<a name="line682"></a> * @return {!Array} the removed elements.
-<a name="line683"></a> */
-<a name="line684"></a>goog.array.splice = function(arr, index, howMany, var_args) {
-<a name="line685"></a>  return goog.array.ARRAY_PROTOTYPE_.splice.apply(
-<a name="line686"></a>      arr, goog.array.slice(arguments, 1));
-<a name="line687"></a>};
-<a name="line688"></a>
-<a name="line689"></a>
-<a name="line690"></a>/**
-<a name="line691"></a> * Returns a new array from a segment of an array. This is a generic version of
-<a name="line692"></a> * Array slice. This means that it might work on other objects similar to
-<a name="line693"></a> * arrays, such as the arguments object.
-<a name="line694"></a> *
-<a name="line695"></a> * @param {goog.array.ArrayLike} arr The array from which to copy a segment.
-<a name="line696"></a> * @param {number} start The index of the first element to copy.
-<a name="line697"></a> * @param {number} opt_end The index after the last element to copy.
-<a name="line698"></a> * @return {!Array} A new array containing the specified segment of the original
-<a name="line699"></a> *     array.
-<a name="line700"></a> */
-<a name="line701"></a>goog.array.slice = function(arr, start, opt_end) {
-<a name="line702"></a>  // passing 1 arg to slice is not the same as passing 2 where the second is
-<a name="line703"></a>  // null or undefined (in that case the second argument is treated as 0).
-<a name="line704"></a>  // we could use slice on the arguments object and then use apply instead of
-<a name="line705"></a>  // testing the length
-<a name="line706"></a>  if (arguments.length &lt;= 2) {
-<a name="line707"></a>    return goog.array.ARRAY_PROTOTYPE_.slice.call(arr, start);
-<a name="line708"></a>  } else {
-<a name="line709"></a>    return goog.array.ARRAY_PROTOTYPE_.slice.call(arr, start, opt_end);
-<a name="line710"></a>  }
-<a name="line711"></a>};
-<a name="line712"></a>
-<a name="line713"></a>
-<a name="line714"></a>/**
-<a name="line715"></a> * Removes all duplicates from an array (retaining only the first
-<a name="line716"></a> * occurrence of each array element).  This function modifies the
-<a name="line717"></a> * array in place and doesn&#39;t change the order of the non-duplicate items.
-<a name="line718"></a> *
-<a name="line719"></a> * For objects, duplicates are identified as having the same hash code property
-<a name="line720"></a> * as defined by {@see goog.getHashCode}.
-<a name="line721"></a> *
-<a name="line722"></a> * Runtime: N,
-<a name="line723"></a> * Worstcase space: 2N (no dupes)
-<a name="line724"></a> *
-<a name="line725"></a> * @param {goog.array.ArrayLike} arr The array from which to remove duplicates.
-<a name="line726"></a> * @param {Array} opt_rv An optional array in which to return the results,
-<a name="line727"></a> *     instead of performing the removal inplace.  If specified, the original
-<a name="line728"></a> *     array will remain unchanged.
-<a name="line729"></a> */
-<a name="line730"></a>goog.array.removeDuplicates = function(arr, opt_rv) {
-<a name="line731"></a>  var rv = opt_rv || arr;
-<a name="line732"></a>  var seen = {}, cursorInsert = 0, cursorRead = 0;
-<a name="line733"></a>  while (cursorRead &lt; arr.length) {
-<a name="line734"></a>    var current = arr[cursorRead++];
-<a name="line735"></a>    var hc = goog.isObject(current) ? goog.getHashCode(current) : current;
-<a name="line736"></a>    if (!Object.prototype.hasOwnProperty.call(seen, hc)) {
-<a name="line737"></a>      seen[hc] = true;
-<a name="line738"></a>      rv[cursorInsert++] = current;
-<a name="line739"></a>    }
-<a name="line740"></a>  }
-<a name="line741"></a>  rv.length = cursorInsert;
-<a name="line742"></a>};
-<a name="line743"></a>
-<a name="line744"></a>
-<a name="line745"></a>/**
-<a name="line746"></a> * Searches the specified array for the specified target using the binary
-<a name="line747"></a> * search algorithm.  If no opt_compareFn is specified, elements are compared
-<a name="line748"></a> * using &lt;code&gt;goog.array.defaultCompare&lt;/code&gt;, which compares the elements
-<a name="line749"></a> * using the built in &lt; and &gt; operators.  This will produce the expected
-<a name="line750"></a> * behavior for homogeneous arrays of String(s) and Number(s). The array
-<a name="line751"></a> * specified &lt;b&gt;must&lt;/b&gt; be sorted in ascending order (as defined by the
-<a name="line752"></a> * comparison function).  If the array is not sorted, results are undefined.
-<a name="line753"></a> * If the array contains multiple instances of the specified target value, any
-<a name="line754"></a> * of these instances may be found.
-<a name="line755"></a> *
-<a name="line756"></a> * Runtime: O(log n)
-<a name="line757"></a> *
-<a name="line758"></a> * @param {goog.array.ArrayLike} arr The array to be searched.
-<a name="line759"></a> * @param {*} target The sought value.
-<a name="line760"></a> * @param {Function} opt_compareFn Optional comparison function by which the
-<a name="line761"></a> *     array is ordered. Should take 2 arguments to compare, and return a
-<a name="line762"></a> *     negative integer, zero, or a positive integer depending on whether the
-<a name="line763"></a> *     first argument is less than, equal to, or greater than the second.
-<a name="line764"></a> * @return {number} Index of the target value if found, otherwise
-<a name="line765"></a> *     (-(insertion point) - 1). The insertion point is where the value should
-<a name="line766"></a> *     be inserted into arr to preserve the sorted property.  Return value &gt;= 0
-<a name="line767"></a> *     iff target is found.
-<a name="line768"></a> */
-<a name="line769"></a>goog.array.binarySearch = function(arr, target, opt_compareFn) {
-<a name="line770"></a>  var left = 0;
-<a name="line771"></a>  var right = arr.length - 1;
-<a name="line772"></a>  var compareFn = opt_compareFn || goog.array.defaultCompare;
-<a name="line773"></a>  while (left &lt;= right) {
-<a name="line774"></a>    var mid = (left + right) &gt;&gt; 1;
-<a name="line775"></a>    var compareResult = compareFn(target, arr[mid]);
-<a name="line776"></a>    if (compareResult &gt; 0) {
-<a name="line777"></a>      left = mid + 1;
-<a name="line778"></a>    } else if (compareResult &lt; 0) {
-<a name="line779"></a>      right = mid - 1;
-<a name="line780"></a>    } else {
-<a name="line781"></a>      return mid;
-<a name="line782"></a>    }
-<a name="line783"></a>  }
-<a name="line784"></a>  // Not found, left is the insertion point.
-<a name="line785"></a>  return -(left + 1);
-<a name="line786"></a>};
-<a name="line787"></a>
-<a name="line788"></a>
-<a name="line789"></a>/**
-<a name="line790"></a> * Sorts the specified array into ascending order.  If no opt_compareFn is
-<a name="line791"></a> * specified, elements are compared using
-<a name="line792"></a> * &lt;code&gt;goog.array.defaultCompare&lt;/code&gt;, which compares the elements using
-<a name="line793"></a> * the built in &lt; and &gt; operators.  This will produce the expected behavior
-<a name="line794"></a> * for homogeneous arrays of String(s) and Number(s).
-<a name="line795"></a> *
-<a name="line796"></a> * This sort is not guaranteed to be stable.
-<a name="line797"></a> *
-<a name="line798"></a> * Runtime: Same as &lt;code&gt;Array.prototype.sort&lt;/code&gt;
-<a name="line799"></a> *
-<a name="line800"></a> * @param {Array} arr The array to be sorted.
-<a name="line801"></a> * @param {Function} opt_compareFn Optional comparison function by which the
-<a name="line802"></a> *     array is to be ordered. Should take 2 arguments to compare, and return a
-<a name="line803"></a> *     negative integer, zero, or a positive integer depending on whether the
-<a name="line804"></a> *     first argument is less than, equal to, or greater than the second.
-<a name="line805"></a> */
-<a name="line806"></a>goog.array.sort = function(arr, opt_compareFn) {
-<a name="line807"></a>  goog.array.ARRAY_PROTOTYPE_.sort.call(
-<a name="line808"></a>      arr, opt_compareFn || goog.array.defaultCompare);
-<a name="line809"></a>};
-<a name="line810"></a>
-<a name="line811"></a>
-<a name="line812"></a>/**
-<a name="line813"></a> * Sorts the specified array into ascending order in a stable way.  If no
-<a name="line814"></a> * opt_compareFn is specified, elements are compared using
-<a name="line815"></a> * &lt;code&gt;goog.array.defaultCompare&lt;/code&gt;, which compares the elements using
-<a name="line816"></a> * the built in &lt; and &gt; operators.  This will produce the expected behavior
-<a name="line817"></a> * for homogeneous arrays of String(s) and Number(s).
-<a name="line818"></a> *
-<a name="line819"></a> * Runtime: Same as &lt;code&gt;Array.prototype.sort&lt;/code&gt;, plus an additional
-<a name="line820"></a> * O(n) overhead of copying the array twice.
-<a name="line821"></a> *
-<a name="line822"></a> * @param {Array} arr The array to be sorted.
-<a name="line823"></a> * @param {function(*, *): number} opt_compareFn Optional comparison function by
-<a name="line824"></a> *     which the array is to be ordered. Should take 2 arguments to compare, and
-<a name="line825"></a> *     return a negative integer, zero, or a positive integer depending on
-<a name="line826"></a> *     whether the first argument is less than, equal to, or greater than the
-<a name="line827"></a> *     second.
-<a name="line828"></a> */
-<a name="line829"></a>goog.array.stableSort = function(arr, opt_compareFn) {
-<a name="line830"></a>  for (var i = 0; i &lt; arr.length; i++) {
-<a name="line831"></a>    arr[i] = {index: i, value: arr[i]};
-<a name="line832"></a>  }
-<a name="line833"></a>  var valueCompareFn = opt_compareFn || goog.array.defaultCompare;
-<a name="line834"></a>  function stableCompareFn(obj1, obj2) {
-<a name="line835"></a>    return valueCompareFn(obj1.value, obj2.value) || obj1.index - obj2.index;
-<a name="line836"></a>  };
-<a name="line837"></a>  goog.array.sort(arr, stableCompareFn);
-<a name="line838"></a>  for (var i = 0; i &lt; arr.length; i++) {
-<a name="line839"></a>    arr[i] = arr[i].value;
-<a name="line840"></a>  }
-<a name="line841"></a>};
-<a name="line842"></a>
-<a name="line843"></a>
-<a name="line844"></a>/**
-<a name="line845"></a> * Sorts an array of objects by the specified object key and compare
-<a name="line846"></a> * function. If no compare function is provided, the key values are
-<a name="line847"></a> * compared in ascending order using &lt;code&gt;goog.array.defaultCompare&lt;/code&gt;.
-<a name="line848"></a> * This won&#39;t work for keys that get renamed by the compiler. So use
-<a name="line849"></a> * {&#39;foo&#39;: 1, &#39;bar&#39;: 2} rather than {foo: 1, bar: 2}.
-<a name="line850"></a> * @param {Array.&lt;Object&gt;} arr An array of objects to sort.
-<a name="line851"></a> * @param {string} key The object key to sort by.
-<a name="line852"></a> * @param {Function} opt_compareFn The function to use to compare key
-<a name="line853"></a> *     values.
-<a name="line854"></a> */
-<a name="line855"></a>goog.array.sortObjectsByKey = function(arr, key, opt_compareFn) {
-<a name="line856"></a>  var compare = opt_compareFn || goog.array.defaultCompare;
-<a name="line857"></a>  goog.array.sort(arr, function(a, b) {
-<a name="line858"></a>    return compare(a[key], b[key]);
-<a name="line859"></a>  });
-<a name="line860"></a>};
-<a name="line861"></a>
-<a name="line862"></a>
-<a name="line863"></a>/**
-<a name="line864"></a> * Compares two arrays for equality. Two arrays are considered equal if they
-<a name="line865"></a> * have the same length and their corresponding elements are equal according to
-<a name="line866"></a> * the comparison function.
-<a name="line867"></a> *
-<a name="line868"></a> * @param {goog.array.ArrayLike} arr1 The first array to compare.
-<a name="line869"></a> * @param {goog.array.ArrayLike} arr2 The second array to compare.
-<a name="line870"></a> * @param {Function} opt_equalsFn Optional comparison function.
-<a name="line871"></a> *     Should take 2 arguments to compare, and return true if the arguments
-<a name="line872"></a> *     are equal. Defaults to {@link goog.array.defaultCompareEquality} which
-<a name="line873"></a> *     compares the elements using the built-in &#39;===&#39; operator.
-<a name="line874"></a> * @return {boolean} Whether the two arrays are equal.
-<a name="line875"></a> */
-<a name="line876"></a>goog.array.equals = function(arr1, arr2, opt_equalsFn) {
-<a name="line877"></a>  if (!goog.isArrayLike(arr1) || !goog.isArrayLike(arr2) ||
-<a name="line878"></a>      arr1.length != arr2.length) {
-<a name="line879"></a>    return false;
-<a name="line880"></a>  }
-<a name="line881"></a>  var l = arr1.length;
-<a name="line882"></a>  var equalsFn = opt_equalsFn || goog.array.defaultCompareEquality;
-<a name="line883"></a>  for (var i = 0; i &lt; l; i++) {
-<a name="line884"></a>    if (!equalsFn(arr1[i], arr2[i])) {
-<a name="line885"></a>      return false;
-<a name="line886"></a>    }
-<a name="line887"></a>  }
-<a name="line888"></a>  return true;
-<a name="line889"></a>};
-<a name="line890"></a>
-<a name="line891"></a>
-<a name="line892"></a>/**
-<a name="line893"></a> * @deprecated Use {@link goog.array.equals}.
-<a name="line894"></a> * @param {goog.array.ArrayLike} arr1 See {@link goog.array.equals}.
-<a name="line895"></a> * @param {goog.array.ArrayLike} arr2 See {@link goog.array.equals}.
-<a name="line896"></a> * @param {Function} opt_equalsFn See {@link goog.array.equals}.
-<a name="line897"></a> * @return {boolean} See {@link goog.array.equals}.
-<a name="line898"></a> */
-<a name="line899"></a>goog.array.compare = function(arr1, arr2, opt_equalsFn) {
-<a name="line900"></a>  return goog.array.equals(arr1, arr2, opt_equalsFn);
-<a name="line901"></a>};
-<a name="line902"></a>
-<a name="line903"></a>
-<a name="line904"></a>/**
-<a name="line905"></a> * Compares its two arguments for order, using the built in &lt; and &gt;
-<a name="line906"></a> * operators.
-<a name="line907"></a> * @param {*} a The first object to be compared.
-<a name="line908"></a> * @param {*} b The second object to be compared.
-<a name="line909"></a> * @return {number} a negative integer, zero, or a positive integer
-<a name="line910"></a> *     as the first argument is less than, equal to, or greater than the
-<a name="line911"></a> *     second.
+<a name="line580"></a>/**
+<a name="line581"></a> * Removes from an array the element at index i
+<a name="line582"></a> * @param {goog.array.ArrayLike} arr Array or array like object from which to
+<a name="line583"></a> *     remove value.
+<a name="line584"></a> * @param {number} i The index to remove.
+<a name="line585"></a> * @return {boolean} True if an element was removed.
+<a name="line586"></a> */
+<a name="line587"></a>goog.array.removeAt = function(arr, i) {
+<a name="line588"></a>  // use generic form of splice
+<a name="line589"></a>  // splice returns the removed items and if successful the length of that
+<a name="line590"></a>  // will be 1
+<a name="line591"></a>  return goog.array.ARRAY_PROTOTYPE_.splice.call(arr, i, 1).length == 1;
+<a name="line592"></a>};
+<a name="line593"></a>
+<a name="line594"></a>
+<a name="line595"></a>/**
+<a name="line596"></a> * Removes the first value that satisfies the given condition.
+<a name="line597"></a> * @param {goog.array.ArrayLike} arr Array from which to remove value.
+<a name="line598"></a> * @param {Function} f The function to call for every element. This function
+<a name="line599"></a> *     takes 3 arguments (the element, the index and the array) and should
+<a name="line600"></a> *     return a boolean.
+<a name="line601"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
+<a name="line602"></a> * @return {boolean} True if an element was removed.
+<a name="line603"></a> */
+<a name="line604"></a>goog.array.removeIf = function(arr, f, opt_obj) {
+<a name="line605"></a>  var i = goog.array.findIndex(arr, f, opt_obj);
+<a name="line606"></a>  if (i &gt;= 0) {
+<a name="line607"></a>    goog.array.removeAt(arr, i);
+<a name="line608"></a>    return true;
+<a name="line609"></a>  }
+<a name="line610"></a>  return false;
+<a name="line611"></a>};
+<a name="line612"></a>
+<a name="line613"></a>
+<a name="line614"></a>/**
+<a name="line615"></a> * Does a shallow copy of an array.
+<a name="line616"></a> * @param {goog.array.ArrayLike} arr  Array or array-like object to clone.
+<a name="line617"></a> * @return {!Array} Clone of the input array.
+<a name="line618"></a> */
+<a name="line619"></a>goog.array.clone = function(arr) {
+<a name="line620"></a>  if (goog.isArray(arr)) {
+<a name="line621"></a>    // Generic concat does not seem to work so lets just use the plain old
+<a name="line622"></a>    // instance method.
+<a name="line623"></a>    return arr.concat();
+<a name="line624"></a>  } else { // array like
+<a name="line625"></a>    // Concat does not work with non arrays
+<a name="line626"></a>    var rv = [];
+<a name="line627"></a>    for (var i = 0, len = arr.length; i &lt; len; i++) {
+<a name="line628"></a>      rv[i] = arr[i];
+<a name="line629"></a>    }
+<a name="line630"></a>    return rv;
+<a name="line631"></a>  }
+<a name="line632"></a>};
+<a name="line633"></a>
+<a name="line634"></a>
+<a name="line635"></a>/**
+<a name="line636"></a> * Converts an object to an array.
+<a name="line637"></a> * @param {goog.array.ArrayLike} object  The object to convert to an array.
+<a name="line638"></a> * @return {!Array} The object converted into an array. If object has a
+<a name="line639"></a> *     length property, every property indexed with a non-negative number
+<a name="line640"></a> *     less than length will be included in the result. If object does not
+<a name="line641"></a> *     have a length property, an empty array will be returned.
+<a name="line642"></a> */
+<a name="line643"></a>goog.array.toArray = function(object) {
+<a name="line644"></a>  if (goog.isArray(object)) {
+<a name="line645"></a>    // This fixes the JS compiler warning and forces the Object to an Array type
+<a name="line646"></a>    return object.concat();
+<a name="line647"></a>  }
+<a name="line648"></a>  // Clone what we hope to be an array-like object to an array.
+<a name="line649"></a>  // We could check isArrayLike() first, but no check we perform would be as
+<a name="line650"></a>  // reliable as simply making the call.
+<a name="line651"></a>  return goog.array.clone(/** @type {Array} */ (object));
+<a name="line652"></a>};
+<a name="line653"></a>
+<a name="line654"></a>
+<a name="line655"></a>/**
+<a name="line656"></a> * Extends an array with another array, element, or &quot;array like&quot; object.
+<a name="line657"></a> * This function operates &#39;in-place&#39;, it does not create a new Array.
+<a name="line658"></a> *
+<a name="line659"></a> * Example:
+<a name="line660"></a> * var a = [];
+<a name="line661"></a> * goog.array.extend(a, [0, 1]);
+<a name="line662"></a> * a; // [0, 1]
+<a name="line663"></a> * goog.array.extend(a, 2);
+<a name="line664"></a> * a; // [0, 1, 2]
+<a name="line665"></a> *
+<a name="line666"></a> * @param {Array} arr1  The array to modify.
+<a name="line667"></a> * @param {*} var_args The elements or arrays of elements to add to arr1.
+<a name="line668"></a> */
+<a name="line669"></a>goog.array.extend = function(arr1, var_args) {
+<a name="line670"></a>  for (var i = 1; i &lt; arguments.length; i++) {
+<a name="line671"></a>    var arr2 = arguments[i];
+<a name="line672"></a>    if (goog.isArrayLike(arr2)) {
+<a name="line673"></a>      // Make sure arr2 is a real array, and not just &quot;array like.&quot;
+<a name="line674"></a>      arr2 = goog.array.toArray(arr2);
+<a name="line675"></a>      arr1.push.apply(arr1, arr2);
+<a name="line676"></a>    } else {
+<a name="line677"></a>      arr1.push(arr2);
+<a name="line678"></a>    }
+<a name="line679"></a>  }
+<a name="line680"></a>};
+<a name="line681"></a>
+<a name="line682"></a>
+<a name="line683"></a>/**
+<a name="line684"></a> * Adds or removes elements from an array. This is a generic version of Array
+<a name="line685"></a> * splice. This means that it might work on other objects similar to arrays,
+<a name="line686"></a> * such as the arguments object.
+<a name="line687"></a> *
+<a name="line688"></a> * @param {goog.array.ArrayLike} arr The array to modify.
+<a name="line689"></a> * @param {number|undefined} index The index at which to start changing the
+<a name="line690"></a> *     array. If not defined, treated as 0.
+<a name="line691"></a> * @param {number} howMany How many elements to remove (0 means no removal. A
+<a name="line692"></a> *     value below 0 is treated as zero and so is any other non number. Numbers
+<a name="line693"></a> *     are floored).
+<a name="line694"></a> * @param {*} var_args Optional, additional elements to insert into the
+<a name="line695"></a> *     array.
+<a name="line696"></a> * @return {!Array} the removed elements.
+<a name="line697"></a> */
+<a name="line698"></a>goog.array.splice = function(arr, index, howMany, var_args) {
+<a name="line699"></a>  return goog.array.ARRAY_PROTOTYPE_.splice.apply(
+<a name="line700"></a>      arr, goog.array.slice(arguments, 1));
+<a name="line701"></a>};
+<a name="line702"></a>
+<a name="line703"></a>
+<a name="line704"></a>/**
+<a name="line705"></a> * Returns a new array from a segment of an array. This is a generic version of
+<a name="line706"></a> * Array slice. This means that it might work on other objects similar to
+<a name="line707"></a> * arrays, such as the arguments object.
+<a name="line708"></a> *
+<a name="line709"></a> * @param {goog.array.ArrayLike} arr The array from which to copy a segment.
+<a name="line710"></a> * @param {number} start The index of the first element to copy.
+<a name="line711"></a> * @param {number} opt_end The index after the last element to copy.
+<a name="line712"></a> * @return {!Array} A new array containing the specified segment of the original
+<a name="line713"></a> *     array.
+<a name="line714"></a> */
+<a name="line715"></a>goog.array.slice = function(arr, start, opt_end) {
+<a name="line716"></a>  // passing 1 arg to slice is not the same as passing 2 where the second is
+<a name="line717"></a>  // null or undefined (in that case the second argument is treated as 0).
+<a name="line718"></a>  // we could use slice on the arguments object and then use apply instead of
+<a name="line719"></a>  // testing the length
+<a name="line720"></a>  if (arguments.length &lt;= 2) {
+<a name="line721"></a>    return goog.array.ARRAY_PROTOTYPE_.slice.call(arr, start);
+<a name="line722"></a>  } else {
+<a name="line723"></a>    return goog.array.ARRAY_PROTOTYPE_.slice.call(arr, start, opt_end);
+<a name="line724"></a>  }
+<a name="line725"></a>};
+<a name="line726"></a>
+<a name="line727"></a>
+<a name="line728"></a>/**
+<a name="line729"></a> * Removes all duplicates from an array (retaining only the first
+<a name="line730"></a> * occurrence of each array element).  This function modifies the
+<a name="line731"></a> * array in place and doesn&#39;t change the order of the non-duplicate items.
+<a name="line732"></a> *
+<a name="line733"></a> * For objects, duplicates are identified as having the same hash code property
+<a name="line734"></a> * as defined by {@link goog.getHashCode}.
+<a name="line735"></a> *
+<a name="line736"></a> * Runtime: N,
+<a name="line737"></a> * Worstcase space: 2N (no dupes)
+<a name="line738"></a> *
+<a name="line739"></a> * @param {goog.array.ArrayLike} arr The array from which to remove duplicates.
+<a name="line740"></a> * @param {Array} opt_rv An optional array in which to return the results,
+<a name="line741"></a> *     instead of performing the removal inplace.  If specified, the original
+<a name="line742"></a> *     array will remain unchanged.
+<a name="line743"></a> */
+<a name="line744"></a>goog.array.removeDuplicates = function(arr, opt_rv) {
+<a name="line745"></a>  var rv = opt_rv || arr;
+<a name="line746"></a>  var seen = {}, cursorInsert = 0, cursorRead = 0;
+<a name="line747"></a>  while (cursorRead &lt; arr.length) {
+<a name="line748"></a>    var current = arr[cursorRead++];
+<a name="line749"></a>    var hc = goog.isObject(current) ? goog.getHashCode(current) : current;
+<a name="line750"></a>    if (!Object.prototype.hasOwnProperty.call(seen, hc)) {
+<a name="line751"></a>      seen[hc] = true;
+<a name="line752"></a>      rv[cursorInsert++] = current;
+<a name="line753"></a>    }
+<a name="line754"></a>  }
+<a name="line755"></a>  rv.length = cursorInsert;
+<a name="line756"></a>};
+<a name="line757"></a>
+<a name="line758"></a>
+<a name="line759"></a>/**
+<a name="line760"></a> * Searches the specified array for the specified target using the binary
+<a name="line761"></a> * search algorithm.  If no opt_compareFn is specified, elements are compared
+<a name="line762"></a> * using &lt;code&gt;goog.array.defaultCompare&lt;/code&gt;, which compares the elements
+<a name="line763"></a> * using the built in &lt; and &gt; operators.  This will produce the expected
+<a name="line764"></a> * behavior for homogeneous arrays of String(s) and Number(s). The array
+<a name="line765"></a> * specified &lt;b&gt;must&lt;/b&gt; be sorted in ascending order (as defined by the
+<a name="line766"></a> * comparison function).  If the array is not sorted, results are undefined.
+<a name="line767"></a> * If the array contains multiple instances of the specified target value, any
+<a name="line768"></a> * of these instances may be found.
+<a name="line769"></a> *
+<a name="line770"></a> * Runtime: O(log n)
+<a name="line771"></a> *
+<a name="line772"></a> * @param {goog.array.ArrayLike} arr The array to be searched.
+<a name="line773"></a> * @param {*} target The sought value.
+<a name="line774"></a> * @param {Function} opt_compareFn Optional comparison function by which the
+<a name="line775"></a> *     array is ordered. Should take 2 arguments to compare, and return a
+<a name="line776"></a> *     negative integer, zero, or a positive integer depending on whether the
+<a name="line777"></a> *     first argument is less than, equal to, or greater than the second.
+<a name="line778"></a> * @return {number} Index of the target value if found, otherwise
+<a name="line779"></a> *     (-(insertion point) - 1). The insertion point is where the value should
+<a name="line780"></a> *     be inserted into arr to preserve the sorted property.  Return value &gt;= 0
+<a name="line781"></a> *     iff target is found.
+<a name="line782"></a> */
+<a name="line783"></a>goog.array.binarySearch = function(arr, target, opt_compareFn) {
+<a name="line784"></a>  var left = 0;
+<a name="line785"></a>  var right = arr.length - 1;
+<a name="line786"></a>  var compareFn = opt_compareFn || goog.array.defaultCompare;
+<a name="line787"></a>  while (left &lt;= right) {
+<a name="line788"></a>    var mid = (left + right) &gt;&gt; 1;
+<a name="line789"></a>    var compareResult = compareFn(target, arr[mid]);
+<a name="line790"></a>    if (compareResult &gt; 0) {
+<a name="line791"></a>      left = mid + 1;
+<a name="line792"></a>    } else if (compareResult &lt; 0) {
+<a name="line793"></a>      right = mid - 1;
+<a name="line794"></a>    } else {
+<a name="line795"></a>      return mid;
+<a name="line796"></a>    }
+<a name="line797"></a>  }
+<a name="line798"></a>  // Not found, left is the insertion point.
+<a name="line799"></a>  return -(left + 1);
+<a name="line800"></a>};
+<a name="line801"></a>
+<a name="line802"></a>
+<a name="line803"></a>/**
+<a name="line804"></a> * Sorts the specified array into ascending order.  If no opt_compareFn is
+<a name="line805"></a> * specified, elements are compared using
+<a name="line806"></a> * &lt;code&gt;goog.array.defaultCompare&lt;/code&gt;, which compares the elements using
+<a name="line807"></a> * the built in &lt; and &gt; operators.  This will produce the expected behavior
+<a name="line808"></a> * for homogeneous arrays of String(s) and Number(s).
+<a name="line809"></a> *
+<a name="line810"></a> * This sort is not guaranteed to be stable.
+<a name="line811"></a> *
+<a name="line812"></a> * Runtime: Same as &lt;code&gt;Array.prototype.sort&lt;/code&gt;
+<a name="line813"></a> *
+<a name="line814"></a> * @param {Array} arr The array to be sorted.
+<a name="line815"></a> * @param {Function} opt_compareFn Optional comparison function by which the
+<a name="line816"></a> *     array is to be ordered. Should take 2 arguments to compare, and return a
+<a name="line817"></a> *     negative integer, zero, or a positive integer depending on whether the
+<a name="line818"></a> *     first argument is less than, equal to, or greater than the second.
+<a name="line819"></a> */
+<a name="line820"></a>goog.array.sort = function(arr, opt_compareFn) {
+<a name="line821"></a>  goog.array.ARRAY_PROTOTYPE_.sort.call(
+<a name="line822"></a>      arr, opt_compareFn || goog.array.defaultCompare);
+<a name="line823"></a>};
+<a name="line824"></a>
+<a name="line825"></a>
+<a name="line826"></a>/**
+<a name="line827"></a> * Sorts the specified array into ascending order in a stable way.  If no
+<a name="line828"></a> * opt_compareFn is specified, elements are compared using
+<a name="line829"></a> * &lt;code&gt;goog.array.defaultCompare&lt;/code&gt;, which compares the elements using
+<a name="line830"></a> * the built in &lt; and &gt; operators.  This will produce the expected behavior
+<a name="line831"></a> * for homogeneous arrays of String(s) and Number(s).
+<a name="line832"></a> *
+<a name="line833"></a> * Runtime: Same as &lt;code&gt;Array.prototype.sort&lt;/code&gt;, plus an additional
+<a name="line834"></a> * O(n) overhead of copying the array twice.
+<a name="line835"></a> *
+<a name="line836"></a> * @param {Array} arr The array to be sorted.
+<a name="line837"></a> * @param {function(*, *): number} opt_compareFn Optional comparison function by
+<a name="line838"></a> *     which the array is to be ordered. Should take 2 arguments to compare, and
+<a name="line839"></a> *     return a negative integer, zero, or a positive integer depending on
+<a name="line840"></a> *     whether the first argument is less than, equal to, or greater than the
+<a name="line841"></a> *     second.
+<a name="line842"></a> */
+<a name="line843"></a>goog.array.stableSort = function(arr, opt_compareFn) {
+<a name="line844"></a>  for (var i = 0; i &lt; arr.length; i++) {
+<a name="line845"></a>    arr[i] = {index: i, value: arr[i]};
+<a name="line846"></a>  }
+<a name="line847"></a>  var valueCompareFn = opt_compareFn || goog.array.defaultCompare;
+<a name="line848"></a>  function stableCompareFn(obj1, obj2) {
+<a name="line849"></a>    return valueCompareFn(obj1.value, obj2.value) || obj1.index - obj2.index;
+<a name="line850"></a>  };
+<a name="line851"></a>  goog.array.sort(arr, stableCompareFn);
+<a name="line852"></a>  for (var i = 0; i &lt; arr.length; i++) {
+<a name="line853"></a>    arr[i] = arr[i].value;
+<a name="line854"></a>  }
+<a name="line855"></a>};
+<a name="line856"></a>
+<a name="line857"></a>
+<a name="line858"></a>/**
+<a name="line859"></a> * Sorts an array of objects by the specified object key and compare
+<a name="line860"></a> * function. If no compare function is provided, the key values are
+<a name="line861"></a> * compared in ascending order using &lt;code&gt;goog.array.defaultCompare&lt;/code&gt;.
+<a name="line862"></a> * This won&#39;t work for keys that get renamed by the compiler. So use
+<a name="line863"></a> * {&#39;foo&#39;: 1, &#39;bar&#39;: 2} rather than {foo: 1, bar: 2}.
+<a name="line864"></a> * @param {Array.&lt;Object&gt;} arr An array of objects to sort.
+<a name="line865"></a> * @param {string} key The object key to sort by.
+<a name="line866"></a> * @param {Function} opt_compareFn The function to use to compare key
+<a name="line867"></a> *     values.
+<a name="line868"></a> */
+<a name="line869"></a>goog.array.sortObjectsByKey = function(arr, key, opt_compareFn) {
+<a name="line870"></a>  var compare = opt_compareFn || goog.array.defaultCompare;
+<a name="line871"></a>  goog.array.sort(arr, function(a, b) {
+<a name="line872"></a>    return compare(a[key], b[key]);
+<a name="line873"></a>  });
+<a name="line874"></a>};
+<a name="line875"></a>
+<a name="line876"></a>
+<a name="line877"></a>/**
+<a name="line878"></a> * Compares two arrays for equality. Two arrays are considered equal if they
+<a name="line879"></a> * have the same length and their corresponding elements are equal according to
+<a name="line880"></a> * the comparison function.
+<a name="line881"></a> *
+<a name="line882"></a> * @param {goog.array.ArrayLike} arr1 The first array to compare.
+<a name="line883"></a> * @param {goog.array.ArrayLike} arr2 The second array to compare.
+<a name="line884"></a> * @param {Function} opt_equalsFn Optional comparison function.
+<a name="line885"></a> *     Should take 2 arguments to compare, and return true if the arguments
+<a name="line886"></a> *     are equal. Defaults to {@link goog.array.defaultCompareEquality} which
+<a name="line887"></a> *     compares the elements using the built-in &#39;===&#39; operator.
+<a name="line888"></a> * @return {boolean} Whether the two arrays are equal.
+<a name="line889"></a> */
+<a name="line890"></a>goog.array.equals = function(arr1, arr2, opt_equalsFn) {
+<a name="line891"></a>  if (!goog.isArrayLike(arr1) || !goog.isArrayLike(arr2) ||
+<a name="line892"></a>      arr1.length != arr2.length) {
+<a name="line893"></a>    return false;
+<a name="line894"></a>  }
+<a name="line895"></a>  var l = arr1.length;
+<a name="line896"></a>  var equalsFn = opt_equalsFn || goog.array.defaultCompareEquality;
+<a name="line897"></a>  for (var i = 0; i &lt; l; i++) {
+<a name="line898"></a>    if (!equalsFn(arr1[i], arr2[i])) {
+<a name="line899"></a>      return false;
+<a name="line900"></a>    }
+<a name="line901"></a>  }
+<a name="line902"></a>  return true;
+<a name="line903"></a>};
+<a name="line904"></a>
+<a name="line905"></a>
+<a name="line906"></a>/**
+<a name="line907"></a> * @deprecated Use {@link goog.array.equals}.
+<a name="line908"></a> * @param {goog.array.ArrayLike} arr1 See {@link goog.array.equals}.
+<a name="line909"></a> * @param {goog.array.ArrayLike} arr2 See {@link goog.array.equals}.
+<a name="line910"></a> * @param {Function} opt_equalsFn See {@link goog.array.equals}.
+<a name="line911"></a> * @return {boolean} See {@link goog.array.equals}.
 <a name="line912"></a> */
-<a name="line913"></a>goog.array.defaultCompare = function(a, b) {
-<a name="line914"></a>  return a &gt; b ? 1 : a &lt; b ? -1 : 0;
+<a name="line913"></a>goog.array.compare = function(arr1, arr2, opt_equalsFn) {
+<a name="line914"></a>  return goog.array.equals(arr1, arr2, opt_equalsFn);
 <a name="line915"></a>};
 <a name="line916"></a>
 <a name="line917"></a>
 <a name="line918"></a>/**
-<a name="line919"></a> * Compares its two arguments for equality, using the built in === operator.
-<a name="line920"></a> * @param {*} a The first object to compare.
-<a name="line921"></a> * @param {*} b The second object to compare.
-<a name="line922"></a> * @return {boolean} True if the two arguments are equal, false otherwise.
-<a name="line923"></a> */
-<a name="line924"></a>goog.array.defaultCompareEquality = function(a, b) {
-<a name="line925"></a>  return a === b;
-<a name="line926"></a>};
-<a name="line927"></a>
-<a name="line928"></a>
-<a name="line929"></a>/**
-<a name="line930"></a> * Inserts a value into a sorted array. The array is not modified if the
-<a name="line931"></a> * value is already present.
-<a name="line932"></a> * @param {Array} array The array to modify.
-<a name="line933"></a> * @param {*} value The object to insert.
-<a name="line934"></a> * @param {Function} opt_compareFn Optional comparison function by which the
-<a name="line935"></a> *     array is ordered. Should take 2 arguments to compare, and
-<a name="line936"></a> *     return a negative integer, zero, or a positive integer depending on
-<a name="line937"></a> *     whether the first argument is less than, equal to, or greater than the
-<a name="line938"></a> *     second.
-<a name="line939"></a> * @return {boolean} True if an element was inserted.
-<a name="line940"></a> */
-<a name="line941"></a>goog.array.binaryInsert = function(array, value, opt_compareFn) {
-<a name="line942"></a>  var index = goog.array.binarySearch(array, value, opt_compareFn);
-<a name="line943"></a>  if (index &lt; 0) {
-<a name="line944"></a>    goog.array.insertAt(array, value, -(index + 1));
-<a name="line945"></a>    return true;
-<a name="line946"></a>  }
-<a name="line947"></a>  return false;
-<a name="line948"></a>};
-<a name="line949"></a>
-<a name="line950"></a>
-<a name="line951"></a>/**
-<a name="line952"></a> * Removes a value from a sorted array.
-<a name="line953"></a> * @param {Array} array The array to modify.
-<a name="line954"></a> * @param {*} value The object to remove.
-<a name="line955"></a> * @param {Function} opt_compareFn Optional comparison function by which the
-<a name="line956"></a> *     array is ordered. Should take 2 arguments to compare, and
-<a name="line957"></a> *     return a negative integer, zero, or a positive integer depending on
-<a name="line958"></a> *     whether the first argument is less than, equal to, or greater than the
-<a name="line959"></a> *     second.
-<a name="line960"></a> * @return {boolean} True if an element was removed.
-<a name="line961"></a> */
-<a name="line962"></a>goog.array.binaryRemove = function(array, value, opt_compareFn) {
-<a name="line963"></a>  var index = goog.array.binarySearch(array, value, opt_compareFn);
-<a name="line964"></a>  return (index &gt;= 0) ? goog.array.removeAt(array, index) : false;
-<a name="line965"></a>};
-<a name="line966"></a>
-<a name="line967"></a>
-<a name="line968"></a>/**
-<a name="line969"></a> * Splits an array into disjoint buckets according to a splitting function.
-<a name="line970"></a> * @param {Array} array The array.
-<a name="line971"></a> * @param {Function} sorter Function to call for every element.  This
-<a name="line972"></a> *     takes 3 arguments (the element, the index and the array) and must
-<a name="line973"></a> *     return a valid object key (a string, number, etc), or undefined, if
-<a name="line974"></a> *     that object should not be placed in a bucket.
-<a name="line975"></a> * @return {!Object} An object, with keys being all of the unique return values
-<a name="line976"></a> *     of sorter, and values being arrays containing the items for
-<a name="line977"></a> *     which the splitter returned that key.
-<a name="line978"></a> */
-<a name="line979"></a>goog.array.bucket = function(array, sorter) {
-<a name="line980"></a>  var buckets = {};
+<a name="line919"></a> * Compares its two arguments for order, using the built in &lt; and &gt;
+<a name="line920"></a> * operators.
+<a name="line921"></a> * @param {*} a The first object to be compared.
+<a name="line922"></a> * @param {*} b The second object to be compared.
+<a name="line923"></a> * @return {number} a negative integer, zero, or a positive integer
+<a name="line924"></a> *     as the first argument is less than, equal to, or greater than the
+<a name="line925"></a> *     second.
+<a name="line926"></a> */
+<a name="line927"></a>goog.array.defaultCompare = function(a, b) {
+<a name="line928"></a>  return a &gt; b ? 1 : a &lt; b ? -1 : 0;
+<a name="line929"></a>};
+<a name="line930"></a>
+<a name="line931"></a>
+<a name="line932"></a>/**
+<a name="line933"></a> * Compares its two arguments for equality, using the built in === operator.
+<a name="line934"></a> * @param {*} a The first object to compare.
+<a name="line935"></a> * @param {*} b The second object to compare.
+<a name="line936"></a> * @return {boolean} True if the two arguments are equal, false otherwise.
+<a name="line937"></a> */
+<a name="line938"></a>goog.array.defaultCompareEquality = function(a, b) {
+<a name="line939"></a>  return a === b;
+<a name="line940"></a>};
+<a name="line941"></a>
+<a name="line942"></a>
+<a name="line943"></a>/**
+<a name="line944"></a> * Inserts a value into a sorted array. The array is not modified if the
+<a name="line945"></a> * value is already present.
+<a name="line946"></a> * @param {Array} array The array to modify.
+<a name="line947"></a> * @param {*} value The object to insert.
+<a name="line948"></a> * @param {Function} opt_compareFn Optional comparison function by which the
+<a name="line949"></a> *     array is ordered. Should take 2 arguments to compare, and
+<a name="line950"></a> *     return a negative integer, zero, or a positive integer depending on
+<a name="line951"></a> *     whether the first argument is less than, equal to, or greater than the
+<a name="line952"></a> *     second.
+<a name="line953"></a> * @return {boolean} True if an element was inserted.
+<a name="line954"></a> */
+<a name="line955"></a>goog.array.binaryInsert = function(array, value, opt_compareFn) {
+<a name="line956"></a>  var index = goog.array.binarySearch(array, value, opt_compareFn);
+<a name="line957"></a>  if (index &lt; 0) {
+<a name="line958"></a>    goog.array.insertAt(array, value, -(index + 1));
+<a name="line959"></a>    return true;
+<a name="line960"></a>  }
+<a name="line961"></a>  return false;
+<a name="line962"></a>};
+<a name="line963"></a>
+<a name="line964"></a>
+<a name="line965"></a>/**
+<a name="line966"></a> * Removes a value from a sorted array.
+<a name="line967"></a> * @param {Array} array The array to modify.
+<a name="line968"></a> * @param {*} value The object to remove.
+<a name="line969"></a> * @param {Function} opt_compareFn Optional comparison function by which the
+<a name="line970"></a> *     array is ordered. Should take 2 arguments to compare, and
+<a name="line971"></a> *     return a negative integer, zero, or a positive integer depending on
+<a name="line972"></a> *     whether the first argument is less than, equal to, or greater than the
+<a name="line973"></a> *     second.
+<a name="line974"></a> * @return {boolean} True if an element was removed.
+<a name="line975"></a> */
+<a name="line976"></a>goog.array.binaryRemove = function(array, value, opt_compareFn) {
+<a name="line977"></a>  var index = goog.array.binarySearch(array, value, opt_compareFn);
+<a name="line978"></a>  return (index &gt;= 0) ? goog.array.removeAt(array, index) : false;
+<a name="line979"></a>};
+<a name="line980"></a>
 <a name="line981"></a>
-<a name="line982"></a>  for (var i = 0; i &lt; array.length; i++) {
-<a name="line983"></a>    var value = array[i];
-<a name="line984"></a>    var key = sorter(value, i, array);
-<a name="line985"></a>    if (goog.isDef(key)) {
-<a name="line986"></a>      // Push the value to the right bucket, creating it if necessary.
-<a name="line987"></a>      var bucket = buckets[key] || (buckets[key] = []);
-<a name="line988"></a>      bucket.push(value);
-<a name="line989"></a>    }
-<a name="line990"></a>  }
-<a name="line991"></a>
-<a name="line992"></a>  return buckets;
-<a name="line993"></a>};
-<a name="line994"></a>
+<a name="line982"></a>/**
+<a name="line983"></a> * Splits an array into disjoint buckets according to a splitting function.
+<a name="line984"></a> * @param {Array} array The array.
+<a name="line985"></a> * @param {Function} sorter Function to call for every element.  This
+<a name="line986"></a> *     takes 3 arguments (the element, the index and the array) and must
+<a name="line987"></a> *     return a valid object key (a string, number, etc), or undefined, if
+<a name="line988"></a> *     that object should not be placed in a bucket.
+<a name="line989"></a> * @return {!Object} An object, with keys being all of the unique return values
+<a name="line990"></a> *     of sorter, and values being arrays containing the items for
+<a name="line991"></a> *     which the splitter returned that key.
+<a name="line992"></a> */
+<a name="line993"></a>goog.array.bucket = function(array, sorter) {
+<a name="line994"></a>  var buckets = {};
 <a name="line995"></a>
-<a name="line996"></a>/**
-<a name="line997"></a> * Returns an array consisting of the given value repeated N times.
-<a name="line998"></a> *
-<a name="line999"></a> * @param {*} value The value to repeat.
-<a name="line1000"></a> * @param {number} n The repeat count.
-<a name="line1001"></a> * @return {!Array.&lt;*&gt;} An array with the repeated value.
-<a name="line1002"></a> */
-<a name="line1003"></a>goog.array.repeat = function(value, n) {
-<a name="line1004"></a>  var array = [];
-<a name="line1005"></a>  for (var i = 0; i &lt; n; i++) {
-<a name="line1006"></a>    array[i] = value;
-<a name="line1007"></a>  }
-<a name="line1008"></a>  return array;
-<a name="line1009"></a>};
-<a name="line1010"></a>
-<a name="line1011"></a>
-<a name="line1012"></a>/**
-<a name="line1013"></a> * Returns an array consisting of every argument with all arrays
-<a name="line1014"></a> * expanded in-place recursively.
-<a name="line1015"></a> *
-<a name="line1016"></a> * @param {*} var_args The values to flatten.
-<a name="line1017"></a> * @return {!Array.&lt;*&gt;} An array containing the flattened values.
-<a name="line1018"></a> */
-<a name="line1019"></a>goog.array.flatten = function(var_args) {
-<a name="line1020"></a>  var result = [];
-<a name="line1021"></a>  for (var i = 0; i &lt; arguments.length; i++) {
-<a name="line1022"></a>    var element = arguments[i];
-<a name="line1023"></a>    if (goog.isArray(element)) {
-<a name="line1024"></a>      result.push.apply(result, goog.array.flatten.apply(null, element));
-<a name="line1025"></a>    } else {
-<a name="line1026"></a>      result.push(element);
-<a name="line1027"></a>    }
-<a name="line1028"></a>  }
-<a name="line1029"></a>  return result;
-<a name="line1030"></a>};
-<a name="line1031"></a>
-<a name="line1032"></a>
-<a name="line1033"></a>/**
-<a name="line1034"></a> * Rotates an array in-place. After calling this method, the element at
-<a name="line1035"></a> * index i will be the element previously at index (i - n) %
-<a name="line1036"></a> * array.length, for all values of i between 0 and array.length - 1,
-<a name="line1037"></a> * inclusive.
-<a name="line1038"></a> *
-<a name="line1039"></a> * For example, suppose list comprises [t, a, n, k, s]. After invoking
-<a name="line1040"></a> * rotate(array, 1) (or rotate(array, -4)), array will comprise [s, t, a, n, k].
-<a name="line1041"></a> *
-<a name="line1042"></a> * @param {!Array.&lt;*&gt;} array The array to rotate.
-<a name="line1043"></a> * @param {number} n The amount to rotate.
-<a name="line1044"></a> * @return {!Array.&lt;*&gt;} The array.
-<a name="line1045"></a> */
-<a name="line1046"></a>goog.array.rotate = function(array, n) {
-<a name="line1047"></a>  if (array.length) {
-<a name="line1048"></a>    n %= array.length;
-<a name="line1049"></a>    if (n &gt; 0) {
-<a name="line1050"></a>      goog.array.ARRAY_PROTOTYPE_.unshift.apply(array, array.splice(-n, n));
-<a name="line1051"></a>    } else if (n &lt; 0) {
-<a name="line1052"></a>      goog.array.ARRAY_PROTOTYPE_.push.apply(array, array.splice(0, -n));
-<a name="line1053"></a>    }
-<a name="line1054"></a>  }
-<a name="line1055"></a>  return array;
-<a name="line1056"></a>};
+<a name="line996"></a>  for (var i = 0; i &lt; array.length; i++) {
+<a name="line997"></a>    var value = array[i];
+<a name="line998"></a>    var key = sorter(value, i, array);
+<a name="line999"></a>    if (goog.isDef(key)) {
+<a name="line1000"></a>      // Push the value to the right bucket, creating it if necessary.
+<a name="line1001"></a>      var bucket = buckets[key] || (buckets[key] = []);
+<a name="line1002"></a>      bucket.push(value);
+<a name="line1003"></a>    }
+<a name="line1004"></a>  }
+<a name="line1005"></a>
+<a name="line1006"></a>  return buckets;
+<a name="line1007"></a>};
+<a name="line1008"></a>
+<a name="line1009"></a>
+<a name="line1010"></a>/**
+<a name="line1011"></a> * Returns an array consisting of the given value repeated N times.
+<a name="line1012"></a> *
+<a name="line1013"></a> * @param {*} value The value to repeat.
+<a name="line1014"></a> * @param {number} n The repeat count.
+<a name="line1015"></a> * @return {!Array.&lt;*&gt;} An array with the repeated value.
+<a name="line1016"></a> */
+<a name="line1017"></a>goog.array.repeat = function(value, n) {
+<a name="line1018"></a>  var array = [];
+<a name="line1019"></a>  for (var i = 0; i &lt; n; i++) {
+<a name="line1020"></a>    array[i] = value;
+<a name="line1021"></a>  }
+<a name="line1022"></a>  return array;
+<a name="line1023"></a>};
+<a name="line1024"></a>
+<a name="line1025"></a>
+<a name="line1026"></a>/**
+<a name="line1027"></a> * Returns an array consisting of every argument with all arrays
+<a name="line1028"></a> * expanded in-place recursively.
+<a name="line1029"></a> *
+<a name="line1030"></a> * @param {*} var_args The values to flatten.
+<a name="line1031"></a> * @return {!Array.&lt;*&gt;} An array containing the flattened values.
+<a name="line1032"></a> */
+<a name="line1033"></a>goog.array.flatten = function(var_args) {
+<a name="line1034"></a>  var result = [];
+<a name="line1035"></a>  for (var i = 0; i &lt; arguments.length; i++) {
+<a name="line1036"></a>    var element = arguments[i];
+<a name="line1037"></a>    if (goog.isArray(element)) {
+<a name="line1038"></a>      result.push.apply(result, goog.array.flatten.apply(null, element));
+<a name="line1039"></a>    } else {
+<a name="line1040"></a>      result.push(element);
+<a name="line1041"></a>    }
+<a name="line1042"></a>  }
+<a name="line1043"></a>  return result;
+<a name="line1044"></a>};
+<a name="line1045"></a>
+<a name="line1046"></a>
+<a name="line1047"></a>/**
+<a name="line1048"></a> * Rotates an array in-place. After calling this method, the element at
+<a name="line1049"></a> * index i will be the element previously at index (i - n) %
+<a name="line1050"></a> * array.length, for all values of i between 0 and array.length - 1,
+<a name="line1051"></a> * inclusive.
+<a name="line1052"></a> *
+<a name="line1053"></a> * For example, suppose list comprises [t, a, n, k, s]. After invoking
+<a name="line1054"></a> * rotate(array, 1) (or rotate(array, -4)), array will comprise [s, t, a, n, k].
+<a name="line1055"></a> *
+<a name="line1056"></a> * @param {!Array.&lt;*&gt;} array The array to rotate.
+<a name="line1057"></a> * @param {number} n The amount to rotate.
+<a name="line1058"></a> * @return {!Array.&lt;*&gt;} The array.
+<a name="line1059"></a> */
+<a name="line1060"></a>goog.array.rotate = function(array, n) {
+<a name="line1061"></a>  if (array.length) {
+<a name="line1062"></a>    n %= array.length;
+<a name="line1063"></a>    if (n &gt; 0) {
+<a name="line1064"></a>      goog.array.ARRAY_PROTOTYPE_.unshift.apply(array, array.splice(-n, n));
+<a name="line1065"></a>    } else if (n &lt; 0) {
+<a name="line1066"></a>      goog.array.ARRAY_PROTOTYPE_.push.apply(array, array.splice(0, -n));
+<a name="line1067"></a>    }
+<a name="line1068"></a>  }
+<a name="line1069"></a>  return array;
+<a name="line1070"></a>};
 </pre>
 
 

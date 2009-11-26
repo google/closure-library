@@ -102,7 +102,7 @@ goog.net.IframeLoadMonitor.POLL_INTERVAL_MS_ = 100;
 /**
  * Key for iframe load listener, or null if not currently listening on the
  * iframe for a load event.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.net.IframeLoadMonitor.prototype.onloadListenerKey_ = null;

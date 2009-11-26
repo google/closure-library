@@ -62,7 +62,7 @@ goog.dom.MultiRange = function() {
 
   /**
    * Lazily computed container node.
-   * @type {Node?}
+   * @type {Node}
    * @private
    */
   this.container_ = null;

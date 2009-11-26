@@ -78,7 +78,7 @@ goog.gears.Worker.prototype.handleMessage = function(messageObject) {
 
 /**
  * The ID of the worker we are communicating with.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.gears.Worker.prototype.id_ = null;

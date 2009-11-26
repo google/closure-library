@@ -216,20 +216,26 @@ goog.testing.stacktrace.followCallChain_ = function() {
   var depth = 0;
 
   while (fn && depth < goog.testing.stacktrace.MAX_DEPTH_) {
-    var m = String(fn).match(goog.testing.stacktrace.FUNCTION_SOURCE_REGEXP_);
-    var functionName = m ? m[1] : '';
+    var fnString = Function.prototype.toString.call(fn);
+    var match = fnString.match(goog.testing.stacktrace.FUNCTION_SOURCE_REGEXP_);
+    var functionName = match ? match[1] : '';
 
     var argsBuilder = ['('];
-    for (var i = 0; i < fn.arguments.length; i++) {
-      var arg = fn.arguments[i];
-      if (i > 0) {
-        argsBuilder.push(', ');
+    if (fn.arguments) {
+      for (var i = 0; i < fn.arguments.length; i++) {
+        var arg = fn.arguments[i];
+        if (i > 0) {
+          argsBuilder.push(', ');
+        }
+        if (goog.isString(arg)) {
+          argsBuilder.push('"', arg, '"');
+        } else {
+          argsBuilder.push(String(arg));
+        }
       }
-      if (goog.isString(arg)) {
-        argsBuilder.push('"', arg, '"');
-      } else {
-        argsBuilder.push(String(arg));
-      }
+    } else {
+      // Opera 10 doesn't know the arguments of native functions.
+      argsBuilder.push('unknown');
     }
     argsBuilder.push(')');
     var args = argsBuilder.join('');

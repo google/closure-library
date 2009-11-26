@@ -79,7 +79,7 @@ goog.ui.emoji.PopupEmojiPicker.prototype.popup_ = null;
 
 /**
  * Reference to the element that triggered the last popup.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.emoji.PopupEmojiPicker.prototype.lastTarget_ = null;
@@ -224,7 +224,7 @@ goog.ui.emoji.PopupEmojiPicker.prototype.setProgressiveRender =
 /**
  * Returns the number of emoji groups in this picker.
  *
- * @return {Number} The number of emoji groups in this picker.
+ * @return {number} The number of emoji groups in this picker.
  */
 goog.ui.emoji.PopupEmojiPicker.prototype.getNumEmojiGroups = function() {
   return this.emojiPicker_.getNumEmojiGroups();
@@ -325,7 +325,7 @@ goog.ui.emoji.PopupEmojiPicker.prototype.setAutoHide = function(autoHide) {
  * Returns the region inside which the Popup dismisses itself when the user
  * clicks, or null if it was not set. Null indicates the entire document is
  * the autohide region.
- * @return {Element?} The DOM element for autohide, or null if it hasn't been
+ * @return {Element} The DOM element for autohide, or null if it hasn't been
  *     set.
  */
 goog.ui.emoji.PopupEmojiPicker.prototype.getAutoHideRegion = function() {
@@ -362,7 +362,7 @@ goog.ui.emoji.PopupEmojiPicker.prototype.getPopup = function() {
 
 
 /**
- * @return {Element?} The last element that triggered the popup.
+ * @return {Element} The last element that triggered the popup.
  */
 goog.ui.emoji.PopupEmojiPicker.prototype.getLastTarget = function() {
   return this.lastTarget_;

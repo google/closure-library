@@ -43,7 +43,7 @@ goog.require('goog.string');
  * NOTE: This relies on at least the 0.2 version of gears (for timer).
  *
  * @param {string} name  The name of the managed store.
- * @param {string?} requiredCookie  A cookie that must be present for the
+ * @param {?string} requiredCookie  A cookie that must be present for the
  *     managed store to be active. Should have the form "foo=bar". Can be null
  *     if not required.
  * @param {GearsLocalServer} opt_localServer  Gears local server -- if not set,
@@ -104,7 +104,7 @@ goog.gears.ManagedResourceStore.prototype.logger_ =
 
 /**
  * The Gears local server object.
- * @type {GearsLocalServer?}
+ * @type {GearsLocalServer}
  * @private
  */
 goog.gears.ManagedResourceStore.prototype.localServer_;
@@ -112,7 +112,7 @@ goog.gears.ManagedResourceStore.prototype.localServer_;
 
 /**
  * The name of the managed store.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.gears.ManagedResourceStore.prototype.name_;
@@ -122,7 +122,7 @@ goog.gears.ManagedResourceStore.prototype.name_;
  * A cookie that must be present for the managed store to be active.
  * Should have the form "foo=bar". String cast is a safety measure since
  * Gears behaves very badly when it gets an unexpected data type.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.gears.ManagedResourceStore.prototype.requiredCookie_;
@@ -138,7 +138,7 @@ goog.gears.ManagedResourceStore.prototype.supportsEvents_;
 
 /**
  * The Gears ManagedResourceStore instance we are wrapping.
- * @type {GearsManagedResourceStore?}
+ * @type {GearsManagedResourceStore}
  * @private
  */
 goog.gears.ManagedResourceStore.prototype.gearsStore_;
@@ -146,7 +146,7 @@ goog.gears.ManagedResourceStore.prototype.gearsStore_;
 
 /**
  * The id of the check status timer.
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.gears.ManagedResourceStore.prototype.timerId_ = null;
@@ -154,7 +154,7 @@ goog.gears.ManagedResourceStore.prototype.timerId_ = null;
 
 /**
  * The check status timer.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.gears.ManagedResourceStore.prototype.timer_ = null;
@@ -367,7 +367,7 @@ goog.gears.ManagedResourceStore.prototype.setManifestUrl = function(url) {
 
 
 /**
- * @return {string?} The version of the managed store that is currently being
+ * @return {?string} The version of the managed store that is currently being
  *     served.
  */
 goog.gears.ManagedResourceStore.prototype.getVersion = function() {
@@ -548,6 +548,6 @@ goog.inherits(goog.gears.ManagedResourceStoreEvent, goog.events.Event);
 
 /**
  * Error message in the case of a failure event.
- * @type {string?}
+ * @type {?string}
  */
 goog.gears.ManagedResourceStoreEvent.prototype.errorMessage = null;

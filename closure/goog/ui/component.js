@@ -63,7 +63,7 @@ goog.ui.Component.prototype.idGenerator_ = goog.ui.IdGenerator.getInstance();
 
 /**
  * The default right to left value.
- * @type {boolean?}
+ * @type {?boolean}
  * @private
  */
 goog.ui.Component.defaultRightToLeft_ = null;
@@ -309,7 +309,7 @@ goog.ui.Component.getStateTransitionEvent = function(state, isEntering) {
  * this point foward to have the given value. This is useful for cases where
  * a given page is always in one directionality, avoiding unnecessary
  * right to left determinations.
- * @param {boolean?} rightToLeft Whether the components should be rendered
+ * @param {?boolean} rightToLeft Whether the components should be rendered
  *     right-to-left. Null iff components should determine their directionality.
  */
 goog.ui.Component.setDefaultRightToLeft = function(rightToLeft) {
@@ -321,7 +321,7 @@ goog.ui.Component.setDefaultRightToLeft = function(rightToLeft) {
  * Unique ID of the component, lazily initialized in {@link
  * goog.ui.Component#getId} if needed.  This property is strictly private and
  * must not be accessed directly outside of this class!
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.ui.Component.prototype.id_ = null;
@@ -348,7 +348,7 @@ goog.ui.Component.prototype.inDocument_ = false;
 // TODO: Stop referring to this private field in subclasses.
 /**
  * The DOM element for the component.
- * @type {Element?}
+ * @type {Element}
  * @private
  */
 goog.ui.Component.prototype.element_ = null;
@@ -369,7 +369,7 @@ goog.ui.Component.prototype.googUiComponentHandler_;
  * Whether the component is rendered right-to-left.  Right-to-left is set
  * lazily when {@link #isRightToLeft} is called the first time, unless it has
  * been set by calling {@link #setRightToLeft} explicitly.
- * @type {boolean?}
+ * @type {?boolean}
  * @private
  */
 goog.ui.Component.prototype.rightToLeft_ = null;
@@ -413,7 +413,7 @@ goog.ui.Component.prototype.children_ = null;
  * 'valueOf', but this shouldn't really be an issue in practice, and if it is,
  * we can always fix it later without changing the API.
  *
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.ui.Component.prototype.childIndex_ = null;
@@ -461,7 +461,7 @@ goog.ui.Component.prototype.setId = function(id) {
 
 /**
  * Gets the component's element.
- * @return {Element?} The element for the component.
+ * @return {Element} The element for the component.
  */
 goog.ui.Component.prototype.getElement = function() {
   return this.element_;
@@ -825,7 +825,7 @@ goog.ui.Component.prototype.getFragmentFromId = function(id) {
  * Helper function for returning an element in the document with a unique id
  * generated using makeId().
  * @param {string} idFragment The partial id.
- * @return {Element?} The element with the unique id, or null if it cannot be
+ * @return {Element} The element with the unique id, or null if it cannot be
  *     found.
  */
 goog.ui.Component.prototype.getElementByFragment = function(idFragment) {
@@ -958,7 +958,7 @@ goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
  * or null if the component itself hasn't been rendered yet.  This default
  * implementation returns the component's root element.  Subclasses with
  * complex DOM structures must override this method.
- * @return {Element?} Element to contain child elements (null if none).
+ * @return {Element} Element to contain child elements (null if none).
  */
 goog.ui.Component.prototype.getContentElement = function() {
   return this.element_;

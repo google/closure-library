@@ -164,7 +164,7 @@ goog.ui.BaseRoundedPanel = function(radius,
 
   /**
    * The background color of the panel.
-   * @type {string?}
+   * @type {?string}
    * @private
    */
   this.backgroundColor_ = opt_backgroundColor || null;
@@ -236,7 +236,7 @@ goog.ui.BaseRoundedPanel.prototype.disposeInternal = function() {
 
 /**
  * Returns the DOM element containing the actual content.
- * @return {Element?} The element containing the actual content (null if none).
+ * @return {Element} The element containing the actual content (null if none).
  */
 goog.ui.BaseRoundedPanel.prototype.getContentElement = function() {
   return this.contentElement_;

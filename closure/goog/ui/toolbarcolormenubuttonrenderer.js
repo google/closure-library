@@ -63,7 +63,7 @@ goog.ui.ToolbarColorMenuButtonRenderer.prototype.createCaption = function(
  * Takes a color menu button control's root element and a value object
  * (which is assumed to be a color), and updates the button's DOM to reflect
  * the new color.  Overrides {@link goog.ui.ButtonRenderer#setValue}.
- * @param {Element?} element The button control's root element (if rendered).
+ * @param {Element} element The button control's root element (if rendered).
  * @param {*} value New value; assumed to be a color spec string.
  */
 goog.ui.ToolbarColorMenuButtonRenderer.prototype.setValue = function(element,

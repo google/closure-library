@@ -238,7 +238,7 @@
 <a name="line195"></a> * control&#39;s root element; each value is a reference to the child control
 <a name="line196"></a> * itself.  Used for looking up the child control corresponding to a DOM
 <a name="line197"></a> * node in O(1) time.
-<a name="line198"></a> * @type {Object?}
+<a name="line198"></a> * @type {Object}
 <a name="line199"></a> * @private
 <a name="line200"></a> */
 <a name="line201"></a>goog.ui.Container.prototype.childElementIdMap_ = null;
@@ -250,7 +250,7 @@
 <a name="line207"></a>/**
 <a name="line208"></a> * Returns the DOM element on which the container is listening for keyboard
 <a name="line209"></a> * events (null if none).
-<a name="line210"></a> * @return {Element?} Element on which the container is listening for key
+<a name="line210"></a> * @return {Element} Element on which the container is listening for key
 <a name="line211"></a> *     events.
 <a name="line212"></a> */
 <a name="line213"></a>goog.ui.Container.prototype.getKeyEventTarget = function() {
@@ -344,7 +344,7 @@
 <a name="line301"></a> * Returns the DOM element into which child components are to be rendered,
 <a name="line302"></a> * or null if the container itself hasn&#39;t been rendered yet.  Overrides
 <a name="line303"></a> * {@link goog.ui.Component#getContentElement} by delegating to the renderer.
-<a name="line304"></a> * @return {Element?} Element to contain child elements (null if none).
+<a name="line304"></a> * @return {Element} Element to contain child elements (null if none).
 <a name="line305"></a> */
 <a name="line306"></a>goog.ui.Container.prototype.getContentElement = function() {
 <a name="line307"></a>  // Delegate to renderer.

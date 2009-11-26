@@ -84,7 +84,7 @@
 <a name="line41"></a>
 <a name="line42"></a>/**
 <a name="line43"></a> * The factory for creating XMLHttpRequest objets.
-<a name="line44"></a> * @type {Function?}
+<a name="line44"></a> * @type {Function}
 <a name="line45"></a> * @private
 <a name="line46"></a> */
 <a name="line47"></a>goog.net.XmlHttp.factory_ = null;
@@ -93,7 +93,7 @@
 <a name="line50"></a>/**
 <a name="line51"></a> * The factory for creating the Options for the XMLHttpRequest objets given
 <a name="line52"></a> * from the factory.
-<a name="line53"></a> * @type {Function?}
+<a name="line53"></a> * @type {Function}
 <a name="line54"></a> * @private
 <a name="line55"></a> */
 <a name="line56"></a>goog.net.XmlHttp.optionsFactory_ = null;
@@ -101,7 +101,7 @@
 <a name="line58"></a>
 <a name="line59"></a>/**
 <a name="line60"></a> * The cached options object used to minimize object allocations.
-<a name="line61"></a> * @type {Object?}
+<a name="line61"></a> * @type {Object}
 <a name="line62"></a> * @private
 <a name="line63"></a> */
 <a name="line64"></a>goog.net.XmlHttp.cachedOptions_ = null;
@@ -213,7 +213,7 @@
 <a name="line170"></a>
 <a name="line171"></a>/**
 <a name="line172"></a> * The ActiveX PROG ID string to use to create xhr&#39;s in IE. Lazily initialized.
-<a name="line173"></a> * @type {string?}
+<a name="line173"></a> * @type {?string}
 <a name="line174"></a> * @private
 <a name="line175"></a> */
 <a name="line176"></a>goog.net.XmlHttp.ieProgId_ = null;

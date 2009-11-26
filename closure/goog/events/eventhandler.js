@@ -110,7 +110,7 @@ goog.events.EventHandler.keyPool_ = new goog.structs.SimplePool(
  * Keys for events that are being listened to. This is used once there are more
  * than one event to listen to. If there is only one event to listen to, key_
  * is used.
- * @type {Object?}
+ * @type {Object}
  * @private
  */
 goog.events.EventHandler.keys_ = null;
@@ -120,7 +120,7 @@ goog.events.EventHandler.keys_ = null;
  * Keys for event that is being listened to if only one event is being listened
  * to. This is a performance optimization to avoid creating an extra object
  * if not necessary.
- * @type {string?}
+ * @type {?string}
  * @private
  */
 goog.events.EventHandler.key_ = null;

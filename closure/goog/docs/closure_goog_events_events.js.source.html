@@ -174,7 +174,7 @@
 <a name="line131"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
 <a name="line132"></a> *     false).
 <a name="line133"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
-<a name="line134"></a> * @return {number?} Unique key for the listener.
+<a name="line134"></a> * @return {?number} Unique key for the listener.
 <a name="line135"></a> */
 <a name="line136"></a>goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
 <a name="line137"></a>  if (!type) {
@@ -283,7 +283,7 @@
 <a name="line240"></a> * @param {Function|Object} listener Callback method.
 <a name="line241"></a> * @param {boolean} opt_capt Fire in capture phase?.
 <a name="line242"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
-<a name="line243"></a> * @return {number?} Unique key for the listener.
+<a name="line243"></a> * @return {?number} Unique key for the listener.
 <a name="line244"></a> */
 <a name="line245"></a>goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
 <a name="line246"></a>  if (goog.isArray(type)) {
@@ -332,7 +332,7 @@
 <a name="line289"></a> *     whether the listener is fired during the capture or bubble phase of the
 <a name="line290"></a> *     event.
 <a name="line291"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
-<a name="line292"></a> * @return {boolean?} indicating whether the listener was there to remove.
+<a name="line292"></a> * @return {?boolean} indicating whether the listener was there to remove.
 <a name="line293"></a> */
 <a name="line294"></a>goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
 <a name="line295"></a>  if (goog.isArray(type)) {
@@ -365,7 +365,7 @@
 <a name="line322"></a> * Removes an event listener which was added with listen() by the key
 <a name="line323"></a> * returned by listen().
 <a name="line324"></a> *
-<a name="line325"></a> * @param {number?} key The key returned by listen() for this event listener.
+<a name="line325"></a> * @param {?number} key The key returned by listen() for this event listener.
 <a name="line326"></a> * @return {boolean} indicating whether the listener was there to remove.
 <a name="line327"></a> */
 <a name="line328"></a>goog.events.unlistenByKey = function(key) {
@@ -576,7 +576,7 @@
 <a name="line533"></a> * Gets the listeners for a given object, type and capture phase.
 <a name="line534"></a> *
 <a name="line535"></a> * @param {Object} obj Object to get listeners for.
-<a name="line536"></a> * @param {string?} type Event type.
+<a name="line536"></a> * @param {?string} type Event type.
 <a name="line537"></a> * @param {boolean} capture Capture phase?.
 <a name="line538"></a> * @return {Array.&lt;goog.events.Listener&gt;?} Array of listener objects.
 <a name="line539"></a> *     Returns null if object has no lsiteners of that type.
@@ -605,7 +605,7 @@
 <a name="line562"></a> *
 <a name="line563"></a> * @param {EventTarget|goog.events.EventTarget} src The node to stop
 <a name="line564"></a> *     listening to events on.
-<a name="line565"></a> * @param {string?} type The name of the event without the &#39;on&#39; prefix.
+<a name="line565"></a> * @param {?string} type The name of the event without the &#39;on&#39; prefix.
 <a name="line566"></a> * @param {Function|Object} listener The listener function to remove.
 <a name="line567"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
 <a name="line568"></a> *                            whether the listener is fired during the

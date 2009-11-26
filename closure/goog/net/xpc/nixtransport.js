@@ -58,7 +58,7 @@ goog.net.xpc.NixTransport = function(channel) {
 
   /**
    * The authorization token, if any, used by this transport.
-   * @type {string?}
+   * @type {?string}
    * @private
    */
   this.authToken_ = channel[goog.net.xpc.CfgFields.AUTH_TOKEN] || '';
@@ -66,7 +66,7 @@ goog.net.xpc.NixTransport = function(channel) {
   /**
    * The authorization token, if any, that must be sent by the other party
    * for setup to occur.
-   * @type {string?}
+   * @type {?string}
    * @private
    */
   this.remoteAuthToken_ =

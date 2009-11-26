@@ -226,7 +226,7 @@
 <a name="line183"></a> *
 <a name="line184"></a> * @param {string} text  The plain text to be searched.
 <a name="line185"></a> * @param {Array} terms  An array of
-<a name="line186"></a> *   [{String} searchTerm, {Boolean} matchWholeWordOnly] tuples.
+<a name="line186"></a> *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
 <a name="line187"></a> *   The matchWholeWordOnly value is a per-term attribute because some terms
 <a name="line188"></a> *   may be CJK, while others are not. (For correctness, matchWholeWordOnly
 <a name="line189"></a> *   should always be false for CJK terms.).
@@ -237,7 +237,7 @@
 <a name="line194"></a> *   and returns the annotated term as an HTML string.
 <a name="line195"></a> * @param {*} opt_ignoreCase  Whether to ignore the case of the query
 <a name="line196"></a> *   terms when looking for matches.
-<a name="line197"></a> * @return {string?} The HTML equivalent of {@code text} with terms
+<a name="line197"></a> * @return {?string} The HTML equivalent of {@code text} with terms
 <a name="line198"></a> *   annotated, or null if the text did not contain any of the terms.
 <a name="line199"></a> */
 <a name="line200"></a>goog.dom.annotate.annotateText = function(text, terms, annotateFn,
@@ -258,7 +258,7 @@
 <a name="line215"></a> *
 <a name="line216"></a> * @param {string} text  The plain text to be searched.
 <a name="line217"></a> * @param {Array} terms  An array of
-<a name="line218"></a> *   [{String} searchTerm, {Boolean} matchWholeWordOnly] tuples.
+<a name="line218"></a> *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
 <a name="line219"></a> *   If {@code ignoreCase} is true, each search term must already be lowercase.
 <a name="line220"></a> *   The matchWholeWordOnly value is a per-term attribute because some terms
 <a name="line221"></a> *   may be CJK, while others are not. (For correctness, matchWholeWordOnly
@@ -270,7 +270,7 @@
 <a name="line227"></a> *   and returns the annotated term as an HTML string.
 <a name="line228"></a> * @param {*} ignoreCase  Whether to ignore the case of the query terms
 <a name="line229"></a> *   when looking for matches.
-<a name="line230"></a> * @return {string?} The HTML equivalent of {@code text} with terms
+<a name="line230"></a> * @return {?string} The HTML equivalent of {@code text} with terms
 <a name="line231"></a> *   annotated, or null if the text did not contain any of the terms.
 <a name="line232"></a> * @private
 <a name="line233"></a> */
@@ -380,9 +380,9 @@
 <a name="line337"></a> * Converts terms to lowercase.
 <a name="line338"></a> *
 <a name="line339"></a> * @param {Array} terms  An array of
-<a name="line340"></a> *   [{String} searchTerm, {Boolean} matchWholeWordOnly] tuples.
+<a name="line340"></a> *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
 <a name="line341"></a> * @return {Array}  An array of
-<a name="line342"></a> *   [{String} searchTerm, {Boolean} matchWholeWordOnly] tuples.
+<a name="line342"></a> *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
 <a name="line343"></a> * @private
 <a name="line344"></a> */
 <a name="line345"></a>goog.dom.annotate.lowercaseTerms_ = function(terms) {

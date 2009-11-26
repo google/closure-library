@@ -66,7 +66,7 @@ goog.dom.pattern.Repeat.prototype.minimum_ = 0;
  * Optional maximum number of times to match the pattern.  A {@code null} value
  * will be treated as infinity.
  *
- * @type {number?}
+ * @type {?number}
  * @private
  */
 goog.dom.pattern.Repeat.prototype.maximum_ = 0;
