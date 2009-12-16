@@ -39,11 +39,11 @@ goog.require('goog.string');
  *   (1) the number of the term that is "hit",
  *   (2) the HTML string (search term) to be annotated,
  *   and returns the annotated term as an HTML string.
- * @param {*} opt_ignoreCase  Whether to ignore the case of the query
+ * @param {*=} opt_ignoreCase  Whether to ignore the case of the query
  *   terms when looking for matches.
- * @param {Array.<string>} opt_classesToSkip  Nodes with one of these CSS class
+ * @param {Array.<string>=} opt_classesToSkip  Nodes with one of these CSS class
  *   names (and its descendants) will be skipped.
- * @param {number} opt_maxMs  Number of milliseconds after which this function,
+ * @param {number=} opt_maxMs  Number of milliseconds after which this function,
  *   if still annotating, should stop and return.
  *
  * @return {boolean} Whether any terms were annotated.
@@ -192,7 +192,7 @@ goog.dom.annotate.NONWORD_RE_ = /\W/;
  *   (1) the number of the term that is "hit",
  *   (2) the HTML string (search term) to be annotated,
  *   and returns the annotated term as an HTML string.
- * @param {*} opt_ignoreCase  Whether to ignore the case of the query
+ * @param {*=} opt_ignoreCase  Whether to ignore the case of the query
  *   terms when looking for matches.
  * @return {?string} The HTML equivalent of {@code text} with terms
  *   annotated, or null if the text did not contain any of the terms.

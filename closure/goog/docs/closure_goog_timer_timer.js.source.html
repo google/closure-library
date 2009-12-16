@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -71,8 +72,8 @@
 <a name="line28"></a>/**
 <a name="line29"></a> * Class for handling timing events.
 <a name="line30"></a> *
-<a name="line31"></a> * @param {number} opt_interval Number of ms between ticks (Default: 1ms).
-<a name="line32"></a> * @param {Object} opt_timerObject  An object that has setTimeout, setInterval,
+<a name="line31"></a> * @param {number=} opt_interval Number of ms between ticks (Default: 1ms).
+<a name="line32"></a> * @param {Object=} opt_timerObject  An object that has setTimeout, setInterval,
 <a name="line33"></a> *     clearTimeout and clearInterval (eg Window).
 <a name="line34"></a> * @constructor
 <a name="line35"></a> * @extends {goog.events.EventTarget}
@@ -286,8 +287,8 @@
 <a name="line243"></a>/**
 <a name="line244"></a> * Calls the given function once, after the optional pause
 <a name="line245"></a> * @param {Function} listener Function or object that has a handleEvent method.
-<a name="line246"></a> * @param {number} opt_interval Number of ms between ticks (Default: 1ms).
-<a name="line247"></a> * @param {Object} opt_handler Object in whose scope to call the listener.
+<a name="line246"></a> * @param {number=} opt_interval Number of ms between ticks (Default: 1ms).
+<a name="line247"></a> * @param {Object=} opt_handler Object in whose scope to call the listener.
 <a name="line248"></a> * @return {number} A handle to the timer ID.
 <a name="line249"></a> */
 <a name="line250"></a>goog.Timer.callOnce = function(listener, opt_interval, opt_handler) {

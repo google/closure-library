@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,8 +81,8 @@
 <a name="line37"></a> * functionality in a separate class.
 <a name="line38"></a> *
 <a name="line39"></a> * @constructor
-<a name="line40"></a> * @param {string} opt_identifier Identifier for this logging class.
-<a name="line41"></a> * @param {string} opt_prefix Prefix prepended to messages.
+<a name="line40"></a> * @param {string=} opt_identifier Identifier for this logging class.
+<a name="line41"></a> * @param {string=} opt_prefix Prefix prepended to messages.
 <a name="line42"></a> */
 <a name="line43"></a>goog.debug.DebugWindow = function(opt_identifier, opt_prefix) {
 <a name="line44"></a>  /**
@@ -536,7 +537,7 @@
 <a name="line493"></a>/**
 <a name="line494"></a> * Retrieve data (using cookies).
 <a name="line495"></a> * @param {string} key Data name.
-<a name="line496"></a> * @param {string} opt_default Optional default value if cookie doesn&#39;t exist.
+<a name="line496"></a> * @param {string=} opt_default Optional default value if cookie doesn&#39;t exist.
 <a name="line497"></a> * @return {string} Cookie value.
 <a name="line498"></a> * @private
 <a name="line499"></a> */
@@ -550,7 +551,7 @@
 <a name="line507"></a> * Retrieve data (using cookies).
 <a name="line508"></a> * @param {string} identifier Identifier for logging class.
 <a name="line509"></a> * @param {string} key Data name.
-<a name="line510"></a> * @param {string} opt_default Optional default value if cookie doesn&#39;t exist.
+<a name="line510"></a> * @param {string=} opt_default Optional default value if cookie doesn&#39;t exist.
 <a name="line511"></a> * @return {string} Cookie value.
 <a name="line512"></a> * @private
 <a name="line513"></a> */

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -81,8 +82,8 @@
 <a name="line38"></a> *
 <a name="line39"></a> * @constructor
 <a name="line40"></a> * @extends {goog.events.EventTarget}
-<a name="line41"></a> * @param {Element} opt_element A DOM element for the popup.
-<a name="line42"></a> * @param {goog.ui.PopupBase.Type} opt_type Type of popup.
+<a name="line41"></a> * @param {Element=} opt_element A DOM element for the popup.
+<a name="line42"></a> * @param {goog.ui.PopupBase.Type=} opt_type Type of popup.
 <a name="line43"></a> */
 <a name="line44"></a>goog.ui.PopupBase = function(opt_element, opt_type) {
 <a name="line45"></a>  /**
@@ -538,7 +539,7 @@
 <a name="line495"></a>/**
 <a name="line496"></a> * Hides the popup. This call is idempotent.
 <a name="line497"></a> *
-<a name="line498"></a> * @param {Object} opt_target Target of the event causing the hide.
+<a name="line498"></a> * @param {Object=} opt_target Target of the event causing the hide.
 <a name="line499"></a> * @return {boolean} Whether the popup was hidden and not cancelled.
 <a name="line500"></a> * @private
 <a name="line501"></a> */
@@ -633,7 +634,7 @@
 <a name="line590"></a> * Called before the popup is hidden. Derived classes can override to hook this
 <a name="line591"></a> * event but should make sure to call the parent class method.
 <a name="line592"></a> *
-<a name="line593"></a> * @param {Object} opt_target Target of the event causing the hide.
+<a name="line593"></a> * @param {Object=} opt_target Target of the event causing the hide.
 <a name="line594"></a> * @return {boolean} If anyone called preventDefault on the event object (or
 <a name="line595"></a> *     if any of the handlers returns false this will also return false.
 <a name="line596"></a> * @private
@@ -647,7 +648,7 @@
 <a name="line604"></a>/**
 <a name="line605"></a> * Called after the popup is hidden. Derived classes can override to hook this
 <a name="line606"></a> * event but should make sure to call the parent class method.
-<a name="line607"></a> * @param {Object} opt_target Target of the event causing the hide.
+<a name="line607"></a> * @param {Object=} opt_target Target of the event causing the hide.
 <a name="line608"></a> * @private
 <a name="line609"></a> */
 <a name="line610"></a>goog.ui.PopupBase.prototype.onHide_ = function(opt_target) {

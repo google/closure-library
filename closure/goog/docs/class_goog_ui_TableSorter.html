@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -82,7 +94,7 @@ headers.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
@@ -90,7 +102,7 @@ headers.
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -114,7 +126,7 @@ headers.
    <tr class="even">
      <td>
         <span class="entryName">opt_domHelper</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        : <div class="fullType"><span class="type">goog.dom.DomHelper=</span></div>
         <div class="entryOverview">Optional DOM helper, used for document interaction.</div>
      </td>
    </tr>
@@ -540,7 +552,7 @@ function.
    <tr class="odd">
      <td>
         <span class="entryName">opt_reverse</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to sort in reverse.</div>
      </td>
    </tr>
@@ -692,7 +704,7 @@ goog.ui.Component#addChildAt for detailed semantics.
    <tr class="odd">
      <td>
         <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, the child component will be rendered into the parent.</div>
      </td>
    </tr>
@@ -796,7 +808,7 @@ different parent, or the given index is out of bounds.
    <tr class="even">
      <td>
         <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, the child component will be rendered into the parent.</div>
      </td>
    </tr>
@@ -1195,7 +1207,7 @@ component and its 0-based index.  The return value is ignored.
    <tr class="odd">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Used as the &#39;this&#39; object in f when called.</div>
      </td>
    </tr>
@@ -2227,7 +2239,7 @@ component&#39;s DOM.
    <tr class="odd">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
      </td>
    </tr>
@@ -2303,7 +2315,7 @@ detailed semantics.
    <tr class="odd">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
      </td>
    </tr>
@@ -2367,7 +2379,7 @@ detailed semantics.
    <tr class="even">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls #exitDocument on the removed child components, and detaches their DOM from the document.</div>
      </td>
    </tr>
@@ -2432,7 +2444,7 @@ Throws an Error if the component is already rendered.
    <tr class="even">
      <td>
         <span class="entryName">opt_parentElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Optional parent element to render the component into.</div>
      </td>
    </tr>
@@ -2560,7 +2572,7 @@ Throws an Error if the component is already rendered.
    <tr class="even">
      <td>
         <span class="entryName">opt_parentElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Optional parent element to render the component into.</div>
      </td>
    </tr>
@@ -2568,7 +2580,7 @@ Throws an Error if the component is already rendered.
    <tr class="odd">
      <td>
         <span class="entryName">opt_beforeElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Element before which the component is to be rendered.  If left out the node is appended to the parent element.</div>
      </td>
    </tr>
@@ -3090,7 +3102,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -3098,7 +3110,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -3335,7 +3347,7 @@ nothing is done.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -3343,7 +3355,7 @@ nothing is done.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>

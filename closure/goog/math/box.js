@@ -62,8 +62,8 @@ goog.math.Box = function(top, right, bottom, left) {
 
 /**
  * Creates a Box by bounding a collection of goog.math.Coordinate objects
- * @param {goog.math.Coordinate} var_args Coordinates to be included inside the
- *     box.
+ * @param {...goog.math.Coordinate} var_args Coordinates to be included inside
+ *     the box.
  * @return {goog.math.Box} A Box containing all the specified Coordinates.
  */
 goog.math.Box.boundingBox = function(var_args) {
@@ -116,9 +116,9 @@ goog.math.Box.prototype.contains = function(other) {
  * Expands box with the given margins.
  *
  * @param {number|goog.math.Box} top Top margin or box with all margins.
- * @param {number} opt_right Right margin.
- * @param {number} opt_bottom Bottom margin.
- * @param {number} opt_left Left margin.
+ * @param {number=} opt_right Right margin.
+ * @param {number=} opt_bottom Bottom margin.
+ * @param {number=} opt_left Left margin.
  * @return {goog.math.Box} A reference to this Box.
  */
 goog.math.Box.prototype.expand = function(top, opt_right, opt_bottom,

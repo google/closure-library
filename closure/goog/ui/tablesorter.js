@@ -38,7 +38,7 @@ goog.require('goog.ui.Component');
  * The TABLE should use a THEAD containing TH elements for the table column
  * headers.
  *
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Component}
@@ -172,7 +172,7 @@ goog.ui.TableSorter.prototype.sort_ = function(e) {
 /**
  * Sort the table contents by the values in the given column.
  * @param {number} column The column to sort by.
- * @param {boolean} opt_reverse Whether to sort in reverse.
+ * @param {boolean=} opt_reverse Whether to sort in reverse.
  */
 goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
   // Get some useful DOM nodes.

@@ -102,11 +102,11 @@ goog.module.BaseModuleLoader.prototype.loadModules = function(
  * Loads a list of JavaScript modules.
  * @param {Array.<string>} ids The module ids in dependency order.
  * @param {Object} moduleInfoMap A mapping from module id to ModuleInfo object.
- * @param {function()} opt_successFn The callback if module loading is a
+ * @param {function()=} opt_successFn The callback if module loading is a
  *     success.
- * @param {function(number)} opt_errorFn The callback if module loading is in
+ * @param {function(number)=} opt_errorFn The callback if module loading is in
  *     error.
- * @param {function()} opt_timeoutFn The callback if module loading times out.
+ * @param {function()=} opt_timeoutFn The callback if module loading times out.
  * @protected
  */
 goog.module.BaseModuleLoader.prototype.loadModulesInternal = function(

@@ -36,7 +36,7 @@ goog.require('goog.ui.Popup');
 
 /**
  * An offline status component.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */

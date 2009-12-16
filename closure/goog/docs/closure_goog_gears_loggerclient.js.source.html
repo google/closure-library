@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -75,7 +76,7 @@
 <a name="line32"></a> * @param {goog.gears.Worker} mainThread  The main thread that has the
 <a name="line33"></a> *     logger server running.
 <a name="line34"></a> * @param {number} logCommandId  The command id used for logging.
-<a name="line35"></a> * @param {string} opt_workerName  This, if present, is added to the error
+<a name="line35"></a> * @param {string=} opt_workerName  This, if present, is added to the error
 <a name="line36"></a> *     object when serializing it.
 <a name="line37"></a> * @constructor
 <a name="line38"></a> * @extends {goog.Disposable}
@@ -137,7 +138,7 @@
 <a name="line94"></a> * @param {string} name The name of the logger.
 <a name="line95"></a> * @param {goog.debug.Logger.Level} level One of the level identifiers.
 <a name="line96"></a> * @param {string} msg The string message.
-<a name="line97"></a> * @param {Object} opt_exception An exception associated with the message.
+<a name="line97"></a> * @param {Object=} opt_exception An exception associated with the message.
 <a name="line98"></a> * @private
 <a name="line99"></a> */
 <a name="line100"></a>goog.gears.LoggerClient.prototype.sendLog_ = function(name,

@@ -48,21 +48,13 @@ function setUp() {
   goog.style.setSize(popup, 20, 20);
 }
 
-function assertGreaterThanOrEqual(a, b) {
-  assertTrue(a >= b);
-}
-
-function assertGreaterThan(a, b) {
-  assertTrue(a > b);
-}
-
 // The frame has enough space at the bottom of the anchor.
 function testRepositionBottom() {
   var avp = new goog.positioning.AnchoredViewportPosition(
       anchor, corner.BOTTOM_LEFT, false);
   goog.style.setSize(anchor, 100, 100);
   goog.style.setPosition(anchor, 0, 0);
-  assertGreaterThanOrEqual(viewportSize.height, 100 + 20);
+  assertTrue(viewportSize.height >= 100 + 20);
 
   avp.reposition(popup, corner.TOP_LEFT);
   var anchorRect = goog.style.getBounds(anchor);
@@ -77,12 +69,28 @@ function testRepositionTop() {
   var newTop = viewportSize.height - 100;
   goog.style.setSize(anchor, 100, 100);
   goog.style.setPosition(anchor, 50, newTop);
-  assertGreaterThanOrEqual(newTop, 20);
+  assertTrue(newTop >= 20);
 
   avp.reposition(popup, corner.TOP_LEFT);
   anchorRect = goog.style.getBounds(anchor);
   var popupRect = goog.style.getBounds(popup);
   assertEquals(anchorRect.top, popupRect.top + popupRect.height);
+}
+
+// Not enough space either at the bottom or right but there is enough space at
+// top left.
+function testRepositionBottomRight() {
+  var avp = new goog.positioning.AnchoredViewportPosition(
+      anchor, corner.BOTTOM_RIGHT, false);
+  goog.style.setSize(anchor, 100, 100);
+  goog.style.setPosition(anchor, viewportSize.width - 110,
+      viewportSize.height - 110);
+
+  avp.reposition(popup, corner.TOP_LEFT);
+  anchorRect = goog.style.getBounds(anchor);
+  var popupRect = goog.style.getBounds(popup);
+  assertEquals(anchorRect.top, popupRect.top + popupRect.height);
+  assertEquals(anchorRect.left, popupRect.left + popupRect.width);
 }
 
 // Enough space at neither the bottom nor the top.  Adjustment flag is false.
@@ -96,7 +104,7 @@ function testRepositionNoSpaceWithoutAdjustment() {
   anchorRect = goog.style.getBounds(anchor);
   popupRect = goog.style.getBounds(popup);
   assertEquals(anchorRect.top + anchorRect.height, popupRect.top);
-  assertGreaterThan(popupRect.top + popupRect.height, viewportSize.height);
+  assertTrue(popupRect.top + popupRect.height > viewportSize.height);
 }
 
 // Enough space at neither the bottom nor the top.  Adjustment flag is true.
@@ -109,7 +117,7 @@ function testRepositionNoSpaceWithAdjustment() {
   avp.reposition(popup, corner.TOP_LEFT);
   anchorRect = goog.style.getBounds(anchor);
   popupRect = goog.style.getBounds(popup);
-  assertGreaterThan(anchorRect.top + anchorRect.height, popupRect.top);
+  assertTrue(anchorRect.top + anchorRect.height > popupRect.top);
   assertEquals(viewportSize.height, popupRect.top + popupRect.height);
 }
 

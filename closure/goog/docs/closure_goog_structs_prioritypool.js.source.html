@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -71,8 +72,8 @@
 <a name="line28"></a>
 <a name="line29"></a>/**
 <a name="line30"></a> * A generic pool class. If max is greater than min, an error is thrown.
-<a name="line31"></a> * @param {number} opt_minCount Min. number of objects (Default: 1).
-<a name="line32"></a> * @param {number} opt_maxCount Max. number of objects (Default: 10).
+<a name="line31"></a> * @param {number=} opt_minCount Min. number of objects (Default: 1).
+<a name="line32"></a> * @param {number=} opt_maxCount Max. number of objects (Default: 10).
 <a name="line33"></a> * @constructor
 <a name="line34"></a> * @extends {goog.structs.Pool}
 <a name="line35"></a> */
@@ -104,10 +105,10 @@
 <a name="line61"></a>/**
 <a name="line62"></a> * Get a new object from the the pool, if there is one available, otherwise
 <a name="line63"></a> * return undefined.
-<a name="line64"></a> * @param {Function} opt_callback The function to callback when an object is
+<a name="line64"></a> * @param {Function=} opt_callback The function to callback when an object is
 <a name="line65"></a> *     available. This could be immediately. If this is not present, then an
 <a name="line66"></a> *     object is immediately returned if available, or undefined if not.
-<a name="line67"></a> * @param {Object} opt_priority The priority of the request.
+<a name="line67"></a> * @param {Object=} opt_priority The priority of the request.
 <a name="line68"></a> * @return {Object|undefined} The new object from the pool if there is one
 <a name="line69"></a> *     available and a callback is not given. Otherwise, undefined.
 <a name="line70"></a> */

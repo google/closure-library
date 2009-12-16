@@ -34,11 +34,6 @@ Copyright 2008 Google Inc. All Rights Reserved.
 <script>
   var clock;
 
-  function FakeModule() {
-    goog.module.BaseModule.call(this);
-  };
-  goog.inherits(FakeModule, goog.module.BaseModule);
-
   function setUpPage() {
     clock = new goog.testing.MockClock(true);
   }
@@ -51,9 +46,6 @@ Copyright 2008 Google Inc. All Rights Reserved.
     var mm = new goog.module.ModuleManager();
     mm.setAllModuleInfo(infoMap);
 
-    for (var id in infoMap) {
-      mm.getModuleInfo(id).setModuleConstructor(FakeModule);
-    }
     mm.isModuleLoaded = function(id) {
       return this.getModuleInfo(id).isLoaded();
     }
@@ -300,7 +292,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     var calledBack = false;
     var error = null;
 
-    var d = mm.load('a');;
+    var d = mm.load('a');
     d.addCallback(function(ctx) {
       calledBack = true;
     });
@@ -310,6 +302,35 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     assertFalse(calledBack);
     assertNull(error);
+    assertFalse(mm.isUserActive());
+
+    clock.tick(5);
+
+    assertTrue(calledBack);
+    assertNull(error);
+  }
+
+  /**
+   * Tests loading a module by user action by requesting a Deferred object.
+   */
+  function testLoadForUser() {
+    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+    mm.setLoader(createSuccessfulNonBatchLoader(mm));
+
+    var calledBack = false;
+    var error = null;
+
+    var d = mm.load('a', true);
+    d.addCallback(function(ctx) {
+      calledBack = true;
+    });
+    d.addErrback(function(err) {
+      error = err;
+    });
+
+    assertFalse(calledBack);
+    assertNull(error);
+    assertTrue(mm.isUserActive());
 
     clock.tick(5);
 
@@ -953,14 +974,15 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
  function testRegisterInitializationCallback() {
-   var initCalled = false;
+   var initCalled = 0;
    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
    mm.setLoader(createSuccessfulNonBatchLoaderWithRegisterInitCallback(mm,
        function() {
-        initCalled = true;
+        ++initCalled;
        }));
    execOnLoad_(mm);
-   assertTrue(initCalled);
+   // execOnLoad_ loads modules a and c
+   assertTrue(initCalled == 2);
  }
 
   function createSuccessfulNonBatchLoaderWithRegisterInitCallback(
@@ -970,6 +992,55 @@ Copyright 2008 Google Inc. All Rights Reserved.
           opt_timeoutFn) {
         moduleMgr.beforeLoadModuleCode(ids[0]);
         moduleMgr.registerInitializationCallback(fn);
+        setTimeout(function() {
+          moduleMgr.setLoaded(ids[0]);
+          moduleMgr.afterLoadModuleCode(ids[0]);
+          if (opt_successFn) {
+            opt_successFn();
+          }
+        }, 5);
+      }};
+  }
+
+  function testSetModuleConstructor() {
+    var initCalled = 0;
+    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+    var info = {
+      'a': { ctor: AModule, count: 0 },
+      'b': { ctor: BModule, count: 0 },
+      'c': { ctor: CModule, count: 0 }
+    };
+    function AModule() {
+      ++info['a'].count;
+      goog.module.BaseModule.call(this);
+    }
+    goog.inherits(AModule, goog.module.BaseModule);
+    function BModule() {
+      ++info['b'].count;
+      goog.module.BaseModule.call(this);
+    }
+    goog.inherits(BModule, goog.module.BaseModule);
+    function CModule() {
+      ++info['c'].count;
+      goog.module.BaseModule.call(this);
+    }
+    goog.inherits(CModule, goog.module.BaseModule);
+
+    mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(mm, info));
+    execOnLoad_(mm);
+    assertTrue(info['a'].count == 1);
+    assertTrue(info['b'].count == 0);
+    assertTrue(info['c'].count == 1);
+    assertTrue(mm.getModuleInfo('a').getModule() instanceof AModule);
+    assertTrue(mm.getModuleInfo('c').getModule() instanceof CModule);
+  }
+
+  function createSuccessfulNonBatchLoaderWithConstructor(moduleMgr, info) {
+    return {
+      loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
+          opt_timeoutFn) {
+        moduleMgr.beforeLoadModuleCode(ids[0]);
+        moduleMgr.setModuleConstructor(info[ids[0]].ctor);
         setTimeout(function() {
           moduleMgr.setLoaded(ids[0]);
           moduleMgr.afterLoadModuleCode(ids[0]);

@@ -34,10 +34,10 @@ goog.require('goog.ui.registry');
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to
  *     display as the content of the item (use to add icons or styling to
  *     menus).
- * @param {Object} opt_model Data/model associated with the menu item.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper used for
+ * @param {Object=} opt_model Data/model associated with the menu item.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper used for
  *     document interactions.
- * @param {goog.ui.MenuItemRenderer} opt_renderer Optional renderer.
+ * @param {goog.ui.MenuItemRenderer=} opt_renderer Optional renderer.
  * @constructor
  * @extends {goog.ui.MenuItem}
  */
@@ -76,7 +76,7 @@ goog.ui.FilterObservingMenuItem.prototype.setObserver = function(f) {
 
 /**
  * Calls the observer function if one has been specified.
- * @param {?string} opt_str Filter string.
+ * @param {?string=} opt_str Filter string.
  */
 goog.ui.FilterObservingMenuItem.prototype.callObserver = function(opt_str) {
   if (this.observer_) {

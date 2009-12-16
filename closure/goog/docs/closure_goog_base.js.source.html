@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -175,7 +176,7 @@
 <a name="line132"></a> * &quot;a.b.c&quot; -&gt; a = {};a.b={};a.b.c={};
 <a name="line133"></a> * Used by goog.provide and goog.exportSymbol.
 <a name="line134"></a> * @param {string} name name of the object that this file defines.
-<a name="line135"></a> * @param {Object=} opt_object the object to expose at the end of the path.
+<a name="line135"></a> * @param {*=} opt_object the object to expose at the end of the path.
 <a name="line136"></a> * @param {Object=} opt_objectToExportTo The object to add the path to; default
 <a name="line137"></a> *     is |goog.global|.
 <a name="line138"></a> * @private
@@ -1192,7 +1193,7 @@
 <a name="line1149"></a> *     new public.path.Foo().myMethod();
 <a name="line1150"></a> *
 <a name="line1151"></a> * @param {string} publicPath Unobfuscated name to export.
-<a name="line1152"></a> * @param {Object} object Object the name should point to.
+<a name="line1152"></a> * @param {*} object Object the name should point to.
 <a name="line1153"></a> * @param {Object=} opt_objectToExportTo The object to add the path to; default
 <a name="line1154"></a> *     is |goog.global|.
 <a name="line1155"></a> */
@@ -1207,7 +1208,7 @@
 <a name="line1164"></a> * ex. goog.exportProperty(Foo.prototype, &#39;myMethod&#39;, Foo.prototype.myMethod);
 <a name="line1165"></a> * @param {Object} object Object whose static property is being exported.
 <a name="line1166"></a> * @param {string} publicName Unobfuscated name to export.
-<a name="line1167"></a> * @param {Object} symbol Object the name should point to.
+<a name="line1167"></a> * @param {*} symbol Object the name should point to.
 <a name="line1168"></a> */
 <a name="line1169"></a>goog.exportProperty = function(object, publicName, symbol) {
 <a name="line1170"></a>  object[publicName] = symbol;

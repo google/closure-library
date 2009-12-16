@@ -91,7 +91,7 @@ goog.dom.SavedCaretRange.prototype.getCaret = function(start) {
 
 /**
  * Removes the carets from the current restoration document.
- * @param {goog.dom.AbstractRange} opt_range A range whose offsets have already
+ * @param {goog.dom.AbstractRange=} opt_range A range whose offsets have already
  *     been adjusted for caret removal; it will be adjusted if it is also
  *     affected by post-removal operations, such as text node normalization.
  * @return {goog.dom.AbstractRange|undefined} The adjusted range, if opt_range

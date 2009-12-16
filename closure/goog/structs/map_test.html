@@ -34,7 +34,7 @@ function stringifyMap(m) {
   var keys = goog.structs.getKeys(m);
   var s = '';
   for (var i = 0; i < keys.length; i++) {
-    s += keys[i] + goog.structs.Map.get(m, keys[i]);
+    s += keys[i] + m[keys[i]];
   }
   return s;
 }
@@ -384,30 +384,6 @@ function testTranspose() {
   var transposed = m.transpose();
   assertEquals('Should contain the keys', 'abcde',
       goog.iter.join(transposed, ''));
-}
-
-function testStaticAddSetGet() {
-  var m = new goog.structs.Map;
-
-  goog.structs.Map.add(m, 'a', 10);
-  assertThrows('should not allow same key added twice',
-    function() {
-      goog.structs.Map.add(m, 'a', 20)
-    });
-  goog.structs.Map.set(m, 'a', 1);
-  goog.structs.Map.add(m, 'b', 2);
-  m.set('c', 3);
-  m.set('d', 4);
-
-  assertEquals('wrong a, prototype getter', 1, m.get('a'));
-  assertEquals('wrong b, prototype getter', 2, m.get('b'));
-  assertEquals('wrong c, prototype getter', 3, m.get('c'));
-  assertEquals('wrong d, prototype getter', 4, m.get('d'));
-
-  assertEquals('wrong a, static getter', 1, goog.structs.Map.get(m, 'a'));
-  assertEquals('wrong b, static getter', 2, goog.structs.Map.get(m, 'b'));
-  assertEquals('wrong c, static getter', 3, goog.structs.Map.get(m, 'c'));
-  assertEquals('wrong d, static getter', 4, goog.structs.Map.get(m, 'd'));
 }
 
 function testEqualsWithSameObject() {

@@ -20,7 +20,6 @@
 
 goog.provide('goog.editor.plugins.AbstractTabHandler');
 
-goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Plugin');
 goog.require('goog.events.KeyCodes');
 

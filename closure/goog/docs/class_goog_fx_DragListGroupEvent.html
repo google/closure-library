@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -79,12 +91,12 @@ for the BEFOREDRAGMOVE and DRAGMOVE events.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.fx.DragListGroupEvent</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -156,7 +168,7 @@ for the BEFOREDRAGMOVE and DRAGMOVE events.
    <tr class="even">
      <td>
         <span class="entryName">opt_draggerElCenter</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
+        : <div class="fullType"><span class="type">goog.math.Coordinate=</span></div>
         <div class="entryOverview">The current center position of the draggerEl.</div>
      </td>
    </tr>
@@ -164,7 +176,7 @@ for the BEFOREDRAGMOVE and DRAGMOVE events.
    <tr class="odd">
      <td>
         <span class="entryName">opt_hoverList</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">The current drag list that&#39;s being hovered over, or null if the center of draggerEl is outside of any drag lists. If not null and the drag action ends right now, then currDragItem will end up in this list.</div>
      </td>
    </tr>
@@ -172,7 +184,7 @@ for the BEFOREDRAGMOVE and DRAGMOVE events.
    <tr class="even">
      <td>
         <span class="entryName">opt_hoverNextItem</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">The current next item in the hoverList that the draggerEl is hovering over. (I.e. If the drag action ends right now, then this item would become the next item after the new location of currDragItem.) May be null if not applicable or if currDragItem would be added to the end of hoverList.</div>
      </td>
    </tr>

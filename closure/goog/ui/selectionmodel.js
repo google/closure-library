@@ -31,7 +31,7 @@ goog.require('goog.events.EventType');
 /**
  * Single-selection model.  Dispatches a {@link goog.events.EventType.SELECT}
  * event when a selection is made.
- * @param {Array.<Object>} opt_items Array of items; defaults to empty.
+ * @param {Array.<Object>=} opt_items Array of items; defaults to empty.
  * @extends {goog.events.EventTarget}
  * @constructor
  */

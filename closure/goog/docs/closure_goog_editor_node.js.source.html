@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -259,7 +260,7 @@
 <a name="line216"></a> * Returns true if the node contains only whitespace and is not and does not
 <a name="line217"></a> * contain any images, iframes or embed tags.
 <a name="line218"></a> * @param {Node} node The node to check.
-<a name="line219"></a> * @param {boolean} opt_prohibitSingleNbsp By default, this function treats a
+<a name="line219"></a> * @param {boolean=} opt_prohibitSingleNbsp By default, this function treats a
 <a name="line220"></a> *     single nbsp as empty.  Set this to true to treat this case as non-empty.
 <a name="line221"></a> * @return {boolean} Whether the node contains only whitespace.
 <a name="line222"></a> */
@@ -421,10 +422,10 @@
 <a name="line378"></a>/**
 <a name="line379"></a> * Splits off a subtree.
 <a name="line380"></a> * @param {!Node} currentNode The starting splitting point.
-<a name="line381"></a> * @param {Node} opt_secondHalf The initial leftmost leaf the new subtree.
+<a name="line381"></a> * @param {Node=} opt_secondHalf The initial leftmost leaf the new subtree.
 <a name="line382"></a> *     If null, siblings after currentNode will be placed in the subtree, but
 <a name="line383"></a> *     no additional node will be.
-<a name="line384"></a> * @param {Node} opt_root The top of the tree where splitting stops at.
+<a name="line384"></a> * @param {Node=} opt_root The top of the tree where splitting stops at.
 <a name="line385"></a> * @return {!Node} The new subtree.
 <a name="line386"></a> */
 <a name="line387"></a>goog.editor.node.splitDomTreeAt = function(currentNode,

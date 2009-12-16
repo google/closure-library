@@ -36,7 +36,7 @@ goog.require('goog.ui.ZippyEvent');
  *     reference, string id or null if no header exists.
  * @param {Element|string} content Content element, either element reference or
  *     string id.
- * @param {boolean} opt_expanded Initial expanded/visibility state. Defaults to
+ * @param {boolean=} opt_expanded Initial expanded/visibility state. Defaults to
  *     false.
  * @constructor
  * @extends {goog.ui.Zippy}

@@ -348,7 +348,7 @@ goog.math.RangeSet.prototype.clear = function() {
 /**
  * Returns an iterator that iterates over the ranges in the RangeSet.
  *
- * @param {boolean} opt_keys Ignored for RangeSets.
+ * @param {boolean=} opt_keys Ignored for RangeSets.
  * @return {goog.iter.Iterator} An iterator over the values in the set.
  */
 goog.math.RangeSet.prototype.__iterator__ = function(opt_keys) {

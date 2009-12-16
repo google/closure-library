@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,13 +90,13 @@ Provides asynchronous messaging.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td>goog.net.xpc.CrossPageChannel</td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -225,7 +237,7 @@ information needed to connect the channel has to be available.
    <tr class="even">
      <td>
         <span class="entryName">opt_connectCb</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        : <div class="fullType"><span class="type">Function=</span></div>
         <div class="entryOverview">The function to be called when the channel has been connected and is ready to be used.</div>
      </td>
    </tr>
@@ -296,7 +308,7 @@ separately.
    <tr class="odd">
      <td>
         <span class="entryName">opt_configureIframeCb</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        : <div class="fullType"><span class="type">Function=</span></div>
         <div class="entryOverview">If present, this function gets called with the iframe element as parameter to allow setting properties on it before it gets added to the DOM. If absent, the iframe&#39;s width and height are set to &#39;100%&#39;.</div>
      </td>
    </tr>
@@ -304,7 +316,7 @@ separately.
    <tr class="even">
      <td>
         <span class="entryName">opt_addCfgParam</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to add the peer configuration as URL parameter (default: true).</div>
      </td>
    </tr>
@@ -865,7 +877,7 @@ transport based on the user agent and the configuration.
    <tr class="even">
      <td>
         <span class="entryName">opt_jsonEncoded</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, incoming messages for this service are expected to contain a JSON-encoded object and will be deserialized automatically.</div>
      </td>
    </tr>

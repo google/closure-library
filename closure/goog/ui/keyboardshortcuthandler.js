@@ -94,6 +94,15 @@ goog.ui.KeyboardShortcutHandler = function(keyTarget) {
    */
   this.allShortcutsAreGlobal_ = false;
 
+  /**
+   * Whether to treat shortcuts with modifiers as if they had been passed
+   * to setGlobalKeys().  Ignored if allShortcutsAreGlobal_ is true.  Applies
+   * only to form elements (not content-editable).
+   * @type {boolean}
+   * @private
+   */
+  this.modifierShortcutsAreGlobal_ = true;
+
   this.initializeKeyListener(keyTarget);
 };
 goog.inherits(goog.ui.KeyboardShortcutHandler, goog.events.EventTarget);
@@ -229,8 +238,8 @@ goog.ui.KeyboardShortcutHandler.prototype.getAlwaysPreventDefault = function() {
 
 
 /**
- * Sets whether to treat all shortcuts as if the keys had been passed to the
- * setGlobalKeys function.
+ * Sets whether to treat all shortcuts (including modifier shortcuts) as if the
+ * keys had been passed to the setGlobalKeys function.
  * @param {boolean} allShortcutsGlobal Whether to treat all shortcuts as global.
  */
 goog.ui.KeyboardShortcutHandler.prototype.setAllShortcutsAreGlobal = function(
@@ -240,8 +249,8 @@ goog.ui.KeyboardShortcutHandler.prototype.setAllShortcutsAreGlobal = function(
 
 
 /**
- * Returns whether all shortcuts are treated as if they keys were passed
- * to setGlobalKeys function.
+ * Returns whether all shortcuts (including modifier shortcuts) are treated as
+ * if the keys had been passed to the setGlobalKeys function.
  * @see #setAllShortcutsAreGlobal
  * @return {boolean} Whether all shortcuts are treated as globals.
  */
@@ -252,14 +261,42 @@ goog.ui.KeyboardShortcutHandler.prototype.getAllShortcutsAreGlobal =
 
 
 /**
+ * Sets whether to treat shortcuts with modifiers as if the keys had been
+ * passed to the setGlobalKeys function.  Ignored if you have called
+ * setAllShortcutsAreGlobal(true).  Applies only to form elements (not
+ * content-editable).
+ * @param {boolean} modifierShortcutsGlobal Whether to treat shortcuts with
+ *     modifiers as global.
+ */
+goog.ui.KeyboardShortcutHandler.prototype.setModifierShortcutsAreGlobal =
+    function(modifierShortcutsGlobal) {
+  this.modifierShortcutsAreGlobal_ = modifierShortcutsGlobal;
+};
+
+
+/**
+ * Returns whether shortcuts with modifiers are treated as if the keys had been
+ * passed to the setGlobalKeys function.  Ignored if you have called
+ * setAllShortcutsAreGlobal(true).  Applies only to form elements (not
+ * content-editable).
+ * @see #setModifierShortcutsAreGlobal
+ * @return {boolean} Whether shortcuts with modifiers are treated as globals.
+ */
+goog.ui.KeyboardShortcutHandler.prototype.getModifierShortcutsAreGlobal =
+    function() {
+  return this.modifierShortcutsAreGlobal_;
+};
+
+
+/**
  * Registers a keyboard shortcut.
  * @param {string} identifier Identifier for the task performed by the keyboard
  *                 combination. Multiple shortcuts can be provided for the same
  *                 task by specifying the same identifier.
- * @param {number|string|Array.<number>} var_args See below.
+ * @param {...(number|string|Array.<number>)} var_args See below.
  *
  * param {number} keyCode Numeric code for key
- * param {number} opt_modifiers Bitmap indicating required modifier keys.
+ * param {number=} opt_modifiers Bitmap indicating required modifier keys.
  *                goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
  *                ALT, or META.
  *
@@ -301,7 +338,7 @@ goog.ui.KeyboardShortcutHandler.prototype.registerShortcut = function(
  * representation of sequence.
  *
  * param {number} keyCode Numeric code for key
- * param {number} opt_modifiers Bitmap indicating required modifier keys.
+ * param {number=} opt_modifiers Bitmap indicating required modifier keys.
  *                 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
  *                 ALT, or META.
  *
@@ -312,7 +349,7 @@ goog.ui.KeyboardShortcutHandler.prototype.registerShortcut = function(
  * {@link #registerShortcut} for syntax. In that case the method only takes one
  * argument.
  *
- * @param {number|string|Array.<number>} var_args String representation, or
+ * @param {...(number|string|Array.<number>)} var_args String representation, or
  *     array or list of alternating key codes and modifiers.
  */
 goog.ui.KeyboardShortcutHandler.prototype.unregisterShortcut = function(
@@ -328,7 +365,7 @@ goog.ui.KeyboardShortcutHandler.prototype.unregisterShortcut = function(
  * the same interface as the unregistering of shortcuts.
  *
  * param {number} keyCode Numeric code for key
- * param {number} opt_modifiers Bitmap indicating required modifier keys.
+ * param {number=} opt_modifiers Bitmap indicating required modifier keys.
  *                 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
  *                 ALT, or META.
  *
@@ -339,7 +376,7 @@ goog.ui.KeyboardShortcutHandler.prototype.unregisterShortcut = function(
  * {@link #registerShortcut} for syntax. In that case the method only takes one
  * argument.
  *
- * @param {number|string|Array.<number>} var_args String representation, or
+ * @param {...(number|string|Array.<number>)} var_args String representation, or
  *     array or list of alternating key codes and modifiers.
  * @return {boolean} Whether the specified keyboard shortcut is registered.
  */
@@ -590,8 +627,8 @@ goog.ui.KeyboardShortcutHandler.setShortcut_ = function(parent,
 /**
  * Returns shortcut for a specific set of strokes.
  * @param {Array.<number>} strokes Strokes array.
- * @param {number} opt_index Index in array to start with.
- * @param {Object} opt_list List to search for shortcut in.
+ * @param {number=} opt_index Index in array to start with.
+ * @param {Object=} opt_list List to search for shortcut in.
  * @return {string|Object} The shortcut.
  * @private
  */
@@ -656,31 +693,9 @@ goog.ui.KeyboardShortcutHandler.makeKey_ = function(keyCode, modifiers) {
  * @private
  */
 goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
-  // Ignore Ctrl, Shift and ALT
-  if (event.keyCode == goog.events.KeyCodes.SHIFT ||
-      event.keyCode == goog.events.KeyCodes.CTRL ||
-      event.keyCode == goog.events.KeyCodes.ALT) {
-   return;
-  }
-
-  var el = /** @type {Element} */ (event.target);
-  if (el.tagName == 'TEXTAREA' || el.tagName == 'INPUT' ||
-      el.tagName == 'BUTTON' || el.tagName == 'SELECT') {
-    // For events originating from a form element most keys are ignored,
-    // unless a modifier key is pressed.
-    if (!event.altKey && !event.ctrlKey && !event.metaKey &&
-        !this.isValidShortcutKey_(event.keyCode, el)) {
-      return;
-    }
-  } else if ((el.isContentEditable ||
-       el.ownerDocument && el.ownerDocument.designMode == 'on') &&
-      !this.globalKeys_[event.keyCode] && !this.allShortcutsAreGlobal_) {
-    // For events originating from an element in editing mode we only let
-    // global key codes through.  Don't check this for form elements, since
-    // they always have isContentEditable in IE.
+  if (!this.isValidShortcut_(event)) {
     return;
   }
-
   var modifiers =
       (event.shiftKey ? goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT : 0) |
       (event.ctrlKey ? goog.ui.KeyboardShortcutHandler.Modifiers.CTRL : 0) |
@@ -758,38 +773,57 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
 
 
 /**
- * Checks if a given key is allowed as a shortcut for the specified element.
- * @param {number} keyCode Numeric key code.
- * @param {Element} el Element the keyboard event originated from.
- * @return {boolean} Whether a given key is allowed as a shortcut for the
- *     specified element.
+ * Checks if a given keypress event may be treated as a shortcut.
+ * @param {goog.events.BrowserEvent} event Keypress event.
+ * @return {boolean} Whether to attempt to process the event as a shortcut.
  * @private
  */
-goog.ui.KeyboardShortcutHandler.prototype.isValidShortcutKey_ =
-    function(keyCode, el) {
+goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
+  var keyCode = event.keyCode;
 
+  // Ignore Ctrl, Shift and ALT
+  if (keyCode == goog.events.KeyCodes.SHIFT ||
+      keyCode == goog.events.KeyCodes.CTRL ||
+      keyCode == goog.events.KeyCodes.ALT) {
+    return false;
+  }
+  var el = /** @type {Element} */ (event.target);
+  var isFormElement =
+      el.tagName == 'TEXTAREA' || el.tagName == 'INPUT' ||
+      el.tagName == 'BUTTON' || el.tagName == 'SELECT';
+
+  var isContentEditable = !isFormElement && (el.isContentEditable ||
+      (el.ownerDocument && el.ownerDocument.designMode == 'on'));
+
+  if (!isFormElement && !isContentEditable) {
+    return true;
+  }
   // Always allow keys registered as global to be used (typically Esc, the
   // F-keys and other keys that are not typically used to manipulate text).
   if (this.globalKeys_[keyCode] || this.allShortcutsAreGlobal_) {
     return true;
   }
-
+  if (isContentEditable) {
+    // For events originating from an element in editing mode we only let
+    // global key codes through.
+    return false;
+  }
+  // Event target is one of (TEXTAREA, INPUT, BUTTON, SELECT).
+  // Allow modifier shortcuts, unless we shouldn't.
+  if (this.modifierShortcutsAreGlobal_ && (
+      event.altKey || event.ctrlKey || event.metaKey)) {
+    return true;
+  }
   // Allow ENTER to be used as shortcut for text inputs.
   if (el.tagName == 'INPUT' && (el.type == 'text' || el.type == 'password')) {
     return keyCode == goog.events.KeyCodes.ENTER;
   }
-
   // Checkboxes, radiobuttons and buttons. Allow all but SPACE as shortcut.
   if (el.tagName == 'INPUT' || el.tagName == 'BUTTON') {
     return keyCode != goog.events.KeyCodes.SPACE;
   }
-
   // Don't allow any additional shortcut keys for textareas or selects.
-  if (el.tagName == 'TEXTAREA' || el.tagName == 'SELECT') {
-    return false;
-  }
-
-  return true;
+  return false;
 };
 
 

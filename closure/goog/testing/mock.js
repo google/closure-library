@@ -151,9 +151,9 @@ goog.testing.MockExpectation.prototype.getErrorMessageCount = function() {
  * The base class for a mock object.
  * @param {Object|Function} objectToMock The object that should be mocked, or
  *    the constructor of an object to mock.
- * @param {boolean} opt_mockStaticMethods An optional argument denoting that
+ * @param {boolean=} opt_mockStaticMethods An optional argument denoting that
  *     a mock should be constructed from the static functions of a class.
- * @param {boolean} opt_createProxy An optional argument denoting that
+ * @param {boolean=} opt_createProxy An optional argument denoting that
  *     a proxy for the target mock should be created.
  * @constructor
  */
@@ -437,7 +437,7 @@ goog.testing.Mock.prototype.$reset = function() {
 /**
  * Throws an exception and records that an exception was thrown.
  * @param {string} comment A short comment about the exception.
- * @param {?string} opt_message A longer message about the exception.
+ * @param {?string=} opt_message A longer message about the exception.
  * @throws {Object} JsUnitException object.
  * @protected
  */
@@ -523,7 +523,7 @@ goog.testing.Mock.prototype.$argumentsAsString = function(args) {
  * Throw an exception based on an incorrect method call.
  * @param {string} name Name of method called.
  * @param {Array.<*>?} args Arguments passed to the mock.
- * @param {goog.testing.MockExpectation} opt_expectation Expected next call,
+ * @param {goog.testing.MockExpectation=} opt_expectation Expected next call,
  *     if any.
  */
 goog.testing.Mock.prototype.$throwCallException = function(name, args,

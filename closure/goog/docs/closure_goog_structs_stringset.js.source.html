@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -74,8 +75,8 @@
 <a name="line31"></a>
 <a name="line32"></a>/**
 <a name="line33"></a> * Creates a set of strings.
-<a name="line34"></a> * @param {!Array} opt_elements Elements to add to the set. The non-string items
-<a name="line35"></a> *     will be converted to strings, so 15 and &#39;15&#39; will mean the same.
+<a name="line34"></a> * @param {!Array=} opt_elements Elements to add to the set. The non-string
+<a name="line35"></a> *     items will be converted to strings, so 15 and &#39;15&#39; will mean the same.
 <a name="line36"></a> * @constructor
 <a name="line37"></a> */
 <a name="line38"></a>goog.structs.StringSet = function(opt_elements) {
@@ -240,7 +241,7 @@
 <a name="line197"></a> * @param {function(string, undefined, !goog.structs.StringSet)} f The function
 <a name="line198"></a> *     to call for every element. It takes the element, undefined (because sets
 <a name="line199"></a> *     have no notion of keys), and the set.
-<a name="line200"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line200"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line201"></a> *     within {@code f}.
 <a name="line202"></a> */
 <a name="line203"></a>goog.structs.StringSet.prototype.forEach = function(f, opt_obj) {
@@ -439,7 +440,7 @@
 <a name="line396"></a> * Returns an iterator that iterates over the elements in the set.
 <a name="line397"></a> * NOTE: creating the iterator copies the whole set so use {@link #forEach} when
 <a name="line398"></a> * possible.
-<a name="line399"></a> * @param {boolean} opt_keys Ignored for sets.
+<a name="line399"></a> * @param {boolean=} opt_keys Ignored for sets.
 <a name="line400"></a> * @return {!goog.iter.Iterator} An iterator over the elements in the set.
 <a name="line401"></a> */
 <a name="line402"></a>goog.structs.StringSet.prototype.__iterator__ = function(opt_keys) {

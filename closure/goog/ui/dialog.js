@@ -70,11 +70,11 @@ goog.require('goog.userAgent');
  *        - ...
  * </pre>
  * @constructor
- * @param {string} opt_class CSS class name for the dialog element, also used
+ * @param {string=} opt_class CSS class name for the dialog element, also used
  *    as a class name prefix for related elements; defaults to modal-dialog.
- * @param {boolean} opt_useIframeMask Work around windowed controls z-index
+ * @param {boolean=} opt_useIframeMask Work around windowed controls z-index
  *     issue by using an iframe instead of a div for bg element.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper; see {@link
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
  *    goog.ui.Component} for semantics.
  * @extends {goog.ui.Component}
  */
@@ -563,7 +563,7 @@ goog.ui.Dialog.prototype.manageBackgroundDom_ = function() {
  * have unexpected results.  The parent element defaults to the current document
  * body if unspecified, which is almost always what you want.
  *
- * @param {Element} opt_parent Element into which the component is to be
+ * @param {Element=} opt_parent Element into which the component is to be
  *    rendered; defaults to the current document's body element if unspecified.
  * @throws {goog.ui.Component.Error.ALREADY_RENDERED} If the component is
  *    already rendered.
@@ -1249,7 +1249,7 @@ goog.ui.Dialog.EventType = {
 /**
  * A button set defines the behaviour of a set of buttons that the dialog can
  * show.  Uses the {@link goog.structs.Map} interface.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper; see {@link
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
  *    goog.ui.Component} for semantics.
  * @constructor
  * @extends {goog.structs.Map}
@@ -1302,9 +1302,9 @@ goog.ui.Dialog.ButtonSet.prototype.cancelButton_ = null;
  * @param {string} key Key used to identify the button in events.
  * @param {string|Element} caption A string caption or a DOM node that can be
  *     appended to a button element.
- * @param {boolean} opt_isDefault Whether this button is the default button,
+ * @param {boolean=} opt_isDefault Whether this button is the default button,
  *     Dialog will dispatch for this button if enter is pressed.
- * @param {boolean} opt_isCancel Whether this button has the same behaviour as
+ * @param {boolean=} opt_isCancel Whether this button has the same behaviour as
  *    cancel.  If escape is pressed this button will fire.
  * @return {goog.ui.Dialog.ButtonSet} The button set, to make it easy to chain
  *    "set" calls and build new ButtonSets.

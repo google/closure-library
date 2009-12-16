@@ -34,9 +34,9 @@ goog.require('goog.ui.registry');
  * so tabs should only be rendered or decorated as children of a tab bar.
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to
  *     display as the tab's caption (if any).
- * @param {goog.ui.TabRenderer} opt_renderer Optional renderer used to render
+ * @param {goog.ui.TabRenderer=} opt_renderer Optional renderer used to render
  *     or decorate the tab.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Control}

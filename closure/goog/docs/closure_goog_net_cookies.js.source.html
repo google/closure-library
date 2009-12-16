@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -122,12 +123,12 @@
 <a name="line79"></a> *
 <a name="line80"></a> * @param {string} name  The cookie name.
 <a name="line81"></a> * @param {string} value  The cookie value.
-<a name="line82"></a> * @param {number} opt_maxAge  The max age in seconds (from now). Use -1 to set
+<a name="line82"></a> * @param {number=} opt_maxAge  The max age in seconds (from now). Use -1 to set
 <a name="line83"></a> *     a session cookie. If not provided, the default is -1 (i.e. set a session
 <a name="line84"></a> *     cookie).
-<a name="line85"></a> * @param {string} opt_path  The path of the cookie. If not present then this
+<a name="line85"></a> * @param {string=} opt_path  The path of the cookie. If not present then this
 <a name="line86"></a> *     uses the full request path.
-<a name="line87"></a> * @param {string} opt_domain  The domain of the cookie, or null to not specify
+<a name="line87"></a> * @param {string=} opt_domain  The domain of the cookie, or null to not specify
 <a name="line88"></a> *     a domain attribute (browser will use the full request host name). If not
 <a name="line89"></a> *     provided, the default is null (i.e. let browser use full request host
 <a name="line90"></a> *     name).
@@ -178,7 +179,7 @@
 <a name="line135"></a>/**
 <a name="line136"></a> * Returns the value for the first cookie with the given name.
 <a name="line137"></a> * @param {string} name  The name of the cookie to get.
-<a name="line138"></a> * @param {string} opt_default  If not found this is returned instead.
+<a name="line138"></a> * @param {string=} opt_default  If not found this is returned instead.
 <a name="line139"></a> * @return {string|undefined}  The value of the cookie. If no cookie is set this
 <a name="line140"></a> *     returns opt_default or undefined if opt_default is not provided.
 <a name="line141"></a> */
@@ -197,10 +198,10 @@
 <a name="line154"></a>/**
 <a name="line155"></a> * Removes and expires a cookie.
 <a name="line156"></a> * @param {string} name  The cookie name.
-<a name="line157"></a> * @param {string} opt_path  The path of the cookie, or null to expire a cookie
+<a name="line157"></a> * @param {string=} opt_path  The path of the cookie, or null to expire a cookie
 <a name="line158"></a> *     set at the full request path. If not provided, the default is &#39;/&#39;
 <a name="line159"></a> *     (i.e. path=/).
-<a name="line160"></a> * @param {string} opt_domain  The domain of the cookie, or null to expire a
+<a name="line160"></a> * @param {string=} opt_domain  The domain of the cookie, or null to expire a
 <a name="line161"></a> *     cookie set at the full request host name. If not provided, the default is
 <a name="line162"></a> *     null (i.e. cookie at full request host name).
 <a name="line163"></a> * @return {boolean} Whether the cookie existed before it was removed.

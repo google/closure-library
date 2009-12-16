@@ -40,8 +40,8 @@ goog.require('goog.ui.Component');
 
 /**
  * A UI Control used for rating things, i.e. videos on Google Video.
- * @param {Array.<string>} opt_ratings Ratings. Default: [1,2,3,4,5].
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {Array.<string>=} opt_ratings Ratings. Default: [1,2,3,4,5].
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */

@@ -35,8 +35,8 @@ goog.require('goog.ui.Popup');
 /**
  * Popup color picker widget.
  *
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
- * @param {goog.ui.ColorPicker} opt_colorPicker Optional color picker to use
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {goog.ui.ColorPicker=} opt_colorPicker Optional color picker to use
  *     for this popup.
  * @extends {goog.ui.Component}
  * @constructor

@@ -90,7 +90,7 @@ goog.structs.QuadTree.prototype.set = function(x, y, value) {
  * Gets the value of the point at (x, y) or null if the point is empty.
  * @param {number} x The x-coordinate.
  * @param {number} y The y-coordinate.
- * @param {*} opt_default The default value to return if the node doesn't
+ * @param {*=} opt_default The default value to return if the node doesn't
  *     exist.
  * @return {*} The value of the node, the default value if the node
  *     doesn't exist, or undefined if the node doesn't exist and no default
@@ -215,7 +215,7 @@ goog.structs.QuadTree.prototype.clone = function() {
  *     The function to call for every value. This function takes 3 arguments
  *     (the value, the coordinate, and the tree itself) and the return value is
  *     irrelevant.
- * @param {Object} opt_obj The object to be used as the value of 'this'
+ * @param {Object=} opt_obj The object to be used as the value of 'this'
  *     within {@ code fn}.
  */
 goog.structs.QuadTree.prototype.forEach = function(fn, opt_obj) {
@@ -462,7 +462,7 @@ goog.structs.QuadTree.NodeType = {
  * @param {number} y Y-coordinate of node.
  * @param {number} w Width of node.
  * @param {number} h Height of node.
- * @param {goog.structs.QuadTree.Node} opt_parent Optional parent node.
+ * @param {goog.structs.QuadTree.Node=} opt_parent Optional parent node.
  * @constructor
  */
 goog.structs.QuadTree.Node = function(x, y, w, h, opt_parent) {
@@ -545,7 +545,7 @@ goog.structs.QuadTree.Node.prototype.point = null;
  * Creates a new point object.
  * @param {number} x The x-coordinate of the point.
  * @param {number} y The y-coordinate of the point.
- * @param {*} opt_value Optional value associated with the point.
+ * @param {*=} opt_value Optional value associated with the point.
  * @constructor
  */
 goog.structs.QuadTree.Point = function(x, y, opt_value) {

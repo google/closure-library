@@ -32,7 +32,7 @@ goog.require('goog.json');
 /**
  * Implements a store for goog.debug.Logger data.
  * @param {goog.gears.Database} database Database.
- * @param {?string} opt_tableName Name of logging table to use.
+ * @param {?string=} opt_tableName Name of logging table to use.
  * @extends {goog.gears.BaseStore}
  * @constructor
  */
@@ -86,7 +86,7 @@ goog.gears.LogStore = function(database, opt_tableName) {
 
   /**
    * Buffered log records not yet flushed to DB.
-   * @type {Array.<goog.debug.Logger.LogRecord>}
+   * @type {Array.<goog.debug.LogRecord>}
    * @private
    */
   this.records_ = [];
@@ -212,8 +212,8 @@ goog.gears.LogStore.prototype.flush = function() {
 /**
  * Create new delay object for auto-pruning. Does not stop or
  * start auto-pruning, call #startAutoPrune and #startAutoPrune for that.
- * @param {?number} opt_count Number of records of recent hitory to keep.
- * @param {?number} opt_interval Milliseconds to wait before next pruning.
+ * @param {?number=} opt_count Number of records of recent hitory to keep.
+ * @param {?number=} opt_interval Milliseconds to wait before next pruning.
  */
 goog.gears.LogStore.prototype.createAutoPruneDelay = function(
     opt_count, opt_interval) {
@@ -262,7 +262,7 @@ goog.gears.LogStore.prototype.isAutoPruneActive = function() {
 
 /**
  * Prune, and schedule next pruning.
- * @param {?number} opt_count Number of records of recent hitory to keep.
+ * @param {?number=} opt_count Number of records of recent hitory to keep.
  * @private
  */
 goog.gears.LogStore.prototype.autoPrune_ = function(opt_count) {
@@ -273,7 +273,7 @@ goog.gears.LogStore.prototype.autoPrune_ = function(opt_count) {
 
 /**
  * Keep some number of most recent log records and delete all older ones.
- * @param {?number} opt_count Number of records of recent history to keep. If
+ * @param {?number=} opt_count Number of records of recent history to keep. If
  *     unspecified, we use #goog.gears.LogStore.DEFAULT_PRUNE_KEEPER_COUNT_.
  *     Pass in 0 to delete all log records.
  */

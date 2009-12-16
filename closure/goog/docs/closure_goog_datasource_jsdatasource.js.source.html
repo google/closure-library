@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,7 +81,7 @@
 <a name="line37"></a> *
 <a name="line38"></a> * @param {Object} root The root JS node.
 <a name="line39"></a> * @param {string} dataName The name of this node relative to the parent node.
-<a name="line40"></a> * @param {Object} opt_parent Optional parent of this JsDataSource.
+<a name="line40"></a> * @param {Object=} opt_parent Optional parent of this JsDataSource.
 <a name="line41"></a> *
 <a name="line42"></a> * implements goog.ds.DataNode.
 <a name="line43"></a> * @constructor
@@ -159,7 +160,7 @@
 <a name="line116"></a>/**
 <a name="line117"></a> * Gets all of the child nodes of the current node.
 <a name="line118"></a> * Should return an empty DataNode list if no child nodes.
-<a name="line119"></a> * @param {string} opt_selector String selector to choose child nodes.
+<a name="line119"></a> * @param {string=} opt_selector String selector to choose child nodes.
 <a name="line120"></a> * @return {goog.ds.DataNodeList} The child nodes.
 <a name="line121"></a> *
 <a name="line122"></a> * TODO revisit lazy creation.
@@ -189,7 +190,7 @@
 <a name="line146"></a> * Creates the DataNodeList with the child nodes for this element.
 <a name="line147"></a> * Allows for only building list as needed.
 <a name="line148"></a> *
-<a name="line149"></a> * @param {boolean} opt_force Whether to force recreating child nodes,
+<a name="line149"></a> * @param {boolean=} opt_force Whether to force recreating child nodes,
 <a name="line150"></a> *     defaults to false.
 <a name="line151"></a> * @private
 <a name="line152"></a> */
@@ -235,7 +236,7 @@
 <a name="line192"></a>/**
 <a name="line193"></a> * Gets a named child node of the current node
 <a name="line194"></a> * @param {string} name The node name.
-<a name="line195"></a> * @param {boolean} opt_canCreate If true, can create child node.
+<a name="line195"></a> * @param {boolean=} opt_canCreate If true, can create child node.
 <a name="line196"></a> * @return {goog.ds.DataNode} The child node, or null if no node of
 <a name="line197"></a> *     this name exists.
 <a name="line198"></a> */
@@ -445,7 +446,7 @@
 <a name="line402"></a> *
 <a name="line403"></a> * @param {goog.ds.DataNode} parent Parent object.
 <a name="line404"></a> * @param {string} dataName Name of this property.
-<a name="line405"></a> * @param {goog.ds.DataNode} opt_parentDataNode The parent data node. If
+<a name="line405"></a> * @param {goog.ds.DataNode=} opt_parentDataNode The parent data node. If
 <a name="line406"></a> *     omitted, assumes that the parent object is the parent data node.
 <a name="line407"></a> *
 <a name="line408"></a> * @constructor

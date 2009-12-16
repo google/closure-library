@@ -255,11 +255,11 @@ goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
  * separately.
  *
  * @param {!Element} parentElm The container element the iframe is appended to.
- * @param {Function} opt_configureIframeCb If present, this function gets
+ * @param {Function=} opt_configureIframeCb If present, this function gets
  *     called with the iframe element as parameter to allow setting properties
  *     on it before it gets added to the DOM. If absent, the iframe's width and
  *     height are set to '100%'.
- * @param {boolean} opt_addCfgParam Whether to add the peer configuration as
+ * @param {boolean=} opt_addCfgParam Whether to add the peer configuration as
  *     URL parameter (default: true).
  * @return {!HTMLIFrameElement} The iframe element.
  */
@@ -343,7 +343,7 @@ goog.net.xpc.CrossPageChannel.prototype.connectDeferred_ = false;
  * Initiates connecting the channel. When this method is called, all the
  * information needed to connect the channel has to be available.
  *
- * @param {Function} opt_connectCb The function to be called when the
+ * @param {Function=} opt_connectCb The function to be called when the
  * channel has been connected and is ready to be used.
  */
 goog.net.xpc.CrossPageChannel.prototype.connect = function(opt_connectCb) {
@@ -429,7 +429,7 @@ goog.net.xpc.CrossPageChannel.prototype.notifyTransportError_ = function() {
  * @param {string} serviceName The name of the service.
  * @param {Function} callback The callback responsible to process incoming
  *     messages.
- * @param {boolean} opt_jsonEncoded If true, incoming messages for this
+ * @param {boolean=} opt_jsonEncoded If true, incoming messages for this
  *     service are expected to contain a JSON-encoded object and will be
  *     deserialized automatically.
  */

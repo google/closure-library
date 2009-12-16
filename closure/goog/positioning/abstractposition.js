@@ -39,8 +39,8 @@ goog.positioning.AbstractPosition = function() {};
  * @param {Element} movableElement Element to position.
  * @param {goog.positioning.Corner} corner Corner of the movable element that
  *     should be positioned adjacent to the anchored element.
- * @param {goog.math.Box} opt_margin A margin specified in pixels.
- * @param {goog.math.Size} opt_preferredSize PreferredSize of the
+ * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+ * @param {goog.math.Size=} opt_preferredSize PreferredSize of the
  *     movableElement.
  */
 goog.positioning.AbstractPosition.prototype.reposition =

@@ -37,7 +37,7 @@ goog.require('goog.ui.MenuBase');
  * classNameSelected - A class that will be added to the element's class names
  * when the item is selected via keyboard or mouse.
  *
- * @param {Element} opt_element A DOM element for the popup.
+ * @param {Element=} opt_element A DOM element for the popup.
  * @constructor
  * @extends {goog.ui.MenuBase}
  * @deprecated Use goog.ui.PopupMenu.
@@ -365,9 +365,9 @@ goog.ui.AttachableMenu.prototype.onKeyDown = function(e) {
  * Find an item that has the given prefix and select it.
  *
  * @param {string} prefix The entered prefix, so far.
- * @param {number} opt_direction 1 to search forward from the selection
+ * @param {number=} opt_direction 1 to search forward from the selection
  *     (default), -1 to search backward (e.g. to go to the previous match).
- * @param {boolean} opt_skip True if should skip the current selection,
+ * @param {boolean=} opt_skip True if should skip the current selection,
  *     unless no other item has the given prefix.
  * @private
  */
@@ -415,7 +415,7 @@ goog.ui.AttachableMenu.prototype.selectByName_ =
 
 /**
  * Dispatch an ITEM_ACTION event when an item is selected
- * @param {Object} opt_item Item selected.
+ * @param {Object=} opt_item Item selected.
  * @private
  */
 goog.ui.AttachableMenu.prototype.onItemSelected_ = function(opt_item) {

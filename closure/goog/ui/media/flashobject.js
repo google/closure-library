@@ -62,7 +62,7 @@ goog.require('goog.userAgent.flash');
  * page.
  *
  * @param {string} flashUrl The flash SWF URL.
- * @param {goog.dom.DomHelper} opt_domHelper An optional DomHelper.
+ * @param {goog.dom.DomHelper=} opt_domHelper An optional DomHelper.
  * @extends {goog.ui.Component}
  * @constructor
  */
@@ -330,7 +330,7 @@ goog.ui.media.FlashObject.prototype.setFlashVar = function(key, value) {
  * @param {goog.structs.Map|Object|string} flashVar A map of variables (given
  *    as a goog.structs.Map or an Object literal) or a key to the optional
  *    {@code opt_value}.
- * @param {string} opt_value The optional value for the flashVar key.
+ * @param {string=} opt_value The optional value for the flashVar key.
  * @return {goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setFlashVars = function(flashVar,

@@ -29,14 +29,14 @@ goog.provide('goog.ui.emoji.SpriteInfo');
  * is sprited via metadata, then the first parameter should be left null.
  *
  * @param {?string} cssClass CSS class to properly display the sprited image.
- * @param {string} opt_url Url of the sprite image.
- * @param {number} opt_width Width of the image being sprited.
- * @param {number} opt_height Height of the image being sprited.
- * @param {number} opt_xOffset Positive x offset of the image being sprited
+ * @param {string=} opt_url Url of the sprite image.
+ * @param {number=} opt_width Width of the image being sprited.
+ * @param {number=} opt_height Height of the image being sprited.
+ * @param {number=} opt_xOffset Positive x offset of the image being sprited
  *     within the sprite.
- * @param {number} opt_yOffset Positive y offset of the image being sprited
+ * @param {number=} opt_yOffset Positive y offset of the image being sprited
  *     within the sprite.
- * @param {boolean} opt_animated Whether the sprite is animated.
+ * @param {boolean=} opt_animated Whether the sprite is animated.
  * @constructor
  */
 goog.ui.emoji.SpriteInfo = function(cssClass, opt_url, opt_width, opt_height,

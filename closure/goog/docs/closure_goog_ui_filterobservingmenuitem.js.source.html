@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -77,10 +78,10 @@
 <a name="line34"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure to
 <a name="line35"></a> *     display as the content of the item (use to add icons or styling to
 <a name="line36"></a> *     menus).
-<a name="line37"></a> * @param {Object} opt_model Data/model associated with the menu item.
-<a name="line38"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper used for
+<a name="line37"></a> * @param {Object=} opt_model Data/model associated with the menu item.
+<a name="line38"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper used for
 <a name="line39"></a> *     document interactions.
-<a name="line40"></a> * @param {goog.ui.MenuItemRenderer} opt_renderer Optional renderer.
+<a name="line40"></a> * @param {goog.ui.MenuItemRenderer=} opt_renderer Optional renderer.
 <a name="line41"></a> * @constructor
 <a name="line42"></a> * @extends {goog.ui.MenuItem}
 <a name="line43"></a> */
@@ -119,7 +120,7 @@
 <a name="line76"></a>
 <a name="line77"></a>/**
 <a name="line78"></a> * Calls the observer function if one has been specified.
-<a name="line79"></a> * @param {?string} opt_str Filter string.
+<a name="line79"></a> * @param {?string=} opt_str Filter string.
 <a name="line80"></a> */
 <a name="line81"></a>goog.ui.FilterObservingMenuItem.prototype.callObserver = function(opt_str) {
 <a name="line82"></a>  if (this.observer_) {

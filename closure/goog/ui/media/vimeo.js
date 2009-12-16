@@ -113,7 +113,7 @@ goog.ui.media.Vimeo.CSS_CLASS = goog.getCssName('goog-ui-media-vimeo');
  * except if you need more fine control over the configuration.
  *
  * @param {goog.ui.media.VimeoModel} dataModel A vimeo video URL.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @return {goog.ui.media.Media} A Control binded to the Vimeo renderer.
  */
@@ -166,8 +166,8 @@ goog.ui.media.Vimeo.prototype.getCssClass = function() {
  * parameters.
  *
  * @param {string} videoId The vimeo video id.
- * @param {string} opt_caption An optional caption of the vimeo video.
- * @param {string} opt_description An optional description of the vimeo video.
+ * @param {string=} opt_caption An optional caption of the vimeo video.
+ * @param {string=} opt_description An optional description of the vimeo video.
  * @constructor
  * @extends {goog.ui.media.MediaModel}
  */
@@ -209,8 +209,8 @@ goog.ui.media.VimeoModel.matcher_ = /http:\/\/(www\.)?vimeo.com\/([0-9]+)/i;
  * Takes a {@code vimeoUrl} and extracts the video id.
  *
  * @param {string} vimeoUrl A vimeo video URL.
- * @param {string} opt_caption An optional caption of the vimeo video.
- * @param {string} opt_description An optional description of the vimeo video.
+ * @param {string=} opt_caption An optional caption of the vimeo video.
+ * @param {string=} opt_description An optional description of the vimeo video.
  * @return {goog.ui.media.VimeoModel} The vimeo data model that represents this
  *     URL.
  * @throws exception in case the parsing fails

@@ -37,10 +37,10 @@ goog.require('goog.userAgent');
  * An abstract base class for a node in the tree.
  *
  * @param {string} html The html content of the node label.
- * @param {Object} opt_config The configuration for the tree. See
+ * @param {Object=} opt_config The configuration for the tree. See
  *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
  *    will be used.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -255,7 +255,7 @@ goog.ui.tree.BaseNode.prototype.enterDocument = function() {
 /**
  * Adds a node as a child to the current node.
  * @param {goog.ui.tree.BaseNode} child The child to add.
- * @param {goog.ui.tree.BaseNode} opt_before If specified, the new child is
+ * @param {goog.ui.tree.BaseNode=} opt_before If specified, the new child is
  *    added as a child before this one. If not specified, it's appended to the
  *    end.
  * @return {goog.ui.tree.BaseNode} The added child.
@@ -1431,7 +1431,7 @@ goog.ui.tree.BaseNode.prototype.getNextShownNode = function() {
   } else {
     var p = this;
     var next;
-    while (p != null) {
+    while (p != this.getTree()) {
       next = p.getNextSibling();
       if (next != null) {
         return next;

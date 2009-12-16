@@ -36,6 +36,22 @@ goog.require('goog.graphics.TextElement');
 
 
 /**
+ * Returns the VML element corresponding to this object.  This method is added
+ * to several classes below.  Note that the return value of this method may
+ * change frequently in IE8, so it should not be cached externally.
+ * @return {Element} The VML element corresponding to this object
+ * @this {goog.graphics.VmlGroupElement|goog.graphics.VmlEllipseElement|
+ *     goog.graphics.VmlRectElement|goog.graphics.VmlPathElement|
+ *     goog.graphics.VmlTextElement|goog.graphics.VmlImageElement}
+ * @private
+ */
+goog.graphics.vmlGetElement_ = function() {
+  this.element_ = this.getGraphics().getVmlElement(this.id_) || this.element_;
+  return this.element_;
+};
+
+
+/**
  * Thin wrapper for VML group elements.
  * This is an implementation of the goog.graphics.GroupElement interface.
  * You should not construct objects from this constructor. The graphics
@@ -47,9 +63,15 @@ goog.require('goog.graphics.TextElement');
  * @extends {goog.graphics.GroupElement}
  */
 goog.graphics.VmlGroupElement = function(element, graphics) {
+  this.id_ = element.id;
   goog.graphics.GroupElement.call(this, element, graphics);
 };
 goog.inherits(goog.graphics.VmlGroupElement, goog.graphics.GroupElement);
+
+
+/** @inheritDoc */
+goog.graphics.VmlGroupElement.prototype.getElement =
+    goog.graphics.vmlGetElement_;
 
 
 /**
@@ -110,6 +132,8 @@ goog.graphics.VmlGroupElement.prototype.setSize = function(width, height) {
  */
 goog.graphics.VmlEllipseElement = function(element, graphics,
     cx, cy, rx, ry, stroke, fill) {
+  this.id_ = element.id;
+
   goog.graphics.EllipseElement.call(this, element, graphics, stroke, fill);
 
   // Store center and radius for future calls to setRadius or setCenter.
@@ -142,6 +166,11 @@ goog.graphics.VmlEllipseElement = function(element, graphics,
   this.ry = ry;
 };
 goog.inherits(goog.graphics.VmlEllipseElement, goog.graphics.EllipseElement);
+
+
+/** @inheritDoc */
+goog.graphics.VmlEllipseElement.prototype.getElement =
+    goog.graphics.vmlGetElement_;
 
 
 /**
@@ -184,9 +213,15 @@ goog.graphics.VmlEllipseElement.prototype.setRadius = function(rx, ry) {
  * @extends {goog.graphics.RectElement}
  */
 goog.graphics.VmlRectElement = function(element, graphics, stroke, fill) {
+  this.id_ = element.id;
   goog.graphics.RectElement.call(this, element, graphics, stroke, fill);
 };
 goog.inherits(goog.graphics.VmlRectElement, goog.graphics.RectElement);
+
+
+/** @inheritDoc */
+goog.graphics.VmlRectElement.prototype.getElement =
+    goog.graphics.vmlGetElement_;
 
 
 /**
@@ -227,9 +262,15 @@ goog.graphics.VmlRectElement.prototype.setSize = function(width, height) {
  * @extends {goog.graphics.PathElement}
  */
 goog.graphics.VmlPathElement = function(element, graphics, stroke, fill) {
+  this.id_ = element.id;
   goog.graphics.PathElement.call(this, element, graphics, stroke, fill);
 };
 goog.inherits(goog.graphics.VmlPathElement, goog.graphics.PathElement);
+
+
+/** @inheritDoc */
+goog.graphics.VmlPathElement.prototype.getElement =
+    goog.graphics.vmlGetElement_;
 
 
 /**
@@ -256,9 +297,15 @@ goog.graphics.VmlPathElement.prototype.setPath = function(path) {
  * @extends {goog.graphics.TextElement}
  */
 goog.graphics.VmlTextElement = function(element, graphics, stroke, fill) {
+  this.id_ = element.id;
   goog.graphics.TextElement.call(this, element, graphics, stroke, fill);
 };
 goog.inherits(goog.graphics.VmlTextElement, goog.graphics.TextElement);
+
+
+/** @inheritDoc */
+goog.graphics.VmlTextElement.prototype.getElement =
+    goog.graphics.vmlGetElement_;
 
 
 /**
@@ -269,6 +316,7 @@ goog.graphics.VmlTextElement.prototype.setText = function(text) {
   goog.graphics.VmlGraphics.setAttribute(this.getElement().childNodes[1],
       'string', text);
 };
+
 
 /**
  * Thin wrapper for VML image elements.
@@ -282,9 +330,15 @@ goog.graphics.VmlTextElement.prototype.setText = function(text) {
  * @extends {goog.graphics.ImageElement}
  */
 goog.graphics.VmlImageElement = function(element, graphics) {
+  this.id_ = element.id;
   goog.graphics.ImageElement.call(this, element, graphics);
 };
 goog.inherits(goog.graphics.VmlImageElement, goog.graphics.ImageElement);
+
+
+/** @inheritDoc */
+goog.graphics.VmlImageElement.prototype.getElement =
+    goog.graphics.vmlGetElement_;
 
 
 /**

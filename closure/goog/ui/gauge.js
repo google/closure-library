@@ -74,7 +74,7 @@ goog.ui.GaugeColoredRange = function(fromValue, toValue, backgroundColor) {
  * the current value.
  * @param {number} width The width in pixels.
  * @param {number} height The height in pixels.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @constructor
  * @extends {goog.ui.Component}
@@ -104,7 +104,7 @@ goog.ui.Gauge = function(width, height, opt_domHelper) {
    * @private
    */
   this.graphics_ = goog.graphics.createGraphics(width, height,
-      opt_domHelper);
+      null, null, opt_domHelper);
 
 
   /**
@@ -476,7 +476,7 @@ goog.ui.Gauge.prototype.setMaximum = function(max) {
  * Sets the current value range displayed by the gauge.
  * @param {number} value The current value for the gauge. This value
  *     determines the position of the needle of the gauge.
- * @param {string} opt_formattedValue The string value to show in the gauge.
+ * @param {string=} opt_formattedValue The string value to show in the gauge.
  *     If not specified, no string value will be displayed.
  */
 goog.ui.Gauge.prototype.setValue = function(value, opt_formattedValue) {

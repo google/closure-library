@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -621,7 +622,7 @@
 <a name="line578"></a> *     or greater will be moved to the second half.  If positionNode is an
 <a name="line579"></a> *     empty element, the dom will be split at that element, with positionNode
 <a name="line580"></a> *     ending up in the second half.  positionOffset must be 0 in this case.
-<a name="line581"></a> * @param {Node} opt_root Node at which to stop splitting the dom (the root
+<a name="line581"></a> * @param {Node=} opt_root Node at which to stop splitting the dom (the root
 <a name="line582"></a> *     is also split).
 <a name="line583"></a> * @return {Node} The node containing the second half of the tree.
 <a name="line584"></a> * @private
@@ -764,7 +765,7 @@
 <a name="line721"></a> * Finds the first A element in a traversal from the input node.  The input
 <a name="line722"></a> * node itself is not included in the search.
 <a name="line723"></a> * @param {Node} node The node to start searching from.
-<a name="line724"></a> * @param {boolean} opt_useFirstChild Whether to traverse along the first child
+<a name="line724"></a> * @param {boolean=} opt_useFirstChild Whether to traverse along the first child
 <a name="line725"></a> *     (true) or last child (false).
 <a name="line726"></a> * @return {Node} The first anchor node found in the search, or null if none
 <a name="line727"></a> *     was found.

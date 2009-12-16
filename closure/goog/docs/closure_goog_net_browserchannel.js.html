@@ -17,6 +17,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -100,6 +101,11 @@
         <div class="class-details">Event class for goog.net.BrowserChannel.Event.STAT_EVENT</div>
  </div>
  <div class="fn-constructor">
+        <a href="class_goog_net_BrowserChannel_TimingEvent.html">
+          goog.net.BrowserChannel.TimingEvent</a><br/>
+        <div class="class-details">Event class for goog.net.BrowserChannel.Event.TIMING_EVENT</div>
+ </div>
+ <div class="fn-constructor">
         <a href="class_goog_net_BrowserChannel_Handler.html">
           goog.net.BrowserChannel.Handler</a><br/>
         <div class="class-details">Interface for the browser channel handler</div>
@@ -179,7 +185,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1538">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1903">code &raquo;</a>
   </td>
      </tr>
 
@@ -213,12 +219,109 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1555">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1920">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.BrowserChannel.createChannelRequest"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.BrowserChannel.</span><span class="entryName">createChannelRequest<span class="args">(<span class="arg">channel</span>,&nbsp;<span class="arg">channelDebug</span>,&nbsp;<span class="arg">opt_sessionId</span>,&nbsp;<span class="arg">opt_requestId</span>,&nbsp;<span class="arg">opt_retryId</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_net_ChannelRequest.html">goog.net.ChannelRequest</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Instantiates a ChannelRequest with the given parameters. Overidden in tests.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">channel</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_net_BrowserChannel.html">goog.net.BrowserChannel</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_net_BrowserTestChannel.html">goog.net.BrowserTestChannel</a></span></div>
+        <div class="entryOverview">The BrowserChannel that owns this request.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">channelDebug</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_net_ChannelDebug.html">goog.net.ChannelDebug</a></span></div>
+        <div class="entryOverview">A ChannelDebug to use for logging.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_sessionId</span>
+        : <div class="fullType"><span class="type">string=</span></div>
+        <div class="entryOverview">The session id for the channel.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_requestId</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">number=</span></div>
+        <div class="entryOverview">The request id for this request.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_retryId</span>
+        : <div class="fullType"><span class="type">number=</span></div>
+        <div class="entryOverview">The retry id for this request.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_net_ChannelRequest.html">goog.net.ChannelRequest</a></span></div>&nbsp;
+            The created channel request.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_browserchannel.js.source.html#line628">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -247,12 +350,12 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line486">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line594">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -293,12 +396,12 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1547">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1912">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -339,12 +442,12 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1460">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1811">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -385,7 +488,82 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1510">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1875">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.BrowserChannel.isFatalError_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.BrowserChannel.</span><span class="entryName">isFatalError_<span class="args">(<span class="arg">error</span>,&nbsp;<span class="arg">statusCode</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns whether or not the given error/status combination is fatal or not.
+On fatal errors we immediately close the session rather than retrying the
+failed request.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">error</span>
+        : <div class="fullType"><span>?</span><span class="type">goog.net.ChannelRequest.Error</span></div>
+        <div class="entryOverview">The error code for the failed request.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">statusCode</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The last HTTP status code.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            Whether or not the error is fatal.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_browserchannel.js.source.html#line1418">code &raquo;</a>
   </td>
      </tr>
 
@@ -445,12 +623,88 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1469">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1820">code &raquo;</a>
   </td>
      </tr>
 
 
      <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.BrowserChannel.notifyTimingEvent"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.BrowserChannel.</span><span class="entryName">notifyTimingEvent<span class="args">(<span class="arg">size</span>,&nbsp;<span class="arg">rtt</span>,&nbsp;<span class="arg">retries</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Helper function to notify listeners about POST request performance.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">size</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">Number of characters in the POST data.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">rtt</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The amount of time from POST start to response.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">retries</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The number of times the POST had to be retried.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_browserchannel.js.source.html#line1834">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -479,12 +733,12 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1451">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1802">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -513,12 +767,12 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1443">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1794">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -573,12 +827,12 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1519">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1884">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -635,12 +889,12 @@ special information. The function takes no parameters and return void.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line485">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line593">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -697,12 +951,12 @@ special information. The function takes no parameters and return void.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line474">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line582">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -771,12 +1025,12 @@ with a try...finally block.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1425">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1776">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -805,7 +1059,7 @@ with a try...finally block.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line475">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line583">code &raquo;</a>
   </td>
      </tr>
 
@@ -832,7 +1086,7 @@ with a try...finally block.
 
 
 
-  <a name="goog.net.BrowserChannel.BACK_CHANNEL_XMHTTP_MAX_RETRIES"></a>
+  <a name="goog.net.BrowserChannel.BACK_CHANNEL_MAX_RETRIES"></a>
 
   <td>
 
@@ -840,21 +1094,21 @@ with a try...finally block.
      <div class="arg">
         <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.net.BrowserChannel.</span><span class="entryName">BACK_CHANNEL_XMHTTP_MAX_RETRIES</span>
+        <span class="entryNamespace">goog.net.BrowserChannel.</span><span class="entryName">BACK_CHANNEL_MAX_RETRIES</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
      </div>
 
 
      <div class="entryOverview">
        Maximum number of attempts to connect to the server for back channel
-requests that are performed over XMLHTTP.
+requests.
      </div>
 
   </td>
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line269">Code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line303">Code &raquo;</a>
   </td>
      </tr>
 
@@ -887,7 +1141,7 @@ requests that are performed over XMLHTTP.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line327">Code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line393">Code &raquo;</a>
   </td>
      </tr>
 
@@ -921,7 +1175,7 @@ requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line256">Code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line290">Code &raquo;</a>
   </td>
      </tr>
 
@@ -954,12 +1208,46 @@ requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line262">Code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line296">Code &raquo;</a>
   </td>
      </tr>
 
 
      <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.BrowserChannel.INACTIVE_CHANNEL_RETRY_FACTOR"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.BrowserChannel.</span><span class="entryName">INACTIVE_CHANNEL_RETRY_FACTOR</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       When retrying for an inactive channel, we will multiply the total delay by
+this number.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_browserchannel.js.source.html#line330">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -987,12 +1275,80 @@ requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line443">Code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line551">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.BrowserChannel.RETRY_DELAY_MS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.BrowserChannel.</span><span class="entryName">RETRY_DELAY_MS</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       Default timeout in MS before the initial retry. Subsequent retries will be
+slower.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_browserchannel.js.source.html#line316">Code &raquo;</a>
   </td>
      </tr>
 
 
      <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.net.BrowserChannel.RETRY_DELAY_SEED"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.BrowserChannel.</span><span class="entryName">RETRY_DELAY_SEED</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       We will add a random time between 0 and this number of MS to retries to
+the retry time for this request.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_browserchannel.js.source.html#line323">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1020,12 +1376,12 @@ requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line276">Code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line309">Code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -1053,12 +1409,12 @@ requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1488">Code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1853">Code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -1086,12 +1442,12 @@ requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1496">Code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1861">Code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -1119,12 +1475,12 @@ requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1504">Code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1869">Code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -1152,7 +1508,7 @@ requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line321">Code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line387">Code &raquo;</a>
   </td>
      </tr>
 

@@ -32,8 +32,8 @@ goog.require('goog.ui.registry');
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to
  *     display as the content of the item (use to add icons or styling to
  *     menus).
- * @param {*} opt_model Data/model associated with the menu item.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper used for
+ * @param {*=} opt_model Data/model associated with the menu item.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper used for
  *     document interactions.
  * @constructor
  * @extends {goog.ui.MenuItem}

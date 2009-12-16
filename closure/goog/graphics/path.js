@@ -182,7 +182,7 @@ goog.graphics.Path.prototype.moveTo = function(x, y) {
 /**
  * Adds points to the path by drawing a straight line to each point.
  *
- * @param {number} var_args The coordinates of each destination point as x, y
+ * @param {...number} var_args The coordinates of each destination point as x, y
  *     value pairs.
  * @return {!goog.graphics.Path} The path itself.
  */
@@ -211,7 +211,7 @@ goog.graphics.Path.prototype.lineTo = function(var_args) {
  * specified using 3 points (6 coordinates) - two control points and the end
  * point of the curve.
  *
- * @param {number} var_args The coordinates specifiying each curve in sets of
+ * @param {...number} var_args The coordinates specifiying each curve in sets of
  *     6 points: {@code [x1, y1]} the first control point, {@code [x2, y2]} the
  *     second control point and {@code [x, y]} the end point.
  * @return {!goog.graphics.Path} The path itself.

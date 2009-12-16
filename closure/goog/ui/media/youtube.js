@@ -122,7 +122,7 @@ goog.addSingletonGetter(goog.ui.media.Youtube);
  * Youtube videos, except if you need finer control over the configuration.
  *
  * @param {goog.ui.media.YoutubeModel} youtubeModel The youtube data model.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @return {goog.ui.media.Media} A Control binded to the youtube renderer.
  */
@@ -200,8 +200,9 @@ goog.ui.media.Youtube.prototype.getCssClass = function() {
  * parameters.
  *
  * @param {string} videoId The youtube video id.
- * @param {string} opt_caption An optional caption of the youtube video.
- * @param {string} opt_description An optional description of the youtube video.
+ * @param {string=} opt_caption An optional caption of the youtube video.
+ * @param {string=} opt_description An optional description of the youtube
+ *     video.
  * @constructor
  * @extends {goog.ui.media.MediaModel}
  */
@@ -244,8 +245,9 @@ goog.ui.media.YoutubeModel.matcher_ =
  * video, and builds a YoutubeModel.
  *
  * @param {string} youtubeUrl A youtube URL.
- * @param {string} opt_caption An optional caption of the youtube video.
- * @param {string} opt_description An optional description of the youtube video.
+ * @param {string=} opt_caption An optional caption of the youtube video.
+ * @param {string=} opt_description An optional description of the youtube
+ *     video.
  * @return {goog.ui.media.YoutubeModel} The data model that represents the
  *     youtube URL.
  * @see goog.ui.media.YoutubeModel.getVideoId()
@@ -299,8 +301,8 @@ goog.ui.media.YoutubeModel.getThumbnailUrl = function(youtubeId) {
  * out of the youtube video id.
  *
  * @param {string} videoId The youtube video ID.
- * @param {boolean} opt_autoplay Whether the flash movie should start playing as
- *     soon as it is shown, or if it should show a 'play' button.
+ * @param {boolean=} opt_autoplay Whether the flash movie should start playing
+ *     as soon as it is shown, or if it should show a 'play' button.
  * @return {string} The flash URL to be embedded on the page.
  */
 goog.ui.media.YoutubeModel.prototype.getFlashUrl = function(videoId,

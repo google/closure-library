@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -61,602 +62,601 @@
 <a name="line18"></a>
 <a name="line19"></a>goog.provide(&#39;goog.proto2.Message&#39;);
 <a name="line20"></a>
-<a name="line21"></a>goog.require(&#39;goog.json&#39;);
-<a name="line22"></a>goog.require(&#39;goog.proto2.Descriptor&#39;);
-<a name="line23"></a>goog.require(&#39;goog.proto2.FieldDescriptor&#39;);
-<a name="line24"></a>goog.require(&#39;goog.proto2.Util&#39;);
-<a name="line25"></a>goog.require(&#39;goog.string&#39;);
+<a name="line21"></a>goog.require(&#39;goog.proto2.Descriptor&#39;);
+<a name="line22"></a>goog.require(&#39;goog.proto2.FieldDescriptor&#39;);
+<a name="line23"></a>goog.require(&#39;goog.proto2.Util&#39;);
+<a name="line24"></a>goog.require(&#39;goog.string&#39;);
+<a name="line25"></a>
 <a name="line26"></a>
 <a name="line27"></a>
-<a name="line28"></a>
-<a name="line29"></a>/**
-<a name="line30"></a> * Base class for all Protocol Buffer 2 messages.
-<a name="line31"></a> * @constructor
-<a name="line32"></a> */
-<a name="line33"></a>goog.proto2.Message = function() {
-<a name="line34"></a>  /**
-<a name="line35"></a>   * Stores the field values in this message.
-<a name="line36"></a>   * @type {Object}
-<a name="line37"></a>   * @private
-<a name="line38"></a>   */
-<a name="line39"></a>  this.values_ = {};
-<a name="line40"></a>
-<a name="line41"></a>  // The descriptor_ is static to the message function that is being created.
-<a name="line42"></a>  // Therefore, we retrieve it via the constructor.
-<a name="line43"></a>
-<a name="line44"></a>  /**
-<a name="line45"></a>   * Stores the information (i.e. metadata) about
-<a name="line46"></a>   * this message.
-<a name="line47"></a>   * @type {goog.proto2.Descriptor}
-<a name="line48"></a>   * @private
-<a name="line49"></a>   */
-<a name="line50"></a>  this.descriptor_ = this.constructor.descriptor_;
-<a name="line51"></a>
-<a name="line52"></a>  /**
-<a name="line53"></a>   * Stores the field information (i.e. metadata)
-<a name="line54"></a>   * about this message.
-<a name="line55"></a>   * @type {Object}
-<a name="line56"></a>   * @private
-<a name="line57"></a>   */
-<a name="line58"></a>  this.fields_ = this.descriptor_.getFieldsMap();
-<a name="line59"></a>
-<a name="line60"></a>  /**
-<a name="line61"></a>   * The lazy deserializer for this message instance, if any.
-<a name="line62"></a>   * @type {goog.proto2.LazyDeserializer?}
-<a name="line63"></a>   * @private
-<a name="line64"></a>   */
-<a name="line65"></a>  this.lazyDeserializer_ = null;
-<a name="line66"></a>
-<a name="line67"></a>  /**
-<a name="line68"></a>   * A map of those fields deserialized.
-<a name="line69"></a>   * @type {Object}
-<a name="line70"></a>   * @private
-<a name="line71"></a>   */
-<a name="line72"></a>  this.deserializedFields_ = null;
-<a name="line73"></a>};
+<a name="line28"></a>/**
+<a name="line29"></a> * Base class for all Protocol Buffer 2 messages.
+<a name="line30"></a> * @constructor
+<a name="line31"></a> */
+<a name="line32"></a>goog.proto2.Message = function() {
+<a name="line33"></a>  /**
+<a name="line34"></a>   * Stores the field values in this message.
+<a name="line35"></a>   * @type {Object}
+<a name="line36"></a>   * @private
+<a name="line37"></a>   */
+<a name="line38"></a>  this.values_ = {};
+<a name="line39"></a>
+<a name="line40"></a>  // The descriptor_ is static to the message function that is being created.
+<a name="line41"></a>  // Therefore, we retrieve it via the constructor.
+<a name="line42"></a>
+<a name="line43"></a>  /**
+<a name="line44"></a>   * Stores the information (i.e. metadata) about
+<a name="line45"></a>   * this message.
+<a name="line46"></a>   * @type {goog.proto2.Descriptor}
+<a name="line47"></a>   * @private
+<a name="line48"></a>   */
+<a name="line49"></a>  this.descriptor_ = this.constructor.descriptor_;
+<a name="line50"></a>
+<a name="line51"></a>  /**
+<a name="line52"></a>   * Stores the field information (i.e. metadata)
+<a name="line53"></a>   * about this message.
+<a name="line54"></a>   * @type {Object}
+<a name="line55"></a>   * @private
+<a name="line56"></a>   */
+<a name="line57"></a>  this.fields_ = this.descriptor_.getFieldsMap();
+<a name="line58"></a>
+<a name="line59"></a>  /**
+<a name="line60"></a>   * The lazy deserializer for this message instance, if any.
+<a name="line61"></a>   * @type {goog.proto2.LazyDeserializer?}
+<a name="line62"></a>   * @private
+<a name="line63"></a>   */
+<a name="line64"></a>  this.lazyDeserializer_ = null;
+<a name="line65"></a>
+<a name="line66"></a>  /**
+<a name="line67"></a>   * A map of those fields deserialized.
+<a name="line68"></a>   * @type {Object}
+<a name="line69"></a>   * @private
+<a name="line70"></a>   */
+<a name="line71"></a>  this.deserializedFields_ = null;
+<a name="line72"></a>};
+<a name="line73"></a>
 <a name="line74"></a>
-<a name="line75"></a>
-<a name="line76"></a>/**
-<a name="line77"></a> * An enumeration defining the possible field types.
-<a name="line78"></a> * Should be a mirror of that defined in descriptor.h.
-<a name="line79"></a> *
-<a name="line80"></a> * @enum {number}
-<a name="line81"></a> */
-<a name="line82"></a>goog.proto2.Message.FieldType = {
-<a name="line83"></a>  DOUBLE: 1,
-<a name="line84"></a>  FLOAT: 2,
-<a name="line85"></a>  INT64: 3,
-<a name="line86"></a>  UINT64: 4,
-<a name="line87"></a>  INT32: 5,
-<a name="line88"></a>  FIXED64: 6,
-<a name="line89"></a>  FIXED32: 7,
-<a name="line90"></a>  BOOL: 8,
-<a name="line91"></a>  STRING: 9,
-<a name="line92"></a>  GROUP: 10,
-<a name="line93"></a>  MESSAGE: 11,
-<a name="line94"></a>  BYTES: 12,
-<a name="line95"></a>  UINT32: 13,
-<a name="line96"></a>  ENUM: 14,
-<a name="line97"></a>  SFIXED32: 15,
-<a name="line98"></a>  SFIXED64: 16,
-<a name="line99"></a>  SINT32: 17,
-<a name="line100"></a>  SINT64: 18
-<a name="line101"></a>};
+<a name="line75"></a>/**
+<a name="line76"></a> * An enumeration defining the possible field types.
+<a name="line77"></a> * Should be a mirror of that defined in descriptor.h.
+<a name="line78"></a> *
+<a name="line79"></a> * @enum {number}
+<a name="line80"></a> */
+<a name="line81"></a>goog.proto2.Message.FieldType = {
+<a name="line82"></a>  DOUBLE: 1,
+<a name="line83"></a>  FLOAT: 2,
+<a name="line84"></a>  INT64: 3,
+<a name="line85"></a>  UINT64: 4,
+<a name="line86"></a>  INT32: 5,
+<a name="line87"></a>  FIXED64: 6,
+<a name="line88"></a>  FIXED32: 7,
+<a name="line89"></a>  BOOL: 8,
+<a name="line90"></a>  STRING: 9,
+<a name="line91"></a>  GROUP: 10,
+<a name="line92"></a>  MESSAGE: 11,
+<a name="line93"></a>  BYTES: 12,
+<a name="line94"></a>  UINT32: 13,
+<a name="line95"></a>  ENUM: 14,
+<a name="line96"></a>  SFIXED32: 15,
+<a name="line97"></a>  SFIXED64: 16,
+<a name="line98"></a>  SINT32: 17,
+<a name="line99"></a>  SINT64: 18
+<a name="line100"></a>};
+<a name="line101"></a>
 <a name="line102"></a>
-<a name="line103"></a>
-<a name="line104"></a>/**
-<a name="line105"></a> * Initializes the message with a lazy deserializer and its associated data.
-<a name="line106"></a> * This method should be called by internal methods ONLY.
-<a name="line107"></a> *
-<a name="line108"></a> * @param {goog.proto2.LazyDeserializer} deserializer The lazy deserializer to
-<a name="line109"></a> *   use to decode the data on the fly.
-<a name="line110"></a> *
-<a name="line111"></a> * @param {Object} data The data to decode/deserialize.
-<a name="line112"></a> */
-<a name="line113"></a>goog.proto2.Message.prototype.initializeForLazyDeserializer =
-<a name="line114"></a>  function(deserializer, data) {
-<a name="line115"></a>
-<a name="line116"></a>  this.lazyDeserializer_ = deserializer;
-<a name="line117"></a>  this.values_ = data;
-<a name="line118"></a>  this.deserializedFields_ = {};
-<a name="line119"></a>};
+<a name="line103"></a>/**
+<a name="line104"></a> * Initializes the message with a lazy deserializer and its associated data.
+<a name="line105"></a> * This method should be called by internal methods ONLY.
+<a name="line106"></a> *
+<a name="line107"></a> * @param {goog.proto2.LazyDeserializer} deserializer The lazy deserializer to
+<a name="line108"></a> *   use to decode the data on the fly.
+<a name="line109"></a> *
+<a name="line110"></a> * @param {Object} data The data to decode/deserialize.
+<a name="line111"></a> */
+<a name="line112"></a>goog.proto2.Message.prototype.initializeForLazyDeserializer =
+<a name="line113"></a>  function(deserializer, data) {
+<a name="line114"></a>
+<a name="line115"></a>  this.lazyDeserializer_ = deserializer;
+<a name="line116"></a>  this.values_ = data;
+<a name="line117"></a>  this.deserializedFields_ = {};
+<a name="line118"></a>};
+<a name="line119"></a>
 <a name="line120"></a>
-<a name="line121"></a>
-<a name="line122"></a>/**
-<a name="line123"></a> * Sets the value of an unknown field, by tag.
-<a name="line124"></a> *
-<a name="line125"></a> * @param {number} tag The tag of an unknown field (must be &gt;= 1).
-<a name="line126"></a> * @param {Object} value The value for that unknown field.
-<a name="line127"></a> */
-<a name="line128"></a>goog.proto2.Message.prototype.setUnknown = function(tag, value) {
-<a name="line129"></a>  goog.proto2.Util.assert(!this.fields_[tag],
-<a name="line130"></a>                          &#39;Field is not unknown in this message&#39;);
-<a name="line131"></a>
-<a name="line132"></a>  goog.proto2.Util.assert(tag &gt;= 1, &#39;Tag is not valid&#39;);
-<a name="line133"></a>  goog.proto2.Util.assert(value !== null, &#39;Value cannot be null&#39;);
-<a name="line134"></a>
-<a name="line135"></a>  this.values_[tag] = value;
-<a name="line136"></a>};
+<a name="line121"></a>/**
+<a name="line122"></a> * Sets the value of an unknown field, by tag.
+<a name="line123"></a> *
+<a name="line124"></a> * @param {number} tag The tag of an unknown field (must be &gt;= 1).
+<a name="line125"></a> * @param {Object} value The value for that unknown field.
+<a name="line126"></a> */
+<a name="line127"></a>goog.proto2.Message.prototype.setUnknown = function(tag, value) {
+<a name="line128"></a>  goog.proto2.Util.assert(!this.fields_[tag],
+<a name="line129"></a>                          &#39;Field is not unknown in this message&#39;);
+<a name="line130"></a>
+<a name="line131"></a>  goog.proto2.Util.assert(tag &gt;= 1, &#39;Tag is not valid&#39;);
+<a name="line132"></a>  goog.proto2.Util.assert(value !== null, &#39;Value cannot be null&#39;);
+<a name="line133"></a>
+<a name="line134"></a>  this.values_[tag] = value;
+<a name="line135"></a>};
+<a name="line136"></a>
 <a name="line137"></a>
-<a name="line138"></a>
-<a name="line139"></a>/**
-<a name="line140"></a> * Iterates over all the unknown fields in the message.
-<a name="line141"></a> *
-<a name="line142"></a> * @param {function(number, Object)} callback A callback method
-<a name="line143"></a> *     which gets invoked for each unknown field.
-<a name="line144"></a> */
-<a name="line145"></a>goog.proto2.Message.prototype.forEachUnknown = function(callback) {
-<a name="line146"></a>  for (var key in this.values_) {
-<a name="line147"></a>    if (!this.fields_[key]) {
-<a name="line148"></a>      callback(/** @type {number} */ (key), this.values_[key]);
-<a name="line149"></a>    }
-<a name="line150"></a>  }
-<a name="line151"></a>};
+<a name="line138"></a>/**
+<a name="line139"></a> * Iterates over all the unknown fields in the message.
+<a name="line140"></a> *
+<a name="line141"></a> * @param {function(number, Object)} callback A callback method
+<a name="line142"></a> *     which gets invoked for each unknown field.
+<a name="line143"></a> */
+<a name="line144"></a>goog.proto2.Message.prototype.forEachUnknown = function(callback) {
+<a name="line145"></a>  for (var key in this.values_) {
+<a name="line146"></a>    if (!this.fields_[key]) {
+<a name="line147"></a>      callback(/** @type {number} */ (key), this.values_[key]);
+<a name="line148"></a>    }
+<a name="line149"></a>  }
+<a name="line150"></a>};
+<a name="line151"></a>
 <a name="line152"></a>
-<a name="line153"></a>
-<a name="line154"></a>/**
-<a name="line155"></a> * Returns the descriptor which describes the current message.
-<a name="line156"></a> *
-<a name="line157"></a> * @return {goog.proto2.Descriptor} The descriptor.
-<a name="line158"></a> */
-<a name="line159"></a>goog.proto2.Message.prototype.getDescriptor = function() {
-<a name="line160"></a>  return this.descriptor_;
-<a name="line161"></a>};
+<a name="line153"></a>/**
+<a name="line154"></a> * Returns the descriptor which describes the current message.
+<a name="line155"></a> *
+<a name="line156"></a> * @return {goog.proto2.Descriptor} The descriptor.
+<a name="line157"></a> */
+<a name="line158"></a>goog.proto2.Message.prototype.getDescriptor = function() {
+<a name="line159"></a>  return this.descriptor_;
+<a name="line160"></a>};
+<a name="line161"></a>
 <a name="line162"></a>
-<a name="line163"></a>
-<a name="line164"></a>/**
-<a name="line165"></a> * Returns the data in the current message as an anonymous
-<a name="line166"></a> * ECMAScript object (i.e a simple key/value pair object).
-<a name="line167"></a> *
-<a name="line168"></a> * @param {goog.proto2.ObjectSerializer.KeyOption} opt_keyOption Specifies
-<a name="line169"></a> *     the format of the keys in the generated object. See the definition
-<a name="line170"></a> *     of the enumeration for more information.
-<a name="line171"></a> *
-<a name="line172"></a> * @return {Object} The object representation of this Message.
-<a name="line173"></a> */
-<a name="line174"></a>goog.proto2.Message.prototype.toJSON = function(opt_keyOption) {
-<a name="line175"></a>  var serializer = new goog.proto2.ObjectSerializer(opt_keyOption);
-<a name="line176"></a>  return serializer.serialize(this);
-<a name="line177"></a>};
+<a name="line163"></a>/**
+<a name="line164"></a> * Returns the data in the current message as an anonymous
+<a name="line165"></a> * ECMAScript object (i.e a simple key/value pair object).
+<a name="line166"></a> *
+<a name="line167"></a> * @param {goog.proto2.ObjectSerializer.KeyOption=} opt_keyOption Specifies
+<a name="line168"></a> *     the format of the keys in the generated object. See the definition
+<a name="line169"></a> *     of the enumeration for more information.
+<a name="line170"></a> *
+<a name="line171"></a> * @return {Object} The object representation of this Message.
+<a name="line172"></a> */
+<a name="line173"></a>goog.proto2.Message.prototype.toJSON = function(opt_keyOption) {
+<a name="line174"></a>  var serializer = new goog.proto2.ObjectSerializer(opt_keyOption);
+<a name="line175"></a>  return serializer.serialize(this);
+<a name="line176"></a>};
+<a name="line177"></a>
 <a name="line178"></a>
-<a name="line179"></a>
-<a name="line180"></a>/**
-<a name="line181"></a> * Returns whether there is a value stored at the field specified by the
-<a name="line182"></a> * given field descriptor.
-<a name="line183"></a> *
-<a name="line184"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to check
-<a name="line185"></a> *     if there is a value.
-<a name="line186"></a> *
-<a name="line187"></a> * @return {boolean} True if a value was found.
-<a name="line188"></a> */
-<a name="line189"></a>goog.proto2.Message.prototype.has = function(field) {
-<a name="line190"></a>  goog.proto2.Util.assert(
-<a name="line191"></a>      field.getContainingType() == this.descriptor_,
-<a name="line192"></a>      &#39;The current message does not contain the given field&#39;);
-<a name="line193"></a>
-<a name="line194"></a>  return this.has$Value(field.getTag());
-<a name="line195"></a>};
+<a name="line179"></a>/**
+<a name="line180"></a> * Returns whether there is a value stored at the field specified by the
+<a name="line181"></a> * given field descriptor.
+<a name="line182"></a> *
+<a name="line183"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to check
+<a name="line184"></a> *     if there is a value.
+<a name="line185"></a> *
+<a name="line186"></a> * @return {boolean} True if a value was found.
+<a name="line187"></a> */
+<a name="line188"></a>goog.proto2.Message.prototype.has = function(field) {
+<a name="line189"></a>  goog.proto2.Util.assert(
+<a name="line190"></a>      field.getContainingType() == this.descriptor_,
+<a name="line191"></a>      &#39;The current message does not contain the given field&#39;);
+<a name="line192"></a>
+<a name="line193"></a>  return this.has$Value(field.getTag());
+<a name="line194"></a>};
+<a name="line195"></a>
 <a name="line196"></a>
-<a name="line197"></a>
-<a name="line198"></a>/**
-<a name="line199"></a> * Returns the array of values found for the given repeated field.
-<a name="line200"></a> *
-<a name="line201"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to
-<a name="line202"></a> *     return the values.
-<a name="line203"></a> *
-<a name="line204"></a> * @return {Array.&lt;Object&gt;} The values found.
-<a name="line205"></a> */
-<a name="line206"></a>goog.proto2.Message.prototype.arrayOf = function(field) {
-<a name="line207"></a>  goog.proto2.Util.assert(
-<a name="line208"></a>      field.getContainingType() == this.descriptor_,
-<a name="line209"></a>      &#39;The current message does not contain the given field&#39;);
-<a name="line210"></a>
-<a name="line211"></a>  return this.array$Values(field.getTag());
-<a name="line212"></a>};
+<a name="line197"></a>/**
+<a name="line198"></a> * Returns the array of values found for the given repeated field.
+<a name="line199"></a> *
+<a name="line200"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to
+<a name="line201"></a> *     return the values.
+<a name="line202"></a> *
+<a name="line203"></a> * @return {Array.&lt;Object&gt;} The values found.
+<a name="line204"></a> */
+<a name="line205"></a>goog.proto2.Message.prototype.arrayOf = function(field) {
+<a name="line206"></a>  goog.proto2.Util.assert(
+<a name="line207"></a>      field.getContainingType() == this.descriptor_,
+<a name="line208"></a>      &#39;The current message does not contain the given field&#39;);
+<a name="line209"></a>
+<a name="line210"></a>  return this.array$Values(field.getTag());
+<a name="line211"></a>};
+<a name="line212"></a>
 <a name="line213"></a>
-<a name="line214"></a>
-<a name="line215"></a>/**
-<a name="line216"></a> * Returns the number of values stored in the given field.
-<a name="line217"></a> *
-<a name="line218"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to count
-<a name="line219"></a> *     the number of values.
-<a name="line220"></a> *
-<a name="line221"></a> * @return {number} The count of the values in the given field.
-<a name="line222"></a> */
-<a name="line223"></a>goog.proto2.Message.prototype.countOf = function(field) {
-<a name="line224"></a>  goog.proto2.Util.assert(
-<a name="line225"></a>      field.getContainingType() == this.descriptor_,
-<a name="line226"></a>      &#39;The current message does not contain the given field&#39;);
-<a name="line227"></a>
-<a name="line228"></a>  return this.count$Values(field.getTag());
-<a name="line229"></a>};
+<a name="line214"></a>/**
+<a name="line215"></a> * Returns the number of values stored in the given field.
+<a name="line216"></a> *
+<a name="line217"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to count
+<a name="line218"></a> *     the number of values.
+<a name="line219"></a> *
+<a name="line220"></a> * @return {number} The count of the values in the given field.
+<a name="line221"></a> */
+<a name="line222"></a>goog.proto2.Message.prototype.countOf = function(field) {
+<a name="line223"></a>  goog.proto2.Util.assert(
+<a name="line224"></a>      field.getContainingType() == this.descriptor_,
+<a name="line225"></a>      &#39;The current message does not contain the given field&#39;);
+<a name="line226"></a>
+<a name="line227"></a>  return this.count$Values(field.getTag());
+<a name="line228"></a>};
+<a name="line229"></a>
 <a name="line230"></a>
-<a name="line231"></a>
-<a name="line232"></a>/**
-<a name="line233"></a> * Returns the value stored at the field specified by the
-<a name="line234"></a> * given field descriptor.
-<a name="line235"></a> *
-<a name="line236"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to get the
-<a name="line237"></a> *     value.
-<a name="line238"></a> * @param {number} opt_index If the field is repeated, the index to use when
-<a name="line239"></a> *     looking up the value.
-<a name="line240"></a> *
-<a name="line241"></a> * @return {Object} The value found or undefined if none.
-<a name="line242"></a> */
-<a name="line243"></a>goog.proto2.Message.prototype.get = function(field, opt_index) {
-<a name="line244"></a>  goog.proto2.Util.assert(
-<a name="line245"></a>      field.getContainingType() == this.descriptor_,
-<a name="line246"></a>      &#39;The current message does not contain the given field&#39;);
-<a name="line247"></a>
-<a name="line248"></a>  return this.get$Value(field.getTag(), opt_index);
-<a name="line249"></a>};
+<a name="line231"></a>/**
+<a name="line232"></a> * Returns the value stored at the field specified by the
+<a name="line233"></a> * given field descriptor.
+<a name="line234"></a> *
+<a name="line235"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to get the
+<a name="line236"></a> *     value.
+<a name="line237"></a> * @param {number=} opt_index If the field is repeated, the index to use when
+<a name="line238"></a> *     looking up the value.
+<a name="line239"></a> *
+<a name="line240"></a> * @return {Object} The value found or undefined if none.
+<a name="line241"></a> */
+<a name="line242"></a>goog.proto2.Message.prototype.get = function(field, opt_index) {
+<a name="line243"></a>  goog.proto2.Util.assert(
+<a name="line244"></a>      field.getContainingType() == this.descriptor_,
+<a name="line245"></a>      &#39;The current message does not contain the given field&#39;);
+<a name="line246"></a>
+<a name="line247"></a>  return this.get$Value(field.getTag(), opt_index);
+<a name="line248"></a>};
+<a name="line249"></a>
 <a name="line250"></a>
-<a name="line251"></a>
-<a name="line252"></a>/**
-<a name="line253"></a> * Returns the value stored at the field specified by the
-<a name="line254"></a> * given field descriptor or the default value if none exists.
-<a name="line255"></a> *
-<a name="line256"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to get the
-<a name="line257"></a> *     value.
-<a name="line258"></a> * @param {number} opt_index If the field is repeated, the index to use when
-<a name="line259"></a> *     looking up the value.
-<a name="line260"></a> *
-<a name="line261"></a> * @return {Object} The value found or the default if none.
-<a name="line262"></a> */
-<a name="line263"></a>goog.proto2.Message.prototype.getOrDefault = function(field, opt_index) {
-<a name="line264"></a>  goog.proto2.Util.assert(
-<a name="line265"></a>      field.getContainingType() == this.descriptor_,
-<a name="line266"></a>      &#39;The current message does not contain the given field&#39;);
-<a name="line267"></a>
-<a name="line268"></a>  return this.get$ValueOrDefault(field.getTag(), opt_index);
-<a name="line269"></a>};
+<a name="line251"></a>/**
+<a name="line252"></a> * Returns the value stored at the field specified by the
+<a name="line253"></a> * given field descriptor or the default value if none exists.
+<a name="line254"></a> *
+<a name="line255"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to get the
+<a name="line256"></a> *     value.
+<a name="line257"></a> * @param {number=} opt_index If the field is repeated, the index to use when
+<a name="line258"></a> *     looking up the value.
+<a name="line259"></a> *
+<a name="line260"></a> * @return {Object} The value found or the default if none.
+<a name="line261"></a> */
+<a name="line262"></a>goog.proto2.Message.prototype.getOrDefault = function(field, opt_index) {
+<a name="line263"></a>  goog.proto2.Util.assert(
+<a name="line264"></a>      field.getContainingType() == this.descriptor_,
+<a name="line265"></a>      &#39;The current message does not contain the given field&#39;);
+<a name="line266"></a>
+<a name="line267"></a>  return this.get$ValueOrDefault(field.getTag(), opt_index);
+<a name="line268"></a>};
+<a name="line269"></a>
 <a name="line270"></a>
-<a name="line271"></a>
-<a name="line272"></a>/**
-<a name="line273"></a> * Stores the given value to the field specified by the
-<a name="line274"></a> * given field descriptor. Note that the field must not be repeated.
-<a name="line275"></a> *
-<a name="line276"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to set
-<a name="line277"></a> *     the value.
-<a name="line278"></a> * @param {Object} value The new value for the field.
-<a name="line279"></a> */
-<a name="line280"></a>goog.proto2.Message.prototype.set = function(field, value) {
-<a name="line281"></a>  goog.proto2.Util.assert(
-<a name="line282"></a>      field.getContainingType() == this.descriptor_,
-<a name="line283"></a>      &#39;The current message does not contain the given field&#39;);
-<a name="line284"></a>
-<a name="line285"></a>  this.set$Value(field.getTag(), value);
-<a name="line286"></a>};
+<a name="line271"></a>/**
+<a name="line272"></a> * Stores the given value to the field specified by the
+<a name="line273"></a> * given field descriptor. Note that the field must not be repeated.
+<a name="line274"></a> *
+<a name="line275"></a> * @param {goog.proto2.FieldDescriptor} field The field for which to set
+<a name="line276"></a> *     the value.
+<a name="line277"></a> * @param {Object} value The new value for the field.
+<a name="line278"></a> */
+<a name="line279"></a>goog.proto2.Message.prototype.set = function(field, value) {
+<a name="line280"></a>  goog.proto2.Util.assert(
+<a name="line281"></a>      field.getContainingType() == this.descriptor_,
+<a name="line282"></a>      &#39;The current message does not contain the given field&#39;);
+<a name="line283"></a>
+<a name="line284"></a>  this.set$Value(field.getTag(), value);
+<a name="line285"></a>};
+<a name="line286"></a>
 <a name="line287"></a>
-<a name="line288"></a>
-<a name="line289"></a>/**
-<a name="line290"></a> * Adds the given value to the field specified by the
-<a name="line291"></a> * given field descriptor. Note that the field must be repeated.
-<a name="line292"></a> *
-<a name="line293"></a> * @param {goog.proto2.FieldDescriptor} field The field in which to add the
-<a name="line294"></a> *     the value.
-<a name="line295"></a> * @param {Object} value The new value to add to the field.
-<a name="line296"></a> */
-<a name="line297"></a>goog.proto2.Message.prototype.add = function(field, value) {
-<a name="line298"></a>  goog.proto2.Util.assert(
-<a name="line299"></a>      field.getContainingType() == this.descriptor_,
-<a name="line300"></a>      &#39;The current message does not contain the given field&#39;);
-<a name="line301"></a>
-<a name="line302"></a>  this.add$Value(field.getTag(), value);
-<a name="line303"></a>};
+<a name="line288"></a>/**
+<a name="line289"></a> * Adds the given value to the field specified by the
+<a name="line290"></a> * given field descriptor. Note that the field must be repeated.
+<a name="line291"></a> *
+<a name="line292"></a> * @param {goog.proto2.FieldDescriptor} field The field in which to add the
+<a name="line293"></a> *     the value.
+<a name="line294"></a> * @param {Object} value The new value to add to the field.
+<a name="line295"></a> */
+<a name="line296"></a>goog.proto2.Message.prototype.add = function(field, value) {
+<a name="line297"></a>  goog.proto2.Util.assert(
+<a name="line298"></a>      field.getContainingType() == this.descriptor_,
+<a name="line299"></a>      &#39;The current message does not contain the given field&#39;);
+<a name="line300"></a>
+<a name="line301"></a>  this.add$Value(field.getTag(), value);
+<a name="line302"></a>};
+<a name="line303"></a>
 <a name="line304"></a>
-<a name="line305"></a>
-<a name="line306"></a>/**
-<a name="line307"></a> * Clears the field specified.
-<a name="line308"></a> *
-<a name="line309"></a> * @param {goog.proto2.FieldDescriptor} field The field to clear.
-<a name="line310"></a> */
-<a name="line311"></a>goog.proto2.Message.prototype.clear = function(field) {
-<a name="line312"></a>  goog.proto2.Util.assert(
-<a name="line313"></a>      field.getContainingType() == this.descriptor_,
-<a name="line314"></a>      &#39;The current message does not contain the given field&#39;);
-<a name="line315"></a>
-<a name="line316"></a>  this.clear$Field(field.getTag());
-<a name="line317"></a>};
+<a name="line305"></a>/**
+<a name="line306"></a> * Clears the field specified.
+<a name="line307"></a> *
+<a name="line308"></a> * @param {goog.proto2.FieldDescriptor} field The field to clear.
+<a name="line309"></a> */
+<a name="line310"></a>goog.proto2.Message.prototype.clear = function(field) {
+<a name="line311"></a>  goog.proto2.Util.assert(
+<a name="line312"></a>      field.getContainingType() == this.descriptor_,
+<a name="line313"></a>      &#39;The current message does not contain the given field&#39;);
+<a name="line314"></a>
+<a name="line315"></a>  this.clear$Field(field.getTag());
+<a name="line316"></a>};
+<a name="line317"></a>
 <a name="line318"></a>
-<a name="line319"></a>
-<a name="line320"></a>/**
-<a name="line321"></a> * Returns the field in this message by the given tag number. If no
-<a name="line322"></a> * such field exists, throws an exception.
-<a name="line323"></a> *
-<a name="line324"></a> * @param {number} tag The field&#39;s tag index.
-<a name="line325"></a> * @return {goog.proto2.FieldDescriptor} The descriptor for the field.
-<a name="line326"></a> * @private
-<a name="line327"></a> */
-<a name="line328"></a>goog.proto2.Message.prototype.getFieldByTag_ = function(tag) {
-<a name="line329"></a>  goog.proto2.Util.assert(this.fields_[tag],
-<a name="line330"></a>                          &#39;No field found for the given tag&#39;);
-<a name="line331"></a>
-<a name="line332"></a>  return this.fields_[tag];
-<a name="line333"></a>};
+<a name="line319"></a>/**
+<a name="line320"></a> * Returns the field in this message by the given tag number. If no
+<a name="line321"></a> * such field exists, throws an exception.
+<a name="line322"></a> *
+<a name="line323"></a> * @param {number} tag The field&#39;s tag index.
+<a name="line324"></a> * @return {goog.proto2.FieldDescriptor} The descriptor for the field.
+<a name="line325"></a> * @private
+<a name="line326"></a> */
+<a name="line327"></a>goog.proto2.Message.prototype.getFieldByTag_ = function(tag) {
+<a name="line328"></a>  goog.proto2.Util.assert(this.fields_[tag],
+<a name="line329"></a>                          &#39;No field found for the given tag&#39;);
+<a name="line330"></a>
+<a name="line331"></a>  return this.fields_[tag];
+<a name="line332"></a>};
+<a name="line333"></a>
 <a name="line334"></a>
-<a name="line335"></a>
-<a name="line336"></a>/**
-<a name="line337"></a> * Returns the whether or not the field indicated by the given tag
-<a name="line338"></a> * has a value.
-<a name="line339"></a> *
-<a name="line340"></a> * GENERATED CODE USE ONLY. Basis of the has{Field} methods.
-<a name="line341"></a> *
-<a name="line342"></a> * @param {number} tag The tag.
-<a name="line343"></a> *
-<a name="line344"></a> * @return {boolean} Whether the message has a value for the field.
-<a name="line345"></a> */
-<a name="line346"></a>goog.proto2.Message.prototype.has$Value = function(tag) {
-<a name="line347"></a>  goog.proto2.Util.assert(this.fields_[tag],
-<a name="line348"></a>                          &#39;No field found for the given tag&#39;);
-<a name="line349"></a>
-<a name="line350"></a>  return tag in this.values_ &amp;&amp; goog.isDef(this.values_[tag]);
-<a name="line351"></a>};
+<a name="line335"></a>/**
+<a name="line336"></a> * Returns the whether or not the field indicated by the given tag
+<a name="line337"></a> * has a value.
+<a name="line338"></a> *
+<a name="line339"></a> * GENERATED CODE USE ONLY. Basis of the has{Field} methods.
+<a name="line340"></a> *
+<a name="line341"></a> * @param {number} tag The tag.
+<a name="line342"></a> *
+<a name="line343"></a> * @return {boolean} Whether the message has a value for the field.
+<a name="line344"></a> */
+<a name="line345"></a>goog.proto2.Message.prototype.has$Value = function(tag) {
+<a name="line346"></a>  goog.proto2.Util.assert(this.fields_[tag],
+<a name="line347"></a>                          &#39;No field found for the given tag&#39;);
+<a name="line348"></a>
+<a name="line349"></a>  return tag in this.values_ &amp;&amp; goog.isDef(this.values_[tag]);
+<a name="line350"></a>};
+<a name="line351"></a>
 <a name="line352"></a>
-<a name="line353"></a>
-<a name="line354"></a>/**
-<a name="line355"></a> * If a lazy deserializer is instantiated, lazily deserializes the
-<a name="line356"></a> * field if required.
-<a name="line357"></a> *
-<a name="line358"></a> * @param {goog.proto2.FieldDescriptor} field The field.
-<a name="line359"></a> * @private
-<a name="line360"></a> */
-<a name="line361"></a>goog.proto2.Message.prototype.lazyDeserialize_ = function(field) {
-<a name="line362"></a>  // If we have a lazy deserializer, then ensure that the field is
-<a name="line363"></a>  // properly deserialized.
-<a name="line364"></a>  if (this.lazyDeserializer_) {
-<a name="line365"></a>    var tag = field.getTag();
-<a name="line366"></a>
-<a name="line367"></a>    if (!(tag in this.deserializedFields_)) {
-<a name="line368"></a>      this.values_[tag] = this.lazyDeserializer_.deserializeField(
-<a name="line369"></a>          this, field, this.values_[tag]);
-<a name="line370"></a>
-<a name="line371"></a>      this.deserializedFields_[tag] = true;
-<a name="line372"></a>    }
-<a name="line373"></a>  }
-<a name="line374"></a>};
+<a name="line353"></a>/**
+<a name="line354"></a> * If a lazy deserializer is instantiated, lazily deserializes the
+<a name="line355"></a> * field if required.
+<a name="line356"></a> *
+<a name="line357"></a> * @param {goog.proto2.FieldDescriptor} field The field.
+<a name="line358"></a> * @private
+<a name="line359"></a> */
+<a name="line360"></a>goog.proto2.Message.prototype.lazyDeserialize_ = function(field) {
+<a name="line361"></a>  // If we have a lazy deserializer, then ensure that the field is
+<a name="line362"></a>  // properly deserialized.
+<a name="line363"></a>  if (this.lazyDeserializer_) {
+<a name="line364"></a>    var tag = field.getTag();
+<a name="line365"></a>
+<a name="line366"></a>    if (!(tag in this.deserializedFields_)) {
+<a name="line367"></a>      this.values_[tag] = this.lazyDeserializer_.deserializeField(
+<a name="line368"></a>          this, field, this.values_[tag]);
+<a name="line369"></a>
+<a name="line370"></a>      this.deserializedFields_[tag] = true;
+<a name="line371"></a>    }
+<a name="line372"></a>  }
+<a name="line373"></a>};
+<a name="line374"></a>
 <a name="line375"></a>
-<a name="line376"></a>
-<a name="line377"></a>/**
-<a name="line378"></a> * Gets the value at the field indicated by the given tag.
-<a name="line379"></a> *
-<a name="line380"></a> * GENERATED CODE USE ONLY. Basis of the get{Field} methods.
-<a name="line381"></a> *
-<a name="line382"></a> * @param {number} tag The field&#39;s tag index.
-<a name="line383"></a> * @param {number} opt_index If the field is a repeated field, the index
-<a name="line384"></a> *     at which to get the value.
-<a name="line385"></a> *
-<a name="line386"></a> * @return {Object} The value found or undefined for none.
-<a name="line387"></a> */
-<a name="line388"></a>goog.proto2.Message.prototype.get$Value = function(tag, opt_index) {
-<a name="line389"></a>  var field = this.getFieldByTag_(tag);
-<a name="line390"></a>
-<a name="line391"></a>  // Ensure that the field is deserialized.
-<a name="line392"></a>  this.lazyDeserialize_(field);
-<a name="line393"></a>
-<a name="line394"></a>  var index = opt_index || 0;
-<a name="line395"></a>
-<a name="line396"></a>  if (field.isRepeated()) {
-<a name="line397"></a>    goog.proto2.Util.assert(index &lt; this.count$Values(tag),
-<a name="line398"></a>                            &#39;Field value count is less than index given&#39;);
-<a name="line399"></a>
-<a name="line400"></a>    return this.values_[tag][index];
-<a name="line401"></a>  } else {
-<a name="line402"></a>    goog.proto2.Util.assert(!goog.isArray(this.values_[tag]));
-<a name="line403"></a>    return this.values_[tag];
-<a name="line404"></a>  }
-<a name="line405"></a>};
+<a name="line376"></a>/**
+<a name="line377"></a> * Gets the value at the field indicated by the given tag.
+<a name="line378"></a> *
+<a name="line379"></a> * GENERATED CODE USE ONLY. Basis of the get{Field} methods.
+<a name="line380"></a> *
+<a name="line381"></a> * @param {number} tag The field&#39;s tag index.
+<a name="line382"></a> * @param {number=} opt_index If the field is a repeated field, the index
+<a name="line383"></a> *     at which to get the value.
+<a name="line384"></a> *
+<a name="line385"></a> * @return {Object} The value found or undefined for none.
+<a name="line386"></a> */
+<a name="line387"></a>goog.proto2.Message.prototype.get$Value = function(tag, opt_index) {
+<a name="line388"></a>  var field = this.getFieldByTag_(tag);
+<a name="line389"></a>
+<a name="line390"></a>  // Ensure that the field is deserialized.
+<a name="line391"></a>  this.lazyDeserialize_(field);
+<a name="line392"></a>
+<a name="line393"></a>  var index = opt_index || 0;
+<a name="line394"></a>
+<a name="line395"></a>  if (field.isRepeated()) {
+<a name="line396"></a>    goog.proto2.Util.assert(index &lt; this.count$Values(tag),
+<a name="line397"></a>                            &#39;Field value count is less than index given&#39;);
+<a name="line398"></a>
+<a name="line399"></a>    return this.values_[tag][index];
+<a name="line400"></a>  } else {
+<a name="line401"></a>    goog.proto2.Util.assert(!goog.isArray(this.values_[tag]));
+<a name="line402"></a>    return this.values_[tag];
+<a name="line403"></a>  }
+<a name="line404"></a>};
+<a name="line405"></a>
 <a name="line406"></a>
-<a name="line407"></a>
-<a name="line408"></a>/**
-<a name="line409"></a> * Gets the value at the field indicated by the given tag or the default value
-<a name="line410"></a> * if none.
-<a name="line411"></a> *
-<a name="line412"></a> * GENERATED CODE USE ONLY. Basis of the get{Field} methods.
-<a name="line413"></a> *
-<a name="line414"></a> * @param {number} tag The field&#39;s tag index.
-<a name="line415"></a> * @param {number} opt_index If the field is a repeated field, the index
-<a name="line416"></a> *     at which to get the value.
-<a name="line417"></a> *
-<a name="line418"></a> * @return {Object} The value found or the default value if none set.
-<a name="line419"></a> */
-<a name="line420"></a>goog.proto2.Message.prototype.get$ValueOrDefault = function(tag, opt_index) {
-<a name="line421"></a>
-<a name="line422"></a>  if (!this.has$Value(tag)) {
-<a name="line423"></a>    // Return the default value.
-<a name="line424"></a>    var field = this.getFieldByTag_(tag);
-<a name="line425"></a>    return field.getDefaultValue();
-<a name="line426"></a>  }
-<a name="line427"></a>
-<a name="line428"></a>  return this.get$Value(tag, opt_index);
-<a name="line429"></a>};
+<a name="line407"></a>/**
+<a name="line408"></a> * Gets the value at the field indicated by the given tag or the default value
+<a name="line409"></a> * if none.
+<a name="line410"></a> *
+<a name="line411"></a> * GENERATED CODE USE ONLY. Basis of the get{Field} methods.
+<a name="line412"></a> *
+<a name="line413"></a> * @param {number} tag The field&#39;s tag index.
+<a name="line414"></a> * @param {number=} opt_index If the field is a repeated field, the index
+<a name="line415"></a> *     at which to get the value.
+<a name="line416"></a> *
+<a name="line417"></a> * @return {Object} The value found or the default value if none set.
+<a name="line418"></a> */
+<a name="line419"></a>goog.proto2.Message.prototype.get$ValueOrDefault = function(tag, opt_index) {
+<a name="line420"></a>
+<a name="line421"></a>  if (!this.has$Value(tag)) {
+<a name="line422"></a>    // Return the default value.
+<a name="line423"></a>    var field = this.getFieldByTag_(tag);
+<a name="line424"></a>    return field.getDefaultValue();
+<a name="line425"></a>  }
+<a name="line426"></a>
+<a name="line427"></a>  return this.get$Value(tag, opt_index);
+<a name="line428"></a>};
+<a name="line429"></a>
 <a name="line430"></a>
-<a name="line431"></a>
-<a name="line432"></a>/**
-<a name="line433"></a> * Gets the values at the field indicated by the given tag.
-<a name="line434"></a> *
-<a name="line435"></a> * GENERATED CODE USE ONLY. Basis of the {field}Array methods.
-<a name="line436"></a> *
-<a name="line437"></a> * @param {number} tag The field&#39;s tag index.
-<a name="line438"></a> *
-<a name="line439"></a> * @return {Array.&lt;Object&gt;} The values found. If none, returns an empty array.
-<a name="line440"></a> */
-<a name="line441"></a>goog.proto2.Message.prototype.array$Values = function(tag) {
-<a name="line442"></a>  goog.proto2.Util.assert(this.getFieldByTag_(tag).isRepeated(),
-<a name="line443"></a>                          &#39;Cannot call fieldArray on a non-repeated field&#39;);
-<a name="line444"></a>
-<a name="line445"></a>  var field = this.getFieldByTag_(tag);
-<a name="line446"></a>
-<a name="line447"></a>  // Ensure that the field is deserialized.
-<a name="line448"></a>  this.lazyDeserialize_(field);
-<a name="line449"></a>
-<a name="line450"></a>  var valuesArray = this.values_[tag];
-<a name="line451"></a>
-<a name="line452"></a>  if (!valuesArray) {
-<a name="line453"></a>    return [];
-<a name="line454"></a>  }
-<a name="line455"></a>
-<a name="line456"></a>  return valuesArray;
-<a name="line457"></a>};
+<a name="line431"></a>/**
+<a name="line432"></a> * Gets the values at the field indicated by the given tag.
+<a name="line433"></a> *
+<a name="line434"></a> * GENERATED CODE USE ONLY. Basis of the {field}Array methods.
+<a name="line435"></a> *
+<a name="line436"></a> * @param {number} tag The field&#39;s tag index.
+<a name="line437"></a> *
+<a name="line438"></a> * @return {Array.&lt;Object&gt;} The values found. If none, returns an empty array.
+<a name="line439"></a> */
+<a name="line440"></a>goog.proto2.Message.prototype.array$Values = function(tag) {
+<a name="line441"></a>  goog.proto2.Util.assert(this.getFieldByTag_(tag).isRepeated(),
+<a name="line442"></a>                          &#39;Cannot call fieldArray on a non-repeated field&#39;);
+<a name="line443"></a>
+<a name="line444"></a>  var field = this.getFieldByTag_(tag);
+<a name="line445"></a>
+<a name="line446"></a>  // Ensure that the field is deserialized.
+<a name="line447"></a>  this.lazyDeserialize_(field);
+<a name="line448"></a>
+<a name="line449"></a>  var valuesArray = this.values_[tag];
+<a name="line450"></a>
+<a name="line451"></a>  if (!valuesArray) {
+<a name="line452"></a>    return [];
+<a name="line453"></a>  }
+<a name="line454"></a>
+<a name="line455"></a>  return valuesArray;
+<a name="line456"></a>};
+<a name="line457"></a>
 <a name="line458"></a>
-<a name="line459"></a>
-<a name="line460"></a>/**
-<a name="line461"></a> * Returns the number of values stored in the field by the given tag.
-<a name="line462"></a> *
-<a name="line463"></a> * GENERATED CODE USE ONLY. Basis of the {field}Count methods.
-<a name="line464"></a> *
-<a name="line465"></a> * @param {number} tag The tag.
-<a name="line466"></a> *
-<a name="line467"></a> * @return {number} The number of values.
-<a name="line468"></a> */
-<a name="line469"></a>goog.proto2.Message.prototype.count$Values = function(tag) {
-<a name="line470"></a>  var field = this.getFieldByTag_(tag);
-<a name="line471"></a>
-<a name="line472"></a>  if (field.isRepeated()) {
-<a name="line473"></a>    if (this.has$Value(tag)) {
-<a name="line474"></a>      goog.proto2.Util.assert(goog.isArray(this.values_[tag]));
-<a name="line475"></a>    }
-<a name="line476"></a>
-<a name="line477"></a>    return this.has$Value(tag) ? this.values_[tag].length : 0;
-<a name="line478"></a>  } else {
-<a name="line479"></a>    return this.has$Value(tag) ? 1 : 0;
-<a name="line480"></a>  }
-<a name="line481"></a>};
+<a name="line459"></a>/**
+<a name="line460"></a> * Returns the number of values stored in the field by the given tag.
+<a name="line461"></a> *
+<a name="line462"></a> * GENERATED CODE USE ONLY. Basis of the {field}Count methods.
+<a name="line463"></a> *
+<a name="line464"></a> * @param {number} tag The tag.
+<a name="line465"></a> *
+<a name="line466"></a> * @return {number} The number of values.
+<a name="line467"></a> */
+<a name="line468"></a>goog.proto2.Message.prototype.count$Values = function(tag) {
+<a name="line469"></a>  var field = this.getFieldByTag_(tag);
+<a name="line470"></a>
+<a name="line471"></a>  if (field.isRepeated()) {
+<a name="line472"></a>    if (this.has$Value(tag)) {
+<a name="line473"></a>      goog.proto2.Util.assert(goog.isArray(this.values_[tag]));
+<a name="line474"></a>    }
+<a name="line475"></a>
+<a name="line476"></a>    return this.has$Value(tag) ? this.values_[tag].length : 0;
+<a name="line477"></a>  } else {
+<a name="line478"></a>    return this.has$Value(tag) ? 1 : 0;
+<a name="line479"></a>  }
+<a name="line480"></a>};
+<a name="line481"></a>
 <a name="line482"></a>
-<a name="line483"></a>
-<a name="line484"></a>/**
-<a name="line485"></a> * Sets the value of the *non-repeating* field indicated by the given tag.
-<a name="line486"></a> *
-<a name="line487"></a> * GENERATED CODE USE ONLY. Basis of the set{Field} methods.
-<a name="line488"></a> *
-<a name="line489"></a> * @param {number} tag The field&#39;s tag index.
-<a name="line490"></a> * @param {Object} value The field&#39;s value.
-<a name="line491"></a> */
-<a name="line492"></a>goog.proto2.Message.prototype.set$Value = function(tag, value) {
-<a name="line493"></a>  if (goog.proto2.Util.conductChecks()) {
-<a name="line494"></a>    var field = this.getFieldByTag_(tag);
-<a name="line495"></a>
-<a name="line496"></a>    goog.proto2.Util.assert(!field.isRepeated(),
-<a name="line497"></a>                            &#39;Cannot call set on a repeated field&#39;);
-<a name="line498"></a>
-<a name="line499"></a>    this.checkFieldType_(field, value);
-<a name="line500"></a>  }
-<a name="line501"></a>
-<a name="line502"></a>  this.values_[tag] = value;
-<a name="line503"></a>};
+<a name="line483"></a>/**
+<a name="line484"></a> * Sets the value of the *non-repeating* field indicated by the given tag.
+<a name="line485"></a> *
+<a name="line486"></a> * GENERATED CODE USE ONLY. Basis of the set{Field} methods.
+<a name="line487"></a> *
+<a name="line488"></a> * @param {number} tag The field&#39;s tag index.
+<a name="line489"></a> * @param {Object} value The field&#39;s value.
+<a name="line490"></a> */
+<a name="line491"></a>goog.proto2.Message.prototype.set$Value = function(tag, value) {
+<a name="line492"></a>  if (goog.proto2.Util.conductChecks()) {
+<a name="line493"></a>    var field = this.getFieldByTag_(tag);
+<a name="line494"></a>
+<a name="line495"></a>    goog.proto2.Util.assert(!field.isRepeated(),
+<a name="line496"></a>                            &#39;Cannot call set on a repeated field&#39;);
+<a name="line497"></a>
+<a name="line498"></a>    this.checkFieldType_(field, value);
+<a name="line499"></a>  }
+<a name="line500"></a>
+<a name="line501"></a>  this.values_[tag] = value;
+<a name="line502"></a>};
+<a name="line503"></a>
 <a name="line504"></a>
-<a name="line505"></a>
-<a name="line506"></a>/**
-<a name="line507"></a> * Adds the value to the *repeating* field indicated by the given tag.
-<a name="line508"></a> *
-<a name="line509"></a> * GENERATED CODE USE ONLY. Basis of the add{Field} methods.
-<a name="line510"></a> *
-<a name="line511"></a> * @param {number} tag The field&#39;s tag index.
-<a name="line512"></a> * @param {Object} value The value to add.
-<a name="line513"></a> */
-<a name="line514"></a>goog.proto2.Message.prototype.add$Value = function(tag, value) {
-<a name="line515"></a>  if (goog.proto2.Util.conductChecks()) {
-<a name="line516"></a>    var field = this.getFieldByTag_(tag);
-<a name="line517"></a>
-<a name="line518"></a>    goog.proto2.Util.assert(field.isRepeated(),
-<a name="line519"></a>                            &#39;Cannot call add on a non-repeated field&#39;);
-<a name="line520"></a>
-<a name="line521"></a>    this.checkFieldType_(field, value);
-<a name="line522"></a>  }
-<a name="line523"></a>
-<a name="line524"></a>  if (!this.values_[tag]) {
-<a name="line525"></a>    this.values_[tag] = [];
-<a name="line526"></a>  }
-<a name="line527"></a>
-<a name="line528"></a>  this.values_[tag].push(value);
-<a name="line529"></a>};
+<a name="line505"></a>/**
+<a name="line506"></a> * Adds the value to the *repeating* field indicated by the given tag.
+<a name="line507"></a> *
+<a name="line508"></a> * GENERATED CODE USE ONLY. Basis of the add{Field} methods.
+<a name="line509"></a> *
+<a name="line510"></a> * @param {number} tag The field&#39;s tag index.
+<a name="line511"></a> * @param {Object} value The value to add.
+<a name="line512"></a> */
+<a name="line513"></a>goog.proto2.Message.prototype.add$Value = function(tag, value) {
+<a name="line514"></a>  if (goog.proto2.Util.conductChecks()) {
+<a name="line515"></a>    var field = this.getFieldByTag_(tag);
+<a name="line516"></a>
+<a name="line517"></a>    goog.proto2.Util.assert(field.isRepeated(),
+<a name="line518"></a>                            &#39;Cannot call add on a non-repeated field&#39;);
+<a name="line519"></a>
+<a name="line520"></a>    this.checkFieldType_(field, value);
+<a name="line521"></a>  }
+<a name="line522"></a>
+<a name="line523"></a>  if (!this.values_[tag]) {
+<a name="line524"></a>    this.values_[tag] = [];
+<a name="line525"></a>  }
+<a name="line526"></a>
+<a name="line527"></a>  this.values_[tag].push(value);
+<a name="line528"></a>};
+<a name="line529"></a>
 <a name="line530"></a>
-<a name="line531"></a>
-<a name="line532"></a>/**
-<a name="line533"></a> * Ensures that the value being assigned to the given field
-<a name="line534"></a> * is valid.
-<a name="line535"></a> *
-<a name="line536"></a> * @param {goog.proto2.FieldDescriptor} field The field being assigned.
-<a name="line537"></a> * @param {Object} value The value being assigned.
-<a name="line538"></a> * @private
-<a name="line539"></a> */
-<a name="line540"></a>goog.proto2.Message.prototype.checkFieldType_ = function(field, value) {
-<a name="line541"></a>  goog.proto2.Util.assert(value !== null);
-<a name="line542"></a>
-<a name="line543"></a>  if (field.getNativeType() == String) {
-<a name="line544"></a>    goog.proto2.Util.assert(typeof value === &#39;string&#39;,
-<a name="line545"></a>                            &#39;Expected value of type string&#39;);
-<a name="line546"></a>  } else if (field.getNativeType() == Boolean) {
-<a name="line547"></a>    goog.proto2.Util.assert(typeof value === &#39;boolean&#39;,
-<a name="line548"></a>                            &#39;Expected value of type boolean&#39;);
-<a name="line549"></a>  } else if (field.getNativeType() == Number) {
-<a name="line550"></a>    goog.proto2.Util.assert(typeof value === &#39;number&#39;,
-<a name="line551"></a>                            &#39;Expected value of type number&#39;);
-<a name="line552"></a>  } else {
-<a name="line553"></a>    if (field.getFieldType() == goog.proto2.Message.FieldType.ENUM) {
-<a name="line554"></a>      goog.proto2.Util.assert(typeof value === &#39;number&#39;,
-<a name="line555"></a>                              &#39;Expected an enum value, which is a number&#39;);
-<a name="line556"></a>    } else {
-<a name="line557"></a>      goog.proto2.Util.assert(value instanceof field.getNativeType(),
-<a name="line558"></a>                              &#39;Expected a matching message type&#39;);
-<a name="line559"></a>    }
-<a name="line560"></a>  }
-<a name="line561"></a>};
+<a name="line531"></a>/**
+<a name="line532"></a> * Ensures that the value being assigned to the given field
+<a name="line533"></a> * is valid.
+<a name="line534"></a> *
+<a name="line535"></a> * @param {goog.proto2.FieldDescriptor} field The field being assigned.
+<a name="line536"></a> * @param {Object} value The value being assigned.
+<a name="line537"></a> * @private
+<a name="line538"></a> */
+<a name="line539"></a>goog.proto2.Message.prototype.checkFieldType_ = function(field, value) {
+<a name="line540"></a>  goog.proto2.Util.assert(value !== null);
+<a name="line541"></a>
+<a name="line542"></a>  if (field.getNativeType() == String) {
+<a name="line543"></a>    goog.proto2.Util.assert(typeof value === &#39;string&#39;,
+<a name="line544"></a>                            &#39;Expected value of type string&#39;);
+<a name="line545"></a>  } else if (field.getNativeType() == Boolean) {
+<a name="line546"></a>    goog.proto2.Util.assert(typeof value === &#39;boolean&#39;,
+<a name="line547"></a>                            &#39;Expected value of type boolean&#39;);
+<a name="line548"></a>  } else if (field.getNativeType() == Number) {
+<a name="line549"></a>    goog.proto2.Util.assert(typeof value === &#39;number&#39;,
+<a name="line550"></a>                            &#39;Expected value of type number&#39;);
+<a name="line551"></a>  } else {
+<a name="line552"></a>    if (field.getFieldType() == goog.proto2.Message.FieldType.ENUM) {
+<a name="line553"></a>      goog.proto2.Util.assert(typeof value === &#39;number&#39;,
+<a name="line554"></a>                              &#39;Expected an enum value, which is a number&#39;);
+<a name="line555"></a>    } else {
+<a name="line556"></a>      goog.proto2.Util.assert(value instanceof field.getNativeType(),
+<a name="line557"></a>                              &#39;Expected a matching message type&#39;);
+<a name="line558"></a>    }
+<a name="line559"></a>  }
+<a name="line560"></a>};
+<a name="line561"></a>
 <a name="line562"></a>
-<a name="line563"></a>
-<a name="line564"></a>/**
-<a name="line565"></a> * Clears the field specified by tag.
-<a name="line566"></a> *
-<a name="line567"></a> * GENERATED CODE USE ONLY. Basis of the clear{Field} methods.
-<a name="line568"></a> *
-<a name="line569"></a> * @param {number} tag The tag of the field to clear.
-<a name="line570"></a> */
-<a name="line571"></a>goog.proto2.Message.prototype.clear$Field = function(tag) {
-<a name="line572"></a>  goog.proto2.Util.assert(this.getFieldByTag_(tag), &#39;Unknown field&#39;);
-<a name="line573"></a>  delete this.values_[tag];
-<a name="line574"></a>};
+<a name="line563"></a>/**
+<a name="line564"></a> * Clears the field specified by tag.
+<a name="line565"></a> *
+<a name="line566"></a> * GENERATED CODE USE ONLY. Basis of the clear{Field} methods.
+<a name="line567"></a> *
+<a name="line568"></a> * @param {number} tag The tag of the field to clear.
+<a name="line569"></a> */
+<a name="line570"></a>goog.proto2.Message.prototype.clear$Field = function(tag) {
+<a name="line571"></a>  goog.proto2.Util.assert(this.getFieldByTag_(tag), &#39;Unknown field&#39;);
+<a name="line572"></a>  delete this.values_[tag];
+<a name="line573"></a>};
+<a name="line574"></a>
 <a name="line575"></a>
-<a name="line576"></a>
-<a name="line577"></a>/**
-<a name="line578"></a> * Sets the metadata that represents the definition of this message.
-<a name="line579"></a> *
-<a name="line580"></a> * GENERATED CODE USE ONLY. Called when constructing message classes.
-<a name="line581"></a> *
-<a name="line582"></a> * @param {Function} messageType Constructor for the message type to
-<a name="line583"></a> *     which this metadata applies.
-<a name="line584"></a> * @param {Object} metadataObj The object containing the metadata.
-<a name="line585"></a> */
-<a name="line586"></a>goog.proto2.Message.set$Metadata = function(messageType, metadataObj) {
-<a name="line587"></a>  var fields = [];
-<a name="line588"></a>  var descriptorInfo;
-<a name="line589"></a>
-<a name="line590"></a>  for (var key in metadataObj) {
-<a name="line591"></a>    if (!metadataObj.hasOwnProperty(key)) {
-<a name="line592"></a>      continue;
-<a name="line593"></a>    }
-<a name="line594"></a>
-<a name="line595"></a>    goog.proto2.Util.assert(goog.string.isNumeric(key), &#39;Keys must be numeric&#39;);
-<a name="line596"></a>
-<a name="line597"></a>    if (key == 0) {
-<a name="line598"></a>      descriptorInfo = metadataObj[0];
-<a name="line599"></a>      continue;
-<a name="line600"></a>    }
-<a name="line601"></a>
-<a name="line602"></a>    // Create the field descriptor.
-<a name="line603"></a>    fields.push(
-<a name="line604"></a>        new goog.proto2.FieldDescriptor(messageType, key, metadataObj[key]));
-<a name="line605"></a>  }
-<a name="line606"></a>
-<a name="line607"></a>  goog.proto2.Util.assert(descriptorInfo);
-<a name="line608"></a>
-<a name="line609"></a>  // Create the descriptor.
-<a name="line610"></a>  messageType.descriptor_ =
-<a name="line611"></a>      new goog.proto2.Descriptor(messageType, descriptorInfo, fields);
-<a name="line612"></a>
-<a name="line613"></a>  messageType.getDescriptor = function() {
-<a name="line614"></a>    return messageType.descriptor_;
-<a name="line615"></a>  };
-<a name="line616"></a>};
+<a name="line576"></a>/**
+<a name="line577"></a> * Sets the metadata that represents the definition of this message.
+<a name="line578"></a> *
+<a name="line579"></a> * GENERATED CODE USE ONLY. Called when constructing message classes.
+<a name="line580"></a> *
+<a name="line581"></a> * @param {Function} messageType Constructor for the message type to
+<a name="line582"></a> *     which this metadata applies.
+<a name="line583"></a> * @param {Object} metadataObj The object containing the metadata.
+<a name="line584"></a> */
+<a name="line585"></a>goog.proto2.Message.set$Metadata = function(messageType, metadataObj) {
+<a name="line586"></a>  var fields = [];
+<a name="line587"></a>  var descriptorInfo;
+<a name="line588"></a>
+<a name="line589"></a>  for (var key in metadataObj) {
+<a name="line590"></a>    if (!metadataObj.hasOwnProperty(key)) {
+<a name="line591"></a>      continue;
+<a name="line592"></a>    }
+<a name="line593"></a>
+<a name="line594"></a>    goog.proto2.Util.assert(goog.string.isNumeric(key), &#39;Keys must be numeric&#39;);
+<a name="line595"></a>
+<a name="line596"></a>    if (key == 0) {
+<a name="line597"></a>      descriptorInfo = metadataObj[0];
+<a name="line598"></a>      continue;
+<a name="line599"></a>    }
+<a name="line600"></a>
+<a name="line601"></a>    // Create the field descriptor.
+<a name="line602"></a>    fields.push(
+<a name="line603"></a>        new goog.proto2.FieldDescriptor(messageType, key, metadataObj[key]));
+<a name="line604"></a>  }
+<a name="line605"></a>
+<a name="line606"></a>  goog.proto2.Util.assert(descriptorInfo);
+<a name="line607"></a>
+<a name="line608"></a>  // Create the descriptor.
+<a name="line609"></a>  messageType.descriptor_ =
+<a name="line610"></a>      new goog.proto2.Descriptor(messageType, descriptorInfo, fields);
+<a name="line611"></a>
+<a name="line612"></a>  messageType.getDescriptor = function() {
+<a name="line613"></a>    return messageType.descriptor_;
+<a name="line614"></a>  };
+<a name="line615"></a>};
 </pre>
 
 

@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,7 +88,7 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_ds_DataNodeList.html">goog.ds.DataNodeList</a></span></td><td><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_ds_BasicNodeList.html">goog.ds.BasicNodeList</a></span></td><td><span class="type"><a href="class_goog_ds_DataNodeList.html">goog.ds.DataNodeList</a></span></td></tr>
@@ -84,7 +96,7 @@
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 

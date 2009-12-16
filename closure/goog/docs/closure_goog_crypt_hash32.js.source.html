@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -124,106 +125,107 @@
 <a name="line81"></a>/**
 <a name="line82"></a> * Hashes a &quot;byte&quot; array to a 32-bit value using the supplied seed.
 <a name="line83"></a> * @param {Array.&lt;number&gt;} bytes Array of bytes.
-<a name="line84"></a> * @param {number} opt_offset The starting position to use for hash computation.
-<a name="line85"></a> * @param {number} opt_length Number of bytes that are used for hashing.
-<a name="line86"></a> * @param {number} opt_seed The seed.
-<a name="line87"></a> * @return {number} 32-bit hash.
-<a name="line88"></a> */
-<a name="line89"></a>goog.crypt.hash32.encodeByteArray = function(
-<a name="line90"></a>    bytes, opt_offset, opt_length, opt_seed) {
-<a name="line91"></a>  var offset = opt_offset || 0;
-<a name="line92"></a>  var length = opt_length || bytes.length;
-<a name="line93"></a>  var seed = opt_seed || goog.crypt.hash32.SEED32;
-<a name="line94"></a>
-<a name="line95"></a>  var mix = {
-<a name="line96"></a>    a: goog.crypt.hash32.CONSTANT32,
-<a name="line97"></a>    b: goog.crypt.hash32.CONSTANT32,
-<a name="line98"></a>    c: seed
-<a name="line99"></a>  };
-<a name="line100"></a>
-<a name="line101"></a>  var keylen;
-<a name="line102"></a>  for (keylen = length; keylen &gt;= 12; keylen -= 12, offset += 12) {
-<a name="line103"></a>    mix.a += goog.crypt.hash32.wordAt_(bytes, offset);
-<a name="line104"></a>    mix.b += goog.crypt.hash32.wordAt_(bytes, offset + 4);
-<a name="line105"></a>    mix.c += goog.crypt.hash32.wordAt_(bytes, offset + 8);
-<a name="line106"></a>    goog.crypt.hash32.mix32_(mix);
-<a name="line107"></a>  }
-<a name="line108"></a>  // Hash any remaining bytes
-<a name="line109"></a>  mix.c += length;
-<a name="line110"></a>  switch (keylen) {  // deal with rest.  Some cases fall through
-<a name="line111"></a>    case 11: mix.c += (bytes[offset + 10]) &lt;&lt; 24;
-<a name="line112"></a>    case 10: mix.c += (bytes[offset + 9] &amp; 0xff) &lt;&lt; 16;
-<a name="line113"></a>    case 9 : mix.c += (bytes[offset + 8] &amp; 0xff) &lt;&lt; 8;
-<a name="line114"></a>      // the first byte of c is reserved for the length
-<a name="line115"></a>    case 8 :
-<a name="line116"></a>      mix.b += goog.crypt.hash32.wordAt_(bytes, offset + 4);
-<a name="line117"></a>      mix.a += goog.crypt.hash32.wordAt_(bytes, offset);
-<a name="line118"></a>      break;
-<a name="line119"></a>    case 7 : mix.b += (bytes[offset + 6] &amp; 0xff) &lt;&lt; 16;
-<a name="line120"></a>    case 6 : mix.b += (bytes[offset + 5] &amp; 0xff) &lt;&lt; 8;
-<a name="line121"></a>    case 5 : mix.b += (bytes[offset + 4] &amp; 0xff);
-<a name="line122"></a>    case 4 :
-<a name="line123"></a>      mix.a += goog.crypt.hash32.wordAt_(bytes, offset);
-<a name="line124"></a>      break;
-<a name="line125"></a>    case 3 : mix.a += (bytes[offset + 2] &amp; 0xff) &lt;&lt; 16;
-<a name="line126"></a>    case 2 : mix.a += (bytes[offset + 1] &amp; 0xff) &lt;&lt; 8;
-<a name="line127"></a>    case 1 : mix.a += (bytes[offset + 0] &amp; 0xff);
-<a name="line128"></a>      // case 0 : nothing left to add
-<a name="line129"></a>  }
-<a name="line130"></a>  return goog.crypt.hash32.mix32_(mix);
-<a name="line131"></a>};
-<a name="line132"></a>
+<a name="line84"></a> * @param {number=} opt_offset The starting position to use for hash
+<a name="line85"></a> * computation.
+<a name="line86"></a> * @param {number=} opt_length Number of bytes that are used for hashing.
+<a name="line87"></a> * @param {number=} opt_seed The seed.
+<a name="line88"></a> * @return {number} 32-bit hash.
+<a name="line89"></a> */
+<a name="line90"></a>goog.crypt.hash32.encodeByteArray = function(
+<a name="line91"></a>    bytes, opt_offset, opt_length, opt_seed) {
+<a name="line92"></a>  var offset = opt_offset || 0;
+<a name="line93"></a>  var length = opt_length || bytes.length;
+<a name="line94"></a>  var seed = opt_seed || goog.crypt.hash32.SEED32;
+<a name="line95"></a>
+<a name="line96"></a>  var mix = {
+<a name="line97"></a>    a: goog.crypt.hash32.CONSTANT32,
+<a name="line98"></a>    b: goog.crypt.hash32.CONSTANT32,
+<a name="line99"></a>    c: seed
+<a name="line100"></a>  };
+<a name="line101"></a>
+<a name="line102"></a>  var keylen;
+<a name="line103"></a>  for (keylen = length; keylen &gt;= 12; keylen -= 12, offset += 12) {
+<a name="line104"></a>    mix.a += goog.crypt.hash32.wordAt_(bytes, offset);
+<a name="line105"></a>    mix.b += goog.crypt.hash32.wordAt_(bytes, offset + 4);
+<a name="line106"></a>    mix.c += goog.crypt.hash32.wordAt_(bytes, offset + 8);
+<a name="line107"></a>    goog.crypt.hash32.mix32_(mix);
+<a name="line108"></a>  }
+<a name="line109"></a>  // Hash any remaining bytes
+<a name="line110"></a>  mix.c += length;
+<a name="line111"></a>  switch (keylen) {  // deal with rest.  Some cases fall through
+<a name="line112"></a>    case 11: mix.c += (bytes[offset + 10]) &lt;&lt; 24;
+<a name="line113"></a>    case 10: mix.c += (bytes[offset + 9] &amp; 0xff) &lt;&lt; 16;
+<a name="line114"></a>    case 9 : mix.c += (bytes[offset + 8] &amp; 0xff) &lt;&lt; 8;
+<a name="line115"></a>      // the first byte of c is reserved for the length
+<a name="line116"></a>    case 8 :
+<a name="line117"></a>      mix.b += goog.crypt.hash32.wordAt_(bytes, offset + 4);
+<a name="line118"></a>      mix.a += goog.crypt.hash32.wordAt_(bytes, offset);
+<a name="line119"></a>      break;
+<a name="line120"></a>    case 7 : mix.b += (bytes[offset + 6] &amp; 0xff) &lt;&lt; 16;
+<a name="line121"></a>    case 6 : mix.b += (bytes[offset + 5] &amp; 0xff) &lt;&lt; 8;
+<a name="line122"></a>    case 5 : mix.b += (bytes[offset + 4] &amp; 0xff);
+<a name="line123"></a>    case 4 :
+<a name="line124"></a>      mix.a += goog.crypt.hash32.wordAt_(bytes, offset);
+<a name="line125"></a>      break;
+<a name="line126"></a>    case 3 : mix.a += (bytes[offset + 2] &amp; 0xff) &lt;&lt; 16;
+<a name="line127"></a>    case 2 : mix.a += (bytes[offset + 1] &amp; 0xff) &lt;&lt; 8;
+<a name="line128"></a>    case 1 : mix.a += (bytes[offset + 0] &amp; 0xff);
+<a name="line129"></a>      // case 0 : nothing left to add
+<a name="line130"></a>  }
+<a name="line131"></a>  return goog.crypt.hash32.mix32_(mix);
+<a name="line132"></a>};
 <a name="line133"></a>
-<a name="line134"></a>/**
-<a name="line135"></a> * Performs an inplace mix of an object with the integer properties (a, b, c)
-<a name="line136"></a> * and returns the final value of c.
-<a name="line137"></a> * @param {Object} mix Object with properties, a, b, and c.
-<a name="line138"></a> * @return {number} The end c-value for the mixing.
-<a name="line139"></a> * @private
-<a name="line140"></a> */
-<a name="line141"></a>goog.crypt.hash32.mix32_ = function(mix) {
-<a name="line142"></a>  var a = mix.a, b = mix.b, c = mix.c;
-<a name="line143"></a>  a -= b; a -= c; a ^= c &gt;&gt;&gt; 13;
-<a name="line144"></a>  b -= c; b -= a; b ^= a &lt;&lt; 8;
-<a name="line145"></a>  c -= a; c -= b; c ^= b &gt;&gt;&gt; 13;
-<a name="line146"></a>  a -= b; a -= c; a ^= c &gt;&gt;&gt; 12;
-<a name="line147"></a>  b -= c; b -= a; b ^= a &lt;&lt; 16;
-<a name="line148"></a>  c -= a; c -= b; c ^= b &gt;&gt;&gt; 5;
-<a name="line149"></a>  a -= b; a -= c; a ^= c &gt;&gt;&gt; 3;
-<a name="line150"></a>  b -= c; b -= a; b ^= a &lt;&lt; 10;
-<a name="line151"></a>  c -= a; c -= b; c ^= b &gt;&gt;&gt; 15;
-<a name="line152"></a>  mix.a = a; mix.b = b; mix.c = c;
-<a name="line153"></a>  return c;
-<a name="line154"></a>};
-<a name="line155"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Performs an inplace mix of an object with the integer properties (a, b, c)
+<a name="line137"></a> * and returns the final value of c.
+<a name="line138"></a> * @param {Object} mix Object with properties, a, b, and c.
+<a name="line139"></a> * @return {number} The end c-value for the mixing.
+<a name="line140"></a> * @private
+<a name="line141"></a> */
+<a name="line142"></a>goog.crypt.hash32.mix32_ = function(mix) {
+<a name="line143"></a>  var a = mix.a, b = mix.b, c = mix.c;
+<a name="line144"></a>  a -= b; a -= c; a ^= c &gt;&gt;&gt; 13;
+<a name="line145"></a>  b -= c; b -= a; b ^= a &lt;&lt; 8;
+<a name="line146"></a>  c -= a; c -= b; c ^= b &gt;&gt;&gt; 13;
+<a name="line147"></a>  a -= b; a -= c; a ^= c &gt;&gt;&gt; 12;
+<a name="line148"></a>  b -= c; b -= a; b ^= a &lt;&lt; 16;
+<a name="line149"></a>  c -= a; c -= b; c ^= b &gt;&gt;&gt; 5;
+<a name="line150"></a>  a -= b; a -= c; a ^= c &gt;&gt;&gt; 3;
+<a name="line151"></a>  b -= c; b -= a; b ^= a &lt;&lt; 10;
+<a name="line152"></a>  c -= a; c -= b; c ^= b &gt;&gt;&gt; 15;
+<a name="line153"></a>  mix.a = a; mix.b = b; mix.c = c;
+<a name="line154"></a>  return c;
+<a name="line155"></a>};
 <a name="line156"></a>
-<a name="line157"></a>/**
-<a name="line158"></a> * Returns the word at a given offset.  Treating an array of bytes a word at a
-<a name="line159"></a> * time is far more efficient than byte-by-byte.
-<a name="line160"></a> * @param {Array.&lt;number&gt;} bytes Array of bytes.
-<a name="line161"></a> * @param {number} offset Offset in the byte array.
-<a name="line162"></a> * @return {number} Integer value for the word.
-<a name="line163"></a> * @private
-<a name="line164"></a> */
-<a name="line165"></a>goog.crypt.hash32.wordAt_ = function(bytes, offset) {
-<a name="line166"></a>  var a = goog.crypt.hash32.toSigned_(bytes[offset + 0]);
-<a name="line167"></a>  var b = goog.crypt.hash32.toSigned_(bytes[offset + 1]);
-<a name="line168"></a>  var c = goog.crypt.hash32.toSigned_(bytes[offset + 2]);
-<a name="line169"></a>  var d = goog.crypt.hash32.toSigned_(bytes[offset + 3]);
-<a name="line170"></a>  return a + (b &lt;&lt; 8) + (c &lt;&lt; 16) + (d &lt;&lt; 24);
-<a name="line171"></a>};
-<a name="line172"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * Returns the word at a given offset.  Treating an array of bytes a word at a
+<a name="line160"></a> * time is far more efficient than byte-by-byte.
+<a name="line161"></a> * @param {Array.&lt;number&gt;} bytes Array of bytes.
+<a name="line162"></a> * @param {number} offset Offset in the byte array.
+<a name="line163"></a> * @return {number} Integer value for the word.
+<a name="line164"></a> * @private
+<a name="line165"></a> */
+<a name="line166"></a>goog.crypt.hash32.wordAt_ = function(bytes, offset) {
+<a name="line167"></a>  var a = goog.crypt.hash32.toSigned_(bytes[offset + 0]);
+<a name="line168"></a>  var b = goog.crypt.hash32.toSigned_(bytes[offset + 1]);
+<a name="line169"></a>  var c = goog.crypt.hash32.toSigned_(bytes[offset + 2]);
+<a name="line170"></a>  var d = goog.crypt.hash32.toSigned_(bytes[offset + 3]);
+<a name="line171"></a>  return a + (b &lt;&lt; 8) + (c &lt;&lt; 16) + (d &lt;&lt; 24);
+<a name="line172"></a>};
 <a name="line173"></a>
-<a name="line174"></a>/**
-<a name="line175"></a> * Converts an unsigned &quot;byte&quot; to signed, that is, convert a value in the range
-<a name="line176"></a> * (0, 2^8-1) to (-2^7, 2^7-1) in order to be compatible with Java&#39;s byte type.
-<a name="line177"></a> * @param {number} n Unsigned &quot;byte&quot; value.
-<a name="line178"></a> * @return {number} Signed &quot;byte&quot; value.
-<a name="line179"></a> * @private
-<a name="line180"></a> */
-<a name="line181"></a>goog.crypt.hash32.toSigned_ = function(n) {
-<a name="line182"></a>  return n &gt; 127 ? n - 256 : n;
-<a name="line183"></a>};
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * Converts an unsigned &quot;byte&quot; to signed, that is, convert a value in the range
+<a name="line177"></a> * (0, 2^8-1) to (-2^7, 2^7-1) in order to be compatible with Java&#39;s byte type.
+<a name="line178"></a> * @param {number} n Unsigned &quot;byte&quot; value.
+<a name="line179"></a> * @return {number} Signed &quot;byte&quot; value.
+<a name="line180"></a> * @private
+<a name="line181"></a> */
+<a name="line182"></a>goog.crypt.hash32.toSigned_ = function(n) {
+<a name="line183"></a>  return n &gt; 127 ? n - 256 : n;
+<a name="line184"></a>};
 </pre>
 
 

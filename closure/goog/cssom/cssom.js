@@ -50,7 +50,7 @@ goog.cssom.CssRuleType = {
 /**
  * Recursively gets all CSS as text, optionally starting from a given
  * CSSStyleSheet.
- * @param {CSSStyleSheet} opt_styleSheet The CSSStyleSheet.
+ * @param {CSSStyleSheet=} opt_styleSheet The CSSStyleSheet.
  * @return {string} css text.
  */
 goog.cssom.getAllCssText = function(opt_styleSheet) {
@@ -63,7 +63,7 @@ goog.cssom.getAllCssText = function(opt_styleSheet) {
  * Recursively gets all CSSStyleRules, optionally starting from a given
  * CSSStyleSheet.
  * Note that this excludes any CSSImportRules, CSSMediaRules, etc..
- * @param {CSSStyleSheet} opt_styleSheet The CSSStyleSheet.
+ * @param {CSSStyleSheet=} opt_styleSheet The CSSStyleSheet.
  * @return {Array.<CSSStyleRule>} A list of CSSStyleRules.
  */
 goog.cssom.getAllCssStyleRules = function(opt_styleSheet) {
@@ -106,8 +106,8 @@ goog.cssom.getCssRulesFromStyleSheet = function(styleSheet) {
  * want to return the sheets in the order of the cascade, therefore if we
  * encounter an import, we will splice that CSSStyleSheet object in front of
  * the CSSStyleSheet that contains it in the returned array of CSSStyleSheets.
- * @param {CSSStyleSheet} opt_styleSheet A CSSStyleSheet.
- * @param {boolean} opt_includeDisabled If true, includes disabled stylesheets,
+ * @param {CSSStyleSheet=} opt_styleSheet A CSSStyleSheet.
+ * @param {boolean=} opt_includeDisabled If true, includes disabled stylesheets,
  *    defaults to false.
  * @return {Array.<CSSStyleSheet>} A list of CSSStyleSheet objects.
  */
@@ -195,7 +195,7 @@ goog.cssom.getCssTextFromCssRule = function(cssRule) {
 /**
  * Get the index of the CSSRule in it's CSSStyleSheet.
  * @param {CSSRule} cssRule A CSSRule.
- * @param {CSSStyleSheet} opt_parentStyleSheet A reference to the stylesheet
+ * @param {CSSStyleSheet=} opt_parentStyleSheet A reference to the stylesheet
  *     object this cssRule belongs to.
  * @throws {Error} When we cannot get the parentStyleSheet.
  * @return {number} The index of the CSSRule, or -1.
@@ -249,9 +249,9 @@ goog.cssom.getParentStyleSheet = function(cssRule) {
  * object in IE. We do some trickery in getAllCssStyleRules to hack this in.
  * @param {CSSRule} cssRule A CSSRule.
  * @param {string} cssText The text for the new CSSRule.
- * @param {CSSStyleSheet} opt_parentStyleSheet A reference to the stylesheet
+ * @param {CSSStyleSheet=} opt_parentStyleSheet A reference to the stylesheet
  *     object this cssRule belongs to.
- * @param {number} opt_index The index of the cssRule in its parentStylesheet.
+ * @param {number=} opt_index The index of the cssRule in its parentStylesheet.
  * @throws {Error} If we cannot find a parentStyleSheet.
  * @throws {Error} If we cannot find a css rule index.
  */
@@ -279,7 +279,7 @@ goog.cssom.replaceCssRule = function(cssRule, cssText, opt_parentStyleSheet,
  * at a given index.
  * @param {CSSStyleSheet} cssStyleSheet The CSSRule's parentStyleSheet.
  * @param {string} cssText The text for the new CSSRule.
- * @param {number} opt_index The index of the cssRule in its parentStylesheet.
+ * @param {number=} opt_index The index of the cssRule in its parentStylesheet.
  * @throws {Error} If the css rule text appears to be ill-formatted.
  * TODO: Inserting at index 0 fails on Firefox 2 and 3 with an
  *     exception warning "Node cannot be inserted at the specified point in
@@ -336,7 +336,7 @@ goog.cssom.removeCssRule = function(cssStyleSheet, index) {
 /**
  * Appends a DOM node to HEAD containing the css text that's passed in.
  * @param {string} cssText CSS to add to the end of the document.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper user for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper user for
  *     document interactions.
  * @return {Element} The newly created STYLE element.
  */

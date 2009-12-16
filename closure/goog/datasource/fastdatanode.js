@@ -58,7 +58,7 @@ goog.require('goog.string');
 /**
  * Creates a new abstract data node.
  * @param {string} dataName Name of the datanode.
- * @param {goog.ds.DataNode} opt_parent Parent of this data node.
+ * @param {goog.ds.DataNode=} opt_parent Parent of this data node.
  * @constructor
  * @extends {goog.ds.DataNodeList}
  */
@@ -109,7 +109,7 @@ goog.ds.AbstractFastDataNode.prototype.getDataPath = function() {
  * Creates a new fast data node, using the properties of root.
  * @param {Object} root JSON-like object to initialize data node from.
  * @param {string} dataName Name of this data node.
- * @param {goog.ds.DataNode} opt_parent Parent of this data node.
+ * @param {goog.ds.DataNode=} opt_parent Parent of this data node.
  * @extends {goog.ds.AbstractFastDataNode}
  * @constructor
  */
@@ -144,7 +144,7 @@ goog.ds.FastDataNode.prototype.extendWith_ = function(object) {
  * @param {Object|number|boolean|string} object Object to initialize data
  *     node from.
  * @param {string} dataName Name of data node.
- * @param {goog.ds.DataNode} opt_parent Parent of data node.
+ * @param {goog.ds.DataNode=} opt_parent Parent of data node.
  * @return {goog.ds.AbstractFastDataNode} Data node representing object.
  */
 goog.ds.FastDataNode.fromJs = function(object, dataName, opt_parent) {
@@ -180,7 +180,7 @@ goog.ds.FastDataNode.prototype.set = function(value) {
 /**
  * Returns child nodes of this data node. Currently, only supports
  * returning all children.
- * @param {string} opt_selector Children to include in child list.
+ * @param {string=} opt_selector Children to include in child list.
  * @return {goog.ds.DataNode|goog.ds.DataNodeList} List of child nodes.
  */
 // TODO: This class implements DataNodeList but we don't support interfaces
@@ -214,7 +214,8 @@ goog.ds.FastDataNode.prototype.wrapChild_ = function(name) {
 /**
  * Get a child node by name.
  * @param {string} name Name of child node.
- * @param {boolean} opt_create Whether to create the child if it does not exist.
+ * @param {boolean=} opt_create Whether to create the child if it does not
+ * exist.
  * @return {goog.ds.DataNode} Child node.
  */
 goog.ds.FastDataNode.prototype.getChildNode = function(name, opt_create) {
@@ -319,7 +320,7 @@ goog.ds.FastDataNode.prototype.add = function(value) {
 /**
  * Gets the value of this data node (if called without opt_key) or
  * gets a child node (if called with opt_key).
- * @param {string} opt_key Name of child node.
+ * @param {string=} opt_key Name of child node.
  * @return {goog.ds.DataNode} This data node or a child node.
  */
 goog.ds.FastDataNode.prototype.get = function(opt_key) {
@@ -395,7 +396,7 @@ goog.ds.FastDataNode.prototype.removeNode = function(name) {
  * Creates a new data node wrapping a primitive value.
  * @param {number|boolean|string} value Value the value to wrap.
  * @param {string} dataName name Name of this data node.
- * @param {goog.ds.DataNode} opt_parent Parent of this data node.
+ * @param {goog.ds.DataNode=} opt_parent Parent of this data node.
  * @extends {goog.ds.AbstractFastDataNode}
  * @constructor
  */
@@ -493,7 +494,7 @@ goog.ds.PrimitiveFastDataNode.prototype.getJsObject = function() {
  * Creates a new list node from an array.
  * @param {Array} values values hold by this list node.
  * @param {string} dataName name of this node.
- * @param {goog.ds.DataNode} opt_parent parent of this node.
+ * @param {goog.ds.DataNode=} opt_parent parent of this node.
  * @extends {goog.ds.AbstractFastDataNode}
  * @constructor
  */
@@ -540,7 +541,8 @@ goog.ds.FastListNode.prototype.getChildNodes = function() {
 /**
  * Get a child node by name.
  * @param {string} key Name of child node.
- * @param {boolean} opt_create Whether to create the child if it does not exist.
+ * @param {boolean=} opt_create Whether to create the child if it does not
+ * exist.
  * @return {goog.ds.DataNode} Child node.
  */
 goog.ds.FastListNode.prototype.getChildNode = function(key, opt_create) {
@@ -689,7 +691,7 @@ goog.ds.FastListNode.prototype.add = function(value) {
 /**
  * Gets the value of this data node (if called without opt_key) or
  * gets a child node (if called with opt_key).
- * @param {string} opt_key Name of child node.
+ * @param {string=} opt_key Name of child node.
  * @return {Array|goog.ds.DataNode} Array of child nodes (if called without
  *     opt_key), or a named child node otherwise.
  */

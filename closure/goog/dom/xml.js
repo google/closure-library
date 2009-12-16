@@ -40,8 +40,8 @@ goog.dom.xml.MAX_ELEMENT_DEPTH = 256; // Same default as MSXML6.
 
 /**
  * Creates an XML document appropriate for the current JS runtime
- * @param {string} opt_rootTagName The root tag name.
- * @param {string} opt_namespaceUri Namespace URI of the document element.
+ * @param {string=} opt_rootTagName The root tag name.
+ * @param {string=} opt_namespaceUri Namespace URI of the document element.
  * @return {Document} The new document.
  */
 goog.dom.xml.createDocument = function(opt_rootTagName, opt_namespaceUri) {

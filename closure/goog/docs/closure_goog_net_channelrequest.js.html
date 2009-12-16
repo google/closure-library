@@ -17,6 +17,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -56,9 +57,9 @@
  object encapsulates the logic for making a single request, either for the
  forward channel, back channel, or test channel, to the server. It contains
  the logic for the three types of transports we use in the BrowserChannel:
- XMLHTTP, Trident ActiveX (ie only), and Image request. It provides retry
- and timeout detection. This class is part of the BrowserChannel
- implementation and is not for use by normal application code.
+ XMLHTTP, Trident ActiveX (ie only), and Image request. It provides timeout
+ detection. This class is part of the BrowserChannel implementation and is not
+ for use by normal application code.
   </div>
   
 
@@ -96,10 +97,7 @@ A new ChannelRequest is created for each request to the server.</div>
   </div>
 
 
-
-
-
-  <h2>Global Properties</h2>
+  <h2>Global Functions</h2>
 
 
 
@@ -116,34 +114,89 @@ A new ChannelRequest is created for each request to the server.</div>
 
 
 
-  <a name="goog.net.ChannelRequest.INACTIVE_CHANNEL_RETRY_FACTOR"></a>
 
   <td>
+    <a name="goog.net.ChannelRequest.errorStringFromCode"></a>
 
 
      <div class="arg">
-        <img align="left" src="static/images/blank.gif">
+       <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">INACTIVE_CHANNEL_RETRY_FACTOR</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-     </div>
+        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">errorStringFromCode<span class="args">(<span class="arg">errorCode</span>,&nbsp;<span class="arg">statusCode</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+      </div>
 
 
      <div class="entryOverview">
-       When retrying for an inactive channel, we will multiply the total delay by
-this number.
+       Returns a useful error string for debugging based on the specified error
+code.
      </div>
 
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">errorCode</span>
+        : <div class="fullType"><span class="type">goog.net.ChannelRequest.Error</span></div>
+        <div class="entryOverview">The error code.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">statusCode</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        <div class="entryOverview">The HTTP status code.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
+            The error string for the given code combination.
+      </div>
+  
+    </div>
+   
   </td>
 
 
   <td class="view-code">
-     <a href="closure_goog_net_channelrequest.js.source.html#line283">Code &raquo;</a>
+     <a href="closure_goog_net_channelrequest.js.source.html#line348">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -172,12 +225,12 @@ response.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_channelrequest.js.source.html#line377">Code &raquo;</a>
+     <a href="closure_goog_net_channelrequest.js.source.html#line376">Code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -205,12 +258,12 @@ response.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_channelrequest.js.source.html#line368">Code &raquo;</a>
+     <a href="closure_goog_net_channelrequest.js.source.html#line367">Code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -239,12 +292,12 @@ state interactive.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_channelrequest.js.source.html#line300">Code &raquo;</a>
+     <a href="closure_goog_net_channelrequest.js.source.html#line278">Code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -273,80 +326,12 @@ fire onreadystatechange during incremental loading of responseText.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_channelrequest.js.source.html#line291">Code &raquo;</a>
-  </td>
-     </tr>
-
-
-     <tr class="odd entry public">
-       <td class="access"></td>
-
-
-
-
-
-  <a name="goog.net.ChannelRequest.RETRY_DELAY_MS"></a>
-
-  <td>
-
-
-     <div class="arg">
-        <img align="left" src="static/images/blank.gif">
-
-        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">RETRY_DELAY_MS</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-     </div>
-
-
-     <div class="entryOverview">
-       Default timeout in MS before the initial retry. Subsequent retries will be
-slower.
-     </div>
-
-  </td>
-
-
-  <td class="view-code">
-     <a href="closure_goog_net_channelrequest.js.source.html#line267">Code &raquo;</a>
+     <a href="closure_goog_net_channelrequest.js.source.html#line269">Code &raquo;</a>
   </td>
      </tr>
 
 
      <tr class="even entry public">
-       <td class="access"></td>
-
-
-
-
-
-  <a name="goog.net.ChannelRequest.RETRY_DELAY_SEED"></a>
-
-  <td>
-
-
-     <div class="arg">
-        <img align="left" src="static/images/blank.gif">
-
-        <span class="entryNamespace">goog.net.ChannelRequest.</span><span class="entryName">RETRY_DELAY_SEED</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-     </div>
-
-
-     <div class="entryOverview">
-       We will add a random time between 0 and this number of MS to retries to
-the retry time for this request.
-     </div>
-
-  </td>
-
-
-  <td class="view-code">
-     <a href="closure_goog_net_channelrequest.js.source.html#line275">Code &raquo;</a>
-  </td>
-     </tr>
-
-
-     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -375,7 +360,7 @@ time limit for the request to not timeout.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_channelrequest.js.source.html#line259">Code &raquo;</a>
+     <a href="closure_goog_net_channelrequest.js.source.html#line261">Code &raquo;</a>
   </td>
      </tr>
 

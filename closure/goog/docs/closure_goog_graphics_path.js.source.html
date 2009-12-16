@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -225,7 +226,7 @@
 <a name="line182"></a>/**
 <a name="line183"></a> * Adds points to the path by drawing a straight line to each point.
 <a name="line184"></a> *
-<a name="line185"></a> * @param {number} var_args The coordinates of each destination point as x, y
+<a name="line185"></a> * @param {...number} var_args The coordinates of each destination point as x, y
 <a name="line186"></a> *     value pairs.
 <a name="line187"></a> * @return {!goog.graphics.Path} The path itself.
 <a name="line188"></a> */
@@ -254,7 +255,7 @@
 <a name="line211"></a> * specified using 3 points (6 coordinates) - two control points and the end
 <a name="line212"></a> * point of the curve.
 <a name="line213"></a> *
-<a name="line214"></a> * @param {number} var_args The coordinates specifiying each curve in sets of
+<a name="line214"></a> * @param {...number} var_args The coordinates specifiying each curve in sets of
 <a name="line215"></a> *     6 points: {@code [x1, y1]} the first control point, {@code [x2, y2]} the
 <a name="line216"></a> *     second control point and {@code [x, y]} the end point.
 <a name="line217"></a> * @return {!goog.graphics.Path} The path itself.

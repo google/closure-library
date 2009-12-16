@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -74,7 +75,7 @@
 <a name="line31"></a> * window (client) coordinates, and made to stay within the viewport.
 <a name="line32"></a> *
 <a name="line33"></a> * @param {number|goog.math.Coordinate} arg1 Left position or coordinate.
-<a name="line34"></a> * @param {number} opt_arg2 Top position if arg1 is a number representing the
+<a name="line34"></a> * @param {number=} opt_arg2 Top position if arg1 is a number representing the
 <a name="line35"></a> *     left position, ignored otherwise.
 <a name="line36"></a> * @constructor
 <a name="line37"></a> * @extends {goog.positioning.ClientPosition}
@@ -93,8 +94,8 @@
 <a name="line50"></a> * @param {goog.positioning.Corner} popupCorner The corner of the popup
 <a name="line51"></a> *     element that that should be positioned adjacent to the anchorElement.
 <a name="line52"></a> *     One of the goog.positioning.Corner constants.
-<a name="line53"></a> * @param {goog.math.Box} opt_margin A margin specified in pixels.
-<a name="line54"></a> * @param {goog.math.Size} opt_preferredSize Preferred size fo the element.
+<a name="line53"></a> * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+<a name="line54"></a> * @param {goog.math.Size=} opt_preferredSize Preferred size fo the element.
 <a name="line55"></a> */
 <a name="line56"></a>goog.positioning.ViewportClientPosition.prototype.reposition = function(
 <a name="line57"></a>    element, popupCorner, opt_margin, opt_preferredSize) {

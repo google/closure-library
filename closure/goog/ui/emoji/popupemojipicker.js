@@ -43,7 +43,7 @@ goog.require('goog.ui.emoji.EmojiPicker');
  * @param {string} defaultImgUrl Url of the img that should be used to fill up
  *     the cells in the emoji table, to prevent jittering. Should be the same
  *     size as the emoji.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @extends {goog.ui.Component}
  * @constructor
  */

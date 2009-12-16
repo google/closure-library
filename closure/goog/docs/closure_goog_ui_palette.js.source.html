@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -87,9 +88,9 @@
 <a name="line44"></a> *
 <a name="line45"></a> * @param {Array.&lt;Node&gt;} items Array of DOM nodes to be displayed as items
 <a name="line46"></a> *     in the palette grid (limited to one per cell).
-<a name="line47"></a> * @param {goog.ui.PaletteRenderer} opt_renderer Renderer used to render or
+<a name="line47"></a> * @param {goog.ui.PaletteRenderer=} opt_renderer Renderer used to render or
 <a name="line48"></a> *     decorate the palette; defaults to {@link goog.ui.PaletteRenderer}.
-<a name="line49"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+<a name="line49"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
 <a name="line50"></a> *     document interaction.
 <a name="line51"></a> * @constructor
 <a name="line52"></a> * @extends {goog.ui.Control}
@@ -393,7 +394,7 @@
 <a name="line350"></a> * been rendered.
 <a name="line351"></a> * @param {goog.math.Size|number} size Either a size object or the number of
 <a name="line352"></a> *     columns.
-<a name="line353"></a> * @param {number} opt_rows The number of rows (optional).
+<a name="line353"></a> * @param {number=} opt_rows The number of rows (optional).
 <a name="line354"></a> */
 <a name="line355"></a>goog.ui.Palette.prototype.setSize = function(size, opt_rows) {
 <a name="line356"></a>  if (this.getElement()) {

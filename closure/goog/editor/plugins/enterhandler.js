@@ -24,7 +24,6 @@ goog.require('goog.dom.AbstractRange');
 goog.require('goog.dom.NodeOffset');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.classes');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
@@ -410,7 +409,7 @@ goog.editor.plugins.EnterHandler.isBrElem = function(node) {
  * don't want to format the h2, but we do want to format the P that is
  * created on enter.  The P node is not available until keyup.
  * @param {goog.dom.TagName} tag The tag name to convert to.
- * @param {boolean} opt_keyUp Whether the function is being called on key up.
+ * @param {boolean=} opt_keyUp Whether the function is being called on key up.
  *     When called on key up, the cursor is in the newly created node, so the
  *     semantics for when to change it to a block are different.  Specifically,
  *     if the resulting node contains only a BR, it is converted to <tag>.

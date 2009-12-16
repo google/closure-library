@@ -17,6 +17,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -135,7 +136,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_logger</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span><span>&nbsp;|&nbsp;</span><span class="type">function(Object)</span></div>
+        : <div class="fullType"><span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span><span>&nbsp;|&nbsp;</span><span class="type">function(Object)=</span></div>
         <div class="entryOverview">The logger to use to catch errors or a function to call instead. The function takes a single parameter that contains information about the error.</div>
      </td>
    </tr>
@@ -143,7 +144,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_cancel</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to stop the error from reaching the browser.</div>
      </td>
    </tr>
@@ -151,7 +152,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_target</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object that fires onerror events.</div>
      </td>
    </tr>
@@ -192,8 +193,12 @@
 
 
      <div class="entryOverview">
-       Creates a string representing an object and all its properties and nested
-objects.
+       Creates a string representing a given primitive or object, and for an
+object, all its properties and nested objects.  WARNING: If an object is
+given, it and all its nested objects will be modified.  To detect reference
+cycles, this method identifies objects using goog.getHashCode(), so every
+object it touches will gain a property whose name begins with
+&#39;closure_hashCode_&#39;.
      </div>
 
 
@@ -213,7 +218,7 @@ objects.
    <tr class="even">
      <td>
         <span class="entryName">obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">null</span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>
+        : <div class="fullType"><span class="type">*</span></div>
         <div class="entryOverview">Object to expose.</div>
      </td>
    </tr>
@@ -221,8 +226,8 @@ objects.
    <tr class="odd">
      <td>
         <span class="entryName">opt_showFn</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Show the functions as well as the properties, default is false.</div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
+        <div class="entryOverview">Also show properties that are functions (by default, functions are omitted).</div>
      </td>
    </tr>
   </table>
@@ -230,7 +235,7 @@ objects.
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>&nbsp;
-            The string representation of <code>obj</code>.
+            A string representation of <code>obj</code>.
       </div>
   
     </div>
@@ -239,7 +244,7 @@ objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line103">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line107">code &raquo;</a>
   </td>
      </tr>
 
@@ -296,7 +301,7 @@ and optionally adds an extra message.
    <tr class="odd">
      <td>
         <span class="entryName">opt_message</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">optional additional message to add to the error.</div>
      </td>
    </tr>
@@ -314,7 +319,7 @@ and optionally adds an extra message.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line240">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line247">code &raquo;</a>
   </td>
      </tr>
 
@@ -369,7 +374,7 @@ and optionally adds an extra message.
    <tr class="odd">
      <td>
         <span class="entryName">opt_showFn</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Show the functions as well as the properties, default is false.</div>
      </td>
    </tr>
@@ -452,7 +457,7 @@ and optionally adds an extra message.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line159">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line165">code &raquo;</a>
   </td>
      </tr>
 
@@ -508,7 +513,7 @@ error with a stack trace.
    <tr class="odd">
      <td>
         <span class="entryName">opt_fn</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        : <div class="fullType"><span class="type">Function=</span></div>
         <div class="entryOverview">Optional function to start stack trace from.</div>
      </td>
    </tr>
@@ -526,7 +531,7 @@ error with a stack trace.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line179">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line185">code &raquo;</a>
   </td>
      </tr>
 
@@ -591,7 +596,7 @@ error with a stack trace.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line395">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line402">code &raquo;</a>
   </td>
      </tr>
 
@@ -639,7 +644,7 @@ from a specified function that&#39;s currently on the call stack.
    <tr class="even">
      <td>
         <span class="entryName">opt_fn</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        : <div class="fullType"><span class="type">Function=</span></div>
         <div class="entryOverview">Optional function to start getting the trace from. If not provided, defaults to the function that called this.</div>
      </td>
    </tr>
@@ -657,7 +662,7 @@ from a specified function that&#39;s currently on the call stack.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line309">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line316">code &raquo;</a>
   </td>
      </tr>
 
@@ -730,7 +735,7 @@ from a specified function that&#39;s currently on the call stack.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line321">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line328">code &raquo;</a>
   </td>
      </tr>
 
@@ -778,7 +783,7 @@ catching circular references or getting the args.
    <tr class="even">
      <td>
         <span class="entryName">opt_depth</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Optional maximum depth to trace back to.</div>
      </td>
    </tr>
@@ -796,7 +801,7 @@ catching circular references or getting the args.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line264">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line271">code &raquo;</a>
   </td>
      </tr>
 
@@ -863,7 +868,7 @@ output strings of a testcase.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line418">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line425">code &raquo;</a>
   </td>
      </tr>
 
@@ -928,7 +933,7 @@ output strings of a testcase.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line203">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line209">code &raquo;</a>
   </td>
      </tr>
 
@@ -976,7 +981,7 @@ output strings of a testcase.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line299">Code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line306">Code &raquo;</a>
   </td>
      </tr>
 
@@ -1009,7 +1014,7 @@ output strings of a testcase.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line432">Code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line439">Code &raquo;</a>
   </td>
      </tr>
 

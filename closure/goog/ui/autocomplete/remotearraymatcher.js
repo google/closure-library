@@ -32,7 +32,7 @@ goog.require('goog.ui.AutoComplete');
  * An array matcher that requests matches via ajax.
  * @param {string} url The Uri which generates the auto complete matches.  The
  *     search term is passed to the server as the 'token' query param.
- * @param {boolean} opt_noSimilar If true, request that the server does not do
+ * @param {boolean=} opt_noSimilar If true, request that the server does not do
  *     similarity matches for the input token against the dictionary.
  *     The value is sent to the server as the 'use_similar' query param which is
  *     either "1" (opt_noSimilar==false) or "0" (opt_noSimilar==true).
@@ -149,7 +149,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.setTimeoutInterval =
  * @param {string} token Current token in autocomplete.
  * @param {number} maxMatches Maximum number of matches required.
  * @param {boolean} useSimilar A hint to the server.
- * @param {string} opt_fullString Complete text in the input element.
+ * @param {string=} opt_fullString Complete text in the input element.
  * @return {?string} The complete url. Return null if no request should be sent.
  * @protected
  */
@@ -170,7 +170,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.buildUrl = function(uri,
  * @param {string} token Current token in autocomplete.
  * @param {number} maxMatches Maximum number of matches required.
  * @param {boolean} useSimilar A hint to the server.
- * @param {string} opt_fullString Complete text in the input element.
+ * @param {string=} opt_fullString Complete text in the input element.
  * @return {boolean} Whether new matches be requested.
  * @protected
  */
@@ -225,7 +225,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.xhrCallback = function(token,
  *     responsible for limiting the number of matches that are returned.
  * @param {Function} matchHandler Callback to execute on the result after
  *     matching.
- * @param {string} opt_fullString The full string from the input box.
+ * @param {string=} opt_fullString The full string from the input box.
  */
 goog.ui.AutoComplete.RemoteArrayMatcher.prototype.requestMatchingRows =
     function(token, maxMatches, matchHandler, opt_fullString) {

@@ -31,8 +31,8 @@ goog.require('goog.math.Coordinate');
  * Inherits from goog.math.Coordinate so that a Vec2 may be passed in to any
  * function that requires a Coordinate.
  *
- * @param {number} opt_x The x coordinate for the vector.
- * @param {number} opt_y The y coordinate for the vector.
+ * @param {number=} opt_x The x coordinate for the vector.
+ * @param {number=} opt_y The y coordinate for the vector.
  * @constructor
  * @extends {goog.math.Coordinate}
  */

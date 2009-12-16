@@ -27,9 +27,9 @@ goog.require('goog.math');
  * Creates a performance timer that runs test functions a number of times to
  * generate timing samples, and provides performance statistics (minimum,
  * maximum, average, and standard deviation).
- * @param {number} opt_numSamples Number of times to run the test function;
+ * @param {number=} opt_numSamples Number of times to run the test function;
  *     defaults to 10.
- * @param {number} opt_timeoutInterval Number of milliseconds after which the
+ * @param {number=} opt_timeoutInterval Number of milliseconds after which the
  *     test is to be aborted; defaults to 5 seconds (5,000ms).
  * @constructor
  */

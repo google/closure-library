@@ -578,7 +578,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.scrollCursorIntoViewGecko_ =
  *     or greater will be moved to the second half.  If positionNode is an
  *     empty element, the dom will be split at that element, with positionNode
  *     ending up in the second half.  positionOffset must be 0 in this case.
- * @param {Node} opt_root Node at which to stop splitting the dom (the root
+ * @param {Node=} opt_root Node at which to stop splitting the dom (the root
  *     is also split).
  * @return {Node} The node containing the second half of the tree.
  * @private
@@ -721,7 +721,7 @@ goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_ = function(
  * Finds the first A element in a traversal from the input node.  The input
  * node itself is not included in the search.
  * @param {Node} node The node to start searching from.
- * @param {boolean} opt_useFirstChild Whether to traverse along the first child
+ * @param {boolean=} opt_useFirstChild Whether to traverse along the first child
  *     (true) or last child (false).
  * @return {Node} The first anchor node found in the search, or null if none
  *     was found.

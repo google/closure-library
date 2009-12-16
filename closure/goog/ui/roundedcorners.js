@@ -66,9 +66,9 @@ goog.ui.RoundedCorners = function(servletUri) {
  * @param {Element} element The element to provide with rounded corners.
  * @param {string} servletUri The uri to the RoundedCornerServlet for
  * fetching the rounded corner images.
- * @param {goog.math.Size} opt_borderThickness The rounded corners border
+ * @param {goog.math.Size=} opt_borderThickness The rounded corners border
  * see setBorderThickness().  If no value is supplied, (5, 5) will be used.
- * @param {number} opt_corners The corners to round.  A bitwise integer.  If no
+ * @param {number=} opt_corners The corners to round.  A bitwise integer.  If no
  * corners are specified, goog.ui.RoundedCorners.Corners.ALL will be used.
  */
 goog.ui.RoundedCorners.roundElement = function(

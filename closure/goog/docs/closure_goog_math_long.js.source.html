@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -175,7 +176,7 @@
 <a name="line132"></a> * Returns a Long representation of the given string, written using the given
 <a name="line133"></a> * radix.
 <a name="line134"></a> * @param {string} str The textual representation of the Long.
-<a name="line135"></a> * @param {number} opt_radix The radix in which the text is written.
+<a name="line135"></a> * @param {number=} opt_radix The radix in which the text is written.
 <a name="line136"></a> * @return {goog.math.Long} The corresponding Long value.
 <a name="line137"></a> */
 <a name="line138"></a>goog.math.Long.fromString = function(str, opt_radix) {
@@ -306,7 +307,7 @@
 <a name="line263"></a>
 <a name="line264"></a>
 <a name="line265"></a>/**
-<a name="line266"></a> * @param {number} opt_radix The radix in which the text should be written.
+<a name="line266"></a> * @param {number=} opt_radix The radix in which the text should be written.
 <a name="line267"></a> * @return {string} The textual representation of this value.
 <a name="line268"></a> */
 <a name="line269"></a>goog.math.Long.prototype.toString = function(opt_radix) {

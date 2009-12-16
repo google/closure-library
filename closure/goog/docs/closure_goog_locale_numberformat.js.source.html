@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -82,7 +83,7 @@
 <a name="line39"></a> * Apply a predefined pattern to NumberFormat object.
 <a name="line40"></a> * @param {number} patternType The number that indicates a predefined number
 <a name="line41"></a> *     format pattern.
-<a name="line42"></a> * @param {string} opt_currency Optional international currency code. This
+<a name="line42"></a> * @param {string=} opt_currency Optional international currency code. This
 <a name="line43"></a> *     determines the currency code/symbol used in format/parse. If not given,
 <a name="line44"></a> *     the currency code for current locale will be used.
 <a name="line45"></a> * @deprecated Use goog.i18n.NumberFormat.
@@ -111,7 +112,7 @@
 <a name="line68"></a>/**
 <a name="line69"></a> * Apply a pattern to NumberFormat object.
 <a name="line70"></a> * @param {string} pattern The number format pattern string.
-<a name="line71"></a> * @param {string} opt_currency Optional international currency code. This
+<a name="line71"></a> * @param {string=} opt_currency Optional international currency code. This
 <a name="line72"></a> *     determines the currency code/symbol used in format/parse. If not given,
 <a name="line73"></a> *     the currency code for current locale will be used.
 <a name="line74"></a> * @deprecated Use goog.i18n.NumberFormat.
@@ -153,7 +154,7 @@
 <a name="line110"></a> * parsing stops after the call. If an error occurs, opt_pos won&#39;t be updated.
 <a name="line111"></a> *
 <a name="line112"></a> * @param {string} text the string to be parsed.
-<a name="line113"></a> * @param {Array} opt_pos position to pass in and get back.
+<a name="line113"></a> * @param {Array=} opt_pos position to pass in and get back.
 <a name="line114"></a> * @return {number} Parsed number, or NaN if the parse fails.
 <a name="line115"></a> * @deprecated Use goog.i18n.NumberFormat.prototype.parse.
 <a name="line116"></a> */

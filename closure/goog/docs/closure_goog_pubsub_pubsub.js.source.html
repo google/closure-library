@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -158,7 +159,7 @@
 <a name="line115"></a> * @param {string} topic Topic to subscribe to.
 <a name="line116"></a> * @param {Function} fn Function to be invoked when a message is published to
 <a name="line117"></a> *     the given topic.
-<a name="line118"></a> * @param {Object} opt_context Object in whose context the function is to be
+<a name="line118"></a> * @param {Object=} opt_context Object in whose context the function is to be
 <a name="line119"></a> *     called (the global scope if none).
 <a name="line120"></a> * @return {number} Subscription key.
 <a name="line121"></a> */
@@ -194,7 +195,7 @@
 <a name="line151"></a> * @param {string} topic Topic to subscribe to.
 <a name="line152"></a> * @param {Function} fn Function to be invoked once and then unsubscribed when
 <a name="line153"></a> *     a message is published to the given topic.
-<a name="line154"></a> * @param {Object} opt_context Object in whose context the function is to be
+<a name="line154"></a> * @param {Object=} opt_context Object in whose context the function is to be
 <a name="line155"></a> *     called (the global scope if none).
 <a name="line156"></a> * @return {number} Subscription key.
 <a name="line157"></a> */
@@ -214,7 +215,7 @@
 <a name="line171"></a> *
 <a name="line172"></a> * @param {string} topic Topic to unsubscribe from.
 <a name="line173"></a> * @param {Function} fn Function to unsubscribe.
-<a name="line174"></a> * @param {Object} opt_context Object in whose context the function was to be
+<a name="line174"></a> * @param {Object=} opt_context Object in whose context the function was to be
 <a name="line175"></a> *     called (the global scope if none).
 <a name="line176"></a> * @return {boolean} Whether a matching subscription was removed.
 <a name="line177"></a> */
@@ -277,95 +278,96 @@
 <a name="line234"></a> * the functions throws an uncaught error, publishing is aborted.
 <a name="line235"></a> *
 <a name="line236"></a> * @param {string} topic Topic to publish to.
-<a name="line237"></a> * @param {*} var_args Arguments that are applied to each subscription function.
-<a name="line238"></a> * @return {boolean} Whether any subscriptions were called.
-<a name="line239"></a> */
-<a name="line240"></a>goog.pubsub.PubSub.prototype.publish = function(topic, var_args) {
-<a name="line241"></a>  var keys = this.topics_[topic];
-<a name="line242"></a>  if (keys) {
-<a name="line243"></a>    // We must lock subscriptions and remove them at the end, so we don&#39;t
-<a name="line244"></a>    // adversely affect the performance of the common case by cloning the key
-<a name="line245"></a>    // array.
-<a name="line246"></a>    this.publishDepth_++;
-<a name="line247"></a>
-<a name="line248"></a>    // For each key in the list of subscription keys for the topic, apply the
-<a name="line249"></a>    // function to the arguments in the appropriate context.  The length of the
-<a name="line250"></a>    // array mush be fixed during the iteration, since subscribers may add new
-<a name="line251"></a>    // subscribers during publishing.
-<a name="line252"></a>    var args = goog.array.slice(arguments, 1);
-<a name="line253"></a>    for (var i = 0, len = keys.length; i &lt; len; i++) {
-<a name="line254"></a>      var key = keys[i];
-<a name="line255"></a>      this.subscriptions_[key + 1].apply(this.subscriptions_[key + 2], args);
-<a name="line256"></a>    }
-<a name="line257"></a>
-<a name="line258"></a>    // Unlock subscriptions.
-<a name="line259"></a>    this.publishDepth_--;
-<a name="line260"></a>
-<a name="line261"></a>    if (this.pendingKeys_ &amp;&amp; this.publishDepth_ == 0) {
-<a name="line262"></a>      var pendingKey;
-<a name="line263"></a>      while ((pendingKey = this.pendingKeys_.pop())) {
-<a name="line264"></a>        this.unsubscribeByKey(pendingKey);
-<a name="line265"></a>      }
-<a name="line266"></a>    }
-<a name="line267"></a>
-<a name="line268"></a>    // At least one subscriber was called.
-<a name="line269"></a>    return i != 0;
-<a name="line270"></a>  }
-<a name="line271"></a>
-<a name="line272"></a>  // No subscribers were found.
-<a name="line273"></a>  return false;
-<a name="line274"></a>};
-<a name="line275"></a>
+<a name="line237"></a> * @param {...*} var_args Arguments that are applied to each subscription
+<a name="line238"></a> *     function.
+<a name="line239"></a> * @return {boolean} Whether any subscriptions were called.
+<a name="line240"></a> */
+<a name="line241"></a>goog.pubsub.PubSub.prototype.publish = function(topic, var_args) {
+<a name="line242"></a>  var keys = this.topics_[topic];
+<a name="line243"></a>  if (keys) {
+<a name="line244"></a>    // We must lock subscriptions and remove them at the end, so we don&#39;t
+<a name="line245"></a>    // adversely affect the performance of the common case by cloning the key
+<a name="line246"></a>    // array.
+<a name="line247"></a>    this.publishDepth_++;
+<a name="line248"></a>
+<a name="line249"></a>    // For each key in the list of subscription keys for the topic, apply the
+<a name="line250"></a>    // function to the arguments in the appropriate context.  The length of the
+<a name="line251"></a>    // array mush be fixed during the iteration, since subscribers may add new
+<a name="line252"></a>    // subscribers during publishing.
+<a name="line253"></a>    var args = goog.array.slice(arguments, 1);
+<a name="line254"></a>    for (var i = 0, len = keys.length; i &lt; len; i++) {
+<a name="line255"></a>      var key = keys[i];
+<a name="line256"></a>      this.subscriptions_[key + 1].apply(this.subscriptions_[key + 2], args);
+<a name="line257"></a>    }
+<a name="line258"></a>
+<a name="line259"></a>    // Unlock subscriptions.
+<a name="line260"></a>    this.publishDepth_--;
+<a name="line261"></a>
+<a name="line262"></a>    if (this.pendingKeys_ &amp;&amp; this.publishDepth_ == 0) {
+<a name="line263"></a>      var pendingKey;
+<a name="line264"></a>      while ((pendingKey = this.pendingKeys_.pop())) {
+<a name="line265"></a>        this.unsubscribeByKey(pendingKey);
+<a name="line266"></a>      }
+<a name="line267"></a>    }
+<a name="line268"></a>
+<a name="line269"></a>    // At least one subscriber was called.
+<a name="line270"></a>    return i != 0;
+<a name="line271"></a>  }
+<a name="line272"></a>
+<a name="line273"></a>  // No subscribers were found.
+<a name="line274"></a>  return false;
+<a name="line275"></a>};
 <a name="line276"></a>
-<a name="line277"></a>/**
-<a name="line278"></a> * Clears the subscription list for a topic, or all topics if unspecified.
-<a name="line279"></a> * @param {string} opt_topic Topic to clear (all topics if unspecified).
-<a name="line280"></a> */
-<a name="line281"></a>goog.pubsub.PubSub.prototype.clear = function(opt_topic) {
-<a name="line282"></a>  if (opt_topic) {
-<a name="line283"></a>    var keys = this.topics_[opt_topic];
-<a name="line284"></a>    if (keys) {
-<a name="line285"></a>      goog.array.forEach(keys, this.unsubscribeByKey, this);
-<a name="line286"></a>      delete this.topics_[opt_topic];
-<a name="line287"></a>    }
-<a name="line288"></a>  } else {
-<a name="line289"></a>    this.subscriptions_.length = 0;
-<a name="line290"></a>    this.topics_ = {};
-<a name="line291"></a>    // We don&#39;t reset key_ on purpose, because we want subscription keys to be
-<a name="line292"></a>    // unique throughout the lifetime of the application.  Reusing subscription
-<a name="line293"></a>    // keys could lead to subtle errors in client code.
-<a name="line294"></a>  }
-<a name="line295"></a>};
-<a name="line296"></a>
+<a name="line277"></a>
+<a name="line278"></a>/**
+<a name="line279"></a> * Clears the subscription list for a topic, or all topics if unspecified.
+<a name="line280"></a> * @param {string=} opt_topic Topic to clear (all topics if unspecified).
+<a name="line281"></a> */
+<a name="line282"></a>goog.pubsub.PubSub.prototype.clear = function(opt_topic) {
+<a name="line283"></a>  if (opt_topic) {
+<a name="line284"></a>    var keys = this.topics_[opt_topic];
+<a name="line285"></a>    if (keys) {
+<a name="line286"></a>      goog.array.forEach(keys, this.unsubscribeByKey, this);
+<a name="line287"></a>      delete this.topics_[opt_topic];
+<a name="line288"></a>    }
+<a name="line289"></a>  } else {
+<a name="line290"></a>    this.subscriptions_.length = 0;
+<a name="line291"></a>    this.topics_ = {};
+<a name="line292"></a>    // We don&#39;t reset key_ on purpose, because we want subscription keys to be
+<a name="line293"></a>    // unique throughout the lifetime of the application.  Reusing subscription
+<a name="line294"></a>    // keys could lead to subtle errors in client code.
+<a name="line295"></a>  }
+<a name="line296"></a>};
 <a name="line297"></a>
-<a name="line298"></a>/**
-<a name="line299"></a> * Returns the number of subscriptions to the given topic (or all topics if
-<a name="line300"></a> * unspecified).
-<a name="line301"></a> * @param {string} opt_topic The topic (all topics if unspecified).
-<a name="line302"></a> * @return {number} Number of subscriptions to the topic.
-<a name="line303"></a> */
-<a name="line304"></a>goog.pubsub.PubSub.prototype.getCount = function(opt_topic) {
-<a name="line305"></a>  if (opt_topic) {
-<a name="line306"></a>    var keys = this.topics_[opt_topic];
-<a name="line307"></a>    return keys ? keys.length : 0;
-<a name="line308"></a>  }
-<a name="line309"></a>
-<a name="line310"></a>  var count = 0;
-<a name="line311"></a>  for (var topic in this.topics_) {
-<a name="line312"></a>    count += this.getCount(topic);
-<a name="line313"></a>  }
-<a name="line314"></a>
-<a name="line315"></a>  return count;
-<a name="line316"></a>};
-<a name="line317"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * Returns the number of subscriptions to the given topic (or all topics if
+<a name="line301"></a> * unspecified).
+<a name="line302"></a> * @param {string=} opt_topic The topic (all topics if unspecified).
+<a name="line303"></a> * @return {number} Number of subscriptions to the topic.
+<a name="line304"></a> */
+<a name="line305"></a>goog.pubsub.PubSub.prototype.getCount = function(opt_topic) {
+<a name="line306"></a>  if (opt_topic) {
+<a name="line307"></a>    var keys = this.topics_[opt_topic];
+<a name="line308"></a>    return keys ? keys.length : 0;
+<a name="line309"></a>  }
+<a name="line310"></a>
+<a name="line311"></a>  var count = 0;
+<a name="line312"></a>  for (var topic in this.topics_) {
+<a name="line313"></a>    count += this.getCount(topic);
+<a name="line314"></a>  }
+<a name="line315"></a>
+<a name="line316"></a>  return count;
+<a name="line317"></a>};
 <a name="line318"></a>
-<a name="line319"></a>/** @inheritDoc */
-<a name="line320"></a>goog.pubsub.PubSub.prototype.disposeInternal = function() {
-<a name="line321"></a>  goog.pubsub.PubSub.superClass_.disposeInternal.call(this);
-<a name="line322"></a>  delete this.subscriptions_;
-<a name="line323"></a>  delete this.topics_;
-<a name="line324"></a>  delete this.pendingKeys_;
-<a name="line325"></a>};
+<a name="line319"></a>
+<a name="line320"></a>/** @inheritDoc */
+<a name="line321"></a>goog.pubsub.PubSub.prototype.disposeInternal = function() {
+<a name="line322"></a>  goog.pubsub.PubSub.superClass_.disposeInternal.call(this);
+<a name="line323"></a>  delete this.subscriptions_;
+<a name="line324"></a>  delete this.topics_;
+<a name="line325"></a>  delete this.pendingKeys_;
+<a name="line326"></a>};
 </pre>
 
 

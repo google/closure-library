@@ -24,7 +24,6 @@ goog.provide('goog.net.tmpnetwork');
 
 goog.require('goog.Uri');
 goog.require('goog.net.ChannelDebug');
-goog.require('goog.userAgent');
 
 
 /**
@@ -54,7 +53,7 @@ goog.net.GOOGLECOM_TIMEOUT = 10000;
  * error.
  *
  * @param {Function} callback The function to call back with results.
- * @param {goog.Uri?} opt_imageUri The URI of an image to use for the
+ * @param {goog.Uri?=} opt_imageUri The URI of an image to use for the
  *     network test.  You *must* provide an image URI; the default behavior is
  *     provided for compatibility with existing code, but the GWS team does not
  *     want people using images served off of google.com for this purpose. The
@@ -81,7 +80,7 @@ goog.net.testGoogleCom = function(callback, opt_imageUri) {
  * @param {number} timeout Milliseconds before giving up.
  * @param {Function} callback Function to call with results.
  * @param {number} retries The number of times to retry.
- * @param {number} opt_pauseBetweenRetriesMS Optional number of milliseconds
+ * @param {number=} opt_pauseBetweenRetriesMS Optional number of milliseconds
  *     between retries - defaults to 0.
  */
 goog.net.testLoadImageWithRetries = function(url, timeout, callback, retries,

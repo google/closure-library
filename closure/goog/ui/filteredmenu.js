@@ -32,9 +32,9 @@ goog.require('goog.ui.Menu');
 
 /**
  * Filtered menu class.
- * @param {goog.ui.MenuRenderer} opt_renderer Renderer used to render filtered
+ * @param {goog.ui.MenuRenderer=} opt_renderer Renderer used to render filtered
  *     menu; defaults to {@link goog.ui.MenuRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Menu}
  */

@@ -133,6 +133,9 @@ goog.debug.Trace_ = function() {
 
   var that = this;
   this.idPool_ = new goog.structs.SimplePool(0, 2000);
+
+  // TODO: SimplePool is supposed to only return objects.
+  // Reconcile this so that we don't have to cast to number below.
   this.idPool_.createObject = function() {
     return String(that.nextId_++);
   };
@@ -358,7 +361,7 @@ goog.debug.Trace_.prototype.reset = function(defaultThreshold) {
  * Starts a tracer
  * @param {string} comment A comment used to identify the tracer. Does not
  *     need to be unique.
- * @param {string} opt_type Type used to identify the tracer. If a Trace is
+ * @param {string=} opt_type Type used to identify the tracer. If a Trace is
  *     given a type (the first argument to the constructor) and multiple Traces
  *     are done on that type then a "TOTAL line will be produced showing the
  *     total number of traces and the sum of the time
@@ -400,7 +403,7 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
   var event = this.eventPool_.getObject();
   event.totalVarAlloc = varAlloc;
   event.eventType = goog.debug.Trace_.EventType.START;
-  event.id = /** @type {number} */ (this.idPool_.getObject());
+  event.id = Number(this.idPool_.getObject());
   event.comment = comment;
   event.type = opt_type;
   this.events_.push(event);
@@ -416,7 +419,7 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
 /**
  * Stops a tracer
  * @param {number|undefined|null} id The id of the tracer that is ending.
- * @param {number} opt_silenceThreshold Threshold below which the tracer is
+ * @param {number=} opt_silenceThreshold Threshold below which the tracer is
  *    silenced.
  * @return {?number} The elapsed time for the tracer or null if the tracer
  *    identitifer was not recognized.
@@ -514,10 +517,10 @@ goog.debug.Trace_.prototype.getTotalVarAlloc = function() {
  * Adds a comment to the trace. Makes it possible to see when a specific event
  * happened in relation to the traces.
  * @param {string} comment A comment that is inserted into the trace.
- * @param {?string} opt_type Type used to identify the tracer. If a comment is
+ * @param {?string=} opt_type Type used to identify the tracer. If a comment is
  *     given a type and multiple comments are done on that type then a "TOTAL
  *     line will be produced showing the total number of comments of that type.
- * @param {?number} opt_timeStamp The timestamp to insert the comment. If not
+ * @param {?number=} opt_timeStamp The timestamp to insert the comment. If not
  *    specified, the current time wil be used.
  */
 goog.debug.Trace_.prototype.addComment = function(comment, opt_type,

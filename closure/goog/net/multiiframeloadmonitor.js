@@ -29,7 +29,7 @@ goog.require('goog.net.IframeLoadMonitor');
  *     wait until they are loaded.
  * @param {function():void} callback The callback to invoke once the frames have
  *     loaded.
- * @param {boolean} opt_hasContent true if the monitor should wait until the
+ * @param {boolean=} opt_hasContent true if the monitor should wait until the
  *     iframes have content (body.firstChild != null).
  * @constructor
  */

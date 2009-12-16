@@ -51,7 +51,7 @@ goog.dom.classes.get = function(element) {
 /**
  * Adds a class or classes to an element. Does not add multiples of class names.
  * @param {Node} element DOM node to add class to.
- * @param {string} var_args Class names to add.
+ * @param {...string} var_args Class names to add.
  * @return {boolean} Whether class was added (or all classes were added).
  */
 goog.dom.classes.add = function(element, var_args) {
@@ -68,7 +68,7 @@ goog.dom.classes.add = function(element, var_args) {
 /**
  * Removes a class or classes from an element.
  * @param {Node} element DOM node to remove class from.
- * @param {string} var_args Class name(s) to remove.
+ * @param {...string} var_args Class name(s) to remove.
  * @return {boolean} Whether all classes in {@code var_args} were found and
  *     removed.
  */

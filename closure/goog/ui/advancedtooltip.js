@@ -31,10 +31,10 @@ goog.require('goog.userAgent');
  * tooltip but can track the cursor position and direction to determine if the
  * tooltip should be dismissed or remain open.
  *
- * @param {Element|string} opt_el Element to display tooltip for, either element
- *                                reference or string id.
- * @param {?string} opt_str Text message to display in tooltip.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {Element|string=} opt_el Element to display tooltip for, either
+ *     element reference or string id.
+ * @param {?string=} opt_str Text message to display in tooltip.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Tooltip}
  */
@@ -116,7 +116,7 @@ goog.ui.AdvancedTooltip.prototype.tracking_ = false;
  * Sets margin around the tooltip where the cursor is allowed without dismissing
  * the tooltip.
  *
- * @param {goog.math.Box} opt_box The margin around the tooltip.
+ * @param {goog.math.Box=} opt_box The margin around the tooltip.
  */
 goog.ui.AdvancedTooltip.prototype.setHotSpotPadding = function(opt_box) {
   this.hotSpotPadding_ = opt_box || null;

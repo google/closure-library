@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -69,7 +70,7 @@
 <a name="line26"></a> * Class for unit testing code that uses Math.random.
 <a name="line27"></a> *
 <a name="line28"></a> * @param {Array.&lt;number&gt;} sequence The sequence of numbers to return.
-<a name="line29"></a> * @param {boolean} opt_install Whether to install the MockRandom at
+<a name="line29"></a> * @param {boolean=} opt_install Whether to install the MockRandom at
 <a name="line30"></a> *     construction time.
 <a name="line31"></a> * @extends {goog.Disposable}
 <a name="line32"></a> * @constructor
@@ -86,7 +87,7 @@
 <a name="line43"></a>
 <a name="line44"></a>  /**
 <a name="line45"></a>   * The original Math.random function.
-<a name="line46"></a>   * @type {Function}
+<a name="line46"></a>   * @type {function(): number}
 <a name="line47"></a>   * @private
 <a name="line48"></a>   */
 <a name="line49"></a>  this.mathRandom_ = Math.random;

@@ -36,11 +36,6 @@ goog.require('goog.testing.net.XhrIo');
 var mockClock;
 
 /**
- * Delay between a network failure and the next network request.
- */
-var RETRY_TIME = 1000;
-
-/**
  * Time to wait for a network request to time out, before aborting.
  */
 var WATCHDOG_TIME = 2000;
@@ -86,12 +81,10 @@ function MockBrowserChannel() {
  * testability:
  * <ul>
  * <li>The BrowserChannel is a MockBrowserChannel.
- * <li>getRetryTime_() always returns RETRY_TIME.
  * <li>createXhrIo_() returns the xhrIo that is passed in.
  * <li>The new watchdogTimeoutCallCount property tracks onWatchDogTimout_()
  *     calls.
- * <li>The new retryCallCount property tracks retry_() calls.
- * <li>The "retry timeout" is set to WATCHDOG_TIME.
+ * <li>The timeout is set to WATCHDOG_TIME.
  * </ul>
  * @param {goog.testing.net.XhrIo} xhrIo  A test XhrIo.
  * @return {goog.net.ChannelRequest} A slightly modified ChannelRequest
@@ -101,11 +94,6 @@ function createChannelRequest(xhrIo) {
   var req = new goog.net.ChannelRequest(
       new MockBrowserChannel(),
       new goog.net.ChannelDebug());
-
-  // Provide a predictable retry time for testing.
-  req.getRetryTime_ = function() {
-    return RETRY_TIME;
-  };
 
   // Install test XhrIo.
   req.createXhrIo_ = function() {
@@ -120,16 +108,8 @@ function createChannelRequest(xhrIo) {
     return this.originalOnWatchDogTimout();
   };
 
-  // Install retryCallCount.
-  req.retryCallCount = 0;
-  req.originalRetry = req.retry_;
-  req.retry_ = function() {
-    this.retryCallCount++;
-    return this.originalRetry();
-  };
+  req.setTimeout(WATCHDOG_TIME);
 
-  req.setRetryTimeout(WATCHDOG_TIME);
-  
   return req;
 }
 
@@ -148,176 +128,26 @@ function createXhrIo() {
 
 
 /**
- * Make sure setMaxRetries sets a field.
+ * Make sure that the request "completes" with an error when the timeout
+ * expires.
  */
-function testSetMaxRetriesSetsSomething() {
-  var req = createChannelRequest();
-  assertEquals(0, req.maxRetries_);
-  req.setMaxRetries(1);
-  assertEquals(1, req.maxRetries_);
-}
-
-
-/**
- * Make sure that dropping maxRetries below the retryCount reports an error,
- * and prevents another request from firing.
- */
-function testSetMaxRetriesBelowRetryCountWhileWaitingForRetry() {
+function testRequestTimeout() {
   var xhrIo = createXhrIo();
   var req = createChannelRequest(xhrIo);
 
-  req.setMaxRetries(2);
   req.xmlHttpPost(new goog.Uri('some_uri'), 'some_postdata', true);
   assertEquals(0, req.watchdogTimeoutCallCount);
-  assertEquals(0, req.retryCount_);
-  assertEquals(0, req.retryCallCount);
   assertEquals(0, req.channel_.completedRequests.length);
 
   // Watchdog timeout.
   mockClock.tick(WATCHDOG_TIME);
   assertEquals(1, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(0, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Almost finish the between-retry timeout.
-  mockClock.tick(RETRY_TIME - 1);
-  assertEquals(1, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(0, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Setting max retries to 0 should fail the req.
-  req.setMaxRetries(0);
-  assertEquals(1, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(0, req.retryCallCount);
   assertEquals(1, req.channel_.completedRequests.length);
   assertFalse(req.getSuccess());
 
-  // Make sure no more retry timers are firing.
+  // Make sure no more timers are firing.
   mockClock.tick(ALL_DAY_MS);
   assertEquals(1, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(0, req.retryCallCount);
-  assertEquals(1, req.channel_.completedRequests.length);
-}
-
-
-/**
- * Make sure that dropping maxRetries below the retryCount reports an error,
- * and prevents another request from firing.
- */
-function testSetMaxRetriesBelowRetryCountWhileRetryXhrIsInFlight() {
-  var xhrIo = createXhrIo();
-  var req = createChannelRequest(xhrIo);
-
-  req.setMaxRetries(2);
-  req.xmlHttpPost(new goog.Uri('some_uri'), 'some_postdata', true);
-  assertEquals(0, req.watchdogTimeoutCallCount);
-  assertEquals(0, req.retryCount_);
-  assertEquals(0, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Watchdog timeout.
-  mockClock.tick(WATCHDOG_TIME);
-  assertEquals(1, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(0, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Wait for the between-retry timeout.
-  mockClock.tick(RETRY_TIME);
-  assertEquals(1, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(1, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Simulate a second watchdog timeout.
-  mockClock.tick(WATCHDOG_TIME);
-  assertEquals(2, req.watchdogTimeoutCallCount);
-  assertEquals(2, req.retryCount_);
-  assertEquals(1, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Wait for another between-retry timeout.
-  mockClock.tick(RETRY_TIME);
-  // Now the second XHR req is in flight.
-  assertEquals(2, req.watchdogTimeoutCallCount);
-  assertEquals(2, req.retryCount_);
-  assertEquals(2, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Almost watchdog timeout, but not quite.
-  mockClock.tick(WATCHDOG_TIME - 1);
-  assertEquals(2, req.watchdogTimeoutCallCount);
-  assertEquals(2, req.retryCount_);
-  assertEquals(2, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Set max retries below actual retries, killing the request
-  req.setMaxRetries(0);
-  assertEquals(2, req.watchdogTimeoutCallCount);
-  assertEquals(2, req.retryCount_);
-  assertEquals(2, req.retryCallCount);
-  assertEquals(1, req.channel_.completedRequests.length);
-  assertFalse(req.getSuccess());
-
-  // Make sure no more retry timers are firing.
-  mockClock.tick(ALL_DAY_MS);
-  assertEquals(2, req.watchdogTimeoutCallCount);
-  assertEquals(2, req.retryCount_);
-  assertEquals(2, req.retryCallCount);
-  assertEquals(1, req.channel_.completedRequests.length);
-}
-
-
-/**
- * Makes sure that setting maxRetries to actual retries doesn't cause a failure.
- */
-function testSetMaxRetriesAtRetryCount() {
-  var xhrIo = createXhrIo();
-  var req = createChannelRequest(xhrIo);
-
-  req.setMaxRetries(1);
-  req.xmlHttpPost(new goog.Uri('some_uri'), 'some_postdata', true);
-
-  // Watchdog timeout.
-  mockClock.tick(WATCHDOG_TIME);
-  // Start retry #1
-  assertEquals(1, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(0, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Wait for the between-retry timeout.
-  mockClock.tick(RETRY_TIME);
-  // Actually retry XHR.
-  assertEquals(1, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(1, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Set max retries to be the same.
-  req.setMaxRetries(1);
-  assertEquals(1, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(1, req.retryCallCount);
-  assertEquals(0, req.channel_.completedRequests.length);
-
-  // Watchdog timeout.  Request has failed.
-  mockClock.tick(WATCHDOG_TIME);
-  assertEquals(2, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(1, req.retryCallCount);
-  assertEquals(1, req.channel_.completedRequests.length);
-  assertFalse(req.getSuccess());
-
-  // Make sure no more retry timers are firing.
-  mockClock.tick(ALL_DAY_MS);
-  assertEquals(2, req.watchdogTimeoutCallCount);
-  assertEquals(1, req.retryCount_);
-  assertEquals(1, req.retryCallCount);
   assertEquals(1, req.channel_.completedRequests.length);
 }
 

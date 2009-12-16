@@ -47,10 +47,10 @@ goog.require('goog.ui.Component');
  * Will construct a chart using Google's chartserver.
  *
  * @param {goog.ui.ServerChart.ChartType} type The chart type.
- * @param {number} opt_width The width of the chart.
- * @param {number} opt_height The height of the chart.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM Helper.
- * @param {string} opt_uri Optional uri used to connect to the chart server, if
+ * @param {number=} opt_width The width of the chart.
+ * @param {number=} opt_height The height of the chart.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM Helper.
+ * @param {string=} opt_uri Optional uri used to connect to the chart server, if
  *     different than goog.ui.ServerChart.CHART_SERVER_URI.
  * @constructor
  * @extends {goog.ui.Component}
@@ -671,8 +671,8 @@ goog.ui.ServerChart.prototype.getType = function() {
 /**
  * Sets the chart size.
  *
- * @param {number} opt_width Optional chart width, defaults to 300.
- * @param {number} opt_height Optional chart height, defaults to 150.
+ * @param {number=} opt_width Optional chart width, defaults to 300.
+ * @param {number=} opt_height Optional chart height, defaults to 150.
  */
 goog.ui.ServerChart.prototype.setSize = function(opt_width, opt_height) {
   var sizeString = [opt_width || 300, opt_height || 150].join('x');
@@ -1027,8 +1027,8 @@ goog.ui.ServerChart.prototype.getNumVisibleDataSets = function() {
  *     weights[2] is relative area of overlap of circles A and B.
  *
  * @param {Array.<number>} weights The relative weights of the circles.
- * @param {Array.<string>} opt_legendText The legend labels for the circles.
- * @param {Array.<string>} opt_colors The colors for the circles.
+ * @param {Array.<string>=} opt_legendText The legend labels for the circles.
+ * @param {Array.<string>=} opt_colors The colors for the circles.
  */
 goog.ui.ServerChart.prototype.setVennSeries = function(
     weights, opt_legendText, opt_colors) {
@@ -1159,9 +1159,9 @@ goog.ui.ServerChart.prototype.setDataScaling = function(minimum, maximum) {
  *     as the space between bars because this is the behavior exposed
  *     in the external developers guide.
  * @param {number} barWidth The width of a bar in pixels.
- * @param {number} opt_spaceBars The width of the space between
+ * @param {number=} opt_spaceBars The width of the space between
  *     bars in a group in pixels.
- * @param {number} opt_spaceGroups The width of the space between
+ * @param {number=} opt_spaceGroups The width of the space between
  *     groups.
  */
 goog.ui.ServerChart.prototype.setBarSpaceWidths = function(barWidth,
@@ -1187,9 +1187,9 @@ goog.ui.ServerChart.prototype.setBarSpaceWidths = function(barWidth,
  *     bars is left undefined, the space between groups will be interpreted
  *     as the space between bars because this is the behavior exposed
  *     in the external developers guide.
- * @param {number} opt_spaceBars The width of the space between
+ * @param {number=} opt_spaceBars The width of the space between
  *     bars in a group in pixels.
- * @param {number} opt_spaceGroups The width of the space between
+ * @param {number=} opt_spaceGroups The width of the space between
  *     groups.
  */
 goog.ui.ServerChart.prototype.setAutomaticBarWidth = function(opt_spaceBars,
@@ -1226,7 +1226,7 @@ goog.ui.ServerChart.prototype.addMultiAxis = function(axisType) {
  * Returns the axis type for the given axis, or all of them in an array if the
  * axis number is not given.
  *
- * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+ * @param {number=} opt_axisNumber The axis index, as returned by addMultiAxis.
  * @return {goog.ui.ServerChart.MultiAxisType|
  *     Array.<goog.ui.ServerChart.MultiAxisType>}
  *     The axis type for the given axis, or all of them in an array if the
@@ -1265,7 +1265,7 @@ goog.ui.ServerChart.prototype.setMultiAxisLabelText = function(axisNumber,
  * Returns the label text, or all of them in a two-dimensional array if the
  * axis number is not given.
  *
- * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+ * @param {number=} opt_axisNumber The axis index, as returned by addMultiAxis.
  * @return {Object|Array.<string>} The label text, or all of them in a
  *     two-dimensional array if the axis number is not given.
  */
@@ -1304,7 +1304,7 @@ goog.ui.ServerChart.prototype.setMultiAxisLabelPosition = function(
  * Returns the label positions for a given axis number, or all of them in a
  * two-dimensional array if the axis number is not given.
  *
- * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+ * @param {number=} opt_axisNumber The axis index, as returned by addMultiAxis.
  * @return {Object|Array.<number>} The label positions for a given axis number,
  *     or all of them in a two-dimensional array if the axis number is not
  *     given.
@@ -1327,7 +1327,7 @@ goog.ui.ServerChart.prototype.getMultiAxisLabelPosition =
  * @param {number} axisNumber The axis index, as returned by addMultiAxis.
  * @param {number} rangeStart The new start of the range.
  * @param {number} rangeEnd The new end of the range.
- * @param {number} opt_interval The interval between axis labels.
+ * @param {number=} opt_interval The interval between axis labels.
  */
 goog.ui.ServerChart.prototype.setMultiAxisRange = function(axisNumber,
                                                            rangeStart,
@@ -1353,7 +1353,7 @@ goog.ui.ServerChart.prototype.setMultiAxisRange = function(axisNumber,
  * (range start, range end), or all of them in a two-dimensional array if the
  * axis number is not given.
  *
- * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+ * @param {number=} opt_axisNumber The axis index, as returned by addMultiAxis.
  * @return {Object|Array.<number>} The label range for a given axis number as a
  *     two-element array of (range start, range end), or all of them in a
  *     two-dimensional array if the axis number is not given.
@@ -1376,10 +1376,10 @@ goog.ui.ServerChart.prototype.getMultiAxisRange = function(opt_axisNumber) {
  *
  * @param {number} axisNumber The axis index, as returned by addMultiAxis.
  * @param {string} color The hex value for this label's color.
- * @param {number} opt_fontSize The label font size, in pixels.
- * @param {goog.ui.ServerChart.MultiAxisAlignment} opt_alignment The label
+ * @param {number=} opt_fontSize The label font size, in pixels.
+ * @param {goog.ui.ServerChart.MultiAxisAlignment=} opt_alignment The label
  *     alignment.
- * @param {goog.ui.ServerChart.AxisDisplayType} opt_axisDisplay The axis
+ * @param {goog.ui.ServerChart.AxisDisplayType=} opt_axisDisplay The axis
  *     line and ticks.
  */
 goog.ui.ServerChart.prototype.setMultiAxisLabelStyle = function(axisNumber,
@@ -1413,7 +1413,7 @@ goog.ui.ServerChart.prototype.setMultiAxisLabelStyle = function(axisNumber,
  * array, or all of them in a two-dimensional array if the axis number is not
  * given.
  *
- * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+ * @param {number=} opt_axisNumber The axis index, as returned by addMultiAxis.
  * @return {Object|Array.<number>} The label style for a given axis number as a
  *     one- to three-element array, or all of them in a two-dimensional array if
  *     the axis number is not given.
@@ -1434,7 +1434,7 @@ goog.ui.ServerChart.prototype.getMultiAxisLabelStyle =
  * @param {Array.<number|null>} data An array of numbers (values can be
  *     NaN or null).
  * @param {string} color The hex value for this data set's color.
- * @param {string} opt_legendText The legend text, if any, for this data
+ * @param {string=} opt_legendText The legend text, if any, for this data
  *     series. NOTE: If specified, all previously added data sets must also
  *     have a legend text.
  */
@@ -1487,7 +1487,7 @@ goog.ui.ServerChart.prototype.clearDataSets = function() {
  * Returns the given data set or all of them in a two-dimensional array if
  * the set number is not given.
  *
- * @param {number} opt_setNumber Optional data set number to get.
+ * @param {number=} opt_setNumber Optional data set number to get.
  * @return {Array} The given data set or all of them in a two-dimensional array
  *     if the set number is not given.
  */

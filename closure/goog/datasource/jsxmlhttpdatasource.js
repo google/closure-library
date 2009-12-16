@@ -42,9 +42,9 @@ goog.require('goog.net.XhrIo');
  *
  * @param {string || goog.Uri} uri URI for the request.
  * @param {string} name Name of the datasource.
- * @param {string} opt_startText Text to expect/strip before JS response.
- * @param {string} opt_endText Text to expect/strip after JS response.
- * @param {boolean} opt_usePost If true, use POST. Defaults to false (GET).
+ * @param {string=} opt_startText Text to expect/strip before JS response.
+ * @param {string=} opt_endText Text to expect/strip after JS response.
+ * @param {boolean=} opt_usePost If true, use POST. Defaults to false (GET).
  *
  * @extends {goog.ds.FastDataNode}
  * @constructor

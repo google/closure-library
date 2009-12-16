@@ -42,7 +42,7 @@ goog.require('goog.structs.Node');
 /**
  * Class for a Heap datastructure.
  *
- * @param {goog.structs.Heap|Object} opt_heap Optional goog.structs.Heap or
+ * @param {goog.structs.Heap|Object=} opt_heap Optional goog.structs.Heap or
  *     Object to initialize heap with.
  * @constructor
  */

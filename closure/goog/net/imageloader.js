@@ -33,7 +33,7 @@ goog.require('goog.userAgent');
  * event for each image loaded, with an {@link Image} object as the target of
  * the event, normalized to have {@code naturalHeight} and {@code naturalWidth}
  * attributes.
- * @param {Element} opt_parent An optional parent element whose document object
+ * @param {Element=} opt_parent An optional parent element whose document object
  *     should be used to load images.
  * @constructor
  * @extends {goog.events.EventTarget}

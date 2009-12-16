@@ -188,7 +188,7 @@ goog.net.xpc.channels_ = {};
 /**
  * Returns a random string.
  * @param {number} length How many characters the string shall contain.
- * @param {string} opt_characters The characters used.
+ * @param {string=} opt_characters The characters used.
  * @return {string} The random string.
  */
 goog.net.xpc.getRandomString = function(length, opt_characters) {

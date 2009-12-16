@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -96,12 +108,12 @@ alert(c.getKeys()); // entry1, entry5, entry9, entry8, entry7
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.structs.LinkedMap</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -125,7 +137,7 @@ alert(c.getKeys()); // entry1, entry5, entry9, entry8, entry7
    <tr class="even">
      <td>
         <span class="entryName">opt_maxCount</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The maximum number of objects to store in the LinkedMap. If unspecified or 0, there is no maximum.</div>
      </td>
    </tr>
@@ -133,7 +145,7 @@ alert(c.getKeys()); // entry1, entry5, entry9, entry8, entry7
    <tr class="odd">
      <td>
         <span class="entryName">opt_cache</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">When set, the LinkedMap stores items in order from most recently used to least recently used, instead of insertion order.</div>
      </td>
    </tr>
@@ -391,7 +403,7 @@ function call returns a true-like value.
    <tr class="odd">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object context to use as &quot;this&quot; for the function.</div>
      </td>
    </tr>
@@ -409,7 +421,7 @@ function call returns a true-like value.
 
 
   <td class="view-code">
-     <a href="closure_goog_structs_linkedmap.js.source.html#line347">code &raquo;</a>
+     <a href="closure_goog_structs_linkedmap.js.source.html#line351">code &raquo;</a>
   </td>
      </tr>
 
@@ -463,7 +475,7 @@ function call returns a true-like value.
    <tr class="odd">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object context to use as &quot;this&quot; for the function.</div>
      </td>
    </tr>
@@ -477,7 +489,7 @@ function call returns a true-like value.
 
 
   <td class="view-code">
-     <a href="closure_goog_structs_linkedmap.js.source.html#line287">code &raquo;</a>
+     <a href="closure_goog_structs_linkedmap.js.source.html#line288">code &raquo;</a>
   </td>
      </tr>
 
@@ -533,7 +545,7 @@ entry will become the most recently used.
    <tr class="odd">
      <td>
         <span class="entryName">opt_val</span>
-        : <div class="fullType"><span class="type">*</span></div>
+        : <div class="fullType"><span class="type">*=</span></div>
         <div class="entryOverview">A default value that will be returned if the key is not found, defaults to undefined.</div>
      </td>
    </tr>
@@ -751,7 +763,7 @@ maximum size, the list will be truncated if necessary.
 
 
   <td class="view-code">
-     <a href="closure_goog_structs_linkedmap.js.source.html#line365">code &raquo;</a>
+     <a href="closure_goog_structs_linkedmap.js.source.html#line369">code &raquo;</a>
   </td>
      </tr>
 
@@ -853,7 +865,7 @@ those calls in an array.
    <tr class="odd">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object context to use as &quot;this&quot; for the function.</div>
      </td>
    </tr>
@@ -871,7 +883,7 @@ those calls in an array.
 
 
   <td class="view-code">
-     <a href="closure_goog_structs_linkedmap.js.source.html#line305">code &raquo;</a>
+     <a href="closure_goog_structs_linkedmap.js.source.html#line307">code &raquo;</a>
   </td>
      </tr>
 
@@ -1019,7 +1031,7 @@ most recently used.
    <tr class="odd">
      <td>
         <span class="entryName">opt_val</span>
-        : <div class="fullType"><span class="type">*</span></div>
+        : <div class="fullType"><span class="type">*=</span></div>
         <div class="entryOverview">A default value that will be returned if the key is not found.</div>
      </td>
    </tr>
@@ -1149,7 +1161,7 @@ the node&#39;s value.
 
 
   <td class="view-code">
-     <a href="closure_goog_structs_linkedmap.js.source.html#line408">code &raquo;</a>
+     <a href="closure_goog_structs_linkedmap.js.source.html#line412">code &raquo;</a>
   </td>
      </tr>
 
@@ -1446,7 +1458,7 @@ those function calls returns a true-like value.
    <tr class="odd">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object context to use as &quot;this&quot; for the function.</div>
      </td>
    </tr>
@@ -1464,7 +1476,7 @@ those function calls returns a true-like value.
 
 
   <td class="view-code">
-     <a href="closure_goog_structs_linkedmap.js.source.html#line326">code &raquo;</a>
+     <a href="closure_goog_structs_linkedmap.js.source.html#line329">code &raquo;</a>
   </td>
      </tr>
 
@@ -1500,7 +1512,7 @@ nodes from the head.
 
 
   <td class="view-code">
-     <a href="closure_goog_structs_linkedmap.js.source.html#line390">code &raquo;</a>
+     <a href="closure_goog_structs_linkedmap.js.source.html#line394">code &raquo;</a>
   </td>
      </tr>
 

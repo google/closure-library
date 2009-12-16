@@ -122,7 +122,7 @@ goog.graphics.ext.coordinates.computeValue = function(coord, size, scale) {
  *     this element.  Should be set to the minimum width of this element if
  *     forMaximum is true.
  * @param {number} scale The ratio of pixels to units.
- * @param {Object} opt_cache Optional (but highly recommend) object to store
+ * @param {Object=} opt_cache Optional (but highly recommend) object to store
  *     cached computations in.  The calling class should manage clearing out
  *     the cache when the scale or containerSize changes.
  * @return {number} The correct number of coordinate space units.

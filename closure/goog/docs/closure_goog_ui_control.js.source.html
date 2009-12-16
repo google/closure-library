@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -109,9 +110,9 @@
 <a name="line66"></a> * for example usage.
 <a name="line67"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure
 <a name="line68"></a> *     to display as the content of the component (if any).
-<a name="line69"></a> * @param {goog.ui.ControlRenderer} opt_renderer Renderer used to render or
+<a name="line69"></a> * @param {goog.ui.ControlRenderer=} opt_renderer Renderer used to render or
 <a name="line70"></a> *     decorate the component; defaults to {@link goog.ui.ControlRenderer}.
-<a name="line71"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+<a name="line71"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
 <a name="line72"></a> *     document interaction.
 <a name="line73"></a> * @constructor
 <a name="line74"></a> * @extends {goog.ui.Component}
@@ -757,7 +758,7 @@
 <a name="line714"></a> * its key target has a tab index.  When hiding a component that is enabled
 <a name="line715"></a> * and focusable, blurs its key target and removes its tab index.
 <a name="line716"></a> * @param {boolean} visible Whether to show or hide the component.
-<a name="line717"></a> * @param {boolean} opt_force If true, doesn&#39;t check whether the component
+<a name="line717"></a> * @param {boolean=} opt_force If true, doesn&#39;t check whether the component
 <a name="line718"></a> *     already has the requested visibility, and doesn&#39;t dispatch any events.
 <a name="line719"></a> * @return {boolean} Whether the visibility was changed.
 <a name="line720"></a> */

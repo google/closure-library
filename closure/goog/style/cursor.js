@@ -42,7 +42,7 @@ goog.style.cursor.CLOSEDHAND_FILE = 'closedhand.cur';
  *
  * @param {string} absoluteDotCurFilePath The absolute base path of
  *     'openhand.cur' file to be used if the browser supports it.
- * @param {boolean} opt_important Whether to use the '!important' CSS
+ * @param {boolean=} opt_important Whether to use the '!important' CSS
  *     modifier.
  * @return {string} The "draggable" mouse cursor style value.
  */
@@ -62,7 +62,7 @@ goog.style.cursor.getDraggableCursorStyle = function(
  *
  * @param {string} absoluteDotCurFilePath The absolute base path of
  *     'closedhand.cur' file to be used if the browser supports it.
- * @param {boolean} opt_important Whether to use the '!important' CSS
+ * @param {boolean=} opt_important Whether to use the '!important' CSS
  *     modifier.
  * @return {string} The "dragging" mouse cursor style value.
  */
@@ -84,7 +84,7 @@ goog.style.cursor.getDraggingCursorStyle = function(
  * @param {string} absoluteDotCurFilePath The .cur file absolute file to be
  *     used if the browser supports it.
  * @param {string} defaultStyle The default fallback cursor style.
- * @param {boolean} opt_important Whether to use the '!important' CSS
+ * @param {boolean=} opt_important Whether to use the '!important' CSS
  *     modifier (not included for FF).
  * @return {string} The computed mouse cursor style value.
  * @private

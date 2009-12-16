@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,7 +90,7 @@ getUTC... methods are equivalent.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Date">Date</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_date_Date.html">goog.date.Date</a></span></td><td><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Date">Date</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span></td><td><span class="type"><a href="class_goog_date_Date.html">goog.date.Date</a></span></td></tr>
@@ -86,7 +98,7 @@ getUTC... methods are equivalent.
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -110,7 +122,7 @@ getUTC... methods are equivalent.
    <tr class="even">
      <td>
         <span class="entryName">opt_year</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type">Object=</span></div>
         <div class="entryOverview">Four digit UTC year or a date-like object. If not set, the created object will contain the date determined by goog.now().</div>
      </td>
    </tr>
@@ -118,7 +130,7 @@ getUTC... methods are equivalent.
    <tr class="odd">
      <td>
         <span class="entryName">opt_month</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">UTC month, 0 = Jan, 11 = Dec.</div>
      </td>
    </tr>
@@ -126,7 +138,7 @@ getUTC... methods are equivalent.
    <tr class="even">
      <td>
         <span class="entryName">opt_date</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">UTC date of month, 1 - 31.</div>
      </td>
    </tr>
@@ -134,7 +146,7 @@ getUTC... methods are equivalent.
    <tr class="odd">
      <td>
         <span class="entryName">opt_hours</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">UTC hours, 0 - 23.</div>
      </td>
    </tr>
@@ -142,7 +154,7 @@ getUTC... methods are equivalent.
    <tr class="even">
      <td>
         <span class="entryName">opt_minutes</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">UTC minutes, 0 - 59.</div>
      </td>
    </tr>
@@ -150,7 +162,7 @@ getUTC... methods are equivalent.
    <tr class="odd">
      <td>
         <span class="entryName">opt_seconds</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">UTC seconds, 0 - 59.</div>
      </td>
    </tr>
@@ -158,7 +170,7 @@ getUTC... methods are equivalent.
    <tr class="even">
      <td>
         <span class="entryName">opt_milliseconds</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">UTC milliseconds, 0 - 999.</div>
      </td>
    </tr>
@@ -927,7 +939,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1402">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1405">code &raquo;</a>
   </td>
      </tr>
 
@@ -973,7 +985,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1593">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1596">code &raquo;</a>
   </td>
      </tr>
 
@@ -1038,7 +1050,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1498">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1501">code &raquo;</a>
   </td>
      </tr>
 
@@ -1084,7 +1096,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1232">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1235">code &raquo;</a>
   </td>
      </tr>
 
@@ -1130,7 +1142,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1262">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1265">code &raquo;</a>
   </td>
      </tr>
 
@@ -1176,7 +1188,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1242">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1245">code &raquo;</a>
   </td>
      </tr>
 
@@ -1222,7 +1234,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1252">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1255">code &raquo;</a>
   </td>
      </tr>
 
@@ -1268,7 +1280,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1272">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1275">code &raquo;</a>
   </td>
      </tr>
 
@@ -1314,7 +1326,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1282">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1285">code &raquo;</a>
   </td>
      </tr>
 
@@ -1360,7 +1372,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1312">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1315">code &raquo;</a>
   </td>
      </tr>
 
@@ -1406,7 +1418,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1292">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1295">code &raquo;</a>
   </td>
      </tr>
 
@@ -1452,7 +1464,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1302">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1305">code &raquo;</a>
   </td>
      </tr>
 
@@ -1512,7 +1524,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1322">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1325">code &raquo;</a>
   </td>
      </tr>
 
@@ -1572,7 +1584,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1352">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1355">code &raquo;</a>
   </td>
      </tr>
 
@@ -1632,7 +1644,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1332">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1335">code &raquo;</a>
   </td>
      </tr>
 
@@ -1692,7 +1704,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1342">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1345">code &raquo;</a>
   </td>
      </tr>
 
@@ -1752,7 +1764,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1362">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1365">code &raquo;</a>
   </td>
      </tr>
 
@@ -1812,7 +1824,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1392">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1395">code &raquo;</a>
   </td>
      </tr>
 
@@ -1872,7 +1884,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1372">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1375">code &raquo;</a>
   </td>
      </tr>
 
@@ -1932,7 +1944,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1382">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1385">code &raquo;</a>
   </td>
      </tr>
 
@@ -1979,7 +1991,7 @@ getUTC... methods are equivalent.
    <tr class="even">
      <td>
         <span class="entryName">opt_verbose</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the verbose format should be used instead of the default compact one.</div>
      </td>
    </tr>
@@ -1987,7 +1999,7 @@ getUTC... methods are equivalent.
    <tr class="odd">
      <td>
         <span class="entryName">opt_tz</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the timezone offset should be included in the string.</div>
      </td>
    </tr>
@@ -2005,7 +2017,7 @@ getUTC... methods are equivalent.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1426">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1429">code &raquo;</a>
   </td>
      </tr>
 
@@ -2053,7 +2065,7 @@ E.g., &#39;06:00:00&#39; or &#39;23:30:15&#39;.
    <tr class="even">
      <td>
         <span class="entryName">opt_showSeconds</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to shows seconds. Defaults to TRUE.</div>
      </td>
    </tr>
@@ -2071,7 +2083,7 @@ E.g., &#39;06:00:00&#39; or &#39;23:30:15&#39;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1578">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1581">code &raquo;</a>
   </td>
      </tr>
 
@@ -2117,7 +2129,7 @@ E.g., &#39;06:00:00&#39; or &#39;23:30:15&#39;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1507">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1510">code &raquo;</a>
   </td>
      </tr>
 
@@ -2165,7 +2177,7 @@ time.
    <tr class="even">
      <td>
         <span class="entryName">opt_verbose</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the opt_verbose format should be returned instead of the default compact one.</div>
      </td>
    </tr>
@@ -2173,7 +2185,7 @@ time.
    <tr class="odd">
      <td>
         <span class="entryName">opt_tz</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the the timezone offset should be included in the string.</div>
      </td>
    </tr>
@@ -2191,7 +2203,7 @@ time.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1473">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1476">code &raquo;</a>
   </td>
      </tr>
 
@@ -2242,7 +2254,7 @@ locales, need Chinese characters for hour and minute units.
    <tr class="even">
      <td>
         <span class="entryName">opt_padHours</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to pad hours, e.g., &#39;05:30&#39; vs &#39;5:30&#39;.</div>
      </td>
    </tr>
@@ -2250,7 +2262,7 @@ locales, need Chinese characters for hour and minute units.
    <tr class="odd">
      <td>
         <span class="entryName">opt_showAmPm</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to show the &#39;am&#39; and &#39;pm&#39; suffix.</div>
      </td>
    </tr>
@@ -2258,7 +2270,7 @@ locales, need Chinese characters for hour and minute units.
    <tr class="even">
      <td>
         <span class="entryName">opt_omitZeroMinutes</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">E.g., &#39;5:00pm&#39; becomes &#39;5pm&#39;, but &#39;5:01pm&#39; remains &#39;5:01pm&#39;.</div>
      </td>
    </tr>
@@ -2276,7 +2288,7 @@ locales, need Chinese characters for hour and minute units.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1524">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1527">code &raquo;</a>
   </td>
      </tr>
 
@@ -2324,7 +2336,7 @@ The return value is also ISO 8601 compliant.
    <tr class="even">
      <td>
         <span class="entryName">opt_timezone</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Should the timezone offset be included in the string?.</div>
      </td>
    </tr>
@@ -2342,7 +2354,7 @@ The return value is also ISO 8601 compliant.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1453">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1456">code &raquo;</a>
   </td>
      </tr>
 
@@ -2425,7 +2437,7 @@ The return value is also ISO 8601 compliant.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1065">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1067">code &raquo;</a>
   </td>
      </tr>
 
@@ -2471,7 +2483,7 @@ The return value is also ISO 8601 compliant.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line716">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line718">code &raquo;</a>
   </td>
      </tr>
 
@@ -2538,7 +2550,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1157">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1159">code &raquo;</a>
   </td>
      </tr>
 
@@ -2584,7 +2596,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line755">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line757">code &raquo;</a>
   </td>
      </tr>
 
@@ -2630,7 +2642,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line773">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line775">code &raquo;</a>
   </td>
      </tr>
 
@@ -2676,7 +2688,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line900">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line902">code &raquo;</a>
   </td>
      </tr>
 
@@ -2722,7 +2734,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line865">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line867">code &raquo;</a>
   </td>
      </tr>
 
@@ -2768,7 +2780,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line874">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line876">code &raquo;</a>
   </td>
      </tr>
 
@@ -2814,7 +2826,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line728">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line730">code &raquo;</a>
   </td>
      </tr>
 
@@ -2860,7 +2872,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line781">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line783">code &raquo;</a>
   </td>
      </tr>
 
@@ -2906,7 +2918,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line747">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line749">code &raquo;</a>
   </td>
      </tr>
 
@@ -2952,7 +2964,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line882">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line884">code &raquo;</a>
   </td>
      </tr>
 
@@ -2998,7 +3010,7 @@ and also ignores timezone considerations.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line765">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line767">code &raquo;</a>
   </td>
      </tr>
 
@@ -3046,7 +3058,7 @@ prevents this value from being constant.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line918">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line920">code &raquo;</a>
   </td>
      </tr>
 
@@ -3093,7 +3105,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line929">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line931">code &raquo;</a>
   </td>
      </tr>
 
@@ -3139,7 +3151,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line814">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line816">code &raquo;</a>
   </td>
      </tr>
 
@@ -3185,7 +3197,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line823">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line825">code &raquo;</a>
   </td>
      </tr>
 
@@ -3231,7 +3243,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line797">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line799">code &raquo;</a>
   </td>
      </tr>
 
@@ -3277,7 +3289,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line831">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line833">code &raquo;</a>
   </td>
      </tr>
 
@@ -3323,7 +3335,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line848">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line850">code &raquo;</a>
   </td>
      </tr>
 
@@ -3369,7 +3381,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line839">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line841">code &raquo;</a>
   </td>
      </tr>
 
@@ -3415,7 +3427,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line806">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line808">code &raquo;</a>
   </td>
      </tr>
 
@@ -3461,7 +3473,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line857">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line859">code &raquo;</a>
   </td>
      </tr>
 
@@ -3507,7 +3519,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line890">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line892">code &raquo;</a>
   </td>
      </tr>
 
@@ -3553,7 +3565,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line789">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line791">code &raquo;</a>
   </td>
      </tr>
 
@@ -3599,7 +3611,7 @@ for UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line739">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line741">code &raquo;</a>
   </td>
      </tr>
 
@@ -3660,7 +3672,7 @@ so automatically.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1179">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1181">code &raquo;</a>
   </td>
      </tr>
 
@@ -3720,7 +3732,7 @@ so automatically.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line953">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line955">code &raquo;</a>
   </td>
      </tr>
 
@@ -3780,7 +3792,7 @@ so automatically.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line994">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line996">code &raquo;</a>
   </td>
      </tr>
 
@@ -3840,7 +3852,7 @@ so automatically.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1045">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1047">code &raquo;</a>
   </td>
      </tr>
 
@@ -3900,7 +3912,7 @@ so automatically.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1055">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1057">code &raquo;</a>
   </td>
      </tr>
 
@@ -3960,7 +3972,7 @@ so automatically.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line963">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line965">code &raquo;</a>
   </td>
      </tr>
 
@@ -4020,7 +4032,7 @@ so automatically.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line984">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line986">code &raquo;</a>
   </td>
      </tr>
 
@@ -4081,7 +4093,7 @@ since 1 January 1970 00:00:00.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1005">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1007">code &raquo;</a>
   </td>
      </tr>
 
@@ -4141,7 +4153,7 @@ since 1 January 1970 00:00:00.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1035">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1037">code &raquo;</a>
   </td>
      </tr>
 
@@ -4201,7 +4213,7 @@ since 1 January 1970 00:00:00.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1015">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1017">code &raquo;</a>
   </td>
      </tr>
 
@@ -4261,7 +4273,7 @@ since 1 January 1970 00:00:00.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1025">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1027">code &raquo;</a>
   </td>
      </tr>
 
@@ -4321,7 +4333,7 @@ since 1 January 1970 00:00:00.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line974">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line976">code &raquo;</a>
   </td>
      </tr>
 
@@ -4368,7 +4380,7 @@ since 1 January 1970 00:00:00.
    <tr class="even">
      <td>
         <span class="entryName">opt_verbose</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the verbose format should be used instead of the default compact one.</div>
      </td>
    </tr>
@@ -4376,7 +4388,7 @@ since 1 January 1970 00:00:00.
    <tr class="odd">
      <td>
         <span class="entryName">opt_tz</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the timezone offset should be included in the string.</div>
      </td>
    </tr>
@@ -4394,7 +4406,7 @@ since 1 January 1970 00:00:00.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1116">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1118">code &raquo;</a>
   </td>
      </tr>
 
@@ -4440,7 +4452,7 @@ since 1 January 1970 00:00:00.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1168">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1170">code &raquo;</a>
   </td>
      </tr>
 
@@ -4487,7 +4499,7 @@ since 1 January 1970 00:00:00.
    <tr class="even">
      <td>
         <span class="entryName">opt_verbose</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the verbose format should be used instead of the default compact one.</div>
      </td>
    </tr>
@@ -4495,7 +4507,7 @@ since 1 January 1970 00:00:00.
    <tr class="odd">
      <td>
         <span class="entryName">opt_tz</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the timezone offset should be included in the string.</div>
      </td>
    </tr>
@@ -4513,7 +4525,7 @@ since 1 January 1970 00:00:00.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1138">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1140">code &raquo;</a>
   </td>
      </tr>
 
@@ -4559,7 +4571,7 @@ since 1 January 1970 00:00:00.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line1190">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line1192">code &raquo;</a>
   </td>
      </tr>
 
@@ -7095,7 +7107,7 @@ since January 1, 1970, 00:00:00 UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line702">Code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line704">Code &raquo;</a>
   </td>
      </tr>
 
@@ -7128,7 +7140,7 @@ since January 1, 1970, 00:00:00 UTC.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line710">Code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line712">Code &raquo;</a>
   </td>
      </tr>
 

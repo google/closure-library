@@ -108,14 +108,14 @@ goog.net.XhrIo.sendInstances_ = [];
  * request.
  * @see goog.net.XhrIo.cleanupAllPendingStaticSends
  * @param {string|goog.Uri} url Uri to make request too.
- * @param {Function} opt_callback Callback function for when request is
+ * @param {Function=} opt_callback Callback function for when request is
  *     complete.
- * @param {string} opt_method Send method, default: GET.
- * @param {string|GearsBlob} opt_content Post data. This can be a Gears blob
+ * @param {string=} opt_method Send method, default: GET.
+ * @param {string|GearsBlob=} opt_content Post data. This can be a Gears blob
  *     if the underlying HTTP request object is a Gears HTTP request.
- * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+ * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
- * @param {number} opt_timeoutInterval Number of milliseconds after which an
+ * @param {number=} opt_timeoutInterval Number of milliseconds after which an
  *     incomplete request will be aborted; 0 means no timeout is set.
  */
 goog.net.XhrIo.send = function(url, opt_callback, opt_method, opt_content,
@@ -168,7 +168,7 @@ goog.net.XhrIo.cleanup = function() {
  *
  * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
  *     protect the entry point(s).
- * @param {boolean} opt_tracers Whether to install tracers around the entry
+ * @param {boolean=} opt_tracers Whether to install tracers around the entry
  *     point.
  */
 goog.net.XhrIo.protectEntryPoints = function(
@@ -331,10 +331,10 @@ goog.net.XhrIo.prototype.setTimeoutInterval = function(ms) {
 /**
  * Instance send that actually uses XMLHttpRequest to make a server call.
  * @param {string|goog.Uri} url Uri to make request too.
- * @param {string} opt_method Send method, default: GET.
- * @param {string|GearsBlob} opt_content Post data. This can be a Gears blob
+ * @param {string=} opt_method Send method, default: GET.
+ * @param {string|GearsBlob=} opt_content Post data. This can be a Gears blob
  *     if the underlying HTTP request object is a Gears HTTP request.
- * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+ * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  */
 goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
@@ -514,7 +514,7 @@ goog.net.XhrIo.prototype.dispatchErrors_ = function() {
 
 /**
  * Abort the current XMLHttpRequest
- * @param {goog.net.ErrorCode} opt_failureCode Optional error code to use -
+ * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
  *     defaults to ABORT.
  */
 goog.net.XhrIo.prototype.abort = function(opt_failureCode) {
@@ -653,7 +653,7 @@ goog.net.XhrIo.prototype.onReadyStateChangeHelper_ = function() {
 /**
  * Remove the listener to protect against leaks, and nullify the XMLHttpRequest
  * object.
- * @param {boolean} opt_fromDispose If this is from the dispose (don't want to
+ * @param {boolean=} opt_fromDispose If this is from the dispose (don't want to
  *     fire any events).
  * @private
  */

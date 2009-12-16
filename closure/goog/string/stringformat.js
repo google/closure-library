@@ -33,7 +33,7 @@ goog.require('goog.string');
  * 'Cost: %.2f' as it would introduce unneccessary latency oposed to
  * 'Cost: ' + cost.toFixed(2).
  * @param {string} formatString Template string containing % specifiers.
- * @param {string|number} var_args Values formatString is to be filled with.
+ * @param {...string|number} var_args Values formatString is to be filled with.
  * @return {string} Formatted string.
  */
 goog.string.format = function(formatString, var_args) {

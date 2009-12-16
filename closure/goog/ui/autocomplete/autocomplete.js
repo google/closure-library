@@ -270,7 +270,7 @@ goog.ui.AutoComplete.prototype.setTriggerSuggestionsOnUpdate = function(
  * <code>renderer.renderRows()</code>.
  *
  * @param {string} token The string for which to search in the Matcher.
- * @param {string} opt_fullString Optionally, the full string in the input
+ * @param {string=} opt_fullString Optionally, the full string in the input
  *     field.
  */
 goog.ui.AutoComplete.prototype.setToken = function(token, opt_fullString) {
@@ -462,7 +462,7 @@ goog.ui.AutoComplete.prototype.disposeInternal = function() {
  *
  * @param {string} matchedToken Token that corresponds with the rows.
  * @param {Array} rows Set of data that match the given token.
- * @param {boolean} opt_preserveHilited If true, keeps the currently hilited
+ * @param {boolean=} opt_preserveHilited If true, keeps the currently hilited
  *     (by index) element hilited.
  *
  * @private
@@ -531,7 +531,7 @@ goog.ui.AutoComplete.prototype.getIdOfIndex_ = function(index) {
  * Attach text areas or input boxes to the autocomplete by DOM reference.  After
  * elements are attached to the autocomplete, when a user types they will see
  * the autocomplete drop down.
- * @param {Element} var_args Variable args: Input or text area elements to
+ * @param {...Element} var_args Variable args: Input or text area elements to
  *     attach the autocomplete too.
  */
 goog.ui.AutoComplete.prototype.attachInputs = function(var_args) {
@@ -544,7 +544,7 @@ goog.ui.AutoComplete.prototype.attachInputs = function(var_args) {
 
 /**
  * Detach text areas or input boxes to the autocomplete by DOM reference.
- * @param {Element} var_args Variable args: Input or text area elements to
+ * @param {...Element} var_args Variable args: Input or text area elements to
  *     detach from the autocomplete.
  */
 goog.ui.AutoComplete.prototype.detachInputs = function(var_args) {

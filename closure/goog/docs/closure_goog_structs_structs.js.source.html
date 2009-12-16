@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -208,7 +209,7 @@
 <a name="line165"></a> * @param {Function} f The function to call for every value. This function takes
 <a name="line166"></a> *     3 arguments (the value, the key or undefined if the collection has no
 <a name="line167"></a> *     notion of keys, and the collection) and the return value is irrelevant.
-<a name="line168"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line168"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line169"></a> *     within {@code f}.
 <a name="line170"></a> */
 <a name="line171"></a>goog.structs.forEach = function(col, f, opt_obj) {
@@ -237,7 +238,7 @@
 <a name="line194"></a> *     notion of keys, and the collection) and should return a Boolean. If the
 <a name="line195"></a> *     return value is true the value is added to the result collection. If it
 <a name="line196"></a> *     is false the value is not included.
-<a name="line197"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line197"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line198"></a> *     within {@code f}.
 <a name="line199"></a> * @return {!Object|!Array} A new collection where the passed values are
 <a name="line200"></a> *     present. If col is a key-less collection an array is returned.  If col
@@ -286,7 +287,7 @@
 <a name="line243"></a> *     takes 3 arguments (the value, the key or undefined if the collection has
 <a name="line244"></a> *     no notion of keys, and the collection) and should return something. The
 <a name="line245"></a> *     result will be used as the value in the new collection.
-<a name="line246"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line246"></a> * @param {Object=} opt_obj  The object to be used as the value of &#39;this&#39;
 <a name="line247"></a> *     within {@code f}.
 <a name="line248"></a> * @return {!Object|!Array} A new collection with the new values.  If col is a
 <a name="line249"></a> *     key-less collection an array is returned.  If col has keys and values a
@@ -330,7 +331,7 @@
 <a name="line287"></a> * @param {Function} f The function to call for every value. This function takes
 <a name="line288"></a> *     3 arguments (the value, the key or undefined if the collection has no
 <a name="line289"></a> *     notion of keys, and the collection) and should return a Boolean.
-<a name="line290"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line290"></a> * @param {Object=} opt_obj  The object to be used as the value of &#39;this&#39;
 <a name="line291"></a> *     within {@code f}.
 <a name="line292"></a> * @return {boolean} True if any value passes the test.
 <a name="line293"></a> */
@@ -362,7 +363,7 @@
 <a name="line319"></a> * @param {Function} f The function to call for every value. This function takes
 <a name="line320"></a> *     3 arguments (the value, the key or undefined if the collection has no
 <a name="line321"></a> *     notion of keys, and the collection) and should return a Boolean.
-<a name="line322"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line322"></a> * @param {Object=} opt_obj  The object to be used as the value of &#39;this&#39;
 <a name="line323"></a> *     within {@code f}.
 <a name="line324"></a> * @return {boolean} True if all key-value pairs pass the test.
 <a name="line325"></a> */

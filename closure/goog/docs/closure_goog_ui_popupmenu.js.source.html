@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -98,7 +99,7 @@
 <a name="line55"></a>
 <a name="line56"></a>/**
 <a name="line57"></a> * A basic menu class.
-<a name="line58"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line58"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line59"></a> * @extends {goog.ui.Menu}
 <a name="line60"></a> * @constructor
 <a name="line61"></a> */
@@ -193,15 +194,15 @@
 <a name="line150"></a> * multiple positions doesn&#39;t make sense.
 <a name="line151"></a> *
 <a name="line152"></a> * @param {Element} element Element whose click event should trigger the menu.
-<a name="line153"></a> * @param {goog.positioning.Corner} opt_targetCorner Corner of the target that
+<a name="line153"></a> * @param {goog.positioning.Corner=} opt_targetCorner Corner of the target that
 <a name="line154"></a> *     the menu should be anchored to.
-<a name="line155"></a> * @param {goog.positioning.Corner} opt_menuCorner Corner of the menu that
+<a name="line155"></a> * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
 <a name="line156"></a> *     should be anchored.
-<a name="line157"></a> * @param {boolean} opt_contextMenu Whether the menu should show on
+<a name="line157"></a> * @param {boolean=} opt_contextMenu Whether the menu should show on
 <a name="line158"></a> *     {@link goog.events.EventType.CONTEXTMENU} events, false if it should
 <a name="line159"></a> *     show on {@link goog.events.EventType.MOUSEDOWN} events. Default is
 <a name="line160"></a> *     MOUSEDOWN.
-<a name="line161"></a> * @param {goog.math.Box} opt_margin Margin for the popup used in positioning
+<a name="line161"></a> * @param {goog.math.Box=} opt_margin Margin for the popup used in positioning
 <a name="line162"></a> *     algorithms.
 <a name="line163"></a> */
 <a name="line164"></a>goog.ui.PopupMenu.prototype.attach = function(
@@ -230,15 +231,15 @@
 <a name="line187"></a> * Subclass may add more properties to the returned object, as needed.
 <a name="line188"></a> *
 <a name="line189"></a> * @param {Element} element Element whose click event should trigger the menu.
-<a name="line190"></a> * @param {goog.positioning.Corner} opt_targetCorner Corner of the target that
+<a name="line190"></a> * @param {goog.positioning.Corner=} opt_targetCorner Corner of the target that
 <a name="line191"></a> *     the menu should be anchored to.
-<a name="line192"></a> * @param {goog.positioning.Corner} opt_menuCorner Corner of the menu that
+<a name="line192"></a> * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
 <a name="line193"></a> *     should be anchored.
-<a name="line194"></a> * @param {boolean} opt_contextMenu Whether the menu should show on
+<a name="line194"></a> * @param {boolean=} opt_contextMenu Whether the menu should show on
 <a name="line195"></a> *     {@link goog.events.EventType.CONTEXTMENU} events, false if it should
 <a name="line196"></a> *     show on {@link goog.events.EventType.MOUSEDOWN} events. Default is
 <a name="line197"></a> *     MOUSEDOWN.
-<a name="line198"></a> * @param {goog.math.Box} opt_margin Margin for the popup used in positioning
+<a name="line198"></a> * @param {goog.math.Box=} opt_margin Margin for the popup used in positioning
 <a name="line199"></a> *     algorithms.
 <a name="line200"></a> *
 <a name="line201"></a> * @return {Object} An object that describes how the popup menu should be
@@ -438,7 +439,7 @@
 <a name="line395"></a> * Shows the menu immediately at the given client coordinates.
 <a name="line396"></a> * @param {number} x The client-X associated with the show event.
 <a name="line397"></a> * @param {number} y The client-Y associated with the show event.
-<a name="line398"></a> * @param {goog.positioning.Corner} opt_menuCorner Corner of the menu that
+<a name="line398"></a> * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
 <a name="line399"></a> *     should be anchored.
 <a name="line400"></a> */
 <a name="line401"></a>goog.ui.PopupMenu.prototype.showAt = function(x, y, opt_menuCorner) {
@@ -451,7 +452,7 @@
 <a name="line408"></a> * @param {Element} element The element to show at.
 <a name="line409"></a> * @param {goog.positioning.Corner} targetCorner The corner of the target to
 <a name="line410"></a> *     anchor to.
-<a name="line411"></a> * @param {goog.positioning.Corner} opt_menuCorner Corner of the menu that
+<a name="line411"></a> * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
 <a name="line412"></a> *     should be anchored.
 <a name="line413"></a> */
 <a name="line414"></a>goog.ui.PopupMenu.prototype.showAtElement = function(element, targetCorner,
@@ -491,7 +492,7 @@
 <a name="line448"></a>
 <a name="line449"></a>/**
 <a name="line450"></a> * Dismiss the popup menu when an action fires.
-<a name="line451"></a> * @param {goog.events.Event} opt_e The optional event.
+<a name="line451"></a> * @param {goog.events.Event=} opt_e The optional event.
 <a name="line452"></a> * @private
 <a name="line453"></a> */
 <a name="line454"></a>goog.ui.PopupMenu.prototype.onAction_ = function(opt_e) {

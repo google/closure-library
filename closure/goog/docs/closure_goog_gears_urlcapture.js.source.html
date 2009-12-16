@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,7 +81,7 @@
 <a name="line37"></a> * @param {string} name The name of the ResourceStore to capture the URLs to.
 <a name="line38"></a> * @param {?string} requiredCookie  A cookie that must be present for the
 <a name="line39"></a> *     managed store to be active. Should have the form &quot;foo=bar&quot;.
-<a name="line40"></a> * @param {GearsResourceStore} opt_localServer The LocalServer for gears.
+<a name="line40"></a> * @param {GearsResourceStore=} opt_localServer The LocalServer for gears.
 <a name="line41"></a> */
 <a name="line42"></a>goog.gears.UrlCapture = function(name, requiredCookie, opt_localServer) {
 <a name="line43"></a>  goog.events.EventTarget.call(this);
@@ -370,8 +371,8 @@
 <a name="line327"></a> * @extends {goog.events.Event}
 <a name="line328"></a> * @param {goog.gears.UrlCapture.EventType} type Type of event to dispatch.
 <a name="line329"></a> * @param {number} captureId The id of the capture that fired this event.
-<a name="line330"></a> * @param {string|goog.Uri} opt_uri The URI for the event.
-<a name="line331"></a> * @param {Array.&lt;string|goog.Uri&gt;} opt_errorUris The URIs that failed to load
+<a name="line330"></a> * @param {string|goog.Uri=} opt_uri The URI for the event.
+<a name="line331"></a> * @param {Array.&lt;string|goog.Uri&gt;=} opt_errorUris The URIs that failed to load
 <a name="line332"></a> * correctly.
 <a name="line333"></a> */
 <a name="line334"></a>goog.gears.UrlCapture.Event = function(type, captureId, opt_uri,

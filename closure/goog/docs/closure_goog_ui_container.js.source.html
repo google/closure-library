@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -94,11 +95,11 @@
 <a name="line51"></a> *    &lt;li&gt;methods to manage child controls hosted in the container,
 <a name="line52"></a> *    &lt;li&gt;default mouse and keyboard event handling methods.
 <a name="line53"></a> *  &lt;/ul&gt;
-<a name="line54"></a> * @param {?goog.ui.Container.Orientation} opt_orientation Container
+<a name="line54"></a> * @param {?goog.ui.Container.Orientation=} opt_orientation Container
 <a name="line55"></a> *     orientation; defaults to {@code VERTICAL}.
-<a name="line56"></a> * @param {?goog.ui.ContainerRenderer} opt_renderer Renderer used to render or
+<a name="line56"></a> * @param {?goog.ui.ContainerRenderer=} opt_renderer Renderer used to render or
 <a name="line57"></a> *     decorate the container; defaults to {@link goog.ui.ContainerRenderer}.
-<a name="line58"></a> * @param {?goog.dom.DomHelper} opt_domHelper DOM helper, used for document
+<a name="line58"></a> * @param {?goog.dom.DomHelper=} opt_domHelper DOM helper, used for document
 <a name="line59"></a> *     interaction.
 <a name="line60"></a> * @extends {goog.ui.Component}
 <a name="line61"></a> * @constructor
@@ -835,7 +836,7 @@
 <a name="line792"></a> * Adds the specified control as the last child of this container.  See
 <a name="line793"></a> * {@link goog.ui.Container#addChildAt} for detailed semantics.
 <a name="line794"></a> * @param {goog.ui.Control} child The new child control.
-<a name="line795"></a> * @param {boolean} opt_render Whether the new child should be rendered
+<a name="line795"></a> * @param {boolean=} opt_render Whether the new child should be rendered
 <a name="line796"></a> *     immediately after being added (defaults to false).
 <a name="line797"></a> */
 <a name="line798"></a>goog.ui.Container.prototype.addChild = function(child, opt_render) {
@@ -844,424 +845,443 @@
 <a name="line801"></a>
 <a name="line802"></a>
 <a name="line803"></a>/**
-<a name="line804"></a> * Adds the control as a child of this container at the given 0-based index.
-<a name="line805"></a> * Overrides {@link goog.ui.Component#addChildAt} by also updating the
-<a name="line806"></a> * container&#39;s highlight index.  Since {@link goog.ui.Component#addChild} uses
-<a name="line807"></a> * {@link #addChildAt} internally, we only need to override this method.
-<a name="line808"></a> * @param {goog.ui.Control} control New child.
-<a name="line809"></a> * @param {number} index Index at which the new child is to be added.
-<a name="line810"></a> * @param {boolean} opt_render Whether the new child should be rendered
-<a name="line811"></a> *     immediately after being added (defaults to false).
-<a name="line812"></a> */
-<a name="line813"></a>goog.ui.Container.prototype.addChildAt = function(control, index, opt_render) {
-<a name="line814"></a>  // Make sure the child control dispatches HIGHLIGHT, UNHIGHLIGHT, OPEN, and
-<a name="line815"></a>  // CLOSE events, and that it doesn&#39;t steal keyboard focus.
-<a name="line816"></a>  control.setDispatchTransitionEvents(goog.ui.Component.State.HOVER, true);
-<a name="line817"></a>  control.setDispatchTransitionEvents(goog.ui.Component.State.OPENED, true);
-<a name="line818"></a>  if (this.isFocusable() || !this.isFocusableChildrenAllowed()) {
-<a name="line819"></a>    control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
-<a name="line820"></a>  }
+<a name="line804"></a> * Overrides {@link goog.ui.Container#getChild} to make it clear that it
+<a name="line805"></a> * only returns {@link goog.ui.Control}s.
+<a name="line806"></a> * @param {string} id Child component ID.
+<a name="line807"></a> * @return {goog.ui.Control} The child with the given ID; null if none.
+<a name="line808"></a> * @override
+<a name="line809"></a> */
+<a name="line810"></a>goog.ui.Container.prototype.getChild;
+<a name="line811"></a>
+<a name="line812"></a>
+<a name="line813"></a>/**
+<a name="line814"></a> * Overrides {@link goog.ui.Container#getChildAt} to make it clear that it
+<a name="line815"></a> * only returns {@link goog.ui.Control}s.
+<a name="line816"></a> * @param {number} index 0-based index.
+<a name="line817"></a> * @return {goog.ui.Control} The child with the given ID; null if none.
+<a name="line818"></a> * @override
+<a name="line819"></a> */
+<a name="line820"></a>goog.ui.Container.prototype.getChildAt;
 <a name="line821"></a>
-<a name="line822"></a>  // Disable mouse event handling by child controls.
-<a name="line823"></a>  control.setHandleMouseEvents(false);
-<a name="line824"></a>
-<a name="line825"></a>  // Let the superclass implementation do the work.
-<a name="line826"></a>  goog.ui.Container.superClass_.addChildAt.call(this, control, index,
-<a name="line827"></a>      opt_render);
-<a name="line828"></a>
-<a name="line829"></a>  if (opt_render &amp;&amp; this.isInDocument()) {
-<a name="line830"></a>    this.registerChildId_(control);
-<a name="line831"></a>  }
-<a name="line832"></a>
-<a name="line833"></a>  // Update the highlight index, if needed.
-<a name="line834"></a>  if (index &lt;= this.highlightedIndex_) {
-<a name="line835"></a>    this.highlightedIndex_++;
-<a name="line836"></a>  }
-<a name="line837"></a>};
-<a name="line838"></a>
-<a name="line839"></a>
-<a name="line840"></a>/**
-<a name="line841"></a> * Removes a child control.  Overrides {@link goog.ui.Component#removeChild} by
-<a name="line842"></a> * updating the highlight index.  Since {@link goog.ui.Component#removeChildAt}
-<a name="line843"></a> * uses {@link #removeChild} internally, we only need to override this method.
-<a name="line844"></a> * @param {string|goog.ui.Control} control The ID of the child to remove, or
-<a name="line845"></a> *     the control itself.
-<a name="line846"></a> * @param {boolean} opt_unrender Whether to call {@code exitDocument} on the
-<a name="line847"></a> *     removed control, and detach its DOM from the document (defaults to
-<a name="line848"></a> *     false).
-<a name="line849"></a> * @return {goog.ui.Control} The removed control, if any.
-<a name="line850"></a> */
-<a name="line851"></a>goog.ui.Container.prototype.removeChild = function(control, opt_unrender) {
-<a name="line852"></a>  // TODO: Fix implementation so that it works if control is a string.
-<a name="line853"></a>
-<a name="line854"></a>  var index = this.indexOfChild(/** @type {goog.ui.Control} */ (control));
-<a name="line855"></a>  if (index != -1) {
-<a name="line856"></a>    if (index == this.highlightedIndex_) {
-<a name="line857"></a>      control.setHighlighted(false);
-<a name="line858"></a>    } else if (index &lt; this.highlightedIndex_) {
-<a name="line859"></a>      this.highlightedIndex_--;
-<a name="line860"></a>    }
-<a name="line861"></a>  }
-<a name="line862"></a>
-<a name="line863"></a>  // Remove the mapping from the child element ID map.
-<a name="line864"></a>  var childElem = control.getElement();
-<a name="line865"></a>  if (childElem &amp;&amp; childElem.id) {
-<a name="line866"></a>    goog.object.remove(this.childElementIdMap_, childElem.id);
-<a name="line867"></a>  }
-<a name="line868"></a>
-<a name="line869"></a>  control = /** @type {goog.ui.Control} */ (
-<a name="line870"></a>      goog.ui.Container.superClass_.removeChild.call(this, control,
-<a name="line871"></a>          opt_unrender));
-<a name="line872"></a>
-<a name="line873"></a>  // Re-enable mouse event handling (in case the control is reused elsewhere).
-<a name="line874"></a>  control.setHandleMouseEvents(true);
-<a name="line875"></a>
-<a name="line876"></a>  return control;
-<a name="line877"></a>};
-<a name="line878"></a>
-<a name="line879"></a>
-<a name="line880"></a>// Container state management.
-<a name="line881"></a>
+<a name="line822"></a>
+<a name="line823"></a>/**
+<a name="line824"></a> * Adds the control as a child of this container at the given 0-based index.
+<a name="line825"></a> * Overrides {@link goog.ui.Component#addChildAt} by also updating the
+<a name="line826"></a> * container&#39;s highlight index.  Since {@link goog.ui.Component#addChild} uses
+<a name="line827"></a> * {@link #addChildAt} internally, we only need to override this method.
+<a name="line828"></a> * @param {goog.ui.Control} control New child.
+<a name="line829"></a> * @param {number} index Index at which the new child is to be added.
+<a name="line830"></a> * @param {boolean=} opt_render Whether the new child should be rendered
+<a name="line831"></a> *     immediately after being added (defaults to false).
+<a name="line832"></a> */
+<a name="line833"></a>goog.ui.Container.prototype.addChildAt = function(control, index, opt_render) {
+<a name="line834"></a>  // Make sure the child control dispatches HIGHLIGHT, UNHIGHLIGHT, OPEN, and
+<a name="line835"></a>  // CLOSE events, and that it doesn&#39;t steal keyboard focus.
+<a name="line836"></a>  control.setDispatchTransitionEvents(goog.ui.Component.State.HOVER, true);
+<a name="line837"></a>  control.setDispatchTransitionEvents(goog.ui.Component.State.OPENED, true);
+<a name="line838"></a>  if (this.isFocusable() || !this.isFocusableChildrenAllowed()) {
+<a name="line839"></a>    control.setSupportedState(goog.ui.Component.State.FOCUSED, false);
+<a name="line840"></a>  }
+<a name="line841"></a>
+<a name="line842"></a>  // Disable mouse event handling by child controls.
+<a name="line843"></a>  control.setHandleMouseEvents(false);
+<a name="line844"></a>
+<a name="line845"></a>  // Let the superclass implementation do the work.
+<a name="line846"></a>  goog.ui.Container.superClass_.addChildAt.call(this, control, index,
+<a name="line847"></a>      opt_render);
+<a name="line848"></a>
+<a name="line849"></a>  if (opt_render &amp;&amp; this.isInDocument()) {
+<a name="line850"></a>    this.registerChildId_(control);
+<a name="line851"></a>  }
+<a name="line852"></a>
+<a name="line853"></a>  // Update the highlight index, if needed.
+<a name="line854"></a>  if (index &lt;= this.highlightedIndex_) {
+<a name="line855"></a>    this.highlightedIndex_++;
+<a name="line856"></a>  }
+<a name="line857"></a>};
+<a name="line858"></a>
+<a name="line859"></a>
+<a name="line860"></a>/**
+<a name="line861"></a> * Removes a child control.  Overrides {@link goog.ui.Component#removeChild} by
+<a name="line862"></a> * updating the highlight index.  Since {@link goog.ui.Component#removeChildAt}
+<a name="line863"></a> * uses {@link #removeChild} internally, we only need to override this method.
+<a name="line864"></a> * @param {string|goog.ui.Control} control The ID of the child to remove, or
+<a name="line865"></a> *     the control itself.
+<a name="line866"></a> * @param {boolean=} opt_unrender Whether to call {@code exitDocument} on the
+<a name="line867"></a> *     removed control, and detach its DOM from the document (defaults to
+<a name="line868"></a> *     false).
+<a name="line869"></a> * @return {goog.ui.Control} The removed control, if any.
+<a name="line870"></a> */
+<a name="line871"></a>goog.ui.Container.prototype.removeChild = function(control, opt_unrender) {
+<a name="line872"></a>  // TODO: Fix implementation so that it works if control is a string.
+<a name="line873"></a>
+<a name="line874"></a>  var index = this.indexOfChild(/** @type {goog.ui.Control} */ (control));
+<a name="line875"></a>  if (index != -1) {
+<a name="line876"></a>    if (index == this.highlightedIndex_) {
+<a name="line877"></a>      control.setHighlighted(false);
+<a name="line878"></a>    } else if (index &lt; this.highlightedIndex_) {
+<a name="line879"></a>      this.highlightedIndex_--;
+<a name="line880"></a>    }
+<a name="line881"></a>  }
 <a name="line882"></a>
-<a name="line883"></a>/**
-<a name="line884"></a> * Returns the container&#39;s orientation.
-<a name="line885"></a> * @return {?goog.ui.Container.Orientation} Container orientation.
-<a name="line886"></a> */
-<a name="line887"></a>goog.ui.Container.prototype.getOrientation = function() {
-<a name="line888"></a>  return this.orientation_;
-<a name="line889"></a>};
-<a name="line890"></a>
-<a name="line891"></a>
-<a name="line892"></a>/**
-<a name="line893"></a> * Sets the container&#39;s orientation.
-<a name="line894"></a> * @param {goog.ui.Container.Orientation} orientation Container orientation.
-<a name="line895"></a> */
-<a name="line896"></a>// TODO: Do we need to support containers with dynamic orientation?
-<a name="line897"></a>goog.ui.Container.prototype.setOrientation = function(orientation) {
-<a name="line898"></a>  if (this.getElement()) {
-<a name="line899"></a>    // Too late.
-<a name="line900"></a>    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
-<a name="line901"></a>  }
+<a name="line883"></a>  // Remove the mapping from the child element ID map.
+<a name="line884"></a>  var childElem = control.getElement();
+<a name="line885"></a>  if (childElem &amp;&amp; childElem.id) {
+<a name="line886"></a>    goog.object.remove(this.childElementIdMap_, childElem.id);
+<a name="line887"></a>  }
+<a name="line888"></a>
+<a name="line889"></a>  control = /** @type {goog.ui.Control} */ (
+<a name="line890"></a>      goog.ui.Container.superClass_.removeChild.call(this, control,
+<a name="line891"></a>          opt_unrender));
+<a name="line892"></a>
+<a name="line893"></a>  // Re-enable mouse event handling (in case the control is reused elsewhere).
+<a name="line894"></a>  control.setHandleMouseEvents(true);
+<a name="line895"></a>
+<a name="line896"></a>  return control;
+<a name="line897"></a>};
+<a name="line898"></a>
+<a name="line899"></a>
+<a name="line900"></a>// Container state management.
+<a name="line901"></a>
 <a name="line902"></a>
-<a name="line903"></a>  this.orientation_ = orientation;
-<a name="line904"></a>};
-<a name="line905"></a>
-<a name="line906"></a>
-<a name="line907"></a>/**
-<a name="line908"></a> * Returns true if the container&#39;s visibility is set to visible, false if
-<a name="line909"></a> * it is set to hidden.  A container that is set to hidden is guaranteed
-<a name="line910"></a> * to be hidden from the user, but the reverse isn&#39;t necessarily true.
-<a name="line911"></a> * A container may be set to visible but can otherwise be obscured by another
-<a name="line912"></a> * element, rendered off-screen, or hidden using direct CSS manipulation.
-<a name="line913"></a> * @return {boolean} Whether the container is set to be visible.
-<a name="line914"></a> */
-<a name="line915"></a>goog.ui.Container.prototype.isVisible = function() {
-<a name="line916"></a>  return this.visible_;
-<a name="line917"></a>};
-<a name="line918"></a>
-<a name="line919"></a>
-<a name="line920"></a>/**
-<a name="line921"></a> * Shows or hides the container.  Does nothing if the container already has
-<a name="line922"></a> * the requested visibility.  Otherwise, dispatches a SHOW or HIDE event as
-<a name="line923"></a> * appropriate, giving listeners a chance to prevent the visibility change.
-<a name="line924"></a> * @param {boolean} visible Whether to show or hide the container.
-<a name="line925"></a> * @param {boolean} opt_force If true, doesn&#39;t check whether the container
-<a name="line926"></a> *     already has the requested visibility, and doesn&#39;t dispatch any events.
-<a name="line927"></a> * @return {boolean} Whether the visibility was changed.
-<a name="line928"></a> */
-<a name="line929"></a>goog.ui.Container.prototype.setVisible = function(visible, opt_force) {
-<a name="line930"></a>  if (opt_force || (this.visible_ != visible &amp;&amp; this.dispatchEvent(visible ?
-<a name="line931"></a>      goog.ui.Component.EventType.SHOW : goog.ui.Component.EventType.HIDE))) {
-<a name="line932"></a>    this.visible_ = visible;
-<a name="line933"></a>
-<a name="line934"></a>    var elem = this.getElement();
-<a name="line935"></a>    if (elem) {
-<a name="line936"></a>      goog.style.showElement(elem, visible);
-<a name="line937"></a>      if (this.isFocusable()) {
-<a name="line938"></a>        // Enable keyboard access only for enabled &amp; visible containers.
-<a name="line939"></a>        this.renderer_.enableTabIndex(this.getKeyEventTarget(),
-<a name="line940"></a>            this.enabled_ &amp;&amp; this.visible_);
-<a name="line941"></a>      }
-<a name="line942"></a>      if (this.visible_ &amp;&amp; !opt_force) {
-<a name="line943"></a>        this.dispatchEvent(goog.ui.Container.EventType.AFTER_SHOW);
-<a name="line944"></a>      }
-<a name="line945"></a>    }
-<a name="line946"></a>
-<a name="line947"></a>    return true;
-<a name="line948"></a>  }
-<a name="line949"></a>
-<a name="line950"></a>  return false;
-<a name="line951"></a>};
-<a name="line952"></a>
+<a name="line903"></a>/**
+<a name="line904"></a> * Returns the container&#39;s orientation.
+<a name="line905"></a> * @return {?goog.ui.Container.Orientation} Container orientation.
+<a name="line906"></a> */
+<a name="line907"></a>goog.ui.Container.prototype.getOrientation = function() {
+<a name="line908"></a>  return this.orientation_;
+<a name="line909"></a>};
+<a name="line910"></a>
+<a name="line911"></a>
+<a name="line912"></a>/**
+<a name="line913"></a> * Sets the container&#39;s orientation.
+<a name="line914"></a> * @param {goog.ui.Container.Orientation} orientation Container orientation.
+<a name="line915"></a> */
+<a name="line916"></a>// TODO: Do we need to support containers with dynamic orientation?
+<a name="line917"></a>goog.ui.Container.prototype.setOrientation = function(orientation) {
+<a name="line918"></a>  if (this.getElement()) {
+<a name="line919"></a>    // Too late.
+<a name="line920"></a>    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+<a name="line921"></a>  }
+<a name="line922"></a>
+<a name="line923"></a>  this.orientation_ = orientation;
+<a name="line924"></a>};
+<a name="line925"></a>
+<a name="line926"></a>
+<a name="line927"></a>/**
+<a name="line928"></a> * Returns true if the container&#39;s visibility is set to visible, false if
+<a name="line929"></a> * it is set to hidden.  A container that is set to hidden is guaranteed
+<a name="line930"></a> * to be hidden from the user, but the reverse isn&#39;t necessarily true.
+<a name="line931"></a> * A container may be set to visible but can otherwise be obscured by another
+<a name="line932"></a> * element, rendered off-screen, or hidden using direct CSS manipulation.
+<a name="line933"></a> * @return {boolean} Whether the container is set to be visible.
+<a name="line934"></a> */
+<a name="line935"></a>goog.ui.Container.prototype.isVisible = function() {
+<a name="line936"></a>  return this.visible_;
+<a name="line937"></a>};
+<a name="line938"></a>
+<a name="line939"></a>
+<a name="line940"></a>/**
+<a name="line941"></a> * Shows or hides the container.  Does nothing if the container already has
+<a name="line942"></a> * the requested visibility.  Otherwise, dispatches a SHOW or HIDE event as
+<a name="line943"></a> * appropriate, giving listeners a chance to prevent the visibility change.
+<a name="line944"></a> * @param {boolean} visible Whether to show or hide the container.
+<a name="line945"></a> * @param {boolean=} opt_force If true, doesn&#39;t check whether the container
+<a name="line946"></a> *     already has the requested visibility, and doesn&#39;t dispatch any events.
+<a name="line947"></a> * @return {boolean} Whether the visibility was changed.
+<a name="line948"></a> */
+<a name="line949"></a>goog.ui.Container.prototype.setVisible = function(visible, opt_force) {
+<a name="line950"></a>  if (opt_force || (this.visible_ != visible &amp;&amp; this.dispatchEvent(visible ?
+<a name="line951"></a>      goog.ui.Component.EventType.SHOW : goog.ui.Component.EventType.HIDE))) {
+<a name="line952"></a>    this.visible_ = visible;
 <a name="line953"></a>
-<a name="line954"></a>/**
-<a name="line955"></a> * Returns true if the container is enabled, false otherwise.
-<a name="line956"></a> * @return {boolean} Whether the container is enabled.
-<a name="line957"></a> */
-<a name="line958"></a>goog.ui.Container.prototype.isEnabled = function() {
-<a name="line959"></a>  return this.enabled_;
-<a name="line960"></a>};
-<a name="line961"></a>
-<a name="line962"></a>
-<a name="line963"></a>/**
-<a name="line964"></a> * Enables/disables the container based on the {@code enable} argument.
-<a name="line965"></a> * Dispatches an {@code ENABLED} or {@code DISABLED} event prior to changing
-<a name="line966"></a> * the container&#39;s state, which may be caught and canceled to prevent the
-<a name="line967"></a> * container from changing state.  Also enables/disables child controls.
-<a name="line968"></a> * @param {boolean} enable Whether to enable or disable the container.
-<a name="line969"></a> */
-<a name="line970"></a>goog.ui.Container.prototype.setEnabled = function(enable) {
-<a name="line971"></a>  if (this.enabled_ != enable &amp;&amp; this.dispatchEvent(enable ?
-<a name="line972"></a>      goog.ui.Component.EventType.ENABLE :
-<a name="line973"></a>      goog.ui.Component.EventType.DISABLE)) {
-<a name="line974"></a>    if (enable) {
-<a name="line975"></a>      // Flag the container as enabled first, then update children.  This is
-<a name="line976"></a>      // because controls can&#39;t be enabled if their parent is disabled.
-<a name="line977"></a>      this.enabled_ = true;
-<a name="line978"></a>      this.forEachChild(function(child) {
-<a name="line979"></a>        // Enable child control unless it is flagged.
-<a name="line980"></a>        if (child.wasDisabled) {
-<a name="line981"></a>          delete child.wasDisabled;
-<a name="line982"></a>        } else {
-<a name="line983"></a>          child.setEnabled(true);
-<a name="line984"></a>        }
-<a name="line985"></a>      });
-<a name="line986"></a>    } else {
-<a name="line987"></a>      // Disable children first, then flag the container as disabled.  This is
-<a name="line988"></a>      // because controls can&#39;t be disabled if their parent is already disabled.
-<a name="line989"></a>      this.forEachChild(function(child) {
-<a name="line990"></a>        // Disable child control, or flag it if it&#39;s already disabled.
-<a name="line991"></a>        if (child.isEnabled()) {
-<a name="line992"></a>          child.setEnabled(false);
-<a name="line993"></a>        } else {
-<a name="line994"></a>          child.wasDisabled = true;
-<a name="line995"></a>        }
-<a name="line996"></a>      });
-<a name="line997"></a>      this.enabled_ = false;
-<a name="line998"></a>      this.setMouseButtonPressed(false);
-<a name="line999"></a>    }
-<a name="line1000"></a>
-<a name="line1001"></a>    if (this.isFocusable()) {
-<a name="line1002"></a>      // Enable keyboard access only for enabled &amp; visible components.
-<a name="line1003"></a>      this.renderer_.enableTabIndex(this.getKeyEventTarget(),
-<a name="line1004"></a>          enable &amp;&amp; this.visible_);
-<a name="line1005"></a>    }
-<a name="line1006"></a>  }
-<a name="line1007"></a>};
-<a name="line1008"></a>
-<a name="line1009"></a>
-<a name="line1010"></a>/**
-<a name="line1011"></a> * Returns true if the container is focusable, false otherwise.  The default
-<a name="line1012"></a> * is true.  Focusable containers always have a tab index and allocate a key
-<a name="line1013"></a> * handler to handle keyboard events while focused.
-<a name="line1014"></a> * @return {boolean} Whether the component is focusable.
-<a name="line1015"></a> */
-<a name="line1016"></a>goog.ui.Container.prototype.isFocusable = function() {
-<a name="line1017"></a>  return this.focusable_;
-<a name="line1018"></a>};
-<a name="line1019"></a>
+<a name="line954"></a>    var elem = this.getElement();
+<a name="line955"></a>    if (elem) {
+<a name="line956"></a>      goog.style.showElement(elem, visible);
+<a name="line957"></a>      if (this.isFocusable()) {
+<a name="line958"></a>        // Enable keyboard access only for enabled &amp; visible containers.
+<a name="line959"></a>        this.renderer_.enableTabIndex(this.getKeyEventTarget(),
+<a name="line960"></a>            this.enabled_ &amp;&amp; this.visible_);
+<a name="line961"></a>      }
+<a name="line962"></a>      if (this.visible_ &amp;&amp; !opt_force) {
+<a name="line963"></a>        this.dispatchEvent(goog.ui.Container.EventType.AFTER_SHOW);
+<a name="line964"></a>      }
+<a name="line965"></a>    }
+<a name="line966"></a>
+<a name="line967"></a>    return true;
+<a name="line968"></a>  }
+<a name="line969"></a>
+<a name="line970"></a>  return false;
+<a name="line971"></a>};
+<a name="line972"></a>
+<a name="line973"></a>
+<a name="line974"></a>/**
+<a name="line975"></a> * Returns true if the container is enabled, false otherwise.
+<a name="line976"></a> * @return {boolean} Whether the container is enabled.
+<a name="line977"></a> */
+<a name="line978"></a>goog.ui.Container.prototype.isEnabled = function() {
+<a name="line979"></a>  return this.enabled_;
+<a name="line980"></a>};
+<a name="line981"></a>
+<a name="line982"></a>
+<a name="line983"></a>/**
+<a name="line984"></a> * Enables/disables the container based on the {@code enable} argument.
+<a name="line985"></a> * Dispatches an {@code ENABLED} or {@code DISABLED} event prior to changing
+<a name="line986"></a> * the container&#39;s state, which may be caught and canceled to prevent the
+<a name="line987"></a> * container from changing state.  Also enables/disables child controls.
+<a name="line988"></a> * @param {boolean} enable Whether to enable or disable the container.
+<a name="line989"></a> */
+<a name="line990"></a>goog.ui.Container.prototype.setEnabled = function(enable) {
+<a name="line991"></a>  if (this.enabled_ != enable &amp;&amp; this.dispatchEvent(enable ?
+<a name="line992"></a>      goog.ui.Component.EventType.ENABLE :
+<a name="line993"></a>      goog.ui.Component.EventType.DISABLE)) {
+<a name="line994"></a>    if (enable) {
+<a name="line995"></a>      // Flag the container as enabled first, then update children.  This is
+<a name="line996"></a>      // because controls can&#39;t be enabled if their parent is disabled.
+<a name="line997"></a>      this.enabled_ = true;
+<a name="line998"></a>      this.forEachChild(function(child) {
+<a name="line999"></a>        // Enable child control unless it is flagged.
+<a name="line1000"></a>        if (child.wasDisabled) {
+<a name="line1001"></a>          delete child.wasDisabled;
+<a name="line1002"></a>        } else {
+<a name="line1003"></a>          child.setEnabled(true);
+<a name="line1004"></a>        }
+<a name="line1005"></a>      });
+<a name="line1006"></a>    } else {
+<a name="line1007"></a>      // Disable children first, then flag the container as disabled.  This is
+<a name="line1008"></a>      // because controls can&#39;t be disabled if their parent is already disabled.
+<a name="line1009"></a>      this.forEachChild(function(child) {
+<a name="line1010"></a>        // Disable child control, or flag it if it&#39;s already disabled.
+<a name="line1011"></a>        if (child.isEnabled()) {
+<a name="line1012"></a>          child.setEnabled(false);
+<a name="line1013"></a>        } else {
+<a name="line1014"></a>          child.wasDisabled = true;
+<a name="line1015"></a>        }
+<a name="line1016"></a>      });
+<a name="line1017"></a>      this.enabled_ = false;
+<a name="line1018"></a>      this.setMouseButtonPressed(false);
+<a name="line1019"></a>    }
 <a name="line1020"></a>
-<a name="line1021"></a>/**
-<a name="line1022"></a> * Sets whether the container is focusable.  The default is true.  Focusable
-<a name="line1023"></a> * containers always have a tab index and allocate a key handler to handle
-<a name="line1024"></a> * keyboard events while focused.
-<a name="line1025"></a> * @param {boolean} focusable Whether the component is to be focusable.
-<a name="line1026"></a> */
-<a name="line1027"></a>goog.ui.Container.prototype.setFocusable = function(focusable) {
-<a name="line1028"></a>  if (focusable != this.focusable_ &amp;&amp; this.isInDocument()) {
-<a name="line1029"></a>    this.enableFocusHandling_(focusable);
-<a name="line1030"></a>  }
-<a name="line1031"></a>  this.focusable_ = focusable;
-<a name="line1032"></a>  if (this.enabled_ &amp;&amp; this.visible_) {
-<a name="line1033"></a>    this.renderer_.enableTabIndex(this.getKeyEventTarget(), focusable);
-<a name="line1034"></a>  }
-<a name="line1035"></a>};
-<a name="line1036"></a>
-<a name="line1037"></a>
-<a name="line1038"></a>/**
-<a name="line1039"></a> * Returns true if the container allows children to be focusable, false
-<a name="line1040"></a> * otherwise.  Only effective if the container is not focusable.
-<a name="line1041"></a> * @return {boolean} Whether children should be focusable.
-<a name="line1042"></a> */
-<a name="line1043"></a>goog.ui.Container.prototype.isFocusableChildrenAllowed = function() {
-<a name="line1044"></a>  return this.allowFocusableChildren_;
-<a name="line1045"></a>};
-<a name="line1046"></a>
-<a name="line1047"></a>
-<a name="line1048"></a>/**
-<a name="line1049"></a> * Sets whether the container allows children to be focusable, false
-<a name="line1050"></a> * otherwise.  Only effective if the container is not focusable.
-<a name="line1051"></a> * @param {boolean} focusable Whether the children should be focusable.
-<a name="line1052"></a> */
-<a name="line1053"></a>goog.ui.Container.prototype.setFocusableChildrenAllowed = function(focusable) {
-<a name="line1054"></a>  this.allowFocusableChildren_ = focusable;
+<a name="line1021"></a>    if (this.isFocusable()) {
+<a name="line1022"></a>      // Enable keyboard access only for enabled &amp; visible components.
+<a name="line1023"></a>      this.renderer_.enableTabIndex(this.getKeyEventTarget(),
+<a name="line1024"></a>          enable &amp;&amp; this.visible_);
+<a name="line1025"></a>    }
+<a name="line1026"></a>  }
+<a name="line1027"></a>};
+<a name="line1028"></a>
+<a name="line1029"></a>
+<a name="line1030"></a>/**
+<a name="line1031"></a> * Returns true if the container is focusable, false otherwise.  The default
+<a name="line1032"></a> * is true.  Focusable containers always have a tab index and allocate a key
+<a name="line1033"></a> * handler to handle keyboard events while focused.
+<a name="line1034"></a> * @return {boolean} Whether the component is focusable.
+<a name="line1035"></a> */
+<a name="line1036"></a>goog.ui.Container.prototype.isFocusable = function() {
+<a name="line1037"></a>  return this.focusable_;
+<a name="line1038"></a>};
+<a name="line1039"></a>
+<a name="line1040"></a>
+<a name="line1041"></a>/**
+<a name="line1042"></a> * Sets whether the container is focusable.  The default is true.  Focusable
+<a name="line1043"></a> * containers always have a tab index and allocate a key handler to handle
+<a name="line1044"></a> * keyboard events while focused.
+<a name="line1045"></a> * @param {boolean} focusable Whether the component is to be focusable.
+<a name="line1046"></a> */
+<a name="line1047"></a>goog.ui.Container.prototype.setFocusable = function(focusable) {
+<a name="line1048"></a>  if (focusable != this.focusable_ &amp;&amp; this.isInDocument()) {
+<a name="line1049"></a>    this.enableFocusHandling_(focusable);
+<a name="line1050"></a>  }
+<a name="line1051"></a>  this.focusable_ = focusable;
+<a name="line1052"></a>  if (this.enabled_ &amp;&amp; this.visible_) {
+<a name="line1053"></a>    this.renderer_.enableTabIndex(this.getKeyEventTarget(), focusable);
+<a name="line1054"></a>  }
 <a name="line1055"></a>};
 <a name="line1056"></a>
 <a name="line1057"></a>
-<a name="line1058"></a>// Highlight management.
-<a name="line1059"></a>
-<a name="line1060"></a>
-<a name="line1061"></a>/**
-<a name="line1062"></a> * Returns the index of the currently highlighted item (-1 if none).
-<a name="line1063"></a> * @return {number} Index of the currently highlighted item.
-<a name="line1064"></a> */
-<a name="line1065"></a>goog.ui.Container.prototype.getHighlightedIndex = function() {
-<a name="line1066"></a>  return this.highlightedIndex_;
-<a name="line1067"></a>};
-<a name="line1068"></a>
-<a name="line1069"></a>
-<a name="line1070"></a>/**
-<a name="line1071"></a> * Highlights the item at the given 0-based index (if any).  If another item
-<a name="line1072"></a> * was previously highlighted, it is un-highlighted.
-<a name="line1073"></a> * @param {number} index Index of item to highlight (-1 removes the current
-<a name="line1074"></a> *     highlight).
-<a name="line1075"></a> */
-<a name="line1076"></a>goog.ui.Container.prototype.setHighlightedIndex = function(index) {
-<a name="line1077"></a>  var child = this.getChildAt(index);
-<a name="line1078"></a>  if (child) {
-<a name="line1079"></a>    child.setHighlighted(true);
-<a name="line1080"></a>  } else if (this.highlightedIndex_ &gt; -1) {
-<a name="line1081"></a>    this.getHighlighted().setHighlighted(false);
-<a name="line1082"></a>  }
-<a name="line1083"></a>};
-<a name="line1084"></a>
-<a name="line1085"></a>
-<a name="line1086"></a>/**
-<a name="line1087"></a> * Highlights the given item if it exists and is a child of the container;
-<a name="line1088"></a> * otherwise un-highlights the currently highlighted item.
-<a name="line1089"></a> * @param {goog.ui.Control} item Item to highlight.
-<a name="line1090"></a> */
-<a name="line1091"></a>goog.ui.Container.prototype.setHighlighted = function(item) {
-<a name="line1092"></a>  this.setHighlightedIndex(this.indexOfChild(item));
-<a name="line1093"></a>};
-<a name="line1094"></a>
-<a name="line1095"></a>
-<a name="line1096"></a>/**
-<a name="line1097"></a> * Returns the currently highlighted item (if any).
-<a name="line1098"></a> * @return {goog.ui.Control?} Highlighted item (null if none).
-<a name="line1099"></a> */
-<a name="line1100"></a>goog.ui.Container.prototype.getHighlighted = function() {
-<a name="line1101"></a>  return /** @type {goog.ui.Control} */ (
-<a name="line1102"></a>      this.getChildAt(this.highlightedIndex_));
+<a name="line1058"></a>/**
+<a name="line1059"></a> * Returns true if the container allows children to be focusable, false
+<a name="line1060"></a> * otherwise.  Only effective if the container is not focusable.
+<a name="line1061"></a> * @return {boolean} Whether children should be focusable.
+<a name="line1062"></a> */
+<a name="line1063"></a>goog.ui.Container.prototype.isFocusableChildrenAllowed = function() {
+<a name="line1064"></a>  return this.allowFocusableChildren_;
+<a name="line1065"></a>};
+<a name="line1066"></a>
+<a name="line1067"></a>
+<a name="line1068"></a>/**
+<a name="line1069"></a> * Sets whether the container allows children to be focusable, false
+<a name="line1070"></a> * otherwise.  Only effective if the container is not focusable.
+<a name="line1071"></a> * @param {boolean} focusable Whether the children should be focusable.
+<a name="line1072"></a> */
+<a name="line1073"></a>goog.ui.Container.prototype.setFocusableChildrenAllowed = function(focusable) {
+<a name="line1074"></a>  this.allowFocusableChildren_ = focusable;
+<a name="line1075"></a>};
+<a name="line1076"></a>
+<a name="line1077"></a>
+<a name="line1078"></a>// Highlight management.
+<a name="line1079"></a>
+<a name="line1080"></a>
+<a name="line1081"></a>/**
+<a name="line1082"></a> * Returns the index of the currently highlighted item (-1 if none).
+<a name="line1083"></a> * @return {number} Index of the currently highlighted item.
+<a name="line1084"></a> */
+<a name="line1085"></a>goog.ui.Container.prototype.getHighlightedIndex = function() {
+<a name="line1086"></a>  return this.highlightedIndex_;
+<a name="line1087"></a>};
+<a name="line1088"></a>
+<a name="line1089"></a>
+<a name="line1090"></a>/**
+<a name="line1091"></a> * Highlights the item at the given 0-based index (if any).  If another item
+<a name="line1092"></a> * was previously highlighted, it is un-highlighted.
+<a name="line1093"></a> * @param {number} index Index of item to highlight (-1 removes the current
+<a name="line1094"></a> *     highlight).
+<a name="line1095"></a> */
+<a name="line1096"></a>goog.ui.Container.prototype.setHighlightedIndex = function(index) {
+<a name="line1097"></a>  var child = this.getChildAt(index);
+<a name="line1098"></a>  if (child) {
+<a name="line1099"></a>    child.setHighlighted(true);
+<a name="line1100"></a>  } else if (this.highlightedIndex_ &gt; -1) {
+<a name="line1101"></a>    this.getHighlighted().setHighlighted(false);
+<a name="line1102"></a>  }
 <a name="line1103"></a>};
 <a name="line1104"></a>
 <a name="line1105"></a>
 <a name="line1106"></a>/**
-<a name="line1107"></a> * Highlights the first highlightable item in the container
-<a name="line1108"></a> */
-<a name="line1109"></a>goog.ui.Container.prototype.highlightFirst = function() {
-<a name="line1110"></a>  this.highlightHelper(function(index, max) {
-<a name="line1111"></a>    return (index + 1) % max;
-<a name="line1112"></a>  }, this.getChildCount() - 1);
+<a name="line1107"></a> * Highlights the given item if it exists and is a child of the container;
+<a name="line1108"></a> * otherwise un-highlights the currently highlighted item.
+<a name="line1109"></a> * @param {goog.ui.Control} item Item to highlight.
+<a name="line1110"></a> */
+<a name="line1111"></a>goog.ui.Container.prototype.setHighlighted = function(item) {
+<a name="line1112"></a>  this.setHighlightedIndex(this.indexOfChild(item));
 <a name="line1113"></a>};
 <a name="line1114"></a>
 <a name="line1115"></a>
 <a name="line1116"></a>/**
-<a name="line1117"></a> * Highlights the last highlightable item in the container.
-<a name="line1118"></a> */
-<a name="line1119"></a>goog.ui.Container.prototype.highlightLast = function() {
-<a name="line1120"></a>  this.highlightHelper(function(index, max) {
-<a name="line1121"></a>    index--;
-<a name="line1122"></a>    return index &lt; 0 ? max - 1 : index;
-<a name="line1123"></a>  }, 0);
-<a name="line1124"></a>};
-<a name="line1125"></a>
-<a name="line1126"></a>
-<a name="line1127"></a>/**
-<a name="line1128"></a> * Highlights the next highlightable item (or the first if nothing is currently
-<a name="line1129"></a> * highlighted).
-<a name="line1130"></a> */
-<a name="line1131"></a>goog.ui.Container.prototype.highlightNext = function() {
-<a name="line1132"></a>  this.highlightHelper(function(index, max) {
-<a name="line1133"></a>    return (index + 1) % max;
-<a name="line1134"></a>  }, this.highlightedIndex_);
-<a name="line1135"></a>};
-<a name="line1136"></a>
-<a name="line1137"></a>
-<a name="line1138"></a>/**
-<a name="line1139"></a> * Highlights the previous highlightable item (or the last if nothing is
-<a name="line1140"></a> * currently highlighted).
-<a name="line1141"></a> */
-<a name="line1142"></a>goog.ui.Container.prototype.highlightPrevious = function() {
-<a name="line1143"></a>  this.highlightHelper(function(index, max) {
-<a name="line1144"></a>    index--;
-<a name="line1145"></a>    return index &lt; 0 ? max - 1 : index;
-<a name="line1146"></a>  }, this.highlightedIndex_);
-<a name="line1147"></a>};
-<a name="line1148"></a>
-<a name="line1149"></a>
-<a name="line1150"></a>/**
-<a name="line1151"></a> * Helper function that manages the details of moving the highlight among
-<a name="line1152"></a> * child controls in response to keyboard events.
-<a name="line1153"></a> * @param {function(number, number) : number} fn Function that accepts the
-<a name="line1154"></a> *     current and maximum indices, and returns the next index to check.
-<a name="line1155"></a> * @param {number} startIndex Start index.
-<a name="line1156"></a> * @return {boolean} Whether the highlight has changed.
-<a name="line1157"></a> * @protected
-<a name="line1158"></a> */
-<a name="line1159"></a>goog.ui.Container.prototype.highlightHelper = function(fn, startIndex) {
-<a name="line1160"></a>  // If the start index is -1 (meaning there&#39;s nothing currently highlighted),
-<a name="line1161"></a>  // try starting from the currently open item, if any.
-<a name="line1162"></a>  var curIndex = startIndex &lt; 0 ?
-<a name="line1163"></a>      this.indexOfChild(this.openItem_) : startIndex;
-<a name="line1164"></a>  var numItems = this.getChildCount();
-<a name="line1165"></a>
-<a name="line1166"></a>  curIndex = fn(curIndex, numItems);
-<a name="line1167"></a>  var visited = 0;
-<a name="line1168"></a>  while (visited &lt;= numItems) {
-<a name="line1169"></a>    var control = /** @type {goog.ui.Control} */ (this.getChildAt(curIndex));
-<a name="line1170"></a>    if (control &amp;&amp; this.canHighlightItem(control)) {
-<a name="line1171"></a>      this.setHighlightedIndexFromKeyEvent(curIndex);
-<a name="line1172"></a>      return true;
-<a name="line1173"></a>    }
-<a name="line1174"></a>    visited++;
-<a name="line1175"></a>    curIndex = fn(curIndex, numItems);
-<a name="line1176"></a>  }
-<a name="line1177"></a>  return false;
-<a name="line1178"></a>};
-<a name="line1179"></a>
-<a name="line1180"></a>
-<a name="line1181"></a>/**
-<a name="line1182"></a> * Returns whether the given item can be highlighted.
-<a name="line1183"></a> * @param {goog.ui.Control} item The item to check.
-<a name="line1184"></a> * @return {boolean} Whether the item can be highlighted.
-<a name="line1185"></a> * @protected
-<a name="line1186"></a> */
-<a name="line1187"></a>goog.ui.Container.prototype.canHighlightItem = function(item) {
-<a name="line1188"></a>  return item.isVisible() &amp;&amp; item.isEnabled() &amp;&amp;
-<a name="line1189"></a>      item.isSupportedState(goog.ui.Component.State.HOVER);
-<a name="line1190"></a>};
-<a name="line1191"></a>
-<a name="line1192"></a>
-<a name="line1193"></a>/**
-<a name="line1194"></a> * Helper method that sets the highlighted index to the given index in response
-<a name="line1195"></a> * to a keyboard event.  The base class implementation simply calls the
-<a name="line1196"></a> * {@link #setHighlightedIndex} method, but subclasses can override this
-<a name="line1197"></a> * behavior as needed.
-<a name="line1198"></a> * @param {number} index Index of item to highlight.
-<a name="line1199"></a> * @protected
-<a name="line1200"></a> */
-<a name="line1201"></a>goog.ui.Container.prototype.setHighlightedIndexFromKeyEvent = function(index) {
-<a name="line1202"></a>  this.setHighlightedIndex(index);
-<a name="line1203"></a>};
-<a name="line1204"></a>
-<a name="line1205"></a>
-<a name="line1206"></a>/**
-<a name="line1207"></a> * Returns true if the mouse button is pressed, false otherwise.
-<a name="line1208"></a> * @return {boolean} Whether the mouse button is pressed.
-<a name="line1209"></a> */
-<a name="line1210"></a>goog.ui.Container.prototype.isMouseButtonPressed = function() {
-<a name="line1211"></a>  return this.mouseButtonPressed_;
-<a name="line1212"></a>};
-<a name="line1213"></a>
-<a name="line1214"></a>
-<a name="line1215"></a>/**
-<a name="line1216"></a> * Sets or clears the &quot;mouse button pressed&quot; flag.
-<a name="line1217"></a> * @param {boolean} pressed Whether the mouse button is presed.
-<a name="line1218"></a> */
-<a name="line1219"></a>goog.ui.Container.prototype.setMouseButtonPressed = function(pressed) {
-<a name="line1220"></a>  this.mouseButtonPressed_ = pressed;
-<a name="line1221"></a>};
+<a name="line1117"></a> * Returns the currently highlighted item (if any).
+<a name="line1118"></a> * @return {goog.ui.Control?} Highlighted item (null if none).
+<a name="line1119"></a> */
+<a name="line1120"></a>goog.ui.Container.prototype.getHighlighted = function() {
+<a name="line1121"></a>  return this.getChildAt(this.highlightedIndex_);
+<a name="line1122"></a>};
+<a name="line1123"></a>
+<a name="line1124"></a>
+<a name="line1125"></a>/**
+<a name="line1126"></a> * Highlights the first highlightable item in the container
+<a name="line1127"></a> */
+<a name="line1128"></a>goog.ui.Container.prototype.highlightFirst = function() {
+<a name="line1129"></a>  this.highlightHelper(function(index, max) {
+<a name="line1130"></a>    return (index + 1) % max;
+<a name="line1131"></a>  }, this.getChildCount() - 1);
+<a name="line1132"></a>};
+<a name="line1133"></a>
+<a name="line1134"></a>
+<a name="line1135"></a>/**
+<a name="line1136"></a> * Highlights the last highlightable item in the container.
+<a name="line1137"></a> */
+<a name="line1138"></a>goog.ui.Container.prototype.highlightLast = function() {
+<a name="line1139"></a>  this.highlightHelper(function(index, max) {
+<a name="line1140"></a>    index--;
+<a name="line1141"></a>    return index &lt; 0 ? max - 1 : index;
+<a name="line1142"></a>  }, 0);
+<a name="line1143"></a>};
+<a name="line1144"></a>
+<a name="line1145"></a>
+<a name="line1146"></a>/**
+<a name="line1147"></a> * Highlights the next highlightable item (or the first if nothing is currently
+<a name="line1148"></a> * highlighted).
+<a name="line1149"></a> */
+<a name="line1150"></a>goog.ui.Container.prototype.highlightNext = function() {
+<a name="line1151"></a>  this.highlightHelper(function(index, max) {
+<a name="line1152"></a>    return (index + 1) % max;
+<a name="line1153"></a>  }, this.highlightedIndex_);
+<a name="line1154"></a>};
+<a name="line1155"></a>
+<a name="line1156"></a>
+<a name="line1157"></a>/**
+<a name="line1158"></a> * Highlights the previous highlightable item (or the last if nothing is
+<a name="line1159"></a> * currently highlighted).
+<a name="line1160"></a> */
+<a name="line1161"></a>goog.ui.Container.prototype.highlightPrevious = function() {
+<a name="line1162"></a>  this.highlightHelper(function(index, max) {
+<a name="line1163"></a>    index--;
+<a name="line1164"></a>    return index &lt; 0 ? max - 1 : index;
+<a name="line1165"></a>  }, this.highlightedIndex_);
+<a name="line1166"></a>};
+<a name="line1167"></a>
+<a name="line1168"></a>
+<a name="line1169"></a>/**
+<a name="line1170"></a> * Helper function that manages the details of moving the highlight among
+<a name="line1171"></a> * child controls in response to keyboard events.
+<a name="line1172"></a> * @param {function(number, number) : number} fn Function that accepts the
+<a name="line1173"></a> *     current and maximum indices, and returns the next index to check.
+<a name="line1174"></a> * @param {number} startIndex Start index.
+<a name="line1175"></a> * @return {boolean} Whether the highlight has changed.
+<a name="line1176"></a> * @protected
+<a name="line1177"></a> */
+<a name="line1178"></a>goog.ui.Container.prototype.highlightHelper = function(fn, startIndex) {
+<a name="line1179"></a>  // If the start index is -1 (meaning there&#39;s nothing currently highlighted),
+<a name="line1180"></a>  // try starting from the currently open item, if any.
+<a name="line1181"></a>  var curIndex = startIndex &lt; 0 ?
+<a name="line1182"></a>      this.indexOfChild(this.openItem_) : startIndex;
+<a name="line1183"></a>  var numItems = this.getChildCount();
+<a name="line1184"></a>
+<a name="line1185"></a>  curIndex = fn(curIndex, numItems);
+<a name="line1186"></a>  var visited = 0;
+<a name="line1187"></a>  while (visited &lt;= numItems) {
+<a name="line1188"></a>    var control = this.getChildAt(curIndex);
+<a name="line1189"></a>    if (control &amp;&amp; this.canHighlightItem(control)) {
+<a name="line1190"></a>      this.setHighlightedIndexFromKeyEvent(curIndex);
+<a name="line1191"></a>      return true;
+<a name="line1192"></a>    }
+<a name="line1193"></a>    visited++;
+<a name="line1194"></a>    curIndex = fn(curIndex, numItems);
+<a name="line1195"></a>  }
+<a name="line1196"></a>  return false;
+<a name="line1197"></a>};
+<a name="line1198"></a>
+<a name="line1199"></a>
+<a name="line1200"></a>/**
+<a name="line1201"></a> * Returns whether the given item can be highlighted.
+<a name="line1202"></a> * @param {goog.ui.Control} item The item to check.
+<a name="line1203"></a> * @return {boolean} Whether the item can be highlighted.
+<a name="line1204"></a> * @protected
+<a name="line1205"></a> */
+<a name="line1206"></a>goog.ui.Container.prototype.canHighlightItem = function(item) {
+<a name="line1207"></a>  return item.isVisible() &amp;&amp; item.isEnabled() &amp;&amp;
+<a name="line1208"></a>      item.isSupportedState(goog.ui.Component.State.HOVER);
+<a name="line1209"></a>};
+<a name="line1210"></a>
+<a name="line1211"></a>
+<a name="line1212"></a>/**
+<a name="line1213"></a> * Helper method that sets the highlighted index to the given index in response
+<a name="line1214"></a> * to a keyboard event.  The base class implementation simply calls the
+<a name="line1215"></a> * {@link #setHighlightedIndex} method, but subclasses can override this
+<a name="line1216"></a> * behavior as needed.
+<a name="line1217"></a> * @param {number} index Index of item to highlight.
+<a name="line1218"></a> * @protected
+<a name="line1219"></a> */
+<a name="line1220"></a>goog.ui.Container.prototype.setHighlightedIndexFromKeyEvent = function(index) {
+<a name="line1221"></a>  this.setHighlightedIndex(index);
+<a name="line1222"></a>};
+<a name="line1223"></a>
+<a name="line1224"></a>
+<a name="line1225"></a>/**
+<a name="line1226"></a> * Returns true if the mouse button is pressed, false otherwise.
+<a name="line1227"></a> * @return {boolean} Whether the mouse button is pressed.
+<a name="line1228"></a> */
+<a name="line1229"></a>goog.ui.Container.prototype.isMouseButtonPressed = function() {
+<a name="line1230"></a>  return this.mouseButtonPressed_;
+<a name="line1231"></a>};
+<a name="line1232"></a>
+<a name="line1233"></a>
+<a name="line1234"></a>/**
+<a name="line1235"></a> * Sets or clears the &quot;mouse button pressed&quot; flag.
+<a name="line1236"></a> * @param {boolean} pressed Whether the mouse button is presed.
+<a name="line1237"></a> */
+<a name="line1238"></a>goog.ui.Container.prototype.setMouseButtonPressed = function(pressed) {
+<a name="line1239"></a>  this.mouseButtonPressed_ = pressed;
+<a name="line1240"></a>};
 </pre>
 
 

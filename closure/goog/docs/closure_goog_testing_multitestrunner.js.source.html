@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,7 +81,7 @@
 <a name="line37"></a>
 <a name="line38"></a>/**
 <a name="line39"></a> * A component for running multiple tests within the browser.
-<a name="line40"></a> * @param {goog.dom.DomHelper} opt_domHelper A DOM helper.
+<a name="line40"></a> * @param {goog.dom.DomHelper=} opt_domHelper A DOM helper.
 <a name="line41"></a> * @extends {goog.ui.Component}
 <a name="line42"></a> * @constructor
 <a name="line43"></a> */
@@ -728,714 +729,716 @@
 <a name="line685"></a>
 <a name="line686"></a>  this.stats_.push(frame.getStats());
 <a name="line687"></a>
-<a name="line688"></a>  this.log(this.trimFileName_(test) + &#39; : &#39; + (success ? &#39;Passed&#39; : &#39;Failed&#39;));
-<a name="line689"></a>
-<a name="line690"></a>  this.resultCount_++;
+<a name="line688"></a>  var prefix = success ? &#39;&#39; : &#39;*** FAILURE *** &#39;;
+<a name="line689"></a>  this.log(prefix +
+<a name="line690"></a>      this.trimFileName_(test) + &#39; : &#39; + (success ? &#39;Passed&#39; : &#39;Failed&#39;));
 <a name="line691"></a>
-<a name="line692"></a>  if (success) {
-<a name="line693"></a>    this.passes_++;
-<a name="line694"></a>  }
-<a name="line695"></a>
-<a name="line696"></a>  this.drawProgressSegment_(test, success);
-<a name="line697"></a>  this.writeCurrentSummary_();
-<a name="line698"></a>  if (!(success &amp;&amp; this.hidePasses_)) {
-<a name="line699"></a>    this.drawTestResult_(test, success, report);
-<a name="line700"></a>  }
-<a name="line701"></a>
-<a name="line702"></a>  if (!this.stopped_ &amp;&amp; this.startedCount_ &lt; this.activeTests_.length) {
-<a name="line703"></a>    this.runNextTest_(frame);
-<a name="line704"></a>  } else if (this.resultCount_ == this.activeTests_.length) {
-<a name="line705"></a>    this.finish_();
-<a name="line706"></a>  }
-<a name="line707"></a>};
-<a name="line708"></a>
-<a name="line709"></a>
-<a name="line710"></a>/**
-<a name="line711"></a> * Runs the next available test, if there are any left.
-<a name="line712"></a> * @param {goog.testing.MultiTestRunner.TestFrame} frame Where to run the test.
-<a name="line713"></a> * @private
-<a name="line714"></a> */
-<a name="line715"></a>goog.testing.MultiTestRunner.prototype.runNextTest_ = function(frame) {
-<a name="line716"></a>  if (this.startedCount_ &lt; this.activeTests_.length) {
-<a name="line717"></a>    var nextTest = this.activeTests_[this.startedCount_++];
-<a name="line718"></a>    this.log(this.trimFileName_(nextTest) + &#39; : Loading&#39;);
-<a name="line719"></a>    frame.runTest(nextTest);
-<a name="line720"></a>  }
-<a name="line721"></a>};
-<a name="line722"></a>
-<a name="line723"></a>
-<a name="line724"></a>/**
-<a name="line725"></a> * Handles the test finishing, processing the results and rendering the report.
-<a name="line726"></a> * @private
-<a name="line727"></a> */
-<a name="line728"></a>goog.testing.MultiTestRunner.prototype.finish_ = function() {
-<a name="line729"></a>  if (this.stopped_) {
-<a name="line730"></a>    this.log(&#39;Stopped&#39;);
-<a name="line731"></a>  } else {
-<a name="line732"></a>    this.log(&#39;Finished&#39;);
-<a name="line733"></a>  }
-<a name="line734"></a>
-<a name="line735"></a>  this.startButtonEl_.disabled = false;
-<a name="line736"></a>  this.stopButtonEl_.disabled = true;
-<a name="line737"></a>  this.active_ = false;
-<a name="line738"></a>
-<a name="line739"></a>  this.showTab_(1);
-<a name="line740"></a>  this.drawStats_();
-<a name="line741"></a>
-<a name="line742"></a>  // Remove all the test frames
-<a name="line743"></a>  while (this.getChildCount() &gt; 0) {
-<a name="line744"></a>    this.removeChildAt(0, true).disposeInternal();
-<a name="line745"></a>  }
-<a name="line746"></a>};
-<a name="line747"></a>
-<a name="line748"></a>
-<a name="line749"></a>/**
-<a name="line750"></a> * Resets the report, clearing out all children and drawing the initial summary.
-<a name="line751"></a> * @private
-<a name="line752"></a> */
-<a name="line753"></a>goog.testing.MultiTestRunner.prototype.resetReport_ = function() {
-<a name="line754"></a>  goog.dom.removeChildren(this.reportEl_);
-<a name="line755"></a>  var summary = this.dom_.createDom(&#39;div&#39;);
-<a name="line756"></a>  summary.className = &#39;goog-testrunner-progress-summary&#39;;
-<a name="line757"></a>  this.reportEl_.appendChild(summary);
-<a name="line758"></a>  this.writeCurrentSummary_();
-<a name="line759"></a>};
-<a name="line760"></a>
-<a name="line761"></a>
-<a name="line762"></a>/**
-<a name="line763"></a> * Draws the stats for the test run.
-<a name="line764"></a> * @private
-<a name="line765"></a> */
-<a name="line766"></a>goog.testing.MultiTestRunner.prototype.drawStats_ = function() {
-<a name="line767"></a>  this.drawFilesHistogram_();
-<a name="line768"></a>
-<a name="line769"></a>  // Only show time stats if pool size is 1, otherwise times are wrong.
-<a name="line770"></a>  if (this.poolSize_ == 1) {
-<a name="line771"></a>    this.drawRunTimePie_();
-<a name="line772"></a>    this.drawTimeHistogram_();
-<a name="line773"></a>  }
-<a name="line774"></a>
-<a name="line775"></a>  this.drawWorstTestsTable_();
-<a name="line776"></a>};
-<a name="line777"></a>
-<a name="line778"></a>
-<a name="line779"></a>/**
-<a name="line780"></a> * Draws the histogram showing number of files loaded.
-<a name="line781"></a> * @private
-<a name="line782"></a> */
-<a name="line783"></a>goog.testing.MultiTestRunner.prototype.drawFilesHistogram_ = function() {
-<a name="line784"></a>  this.drawStatsHistogram_(
-<a name="line785"></a>      &#39;numFilesLoaded&#39;,
-<a name="line786"></a>      this.numFilesStatsBucketSize_,
-<a name="line787"></a>      goog.functions.identity,
-<a name="line788"></a>      500,
-<a name="line789"></a>      &#39;Histogram showing distribution of\nnumber of files loaded per test&#39;);
-<a name="line790"></a>};
-<a name="line791"></a>
-<a name="line792"></a>
-<a name="line793"></a>/**
-<a name="line794"></a> * Draws the histogram showing how long each test took to complete.
-<a name="line795"></a> * @private
-<a name="line796"></a> */
-<a name="line797"></a>goog.testing.MultiTestRunner.prototype.drawTimeHistogram_ = function() {
-<a name="line798"></a>  this.drawStatsHistogram_(
-<a name="line799"></a>      &#39;totalTime&#39;,
-<a name="line800"></a>      this.runTimeStatsBucketSize_,
-<a name="line801"></a>      function(x) { return x / 1000; },
-<a name="line802"></a>      500,
-<a name="line803"></a>      &#39;Histogram showing distribution of\ntime spent running tests in s&#39;);
-<a name="line804"></a>};
-<a name="line805"></a>
-<a name="line806"></a>
-<a name="line807"></a>/**
-<a name="line808"></a> * Draws a stats histogram.
-<a name="line809"></a> * @param {string} statsField Field of the stats object to graph.
-<a name="line810"></a> * @param {number} bucketSize The size for the histogram&#39;s buckets.
-<a name="line811"></a> * @param {function(*, ...[*]): *} valueTransformFn Function for transforming
-<a name="line812"></a> *     the x-labels value for display.
-<a name="line813"></a> * @param {number} width The width in pixels of the graph.
-<a name="line814"></a> * @param {string} title The graph&#39;s title.
-<a name="line815"></a> * @private
-<a name="line816"></a> */
-<a name="line817"></a>goog.testing.MultiTestRunner.prototype.drawStatsHistogram_ = function(
-<a name="line818"></a>    statsField, bucketSize, valueTransformFn, width, title) {
-<a name="line819"></a>
-<a name="line820"></a>  var hist = {}, data = [], xlabels = [], ylabels = [];
-<a name="line821"></a>  var max = 0;
-<a name="line822"></a>  for (var i = 0; i &lt; this.stats_.length; i++) {
-<a name="line823"></a>    var num = this.stats_[i][statsField];
-<a name="line824"></a>    var bucket = Math.floor(num / bucketSize) * bucketSize;
-<a name="line825"></a>    if (bucket &gt; max) {
-<a name="line826"></a>      max = bucket;
-<a name="line827"></a>    }
-<a name="line828"></a>    if (!hist[bucket]) {
-<a name="line829"></a>      hist[bucket] = 1;
-<a name="line830"></a>    } else {
-<a name="line831"></a>      hist[bucket]++;
-<a name="line832"></a>    }
-<a name="line833"></a>  }
-<a name="line834"></a>  var maxBucketSize = 0;
-<a name="line835"></a>  for (var i = 0; i &lt;= max; i += bucketSize) {
-<a name="line836"></a>    xlabels.push(valueTransformFn(i));
-<a name="line837"></a>    var count = hist[i] || 0
-<a name="line838"></a>    if (count &gt; maxBucketSize) {
-<a name="line839"></a>      maxBucketSize = count;
-<a name="line840"></a>    }
-<a name="line841"></a>    data.push(count);
-<a name="line842"></a>  }
-<a name="line843"></a>  var diff = Math.max(1, Math.ceil(maxBucketSize / 10));
-<a name="line844"></a>  for (var i = 0; i &lt;= maxBucketSize; i += diff) {
-<a name="line845"></a>    ylabels.push(i);
-<a name="line846"></a>  }
-<a name="line847"></a>  var chart = new goog.ui.ServerChart(
-<a name="line848"></a>      goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR, width, 250);
-<a name="line849"></a>  chart.setTitle(title);
-<a name="line850"></a>  chart.addDataSet(data, &#39;ff9900&#39;);
-<a name="line851"></a>  chart.setLeftLabels(ylabels);
-<a name="line852"></a>  chart.setGridY(ylabels.length - 1);
-<a name="line853"></a>  chart.setXLabels(xlabels);
-<a name="line854"></a>  chart.render(this.statsEl_);
-<a name="line855"></a>};
-<a name="line856"></a>
-<a name="line857"></a>
-<a name="line858"></a>/**
-<a name="line859"></a> * Draws a pie chart showing the percentage of time spent running the tests
-<a name="line860"></a> * compared to loading them etc.
-<a name="line861"></a> * @private
-<a name="line862"></a> */
-<a name="line863"></a>goog.testing.MultiTestRunner.prototype.drawRunTimePie_ = function() {
-<a name="line864"></a>  var totalTime = 0, runTime = 0;
-<a name="line865"></a>  for (var i = 0; i &lt; this.stats_.length; i++) {
-<a name="line866"></a>    var stat = this.stats_[i];
-<a name="line867"></a>    totalTime += stat.totalTime;
-<a name="line868"></a>    runTime += stat.runTime;
-<a name="line869"></a>  }
-<a name="line870"></a>  var loadTime = totalTime - runTime;
-<a name="line871"></a>  var pie = new goog.ui.ServerChart(
-<a name="line872"></a>      goog.ui.ServerChart.ChartType.PIE, 500, 250);
-<a name="line873"></a>  pie.setMinValue(0);
-<a name="line874"></a>  pie.setMaxValue(totalTime);
-<a name="line875"></a>  pie.addDataSet([runTime, loadTime], &#39;ff9900&#39;);
-<a name="line876"></a>  pie.setXLabels([
-<a name="line877"></a>      &#39;Test execution (&#39; + runTime + &#39;ms)&#39;,
-<a name="line878"></a>      &#39;Loading (&#39; + loadTime + &#39;ms)&#39;]);
-<a name="line879"></a>  pie.render(this.statsEl_);
-<a name="line880"></a>};
-<a name="line881"></a>
-<a name="line882"></a>
-<a name="line883"></a>/**
-<a name="line884"></a> * Draws a pie chart showing the percentage of time spent running the tests
-<a name="line885"></a> * compared to loading them etc.
-<a name="line886"></a> * @private
-<a name="line887"></a> */
-<a name="line888"></a>goog.testing.MultiTestRunner.prototype.drawWorstTestsTable_ = function() {
-<a name="line889"></a>  this.stats_.sort(function(a, b) {
-<a name="line890"></a>    return b[&#39;numFilesLoaded&#39;] - a[&#39;numFilesLoaded&#39;];
-<a name="line891"></a>  });
-<a name="line892"></a>
-<a name="line893"></a>  var tr = goog.bind(this.dom_.createDom, this.dom_, &#39;tr&#39;);
-<a name="line894"></a>  var th = goog.bind(this.dom_.createDom, this.dom_, &#39;th&#39;);
-<a name="line895"></a>  var td = goog.bind(this.dom_.createDom, this.dom_, &#39;td&#39;);
-<a name="line896"></a>  var a = goog.bind(this.dom_.createDom, this.dom_, &#39;a&#39;);
-<a name="line897"></a>
-<a name="line898"></a>  var table = this.dom_.createDom(&#39;table&#39;, null,
-<a name="line899"></a>      tr(null,
-<a name="line900"></a>          th(null, &#39; &#39;),
-<a name="line901"></a>          th(null, &#39;Test file&#39;),
-<a name="line902"></a>          th(&#39;center&#39;, &#39;Num files loaded&#39;),
-<a name="line903"></a>          th(&#39;center&#39;, &#39;Run time (ms)&#39;),
-<a name="line904"></a>          th(&#39;center&#39;, &#39;Total time (ms)&#39;)));
-<a name="line905"></a>
-<a name="line906"></a>  for (var i = 0; i &lt; this.stats_.length; i++) {
-<a name="line907"></a>    var stat = this.stats_[i];
-<a name="line908"></a>    table.appendChild(tr(null,
-<a name="line909"></a>        td(&#39;center&#39;, String(i + 1)),
-<a name="line910"></a>        td(null, a(
-<a name="line911"></a>            {&#39;href&#39;: this.basePath_ + stat[&#39;testFile&#39;], &#39;target&#39;: &#39;_blank&#39;},
-<a name="line912"></a>            stat[&#39;testFile&#39;])),
-<a name="line913"></a>        td(&#39;center&#39;, String(stat[&#39;numFilesLoaded&#39;])),
-<a name="line914"></a>        td(&#39;center&#39;, String(stat[&#39;runTime&#39;])),
-<a name="line915"></a>        td(&#39;center&#39;, String(stat[&#39;totalTime&#39;]))));
-<a name="line916"></a>  }
-<a name="line917"></a>
-<a name="line918"></a>  this.statsEl_.appendChild(table);
-<a name="line919"></a>};
-<a name="line920"></a>
-<a name="line921"></a>
-<a name="line922"></a>/**
-<a name="line923"></a> * Clears the stats page.
-<a name="line924"></a> * @private
-<a name="line925"></a> */
-<a name="line926"></a>goog.testing.MultiTestRunner.prototype.clearStats_ = function() {
-<a name="line927"></a>  goog.dom.removeChildren(this.statsEl_);
-<a name="line928"></a>};
-<a name="line929"></a>
-<a name="line930"></a>
-<a name="line931"></a>/**
-<a name="line932"></a> * Updates the report&#39;s summary.
-<a name="line933"></a> * @private
-<a name="line934"></a> */
-<a name="line935"></a>goog.testing.MultiTestRunner.prototype.writeCurrentSummary_ = function() {
-<a name="line936"></a>  var total = this.activeTests_.length;
-<a name="line937"></a>  var executed = this.resultCount_;
-<a name="line938"></a>  var passes = this.passes_;
-<a name="line939"></a>  var duration = Math.round((goog.now() - this.startTime_) / 1000);
-<a name="line940"></a>  var text = executed + &#39; of &#39; + total + &#39; tests executed.&lt;br&gt;&#39; +
-<a name="line941"></a>      passes + &#39; passed, &#39; + (executed - passes) + &#39; failed.&lt;br&gt;&#39; +
-<a name="line942"></a>      &#39;Duration: &#39; + duration + &#39;s.&#39;;
-<a name="line943"></a>  this.reportEl_.firstChild.innerHTML = text;
-<a name="line944"></a>};
-<a name="line945"></a>
-<a name="line946"></a>
-<a name="line947"></a>/**
-<a name="line948"></a> * Adds a segment to the progress bar.
-<a name="line949"></a> * @param {string} title Title for the segment.
-<a name="line950"></a> * @param {*} success Whether the segment should indicate a success.
-<a name="line951"></a> * @private
-<a name="line952"></a> */
-<a name="line953"></a>goog.testing.MultiTestRunner.prototype.drawProgressSegment_ =
-<a name="line954"></a>      function(title, success) {
-<a name="line955"></a>  var part = this.progressRow_.cells[this.resultCount_ - 1];
-<a name="line956"></a>  part.title = title + &#39; : &#39; + (success ? &#39;SUCCESS&#39; : &#39;FAILURE&#39;);
-<a name="line957"></a>  part.style.backgroundColor = success ? &#39;#090&#39; : &#39;#900&#39;;
-<a name="line958"></a>};
-<a name="line959"></a>
-<a name="line960"></a>
-<a name="line961"></a>/**
-<a name="line962"></a> * Draws a test result in the report pane.
-<a name="line963"></a> * @param {string} test Test name.
-<a name="line964"></a> * @param {*} success Whether the test succeeded.
-<a name="line965"></a> * @param {string} report The report.
-<a name="line966"></a> * @private
-<a name="line967"></a> */
-<a name="line968"></a>goog.testing.MultiTestRunner.prototype.drawTestResult_ = function(
-<a name="line969"></a>    test, success, report) {
-<a name="line970"></a>  var text = goog.string.isEmpty(report) ?
-<a name="line971"></a>      &#39;No report for &#39; + test + &#39;\n&#39; : report;
-<a name="line972"></a>  var el = this.dom_.createDom(&#39;div&#39;);
-<a name="line973"></a>  text = goog.string.htmlEscape(text).replace(/\n/g, &#39;&lt;br&gt;&#39;);
-<a name="line974"></a>  if (success) {
-<a name="line975"></a>    el.className = &#39;goog-testrunner-report-success&#39;;
-<a name="line976"></a>  } else {
-<a name="line977"></a>    text += &#39;&lt;a href=&quot;&#39; + this.basePath_ + test +
-<a name="line978"></a>        &#39;&quot;&gt;Run individually &amp;raquo;&lt;/a&gt;&lt;br&gt;&amp;nbsp;&#39;;
-<a name="line979"></a>    el.className = &#39;goog-testrunner-report-failure&#39;;
-<a name="line980"></a>  }
-<a name="line981"></a>  el.innerHTML = text;
-<a name="line982"></a>  this.reportEl_.appendChild(el);
-<a name="line983"></a>};
-<a name="line984"></a>
-<a name="line985"></a>
-<a name="line986"></a>/**
-<a name="line987"></a> * Returns the current timestamp.
-<a name="line988"></a> * @return {string} HH:MM:SS.
-<a name="line989"></a> * @private
-<a name="line990"></a> */
-<a name="line991"></a>goog.testing.MultiTestRunner.prototype.getTimeStamp_ = function() {
-<a name="line992"></a>  var d = new Date;
-<a name="line993"></a>  return goog.string.padNumber(d.getHours(), 2) + &#39;:&#39; +
-<a name="line994"></a>      goog.string.padNumber(d.getMinutes(), 2) + &#39;:&#39; +
-<a name="line995"></a>      goog.string.padNumber(d.getSeconds(), 2);
-<a name="line996"></a>};
-<a name="line997"></a>
-<a name="line998"></a>
-<a name="line999"></a>/**
-<a name="line1000"></a> * Trims a filename to be less than 35-characters, ensuring that we do not break
-<a name="line1001"></a> * a path part.
-<a name="line1002"></a> * @param {string} name The file name.
-<a name="line1003"></a> * @return {string} The shortened name.
-<a name="line1004"></a> * @private
-<a name="line1005"></a> */
-<a name="line1006"></a>goog.testing.MultiTestRunner.prototype.trimFileName_ = function(name) {
-<a name="line1007"></a>  if (name.length &lt; 35) {
-<a name="line1008"></a>    return name;
-<a name="line1009"></a>  }
-<a name="line1010"></a>  var parts = name.split(&#39;/&#39;);
-<a name="line1011"></a>  var result = &#39;&#39;;
-<a name="line1012"></a>  while (result.length &lt; 35 &amp;&amp; parts.length &gt; 0) {
-<a name="line1013"></a>    result = &#39;/&#39; + parts.pop() + result;
-<a name="line1014"></a>  }
-<a name="line1015"></a>  return &#39;...&#39; + result;
-<a name="line1016"></a>};
-<a name="line1017"></a>
-<a name="line1018"></a>
-<a name="line1019"></a>/**
-<a name="line1020"></a> * Shows the report and hides the log if the argument is true.
-<a name="line1021"></a> * @param {number} tab Which tab to show.
-<a name="line1022"></a> * @private
-<a name="line1023"></a> */
-<a name="line1024"></a>goog.testing.MultiTestRunner.prototype.showTab_ = function(tab) {
-<a name="line1025"></a>  if (tab == 0) {
-<a name="line1026"></a>    this.logEl_.style.display = &#39;&#39;;
-<a name="line1027"></a>    goog.dom.classes.add(this.logTabEl_, &#39;goog-testrunner-activetab&#39;);
-<a name="line1028"></a>  } else {
-<a name="line1029"></a>    this.logEl_.style.display = &#39;none&#39;;
-<a name="line1030"></a>    goog.dom.classes.remove(this.logTabEl_, &#39;goog-testrunner-activetab&#39;);
-<a name="line1031"></a>  }
-<a name="line1032"></a>
-<a name="line1033"></a>  if (tab == 1) {
-<a name="line1034"></a>    this.reportEl_.style.display = &#39;&#39;;
-<a name="line1035"></a>    goog.dom.classes.add(this.reportTabEl_, &#39;goog-testrunner-activetab&#39;);
-<a name="line1036"></a>  } else {
-<a name="line1037"></a>    this.reportEl_.style.display = &#39;none&#39;;
-<a name="line1038"></a>    goog.dom.classes.remove(this.reportTabEl_, &#39;goog-testrunner-activetab&#39;);
-<a name="line1039"></a>  }
-<a name="line1040"></a>
-<a name="line1041"></a>  if (tab == 2) {
-<a name="line1042"></a>    this.statsEl_.style.display = &#39;&#39;;
-<a name="line1043"></a>    goog.dom.classes.add(this.statsTabEl_, &#39;goog-testrunner-activetab&#39;);
-<a name="line1044"></a>  } else {
-<a name="line1045"></a>    this.statsEl_.style.display = &#39;none&#39;;
-<a name="line1046"></a>    goog.dom.classes.remove(this.statsTabEl_, &#39;goog-testrunner-activetab&#39;);
-<a name="line1047"></a>  }
-<a name="line1048"></a>};
-<a name="line1049"></a>
-<a name="line1050"></a>
-<a name="line1051"></a>/**
-<a name="line1052"></a> * Handles the start button being clicked.
-<a name="line1053"></a> * @param {goog.events.BrowserEvent} e The click event.
-<a name="line1054"></a> * @private
-<a name="line1055"></a> */
-<a name="line1056"></a>goog.testing.MultiTestRunner.prototype.onStartClicked_ = function(e) {
-<a name="line1057"></a>  this.start();
-<a name="line1058"></a>};
-<a name="line1059"></a>
-<a name="line1060"></a>
-<a name="line1061"></a>/**
-<a name="line1062"></a> * Handles the stop button being clicked.
-<a name="line1063"></a> * @param {goog.events.BrowserEvent} e The click event.
-<a name="line1064"></a> * @private
-<a name="line1065"></a> */
-<a name="line1066"></a>goog.testing.MultiTestRunner.prototype.onStopClicked_ = function(e) {
-<a name="line1067"></a>  this.stopped_ = true;
-<a name="line1068"></a>  this.finish_();
-<a name="line1069"></a>};
-<a name="line1070"></a>
-<a name="line1071"></a>
-<a name="line1072"></a>/**
-<a name="line1073"></a> * Handles the log tab being clicked.
-<a name="line1074"></a> * @param {goog.events.BrowserEvent} e The click event.
-<a name="line1075"></a> * @private
-<a name="line1076"></a> */
-<a name="line1077"></a>goog.testing.MultiTestRunner.prototype.onLogTabClicked_ = function(e) {
-<a name="line1078"></a>  this.showTab_(0);
-<a name="line1079"></a>};
-<a name="line1080"></a>
-<a name="line1081"></a>
-<a name="line1082"></a>/**
-<a name="line1083"></a> * Handles the log tab being clicked.
-<a name="line1084"></a> * @param {goog.events.BrowserEvent} e The click event.
-<a name="line1085"></a> * @private
-<a name="line1086"></a> */
-<a name="line1087"></a>goog.testing.MultiTestRunner.prototype.onReportTabClicked_ = function(e) {
-<a name="line1088"></a>  this.showTab_(1);
-<a name="line1089"></a>};
-<a name="line1090"></a>
-<a name="line1091"></a>
-<a name="line1092"></a>/**
-<a name="line1093"></a> * Handles the stats tab being clicked.
-<a name="line1094"></a> * @param {goog.events.BrowserEvent} e The click event.
-<a name="line1095"></a> * @private
-<a name="line1096"></a> */
-<a name="line1097"></a>goog.testing.MultiTestRunner.prototype.onStatsTabClicked_ = function(e) {
-<a name="line1098"></a>  this.showTab_(2);
-<a name="line1099"></a>};
-<a name="line1100"></a>
-<a name="line1101"></a>
+<a name="line692"></a>  this.resultCount_++;
+<a name="line693"></a>
+<a name="line694"></a>  if (success) {
+<a name="line695"></a>    this.passes_++;
+<a name="line696"></a>  }
+<a name="line697"></a>
+<a name="line698"></a>  this.drawProgressSegment_(test, success);
+<a name="line699"></a>  this.writeCurrentSummary_();
+<a name="line700"></a>  if (!(success &amp;&amp; this.hidePasses_)) {
+<a name="line701"></a>    this.drawTestResult_(test, success, report);
+<a name="line702"></a>  }
+<a name="line703"></a>
+<a name="line704"></a>  if (!this.stopped_ &amp;&amp; this.startedCount_ &lt; this.activeTests_.length) {
+<a name="line705"></a>    this.runNextTest_(frame);
+<a name="line706"></a>  } else if (this.resultCount_ == this.activeTests_.length) {
+<a name="line707"></a>    this.finish_();
+<a name="line708"></a>  }
+<a name="line709"></a>};
+<a name="line710"></a>
+<a name="line711"></a>
+<a name="line712"></a>/**
+<a name="line713"></a> * Runs the next available test, if there are any left.
+<a name="line714"></a> * @param {goog.testing.MultiTestRunner.TestFrame} frame Where to run the test.
+<a name="line715"></a> * @private
+<a name="line716"></a> */
+<a name="line717"></a>goog.testing.MultiTestRunner.prototype.runNextTest_ = function(frame) {
+<a name="line718"></a>  if (this.startedCount_ &lt; this.activeTests_.length) {
+<a name="line719"></a>    var nextTest = this.activeTests_[this.startedCount_++];
+<a name="line720"></a>    this.log(this.trimFileName_(nextTest) + &#39; : Loading&#39;);
+<a name="line721"></a>    frame.runTest(nextTest);
+<a name="line722"></a>  }
+<a name="line723"></a>};
+<a name="line724"></a>
+<a name="line725"></a>
+<a name="line726"></a>/**
+<a name="line727"></a> * Handles the test finishing, processing the results and rendering the report.
+<a name="line728"></a> * @private
+<a name="line729"></a> */
+<a name="line730"></a>goog.testing.MultiTestRunner.prototype.finish_ = function() {
+<a name="line731"></a>  if (this.stopped_) {
+<a name="line732"></a>    this.log(&#39;Stopped&#39;);
+<a name="line733"></a>  } else {
+<a name="line734"></a>    this.log(&#39;Finished&#39;);
+<a name="line735"></a>  }
+<a name="line736"></a>
+<a name="line737"></a>  this.startButtonEl_.disabled = false;
+<a name="line738"></a>  this.stopButtonEl_.disabled = true;
+<a name="line739"></a>  this.active_ = false;
+<a name="line740"></a>
+<a name="line741"></a>  this.showTab_(1);
+<a name="line742"></a>  this.drawStats_();
+<a name="line743"></a>
+<a name="line744"></a>  // Remove all the test frames
+<a name="line745"></a>  while (this.getChildCount() &gt; 0) {
+<a name="line746"></a>    this.removeChildAt(0, true).disposeInternal();
+<a name="line747"></a>  }
+<a name="line748"></a>};
+<a name="line749"></a>
+<a name="line750"></a>
+<a name="line751"></a>/**
+<a name="line752"></a> * Resets the report, clearing out all children and drawing the initial summary.
+<a name="line753"></a> * @private
+<a name="line754"></a> */
+<a name="line755"></a>goog.testing.MultiTestRunner.prototype.resetReport_ = function() {
+<a name="line756"></a>  goog.dom.removeChildren(this.reportEl_);
+<a name="line757"></a>  var summary = this.dom_.createDom(&#39;div&#39;);
+<a name="line758"></a>  summary.className = &#39;goog-testrunner-progress-summary&#39;;
+<a name="line759"></a>  this.reportEl_.appendChild(summary);
+<a name="line760"></a>  this.writeCurrentSummary_();
+<a name="line761"></a>};
+<a name="line762"></a>
+<a name="line763"></a>
+<a name="line764"></a>/**
+<a name="line765"></a> * Draws the stats for the test run.
+<a name="line766"></a> * @private
+<a name="line767"></a> */
+<a name="line768"></a>goog.testing.MultiTestRunner.prototype.drawStats_ = function() {
+<a name="line769"></a>  this.drawFilesHistogram_();
+<a name="line770"></a>
+<a name="line771"></a>  // Only show time stats if pool size is 1, otherwise times are wrong.
+<a name="line772"></a>  if (this.poolSize_ == 1) {
+<a name="line773"></a>    this.drawRunTimePie_();
+<a name="line774"></a>    this.drawTimeHistogram_();
+<a name="line775"></a>  }
+<a name="line776"></a>
+<a name="line777"></a>  this.drawWorstTestsTable_();
+<a name="line778"></a>};
+<a name="line779"></a>
+<a name="line780"></a>
+<a name="line781"></a>/**
+<a name="line782"></a> * Draws the histogram showing number of files loaded.
+<a name="line783"></a> * @private
+<a name="line784"></a> */
+<a name="line785"></a>goog.testing.MultiTestRunner.prototype.drawFilesHistogram_ = function() {
+<a name="line786"></a>  this.drawStatsHistogram_(
+<a name="line787"></a>      &#39;numFilesLoaded&#39;,
+<a name="line788"></a>      this.numFilesStatsBucketSize_,
+<a name="line789"></a>      goog.functions.identity,
+<a name="line790"></a>      500,
+<a name="line791"></a>      &#39;Histogram showing distribution of\nnumber of files loaded per test&#39;);
+<a name="line792"></a>};
+<a name="line793"></a>
+<a name="line794"></a>
+<a name="line795"></a>/**
+<a name="line796"></a> * Draws the histogram showing how long each test took to complete.
+<a name="line797"></a> * @private
+<a name="line798"></a> */
+<a name="line799"></a>goog.testing.MultiTestRunner.prototype.drawTimeHistogram_ = function() {
+<a name="line800"></a>  this.drawStatsHistogram_(
+<a name="line801"></a>      &#39;totalTime&#39;,
+<a name="line802"></a>      this.runTimeStatsBucketSize_,
+<a name="line803"></a>      function(x) { return x / 1000; },
+<a name="line804"></a>      500,
+<a name="line805"></a>      &#39;Histogram showing distribution of\ntime spent running tests in s&#39;);
+<a name="line806"></a>};
+<a name="line807"></a>
+<a name="line808"></a>
+<a name="line809"></a>/**
+<a name="line810"></a> * Draws a stats histogram.
+<a name="line811"></a> * @param {string} statsField Field of the stats object to graph.
+<a name="line812"></a> * @param {number} bucketSize The size for the histogram&#39;s buckets.
+<a name="line813"></a> * @param {function(*, ...[*]): *} valueTransformFn Function for transforming
+<a name="line814"></a> *     the x-labels value for display.
+<a name="line815"></a> * @param {number} width The width in pixels of the graph.
+<a name="line816"></a> * @param {string} title The graph&#39;s title.
+<a name="line817"></a> * @private
+<a name="line818"></a> */
+<a name="line819"></a>goog.testing.MultiTestRunner.prototype.drawStatsHistogram_ = function(
+<a name="line820"></a>    statsField, bucketSize, valueTransformFn, width, title) {
+<a name="line821"></a>
+<a name="line822"></a>  var hist = {}, data = [], xlabels = [], ylabels = [];
+<a name="line823"></a>  var max = 0;
+<a name="line824"></a>  for (var i = 0; i &lt; this.stats_.length; i++) {
+<a name="line825"></a>    var num = this.stats_[i][statsField];
+<a name="line826"></a>    var bucket = Math.floor(num / bucketSize) * bucketSize;
+<a name="line827"></a>    if (bucket &gt; max) {
+<a name="line828"></a>      max = bucket;
+<a name="line829"></a>    }
+<a name="line830"></a>    if (!hist[bucket]) {
+<a name="line831"></a>      hist[bucket] = 1;
+<a name="line832"></a>    } else {
+<a name="line833"></a>      hist[bucket]++;
+<a name="line834"></a>    }
+<a name="line835"></a>  }
+<a name="line836"></a>  var maxBucketSize = 0;
+<a name="line837"></a>  for (var i = 0; i &lt;= max; i += bucketSize) {
+<a name="line838"></a>    xlabels.push(valueTransformFn(i));
+<a name="line839"></a>    var count = hist[i] || 0
+<a name="line840"></a>    if (count &gt; maxBucketSize) {
+<a name="line841"></a>      maxBucketSize = count;
+<a name="line842"></a>    }
+<a name="line843"></a>    data.push(count);
+<a name="line844"></a>  }
+<a name="line845"></a>  var diff = Math.max(1, Math.ceil(maxBucketSize / 10));
+<a name="line846"></a>  for (var i = 0; i &lt;= maxBucketSize; i += diff) {
+<a name="line847"></a>    ylabels.push(i);
+<a name="line848"></a>  }
+<a name="line849"></a>  var chart = new goog.ui.ServerChart(
+<a name="line850"></a>      goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR, width, 250);
+<a name="line851"></a>  chart.setTitle(title);
+<a name="line852"></a>  chart.addDataSet(data, &#39;ff9900&#39;);
+<a name="line853"></a>  chart.setLeftLabels(ylabels);
+<a name="line854"></a>  chart.setGridY(ylabels.length - 1);
+<a name="line855"></a>  chart.setXLabels(xlabels);
+<a name="line856"></a>  chart.render(this.statsEl_);
+<a name="line857"></a>};
+<a name="line858"></a>
+<a name="line859"></a>
+<a name="line860"></a>/**
+<a name="line861"></a> * Draws a pie chart showing the percentage of time spent running the tests
+<a name="line862"></a> * compared to loading them etc.
+<a name="line863"></a> * @private
+<a name="line864"></a> */
+<a name="line865"></a>goog.testing.MultiTestRunner.prototype.drawRunTimePie_ = function() {
+<a name="line866"></a>  var totalTime = 0, runTime = 0;
+<a name="line867"></a>  for (var i = 0; i &lt; this.stats_.length; i++) {
+<a name="line868"></a>    var stat = this.stats_[i];
+<a name="line869"></a>    totalTime += stat.totalTime;
+<a name="line870"></a>    runTime += stat.runTime;
+<a name="line871"></a>  }
+<a name="line872"></a>  var loadTime = totalTime - runTime;
+<a name="line873"></a>  var pie = new goog.ui.ServerChart(
+<a name="line874"></a>      goog.ui.ServerChart.ChartType.PIE, 500, 250);
+<a name="line875"></a>  pie.setMinValue(0);
+<a name="line876"></a>  pie.setMaxValue(totalTime);
+<a name="line877"></a>  pie.addDataSet([runTime, loadTime], &#39;ff9900&#39;);
+<a name="line878"></a>  pie.setXLabels([
+<a name="line879"></a>      &#39;Test execution (&#39; + runTime + &#39;ms)&#39;,
+<a name="line880"></a>      &#39;Loading (&#39; + loadTime + &#39;ms)&#39;]);
+<a name="line881"></a>  pie.render(this.statsEl_);
+<a name="line882"></a>};
+<a name="line883"></a>
+<a name="line884"></a>
+<a name="line885"></a>/**
+<a name="line886"></a> * Draws a pie chart showing the percentage of time spent running the tests
+<a name="line887"></a> * compared to loading them etc.
+<a name="line888"></a> * @private
+<a name="line889"></a> */
+<a name="line890"></a>goog.testing.MultiTestRunner.prototype.drawWorstTestsTable_ = function() {
+<a name="line891"></a>  this.stats_.sort(function(a, b) {
+<a name="line892"></a>    return b[&#39;numFilesLoaded&#39;] - a[&#39;numFilesLoaded&#39;];
+<a name="line893"></a>  });
+<a name="line894"></a>
+<a name="line895"></a>  var tr = goog.bind(this.dom_.createDom, this.dom_, &#39;tr&#39;);
+<a name="line896"></a>  var th = goog.bind(this.dom_.createDom, this.dom_, &#39;th&#39;);
+<a name="line897"></a>  var td = goog.bind(this.dom_.createDom, this.dom_, &#39;td&#39;);
+<a name="line898"></a>  var a = goog.bind(this.dom_.createDom, this.dom_, &#39;a&#39;);
+<a name="line899"></a>
+<a name="line900"></a>  var table = this.dom_.createDom(&#39;table&#39;, null,
+<a name="line901"></a>      tr(null,
+<a name="line902"></a>          th(null, &#39; &#39;),
+<a name="line903"></a>          th(null, &#39;Test file&#39;),
+<a name="line904"></a>          th(&#39;center&#39;, &#39;Num files loaded&#39;),
+<a name="line905"></a>          th(&#39;center&#39;, &#39;Run time (ms)&#39;),
+<a name="line906"></a>          th(&#39;center&#39;, &#39;Total time (ms)&#39;)));
+<a name="line907"></a>
+<a name="line908"></a>  for (var i = 0; i &lt; this.stats_.length; i++) {
+<a name="line909"></a>    var stat = this.stats_[i];
+<a name="line910"></a>    table.appendChild(tr(null,
+<a name="line911"></a>        td(&#39;center&#39;, String(i + 1)),
+<a name="line912"></a>        td(null, a(
+<a name="line913"></a>            {&#39;href&#39;: this.basePath_ + stat[&#39;testFile&#39;], &#39;target&#39;: &#39;_blank&#39;},
+<a name="line914"></a>            stat[&#39;testFile&#39;])),
+<a name="line915"></a>        td(&#39;center&#39;, String(stat[&#39;numFilesLoaded&#39;])),
+<a name="line916"></a>        td(&#39;center&#39;, String(stat[&#39;runTime&#39;])),
+<a name="line917"></a>        td(&#39;center&#39;, String(stat[&#39;totalTime&#39;]))));
+<a name="line918"></a>  }
+<a name="line919"></a>
+<a name="line920"></a>  this.statsEl_.appendChild(table);
+<a name="line921"></a>};
+<a name="line922"></a>
+<a name="line923"></a>
+<a name="line924"></a>/**
+<a name="line925"></a> * Clears the stats page.
+<a name="line926"></a> * @private
+<a name="line927"></a> */
+<a name="line928"></a>goog.testing.MultiTestRunner.prototype.clearStats_ = function() {
+<a name="line929"></a>  goog.dom.removeChildren(this.statsEl_);
+<a name="line930"></a>};
+<a name="line931"></a>
+<a name="line932"></a>
+<a name="line933"></a>/**
+<a name="line934"></a> * Updates the report&#39;s summary.
+<a name="line935"></a> * @private
+<a name="line936"></a> */
+<a name="line937"></a>goog.testing.MultiTestRunner.prototype.writeCurrentSummary_ = function() {
+<a name="line938"></a>  var total = this.activeTests_.length;
+<a name="line939"></a>  var executed = this.resultCount_;
+<a name="line940"></a>  var passes = this.passes_;
+<a name="line941"></a>  var duration = Math.round((goog.now() - this.startTime_) / 1000);
+<a name="line942"></a>  var text = executed + &#39; of &#39; + total + &#39; tests executed.&lt;br&gt;&#39; +
+<a name="line943"></a>      passes + &#39; passed, &#39; + (executed - passes) + &#39; failed.&lt;br&gt;&#39; +
+<a name="line944"></a>      &#39;Duration: &#39; + duration + &#39;s.&#39;;
+<a name="line945"></a>  this.reportEl_.firstChild.innerHTML = text;
+<a name="line946"></a>};
+<a name="line947"></a>
+<a name="line948"></a>
+<a name="line949"></a>/**
+<a name="line950"></a> * Adds a segment to the progress bar.
+<a name="line951"></a> * @param {string} title Title for the segment.
+<a name="line952"></a> * @param {*} success Whether the segment should indicate a success.
+<a name="line953"></a> * @private
+<a name="line954"></a> */
+<a name="line955"></a>goog.testing.MultiTestRunner.prototype.drawProgressSegment_ =
+<a name="line956"></a>      function(title, success) {
+<a name="line957"></a>  var part = this.progressRow_.cells[this.resultCount_ - 1];
+<a name="line958"></a>  part.title = title + &#39; : &#39; + (success ? &#39;SUCCESS&#39; : &#39;FAILURE&#39;);
+<a name="line959"></a>  part.style.backgroundColor = success ? &#39;#090&#39; : &#39;#900&#39;;
+<a name="line960"></a>};
+<a name="line961"></a>
+<a name="line962"></a>
+<a name="line963"></a>/**
+<a name="line964"></a> * Draws a test result in the report pane.
+<a name="line965"></a> * @param {string} test Test name.
+<a name="line966"></a> * @param {*} success Whether the test succeeded.
+<a name="line967"></a> * @param {string} report The report.
+<a name="line968"></a> * @private
+<a name="line969"></a> */
+<a name="line970"></a>goog.testing.MultiTestRunner.prototype.drawTestResult_ = function(
+<a name="line971"></a>    test, success, report) {
+<a name="line972"></a>  var text = goog.string.isEmpty(report) ?
+<a name="line973"></a>      &#39;No report for &#39; + test + &#39;\n&#39; : report;
+<a name="line974"></a>  var el = this.dom_.createDom(&#39;div&#39;);
+<a name="line975"></a>  text = goog.string.htmlEscape(text).replace(/\n/g, &#39;&lt;br&gt;&#39;);
+<a name="line976"></a>  if (success) {
+<a name="line977"></a>    el.className = &#39;goog-testrunner-report-success&#39;;
+<a name="line978"></a>  } else {
+<a name="line979"></a>    text += &#39;&lt;a href=&quot;&#39; + this.basePath_ + test +
+<a name="line980"></a>        &#39;&quot;&gt;Run individually &amp;raquo;&lt;/a&gt;&lt;br&gt;&amp;nbsp;&#39;;
+<a name="line981"></a>    el.className = &#39;goog-testrunner-report-failure&#39;;
+<a name="line982"></a>  }
+<a name="line983"></a>  el.innerHTML = text;
+<a name="line984"></a>  this.reportEl_.appendChild(el);
+<a name="line985"></a>};
+<a name="line986"></a>
+<a name="line987"></a>
+<a name="line988"></a>/**
+<a name="line989"></a> * Returns the current timestamp.
+<a name="line990"></a> * @return {string} HH:MM:SS.
+<a name="line991"></a> * @private
+<a name="line992"></a> */
+<a name="line993"></a>goog.testing.MultiTestRunner.prototype.getTimeStamp_ = function() {
+<a name="line994"></a>  var d = new Date;
+<a name="line995"></a>  return goog.string.padNumber(d.getHours(), 2) + &#39;:&#39; +
+<a name="line996"></a>      goog.string.padNumber(d.getMinutes(), 2) + &#39;:&#39; +
+<a name="line997"></a>      goog.string.padNumber(d.getSeconds(), 2);
+<a name="line998"></a>};
+<a name="line999"></a>
+<a name="line1000"></a>
+<a name="line1001"></a>/**
+<a name="line1002"></a> * Trims a filename to be less than 35-characters, ensuring that we do not break
+<a name="line1003"></a> * a path part.
+<a name="line1004"></a> * @param {string} name The file name.
+<a name="line1005"></a> * @return {string} The shortened name.
+<a name="line1006"></a> * @private
+<a name="line1007"></a> */
+<a name="line1008"></a>goog.testing.MultiTestRunner.prototype.trimFileName_ = function(name) {
+<a name="line1009"></a>  if (name.length &lt; 35) {
+<a name="line1010"></a>    return name;
+<a name="line1011"></a>  }
+<a name="line1012"></a>  var parts = name.split(&#39;/&#39;);
+<a name="line1013"></a>  var result = &#39;&#39;;
+<a name="line1014"></a>  while (result.length &lt; 35 &amp;&amp; parts.length &gt; 0) {
+<a name="line1015"></a>    result = &#39;/&#39; + parts.pop() + result;
+<a name="line1016"></a>  }
+<a name="line1017"></a>  return &#39;...&#39; + result;
+<a name="line1018"></a>};
+<a name="line1019"></a>
+<a name="line1020"></a>
+<a name="line1021"></a>/**
+<a name="line1022"></a> * Shows the report and hides the log if the argument is true.
+<a name="line1023"></a> * @param {number} tab Which tab to show.
+<a name="line1024"></a> * @private
+<a name="line1025"></a> */
+<a name="line1026"></a>goog.testing.MultiTestRunner.prototype.showTab_ = function(tab) {
+<a name="line1027"></a>  if (tab == 0) {
+<a name="line1028"></a>    this.logEl_.style.display = &#39;&#39;;
+<a name="line1029"></a>    goog.dom.classes.add(this.logTabEl_, &#39;goog-testrunner-activetab&#39;);
+<a name="line1030"></a>  } else {
+<a name="line1031"></a>    this.logEl_.style.display = &#39;none&#39;;
+<a name="line1032"></a>    goog.dom.classes.remove(this.logTabEl_, &#39;goog-testrunner-activetab&#39;);
+<a name="line1033"></a>  }
+<a name="line1034"></a>
+<a name="line1035"></a>  if (tab == 1) {
+<a name="line1036"></a>    this.reportEl_.style.display = &#39;&#39;;
+<a name="line1037"></a>    goog.dom.classes.add(this.reportTabEl_, &#39;goog-testrunner-activetab&#39;);
+<a name="line1038"></a>  } else {
+<a name="line1039"></a>    this.reportEl_.style.display = &#39;none&#39;;
+<a name="line1040"></a>    goog.dom.classes.remove(this.reportTabEl_, &#39;goog-testrunner-activetab&#39;);
+<a name="line1041"></a>  }
+<a name="line1042"></a>
+<a name="line1043"></a>  if (tab == 2) {
+<a name="line1044"></a>    this.statsEl_.style.display = &#39;&#39;;
+<a name="line1045"></a>    goog.dom.classes.add(this.statsTabEl_, &#39;goog-testrunner-activetab&#39;);
+<a name="line1046"></a>  } else {
+<a name="line1047"></a>    this.statsEl_.style.display = &#39;none&#39;;
+<a name="line1048"></a>    goog.dom.classes.remove(this.statsTabEl_, &#39;goog-testrunner-activetab&#39;);
+<a name="line1049"></a>  }
+<a name="line1050"></a>};
+<a name="line1051"></a>
+<a name="line1052"></a>
+<a name="line1053"></a>/**
+<a name="line1054"></a> * Handles the start button being clicked.
+<a name="line1055"></a> * @param {goog.events.BrowserEvent} e The click event.
+<a name="line1056"></a> * @private
+<a name="line1057"></a> */
+<a name="line1058"></a>goog.testing.MultiTestRunner.prototype.onStartClicked_ = function(e) {
+<a name="line1059"></a>  this.start();
+<a name="line1060"></a>};
+<a name="line1061"></a>
+<a name="line1062"></a>
+<a name="line1063"></a>/**
+<a name="line1064"></a> * Handles the stop button being clicked.
+<a name="line1065"></a> * @param {goog.events.BrowserEvent} e The click event.
+<a name="line1066"></a> * @private
+<a name="line1067"></a> */
+<a name="line1068"></a>goog.testing.MultiTestRunner.prototype.onStopClicked_ = function(e) {
+<a name="line1069"></a>  this.stopped_ = true;
+<a name="line1070"></a>  this.finish_();
+<a name="line1071"></a>};
+<a name="line1072"></a>
+<a name="line1073"></a>
+<a name="line1074"></a>/**
+<a name="line1075"></a> * Handles the log tab being clicked.
+<a name="line1076"></a> * @param {goog.events.BrowserEvent} e The click event.
+<a name="line1077"></a> * @private
+<a name="line1078"></a> */
+<a name="line1079"></a>goog.testing.MultiTestRunner.prototype.onLogTabClicked_ = function(e) {
+<a name="line1080"></a>  this.showTab_(0);
+<a name="line1081"></a>};
+<a name="line1082"></a>
+<a name="line1083"></a>
+<a name="line1084"></a>/**
+<a name="line1085"></a> * Handles the log tab being clicked.
+<a name="line1086"></a> * @param {goog.events.BrowserEvent} e The click event.
+<a name="line1087"></a> * @private
+<a name="line1088"></a> */
+<a name="line1089"></a>goog.testing.MultiTestRunner.prototype.onReportTabClicked_ = function(e) {
+<a name="line1090"></a>  this.showTab_(1);
+<a name="line1091"></a>};
+<a name="line1092"></a>
+<a name="line1093"></a>
+<a name="line1094"></a>/**
+<a name="line1095"></a> * Handles the stats tab being clicked.
+<a name="line1096"></a> * @param {goog.events.BrowserEvent} e The click event.
+<a name="line1097"></a> * @private
+<a name="line1098"></a> */
+<a name="line1099"></a>goog.testing.MultiTestRunner.prototype.onStatsTabClicked_ = function(e) {
+<a name="line1100"></a>  this.showTab_(2);
+<a name="line1101"></a>};
 <a name="line1102"></a>
-<a name="line1103"></a>/**
-<a name="line1104"></a> * Class used to manage the interaction with a single iframe.
-<a name="line1105"></a> * @param {string} basePath The base path for tests.
-<a name="line1106"></a> * @param {number} timeoutMs The time to wait for the test to load and run.
-<a name="line1107"></a> * @param {boolean} verbosePasses Whether to show results for passes.
-<a name="line1108"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional dom helper.
-<a name="line1109"></a> * @constructor
-<a name="line1110"></a> * @extends {goog.ui.Component}
-<a name="line1111"></a> */
-<a name="line1112"></a>goog.testing.MultiTestRunner.TestFrame = function(
-<a name="line1113"></a>    basePath, timeoutMs, verbosePasses, opt_domHelper) {
-<a name="line1114"></a>  goog.ui.Component.call(this, opt_domHelper);
-<a name="line1115"></a>
-<a name="line1116"></a>  /**
-<a name="line1117"></a>   * Base path where tests should be resolved from.
-<a name="line1118"></a>   * @type {string}
-<a name="line1119"></a>   * @private
-<a name="line1120"></a>   */
-<a name="line1121"></a>  this.basePath_ = basePath;
-<a name="line1122"></a>
-<a name="line1123"></a>  /**
-<a name="line1124"></a>   * The timeout for the test.
-<a name="line1125"></a>   * @type {number}
-<a name="line1126"></a>   * @private
-<a name="line1127"></a>   */
-<a name="line1128"></a>  this.timeoutMs_ = timeoutMs;
-<a name="line1129"></a>
-<a name="line1130"></a>  /**
-<a name="line1131"></a>   * Whether to show a summary for passing tests.
-<a name="line1132"></a>   * @type {boolean}
-<a name="line1133"></a>   * @private
-<a name="line1134"></a>   */
-<a name="line1135"></a>  this.verbosePasses_ = verbosePasses;
-<a name="line1136"></a>
-<a name="line1137"></a>  /**
-<a name="line1138"></a>   * An event handler for handling events.
-<a name="line1139"></a>   * @type {goog.events.EventHandler}
-<a name="line1140"></a>   * @private
-<a name="line1141"></a>   */
-<a name="line1142"></a>  this.eh_ = new goog.events.EventHandler(this);
-<a name="line1143"></a>
-<a name="line1144"></a>};
-<a name="line1145"></a>goog.inherits(goog.testing.MultiTestRunner.TestFrame, goog.ui.Component);
-<a name="line1146"></a>
-<a name="line1147"></a>
-<a name="line1148"></a>/**
-<a name="line1149"></a> * Reference to the iframe.
-<a name="line1150"></a> * @type {HTMLIFrameElement}
-<a name="line1151"></a> * @private
-<a name="line1152"></a> */
-<a name="line1153"></a>goog.testing.MultiTestRunner.TestFrame.prototype.iframeEl_ = null;
-<a name="line1154"></a>
-<a name="line1155"></a>
-<a name="line1156"></a>/**
-<a name="line1157"></a> * Whether the iframe for the current test has loaded.
-<a name="line1158"></a> * @type {boolean}
-<a name="line1159"></a> * @private
-<a name="line1160"></a> */
-<a name="line1161"></a>goog.testing.MultiTestRunner.TestFrame.prototype.iframeLoaded_ = false;
-<a name="line1162"></a>
-<a name="line1163"></a>
-<a name="line1164"></a>/**
-<a name="line1165"></a> * The test file being run.
-<a name="line1166"></a> * @type {string}
-<a name="line1167"></a> * @private
-<a name="line1168"></a> */
-<a name="line1169"></a>goog.testing.MultiTestRunner.TestFrame.prototype.testFile_ = &#39;&#39;;
-<a name="line1170"></a>
-<a name="line1171"></a>
-<a name="line1172"></a>/**
-<a name="line1173"></a> * The report returned from the test.
-<a name="line1174"></a> * @type {string}
-<a name="line1175"></a> * @private
-<a name="line1176"></a> */
-<a name="line1177"></a>goog.testing.MultiTestRunner.TestFrame.prototype.report_ = &#39;&#39;;
-<a name="line1178"></a>
-<a name="line1179"></a>
-<a name="line1180"></a>/**
-<a name="line1181"></a> * The total time loading and running the test in milliseconds.
-<a name="line1182"></a> * @type {number}
-<a name="line1183"></a> * @private
-<a name="line1184"></a> */
-<a name="line1185"></a>goog.testing.MultiTestRunner.TestFrame.prototype.totalTime_ = 0;
-<a name="line1186"></a>
-<a name="line1187"></a>
-<a name="line1188"></a>/**
-<a name="line1189"></a> * The actual runtime of the test in milliseconds.
-<a name="line1190"></a> * @type {number}
-<a name="line1191"></a> * @private
-<a name="line1192"></a> */
-<a name="line1193"></a>goog.testing.MultiTestRunner.TestFrame.prototype.runTime_ = 0;
-<a name="line1194"></a>
-<a name="line1195"></a>
-<a name="line1196"></a>/**
-<a name="line1197"></a> * The number of files loaded by the test.
-<a name="line1198"></a> * @type {number}
-<a name="line1199"></a> * @private
-<a name="line1200"></a> */
-<a name="line1201"></a>goog.testing.MultiTestRunner.TestFrame.prototype.numFilesLoaded_ = 0;
-<a name="line1202"></a>
-<a name="line1203"></a>
-<a name="line1204"></a>/**
-<a name="line1205"></a> * Whether the test was successful, null if no result has been returned yet.
-<a name="line1206"></a> * @type {?boolean}
-<a name="line1207"></a> * @private
-<a name="line1208"></a> */
-<a name="line1209"></a>goog.testing.MultiTestRunner.TestFrame.prototype.isSuccess_ = null;
-<a name="line1210"></a>
-<a name="line1211"></a>
-<a name="line1212"></a>/**
-<a name="line1213"></a> * Timestamp for the when the test was started.
-<a name="line1214"></a> * @type {number}
-<a name="line1215"></a> * @private
-<a name="line1216"></a> */
-<a name="line1217"></a>goog.testing.MultiTestRunner.TestFrame.prototype.startTime_ = 0;
-<a name="line1218"></a>
-<a name="line1219"></a>
-<a name="line1220"></a>/**
-<a name="line1221"></a> * Timestamp for the last state, used to determine timeouts.
-<a name="line1222"></a> * @type {number}
-<a name="line1223"></a> * @private
-<a name="line1224"></a> */
-<a name="line1225"></a>goog.testing.MultiTestRunner.TestFrame.prototype.lastStateTime_ = 0;
-<a name="line1226"></a>
-<a name="line1227"></a>
-<a name="line1228"></a>/**
-<a name="line1229"></a> * The state of the active test.
-<a name="line1230"></a> * @type {number}
-<a name="line1231"></a> * @private
-<a name="line1232"></a> */
-<a name="line1233"></a>goog.testing.MultiTestRunner.TestFrame.prototype.currentState_ = 0;
-<a name="line1234"></a>
-<a name="line1235"></a>
-<a name="line1236"></a>/**
-<a name="line1237"></a> * Disposes the test frame.
-<a name="line1238"></a> */
-<a name="line1239"></a>goog.testing.MultiTestRunner.TestFrame.prototype.disposeInternal = function() {
-<a name="line1240"></a>  goog.testing.MultiTestRunner.TestFrame.superClass_.disposeInternal.call(this);
-<a name="line1241"></a>  this.dom_.removeNode(this.iframeEl_);
-<a name="line1242"></a>  this.eh_.dispose();
-<a name="line1243"></a>  this.iframeEl_ = null;
-<a name="line1244"></a>};
-<a name="line1245"></a>
-<a name="line1246"></a>
-<a name="line1247"></a>/**
-<a name="line1248"></a> * Runs a test file in this test frame.
-<a name="line1249"></a> * @param {string} testFile The test to run.
-<a name="line1250"></a> */
-<a name="line1251"></a>goog.testing.MultiTestRunner.TestFrame.prototype.runTest = function(testFile) {
-<a name="line1252"></a>  this.lastStateTime_ = this.startTime_ = goog.now();
-<a name="line1253"></a>
-<a name="line1254"></a>  if (!this.iframeEl_) {
-<a name="line1255"></a>    this.createIframe_();
-<a name="line1256"></a>  }
-<a name="line1257"></a>
-<a name="line1258"></a>  this.iframeLoaded_ = false;
-<a name="line1259"></a>  this.currentState_ = 0;
-<a name="line1260"></a>  this.isSuccess_ = null;
-<a name="line1261"></a>  this.report_ = &#39;&#39;;
-<a name="line1262"></a>  this.testFile_ = testFile;
-<a name="line1263"></a>
-<a name="line1264"></a>  try {
-<a name="line1265"></a>    this.iframeEl_.src = this.basePath_ + testFile;
-<a name="line1266"></a>  } catch (e) {
-<a name="line1267"></a>    // Failures will trigger a JS exception on the local file system.
-<a name="line1268"></a>    this.report_ = this.testFile_ + &#39; failed to load : &#39; + e.message;
-<a name="line1269"></a>    this.isSuccess_ = false;
-<a name="line1270"></a>    this.finish_();
-<a name="line1271"></a>    return;
-<a name="line1272"></a>  }
-<a name="line1273"></a>
-<a name="line1274"></a>  this.checkForCompletion_();
-<a name="line1275"></a>};
-<a name="line1276"></a>
-<a name="line1277"></a>
-<a name="line1278"></a>/**
-<a name="line1279"></a> * @return {string} The test file the TestFrame is running.
-<a name="line1280"></a> */
-<a name="line1281"></a>goog.testing.MultiTestRunner.TestFrame.prototype.getTestFile = function() {
-<a name="line1282"></a>  return this.testFile_;
-<a name="line1283"></a>};
-<a name="line1284"></a>
-<a name="line1285"></a>
-<a name="line1286"></a>/**
-<a name="line1287"></a> * @return {Object} Stats about the test run.
-<a name="line1288"></a> */
-<a name="line1289"></a>goog.testing.MultiTestRunner.TestFrame.prototype.getStats = function() {
-<a name="line1290"></a>  return {
-<a name="line1291"></a>    &#39;testFile&#39;: this.testFile_,
-<a name="line1292"></a>    &#39;success&#39;: this.isSuccess_,
-<a name="line1293"></a>    &#39;runTime&#39;: this.runTime_,
-<a name="line1294"></a>    &#39;totalTime&#39;: this.totalTime_,
-<a name="line1295"></a>    &#39;numFilesLoaded&#39;: this.numFilesLoaded_
-<a name="line1296"></a>  };
-<a name="line1297"></a>};
-<a name="line1298"></a>
-<a name="line1299"></a>
-<a name="line1300"></a>/**
-<a name="line1301"></a> * @return {string} The report for the test run.
-<a name="line1302"></a> */
-<a name="line1303"></a>goog.testing.MultiTestRunner.TestFrame.prototype.getReport = function() {
-<a name="line1304"></a>  return this.report_;
-<a name="line1305"></a>};
-<a name="line1306"></a>
-<a name="line1307"></a>
-<a name="line1308"></a>/**
-<a name="line1309"></a> * @return {?boolean} Whether the test frame had a success.
-<a name="line1310"></a> */
-<a name="line1311"></a>goog.testing.MultiTestRunner.TestFrame.prototype.isSuccess = function() {
-<a name="line1312"></a>  return this.isSuccess_;
-<a name="line1313"></a>};
-<a name="line1314"></a>
-<a name="line1315"></a>
-<a name="line1316"></a>/**
-<a name="line1317"></a> * Handles the TestFrame finishing a single test.
-<a name="line1318"></a> * @private
-<a name="line1319"></a> */
-<a name="line1320"></a>goog.testing.MultiTestRunner.TestFrame.prototype.finish_ = function() {
-<a name="line1321"></a>  this.totalTime_ = goog.now() - this.startTime_;
-<a name="line1322"></a>  // TODO: Fire an event instead?
-<a name="line1323"></a>  if (this.getParent() &amp;&amp; this.getParent().processResult) {
-<a name="line1324"></a>    this.getParent().processResult(this);
-<a name="line1325"></a>  }
-<a name="line1326"></a>};
-<a name="line1327"></a>
-<a name="line1328"></a>
-<a name="line1329"></a>/**
-<a name="line1330"></a> * Creates an iframe to run the tests in.  For overriding in unit tests.
-<a name="line1331"></a> * @private
-<a name="line1332"></a> */
-<a name="line1333"></a>goog.testing.MultiTestRunner.TestFrame.prototype.createIframe_ = function() {
-<a name="line1334"></a>  this.iframeEl_ =
-<a name="line1335"></a>      (/** @type {HTMLIFrameElement} */ this.dom_.createDom(&#39;iframe&#39;));
-<a name="line1336"></a>  this.getElement().appendChild(this.iframeEl_);
-<a name="line1337"></a>  this.eh_.listen(this.iframeEl_, &#39;load&#39;, this.onIframeLoaded_);
-<a name="line1338"></a>};
-<a name="line1339"></a>
-<a name="line1340"></a>
-<a name="line1341"></a>/**
-<a name="line1342"></a> * Handles the iframe loading.
-<a name="line1343"></a> * @param {goog.events.BrowserEvent} e The load event.
-<a name="line1344"></a> * @private
-<a name="line1345"></a> */
-<a name="line1346"></a>goog.testing.MultiTestRunner.TestFrame.prototype.onIframeLoaded_ = function(e) {
-<a name="line1347"></a>  this.iframeLoaded_ = true;
-<a name="line1348"></a>};
-<a name="line1349"></a>
-<a name="line1350"></a>
-<a name="line1351"></a>/**
-<a name="line1352"></a> * Checks the active test for completion, keeping track of the tests&#39; various
-<a name="line1353"></a> * execution stages.
-<a name="line1354"></a> * @private
-<a name="line1355"></a> */
-<a name="line1356"></a>goog.testing.MultiTestRunner.TestFrame.prototype.checkForCompletion_ =
-<a name="line1357"></a>    function() {
-<a name="line1358"></a>  var js = goog.dom.getFrameContentWindow(this.iframeEl_);
-<a name="line1359"></a>  switch (this.currentState_) {
-<a name="line1360"></a>    case 0:
-<a name="line1361"></a>      if (this.iframeLoaded_ &amp;&amp; js[&#39;G_testRunner&#39;]) {
-<a name="line1362"></a>        this.lastStateTime_ = goog.now();
-<a name="line1363"></a>        this.currentState_++;
-<a name="line1364"></a>      }
-<a name="line1365"></a>      break;
-<a name="line1366"></a>    case 1:
-<a name="line1367"></a>      if (js[&#39;G_testRunner&#39;][&#39;isInitialized&#39;]()) {
-<a name="line1368"></a>        this.lastStateTime_ = goog.now();
-<a name="line1369"></a>        this.currentState_++;
-<a name="line1370"></a>      }
-<a name="line1371"></a>      break;
-<a name="line1372"></a>    case 2:
-<a name="line1373"></a>      if (js[&#39;G_testRunner&#39;][&#39;isFinished&#39;]()) {
-<a name="line1374"></a>        var tr = js[&#39;G_testRunner&#39;];
-<a name="line1375"></a>        this.isSuccess_ = tr[&#39;isSuccess&#39;]();
-<a name="line1376"></a>        this.report_ = tr[&#39;getReport&#39;](this.verbosePasses_);
-<a name="line1377"></a>        this.runTime_ = tr[&#39;getRunTime&#39;]();
-<a name="line1378"></a>        this.numFilesLoaded_ = tr[&#39;getNumFilesLoaded&#39;]();
-<a name="line1379"></a>        this.finish_();
-<a name="line1380"></a>        return;
-<a name="line1381"></a>      }
-<a name="line1382"></a>  }
-<a name="line1383"></a>
-<a name="line1384"></a>  // Check to see if the test has timed out.
-<a name="line1385"></a>  if (goog.now() - this.lastStateTime_ &gt; this.timeoutMs_) {
-<a name="line1386"></a>    this.report_ = this.testFile_ + &#39; timed out  &#39; +
-<a name="line1387"></a>        goog.testing.MultiTestRunner.STATES[this.currentState_];
-<a name="line1388"></a>    this.isSuccess_ = false;
-<a name="line1389"></a>    this.finish_();
-<a name="line1390"></a>    return;
-<a name="line1391"></a>  }
-<a name="line1392"></a>
-<a name="line1393"></a>  // Check again in 100ms.
-<a name="line1394"></a>  goog.Timer.callOnce(this.checkForCompletion_, 100, this);
-<a name="line1395"></a>};
+<a name="line1103"></a>
+<a name="line1104"></a>
+<a name="line1105"></a>/**
+<a name="line1106"></a> * Class used to manage the interaction with a single iframe.
+<a name="line1107"></a> * @param {string} basePath The base path for tests.
+<a name="line1108"></a> * @param {number} timeoutMs The time to wait for the test to load and run.
+<a name="line1109"></a> * @param {boolean} verbosePasses Whether to show results for passes.
+<a name="line1110"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional dom helper.
+<a name="line1111"></a> * @constructor
+<a name="line1112"></a> * @extends {goog.ui.Component}
+<a name="line1113"></a> */
+<a name="line1114"></a>goog.testing.MultiTestRunner.TestFrame = function(
+<a name="line1115"></a>    basePath, timeoutMs, verbosePasses, opt_domHelper) {
+<a name="line1116"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line1117"></a>
+<a name="line1118"></a>  /**
+<a name="line1119"></a>   * Base path where tests should be resolved from.
+<a name="line1120"></a>   * @type {string}
+<a name="line1121"></a>   * @private
+<a name="line1122"></a>   */
+<a name="line1123"></a>  this.basePath_ = basePath;
+<a name="line1124"></a>
+<a name="line1125"></a>  /**
+<a name="line1126"></a>   * The timeout for the test.
+<a name="line1127"></a>   * @type {number}
+<a name="line1128"></a>   * @private
+<a name="line1129"></a>   */
+<a name="line1130"></a>  this.timeoutMs_ = timeoutMs;
+<a name="line1131"></a>
+<a name="line1132"></a>  /**
+<a name="line1133"></a>   * Whether to show a summary for passing tests.
+<a name="line1134"></a>   * @type {boolean}
+<a name="line1135"></a>   * @private
+<a name="line1136"></a>   */
+<a name="line1137"></a>  this.verbosePasses_ = verbosePasses;
+<a name="line1138"></a>
+<a name="line1139"></a>  /**
+<a name="line1140"></a>   * An event handler for handling events.
+<a name="line1141"></a>   * @type {goog.events.EventHandler}
+<a name="line1142"></a>   * @private
+<a name="line1143"></a>   */
+<a name="line1144"></a>  this.eh_ = new goog.events.EventHandler(this);
+<a name="line1145"></a>
+<a name="line1146"></a>};
+<a name="line1147"></a>goog.inherits(goog.testing.MultiTestRunner.TestFrame, goog.ui.Component);
+<a name="line1148"></a>
+<a name="line1149"></a>
+<a name="line1150"></a>/**
+<a name="line1151"></a> * Reference to the iframe.
+<a name="line1152"></a> * @type {HTMLIFrameElement}
+<a name="line1153"></a> * @private
+<a name="line1154"></a> */
+<a name="line1155"></a>goog.testing.MultiTestRunner.TestFrame.prototype.iframeEl_ = null;
+<a name="line1156"></a>
+<a name="line1157"></a>
+<a name="line1158"></a>/**
+<a name="line1159"></a> * Whether the iframe for the current test has loaded.
+<a name="line1160"></a> * @type {boolean}
+<a name="line1161"></a> * @private
+<a name="line1162"></a> */
+<a name="line1163"></a>goog.testing.MultiTestRunner.TestFrame.prototype.iframeLoaded_ = false;
+<a name="line1164"></a>
+<a name="line1165"></a>
+<a name="line1166"></a>/**
+<a name="line1167"></a> * The test file being run.
+<a name="line1168"></a> * @type {string}
+<a name="line1169"></a> * @private
+<a name="line1170"></a> */
+<a name="line1171"></a>goog.testing.MultiTestRunner.TestFrame.prototype.testFile_ = &#39;&#39;;
+<a name="line1172"></a>
+<a name="line1173"></a>
+<a name="line1174"></a>/**
+<a name="line1175"></a> * The report returned from the test.
+<a name="line1176"></a> * @type {string}
+<a name="line1177"></a> * @private
+<a name="line1178"></a> */
+<a name="line1179"></a>goog.testing.MultiTestRunner.TestFrame.prototype.report_ = &#39;&#39;;
+<a name="line1180"></a>
+<a name="line1181"></a>
+<a name="line1182"></a>/**
+<a name="line1183"></a> * The total time loading and running the test in milliseconds.
+<a name="line1184"></a> * @type {number}
+<a name="line1185"></a> * @private
+<a name="line1186"></a> */
+<a name="line1187"></a>goog.testing.MultiTestRunner.TestFrame.prototype.totalTime_ = 0;
+<a name="line1188"></a>
+<a name="line1189"></a>
+<a name="line1190"></a>/**
+<a name="line1191"></a> * The actual runtime of the test in milliseconds.
+<a name="line1192"></a> * @type {number}
+<a name="line1193"></a> * @private
+<a name="line1194"></a> */
+<a name="line1195"></a>goog.testing.MultiTestRunner.TestFrame.prototype.runTime_ = 0;
+<a name="line1196"></a>
+<a name="line1197"></a>
+<a name="line1198"></a>/**
+<a name="line1199"></a> * The number of files loaded by the test.
+<a name="line1200"></a> * @type {number}
+<a name="line1201"></a> * @private
+<a name="line1202"></a> */
+<a name="line1203"></a>goog.testing.MultiTestRunner.TestFrame.prototype.numFilesLoaded_ = 0;
+<a name="line1204"></a>
+<a name="line1205"></a>
+<a name="line1206"></a>/**
+<a name="line1207"></a> * Whether the test was successful, null if no result has been returned yet.
+<a name="line1208"></a> * @type {?boolean}
+<a name="line1209"></a> * @private
+<a name="line1210"></a> */
+<a name="line1211"></a>goog.testing.MultiTestRunner.TestFrame.prototype.isSuccess_ = null;
+<a name="line1212"></a>
+<a name="line1213"></a>
+<a name="line1214"></a>/**
+<a name="line1215"></a> * Timestamp for the when the test was started.
+<a name="line1216"></a> * @type {number}
+<a name="line1217"></a> * @private
+<a name="line1218"></a> */
+<a name="line1219"></a>goog.testing.MultiTestRunner.TestFrame.prototype.startTime_ = 0;
+<a name="line1220"></a>
+<a name="line1221"></a>
+<a name="line1222"></a>/**
+<a name="line1223"></a> * Timestamp for the last state, used to determine timeouts.
+<a name="line1224"></a> * @type {number}
+<a name="line1225"></a> * @private
+<a name="line1226"></a> */
+<a name="line1227"></a>goog.testing.MultiTestRunner.TestFrame.prototype.lastStateTime_ = 0;
+<a name="line1228"></a>
+<a name="line1229"></a>
+<a name="line1230"></a>/**
+<a name="line1231"></a> * The state of the active test.
+<a name="line1232"></a> * @type {number}
+<a name="line1233"></a> * @private
+<a name="line1234"></a> */
+<a name="line1235"></a>goog.testing.MultiTestRunner.TestFrame.prototype.currentState_ = 0;
+<a name="line1236"></a>
+<a name="line1237"></a>
+<a name="line1238"></a>/**
+<a name="line1239"></a> * Disposes the test frame.
+<a name="line1240"></a> */
+<a name="line1241"></a>goog.testing.MultiTestRunner.TestFrame.prototype.disposeInternal = function() {
+<a name="line1242"></a>  goog.testing.MultiTestRunner.TestFrame.superClass_.disposeInternal.call(this);
+<a name="line1243"></a>  this.dom_.removeNode(this.iframeEl_);
+<a name="line1244"></a>  this.eh_.dispose();
+<a name="line1245"></a>  this.iframeEl_ = null;
+<a name="line1246"></a>};
+<a name="line1247"></a>
+<a name="line1248"></a>
+<a name="line1249"></a>/**
+<a name="line1250"></a> * Runs a test file in this test frame.
+<a name="line1251"></a> * @param {string} testFile The test to run.
+<a name="line1252"></a> */
+<a name="line1253"></a>goog.testing.MultiTestRunner.TestFrame.prototype.runTest = function(testFile) {
+<a name="line1254"></a>  this.lastStateTime_ = this.startTime_ = goog.now();
+<a name="line1255"></a>
+<a name="line1256"></a>  if (!this.iframeEl_) {
+<a name="line1257"></a>    this.createIframe_();
+<a name="line1258"></a>  }
+<a name="line1259"></a>
+<a name="line1260"></a>  this.iframeLoaded_ = false;
+<a name="line1261"></a>  this.currentState_ = 0;
+<a name="line1262"></a>  this.isSuccess_ = null;
+<a name="line1263"></a>  this.report_ = &#39;&#39;;
+<a name="line1264"></a>  this.testFile_ = testFile;
+<a name="line1265"></a>
+<a name="line1266"></a>  try {
+<a name="line1267"></a>    this.iframeEl_.src = this.basePath_ + testFile;
+<a name="line1268"></a>  } catch (e) {
+<a name="line1269"></a>    // Failures will trigger a JS exception on the local file system.
+<a name="line1270"></a>    this.report_ = this.testFile_ + &#39; failed to load : &#39; + e.message;
+<a name="line1271"></a>    this.isSuccess_ = false;
+<a name="line1272"></a>    this.finish_();
+<a name="line1273"></a>    return;
+<a name="line1274"></a>  }
+<a name="line1275"></a>
+<a name="line1276"></a>  this.checkForCompletion_();
+<a name="line1277"></a>};
+<a name="line1278"></a>
+<a name="line1279"></a>
+<a name="line1280"></a>/**
+<a name="line1281"></a> * @return {string} The test file the TestFrame is running.
+<a name="line1282"></a> */
+<a name="line1283"></a>goog.testing.MultiTestRunner.TestFrame.prototype.getTestFile = function() {
+<a name="line1284"></a>  return this.testFile_;
+<a name="line1285"></a>};
+<a name="line1286"></a>
+<a name="line1287"></a>
+<a name="line1288"></a>/**
+<a name="line1289"></a> * @return {Object} Stats about the test run.
+<a name="line1290"></a> */
+<a name="line1291"></a>goog.testing.MultiTestRunner.TestFrame.prototype.getStats = function() {
+<a name="line1292"></a>  return {
+<a name="line1293"></a>    &#39;testFile&#39;: this.testFile_,
+<a name="line1294"></a>    &#39;success&#39;: this.isSuccess_,
+<a name="line1295"></a>    &#39;runTime&#39;: this.runTime_,
+<a name="line1296"></a>    &#39;totalTime&#39;: this.totalTime_,
+<a name="line1297"></a>    &#39;numFilesLoaded&#39;: this.numFilesLoaded_
+<a name="line1298"></a>  };
+<a name="line1299"></a>};
+<a name="line1300"></a>
+<a name="line1301"></a>
+<a name="line1302"></a>/**
+<a name="line1303"></a> * @return {string} The report for the test run.
+<a name="line1304"></a> */
+<a name="line1305"></a>goog.testing.MultiTestRunner.TestFrame.prototype.getReport = function() {
+<a name="line1306"></a>  return this.report_;
+<a name="line1307"></a>};
+<a name="line1308"></a>
+<a name="line1309"></a>
+<a name="line1310"></a>/**
+<a name="line1311"></a> * @return {?boolean} Whether the test frame had a success.
+<a name="line1312"></a> */
+<a name="line1313"></a>goog.testing.MultiTestRunner.TestFrame.prototype.isSuccess = function() {
+<a name="line1314"></a>  return this.isSuccess_;
+<a name="line1315"></a>};
+<a name="line1316"></a>
+<a name="line1317"></a>
+<a name="line1318"></a>/**
+<a name="line1319"></a> * Handles the TestFrame finishing a single test.
+<a name="line1320"></a> * @private
+<a name="line1321"></a> */
+<a name="line1322"></a>goog.testing.MultiTestRunner.TestFrame.prototype.finish_ = function() {
+<a name="line1323"></a>  this.totalTime_ = goog.now() - this.startTime_;
+<a name="line1324"></a>  // TODO: Fire an event instead?
+<a name="line1325"></a>  if (this.getParent() &amp;&amp; this.getParent().processResult) {
+<a name="line1326"></a>    this.getParent().processResult(this);
+<a name="line1327"></a>  }
+<a name="line1328"></a>};
+<a name="line1329"></a>
+<a name="line1330"></a>
+<a name="line1331"></a>/**
+<a name="line1332"></a> * Creates an iframe to run the tests in.  For overriding in unit tests.
+<a name="line1333"></a> * @private
+<a name="line1334"></a> */
+<a name="line1335"></a>goog.testing.MultiTestRunner.TestFrame.prototype.createIframe_ = function() {
+<a name="line1336"></a>  this.iframeEl_ =
+<a name="line1337"></a>      (/** @type {HTMLIFrameElement} */ this.dom_.createDom(&#39;iframe&#39;));
+<a name="line1338"></a>  this.getElement().appendChild(this.iframeEl_);
+<a name="line1339"></a>  this.eh_.listen(this.iframeEl_, &#39;load&#39;, this.onIframeLoaded_);
+<a name="line1340"></a>};
+<a name="line1341"></a>
+<a name="line1342"></a>
+<a name="line1343"></a>/**
+<a name="line1344"></a> * Handles the iframe loading.
+<a name="line1345"></a> * @param {goog.events.BrowserEvent} e The load event.
+<a name="line1346"></a> * @private
+<a name="line1347"></a> */
+<a name="line1348"></a>goog.testing.MultiTestRunner.TestFrame.prototype.onIframeLoaded_ = function(e) {
+<a name="line1349"></a>  this.iframeLoaded_ = true;
+<a name="line1350"></a>};
+<a name="line1351"></a>
+<a name="line1352"></a>
+<a name="line1353"></a>/**
+<a name="line1354"></a> * Checks the active test for completion, keeping track of the tests&#39; various
+<a name="line1355"></a> * execution stages.
+<a name="line1356"></a> * @private
+<a name="line1357"></a> */
+<a name="line1358"></a>goog.testing.MultiTestRunner.TestFrame.prototype.checkForCompletion_ =
+<a name="line1359"></a>    function() {
+<a name="line1360"></a>  var js = goog.dom.getFrameContentWindow(this.iframeEl_);
+<a name="line1361"></a>  switch (this.currentState_) {
+<a name="line1362"></a>    case 0:
+<a name="line1363"></a>      if (this.iframeLoaded_ &amp;&amp; js[&#39;G_testRunner&#39;]) {
+<a name="line1364"></a>        this.lastStateTime_ = goog.now();
+<a name="line1365"></a>        this.currentState_++;
+<a name="line1366"></a>      }
+<a name="line1367"></a>      break;
+<a name="line1368"></a>    case 1:
+<a name="line1369"></a>      if (js[&#39;G_testRunner&#39;][&#39;isInitialized&#39;]()) {
+<a name="line1370"></a>        this.lastStateTime_ = goog.now();
+<a name="line1371"></a>        this.currentState_++;
+<a name="line1372"></a>      }
+<a name="line1373"></a>      break;
+<a name="line1374"></a>    case 2:
+<a name="line1375"></a>      if (js[&#39;G_testRunner&#39;][&#39;isFinished&#39;]()) {
+<a name="line1376"></a>        var tr = js[&#39;G_testRunner&#39;];
+<a name="line1377"></a>        this.isSuccess_ = tr[&#39;isSuccess&#39;]();
+<a name="line1378"></a>        this.report_ = tr[&#39;getReport&#39;](this.verbosePasses_);
+<a name="line1379"></a>        this.runTime_ = tr[&#39;getRunTime&#39;]();
+<a name="line1380"></a>        this.numFilesLoaded_ = tr[&#39;getNumFilesLoaded&#39;]();
+<a name="line1381"></a>        this.finish_();
+<a name="line1382"></a>        return;
+<a name="line1383"></a>      }
+<a name="line1384"></a>  }
+<a name="line1385"></a>
+<a name="line1386"></a>  // Check to see if the test has timed out.
+<a name="line1387"></a>  if (goog.now() - this.lastStateTime_ &gt; this.timeoutMs_) {
+<a name="line1388"></a>    this.report_ = this.testFile_ + &#39; timed out  &#39; +
+<a name="line1389"></a>        goog.testing.MultiTestRunner.STATES[this.currentState_];
+<a name="line1390"></a>    this.isSuccess_ = false;
+<a name="line1391"></a>    this.finish_();
+<a name="line1392"></a>    return;
+<a name="line1393"></a>  }
+<a name="line1394"></a>
+<a name="line1395"></a>  // Check again in 100ms.
+<a name="line1396"></a>  goog.Timer.callOnce(this.checkForCompletion_, 100, this);
+<a name="line1397"></a>};
 </pre>
 
 

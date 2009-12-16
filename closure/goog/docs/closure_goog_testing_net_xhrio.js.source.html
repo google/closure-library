@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -75,7 +76,7 @@
 <a name="line32"></a>/**
 <a name="line33"></a> * Mock implementation of goog.net.XhrIo. This doesn&#39;t provide a mock
 <a name="line34"></a> * implementation for all cases, but it&#39;s not too hard to add them as needed.
-<a name="line35"></a> * @param {goog.testing.TestQueue} opt_testQueue Test queue for inserting test
+<a name="line35"></a> * @param {goog.testing.TestQueue=} opt_testQueue Test queue for inserting test
 <a name="line36"></a> *     events.
 <a name="line37"></a> * @constructor
 <a name="line38"></a> * @extends {goog.events.EventTarget}
@@ -116,13 +117,13 @@
 <a name="line73"></a>/**
 <a name="line74"></a> * Simulates the static XhrIo send method.
 <a name="line75"></a> * @param {string} url Uri to make request to.
-<a name="line76"></a> * @param {Function} opt_callback Callback function for when request is
+<a name="line76"></a> * @param {Function=} opt_callback Callback function for when request is
 <a name="line77"></a> *     complete.
-<a name="line78"></a> * @param {string} opt_method Send method, default: GET.
-<a name="line79"></a> * @param {string} opt_content Post data.
-<a name="line80"></a> * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+<a name="line78"></a> * @param {string=} opt_method Send method, default: GET.
+<a name="line79"></a> * @param {string=} opt_content Post data.
+<a name="line80"></a> * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
 <a name="line81"></a> *     request.
-<a name="line82"></a> * @param {number} opt_timeoutInterval Number of milliseconds after which an
+<a name="line82"></a> * @param {number=} opt_timeoutInterval Number of milliseconds after which an
 <a name="line83"></a> *     incomplete request will be aborted; 0 means no timeout is set.
 <a name="line84"></a> */
 <a name="line85"></a>goog.testing.net.XhrIo.send = function(url, opt_callback, opt_method,
@@ -260,7 +261,7 @@
 <a name="line217"></a>
 <a name="line218"></a>/**
 <a name="line219"></a> * Abort the current XMLHttpRequest
-<a name="line220"></a> * @param {goog.net.ErrorCode} opt_failureCode Optional error code to use -
+<a name="line220"></a> * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
 <a name="line221"></a> *     defaults to ABORT.
 <a name="line222"></a> */
 <a name="line223"></a>goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
@@ -276,9 +277,9 @@
 <a name="line233"></a>/**
 <a name="line234"></a> * Simulates the XhrIo send.
 <a name="line235"></a> * @param {string} url Uri to make request too.
-<a name="line236"></a> * @param {string} opt_method Send method, default: GET.
-<a name="line237"></a> * @param {string} opt_content Post data.
-<a name="line238"></a> * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+<a name="line236"></a> * @param {string=} opt_method Send method, default: GET.
+<a name="line237"></a> * @param {string=} opt_content Post data.
+<a name="line238"></a> * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
 <a name="line239"></a> *     request.
 <a name="line240"></a> */
 <a name="line241"></a>goog.testing.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
@@ -324,7 +325,7 @@
 <a name="line281"></a> * Simulates receiving a response.
 <a name="line282"></a> * @param {number} statusCode Simulated status code.
 <a name="line283"></a> * @param {string|Document} response Simulated response.
-<a name="line284"></a> * @param {Object} opt_headers Simulated response headers.
+<a name="line284"></a> * @param {Object=} opt_headers Simulated response headers.
 <a name="line285"></a> */
 <a name="line286"></a>goog.testing.net.XhrIo.prototype.simulateResponse = function(statusCode,
 <a name="line287"></a>    response, opt_headers) {

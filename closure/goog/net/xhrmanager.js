@@ -47,12 +47,12 @@ goog.require('goog.structs.Map');
 
 /**
  * A manager of an XhrIoPool.
- * @param {number} opt_maxRetries Max. number of retries (Default: 1).
- * @param {goog.structs.Map} opt_headers Map of default headers to add to every
+ * @param {number=} opt_maxRetries Max. number of retries (Default: 1).
+ * @param {goog.structs.Map=} opt_headers Map of default headers to add to every
  *     request.
- * @param {number} opt_minCount Min. number of objects (Default: 1).
- * @param {number} opt_maxCount Max. number of objects (Default: 10).
- * @param {number} opt_timeoutInterval Timeout (in ms) before aborting an
+ * @param {number=} opt_minCount Min. number of objects (Default: 1).
+ * @param {number=} opt_maxCount Max. number of objects (Default: 10).
+ * @param {number=} opt_timeoutInterval Timeout (in ms) before aborting an
  *     attempt (Default: 0ms).
  * @constructor
  * @extends {goog.events.EventTarget}
@@ -166,15 +166,16 @@ goog.net.XhrManager.prototype.getOutstandingCount = function() {
  * priority.
  * @param {string} id The id of the request.
  * @param {string} url Uri to make the request too.
- * @param {string} opt_method Send method, default: GET.
- * @param {string} opt_content Post data.
- * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+ * @param {string=} opt_method Send method, default: GET.
+ * @param {string=} opt_content Post data.
+ * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
- * @param {Object} opt_priority The priority of the request.
- * @param {Function} opt_callback Callback function for when request is complete
- *     The only param is the event object from the COMPLETE event.
- * @param {number} opt_maxRetries The maximum number of times the request should
- *     be retried.
+ * @param {Object=} opt_priority The priority of the request.
+ * @param {Function=} opt_callback Callback function for when request is
+ *     complete. The only param is the event object from the COMPLETE event.
+ * @param {number=} opt_maxRetries The maximum number of times the request
+ *     should be retried.
+ * @return {goog.net.XhrManager.Request} The queued request object.
  */
 goog.net.XhrManager.prototype.send = function(
     id,
@@ -205,13 +206,15 @@ goog.net.XhrManager.prototype.send = function(
   // Setup the callback for the pool.
   var callback = goog.bind(this.handleAvailableXhr_, this, id);
   this.xhrPool_.getObject(callback, opt_priority);
+
+  return request;
 };
 
 
 /**
  * Aborts the request associated with id.
  * @param {string} id The id of the request to abort.
- * @param {boolean} opt_force If true, remove the id now so it can be reused.
+ * @param {boolean=} opt_force If true, remove the id now so it can be reused.
  *     No events are fired and the callback is not called when forced.
  */
 goog.net.XhrManager.prototype.abort = function(id, opt_force) {
@@ -433,8 +436,8 @@ goog.net.XhrManager.prototype.handleError_ = function(id, xhrIo) {
  * Remove listeners for XHR events on an XhrIo object.
  * @param {goog.net.XhrIo} xhrIo The object to stop listenening to events on.
  * @param {Function} func The callback to remove from event handling.
- * @param {string|Array.<string>} opt_types Event types to remove listeners for.
- *     Defaults to XHR_EVENT_TYPES_.
+ * @param {string|Array.<string>=} opt_types Event types to remove listeners
+ *     for. Defaults to XHR_EVENT_TYPES_.
  * @private
  */
 goog.net.XhrManager.prototype.removeXhrListener_ = function(xhrIo,
@@ -449,7 +452,7 @@ goog.net.XhrManager.prototype.removeXhrListener_ = function(xhrIo,
  * Adds a listener for XHR events on an XhrIo object.
  * @param {goog.net.XhrIo} xhrIo The object listen to events on.
  * @param {Function} func The callback when the event occurs.
- * @param {string|Array.<string>} opt_types Event types to attach listeners to.
+ * @param {string|Array.<string>=} opt_types Event types to attach listeners to.
  *     Defaults to XHR_EVENT_TYPES_.
  * @private
  */
@@ -539,14 +542,14 @@ goog.net.XhrManager.Event.prototype.disposeInternal = function() {
  * @param {string} url Uri to make the request too.
  * @param {Function} xhrEventCallback Callback attached to the events of the
  *     XhrIo object of the request.
- * @param {string} opt_method Send method, default: GET.
- * @param {string} opt_content Post data.
- * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+ * @param {string=} opt_method Send method, default: GET.
+ * @param {string=} opt_content Post data.
+ * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
- * @param {Function} opt_callback Callback function for when request is complete
- * NOTE: Only 1 callback supported across all events.
- * @param {number} opt_maxRetries The maximum number of times the request should
- *     be retried (Default: 1).
+ * @param {Function=} opt_callback Callback function for when request is
+ *     complete. NOTE: Only 1 callback supported across all events.
+ * @param {number=} opt_maxRetries The maximum number of times the request
+ *     should be retried (Default: 1).
  *
  * @constructor
  * @extends {goog.Disposable}

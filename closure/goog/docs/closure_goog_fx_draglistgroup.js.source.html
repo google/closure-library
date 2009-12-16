@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -266,10 +267,10 @@
 <a name="line223"></a> * @param {goog.fx.DragListDirection} growthDirection The direction that this
 <a name="line224"></a> *     drag list grows in (i.e.. if an item is added, the list&#39;s bounding box
 <a name="line225"></a> *     expands in this direction).
-<a name="line226"></a> * @param {boolean} opt_isDocOrderSameAsGrowthDirection Defaults to true.
+<a name="line226"></a> * @param {boolean=} opt_isDocOrderSameAsGrowthDirection Defaults to true.
 <a name="line227"></a> *     Whether or not the ordering of this drag list&#39;s items in the document
 <a name="line228"></a> *     is the same as the list&#39;s growth direction.
-<a name="line229"></a> * @param {string} opt_dragHoverClass CSS class to apply to this drag list when
+<a name="line229"></a> * @param {string=} opt_dragHoverClass CSS class to apply to this drag list when
 <a name="line230"></a> *     the draggerEl hovers over it during a drag action.
 <a name="line231"></a> */
 <a name="line232"></a>goog.fx.DragListGroup.prototype.addDragList = function(
@@ -1036,13 +1037,13 @@
 <a name="line993"></a> * @param {Element} draggerEl The clone of the current drag item that&#39;s actually
 <a name="line994"></a> *     being dragged around.
 <a name="line995"></a> * @param {goog.fx.Dragger} dragger The dragger object.
-<a name="line996"></a> * @param {goog.math.Coordinate} opt_draggerElCenter The current center position
-<a name="line997"></a> *     of the draggerEl.
-<a name="line998"></a> * @param {Element} opt_hoverList The current drag list that&#39;s being hovered
+<a name="line996"></a> * @param {goog.math.Coordinate=} opt_draggerElCenter The current center
+<a name="line997"></a> *     position of the draggerEl.
+<a name="line998"></a> * @param {Element=} opt_hoverList The current drag list that&#39;s being hovered
 <a name="line999"></a> *     over, or null if the center of draggerEl is outside of any drag lists.
 <a name="line1000"></a> *     If not null and the drag action ends right now, then currDragItem will
 <a name="line1001"></a> *     end up in this list.
-<a name="line1002"></a> * @param {Element} opt_hoverNextItem The current next item in the hoverList
+<a name="line1002"></a> * @param {Element=} opt_hoverNextItem The current next item in the hoverList
 <a name="line1003"></a> *     that the draggerEl is hovering over. (I.e. If the drag action ends
 <a name="line1004"></a> *     right now, then this item would become the next item after the new
 <a name="line1005"></a> *     location of currDragItem.) May be null if not applicable or if

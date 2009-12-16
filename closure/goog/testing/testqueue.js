@@ -52,7 +52,7 @@ goog.testing.TestQueue.prototype.isEmpty = function() {
 /**
  * Gets the next event from the queue. Throws an exception if the queue is
  * empty.
- * @param {string} opt_comment Comment if the queue is empty.
+ * @param {string=} opt_comment Comment if the queue is empty.
  * @return {Object} The next event from the queue.
  */
 goog.testing.TestQueue.prototype.dequeue = function(opt_comment) {

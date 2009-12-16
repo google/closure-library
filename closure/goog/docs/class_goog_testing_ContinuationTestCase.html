@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,13 +90,13 @@ the wait condition is met.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_testing_TestCase.html">goog.testing.TestCase</a></span></td><td></td></tr>
   <tr><td>goog.testing.ContinuationTestCase</td><td><span class="type"><a href="class_goog_testing_TestCase.html">goog.testing.TestCase</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -108,7 +120,7 @@ the wait condition is met.
    <tr class="even">
      <td>
         <span class="entryName">opt_name</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Optional name for the test case.</div>
      </td>
    </tr>
@@ -777,7 +789,7 @@ or until a maximum timeout is reached.
    <tr class="even">
      <td>
         <span class="entryName">opt_interval</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The polling interval in milliseconds.</div>
      </td>
    </tr>
@@ -785,7 +797,7 @@ or until a maximum timeout is reached.
    <tr class="odd">
      <td>
         <span class="entryName">opt_maxTimeout</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The maximum amount of time to wait for the condition in milliseconds (defaults to 1000).</div>
      </td>
    </tr>
@@ -930,7 +942,7 @@ does not fire within a reasonable timeout, the test will fail.
    <tr class="odd">
      <td>
         <span class="entryName">opt_duration</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The length of the timeout in milliseconds.</div>
      </td>
    </tr>
@@ -1270,7 +1282,7 @@ function.
    <tr class="odd">
      <td>
         <span class="entryName">opt_e</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">Error</span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">Error=</span></div>
         <div class="entryOverview">The exception object associated with the failure or a string.</div>
      </td>
    </tr>
@@ -1597,7 +1609,7 @@ function.
    <tr class="even">
      <td>
         <span class="entryName">opt_verbose</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true results will include data about all tests, not just what failed.</div>
      </td>
    </tr>
@@ -1914,7 +1926,7 @@ function.
    <tr class="odd">
      <td>
         <span class="entryName">opt_e</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">Error</span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">Error=</span></div>
         <div class="entryOverview">The exception object associated with the failure or a string.</div>
      </td>
    </tr>

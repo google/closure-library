@@ -95,7 +95,7 @@ goog.gears.WorkerPool.prototype.getGearsWorkerPool = function() {
  * @param {function(!GearsErrorObject):boolean} fn An error handler function
  *     that gets passed an error object with message and line number attributes.
  *     Returns whether the error was handled. If true stops propagation.
- * @param {Object} opt_handler This object for the function.
+ * @param {Object=} opt_handler This object for the function.
  */
 goog.gears.WorkerPool.prototype.setErrorHandler = function(fn, opt_handler) {
   this.workerPool_.onerror = goog.bind(fn, opt_handler);

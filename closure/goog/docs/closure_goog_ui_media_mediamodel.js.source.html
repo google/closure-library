@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -84,11 +85,11 @@
 <a name="line41"></a> * {@link fava.data.Node} is under fava, and not available in closure. Add
 <a name="line42"></a> * setters to MediaModel once this is supported.
 <a name="line43"></a> *
-<a name="line44"></a> * @param {string} opt_url An optional URL of the media.
-<a name="line45"></a> * @param {string} opt_caption An optional caption of the media.
-<a name="line46"></a> * @param {string} opt_description An optional description of the media.
-<a name="line47"></a> * @param {goog.ui.media.MediaModel.MimeType} opt_type The type of the media.
-<a name="line48"></a> * @param {goog.ui.media.MediaModel.Medium} opt_medium The medium of the media.
+<a name="line44"></a> * @param {string=} opt_url An optional URL of the media.
+<a name="line45"></a> * @param {string=} opt_caption An optional caption of the media.
+<a name="line46"></a> * @param {string=} opt_description An optional description of the media.
+<a name="line47"></a> * @param {goog.ui.media.MediaModel.MimeType=} opt_type The type of the media.
+<a name="line48"></a> * @param {goog.ui.media.MediaModel.Medium=} opt_medium The medium of the media.
 <a name="line49"></a> * @constructor
 <a name="line50"></a> */
 <a name="line51"></a>goog.ui.media.MediaModel = function(opt_url,
@@ -353,7 +354,7 @@
 <a name="line310"></a> * Constructs a thumbnail containing details of the thumbnail&#39;s image URL and
 <a name="line311"></a> * optionally it&#39;s size.
 <a name="line312"></a> * @param {string} url The URL of the thumbnail&#39;s image.
-<a name="line313"></a> * @param {goog.math.Size} opt_size The size of the thumbnail&#39;s image if known.
+<a name="line313"></a> * @param {goog.math.Size=} opt_size The size of the thumbnail&#39;s image if known.
 <a name="line314"></a> * @constructor
 <a name="line315"></a> */
 <a name="line316"></a>goog.ui.media.MediaModel.Thumbnail = function(url, opt_size) {
@@ -419,8 +420,8 @@
 <a name="line376"></a> * Constructs a player containing details of the player&#39;s URL and
 <a name="line377"></a> * optionally it&#39;s size.
 <a name="line378"></a> * @param {string} url The URL of the player.
-<a name="line379"></a> * @param {Object} opt_vars Optional map of arguments to the player.
-<a name="line380"></a> * @param {goog.math.Size} opt_size The size of the player if known.
+<a name="line379"></a> * @param {Object=} opt_vars Optional map of arguments to the player.
+<a name="line380"></a> * @param {goog.math.Size=} opt_size The size of the player if known.
 <a name="line381"></a> * @constructor
 <a name="line382"></a> */
 <a name="line383"></a>goog.ui.media.MediaModel.Player = function(url, opt_vars, opt_size) {
@@ -515,7 +516,7 @@
 <a name="line472"></a> * and its particular contents.
 <a name="line473"></a> * @param {string} scheme The URI that identifies the categorization scheme.
 <a name="line474"></a> * @param {string} value The value of the category.
-<a name="line475"></a> * @param {string} opt_label The human readable label that can be displayed in
+<a name="line475"></a> * @param {string=} opt_label The human readable label that can be displayed in
 <a name="line476"></a> *     end user applications.
 <a name="line477"></a> * @constructor
 <a name="line478"></a> */

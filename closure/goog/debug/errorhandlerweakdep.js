@@ -28,7 +28,7 @@ goog.provide('goog.debug.errorHandlerWeakDep');
 goog.debug.errorHandlerWeakDep = {
   /**
    * @param {Function} fn An entry point function to be protected.
-   * @param {boolean} opt_tracers Whether to install tracers around the
+   * @param {boolean=} opt_tracers Whether to install tracers around the
    *     fn.
    * @return {Function} A protected wrapper function that calls the
    *     entry point function.

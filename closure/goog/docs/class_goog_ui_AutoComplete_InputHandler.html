@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -77,13 +89,13 @@ text-input or textarea.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td>goog.ui.AutoComplete.InputHandler</td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
       <tr><td><span class="type"><a href="class_goog_ui_AutoComplete_RichInputHandler.html">goog.ui.AutoComplete.RichInputHandler</a></span></td><td>goog.ui.AutoComplete.InputHandler</td></tr>
   </table>
 </div>
@@ -108,7 +120,7 @@ text-input or textarea.
    <tr class="even">
      <td>
         <span class="entryName">opt_separators</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">Separators to split multiple entries.</div>
      </td>
    </tr>
@@ -116,7 +128,7 @@ text-input or textarea.
    <tr class="odd">
      <td>
         <span class="entryName">opt_literals</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">Characters used to delimit text literals.</div>
      </td>
    </tr>
@@ -124,7 +136,7 @@ text-input or textarea.
    <tr class="even">
      <td>
         <span class="entryName">opt_multi</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to allow multiple entries (Default: true).</div>
      </td>
    </tr>
@@ -132,7 +144,7 @@ text-input or textarea.
    <tr class="odd">
      <td>
         <span class="entryName">opt_throttleTime</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
         <div class="entryOverview">Number of milliseconds to throttle keyevents with (Default: 150). Use -1 to disable updates on typing. Note that typing the separator will update autocomplete suggestions.</div>
      </td>
    </tr>
@@ -202,7 +214,7 @@ text-input or textarea.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line786">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line796">code &raquo;</a>
   </td>
      </tr>
 
@@ -370,7 +382,7 @@ interface and events.
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">...Element</span></div>
         <div class="entryOverview">Elements to attach the input handler too.</div>
      </td>
    </tr>
@@ -490,7 +502,7 @@ interface and events.
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">...Element</span></div>
         <div class="entryOverview">Variable arguments for elements to unbind from.</div>
      </td>
    </tr>
@@ -751,7 +763,7 @@ otherwise from the last keypress.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1058">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1068">code &raquo;</a>
   </td>
      </tr>
 
@@ -797,7 +809,7 @@ otherwise from the last keypress.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line639">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line649">code &raquo;</a>
   </td>
      </tr>
 
@@ -862,7 +874,7 @@ otherwise from the last keypress.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line660">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line670">code &raquo;</a>
   </td>
      </tr>
 
@@ -927,7 +939,7 @@ otherwise from the last keypress.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line777">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line787">code &raquo;</a>
   </td>
      </tr>
 
@@ -992,7 +1004,7 @@ otherwise from the last keypress.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line746">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line756">code &raquo;</a>
   </td>
      </tr>
 
@@ -1038,7 +1050,7 @@ otherwise from the last keypress.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1023">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1033">code &raquo;</a>
   </td>
      </tr>
 
@@ -1084,7 +1096,7 @@ otherwise from the last keypress.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1013">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1023">code &raquo;</a>
   </td>
      </tr>
 
@@ -1130,7 +1142,7 @@ otherwise from the last keypress.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line766">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line776">code &raquo;</a>
   </td>
      </tr>
 
@@ -1176,7 +1188,7 @@ otherwise from the last keypress.
    <tr class="even">
      <td>
         <span class="entryName">opt_e</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
+        : <div class="fullType"><span class="type">goog.events.Event=</span></div>
         <div class="entryOverview">Browser event object.</div>
      </td>
    </tr>
@@ -1190,7 +1202,7 @@ otherwise from the last keypress.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line856">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line866">code &raquo;</a>
   </td>
      </tr>
 
@@ -1250,7 +1262,7 @@ otherwise from the last keypress.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line830">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line840">code &raquo;</a>
   </td>
      </tr>
 
@@ -1311,7 +1323,7 @@ separator character.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line981">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line991">code &raquo;</a>
   </td>
      </tr>
 
@@ -1371,7 +1383,7 @@ separator character.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line894">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line904">code &raquo;</a>
   </td>
      </tr>
 
@@ -1432,7 +1444,7 @@ Checks if IME input is ended.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line920">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line930">code &raquo;</a>
   </td>
      </tr>
 
@@ -1493,7 +1505,7 @@ an IME entry scenario.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line934">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line944">code &raquo;</a>
   </td>
      </tr>
 
@@ -1554,7 +1566,7 @@ key and does the relevent action as appropriate.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line906">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line916">code &raquo;</a>
   </td>
      </tr>
 
@@ -1615,7 +1627,7 @@ any update to the autocomplete.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line884">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line894">code &raquo;</a>
   </td>
      </tr>
 
@@ -1661,7 +1673,7 @@ any update to the autocomplete.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1033">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1043">code &raquo;</a>
   </td>
      </tr>
 
@@ -1695,7 +1707,7 @@ any update to the autocomplete.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line807">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line817">code &raquo;</a>
   </td>
      </tr>
 
@@ -1750,7 +1762,7 @@ any update to the autocomplete.
    <tr class="odd">
      <td>
         <span class="entryName">opt_multi</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Should this be treated as a single or multi-token auto-complete?  Overrides previous setting of opt_multi on constructor.</div>
      </td>
    </tr>
@@ -1904,6 +1916,66 @@ next focusable  element) on TAB.
 
 
   <td>
+    <a name="goog.ui.AutoComplete.InputHandler.prototype.setRowJustSelected"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setRowJustSelected<span class="args">(<span class="arg">justSelected</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets whether a row has just been selected.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">justSelected</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether or not the row has just been selected.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line621">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
     <a name="goog.ui.AutoComplete.InputHandler.prototype.setSeparatorCompletes"></a>
 
 
@@ -1955,7 +2027,7 @@ next focusable  element) on TAB.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2015,7 +2087,7 @@ next focusable  element) on TAB.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2075,7 +2147,7 @@ next focusable  element) on TAB.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2130,12 +2202,12 @@ next focusable  element) on TAB.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line621">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line631">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2197,7 +2269,7 @@ be removed.  This can also be set to null to disable trimming.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2252,12 +2324,12 @@ be removed.  This can also be set to null to disable trimming.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line648">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line658">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2318,7 +2390,7 @@ and previous autocomplete entries.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2378,7 +2450,7 @@ and previous autocomplete entries.
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -2443,12 +2515,12 @@ entries.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1090">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1100">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -2477,12 +2549,12 @@ entries.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line947">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line957">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -2511,12 +2583,12 @@ entries.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line963">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line973">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -2576,12 +2648,12 @@ entries.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1046">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1056">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2623,7 +2695,7 @@ token.
    <tr class="even">
      <td>
         <span class="entryName">opt_force</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true the menu will be forced to update.</div>
      </td>
    </tr>
@@ -2637,7 +2709,7 @@ token.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line991">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_inputhandler.js.source.html#line1001">code &raquo;</a>
   </td>
      </tr>
 

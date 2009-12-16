@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -73,7 +74,7 @@
 <a name="line30"></a> * @param {Function} f The function to wrap. Its return value may only depend
 <a name="line31"></a> *     on its arguments and &#39;this&#39; context. There may be further restrictions
 <a name="line32"></a> *     on the arguments depending on the capabilities of the serializer used.
-<a name="line33"></a> * @param {function(number, Object): string} opt_serializer A function to
+<a name="line33"></a> * @param {function(number, Object): string=} opt_serializer A function to
 <a name="line34"></a> *     serialize f&#39;s arguments. It must have the same signature as
 <a name="line35"></a> *     goog.memoize.simpleSerializer. It defaults to that function.
 <a name="line36"></a> * @this {Object} The object whose function is being wrapped.

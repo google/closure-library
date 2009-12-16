@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -83,14 +95,14 @@ plus at leat one modifier) and a sequence of keys or strokes.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td>goog.ui.KeyboardShortcutHandler</td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -215,7 +227,7 @@ plus at leat one modifier) and a sequence of keys or strokes.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line620">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line657">code &raquo;</a>
   </td>
      </tr>
 
@@ -249,7 +261,7 @@ plus at leat one modifier) and a sequence of keys or strokes.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line545">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line582">code &raquo;</a>
   </td>
      </tr>
 
@@ -283,7 +295,7 @@ plus at leat one modifier) and a sequence of keys or strokes.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line423">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line460">code &raquo;</a>
   </td>
      </tr>
 
@@ -310,8 +322,8 @@ plus at leat one modifier) and a sequence of keys or strokes.
 
 
      <div class="entryOverview">
-       Returns whether all shortcuts are treated as if they keys were passed
-to setGlobalKeys function.
+       Returns whether all shortcuts (including modifier shortcuts) are treated as
+if the keys had been passed to the setGlobalKeys function.
      </div>
 
 
@@ -330,7 +342,7 @@ to setGlobalKeys function.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line248">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line257">code &raquo;</a>
   </td>
      </tr>
 
@@ -377,7 +389,7 @@ event is fired. The default value is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line226">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line235">code &raquo;</a>
   </td>
      </tr>
 
@@ -442,7 +454,7 @@ event is fired. The default value is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line435">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line472">code &raquo;</a>
   </td>
      </tr>
 
@@ -488,12 +500,61 @@ event is fired. The default value is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line415">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line452">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.KeyboardShortcutHandler.prototype.getModifierShortcutsAreGlobal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getModifierShortcutsAreGlobal<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns whether shortcuts with modifiers are treated as if the keys had been
+passed to the setGlobalKeys function.  Ignored if you have called
+setAllShortcutsAreGlobal(true).  Applies only to form elements (not
+content-editable).
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
+            Whether shortcuts with modifiers are treated as globals.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line285">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -543,7 +604,7 @@ event is fired. The default value is true.
    <tr class="odd">
      <td>
         <span class="entryName">opt_index</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Index in array to start with.</div>
      </td>
    </tr>
@@ -551,7 +612,7 @@ event is fired. The default value is true.
    <tr class="even">
      <td>
         <span class="entryName">opt_list</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">List to search for shortcut in.</div>
      </td>
    </tr>
@@ -569,12 +630,12 @@ event is fired. The default value is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line598">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line635">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -629,12 +690,12 @@ event is fired. The default value is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line658">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line695">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -689,12 +750,12 @@ event is fired. The default value is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line513">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line550">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry protected">
+     <tr class="odd entry protected">
        <td class="access"></td>
 
 
@@ -750,12 +811,12 @@ are pressed.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line490">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line527">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -823,12 +884,12 @@ are pressed.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line363">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line400">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -854,7 +915,7 @@ are pressed.
 the same interface as the unregistering of shortcuts.
 
 param {number} keyCode Numeric code for key
-param {number} opt_modifiers Bitmap indicating required modifier keys.
+param {number=} opt_modifiers Bitmap indicating required modifier keys.
 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
 ALT, or META.
 
@@ -883,7 +944,7 @@ argument.
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;</div>
+        : <div class="fullType"><span class="type">...(number</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">number></span>&gt;</div>
         <div class="entryOverview">String representation, or array or list of alternating key codes and modifiers.</div>
      </td>
    </tr>
@@ -901,12 +962,12 @@ argument.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line346">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line383">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -915,20 +976,20 @@ argument.
 
 
   <td>
-    <a name="goog.ui.KeyboardShortcutHandler.prototype.isValidShortcutKey_"></a>
+    <a name="goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_"></a>
 
 
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">isValidShortcutKey_<span class="args">(<span class="arg">keyCode</span>,&nbsp;<span class="arg">el</span>)</span>
+        <span class="entryName">isValidShortcut_<span class="args">(<span class="arg">event</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
 
 
      <div class="entryOverview">
-       Checks if a given key is allowed as a shortcut for the specified element.
+       Checks if a given keypress event may be treated as a shortcut.
      </div>
 
 
@@ -947,17 +1008,9 @@ argument.
      
    <tr class="even">
      <td>
-        <span class="entryName">keyCode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Numeric key code.</div>
-     </td>
-   </tr>
-     
-   <tr class="odd">
-     <td>
-        <span class="entryName">el</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Element the keyboard event originated from.</div>
+        <span class="entryName">event</span>
+        : <div class="fullType"><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span></div>
+        <div class="entryOverview">Keypress event.</div>
      </td>
    </tr>
   </table>
@@ -965,7 +1018,7 @@ argument.
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>&nbsp;
-            Whether a given key is allowed as a shortcut for the specified element.
+            Whether to attempt to process the event as a shortcut.
       </div>
   
     </div>
@@ -974,12 +1027,12 @@ argument.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line768">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line781">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1028,8 +1081,8 @@ argument.
    <tr class="odd">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;</div>
-        <div class="entryOverview">See below. param {number} keyCode Numeric code for key param {number} opt_modifiers Bitmap indicating required modifier keys. goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL, ALT, or META. The last two parameters can be repeated any number of times to create a shortcut using a sequence of strokes. Instead of varagrs the second parameter could also be an array where each element would be ragarded as a parameter. A string representation of the shortcut can be supplied instead of the last two parameters. In that case the method only takes two arguments, the identifier and the string. Examples: g               registerShortcut(str, G_KEYCODE) Ctrl+g          registerShortcut(str, G_KEYCODE, CTRL) Ctrl+Shift+g    registerShortcut(str, G_KEYCODE, CTRL | SHIFT) Ctrl+g a        registerShortcut(str, G_KEYCODE, CTRL, A_KEYCODE) Ctrl+g Shift+a  registerShortcut(str, G_KEYCODE, CTRL, A_KEYCODE, SHIFT) g a             registerShortcut(str, G_KEYCODE, NONE, A_KEYCODE) Examples using string representation for shortcuts: g               registerShortcut(str, &#39;g&#39;) Ctrl+g          registerShortcut(str, &#39;ctrl+g&#39;) Ctrl+Shift+g    registerShortcut(str, &#39;ctrl+shift+g&#39;) Ctrl+g a        registerShortcut(str, &#39;ctrl+g a&#39;) Ctrl+g Shift+a  registerShortcut(str, &#39;ctrl+g shift+a&#39;) g a             registerShortcut(str, &#39;g a&#39;).</div>
+        : <div class="fullType"><span class="type">...(number</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">number></span>&gt;</div>
+        <div class="entryOverview">See below. param {number} keyCode Numeric code for key param {number=} opt_modifiers Bitmap indicating required modifier keys. goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL, ALT, or META. The last two parameters can be repeated any number of times to create a shortcut using a sequence of strokes. Instead of varagrs the second parameter could also be an array where each element would be ragarded as a parameter. A string representation of the shortcut can be supplied instead of the last two parameters. In that case the method only takes two arguments, the identifier and the string. Examples: g               registerShortcut(str, G_KEYCODE) Ctrl+g          registerShortcut(str, G_KEYCODE, CTRL) Ctrl+Shift+g    registerShortcut(str, G_KEYCODE, CTRL | SHIFT) Ctrl+g a        registerShortcut(str, G_KEYCODE, CTRL, A_KEYCODE) Ctrl+g Shift+a  registerShortcut(str, G_KEYCODE, CTRL, A_KEYCODE, SHIFT) g a             registerShortcut(str, G_KEYCODE, NONE, A_KEYCODE) Examples using string representation for shortcuts: g               registerShortcut(str, &#39;g&#39;) Ctrl+g          registerShortcut(str, &#39;ctrl+g&#39;) Ctrl+Shift+g    registerShortcut(str, &#39;ctrl+shift+g&#39;) Ctrl+g a        registerShortcut(str, &#39;ctrl+g a&#39;) Ctrl+g Shift+a  registerShortcut(str, &#39;ctrl+g shift+a&#39;) g a             registerShortcut(str, &#39;g a&#39;).</div>
      </td>
    </tr>
   </table>
@@ -1042,12 +1095,12 @@ argument.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line290">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line327">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1068,8 +1121,8 @@ argument.
 
 
      <div class="entryOverview">
-       Sets whether to treat all shortcuts as if the keys had been passed to the
-setGlobalKeys function.
+       Sets whether to treat all shortcuts (including modifier shortcuts) as if the
+keys had been passed to the setGlobalKeys function.
      </div>
 
 
@@ -1103,12 +1156,12 @@ setGlobalKeys function.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line236">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line245">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1167,12 +1220,12 @@ is fired. The default value is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line214">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line223">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1228,7 +1281,70 @@ even if entered in a textarea or input field.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line406">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line443">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.KeyboardShortcutHandler.prototype.setModifierShortcutsAreGlobal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setModifierShortcutsAreGlobal<span class="args">(<span class="arg">modifierShortcutsGlobal</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets whether to treat shortcuts with modifiers as if the keys had been
+passed to the setGlobalKeys function.  Ignored if you have called
+setAllShortcutsAreGlobal(true).  Applies only to form elements (not
+content-editable).
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">modifierShortcutsGlobal</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">Whether to treat shortcuts with modifiers as global.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line271">code &raquo;</a>
   </td>
      </tr>
 
@@ -1262,7 +1378,7 @@ even if entered in a textarea or input field.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line396">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line433">code &raquo;</a>
   </td>
      </tr>
 
@@ -1292,7 +1408,7 @@ even if entered in a textarea or input field.
 representation of sequence.
 
 param {number} keyCode Numeric code for key
-param {number} opt_modifiers Bitmap indicating required modifier keys.
+param {number=} opt_modifiers Bitmap indicating required modifier keys.
 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
 ALT, or META.
 
@@ -1321,7 +1437,7 @@ argument.
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;</div>
+        : <div class="fullType"><span class="type">...(number</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">number></span>&gt;</div>
         <div class="entryOverview">String representation, or array or list of alternating key codes and modifiers.</div>
      </td>
    </tr>
@@ -1335,7 +1451,7 @@ argument.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line318">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line355">code &raquo;</a>
   </td>
      </tr>
 
@@ -1425,7 +1541,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -1433,7 +1549,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -1670,7 +1786,7 @@ nothing is done.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -1678,7 +1794,7 @@ nothing is done.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -2191,7 +2307,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line191">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line200">code &raquo;</a>
   </td>
      </tr>
 
@@ -2267,7 +2383,7 @@ the remaining bits are unused.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line646">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line683">code &raquo;</a>
   </td>
      </tr>
 
@@ -2332,7 +2448,7 @@ the remaining bits are unused.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line447">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line484">code &raquo;</a>
   </td>
      </tr>
 
@@ -2408,7 +2524,7 @@ the remaining bits are unused.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line565">code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line602">code &raquo;</a>
   </td>
      </tr>
 
@@ -2457,7 +2573,7 @@ the remaining bits are unused.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line128">Code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line137">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2491,7 +2607,7 @@ key in a key sequence.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line107">Code &raquo;</a>
+     <a href="closure_goog_ui_keyboardshortcuthandler.js.source.html#line116">Code &raquo;</a>
   </td>
      </tr>
 

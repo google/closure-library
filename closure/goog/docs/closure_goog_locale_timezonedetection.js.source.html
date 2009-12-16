@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -98,14 +99,14 @@
 <a name="line55"></a>    }
 <a name="line56"></a>    hash = (hash &lt;&lt; 2) ^ offset;
 <a name="line57"></a>  }
-<a name="line58"></a>  return isComplex ? hash : stdOffset;
+<a name="line58"></a>  return isComplex ? hash : /** @type {number} */ (stdOffset);
 <a name="line59"></a>};
 <a name="line60"></a>
 <a name="line61"></a>/**
 <a name="line62"></a> * Detects browser&#39;s time zone setting. If user&#39;s country is known, a better
 <a name="line63"></a> * time zone choice could be guessed.
-<a name="line64"></a> * @param {string} opt_country Two-letter ISO 3166 country code.
-<a name="line65"></a> * @param {Date} opt_date Date for calculating the fingerprint. Defaults to the
+<a name="line64"></a> * @param {string=} opt_country Two-letter ISO 3166 country code.
+<a name="line65"></a> * @param {Date=} opt_date Date for calculating the fingerprint. Defaults to the
 <a name="line66"></a> *     current date.
 <a name="line67"></a> * @return {string} Time zone ID of best guess.
 <a name="line68"></a> */
@@ -133,9 +134,9 @@
 <a name="line90"></a> * Returns an array of time zones that are consistent with user&#39;s platform
 <a name="line91"></a> * setting. If user&#39;s country is given, only the time zone for that country is
 <a name="line92"></a> * returned.
-<a name="line93"></a> * @param {string} opt_country 2 letter ISO 3166 country code. Helps in making
+<a name="line93"></a> * @param {string=} opt_country 2 letter ISO 3166 country code. Helps in making
 <a name="line94"></a> *     a better guess for user&#39;s time zone.
-<a name="line95"></a> * @param {Date} opt_date Date for retrieving timezone list. Defaults to the
+<a name="line95"></a> * @param {Date=} opt_date Date for retrieving timezone list. Defaults to the
 <a name="line96"></a> *     current date.
 <a name="line97"></a> * @return {Array.&lt;string&gt;} Array of time zone IDs.
 <a name="line98"></a> */

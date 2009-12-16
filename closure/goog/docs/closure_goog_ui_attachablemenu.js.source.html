@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,7 +81,7 @@
 <a name="line37"></a> * classNameSelected - A class that will be added to the element&#39;s class names
 <a name="line38"></a> * when the item is selected via keyboard or mouse.
 <a name="line39"></a> *
-<a name="line40"></a> * @param {Element} opt_element A DOM element for the popup.
+<a name="line40"></a> * @param {Element=} opt_element A DOM element for the popup.
 <a name="line41"></a> * @constructor
 <a name="line42"></a> * @extends {goog.ui.MenuBase}
 <a name="line43"></a> * @deprecated Use goog.ui.PopupMenu.
@@ -408,9 +409,9 @@
 <a name="line365"></a> * Find an item that has the given prefix and select it.
 <a name="line366"></a> *
 <a name="line367"></a> * @param {string} prefix The entered prefix, so far.
-<a name="line368"></a> * @param {number} opt_direction 1 to search forward from the selection
+<a name="line368"></a> * @param {number=} opt_direction 1 to search forward from the selection
 <a name="line369"></a> *     (default), -1 to search backward (e.g. to go to the previous match).
-<a name="line370"></a> * @param {boolean} opt_skip True if should skip the current selection,
+<a name="line370"></a> * @param {boolean=} opt_skip True if should skip the current selection,
 <a name="line371"></a> *     unless no other item has the given prefix.
 <a name="line372"></a> * @private
 <a name="line373"></a> */
@@ -458,7 +459,7 @@
 <a name="line415"></a>
 <a name="line416"></a>/**
 <a name="line417"></a> * Dispatch an ITEM_ACTION event when an item is selected
-<a name="line418"></a> * @param {Object} opt_item Item selected.
+<a name="line418"></a> * @param {Object=} opt_item Item selected.
 <a name="line419"></a> * @private
 <a name="line420"></a> */
 <a name="line421"></a>goog.ui.AttachableMenu.prototype.onItemSelected_ = function(opt_item) {

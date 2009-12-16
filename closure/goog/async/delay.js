@@ -36,9 +36,9 @@ goog.require('goog.Timer');
  * the timer.
  *
  * @param {Function} listener Function to call when the delay completes.
- * @param {number} opt_interval The default length of the invocation delay (in
+ * @param {number=} opt_interval The default length of the invocation delay (in
  *     milliseconds).
- * @param {Object} opt_handler The object scope to invoke the function in.
+ * @param {Object=} opt_handler The object scope to invoke the function in.
  * @constructor
  * @extends {goog.Disposable}
  */
@@ -107,7 +107,7 @@ goog.async.Delay.prototype.disposeInternal = function() {
  * Starts the delay timer. The provided listener function will be called after
  * the specified interval. Calling start on an active timer will reset the
  * delay interval.
- * @param {number} opt_interval If specified, overrides the object's default
+ * @param {number=} opt_interval If specified, overrides the object's default
  *     interval with this one (in milliseconds).
  */
 goog.async.Delay.prototype.start = function(opt_interval) {

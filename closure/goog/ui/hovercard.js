@@ -55,10 +55,10 @@ goog.require('goog.ui.AdvancedTooltip');
  *     tag names to the attribute that the tag should have in order to trigger
  *     the hovercard, e.g., {A: 'href'} for all links.  Tag names must be all
  *     upper case; attribute names are case insensitive.
- * @param {boolean} opt_checkDescendants Use false for a performance gain if
+ * @param {boolean=} opt_checkDescendants Use false for a performance gain if
  *     you are sure that none of your triggering elements have child elements.
  *     Default is true.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.AdvancedTooltip}
  */
@@ -198,9 +198,9 @@ goog.ui.HoverCard.prototype.handleTriggerMouseOver_ = function(e) {
 /**
  * Triggers the hovercard to show after a delay.
  * @param {Element} anchorElement Element that is triggering the hovercard.
- * @param {goog.positioning.AbstractPosition} opt_pos Position to display
+ * @param {goog.positioning.AbstractPosition=} opt_pos Position to display
  *     hovercard.
- * @param {Object} opt_data Data to pass to the onTrigger event.
+ * @param {Object=} opt_data Data to pass to the onTrigger event.
  */
 goog.ui.HoverCard.prototype.triggerForElement = function(anchorElement,
                                                          opt_pos, opt_data) {
@@ -388,7 +388,7 @@ goog.ui.HoverCard.prototype.handleMouseOutAndBlur = function(event) {
  * Called by timer from mouse over handler. If this is called and the hovercard
  * is not shown for whatever reason, then send a cancel trigger event.
  * @param {Element} el Element to show tooltip for.
- * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+ * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
  *     at.
  */
 goog.ui.HoverCard.prototype.maybeShow = function(el, opt_pos) {
@@ -422,7 +422,7 @@ goog.ui.HoverCard.prototype.setMaxSearchSteps = function(maxSearchSteps) {
  * @param {goog.ui.HoverCard.EventType} type Event type.
  * @param {goog.ui.HoverCard} target Hovercard that is triggering the event.
  * @param {Element} anchor Element that triggered event.
- * @param {Object} opt_data Optional data to be available in the TRIGGER event.
+ * @param {Object=} opt_data Optional data to be available in the TRIGGER event.
  * @constructor
  * @extends {goog.events.Event}
  */

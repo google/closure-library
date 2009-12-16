@@ -57,7 +57,7 @@ goog.require('goog.userAgent');
  * @param {goog.spell.SpellCheck} handler Instance of the SpellCheckHandler
  *     support object to use. A single instance can be shared by multiple editor
  *     components.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -462,7 +462,7 @@ goog.ui.AbstractSpellChecker.prototype.getSuggestions_ = function() {
  * Displays suggestions menu.
  *
  * @param {Element} el Element to display menu for.
- * @param {goog.events.BrowserEvent|goog.math.Coordinate} opt_pos Position to
+ * @param {goog.events.BrowserEvent|goog.math.Coordinate=} opt_pos Position to
  *     display menu at relative to the viewport (in client coordinates), or a
  *     mouse event.
  */
@@ -642,7 +642,7 @@ goog.ui.AbstractSpellChecker.prototype.updateElement =
 
 /**
  * Generates unique Ids for spell checker elements.
- * @param {number} opt_id Id to suffix with.
+ * @param {number=} opt_id Id to suffix with.
  * @return {string} Unique element id.
  * @protected
  */

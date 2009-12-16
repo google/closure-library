@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -202,17 +203,17 @@
 <a name="line159"></a>/**
 <a name="line160"></a> * Sends a request across domain.
 <a name="line161"></a> * @param {string} uri Uri to make request to.
-<a name="line162"></a> * @param {Function} opt_continuation Continuation function to be called
+<a name="line162"></a> * @param {Function=} opt_continuation Continuation function to be called
 <a name="line163"></a> *     when request is completed.  Takes one argument of an event object
 <a name="line164"></a> *     whose target has the following properties: &quot;status&quot; is the HTTP
 <a name="line165"></a> *     response status code, &quot;responseText&quot; is the response text,
 <a name="line166"></a> *     and &quot;headers&quot; is an object with all response headers.  The event
 <a name="line167"></a> *     target&#39;s getResponseJson() method returns a JavaScript object evaluated
 <a name="line168"></a> *     from the JSON response or undefined if response is not JSON.
-<a name="line169"></a> * @param {string} opt_method Method of request. Default is POST.
-<a name="line170"></a> * @param {Object} opt_params Parameters. Each property is turned into a
+<a name="line169"></a> * @param {string=} opt_method Method of request. Default is POST.
+<a name="line170"></a> * @param {Object=} opt_params Parameters. Each property is turned into a
 <a name="line171"></a> *     request parameter.
-<a name="line172"></a> * @param {Object} opt_headers Map of headers of the request.
+<a name="line172"></a> * @param {Object=} opt_headers Map of headers of the request.
 <a name="line173"></a> */
 <a name="line174"></a>goog.net.CrossDomainRpc.send =
 <a name="line175"></a>    function(uri, opt_continuation, opt_method, opt_params, opt_headers) {
@@ -405,10 +406,10 @@
 <a name="line362"></a>/**
 <a name="line363"></a> * Sends a request across domain.
 <a name="line364"></a> * @param {string} uri Uri to make request to.
-<a name="line365"></a> * @param {string} opt_method Method of request. Default is POST.
-<a name="line366"></a> * @param {Object} opt_params Parameters. Each property is turned into a
+<a name="line365"></a> * @param {string=} opt_method Method of request. Default is POST.
+<a name="line366"></a> * @param {Object=} opt_params Parameters. Each property is turned into a
 <a name="line367"></a> *     request parameter.
-<a name="line368"></a> * @param {Object} opt_headers Map of headers of the request.
+<a name="line368"></a> * @param {Object=} opt_headers Map of headers of the request.
 <a name="line369"></a> */
 <a name="line370"></a>goog.net.CrossDomainRpc.prototype.sendRequest =
 <a name="line371"></a>    function(uri, opt_method, opt_params, opt_headers) {

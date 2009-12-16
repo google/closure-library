@@ -429,7 +429,7 @@ goog.testing.MockClassFactory.prototype.getMockClass_ =
  * Gets a strict mock for a given class.
  * @param {Object} namespace A javascript namespace (e.g. goog.testing).
  * @param {Function} classToMock The class that will be mocked.
- * @param {*} var_args The arguments associated with this instance's
+ * @param {...*} var_args The arguments associated with this instance's
  *     constructor.
  * @return {goog.testing.StrictMock} The mock created for the provided class.
  */
@@ -445,7 +445,7 @@ goog.testing.MockClassFactory.prototype.getStrictMockClass =
  * Gets a loose mock for a given class.
  * @param {Object} namespace A javascript namespace (e.g. goog.testing).
  * @param {Function} classToMock The class that will be mocked.
- * @param {*} var_args The arguments associated with this instance's
+ * @param {...*} var_args The arguments associated with this instance's
  *     constructor.
  * @return {goog.testing.LooseMock} The mock created for the provided class.
  */

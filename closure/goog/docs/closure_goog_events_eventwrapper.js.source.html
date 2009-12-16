@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,10 +81,10 @@
 <a name="line37"></a> *     events on.
 <a name="line38"></a> * @param {Function|Object} listener Callback method, or an object with a
 <a name="line39"></a> *     handleEvent function.
-<a name="line40"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+<a name="line40"></a> * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
 <a name="line41"></a> *     false).
-<a name="line42"></a> * @param {Object} opt_scope Element in whose scope to call the listener.
-<a name="line43"></a> * @param {goog.events.EventHandler} opt_eventHandler Event handler to add
+<a name="line42"></a> * @param {Object=} opt_scope Element in whose scope to call the listener.
+<a name="line43"></a> * @param {goog.events.EventHandler=} opt_eventHandler Event handler to add
 <a name="line44"></a> *     listener to.
 <a name="line45"></a> */
 <a name="line46"></a>goog.events.EventWrapper.prototype.listen = function(src, listener, opt_capt,
@@ -98,10 +99,10 @@
 <a name="line55"></a> *    from.
 <a name="line56"></a> * @param {Function|Object} listener Callback method, or an object with a
 <a name="line57"></a> *     handleEvent function.
-<a name="line58"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+<a name="line58"></a> * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
 <a name="line59"></a> *     false).
-<a name="line60"></a> * @param {Object} opt_scope Element in whose scope to call the listener.
-<a name="line61"></a> * @param {goog.events.EventHandler} opt_eventHandler Event handler to remove
+<a name="line60"></a> * @param {Object=} opt_scope Element in whose scope to call the listener.
+<a name="line61"></a> * @param {goog.events.EventHandler=} opt_eventHandler Event handler to remove
 <a name="line62"></a> *     listener from.
 <a name="line63"></a> */
 <a name="line64"></a>goog.events.EventWrapper.prototype.unlisten = function(src, listener, opt_capt,

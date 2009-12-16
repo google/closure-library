@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -105,7 +106,7 @@
 <a name="line62"></a>/**
 <a name="line63"></a> * Gets all of the child nodes of the current node.
 <a name="line64"></a> * Should return an empty DataNode list if no child nodes.
-<a name="line65"></a> * @param {string} opt_selector String selector to choose child nodes.
+<a name="line65"></a> * @param {string=} opt_selector String selector to choose child nodes.
 <a name="line66"></a> * @return {goog.ds.DataNodeList} The child nodes.
 <a name="line67"></a> */
 <a name="line68"></a>goog.ds.DataNode.prototype.getChildNodes = goog.nullFunction;
@@ -114,7 +115,7 @@
 <a name="line71"></a>/**
 <a name="line72"></a> * Gets a named child node of the current node
 <a name="line73"></a> * @param {string} name The node name.
-<a name="line74"></a> * @param {boolean} opt_canCreate Whether to create a child node if it does not
+<a name="line74"></a> * @param {boolean=} opt_canCreate Whether to create a child node if it does not
 <a name="line75"></a> *     exist.
 <a name="line76"></a> * @return {goog.ds.DataNode} The child node, or null
 <a name="line77"></a> * if no node of this name exists.
@@ -215,7 +216,7 @@
 <a name="line172"></a>/**
 <a name="line173"></a> * Gets all of the child nodes of the current node.
 <a name="line174"></a> * Should return an empty DataNode list if no child nodes.
-<a name="line175"></a> * @param {string} opt_selector String selector to choose child nodes.
+<a name="line175"></a> * @param {string=} opt_selector String selector to choose child nodes.
 <a name="line176"></a> * @return {goog.ds.DataNodeList} The child nodes.
 <a name="line177"></a> */
 <a name="line178"></a>goog.ds.BaseDataNode.prototype.getChildNodes = function(opt_selector) {
@@ -226,7 +227,7 @@
 <a name="line183"></a>/**
 <a name="line184"></a> * Gets a named child node of the current node
 <a name="line185"></a> * @param {string} name The node name.
-<a name="line186"></a> * @param {boolean} opt_canCreate Whether you can create the child node if
+<a name="line186"></a> * @param {boolean=} opt_canCreate Whether you can create the child node if
 <a name="line187"></a> *     it doesn&#39;t exist already.
 <a name="line188"></a> * @return {goog.ds.DataNode} The child node, or null if no node of
 <a name="line189"></a> *     this name exists and opt_create is false.
@@ -361,7 +362,7 @@
 <a name="line318"></a> * names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
 <a name="line319"></a> * undefined if these names are used.
 <a name="line320"></a> *
-<a name="line321"></a> * @param {Array.&lt;goog.ds.DataNode&gt;} opt_nodes optional nodes to add to list.
+<a name="line321"></a> * @param {Array.&lt;goog.ds.DataNode&gt;=} opt_nodes optional nodes to add to list.
 <a name="line322"></a> * @constructor
 <a name="line323"></a> * @extends {goog.ds.DataNodeList}
 <a name="line324"></a> */
@@ -519,7 +520,7 @@
 <a name="line476"></a> *     node list is sorted. Should take 2 arguments to compare, and return a
 <a name="line477"></a> *     negative integer, zero, or a positive integer depending on whether the
 <a name="line478"></a> *     first argument is less than, equal to, or greater than the second.
-<a name="line479"></a> * @param {Array.&lt;goog.ds.DataNode&gt;} opt_nodes optional nodes to add to list;
+<a name="line479"></a> * @param {Array.&lt;goog.ds.DataNode&gt;=} opt_nodes optional nodes to add to list;
 <a name="line480"></a> *    these are assumed to be in sorted order.
 <a name="line481"></a> * @extends {goog.ds.BasicNodeList}
 <a name="line482"></a> * @constructor

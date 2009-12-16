@@ -31,15 +31,22 @@ goog.require('goog.math.Rect');
 goog.require('goog.math.Size');
 goog.require('goog.object');
 goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
 
 
 /**
  * Sets a style value on an element.
+ *
+ * This function is not indended to patch issues in the browser's style
+ * handling, but to allow easy programmatic access to setting dash-separated
+ * style properties.  An example is setting a batch of properties from a data
+ * object without overwriting old styles.  When possible, use native APIs:
+ * elem.style.propertyKey = 'value' or (if obliterating old styles is fine)
+ * elem.style.cssText = 'property1: value1; property2: value2'.
+ *
  * @param {Element} element The element to change.
  * @param {string|Object} style If a string, a style name. If an object, a hash
  *     of style names to style values.
- * @param {string|number|boolean} opt_value If style was a string, then this
+ * @param {string|number|boolean=} opt_value If style was a string, then this
  *     should be the value.
  */
 goog.style.setStyle = function(element, style, opt_value) {
@@ -220,7 +227,7 @@ goog.style.getComputedCursor = function(element) {
  * argument then it will add px.
  * @param {Element} el Element to move.
  * @param {string|number|goog.math.Coordinate} arg1 Left position or coordinate.
- * @param {string|number} opt_arg2 Top position.
+ * @param {string|number=} opt_arg2 Top position.
  */
 goog.style.setPosition = function(el, arg1, opt_arg2) {
   var x, y;
@@ -258,7 +265,7 @@ goog.style.getPosition = function(element) {
 
 /**
  * Returns the viewport element for a particular document
- * @param {Node} opt_node DOM node (Document is OK) to get the viewport element
+ * @param {Node=} opt_node DOM node (Document is OK) to get the viewport element
  *     of.
  * @return {Element} document.documentElement or document.body.
  */
@@ -432,7 +439,7 @@ goog.style.getVisibleRectForElement = function(element) {
  *
  * @param {Element} element The element to make visible.
  * @param {Element} container The container to scroll.
- * @param {boolean} opt_center Whether to center the element in the container.
+ * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
  */
 goog.style.scrollIntoContainerView = function(element, container, opt_center) {
@@ -663,8 +670,8 @@ goog.style.getFramedPageOffset = function(el, relativeWin) {
  *
  * @param {goog.math.Rect} rect The source rectangle relative to origBase page,
  *     and it will have the translated result.
- * @param {!goog.dom.DomHelper} origBase The DomHelper for the input rectangle.
- * @param {!goog.dom.DomHelper} newBase The DomHelper for the resultant
+ * @param {goog.dom.DomHelper} origBase The DomHelper for the input rectangle.
+ * @param {goog.dom.DomHelper} newBase The DomHelper for the resultant
  *     coordinate.  This must be a DOM for an ancestor frame of origBase
  *     or the same as origBase.
  */
@@ -735,7 +742,7 @@ goog.style.getClientPosition = function(el) {
  *
  * @param {Element} el The element to set page offset for.
  * @param {number|goog.math.Coordinate} x Left position or coordinate obj.
- * @param {number} opt_y Top position.
+ * @param {number=} opt_y Top position.
  */
 goog.style.setPageOffset = function(el, x, opt_y) {
   // Get current pageoffset
@@ -768,7 +775,7 @@ goog.style.setPageOffset = function(el, x, opt_y) {
  * @param {Element} element Element to move.
  * @param {string|number|goog.math.Size} w Width of the element, or a
  *     size object.
- * @param {string|number} opt_h Height of the element. Required if w is not a
+ * @param {string|number=} opt_h Height of the element. Required if w is not a
  *     size object.
  */
 goog.style.setSize = function(element, w, opt_h) {
@@ -1020,7 +1027,7 @@ goog.style.isElementShown = function(el) {
  * Installs the styles string into the window that contains opt_element.  If
  * opt_element is null, the main window is used.
  * @param {string} stylesString The style string to install.
- * @param {Node} opt_node Node whose parent document should have the
+ * @param {Node=} opt_node Node whose parent document should have the
  *     styles installed.
  * @return {Element|StyleSheet} The style element created.
  */
@@ -1192,7 +1199,7 @@ goog.style.isUnselectable = function(el) {
  * @param {Element} el  The element to alter.
  * @param {boolean} unselectable  Whether the element and its descendants
  *     should be made unselectable.
- * @param {boolean} opt_noRecurse  Whether to only alter the element's own
+ * @param {boolean=} opt_noRecurse  Whether to only alter the element's own
  *     selectable state, and leave its descendants alone; defaults to false.
  */
 goog.style.setUnselectable = function(el, unselectable, opt_noRecurse) {

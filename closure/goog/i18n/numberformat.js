@@ -30,7 +30,7 @@ goog.require('goog.i18n.currencyCodeMap');
  * Constructor of NumberFormat.
  * @param {number|string} pattern The number that indicates a predefined
  *     number format pattern.
- * @param {string} opt_currency Optional international currency code. This
+ * @param {string=} opt_currency Optional international currency code. This
  *     determines the currency code/symbol used in format/parse. If not given,
  *     the currency code for current locale will be used.
  * @constructor
@@ -143,7 +143,7 @@ goog.i18n.NumberFormat.prototype.applyStandardPattern_ = function(patternType) {
  * parsing stops after the call. If an error occurs, opt_pos won't be updated.
  *
  * @param {string} text The string to be parsed.
- * @param {Array.<number>} opt_pos Position to pass in and get back.
+ * @param {Array.<number>=} opt_pos Position to pass in and get back.
  * @return {number} Parsed number. This throws an error if the text cannot be
  *     parsed.
  */

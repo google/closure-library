@@ -31,9 +31,9 @@ goog.require('goog.ui.registry');
  * Class representing a separator.  Although it extends {@link goog.ui.Control},
  * the Separator class doesn't allocate any event handlers, nor does it change
  * its appearance on mouseover, etc.
- * @param {goog.ui.MenuSeparatorRenderer} opt_renderer Renderer to render or
+ * @param {goog.ui.MenuSeparatorRenderer=} opt_renderer Renderer to render or
  *    decorate the separator; defaults to {@link goog.ui.MenuSeparatorRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *    document interaction.
  * @constructor
  * @extends {goog.ui.Control}

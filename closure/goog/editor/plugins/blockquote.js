@@ -37,7 +37,7 @@ goog.require('goog.functions');
  * subclasses.
  * @param {boolean} requiresClassnameToSplit Whether to split only blockquotes
  *     that have the given classname.
- * @param {string} opt_classname The classname to apply to generated
+ * @param {string=} opt_classname The classname to apply to generated
  *     blockquotes.  Defaults to 'tr_bq'.
  * @constructor
  * @extends {goog.editor.Plugin}
@@ -191,7 +191,7 @@ goog.editor.plugins.Blockquote.prototype.isSupportedCommand = function(
  * function returns true, the event that caused it to be called should be
  * canceled.
  * @param {string} command The command to execute.
- * @param {Node|Object} var_args Single additional argument representing the
+ * @param {...Node|Object} var_args Single additional argument representing the
  *     current cursor position.  In IE, it is a single node.  In any other
  *     browser, it is an object with a {@code node} key and an {@code offset}
  *     key.

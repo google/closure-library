@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,13 +88,13 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_dom_browserrange_AbstractRange.html">goog.dom.browserrange.AbstractRange</a></span></td><td></td></tr>
   <tr><td>goog.dom.browserrange.IeRange</td><td><span class="type"><a href="class_goog_dom_browserrange_AbstractRange.html">goog.dom.browserrange.AbstractRange</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -691,7 +703,7 @@ the search from <code>node</code>, which must contain the range.
    <tr class="odd">
      <td>
         <span class="entryName">opt_node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
+        : <div class="fullType"><span class="type">Node=</span></div>
         <div class="entryOverview">Optional node to start the search from.</div>
      </td>
    </tr>
@@ -764,7 +776,7 @@ the search from <code>node</code>, which must contain the range.
    <tr class="odd">
      <td>
         <span class="entryName">opt_container</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
+        : <div class="fullType"><span class="type">Node=</span></div>
         <div class="entryOverview">The container to get the offset relative to. Defaults to the value returned by getStartNode/getEndNode.</div>
      </td>
    </tr>
@@ -1362,7 +1374,7 @@ direction of the range, the iterator will move in document order.
    <tr class="even">
      <td>
         <span class="entryName">opt_keys</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Unused for this iterator.</div>
      </td>
    </tr>
@@ -1562,7 +1574,7 @@ native range object.
    <tr class="odd">
      <td>
         <span class="entryName">opt_allowPartial</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If not set or false, the range must be entirely contained in the selection for this function to return true.</div>
      </td>
    </tr>
@@ -1635,7 +1647,7 @@ native range object.
    <tr class="odd">
      <td>
         <span class="entryName">opt_allowPartial</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If not set or false, the node must be entirely contained in the selection for this function to return true.</div>
      </td>
    </tr>
@@ -1708,7 +1720,7 @@ native range object.
    <tr class="odd">
      <td>
         <span class="entryName">opt_allowPartial</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If not set or false, the range must be entirely contained in the selection for this function to return true.</div>
      </td>
    </tr>
@@ -3048,7 +3060,7 @@ beyond recovery because of the way this splits nodes.
    <tr class="odd">
      <td>
         <span class="entryName">opt_domHelper</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        : <div class="fullType"><span class="type">goog.dom.DomHelper=</span></div>
         <div class="entryOverview">The dom helper to use.</div>
      </td>
    </tr>
@@ -3130,7 +3142,7 @@ element.
    <tr class="even">
      <td>
         <span class="entryName">opt_domHelper</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        : <div class="fullType"><span class="type">goog.dom.DomHelper=</span></div>
         <div class="entryOverview">DOM helper object for the document the range resides in.</div>
      </td>
    </tr>

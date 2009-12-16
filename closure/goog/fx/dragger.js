@@ -29,7 +29,6 @@ goog.provide('goog.fx.Dragger');
 goog.provide('goog.fx.Dragger.EventType');
 
 goog.require('goog.dom');
-goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent.MouseButton');
 goog.require('goog.events.Event');
@@ -45,9 +44,9 @@ goog.require('goog.userAgent');
  * A class that allows mouse based dragging (moving) of an element
  *
  * @param {Element} target The element that will be dragged.
- * @param {Element} opt_handle An optional handle to control the drag, if null
+ * @param {Element=} opt_handle An optional handle to control the drag, if null
  *     the target is used.
- * @param {goog.math.Rect} opt_limits Object containing left, top, width,
+ * @param {goog.math.Rect=} opt_limits Object containing left, top, width,
  *     and height.
  *
  * @extends {goog.events.EventTarget}
@@ -61,7 +60,8 @@ goog.fx.Dragger = function(target, opt_handle, opt_limits) {
   this.document_ = goog.dom.getOwnerDocument(target);
   this.eventHandler_ = new goog.events.EventHandler(this);
 
-  // Add listeners
+  // Add listener. Do not use the event handler here since the event handler is
+  // used for listeners added and removed during the drag operation.
   goog.events.listen(this.handle, goog.events.EventType.MOUSEDOWN,
                      this.startDrag, false, this);
 };
@@ -228,6 +228,15 @@ goog.fx.Dragger.prototype.ieDragStartCancellingOn_ = false;
 
 
 /**
+ * Returns the event handler, intended for subclass use.
+ * @return {goog.events.EventHandler} The event handler.
+ */
+goog.fx.Dragger.prototype.getHandler = function() {
+  return this.eventHandler_;
+};
+
+
+/**
  * Event handler used to cancel IE's 'ondragstart' event.
  * @param {goog.events.BrowserEvent} e The drag-start event.
  */
@@ -367,10 +376,14 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
 goog.fx.Dragger.prototype.setupDragHandlers = function() {
   var doc = this.document_;
   var docEl = doc.documentElement;
+  // Use bubbling when we have setCapture since we got reports that IE has
+  // problems with the capturing events in combination with setCapture.
+  var useCapture = !goog.fx.Dragger.HAS_SET_CAPTURE_;
+
   this.eventHandler_.listen(doc, goog.events.EventType.MOUSEMOVE,
-                            this.mouseMoved_, true);
+                            this.mouseMoved_, useCapture);
   this.eventHandler_.listen(doc, goog.events.EventType.MOUSEUP,
-                            this.endDrag, true);
+                            this.endDrag, useCapture);
 
   if (goog.fx.Dragger.HAS_SET_CAPTURE_) {
     docEl.setCapture(false);
@@ -394,7 +407,7 @@ goog.fx.Dragger.prototype.setupDragHandlers = function() {
 
   if (this.scrollTarget_) {
     this.eventHandler_.listen(this.scrollTarget_, goog.events.EventType.SCROLL,
-                              this.onScroll_, true);
+                              this.onScroll_, useCapture);
   }
 };
 
@@ -417,7 +430,7 @@ goog.fx.Dragger.prototype.initializeDrag_ = function(e) {
 /**
  * Event handler that is used to end the drag
  * @param {goog.events.BrowserEvent} e Event object.
- * @param {boolean} opt_dragCanceled Whether the drag has been canceled.
+ * @param {boolean=} opt_dragCanceled Whether the drag has been canceled.
  */
 goog.fx.Dragger.prototype.endDrag = function(e, opt_dragCanceled) {
   this.eventHandler_.removeAll();
@@ -603,9 +616,9 @@ goog.fx.Dragger.prototype.defaultAction = function(x, y) {
  * @param {number} clientY Y-coordinate relative to the window.
  * @param {goog.events.BrowserEvent} browserEvent The closure object
  *   representing the browser event that caused this drag event.
- * @param {number} opt_actX Optional actual x for drag if it has been limited.
- * @param {number} opt_actY Optional actual y for drag if it has been limited.
- * @param {boolean} opt_dragCanceled Whether the drag has been canceled.
+ * @param {number=} opt_actX Optional actual x for drag if it has been limited.
+ * @param {number=} opt_actY Optional actual y for drag if it has been limited.
+ * @param {boolean=} opt_dragCanceled Whether the drag has been canceled.
  * @constructor
  * @extends {goog.events.Event}
  */

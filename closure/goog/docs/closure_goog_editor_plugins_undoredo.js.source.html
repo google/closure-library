@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -76,983 +77,982 @@
 <a name="line33"></a>goog.require(&#39;goog.editor.plugins.UndoRedoState&#39;);
 <a name="line34"></a>goog.require(&#39;goog.events&#39;);
 <a name="line35"></a>goog.require(&#39;goog.events.EventHandler&#39;);
-<a name="line36"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line36"></a>
 <a name="line37"></a>
-<a name="line38"></a>
-<a name="line39"></a>/**
-<a name="line40"></a> * Encapsulates undo/redo logic using a custom undo stack (i.e. not browser
-<a name="line41"></a> * built-in). Browser built-in undo stacks are too flaky (e.g. IE&#39;s gets
-<a name="line42"></a> * clobbered on DOM modifications). Also, this allows interleaving non-editing
-<a name="line43"></a> * commands into the undo stack via the UndoRedoManager.
-<a name="line44"></a> *
-<a name="line45"></a> * @param {goog.editor.plugins.UndoRedoManager} opt_manager An undo redo manager
-<a name="line46"></a> *    to be used by this plugin. If none is provided one is created.
-<a name="line47"></a> * @constructor
-<a name="line48"></a> * @extends {goog.editor.Plugin}
-<a name="line49"></a> */
-<a name="line50"></a>goog.editor.plugins.UndoRedo = function(opt_manager) {
-<a name="line51"></a>  goog.editor.Plugin.call(this);
-<a name="line52"></a>
-<a name="line53"></a>  this.setUndoRedoManager(opt_manager ||
-<a name="line54"></a>      new goog.editor.plugins.UndoRedoManager());
-<a name="line55"></a>
-<a name="line56"></a>  // Map of goog.editor.Field hashcode to goog.events.EventHandler
-<a name="line57"></a>  this.eventHandlers_ = {};
-<a name="line58"></a>
-<a name="line59"></a>  this.currentStates_ = {};
-<a name="line60"></a>
-<a name="line61"></a>  /**
-<a name="line62"></a>   * @type {?string}
-<a name="line63"></a>   * @private
-<a name="line64"></a>   */
-<a name="line65"></a>  this.initialFieldChange_ = null;
-<a name="line66"></a>
-<a name="line67"></a>  /**
-<a name="line68"></a>   * A copy of {@code goog.editor.plugins.UndoRedo.restoreState} bound to this,
-<a name="line69"></a>   * used by undo-redo state objects to restore the state of an editable field.
-<a name="line70"></a>   * @type {Function}
-<a name="line71"></a>   * @see goog.editor.plugins.UndoRedo#restoreState
-<a name="line72"></a>   * @private
-<a name="line73"></a>   */
-<a name="line74"></a>  this.boundRestoreState_ = goog.bind(this.restoreState, this);
-<a name="line75"></a>};
-<a name="line76"></a>goog.inherits(goog.editor.plugins.UndoRedo, goog.editor.Plugin);
+<a name="line38"></a>/**
+<a name="line39"></a> * Encapsulates undo/redo logic using a custom undo stack (i.e. not browser
+<a name="line40"></a> * built-in). Browser built-in undo stacks are too flaky (e.g. IE&#39;s gets
+<a name="line41"></a> * clobbered on DOM modifications). Also, this allows interleaving non-editing
+<a name="line42"></a> * commands into the undo stack via the UndoRedoManager.
+<a name="line43"></a> *
+<a name="line44"></a> * @param {goog.editor.plugins.UndoRedoManager=} opt_manager An undo redo
+<a name="line45"></a> *    manager to be used by this plugin. If none is provided one is created.
+<a name="line46"></a> * @constructor
+<a name="line47"></a> * @extends {goog.editor.Plugin}
+<a name="line48"></a> */
+<a name="line49"></a>goog.editor.plugins.UndoRedo = function(opt_manager) {
+<a name="line50"></a>  goog.editor.Plugin.call(this);
+<a name="line51"></a>
+<a name="line52"></a>  this.setUndoRedoManager(opt_manager ||
+<a name="line53"></a>      new goog.editor.plugins.UndoRedoManager());
+<a name="line54"></a>
+<a name="line55"></a>  // Map of goog.editor.Field hashcode to goog.events.EventHandler
+<a name="line56"></a>  this.eventHandlers_ = {};
+<a name="line57"></a>
+<a name="line58"></a>  this.currentStates_ = {};
+<a name="line59"></a>
+<a name="line60"></a>  /**
+<a name="line61"></a>   * @type {?string}
+<a name="line62"></a>   * @private
+<a name="line63"></a>   */
+<a name="line64"></a>  this.initialFieldChange_ = null;
+<a name="line65"></a>
+<a name="line66"></a>  /**
+<a name="line67"></a>   * A copy of {@code goog.editor.plugins.UndoRedo.restoreState} bound to this,
+<a name="line68"></a>   * used by undo-redo state objects to restore the state of an editable field.
+<a name="line69"></a>   * @type {Function}
+<a name="line70"></a>   * @see goog.editor.plugins.UndoRedo#restoreState
+<a name="line71"></a>   * @private
+<a name="line72"></a>   */
+<a name="line73"></a>  this.boundRestoreState_ = goog.bind(this.restoreState, this);
+<a name="line74"></a>};
+<a name="line75"></a>goog.inherits(goog.editor.plugins.UndoRedo, goog.editor.Plugin);
+<a name="line76"></a>
 <a name="line77"></a>
-<a name="line78"></a>
-<a name="line79"></a>/**
-<a name="line80"></a> * The logger for this class.
-<a name="line81"></a> * @type {goog.debug.Logger}
-<a name="line82"></a> * @protected
-<a name="line83"></a> */
-<a name="line84"></a>goog.editor.plugins.UndoRedo.prototype.logger =
-<a name="line85"></a>    goog.debug.Logger.getLogger(&#39;goog.editor.plugins.UndoRedo&#39;);
+<a name="line78"></a>/**
+<a name="line79"></a> * The logger for this class.
+<a name="line80"></a> * @type {goog.debug.Logger}
+<a name="line81"></a> * @protected
+<a name="line82"></a> */
+<a name="line83"></a>goog.editor.plugins.UndoRedo.prototype.logger =
+<a name="line84"></a>    goog.debug.Logger.getLogger(&#39;goog.editor.plugins.UndoRedo&#39;);
+<a name="line85"></a>
 <a name="line86"></a>
-<a name="line87"></a>
-<a name="line88"></a>/**
-<a name="line89"></a> * The {@code UndoState_} whose change is in progress, null if an undo or redo
-<a name="line90"></a> * is not in progress.
-<a name="line91"></a> *
-<a name="line92"></a> * @type {goog.editor.plugins.UndoRedo.UndoState_?}
-<a name="line93"></a> * @private
-<a name="line94"></a> */
-<a name="line95"></a>goog.editor.plugins.UndoRedo.prototype.inProgressUndo_ = null;
+<a name="line87"></a>/**
+<a name="line88"></a> * The {@code UndoState_} whose change is in progress, null if an undo or redo
+<a name="line89"></a> * is not in progress.
+<a name="line90"></a> *
+<a name="line91"></a> * @type {goog.editor.plugins.UndoRedo.UndoState_?}
+<a name="line92"></a> * @private
+<a name="line93"></a> */
+<a name="line94"></a>goog.editor.plugins.UndoRedo.prototype.inProgressUndo_ = null;
+<a name="line95"></a>
 <a name="line96"></a>
-<a name="line97"></a>
-<a name="line98"></a>/**
-<a name="line99"></a> * The undo-redo stack manager used by this plugin.
-<a name="line100"></a> * @type {goog.editor.plugins.UndoRedoManager}
-<a name="line101"></a> * @private
-<a name="line102"></a> */
-<a name="line103"></a>goog.editor.plugins.UndoRedo.prototype.undoManager_;
+<a name="line97"></a>/**
+<a name="line98"></a> * The undo-redo stack manager used by this plugin.
+<a name="line99"></a> * @type {goog.editor.plugins.UndoRedoManager}
+<a name="line100"></a> * @private
+<a name="line101"></a> */
+<a name="line102"></a>goog.editor.plugins.UndoRedo.prototype.undoManager_;
+<a name="line103"></a>
 <a name="line104"></a>
-<a name="line105"></a>
-<a name="line106"></a>/**
-<a name="line107"></a> * The key for the event listener handling state change events from the
-<a name="line108"></a> * undo-redo manager.
-<a name="line109"></a> * @type {number}
-<a name="line110"></a> * @private
-<a name="line111"></a> */
-<a name="line112"></a>goog.editor.plugins.UndoRedo.prototype.managerStateChangeKey_;
+<a name="line105"></a>/**
+<a name="line106"></a> * The key for the event listener handling state change events from the
+<a name="line107"></a> * undo-redo manager.
+<a name="line108"></a> * @type {number}
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.editor.plugins.UndoRedo.prototype.managerStateChangeKey_;
+<a name="line112"></a>
 <a name="line113"></a>
-<a name="line114"></a>
-<a name="line115"></a>/**
-<a name="line116"></a> * Commands implemented by this plugin.
-<a name="line117"></a> * @enum {string}
-<a name="line118"></a> */
-<a name="line119"></a>goog.editor.plugins.UndoRedo.COMMAND = {
-<a name="line120"></a>  UNDO: &#39;+undo&#39;,
-<a name="line121"></a>  REDO: &#39;+redo&#39;
-<a name="line122"></a>};
+<a name="line114"></a>/**
+<a name="line115"></a> * Commands implemented by this plugin.
+<a name="line116"></a> * @enum {string}
+<a name="line117"></a> */
+<a name="line118"></a>goog.editor.plugins.UndoRedo.COMMAND = {
+<a name="line119"></a>  UNDO: &#39;+undo&#39;,
+<a name="line120"></a>  REDO: &#39;+redo&#39;
+<a name="line121"></a>};
+<a name="line122"></a>
 <a name="line123"></a>
-<a name="line124"></a>
-<a name="line125"></a>/**
-<a name="line126"></a> * Inverse map of execCommand strings to
-<a name="line127"></a> * {@link goog.editor.plugins.UndoRedo.COMMAND} constants. Used to determine
-<a name="line128"></a> * whether a string corresponds to a command this plugin handles in O(1) time.
-<a name="line129"></a> * @type {Object}
-<a name="line130"></a> * @private
-<a name="line131"></a> */
-<a name="line132"></a>goog.editor.plugins.UndoRedo.SUPPORTED_COMMANDS_ =
-<a name="line133"></a>    goog.object.transpose(goog.editor.plugins.UndoRedo.COMMAND);
+<a name="line124"></a>/**
+<a name="line125"></a> * Inverse map of execCommand strings to
+<a name="line126"></a> * {@link goog.editor.plugins.UndoRedo.COMMAND} constants. Used to determine
+<a name="line127"></a> * whether a string corresponds to a command this plugin handles in O(1) time.
+<a name="line128"></a> * @type {Object}
+<a name="line129"></a> * @private
+<a name="line130"></a> */
+<a name="line131"></a>goog.editor.plugins.UndoRedo.SUPPORTED_COMMANDS_ =
+<a name="line132"></a>    goog.object.transpose(goog.editor.plugins.UndoRedo.COMMAND);
+<a name="line133"></a>
 <a name="line134"></a>
-<a name="line135"></a>
-<a name="line136"></a>/**
-<a name="line137"></a> * Set the max undo stack depth (not the real memory usage).
-<a name="line138"></a> * @param {number} depth Depth of the stack.
-<a name="line139"></a> */
-<a name="line140"></a>goog.editor.plugins.UndoRedo.prototype.setMaxUndoDepth = function(depth) {
-<a name="line141"></a>  this.undoManager_.setMaxUndoDepth(depth);
-<a name="line142"></a>};
+<a name="line135"></a>/**
+<a name="line136"></a> * Set the max undo stack depth (not the real memory usage).
+<a name="line137"></a> * @param {number} depth Depth of the stack.
+<a name="line138"></a> */
+<a name="line139"></a>goog.editor.plugins.UndoRedo.prototype.setMaxUndoDepth = function(depth) {
+<a name="line140"></a>  this.undoManager_.setMaxUndoDepth(depth);
+<a name="line141"></a>};
+<a name="line142"></a>
 <a name="line143"></a>
-<a name="line144"></a>
-<a name="line145"></a>/**
-<a name="line146"></a> * Set the undo-redo manager used by this plugin. Any state on a previous
-<a name="line147"></a> * undo-redo manager is lost.
-<a name="line148"></a> * @param {goog.editor.plugins.UndoRedoManager} manager The undo-redo manager.
-<a name="line149"></a> */
-<a name="line150"></a>goog.editor.plugins.UndoRedo.prototype.setUndoRedoManager = function(manager) {
-<a name="line151"></a>  if (this.managerStateChangeKey_) {
-<a name="line152"></a>    goog.events.unlistenByKey(this.managerStateChangeKey_);
-<a name="line153"></a>  }
-<a name="line154"></a>
-<a name="line155"></a>  this.undoManager_ = manager;
-<a name="line156"></a>  this.managerStateChangeKey_ = /** @type {number} */ (
-<a name="line157"></a>      goog.events.listen(this.undoManager_,
-<a name="line158"></a>        goog.editor.plugins.UndoRedoManager.EventType.STATE_CHANGE,
-<a name="line159"></a>        this.dispatchCommandValueChange_,
-<a name="line160"></a>        false,
-<a name="line161"></a>        this));
-<a name="line162"></a>};
+<a name="line144"></a>/**
+<a name="line145"></a> * Set the undo-redo manager used by this plugin. Any state on a previous
+<a name="line146"></a> * undo-redo manager is lost.
+<a name="line147"></a> * @param {goog.editor.plugins.UndoRedoManager} manager The undo-redo manager.
+<a name="line148"></a> */
+<a name="line149"></a>goog.editor.plugins.UndoRedo.prototype.setUndoRedoManager = function(manager) {
+<a name="line150"></a>  if (this.managerStateChangeKey_) {
+<a name="line151"></a>    goog.events.unlistenByKey(this.managerStateChangeKey_);
+<a name="line152"></a>  }
+<a name="line153"></a>
+<a name="line154"></a>  this.undoManager_ = manager;
+<a name="line155"></a>  this.managerStateChangeKey_ = /** @type {number} */ (
+<a name="line156"></a>      goog.events.listen(this.undoManager_,
+<a name="line157"></a>        goog.editor.plugins.UndoRedoManager.EventType.STATE_CHANGE,
+<a name="line158"></a>        this.dispatchCommandValueChange_,
+<a name="line159"></a>        false,
+<a name="line160"></a>        this));
+<a name="line161"></a>};
+<a name="line162"></a>
 <a name="line163"></a>
-<a name="line164"></a>
-<a name="line165"></a>/**
-<a name="line166"></a> * Whether the string corresponds to a command this plugin handles.
-<a name="line167"></a> * @param {string} command Command string to check.
-<a name="line168"></a> * @return {boolean} Whether the string corresponds to a command
-<a name="line169"></a> *     this plugin handles.
-<a name="line170"></a> */
-<a name="line171"></a>goog.editor.plugins.UndoRedo.prototype.isSupportedCommand = function(command) {
-<a name="line172"></a>  return command in goog.editor.plugins.UndoRedo.SUPPORTED_COMMANDS_;
-<a name="line173"></a>};
+<a name="line164"></a>/**
+<a name="line165"></a> * Whether the string corresponds to a command this plugin handles.
+<a name="line166"></a> * @param {string} command Command string to check.
+<a name="line167"></a> * @return {boolean} Whether the string corresponds to a command
+<a name="line168"></a> *     this plugin handles.
+<a name="line169"></a> */
+<a name="line170"></a>goog.editor.plugins.UndoRedo.prototype.isSupportedCommand = function(command) {
+<a name="line171"></a>  return command in goog.editor.plugins.UndoRedo.SUPPORTED_COMMANDS_;
+<a name="line172"></a>};
+<a name="line173"></a>
 <a name="line174"></a>
-<a name="line175"></a>
-<a name="line176"></a>/** @inheritDoc */
-<a name="line177"></a>goog.editor.plugins.UndoRedo.prototype.registerFieldObject = function(
-<a name="line178"></a>    fieldObject) {
-<a name="line179"></a>  this.fieldObject = fieldObject;
-<a name="line180"></a>};
+<a name="line175"></a>/** @inheritDoc */
+<a name="line176"></a>goog.editor.plugins.UndoRedo.prototype.registerFieldObject = function(
+<a name="line177"></a>    fieldObject) {
+<a name="line178"></a>  this.fieldObject = fieldObject;
+<a name="line179"></a>};
+<a name="line180"></a>
 <a name="line181"></a>
-<a name="line182"></a>
-<a name="line183"></a>/**
-<a name="line184"></a> * Unregisters and disables the fieldObject with this plugin. Thie does *not*
-<a name="line185"></a> * clobber the undo stack for the fieldObject though.
-<a name="line186"></a> * TODO: For the multifield version, we really should add a way to
-<a name="line187"></a> * ignore undo actions on field&#39;s that have been made uneditable.
-<a name="line188"></a> * This is probably as simple as skipping over entries in the undo stack
-<a name="line189"></a> * that have a hashcode of an uneditable field.
-<a name="line190"></a> * @param {goog.editor.Field} fieldObject The field to register with the plugin.
-<a name="line191"></a> */
-<a name="line192"></a>goog.editor.plugins.UndoRedo.prototype.unregisterFieldObject = function(
-<a name="line193"></a>    fieldObject) {
-<a name="line194"></a>  this.disable(fieldObject);
-<a name="line195"></a>  this.fieldObject = null;
-<a name="line196"></a>};
+<a name="line182"></a>/**
+<a name="line183"></a> * Unregisters and disables the fieldObject with this plugin. Thie does *not*
+<a name="line184"></a> * clobber the undo stack for the fieldObject though.
+<a name="line185"></a> * TODO: For the multifield version, we really should add a way to
+<a name="line186"></a> * ignore undo actions on field&#39;s that have been made uneditable.
+<a name="line187"></a> * This is probably as simple as skipping over entries in the undo stack
+<a name="line188"></a> * that have a hashcode of an uneditable field.
+<a name="line189"></a> * @param {goog.editor.Field} fieldObject The field to register with the plugin.
+<a name="line190"></a> */
+<a name="line191"></a>goog.editor.plugins.UndoRedo.prototype.unregisterFieldObject = function(
+<a name="line192"></a>    fieldObject) {
+<a name="line193"></a>  this.disable(fieldObject);
+<a name="line194"></a>  this.fieldObject = null;
+<a name="line195"></a>};
+<a name="line196"></a>
 <a name="line197"></a>
-<a name="line198"></a>
-<a name="line199"></a>/**
-<a name="line200"></a> * This is so subclasses can deal with multifield undo-redo.
-<a name="line201"></a> * @return {goog.editor.Field} The active field object for this field. This is
-<a name="line202"></a> *     the one registered field object for the single-plugin case and the
-<a name="line203"></a> *     focused field for the multi-field plugin case.
-<a name="line204"></a> */
-<a name="line205"></a>goog.editor.plugins.UndoRedo.prototype.getCurrentFieldObject = function() {
-<a name="line206"></a>  return this.fieldObject;
-<a name="line207"></a>};
+<a name="line198"></a>/**
+<a name="line199"></a> * This is so subclasses can deal with multifield undo-redo.
+<a name="line200"></a> * @return {goog.editor.Field} The active field object for this field. This is
+<a name="line201"></a> *     the one registered field object for the single-plugin case and the
+<a name="line202"></a> *     focused field for the multi-field plugin case.
+<a name="line203"></a> */
+<a name="line204"></a>goog.editor.plugins.UndoRedo.prototype.getCurrentFieldObject = function() {
+<a name="line205"></a>  return this.fieldObject;
+<a name="line206"></a>};
+<a name="line207"></a>
 <a name="line208"></a>
-<a name="line209"></a>
-<a name="line210"></a>/**
-<a name="line211"></a> * This is so subclasses can deal with multifield undo-redo.
-<a name="line212"></a> * @param {string} fieldHashCode The Field&#39;s hashcode.
-<a name="line213"></a> * @return {goog.editor.Field} The field object with the hashcode.
-<a name="line214"></a> */
-<a name="line215"></a>goog.editor.plugins.UndoRedo.prototype.getFieldObject = function(
-<a name="line216"></a>    fieldHashCode) {
-<a name="line217"></a>  // With single field undoredo, there&#39;s only one Field involved.
-<a name="line218"></a>  return this.fieldObject;
-<a name="line219"></a>};
+<a name="line209"></a>/**
+<a name="line210"></a> * This is so subclasses can deal with multifield undo-redo.
+<a name="line211"></a> * @param {string} fieldHashCode The Field&#39;s hashcode.
+<a name="line212"></a> * @return {goog.editor.Field} The field object with the hashcode.
+<a name="line213"></a> */
+<a name="line214"></a>goog.editor.plugins.UndoRedo.prototype.getFieldObject = function(
+<a name="line215"></a>    fieldHashCode) {
+<a name="line216"></a>  // With single field undoredo, there&#39;s only one Field involved.
+<a name="line217"></a>  return this.fieldObject;
+<a name="line218"></a>};
+<a name="line219"></a>
 <a name="line220"></a>
-<a name="line221"></a>
-<a name="line222"></a>/**
-<a name="line223"></a> * This is so subclasses can deal with multifield undo-redo.
-<a name="line224"></a> * @return {goog.editor.Field} Target for COMMAND_VALUE_CHANGE events.
-<a name="line225"></a> */
-<a name="line226"></a>goog.editor.plugins.UndoRedo.prototype.getCurrentEventTarget = function() {
-<a name="line227"></a>  return this.fieldObject;
-<a name="line228"></a>};
+<a name="line221"></a>/**
+<a name="line222"></a> * This is so subclasses can deal with multifield undo-redo.
+<a name="line223"></a> * @return {goog.editor.Field} Target for COMMAND_VALUE_CHANGE events.
+<a name="line224"></a> */
+<a name="line225"></a>goog.editor.plugins.UndoRedo.prototype.getCurrentEventTarget = function() {
+<a name="line226"></a>  return this.fieldObject;
+<a name="line227"></a>};
+<a name="line228"></a>
 <a name="line229"></a>
-<a name="line230"></a>
-<a name="line231"></a>/** @inheritDoc */
-<a name="line232"></a>goog.editor.plugins.UndoRedo.prototype.enable = function(fieldObject) {
-<a name="line233"></a>  if (this.isEnabled(fieldObject)) {
-<a name="line234"></a>    return;
-<a name="line235"></a>  }
-<a name="line236"></a>
-<a name="line237"></a>  // Don&#39;t want pending delayed changes from when undo-redo was disabled
-<a name="line238"></a>  // firing after undo-redo is enabled since they might cause undo-redo stack
-<a name="line239"></a>  // updates.
-<a name="line240"></a>  fieldObject.clearDelayedChange();
-<a name="line241"></a>
-<a name="line242"></a>  var eventHandler = new goog.events.EventHandler(this);
-<a name="line243"></a>
-<a name="line244"></a>  // TODO: From ojan during a code review:
-<a name="line245"></a>  // The beforechange handler is meant to be there so you can grab the cursor
-<a name="line246"></a>  // position *before* the change is made as that&#39;s where you want the cursor to
-<a name="line247"></a>  // be after an undo.
-<a name="line248"></a>  //
-<a name="line249"></a>  // It kinda looks like updateCurrentState_ doesn&#39;t do that correctly right
-<a name="line250"></a>  // now, but it really should be fixed to do so. The cursor position stored in
-<a name="line251"></a>  // the state should be the cursor position before any changes are made, not
-<a name="line252"></a>  // the cursor position when the change finishes.
-<a name="line253"></a>  //
-<a name="line254"></a>  // It also seems like the if check below is just a bad one. We should do this
-<a name="line255"></a>  // for browsers that use mutation events as well even though the beforechange
-<a name="line256"></a>  // happens too late...maybe not. I don&#39;t know about this.
-<a name="line257"></a>  if (!goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
-<a name="line258"></a>    // We don&#39;t listen to beforechange in mutation-event browsers because
-<a name="line259"></a>    // there we fire beforechange, then syncronously file change. The point
-<a name="line260"></a>    // of before change is to capture before the user has changed anything.
-<a name="line261"></a>    eventHandler.listen(fieldObject,
-<a name="line262"></a>        goog.editor.Field.EventType.BEFORECHANGE, this.handleBeforeChange_);
-<a name="line263"></a>  }
-<a name="line264"></a>  eventHandler.listen(fieldObject,
-<a name="line265"></a>      goog.editor.Field.EventType.DELAYEDCHANGE, this.handleDelayedChange_);
-<a name="line266"></a>  eventHandler.listen(fieldObject, goog.editor.Field.EventType.BLUR,
-<a name="line267"></a>      this.handleBlur_);
-<a name="line268"></a>
-<a name="line269"></a>  this.eventHandlers_[fieldObject.getHashCode()] = eventHandler;
-<a name="line270"></a>
-<a name="line271"></a>  // We want to capture the initial state of a Trogedit field before any
-<a name="line272"></a>  // editing has happened. This is necessary so that we can undo the first
-<a name="line273"></a>  // change to a field, even if we don&#39;t handle beforeChange.
-<a name="line274"></a>  this.updateCurrentState_(fieldObject);
-<a name="line275"></a>};
+<a name="line230"></a>/** @inheritDoc */
+<a name="line231"></a>goog.editor.plugins.UndoRedo.prototype.enable = function(fieldObject) {
+<a name="line232"></a>  if (this.isEnabled(fieldObject)) {
+<a name="line233"></a>    return;
+<a name="line234"></a>  }
+<a name="line235"></a>
+<a name="line236"></a>  // Don&#39;t want pending delayed changes from when undo-redo was disabled
+<a name="line237"></a>  // firing after undo-redo is enabled since they might cause undo-redo stack
+<a name="line238"></a>  // updates.
+<a name="line239"></a>  fieldObject.clearDelayedChange();
+<a name="line240"></a>
+<a name="line241"></a>  var eventHandler = new goog.events.EventHandler(this);
+<a name="line242"></a>
+<a name="line243"></a>  // TODO: From ojan during a code review:
+<a name="line244"></a>  // The beforechange handler is meant to be there so you can grab the cursor
+<a name="line245"></a>  // position *before* the change is made as that&#39;s where you want the cursor to
+<a name="line246"></a>  // be after an undo.
+<a name="line247"></a>  //
+<a name="line248"></a>  // It kinda looks like updateCurrentState_ doesn&#39;t do that correctly right
+<a name="line249"></a>  // now, but it really should be fixed to do so. The cursor position stored in
+<a name="line250"></a>  // the state should be the cursor position before any changes are made, not
+<a name="line251"></a>  // the cursor position when the change finishes.
+<a name="line252"></a>  //
+<a name="line253"></a>  // It also seems like the if check below is just a bad one. We should do this
+<a name="line254"></a>  // for browsers that use mutation events as well even though the beforechange
+<a name="line255"></a>  // happens too late...maybe not. I don&#39;t know about this.
+<a name="line256"></a>  if (!goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
+<a name="line257"></a>    // We don&#39;t listen to beforechange in mutation-event browsers because
+<a name="line258"></a>    // there we fire beforechange, then syncronously file change. The point
+<a name="line259"></a>    // of before change is to capture before the user has changed anything.
+<a name="line260"></a>    eventHandler.listen(fieldObject,
+<a name="line261"></a>        goog.editor.Field.EventType.BEFORECHANGE, this.handleBeforeChange_);
+<a name="line262"></a>  }
+<a name="line263"></a>  eventHandler.listen(fieldObject,
+<a name="line264"></a>      goog.editor.Field.EventType.DELAYEDCHANGE, this.handleDelayedChange_);
+<a name="line265"></a>  eventHandler.listen(fieldObject, goog.editor.Field.EventType.BLUR,
+<a name="line266"></a>      this.handleBlur_);
+<a name="line267"></a>
+<a name="line268"></a>  this.eventHandlers_[fieldObject.getHashCode()] = eventHandler;
+<a name="line269"></a>
+<a name="line270"></a>  // We want to capture the initial state of a Trogedit field before any
+<a name="line271"></a>  // editing has happened. This is necessary so that we can undo the first
+<a name="line272"></a>  // change to a field, even if we don&#39;t handle beforeChange.
+<a name="line273"></a>  this.updateCurrentState_(fieldObject);
+<a name="line274"></a>};
+<a name="line275"></a>
 <a name="line276"></a>
-<a name="line277"></a>
-<a name="line278"></a>/** @inheritDoc */
-<a name="line279"></a>goog.editor.plugins.UndoRedo.prototype.disable = function(fieldObject) {
-<a name="line280"></a>  // Process any pending changes so we don&#39;t lose any undo-redo states that we
-<a name="line281"></a>  // want prior to disabling undo-redo.
-<a name="line282"></a>  fieldObject.clearDelayedChange();
-<a name="line283"></a>
-<a name="line284"></a>  var eventHandler = this.eventHandlers_[fieldObject.getHashCode()];
-<a name="line285"></a>  if (eventHandler) {
-<a name="line286"></a>    eventHandler.dispose();
-<a name="line287"></a>    delete this.eventHandlers_[fieldObject.getHashCode()];
-<a name="line288"></a>  }
-<a name="line289"></a>
-<a name="line290"></a>  // We delete the current state of the field on disable. When we re-enable
-<a name="line291"></a>  // the state will be re-fetched. In most cases the content will be the same,
-<a name="line292"></a>  // but this allows us to pick up changes while not editable. That way, when
-<a name="line293"></a>  // undoing after starting an editable session, you can always undo to the
-<a name="line294"></a>  // state you started in. Given this sequence of events:
-<a name="line295"></a>  // Make editable
-<a name="line296"></a>  // Type &#39;anakin&#39;
-<a name="line297"></a>  // Make not editable
-<a name="line298"></a>  // Set HTML to be &#39;padme&#39;
-<a name="line299"></a>  // Make editable
-<a name="line300"></a>  // Type &#39;dark side&#39;
-<a name="line301"></a>  // Undo
-<a name="line302"></a>  // Without re-snapshoting current state on enable, the undo would go from
-<a name="line303"></a>  // &#39;dark-side&#39; -&gt; &#39;anakin&#39;, rather than &#39;dark-side&#39; -&gt; &#39;padme&#39;. You couldn&#39;t
-<a name="line304"></a>  // undo the field to the state that existed immediately after it was made
-<a name="line305"></a>  // editable for the second time.
-<a name="line306"></a>  if (this.currentStates_[fieldObject.getHashCode()]) {
-<a name="line307"></a>    delete this.currentStates_[fieldObject.getHashCode()];
-<a name="line308"></a>  }
-<a name="line309"></a>};
+<a name="line277"></a>/** @inheritDoc */
+<a name="line278"></a>goog.editor.plugins.UndoRedo.prototype.disable = function(fieldObject) {
+<a name="line279"></a>  // Process any pending changes so we don&#39;t lose any undo-redo states that we
+<a name="line280"></a>  // want prior to disabling undo-redo.
+<a name="line281"></a>  fieldObject.clearDelayedChange();
+<a name="line282"></a>
+<a name="line283"></a>  var eventHandler = this.eventHandlers_[fieldObject.getHashCode()];
+<a name="line284"></a>  if (eventHandler) {
+<a name="line285"></a>    eventHandler.dispose();
+<a name="line286"></a>    delete this.eventHandlers_[fieldObject.getHashCode()];
+<a name="line287"></a>  }
+<a name="line288"></a>
+<a name="line289"></a>  // We delete the current state of the field on disable. When we re-enable
+<a name="line290"></a>  // the state will be re-fetched. In most cases the content will be the same,
+<a name="line291"></a>  // but this allows us to pick up changes while not editable. That way, when
+<a name="line292"></a>  // undoing after starting an editable session, you can always undo to the
+<a name="line293"></a>  // state you started in. Given this sequence of events:
+<a name="line294"></a>  // Make editable
+<a name="line295"></a>  // Type &#39;anakin&#39;
+<a name="line296"></a>  // Make not editable
+<a name="line297"></a>  // Set HTML to be &#39;padme&#39;
+<a name="line298"></a>  // Make editable
+<a name="line299"></a>  // Type &#39;dark side&#39;
+<a name="line300"></a>  // Undo
+<a name="line301"></a>  // Without re-snapshoting current state on enable, the undo would go from
+<a name="line302"></a>  // &#39;dark-side&#39; -&gt; &#39;anakin&#39;, rather than &#39;dark-side&#39; -&gt; &#39;padme&#39;. You couldn&#39;t
+<a name="line303"></a>  // undo the field to the state that existed immediately after it was made
+<a name="line304"></a>  // editable for the second time.
+<a name="line305"></a>  if (this.currentStates_[fieldObject.getHashCode()]) {
+<a name="line306"></a>    delete this.currentStates_[fieldObject.getHashCode()];
+<a name="line307"></a>  }
+<a name="line308"></a>};
+<a name="line309"></a>
 <a name="line310"></a>
-<a name="line311"></a>
-<a name="line312"></a>/** @inheritDoc */
-<a name="line313"></a>goog.editor.plugins.UndoRedo.prototype.isEnabled = function(fieldObject) {
-<a name="line314"></a>  // All enabled plugins have a eventHandler so reuse that map rather than
-<a name="line315"></a>  // storing additional enabled state.
-<a name="line316"></a>  return !!this.eventHandlers_[fieldObject.getHashCode()];
-<a name="line317"></a>};
+<a name="line311"></a>/** @inheritDoc */
+<a name="line312"></a>goog.editor.plugins.UndoRedo.prototype.isEnabled = function(fieldObject) {
+<a name="line313"></a>  // All enabled plugins have a eventHandler so reuse that map rather than
+<a name="line314"></a>  // storing additional enabled state.
+<a name="line315"></a>  return !!this.eventHandlers_[fieldObject.getHashCode()];
+<a name="line316"></a>};
+<a name="line317"></a>
 <a name="line318"></a>
-<a name="line319"></a>
-<a name="line320"></a>/** @inheritDoc */
-<a name="line321"></a>goog.editor.plugins.UndoRedo.prototype.disposeInternal = function() {
-<a name="line322"></a>  goog.editor.plugins.UndoRedo.superClass_.disposeInternal.call(this);
-<a name="line323"></a>
-<a name="line324"></a>  for (var hashcode in this.eventHandlers_) {
-<a name="line325"></a>    this.eventHandlers_[hashcode].dispose();
-<a name="line326"></a>    delete this.eventHandlers_[hashcode];
-<a name="line327"></a>  }
-<a name="line328"></a>  this.fieldObject = null;
-<a name="line329"></a>
-<a name="line330"></a>  if (this.undoManager_) {
-<a name="line331"></a>    this.undoManager_.dispose();
-<a name="line332"></a>    delete this.undoManager_;
-<a name="line333"></a>  }
-<a name="line334"></a>};
+<a name="line319"></a>/** @inheritDoc */
+<a name="line320"></a>goog.editor.plugins.UndoRedo.prototype.disposeInternal = function() {
+<a name="line321"></a>  goog.editor.plugins.UndoRedo.superClass_.disposeInternal.call(this);
+<a name="line322"></a>
+<a name="line323"></a>  for (var hashcode in this.eventHandlers_) {
+<a name="line324"></a>    this.eventHandlers_[hashcode].dispose();
+<a name="line325"></a>    delete this.eventHandlers_[hashcode];
+<a name="line326"></a>  }
+<a name="line327"></a>  this.fieldObject = null;
+<a name="line328"></a>
+<a name="line329"></a>  if (this.undoManager_) {
+<a name="line330"></a>    this.undoManager_.dispose();
+<a name="line331"></a>    delete this.undoManager_;
+<a name="line332"></a>  }
+<a name="line333"></a>};
+<a name="line334"></a>
 <a name="line335"></a>
-<a name="line336"></a>
-<a name="line337"></a>/** @inheritDoc */
-<a name="line338"></a>goog.editor.plugins.UndoRedo.prototype.getTrogClassId = function() {
-<a name="line339"></a>  return &#39;UndoRedo&#39;;
-<a name="line340"></a>};
+<a name="line336"></a>/** @inheritDoc */
+<a name="line337"></a>goog.editor.plugins.UndoRedo.prototype.getTrogClassId = function() {
+<a name="line338"></a>  return &#39;UndoRedo&#39;;
+<a name="line339"></a>};
+<a name="line340"></a>
 <a name="line341"></a>
-<a name="line342"></a>
-<a name="line343"></a>/** @inheritDoc */
-<a name="line344"></a>goog.editor.plugins.UndoRedo.prototype.execCommand = function(command,
-<a name="line345"></a>    var_args) {
-<a name="line346"></a>  if (command == goog.editor.plugins.UndoRedo.COMMAND.UNDO) {
-<a name="line347"></a>    this.undoManager_.undo();
-<a name="line348"></a>  } else if (command == goog.editor.plugins.UndoRedo.COMMAND.REDO) {
-<a name="line349"></a>    this.undoManager_.redo();
-<a name="line350"></a>  }
-<a name="line351"></a>};
+<a name="line342"></a>/** @inheritDoc */
+<a name="line343"></a>goog.editor.plugins.UndoRedo.prototype.execCommand = function(command,
+<a name="line344"></a>    var_args) {
+<a name="line345"></a>  if (command == goog.editor.plugins.UndoRedo.COMMAND.UNDO) {
+<a name="line346"></a>    this.undoManager_.undo();
+<a name="line347"></a>  } else if (command == goog.editor.plugins.UndoRedo.COMMAND.REDO) {
+<a name="line348"></a>    this.undoManager_.redo();
+<a name="line349"></a>  }
+<a name="line350"></a>};
+<a name="line351"></a>
 <a name="line352"></a>
-<a name="line353"></a>
-<a name="line354"></a>/** @inheritDoc */
-<a name="line355"></a>goog.editor.plugins.UndoRedo.prototype.queryCommandValue = function(command) {
-<a name="line356"></a>  var state = null;
-<a name="line357"></a>  if (command == goog.editor.plugins.UndoRedo.COMMAND.UNDO) {
-<a name="line358"></a>    state = this.undoManager_.hasUndoState();
-<a name="line359"></a>  } else if (command == goog.editor.plugins.UndoRedo.COMMAND.REDO) {
-<a name="line360"></a>    state = this.undoManager_.hasRedoState();
-<a name="line361"></a>  }
-<a name="line362"></a>  return state;
-<a name="line363"></a>};
+<a name="line353"></a>/** @inheritDoc */
+<a name="line354"></a>goog.editor.plugins.UndoRedo.prototype.queryCommandValue = function(command) {
+<a name="line355"></a>  var state = null;
+<a name="line356"></a>  if (command == goog.editor.plugins.UndoRedo.COMMAND.UNDO) {
+<a name="line357"></a>    state = this.undoManager_.hasUndoState();
+<a name="line358"></a>  } else if (command == goog.editor.plugins.UndoRedo.COMMAND.REDO) {
+<a name="line359"></a>    state = this.undoManager_.hasRedoState();
+<a name="line360"></a>  }
+<a name="line361"></a>  return state;
+<a name="line362"></a>};
+<a name="line363"></a>
 <a name="line364"></a>
-<a name="line365"></a>
-<a name="line366"></a>/**
-<a name="line367"></a> * Dispatches the COMMAND_VALUE_CHANGE event on the editable field or the field
-<a name="line368"></a> * manager, as appropriate.
-<a name="line369"></a> * Note: Really, people using multi field mode should be listening directly
-<a name="line370"></a> * to the undo-redo manager for events.
-<a name="line371"></a> * @private
-<a name="line372"></a> */
-<a name="line373"></a>goog.editor.plugins.UndoRedo.prototype.dispatchCommandValueChange_ =
-<a name="line374"></a>    function() {
-<a name="line375"></a>  var eventTarget = this.getCurrentEventTarget();
-<a name="line376"></a>  eventTarget.dispatchEvent({
-<a name="line377"></a>    type: goog.editor.Field.EventType.COMMAND_VALUE_CHANGE,
-<a name="line378"></a>    commands: [goog.editor.plugins.UndoRedo.COMMAND.REDO,
-<a name="line379"></a>      goog.editor.plugins.UndoRedo.COMMAND.UNDO]});
-<a name="line380"></a>};
+<a name="line365"></a>/**
+<a name="line366"></a> * Dispatches the COMMAND_VALUE_CHANGE event on the editable field or the field
+<a name="line367"></a> * manager, as appropriate.
+<a name="line368"></a> * Note: Really, people using multi field mode should be listening directly
+<a name="line369"></a> * to the undo-redo manager for events.
+<a name="line370"></a> * @private
+<a name="line371"></a> */
+<a name="line372"></a>goog.editor.plugins.UndoRedo.prototype.dispatchCommandValueChange_ =
+<a name="line373"></a>    function() {
+<a name="line374"></a>  var eventTarget = this.getCurrentEventTarget();
+<a name="line375"></a>  eventTarget.dispatchEvent({
+<a name="line376"></a>    type: goog.editor.Field.EventType.COMMAND_VALUE_CHANGE,
+<a name="line377"></a>    commands: [goog.editor.plugins.UndoRedo.COMMAND.REDO,
+<a name="line378"></a>      goog.editor.plugins.UndoRedo.COMMAND.UNDO]});
+<a name="line379"></a>};
+<a name="line380"></a>
 <a name="line381"></a>
-<a name="line382"></a>
-<a name="line383"></a>/**
-<a name="line384"></a> * Restores the state of the editable field.
-<a name="line385"></a> * @param {goog.editor.plugins.UndoRedo.UndoState_} state The state initiating
-<a name="line386"></a> *    the restore.
-<a name="line387"></a> * @param {string} content The content to restore.
-<a name="line388"></a> * @param {goog.editor.plugins.UndoRedo.CursorPosition_?} cursorPosition
-<a name="line389"></a> *     The cursor position within the content.
-<a name="line390"></a> */
-<a name="line391"></a>goog.editor.plugins.UndoRedo.prototype.restoreState = function(
-<a name="line392"></a>    state, content, cursorPosition) {
-<a name="line393"></a>  // Fire any pending changes to get the current field state up to date and
-<a name="line394"></a>  // then stop listening to changes while doing the undo/redo.
-<a name="line395"></a>  var fieldObj = this.getFieldObject(state.fieldHashCode);
-<a name="line396"></a>  if (!fieldObj) {
-<a name="line397"></a>    return;
-<a name="line398"></a>  }
-<a name="line399"></a>
-<a name="line400"></a>  // Fires any pending changes, and stops the change events. Still want to
-<a name="line401"></a>  // dispatch before change, as a change is being made and the change event
-<a name="line402"></a>  // will be manually dispatched below after the new content has been restored
-<a name="line403"></a>  // (also restarting change events).
-<a name="line404"></a>  fieldObj.stopChangeEvents(true, true);
-<a name="line405"></a>
-<a name="line406"></a>  // To prevent the situation where we stop change events and then an exception
-<a name="line407"></a>  // happens before we can restart change events, the following code must be in
-<a name="line408"></a>  // a try-finally block.
-<a name="line409"></a>  try {
-<a name="line410"></a>    fieldObj.dispatchBeforeChange();
-<a name="line411"></a>
-<a name="line412"></a>    // Restore the state
-<a name="line413"></a>    fieldObj.execCommand(goog.editor.Command.CLEAR_LOREM, true);
-<a name="line414"></a>
-<a name="line415"></a>    // We specifically set the raw innerHTML of the field here as that&#39;s what
-<a name="line416"></a>    // we get from the field when we save an undo/redo state. There&#39;s
-<a name="line417"></a>    // no need to clean/unclean the contents in either direction.
-<a name="line418"></a>    fieldObj.getElement().innerHTML = content;
-<a name="line419"></a>
-<a name="line420"></a>    if (cursorPosition) {
-<a name="line421"></a>      cursorPosition.select();
-<a name="line422"></a>    }
-<a name="line423"></a>
-<a name="line424"></a>    var previousFieldObject = this.getCurrentFieldObject();
-<a name="line425"></a>    fieldObj.focus();
-<a name="line426"></a>
-<a name="line427"></a>    // Apps that integrate their undo-redo with Trogedit may be
-<a name="line428"></a>    // in a state where there is no previous field object (no field focused at
-<a name="line429"></a>    // the time of undo), so check for existence first.
-<a name="line430"></a>    if (previousFieldObject &amp;&amp;
-<a name="line431"></a>        previousFieldObject.getHashCode() != state.fieldHashCode) {
-<a name="line432"></a>      previousFieldObject.execCommand(goog.editor.Command.UPDATE_LOREM);
-<a name="line433"></a>    }
-<a name="line434"></a>
-<a name="line435"></a>    // We need to update currentState_ to reflect the change.
-<a name="line436"></a>    this.currentStates_[state.fieldHashCode].setUndoState(
-<a name="line437"></a>        content, cursorPosition);
-<a name="line438"></a>  } catch (e) {
-<a name="line439"></a>    this.logger.severe(&#39;Error while restoring undo state&#39;, e);
-<a name="line440"></a>  } finally {
-<a name="line441"></a>    // Clear the delayed change event, set flag so we know not to act on it.
-<a name="line442"></a>    this.inProgressUndo_ = state;
-<a name="line443"></a>    // Notify the editor that we&#39;ve changed (fire autosave).
-<a name="line444"></a>    // Note that this starts up change events again, so we don&#39;t have to
-<a name="line445"></a>    // manually do so even though we stopped change events above.
-<a name="line446"></a>    fieldObj.dispatchChange();
-<a name="line447"></a>    fieldObj.dispatchSelectionChangeEvent();
-<a name="line448"></a>  }
-<a name="line449"></a>};
+<a name="line382"></a>/**
+<a name="line383"></a> * Restores the state of the editable field.
+<a name="line384"></a> * @param {goog.editor.plugins.UndoRedo.UndoState_} state The state initiating
+<a name="line385"></a> *    the restore.
+<a name="line386"></a> * @param {string} content The content to restore.
+<a name="line387"></a> * @param {goog.editor.plugins.UndoRedo.CursorPosition_?} cursorPosition
+<a name="line388"></a> *     The cursor position within the content.
+<a name="line389"></a> */
+<a name="line390"></a>goog.editor.plugins.UndoRedo.prototype.restoreState = function(
+<a name="line391"></a>    state, content, cursorPosition) {
+<a name="line392"></a>  // Fire any pending changes to get the current field state up to date and
+<a name="line393"></a>  // then stop listening to changes while doing the undo/redo.
+<a name="line394"></a>  var fieldObj = this.getFieldObject(state.fieldHashCode);
+<a name="line395"></a>  if (!fieldObj) {
+<a name="line396"></a>    return;
+<a name="line397"></a>  }
+<a name="line398"></a>
+<a name="line399"></a>  // Fires any pending changes, and stops the change events. Still want to
+<a name="line400"></a>  // dispatch before change, as a change is being made and the change event
+<a name="line401"></a>  // will be manually dispatched below after the new content has been restored
+<a name="line402"></a>  // (also restarting change events).
+<a name="line403"></a>  fieldObj.stopChangeEvents(true, true);
+<a name="line404"></a>
+<a name="line405"></a>  // To prevent the situation where we stop change events and then an exception
+<a name="line406"></a>  // happens before we can restart change events, the following code must be in
+<a name="line407"></a>  // a try-finally block.
+<a name="line408"></a>  try {
+<a name="line409"></a>    fieldObj.dispatchBeforeChange();
+<a name="line410"></a>
+<a name="line411"></a>    // Restore the state
+<a name="line412"></a>    fieldObj.execCommand(goog.editor.Command.CLEAR_LOREM, true);
+<a name="line413"></a>
+<a name="line414"></a>    // We specifically set the raw innerHTML of the field here as that&#39;s what
+<a name="line415"></a>    // we get from the field when we save an undo/redo state. There&#39;s
+<a name="line416"></a>    // no need to clean/unclean the contents in either direction.
+<a name="line417"></a>    fieldObj.getElement().innerHTML = content;
+<a name="line418"></a>
+<a name="line419"></a>    if (cursorPosition) {
+<a name="line420"></a>      cursorPosition.select();
+<a name="line421"></a>    }
+<a name="line422"></a>
+<a name="line423"></a>    var previousFieldObject = this.getCurrentFieldObject();
+<a name="line424"></a>    fieldObj.focus();
+<a name="line425"></a>
+<a name="line426"></a>    // Apps that integrate their undo-redo with Trogedit may be
+<a name="line427"></a>    // in a state where there is no previous field object (no field focused at
+<a name="line428"></a>    // the time of undo), so check for existence first.
+<a name="line429"></a>    if (previousFieldObject &amp;&amp;
+<a name="line430"></a>        previousFieldObject.getHashCode() != state.fieldHashCode) {
+<a name="line431"></a>      previousFieldObject.execCommand(goog.editor.Command.UPDATE_LOREM);
+<a name="line432"></a>    }
+<a name="line433"></a>
+<a name="line434"></a>    // We need to update currentState_ to reflect the change.
+<a name="line435"></a>    this.currentStates_[state.fieldHashCode].setUndoState(
+<a name="line436"></a>        content, cursorPosition);
+<a name="line437"></a>  } catch (e) {
+<a name="line438"></a>    this.logger.severe(&#39;Error while restoring undo state&#39;, e);
+<a name="line439"></a>  } finally {
+<a name="line440"></a>    // Clear the delayed change event, set flag so we know not to act on it.
+<a name="line441"></a>    this.inProgressUndo_ = state;
+<a name="line442"></a>    // Notify the editor that we&#39;ve changed (fire autosave).
+<a name="line443"></a>    // Note that this starts up change events again, so we don&#39;t have to
+<a name="line444"></a>    // manually do so even though we stopped change events above.
+<a name="line445"></a>    fieldObj.dispatchChange();
+<a name="line446"></a>    fieldObj.dispatchSelectionChangeEvent();
+<a name="line447"></a>  }
+<a name="line448"></a>};
+<a name="line449"></a>
 <a name="line450"></a>
-<a name="line451"></a>
-<a name="line452"></a>/**
-<a name="line453"></a> * @inheritDoc
-<a name="line454"></a> */
-<a name="line455"></a>goog.editor.plugins.UndoRedo.prototype.handleKeyboardShortcut = function(e, key,
-<a name="line456"></a>    isModifierPressed) {
-<a name="line457"></a>  if (isModifierPressed) {
-<a name="line458"></a>    var command;
-<a name="line459"></a>    if (key == &#39;z&#39;) {
-<a name="line460"></a>      command = e.shiftKey ? goog.editor.plugins.UndoRedo.COMMAND.REDO :
-<a name="line461"></a>          goog.editor.plugins.UndoRedo.COMMAND.UNDO;
-<a name="line462"></a>    } else if (key == &#39;y&#39;) {
-<a name="line463"></a>      command = goog.editor.plugins.UndoRedo.COMMAND.REDO;
-<a name="line464"></a>    }
-<a name="line465"></a>
-<a name="line466"></a>    if (command) {
-<a name="line467"></a>      // In the case where Trogedit shares it&#39;s undo redo stack with another
-<a name="line468"></a>      // application it&#39;s possible that an undo or redo will not be for an
-<a name="line469"></a>      // goog.editor.Field. In this case we don&#39;t want to go through the
-<a name="line470"></a>      // goog.editor.Field execCommand flow which stops and restarts events on
-<a name="line471"></a>      // the current field. Only Trogedit UndoState&#39;s have a fieldHashCode so
-<a name="line472"></a>      // use that to distinguish between Trogedit and other states.
-<a name="line473"></a>      var state = command == goog.editor.plugins.UndoRedo.COMMAND.UNDO ?
-<a name="line474"></a>          this.undoManager_.undoPeek() : this.undoManager_.redoPeek();
-<a name="line475"></a>      if (state &amp;&amp; state.fieldHashCode) {
-<a name="line476"></a>        this.getCurrentFieldObject().execCommand(command);
-<a name="line477"></a>      } else {
-<a name="line478"></a>        this.execCommand(command);
-<a name="line479"></a>      }
-<a name="line480"></a>
-<a name="line481"></a>      return true;
-<a name="line482"></a>    }
-<a name="line483"></a>  }
-<a name="line484"></a>
-<a name="line485"></a>  return false;
-<a name="line486"></a>};
+<a name="line451"></a>/**
+<a name="line452"></a> * @inheritDoc
+<a name="line453"></a> */
+<a name="line454"></a>goog.editor.plugins.UndoRedo.prototype.handleKeyboardShortcut = function(e, key,
+<a name="line455"></a>    isModifierPressed) {
+<a name="line456"></a>  if (isModifierPressed) {
+<a name="line457"></a>    var command;
+<a name="line458"></a>    if (key == &#39;z&#39;) {
+<a name="line459"></a>      command = e.shiftKey ? goog.editor.plugins.UndoRedo.COMMAND.REDO :
+<a name="line460"></a>          goog.editor.plugins.UndoRedo.COMMAND.UNDO;
+<a name="line461"></a>    } else if (key == &#39;y&#39;) {
+<a name="line462"></a>      command = goog.editor.plugins.UndoRedo.COMMAND.REDO;
+<a name="line463"></a>    }
+<a name="line464"></a>
+<a name="line465"></a>    if (command) {
+<a name="line466"></a>      // In the case where Trogedit shares it&#39;s undo redo stack with another
+<a name="line467"></a>      // application it&#39;s possible that an undo or redo will not be for an
+<a name="line468"></a>      // goog.editor.Field. In this case we don&#39;t want to go through the
+<a name="line469"></a>      // goog.editor.Field execCommand flow which stops and restarts events on
+<a name="line470"></a>      // the current field. Only Trogedit UndoState&#39;s have a fieldHashCode so
+<a name="line471"></a>      // use that to distinguish between Trogedit and other states.
+<a name="line472"></a>      var state = command == goog.editor.plugins.UndoRedo.COMMAND.UNDO ?
+<a name="line473"></a>          this.undoManager_.undoPeek() : this.undoManager_.redoPeek();
+<a name="line474"></a>      if (state &amp;&amp; state.fieldHashCode) {
+<a name="line475"></a>        this.getCurrentFieldObject().execCommand(command);
+<a name="line476"></a>      } else {
+<a name="line477"></a>        this.execCommand(command);
+<a name="line478"></a>      }
+<a name="line479"></a>
+<a name="line480"></a>      return true;
+<a name="line481"></a>    }
+<a name="line482"></a>  }
+<a name="line483"></a>
+<a name="line484"></a>  return false;
+<a name="line485"></a>};
+<a name="line486"></a>
 <a name="line487"></a>
-<a name="line488"></a>
-<a name="line489"></a>/**
-<a name="line490"></a> * Clear the undo/redo stack.
-<a name="line491"></a> */
-<a name="line492"></a>goog.editor.plugins.UndoRedo.prototype.clearHistory = function() {
-<a name="line493"></a>  // Fire all pending change events, so that they don&#39;t come back
-<a name="line494"></a>  // asynchronously to fill the queue.
-<a name="line495"></a>  this.fieldObject.stopChangeEvents(true, true);
-<a name="line496"></a>  this.undoManager_.clearHistory();
-<a name="line497"></a>  this.fieldObject.startChangeEvents();
-<a name="line498"></a>};
+<a name="line488"></a>/**
+<a name="line489"></a> * Clear the undo/redo stack.
+<a name="line490"></a> */
+<a name="line491"></a>goog.editor.plugins.UndoRedo.prototype.clearHistory = function() {
+<a name="line492"></a>  // Fire all pending change events, so that they don&#39;t come back
+<a name="line493"></a>  // asynchronously to fill the queue.
+<a name="line494"></a>  this.fieldObject.stopChangeEvents(true, true);
+<a name="line495"></a>  this.undoManager_.clearHistory();
+<a name="line496"></a>  this.fieldObject.startChangeEvents();
+<a name="line497"></a>};
+<a name="line498"></a>
 <a name="line499"></a>
-<a name="line500"></a>
-<a name="line501"></a>/**
-<a name="line502"></a> * Refreshes the current state of the editable field as maintained by undo-redo,
-<a name="line503"></a> * without adding any undo-redo states to the stack.
-<a name="line504"></a> * @param {goog.editor.Field} fieldObject The editable field.
-<a name="line505"></a> */
-<a name="line506"></a>goog.editor.plugins.UndoRedo.prototype.refreshCurrentState = function(
-<a name="line507"></a>    fieldObject) {
-<a name="line508"></a>  if (this.isEnabled(fieldObject)) {
-<a name="line509"></a>    if (this.currentStates_[fieldObject.getHashCode()]) {
-<a name="line510"></a>      delete this.currentStates_[fieldObject.getHashCode()];
-<a name="line511"></a>    }
-<a name="line512"></a>    this.updateCurrentState_(fieldObject);
-<a name="line513"></a>  }
-<a name="line514"></a>};
+<a name="line500"></a>/**
+<a name="line501"></a> * Refreshes the current state of the editable field as maintained by undo-redo,
+<a name="line502"></a> * without adding any undo-redo states to the stack.
+<a name="line503"></a> * @param {goog.editor.Field} fieldObject The editable field.
+<a name="line504"></a> */
+<a name="line505"></a>goog.editor.plugins.UndoRedo.prototype.refreshCurrentState = function(
+<a name="line506"></a>    fieldObject) {
+<a name="line507"></a>  if (this.isEnabled(fieldObject)) {
+<a name="line508"></a>    if (this.currentStates_[fieldObject.getHashCode()]) {
+<a name="line509"></a>      delete this.currentStates_[fieldObject.getHashCode()];
+<a name="line510"></a>    }
+<a name="line511"></a>    this.updateCurrentState_(fieldObject);
+<a name="line512"></a>  }
+<a name="line513"></a>};
+<a name="line514"></a>
 <a name="line515"></a>
-<a name="line516"></a>
-<a name="line517"></a>/**
-<a name="line518"></a> * Before the field changes, we want to save the state.
-<a name="line519"></a> * @param {goog.events.Event} e The event.
-<a name="line520"></a> * @private
-<a name="line521"></a> */
-<a name="line522"></a>goog.editor.plugins.UndoRedo.prototype.handleBeforeChange_ = function(e) {
-<a name="line523"></a>  if (this.inProgressUndo_) {
-<a name="line524"></a>    // We are in between a previous undo and it&#39;s delayed change event.
-<a name="line525"></a>    // Continuing here clobbers the redo stack.
-<a name="line526"></a>    // This does mean that if you are trying to undo/redo really quickly, it
-<a name="line527"></a>    // will be gated by the speed of delayed change events.
-<a name="line528"></a>    return;
-<a name="line529"></a>  }
-<a name="line530"></a>
-<a name="line531"></a>  var fieldObj = /** @type {goog.editor.Field} */ (e.target);
-<a name="line532"></a>  var fieldHashCode = fieldObj.getHashCode();
-<a name="line533"></a>
-<a name="line534"></a>  if (this.initialFieldChange_ != fieldHashCode) {
-<a name="line535"></a>    this.initialFieldChange_ = fieldHashCode;
-<a name="line536"></a>    this.updateCurrentState_(fieldObj);
-<a name="line537"></a>  }
-<a name="line538"></a>};
+<a name="line516"></a>/**
+<a name="line517"></a> * Before the field changes, we want to save the state.
+<a name="line518"></a> * @param {goog.events.Event} e The event.
+<a name="line519"></a> * @private
+<a name="line520"></a> */
+<a name="line521"></a>goog.editor.plugins.UndoRedo.prototype.handleBeforeChange_ = function(e) {
+<a name="line522"></a>  if (this.inProgressUndo_) {
+<a name="line523"></a>    // We are in between a previous undo and it&#39;s delayed change event.
+<a name="line524"></a>    // Continuing here clobbers the redo stack.
+<a name="line525"></a>    // This does mean that if you are trying to undo/redo really quickly, it
+<a name="line526"></a>    // will be gated by the speed of delayed change events.
+<a name="line527"></a>    return;
+<a name="line528"></a>  }
+<a name="line529"></a>
+<a name="line530"></a>  var fieldObj = /** @type {goog.editor.Field} */ (e.target);
+<a name="line531"></a>  var fieldHashCode = fieldObj.getHashCode();
+<a name="line532"></a>
+<a name="line533"></a>  if (this.initialFieldChange_ != fieldHashCode) {
+<a name="line534"></a>    this.initialFieldChange_ = fieldHashCode;
+<a name="line535"></a>    this.updateCurrentState_(fieldObj);
+<a name="line536"></a>  }
+<a name="line537"></a>};
+<a name="line538"></a>
 <a name="line539"></a>
-<a name="line540"></a>
-<a name="line541"></a>/**
-<a name="line542"></a> * After some idle time, we want to save the state.
-<a name="line543"></a> * @param {goog.events.Event} e The event.
-<a name="line544"></a> * @private
-<a name="line545"></a> */
-<a name="line546"></a>goog.editor.plugins.UndoRedo.prototype.handleDelayedChange_ = function(e) {
-<a name="line547"></a>  // This was undo making a change, don&#39;t add it BACK into the history
-<a name="line548"></a>  if (this.inProgressUndo_) {
-<a name="line549"></a>    // Must clear this.inProgressUndo_ before dispatching event because the
-<a name="line550"></a>    // dispatch can cause another, queued undo that should be allowed to go
-<a name="line551"></a>    // through.
-<a name="line552"></a>    var state = this.inProgressUndo_;
-<a name="line553"></a>    this.inProgressUndo_ = null;
-<a name="line554"></a>    state.dispatchEvent(goog.editor.plugins.UndoRedoState.ACTION_COMPLETED);
-<a name="line555"></a>    return;
-<a name="line556"></a>  }
-<a name="line557"></a>
-<a name="line558"></a>  this.updateCurrentState_(/** @type {goog.editor.Field} */ (e.target));
-<a name="line559"></a>};
+<a name="line540"></a>/**
+<a name="line541"></a> * After some idle time, we want to save the state.
+<a name="line542"></a> * @param {goog.events.Event} e The event.
+<a name="line543"></a> * @private
+<a name="line544"></a> */
+<a name="line545"></a>goog.editor.plugins.UndoRedo.prototype.handleDelayedChange_ = function(e) {
+<a name="line546"></a>  // This was undo making a change, don&#39;t add it BACK into the history
+<a name="line547"></a>  if (this.inProgressUndo_) {
+<a name="line548"></a>    // Must clear this.inProgressUndo_ before dispatching event because the
+<a name="line549"></a>    // dispatch can cause another, queued undo that should be allowed to go
+<a name="line550"></a>    // through.
+<a name="line551"></a>    var state = this.inProgressUndo_;
+<a name="line552"></a>    this.inProgressUndo_ = null;
+<a name="line553"></a>    state.dispatchEvent(goog.editor.plugins.UndoRedoState.ACTION_COMPLETED);
+<a name="line554"></a>    return;
+<a name="line555"></a>  }
+<a name="line556"></a>
+<a name="line557"></a>  this.updateCurrentState_(/** @type {goog.editor.Field} */ (e.target));
+<a name="line558"></a>};
+<a name="line559"></a>
 <a name="line560"></a>
-<a name="line561"></a>
-<a name="line562"></a>/**
-<a name="line563"></a> * When the user blurs away, we need to save the state on that field.
-<a name="line564"></a> * @param {goog.events.Event} e The event.
-<a name="line565"></a> * @private
-<a name="line566"></a> */
-<a name="line567"></a>goog.editor.plugins.UndoRedo.prototype.handleBlur_ = function(e) {
-<a name="line568"></a>  var fieldObj = /** @type {goog.editor.Field} */ (e.target);
-<a name="line569"></a>  if (fieldObj) {
-<a name="line570"></a>    fieldObj.clearDelayedChange();
-<a name="line571"></a>  }
-<a name="line572"></a>};
+<a name="line561"></a>/**
+<a name="line562"></a> * When the user blurs away, we need to save the state on that field.
+<a name="line563"></a> * @param {goog.events.Event} e The event.
+<a name="line564"></a> * @private
+<a name="line565"></a> */
+<a name="line566"></a>goog.editor.plugins.UndoRedo.prototype.handleBlur_ = function(e) {
+<a name="line567"></a>  var fieldObj = /** @type {goog.editor.Field} */ (e.target);
+<a name="line568"></a>  if (fieldObj) {
+<a name="line569"></a>    fieldObj.clearDelayedChange();
+<a name="line570"></a>  }
+<a name="line571"></a>};
+<a name="line572"></a>
 <a name="line573"></a>
-<a name="line574"></a>
-<a name="line575"></a>/**
-<a name="line576"></a> * Returns the goog.editor.plugins.UndoRedo.CursorPosition_ for the current
-<a name="line577"></a> * selection in the given Field.
-<a name="line578"></a> * @param {goog.editor.Field} fieldObj The field object.
-<a name="line579"></a> * @return {goog.editor.plugins.UndoRedo.CursorPosition_} The CursorPosition_ or
-<a name="line580"></a> *    null if there is no valid selection.
-<a name="line581"></a> * @private
-<a name="line582"></a> */
-<a name="line583"></a>goog.editor.plugins.UndoRedo.prototype.getCursorPosition_ = function(fieldObj) {
-<a name="line584"></a>  var cursorPos = new goog.editor.plugins.UndoRedo.CursorPosition_(fieldObj);
-<a name="line585"></a>  if (!cursorPos.isValid()) {
-<a name="line586"></a>    return null;
-<a name="line587"></a>  }
-<a name="line588"></a>  return cursorPos;
-<a name="line589"></a>};
+<a name="line574"></a>/**
+<a name="line575"></a> * Returns the goog.editor.plugins.UndoRedo.CursorPosition_ for the current
+<a name="line576"></a> * selection in the given Field.
+<a name="line577"></a> * @param {goog.editor.Field} fieldObj The field object.
+<a name="line578"></a> * @return {goog.editor.plugins.UndoRedo.CursorPosition_} The CursorPosition_ or
+<a name="line579"></a> *    null if there is no valid selection.
+<a name="line580"></a> * @private
+<a name="line581"></a> */
+<a name="line582"></a>goog.editor.plugins.UndoRedo.prototype.getCursorPosition_ = function(fieldObj) {
+<a name="line583"></a>  var cursorPos = new goog.editor.plugins.UndoRedo.CursorPosition_(fieldObj);
+<a name="line584"></a>  if (!cursorPos.isValid()) {
+<a name="line585"></a>    return null;
+<a name="line586"></a>  }
+<a name="line587"></a>  return cursorPos;
+<a name="line588"></a>};
+<a name="line589"></a>
 <a name="line590"></a>
-<a name="line591"></a>
-<a name="line592"></a>/**
-<a name="line593"></a> * Helper method for saving state.
-<a name="line594"></a> * @param {goog.editor.Field} fieldObj The field object.
-<a name="line595"></a> * @private
-<a name="line596"></a> */
-<a name="line597"></a>goog.editor.plugins.UndoRedo.prototype.updateCurrentState_ = function(
-<a name="line598"></a>    fieldObj) {
-<a name="line599"></a>  var fieldHashCode = fieldObj.getHashCode();
-<a name="line600"></a>  // We specifically grab the raw innerHTML of the field here as that&#39;s what
-<a name="line601"></a>  // we would set on the field in the case of an undo/redo operation. There&#39;s
-<a name="line602"></a>  // no need to clean/unclean the contents in either direction. In the case of
-<a name="line603"></a>  // lorem ipsum being used, we want to capture the effective state (empty, no
-<a name="line604"></a>  // cursor position) rather than capturing the lorem html.
-<a name="line605"></a>  var content, cursorPos;
-<a name="line606"></a>  if (fieldObj.queryCommandValue(goog.editor.Command.USING_LOREM)) {
-<a name="line607"></a>    content = &#39;&#39;;
-<a name="line608"></a>    cursorPos = null;
-<a name="line609"></a>  } else {
-<a name="line610"></a>    content = fieldObj.getElement().innerHTML;
-<a name="line611"></a>    cursorPos = this.getCursorPosition_(fieldObj);
-<a name="line612"></a>  }
-<a name="line613"></a>
-<a name="line614"></a>  var currentState = this.currentStates_[fieldHashCode];
-<a name="line615"></a>  if (currentState) {
-<a name="line616"></a>    // Don&#39;t create states if the content hasn&#39;t changed (spurious
-<a name="line617"></a>    // delayed change). This can happen when lorem is cleared, for example.
-<a name="line618"></a>    if (currentState.undoContent_ == content) {
-<a name="line619"></a>      return;
-<a name="line620"></a>    } else if (content == &#39;&#39; || currentState.undoContent_ == &#39;&#39;) {
-<a name="line621"></a>      // If lorem ipsum is on we say the contents are the empty string. However,
-<a name="line622"></a>      // for an empty text shape with focus, the empty contents might not be
-<a name="line623"></a>      // the same, depending on plugins. We want these two empty states to be
-<a name="line624"></a>      // considered identical because to the user they are indistinguishable,
-<a name="line625"></a>      // so we use fieldObj.getInjectableContents to map between them.
-<a name="line626"></a>      // We cannot use getInjectableContents when first creating the undo
-<a name="line627"></a>      // content for a field with lorem, because on enable when this is first
-<a name="line628"></a>      // called we can&#39;t guarantee plugin registration order, so the
-<a name="line629"></a>      // injectableContents at that time might not match the final
-<a name="line630"></a>      // injectableContents.
-<a name="line631"></a>      var emptyContents = fieldObj.getInjectableContents(&#39;&#39;, {});
-<a name="line632"></a>      if (content == emptyContents &amp;&amp; currentState.undoContent_ == &#39;&#39; ||
-<a name="line633"></a>          currentState.undoContent_ == emptyContents &amp;&amp; content == &#39;&#39;) {
-<a name="line634"></a>        return;
-<a name="line635"></a>      }
-<a name="line636"></a>    }
-<a name="line637"></a>
-<a name="line638"></a>    currentState.setRedoState(content, cursorPos);
-<a name="line639"></a>    this.undoManager_.addState(currentState);
-<a name="line640"></a>  }
-<a name="line641"></a>
-<a name="line642"></a>  this.currentStates_[fieldHashCode] =
-<a name="line643"></a>      new goog.editor.plugins.UndoRedo.UndoState_(fieldHashCode, content,
-<a name="line644"></a>          cursorPos, this.boundRestoreState_);
-<a name="line645"></a>};
+<a name="line591"></a>/**
+<a name="line592"></a> * Helper method for saving state.
+<a name="line593"></a> * @param {goog.editor.Field} fieldObj The field object.
+<a name="line594"></a> * @private
+<a name="line595"></a> */
+<a name="line596"></a>goog.editor.plugins.UndoRedo.prototype.updateCurrentState_ = function(
+<a name="line597"></a>    fieldObj) {
+<a name="line598"></a>  var fieldHashCode = fieldObj.getHashCode();
+<a name="line599"></a>  // We specifically grab the raw innerHTML of the field here as that&#39;s what
+<a name="line600"></a>  // we would set on the field in the case of an undo/redo operation. There&#39;s
+<a name="line601"></a>  // no need to clean/unclean the contents in either direction. In the case of
+<a name="line602"></a>  // lorem ipsum being used, we want to capture the effective state (empty, no
+<a name="line603"></a>  // cursor position) rather than capturing the lorem html.
+<a name="line604"></a>  var content, cursorPos;
+<a name="line605"></a>  if (fieldObj.queryCommandValue(goog.editor.Command.USING_LOREM)) {
+<a name="line606"></a>    content = &#39;&#39;;
+<a name="line607"></a>    cursorPos = null;
+<a name="line608"></a>  } else {
+<a name="line609"></a>    content = fieldObj.getElement().innerHTML;
+<a name="line610"></a>    cursorPos = this.getCursorPosition_(fieldObj);
+<a name="line611"></a>  }
+<a name="line612"></a>
+<a name="line613"></a>  var currentState = this.currentStates_[fieldHashCode];
+<a name="line614"></a>  if (currentState) {
+<a name="line615"></a>    // Don&#39;t create states if the content hasn&#39;t changed (spurious
+<a name="line616"></a>    // delayed change). This can happen when lorem is cleared, for example.
+<a name="line617"></a>    if (currentState.undoContent_ == content) {
+<a name="line618"></a>      return;
+<a name="line619"></a>    } else if (content == &#39;&#39; || currentState.undoContent_ == &#39;&#39;) {
+<a name="line620"></a>      // If lorem ipsum is on we say the contents are the empty string. However,
+<a name="line621"></a>      // for an empty text shape with focus, the empty contents might not be
+<a name="line622"></a>      // the same, depending on plugins. We want these two empty states to be
+<a name="line623"></a>      // considered identical because to the user they are indistinguishable,
+<a name="line624"></a>      // so we use fieldObj.getInjectableContents to map between them.
+<a name="line625"></a>      // We cannot use getInjectableContents when first creating the undo
+<a name="line626"></a>      // content for a field with lorem, because on enable when this is first
+<a name="line627"></a>      // called we can&#39;t guarantee plugin registration order, so the
+<a name="line628"></a>      // injectableContents at that time might not match the final
+<a name="line629"></a>      // injectableContents.
+<a name="line630"></a>      var emptyContents = fieldObj.getInjectableContents(&#39;&#39;, {});
+<a name="line631"></a>      if (content == emptyContents &amp;&amp; currentState.undoContent_ == &#39;&#39; ||
+<a name="line632"></a>          currentState.undoContent_ == emptyContents &amp;&amp; content == &#39;&#39;) {
+<a name="line633"></a>        return;
+<a name="line634"></a>      }
+<a name="line635"></a>    }
+<a name="line636"></a>
+<a name="line637"></a>    currentState.setRedoState(content, cursorPos);
+<a name="line638"></a>    this.undoManager_.addState(currentState);
+<a name="line639"></a>  }
+<a name="line640"></a>
+<a name="line641"></a>  this.currentStates_[fieldHashCode] =
+<a name="line642"></a>      new goog.editor.plugins.UndoRedo.UndoState_(fieldHashCode, content,
+<a name="line643"></a>          cursorPos, this.boundRestoreState_);
+<a name="line644"></a>};
+<a name="line645"></a>
 <a name="line646"></a>
-<a name="line647"></a>
-<a name="line648"></a>/**
-<a name="line649"></a> * This object encapsulates the state of an editable field.
-<a name="line650"></a> *
-<a name="line651"></a> * @param {string} fieldHashCode String the id of the field we&#39;re saving the
-<a name="line652"></a> *     content of.
-<a name="line653"></a> * @param {string} content String the actual text we&#39;re saving.
-<a name="line654"></a> * @param {goog.editor.plugins.UndoRedo.CursorPosition_?} cursorPosition
-<a name="line655"></a> *     CursorPosLite object for the cursor position in the field.
-<a name="line656"></a> * @param {Function} restore The function used to restore editable field state.
-<a name="line657"></a> * @private
-<a name="line658"></a> * @constructor
-<a name="line659"></a> * @extends {goog.editor.plugins.UndoRedoState}
-<a name="line660"></a> */
-<a name="line661"></a>goog.editor.plugins.UndoRedo.UndoState_ = function(fieldHashCode, content,
-<a name="line662"></a>    cursorPosition, restore) {
-<a name="line663"></a>  goog.editor.plugins.UndoRedoState.call(this, true);
-<a name="line664"></a>
-<a name="line665"></a>  /**
-<a name="line666"></a>   * The hash code for the field whose content is being saved.
-<a name="line667"></a>   * @type {string}
-<a name="line668"></a>   */
-<a name="line669"></a>  this.fieldHashCode = fieldHashCode;
-<a name="line670"></a>
-<a name="line671"></a>  /**
-<a name="line672"></a>   * The bound copy of {@code goog.editor.plugins.UndoRedo.restoreState} used by
-<a name="line673"></a>   * this state.
-<a name="line674"></a>   * @type {Function}
-<a name="line675"></a>   * @private
-<a name="line676"></a>   */
-<a name="line677"></a>  this.restore_ = restore;
-<a name="line678"></a>
-<a name="line679"></a>  this.setUndoState(content, cursorPosition);
-<a name="line680"></a>};
-<a name="line681"></a>goog.inherits(goog.editor.plugins.UndoRedo.UndoState_,
-<a name="line682"></a>    goog.editor.plugins.UndoRedoState);
+<a name="line647"></a>/**
+<a name="line648"></a> * This object encapsulates the state of an editable field.
+<a name="line649"></a> *
+<a name="line650"></a> * @param {string} fieldHashCode String the id of the field we&#39;re saving the
+<a name="line651"></a> *     content of.
+<a name="line652"></a> * @param {string} content String the actual text we&#39;re saving.
+<a name="line653"></a> * @param {goog.editor.plugins.UndoRedo.CursorPosition_?} cursorPosition
+<a name="line654"></a> *     CursorPosLite object for the cursor position in the field.
+<a name="line655"></a> * @param {Function} restore The function used to restore editable field state.
+<a name="line656"></a> * @private
+<a name="line657"></a> * @constructor
+<a name="line658"></a> * @extends {goog.editor.plugins.UndoRedoState}
+<a name="line659"></a> */
+<a name="line660"></a>goog.editor.plugins.UndoRedo.UndoState_ = function(fieldHashCode, content,
+<a name="line661"></a>    cursorPosition, restore) {
+<a name="line662"></a>  goog.editor.plugins.UndoRedoState.call(this, true);
+<a name="line663"></a>
+<a name="line664"></a>  /**
+<a name="line665"></a>   * The hash code for the field whose content is being saved.
+<a name="line666"></a>   * @type {string}
+<a name="line667"></a>   */
+<a name="line668"></a>  this.fieldHashCode = fieldHashCode;
+<a name="line669"></a>
+<a name="line670"></a>  /**
+<a name="line671"></a>   * The bound copy of {@code goog.editor.plugins.UndoRedo.restoreState} used by
+<a name="line672"></a>   * this state.
+<a name="line673"></a>   * @type {Function}
+<a name="line674"></a>   * @private
+<a name="line675"></a>   */
+<a name="line676"></a>  this.restore_ = restore;
+<a name="line677"></a>
+<a name="line678"></a>  this.setUndoState(content, cursorPosition);
+<a name="line679"></a>};
+<a name="line680"></a>goog.inherits(goog.editor.plugins.UndoRedo.UndoState_,
+<a name="line681"></a>    goog.editor.plugins.UndoRedoState);
+<a name="line682"></a>
 <a name="line683"></a>
-<a name="line684"></a>
-<a name="line685"></a>/**
-<a name="line686"></a> * The content to restore on undo.
-<a name="line687"></a> * @type {string}
-<a name="line688"></a> * @private
-<a name="line689"></a> */
-<a name="line690"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.undoContent_;
+<a name="line684"></a>/**
+<a name="line685"></a> * The content to restore on undo.
+<a name="line686"></a> * @type {string}
+<a name="line687"></a> * @private
+<a name="line688"></a> */
+<a name="line689"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.undoContent_;
+<a name="line690"></a>
 <a name="line691"></a>
-<a name="line692"></a>
-<a name="line693"></a>/**
-<a name="line694"></a> * The cursor position to restore on undo.
-<a name="line695"></a> * @type {goog.editor.plugins.UndoRedo.CursorPosition_?}
-<a name="line696"></a> * @private
-<a name="line697"></a> */
-<a name="line698"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.undoCursorPosition_;
+<a name="line692"></a>/**
+<a name="line693"></a> * The cursor position to restore on undo.
+<a name="line694"></a> * @type {goog.editor.plugins.UndoRedo.CursorPosition_?}
+<a name="line695"></a> * @private
+<a name="line696"></a> */
+<a name="line697"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.undoCursorPosition_;
+<a name="line698"></a>
 <a name="line699"></a>
-<a name="line700"></a>
-<a name="line701"></a>/**
-<a name="line702"></a> * The content to restore on redo, undefined until the state is pushed onto the
-<a name="line703"></a> * undo stack.
-<a name="line704"></a> * @type {string|undefined}
-<a name="line705"></a> * @private
-<a name="line706"></a> */
-<a name="line707"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.redoContent_;
+<a name="line700"></a>/**
+<a name="line701"></a> * The content to restore on redo, undefined until the state is pushed onto the
+<a name="line702"></a> * undo stack.
+<a name="line703"></a> * @type {string|undefined}
+<a name="line704"></a> * @private
+<a name="line705"></a> */
+<a name="line706"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.redoContent_;
+<a name="line707"></a>
 <a name="line708"></a>
-<a name="line709"></a>
-<a name="line710"></a>/**
-<a name="line711"></a> * The cursor position to restore on redo, undefined until the state is pushed
-<a name="line712"></a> * onto the undo stack.
-<a name="line713"></a> * @type {goog.editor.plugins.UndoRedo.CursorPosition_|null|undefined}
-<a name="line714"></a> * @private
-<a name="line715"></a> */
-<a name="line716"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.redoCursorPosition_;
+<a name="line709"></a>/**
+<a name="line710"></a> * The cursor position to restore on redo, undefined until the state is pushed
+<a name="line711"></a> * onto the undo stack.
+<a name="line712"></a> * @type {goog.editor.plugins.UndoRedo.CursorPosition_|null|undefined}
+<a name="line713"></a> * @private
+<a name="line714"></a> */
+<a name="line715"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.redoCursorPosition_;
+<a name="line716"></a>
 <a name="line717"></a>
-<a name="line718"></a>
-<a name="line719"></a>/**
-<a name="line720"></a> * Performs the undo operation represented by this state.
-<a name="line721"></a> */
-<a name="line722"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.undo = function() {
-<a name="line723"></a>  this.restore_(this, this.undoContent_,
-<a name="line724"></a>      this.undoCursorPosition_);
-<a name="line725"></a>};
+<a name="line718"></a>/**
+<a name="line719"></a> * Performs the undo operation represented by this state.
+<a name="line720"></a> */
+<a name="line721"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.undo = function() {
+<a name="line722"></a>  this.restore_(this, this.undoContent_,
+<a name="line723"></a>      this.undoCursorPosition_);
+<a name="line724"></a>};
+<a name="line725"></a>
 <a name="line726"></a>
-<a name="line727"></a>
-<a name="line728"></a>/**
-<a name="line729"></a> * Performs the redo operation represented by this state.
-<a name="line730"></a> */
-<a name="line731"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.redo = function() {
-<a name="line732"></a>  this.restore_(this, this.redoContent_,
-<a name="line733"></a>      this.redoCursorPosition_);
-<a name="line734"></a>};
+<a name="line727"></a>/**
+<a name="line728"></a> * Performs the redo operation represented by this state.
+<a name="line729"></a> */
+<a name="line730"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.redo = function() {
+<a name="line731"></a>  this.restore_(this, this.redoContent_,
+<a name="line732"></a>      this.redoCursorPosition_);
+<a name="line733"></a>};
+<a name="line734"></a>
 <a name="line735"></a>
-<a name="line736"></a>
-<a name="line737"></a>/**
-<a name="line738"></a> * Updates the undo portion of this state. Should only be used to update the
-<a name="line739"></a> * current state of an editable field, which is not yet on the undo stack after
-<a name="line740"></a> * an undo or redo operation. You should never be modifying states on the stack!
-<a name="line741"></a> * @param {string} content The current content.
-<a name="line742"></a> * @param {goog.editor.plugins.UndoRedo.CursorPosition_?} cursorPosition
-<a name="line743"></a> *     The current cursor position.
-<a name="line744"></a> */
-<a name="line745"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.setUndoState = function(
-<a name="line746"></a>    content, cursorPosition) {
-<a name="line747"></a>  this.undoContent_ = content;
-<a name="line748"></a>  this.undoCursorPosition_ = cursorPosition;
-<a name="line749"></a>};
+<a name="line736"></a>/**
+<a name="line737"></a> * Updates the undo portion of this state. Should only be used to update the
+<a name="line738"></a> * current state of an editable field, which is not yet on the undo stack after
+<a name="line739"></a> * an undo or redo operation. You should never be modifying states on the stack!
+<a name="line740"></a> * @param {string} content The current content.
+<a name="line741"></a> * @param {goog.editor.plugins.UndoRedo.CursorPosition_?} cursorPosition
+<a name="line742"></a> *     The current cursor position.
+<a name="line743"></a> */
+<a name="line744"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.setUndoState = function(
+<a name="line745"></a>    content, cursorPosition) {
+<a name="line746"></a>  this.undoContent_ = content;
+<a name="line747"></a>  this.undoCursorPosition_ = cursorPosition;
+<a name="line748"></a>};
+<a name="line749"></a>
 <a name="line750"></a>
-<a name="line751"></a>
-<a name="line752"></a>/**
-<a name="line753"></a> * Adds redo information to this state. This method should be called before the
-<a name="line754"></a> * state is added onto the undo stack.
-<a name="line755"></a> *
-<a name="line756"></a> * @param {string} content The content to restore on a redo.
-<a name="line757"></a> * @param {goog.editor.plugins.UndoRedo.CursorPosition_?} cursorPosition
-<a name="line758"></a> *     The cursor position to restore on a redo.
-<a name="line759"></a> */
-<a name="line760"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.setRedoState = function(
-<a name="line761"></a>    content, cursorPosition) {
-<a name="line762"></a>  this.redoContent_ = content;
-<a name="line763"></a>  this.redoCursorPosition_ = cursorPosition;
-<a name="line764"></a>};
+<a name="line751"></a>/**
+<a name="line752"></a> * Adds redo information to this state. This method should be called before the
+<a name="line753"></a> * state is added onto the undo stack.
+<a name="line754"></a> *
+<a name="line755"></a> * @param {string} content The content to restore on a redo.
+<a name="line756"></a> * @param {goog.editor.plugins.UndoRedo.CursorPosition_?} cursorPosition
+<a name="line757"></a> *     The cursor position to restore on a redo.
+<a name="line758"></a> */
+<a name="line759"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.setRedoState = function(
+<a name="line760"></a>    content, cursorPosition) {
+<a name="line761"></a>  this.redoContent_ = content;
+<a name="line762"></a>  this.redoCursorPosition_ = cursorPosition;
+<a name="line763"></a>};
+<a name="line764"></a>
 <a name="line765"></a>
-<a name="line766"></a>
-<a name="line767"></a>/**
-<a name="line768"></a> * Checks if the *contents* of two
-<a name="line769"></a> * {@code goog.editor.plugins.UndoRedo.UndoState_}s are the same.  We don&#39;t
-<a name="line770"></a> * bother checking the cursor position (that&#39;s not something we&#39;d want to save
-<a name="line771"></a> * anyway).
-<a name="line772"></a> * @param {goog.editor.plugins.UndoRedo.UndoState_} rhs The state to compare.
-<a name="line773"></a> * @return {boolean} Whether the contents are the same.
-<a name="line774"></a> */
-<a name="line775"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.equals = function(rhs) {
-<a name="line776"></a>  return this.fieldHashCode == rhs.fieldHashCode &amp;&amp;
-<a name="line777"></a>      this.undoContent_ == rhs.undoContent_ &amp;&amp;
-<a name="line778"></a>      this.redoContent_ == rhs.redoContent_;
-<a name="line779"></a>};
+<a name="line766"></a>/**
+<a name="line767"></a> * Checks if the *contents* of two
+<a name="line768"></a> * {@code goog.editor.plugins.UndoRedo.UndoState_}s are the same.  We don&#39;t
+<a name="line769"></a> * bother checking the cursor position (that&#39;s not something we&#39;d want to save
+<a name="line770"></a> * anyway).
+<a name="line771"></a> * @param {goog.editor.plugins.UndoRedo.UndoState_} rhs The state to compare.
+<a name="line772"></a> * @return {boolean} Whether the contents are the same.
+<a name="line773"></a> */
+<a name="line774"></a>goog.editor.plugins.UndoRedo.UndoState_.prototype.equals = function(rhs) {
+<a name="line775"></a>  return this.fieldHashCode == rhs.fieldHashCode &amp;&amp;
+<a name="line776"></a>      this.undoContent_ == rhs.undoContent_ &amp;&amp;
+<a name="line777"></a>      this.redoContent_ == rhs.redoContent_;
+<a name="line778"></a>};
+<a name="line779"></a>
 <a name="line780"></a>
-<a name="line781"></a>
-<a name="line782"></a>/**
-<a name="line783"></a> * Stores the state of the selection in a way the survives DOM modifications
-<a name="line784"></a> * that don&#39;t modify the user-interactable content (e.g. making something bold
-<a name="line785"></a> * vs. typing a character).
-<a name="line786"></a> *
-<a name="line787"></a> * TODO: Completely get rid of this and use goog.dom.SavedCaretRange.
-<a name="line788"></a> *
-<a name="line789"></a> * @param {goog.editor.Field} field The field the selection is in.
-<a name="line790"></a> * @private
-<a name="line791"></a> * @constructor
-<a name="line792"></a> */
-<a name="line793"></a>goog.editor.plugins.UndoRedo.CursorPosition_ = function(field) {
-<a name="line794"></a>  this.field_ = field;
-<a name="line795"></a>
-<a name="line796"></a>  var win = field.getEditableDomHelper().getWindow();
-<a name="line797"></a>  var range = field.getRange();
-<a name="line798"></a>  var isValidRange = !!range &amp;&amp; range.isRangeInDocument() &amp;&amp;
-<a name="line799"></a>      range.getWindow() == win;
-<a name="line800"></a>  range = isValidRange ? range : null;
-<a name="line801"></a>
-<a name="line802"></a>  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-<a name="line803"></a>    this.initW3C_(range);
-<a name="line804"></a>  } else if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
-<a name="line805"></a>    this.initIE_(range);
-<a name="line806"></a>  }
-<a name="line807"></a>};
+<a name="line781"></a>/**
+<a name="line782"></a> * Stores the state of the selection in a way the survives DOM modifications
+<a name="line783"></a> * that don&#39;t modify the user-interactable content (e.g. making something bold
+<a name="line784"></a> * vs. typing a character).
+<a name="line785"></a> *
+<a name="line786"></a> * TODO: Completely get rid of this and use goog.dom.SavedCaretRange.
+<a name="line787"></a> *
+<a name="line788"></a> * @param {goog.editor.Field} field The field the selection is in.
+<a name="line789"></a> * @private
+<a name="line790"></a> * @constructor
+<a name="line791"></a> */
+<a name="line792"></a>goog.editor.plugins.UndoRedo.CursorPosition_ = function(field) {
+<a name="line793"></a>  this.field_ = field;
+<a name="line794"></a>
+<a name="line795"></a>  var win = field.getEditableDomHelper().getWindow();
+<a name="line796"></a>  var range = field.getRange();
+<a name="line797"></a>  var isValidRange = !!range &amp;&amp; range.isRangeInDocument() &amp;&amp;
+<a name="line798"></a>      range.getWindow() == win;
+<a name="line799"></a>  range = isValidRange ? range : null;
+<a name="line800"></a>
+<a name="line801"></a>  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
+<a name="line802"></a>    this.initW3C_(range);
+<a name="line803"></a>  } else if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
+<a name="line804"></a>    this.initIE_(range);
+<a name="line805"></a>  }
+<a name="line806"></a>};
+<a name="line807"></a>
 <a name="line808"></a>
-<a name="line809"></a>
-<a name="line810"></a>/**
-<a name="line811"></a> * The standards compliant version keeps a list of childNode offsets.
-<a name="line812"></a> * @param {goog.dom.AbstractRange?} range The range to save.
-<a name="line813"></a> * @private
-<a name="line814"></a> */
-<a name="line815"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.initW3C_ = function(
-<a name="line816"></a>    range) {
-<a name="line817"></a>  this.isValid_ = false;
-<a name="line818"></a>
-<a name="line819"></a>  // TODO: Check if the range is in the field before trying to save it
-<a name="line820"></a>  // for FF 3 contentEditable.
-<a name="line821"></a>  if (!range) {
-<a name="line822"></a>    return;
-<a name="line823"></a>  }
-<a name="line824"></a>
-<a name="line825"></a>  var anchorNode = range.getAnchorNode();
-<a name="line826"></a>  var focusNode = range.getFocusNode();
-<a name="line827"></a>  if (!anchorNode || !focusNode) {
-<a name="line828"></a>    return;
-<a name="line829"></a>  }
-<a name="line830"></a>
-<a name="line831"></a>  var anchorOffset = range.getAnchorOffset();
-<a name="line832"></a>  var anchor = new goog.dom.NodeOffset(anchorNode, this.field_.getElement());
-<a name="line833"></a>
-<a name="line834"></a>  var focusOffset = range.getFocusOffset();
-<a name="line835"></a>  var focus = new goog.dom.NodeOffset(focusNode, this.field_.getElement());
-<a name="line836"></a>
-<a name="line837"></a>  // Test range direction.
-<a name="line838"></a>  if (range.isReversed()) {
-<a name="line839"></a>    this.startOffset_ = focus;
-<a name="line840"></a>    this.startChildOffset_ = focusOffset;
-<a name="line841"></a>    this.endOffset_ = anchor;
-<a name="line842"></a>    this.endChildOffset_ = anchorOffset;
-<a name="line843"></a>  } else {
-<a name="line844"></a>    this.startOffset_ = anchor;
-<a name="line845"></a>    this.startChildOffset_ = anchorOffset;
-<a name="line846"></a>    this.endOffset_ = focus;
-<a name="line847"></a>    this.endChildOffset_ = focusOffset;
-<a name="line848"></a>  }
-<a name="line849"></a>
-<a name="line850"></a>  this.isValid_ = true;
-<a name="line851"></a>};
+<a name="line809"></a>/**
+<a name="line810"></a> * The standards compliant version keeps a list of childNode offsets.
+<a name="line811"></a> * @param {goog.dom.AbstractRange?} range The range to save.
+<a name="line812"></a> * @private
+<a name="line813"></a> */
+<a name="line814"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.initW3C_ = function(
+<a name="line815"></a>    range) {
+<a name="line816"></a>  this.isValid_ = false;
+<a name="line817"></a>
+<a name="line818"></a>  // TODO: Check if the range is in the field before trying to save it
+<a name="line819"></a>  // for FF 3 contentEditable.
+<a name="line820"></a>  if (!range) {
+<a name="line821"></a>    return;
+<a name="line822"></a>  }
+<a name="line823"></a>
+<a name="line824"></a>  var anchorNode = range.getAnchorNode();
+<a name="line825"></a>  var focusNode = range.getFocusNode();
+<a name="line826"></a>  if (!anchorNode || !focusNode) {
+<a name="line827"></a>    return;
+<a name="line828"></a>  }
+<a name="line829"></a>
+<a name="line830"></a>  var anchorOffset = range.getAnchorOffset();
+<a name="line831"></a>  var anchor = new goog.dom.NodeOffset(anchorNode, this.field_.getElement());
+<a name="line832"></a>
+<a name="line833"></a>  var focusOffset = range.getFocusOffset();
+<a name="line834"></a>  var focus = new goog.dom.NodeOffset(focusNode, this.field_.getElement());
+<a name="line835"></a>
+<a name="line836"></a>  // Test range direction.
+<a name="line837"></a>  if (range.isReversed()) {
+<a name="line838"></a>    this.startOffset_ = focus;
+<a name="line839"></a>    this.startChildOffset_ = focusOffset;
+<a name="line840"></a>    this.endOffset_ = anchor;
+<a name="line841"></a>    this.endChildOffset_ = anchorOffset;
+<a name="line842"></a>  } else {
+<a name="line843"></a>    this.startOffset_ = anchor;
+<a name="line844"></a>    this.startChildOffset_ = anchorOffset;
+<a name="line845"></a>    this.endOffset_ = focus;
+<a name="line846"></a>    this.endChildOffset_ = focusOffset;
+<a name="line847"></a>  }
+<a name="line848"></a>
+<a name="line849"></a>  this.isValid_ = true;
+<a name="line850"></a>};
+<a name="line851"></a>
 <a name="line852"></a>
-<a name="line853"></a>
-<a name="line854"></a>/**
-<a name="line855"></a> * In IE, we just keep track of the text offset (number of characters).
-<a name="line856"></a> * @param {goog.dom.AbstractRange?} range The range to save.
-<a name="line857"></a> * @private
-<a name="line858"></a> */
-<a name="line859"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.initIE_ = function(
-<a name="line860"></a>    range) {
-<a name="line861"></a>  this.isValid_ = false;
-<a name="line862"></a>
-<a name="line863"></a>  if (!range) {
-<a name="line864"></a>    return;
-<a name="line865"></a>  }
-<a name="line866"></a>
-<a name="line867"></a>  var ieRange = range.getTextRange(0).getBrowserRangeObject();
-<a name="line868"></a>
-<a name="line869"></a>  if (!goog.dom.contains(this.field_.getElement(), ieRange.parentElement())) {
-<a name="line870"></a>    return;
-<a name="line871"></a>  }
-<a name="line872"></a>
-<a name="line873"></a>  // Create a range that encompasses the contentEditable region to serve
-<a name="line874"></a>  // as a reference to form ranges below.
-<a name="line875"></a>  var contentEditableRange =
-<a name="line876"></a>      this.field_.getEditableDomHelper().getDocument().body.createTextRange();
-<a name="line877"></a>  contentEditableRange.moveToElementText(this.field_.getElement());
-<a name="line878"></a>
-<a name="line879"></a>  // startMarker is a range from the start of the contentEditable node to the
-<a name="line880"></a>  // start of the current selection.
-<a name="line881"></a>  var startMarker = ieRange.duplicate();
-<a name="line882"></a>  startMarker.collapse(true);
-<a name="line883"></a>  startMarker.setEndPoint(&#39;StartToStart&#39;, contentEditableRange);
-<a name="line884"></a>  this.startOffset_ =
-<a name="line885"></a>      goog.editor.plugins.UndoRedo.CursorPosition_.computeEndOffsetIE_(
-<a name="line886"></a>          startMarker);
-<a name="line887"></a>
-<a name="line888"></a>  // endMarker is a range from the start of teh contentEditable node to the
-<a name="line889"></a>  // end of the current selection.
-<a name="line890"></a>  var endMarker = ieRange.duplicate();
-<a name="line891"></a>  endMarker.setEndPoint(&#39;StartToStart&#39;, contentEditableRange);
-<a name="line892"></a>  this.endOffset_ =
-<a name="line893"></a>      goog.editor.plugins.UndoRedo.CursorPosition_.computeEndOffsetIE_(
-<a name="line894"></a>          endMarker);
-<a name="line895"></a>
-<a name="line896"></a>  this.isValid_ = true;
-<a name="line897"></a>};
+<a name="line853"></a>/**
+<a name="line854"></a> * In IE, we just keep track of the text offset (number of characters).
+<a name="line855"></a> * @param {goog.dom.AbstractRange?} range The range to save.
+<a name="line856"></a> * @private
+<a name="line857"></a> */
+<a name="line858"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.initIE_ = function(
+<a name="line859"></a>    range) {
+<a name="line860"></a>  this.isValid_ = false;
+<a name="line861"></a>
+<a name="line862"></a>  if (!range) {
+<a name="line863"></a>    return;
+<a name="line864"></a>  }
+<a name="line865"></a>
+<a name="line866"></a>  var ieRange = range.getTextRange(0).getBrowserRangeObject();
+<a name="line867"></a>
+<a name="line868"></a>  if (!goog.dom.contains(this.field_.getElement(), ieRange.parentElement())) {
+<a name="line869"></a>    return;
+<a name="line870"></a>  }
+<a name="line871"></a>
+<a name="line872"></a>  // Create a range that encompasses the contentEditable region to serve
+<a name="line873"></a>  // as a reference to form ranges below.
+<a name="line874"></a>  var contentEditableRange =
+<a name="line875"></a>      this.field_.getEditableDomHelper().getDocument().body.createTextRange();
+<a name="line876"></a>  contentEditableRange.moveToElementText(this.field_.getElement());
+<a name="line877"></a>
+<a name="line878"></a>  // startMarker is a range from the start of the contentEditable node to the
+<a name="line879"></a>  // start of the current selection.
+<a name="line880"></a>  var startMarker = ieRange.duplicate();
+<a name="line881"></a>  startMarker.collapse(true);
+<a name="line882"></a>  startMarker.setEndPoint(&#39;StartToStart&#39;, contentEditableRange);
+<a name="line883"></a>  this.startOffset_ =
+<a name="line884"></a>      goog.editor.plugins.UndoRedo.CursorPosition_.computeEndOffsetIE_(
+<a name="line885"></a>          startMarker);
+<a name="line886"></a>
+<a name="line887"></a>  // endMarker is a range from the start of teh contentEditable node to the
+<a name="line888"></a>  // end of the current selection.
+<a name="line889"></a>  var endMarker = ieRange.duplicate();
+<a name="line890"></a>  endMarker.setEndPoint(&#39;StartToStart&#39;, contentEditableRange);
+<a name="line891"></a>  this.endOffset_ =
+<a name="line892"></a>      goog.editor.plugins.UndoRedo.CursorPosition_.computeEndOffsetIE_(
+<a name="line893"></a>          endMarker);
+<a name="line894"></a>
+<a name="line895"></a>  this.isValid_ = true;
+<a name="line896"></a>};
+<a name="line897"></a>
 <a name="line898"></a>
-<a name="line899"></a>
-<a name="line900"></a>/**
-<a name="line901"></a> * @return {boolean} Whether this object is valid.
-<a name="line902"></a> */
-<a name="line903"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.isValid = function() {
-<a name="line904"></a>  return this.isValid_;
-<a name="line905"></a>};
+<a name="line899"></a>/**
+<a name="line900"></a> * @return {boolean} Whether this object is valid.
+<a name="line901"></a> */
+<a name="line902"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.isValid = function() {
+<a name="line903"></a>  return this.isValid_;
+<a name="line904"></a>};
+<a name="line905"></a>
 <a name="line906"></a>
-<a name="line907"></a>
-<a name="line908"></a>/**
-<a name="line909"></a> * @return {string} A string representation of this object.
-<a name="line910"></a> */
-<a name="line911"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.toString = function() {
-<a name="line912"></a>  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-<a name="line913"></a>    return &#39;W3C:&#39; + this.startOffset_.toString() + &#39;\n&#39; +
-<a name="line914"></a>        this.startChildOffset_ + &#39;:&#39; + this.endOffset_.toString() + &#39;\n&#39; +
-<a name="line915"></a>        this.endChildOffset_;
-<a name="line916"></a>  }
-<a name="line917"></a>  return &#39;IE:&#39; + this.startOffset_ + &#39;,&#39; + this.endOffset_;
-<a name="line918"></a>};
+<a name="line907"></a>/**
+<a name="line908"></a> * @return {string} A string representation of this object.
+<a name="line909"></a> */
+<a name="line910"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.toString = function() {
+<a name="line911"></a>  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
+<a name="line912"></a>    return &#39;W3C:&#39; + this.startOffset_.toString() + &#39;\n&#39; +
+<a name="line913"></a>        this.startChildOffset_ + &#39;:&#39; + this.endOffset_.toString() + &#39;\n&#39; +
+<a name="line914"></a>        this.endChildOffset_;
+<a name="line915"></a>  }
+<a name="line916"></a>  return &#39;IE:&#39; + this.startOffset_ + &#39;,&#39; + this.endOffset_;
+<a name="line917"></a>};
+<a name="line918"></a>
 <a name="line919"></a>
-<a name="line920"></a>
-<a name="line921"></a>/**
-<a name="line922"></a> * Makes the browser&#39;s selection match the cursor position.
-<a name="line923"></a> */
-<a name="line924"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.select = function() {
-<a name="line925"></a>  var range = this.getRange_(this.field_.getElement());
-<a name="line926"></a>  if (range) {
-<a name="line927"></a>    if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
-<a name="line928"></a>      this.field_.getElement().focus();
-<a name="line929"></a>    }
-<a name="line930"></a>    goog.dom.Range.createFromBrowserRange(range).select();
-<a name="line931"></a>  }
-<a name="line932"></a>};
+<a name="line920"></a>/**
+<a name="line921"></a> * Makes the browser&#39;s selection match the cursor position.
+<a name="line922"></a> */
+<a name="line923"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.select = function() {
+<a name="line924"></a>  var range = this.getRange_(this.field_.getElement());
+<a name="line925"></a>  if (range) {
+<a name="line926"></a>    if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
+<a name="line927"></a>      this.field_.getElement().focus();
+<a name="line928"></a>    }
+<a name="line929"></a>    goog.dom.Range.createFromBrowserRange(range).select();
+<a name="line930"></a>  }
+<a name="line931"></a>};
+<a name="line932"></a>
 <a name="line933"></a>
-<a name="line934"></a>
-<a name="line935"></a>/**
-<a name="line936"></a> * Get the range that encompases the the cursor position relative to a given
-<a name="line937"></a> * base node.
-<a name="line938"></a> * @param {Element} baseNode The node to get the cursor position relative to.
-<a name="line939"></a> * @return {Range|TextRange|null} The browser range for this position.
-<a name="line940"></a> * @private
-<a name="line941"></a> */
-<a name="line942"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.getRange_ =
-<a name="line943"></a>    function(baseNode) {
-<a name="line944"></a>  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-<a name="line945"></a>    var startNode = this.startOffset_.findTargetNode(baseNode);
-<a name="line946"></a>    var endNode = this.endOffset_.findTargetNode(baseNode);
-<a name="line947"></a>    if (!startNode || !endNode) {
-<a name="line948"></a>      return null;
-<a name="line949"></a>    }
-<a name="line950"></a>
-<a name="line951"></a>    // Create range.
-<a name="line952"></a>    return /** @type {Range} */ (
-<a name="line953"></a>        goog.dom.Range.createFromNodes(startNode, this.startChildOffset_,
-<a name="line954"></a>            endNode, this.endChildOffset_).getBrowserRangeObject());
-<a name="line955"></a>  }
-<a name="line956"></a>
-<a name="line957"></a>  // Create a collapsed selection at the start of the contentEditable region,
-<a name="line958"></a>  // which the offsets were calculated relative to before.  Note that we force
-<a name="line959"></a>  // a text range here so we can use moveToElementText.
-<a name="line960"></a>  var sel = baseNode.ownerDocument.body.createTextRange()
-<a name="line961"></a>  sel.moveToElementText(baseNode);
-<a name="line962"></a>  sel.collapse(true);
-<a name="line963"></a>  sel.moveEnd(&#39;character&#39;, this.endOffset_);
-<a name="line964"></a>  sel.moveStart(&#39;character&#39;, this.startOffset_);
-<a name="line965"></a>  return sel;
-<a name="line966"></a>};
+<a name="line934"></a>/**
+<a name="line935"></a> * Get the range that encompases the the cursor position relative to a given
+<a name="line936"></a> * base node.
+<a name="line937"></a> * @param {Element} baseNode The node to get the cursor position relative to.
+<a name="line938"></a> * @return {Range|TextRange|null} The browser range for this position.
+<a name="line939"></a> * @private
+<a name="line940"></a> */
+<a name="line941"></a>goog.editor.plugins.UndoRedo.CursorPosition_.prototype.getRange_ =
+<a name="line942"></a>    function(baseNode) {
+<a name="line943"></a>  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
+<a name="line944"></a>    var startNode = this.startOffset_.findTargetNode(baseNode);
+<a name="line945"></a>    var endNode = this.endOffset_.findTargetNode(baseNode);
+<a name="line946"></a>    if (!startNode || !endNode) {
+<a name="line947"></a>      return null;
+<a name="line948"></a>    }
+<a name="line949"></a>
+<a name="line950"></a>    // Create range.
+<a name="line951"></a>    return /** @type {Range} */ (
+<a name="line952"></a>        goog.dom.Range.createFromNodes(startNode, this.startChildOffset_,
+<a name="line953"></a>            endNode, this.endChildOffset_).getBrowserRangeObject());
+<a name="line954"></a>  }
+<a name="line955"></a>
+<a name="line956"></a>  // Create a collapsed selection at the start of the contentEditable region,
+<a name="line957"></a>  // which the offsets were calculated relative to before.  Note that we force
+<a name="line958"></a>  // a text range here so we can use moveToElementText.
+<a name="line959"></a>  var sel = baseNode.ownerDocument.body.createTextRange()
+<a name="line960"></a>  sel.moveToElementText(baseNode);
+<a name="line961"></a>  sel.collapse(true);
+<a name="line962"></a>  sel.moveEnd(&#39;character&#39;, this.endOffset_);
+<a name="line963"></a>  sel.moveStart(&#39;character&#39;, this.startOffset_);
+<a name="line964"></a>  return sel;
+<a name="line965"></a>};
+<a name="line966"></a>
 <a name="line967"></a>
-<a name="line968"></a>
-<a name="line969"></a>/**
-<a name="line970"></a> * Compute the number of characters to the end of the range in IE.
-<a name="line971"></a> * @param {TextRange} range The range to compute an offset for.
-<a name="line972"></a> * @return {number} The number of characters to the end of the range.
-<a name="line973"></a> * @private
-<a name="line974"></a> */
-<a name="line975"></a>goog.editor.plugins.UndoRedo.CursorPosition_.computeEndOffsetIE_ =
-<a name="line976"></a>    function(range) {
-<a name="line977"></a>  var testRange = range.duplicate();
-<a name="line978"></a>
-<a name="line979"></a>  // The number of offset characters is a little off depending on
-<a name="line980"></a>  // what type of block elements happen to be between the start of the
-<a name="line981"></a>  // textedit and the cursor position.  We fudge the offset until the
-<a name="line982"></a>  // two ranges match.
-<a name="line983"></a>  var text = range.text;
-<a name="line984"></a>  var guess = text.length;
-<a name="line985"></a>
-<a name="line986"></a>  testRange.collapse(true);
-<a name="line987"></a>  testRange.moveEnd(&#39;character&#39;, guess);
-<a name="line988"></a>
-<a name="line989"></a>  // Adjust the range until the end points match.  This doesn&#39;t quite
-<a name="line990"></a>  // work if we&#39;re at the end of the field so we give up after a few
-<a name="line991"></a>  // iterations.
-<a name="line992"></a>  var diff;
-<a name="line993"></a>  var numTries = 10;
-<a name="line994"></a>  while (diff = testRange.compareEndPoints(&#39;EndToEnd&#39;, range)) {
-<a name="line995"></a>    guess -= diff;
-<a name="line996"></a>    testRange.moveEnd(&#39;character&#39;, -diff);
-<a name="line997"></a>    --numTries;
-<a name="line998"></a>    if (0 == numTries) {
-<a name="line999"></a>      break;
-<a name="line1000"></a>    }
-<a name="line1001"></a>  }
-<a name="line1002"></a>  // When we set innerHTML, blank lines become a single space, causing
-<a name="line1003"></a>  // the cursor position to be off by one.  So we accommodate for blank
-<a name="line1004"></a>  // lines.
-<a name="line1005"></a>  var offset = 0;
-<a name="line1006"></a>  var pos = text.indexOf(&#39;\n\r&#39;);
-<a name="line1007"></a>  while (pos != -1) {
-<a name="line1008"></a>    ++offset;
-<a name="line1009"></a>    pos = text.indexOf(&#39;\n\r&#39;, pos + 1);
-<a name="line1010"></a>  }
-<a name="line1011"></a>  return guess + offset;
-<a name="line1012"></a>};
+<a name="line968"></a>/**
+<a name="line969"></a> * Compute the number of characters to the end of the range in IE.
+<a name="line970"></a> * @param {TextRange} range The range to compute an offset for.
+<a name="line971"></a> * @return {number} The number of characters to the end of the range.
+<a name="line972"></a> * @private
+<a name="line973"></a> */
+<a name="line974"></a>goog.editor.plugins.UndoRedo.CursorPosition_.computeEndOffsetIE_ =
+<a name="line975"></a>    function(range) {
+<a name="line976"></a>  var testRange = range.duplicate();
+<a name="line977"></a>
+<a name="line978"></a>  // The number of offset characters is a little off depending on
+<a name="line979"></a>  // what type of block elements happen to be between the start of the
+<a name="line980"></a>  // textedit and the cursor position.  We fudge the offset until the
+<a name="line981"></a>  // two ranges match.
+<a name="line982"></a>  var text = range.text;
+<a name="line983"></a>  var guess = text.length;
+<a name="line984"></a>
+<a name="line985"></a>  testRange.collapse(true);
+<a name="line986"></a>  testRange.moveEnd(&#39;character&#39;, guess);
+<a name="line987"></a>
+<a name="line988"></a>  // Adjust the range until the end points match.  This doesn&#39;t quite
+<a name="line989"></a>  // work if we&#39;re at the end of the field so we give up after a few
+<a name="line990"></a>  // iterations.
+<a name="line991"></a>  var diff;
+<a name="line992"></a>  var numTries = 10;
+<a name="line993"></a>  while (diff = testRange.compareEndPoints(&#39;EndToEnd&#39;, range)) {
+<a name="line994"></a>    guess -= diff;
+<a name="line995"></a>    testRange.moveEnd(&#39;character&#39;, -diff);
+<a name="line996"></a>    --numTries;
+<a name="line997"></a>    if (0 == numTries) {
+<a name="line998"></a>      break;
+<a name="line999"></a>    }
+<a name="line1000"></a>  }
+<a name="line1001"></a>  // When we set innerHTML, blank lines become a single space, causing
+<a name="line1002"></a>  // the cursor position to be off by one.  So we accommodate for blank
+<a name="line1003"></a>  // lines.
+<a name="line1004"></a>  var offset = 0;
+<a name="line1005"></a>  var pos = text.indexOf(&#39;\n\r&#39;);
+<a name="line1006"></a>  while (pos != -1) {
+<a name="line1007"></a>    ++offset;
+<a name="line1008"></a>    pos = text.indexOf(&#39;\n\r&#39;, pos + 1);
+<a name="line1009"></a>  }
+<a name="line1010"></a>  return guess + offset;
+<a name="line1011"></a>};
 </pre>
 
 

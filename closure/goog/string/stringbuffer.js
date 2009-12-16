@@ -25,9 +25,9 @@ goog.require('goog.userAgent.jscript');
  * using Array.join() rather than the '+' operator.  For other browsers
  * we simply use the '+' operator.
  *
- * @param {Object|number|string|boolean} opt_a1 Optional first initial item
+ * @param {Object|number|string|boolean=} opt_a1 Optional first initial item
  *     to append.
- * @param {Object|number|string|boolean} var_args Other initial items to
+ * @param {...Object|number|string|boolean} var_args Other initial items to
  *     append, e.g., new goog.string.StringBuffer('foo', 'bar').
  * @constructor
  */
@@ -72,16 +72,13 @@ if (goog.userAgent.jscript.HAS_JSCRIPT) {
    * Calling this with null, undefined, or empty arguments is an error.
    *
    * @param {Object|number|string|boolean} a1 Required first string.
-   * @param {Object|number|string|boolean} opt_a2 Optional second string.
-   * @param {Object|number|string|boolean} var_args Other items to append,
+   * @param {Object|number|string|boolean=} opt_a2 Optional second string.
+   * @param {...Object|number|string|boolean} var_args Other items to append,
    *     e.g., sb.append('foo', 'bar', 'baz').
    * @return {goog.string.StringBuffer} This same StringBuffer object.
    */
   goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
     // IE version.
-    if (!COMPILED && !goog.isDef(a1)) {
-      throw Error('Cannot call StringBuffer.append with zero arguments.');
-    }
 
     if (opt_a2 == null) { // second argument is undefined (null == undefined)
       // Array assignment is 2x faster than Array push.  Also, use a1
@@ -101,17 +98,14 @@ if (goog.userAgent.jscript.HAS_JSCRIPT) {
    * Calling this with null, undefined, or empty arguments is an error.
    *
    * @param {Object|number|string|boolean} a1 Required first string.
-   * @param {Object|number|string|boolean} opt_a2 Optional second string.
-   * @param {Object|number|string|boolean} var_args Other items to append,
+   * @param {Object|number|string|boolean=} opt_a2 Optional second string.
+   * @param {...Object|number|string|boolean} var_args Other items to append,
    *     e.g., sb.append('foo', 'bar', 'baz').
    * @return {goog.string.StringBuffer} This same StringBuffer object.
    * @suppress {duplicate}
    */
   goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
     // W3 version.
-    if (!COMPILED && !goog.isDef(a1)) {
-      throw Error('Cannot call StringBuffer.append with zero arguments.');
-    }
 
     // Use a1 directly to avoid arguments instantiation for single-arg case.
     this.buffer_ += a1;

@@ -40,9 +40,9 @@ goog.require('goog.testing.asserts');
  * A simple interface for executing argument matching.  A match in this case is
  * testing to see if a supplied object fits a given criteria.  True is returned
  * if the given criteria is met.
- * @param {Function} opt_matchFn A function that evaluates a given argument
+ * @param {Function=} opt_matchFn A function that evaluates a given argument
  *     and returns true if it meets a given criteria.
- * @param {?string} opt_matchName The name expressing intent as part of
+ * @param {?string=} opt_matchName The name expressing intent as part of
  *      an error message for when a match fails.
  * @constructor
  */
@@ -70,7 +70,7 @@ goog.testing.mockmatchers.ArgumentMatcher =
  * which (if provided) will get error information and returns whether or
  * not it matches.
  * @param {*} toVerify The argument that should be verified.
- * @param {goog.testing.MockExpectation?} opt_expectation The expectation
+ * @param {goog.testing.MockExpectation?=} opt_expectation The expectation
  *     for this match.
  * @return {boolean} Whether or not a given argument passes verification.
  */
@@ -206,10 +206,10 @@ goog.testing.mockmatchers.ObjectEquals.prototype.matches =
  * can perform extra tests with this argument later.  For example, if the
  * argument is a callback method, the unit test can then later call this
  * callback to test the asynchronous portion of the call.
- * @param {goog.testing.mockmatchers.ArgumentMatcher|Function} opt_matcher
+ * @param {goog.testing.mockmatchers.ArgumentMatcher|Function=} opt_matcher
  *     Argument matcher or matching function that will be used to validate the
  *     argument.  By default, argument will always be valid.
- * @param {?string} opt_matchName The name expressing intent as part of
+ * @param {?string=} opt_matchName The name expressing intent as part of
  *      an error message for when a match fails.
  * @constructor
  * @extends {goog.testing.mockmatchers.ArgumentMatcher}
@@ -350,7 +350,7 @@ goog.testing.mockmatchers.isNodeLike =
  * @param {Array} expectedArr An array of expectations which can be either
  *     values to check for equality or ArgumentMatchers.
  * @param {Array} arr The array to match.
- * @param {goog.testing.MockExpectation?} opt_expectation The expectation
+ * @param {goog.testing.MockExpectation?=} opt_expectation The expectation
  *     for this match.
  * @return {boolean} Whether or not the given array matches the expectations.
  */

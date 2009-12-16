@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -115,7 +116,7 @@
 <a name="line72"></a>/**
 <a name="line73"></a> * Returns the {@code Iterator} object itself.  This is used to implement
 <a name="line74"></a> * the iterator protocol in JavaScript 1.7
-<a name="line75"></a> * @param {boolean} opt_keys  Whether to return the keys or values. Default is
+<a name="line75"></a> * @param {boolean=} opt_keys  Whether to return the keys or values. Default is
 <a name="line76"></a> *     to only return the values.  This is being used by the for-in loop (true)
 <a name="line77"></a> *     and the for-each-in loop (false).  Even though the param gives a hint
 <a name="line78"></a> *     about what the iterator will return there is no guarantee that it will
@@ -181,7 +182,7 @@
 <a name="line138"></a> *     return value is irrelevant.  The reason for passing undefined as the
 <a name="line139"></a> *     second argument is so that the same function can be used in
 <a name="line140"></a> *     {@see goog.array#forEach} as well as others.
-<a name="line141"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39; within
+<a name="line141"></a> * @param {Object=} opt_obj  The object to be used as the value of &#39;this&#39; within
 <a name="line142"></a> *     {@code f}.
 <a name="line143"></a> */
 <a name="line144"></a>goog.iter.forEach = function(iterable, f, opt_obj) {
@@ -221,7 +222,7 @@
 <a name="line178"></a> *     return a boolean.  If the return value is true the element will be
 <a name="line179"></a> *     included  in the returned iteror.  If it is false the element is not
 <a name="line180"></a> *     included.
-<a name="line181"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39; within
+<a name="line181"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39; within
 <a name="line182"></a> *     {@code f}.
 <a name="line183"></a> * @return {!goog.iter.Iterator} A new iterator in which only elements that
 <a name="line184"></a> *     passed the test are present.
@@ -252,9 +253,9 @@
 <a name="line209"></a> * @param {number} startOrStop  The stop value if only one argument is provided.
 <a name="line210"></a> *     The start value if 2 or more arguments are provided.  If only one
 <a name="line211"></a> *     argument is used the start value is 0.
-<a name="line212"></a> * @param {number} opt_stop  The stop value.  If left out then the first
+<a name="line212"></a> * @param {number=} opt_stop  The stop value.  If left out then the first
 <a name="line213"></a> *     argument is used as the stop value.
-<a name="line214"></a> * @param {number} opt_step  The number to increment with between each call to
+<a name="line214"></a> * @param {number=} opt_step  The number to increment with between each call to
 <a name="line215"></a> *     next.  This can be negative.
 <a name="line216"></a> * @return {!goog.iter.Iterator} A new iterator that returns the values in the
 <a name="line217"></a> *     range.
@@ -303,7 +304,7 @@
 <a name="line260"></a> * @param {Function} f The function to call for every element.  This function
 <a name="line261"></a> *     takes 3 arguments (the element, undefined, and the iterator) and should
 <a name="line262"></a> *     return a new value.
-<a name="line263"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39; within
+<a name="line263"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39; within
 <a name="line264"></a> *     {@code f}.
 <a name="line265"></a> * @return {!goog.iter.Iterator} A new iterator that returns the results of
 <a name="line266"></a> *     applying the function to each element in the original iterator.
@@ -331,7 +332,7 @@
 <a name="line288"></a> *     and the value of the current element).
 <a name="line289"></a> *     function(previousValue, currentElement) : newValue.
 <a name="line290"></a> * @param {*} val The initial value to pass into the function on the first call.
-<a name="line291"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line291"></a> * @param {Object=} opt_obj  The object to be used as the value of &#39;this&#39;
 <a name="line292"></a> *     within f.
 <a name="line293"></a> * @return {*} Result of evaluating f repeatedly across the values of
 <a name="line294"></a> *     the iterator.
@@ -354,7 +355,7 @@
 <a name="line311"></a> * @param {Function} f  The function to call for every value. This function
 <a name="line312"></a> *     takes 3 arguments (the value, undefined, and the iterator) and should
 <a name="line313"></a> *     return a boolean.
-<a name="line314"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39; within
+<a name="line314"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39; within
 <a name="line315"></a> *     {@code f}.
 <a name="line316"></a> * @return {boolean} true if any value passes the test.
 <a name="line317"></a> */
@@ -385,7 +386,7 @@
 <a name="line342"></a> * @param {Function} f  The function to call for every value. This function
 <a name="line343"></a> *     takes 3 arguments (the value, undefined, and the iterator) and should
 <a name="line344"></a> *     return a boolean.
-<a name="line345"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39; within
+<a name="line345"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39; within
 <a name="line346"></a> *     {@code f}.
 <a name="line347"></a> * @return {boolean} true if every value passes the test.
 <a name="line348"></a> */
@@ -410,7 +411,7 @@
 <a name="line367"></a>/**
 <a name="line368"></a> * Takes zero or more iterators and returns one iterator that will iterate over
 <a name="line369"></a> * them in the order chained.
-<a name="line370"></a> * @param {goog.iter.Iterator} var_args  Any number of iterator objects.
+<a name="line370"></a> * @param {...goog.iter.Iterator} var_args  Any number of iterator objects.
 <a name="line371"></a> * @return {!goog.iter.Iterator} Returns a new iterator that will iterate over
 <a name="line372"></a> *     all the given iterators&#39; contents.
 <a name="line373"></a> */
@@ -448,7 +449,7 @@
 <a name="line405"></a> * @param {Function} f  The function to call for every value. This function
 <a name="line406"></a> *     takes 3 arguments (the value, undefined, and the iterator) and should
 <a name="line407"></a> *     return a boolean.
-<a name="line408"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39; within
+<a name="line408"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39; within
 <a name="line409"></a> *     {@code f}.
 <a name="line410"></a> * @return {!goog.iter.Iterator} A new iterator that drops elements from the
 <a name="line411"></a> *     original iterator as long as {@code f} is true.
@@ -479,7 +480,7 @@
 <a name="line436"></a> * @param {Function} f  The function to call for every value. This function
 <a name="line437"></a> *     takes 3 arguments (the value, undefined, and the iterator) and should
 <a name="line438"></a> *     return a boolean.
-<a name="line439"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object in f when called.
+<a name="line439"></a> * @param {Object=} opt_obj This is used as the &#39;this&#39; object in f when called.
 <a name="line440"></a> * @return {!goog.iter.Iterator} A new iterator that keeps elements in the
 <a name="line441"></a> *     original iterator as long as the function is true.
 <a name="line442"></a> */

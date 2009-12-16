@@ -36,7 +36,7 @@ goog.inherits(goog.ui.MockActivityMonitor, goog.ui.ActivityMonitor);
 
 /**
  * Simulates an event that updates the user to being non-idle.
- * @param {goog.events.EventType} opt_type The type of event that made the user
+ * @param {goog.events.EventType=} opt_type The type of event that made the user
  *     not idle. If not specified, defaults to MOUSEMOVE.
  */
 goog.ui.MockActivityMonitor.prototype.simulateEvent = function(opt_type) {

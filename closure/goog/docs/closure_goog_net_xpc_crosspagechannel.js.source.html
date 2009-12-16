@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -298,11 +299,11 @@
 <a name="line255"></a> * separately.
 <a name="line256"></a> *
 <a name="line257"></a> * @param {!Element} parentElm The container element the iframe is appended to.
-<a name="line258"></a> * @param {Function} opt_configureIframeCb If present, this function gets
+<a name="line258"></a> * @param {Function=} opt_configureIframeCb If present, this function gets
 <a name="line259"></a> *     called with the iframe element as parameter to allow setting properties
 <a name="line260"></a> *     on it before it gets added to the DOM. If absent, the iframe&#39;s width and
 <a name="line261"></a> *     height are set to &#39;100%&#39;.
-<a name="line262"></a> * @param {boolean} opt_addCfgParam Whether to add the peer configuration as
+<a name="line262"></a> * @param {boolean=} opt_addCfgParam Whether to add the peer configuration as
 <a name="line263"></a> *     URL parameter (default: true).
 <a name="line264"></a> * @return {!HTMLIFrameElement} The iframe element.
 <a name="line265"></a> */
@@ -386,7 +387,7 @@
 <a name="line343"></a> * Initiates connecting the channel. When this method is called, all the
 <a name="line344"></a> * information needed to connect the channel has to be available.
 <a name="line345"></a> *
-<a name="line346"></a> * @param {Function} opt_connectCb The function to be called when the
+<a name="line346"></a> * @param {Function=} opt_connectCb The function to be called when the
 <a name="line347"></a> * channel has been connected and is ready to be used.
 <a name="line348"></a> */
 <a name="line349"></a>goog.net.xpc.CrossPageChannel.prototype.connect = function(opt_connectCb) {
@@ -472,7 +473,7 @@
 <a name="line429"></a> * @param {string} serviceName The name of the service.
 <a name="line430"></a> * @param {Function} callback The callback responsible to process incoming
 <a name="line431"></a> *     messages.
-<a name="line432"></a> * @param {boolean} opt_jsonEncoded If true, incoming messages for this
+<a name="line432"></a> * @param {boolean=} opt_jsonEncoded If true, incoming messages for this
 <a name="line433"></a> *     service are expected to contain a JSON-encoded object and will be
 <a name="line434"></a> *     deserialized automatically.
 <a name="line435"></a> */

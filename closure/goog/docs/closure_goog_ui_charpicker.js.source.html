@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -88,13 +89,13 @@
 <a name="line45"></a> *
 <a name="line46"></a> * See charpicker.html demo for example usage.
 <a name="line47"></a> * @param {goog.i18n.CharPickerData} charPickerData Category names and charlist.
-<a name="line48"></a> * @param {Array.&lt;string&gt;} opt_recents List of characters to be displayed in
+<a name="line48"></a> * @param {Array.&lt;string&gt;=} opt_recents List of characters to be displayed in
 <a name="line49"></a> *     resently selected characters area.
-<a name="line50"></a> * @param {number} opt_initCategory Sequence number of initial category.
-<a name="line51"></a> * @param {number} opt_initSubcategory Sequence number of initial subcategory.
-<a name="line52"></a> * @param {number} opt_rowCount Number of rows in the grid.
-<a name="line53"></a> * @param {number} opt_columnCount Number of columns in the grid.
-<a name="line54"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line50"></a> * @param {number=} opt_initCategory Sequence number of initial category.
+<a name="line51"></a> * @param {number=} opt_initSubcategory Sequence number of initial subcategory.
+<a name="line52"></a> * @param {number=} opt_rowCount Number of rows in the grid.
+<a name="line53"></a> * @param {number=} opt_columnCount Number of columns in the grid.
+<a name="line54"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line55"></a> * @constructor
 <a name="line56"></a> * @extends {goog.ui.Component}
 <a name="line57"></a> */
@@ -577,7 +578,7 @@
 <a name="line534"></a>
 <a name="line535"></a>/**
 <a name="line536"></a> * On OK click accepts the character and updates the recent char list.
-<a name="line537"></a> * @param {goog.events.Event} opt_event Event for click on OK button.
+<a name="line537"></a> * @param {goog.events.Event=} opt_event Event for click on OK button.
 <a name="line538"></a> * @return {boolean} Indicates whether to propagate event.
 <a name="line539"></a> * @private
 <a name="line540"></a> */
@@ -635,7 +636,7 @@
 <a name="line592"></a>/**
 <a name="line593"></a> * Sets the category and updates the submenu items and grid accordingly.
 <a name="line594"></a> * @param {number} category Category index used to index the data tables.
-<a name="line595"></a> * @param {number} opt_subcategory Subcategory index used with category index.
+<a name="line595"></a> * @param {number=} opt_subcategory Subcategory index used with category index.
 <a name="line596"></a> * @private
 <a name="line597"></a> */
 <a name="line598"></a>goog.ui.CharPicker.prototype.setSelectedCategory_ = function(category,

@@ -28,11 +28,11 @@ goog.require('goog.ui.AutoComplete.InputHandler');
 /**
  * Class for managing the interaction between an autocomplete object and a
  * text-input or textarea.
- * @param {?string} opt_separators Seperators to split multiple entries.
- * @param {?string} opt_literals Characters used to delimit text literals.
- * @param {?boolean} opt_multi Whether to allow multiple entries
+ * @param {?string=} opt_separators Seperators to split multiple entries.
+ * @param {?string=} opt_literals Characters used to delimit text literals.
+ * @param {?boolean=} opt_multi Whether to allow multiple entries
  *     (Default: true).
- * @param {?number} opt_throttleTime Number of milliseconds to throttle
+ * @param {?number=} opt_throttleTime Number of milliseconds to throttle
  *     keyevents with (Default: 150).
  * @constructor
  * @extends {goog.ui.AutoComplete.InputHandler}

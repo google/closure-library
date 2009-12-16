@@ -45,11 +45,11 @@ goog.require('goog.string');
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
  * @param {string|number} height The (non-zero) height in pixels.  Strings
  *     expressing percentages of parent with (e.g. '80%') are also accepted.
- * @param {?number} opt_coordWidth The coordinate width - if
+ * @param {?number=} opt_coordWidth The coordinate width - if
  *     omitted or null, defaults to same as width.
- * @param {?number} opt_coordHeight The coordinate height - if
+ * @param {?number=} opt_coordHeight The coordinate height - if
  *     omitted or null, defaults to same as height.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @constructor
  * @extends {goog.graphics.AbstractGraphics}
@@ -209,8 +209,35 @@ goog.graphics.VmlGraphics.prototype.handler_;
  * @return {Element} The created element.
  */
 goog.graphics.VmlGraphics.prototype.createVmlElement = function(tagName) {
-  return this.dom_.createElement(goog.graphics.VmlGraphics.VML_PREFIX_ + ':' +
-                                 tagName);
+  var element =
+      this.dom_.createElement(goog.graphics.VmlGraphics.VML_PREFIX_ + ':' +
+                              tagName);
+  element.id = goog.string.createUniqueString();
+  return element;
+};
+
+
+/**
+ * Returns the VML element with the given id that is a child of this graphics
+ * object.
+ * Should be considered package private, and not used externally.
+ * @param {string} id The element id to find.
+ * @return {Element} The element with the given id, or null if none is found.
+ */
+goog.graphics.VmlGraphics.prototype.getVmlElement = function(id) {
+  return this.dom_.getElement(id);
+};
+
+
+/**
+ * Resets the graphics so they will display properly on IE8.  Noop in older
+ * versions.
+ * @private
+ */
+goog.graphics.VmlGraphics.prototype.updateGraphics_ = function() {
+  if (goog.graphics.VmlGraphics.IE8_MODE_ && this.isInDocument()) {
+    this.getElement().innerHTML = this.getElement().innerHTML;
+  }
 };
 
 
@@ -218,13 +245,14 @@ goog.graphics.VmlGraphics.prototype.createVmlElement = function(tagName) {
  * Appends an element.
  *
  * @param {goog.graphics.Element} element The element wrapper.
- * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+ * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  * @private
  */
 goog.graphics.VmlGraphics.prototype.append_ = function(element, opt_group) {
   var parent = opt_group || this.canvasElement;
   parent.getElement().appendChild(element.getElement());
+  this.updateGraphics_();
 };
 
 
@@ -269,6 +297,7 @@ goog.graphics.VmlGraphics.prototype.setElementFill = function(element, fill) {
   } else {
     vmlElement.filled = false;
   }
+  this.updateGraphics_();
 };
 
 
@@ -307,6 +336,7 @@ goog.graphics.VmlGraphics.prototype.setElementStroke = function(element,
   } else {
     vmlElement.stroked = false;
   }
+  this.updateGraphics_();
 };
 
 
@@ -586,7 +616,7 @@ goog.graphics.VmlGraphics.prototype.clear = function() {
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+ * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.EllipseElement} The newly created element.
@@ -613,7 +643,7 @@ goog.graphics.VmlGraphics.prototype.drawEllipse = function(cx, cy, rx, ry,
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+ * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.RectElement} The newly created element.
@@ -636,7 +666,7 @@ goog.graphics.VmlGraphics.prototype.drawRect = function(x, y, width, height,
  * @param {number} width Width of image.
  * @param {number} height Height of image.
  * @param {string} src Source of the image.
- * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+ * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.ImageElement} The newly created element.
@@ -664,7 +694,7 @@ goog.graphics.VmlGraphics.prototype.drawImage = function(x, y, width, height,
  * @param {goog.graphics.Font} font Font describing the font properties.
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+ * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.TextElement} The newly created element.
@@ -711,7 +741,7 @@ goog.graphics.VmlGraphics.prototype.drawTextOnLine = function(
  * @param {goog.graphics.Path} path The path object to draw.
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+ * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.PathElement} The newly created element.
@@ -780,7 +810,7 @@ goog.graphics.VmlGraphics.getVmlPath = function(path) {
 /**
  * Create an empty group of drawing elements.
  *
- * @param {goog.graphics.VmlGroupElement} opt_group The group wrapper element
+ * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.GroupElement} The newly created group.
@@ -816,6 +846,7 @@ goog.graphics.VmlGraphics.prototype.getTextWidth = function(text, font) {
 goog.graphics.VmlGraphics.prototype.enterDocument = function() {
   goog.graphics.VmlGraphics.superClass_.enterDocument.call(this);
   this.handleContainerResize_();
+  this.updateGraphics_();
 };
 
 

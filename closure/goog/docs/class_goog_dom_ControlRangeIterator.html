@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -77,7 +89,7 @@ adds functions to determine the portion of each text node that is selected.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_dom_TagIterator.html">goog.dom.TagIterator</a></span></td><td><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_dom_RangeIterator.html">goog.dom.RangeIterator</a></span></td><td><span class="type"><a href="class_goog_dom_TagIterator.html">goog.dom.TagIterator</a></span></td></tr>
@@ -85,7 +97,7 @@ adds functions to determine the portion of each text node that is selected.
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -1237,7 +1249,7 @@ Only overwrites the tree depth when the parameter is specified.
    <tr class="odd">
      <td>
         <span class="entryName">opt_tagType</span>
-        : <div class="fullType"><span>?</span><span class="type">goog.dom.TagWalkType</span></div>
+        : <div class="fullType"><span class="type">goog.dom.TagWalkType?=</span></div>
         <div class="entryOverview">The type of the position Defaults to the start of the given node.</div>
      </td>
    </tr>
@@ -1245,7 +1257,7 @@ Only overwrites the tree depth when the parameter is specified.
    <tr class="even">
      <td>
         <span class="entryName">opt_depth</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The tree depth.</div>
      </td>
    </tr>
@@ -1340,7 +1352,7 @@ it visits the first of the nodes next.
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">...Object</span></div>
         <div class="entryOverview">A list of nodes to replace the current node with. If the first argument is array-like, it will be used, otherwise all the arguments are assumed to be nodes.</div>
      </td>
    </tr>
@@ -1425,7 +1437,7 @@ the iterator protocol in JavaScript 1.7
    <tr class="even">
      <td>
         <span class="entryName">opt_keys</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to return the keys or values. Default is to only return the values.  This is being used by the for-in loop (true) and the for-each-in loop (false).  Even though the param gives a hint about what the iterator will return there is no guarantee that it will return the keys when true is passed.</div>
      </td>
    </tr>

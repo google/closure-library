@@ -308,7 +308,7 @@ goog.gears.Database.resultSetToArray = function(rs) {
  * Execute a sql statement with a set of arguments
  *
  * @param {string} sql The sql statement to execute.
- * @param {*} var_args The arguments to execute, either as a single
+ * @param {...*} var_args The arguments to execute, either as a single
  * array argument or as var_args.
  * @return {GearsResultSet} The results.
  */
@@ -405,7 +405,7 @@ goog.gears.Database.prototype.queryObject_ = function(sql,
  * containing the result.
  *
  * @param {string} sql The SQL statement.
- * @param {Object} var_args Query params. An array or multiple arguments.
+ * @param {...Object} var_args Query params. An array or multiple arguments.
  * @return {Array} An array of arrays containing the results of the query.
  */
 goog.gears.Database.prototype.queryArrays = function(sql, var_args) {
@@ -420,7 +420,7 @@ goog.gears.Database.prototype.queryArrays = function(sql, var_args) {
  * This calls query on the database and builds an array containing hashes
  *
  * @param {string} sql Ths SQL statement.
- * @param {Object} var_args query params. An array or multiple arguments.
+ * @param {...Object} var_args query params. An array or multiple arguments.
  * @return {Array} An array of hashes containing the results of the query.
  */
 goog.gears.Database.prototype.queryObjectArray = function(sql, var_args) {
@@ -437,7 +437,7 @@ goog.gears.Database.prototype.queryObjectArray = function(sql, var_args) {
  * column.
  *
  * @param {string} sql SQL statement.
- * @param {Object} var_args query params. An array or multiple arguments.
+ * @param {...Object} var_args query params. An array or multiple arguments.
  * @return {Array} The values in the first column.
  */
 goog.gears.Database.prototype.queryValueArray = function(sql, var_args) {
@@ -453,7 +453,7 @@ goog.gears.Database.prototype.queryValueArray = function(sql, var_args) {
  * row.
  *
  * @param {string} sql SQL statement.
- * @param {Object} var_args query params. An array or multiple arguments.
+ * @param {...Object} var_args query params. An array or multiple arguments.
  * @return {(number,string,null)} The first value in
  *     the first row.
  */
@@ -470,7 +470,7 @@ goog.gears.Database.prototype.queryValue = function(sql, var_args) {
  * where the keys are the column names.
  *
  * @param {string} sql SQL statement.
- * @param {*} var_args query params. An array or multiple arguments.
+ * @param {...*} var_args query params. An array or multiple arguments.
  * @return {Object} The first row as a hash map.
  */
 goog.gears.Database.prototype.queryObject = function(sql, var_args) {
@@ -485,7 +485,7 @@ goog.gears.Database.prototype.queryObject = function(sql, var_args) {
  * This calls query on the database and returns the first row as an array
  *
  * @param {string} sql SQL statement.
- * @param {Object} var_args query params. An array or multiple arguments.
+ * @param {...Object} var_args query params. An array or multiple arguments.
  * @return {Array} The first row as an array.
  */
 goog.gears.Database.prototype.queryArray = function(sql, var_args) {
@@ -503,9 +503,9 @@ goog.gears.Database.prototype.queryArray = function(sql, var_args) {
  *
  * @param {string} sql The SQL statement to execute.
  * @param {Function} f Function to call for each value.
- * @param {Object} opt_this If present f will be called using this object as
+ * @param {Object=} opt_this If present f will be called using this object as
  *                          'this'.
- * @param {Object} var_args query params. An array or multiple arguments.
+ * @param {...Object} var_args query params. An array or multiple arguments.
  */
 goog.gears.Database.prototype.forEachValue = function(sql,
     f, opt_this, var_args) {
@@ -540,9 +540,9 @@ goog.gears.Database.prototype.forEachValue = function(sql,
  *
  * @param {string} sql The SQL statement to execute.
  * @param {Function} f Function to call for each row.
- * @param {Object} opt_this If present f will be called using this
+ * @param {Object=} opt_this If present f will be called using this
  *                          object as 'this'.
- * @param {*} var_args query params. An array or multiple arguments.
+ * @param {...*} var_args query params. An array or multiple arguments.
  */
 goog.gears.Database.prototype.forEachRow = function(sql,
     f, opt_this, var_args) {
@@ -785,7 +785,7 @@ goog.gears.Database.prototype.commit = function() {
  * if this the last outstanding transaction, otherwise the real ROLLBACK will
  * be deferred until the last outstanding transaction is closed.
  *
- * @param {Error} opt_e the exception that caused this rollback. If it
+ * @param {Error=} opt_e the exception that caused this rollback. If it
  *                          is provided then that exception is rethown if
  *                          the rollback does not take place.
  * @return {boolean} true if the ROLLBACK has been executed or if we are not
@@ -829,7 +829,7 @@ goog.gears.Database.prototype.isInTransaction = function() {
  * Ensures there is no open transaction upon return. An existing open
  * transaction is rolled back.
  *
- * @param {string} opt_logMsgPrefix a prefix to the message that is logged when
+ * @param {string=} opt_logMsgPrefix a prefix to the message that is logged when
  *     an unexpected open transaction is found.
  */
 goog.gears.Database.prototype.ensureNoTransaction = function(opt_logMsgPrefix) {

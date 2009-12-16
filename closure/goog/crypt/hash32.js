@@ -81,9 +81,10 @@ goog.crypt.hash32.encodeInteger = function(value) {
 /**
  * Hashes a "byte" array to a 32-bit value using the supplied seed.
  * @param {Array.<number>} bytes Array of bytes.
- * @param {number} opt_offset The starting position to use for hash computation.
- * @param {number} opt_length Number of bytes that are used for hashing.
- * @param {number} opt_seed The seed.
+ * @param {number=} opt_offset The starting position to use for hash
+ * computation.
+ * @param {number=} opt_length Number of bytes that are used for hashing.
+ * @param {number=} opt_seed The seed.
  * @return {number} 32-bit hash.
  */
 goog.crypt.hash32.encodeByteArray = function(

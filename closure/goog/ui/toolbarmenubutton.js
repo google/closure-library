@@ -30,11 +30,11 @@ goog.require('goog.ui.registry');
  *
  * @param {goog.ui.ControlContent} content Text caption or existing DOM
  *     structure to display as the button's caption.
- * @param {goog.ui.Menu} opt_menu Menu to render under the button when clicked.
- * @param {goog.ui.ButtonRenderer} opt_renderer Optional renderer used to
+ * @param {goog.ui.Menu=} opt_menu Menu to render under the button when clicked.
+ * @param {goog.ui.ButtonRenderer=} opt_renderer Optional renderer used to
  *     render or decorate the button; defaults to
  *     {@link goog.ui.ToolbarMenuButtonRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.MenuButton}

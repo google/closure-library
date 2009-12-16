@@ -61,7 +61,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.isSupportedCommand =
  * supported). Hence this method does not dispatch the change events that the
  * superclass method does.
  * @param {string} command The command to execute.
- * @param {Object} var_args Any additional parameters needed to
+ * @param {...Object} var_args Any additional parameters needed to
  *     execute the command.
  * @return {Object|undefined} The result of the execCommand, if any.
  * @override
@@ -93,7 +93,7 @@ goog.editor.plugins.AbstractDialogPlugin.EventType = {
  * subclasses.
  * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
  *     create the dialog.
- * @param {*} opt_arg The dialog specific argument. Concrete subclasses should
+ * @param {*=} opt_arg The dialog specific argument. Concrete subclasses should
  *     declare a specific type.
  * @return {goog.ui.editor.AbstractDialog} The newly created dialog.
  * @protected
@@ -129,7 +129,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.setReuseDialog =
  * {@link goog.editor.plugins.AbstractDialogPlugin.EventType.OPENED} after the
  * dialog is shown.
  * @param {string} command The command to execute.
- * @param {*} opt_arg The dialog specific argument. Should be the same as
+ * @param {*=} opt_arg The dialog specific argument. Should be the same as
  *     {@link createDialog}.
  * @return {Object|undefined} The result of the execCommand, if any.
  * @protected

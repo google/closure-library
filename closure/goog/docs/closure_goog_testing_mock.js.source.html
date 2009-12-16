@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -194,9 +195,9 @@
 <a name="line151"></a> * The base class for a mock object.
 <a name="line152"></a> * @param {Object|Function} objectToMock The object that should be mocked, or
 <a name="line153"></a> *    the constructor of an object to mock.
-<a name="line154"></a> * @param {boolean} opt_mockStaticMethods An optional argument denoting that
+<a name="line154"></a> * @param {boolean=} opt_mockStaticMethods An optional argument denoting that
 <a name="line155"></a> *     a mock should be constructed from the static functions of a class.
-<a name="line156"></a> * @param {boolean} opt_createProxy An optional argument denoting that
+<a name="line156"></a> * @param {boolean=} opt_createProxy An optional argument denoting that
 <a name="line157"></a> *     a proxy for the target mock should be created.
 <a name="line158"></a> * @constructor
 <a name="line159"></a> */
@@ -480,7 +481,7 @@
 <a name="line437"></a>/**
 <a name="line438"></a> * Throws an exception and records that an exception was thrown.
 <a name="line439"></a> * @param {string} comment A short comment about the exception.
-<a name="line440"></a> * @param {?string} opt_message A longer message about the exception.
+<a name="line440"></a> * @param {?string=} opt_message A longer message about the exception.
 <a name="line441"></a> * @throws {Object} JsUnitException object.
 <a name="line442"></a> * @protected
 <a name="line443"></a> */
@@ -566,7 +567,7 @@
 <a name="line523"></a> * Throw an exception based on an incorrect method call.
 <a name="line524"></a> * @param {string} name Name of method called.
 <a name="line525"></a> * @param {Array.&lt;*&gt;?} args Arguments passed to the mock.
-<a name="line526"></a> * @param {goog.testing.MockExpectation} opt_expectation Expected next call,
+<a name="line526"></a> * @param {goog.testing.MockExpectation=} opt_expectation Expected next call,
 <a name="line527"></a> *     if any.
 <a name="line528"></a> */
 <a name="line529"></a>goog.testing.Mock.prototype.$throwCallException = function(name, args,

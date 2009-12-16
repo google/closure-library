@@ -34,7 +34,7 @@ goog.require('goog.testing.StrictMock');
 /**
  * Class used to mock a function. Useful for mocking closures and anonymous
  * callbacks etc. Creates a function object that extends goog.testing.StrictMock
- * @param {string} opt_functionName the optional name of the function to mock
+ * @param {string=} opt_functionName the optional name of the function to mock
  *     set to '[anonymous mocked function]' if not passed in.
  * @extends {goog.testing.StrictMock}
  * @constructor
@@ -98,7 +98,7 @@ goog.testing.GlobalFunctionMock = function(functionName) {
 
 /**
  * Mocks a function. Convenience method for new goog.testing.FunctionMock
- * @param {string} opt_functionName the optional name of the function to mock
+ * @param {string=} opt_functionName the optional name of the function to mock
  *     set to '[anonymous mocked function]' if not passed in.
  * @return {goog.testing.FunctionMock} the mocked function.
  */

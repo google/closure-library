@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -115,11 +116,11 @@
 <a name="line72"></a> * Simulates the iframe send.
 <a name="line73"></a> *
 <a name="line74"></a> * @param {goog.Uri|string} uri Uri of the request.
-<a name="line75"></a> * @param {string} opt_method Default is GET, POST uses a form to submit the
+<a name="line75"></a> * @param {string=} opt_method Default is GET, POST uses a form to submit the
 <a name="line76"></a> *     request.
-<a name="line77"></a> * @param {boolean} opt_noCache Append a timestamp to the request to avoid
+<a name="line77"></a> * @param {boolean=} opt_noCache Append a timestamp to the request to avoid
 <a name="line78"></a> *     caching.
-<a name="line79"></a> * @param {Object|goog.structs.Map} opt_data Map of key-value pairs.
+<a name="line79"></a> * @param {Object|goog.structs.Map=} opt_data Map of key-value pairs.
 <a name="line80"></a> */
 <a name="line81"></a>goog.net.MockIFrameIo.prototype.send = function(uri, opt_method, opt_noCache,
 <a name="line82"></a>                                                opt_data) {
@@ -136,9 +137,9 @@
 <a name="line93"></a>/**
 <a name="line94"></a> * Simulates the iframe send from a form.
 <a name="line95"></a> * @param {Element} form Form element used to send the request to the server.
-<a name="line96"></a> * @param {string} opt_uri Uri to set for the destination of the request, by
+<a name="line96"></a> * @param {string=} opt_uri Uri to set for the destination of the request, by
 <a name="line97"></a> *     default the uri will come from the form.
-<a name="line98"></a> * @param {boolean} opt_noCache Append a timestamp to the request to avoid
+<a name="line98"></a> * @param {boolean=} opt_noCache Append a timestamp to the request to avoid
 <a name="line99"></a> *     caching.
 <a name="line100"></a> */
 <a name="line101"></a>goog.net.MockIFrameIo.prototype.sendFromForm = function(form, opt_uri,
@@ -154,7 +155,7 @@
 <a name="line111"></a>
 <a name="line112"></a>/**
 <a name="line113"></a> * Simulates aborting the current Iframe request.
-<a name="line114"></a> * @param {goog.net.ErrorCode} opt_failureCode Optional error code to use -
+<a name="line114"></a> * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
 <a name="line115"></a> *     defaults to ABORT.
 <a name="line116"></a> */
 <a name="line117"></a>goog.net.MockIFrameIo.prototype.abort = function(opt_failureCode) {

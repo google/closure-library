@@ -32,7 +32,7 @@ goog.provide('goog.asserts');
 /**
  * Checks if the condition evaluates to true if goog.DEBUG is true.
  * @param {*} condition The condition to check.
- * @param {string} opt_message Error message in case of failure.
+ * @param {string=} opt_message Error message in case of failure.
  * @throws {Error} Assertion failed, the condition evaluates to false.
  */
 goog.asserts.assert = function(condition, opt_message) {
@@ -55,7 +55,7 @@ goog.asserts.assert = function(condition, opt_message) {
  *  }
  * </pre>
  *
- * @param {string} opt_message Error message for failure.
+ * @param {string=} opt_message Error message for failure.
  * @throws {Error} Failure.
  */
 goog.asserts.fail = function(opt_message) {
@@ -68,7 +68,7 @@ goog.asserts.fail = function(opt_message) {
 /**
  * Checks if the value is a number if goog.DEBUG is true.
  * @param {*} value The value to check.
- * @param {string} opt_message Error message in case of failure.
+ * @param {string=} opt_message Error message in case of failure.
  * @throws {Error} Assertion failed, the condition evaluates to false.
  */
 goog.asserts.assertNumber = function(value, opt_message) {
@@ -79,7 +79,7 @@ goog.asserts.assertNumber = function(value, opt_message) {
 /**
  * Checks if the value is a string if goog.DEBUG is true.
  * @param {*} value The value to check.
- * @param {string} opt_message Error message in case of failure.
+ * @param {string=} opt_message Error message in case of failure.
  * @throws {Error} Assertion failed, the condition evaluates to false.
  */
 goog.asserts.assertString = function(value, opt_message) {
@@ -90,7 +90,7 @@ goog.asserts.assertString = function(value, opt_message) {
 /**
  * Checks if the value is a function if goog.DEBUG is true.
  * @param {*} value The value to check.
- * @param {string} opt_message Error message in case of failure.
+ * @param {string=} opt_message Error message in case of failure.
  * @throws {Error} Assertion failed, the condition evaluates to false.
  */
 goog.asserts.assertFunction = function(value, opt_message) {
@@ -101,7 +101,7 @@ goog.asserts.assertFunction = function(value, opt_message) {
 /**
  * Checks if the value is an Object if goog.DEBUG is true.
  * @param {*} value The value to check.
- * @param {string} opt_message Error message in case of failure.
+ * @param {string=} opt_message Error message in case of failure.
  * @throws {Error} Assertion failed, the condition evaluates to false.
  */
 goog.asserts.assertObject = function(value, opt_message) {
@@ -114,7 +114,7 @@ goog.asserts.assertObject = function(value, opt_message) {
  * goog.DEBUG is true.
  * @param {*} value The value to check.
  * @param {!Function} type A user-defined constructor.
- * @param {string} opt_message Error message in case of failure.
+ * @param {string=} opt_message Error message in case of failure.
  * @throws {Error} Assertion failed, the condition evaluates to false.
  */
 goog.asserts.assertInstanceof = function(value, type, opt_message) {

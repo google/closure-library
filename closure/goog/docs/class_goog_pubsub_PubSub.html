@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -83,13 +95,13 @@ strings corresponding to native Object properties, e.g. &quot;constructor&quot;,
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td>goog.pubsub.PubSub</td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -178,7 +190,7 @@ strings corresponding to native Object properties, e.g. &quot;constructor&quot;,
    <tr class="even">
      <td>
         <span class="entryName">opt_topic</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Topic to clear (all topics if unspecified).</div>
      </td>
    </tr>
@@ -192,7 +204,7 @@ strings corresponding to native Object properties, e.g. &quot;constructor&quot;,
 
 
   <td class="view-code">
-     <a href="closure_goog_pubsub_pubsub.js.source.html#line281">code &raquo;</a>
+     <a href="closure_goog_pubsub_pubsub.js.source.html#line282">code &raquo;</a>
   </td>
      </tr>
 
@@ -226,7 +238,7 @@ strings corresponding to native Object properties, e.g. &quot;constructor&quot;,
 
 
   <td class="view-code">
-     <a href="closure_goog_pubsub_pubsub.js.source.html#line320">code &raquo;</a>
+     <a href="closure_goog_pubsub_pubsub.js.source.html#line321">code &raquo;</a>
   </td>
      </tr>
 
@@ -274,7 +286,7 @@ unspecified).
    <tr class="even">
      <td>
         <span class="entryName">opt_topic</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">The topic (all topics if unspecified).</div>
      </td>
    </tr>
@@ -292,7 +304,7 @@ unspecified).
 
 
   <td class="view-code">
-     <a href="closure_goog_pubsub_pubsub.js.source.html#line304">code &raquo;</a>
+     <a href="closure_goog_pubsub_pubsub.js.source.html#line305">code &raquo;</a>
   </td>
      </tr>
 
@@ -349,7 +361,7 @@ the functions throws an uncaught error, publishing is aborted.
    <tr class="odd">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type">*</span></div>
+        : <div class="fullType"><span class="type">...*</span></div>
         <div class="entryOverview">Arguments that are applied to each subscription function.</div>
      </td>
    </tr>
@@ -367,7 +379,7 @@ the functions throws an uncaught error, publishing is aborted.
 
 
   <td class="view-code">
-     <a href="closure_goog_pubsub_pubsub.js.source.html#line240">code &raquo;</a>
+     <a href="closure_goog_pubsub_pubsub.js.source.html#line241">code &raquo;</a>
   </td>
      </tr>
 
@@ -435,7 +447,7 @@ the topic via #unsubscribeByKey.
    <tr class="even">
      <td>
         <span class="entryName">opt_context</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose context the function is to be called (the global scope if none).</div>
      </td>
    </tr>
@@ -520,7 +532,7 @@ key that can be used to unsubscribe the function from the topic via
    <tr class="even">
      <td>
         <span class="entryName">opt_context</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose context the function is to be called (the global scope if none).</div>
      </td>
    </tr>
@@ -602,7 +614,7 @@ Returns a Boolean indicating whether a subscription was removed.
    <tr class="even">
      <td>
         <span class="entryName">opt_context</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose context the function was to be called (the global scope if none).</div>
      </td>
    </tr>

@@ -37,9 +37,9 @@ goog.require('goog.ui.PopupDatePicker');
  *     used to format the date picker's date for display in the input element.
  * @param {goog.i18n.DateTimeParse} dateTimeParser A parser instance used to
  *     parse the input element's string as a date to set the picker.
- * @param {goog.ui.DatePicker} opt_datePicker Optional DatePicker.  This
+ * @param {goog.ui.DatePicker=} opt_datePicker Optional DatePicker.  This
  *     enables the use of a custom date-picker instance.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @extends {goog.ui.Component}
  * @constructor
  */

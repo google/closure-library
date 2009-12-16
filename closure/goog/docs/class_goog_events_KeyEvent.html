@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,7 +90,7 @@ it overrides the key code with the fixed key code.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span></td><td><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></td></tr>
@@ -86,7 +98,7 @@ it overrides the key code with the fixed key code.
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -204,7 +216,7 @@ it overrides the key code with the fixed key code.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_browserevent.js.source.html#line368">code &raquo;</a>
+     <a href="closure_goog_events_browserevent.js.source.html#line370">code &raquo;</a>
   </td>
      </tr>
 
@@ -250,7 +262,7 @@ it overrides the key code with the fixed key code.
 
 
   <td class="view-code">
-     <a href="closure_goog_events_browserevent.js.source.html#line360">code &raquo;</a>
+     <a href="closure_goog_events_browserevent.js.source.html#line362">code &raquo;</a>
   </td>
      </tr>
 
@@ -305,7 +317,7 @@ object.
    <tr class="odd">
      <td>
         <span class="entryName">opt_currentTarget</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
+        : <div class="fullType"><span class="type">Node=</span></div>
         <div class="entryOverview">Current target for event.</div>
      </td>
    </tr>
@@ -393,7 +405,7 @@ There&#39;s a nice table of this mess at <a href="http://www.unixpapa.com/js/mou
 
 
   <td class="view-code">
-     <a href="closure_goog_events_browserevent.js.source.html#line284">code &raquo;</a>
+     <a href="closure_goog_events_browserevent.js.source.html#line286">code &raquo;</a>
   </td>
      </tr>
 
@@ -427,7 +439,7 @@ There&#39;s a nice table of this mess at <a href="http://www.unixpapa.com/js/mou
 
 
   <td class="view-code">
-     <a href="closure_goog_events_browserevent.js.source.html#line324">code &raquo;</a>
+     <a href="closure_goog_events_browserevent.js.source.html#line326">code &raquo;</a>
   </td>
      </tr>
 
@@ -461,7 +473,7 @@ There&#39;s a nice table of this mess at <a href="http://www.unixpapa.com/js/mou
 
 
   <td class="view-code">
-     <a href="closure_goog_events_browserevent.js.source.html#line301">code &raquo;</a>
+     <a href="closure_goog_events_browserevent.js.source.html#line303">code &raquo;</a>
   </td>
      </tr>
 

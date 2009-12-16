@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -84,13 +96,13 @@ started. Calling start on an active delay will reset the timer.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td>goog.async.ConditionalDelay</td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -122,7 +134,7 @@ started. Calling start on an active delay will reset the timer.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object scope to invoke the function in.</div>
      </td>
    </tr>
@@ -439,7 +451,7 @@ will stop the timer first.
    <tr class="even">
      <td>
         <span class="entryName">opt_interval</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The time interval between the function invocations (in milliseconds). Default is 0.</div>
      </td>
    </tr>
@@ -447,7 +459,7 @@ will stop the timer first.
    <tr class="odd">
      <td>
         <span class="entryName">opt_timeout</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The timeout interval (in milliseconds). Takes precedence over the <code>opt_interval</code>, i.e. if the timeout is less than the invocation interval, the function will be called when the timeout is exceeded. A negative value means no timeout. Default is 0.</div>
      </td>
    </tr>

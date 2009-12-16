@@ -62,7 +62,7 @@ goog.ds.DataNode.prototype.set = goog.nullFunction;
 /**
  * Gets all of the child nodes of the current node.
  * Should return an empty DataNode list if no child nodes.
- * @param {string} opt_selector String selector to choose child nodes.
+ * @param {string=} opt_selector String selector to choose child nodes.
  * @return {goog.ds.DataNodeList} The child nodes.
  */
 goog.ds.DataNode.prototype.getChildNodes = goog.nullFunction;
@@ -71,7 +71,7 @@ goog.ds.DataNode.prototype.getChildNodes = goog.nullFunction;
 /**
  * Gets a named child node of the current node
  * @param {string} name The node name.
- * @param {boolean} opt_canCreate Whether to create a child node if it does not
+ * @param {boolean=} opt_canCreate Whether to create a child node if it does not
  *     exist.
  * @return {goog.ds.DataNode} The child node, or null
  * if no node of this name exists.
@@ -172,7 +172,7 @@ goog.ds.BaseDataNode.prototype.set = goog.nullFunction;
 /**
  * Gets all of the child nodes of the current node.
  * Should return an empty DataNode list if no child nodes.
- * @param {string} opt_selector String selector to choose child nodes.
+ * @param {string=} opt_selector String selector to choose child nodes.
  * @return {goog.ds.DataNodeList} The child nodes.
  */
 goog.ds.BaseDataNode.prototype.getChildNodes = function(opt_selector) {
@@ -183,7 +183,7 @@ goog.ds.BaseDataNode.prototype.getChildNodes = function(opt_selector) {
 /**
  * Gets a named child node of the current node
  * @param {string} name The node name.
- * @param {boolean} opt_canCreate Whether you can create the child node if
+ * @param {boolean=} opt_canCreate Whether you can create the child node if
  *     it doesn't exist already.
  * @return {goog.ds.DataNode} The child node, or null if no node of
  *     this name exists and opt_create is false.
@@ -318,7 +318,7 @@ goog.ds.DataNodeList.prototype.removeNode = goog.nullFunction;
  * names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
  * undefined if these names are used.
  *
- * @param {Array.<goog.ds.DataNode>} opt_nodes optional nodes to add to list.
+ * @param {Array.<goog.ds.DataNode>=} opt_nodes optional nodes to add to list.
  * @constructor
  * @extends {goog.ds.DataNodeList}
  */
@@ -476,7 +476,7 @@ goog.ds.EmptyNodeList.prototype.add = function(node) {
  *     node list is sorted. Should take 2 arguments to compare, and return a
  *     negative integer, zero, or a positive integer depending on whether the
  *     first argument is less than, equal to, or greater than the second.
- * @param {Array.<goog.ds.DataNode>} opt_nodes optional nodes to add to list;
+ * @param {Array.<goog.ds.DataNode>=} opt_nodes optional nodes to add to list;
  *    these are assumed to be in sorted order.
  * @extends {goog.ds.BasicNodeList}
  * @constructor

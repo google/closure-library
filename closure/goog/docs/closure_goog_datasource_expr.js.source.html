@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -87,7 +88,7 @@
 <a name="line44"></a> * from this string and a passed in DataNode can evaluate to a value, DataNode,
 <a name="line45"></a> * or a DataNodeList.
 <a name="line46"></a> *
-<a name="line47"></a> * @param {string} opt_expr The string expression.
+<a name="line47"></a> * @param {string=} opt_expr The string expression.
 <a name="line48"></a> * @constructor
 <a name="line49"></a> */
 <a name="line50"></a>goog.ds.Expr = function(opt_expr) {
@@ -101,10 +102,10 @@
 <a name="line58"></a> * Set the source expression text &amp; parse
 <a name="line59"></a> *
 <a name="line60"></a> * @param {string} expr The string expression source.
-<a name="line61"></a> * @param {Array} opt_parts Array of the parts of an expression.
-<a name="line62"></a> * @param {goog.ds.Expr} opt_childExpr Optional child of this expression,
+<a name="line61"></a> * @param {Array=} opt_parts Array of the parts of an expression.
+<a name="line62"></a> * @param {goog.ds.Expr=} opt_childExpr Optional child of this expression,
 <a name="line63"></a> *   passed in as a hint for processing.
-<a name="line64"></a> * @param {goog.ds.Expr} opt_prevExpr Optional preceding expression
+<a name="line64"></a> * @param {goog.ds.Expr=} opt_prevExpr Optional preceding expression
 <a name="line65"></a> *   (i.e. $A/B/C is previous expression to B/C) passed in as a hint for
 <a name="line66"></a> *   processing.
 <a name="line67"></a> * @private
@@ -228,7 +229,7 @@
 <a name="line185"></a> * Recursively walks through child nodes to evaluate
 <a name="line186"></a> * TODO Support other expression functions
 <a name="line187"></a> *
-<a name="line188"></a> * @param {goog.ds.DataNode} opt_ds Optional datasource to evaluate against.
+<a name="line188"></a> * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
 <a name="line189"></a> *     If not provided, evaluates against DataManager global root.
 <a name="line190"></a> * @return {Object} Value of the node, or null if doesn&#39;t exist.
 <a name="line191"></a> */
@@ -270,9 +271,9 @@
 <a name="line227"></a> * Evaluate an expression on a data node, and return matching nodes
 <a name="line228"></a> * Recursively walks through child nodes to evaluate
 <a name="line229"></a> *
-<a name="line230"></a> * @param {goog.ds.DataNode} opt_ds Optional datasource to evaluate against.
+<a name="line230"></a> * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
 <a name="line231"></a> *     If not provided, evaluates against data root.
-<a name="line232"></a> * @param {boolean} opt_canCreate If true, will try to create new nodes.
+<a name="line232"></a> * @param {boolean=} opt_canCreate If true, will try to create new nodes.
 <a name="line233"></a> * @return {goog.ds.DataNodeList} Matching nodes.
 <a name="line234"></a> */
 <a name="line235"></a>goog.ds.Expr.prototype.getNodes = function(opt_ds, opt_canCreate) {
@@ -285,9 +286,9 @@
 <a name="line242"></a> * Evaluate an expression on a data node, and return the first matching node
 <a name="line243"></a> * Recursively walks through child nodes to evaluate
 <a name="line244"></a> *
-<a name="line245"></a> * @param {goog.ds.DataNode} opt_ds Optional datasource to evaluate against.
+<a name="line245"></a> * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
 <a name="line246"></a> *     If not provided, evaluates against DataManager global root.
-<a name="line247"></a> * @param {boolean} opt_canCreate If true, will try to create new nodes.
+<a name="line247"></a> * @param {boolean=} opt_canCreate If true, will try to create new nodes.
 <a name="line248"></a> * @return {goog.ds.DataNode} Matching nodes, or null if doesn&#39;t exist.
 <a name="line249"></a> */
 <a name="line250"></a>goog.ds.Expr.prototype.getNode = function(opt_ds, opt_canCreate) {
@@ -300,11 +301,11 @@
 <a name="line257"></a> * Evaluate an expression on a data node, and return the first matching node
 <a name="line258"></a> * Recursively walks through child nodes to evaluate
 <a name="line259"></a> *
-<a name="line260"></a> * @param {goog.ds.DataNode} opt_ds Optional datasource to evaluate against.
+<a name="line260"></a> * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
 <a name="line261"></a> *     If not provided, evaluates against DataManager global root.
-<a name="line262"></a> * @param {boolean} opt_selectOne Whether to return single matching DataNode
+<a name="line262"></a> * @param {boolean=} opt_selectOne Whether to return single matching DataNode
 <a name="line263"></a> *     or matching nodes in DataNodeList.
-<a name="line264"></a> * @param {boolean} opt_canCreate If true, will try to create new nodes.
+<a name="line264"></a> * @param {boolean=} opt_canCreate If true, will try to create new nodes.
 <a name="line265"></a> * @return {goog.ds.DataNode|goog.ds.DataNodeList} Matching node or nodes,
 <a name="line266"></a> *     depending on value of opt_selectOne.
 <a name="line267"></a> * @private
@@ -482,11 +483,11 @@
 <a name="line439"></a> * Create an expression from a string, can use cached values
 <a name="line440"></a> * Uses hints from related expressions to help in creation
 <a name="line441"></a> *
-<a name="line442"></a> * @param {?string} opt_expr The string expression source.
-<a name="line443"></a> * @param {Array} opt_parts Array of the parts of an expression.
-<a name="line444"></a> * @param {goog.ds.Expr} opt_childExpr Optional child of this expression,
+<a name="line442"></a> * @param {?string=} opt_expr The string expression source.
+<a name="line443"></a> * @param {Array=} opt_parts Array of the parts of an expression.
+<a name="line444"></a> * @param {goog.ds.Expr=} opt_childExpr Optional child of this expression,
 <a name="line445"></a> *   passed in as a hint for processing.
-<a name="line446"></a> * @param {goog.ds.Expr} opt_prevExpr Optional preceding expression
+<a name="line446"></a> * @param {goog.ds.Expr=} opt_prevExpr Optional preceding expression
 <a name="line447"></a> *   (i.e. $A/B/C is previous expression to B/C) passed in as a hint for
 <a name="line448"></a> *   processing.
 <a name="line449"></a> * @return {goog.ds.Expr} The expression object.

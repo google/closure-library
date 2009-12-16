@@ -54,8 +54,8 @@ goog.require('goog.userAgent');
  * object.
  * The content of this object will not be initialized if no event object is
  * provided. If this is the case, init() needs to be invoked separately.
- * @param {Event} opt_e Browser event object.
- * @param {Node} opt_currentTarget Current target for event.
+ * @param {Event=} opt_e Browser event object.
+ * @param {Node=} opt_currentTarget Current target for event.
  * @constructor
  * @extends {goog.events.Event}
  */
@@ -216,7 +216,7 @@ goog.events.BrowserEvent.prototype.event_ = null;
  * Accepts a browser event object and creates a patched, cross browser event
  * object.
  * @param {Event} e Browser event object.
- * @param {Node} opt_currentTarget Current target for event.
+ * @param {Node=} opt_currentTarget Current target for event.
  */
 goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   var type = this.type = e.type;
@@ -233,7 +233,9 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
       /** @preserveTry */
       try {
         relatedTarget = relatedTarget.nodeName && relatedTarget;
-      } catch (err) {}
+      } catch (err) {
+        relatedTarget = null;
+      }
     }
     // TODO: Use goog.events.EventType when it has been refactored into its
     // own file.

@@ -32,11 +32,11 @@ goog.require('goog.ui.Component');
  * of this class. Instead us goog.graphics.createGraphics
  * @param {number|string} width The width in pixels or percent.
  * @param {number|string} height The height in pixels or percent.
- * @param {?number} opt_coordWidth Optional coordinate system width - if
+ * @param {?number=} opt_coordWidth Optional coordinate system width - if
  *     omitted or null, defaults to same as width.
- * @param {?number} opt_coordHeight Optional coordinate system height - if
+ * @param {?number=} opt_coordHeight Optional coordinate system height - if
  *     omitted or null, defaults to same as height.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @constructor
  * @extends {goog.ui.Component}
@@ -256,7 +256,7 @@ goog.graphics.AbstractGraphics.prototype.setElementTransform =
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
  *     append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.EllipseElement} The newly created element.
@@ -277,7 +277,7 @@ goog.graphics.AbstractGraphics.prototype.drawCircle = function(
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
  *     append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.EllipseElement} The newly created element.
@@ -295,7 +295,7 @@ goog.graphics.AbstractGraphics.prototype.drawEllipse = goog.abstractMethod;
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
  *     append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.RectElement} The newly created element.
@@ -317,7 +317,7 @@ goog.graphics.AbstractGraphics.prototype.drawRect = goog.abstractMethod;
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill  Fill object describing the fill.
- * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
  *     append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.TextElement} The newly created element.
@@ -352,7 +352,7 @@ goog.graphics.AbstractGraphics.prototype.drawText = function(
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
  *     append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.TextElement} The newly created element.
@@ -367,7 +367,7 @@ goog.graphics.AbstractGraphics.prototype.drawTextOnLine = goog.abstractMethod;
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
  *     append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.PathElement} The newly created element.
@@ -378,7 +378,7 @@ goog.graphics.AbstractGraphics.prototype.drawPath = goog.abstractMethod;
 /**
  * Create an empty group of drawing elements.
  *
- * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
  *     append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.GroupElement} The newly created group.

@@ -33,9 +33,9 @@ goog.require('goog.ui.AutoComplete.Renderer');
  * an inputbox or text area from a data array provided via ajax.
  * @param {string} url The Uri which generates the auto complete matches.
  * @param {Element} input Input element or text area.
- * @param {boolean} opt_multi Whether to allow multiple entries; defaults
+ * @param {boolean=} opt_multi Whether to allow multiple entries; defaults
  *     to false.
- * @param {boolean} opt_useSimilar Whether to use similar matches; e.g.
+ * @param {boolean=} opt_useSimilar Whether to use similar matches; e.g.
  *     "gost" => "ghost".
  * @constructor
  * @extends {goog.ui.AutoComplete}

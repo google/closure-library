@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,7 +88,7 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_ds_DataNodeList.html">goog.ds.DataNodeList</a></span></td><td><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_ds_AbstractFastDataNode.html">goog.ds.AbstractFastDataNode</a></span></td><td><span class="type"><a href="class_goog_ds_DataNodeList.html">goog.ds.DataNodeList</a></span></td></tr>
@@ -84,7 +96,7 @@
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -124,7 +136,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_parent</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></div>
+        : <div class="fullType"><span class="type">goog.ds.DataNode=</span></div>
         <div class="entryOverview">parent of this node.</div>
      </td>
    </tr>
@@ -220,7 +232,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line676">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line678">code &raquo;</a>
   </td>
      </tr>
 
@@ -268,7 +280,7 @@ gets a child node (if called with opt_key).
    <tr class="even">
      <td>
         <span class="entryName">opt_key</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Name of child node.</div>
      </td>
    </tr>
@@ -286,7 +298,7 @@ gets a child node (if called with opt_key).
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line696">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line698">code &raquo;</a>
   </td>
      </tr>
 
@@ -351,7 +363,7 @@ gets a child node (if called with opt_key).
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line711">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line713">code &raquo;</a>
   </td>
      </tr>
 
@@ -406,7 +418,7 @@ gets a child node (if called with opt_key).
    <tr class="odd">
      <td>
         <span class="entryName">opt_create</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to create the child if it does not exist.</div>
      </td>
    </tr>
@@ -424,7 +436,7 @@ gets a child node (if called with opt_key).
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line546">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line548">code &raquo;</a>
   </td>
      </tr>
 
@@ -489,7 +501,7 @@ gets a child node (if called with opt_key).
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line567">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line569">code &raquo;</a>
   </td>
      </tr>
 
@@ -536,7 +548,7 @@ returning all children.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line535">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line536">code &raquo;</a>
   </td>
      </tr>
 
@@ -582,7 +594,7 @@ returning all children.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line721">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line723">code &raquo;</a>
   </td>
      </tr>
 
@@ -629,7 +641,7 @@ not modify the object returned by this function.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line659">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line661">code &raquo;</a>
   </td>
      </tr>
 
@@ -694,7 +706,7 @@ not modify the object returned by this function.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line580">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line582">code &raquo;</a>
   </td>
      </tr>
 
@@ -761,7 +773,7 @@ an &#39;id&#39; attribute.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line775">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line777">code &raquo;</a>
   </td>
      </tr>
 
@@ -807,7 +819,7 @@ an &#39;id&#39; attribute.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line649">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line651">code &raquo;</a>
   </td>
      </tr>
 
@@ -842,7 +854,7 @@ Should be called whenever the list size has changed.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line637">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line639">code &raquo;</a>
   </td>
      </tr>
 
@@ -902,7 +914,7 @@ Should be called whenever the list size has changed.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line740">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line742">code &raquo;</a>
   </td>
      </tr>
 
@@ -962,7 +974,7 @@ Should be called whenever the list size has changed.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line523">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line524">code &raquo;</a>
   </td>
      </tr>
 
@@ -1037,7 +1049,7 @@ instance by calling getChildNode.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line602">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line604">code &raquo;</a>
   </td>
      </tr>
 
@@ -1105,7 +1117,7 @@ instance by calling getChildNode.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line731">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line733">code &raquo;</a>
   </td>
      </tr>
 

@@ -30,7 +30,7 @@ goog.require('goog.json');
  * @param {Function} f The function to wrap. Its return value may only depend
  *     on its arguments and 'this' context. There may be further restrictions
  *     on the arguments depending on the capabilities of the serializer used.
- * @param {function(number, Object): string} opt_serializer A function to
+ * @param {function(number, Object): string=} opt_serializer A function to
  *     serialize f's arguments. It must have the same signature as
  *     goog.memoize.simpleSerializer. It defaults to that function.
  * @this {Object} The object whose function is being wrapped.

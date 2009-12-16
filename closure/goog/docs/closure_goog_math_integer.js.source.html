@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -188,7 +189,7 @@
 <a name="line145"></a> * Returns an Integer representation of the given string, written using the
 <a name="line146"></a> * given radix.
 <a name="line147"></a> * @param {string} str The textual representation of the Integer.
-<a name="line148"></a> * @param {number} opt_radix The radix in which the text is written.
+<a name="line148"></a> * @param {number=} opt_radix The radix in which the text is written.
 <a name="line149"></a> * @return {goog.math.Integer} The corresponding Integer value.
 <a name="line150"></a> */
 <a name="line151"></a>goog.math.Integer.fromString = function(str, opt_radix) {
@@ -277,7 +278,7 @@
 <a name="line234"></a>
 <a name="line235"></a>
 <a name="line236"></a>/**
-<a name="line237"></a> * @param {number} opt_radix The radix in which the text should be written.
+<a name="line237"></a> * @param {number=} opt_radix The radix in which the text should be written.
 <a name="line238"></a> * @return {string} The textual representation of this value.
 <a name="line239"></a> */
 <a name="line240"></a>goog.math.Integer.prototype.toString = function(opt_radix) {

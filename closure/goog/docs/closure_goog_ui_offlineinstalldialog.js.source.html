@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -85,11 +86,11 @@
 <a name="line42"></a>
 <a name="line43"></a>/**
 <a name="line44"></a> * An offline install dialog.
-<a name="line45"></a> * @param {string} opt_class CSS class name for the dialog element, also used
+<a name="line45"></a> * @param {string=} opt_class CSS class name for the dialog element, also used
 <a name="line46"></a> *    as a class name prefix for related elements; defaults to modal-dialog.
-<a name="line47"></a> * @param {boolean} opt_useIframeMask Work around windowed controls z-index
+<a name="line47"></a> * @param {boolean=} opt_useIframeMask Work around windowed controls z-index
 <a name="line48"></a> *     issue by using an iframe instead of a div for bg element.
-<a name="line49"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line49"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line50"></a> * @constructor
 <a name="line51"></a> * @extends {goog.ui.Dialog}
 <a name="line52"></a> */
@@ -692,7 +693,7 @@
 <a name="line649"></a> * not enabled the current application for offline access.
 <a name="line650"></a> * @param {goog.ui.OfflineInstallDialog} dialog  The dialog this is a screen
 <a name="line651"></a> *     for.
-<a name="line652"></a> * @param {string} opt_type An optional type, for specifying a more specific
+<a name="line652"></a> * @param {string=} opt_type An optional type, for specifying a more specific
 <a name="line653"></a> *     type of dialog. Only for use by subclasses.
 <a name="line654"></a> * @constructor
 <a name="line655"></a> * @extends {goog.ui.OfflineInstallDialogScreen}

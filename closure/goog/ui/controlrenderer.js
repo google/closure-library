@@ -686,8 +686,8 @@ goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
  * opt_includedClass is added to classes as well.
  * @param {Array.<string>} classes Array of classes to return matching combined
  *     classes for.
- * @param {?string} opt_includedClass If provided, get only the combined classes
- *     that include this one.
+ * @param {?string=} opt_includedClass If provided, get only the combined
+ *     classes that include this one.
  * @return {Array.<string>} Array of combined class names that should be
  *     applied.
  * @private

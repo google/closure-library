@@ -29,7 +29,7 @@ goog.require('goog.locale');
  * from http://go/js_locale_data. User of this method
  * has to add dependacy to this.
  *
- * @param {string} opt_regionOrLang If region tag is provided, timezone ids
+ * @param {string=} opt_regionOrLang If region tag is provided, timezone ids
  *    specific this region are considered. If language is provided, all regions
  *    for which this language is defacto official is considered. If
  *    this parameter is not speficied, current locale is used to
@@ -52,7 +52,7 @@ goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
  * from http://go/js_locale_data. User of this method
  * has to add dependacy to this.
  *
- * @param {string} opt_regionOrLang If region tag is provided, timezone ids
+ * @param {string=} opt_regionOrLang If region tag is provided, timezone ids
  *    specific this region are considered. If language is provided, all regions
  *    for which this language is defacto official is considered. If
  *    this parameter is not speficied, current locale is used to
@@ -95,7 +95,7 @@ goog.locale.getTimeZoneAllLongNames = function() {
  *
  * @param {string} nameType Resource name to be loaded to get the names.
  *
- * @param {string} opt_resource If resource is region tag, timezone ids
+ * @param {string=} opt_resource If resource is region tag, timezone ids
  *    specific this region are considered. If it is language, all regions
  *    for which this language is defacto official is considered. If it is
  *    undefined, current locale is used to extract this information.

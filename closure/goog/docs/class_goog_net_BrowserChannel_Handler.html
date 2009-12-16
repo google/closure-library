@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,12 +88,12 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.net.BrowserChannel.Handler</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -144,13 +156,14 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">channelClosed<span class="args">(<span class="arg">browserChannel</span>)</span>
+        <span class="entryName">channelClosed<span class="args">(<span class="arg">browserChannel</span>,&nbsp;<span class="arg">opt_pendingMaps</span>,&nbsp;<span class="arg">opt_undeliveredMaps</span>)</span>
         </span>
       </div>
 
 
      <div class="entryOverview">
-       Indicates the BrowserChannel is closed.
+       Indicates the BrowserChannel is closed. Also notifies about which maps,
+if any, that may not have been delivered to the server.
      </div>
 
 
@@ -174,6 +187,22 @@
         <div class="entryOverview">The browser channel.</div>
      </td>
    </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_pendingMaps</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span>&gt;</div>
+        <div class="entryOverview">The array of pending maps, which may or may not have been delivered to the server.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_undeliveredMaps</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span>&gt;</div>
+        <div class="entryOverview">The array of undelivered maps, which have definitely not been delivered to the server.</div>
+     </td>
+   </tr>
   </table>
       </div>
    
@@ -184,7 +213,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1629">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1998">code &raquo;</a>
   </td>
      </tr>
 
@@ -252,7 +281,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1620">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1984">code &raquo;</a>
   </td>
      </tr>
 
@@ -320,7 +349,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1608">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1973">code &raquo;</a>
   </td>
      </tr>
 
@@ -355,7 +384,7 @@ server.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1574">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1939">code &raquo;</a>
   </td>
      </tr>
 
@@ -416,7 +445,7 @@ and can now send and receive data.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1597">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1962">code &raquo;</a>
   </td>
      </tr>
 
@@ -482,7 +511,7 @@ made to the server.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1641">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line2010">code &raquo;</a>
   </td>
      </tr>
 
@@ -547,7 +576,7 @@ made to the server.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1652">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line2021">code &raquo;</a>
   </td>
      </tr>
 
@@ -613,7 +642,7 @@ length of time to wait before retrying.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1664">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line2033">code &raquo;</a>
   </td>
      </tr>
 
@@ -680,7 +709,7 @@ the handler may want all requests to fail immediately.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_browserchannel.js.source.html#line1586">code &raquo;</a>
+     <a href="closure_goog_net_browserchannel.js.source.html#line1951">code &raquo;</a>
   </td>
      </tr>
 

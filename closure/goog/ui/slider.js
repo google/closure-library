@@ -48,7 +48,7 @@ goog.require('goog.ui.SliderBase.Orientation');
 
 /**
  * This creates a slider object.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.SliderBase}
  */

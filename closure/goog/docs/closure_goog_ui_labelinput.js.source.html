@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -86,8 +87,8 @@
 <a name="line43"></a>
 <a name="line44"></a>/**
 <a name="line45"></a> * This creates the label input object.
-<a name="line46"></a> * @param {string} opt_label The text to show as the label.
-<a name="line47"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line46"></a> * @param {string=} opt_label The text to show as the label.
+<a name="line47"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line48"></a> * @extends {goog.ui.Component}
 <a name="line49"></a> * @constructor
 <a name="line50"></a> */
@@ -447,7 +448,7 @@
 <a name="line404"></a>  // Check again in case something changed since this was scheduled.
 <a name="line405"></a>  // We check that the element is still there since this is called by a timer
 <a name="line406"></a>  // and the dispose method may have been called prior to this.
-<a name="line407"></a>  if (this.getElement() &amp;&amp; !this.hasChanged()) {
+<a name="line407"></a>  if (this.getElement() &amp;&amp; !this.hasChanged() &amp;&amp; !this.hasFocus_) {
 <a name="line408"></a>    this.getElement().value = this.label_;
 <a name="line409"></a>  }
 <a name="line410"></a>};

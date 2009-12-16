@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,13 +88,13 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_dom_pattern_AbstractPattern.html">goog.dom.pattern.AbstractPattern</a></span></td><td></td></tr>
   <tr><td>goog.dom.pattern.Tag</td><td><span class="type"><a href="class_goog_dom_pattern_AbstractPattern.html">goog.dom.pattern.AbstractPattern</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
       <tr><td><span class="type"><a href="class_goog_dom_pattern_FullTag.html">goog.dom.pattern.FullTag</a></span></td><td><span class="type"><a href="class_goog_dom_pattern_StartTag.html">goog.dom.pattern.StartTag</a></span></td></tr>
         <tr><td><span class="type"><a href="class_goog_dom_pattern_StartTag.html">goog.dom.pattern.StartTag</a></span></td><td>goog.dom.pattern.Tag</td></tr>
       <tr><td><span class="type"><a href="class_goog_dom_pattern_EndTag.html">goog.dom.pattern.EndTag</a></span></td><td>goog.dom.pattern.Tag</td></tr>
@@ -125,7 +137,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_attrs</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Optional map of attribute names to desired values. This pattern will only match when all attributes are present and match the string or regular expression value provided here.</div>
      </td>
    </tr>
@@ -133,7 +145,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_styles</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Optional map of CSS style names to desired values. This pattern will only match when all styles are present and match the string or regular expression value provided here.</div>
      </td>
    </tr>
@@ -141,7 +153,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_test</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        : <div class="fullType"><span class="type">Function=</span></div>
         <div class="entryOverview">Optional function that takes the element as a parameter and returns true if this pattern should match it.</div>
      </td>
    </tr>

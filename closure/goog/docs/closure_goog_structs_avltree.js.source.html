@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -95,7 +96,7 @@
 <a name="line52"></a> * values. The values can be accessed efficiently in their sorted order since
 <a name="line53"></a> * the tree enforces a O(logn) maximum height.
 <a name="line54"></a> *
-<a name="line55"></a> * @param {Function} opt_comparator Function used to order the tree&#39;s nodes.
+<a name="line55"></a> * @param {Function=} opt_comparator Function used to order the tree&#39;s nodes.
 <a name="line56"></a> * @constructor
 <a name="line57"></a> */
 <a name="line58"></a>goog.structs.AvlTree = function(opt_comparator) {
@@ -376,7 +377,7 @@
 <a name="line333"></a> * maximum node or when {@code func} returns a value that evaluates to true.
 <a name="line334"></a> *
 <a name="line335"></a> * @param {Function} func Function to call on each traversed node.
-<a name="line336"></a> * @param {Object} opt_startValue If specified, traversal will begin on the
+<a name="line336"></a> * @param {Object=} opt_startValue If specified, traversal will begin on the
 <a name="line337"></a> *    node with the smallest value &gt;= opt_startValue.
 <a name="line338"></a> */
 <a name="line339"></a>goog.structs.AvlTree.prototype.inOrderTraverse =
@@ -433,7 +434,7 @@
 <a name="line390"></a> * tree&#39;s minimum node or when func returns a value that evaluates to true.
 <a name="line391"></a> *
 <a name="line392"></a> * @param {Function} func Function to call on each traversed node.
-<a name="line393"></a> * @param {Object} opt_startValue If specified, traversal will begin on the
+<a name="line393"></a> * @param {Object=} opt_startValue If specified, traversal will begin on the
 <a name="line394"></a> *    node with the largest value &lt;= opt_startValue.
 <a name="line395"></a> */
 <a name="line396"></a>goog.structs.AvlTree.prototype.reverseOrderTraverse =
@@ -493,9 +494,9 @@
 <a name="line450"></a> *
 <a name="line451"></a> * @param {Function} traversalFunc Function used to traverse the tree. Takes a
 <a name="line452"></a> *     node as a parameter and returns a node.
-<a name="line453"></a> * @param {goog.structs.AvlTree.Node} opt_startNode The node at which the
+<a name="line453"></a> * @param {goog.structs.AvlTree.Node=} opt_startNode The node at which the
 <a name="line454"></a> *     traversal begins.
-<a name="line455"></a> * @param {goog.structs.AvlTree.Node} opt_endNode The node at which the
+<a name="line455"></a> * @param {goog.structs.AvlTree.Node=} opt_endNode The node at which the
 <a name="line456"></a> *     traversal ends.
 <a name="line457"></a> * @private
 <a name="line458"></a> */
@@ -685,7 +686,7 @@
 <a name="line642"></a> * Returns the node with the smallest value in tree, optionally rooted at
 <a name="line643"></a> * {@code opt_rootNode}.
 <a name="line644"></a> *
-<a name="line645"></a> * @param {goog.structs.AvlTree.Node} opt_rootNode Optional root node.
+<a name="line645"></a> * @param {goog.structs.AvlTree.Node=} opt_rootNode Optional root node.
 <a name="line646"></a> * @return {goog.structs.AvlTree.Node} The node with the smallest value in
 <a name="line647"></a> *     the tree.
 <a name="line648"></a> * @private
@@ -713,7 +714,7 @@
 <a name="line670"></a> * Returns the node with the largest value in tree, optionally rooted at
 <a name="line671"></a> * opt_rootNode.
 <a name="line672"></a> *
-<a name="line673"></a> * @param {goog.structs.AvlTree.Node} opt_rootNode Optional root node.
+<a name="line673"></a> * @param {goog.structs.AvlTree.Node=} opt_rootNode Optional root node.
 <a name="line674"></a> * @return {goog.structs.AvlTree.Node} The node with the largest value in
 <a name="line675"></a> *     the tree.
 <a name="line676"></a> * @private
@@ -745,7 +746,7 @@
 <a name="line702"></a> * defaults to 1 and its children default to null.
 <a name="line703"></a> *
 <a name="line704"></a> * @param {*} value Value to store in the node.
-<a name="line705"></a> * @param {goog.structs.AvlTree.Node} opt_parent Optional parent node.
+<a name="line705"></a> * @param {goog.structs.AvlTree.Node=} opt_parent Optional parent node.
 <a name="line706"></a> * @constructor
 <a name="line707"></a> */
 <a name="line708"></a>goog.structs.AvlTree.Node = function(value, opt_parent) {

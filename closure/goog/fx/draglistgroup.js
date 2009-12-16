@@ -223,10 +223,10 @@ goog.fx.DragListGroup.prototype.dragger_;
  * @param {goog.fx.DragListDirection} growthDirection The direction that this
  *     drag list grows in (i.e.. if an item is added, the list's bounding box
  *     expands in this direction).
- * @param {boolean} opt_isDocOrderSameAsGrowthDirection Defaults to true.
+ * @param {boolean=} opt_isDocOrderSameAsGrowthDirection Defaults to true.
  *     Whether or not the ordering of this drag list's items in the document
  *     is the same as the list's growth direction.
- * @param {string} opt_dragHoverClass CSS class to apply to this drag list when
+ * @param {string=} opt_dragHoverClass CSS class to apply to this drag list when
  *     the draggerEl hovers over it during a drag action.
  */
 goog.fx.DragListGroup.prototype.addDragList = function(
@@ -993,13 +993,13 @@ goog.fx.DragListGroup.prototype.cloneNode_ = function(sourceEl) {
  * @param {Element} draggerEl The clone of the current drag item that's actually
  *     being dragged around.
  * @param {goog.fx.Dragger} dragger The dragger object.
- * @param {goog.math.Coordinate} opt_draggerElCenter The current center position
- *     of the draggerEl.
- * @param {Element} opt_hoverList The current drag list that's being hovered
+ * @param {goog.math.Coordinate=} opt_draggerElCenter The current center
+ *     position of the draggerEl.
+ * @param {Element=} opt_hoverList The current drag list that's being hovered
  *     over, or null if the center of draggerEl is outside of any drag lists.
  *     If not null and the drag action ends right now, then currDragItem will
  *     end up in this list.
- * @param {Element} opt_hoverNextItem The current next item in the hoverList
+ * @param {Element=} opt_hoverNextItem The current next item in the hoverList
  *     that the draggerEl is hovering over. (I.e. If the drag action ends
  *     right now, then this item would become the next item after the new
  *     location of currDragItem.) May be null if not applicable or if

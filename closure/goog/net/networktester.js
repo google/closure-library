@@ -29,8 +29,8 @@ goog.require('goog.debug.Logger');
  * @param {Function} callback Callback that is called when the test completes.
  *     The callback takes a single boolean parameter. True indicates the URL
  *     was reachable, false indicates it wasn't.
- * @param {Object} opt_handler Handler object for the callback.
- * @param {goog.Uri} opt_uri URI to use for testing.
+ * @param {Object=} opt_handler Handler object for the callback.
+ * @param {goog.Uri=} opt_uri URI to use for testing.
  * @constructor
  */
 goog.net.NetworkTester = function(callback, opt_handler, opt_uri) {

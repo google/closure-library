@@ -28,10 +28,10 @@ goog.require('goog.structs.PriorityPool');
 
 /**
  * A pool of XhrIo objects.
- * @param {goog.structs.Map} opt_headers Map of default headers to add to every
+ * @param {goog.structs.Map=} opt_headers Map of default headers to add to every
  *                                       request.
- * @param {number} opt_minCount Min. number of objects (Default: 1).
- * @param {number} opt_maxCount Max. number of objects (Default: 10).
+ * @param {number=} opt_minCount Min. number of objects (Default: 1).
+ * @param {number=} opt_maxCount Max. number of objects (Default: 10).
  * @constructor
  * @extends {goog.structs.PriorityPool}
  */

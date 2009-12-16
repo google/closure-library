@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -69,7 +70,7 @@
 <a name="line26"></a> * @param {Function} f The function to call for every element. This function
 <a name="line27"></a> *     takes 3 arguments (the element, the index and the object)
 <a name="line28"></a> *     and the return value is irrelevant.
-<a name="line29"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object within f.
+<a name="line29"></a> * @param {Object=} opt_obj This is used as the &#39;this&#39; object within f.
 <a name="line30"></a> */
 <a name="line31"></a>goog.object.forEach = function(obj, f, opt_obj) {
 <a name="line32"></a>  for (var key in obj) {
@@ -88,7 +89,7 @@
 <a name="line45"></a> *     and should return a boolean. If the return value is true the
 <a name="line46"></a> *     element is added to the result object. If it is false the
 <a name="line47"></a> *     element is not included.
-<a name="line48"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object within f.
+<a name="line48"></a> * @param {Object=} opt_obj This is used as the &#39;this&#39; object within f.
 <a name="line49"></a> * @return {!Object} a new object in which only elements that passed the test
 <a name="line50"></a> *     are present.
 <a name="line51"></a> */
@@ -112,7 +113,7 @@
 <a name="line69"></a> *     takes 3 arguments (the element, the index and the object)
 <a name="line70"></a> *     and should return something. The result will be inserted
 <a name="line71"></a> *     into a new object.
-<a name="line72"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object within f.
+<a name="line72"></a> * @param {Object=} opt_obj This is used as the &#39;this&#39; object within f.
 <a name="line73"></a> * @return {!Object} a new object with the results from f.
 <a name="line74"></a> */
 <a name="line75"></a>goog.object.map = function(obj, f, opt_obj) {
@@ -133,7 +134,7 @@
 <a name="line90"></a> * @param {Function} f The function to call for every element. This function
 <a name="line91"></a> *     takes 3 arguments (the element, the index and the object) and should
 <a name="line92"></a> *     return a boolean.
-<a name="line93"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object within f.
+<a name="line93"></a> * @param {Object=} opt_obj This is used as the &#39;this&#39; object within f.
 <a name="line94"></a> * @return {boolean} true if any element passes the test.
 <a name="line95"></a> */
 <a name="line96"></a>goog.object.some = function(obj, f, opt_obj) {
@@ -155,7 +156,7 @@
 <a name="line112"></a> * @param {Function} f The function to call for every element. This function
 <a name="line113"></a> *     takes 3 arguments (the element, the index and the object) and should
 <a name="line114"></a> *     return a boolean.
-<a name="line115"></a> * @param {Object} opt_obj This is used as the &#39;this&#39; object within f.
+<a name="line115"></a> * @param {Object=} opt_obj This is used as the &#39;this&#39; object within f.
 <a name="line116"></a> * @return {boolean} false if any element fails the test.
 <a name="line117"></a> */
 <a name="line118"></a>goog.object.every = function(obj, f, opt_obj) {
@@ -298,7 +299,7 @@
 <a name="line255"></a> * @param {function(*, string, Object): boolean} f The function to call for
 <a name="line256"></a> *     every element. Takes 3 arguments (the value, the key and the object) and
 <a name="line257"></a> *     should return a boolean.
-<a name="line258"></a> * @param {Object} opt_this An optional &quot;this&quot; context for the function.
+<a name="line258"></a> * @param {Object=} opt_this An optional &quot;this&quot; context for the function.
 <a name="line259"></a> * @return {string|undefined} The key of an element for which the function
 <a name="line260"></a> *     returns true or undefined if no such element is found.
 <a name="line261"></a> */
@@ -319,7 +320,7 @@
 <a name="line276"></a> * @param {function(*, string, Object): boolean} f The function to call for
 <a name="line277"></a> *     every element. Takes 3 arguments (the value, the key and the object) and
 <a name="line278"></a> *     should return a boolean.
-<a name="line279"></a> * @param {Object} opt_this An optional &quot;this&quot; context for the function.
+<a name="line279"></a> * @param {Object=} opt_this An optional &quot;this&quot; context for the function.
 <a name="line280"></a> * @return {*} The value of an element for which the function returns true or
 <a name="line281"></a> *     undefined if no such element is found.
 <a name="line282"></a> */
@@ -394,7 +395,7 @@
 <a name="line351"></a> *
 <a name="line352"></a> * @param {Object} obj The object from which to get the value.
 <a name="line353"></a> * @param {string} key The key for which to get the value.
-<a name="line354"></a> * @param {*} opt_val The value to return if no item is found for the given
+<a name="line354"></a> * @param {*=} opt_val The value to return if no item is found for the given
 <a name="line355"></a> *     key (default is undefined).
 <a name="line356"></a> * @return {*} The value for the given key.
 <a name="line357"></a> */
@@ -495,7 +496,7 @@
 <a name="line452"></a> * o; // {a: 0, b: 1, c: 2}
 <a name="line453"></a> *
 <a name="line454"></a> * @param {Object} target  The object to modify.
-<a name="line455"></a> * @param {Object} var_args The objects from which values will be copied.
+<a name="line455"></a> * @param {...Object} var_args The objects from which values will be copied.
 <a name="line456"></a> */
 <a name="line457"></a>goog.object.extend = function(target, var_args) {
 <a name="line458"></a>  var key, source;
@@ -523,9 +524,9 @@
 <a name="line480"></a>
 <a name="line481"></a>/**
 <a name="line482"></a> * Creates a new object built from the key-value pairs provided as arguments.
-<a name="line483"></a> * @param {*} var_args If only one argument is provided and it is an array then
-<a name="line484"></a> *     this is used as the arguments,  otherwise even arguments are used as the
-<a name="line485"></a> *     property names and odd arguments are used as the property values.
+<a name="line483"></a> * @param {...*} var_args If only one argument is provided and it is an array
+<a name="line484"></a> *     then this is used as the arguments,  otherwise even arguments are used as
+<a name="line485"></a> *     the property names and odd arguments are used as the property values.
 <a name="line486"></a> * @return {!Object} The new object.
 <a name="line487"></a> * @throws {Error} If there are uneven number of arguments or there is only one
 <a name="line488"></a> *     non array argument.
@@ -551,9 +552,9 @@
 <a name="line508"></a>/**
 <a name="line509"></a> * Creates a new object where the property names come from the arguments but
 <a name="line510"></a> * the value is always set to true
-<a name="line511"></a> * @param {*} var_args If only one argument is provided and it is an array then
-<a name="line512"></a> *     this is used as the arguments,  otherwise the arguments are used as the
-<a name="line513"></a> *     property names.
+<a name="line511"></a> * @param {...*} var_args If only one argument is provided and it is an array
+<a name="line512"></a> *     then this is used as the arguments,  otherwise the arguments are used
+<a name="line513"></a> *     as the property names.
 <a name="line514"></a> * @return {!Object} The new object.
 <a name="line515"></a> */
 <a name="line516"></a>goog.object.createSet = function(var_args) {

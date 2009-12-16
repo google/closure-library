@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -113,7 +114,7 @@
 <a name="line70"></a> * Builds a DrilldownRow component, which can overlay a tree
 <a name="line71"></a> * structure onto sections of an HTML table.
 <a name="line72"></a> *
-<a name="line73"></a> * @param {Object} opt_properties This parameter can contain:
+<a name="line73"></a> * @param {Object=} opt_properties This parameter can contain:
 <a name="line74"></a> *   contents:  if present, user data identifying
 <a name="line75"></a> *     the information loaded into the row and its children.
 <a name="line76"></a> *   loaded: initializes the isLoaded property, defaults to true.
@@ -237,7 +238,7 @@
 <a name="line194"></a> *
 <a name="line195"></a> * @param {goog.ui.DrilldownRow} child New child to be added.
 <a name="line196"></a> * @param {number} index position to be occupied by the child.
-<a name="line197"></a> * @param {boolean} opt_render true to force immediate rendering.
+<a name="line197"></a> * @param {boolean=} opt_render true to force immediate rendering.
 <a name="line198"></a> */
 <a name="line199"></a>goog.ui.DrilldownRow.prototype.addChildAt = function(child, index, opt_render) {
 <a name="line200"></a>  goog.ui.DrilldownRow.superClass_.addChildAt.call(this, child, index, false);

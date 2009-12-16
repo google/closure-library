@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -79,13 +80,13 @@
 <a name="line36"></a> * request.
 <a name="line37"></a> * @see goog.net.XhrIo.cleanupAllPendingStaticSends
 <a name="line38"></a> * @param {string} url Uri to make request too.
-<a name="line39"></a> * @param {Function} opt_callback Callback function for when request is
+<a name="line39"></a> * @param {Function=} opt_callback Callback function for when request is
 <a name="line40"></a> *     complete.
-<a name="line41"></a> * @param {string} opt_method Send method, default: GET.
-<a name="line42"></a> * @param {string} opt_content Post data.
-<a name="line43"></a> * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+<a name="line41"></a> * @param {string=} opt_method Send method, default: GET.
+<a name="line42"></a> * @param {string=} opt_content Post data.
+<a name="line43"></a> * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
 <a name="line44"></a> *     request.
-<a name="line45"></a> * @param {number} opt_timeoutInterval Number of milliseconds after which an
+<a name="line45"></a> * @param {number=} opt_timeoutInterval Number of milliseconds after which an
 <a name="line46"></a> *     incomplete request will be aborted; 0 means no timeout is set.
 <a name="line47"></a> */
 <a name="line48"></a>goog.net.XhrLite.send = goog.net.XhrIo.send;
@@ -119,7 +120,7 @@
 <a name="line76"></a> *
 <a name="line77"></a> * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
 <a name="line78"></a> *     protect the entry point(s).
-<a name="line79"></a> * @param {boolean} opt_tracers Whether to install tracers around the entry
+<a name="line79"></a> * @param {boolean=} opt_tracers Whether to install tracers around the entry
 <a name="line80"></a> *     point.
 <a name="line81"></a> */
 <a name="line82"></a>goog.net.XhrLite.protectEntryPoints = goog.net.XhrIo.protectEntryPoints;

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,7 +81,7 @@
 <a name="line37"></a> *
 <a name="line38"></a> * @param {Node} node The XML node. Can be null.
 <a name="line39"></a> * @param {goog.ds.XmlDataSource} parent Parent of XML element. Can be null.
-<a name="line40"></a> * @param {string} opt_name The name of this node relative to the parent node.
+<a name="line40"></a> * @param {string=} opt_name The name of this node relative to the parent node.
 <a name="line41"></a> *
 <a name="line42"></a> * @extends {goog.ds.DataNode}
 <a name="line43"></a> * @constructor
@@ -195,7 +196,7 @@
 <a name="line152"></a>/**
 <a name="line153"></a> * Gets all of the child nodes of the current node.
 <a name="line154"></a> * Should return an empty DataNode list if no child nodes.
-<a name="line155"></a> * @param {string} opt_selector String selector to choose child nodes.
+<a name="line155"></a> * @param {string=} opt_selector String selector to choose child nodes.
 <a name="line156"></a> * @return {goog.ds.DataNodeList} The child nodes.
 <a name="line157"></a> */
 <a name="line158"></a>goog.ds.XmlDataSource.prototype.getChildNodes = function(opt_selector) {
@@ -446,7 +447,7 @@
 <a name="line403"></a> * @param {(string,goog.Uri)} uri The URL to send to.
 <a name="line404"></a> * @param {Function} onload Function to call when xml document loads
 <a name="line405"></a> *     succesfully.
-<a name="line406"></a> * @param {Function} opt_onerror Function to call when xml document load fails.
+<a name="line406"></a> * @param {Function=} opt_onerror Function to call when xml document load fails.
 <a name="line407"></a> *
 <a name="line408"></a> * @constructor
 <a name="line409"></a> * @private

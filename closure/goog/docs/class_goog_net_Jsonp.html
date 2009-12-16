@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,12 +90,12 @@ assumes the call failed to complete successfully.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.net.Jsonp</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -115,7 +127,7 @@ assumes the call failed to complete successfully.
    <tr class="odd">
      <td>
         <span class="entryName">opt_callbackParamName</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">The parameter name that is used to specify the callback. Defaults to &quot;callback&quot;.</div>
      </td>
    </tr>
@@ -322,7 +334,7 @@ will be cleaned up after the timeout.
    <tr class="odd">
      <td>
         <span class="entryName">opt_replyCallback</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        : <div class="fullType"><span class="type">Function=</span></div>
         <div class="entryOverview">A function expecting one argument, called when the reply arrives, with the response data.</div>
      </td>
    </tr>
@@ -330,7 +342,7 @@ will be cleaned up after the timeout.
    <tr class="even">
      <td>
         <span class="entryName">opt_errorCallback</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        : <div class="fullType"><span class="type">Function=</span></div>
         <div class="entryOverview">A function expecting one argument, called on timeout, with the payload.</div>
      </td>
    </tr>
@@ -338,7 +350,7 @@ will be cleaned up after the timeout.
    <tr class="odd">
      <td>
         <span class="entryName">opt_callbackParamValue</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Value to be used as the parameter value for the callback parameter (callbackParamName). To be used when the value needs to be fixed by the client for a particular request, to make use of the cached responses for the request. NOTE: If multiple requests are made with the same opt_callbackParamValue, only the last call will work whenever the response comes back.</div>
      </td>
    </tr>
@@ -673,7 +685,7 @@ the given timeoutCallback with the original payload.
    <tr class="odd">
      <td>
         <span class="entryName">opt_errorCallback</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        : <div class="fullType"><span class="type">Function=</span></div>
         <div class="entryOverview">The function called on timeout.</div>
      </td>
    </tr>
@@ -763,7 +775,7 @@ given replyCallback with data returned by the server.
    <tr class="odd">
      <td>
         <span class="entryName">timeout</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
         <div class="entryOverview">A timeout call that needs to be cleared.</div>
      </td>
    </tr>

@@ -32,7 +32,7 @@ goog.require('goog.debug.Logger');
  * @param {goog.gears.Worker} mainThread  The main thread that has the
  *     logger server running.
  * @param {number} logCommandId  The command id used for logging.
- * @param {string} opt_workerName  This, if present, is added to the error
+ * @param {string=} opt_workerName  This, if present, is added to the error
  *     object when serializing it.
  * @constructor
  * @extends {goog.Disposable}
@@ -94,7 +94,7 @@ goog.gears.LoggerClient.instance_ = null;
  * @param {string} name The name of the logger.
  * @param {goog.debug.Logger.Level} level One of the level identifiers.
  * @param {string} msg The string message.
- * @param {Object} opt_exception An exception associated with the message.
+ * @param {Object=} opt_exception An exception associated with the message.
  * @private
  */
 goog.gears.LoggerClient.prototype.sendLog_ = function(name,

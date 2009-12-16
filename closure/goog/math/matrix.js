@@ -45,8 +45,8 @@ goog.require('goog.math.Size');
  * @param {goog.math.Matrix|Array.<Array.<number>>|goog.math.Size|number} m
  *     A matrix to copy, a 2D-array to take as a template, a size object for
  *     dimensions, or the number of rows.
- * @param {number} opt_n Number of columns of the matrix (only applicable if the
- *     first argument is also numeric).
+ * @param {number=} opt_n Number of columns of the matrix (only applicable if
+ *     the first argument is also numeric).
  * @constructor
  */
 goog.math.Matrix = function(m, opt_n) {
@@ -96,7 +96,7 @@ goog.math.Matrix.createIdentityMatrix = function(n) {
  * @param {Function} fn The function to call for every element. This function
  *     takes 4 arguments (value, i, j, and the matrix)
  *     and the return value is irrelevant.
- * @param {Object} opt_obj The object to be used as the value of 'this'
+ * @param {Object=} opt_obj The object to be used as the value of 'this'
  *     within {@code fn}.
  */
 goog.math.Matrix.forEach = function(matrix, fn, opt_obj) {
@@ -141,7 +141,7 @@ goog.math.Matrix.isValidArray = function(arr) {
  *                     takes 4 arguments (value, i, j and the matrix)
  *                     and should return something. The result will be inserted
  *                     into a new matrix.
- * @param {Object} opt_obj The object to be used as the value of 'this'
+ * @param {Object=} opt_obj The object to be used as the value of 'this'
  *     within {@code fn}.
  * @return {goog.math.Matrix} A new matrix with the results from {@code fn}.
  */
@@ -251,7 +251,7 @@ goog.math.Matrix.prototype.appendRows = function(m) {
 /**
  * Returns whether the given matrix equals this matrix.
  * @param {goog.math.Matrix} m The matrix to compare to this one.
- * @param {number} opt_tolerance The tolerance when comparing array entries.
+ * @param {number=} opt_tolerance The tolerance when comparing array entries.
  * @return {boolean} Whether the given matrix equals this matrix.
  */
 goog.math.Matrix.prototype.equals = function(m, opt_tolerance) {
@@ -569,8 +569,8 @@ goog.math.Matrix.prototype.getMinor_ = function(i, j) {
  * Returns a submatrix contained within this matrix.
  * @param {number} i1 The upper row index.
  * @param {number} j1 The left column index.
- * @param {number} opt_i2 The lower row index.
- * @param {number} opt_j2 The right column index.
+ * @param {number=} opt_i2 The lower row index.
+ * @param {number=} opt_j2 The right column index.
  * @return {goog.math.Matrix} The submatrix contained within the given bounds.
  * @private
  */

@@ -151,7 +151,7 @@ goog.locale.DateTimeFormat.prototype.applyPattern = function(pattern) {
 /**
  * Format the given date object according to preset pattern and current lcoale.
  * @param {Date} date The Date object that is being formatted.
- * @param {goog.locale.TimeZone} opt_timeZone optional, if specified, time
+ * @param {goog.locale.TimeZone=} opt_timeZone optional, if specified, time
  *    related fields will be formatted based on its setting.
  * @return {string} Formatted string for the given date.
  * @deprecated Use goog.i18n.DateTimeFormat.prototype.format.

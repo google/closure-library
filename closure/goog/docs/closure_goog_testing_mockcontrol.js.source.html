@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -153,9 +154,9 @@
 <a name="line110"></a> * Creates a controlled StrictMock.  Passes its arguments through to the
 <a name="line111"></a> * StrictMock constructor.
 <a name="line112"></a> * @param {Object} objectToMock The object to mock.
-<a name="line113"></a> * @param {boolean} opt_mockStaticMethods An optional argument denoting that
+<a name="line113"></a> * @param {boolean=} opt_mockStaticMethods An optional argument denoting that
 <a name="line114"></a> *     a mock should be constructed from the static functions of a class.
-<a name="line115"></a> * @param {boolean} opt_createProxy An optional argument denoting that
+<a name="line115"></a> * @param {boolean=} opt_createProxy An optional argument denoting that
 <a name="line116"></a> *     a proxy for the target mock should be created.
 <a name="line117"></a> * @return {goog.testing.StrictMock} The mock object.
 <a name="line118"></a> */
@@ -172,11 +173,11 @@
 <a name="line129"></a> * Creates a controlled LooseMock.  Passes its arguments through to the
 <a name="line130"></a> * LooseMock constructor.
 <a name="line131"></a> * @param {Object} objectToMock The object to mock.
-<a name="line132"></a> * @param {boolean} opt_ignoreUnexpectedCalls Whether to ignore unexpected
+<a name="line132"></a> * @param {boolean=} opt_ignoreUnexpectedCalls Whether to ignore unexpected
 <a name="line133"></a> *     calls.
-<a name="line134"></a> * @param {boolean} opt_mockStaticMethods An optional argument denoting that
+<a name="line134"></a> * @param {boolean=} opt_mockStaticMethods An optional argument denoting that
 <a name="line135"></a> *     a mock should be constructed from the static functions of a class.
-<a name="line136"></a> * @param {boolean} opt_createProxy An optional argument denoting that
+<a name="line136"></a> * @param {boolean=} opt_createProxy An optional argument denoting that
 <a name="line137"></a> *     a proxy for the target mock should be created.
 <a name="line138"></a> * @return {goog.testing.LooseMock} The mock object.
 <a name="line139"></a> */
@@ -193,7 +194,7 @@
 <a name="line150"></a>/**
 <a name="line151"></a> * Creates a controlled FunctionMock.  Passes its arguments through to the
 <a name="line152"></a> * FunctionMock constructor.
-<a name="line153"></a> * @param {string} opt_functionName The optional name of the function to mock
+<a name="line153"></a> * @param {string=} opt_functionName The optional name of the function to mock
 <a name="line154"></a> *     set to &#39;[anonymous mocked function]&#39; if not passed in.
 <a name="line155"></a> * @return {goog.testing.FunctionMock} The mocked function.
 <a name="line156"></a> */

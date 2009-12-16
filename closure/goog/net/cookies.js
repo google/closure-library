@@ -79,12 +79,12 @@ goog.net.cookies.isEnabled = function() {
  *
  * @param {string} name  The cookie name.
  * @param {string} value  The cookie value.
- * @param {number} opt_maxAge  The max age in seconds (from now). Use -1 to set
+ * @param {number=} opt_maxAge  The max age in seconds (from now). Use -1 to set
  *     a session cookie. If not provided, the default is -1 (i.e. set a session
  *     cookie).
- * @param {string} opt_path  The path of the cookie. If not present then this
+ * @param {string=} opt_path  The path of the cookie. If not present then this
  *     uses the full request path.
- * @param {string} opt_domain  The domain of the cookie, or null to not specify
+ * @param {string=} opt_domain  The domain of the cookie, or null to not specify
  *     a domain attribute (browser will use the full request host name). If not
  *     provided, the default is null (i.e. let browser use full request host
  *     name).
@@ -135,7 +135,7 @@ goog.net.cookies.set = function(name, value, opt_maxAge, opt_path, opt_domain) {
 /**
  * Returns the value for the first cookie with the given name.
  * @param {string} name  The name of the cookie to get.
- * @param {string} opt_default  If not found this is returned instead.
+ * @param {string=} opt_default  If not found this is returned instead.
  * @return {string|undefined}  The value of the cookie. If no cookie is set this
  *     returns opt_default or undefined if opt_default is not provided.
  */
@@ -154,10 +154,10 @@ goog.net.cookies.get = function(name, opt_default) {
 /**
  * Removes and expires a cookie.
  * @param {string} name  The cookie name.
- * @param {string} opt_path  The path of the cookie, or null to expire a cookie
+ * @param {string=} opt_path  The path of the cookie, or null to expire a cookie
  *     set at the full request path. If not provided, the default is '/'
  *     (i.e. path=/).
- * @param {string} opt_domain  The domain of the cookie, or null to expire a
+ * @param {string=} opt_domain  The domain of the cookie, or null to expire a
  *     cookie set at the full request host name. If not provided, the default is
  *     null (i.e. cookie at full request host name).
  * @return {boolean} Whether the cookie existed before it was removed.

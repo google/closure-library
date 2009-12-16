@@ -25,7 +25,6 @@
 goog.provide('goog.net.ChannelDebug');
 goog.require('goog.debug.Logger');
 goog.require('goog.json');
-goog.require('goog.string');
 
 
 /**
@@ -90,7 +89,7 @@ goog.net.ChannelDebug.prototype.xmlHttpChannelResponseMetaData =
  * Logs the response data received from an XmlHttp request.
  * @param {string|number|undefined} id The request id.
  * @param {?string} responseText The response text.
- * @param {?string} opt_desc Optional request description.
+ * @param {?string=} opt_desc Optional request description.
  */
 goog.net.ChannelDebug.prototype.xmlHttpChannelResponseText =
     function(id, responseText, opt_desc) {
@@ -162,7 +161,7 @@ goog.net.ChannelDebug.prototype.debug = function(text) {
 /**
  * Logs an exception
  * @param {Error} e The error or error event.
- * @param {string} opt_msg The optional message, defaults to 'Exception'.
+ * @param {string=} opt_msg The optional message, defaults to 'Exception'.
  */
 goog.net.ChannelDebug.prototype.dumpException = function(e, opt_msg) {
   this.severe((opt_msg || 'Exception') + e);

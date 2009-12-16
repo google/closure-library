@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -77,12 +89,12 @@ RoundedCornerServlet server class.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.ui.RoundedCorners</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -2067,7 +2079,7 @@ parent.  The element is added as the content of the rounded corners div.
    <tr class="even">
      <td>
         <span class="entryName">opt_borderThickness</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Size.html">goog.math.Size</a></span></div>
+        : <div class="fullType"><span class="type">goog.math.Size=</span></div>
         <div class="entryOverview">The rounded corners border see setBorderThickness().  If no value is supplied, (5, 5) will be used.</div>
      </td>
    </tr>
@@ -2075,7 +2087,7 @@ parent.  The element is added as the content of the rounded corners div.
    <tr class="odd">
      <td>
         <span class="entryName">opt_corners</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The corners to round.  A bitwise integer.  If no corners are specified, goog.ui.RoundedCorners.Corners.ALL will be used.</div>
      </td>
    </tr>

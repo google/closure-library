@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,14 +88,14 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td>goog.net.XhrManager</td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -107,7 +119,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_maxRetries</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Max. number of retries (Default: 1).</div>
      </td>
    </tr>
@@ -115,7 +127,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_headers</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span></div>
+        : <div class="fullType"><span class="type">goog.structs.Map=</span></div>
         <div class="entryOverview">Map of default headers to add to every request.</div>
      </td>
    </tr>
@@ -123,7 +135,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_minCount</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Min. number of objects (Default: 1).</div>
      </td>
    </tr>
@@ -131,7 +143,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_maxCount</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Max. number of objects (Default: 10).</div>
      </td>
    </tr>
@@ -139,7 +151,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_timeoutInterval</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Timeout (in ms) before aborting an attempt (Default: 0ms).</div>
      </td>
    </tr>
@@ -229,7 +241,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_force</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, remove the id now so it can be reused. No events are fired and the callback is not called when forced.</div>
      </td>
    </tr>
@@ -243,7 +255,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line217">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line220">code &raquo;</a>
   </td>
      </tr>
 
@@ -305,7 +317,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_types</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&gt;</div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">string></span>&gt;</div>
         <div class="entryOverview">Event types to attach listeners to. Defaults to XHR_EVENT_TYPES_.</div>
      </td>
    </tr>
@@ -319,7 +331,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line456">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line459">code &raquo;</a>
   </td>
      </tr>
 
@@ -353,7 +365,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line467">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line470">code &raquo;</a>
   </td>
      </tr>
 
@@ -467,7 +479,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line383">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line386">code &raquo;</a>
   </td>
      </tr>
 
@@ -536,7 +548,7 @@ the READY event, and starts the process to send the request.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line248">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line251">code &raquo;</a>
   </td>
      </tr>
 
@@ -618,7 +630,7 @@ the request as completed if the request has succeeded, or is done retrying.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line355">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line358">code &raquo;</a>
   </td>
      </tr>
 
@@ -688,7 +700,7 @@ request hit the READY state). Else, it dispatches the ERROR event.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line417">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line420">code &raquo;</a>
   </td>
      </tr>
 
@@ -761,7 +773,7 @@ request hit the READY state). Else, it dispatches the ERROR event.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line288">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line291">code &raquo;</a>
   </td>
      </tr>
 
@@ -830,7 +842,7 @@ the request as completed.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line399">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line402">code &raquo;</a>
   </td>
      </tr>
 
@@ -892,7 +904,7 @@ the request as completed.
    <tr class="even">
      <td>
         <span class="entryName">opt_types</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&gt;</div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">string></span>&gt;</div>
         <div class="entryOverview">Event types to remove listeners for. Defaults to XHR_EVENT_TYPES_.</div>
      </td>
    </tr>
@@ -906,7 +918,7 @@ the request as completed.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line440">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line443">code &raquo;</a>
   </td>
      </tr>
 
@@ -976,7 +988,7 @@ the XhrIo object back into the pool.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line324">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line327">code &raquo;</a>
   </td>
      </tr>
 
@@ -998,6 +1010,7 @@ the XhrIo object back into the pool.
 
         <span class="entryName">send<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">url</span>,&nbsp;<span class="arg">opt_method</span>,&nbsp;<span class="arg">opt_content</span>,&nbsp;<span class="arg">opt_headers</span>,&nbsp;<span class="arg">opt_priority</span>,&nbsp;<span class="arg">opt_callback</span>,&nbsp;<span class="arg">opt_maxRetries</span>)</span>
         </span>
+        &#8658; <div class="fullType"><span class="type"><a href="class_goog_net_XhrManager_Request.html">goog.net.XhrManager.Request</a></span></div>
       </div>
 
 
@@ -1042,7 +1055,7 @@ priority.
    <tr class="even">
      <td>
         <span class="entryName">opt_method</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Send method, default: GET.</div>
      </td>
    </tr>
@@ -1050,7 +1063,7 @@ priority.
    <tr class="odd">
      <td>
         <span class="entryName">opt_content</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Post data.</div>
      </td>
    </tr>
@@ -1058,7 +1071,7 @@ priority.
    <tr class="even">
      <td>
         <span class="entryName">opt_headers</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">goog.structs.Map=</span></div>
         <div class="entryOverview">Map of headers to add to the request.</div>
      </td>
    </tr>
@@ -1066,7 +1079,7 @@ priority.
    <tr class="odd">
      <td>
         <span class="entryName">opt_priority</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The priority of the request.</div>
      </td>
    </tr>
@@ -1074,21 +1087,25 @@ priority.
    <tr class="even">
      <td>
         <span class="entryName">opt_callback</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
-        <div class="entryOverview">Callback function for when request is complete The only param is the event object from the COMPLETE event.</div>
+        : <div class="fullType"><span class="type">Function=</span></div>
+        <div class="entryOverview">Callback function for when request is complete. The only param is the event object from the COMPLETE event.</div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
         <span class="entryName">opt_maxRetries</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The maximum number of times the request should be retried.</div>
      </td>
    </tr>
   </table>
       </div>
    
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="class_goog_net_XhrManager_Request.html">goog.net.XhrManager.Request</a></span></div>&nbsp;
+            The queued request object.
+      </div>
   
     </div>
    
@@ -1096,7 +1113,7 @@ priority.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line179">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line180">code &raquo;</a>
   </td>
      </tr>
 
@@ -1247,7 +1264,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -1255,7 +1272,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -1492,7 +1509,7 @@ nothing is done.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -1500,7 +1517,7 @@ nothing is done.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>

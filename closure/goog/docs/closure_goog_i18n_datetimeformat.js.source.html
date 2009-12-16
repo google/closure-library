@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -227,7 +228,7 @@
 <a name="line184"></a>/**
 <a name="line185"></a> * Format the given date object according to preset pattern and current lcoale.
 <a name="line186"></a> * @param {Date} date The Date object that is being formatted.
-<a name="line187"></a> * @param {goog.i18n.TimeZone} opt_timeZone optional, if specified, time
+<a name="line187"></a> * @param {goog.i18n.TimeZone=} opt_timeZone optional, if specified, time
 <a name="line188"></a> *    related fields will be formatted based on its setting. When this field
 <a name="line189"></a> *    is not specified, &quot;undefined&quot; will be pass around and those function
 <a name="line190"></a> *    that really need time zone service will create a default one.
@@ -590,7 +591,7 @@
 <a name="line547"></a> * @param {number} count Number of time pattern char repeats, it controls
 <a name="line548"></a> *     how a field should be formatted.
 <a name="line549"></a> * @param {Date} date It holds the date object to be formatted.
-<a name="line550"></a> * @param {goog.i18n.TimeZone} opt_timeZone This holds current time zone info.
+<a name="line550"></a> * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
 <a name="line551"></a> * @return {string} Formatted string that represent this field.
 <a name="line552"></a> * @private
 <a name="line553"></a> */
@@ -608,7 +609,7 @@
 <a name="line565"></a> * @param {number} count Number of time pattern char repeats, it controls
 <a name="line566"></a> *     how a field should be formatted.
 <a name="line567"></a> * @param {Date} date Whose value being evaluated.
-<a name="line568"></a> * @param {goog.i18n.TimeZone} opt_timeZone This holds current time zone info.
+<a name="line568"></a> * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
 <a name="line569"></a> * @return {string} GMT timeZone string.
 <a name="line570"></a> * @private
 <a name="line571"></a> */
@@ -624,7 +625,7 @@
 <a name="line581"></a>/**
 <a name="line582"></a> * Generate GMT timeZone string for given date
 <a name="line583"></a> * @param {Date} date Whose value being evaluated.
-<a name="line584"></a> * @param {goog.i18n.TimeZone} opt_timeZone This holds current time zone info.
+<a name="line584"></a> * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
 <a name="line585"></a> * @return {string} GMT timeZone string.
 <a name="line586"></a> * @private
 <a name="line587"></a> */
@@ -642,7 +643,7 @@
 <a name="line599"></a> * @param {Date} date represents the real date to be formatted.
 <a name="line600"></a> * @param {Date} dateForDate used to resolve date fields for formatting.
 <a name="line601"></a> * @param {Date} dateForTime used to resolve time fields for formatting.
-<a name="line602"></a> * @param {goog.i18n.TimeZone} opt_timeZone This holds current time zone info.
+<a name="line602"></a> * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
 <a name="line603"></a> * @return {string} string representation for the given field.
 <a name="line604"></a> * @private
 <a name="line605"></a> */

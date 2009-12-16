@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -91,11 +92,11 @@
 <a name="line48"></a> * {@code SELECT} event and an {@code ACTION} event; subsequent clicks on an
 <a name="line49"></a> * already selected tab only result in {@code ACTION} events.
 <a name="line50"></a> *
-<a name="line51"></a> * @param {goog.ui.TabBar.Location} opt_location Tab bar location; defaults to
+<a name="line51"></a> * @param {goog.ui.TabBar.Location=} opt_location Tab bar location; defaults to
 <a name="line52"></a> *     {@link goog.ui.TabBar.Location.TOP}.
-<a name="line53"></a> * @param {goog.ui.TabBarRenderer} opt_renderer Renderer used to render or
+<a name="line53"></a> * @param {goog.ui.TabBarRenderer=} opt_renderer Renderer used to render or
 <a name="line54"></a> *     decorate the container; defaults to {@link goog.ui.TabBarRenderer}.
-<a name="line55"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for document
+<a name="line55"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for document
 <a name="line56"></a> *     interaction.
 <a name="line57"></a> * @constructor
 <a name="line58"></a> * @extends {goog.ui.Container}
@@ -174,7 +175,7 @@
 <a name="line131"></a> * by deselecting the tab being removed.  Since {@link #removeChildAt} uses
 <a name="line132"></a> * {@link #removeChild} internally, we only need to override this method.
 <a name="line133"></a> * @param {string|goog.ui.Control} tab Tab to remove.
-<a name="line134"></a> * @param {boolean} opt_unrender Whether to call {@code exitDocument} on the
+<a name="line134"></a> * @param {boolean=} opt_unrender Whether to call {@code exitDocument} on the
 <a name="line135"></a> *     removed tab, and detach its DOM from the document (defaults to false).
 <a name="line136"></a> * @return {goog.ui.Control} The removed tab, if any.
 <a name="line137"></a> * @override

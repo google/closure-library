@@ -29,7 +29,7 @@ goog.require('goog.dom.pattern.MatchType');
  *
  * @param {Array.<goog.dom.pattern.AbstractPattern>} patterns Ordered array of
  *     patterns to match.
- * @param {boolean} opt_ignoreWhitespace Optional flag to ignore text nodes
+ * @param {boolean=} opt_ignoreWhitespace Optional flag to ignore text nodes
  *     consisting entirely of whitespace.  The default is to not ignore them.
  * @constructor
  * @extends {goog.dom.pattern.AbstractPattern}

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -71,9 +72,9 @@
 <a name="line28"></a> * @param {goog.debug.Logger.Level} level One of the level identifiers.
 <a name="line29"></a> * @param {string} msg The string message.
 <a name="line30"></a> * @param {string} loggerName The name of the source logger.
-<a name="line31"></a> * @param {number} opt_time Time this log record was created if other than now.
+<a name="line31"></a> * @param {number=} opt_time Time this log record was created if other than now.
 <a name="line32"></a> *     If 0, we use #goog.now.
-<a name="line33"></a> * @param {number} opt_sequenceNumber Sequence number of this log record. This
+<a name="line33"></a> * @param {number=} opt_sequenceNumber Sequence number of this log record. This
 <a name="line34"></a> *     should only be passed in when restoring a log record from persistence.
 <a name="line35"></a> */
 <a name="line36"></a>goog.debug.LogRecord = function(level, msg, loggerName,

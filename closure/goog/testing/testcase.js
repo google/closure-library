@@ -46,7 +46,7 @@ goog.require('goog.testing.stacktrace');
  *
  * Use {@link #autoDiscoverTests}
  *
- * @param {string} opt_name The name of the test case, defaults to
+ * @param {string=} opt_name The name of the test case, defaults to
  *     'Untitled Test Case'.
  * @constructor
  */
@@ -388,7 +388,7 @@ goog.testing.TestCase.prototype.isSuccess = function() {
 
 /**
  * Returns a string detailing the results from the test.
- * @param {boolean} opt_verbose If true results will include data about all
+ * @param {boolean=} opt_verbose If true results will include data about all
  *     tests, not just what failed.
  * @return {string} The results from the test.
  */
@@ -724,7 +724,7 @@ goog.testing.TestCase.prototype.doSuccess = function(test) {
 /**
  * Handles a test that failed.
  * @param {goog.testing.TestCase.Test} test The test that failed.
- * @param {string|Error} opt_e The exception object associated with the
+ * @param {string|Error=} opt_e The exception object associated with the
  *     failure or a string.
  * @protected
  */
@@ -739,7 +739,7 @@ goog.testing.TestCase.prototype.doError = function(test, opt_e) {
 
 /**
  * @param {string} name Failed test name.
- * @param {string|Error} opt_e The exception object associated with the
+ * @param {string|Error=} opt_e The exception object associated with the
  *     failure or a string.
  * @return {goog.testing.TestCase.Error} Error object.
  */
@@ -777,7 +777,7 @@ goog.testing.TestCase.prototype.logError = function(name, opt_e) {
  * A class representing a single test function.
  * @param {string} name The test name.
  * @param {Function} ref Reference to the test function.
- * @param {Object} opt_scope Optional scope that the test function should be
+ * @param {Object=} opt_scope Optional scope that the test function should be
  *     called in.
  * @constructor
  */
@@ -918,7 +918,7 @@ goog.testing.TestCase.Result.prototype.isStrict = function() {
  * A class representing an error thrown by the test
  * @param {string} source The name of the test which threw the error.
  * @param {string} message The error message.
- * @param {string} opt_stack A string showing the execution stack.
+ * @param {string=} opt_stack A string showing the execution stack.
  * @constructor
  */
 goog.testing.TestCase.Error = function(source, message, opt_stack) {

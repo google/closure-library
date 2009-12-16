@@ -507,6 +507,33 @@ limitations under the License.
         targetDiv.contentEditable = 'false';
       }
     }
+
+    function testSetAllShortcutsAreGlobal() {
+      listener.shortcutFired('enter');
+      listener.shortcutFired('space');
+      listener.shortcutFired('x');
+      listener.shortcutFired('global');
+      listener.shortcutFired('withAlt');
+      listener.$replay();
+
+      registerEnterSpaceXF1AltY();
+      handler.setAllShortcutsAreGlobal(true);
+      fireEnterSpaceXF1AltY(goog.dom.$('targetTextArea'));
+
+      listener.$verify();
+    }
+
+    function testSetModifierShortcutsAreGlobalFalse() {
+      listener.shortcutFired('global');
+      listener.$replay();
+
+      registerEnterSpaceXF1AltY();
+      handler.setModifierShortcutsAreGlobal(false);
+      fireEnterSpaceXF1AltY(goog.dom.$('targetTextArea'));
+
+      listener.$verify();
+    }
+
   </script>
 </body>
 </html>

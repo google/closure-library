@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -69,12 +70,12 @@
 <a name="line26"></a>
 <a name="line27"></a>/**
 <a name="line28"></a> * Mock of goog.editor.Field.
-<a name="line29"></a> * @param {Window} opt_window Window the field would edit.  Defaults to
+<a name="line29"></a> * @param {Window=} opt_window Window the field would edit.  Defaults to
 <a name="line30"></a> *     {@code window}.
-<a name="line31"></a> * @param {Window} opt_appWindow &quot;AppWindow&quot; of the field, which can be
+<a name="line31"></a> * @param {Window=} opt_appWindow &quot;AppWindow&quot; of the field, which can be
 <a name="line32"></a> *     different from {@code opt_window} when mocking a field that uses an
 <a name="line33"></a> *     iframe. Defaults to {@code opt_window}.
-<a name="line34"></a> * @param {goog.dom.AbstractRange} opt_range An object (mock or real) to be
+<a name="line34"></a> * @param {goog.dom.AbstractRange=} opt_range An object (mock or real) to be
 <a name="line35"></a> *     returned by getRange(). If ommitted, a new goog.dom.Range is created
 <a name="line36"></a> *     from the window every time getRange() is called.
 <a name="line37"></a> * @constructor

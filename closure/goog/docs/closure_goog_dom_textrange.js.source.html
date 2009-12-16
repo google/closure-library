@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -90,7 +91,7 @@
 <a name="line47"></a> * Create a new range wrapper from the given browser range object.  Do not use
 <a name="line48"></a> * this method directly - please use goog.dom.Range.createFrom* instead.
 <a name="line49"></a> * @param {Range|TextRange} range The browser range object.
-<a name="line50"></a> * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+<a name="line50"></a> * @param {boolean=} opt_isReversed Whether the focus node is before the anchor
 <a name="line51"></a> *     node.
 <a name="line52"></a> * @return {goog.dom.TextRange} A range wrapper object.
 <a name="line53"></a> */
@@ -104,7 +105,7 @@
 <a name="line61"></a> * Create a new range wrapper from the given browser range wrapper.
 <a name="line62"></a> * @param {goog.dom.browserrange.AbstractRange} browserRange The browser range
 <a name="line63"></a> *     wrapper.
-<a name="line64"></a> * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+<a name="line64"></a> * @param {boolean=} opt_isReversed Whether the focus node is before the anchor
 <a name="line65"></a> *     node.
 <a name="line66"></a> * @return {goog.dom.TextRange} A range wrapper object.
 <a name="line67"></a> * @private
@@ -125,7 +126,7 @@
 <a name="line82"></a> * Create a new range wrapper that selects the given node&#39;s text.  Do not use
 <a name="line83"></a> * this method directly - please use goog.dom.Range.createFrom* instead.
 <a name="line84"></a> * @param {Node} node The node to select.
-<a name="line85"></a> * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+<a name="line85"></a> * @param {boolean=} opt_isReversed Whether the focus node is before the anchor
 <a name="line86"></a> *     node.
 <a name="line87"></a> * @return {goog.dom.TextRange} A range wrapper object.
 <a name="line88"></a> */
@@ -499,7 +500,7 @@
 <a name="line456"></a>/**
 <a name="line457"></a> * Returns a TextRangeIterator over the contents of the range.  Regardless of
 <a name="line458"></a> * the direction of the range, the iterator will move in document order.
-<a name="line459"></a> * @param {boolean} opt_keys Unused for this iterator.
+<a name="line459"></a> * @param {boolean=} opt_keys Unused for this iterator.
 <a name="line460"></a> * @return {goog.dom.TextRangeIterator} An iterator over tags in the range.
 <a name="line461"></a> */
 <a name="line462"></a>goog.dom.TextRange.prototype.__iterator__ = function(opt_keys) {

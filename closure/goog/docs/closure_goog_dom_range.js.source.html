@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -75,7 +76,7 @@
 <a name="line32"></a> * Create a new selection from the given browser window&#39;s current selection.
 <a name="line33"></a> * Note that this object does not auto-update if the user changes their
 <a name="line34"></a> * selection and should be used as a snapshot.
-<a name="line35"></a> * @param {Window} opt_win The window to get the selection of.  Defaults to the
+<a name="line35"></a> * @param {Window=} opt_win The window to get the selection of.  Defaults to the
 <a name="line36"></a> *     window this class was defined in.
 <a name="line37"></a> * @return {goog.dom.AbstractRange?} A range wrapper object, or null if there
 <a name="line38"></a> *     was an error.
@@ -127,7 +128,7 @@
 <a name="line84"></a>/**
 <a name="line85"></a> * Create a new range wrapper from the given browser range object.
 <a name="line86"></a> * @param {Range|TextRange} range The browser range object.
-<a name="line87"></a> * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+<a name="line87"></a> * @param {boolean=} opt_isReversed Whether the focus node is before the anchor
 <a name="line88"></a> *     node.
 <a name="line89"></a> * @return {goog.dom.AbstractRange} A range wrapper object.
 <a name="line90"></a> */
@@ -142,7 +143,7 @@
 <a name="line99"></a>/**
 <a name="line100"></a> * Create a new range wrapper that selects the given node&#39;s text.
 <a name="line101"></a> * @param {Node} node The node to select.
-<a name="line102"></a> * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+<a name="line102"></a> * @param {boolean=} opt_isReversed Whether the focus node is before the anchor
 <a name="line103"></a> *     node.
 <a name="line104"></a> * @return {goog.dom.AbstractRange} A range wrapper object.
 <a name="line105"></a> */
@@ -183,7 +184,7 @@
 <a name="line140"></a>
 <a name="line141"></a>/**
 <a name="line142"></a> * Clears the window&#39;s selection.
-<a name="line143"></a> * @param {Window} opt_win The window to get the selection of.  Defaults to the
+<a name="line143"></a> * @param {Window=} opt_win The window to get the selection of.  Defaults to the
 <a name="line144"></a> *     window this class was defined in.
 <a name="line145"></a> */
 <a name="line146"></a>goog.dom.Range.clearSelection = function(opt_win) {
@@ -208,7 +209,7 @@
 <a name="line165"></a>
 <a name="line166"></a>/**
 <a name="line167"></a> * Tests if the window has a selection.
-<a name="line168"></a> * @param {Window} opt_win The window to check the selection of.  Defaults to
+<a name="line168"></a> * @param {Window=} opt_win The window to check the selection of.  Defaults to
 <a name="line169"></a> *     the window this class was defined in.
 <a name="line170"></a> * @return {boolean} Whether the window has a selection.
 <a name="line171"></a> */

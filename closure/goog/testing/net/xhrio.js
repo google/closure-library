@@ -32,7 +32,7 @@ goog.require('goog.net.XmlHttp');
 /**
  * Mock implementation of goog.net.XhrIo. This doesn't provide a mock
  * implementation for all cases, but it's not too hard to add them as needed.
- * @param {goog.testing.TestQueue} opt_testQueue Test queue for inserting test
+ * @param {goog.testing.TestQueue=} opt_testQueue Test queue for inserting test
  *     events.
  * @constructor
  * @extends {goog.events.EventTarget}
@@ -73,13 +73,13 @@ goog.testing.net.XhrIo.getSendInstances = function() {
 /**
  * Simulates the static XhrIo send method.
  * @param {string} url Uri to make request to.
- * @param {Function} opt_callback Callback function for when request is
+ * @param {Function=} opt_callback Callback function for when request is
  *     complete.
- * @param {string} opt_method Send method, default: GET.
- * @param {string} opt_content Post data.
- * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+ * @param {string=} opt_method Send method, default: GET.
+ * @param {string=} opt_content Post data.
+ * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
- * @param {number} opt_timeoutInterval Number of milliseconds after which an
+ * @param {number=} opt_timeoutInterval Number of milliseconds after which an
  *     incomplete request will be aborted; 0 means no timeout is set.
  */
 goog.testing.net.XhrIo.send = function(url, opt_callback, opt_method,
@@ -217,7 +217,7 @@ goog.testing.net.XhrIo.prototype.simulateTimeout = function() {
 
 /**
  * Abort the current XMLHttpRequest
- * @param {goog.net.ErrorCode} opt_failureCode Optional error code to use -
+ * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
  *     defaults to ABORT.
  */
 goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
@@ -233,9 +233,9 @@ goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
 /**
  * Simulates the XhrIo send.
  * @param {string} url Uri to make request too.
- * @param {string} opt_method Send method, default: GET.
- * @param {string} opt_content Post data.
- * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+ * @param {string=} opt_method Send method, default: GET.
+ * @param {string=} opt_content Post data.
+ * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  */
 goog.testing.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
@@ -281,7 +281,7 @@ goog.testing.net.XhrIo.prototype.simulateReadyStateChange =
  * Simulates receiving a response.
  * @param {number} statusCode Simulated status code.
  * @param {string|Document} response Simulated response.
- * @param {Object} opt_headers Simulated response headers.
+ * @param {Object=} opt_headers Simulated response headers.
  */
 goog.testing.net.XhrIo.prototype.simulateResponse = function(statusCode,
     response, opt_headers) {

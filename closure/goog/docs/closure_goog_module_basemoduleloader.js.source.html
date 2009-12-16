@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -145,11 +146,11 @@
 <a name="line102"></a> * Loads a list of JavaScript modules.
 <a name="line103"></a> * @param {Array.&lt;string&gt;} ids The module ids in dependency order.
 <a name="line104"></a> * @param {Object} moduleInfoMap A mapping from module id to ModuleInfo object.
-<a name="line105"></a> * @param {function()} opt_successFn The callback if module loading is a
+<a name="line105"></a> * @param {function()=} opt_successFn The callback if module loading is a
 <a name="line106"></a> *     success.
-<a name="line107"></a> * @param {function(number)} opt_errorFn The callback if module loading is in
+<a name="line107"></a> * @param {function(number)=} opt_errorFn The callback if module loading is in
 <a name="line108"></a> *     error.
-<a name="line109"></a> * @param {function()} opt_timeoutFn The callback if module loading times out.
+<a name="line109"></a> * @param {function()=} opt_timeoutFn The callback if module loading times out.
 <a name="line110"></a> * @protected
 <a name="line111"></a> */
 <a name="line112"></a>goog.module.BaseModuleLoader.prototype.loadModulesInternal = function(

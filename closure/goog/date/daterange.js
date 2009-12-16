@@ -158,7 +158,7 @@ goog.date.DateRange.offsetInMonths_ = function(date, offset) {
 
 /**
  * Returns the range from yesterday to yesterday.
- * @param {Date} opt_today The date to consider today. Defaults to today.
+ * @param {Date=} opt_today The date to consider today. Defaults to today.
  * @return {goog.date.DateRange} The range that includes only yesterday.
  */
 goog.date.DateRange.yesterday = function(opt_today) {
@@ -170,7 +170,7 @@ goog.date.DateRange.yesterday = function(opt_today) {
 
 /**
  * Returns the range from today to today.
- * @param {Date} opt_today The date to consider today. Defaults to today.
+ * @param {Date=} opt_today The date to consider today. Defaults to today.
  * @return {goog.date.DateRange} The range that includes only today.
  */
 goog.date.DateRange.today = function(opt_today) {
@@ -181,7 +181,7 @@ goog.date.DateRange.today = function(opt_today) {
 
 /**
  * Returns the range that includes the seven days that end yesterday.
- * @param {Date} opt_today The date to consider today. Defaults to today.
+ * @param {Date=} opt_today The date to consider today. Defaults to today.
  * @return {goog.date.DateRange} The range that includes the seven days that
  *     end yesterday.
  */
@@ -196,7 +196,7 @@ goog.date.DateRange.last7Days = function(opt_today) {
 /**
  * Returns the range that starts the first of this month and ends the last day
  * of this month.
- * @param {Date} opt_today The date to consider today. Defaults to today.
+ * @param {Date=} opt_today The date to consider today. Defaults to today.
  * @return {goog.date.DateRange} The range that starts the first of this month
  *     and ends the last day of this month.
  */
@@ -213,7 +213,7 @@ goog.date.DateRange.thisMonth = function(opt_today) {
 /**
  * Returns the range that starts the first of last month and ends the last day
  * of last month.
- * @param {Date} opt_today The date to consider today. Defaults to today.
+ * @param {Date=} opt_today The date to consider today. Defaults to today.
  * @return {goog.date.DateRange} The range that starts the first of last month
  *     and ends the last day of last month.
  */
@@ -230,7 +230,7 @@ goog.date.DateRange.lastMonth = function(opt_today) {
 /**
  * Returns the range that starts the Monday on or before today and ends the
  * Sunday on or after today.
- * @param {Date} opt_today The date to consider today. Defaults to today.
+ * @param {Date=} opt_today The date to consider today. Defaults to today.
  * @return {goog.date.DateRange} The range that starts the Monday on or before
  *     today and ends the Sunday on or after today.
  */
@@ -245,7 +245,7 @@ goog.date.DateRange.thisWeek = function(opt_today) {
 /**
  * Returns the range that starts seven days before the Monday on or before
  * today and ends the Sunday on or before yesterday.
- * @param {Date} opt_today The date to consider today. Defaults to today.
+ * @param {Date=} opt_today The date to consider today. Defaults to today.
  * @return {goog.date.DateRange} The range that starts seven days before the
  *     Monday on or before today and ends the Sunday on or before yesterday.
  */
@@ -261,7 +261,7 @@ goog.date.DateRange.lastWeek = function(opt_today) {
 /**
  * Returns the range that starts seven days before the Monday on or before
  * today and ends the Friday before today.
- * @param {Date} opt_today The date to consider today. Defaults to today.
+ * @param {Date=} opt_today The date to consider today. Defaults to today.
  * @return {goog.date.DateRange} The range that starts seven days before the
  *     Monday on or before today and ends the Friday before today.
  */
@@ -277,7 +277,7 @@ goog.date.DateRange.lastBusinessWeek = function(opt_today) {
 /**
  * Returns the range that includes all days between January 1, 1900 and
  * December 31, 9999.
- * @param {Date} opt_today The date to consider today. Defaults to today.
+ * @param {Date=} opt_today The date to consider today. Defaults to today.
  * @return {goog.date.DateRange} The range that includes all days between
  *     January 1, 1900 and December 31, 9999.
  */
@@ -309,7 +309,7 @@ goog.date.DateRange.StandardDateRangeKeys = {
 
 /**
  * @param {string} dateRangeKey A standard date range key.
- * @param {Date} opt_today The date to consider today. Defaults to today.
+ * @param {Date=} opt_today The date to consider today. Defaults to today.
  * @return {goog.date.DateRange} The date range that corresponds to that key.
  * @throws {Error} If no standard date range with that key exists.
  */

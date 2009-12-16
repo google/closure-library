@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -108,10 +109,10 @@
 <a name="line65"></a> *     events on.
 <a name="line66"></a> * @param {Function|Object} listener Callback method, or an object with a
 <a name="line67"></a> *     handleEvent function.
-<a name="line68"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+<a name="line68"></a> * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
 <a name="line69"></a> *     false).
-<a name="line70"></a> * @param {Object} opt_scope Element in whose scope to call the listener.
-<a name="line71"></a> * @param {goog.events.EventHandler} opt_eventHandler Event handler to add
+<a name="line70"></a> * @param {Object=} opt_scope Element in whose scope to call the listener.
+<a name="line71"></a> * @param {goog.events.EventHandler=} opt_eventHandler Event handler to add
 <a name="line72"></a> *     listener to.
 <a name="line73"></a> */
 <a name="line74"></a>goog.events.ActionEventWrapper_.prototype.listen = function(target, listener,
@@ -147,10 +148,10 @@
 <a name="line104"></a> *    listener from.
 <a name="line105"></a> * @param {Function|Object} listener Callback method, or an object with a
 <a name="line106"></a> *     handleEvent function.
-<a name="line107"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+<a name="line107"></a> * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
 <a name="line108"></a> *     false).
-<a name="line109"></a> * @param {Object} opt_scope Element in whose scope to call the listener.
-<a name="line110"></a> * @param {goog.events.EventHandler} opt_eventHandler Event handler to remove
+<a name="line109"></a> * @param {Object=} opt_scope Element in whose scope to call the listener.
+<a name="line110"></a> * @param {goog.events.EventHandler=} opt_eventHandler Event handler to remove
 <a name="line111"></a> *     listener from.
 <a name="line112"></a> */
 <a name="line113"></a>goog.events.ActionEventWrapper_.prototype.unlisten = function(target, listener,

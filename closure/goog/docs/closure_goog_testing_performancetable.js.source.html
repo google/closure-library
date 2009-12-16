@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -67,8 +68,8 @@
 <a name="line24"></a>/**
 <a name="line25"></a> * A UI widget that runs performance tests and displays the results.
 <a name="line26"></a> * @param {Element} root The element where the table should be attached.
-<a name="line27"></a> * @param {goog.testing.PerformanceTimer} opt_timer A timer to use for executing
-<a name="line28"></a> *     functions and profiling them.
+<a name="line27"></a> * @param {goog.testing.PerformanceTimer=} opt_timer A timer to use for
+<a name="line28"></a> *     executing functions and profiling them.
 <a name="line29"></a> * @constructor
 <a name="line30"></a> */
 <a name="line31"></a>goog.testing.PerformanceTable = function(root, opt_timer) {
@@ -143,7 +144,7 @@
 <a name="line100"></a>/**
 <a name="line101"></a> * Run the given function with the performance timer, and show the results.
 <a name="line102"></a> * @param {Function} fn The function to run.
-<a name="line103"></a> * @param {string} opt_desc A description to associate with this run.
+<a name="line103"></a> * @param {string=} opt_desc A description to associate with this run.
 <a name="line104"></a> */
 <a name="line105"></a>goog.testing.PerformanceTable.prototype.run = function(fn, opt_desc) {
 <a name="line106"></a>  var results = this.timer_.run(fn);

@@ -33,7 +33,7 @@ goog.require('goog.ui.Component.EventType');
  * CHANGE event after toggled by user.
  * TODO: Add keyboard support.
  *
- * @param {goog.ui.Checkbox.State} opt_checked Checked state to set.
+ * @param {goog.ui.Checkbox.State=} opt_checked Checked state to set.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -234,9 +234,11 @@ goog.ui.Checkbox.prototype.updateView = function() {
 
 /**
  * Handles the click event.
+ * @param {!goog.events.BrowserEvent} e The event.
  * @private
  */
-goog.ui.Checkbox.prototype.handleClick_ = function() {
+goog.ui.Checkbox.prototype.handleClick_ = function(e) {
+  e.stopPropagation();
   var eventType = this.checked_ ? goog.ui.Component.EventType.UNCHECK :
       goog.ui.Component.EventType.CHECK;
   if (this.enabled_ && this.dispatchEvent(eventType)) {

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -152,7 +153,7 @@
 <a name="line109"></a>
 <a name="line110"></a>/**
 <a name="line111"></a> * A test case that is capable of running tests the contain asynchronous logic.
-<a name="line112"></a> * @param {string} opt_name A descriptive name for the test case.
+<a name="line112"></a> * @param {string=} opt_name A descriptive name for the test case.
 <a name="line113"></a> * @extends {goog.testing.TestCase}
 <a name="line114"></a> * @constructor
 <a name="line115"></a> */
@@ -336,7 +337,7 @@
 <a name="line293"></a>/**
 <a name="line294"></a> * Preferred way of creating an AsyncTestCase. Creates one and initializes it
 <a name="line295"></a> * with the G_testRunner.
-<a name="line296"></a> * @param {string} opt_name A descriptive name for the test case.
+<a name="line296"></a> * @param {string=} opt_name A descriptive name for the test case.
 <a name="line297"></a> * @return {goog.testing.AsyncTestCase} The created AsyncTestCase.
 <a name="line298"></a> */
 <a name="line299"></a>goog.testing.AsyncTestCase.createAndInstall = function(opt_name) {
@@ -356,7 +357,7 @@
 <a name="line313"></a>/**
 <a name="line314"></a> * Informs the testcase not to continue to the next step in the test cycle
 <a name="line315"></a> * until continueTesting is called.
-<a name="line316"></a> * @param {string} opt_name A description of what we are waiting for.
+<a name="line316"></a> * @param {string=} opt_name A description of what we are waiting for.
 <a name="line317"></a> */
 <a name="line318"></a>goog.testing.AsyncTestCase.prototype.waitForAsync = function(opt_name) {
 <a name="line319"></a>  this.isReady_ = false;
@@ -385,7 +386,7 @@
 <a name="line342"></a>
 <a name="line343"></a>/**
 <a name="line344"></a> * Handles an exception thrown by a test.
-<a name="line345"></a> * @param {string|Error} opt_e The exception object associated with the
+<a name="line345"></a> * @param {string|Error=} opt_e The exception object associated with the
 <a name="line346"></a> *     failure or a string.
 <a name="line347"></a> * @throws Always throws a ControlBreakingException.
 <a name="line348"></a> */
@@ -493,7 +494,7 @@
 <a name="line450"></a>/**
 <a name="line451"></a> * Wraps doAsyncError() for when we are sure that the test runner has no user
 <a name="line452"></a> * code above it in the stack.
-<a name="line453"></a> * @param {string|Error} opt_e The exception object associated with the
+<a name="line453"></a> * @param {string|Error=} opt_e The exception object associated with the
 <a name="line454"></a> *     failure or a string.
 <a name="line455"></a> * @private
 <a name="line456"></a> */
@@ -710,7 +711,7 @@
 <a name="line667"></a>
 <a name="line668"></a>/**
 <a name="line669"></a> * Calls the next callback when the isReady_ flag is true.
-<a name="line670"></a> * @param {Function} opt_doFirst A function to call before pumping.
+<a name="line670"></a> * @param {Function=} opt_doFirst A function to call before pumping.
 <a name="line671"></a> * @private
 <a name="line672"></a> * @throws Throws a ControlBreakingException if there were any failing steps.
 <a name="line673"></a> */

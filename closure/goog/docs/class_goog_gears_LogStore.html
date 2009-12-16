@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,14 +88,14 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_gears_BaseStore.html">goog.gears.BaseStore</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td>goog.gears.LogStore</td><td><span class="type"><a href="class_goog_gears_BaseStore.html">goog.gears.BaseStore</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -115,7 +127,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_tableName</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">Name of logging table to use.</div>
      </td>
    </tr>
@@ -257,7 +269,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_count</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
         <div class="entryOverview">Number of records of recent hitory to keep.</div>
      </td>
    </tr>
@@ -318,7 +330,7 @@ start auto-pruning, call #startAutoPrune and #startAutoPrune for that.
    <tr class="even">
      <td>
         <span class="entryName">opt_count</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
         <div class="entryOverview">Number of records of recent hitory to keep.</div>
      </td>
    </tr>
@@ -326,7 +338,7 @@ start auto-pruning, call #startAutoPrune and #startAutoPrune for that.
    <tr class="odd">
      <td>
         <span class="entryName">opt_interval</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
         <div class="entryOverview">Milliseconds to wait before next pruning.</div>
      </td>
    </tr>
@@ -546,7 +558,7 @@ start auto-pruning, call #startAutoPrune and #startAutoPrune for that.
    <tr class="even">
      <td>
         <span class="entryName">opt_count</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
         <div class="entryOverview">Number of records of recent history to keep. If unspecified, we use #goog.gears.LogStore.DEFAULT_PRUNE_KEEPER_COUNT_. Pass in 0 to delete all log records.</div>
      </td>
    </tr>
@@ -890,7 +902,7 @@ start auto-pruning, call #startAutoPrune and #startAutoPrune for that.
    <tr class="odd">
      <td>
         <span class="entryName">opt_ifNotExists</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">true if the table or index should be created only if it does not exist. Otherwise trying to create a table or index that already exists will result in an exception being thrown.</div>
      </td>
    </tr>
@@ -1182,7 +1194,7 @@ to drop the trigger with this name first.
    <tr class="odd">
      <td>
         <span class="entryName">opt_ifNotExists</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">true if the table or index should be created only if it does not exist. Otherwise trying to create a table or index that already exists will result in an exception being thrown.</div>
      </td>
    </tr>

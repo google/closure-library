@@ -62,7 +62,7 @@ goog.debug.ErrorHandler.prototype.getStackTraceHolder_ = function(stackTrace) {
  * is thrown from a protected function, a handler will be invoked to handle it.
  *
  * @param {Function} fn An entry point function to be protected.
- * @param {boolean} opt_tracers Whether to install tracers around the fn.
+ * @param {boolean=} opt_tracers Whether to install tracers around the fn.
  * @return {!Function} A protected wrapper function that calls the entry point
  *     function.
  */
@@ -115,7 +115,7 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn, tracers) {
 
 /**
  * Installs exception protection for window.setTimeout to handle exceptions.
- * @param {boolean} opt_tracers Whether to install tracers around the fn.
+ * @param {boolean=} opt_tracers Whether to install tracers around the fn.
  */
 goog.debug.ErrorHandler.prototype.protectWindowSetTimeout =
     function(opt_tracers) {
@@ -137,7 +137,7 @@ goog.debug.ErrorHandler.prototype.protectWindowSetTimeout =
 
 /**
  * Install exception protection for window.setInterval to handle exceptions.
- * @param {boolean} opt_tracers Whether to install tracers around the fn.
+ * @param {boolean=} opt_tracers Whether to install tracers around the fn.
  */
 goog.debug.ErrorHandler.prototype.protectWindowSetInterval =
     function(opt_tracers) {

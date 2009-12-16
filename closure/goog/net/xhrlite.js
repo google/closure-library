@@ -36,13 +36,13 @@ goog.net.XhrLite = goog.net.XhrIo;
  * request.
  * @see goog.net.XhrIo.cleanupAllPendingStaticSends
  * @param {string} url Uri to make request too.
- * @param {Function} opt_callback Callback function for when request is
+ * @param {Function=} opt_callback Callback function for when request is
  *     complete.
- * @param {string} opt_method Send method, default: GET.
- * @param {string} opt_content Post data.
- * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+ * @param {string=} opt_method Send method, default: GET.
+ * @param {string=} opt_content Post data.
+ * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
- * @param {number} opt_timeoutInterval Number of milliseconds after which an
+ * @param {number=} opt_timeoutInterval Number of milliseconds after which an
  *     incomplete request will be aborted; 0 means no timeout is set.
  */
 goog.net.XhrLite.send = goog.net.XhrIo.send;
@@ -76,7 +76,7 @@ goog.net.XhrLite.cleanup = goog.net.XhrIo.cleanup;
  *
  * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
  *     protect the entry point(s).
- * @param {boolean} opt_tracers Whether to install tracers around the entry
+ * @param {boolean=} opt_tracers Whether to install tracers around the entry
  *     point.
  */
 goog.net.XhrLite.protectEntryPoints = goog.net.XhrIo.protectEntryPoints;

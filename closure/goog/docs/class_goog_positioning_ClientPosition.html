@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -81,13 +93,13 @@ parameters.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_positioning_AbstractPosition.html">goog.positioning.AbstractPosition</a></span></td><td></td></tr>
   <tr><td>goog.positioning.ClientPosition</td><td><span class="type"><a href="class_goog_positioning_AbstractPosition.html">goog.positioning.AbstractPosition</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
       <tr><td><span class="type"><a href="class_goog_positioning_ViewportClientPosition.html">goog.positioning.ViewportClientPosition</a></span></td><td>goog.positioning.ClientPosition</td></tr>
       <tr><td><span class="type"><a href="class_goog_ui_Popup_ViewPortClientPosition.html">goog.ui.Popup.ViewPortClientPosition</a></span></td><td>goog.positioning.ClientPosition</td></tr>
   </table>
@@ -121,7 +133,7 @@ parameters.
    <tr class="odd">
      <td>
         <span class="entryName">opt_arg2</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Top position.</div>
      </td>
    </tr>
@@ -219,7 +231,7 @@ parameters.
    <tr class="even">
      <td>
         <span class="entryName">opt_margin</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Box.html">goog.math.Box</a></span></div>
+        : <div class="fullType"><span class="type">goog.math.Box=</span></div>
         <div class="entryOverview">A margin specified in pixels.</div>
      </td>
    </tr>
@@ -227,7 +239,7 @@ parameters.
    <tr class="odd">
      <td>
         <span class="entryName">opt_preferredSize</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Size.html">goog.math.Size</a></span></div>
+        : <div class="fullType"><span class="type">goog.math.Size=</span></div>
         <div class="entryOverview">Preferred size of the element.</div>
      </td>
    </tr>
@@ -326,7 +338,7 @@ parameters.
    <tr class="even">
      <td>
         <span class="entryName">opt_margin</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Box.html">goog.math.Box</a></span></div>
+        : <div class="fullType"><span class="type">goog.math.Box=</span></div>
         <div class="entryOverview">A margin specified in pixels.</div>
      </td>
    </tr>
@@ -334,7 +346,7 @@ parameters.
    <tr class="odd">
      <td>
         <span class="entryName">opt_preferredSize</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Size.html">goog.math.Size</a></span></div>
+        : <div class="fullType"><span class="type">goog.math.Size=</span></div>
         <div class="entryOverview">PreferredSize of the movableElement.</div>
      </td>
    </tr>

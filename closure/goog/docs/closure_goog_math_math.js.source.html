@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -147,8 +148,8 @@
 <a name="line104"></a> * tolerance to adjust for floating pount errors.
 <a name="line105"></a> * @param {number} a A number.
 <a name="line106"></a> * @param {number} b A number.
-<a name="line107"></a> * @param {number} opt_tolerance Optional tolerance range. Defaults to 0.000001.
-<a name="line108"></a> *     If specified, should be greater than 0.
+<a name="line107"></a> * @param {number=} opt_tolerance Optional tolerance range. Defaults
+<a name="line108"></a> *     to 0.000001. If specified, should be greater than 0.
 <a name="line109"></a> * @return {boolean} Whether {@code a} and {@code b} are nearly equal.
 <a name="line110"></a> */
 <a name="line111"></a>goog.math.nearlyEquals = function(a, b, opt_tolerance) {
@@ -270,10 +271,10 @@
 <a name="line227"></a> *
 <a name="line228"></a> * @param {Array.&lt;Object&gt;} array1 First array of objects.
 <a name="line229"></a> * @param {Array.&lt;Object&gt;} array2 Second array of objects.
-<a name="line230"></a> * @param {Function} opt_compareFn Function that acts as a custom comparator
+<a name="line230"></a> * @param {Function=} opt_compareFn Function that acts as a custom comparator
 <a name="line231"></a> *     for the array ojects. Function should return true if objects are equal,
 <a name="line232"></a> *     otherwise false.
-<a name="line233"></a> * @param {Function} opt_collectorFn Function used to decide what to return
+<a name="line233"></a> * @param {Function=} opt_collectorFn Function used to decide what to return
 <a name="line234"></a> *     as a result subsequence. It accepts 2 arguments: index of common element
 <a name="line235"></a> *     in the first array and index in the second. The default function returns
 <a name="line236"></a> *     element from the first array.
@@ -338,7 +339,7 @@
 <a name="line295"></a>
 <a name="line296"></a>/**
 <a name="line297"></a> * Returns the sum of the arguments.
-<a name="line298"></a> * @param {number} var_args Numbers to add.
+<a name="line298"></a> * @param {...number} var_args Numbers to add.
 <a name="line299"></a> * @return {number} The sum of the arguments (0 if no arguments were provided,
 <a name="line300"></a> *     {@code NaN} if any of the arguments is not a valid number).
 <a name="line301"></a> */
@@ -352,7 +353,7 @@
 <a name="line309"></a>
 <a name="line310"></a>/**
 <a name="line311"></a> * Returns the arithmetic mean of the arguments.
-<a name="line312"></a> * @param {number} var_args Numbers to average.
+<a name="line312"></a> * @param {...number} var_args Numbers to average.
 <a name="line313"></a> * @return {number} The average of the arguments ({@code NaN} if no arguments
 <a name="line314"></a> *     were provided or any of the arguments is not a valid number).
 <a name="line315"></a> */
@@ -365,7 +366,7 @@
 <a name="line322"></a> * Returns the sample standard deviation of the arguments.  For a definition of
 <a name="line323"></a> * sample standard deviation, see e.g.
 <a name="line324"></a> * http://en.wikipedia.org/wiki/Standard_deviation
-<a name="line325"></a> * @param {number} var_args Number samples to analyze.
+<a name="line325"></a> * @param {...number} var_args Number samples to analyze.
 <a name="line326"></a> * @return {number} The sample standard deviation of the arguments (0 if fewer
 <a name="line327"></a> *     than two samples were provided, or {@code NaN} if any of the samples is
 <a name="line328"></a> *     not a valid number).

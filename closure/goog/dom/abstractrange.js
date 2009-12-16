@@ -283,7 +283,7 @@ goog.dom.AbstractRange.prototype.getWindow = function() {
 /**
  * Tests if this range contains the given range.
  * @param {goog.dom.AbstractRange} range The range to test.
- * @param {boolean} opt_allowPartial If true, the range can be partially
+ * @param {boolean=} opt_allowPartial If true, the range can be partially
  *     contained in the selection, otherwise the range must be entirely
  *     contained.
  * @return {boolean} Whether this range contains the given range.
@@ -294,7 +294,7 @@ goog.dom.AbstractRange.prototype.containsRange = goog.abstractMethod;
 /**
  * Tests if this range contains the given node.
  * @param {Node} node The node to test for.
- * @param {boolean} opt_allowPartial If not set or false, the node must be
+ * @param {boolean=} opt_allowPartial If not set or false, the node must be
  *     entirely contained in the selection for this function to return true.
  * @return {boolean} Whether this range contains the given node.
  */
@@ -369,7 +369,7 @@ goog.dom.AbstractRange.prototype.getPastableHtml = goog.abstractMethod;
 /**
  * Returns a RangeIterator over the contents of the range.  Regardless of the
  * direction of the range, the iterator will move in document order.
- * @param {boolean} opt_keys Unused for this iterator.
+ * @param {boolean=} opt_keys Unused for this iterator.
  * @return {goog.dom.RangeIterator} An iterator over tags in the range.
  */
 goog.dom.AbstractRange.prototype.__iterator__ = goog.abstractMethod;
@@ -469,7 +469,7 @@ goog.dom.AbstractRange.prototype.collapse = goog.abstractMethod;
  * adds functions to determine the portion of each text node that is selected.
  * @param {Node} node The node to start traversal at.  When null, creates an
  *     empty iterator.
- * @param {boolean} opt_reverse Whether to traverse nodes in reverse.
+ * @param {boolean=} opt_reverse Whether to traverse nodes in reverse.
  * @constructor
  * @extends {goog.dom.TagIterator}
  */

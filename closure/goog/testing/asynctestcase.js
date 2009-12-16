@@ -109,7 +109,7 @@ goog.require('goog.testing.asserts');
 
 /**
  * A test case that is capable of running tests the contain asynchronous logic.
- * @param {string} opt_name A descriptive name for the test case.
+ * @param {string=} opt_name A descriptive name for the test case.
  * @extends {goog.testing.TestCase}
  * @constructor
  */
@@ -293,7 +293,7 @@ goog.testing.AsyncTestCase.prototype.numControlExceptionsExpected_ = 0;
 /**
  * Preferred way of creating an AsyncTestCase. Creates one and initializes it
  * with the G_testRunner.
- * @param {string} opt_name A descriptive name for the test case.
+ * @param {string=} opt_name A descriptive name for the test case.
  * @return {goog.testing.AsyncTestCase} The created AsyncTestCase.
  */
 goog.testing.AsyncTestCase.createAndInstall = function(opt_name) {
@@ -313,7 +313,7 @@ goog.testing.AsyncTestCase.createAndInstall = function(opt_name) {
 /**
  * Informs the testcase not to continue to the next step in the test cycle
  * until continueTesting is called.
- * @param {string} opt_name A description of what we are waiting for.
+ * @param {string=} opt_name A description of what we are waiting for.
  */
 goog.testing.AsyncTestCase.prototype.waitForAsync = function(opt_name) {
   this.isReady_ = false;
@@ -342,7 +342,7 @@ goog.testing.AsyncTestCase.prototype.continueTesting = function() {
 
 /**
  * Handles an exception thrown by a test.
- * @param {string|Error} opt_e The exception object associated with the
+ * @param {string|Error=} opt_e The exception object associated with the
  *     failure or a string.
  * @throws Always throws a ControlBreakingException.
  */
@@ -450,7 +450,7 @@ goog.testing.AsyncTestCase.prototype.dbgLog_ = function(message) {
 /**
  * Wraps doAsyncError() for when we are sure that the test runner has no user
  * code above it in the stack.
- * @param {string|Error} opt_e The exception object associated with the
+ * @param {string|Error=} opt_e The exception object associated with the
  *     failure or a string.
  * @private
  */
@@ -667,7 +667,7 @@ goog.testing.AsyncTestCase.prototype.callTopOfStackFunc_ = function(func) {
 
 /**
  * Calls the next callback when the isReady_ flag is true.
- * @param {Function} opt_doFirst A function to call before pumping.
+ * @param {Function=} opt_doFirst A function to call before pumping.
  * @private
  * @throws Throws a ControlBreakingException if there were any failing steps.
  */

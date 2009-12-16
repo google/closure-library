@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -328,7 +329,7 @@
 <a name="line285"></a>/**
 <a name="line286"></a> * Generates an SQLITE CREATE statement from a definition object.
 <a name="line287"></a> * @param {Object} def  a schema statement definition.
-<a name="line288"></a> * @param {boolean} opt_ifNotExists true if the table or index should be
+<a name="line288"></a> * @param {boolean=} opt_ifNotExists true if the table or index should be
 <a name="line289"></a> *     created only if it does not exist. Otherwise trying to create a table
 <a name="line290"></a> *     or index that already exists will result in an exception being thrown.
 <a name="line291"></a> * @return {string} the statement.
@@ -415,7 +416,7 @@
 <a name="line372"></a> *       the when clause for the trigger. The trigger object also contains
 <a name="line373"></a> *       an &#39;actions&#39; field which is an array of strings containing
 <a name="line374"></a> *       the actions for this trigger.
-<a name="line375"></a> * @param {boolean} opt_ifNotExists true if the table or index should be
+<a name="line375"></a> * @param {boolean=} opt_ifNotExists true if the table or index should be
 <a name="line376"></a> *     created only if it does not exist. Otherwise trying to create a table
 <a name="line377"></a> *     or index that already exists will result in an exception being thrown.
 <a name="line378"></a> */

@@ -32,7 +32,7 @@ goog.proto2.Util.PBCHECK = !COMPILED;
  * flag is on.
  *
  * @param {*} condition The condition to check.
- * @param {string} opt_message Error message in case of failure.
+ * @param {string=} opt_message Error message in case of failure.
  * @throws {Error} Assertion failed, the condition evaluates to false.
  */
 goog.proto2.Util.assert = function(condition, opt_message) {

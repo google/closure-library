@@ -58,7 +58,7 @@ goog.require('goog.userAgent');
  * @param {goog.ui.Component} firstComponent Left or Top component.
  * @param {goog.ui.Component} secondComponent Right or Bottom component.
  * @param {goog.ui.SplitPane.Orientation} orientation SplitPane orientation.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @extends {goog.ui.Component}
  * @constructor
  */
@@ -535,7 +535,7 @@ goog.ui.SplitPane.prototype.getFirstComponentSize = function() {
 /**
  * Set the size of the left/top component, and resize the other component based
  * on that size and handle size.
- * @param {?number} opt_size The size of the top or left, in pixels.
+ * @param {?number=} opt_size The size of the top or left, in pixels.
  */
 goog.ui.SplitPane.prototype.setFirstComponentSize = function(opt_size) {
   var top = 0, left = 0;

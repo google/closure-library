@@ -35,7 +35,7 @@ goog.require('goog.fx.DragDropItem');
  *
  * @param {Element|string} element Dom Node, or string representation of node
  *     id, to be used as drag source/drop target.
- * @param {Object} opt_data Data associated with the source/target.
+ * @param {Object=} opt_data Data associated with the source/target.
  * @throws Error If no element argument is provided or if the type is invalid
  * @extends {goog.fx.AbstractDragDrop}
  * @constructor

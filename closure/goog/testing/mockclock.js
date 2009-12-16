@@ -28,7 +28,7 @@ goog.require('goog.Disposable');
 
 /**
  * Class for unit testing code that uses setTimeout and clearTimeout.
- * @param {boolean} opt_autoInstall Install the MockClock at constuction time.
+ * @param {boolean=} opt_autoInstall Install the MockClock at constuction time.
  * @constructor
  * @extends {goog.Disposable}
  */
@@ -230,7 +230,7 @@ goog.testing.MockClock.prototype.getTimeoutDelay = function() {
 /**
  * Increments the MockClock's time by a given number of milliseconds, running
  * any functions that are now overdue.
- * @param {number} opt_millis Number of milliseconds to increment the counter.
+ * @param {number=} opt_millis Number of milliseconds to increment the counter.
  *     If not specified, clock ticks 1 millisecond.
  * @return {number} Current mock time in millis.
  */

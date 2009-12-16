@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -92,10 +93,10 @@
 <a name="line49"></a> *
 <a name="line50"></a> * @param {string} module The name of the module. Cf. parameter module
 <a name="line51"></a> *     of method require().
-<a name="line52"></a> * @param {number} opt_symbol The symbol being defined, or nothing when all
+<a name="line52"></a> * @param {number=} opt_symbol The symbol being defined, or nothing when all
 <a name="line53"></a> *     symbols of the module are defined. Cf. parameter symbol of method
 <a name="line54"></a> *     require().
-<a name="line55"></a> * @param {Object} opt_object The object bound to the symbol, or nothing when
+<a name="line55"></a> * @param {Object=} opt_object The object bound to the symbol, or nothing when
 <a name="line56"></a> *     all symbols of the module are defined.
 <a name="line57"></a> */
 <a name="line58"></a>goog.module.provide = function(module, opt_symbol, opt_object) {
@@ -110,7 +111,7 @@
 <a name="line67"></a> * explanation of param.
 <a name="line68"></a> *
 <a name="line69"></a> * @param {string} urlBase The URL of the base library.
-<a name="line70"></a> * @param {Function} opt_urlFunction Function that creates the URL for the
+<a name="line70"></a> * @param {Function=} opt_urlFunction Function that creates the URL for the
 <a name="line71"></a> *     module file. It will be passed the base URL for module files and the
 <a name="line72"></a> *     module name and should return the fully-formed URL to the module file to
 <a name="line73"></a> *     load.

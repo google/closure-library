@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -169,7 +170,7 @@
 <a name="line126"></a> * except if you need more fine control over the configuration.
 <a name="line127"></a> *
 <a name="line128"></a> * @param {goog.ui.media.FlickrSetModel} dataModel The Flickr Set data model.
-<a name="line129"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+<a name="line129"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
 <a name="line130"></a> *     document interaction.
 <a name="line131"></a> * @return {goog.ui.media.Media} A Control binded to the FlickrSet renderer.
 <a name="line132"></a> * @throws exception in case {@code flickrSetUrl} is an invalid flickr set URL.
@@ -239,8 +240,8 @@
 <a name="line196"></a> *
 <a name="line197"></a> * @param {string} userId The flickr userId associated with this set.
 <a name="line198"></a> * @param {string} setId The flickr setId associated with this set.
-<a name="line199"></a> * @param {string} opt_caption An optional caption of the flickr set.
-<a name="line200"></a> * @param {string} opt_description An optional description of the flickr set.
+<a name="line199"></a> * @param {string=} opt_caption An optional caption of the flickr set.
+<a name="line200"></a> * @param {string=} opt_description An optional description of the flickr set.
 <a name="line201"></a> * @constructor
 <a name="line202"></a> * @extends {goog.ui.media.MediaModel}
 <a name="line203"></a> */
@@ -302,8 +303,8 @@
 <a name="line259"></a> * Takes a {@code flickrSetUrl} and extracts the flickr username and set id.
 <a name="line260"></a> *
 <a name="line261"></a> * @param {string} flickrSetUrl A Flickr set URL.
-<a name="line262"></a> * @param {string} opt_caption An optional caption of the flickr set.
-<a name="line263"></a> * @param {string} opt_description An optional description of the flickr set.
+<a name="line262"></a> * @param {string=} opt_caption An optional caption of the flickr set.
+<a name="line263"></a> * @param {string=} opt_description An optional description of the flickr set.
 <a name="line264"></a> * @return {goog.ui.media.FlickrSetModel} The data model that represents the
 <a name="line265"></a> *     Flickr set.
 <a name="line266"></a> * @throws exception in case the parsing fails

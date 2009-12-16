@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -89,7 +90,7 @@
 <a name="line46"></a> *
 <a name="line47"></a> * Use {@link #autoDiscoverTests}
 <a name="line48"></a> *
-<a name="line49"></a> * @param {string} opt_name The name of the test case, defaults to
+<a name="line49"></a> * @param {string=} opt_name The name of the test case, defaults to
 <a name="line50"></a> *     &#39;Untitled Test Case&#39;.
 <a name="line51"></a> * @constructor
 <a name="line52"></a> */
@@ -431,7 +432,7 @@
 <a name="line388"></a>
 <a name="line389"></a>/**
 <a name="line390"></a> * Returns a string detailing the results from the test.
-<a name="line391"></a> * @param {boolean} opt_verbose If true results will include data about all
+<a name="line391"></a> * @param {boolean=} opt_verbose If true results will include data about all
 <a name="line392"></a> *     tests, not just what failed.
 <a name="line393"></a> * @return {string} The results from the test.
 <a name="line394"></a> */
@@ -767,7 +768,7 @@
 <a name="line724"></a>/**
 <a name="line725"></a> * Handles a test that failed.
 <a name="line726"></a> * @param {goog.testing.TestCase.Test} test The test that failed.
-<a name="line727"></a> * @param {string|Error} opt_e The exception object associated with the
+<a name="line727"></a> * @param {string|Error=} opt_e The exception object associated with the
 <a name="line728"></a> *     failure or a string.
 <a name="line729"></a> * @protected
 <a name="line730"></a> */
@@ -782,7 +783,7 @@
 <a name="line739"></a>
 <a name="line740"></a>/**
 <a name="line741"></a> * @param {string} name Failed test name.
-<a name="line742"></a> * @param {string|Error} opt_e The exception object associated with the
+<a name="line742"></a> * @param {string|Error=} opt_e The exception object associated with the
 <a name="line743"></a> *     failure or a string.
 <a name="line744"></a> * @return {goog.testing.TestCase.Error} Error object.
 <a name="line745"></a> */
@@ -820,7 +821,7 @@
 <a name="line777"></a> * A class representing a single test function.
 <a name="line778"></a> * @param {string} name The test name.
 <a name="line779"></a> * @param {Function} ref Reference to the test function.
-<a name="line780"></a> * @param {Object} opt_scope Optional scope that the test function should be
+<a name="line780"></a> * @param {Object=} opt_scope Optional scope that the test function should be
 <a name="line781"></a> *     called in.
 <a name="line782"></a> * @constructor
 <a name="line783"></a> */
@@ -961,7 +962,7 @@
 <a name="line918"></a> * A class representing an error thrown by the test
 <a name="line919"></a> * @param {string} source The name of the test which threw the error.
 <a name="line920"></a> * @param {string} message The error message.
-<a name="line921"></a> * @param {string} opt_stack A string showing the execution stack.
+<a name="line921"></a> * @param {string=} opt_stack A string showing the execution stack.
 <a name="line922"></a> * @constructor
 <a name="line923"></a> */
 <a name="line924"></a>goog.testing.TestCase.Error = function(source, message, opt_stack) {

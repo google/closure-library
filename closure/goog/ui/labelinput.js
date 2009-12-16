@@ -43,8 +43,8 @@ goog.require('goog.ui.Component');
 
 /**
  * This creates the label input object.
- * @param {string} opt_label The text to show as the label.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {string=} opt_label The text to show as the label.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @extends {goog.ui.Component}
  * @constructor
  */
@@ -404,7 +404,7 @@ goog.ui.LabelInput.prototype.restoreLabel_ = function() {
   // Check again in case something changed since this was scheduled.
   // We check that the element is still there since this is called by a timer
   // and the dispose method may have been called prior to this.
-  if (this.getElement() && !this.hasChanged()) {
+  if (this.getElement() && !this.hasChanged() && !this.hasFocus_) {
     this.getElement().value = this.label_;
   }
 };

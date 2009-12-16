@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -81,116 +82,113 @@
 <a name="line38"></a>
 <a name="line39"></a>goog.provide(&#39;goog.proto2.PbLiteSerializer&#39;);
 <a name="line40"></a>
-<a name="line41"></a>goog.require(&#39;goog.proto2.Descriptor&#39;);
-<a name="line42"></a>goog.require(&#39;goog.proto2.FieldDescriptor&#39;);
-<a name="line43"></a>goog.require(&#39;goog.proto2.LazyDeserializer&#39;);
-<a name="line44"></a>goog.require(&#39;goog.proto2.Util&#39;);
-<a name="line45"></a>goog.require(&#39;goog.string&#39;);
-<a name="line46"></a>
-<a name="line47"></a>
-<a name="line48"></a>
-<a name="line49"></a>/**
-<a name="line50"></a> * PB-Lite serializer.
-<a name="line51"></a> *
-<a name="line52"></a> * @constructor
-<a name="line53"></a> * @extends {goog.proto2.LazyDeserializer}
-<a name="line54"></a> */
-<a name="line55"></a>goog.proto2.PbLiteSerializer = function() {};
-<a name="line56"></a>goog.inherits(goog.proto2.PbLiteSerializer, goog.proto2.LazyDeserializer);
-<a name="line57"></a>
-<a name="line58"></a>
-<a name="line59"></a>/**
-<a name="line60"></a> * Serializes a message to a PB-Lite object.
-<a name="line61"></a> *
-<a name="line62"></a> * @param {goog.proto2.Message} message The message to be serialized.
-<a name="line63"></a> *
-<a name="line64"></a> * @return {Object} The serialized form of the message.
-<a name="line65"></a> */
-<a name="line66"></a>goog.proto2.PbLiteSerializer.prototype.serialize = function(message) {
-<a name="line67"></a>  var descriptor = message.getDescriptor();
-<a name="line68"></a>  var fields = descriptor.getFields();
-<a name="line69"></a>
-<a name="line70"></a>  var serialized = [];
-<a name="line71"></a>
-<a name="line72"></a>  // Add the known fields.
-<a name="line73"></a>  for (var i = 0; i &lt; fields.length; i++) {
-<a name="line74"></a>    var field = fields[i];
-<a name="line75"></a>
-<a name="line76"></a>    if (!message.has(field)) {
-<a name="line77"></a>      continue;
-<a name="line78"></a>    }
-<a name="line79"></a>
-<a name="line80"></a>    var tag = field.getTag();
+<a name="line41"></a>goog.require(&#39;goog.proto2.LazyDeserializer&#39;);
+<a name="line42"></a>goog.require(&#39;goog.proto2.Util&#39;);
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * PB-Lite serializer.
+<a name="line48"></a> *
+<a name="line49"></a> * @constructor
+<a name="line50"></a> * @extends {goog.proto2.LazyDeserializer}
+<a name="line51"></a> */
+<a name="line52"></a>goog.proto2.PbLiteSerializer = function() {};
+<a name="line53"></a>goog.inherits(goog.proto2.PbLiteSerializer, goog.proto2.LazyDeserializer);
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * Serializes a message to a PB-Lite object.
+<a name="line58"></a> *
+<a name="line59"></a> * @param {goog.proto2.Message} message The message to be serialized.
+<a name="line60"></a> *
+<a name="line61"></a> * @return {Object} The serialized form of the message.
+<a name="line62"></a> */
+<a name="line63"></a>goog.proto2.PbLiteSerializer.prototype.serialize = function(message) {
+<a name="line64"></a>  var descriptor = message.getDescriptor();
+<a name="line65"></a>  var fields = descriptor.getFields();
+<a name="line66"></a>
+<a name="line67"></a>  var serialized = [];
+<a name="line68"></a>
+<a name="line69"></a>  // Add the known fields.
+<a name="line70"></a>  for (var i = 0; i &lt; fields.length; i++) {
+<a name="line71"></a>    var field = fields[i];
+<a name="line72"></a>
+<a name="line73"></a>    if (!message.has(field)) {
+<a name="line74"></a>      continue;
+<a name="line75"></a>    }
+<a name="line76"></a>
+<a name="line77"></a>    var tag = field.getTag();
+<a name="line78"></a>
+<a name="line79"></a>    if (field.isRepeated()) {
+<a name="line80"></a>      serialized[tag] = [];
 <a name="line81"></a>
-<a name="line82"></a>    if (field.isRepeated()) {
-<a name="line83"></a>      serialized[tag] = [];
-<a name="line84"></a>
-<a name="line85"></a>      for (var j = 0; j &lt; message.countOf(field); j++) {
-<a name="line86"></a>        serialized[tag][j] =
-<a name="line87"></a>            this.getSerializedValue(field, message.get(field, j));
-<a name="line88"></a>      }
-<a name="line89"></a>    } else {
-<a name="line90"></a>      serialized[tag] = this.getSerializedValue(field, message.get(field));
-<a name="line91"></a>    }
-<a name="line92"></a>  }
-<a name="line93"></a>
-<a name="line94"></a>  // Add any unknown fields.
-<a name="line95"></a>  message.forEachUnknown(function(tag, value) {
-<a name="line96"></a>    serialized[tag] = value;
-<a name="line97"></a>  });
+<a name="line82"></a>      for (var j = 0; j &lt; message.countOf(field); j++) {
+<a name="line83"></a>        serialized[tag][j] =
+<a name="line84"></a>            this.getSerializedValue(field, message.get(field, j));
+<a name="line85"></a>      }
+<a name="line86"></a>    } else {
+<a name="line87"></a>      serialized[tag] = this.getSerializedValue(field, message.get(field));
+<a name="line88"></a>    }
+<a name="line89"></a>  }
+<a name="line90"></a>
+<a name="line91"></a>  // Add any unknown fields.
+<a name="line92"></a>  message.forEachUnknown(function(tag, value) {
+<a name="line93"></a>    serialized[tag] = value;
+<a name="line94"></a>  });
+<a name="line95"></a>
+<a name="line96"></a>  return serialized;
+<a name="line97"></a>};
 <a name="line98"></a>
-<a name="line99"></a>  return serialized;
-<a name="line100"></a>};
-<a name="line101"></a>
-<a name="line102"></a>
-<a name="line103"></a>/** @inheritDoc */
-<a name="line104"></a>goog.proto2.PbLiteSerializer.prototype.deserializeField =
-<a name="line105"></a>  function(message, field, value) {
-<a name="line106"></a>
-<a name="line107"></a>   if (value == null) {
-<a name="line108"></a>     return null;
-<a name="line109"></a>   }
+<a name="line99"></a>
+<a name="line100"></a>/** @inheritDoc */
+<a name="line101"></a>goog.proto2.PbLiteSerializer.prototype.deserializeField =
+<a name="line102"></a>  function(message, field, value) {
+<a name="line103"></a>
+<a name="line104"></a>   if (value == null) {
+<a name="line105"></a>     return null;
+<a name="line106"></a>   }
+<a name="line107"></a>
+<a name="line108"></a>   if (field.isRepeated()) {
+<a name="line109"></a>     var data = [];
 <a name="line110"></a>
-<a name="line111"></a>   if (field.isRepeated()) {
-<a name="line112"></a>     var data = [];
-<a name="line113"></a>
-<a name="line114"></a>     goog.proto2.Util.assert(goog.isArray(value));
-<a name="line115"></a>
-<a name="line116"></a>     for (var i = 0; i &lt; value.length; i++) {
-<a name="line117"></a>       data[i] = this.getDeserializedValue(field, value[i]);
-<a name="line118"></a>     }
-<a name="line119"></a>
-<a name="line120"></a>     return data;
-<a name="line121"></a>   } else {
-<a name="line122"></a>     return this.getDeserializedValue(field, value);
-<a name="line123"></a>   }
-<a name="line124"></a>};
-<a name="line125"></a>
-<a name="line126"></a>
-<a name="line127"></a>/** @inheritDoc */
-<a name="line128"></a>goog.proto2.PbLiteSerializer.prototype.getSerializedValue =
-<a name="line129"></a>  function(field, value) {
-<a name="line130"></a>  if (field.getFieldType() == goog.proto2.Message.FieldType.BOOL) {
-<a name="line131"></a>    // Booleans are serialized in numeric form.
-<a name="line132"></a>    return value ? 1 : 0;
-<a name="line133"></a>  }
-<a name="line134"></a>
-<a name="line135"></a>  return goog.proto2.Serializer.prototype.getSerializedValue.apply(this,
-<a name="line136"></a>                                                                   arguments);
-<a name="line137"></a>};
-<a name="line138"></a>
-<a name="line139"></a>/** @inheritDoc */
-<a name="line140"></a>goog.proto2.PbLiteSerializer.prototype.getDeserializedValue =
-<a name="line141"></a>  function(field, value) {
-<a name="line142"></a>
-<a name="line143"></a>  if (field.getFieldType() == goog.proto2.Message.FieldType.BOOL) {
-<a name="line144"></a>    // Booleans are serialized in numeric form.
-<a name="line145"></a>    return value === 1;
-<a name="line146"></a>  }
-<a name="line147"></a>
-<a name="line148"></a>  return goog.proto2.Serializer.prototype.getDeserializedValue.apply(this,
-<a name="line149"></a>                                                                     arguments);
-<a name="line150"></a>};
+<a name="line111"></a>     goog.proto2.Util.assert(goog.isArray(value));
+<a name="line112"></a>
+<a name="line113"></a>     for (var i = 0; i &lt; value.length; i++) {
+<a name="line114"></a>       data[i] = this.getDeserializedValue(field, value[i]);
+<a name="line115"></a>     }
+<a name="line116"></a>
+<a name="line117"></a>     return data;
+<a name="line118"></a>   } else {
+<a name="line119"></a>     return this.getDeserializedValue(field, value);
+<a name="line120"></a>   }
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/** @inheritDoc */
+<a name="line125"></a>goog.proto2.PbLiteSerializer.prototype.getSerializedValue =
+<a name="line126"></a>  function(field, value) {
+<a name="line127"></a>  if (field.getFieldType() == goog.proto2.Message.FieldType.BOOL) {
+<a name="line128"></a>    // Booleans are serialized in numeric form.
+<a name="line129"></a>    return value ? 1 : 0;
+<a name="line130"></a>  }
+<a name="line131"></a>
+<a name="line132"></a>  return goog.proto2.Serializer.prototype.getSerializedValue.apply(this,
+<a name="line133"></a>                                                                   arguments);
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>/** @inheritDoc */
+<a name="line137"></a>goog.proto2.PbLiteSerializer.prototype.getDeserializedValue =
+<a name="line138"></a>  function(field, value) {
+<a name="line139"></a>
+<a name="line140"></a>  if (field.getFieldType() == goog.proto2.Message.FieldType.BOOL) {
+<a name="line141"></a>    // Booleans are serialized in numeric form.
+<a name="line142"></a>    return value === 1;
+<a name="line143"></a>  }
+<a name="line144"></a>
+<a name="line145"></a>  return goog.proto2.Serializer.prototype.getDeserializedValue.apply(this,
+<a name="line146"></a>                                                                     arguments);
+<a name="line147"></a>};
 </pre>
 
 

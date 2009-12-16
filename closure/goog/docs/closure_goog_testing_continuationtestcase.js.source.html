@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -136,7 +137,7 @@
 <a name="line93"></a> * may issue &quot;wait&quot; commands that suspend the test temporarily and continue once
 <a name="line94"></a> * the wait condition is met.
 <a name="line95"></a> *
-<a name="line96"></a> * @param {string} opt_name Optional name for the test case.
+<a name="line96"></a> * @param {string=} opt_name Optional name for the test case.
 <a name="line97"></a> * @constructor
 <a name="line98"></a> * @extends {goog.testing.TestCase}
 <a name="line99"></a> */
@@ -332,7 +333,7 @@
 <a name="line289"></a>/**
 <a name="line290"></a> * Creates a new test step that will run after a user-specified timeout.
 <a name="line291"></a> * @param {Function} continuation The test function to invoke after the timeout.
-<a name="line292"></a> * @param {number} opt_duration The length of the timeout in milliseconds.
+<a name="line292"></a> * @param {number=} opt_duration The length of the timeout in milliseconds.
 <a name="line293"></a> */
 <a name="line294"></a>goog.testing.ContinuationTestCase.prototype.waitForTimeout =
 <a name="line295"></a>    function(continuation, opt_duration) {
@@ -375,8 +376,8 @@
 <a name="line332"></a> * @param {Function} condition The condition to poll.
 <a name="line333"></a> * @param {Function} continuation The test code to evaluate once the condition
 <a name="line334"></a> *     becomes true.
-<a name="line335"></a> * @param {number} opt_interval The polling interval in milliseconds.
-<a name="line336"></a> * @param {number} opt_maxTimeout The maximum amount of time to wait for the
+<a name="line335"></a> * @param {number=} opt_interval The polling interval in milliseconds.
+<a name="line336"></a> * @param {number=} opt_maxTimeout The maximum amount of time to wait for the
 <a name="line337"></a> *     condition in milliseconds (defaults to 1000).
 <a name="line338"></a> */
 <a name="line339"></a>goog.testing.ContinuationTestCase.prototype.waitForCondition = function(
@@ -647,7 +648,7 @@
 <a name="line604"></a> *
 <a name="line605"></a> * @param {string} name The test name.
 <a name="line606"></a> * @param {Function} ref The test function to run.
-<a name="line607"></a> * @param {Object} opt_scope The object context to run the test in.
+<a name="line607"></a> * @param {Object=} opt_scope The object context to run the test in.
 <a name="line608"></a> * @constructor
 <a name="line609"></a> * @extends {goog.testing.TestCase.Test}
 <a name="line610"></a> */

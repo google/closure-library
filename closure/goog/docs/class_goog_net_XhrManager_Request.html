@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -77,13 +89,13 @@ NOTE: This is used internal to the XhrManager.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td>goog.net.XhrManager.Request</td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -123,7 +135,7 @@ NOTE: This is used internal to the XhrManager.
    <tr class="even">
      <td>
         <span class="entryName">opt_method</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Send method, default: GET.</div>
      </td>
    </tr>
@@ -131,7 +143,7 @@ NOTE: This is used internal to the XhrManager.
    <tr class="odd">
      <td>
         <span class="entryName">opt_content</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Post data.</div>
      </td>
    </tr>
@@ -139,7 +151,7 @@ NOTE: This is used internal to the XhrManager.
    <tr class="even">
      <td>
         <span class="entryName">opt_headers</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">goog.structs.Map=</span></div>
         <div class="entryOverview">Map of headers to add to the request.</div>
      </td>
    </tr>
@@ -147,15 +159,15 @@ NOTE: This is used internal to the XhrManager.
    <tr class="odd">
      <td>
         <span class="entryName">opt_callback</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
-        <div class="entryOverview">Callback function for when request is complete NOTE: Only 1 callback supported across all events.</div>
+        : <div class="fullType"><span class="type">Function=</span></div>
+        <div class="entryOverview">Callback function for when request is complete. NOTE: Only 1 callback supported across all events.</div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
         <span class="entryName">opt_maxRetries</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The maximum number of times the request should be retried (Default: 1).</div>
      </td>
    </tr>
@@ -225,7 +237,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line770">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line773">code &raquo;</a>
   </td>
      </tr>
 
@@ -271,7 +283,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line743">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line746">code &raquo;</a>
   </td>
      </tr>
 
@@ -317,7 +329,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line690">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line693">code &raquo;</a>
   </td>
      </tr>
 
@@ -363,7 +375,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line762">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line765">code &raquo;</a>
   </td>
      </tr>
 
@@ -409,7 +421,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line725">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line728">code &raquo;</a>
   </td>
      </tr>
 
@@ -455,7 +467,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line664">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line667">code &raquo;</a>
   </td>
      </tr>
 
@@ -501,7 +513,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line673">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line676">code &raquo;</a>
   </td>
      </tr>
 
@@ -547,7 +559,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line682">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line685">code &raquo;</a>
   </td>
      </tr>
 
@@ -593,7 +605,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line655">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line658">code &raquo;</a>
   </td>
      </tr>
 
@@ -639,7 +651,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line646">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line649">code &raquo;</a>
   </td>
      </tr>
 
@@ -685,7 +697,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line753">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line756">code &raquo;</a>
   </td>
      </tr>
 
@@ -731,7 +743,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line708">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line711">code &raquo;</a>
   </td>
      </tr>
 
@@ -765,7 +777,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line698">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line701">code &raquo;</a>
   </td>
      </tr>
 
@@ -825,7 +837,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line734">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line737">code &raquo;</a>
   </td>
      </tr>
 
@@ -885,7 +897,7 @@ NOTE: This is used internal to the XhrManager.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrmanager.js.source.html#line716">code &raquo;</a>
+     <a href="closure_goog_net_xhrmanager.js.source.html#line719">code &raquo;</a>
   </td>
      </tr>
 

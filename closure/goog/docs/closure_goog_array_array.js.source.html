@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -102,7 +103,7 @@
 <a name="line59"></a> *
 <a name="line60"></a> * @param {goog.array.ArrayLike} arr The array to be searched.
 <a name="line61"></a> * @param {*} obj The object for which we are searching.
-<a name="line62"></a> * @param {number} opt_fromIndex The index at which to start the search. If
+<a name="line62"></a> * @param {number=} opt_fromIndex The index at which to start the search. If
 <a name="line63"></a> *     omitted the search starts at index 0.
 <a name="line64"></a> * @return {number} The index of the first matching array element.
 <a name="line65"></a> */
@@ -139,7 +140,7 @@
 <a name="line96"></a> *
 <a name="line97"></a> * @param {goog.array.ArrayLike} arr The array to be searched.
 <a name="line98"></a> * @param {*} obj The object for which we are searching.
-<a name="line99"></a> * @param {?number} opt_fromIndex The index at which to start the search. If
+<a name="line99"></a> * @param {?number=} opt_fromIndex The index at which to start the search. If
 <a name="line100"></a> *     omitted the search starts at the end of the array.
 <a name="line101"></a> * @return {number} The index of the last matching array element.
 <a name="line102"></a> */
@@ -186,7 +187,7 @@
 <a name="line143"></a> *     which have assigned values; it is not called for indexes which have
 <a name="line144"></a> *     been deleted or which have never been assigned values.
 <a name="line145"></a> *
-<a name="line146"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line146"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line147"></a> *     within f.
 <a name="line148"></a> */
 <a name="line149"></a>goog.array.forEach = goog.array.ARRAY_PROTOTYPE_.forEach ?
@@ -212,7 +213,7 @@
 <a name="line169"></a> * @param {Function} f The function to call for every element. This function
 <a name="line170"></a> *     takes 3 arguments (the element, the index and the array). The return
 <a name="line171"></a> *     value is ignored.
-<a name="line172"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line172"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line173"></a> *     within f.
 <a name="line174"></a> */
 <a name="line175"></a>goog.array.forEachRight = function(arr, f, opt_obj) {
@@ -237,7 +238,7 @@
 <a name="line194"></a> *     takes 3 arguments (the element, the index and the array) and must
 <a name="line195"></a> *     return a Boolean. If the return value is true the element is added to the
 <a name="line196"></a> *     result array. If it is false the element is not included.
-<a name="line197"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line197"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line198"></a> *     within f.
 <a name="line199"></a> * @return {!Array} a new array in which only elements that passed the test are
 <a name="line200"></a> *     present.
@@ -273,7 +274,7 @@
 <a name="line230"></a> * @param {Function} f The function to call for every element. This function
 <a name="line231"></a> *     takes 3 arguments (the element, the index and the array) and should
 <a name="line232"></a> *     return something. The result will be inserted into a new array.
-<a name="line233"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line233"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line234"></a> *     within f.
 <a name="line235"></a> * @return {!Array} a new array with the results from f.
 <a name="line236"></a> */
@@ -312,7 +313,7 @@
 <a name="line269"></a> *     array itself)
 <a name="line270"></a> *     function(previousValue, currentValue, index, array).
 <a name="line271"></a> * @param {*} val The initial value to pass into the function on the first call.
-<a name="line272"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line272"></a> * @param {Object=} opt_obj  The object to be used as the value of &#39;this&#39;
 <a name="line273"></a> *     within f.
 <a name="line274"></a> * @return {*} Result of evaluating f repeatedly across the values of the array.
 <a name="line275"></a> */
@@ -350,7 +351,7 @@
 <a name="line307"></a> *     array itself)
 <a name="line308"></a> *     function(previousValue, currentValue, index, array).
 <a name="line309"></a> * @param {*} val The initial value to pass into the function on the first call.
-<a name="line310"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line310"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line311"></a> *     within f.
 <a name="line312"></a> * @return {*} Object returned as a result of evaluating f repeatedly across the
 <a name="line313"></a> *     values of the array.
@@ -382,7 +383,7 @@
 <a name="line339"></a> * @param {Function} f The function to call for every element. This function
 <a name="line340"></a> *     takes 3 arguments (the element, the index and the array) and must
 <a name="line341"></a> *     return a Boolean.
-<a name="line342"></a> * @param {Object} opt_obj  The object to be used as the value of &#39;this&#39;
+<a name="line342"></a> * @param {Object=} opt_obj  The object to be used as the value of &#39;this&#39;
 <a name="line343"></a> *     within f.
 <a name="line344"></a> * @return {boolean} true if any element passes the test.
 <a name="line345"></a> */
@@ -413,7 +414,7 @@
 <a name="line370"></a> * @param {Function} f The function to call for every element. This function
 <a name="line371"></a> *     takes 3 arguments (the element, the index and the array) and must
 <a name="line372"></a> *     return a Boolean.
-<a name="line373"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line373"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line374"></a> *     within f.
 <a name="line375"></a> * @return {boolean} false if any element fails the test.
 <a name="line376"></a> */
@@ -440,7 +441,7 @@
 <a name="line397"></a> * @param {Function} f The function to call for every element. This function
 <a name="line398"></a> *     takes 3 arguments (the element, the index and the array) and should
 <a name="line399"></a> *     return a boolean.
-<a name="line400"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
+<a name="line400"></a> * @param {Object=} opt_obj An optional &quot;this&quot; context for the function.
 <a name="line401"></a> * @return {*} The first array element that passes the test, or null if no
 <a name="line402"></a> *     element is found.
 <a name="line403"></a> */
@@ -457,7 +458,7 @@
 <a name="line414"></a> * @param {Function} f The function to call for every element. This function
 <a name="line415"></a> *     takes 3 arguments (the element, the index and the array) and should
 <a name="line416"></a> *     return a boolean.
-<a name="line417"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
+<a name="line417"></a> * @param {Object=} opt_obj An optional &quot;this&quot; context for the function.
 <a name="line418"></a> * @return {number} The index of the first array element that passes the test,
 <a name="line419"></a> *     or -1 if no element is found.
 <a name="line420"></a> */
@@ -480,7 +481,7 @@
 <a name="line437"></a> * @param {Function} f The function to call for every element. This function
 <a name="line438"></a> *     takes 3 arguments (the element, the index and the array) and should
 <a name="line439"></a> *     return a boolean.
-<a name="line440"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
+<a name="line440"></a> * @param {Object=} opt_obj An optional &quot;this&quot; context for the function.
 <a name="line441"></a> * @return {*} The last array element that passes the test, or null if no
 <a name="line442"></a> *     element is found.
 <a name="line443"></a> */
@@ -497,7 +498,7 @@
 <a name="line454"></a> * @param {Function} f The function to call for every element. This function
 <a name="line455"></a> *     takes 3 arguments (the element, the index and the array) and should
 <a name="line456"></a> *     return a boolean.
-<a name="line457"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
+<a name="line457"></a> * @param {Object=} opt_obj An optional &quot;this&quot; context for the function.
 <a name="line458"></a> * @return {number} The index of the last array element that passes the test,
 <a name="line459"></a> *     or -1 if no element is found.
 <a name="line460"></a> */
@@ -567,7 +568,7 @@
 <a name="line524"></a> * Inserts an object at the given index of the array.
 <a name="line525"></a> * @param {goog.array.ArrayLike} arr The array to modify.
 <a name="line526"></a> * @param {*} obj The object to insert.
-<a name="line527"></a> * @param {number} opt_i The index at which to insert the object. If omitted,
+<a name="line527"></a> * @param {number=} opt_i The index at which to insert the object. If omitted,
 <a name="line528"></a> *      treated as 0. A negative index is counted from the end of the array.
 <a name="line529"></a> */
 <a name="line530"></a>goog.array.insertAt = function(arr, obj, opt_i) {
@@ -579,7 +580,7 @@
 <a name="line536"></a> * Inserts at the given index of the array, all elements of another array.
 <a name="line537"></a> * @param {goog.array.ArrayLike} arr The array to modify.
 <a name="line538"></a> * @param {goog.array.ArrayLike} elementsToAdd The array of elements to add.
-<a name="line539"></a> * @param {number} opt_i The index at which to insert the object. If omitted,
+<a name="line539"></a> * @param {number=} opt_i The index at which to insert the object. If omitted,
 <a name="line540"></a> *      treated as 0. A negative index is counted from the end of the array.
 <a name="line541"></a> */
 <a name="line542"></a>goog.array.insertArrayAt = function(arr, elementsToAdd, opt_i) {
@@ -591,7 +592,7 @@
 <a name="line548"></a> * Inserts an object into an array before a specified object.
 <a name="line549"></a> * @param {Array} arr The array to modify.
 <a name="line550"></a> * @param {*} obj The object to insert.
-<a name="line551"></a> * @param {*} opt_obj2 The object before which obj should be inserted. If obj2
+<a name="line551"></a> * @param {*=} opt_obj2 The object before which obj should be inserted. If obj2
 <a name="line552"></a> *     is omitted or not found, obj is inserted at the end of the array.
 <a name="line553"></a> */
 <a name="line554"></a>goog.array.insertBefore = function(arr, obj, opt_obj2) {
@@ -641,7 +642,7 @@
 <a name="line598"></a> * @param {Function} f The function to call for every element. This function
 <a name="line599"></a> *     takes 3 arguments (the element, the index and the array) and should
 <a name="line600"></a> *     return a boolean.
-<a name="line601"></a> * @param {Object} opt_obj An optional &quot;this&quot; context for the function.
+<a name="line601"></a> * @param {Object=} opt_obj An optional &quot;this&quot; context for the function.
 <a name="line602"></a> * @return {boolean} True if an element was removed.
 <a name="line603"></a> */
 <a name="line604"></a>goog.array.removeIf = function(arr, f, opt_obj) {
@@ -707,7 +708,7 @@
 <a name="line664"></a> * a; // [0, 1, 2]
 <a name="line665"></a> *
 <a name="line666"></a> * @param {Array} arr1  The array to modify.
-<a name="line667"></a> * @param {*} var_args The elements or arrays of elements to add to arr1.
+<a name="line667"></a> * @param {...*} var_args The elements or arrays of elements to add to arr1.
 <a name="line668"></a> */
 <a name="line669"></a>goog.array.extend = function(arr1, var_args) {
 <a name="line670"></a>  for (var i = 1; i &lt; arguments.length; i++) {
@@ -734,7 +735,7 @@
 <a name="line691"></a> * @param {number} howMany How many elements to remove (0 means no removal. A
 <a name="line692"></a> *     value below 0 is treated as zero and so is any other non number. Numbers
 <a name="line693"></a> *     are floored).
-<a name="line694"></a> * @param {*} var_args Optional, additional elements to insert into the
+<a name="line694"></a> * @param {...*} var_args Optional, additional elements to insert into the
 <a name="line695"></a> *     array.
 <a name="line696"></a> * @return {!Array} the removed elements.
 <a name="line697"></a> */
@@ -751,7 +752,7 @@
 <a name="line708"></a> *
 <a name="line709"></a> * @param {goog.array.ArrayLike} arr The array from which to copy a segment.
 <a name="line710"></a> * @param {number} start The index of the first element to copy.
-<a name="line711"></a> * @param {number} opt_end The index after the last element to copy.
+<a name="line711"></a> * @param {number=} opt_end The index after the last element to copy.
 <a name="line712"></a> * @return {!Array} A new array containing the specified segment of the original
 <a name="line713"></a> *     array.
 <a name="line714"></a> */
@@ -780,7 +781,7 @@
 <a name="line737"></a> * Worstcase space: 2N (no dupes)
 <a name="line738"></a> *
 <a name="line739"></a> * @param {goog.array.ArrayLike} arr The array from which to remove duplicates.
-<a name="line740"></a> * @param {Array} opt_rv An optional array in which to return the results,
+<a name="line740"></a> * @param {Array=} opt_rv An optional array in which to return the results,
 <a name="line741"></a> *     instead of performing the removal inplace.  If specified, the original
 <a name="line742"></a> *     array will remain unchanged.
 <a name="line743"></a> */
@@ -814,7 +815,7 @@
 <a name="line771"></a> *
 <a name="line772"></a> * @param {goog.array.ArrayLike} arr The array to be searched.
 <a name="line773"></a> * @param {*} target The sought value.
-<a name="line774"></a> * @param {Function} opt_compareFn Optional comparison function by which the
+<a name="line774"></a> * @param {Function=} opt_compareFn Optional comparison function by which the
 <a name="line775"></a> *     array is ordered. Should take 2 arguments to compare, and return a
 <a name="line776"></a> *     negative integer, zero, or a positive integer depending on whether the
 <a name="line777"></a> *     first argument is less than, equal to, or greater than the second.
@@ -855,7 +856,7 @@
 <a name="line812"></a> * Runtime: Same as &lt;code&gt;Array.prototype.sort&lt;/code&gt;
 <a name="line813"></a> *
 <a name="line814"></a> * @param {Array} arr The array to be sorted.
-<a name="line815"></a> * @param {Function} opt_compareFn Optional comparison function by which the
+<a name="line815"></a> * @param {Function=} opt_compareFn Optional comparison function by which the
 <a name="line816"></a> *     array is to be ordered. Should take 2 arguments to compare, and return a
 <a name="line817"></a> *     negative integer, zero, or a positive integer depending on whether the
 <a name="line818"></a> *     first argument is less than, equal to, or greater than the second.
@@ -877,9 +878,9 @@
 <a name="line834"></a> * O(n) overhead of copying the array twice.
 <a name="line835"></a> *
 <a name="line836"></a> * @param {Array} arr The array to be sorted.
-<a name="line837"></a> * @param {function(*, *): number} opt_compareFn Optional comparison function by
-<a name="line838"></a> *     which the array is to be ordered. Should take 2 arguments to compare, and
-<a name="line839"></a> *     return a negative integer, zero, or a positive integer depending on
+<a name="line837"></a> * @param {function(*, *): number=} opt_compareFn Optional comparison function
+<a name="line838"></a> *     by which the array is to be ordered. Should take 2 arguments to compare,
+<a name="line839"></a> *     and return a negative integer, zero, or a positive integer depending on
 <a name="line840"></a> *     whether the first argument is less than, equal to, or greater than the
 <a name="line841"></a> *     second.
 <a name="line842"></a> */
@@ -906,7 +907,7 @@
 <a name="line863"></a> * {&#39;foo&#39;: 1, &#39;bar&#39;: 2} rather than {foo: 1, bar: 2}.
 <a name="line864"></a> * @param {Array.&lt;Object&gt;} arr An array of objects to sort.
 <a name="line865"></a> * @param {string} key The object key to sort by.
-<a name="line866"></a> * @param {Function} opt_compareFn The function to use to compare key
+<a name="line866"></a> * @param {Function=} opt_compareFn The function to use to compare key
 <a name="line867"></a> *     values.
 <a name="line868"></a> */
 <a name="line869"></a>goog.array.sortObjectsByKey = function(arr, key, opt_compareFn) {
@@ -924,7 +925,7 @@
 <a name="line881"></a> *
 <a name="line882"></a> * @param {goog.array.ArrayLike} arr1 The first array to compare.
 <a name="line883"></a> * @param {goog.array.ArrayLike} arr2 The second array to compare.
-<a name="line884"></a> * @param {Function} opt_equalsFn Optional comparison function.
+<a name="line884"></a> * @param {Function=} opt_equalsFn Optional comparison function.
 <a name="line885"></a> *     Should take 2 arguments to compare, and return true if the arguments
 <a name="line886"></a> *     are equal. Defaults to {@link goog.array.defaultCompareEquality} which
 <a name="line887"></a> *     compares the elements using the built-in &#39;===&#39; operator.
@@ -950,7 +951,7 @@
 <a name="line907"></a> * @deprecated Use {@link goog.array.equals}.
 <a name="line908"></a> * @param {goog.array.ArrayLike} arr1 See {@link goog.array.equals}.
 <a name="line909"></a> * @param {goog.array.ArrayLike} arr2 See {@link goog.array.equals}.
-<a name="line910"></a> * @param {Function} opt_equalsFn See {@link goog.array.equals}.
+<a name="line910"></a> * @param {Function=} opt_equalsFn See {@link goog.array.equals}.
 <a name="line911"></a> * @return {boolean} See {@link goog.array.equals}.
 <a name="line912"></a> */
 <a name="line913"></a>goog.array.compare = function(arr1, arr2, opt_equalsFn) {
@@ -988,7 +989,7 @@
 <a name="line945"></a> * value is already present.
 <a name="line946"></a> * @param {Array} array The array to modify.
 <a name="line947"></a> * @param {*} value The object to insert.
-<a name="line948"></a> * @param {Function} opt_compareFn Optional comparison function by which the
+<a name="line948"></a> * @param {Function=} opt_compareFn Optional comparison function by which the
 <a name="line949"></a> *     array is ordered. Should take 2 arguments to compare, and
 <a name="line950"></a> *     return a negative integer, zero, or a positive integer depending on
 <a name="line951"></a> *     whether the first argument is less than, equal to, or greater than the
@@ -1009,7 +1010,7 @@
 <a name="line966"></a> * Removes a value from a sorted array.
 <a name="line967"></a> * @param {Array} array The array to modify.
 <a name="line968"></a> * @param {*} value The object to remove.
-<a name="line969"></a> * @param {Function} opt_compareFn Optional comparison function by which the
+<a name="line969"></a> * @param {Function=} opt_compareFn Optional comparison function by which the
 <a name="line970"></a> *     array is ordered. Should take 2 arguments to compare, and
 <a name="line971"></a> *     return a negative integer, zero, or a positive integer depending on
 <a name="line972"></a> *     whether the first argument is less than, equal to, or greater than the
@@ -1070,7 +1071,7 @@
 <a name="line1027"></a> * Returns an array consisting of every argument with all arrays
 <a name="line1028"></a> * expanded in-place recursively.
 <a name="line1029"></a> *
-<a name="line1030"></a> * @param {*} var_args The values to flatten.
+<a name="line1030"></a> * @param {...*} var_args The values to flatten.
 <a name="line1031"></a> * @return {!Array.&lt;*&gt;} An array containing the flattened values.
 <a name="line1032"></a> */
 <a name="line1033"></a>goog.array.flatten = function(var_args) {

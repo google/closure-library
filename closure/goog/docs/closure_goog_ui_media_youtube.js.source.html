@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -165,7 +166,7 @@
 <a name="line122"></a> * Youtube videos, except if you need finer control over the configuration.
 <a name="line123"></a> *
 <a name="line124"></a> * @param {goog.ui.media.YoutubeModel} youtubeModel The youtube data model.
-<a name="line125"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+<a name="line125"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
 <a name="line126"></a> *     document interaction.
 <a name="line127"></a> * @return {goog.ui.media.Media} A Control binded to the youtube renderer.
 <a name="line128"></a> */
@@ -243,128 +244,130 @@
 <a name="line200"></a> * parameters.
 <a name="line201"></a> *
 <a name="line202"></a> * @param {string} videoId The youtube video id.
-<a name="line203"></a> * @param {string} opt_caption An optional caption of the youtube video.
-<a name="line204"></a> * @param {string} opt_description An optional description of the youtube video.
-<a name="line205"></a> * @constructor
-<a name="line206"></a> * @extends {goog.ui.media.MediaModel}
-<a name="line207"></a> */
-<a name="line208"></a>goog.ui.media.YoutubeModel = function(videoId, opt_caption, opt_description) {
-<a name="line209"></a>  goog.ui.media.MediaModel.call(
-<a name="line210"></a>      this,
-<a name="line211"></a>      goog.ui.media.YoutubeModel.buildUrl(videoId),
-<a name="line212"></a>      opt_caption,
-<a name="line213"></a>      opt_description,
-<a name="line214"></a>      goog.ui.media.MediaModel.MimeType.FLASH);
-<a name="line215"></a>
-<a name="line216"></a>  /**
-<a name="line217"></a>   * The Youtube video id.
-<a name="line218"></a>   * @type {string}
-<a name="line219"></a>   * @private
-<a name="line220"></a>   */
-<a name="line221"></a>  this.videoId_ = videoId;
-<a name="line222"></a>
-<a name="line223"></a>  this.setThumbnails([new goog.ui.media.MediaModel.Thumbnail(
-<a name="line224"></a>      goog.ui.media.YoutubeModel.getThumbnailUrl(videoId))]);
-<a name="line225"></a>
-<a name="line226"></a>  this.setPlayer(new goog.ui.media.MediaModel.Player(
-<a name="line227"></a>      this.getFlashUrl(videoId, true)));
-<a name="line228"></a>};
-<a name="line229"></a>goog.inherits(goog.ui.media.YoutubeModel, goog.ui.media.MediaModel);
-<a name="line230"></a>
+<a name="line203"></a> * @param {string=} opt_caption An optional caption of the youtube video.
+<a name="line204"></a> * @param {string=} opt_description An optional description of the youtube
+<a name="line205"></a> *     video.
+<a name="line206"></a> * @constructor
+<a name="line207"></a> * @extends {goog.ui.media.MediaModel}
+<a name="line208"></a> */
+<a name="line209"></a>goog.ui.media.YoutubeModel = function(videoId, opt_caption, opt_description) {
+<a name="line210"></a>  goog.ui.media.MediaModel.call(
+<a name="line211"></a>      this,
+<a name="line212"></a>      goog.ui.media.YoutubeModel.buildUrl(videoId),
+<a name="line213"></a>      opt_caption,
+<a name="line214"></a>      opt_description,
+<a name="line215"></a>      goog.ui.media.MediaModel.MimeType.FLASH);
+<a name="line216"></a>
+<a name="line217"></a>  /**
+<a name="line218"></a>   * The Youtube video id.
+<a name="line219"></a>   * @type {string}
+<a name="line220"></a>   * @private
+<a name="line221"></a>   */
+<a name="line222"></a>  this.videoId_ = videoId;
+<a name="line223"></a>
+<a name="line224"></a>  this.setThumbnails([new goog.ui.media.MediaModel.Thumbnail(
+<a name="line225"></a>      goog.ui.media.YoutubeModel.getThumbnailUrl(videoId))]);
+<a name="line226"></a>
+<a name="line227"></a>  this.setPlayer(new goog.ui.media.MediaModel.Player(
+<a name="line228"></a>      this.getFlashUrl(videoId, true)));
+<a name="line229"></a>};
+<a name="line230"></a>goog.inherits(goog.ui.media.YoutubeModel, goog.ui.media.MediaModel);
 <a name="line231"></a>
-<a name="line232"></a>/**
-<a name="line233"></a> * A youtube regular expression matcher. It matches the VIDEOID of URLs like
-<a name="line234"></a> * http://www.youtube.com/watch?v=VIDEOID.
-<a name="line235"></a> * @type {RegExp}
-<a name="line236"></a> * @private
-<a name="line237"></a> */
-<a name="line238"></a>goog.ui.media.YoutubeModel.matcher_ =
-<a name="line239"></a>    /https?:\/\/(?:[a-zA_Z]{2,3}.)?(?:youtube\.com\/watch\?)((?:[\w\d\-\_\=]+&amp;amp;(?:amp;)?)*v(?:&amp;lt;[A-Z]+&amp;gt;)?=([0-9a-zA-Z\-\_]+))/i;
-<a name="line240"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * A youtube regular expression matcher. It matches the VIDEOID of URLs like
+<a name="line235"></a> * http://www.youtube.com/watch?v=VIDEOID.
+<a name="line236"></a> * @type {RegExp}
+<a name="line237"></a> * @private
+<a name="line238"></a> */
+<a name="line239"></a>goog.ui.media.YoutubeModel.matcher_ =
+<a name="line240"></a>    /https?:\/\/(?:[a-zA_Z]{2,3}.)?(?:youtube\.com\/watch\?)((?:[\w\d\-\_\=]+&amp;amp;(?:amp;)?)*v(?:&amp;lt;[A-Z]+&amp;gt;)?=([0-9a-zA-Z\-\_]+))/i;
 <a name="line241"></a>
-<a name="line242"></a>/**
-<a name="line243"></a> * A auxiliary static method that parses a youtube URL, extracting the ID of the
-<a name="line244"></a> * video, and builds a YoutubeModel.
-<a name="line245"></a> *
-<a name="line246"></a> * @param {string} youtubeUrl A youtube URL.
-<a name="line247"></a> * @param {string} opt_caption An optional caption of the youtube video.
-<a name="line248"></a> * @param {string} opt_description An optional description of the youtube video.
-<a name="line249"></a> * @return {goog.ui.media.YoutubeModel} The data model that represents the
-<a name="line250"></a> *     youtube URL.
-<a name="line251"></a> * @see goog.ui.media.YoutubeModel.getVideoId()
-<a name="line252"></a> * @throws Error in case the parsing fails.
-<a name="line253"></a> */
-<a name="line254"></a>goog.ui.media.YoutubeModel.newInstance = function(youtubeUrl,
-<a name="line255"></a>                                                  opt_caption,
-<a name="line256"></a>                                                  opt_description) {
-<a name="line257"></a>  var extract = goog.ui.media.YoutubeModel.matcher_.exec(youtubeUrl);
-<a name="line258"></a>  if (extract) {
-<a name="line259"></a>    return new goog.ui.media.YoutubeModel(
-<a name="line260"></a>        extract[2], opt_caption, opt_description);
-<a name="line261"></a>  }
-<a name="line262"></a>
-<a name="line263"></a>  throw Error(&#39;failed to parse video id from youtube url: &#39; + youtubeUrl);
-<a name="line264"></a>};
-<a name="line265"></a>
-<a name="line266"></a>
-<a name="line267"></a>/**
-<a name="line268"></a> * The opposite of {@code goog.ui.media.Youtube.newInstance}: it takes a videoId
-<a name="line269"></a> * and returns a youtube URL.
-<a name="line270"></a> *
-<a name="line271"></a> * @param {string} videoId The youtube video ID.
-<a name="line272"></a> * @return {string} The youtube URL.
-<a name="line273"></a> */
-<a name="line274"></a>goog.ui.media.YoutubeModel.buildUrl = function(videoId) {
-<a name="line275"></a>  return &#39;http://www.youtube.com/watch?v=&#39; + goog.string.urlEncode(videoId);
-<a name="line276"></a>};
-<a name="line277"></a>
-<a name="line278"></a>
-<a name="line279"></a>/**
-<a name="line280"></a> * A static auxiliary method that builds a static image URL with a preview of
-<a name="line281"></a> * the youtube video.
-<a name="line282"></a> *
-<a name="line283"></a> * NOTE: patterned after Gmail&#39;s gadgets/youtube,
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * A auxiliary static method that parses a youtube URL, extracting the ID of the
+<a name="line245"></a> * video, and builds a YoutubeModel.
+<a name="line246"></a> *
+<a name="line247"></a> * @param {string} youtubeUrl A youtube URL.
+<a name="line248"></a> * @param {string=} opt_caption An optional caption of the youtube video.
+<a name="line249"></a> * @param {string=} opt_description An optional description of the youtube
+<a name="line250"></a> *     video.
+<a name="line251"></a> * @return {goog.ui.media.YoutubeModel} The data model that represents the
+<a name="line252"></a> *     youtube URL.
+<a name="line253"></a> * @see goog.ui.media.YoutubeModel.getVideoId()
+<a name="line254"></a> * @throws Error in case the parsing fails.
+<a name="line255"></a> */
+<a name="line256"></a>goog.ui.media.YoutubeModel.newInstance = function(youtubeUrl,
+<a name="line257"></a>                                                  opt_caption,
+<a name="line258"></a>                                                  opt_description) {
+<a name="line259"></a>  var extract = goog.ui.media.YoutubeModel.matcher_.exec(youtubeUrl);
+<a name="line260"></a>  if (extract) {
+<a name="line261"></a>    return new goog.ui.media.YoutubeModel(
+<a name="line262"></a>        extract[2], opt_caption, opt_description);
+<a name="line263"></a>  }
+<a name="line264"></a>
+<a name="line265"></a>  throw Error(&#39;failed to parse video id from youtube url: &#39; + youtubeUrl);
+<a name="line266"></a>};
+<a name="line267"></a>
+<a name="line268"></a>
+<a name="line269"></a>/**
+<a name="line270"></a> * The opposite of {@code goog.ui.media.Youtube.newInstance}: it takes a videoId
+<a name="line271"></a> * and returns a youtube URL.
+<a name="line272"></a> *
+<a name="line273"></a> * @param {string} videoId The youtube video ID.
+<a name="line274"></a> * @return {string} The youtube URL.
+<a name="line275"></a> */
+<a name="line276"></a>goog.ui.media.YoutubeModel.buildUrl = function(videoId) {
+<a name="line277"></a>  return &#39;http://www.youtube.com/watch?v=&#39; + goog.string.urlEncode(videoId);
+<a name="line278"></a>};
+<a name="line279"></a>
+<a name="line280"></a>
+<a name="line281"></a>/**
+<a name="line282"></a> * A static auxiliary method that builds a static image URL with a preview of
+<a name="line283"></a> * the youtube video.
 <a name="line284"></a> *
-<a name="line285"></a> * TODO: how do I specify the width/height of the resulting image on the
-<a name="line286"></a> * url ? is there an official API for http://ytimg.com ?
-<a name="line287"></a> *
-<a name="line288"></a> * @param {string} youtubeId The youtube video ID.
-<a name="line289"></a> * @return {string} An URL that contains an image with a preview of the youtube
-<a name="line290"></a> *     movie.
-<a name="line291"></a> */
-<a name="line292"></a>goog.ui.media.YoutubeModel.getThumbnailUrl = function(youtubeId) {
-<a name="line293"></a>  return &#39;http://i.ytimg.com/vi/&#39; + youtubeId + &#39;/default.jpg&#39;;
-<a name="line294"></a>};
-<a name="line295"></a>
-<a name="line296"></a>
-<a name="line297"></a>/**
-<a name="line298"></a> * An auxiliary method that builds URL of the flash movie to be embedded,
-<a name="line299"></a> * out of the youtube video id.
-<a name="line300"></a> *
-<a name="line301"></a> * @param {string} videoId The youtube video ID.
-<a name="line302"></a> * @param {boolean} opt_autoplay Whether the flash movie should start playing as
-<a name="line303"></a> *     soon as it is shown, or if it should show a &#39;play&#39; button.
-<a name="line304"></a> * @return {string} The flash URL to be embedded on the page.
-<a name="line305"></a> */
-<a name="line306"></a>goog.ui.media.YoutubeModel.prototype.getFlashUrl = function(videoId,
-<a name="line307"></a>                                                            opt_autoplay) {
-<a name="line308"></a>  var autoplay = opt_autoplay ? &#39;&amp;autoplay=1&#39; : &#39;&#39;;
-<a name="line309"></a>  // YouTube video ids are extracted from youtube URLs, which are user
-<a name="line310"></a>  // generated input. the video id is later used to embed a flash object,
-<a name="line311"></a>  // which is generated through HTML construction. We goog.string.urlEncode
-<a name="line312"></a>  // the video id to make sure the URL is safe to be embedded.
-<a name="line313"></a>  return &#39;http://www.youtube.com/v/&#39; + goog.string.urlEncode(videoId) +
-<a name="line314"></a>      &#39;&amp;hl=en&amp;fs=1&#39; + autoplay;
-<a name="line315"></a>};
-<a name="line316"></a>
-<a name="line317"></a>
-<a name="line318"></a>/**
-<a name="line319"></a> * Gets the Youtube video id.
-<a name="line320"></a> * @return {string} The Youtube video id.
-<a name="line321"></a> */
-<a name="line322"></a>goog.ui.media.YoutubeModel.prototype.getVideoId = function() {
-<a name="line323"></a>  return this.videoId_;
-<a name="line324"></a>};
+<a name="line285"></a> * NOTE: patterned after Gmail&#39;s gadgets/youtube,
+<a name="line286"></a> *
+<a name="line287"></a> * TODO: how do I specify the width/height of the resulting image on the
+<a name="line288"></a> * url ? is there an official API for http://ytimg.com ?
+<a name="line289"></a> *
+<a name="line290"></a> * @param {string} youtubeId The youtube video ID.
+<a name="line291"></a> * @return {string} An URL that contains an image with a preview of the youtube
+<a name="line292"></a> *     movie.
+<a name="line293"></a> */
+<a name="line294"></a>goog.ui.media.YoutubeModel.getThumbnailUrl = function(youtubeId) {
+<a name="line295"></a>  return &#39;http://i.ytimg.com/vi/&#39; + youtubeId + &#39;/default.jpg&#39;;
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * An auxiliary method that builds URL of the flash movie to be embedded,
+<a name="line301"></a> * out of the youtube video id.
+<a name="line302"></a> *
+<a name="line303"></a> * @param {string} videoId The youtube video ID.
+<a name="line304"></a> * @param {boolean=} opt_autoplay Whether the flash movie should start playing
+<a name="line305"></a> *     as soon as it is shown, or if it should show a &#39;play&#39; button.
+<a name="line306"></a> * @return {string} The flash URL to be embedded on the page.
+<a name="line307"></a> */
+<a name="line308"></a>goog.ui.media.YoutubeModel.prototype.getFlashUrl = function(videoId,
+<a name="line309"></a>                                                            opt_autoplay) {
+<a name="line310"></a>  var autoplay = opt_autoplay ? &#39;&amp;autoplay=1&#39; : &#39;&#39;;
+<a name="line311"></a>  // YouTube video ids are extracted from youtube URLs, which are user
+<a name="line312"></a>  // generated input. the video id is later used to embed a flash object,
+<a name="line313"></a>  // which is generated through HTML construction. We goog.string.urlEncode
+<a name="line314"></a>  // the video id to make sure the URL is safe to be embedded.
+<a name="line315"></a>  return &#39;http://www.youtube.com/v/&#39; + goog.string.urlEncode(videoId) +
+<a name="line316"></a>      &#39;&amp;hl=en&amp;fs=1&#39; + autoplay;
+<a name="line317"></a>};
+<a name="line318"></a>
+<a name="line319"></a>
+<a name="line320"></a>/**
+<a name="line321"></a> * Gets the Youtube video id.
+<a name="line322"></a> * @return {string} The Youtube video id.
+<a name="line323"></a> */
+<a name="line324"></a>goog.ui.media.YoutubeModel.prototype.getVideoId = function() {
+<a name="line325"></a>  return this.videoId_;
+<a name="line326"></a>};
 </pre>
 
 

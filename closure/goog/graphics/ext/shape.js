@@ -29,7 +29,7 @@ goog.require('goog.math.Rect');
  * Wrapper for a graphics shape element.
  * @param {goog.graphics.ext.Group} group Parent for this element.
  * @param {goog.graphics.ext.Path} path  The path to draw.
- * @param {boolean} opt_autoSize Optional flag to specify the path should
+ * @param {boolean=} opt_autoSize Optional flag to specify the path should
  *     automatically resize to fit the element.  Defaults to false.
  * @constructor
  * @extends {goog.graphics.ext.StrokeAndFillElement}

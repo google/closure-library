@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -63,60 +64,59 @@
 <a name="line20"></a>goog.provide(&#39;goog.positioning.AnchoredPosition&#39;);
 <a name="line21"></a>
 <a name="line22"></a>goog.require(&#39;goog.math.Box&#39;);
-<a name="line23"></a>goog.require(&#39;goog.math.Coordinate&#39;);
-<a name="line24"></a>goog.require(&#39;goog.positioning&#39;);
-<a name="line25"></a>goog.require(&#39;goog.positioning.AbstractPosition&#39;);
+<a name="line23"></a>goog.require(&#39;goog.positioning&#39;);
+<a name="line24"></a>goog.require(&#39;goog.positioning.AbstractPosition&#39;);
+<a name="line25"></a>
 <a name="line26"></a>
-<a name="line27"></a>
-<a name="line28"></a>/**
-<a name="line29"></a> * Encapsulates a popup position where the popup is anchored at a corner of
-<a name="line30"></a> * an element.
-<a name="line31"></a> *
-<a name="line32"></a> * When using AnchoredPosition, it is recommended that the popup element
-<a name="line33"></a> * specified in the Popup constructor or Popup.setElement be absolutely
-<a name="line34"></a> * positioned.
-<a name="line35"></a> *
-<a name="line36"></a> * @param {Element} anchorElement Element the movable element should be
-<a name="line37"></a> *     anchored against.
-<a name="line38"></a> * @param {goog.positioning.Corner} corner Corner of anchored element the
-<a name="line39"></a> *     movable element should be positioned at.
-<a name="line40"></a> * @constructor
-<a name="line41"></a> * @extends {goog.positioning.AbstractPosition}
-<a name="line42"></a> */
-<a name="line43"></a>goog.positioning.AnchoredPosition = function(anchorElement, corner) {
-<a name="line44"></a>  /**
-<a name="line45"></a>   * Element the movable element should be anchored against.
-<a name="line46"></a>   * @type {Element}
-<a name="line47"></a>   */
-<a name="line48"></a>  this.element = anchorElement;
-<a name="line49"></a>
-<a name="line50"></a>  /**
-<a name="line51"></a>   * Corner of anchored element the movable element should be positioned at.
-<a name="line52"></a>   * @type {goog.positioning.Corner}
-<a name="line53"></a>   */
-<a name="line54"></a>  this.corner = corner;
-<a name="line55"></a>};
-<a name="line56"></a>goog.inherits(goog.positioning.AnchoredPosition,
-<a name="line57"></a>              goog.positioning.AbstractPosition);
+<a name="line27"></a>/**
+<a name="line28"></a> * Encapsulates a popup position where the popup is anchored at a corner of
+<a name="line29"></a> * an element.
+<a name="line30"></a> *
+<a name="line31"></a> * When using AnchoredPosition, it is recommended that the popup element
+<a name="line32"></a> * specified in the Popup constructor or Popup.setElement be absolutely
+<a name="line33"></a> * positioned.
+<a name="line34"></a> *
+<a name="line35"></a> * @param {Element} anchorElement Element the movable element should be
+<a name="line36"></a> *     anchored against.
+<a name="line37"></a> * @param {goog.positioning.Corner} corner Corner of anchored element the
+<a name="line38"></a> *     movable element should be positioned at.
+<a name="line39"></a> * @constructor
+<a name="line40"></a> * @extends {goog.positioning.AbstractPosition}
+<a name="line41"></a> */
+<a name="line42"></a>goog.positioning.AnchoredPosition = function(anchorElement, corner) {
+<a name="line43"></a>  /**
+<a name="line44"></a>   * Element the movable element should be anchored against.
+<a name="line45"></a>   * @type {Element}
+<a name="line46"></a>   */
+<a name="line47"></a>  this.element = anchorElement;
+<a name="line48"></a>
+<a name="line49"></a>  /**
+<a name="line50"></a>   * Corner of anchored element the movable element should be positioned at.
+<a name="line51"></a>   * @type {goog.positioning.Corner}
+<a name="line52"></a>   */
+<a name="line53"></a>  this.corner = corner;
+<a name="line54"></a>};
+<a name="line55"></a>goog.inherits(goog.positioning.AnchoredPosition,
+<a name="line56"></a>              goog.positioning.AbstractPosition);
+<a name="line57"></a>
 <a name="line58"></a>
-<a name="line59"></a>
-<a name="line60"></a>/**
-<a name="line61"></a> * Repositions the movable element.
-<a name="line62"></a> *
-<a name="line63"></a> * @param {Element} movableElement Element to position.
-<a name="line64"></a> * @param {goog.positioning.Corner} movableCorner Corner of the movable element
-<a name="line65"></a> *     that should be positioned adjacent to the anchored element.
-<a name="line66"></a> * @param {goog.math.Box} opt_margin A margin specifin pixels.
-<a name="line67"></a> */
-<a name="line68"></a>goog.positioning.AnchoredPosition.prototype.reposition = function(
-<a name="line69"></a>    movableElement, movableCorner, opt_margin) {
-<a name="line70"></a>  goog.positioning.positionAtAnchor(this.element,
-<a name="line71"></a>                                    this.corner,
-<a name="line72"></a>                                    movableElement,
-<a name="line73"></a>                                    movableCorner,
-<a name="line74"></a>                                    undefined,
-<a name="line75"></a>                                    opt_margin);
-<a name="line76"></a>};
+<a name="line59"></a>/**
+<a name="line60"></a> * Repositions the movable element.
+<a name="line61"></a> *
+<a name="line62"></a> * @param {Element} movableElement Element to position.
+<a name="line63"></a> * @param {goog.positioning.Corner} movableCorner Corner of the movable element
+<a name="line64"></a> *     that should be positioned adjacent to the anchored element.
+<a name="line65"></a> * @param {goog.math.Box=} opt_margin A margin specifin pixels.
+<a name="line66"></a> */
+<a name="line67"></a>goog.positioning.AnchoredPosition.prototype.reposition = function(
+<a name="line68"></a>    movableElement, movableCorner, opt_margin) {
+<a name="line69"></a>  goog.positioning.positionAtAnchor(this.element,
+<a name="line70"></a>                                    this.corner,
+<a name="line71"></a>                                    movableElement,
+<a name="line72"></a>                                    movableCorner,
+<a name="line73"></a>                                    undefined,
+<a name="line74"></a>                                    opt_margin);
+<a name="line75"></a>};
 </pre>
 
 

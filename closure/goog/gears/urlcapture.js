@@ -37,7 +37,7 @@ goog.require('goog.gears');
  * @param {string} name The name of the ResourceStore to capture the URLs to.
  * @param {?string} requiredCookie  A cookie that must be present for the
  *     managed store to be active. Should have the form "foo=bar".
- * @param {GearsResourceStore} opt_localServer The LocalServer for gears.
+ * @param {GearsResourceStore=} opt_localServer The LocalServer for gears.
  */
 goog.gears.UrlCapture = function(name, requiredCookie, opt_localServer) {
   goog.events.EventTarget.call(this);
@@ -327,8 +327,8 @@ goog.gears.UrlCapture.prototype.usesGoogUri_ = function(captureId) {
  * @extends {goog.events.Event}
  * @param {goog.gears.UrlCapture.EventType} type Type of event to dispatch.
  * @param {number} captureId The id of the capture that fired this event.
- * @param {string|goog.Uri} opt_uri The URI for the event.
- * @param {Array.<string|goog.Uri>} opt_errorUris The URIs that failed to load
+ * @param {string|goog.Uri=} opt_uri The URI for the event.
+ * @param {Array.<string|goog.Uri>=} opt_errorUris The URIs that failed to load
  * correctly.
  */
 goog.gears.UrlCapture.Event = function(type, captureId, opt_uri,

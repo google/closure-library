@@ -30,7 +30,7 @@ goog.require('goog.ui.Component');
  * Creates a formpost object.
  * @constructor
  * @extends {goog.ui.Component}
- * @param {goog.dom.DomHelper} opt_dom The DOM helper.
+ * @param {goog.dom.DomHelper=} opt_dom The DOM helper.
  */
 goog.ui.FormPost = function(opt_dom) {
   goog.ui.Component.call(this, opt_dom);
@@ -50,9 +50,9 @@ goog.ui.FormPost.prototype.createDom = function() {
  * submitted.
  * @param {Object} parameters Object with parameter values. Values can be
  *     strings, numbers, or arrays of strings or numbers.
- * @param {string} opt_url The destination URL. If not specified, uses the
+ * @param {string=} opt_url The destination URL. If not specified, uses the
  *     current URL for window for the DOM specified in the constructor.
- * @param {string} opt_target An optional name of a window in which to open the
+ * @param {string=} opt_target An optional name of a window in which to open the
  *     URL. If not specified, uses the window for the DOM specified in the
  *     constructor.
  */

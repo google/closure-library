@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -173,7 +174,7 @@
 <a name="line130"></a> * correct, but rather a good-enough implementation for directionality
 <a name="line131"></a> * estimation purposes.
 <a name="line132"></a> * @param {string} str The given string.
-<a name="line133"></a> * @param {boolean} opt_isStripNeeded Whether to perform the stripping.
+<a name="line133"></a> * @param {boolean=} opt_isStripNeeded Whether to perform the stripping.
 <a name="line134"></a> *     Default: false (to retain consistency with calling functions).
 <a name="line135"></a> * @return {string} The given string cleaned of HTML tags / escapes.
 <a name="line136"></a> * @private
@@ -203,7 +204,7 @@
 <a name="line160"></a>/**
 <a name="line161"></a> * Test whether the given string has any RTL characters in it.
 <a name="line162"></a> * @param {string} str The given string that need to be tested.
-<a name="line163"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line163"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line164"></a> *     Default: false.
 <a name="line165"></a> * @return {boolean} Whether the string contains RTL characters.
 <a name="line166"></a> */
@@ -225,7 +226,7 @@
 <a name="line182"></a>/**
 <a name="line183"></a> * Test whether the given string has any LTR characters in it.
 <a name="line184"></a> * @param {string} str The given string that need to be tested.
-<a name="line185"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line185"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line186"></a> *     Default: false.
 <a name="line187"></a> * @return {boolean} Whether the string contains LTR characters.
 <a name="line188"></a> */
@@ -306,7 +307,7 @@
 <a name="line263"></a>/**
 <a name="line264"></a> * Check whether the first strongly directional character (if any) is RTL.
 <a name="line265"></a> * @param {string} str String being checked.
-<a name="line266"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line266"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line267"></a> *     Default: false.
 <a name="line268"></a> * @return {boolean} Whether RTL directionality is detected using the first
 <a name="line269"></a> *     strongly-directional character method.
@@ -320,7 +321,7 @@
 <a name="line277"></a>/**
 <a name="line278"></a> * Check whether the first strongly directional character (if any) is RTL.
 <a name="line279"></a> * @param {string} str String being checked.
-<a name="line280"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line280"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line281"></a> *     Default: false.
 <a name="line282"></a> * @return {boolean} Whether RTL directionality is detected using the first
 <a name="line283"></a> *     strongly-directional character method.
@@ -332,7 +333,7 @@
 <a name="line289"></a>/**
 <a name="line290"></a> * Check whether the first strongly directional character (if any) is LTR.
 <a name="line291"></a> * @param {string} str String being checked.
-<a name="line292"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line292"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line293"></a> *     Default: false.
 <a name="line294"></a> * @return {boolean} Whether LTR directionality is detected using the first
 <a name="line295"></a> *     strongly-directional character method.
@@ -346,7 +347,7 @@
 <a name="line303"></a>/**
 <a name="line304"></a> * Check whether the first strongly directional character (if any) is LTR.
 <a name="line305"></a> * @param {string} str String being checked.
-<a name="line306"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line306"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line307"></a> *     Default: false.
 <a name="line308"></a> * @return {boolean} Whether LTR directionality is detected using the first
 <a name="line309"></a> *     strongly-directional character method.
@@ -370,7 +371,7 @@
 <a name="line327"></a> * Check whether the input string either contains no strongly directional
 <a name="line328"></a> * characters or looks like a url.
 <a name="line329"></a> * @param {string} str String being checked.
-<a name="line330"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line330"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line331"></a> *     Default: false.
 <a name="line332"></a> * @return {boolean} Whether neutral directionality is detected.
 <a name="line333"></a> */
@@ -405,7 +406,7 @@
 <a name="line362"></a> * Check if the exit directionality a piece of text is LTR, i.e. if the last
 <a name="line363"></a> * strongly-directional character in the string is LTR.
 <a name="line364"></a> * @param {string} str String being checked.
-<a name="line365"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line365"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line366"></a> *     Default: false.
 <a name="line367"></a> * @return {boolean} Whether LTR exit directionality was detected.
 <a name="line368"></a> */
@@ -419,7 +420,7 @@
 <a name="line376"></a> * Check if the exit directionality a piece of text is LTR, i.e. if the last
 <a name="line377"></a> * strongly-directional character in the string is LTR.
 <a name="line378"></a> * @param {string} str String being checked.
-<a name="line379"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line379"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line380"></a> *     Default: false.
 <a name="line381"></a> * @return {boolean} Whether LTR exit directionality was detected.
 <a name="line382"></a> * @deprecated Use endsWithLtr.
@@ -431,7 +432,7 @@
 <a name="line388"></a> * Check if the exit directionality a piece of text is RTL, i.e. if the last
 <a name="line389"></a> * strongly-directional character in the string is RTL.
 <a name="line390"></a> * @param {string} str String being checked.
-<a name="line391"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line391"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line392"></a> *     Default: false.
 <a name="line393"></a> * @return {boolean} Whether RTL exit directionality was detected.
 <a name="line394"></a> */
@@ -445,7 +446,7 @@
 <a name="line402"></a> * Check if the exit directionality a piece of text is RTL, i.e. if the last
 <a name="line403"></a> * strongly-directional character in the string is RTL.
 <a name="line404"></a> * @param {string} str String being checked.
-<a name="line405"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line405"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line406"></a> *     Default: false.
 <a name="line407"></a> * @return {boolean} Whether RTL exit directionality was detected.
 <a name="line408"></a> * @deprecated Use endsWithRtl.
@@ -513,7 +514,7 @@
 <a name="line470"></a> * Apply bracket guard using html span tag. This is to address the problem of
 <a name="line471"></a> * messy bracket display frequently happens in RTL layout.
 <a name="line472"></a> * @param {string} s The string that need to be processed.
-<a name="line473"></a> * @param {boolean} opt_isRtlContext specifies default direction (usually
+<a name="line473"></a> * @param {boolean=} opt_isRtlContext specifies default direction (usually
 <a name="line474"></a> *     direction of the UI).
 <a name="line475"></a> * @return {string} The processed string, with all bracket guarded.
 <a name="line476"></a> */
@@ -535,7 +536,7 @@
 <a name="line492"></a> * This version works for both plain text and html. But it does not work as
 <a name="line493"></a> * good as guardBracketInHtml in some cases.
 <a name="line494"></a> * @param {string} s The string that need to be processed.
-<a name="line495"></a> * @param {boolean} opt_isRtlContext specifies default direction (usually
+<a name="line495"></a> * @param {boolean=} opt_isRtlContext specifies default direction (usually
 <a name="line496"></a> *     direction of the UI).
 <a name="line497"></a> * @return {string} The processed string, with all bracket guarded.
 <a name="line498"></a> */
@@ -724,7 +725,7 @@
 <a name="line681"></a> * Otherwise, returns UNKNOWN, which is used to mean &quot;neutral&quot;.
 <a name="line682"></a> * Numbers are counted as weakly LTR.
 <a name="line683"></a> * @param {string} str The string to be checked.
-<a name="line684"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line684"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line685"></a> *     Default: false.
 <a name="line686"></a> * @return {goog.i18n.bidi.Dir} Estimated overall directionality of {@code str}.
 <a name="line687"></a> */
@@ -759,7 +760,7 @@
 <a name="line716"></a> * Check the directionality of a piece of text, return true if the piece of
 <a name="line717"></a> * text should be laid out in RTL direction.
 <a name="line718"></a> * @param {string} str The piece of text that need to be detected.
-<a name="line719"></a> * @param {boolean} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line719"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
 <a name="line720"></a> *     Default: false.
 <a name="line721"></a> * @return {boolean} Whether this piece of text should be laid out in RTL.
 <a name="line722"></a> */

@@ -26,7 +26,6 @@ goog.provide('goog.editor.icontent.FieldFormatInfo');
 goog.provide('goog.editor.icontent.FieldStyleInfo');
 
 goog.require('goog.editor.BrowserFeature');
-goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.userAgent');
 
@@ -39,7 +38,7 @@ goog.require('goog.userAgent');
  *     standards mode.
  * @param {boolean} blended Whether the field is in blended mode.
  * @param {boolean} fixedHeight Whether the field is in fixedHeight mode.
- * @param {Object} opt_extraStyles Other style attributes for the field,
+ * @param {Object=} opt_extraStyles Other style attributes for the field,
  *     represented as a map of strings.
  * @constructor
  */

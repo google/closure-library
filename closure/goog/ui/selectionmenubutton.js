@@ -40,11 +40,11 @@ goog.require('goog.ui.MenuItem');
  * The checkbox content fires the action events associated with the 'select all'
  * and 'select none' menu items.
  *
- * @param {goog.ui.ButtonRenderer} opt_renderer Renderer used to render or
+ * @param {goog.ui.ButtonRenderer=} opt_renderer Renderer used to render or
  *     decorate the menu button; defaults to {@link goog.ui.MenuButtonRenderer}.
- * @param {goog.ui.MenuItemRenderer} opt_itemRenderer Optional menu item
+ * @param {goog.ui.MenuItemRenderer=} opt_itemRenderer Optional menu item
  *     renderer.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.MenuButton}

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -71,7 +72,7 @@
 <a name="line28"></a>
 <a name="line29"></a>/**
 <a name="line30"></a> * Class for unit testing code that uses setTimeout and clearTimeout.
-<a name="line31"></a> * @param {boolean} opt_autoInstall Install the MockClock at constuction time.
+<a name="line31"></a> * @param {boolean=} opt_autoInstall Install the MockClock at constuction time.
 <a name="line32"></a> * @constructor
 <a name="line33"></a> * @extends {goog.Disposable}
 <a name="line34"></a> */
@@ -273,7 +274,7 @@
 <a name="line230"></a>/**
 <a name="line231"></a> * Increments the MockClock&#39;s time by a given number of milliseconds, running
 <a name="line232"></a> * any functions that are now overdue.
-<a name="line233"></a> * @param {number} opt_millis Number of milliseconds to increment the counter.
+<a name="line233"></a> * @param {number=} opt_millis Number of milliseconds to increment the counter.
 <a name="line234"></a> *     If not specified, clock ticks 1 millisecond.
 <a name="line235"></a> * @return {number} Current mock time in millis.
 <a name="line236"></a> */

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -104,7 +105,7 @@
 <a name="line61"></a> * supported). Hence this method does not dispatch the change events that the
 <a name="line62"></a> * superclass method does.
 <a name="line63"></a> * @param {string} command The command to execute.
-<a name="line64"></a> * @param {Object} var_args Any additional parameters needed to
+<a name="line64"></a> * @param {...Object} var_args Any additional parameters needed to
 <a name="line65"></a> *     execute the command.
 <a name="line66"></a> * @return {Object|undefined} The result of the execCommand, if any.
 <a name="line67"></a> * @override
@@ -136,7 +137,7 @@
 <a name="line93"></a> * subclasses.
 <a name="line94"></a> * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
 <a name="line95"></a> *     create the dialog.
-<a name="line96"></a> * @param {*} opt_arg The dialog specific argument. Concrete subclasses should
+<a name="line96"></a> * @param {*=} opt_arg The dialog specific argument. Concrete subclasses should
 <a name="line97"></a> *     declare a specific type.
 <a name="line98"></a> * @return {goog.ui.editor.AbstractDialog} The newly created dialog.
 <a name="line99"></a> * @protected
@@ -172,7 +173,7 @@
 <a name="line129"></a> * {@link goog.editor.plugins.AbstractDialogPlugin.EventType.OPENED} after the
 <a name="line130"></a> * dialog is shown.
 <a name="line131"></a> * @param {string} command The command to execute.
-<a name="line132"></a> * @param {*} opt_arg The dialog specific argument. Should be the same as
+<a name="line132"></a> * @param {*=} opt_arg The dialog specific argument. Should be the same as
 <a name="line133"></a> *     {@link createDialog}.
 <a name="line134"></a> * @return {Object|undefined} The result of the execCommand, if any.
 <a name="line135"></a> * @protected

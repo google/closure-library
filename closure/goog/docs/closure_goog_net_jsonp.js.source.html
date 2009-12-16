@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -100,7 +101,7 @@
 <a name="line57"></a> *     data posted through this channel (e.g.,
 <a name="line58"></a> *     &quot;http://maps.google.com/maps/geo&quot;).
 <a name="line59"></a> *
-<a name="line60"></a> * @param {string} opt_callbackParamName The parameter name that is used to
+<a name="line60"></a> * @param {string=} opt_callbackParamName The parameter name that is used to
 <a name="line61"></a> *     specify the callback. Defaults to &quot;callback&quot;.
 <a name="line62"></a> *
 <a name="line63"></a> * @constructor
@@ -186,13 +187,13 @@
 <a name="line143"></a> *
 <a name="line144"></a> * @param {Object} payload Name-value pairs.
 <a name="line145"></a> *
-<a name="line146"></a> * @param {Function} opt_replyCallback A function expecting one
+<a name="line146"></a> * @param {Function=} opt_replyCallback A function expecting one
 <a name="line147"></a> *     argument, called when the reply arrives, with the response data.
 <a name="line148"></a> *
-<a name="line149"></a> * @param {Function} opt_errorCallback A function expecting one
+<a name="line149"></a> * @param {Function=} opt_errorCallback A function expecting one
 <a name="line150"></a> *     argument, called on timeout, with the payload.
 <a name="line151"></a> *
-<a name="line152"></a> * @param {string} opt_callbackParamValue Value to be used as the
+<a name="line152"></a> * @param {string=} opt_callbackParamValue Value to be used as the
 <a name="line153"></a> *     parameter value for the callback parameter (callbackParamName).
 <a name="line154"></a> *     To be used when the value needs to be fixed by the client for a
 <a name="line155"></a> *     particular request, to make use of the cached responses for the request.
@@ -288,7 +289,7 @@
 <a name="line245"></a> * @param {string} id The id of the script node.
 <a name="line246"></a> * @param {Element} scriptNode Script element.
 <a name="line247"></a> * @param {Object} payload The payload that was sent to the server.
-<a name="line248"></a> * @param {Function} opt_errorCallback The function called on timeout.
+<a name="line248"></a> * @param {Function=} opt_errorCallback The function called on timeout.
 <a name="line249"></a> * @return {Function} A zero argument function that handles callback duties.
 <a name="line250"></a> * @private
 <a name="line251"></a> */
@@ -317,7 +318,7 @@
 <a name="line274"></a> * @param {string} id The id of the script node.
 <a name="line275"></a> * @param {Element} scriptNode Script element.
 <a name="line276"></a> * @param {Function} replyCallback The function called on reply.
-<a name="line277"></a> * @param {Object} timeout A timeout call that needs to be cleared.
+<a name="line277"></a> * @param {?number} timeout A timeout call that needs to be cleared.
 <a name="line278"></a> * @return {Function} A reply callback function.
 <a name="line279"></a> * @private
 <a name="line280"></a> */
@@ -330,13 +331,13 @@
 <a name="line287"></a>   * clears the error timeout handler, calls the user&#39;s handler, then
 <a name="line288"></a>   * removes the script node and itself.
 <a name="line289"></a>   *
-<a name="line290"></a>   * @param {Object} var_args The response data sent from the server.
+<a name="line290"></a>   * @param {...Object} var_args The response data sent from the server.
 <a name="line291"></a>   */
 <a name="line292"></a>  return function(var_args) {
 <a name="line293"></a>    goog.global.clearTimeout(timeout);
 <a name="line294"></a>    goog.net.Jsonp.cleanup_(id, scriptNode, true);
 <a name="line295"></a>    replyCallback.apply(undefined, arguments);
-<a name="line296"></a>  }
+<a name="line296"></a>  };
 <a name="line297"></a>};
 <a name="line298"></a>
 <a name="line299"></a>

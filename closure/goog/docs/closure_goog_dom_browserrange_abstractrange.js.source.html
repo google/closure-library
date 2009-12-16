@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -161,7 +162,7 @@
 <a name="line118"></a>/**
 <a name="line119"></a> * Tests if this range contains the given range.
 <a name="line120"></a> * @param {goog.dom.browserrange.AbstractRange} range The range to test.
-<a name="line121"></a> * @param {boolean} opt_allowPartial If not set or false, the range must be
+<a name="line121"></a> * @param {boolean=} opt_allowPartial If not set or false, the range must be
 <a name="line122"></a> *     entirely contained in the selection for this function to return true.
 <a name="line123"></a> * @return {boolean} Whether this range contains the given range.
 <a name="line124"></a> */
@@ -174,7 +175,7 @@
 <a name="line131"></a>/**
 <a name="line132"></a> * Tests if this range contains any or all of the given browser range.
 <a name="line133"></a> * @param {Range|TextRange} range The browser native range to test.
-<a name="line134"></a> * @param {boolean} opt_allowPartial If not set or false, the range must be
+<a name="line134"></a> * @param {boolean=} opt_allowPartial If not set or false, the range must be
 <a name="line135"></a> *     entirely contained in the selection for this function to return true.
 <a name="line136"></a> * @return {boolean} Whether this range contains the given browser range.
 <a name="line137"></a> */
@@ -211,7 +212,7 @@
 <a name="line168"></a>/**
 <a name="line169"></a> * Tests if this range contains the given node.
 <a name="line170"></a> * @param {Node} node The node to test.
-<a name="line171"></a> * @param {boolean} opt_allowPartial If not set or false, the node must be
+<a name="line171"></a> * @param {boolean=} opt_allowPartial If not set or false, the node must be
 <a name="line172"></a> *     entirely contained in the selection for this function to return true.
 <a name="line173"></a> * @return {boolean} Whether this range contains the given node.
 <a name="line174"></a> */
@@ -285,7 +286,7 @@
 <a name="line242"></a>/**
 <a name="line243"></a> * Returns a RangeIterator over the contents of the range.  Regardless of the
 <a name="line244"></a> * direction of the range, the iterator will move in document order.
-<a name="line245"></a> * @param {boolean} opt_keys Unused for this iterator.
+<a name="line245"></a> * @param {boolean=} opt_keys Unused for this iterator.
 <a name="line246"></a> * @return {goog.dom.RangeIterator} An iterator over tags in the range.
 <a name="line247"></a> */
 <a name="line248"></a>goog.dom.browserrange.AbstractRange.prototype.__iterator__ = function(
@@ -300,7 +301,7 @@
 <a name="line257"></a>
 <a name="line258"></a>/**
 <a name="line259"></a> * Set this range as the selection in its window.
-<a name="line260"></a> * @param {boolean} opt_reverse Whether to select the range in reverse,
+<a name="line260"></a> * @param {boolean=} opt_reverse Whether to select the range in reverse,
 <a name="line261"></a> *     if possible.
 <a name="line262"></a> */
 <a name="line263"></a>goog.dom.browserrange.AbstractRange.prototype.select =

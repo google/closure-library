@@ -178,7 +178,7 @@ goog.ui.ContainerScroller.prototype.onHide_ = function(e) {
 
 /**
  * Centers the currently highlighted item, if this is scrollable.
- * @param {boolean} opt_center Whether to center the highlighted element
+ * @param {boolean=} opt_center Whether to center the highlighted element
  *     rather than simply ensure it is in view.  Useful for the first
  *     render.
  * @private

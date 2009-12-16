@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -72,7 +73,7 @@
 <a name="line29"></a> * @param {string} pattern Pattern String to specify how the date should
 <a name="line30"></a> *     be formatted.
 <a name="line31"></a> * @param {Date} date Date object being formatted.
-<a name="line32"></a> * @param {goog.locale.TimeZone} opt_timeZone optional, if specified, time
+<a name="line32"></a> * @param {goog.locale.TimeZone=} opt_timeZone optional, if specified, time
 <a name="line33"></a> *    related fields will be formatted based on its setting.
 <a name="line34"></a> *
 <a name="line35"></a> * @return {string} string representation of date/time.
@@ -90,7 +91,7 @@
 <a name="line47"></a> * date format pattern specified in symbols object.
 <a name="line48"></a> * @param {number} formatType Number used to reference predefined pattern.
 <a name="line49"></a> * @param {Date} date The date object being formatted.
-<a name="line50"></a> * @param {goog.locale.TimeZone} opt_timeZone optional, if specified, time
+<a name="line50"></a> * @param {goog.locale.TimeZone=} opt_timeZone optional, if specified, time
 <a name="line51"></a> *    related fields will be formatted based on its setting.
 <a name="line52"></a> * @return {string} string representation of date/time.
 <a name="line53"></a> * @deprecated Use goog.i18n.DateTimeFormat.
@@ -239,7 +240,7 @@
 <a name="line196"></a> * Parse the given text using specified pattern to get a number.
 <a name="line197"></a> * @param {string} pattern tells how the text is constructed.
 <a name="line198"></a> * @param {string} text input text being parsed.
-<a name="line199"></a> * @param {Array} opt_pos optional one element array that holds position
+<a name="line199"></a> * @param {Array=} opt_pos optional one element array that holds position
 <a name="line200"></a> *     information. It tells from where parse should begin. Upon return, it
 <a name="line201"></a> *     holds parse stop position.
 <a name="line202"></a> * @return {number} Parsed number, NaN if in error.
@@ -270,7 +271,7 @@
 <a name="line227"></a> * Parse the given text using a predefined pattern to get a number.
 <a name="line228"></a> * @param {number} patternType identifies a predefined pattern to use.
 <a name="line229"></a> * @param {string} text the input text being parsed.
-<a name="line230"></a> * @param {number} opt_pos optional position information, it holds parse start
+<a name="line230"></a> * @param {number=} opt_pos optional position information, it holds parse start
 <a name="line231"></a> *     position in the beginning. If parsing is successful, this position will
 <a name="line232"></a> *     be updated to the character next to where parsing ends.
 <a name="line233"></a> * @return {number} Parsed number, 0 if in error.
@@ -286,7 +287,7 @@
 <a name="line243"></a>/**
 <a name="line244"></a> * To obtain a NumberFormat object that can be used for number format/parse.
 <a name="line245"></a> * @param {string} pattern number format pattern string.
-<a name="line246"></a> * @param {string} opt_currencyCode optional international currency code, it
+<a name="line246"></a> * @param {string=} opt_currencyCode optional international currency code, it
 <a name="line247"></a> *     determines the currency code/symbol should be used in format/parse. If
 <a name="line248"></a> *     not given, the currency code for current locale will be used.
 <a name="line249"></a> * @return {goog.locale.NumberFormat}  A goog.locale.NumberFormat instance
@@ -304,7 +305,7 @@
 <a name="line261"></a> * To obtain a NumberFormat object that can be used for number format/parse from
 <a name="line262"></a> * a predefined pattern type.
 <a name="line263"></a> * @param {number} patternType identifies a predefined number format pattern.
-<a name="line264"></a> * @param {string} opt_currencyCode optional international currency code. It
+<a name="line264"></a> * @param {string=} opt_currencyCode optional international currency code. It
 <a name="line265"></a> *     determines the currency code/symbol used in format/parse. If not given,
 <a name="line266"></a> *     the currency code for current locale will be used.
 <a name="line267"></a> * @return {goog.locale.NumberFormat} A goog.locale.NumberFormat instance for

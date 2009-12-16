@@ -261,7 +261,7 @@ goog.ui.editor.DefaultToolbar.addDefaultFormatOptions = function(button) {
  * Creates a {@link goog.ui.Toolbar} containing a default set of editor
  * toolbar buttons, and renders it into the given parent element.
  * @param {!Element} elem Toolbar parent element.
- * @param {boolean} opt_isRightToLeft Whether the editor chrome is
+ * @param {boolean=} opt_isRightToLeft Whether the editor chrome is
  *     right-to-left; defaults to the directionality of the toolbar parent
  *     element.
  * @return {!goog.ui.Toolbar} Default editor toolbar, rendered into the given
@@ -288,7 +288,7 @@ goog.ui.editor.DefaultToolbar.makeDefaultToolbar = function(elem,
  * @param {!Array.<string|goog.ui.Control>} items Toolbar items; each must
  *     be a {@link goog.editor.Command} or a {@link goog.ui.Control}.
  * @param {!Element} elem Toolbar parent element.
- * @param {boolean} opt_isRightToLeft Whether the editor chrome is
+ * @param {boolean=} opt_isRightToLeft Whether the editor chrome is
  *     right-to-left; defaults to the directionality of the toolbar parent
  *     element.
  * @return {!goog.ui.Toolbar} Editor toolbar, rendered into the given parent
@@ -320,7 +320,7 @@ goog.ui.editor.DefaultToolbar.makeToolbar = function(items, elem,
  * command.  Note that this function is only intended to create built-in
  * buttons; please don't try to hack it!
  * @param {string} command Editor command ID.
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
  *     creation; defaults to the current document if unspecified.
  * @return {goog.ui.Button} Toolbar button (null if no built-in button exists
  *     for the command).
@@ -404,11 +404,11 @@ goog.ui.editor.DefaultToolbar.DEFAULT_BUTTONS_RTL = [
  *     built-in buttons, anything else for custom buttons.
  * @param {string} tooltip Tooltip to be shown on hover.
  * @param {goog.ui.ControlContent} caption Button caption.
- * @param {string} opt_classNames CSS class name(s) to apply to the caption
+ * @param {string=} opt_classNames CSS class name(s) to apply to the caption
  *     element.
- * @param {goog.ui.ButtonRenderer} opt_renderer Button renderer; defaults to
+ * @param {goog.ui.ButtonRenderer=} opt_renderer Button renderer; defaults to
  *     {@link goog.ui.ToolbarButtonRenderer} if unspecified.
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
@@ -439,11 +439,11 @@ goog.ui.editor.DefaultToolbar.rtlButtonFactory_ = function(id, tooltip,
  *     built-in buttons, anything else for custom buttons.
  * @param {string} tooltip Tooltip to be shown on hover.
  * @param {goog.ui.ControlContent} caption Button caption.
- * @param {string} opt_classNames CSS class name(s) to apply to the caption
+ * @param {string=} opt_classNames CSS class name(s) to apply to the caption
  *     element.
- * @param {goog.ui.ButtonRenderer} opt_renderer Button renderer; defaults to
+ * @param {goog.ui.ButtonRenderer=} opt_renderer Button renderer; defaults to
  *     {@link goog.ui.ToolbarButtonRenderer} if unspecified.
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
@@ -467,11 +467,11 @@ goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_ = function(id, tooltip,
  *     built-in buttons, anything else for custom buttons.
  * @param {string} tooltip Tooltip to be shown on hover.
  * @param {goog.ui.ControlContent} caption Button caption.
- * @param {string} opt_classNames CSS class name(s) to apply to the caption
+ * @param {string=} opt_classNames CSS class name(s) to apply to the caption
  *     element.
- * @param {goog.ui.MenuButtonRenderer} opt_renderer Button renderer; defaults to
- *     {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+ * @param {goog.ui.MenuButtonRenderer=} opt_renderer Button renderer; defaults
+ *     to {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
@@ -516,11 +516,11 @@ goog.ui.editor.DefaultToolbar.fontFaceFactory_ = function(id, tooltip,
  *     built-in buttons, anything else for custom buttons.
  * @param {string} tooltip Tooltip to be shown on hover.
  * @param {goog.ui.ControlContent} caption Button caption.
- * @param {string} opt_classNames CSS class name(s) to apply to the caption
+ * @param {string=} opt_classNames CSS class name(s) to apply to the caption
  *     element.
- * @param {goog.ui.MenuButtonRenderer} opt_renderer Button renderer; defaults to
- *     {@link goog.ui.ToolbarMebuButtonRenderer} if unspecified.
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+ * @param {goog.ui.MenuButtonRenderer=} opt_renderer Button renderer; defaults
+ *     to {@link goog.ui.ToolbarMebuButtonRenderer} if unspecified.
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
@@ -582,12 +582,12 @@ goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, value) {
  *     built-in buttons, anything else for custom buttons.
  * @param {string} tooltip Tooltip to be shown on hover.
  * @param {goog.ui.ControlContent} caption Button caption.
- * @param {string} opt_classNames CSS class name(s) to apply to the caption
+ * @param {string=} opt_classNames CSS class name(s) to apply to the caption
  *     element.
- * @param {goog.ui.ColorMenuButtonRenderer} opt_renderer Button renderer;
+ * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Button renderer;
  *     defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer} if
  *     unspecified.
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
@@ -612,12 +612,12 @@ goog.ui.editor.DefaultToolbar.fontColorFactory_ = function(id, tooltip,
  *     built-in buttons, anything else for custom buttons.
  * @param {string} tooltip Tooltip to be shown on hover.
  * @param {goog.ui.ControlContent} caption Button caption.
- * @param {string} opt_classNames CSS class name(s) to apply to the caption
+ * @param {string=} opt_classNames CSS class name(s) to apply to the caption
  *     element.
- * @param {goog.ui.ColorMenuButtonRenderer} opt_renderer Button renderer;
+ * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Button renderer;
  *     defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer} if
  *     unspecified.
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private
@@ -642,11 +642,12 @@ goog.ui.editor.DefaultToolbar.backgroundColorFactory_ = function(id, tooltip,
  *     built-in buttons, anything else for custom buttons.
  * @param {string} tooltip Tooltip to be shown on hover.
  * @param {goog.ui.ControlContent} caption Button caption.
- * @param {string} opt_classNames CSS class name(s) to apply to the caption
+ * @param {string=} opt_classNames CSS class name(s) to apply to the caption
  *     element.
- * @param {goog.ui.MenuButtonRenderer} opt_renderer Button renderer; defaults to
+ * @param {goog.ui.MenuButtonRenderer=} opt_renderer Button renderer;
+ *     defaults to
  *     {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
  *     creation; defaults to the current document if unspecified.
  * @return {!goog.ui.Button} A toolbar button.
  * @private

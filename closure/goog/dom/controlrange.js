@@ -61,7 +61,7 @@ goog.dom.ControlRange.createFromBrowserRange = function(controlRange) {
 /**
  * Create a new range wrapper that selects the given element.  Do not use
  * this method directly - please use goog.dom.Range.createFrom* instead.
- * @param {Element} var_args The element(s) to select.
+ * @param {...Element} var_args The element(s) to select.
  * @return {goog.dom.ControlRange} A range wrapper object.
  */
 goog.dom.ControlRange.createFromElements = function(var_args) {

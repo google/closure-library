@@ -47,10 +47,10 @@ goog.require('goog.ui.registry');
  *
  * @param {goog.ui.ControlContent} content Text caption or existing DOM
  *     structure to display as the button's caption (if any).
- * @param {goog.ui.Menu} opt_menu Menu to render under the button when clicked.
- * @param {goog.ui.ButtonRenderer} opt_renderer Renderer used to render or
+ * @param {goog.ui.Menu=} opt_menu Menu to render under the button when clicked.
+ * @param {goog.ui.ButtonRenderer=} opt_renderer Renderer used to render or
  *     decorate the menu button; defaults to {@link goog.ui.MenuButtonRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Button}
@@ -459,7 +459,7 @@ goog.ui.MenuButton.prototype.getItemCount = function() {
  * Shows/hides the menu button based on the value of the argument.  Also hides
  * the popup menu if the button is being hidden.
  * @param {boolean} visible Whether to show or hide the button.
- * @param {boolean} opt_force If true, doesn't check whether the component
+ * @param {boolean=} opt_force If true, doesn't check whether the component
  *     already has the requested visibility, and doesn't dispatch any events.
  * @return {boolean} Whether the visibility was changed.
  * @override

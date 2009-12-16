@@ -29,7 +29,7 @@ goog.require('goog.ui.Popup');
  * The MenuBase class provides an abstract base class for different
  * implementations of menu controls.
  *
- * @param {Element} opt_element A DOM element for the popup.
+ * @param {Element=} opt_element A DOM element for the popup.
  * @deprecated Use goog.ui.Menu.
  * @constructor
  * @extends {goog.ui.Popup}
@@ -102,7 +102,7 @@ goog.ui.MenuBase.prototype.onShow_ = function() {
 /**
  * Called after the menu is hidden. Derived classes can override to hook this
  * event but should make sure to call the parent class method.
- * @param {Object} opt_target Target of the event causing the hide.
+ * @param {Object=} opt_target Target of the event causing the hide.
  * @private
  */
 goog.ui.MenuBase.prototype.onHide_ = function(opt_target) {

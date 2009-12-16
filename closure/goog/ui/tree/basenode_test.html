@@ -24,9 +24,11 @@ limitations under the License.
 <script>
 
 goog.require('goog.testing.jsunit');
-goog.require('goog.ui.tree.TreeControl');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.BaseNode.EventType');
+goog.require('goog.ui.tree.TreeControl');
+goog.require('goog.ui.tree.TreeNode');
 
 </script>
 </head>
@@ -115,6 +117,32 @@ function testExpandEventsPreventDefault2() {
       });
   n.setExpanded(!expanded);
   assertEquals(1, callCount);
+}
+
+function testGetNextShownNode() {
+  var tree = new goog.ui.tree.TreeControl('tree');
+  assertNull('next node for unpopulated tree', tree.getNextShownNode());
+
+  var node1 = new goog.ui.tree.TreeNode('node1');
+  var node2 = new goog.ui.tree.TreeNode('node2');
+  var node3 = new goog.ui.tree.TreeNode('node3');
+  node1.add(node2);
+  node1.add(node3);
+
+  assertNull('next node for unexpanded node1', node1.getNextShownNode());
+  node1.expand();
+  assertEquals('next node for expanded node1', node2, node1.getNextShownNode());
+  assertEquals('next node for node2', node3, node2.getNextShownNode());
+  assertNull('next node for node3', node3.getNextShownNode());
+
+  tree.add(node1);
+  assertEquals('next node for populated tree', node1, tree.getNextShownNode());
+  assertNull('next node for node3 inside the tree', node3.getNextShownNode());
+
+  var component = new goog.ui.Component();
+  component.addChild(tree);
+  assertNull('next node for node3 inside the tree if the tree has parent',
+      node3.getNextShownNode());
 }
 
 </script>

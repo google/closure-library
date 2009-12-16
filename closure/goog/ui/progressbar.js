@@ -35,7 +35,7 @@ goog.require('goog.userAgent');
 
 /**
  * This creates a progress bar object.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */

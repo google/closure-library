@@ -24,10 +24,7 @@ goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.TagIterator');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.TextRangeIterator');
-goog.require('goog.dom.classes');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
@@ -144,7 +141,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.getDocument_ = function() {
  * Execute a user-initiated command.
  * @param {goog.editor.plugins.BasicTextFormatter.COMMAND} command Command
  *     to execute.
- * @param {string|number|boolean|null} var_args For color commands, this
+ * @param {...string|number|boolean|null} var_args For color commands, this
  *     should be the hex color (with the #). It will be unused for
  *     other commands.
  * @return {Object|undefined} The result of the command.
@@ -581,7 +578,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
  * passed-in node!
  * This is only intended to be used in IE and Opera.
  * @param {Node} paragraph Paragragh to convert to a div.
- * @param {boolean} opt_convertBrs If true, also convert BRs to divs.
+ * @param {boolean=} opt_convertBrs If true, also convert BRs to divs.
  * @private
  */
 goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_ =
@@ -677,12 +674,12 @@ goog.editor.plugins.BasicTextFormatter.convertContainerToTextAlign_ =
 /**
  * Perform an execCommand on the active document.
  * @param {string} command The command to execute.
- * @param {string|number|boolean|null} opt_value Optional value.
- * @param {boolean} opt_preserveDir Set true to make sure that command does not
+ * @param {string|number|boolean|null=} opt_value Optional value.
+ * @param {boolean=} opt_preserveDir Set true to make sure that command does not
  *     change directionality of the selected text (works only if all selected
  *     text has the same directionality, otherwise ignored). Should not be true
  *     if bidi plugin is not loaded.
- * @param {boolean} opt_styleWithCss Set to true to ask the browser to use CSS
+ * @param {boolean=} opt_styleWithCss Set to true to ask the browser to use CSS
  *     to perform the execCommand.
  * @private
  */
@@ -1491,7 +1488,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.isNodeInState_ =
  * Wrapper for browser's queryCommandState.
  * @param {Document|TextRange|Range} queryObject The object to query.
  * @param {string} command The command to check.
- * @param {boolean} opt_styleWithCss Set to true to enable styleWithCSS before
+ * @param {boolean=} opt_styleWithCss Set to true to enable styleWithCSS before
  *     performing the queryCommandState.
  * @return {boolean} The command state.
  * @private
@@ -1507,7 +1504,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.queryCommandStateInternal_ =
  * Wrapper for browser's queryCommandValue.
  * @param {Document|TextRange|Range} queryObject The object to query.
  * @param {string} command The command to check.
- * @param {boolean} opt_styleWithCss Set to true to enable styleWithCSS before
+ * @param {boolean=} opt_styleWithCss Set to true to enable styleWithCSS before
  *     performing the queryCommandValue.
  * @return {string|boolean|null} The command value.
  * @private
@@ -1525,7 +1522,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.queryCommandValueInternal_ =
  *     to use queryCommandValue.
  * @param {Document|TextRange|Range} queryObject The object to query.
  * @param {string} command The command to check.
- * @param {boolean} opt_styleWithCss Set to true to enable styleWithCSS before
+ * @param {boolean=} opt_styleWithCss Set to true to enable styleWithCSS before
  *     performing the queryCommand(Value|State).
  * @return {string|boolean|null} The command value.
  * @private

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -124,15 +125,15 @@
 <a name="line81"></a> * that it will continue iterating until the end of the document instead of
 <a name="line82"></a> * until exiting the start node.
 <a name="line83"></a> *
-<a name="line84"></a> * @param {Node} opt_node The start node.  If unspecified or null, defaults to
+<a name="line84"></a> * @param {Node=} opt_node The start node.  If unspecified or null, defaults to
 <a name="line85"></a> *     an empty iterator.
-<a name="line86"></a> * @param {boolean} opt_reversed Whether to traverse the tree in reverse.
-<a name="line87"></a> * @param {boolean} opt_unconstrained Whether the iterator is not constrained to
-<a name="line88"></a> *     the starting node and its children.
-<a name="line89"></a> * @param {goog.dom.TagWalkType?} opt_tagType The type of the position.
+<a name="line86"></a> * @param {boolean=} opt_reversed Whether to traverse the tree in reverse.
+<a name="line87"></a> * @param {boolean=} opt_unconstrained Whether the iterator is not constrained
+<a name="line88"></a> *     to the starting node and its children.
+<a name="line89"></a> * @param {goog.dom.TagWalkType?=} opt_tagType The type of the position.
 <a name="line90"></a> *     Defaults to the start of the given node for forward iterators, and
 <a name="line91"></a> *     the end of the node for reverse iterators.
-<a name="line92"></a> * @param {number} opt_depth The starting tree depth.
+<a name="line92"></a> * @param {number=} opt_depth The starting tree depth.
 <a name="line93"></a> * @constructor
 <a name="line94"></a> * @extends {goog.iter.Iterator}
 <a name="line95"></a> */
@@ -204,9 +205,9 @@
 <a name="line161"></a> * type which can be one of the {@link goog.dom.TagWalkType} token types.
 <a name="line162"></a> * Only overwrites the tree depth when the parameter is specified.
 <a name="line163"></a> * @param {Node} node The node to set the position to.
-<a name="line164"></a> * @param {goog.dom.TagWalkType?} opt_tagType The type of the position
+<a name="line164"></a> * @param {goog.dom.TagWalkType?=} opt_tagType The type of the position
 <a name="line165"></a> *     Defaults to the start of the given node.
-<a name="line166"></a> * @param {number} opt_depth The tree depth.
+<a name="line166"></a> * @param {number=} opt_depth The tree depth.
 <a name="line167"></a> */
 <a name="line168"></a>goog.dom.TagIterator.prototype.setPosition = function(node,
 <a name="line169"></a>    opt_tagType, opt_depth) {
@@ -382,8 +383,8 @@
 <a name="line339"></a>/**
 <a name="line340"></a> * Replace the current node with the list of nodes. Reset the iterator so that
 <a name="line341"></a> * it visits the first of the nodes next.
-<a name="line342"></a> * @param {Object} var_args A list of nodes to replace the current node with. If
-<a name="line343"></a> *     the first argument is array-like, it will be used, otherwise all the
+<a name="line342"></a> * @param {...Object} var_args A list of nodes to replace the current node with.
+<a name="line343"></a> *     If the first argument is array-like, it will be used, otherwise all the
 <a name="line344"></a> *     arguments are assumed to be nodes.
 <a name="line345"></a> */
 <a name="line346"></a>goog.dom.TagIterator.prototype.splice = function(var_args) {

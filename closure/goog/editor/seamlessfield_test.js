@@ -23,6 +23,7 @@ goog.require('goog.editor.SeamlessField');
 goog.require('goog.events');
 goog.require('goog.style');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.MockRange');
 goog.require('goog.testing.jsunit');
 
 
@@ -148,8 +149,12 @@ function testDispatchBlur() {
     var clearSelection = goog.dom.Range.clearSelection;
     var cleared = false;
     var clearedWindow;
-    blendedField.editableDomHelper = {
-      getWindow: goog.functions.constant(iframe.contentWindow)
+    blendedField.editableDomHelper = new goog.dom.DomHelper();
+    blendedField.editableDomHelper.getWindow =
+        goog.functions.constant(iframe.contentWindow);
+    var mockRange = new goog.testing.MockRange();
+    blendedField.getRange = function() {
+      return mockRange;
     };
     goog.dom.Range.clearSelection = function(opt_window) {
       clearSelection(opt_window);
@@ -158,6 +163,9 @@ function testDispatchBlur() {
     }
     var clock = new goog.testing.MockClock(true);
 
+    mockRange.collapse(true);
+    mockRange.select();
+    mockRange.$replay();
     blendedField.dispatchBlur();
     clock.tick(1);
 
@@ -165,6 +173,7 @@ function testDispatchBlur() {
     assertTrue('Selection must be cleared.', cleared);
     assertEquals('Selection must be cleared in iframe',
         iframe.contentWindow, clearedWindow);
+    mockRange.$verify();
     clock.dispose();
   }
 }
@@ -180,7 +189,7 @@ function testSetMinHeight() {
       // Initially create and size iframe.
       var iframe = createSeamlessIframe();
       field.attachIframe(iframe);
-      field.iframeFieldLoadHandler(iframe, '');
+      field.iframeFieldLoadHandler(iframe, '', {});
       // Need to process timeouts set by load handlers.
       clock.tick(1000);
 
@@ -346,8 +355,7 @@ function createSeamlessIframe() {
  * @return {goog.editor.SeamlessField}
  */
 function initSeamlessField(innerHTML, styles) {
-  var field = new goog.editor.SeamlessField('field', undefined,
-      fieldElem.ownerDocument);
+  var field = new goog.editor.SeamlessField('field');
   fieldElem.innerHTML = innerHTML;
   goog.style.setStyle(fieldElem, styles);
   return field;
@@ -360,7 +368,7 @@ function initSeamlessField(innerHTML, styles) {
  * and that's not what we want.
  *
  * @param {goog.editor.Field} fieldObj
- * @param {Element} iframe
+ * @param {HTMLIFrameElement} iframe
  */
 function assertAttachSeamlessIframeSizesCorrectly(fieldObj, iframe) {
   var size = goog.style.getSize(fieldObj.getOriginalElement());

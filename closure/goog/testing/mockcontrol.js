@@ -110,9 +110,9 @@ goog.testing.MockControl.prototype.$tearDown = function() {
  * Creates a controlled StrictMock.  Passes its arguments through to the
  * StrictMock constructor.
  * @param {Object} objectToMock The object to mock.
- * @param {boolean} opt_mockStaticMethods An optional argument denoting that
+ * @param {boolean=} opt_mockStaticMethods An optional argument denoting that
  *     a mock should be constructed from the static functions of a class.
- * @param {boolean} opt_createProxy An optional argument denoting that
+ * @param {boolean=} opt_createProxy An optional argument denoting that
  *     a proxy for the target mock should be created.
  * @return {goog.testing.StrictMock} The mock object.
  */
@@ -129,11 +129,11 @@ goog.testing.MockControl.prototype.createStrictMock = function(
  * Creates a controlled LooseMock.  Passes its arguments through to the
  * LooseMock constructor.
  * @param {Object} objectToMock The object to mock.
- * @param {boolean} opt_ignoreUnexpectedCalls Whether to ignore unexpected
+ * @param {boolean=} opt_ignoreUnexpectedCalls Whether to ignore unexpected
  *     calls.
- * @param {boolean} opt_mockStaticMethods An optional argument denoting that
+ * @param {boolean=} opt_mockStaticMethods An optional argument denoting that
  *     a mock should be constructed from the static functions of a class.
- * @param {boolean} opt_createProxy An optional argument denoting that
+ * @param {boolean=} opt_createProxy An optional argument denoting that
  *     a proxy for the target mock should be created.
  * @return {goog.testing.LooseMock} The mock object.
  */
@@ -150,7 +150,7 @@ goog.testing.MockControl.prototype.createLooseMock = function(
 /**
  * Creates a controlled FunctionMock.  Passes its arguments through to the
  * FunctionMock constructor.
- * @param {string} opt_functionName The optional name of the function to mock
+ * @param {string=} opt_functionName The optional name of the function to mock
  *     set to '[anonymous mocked function]' if not passed in.
  * @return {goog.testing.FunctionMock} The mocked function.
  */

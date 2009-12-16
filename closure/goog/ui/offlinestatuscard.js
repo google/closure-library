@@ -35,7 +35,7 @@ goog.require('goog.ui.ProgressBar');
 
 /**
  * A offline status card.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */

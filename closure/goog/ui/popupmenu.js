@@ -55,7 +55,7 @@ goog.require('goog.userAgent');
 
 /**
  * A basic menu class.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @extends {goog.ui.Menu}
  * @constructor
  */
@@ -150,15 +150,15 @@ goog.ui.PopupMenu.prototype.enterDocument = function() {
  * multiple positions doesn't make sense.
  *
  * @param {Element} element Element whose click event should trigger the menu.
- * @param {goog.positioning.Corner} opt_targetCorner Corner of the target that
+ * @param {goog.positioning.Corner=} opt_targetCorner Corner of the target that
  *     the menu should be anchored to.
- * @param {goog.positioning.Corner} opt_menuCorner Corner of the menu that
+ * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
  *     should be anchored.
- * @param {boolean} opt_contextMenu Whether the menu should show on
+ * @param {boolean=} opt_contextMenu Whether the menu should show on
  *     {@link goog.events.EventType.CONTEXTMENU} events, false if it should
  *     show on {@link goog.events.EventType.MOUSEDOWN} events. Default is
  *     MOUSEDOWN.
- * @param {goog.math.Box} opt_margin Margin for the popup used in positioning
+ * @param {goog.math.Box=} opt_margin Margin for the popup used in positioning
  *     algorithms.
  */
 goog.ui.PopupMenu.prototype.attach = function(
@@ -187,15 +187,15 @@ goog.ui.PopupMenu.prototype.attach = function(
  * Subclass may add more properties to the returned object, as needed.
  *
  * @param {Element} element Element whose click event should trigger the menu.
- * @param {goog.positioning.Corner} opt_targetCorner Corner of the target that
+ * @param {goog.positioning.Corner=} opt_targetCorner Corner of the target that
  *     the menu should be anchored to.
- * @param {goog.positioning.Corner} opt_menuCorner Corner of the menu that
+ * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
  *     should be anchored.
- * @param {boolean} opt_contextMenu Whether the menu should show on
+ * @param {boolean=} opt_contextMenu Whether the menu should show on
  *     {@link goog.events.EventType.CONTEXTMENU} events, false if it should
  *     show on {@link goog.events.EventType.MOUSEDOWN} events. Default is
  *     MOUSEDOWN.
- * @param {goog.math.Box} opt_margin Margin for the popup used in positioning
+ * @param {goog.math.Box=} opt_margin Margin for the popup used in positioning
  *     algorithms.
  *
  * @return {Object} An object that describes how the popup menu should be
@@ -395,7 +395,7 @@ goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
  * Shows the menu immediately at the given client coordinates.
  * @param {number} x The client-X associated with the show event.
  * @param {number} y The client-Y associated with the show event.
- * @param {goog.positioning.Corner} opt_menuCorner Corner of the menu that
+ * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
  *     should be anchored.
  */
 goog.ui.PopupMenu.prototype.showAt = function(x, y, opt_menuCorner) {
@@ -408,7 +408,7 @@ goog.ui.PopupMenu.prototype.showAt = function(x, y, opt_menuCorner) {
  * @param {Element} element The element to show at.
  * @param {goog.positioning.Corner} targetCorner The corner of the target to
  *     anchor to.
- * @param {goog.positioning.Corner} opt_menuCorner Corner of the menu that
+ * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
  *     should be anchored.
  */
 goog.ui.PopupMenu.prototype.showAtElement = function(element, targetCorner,
@@ -448,7 +448,7 @@ goog.ui.PopupMenu.prototype.wasRecentlyHidden = function() {
 
 /**
  * Dismiss the popup menu when an action fires.
- * @param {goog.events.Event} opt_e The optional event.
+ * @param {goog.events.Event=} opt_e The optional event.
  * @private
  */
 goog.ui.PopupMenu.prototype.onAction_ = function(opt_e) {

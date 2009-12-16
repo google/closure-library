@@ -30,11 +30,11 @@ goog.require('goog.ui.registry');
  *
  * @param {goog.ui.ControlContent} caption Default caption or existing DOM
  *     structure to display as the button's caption when nothing is selected.
- * @param {goog.ui.Menu} opt_menu Menu containing selection options.
- * @param {goog.ui.MenuButtonRenderer} opt_renderer Renderer used to
+ * @param {goog.ui.Menu=} opt_menu Menu containing selection options.
+ * @param {goog.ui.MenuButtonRenderer=} opt_renderer Renderer used to
  *     render or decorate the control; defaults to
  *     {@link goog.ui.ToolbarMenuButtonRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Select}

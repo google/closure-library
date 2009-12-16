@@ -44,7 +44,7 @@ goog.require('goog.string');
  * from this string and a passed in DataNode can evaluate to a value, DataNode,
  * or a DataNodeList.
  *
- * @param {string} opt_expr The string expression.
+ * @param {string=} opt_expr The string expression.
  * @constructor
  */
 goog.ds.Expr = function(opt_expr) {
@@ -58,10 +58,10 @@ goog.ds.Expr = function(opt_expr) {
  * Set the source expression text & parse
  *
  * @param {string} expr The string expression source.
- * @param {Array} opt_parts Array of the parts of an expression.
- * @param {goog.ds.Expr} opt_childExpr Optional child of this expression,
+ * @param {Array=} opt_parts Array of the parts of an expression.
+ * @param {goog.ds.Expr=} opt_childExpr Optional child of this expression,
  *   passed in as a hint for processing.
- * @param {goog.ds.Expr} opt_prevExpr Optional preceding expression
+ * @param {goog.ds.Expr=} opt_prevExpr Optional preceding expression
  *   (i.e. $A/B/C is previous expression to B/C) passed in as a hint for
  *   processing.
  * @private
@@ -185,7 +185,7 @@ goog.ds.Expr.prototype.getNext = function() {
  * Recursively walks through child nodes to evaluate
  * TODO Support other expression functions
  *
- * @param {goog.ds.DataNode} opt_ds Optional datasource to evaluate against.
+ * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
  *     If not provided, evaluates against DataManager global root.
  * @return {Object} Value of the node, or null if doesn't exist.
  */
@@ -227,9 +227,9 @@ goog.ds.Expr.prototype.getValue = function(opt_ds) {
  * Evaluate an expression on a data node, and return matching nodes
  * Recursively walks through child nodes to evaluate
  *
- * @param {goog.ds.DataNode} opt_ds Optional datasource to evaluate against.
+ * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
  *     If not provided, evaluates against data root.
- * @param {boolean} opt_canCreate If true, will try to create new nodes.
+ * @param {boolean=} opt_canCreate If true, will try to create new nodes.
  * @return {goog.ds.DataNodeList} Matching nodes.
  */
 goog.ds.Expr.prototype.getNodes = function(opt_ds, opt_canCreate) {
@@ -242,9 +242,9 @@ goog.ds.Expr.prototype.getNodes = function(opt_ds, opt_canCreate) {
  * Evaluate an expression on a data node, and return the first matching node
  * Recursively walks through child nodes to evaluate
  *
- * @param {goog.ds.DataNode} opt_ds Optional datasource to evaluate against.
+ * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
  *     If not provided, evaluates against DataManager global root.
- * @param {boolean} opt_canCreate If true, will try to create new nodes.
+ * @param {boolean=} opt_canCreate If true, will try to create new nodes.
  * @return {goog.ds.DataNode} Matching nodes, or null if doesn't exist.
  */
 goog.ds.Expr.prototype.getNode = function(opt_ds, opt_canCreate) {
@@ -257,11 +257,11 @@ goog.ds.Expr.prototype.getNode = function(opt_ds, opt_canCreate) {
  * Evaluate an expression on a data node, and return the first matching node
  * Recursively walks through child nodes to evaluate
  *
- * @param {goog.ds.DataNode} opt_ds Optional datasource to evaluate against.
+ * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
  *     If not provided, evaluates against DataManager global root.
- * @param {boolean} opt_selectOne Whether to return single matching DataNode
+ * @param {boolean=} opt_selectOne Whether to return single matching DataNode
  *     or matching nodes in DataNodeList.
- * @param {boolean} opt_canCreate If true, will try to create new nodes.
+ * @param {boolean=} opt_canCreate If true, will try to create new nodes.
  * @return {goog.ds.DataNode|goog.ds.DataNodeList} Matching node or nodes,
  *     depending on value of opt_selectOne.
  * @private
@@ -439,11 +439,11 @@ goog.ds.Expr.create = function(expr) {
  * Create an expression from a string, can use cached values
  * Uses hints from related expressions to help in creation
  *
- * @param {?string} opt_expr The string expression source.
- * @param {Array} opt_parts Array of the parts of an expression.
- * @param {goog.ds.Expr} opt_childExpr Optional child of this expression,
+ * @param {?string=} opt_expr The string expression source.
+ * @param {Array=} opt_parts Array of the parts of an expression.
+ * @param {goog.ds.Expr=} opt_childExpr Optional child of this expression,
  *   passed in as a hint for processing.
- * @param {goog.ds.Expr} opt_prevExpr Optional preceding expression
+ * @param {goog.ds.Expr=} opt_prevExpr Optional preceding expression
  *   (i.e. $A/B/C is previous expression to B/C) passed in as a hint for
  *   processing.
  * @return {goog.ds.Expr} The expression object.

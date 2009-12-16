@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -129,7 +130,7 @@
 <a name="line86"></a> * Does simple python-style string substitution.
 <a name="line87"></a> * subs(&quot;foo%s hot%s&quot;, &quot;bar&quot;, &quot;dog&quot;) becomes &quot;foobar hotdog&quot;.
 <a name="line88"></a> * @param {string} str The string containing the pattern.
-<a name="line89"></a> * @param {*} var_args The items to substitute into the pattern.
+<a name="line89"></a> * @param {...*} var_args The items to substitute into the pattern.
 <a name="line90"></a> * @return {string} A copy of {@code str} in which each occurrence of
 <a name="line91"></a> *     {@code %s} has been replaced an argument from {@code var_args}.
 <a name="line92"></a> */
@@ -473,7 +474,7 @@
 <a name="line430"></a>/**
 <a name="line431"></a> * Converts \n to &lt;br&gt;s or &lt;br /&gt;s.
 <a name="line432"></a> * @param {string} str The string in which to convert newlines.
-<a name="line433"></a> * @param {boolean} opt_xml Whether to use XML compatible tags.
+<a name="line433"></a> * @param {boolean=} opt_xml Whether to use XML compatible tags.
 <a name="line434"></a> * @return {string} A copy of {@code str} with converted newlines.
 <a name="line435"></a> */
 <a name="line436"></a>goog.string.newLineToBr = function(str, opt_xml) {
@@ -515,7 +516,7 @@
 <a name="line472"></a> * application grows the difference between the various methods would increase.
 <a name="line473"></a> *
 <a name="line474"></a> * @param {string} str string to be escaped.
-<a name="line475"></a> * @param {boolean} opt_isLikelyToContainHtmlChars Don&#39;t perform a check to see
+<a name="line475"></a> * @param {boolean=} opt_isLikelyToContainHtmlChars Don&#39;t perform a check to see
 <a name="line476"></a> *     if the character needs replacing - use this option if you expect each of
 <a name="line477"></a> *     the characters to appear often. Leave false if you expect few html
 <a name="line478"></a> *     characters to occur in your strings, such as if you are escaping HTML.
@@ -679,7 +680,7 @@
 <a name="line636"></a> * Do escaping of whitespace to preserve spatial formatting. We use character
 <a name="line637"></a> * entity #160 to make it safer for xml.
 <a name="line638"></a> * @param {string} str The string in which to escape whitespace.
-<a name="line639"></a> * @param {boolean} opt_xml Whether to use XML compatible tags.
+<a name="line639"></a> * @param {boolean=} opt_xml Whether to use XML compatible tags.
 <a name="line640"></a> * @return {string} An escaped copy of {@code str}.
 <a name="line641"></a> */
 <a name="line642"></a>goog.string.whitespaceEscape = function(str, opt_xml) {
@@ -721,7 +722,7 @@
 <a name="line678"></a> * &#39;Hello World!&#39; produces &#39;Hello W...&#39;.
 <a name="line679"></a> * @param {string} str The string to truncate.
 <a name="line680"></a> * @param {number} chars Max number of characters.
-<a name="line681"></a> * @param {boolean} opt_protectEscapedCharacters Whether to protect escaped
+<a name="line681"></a> * @param {boolean=} opt_protectEscapedCharacters Whether to protect escaped
 <a name="line682"></a> *     characters from being cut off in the middle.
 <a name="line683"></a> * @return {string} The truncated {@code str} string.
 <a name="line684"></a> */
@@ -747,7 +748,7 @@
 <a name="line704"></a> * and favoring the beginning of the string.
 <a name="line705"></a> * @param {string} str The string to truncate the middle of.
 <a name="line706"></a> * @param {number} chars Max number of characters.
-<a name="line707"></a> * @param {boolean} opt_protectEscapedCharacters Whether to protect escaped
+<a name="line707"></a> * @param {boolean=} opt_protectEscapedCharacters Whether to protect escaped
 <a name="line708"></a> *     characters from being cutoff in the middle.
 <a name="line709"></a> * @return {string} A truncated copy of {@code str}.
 <a name="line710"></a> */
@@ -955,7 +956,7 @@
 <a name="line912"></a> *
 <a name="line913"></a> * @param {number} num The number to pad.
 <a name="line914"></a> * @param {number} length The desired length.
-<a name="line915"></a> * @param {number} opt_precision The desired precision.
+<a name="line915"></a> * @param {number=} opt_precision The desired precision.
 <a name="line916"></a> * @return {string} {@code num} as a string with the given options.
 <a name="line917"></a> */
 <a name="line918"></a>goog.string.padNumber = function(num, length, opt_precision) {
@@ -990,7 +991,7 @@
 <a name="line947"></a> * &lt;pre&gt;buildString(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;) -&gt; &#39;abcd&#39;
 <a name="line948"></a> * buildString(null, undefined) -&gt; &#39;&#39;
 <a name="line949"></a> * &lt;/pre&gt;
-<a name="line950"></a> * @param {*} var_args A list of strings to concatenate. If not a string,
+<a name="line950"></a> * @param {...*} var_args A list of strings to concatenate. If not a string,
 <a name="line951"></a> *     it will be casted to one.
 <a name="line952"></a> * @return {string} The concatenation of {@code var_args}.
 <a name="line953"></a> */

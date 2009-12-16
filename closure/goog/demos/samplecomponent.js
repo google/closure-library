@@ -33,9 +33,9 @@ goog.require('goog.ui.Component');
  * goog.ui.Component API, and is keyboard accessible, as per
  * http://wiki/Main/ClosureKeyboardAccessible
  *
- * @param {string} opt_label A label to display. Defaults to "Click Me" if none
+ * @param {string=} opt_label A label to display. Defaults to "Click Me" if none
  *     provided.
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper to use.
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper to use.
  *
  * @extends {goog.ui.Component}
  * @constructor

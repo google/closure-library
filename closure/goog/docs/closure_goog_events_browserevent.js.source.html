@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -97,8 +98,8 @@
 <a name="line54"></a> * object.
 <a name="line55"></a> * The content of this object will not be initialized if no event object is
 <a name="line56"></a> * provided. If this is the case, init() needs to be invoked separately.
-<a name="line57"></a> * @param {Event} opt_e Browser event object.
-<a name="line58"></a> * @param {Node} opt_currentTarget Current target for event.
+<a name="line57"></a> * @param {Event=} opt_e Browser event object.
+<a name="line58"></a> * @param {Node=} opt_currentTarget Current target for event.
 <a name="line59"></a> * @constructor
 <a name="line60"></a> * @extends {goog.events.Event}
 <a name="line61"></a> */
@@ -259,7 +260,7 @@
 <a name="line216"></a> * Accepts a browser event object and creates a patched, cross browser event
 <a name="line217"></a> * object.
 <a name="line218"></a> * @param {Event} e Browser event object.
-<a name="line219"></a> * @param {Node} opt_currentTarget Current target for event.
+<a name="line219"></a> * @param {Node=} opt_currentTarget Current target for event.
 <a name="line220"></a> */
 <a name="line221"></a>goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
 <a name="line222"></a>  var type = this.type = e.type;
@@ -276,145 +277,147 @@
 <a name="line233"></a>      /** @preserveTry */
 <a name="line234"></a>      try {
 <a name="line235"></a>        relatedTarget = relatedTarget.nodeName &amp;&amp; relatedTarget;
-<a name="line236"></a>      } catch (err) {}
-<a name="line237"></a>    }
-<a name="line238"></a>    // TODO: Use goog.events.EventType when it has been refactored into its
-<a name="line239"></a>    // own file.
-<a name="line240"></a>  } else if (type == &#39;mouseover&#39;) {
-<a name="line241"></a>    relatedTarget = e.fromElement;
-<a name="line242"></a>  } else if (type == &#39;mouseout&#39;) {
-<a name="line243"></a>    relatedTarget = e.toElement;
-<a name="line244"></a>  }
-<a name="line245"></a>
-<a name="line246"></a>  this.relatedTarget = relatedTarget;
+<a name="line236"></a>      } catch (err) {
+<a name="line237"></a>        relatedTarget = null;
+<a name="line238"></a>      }
+<a name="line239"></a>    }
+<a name="line240"></a>    // TODO: Use goog.events.EventType when it has been refactored into its
+<a name="line241"></a>    // own file.
+<a name="line242"></a>  } else if (type == &#39;mouseover&#39;) {
+<a name="line243"></a>    relatedTarget = e.fromElement;
+<a name="line244"></a>  } else if (type == &#39;mouseout&#39;) {
+<a name="line245"></a>    relatedTarget = e.toElement;
+<a name="line246"></a>  }
 <a name="line247"></a>
-<a name="line248"></a>  this.offsetX = e.offsetX !== undefined ? e.offsetX : e.layerX;
-<a name="line249"></a>  this.offsetY = e.offsetY !== undefined ? e.offsetY : e.layerY;
-<a name="line250"></a>  this.clientX = e.clientX !== undefined ? e.clientX : e.pageX;
-<a name="line251"></a>  this.clientY = e.clientY !== undefined ? e.clientY : e.pageY;
-<a name="line252"></a>  this.screenX = e.screenX || 0;
-<a name="line253"></a>  this.screenY = e.screenY || 0;
-<a name="line254"></a>
-<a name="line255"></a>  this.button = e.button;
+<a name="line248"></a>  this.relatedTarget = relatedTarget;
+<a name="line249"></a>
+<a name="line250"></a>  this.offsetX = e.offsetX !== undefined ? e.offsetX : e.layerX;
+<a name="line251"></a>  this.offsetY = e.offsetY !== undefined ? e.offsetY : e.layerY;
+<a name="line252"></a>  this.clientX = e.clientX !== undefined ? e.clientX : e.pageX;
+<a name="line253"></a>  this.clientY = e.clientY !== undefined ? e.clientY : e.pageY;
+<a name="line254"></a>  this.screenX = e.screenX || 0;
+<a name="line255"></a>  this.screenY = e.screenY || 0;
 <a name="line256"></a>
-<a name="line257"></a>  this.keyCode = e.keyCode || 0;
-<a name="line258"></a>  this.charCode = e.charCode || (type == &#39;keypress&#39; ? e.keyCode : 0);
-<a name="line259"></a>  this.ctrlKey = e.ctrlKey;
-<a name="line260"></a>  this.altKey = e.altKey;
-<a name="line261"></a>  this.shiftKey = e.shiftKey;
-<a name="line262"></a>  this.metaKey = e.metaKey;
-<a name="line263"></a>  this.event_ = e;
-<a name="line264"></a>  delete this.returnValue_;
-<a name="line265"></a>  delete this.propagationStopped_;
-<a name="line266"></a>};
-<a name="line267"></a>
-<a name="line268"></a>/**
-<a name="line269"></a> * Tests to see which button was pressed during the event. This is really only
-<a name="line270"></a> * useful in IE and Gecko browsers. And in IE, it&#39;s only useful for
-<a name="line271"></a> * mousedown/mouseup events, because click only fires for the left mouse button.
-<a name="line272"></a> *
-<a name="line273"></a> * Safari 2 only reports the left button being clicked, and uses the value &#39;1&#39;
-<a name="line274"></a> * instead of 0. Opera only reports a mousedown event for the middle button, and
-<a name="line275"></a> * no mouse events for the right button. Opera has default behavior for left and
-<a name="line276"></a> * middle click that can only be overridden via a configuration setting.
-<a name="line277"></a> *
-<a name="line278"></a> * There&#39;s a nice table of this mess at http://www.unixpapa.com/js/mouse.html.
+<a name="line257"></a>  this.button = e.button;
+<a name="line258"></a>
+<a name="line259"></a>  this.keyCode = e.keyCode || 0;
+<a name="line260"></a>  this.charCode = e.charCode || (type == &#39;keypress&#39; ? e.keyCode : 0);
+<a name="line261"></a>  this.ctrlKey = e.ctrlKey;
+<a name="line262"></a>  this.altKey = e.altKey;
+<a name="line263"></a>  this.shiftKey = e.shiftKey;
+<a name="line264"></a>  this.metaKey = e.metaKey;
+<a name="line265"></a>  this.event_ = e;
+<a name="line266"></a>  delete this.returnValue_;
+<a name="line267"></a>  delete this.propagationStopped_;
+<a name="line268"></a>};
+<a name="line269"></a>
+<a name="line270"></a>/**
+<a name="line271"></a> * Tests to see which button was pressed during the event. This is really only
+<a name="line272"></a> * useful in IE and Gecko browsers. And in IE, it&#39;s only useful for
+<a name="line273"></a> * mousedown/mouseup events, because click only fires for the left mouse button.
+<a name="line274"></a> *
+<a name="line275"></a> * Safari 2 only reports the left button being clicked, and uses the value &#39;1&#39;
+<a name="line276"></a> * instead of 0. Opera only reports a mousedown event for the middle button, and
+<a name="line277"></a> * no mouse events for the right button. Opera has default behavior for left and
+<a name="line278"></a> * middle click that can only be overridden via a configuration setting.
 <a name="line279"></a> *
-<a name="line280"></a> * @param {goog.events.BrowserEvent.MouseButton} button The button
-<a name="line281"></a> *     to test for.
-<a name="line282"></a> * @return {boolean} True if button was pressed.
-<a name="line283"></a> */
-<a name="line284"></a>goog.events.BrowserEvent.prototype.isButton = function(button) {
-<a name="line285"></a>  if (goog.userAgent.IE) {
-<a name="line286"></a>    if (this.type == &#39;click&#39;) {
-<a name="line287"></a>      return button == goog.events.BrowserEvent.MouseButton.LEFT;
-<a name="line288"></a>    } else {
-<a name="line289"></a>      return !!(this.event_.button &amp;
-<a name="line290"></a>          goog.events.BrowserEvent.IEButtonMap_[button]);
-<a name="line291"></a>    }
-<a name="line292"></a>  } else {
-<a name="line293"></a>    return this.event_.button == button;
-<a name="line294"></a>  }
-<a name="line295"></a>};
-<a name="line296"></a>
-<a name="line297"></a>
-<a name="line298"></a>/**
-<a name="line299"></a> * @inheritDoc
-<a name="line300"></a> */
-<a name="line301"></a>goog.events.BrowserEvent.prototype.stopPropagation = function() {
-<a name="line302"></a>  this.propagationStopped_ = true;
-<a name="line303"></a>  if (this.event_.stopPropagation) {
-<a name="line304"></a>    this.event_.stopPropagation();
-<a name="line305"></a>  } else {
-<a name="line306"></a>    this.event_.cancelBubble = true;
-<a name="line307"></a>  }
-<a name="line308"></a>};
-<a name="line309"></a>
-<a name="line310"></a>
-<a name="line311"></a>/**
-<a name="line312"></a> * To prevent default in IE7 for certain keydown events we need set the keyCode
-<a name="line313"></a> * to -1.
-<a name="line314"></a> * @type {boolean}
-<a name="line315"></a> * @private
-<a name="line316"></a> */
-<a name="line317"></a>goog.events.BrowserEvent.IE7_SET_KEY_CODE_TO_PREVENT_DEFAULT_ =
-<a name="line318"></a>    goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;8&#39;)
-<a name="line319"></a>
-<a name="line320"></a>
-<a name="line321"></a>/**
-<a name="line322"></a> * @inheritDoc
-<a name="line323"></a> */
-<a name="line324"></a>goog.events.BrowserEvent.prototype.preventDefault = function() {
-<a name="line325"></a>  this.returnValue_ = false;
-<a name="line326"></a>  var be = this.event_;
-<a name="line327"></a>  if (!be.preventDefault) {
-<a name="line328"></a>    be.returnValue = false;
-<a name="line329"></a>    if (goog.events.BrowserEvent.IE7_SET_KEY_CODE_TO_PREVENT_DEFAULT_) {
-<a name="line330"></a>      /** @preserveTry */
-<a name="line331"></a>      try {
-<a name="line332"></a>        // Most keys can be prevented using returnValue, just like in IE8 but
-<a name="line333"></a>        // some special keys require setting the keyCode to -1 as well:
-<a name="line334"></a>        //
-<a name="line335"></a>        // F3, F5, F10, F11, Ctrl+P, Crtl+O, Ctrl+F (these are taken from IE6)
+<a name="line280"></a> * There&#39;s a nice table of this mess at http://www.unixpapa.com/js/mouse.html.
+<a name="line281"></a> *
+<a name="line282"></a> * @param {goog.events.BrowserEvent.MouseButton} button The button
+<a name="line283"></a> *     to test for.
+<a name="line284"></a> * @return {boolean} True if button was pressed.
+<a name="line285"></a> */
+<a name="line286"></a>goog.events.BrowserEvent.prototype.isButton = function(button) {
+<a name="line287"></a>  if (goog.userAgent.IE) {
+<a name="line288"></a>    if (this.type == &#39;click&#39;) {
+<a name="line289"></a>      return button == goog.events.BrowserEvent.MouseButton.LEFT;
+<a name="line290"></a>    } else {
+<a name="line291"></a>      return !!(this.event_.button &amp;
+<a name="line292"></a>          goog.events.BrowserEvent.IEButtonMap_[button]);
+<a name="line293"></a>    }
+<a name="line294"></a>  } else {
+<a name="line295"></a>    return this.event_.button == button;
+<a name="line296"></a>  }
+<a name="line297"></a>};
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * @inheritDoc
+<a name="line302"></a> */
+<a name="line303"></a>goog.events.BrowserEvent.prototype.stopPropagation = function() {
+<a name="line304"></a>  this.propagationStopped_ = true;
+<a name="line305"></a>  if (this.event_.stopPropagation) {
+<a name="line306"></a>    this.event_.stopPropagation();
+<a name="line307"></a>  } else {
+<a name="line308"></a>    this.event_.cancelBubble = true;
+<a name="line309"></a>  }
+<a name="line310"></a>};
+<a name="line311"></a>
+<a name="line312"></a>
+<a name="line313"></a>/**
+<a name="line314"></a> * To prevent default in IE7 for certain keydown events we need set the keyCode
+<a name="line315"></a> * to -1.
+<a name="line316"></a> * @type {boolean}
+<a name="line317"></a> * @private
+<a name="line318"></a> */
+<a name="line319"></a>goog.events.BrowserEvent.IE7_SET_KEY_CODE_TO_PREVENT_DEFAULT_ =
+<a name="line320"></a>    goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;8&#39;)
+<a name="line321"></a>
+<a name="line322"></a>
+<a name="line323"></a>/**
+<a name="line324"></a> * @inheritDoc
+<a name="line325"></a> */
+<a name="line326"></a>goog.events.BrowserEvent.prototype.preventDefault = function() {
+<a name="line327"></a>  this.returnValue_ = false;
+<a name="line328"></a>  var be = this.event_;
+<a name="line329"></a>  if (!be.preventDefault) {
+<a name="line330"></a>    be.returnValue = false;
+<a name="line331"></a>    if (goog.events.BrowserEvent.IE7_SET_KEY_CODE_TO_PREVENT_DEFAULT_) {
+<a name="line332"></a>      /** @preserveTry */
+<a name="line333"></a>      try {
+<a name="line334"></a>        // Most keys can be prevented using returnValue, just like in IE8 but
+<a name="line335"></a>        // some special keys require setting the keyCode to -1 as well:
 <a name="line336"></a>        //
-<a name="line337"></a>        // We therefore do this for all function keys as well as when Ctrl key
-<a name="line338"></a>        // is pressed.
-<a name="line339"></a>        var VK_F1 = 112;
-<a name="line340"></a>        var VK_F12 = 123;
-<a name="line341"></a>        if (be.ctrlKey || be.keyCode &gt;= VK_F1 &amp;&amp; be.keyCode &lt;= VK_F12) {
-<a name="line342"></a>          be.keyCode = -1;
-<a name="line343"></a>        }
-<a name="line344"></a>      } catch (ex) {
-<a name="line345"></a>        // IE throws an &#39;access denied&#39; exception when trying to change
-<a name="line346"></a>        // keyCode in some situations (e.g. srcElement is input[type=file],
-<a name="line347"></a>        // or srcElement is an anchor tag rewritten by parent&#39;s innerHTML).
-<a name="line348"></a>        // Do nothing in this case.
-<a name="line349"></a>      }
-<a name="line350"></a>    }
-<a name="line351"></a>  } else {
-<a name="line352"></a>    be.preventDefault();
-<a name="line353"></a>  }
-<a name="line354"></a>};
-<a name="line355"></a>
-<a name="line356"></a>
-<a name="line357"></a>/**
-<a name="line358"></a> * @return {Event} The underlying browser event object.
-<a name="line359"></a> */
-<a name="line360"></a>goog.events.BrowserEvent.prototype.getBrowserEvent = function() {
-<a name="line361"></a>  return this.event_;
-<a name="line362"></a>};
-<a name="line363"></a>
-<a name="line364"></a>
-<a name="line365"></a>/**
-<a name="line366"></a> * @inheritDoc
-<a name="line367"></a> */
-<a name="line368"></a>goog.events.BrowserEvent.prototype.disposeInternal = function() {
-<a name="line369"></a>  goog.events.BrowserEvent.superClass_.disposeInternal.call(this);
-<a name="line370"></a>  this.event_ = null;
-<a name="line371"></a>  this.target = null;
-<a name="line372"></a>  this.currentTarget = null;
-<a name="line373"></a>  this.relatedTarget = null;
-<a name="line374"></a>};
+<a name="line337"></a>        // F3, F5, F10, F11, Ctrl+P, Crtl+O, Ctrl+F (these are taken from IE6)
+<a name="line338"></a>        //
+<a name="line339"></a>        // We therefore do this for all function keys as well as when Ctrl key
+<a name="line340"></a>        // is pressed.
+<a name="line341"></a>        var VK_F1 = 112;
+<a name="line342"></a>        var VK_F12 = 123;
+<a name="line343"></a>        if (be.ctrlKey || be.keyCode &gt;= VK_F1 &amp;&amp; be.keyCode &lt;= VK_F12) {
+<a name="line344"></a>          be.keyCode = -1;
+<a name="line345"></a>        }
+<a name="line346"></a>      } catch (ex) {
+<a name="line347"></a>        // IE throws an &#39;access denied&#39; exception when trying to change
+<a name="line348"></a>        // keyCode in some situations (e.g. srcElement is input[type=file],
+<a name="line349"></a>        // or srcElement is an anchor tag rewritten by parent&#39;s innerHTML).
+<a name="line350"></a>        // Do nothing in this case.
+<a name="line351"></a>      }
+<a name="line352"></a>    }
+<a name="line353"></a>  } else {
+<a name="line354"></a>    be.preventDefault();
+<a name="line355"></a>  }
+<a name="line356"></a>};
+<a name="line357"></a>
+<a name="line358"></a>
+<a name="line359"></a>/**
+<a name="line360"></a> * @return {Event} The underlying browser event object.
+<a name="line361"></a> */
+<a name="line362"></a>goog.events.BrowserEvent.prototype.getBrowserEvent = function() {
+<a name="line363"></a>  return this.event_;
+<a name="line364"></a>};
+<a name="line365"></a>
+<a name="line366"></a>
+<a name="line367"></a>/**
+<a name="line368"></a> * @inheritDoc
+<a name="line369"></a> */
+<a name="line370"></a>goog.events.BrowserEvent.prototype.disposeInternal = function() {
+<a name="line371"></a>  goog.events.BrowserEvent.superClass_.disposeInternal.call(this);
+<a name="line372"></a>  this.event_ = null;
+<a name="line373"></a>  this.target = null;
+<a name="line374"></a>  this.currentTarget = null;
+<a name="line375"></a>  this.relatedTarget = null;
+<a name="line376"></a>};
 </pre>
 
 

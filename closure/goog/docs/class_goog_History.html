@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -102,14 +114,14 @@ h.setToken(&#39;foo&#39;);
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td>goog.History</td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -133,7 +145,7 @@ h.setToken(&#39;foo&#39;);
    <tr class="even">
      <td>
         <span class="entryName">opt_invisible</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">True to use hidden history states instead of the user-visible location hash.</div>
      </td>
    </tr>
@@ -141,7 +153,7 @@ h.setToken(&#39;foo&#39;);
    <tr class="odd">
      <td>
         <span class="entryName">opt_blankPageUrl</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">A URL to a blank page on the same server. Required if opt_invisible is true.  This URL is also used as the src for the iframe used to track history state in IE (if not specified the iframe is not given a src attribute).  Access is Denied error may occur in IE7 if the window&#39;s URL&#39;s scheme is https, and this URL is not specified.</div>
      </td>
    </tr>
@@ -149,7 +161,7 @@ h.setToken(&#39;foo&#39;);
    <tr class="even">
      <td>
         <span class="entryName">opt_input</span>
-        : <div class="fullType"><span class="type">HTMLInputElement</span></div>
+        : <div class="fullType"><span class="type">HTMLInputElement=</span></div>
         <div class="entryOverview">The hidden input element to be used to store the history token.  If not provided, a hidden input element will be created using document.write.</div>
      </td>
    </tr>
@@ -157,7 +169,7 @@ h.setToken(&#39;foo&#39;);
    <tr class="odd">
      <td>
         <span class="entryName">opt_iframe</span>
-        : <div class="fullType"><span class="type">HTMLIFrameElement</span></div>
+        : <div class="fullType"><span class="type">HTMLIFrameElement=</span></div>
         <div class="entryOverview">The hidden iframe that will be used by IE for pushing history state changes, or by all browsers if opt_invisible is true. If not provided, a hidden iframe element will be created using document.write.</div>
      </td>
    </tr>
@@ -229,7 +241,7 @@ navigation changes. If <code>goog.History.HAS_ONHASHCHANGE</code> is
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line817">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line816">code &raquo;</a>
   </td>
      </tr>
 
@@ -263,7 +275,7 @@ navigation changes. If <code>goog.History.HAS_ONHASHCHANGE</code> is
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line427">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line426">code &raquo;</a>
   </td>
      </tr>
 
@@ -314,7 +326,7 @@ null in that case.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line764">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line763">code &raquo;</a>
   </td>
      </tr>
 
@@ -382,7 +394,7 @@ be returned as label//root.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line613">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line612">code &raquo;</a>
   </td>
      </tr>
 
@@ -428,7 +440,7 @@ be returned as label//root.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line565">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line564">code &raquo;</a>
   </td>
      </tr>
 
@@ -467,7 +479,7 @@ object will actually be enabled at this point.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line515">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line514">code &raquo;</a>
   </td>
      </tr>
 
@@ -530,7 +542,7 @@ true.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line554">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line553">code &raquo;</a>
   </td>
      </tr>
 
@@ -591,7 +603,7 @@ correct state can be restored in the hash or iframe.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line535">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line534">code &raquo;</a>
   </td>
      </tr>
 
@@ -633,7 +645,7 @@ unstick itself as the user wiggles the mouse in frustration.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line890">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line889">code &raquo;</a>
   </td>
      </tr>
 
@@ -688,7 +700,7 @@ stack.
    <tr class="odd">
      <td>
         <span class="entryName">opt_title</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Optional title used when setting the hidden iframe title in IE.</div>
      </td>
    </tr>
@@ -702,7 +714,7 @@ stack.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line599">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line598">code &raquo;</a>
   </td>
      </tr>
 
@@ -769,7 +781,7 @@ the caller.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line446">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line445">code &raquo;</a>
   </td>
      </tr>
 
@@ -837,7 +849,7 @@ window.location.replace replaces the current state from the history stack.
    <tr class="odd">
      <td>
         <span class="entryName">opt_replace</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Set to true to replace the current token without appending a history entry.</div>
      </td>
    </tr>
@@ -851,7 +863,7 @@ window.location.replace replaces the current state from the history stack.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line684">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line683">code &raquo;</a>
   </td>
      </tr>
 
@@ -916,7 +928,7 @@ affecting the length of the stack.
    <tr class="even">
      <td>
         <span class="entryName">opt_title</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Optional title used when setting the hidden iframe title in IE.</div>
      </td>
    </tr>
@@ -930,7 +942,7 @@ affecting the length of the stack.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line633">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line632">code &raquo;</a>
   </td>
      </tr>
 
@@ -988,7 +1000,7 @@ Older versions of webkit cannot set the iframe, so ignore those browsers.
    <tr class="odd">
      <td>
         <span class="entryName">opt_replace</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Set to true to replace the current iframe state without appending a new history entry.</div>
      </td>
    </tr>
@@ -996,7 +1008,7 @@ Older versions of webkit cannot set the iframe, so ignore those browsers.
    <tr class="even">
      <td>
         <span class="entryName">opt_title</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Optional title used when setting the hidden iframe title in IE.</div>
      </td>
    </tr>
@@ -1010,7 +1022,7 @@ Older versions of webkit cannot set the iframe, so ignore those browsers.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line714">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line713">code &raquo;</a>
   </td>
      </tr>
 
@@ -1070,7 +1082,7 @@ Older versions of webkit cannot set the iframe, so ignore those browsers.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line869">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line868">code &raquo;</a>
   </td>
      </tr>
 
@@ -1128,7 +1140,7 @@ problem, the app can pass in a title to use with the hidden iframe.
    <tr class="odd">
      <td>
         <span class="entryName">opt_title</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Optional title used when setting the hidden iframe title in IE.</div>
      </td>
    </tr>
@@ -1142,7 +1154,7 @@ problem, the app can pass in a title to use with the hidden iframe.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line587">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line586">code &raquo;</a>
   </td>
      </tr>
 
@@ -1203,7 +1215,7 @@ to the location or the iframe state is detected by poll_.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line846">code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line845">code &raquo;</a>
   </td>
      </tr>
 
@@ -1293,7 +1305,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -1301,7 +1313,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -1538,7 +1550,7 @@ nothing is done.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -1546,7 +1558,7 @@ nothing is done.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -1886,7 +1898,7 @@ mypackage.MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line376">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line375">Code &raquo;</a>
   </td>
      </tr>
 
@@ -1919,7 +1931,7 @@ mypackage.MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line399">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line398">Code &raquo;</a>
   </td>
      </tr>
 
@@ -1954,7 +1966,7 @@ hangs temporarily while the location is changed.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line421">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line420">Code &raquo;</a>
   </td>
      </tr>
 
@@ -1994,7 +2006,7 @@ object to resurrect itself when the html page becomes accessible.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line391">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line390">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2207,7 +2219,7 @@ get listen() calling addEventListener() and vice-versa.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line408">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line407">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2242,7 +2254,7 @@ body innerHTML.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line914">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line913">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2275,7 +2287,7 @@ body innerHTML.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line922">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line921">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2309,7 +2321,7 @@ timer (@see goog.History#operaDefibrillator_).
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line902">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line901">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2342,7 +2354,7 @@ timer (@see goog.History#operaDefibrillator_).
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line930">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line929">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2376,7 +2388,7 @@ Used to create unique IDs.
 
 
   <td class="view-code">
-     <a href="closure_goog_history_history.js.source.html#line940">Code &raquo;</a>
+     <a href="closure_goog_history_history.js.source.html#line939">Code &raquo;</a>
   </td>
      </tr>
 

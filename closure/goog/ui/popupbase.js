@@ -38,8 +38,8 @@ goog.require('goog.userAgent');
  *
  * @constructor
  * @extends {goog.events.EventTarget}
- * @param {Element} opt_element A DOM element for the popup.
- * @param {goog.ui.PopupBase.Type} opt_type Type of popup.
+ * @param {Element=} opt_element A DOM element for the popup.
+ * @param {goog.ui.PopupBase.Type=} opt_type Type of popup.
  */
 goog.ui.PopupBase = function(opt_element, opt_type) {
   /**
@@ -495,7 +495,7 @@ goog.ui.PopupBase.prototype.show_ = function() {
 /**
  * Hides the popup. This call is idempotent.
  *
- * @param {Object} opt_target Target of the event causing the hide.
+ * @param {Object=} opt_target Target of the event causing the hide.
  * @return {boolean} Whether the popup was hidden and not cancelled.
  * @private
  */
@@ -590,7 +590,7 @@ goog.ui.PopupBase.prototype.onShow_ = function() {
  * Called before the popup is hidden. Derived classes can override to hook this
  * event but should make sure to call the parent class method.
  *
- * @param {Object} opt_target Target of the event causing the hide.
+ * @param {Object=} opt_target Target of the event causing the hide.
  * @return {boolean} If anyone called preventDefault on the event object (or
  *     if any of the handlers returns false this will also return false.
  * @private
@@ -604,7 +604,7 @@ goog.ui.PopupBase.prototype.onBeforeHide_ = function(opt_target) {
 /**
  * Called after the popup is hidden. Derived classes can override to hook this
  * event but should make sure to call the parent class method.
- * @param {Object} opt_target Target of the event causing the hide.
+ * @param {Object=} opt_target Target of the event causing the hide.
  * @private
  */
 goog.ui.PopupBase.prototype.onHide_ = function(opt_target) {

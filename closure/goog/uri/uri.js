@@ -53,10 +53,10 @@ goog.require('goog.uri.utils.ComponentIndex');
  * All setters return <code>this</code> and so may be chained, a la
  * <code>goog.Uri.parse('/foo').setFragment('part').toString()</code>.
  *
- * @param {*} opt_uri Optional string URI to parse
+ * @param {*=} opt_uri Optional string URI to parse
  *        (use goog.Uri.create() to create a URI from parts), or if
  *        a goog.Uri is passed, a clone is created.
- * @param {boolean} opt_ignoreCase If true, #getParameterValue will ignore
+ * @param {boolean=} opt_ignoreCase If true, #getParameterValue will ignore
  * the case of the parameter name.
  *
  * @constructor
@@ -332,7 +332,7 @@ goog.Uri.prototype.getScheme = function() {
 /**
  * Sets the scheme/protocol.
  * @param {string} newScheme New scheme value.
- * @param {boolean} opt_decode Optional param for whether to decode new value.
+ * @param {boolean=} opt_decode Optional param for whether to decode new value.
  * @return {goog.Uri} Reference to this URI object.
  */
 goog.Uri.prototype.setScheme = function(newScheme, opt_decode) {
@@ -368,7 +368,7 @@ goog.Uri.prototype.getUserInfo = function() {
 /**
  * Sets the userInfo.
  * @param {string} newUserInfo New userInfo value.
- * @param {boolean} opt_decode Optional param for whether to decode new value.
+ * @param {boolean=} opt_decode Optional param for whether to decode new value.
  * @return {goog.Uri} Reference to this URI object.
  */
 goog.Uri.prototype.setUserInfo = function(newUserInfo, opt_decode) {
@@ -399,7 +399,7 @@ goog.Uri.prototype.getDomain = function() {
 /**
  * Sets the domain.
  * @param {string} newDomain New domain value.
- * @param {boolean} opt_decode Optional param for whether to decode new value.
+ * @param {boolean=} opt_decode Optional param for whether to decode new value.
  * @return {goog.Uri} Reference to this URI object.
  */
 goog.Uri.prototype.setDomain = function(newDomain, opt_decode) {
@@ -468,7 +468,7 @@ goog.Uri.prototype.getPath = function() {
 /**
  * Sets the path.
  * @param {string} newPath New path value.
- * @param {boolean} opt_decode Optional param for whether to decode new value.
+ * @param {boolean=} opt_decode Optional param for whether to decode new value.
  * @return {goog.Uri} Reference to this URI object.
  */
 goog.Uri.prototype.setPath = function(newPath, opt_decode) {
@@ -498,7 +498,7 @@ goog.Uri.prototype.hasQuery = function() {
 /**
  * Sets the query data.
  * @param {goog.Uri.QueryData|string|undefined} queryData QueryData object.
- * @param {boolean} opt_decode Optional param for whether to decode new value.
+ * @param {boolean=} opt_decode Optional param for whether to decode new value.
  *     Applies only if queryData is a string.
  * @return {goog.Uri} Reference to this URI object.
  */
@@ -528,7 +528,7 @@ goog.Uri.prototype.setQueryData = function(queryData, opt_decode) {
 /**
  * Sets the URI query.
  * @param {string} newQuery New query value.
- * @param {boolean} opt_decode Optional param for whether to decode new value.
+ * @param {boolean=} opt_decode Optional param for whether to decode new value.
  * @return {goog.Uri} Reference to this URI object.
  */
 goog.Uri.prototype.setQuery = function(newQuery, opt_decode) {
@@ -653,7 +653,7 @@ goog.Uri.prototype.getFragment = function() {
 /**
  * Sets the URI fragment.
  * @param {string} newFragment New fragment value.
- * @param {boolean} opt_decode Optional param for whether to decode new value.
+ * @param {boolean=} opt_decode Optional param for whether to decode new value.
  * @return {goog.Uri} Reference to this URI object.
  */
 goog.Uri.prototype.setFragment = function(newFragment, opt_decode) {
@@ -774,7 +774,7 @@ goog.Uri.prototype.getIgnoreCase = function() {
  *
  * @param {*} uri Raw URI string or instance of Uri
  *     object.
- * @param {boolean} opt_ignoreCase Whether to ignore the case of parameter
+ * @param {boolean=} opt_ignoreCase Whether to ignore the case of parameter
  * names in #getParameterValue.
  * @return {goog.Uri} The new URI object.
  */
@@ -787,14 +787,14 @@ goog.Uri.parse = function(uri, opt_ignoreCase) {
 /**
  * Creates a new goog.Uri object from unencoded parts.
  *
- * @param {?string} opt_scheme Scheme/protocol or full URI to parse.
- * @param {?string} opt_userInfo username:password.
- * @param {?string} opt_domain www.google.com.
- * @param {?number} opt_port 9830.
- * @param {?string} opt_path /some/path/to/a/file.html.
- * @param {string|goog.Uri.QueryData} opt_query a=1&b=2.
- * @param {?string} opt_fragment The fragment without the #.
- * @param {boolean} opt_ignoreCase Whether to ignore parameter name case in
+ * @param {?string=} opt_scheme Scheme/protocol or full URI to parse.
+ * @param {?string=} opt_userInfo username:password.
+ * @param {?string=} opt_domain www.google.com.
+ * @param {?number=} opt_port 9830.
+ * @param {?string=} opt_path /some/path/to/a/file.html.
+ * @param {string|goog.Uri.QueryData=} opt_query a=1&b=2.
+ * @param {?string=} opt_fragment The fragment without the #.
+ * @param {boolean=} opt_ignoreCase Whether to ignore parameter name case in
  *     #getParameterValue.
  *
  * @return {goog.Uri} The new URI object.
@@ -1019,11 +1019,11 @@ goog.Uri.haveSameDomain = function(uri1String, uri2String) {
  *
  * Has the same interface as the collections in goog.structs.
  *
- * @param {?string} opt_query Optional encoded query string to parse into
+ * @param {?string=} opt_query Optional encoded query string to parse into
  *     the object.
- * @param {goog.Uri} opt_uri Optional uri object that should have it's cache
+ * @param {goog.Uri=} opt_uri Optional uri object that should have it's cache
  *     invalidated when this object updates.
- * @param {boolean} opt_ignoreCase If true, ignore the case of the parameter
+ * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
  *     name in #get.
  * @constructor
  */
@@ -1087,9 +1087,9 @@ goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
  *
  * @param {!goog.structs.Map|!Object} map Map of string parameter names to
  *     string parameter values.
- * @param {goog.Uri} opt_uri URI object that should have it's cache
+ * @param {goog.Uri=} opt_uri URI object that should have it's cache
  *     invalidated when this object updates.
- * @param {boolean} opt_ignoreCase If true, ignore the case of the parameter
+ * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
  *     name in #get.
  * @return {!goog.Uri.QueryData} The populated query data instance.
  */
@@ -1113,9 +1113,9 @@ goog.Uri.QueryData.createFromMap = function(map, opt_uri, opt_ignoreCase) {
  *
  * @param {Array.<string>} keys Parameter names.
  * @param {Array} values Parameter values.
- * @param {goog.Uri} opt_uri URI object that should have it's cache
+ * @param {goog.Uri=} opt_uri URI object that should have it's cache
  *     invalidated when this object updates.
- * @param {boolean} opt_ignoreCase If true, ignore the case of the parameter
+ * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
  *     name in #get.
  * @return {!goog.Uri.QueryData} The populated query data instance.
  */
@@ -1299,7 +1299,7 @@ goog.Uri.QueryData.prototype.getKeys = function() {
  * Returns all the values of the parameters with the given name. If the query
  * data has no such key this will return an empty array. If no key is given
  * all values wil be returned.
- * @param {string} opt_key The name of the parameter to get the values for.
+ * @param {string=} opt_key The name of the parameter to get the values for.
  * @return {Array} All the values of the parameters with the given name.
  */
 goog.Uri.QueryData.prototype.getValues = function(opt_key) {
@@ -1366,7 +1366,7 @@ goog.Uri.QueryData.prototype.set = function(key, value) {
  * Returns the first value associated with the key. If the query data has no
  * such key this will return undefined or the optional default.
  * @param {string} key The name of the parameter to get the value for.
- * @param {*} opt_default The default value to return if the query data
+ * @param {*=} opt_default The default value to return if the query data
  *     has no such key.
  * @return {*} The first value associated with the key.
  */
@@ -1520,7 +1520,7 @@ goog.Uri.QueryData.prototype.clone = function() {
  * Helper function to get the key name from a JavaScript object. Converts
  * the object to a string, and to lower case if necessary.
  * @private
- * @param {Object} arg The object to get a key name from.
+ * @param {*} arg The object to get a key name from.
  * @return {string} valid key name which can be looked up in #keyMap_.
  */
 goog.Uri.QueryData.prototype.getKeyName_ = function(arg) {
@@ -1559,8 +1559,8 @@ goog.Uri.QueryData.prototype.setIgnoreCase = function(ignoreCase) {
  * Extends a query data object with another query data or map like object. This
  * operates 'in-place', it does not create a new QueryData object.
  *
- * @param {goog.Uri.QueryData|goog.structs.Map|Object} var_args The object from
- *     which key value pairs will be copied.
+ * @param {...(goog.Uri.QueryData|goog.structs.Map|Object)} var_args The object
+ *     from which key value pairs will be copied.
  */
 goog.Uri.QueryData.prototype.extend = function(var_args) {
   for (var i = 0; i < arguments.length; i++) {

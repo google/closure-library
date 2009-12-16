@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -79,7 +91,7 @@ styled like block-level elements.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_ui_ControlRenderer.html">goog.ui.ControlRenderer</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></td><td><span class="type"><a href="class_goog_ui_ControlRenderer.html">goog.ui.ControlRenderer</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_ui_CustomButtonRenderer.html">goog.ui.CustomButtonRenderer</a></span></td><td><span class="type"><a href="class_goog_ui_ButtonRenderer.html">goog.ui.ButtonRenderer</a></span></td></tr>
@@ -87,7 +99,7 @@ styled like block-level elements.
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -2070,7 +2082,7 @@ opt_includedClass is added to classes as well.
    <tr class="odd">
      <td>
         <span class="entryName">opt_includedClass</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">If provided, get only the combined classes that include this one.</div>
      </td>
    </tr>

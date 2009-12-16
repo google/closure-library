@@ -146,7 +146,7 @@ goog.ui.media.Mp3.MATCHER =
  *
  * @param {goog.ui.media.MediaModel} dataModel A media model that must contain
  *     an mp3 url on {@code dataModel.getUrl}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @return {goog.ui.media.Media} A goog.ui.Control subclass with the mp3
  *     renderer.

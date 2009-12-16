@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -90,10 +91,10 @@
 <a name="line47"></a> * Will construct a chart using Google&#39;s chartserver.
 <a name="line48"></a> *
 <a name="line49"></a> * @param {goog.ui.ServerChart.ChartType} type The chart type.
-<a name="line50"></a> * @param {number} opt_width The width of the chart.
-<a name="line51"></a> * @param {number} opt_height The height of the chart.
-<a name="line52"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM Helper.
-<a name="line53"></a> * @param {string} opt_uri Optional uri used to connect to the chart server, if
+<a name="line50"></a> * @param {number=} opt_width The width of the chart.
+<a name="line51"></a> * @param {number=} opt_height The height of the chart.
+<a name="line52"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM Helper.
+<a name="line53"></a> * @param {string=} opt_uri Optional uri used to connect to the chart server, if
 <a name="line54"></a> *     different than goog.ui.ServerChart.CHART_SERVER_URI.
 <a name="line55"></a> * @constructor
 <a name="line56"></a> * @extends {goog.ui.Component}
@@ -714,8 +715,8 @@
 <a name="line671"></a>/**
 <a name="line672"></a> * Sets the chart size.
 <a name="line673"></a> *
-<a name="line674"></a> * @param {number} opt_width Optional chart width, defaults to 300.
-<a name="line675"></a> * @param {number} opt_height Optional chart height, defaults to 150.
+<a name="line674"></a> * @param {number=} opt_width Optional chart width, defaults to 300.
+<a name="line675"></a> * @param {number=} opt_height Optional chart height, defaults to 150.
 <a name="line676"></a> */
 <a name="line677"></a>goog.ui.ServerChart.prototype.setSize = function(opt_width, opt_height) {
 <a name="line678"></a>  var sizeString = [opt_width || 300, opt_height || 150].join(&#39;x&#39;);
@@ -1070,8 +1071,8 @@
 <a name="line1027"></a> *     weights[2] is relative area of overlap of circles A and B.
 <a name="line1028"></a> *
 <a name="line1029"></a> * @param {Array.&lt;number&gt;} weights The relative weights of the circles.
-<a name="line1030"></a> * @param {Array.&lt;string&gt;} opt_legendText The legend labels for the circles.
-<a name="line1031"></a> * @param {Array.&lt;string&gt;} opt_colors The colors for the circles.
+<a name="line1030"></a> * @param {Array.&lt;string&gt;=} opt_legendText The legend labels for the circles.
+<a name="line1031"></a> * @param {Array.&lt;string&gt;=} opt_colors The colors for the circles.
 <a name="line1032"></a> */
 <a name="line1033"></a>goog.ui.ServerChart.prototype.setVennSeries = function(
 <a name="line1034"></a>    weights, opt_legendText, opt_colors) {
@@ -1202,9 +1203,9 @@
 <a name="line1159"></a> *     as the space between bars because this is the behavior exposed
 <a name="line1160"></a> *     in the external developers guide.
 <a name="line1161"></a> * @param {number} barWidth The width of a bar in pixels.
-<a name="line1162"></a> * @param {number} opt_spaceBars The width of the space between
+<a name="line1162"></a> * @param {number=} opt_spaceBars The width of the space between
 <a name="line1163"></a> *     bars in a group in pixels.
-<a name="line1164"></a> * @param {number} opt_spaceGroups The width of the space between
+<a name="line1164"></a> * @param {number=} opt_spaceGroups The width of the space between
 <a name="line1165"></a> *     groups.
 <a name="line1166"></a> */
 <a name="line1167"></a>goog.ui.ServerChart.prototype.setBarSpaceWidths = function(barWidth,
@@ -1230,9 +1231,9 @@
 <a name="line1187"></a> *     bars is left undefined, the space between groups will be interpreted
 <a name="line1188"></a> *     as the space between bars because this is the behavior exposed
 <a name="line1189"></a> *     in the external developers guide.
-<a name="line1190"></a> * @param {number} opt_spaceBars The width of the space between
+<a name="line1190"></a> * @param {number=} opt_spaceBars The width of the space between
 <a name="line1191"></a> *     bars in a group in pixels.
-<a name="line1192"></a> * @param {number} opt_spaceGroups The width of the space between
+<a name="line1192"></a> * @param {number=} opt_spaceGroups The width of the space between
 <a name="line1193"></a> *     groups.
 <a name="line1194"></a> */
 <a name="line1195"></a>goog.ui.ServerChart.prototype.setAutomaticBarWidth = function(opt_spaceBars,
@@ -1269,7 +1270,7 @@
 <a name="line1226"></a> * Returns the axis type for the given axis, or all of them in an array if the
 <a name="line1227"></a> * axis number is not given.
 <a name="line1228"></a> *
-<a name="line1229"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1229"></a> * @param {number=} opt_axisNumber The axis index, as returned by addMultiAxis.
 <a name="line1230"></a> * @return {goog.ui.ServerChart.MultiAxisType|
 <a name="line1231"></a> *     Array.&lt;goog.ui.ServerChart.MultiAxisType&gt;}
 <a name="line1232"></a> *     The axis type for the given axis, or all of them in an array if the
@@ -1308,7 +1309,7 @@
 <a name="line1265"></a> * Returns the label text, or all of them in a two-dimensional array if the
 <a name="line1266"></a> * axis number is not given.
 <a name="line1267"></a> *
-<a name="line1268"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1268"></a> * @param {number=} opt_axisNumber The axis index, as returned by addMultiAxis.
 <a name="line1269"></a> * @return {Object|Array.&lt;string&gt;} The label text, or all of them in a
 <a name="line1270"></a> *     two-dimensional array if the axis number is not given.
 <a name="line1271"></a> */
@@ -1347,7 +1348,7 @@
 <a name="line1304"></a> * Returns the label positions for a given axis number, or all of them in a
 <a name="line1305"></a> * two-dimensional array if the axis number is not given.
 <a name="line1306"></a> *
-<a name="line1307"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1307"></a> * @param {number=} opt_axisNumber The axis index, as returned by addMultiAxis.
 <a name="line1308"></a> * @return {Object|Array.&lt;number&gt;} The label positions for a given axis number,
 <a name="line1309"></a> *     or all of them in a two-dimensional array if the axis number is not
 <a name="line1310"></a> *     given.
@@ -1370,7 +1371,7 @@
 <a name="line1327"></a> * @param {number} axisNumber The axis index, as returned by addMultiAxis.
 <a name="line1328"></a> * @param {number} rangeStart The new start of the range.
 <a name="line1329"></a> * @param {number} rangeEnd The new end of the range.
-<a name="line1330"></a> * @param {number} opt_interval The interval between axis labels.
+<a name="line1330"></a> * @param {number=} opt_interval The interval between axis labels.
 <a name="line1331"></a> */
 <a name="line1332"></a>goog.ui.ServerChart.prototype.setMultiAxisRange = function(axisNumber,
 <a name="line1333"></a>                                                           rangeStart,
@@ -1396,7 +1397,7 @@
 <a name="line1353"></a> * (range start, range end), or all of them in a two-dimensional array if the
 <a name="line1354"></a> * axis number is not given.
 <a name="line1355"></a> *
-<a name="line1356"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1356"></a> * @param {number=} opt_axisNumber The axis index, as returned by addMultiAxis.
 <a name="line1357"></a> * @return {Object|Array.&lt;number&gt;} The label range for a given axis number as a
 <a name="line1358"></a> *     two-element array of (range start, range end), or all of them in a
 <a name="line1359"></a> *     two-dimensional array if the axis number is not given.
@@ -1419,10 +1420,10 @@
 <a name="line1376"></a> *
 <a name="line1377"></a> * @param {number} axisNumber The axis index, as returned by addMultiAxis.
 <a name="line1378"></a> * @param {string} color The hex value for this label&#39;s color.
-<a name="line1379"></a> * @param {number} opt_fontSize The label font size, in pixels.
-<a name="line1380"></a> * @param {goog.ui.ServerChart.MultiAxisAlignment} opt_alignment The label
+<a name="line1379"></a> * @param {number=} opt_fontSize The label font size, in pixels.
+<a name="line1380"></a> * @param {goog.ui.ServerChart.MultiAxisAlignment=} opt_alignment The label
 <a name="line1381"></a> *     alignment.
-<a name="line1382"></a> * @param {goog.ui.ServerChart.AxisDisplayType} opt_axisDisplay The axis
+<a name="line1382"></a> * @param {goog.ui.ServerChart.AxisDisplayType=} opt_axisDisplay The axis
 <a name="line1383"></a> *     line and ticks.
 <a name="line1384"></a> */
 <a name="line1385"></a>goog.ui.ServerChart.prototype.setMultiAxisLabelStyle = function(axisNumber,
@@ -1456,7 +1457,7 @@
 <a name="line1413"></a> * array, or all of them in a two-dimensional array if the axis number is not
 <a name="line1414"></a> * given.
 <a name="line1415"></a> *
-<a name="line1416"></a> * @param {number} opt_axisNumber The axis index, as returned by addMultiAxis.
+<a name="line1416"></a> * @param {number=} opt_axisNumber The axis index, as returned by addMultiAxis.
 <a name="line1417"></a> * @return {Object|Array.&lt;number&gt;} The label style for a given axis number as a
 <a name="line1418"></a> *     one- to three-element array, or all of them in a two-dimensional array if
 <a name="line1419"></a> *     the axis number is not given.
@@ -1477,7 +1478,7 @@
 <a name="line1434"></a> * @param {Array.&lt;number|null&gt;} data An array of numbers (values can be
 <a name="line1435"></a> *     NaN or null).
 <a name="line1436"></a> * @param {string} color The hex value for this data set&#39;s color.
-<a name="line1437"></a> * @param {string} opt_legendText The legend text, if any, for this data
+<a name="line1437"></a> * @param {string=} opt_legendText The legend text, if any, for this data
 <a name="line1438"></a> *     series. NOTE: If specified, all previously added data sets must also
 <a name="line1439"></a> *     have a legend text.
 <a name="line1440"></a> */
@@ -1530,7 +1531,7 @@
 <a name="line1487"></a> * Returns the given data set or all of them in a two-dimensional array if
 <a name="line1488"></a> * the set number is not given.
 <a name="line1489"></a> *
-<a name="line1490"></a> * @param {number} opt_setNumber Optional data set number to get.
+<a name="line1490"></a> * @param {number=} opt_setNumber Optional data set number to get.
 <a name="line1491"></a> * @return {Array} The given data set or all of them in a two-dimensional array
 <a name="line1492"></a> *     if the set number is not given.
 <a name="line1493"></a> */

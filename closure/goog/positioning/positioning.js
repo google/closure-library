@@ -27,12 +27,10 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.Event');
-goog.require('goog.events.EventTarget');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.style');
-goog.require('goog.userAgent');
 
 
 
@@ -118,6 +116,24 @@ goog.positioning.OverflowStatus.FAILED =
 
 
 /**
+ * Shorthand to check if horizontal positioning failed.
+ * @type {number}
+ */
+goog.positioning.OverflowStatus.FAILED_HORIZONTAL =
+    goog.positioning.OverflowStatus.FAILED_LEFT |
+    goog.positioning.OverflowStatus.FAILED_RIGHT;
+
+
+/**
+ * Shorthand to check if vertical positioning failed.
+ * @type {number}
+ */
+goog.positioning.OverflowStatus.FAILED_VERTICAL =
+    goog.positioning.OverflowStatus.FAILED_TOP |
+    goog.positioning.OverflowStatus.FAILED_BOTTOM;
+
+
+/**
  * Positions a movable element relative to an anchor element. The caller
  * specifies the corners that should touch. This functions then moves the
  * movable element accordingly.
@@ -130,19 +146,19 @@ goog.positioning.OverflowStatus.FAILED =
  * @param {goog.positioning.Corner} movableElementCorner The corner of the
  *     movableElement that that should be positioned adjacent to the anchor
  *     element.
- * @param {goog.math.Coordinate} opt_offset An offset specified in pixels.
+ * @param {goog.math.Coordinate=} opt_offset An offset specified in pixels.
  *    After the normal positioning algorithm is applied, the offset is then
  *    applied. Positive coordinates move the popup closer to the center of the
  *    anchor element. Negative coordinates move the popup away from the center
  *    of the anchor element.
- * @param {goog.math.Box} opt_margin A margin specified in pixels.
+ * @param {goog.math.Box=} opt_margin A margin specified in pixels.
  *    After the normal positioning algorithm is applied and any offset, the
  *    margin is then applied. Positive coordinates move the popup away from the
- *    spot it was positioned towards its center. Negative coordiates move it
+ *    spot it was positioned towards its center. Negative coordinates move it
  *    towards the spot it was positioned away from its center.
- * @param {?number} opt_overflow Overflow handling mode. Defaults to IGNORE if
+ * @param {?number=} opt_overflow Overflow handling mode. Defaults to IGNORE if
  *     not specified. Bitmap, {@see goog.positioning.Overflow}.
- * @param {goog.math.Size} opt_preferredSize The preferred size of the
+ * @param {goog.math.Size=} opt_preferredSize The preferred size of the
  *     movableElement.
  * @return {goog.positioning.OverflowStatus} Status bitmap,
  *     {@see goog.positioning.OverflowStatus}.
@@ -263,16 +279,16 @@ goog.positioning.getVisiblePart_ = function(el) {
  * @param {Element} movableElement The element to be positioned.
  * @param {goog.positioning.Corner} movableElementCorner The corner of the
  *     movableElement that that should be positioned.
- * @param {goog.math.Box} opt_margin A margin specified in pixels.
+ * @param {goog.math.Box=} opt_margin A margin specified in pixels.
  *    After the normal positioning algorithm is applied and any offset, the
  *    margin is then applied. Positive coordinates move the popup away from the
- *    spot it was positioned towards its center. Negative coordiates move it
+ *    spot it was positioned towards its center. Negative coordinates move it
  *    towards the spot it was positioned away from its center.
- * @param {goog.math.Box} opt_viewport Box object describing the dimensions of
+ * @param {goog.math.Box=} opt_viewport Box object describing the dimensions of
  *     the viewport. Required if opt_overflow is specified.
- * @param {?number} opt_overflow Overflow handling mode. Defaults to IGNORE if
+ * @param {?number=} opt_overflow Overflow handling mode. Defaults to IGNORE if
  *     not specified, {@see goog.positioning.Overflow}.
- * @param {goog.math.Size} opt_preferredSize The preferred size of the
+ * @param {goog.math.Size=} opt_preferredSize The preferred size of the
  *     movableElement. Defaults to the current size.
  * @return {goog.positioning.OverflowStatus} Status bitmap.
  */

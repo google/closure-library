@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,14 +90,14 @@ window (client) coordinates, and made to stay within the viewport.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_positioning_AbstractPosition.html">goog.positioning.AbstractPosition</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_positioning_ClientPosition.html">goog.positioning.ClientPosition</a></span></td><td><span class="type"><a href="class_goog_positioning_AbstractPosition.html">goog.positioning.AbstractPosition</a></span></td></tr>
   <tr><td>goog.ui.Popup.ViewPortClientPosition</td><td><span class="type"><a href="class_goog_positioning_ClientPosition.html">goog.positioning.ClientPosition</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -190,7 +202,7 @@ window (client) coordinates, and made to stay within the viewport.
    <tr class="even">
      <td>
         <span class="entryName">opt_margin</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Box.html">goog.math.Box</a></span></div>
+        : <div class="fullType"><span class="type">goog.math.Box=</span></div>
         <div class="entryOverview">A margin specified in pixels.</div>
      </td>
    </tr>
@@ -198,7 +210,7 @@ window (client) coordinates, and made to stay within the viewport.
    <tr class="odd">
      <td>
         <span class="entryName">opt_preferredSize</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Size.html">goog.math.Size</a></span></div>
+        : <div class="fullType"><span class="type">goog.math.Size=</span></div>
         <div class="entryOverview">Preferred size of the element.</div>
      </td>
    </tr>
@@ -297,7 +309,7 @@ window (client) coordinates, and made to stay within the viewport.
    <tr class="even">
      <td>
         <span class="entryName">opt_margin</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Box.html">goog.math.Box</a></span></div>
+        : <div class="fullType"><span class="type">goog.math.Box=</span></div>
         <div class="entryOverview">A margin specified in pixels.</div>
      </td>
    </tr>
@@ -305,7 +317,7 @@ window (client) coordinates, and made to stay within the viewport.
    <tr class="odd">
      <td>
         <span class="entryName">opt_preferredSize</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Size.html">goog.math.Size</a></span></div>
+        : <div class="fullType"><span class="type">goog.math.Size=</span></div>
         <div class="entryOverview">PreferredSize of the movableElement.</div>
      </td>
    </tr>

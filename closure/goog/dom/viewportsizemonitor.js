@@ -52,7 +52,7 @@ goog.require('goog.userAgent');
  * Manually verified on IE6, IE7, FF2, Opera 9, and WebKit.  {@code getSize}
  * doesn't always return the correct viewport height on Safari 2.0.4.
  *
- * @param {Window} opt_window The window to monitor; defaults to the window in
+ * @param {Window=} opt_window The window to monitor; defaults to the window in
  *    which this code is executing.
  * @constructor
  * @extends {goog.events.EventTarget}

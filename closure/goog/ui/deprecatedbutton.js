@@ -27,7 +27,7 @@ goog.require('goog.events.EventTarget');
 /**
  * Default implementation of a button. Uses the default browser-style button.
  *
- * @param {string} opt_class Optional class for component.
+ * @param {string=} opt_class Optional class for component.
  *                           Default: 'goog-button'.
  * @constructor
  * @extends {goog.events.EventTarget}
@@ -283,7 +283,7 @@ goog.ui.DeprecatedButton.prototype.isRendered = function() {
 
 /**
  * Renders the component. Throws an Error if the component is already rendered.
- * @param {Element} opt_element Element to render the compponent into.
+ * @param {Element=} opt_element Element to render the compponent into.
  *                              If omitted, then the componenet is appended to
  *                              the document.
  */

@@ -49,10 +49,10 @@ goog.module.require = function(module, symbol, callback) {
  *
  * @param {string} module The name of the module. Cf. parameter module
  *     of method require().
- * @param {number} opt_symbol The symbol being defined, or nothing when all
+ * @param {number=} opt_symbol The symbol being defined, or nothing when all
  *     symbols of the module are defined. Cf. parameter symbol of method
  *     require().
- * @param {Object} opt_object The object bound to the symbol, or nothing when
+ * @param {Object=} opt_object The object bound to the symbol, or nothing when
  *     all symbols of the module are defined.
  */
 goog.module.provide = function(module, opt_symbol, opt_object) {
@@ -67,7 +67,7 @@ goog.module.provide = function(module, opt_symbol, opt_object) {
  * explanation of param.
  *
  * @param {string} urlBase The URL of the base library.
- * @param {Function} opt_urlFunction Function that creates the URL for the
+ * @param {Function=} opt_urlFunction Function that creates the URL for the
  *     module file. It will be passed the base URL for module files and the
  *     module name and should return the fully-formed URL to the module file to
  *     load.

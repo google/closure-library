@@ -82,7 +82,7 @@ goog.fx.easing.inAndOut = function(t) {
  * @param {Array.<number>} start Array for start coordinates.
  * @param {Array.<number>} end Array for end coordinates.
  * @param {number} duration Length of animation in milliseconds.
- * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+ * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
@@ -326,7 +326,7 @@ goog.fx.Animation.prototype.lastFrame = null;
 
 /**
  * Starts or resumes an animation.
- * @param {boolean} opt_restart Whether to restart the
+ * @param {boolean=} opt_restart Whether to restart the
  *     animation from the beginning if it has been paused.
  * @return {boolean} Whether animation was started.
  */

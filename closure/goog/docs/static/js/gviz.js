@@ -42,6 +42,7 @@ grokdoc.gviz.decorators['gviz-org-chart'] = function(table) {
 
   var chartRoot = goog.dom.$dom('div', 'goog-inline-block');
   table.parentNode.replaceChild(chartRoot, table);
+  table.style.display = 'block';
 
   var chart = new google.visualization.OrgChart(chartRoot);
   chart.draw(data, {'allowHtml': true, 'allowCollapse': true});
@@ -63,10 +64,3 @@ grokdoc.gviz.init = function() {
 };
 
 goog.exportSymbol('grokdoc.gviz.init', grokdoc.gviz.init);
-document.write(
-    '<script type="text/javascript" ' +
-        'src="http://www.google.com/jsapi"></script>' +
-    '<script type="text/javascript">' +
-        ' google.load("visualization", "1", {packages:[\"orgchart\"]});' +
-        ' google.setOnLoadCallback(grokdoc.gviz.init); ' +
-    '</script>');

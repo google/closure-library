@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -73,11 +74,11 @@
 <a name="line30"></a> *
 <a name="line31"></a> * @param {Array.&lt;string&gt;} ids The module ids in dependency order.
 <a name="line32"></a> * @param {Object} moduleInfoMap A mapping from module id to ModuleInfo object.
-<a name="line33"></a> * @param {function()?} opt_successFn The callback if module loading is a
+<a name="line33"></a> * @param {function()?=} opt_successFn The callback if module loading is a
 <a name="line34"></a> *     success.
-<a name="line35"></a> * @param {function(number)?} opt_errorFn The callback if module loading is an
+<a name="line35"></a> * @param {function(number)?=} opt_errorFn The callback if module loading is an
 <a name="line36"></a> *     error.
-<a name="line37"></a> * @param {function()?} opt_timeoutFn The callback if module loading times out.
+<a name="line37"></a> * @param {function()?=} opt_timeoutFn The callback if module loading times out.
 <a name="line38"></a> */
 <a name="line39"></a>goog.module.AbstractModuleLoader.prototype.loadModules = function(
 <a name="line40"></a>  ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {};

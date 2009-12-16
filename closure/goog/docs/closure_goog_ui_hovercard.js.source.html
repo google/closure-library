@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -98,10 +99,10 @@
 <a name="line55"></a> *     tag names to the attribute that the tag should have in order to trigger
 <a name="line56"></a> *     the hovercard, e.g., {A: &#39;href&#39;} for all links.  Tag names must be all
 <a name="line57"></a> *     upper case; attribute names are case insensitive.
-<a name="line58"></a> * @param {boolean} opt_checkDescendants Use false for a performance gain if
+<a name="line58"></a> * @param {boolean=} opt_checkDescendants Use false for a performance gain if
 <a name="line59"></a> *     you are sure that none of your triggering elements have child elements.
 <a name="line60"></a> *     Default is true.
-<a name="line61"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line61"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line62"></a> * @constructor
 <a name="line63"></a> * @extends {goog.ui.AdvancedTooltip}
 <a name="line64"></a> */
@@ -241,9 +242,9 @@
 <a name="line198"></a>/**
 <a name="line199"></a> * Triggers the hovercard to show after a delay.
 <a name="line200"></a> * @param {Element} anchorElement Element that is triggering the hovercard.
-<a name="line201"></a> * @param {goog.positioning.AbstractPosition} opt_pos Position to display
+<a name="line201"></a> * @param {goog.positioning.AbstractPosition=} opt_pos Position to display
 <a name="line202"></a> *     hovercard.
-<a name="line203"></a> * @param {Object} opt_data Data to pass to the onTrigger event.
+<a name="line203"></a> * @param {Object=} opt_data Data to pass to the onTrigger event.
 <a name="line204"></a> */
 <a name="line205"></a>goog.ui.HoverCard.prototype.triggerForElement = function(anchorElement,
 <a name="line206"></a>                                                         opt_pos, opt_data) {
@@ -431,7 +432,7 @@
 <a name="line388"></a> * Called by timer from mouse over handler. If this is called and the hovercard
 <a name="line389"></a> * is not shown for whatever reason, then send a cancel trigger event.
 <a name="line390"></a> * @param {Element} el Element to show tooltip for.
-<a name="line391"></a> * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+<a name="line391"></a> * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
 <a name="line392"></a> *     at.
 <a name="line393"></a> */
 <a name="line394"></a>goog.ui.HoverCard.prototype.maybeShow = function(el, opt_pos) {
@@ -465,7 +466,7 @@
 <a name="line422"></a> * @param {goog.ui.HoverCard.EventType} type Event type.
 <a name="line423"></a> * @param {goog.ui.HoverCard} target Hovercard that is triggering the event.
 <a name="line424"></a> * @param {Element} anchor Element that triggered event.
-<a name="line425"></a> * @param {Object} opt_data Optional data to be available in the TRIGGER event.
+<a name="line425"></a> * @param {Object=} opt_data Optional data to be available in the TRIGGER event.
 <a name="line426"></a> * @constructor
 <a name="line427"></a> * @extends {goog.events.Event}
 <a name="line428"></a> */

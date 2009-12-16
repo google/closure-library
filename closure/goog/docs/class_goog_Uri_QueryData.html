@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -79,12 +91,12 @@ Has the same interface as the collections in goog.structs.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.Uri.QueryData</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -108,7 +120,7 @@ Has the same interface as the collections in goog.structs.
    <tr class="even">
      <td>
         <span class="entryName">opt_query</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">Optional encoded query string to parse into the object.</div>
      </td>
    </tr>
@@ -116,7 +128,7 @@ Has the same interface as the collections in goog.structs.
    <tr class="odd">
      <td>
         <span class="entryName">opt_uri</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
+        : <div class="fullType"><span class="type">goog.Uri=</span></div>
         <div class="entryOverview">Optional uri object that should have it&#39;s cache invalidated when this object updates.</div>
      </td>
    </tr>
@@ -124,7 +136,7 @@ Has the same interface as the collections in goog.structs.
    <tr class="even">
      <td>
         <span class="entryName">opt_ignoreCase</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, ignore the case of the parameter name in #get.</div>
      </td>
    </tr>
@@ -525,7 +537,7 @@ operates &#39;in-place&#39;, it does not create a new QueryData object.
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_Uri_QueryData.html">goog.Uri.QueryData</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">...(goog.Uri.QueryData</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span><span>&nbsp;|&nbsp;</span><span class="type">Object)</span></div>
         <div class="entryOverview">The object from which key value pairs will be copied.</div>
      </td>
    </tr>
@@ -660,7 +672,7 @@ such key this will return undefined or the optional default.
    <tr class="odd">
      <td>
         <span class="entryName">opt_default</span>
-        : <div class="fullType"><span class="type">*</span></div>
+        : <div class="fullType"><span class="type">*=</span></div>
         <div class="entryOverview">The default value to return if the query data has no such key.</div>
      </td>
    </tr>
@@ -772,7 +784,7 @@ the object to a string, and to lower case if necessary.
    <tr class="even">
      <td>
         <span class="entryName">arg</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">*</span></div>
         <div class="entryOverview">The object to get a key name from.</div>
      </td>
    </tr>
@@ -886,7 +898,7 @@ all values wil be returned.
    <tr class="even">
      <td>
         <span class="entryName">opt_key</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">The name of the parameter to get the values for.</div>
      </td>
    </tr>
@@ -1532,7 +1544,7 @@ lengths of the arrays differ.
    <tr class="even">
      <td>
         <span class="entryName">opt_uri</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
+        : <div class="fullType"><span class="type">goog.Uri=</span></div>
         <div class="entryOverview">URI object that should have it&#39;s cache invalidated when this object updates.</div>
      </td>
    </tr>
@@ -1540,7 +1552,7 @@ lengths of the arrays differ.
    <tr class="odd">
      <td>
         <span class="entryName">opt_ignoreCase</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, ignore the case of the parameter name in #get.</div>
      </td>
    </tr>
@@ -1613,7 +1625,7 @@ lengths of the arrays differ.
    <tr class="odd">
      <td>
         <span class="entryName">opt_uri</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
+        : <div class="fullType"><span class="type">goog.Uri=</span></div>
         <div class="entryOverview">URI object that should have it&#39;s cache invalidated when this object updates.</div>
      </td>
    </tr>
@@ -1621,7 +1633,7 @@ lengths of the arrays differ.
    <tr class="even">
      <td>
         <span class="entryName">opt_ignoreCase</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, ignore the case of the parameter name in #get.</div>
      </td>
    </tr>

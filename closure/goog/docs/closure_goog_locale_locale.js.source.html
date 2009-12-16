@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -339,7 +340,7 @@
 <a name="line296"></a> * has to add dependacy to this.
 <a name="line297"></a> *
 <a name="line298"></a> * @param {string} languageCode Language code to lookup the country name for.
-<a name="line299"></a> * @param {Object} opt_localeSymbols If omitted the current locale symbol
+<a name="line299"></a> * @param {Object=} opt_localeSymbols If omitted the current locale symbol
 <a name="line300"></a> *     set is used.
 <a name="line301"></a> *
 <a name="line302"></a> * @return {string} Localized country name.
@@ -383,7 +384,7 @@
 <a name="line340"></a> * has to add dependacy to this.
 <a name="line341"></a> *
 <a name="line342"></a> * @param {string} languageCode Language code to lookup the language name for.
-<a name="line343"></a> * @param {Object} opt_localeSymbols locale symbol set if given.
+<a name="line343"></a> * @param {Object=} opt_localeSymbols locale symbol set if given.
 <a name="line344"></a> *
 <a name="line345"></a> * @return {string} Localized language name of the provided language code.
 <a name="line346"></a> */
@@ -536,7 +537,7 @@
 <a name="line493"></a>/**
 <a name="line494"></a> * Retrieve specified resource for certain locale.
 <a name="line495"></a> * @param {string} resourceName String that represents the type of resource.
-<a name="line496"></a> * @param {string} opt_locale Locale ID, if not given, current locale
+<a name="line496"></a> * @param {string=} opt_locale Locale ID, if not given, current locale
 <a name="line497"></a> *     will be assumed.
 <a name="line498"></a> * @return {Object|undefined} The resource object that hold all the resource
 <a name="line499"></a> *     data, or undefined if not available.
@@ -558,7 +559,7 @@
 <a name="line515"></a> * resourceName does not exist at all, undefined will be returned.
 <a name="line516"></a> *
 <a name="line517"></a> * @param {string} resourceName String that represents the type of resource.
-<a name="line518"></a> * @param {string} opt_locale locale ID, if not given, current locale
+<a name="line518"></a> * @param {string=} opt_locale locale ID, if not given, current locale
 <a name="line519"></a> *     will be assumed.
 <a name="line520"></a> * @return {Object|undefined} The resource object for desired locale.
 <a name="line521"></a> */

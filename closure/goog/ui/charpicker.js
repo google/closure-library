@@ -45,13 +45,13 @@ goog.require('goog.ui.MenuItem');
  *
  * See charpicker.html demo for example usage.
  * @param {goog.i18n.CharPickerData} charPickerData Category names and charlist.
- * @param {Array.<string>} opt_recents List of characters to be displayed in
+ * @param {Array.<string>=} opt_recents List of characters to be displayed in
  *     resently selected characters area.
- * @param {number} opt_initCategory Sequence number of initial category.
- * @param {number} opt_initSubcategory Sequence number of initial subcategory.
- * @param {number} opt_rowCount Number of rows in the grid.
- * @param {number} opt_columnCount Number of columns in the grid.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {number=} opt_initCategory Sequence number of initial category.
+ * @param {number=} opt_initSubcategory Sequence number of initial subcategory.
+ * @param {number=} opt_rowCount Number of rows in the grid.
+ * @param {number=} opt_columnCount Number of columns in the grid.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -534,7 +534,7 @@ goog.ui.CharPicker.prototype.handleInput_ = function(e) {
 
 /**
  * On OK click accepts the character and updates the recent char list.
- * @param {goog.events.Event} opt_event Event for click on OK button.
+ * @param {goog.events.Event=} opt_event Event for click on OK button.
  * @return {boolean} Indicates whether to propagate event.
  * @private
  */
@@ -592,7 +592,7 @@ goog.ui.CharPicker.prototype.createMenuItem_ = function(id, caption) {
 /**
  * Sets the category and updates the submenu items and grid accordingly.
  * @param {number} category Category index used to index the data tables.
- * @param {number} opt_subcategory Subcategory index used with category index.
+ * @param {number=} opt_subcategory Subcategory index used with category index.
  * @private
  */
 goog.ui.CharPicker.prototype.setSelectedCategory_ = function(category,

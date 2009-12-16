@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -113,7 +114,7 @@
 <a name="line70"></a> * to remove all events listeners belonging to this object. It is optimized to
 <a name="line71"></a> * use less objects if only one event is being listened to, but if that&#39;s the
 <a name="line72"></a> * case, it may not be worth using the EventHandler anyway.
-<a name="line73"></a> * @param {Object} opt_handler Object in whose scope to call the listeners.
+<a name="line73"></a> * @param {Object=} opt_handler Object in whose scope to call the listeners.
 <a name="line74"></a> * @constructor
 <a name="line75"></a> * @extends {goog.Disposable}
 <a name="line76"></a> */
@@ -175,10 +176,10 @@
 <a name="line132"></a> * @param {goog.events.EventTarget|EventTarget} src Event source.
 <a name="line133"></a> * @param {string|Array.&lt;string&gt;} type Event type to listen for or array of
 <a name="line134"></a> *     event types.
-<a name="line135"></a> * @param {Function|Object} opt_fn Optional callback function to be used as the
+<a name="line135"></a> * @param {Function|Object=} opt_fn Optional callback function to be used as the
 <a name="line136"></a> *    listener or an object with handleEvent function.
-<a name="line137"></a> * @param {boolean} opt_capture Optional whether to use capture phase.
-<a name="line138"></a> * @param {Object} opt_handler Object in whose scope to call the listener.
+<a name="line137"></a> * @param {boolean=} opt_capture Optional whether to use capture phase.
+<a name="line138"></a> * @param {Object=} opt_handler Object in whose scope to call the listener.
 <a name="line139"></a> * @return {goog.events.EventHandler} This object, allowing for chaining of
 <a name="line140"></a> *     calls.
 <a name="line141"></a> */
@@ -209,10 +210,10 @@
 <a name="line166"></a> * @param {goog.events.EventTarget|EventTarget} src Event source.
 <a name="line167"></a> * @param {string|Array.&lt;string&gt;} type Event type to listen for or array of
 <a name="line168"></a> *     event types.
-<a name="line169"></a> * @param {Function|Object} opt_fn Optional callback function to be used as the
+<a name="line169"></a> * @param {Function|Object=} opt_fn Optional callback function to be used as the
 <a name="line170"></a> *    listener or an object with handleEvent function.
-<a name="line171"></a> * @param {boolean} opt_capture Optional whether to use capture phase.
-<a name="line172"></a> * @param {Object} opt_handler Object in whose scope to call the listener.
+<a name="line171"></a> * @param {boolean=} opt_capture Optional whether to use capture phase.
+<a name="line172"></a> * @param {Object=} opt_handler Object in whose scope to call the listener.
 <a name="line173"></a> * @return {goog.events.EventHandler} This object, allowing for chaining of
 <a name="line174"></a> *     calls.
 <a name="line175"></a> */
@@ -245,9 +246,9 @@
 <a name="line202"></a> * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
 <a name="line203"></a> * @param {Function|Object} listener Callback method, or an object with a
 <a name="line204"></a> *     handleEvent function.
-<a name="line205"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+<a name="line205"></a> * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
 <a name="line206"></a> *     false).
-<a name="line207"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line207"></a> * @param {Object=} opt_handler Element in whose scope to call the listener.
 <a name="line208"></a> * @return {goog.events.EventHandler} This object, allowing for chaining of
 <a name="line209"></a> *     calls.
 <a name="line210"></a> */
@@ -285,10 +286,10 @@
 <a name="line242"></a> * Unlistens on an event.
 <a name="line243"></a> * @param {goog.events.EventTarget|EventTarget} src Event source.
 <a name="line244"></a> * @param {string|Array.&lt;string&gt;} type Event type to listen for.
-<a name="line245"></a> * @param {Function|Object} opt_fn Optional callback function to be used as the
+<a name="line245"></a> * @param {Function|Object=} opt_fn Optional callback function to be used as the
 <a name="line246"></a> *    listener or an object with handleEvent function.
-<a name="line247"></a> * @param {boolean} opt_capture Optional whether to use capture phase.
-<a name="line248"></a> * @param {Object} opt_handler Object in whose scope to call the listener.
+<a name="line247"></a> * @param {boolean=} opt_capture Optional whether to use capture phase.
+<a name="line248"></a> * @param {Object=} opt_handler Object in whose scope to call the listener.
 <a name="line249"></a> * @return {goog.events.EventHandler} This object, allowing for chaining of
 <a name="line250"></a> *     calls.
 <a name="line251"></a> */
@@ -328,10 +329,10 @@
 <a name="line285"></a> *     listening to events on.
 <a name="line286"></a> * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
 <a name="line287"></a> * @param {Function|Object} listener The listener function to remove.
-<a name="line288"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+<a name="line288"></a> * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
 <a name="line289"></a> *     whether the listener is fired during the capture or bubble phase of the
 <a name="line290"></a> *     event.
-<a name="line291"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line291"></a> * @param {Object=} opt_handler Element in whose scope to call the listener.
 <a name="line292"></a> * @return {goog.events.EventHandler} This object, allowing for chaining of
 <a name="line293"></a> *     calls.
 <a name="line294"></a> */

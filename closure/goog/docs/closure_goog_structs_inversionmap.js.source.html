@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -72,7 +73,7 @@
 <a name="line29"></a> *     increasing integer values, with at least one instance.
 <a name="line30"></a> * @param {Array.&lt;*&gt;} valueArray An array of corresponding values.
 <a name="line31"></a> *     Length must be the same as rangeArray.
-<a name="line32"></a> * @param {boolean} opt_delta If true, saves only delta from previous value.
+<a name="line32"></a> * @param {boolean=} opt_delta If true, saves only delta from previous value.
 <a name="line33"></a> * @constructor
 <a name="line34"></a> */
 <a name="line35"></a>goog.structs.InversionMap = function(rangeArray, valueArray, opt_delta) {
@@ -104,7 +105,7 @@
 <a name="line61"></a> * When used as a set, even indices are IN, and odd are OUT.
 <a name="line62"></a> * @param {Array.&lt;number?&gt;} rangeArray An array of monotonically
 <a name="line63"></a> *     increasing integer values, with at least one instance.
-<a name="line64"></a> * @param {boolean} opt_delta If true, saves only delta from previous value.
+<a name="line64"></a> * @param {boolean=} opt_delta If true, saves only delta from previous value.
 <a name="line65"></a> * @private
 <a name="line66"></a> */
 <a name="line67"></a>goog.structs.InversionMap.prototype.storeInversion_ = function(rangeArray,
@@ -127,7 +128,7 @@
 <a name="line84"></a> *     increasing integer values, with at least one instance.
 <a name="line85"></a> * @param {Array.&lt;*&gt;} valueArray An array of corresponding values.
 <a name="line86"></a> *     Length must be the same as rangeArray.
-<a name="line87"></a> * @param {boolean} opt_delta If true, saves only delta from previous value.
+<a name="line87"></a> * @param {boolean=} opt_delta If true, saves only delta from previous value.
 <a name="line88"></a> */
 <a name="line89"></a>goog.structs.InversionMap.prototype.spliceInversion = function(
 <a name="line90"></a>    rangeArray, valueArray, opt_delta) {

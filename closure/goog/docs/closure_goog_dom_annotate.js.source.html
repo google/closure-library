@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -82,11 +83,11 @@
 <a name="line39"></a> *   (1) the number of the term that is &quot;hit&quot;,
 <a name="line40"></a> *   (2) the HTML string (search term) to be annotated,
 <a name="line41"></a> *   and returns the annotated term as an HTML string.
-<a name="line42"></a> * @param {*} opt_ignoreCase  Whether to ignore the case of the query
+<a name="line42"></a> * @param {*=} opt_ignoreCase  Whether to ignore the case of the query
 <a name="line43"></a> *   terms when looking for matches.
-<a name="line44"></a> * @param {Array.&lt;string&gt;} opt_classesToSkip  Nodes with one of these CSS class
+<a name="line44"></a> * @param {Array.&lt;string&gt;=} opt_classesToSkip  Nodes with one of these CSS class
 <a name="line45"></a> *   names (and its descendants) will be skipped.
-<a name="line46"></a> * @param {number} opt_maxMs  Number of milliseconds after which this function,
+<a name="line46"></a> * @param {number=} opt_maxMs  Number of milliseconds after which this function,
 <a name="line47"></a> *   if still annotating, should stop and return.
 <a name="line48"></a> *
 <a name="line49"></a> * @return {boolean} Whether any terms were annotated.
@@ -235,7 +236,7 @@
 <a name="line192"></a> *   (1) the number of the term that is &quot;hit&quot;,
 <a name="line193"></a> *   (2) the HTML string (search term) to be annotated,
 <a name="line194"></a> *   and returns the annotated term as an HTML string.
-<a name="line195"></a> * @param {*} opt_ignoreCase  Whether to ignore the case of the query
+<a name="line195"></a> * @param {*=} opt_ignoreCase  Whether to ignore the case of the query
 <a name="line196"></a> *   terms when looking for matches.
 <a name="line197"></a> * @return {?string} The HTML equivalent of {@code text} with terms
 <a name="line198"></a> *   annotated, or null if the text did not contain any of the terms.

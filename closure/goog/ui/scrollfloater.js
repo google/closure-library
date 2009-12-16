@@ -48,12 +48,12 @@ goog.require('goog.userAgent');
 /**
  * Creates a ScrollFloater; see file overview for details.
  *
- * @param {Element} opt_parentElement Where to attach the element when it's
+ * @param {Element=} opt_parentElement Where to attach the element when it's
  *     floating.  Default is the document body.  If the floating element
  *     contains form inputs, it will be necessary to attach it to the
  *     corresponding form element, or to an element in the DOM subtree under
  *     the form element.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -229,7 +229,7 @@ goog.ui.ScrollFloater.prototype.isFloating = function() {
 /**
  * When a scroll event occurs, compares the element's position to the current
  * document scroll position, and stops or starts floating behavior if needed.
- * @param {goog.events.Event} opt_e The event, which is ignored.
+ * @param {goog.events.Event=} opt_e The event, which is ignored.
  * @private
  */
 goog.ui.ScrollFloater.prototype.update_ = function(opt_e) {

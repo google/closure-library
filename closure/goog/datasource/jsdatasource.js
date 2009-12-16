@@ -37,7 +37,7 @@ goog.require('goog.ds.LoadState');
  *
  * @param {Object} root The root JS node.
  * @param {string} dataName The name of this node relative to the parent node.
- * @param {Object} opt_parent Optional parent of this JsDataSource.
+ * @param {Object=} opt_parent Optional parent of this JsDataSource.
  *
  * implements goog.ds.DataNode.
  * @constructor
@@ -116,7 +116,7 @@ goog.ds.JsDataSource.prototype.set = function(value) {
 /**
  * Gets all of the child nodes of the current node.
  * Should return an empty DataNode list if no child nodes.
- * @param {string} opt_selector String selector to choose child nodes.
+ * @param {string=} opt_selector String selector to choose child nodes.
  * @return {goog.ds.DataNodeList} The child nodes.
  *
  * TODO revisit lazy creation.
@@ -146,7 +146,7 @@ goog.ds.JsDataSource.prototype.getChildNodes = function(opt_selector) {
  * Creates the DataNodeList with the child nodes for this element.
  * Allows for only building list as needed.
  *
- * @param {boolean} opt_force Whether to force recreating child nodes,
+ * @param {boolean=} opt_force Whether to force recreating child nodes,
  *     defaults to false.
  * @private
  */
@@ -192,7 +192,7 @@ goog.ds.JsDataSource.prototype.createChildNodes_ = function(opt_force) {
 /**
  * Gets a named child node of the current node
  * @param {string} name The node name.
- * @param {boolean} opt_canCreate If true, can create child node.
+ * @param {boolean=} opt_canCreate If true, can create child node.
  * @return {goog.ds.DataNode} The child node, or null if no node of
  *     this name exists.
  */
@@ -402,7 +402,7 @@ goog.ds.JsDataSource.prototype.isList = function() {
  *
  * @param {goog.ds.DataNode} parent Parent object.
  * @param {string} dataName Name of this property.
- * @param {goog.ds.DataNode} opt_parentDataNode The parent data node. If
+ * @param {goog.ds.DataNode=} opt_parentDataNode The parent data node. If
  *     omitted, assumes that the parent object is the parent data node.
  *
  * @constructor

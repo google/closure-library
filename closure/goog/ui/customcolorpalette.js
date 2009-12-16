@@ -31,9 +31,9 @@ goog.require('goog.ui.ColorPalette');
  *
  * @param {Array.<string>} initColors Array of initial colors to populate the
  *     palette with.
- * @param {goog.ui.PaletteRenderer} opt_renderer Renderer used to render or
+ * @param {goog.ui.PaletteRenderer=} opt_renderer Renderer used to render or
  *     decorate the palette; defaults to {@link goog.ui.PaletteRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.ColorPalette}

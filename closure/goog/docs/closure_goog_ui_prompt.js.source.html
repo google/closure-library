@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -86,12 +87,12 @@
 <a name="line43"></a> *     Cancel. The function should expect a single argument which represents
 <a name="line44"></a> *     what the user entered into the prompt. If the user presses cancel, the
 <a name="line45"></a> *     value of the argument will be null.
-<a name="line46"></a> * @param {string} opt_defaultValue Optional default value that should be in
+<a name="line46"></a> * @param {string=} opt_defaultValue Optional default value that should be in
 <a name="line47"></a> *     the text box when the prompt appears.
-<a name="line48"></a> * @param {string} opt_class Optional prefix for the classes.
-<a name="line49"></a> * @param {boolean} opt_useIframeForIE For IE, workaround windowed controls
+<a name="line48"></a> * @param {string=} opt_class Optional prefix for the classes.
+<a name="line49"></a> * @param {boolean=} opt_useIframeForIE For IE, workaround windowed controls
 <a name="line50"></a> *     z-index issue by using a an iframe instead of a div for bg element.
-<a name="line51"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper; see {@link
+<a name="line51"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
 <a name="line52"></a> *    goog.ui.Component} for semantics.
 <a name="line53"></a> * @constructor
 <a name="line54"></a> * @extends {goog.ui.Dialog}

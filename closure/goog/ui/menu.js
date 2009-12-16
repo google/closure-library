@@ -62,8 +62,8 @@ goog.require('goog.ui.MenuSeparator');
 // TODO: Reverse constructor argument order for consistency.
 /**
  * A basic menu class.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
- * @param {goog.ui.MenuRenderer} opt_renderer Renderer used to render or
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {goog.ui.MenuRenderer=} opt_renderer Renderer used to render or
  *     decorate the container; defaults to {@link goog.ui.MenuRenderer}.
  * @constructor
  * @extends {goog.ui.Container}
@@ -253,7 +253,7 @@ goog.ui.Menu.prototype.getItems = function() {
 /**
  * Sets the position of the menu relative to the view port.
  * @param {number|goog.math.Coordinate} x Left position or coordinate obj.
- * @param {number} opt_y Top position.
+ * @param {number=} opt_y Top position.
  */
 goog.ui.Menu.prototype.setPosition = function(x, opt_y) {
   // NOTE: It is necessary to temporarily set the display from none, so

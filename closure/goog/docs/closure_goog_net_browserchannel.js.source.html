@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -81,1632 +82,2001 @@
 <a name="line38"></a>goog.provide(&#39;goog.net.BrowserChannel.Handler&#39;);
 <a name="line39"></a>goog.provide(&#39;goog.net.BrowserChannel.LogSaver&#39;);
 <a name="line40"></a>goog.provide(&#39;goog.net.BrowserChannel.StatEvent&#39;);
-<a name="line41"></a>
-<a name="line42"></a>goog.require(&#39;goog.Uri&#39;);
-<a name="line43"></a>goog.require(&#39;goog.debug.TextFormatter&#39;);
-<a name="line44"></a>goog.require(&#39;goog.events.Event&#39;);
-<a name="line45"></a>goog.require(&#39;goog.events.EventTarget&#39;);
-<a name="line46"></a>goog.require(&#39;goog.json&#39;);
-<a name="line47"></a>goog.require(&#39;goog.net.BrowserTestChannel&#39;);
-<a name="line48"></a>goog.require(&#39;goog.net.ChannelDebug&#39;);
-<a name="line49"></a>goog.require(&#39;goog.net.ChannelRequest&#39;);
-<a name="line50"></a>goog.require(&#39;goog.string&#39;);
-<a name="line51"></a>goog.require(&#39;goog.structs.CircularBuffer&#39;);
-<a name="line52"></a>goog.require(&#39;goog.userAgent&#39;);
-<a name="line53"></a>
-<a name="line54"></a>
-<a name="line55"></a>/**
-<a name="line56"></a> * Encapsulates the logic for a single BrowserChannel.
-<a name="line57"></a> *
-<a name="line58"></a> * @param {string} clientVersion An application-specific version number that
-<a name="line59"></a> *        is sent to the server when connected.
-<a name="line60"></a> * @constructor
-<a name="line61"></a> */
-<a name="line62"></a>goog.net.BrowserChannel = function(clientVersion) {
-<a name="line63"></a>  /**
-<a name="line64"></a>   * The application specific version that is passed to the server.
-<a name="line65"></a>   * @type {string}
-<a name="line66"></a>   * @private
-<a name="line67"></a>   */
-<a name="line68"></a>  this.clientVersion_ = clientVersion;
-<a name="line69"></a>
-<a name="line70"></a>  /**
-<a name="line71"></a>   * The current state of the BrowserChannel. It should be one of the
-<a name="line72"></a>   * goog.net.BrowserChannel.State constants.
-<a name="line73"></a>   * @type {goog.net.BrowserChannel.State}
-<a name="line74"></a>   * @private
-<a name="line75"></a>   */
-<a name="line76"></a>  this.state_ = goog.net.BrowserChannel.State.INIT;
-<a name="line77"></a>
-<a name="line78"></a>  /**
-<a name="line79"></a>   * An array of queued maps that need to be sent to the server.
-<a name="line80"></a>   * @type {Array.&lt;Object|goog.structs.Map&gt;}
-<a name="line81"></a>   * @private
-<a name="line82"></a>   */
-<a name="line83"></a>  this.outgoingMaps_ = [];
-<a name="line84"></a>
-<a name="line85"></a>  /**
-<a name="line86"></a>   * The channel debug used for browserchannel logging
-<a name="line87"></a>   * @type {goog.net.ChannelDebug}
-<a name="line88"></a>   * @private
-<a name="line89"></a>   */
-<a name="line90"></a>  this.channelDebug_ = new goog.net.ChannelDebug();
-<a name="line91"></a>};
-<a name="line92"></a>
-<a name="line93"></a>
-<a name="line94"></a>/**
-<a name="line95"></a> * Extra HTTP headers to add to all the requests sent to the server.
-<a name="line96"></a> * @type {Object}
-<a name="line97"></a> * @private
-<a name="line98"></a> */
-<a name="line99"></a>goog.net.BrowserChannel.prototype.extraHeaders_ = null;
-<a name="line100"></a>
-<a name="line101"></a>/**
-<a name="line102"></a> * Extra parameters to add to all the requests sent to the server.
-<a name="line103"></a> * @type {Object}
-<a name="line104"></a> * @private
-<a name="line105"></a> */
-<a name="line106"></a>goog.net.BrowserChannel.prototype.extraParams_ = null;
-<a name="line107"></a>
-<a name="line108"></a>/**
-<a name="line109"></a> * The current ChannelRequest object for the forwardchannel.
-<a name="line110"></a> * @type {goog.net.ChannelRequest?}
-<a name="line111"></a> * @private
-<a name="line112"></a> */
-<a name="line113"></a>goog.net.BrowserChannel.prototype.forwardChannelRequest_ = null;
-<a name="line114"></a>
-<a name="line115"></a>/**
-<a name="line116"></a> * The ChannelRequest object for the backchannel.
-<a name="line117"></a> * @type {goog.net.ChannelRequest?}
-<a name="line118"></a> * @private
-<a name="line119"></a> */
-<a name="line120"></a>goog.net.BrowserChannel.prototype.backChannelRequest_ = null;
-<a name="line121"></a>
-<a name="line122"></a>/**
-<a name="line123"></a> * The relative path (in the context of the the page hosting the browser
-<a name="line124"></a> * channel) for making requests to the server.
-<a name="line125"></a> * @type {?string}
-<a name="line126"></a> * @private
-<a name="line127"></a> */
-<a name="line128"></a>goog.net.BrowserChannel.prototype.path_ = null;
-<a name="line129"></a>
-<a name="line130"></a>/**
-<a name="line131"></a> * The absolute URI for the forwardchannel request.
-<a name="line132"></a> * @type {goog.Uri}
-<a name="line133"></a> * @private
-<a name="line134"></a> */
-<a name="line135"></a>goog.net.BrowserChannel.prototype.forwardChannelUri_ = null;
-<a name="line136"></a>
-<a name="line137"></a>/**
-<a name="line138"></a> * The absolute URI for the backchannel request.
-<a name="line139"></a> * @type {goog.Uri}
-<a name="line140"></a> * @private
-<a name="line141"></a> */
-<a name="line142"></a>goog.net.BrowserChannel.prototype.backChannelUri_ = null;
-<a name="line143"></a>
-<a name="line144"></a>/**
-<a name="line145"></a> * A subdomain prefix for using a subdomain in IE for the backchannel
-<a name="line146"></a> * requests.
-<a name="line147"></a> * @type {?string}
-<a name="line148"></a> * @private
-<a name="line149"></a> */
-<a name="line150"></a>goog.net.BrowserChannel.prototype.hostPrefix_ = null;
-<a name="line151"></a>
-<a name="line152"></a>/**
-<a name="line153"></a> * Whether we allow the use of a subdomain in IE for the backchannel requests.
-<a name="line154"></a> * @private
-<a name="line155"></a> */
-<a name="line156"></a>goog.net.BrowserChannel.prototype.allowHostPrefix_ = true;
-<a name="line157"></a>
-<a name="line158"></a>/**
-<a name="line159"></a> * The next id to use for the RID (request identifier) parameter. This
-<a name="line160"></a> * identifier uniquely identifies the forward channel request.
-<a name="line161"></a> * @type {number}
-<a name="line162"></a> * @private
-<a name="line163"></a> */
-<a name="line164"></a>goog.net.BrowserChannel.prototype.nextRid_ = 0;
-<a name="line165"></a>
-<a name="line166"></a>/**
-<a name="line167"></a> * Whether to fail forward-channel requests after one try, or after a few tries.
-<a name="line168"></a> * @type {boolean}
-<a name="line169"></a> * @private
-<a name="line170"></a> */
-<a name="line171"></a>goog.net.BrowserChannel.prototype.failFast_ = false;
-<a name="line172"></a>
-<a name="line173"></a>/**
-<a name="line174"></a> * The handler that receive callbacks for state changes and data.
-<a name="line175"></a> * @type {goog.net.BrowserChannel.Handler}
-<a name="line176"></a> * @private
-<a name="line177"></a> */
-<a name="line178"></a>goog.net.BrowserChannel.prototype.handler_ = null;
-<a name="line179"></a>
-<a name="line180"></a>/**
-<a name="line181"></a> * Timer identifier for asynchronously making a forward channel request.
-<a name="line182"></a> * @type {?number}
-<a name="line183"></a> * @private
-<a name="line184"></a> */
-<a name="line185"></a>goog.net.BrowserChannel.prototype.forwardChannelTimerId_ = null;
-<a name="line186"></a>
-<a name="line187"></a>/**
-<a name="line188"></a> * Timer identifier for asynchronously making a back channel request.
-<a name="line189"></a> * @type {?number}
-<a name="line190"></a> * @private
-<a name="line191"></a> */
-<a name="line192"></a>goog.net.BrowserChannel.prototype.backChannelTimerId_ = null;
-<a name="line193"></a>
-<a name="line194"></a>/**
-<a name="line195"></a> * The BrowserTestChannel object which encapsulates the logic for determining
-<a name="line196"></a> * interesting network conditions about the client.
-<a name="line197"></a> * @type {goog.net.BrowserTestChannel?}
-<a name="line198"></a> * @private
-<a name="line199"></a> */
-<a name="line200"></a>goog.net.BrowserChannel.prototype.connectionTest_ = null;
-<a name="line201"></a>
-<a name="line202"></a>/**
-<a name="line203"></a> * Whether the client&#39;s network conditions can support chunked responses.
-<a name="line204"></a> * @type {?boolean}
-<a name="line205"></a> * @private
-<a name="line206"></a> */
-<a name="line207"></a>goog.net.BrowserChannel.prototype.useChunked_ = null;
-<a name="line208"></a>
-<a name="line209"></a>/**
-<a name="line210"></a> * Whether chunked mode is allowed. In certain debugging situations, it&#39;s
-<a name="line211"></a> * useful to disable this.
-<a name="line212"></a> * @private
-<a name="line213"></a> */
-<a name="line214"></a>goog.net.BrowserChannel.prototype.allowChunkedMode_ = true;
-<a name="line215"></a>
-<a name="line216"></a>/**
-<a name="line217"></a> * The array identifier of the last array received from the server for the
-<a name="line218"></a> * backchannel request.
-<a name="line219"></a> * @type {number}
-<a name="line220"></a> * @private
-<a name="line221"></a> */
-<a name="line222"></a>goog.net.BrowserChannel.prototype.lastArrayId_ = -1;
-<a name="line223"></a>
-<a name="line224"></a>/**
-<a name="line225"></a> * The last status code received.
-<a name="line226"></a> * @type {number}
-<a name="line227"></a> * @private
-<a name="line228"></a> */
-<a name="line229"></a>goog.net.BrowserChannel.prototype.lastStatusCode_ = -1;
-<a name="line230"></a>
-<a name="line231"></a>
-<a name="line232"></a>/**
-<a name="line233"></a> * Enum type for the browser channel state machine.
-<a name="line234"></a> * @enum {number}
-<a name="line235"></a> */
-<a name="line236"></a>goog.net.BrowserChannel.State = {
-<a name="line237"></a>  /** The channel is closed. */
-<a name="line238"></a>  CLOSED: 0,
-<a name="line239"></a>
-<a name="line240"></a>  /** The channel has been initialized but hasn&#39;t yet initiated a connection. */
-<a name="line241"></a>  INIT: 1,
-<a name="line242"></a>
-<a name="line243"></a>  /** The channel is in the process of opening a connection to the server. */
-<a name="line244"></a>  OPENING: 2,
-<a name="line245"></a>
-<a name="line246"></a>  /** The channel is open. */
-<a name="line247"></a>  OPENED: 3
-<a name="line248"></a>};
-<a name="line249"></a>
-<a name="line250"></a>
-<a name="line251"></a>/**
-<a name="line252"></a> * Maximum number of attempts to connect to the server for forward channel
-<a name="line253"></a> * requests.
-<a name="line254"></a> * @type {number}
-<a name="line255"></a> */
-<a name="line256"></a>goog.net.BrowserChannel.FORWARD_CHANNEL_MAX_RETRIES = 2;
-<a name="line257"></a>
-<a name="line258"></a>/**
-<a name="line259"></a> * The timeout in milliseconds for a forward channel request.
-<a name="line260"></a> * @type {number}
-<a name="line261"></a> */
-<a name="line262"></a>goog.net.BrowserChannel.FORWARD_CHANNEL_RETRY_TIMEOUT = 20 * 1000;
-<a name="line263"></a>
-<a name="line264"></a>/**
-<a name="line265"></a> * Maximum number of attempts to connect to the server for back channel
-<a name="line266"></a> * requests that are performed over XMLHTTP.
-<a name="line267"></a> * @type {number}
-<a name="line268"></a> */
-<a name="line269"></a>goog.net.BrowserChannel.BACK_CHANNEL_XMHTTP_MAX_RETRIES = 3;
-<a name="line270"></a>
-<a name="line271"></a>
-<a name="line272"></a>/**
-<a name="line273"></a> * The version of the protocol used.
-<a name="line274"></a> * @type {number}
-<a name="line275"></a> */
-<a name="line276"></a>goog.net.BrowserChannel.VERSION = 6;
-<a name="line277"></a>
-<a name="line278"></a>
-<a name="line279"></a>/**
-<a name="line280"></a> * Enum type for identifying a BrowserChannel error.
-<a name="line281"></a> * @enum {number}
-<a name="line282"></a> */
-<a name="line283"></a>goog.net.BrowserChannel.Error = {
-<a name="line284"></a>  /** Value that indicates no error has occurred. */
-<a name="line285"></a>  OK: 0,
-<a name="line286"></a>
-<a name="line287"></a>  /** An error due to a request failing. */
-<a name="line288"></a>  REQUEST_FAILED: 2,
-<a name="line289"></a>
-<a name="line290"></a>  /** An error due to the user being logged out. */
-<a name="line291"></a>  LOGGED_OUT: 4,
-<a name="line292"></a>
-<a name="line293"></a>  /** An error due to server response which contains no data. */
-<a name="line294"></a>  NO_DATA: 5,
-<a name="line295"></a>
-<a name="line296"></a>  /** An error due to a server response indicating an unknown session id */
-<a name="line297"></a>  UNKNOWN_SESSION_ID: 6,
-<a name="line298"></a>
-<a name="line299"></a>  /** An error due to a server response requesting to stop the channel. */
-<a name="line300"></a>  STOP: 7,
-<a name="line301"></a>
-<a name="line302"></a>  /** A general network error. */
-<a name="line303"></a>  NETWORK: 8,
+<a name="line41"></a>goog.provide(&#39;goog.net.BrowserChannel.TimingEvent&#39;);
+<a name="line42"></a>
+<a name="line43"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line44"></a>goog.require(&#39;goog.array&#39;);
+<a name="line45"></a>goog.require(&#39;goog.debug.TextFormatter&#39;);
+<a name="line46"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line47"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line48"></a>goog.require(&#39;goog.json&#39;);
+<a name="line49"></a>goog.require(&#39;goog.net.BrowserTestChannel&#39;);
+<a name="line50"></a>goog.require(&#39;goog.net.ChannelDebug&#39;);
+<a name="line51"></a>goog.require(&#39;goog.net.ChannelRequest&#39;);
+<a name="line52"></a>goog.require(&#39;goog.string&#39;);
+<a name="line53"></a>goog.require(&#39;goog.structs.CircularBuffer&#39;);
+<a name="line54"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Encapsulates the logic for a single BrowserChannel.
+<a name="line59"></a> *
+<a name="line60"></a> * @param {string} clientVersion An application-specific version number that
+<a name="line61"></a> *        is sent to the server when connected.
+<a name="line62"></a> * @constructor
+<a name="line63"></a> */
+<a name="line64"></a>goog.net.BrowserChannel = function(clientVersion) {
+<a name="line65"></a>  /**
+<a name="line66"></a>   * The application specific version that is passed to the server.
+<a name="line67"></a>   * @type {string}
+<a name="line68"></a>   * @private
+<a name="line69"></a>   */
+<a name="line70"></a>  this.clientVersion_ = clientVersion;
+<a name="line71"></a>
+<a name="line72"></a>  /**
+<a name="line73"></a>   * The current state of the BrowserChannel. It should be one of the
+<a name="line74"></a>   * goog.net.BrowserChannel.State constants.
+<a name="line75"></a>   * @type {goog.net.BrowserChannel.State}
+<a name="line76"></a>   * @private
+<a name="line77"></a>   */
+<a name="line78"></a>  this.state_ = goog.net.BrowserChannel.State.INIT;
+<a name="line79"></a>
+<a name="line80"></a>  /**
+<a name="line81"></a>   * An array of queued maps that need to be sent to the server.
+<a name="line82"></a>   * @type {Array.&lt;Object|goog.structs.Map&gt;}
+<a name="line83"></a>   * @private
+<a name="line84"></a>   */
+<a name="line85"></a>  this.outgoingMaps_ = [];
+<a name="line86"></a>
+<a name="line87"></a>  /**
+<a name="line88"></a>   * An array of dequeued maps that we have either received a non-successful
+<a name="line89"></a>   * response for, or no response at all, and which therefore may or may not
+<a name="line90"></a>   * have been received by the server.
+<a name="line91"></a>   * @type {Array.&lt;Object|goog.structs.Map&gt;}
+<a name="line92"></a>   * @private
+<a name="line93"></a>   */
+<a name="line94"></a>  this.pendingMaps_ = [];
+<a name="line95"></a>
+<a name="line96"></a>  /**
+<a name="line97"></a>   * The channel debug used for browserchannel logging
+<a name="line98"></a>   * @type {goog.net.ChannelDebug}
+<a name="line99"></a>   * @private
+<a name="line100"></a>   */
+<a name="line101"></a>  this.channelDebug_ = new goog.net.ChannelDebug();
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Extra HTTP headers to add to all the requests sent to the server.
+<a name="line107"></a> * @type {Object}
+<a name="line108"></a> * @private
+<a name="line109"></a> */
+<a name="line110"></a>goog.net.BrowserChannel.prototype.extraHeaders_ = null;
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Extra parameters to add to all the requests sent to the server.
+<a name="line114"></a> * @type {Object}
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.net.BrowserChannel.prototype.extraParams_ = null;
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * The current ChannelRequest object for the forwardchannel.
+<a name="line121"></a> * @type {goog.net.ChannelRequest?}
+<a name="line122"></a> * @private
+<a name="line123"></a> */
+<a name="line124"></a>goog.net.BrowserChannel.prototype.forwardChannelRequest_ = null;
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * The ChannelRequest object for the backchannel.
+<a name="line128"></a> * @type {goog.net.ChannelRequest?}
+<a name="line129"></a> * @private
+<a name="line130"></a> */
+<a name="line131"></a>goog.net.BrowserChannel.prototype.backChannelRequest_ = null;
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * The relative path (in the context of the the page hosting the browser
+<a name="line135"></a> * channel) for making requests to the server.
+<a name="line136"></a> * @type {?string}
+<a name="line137"></a> * @private
+<a name="line138"></a> */
+<a name="line139"></a>goog.net.BrowserChannel.prototype.path_ = null;
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * The absolute URI for the forwardchannel request.
+<a name="line143"></a> * @type {goog.Uri}
+<a name="line144"></a> * @private
+<a name="line145"></a> */
+<a name="line146"></a>goog.net.BrowserChannel.prototype.forwardChannelUri_ = null;
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * The absolute URI for the backchannel request.
+<a name="line150"></a> * @type {goog.Uri}
+<a name="line151"></a> * @private
+<a name="line152"></a> */
+<a name="line153"></a>goog.net.BrowserChannel.prototype.backChannelUri_ = null;
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * A subdomain prefix for using a subdomain in IE for the backchannel
+<a name="line157"></a> * requests.
+<a name="line158"></a> * @type {?string}
+<a name="line159"></a> * @private
+<a name="line160"></a> */
+<a name="line161"></a>goog.net.BrowserChannel.prototype.hostPrefix_ = null;
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * Whether we allow the use of a subdomain in IE for the backchannel requests.
+<a name="line165"></a> * @private
+<a name="line166"></a> */
+<a name="line167"></a>goog.net.BrowserChannel.prototype.allowHostPrefix_ = true;
+<a name="line168"></a>
+<a name="line169"></a>/**
+<a name="line170"></a> * The next id to use for the RID (request identifier) parameter. This
+<a name="line171"></a> * identifier uniquely identifies the forward channel request.
+<a name="line172"></a> * @type {number}
+<a name="line173"></a> * @private
+<a name="line174"></a> */
+<a name="line175"></a>goog.net.BrowserChannel.prototype.nextRid_ = 0;
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * Whether to fail forward-channel requests after one try, or after a few tries.
+<a name="line179"></a> * @type {boolean}
+<a name="line180"></a> * @private
+<a name="line181"></a> */
+<a name="line182"></a>goog.net.BrowserChannel.prototype.failFast_ = false;
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * The handler that receive callbacks for state changes and data.
+<a name="line186"></a> * @type {goog.net.BrowserChannel.Handler}
+<a name="line187"></a> * @private
+<a name="line188"></a> */
+<a name="line189"></a>goog.net.BrowserChannel.prototype.handler_ = null;
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * Timer identifier for asynchronously making a forward channel request.
+<a name="line193"></a> * @type {?number}
+<a name="line194"></a> * @private
+<a name="line195"></a> */
+<a name="line196"></a>goog.net.BrowserChannel.prototype.forwardChannelTimerId_ = null;
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Timer identifier for asynchronously making a back channel request.
+<a name="line200"></a> * @type {?number}
+<a name="line201"></a> * @private
+<a name="line202"></a> */
+<a name="line203"></a>goog.net.BrowserChannel.prototype.backChannelTimerId_ = null;
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * The BrowserTestChannel object which encapsulates the logic for determining
+<a name="line207"></a> * interesting network conditions about the client.
+<a name="line208"></a> * @type {goog.net.BrowserTestChannel?}
+<a name="line209"></a> * @private
+<a name="line210"></a> */
+<a name="line211"></a>goog.net.BrowserChannel.prototype.connectionTest_ = null;
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Whether the client&#39;s network conditions can support chunked responses.
+<a name="line215"></a> * @type {?boolean}
+<a name="line216"></a> * @private
+<a name="line217"></a> */
+<a name="line218"></a>goog.net.BrowserChannel.prototype.useChunked_ = null;
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * Whether chunked mode is allowed. In certain debugging situations, it&#39;s
+<a name="line222"></a> * useful to disable this.
+<a name="line223"></a> * @private
+<a name="line224"></a> */
+<a name="line225"></a>goog.net.BrowserChannel.prototype.allowChunkedMode_ = true;
+<a name="line226"></a>
+<a name="line227"></a>/**
+<a name="line228"></a> * The array identifier of the last array received from the server for the
+<a name="line229"></a> * backchannel request.
+<a name="line230"></a> * @type {number}
+<a name="line231"></a> * @private
+<a name="line232"></a> */
+<a name="line233"></a>goog.net.BrowserChannel.prototype.lastArrayId_ = -1;
+<a name="line234"></a>
+<a name="line235"></a>/**
+<a name="line236"></a> * The last status code received.
+<a name="line237"></a> * @type {number}
+<a name="line238"></a> * @private
+<a name="line239"></a> */
+<a name="line240"></a>goog.net.BrowserChannel.prototype.lastStatusCode_ = -1;
+<a name="line241"></a>
+<a name="line242"></a>/**
+<a name="line243"></a> * Number of times we have retried the current forward channel request.
+<a name="line244"></a> * @type {number}
+<a name="line245"></a> * @private
+<a name="line246"></a> */
+<a name="line247"></a>goog.net.BrowserChannel.prototype.forwardChannelRetryCount_;
+<a name="line248"></a>
+<a name="line249"></a>/**
+<a name="line250"></a> * Number of times it a row that we have retried the current back channel
+<a name="line251"></a> * request and received no data.
+<a name="line252"></a> * @type {number}
+<a name="line253"></a> * @private
+<a name="line254"></a> */
+<a name="line255"></a>goog.net.BrowserChannel.prototype.backChannelRetryCount_;
+<a name="line256"></a>
+<a name="line257"></a>/**
+<a name="line258"></a> * The attempt id for the current back channel request. Starts at 1 and
+<a name="line259"></a> * increments for each reconnect. The server uses this to log if our connection
+<a name="line260"></a> * is flaky or not.
+<a name="line261"></a> * @type {number}
+<a name="line262"></a> * @private
+<a name="line263"></a> */
+<a name="line264"></a>goog.net.BrowserChannel.prototype.backChannelAttemptId_;
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * Enum type for the browser channel state machine.
+<a name="line268"></a> * @enum {number}
+<a name="line269"></a> */
+<a name="line270"></a>goog.net.BrowserChannel.State = {
+<a name="line271"></a>  /** The channel is closed. */
+<a name="line272"></a>  CLOSED: 0,
+<a name="line273"></a>
+<a name="line274"></a>  /** The channel has been initialized but hasn&#39;t yet initiated a connection. */
+<a name="line275"></a>  INIT: 1,
+<a name="line276"></a>
+<a name="line277"></a>  /** The channel is in the process of opening a connection to the server. */
+<a name="line278"></a>  OPENING: 2,
+<a name="line279"></a>
+<a name="line280"></a>  /** The channel is open. */
+<a name="line281"></a>  OPENED: 3
+<a name="line282"></a>};
+<a name="line283"></a>
+<a name="line284"></a>
+<a name="line285"></a>/**
+<a name="line286"></a> * Maximum number of attempts to connect to the server for forward channel
+<a name="line287"></a> * requests.
+<a name="line288"></a> * @type {number}
+<a name="line289"></a> */
+<a name="line290"></a>goog.net.BrowserChannel.FORWARD_CHANNEL_MAX_RETRIES = 2;
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * The timeout in milliseconds for a forward channel request.
+<a name="line294"></a> * @type {number}
+<a name="line295"></a> */
+<a name="line296"></a>goog.net.BrowserChannel.FORWARD_CHANNEL_RETRY_TIMEOUT = 20 * 1000;
+<a name="line297"></a>
+<a name="line298"></a>/**
+<a name="line299"></a> * Maximum number of attempts to connect to the server for back channel
+<a name="line300"></a> * requests.
+<a name="line301"></a> * @type {number}
+<a name="line302"></a> */
+<a name="line303"></a>goog.net.BrowserChannel.BACK_CHANNEL_MAX_RETRIES = 3;
 <a name="line304"></a>
-<a name="line305"></a>  /** An error due to the channel being blocked by a network administrator. */
-<a name="line306"></a>  BLOCKED: 9,
-<a name="line307"></a>
-<a name="line308"></a>  /** An error due to bad data being returned from the server. */
-<a name="line309"></a>  BAD_DATA: 10,
+<a name="line305"></a>/**
+<a name="line306"></a> * The version of the protocol used.
+<a name="line307"></a> * @type {number}
+<a name="line308"></a> */
+<a name="line309"></a>goog.net.BrowserChannel.VERSION = 6;
 <a name="line310"></a>
-<a name="line311"></a>  /** An error due to a response that doesn&#39;t start with the magic cookie. */
-<a name="line312"></a>  BAD_RESPONSE: 11
-<a name="line313"></a>};
-<a name="line314"></a>
-<a name="line315"></a>
-<a name="line316"></a>/**
-<a name="line317"></a> * Singleton event target for firing stat events
-<a name="line318"></a> * @type {goog.events.EventTarget}
-<a name="line319"></a> * @private
-<a name="line320"></a> */
-<a name="line321"></a>goog.net.BrowserChannel.statEventTarget_ = new goog.events.EventTarget();
-<a name="line322"></a>
-<a name="line323"></a>/**
-<a name="line324"></a> * Events fired by BrowserChannel and associated objects
-<a name="line325"></a> * @type {Object}
-<a name="line326"></a> */
-<a name="line327"></a>goog.net.BrowserChannel.Event = {};
-<a name="line328"></a>
-<a name="line329"></a>
-<a name="line330"></a>/**
-<a name="line331"></a> * Stat Event which fires when things of interest happen that mey be useful for
-<a name="line332"></a> * applications to know about for stats or debugging purposes. This event fires
-<a name="line333"></a> * on the EventTarget returned by getStatEventTarget.
-<a name="line334"></a> */
-<a name="line335"></a>goog.net.BrowserChannel.Event.STAT_EVENT = &#39;statevent&#39;;
-<a name="line336"></a>
-<a name="line337"></a>
-<a name="line338"></a>/**
-<a name="line339"></a> * Event class for goog.net.BrowserChannel.Event.STAT_EVENT
-<a name="line340"></a> *
-<a name="line341"></a> * @param {goog.events.EventTarget} eventTarget  The stat event target for
-<a name="line342"></a>       the browser channel.
-<a name="line343"></a> * @param {goog.net.BrowserChannel.Stat} stat The stat.
-<a name="line344"></a> * @constructor
-<a name="line345"></a> * @extends {goog.events.Event}
-<a name="line346"></a> */
-<a name="line347"></a>goog.net.BrowserChannel.StatEvent = function(eventTarget, stat) {
-<a name="line348"></a>  goog.events.Event.call(this, goog.net.BrowserChannel.Event.STAT_EVENT,
-<a name="line349"></a>      eventTarget);
-<a name="line350"></a>
-<a name="line351"></a>  /**
-<a name="line352"></a>   * The stat
-<a name="line353"></a>   * @type {goog.net.BrowserChannel.Stat}
-<a name="line354"></a>   */
-<a name="line355"></a>  this.stat = stat;
-<a name="line356"></a>
-<a name="line357"></a>};
-<a name="line358"></a>goog.inherits(goog.net.BrowserChannel.StatEvent, goog.events.Event);
-<a name="line359"></a>
-<a name="line360"></a>
-<a name="line361"></a>/**
-<a name="line362"></a> * Enum that identifies events for statistics that are interesting to track.
-<a name="line363"></a> * TODO - Change name not to use Event or use EventTarget
-<a name="line364"></a> * @enum {number}
-<a name="line365"></a> */
-<a name="line366"></a>goog.net.BrowserChannel.Stat = {
-<a name="line367"></a>  /** Event indicating a new connection attempt. */
-<a name="line368"></a>  CONNECT_ATTEMPT: 0,
+<a name="line311"></a>/**
+<a name="line312"></a> * Default timeout in MS before the initial retry. Subsequent retries will be
+<a name="line313"></a> * slower.
+<a name="line314"></a> * @type {number}
+<a name="line315"></a> */
+<a name="line316"></a>goog.net.BrowserChannel.RETRY_DELAY_MS = 5 * 1000;
+<a name="line317"></a>
+<a name="line318"></a>/**
+<a name="line319"></a> * We will add a random time between 0 and this number of MS to retries to
+<a name="line320"></a> * the retry time for this request.
+<a name="line321"></a> * @type {number}
+<a name="line322"></a> */
+<a name="line323"></a>goog.net.BrowserChannel.RETRY_DELAY_SEED = 10 * 1000;
+<a name="line324"></a>
+<a name="line325"></a>/**
+<a name="line326"></a> * When retrying for an inactive channel, we will multiply the total delay by
+<a name="line327"></a> * this number.
+<a name="line328"></a> * @type {number}
+<a name="line329"></a> */
+<a name="line330"></a>goog.net.BrowserChannel.INACTIVE_CHANNEL_RETRY_FACTOR = 2;
+<a name="line331"></a>
+<a name="line332"></a>
+<a name="line333"></a>/**
+<a name="line334"></a> * Enum type for identifying a BrowserChannel error.
+<a name="line335"></a> * @enum {number}
+<a name="line336"></a> */
+<a name="line337"></a>goog.net.BrowserChannel.Error = {
+<a name="line338"></a>  /** Value that indicates no error has occurred. */
+<a name="line339"></a>  OK: 0,
+<a name="line340"></a>
+<a name="line341"></a>  /** An error due to a request failing. */
+<a name="line342"></a>  REQUEST_FAILED: 2,
+<a name="line343"></a>
+<a name="line344"></a>  /** An error due to the user being logged out. */
+<a name="line345"></a>  LOGGED_OUT: 4,
+<a name="line346"></a>
+<a name="line347"></a>  /** An error due to server response which contains no data. */
+<a name="line348"></a>  NO_DATA: 5,
+<a name="line349"></a>
+<a name="line350"></a>  /** An error due to a server response indicating an unknown session id */
+<a name="line351"></a>  UNKNOWN_SESSION_ID: 6,
+<a name="line352"></a>
+<a name="line353"></a>  /** An error due to a server response requesting to stop the channel. */
+<a name="line354"></a>  STOP: 7,
+<a name="line355"></a>
+<a name="line356"></a>  /** A general network error. */
+<a name="line357"></a>  NETWORK: 8,
+<a name="line358"></a>
+<a name="line359"></a>  /** An error due to the channel being blocked by a network administrator. */
+<a name="line360"></a>  BLOCKED: 9,
+<a name="line361"></a>
+<a name="line362"></a>  /** An error due to bad data being returned from the server. */
+<a name="line363"></a>  BAD_DATA: 10,
+<a name="line364"></a>
+<a name="line365"></a>  /** An error due to a response that doesn&#39;t start with the magic cookie. */
+<a name="line366"></a>  BAD_RESPONSE: 11
+<a name="line367"></a>};
+<a name="line368"></a>
 <a name="line369"></a>
-<a name="line370"></a>  /** Event indicating a connection error due to a general network problem. */
-<a name="line371"></a>  ERROR_NETWORK: 1,
-<a name="line372"></a>
-<a name="line373"></a>  /**
-<a name="line374"></a>   * Event indicating a connection error that isn&#39;t due to a general network
-<a name="line375"></a>   * problem.
-<a name="line376"></a>   */
-<a name="line377"></a>  ERROR_OTHER: 2,
-<a name="line378"></a>
-<a name="line379"></a>  /** Event indicating the start of test stage one. */
-<a name="line380"></a>  TEST_STAGE_ONE_START: 3,
+<a name="line370"></a>/**
+<a name="line371"></a> * Internal enum type for the two browser channel channel types.
+<a name="line372"></a> * @enum {number}
+<a name="line373"></a> * @private
+<a name="line374"></a> */
+<a name="line375"></a>goog.net.BrowserChannel.ChannelType_ = {
+<a name="line376"></a>  FORWARD_CHANNEL: 1,
+<a name="line377"></a>
+<a name="line378"></a>  BACK_CHANNEL: 2
+<a name="line379"></a>};
+<a name="line380"></a>
 <a name="line381"></a>
-<a name="line382"></a>
-<a name="line383"></a>  /** Event indicating the channel is blocked by a network administrator. */
-<a name="line384"></a>  CHANNEL_BLOCKED: 4,
-<a name="line385"></a>
-<a name="line386"></a>  /** Event indicating the start of test stage two. */
-<a name="line387"></a>  TEST_STAGE_TWO_START: 5,
+<a name="line382"></a>/**
+<a name="line383"></a> * Singleton event target for firing stat events
+<a name="line384"></a> * @type {goog.events.EventTarget}
+<a name="line385"></a> * @private
+<a name="line386"></a> */
+<a name="line387"></a>goog.net.BrowserChannel.statEventTarget_ = new goog.events.EventTarget();
 <a name="line388"></a>
-<a name="line389"></a>  /** Event indicating the first piece of test data was received. */
-<a name="line390"></a>  TEST_STAGE_TWO_DATA_ONE: 6,
-<a name="line391"></a>
-<a name="line392"></a>  /**
-<a name="line393"></a>   * Event indicating that the second piece of test data was received and it was
-<a name="line394"></a>   * recieved separately from the first.
-<a name="line395"></a>   */
-<a name="line396"></a>  TEST_STAGE_TWO_DATA_TWO: 7,
-<a name="line397"></a>
-<a name="line398"></a>  /** Event indicating both pieces of test data were received simultaneously. */
-<a name="line399"></a>  TEST_STAGE_TWO_DATA_BOTH: 8,
-<a name="line400"></a>
-<a name="line401"></a>  /** Event indicating stage one of the test request failed. */
-<a name="line402"></a>  TEST_STAGE_ONE_FAILED: 9,
+<a name="line389"></a>/**
+<a name="line390"></a> * Events fired by BrowserChannel and associated objects
+<a name="line391"></a> * @type {Object}
+<a name="line392"></a> */
+<a name="line393"></a>goog.net.BrowserChannel.Event = {};
+<a name="line394"></a>
+<a name="line395"></a>
+<a name="line396"></a>/**
+<a name="line397"></a> * Stat Event that fires when things of interest happen that may be useful for
+<a name="line398"></a> * applications to know about for stats or debugging purposes. This event fires
+<a name="line399"></a> * on the EventTarget returned by getStatEventTarget.
+<a name="line400"></a> */
+<a name="line401"></a>goog.net.BrowserChannel.Event.STAT_EVENT = &#39;statevent&#39;;
+<a name="line402"></a>
 <a name="line403"></a>
-<a name="line404"></a>  /** Event indicating stage two of the test request failed. */
-<a name="line405"></a>  TEST_STAGE_TWO_FAILED: 10,
-<a name="line406"></a>
-<a name="line407"></a>  /**
-<a name="line408"></a>   * Event indicating that a buffering proxy is likely between the client and
-<a name="line409"></a>   * the server.
-<a name="line410"></a>   */
-<a name="line411"></a>  PROXY: 11,
-<a name="line412"></a>
-<a name="line413"></a>  /**
-<a name="line414"></a>   * Event indicating that no buffering proxy is likely between the client and
-<a name="line415"></a>   * the server.
-<a name="line416"></a>   */
-<a name="line417"></a>  NOPROXY: 12,
-<a name="line418"></a>
-<a name="line419"></a>  /** Event indicating an unknown SID error. */
-<a name="line420"></a>  REQUEST_UNKNOWN_SESSION_ID: 13,
-<a name="line421"></a>
-<a name="line422"></a>  /** Event indicating a bad status code was received. */
-<a name="line423"></a>  REQUEST_BAD_STATUS: 14,
-<a name="line424"></a>
-<a name="line425"></a>  /** Event indicating incomplete data was received */
-<a name="line426"></a>  REQUEST_INCOMPLETE_DATA: 15,
-<a name="line427"></a>
-<a name="line428"></a>  /** Event indicating bad data was received */
-<a name="line429"></a>  REQUEST_BAD_DATA: 16,
-<a name="line430"></a>
-<a name="line431"></a>  /** Event indicating no data was received when data was expected. */
-<a name="line432"></a>  REQUEST_NO_DATA: 17,
+<a name="line404"></a>/**
+<a name="line405"></a> * Event class for goog.net.BrowserChannel.Event.STAT_EVENT
+<a name="line406"></a> *
+<a name="line407"></a> * @param {goog.events.EventTarget} eventTarget The stat event target for
+<a name="line408"></a>       the browser channel.
+<a name="line409"></a> * @param {goog.net.BrowserChannel.Stat} stat The stat.
+<a name="line410"></a> * @constructor
+<a name="line411"></a> * @extends {goog.events.Event}
+<a name="line412"></a> */
+<a name="line413"></a>goog.net.BrowserChannel.StatEvent = function(eventTarget, stat) {
+<a name="line414"></a>  goog.events.Event.call(this, goog.net.BrowserChannel.Event.STAT_EVENT,
+<a name="line415"></a>      eventTarget);
+<a name="line416"></a>
+<a name="line417"></a>  /**
+<a name="line418"></a>   * The stat
+<a name="line419"></a>   * @type {goog.net.BrowserChannel.Stat}
+<a name="line420"></a>   */
+<a name="line421"></a>  this.stat = stat;
+<a name="line422"></a>
+<a name="line423"></a>};
+<a name="line424"></a>goog.inherits(goog.net.BrowserChannel.StatEvent, goog.events.Event);
+<a name="line425"></a>
+<a name="line426"></a>
+<a name="line427"></a>/**
+<a name="line428"></a> * An event that fires when POST requests complete successfully, indicating
+<a name="line429"></a> * the size of the POST and the round trip time.
+<a name="line430"></a> * This event fires on the EventTarget returned by getStatEventTarget.
+<a name="line431"></a> */
+<a name="line432"></a>goog.net.BrowserChannel.Event.TIMING_EVENT = &#39;timingevent&#39;;
 <a name="line433"></a>
-<a name="line434"></a>  /** Event indicating a request timeout. */
-<a name="line435"></a>  REQUEST_TIMEOUT: 18
-<a name="line436"></a>};
-<a name="line437"></a>
-<a name="line438"></a>
-<a name="line439"></a>/**
-<a name="line440"></a> * Magic response cookie that is the response for forward channel requests.
-<a name="line441"></a> * @type {string}
-<a name="line442"></a> */
-<a name="line443"></a>goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE = &#39;y2f%&#39;;
-<a name="line444"></a>
-<a name="line445"></a>
-<a name="line446"></a>/**
-<a name="line447"></a> * Returns the browserchannel logger.
-<a name="line448"></a> *
-<a name="line449"></a> * @return {goog.net.ChannelDebug} The channel debug object.
-<a name="line450"></a> */
-<a name="line451"></a>goog.net.BrowserChannel.prototype.getChannelDebug = function() {
-<a name="line452"></a>  return this.channelDebug_;
-<a name="line453"></a>};
+<a name="line434"></a>
+<a name="line435"></a>/**
+<a name="line436"></a> * Event class for goog.net.BrowserChannel.Event.TIMING_EVENT
+<a name="line437"></a> *
+<a name="line438"></a> * @param {goog.events.EventTarget} target The stat event target for
+<a name="line439"></a>       the browser channel.
+<a name="line440"></a> * @param {number} size The number of characters in the POST data.
+<a name="line441"></a> * @param {number} rtt The total round trip time from POST to response in MS.
+<a name="line442"></a> * @param {number} retries The number of times the POST had to be retried.
+<a name="line443"></a> * @constructor
+<a name="line444"></a> * @extends {goog.events.Event}
+<a name="line445"></a> */
+<a name="line446"></a>goog.net.BrowserChannel.TimingEvent = function(target, size, rtt, retries) {
+<a name="line447"></a>  goog.events.Event.call(this, goog.net.BrowserChannel.Event.TIMING_EVENT,
+<a name="line448"></a>      target);
+<a name="line449"></a>
+<a name="line450"></a>  /**
+<a name="line451"></a>   * @type {number}
+<a name="line452"></a>   */
+<a name="line453"></a>  this.size = size;
 <a name="line454"></a>
-<a name="line455"></a>
-<a name="line456"></a>/**
-<a name="line457"></a> * Set the browserchannel logger.
-<a name="line458"></a> * TODO: Add interface for channel loggers or remove this function.
-<a name="line459"></a> *
-<a name="line460"></a> * @param {goog.net.ChannelDebug} channelDebug The channel debug object.
-<a name="line461"></a> */
-<a name="line462"></a>goog.net.BrowserChannel.prototype.setChannelDebug = function(
-<a name="line463"></a>    channelDebug) {
-<a name="line464"></a>  this.channelDebug_ = channelDebug;
+<a name="line455"></a>  /**
+<a name="line456"></a>   * @type {number}
+<a name="line457"></a>   */
+<a name="line458"></a>  this.rtt = rtt
+<a name="line459"></a>
+<a name="line460"></a>  /**
+<a name="line461"></a>   * @type {number}
+<a name="line462"></a>   */
+<a name="line463"></a>  this.retries = retries;
+<a name="line464"></a>
 <a name="line465"></a>};
-<a name="line466"></a>
+<a name="line466"></a>goog.inherits(goog.net.BrowserChannel.TimingEvent, goog.events.Event);
 <a name="line467"></a>
-<a name="line468"></a>/**
-<a name="line469"></a> * Allows the application to set an execution hooks for when BrowserChannel
-<a name="line470"></a> * starts processing requests. This is useful to track timing or logging
-<a name="line471"></a> * special information. The function takes no parameters and return void.
-<a name="line472"></a> * @param {Function} startHook  The function for the start hook.
+<a name="line468"></a>
+<a name="line469"></a>/**
+<a name="line470"></a> * Enum that identifies events for statistics that are interesting to track.
+<a name="line471"></a> * TODO - Change name not to use Event or use EventTarget
+<a name="line472"></a> * @enum {number}
 <a name="line473"></a> */
-<a name="line474"></a>goog.net.BrowserChannel.setStartThreadExecutionHook = function(startHook) {
-<a name="line475"></a>  goog.net.BrowserChannel.startExecutionHook_ = startHook;
-<a name="line476"></a>};
+<a name="line474"></a>goog.net.BrowserChannel.Stat = {
+<a name="line475"></a>  /** Event indicating a new connection attempt. */
+<a name="line476"></a>  CONNECT_ATTEMPT: 0,
 <a name="line477"></a>
-<a name="line478"></a>
-<a name="line479"></a>/**
-<a name="line480"></a> * Allows the application to set an execution hooks for when BrowserChannel
-<a name="line481"></a> * stops processing requests. This is useful to track timing or logging
-<a name="line482"></a> * special information. The function takes no parameters and return void.
-<a name="line483"></a> * @param {Function} endHook  The function for the end hook.
-<a name="line484"></a> */
-<a name="line485"></a>goog.net.BrowserChannel.setEndThreadExecutionHook = function(endHook) {
-<a name="line486"></a>  goog.net.BrowserChannel.endExecutionHook_ = endHook;
-<a name="line487"></a>};
-<a name="line488"></a>
+<a name="line478"></a>  /** Event indicating a connection error due to a general network problem. */
+<a name="line479"></a>  ERROR_NETWORK: 1,
+<a name="line480"></a>
+<a name="line481"></a>  /**
+<a name="line482"></a>   * Event indicating a connection error that isn&#39;t due to a general network
+<a name="line483"></a>   * problem.
+<a name="line484"></a>   */
+<a name="line485"></a>  ERROR_OTHER: 2,
+<a name="line486"></a>
+<a name="line487"></a>  /** Event indicating the start of test stage one. */
+<a name="line488"></a>  TEST_STAGE_ONE_START: 3,
 <a name="line489"></a>
-<a name="line490"></a>/**
-<a name="line491"></a> * Application provided execution hook for the start hook.
-<a name="line492"></a> *
-<a name="line493"></a> * @type {Function}
-<a name="line494"></a> * @private
-<a name="line495"></a> */
-<a name="line496"></a>goog.net.BrowserChannel.startExecutionHook_ = function() { };
-<a name="line497"></a>
-<a name="line498"></a>
-<a name="line499"></a>/**
-<a name="line500"></a> * Application provided execution hook for the end hook.
-<a name="line501"></a> *
-<a name="line502"></a> * @type {Function}
-<a name="line503"></a> * @private
-<a name="line504"></a> */
-<a name="line505"></a>goog.net.BrowserChannel.endExecutionHook_ = function() { };
-<a name="line506"></a>
-<a name="line507"></a>
-<a name="line508"></a>/**
-<a name="line509"></a> * Starts the channel. This initiates connections to the server.
-<a name="line510"></a> *
-<a name="line511"></a> * @param {string} testPath  The path for the test connection.
-<a name="line512"></a> * @param {string} channelPath  The path for the channel connection.
-<a name="line513"></a> * @param {Object} extraParams  Extra parameter keys and values to add to the
-<a name="line514"></a> *     requests.
-<a name="line515"></a> * @param {string} opt_oldSessionId  Session ID from a previous session.
-<a name="line516"></a> * @param {number} opt_oldArrayId  The last array ID from a previous session.
-<a name="line517"></a> */
-<a name="line518"></a>goog.net.BrowserChannel.prototype.connect = function(testPath, channelPath,
-<a name="line519"></a>    extraParams, opt_oldSessionId, opt_oldArrayId) {
-<a name="line520"></a>  this.channelDebug_.debug(&#39;connect()&#39;);
-<a name="line521"></a>
-<a name="line522"></a>  goog.net.BrowserChannel.notifyStatEvent(
-<a name="line523"></a>      goog.net.BrowserChannel.Stat.CONNECT_ATTEMPT);
-<a name="line524"></a>
-<a name="line525"></a>  this.path_ = channelPath;
-<a name="line526"></a>  this.extraParams_ = extraParams || {};
-<a name="line527"></a>
-<a name="line528"></a>  // Attach parameters about the previous session if reconnecting.
-<a name="line529"></a>  if (opt_oldSessionId &amp;&amp; goog.isDef(opt_oldArrayId)) {
-<a name="line530"></a>    this.extraParams_[&#39;OSID&#39;] = opt_oldSessionId;
-<a name="line531"></a>    this.extraParams_[&#39;OAID&#39;] = opt_oldArrayId;
-<a name="line532"></a>  }
-<a name="line533"></a>
-<a name="line534"></a>  this.connectTest_(testPath);
-<a name="line535"></a>};
-<a name="line536"></a>
-<a name="line537"></a>/**
-<a name="line538"></a> * Disconnects and closes the channel.
-<a name="line539"></a> */
-<a name="line540"></a>goog.net.BrowserChannel.prototype.disconnect = function() {
-<a name="line541"></a>  this.channelDebug_.debug(&#39;disconnect()&#39;);
-<a name="line542"></a>
-<a name="line543"></a>  this.cancelRequests_();
-<a name="line544"></a>
-<a name="line545"></a>  if (this.state_ == goog.net.BrowserChannel.State.OPENED) {
-<a name="line546"></a>    var rid = this.nextRid_++;
-<a name="line547"></a>    var uri = this.forwardChannelUri_.clone();
-<a name="line548"></a>    uri.setParameterValue(&#39;SID&#39;, this.sid_);
-<a name="line549"></a>    uri.setParameterValue(&#39;RID&#39;, rid);
-<a name="line550"></a>    uri.setParameterValue(&#39;TYPE&#39;, &#39;terminate&#39;);
-<a name="line551"></a>
-<a name="line552"></a>    // Add the reconnect parameters.
-<a name="line553"></a>    this.addAdditionalParams_(uri);
-<a name="line554"></a>
-<a name="line555"></a>    var request = new goog.net.ChannelRequest(
-<a name="line556"></a>        this, this.channelDebug_, this.sid_, rid);
-<a name="line557"></a>    request.sendUsingImgTag(uri);
-<a name="line558"></a>    this.onClose_();
-<a name="line559"></a>  }
-<a name="line560"></a>};
-<a name="line561"></a>
+<a name="line490"></a>
+<a name="line491"></a>  /** Event indicating the channel is blocked by a network administrator. */
+<a name="line492"></a>  CHANNEL_BLOCKED: 4,
+<a name="line493"></a>
+<a name="line494"></a>  /** Event indicating the start of test stage two. */
+<a name="line495"></a>  TEST_STAGE_TWO_START: 5,
+<a name="line496"></a>
+<a name="line497"></a>  /** Event indicating the first piece of test data was received. */
+<a name="line498"></a>  TEST_STAGE_TWO_DATA_ONE: 6,
+<a name="line499"></a>
+<a name="line500"></a>  /**
+<a name="line501"></a>   * Event indicating that the second piece of test data was received and it was
+<a name="line502"></a>   * recieved separately from the first.
+<a name="line503"></a>   */
+<a name="line504"></a>  TEST_STAGE_TWO_DATA_TWO: 7,
+<a name="line505"></a>
+<a name="line506"></a>  /** Event indicating both pieces of test data were received simultaneously. */
+<a name="line507"></a>  TEST_STAGE_TWO_DATA_BOTH: 8,
+<a name="line508"></a>
+<a name="line509"></a>  /** Event indicating stage one of the test request failed. */
+<a name="line510"></a>  TEST_STAGE_ONE_FAILED: 9,
+<a name="line511"></a>
+<a name="line512"></a>  /** Event indicating stage two of the test request failed. */
+<a name="line513"></a>  TEST_STAGE_TWO_FAILED: 10,
+<a name="line514"></a>
+<a name="line515"></a>  /**
+<a name="line516"></a>   * Event indicating that a buffering proxy is likely between the client and
+<a name="line517"></a>   * the server.
+<a name="line518"></a>   */
+<a name="line519"></a>  PROXY: 11,
+<a name="line520"></a>
+<a name="line521"></a>  /**
+<a name="line522"></a>   * Event indicating that no buffering proxy is likely between the client and
+<a name="line523"></a>   * the server.
+<a name="line524"></a>   */
+<a name="line525"></a>  NOPROXY: 12,
+<a name="line526"></a>
+<a name="line527"></a>  /** Event indicating an unknown SID error. */
+<a name="line528"></a>  REQUEST_UNKNOWN_SESSION_ID: 13,
+<a name="line529"></a>
+<a name="line530"></a>  /** Event indicating a bad status code was received. */
+<a name="line531"></a>  REQUEST_BAD_STATUS: 14,
+<a name="line532"></a>
+<a name="line533"></a>  /** Event indicating incomplete data was received */
+<a name="line534"></a>  REQUEST_INCOMPLETE_DATA: 15,
+<a name="line535"></a>
+<a name="line536"></a>  /** Event indicating bad data was received */
+<a name="line537"></a>  REQUEST_BAD_DATA: 16,
+<a name="line538"></a>
+<a name="line539"></a>  /** Event indicating no data was received when data was expected. */
+<a name="line540"></a>  REQUEST_NO_DATA: 17,
+<a name="line541"></a>
+<a name="line542"></a>  /** Event indicating a request timeout. */
+<a name="line543"></a>  REQUEST_TIMEOUT: 18
+<a name="line544"></a>};
+<a name="line545"></a>
+<a name="line546"></a>
+<a name="line547"></a>/**
+<a name="line548"></a> * Magic response cookie that is the response for forward channel requests.
+<a name="line549"></a> * @type {string}
+<a name="line550"></a> */
+<a name="line551"></a>goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE = &#39;y2f%&#39;;
+<a name="line552"></a>
+<a name="line553"></a>
+<a name="line554"></a>/**
+<a name="line555"></a> * Returns the browserchannel logger.
+<a name="line556"></a> *
+<a name="line557"></a> * @return {goog.net.ChannelDebug} The channel debug object.
+<a name="line558"></a> */
+<a name="line559"></a>goog.net.BrowserChannel.prototype.getChannelDebug = function() {
+<a name="line560"></a>  return this.channelDebug_;
+<a name="line561"></a>};
 <a name="line562"></a>
-<a name="line563"></a>/**
-<a name="line564"></a> * Returns the session id of the channel. Only available after the
-<a name="line565"></a> * channel has been opened.
-<a name="line566"></a> * @return {string} Session ID.
-<a name="line567"></a> */
-<a name="line568"></a>goog.net.BrowserChannel.prototype.getSessionId = function() {
-<a name="line569"></a>  return this.sid_;
-<a name="line570"></a>};
-<a name="line571"></a>
-<a name="line572"></a>
-<a name="line573"></a>/**
-<a name="line574"></a> * Starts the test channel to determine network conditions.
-<a name="line575"></a> *
-<a name="line576"></a> * @param {string} testPath  The relative PATH for the test connection.
-<a name="line577"></a> * @private
-<a name="line578"></a> */
-<a name="line579"></a>goog.net.BrowserChannel.prototype.connectTest_ = function(testPath) {
-<a name="line580"></a>  this.channelDebug_.debug(&#39;connectTest_()&#39;);
-<a name="line581"></a>  this.connectionTest_ = new goog.net.BrowserTestChannel(
-<a name="line582"></a>      this, this.channelDebug_);
-<a name="line583"></a>  this.connectionTest_.setExtraHeaders(this.extraHeaders_);
-<a name="line584"></a>  this.connectionTest_.connect(testPath);
-<a name="line585"></a>};
+<a name="line563"></a>
+<a name="line564"></a>/**
+<a name="line565"></a> * Set the browserchannel logger.
+<a name="line566"></a> * TODO: Add interface for channel loggers or remove this function.
+<a name="line567"></a> *
+<a name="line568"></a> * @param {goog.net.ChannelDebug} channelDebug The channel debug object.
+<a name="line569"></a> */
+<a name="line570"></a>goog.net.BrowserChannel.prototype.setChannelDebug = function(
+<a name="line571"></a>    channelDebug) {
+<a name="line572"></a>  this.channelDebug_ = channelDebug;
+<a name="line573"></a>};
+<a name="line574"></a>
+<a name="line575"></a>
+<a name="line576"></a>/**
+<a name="line577"></a> * Allows the application to set an execution hooks for when BrowserChannel
+<a name="line578"></a> * starts processing requests. This is useful to track timing or logging
+<a name="line579"></a> * special information. The function takes no parameters and return void.
+<a name="line580"></a> * @param {Function} startHook  The function for the start hook.
+<a name="line581"></a> */
+<a name="line582"></a>goog.net.BrowserChannel.setStartThreadExecutionHook = function(startHook) {
+<a name="line583"></a>  goog.net.BrowserChannel.startExecutionHook_ = startHook;
+<a name="line584"></a>};
+<a name="line585"></a>
 <a name="line586"></a>
-<a name="line587"></a>
-<a name="line588"></a>/**
-<a name="line589"></a> * Starts the regular channel which is run after the test channel is complete.
-<a name="line590"></a> * @private
-<a name="line591"></a> */
-<a name="line592"></a>goog.net.BrowserChannel.prototype.connectChannel_ = function() {
-<a name="line593"></a>  this.channelDebug_.debug(&#39;connectChannel_()&#39;);
-<a name="line594"></a>  this.ensureInState_(goog.net.BrowserChannel.State.INIT);
-<a name="line595"></a>  this.forwardChannelUri_ =
-<a name="line596"></a>      this.getForwardChannelUri(/** @type {string} */ (this.path_));
-<a name="line597"></a>  this.ensureForwardChannel_();
-<a name="line598"></a>};
-<a name="line599"></a>
-<a name="line600"></a>
-<a name="line601"></a>/**
-<a name="line602"></a> * Cancels all outstanding requests.
-<a name="line603"></a> * @private
-<a name="line604"></a> */
-<a name="line605"></a>goog.net.BrowserChannel.prototype.cancelRequests_ = function() {
-<a name="line606"></a>  if (this.connectionTest_) {
-<a name="line607"></a>    this.connectionTest_.abort();
-<a name="line608"></a>    this.connectionTest_ = null;
-<a name="line609"></a>  }
-<a name="line610"></a>
-<a name="line611"></a>  if (this.backChannelRequest_) {
-<a name="line612"></a>    this.backChannelRequest_.cancel();
-<a name="line613"></a>    this.backChannelRequest_ = null;
-<a name="line614"></a>  }
+<a name="line587"></a>/**
+<a name="line588"></a> * Allows the application to set an execution hooks for when BrowserChannel
+<a name="line589"></a> * stops processing requests. This is useful to track timing or logging
+<a name="line590"></a> * special information. The function takes no parameters and return void.
+<a name="line591"></a> * @param {Function} endHook  The function for the end hook.
+<a name="line592"></a> */
+<a name="line593"></a>goog.net.BrowserChannel.setEndThreadExecutionHook = function(endHook) {
+<a name="line594"></a>  goog.net.BrowserChannel.endExecutionHook_ = endHook;
+<a name="line595"></a>};
+<a name="line596"></a>
+<a name="line597"></a>
+<a name="line598"></a>/**
+<a name="line599"></a> * Application provided execution hook for the start hook.
+<a name="line600"></a> *
+<a name="line601"></a> * @type {Function}
+<a name="line602"></a> * @private
+<a name="line603"></a> */
+<a name="line604"></a>goog.net.BrowserChannel.startExecutionHook_ = function() { };
+<a name="line605"></a>
+<a name="line606"></a>
+<a name="line607"></a>/**
+<a name="line608"></a> * Application provided execution hook for the end hook.
+<a name="line609"></a> *
+<a name="line610"></a> * @type {Function}
+<a name="line611"></a> * @private
+<a name="line612"></a> */
+<a name="line613"></a>goog.net.BrowserChannel.endExecutionHook_ = function() { };
+<a name="line614"></a>
 <a name="line615"></a>
-<a name="line616"></a>  if (this.forwardChannelRequest_) {
-<a name="line617"></a>    this.forwardChannelRequest_.cancel();
-<a name="line618"></a>    this.forwardChannelRequest_ = null;
-<a name="line619"></a>  }
-<a name="line620"></a>};
-<a name="line621"></a>
-<a name="line622"></a>
-<a name="line623"></a>/**
-<a name="line624"></a> * Returns the extra HTTP headers to add to all the requests sent to the server.
-<a name="line625"></a> *
-<a name="line626"></a> * @return {Object} The HTTP headers, or null.
+<a name="line616"></a>/**
+<a name="line617"></a> * Instantiates a ChannelRequest with the given parameters. Overidden in tests.
+<a name="line618"></a> *
+<a name="line619"></a> * @param {goog.net.BrowserChannel|goog.net.BrowserTestChannel} channel
+<a name="line620"></a> *     The BrowserChannel that owns this request.
+<a name="line621"></a> * @param {goog.net.ChannelDebug} channelDebug A ChannelDebug to use for
+<a name="line622"></a> *     logging.
+<a name="line623"></a> * @param {string=} opt_sessionId  The session id for the channel.
+<a name="line624"></a> * @param {string|number=} opt_requestId  The request id for this request.
+<a name="line625"></a> * @param {number=} opt_retryId  The retry id for this request.
+<a name="line626"></a> * @return {goog.net.ChannelRequest} The created channel request.
 <a name="line627"></a> */
-<a name="line628"></a>goog.net.BrowserChannel.prototype.getExtraHeaders = function() {
-<a name="line629"></a>  return this.extraHeaders_;
-<a name="line630"></a>};
-<a name="line631"></a>
-<a name="line632"></a>
-<a name="line633"></a>/**
-<a name="line634"></a> * Sets extra HTTP headers to add to all the requests sent to the server.
-<a name="line635"></a> *
-<a name="line636"></a> * @param {Object} extraHeaders The HTTP headers, or null.
-<a name="line637"></a> */
-<a name="line638"></a>goog.net.BrowserChannel.prototype.setExtraHeaders = function(extraHeaders) {
-<a name="line639"></a>  this.extraHeaders_ = extraHeaders;
-<a name="line640"></a>};
-<a name="line641"></a>
-<a name="line642"></a>
-<a name="line643"></a>/**
-<a name="line644"></a> * Returns the handler used for channel callback events.
-<a name="line645"></a> *
-<a name="line646"></a> * @return {goog.net.BrowserChannel.Handler} The handler.
-<a name="line647"></a> */
-<a name="line648"></a>goog.net.BrowserChannel.prototype.getHandler = function() {
-<a name="line649"></a>  return this.handler_;
-<a name="line650"></a>};
-<a name="line651"></a>
+<a name="line628"></a>goog.net.BrowserChannel.createChannelRequest = function(
+<a name="line629"></a>    channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId) {
+<a name="line630"></a>  return new goog.net.ChannelRequest(
+<a name="line631"></a>      channel,
+<a name="line632"></a>      channelDebug,
+<a name="line633"></a>      opt_sessionId,
+<a name="line634"></a>      opt_requestId,
+<a name="line635"></a>      opt_retryId);
+<a name="line636"></a>};
+<a name="line637"></a>
+<a name="line638"></a>
+<a name="line639"></a>/**
+<a name="line640"></a> * Starts the channel. This initiates connections to the server.
+<a name="line641"></a> *
+<a name="line642"></a> * @param {string} testPath  The path for the test connection.
+<a name="line643"></a> * @param {string} channelPath  The path for the channel connection.
+<a name="line644"></a> * @param {Object} extraParams  Extra parameter keys and values to add to the
+<a name="line645"></a> *     requests.
+<a name="line646"></a> * @param {string=} opt_oldSessionId  Session ID from a previous session.
+<a name="line647"></a> * @param {number=} opt_oldArrayId  The last array ID from a previous session.
+<a name="line648"></a> */
+<a name="line649"></a>goog.net.BrowserChannel.prototype.connect = function(testPath, channelPath,
+<a name="line650"></a>    extraParams, opt_oldSessionId, opt_oldArrayId) {
+<a name="line651"></a>  this.channelDebug_.debug(&#39;connect()&#39;);
 <a name="line652"></a>
-<a name="line653"></a>/**
-<a name="line654"></a> * Sets the handler used for channel callback events.
-<a name="line655"></a> * @param {goog.net.BrowserChannel.Handler} handler The handler to set.
-<a name="line656"></a> */
-<a name="line657"></a>goog.net.BrowserChannel.prototype.setHandler = function(handler) {
-<a name="line658"></a>  this.handler_ = handler;
-<a name="line659"></a>};
-<a name="line660"></a>
-<a name="line661"></a>
-<a name="line662"></a>/**
-<a name="line663"></a> * Returns whether the channel allows the use of a subdomain. There may be
-<a name="line664"></a> * cases where this isn&#39;t allowed.
-<a name="line665"></a> * @return {boolean} Whether a host prefix is allowed.
-<a name="line666"></a> */
-<a name="line667"></a>goog.net.BrowserChannel.prototype.getAllowHostPrefix = function() {
-<a name="line668"></a>  return this.allowHostPrefix_;
-<a name="line669"></a>};
-<a name="line670"></a>
-<a name="line671"></a>
-<a name="line672"></a>/**
-<a name="line673"></a> * Sets whether the channel allows the use of a subdomain. There may be cases
-<a name="line674"></a> * where this isn&#39;t allowed, for example, logging in with troutboard where
-<a name="line675"></a> * using a subdomain causes Apache to force the user to authenticate twice.
-<a name="line676"></a> * @param {boolean} allowHostPrefix Whether a host prefix is allowed.
-<a name="line677"></a> */
-<a name="line678"></a>goog.net.BrowserChannel.prototype.setAllowHostPrefix =
-<a name="line679"></a>    function(allowHostPrefix) {
-<a name="line680"></a>  this.allowHostPrefix_ = allowHostPrefix;
-<a name="line681"></a>};
+<a name="line653"></a>  goog.net.BrowserChannel.notifyStatEvent(
+<a name="line654"></a>      goog.net.BrowserChannel.Stat.CONNECT_ATTEMPT);
+<a name="line655"></a>
+<a name="line656"></a>  this.path_ = channelPath;
+<a name="line657"></a>  this.extraParams_ = extraParams || {};
+<a name="line658"></a>
+<a name="line659"></a>  // Attach parameters about the previous session if reconnecting.
+<a name="line660"></a>  if (opt_oldSessionId &amp;&amp; goog.isDef(opt_oldArrayId)) {
+<a name="line661"></a>    this.extraParams_[&#39;OSID&#39;] = opt_oldSessionId;
+<a name="line662"></a>    this.extraParams_[&#39;OAID&#39;] = opt_oldArrayId;
+<a name="line663"></a>  }
+<a name="line664"></a>
+<a name="line665"></a>  this.connectTest_(testPath);
+<a name="line666"></a>};
+<a name="line667"></a>
+<a name="line668"></a>/**
+<a name="line669"></a> * Disconnects and closes the channel.
+<a name="line670"></a> */
+<a name="line671"></a>goog.net.BrowserChannel.prototype.disconnect = function() {
+<a name="line672"></a>  this.channelDebug_.debug(&#39;disconnect()&#39;);
+<a name="line673"></a>
+<a name="line674"></a>  this.cancelRequests_();
+<a name="line675"></a>
+<a name="line676"></a>  if (this.state_ == goog.net.BrowserChannel.State.OPENED) {
+<a name="line677"></a>    var rid = this.nextRid_++;
+<a name="line678"></a>    var uri = this.forwardChannelUri_.clone();
+<a name="line679"></a>    uri.setParameterValue(&#39;SID&#39;, this.sid_);
+<a name="line680"></a>    uri.setParameterValue(&#39;RID&#39;, rid);
+<a name="line681"></a>    uri.setParameterValue(&#39;TYPE&#39;, &#39;terminate&#39;);
 <a name="line682"></a>
-<a name="line683"></a>/**
-<a name="line684"></a> * Returns whether the channel is buffered or not. This state is valid for
-<a name="line685"></a> * querying only after the test connection has completed. This may be
-<a name="line686"></a> * queried in the goog.net.BrowserChannel.okToMakeRequest() callback.
-<a name="line687"></a> * A channel may be buffered if the test connection determines that
-<a name="line688"></a> * a chunked response could not be sent down within a suitable time.
-<a name="line689"></a> * @return {boolean} Whether the channel is buffered.
-<a name="line690"></a> */
-<a name="line691"></a>goog.net.BrowserChannel.prototype.isBuffered = function() {
-<a name="line692"></a>  return !this.useChunked_;
-<a name="line693"></a>};
-<a name="line694"></a>
-<a name="line695"></a>/**
-<a name="line696"></a> * Returns whether chunked mode is allowed. In certain debugging situations,
-<a name="line697"></a> * it&#39;s useful for the application to have a way to disable chunked mode for a
-<a name="line698"></a> * user.
-<a name="line699"></a>
-<a name="line700"></a> * @return {boolean} Whether chunked mode is allowed.
-<a name="line701"></a> */
-<a name="line702"></a>goog.net.BrowserChannel.prototype.getAllowChunkedMode =
-<a name="line703"></a>    function() {
-<a name="line704"></a>  return this.allowChunkedMode_;
-<a name="line705"></a>};
-<a name="line706"></a>
-<a name="line707"></a>
-<a name="line708"></a>/**
-<a name="line709"></a> * Sets whether chunked mode is allowed. In certain debugging situations, it&#39;s
-<a name="line710"></a> * useful for the application to have a way to disable chunked mode for a user.
-<a name="line711"></a> * @param {boolean} allowChunkedMode  Whether chunked mode is allowed.
-<a name="line712"></a> */
-<a name="line713"></a>goog.net.BrowserChannel.prototype.setAllowChunkedMode =
-<a name="line714"></a>    function(allowChunkedMode) {
-<a name="line715"></a>  this.allowChunkedMode_ = allowChunkedMode;
+<a name="line683"></a>    // Add the reconnect parameters.
+<a name="line684"></a>    this.addAdditionalParams_(uri);
+<a name="line685"></a>
+<a name="line686"></a>    var request = goog.net.BrowserChannel.createChannelRequest(
+<a name="line687"></a>        this, this.channelDebug_, this.sid_, rid);
+<a name="line688"></a>    request.sendUsingImgTag(uri);
+<a name="line689"></a>    this.onClose_();
+<a name="line690"></a>  }
+<a name="line691"></a>};
+<a name="line692"></a>
+<a name="line693"></a>
+<a name="line694"></a>/**
+<a name="line695"></a> * Returns the session id of the channel. Only available after the
+<a name="line696"></a> * channel has been opened.
+<a name="line697"></a> * @return {string} Session ID.
+<a name="line698"></a> */
+<a name="line699"></a>goog.net.BrowserChannel.prototype.getSessionId = function() {
+<a name="line700"></a>  return this.sid_;
+<a name="line701"></a>};
+<a name="line702"></a>
+<a name="line703"></a>
+<a name="line704"></a>/**
+<a name="line705"></a> * Starts the test channel to determine network conditions.
+<a name="line706"></a> *
+<a name="line707"></a> * @param {string} testPath  The relative PATH for the test connection.
+<a name="line708"></a> * @private
+<a name="line709"></a> */
+<a name="line710"></a>goog.net.BrowserChannel.prototype.connectTest_ = function(testPath) {
+<a name="line711"></a>  this.channelDebug_.debug(&#39;connectTest_()&#39;);
+<a name="line712"></a>  this.connectionTest_ = new goog.net.BrowserTestChannel(
+<a name="line713"></a>      this, this.channelDebug_);
+<a name="line714"></a>  this.connectionTest_.setExtraHeaders(this.extraHeaders_);
+<a name="line715"></a>  this.connectionTest_.connect(testPath);
 <a name="line716"></a>};
 <a name="line717"></a>
 <a name="line718"></a>
 <a name="line719"></a>/**
-<a name="line720"></a> * Sends a request to the server. The format of the request is a Map data
-<a name="line721"></a> * structure of key/value pairs. These maps are then encoded in a format
-<a name="line722"></a> * suitable for the wire and then reconstituted as a Map data structure that
-<a name="line723"></a> * the server can process.
-<a name="line724"></a> * @param {Object|goog.structs.Map} map  The map to send.
-<a name="line725"></a> */
-<a name="line726"></a>goog.net.BrowserChannel.prototype.sendMap = function(map) {
-<a name="line727"></a>  if (this.state_ == goog.net.BrowserChannel.State.CLOSED) {
-<a name="line728"></a>    throw Error(&#39;Invalid operation: sending map when state is closed&#39;);
-<a name="line729"></a>  }
+<a name="line720"></a> * Starts the regular channel which is run after the test channel is complete.
+<a name="line721"></a> * @private
+<a name="line722"></a> */
+<a name="line723"></a>goog.net.BrowserChannel.prototype.connectChannel_ = function() {
+<a name="line724"></a>  this.channelDebug_.debug(&#39;connectChannel_()&#39;);
+<a name="line725"></a>  this.ensureInState_(goog.net.BrowserChannel.State.INIT);
+<a name="line726"></a>  this.forwardChannelUri_ =
+<a name="line727"></a>      this.getForwardChannelUri(/** @type {string} */ (this.path_));
+<a name="line728"></a>  this.ensureForwardChannel_();
+<a name="line729"></a>};
 <a name="line730"></a>
-<a name="line731"></a>  this.outgoingMaps_.push(map);
-<a name="line732"></a>  if (this.state_ == goog.net.BrowserChannel.State.OPENING ||
-<a name="line733"></a>      this.state_ == goog.net.BrowserChannel.State.OPENED) {
-<a name="line734"></a>    this.ensureForwardChannel_();
-<a name="line735"></a>  }
-<a name="line736"></a>};
-<a name="line737"></a>
-<a name="line738"></a>
-<a name="line739"></a>/**
-<a name="line740"></a> * When set to true, this changes the behavior of the forward channel so it
-<a name="line741"></a> * will not retry requests; it will fail after one network failure, and if
-<a name="line742"></a> * there was already one network failure, the request will fail immediately.
-<a name="line743"></a> * @param {boolean} failFast  Whether or not to fail fast.
-<a name="line744"></a> */
-<a name="line745"></a>goog.net.BrowserChannel.prototype.setFailFast = function(failFast) {
-<a name="line746"></a>  this.failFast_ = failFast;
-<a name="line747"></a>  this.channelDebug_.info(&#39;setFailFast: &#39; + failFast);
-<a name="line748"></a>  if (this.forwardChannelRequest_) {
-<a name="line749"></a>    this.channelDebug_.info(&#39;setting max forward-channel retries to &#39; +
-<a name="line750"></a>        this.getForwardChannelMaxRetries());
-<a name="line751"></a>    this.forwardChannelRequest_.setMaxRetries(
-<a name="line752"></a>        this.getForwardChannelMaxRetries());
-<a name="line753"></a>  }
-<a name="line754"></a>};
-<a name="line755"></a>
+<a name="line731"></a>
+<a name="line732"></a>/**
+<a name="line733"></a> * Cancels all outstanding requests.
+<a name="line734"></a> * @private
+<a name="line735"></a> */
+<a name="line736"></a>goog.net.BrowserChannel.prototype.cancelRequests_ = function() {
+<a name="line737"></a>  if (this.connectionTest_) {
+<a name="line738"></a>    this.connectionTest_.abort();
+<a name="line739"></a>    this.connectionTest_ = null;
+<a name="line740"></a>  }
+<a name="line741"></a>
+<a name="line742"></a>  if (this.backChannelRequest_) {
+<a name="line743"></a>    this.backChannelRequest_.cancel();
+<a name="line744"></a>    this.backChannelRequest_ = null;
+<a name="line745"></a>  }
+<a name="line746"></a>
+<a name="line747"></a>  if (this.backChannelTimerId_) {
+<a name="line748"></a>    goog.global.clearTimeout(this.backChannelTimerId_);
+<a name="line749"></a>    this.backChannelTimerId_ = null;
+<a name="line750"></a>  }
+<a name="line751"></a>
+<a name="line752"></a>  if (this.forwardChannelRequest_) {
+<a name="line753"></a>    this.forwardChannelRequest_.cancel();
+<a name="line754"></a>    this.forwardChannelRequest_ = null;
+<a name="line755"></a>  }
 <a name="line756"></a>
-<a name="line757"></a>/**
-<a name="line758"></a> * @return {number}  The max number of retries, which will be 0 in fail-fast
-<a name="line759"></a> * mode.
-<a name="line760"></a> */
-<a name="line761"></a>goog.net.BrowserChannel.prototype.getForwardChannelMaxRetries = function() {
-<a name="line762"></a>  return this.failFast_ ?
-<a name="line763"></a>         0 : goog.net.BrowserChannel.FORWARD_CHANNEL_MAX_RETRIES;
-<a name="line764"></a>};
-<a name="line765"></a>
-<a name="line766"></a>
-<a name="line767"></a>/**
-<a name="line768"></a> * Returns whether the channel is closed
-<a name="line769"></a> * @return {boolean} true if the channel is closed.
-<a name="line770"></a> */
-<a name="line771"></a>goog.net.BrowserChannel.prototype.isClosed = function() {
-<a name="line772"></a>  return this.state_ == goog.net.BrowserChannel.State.CLOSED;
-<a name="line773"></a>};
-<a name="line774"></a>
-<a name="line775"></a>
-<a name="line776"></a>/**
-<a name="line777"></a> * Returns the browser channel state.
-<a name="line778"></a> * @return {goog.net.BrowserChannel.State} The current state of the browser
-<a name="line779"></a> * channel.
-<a name="line780"></a> */
-<a name="line781"></a>goog.net.BrowserChannel.prototype.getState = function() {
-<a name="line782"></a>  return this.state_;
-<a name="line783"></a>};
-<a name="line784"></a>
-<a name="line785"></a>
-<a name="line786"></a>/**
-<a name="line787"></a> * Return the last status code received for a request.
-<a name="line788"></a> * @return {number} The last status code received for a request.
-<a name="line789"></a> */
-<a name="line790"></a>goog.net.BrowserChannel.prototype.getLastStatusCode = function() {
-<a name="line791"></a>  return this.lastStatusCode_;
-<a name="line792"></a>};
+<a name="line757"></a>  if (this.forwardChannelTimerId_) {
+<a name="line758"></a>    goog.global.clearTimeout(this.forwardChannelTimerId_);
+<a name="line759"></a>    this.forwardChannelTimerId_ = null;
+<a name="line760"></a>  }
+<a name="line761"></a>};
+<a name="line762"></a>
+<a name="line763"></a>
+<a name="line764"></a>/**
+<a name="line765"></a> * Returns the extra HTTP headers to add to all the requests sent to the server.
+<a name="line766"></a> *
+<a name="line767"></a> * @return {Object} The HTTP headers, or null.
+<a name="line768"></a> */
+<a name="line769"></a>goog.net.BrowserChannel.prototype.getExtraHeaders = function() {
+<a name="line770"></a>  return this.extraHeaders_;
+<a name="line771"></a>};
+<a name="line772"></a>
+<a name="line773"></a>
+<a name="line774"></a>/**
+<a name="line775"></a> * Sets extra HTTP headers to add to all the requests sent to the server.
+<a name="line776"></a> *
+<a name="line777"></a> * @param {Object} extraHeaders The HTTP headers, or null.
+<a name="line778"></a> */
+<a name="line779"></a>goog.net.BrowserChannel.prototype.setExtraHeaders = function(extraHeaders) {
+<a name="line780"></a>  this.extraHeaders_ = extraHeaders;
+<a name="line781"></a>};
+<a name="line782"></a>
+<a name="line783"></a>
+<a name="line784"></a>/**
+<a name="line785"></a> * Returns the handler used for channel callback events.
+<a name="line786"></a> *
+<a name="line787"></a> * @return {goog.net.BrowserChannel.Handler} The handler.
+<a name="line788"></a> */
+<a name="line789"></a>goog.net.BrowserChannel.prototype.getHandler = function() {
+<a name="line790"></a>  return this.handler_;
+<a name="line791"></a>};
+<a name="line792"></a>
 <a name="line793"></a>
-<a name="line794"></a>
-<a name="line795"></a>/**
-<a name="line796"></a> * @return {number} The last array id received.
+<a name="line794"></a>/**
+<a name="line795"></a> * Sets the handler used for channel callback events.
+<a name="line796"></a> * @param {goog.net.BrowserChannel.Handler} handler The handler to set.
 <a name="line797"></a> */
-<a name="line798"></a>goog.net.BrowserChannel.prototype.getLastArrayId = function() {
-<a name="line799"></a>  return this.lastArrayId_;
+<a name="line798"></a>goog.net.BrowserChannel.prototype.setHandler = function(handler) {
+<a name="line799"></a>  this.handler_ = handler;
 <a name="line800"></a>};
 <a name="line801"></a>
 <a name="line802"></a>
 <a name="line803"></a>/**
-<a name="line804"></a> * Returns whether there are outstanding requests servicing the channel.
-<a name="line805"></a> * @return {boolean} true if there are outstanding requests.
-<a name="line806"></a> */
-<a name="line807"></a>goog.net.BrowserChannel.prototype.hasOutstandingRequests = function() {
-<a name="line808"></a>  return this.outstandingRequests_() != 0;
-<a name="line809"></a>};
-<a name="line810"></a>
+<a name="line804"></a> * Returns whether the channel allows the use of a subdomain. There may be
+<a name="line805"></a> * cases where this isn&#39;t allowed.
+<a name="line806"></a> * @return {boolean} Whether a host prefix is allowed.
+<a name="line807"></a> */
+<a name="line808"></a>goog.net.BrowserChannel.prototype.getAllowHostPrefix = function() {
+<a name="line809"></a>  return this.allowHostPrefix_;
+<a name="line810"></a>};
 <a name="line811"></a>
-<a name="line812"></a>/**
-<a name="line813"></a> * Returns the number of outstanding requests.
-<a name="line814"></a> * @return {number} The number of outstanding requests to the server.
-<a name="line815"></a> * @private
-<a name="line816"></a> */
-<a name="line817"></a>goog.net.BrowserChannel.prototype.outstandingRequests_ = function() {
-<a name="line818"></a>  var count = 0;
-<a name="line819"></a>  if (this.backChannelRequest_) {
-<a name="line820"></a>    count++;
-<a name="line821"></a>  }
-<a name="line822"></a>  if (this.forwardChannelRequest_) {
-<a name="line823"></a>    count++;
-<a name="line824"></a>  }
-<a name="line825"></a>  return count;
-<a name="line826"></a>};
-<a name="line827"></a>
-<a name="line828"></a>
-<a name="line829"></a>/**
-<a name="line830"></a> * Ensures that a forward channel request is scheduled.
-<a name="line831"></a> * @private
+<a name="line812"></a>
+<a name="line813"></a>/**
+<a name="line814"></a> * Sets whether the channel allows the use of a subdomain. There may be cases
+<a name="line815"></a> * where this isn&#39;t allowed, for example, logging in with troutboard where
+<a name="line816"></a> * using a subdomain causes Apache to force the user to authenticate twice.
+<a name="line817"></a> * @param {boolean} allowHostPrefix Whether a host prefix is allowed.
+<a name="line818"></a> */
+<a name="line819"></a>goog.net.BrowserChannel.prototype.setAllowHostPrefix =
+<a name="line820"></a>    function(allowHostPrefix) {
+<a name="line821"></a>  this.allowHostPrefix_ = allowHostPrefix;
+<a name="line822"></a>};
+<a name="line823"></a>
+<a name="line824"></a>
+<a name="line825"></a>/**
+<a name="line826"></a> * Returns whether the channel is buffered or not. This state is valid for
+<a name="line827"></a> * querying only after the test connection has completed. This may be
+<a name="line828"></a> * queried in the goog.net.BrowserChannel.okToMakeRequest() callback.
+<a name="line829"></a> * A channel may be buffered if the test connection determines that
+<a name="line830"></a> * a chunked response could not be sent down within a suitable time.
+<a name="line831"></a> * @return {boolean} Whether the channel is buffered.
 <a name="line832"></a> */
-<a name="line833"></a>goog.net.BrowserChannel.prototype.ensureForwardChannel_ = function() {
-<a name="line834"></a>  if (this.forwardChannelRequest_) {
-<a name="line835"></a>    // connection in process - no need to start a new request
-<a name="line836"></a>    return;
-<a name="line837"></a>  }
-<a name="line838"></a>
-<a name="line839"></a>  if (this.forwardChannelTimerId_) {
-<a name="line840"></a>    // no need to start a new request - one is already scheduled
-<a name="line841"></a>    return;
-<a name="line842"></a>  }
-<a name="line843"></a>
-<a name="line844"></a>  this.forwardChannelTimerId_ = goog.net.BrowserChannel.setTimeout(
-<a name="line845"></a>      goog.bind(this.onStartForwardChannelTimer_, this), 0);
-<a name="line846"></a>};
-<a name="line847"></a>
-<a name="line848"></a>
-<a name="line849"></a>/**
-<a name="line850"></a> * Timer callback for ensureForwardChannel
-<a name="line851"></a> * @private
-<a name="line852"></a> */
-<a name="line853"></a>goog.net.BrowserChannel.prototype.onStartForwardChannelTimer_ = function() {
-<a name="line854"></a>  this.forwardChannelTimerId_ = null;
-<a name="line855"></a>  this.startForwardChannel_();
-<a name="line856"></a>};
-<a name="line857"></a>
-<a name="line858"></a>
-<a name="line859"></a>/**
-<a name="line860"></a> * Begins a new forward channel operation to the server.
-<a name="line861"></a> * @private
-<a name="line862"></a> */
-<a name="line863"></a>goog.net.BrowserChannel.prototype.startForwardChannel_ = function() {
-<a name="line864"></a>  this.channelDebug_.debug(&#39;startForwardChannel_&#39;);
-<a name="line865"></a>
-<a name="line866"></a>  if (this.state_ == goog.net.BrowserChannel.State.INIT) {
-<a name="line867"></a>    this.open_();
-<a name="line868"></a>    this.state_ = goog.net.BrowserChannel.State.OPENING;
-<a name="line869"></a>  } else if (this.state_ == goog.net.BrowserChannel.State.OPENED) {
-<a name="line870"></a>    // make sure there is a connection open to receive data
-<a name="line871"></a>    this.ensureBackChannel_();
-<a name="line872"></a>
-<a name="line873"></a>    if (!this.okToMakeRequest_()) {
-<a name="line874"></a>      // channel is cancelled
-<a name="line875"></a>      return;
-<a name="line876"></a>    }
-<a name="line877"></a>
-<a name="line878"></a>    if (this.outgoingMaps_.length == 0) {
-<a name="line879"></a>      this.channelDebug_.debug(&#39;startForwardChannel_ returned: &#39; +
-<a name="line880"></a>                                  &#39;nothing to send&#39;);
-<a name="line881"></a>      // no need to start a new forward channel request
-<a name="line882"></a>      return;
-<a name="line883"></a>    }
-<a name="line884"></a>
-<a name="line885"></a>    if (this.forwardChannelRequest_) {
-<a name="line886"></a>      this.channelDebug_.debug(&#39;startForwardChannel_ returned: &#39; +
-<a name="line887"></a>                                  &#39;connection already in progress&#39;);
-<a name="line888"></a>      // no need to start a new forward channel request
-<a name="line889"></a>      return;
-<a name="line890"></a>    }
-<a name="line891"></a>
-<a name="line892"></a>    this.makeForwardChannelRequest_();
-<a name="line893"></a>    this.channelDebug_.debug(&#39;startForwardChannel_ finished, sent request&#39;);
-<a name="line894"></a>  }
-<a name="line895"></a>};
-<a name="line896"></a>
-<a name="line897"></a>
-<a name="line898"></a>/**
-<a name="line899"></a> * Establishes a new channel session with the the server.
-<a name="line900"></a> * @private
-<a name="line901"></a> */
-<a name="line902"></a>goog.net.BrowserChannel.prototype.open_ = function() {
-<a name="line903"></a>  this.channelDebug_.debug(&#39;open_()&#39;);
-<a name="line904"></a>  this.nextRid_ = Math.floor(Math.random() * 100000);
-<a name="line905"></a>
-<a name="line906"></a>  var rid = this.nextRid_++;
-<a name="line907"></a>  var request = new goog.net.ChannelRequest(this, this.channelDebug_, &#39;&#39;, rid);
-<a name="line908"></a>  request.setExtraHeaders(this.extraHeaders_);
-<a name="line909"></a>  var requestText = this.dequeueOutgoingMaps_();
-<a name="line910"></a>  var uri = this.forwardChannelUri_.clone();
-<a name="line911"></a>  uri.setParameterValue(&#39;RID&#39;, rid);
-<a name="line912"></a>  if (this.clientVersion_) {
-<a name="line913"></a>   uri.setParameterValue(&#39;CVER&#39;, this.clientVersion_);
-<a name="line914"></a>  }
-<a name="line915"></a>
-<a name="line916"></a>  // Add the reconnect parameters.
-<a name="line917"></a>  this.addAdditionalParams_(uri);
-<a name="line918"></a>
-<a name="line919"></a>  request.xmlHttpPost(uri, requestText, true);
-<a name="line920"></a>  this.forwardChannelRequest_ = request;
-<a name="line921"></a>};
+<a name="line833"></a>goog.net.BrowserChannel.prototype.isBuffered = function() {
+<a name="line834"></a>  return !this.useChunked_;
+<a name="line835"></a>};
+<a name="line836"></a>
+<a name="line837"></a>
+<a name="line838"></a>/**
+<a name="line839"></a> * Returns whether chunked mode is allowed. In certain debugging situations,
+<a name="line840"></a> * it&#39;s useful for the application to have a way to disable chunked mode for a
+<a name="line841"></a> * user.
+<a name="line842"></a>
+<a name="line843"></a> * @return {boolean} Whether chunked mode is allowed.
+<a name="line844"></a> */
+<a name="line845"></a>goog.net.BrowserChannel.prototype.getAllowChunkedMode =
+<a name="line846"></a>    function() {
+<a name="line847"></a>  return this.allowChunkedMode_;
+<a name="line848"></a>};
+<a name="line849"></a>
+<a name="line850"></a>
+<a name="line851"></a>/**
+<a name="line852"></a> * Sets whether chunked mode is allowed. In certain debugging situations, it&#39;s
+<a name="line853"></a> * useful for the application to have a way to disable chunked mode for a user.
+<a name="line854"></a> * @param {boolean} allowChunkedMode  Whether chunked mode is allowed.
+<a name="line855"></a> */
+<a name="line856"></a>goog.net.BrowserChannel.prototype.setAllowChunkedMode =
+<a name="line857"></a>    function(allowChunkedMode) {
+<a name="line858"></a>  this.allowChunkedMode_ = allowChunkedMode;
+<a name="line859"></a>};
+<a name="line860"></a>
+<a name="line861"></a>
+<a name="line862"></a>/**
+<a name="line863"></a> * Sends a request to the server. The format of the request is a Map data
+<a name="line864"></a> * structure of key/value pairs. These maps are then encoded in a format
+<a name="line865"></a> * suitable for the wire and then reconstituted as a Map data structure that
+<a name="line866"></a> * the server can process.
+<a name="line867"></a> * @param {Object|goog.structs.Map} map  The map to send.
+<a name="line868"></a> */
+<a name="line869"></a>goog.net.BrowserChannel.prototype.sendMap = function(map) {
+<a name="line870"></a>  if (this.state_ == goog.net.BrowserChannel.State.CLOSED) {
+<a name="line871"></a>    throw Error(&#39;Invalid operation: sending map when state is closed&#39;);
+<a name="line872"></a>  }
+<a name="line873"></a>
+<a name="line874"></a>  this.outgoingMaps_.push(map);
+<a name="line875"></a>  if (this.state_ == goog.net.BrowserChannel.State.OPENING ||
+<a name="line876"></a>      this.state_ == goog.net.BrowserChannel.State.OPENED) {
+<a name="line877"></a>    this.ensureForwardChannel_();
+<a name="line878"></a>  }
+<a name="line879"></a>};
+<a name="line880"></a>
+<a name="line881"></a>
+<a name="line882"></a>/**
+<a name="line883"></a> * When set to true, this changes the behavior of the forward channel so it
+<a name="line884"></a> * will not retry requests; it will fail after one network failure, and if
+<a name="line885"></a> * there was already one network failure, the request will fail immediately.
+<a name="line886"></a> * @param {boolean} failFast  Whether or not to fail fast.
+<a name="line887"></a> */
+<a name="line888"></a>goog.net.BrowserChannel.prototype.setFailFast = function(failFast) {
+<a name="line889"></a>  this.failFast_ = failFast;
+<a name="line890"></a>  this.channelDebug_.info(&#39;setFailFast: &#39; + failFast);
+<a name="line891"></a>  if ((this.forwardChannelRequest_ || this.forwardChannelTimerId_) &amp;&amp;
+<a name="line892"></a>      this.forwardChannelRetryCount_ &gt; this.getForwardChannelMaxRetries()) {
+<a name="line893"></a>    this.channelDebug_.info(
+<a name="line894"></a>        &#39;Retry count &#39; + this.forwardChannelRetryCount_ +
+<a name="line895"></a>        &#39; &gt; new maxRetries &#39; + this.getForwardChannelMaxRetries() +
+<a name="line896"></a>        &#39;. Fail immediately!&#39;);
+<a name="line897"></a>    if (this.forwardChannelRequest_) {
+<a name="line898"></a>      this.forwardChannelRequest_.cancel();
+<a name="line899"></a>      // Go through the standard onRequestComplete logic to expose the max-retry
+<a name="line900"></a>      // failure in the standard way.
+<a name="line901"></a>      this.onRequestComplete(this.forwardChannelRequest_);
+<a name="line902"></a>    } else {  // i.e., this.forwardChannelTimerId_
+<a name="line903"></a>      goog.global.clearTimeout(this.forwardChannelTimerId_);
+<a name="line904"></a>      this.forwardChannelTimerId_ = null;
+<a name="line905"></a>      // The error code from the last failed request is gone, so just use a
+<a name="line906"></a>      // generic one.
+<a name="line907"></a>      this.signalError_(goog.net.BrowserChannel.Error.REQUEST_FAILED);
+<a name="line908"></a>    }
+<a name="line909"></a>  }
+<a name="line910"></a>};
+<a name="line911"></a>
+<a name="line912"></a>
+<a name="line913"></a>/**
+<a name="line914"></a> * @return {number} The max number of forward-channel retries, which will be 0
+<a name="line915"></a> * in fail-fast mode.
+<a name="line916"></a> */
+<a name="line917"></a>goog.net.BrowserChannel.prototype.getForwardChannelMaxRetries = function() {
+<a name="line918"></a>  return this.failFast_ ?
+<a name="line919"></a>         0 : goog.net.BrowserChannel.FORWARD_CHANNEL_MAX_RETRIES;
+<a name="line920"></a>};
+<a name="line921"></a>
 <a name="line922"></a>
-<a name="line923"></a>
-<a name="line924"></a>/**
-<a name="line925"></a> * Makes a forward channel request using XMLHTTP.
-<a name="line926"></a> * @private
-<a name="line927"></a> */
-<a name="line928"></a>goog.net.BrowserChannel.prototype.makeForwardChannelRequest_ = function() {
-<a name="line929"></a>  var rid = this.nextRid_++;
-<a name="line930"></a>  var uri = this.forwardChannelUri_.clone();
-<a name="line931"></a>  uri.setParameterValue(&#39;SID&#39;, this.sid_);
-<a name="line932"></a>  uri.setParameterValue(&#39;RID&#39;, rid);
-<a name="line933"></a>  // Add the additional reconnect parameters.
-<a name="line934"></a>  this.addAdditionalParams_(uri);
-<a name="line935"></a>
-<a name="line936"></a>  var requestText = this.dequeueOutgoingMaps_();
-<a name="line937"></a>  var request = new goog.net.ChannelRequest(
-<a name="line938"></a>      this, this.channelDebug_, this.sid_, rid);
-<a name="line939"></a>  request.setExtraHeaders(this.extraHeaders_);
-<a name="line940"></a>  request.setMaxRetries(this.getForwardChannelMaxRetries());
-<a name="line941"></a>
-<a name="line942"></a>  // randomize from 50%-100% of the forward channel retry timeout to avoid
-<a name="line943"></a>  // a big hit if servers happen to die at once.
-<a name="line944"></a>  request.setRetryTimeout(
-<a name="line945"></a>      Math.round(goog.net.BrowserChannel.FORWARD_CHANNEL_RETRY_TIMEOUT * 0.50) +
-<a name="line946"></a>      Math.round(goog.net.BrowserChannel.FORWARD_CHANNEL_RETRY_TIMEOUT * 0.50 *
-<a name="line947"></a>                 Math.random()));
-<a name="line948"></a>  this.forwardChannelRequest_ = request;
-<a name="line949"></a>  request.xmlHttpPost(uri, requestText, true);
-<a name="line950"></a>};
-<a name="line951"></a>
-<a name="line952"></a>
-<a name="line953"></a>/**
-<a name="line954"></a> * Adds the additional parameters from the handler to the given URI.
-<a name="line955"></a> * @param {goog.Uri} uri The URI to add the parameters to.
-<a name="line956"></a> * @private
-<a name="line957"></a> */
-<a name="line958"></a>goog.net.BrowserChannel.prototype.addAdditionalParams_ = function(uri) {
-<a name="line959"></a>  // Add the additional reconnect parameters as needed.
-<a name="line960"></a>  if (this.handler_) {
-<a name="line961"></a>    var params = this.handler_.getAdditionalParams(this);
-<a name="line962"></a>    if (params) {
-<a name="line963"></a>      goog.structs.forEach(params, function(value, key, coll) {
-<a name="line964"></a>        uri.setParameterValue(key, value);
-<a name="line965"></a>      });
-<a name="line966"></a>    }
-<a name="line967"></a>  }
-<a name="line968"></a>};
-<a name="line969"></a>
-<a name="line970"></a>
-<a name="line971"></a>/**
-<a name="line972"></a> * Returns the request text from the outgoing maps and resets it.
-<a name="line973"></a> * @return {string} The encoded request text created from all the currently
-<a name="line974"></a> *                  queued outgoing maps.
-<a name="line975"></a> * @private
-<a name="line976"></a> */
-<a name="line977"></a>goog.net.BrowserChannel.prototype.dequeueOutgoingMaps_ = function() {
-<a name="line978"></a>  var sb = [&#39;count=&#39; + this.outgoingMaps_.length];
-<a name="line979"></a>  for (var i = 0; i &lt; this.outgoingMaps_.length; i++) {
-<a name="line980"></a>    var map = this.outgoingMaps_[i];
-<a name="line981"></a>    goog.structs.forEach(map, function(value, key, coll) {
-<a name="line982"></a>      sb.push(&#39;req&#39; + i + &#39;_&#39; + key + &#39;=&#39; + encodeURIComponent(value));
-<a name="line983"></a>    });
-<a name="line984"></a>  }
-<a name="line985"></a>  this.outgoingMaps_.length = 0;
-<a name="line986"></a>  return sb.join(&#39;&amp;&#39;);
-<a name="line987"></a>};
-<a name="line988"></a>
-<a name="line989"></a>
-<a name="line990"></a>/**
-<a name="line991"></a> * Ensures there is a backchannel request for receiving data from the server.
-<a name="line992"></a> * @private
-<a name="line993"></a> */
-<a name="line994"></a>goog.net.BrowserChannel.prototype.ensureBackChannel_ = function() {
-<a name="line995"></a>  if (this.backChannelRequest_) {
-<a name="line996"></a>    // already have one
-<a name="line997"></a>    return;
-<a name="line998"></a>  }
-<a name="line999"></a>
-<a name="line1000"></a>  if (this.backChannelTimerId_) {
-<a name="line1001"></a>    // no need to start a new request - one is already scheduled
-<a name="line1002"></a>    return;
-<a name="line1003"></a>  }
-<a name="line1004"></a>
-<a name="line1005"></a>  this.backChannelTimerId_ = goog.net.BrowserChannel.setTimeout(
-<a name="line1006"></a>      goog.bind(this.onStartBackChannelTimer_, this), 0);
-<a name="line1007"></a>};
+<a name="line923"></a>/**
+<a name="line924"></a> * @return {number} The max number of back-channel retries, which is a constant.
+<a name="line925"></a> */
+<a name="line926"></a>goog.net.BrowserChannel.prototype.getBackChannelMaxRetries = function() {
+<a name="line927"></a>  // Back-channel retries is a constant.
+<a name="line928"></a>  return goog.net.BrowserChannel.BACK_CHANNEL_MAX_RETRIES;
+<a name="line929"></a>};
+<a name="line930"></a>
+<a name="line931"></a>
+<a name="line932"></a>/**
+<a name="line933"></a> * Returns whether the channel is closed
+<a name="line934"></a> * @return {boolean} true if the channel is closed.
+<a name="line935"></a> */
+<a name="line936"></a>goog.net.BrowserChannel.prototype.isClosed = function() {
+<a name="line937"></a>  return this.state_ == goog.net.BrowserChannel.State.CLOSED;
+<a name="line938"></a>};
+<a name="line939"></a>
+<a name="line940"></a>
+<a name="line941"></a>/**
+<a name="line942"></a> * Returns the browser channel state.
+<a name="line943"></a> * @return {goog.net.BrowserChannel.State} The current state of the browser
+<a name="line944"></a> * channel.
+<a name="line945"></a> */
+<a name="line946"></a>goog.net.BrowserChannel.prototype.getState = function() {
+<a name="line947"></a>  return this.state_;
+<a name="line948"></a>};
+<a name="line949"></a>
+<a name="line950"></a>
+<a name="line951"></a>/**
+<a name="line952"></a> * Return the last status code received for a request.
+<a name="line953"></a> * @return {number} The last status code received for a request.
+<a name="line954"></a> */
+<a name="line955"></a>goog.net.BrowserChannel.prototype.getLastStatusCode = function() {
+<a name="line956"></a>  return this.lastStatusCode_;
+<a name="line957"></a>};
+<a name="line958"></a>
+<a name="line959"></a>
+<a name="line960"></a>/**
+<a name="line961"></a> * @return {number} The last array id received.
+<a name="line962"></a> */
+<a name="line963"></a>goog.net.BrowserChannel.prototype.getLastArrayId = function() {
+<a name="line964"></a>  return this.lastArrayId_;
+<a name="line965"></a>};
+<a name="line966"></a>
+<a name="line967"></a>
+<a name="line968"></a>/**
+<a name="line969"></a> * Returns whether there are outstanding requests servicing the channel.
+<a name="line970"></a> * @return {boolean} true if there are outstanding requests.
+<a name="line971"></a> */
+<a name="line972"></a>goog.net.BrowserChannel.prototype.hasOutstandingRequests = function() {
+<a name="line973"></a>  return this.outstandingRequests_() != 0;
+<a name="line974"></a>};
+<a name="line975"></a>
+<a name="line976"></a>
+<a name="line977"></a>/**
+<a name="line978"></a> * Returns the number of outstanding requests.
+<a name="line979"></a> * @return {number} The number of outstanding requests to the server.
+<a name="line980"></a> * @private
+<a name="line981"></a> */
+<a name="line982"></a>goog.net.BrowserChannel.prototype.outstandingRequests_ = function() {
+<a name="line983"></a>  var count = 0;
+<a name="line984"></a>  if (this.backChannelRequest_) {
+<a name="line985"></a>    count++;
+<a name="line986"></a>  }
+<a name="line987"></a>  if (this.forwardChannelRequest_) {
+<a name="line988"></a>    count++;
+<a name="line989"></a>  }
+<a name="line990"></a>  return count;
+<a name="line991"></a>};
+<a name="line992"></a>
+<a name="line993"></a>
+<a name="line994"></a>/**
+<a name="line995"></a> * Ensures that a forward channel request is scheduled.
+<a name="line996"></a> * @private
+<a name="line997"></a> */
+<a name="line998"></a>goog.net.BrowserChannel.prototype.ensureForwardChannel_ = function() {
+<a name="line999"></a>  if (this.forwardChannelRequest_) {
+<a name="line1000"></a>    // connection in process - no need to start a new request
+<a name="line1001"></a>    return;
+<a name="line1002"></a>  }
+<a name="line1003"></a>
+<a name="line1004"></a>  if (this.forwardChannelTimerId_) {
+<a name="line1005"></a>    // no need to start a new request - one is already scheduled
+<a name="line1006"></a>    return;
+<a name="line1007"></a>  }
 <a name="line1008"></a>
-<a name="line1009"></a>
-<a name="line1010"></a>/**
-<a name="line1011"></a> * Timer callback for ensureBackChannel_.
-<a name="line1012"></a> * @private
-<a name="line1013"></a> */
-<a name="line1014"></a>goog.net.BrowserChannel.prototype.onStartBackChannelTimer_ = function() {
-<a name="line1015"></a>  this.backChannelTimerId_ = null;
-<a name="line1016"></a>  this.startBackChannel_();
-<a name="line1017"></a>};
-<a name="line1018"></a>
-<a name="line1019"></a>
-<a name="line1020"></a>/**
-<a name="line1021"></a> * Begins a new back channel operation to the server.
-<a name="line1022"></a> * @private
-<a name="line1023"></a> */
-<a name="line1024"></a>goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
-<a name="line1025"></a>  if (!this.okToMakeRequest_()) {
-<a name="line1026"></a>    // channel is cancelled
-<a name="line1027"></a>    return;
+<a name="line1009"></a>  this.forwardChannelTimerId_ = goog.net.BrowserChannel.setTimeout(
+<a name="line1010"></a>      goog.bind(this.onStartForwardChannelTimer_, this), 0);
+<a name="line1011"></a>  this.forwardChannelRetryCount_ = 0;
+<a name="line1012"></a>};
+<a name="line1013"></a>
+<a name="line1014"></a>
+<a name="line1015"></a>/**
+<a name="line1016"></a> * Schedules a forward-channel retry for the specified request, unless the max
+<a name="line1017"></a> * retries has been reached.
+<a name="line1018"></a> * @param {goog.net.ChannelRequest} request The failed request to retry.
+<a name="line1019"></a> * @return {boolean} true iff a retry was scheduled.
+<a name="line1020"></a> * @private
+<a name="line1021"></a> */
+<a name="line1022"></a>goog.net.BrowserChannel.prototype.maybeRetryForwardChannel_ =
+<a name="line1023"></a>    function(request) {
+<a name="line1024"></a>  if (this.forwardChannelRequest_ || this.forwardChannelTimerId_) {
+<a name="line1025"></a>    // Should be impossible to be called in this state.
+<a name="line1026"></a>    this.channelDebug_.severe(&#39;Request already in progress&#39;);
+<a name="line1027"></a>    return false;
 <a name="line1028"></a>  }
 <a name="line1029"></a>
-<a name="line1030"></a>  this.channelDebug_.debug(&#39;Creating new HttpRequest&#39;);
-<a name="line1031"></a>  this.backChannelRequest_ =
-<a name="line1032"></a>      new goog.net.ChannelRequest(this, this.channelDebug_, this.sid_, &#39;rpc&#39;);
-<a name="line1033"></a>  this.backChannelRequest_.setExtraHeaders(this.extraHeaders_);
-<a name="line1034"></a>  var uri = this.backChannelUri_.clone();
-<a name="line1035"></a>  uri.setParameterValue(&#39;RID&#39;, &#39;rpc&#39;);
-<a name="line1036"></a>  uri.setParameterValue(&#39;SID&#39;, this.sid_);
-<a name="line1037"></a>  uri.setParameterValue(&#39;CI&#39;, this.useChunked_ ? &#39;0&#39; : &#39;1&#39;);
-<a name="line1038"></a>  uri.setParameterValue(&#39;AID&#39;, this.lastArrayId_);
-<a name="line1039"></a>
-<a name="line1040"></a>  // Add the reconnect parameters.
-<a name="line1041"></a>  this.addAdditionalParams_(uri);
-<a name="line1042"></a>
-<a name="line1043"></a>  if (goog.userAgent.IE) {
-<a name="line1044"></a>    uri.setParameterValue(&#39;TYPE&#39;, &#39;html&#39;);
-<a name="line1045"></a>    this.backChannelRequest_.tridentGet(uri, Boolean(this.hostPrefix_));
-<a name="line1046"></a>  } else {
-<a name="line1047"></a>    uri.setParameterValue(&#39;TYPE&#39;, &#39;xmlhttp&#39;);
-<a name="line1048"></a>    this.backChannelRequest_.setMaxRetries(
-<a name="line1049"></a>        goog.net.BrowserChannel.BACK_CHANNEL_XMHTTP_MAX_RETRIES);
-<a name="line1050"></a>    this.backChannelRequest_.xmlHttpGet(uri, true);
-<a name="line1051"></a>  }
-<a name="line1052"></a>  this.channelDebug_.debug(&#39;New Request created&#39;);
-<a name="line1053"></a>};
-<a name="line1054"></a>
+<a name="line1030"></a>  if (this.state_ == goog.net.BrowserChannel.State.INIT ||  // no retry open_()
+<a name="line1031"></a>      (this.forwardChannelRetryCount_ &gt;= this.getForwardChannelMaxRetries())) {
+<a name="line1032"></a>    return false;
+<a name="line1033"></a>  }
+<a name="line1034"></a>
+<a name="line1035"></a>  this.channelDebug_.debug(&#39;Going to retry POST&#39;);
+<a name="line1036"></a>
+<a name="line1037"></a>  this.forwardChannelTimerId_ = goog.net.BrowserChannel.setTimeout(
+<a name="line1038"></a>      goog.bind(this.onStartForwardChannelTimer_, this, request),
+<a name="line1039"></a>      this.getRetryTime_(this.forwardChannelRetryCount_));
+<a name="line1040"></a>  this.forwardChannelRetryCount_++;
+<a name="line1041"></a>  return true;
+<a name="line1042"></a>};
+<a name="line1043"></a>
+<a name="line1044"></a>
+<a name="line1045"></a>/**
+<a name="line1046"></a> * Timer callback for ensureForwardChannel
+<a name="line1047"></a> * @param {goog.net.ChannelRequest=} opt_retryRequest A failed request to retry.
+<a name="line1048"></a> * @private
+<a name="line1049"></a> */
+<a name="line1050"></a>goog.net.BrowserChannel.prototype.onStartForwardChannelTimer_ = function(
+<a name="line1051"></a>    opt_retryRequest) {
+<a name="line1052"></a>  this.forwardChannelTimerId_ = null;
+<a name="line1053"></a>  this.startForwardChannel_(opt_retryRequest);
+<a name="line1054"></a>};
 <a name="line1055"></a>
-<a name="line1056"></a>/**
-<a name="line1057"></a> * Gives the handler a chance to return an error code and stop channel
-<a name="line1058"></a> * execution. A handler might want to do this to check that the user is still
-<a name="line1059"></a> * logged in, for example.
+<a name="line1056"></a>
+<a name="line1057"></a>/**
+<a name="line1058"></a> * Begins a new forward channel operation to the server.
+<a name="line1059"></a> * @param {goog.net.ChannelRequest=} opt_retryRequest A failed request to retry.
 <a name="line1060"></a> * @private
-<a name="line1061"></a> * @return {boolean} If it&#39;s OK to make a request.
-<a name="line1062"></a> */
-<a name="line1063"></a>goog.net.BrowserChannel.prototype.okToMakeRequest_ = function() {
-<a name="line1064"></a>  if (this.handler_) {
-<a name="line1065"></a>    var result = this.handler_.okToMakeRequest(this);
-<a name="line1066"></a>    if (result != goog.net.BrowserChannel.Error.OK) {
-<a name="line1067"></a>      this.channelDebug_.debug(&#39;Handler returned error code from &#39; +
-<a name="line1068"></a>                                  &#39;okToMakeRequest&#39;);
-<a name="line1069"></a>      this.signalError_(result);
-<a name="line1070"></a>      return false;
-<a name="line1071"></a>    }
-<a name="line1072"></a>  }
-<a name="line1073"></a>  return true;
-<a name="line1074"></a>};
-<a name="line1075"></a>
-<a name="line1076"></a>
-<a name="line1077"></a>/**
-<a name="line1078"></a> * Callback from BrowserTestChannel for when the channel is finished.
-<a name="line1079"></a> * @param {goog.net.BrowserTestChannel} testChannel The BrowserTestChannel.
-<a name="line1080"></a> * @param {boolean} useChunked  Whether we can chunk responses.
-<a name="line1081"></a> */
-<a name="line1082"></a>goog.net.BrowserChannel.prototype.testConnectionFinished =
-<a name="line1083"></a>    function(testChannel, useChunked) {
-<a name="line1084"></a>  this.channelDebug_.debug(&#39;Test Connection Finished&#39;);
-<a name="line1085"></a>
-<a name="line1086"></a>  this.useChunked_ = this.allowChunkedMode_ &amp;&amp; useChunked;
-<a name="line1087"></a>  this.lastStatusCode_ = testChannel.getLastStatusCode();
-<a name="line1088"></a>  this.connectChannel_();
-<a name="line1089"></a>};
+<a name="line1061"></a> */
+<a name="line1062"></a>goog.net.BrowserChannel.prototype.startForwardChannel_ = function(
+<a name="line1063"></a>    opt_retryRequest) {
+<a name="line1064"></a>  this.channelDebug_.debug(&#39;startForwardChannel_&#39;);
+<a name="line1065"></a>
+<a name="line1066"></a>  if (this.state_ == goog.net.BrowserChannel.State.INIT) {
+<a name="line1067"></a>    if (opt_retryRequest) {
+<a name="line1068"></a>      this.channelDebug_.severe(&#39;Not supposed to retry the open&#39;);
+<a name="line1069"></a>      return;
+<a name="line1070"></a>    }
+<a name="line1071"></a>    this.open_();
+<a name="line1072"></a>    this.state_ = goog.net.BrowserChannel.State.OPENING;
+<a name="line1073"></a>  } else if (this.state_ == goog.net.BrowserChannel.State.OPENED) {
+<a name="line1074"></a>    if (!this.okToMakeRequest_()) {
+<a name="line1075"></a>      // channel is cancelled
+<a name="line1076"></a>      return;
+<a name="line1077"></a>    }
+<a name="line1078"></a>
+<a name="line1079"></a>    if (opt_retryRequest) {
+<a name="line1080"></a>      this.makeForwardChannelRequest_(opt_retryRequest);
+<a name="line1081"></a>      return;
+<a name="line1082"></a>    }
+<a name="line1083"></a>
+<a name="line1084"></a>    if (this.outgoingMaps_.length == 0) {
+<a name="line1085"></a>      this.channelDebug_.debug(&#39;startForwardChannel_ returned: &#39; +
+<a name="line1086"></a>                                  &#39;nothing to send&#39;);
+<a name="line1087"></a>      // no need to start a new forward channel request
+<a name="line1088"></a>      return;
+<a name="line1089"></a>    }
 <a name="line1090"></a>
-<a name="line1091"></a>
-<a name="line1092"></a>/**
-<a name="line1093"></a> * Callback from BrowserTestChannel for when the channel has an error.
-<a name="line1094"></a> * @param {goog.net.BrowserTestChannel} testChannel The BrowserTestChannel.
-<a name="line1095"></a> * @param {goog.net.ChannelRequest.Error} errorCode  The error code of the
-<a name="line1096"></a>       failure.
-<a name="line1097"></a> */
-<a name="line1098"></a>goog.net.BrowserChannel.prototype.testConnectionFailure =
-<a name="line1099"></a>    function(testChannel, errorCode) {
-<a name="line1100"></a>  this.channelDebug_.debug(&#39;Test Connection Failed&#39;);
-<a name="line1101"></a>  this.lastStatusCode_ = testChannel.getLastStatusCode();
-<a name="line1102"></a>  this.signalError_(goog.net.BrowserChannel.Error.REQUEST_FAILED);
-<a name="line1103"></a>};
-<a name="line1104"></a>
-<a name="line1105"></a>
-<a name="line1106"></a>/**
-<a name="line1107"></a> * Callback from BrowserTestChannel for when the channel is blocked.
-<a name="line1108"></a> * @param {goog.net.BrowserTestChannel} testChannel The BrowserTestChannel.
-<a name="line1109"></a> */
-<a name="line1110"></a>goog.net.BrowserChannel.prototype.testConnectionBlocked =
-<a name="line1111"></a>    function(testChannel) {
-<a name="line1112"></a>  this.channelDebug_.debug(&#39;Test Connection Blocked&#39;);
-<a name="line1113"></a>  this.lastStatusCode_ = this.connectionTest_.getLastStatusCode();
-<a name="line1114"></a>  this.signalError_(goog.net.BrowserChannel.Error.BLOCKED);
-<a name="line1115"></a>};
-<a name="line1116"></a>
-<a name="line1117"></a>
-<a name="line1118"></a>/**
-<a name="line1119"></a> * Callback from ChannelRequest for when new data is received
-<a name="line1120"></a> * @param {goog.net.ChannelRequest} request  The request object.
-<a name="line1121"></a> * @param {string} responseText The text of the response.
-<a name="line1122"></a> */
-<a name="line1123"></a>goog.net.BrowserChannel.prototype.onRequestData =
-<a name="line1124"></a>    function(request, responseText) {
-<a name="line1125"></a>  if (this.state_ == goog.net.BrowserChannel.State.CLOSED ||
-<a name="line1126"></a>      (this.backChannelRequest_ != request &amp;&amp;
-<a name="line1127"></a>       this.forwardChannelRequest_ != request)) {
-<a name="line1128"></a>    // either CLOSED or a request we don&#39;t know about (perhaps an old request)
-<a name="line1129"></a>    return;
-<a name="line1130"></a>  }
-<a name="line1131"></a>  this.lastStatusCode_ = request.getLastStatusCode();
-<a name="line1132"></a>
-<a name="line1133"></a>  if (this.forwardChannelRequest_ == request &amp;&amp;
-<a name="line1134"></a>      this.state_ == goog.net.BrowserChannel.State.OPENED) {
-<a name="line1135"></a>    // expect magic cookie in response
-<a name="line1136"></a>    if (responseText != goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE) {
-<a name="line1137"></a>      this.channelDebug_.debug(&#39;Bad data returned - missing/invald &#39; +
-<a name="line1138"></a>                                  &#39;magic cookie&#39;);
-<a name="line1139"></a>      this.signalError_(goog.net.BrowserChannel.Error.BAD_RESPONSE);
-<a name="line1140"></a>    }
-<a name="line1141"></a>  } else {
-<a name="line1142"></a>    if (!goog.string.isEmpty(responseText)) {
-<a name="line1143"></a>      this.onInput_(/** @type {Array} */ (goog.json.unsafeParse(responseText)));
-<a name="line1144"></a>    }
-<a name="line1145"></a>  }
-<a name="line1146"></a>};
-<a name="line1147"></a>
-<a name="line1148"></a>
-<a name="line1149"></a>/**
-<a name="line1150"></a> * Callback from ChannelRequest that indicates a request has completed.
-<a name="line1151"></a> * @param {goog.net.ChannelRequest} request  The request object.
-<a name="line1152"></a> */
-<a name="line1153"></a>goog.net.BrowserChannel.prototype.onRequestComplete =
-<a name="line1154"></a>    function(request) {
-<a name="line1155"></a>  this.channelDebug_.debug(&#39;Request complete&#39;);
-<a name="line1156"></a>  var foundRequest = false;
-<a name="line1157"></a>  if (this.backChannelRequest_ == request) {
-<a name="line1158"></a>    this.backChannelRequest_ = null;
-<a name="line1159"></a>    foundRequest = true;
-<a name="line1160"></a>  } else if (this.forwardChannelRequest_ == request) {
-<a name="line1161"></a>    this.forwardChannelRequest_ = null;
-<a name="line1162"></a>    foundRequest = true;
-<a name="line1163"></a>  }
-<a name="line1164"></a>
-<a name="line1165"></a>  // return if it was an old request from a previous session
-<a name="line1166"></a>  if (!foundRequest) {
-<a name="line1167"></a>    return;
-<a name="line1168"></a>  }
-<a name="line1169"></a>  this.lastStatusCode_ = request.getLastStatusCode();
-<a name="line1170"></a>
-<a name="line1171"></a>  if (this.state_ == goog.net.BrowserChannel.State.CLOSED) {
-<a name="line1172"></a>    return;
-<a name="line1173"></a>  }
-<a name="line1174"></a>
-<a name="line1175"></a>  if (!request.getSuccess()) {
-<a name="line1176"></a>    this.channelDebug_.debug(&#39;Error: HTTP request failed&#39;);
-<a name="line1177"></a>    switch (request.getLastError()) {
-<a name="line1178"></a>      case goog.net.ChannelRequest.Error.NO_DATA:
-<a name="line1179"></a>        this.signalError_(goog.net.BrowserChannel.Error.NO_DATA);
-<a name="line1180"></a>        break;
-<a name="line1181"></a>      case goog.net.ChannelRequest.Error.BAD_DATA:
-<a name="line1182"></a>        this.signalError_(goog.net.BrowserChannel.Error.BAD_DATA);
-<a name="line1183"></a>        break;
-<a name="line1184"></a>      case goog.net.ChannelRequest.Error.UNKNOWN_SESSION_ID:
-<a name="line1185"></a>        this.signalError_(goog.net.BrowserChannel.Error.UNKNOWN_SESSION_ID);
-<a name="line1186"></a>        break;
-<a name="line1187"></a>      default:
-<a name="line1188"></a>        this.signalError_(goog.net.BrowserChannel.Error.REQUEST_FAILED);
-<a name="line1189"></a>        break;
-<a name="line1190"></a>    }
-<a name="line1191"></a>    return;
-<a name="line1192"></a>  }
-<a name="line1193"></a>
-<a name="line1194"></a>  this.ensureForwardChannel_();
-<a name="line1195"></a>  this.ensureBackChannel_();
-<a name="line1196"></a>};
+<a name="line1091"></a>    if (this.forwardChannelRequest_) {
+<a name="line1092"></a>      this.channelDebug_.debug(&#39;startForwardChannel_ returned: &#39; +
+<a name="line1093"></a>                                  &#39;connection already in progress&#39;);
+<a name="line1094"></a>      // no need to start a new forward channel request
+<a name="line1095"></a>      return;
+<a name="line1096"></a>    }
+<a name="line1097"></a>
+<a name="line1098"></a>    this.makeForwardChannelRequest_();
+<a name="line1099"></a>    this.channelDebug_.debug(&#39;startForwardChannel_ finished, sent request&#39;);
+<a name="line1100"></a>  }
+<a name="line1101"></a>};
+<a name="line1102"></a>
+<a name="line1103"></a>
+<a name="line1104"></a>/**
+<a name="line1105"></a> * Establishes a new channel session with the the server.
+<a name="line1106"></a> * @private
+<a name="line1107"></a> */
+<a name="line1108"></a>goog.net.BrowserChannel.prototype.open_ = function() {
+<a name="line1109"></a>  this.channelDebug_.debug(&#39;open_()&#39;);
+<a name="line1110"></a>  this.nextRid_ = Math.floor(Math.random() * 100000);
+<a name="line1111"></a>
+<a name="line1112"></a>  var rid = this.nextRid_++;
+<a name="line1113"></a>  var request = goog.net.BrowserChannel.createChannelRequest(
+<a name="line1114"></a>      this, this.channelDebug_, &#39;&#39;, rid);
+<a name="line1115"></a>  request.setExtraHeaders(this.extraHeaders_);
+<a name="line1116"></a>  var requestText = this.dequeueOutgoingMaps_();
+<a name="line1117"></a>  var uri = this.forwardChannelUri_.clone();
+<a name="line1118"></a>  uri.setParameterValue(&#39;RID&#39;, rid);
+<a name="line1119"></a>  if (this.clientVersion_) {
+<a name="line1120"></a>   uri.setParameterValue(&#39;CVER&#39;, this.clientVersion_);
+<a name="line1121"></a>  }
+<a name="line1122"></a>
+<a name="line1123"></a>  // Add the reconnect parameters.
+<a name="line1124"></a>  this.addAdditionalParams_(uri);
+<a name="line1125"></a>
+<a name="line1126"></a>  request.xmlHttpPost(uri, requestText, true);
+<a name="line1127"></a>  this.forwardChannelRequest_ = request;
+<a name="line1128"></a>};
+<a name="line1129"></a>
+<a name="line1130"></a>
+<a name="line1131"></a>/**
+<a name="line1132"></a> * Makes a forward channel request using XMLHTTP.
+<a name="line1133"></a> * @param {goog.net.ChannelRequest=} opt_retryRequest A failed request to retry.
+<a name="line1134"></a> * @private
+<a name="line1135"></a> */
+<a name="line1136"></a>goog.net.BrowserChannel.prototype.makeForwardChannelRequest_ =
+<a name="line1137"></a>    function(opt_retryRequest) {
+<a name="line1138"></a>  var rid;
+<a name="line1139"></a>  var requestText;
+<a name="line1140"></a>  if (opt_retryRequest) {
+<a name="line1141"></a>    // TODO: Ideally we should send up any new arrays we have too,
+<a name="line1142"></a>    // but currently the server&#39;s logic for detecting incoming duplicates is
+<a name="line1143"></a>    // based purely on RID, so we have to send up the exact same data because it
+<a name="line1144"></a>    // may ignore it. But if we change the server&#39;s duplicate detection to be
+<a name="line1145"></a>    // based on array IDs then we can just send up everything we&#39;ve got. That
+<a name="line1146"></a>    // will also eliminate the extra opt_retryRequest cases throughout the code.
+<a name="line1147"></a>    rid = opt_retryRequest.getRequestId();
+<a name="line1148"></a>    requestText = /** @type {string} */ (opt_retryRequest.getPostData());
+<a name="line1149"></a>  } else {
+<a name="line1150"></a>    rid = this.nextRid_++;
+<a name="line1151"></a>    requestText = this.dequeueOutgoingMaps_();
+<a name="line1152"></a>  }
+<a name="line1153"></a>
+<a name="line1154"></a>  var uri = this.forwardChannelUri_.clone();
+<a name="line1155"></a>  uri.setParameterValue(&#39;SID&#39;, this.sid_);
+<a name="line1156"></a>  uri.setParameterValue(&#39;RID&#39;, rid);
+<a name="line1157"></a>  uri.setParameterValue(&#39;AID&#39;, this.lastArrayId_);
+<a name="line1158"></a>  // Add the additional reconnect parameters.
+<a name="line1159"></a>  this.addAdditionalParams_(uri);
+<a name="line1160"></a>
+<a name="line1161"></a>  var request = goog.net.BrowserChannel.createChannelRequest(
+<a name="line1162"></a>      this,
+<a name="line1163"></a>      this.channelDebug_,
+<a name="line1164"></a>      this.sid_,
+<a name="line1165"></a>      rid,
+<a name="line1166"></a>      this.forwardChannelRetryCount_ + 1);
+<a name="line1167"></a>  request.setExtraHeaders(this.extraHeaders_);
+<a name="line1168"></a>
+<a name="line1169"></a>  // randomize from 50%-100% of the forward channel timeout to avoid
+<a name="line1170"></a>  // a big hit if servers happen to die at once.
+<a name="line1171"></a>  request.setTimeout(
+<a name="line1172"></a>      Math.round(goog.net.BrowserChannel.FORWARD_CHANNEL_RETRY_TIMEOUT * 0.50) +
+<a name="line1173"></a>      Math.round(goog.net.BrowserChannel.FORWARD_CHANNEL_RETRY_TIMEOUT * 0.50 *
+<a name="line1174"></a>                 Math.random()));
+<a name="line1175"></a>  this.forwardChannelRequest_ = request;
+<a name="line1176"></a>  request.xmlHttpPost(uri, requestText, true);
+<a name="line1177"></a>};
+<a name="line1178"></a>
+<a name="line1179"></a>
+<a name="line1180"></a>/**
+<a name="line1181"></a> * Adds the additional parameters from the handler to the given URI.
+<a name="line1182"></a> * @param {goog.Uri} uri The URI to add the parameters to.
+<a name="line1183"></a> * @private
+<a name="line1184"></a> */
+<a name="line1185"></a>goog.net.BrowserChannel.prototype.addAdditionalParams_ = function(uri) {
+<a name="line1186"></a>  // Add the additional reconnect parameters as needed.
+<a name="line1187"></a>  if (this.handler_) {
+<a name="line1188"></a>    var params = this.handler_.getAdditionalParams(this);
+<a name="line1189"></a>    if (params) {
+<a name="line1190"></a>      goog.structs.forEach(params, function(value, key, coll) {
+<a name="line1191"></a>        uri.setParameterValue(key, value);
+<a name="line1192"></a>      });
+<a name="line1193"></a>    }
+<a name="line1194"></a>  }
+<a name="line1195"></a>};
+<a name="line1196"></a>
 <a name="line1197"></a>
-<a name="line1198"></a>
-<a name="line1199"></a>/**
-<a name="line1200"></a> * Processes the data returned by the server.
-<a name="line1201"></a> * @param {Array} respArray The response array returned by the server.
+<a name="line1198"></a>/**
+<a name="line1199"></a> * Returns the request text from the outgoing maps and resets it.
+<a name="line1200"></a> * @return {string} The encoded request text created from all the currently
+<a name="line1201"></a> *                  queued outgoing maps.
 <a name="line1202"></a> * @private
 <a name="line1203"></a> */
-<a name="line1204"></a>goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
-<a name="line1205"></a>  // respArray is an array of arrays
-<a name="line1206"></a>  var batch = this.handler_ &amp;&amp; this.handler_.channelHandleMultipleArrays ?
-<a name="line1207"></a>      [] : null;
-<a name="line1208"></a>  for (var i = 0; i &lt; respArray.length; i++) {
-<a name="line1209"></a>    var nextArray = respArray[i];
-<a name="line1210"></a>    this.lastArrayId_ = nextArray[0];
-<a name="line1211"></a>    nextArray = nextArray[1];
-<a name="line1212"></a>    if (this.state_ == goog.net.BrowserChannel.State.OPENING) {
-<a name="line1213"></a>      if (nextArray[0] == &#39;c&#39;) {
-<a name="line1214"></a>        this.sid_ = nextArray[1];
-<a name="line1215"></a>        if (this.allowHostPrefix_) {
-<a name="line1216"></a>          this.hostPrefix_ = nextArray[2];
-<a name="line1217"></a>        } else {
-<a name="line1218"></a>          this.hostPrefix_ = null;
-<a name="line1219"></a>        }
-<a name="line1220"></a>        this.state_ = goog.net.BrowserChannel.State.OPENED;
-<a name="line1221"></a>        if (this.handler_) {
-<a name="line1222"></a>          this.handler_.channelOpened(this);
-<a name="line1223"></a>        }
-<a name="line1224"></a>        this.backChannelUri_ = this.getBackChannelUri(
-<a name="line1225"></a>            this.hostPrefix_, /** @type {string} */ (this.path_));
-<a name="line1226"></a>      } else if (nextArray[0] == &#39;stop&#39;) {
-<a name="line1227"></a>        this.signalError_(goog.net.BrowserChannel.Error.STOP);
-<a name="line1228"></a>      }
-<a name="line1229"></a>    } else if (this.state_ == goog.net.BrowserChannel.State.OPENED) {
-<a name="line1230"></a>      if (nextArray[0] == &#39;stop&#39;) {
-<a name="line1231"></a>        if (batch &amp;&amp; batch.length) {
-<a name="line1232"></a>          this.handler_.channelHandleMultipleArrays(this, batch);
-<a name="line1233"></a>          batch.length = 0;
-<a name="line1234"></a>        }
-<a name="line1235"></a>        this.signalError_(goog.net.BrowserChannel.Error.STOP);
-<a name="line1236"></a>      } else if (nextArray[0] == &#39;noop&#39;) {
-<a name="line1237"></a>        // ignore - noop to keep connection happy
-<a name="line1238"></a>      } else {
-<a name="line1239"></a>        if (batch) {
-<a name="line1240"></a>          batch.push(nextArray);
-<a name="line1241"></a>        } else if (this.handler_) {
-<a name="line1242"></a>          this.handler_.channelHandleArray(this, nextArray);
-<a name="line1243"></a>        }
-<a name="line1244"></a>      }
-<a name="line1245"></a>    }
-<a name="line1246"></a>  }
-<a name="line1247"></a>  if (batch &amp;&amp; batch.length) {
-<a name="line1248"></a>    this.handler_.channelHandleMultipleArrays(this, batch);
-<a name="line1249"></a>  }
-<a name="line1250"></a>};
+<a name="line1204"></a>goog.net.BrowserChannel.prototype.dequeueOutgoingMaps_ = function() {
+<a name="line1205"></a>  var sb = [&#39;count=&#39; + this.outgoingMaps_.length];
+<a name="line1206"></a>  for (var i = 0; i &lt; this.outgoingMaps_.length; i++) {
+<a name="line1207"></a>    var map = this.outgoingMaps_[i];
+<a name="line1208"></a>    goog.structs.forEach(map, function(value, key, coll) {
+<a name="line1209"></a>      sb.push(&#39;req&#39; + i + &#39;_&#39; + key + &#39;=&#39; + encodeURIComponent(value));
+<a name="line1210"></a>    });
+<a name="line1211"></a>    this.pendingMaps_.push(map);
+<a name="line1212"></a>  }
+<a name="line1213"></a>  this.outgoingMaps_.length = 0;
+<a name="line1214"></a>  return sb.join(&#39;&amp;&#39;);
+<a name="line1215"></a>};
+<a name="line1216"></a>
+<a name="line1217"></a>
+<a name="line1218"></a>/**
+<a name="line1219"></a> * Ensures there is a backchannel request for receiving data from the server.
+<a name="line1220"></a> * @private
+<a name="line1221"></a> */
+<a name="line1222"></a>goog.net.BrowserChannel.prototype.ensureBackChannel_ = function() {
+<a name="line1223"></a>  if (this.backChannelRequest_) {
+<a name="line1224"></a>    // already have one
+<a name="line1225"></a>    return;
+<a name="line1226"></a>  }
+<a name="line1227"></a>
+<a name="line1228"></a>  if (this.backChannelTimerId_) {
+<a name="line1229"></a>    // no need to start a new request - one is already scheduled
+<a name="line1230"></a>    return;
+<a name="line1231"></a>  }
+<a name="line1232"></a>
+<a name="line1233"></a>  this.backChannelAttemptId_ = 1;
+<a name="line1234"></a>  this.backChannelTimerId_ = goog.net.BrowserChannel.setTimeout(
+<a name="line1235"></a>      goog.bind(this.onStartBackChannelTimer_, this), 0);
+<a name="line1236"></a>  this.backChannelRetryCount_ = 0;
+<a name="line1237"></a>};
+<a name="line1238"></a>
+<a name="line1239"></a>
+<a name="line1240"></a>/**
+<a name="line1241"></a> * Schedules a back-channel retry, unless the max retries has been reached.
+<a name="line1242"></a> * @return {boolean} true iff a retry was scheduled.
+<a name="line1243"></a> * @private
+<a name="line1244"></a> */
+<a name="line1245"></a>goog.net.BrowserChannel.prototype.maybeRetryBackChannel_ = function() {
+<a name="line1246"></a>  if (this.backChannelRequest_ || this.backChannelTimerId_) {
+<a name="line1247"></a>    // Should be impossible to be called in this state.
+<a name="line1248"></a>    this.channelDebug_.severe(&#39;Request already in progress&#39;);
+<a name="line1249"></a>    return false;
+<a name="line1250"></a>  }
 <a name="line1251"></a>
-<a name="line1252"></a>
-<a name="line1253"></a>/**
-<a name="line1254"></a> * Helper to ensure the BrowserChannel is in the expected state.
-<a name="line1255"></a> * @param {number} state The expected state.
-<a name="line1256"></a> * @private
-<a name="line1257"></a> */
-<a name="line1258"></a>goog.net.BrowserChannel.prototype.ensureInState_ = function(state) {
-<a name="line1259"></a>  if (this.state_ != state) {
-<a name="line1260"></a>    throw Error(&#39;Invalid operation: expected channel state &#39; + state +
-<a name="line1261"></a>      &#39; got channel state &#39; + this.state_);
-<a name="line1262"></a>  }
-<a name="line1263"></a>};
-<a name="line1264"></a>
+<a name="line1252"></a>  if (this.backChannelRetryCount_ &gt;= this.getBackChannelMaxRetries()) {
+<a name="line1253"></a>    return false;
+<a name="line1254"></a>  }
+<a name="line1255"></a>
+<a name="line1256"></a>  this.channelDebug_.debug(&#39;Going to retry GET&#39;);
+<a name="line1257"></a>
+<a name="line1258"></a>  this.backChannelAttemptId_++;
+<a name="line1259"></a>  this.backChannelTimerId_ = goog.net.BrowserChannel.setTimeout(
+<a name="line1260"></a>      goog.bind(this.onStartBackChannelTimer_, this),
+<a name="line1261"></a>      this.getRetryTime_(this.backChannelRetryCount_));
+<a name="line1262"></a>  this.backChannelRetryCount_++;
+<a name="line1263"></a>  return true;
+<a name="line1264"></a>};
 <a name="line1265"></a>
-<a name="line1266"></a>/**
-<a name="line1267"></a> * Signals an error has occurred.
-<a name="line1268"></a> * @param {goog.net.BrowserChannel.Error} error  The error code for the failure.
+<a name="line1266"></a>
+<a name="line1267"></a>/**
+<a name="line1268"></a> * Timer callback for ensureBackChannel_.
 <a name="line1269"></a> * @private
 <a name="line1270"></a> */
-<a name="line1271"></a>goog.net.BrowserChannel.prototype.signalError_ = function(error) {
-<a name="line1272"></a>  this.channelDebug_.info(&#39;Error code &#39; + error);
-<a name="line1273"></a>  if (error == goog.net.BrowserChannel.Error.REQUEST_FAILED ||
-<a name="line1274"></a>      error == goog.net.BrowserChannel.Error.BLOCKED) {
-<a name="line1275"></a>    // Ping google to check if it&#39;s a gmail error or user&#39;s network error
-<a name="line1276"></a>    var imageUri = null;
-<a name="line1277"></a>    if (this.handler_) {
-<a name="line1278"></a>      imageUri = this.handler_.getNetworkTestImageUri(this);
-<a name="line1279"></a>    }
-<a name="line1280"></a>    goog.net.testGoogleCom(
-<a name="line1281"></a>        goog.bind(this.testGoogleComCallback_, this, error), imageUri);
-<a name="line1282"></a>  } else {
-<a name="line1283"></a>    this.onError_(error);
-<a name="line1284"></a>  }
-<a name="line1285"></a>};
+<a name="line1271"></a>goog.net.BrowserChannel.prototype.onStartBackChannelTimer_ = function() {
+<a name="line1272"></a>  this.backChannelTimerId_ = null;
+<a name="line1273"></a>  this.startBackChannel_();
+<a name="line1274"></a>};
+<a name="line1275"></a>
+<a name="line1276"></a>
+<a name="line1277"></a>/**
+<a name="line1278"></a> * Begins a new back channel operation to the server.
+<a name="line1279"></a> * @private
+<a name="line1280"></a> */
+<a name="line1281"></a>goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
+<a name="line1282"></a>  if (!this.okToMakeRequest_()) {
+<a name="line1283"></a>    // channel is cancelled
+<a name="line1284"></a>    return;
+<a name="line1285"></a>  }
 <a name="line1286"></a>
-<a name="line1287"></a>
-<a name="line1288"></a>/**
-<a name="line1289"></a> * Callback for testGoogleCom during error handling.
-<a name="line1290"></a> * @param {goog.net.BrowserChannel.Error} error The error code for the failure.
-<a name="line1291"></a> * @param {boolean} networkUp Whether the network is up.
-<a name="line1292"></a> * @private
-<a name="line1293"></a> */
-<a name="line1294"></a>goog.net.BrowserChannel.prototype.testGoogleComCallback_ =
-<a name="line1295"></a>    function(error, networkUp) {
-<a name="line1296"></a>  if (networkUp) {
-<a name="line1297"></a>    this.channelDebug_.info(&#39;Successfully pinged google.com&#39;);
-<a name="line1298"></a>    this.onError_(error);
-<a name="line1299"></a>  } else {
-<a name="line1300"></a>    this.channelDebug_.info(&#39;Failed to ping google.com&#39;);
-<a name="line1301"></a>    this.onError_(goog.net.BrowserChannel.Error.NETWORK);
-<a name="line1302"></a>  }
-<a name="line1303"></a>};
-<a name="line1304"></a>
-<a name="line1305"></a>
-<a name="line1306"></a>/**
-<a name="line1307"></a> * Called when we&#39;ve determined the final error for a channel. It closes the
-<a name="line1308"></a> * notifiers the handler of the error and closes the channel.
-<a name="line1309"></a> * @param {goog.net.BrowserChannel.Error} error  The error code for the failure.
-<a name="line1310"></a> * @private
-<a name="line1311"></a> */
-<a name="line1312"></a>goog.net.BrowserChannel.prototype.onError_ = function(error) {
-<a name="line1313"></a>  this.channelDebug_.debug(&#39;HttpChannel: error - &#39; + error);
-<a name="line1314"></a>  if (error == goog.net.BrowserChannel.Error.NETWORK) {
-<a name="line1315"></a>    goog.net.BrowserChannel.notifyStatEvent(
-<a name="line1316"></a>        goog.net.BrowserChannel.Stat.ERROR_NETWORK);
-<a name="line1317"></a>  } else {
-<a name="line1318"></a>    goog.net.BrowserChannel.notifyStatEvent(
-<a name="line1319"></a>        goog.net.BrowserChannel.Stat.ERROR_OTHER);
-<a name="line1320"></a>  }
-<a name="line1321"></a>  this.state_ = goog.net.BrowserChannel.State.CLOSED;
-<a name="line1322"></a>  if (this.handler_) {
-<a name="line1323"></a>    this.handler_.channelError(this, error);
-<a name="line1324"></a>  }
-<a name="line1325"></a>  this.onClose_();
-<a name="line1326"></a>  this.cancelRequests_();
-<a name="line1327"></a>};
-<a name="line1328"></a>
-<a name="line1329"></a>
-<a name="line1330"></a>/**
-<a name="line1331"></a> * Called when the channel has been closed. It notifiers the handler of the
-<a name="line1332"></a> * event.
-<a name="line1333"></a> * @private
-<a name="line1334"></a> */
-<a name="line1335"></a>goog.net.BrowserChannel.prototype.onClose_ = function() {
-<a name="line1336"></a>  this.state_ = goog.net.BrowserChannel.State.CLOSED;
-<a name="line1337"></a>  this.lastStatusCode_ = -1;
-<a name="line1338"></a>  if (this.handler_) {
-<a name="line1339"></a>    this.handler_.channelClosed(this);
-<a name="line1340"></a>  }
-<a name="line1341"></a>};
-<a name="line1342"></a>
-<a name="line1343"></a>
-<a name="line1344"></a>/**
-<a name="line1345"></a> * Gets the Uri used for the connection that sends data to the server.
-<a name="line1346"></a> * @param {string} path The path on the host.
-<a name="line1347"></a> * @return {goog.Uri} The forward channel URI.
-<a name="line1348"></a> */
-<a name="line1349"></a>goog.net.BrowserChannel.prototype.getForwardChannelUri =
-<a name="line1350"></a>    function(path) {
-<a name="line1351"></a>  var uri = this.createDataUri(null, path);
-<a name="line1352"></a>  this.channelDebug_.debug(&#39;GetForwardChannelUri: &#39; + uri);
-<a name="line1353"></a>  return uri;
-<a name="line1354"></a>};
-<a name="line1355"></a>
-<a name="line1356"></a>
-<a name="line1357"></a>/**
-<a name="line1358"></a> * Gets the Uri used for the connection that receives data from the server.
-<a name="line1359"></a> * @param {?string} hostPrefix The host prefix.
-<a name="line1360"></a> * @param {string} path The path on the host.
-<a name="line1361"></a> * @return {goog.Uri} The back channel URI.
-<a name="line1362"></a> */
-<a name="line1363"></a>goog.net.BrowserChannel.prototype.getBackChannelUri =
-<a name="line1364"></a>    function(hostPrefix, path) {
-<a name="line1365"></a>  var uri = this.createDataUri(goog.userAgent.IE ? hostPrefix : null, path);
-<a name="line1366"></a>  this.channelDebug_.debug(&#39;GetBackChannelUri: &#39; + uri);
-<a name="line1367"></a>  return uri;
-<a name="line1368"></a>};
-<a name="line1369"></a>
-<a name="line1370"></a>
-<a name="line1371"></a>/**
-<a name="line1372"></a> * Creates a data Uri applying logic for secondary hostprefix, port
-<a name="line1373"></a> * overrides, and versioning.
-<a name="line1374"></a> * @param {?string} hostPrefix The host prefix.
-<a name="line1375"></a> * @param {string} path The path on the host.
-<a name="line1376"></a> * @param {number} opt_overridePort Optional override port.
-<a name="line1377"></a> * @return {goog.Uri} The data URI.
-<a name="line1378"></a> */
-<a name="line1379"></a>goog.net.BrowserChannel.prototype.createDataUri =
-<a name="line1380"></a>    function(hostPrefix, path, opt_overridePort) {
-<a name="line1381"></a>  var locationPage = window.location;
-<a name="line1382"></a>  var hostName;
-<a name="line1383"></a>  if (hostPrefix) {
-<a name="line1384"></a>    hostName = hostPrefix + &#39;.&#39; + locationPage.hostname;
-<a name="line1385"></a>  } else {
-<a name="line1386"></a>    hostName = locationPage.hostname;
-<a name="line1387"></a>  }
-<a name="line1388"></a>
-<a name="line1389"></a>  var port = opt_overridePort || locationPage.port;
-<a name="line1390"></a>
-<a name="line1391"></a>  var uri = goog.Uri.create(locationPage.protocol, null, hostName, port, path);
-<a name="line1392"></a>  if (this.extraParams_) {
-<a name="line1393"></a>    goog.structs.forEach(this.extraParams_, function(value, key, coll) {
-<a name="line1394"></a>      uri.setParameterValue(key, value);
-<a name="line1395"></a>    });
-<a name="line1396"></a>  }
-<a name="line1397"></a>
-<a name="line1398"></a>  // Add the protocol version to the URI.
-<a name="line1399"></a>  uri.setParameterValue(&#39;VER&#39;, goog.net.BrowserChannel.VERSION);
-<a name="line1400"></a>
-<a name="line1401"></a>  // Add the reconnect parameters.
-<a name="line1402"></a>  this.addAdditionalParams_(uri);
-<a name="line1403"></a>
-<a name="line1404"></a>  return uri;
+<a name="line1287"></a>  this.channelDebug_.debug(&#39;Creating new HttpRequest&#39;);
+<a name="line1288"></a>  this.backChannelRequest_ = goog.net.BrowserChannel.createChannelRequest(
+<a name="line1289"></a>      this,
+<a name="line1290"></a>      this.channelDebug_,
+<a name="line1291"></a>      this.sid_,
+<a name="line1292"></a>      &#39;rpc&#39;,
+<a name="line1293"></a>      this.backChannelAttemptId_);
+<a name="line1294"></a>  this.backChannelRequest_.setExtraHeaders(this.extraHeaders_);
+<a name="line1295"></a>  var uri = this.backChannelUri_.clone();
+<a name="line1296"></a>  uri.setParameterValue(&#39;RID&#39;, &#39;rpc&#39;);
+<a name="line1297"></a>  uri.setParameterValue(&#39;SID&#39;, this.sid_);
+<a name="line1298"></a>  uri.setParameterValue(&#39;CI&#39;, this.useChunked_ ? &#39;0&#39; : &#39;1&#39;);
+<a name="line1299"></a>  uri.setParameterValue(&#39;AID&#39;, this.lastArrayId_);
+<a name="line1300"></a>
+<a name="line1301"></a>  // Add the reconnect parameters.
+<a name="line1302"></a>  this.addAdditionalParams_(uri);
+<a name="line1303"></a>
+<a name="line1304"></a>  if (goog.userAgent.IE) {
+<a name="line1305"></a>    uri.setParameterValue(&#39;TYPE&#39;, &#39;html&#39;);
+<a name="line1306"></a>    this.backChannelRequest_.tridentGet(uri, Boolean(this.hostPrefix_));
+<a name="line1307"></a>  } else {
+<a name="line1308"></a>    uri.setParameterValue(&#39;TYPE&#39;, &#39;xmlhttp&#39;);
+<a name="line1309"></a>    this.backChannelRequest_.xmlHttpGet(uri, true);
+<a name="line1310"></a>  }
+<a name="line1311"></a>  this.channelDebug_.debug(&#39;New Request created&#39;);
+<a name="line1312"></a>};
+<a name="line1313"></a>
+<a name="line1314"></a>
+<a name="line1315"></a>/**
+<a name="line1316"></a> * Gives the handler a chance to return an error code and stop channel
+<a name="line1317"></a> * execution. A handler might want to do this to check that the user is still
+<a name="line1318"></a> * logged in, for example.
+<a name="line1319"></a> * @private
+<a name="line1320"></a> * @return {boolean} If it&#39;s OK to make a request.
+<a name="line1321"></a> */
+<a name="line1322"></a>goog.net.BrowserChannel.prototype.okToMakeRequest_ = function() {
+<a name="line1323"></a>  if (this.handler_) {
+<a name="line1324"></a>    var result = this.handler_.okToMakeRequest(this);
+<a name="line1325"></a>    if (result != goog.net.BrowserChannel.Error.OK) {
+<a name="line1326"></a>      this.channelDebug_.debug(&#39;Handler returned error code from &#39; +
+<a name="line1327"></a>                                  &#39;okToMakeRequest&#39;);
+<a name="line1328"></a>      this.signalError_(result);
+<a name="line1329"></a>      return false;
+<a name="line1330"></a>    }
+<a name="line1331"></a>  }
+<a name="line1332"></a>  return true;
+<a name="line1333"></a>};
+<a name="line1334"></a>
+<a name="line1335"></a>
+<a name="line1336"></a>/**
+<a name="line1337"></a> * Callback from BrowserTestChannel for when the channel is finished.
+<a name="line1338"></a> * @param {goog.net.BrowserTestChannel} testChannel The BrowserTestChannel.
+<a name="line1339"></a> * @param {boolean} useChunked  Whether we can chunk responses.
+<a name="line1340"></a> */
+<a name="line1341"></a>goog.net.BrowserChannel.prototype.testConnectionFinished =
+<a name="line1342"></a>    function(testChannel, useChunked) {
+<a name="line1343"></a>  this.channelDebug_.debug(&#39;Test Connection Finished&#39;);
+<a name="line1344"></a>
+<a name="line1345"></a>  this.useChunked_ = this.allowChunkedMode_ &amp;&amp; useChunked;
+<a name="line1346"></a>  this.lastStatusCode_ = testChannel.getLastStatusCode();
+<a name="line1347"></a>  this.connectChannel_();
+<a name="line1348"></a>};
+<a name="line1349"></a>
+<a name="line1350"></a>
+<a name="line1351"></a>/**
+<a name="line1352"></a> * Callback from BrowserTestChannel for when the channel has an error.
+<a name="line1353"></a> * @param {goog.net.BrowserTestChannel} testChannel The BrowserTestChannel.
+<a name="line1354"></a> * @param {goog.net.ChannelRequest.Error} errorCode  The error code of the
+<a name="line1355"></a>       failure.
+<a name="line1356"></a> */
+<a name="line1357"></a>goog.net.BrowserChannel.prototype.testConnectionFailure =
+<a name="line1358"></a>    function(testChannel, errorCode) {
+<a name="line1359"></a>  this.channelDebug_.debug(&#39;Test Connection Failed&#39;);
+<a name="line1360"></a>  this.lastStatusCode_ = testChannel.getLastStatusCode();
+<a name="line1361"></a>  this.signalError_(goog.net.BrowserChannel.Error.REQUEST_FAILED);
+<a name="line1362"></a>};
+<a name="line1363"></a>
+<a name="line1364"></a>
+<a name="line1365"></a>/**
+<a name="line1366"></a> * Callback from BrowserTestChannel for when the channel is blocked.
+<a name="line1367"></a> * @param {goog.net.BrowserTestChannel} testChannel The BrowserTestChannel.
+<a name="line1368"></a> */
+<a name="line1369"></a>goog.net.BrowserChannel.prototype.testConnectionBlocked =
+<a name="line1370"></a>    function(testChannel) {
+<a name="line1371"></a>  this.channelDebug_.debug(&#39;Test Connection Blocked&#39;);
+<a name="line1372"></a>  this.lastStatusCode_ = this.connectionTest_.getLastStatusCode();
+<a name="line1373"></a>  this.signalError_(goog.net.BrowserChannel.Error.BLOCKED);
+<a name="line1374"></a>};
+<a name="line1375"></a>
+<a name="line1376"></a>
+<a name="line1377"></a>/**
+<a name="line1378"></a> * Callback from ChannelRequest for when new data is received
+<a name="line1379"></a> * @param {goog.net.ChannelRequest} request  The request object.
+<a name="line1380"></a> * @param {string} responseText The text of the response.
+<a name="line1381"></a> */
+<a name="line1382"></a>goog.net.BrowserChannel.prototype.onRequestData =
+<a name="line1383"></a>    function(request, responseText) {
+<a name="line1384"></a>  if (this.state_ == goog.net.BrowserChannel.State.CLOSED ||
+<a name="line1385"></a>      (this.backChannelRequest_ != request &amp;&amp;
+<a name="line1386"></a>       this.forwardChannelRequest_ != request)) {
+<a name="line1387"></a>    // either CLOSED or a request we don&#39;t know about (perhaps an old request)
+<a name="line1388"></a>    return;
+<a name="line1389"></a>  }
+<a name="line1390"></a>  this.lastStatusCode_ = request.getLastStatusCode();
+<a name="line1391"></a>
+<a name="line1392"></a>  if (this.forwardChannelRequest_ == request &amp;&amp;
+<a name="line1393"></a>      this.state_ == goog.net.BrowserChannel.State.OPENED) {
+<a name="line1394"></a>    // expect magic cookie in response
+<a name="line1395"></a>    if (responseText != goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE) {
+<a name="line1396"></a>      this.channelDebug_.debug(&#39;Bad data returned - missing/invald &#39; +
+<a name="line1397"></a>                                  &#39;magic cookie&#39;);
+<a name="line1398"></a>      this.signalError_(goog.net.BrowserChannel.Error.BAD_RESPONSE);
+<a name="line1399"></a>    }
+<a name="line1400"></a>  } else {
+<a name="line1401"></a>    if (!goog.string.isEmpty(responseText)) {
+<a name="line1402"></a>      this.onInput_(/** @type {Array} */ (goog.json.unsafeParse(responseText)));
+<a name="line1403"></a>    }
+<a name="line1404"></a>  }
 <a name="line1405"></a>};
 <a name="line1406"></a>
 <a name="line1407"></a>
 <a name="line1408"></a>/**
-<a name="line1409"></a> * Gets whether this channel is currently active. This is used to determine the
-<a name="line1410"></a> * length of time to wait before retrying. This call delegates to the handler.
-<a name="line1411"></a> * @return {boolean} Whether the channel is currently active.
-<a name="line1412"></a> */
-<a name="line1413"></a>goog.net.BrowserChannel.prototype.isActive = function() {
-<a name="line1414"></a>  return this.handler_.isActive(this);
-<a name="line1415"></a>};
-<a name="line1416"></a>
-<a name="line1417"></a>
-<a name="line1418"></a>/**
-<a name="line1419"></a> * Wrapper around SafeTimeout which calls the start and end execution hooks
-<a name="line1420"></a> * with a try...finally block.
-<a name="line1421"></a> * @param {Function} fn The callback function.
-<a name="line1422"></a> * @param {number} ms The time in MS for the timer.
-<a name="line1423"></a> * @return {number} The ID of the timer.
-<a name="line1424"></a> */
-<a name="line1425"></a>goog.net.BrowserChannel.setTimeout = function(fn, ms) {
-<a name="line1426"></a>  if (!goog.isFunction(fn)) {
-<a name="line1427"></a>    throw Error(&#39;Fn must not be null and must be a function&#39;);
-<a name="line1428"></a>  }
-<a name="line1429"></a>  return goog.global.setTimeout(function() {
-<a name="line1430"></a>    goog.net.BrowserChannel.onStartExecution();
-<a name="line1431"></a>    try {
-<a name="line1432"></a>      fn();
-<a name="line1433"></a>    } finally {
-<a name="line1434"></a>      goog.net.BrowserChannel.onEndExecution();
-<a name="line1435"></a>    }
-<a name="line1436"></a>  }, ms);
-<a name="line1437"></a>};
-<a name="line1438"></a>
-<a name="line1439"></a>
-<a name="line1440"></a>/**
-<a name="line1441"></a> * Helper function to call the start hook
-<a name="line1442"></a> */
-<a name="line1443"></a>goog.net.BrowserChannel.onStartExecution = function() {
-<a name="line1444"></a>  goog.net.BrowserChannel.startExecutionHook_();
-<a name="line1445"></a>};
+<a name="line1409"></a> * Returns whether or not the given error/status combination is fatal or not.
+<a name="line1410"></a> * On fatal errors we immediately close the session rather than retrying the
+<a name="line1411"></a> * failed request.
+<a name="line1412"></a> * @param {goog.net.ChannelRequest.Error?} error The error code for the failed
+<a name="line1413"></a> * request.
+<a name="line1414"></a> * @param {number} statusCode The last HTTP status code.
+<a name="line1415"></a> * @return {boolean} Whether or not the error is fatal.
+<a name="line1416"></a> * @private
+<a name="line1417"></a> */
+<a name="line1418"></a>goog.net.BrowserChannel.isFatalError_ =
+<a name="line1419"></a>    function(error, statusCode) {
+<a name="line1420"></a>  return error == goog.net.ChannelRequest.Error.UNKNOWN_SESSION_ID ||
+<a name="line1421"></a>      (error == goog.net.ChannelRequest.Error.STATUS &amp;&amp;
+<a name="line1422"></a>       statusCode &gt; 0);
+<a name="line1423"></a>};
+<a name="line1424"></a>
+<a name="line1425"></a>
+<a name="line1426"></a>/**
+<a name="line1427"></a> * Callback from ChannelRequest that indicates a request has completed.
+<a name="line1428"></a> * @param {goog.net.ChannelRequest} request  The request object.
+<a name="line1429"></a> */
+<a name="line1430"></a>goog.net.BrowserChannel.prototype.onRequestComplete =
+<a name="line1431"></a>    function(request) {
+<a name="line1432"></a>  this.channelDebug_.debug(&#39;Request complete&#39;);
+<a name="line1433"></a>  var type;
+<a name="line1434"></a>  if (this.backChannelRequest_ == request) {
+<a name="line1435"></a>    this.backChannelRequest_ = null;
+<a name="line1436"></a>    type = goog.net.BrowserChannel.ChannelType_.BACK_CHANNEL;
+<a name="line1437"></a>  } else if (this.forwardChannelRequest_ == request) {
+<a name="line1438"></a>    this.forwardChannelRequest_ = null;
+<a name="line1439"></a>    type = goog.net.BrowserChannel.ChannelType_.FORWARD_CHANNEL;
+<a name="line1440"></a>  } else {
+<a name="line1441"></a>    // return if it was an old request from a previous session
+<a name="line1442"></a>    return;
+<a name="line1443"></a>  }
+<a name="line1444"></a>
+<a name="line1445"></a>  this.lastStatusCode_ = request.getLastStatusCode();
 <a name="line1446"></a>
-<a name="line1447"></a>
-<a name="line1448"></a>/**
-<a name="line1449"></a> * Helper function to call the end hook
-<a name="line1450"></a> */
-<a name="line1451"></a>goog.net.BrowserChannel.onEndExecution = function() {
-<a name="line1452"></a>  goog.net.BrowserChannel.endExecutionHook_();
-<a name="line1453"></a>};
-<a name="line1454"></a>
-<a name="line1455"></a>
-<a name="line1456"></a>/**
-<a name="line1457"></a> * Returns the singleton event target for stat events.
-<a name="line1458"></a> * @return {goog.events.EventTarget} The event target for stat events.
-<a name="line1459"></a> */
-<a name="line1460"></a>goog.net.BrowserChannel.getStatEventTarget = function() {
-<a name="line1461"></a>  return goog.net.BrowserChannel.statEventTarget_;
-<a name="line1462"></a>};
-<a name="line1463"></a>
-<a name="line1464"></a>
-<a name="line1465"></a>/**
-<a name="line1466"></a> * Helper function to call the stat event callback.
-<a name="line1467"></a> * @param {goog.net.BrowserChannel.Stat} stat The stat.
-<a name="line1468"></a> */
-<a name="line1469"></a>goog.net.BrowserChannel.notifyStatEvent = function(stat) {
-<a name="line1470"></a>  var target = goog.net.BrowserChannel.statEventTarget_;
-<a name="line1471"></a>  target.dispatchEvent(
-<a name="line1472"></a>      new goog.net.BrowserChannel.StatEvent(target, stat));
-<a name="line1473"></a>};
-<a name="line1474"></a>
-<a name="line1475"></a>
-<a name="line1476"></a>/**
-<a name="line1477"></a> * A LogSaver that can be used to accumulate all the debug logs for
-<a name="line1478"></a> * BrowserChannels so they can be sent to the server when a problem is
-<a name="line1479"></a> * detected.
-<a name="line1480"></a> */
-<a name="line1481"></a>goog.net.BrowserChannel.LogSaver = {};
-<a name="line1482"></a>
-<a name="line1483"></a>/**
-<a name="line1484"></a> * Buffer for accumulating the debug log
-<a name="line1485"></a> * @type {goog.structs.CircularBuffer}
-<a name="line1486"></a> * @private
-<a name="line1487"></a> */
-<a name="line1488"></a>goog.net.BrowserChannel.LogSaver.buffer_ =
-<a name="line1489"></a>    new goog.structs.CircularBuffer(1000);
-<a name="line1490"></a>
-<a name="line1491"></a>/**
-<a name="line1492"></a> * Whether we&#39;re currently accumulating the debug log.
-<a name="line1493"></a> * @type {boolean}
-<a name="line1494"></a> * @private
-<a name="line1495"></a> */
-<a name="line1496"></a>goog.net.BrowserChannel.LogSaver.enabled_ = false;
-<a name="line1497"></a>
-<a name="line1498"></a>
-<a name="line1499"></a>/**
-<a name="line1500"></a> * Formatter for saving logs.
-<a name="line1501"></a> * @type {goog.debug.Formatter}
-<a name="line1502"></a> * @private
-<a name="line1503"></a> */
-<a name="line1504"></a>goog.net.BrowserChannel.LogSaver.formatter_ = new goog.debug.TextFormatter();
-<a name="line1505"></a>
-<a name="line1506"></a>/**
-<a name="line1507"></a> * Returns whether the LogSaver is enabled.
-<a name="line1508"></a> * @return {boolean} Whether saving is enabled or disabled.
-<a name="line1509"></a> */
-<a name="line1510"></a>goog.net.BrowserChannel.LogSaver.isEnabled = function() {
-<a name="line1511"></a>  return goog.net.BrowserChannel.LogSaver.enabled_
-<a name="line1512"></a>};
-<a name="line1513"></a>
-<a name="line1514"></a>
-<a name="line1515"></a>/**
-<a name="line1516"></a> * Enables of disables the LogSaver.
-<a name="line1517"></a> * @param {boolean} enable Whether to enable or disable saving.
-<a name="line1518"></a> */
-<a name="line1519"></a>goog.net.BrowserChannel.LogSaver.setEnabled = function(enable) {
-<a name="line1520"></a>  if (enable == goog.net.BrowserChannel.LogSaver.enabled_) {
-<a name="line1521"></a>    return;
-<a name="line1522"></a>  }
-<a name="line1523"></a>
-<a name="line1524"></a>  var fn = goog.net.BrowserChannel.LogSaver.addLogRecord;
-<a name="line1525"></a>  var logger = goog.debug.Logger.getLogger(&#39;goog.net&#39;);
-<a name="line1526"></a>  if (enable) {
-<a name="line1527"></a>    logger.addHandler(fn);
-<a name="line1528"></a>  } else {
-<a name="line1529"></a>    logger.removeHandler(fn);
-<a name="line1530"></a>  }
-<a name="line1531"></a>};
-<a name="line1532"></a>
-<a name="line1533"></a>
-<a name="line1534"></a>/**
-<a name="line1535"></a> * Adds a log record.
-<a name="line1536"></a> * @param {goog.debug.LogRecord} logRecord the LogRecord.
-<a name="line1537"></a> */
-<a name="line1538"></a>goog.net.BrowserChannel.LogSaver.addLogRecord = function(logRecord) {
-<a name="line1539"></a>  goog.net.BrowserChannel.LogSaver.buffer_.add(
-<a name="line1540"></a>      goog.net.BrowserChannel.LogSaver.formatter_.formatRecord(logRecord));
-<a name="line1541"></a>};
-<a name="line1542"></a>
-<a name="line1543"></a>/**
-<a name="line1544"></a> * Returns the log as a single string.
-<a name="line1545"></a> * @return {string} The log as a single string.
-<a name="line1546"></a> */
-<a name="line1547"></a>goog.net.BrowserChannel.LogSaver.getBuffer = function() {
-<a name="line1548"></a>  return goog.net.BrowserChannel.LogSaver.buffer_.getValues().join(&#39;&#39;);
-<a name="line1549"></a>};
-<a name="line1550"></a>
-<a name="line1551"></a>
-<a name="line1552"></a>/**
-<a name="line1553"></a> * Clears the buffer
-<a name="line1554"></a> */
-<a name="line1555"></a>goog.net.BrowserChannel.LogSaver.clearBuffer = function() {
-<a name="line1556"></a>  goog.net.BrowserChannel.LogSaver.buffer_.clear();
-<a name="line1557"></a>};
-<a name="line1558"></a>
-<a name="line1559"></a>
-<a name="line1560"></a>
-<a name="line1561"></a>/**
-<a name="line1562"></a> * Interface for the browser channel handler
-<a name="line1563"></a> * @constructor
-<a name="line1564"></a> */
-<a name="line1565"></a>goog.net.BrowserChannel.Handler = function() {
-<a name="line1566"></a>};
-<a name="line1567"></a>
-<a name="line1568"></a>
-<a name="line1569"></a>/**
-<a name="line1570"></a> * Callback handler for when a batch of response arrays is received from the
-<a name="line1571"></a> * server.
-<a name="line1572"></a> * @type {Function}
-<a name="line1573"></a> */
-<a name="line1574"></a>goog.net.BrowserChannel.Handler.prototype.channelHandleMultipleArrays = null;
-<a name="line1575"></a>
-<a name="line1576"></a>
-<a name="line1577"></a>/**
-<a name="line1578"></a> * Whether it&#39;s okay to make a request to the server. A handler can return
-<a name="line1579"></a> * false if the channel should fail. For example, if the user has logged out,
-<a name="line1580"></a> * the handler may want all requests to fail immediately.
-<a name="line1581"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
-<a name="line1582"></a> * @return {goog.net.BrowserChannel.Error} An error code. The code should
-<a name="line1583"></a> * return goog.net.BrowserChannel.Error.OK to indicate it&#39;s okay. Any other
-<a name="line1584"></a> * error code will cause a failure.
-<a name="line1585"></a> */
-<a name="line1586"></a>goog.net.BrowserChannel.Handler.prototype.okToMakeRequest =
-<a name="line1587"></a>    function(browserChannel) {
-<a name="line1588"></a>  return goog.net.BrowserChannel.Error.OK;
-<a name="line1589"></a>};
-<a name="line1590"></a>
-<a name="line1591"></a>
-<a name="line1592"></a>/**
-<a name="line1593"></a> * Indicates the BrowserChannel has successfully negotiated with the server
-<a name="line1594"></a> * and can now send and receive data.
-<a name="line1595"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
-<a name="line1596"></a> */
-<a name="line1597"></a>goog.net.BrowserChannel.Handler.prototype.channelOpened =
-<a name="line1598"></a>    function(browserChannel) {
-<a name="line1599"></a>};
-<a name="line1600"></a>
-<a name="line1601"></a>
-<a name="line1602"></a>/**
-<a name="line1603"></a> * New input is available for the application to process.
-<a name="line1604"></a> *
-<a name="line1605"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
-<a name="line1606"></a> * @param {Array} array The data array.
-<a name="line1607"></a> */
-<a name="line1608"></a>goog.net.BrowserChannel.Handler.prototype.channelHandleArray =
-<a name="line1609"></a>    function(browserChannel, array) {
-<a name="line1610"></a>
-<a name="line1611"></a>};
-<a name="line1612"></a>
-<a name="line1613"></a>
-<a name="line1614"></a>/**
-<a name="line1615"></a> * Indicates an error occurred on the BrowserChannel.
-<a name="line1616"></a> *
-<a name="line1617"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
-<a name="line1618"></a> * @param {goog.net.BrowserChannel.Error} error The error code.
-<a name="line1619"></a> */
-<a name="line1620"></a>goog.net.BrowserChannel.Handler.prototype.channelError =
-<a name="line1621"></a>    function(browserChannel, error) {
-<a name="line1622"></a>};
-<a name="line1623"></a>
-<a name="line1624"></a>
-<a name="line1625"></a>/**
-<a name="line1626"></a> * Indicates the BrowserChannel is closed.
-<a name="line1627"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
-<a name="line1628"></a> */
-<a name="line1629"></a>goog.net.BrowserChannel.Handler.prototype.channelClosed =
-<a name="line1630"></a>    function(browserChannel) {
-<a name="line1631"></a>};
-<a name="line1632"></a>
-<a name="line1633"></a>
-<a name="line1634"></a>/**
-<a name="line1635"></a> * Gets any parameters that should be added at the time another connection is
-<a name="line1636"></a> * made to the server.
-<a name="line1637"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
-<a name="line1638"></a> * @return {Object} Extra parameter keys and values to add to the
-<a name="line1639"></a> *                  requests.
-<a name="line1640"></a> */
-<a name="line1641"></a>goog.net.BrowserChannel.Handler.prototype.getAdditionalParams =
-<a name="line1642"></a>    function(browserChannel) {
-<a name="line1643"></a>  return {};
-<a name="line1644"></a>};
-<a name="line1645"></a>
-<a name="line1646"></a>
-<a name="line1647"></a>/**
-<a name="line1648"></a> * Gets the URI of an image that can be used to test network connectivity.
-<a name="line1649"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
-<a name="line1650"></a> * @return {goog.Uri?} A custom URI to load for the network test.
-<a name="line1651"></a> */
-<a name="line1652"></a>goog.net.BrowserChannel.Handler.prototype.getNetworkTestImageUri =
-<a name="line1653"></a>    function(browserChannel) {
-<a name="line1654"></a>  return null;
-<a name="line1655"></a>};
-<a name="line1656"></a>
-<a name="line1657"></a>
-<a name="line1658"></a>/**
-<a name="line1659"></a> * Gets whether this channel is currently active. This is used to determine the
-<a name="line1660"></a> * length of time to wait before retrying.
-<a name="line1661"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
-<a name="line1662"></a> * @return {boolean} Whether the channel is currently active.
-<a name="line1663"></a> */
-<a name="line1664"></a>goog.net.BrowserChannel.Handler.prototype.isActive = function(browserChannel) {
-<a name="line1665"></a>  return true;
-<a name="line1666"></a>};
+<a name="line1447"></a>  if (this.state_ == goog.net.BrowserChannel.State.CLOSED) {
+<a name="line1448"></a>    return;
+<a name="line1449"></a>  }
+<a name="line1450"></a>
+<a name="line1451"></a>  if (request.getSuccess()) {
+<a name="line1452"></a>    // Yay!
+<a name="line1453"></a>    if (type == goog.net.BrowserChannel.ChannelType_.FORWARD_CHANNEL) {
+<a name="line1454"></a>      var size = request.getPostData() ? request.getPostData().length : 0;
+<a name="line1455"></a>      goog.net.BrowserChannel.notifyTimingEvent(size,
+<a name="line1456"></a>          goog.now() - request.getRequestStartTime(),
+<a name="line1457"></a>          this.forwardChannelRetryCount_);
+<a name="line1458"></a>      this.ensureForwardChannel_();
+<a name="line1459"></a>      this.pendingMaps_.length = 0;
+<a name="line1460"></a>    } else {  // i.e., back-channel
+<a name="line1461"></a>      this.ensureBackChannel_();
+<a name="line1462"></a>    }
+<a name="line1463"></a>    return;
+<a name="line1464"></a>  }
+<a name="line1465"></a>  // Else unsuccessful. Fall through.
+<a name="line1466"></a>
+<a name="line1467"></a>  var lastError = request.getLastError();
+<a name="line1468"></a>  if (!goog.net.BrowserChannel.isFatalError_(lastError,
+<a name="line1469"></a>                                             this.lastStatusCode_)) {
+<a name="line1470"></a>    // Maybe retry.
+<a name="line1471"></a>    this.channelDebug_.debug(&#39;Maybe retrying, last error: &#39; +
+<a name="line1472"></a>        goog.net.ChannelRequest.errorStringFromCode(
+<a name="line1473"></a>            /** @type {goog.net.ChannelRequest.Error} */ (lastError),
+<a name="line1474"></a>            this.lastStatusCode_));
+<a name="line1475"></a>    if (type == goog.net.BrowserChannel.ChannelType_.FORWARD_CHANNEL) {
+<a name="line1476"></a>      if (this.maybeRetryForwardChannel_(request)) {
+<a name="line1477"></a>        return;
+<a name="line1478"></a>      }
+<a name="line1479"></a>    }
+<a name="line1480"></a>    if (type == goog.net.BrowserChannel.ChannelType_.BACK_CHANNEL) {
+<a name="line1481"></a>      if (this.maybeRetryBackChannel_()) {
+<a name="line1482"></a>        return;
+<a name="line1483"></a>      }
+<a name="line1484"></a>    }
+<a name="line1485"></a>    // Else exceeded max retries. Fall through.
+<a name="line1486"></a>    this.channelDebug_.debug(&#39;Exceeded max number of retries&#39;);
+<a name="line1487"></a>  } else {
+<a name="line1488"></a>    // Else fatal error. Fall through and mark the pending maps as failed.
+<a name="line1489"></a>    this.channelDebug_.debug(&#39;Not retrying due to error type&#39;);
+<a name="line1490"></a>  }
+<a name="line1491"></a>
+<a name="line1492"></a>
+<a name="line1493"></a>  // Can&#39;t save this session. :(
+<a name="line1494"></a>  this.channelDebug_.debug(&#39;Error: HTTP request failed&#39;);
+<a name="line1495"></a>  switch (lastError) {
+<a name="line1496"></a>    case goog.net.ChannelRequest.Error.NO_DATA:
+<a name="line1497"></a>      this.signalError_(goog.net.BrowserChannel.Error.NO_DATA);
+<a name="line1498"></a>      break;
+<a name="line1499"></a>    case goog.net.ChannelRequest.Error.BAD_DATA:
+<a name="line1500"></a>      this.signalError_(goog.net.BrowserChannel.Error.BAD_DATA);
+<a name="line1501"></a>      break;
+<a name="line1502"></a>    case goog.net.ChannelRequest.Error.UNKNOWN_SESSION_ID:
+<a name="line1503"></a>      this.signalError_(goog.net.BrowserChannel.Error.UNKNOWN_SESSION_ID);
+<a name="line1504"></a>      break;
+<a name="line1505"></a>    default:
+<a name="line1506"></a>      this.signalError_(goog.net.BrowserChannel.Error.REQUEST_FAILED);
+<a name="line1507"></a>      break;
+<a name="line1508"></a>  }
+<a name="line1509"></a>};
+<a name="line1510"></a>
+<a name="line1511"></a>
+<a name="line1512"></a>/**
+<a name="line1513"></a> * @param {number} retryCount Number of retries so far.
+<a name="line1514"></a> * @return {number} Time in ms before firing next retry request.
+<a name="line1515"></a> * @private
+<a name="line1516"></a> */
+<a name="line1517"></a>goog.net.BrowserChannel.prototype.getRetryTime_ = function(retryCount) {
+<a name="line1518"></a>  var retryTime = goog.net.BrowserChannel.RETRY_DELAY_MS +
+<a name="line1519"></a>      Math.floor(Math.random() * goog.net.BrowserChannel.RETRY_DELAY_SEED);
+<a name="line1520"></a>  if (!this.isActive()) {
+<a name="line1521"></a>    this.channelDebug_.debug(&#39;Inactive channel&#39;);
+<a name="line1522"></a>    retryTime =
+<a name="line1523"></a>        retryTime * goog.net.BrowserChannel.INACTIVE_CHANNEL_RETRY_FACTOR;
+<a name="line1524"></a>  }
+<a name="line1525"></a>  // Backoff for subsequent retries
+<a name="line1526"></a>  retryTime = retryTime * retryCount;
+<a name="line1527"></a>  return retryTime;
+<a name="line1528"></a>};
+<a name="line1529"></a>
+<a name="line1530"></a>
+<a name="line1531"></a>/**
+<a name="line1532"></a> * Processes the data returned by the server.
+<a name="line1533"></a> * @param {Array} respArray The response array returned by the server.
+<a name="line1534"></a> * @private
+<a name="line1535"></a> */
+<a name="line1536"></a>goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
+<a name="line1537"></a>  // respArray is an array of arrays
+<a name="line1538"></a>  var batch = this.handler_ &amp;&amp; this.handler_.channelHandleMultipleArrays ?
+<a name="line1539"></a>      [] : null;
+<a name="line1540"></a>  for (var i = 0; i &lt; respArray.length; i++) {
+<a name="line1541"></a>    var nextArray = respArray[i];
+<a name="line1542"></a>    this.lastArrayId_ = nextArray[0];
+<a name="line1543"></a>    nextArray = nextArray[1];
+<a name="line1544"></a>    if (this.state_ == goog.net.BrowserChannel.State.OPENING) {
+<a name="line1545"></a>      if (nextArray[0] == &#39;c&#39;) {
+<a name="line1546"></a>        this.sid_ = nextArray[1];
+<a name="line1547"></a>        if (this.allowHostPrefix_) {
+<a name="line1548"></a>          this.hostPrefix_ = nextArray[2];
+<a name="line1549"></a>        } else {
+<a name="line1550"></a>          this.hostPrefix_ = null;
+<a name="line1551"></a>        }
+<a name="line1552"></a>        this.state_ = goog.net.BrowserChannel.State.OPENED;
+<a name="line1553"></a>        if (this.handler_) {
+<a name="line1554"></a>          this.handler_.channelOpened(this);
+<a name="line1555"></a>        }
+<a name="line1556"></a>        this.backChannelUri_ = this.getBackChannelUri(
+<a name="line1557"></a>            this.hostPrefix_, /** @type {string} */ (this.path_));
+<a name="line1558"></a>        // Open connection to receive data
+<a name="line1559"></a>        this.ensureBackChannel_();
+<a name="line1560"></a>      } else if (nextArray[0] == &#39;stop&#39;) {
+<a name="line1561"></a>        this.signalError_(goog.net.BrowserChannel.Error.STOP);
+<a name="line1562"></a>      }
+<a name="line1563"></a>    } else if (this.state_ == goog.net.BrowserChannel.State.OPENED) {
+<a name="line1564"></a>      if (nextArray[0] == &#39;stop&#39;) {
+<a name="line1565"></a>        if (batch &amp;&amp; batch.length) {
+<a name="line1566"></a>          this.handler_.channelHandleMultipleArrays(this, batch);
+<a name="line1567"></a>          batch.length = 0;
+<a name="line1568"></a>        }
+<a name="line1569"></a>        this.signalError_(goog.net.BrowserChannel.Error.STOP);
+<a name="line1570"></a>      } else if (nextArray[0] == &#39;noop&#39;) {
+<a name="line1571"></a>        // ignore - noop to keep connection happy
+<a name="line1572"></a>      } else {
+<a name="line1573"></a>        if (batch) {
+<a name="line1574"></a>          batch.push(nextArray);
+<a name="line1575"></a>        } else if (this.handler_) {
+<a name="line1576"></a>          this.handler_.channelHandleArray(this, nextArray);
+<a name="line1577"></a>        }
+<a name="line1578"></a>      }
+<a name="line1579"></a>      // We have received useful data on the back-channel, so clear its retry
+<a name="line1580"></a>      // count. We do this because back-channels by design do not complete
+<a name="line1581"></a>      // quickly, so on a flaky connection we could have many fail to complete
+<a name="line1582"></a>      // fully but still deliver a lot of data before they fail. We don&#39;t want
+<a name="line1583"></a>      // to count such failures towards the retry limit, because we don&#39;t want
+<a name="line1584"></a>      // to give up on a session if we can still receive data.
+<a name="line1585"></a>      this.backChannelRetryCount_ = 0;
+<a name="line1586"></a>    }
+<a name="line1587"></a>  }
+<a name="line1588"></a>  if (batch &amp;&amp; batch.length) {
+<a name="line1589"></a>    this.handler_.channelHandleMultipleArrays(this, batch);
+<a name="line1590"></a>  }
+<a name="line1591"></a>};
+<a name="line1592"></a>
+<a name="line1593"></a>
+<a name="line1594"></a>/**
+<a name="line1595"></a> * Helper to ensure the BrowserChannel is in the expected state.
+<a name="line1596"></a> * @param {number} state The expected state.
+<a name="line1597"></a> * @private
+<a name="line1598"></a> */
+<a name="line1599"></a>goog.net.BrowserChannel.prototype.ensureInState_ = function(state) {
+<a name="line1600"></a>  if (this.state_ != state) {
+<a name="line1601"></a>    throw Error(&#39;Invalid operation: expected channel state &#39; + state +
+<a name="line1602"></a>      &#39; got channel state &#39; + this.state_);
+<a name="line1603"></a>  }
+<a name="line1604"></a>};
+<a name="line1605"></a>
+<a name="line1606"></a>
+<a name="line1607"></a>/**
+<a name="line1608"></a> * Signals an error has occurred.
+<a name="line1609"></a> * @param {goog.net.BrowserChannel.Error} error  The error code for the failure.
+<a name="line1610"></a> * @private
+<a name="line1611"></a> */
+<a name="line1612"></a>goog.net.BrowserChannel.prototype.signalError_ = function(error) {
+<a name="line1613"></a>  this.channelDebug_.info(&#39;Error code &#39; + error);
+<a name="line1614"></a>  if (error == goog.net.BrowserChannel.Error.REQUEST_FAILED ||
+<a name="line1615"></a>      error == goog.net.BrowserChannel.Error.BLOCKED) {
+<a name="line1616"></a>    // Ping google to check if it&#39;s a server error or user&#39;s network error.
+<a name="line1617"></a>    var imageUri = null;
+<a name="line1618"></a>    if (this.handler_) {
+<a name="line1619"></a>      imageUri = this.handler_.getNetworkTestImageUri(this);
+<a name="line1620"></a>    }
+<a name="line1621"></a>    goog.net.testGoogleCom(
+<a name="line1622"></a>        goog.bind(this.testGoogleComCallback_, this), imageUri);
+<a name="line1623"></a>  } else {
+<a name="line1624"></a>    goog.net.BrowserChannel.notifyStatEvent(
+<a name="line1625"></a>        goog.net.BrowserChannel.Stat.ERROR_OTHER);
+<a name="line1626"></a>  }
+<a name="line1627"></a>  this.onError_(error);
+<a name="line1628"></a>};
+<a name="line1629"></a>
+<a name="line1630"></a>
+<a name="line1631"></a>/**
+<a name="line1632"></a> * Callback for testGoogleCom during error handling.
+<a name="line1633"></a> * @param {boolean} networkUp Whether the network is up.
+<a name="line1634"></a> * @private
+<a name="line1635"></a> */
+<a name="line1636"></a>goog.net.BrowserChannel.prototype.testGoogleComCallback_ = function(networkUp) {
+<a name="line1637"></a>  if (networkUp) {
+<a name="line1638"></a>    this.channelDebug_.info(&#39;Successfully pinged google.com&#39;);
+<a name="line1639"></a>    goog.net.BrowserChannel.notifyStatEvent(
+<a name="line1640"></a>        goog.net.BrowserChannel.Stat.ERROR_OTHER);
+<a name="line1641"></a>  } else {
+<a name="line1642"></a>    this.channelDebug_.info(&#39;Failed to ping google.com&#39;);
+<a name="line1643"></a>    goog.net.BrowserChannel.notifyStatEvent(
+<a name="line1644"></a>        goog.net.BrowserChannel.Stat.ERROR_NETWORK);
+<a name="line1645"></a>  }
+<a name="line1646"></a>};
+<a name="line1647"></a>
+<a name="line1648"></a>
+<a name="line1649"></a>/**
+<a name="line1650"></a> * Called when we&#39;ve determined the final error for a channel. It closes the
+<a name="line1651"></a> * notifiers the handler of the error and closes the channel.
+<a name="line1652"></a> * @param {goog.net.BrowserChannel.Error} error  The error code for the failure.
+<a name="line1653"></a> * @private
+<a name="line1654"></a> */
+<a name="line1655"></a>goog.net.BrowserChannel.prototype.onError_ = function(error) {
+<a name="line1656"></a>  this.channelDebug_.debug(&#39;HttpChannel: error - &#39; + error);
+<a name="line1657"></a>  this.state_ = goog.net.BrowserChannel.State.CLOSED;
+<a name="line1658"></a>  if (this.handler_) {
+<a name="line1659"></a>    this.handler_.channelError(this, error);
+<a name="line1660"></a>  }
+<a name="line1661"></a>  this.onClose_();
+<a name="line1662"></a>  this.cancelRequests_();
+<a name="line1663"></a>};
+<a name="line1664"></a>
+<a name="line1665"></a>
+<a name="line1666"></a>/**
+<a name="line1667"></a> * Called when the channel has been closed. It notifiers the handler of the
+<a name="line1668"></a> * event, and reports any pending or undelivered maps.
+<a name="line1669"></a> * @private
+<a name="line1670"></a> */
+<a name="line1671"></a>goog.net.BrowserChannel.prototype.onClose_ = function() {
+<a name="line1672"></a>  this.state_ = goog.net.BrowserChannel.State.CLOSED;
+<a name="line1673"></a>  this.lastStatusCode_ = -1;
+<a name="line1674"></a>  if (this.handler_) {
+<a name="line1675"></a>    if (this.pendingMaps_.length == 0 &amp;&amp; this.outgoingMaps_.length == 0) {
+<a name="line1676"></a>      this.handler_.channelClosed(this);
+<a name="line1677"></a>    } else {
+<a name="line1678"></a>      this.channelDebug_.debug(&#39;Number of undelivered maps&#39; +
+<a name="line1679"></a>          &#39;, pending: &#39; + this.pendingMaps_.length +
+<a name="line1680"></a>          &#39;, outgoing: &#39; + this.outgoingMaps_.length);
+<a name="line1681"></a>
+<a name="line1682"></a>      var copyOfPendingMaps = goog.array.clone(this.pendingMaps_);
+<a name="line1683"></a>      var copyOfUndeliveredMaps = goog.array.clone(this.outgoingMaps_);
+<a name="line1684"></a>      this.pendingMaps_.length = 0;
+<a name="line1685"></a>      this.outgoingMaps_.length = 0;
+<a name="line1686"></a>
+<a name="line1687"></a>      this.handler_.channelClosed(this,
+<a name="line1688"></a>          copyOfPendingMaps,
+<a name="line1689"></a>          copyOfUndeliveredMaps);
+<a name="line1690"></a>    }
+<a name="line1691"></a>  }
+<a name="line1692"></a>};
+<a name="line1693"></a>
+<a name="line1694"></a>
+<a name="line1695"></a>/**
+<a name="line1696"></a> * Gets the Uri used for the connection that sends data to the server.
+<a name="line1697"></a> * @param {string} path The path on the host.
+<a name="line1698"></a> * @return {goog.Uri} The forward channel URI.
+<a name="line1699"></a> */
+<a name="line1700"></a>goog.net.BrowserChannel.prototype.getForwardChannelUri =
+<a name="line1701"></a>    function(path) {
+<a name="line1702"></a>  var uri = this.createDataUri(null, path);
+<a name="line1703"></a>  this.channelDebug_.debug(&#39;GetForwardChannelUri: &#39; + uri);
+<a name="line1704"></a>  return uri;
+<a name="line1705"></a>};
+<a name="line1706"></a>
+<a name="line1707"></a>
+<a name="line1708"></a>/**
+<a name="line1709"></a> * Gets the Uri used for the connection that receives data from the server.
+<a name="line1710"></a> * @param {?string} hostPrefix The host prefix.
+<a name="line1711"></a> * @param {string} path The path on the host.
+<a name="line1712"></a> * @return {goog.Uri} The back channel URI.
+<a name="line1713"></a> */
+<a name="line1714"></a>goog.net.BrowserChannel.prototype.getBackChannelUri =
+<a name="line1715"></a>    function(hostPrefix, path) {
+<a name="line1716"></a>  var uri = this.createDataUri(goog.userAgent.IE ? hostPrefix : null, path);
+<a name="line1717"></a>  this.channelDebug_.debug(&#39;GetBackChannelUri: &#39; + uri);
+<a name="line1718"></a>  return uri;
+<a name="line1719"></a>};
+<a name="line1720"></a>
+<a name="line1721"></a>
+<a name="line1722"></a>/**
+<a name="line1723"></a> * Creates a data Uri applying logic for secondary hostprefix, port
+<a name="line1724"></a> * overrides, and versioning.
+<a name="line1725"></a> * @param {?string} hostPrefix The host prefix.
+<a name="line1726"></a> * @param {string} path The path on the host.
+<a name="line1727"></a> * @param {number=} opt_overridePort Optional override port.
+<a name="line1728"></a> * @return {goog.Uri} The data URI.
+<a name="line1729"></a> */
+<a name="line1730"></a>goog.net.BrowserChannel.prototype.createDataUri =
+<a name="line1731"></a>    function(hostPrefix, path, opt_overridePort) {
+<a name="line1732"></a>  var locationPage = window.location;
+<a name="line1733"></a>  var hostName;
+<a name="line1734"></a>  if (hostPrefix) {
+<a name="line1735"></a>    hostName = hostPrefix + &#39;.&#39; + locationPage.hostname;
+<a name="line1736"></a>  } else {
+<a name="line1737"></a>    hostName = locationPage.hostname;
+<a name="line1738"></a>  }
+<a name="line1739"></a>
+<a name="line1740"></a>  var port = opt_overridePort || locationPage.port;
+<a name="line1741"></a>
+<a name="line1742"></a>  var uri = goog.Uri.create(locationPage.protocol, null, hostName, port, path);
+<a name="line1743"></a>  if (this.extraParams_) {
+<a name="line1744"></a>    goog.structs.forEach(this.extraParams_, function(value, key, coll) {
+<a name="line1745"></a>      uri.setParameterValue(key, value);
+<a name="line1746"></a>    });
+<a name="line1747"></a>  }
+<a name="line1748"></a>
+<a name="line1749"></a>  // Add the protocol version to the URI.
+<a name="line1750"></a>  uri.setParameterValue(&#39;VER&#39;, goog.net.BrowserChannel.VERSION);
+<a name="line1751"></a>
+<a name="line1752"></a>  // Add the reconnect parameters.
+<a name="line1753"></a>  this.addAdditionalParams_(uri);
+<a name="line1754"></a>
+<a name="line1755"></a>  return uri;
+<a name="line1756"></a>};
+<a name="line1757"></a>
+<a name="line1758"></a>
+<a name="line1759"></a>/**
+<a name="line1760"></a> * Gets whether this channel is currently active. This is used to determine the
+<a name="line1761"></a> * length of time to wait before retrying. This call delegates to the handler.
+<a name="line1762"></a> * @return {boolean} Whether the channel is currently active.
+<a name="line1763"></a> */
+<a name="line1764"></a>goog.net.BrowserChannel.prototype.isActive = function() {
+<a name="line1765"></a>  return this.handler_.isActive(this);
+<a name="line1766"></a>};
+<a name="line1767"></a>
+<a name="line1768"></a>
+<a name="line1769"></a>/**
+<a name="line1770"></a> * Wrapper around SafeTimeout which calls the start and end execution hooks
+<a name="line1771"></a> * with a try...finally block.
+<a name="line1772"></a> * @param {Function} fn The callback function.
+<a name="line1773"></a> * @param {number} ms The time in MS for the timer.
+<a name="line1774"></a> * @return {number} The ID of the timer.
+<a name="line1775"></a> */
+<a name="line1776"></a>goog.net.BrowserChannel.setTimeout = function(fn, ms) {
+<a name="line1777"></a>  if (!goog.isFunction(fn)) {
+<a name="line1778"></a>    throw Error(&#39;Fn must not be null and must be a function&#39;);
+<a name="line1779"></a>  }
+<a name="line1780"></a>  return goog.global.setTimeout(function() {
+<a name="line1781"></a>    goog.net.BrowserChannel.onStartExecution();
+<a name="line1782"></a>    try {
+<a name="line1783"></a>      fn();
+<a name="line1784"></a>    } finally {
+<a name="line1785"></a>      goog.net.BrowserChannel.onEndExecution();
+<a name="line1786"></a>    }
+<a name="line1787"></a>  }, ms);
+<a name="line1788"></a>};
+<a name="line1789"></a>
+<a name="line1790"></a>
+<a name="line1791"></a>/**
+<a name="line1792"></a> * Helper function to call the start hook
+<a name="line1793"></a> */
+<a name="line1794"></a>goog.net.BrowserChannel.onStartExecution = function() {
+<a name="line1795"></a>  goog.net.BrowserChannel.startExecutionHook_();
+<a name="line1796"></a>};
+<a name="line1797"></a>
+<a name="line1798"></a>
+<a name="line1799"></a>/**
+<a name="line1800"></a> * Helper function to call the end hook
+<a name="line1801"></a> */
+<a name="line1802"></a>goog.net.BrowserChannel.onEndExecution = function() {
+<a name="line1803"></a>  goog.net.BrowserChannel.endExecutionHook_();
+<a name="line1804"></a>};
+<a name="line1805"></a>
+<a name="line1806"></a>
+<a name="line1807"></a>/**
+<a name="line1808"></a> * Returns the singleton event target for stat events.
+<a name="line1809"></a> * @return {goog.events.EventTarget} The event target for stat events.
+<a name="line1810"></a> */
+<a name="line1811"></a>goog.net.BrowserChannel.getStatEventTarget = function() {
+<a name="line1812"></a>  return goog.net.BrowserChannel.statEventTarget_;
+<a name="line1813"></a>};
+<a name="line1814"></a>
+<a name="line1815"></a>
+<a name="line1816"></a>/**
+<a name="line1817"></a> * Helper function to call the stat event callback.
+<a name="line1818"></a> * @param {goog.net.BrowserChannel.Stat} stat The stat.
+<a name="line1819"></a> */
+<a name="line1820"></a>goog.net.BrowserChannel.notifyStatEvent = function(stat) {
+<a name="line1821"></a>  var target = goog.net.BrowserChannel.statEventTarget_;
+<a name="line1822"></a>  target.dispatchEvent(
+<a name="line1823"></a>      new goog.net.BrowserChannel.StatEvent(target, stat));
+<a name="line1824"></a>};
+<a name="line1825"></a>
+<a name="line1826"></a>
+<a name="line1827"></a>/**
+<a name="line1828"></a> * Helper function to notify listeners about POST request performance.
+<a name="line1829"></a> *
+<a name="line1830"></a> * @param {number} size Number of characters in the POST data.
+<a name="line1831"></a> * @param {number} rtt The amount of time from POST start to response.
+<a name="line1832"></a> * @param {number} retries The number of times the POST had to be retried.
+<a name="line1833"></a> */
+<a name="line1834"></a>goog.net.BrowserChannel.notifyTimingEvent = function(size, rtt, retries) {
+<a name="line1835"></a>  var target = goog.net.BrowserChannel.statEventTarget_;
+<a name="line1836"></a>  target.dispatchEvent(
+<a name="line1837"></a>      new goog.net.BrowserChannel.TimingEvent(target, size, rtt, retries));
+<a name="line1838"></a>};
+<a name="line1839"></a>
+<a name="line1840"></a>
+<a name="line1841"></a>/**
+<a name="line1842"></a> * A LogSaver that can be used to accumulate all the debug logs for
+<a name="line1843"></a> * BrowserChannels so they can be sent to the server when a problem is
+<a name="line1844"></a> * detected.
+<a name="line1845"></a> */
+<a name="line1846"></a>goog.net.BrowserChannel.LogSaver = {};
+<a name="line1847"></a>
+<a name="line1848"></a>/**
+<a name="line1849"></a> * Buffer for accumulating the debug log
+<a name="line1850"></a> * @type {goog.structs.CircularBuffer}
+<a name="line1851"></a> * @private
+<a name="line1852"></a> */
+<a name="line1853"></a>goog.net.BrowserChannel.LogSaver.buffer_ =
+<a name="line1854"></a>    new goog.structs.CircularBuffer(1000);
+<a name="line1855"></a>
+<a name="line1856"></a>/**
+<a name="line1857"></a> * Whether we&#39;re currently accumulating the debug log.
+<a name="line1858"></a> * @type {boolean}
+<a name="line1859"></a> * @private
+<a name="line1860"></a> */
+<a name="line1861"></a>goog.net.BrowserChannel.LogSaver.enabled_ = false;
+<a name="line1862"></a>
+<a name="line1863"></a>
+<a name="line1864"></a>/**
+<a name="line1865"></a> * Formatter for saving logs.
+<a name="line1866"></a> * @type {goog.debug.Formatter}
+<a name="line1867"></a> * @private
+<a name="line1868"></a> */
+<a name="line1869"></a>goog.net.BrowserChannel.LogSaver.formatter_ = new goog.debug.TextFormatter();
+<a name="line1870"></a>
+<a name="line1871"></a>/**
+<a name="line1872"></a> * Returns whether the LogSaver is enabled.
+<a name="line1873"></a> * @return {boolean} Whether saving is enabled or disabled.
+<a name="line1874"></a> */
+<a name="line1875"></a>goog.net.BrowserChannel.LogSaver.isEnabled = function() {
+<a name="line1876"></a>  return goog.net.BrowserChannel.LogSaver.enabled_
+<a name="line1877"></a>};
+<a name="line1878"></a>
+<a name="line1879"></a>
+<a name="line1880"></a>/**
+<a name="line1881"></a> * Enables of disables the LogSaver.
+<a name="line1882"></a> * @param {boolean} enable Whether to enable or disable saving.
+<a name="line1883"></a> */
+<a name="line1884"></a>goog.net.BrowserChannel.LogSaver.setEnabled = function(enable) {
+<a name="line1885"></a>  if (enable == goog.net.BrowserChannel.LogSaver.enabled_) {
+<a name="line1886"></a>    return;
+<a name="line1887"></a>  }
+<a name="line1888"></a>
+<a name="line1889"></a>  var fn = goog.net.BrowserChannel.LogSaver.addLogRecord;
+<a name="line1890"></a>  var logger = goog.debug.Logger.getLogger(&#39;goog.net&#39;);
+<a name="line1891"></a>  if (enable) {
+<a name="line1892"></a>    logger.addHandler(fn);
+<a name="line1893"></a>  } else {
+<a name="line1894"></a>    logger.removeHandler(fn);
+<a name="line1895"></a>  }
+<a name="line1896"></a>};
+<a name="line1897"></a>
+<a name="line1898"></a>
+<a name="line1899"></a>/**
+<a name="line1900"></a> * Adds a log record.
+<a name="line1901"></a> * @param {goog.debug.LogRecord} logRecord the LogRecord.
+<a name="line1902"></a> */
+<a name="line1903"></a>goog.net.BrowserChannel.LogSaver.addLogRecord = function(logRecord) {
+<a name="line1904"></a>  goog.net.BrowserChannel.LogSaver.buffer_.add(
+<a name="line1905"></a>      goog.net.BrowserChannel.LogSaver.formatter_.formatRecord(logRecord));
+<a name="line1906"></a>};
+<a name="line1907"></a>
+<a name="line1908"></a>/**
+<a name="line1909"></a> * Returns the log as a single string.
+<a name="line1910"></a> * @return {string} The log as a single string.
+<a name="line1911"></a> */
+<a name="line1912"></a>goog.net.BrowserChannel.LogSaver.getBuffer = function() {
+<a name="line1913"></a>  return goog.net.BrowserChannel.LogSaver.buffer_.getValues().join(&#39;&#39;);
+<a name="line1914"></a>};
+<a name="line1915"></a>
+<a name="line1916"></a>
+<a name="line1917"></a>/**
+<a name="line1918"></a> * Clears the buffer
+<a name="line1919"></a> */
+<a name="line1920"></a>goog.net.BrowserChannel.LogSaver.clearBuffer = function() {
+<a name="line1921"></a>  goog.net.BrowserChannel.LogSaver.buffer_.clear();
+<a name="line1922"></a>};
+<a name="line1923"></a>
+<a name="line1924"></a>
+<a name="line1925"></a>
+<a name="line1926"></a>/**
+<a name="line1927"></a> * Interface for the browser channel handler
+<a name="line1928"></a> * @constructor
+<a name="line1929"></a> */
+<a name="line1930"></a>goog.net.BrowserChannel.Handler = function() {
+<a name="line1931"></a>};
+<a name="line1932"></a>
+<a name="line1933"></a>
+<a name="line1934"></a>/**
+<a name="line1935"></a> * Callback handler for when a batch of response arrays is received from the
+<a name="line1936"></a> * server.
+<a name="line1937"></a> * @type {Function}
+<a name="line1938"></a> */
+<a name="line1939"></a>goog.net.BrowserChannel.Handler.prototype.channelHandleMultipleArrays = null;
+<a name="line1940"></a>
+<a name="line1941"></a>
+<a name="line1942"></a>/**
+<a name="line1943"></a> * Whether it&#39;s okay to make a request to the server. A handler can return
+<a name="line1944"></a> * false if the channel should fail. For example, if the user has logged out,
+<a name="line1945"></a> * the handler may want all requests to fail immediately.
+<a name="line1946"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+<a name="line1947"></a> * @return {goog.net.BrowserChannel.Error} An error code. The code should
+<a name="line1948"></a> * return goog.net.BrowserChannel.Error.OK to indicate it&#39;s okay. Any other
+<a name="line1949"></a> * error code will cause a failure.
+<a name="line1950"></a> */
+<a name="line1951"></a>goog.net.BrowserChannel.Handler.prototype.okToMakeRequest =
+<a name="line1952"></a>    function(browserChannel) {
+<a name="line1953"></a>  return goog.net.BrowserChannel.Error.OK;
+<a name="line1954"></a>};
+<a name="line1955"></a>
+<a name="line1956"></a>
+<a name="line1957"></a>/**
+<a name="line1958"></a> * Indicates the BrowserChannel has successfully negotiated with the server
+<a name="line1959"></a> * and can now send and receive data.
+<a name="line1960"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+<a name="line1961"></a> */
+<a name="line1962"></a>goog.net.BrowserChannel.Handler.prototype.channelOpened =
+<a name="line1963"></a>    function(browserChannel) {
+<a name="line1964"></a>};
+<a name="line1965"></a>
+<a name="line1966"></a>
+<a name="line1967"></a>/**
+<a name="line1968"></a> * New input is available for the application to process.
+<a name="line1969"></a> *
+<a name="line1970"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+<a name="line1971"></a> * @param {Array} array The data array.
+<a name="line1972"></a> */
+<a name="line1973"></a>goog.net.BrowserChannel.Handler.prototype.channelHandleArray =
+<a name="line1974"></a>    function(browserChannel, array) {
+<a name="line1975"></a>};
+<a name="line1976"></a>
+<a name="line1977"></a>
+<a name="line1978"></a>/**
+<a name="line1979"></a> * Indicates an error occurred on the BrowserChannel.
+<a name="line1980"></a> *
+<a name="line1981"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+<a name="line1982"></a> * @param {goog.net.BrowserChannel.Error} error The error code.
+<a name="line1983"></a> */
+<a name="line1984"></a>goog.net.BrowserChannel.Handler.prototype.channelError =
+<a name="line1985"></a>    function(browserChannel, error) {
+<a name="line1986"></a>};
+<a name="line1987"></a>
+<a name="line1988"></a>
+<a name="line1989"></a>/**
+<a name="line1990"></a> * Indicates the BrowserChannel is closed. Also notifies about which maps,
+<a name="line1991"></a> * if any, that may not have been delivered to the server.
+<a name="line1992"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+<a name="line1993"></a> * @param {Array.&lt;Object|goog.structs.Map&gt;} opt_pendingMaps The array of
+<a name="line1994"></a> *     pending maps, which may or may not have been delivered to the server.
+<a name="line1995"></a> * @param {Array.&lt;Object|goog.structs.Map&gt;} opt_undeliveredMaps The array of
+<a name="line1996"></a> *     undelivered maps, which have definitely not been delivered to the server.
+<a name="line1997"></a> */
+<a name="line1998"></a>goog.net.BrowserChannel.Handler.prototype.channelClosed =
+<a name="line1999"></a>    function(browserChannel, opt_pendingMaps, opt_undeliveredMaps) {
+<a name="line2000"></a>};
+<a name="line2001"></a>
+<a name="line2002"></a>
+<a name="line2003"></a>/**
+<a name="line2004"></a> * Gets any parameters that should be added at the time another connection is
+<a name="line2005"></a> * made to the server.
+<a name="line2006"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+<a name="line2007"></a> * @return {Object} Extra parameter keys and values to add to the
+<a name="line2008"></a> *                  requests.
+<a name="line2009"></a> */
+<a name="line2010"></a>goog.net.BrowserChannel.Handler.prototype.getAdditionalParams =
+<a name="line2011"></a>    function(browserChannel) {
+<a name="line2012"></a>  return {};
+<a name="line2013"></a>};
+<a name="line2014"></a>
+<a name="line2015"></a>
+<a name="line2016"></a>/**
+<a name="line2017"></a> * Gets the URI of an image that can be used to test network connectivity.
+<a name="line2018"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+<a name="line2019"></a> * @return {goog.Uri?} A custom URI to load for the network test.
+<a name="line2020"></a> */
+<a name="line2021"></a>goog.net.BrowserChannel.Handler.prototype.getNetworkTestImageUri =
+<a name="line2022"></a>    function(browserChannel) {
+<a name="line2023"></a>  return null;
+<a name="line2024"></a>};
+<a name="line2025"></a>
+<a name="line2026"></a>
+<a name="line2027"></a>/**
+<a name="line2028"></a> * Gets whether this channel is currently active. This is used to determine the
+<a name="line2029"></a> * length of time to wait before retrying.
+<a name="line2030"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+<a name="line2031"></a> * @return {boolean} Whether the channel is currently active.
+<a name="line2032"></a> */
+<a name="line2033"></a>goog.net.BrowserChannel.Handler.prototype.isActive = function(browserChannel) {
+<a name="line2034"></a>  return true;
+<a name="line2035"></a>};
 </pre>
 
 

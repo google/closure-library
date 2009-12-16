@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -79,9 +80,9 @@
 <a name="line36"></a> * the timer.
 <a name="line37"></a> *
 <a name="line38"></a> * @param {Function} listener Function to call when the delay completes.
-<a name="line39"></a> * @param {number} opt_interval The default length of the invocation delay (in
+<a name="line39"></a> * @param {number=} opt_interval The default length of the invocation delay (in
 <a name="line40"></a> *     milliseconds).
-<a name="line41"></a> * @param {Object} opt_handler The object scope to invoke the function in.
+<a name="line41"></a> * @param {Object=} opt_handler The object scope to invoke the function in.
 <a name="line42"></a> * @constructor
 <a name="line43"></a> * @extends {goog.Disposable}
 <a name="line44"></a> */
@@ -150,7 +151,7 @@
 <a name="line107"></a> * Starts the delay timer. The provided listener function will be called after
 <a name="line108"></a> * the specified interval. Calling start on an active timer will reset the
 <a name="line109"></a> * delay interval.
-<a name="line110"></a> * @param {number} opt_interval If specified, overrides the object&#39;s default
+<a name="line110"></a> * @param {number=} opt_interval If specified, overrides the object&#39;s default
 <a name="line111"></a> *     interval with this one (in milliseconds).
 <a name="line112"></a> */
 <a name="line113"></a>goog.async.Delay.prototype.start = function(opt_interval) {

@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -77,13 +89,13 @@ to parent object so that you can set the vaule
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_ds_BaseDataNode.html">goog.ds.BaseDataNode</a></span></td><td></td></tr>
   <tr><td>goog.ds.JsPropertyDataSource</td><td><span class="type"><a href="class_goog_ds_BaseDataNode.html">goog.ds.BaseDataNode</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -123,7 +135,7 @@ to parent object so that you can set the vaule
    <tr class="even">
      <td>
         <span class="entryName">opt_parentDataNode</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></div>
+        : <div class="fullType"><span class="type">goog.ds.DataNode=</span></div>
         <div class="entryOverview">The parent data node. If omitted, assumes that the parent object is the parent data node.</div>
      </td>
    </tr>
@@ -435,7 +447,7 @@ to parent object so that you can set the vaule
    <tr class="odd">
      <td>
         <span class="entryName">opt_canCreate</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether you can create the child node if it doesn&#39;t exist already.</div>
      </td>
    </tr>
@@ -566,7 +578,7 @@ Should return an empty DataNode list if no child nodes.
    <tr class="even">
      <td>
         <span class="entryName">opt_selector</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">String selector to choose child nodes.</div>
      </td>
    </tr>

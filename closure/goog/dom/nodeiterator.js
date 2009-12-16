@@ -53,11 +53,11 @@ goog.require('goog.dom.TagIterator');
  * that it will continue iterating until the end of the document instead of
  * until exiting the start node.
  *
- * @param {Node} opt_node The start node.  Defaults to an empty iterator.
- * @param {boolean} opt_reversed Whether to traverse the tree in reverse.
- * @param {boolean} opt_unconstrained Whether the iterator is not constrained to
- *     the starting node and its children.
- * @param {number} opt_depth The starting tree depth.
+ * @param {Node=} opt_node The start node.  Defaults to an empty iterator.
+ * @param {boolean=} opt_reversed Whether to traverse the tree in reverse.
+ * @param {boolean=} opt_unconstrained Whether the iterator is not constrained
+ *     to the starting node and its children.
+ * @param {number=} opt_depth The starting tree depth.
  * @constructor
  * @extends {goog.dom.TagIterator}
  */

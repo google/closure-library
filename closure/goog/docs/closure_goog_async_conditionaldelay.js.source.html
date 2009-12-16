@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -107,7 +108,7 @@
 <a name="line64"></a> * @param {function():boolean} listener Function to call when the delay
 <a name="line65"></a> *     completes. Should return a value that type-converts to {@code true} if
 <a name="line66"></a> *     the call succeeded and this delay should be stopped.
-<a name="line67"></a> * @param {Object} opt_handler The object scope to invoke the function in.
+<a name="line67"></a> * @param {Object=} opt_handler The object scope to invoke the function in.
 <a name="line68"></a> * @constructor
 <a name="line69"></a> * @extends {goog.Disposable}
 <a name="line70"></a> */
@@ -183,9 +184,9 @@
 <a name="line140"></a> * repeatedly after the specified interval until the function returns
 <a name="line141"></a> * {@code true} or the timeout is exceeded. Calling start on an active timer
 <a name="line142"></a> * will stop the timer first.
-<a name="line143"></a> * @param {number} opt_interval The time interval between the function
+<a name="line143"></a> * @param {number=} opt_interval The time interval between the function
 <a name="line144"></a> *     invocations (in milliseconds). Default is 0.
-<a name="line145"></a> * @param {number} opt_timeout The timeout interval (in milliseconds). Takes
+<a name="line145"></a> * @param {number=} opt_timeout The timeout interval (in milliseconds). Takes
 <a name="line146"></a> *     precedence over the {@code opt_interval}, i.e. if the timeout is less
 <a name="line147"></a> *     than the invocation interval, the function will be called when the
 <a name="line148"></a> *     timeout is exceeded. A negative value means no timeout. Default is 0.

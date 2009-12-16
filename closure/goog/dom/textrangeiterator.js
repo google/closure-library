@@ -38,7 +38,7 @@ goog.require('goog.iter.StopIteration');
  * @param {number} endOffset The offset in to endNode.  If endNode is
  *     an element, indicates an offset in to childNodes.  If endNode is a
  *     text node, indicates an offset in to nodeValue.
- * @param {boolean} opt_reverse Whether to traverse nodes in reverse.
+ * @param {boolean=} opt_reverse Whether to traverse nodes in reverse.
  * @constructor
  * @extends {goog.dom.RangeIterator}
  */

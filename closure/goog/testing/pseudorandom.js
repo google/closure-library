@@ -29,8 +29,8 @@ goog.require('goog.Disposable');
  * Class for unit testing code that uses Math.random. Generates deterministic
  * random numbers.
  *
- * @param {number} opt_seed The seed to use.
- * @param {boolean} opt_install Whether to install the PseudoRandom at
+ * @param {number=} opt_seed The seed to use.
+ * @param {boolean=} opt_install Whether to install the PseudoRandom at
  *     construction time.
  * @extends {goog.Disposable}
  * @constructor

@@ -104,8 +104,8 @@ goog.math.lerp = function(a, b, x) {
  * tolerance to adjust for floating pount errors.
  * @param {number} a A number.
  * @param {number} b A number.
- * @param {number} opt_tolerance Optional tolerance range. Defaults to 0.000001.
- *     If specified, should be greater than 0.
+ * @param {number=} opt_tolerance Optional tolerance range. Defaults
+ *     to 0.000001. If specified, should be greater than 0.
  * @return {boolean} Whether {@code a} and {@code b} are nearly equal.
  */
 goog.math.nearlyEquals = function(a, b, opt_tolerance) {
@@ -227,10 +227,10 @@ goog.math.sign = function(x) {
  *
  * @param {Array.<Object>} array1 First array of objects.
  * @param {Array.<Object>} array2 Second array of objects.
- * @param {Function} opt_compareFn Function that acts as a custom comparator
+ * @param {Function=} opt_compareFn Function that acts as a custom comparator
  *     for the array ojects. Function should return true if objects are equal,
  *     otherwise false.
- * @param {Function} opt_collectorFn Function used to decide what to return
+ * @param {Function=} opt_collectorFn Function used to decide what to return
  *     as a result subsequence. It accepts 2 arguments: index of common element
  *     in the first array and index in the second. The default function returns
  *     element from the first array.
@@ -295,7 +295,7 @@ goog.math.longestCommonSubsequence = function(
 
 /**
  * Returns the sum of the arguments.
- * @param {number} var_args Numbers to add.
+ * @param {...number} var_args Numbers to add.
  * @return {number} The sum of the arguments (0 if no arguments were provided,
  *     {@code NaN} if any of the arguments is not a valid number).
  */
@@ -309,7 +309,7 @@ goog.math.sum = function(var_args) {
 
 /**
  * Returns the arithmetic mean of the arguments.
- * @param {number} var_args Numbers to average.
+ * @param {...number} var_args Numbers to average.
  * @return {number} The average of the arguments ({@code NaN} if no arguments
  *     were provided or any of the arguments is not a valid number).
  */
@@ -322,7 +322,7 @@ goog.math.average = function(var_args) {
  * Returns the sample standard deviation of the arguments.  For a definition of
  * sample standard deviation, see e.g.
  * http://en.wikipedia.org/wiki/Standard_deviation
- * @param {number} var_args Number samples to analyze.
+ * @param {...number} var_args Number samples to analyze.
  * @return {number} The sample standard deviation of the arguments (0 if fewer
  *     than two samples were provided, or {@code NaN} if any of the samples is
  *     not a valid number).

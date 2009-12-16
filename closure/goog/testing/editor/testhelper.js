@@ -123,8 +123,9 @@ goog.testing.editor.TestHelper.prototype.findTextNode = function(textOrRegexp) {
  * @param {Node|string} from Node or text of the node to start the selection at.
  * @param {number} fromOffset Offset within the above node to start the
  *     selection at.
- * @param {Node|string} opt_to Node or text of the node to end the selection at.
- * @param {number} opt_toOffset Offset within the above node to end the
+ * @param {Node|string=} opt_to Node or text of the node to end the selection
+ *     at.
+ * @param {number=} opt_toOffset Offset within the above node to end the
  *     selection at.
  */
 goog.testing.editor.TestHelper.prototype.select = function(from, fromOffset,

@@ -50,9 +50,7 @@
 goog.provide('goog.cssom.iframe.style');
 
 goog.require('goog.cssom');
-goog.require('goog.debug.Logger');
 goog.require('goog.dom');
-goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classes');
 goog.require('goog.style');
@@ -205,7 +203,7 @@ goog.cssom.iframe.style.CssRuleSet_.prototype.clone = function() {
  * Set the declaration text with properties from a given object.
  * @param {Object} sourceObject Object whose properties and values should
  *     be used to generate the declaration text.
- * @param {boolean} opt_important Whether !important should be added to each
+ * @param {boolean=} opt_important Whether !important should be added to each
  *     declaration.
  */
 goog.cssom.iframe.style.CssRuleSet_.prototype.setDeclarationTextFromObject =
@@ -296,7 +294,7 @@ goog.cssom.iframe.style.makeColorRuleImportant_ = function(cssText) {
  *   <li>adjacent sibling selectors (div + h1)
  *   <li>attribute selectors (input[type=submit])
  * </ul>
- * @param {string} opt_selectorString String containing selectors to parse.
+ * @param {string=} opt_selectorString String containing selectors to parse.
  * @constructor
  * @private
  */
@@ -700,9 +698,9 @@ goog.cssom.iframe.style.textProperties_ = [
  * with an iframe and preserve the css styling of the contents.
  *
  * @param {Element} element The element for which context should be calculated.
- * @param {boolean} opt_forceRuleSetCacheUpdate Flag to force the internal
+ * @param {boolean=} opt_forceRuleSetCacheUpdate Flag to force the internal
  *     cache of rulesets to refresh itself before we read the same.
- * @param {boolean} opt_copyBackgroundContext Flag indicating that if the
+ * @param {boolean=} opt_copyBackgroundContext Flag indicating that if the
  *     {@code element} has a transparent background, background rules
  *     from the nearest ancestor element(s) that have background-color
  *     and/or background-image set should be copied.

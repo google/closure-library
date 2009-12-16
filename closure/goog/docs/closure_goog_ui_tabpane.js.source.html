@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -85,10 +86,10 @@
 <a name="line42"></a> * container or created from scratch.
 <a name="line43"></a> *
 <a name="line44"></a> * @param {Element} el Container element to create the tab pane out of.
-<a name="line45"></a> * @param {goog.ui.TabPane.TabLocation} opt_tabLocation Location of the tabs
+<a name="line45"></a> * @param {goog.ui.TabPane.TabLocation=} opt_tabLocation Location of the tabs
 <a name="line46"></a> *     in relation to the content container. Default is top.
-<a name="line47"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
-<a name="line48"></a> * @param {boolean} opt_useMouseDown Whether to use MOUSEDOWN instead of CLICK
+<a name="line47"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+<a name="line48"></a> * @param {boolean=} opt_useMouseDown Whether to use MOUSEDOWN instead of CLICK
 <a name="line49"></a> *     for tab changes.
 <a name="line50"></a> * @extends {goog.events.EventTarget}
 <a name="line51"></a> * @constructor
@@ -309,7 +310,7 @@
 <a name="line266"></a> * Adds a page to the tab pane.
 <a name="line267"></a> *
 <a name="line268"></a> * @param {goog.ui.TabPane.TabPage} page Tab page to add.
-<a name="line269"></a> * @param {number} opt_index Zero based index to insert tab at. Inserted at the
+<a name="line269"></a> * @param {number=} opt_index Zero based index to insert tab at. Inserted at the
 <a name="line270"></a> *                           end if not specified.
 <a name="line271"></a> */
 <a name="line272"></a>goog.ui.TabPane.prototype.addPage = function(page, opt_index) {
@@ -507,11 +508,11 @@
 <a name="line464"></a>/**
 <a name="line465"></a> * Object representing an individual tab pane.
 <a name="line466"></a> *
-<a name="line467"></a> * @param {Element} opt_el Container element to create the pane out of.
-<a name="line468"></a> * @param {Element|string} opt_title Pane title or element to use as the title.
-<a name="line469"></a> *                                   If not specified the first element in the
-<a name="line470"></a> *                                   container is used as the title.
-<a name="line471"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper
+<a name="line467"></a> * @param {Element=} opt_el Container element to create the pane out of.
+<a name="line468"></a> * @param {(Element|string)=} opt_title Pane title or element to use as the
+<a name="line469"></a> *     title. If not specified the first element in the container is used as
+<a name="line470"></a> *     the title.
+<a name="line471"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper
 <a name="line472"></a> * The first parameter can be omitted.
 <a name="line473"></a> * @constructor
 <a name="line474"></a> */
@@ -677,7 +678,7 @@
 <a name="line634"></a> * Sets parent tab pane for tab page.
 <a name="line635"></a> *
 <a name="line636"></a> * @param {goog.ui.TabPane?} tabPane Tab strip object.
-<a name="line637"></a> * @param {number} opt_index Index of page in pane.
+<a name="line637"></a> * @param {number=} opt_index Index of page in pane.
 <a name="line638"></a> * @private
 <a name="line639"></a> */
 <a name="line640"></a>goog.ui.TabPane.TabPage.prototype.setParent_ = function(tabPane, opt_index) {

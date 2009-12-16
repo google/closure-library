@@ -21,14 +21,11 @@
 goog.provide('goog.positioning.MenuAnchoredPosition');
 
 goog.require('goog.math.Box');
-goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AnchoredViewportPosition');
 goog.require('goog.positioning.Corner');
-goog.require('goog.positioning.CornerBit');
 goog.require('goog.positioning.Overflow');
-goog.require('goog.positioning.OverflowStatus');
 
 
 /**
@@ -43,10 +40,10 @@ goog.require('goog.positioning.OverflowStatus');
  *     anchored against.
  * @param {goog.positioning.Corner} corner Corner of anchored element the
  *     movable element should be positioned at.
- * @param {boolean} opt_adjust Whether the positioning should be adjusted until
+ * @param {boolean=} opt_adjust Whether the positioning should be adjusted until
  *    the element fits inside the viewport even if that means that the anchored
  *    corners are ignored.
- * @param {boolean} opt_resize Whether the positioning should be adjusted until
+ * @param {boolean=} opt_resize Whether the positioning should be adjusted until
  *    the element fits inside the viewport on the X axis and it's heigh is
  *    resized so if fits in the viewport.  This take precedence over
  *    opt_adjust.
@@ -77,8 +74,8 @@ goog.inherits(goog.positioning.MenuAnchoredPosition,
  * @param {Element} movableElement Element to position.
  * @param {goog.positioning.Corner} movableCorner Corner of the movable element
  *     that should be positioned adjacent to the anchored element.
- * @param {goog.math.Box} opt_margin A margin specifin pixels.
- * @param {goog.math.Size} opt_preferredSize Preferred size of the
+ * @param {goog.math.Box=} opt_margin A margin specifin pixels.
+ * @param {goog.math.Size=} opt_preferredSize Preferred size of the
  *     moveableElement.
  */
 goog.positioning.MenuAnchoredPosition.prototype.reposition =

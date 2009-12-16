@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -81,12 +93,12 @@ new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.date.Interval</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -110,7 +122,7 @@ new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
    <tr class="even">
      <td>
         <span class="entryName">opt_years</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type">string=</span></div>
         <div class="entryOverview">Years or string representing date part.</div>
      </td>
    </tr>
@@ -118,7 +130,7 @@ new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
    <tr class="odd">
      <td>
         <span class="entryName">opt_months</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Months or number of whatever date part specified by first parameter.</div>
      </td>
    </tr>
@@ -126,7 +138,7 @@ new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
    <tr class="even">
      <td>
         <span class="entryName">opt_days</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Days.</div>
      </td>
    </tr>
@@ -134,7 +146,7 @@ new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
    <tr class="odd">
      <td>
         <span class="entryName">opt_hours</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Hours.</div>
      </td>
    </tr>
@@ -142,7 +154,7 @@ new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
    <tr class="even">
      <td>
         <span class="entryName">opt_minutes</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Minutes.</div>
      </td>
    </tr>
@@ -150,7 +162,7 @@ new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
    <tr class="odd">
      <td>
         <span class="entryName">opt_seconds</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Seconds.</div>
      </td>
    </tr>
@@ -246,7 +258,7 @@ new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line647">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line648">code &raquo;</a>
   </td>
      </tr>
 
@@ -292,7 +304,7 @@ new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line584">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line585">code &raquo;</a>
   </td>
      </tr>
 
@@ -359,7 +371,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line571">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line572">code &raquo;</a>
   </td>
      </tr>
 
@@ -405,7 +417,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line636">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line637">code &raquo;</a>
   </td>
      </tr>
 
@@ -452,7 +464,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
    <tr class="even">
      <td>
         <span class="entryName">opt_verbose</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Include zero fields in the duration string.</div>
      </td>
    </tr>
@@ -470,7 +482,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line512">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line513">code &raquo;</a>
   </td>
      </tr>
 
@@ -563,7 +575,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line478">code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line479">code &raquo;</a>
   </td>
      </tr>
 
@@ -612,7 +624,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line609">Code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line610">Code &raquo;</a>
   </td>
      </tr>
 
@@ -645,7 +657,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line616">Code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line617">Code &raquo;</a>
   </td>
      </tr>
 
@@ -678,7 +690,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line623">Code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line624">Code &raquo;</a>
   </td>
      </tr>
 
@@ -711,7 +723,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line602">Code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line603">Code &raquo;</a>
   </td>
      </tr>
 
@@ -744,7 +756,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line630">Code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line631">Code &raquo;</a>
   </td>
      </tr>
 
@@ -777,7 +789,7 @@ account for comparisons like &quot;12 months == 1 year&quot;.
 
 
   <td class="view-code">
-     <a href="closure_goog_date_date.js.source.html#line595">Code &raquo;</a>
+     <a href="closure_goog_date_date.js.source.html#line596">Code &raquo;</a>
   </td>
      </tr>
 

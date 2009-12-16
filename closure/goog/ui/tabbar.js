@@ -48,11 +48,11 @@ goog.require('goog.ui.registry');
  * {@code SELECT} event and an {@code ACTION} event; subsequent clicks on an
  * already selected tab only result in {@code ACTION} events.
  *
- * @param {goog.ui.TabBar.Location} opt_location Tab bar location; defaults to
+ * @param {goog.ui.TabBar.Location=} opt_location Tab bar location; defaults to
  *     {@link goog.ui.TabBar.Location.TOP}.
- * @param {goog.ui.TabBarRenderer} opt_renderer Renderer used to render or
+ * @param {goog.ui.TabBarRenderer=} opt_renderer Renderer used to render or
  *     decorate the container; defaults to {@link goog.ui.TabBarRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for document
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for document
  *     interaction.
  * @constructor
  * @extends {goog.ui.Container}
@@ -131,7 +131,7 @@ goog.ui.TabBar.prototype.disposeInternal = function() {
  * by deselecting the tab being removed.  Since {@link #removeChildAt} uses
  * {@link #removeChild} internally, we only need to override this method.
  * @param {string|goog.ui.Control} tab Tab to remove.
- * @param {boolean} opt_unrender Whether to call {@code exitDocument} on the
+ * @param {boolean=} opt_unrender Whether to call {@code exitDocument} on the
  *     removed tab, and detach its DOM from the document (defaults to false).
  * @return {goog.ui.Control} The removed tab, if any.
  * @override

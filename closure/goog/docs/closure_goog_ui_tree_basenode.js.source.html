@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,10 +81,10 @@
 <a name="line37"></a> * An abstract base class for a node in the tree.
 <a name="line38"></a> *
 <a name="line39"></a> * @param {string} html The html content of the node label.
-<a name="line40"></a> * @param {Object} opt_config The configuration for the tree. See
+<a name="line40"></a> * @param {Object=} opt_config The configuration for the tree. See
 <a name="line41"></a> *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
 <a name="line42"></a> *    will be used.
-<a name="line43"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line43"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line44"></a> * @constructor
 <a name="line45"></a> * @extends {goog.ui.Component}
 <a name="line46"></a> */
@@ -298,7 +299,7 @@
 <a name="line255"></a>/**
 <a name="line256"></a> * Adds a node as a child to the current node.
 <a name="line257"></a> * @param {goog.ui.tree.BaseNode} child The child to add.
-<a name="line258"></a> * @param {goog.ui.tree.BaseNode} opt_before If specified, the new child is
+<a name="line258"></a> * @param {goog.ui.tree.BaseNode=} opt_before If specified, the new child is
 <a name="line259"></a> *    added as a child before this one. If not specified, it&#39;s appended to the
 <a name="line260"></a> *    end.
 <a name="line261"></a> * @return {goog.ui.tree.BaseNode} The added child.
@@ -1474,7 +1475,7 @@
 <a name="line1431"></a>  } else {
 <a name="line1432"></a>    var p = this;
 <a name="line1433"></a>    var next;
-<a name="line1434"></a>    while (p != null) {
+<a name="line1434"></a>    while (p != this.getTree()) {
 <a name="line1435"></a>      next = p.getNextSibling();
 <a name="line1436"></a>      if (next != null) {
 <a name="line1437"></a>        return next;

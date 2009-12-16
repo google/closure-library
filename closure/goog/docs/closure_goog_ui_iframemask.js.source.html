@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -78,9 +79,9 @@
 <a name="line35"></a> * Controller for an iframe mask. The mask is only valid in the current
 <a name="line36"></a> * document, or else the document of the given DOM helper.
 <a name="line37"></a> *
-<a name="line38"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper for the relevant
+<a name="line38"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper for the relevant
 <a name="line39"></a> *     document.
-<a name="line40"></a> * @param {goog.structs.Pool} opt_iframePool An optional source of iframes.
+<a name="line40"></a> * @param {goog.structs.Pool=} opt_iframePool An optional source of iframes.
 <a name="line41"></a> *     Iframes will be grabbed from the pool when they&#39;re needed and returned
 <a name="line42"></a> *     to the pool (but still attached to the DOM) when they&#39;re done.
 <a name="line43"></a> * @constructor
@@ -263,7 +264,7 @@
 <a name="line220"></a> * @param {goog.events.EventTarget} target The event target to listen on.
 <a name="line221"></a> * @param {string} showEvent When this event fires, the mask will be applied.
 <a name="line222"></a> * @param {string} hideEvent When this event fires, the mask will be hidden.
-<a name="line223"></a> * @param {Element} opt_snapElement When the mask is applied, it will
+<a name="line223"></a> * @param {Element=} opt_snapElement When the mask is applied, it will
 <a name="line224"></a> *     automatically snap to this element. If no element is specified, it will
 <a name="line225"></a> *     use the default snap element.
 <a name="line226"></a> */

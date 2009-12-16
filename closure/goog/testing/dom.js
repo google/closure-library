@@ -205,7 +205,7 @@ goog.testing.dom.describeNode_ = function(node) {
  * @param {string} htmlPattern The pattern to match.
  * @param {Element} actual The element to check: its contents are matched
  *     against the HTML pattern.
- * @param {boolean} opt_strictAttributes If false, attributes that appear in
+ * @param {boolean=} opt_strictAttributes If false, attributes that appear in
  *     htmlPattern must be in actual, but actual can have attributes not
  *     present in htmlPattern.  If true, htmlPattern and actual must have the
  *     same set of attributes.  Default is false.

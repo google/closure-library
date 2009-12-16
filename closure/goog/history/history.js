@@ -161,7 +161,6 @@ goog.provide('goog.History.Event');
 goog.provide('goog.History.EventType');
 
 goog.require('goog.Timer');
-goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
@@ -200,18 +199,18 @@ goog.require('goog.userAgent');
  * h.setToken('foo');
  * </pre>
  *
- * @param {boolean} opt_invisible True to use hidden history states instead of
+ * @param {boolean=} opt_invisible True to use hidden history states instead of
  *     the user-visible location hash.
- * @param {string} opt_blankPageUrl A URL to a blank page on the same server.
+ * @param {string=} opt_blankPageUrl A URL to a blank page on the same server.
  *     Required if opt_invisible is true.  This URL is also used as the src
  *     for the iframe used to track history state in IE (if not specified the
  *     iframe is not given a src attribute).  Access is Denied error may
  *     occur in IE7 if the window's URL's scheme is https, and this URL is
  *     not specified.
- * @param {HTMLInputElement} opt_input The hidden input element to be used to
+ * @param {HTMLInputElement=} opt_input The hidden input element to be used to
  *     store the history token.  If not provided, a hidden input element will
  *     be created using document.write.
- * @param {HTMLIFrameElement} opt_iframe The hidden iframe that will be used by
+ * @param {HTMLIFrameElement=} opt_iframe The hidden iframe that will be used by
  *     IE for pushing history state changes, or by all browsers if opt_invisible
  *     is true. If not provided, a hidden iframe element will be created using
  *     document.write.
@@ -581,7 +580,7 @@ goog.History.prototype.getToken = function() {
  * history drop down can be out of sync with the token.  To get around this
  * problem, the app can pass in a title to use with the hidden iframe.
  * @param {string} token The history state identifier.
- * @param {string} opt_title Optional title used when setting the hidden iframe
+ * @param {string=} opt_title Optional title used when setting the hidden iframe
  *     title in IE.
  */
 goog.History.prototype.setToken = function(token, opt_title) {
@@ -593,7 +592,7 @@ goog.History.prototype.setToken = function(token, opt_title) {
  * Replaces the current history state without affecting the rest of the history
  * stack.
  * @param {string} token The history state identifier.
- * @param {string} opt_title Optional title used when setting the hidden iframe
+ * @param {string=} opt_title Optional title used when setting the hidden iframe
  *     title in IE.
  */
 goog.History.prototype.replaceToken = function(token, opt_title) {
@@ -626,7 +625,7 @@ goog.History.prototype.getLocationFragment_ = function(win) {
  * @param {string} token The history state identifier.
  * @param {boolean} replace Set to replace the current history entry instead of
  *    appending a new history state.
- * @param {string} opt_title Optional title used when setting the hidden iframe
+ * @param {string=} opt_title Optional title used when setting the hidden iframe
  *     title in IE.
  * @private
  */
@@ -677,8 +676,8 @@ goog.History.prototype.setHistoryState_ = function(token, replace, opt_title) {
  * http://www.whatwg.org/specs/web-apps/current-work/#replacement-enabled
  *
  * @param {string} hash The new string to set.
- * @param {boolean} opt_replace Set to true to replace the current token without
- *    appending a history entry.
+ * @param {boolean=} opt_replace Set to true to replace the current token
+ *    without appending a history entry.
  * @private
  */
 goog.History.prototype.setHash_ = function(hash, opt_replace) {
@@ -705,9 +704,9 @@ goog.History.prototype.setHash_ = function(hash, opt_replace) {
  * Older versions of webkit cannot set the iframe, so ignore those browsers.
  *
  * @param {string} token The new string to set.
- * @param {boolean} opt_replace Set to true to replace the current iframe state
+ * @param {boolean=} opt_replace Set to true to replace the current iframe state
  *     without appending a new history entry.
- * @param {string} opt_title Optional title used when setting the hidden iframe
+ * @param {string=} opt_title Optional title used when setting the hidden iframe
  *     title in IE.
  * @private
  */

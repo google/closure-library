@@ -36,9 +36,9 @@ goog.require('goog.style');
  * made more general and could support horizontal scrolling.
  *
  * @param {Element} containerNode A container that can be scrolled.
- * @param {number} opt_verticalMargin Optional vertical margin to use while
+ * @param {number=} opt_verticalMargin Optional vertical margin to use while
  *     scrolling.
- * @param {boolean} opt_externalMouseMoveTracking Whether mouse move events
+ * @param {boolean=} opt_externalMouseMoveTracking Whether mouse move events
  *     are tracked externally by the client object which calls the mouse move
  *     event handler, useful when events are generated for more than one source
  *     element and/or are not real mousemove events.

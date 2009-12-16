@@ -33,7 +33,7 @@ goog.require('goog.positioning.AbstractPosition');
  * other element.
  *
  * @param {number|goog.math.Coordinate} arg1 Left position or coordinate.
- * @param {number} opt_arg2 Top position.
+ * @param {number=} opt_arg2 Top position.
  * @constructor
  * @extends {goog.positioning.AbstractPosition}
  */
@@ -51,8 +51,8 @@ goog.inherits(goog.positioning.ViewportPosition,
  * @param {Element} element The DOM element of the popup.
  * @param {goog.positioning.Corner} popupCorner The corner of the popup
  *     element that that should be positioned adjacent to the anchorElement.
- * @param {goog.math.Box} opt_margin A margin specified in pixels.
- * @param {goog.math.Size} opt_preferredSize Preferred size of the element.
+ * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+ * @param {goog.math.Size=} opt_preferredSize Preferred size of the element.
  */
 goog.positioning.ViewportPosition.prototype.reposition = function(
     element, popupCorner, opt_margin, opt_preferredSize) {

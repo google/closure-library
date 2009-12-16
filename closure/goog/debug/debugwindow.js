@@ -37,8 +37,8 @@ goog.require('goog.userAgent');
  * functionality in a separate class.
  *
  * @constructor
- * @param {string} opt_identifier Identifier for this logging class.
- * @param {string} opt_prefix Prefix prepended to messages.
+ * @param {string=} opt_identifier Identifier for this logging class.
+ * @param {string=} opt_prefix Prefix prepended to messages.
  */
 goog.debug.DebugWindow = function(opt_identifier, opt_prefix) {
   /**
@@ -493,7 +493,7 @@ goog.debug.DebugWindow.prototype.setCookie_ = function(key, value) {
 /**
  * Retrieve data (using cookies).
  * @param {string} key Data name.
- * @param {string} opt_default Optional default value if cookie doesn't exist.
+ * @param {string=} opt_default Optional default value if cookie doesn't exist.
  * @return {string} Cookie value.
  * @private
  */
@@ -507,7 +507,7 @@ goog.debug.DebugWindow.prototype.getCookie_ = function(key, opt_default) {
  * Retrieve data (using cookies).
  * @param {string} identifier Identifier for logging class.
  * @param {string} key Data name.
- * @param {string} opt_default Optional default value if cookie doesn't exist.
+ * @param {string=} opt_default Optional default value if cookie doesn't exist.
  * @return {string} Cookie value.
  * @private
  */

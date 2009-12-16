@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -80,7 +92,7 @@ render the results.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_ui_AutoComplete.html">goog.ui.AutoComplete</a></span></td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
@@ -89,7 +101,7 @@ render the results.
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -129,7 +141,7 @@ render the results.
    <tr class="even">
      <td>
         <span class="entryName">opt_multi</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to allow multiple entries; defaults to false.</div>
      </td>
    </tr>
@@ -137,7 +149,7 @@ render the results.
    <tr class="odd">
      <td>
         <span class="entryName">opt_useSimilar</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to use similar matches; e.g. &quot;gost&quot; =&gt; &quot;ghost&quot;.</div>
      </td>
    </tr>
@@ -673,7 +685,7 @@ the autocomplete drop down.
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">...Element</span></div>
         <div class="entryOverview">Variable args: Input or text area elements to attach the autocomplete too.</div>
      </td>
    </tr>
@@ -767,7 +779,7 @@ the autocomplete drop down.
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">...Element</span></div>
         <div class="entryOverview">Variable args: Input or text area elements to detach from the autocomplete.</div>
      </td>
    </tr>
@@ -1399,7 +1411,7 @@ data: the raw row data from Matcher
    <tr class="even">
      <td>
         <span class="entryName">opt_preserveHilited</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, keeps the currently hilited (by index) element hilited.</div>
      </td>
    </tr>
@@ -1759,7 +1771,7 @@ fetch the matches (up to maxMatches), and then it triggers a call to
    <tr class="odd">
      <td>
         <span class="entryName">opt_fullString</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Optionally, the full string in the input field.</div>
      </td>
    </tr>
@@ -1924,7 +1936,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -1932,7 +1944,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -2169,7 +2181,7 @@ nothing is done.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -2177,7 +2189,7 @@ nothing is done.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>

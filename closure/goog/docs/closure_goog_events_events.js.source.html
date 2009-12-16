@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -171,9 +172,9 @@
 <a name="line128"></a> * @param {string|Array.&lt;string&gt;} type Event type or array of event types.
 <a name="line129"></a> * @param {Function|Object} listener Callback method, or an object with a
 <a name="line130"></a> *     handleEvent function.
-<a name="line131"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+<a name="line131"></a> * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
 <a name="line132"></a> *     false).
-<a name="line133"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line133"></a> * @param {Object=} opt_handler Element in whose scope to call the listener.
 <a name="line134"></a> * @return {?number} Unique key for the listener.
 <a name="line135"></a> */
 <a name="line136"></a>goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
@@ -281,8 +282,8 @@
 <a name="line238"></a> *     events on.
 <a name="line239"></a> * @param {string|Array.&lt;string&gt;} type Event type or array of event types.
 <a name="line240"></a> * @param {Function|Object} listener Callback method.
-<a name="line241"></a> * @param {boolean} opt_capt Fire in capture phase?.
-<a name="line242"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line241"></a> * @param {boolean=} opt_capt Fire in capture phase?.
+<a name="line242"></a> * @param {Object=} opt_handler Element in whose scope to call the listener.
 <a name="line243"></a> * @return {?number} Unique key for the listener.
 <a name="line244"></a> */
 <a name="line245"></a>goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
@@ -310,9 +311,9 @@
 <a name="line267"></a> * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
 <a name="line268"></a> * @param {Function|Object} listener Callback method, or an object with a
 <a name="line269"></a> *     handleEvent function.
-<a name="line270"></a> * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+<a name="line270"></a> * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
 <a name="line271"></a> *     false).
-<a name="line272"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line272"></a> * @param {Object=} opt_handler Element in whose scope to call the listener.
 <a name="line273"></a> */
 <a name="line274"></a>goog.events.listenWithWrapper = function(src, wrapper, listener, opt_capt,
 <a name="line275"></a>    opt_handler) {
@@ -328,10 +329,10 @@
 <a name="line285"></a> * @param {string|Array.&lt;string&gt;} type The name of the event without the &#39;on&#39;
 <a name="line286"></a> *     prefix.
 <a name="line287"></a> * @param {Function|Object} listener The listener function to remove.
-<a name="line288"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+<a name="line288"></a> * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
 <a name="line289"></a> *     whether the listener is fired during the capture or bubble phase of the
 <a name="line290"></a> *     event.
-<a name="line291"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line291"></a> * @param {Object=} opt_handler Element in whose scope to call the listener.
 <a name="line292"></a> * @return {?boolean} indicating whether the listener was there to remove.
 <a name="line293"></a> */
 <a name="line294"></a>goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
@@ -432,10 +433,10 @@
 <a name="line389"></a> *     listening to events on.
 <a name="line390"></a> * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
 <a name="line391"></a> * @param {Function|Object} listener The listener function to remove.
-<a name="line392"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+<a name="line392"></a> * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
 <a name="line393"></a> *     whether the listener is fired during the capture or bubble phase of the
 <a name="line394"></a> *     event.
-<a name="line395"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line395"></a> * @param {Object=} opt_handler Element in whose scope to call the listener.
 <a name="line396"></a> */
 <a name="line397"></a>goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
 <a name="line398"></a>    opt_handler) {
@@ -513,10 +514,10 @@
 <a name="line470"></a> * remove all listeners that have been registered.  You can also optionally
 <a name="line471"></a> * remove listeners of a particular type or capture phase.
 <a name="line472"></a> *
-<a name="line473"></a> * @param {Object} opt_obj Object to remove listeners from.
-<a name="line474"></a> * @param {string} opt_type Type of event to, default is all types.
-<a name="line475"></a> * @param {boolean} opt_capt Whether to remove the listeners from the capture or
-<a name="line476"></a> * bubble phase.  If unspecified, will remove both.
+<a name="line473"></a> * @param {Object=} opt_obj Object to remove listeners from.
+<a name="line474"></a> * @param {string=} opt_type Type of event to, default is all types.
+<a name="line475"></a> * @param {boolean=} opt_capt Whether to remove the listeners from the capture
+<a name="line476"></a> *     or bubble phase.  If unspecified, will remove both.
 <a name="line477"></a> * @return {number} Number of listeners removed.
 <a name="line478"></a> */
 <a name="line479"></a>goog.events.removeAll = function(opt_obj, opt_type, opt_capt) {
@@ -607,10 +608,10 @@
 <a name="line564"></a> *     listening to events on.
 <a name="line565"></a> * @param {?string} type The name of the event without the &#39;on&#39; prefix.
 <a name="line566"></a> * @param {Function|Object} listener The listener function to remove.
-<a name="line567"></a> * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+<a name="line567"></a> * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
 <a name="line568"></a> *                            whether the listener is fired during the
 <a name="line569"></a> *                            capture or bubble phase of the event.
-<a name="line570"></a> * @param {Object} opt_handler Element in whose scope to call the listener.
+<a name="line570"></a> * @param {Object=} opt_handler Element in whose scope to call the listener.
 <a name="line571"></a> * @return {goog.events.Listener?} the found listener or null if not found.
 <a name="line572"></a> */
 <a name="line573"></a>goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
@@ -636,8 +637,8 @@
 <a name="line593"></a> * unspecified, the function will match on the remaining criteria.
 <a name="line594"></a> *
 <a name="line595"></a> * @param {EventTarget|goog.events.EventTarget} obj Target to get listeners for.
-<a name="line596"></a> * @param {string} opt_type Event type.
-<a name="line597"></a> * @param {boolean} opt_capture Whether to check for capture or bubble-phase
+<a name="line596"></a> * @param {string=} opt_type Event type.
+<a name="line597"></a> * @param {boolean=} opt_capture Whether to check for capture or bubble-phase
 <a name="line598"></a> *     listeners.
 <a name="line599"></a> * @return {boolean} Whether an event target has one or more listeners matching
 <a name="line600"></a> *     the requested type and/or capture phase.
@@ -956,7 +957,7 @@
 <a name="line913"></a> *
 <a name="line914"></a> * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
 <a name="line915"></a> *     protect the entry point.
-<a name="line916"></a> * @param {boolean} opt_tracers Whether to install tracers around the browser
+<a name="line916"></a> * @param {boolean=} opt_tracers Whether to install tracers around the browser
 <a name="line917"></a> *     event entry point.
 <a name="line918"></a> */
 <a name="line919"></a>goog.events.protectBrowserEventEntryPoint = function(
@@ -972,7 +973,7 @@
 <a name="line929"></a> * function is a proxy for the real listener the user specified.
 <a name="line930"></a> *
 <a name="line931"></a> * @param {string} key Unique key for the listener.
-<a name="line932"></a> * @param {Event} opt_evt Optional event object that gets passed in via the
+<a name="line932"></a> * @param {Event=} opt_evt Optional event object that gets passed in via the
 <a name="line933"></a> *     native event handlers.
 <a name="line934"></a> * @return {boolean} Result of the event handler.
 <a name="line935"></a> * @this {goog.events.EventTarget|Object} The object or Element that

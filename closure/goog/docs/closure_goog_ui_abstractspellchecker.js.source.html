@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -100,7 +101,7 @@
 <a name="line57"></a> * @param {goog.spell.SpellCheck} handler Instance of the SpellCheckHandler
 <a name="line58"></a> *     support object to use. A single instance can be shared by multiple editor
 <a name="line59"></a> *     components.
-<a name="line60"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line60"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line61"></a> * @constructor
 <a name="line62"></a> * @extends {goog.ui.Component}
 <a name="line63"></a> */
@@ -505,7 +506,7 @@
 <a name="line462"></a> * Displays suggestions menu.
 <a name="line463"></a> *
 <a name="line464"></a> * @param {Element} el Element to display menu for.
-<a name="line465"></a> * @param {goog.events.BrowserEvent|goog.math.Coordinate} opt_pos Position to
+<a name="line465"></a> * @param {goog.events.BrowserEvent|goog.math.Coordinate=} opt_pos Position to
 <a name="line466"></a> *     display menu at relative to the viewport (in client coordinates), or a
 <a name="line467"></a> *     mouse event.
 <a name="line468"></a> */
@@ -685,7 +686,7 @@
 <a name="line642"></a>
 <a name="line643"></a>/**
 <a name="line644"></a> * Generates unique Ids for spell checker elements.
-<a name="line645"></a> * @param {number} opt_id Id to suffix with.
+<a name="line645"></a> * @param {number=} opt_id Id to suffix with.
 <a name="line646"></a> * @return {string} Unique element id.
 <a name="line647"></a> * @protected
 <a name="line648"></a> */

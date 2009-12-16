@@ -48,7 +48,7 @@ goog.window.DEFAULT_POPUP_TARGET = 'google_popup';
  *     for example goog.Uri.  If this is an object with a 'href' attribute, such
  *     as HTMLAnchorElement, it will be used instead.
  *
- * @param {Object} opt_options supports the following options:
+ * @param {Object=} opt_options supports the following options:
  *  'target': (string) target (window name). If null, linkRef.target will
  *          be used.
  *  'width': (number) window width. If null, the default is 690.
@@ -65,7 +65,7 @@ goog.window.DEFAULT_POPUP_TARGET = 'google_popup';
  *      from the request headers. Does this by opening a blank window that
  *      then redirects to the target url, so users may see some flickering.
  *
- * @param {Window} opt_parentWin Parent window that should be used to open the
+ * @param {Window=} opt_parentWin Parent window that should be used to open the
  *                 new window.
  *
  * @return {Window} Returns the window object that was opened. This returns
@@ -131,7 +131,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
  * URL of the popped window; otherwise it's assumed to be an HTMLAnchorElement
  * (or some other object with "target" and "href" properties).
  *
- * @param {Object} opt_options supports the following options:
+ * @param {Object=} opt_options supports the following options:
  *  'target': (Object) target (window name). If null, linkRef.target will
  *          be used. If *that's* null, the default is "google_popup".
  *  'width': (number) window width. If null, the default is 690.

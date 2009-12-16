@@ -35,9 +35,9 @@ goog.require('goog.ui.PopupBase.EventType');
 /**
  * Popup date picker widget.
  *
- * @param {goog.ui.DatePicker} opt_datePicker Optional DatePicker.  This
+ * @param {goog.ui.DatePicker=} opt_datePicker Optional DatePicker.  This
  *     enables the use of a custom date-picker instance.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @extends {goog.ui.Component}
  * @constructor
  */
@@ -113,6 +113,10 @@ goog.ui.PopupDatePicker.prototype.enterDocument = function() {
 /** @inheritDoc */
 goog.ui.PopupDatePicker.prototype.disposeInternal = function() {
   goog.ui.PopupDatePicker.superClass_.disposeInternal.call(this);
+  if (this.popup_) {
+    this.popup_.dispose();
+    this.popup_ = null;
+  }
   this.datePicker_.dispose();
   this.datePicker_ = null;
   this.lastTarget_ = null;

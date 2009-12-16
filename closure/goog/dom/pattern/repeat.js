@@ -27,9 +27,9 @@ goog.require('goog.dom.pattern.MatchType');
  * Pattern object that matches a repetition of another pattern.
  * @param {goog.dom.pattern.AbstractPattern} pattern The pattern to
  *     repetitively match.
- * @param {number} opt_minimum The minimum number of times to match.  Defaults
+ * @param {number=} opt_minimum The minimum number of times to match.  Defaults
  *     to 0.
- * @param {number} opt_maximum The maximum number of times to match.  Defaults
+ * @param {number=} opt_maximum The maximum number of times to match.  Defaults
  *     to unlimited.
  * @constructor
  * @extends {goog.dom.pattern.AbstractPattern}

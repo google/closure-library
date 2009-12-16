@@ -96,7 +96,6 @@ limitations under the License.
 <script>
 
 var savedHtml;
-var MERGES_EMPTY_TEXT_NODES = goog.userAgent.IE;
 
 function setUp() {
   savedHtml = goog.dom.$('root').innerHTML;
@@ -459,8 +458,7 @@ function testRangeCreatedInVeryFragmentedDom() {
 
   // Notice that there are two empty text nodes at the beginning of each
   // fragmented node.
-  var offset = MERGES_EMPTY_TEXT_NODES ? -1 : 0;
-  var range = goog.dom.Range.createFromNodes(def, 3 + offset, jkl, 4 + offset);
+  var range = goog.dom.Range.createFromNodes(def, 3, jkl, 4);
 
   var newRange = normalizeBody(range);
 
@@ -503,9 +501,7 @@ function testRangeCreatedInFragmentedDomWithPreviousSiblings() {
   // Notice that there are two empty text nodes at the beginning of each
   // fragmented node.
   var root = goog.dom.$('parentNode');
-  var offset = MERGES_EMPTY_TEXT_NODES ? -1 : 0;
-  var range = goog.dom.Range.createFromNodes(
-      root, 9 + 2 * offset, root, 16 + 3*offset);
+  var range = goog.dom.Range.createFromNodes(root, 9, root, 16);
 
   var newRange = normalizeBody(range);
 
@@ -554,13 +550,17 @@ function testRangePreservingNormalize() {
   fragmentText(def.firstChild);
   fragmentText(jkl.firstChild);
 
-  var offset = goog.userAgent.IE ? -1 : 0;
-  var range = goog.dom.Range.createFromNodes(def, 3 + offset, jkl, 4 + offset);
+  var range = goog.dom.Range.createFromNodes(def, 3, jkl, 4);
+  var oldRangeDescription = rangeToString(range);
   range = goog.editor.range.rangePreservingNormalize_(parent, range);
 
   // Check that everything was normalized ok.
-  assertEquals(1, def.childNodes.length);
-  assertEquals(1, jkl.childNodes.length);
+  assertEquals("def should have 1 child; range is " + rangeToString(range) +
+      ", range was " + oldRangeDescription,
+      1, def.childNodes.length);
+  assertEquals("jkl should have 1 child; range is " + rangeToString(range) +
+      ", range was " + oldRangeDescription,
+      1, jkl.childNodes.length);
   goog.testing.dom.assertRangeEquals(def.firstChild, 1, jkl.firstChild, 2,
                                      range);
 }
@@ -572,15 +572,21 @@ function testSelectionPreservingNormalize1() {
   fragmentText(def.firstChild);
   fragmentText(jkl.firstChild);
 
-  var offset = goog.userAgent.IE ? -1 : 0;
-  goog.dom.Range.createFromNodes(def, 3 + offset, jkl, 4 + offset).select();
+  goog.dom.Range.createFromNodes(def, 3, jkl, 4).select();
+  var oldRangeDescription = rangeToString(
+      goog.dom.Range.createFromWindow(window));
   goog.editor.range.selectionPreservingNormalize(parent);
 
   // Check that everything was normalized ok.
-  assertEquals(1, def.childNodes.length);
-  assertEquals(1, jkl.childNodes.length);
+  var range = goog.dom.Range.createFromWindow(window);
+  assertEquals("def should have 1 child; range is " + rangeToString(range) +
+      ", range was " + oldRangeDescription,
+      1, def.childNodes.length);
+  assertEquals("jkl should have 1 child; range is " + rangeToString(range) +
+      ", range was " + oldRangeDescription,
+      1, jkl.childNodes.length);
   goog.testing.dom.assertRangeEquals(def.firstChild, 1, jkl.firstChild, 2,
-      goog.dom.Range.createFromWindow(window));
+      range);
 }
 
 /**
@@ -588,11 +594,6 @@ function testSelectionPreservingNormalize1() {
  * selection in the document.
  */
 function testSelectionPreservingNormalize2() {
-  if (goog.userAgent.IE) {
-    // TODO: Figure out why this test is flakey on IE on the farm.
-    return;
-  } 
-
   var parent = goog.dom.$('normalizeTest-3');
   var def = goog.dom.$('def-3');
   var jkl = goog.dom.$('jkl-3');
@@ -617,16 +618,23 @@ function normalizeBody(range) {
 
 /** Break a text node up into lots of little fragments. */
 function fragmentText(text) {
-  text.splitText(2);
-  text.splitText(1);
+  // NOTE: For some reason, splitText makes IE deeply
+  // unhappy to the point where normalize and other normal DOM operations
+  // start failing. It's a useful test for Firefox though, because different
+  // versions of FireFox handle empty text nodes differently.
+  // See goog.editor.BrowserFeature.
+  if (goog.userAgent.IE) {
+    manualSplitText(text, 2);
+    manualSplitText(text, 1);
+    manualSplitText(text, 0);
+    manualSplitText(text, 0);
+  } else {
+    text.splitText(2);
+    text.splitText(1);
 
-  // NOTE: For some reason, this idiom makes IE deeply
-  // unhappy to the point where normal DOM operations start failing. So
-  // we don't use fragmentText in some places. It's a useful test
-  // for Firefox though, because different versions of firefox handle
-  // empty text nodes differently. See goog.editor.BrowserFeature.
-  text.splitText(0);
-  text.splitText(0);
+    text.splitText(0);
+    text.splitText(0);
+  }
 }
 
 /**
@@ -639,6 +647,12 @@ function clearSelectionAndRestoreSaved(saved) {
   assertFalse(goog.dom.Range.hasSelection(window));
   saved.restore();
   assertTrue(goog.dom.Range.hasSelection(window));
+}
+
+function manualSplitText(node, pos) {
+  var newNodeString = node.nodeValue.substr(pos);
+  node.nodeValue = node.nodeValue.substr(0, pos);
+  goog.dom.insertSiblingAfter(document.createTextNode(newNodeString), node);
 }
 
 function testSelectNodeStartSimple() {
@@ -698,6 +712,7 @@ function testIsEditable() {
   assertTrue('Range of some container element children considered editable',
     goog.editor.range.isEditable(someEditableChildren));
 
+  
   var mixedEditableNonEditable = goog.dom.Range.createFromNodes(
     containerElement.previousSibling, 0, containerElement, 2);
   assertFalse('Range overlapping some content not considered editable',
@@ -743,6 +758,25 @@ function testIntersectsTag() {
   assertFalse(goog.editor.range.intersectsTag(range, goog.dom.TagName.CODE));
   assertFalse(goog.editor.range.intersectsTag(range, goog.dom.TagName.U));
 }
+
+
+// Some debugging utilities.
+
+function nodeToString(node) {
+  return (node.tagName || node.nodeValue) + (node.id ? '#' + node.id : '') +
+      ':"' + (node.innerHTML || '') + '"';
+};
+
+function rangeToString(range) {
+  if (!range) {
+    return "null";
+  }
+  return nodeToString(range.getStartNode()) + ':' +
+         range.getStartOffset() + ' to ' +
+         nodeToString(range.getEndNode()) + ':' +
+         range.getEndOffset();
+};
+
 
 </script>
 </body>

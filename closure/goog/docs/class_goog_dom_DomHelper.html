@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,12 +88,12 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.dom.DomHelper</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -105,7 +117,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_document</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
+        : <div class="fullType"><span class="type">Document=</span></div>
         <div class="entryOverview">Document object to associate with this DOM helper.</div>
      </td>
    </tr>
@@ -187,7 +199,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1712">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1689">code &raquo;</a>
   </td>
      </tr>
 
@@ -233,7 +245,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1748">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1725">code &raquo;</a>
   </td>
      </tr>
 
@@ -279,7 +291,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1825">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1803">code &raquo;</a>
   </td>
      </tr>
 
@@ -313,7 +325,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1914">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1892">code &raquo;</a>
   </td>
      </tr>
 
@@ -359,7 +371,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2019">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1997">code &raquo;</a>
   </td>
      </tr>
 
@@ -426,7 +438,7 @@ child nodes of the new DIV.
    <tr class="odd">
      <td>
         <span class="entryName">opt_attributes</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">string=</span></div>
         <div class="entryOverview">If object, then a map of name-value pairs for attributes. If a string, then this is the className of the new element.</div>
      </td>
    </tr>
@@ -434,7 +446,7 @@ child nodes of the new DIV.
    <tr class="even">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span><span>&nbsp;|&nbsp;</span><span class="type">NodeList</span></div>
+        : <div class="fullType"><span class="type">...Object</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span><span>&nbsp;|&nbsp;</span><span class="type">NodeList</span></div>
         <div class="entryOverview">Further DOM nodes or strings for text nodes. If one of the var_args is an array or NodeList, its elements will be added as childNodes instead.</div>
      </td>
    </tr>
@@ -452,7 +464,7 @@ child nodes of the new DIV.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1807">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1784">code &raquo;</a>
   </td>
      </tr>
 
@@ -517,7 +529,7 @@ child nodes of the new DIV.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1833">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1811">code &raquo;</a>
   </td>
      </tr>
 
@@ -582,7 +594,7 @@ child nodes of the new DIV.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1843">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1821">code &raquo;</a>
   </td>
      </tr>
 
@@ -629,7 +641,7 @@ a depth first search.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2064">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2042">code &raquo;</a>
   </td>
      </tr>
 
@@ -676,7 +688,7 @@ depth first search.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2074">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2052">code &raquo;</a>
   </td>
      </tr>
 
@@ -722,7 +734,7 @@ depth first search.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1966">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1944">code &raquo;</a>
   </td>
      </tr>
 
@@ -769,7 +781,7 @@ matcher function.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2145">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2123">code &raquo;</a>
   </td>
      </tr>
 
@@ -817,7 +829,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2127">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2105">code &raquo;</a>
   </td>
      </tr>
 
@@ -863,7 +875,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1867">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1845">code &raquo;</a>
   </td>
      </tr>
 
@@ -909,7 +921,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1687">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1663">code &raquo;</a>
   </td>
      </tr>
 
@@ -955,7 +967,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1778">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1755">code &raquo;</a>
   </td>
      </tr>
 
@@ -1001,7 +1013,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1904">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1882">code &raquo;</a>
   </td>
      </tr>
 
@@ -1047,7 +1059,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1895">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1873">code &raquo;</a>
   </td>
      </tr>
 
@@ -1093,7 +1105,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1671">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1647">code &raquo;</a>
   </td>
      </tr>
 
@@ -1159,7 +1171,7 @@ return that.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1698">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1674">code &raquo;</a>
   </td>
      </tr>
 
@@ -1209,7 +1221,7 @@ NodeList or a static list depending on the code path taken.
    <tr class="even">
      <td>
         <span class="entryName">opt_tag</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">Element tag name or * for all tags.</div>
      </td>
    </tr>
@@ -1217,7 +1229,7 @@ NodeList or a static list depending on the code path taken.
    <tr class="odd">
      <td>
         <span class="entryName">opt_class</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">Optional class name.</div>
      </td>
    </tr>
@@ -1225,7 +1237,7 @@ NodeList or a static list depending on the code path taken.
    <tr class="even">
      <td>
         <span class="entryName">opt_el</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Optional element to look in.</div>
      </td>
    </tr>
@@ -1243,7 +1255,7 @@ NodeList or a static list depending on the code path taken.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1729">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1706">code &raquo;</a>
   </td>
      </tr>
 
@@ -1289,7 +1301,7 @@ NodeList or a static list depending on the code path taken.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1974">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1952">code &raquo;</a>
   </td>
      </tr>
 
@@ -1335,7 +1347,7 @@ NodeList or a static list depending on the code path taken.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2035">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2013">code &raquo;</a>
   </td>
      </tr>
 
@@ -1381,7 +1393,7 @@ NodeList or a static list depending on the code path taken.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2044">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2022">code &raquo;</a>
   </td>
      </tr>
 
@@ -1427,7 +1439,7 @@ NodeList or a static list depending on the code path taken.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1983">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1961">code &raquo;</a>
   </td>
      </tr>
 
@@ -1473,7 +1485,7 @@ NodeList or a static list depending on the code path taken.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1991">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1969">code &raquo;</a>
   </td>
      </tr>
 
@@ -1522,7 +1534,7 @@ lines are ignored.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2100">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2078">code &raquo;</a>
   </td>
      </tr>
 
@@ -1570,7 +1582,7 @@ length is the same as the length calculated by
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2112">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2090">code &raquo;</a>
   </td>
      </tr>
 
@@ -1616,7 +1628,7 @@ length is the same as the length calculated by
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2027">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2005">code &raquo;</a>
   </td>
      </tr>
 
@@ -1662,7 +1674,7 @@ length is the same as the length calculated by
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2001">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1979">code &raquo;</a>
   </td>
      </tr>
 
@@ -1713,7 +1725,7 @@ simulate it via node traversal.  Line breaks are canonicalized in IE.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2088">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2066">code &raquo;</a>
   </td>
      </tr>
 
@@ -1760,7 +1772,7 @@ simulate it via node traversal.  Line breaks are canonicalized in IE.
    <tr class="even">
      <td>
         <span class="entryName">opt_window</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/window">Window</a></span></div>
+        : <div class="fullType"><span class="type">Window=</span></div>
         <div class="entryOverview">Optional window element to test. Defaults to the window of the Dom Helper.</div>
      </td>
    </tr>
@@ -1778,7 +1790,7 @@ simulate it via node traversal.  Line breaks are canonicalized in IE.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1766">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1743">code &raquo;</a>
   </td>
      </tr>
 
@@ -1824,7 +1836,7 @@ simulate it via node traversal.  Line breaks are canonicalized in IE.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1886">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1864">code &raquo;</a>
   </td>
      </tr>
 
@@ -1892,7 +1904,7 @@ is used if the <code>htmlString</code> only generates a single node.  If the
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1857">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1835">code &raquo;</a>
   </td>
      </tr>
 
@@ -1927,7 +1939,7 @@ sibling). If the reference node has no parent, then does nothing.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1939">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1917">code &raquo;</a>
   </td>
      </tr>
 
@@ -1962,7 +1974,7 @@ sibling). If the reference node has no parent, then does nothing.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1930">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1908">code &raquo;</a>
   </td>
      </tr>
 
@@ -2009,7 +2021,7 @@ mode, false otherwise.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1877">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1855">code &raquo;</a>
   </td>
      </tr>
 
@@ -2055,7 +2067,7 @@ mode, false otherwise.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2010">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1988">code &raquo;</a>
   </td>
      </tr>
 
@@ -2089,7 +2101,7 @@ mode, false otherwise.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1921">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1899">code &raquo;</a>
   </td>
      </tr>
 
@@ -2135,7 +2147,7 @@ mode, false otherwise.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1947">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1925">code &raquo;</a>
   </td>
      </tr>
 
@@ -2170,7 +2182,7 @@ parent.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1956">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1934">code &raquo;</a>
   </td>
      </tr>
 
@@ -2230,7 +2242,7 @@ parent.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1678">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1654">code &raquo;</a>
   </td>
      </tr>
 
@@ -2264,7 +2276,7 @@ parent.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1757">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1734">code &raquo;</a>
   </td>
      </tr>
 
@@ -2298,7 +2310,7 @@ parent.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line2054">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line2032">code &raquo;</a>
   </td>
      </tr>
 

@@ -145,7 +145,7 @@ goog.math.Integer.fromBits = function(bits) {
  * Returns an Integer representation of the given string, written using the
  * given radix.
  * @param {string} str The textual representation of the Integer.
- * @param {number} opt_radix The radix in which the text is written.
+ * @param {number=} opt_radix The radix in which the text is written.
  * @return {goog.math.Integer} The corresponding Integer value.
  */
 goog.math.Integer.fromString = function(str, opt_radix) {
@@ -234,7 +234,7 @@ goog.math.Integer.prototype.toNumber = function() {
 
 
 /**
- * @param {number} opt_radix The radix in which the text should be written.
+ * @param {number=} opt_radix The radix in which the text should be written.
  * @return {string} The textual representation of this value.
  */
 goog.math.Integer.prototype.toString = function(opt_radix) {

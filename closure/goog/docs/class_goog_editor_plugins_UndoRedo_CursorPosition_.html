@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -80,12 +92,12 @@ TODO: Completely get rid of this and use goog.dom.SavedCaretRange.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.editor.plugins.UndoRedo.CursorPosition_</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -211,7 +223,7 @@ base node.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line942">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line941">code &raquo;</a>
   </td>
      </tr>
 
@@ -271,7 +283,7 @@ base node.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line859">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line858">code &raquo;</a>
   </td>
      </tr>
 
@@ -331,7 +343,7 @@ base node.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line815">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line814">code &raquo;</a>
   </td>
      </tr>
 
@@ -377,7 +389,7 @@ base node.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line903">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line902">code &raquo;</a>
   </td>
      </tr>
 
@@ -411,7 +423,7 @@ base node.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line924">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line923">code &raquo;</a>
   </td>
      </tr>
 
@@ -457,7 +469,7 @@ base node.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line911">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line910">code &raquo;</a>
   </td>
      </tr>
 
@@ -550,7 +562,7 @@ base node.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line975">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_undoredo.js.source.html#line974">code &raquo;</a>
   </td>
      </tr>
 

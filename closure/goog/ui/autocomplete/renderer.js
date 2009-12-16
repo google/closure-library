@@ -36,14 +36,14 @@ goog.require('goog.userAgent');
  * Class for rendering the results of an auto-complete in a drop down list.
  *
  * @constructor
- * @param {Element} opt_parentNode optional reference to the parent element that
- *     will hold the autocomplete elements. goog.dom.getDocument().body will be
- *     used if this is null.
- * @param {?({renderRow}|{render})} opt_customRenderer Custom full renderer to
+ * @param {Element=} opt_parentNode optional reference to the parent element
+ *     that will hold the autocomplete elements. goog.dom.getDocument().body
+ *     will be used if this is null.
+ * @param {?({renderRow}|{render})=} opt_customRenderer Custom full renderer to
  *     render each row. Should be something with a renderRow or render method.
- * @param {boolean} opt_rightAlign Determines if the autocomplete will always be
- *     right aligned. False by default.
- * @param {boolean} opt_useStandardHighlighting Determines if standard
+ * @param {boolean=} opt_rightAlign Determines if the autocomplete will always
+ *     be right aligned. False by default.
+ * @param {boolean=} opt_useStandardHighlighting Determines if standard
  *     highlighting should be applied to each row of data. Standard highlighting
  *     bolds every matching substring for a given token in each row.
  * @extends {goog.events.EventTarget}
@@ -241,7 +241,7 @@ goog.ui.AutoComplete.Renderer.prototype.setUseStandardHighlighting =
  *
  * @param {Array} rows Matching UI rows.
  * @param {string} token Token we are currently matching against.
- * @param {Element} opt_target Current HTML node, will position popup beneath
+ * @param {Element=} opt_target Current HTML node, will position popup beneath
  *     this node.
  */
 goog.ui.AutoComplete.Renderer.prototype.renderRows = function(rows, token,

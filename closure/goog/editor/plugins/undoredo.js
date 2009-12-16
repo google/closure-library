@@ -33,7 +33,6 @@ goog.require('goog.editor.plugins.UndoRedoManager');
 goog.require('goog.editor.plugins.UndoRedoState');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
-goog.require('goog.events.KeyCodes');
 
 
 /**
@@ -42,8 +41,8 @@ goog.require('goog.events.KeyCodes');
  * clobbered on DOM modifications). Also, this allows interleaving non-editing
  * commands into the undo stack via the UndoRedoManager.
  *
- * @param {goog.editor.plugins.UndoRedoManager} opt_manager An undo redo manager
- *    to be used by this plugin. If none is provided one is created.
+ * @param {goog.editor.plugins.UndoRedoManager=} opt_manager An undo redo
+ *    manager to be used by this plugin. If none is provided one is created.
  * @constructor
  * @extends {goog.editor.Plugin}
  */

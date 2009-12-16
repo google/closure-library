@@ -70,7 +70,7 @@ goog.require('goog.ui.Component');
  * Builds a DrilldownRow component, which can overlay a tree
  * structure onto sections of an HTML table.
  *
- * @param {Object} opt_properties This parameter can contain:
+ * @param {Object=} opt_properties This parameter can contain:
  *   contents:  if present, user data identifying
  *     the information loaded into the row and its children.
  *   loaded: initializes the isLoaded property, defaults to true.
@@ -194,7 +194,7 @@ goog.ui.DrilldownRow.prototype.canDecorate = function(node) {
  *
  * @param {goog.ui.DrilldownRow} child New child to be added.
  * @param {number} index position to be occupied by the child.
- * @param {boolean} opt_render true to force immediate rendering.
+ * @param {boolean=} opt_render true to force immediate rendering.
  */
 goog.ui.DrilldownRow.prototype.addChildAt = function(child, index, opt_render) {
   goog.ui.DrilldownRow.superClass_.addChildAt.call(this, child, index, false);

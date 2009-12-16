@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -101,7 +102,7 @@
 <a name="line58"></a> * @param {goog.ui.Component} firstComponent Left or Top component.
 <a name="line59"></a> * @param {goog.ui.Component} secondComponent Right or Bottom component.
 <a name="line60"></a> * @param {goog.ui.SplitPane.Orientation} orientation SplitPane orientation.
-<a name="line61"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line61"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line62"></a> * @extends {goog.ui.Component}
 <a name="line63"></a> * @constructor
 <a name="line64"></a> */
@@ -578,7 +579,7 @@
 <a name="line535"></a>/**
 <a name="line536"></a> * Set the size of the left/top component, and resize the other component based
 <a name="line537"></a> * on that size and handle size.
-<a name="line538"></a> * @param {?number} opt_size The size of the top or left, in pixels.
+<a name="line538"></a> * @param {?number=} opt_size The size of the top or left, in pixels.
 <a name="line539"></a> */
 <a name="line540"></a>goog.ui.SplitPane.prototype.setFirstComponentSize = function(opt_size) {
 <a name="line541"></a>  var top = 0, left = 0;

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -105,7 +106,7 @@
 <a name="line62"></a> * is thrown from a protected function, a handler will be invoked to handle it.
 <a name="line63"></a> *
 <a name="line64"></a> * @param {Function} fn An entry point function to be protected.
-<a name="line65"></a> * @param {boolean} opt_tracers Whether to install tracers around the fn.
+<a name="line65"></a> * @param {boolean=} opt_tracers Whether to install tracers around the fn.
 <a name="line66"></a> * @return {!Function} A protected wrapper function that calls the entry point
 <a name="line67"></a> *     function.
 <a name="line68"></a> */
@@ -158,7 +159,7 @@
 <a name="line115"></a>
 <a name="line116"></a>/**
 <a name="line117"></a> * Installs exception protection for window.setTimeout to handle exceptions.
-<a name="line118"></a> * @param {boolean} opt_tracers Whether to install tracers around the fn.
+<a name="line118"></a> * @param {boolean=} opt_tracers Whether to install tracers around the fn.
 <a name="line119"></a> */
 <a name="line120"></a>goog.debug.ErrorHandler.prototype.protectWindowSetTimeout =
 <a name="line121"></a>    function(opt_tracers) {
@@ -180,7 +181,7 @@
 <a name="line137"></a>
 <a name="line138"></a>/**
 <a name="line139"></a> * Install exception protection for window.setInterval to handle exceptions.
-<a name="line140"></a> * @param {boolean} opt_tracers Whether to install tracers around the fn.
+<a name="line140"></a> * @param {boolean=} opt_tracers Whether to install tracers around the fn.
 <a name="line141"></a> */
 <a name="line142"></a>goog.debug.ErrorHandler.prototype.protectWindowSetInterval =
 <a name="line143"></a>    function(opt_tracers) {

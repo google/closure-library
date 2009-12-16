@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -172,10 +173,10 @@
 <a name="line129"></a> * @param {Function} handler The function to handle the event. The handler can
 <a name="line130"></a> *     also be an object that implements the handleEvent method which takes the
 <a name="line131"></a> *     event object as argument.
-<a name="line132"></a> * @param {boolean} opt_capture In DOM-compliant browsers, this determines
+<a name="line132"></a> * @param {boolean=} opt_capture In DOM-compliant browsers, this determines
 <a name="line133"></a> *     whether the listener is fired during the capture or bubble phase of the
 <a name="line134"></a> *     event.
-<a name="line135"></a> * @param {Object} opt_handlerScope Object in whose scope to call the listener.
+<a name="line135"></a> * @param {Object=} opt_handlerScope Object in whose scope to call the listener.
 <a name="line136"></a> */
 <a name="line137"></a>goog.graphics.Element.prototype.addEventListener = function(
 <a name="line138"></a>    type, handler, opt_capture, opt_handlerScope) {
@@ -193,10 +194,10 @@
 <a name="line150"></a> * @param {Function} handler The function to handle the event. The handler can
 <a name="line151"></a> *     can also be an object that implements thehandleEvent method which takes
 <a name="line152"></a> *     the event obejct as argument.
-<a name="line153"></a> * @param {boolean} opt_capture In DOM-compliant browsers, this determines
+<a name="line153"></a> * @param {boolean=} opt_capture In DOM-compliant browsers, this determines
 <a name="line154"></a> *     whether the listener is fired during the capture or bubble phase of the
 <a name="line155"></a> *     event.
-<a name="line156"></a> * @param {Object} opt_handlerScope Object in whose scope to call the listener.
+<a name="line156"></a> * @param {Object=} opt_handlerScope Object in whose scope to call the listener.
 <a name="line157"></a> */
 <a name="line158"></a>goog.graphics.Element.prototype.removeEventListener = function(
 <a name="line159"></a>    type, handler, opt_capture, opt_handlerScope) {

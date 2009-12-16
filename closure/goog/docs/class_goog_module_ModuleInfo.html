@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -77,13 +89,13 @@ module of js code that may or may not yet be loaded into the environment.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td>goog.module.ModuleInfo</td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -197,7 +209,7 @@ module of js code that may or may not yet be loaded into the environment.
    <tr class="odd">
      <td>
         <span class="entryName">context</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">*</span></div>
         <div class="entryOverview">The module context.</div>
      </td>
    </tr>
@@ -211,7 +223,7 @@ module of js code that may or may not yet be loaded into the environment.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_moduleinfo.js.source.html#line264">code &raquo;</a>
+     <a href="closure_goog_module_moduleinfo.js.source.html#line269">code &raquo;</a>
   </td>
      </tr>
 
@@ -245,7 +257,7 @@ module of js code that may or may not yet be loaded into the environment.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_moduleinfo.js.source.html#line276">code &raquo;</a>
+     <a href="closure_goog_module_moduleinfo.js.source.html#line281">code &raquo;</a>
   </td>
      </tr>
 
@@ -337,7 +349,7 @@ module of js code that may or may not yet be loaded into the environment.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_moduleinfo.js.source.html#line218">code &raquo;</a>
+     <a href="closure_goog_module_moduleinfo.js.source.html#line222">code &raquo;</a>
   </td>
      </tr>
 
@@ -429,7 +441,7 @@ module of js code that may or may not yet be loaded into the environment.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_moduleinfo.js.source.html#line208">code &raquo;</a>
+     <a href="closure_goog_module_moduleinfo.js.source.html#line212">code &raquo;</a>
   </td>
      </tr>
 
@@ -525,7 +537,7 @@ it.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_moduleinfo.js.source.html#line251">code &raquo;</a>
+     <a href="closure_goog_module_moduleinfo.js.source.html#line255">code &raquo;</a>
   </td>
      </tr>
 
@@ -585,7 +597,7 @@ it.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_moduleinfo.js.source.html#line228">code &raquo;</a>
+     <a href="closure_goog_module_moduleinfo.js.source.html#line232">code &raquo;</a>
   </td>
      </tr>
 
@@ -640,7 +652,7 @@ it.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Optional handler under whose scope to execute the callback.</div>
      </td>
    </tr>
@@ -658,7 +670,7 @@ it.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_moduleinfo.js.source.html#line163">code &raquo;</a>
+     <a href="closure_goog_module_moduleinfo.js.source.html#line167">code &raquo;</a>
   </td>
      </tr>
 
@@ -721,7 +733,7 @@ it.
    <tr class="even">
      <td>
         <span class="entryName">opt_handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Optional handler under whose scope to execute the callback.</div>
      </td>
    </tr>
@@ -739,7 +751,7 @@ it.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_moduleinfo.js.source.html#line196">code &raquo;</a>
+     <a href="closure_goog_module_moduleinfo.js.source.html#line200">code &raquo;</a>
   </td>
      </tr>
 
@@ -796,7 +808,7 @@ before the other callbacks are called.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Optional handler under whose scope to execute the callback.</div>
      </td>
    </tr>
@@ -814,7 +826,7 @@ before the other callbacks are called.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_moduleinfo.js.source.html#line148">code &raquo;</a>
+     <a href="closure_goog_module_moduleinfo.js.source.html#line152">code &raquo;</a>
   </td>
      </tr>
 
@@ -862,14 +874,14 @@ before the other callbacks are called.
      <td>
         <span class="entryName">fn</span>
         : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
-        <div class="entryOverview">A callback function that takes a single argument which is the module context.</div>
+        <div class="entryOverview">A callback function that takes a single argument which is the failure type.</div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
         <span class="entryName">opt_handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Optional handler under whose scope to execute the callback.</div>
      </td>
    </tr>
@@ -887,7 +899,7 @@ before the other callbacks are called.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_moduleinfo.js.source.html#line178">code &raquo;</a>
+     <a href="closure_goog_module_moduleinfo.js.source.html#line182">code &raquo;</a>
   </td>
      </tr>
 

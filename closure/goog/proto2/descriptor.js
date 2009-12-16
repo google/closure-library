@@ -133,7 +133,7 @@ goog.proto2.Descriptor.prototype.findFieldByName = function(name) {
       return field.getName() == name;
     });
 
-  return valueFound || null;
+  return /** @type {goog.proto2.FieldDescriptor} */ (valueFound) || null;
 };
 
 

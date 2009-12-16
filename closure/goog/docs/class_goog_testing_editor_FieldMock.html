@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,14 +88,14 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_testing_Mock.html">goog.testing.Mock</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_testing_LooseMock.html">goog.testing.LooseMock</a></span></td><td><span class="type"><a href="class_goog_testing_Mock.html">goog.testing.Mock</a></span></td></tr>
   <tr><td>goog.testing.editor.FieldMock</td><td><span class="type"><a href="class_goog_testing_LooseMock.html">goog.testing.LooseMock</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -107,7 +119,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_window</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/window">Window</a></span></div>
+        : <div class="fullType"><span class="type">Window=</span></div>
         <div class="entryOverview">Window the field would edit.  Defaults to <code>window</code>.</div>
      </td>
    </tr>
@@ -115,7 +127,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_appWindow</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/window">Window</a></span></div>
+        : <div class="fullType"><span class="type">Window=</span></div>
         <div class="entryOverview">&quot;AppWindow&quot; of the field, which can be different from <code>opt_window</code> when mocking a field that uses an iframe. Defaults to <code>opt_window</code>.</div>
      </td>
    </tr>
@@ -123,7 +135,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_range</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span></div>
+        : <div class="fullType"><span class="type">goog.dom.AbstractRange=</span></div>
         <div class="entryOverview">An object (mock or real) to be returned by getRange(). If ommitted, a new goog.dom.Range is created from the window every time getRange() is called.</div>
      </td>
    </tr>
@@ -1422,7 +1434,7 @@ subclass.
    <tr class="even">
      <td>
         <span class="entryName">opt_expectation</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_testing_MockExpectation.html">goog.testing.MockExpectation</a></span></div>
+        : <div class="fullType"><span class="type">goog.testing.MockExpectation=</span></div>
         <div class="entryOverview">Expected next call, if any.</div>
      </td>
    </tr>
@@ -1490,7 +1502,7 @@ subclass.
    <tr class="odd">
      <td>
         <span class="entryName">opt_message</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">A longer message about the exception.</div>
      </td>
    </tr>

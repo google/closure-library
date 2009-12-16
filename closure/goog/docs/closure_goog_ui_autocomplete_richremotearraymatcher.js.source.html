@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -73,7 +74,7 @@
 <a name="line30"></a> * rich rows.
 <a name="line31"></a> * @param {string} url The Uri which generates the auto complete matches.  The
 <a name="line32"></a> *     search term is passed to the server as the &#39;token&#39; query param.
-<a name="line33"></a> * @param {boolean} opt_noSimilar If true, request that the server does not do
+<a name="line33"></a> * @param {boolean=} opt_noSimilar If true, request that the server does not do
 <a name="line34"></a> *     similarity matches for the input token against the dictionary.
 <a name="line35"></a> *     The value is sent to the server as the &#39;use_similar&#39; query param which is
 <a name="line36"></a> *     either &quot;1&quot; (opt_noSimilar==false) or &quot;0&quot; (opt_noSimilar==true).
@@ -130,40 +131,41 @@
 <a name="line87"></a>    try {
 <a name="line88"></a>      var rows = [];
 <a name="line89"></a>      for (var i = 0; i &lt; matches.length; i++) {
-<a name="line90"></a>        var func = goog.json.unsafeParse(matches[i][0]);
-<a name="line91"></a>        for (var j = 1; j &lt; matches[i].length; j++) {
-<a name="line92"></a>          var richRow = func(matches[i][j]);
-<a name="line93"></a>          rows.push(richRow);
-<a name="line94"></a>
-<a name="line95"></a>          // If no render function was provided, set the node&#39;s innerHTML.
-<a name="line96"></a>          if (typeof richRow.render == &#39;undefined&#39;) {
-<a name="line97"></a>            richRow.render = function(node, token) {
-<a name="line98"></a>              node.innerHTML = richRow.toString();
-<a name="line99"></a>            };
-<a name="line100"></a>          }
-<a name="line101"></a>
-<a name="line102"></a>          // If no select function was provided, set the text of the input.
-<a name="line103"></a>          if (typeof richRow.select == &#39;undefined&#39;) {
-<a name="line104"></a>            richRow.select = function(target) {
-<a name="line105"></a>              target.value = richRow.toString();
-<a name="line106"></a>            };
-<a name="line107"></a>          }
-<a name="line108"></a>        }
-<a name="line109"></a>      }
-<a name="line110"></a>      if (this.rowFilter_) {
-<a name="line111"></a>        rows = this.rowFilter_(rows);
-<a name="line112"></a>      }
-<a name="line113"></a>      matchHandler(token, rows);
-<a name="line114"></a>    } catch (exception) {
-<a name="line115"></a>      // TODO: Is this what we want?
-<a name="line116"></a>      matchHandler(token, []);
-<a name="line117"></a>    }
-<a name="line118"></a>  }, this);
-<a name="line119"></a>
-<a name="line120"></a>  // Call the super&#39;s requestMatchingRows with myMatchHandler
-<a name="line121"></a>  goog.ui.AutoComplete.RichRemoteArrayMatcher.superClass_
-<a name="line122"></a>      .requestMatchingRows.call(this, token, maxMatches, myMatchHandler);
-<a name="line123"></a>};
+<a name="line90"></a>        var func =  /** @type {!Function} */
+<a name="line91"></a>            (goog.json.unsafeParse(matches[i][0]));
+<a name="line92"></a>        for (var j = 1; j &lt; matches[i].length; j++) {
+<a name="line93"></a>          var richRow = func(matches[i][j]);
+<a name="line94"></a>          rows.push(richRow);
+<a name="line95"></a>
+<a name="line96"></a>          // If no render function was provided, set the node&#39;s innerHTML.
+<a name="line97"></a>          if (typeof richRow.render == &#39;undefined&#39;) {
+<a name="line98"></a>            richRow.render = function(node, token) {
+<a name="line99"></a>              node.innerHTML = richRow.toString();
+<a name="line100"></a>            };
+<a name="line101"></a>          }
+<a name="line102"></a>
+<a name="line103"></a>          // If no select function was provided, set the text of the input.
+<a name="line104"></a>          if (typeof richRow.select == &#39;undefined&#39;) {
+<a name="line105"></a>            richRow.select = function(target) {
+<a name="line106"></a>              target.value = richRow.toString();
+<a name="line107"></a>            };
+<a name="line108"></a>          }
+<a name="line109"></a>        }
+<a name="line110"></a>      }
+<a name="line111"></a>      if (this.rowFilter_) {
+<a name="line112"></a>        rows = this.rowFilter_(rows);
+<a name="line113"></a>      }
+<a name="line114"></a>      matchHandler(token, rows);
+<a name="line115"></a>    } catch (exception) {
+<a name="line116"></a>      // TODO: Is this what we want?
+<a name="line117"></a>      matchHandler(token, []);
+<a name="line118"></a>    }
+<a name="line119"></a>  }, this);
+<a name="line120"></a>
+<a name="line121"></a>  // Call the super&#39;s requestMatchingRows with myMatchHandler
+<a name="line122"></a>  goog.ui.AutoComplete.RichRemoteArrayMatcher.superClass_
+<a name="line123"></a>      .requestMatchingRows.call(this, token, maxMatches, myMatchHandler);
+<a name="line124"></a>};
 </pre>
 
 

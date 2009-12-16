@@ -28,9 +28,9 @@ goog.provide('goog.debug.LogRecord');
  * @param {goog.debug.Logger.Level} level One of the level identifiers.
  * @param {string} msg The string message.
  * @param {string} loggerName The name of the source logger.
- * @param {number} opt_time Time this log record was created if other than now.
+ * @param {number=} opt_time Time this log record was created if other than now.
  *     If 0, we use #goog.now.
- * @param {number} opt_sequenceNumber Sequence number of this log record. This
+ * @param {number=} opt_sequenceNumber Sequence number of this log record. This
  *     should only be passed in when restoring a log record from persistence.
  */
 goog.debug.LogRecord = function(level, msg, loggerName,

@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,13 +90,13 @@ parameters.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_ui_media_MediaModel.html">goog.ui.media.MediaModel</a></span></td><td></td></tr>
   <tr><td>goog.ui.media.YoutubeModel</td><td><span class="type"><a href="class_goog_ui_media_MediaModel.html">goog.ui.media.MediaModel</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -116,7 +128,7 @@ parameters.
    <tr class="odd">
      <td>
         <span class="entryName">opt_caption</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">An optional caption of the youtube video.</div>
      </td>
    </tr>
@@ -124,7 +136,7 @@ parameters.
    <tr class="even">
      <td>
         <span class="entryName">opt_description</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">An optional description of the youtube video.</div>
      </td>
    </tr>
@@ -216,7 +228,7 @@ out of the youtube video id.
    <tr class="odd">
      <td>
         <span class="entryName">opt_autoplay</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the flash movie should start playing as soon as it is shown, or if it should show a &#39;play&#39; button.</div>
      </td>
    </tr>
@@ -234,7 +246,7 @@ out of the youtube video id.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_media_youtube.js.source.html#line306">code &raquo;</a>
+     <a href="closure_goog_ui_media_youtube.js.source.html#line308">code &raquo;</a>
   </td>
      </tr>
 
@@ -280,7 +292,7 @@ out of the youtube video id.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_media_youtube.js.source.html#line322">code &raquo;</a>
+     <a href="closure_goog_ui_media_youtube.js.source.html#line324">code &raquo;</a>
   </td>
      </tr>
 
@@ -1285,7 +1297,7 @@ and returns a youtube URL.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_media_youtube.js.source.html#line274">code &raquo;</a>
+     <a href="closure_goog_ui_media_youtube.js.source.html#line276">code &raquo;</a>
   </td>
      </tr>
 
@@ -1356,7 +1368,7 @@ url ? is there an official API for <a href="http://ytimg.com">http://ytimg.com</
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_media_youtube.js.source.html#line292">code &raquo;</a>
+     <a href="closure_goog_ui_media_youtube.js.source.html#line294">code &raquo;</a>
   </td>
      </tr>
 
@@ -1391,7 +1403,7 @@ url ? is there an official API for <a href="http://ytimg.com">http://ytimg.com</
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_media_youtube.js.source.html#line238">code &raquo;</a>
+     <a href="closure_goog_ui_media_youtube.js.source.html#line239">code &raquo;</a>
   </td>
      </tr>
 
@@ -1447,7 +1459,7 @@ video, and builds a YoutubeModel.
    <tr class="odd">
      <td>
         <span class="entryName">opt_caption</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">An optional caption of the youtube video.</div>
      </td>
    </tr>
@@ -1455,7 +1467,7 @@ video, and builds a YoutubeModel.
    <tr class="even">
      <td>
         <span class="entryName">opt_description</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">An optional description of the youtube video.</div>
      </td>
    </tr>
@@ -1473,7 +1485,7 @@ video, and builds a YoutubeModel.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_media_youtube.js.source.html#line254">code &raquo;</a>
+     <a href="closure_goog_ui_media_youtube.js.source.html#line256">code &raquo;</a>
   </td>
      </tr>
 

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,10 +81,10 @@
 <a name="line37"></a> *
 <a name="line38"></a> * @param {goog.ui.ControlContent} caption Default caption or existing DOM
 <a name="line39"></a> *     structure to display as the button&#39;s caption when nothing is selected.
-<a name="line40"></a> * @param {goog.ui.Menu} opt_menu Menu containing selection options.
-<a name="line41"></a> * @param {goog.ui.ButtonRenderer} opt_renderer Renderer used to render or
+<a name="line40"></a> * @param {goog.ui.Menu=} opt_menu Menu containing selection options.
+<a name="line41"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Renderer used to render or
 <a name="line42"></a> *     decorate the control; defaults to {@link goog.ui.MenuButtonRenderer}.
-<a name="line43"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+<a name="line43"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
 <a name="line44"></a> *     document interaction.
 <a name="line45"></a> * @constructor
 <a name="line46"></a> * @extends {goog.ui.MenuButton}
@@ -374,7 +375,7 @@
 <a name="line331"></a>/**
 <a name="line332"></a> * Creates a new selection model and sets up an event listener to handle
 <a name="line333"></a> * {@link goog.events.EventType.SELECT} events dispatched by it.
-<a name="line334"></a> * @param {goog.ui.Component} opt_component If provided, will add the
+<a name="line334"></a> * @param {goog.ui.Component=} opt_component If provided, will add the
 <a name="line335"></a> *     component&#39;s children as items to the selection model.
 <a name="line336"></a> * @private
 <a name="line337"></a> */

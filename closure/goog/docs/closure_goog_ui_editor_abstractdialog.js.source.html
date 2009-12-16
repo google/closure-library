@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -191,16 +192,16 @@
 <a name="line148"></a>/**
 <a name="line149"></a> * Adds an OK button to the dialog. Clicking this button will cause {@link
 <a name="line150"></a> * handleOk} to run, subsequently dispatching an OK event.
-<a name="line151"></a> * @param {string} opt_label The caption for the button, if not &quot;OK&quot;.
+<a name="line151"></a> * @param {string=} opt_label The caption for the button, if not &quot;OK&quot;.
 <a name="line152"></a> * @return {goog.ui.editor.AbstractDialog.Builder} This.
 <a name="line153"></a> */
 <a name="line154"></a>goog.ui.editor.AbstractDialog.Builder.prototype.addOkButton =
 <a name="line155"></a>    function(opt_label) {
 <a name="line156"></a>  var key = goog.ui.Dialog.DefaultButtonKeys.OK;
 <a name="line157"></a>  /** @desc Label for an OK button in an editor dialog. */
-<a name="line158"></a>  var MSG_EDITOR_DIALOG_OK = goog.getMsg(&#39;OK&#39;);
+<a name="line158"></a>  var MSG_TR_DIALOG_OK = goog.getMsg(&#39;OK&#39;);
 <a name="line159"></a>  // True means this is the default/OK button.
-<a name="line160"></a>  this.buttonSet_.set(key, opt_label || MSG_EDITOR_DIALOG_OK, true);
+<a name="line160"></a>  this.buttonSet_.set(key, opt_label || MSG_TR_DIALOG_OK, true);
 <a name="line161"></a>  this.buttonHandlers_[key] = goog.bind(this.editorDialog_.handleOk,
 <a name="line162"></a>                                        this.editorDialog_);
 <a name="line163"></a>  return this;
@@ -209,16 +210,16 @@
 <a name="line166"></a>/**
 <a name="line167"></a> * Adds a Cancel button to the dialog. Clicking this button will cause {@link
 <a name="line168"></a> * handleCancel} to run, subsequently dispatching a CANCEL event.
-<a name="line169"></a> * @param {string} opt_label The caption for the button, if not &quot;Cancel&quot;.
+<a name="line169"></a> * @param {string=} opt_label The caption for the button, if not &quot;Cancel&quot;.
 <a name="line170"></a> * @return {goog.ui.editor.AbstractDialog.Builder} This.
 <a name="line171"></a> */
 <a name="line172"></a>goog.ui.editor.AbstractDialog.Builder.prototype.addCancelButton =
 <a name="line173"></a>    function(opt_label) {
 <a name="line174"></a>  var key = goog.ui.Dialog.DefaultButtonKeys.CANCEL;
 <a name="line175"></a>  /** @desc Label for a cancel button in an editor dialog. */
-<a name="line176"></a>  var MSG_EDITOR_DIALOG_CANCEL = goog.getMsg(&#39;Cancel&#39;);
+<a name="line176"></a>  var MSG_TR_DIALOG_CANCEL = goog.getMsg(&#39;Cancel&#39;);
 <a name="line177"></a>  // False means it&#39;s not the OK button, true means it&#39;s the Cancel button.
-<a name="line178"></a>  this.buttonSet_.set(key, opt_label || MSG_EDITOR_DIALOG_CANCEL, false, true);
+<a name="line178"></a>  this.buttonSet_.set(key, opt_label || MSG_TR_DIALOG_CANCEL, false, true);
 <a name="line179"></a>  this.buttonHandlers_[key] = goog.bind(this.editorDialog_.handleCancel,
 <a name="line180"></a>                                        this.editorDialog_);
 <a name="line181"></a>  return this;
@@ -231,7 +232,7 @@
 <a name="line188"></a> *     the button is clicked. It is recommended that this function be a method
 <a name="line189"></a> *     in the concrete subclass of AbstractDialog using this Builder, and that
 <a name="line190"></a> *     it dispatch an event (see {@link handleOk}).
-<a name="line191"></a> * @param {string} opt_buttonId Identifier to be used to access the button when
+<a name="line191"></a> * @param {string=} opt_buttonId Identifier to be used to access the button when
 <a name="line192"></a> *     calling AbstractDialog.getButtonElement().
 <a name="line193"></a> * @return {goog.ui.editor.AbstractDialog.Builder} This.
 <a name="line194"></a> */

@@ -27,10 +27,10 @@ goog.require('goog.ui.registry');
 /**
  * A separator control for a toolbar.
  *
- * @param {goog.ui.ToolbarSeparatorRenderer} opt_renderer Renderer to render or
+ * @param {goog.ui.ToolbarSeparatorRenderer=} opt_renderer Renderer to render or
  *    decorate the separator; defaults to
  *     {@link goog.ui.ToolbarSeparatorRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *    document interaction.
  * @constructor
  * @extends {goog.ui.Separator}

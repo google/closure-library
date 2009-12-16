@@ -28,12 +28,12 @@ goog.require('goog.structs.Set');
 
 /**
  * Catches onerror events fired by windows and similar objects.
- * @param {goog.debug.Logger|function(Object)} opt_logger The logger to use to
+ * @param {goog.debug.Logger|function(Object)=} opt_logger The logger to use to
  *    catch errors or a function to call instead. The function takes a single
  *    parameter that contains information about the error.
- * @param {boolean} opt_cancel Whether to stop the error from reaching the
+ * @param {boolean=} opt_cancel Whether to stop the error from reaching the
  *    browser.
- * @param {Object} opt_target Object that fires onerror events.
+ * @param {Object=} opt_target Object that fires onerror events.
  */
 goog.debug.catchErrors = function(opt_logger, opt_cancel, opt_target) {
   var logger = opt_logger || goog.debug.LogManager.getRoot();
@@ -62,7 +62,7 @@ goog.debug.catchErrors = function(opt_logger, opt_cancel, opt_target) {
 /**
  * Creates a string representing an object and all its properties.
  * @param {Object|null|undefined} obj Object to expose.
- * @param {boolean} opt_showFn Show the functions as well as the properties,
+ * @param {boolean=} opt_showFn Show the functions as well as the properties,
  *     default is false.
  * @return {string} The string representation of {@code obj}.
  */
@@ -93,12 +93,16 @@ goog.debug.expose = function(obj, opt_showFn) {
 
 
 /**
- * Creates a string representing an object and all its properties and nested
- * objects.
- * @param {Object|null|undefined} obj Object to expose.
- * @param {boolean} opt_showFn Show the functions as well as the properties,
- *     default is false.
- * @return {string} The string representation of {@code obj}.
+ * Creates a string representing a given primitive or object, and for an
+ * object, all its properties and nested objects.  WARNING: If an object is
+ * given, it and all its nested objects will be modified.  To detect reference
+ * cycles, this method identifies objects using goog.getHashCode(), so every
+ * object it touches will gain a property whose name begins with
+ * 'closure_hashCode_'.
+ * @param {*} obj Object to expose.
+ * @param {boolean=} opt_showFn Also show properties that are functions (by
+ *     default, functions are omitted).
+ * @return {string} A string representation of {@code obj}.
  */
 goog.debug.deepExpose = function(obj, opt_showFn) {
   var previous = new goog.structs.Set();
@@ -123,6 +127,8 @@ goog.debug.deepExpose = function(obj, opt_showFn) {
         str.push(indentMultiline(String(obj)));
       } else if (goog.isObject(obj)) {
         if (previous.contains(obj)) {
+          // TODO: This is a bug; it falsely detects non-loops as loops
+          // when the reference tree contains two references to the same object.
           str.push('*** reference loop detected ***');
         } else {
           previous.add(obj);
@@ -173,7 +179,7 @@ goog.debug.exposeArray = function(arr) {
  * Exposes an exception that has been caught by a try...catch and outputs the
  * error with a stack trace.
  * @param {Object} err Error object or string.
- * @param {Function} opt_fn Optional function to start stack trace from.
+ * @param {Function=} opt_fn Optional function to start stack trace from.
  * @return {string} Details of exception.
  */
 goog.debug.exposeException = function(err, opt_fn) {
@@ -232,7 +238,8 @@ goog.debug.normalizeErrorObject = function(err) {
  * adds a stacktrace if there isn't one,
  * and optionally adds an extra message.
  * @param {Error|string} err  the original thrown object or string.
- * @param {string} opt_message  optional additional message to add to the error.
+ * @param {string=} opt_message  optional additional message to add to the
+ *     error.
  * @return {Error} If err is a string, it is used to create a new Error,
  *     which is enhanced and returned.  Otherwise err itself is enhanced
  *     and returned.
@@ -257,7 +264,7 @@ goog.debug.enhanceError = function(err, opt_message) {
 /**
  * Gets the current stack trace. Simple and iterative - doesn't worry about
  * catching circular references or getting the args.
- * @param {number} opt_depth Optional maximum depth to trace back to.
+ * @param {number=} opt_depth Optional maximum depth to trace back to.
  * @return {string} A string with the function names of all functions in the
  *     stack, separated by \n.
  */
@@ -302,7 +309,7 @@ goog.debug.MAX_STACK_DEPTH = 50;
 /**
  * Gets the current stack trace, either starting from the caller or starting
  * from a specified function that's currently on the call stack.
- * @param {Function} opt_fn Optional function to start getting the trace from.
+ * @param {Function=} opt_fn Optional function to start getting the trace from.
  *     If not provided, defaults to the function that called this.
  * @return {string} Stack trace.
  */

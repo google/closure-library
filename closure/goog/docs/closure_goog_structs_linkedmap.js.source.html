@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -68,37 +69,37 @@
 <a name="line25"></a>
 <a name="line26"></a>goog.provide(&#39;goog.structs.LinkedMap&#39;);
 <a name="line27"></a>
-<a name="line28"></a>goog.require(&#39;goog.array&#39;);
-<a name="line29"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line28"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line29"></a>
 <a name="line30"></a>
-<a name="line31"></a>
-<a name="line32"></a>/**
-<a name="line33"></a> * Class for a LinkedMap datastructure, which combines O(1) map access for
-<a name="line34"></a> * key/value pairs with a linked list for a consistent iteration order. Sample
-<a name="line35"></a> * usage:
-<a name="line36"></a> *
-<a name="line37"></a> * &lt;pre&gt;
-<a name="line38"></a> * var m = new LinkedMap();
-<a name="line39"></a> * m.set(&#39;param1&#39;, &#39;A&#39;);
-<a name="line40"></a> * m.set(&#39;param2&#39;, &#39;B&#39;);
-<a name="line41"></a> * m.set(&#39;param3&#39;, &#39;C&#39;);
-<a name="line42"></a> * alert(m.getKeys()); // param1, param2, param3
-<a name="line43"></a> *
-<a name="line44"></a> * var c = new LinkedMap(5, true);
-<a name="line45"></a> * for (var i = 0; i &lt; 10; i++) {
-<a name="line46"></a> *   c.set(&#39;entry&#39; + i, false);
-<a name="line47"></a> * }
-<a name="line48"></a> * alert(c.getKeys()); // entry9, entry8, entry7, entry6, entry5
-<a name="line49"></a> *
-<a name="line50"></a> * c.set(&#39;entry5&#39;, true);
-<a name="line51"></a> * c.set(&#39;entry1&#39;, false);
-<a name="line52"></a> * alert(c.getKeys()); // entry1, entry5, entry9, entry8, entry7
-<a name="line53"></a> * &lt;/pre&gt;
-<a name="line54"></a> *
-<a name="line55"></a> * @param {number} opt_maxCount The maximum number of objects to store in the
-<a name="line56"></a> *     LinkedMap. If unspecified or 0, there is no maximum.
-<a name="line57"></a> * @param {boolean} opt_cache When set, the LinkedMap stores items in order from
-<a name="line58"></a> *     most recently used to least recently used, instead of insertion order.
+<a name="line31"></a>/**
+<a name="line32"></a> * Class for a LinkedMap datastructure, which combines O(1) map access for
+<a name="line33"></a> * key/value pairs with a linked list for a consistent iteration order. Sample
+<a name="line34"></a> * usage:
+<a name="line35"></a> *
+<a name="line36"></a> * &lt;pre&gt;
+<a name="line37"></a> * var m = new LinkedMap();
+<a name="line38"></a> * m.set(&#39;param1&#39;, &#39;A&#39;);
+<a name="line39"></a> * m.set(&#39;param2&#39;, &#39;B&#39;);
+<a name="line40"></a> * m.set(&#39;param3&#39;, &#39;C&#39;);
+<a name="line41"></a> * alert(m.getKeys()); // param1, param2, param3
+<a name="line42"></a> *
+<a name="line43"></a> * var c = new LinkedMap(5, true);
+<a name="line44"></a> * for (var i = 0; i &lt; 10; i++) {
+<a name="line45"></a> *   c.set(&#39;entry&#39; + i, false);
+<a name="line46"></a> * }
+<a name="line47"></a> * alert(c.getKeys()); // entry9, entry8, entry7, entry6, entry5
+<a name="line48"></a> *
+<a name="line49"></a> * c.set(&#39;entry5&#39;, true);
+<a name="line50"></a> * c.set(&#39;entry1&#39;, false);
+<a name="line51"></a> * alert(c.getKeys()); // entry1, entry5, entry9, entry8, entry7
+<a name="line52"></a> * &lt;/pre&gt;
+<a name="line53"></a> *
+<a name="line54"></a> * @param {number=} opt_maxCount The maximum number of objects to store in the
+<a name="line55"></a> *     LinkedMap. If unspecified or 0, there is no maximum.
+<a name="line56"></a> * @param {boolean=} opt_cache When set, the LinkedMap stores items in order
+<a name="line57"></a> *     from most recently used to least recently used, instead of insertion
+<a name="line58"></a> *     order.
 <a name="line59"></a> * @constructor
 <a name="line60"></a> */
 <a name="line61"></a>goog.structs.LinkedMap = function(opt_maxCount, opt_cache) {
@@ -127,7 +128,7 @@
 <a name="line84"></a> * Retrieves the value for a given key. If this is a caching LinkedMap, the
 <a name="line85"></a> * entry will become the most recently used.
 <a name="line86"></a> * @param {string} key The key to retrieve the value for.
-<a name="line87"></a> * @param {*} opt_val A default value that will be returned if the key is
+<a name="line87"></a> * @param {*=} opt_val A default value that will be returned if the key is
 <a name="line88"></a> *     not found, defaults to undefined.
 <a name="line89"></a> * @return {*} The retrieved value.
 <a name="line90"></a> */
@@ -148,7 +149,7 @@
 <a name="line105"></a> * Retrieves the value for a given key without updating the entry to be the
 <a name="line106"></a> * most recently used.
 <a name="line107"></a> * @param {string} key The key to retrieve the value for.
-<a name="line108"></a> * @param {*} opt_val A default value that will be returned if the key is
+<a name="line108"></a> * @param {*=} opt_val A default value that will be returned if the key is
 <a name="line109"></a> *     not found.
 <a name="line110"></a> * @return {*} The retrieved value.
 <a name="line111"></a> */
@@ -325,174 +326,178 @@
 <a name="line282"></a> * @see goog.structs.forEach
 <a name="line283"></a> * @param {Function} f The function to call for each item. The function takes
 <a name="line284"></a> *     three arguments: the value, the key, and the LinkedMap.
-<a name="line285"></a> * @param {Object} opt_obj The object context to use as &quot;this&quot; for the function.
-<a name="line286"></a> */
-<a name="line287"></a>goog.structs.LinkedMap.prototype.forEach = function(f, opt_obj) {
-<a name="line288"></a>  for (var n = this.head_.next; n != this.head_; n = n.next) {
-<a name="line289"></a>    f.call(opt_obj, n.value, n.key, this);
-<a name="line290"></a>  }
-<a name="line291"></a>};
-<a name="line292"></a>
+<a name="line285"></a> * @param {Object=} opt_obj The object context to use as &quot;this&quot; for the
+<a name="line286"></a> *     function.
+<a name="line287"></a> */
+<a name="line288"></a>goog.structs.LinkedMap.prototype.forEach = function(f, opt_obj) {
+<a name="line289"></a>  for (var n = this.head_.next; n != this.head_; n = n.next) {
+<a name="line290"></a>    f.call(opt_obj, n.value, n.key, this);
+<a name="line291"></a>  }
+<a name="line292"></a>};
 <a name="line293"></a>
-<a name="line294"></a>/**
-<a name="line295"></a> * Calls a function on each item in the LinkedMap and returns the results of
-<a name="line296"></a> * those calls in an array.
-<a name="line297"></a> *
-<a name="line298"></a> * @see goog.structs.map
-<a name="line299"></a> * @param {Function} f The function to call for each item. The function takes
-<a name="line300"></a> *     three arguments: the value, the key, and the LinkedMap.
-<a name="line301"></a> * @param {Object} opt_obj The object context to use as &quot;this&quot; for the function.
-<a name="line302"></a> * @return {Array} The results of the function calls for each item in the
-<a name="line303"></a> *     LinkedMap.
-<a name="line304"></a> */
-<a name="line305"></a>goog.structs.LinkedMap.prototype.map = function(f, opt_obj) {
-<a name="line306"></a>  var rv = [];
-<a name="line307"></a>  for (var n = this.head_.next; n != this.head_; n = n.next) {
-<a name="line308"></a>    rv.push(f.call(opt_obj, n.value, n.key, this));
-<a name="line309"></a>  }
-<a name="line310"></a>  return rv;
-<a name="line311"></a>};
-<a name="line312"></a>
-<a name="line313"></a>
-<a name="line314"></a>/**
-<a name="line315"></a> * Calls a function on each item in the LinkedMap and returns true if any of
-<a name="line316"></a> * those function calls returns a true-like value.
-<a name="line317"></a> *
-<a name="line318"></a> * @see goog.structs.some
-<a name="line319"></a> * @param {Function} f The function to call for each item. The function takes
-<a name="line320"></a> *     three arguments: the value, the key, and the LinkedMap, and returns a
-<a name="line321"></a> *     boolean.
-<a name="line322"></a> * @param {Object} opt_obj The object context to use as &quot;this&quot; for the function.
-<a name="line323"></a> * @return {boolean} Whether f evaluates to true for at least one item in the
-<a name="line324"></a> *     LinkedMap.
-<a name="line325"></a> */
-<a name="line326"></a>goog.structs.LinkedMap.prototype.some = function(f, opt_obj) {
-<a name="line327"></a>  for (var n = this.head_.next; n != this.head_; n = n.next) {
-<a name="line328"></a>    if (f.call(opt_obj, n.value, n.key, this)) {
-<a name="line329"></a>      return true;
-<a name="line330"></a>    }
-<a name="line331"></a>  }
-<a name="line332"></a>  return false;
-<a name="line333"></a>};
-<a name="line334"></a>
-<a name="line335"></a>
-<a name="line336"></a>/**
-<a name="line337"></a> * Calls a function on each item in the LinkedMap and returns true only if every
-<a name="line338"></a> * function call returns a true-like value.
-<a name="line339"></a> *
-<a name="line340"></a> * @see goog.structs.some
-<a name="line341"></a> * @param {Function} f The function to call for each item. The function takes
-<a name="line342"></a> *     three arguments: the value, the key, and the Cache, and returns a
-<a name="line343"></a> *     boolean.
-<a name="line344"></a> * @param {Object} opt_obj The object context to use as &quot;this&quot; for the function.
-<a name="line345"></a> * @return {boolean} Whether f evaluates to true for every item in the Cache.
-<a name="line346"></a> */
-<a name="line347"></a>goog.structs.LinkedMap.prototype.every = function(f, opt_obj) {
-<a name="line348"></a>  for (var n = this.head_.next; n != this.head_; n = n.next) {
-<a name="line349"></a>    if (!f.call(opt_obj, n.value, n.key, this)) {
-<a name="line350"></a>      return false;
-<a name="line351"></a>    }
-<a name="line352"></a>  }
-<a name="line353"></a>  return true;
-<a name="line354"></a>};
-<a name="line355"></a>
-<a name="line356"></a>
-<a name="line357"></a>/**
-<a name="line358"></a> * Appends a node to the list. LinkedMap in cache mode adds new nodes to
-<a name="line359"></a> * the head of the list, otherwise they are appended to the tail. If there is a
-<a name="line360"></a> * maximum size, the list will be truncated if necessary.
-<a name="line361"></a> *
-<a name="line362"></a> * @param {goog.structs.LinkedMap.Node_} node The item to insert.
-<a name="line363"></a> * @private
-<a name="line364"></a> */
-<a name="line365"></a>goog.structs.LinkedMap.prototype.insert_ = function(node) {
-<a name="line366"></a>  if (this.cache_) {
-<a name="line367"></a>    node.next = this.head_.next;
-<a name="line368"></a>    node.prev = this.head_;
-<a name="line369"></a>
-<a name="line370"></a>    this.head_.next = node;
-<a name="line371"></a>    node.next.prev = node;
-<a name="line372"></a>  } else {
-<a name="line373"></a>    node.prev = this.head_.prev;
-<a name="line374"></a>    node.next = this.head_;
-<a name="line375"></a>
-<a name="line376"></a>    this.head_.prev = node;
-<a name="line377"></a>    node.prev.next = node;
-<a name="line378"></a>  }
+<a name="line294"></a>
+<a name="line295"></a>/**
+<a name="line296"></a> * Calls a function on each item in the LinkedMap and returns the results of
+<a name="line297"></a> * those calls in an array.
+<a name="line298"></a> *
+<a name="line299"></a> * @see goog.structs.map
+<a name="line300"></a> * @param {Function} f The function to call for each item. The function takes
+<a name="line301"></a> *     three arguments: the value, the key, and the LinkedMap.
+<a name="line302"></a> * @param {Object=} opt_obj The object context to use as &quot;this&quot; for the
+<a name="line303"></a> *     function.
+<a name="line304"></a> * @return {Array} The results of the function calls for each item in the
+<a name="line305"></a> *     LinkedMap.
+<a name="line306"></a> */
+<a name="line307"></a>goog.structs.LinkedMap.prototype.map = function(f, opt_obj) {
+<a name="line308"></a>  var rv = [];
+<a name="line309"></a>  for (var n = this.head_.next; n != this.head_; n = n.next) {
+<a name="line310"></a>    rv.push(f.call(opt_obj, n.value, n.key, this));
+<a name="line311"></a>  }
+<a name="line312"></a>  return rv;
+<a name="line313"></a>};
+<a name="line314"></a>
+<a name="line315"></a>
+<a name="line316"></a>/**
+<a name="line317"></a> * Calls a function on each item in the LinkedMap and returns true if any of
+<a name="line318"></a> * those function calls returns a true-like value.
+<a name="line319"></a> *
+<a name="line320"></a> * @see goog.structs.some
+<a name="line321"></a> * @param {Function} f The function to call for each item. The function takes
+<a name="line322"></a> *     three arguments: the value, the key, and the LinkedMap, and returns a
+<a name="line323"></a> *     boolean.
+<a name="line324"></a> * @param {Object=} opt_obj The object context to use as &quot;this&quot; for the
+<a name="line325"></a> *     function.
+<a name="line326"></a> * @return {boolean} Whether f evaluates to true for at least one item in the
+<a name="line327"></a> *     LinkedMap.
+<a name="line328"></a> */
+<a name="line329"></a>goog.structs.LinkedMap.prototype.some = function(f, opt_obj) {
+<a name="line330"></a>  for (var n = this.head_.next; n != this.head_; n = n.next) {
+<a name="line331"></a>    if (f.call(opt_obj, n.value, n.key, this)) {
+<a name="line332"></a>      return true;
+<a name="line333"></a>    }
+<a name="line334"></a>  }
+<a name="line335"></a>  return false;
+<a name="line336"></a>};
+<a name="line337"></a>
+<a name="line338"></a>
+<a name="line339"></a>/**
+<a name="line340"></a> * Calls a function on each item in the LinkedMap and returns true only if every
+<a name="line341"></a> * function call returns a true-like value.
+<a name="line342"></a> *
+<a name="line343"></a> * @see goog.structs.some
+<a name="line344"></a> * @param {Function} f The function to call for each item. The function takes
+<a name="line345"></a> *     three arguments: the value, the key, and the Cache, and returns a
+<a name="line346"></a> *     boolean.
+<a name="line347"></a> * @param {Object=} opt_obj The object context to use as &quot;this&quot; for the
+<a name="line348"></a> *     function.
+<a name="line349"></a> * @return {boolean} Whether f evaluates to true for every item in the Cache.
+<a name="line350"></a> */
+<a name="line351"></a>goog.structs.LinkedMap.prototype.every = function(f, opt_obj) {
+<a name="line352"></a>  for (var n = this.head_.next; n != this.head_; n = n.next) {
+<a name="line353"></a>    if (!f.call(opt_obj, n.value, n.key, this)) {
+<a name="line354"></a>      return false;
+<a name="line355"></a>    }
+<a name="line356"></a>  }
+<a name="line357"></a>  return true;
+<a name="line358"></a>};
+<a name="line359"></a>
+<a name="line360"></a>
+<a name="line361"></a>/**
+<a name="line362"></a> * Appends a node to the list. LinkedMap in cache mode adds new nodes to
+<a name="line363"></a> * the head of the list, otherwise they are appended to the tail. If there is a
+<a name="line364"></a> * maximum size, the list will be truncated if necessary.
+<a name="line365"></a> *
+<a name="line366"></a> * @param {goog.structs.LinkedMap.Node_} node The item to insert.
+<a name="line367"></a> * @private
+<a name="line368"></a> */
+<a name="line369"></a>goog.structs.LinkedMap.prototype.insert_ = function(node) {
+<a name="line370"></a>  if (this.cache_) {
+<a name="line371"></a>    node.next = this.head_.next;
+<a name="line372"></a>    node.prev = this.head_;
+<a name="line373"></a>
+<a name="line374"></a>    this.head_.next = node;
+<a name="line375"></a>    node.next.prev = node;
+<a name="line376"></a>  } else {
+<a name="line377"></a>    node.prev = this.head_.prev;
+<a name="line378"></a>    node.next = this.head_;
 <a name="line379"></a>
-<a name="line380"></a>  this.truncate_();
-<a name="line381"></a>};
-<a name="line382"></a>
+<a name="line380"></a>    this.head_.prev = node;
+<a name="line381"></a>    node.prev.next = node;
+<a name="line382"></a>  }
 <a name="line383"></a>
-<a name="line384"></a>/**
-<a name="line385"></a> * Removes elements from the LinkedMap if the maximum count has been exceeded.
-<a name="line386"></a> * In cache mode removes nodes from the tail of the list. Otherwise removes
-<a name="line387"></a> * nodes from the head.
-<a name="line388"></a> * @private
-<a name="line389"></a> */
-<a name="line390"></a>goog.structs.LinkedMap.prototype.truncate_ = function() {
-<a name="line391"></a>  if (this.maxCount_) {
-<a name="line392"></a>    for (var i = this.map_.getCount(); i &gt; this.maxCount_; i--) {
-<a name="line393"></a>      var node = this.cache_ ? this.head_.prev : this.head_.next;
-<a name="line394"></a>      node.remove();
-<a name="line395"></a>      this.map_.remove(node.key);
-<a name="line396"></a>    }
-<a name="line397"></a>  }
-<a name="line398"></a>};
-<a name="line399"></a>
-<a name="line400"></a>
-<a name="line401"></a>/**
-<a name="line402"></a> * Removes the node from the LinkedMap if it is not the head, and returns
-<a name="line403"></a> * the node&#39;s value.
-<a name="line404"></a> * @param {goog.structs.LinkedMap.Node_} node The item to remove.
-<a name="line405"></a> * @return {*} The value of the popped node.
-<a name="line406"></a> * @private
-<a name="line407"></a> */
-<a name="line408"></a>goog.structs.LinkedMap.prototype.popNode_ = function(node) {
-<a name="line409"></a>  if (this.head_ != node) {
-<a name="line410"></a>    node.remove();
-<a name="line411"></a>    this.map_.remove(node.key);
-<a name="line412"></a>  }
-<a name="line413"></a>  return node.value;
-<a name="line414"></a>};
-<a name="line415"></a>
-<a name="line416"></a>
-<a name="line417"></a>/**
-<a name="line418"></a> * Internal class for a doubly-linked list node containing a key/value pair.
-<a name="line419"></a> * @param {string} key The key.
-<a name="line420"></a> * @param {*} value The value.
-<a name="line421"></a> * @constructor
-<a name="line422"></a> * @private
-<a name="line423"></a> */
-<a name="line424"></a>goog.structs.LinkedMap.Node_ = function(key, value) {
-<a name="line425"></a>  this.key = key;
-<a name="line426"></a>  this.value = value;
-<a name="line427"></a>};
-<a name="line428"></a>
-<a name="line429"></a>
-<a name="line430"></a>/**
-<a name="line431"></a> * The next node in the list.
-<a name="line432"></a> * @type {goog.structs.LinkedMap.Node_?}
-<a name="line433"></a> */
-<a name="line434"></a>goog.structs.LinkedMap.Node_.prototype.next;
-<a name="line435"></a>
-<a name="line436"></a>
-<a name="line437"></a>/**
-<a name="line438"></a> * The previous node in the list.
-<a name="line439"></a> * @type {goog.structs.LinkedMap.Node_?}
-<a name="line440"></a> */
-<a name="line441"></a>goog.structs.LinkedMap.Node_.prototype.prev;
-<a name="line442"></a>
-<a name="line443"></a>
-<a name="line444"></a>/**
-<a name="line445"></a> * Causes this node to remove itself rom the list.
-<a name="line446"></a> */
-<a name="line447"></a>goog.structs.LinkedMap.Node_.prototype.remove = function() {
-<a name="line448"></a>  this.prev.next = this.next;
-<a name="line449"></a>  this.next.prev = this.prev;
-<a name="line450"></a>
-<a name="line451"></a>  this.prev = this.next = null;
-<a name="line452"></a>};
+<a name="line384"></a>  this.truncate_();
+<a name="line385"></a>};
+<a name="line386"></a>
+<a name="line387"></a>
+<a name="line388"></a>/**
+<a name="line389"></a> * Removes elements from the LinkedMap if the maximum count has been exceeded.
+<a name="line390"></a> * In cache mode removes nodes from the tail of the list. Otherwise removes
+<a name="line391"></a> * nodes from the head.
+<a name="line392"></a> * @private
+<a name="line393"></a> */
+<a name="line394"></a>goog.structs.LinkedMap.prototype.truncate_ = function() {
+<a name="line395"></a>  if (this.maxCount_) {
+<a name="line396"></a>    for (var i = this.map_.getCount(); i &gt; this.maxCount_; i--) {
+<a name="line397"></a>      var node = this.cache_ ? this.head_.prev : this.head_.next;
+<a name="line398"></a>      node.remove();
+<a name="line399"></a>      this.map_.remove(node.key);
+<a name="line400"></a>    }
+<a name="line401"></a>  }
+<a name="line402"></a>};
+<a name="line403"></a>
+<a name="line404"></a>
+<a name="line405"></a>/**
+<a name="line406"></a> * Removes the node from the LinkedMap if it is not the head, and returns
+<a name="line407"></a> * the node&#39;s value.
+<a name="line408"></a> * @param {goog.structs.LinkedMap.Node_} node The item to remove.
+<a name="line409"></a> * @return {*} The value of the popped node.
+<a name="line410"></a> * @private
+<a name="line411"></a> */
+<a name="line412"></a>goog.structs.LinkedMap.prototype.popNode_ = function(node) {
+<a name="line413"></a>  if (this.head_ != node) {
+<a name="line414"></a>    node.remove();
+<a name="line415"></a>    this.map_.remove(node.key);
+<a name="line416"></a>  }
+<a name="line417"></a>  return node.value;
+<a name="line418"></a>};
+<a name="line419"></a>
+<a name="line420"></a>
+<a name="line421"></a>/**
+<a name="line422"></a> * Internal class for a doubly-linked list node containing a key/value pair.
+<a name="line423"></a> * @param {string} key The key.
+<a name="line424"></a> * @param {*} value The value.
+<a name="line425"></a> * @constructor
+<a name="line426"></a> * @private
+<a name="line427"></a> */
+<a name="line428"></a>goog.structs.LinkedMap.Node_ = function(key, value) {
+<a name="line429"></a>  this.key = key;
+<a name="line430"></a>  this.value = value;
+<a name="line431"></a>};
+<a name="line432"></a>
+<a name="line433"></a>
+<a name="line434"></a>/**
+<a name="line435"></a> * The next node in the list.
+<a name="line436"></a> * @type {goog.structs.LinkedMap.Node_?}
+<a name="line437"></a> */
+<a name="line438"></a>goog.structs.LinkedMap.Node_.prototype.next;
+<a name="line439"></a>
+<a name="line440"></a>
+<a name="line441"></a>/**
+<a name="line442"></a> * The previous node in the list.
+<a name="line443"></a> * @type {goog.structs.LinkedMap.Node_?}
+<a name="line444"></a> */
+<a name="line445"></a>goog.structs.LinkedMap.Node_.prototype.prev;
+<a name="line446"></a>
+<a name="line447"></a>
+<a name="line448"></a>/**
+<a name="line449"></a> * Causes this node to remove itself rom the list.
+<a name="line450"></a> */
+<a name="line451"></a>goog.structs.LinkedMap.Node_.prototype.remove = function() {
+<a name="line452"></a>  this.prev.next = this.next;
+<a name="line453"></a>  this.next.prev = this.prev;
+<a name="line454"></a>
+<a name="line455"></a>  this.prev = this.next = null;
+<a name="line456"></a>};
 </pre>
 
 

@@ -132,7 +132,7 @@ if (!COMPILED) {
  * "a.b.c" -> a = {};a.b={};a.b.c={};
  * Used by goog.provide and goog.exportSymbol.
  * @param {string} name name of the object that this file defines.
- * @param {Object=} opt_object the object to expose at the end of the path.
+ * @param {*=} opt_object the object to expose at the end of the path.
  * @param {Object=} opt_objectToExportTo The object to add the path to; default
  *     is |goog.global|.
  * @private
@@ -1149,7 +1149,7 @@ goog.getMsg = function(str, opt_values) {
  *     new public.path.Foo().myMethod();
  *
  * @param {string} publicPath Unobfuscated name to export.
- * @param {Object} object Object the name should point to.
+ * @param {*} object Object the name should point to.
  * @param {Object=} opt_objectToExportTo The object to add the path to; default
  *     is |goog.global|.
  */
@@ -1164,7 +1164,7 @@ goog.exportSymbol = function(publicPath, object, opt_objectToExportTo) {
  * ex. goog.exportProperty(Foo.prototype, 'myMethod', Foo.prototype.myMethod);
  * @param {Object} object Object whose static property is being exported.
  * @param {string} publicName Unobfuscated name to export.
- * @param {Object} symbol Object the name should point to.
+ * @param {*} symbol Object the name should point to.
  */
 goog.exportProperty = function(object, publicName, symbol) {
   object[publicName] = symbol;

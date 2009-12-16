@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,10 +81,10 @@
 <a name="line37"></a> * listeners may retrieve the selected item using the
 <a name="line38"></a> * {@link #getValue} method.
 <a name="line39"></a> *
-<a name="line40"></a> * @param {goog.ui.DimensionPickerRenderer} opt_renderer Renderer used to
+<a name="line40"></a> * @param {goog.ui.DimensionPickerRenderer=} opt_renderer Renderer used to
 <a name="line41"></a> *     render or decorate the palette; defaults to
 <a name="line42"></a> *     {@link goog.ui.DimensionPickerRenderer}.
-<a name="line43"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+<a name="line43"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
 <a name="line44"></a> *     document interaction.
 <a name="line45"></a> * @constructor
 <a name="line46"></a> * @extends {goog.ui.Control}
@@ -240,7 +241,7 @@
 <a name="line197"></a>/**
 <a name="line198"></a> * Handle key events if supported, so the user can use the keyboard to
 <a name="line199"></a> * manipulate the highlighted rows and columns.
-<a name="line200"></a> * @param {goog.events.BrowserEvent} e The key event object.
+<a name="line200"></a> * @param {goog.events.KeyEvent} e The key event object.
 <a name="line201"></a> * @return {boolean} Whether the key event was handled.
 <a name="line202"></a> */
 <a name="line203"></a>goog.ui.DimensionPicker.prototype.handleKeyEvent = function(e) {
@@ -295,7 +296,7 @@
 <a name="line252"></a> * Sets the currently highlighted dimensions.
 <a name="line253"></a> * @param {number} columns The number of columns to highlight, or a
 <a name="line254"></a> *     goog.math.Size object containing both.
-<a name="line255"></a> * @param {number} opt_rows The number of rows to highlight.  Can be
+<a name="line255"></a> * @param {number=} opt_rows The number of rows to highlight.  Can be
 <a name="line256"></a> *     omitted when columns is a good.math.Size object.
 <a name="line257"></a> */
 <a name="line258"></a>goog.ui.DimensionPicker.prototype.setValue = function(columns,

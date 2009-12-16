@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -79,12 +91,12 @@ See com.google.common.base.Tracer.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.debug.Trace_</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -182,7 +194,7 @@ happened in relation to the traces.
    <tr class="odd">
      <td>
         <span class="entryName">opt_type</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">Type used to identify the tracer. If a comment is given a type and multiple comments are done on that type then a &quot;TOTAL line will be produced showing the total number of comments of that type.</div>
      </td>
    </tr>
@@ -190,7 +202,7 @@ happened in relation to the traces.
    <tr class="even">
      <td>
         <span class="entryName">opt_timeStamp</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
         <div class="entryOverview">The timestamp to insert the comment. If not specified, the current time wil be used.</div>
      </td>
    </tr>
@@ -204,7 +216,7 @@ happened in relation to the traces.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line523">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line526">code &raquo;</a>
   </td>
      </tr>
 
@@ -238,7 +250,7 @@ happened in relation to the traces.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line313">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line316">code &raquo;</a>
   </td>
      </tr>
 
@@ -284,7 +296,7 @@ happened in relation to the traces.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line586">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line589">code &raquo;</a>
   </td>
      </tr>
 
@@ -350,7 +362,7 @@ hasn&#39;t yet been.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line571">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line574">code &raquo;</a>
   </td>
      </tr>
 
@@ -397,7 +409,7 @@ works in IE.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line503">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line506">code &raquo;</a>
   </td>
      </tr>
 
@@ -457,7 +469,7 @@ works in IE.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line306">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line309">code &raquo;</a>
   </td>
      </tr>
 
@@ -517,7 +529,7 @@ works in IE.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line323">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line326">code &raquo;</a>
   </td>
      </tr>
 
@@ -577,7 +589,7 @@ works in IE.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line493">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line496">code &raquo;</a>
   </td>
      </tr>
 
@@ -640,7 +652,7 @@ Tracer code has been loaded.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line296">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line299">code &raquo;</a>
   </td>
      </tr>
 
@@ -695,7 +707,7 @@ Tracer code has been loaded.
    <tr class="odd">
      <td>
         <span class="entryName">opt_type</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Type used to identify the tracer. If a Trace is given a type (the first argument to the constructor) and multiple Traces are done on that type then a &quot;TOTAL line will be produced showing the total number of traces and the sum of the time (&quot;TOTAL Database 2 (37 ms)&quot; in our example). These traces should be mutually exclusive or else the sum won&#39;t make sense (the time will be double counted if the second starts before the first ends).</div>
      </td>
    </tr>
@@ -713,7 +725,7 @@ Tracer code has been loaded.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line371">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line374">code &raquo;</a>
   </td>
      </tr>
 
@@ -768,7 +780,7 @@ Tracer code has been loaded.
    <tr class="odd">
      <td>
         <span class="entryName">opt_silenceThreshold</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Threshold below which the tracer is silenced.</div>
      </td>
    </tr>
@@ -786,7 +798,7 @@ Tracer code has been loaded.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line424">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line427">code &raquo;</a>
   </td>
      </tr>
 
@@ -832,7 +844,7 @@ Tracer code has been loaded.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line595">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line598">code &raquo;</a>
   </td>
      </tr>
 
@@ -899,7 +911,7 @@ Tracer code has been loaded.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line162">Code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line165">Code &raquo;</a>
   </td>
      </tr>
 
@@ -932,7 +944,7 @@ Tracer code has been loaded.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line154">Code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line157">Code &raquo;</a>
   </td>
      </tr>
 
@@ -1015,7 +1027,7 @@ Tracer code has been loaded.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line665">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line668">code &raquo;</a>
   </td>
      </tr>
 
@@ -1081,7 +1093,7 @@ improved alignment. TODO there must be a better way
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line649">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line652">code &raquo;</a>
   </td>
      </tr>
 
@@ -1129,7 +1141,7 @@ higher precision timing info.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_tracer.js.source.html#line682">code &raquo;</a>
+     <a href="closure_goog_debug_tracer.js.source.html#line685">code &raquo;</a>
   </td>
      </tr>
 

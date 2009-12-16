@@ -236,12 +236,12 @@ goog.net.IframeIo.form_;
  * request.
  * @param {goog.Uri|string} uri Uri of the request, it is up the caller to
  *     manage query string params.
- * @param {Function} opt_callback Event handler for when request is completed.
- * @param {string} opt_method Default is GET, POST uses a form to submit the
+ * @param {Function=} opt_callback Event handler for when request is completed.
+ * @param {string=} opt_method Default is GET, POST uses a form to submit the
  *     request.
- * @param {boolean} opt_noCache Append a timestamp to the request to avoid
+ * @param {boolean=} opt_noCache Append a timestamp to the request to avoid
  *     caching.
- * @param {Object|goog.structs.Map} opt_data Map of key-value pairs that
+ * @param {Object|goog.structs.Map=} opt_data Map of key-value pairs that
  *     will be posted to the server via the iframe's form.
  */
 goog.net.IframeIo.send = function(
@@ -497,11 +497,11 @@ goog.net.IframeIo.prototype.errorHandled_;
  * stop a history entry being added for POST requests.
  *
  * @param {goog.Uri|string} uri Uri of the request.
- * @param {string} opt_method Default is GET, POST uses a form to submit the
+ * @param {string=} opt_method Default is GET, POST uses a form to submit the
  *     request.
- * @param {boolean} opt_noCache Append a timestamp to the request to avoid
+ * @param {boolean=} opt_noCache Append a timestamp to the request to avoid
  *     caching.
- * @param {Object|goog.structs.Map} opt_data Map of key-value pairs.
+ * @param {Object|goog.structs.Map=} opt_data Map of key-value pairs.
  */
 goog.net.IframeIo.prototype.send = function(
     uri, opt_method, opt_noCache, opt_data) {
@@ -560,9 +560,9 @@ goog.net.IframeIo.prototype.send = function(
  *
  * @param {HTMLFormElement} form Form element used to send the request to the
  *     server.
- * @param {string} opt_uri Uri to set for the destination of the request, by
+ * @param {string=} opt_uri Uri to set for the destination of the request, by
  *     default the uri will come from the form.
- * @param {boolean} opt_noCache Append a timestamp to the request to avoid
+ * @param {boolean=} opt_noCache Append a timestamp to the request to avoid
  *     caching.
  */
 goog.net.IframeIo.prototype.sendFromForm = function(form, opt_uri,
@@ -587,7 +587,7 @@ goog.net.IframeIo.prototype.sendFromForm = function(form, opt_uri,
 
 /**
  * Abort the current Iframe request
- * @param {goog.net.ErrorCode} opt_failureCode Optional error code to use -
+ * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
  *     defaults to ABORT.
  */
 goog.net.IframeIo.prototype.abort = function(opt_failureCode) {
@@ -1055,8 +1055,8 @@ goog.net.IframeIo.prototype.handleLoad_ = function(contentDocument) {
 /**
  * Handles errors.
  * @param {goog.net.ErrorCode} errorCode Error code.
- * @param {Object} opt_customError If error is CUSTOM_ERROR, this is the client-
- *     provided custom error.
+ * @param {Object=} opt_customError If error is CUSTOM_ERROR, this is the
+ *     client-provided custom error.
  * @private
  */
 goog.net.IframeIo.prototype.handleError_ = function(errorCode,

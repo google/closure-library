@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -74,10 +75,10 @@
 <a name="line31"></a> * tooltip but can track the cursor position and direction to determine if the
 <a name="line32"></a> * tooltip should be dismissed or remain open.
 <a name="line33"></a> *
-<a name="line34"></a> * @param {Element|string} opt_el Element to display tooltip for, either element
-<a name="line35"></a> *                                reference or string id.
-<a name="line36"></a> * @param {?string} opt_str Text message to display in tooltip.
-<a name="line37"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line34"></a> * @param {Element|string=} opt_el Element to display tooltip for, either
+<a name="line35"></a> *     element reference or string id.
+<a name="line36"></a> * @param {?string=} opt_str Text message to display in tooltip.
+<a name="line37"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line38"></a> * @constructor
 <a name="line39"></a> * @extends {goog.ui.Tooltip}
 <a name="line40"></a> */
@@ -159,7 +160,7 @@
 <a name="line116"></a> * Sets margin around the tooltip where the cursor is allowed without dismissing
 <a name="line117"></a> * the tooltip.
 <a name="line118"></a> *
-<a name="line119"></a> * @param {goog.math.Box} opt_box The margin around the tooltip.
+<a name="line119"></a> * @param {goog.math.Box=} opt_box The margin around the tooltip.
 <a name="line120"></a> */
 <a name="line121"></a>goog.ui.AdvancedTooltip.prototype.setHotSpotPadding = function(opt_box) {
 <a name="line122"></a>  this.hotSpotPadding_ = opt_box || null;

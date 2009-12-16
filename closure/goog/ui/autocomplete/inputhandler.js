@@ -108,11 +108,11 @@ goog.require('goog.ui.AutoComplete');
  * Class for managing the interaction between an auto-complete object and a
  * text-input or textarea.
  *
- * @param {?string} opt_separators Separators to split multiple entries.
- * @param {?string} opt_literals Characters used to delimit text literals.
- * @param {?boolean} opt_multi Whether to allow multiple entries
+ * @param {?string=} opt_separators Separators to split multiple entries.
+ * @param {?string=} opt_literals Characters used to delimit text literals.
+ * @param {?boolean=} opt_multi Whether to allow multiple entries
  *     (Default: true).
- * @param {?number} opt_throttleTime Number of milliseconds to throttle
+ * @param {?number=} opt_throttleTime Number of milliseconds to throttle
  *     keyevents with (Default: 150). Use -1 to disable updates on typing. Note
  *     that typing the separator will update autocomplete suggestions.
  * @constructor
@@ -406,7 +406,7 @@ goog.ui.AutoComplete.InputHandler.prototype.detachInput = function(el) {
 
 /**
  * Attaches the input handler to multiple elements.
- * @param {Element} var_args Elements to attach the input handler too.
+ * @param {...Element} var_args Elements to attach the input handler too.
  */
 goog.ui.AutoComplete.InputHandler.prototype.attachInputs = function(var_args) {
   for (var i = 0; i < arguments.length; i++) {
@@ -417,7 +417,7 @@ goog.ui.AutoComplete.InputHandler.prototype.attachInputs = function(var_args) {
 
 /**
  * Detaches the input handler from multuple elements.
- * @param {Element} var_args Variable arguments for elements to unbind from.
+ * @param {...Element} var_args Variable arguments for elements to unbind from.
  */
 goog.ui.AutoComplete.InputHandler.prototype.detachInputs = function(var_args) {
   for (var i = 0; i < arguments.length; i++) {
@@ -429,7 +429,7 @@ goog.ui.AutoComplete.InputHandler.prototype.detachInputs = function(var_args) {
 /**
  * Selects the given row.  Implements the SelectionHandler interface.
  * @param {Object} row The row to select.
- * @param {boolean} opt_multi Should this be treated as a single or multi-token
+ * @param {boolean=} opt_multi Should this be treated as a single or multi-token
  *     auto-complete?  Overrides previous setting of opt_multi on constructor.
  * @return {boolean} Whether to suppress the update event.
  */
@@ -611,6 +611,16 @@ goog.ui.AutoComplete.InputHandler.prototype.setSeparatorSelects =
  */
 goog.ui.AutoComplete.InputHandler.prototype.getThrottleTime = function() {
   return this.timer_ ? this.timer_.getInterval() : -1;
+};
+
+
+/**
+ * Sets whether a row has just been selected.
+ * @param {boolean} justSelected Whether or not the row has just been selected.
+ */
+goog.ui.AutoComplete.InputHandler.prototype.setRowJustSelected =
+    function(justSelected) {
+  this.rowJustSelected_ = justSelected;
 };
 
 
@@ -850,7 +860,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onFocus_ = function(e) {
 
 /**
  * Handles an element blurring.
- * @param {goog.events.Event} opt_e Browser event object.
+ * @param {goog.events.Event=} opt_e Browser event object.
  * @private
  */
 goog.ui.AutoComplete.InputHandler.prototype.onBlur_ = function(opt_e) {
@@ -986,7 +996,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onIeKeyPress_ = function(e) {
 /**
  * Checks if an update has occurred and notified the autocomplete of the new
  * token.
- * @param {boolean} opt_force If true the menu will be forced to update.
+ * @param {boolean=} opt_force If true the menu will be forced to update.
  */
 goog.ui.AutoComplete.InputHandler.prototype.update = function(opt_force) {
   if (opt_force ||

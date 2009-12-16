@@ -82,9 +82,9 @@ goog.ds.DataManager.clearInstance = function() {
 /**
  * Add a data source
  * @param {goog.ds.DataNode} ds The data source.
- * @param {boolean} opt_autoload Whether to automatically load the data,
+ * @param {boolean=} opt_autoload Whether to automatically load the data,
  *   defaults to false.
- * @param {string} opt_name Optional name, can also get name
+ * @param {string=} opt_name Optional name, can also get name
  *   from the datasource.
  */
 goog.ds.DataManager.prototype.addDataSource = function(ds, opt_autoload,
@@ -184,7 +184,7 @@ goog.ds.DataManager.prototype.set = function(value) {
 
 /**
  * Gets all of the child nodes of the current node.
- * @param {string} opt_selector String selector to choose child nodes
+ * @param {string=} opt_selector String selector to choose child nodes
  * Should return an empty DataNode list if no child nodes.
  *
  * @return {goog.ds.DataNodeList} The child nodes.
@@ -289,7 +289,7 @@ goog.ds.DataManager.prototype.getEventCount = function() {
  *
  * @param {Function} fn Callback function, signature function(dataPath, id).
  * @param {string} dataPath Fully qualified data path.
- * @param {string} opt_id A value passed back to the listener when the dataPath
+ * @param {string=} opt_id A value passed back to the listener when the dataPath
  *   is matched.
  */
 goog.ds.DataManager.prototype.addListener = function(fn, dataPath, opt_id) {
@@ -347,7 +347,7 @@ goog.ds.DataManager.prototype.addListener = function(fn, dataPath, opt_id) {
  *
  * @param {Function} fn Callback function, signature (dataPath, id, indexes).
  * @param {string} dataPath Fully qualified data path.
- * @param {string} opt_id A value passed back to the listener when the dataPath
+ * @param {string=} opt_id A value passed back to the listener when the dataPath
  *   is matched.
  */
 goog.ds.DataManager.prototype.addIndexedListener = function(fn, dataPath,
@@ -398,8 +398,8 @@ goog.ds.DataManager.prototype.addIndexedListener = function(fn, dataPath,
  * matching datapath and matching id.
  *
  * @param {Function} fn Callback function, signature function(dataPath, id).
- * @param {string} opt_dataPath Fully qualified data path.
- * @param {string} opt_id A value passed back to the listener when the dataPath
+ * @param {string=} opt_dataPath Fully qualified data path.
+ * @param {string=} opt_id A value passed back to the listener when the dataPath
  *   is matched.
  */
 goog.ds.DataManager.prototype.removeIndexedListeners = function(
@@ -414,8 +414,8 @@ goog.ds.DataManager.prototype.removeIndexedListeners = function(
  * matching dataPath and matching id
  *
  * @param {Function} fn Callback function, signature function(dataPath, id).
- * @param {string} opt_dataPath Fully qualified data path.
- * @param {string} opt_id A value passed back to the listener when the dataPath
+ * @param {string=} opt_dataPath Fully qualified data path.
+ * @param {string=} opt_id A value passed back to the listener when the dataPath
  *   is matched.
  */
 goog.ds.DataManager.prototype.removeListeners = function(fn, opt_dataPath,
@@ -442,8 +442,8 @@ goog.ds.DataManager.prototype.removeListeners = function(fn, opt_dataPath,
  * @param {boolean} indexed Indicates whether the listenersByFunction are
  *     indexed or not.
  * @param {Function} fn Callback function, signature function(dataPath, id).
- * @param {string} opt_dataPath Fully qualified data path.
- * @param {string} opt_id A value passed back to the listener when the dataPath
+ * @param {string=} opt_dataPath Fully qualified data path.
+ * @param {string=} opt_id A value passed back to the listener when the dataPath
  *   is matched.
  * @private
  */

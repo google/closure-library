@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -245,7 +246,7 @@
 <a name="line202"></a> * @param {!Array.&lt;goog.ui.Control&gt;} items Toolbar items; each must
 <a name="line203"></a> *     be a {@link goog.ui.Control}.
 <a name="line204"></a> * @param {!Element} elem Toolbar parent element.
-<a name="line205"></a> * @param {boolean} opt_isRightToLeft Whether the editor chrome is
+<a name="line205"></a> * @param {boolean=} opt_isRightToLeft Whether the editor chrome is
 <a name="line206"></a> *     right-to-left; defaults to the directionality of the toolbar parent
 <a name="line207"></a> *     element.
 <a name="line208"></a> * @return {!goog.ui.Toolbar} Editor toolbar, rendered into the given parent
@@ -292,11 +293,11 @@
 <a name="line249"></a> *     built-in buttons, anything else for custom buttons.
 <a name="line250"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line251"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line252"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line252"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line253"></a> *     element.
-<a name="line254"></a> * @param {goog.ui.ButtonRenderer} opt_renderer Button renderer; defaults to
+<a name="line254"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Button renderer; defaults to
 <a name="line255"></a> *     {@link goog.ui.ToolbarButtonRenderer} if unspecified.
-<a name="line256"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line256"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line257"></a> *     creation; defaults to the current document if unspecified.
 <a name="line258"></a> * @return {!goog.ui.Button} A toolbar button.
 <a name="line259"></a> */
@@ -321,11 +322,11 @@
 <a name="line278"></a> *     built-in buttons, anything else for custom buttons.
 <a name="line279"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line280"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line281"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line281"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line282"></a> *     element.
-<a name="line283"></a> * @param {goog.ui.ButtonRenderer} opt_renderer Button renderer; defaults to
+<a name="line283"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Button renderer; defaults to
 <a name="line284"></a> *     {@link goog.ui.ToolbarButtonRenderer} if unspecified.
-<a name="line285"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line285"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line286"></a> *     creation; defaults to the current document if unspecified.
 <a name="line287"></a> * @return {!goog.ui.Button} A toggle button.
 <a name="line288"></a> */
@@ -348,11 +349,11 @@
 <a name="line305"></a> *     built-in buttons, anything else for custom buttons.
 <a name="line306"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line307"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line308"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line308"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line309"></a> *     element.
-<a name="line310"></a> * @param {goog.ui.ButtonRenderer} opt_renderer Button renderer; defaults to
+<a name="line310"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Button renderer; defaults to
 <a name="line311"></a> *     {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
-<a name="line312"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line312"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line313"></a> *     creation; defaults to the current document if unspecified.
 <a name="line314"></a> * @return {!goog.ui.MenuButton} A menu button.
 <a name="line315"></a> */
@@ -381,11 +382,11 @@
 <a name="line338"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line339"></a> * @param {goog.ui.ControlContent} caption Button caption; used as the
 <a name="line340"></a> *     default caption when nothing is selected.
-<a name="line341"></a> * @param {string} opt_classNames CSS class name(s) to apply to the button&#39;s
+<a name="line341"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the button&#39;s
 <a name="line342"></a> *     root element.
-<a name="line343"></a> * @param {goog.ui.MenuButtonRenderer} opt_renderer Button renderer;
+<a name="line343"></a> * @param {goog.ui.MenuButtonRenderer=} opt_renderer Button renderer;
 <a name="line344"></a> *     defaults to {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
-<a name="line345"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line345"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line346"></a> *     creation; defaults to the current document if unspecified.
 <a name="line347"></a> * @return {!goog.ui.Select} A select button.
 <a name="line348"></a> */
@@ -418,12 +419,12 @@
 <a name="line375"></a> *     built-in toolbar buttons, but can be anything else for custom buttons.
 <a name="line376"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line377"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line378"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line378"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line379"></a> *     element.
-<a name="line380"></a> * @param {goog.ui.ColorMenuButtonRenderer} opt_renderer Button renderer;
+<a name="line380"></a> * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Button renderer;
 <a name="line381"></a> *     defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer}
 <a name="line382"></a> *     if unspecified.
-<a name="line383"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line383"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line384"></a> *     creation; defaults to the current document if unspecified.
 <a name="line385"></a> * @return {!goog.ui.ColorMenuButton} A color menu button.
 <a name="line386"></a> */
@@ -445,9 +446,9 @@
 <a name="line402"></a> * Creates a new DIV that wraps a button caption, optionally applying CSS
 <a name="line403"></a> * class names to it.  Used as a helper function in button factory methods.
 <a name="line404"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line405"></a> * @param {string} opt_classNames CSS class name(s) to apply to the DIV that
+<a name="line405"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the DIV that
 <a name="line406"></a> *     wraps the caption (if any).
-<a name="line407"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line407"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line408"></a> *     creation; defaults to the current document if unspecified.
 <a name="line409"></a> * @return {!Element} DIV that wraps the caption.
 <a name="line410"></a> * @private

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -88,10 +89,10 @@
 <a name="line45"></a> * manipulation.
 <a name="line46"></a> *
 <a name="line47"></a> * @extends {goog.events.EventTarget}
-<a name="line48"></a> * @param {goog.date.Date|Date} opt_date Date to initialize the date picker
+<a name="line48"></a> * @param {goog.date.Date|Date=} opt_date Date to initialize the date picker
 <a name="line49"></a> *     with, defaults to the current date.
-<a name="line50"></a> * @param {Object} opt_dateTimeSymbols Date and time symbols to use. Defaults to
-<a name="line51"></a> *     goog.i18n.DateTimeSymbols if not set.
+<a name="line50"></a> * @param {Object=} opt_dateTimeSymbols Date and time symbols to use.
+<a name="line51"></a> *     Defaults to goog.i18n.DateTimeSymbols if not set.
 <a name="line52"></a> * @constructor
 <a name="line53"></a> * @see goog.date.Date
 <a name="line54"></a> */
@@ -1113,7 +1114,7 @@
 <a name="line1070"></a> * @param {Element} parentNode Container the button should be added to.
 <a name="line1071"></a> * @param {string} label Button label.
 <a name="line1072"></a> * @param {Function} method Event handler.
-<a name="line1073"></a> * @param {string} opt_className Class name for button, which will be used
+<a name="line1073"></a> * @param {string=} opt_className Class name for button, which will be used
 <a name="line1074"></a> *    in addition to &quot;goog-date-picker-btn&quot;.
 <a name="line1075"></a> * @private
 <a name="line1076"></a> * @return {Element} The created button element.

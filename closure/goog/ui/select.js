@@ -37,10 +37,10 @@ goog.require('goog.ui.registry');
  *
  * @param {goog.ui.ControlContent} caption Default caption or existing DOM
  *     structure to display as the button's caption when nothing is selected.
- * @param {goog.ui.Menu} opt_menu Menu containing selection options.
- * @param {goog.ui.ButtonRenderer} opt_renderer Renderer used to render or
+ * @param {goog.ui.Menu=} opt_menu Menu containing selection options.
+ * @param {goog.ui.ButtonRenderer=} opt_renderer Renderer used to render or
  *     decorate the control; defaults to {@link goog.ui.MenuButtonRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.MenuButton}
@@ -331,7 +331,7 @@ goog.ui.Select.prototype.getSelectionModel = function() {
 /**
  * Creates a new selection model and sets up an event listener to handle
  * {@link goog.events.EventType.SELECT} events dispatched by it.
- * @param {goog.ui.Component} opt_component If provided, will add the
+ * @param {goog.ui.Component=} opt_component If provided, will add the
  *     component's children as items to the selection model.
  * @private
  */

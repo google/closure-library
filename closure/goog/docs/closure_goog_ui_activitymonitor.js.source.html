@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -78,7 +79,7 @@
 <a name="line35"></a> * the current idle time.
 <a name="line36"></a> * TODO: Expand this class to allow it to monitor multiple DOMs.
 <a name="line37"></a> *
-<a name="line38"></a> * @param {goog.dom.DomHelper|Array.&lt;goog.dom.DomHelper&gt;} opt_domHelper
+<a name="line38"></a> * @param {goog.dom.DomHelper|Array.&lt;goog.dom.DomHelper&gt;=} opt_domHelper
 <a name="line39"></a> *     DomHelper which contains the document(s) to listen to.  If null, the
 <a name="line40"></a> *     default document is usedinstead.
 <a name="line41"></a> *
@@ -275,7 +276,7 @@
 <a name="line232"></a>
 <a name="line233"></a>/**
 <a name="line234"></a> * Returns the amount of time the user has been idle.
-<a name="line235"></a> * @param {number} opt_now The current time can optionally be passed in for the
+<a name="line235"></a> * @param {number=} opt_now The current time can optionally be passed in for the
 <a name="line236"></a> *     computation to avoid an extra Date allocation.
 <a name="line237"></a> * @return {number} The amount of time in ms that the user has been idle.
 <a name="line238"></a> */

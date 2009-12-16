@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -73,7 +74,7 @@
 <a name="line30"></a> * Creates a formpost object.
 <a name="line31"></a> * @constructor
 <a name="line32"></a> * @extends {goog.ui.Component}
-<a name="line33"></a> * @param {goog.dom.DomHelper} opt_dom The DOM helper.
+<a name="line33"></a> * @param {goog.dom.DomHelper=} opt_dom The DOM helper.
 <a name="line34"></a> */
 <a name="line35"></a>goog.ui.FormPost = function(opt_dom) {
 <a name="line36"></a>  goog.ui.Component.call(this, opt_dom);
@@ -93,9 +94,9 @@
 <a name="line50"></a> * submitted.
 <a name="line51"></a> * @param {Object} parameters Object with parameter values. Values can be
 <a name="line52"></a> *     strings, numbers, or arrays of strings or numbers.
-<a name="line53"></a> * @param {string} opt_url The destination URL. If not specified, uses the
+<a name="line53"></a> * @param {string=} opt_url The destination URL. If not specified, uses the
 <a name="line54"></a> *     current URL for window for the DOM specified in the constructor.
-<a name="line55"></a> * @param {string} opt_target An optional name of a window in which to open the
+<a name="line55"></a> * @param {string=} opt_target An optional name of a window in which to open the
 <a name="line56"></a> *     URL. If not specified, uses the window for the DOM specified in the
 <a name="line57"></a> *     constructor.
 <a name="line58"></a> */

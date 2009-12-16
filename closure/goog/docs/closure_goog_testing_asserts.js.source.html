@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -194,524 +195,540 @@
 <a name="line151"></a>  _assert(comment, booleanValue, &#39;Call to assert(boolean) with false&#39;);
 <a name="line152"></a>}
 <a name="line153"></a>
-<a name="line154"></a>function assertThrows(a, opt_b) {
-<a name="line155"></a>  _validateArguments(1, arguments);
-<a name="line156"></a>  var func = nonCommentArg(1, 1, arguments);
-<a name="line157"></a>  _assert(commentArg(1, arguments), typeof func == &#39;function&#39;,
-<a name="line158"></a>      &#39;Argument passed to assertThrows is not a function&#39;);
-<a name="line159"></a>
-<a name="line160"></a>  var isOk = false;
-<a name="line161"></a>  try {
-<a name="line162"></a>    func();
-<a name="line163"></a>  } catch (e) {
-<a name="line164"></a>    isOk = true;
-<a name="line165"></a>  }
-<a name="line166"></a>  _assert(commentArg(1, arguments), isOk,
-<a name="line167"></a>      &#39;No exception thrown from function passed to assertThrows&#39;);
-<a name="line168"></a>}
+<a name="line154"></a>/**
+<a name="line155"></a> * Asserts that the function throws an error.
+<a name="line156"></a> *
+<a name="line157"></a> * @param {!(string|Function)} a The assertion comment or the function to call.
+<a name="line158"></a> * @param {!Function=} opt_b The function to call (if the first argument of
+<a name="line159"></a> *     {@code assertThrows} was the comment).
+<a name="line160"></a> * @return {*} The error thrown by the function.
+<a name="line161"></a> * @throws {goog.testing.JsUnitException} If the assertion failed.
+<a name="line162"></a> */
+<a name="line163"></a>function assertThrows(a, opt_b) {
+<a name="line164"></a>  _validateArguments(1, arguments);
+<a name="line165"></a>  var func = nonCommentArg(1, 1, arguments);
+<a name="line166"></a>  var comment = commentArg(1, arguments);
+<a name="line167"></a>  _assert(comment, typeof func == &#39;function&#39;,
+<a name="line168"></a>      &#39;Argument passed to assertThrows is not a function&#39;);
 <a name="line169"></a>
-<a name="line170"></a>function assertNotThrows(a, opt_b) {
-<a name="line171"></a>  _validateArguments(1, arguments);
-<a name="line172"></a>  var func = nonCommentArg(1, 1, arguments);
-<a name="line173"></a>  _assert(commentArg(1, arguments), typeof func == &#39;function&#39;,
-<a name="line174"></a>      &#39;Argument passed to assertNotThrows is not a function&#39;);
-<a name="line175"></a>
-<a name="line176"></a>  var isOk = true;
-<a name="line177"></a>  try {
-<a name="line178"></a>    func();
-<a name="line179"></a>  } catch (e) {
-<a name="line180"></a>    isOk = false;
-<a name="line181"></a>  }
-<a name="line182"></a>  _assert(commentArg(1, arguments), isOk,
-<a name="line183"></a>      &#39;A non expected exception was thrown from function passed to &#39; +
-<a name="line184"></a>      &#39;assertNotThrows&#39;);
-<a name="line185"></a>}
-<a name="line186"></a>
-<a name="line187"></a>function assertTrue(a, opt_b) {
-<a name="line188"></a>  _validateArguments(1, arguments);
-<a name="line189"></a>  var comment = commentArg(1, arguments);
-<a name="line190"></a>  var booleanValue = nonCommentArg(1, 1, arguments);
-<a name="line191"></a>
-<a name="line192"></a>  _assert(comment, goog.isBoolean(booleanValue),
-<a name="line193"></a>      &#39;Bad argument to assertTrue(boolean)&#39;);
-<a name="line194"></a>  _assert(comment, booleanValue, &#39;Call to assertTrue(boolean) with false&#39;);
-<a name="line195"></a>}
-<a name="line196"></a>
-<a name="line197"></a>function assertFalse(a, opt_b) {
-<a name="line198"></a>  _validateArguments(1, arguments);
-<a name="line199"></a>  var comment = commentArg(1, arguments);
-<a name="line200"></a>  var booleanValue = nonCommentArg(1, 1, arguments);
-<a name="line201"></a>
-<a name="line202"></a>  _assert(comment, goog.isBoolean(booleanValue),
-<a name="line203"></a>      &#39;Bad argument to assertFalse(boolean)&#39;);
-<a name="line204"></a>  _assert(comment, !booleanValue, &#39;Call to assertFalse(boolean) with true&#39;);
-<a name="line205"></a>}
-<a name="line206"></a>
-<a name="line207"></a>function assertEquals(a, b, opt_c) {
-<a name="line208"></a>  _validateArguments(2, arguments);
-<a name="line209"></a>  var var1 = nonCommentArg(1, 2, arguments);
-<a name="line210"></a>  var var2 = nonCommentArg(2, 2, arguments);
-<a name="line211"></a>  _assert(commentArg(2, arguments), var1 === var2,
-<a name="line212"></a>          &#39;Expected &#39; + _displayStringForValue(var1) + &#39; but was &#39; +
-<a name="line213"></a>          _displayStringForValue(var2));
+<a name="line170"></a>  try {
+<a name="line171"></a>    func();
+<a name="line172"></a>  } catch (e) {
+<a name="line173"></a>    return e;
+<a name="line174"></a>  }
+<a name="line175"></a>  goog.testing.asserts.raiseException_(comment,
+<a name="line176"></a>      &#39;No exception thrown from function passed to assertThrows&#39;);
+<a name="line177"></a>}
+<a name="line178"></a>
+<a name="line179"></a>function assertNotThrows(a, opt_b) {
+<a name="line180"></a>  _validateArguments(1, arguments);
+<a name="line181"></a>  var func = nonCommentArg(1, 1, arguments);
+<a name="line182"></a>  _assert(commentArg(1, arguments), typeof func == &#39;function&#39;,
+<a name="line183"></a>      &#39;Argument passed to assertNotThrows is not a function&#39;);
+<a name="line184"></a>
+<a name="line185"></a>  var isOk = true;
+<a name="line186"></a>  try {
+<a name="line187"></a>    func();
+<a name="line188"></a>  } catch (e) {
+<a name="line189"></a>    isOk = false;
+<a name="line190"></a>  }
+<a name="line191"></a>  _assert(commentArg(1, arguments), isOk,
+<a name="line192"></a>      &#39;A non expected exception was thrown from function passed to &#39; +
+<a name="line193"></a>      &#39;assertNotThrows&#39;);
+<a name="line194"></a>}
+<a name="line195"></a>
+<a name="line196"></a>function assertTrue(a, opt_b) {
+<a name="line197"></a>  _validateArguments(1, arguments);
+<a name="line198"></a>  var comment = commentArg(1, arguments);
+<a name="line199"></a>  var booleanValue = nonCommentArg(1, 1, arguments);
+<a name="line200"></a>
+<a name="line201"></a>  _assert(comment, goog.isBoolean(booleanValue),
+<a name="line202"></a>      &#39;Bad argument to assertTrue(boolean)&#39;);
+<a name="line203"></a>  _assert(comment, booleanValue, &#39;Call to assertTrue(boolean) with false&#39;);
+<a name="line204"></a>}
+<a name="line205"></a>
+<a name="line206"></a>function assertFalse(a, opt_b) {
+<a name="line207"></a>  _validateArguments(1, arguments);
+<a name="line208"></a>  var comment = commentArg(1, arguments);
+<a name="line209"></a>  var booleanValue = nonCommentArg(1, 1, arguments);
+<a name="line210"></a>
+<a name="line211"></a>  _assert(comment, goog.isBoolean(booleanValue),
+<a name="line212"></a>      &#39;Bad argument to assertFalse(boolean)&#39;);
+<a name="line213"></a>  _assert(comment, !booleanValue, &#39;Call to assertFalse(boolean) with true&#39;);
 <a name="line214"></a>}
 <a name="line215"></a>
-<a name="line216"></a>function assertNotEquals(a, b, opt_c) {
+<a name="line216"></a>function assertEquals(a, b, opt_c) {
 <a name="line217"></a>  _validateArguments(2, arguments);
 <a name="line218"></a>  var var1 = nonCommentArg(1, 2, arguments);
 <a name="line219"></a>  var var2 = nonCommentArg(2, 2, arguments);
-<a name="line220"></a>  _assert(commentArg(2, arguments), var1 !== var2,
-<a name="line221"></a>      &#39;Expected not to be &#39; + _displayStringForValue(var2));
-<a name="line222"></a>}
-<a name="line223"></a>
-<a name="line224"></a>function assertNull(a, opt_b) {
-<a name="line225"></a>  _validateArguments(1, arguments);
-<a name="line226"></a>  var aVar = nonCommentArg(1, 1, arguments);
-<a name="line227"></a>  _assert(commentArg(1, arguments), aVar === null,
-<a name="line228"></a>      &#39;Expected &#39; + _displayStringForValue(null) + &#39; but was &#39; +
-<a name="line229"></a>      _displayStringForValue(aVar));
-<a name="line230"></a>}
-<a name="line231"></a>
-<a name="line232"></a>function assertNotNull(a, opt_b) {
-<a name="line233"></a>  _validateArguments(1, arguments);
-<a name="line234"></a>  var aVar = nonCommentArg(1, 1, arguments);
-<a name="line235"></a>  _assert(commentArg(1, arguments), aVar !== null,
-<a name="line236"></a>      &#39;Expected not to be &#39; + _displayStringForValue(null));
-<a name="line237"></a>}
-<a name="line238"></a>
-<a name="line239"></a>function assertUndefined(a, opt_b) {
-<a name="line240"></a>  _validateArguments(1, arguments);
-<a name="line241"></a>  var aVar = nonCommentArg(1, 1, arguments);
-<a name="line242"></a>  _assert(commentArg(1, arguments), aVar === JSUNIT_UNDEFINED_VALUE,
-<a name="line243"></a>      &#39;Expected &#39; + _displayStringForValue(JSUNIT_UNDEFINED_VALUE) +
-<a name="line244"></a>      &#39; but was &#39; + _displayStringForValue(aVar));
-<a name="line245"></a>}
-<a name="line246"></a>
-<a name="line247"></a>function assertNotUndefined(a, opt_b) {
-<a name="line248"></a>  _validateArguments(1, arguments);
-<a name="line249"></a>  var aVar = nonCommentArg(1, 1, arguments);
-<a name="line250"></a>  _assert(commentArg(1, arguments), aVar !== JSUNIT_UNDEFINED_VALUE,
-<a name="line251"></a>      &#39;Expected not to be &#39; + _displayStringForValue(JSUNIT_UNDEFINED_VALUE));
-<a name="line252"></a>}
-<a name="line253"></a>
-<a name="line254"></a>function assertNonEmptyString(a, opt_b) {
-<a name="line255"></a>  _validateArguments(1, arguments);
-<a name="line256"></a>  var aVar = nonCommentArg(1, 1, arguments);
-<a name="line257"></a>  _assert(commentArg(1, arguments),
-<a name="line258"></a>      aVar !== JSUNIT_UNDEFINED_VALUE &amp;&amp; aVar !== null &amp;&amp;
-<a name="line259"></a>      typeof aVar == &#39;string&#39; &amp;&amp; aVar !== &#39;&#39;,
-<a name="line260"></a>      &#39;Expected non-empty string but was &#39; + _displayStringForValue(aVar));
+<a name="line220"></a>  _assert(commentArg(2, arguments), var1 === var2,
+<a name="line221"></a>          &#39;Expected &#39; + _displayStringForValue(var1) + &#39; but was &#39; +
+<a name="line222"></a>          _displayStringForValue(var2));
+<a name="line223"></a>}
+<a name="line224"></a>
+<a name="line225"></a>function assertNotEquals(a, b, opt_c) {
+<a name="line226"></a>  _validateArguments(2, arguments);
+<a name="line227"></a>  var var1 = nonCommentArg(1, 2, arguments);
+<a name="line228"></a>  var var2 = nonCommentArg(2, 2, arguments);
+<a name="line229"></a>  _assert(commentArg(2, arguments), var1 !== var2,
+<a name="line230"></a>      &#39;Expected not to be &#39; + _displayStringForValue(var2));
+<a name="line231"></a>}
+<a name="line232"></a>
+<a name="line233"></a>function assertNull(a, opt_b) {
+<a name="line234"></a>  _validateArguments(1, arguments);
+<a name="line235"></a>  var aVar = nonCommentArg(1, 1, arguments);
+<a name="line236"></a>  _assert(commentArg(1, arguments), aVar === null,
+<a name="line237"></a>      &#39;Expected &#39; + _displayStringForValue(null) + &#39; but was &#39; +
+<a name="line238"></a>      _displayStringForValue(aVar));
+<a name="line239"></a>}
+<a name="line240"></a>
+<a name="line241"></a>function assertNotNull(a, opt_b) {
+<a name="line242"></a>  _validateArguments(1, arguments);
+<a name="line243"></a>  var aVar = nonCommentArg(1, 1, arguments);
+<a name="line244"></a>  _assert(commentArg(1, arguments), aVar !== null,
+<a name="line245"></a>      &#39;Expected not to be &#39; + _displayStringForValue(null));
+<a name="line246"></a>}
+<a name="line247"></a>
+<a name="line248"></a>function assertUndefined(a, opt_b) {
+<a name="line249"></a>  _validateArguments(1, arguments);
+<a name="line250"></a>  var aVar = nonCommentArg(1, 1, arguments);
+<a name="line251"></a>  _assert(commentArg(1, arguments), aVar === JSUNIT_UNDEFINED_VALUE,
+<a name="line252"></a>      &#39;Expected &#39; + _displayStringForValue(JSUNIT_UNDEFINED_VALUE) +
+<a name="line253"></a>      &#39; but was &#39; + _displayStringForValue(aVar));
+<a name="line254"></a>}
+<a name="line255"></a>
+<a name="line256"></a>function assertNotUndefined(a, opt_b) {
+<a name="line257"></a>  _validateArguments(1, arguments);
+<a name="line258"></a>  var aVar = nonCommentArg(1, 1, arguments);
+<a name="line259"></a>  _assert(commentArg(1, arguments), aVar !== JSUNIT_UNDEFINED_VALUE,
+<a name="line260"></a>      &#39;Expected not to be &#39; + _displayStringForValue(JSUNIT_UNDEFINED_VALUE));
 <a name="line261"></a>}
 <a name="line262"></a>
-<a name="line263"></a>function assertNaN(a, opt_b) {
+<a name="line263"></a>function assertNotNullNorUndefined(a, opt_b) {
 <a name="line264"></a>  _validateArguments(1, arguments);
-<a name="line265"></a>  var aVar = nonCommentArg(1, 1, arguments);
-<a name="line266"></a>  _assert(commentArg(1, arguments), isNaN(aVar), &#39;Expected NaN&#39;);
+<a name="line265"></a>  assertNotNull.apply(null, arguments);
+<a name="line266"></a>  assertNotUndefined.apply(null, arguments);
 <a name="line267"></a>}
 <a name="line268"></a>
-<a name="line269"></a>function assertNotNaN(a, opt_b) {
+<a name="line269"></a>function assertNonEmptyString(a, opt_b) {
 <a name="line270"></a>  _validateArguments(1, arguments);
 <a name="line271"></a>  var aVar = nonCommentArg(1, 1, arguments);
-<a name="line272"></a>  _assert(commentArg(1, arguments), !isNaN(aVar), &#39;Expected not NaN&#39;);
-<a name="line273"></a>}
-<a name="line274"></a>
-<a name="line275"></a>// Notes:
-<a name="line276"></a>// Object equality has some nasty browser quirks, and this implementation is
-<a name="line277"></a>// not 100% correct. For example,
-<a name="line278"></a>//
-<a name="line279"></a>// var a = [0, 1, 2];
-<a name="line280"></a>// var b = [0, 1, 2];
-<a name="line281"></a>// delete a[1];
-<a name="line282"></a>// b[1] = undefined;
-<a name="line283"></a>// assertObjectEquals(a, b); // should fail, but currently passes
-<a name="line284"></a>//
-<a name="line285"></a>// See asserts_test.html for more interesting edge cases.
-<a name="line286"></a>function assertObjectEquals(a, b, opt_c) {
-<a name="line287"></a>  _validateArguments(2, arguments);
-<a name="line288"></a>  var v1 = nonCommentArg(1, 2, arguments);
-<a name="line289"></a>  var v2 = nonCommentArg(2, 2, arguments);
-<a name="line290"></a>  var failureMessage = commentArg(2, arguments) ? commentArg(2, arguments) : &#39;&#39;;
-<a name="line291"></a>  // start with an empty string here so the join in the final assertion
-<a name="line292"></a>  // puts the first failure on a new line in the output
-<a name="line293"></a>  var failures = [&#39;&#39;];
-<a name="line294"></a>
-<a name="line295"></a>  function innerAssert(var1, var2, path) {
-<a name="line296"></a>    if (var1 === var2) {
-<a name="line297"></a>      return true;
-<a name="line298"></a>    }
-<a name="line299"></a>
-<a name="line300"></a>    var typeOfVar1 = _trueTypeOf(var1);
-<a name="line301"></a>    var typeOfVar2 = _trueTypeOf(var2);
-<a name="line302"></a>
-<a name="line303"></a>    if (typeOfVar1 == typeOfVar2) {
-<a name="line304"></a>      var isArray = typeOfVar1 == &#39;Array&#39;;
-<a name="line305"></a>      var equalityPredicate = PRIMITIVE_EQUALITY_PREDICATES[typeOfVar1];
-<a name="line306"></a>      if (equalityPredicate) {
-<a name="line307"></a>        if (!equalityPredicate(var1, var2)) {
-<a name="line308"></a>          failures.push(path + &#39; expected &#39; + _displayStringForValue(var1) +
-<a name="line309"></a>                        &#39; but was &#39; + _displayStringForValue(var2));
-<a name="line310"></a>        }
-<a name="line311"></a>      } else if (!isArray || var1.length === var2.length) {
-<a name="line312"></a>        var childPath = path + (isArray ? &#39;[%s]&#39; : (path ? &#39;.%s&#39; : &#39;%s&#39;));
-<a name="line313"></a>
-<a name="line314"></a>        // if an object has an __iterator__ property, we have no way of
-<a name="line315"></a>        // actually inspecting its raw properties, and JS 1.7 doesn&#39;t
-<a name="line316"></a>        // overload [] to make it possible for someone to generically
-<a name="line317"></a>        // use what the iterator returns to compare the object-managed
-<a name="line318"></a>        // properties. This gets us into deep poo with things like
-<a name="line319"></a>        // goog.structs.Map, at least on systems that support iteration.
-<a name="line320"></a>        if (!var1[&#39;__iterator__&#39;]) {
-<a name="line321"></a>          for (var prop in var1) {
-<a name="line322"></a>            if (isArray || prop in var2) {
-<a name="line323"></a>              innerAssert(var1[prop], var2[prop],
-<a name="line324"></a>                          childPath.replace(&#39;%s&#39;, prop));
-<a name="line325"></a>            } else {
-<a name="line326"></a>              failures.push(&#39;property &#39; + prop +
-<a name="line327"></a>                            &#39; not present in actual &#39; + (path || typeOfVar2));
-<a name="line328"></a>            }
-<a name="line329"></a>          }
-<a name="line330"></a>          if (!isArray) {
-<a name="line331"></a>            // make sure there aren&#39;t properties in var2 that are missing
-<a name="line332"></a>            // from var1. if there are, then by definition they don&#39;t
-<a name="line333"></a>            // match.
-<a name="line334"></a>            for (var prop in var2) {
-<a name="line335"></a>              if (!(prop in var1)) {
-<a name="line336"></a>                failures.push(&#39;property &#39; + prop +
-<a name="line337"></a>                              &#39; not present in expected &#39; +
-<a name="line338"></a>                              (path || typeOfVar1));
-<a name="line339"></a>              }
-<a name="line340"></a>            }
-<a name="line341"></a>          }
-<a name="line342"></a>        } else {
-<a name="line343"></a>          // special-case for closure objects that have iterators
-<a name="line344"></a>          if (goog.isFunction(var1.equals)) {
-<a name="line345"></a>            // use the object&#39;s own equals function, assuming it accepts an
-<a name="line346"></a>            // object and returns a boolean
-<a name="line347"></a>            if (!var1.equals(var2)) {
-<a name="line348"></a>              failures.push(&#39;equals() returned false for &#39; +
-<a name="line349"></a>                            (path || typeOfVar1));
-<a name="line350"></a>            }
-<a name="line351"></a>          } else if (var1.map_) {
-<a name="line352"></a>            // assume goog.structs.Map or goog.structs.Set, where comparing
-<a name="line353"></a>            // their private map_ field is sufficient
-<a name="line354"></a>            innerAssert(var1.map_, var2.map_, childPath.replace(&#39;%s&#39;, &#39;map_&#39;));
-<a name="line355"></a>          } else {
-<a name="line356"></a>            // else die, so user knows we can&#39;t do anything
-<a name="line357"></a>            failures.push(&#39;unable to check &#39; + (path || typeOfVar1) +
-<a name="line358"></a>                          &#39; for equality: it has an iterator we do not &#39; +
-<a name="line359"></a>                          &#39;know how to handle. please add an equals method&#39;);
-<a name="line360"></a>          }
-<a name="line361"></a>        }
-<a name="line362"></a>      } else {
-<a name="line363"></a>        failures.push(path + &#39; expected &#39; + var1.length + &#39;-element array &#39; +
-<a name="line364"></a>                      &#39;but got a &#39; + var2.length + &#39;-element array&#39;);
-<a name="line365"></a>      }
-<a name="line366"></a>    } else {
-<a name="line367"></a>      failures.push(path + &#39; expected &#39; + _displayStringForValue(var1) +
-<a name="line368"></a>                    &#39; but was &#39; + _displayStringForValue(var2));
-<a name="line369"></a>    }
-<a name="line370"></a>  }
-<a name="line371"></a>
-<a name="line372"></a>  innerAssert(v1, v2, &#39;&#39;);
-<a name="line373"></a>  _assert(failureMessage, failures.length == 1,
-<a name="line374"></a>          &#39;Expected &#39; + _displayStringForValue(v1) + &#39; but was &#39; +
-<a name="line375"></a>          _displayStringForValue(v2) +
-<a name="line376"></a>          failures.join(&#39;\n   &#39;));
-<a name="line377"></a>}
-<a name="line378"></a>
-<a name="line379"></a>function assertArrayEquals(a, b, opt_c) {
-<a name="line380"></a>  _validateArguments(2, arguments);
-<a name="line381"></a>  var v1 = nonCommentArg(1, 2, arguments);
-<a name="line382"></a>  var v2 = nonCommentArg(2, 2, arguments);
-<a name="line383"></a>  var failureMessage = commentArg(2, arguments) ? commentArg(2, arguments) : &#39;&#39;;
-<a name="line384"></a>
-<a name="line385"></a>  var typeOfVar1 = _trueTypeOf(v1);
-<a name="line386"></a>  _assert(failureMessage,
-<a name="line387"></a>          typeOfVar1 == &#39;Array&#39;,
-<a name="line388"></a>          &#39;Expected an array for assertArrayEquals but found a &#39; + typeOfVar1);
-<a name="line389"></a>
-<a name="line390"></a>  var typeOfVar2 = _trueTypeOf(v2);
-<a name="line391"></a>  _assert(failureMessage,
-<a name="line392"></a>          typeOfVar2 == &#39;Array&#39;,
-<a name="line393"></a>          &#39;Expected an array for assertArrayEquals but found a &#39; + typeOfVar2);
-<a name="line394"></a>
-<a name="line395"></a>  assertObjectEquals.apply(null, arguments);
-<a name="line396"></a>}
-<a name="line397"></a>
-<a name="line398"></a>/**
-<a name="line399"></a> * Compares two array-like objects without taking their order into account.
-<a name="line400"></a> * @param {string|goog.testing.asserts.ArrayLike} a Assertion message or the
-<a name="line401"></a> *     expected elements.
-<a name="line402"></a> * @param {goog.testing.asserts.ArrayLike} b Expected elements or the actual
-<a name="line403"></a> *     elements.
-<a name="line404"></a> * @param {goog.testing.asserts.ArrayLike} opt_c Actual elements.
-<a name="line405"></a> */
-<a name="line406"></a>function assertSameElements(a, b, opt_c) {
-<a name="line407"></a>  _validateArguments(2, arguments);
-<a name="line408"></a>  var expected = nonCommentArg(1, 2, arguments);
-<a name="line409"></a>  var actual = nonCommentArg(2, 2, arguments);
-<a name="line410"></a>  var message = commentArg(2, arguments);
-<a name="line411"></a>
-<a name="line412"></a>  assertTrue(&#39;Bad arguments to assertSameElements(opt_message, expected: &#39; +
-<a name="line413"></a>      &#39;ArrayLike, actual: ArrayLike)&#39;,
-<a name="line414"></a>      goog.isArrayLike(expected) &amp;&amp; goog.isArrayLike(actual));
-<a name="line415"></a>
-<a name="line416"></a>  // Clones expected and actual and converts them to real arrays.
-<a name="line417"></a>  expected = goog.testing.asserts.toArray_(expected);
-<a name="line418"></a>  actual = goog.testing.asserts.toArray_(actual);
-<a name="line419"></a>  // TODO: It would be great to show only the difference
-<a name="line420"></a>  // between the expected and actual elements.
-<a name="line421"></a>  _assert(message, expected.length == actual.length,
-<a name="line422"></a>      &#39;Expected &#39; + expected.length + &#39; elements: [&#39; + expected + &#39;], &#39; +
-<a name="line423"></a>      &#39;got &#39; + actual.length + &#39; elements: [&#39; + actual + &#39;]&#39;);
-<a name="line424"></a>
-<a name="line425"></a>  var toFind = goog.testing.asserts.toArray_(expected);
-<a name="line426"></a>  for (var i = 0; i &lt; actual.length; i++) {
-<a name="line427"></a>    var index = goog.testing.asserts.indexOf_(toFind, actual[i]);
-<a name="line428"></a>    _assert(message, index != -1, &#39;Expected [&#39; + expected + &#39;], got [&#39; +
-<a name="line429"></a>        actual + &#39;]&#39;);
-<a name="line430"></a>    toFind.splice(index, 1);
-<a name="line431"></a>  }
-<a name="line432"></a>}
-<a name="line433"></a>
-<a name="line434"></a>function assertEvaluatesToTrue(a, opt_b) {
-<a name="line435"></a>  _validateArguments(1, arguments);
-<a name="line436"></a>  var value = nonCommentArg(1, 1, arguments);
-<a name="line437"></a>  if (!value) {
-<a name="line438"></a>    _assert(commentArg(1, arguments), false, &#39;Expected to evaluate to true&#39;);
-<a name="line439"></a>  }
-<a name="line440"></a>}
-<a name="line441"></a>
-<a name="line442"></a>function assertEvaluatesToFalse(a, opt_b) {
-<a name="line443"></a>  _validateArguments(1, arguments);
-<a name="line444"></a>  var value = nonCommentArg(1, 1, arguments);
-<a name="line445"></a>  if (value) {
-<a name="line446"></a>    _assert(commentArg(1, arguments), false, &#39;Expected to evaluate to false&#39;);
-<a name="line447"></a>  }
-<a name="line448"></a>}
-<a name="line449"></a>
-<a name="line450"></a>function assertHTMLEquals(a, b, opt_c) {
-<a name="line451"></a>  _validateArguments(2, arguments);
-<a name="line452"></a>  var var1 = nonCommentArg(1, 2, arguments);
-<a name="line453"></a>  var var2 = nonCommentArg(2, 2, arguments);
-<a name="line454"></a>  var var1Standardized = standardizeHTML(var1);
-<a name="line455"></a>  var var2Standardized = standardizeHTML(var2);
+<a name="line272"></a>  _assert(commentArg(1, arguments),
+<a name="line273"></a>      aVar !== JSUNIT_UNDEFINED_VALUE &amp;&amp; aVar !== null &amp;&amp;
+<a name="line274"></a>      typeof aVar == &#39;string&#39; &amp;&amp; aVar !== &#39;&#39;,
+<a name="line275"></a>      &#39;Expected non-empty string but was &#39; + _displayStringForValue(aVar));
+<a name="line276"></a>}
+<a name="line277"></a>
+<a name="line278"></a>function assertNaN(a, opt_b) {
+<a name="line279"></a>  _validateArguments(1, arguments);
+<a name="line280"></a>  var aVar = nonCommentArg(1, 1, arguments);
+<a name="line281"></a>  _assert(commentArg(1, arguments), isNaN(aVar), &#39;Expected NaN&#39;);
+<a name="line282"></a>}
+<a name="line283"></a>
+<a name="line284"></a>function assertNotNaN(a, opt_b) {
+<a name="line285"></a>  _validateArguments(1, arguments);
+<a name="line286"></a>  var aVar = nonCommentArg(1, 1, arguments);
+<a name="line287"></a>  _assert(commentArg(1, arguments), !isNaN(aVar), &#39;Expected not NaN&#39;);
+<a name="line288"></a>}
+<a name="line289"></a>
+<a name="line290"></a>// Notes:
+<a name="line291"></a>// Object equality has some nasty browser quirks, and this implementation is
+<a name="line292"></a>// not 100% correct. For example,
+<a name="line293"></a>//
+<a name="line294"></a>// var a = [0, 1, 2];
+<a name="line295"></a>// var b = [0, 1, 2];
+<a name="line296"></a>// delete a[1];
+<a name="line297"></a>// b[1] = undefined;
+<a name="line298"></a>// assertObjectEquals(a, b); // should fail, but currently passes
+<a name="line299"></a>//
+<a name="line300"></a>// See asserts_test.html for more interesting edge cases.
+<a name="line301"></a>function assertObjectEquals(a, b, opt_c) {
+<a name="line302"></a>  _validateArguments(2, arguments);
+<a name="line303"></a>  var v1 = nonCommentArg(1, 2, arguments);
+<a name="line304"></a>  var v2 = nonCommentArg(2, 2, arguments);
+<a name="line305"></a>  var failureMessage = commentArg(2, arguments) ? commentArg(2, arguments) : &#39;&#39;;
+<a name="line306"></a>  // start with an empty string here so the join in the final assertion
+<a name="line307"></a>  // puts the first failure on a new line in the output
+<a name="line308"></a>  var failures = [&#39;&#39;];
+<a name="line309"></a>
+<a name="line310"></a>  function innerAssert(var1, var2, path) {
+<a name="line311"></a>    if (var1 === var2) {
+<a name="line312"></a>      return true;
+<a name="line313"></a>    }
+<a name="line314"></a>
+<a name="line315"></a>    var typeOfVar1 = _trueTypeOf(var1);
+<a name="line316"></a>    var typeOfVar2 = _trueTypeOf(var2);
+<a name="line317"></a>
+<a name="line318"></a>    if (typeOfVar1 == typeOfVar2) {
+<a name="line319"></a>      var isArray = typeOfVar1 == &#39;Array&#39;;
+<a name="line320"></a>      var equalityPredicate = PRIMITIVE_EQUALITY_PREDICATES[typeOfVar1];
+<a name="line321"></a>      if (equalityPredicate) {
+<a name="line322"></a>        if (!equalityPredicate(var1, var2)) {
+<a name="line323"></a>          failures.push(path + &#39; expected &#39; + _displayStringForValue(var1) +
+<a name="line324"></a>                        &#39; but was &#39; + _displayStringForValue(var2));
+<a name="line325"></a>        }
+<a name="line326"></a>      } else if (!isArray || var1.length === var2.length) {
+<a name="line327"></a>        var childPath = path + (isArray ? &#39;[%s]&#39; : (path ? &#39;.%s&#39; : &#39;%s&#39;));
+<a name="line328"></a>
+<a name="line329"></a>        // if an object has an __iterator__ property, we have no way of
+<a name="line330"></a>        // actually inspecting its raw properties, and JS 1.7 doesn&#39;t
+<a name="line331"></a>        // overload [] to make it possible for someone to generically
+<a name="line332"></a>        // use what the iterator returns to compare the object-managed
+<a name="line333"></a>        // properties. This gets us into deep poo with things like
+<a name="line334"></a>        // goog.structs.Map, at least on systems that support iteration.
+<a name="line335"></a>        if (!var1[&#39;__iterator__&#39;]) {
+<a name="line336"></a>          for (var prop in var1) {
+<a name="line337"></a>            if (isArray || prop in var2) {
+<a name="line338"></a>              innerAssert(var1[prop], var2[prop],
+<a name="line339"></a>                          childPath.replace(&#39;%s&#39;, prop));
+<a name="line340"></a>            } else {
+<a name="line341"></a>              failures.push(&#39;property &#39; + prop +
+<a name="line342"></a>                            &#39; not present in actual &#39; + (path || typeOfVar2));
+<a name="line343"></a>            }
+<a name="line344"></a>          }
+<a name="line345"></a>          if (!isArray) {
+<a name="line346"></a>            // make sure there aren&#39;t properties in var2 that are missing
+<a name="line347"></a>            // from var1. if there are, then by definition they don&#39;t
+<a name="line348"></a>            // match.
+<a name="line349"></a>            for (var prop in var2) {
+<a name="line350"></a>              if (!(prop in var1)) {
+<a name="line351"></a>                failures.push(&#39;property &#39; + prop +
+<a name="line352"></a>                              &#39; not present in expected &#39; +
+<a name="line353"></a>                              (path || typeOfVar1));
+<a name="line354"></a>              }
+<a name="line355"></a>            }
+<a name="line356"></a>          }
+<a name="line357"></a>        } else {
+<a name="line358"></a>          // special-case for closure objects that have iterators
+<a name="line359"></a>          if (goog.isFunction(var1.equals)) {
+<a name="line360"></a>            // use the object&#39;s own equals function, assuming it accepts an
+<a name="line361"></a>            // object and returns a boolean
+<a name="line362"></a>            if (!var1.equals(var2)) {
+<a name="line363"></a>              failures.push(&#39;equals() returned false for &#39; +
+<a name="line364"></a>                            (path || typeOfVar1));
+<a name="line365"></a>            }
+<a name="line366"></a>          } else if (var1.map_) {
+<a name="line367"></a>            // assume goog.structs.Map or goog.structs.Set, where comparing
+<a name="line368"></a>            // their private map_ field is sufficient
+<a name="line369"></a>            innerAssert(var1.map_, var2.map_, childPath.replace(&#39;%s&#39;, &#39;map_&#39;));
+<a name="line370"></a>          } else {
+<a name="line371"></a>            // else die, so user knows we can&#39;t do anything
+<a name="line372"></a>            failures.push(&#39;unable to check &#39; + (path || typeOfVar1) +
+<a name="line373"></a>                          &#39; for equality: it has an iterator we do not &#39; +
+<a name="line374"></a>                          &#39;know how to handle. please add an equals method&#39;);
+<a name="line375"></a>          }
+<a name="line376"></a>        }
+<a name="line377"></a>      } else {
+<a name="line378"></a>        failures.push(path + &#39; expected &#39; + var1.length + &#39;-element array &#39; +
+<a name="line379"></a>                      &#39;but got a &#39; + var2.length + &#39;-element array&#39;);
+<a name="line380"></a>      }
+<a name="line381"></a>    } else {
+<a name="line382"></a>      failures.push(path + &#39; expected &#39; + _displayStringForValue(var1) +
+<a name="line383"></a>                    &#39; but was &#39; + _displayStringForValue(var2));
+<a name="line384"></a>    }
+<a name="line385"></a>  }
+<a name="line386"></a>
+<a name="line387"></a>  innerAssert(v1, v2, &#39;&#39;);
+<a name="line388"></a>  _assert(failureMessage, failures.length == 1,
+<a name="line389"></a>          &#39;Expected &#39; + _displayStringForValue(v1) + &#39; but was &#39; +
+<a name="line390"></a>          _displayStringForValue(v2) +
+<a name="line391"></a>          failures.join(&#39;\n   &#39;));
+<a name="line392"></a>}
+<a name="line393"></a>
+<a name="line394"></a>function assertArrayEquals(a, b, opt_c) {
+<a name="line395"></a>  _validateArguments(2, arguments);
+<a name="line396"></a>  var v1 = nonCommentArg(1, 2, arguments);
+<a name="line397"></a>  var v2 = nonCommentArg(2, 2, arguments);
+<a name="line398"></a>  var failureMessage = commentArg(2, arguments) ? commentArg(2, arguments) : &#39;&#39;;
+<a name="line399"></a>
+<a name="line400"></a>  var typeOfVar1 = _trueTypeOf(v1);
+<a name="line401"></a>  _assert(failureMessage,
+<a name="line402"></a>          typeOfVar1 == &#39;Array&#39;,
+<a name="line403"></a>          &#39;Expected an array for assertArrayEquals but found a &#39; + typeOfVar1);
+<a name="line404"></a>
+<a name="line405"></a>  var typeOfVar2 = _trueTypeOf(v2);
+<a name="line406"></a>  _assert(failureMessage,
+<a name="line407"></a>          typeOfVar2 == &#39;Array&#39;,
+<a name="line408"></a>          &#39;Expected an array for assertArrayEquals but found a &#39; + typeOfVar2);
+<a name="line409"></a>
+<a name="line410"></a>  assertObjectEquals.apply(null, arguments);
+<a name="line411"></a>}
+<a name="line412"></a>
+<a name="line413"></a>/**
+<a name="line414"></a> * Compares two array-like objects without taking their order into account.
+<a name="line415"></a> * @param {string|goog.testing.asserts.ArrayLike} a Assertion message or the
+<a name="line416"></a> *     expected elements.
+<a name="line417"></a> * @param {goog.testing.asserts.ArrayLike} b Expected elements or the actual
+<a name="line418"></a> *     elements.
+<a name="line419"></a> * @param {goog.testing.asserts.ArrayLike=} opt_c Actual elements.
+<a name="line420"></a> */
+<a name="line421"></a>function assertSameElements(a, b, opt_c) {
+<a name="line422"></a>  _validateArguments(2, arguments);
+<a name="line423"></a>  var expected = nonCommentArg(1, 2, arguments);
+<a name="line424"></a>  var actual = nonCommentArg(2, 2, arguments);
+<a name="line425"></a>  var message = commentArg(2, arguments);
+<a name="line426"></a>
+<a name="line427"></a>  assertTrue(&#39;Bad arguments to assertSameElements(opt_message, expected: &#39; +
+<a name="line428"></a>      &#39;ArrayLike, actual: ArrayLike)&#39;,
+<a name="line429"></a>      goog.isArrayLike(expected) &amp;&amp; goog.isArrayLike(actual));
+<a name="line430"></a>
+<a name="line431"></a>  // Clones expected and actual and converts them to real arrays.
+<a name="line432"></a>  expected = goog.testing.asserts.toArray_(expected);
+<a name="line433"></a>  actual = goog.testing.asserts.toArray_(actual);
+<a name="line434"></a>  // TODO: It would be great to show only the difference
+<a name="line435"></a>  // between the expected and actual elements.
+<a name="line436"></a>  _assert(message, expected.length == actual.length,
+<a name="line437"></a>      &#39;Expected &#39; + expected.length + &#39; elements: [&#39; + expected + &#39;], &#39; +
+<a name="line438"></a>      &#39;got &#39; + actual.length + &#39; elements: [&#39; + actual + &#39;]&#39;);
+<a name="line439"></a>
+<a name="line440"></a>  var toFind = goog.testing.asserts.toArray_(expected);
+<a name="line441"></a>  for (var i = 0; i &lt; actual.length; i++) {
+<a name="line442"></a>    var index = goog.testing.asserts.indexOf_(toFind, actual[i]);
+<a name="line443"></a>    _assert(message, index != -1, &#39;Expected [&#39; + expected + &#39;], got [&#39; +
+<a name="line444"></a>        actual + &#39;]&#39;);
+<a name="line445"></a>    toFind.splice(index, 1);
+<a name="line446"></a>  }
+<a name="line447"></a>}
+<a name="line448"></a>
+<a name="line449"></a>function assertEvaluatesToTrue(a, opt_b) {
+<a name="line450"></a>  _validateArguments(1, arguments);
+<a name="line451"></a>  var value = nonCommentArg(1, 1, arguments);
+<a name="line452"></a>  if (!value) {
+<a name="line453"></a>    _assert(commentArg(1, arguments), false, &#39;Expected to evaluate to true&#39;);
+<a name="line454"></a>  }
+<a name="line455"></a>}
 <a name="line456"></a>
-<a name="line457"></a>  _assert(commentArg(2, arguments), var1Standardized === var2Standardized,
-<a name="line458"></a>          &#39;Expected &#39; + _displayStringForValue(var1Standardized) + &#39; but was &#39; +
-<a name="line459"></a>          _displayStringForValue(var2Standardized));
-<a name="line460"></a>}
-<a name="line461"></a>
-<a name="line462"></a>/**
-<a name="line463"></a> * Compares two CSS property values to make sure that they represent the same
-<a name="line464"></a> * things. This will normalize values in the browser. For example, in Firefox,
-<a name="line465"></a> * this assertion will consider &quot;rgb(0, 0, 255)&quot; and &quot;#0000ff&quot; to be identical
-<a name="line466"></a> * values for the &quot;color&quot; property. This function won&#39;t normalize everything --
-<a name="line467"></a> * for example, in most browsers, &quot;blue&quot; will not match &quot;#0000ff&quot;. It is
-<a name="line468"></a> * intended only to compensate for unexpected normalizations performed by
-<a name="line469"></a> * the browser that should also affect your expected value.
-<a name="line470"></a> * @param {string} a Assertion message, or the CSS property name.
-<a name="line471"></a> * @param {string} b CSS property name, or the expected value.
-<a name="line472"></a> * @param {string} c The expected value, or the actual value.
-<a name="line473"></a> * @param {string} opt_d The actual value.
-<a name="line474"></a> */
-<a name="line475"></a>function assertCSSValueEquals(a, b, c, opt_d) {
-<a name="line476"></a>  _validateArguments(3, arguments);
-<a name="line477"></a>  var propertyName = nonCommentArg(1, 3, arguments);
-<a name="line478"></a>  var expectedValue = nonCommentArg(2, 3, arguments);
-<a name="line479"></a>  var actualValue = nonCommentArg(3, 3, arguments);
-<a name="line480"></a>  var expectedValueStandardized =
-<a name="line481"></a>      standardizeCSSValue(propertyName, expectedValue);
-<a name="line482"></a>  var actualValueStandardized =
-<a name="line483"></a>      standardizeCSSValue(propertyName, actualValue);
-<a name="line484"></a>
-<a name="line485"></a>  _assert(commentArg(3, arguments),
-<a name="line486"></a>          expectedValueStandardized == actualValueStandardized,
-<a name="line487"></a>          &#39;Expected &#39; + _displayStringForValue(expectedValueStandardized) +
-<a name="line488"></a>          &#39; but was &#39; + _displayStringForValue(actualValueStandardized));
-<a name="line489"></a>}
-<a name="line490"></a>
-<a name="line491"></a>function assertHashEquals(a, b, opt_c) {
-<a name="line492"></a>  _validateArguments(2, arguments);
-<a name="line493"></a>  var var1 = nonCommentArg(1, 2, arguments);
-<a name="line494"></a>  var var2 = nonCommentArg(2, 2, arguments);
-<a name="line495"></a>  var message = commentArg(2, arguments);
-<a name="line496"></a>  for (var key in var1) {
-<a name="line497"></a>    _assert(message,
-<a name="line498"></a>        key in var2, &#39;Expected hash had key &#39; + key + &#39; that was not found&#39;);
-<a name="line499"></a>    _assert(message, var1[key] == var2[key], &#39;Value for key &#39; + key +
-<a name="line500"></a>        &#39; mismatch - expected = &#39; + var1[key] + &#39;, actual = &#39; + var2[key]);
-<a name="line501"></a>  }
-<a name="line502"></a>
-<a name="line503"></a>  for (var key in var2) {
-<a name="line504"></a>    _assert(message, key in var1, &#39;Actual hash had key &#39; + key +
-<a name="line505"></a>        &#39; that was not expected&#39;);
-<a name="line506"></a>  }
-<a name="line507"></a>}
-<a name="line508"></a>
-<a name="line509"></a>function assertRoughlyEquals(a, b, c, opt_d) {
-<a name="line510"></a>  _validateArguments(3, arguments);
-<a name="line511"></a>  var expected = nonCommentArg(1, 3, arguments);
-<a name="line512"></a>  var actual = nonCommentArg(2, 3, arguments);
-<a name="line513"></a>  var tolerance = nonCommentArg(3, 3, arguments);
-<a name="line514"></a>  _assert(commentArg(3, arguments), Math.abs(expected - actual) &lt;= tolerance,
-<a name="line515"></a>      &#39;Expected &#39; + expected + &#39;, but got &#39; + actual +
-<a name="line516"></a>      &#39; which was more than &#39; + tolerance + &#39; away&#39;);
-<a name="line517"></a>}
-<a name="line518"></a>
-<a name="line519"></a>function assertContains(a, b, opt_c) {
-<a name="line520"></a>  _validateArguments(2, arguments);
-<a name="line521"></a>  var contained = nonCommentArg(1, 2, arguments);
-<a name="line522"></a>  var container = nonCommentArg(2, 2, arguments);
-<a name="line523"></a>  _assert(commentArg(2, arguments),
-<a name="line524"></a>      goog.testing.asserts.contains_(container, contained),
-<a name="line525"></a>      &#39;Expected \&#39;&#39; + container + &#39;\&#39; to contain \&#39;&#39; + contained + &#39;\&#39;&#39;);
-<a name="line526"></a>}
-<a name="line527"></a>
-<a name="line528"></a>function assertNotContains(a, b, opt_c) {
-<a name="line529"></a>  _validateArguments(2, arguments);
-<a name="line530"></a>  var contained = nonCommentArg(1, 2, arguments);
-<a name="line531"></a>  var container = nonCommentArg(2, 2, arguments);
-<a name="line532"></a>  _assert(commentArg(2, arguments),
-<a name="line533"></a>      !goog.testing.asserts.contains_(container, contained),
-<a name="line534"></a>      &#39;Expected \&#39;&#39; + container + &#39;\&#39; not to contain \&#39;&#39; + contained + &#39;\&#39;&#39;);
-<a name="line535"></a>}
-<a name="line536"></a>
-<a name="line537"></a>/**
-<a name="line538"></a> * Converts an array like object to array or clones it if it&#39;s already array.
-<a name="line539"></a> * @param {goog.testing.asserts.ArrayLike} arrayLike The collection.
-<a name="line540"></a> * @return {!Array} Copy of the collection as array.
-<a name="line541"></a> * @private
-<a name="line542"></a> */
-<a name="line543"></a>goog.testing.asserts.toArray_ = function(arrayLike) {
-<a name="line544"></a>  var ret = [];
-<a name="line545"></a>  for (var i = 0; i &lt; arrayLike.length; i++) {
-<a name="line546"></a>    ret[i] = arrayLike[i];
-<a name="line547"></a>  }
-<a name="line548"></a>  return ret;
-<a name="line549"></a>};
-<a name="line550"></a>
-<a name="line551"></a>/**
-<a name="line552"></a> * Finds the position of the first occurrence of an element in a container.
-<a name="line553"></a> * @param {goog.testing.asserts.ArrayLike} container
-<a name="line554"></a> *     The array to find the element in.
-<a name="line555"></a> * @param {*} contained Element to find.
-<a name="line556"></a> * @return {number} Index of the first occurrence or -1 if not found.
-<a name="line557"></a> * @private
-<a name="line558"></a> */
-<a name="line559"></a>goog.testing.asserts.indexOf_ = function(container, contained) {
-<a name="line560"></a>  if (container.indexOf) {
-<a name="line561"></a>    return container.indexOf(contained);
-<a name="line562"></a>  } else {
-<a name="line563"></a>    // IE6/7 do not have indexOf so do a search.
-<a name="line564"></a>    for (var i = 0; i &lt; container.length; i++) {
-<a name="line565"></a>      if (container[i] === contained) {
-<a name="line566"></a>        return i;
-<a name="line567"></a>      }
-<a name="line568"></a>    }
-<a name="line569"></a>    return -1;
-<a name="line570"></a>  }
-<a name="line571"></a>};
-<a name="line572"></a>
-<a name="line573"></a>/**
-<a name="line574"></a> * Tells whether the array contains the given element.
-<a name="line575"></a> * @param {goog.testing.asserts.ArrayLike} container The array to
-<a name="line576"></a> *     find the element in.
-<a name="line577"></a> * @param {*} contained Element to find.
-<a name="line578"></a> * @return {boolean} Whether the element is in the array.
-<a name="line579"></a> * @private
-<a name="line580"></a> */
-<a name="line581"></a>goog.testing.asserts.contains_ = function(container, contained) {
-<a name="line582"></a>  // TODO: Can we check for container.contains as well?
-<a name="line583"></a>  // That would give us support for most goog.structs (though weird results
-<a name="line584"></a>  // with anything else with a contains method, like goog.math.Range). Falling
-<a name="line585"></a>  // back with container.some would catch all iterables, too.
-<a name="line586"></a>  return goog.testing.asserts.indexOf_(container, contained) != -1;
-<a name="line587"></a>};
-<a name="line588"></a>
-<a name="line589"></a>function standardizeHTML(html) {
-<a name="line590"></a>  var translator = document.createElement(&#39;DIV&#39;);
-<a name="line591"></a>  translator.innerHTML = html;
-<a name="line592"></a>
-<a name="line593"></a>  // Trim whitespace from result (without relying on goog.string)
-<a name="line594"></a>  return translator.innerHTML.replace(/^\s+|\s+$/g, &#39;&#39;);
-<a name="line595"></a>}
-<a name="line596"></a>
-<a name="line597"></a>/**
-<a name="line598"></a> * Standardizes a CSS value for a given property by applying it to an element
-<a name="line599"></a> * and then reading it back.
-<a name="line600"></a> * @param {string} propertyName CSS property name.
-<a name="line601"></a> * @param {string} value CSS value.
-<a name="line602"></a> * @return {string} Normalized CSS value.
-<a name="line603"></a> */
-<a name="line604"></a>function standardizeCSSValue(propertyName, value) {
-<a name="line605"></a>  var styleDeclaration = document.createElement(&#39;DIV&#39;).style;
-<a name="line606"></a>  styleDeclaration[propertyName] = value;
-<a name="line607"></a>  return styleDeclaration[propertyName];
-<a name="line608"></a>}
-<a name="line609"></a>
-<a name="line610"></a>
-<a name="line611"></a>/**
-<a name="line612"></a> * Raises a JsUnit exception with the given comment.
-<a name="line613"></a> * @param {string} comment A summary for the exception.
-<a name="line614"></a> * @param {string} opt_message A description of the exception.
-<a name="line615"></a> * @private
-<a name="line616"></a> */
-<a name="line617"></a>goog.testing.asserts.raiseException_ = function(comment, opt_message) {
-<a name="line618"></a>  if (goog.global[&#39;CLOSURE_INSPECTOR___&#39;] &amp;&amp;
-<a name="line619"></a>      goog.global[&#39;CLOSURE_INSPECTOR___&#39;][&#39;supportsJSUnit&#39;]) {
-<a name="line620"></a>    goog.global[&#39;CLOSURE_INSPECTOR___&#39;][&#39;jsUnitFailure&#39;](comment, opt_message);
-<a name="line621"></a>  }
-<a name="line622"></a>
-<a name="line623"></a>  throw new goog.testing.JsUnitException(comment, opt_message);
-<a name="line624"></a>};
+<a name="line457"></a>function assertEvaluatesToFalse(a, opt_b) {
+<a name="line458"></a>  _validateArguments(1, arguments);
+<a name="line459"></a>  var value = nonCommentArg(1, 1, arguments);
+<a name="line460"></a>  if (value) {
+<a name="line461"></a>    _assert(commentArg(1, arguments), false, &#39;Expected to evaluate to false&#39;);
+<a name="line462"></a>  }
+<a name="line463"></a>}
+<a name="line464"></a>
+<a name="line465"></a>function assertHTMLEquals(a, b, opt_c) {
+<a name="line466"></a>  _validateArguments(2, arguments);
+<a name="line467"></a>  var var1 = nonCommentArg(1, 2, arguments);
+<a name="line468"></a>  var var2 = nonCommentArg(2, 2, arguments);
+<a name="line469"></a>  var var1Standardized = standardizeHTML(var1);
+<a name="line470"></a>  var var2Standardized = standardizeHTML(var2);
+<a name="line471"></a>
+<a name="line472"></a>  _assert(commentArg(2, arguments), var1Standardized === var2Standardized,
+<a name="line473"></a>          &#39;Expected &#39; + _displayStringForValue(var1Standardized) + &#39; but was &#39; +
+<a name="line474"></a>          _displayStringForValue(var2Standardized));
+<a name="line475"></a>}
+<a name="line476"></a>
+<a name="line477"></a>/**
+<a name="line478"></a> * Compares two CSS property values to make sure that they represent the same
+<a name="line479"></a> * things. This will normalize values in the browser. For example, in Firefox,
+<a name="line480"></a> * this assertion will consider &quot;rgb(0, 0, 255)&quot; and &quot;#0000ff&quot; to be identical
+<a name="line481"></a> * values for the &quot;color&quot; property. This function won&#39;t normalize everything --
+<a name="line482"></a> * for example, in most browsers, &quot;blue&quot; will not match &quot;#0000ff&quot;. It is
+<a name="line483"></a> * intended only to compensate for unexpected normalizations performed by
+<a name="line484"></a> * the browser that should also affect your expected value.
+<a name="line485"></a> * @param {string} a Assertion message, or the CSS property name.
+<a name="line486"></a> * @param {string} b CSS property name, or the expected value.
+<a name="line487"></a> * @param {string} c The expected value, or the actual value.
+<a name="line488"></a> * @param {string=} opt_d The actual value.
+<a name="line489"></a> */
+<a name="line490"></a>function assertCSSValueEquals(a, b, c, opt_d) {
+<a name="line491"></a>  _validateArguments(3, arguments);
+<a name="line492"></a>  var propertyName = nonCommentArg(1, 3, arguments);
+<a name="line493"></a>  var expectedValue = nonCommentArg(2, 3, arguments);
+<a name="line494"></a>  var actualValue = nonCommentArg(3, 3, arguments);
+<a name="line495"></a>  var expectedValueStandardized =
+<a name="line496"></a>      standardizeCSSValue(propertyName, expectedValue);
+<a name="line497"></a>  var actualValueStandardized =
+<a name="line498"></a>      standardizeCSSValue(propertyName, actualValue);
+<a name="line499"></a>
+<a name="line500"></a>  _assert(commentArg(3, arguments),
+<a name="line501"></a>          expectedValueStandardized == actualValueStandardized,
+<a name="line502"></a>          &#39;Expected &#39; + _displayStringForValue(expectedValueStandardized) +
+<a name="line503"></a>          &#39; but was &#39; + _displayStringForValue(actualValueStandardized));
+<a name="line504"></a>}
+<a name="line505"></a>
+<a name="line506"></a>function assertHashEquals(a, b, opt_c) {
+<a name="line507"></a>  _validateArguments(2, arguments);
+<a name="line508"></a>  var var1 = nonCommentArg(1, 2, arguments);
+<a name="line509"></a>  var var2 = nonCommentArg(2, 2, arguments);
+<a name="line510"></a>  var message = commentArg(2, arguments);
+<a name="line511"></a>  for (var key in var1) {
+<a name="line512"></a>    _assert(message,
+<a name="line513"></a>        key in var2, &#39;Expected hash had key &#39; + key + &#39; that was not found&#39;);
+<a name="line514"></a>    _assert(message, var1[key] == var2[key], &#39;Value for key &#39; + key +
+<a name="line515"></a>        &#39; mismatch - expected = &#39; + var1[key] + &#39;, actual = &#39; + var2[key]);
+<a name="line516"></a>  }
+<a name="line517"></a>
+<a name="line518"></a>  for (var key in var2) {
+<a name="line519"></a>    _assert(message, key in var1, &#39;Actual hash had key &#39; + key +
+<a name="line520"></a>        &#39; that was not expected&#39;);
+<a name="line521"></a>  }
+<a name="line522"></a>}
+<a name="line523"></a>
+<a name="line524"></a>function assertRoughlyEquals(a, b, c, opt_d) {
+<a name="line525"></a>  _validateArguments(3, arguments);
+<a name="line526"></a>  var expected = nonCommentArg(1, 3, arguments);
+<a name="line527"></a>  var actual = nonCommentArg(2, 3, arguments);
+<a name="line528"></a>  var tolerance = nonCommentArg(3, 3, arguments);
+<a name="line529"></a>  _assert(commentArg(3, arguments), Math.abs(expected - actual) &lt;= tolerance,
+<a name="line530"></a>      &#39;Expected &#39; + expected + &#39;, but got &#39; + actual +
+<a name="line531"></a>      &#39; which was more than &#39; + tolerance + &#39; away&#39;);
+<a name="line532"></a>}
+<a name="line533"></a>
+<a name="line534"></a>function assertContains(a, b, opt_c) {
+<a name="line535"></a>  _validateArguments(2, arguments);
+<a name="line536"></a>  var contained = nonCommentArg(1, 2, arguments);
+<a name="line537"></a>  var container = nonCommentArg(2, 2, arguments);
+<a name="line538"></a>  _assert(commentArg(2, arguments),
+<a name="line539"></a>      goog.testing.asserts.contains_(container, contained),
+<a name="line540"></a>      &#39;Expected \&#39;&#39; + container + &#39;\&#39; to contain \&#39;&#39; + contained + &#39;\&#39;&#39;);
+<a name="line541"></a>}
+<a name="line542"></a>
+<a name="line543"></a>function assertNotContains(a, b, opt_c) {
+<a name="line544"></a>  _validateArguments(2, arguments);
+<a name="line545"></a>  var contained = nonCommentArg(1, 2, arguments);
+<a name="line546"></a>  var container = nonCommentArg(2, 2, arguments);
+<a name="line547"></a>  _assert(commentArg(2, arguments),
+<a name="line548"></a>      !goog.testing.asserts.contains_(container, contained),
+<a name="line549"></a>      &#39;Expected \&#39;&#39; + container + &#39;\&#39; not to contain \&#39;&#39; + contained + &#39;\&#39;&#39;);
+<a name="line550"></a>}
+<a name="line551"></a>
+<a name="line552"></a>/**
+<a name="line553"></a> * Converts an array like object to array or clones it if it&#39;s already array.
+<a name="line554"></a> * @param {goog.testing.asserts.ArrayLike} arrayLike The collection.
+<a name="line555"></a> * @return {!Array} Copy of the collection as array.
+<a name="line556"></a> * @private
+<a name="line557"></a> */
+<a name="line558"></a>goog.testing.asserts.toArray_ = function(arrayLike) {
+<a name="line559"></a>  var ret = [];
+<a name="line560"></a>  for (var i = 0; i &lt; arrayLike.length; i++) {
+<a name="line561"></a>    ret[i] = arrayLike[i];
+<a name="line562"></a>  }
+<a name="line563"></a>  return ret;
+<a name="line564"></a>};
+<a name="line565"></a>
+<a name="line566"></a>/**
+<a name="line567"></a> * Finds the position of the first occurrence of an element in a container.
+<a name="line568"></a> * @param {goog.testing.asserts.ArrayLike} container
+<a name="line569"></a> *     The array to find the element in.
+<a name="line570"></a> * @param {*} contained Element to find.
+<a name="line571"></a> * @return {number} Index of the first occurrence or -1 if not found.
+<a name="line572"></a> * @private
+<a name="line573"></a> */
+<a name="line574"></a>goog.testing.asserts.indexOf_ = function(container, contained) {
+<a name="line575"></a>  if (container.indexOf) {
+<a name="line576"></a>    return container.indexOf(contained);
+<a name="line577"></a>  } else {
+<a name="line578"></a>    // IE6/7 do not have indexOf so do a search.
+<a name="line579"></a>    for (var i = 0; i &lt; container.length; i++) {
+<a name="line580"></a>      if (container[i] === contained) {
+<a name="line581"></a>        return i;
+<a name="line582"></a>      }
+<a name="line583"></a>    }
+<a name="line584"></a>    return -1;
+<a name="line585"></a>  }
+<a name="line586"></a>};
+<a name="line587"></a>
+<a name="line588"></a>/**
+<a name="line589"></a> * Tells whether the array contains the given element.
+<a name="line590"></a> * @param {goog.testing.asserts.ArrayLike} container The array to
+<a name="line591"></a> *     find the element in.
+<a name="line592"></a> * @param {*} contained Element to find.
+<a name="line593"></a> * @return {boolean} Whether the element is in the array.
+<a name="line594"></a> * @private
+<a name="line595"></a> */
+<a name="line596"></a>goog.testing.asserts.contains_ = function(container, contained) {
+<a name="line597"></a>  // TODO: Can we check for container.contains as well?
+<a name="line598"></a>  // That would give us support for most goog.structs (though weird results
+<a name="line599"></a>  // with anything else with a contains method, like goog.math.Range). Falling
+<a name="line600"></a>  // back with container.some would catch all iterables, too.
+<a name="line601"></a>  return goog.testing.asserts.indexOf_(container, contained) != -1;
+<a name="line602"></a>};
+<a name="line603"></a>
+<a name="line604"></a>function standardizeHTML(html) {
+<a name="line605"></a>  var translator = document.createElement(&#39;DIV&#39;);
+<a name="line606"></a>  translator.innerHTML = html;
+<a name="line607"></a>
+<a name="line608"></a>  // Trim whitespace from result (without relying on goog.string)
+<a name="line609"></a>  return translator.innerHTML.replace(/^\s+|\s+$/g, &#39;&#39;);
+<a name="line610"></a>}
+<a name="line611"></a>
+<a name="line612"></a>/**
+<a name="line613"></a> * Standardizes a CSS value for a given property by applying it to an element
+<a name="line614"></a> * and then reading it back.
+<a name="line615"></a> * @param {string} propertyName CSS property name.
+<a name="line616"></a> * @param {string} value CSS value.
+<a name="line617"></a> * @return {string} Normalized CSS value.
+<a name="line618"></a> */
+<a name="line619"></a>function standardizeCSSValue(propertyName, value) {
+<a name="line620"></a>  var styleDeclaration = document.createElement(&#39;DIV&#39;).style;
+<a name="line621"></a>  styleDeclaration[propertyName] = value;
+<a name="line622"></a>  return styleDeclaration[propertyName];
+<a name="line623"></a>}
+<a name="line624"></a>
 <a name="line625"></a>
-<a name="line626"></a>
-<a name="line627"></a>/**
+<a name="line626"></a>/**
+<a name="line627"></a> * Raises a JsUnit exception with the given comment.
 <a name="line628"></a> * @param {string} comment A summary for the exception.
-<a name="line629"></a> * @param {?string} opt_message A description of the exception.
-<a name="line630"></a> * @constructor
+<a name="line629"></a> * @param {string=} opt_message A description of the exception.
+<a name="line630"></a> * @private
 <a name="line631"></a> */
-<a name="line632"></a>goog.testing.JsUnitException = function(comment, opt_message) {
-<a name="line633"></a>  this.isJsUnitException = true;
-<a name="line634"></a>  this.message = (comment ? comment : &#39;&#39;) +
-<a name="line635"></a>                 (comment &amp;&amp; opt_message ? &#39;\n&#39; : &#39;&#39;) +
-<a name="line636"></a>                 (opt_message ? opt_message : &#39;&#39;);
-<a name="line637"></a>  this.stackTrace = goog.testing.stacktrace.get();
-<a name="line638"></a>};
-<a name="line639"></a>
-<a name="line640"></a>/** @inheritDoc */
-<a name="line641"></a>goog.testing.JsUnitException.prototype.toString = function() {
-<a name="line642"></a>  // TODO: Fix dependency in build rules.  For more info see
-<a name="line643"></a>  // http://b/2020085
-<a name="line644"></a>  return &#39;[JsUnitException]&#39;;
-<a name="line645"></a>};
-<a name="line646"></a>
-<a name="line647"></a>goog.exportSymbol(&#39;fail&#39;, fail);
-<a name="line648"></a>goog.exportSymbol(&#39;assert&#39;, assert);
-<a name="line649"></a>goog.exportSymbol(&#39;assertThrows&#39;, assertThrows);
-<a name="line650"></a>goog.exportSymbol(&#39;assertNotThrows&#39;, assertNotThrows);
-<a name="line651"></a>goog.exportSymbol(&#39;assertTrue&#39;, assertTrue);
-<a name="line652"></a>goog.exportSymbol(&#39;assertFalse&#39;, assertFalse);
-<a name="line653"></a>goog.exportSymbol(&#39;assertEquals&#39;, assertEquals);
-<a name="line654"></a>goog.exportSymbol(&#39;assertNotEquals&#39;, assertNotEquals);
-<a name="line655"></a>goog.exportSymbol(&#39;assertNull&#39;, assertNull);
-<a name="line656"></a>goog.exportSymbol(&#39;assertNotNull&#39;, assertNotNull);
-<a name="line657"></a>goog.exportSymbol(&#39;assertUndefined&#39;, assertUndefined);
-<a name="line658"></a>goog.exportSymbol(&#39;assertNotUndefined&#39;, assertNotUndefined);
-<a name="line659"></a>goog.exportSymbol(&#39;assertNonEmptyString&#39;, assertNonEmptyString);
-<a name="line660"></a>goog.exportSymbol(&#39;assertNaN&#39;, assertNaN);
-<a name="line661"></a>goog.exportSymbol(&#39;assertNotNaN&#39;, assertNotNaN);
-<a name="line662"></a>goog.exportSymbol(&#39;assertObjectEquals&#39;, assertObjectEquals);
-<a name="line663"></a>goog.exportSymbol(&#39;assertArrayEquals&#39;, assertArrayEquals);
-<a name="line664"></a>goog.exportSymbol(&#39;assertSameElements&#39;, assertSameElements);
-<a name="line665"></a>goog.exportSymbol(&#39;assertEvaluatesToTrue&#39;, assertEvaluatesToTrue);
-<a name="line666"></a>goog.exportSymbol(&#39;assertEvaluatesToFalse&#39;, assertEvaluatesToFalse);
-<a name="line667"></a>goog.exportSymbol(&#39;assertHTMLEquals&#39;, assertHTMLEquals);
-<a name="line668"></a>goog.exportSymbol(&#39;assertHashEquals&#39;, assertHashEquals);
-<a name="line669"></a>goog.exportSymbol(&#39;assertRoughlyEquals&#39;, assertRoughlyEquals);
-<a name="line670"></a>goog.exportSymbol(&#39;assertContains&#39;, assertContains);
-<a name="line671"></a>goog.exportSymbol(&#39;assertNotContains&#39;, assertNotContains);
+<a name="line632"></a>goog.testing.asserts.raiseException_ = function(comment, opt_message) {
+<a name="line633"></a>  if (goog.global[&#39;CLOSURE_INSPECTOR___&#39;] &amp;&amp;
+<a name="line634"></a>      goog.global[&#39;CLOSURE_INSPECTOR___&#39;][&#39;supportsJSUnit&#39;]) {
+<a name="line635"></a>    goog.global[&#39;CLOSURE_INSPECTOR___&#39;][&#39;jsUnitFailure&#39;](comment, opt_message);
+<a name="line636"></a>  }
+<a name="line637"></a>
+<a name="line638"></a>  throw new goog.testing.JsUnitException(comment, opt_message);
+<a name="line639"></a>};
+<a name="line640"></a>
+<a name="line641"></a>
+<a name="line642"></a>/**
+<a name="line643"></a> * @param {string} comment A summary for the exception.
+<a name="line644"></a> * @param {?string=} opt_message A description of the exception.
+<a name="line645"></a> * @constructor
+<a name="line646"></a> */
+<a name="line647"></a>goog.testing.JsUnitException = function(comment, opt_message) {
+<a name="line648"></a>  this.isJsUnitException = true;
+<a name="line649"></a>  this.message = (comment ? comment : &#39;&#39;) +
+<a name="line650"></a>                 (comment &amp;&amp; opt_message ? &#39;\n&#39; : &#39;&#39;) +
+<a name="line651"></a>                 (opt_message ? opt_message : &#39;&#39;);
+<a name="line652"></a>  this.stackTrace = goog.testing.stacktrace.get();
+<a name="line653"></a>};
+<a name="line654"></a>
+<a name="line655"></a>/** @inheritDoc */
+<a name="line656"></a>goog.testing.JsUnitException.prototype.toString = function() {
+<a name="line657"></a>  // TODO: Fix dependency in build rules.  For more info see
+<a name="line658"></a>  // http://b/2020085
+<a name="line659"></a>  return &#39;[JsUnitException]&#39;;
+<a name="line660"></a>};
+<a name="line661"></a>
+<a name="line662"></a>goog.exportSymbol(&#39;fail&#39;, fail);
+<a name="line663"></a>goog.exportSymbol(&#39;assert&#39;, assert);
+<a name="line664"></a>goog.exportSymbol(&#39;assertThrows&#39;, assertThrows);
+<a name="line665"></a>goog.exportSymbol(&#39;assertNotThrows&#39;, assertNotThrows);
+<a name="line666"></a>goog.exportSymbol(&#39;assertTrue&#39;, assertTrue);
+<a name="line667"></a>goog.exportSymbol(&#39;assertFalse&#39;, assertFalse);
+<a name="line668"></a>goog.exportSymbol(&#39;assertEquals&#39;, assertEquals);
+<a name="line669"></a>goog.exportSymbol(&#39;assertNotEquals&#39;, assertNotEquals);
+<a name="line670"></a>goog.exportSymbol(&#39;assertNull&#39;, assertNull);
+<a name="line671"></a>goog.exportSymbol(&#39;assertNotNull&#39;, assertNotNull);
+<a name="line672"></a>goog.exportSymbol(&#39;assertUndefined&#39;, assertUndefined);
+<a name="line673"></a>goog.exportSymbol(&#39;assertNotUndefined&#39;, assertNotUndefined);
+<a name="line674"></a>goog.exportSymbol(&#39;assertNotNullNorUndefined&#39;, assertNotNullNorUndefined);
+<a name="line675"></a>goog.exportSymbol(&#39;assertNonEmptyString&#39;, assertNonEmptyString);
+<a name="line676"></a>goog.exportSymbol(&#39;assertNaN&#39;, assertNaN);
+<a name="line677"></a>goog.exportSymbol(&#39;assertNotNaN&#39;, assertNotNaN);
+<a name="line678"></a>goog.exportSymbol(&#39;assertObjectEquals&#39;, assertObjectEquals);
+<a name="line679"></a>goog.exportSymbol(&#39;assertArrayEquals&#39;, assertArrayEquals);
+<a name="line680"></a>goog.exportSymbol(&#39;assertSameElements&#39;, assertSameElements);
+<a name="line681"></a>goog.exportSymbol(&#39;assertEvaluatesToTrue&#39;, assertEvaluatesToTrue);
+<a name="line682"></a>goog.exportSymbol(&#39;assertEvaluatesToFalse&#39;, assertEvaluatesToFalse);
+<a name="line683"></a>goog.exportSymbol(&#39;assertHTMLEquals&#39;, assertHTMLEquals);
+<a name="line684"></a>goog.exportSymbol(&#39;assertHashEquals&#39;, assertHashEquals);
+<a name="line685"></a>goog.exportSymbol(&#39;assertRoughlyEquals&#39;, assertRoughlyEquals);
+<a name="line686"></a>goog.exportSymbol(&#39;assertContains&#39;, assertContains);
+<a name="line687"></a>goog.exportSymbol(&#39;assertNotContains&#39;, assertNotContains);
 </pre>
 
 

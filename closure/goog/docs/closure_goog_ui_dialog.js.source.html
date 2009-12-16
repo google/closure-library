@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -113,11 +114,11 @@
 <a name="line70"></a> *        - ...
 <a name="line71"></a> * &lt;/pre&gt;
 <a name="line72"></a> * @constructor
-<a name="line73"></a> * @param {string} opt_class CSS class name for the dialog element, also used
+<a name="line73"></a> * @param {string=} opt_class CSS class name for the dialog element, also used
 <a name="line74"></a> *    as a class name prefix for related elements; defaults to modal-dialog.
-<a name="line75"></a> * @param {boolean} opt_useIframeMask Work around windowed controls z-index
+<a name="line75"></a> * @param {boolean=} opt_useIframeMask Work around windowed controls z-index
 <a name="line76"></a> *     issue by using an iframe instead of a div for bg element.
-<a name="line77"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper; see {@link
+<a name="line77"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
 <a name="line78"></a> *    goog.ui.Component} for semantics.
 <a name="line79"></a> * @extends {goog.ui.Component}
 <a name="line80"></a> */
@@ -606,7 +607,7 @@
 <a name="line563"></a> * have unexpected results.  The parent element defaults to the current document
 <a name="line564"></a> * body if unspecified, which is almost always what you want.
 <a name="line565"></a> *
-<a name="line566"></a> * @param {Element} opt_parent Element into which the component is to be
+<a name="line566"></a> * @param {Element=} opt_parent Element into which the component is to be
 <a name="line567"></a> *    rendered; defaults to the current document&#39;s body element if unspecified.
 <a name="line568"></a> * @throws {goog.ui.Component.Error.ALREADY_RENDERED} If the component is
 <a name="line569"></a> *    already rendered.
@@ -1292,7 +1293,7 @@
 <a name="line1249"></a>/**
 <a name="line1250"></a> * A button set defines the behaviour of a set of buttons that the dialog can
 <a name="line1251"></a> * show.  Uses the {@link goog.structs.Map} interface.
-<a name="line1252"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper; see {@link
+<a name="line1252"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
 <a name="line1253"></a> *    goog.ui.Component} for semantics.
 <a name="line1254"></a> * @constructor
 <a name="line1255"></a> * @extends {goog.structs.Map}
@@ -1345,9 +1346,9 @@
 <a name="line1302"></a> * @param {string} key Key used to identify the button in events.
 <a name="line1303"></a> * @param {string|Element} caption A string caption or a DOM node that can be
 <a name="line1304"></a> *     appended to a button element.
-<a name="line1305"></a> * @param {boolean} opt_isDefault Whether this button is the default button,
+<a name="line1305"></a> * @param {boolean=} opt_isDefault Whether this button is the default button,
 <a name="line1306"></a> *     Dialog will dispatch for this button if enter is pressed.
-<a name="line1307"></a> * @param {boolean} opt_isCancel Whether this button has the same behaviour as
+<a name="line1307"></a> * @param {boolean=} opt_isCancel Whether this button has the same behaviour as
 <a name="line1308"></a> *    cancel.  If escape is pressed this button will fire.
 <a name="line1309"></a> * @return {goog.ui.Dialog.ButtonSet} The button set, to make it easy to chain
 <a name="line1310"></a> *    &quot;set&quot; calls and build new ButtonSets.

@@ -86,7 +86,7 @@ goog.string.caseInsensitiveEndsWith = function(str, suffix) {
  * Does simple python-style string substitution.
  * subs("foo%s hot%s", "bar", "dog") becomes "foobar hotdog".
  * @param {string} str The string containing the pattern.
- * @param {*} var_args The items to substitute into the pattern.
+ * @param {...*} var_args The items to substitute into the pattern.
  * @return {string} A copy of {@code str} in which each occurrence of
  *     {@code %s} has been replaced an argument from {@code var_args}.
  */
@@ -430,7 +430,7 @@ goog.string.urlDecode = function(str) {
 /**
  * Converts \n to <br>s or <br />s.
  * @param {string} str The string in which to convert newlines.
- * @param {boolean} opt_xml Whether to use XML compatible tags.
+ * @param {boolean=} opt_xml Whether to use XML compatible tags.
  * @return {string} A copy of {@code str} with converted newlines.
  */
 goog.string.newLineToBr = function(str, opt_xml) {
@@ -472,7 +472,7 @@ goog.string.newLineToBr = function(str, opt_xml) {
  * application grows the difference between the various methods would increase.
  *
  * @param {string} str string to be escaped.
- * @param {boolean} opt_isLikelyToContainHtmlChars Don't perform a check to see
+ * @param {boolean=} opt_isLikelyToContainHtmlChars Don't perform a check to see
  *     if the character needs replacing - use this option if you expect each of
  *     the characters to appear often. Leave false if you expect few html
  *     characters to occur in your strings, such as if you are escaping HTML.
@@ -636,7 +636,7 @@ goog.string.NORMALIZE_FN_ = 'normalize';
  * Do escaping of whitespace to preserve spatial formatting. We use character
  * entity #160 to make it safer for xml.
  * @param {string} str The string in which to escape whitespace.
- * @param {boolean} opt_xml Whether to use XML compatible tags.
+ * @param {boolean=} opt_xml Whether to use XML compatible tags.
  * @return {string} An escaped copy of {@code str}.
  */
 goog.string.whitespaceEscape = function(str, opt_xml) {
@@ -678,7 +678,7 @@ goog.string.stripQuotes = function(str, quoteChars) {
  * 'Hello World!' produces 'Hello W...'.
  * @param {string} str The string to truncate.
  * @param {number} chars Max number of characters.
- * @param {boolean} opt_protectEscapedCharacters Whether to protect escaped
+ * @param {boolean=} opt_protectEscapedCharacters Whether to protect escaped
  *     characters from being cut off in the middle.
  * @return {string} The truncated {@code str} string.
  */
@@ -704,7 +704,7 @@ goog.string.truncate = function(str, chars, opt_protectEscapedCharacters) {
  * and favoring the beginning of the string.
  * @param {string} str The string to truncate the middle of.
  * @param {number} chars Max number of characters.
- * @param {boolean} opt_protectEscapedCharacters Whether to protect escaped
+ * @param {boolean=} opt_protectEscapedCharacters Whether to protect escaped
  *     characters from being cutoff in the middle.
  * @return {string} A truncated copy of {@code str}.
  */
@@ -912,7 +912,7 @@ goog.string.repeat = function(string, length) {
  *
  * @param {number} num The number to pad.
  * @param {number} length The desired length.
- * @param {number} opt_precision The desired precision.
+ * @param {number=} opt_precision The desired precision.
  * @return {string} {@code num} as a string with the given options.
  */
 goog.string.padNumber = function(num, length, opt_precision) {
@@ -947,7 +947,7 @@ goog.string.makeSafe = function(obj) {
  * <pre>buildString('a', 'b', 'c', 'd') -> 'abcd'
  * buildString(null, undefined) -> ''
  * </pre>
- * @param {*} var_args A list of strings to concatenate. If not a string,
+ * @param {...*} var_args A list of strings to concatenate. If not a string,
  *     it will be casted to one.
  * @return {string} The concatenation of {@code var_args}.
  */

@@ -41,9 +41,9 @@ goog.require('goog.userAgent');
 /**
  * Creates an HSV palette. Allows a user to select the hue, saturation and
  * value/brightness.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
- * @param {string} opt_color Optional initial color (default is red).
- * @param {string} opt_class Optional base for creating classnames (default is
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {string=} opt_color Optional initial color (default is red).
+ * @param {string=} opt_class Optional base for creating classnames (default is
  *     goog.getCssName('goog-hsv-palette')).
  * @extends {goog.ui.Component}
  * @constructor
@@ -204,9 +204,9 @@ goog.ui.HsvPalette.prototype.setColor_ = function(color) {
 /**
  * Alters the hue, saturation, and/or value of the currently selected color and
  * updates the UI.
- * @param {?number} opt_hue (optional) hue in [0, 1].
- * @param {?number} opt_saturation (optional) saturation in [0, 1].
- * @param {?number} opt_value (optional) value in [0, 255].
+ * @param {?number=} opt_hue (optional) hue in [0, 1].
+ * @param {?number=} opt_saturation (optional) saturation in [0, 1].
+ * @param {?number=} opt_value (optional) value in [0, 255].
  */
 goog.ui.HsvPalette.prototype.setHsv = function(opt_hue,
                                                opt_saturation,
@@ -221,9 +221,9 @@ goog.ui.HsvPalette.prototype.setHsv = function(opt_hue,
 
 /**
  * Alters the hue, saturation, and/or value of the currently selected color.
- * @param {?number} opt_hue (optional) hue in [0, 1].
- * @param {?number} opt_saturation (optional) saturation in [0, 1].
- * @param {?number} opt_value (optional) value in [0, 255].
+ * @param {?number=} opt_hue (optional) hue in [0, 1].
+ * @param {?number=} opt_saturation (optional) saturation in [0, 1].
+ * @param {?number=} opt_value (optional) value in [0, 255].
  * @private
  */
 goog.ui.HsvPalette.prototype.setHsv_ = function(opt_hue,

@@ -117,7 +117,7 @@ goog.events.Listener.prototype.callOnce = false;
  * @param {Object} src Source object for the event.
  * @param {string} type Event type.
  * @param {boolean} capture Whether in capture or bubble phase.
- * @param {Object} opt_handler Object in whose context to execute the callback.
+ * @param {Object=} opt_handler Object in whose context to execute the callback.
  */
 goog.events.Listener.prototype.init = function(listener, proxy, src, type,
                                                capture, opt_handler) {

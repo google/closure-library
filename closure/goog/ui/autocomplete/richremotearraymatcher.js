@@ -30,7 +30,7 @@ goog.require('goog.ui.AutoComplete.RemoteArrayMatcher');
  * rich rows.
  * @param {string} url The Uri which generates the auto complete matches.  The
  *     search term is passed to the server as the 'token' query param.
- * @param {boolean} opt_noSimilar If true, request that the server does not do
+ * @param {boolean=} opt_noSimilar If true, request that the server does not do
  *     similarity matches for the input token against the dictionary.
  *     The value is sent to the server as the 'use_similar' query param which is
  *     either "1" (opt_noSimilar==false) or "0" (opt_noSimilar==true).
@@ -87,7 +87,8 @@ goog.ui.AutoComplete.RichRemoteArrayMatcher.prototype.requestMatchingRows =
     try {
       var rows = [];
       for (var i = 0; i < matches.length; i++) {
-        var func = goog.json.unsafeParse(matches[i][0]);
+        var func =  /** @type {!Function} */
+            (goog.json.unsafeParse(matches[i][0]));
         for (var j = 1; j < matches[i].length; j++) {
           var richRow = func(matches[i][j]);
           rows.push(richRow);

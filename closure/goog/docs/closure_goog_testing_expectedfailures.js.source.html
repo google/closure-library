@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -182,7 +183,7 @@
 <a name="line139"></a> * Register to expect failure for the given condition.  Multiple calls to this
 <a name="line140"></a> * function act as a boolean OR.  The first applicable message will be used.
 <a name="line141"></a> * @param {boolean} condition Whether to expect failure.
-<a name="line142"></a> * @param {string} opt_message Descriptive message of this expected failure.
+<a name="line142"></a> * @param {string=} opt_message Descriptive message of this expected failure.
 <a name="line143"></a> */
 <a name="line144"></a>goog.testing.ExpectedFailures.prototype.expectFailureFor = function(
 <a name="line145"></a>    condition, opt_message) {
@@ -206,7 +207,7 @@
 <a name="line163"></a>/**
 <a name="line164"></a> * Handle an exception, suppressing it if it is a unit test failure that we
 <a name="line165"></a> * expected.
-<a name="line166"></a> * @param {Object} ex The exception to handle.
+<a name="line166"></a> * @param {Error} ex The exception to handle.
 <a name="line167"></a> */
 <a name="line168"></a>goog.testing.ExpectedFailures.prototype.handleException = function(ex) {
 <a name="line169"></a>  if (this.isExceptionExpected(ex)) {
@@ -227,7 +228,7 @@
 <a name="line184"></a>/**
 <a name="line185"></a> * Run the given function, catching any expected failures.
 <a name="line186"></a> * @param {Function} func The function to run.
-<a name="line187"></a> * @param {boolean} opt_lenient Whether to ignore if the expected failures
+<a name="line187"></a> * @param {boolean=} opt_lenient Whether to ignore if the expected failures
 <a name="line188"></a> *     didn&#39;t occur.  In this case a warning will be logged in handleTearDown.
 <a name="line189"></a> */
 <a name="line190"></a>goog.testing.ExpectedFailures.prototype.run = function(func, opt_lenient) {

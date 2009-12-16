@@ -23,6 +23,7 @@ goog.require('goog.dom.AbstractRange');
 goog.require('goog.testing.LooseMock');
 
 
+
 /**
  * LooseMock of goog.dom.AbstractRange. Useful because the mock framework cannot
  * simply create a mock out of an abstract class, and cannot create a mock out
@@ -52,7 +53,11 @@ goog.testing.MockRange.ConcreteRange_ = function() {
 };
 goog.inherits(goog.testing.MockRange.ConcreteRange_, goog.dom.AbstractRange);
 
-// Must undefine this so the mock framework can loop through this class'
-// properties.
-/** @inheritDoc */
+
+/**
+ * Undefine the iterator so the mock framework can loop through this class'
+ * properties.
+ * @type {undefined}
+ * @override
+ */
 goog.testing.MockRange.ConcreteRange_.prototype.__iterator__ = undefined;

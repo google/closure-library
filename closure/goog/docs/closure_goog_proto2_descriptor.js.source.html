@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -176,7 +177,7 @@
 <a name="line133"></a>      return field.getName() == name;
 <a name="line134"></a>    });
 <a name="line135"></a>
-<a name="line136"></a>  return valueFound || null;
+<a name="line136"></a>  return /** @type {goog.proto2.FieldDescriptor} */ (valueFound) || null;
 <a name="line137"></a>};
 <a name="line138"></a>
 <a name="line139"></a>

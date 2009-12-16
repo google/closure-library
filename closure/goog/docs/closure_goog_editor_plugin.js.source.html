@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -317,7 +318,7 @@
 <a name="line274"></a>
 <a name="line275"></a>/**
 <a name="line276"></a> * Handles selection change.
-<a name="line277"></a> * @param {!goog.events.BrowserEvent} opt_e The browser event.
+<a name="line277"></a> * @param {!goog.events.BrowserEvent=} opt_e The browser event.
 <a name="line278"></a> * @return {boolean} Whether the event was handled and thus should *not* be
 <a name="line279"></a> *     propagated to other plugins.
 <a name="line280"></a> */
@@ -359,7 +360,7 @@
 <a name="line316"></a> * Multi-field plugins must override execCommand.
 <a name="line317"></a> *
 <a name="line318"></a> * @param {string} command The command to execute.
-<a name="line319"></a> * @param {Object} var_args Any additional parameters needed to
+<a name="line319"></a> * @param {...Object} var_args Any additional parameters needed to
 <a name="line320"></a> *     execute the command.
 <a name="line321"></a> * @return {Object|undefined} The result of the execCommand, if any.
 <a name="line322"></a> */
@@ -414,7 +415,7 @@
 <a name="line371"></a> * instead.
 <a name="line372"></a> *
 <a name="line373"></a> * @param {string} command The command to execute.
-<a name="line374"></a> * @param {Object} var_args Any additional parameters needed to
+<a name="line374"></a> * @param {...Object} var_args Any additional parameters needed to
 <a name="line375"></a> *     execute the command.
 <a name="line376"></a> * @return {Object|undefined} The result of the execCommand, if any.
 <a name="line377"></a> * @protected

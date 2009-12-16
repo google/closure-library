@@ -93,7 +93,7 @@ goog.require('goog.testing.asserts');
  * may issue "wait" commands that suspend the test temporarily and continue once
  * the wait condition is met.
  *
- * @param {string} opt_name Optional name for the test case.
+ * @param {string=} opt_name Optional name for the test case.
  * @constructor
  * @extends {goog.testing.TestCase}
  */
@@ -289,7 +289,7 @@ goog.testing.ContinuationTestCase.prototype.runNextStep_ = function() {
 /**
  * Creates a new test step that will run after a user-specified timeout.
  * @param {Function} continuation The test function to invoke after the timeout.
- * @param {number} opt_duration The length of the timeout in milliseconds.
+ * @param {number=} opt_duration The length of the timeout in milliseconds.
  */
 goog.testing.ContinuationTestCase.prototype.waitForTimeout =
     function(continuation, opt_duration) {
@@ -332,8 +332,8 @@ goog.testing.ContinuationTestCase.prototype.waitForEvent = function(
  * @param {Function} condition The condition to poll.
  * @param {Function} continuation The test code to evaluate once the condition
  *     becomes true.
- * @param {number} opt_interval The polling interval in milliseconds.
- * @param {number} opt_maxTimeout The maximum amount of time to wait for the
+ * @param {number=} opt_interval The polling interval in milliseconds.
+ * @param {number=} opt_maxTimeout The maximum amount of time to wait for the
  *     condition in milliseconds (defaults to 1000).
  */
 goog.testing.ContinuationTestCase.prototype.waitForCondition = function(
@@ -604,7 +604,7 @@ goog.testing.ContinuationTestCase.Test.prototype.cancelPhase_ =
  *
  * @param {string} name The test name.
  * @param {Function} ref The test function to run.
- * @param {Object} opt_scope The object context to run the test in.
+ * @param {Object=} opt_scope The object context to run the test in.
  * @constructor
  * @extends {goog.testing.TestCase.Test}
  */

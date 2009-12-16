@@ -43,9 +43,9 @@ goog.require('goog.userAgent');
  *                 - text
  * </pre>
  *
- * @param {string} opt_class Optional class for component.
+ * @param {string=} opt_class Optional class for component.
  *     Default: 'goog-cccbutton'.
- * @param {boolean} opt_noPoundSignInHref An optional argument that, when true,
+ * @param {boolean=} opt_noPoundSignInHref An optional argument that, when true,
  *     instructs the button to not use the href="#" to create the link. The
  *     side effect of this option being true is that clicking the button
  *     triggers the window's onunload or onbeforeunload handler in IE. The
@@ -191,7 +191,7 @@ goog.ui.CccButton.prototype.setEnabled = function(enable) {
 
 /**
  * Renders the component. Throws an Error if the component is already rendered.
- * @param {Element} opt_element Element to render the compponent into.
+ * @param {Element=} opt_element Element to render the compponent into.
  *                              If omitted, then the componenet is appended to
  *                              the document.
  */

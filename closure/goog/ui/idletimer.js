@@ -38,7 +38,7 @@ goog.require('goog.ui.ActivityMonitor');
  * active.
  * @param {number} idleThreshold Amount of time in ms at which we consider the
  *     user has gone idle.
- * @param {goog.ui.ActivityMonitor} opt_activityMonitor The activity monitor
+ * @param {goog.ui.ActivityMonitor=} opt_activityMonitor The activity monitor
  *     keeping track of user interaction. Defaults to a default-constructed
  *     activity monitor. If a default activity monitor is used then this class
  *     will dispose of it. If an activity monitor is passed in then the caller

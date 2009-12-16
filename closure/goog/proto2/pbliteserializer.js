@@ -38,11 +38,8 @@
 
 goog.provide('goog.proto2.PbLiteSerializer');
 
-goog.require('goog.proto2.Descriptor');
-goog.require('goog.proto2.FieldDescriptor');
 goog.require('goog.proto2.LazyDeserializer');
 goog.require('goog.proto2.Util');
-goog.require('goog.string');
 
 
 

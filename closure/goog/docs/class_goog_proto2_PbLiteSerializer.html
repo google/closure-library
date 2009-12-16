@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,14 +88,14 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_proto2_Serializer.html">goog.proto2.Serializer</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_proto2_LazyDeserializer.html">goog.proto2.LazyDeserializer</a></span></td><td><span class="type"><a href="class_goog_proto2_Serializer.html">goog.proto2.Serializer</a></span></td></tr>
   <tr><td>goog.proto2.PbLiteSerializer</td><td><span class="type"><a href="class_goog_proto2_LazyDeserializer.html">goog.proto2.LazyDeserializer</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -202,7 +214,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_pbliteserializer.js.source.html#line104">code &raquo;</a>
+     <a href="closure_goog_proto2_pbliteserializer.js.source.html#line101">code &raquo;</a>
   </td>
      </tr>
 
@@ -270,7 +282,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_pbliteserializer.js.source.html#line140">code &raquo;</a>
+     <a href="closure_goog_proto2_pbliteserializer.js.source.html#line137">code &raquo;</a>
   </td>
      </tr>
 
@@ -338,7 +350,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_pbliteserializer.js.source.html#line128">code &raquo;</a>
+     <a href="closure_goog_proto2_pbliteserializer.js.source.html#line125">code &raquo;</a>
   </td>
      </tr>
 
@@ -403,7 +415,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_pbliteserializer.js.source.html#line66">code &raquo;</a>
+     <a href="closure_goog_proto2_pbliteserializer.js.source.html#line63">code &raquo;</a>
   </td>
      </tr>
 

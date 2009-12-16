@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -77,13 +89,13 @@ Since modules may not have their code loaded, we must keep track of them.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td>goog.module.ModuleManager</td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -186,7 +198,7 @@ Since modules may not have their code loaded, we must keep track of them.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line621">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line635">code &raquo;</a>
   </td>
      </tr>
 
@@ -246,7 +258,7 @@ Since modules may not have their code loaded, we must keep track of them.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line605">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line619">code &raquo;</a>
   </td>
      </tr>
 
@@ -280,7 +292,7 @@ Since modules may not have their code loaded, we must keep track of them.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line295">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line297">code &raquo;</a>
   </td>
      </tr>
 
@@ -340,7 +352,7 @@ Since modules may not have their code loaded, we must keep track of them.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line732">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line761">code &raquo;</a>
   </td>
      </tr>
 
@@ -374,7 +386,7 @@ Since modules may not have their code loaded, we must keep track of them.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line847">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line876">code &raquo;</a>
   </td>
      </tr>
 
@@ -441,7 +453,7 @@ the module if necessary, unless opt_noLoad is true.
    <tr class="even">
      <td>
         <span class="entryName">opt_handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Optional handler under whose scope to execute the callback.</div>
      </td>
    </tr>
@@ -449,7 +461,7 @@ the module if necessary, unless opt_noLoad is true.
    <tr class="odd">
      <td>
         <span class="entryName">opt_noLoad</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">TRUE iff not to initiate loading of the module.</div>
      </td>
    </tr>
@@ -457,7 +469,7 @@ the module if necessary, unless opt_noLoad is true.
    <tr class="even">
      <td>
         <span class="entryName">opt_userInitiated</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">TRUE iff the loading of the module was user initiated.</div>
      </td>
    </tr>
@@ -465,7 +477,7 @@ the module if necessary, unless opt_noLoad is true.
    <tr class="odd">
      <td>
         <span class="entryName">opt_preferSynchronous</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">TRUE iff the function should be executed synchronously if the module has already been loaded.</div>
      </td>
    </tr>
@@ -483,7 +495,7 @@ the module if necessary, unless opt_noLoad is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line528">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line530">code &raquo;</a>
   </td>
      </tr>
 
@@ -543,7 +555,7 @@ the module if necessary, unless opt_noLoad is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line836">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line865">code &raquo;</a>
   </td>
      </tr>
 
@@ -589,7 +601,7 @@ the module if necessary, unless opt_noLoad is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line239">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line241">code &raquo;</a>
   </td>
      </tr>
 
@@ -635,7 +647,7 @@ the module if necessary, unless opt_noLoad is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line259">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line261">code &raquo;</a>
   </td>
      </tr>
 
@@ -700,7 +712,7 @@ the module if necessary, unless opt_noLoad is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line216">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line218">code &raquo;</a>
   </td>
      </tr>
 
@@ -766,7 +778,7 @@ module transitively depends on, including itself.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line447">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line449">code &raquo;</a>
   </td>
      </tr>
 
@@ -826,7 +838,7 @@ module transitively depends on, including itself.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line681">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line710">code &raquo;</a>
   </td>
      </tr>
 
@@ -860,7 +872,7 @@ module transitively depends on, including itself.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line719">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line748">code &raquo;</a>
   </td>
      </tr>
 
@@ -906,7 +918,7 @@ module transitively depends on, including itself.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line277">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line279">code &raquo;</a>
   </td>
      </tr>
 
@@ -972,7 +984,7 @@ loaded.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line503">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line505">code &raquo;</a>
   </td>
      </tr>
 
@@ -1018,7 +1030,7 @@ loaded.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line286">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line288">code &raquo;</a>
   </td>
      </tr>
 
@@ -1038,7 +1050,7 @@ loaded.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">load<span class="args">(<span class="arg">moduleId</span>)</span>
+        <span class="entryName">load<span class="args">(<span class="arg">moduleId</span>,&nbsp;<span class="arg">opt_userInitiated</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type">goog.async.Deferred</span></div>
       </div>
@@ -1070,6 +1082,14 @@ result.
         <div class="entryOverview">A module id.</div>
      </td>
    </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_userInitiated</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        <div class="entryOverview">If the load is a result of a user action.</div>
+     </td>
+   </tr>
   </table>
       </div>
    
@@ -1084,7 +1104,7 @@ result.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line576">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line579">code &raquo;</a>
   </td>
      </tr>
 
@@ -1154,7 +1174,7 @@ module is already loaded or is currently loading.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line352">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line354">code &raquo;</a>
   </td>
      </tr>
 
@@ -1219,7 +1239,7 @@ alternative to this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line378">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line380">code &raquo;</a>
   </td>
      </tr>
 
@@ -1277,7 +1297,7 @@ and that no modules are currently loading before calling this method.
    <tr class="odd">
      <td>
         <span class="entryName">opt_isRetry</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If the load is a retry of a previous load attempt.</div>
      </td>
    </tr>
@@ -1291,7 +1311,7 @@ and that no modules are currently loading before calling this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line400">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line402">code &raquo;</a>
   </td>
      </tr>
 
@@ -1325,7 +1345,7 @@ and that no modules are currently loading before calling this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line784">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line813">code &raquo;</a>
   </td>
      </tr>
 
@@ -1380,7 +1400,7 @@ and that no modules are currently loading before calling this method.
    <tr class="odd">
      <td>
         <span class="entryName">opt_timeout</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The number of ms to wait before adding the module id to the loading queue (defaults to 0 ms). Note that the module will be loaded asynchronously regardless of the value of this parameter.</div>
      </td>
    </tr>
@@ -1398,7 +1418,7 @@ and that no modules are currently loading before calling this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line332">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line334">code &raquo;</a>
   </td>
      </tr>
 
@@ -1466,7 +1486,7 @@ and that no modules are currently loading before calling this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line804">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line833">code &raquo;</a>
   </td>
      </tr>
 
@@ -1534,7 +1554,7 @@ and that no modules are currently loading before calling this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line822">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line851">code &raquo;</a>
   </td>
      </tr>
 
@@ -1593,7 +1613,7 @@ function inline.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Optional handler under whose scope to execute the callback.</div>
      </td>
    </tr>
@@ -1607,7 +1627,7 @@ function inline.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line645">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line659">code &raquo;</a>
   </td>
      </tr>
 
@@ -1667,7 +1687,7 @@ function inline.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line204">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line206">code &raquo;</a>
   </td>
      </tr>
 
@@ -1727,7 +1747,7 @@ function inline.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line192">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line194">code &raquo;</a>
   </td>
      </tr>
 
@@ -1789,7 +1809,7 @@ generated and appended to each dynamic module&#39;s code at compilation time.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line475">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line477">code &raquo;</a>
   </td>
      </tr>
 
@@ -1849,12 +1869,74 @@ generated and appended to each dynamic module&#39;s code at compilation time.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line250">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line252">code &raquo;</a>
   </td>
      </tr>
 
 
      <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.module.ModuleManager.prototype.setModuleConstructor"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setModuleConstructor<span class="args">(<span class="arg">fn</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the constructor to use for the module object for the currently
+loading module. The constructor should derive from {@see
+goog.module.BaseModule}.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">fn</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
+        <div class="entryOverview">The constructor function.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_module_modulemanager.js.source.html#line676">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1909,12 +1991,12 @@ generated and appended to each dynamic module&#39;s code at compilation time.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line268">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line270">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1969,7 +2051,7 @@ generated and appended to each dynamic module&#39;s code at compilation time.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line226">code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line228">code &raquo;</a>
   </td>
      </tr>
 
@@ -2236,7 +2318,7 @@ request) has been enabled.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line131">Code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line133">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2270,7 +2352,7 @@ requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line158">Code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line160">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2304,7 +2386,7 @@ the last data.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line167">Code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line169">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2337,7 +2419,7 @@ the last data.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line149">Code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line151">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2371,7 +2453,7 @@ opt_successFn, opt_errorFn, opt_timeoutFn) method.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line140">Code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line142">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2404,7 +2486,7 @@ opt_successFn, opt_errorFn, opt_timeoutFn) method.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line121">Code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line123">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2437,7 +2519,7 @@ opt_successFn, opt_errorFn, opt_timeoutFn) method.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line185">Code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line187">Code &raquo;</a>
   </td>
      </tr>
 
@@ -2472,7 +2554,7 @@ user-initiated modules are loading or queued up to load.
 
 
   <td class="view-code">
-     <a href="closure_goog_module_modulemanager.js.source.html#line177">Code &raquo;</a>
+     <a href="closure_goog_module_modulemanager.js.source.html#line179">Code &raquo;</a>
   </td>
      </tr>
 

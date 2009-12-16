@@ -17,9 +17,9 @@
  * object encapsulates the logic for making a single request, either for the
  * forward channel, back channel, or test channel, to the server. It contains
  * the logic for the three types of transports we use in the BrowserChannel:
- * XMLHTTP, Trident ActiveX (ie only), and Image request. It provides retry
- * and timeout detection. This class is part of the BrowserChannel
- * implementation and is not for use by normal application code.
+ * XMLHTTP, Trident ActiveX (ie only), and Image request. It provides timeout
+ * detection. This class is part of the BrowserChannel implementation and is not
+ * for use by normal application code.
  *
  */
 
@@ -44,12 +44,13 @@ goog.require('goog.userAgent');
  *     The BrowserChannel that owns this request.
  * @param {goog.net.ChannelDebug} channelDebug A ChannelDebug to use for
  *     logging.
- * @param {string} opt_sessionId  The session id for the channel.
- * @param {string|number} opt_requestId  The request id for this request.
+ * @param {string=} opt_sessionId  The session id for the channel.
+ * @param {string|number=} opt_requestId  The request id for this request.
+ * @param {number=} opt_retryId  The retry id for this request.
  * @constructor
  */
 goog.net.ChannelRequest = function(
-    channel, channelDebug, opt_sessionId, opt_requestId) {
+    channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId) {
   /**
    * The BrowserChannel object that owns the request.
    * @type {goog.net.BrowserChannel|goog.net.BrowserTestChannel}
@@ -71,19 +72,28 @@ goog.net.ChannelRequest = function(
    */
   this.sid_ = opt_sessionId;
 
- /**
+  /**
    * The RID (request ID) for the request.
    * @type {string|number|undefined}
    * @private
    */
   this.rid_ = opt_requestId;
 
+
   /**
-   * The timeout in ms before retrying the request or failing.
+   * The attempt number of the current request.
    * @type {number}
    * @private
    */
-  this.retryTimeout_ = goog.net.ChannelRequest.TIMEOUT_MS;
+  this.retryId_ = opt_retryId || 1;
+
+
+  /**
+   * The timeout in ms before failing the request.
+   * @type {number}
+   * @private
+   */
+  this.timeout_ = goog.net.ChannelRequest.TIMEOUT_MS;
 
   /**
    * An object to keep track of the channel request event listeners.
@@ -113,14 +123,6 @@ goog.net.ChannelRequest.prototype.extraHeaders_ = null;
 
 
 /**
- * The maximum number of attempts to retry the request before failing.
- * @type {number}
- * @private
- */
-goog.net.ChannelRequest.prototype.maxRetries_ = 0;
-
-
-/**
  * Whether the request was successful. This is only set to true after the
  * request successfuly completes.
  * @type {boolean}
@@ -146,11 +148,11 @@ goog.net.ChannelRequest.prototype.watchDogTimeoutTime_ = null;
 
 
 /**
- * The attempt number of the current request.
- * @type {number}
+ * The time the request started.
+ * @type {?number}
  * @private
  */
-goog.net.ChannelRequest.prototype.retryCount_ = 0;
+goog.net.ChannelRequest.prototype.requestStartTime_ = null;
 
 
 /**
@@ -260,30 +262,6 @@ goog.net.ChannelRequest.TIMEOUT_MS = 45 * 1000;
 
 
 /**
- * Default timeout in MS before the initial retry. Subsequent retries will be
- * slower.
- * @type {number}
- */
-goog.net.ChannelRequest.RETRY_DELAY_MS = 5 * 1000;
-
-
-/**
- * We will add a random time between 0 and this number of MS to retries to
- * the retry time for this request.
- * @type {number}
- */
-goog.net.ChannelRequest.RETRY_DELAY_SEED = 10 * 1000;
-
-
-/**
- * When retrying for an inactive channel, we will multiply the total delay by
- * this number.
- * @type {number}
- */
-goog.net.ChannelRequest.INACTIVE_CHANNEL_RETRY_FACTOR = 2;
-
-
-/**
  * How often to poll (in MS) for changes to responseText in browsers that don't
  * fire onreadystatechange during incremental loading of responseText.
  * @type {number}
@@ -361,6 +339,27 @@ goog.net.ChannelRequest.Error = {
 
 
 /**
+ * Returns a useful error string for debugging based on the specified error
+ * code.
+ * @param {goog.net.ChannelRequest.Error} errorCode The error code.
+ * @param {number} statusCode The HTTP status code.
+ * @return {string} The error string for the given code combination.
+ */
+goog.net.ChannelRequest.errorStringFromCode = function(errorCode, statusCode) {
+  switch (errorCode) {
+    case goog.net.ChannelRequest.Error.STATUS:
+      return 'Non-200 return code (' + statusCode + ')';
+    case goog.net.ChannelRequest.Error.NO_DATA:
+      return 'XMLHTTP failure (no data)';
+   case goog.net.ChannelRequest.Error.TIMEOUT:
+      return 'HttpConnection timeout';
+    default:
+      return 'Unknown error';
+  }
+};
+
+
+/**
  * Sentinel value used to indicate an invalid chunk in a multi-chunk response.
  * @type {Object}
  * @private
@@ -388,40 +387,12 @@ goog.net.ChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {
 
 
 /**
- * Sets the maximum number of retries for a request.  If the request is already
- * on a retry beyond the new maxRetries, then it will fail immediately.
+ * Sets the timeout for a request
  *
- * @param {number} maxRetries The maximum number of retries for a request.
+ * @param {number} timeout   The timeout in MS for when we fail the request.
  */
-goog.net.ChannelRequest.prototype.setMaxRetries = function(maxRetries) {
-  this.maxRetries_ = maxRetries;
-  if (this.retryCount_ > maxRetries) {
-    this.channelDebug_.info(
-        'Retry count ' + this.retryCount_ +
-        ' > new maxRetries ' + maxRetries + '. Fail immediately!');
-
-    // Maybe we're idly waiting for the next retry.  Cancel that timer.
-    this.cancelRetryTimer_();
-
-    // Maybe the retry is in flight.  Cancel that timer and request.
-    this.cancelWatchDogTimer_();
-    this.cleanup_();
-
-    // Go through the standard maybeRetry logic to expose the max-retry failure
-    // in the standard way.
-    this.maybeRetry_();
-  }
-};
-
-
-/**
- * Sets the retry timeout for a request
- *
- * @param {number} retryTimeout   The timeout in MS for when we either retry the
- *                                request or fail.
- */
-goog.net.ChannelRequest.prototype.setRetryTimeout = function(retryTimeout) {
-  this.retryTimeout_ = retryTimeout;
+goog.net.ChannelRequest.prototype.setTimeout = function(timeout) {
+  this.timeout_ = timeout;
 };
 
 
@@ -449,7 +420,7 @@ goog.net.ChannelRequest.prototype.xmlHttpPost = function(uri, postData,
  * @param {goog.Uri} uri  The uri of the request.
  * @param {boolean} decodeChunks  Whether to the result is expected to be
  *     encoded for chunking and thus requires decoding.
- * @param {boolean} opt_noClose   Whether to request that the tcp/ip connection
+ * @param {boolean=} opt_noClose   Whether to request that the tcp/ip connection
  *     should be closed.
  */
 goog.net.ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
@@ -475,7 +446,7 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function() {
   // clone the base URI to create the request URI. The request uri has the
   // attempt number as a parameter which helps in debugging.
   this.requestUri_ = this.baseUri_.clone();
-  this.requestUri_.setParameterValues('t', this.retryCount_ + 1);
+  this.requestUri_.setParameterValues('t', this.retryId_);
 
   // send the request either as a POST or GET
   this.xmlHttpChunkStart_ = 0;
@@ -492,13 +463,18 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function() {
   } else {
     // todo (jonp) - use GET constant when Dan defines it
     this.verb_ = 'GET';
-    if (this.sendClose_) {
+
+    // If the user agent is webkit, we cannot send the close header since it is
+    // disallowed by the browser.  If we attempt to set the "Connection: close"
+    // header in WEBKIT browser, it will actually causes an error message.
+    if (this.sendClose_ && !goog.userAgent.WEBKIT) {
       headers['Connection'] = 'close';
     }
     this.xmlHttp_.send(this.requestUri_, this.verb_, null, headers);
   }
+  this.requestStartTime_ = goog.now();
   this.channelDebug_.xmlHttpChannelRequest(this.verb_,
-      this.requestUri_, this.rid_, this.retryCount_ + 1,
+      this.requestUri_, this.rid_, this.retryId_,
       this.postData_);
   this.ensureWatchDogTimer_();
 };
@@ -587,7 +563,7 @@ goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
 
   this.channelDebug_.xmlHttpChannelResponseMetaData(
       /** @type {string} */ (this.verb_),
-      this.requestUri_, this.rid_, this.retryCount_ + 1, readyState,
+      this.requestUri_, this.rid_, this.retryId_, readyState,
       status);
 
   if (!this.successful_) {
@@ -607,7 +583,7 @@ goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
     }
     this.channelDebug_.xmlHttpChannelResponseText(this.rid_, responseText);
     this.cleanup_();
-    this.maybeRetry_();
+    this.dispatchFailure_();
     return;
   }
 
@@ -696,7 +672,7 @@ goog.net.ChannelRequest.prototype.decodeNextChunks_ = function(readyState,
     this.channelDebug_.xmlHttpChannelResponseText(
         this.rid_, responseText, '[Invalid Chunked Response]');
     this.cleanup_();
-    this.maybeRetry_();
+    this.dispatchFailure_();
   }
   this.successful_ = this.successful_ && decodeNextChunksSuccessful;
 };
@@ -826,11 +802,11 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   this.trident_.appendChild(div);
   this.requestUri_ = this.baseUri_.clone();
   this.requestUri_.setParameterValue('DOMAIN', hostname);
-  this.requestUri_.setParameterValue('t', this.retryCount_ + 1);
+  this.requestUri_.setParameterValue('t', this.retryId_);
   div.innerHTML = '<iframe src="' + this.requestUri_ + '"></iframe>';
-
+  this.requestStartTime_ = goog.now();
   this.channelDebug_.tridentChannelRequest('GET',
-      this.requestUri_, this.rid_, this.retryCount_ + 1);
+      this.requestUri_, this.rid_, this.retryId_);
 
   this.ensureWatchDogTimer_();
 };
@@ -923,6 +899,7 @@ goog.net.ChannelRequest.prototype.sendUsingImgTag = function(uri) {
 goog.net.ChannelRequest.prototype.imgTagGet_ = function() {
   var eltImg = new Image();
   eltImg.src = this.baseUri_;
+  this.requestStartTime_ = goog.now();
   this.ensureWatchDogTimer_();
 };
 
@@ -944,8 +921,8 @@ goog.net.ChannelRequest.prototype.cancel = function() {
  * @private
  */
 goog.net.ChannelRequest.prototype.ensureWatchDogTimer_ = function() {
-  this.watchDogTimeoutTime_ = goog.now() + this.retryTimeout_;
-  this.startWatchDogTimer_(this.retryTimeout_);
+  this.watchDogTimeoutTime_ = goog.now() + this.timeout_;
+  this.startWatchDogTimer_(this.timeout_);
 };
 
 
@@ -999,8 +976,8 @@ goog.net.ChannelRequest.prototype.onWatchDogTimout_ = function() {
 
 
 /**
- * Called when the request has actually timed out. Will cleanup and maybe retry
- * the request if we haven't exceeded the retry count.
+ * Called when the request has actually timed out. Will cleanup and notify the
+ * channel of the failure.
  *
  * @private
  */
@@ -1013,104 +990,24 @@ goog.net.ChannelRequest.prototype.handleTimeout_ = function() {
   this.channelDebug_.timeoutResponse(this.requestUri_);
   this.cleanup_();
 
-  // set error and maybe retry
+  // set error and dispatch failure
   this.lastError_ = goog.net.ChannelRequest.Error.TIMEOUT;
   goog.net.BrowserChannel.notifyStatEvent(
       goog.net.BrowserChannel.Stat.REQUEST_TIMEOUT);
-  this.maybeRetry_();
+  this.dispatchFailure_();
 };
 
 
 /**
- * Retries the current request if we still meet the conditions for retrying.
+ * Notifies the channel that this request failed.
  * @private
  */
-goog.net.ChannelRequest.prototype.maybeRetry_ = function() {
+goog.net.ChannelRequest.prototype.dispatchFailure_ = function() {
   if (this.channel_.isClosed() || this.cancelled_) {
     return;
   }
 
-  this.channelDebug_.debug('Maybe retrying, last error: ' +
-        this.errorStringFromCode_(
-            /** @type {goog.net.ChannelRequest.Error} */ (this.lastError_)));
-
-  if (this.lastError_ == goog.net.ChannelRequest.Error.UNKNOWN_SESSION_ID ||
-      (this.lastError_ == goog.net.ChannelRequest.Error.STATUS &&
-       this.lastStatusCode_ > 0)) {
-    this.channelDebug_.debug('Not retrying due to error type');
-    this.channel_.onRequestComplete(this);
-  } else if (this.retryCount_ >= this.maxRetries_) {
-    this.channelDebug_.debug('Exceeded max number of retries');
-    this.channel_.onRequestComplete(this);
-  } else {
-    this.channelDebug_.debug('Going to retry');
-    this.retryTimerId_ = goog.net.BrowserChannel.setTimeout(
-        goog.bind(this.retry_, this), this.getRetryTime_());
-    this.retryCount_++;
-  }
-};
-
-
-/**
- * @return {number} Time in ms before firing next retry request.
- * @private
- */
-goog.net.ChannelRequest.prototype.getRetryTime_ = function() {
-  var retryTime = goog.net.ChannelRequest.RETRY_DELAY_MS +
-      Math.floor(Math.random() * goog.net.ChannelRequest.RETRY_DELAY_SEED);
-  if (!this.channel_.isActive()) {
-    this.channelDebug_.debug('Inactive channel');
-    retryTime =
-        retryTime * goog.net.ChannelRequest.INACTIVE_CHANNEL_RETRY_FACTOR;
-  }
-  // Backoff for subsequent retries
-  retryTime = retryTime * this.retryCount_ + 1;
-  return retryTime;
-};
-
-
-/**
- * Performs a retry by restarting the request
- * @private
- */
-goog.net.ChannelRequest.prototype.retry_ = function() {
-  this.retryTimerId_ = null;
-  if (this.type_ == goog.net.ChannelRequest.Type_.XML_HTTP) {
-    this.sendXmlHttp_();
-  }
-};
-
-
-/**
- * Cancels the retry timer if it has been started.
- * @private
- */
-goog.net.ChannelRequest.prototype.cancelRetryTimer_ = function() {
-  if (this.retryTimerId_) {
-    goog.global.clearTimeout(this.retryTimerId_);
-    this.retryTimerId_ = null;
-  }
-};
-
-
-/**
- * Returns a useful error string for debugging based on the specified error
- * code.
- * @param {goog.net.ChannelRequest.Error} errorCode The error code.
- * @return {string} The error string for the given code.
- * @private
- */
-goog.net.ChannelRequest.prototype.errorStringFromCode_ = function(errorCode) {
-  switch (errorCode) {
-    case goog.net.ChannelRequest.Error.STATUS:
-      return 'Non-200 return code (' + this.lastStatusCode_ + ')';
-    case goog.net.ChannelRequest.Error.NO_DATA:
-      return 'XMLHTTP failure (no data)';
-   case goog.net.ChannelRequest.Error.TIMEOUT:
-      return 'HttpConnection timeout';
-    default:
-      return 'Unknown error';
-  }
+  this.channel_.onRequestComplete(this);
 };
 
 
@@ -1148,7 +1045,6 @@ goog.net.ChannelRequest.prototype.getSuccess = function() {
   return this.successful_;
 };
 
-
 /**
  * If the request was not successful, returns the reason.
  *
@@ -1183,6 +1079,26 @@ goog.net.ChannelRequest.prototype.getSessionId = function() {
  */
 goog.net.ChannelRequest.prototype.getRequestId = function() {
   return this.rid_;
+};
+
+
+/**
+ * Returns the data for a post, if this request is a post.
+ *
+ * @return {?string} The POST data provided by the request initiator.
+ */
+goog.net.ChannelRequest.prototype.getPostData = function() {
+  return this.postData_;
+};
+
+
+/**
+ * Returns the time that the request started, if it has started.
+ *
+ * @return {?number} The time the request started, as returned by goog.now().
+ */
+goog.net.ChannelRequest.prototype.getRequestStartTime = function() {
+  return this.requestStartTime_;
 };
 
 

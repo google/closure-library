@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -71,7 +72,7 @@
 <a name="line28"></a> * Formats a number of bytes in human readable form.
 <a name="line29"></a> * 54, 450K, 1.3M, 5G etc.
 <a name="line30"></a> * @param {number} bytes The number of bytes to show.
-<a name="line31"></a> * @param {number} opt_decimals The number of decimals to use.  Defaults to 2.
+<a name="line31"></a> * @param {number=} opt_decimals The number of decimals to use.  Defaults to 2.
 <a name="line32"></a> * @return {string} The human readable form of the byte size.
 <a name="line33"></a> */
 <a name="line34"></a>goog.format.fileSize = function(bytes, opt_decimals) {
@@ -130,7 +131,7 @@
 <a name="line87"></a>/**
 <a name="line88"></a> * Converts a numeric value to string representation. SI conversion.
 <a name="line89"></a> * @param {number} val Value to be converted.
-<a name="line90"></a> * @param {number} opt_decimals The number of decimals to use.  Defaults to 2.
+<a name="line90"></a> * @param {number=} opt_decimals The number of decimals to use.  Defaults to 2.
 <a name="line91"></a> * @return {string} String representation of number.
 <a name="line92"></a> */
 <a name="line93"></a>goog.format.numericValueToString = function(val, opt_decimals) {
@@ -144,8 +145,8 @@
 <a name="line101"></a> * Default is to return the additional &#39;B&#39; suffix, e.g. &#39;10.5KB&#39; to minimize
 <a name="line102"></a> * confusion with counts that are scaled by powers of 1000.
 <a name="line103"></a> * @param {number} val Value to be converted.
-<a name="line104"></a> * @param {number} opt_decimals The number of decimals to use.  Defaults to 2.
-<a name="line105"></a> * @param {boolean} opt_suffix If true, include trailing &#39;B&#39; in returned
+<a name="line104"></a> * @param {number=} opt_decimals The number of decimals to use.  Defaults to 2.
+<a name="line105"></a> * @param {boolean=} opt_suffix If true, include trailing &#39;B&#39; in returned
 <a name="line106"></a> *     string.  Default is true.
 <a name="line107"></a> * @return {string} String representation of number of bytes.
 <a name="line108"></a> */
@@ -182,8 +183,8 @@
 <a name="line139"></a> * scales.
 <a name="line140"></a> * @param {number} val Value to be converted.
 <a name="line141"></a> * @param {Object} conversion Dictionary of scaling factors.
-<a name="line142"></a> * @param {number} opt_decimals The number of decimals to use.  Default is 2.
-<a name="line143"></a> * @param {string} opt_suffix Optional suffix to append.
+<a name="line142"></a> * @param {number=} opt_decimals The number of decimals to use.  Default is 2.
+<a name="line143"></a> * @param {string=} opt_suffix Optional suffix to append.
 <a name="line144"></a> * @return {string} The human readable form of the byte size.
 <a name="line145"></a> * @private
 <a name="line146"></a> */
@@ -302,7 +303,7 @@
 <a name="line259"></a> * @param {function(number, number, boolean): boolean} hasGraphemeBreak A
 <a name="line260"></a> *     function determining if there is a grapheme break between two characters,
 <a name="line261"></a> *     in the same signature as goog.i18n.GraphemeBreak.hasGraphemeBreak.
-<a name="line262"></a> * @param {number} opt_maxlen Maximum length after which to ensure
+<a name="line262"></a> * @param {number=} opt_maxlen Maximum length after which to ensure
 <a name="line263"></a> *     there is a break.  Default is 10 characters.
 <a name="line264"></a> * @return {string} The string including word breaks.
 <a name="line265"></a> * @private
@@ -397,7 +398,7 @@
 <a name="line354"></a> * insertWordBreaksBasic to minimize the size impact.
 <a name="line355"></a> *
 <a name="line356"></a> * @param {string} str HTML to insert word breaks into.
-<a name="line357"></a> * @param {number} opt_maxlen Maximum length after which to ensure there is a
+<a name="line357"></a> * @param {number=} opt_maxlen Maximum length after which to ensure there is a
 <a name="line358"></a> *     break.  Default is 10 characters.
 <a name="line359"></a> * @return {string} The string including word breaks.
 <a name="line360"></a> */
@@ -418,7 +419,7 @@
 <a name="line375"></a> * @param {number} charCode The character code under consideration.  It must be
 <a name="line376"></a> *     at least \u0300 as a precondition -- this case is covered by
 <a name="line377"></a> *     insertWordBreaksGeneric_.
-<a name="line378"></a> * @param {boolean} opt_extended Ignored, to conform with the interface.
+<a name="line378"></a> * @param {boolean=} opt_extended Ignored, to conform with the interface.
 <a name="line379"></a> * @return {boolean} Whether it is one of the recognized subsets of characters
 <a name="line380"></a> *     with a grapheme break.
 <a name="line381"></a> * @private
@@ -447,7 +448,7 @@
 <a name="line404"></a> * code eliminated.
 <a name="line405"></a> *
 <a name="line406"></a> * @param {string} str HTML to insert word breaks into.
-<a name="line407"></a> * @param {number} opt_maxlen Maximum length after which to ensure there is a
+<a name="line407"></a> * @param {number=} opt_maxlen Maximum length after which to ensure there is a
 <a name="line408"></a> *     break.  Default is 10 characters.
 <a name="line409"></a> * @return {string} The string including word breaks.
 <a name="line410"></a> */

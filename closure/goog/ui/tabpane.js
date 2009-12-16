@@ -42,10 +42,10 @@ goog.require('goog.style');
  * container or created from scratch.
  *
  * @param {Element} el Container element to create the tab pane out of.
- * @param {goog.ui.TabPane.TabLocation} opt_tabLocation Location of the tabs
+ * @param {goog.ui.TabPane.TabLocation=} opt_tabLocation Location of the tabs
  *     in relation to the content container. Default is top.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
- * @param {boolean} opt_useMouseDown Whether to use MOUSEDOWN instead of CLICK
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {boolean=} opt_useMouseDown Whether to use MOUSEDOWN instead of CLICK
  *     for tab changes.
  * @extends {goog.events.EventTarget}
  * @constructor
@@ -266,7 +266,7 @@ goog.ui.TabPane.prototype.createPages_ = function(nodes) {
  * Adds a page to the tab pane.
  *
  * @param {goog.ui.TabPane.TabPage} page Tab page to add.
- * @param {number} opt_index Zero based index to insert tab at. Inserted at the
+ * @param {number=} opt_index Zero based index to insert tab at. Inserted at the
  *                           end if not specified.
  */
 goog.ui.TabPane.prototype.addPage = function(page, opt_index) {
@@ -464,11 +464,11 @@ goog.ui.TabPane.prototype.onHeaderKeyDown_ = function(event) {
 /**
  * Object representing an individual tab pane.
  *
- * @param {Element} opt_el Container element to create the pane out of.
- * @param {Element|string} opt_title Pane title or element to use as the title.
- *                                   If not specified the first element in the
- *                                   container is used as the title.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper
+ * @param {Element=} opt_el Container element to create the pane out of.
+ * @param {(Element|string)=} opt_title Pane title or element to use as the
+ *     title. If not specified the first element in the container is used as
+ *     the title.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper
  * The first parameter can be omitted.
  * @constructor
  */
@@ -634,7 +634,7 @@ goog.ui.TabPane.TabPage.prototype.setVisible_ = function(visible) {
  * Sets parent tab pane for tab page.
  *
  * @param {goog.ui.TabPane?} tabPane Tab strip object.
- * @param {number} opt_index Index of page in pane.
+ * @param {number=} opt_index Index of page in pane.
  * @private
  */
 goog.ui.TabPane.TabPage.prototype.setParent_ = function(tabPane, opt_index) {

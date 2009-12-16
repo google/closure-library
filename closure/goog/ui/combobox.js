@@ -43,7 +43,7 @@ goog.require('goog.userAgent');
 
 /**
  * A ComboBox control.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @extends {goog.ui.Component}
  * @constructor
  */
@@ -792,8 +792,8 @@ goog.ui.ComboBox.prototype.isItemSticky_ = function(item) {
 /**
  * Class for combo box items.
  * @param {string} caption Text caption for the menu item.
- * @param {Object} opt_data Identifying data for the menu item.
- * @param {goog.dom.DomHelper} opt_domHelper Optional dom helper used for dom
+ * @param {Object=} opt_data Identifying data for the menu item.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional dom helper used for dom
  *     interactions.
  * @constructor
  * @extends {goog.ui.MenuItem}

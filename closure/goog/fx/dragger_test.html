@@ -40,6 +40,8 @@ limitations under the License.
 
 <script>
 
+var HAS_SET_CAPTURE = goog.fx.Dragger.HAS_SET_CAPTURE_;
+
 var target;
 function setUp() {
   var sandbox = goog.dom.$('sandbox');
@@ -123,10 +125,10 @@ function testStartDrag_Cancel() {
       dragger.dragging_);
   assertFalse('Dragger must not have registered mousemove handlers.',
       goog.events.hasListener(dragger.document_,
-          goog.events.EventType.MOUSEMOVE, true));
+          goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
   assertFalse('Dragger must not have registered mouseup handlers.',
       goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
-          true));
+          !HAS_SET_CAPTURE));
   e.$verify();
 }
 
@@ -184,10 +186,10 @@ function testStartDrag_MouseMove() {
   assertTrue('Start drag event should have fired.', startDragFired);
   assertTrue('Dragger must have registered mousemove handlers.',
       goog.events.hasListener(dragger.document_,
-          goog.events.EventType.MOUSEMOVE, true));
+          goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
   assertTrue('Dragger must have registered mouseup handlers.',
       goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
-          true));
+          !HAS_SET_CAPTURE));
   e.$verify();
 }
 
@@ -215,10 +217,10 @@ function testMouseMoved_Cancel() {
       dragger.dragging_);
   assertTrue('Dragger must have registered mousemove handlers.',
       goog.events.hasListener(dragger.document_,
-          goog.events.EventType.MOUSEMOVE, true));
+          goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
   assertTrue('Dragger must have registered mouseup handlers.',
       goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
-          true));
+          !HAS_SET_CAPTURE));
 
   e.screenX = 10;
   e.screenY = 10;

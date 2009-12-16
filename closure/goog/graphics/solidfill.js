@@ -28,7 +28,7 @@ goog.require('goog.graphics.Fill');
  * Creates an immutable solid color fill object.
  *
  * @param {string} color The color of the background.
- * @param {number} opt_opacity The opacity of the background fill. The value
+ * @param {number=} opt_opacity The opacity of the background fill. The value
  *    must be greater than zero (transparent) and less than or equal to 1
  *    (opaque).
  * @constructor

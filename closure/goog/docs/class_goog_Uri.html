@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -86,12 +98,12 @@ All setters return <code>this</code> and so may be chained, a la
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.Uri</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -115,7 +127,7 @@ All setters return <code>this</code> and so may be chained, a la
    <tr class="even">
      <td>
         <span class="entryName">opt_uri</span>
-        : <div class="fullType"><span class="type">*</span></div>
+        : <div class="fullType"><span class="type">*=</span></div>
         <div class="entryOverview">Optional string URI to parse (use goog.Uri.create() to create a URI from parts), or if a goog.Uri is passed, a clone is created.</div>
      </td>
    </tr>
@@ -123,7 +135,7 @@ All setters return <code>this</code> and so may be chained, a la
    <tr class="odd">
      <td>
         <span class="entryName">opt_ignoreCase</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, #getParameterValue will ignore the case of the parameter name.</div>
      </td>
    </tr>
@@ -1551,7 +1563,7 @@ segments will be resolved, as described in RFC 3986.
    <tr class="odd">
      <td>
         <span class="entryName">opt_decode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Optional param for whether to decode new value.</div>
      </td>
    </tr>
@@ -1624,7 +1636,7 @@ segments will be resolved, as described in RFC 3986.
    <tr class="odd">
      <td>
         <span class="entryName">opt_decode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Optional param for whether to decode new value.</div>
      </td>
    </tr>
@@ -1911,7 +1923,7 @@ So, <code>goog.Uri.parse(&#39;foo?a=b&amp;c=d&amp;e=f&#39;).setParameterValues(&
    <tr class="odd">
      <td>
         <span class="entryName">opt_decode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Optional param for whether to decode new value.</div>
      </td>
    </tr>
@@ -2049,7 +2061,7 @@ So, <code>goog.Uri.parse(&#39;foo?a=b&amp;c=d&amp;e=f&#39;).setParameterValues(&
    <tr class="odd">
      <td>
         <span class="entryName">opt_decode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Optional param for whether to decode new value.</div>
      </td>
    </tr>
@@ -2122,7 +2134,7 @@ So, <code>goog.Uri.parse(&#39;foo?a=b&amp;c=d&amp;e=f&#39;).setParameterValues(&
    <tr class="odd">
      <td>
         <span class="entryName">opt_decode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Optional param for whether to decode new value. Applies only if queryData is a string.</div>
      </td>
    </tr>
@@ -2257,7 +2269,7 @@ this Uri.
    <tr class="odd">
      <td>
         <span class="entryName">opt_decode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Optional param for whether to decode new value.</div>
      </td>
    </tr>
@@ -2330,7 +2342,7 @@ this Uri.
    <tr class="odd">
      <td>
         <span class="entryName">opt_decode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Optional param for whether to decode new value.</div>
      </td>
    </tr>
@@ -2757,7 +2769,7 @@ this Uri.
    <tr class="even">
      <td>
         <span class="entryName">opt_scheme</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">Scheme/protocol or full URI to parse.</div>
      </td>
    </tr>
@@ -2765,7 +2777,7 @@ this Uri.
    <tr class="odd">
      <td>
         <span class="entryName">opt_userInfo</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">username:password.</div>
      </td>
    </tr>
@@ -2773,7 +2785,7 @@ this Uri.
    <tr class="even">
      <td>
         <span class="entryName">opt_domain</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview"><a href="http://www.google.com">www.google.com</a>.</div>
      </td>
    </tr>
@@ -2781,7 +2793,7 @@ this Uri.
    <tr class="odd">
      <td>
         <span class="entryName">opt_port</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
         <div class="entryOverview">9830.</div>
      </td>
    </tr>
@@ -2789,7 +2801,7 @@ this Uri.
    <tr class="even">
      <td>
         <span class="entryName">opt_path</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">/some/path/to/a/file.html.</div>
      </td>
    </tr>
@@ -2797,7 +2809,7 @@ this Uri.
    <tr class="odd">
      <td>
         <span class="entryName">opt_query</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_Uri_QueryData.html">goog.Uri.QueryData</a></span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">goog.Uri.QueryData=</span></div>
         <div class="entryOverview">a=1&amp;b=2.</div>
      </td>
    </tr>
@@ -2805,7 +2817,7 @@ this Uri.
    <tr class="even">
      <td>
         <span class="entryName">opt_fragment</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">The fragment without the #.</div>
      </td>
    </tr>
@@ -2813,7 +2825,7 @@ this Uri.
    <tr class="odd">
      <td>
         <span class="entryName">opt_ignoreCase</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to ignore parameter name case in #getParameterValue.</div>
      </td>
    </tr>
@@ -3264,7 +3276,7 @@ If a Uri object is passed to parse then it will return a clone of the object.
    <tr class="odd">
      <td>
         <span class="entryName">opt_ignoreCase</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to ignore the case of parameter names in #getParameterValue.</div>
      </td>
    </tr>

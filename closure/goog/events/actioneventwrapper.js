@@ -65,10 +65,10 @@ goog.events.ActionEventWrapper_.EVENT_TYPES_ = [
  *     events on.
  * @param {Function|Object} listener Callback method, or an object with a
  *     handleEvent function.
- * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+ * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
- * @param {Object} opt_scope Element in whose scope to call the listener.
- * @param {goog.events.EventHandler} opt_eventHandler Event handler to add
+ * @param {Object=} opt_scope Element in whose scope to call the listener.
+ * @param {goog.events.EventHandler=} opt_eventHandler Event handler to add
  *     listener to.
  */
 goog.events.ActionEventWrapper_.prototype.listen = function(target, listener,
@@ -104,10 +104,10 @@ goog.events.ActionEventWrapper_.prototype.listen = function(target, listener,
  *    listener from.
  * @param {Function|Object} listener Callback method, or an object with a
  *     handleEvent function.
- * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+ * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
- * @param {Object} opt_scope Element in whose scope to call the listener.
- * @param {goog.events.EventHandler} opt_eventHandler Event handler to remove
+ * @param {Object=} opt_scope Element in whose scope to call the listener.
+ * @param {goog.events.EventHandler=} opt_eventHandler Event handler to remove
  *     listener from.
  */
 goog.events.ActionEventWrapper_.prototype.unlisten = function(target, listener,

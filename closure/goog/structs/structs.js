@@ -165,7 +165,7 @@ goog.structs.clear = function(col) {
  * @param {Function} f The function to call for every value. This function takes
  *     3 arguments (the value, the key or undefined if the collection has no
  *     notion of keys, and the collection) and the return value is irrelevant.
- * @param {Object} opt_obj The object to be used as the value of 'this'
+ * @param {Object=} opt_obj The object to be used as the value of 'this'
  *     within {@code f}.
  */
 goog.structs.forEach = function(col, f, opt_obj) {
@@ -194,7 +194,7 @@ goog.structs.forEach = function(col, f, opt_obj) {
  *     notion of keys, and the collection) and should return a Boolean. If the
  *     return value is true the value is added to the result collection. If it
  *     is false the value is not included.
- * @param {Object} opt_obj The object to be used as the value of 'this'
+ * @param {Object=} opt_obj The object to be used as the value of 'this'
  *     within {@code f}.
  * @return {!Object|!Array} A new collection where the passed values are
  *     present. If col is a key-less collection an array is returned.  If col
@@ -243,7 +243,7 @@ goog.structs.filter = function(col, f, opt_obj) {
  *     takes 3 arguments (the value, the key or undefined if the collection has
  *     no notion of keys, and the collection) and should return something. The
  *     result will be used as the value in the new collection.
- * @param {Object} opt_obj  The object to be used as the value of 'this'
+ * @param {Object=} opt_obj  The object to be used as the value of 'this'
  *     within {@code f}.
  * @return {!Object|!Array} A new collection with the new values.  If col is a
  *     key-less collection an array is returned.  If col has keys and values a
@@ -287,7 +287,7 @@ goog.structs.map = function(col, f, opt_obj) {
  * @param {Function} f The function to call for every value. This function takes
  *     3 arguments (the value, the key or undefined if the collection has no
  *     notion of keys, and the collection) and should return a Boolean.
- * @param {Object} opt_obj  The object to be used as the value of 'this'
+ * @param {Object=} opt_obj  The object to be used as the value of 'this'
  *     within {@code f}.
  * @return {boolean} True if any value passes the test.
  */
@@ -319,7 +319,7 @@ goog.structs.some = function(col, f, opt_obj) {
  * @param {Function} f The function to call for every value. This function takes
  *     3 arguments (the value, the key or undefined if the collection has no
  *     notion of keys, and the collection) and should return a Boolean.
- * @param {Object} opt_obj  The object to be used as the value of 'this'
+ * @param {Object=} opt_obj  The object to be used as the value of 'this'
  *     within {@code f}.
  * @return {boolean} True if all key-value pairs pass the test.
  */

@@ -22,8 +22,8 @@ goog.provide('goog.math.Coordinate');
 
 /**
  * Class for representing coordinates and positions.
- * @param {number} opt_x Left, defaults to 0.
- * @param {number} opt_y Top, defaults to 0.
+ * @param {number=} opt_x Left, defaults to 0.
+ * @param {number=} opt_y Top, defaults to 0.
  * @constructor
  */
 goog.math.Coordinate = function(opt_x, opt_y) {

@@ -311,7 +311,7 @@ goog.dom.forms.getSelectMultiple_ = function(el) {
 /**
  * Sets the current value of any element with a type.
  * @param {Element} el The element.
- * @param {string|Array} opt_value The value to give to the element.
+ * @param {string|Array=} opt_value The value to give to the element.
  */
 goog.dom.forms.setValue = function(el, opt_value) {
   var type = el.type;
@@ -343,7 +343,7 @@ goog.dom.forms.setValue = function(el, opt_value) {
  * the value property but my hunch is that the primary use case is to check a
  * checkbox, not to reset its value property.
  * @param {Element} el The element.
- * @param {string|boolean} opt_value The value, sets the element checked if
+ * @param {string|boolean=} opt_value The value, sets the element checked if
  *     val is set.
  * @private
  */
@@ -355,7 +355,7 @@ goog.dom.forms.setInputChecked_ = function(el, opt_value) {
 /**
  * Sets the value of a select-one element.
  * @param {Element} el The element.
- * @param {string} opt_value The value of the selected option element.
+ * @param {string=} opt_value The value of the selected option element.
  * @private
  */
 goog.dom.forms.setSelectSingle_ = function(el, opt_value) {
@@ -375,7 +375,7 @@ goog.dom.forms.setSelectSingle_ = function(el, opt_value) {
 /**
  * Sets the value of a select-multiple element.
  * @param {Element} el The element.
- * @param {Array.<string>|string} opt_value The value of the selected option
+ * @param {Array.<string>|string=} opt_value The value of the selected option
  *     element(s).
  * @private
  */

@@ -46,10 +46,10 @@ goog.require('goog.ui.registry');
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to
  *     display as the content of the submenu (use to add icons or styling to
  *     menus).
- * @param {Object} opt_model Data/model associated with the menu item.
- * @param {goog.dom.DomHelper} opt_domHelper Optional dom helper used for dom
+ * @param {Object=} opt_model Data/model associated with the menu item.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional dom helper used for dom
  *     interactions.
- * @param {goog.ui.MenuItemRenderer} opt_renderer Renderer used to render or
+ * @param {goog.ui.MenuItemRenderer=} opt_renderer Renderer used to render or
  *     decorate the component; defaults to {@link goog.ui.SubMenuRenderer}.
  * @constructor
  * @extends {goog.ui.MenuItem}
@@ -174,7 +174,7 @@ goog.ui.SubMenu.prototype.disposeInternal = function() {
  * accuracy when moving to submenus.  Alternate implementations could use
  * geometry instead of a timer.
  * @param {boolean} highlight Whether item should be highlighted.
- * @param {boolean} opt_btnPressed Whether the mouse button is held down.
+ * @param {boolean=} opt_btnPressed Whether the mouse button is held down.
  */
 goog.ui.SubMenu.prototype.setHighlighted = function(highlight,
                                                     opt_btnPressed) {
@@ -243,7 +243,7 @@ goog.ui.SubMenu.prototype.clearTimers = function() {
 /**
  * Sets the menu item to be visible or invisible.
  * @param {boolean} visible Whether to show or hide the component.
- * @param {boolean} opt_force If true, doesn't check whether the component
+ * @param {boolean=} opt_force If true, doesn't check whether the component
  *     already has the requested visibility, and doesn't dispatch any events.
  * @return {boolean} Whether the visibility was changed.
  */
@@ -587,7 +587,7 @@ goog.ui.SubMenu.prototype.getMenu = function() {
 /**
  * Sets the submenu to a specific menu.
  * @param {goog.ui.Menu} menu The menu to show when this item is selected.
- * @param {boolean} opt_internal Whether this menu is an "internal" menu, and
+ * @param {boolean=} opt_internal Whether this menu is an "internal" menu, and
  *     should be disposed of when this object is disposed of.
  */
 goog.ui.SubMenu.prototype.setMenu = function(menu, opt_internal) {

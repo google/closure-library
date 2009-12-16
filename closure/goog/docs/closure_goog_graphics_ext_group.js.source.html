@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -64,190 +65,189 @@
 <a name="line21"></a>goog.provide(&#39;goog.graphics.ext.Group&#39;);
 <a name="line22"></a>
 <a name="line23"></a>goog.require(&#39;goog.graphics.ext.Element&#39;);
-<a name="line24"></a>goog.require(&#39;goog.structs.Map&#39;)
+<a name="line24"></a>
 <a name="line25"></a>
-<a name="line26"></a>
-<a name="line27"></a>/**
-<a name="line28"></a> * Wrapper for a graphics group.
-<a name="line29"></a> * @param {goog.graphics.ext.Group} group Parent for this element.  Can be null
-<a name="line30"></a> *     if this is a Graphics instance.
-<a name="line31"></a> * @param {goog.graphics.Element} opt_wrapper The thin wrapper to wrap.  If
-<a name="line32"></a> *     omitted, a new group will be created.  Must be included when group is
-<a name="line33"></a> *     null.
-<a name="line34"></a> * @constructor
-<a name="line35"></a> * @extends {goog.graphics.ext.Element}
-<a name="line36"></a> */
-<a name="line37"></a>goog.graphics.ext.Group = function(group, opt_wrapper) {
-<a name="line38"></a>  opt_wrapper = opt_wrapper || group.getGraphicsImplementation().createGroup(
-<a name="line39"></a>      group.getWrapper());
-<a name="line40"></a>  goog.graphics.ext.Element.call(this, group, opt_wrapper);
-<a name="line41"></a>  this.children_ = [];
-<a name="line42"></a>};
-<a name="line43"></a>goog.inherits(goog.graphics.ext.Group, goog.graphics.ext.Element);
+<a name="line26"></a>/**
+<a name="line27"></a> * Wrapper for a graphics group.
+<a name="line28"></a> * @param {goog.graphics.ext.Group} group Parent for this element.  Can be null
+<a name="line29"></a> *     if this is a Graphics instance.
+<a name="line30"></a> * @param {goog.graphics.Element=} opt_wrapper The thin wrapper to wrap.  If
+<a name="line31"></a> *     omitted, a new group will be created.  Must be included when group is
+<a name="line32"></a> *     null.
+<a name="line33"></a> * @constructor
+<a name="line34"></a> * @extends {goog.graphics.ext.Element}
+<a name="line35"></a> */
+<a name="line36"></a>goog.graphics.ext.Group = function(group, opt_wrapper) {
+<a name="line37"></a>  opt_wrapper = opt_wrapper || group.getGraphicsImplementation().createGroup(
+<a name="line38"></a>      group.getWrapper());
+<a name="line39"></a>  goog.graphics.ext.Element.call(this, group, opt_wrapper);
+<a name="line40"></a>  this.children_ = [];
+<a name="line41"></a>};
+<a name="line42"></a>goog.inherits(goog.graphics.ext.Group, goog.graphics.ext.Element);
+<a name="line43"></a>
 <a name="line44"></a>
-<a name="line45"></a>
-<a name="line46"></a>/**
-<a name="line47"></a> * Array of child elements this group contains.
-<a name="line48"></a> * @type {Array.&lt;goog.graphics.Element&gt;}
-<a name="line49"></a> * @private
-<a name="line50"></a> */
-<a name="line51"></a>goog.graphics.ext.Group.prototype.children_;
+<a name="line45"></a>/**
+<a name="line46"></a> * Array of child elements this group contains.
+<a name="line47"></a> * @type {Array.&lt;goog.graphics.Element&gt;}
+<a name="line48"></a> * @private
+<a name="line49"></a> */
+<a name="line50"></a>goog.graphics.ext.Group.prototype.children_;
+<a name="line51"></a>
 <a name="line52"></a>
-<a name="line53"></a>
-<a name="line54"></a>/**
-<a name="line55"></a> * Add an element to the group.  This should be treated as package local, as
-<a name="line56"></a> * it is called by the draw* methods.
-<a name="line57"></a> * @param {!goog.graphics.ext.Element} element The element to add.
-<a name="line58"></a> * @param {boolean} opt_chain Whether this addition is part of a longer set
-<a name="line59"></a> *     of element additions.
-<a name="line60"></a> */
-<a name="line61"></a>goog.graphics.ext.Group.prototype.addChild = function(element, opt_chain) {
-<a name="line62"></a>  if (!goog.array.contains(this.children_, element)) {
-<a name="line63"></a>    this.children_.push(element);
-<a name="line64"></a>  }
-<a name="line65"></a>
-<a name="line66"></a>  var transformed = this.growToFit_(element);
-<a name="line67"></a>
-<a name="line68"></a>  if (element.isParentDependent()) {
-<a name="line69"></a>    element.parentTransform();
-<a name="line70"></a>  }
-<a name="line71"></a>
-<a name="line72"></a>  if (!opt_chain &amp;&amp; element.isPendingTransform()) {
-<a name="line73"></a>    element.reset();
-<a name="line74"></a>  }
-<a name="line75"></a>
-<a name="line76"></a>  if (transformed) {
-<a name="line77"></a>    this.reset();
-<a name="line78"></a>  }
-<a name="line79"></a>};
+<a name="line53"></a>/**
+<a name="line54"></a> * Add an element to the group.  This should be treated as package local, as
+<a name="line55"></a> * it is called by the draw* methods.
+<a name="line56"></a> * @param {!goog.graphics.ext.Element} element The element to add.
+<a name="line57"></a> * @param {boolean=} opt_chain Whether this addition is part of a longer set
+<a name="line58"></a> *     of element additions.
+<a name="line59"></a> */
+<a name="line60"></a>goog.graphics.ext.Group.prototype.addChild = function(element, opt_chain) {
+<a name="line61"></a>  if (!goog.array.contains(this.children_, element)) {
+<a name="line62"></a>    this.children_.push(element);
+<a name="line63"></a>  }
+<a name="line64"></a>
+<a name="line65"></a>  var transformed = this.growToFit_(element);
+<a name="line66"></a>
+<a name="line67"></a>  if (element.isParentDependent()) {
+<a name="line68"></a>    element.parentTransform();
+<a name="line69"></a>  }
+<a name="line70"></a>
+<a name="line71"></a>  if (!opt_chain &amp;&amp; element.isPendingTransform()) {
+<a name="line72"></a>    element.reset();
+<a name="line73"></a>  }
+<a name="line74"></a>
+<a name="line75"></a>  if (transformed) {
+<a name="line76"></a>    this.reset();
+<a name="line77"></a>  }
+<a name="line78"></a>};
+<a name="line79"></a>
 <a name="line80"></a>
-<a name="line81"></a>
-<a name="line82"></a>/**
-<a name="line83"></a> * Remove an element from the group.
-<a name="line84"></a> * @param {goog.graphics.Element} element The element to remove.
-<a name="line85"></a> */
-<a name="line86"></a>goog.graphics.ext.Group.prototype.removeChild = function(element) {
-<a name="line87"></a>  goog.array.remove(this.children_, element);
-<a name="line88"></a>
-<a name="line89"></a>  // TODO: shape.fireEvent(&#39;delete&#39;)
-<a name="line90"></a>
-<a name="line91"></a>  this.getGraphicsImplementation().removeElement(element.getWrapper());
-<a name="line92"></a>};
+<a name="line81"></a>/**
+<a name="line82"></a> * Remove an element from the group.
+<a name="line83"></a> * @param {goog.graphics.Element} element The element to remove.
+<a name="line84"></a> */
+<a name="line85"></a>goog.graphics.ext.Group.prototype.removeChild = function(element) {
+<a name="line86"></a>  goog.array.remove(this.children_, element);
+<a name="line87"></a>
+<a name="line88"></a>  // TODO: shape.fireEvent(&#39;delete&#39;)
+<a name="line89"></a>
+<a name="line90"></a>  this.getGraphicsImplementation().removeElement(element.getWrapper());
+<a name="line91"></a>};
+<a name="line92"></a>
 <a name="line93"></a>
-<a name="line94"></a>
-<a name="line95"></a>/**
-<a name="line96"></a> * Calls the given function on each of this component&#39;s children in order.  If
-<a name="line97"></a> * {@code opt_obj} is provided, it will be used as the &#39;this&#39; object in the
-<a name="line98"></a> * function when called.  The function should take two arguments:  the child
-<a name="line99"></a> * component and its 0-based index.  The return value is ignored.
-<a name="line100"></a> * @param {Function} f The function to call for every child component; should
-<a name="line101"></a> *    take 2 arguments (the child and its index).
-<a name="line102"></a> * @param {Object} opt_obj Used as the &#39;this&#39; object in f when called.
-<a name="line103"></a> */
-<a name="line104"></a>goog.graphics.ext.Group.prototype.forEachChild = function(f, opt_obj) {
-<a name="line105"></a>  if (this.children_) {
-<a name="line106"></a>    goog.array.forEach(this.children_, f, opt_obj);
-<a name="line107"></a>  }
-<a name="line108"></a>};
+<a name="line94"></a>/**
+<a name="line95"></a> * Calls the given function on each of this component&#39;s children in order.  If
+<a name="line96"></a> * {@code opt_obj} is provided, it will be used as the &#39;this&#39; object in the
+<a name="line97"></a> * function when called.  The function should take two arguments:  the child
+<a name="line98"></a> * component and its 0-based index.  The return value is ignored.
+<a name="line99"></a> * @param {Function} f The function to call for every child component; should
+<a name="line100"></a> *    take 2 arguments (the child and its index).
+<a name="line101"></a> * @param {Object=} opt_obj Used as the &#39;this&#39; object in f when called.
+<a name="line102"></a> */
+<a name="line103"></a>goog.graphics.ext.Group.prototype.forEachChild = function(f, opt_obj) {
+<a name="line104"></a>  if (this.children_) {
+<a name="line105"></a>    goog.array.forEach(this.children_, f, opt_obj);
+<a name="line106"></a>  }
+<a name="line107"></a>};
+<a name="line108"></a>
 <a name="line109"></a>
-<a name="line110"></a>
-<a name="line111"></a>/**
-<a name="line112"></a> * Reset the element.
-<a name="line113"></a> */
-<a name="line114"></a>goog.graphics.ext.Group.prototype.reset = function() {
-<a name="line115"></a>  goog.graphics.ext.Group.superClass_.reset.call(this);
-<a name="line116"></a>
-<a name="line117"></a>  this.updateChildren();
-<a name="line118"></a>};
+<a name="line110"></a>/**
+<a name="line111"></a> * Reset the element.
+<a name="line112"></a> */
+<a name="line113"></a>goog.graphics.ext.Group.prototype.reset = function() {
+<a name="line114"></a>  goog.graphics.ext.Group.superClass_.reset.call(this);
+<a name="line115"></a>
+<a name="line116"></a>  this.updateChildren();
+<a name="line117"></a>};
+<a name="line118"></a>
 <a name="line119"></a>
-<a name="line120"></a>
-<a name="line121"></a>/**
-<a name="line122"></a> * Called from the parent class, this method resets any pre-computed positions
-<a name="line123"></a> * and sizes.
-<a name="line124"></a> * @protected
-<a name="line125"></a> */
-<a name="line126"></a>goog.graphics.ext.Group.prototype.redraw = function() {
-<a name="line127"></a>  this.getWrapper().setSize(this.getWidth(), this.getHeight());
-<a name="line128"></a>  this.transformChildren();
-<a name="line129"></a>};
+<a name="line120"></a>/**
+<a name="line121"></a> * Called from the parent class, this method resets any pre-computed positions
+<a name="line122"></a> * and sizes.
+<a name="line123"></a> * @protected
+<a name="line124"></a> */
+<a name="line125"></a>goog.graphics.ext.Group.prototype.redraw = function() {
+<a name="line126"></a>  this.getWrapper().setSize(this.getWidth(), this.getHeight());
+<a name="line127"></a>  this.transformChildren();
+<a name="line128"></a>};
+<a name="line129"></a>
 <a name="line130"></a>
-<a name="line131"></a>
-<a name="line132"></a>/**
-<a name="line133"></a> * Transform the children that need to be transformed.
-<a name="line134"></a> * @protected
-<a name="line135"></a> */
-<a name="line136"></a>goog.graphics.ext.Group.prototype.transformChildren = function() {
-<a name="line137"></a>  this.forEachChild(function(child) {
-<a name="line138"></a>    if (child.isParentDependent()) {
-<a name="line139"></a>      child.parentTransform();
-<a name="line140"></a>    }
-<a name="line141"></a>  });
-<a name="line142"></a>};
+<a name="line131"></a>/**
+<a name="line132"></a> * Transform the children that need to be transformed.
+<a name="line133"></a> * @protected
+<a name="line134"></a> */
+<a name="line135"></a>goog.graphics.ext.Group.prototype.transformChildren = function() {
+<a name="line136"></a>  this.forEachChild(function(child) {
+<a name="line137"></a>    if (child.isParentDependent()) {
+<a name="line138"></a>      child.parentTransform();
+<a name="line139"></a>    }
+<a name="line140"></a>  });
+<a name="line141"></a>};
+<a name="line142"></a>
 <a name="line143"></a>
-<a name="line144"></a>
-<a name="line145"></a>/**
-<a name="line146"></a> * As part of the reset process, update child elements.
-<a name="line147"></a> */
-<a name="line148"></a>goog.graphics.ext.Group.prototype.updateChildren = function() {
-<a name="line149"></a>  this.forEachChild(function(child) {
-<a name="line150"></a>    if (child.isParentDependent() || child.isPendingTransform()) {
-<a name="line151"></a>      child.reset();
-<a name="line152"></a>    } else if (child.updateChildren) {
-<a name="line153"></a>      child.updateChildren();
-<a name="line154"></a>    }
-<a name="line155"></a>  });
-<a name="line156"></a>};
+<a name="line144"></a>/**
+<a name="line145"></a> * As part of the reset process, update child elements.
+<a name="line146"></a> */
+<a name="line147"></a>goog.graphics.ext.Group.prototype.updateChildren = function() {
+<a name="line148"></a>  this.forEachChild(function(child) {
+<a name="line149"></a>    if (child.isParentDependent() || child.isPendingTransform()) {
+<a name="line150"></a>      child.reset();
+<a name="line151"></a>    } else if (child.updateChildren) {
+<a name="line152"></a>      child.updateChildren();
+<a name="line153"></a>    }
+<a name="line154"></a>  });
+<a name="line155"></a>};
+<a name="line156"></a>
 <a name="line157"></a>
-<a name="line158"></a>
-<a name="line159"></a>/**
-<a name="line160"></a> * When adding an element, grow this group&#39;s bounds to fit it.
-<a name="line161"></a> * @param {!goog.graphics.ext.Element} element The added element.
-<a name="line162"></a> * @return {boolean} Whether the size of this group changed.
-<a name="line163"></a> * @private
-<a name="line164"></a> */
-<a name="line165"></a>goog.graphics.ext.Group.prototype.growToFit_ = function(element) {
-<a name="line166"></a>  var transformed = false;
-<a name="line167"></a>
-<a name="line168"></a>  var x = element.getMaxX();
-<a name="line169"></a>  if (x &gt; this.getWidth()) {
-<a name="line170"></a>    this.setMinWidth(x);
-<a name="line171"></a>    transformed = true;
-<a name="line172"></a>  }
-<a name="line173"></a>
-<a name="line174"></a>  var y = element.getMaxY()
-<a name="line175"></a>  if (y &gt; this.getHeight()) {
-<a name="line176"></a>    this.setMinHeight(y);
-<a name="line177"></a>    transformed = true;
-<a name="line178"></a>  }
-<a name="line179"></a>
-<a name="line180"></a>  return transformed;
-<a name="line181"></a>};
+<a name="line158"></a>/**
+<a name="line159"></a> * When adding an element, grow this group&#39;s bounds to fit it.
+<a name="line160"></a> * @param {!goog.graphics.ext.Element} element The added element.
+<a name="line161"></a> * @return {boolean} Whether the size of this group changed.
+<a name="line162"></a> * @private
+<a name="line163"></a> */
+<a name="line164"></a>goog.graphics.ext.Group.prototype.growToFit_ = function(element) {
+<a name="line165"></a>  var transformed = false;
+<a name="line166"></a>
+<a name="line167"></a>  var x = element.getMaxX();
+<a name="line168"></a>  if (x &gt; this.getWidth()) {
+<a name="line169"></a>    this.setMinWidth(x);
+<a name="line170"></a>    transformed = true;
+<a name="line171"></a>  }
+<a name="line172"></a>
+<a name="line173"></a>  var y = element.getMaxY()
+<a name="line174"></a>  if (y &gt; this.getHeight()) {
+<a name="line175"></a>    this.setMinHeight(y);
+<a name="line176"></a>    transformed = true;
+<a name="line177"></a>  }
+<a name="line178"></a>
+<a name="line179"></a>  return transformed;
+<a name="line180"></a>};
+<a name="line181"></a>
 <a name="line182"></a>
-<a name="line183"></a>
-<a name="line184"></a>/**
-<a name="line185"></a> * @return {number} The width of the element&#39;s coordinate space.
-<a name="line186"></a> */
-<a name="line187"></a>goog.graphics.ext.Group.prototype.getCoordinateWidth = function() {
-<a name="line188"></a>  return this.getWidth();
-<a name="line189"></a>};
+<a name="line183"></a>/**
+<a name="line184"></a> * @return {number} The width of the element&#39;s coordinate space.
+<a name="line185"></a> */
+<a name="line186"></a>goog.graphics.ext.Group.prototype.getCoordinateWidth = function() {
+<a name="line187"></a>  return this.getWidth();
+<a name="line188"></a>};
+<a name="line189"></a>
 <a name="line190"></a>
-<a name="line191"></a>
-<a name="line192"></a>/**
-<a name="line193"></a> * @return {number} The height of the element&#39;s coordinate space.
-<a name="line194"></a> */
-<a name="line195"></a>goog.graphics.ext.Group.prototype.getCoordinateHeight = function() {
-<a name="line196"></a>  return this.getHeight();
-<a name="line197"></a>};
+<a name="line191"></a>/**
+<a name="line192"></a> * @return {number} The height of the element&#39;s coordinate space.
+<a name="line193"></a> */
+<a name="line194"></a>goog.graphics.ext.Group.prototype.getCoordinateHeight = function() {
+<a name="line195"></a>  return this.getHeight();
+<a name="line196"></a>};
+<a name="line197"></a>
 <a name="line198"></a>
-<a name="line199"></a>
-<a name="line200"></a>/**
-<a name="line201"></a> * Remove all drawing elements from the group.
-<a name="line202"></a> */
-<a name="line203"></a>goog.graphics.ext.Group.prototype.clear = function() {
-<a name="line204"></a>  while (this.children_.length) {
-<a name="line205"></a>    this.removeChild(this.children_[0]);
-<a name="line206"></a>  }
-<a name="line207"></a>};
+<a name="line199"></a>/**
+<a name="line200"></a> * Remove all drawing elements from the group.
+<a name="line201"></a> */
+<a name="line202"></a>goog.graphics.ext.Group.prototype.clear = function() {
+<a name="line203"></a>  while (this.children_.length) {
+<a name="line204"></a>    this.removeChild(this.children_[0]);
+<a name="line205"></a>  }
+<a name="line206"></a>};
 </pre>
 
 

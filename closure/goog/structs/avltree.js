@@ -52,7 +52,7 @@ goog.require('goog.structs');
  * values. The values can be accessed efficiently in their sorted order since
  * the tree enforces a O(logn) maximum height.
  *
- * @param {Function} opt_comparator Function used to order the tree's nodes.
+ * @param {Function=} opt_comparator Function used to order the tree's nodes.
  * @constructor
  */
 goog.structs.AvlTree = function(opt_comparator) {
@@ -333,7 +333,7 @@ goog.structs.AvlTree.prototype.getValues = function() {
  * maximum node or when {@code func} returns a value that evaluates to true.
  *
  * @param {Function} func Function to call on each traversed node.
- * @param {Object} opt_startValue If specified, traversal will begin on the
+ * @param {Object=} opt_startValue If specified, traversal will begin on the
  *    node with the smallest value >= opt_startValue.
  */
 goog.structs.AvlTree.prototype.inOrderTraverse =
@@ -390,7 +390,7 @@ goog.structs.AvlTree.prototype.inOrderTraverse =
  * tree's minimum node or when func returns a value that evaluates to true.
  *
  * @param {Function} func Function to call on each traversed node.
- * @param {Object} opt_startValue If specified, traversal will begin on the
+ * @param {Object=} opt_startValue If specified, traversal will begin on the
  *    node with the largest value <= opt_startValue.
  */
 goog.structs.AvlTree.prototype.reverseOrderTraverse =
@@ -450,9 +450,9 @@ goog.structs.AvlTree.prototype.reverseOrderTraverse =
  *
  * @param {Function} traversalFunc Function used to traverse the tree. Takes a
  *     node as a parameter and returns a node.
- * @param {goog.structs.AvlTree.Node} opt_startNode The node at which the
+ * @param {goog.structs.AvlTree.Node=} opt_startNode The node at which the
  *     traversal begins.
- * @param {goog.structs.AvlTree.Node} opt_endNode The node at which the
+ * @param {goog.structs.AvlTree.Node=} opt_endNode The node at which the
  *     traversal ends.
  * @private
  */
@@ -642,7 +642,7 @@ goog.structs.AvlTree.prototype.removeNode_ = function(node) {
  * Returns the node with the smallest value in tree, optionally rooted at
  * {@code opt_rootNode}.
  *
- * @param {goog.structs.AvlTree.Node} opt_rootNode Optional root node.
+ * @param {goog.structs.AvlTree.Node=} opt_rootNode Optional root node.
  * @return {goog.structs.AvlTree.Node} The node with the smallest value in
  *     the tree.
  * @private
@@ -670,7 +670,7 @@ goog.structs.AvlTree.prototype.getMinNode_ = function(opt_rootNode) {
  * Returns the node with the largest value in tree, optionally rooted at
  * opt_rootNode.
  *
- * @param {goog.structs.AvlTree.Node} opt_rootNode Optional root node.
+ * @param {goog.structs.AvlTree.Node=} opt_rootNode Optional root node.
  * @return {goog.structs.AvlTree.Node} The node with the largest value in
  *     the tree.
  * @private
@@ -702,7 +702,7 @@ goog.structs.AvlTree.prototype.getMaxNode_ = function(opt_rootNode) {
  * defaults to 1 and its children default to null.
  *
  * @param {*} value Value to store in the node.
- * @param {goog.structs.AvlTree.Node} opt_parent Optional parent node.
+ * @param {goog.structs.AvlTree.Node=} opt_parent Optional parent node.
  * @constructor
  */
 goog.structs.AvlTree.Node = function(value, opt_parent) {

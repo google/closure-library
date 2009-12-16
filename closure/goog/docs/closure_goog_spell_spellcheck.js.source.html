@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -72,12 +73,12 @@
 <a name="line29"></a> * Support class for spell checker components. Provides basic functionality
 <a name="line30"></a> * such as word lookup and caching.
 <a name="line31"></a> *
-<a name="line32"></a> * @param {Function} opt_lookupFunction Function to use for word lookup. Must
+<a name="line32"></a> * @param {Function=} opt_lookupFunction Function to use for word lookup. Must
 <a name="line33"></a> *     accept an array of words, an object reference and a callback function as
 <a name="line34"></a> *     parameters. It must also call the callback function (as a method on the
 <a name="line35"></a> *     object), once ready, with an array containing the original words, their
 <a name="line36"></a> *     spelling status and optionally an array of suggestions.
-<a name="line37"></a> * @param {string} opt_language Content language.
+<a name="line37"></a> * @param {string=} opt_language Content language.
 <a name="line38"></a> * @constructor
 <a name="line39"></a> * @extends {goog.events.EventTarget}
 <a name="line40"></a> */
@@ -241,7 +242,7 @@
 <a name="line198"></a>/**
 <a name="line199"></a> * Sets language.
 <a name="line200"></a> *
-<a name="line201"></a> * @param {string} opt_language Content language.
+<a name="line201"></a> * @param {string=} opt_language Content language.
 <a name="line202"></a> */
 <a name="line203"></a>goog.spell.SpellCheck.prototype.setLanguage = function(opt_language) {
 <a name="line204"></a>  this.language_ = opt_language || &#39;&#39;;
@@ -423,7 +424,7 @@
 <a name="line380"></a> *
 <a name="line381"></a> * @param {string} word Word to set status for.
 <a name="line382"></a> * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
-<a name="line383"></a> * @param {Array.&lt;string&gt;} opt_suggestions Suggestions.
+<a name="line383"></a> * @param {Array.&lt;string&gt;=} opt_suggestions Suggestions.
 <a name="line384"></a> *
 <a name="line385"></a> * Example:
 <a name="line386"></a> * obj.setWordStatus(&#39;word&#39;, VALID);
@@ -440,7 +441,7 @@
 <a name="line397"></a> *
 <a name="line398"></a> * @param {string} word Word to set status for.
 <a name="line399"></a> * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
-<a name="line400"></a> * @param {Array.&lt;string&gt;} opt_suggestions Suggestions.
+<a name="line400"></a> * @param {Array.&lt;string&gt;=} opt_suggestions Suggestions.
 <a name="line401"></a> * @private
 <a name="line402"></a> */
 <a name="line403"></a>goog.spell.SpellCheck.prototype.setWordStatus_ =

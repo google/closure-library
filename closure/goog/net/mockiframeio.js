@@ -72,11 +72,11 @@ goog.net.MockIFrameIo.prototype.lastError_ = '';
  * Simulates the iframe send.
  *
  * @param {goog.Uri|string} uri Uri of the request.
- * @param {string} opt_method Default is GET, POST uses a form to submit the
+ * @param {string=} opt_method Default is GET, POST uses a form to submit the
  *     request.
- * @param {boolean} opt_noCache Append a timestamp to the request to avoid
+ * @param {boolean=} opt_noCache Append a timestamp to the request to avoid
  *     caching.
- * @param {Object|goog.structs.Map} opt_data Map of key-value pairs.
+ * @param {Object|goog.structs.Map=} opt_data Map of key-value pairs.
  */
 goog.net.MockIFrameIo.prototype.send = function(uri, opt_method, opt_noCache,
                                                 opt_data) {
@@ -93,9 +93,9 @@ goog.net.MockIFrameIo.prototype.send = function(uri, opt_method, opt_noCache,
 /**
  * Simulates the iframe send from a form.
  * @param {Element} form Form element used to send the request to the server.
- * @param {string} opt_uri Uri to set for the destination of the request, by
+ * @param {string=} opt_uri Uri to set for the destination of the request, by
  *     default the uri will come from the form.
- * @param {boolean} opt_noCache Append a timestamp to the request to avoid
+ * @param {boolean=} opt_noCache Append a timestamp to the request to avoid
  *     caching.
  */
 goog.net.MockIFrameIo.prototype.sendFromForm = function(form, opt_uri,
@@ -111,7 +111,7 @@ goog.net.MockIFrameIo.prototype.sendFromForm = function(form, opt_uri,
 
 /**
  * Simulates aborting the current Iframe request.
- * @param {goog.net.ErrorCode} opt_failureCode Optional error code to use -
+ * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
  *     defaults to ABORT.
  */
 goog.net.MockIFrameIo.prototype.abort = function(opt_failureCode) {

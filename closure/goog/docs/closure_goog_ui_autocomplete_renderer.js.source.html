@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -79,14 +80,14 @@
 <a name="line36"></a> * Class for rendering the results of an auto-complete in a drop down list.
 <a name="line37"></a> *
 <a name="line38"></a> * @constructor
-<a name="line39"></a> * @param {Element} opt_parentNode optional reference to the parent element that
-<a name="line40"></a> *     will hold the autocomplete elements. goog.dom.getDocument().body will be
-<a name="line41"></a> *     used if this is null.
-<a name="line42"></a> * @param {?({renderRow}|{render})} opt_customRenderer Custom full renderer to
+<a name="line39"></a> * @param {Element=} opt_parentNode optional reference to the parent element
+<a name="line40"></a> *     that will hold the autocomplete elements. goog.dom.getDocument().body
+<a name="line41"></a> *     will be used if this is null.
+<a name="line42"></a> * @param {?({renderRow}|{render})=} opt_customRenderer Custom full renderer to
 <a name="line43"></a> *     render each row. Should be something with a renderRow or render method.
-<a name="line44"></a> * @param {boolean} opt_rightAlign Determines if the autocomplete will always be
-<a name="line45"></a> *     right aligned. False by default.
-<a name="line46"></a> * @param {boolean} opt_useStandardHighlighting Determines if standard
+<a name="line44"></a> * @param {boolean=} opt_rightAlign Determines if the autocomplete will always
+<a name="line45"></a> *     be right aligned. False by default.
+<a name="line46"></a> * @param {boolean=} opt_useStandardHighlighting Determines if standard
 <a name="line47"></a> *     highlighting should be applied to each row of data. Standard highlighting
 <a name="line48"></a> *     bolds every matching substring for a given token in each row.
 <a name="line49"></a> * @extends {goog.events.EventTarget}
@@ -284,7 +285,7 @@
 <a name="line241"></a> *
 <a name="line242"></a> * @param {Array} rows Matching UI rows.
 <a name="line243"></a> * @param {string} token Token we are currently matching against.
-<a name="line244"></a> * @param {Element} opt_target Current HTML node, will position popup beneath
+<a name="line244"></a> * @param {Element=} opt_target Current HTML node, will position popup beneath
 <a name="line245"></a> *     this node.
 <a name="line246"></a> */
 <a name="line247"></a>goog.ui.AutoComplete.Renderer.prototype.renderRows = function(rows, token,

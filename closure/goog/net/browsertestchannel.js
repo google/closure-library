@@ -210,9 +210,9 @@ goog.net.BrowserTestChannel.prototype.connect = function(path) {
 
   // the first request returns server specific parameters
   sendDataUri.setParameterValues('MODE', 'init');
-  this.request_ = new goog.net.ChannelRequest(this, this.channelDebug_);
+  this.request_ = goog.net.BrowserChannel.createChannelRequest(
+      this, this.channelDebug_);
   this.request_.setExtraHeaders(this.extraHeaders_);
-  this.request_.setMaxRetries(0);
   this.request_.xmlHttpGet(sendDataUri, false, true);
   this.state_ = goog.net.BrowserTestChannel.State_.INIT;
 };
@@ -267,9 +267,9 @@ goog.net.BrowserTestChannel.prototype.checkBlockedCallback_ = function(
  */
 goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
   this.channelDebug_.debug('TestConnection: starting stage 2');
-  this.request_ = new goog.net.ChannelRequest(this, this.channelDebug_);
+  this.request_ = goog.net.BrowserChannel.createChannelRequest(
+      this, this.channelDebug_);
   this.request_.setExtraHeaders(this.extraHeaders_);
-  this.request_.setMaxRetries(0);
   var recvDataUri = this.channel_.getBackChannelUri(this.hostPrefix_,
       /** @type {string} */ (this.path_));
 
@@ -414,8 +414,7 @@ goog.net.BrowserTestChannel.prototype.onRequestComplete =
         // TODO: need to empirically verify that this number is OK
         // for slow computers
         goodConn = false;
-      }
-      else {
+      } else {
         goodConn = true;
       }
     } else {

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -166,7 +167,7 @@
 <a name="line123"></a> * configuration.
 <a name="line124"></a> *
 <a name="line125"></a> * @param {goog.ui.media.PicasaAlbumModel} dataModel A picasa album data model.
-<a name="line126"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+<a name="line126"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
 <a name="line127"></a> *     document interaction.
 <a name="line128"></a> * @return {goog.ui.media.Media} A Control instance binded to the Picasa
 <a name="line129"></a> *     renderer.
@@ -224,10 +225,10 @@
 <a name="line181"></a> *
 <a name="line182"></a> * @param {string} userId The picasa userId associated with this album.
 <a name="line183"></a> * @param {string} albumId The picasa albumId associated with this album.
-<a name="line184"></a> * @param {string} opt_authKey An optional authentication key, used on private
+<a name="line184"></a> * @param {string=} opt_authKey An optional authentication key, used on private
 <a name="line185"></a> *     albums.
-<a name="line186"></a> * @param {string} opt_caption An optional caption of the picasa album.
-<a name="line187"></a> * @param {string} opt_description An optional description of the picasa album.
+<a name="line186"></a> * @param {string=} opt_caption An optional caption of the picasa album.
+<a name="line187"></a> * @param {string=} opt_description An optional description of the picasa album.
 <a name="line188"></a> * @constructor
 <a name="line189"></a> * @extends {goog.ui.media.MediaModel}
 <a name="line190"></a> */
@@ -300,8 +301,8 @@
 <a name="line257"></a> * Gets a {@code picasaUrl} and extracts the user and album id.
 <a name="line258"></a> *
 <a name="line259"></a> * @param {string} picasaUrl A picasa album URL.
-<a name="line260"></a> * @param {string} opt_caption An optional caption of the picasa album.
-<a name="line261"></a> * @param {string} opt_description An optional description of the picasa album.
+<a name="line260"></a> * @param {string=} opt_caption An optional caption of the picasa album.
+<a name="line261"></a> * @param {string=} opt_description An optional description of the picasa album.
 <a name="line262"></a> * @return {goog.ui.media.PicasaAlbumModel} The picasa album data model that
 <a name="line263"></a> *     represents the picasa URL.
 <a name="line264"></a> * @throws exception in case the parsing fails

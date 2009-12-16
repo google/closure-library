@@ -18,7 +18,6 @@
 
 goog.provide('goog.proto2.Message');
 
-goog.require('goog.json');
 goog.require('goog.proto2.Descriptor');
 goog.require('goog.proto2.FieldDescriptor');
 goog.require('goog.proto2.Util');
@@ -165,7 +164,7 @@ goog.proto2.Message.prototype.getDescriptor = function() {
  * Returns the data in the current message as an anonymous
  * ECMAScript object (i.e a simple key/value pair object).
  *
- * @param {goog.proto2.ObjectSerializer.KeyOption} opt_keyOption Specifies
+ * @param {goog.proto2.ObjectSerializer.KeyOption=} opt_keyOption Specifies
  *     the format of the keys in the generated object. See the definition
  *     of the enumeration for more information.
  *
@@ -235,7 +234,7 @@ goog.proto2.Message.prototype.countOf = function(field) {
  *
  * @param {goog.proto2.FieldDescriptor} field The field for which to get the
  *     value.
- * @param {number} opt_index If the field is repeated, the index to use when
+ * @param {number=} opt_index If the field is repeated, the index to use when
  *     looking up the value.
  *
  * @return {Object} The value found or undefined if none.
@@ -255,7 +254,7 @@ goog.proto2.Message.prototype.get = function(field, opt_index) {
  *
  * @param {goog.proto2.FieldDescriptor} field The field for which to get the
  *     value.
- * @param {number} opt_index If the field is repeated, the index to use when
+ * @param {number=} opt_index If the field is repeated, the index to use when
  *     looking up the value.
  *
  * @return {Object} The value found or the default if none.
@@ -380,7 +379,7 @@ goog.proto2.Message.prototype.lazyDeserialize_ = function(field) {
  * GENERATED CODE USE ONLY. Basis of the get{Field} methods.
  *
  * @param {number} tag The field's tag index.
- * @param {number} opt_index If the field is a repeated field, the index
+ * @param {number=} opt_index If the field is a repeated field, the index
  *     at which to get the value.
  *
  * @return {Object} The value found or undefined for none.
@@ -412,7 +411,7 @@ goog.proto2.Message.prototype.get$Value = function(tag, opt_index) {
  * GENERATED CODE USE ONLY. Basis of the get{Field} methods.
  *
  * @param {number} tag The field's tag index.
- * @param {number} opt_index If the field is a repeated field, the index
+ * @param {number=} opt_index If the field is a repeated field, the index
  *     at which to get the value.
  *
  * @return {Object} The value found or the default value if none set.

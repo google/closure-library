@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -351,7 +352,7 @@
 <a name="line308"></a> * Execute a sql statement with a set of arguments
 <a name="line309"></a> *
 <a name="line310"></a> * @param {string} sql The sql statement to execute.
-<a name="line311"></a> * @param {*} var_args The arguments to execute, either as a single
+<a name="line311"></a> * @param {...*} var_args The arguments to execute, either as a single
 <a name="line312"></a> * array argument or as var_args.
 <a name="line313"></a> * @return {GearsResultSet} The results.
 <a name="line314"></a> */
@@ -448,7 +449,7 @@
 <a name="line405"></a> * containing the result.
 <a name="line406"></a> *
 <a name="line407"></a> * @param {string} sql The SQL statement.
-<a name="line408"></a> * @param {Object} var_args Query params. An array or multiple arguments.
+<a name="line408"></a> * @param {...Object} var_args Query params. An array or multiple arguments.
 <a name="line409"></a> * @return {Array} An array of arrays containing the results of the query.
 <a name="line410"></a> */
 <a name="line411"></a>goog.gears.Database.prototype.queryArrays = function(sql, var_args) {
@@ -463,7 +464,7 @@
 <a name="line420"></a> * This calls query on the database and builds an array containing hashes
 <a name="line421"></a> *
 <a name="line422"></a> * @param {string} sql Ths SQL statement.
-<a name="line423"></a> * @param {Object} var_args query params. An array or multiple arguments.
+<a name="line423"></a> * @param {...Object} var_args query params. An array or multiple arguments.
 <a name="line424"></a> * @return {Array} An array of hashes containing the results of the query.
 <a name="line425"></a> */
 <a name="line426"></a>goog.gears.Database.prototype.queryObjectArray = function(sql, var_args) {
@@ -480,7 +481,7 @@
 <a name="line437"></a> * column.
 <a name="line438"></a> *
 <a name="line439"></a> * @param {string} sql SQL statement.
-<a name="line440"></a> * @param {Object} var_args query params. An array or multiple arguments.
+<a name="line440"></a> * @param {...Object} var_args query params. An array or multiple arguments.
 <a name="line441"></a> * @return {Array} The values in the first column.
 <a name="line442"></a> */
 <a name="line443"></a>goog.gears.Database.prototype.queryValueArray = function(sql, var_args) {
@@ -496,7 +497,7 @@
 <a name="line453"></a> * row.
 <a name="line454"></a> *
 <a name="line455"></a> * @param {string} sql SQL statement.
-<a name="line456"></a> * @param {Object} var_args query params. An array or multiple arguments.
+<a name="line456"></a> * @param {...Object} var_args query params. An array or multiple arguments.
 <a name="line457"></a> * @return {(number,string,null)} The first value in
 <a name="line458"></a> *     the first row.
 <a name="line459"></a> */
@@ -513,7 +514,7 @@
 <a name="line470"></a> * where the keys are the column names.
 <a name="line471"></a> *
 <a name="line472"></a> * @param {string} sql SQL statement.
-<a name="line473"></a> * @param {*} var_args query params. An array or multiple arguments.
+<a name="line473"></a> * @param {...*} var_args query params. An array or multiple arguments.
 <a name="line474"></a> * @return {Object} The first row as a hash map.
 <a name="line475"></a> */
 <a name="line476"></a>goog.gears.Database.prototype.queryObject = function(sql, var_args) {
@@ -528,7 +529,7 @@
 <a name="line485"></a> * This calls query on the database and returns the first row as an array
 <a name="line486"></a> *
 <a name="line487"></a> * @param {string} sql SQL statement.
-<a name="line488"></a> * @param {Object} var_args query params. An array or multiple arguments.
+<a name="line488"></a> * @param {...Object} var_args query params. An array or multiple arguments.
 <a name="line489"></a> * @return {Array} The first row as an array.
 <a name="line490"></a> */
 <a name="line491"></a>goog.gears.Database.prototype.queryArray = function(sql, var_args) {
@@ -546,9 +547,9 @@
 <a name="line503"></a> *
 <a name="line504"></a> * @param {string} sql The SQL statement to execute.
 <a name="line505"></a> * @param {Function} f Function to call for each value.
-<a name="line506"></a> * @param {Object} opt_this If present f will be called using this object as
+<a name="line506"></a> * @param {Object=} opt_this If present f will be called using this object as
 <a name="line507"></a> *                          &#39;this&#39;.
-<a name="line508"></a> * @param {Object} var_args query params. An array or multiple arguments.
+<a name="line508"></a> * @param {...Object} var_args query params. An array or multiple arguments.
 <a name="line509"></a> */
 <a name="line510"></a>goog.gears.Database.prototype.forEachValue = function(sql,
 <a name="line511"></a>    f, opt_this, var_args) {
@@ -583,9 +584,9 @@
 <a name="line540"></a> *
 <a name="line541"></a> * @param {string} sql The SQL statement to execute.
 <a name="line542"></a> * @param {Function} f Function to call for each row.
-<a name="line543"></a> * @param {Object} opt_this If present f will be called using this
+<a name="line543"></a> * @param {Object=} opt_this If present f will be called using this
 <a name="line544"></a> *                          object as &#39;this&#39;.
-<a name="line545"></a> * @param {*} var_args query params. An array or multiple arguments.
+<a name="line545"></a> * @param {...*} var_args query params. An array or multiple arguments.
 <a name="line546"></a> */
 <a name="line547"></a>goog.gears.Database.prototype.forEachRow = function(sql,
 <a name="line548"></a>    f, opt_this, var_args) {
@@ -828,7 +829,7 @@
 <a name="line785"></a> * if this the last outstanding transaction, otherwise the real ROLLBACK will
 <a name="line786"></a> * be deferred until the last outstanding transaction is closed.
 <a name="line787"></a> *
-<a name="line788"></a> * @param {Error} opt_e the exception that caused this rollback. If it
+<a name="line788"></a> * @param {Error=} opt_e the exception that caused this rollback. If it
 <a name="line789"></a> *                          is provided then that exception is rethown if
 <a name="line790"></a> *                          the rollback does not take place.
 <a name="line791"></a> * @return {boolean} true if the ROLLBACK has been executed or if we are not
@@ -872,7 +873,7 @@
 <a name="line829"></a> * Ensures there is no open transaction upon return. An existing open
 <a name="line830"></a> * transaction is rolled back.
 <a name="line831"></a> *
-<a name="line832"></a> * @param {string} opt_logMsgPrefix a prefix to the message that is logged when
+<a name="line832"></a> * @param {string=} opt_logMsgPrefix a prefix to the message that is logged when
 <a name="line833"></a> *     an unexpected open transaction is found.
 <a name="line834"></a> */
 <a name="line835"></a>goog.gears.Database.prototype.ensureNoTransaction = function(opt_logMsgPrefix) {

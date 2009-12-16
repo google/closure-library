@@ -41,7 +41,7 @@ goog.require('goog.userAgent');
  *       alert('Font size was changed');
  *     });
  * </pre>
- * @param {goog.dom.DomHelper} opt_domHelper DOM helper object that is used to
+ * @param {goog.dom.DomHelper=} opt_domHelper DOM helper object that is used to
  *     determine where to insert the DOM nodes used to determine when the font
  *     size changes.
  * @constructor

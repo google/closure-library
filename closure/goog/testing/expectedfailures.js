@@ -139,7 +139,7 @@ goog.testing.ExpectedFailures.setUpConsole_ = function() {
  * Register to expect failure for the given condition.  Multiple calls to this
  * function act as a boolean OR.  The first applicable message will be used.
  * @param {boolean} condition Whether to expect failure.
- * @param {string} opt_message Descriptive message of this expected failure.
+ * @param {string=} opt_message Descriptive message of this expected failure.
  */
 goog.testing.ExpectedFailures.prototype.expectFailureFor = function(
     condition, opt_message) {
@@ -163,7 +163,7 @@ goog.testing.ExpectedFailures.prototype.isExceptionExpected = function(ex) {
 /**
  * Handle an exception, suppressing it if it is a unit test failure that we
  * expected.
- * @param {Object} ex The exception to handle.
+ * @param {Error} ex The exception to handle.
  */
 goog.testing.ExpectedFailures.prototype.handleException = function(ex) {
   if (this.isExceptionExpected(ex)) {
@@ -184,7 +184,7 @@ goog.testing.ExpectedFailures.prototype.handleException = function(ex) {
 /**
  * Run the given function, catching any expected failures.
  * @param {Function} func The function to run.
- * @param {boolean} opt_lenient Whether to ignore if the expected failures
+ * @param {boolean=} opt_lenient Whether to ignore if the expected failures
  *     didn't occur.  In this case a warning will be logged in handleTearDown.
  */
 goog.testing.ExpectedFailures.prototype.run = function(func, opt_lenient) {

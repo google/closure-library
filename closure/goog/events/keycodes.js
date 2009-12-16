@@ -202,10 +202,10 @@ goog.events.KeyCodes.isTextModifyingKeyEvent = function(e) {
  * fire keydown in these cases, though, but not keypress.
  *
  * @param {number} keyCode A key code.
- * @param {number} opt_heldKeyCode Key code of a currently-held key.
- * @param {boolean} opt_shiftKey Whether the shift key is held down.
- * @param {boolean} opt_ctrlKey Whether the control key is held down.
- * @param {boolean} opt_altKey Whether the alt key is held down.
+ * @param {number=} opt_heldKeyCode Key code of a currently-held key.
+ * @param {boolean=} opt_shiftKey Whether the shift key is held down.
+ * @param {boolean=} opt_ctrlKey Whether the control key is held down.
+ * @param {boolean=} opt_altKey Whether the alt key is held down.
  * @return {boolean} Whether it's a key that fires a keypress event.
  */
 goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,

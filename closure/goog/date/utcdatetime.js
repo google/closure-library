@@ -31,15 +31,15 @@ goog.require('goog.date.Interval');
  * Defaults to current date and time if none is specified. The get... and the
  * getUTC... methods are equivalent.
  *
- * @param {number|Object} opt_year Four digit UTC year or a date-like object.
+ * @param {number|Object=} opt_year Four digit UTC year or a date-like object.
  *     If not set, the created object will contain the date determined by
  *     goog.now().
- * @param {number} opt_month UTC month, 0 = Jan, 11 = Dec.
- * @param {number} opt_date UTC date of month, 1 - 31.
- * @param {number} opt_hours UTC hours, 0 - 23.
- * @param {number} opt_minutes UTC minutes, 0 - 59.
- * @param {number} opt_seconds UTC seconds, 0 - 59.
- * @param {number} opt_milliseconds UTC milliseconds, 0 - 999.
+ * @param {number=} opt_month UTC month, 0 = Jan, 11 = Dec.
+ * @param {number=} opt_date UTC date of month, 1 - 31.
+ * @param {number=} opt_hours UTC hours, 0 - 23.
+ * @param {number=} opt_minutes UTC minutes, 0 - 59.
+ * @param {number=} opt_seconds UTC seconds, 0 - 59.
+ * @param {number=} opt_milliseconds UTC milliseconds, 0 - 999.
  * @constructor
  * @extends {goog.date.DateTime}
  */

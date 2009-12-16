@@ -29,7 +29,7 @@ goog.require('goog.dom.pattern.MatchType');
  *
  * @param {goog.dom.pattern.AbstractPattern} childPattern Pattern to collect
  *     child matches of.
- * @param {number} opt_minimumMatches Enforce a minimum nuber of matches.
+ * @param {number=} opt_minimumMatches Enforce a minimum nuber of matches.
  *     Defaults to 0.
  * @constructor
  * @extends {goog.dom.pattern.AllChildren}

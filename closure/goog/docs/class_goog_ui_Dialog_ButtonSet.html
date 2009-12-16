@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,13 +90,13 @@ show.  Uses the goog.structs.Map interface.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span></td><td></td></tr>
   <tr><td>goog.ui.Dialog.ButtonSet</td><td><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -108,7 +120,7 @@ show.  Uses the goog.structs.Map interface.
    <tr class="even">
      <td>
         <span class="entryName">opt_domHelper</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        : <div class="fullType"><span class="type">goog.dom.DomHelper=</span></div>
         <div class="entryOverview">Optional DOM helper; see goog.ui.Component for semantics.</div>
      </td>
    </tr>
@@ -570,7 +582,7 @@ are added.
    <tr class="even">
      <td>
         <span class="entryName">opt_isDefault</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether this button is the default button, Dialog will dispatch for this button if enter is pressed.</div>
      </td>
    </tr>
@@ -578,7 +590,7 @@ are added.
    <tr class="odd">
      <td>
         <span class="entryName">opt_isCancel</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether this button has the same behaviour as cancel.  If escape is pressed this button will fire.</div>
      </td>
    </tr>
@@ -788,7 +800,7 @@ created.
    <tr class="even">
      <td>
         <span class="entryName">opt_keys</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">True to iterate over the keys. False to iterate over the values.  The default value is false.</div>
      </td>
    </tr>
@@ -1166,7 +1178,7 @@ map.
    <tr class="odd">
      <td>
         <span class="entryName">opt_equalityFn</span>
-        : <div class="fullType"><span class="type">function(*, *) : boolean</span></div>
+        : <div class="fullType"><span class="type">function(*, *) : boolean=</span></div>
         <div class="entryOverview">Optional equality function to test equality of values. If not specified, this will test whether the values contained in each map are identical objects.</div>
      </td>
    </tr>
@@ -1240,7 +1252,7 @@ value is not given this will return <code>undefined</code>.
    <tr class="odd">
      <td>
         <span class="entryName">opt_val</span>
-        : <div class="fullType"><span class="type">*</span></div>
+        : <div class="fullType"><span class="type">*=</span></div>
         <div class="entryOverview">The value to return if no item is found for the given key, defaults to undefined.</div>
      </td>
    </tr>

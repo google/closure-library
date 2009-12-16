@@ -101,7 +101,7 @@ goog.math.Line.prototype.getSegmentLength = function() {
  * Computes the point on the line closest to a given point.
  * @param {number|goog.math.Coordinate} x The x coordinate of the point, or
  *     a coordinate object.
- * @param {number} opt_y The y coordinate of the point - required if x is a
+ * @param {number=} opt_y The y coordinate of the point - required if x is a
  *     number, ignored if x is a goog.math.Coordinate.
  * @return {goog.math.Coordinate} The point on the line closest to the given
  *     point.

@@ -240,9 +240,9 @@ goog.date.relative.formatDay = function(dateMs) {
  *   Tuesday, March 20, 2005    // Too long ago for a relative date.
  *
  * @param {Date} date A date object.
- * @param {string} opt_shortTimeMsg An optional short time message can be
+ * @param {string=} opt_shortTimeMsg An optional short time message can be
  *     provided if available, so that it's not recalculated in this function.
- * @param {string} opt_fullDateMsg An optional date message can be
+ * @param {string=} opt_fullDateMsg An optional date message can be
  *     provided if available, so that it's not recalculated in this function.
  * @return {string} The date string in the above form.
  */
@@ -263,9 +263,9 @@ goog.date.relative.getDateString = function(
  * future dates.
  *
  * @param {Date} date A timestamp or date object.
- * @param {string} opt_shortTimeMsg An optional short time message can be
+ * @param {string=} opt_shortTimeMsg An optional short time message can be
  *     provided if available, so that it's not recalculated in this function.
- * @param {string} opt_fullDateMsg An optional date message can be
+ * @param {string=} opt_fullDateMsg An optional date message can be
  *     provided if available, so that it's not recalculated in this function.
  * @return {string} The date string in the above form.
  */
@@ -287,9 +287,9 @@ goog.date.relative.getPastDateString = function(
  * @param {Date} date A timestamp or date object.
  * @param {function(number) : string} relativeFormatter Function to use when
  *     formatting the relative date.
- * @param {string} opt_shortTimeMsg An optional short time message can be
+ * @param {string=} opt_shortTimeMsg An optional short time message can be
  *     provided if available, so that it's not recalculated in this function.
- * @param {string} opt_fullDateMsg An optional date message can be
+ * @param {string=} opt_fullDateMsg An optional date message can be
  *     provided if available, so that it's not recalculated in this function.
  * @return {string} The date string in the above form.
  * @private

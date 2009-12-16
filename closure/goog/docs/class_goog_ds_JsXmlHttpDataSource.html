@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,7 +90,7 @@ set to a variable and doesn&#39;t require strict JSON notation.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_ds_DataNodeList.html">goog.ds.DataNodeList</a></span></td><td><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_ds_AbstractFastDataNode.html">goog.ds.AbstractFastDataNode</a></span></td><td><span class="type"><a href="class_goog_ds_DataNodeList.html">goog.ds.DataNodeList</a></span></td></tr>
@@ -87,7 +99,7 @@ set to a variable and doesn&#39;t require strict JSON notation.
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -127,7 +139,7 @@ set to a variable and doesn&#39;t require strict JSON notation.
    <tr class="even">
      <td>
         <span class="entryName">opt_startText</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Text to expect/strip before JS response.</div>
      </td>
    </tr>
@@ -135,7 +147,7 @@ set to a variable and doesn&#39;t require strict JSON notation.
    <tr class="odd">
      <td>
         <span class="entryName">opt_endText</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Text to expect/strip after JS response.</div>
      </td>
    </tr>
@@ -143,7 +155,7 @@ set to a variable and doesn&#39;t require strict JSON notation.
    <tr class="even">
      <td>
         <span class="entryName">opt_usePost</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, use POST. Defaults to false (GET).</div>
      </td>
    </tr>
@@ -499,7 +511,7 @@ parameters. Only used in POST requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line314">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line315">code &raquo;</a>
   </td>
      </tr>
 
@@ -545,7 +557,7 @@ parameters. Only used in POST requests.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line300">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line301">code &raquo;</a>
   </td>
      </tr>
 
@@ -653,7 +665,7 @@ gets a child node (if called with opt_key).
    <tr class="even">
      <td>
         <span class="entryName">opt_key</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Name of child node.</div>
      </td>
    </tr>
@@ -671,7 +683,7 @@ gets a child node (if called with opt_key).
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line325">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line326">code &raquo;</a>
   </td>
      </tr>
 
@@ -738,7 +750,7 @@ method, you should use goog.ds.FastListNode.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line342">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line343">code &raquo;</a>
   </td>
      </tr>
 
@@ -793,7 +805,7 @@ method, you should use goog.ds.FastListNode.
    <tr class="odd">
      <td>
         <span class="entryName">opt_create</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to create the child if it does not exist.</div>
      </td>
    </tr>
@@ -811,7 +823,7 @@ method, you should use goog.ds.FastListNode.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line220">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line221">code &raquo;</a>
   </td>
      </tr>
 
@@ -877,7 +889,7 @@ the need to create PrimitiveFastData nodes.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line259">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line260">code &raquo;</a>
   </td>
      </tr>
 
@@ -925,7 +937,7 @@ returning all children.
    <tr class="even">
      <td>
         <span class="entryName">opt_selector</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Children to include in child list.</div>
      </td>
    </tr>
@@ -991,7 +1003,7 @@ method, you should use goog.ds.FastListNode.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line363">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line364">code &raquo;</a>
   </td>
      </tr>
 
@@ -1038,7 +1050,7 @@ not modify the object returned by this function.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line284">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line285">code &raquo;</a>
   </td>
      </tr>
 
@@ -1085,7 +1097,7 @@ instances of FastDataNode but may return true for subclasses.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line274">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line275">code &raquo;</a>
   </td>
      </tr>
 
@@ -1145,7 +1157,7 @@ instances of FastDataNode but may return true for subclasses.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line389">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line390">code &raquo;</a>
   </td>
      </tr>
 
@@ -1277,7 +1289,7 @@ instance by calling getChildNode.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line242">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line243">code &raquo;</a>
   </td>
      </tr>
 
@@ -1345,7 +1357,7 @@ instance by calling getChildNode.
 
 
   <td class="view-code">
-     <a href="closure_goog_datasource_fastdatanode.js.source.html#line380">code &raquo;</a>
+     <a href="closure_goog_datasource_fastdatanode.js.source.html#line381">code &raquo;</a>
   </td>
      </tr>
 

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -208,7 +209,7 @@
 <a name="line165"></a> * @param {number|string} value The value of the coordinate.
 <a name="line166"></a> * @param {goog.graphics.ext.Element.PositionType_} type The type of the
 <a name="line167"></a> *     coordinate.
-<a name="line168"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line168"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line169"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line170"></a> *     pending but not yet performed.
 <a name="line171"></a> * @private
@@ -230,7 +231,7 @@
 <a name="line187"></a> * @param {goog.graphics.ext.Element.Position_} position The position object to
 <a name="line188"></a> *     set the value on.
 <a name="line189"></a> * @param {string|number} size The new width/height value.
-<a name="line190"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line190"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line191"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line192"></a> *     pending but not yet performed.
 <a name="line193"></a> * @private
@@ -281,7 +282,7 @@
 <a name="line238"></a> * Sets the left coordinate of the element.  Overwrites any previous value of
 <a name="line239"></a> * left, center, or right for this element.
 <a name="line240"></a> * @param {string|number} left The left coordinate.
-<a name="line241"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line241"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line242"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line243"></a> *     pending but not yet performed.
 <a name="line244"></a> */
@@ -306,7 +307,7 @@
 <a name="line263"></a> * Sets the right coordinate of the element.  Overwrites any previous value of
 <a name="line264"></a> * left, center, or right for this element.
 <a name="line265"></a> * @param {string|number} right The right coordinate.
-<a name="line266"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line266"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line267"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line268"></a> *     pending but not yet performed.
 <a name="line269"></a> */
@@ -331,7 +332,7 @@
 <a name="line288"></a> * Sets the center coordinate of the element.  Overwrites any previous value of
 <a name="line289"></a> * left, center, or right for this element.
 <a name="line290"></a> * @param {string|number} center The center coordinate.
-<a name="line291"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line291"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line292"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line293"></a> *     pending but not yet performed.
 <a name="line294"></a> */
@@ -359,7 +360,7 @@
 <a name="line316"></a> * Sets the top coordinate of the element.  Overwrites any previous value of
 <a name="line317"></a> * top, middle, or bottom for this element.
 <a name="line318"></a> * @param {string|number} top The top coordinate.
-<a name="line319"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line319"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line320"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line321"></a> *     pending but not yet performed.
 <a name="line322"></a> */
@@ -384,7 +385,7 @@
 <a name="line341"></a> * Sets the bottom coordinate of the element.  Overwrites any previous value of
 <a name="line342"></a> * top, middle, or bottom for this element.
 <a name="line343"></a> * @param {string|number} bottom The bottom coordinate.
-<a name="line344"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line344"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line345"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line346"></a> *     pending but not yet performed.
 <a name="line347"></a> */
@@ -409,7 +410,7 @@
 <a name="line366"></a> * Sets the middle coordinate of the element.  Overwrites any previous value of
 <a name="line367"></a> * top, middle, or bottom for this element
 <a name="line368"></a> * @param {string|number} middle The middle coordinate.
-<a name="line369"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line369"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line370"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line371"></a> *     pending but not yet performed.
 <a name="line372"></a> */
@@ -436,7 +437,7 @@
 <a name="line393"></a>/**
 <a name="line394"></a> * Sets the width of the element.
 <a name="line395"></a> * @param {string|number} width The new width value.
-<a name="line396"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line396"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line397"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line398"></a> *     pending but not yet performed.
 <a name="line399"></a> */
@@ -475,7 +476,7 @@
 <a name="line432"></a>/**
 <a name="line433"></a> * Sets the height of the element.
 <a name="line434"></a> * @param {string|number} height The new height value.
-<a name="line435"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line435"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line436"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line437"></a> *     pending but not yet performed.
 <a name="line438"></a> */
@@ -509,7 +510,7 @@
 <a name="line466"></a> * Shortcut for setting the left and top position.
 <a name="line467"></a> * @param {string|number} left The left coordinate.
 <a name="line468"></a> * @param {string|number} top The top coordinate.
-<a name="line469"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line469"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line470"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line471"></a> *     pending but not yet performed.
 <a name="line472"></a> */
@@ -524,7 +525,7 @@
 <a name="line481"></a> * Shortcut for setting the width and height.
 <a name="line482"></a> * @param {string|number} width The new width value.
 <a name="line483"></a> * @param {string|number} height The new height value.
-<a name="line484"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line484"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line485"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line486"></a> *     pending but not yet performed.
 <a name="line487"></a> */
@@ -541,7 +542,7 @@
 <a name="line498"></a> * @param {string|number} top The top coordinate.
 <a name="line499"></a> * @param {string|number} width The new width value.
 <a name="line500"></a> * @param {string|number} height The new height value.
-<a name="line501"></a> * @param {boolean} opt_chain Optional flag to specify this function is part
+<a name="line501"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
 <a name="line502"></a> *     of a chain of calls and therefore transformations should be set as
 <a name="line503"></a> *     pending but not yet performed.
 <a name="line504"></a> */
@@ -831,7 +832,7 @@
 <a name="line788"></a>/**
 <a name="line789"></a> * Converts the given x coordinate to a number value in units.
 <a name="line790"></a> * @param {string|number|null} v The coordinate to retrieve the value for.
-<a name="line791"></a> * @param {boolean} opt_forMaximum Whether we are computing the largest value
+<a name="line791"></a> * @param {boolean=} opt_forMaximum Whether we are computing the largest value
 <a name="line792"></a> *     this coordinate would be in a parent of no size.
 <a name="line793"></a> * @return {number} The correct number of coordinate space units.
 <a name="line794"></a> * @private

@@ -166,7 +166,7 @@ goog.i18n.GraphemeBreak.getBreakProp_ = function(acode) {
  * is to check for both using a boolean flag to switch between them.
  * @param {number} a The code point value of the first character.
  * @param {number} b The code point value of the second character.
- * @param {boolean} opt_extended If true, indicates extended grapheme cluster;
+ * @param {boolean=} opt_extended If true, indicates extended grapheme cluster;
  *     If false, indicates legacy cluster.
  * @return {boolean} True if a & b do not form a cluster; False otherwise.
  */

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -93,7 +94,7 @@
 <a name="line50"></a>/**
 <a name="line51"></a> * Recursively gets all CSS as text, optionally starting from a given
 <a name="line52"></a> * CSSStyleSheet.
-<a name="line53"></a> * @param {CSSStyleSheet} opt_styleSheet The CSSStyleSheet.
+<a name="line53"></a> * @param {CSSStyleSheet=} opt_styleSheet The CSSStyleSheet.
 <a name="line54"></a> * @return {string} css text.
 <a name="line55"></a> */
 <a name="line56"></a>goog.cssom.getAllCssText = function(opt_styleSheet) {
@@ -106,7 +107,7 @@
 <a name="line63"></a> * Recursively gets all CSSStyleRules, optionally starting from a given
 <a name="line64"></a> * CSSStyleSheet.
 <a name="line65"></a> * Note that this excludes any CSSImportRules, CSSMediaRules, etc..
-<a name="line66"></a> * @param {CSSStyleSheet} opt_styleSheet The CSSStyleSheet.
+<a name="line66"></a> * @param {CSSStyleSheet=} opt_styleSheet The CSSStyleSheet.
 <a name="line67"></a> * @return {Array.&lt;CSSStyleRule&gt;} A list of CSSStyleRules.
 <a name="line68"></a> */
 <a name="line69"></a>goog.cssom.getAllCssStyleRules = function(opt_styleSheet) {
@@ -149,8 +150,8 @@
 <a name="line106"></a> * want to return the sheets in the order of the cascade, therefore if we
 <a name="line107"></a> * encounter an import, we will splice that CSSStyleSheet object in front of
 <a name="line108"></a> * the CSSStyleSheet that contains it in the returned array of CSSStyleSheets.
-<a name="line109"></a> * @param {CSSStyleSheet} opt_styleSheet A CSSStyleSheet.
-<a name="line110"></a> * @param {boolean} opt_includeDisabled If true, includes disabled stylesheets,
+<a name="line109"></a> * @param {CSSStyleSheet=} opt_styleSheet A CSSStyleSheet.
+<a name="line110"></a> * @param {boolean=} opt_includeDisabled If true, includes disabled stylesheets,
 <a name="line111"></a> *    defaults to false.
 <a name="line112"></a> * @return {Array.&lt;CSSStyleSheet&gt;} A list of CSSStyleSheet objects.
 <a name="line113"></a> */
@@ -238,7 +239,7 @@
 <a name="line195"></a>/**
 <a name="line196"></a> * Get the index of the CSSRule in it&#39;s CSSStyleSheet.
 <a name="line197"></a> * @param {CSSRule} cssRule A CSSRule.
-<a name="line198"></a> * @param {CSSStyleSheet} opt_parentStyleSheet A reference to the stylesheet
+<a name="line198"></a> * @param {CSSStyleSheet=} opt_parentStyleSheet A reference to the stylesheet
 <a name="line199"></a> *     object this cssRule belongs to.
 <a name="line200"></a> * @throws {Error} When we cannot get the parentStyleSheet.
 <a name="line201"></a> * @return {number} The index of the CSSRule, or -1.
@@ -292,9 +293,9 @@
 <a name="line249"></a> * object in IE. We do some trickery in getAllCssStyleRules to hack this in.
 <a name="line250"></a> * @param {CSSRule} cssRule A CSSRule.
 <a name="line251"></a> * @param {string} cssText The text for the new CSSRule.
-<a name="line252"></a> * @param {CSSStyleSheet} opt_parentStyleSheet A reference to the stylesheet
+<a name="line252"></a> * @param {CSSStyleSheet=} opt_parentStyleSheet A reference to the stylesheet
 <a name="line253"></a> *     object this cssRule belongs to.
-<a name="line254"></a> * @param {number} opt_index The index of the cssRule in its parentStylesheet.
+<a name="line254"></a> * @param {number=} opt_index The index of the cssRule in its parentStylesheet.
 <a name="line255"></a> * @throws {Error} If we cannot find a parentStyleSheet.
 <a name="line256"></a> * @throws {Error} If we cannot find a css rule index.
 <a name="line257"></a> */
@@ -322,7 +323,7 @@
 <a name="line279"></a> * at a given index.
 <a name="line280"></a> * @param {CSSStyleSheet} cssStyleSheet The CSSRule&#39;s parentStyleSheet.
 <a name="line281"></a> * @param {string} cssText The text for the new CSSRule.
-<a name="line282"></a> * @param {number} opt_index The index of the cssRule in its parentStylesheet.
+<a name="line282"></a> * @param {number=} opt_index The index of the cssRule in its parentStylesheet.
 <a name="line283"></a> * @throws {Error} If the css rule text appears to be ill-formatted.
 <a name="line284"></a> * TODO: Inserting at index 0 fails on Firefox 2 and 3 with an
 <a name="line285"></a> *     exception warning &quot;Node cannot be inserted at the specified point in
@@ -379,7 +380,7 @@
 <a name="line336"></a>/**
 <a name="line337"></a> * Appends a DOM node to HEAD containing the css text that&#39;s passed in.
 <a name="line338"></a> * @param {string} cssText CSS to add to the end of the document.
-<a name="line339"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper user for
+<a name="line339"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper user for
 <a name="line340"></a> *     document interactions.
 <a name="line341"></a> * @return {Element} The newly created STYLE element.
 <a name="line342"></a> */

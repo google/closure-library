@@ -249,7 +249,7 @@ goog.i18n.DateTimeParse.prototype.applyStandardPattern_ = function(formatType)
  * not validate the input.
  * @param {string} text The string being parsed.
  * @param {Date} date The Date object to hold the parsed date.
- * @param {number} opt_start The position from where parse should begin.
+ * @param {number=} opt_start The position from where parse should begin.
  * @return {number} How many characters parser advanced.
  */
 goog.i18n.DateTimeParse.prototype.parse = function(text, date, opt_start) {
@@ -263,7 +263,7 @@ goog.i18n.DateTimeParse.prototype.parse = function(text, date, opt_start) {
  * validate the input and make sure it is a validate date/time.
  * @param {string} text The string being parsed.
  * @param {Date} date The Date object to hold the parsed date.
- * @param {number} opt_start The position from where parse should begin.
+ * @param {number=} opt_start The position from where parse should begin.
  * @return {number} How many characters parser advanced.
  */
 goog.i18n.DateTimeParse.prototype.strictParse =

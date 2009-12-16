@@ -491,7 +491,7 @@ goog.fx.AbstractDragDrop.prototype.endDrag = function(event) {
 /**
  * Called after a drag operation has finished.
  *
- * @param {goog.fx.DragDropItem} opt_dropTarget Target for successful drop.
+ * @param {goog.fx.DragDropItem=} opt_dropTarget Target for successful drop.
  * @protected
  */
 goog.fx.AbstractDragDrop.prototype.afterEndDrag = function(opt_dropTarget) {
@@ -1042,14 +1042,14 @@ goog.fx.AbstractDragDrop.prototype.disposeInternal = function() {
  * @param {string} type Event type.
  * @param {goog.fx.AbstractDragDrop} source Source drag drop object.
  * @param {goog.fx.DragDropItem} sourceItem Source item.
- * @param {goog.fx.AbstractDragDrop} opt_target Target drag drop object.
- * @param {goog.fx.DragDropItem} opt_targetItem Target item.
- * @param {Element} opt_targetElement Target element.
- * @param {number} opt_clientX X-Position relative to the screen.
- * @param {number} opt_clientY Y-Position relative to the screen.
- * @param {number} opt_x X-Position relative to the viewport.
- * @param {number} opt_y Y-Position relative to the viewport.
- * @param {Object} opt_subtarget The currently active subtarget.
+ * @param {goog.fx.AbstractDragDrop=} opt_target Target drag drop object.
+ * @param {goog.fx.DragDropItem=} opt_targetItem Target item.
+ * @param {Element=} opt_targetElement Target element.
+ * @param {number=} opt_clientX X-Position relative to the screen.
+ * @param {number=} opt_clientY Y-Position relative to the screen.
+ * @param {number=} opt_x X-Position relative to the viewport.
+ * @param {number=} opt_y Y-Position relative to the viewport.
+ * @param {Object=} opt_subtarget The currently active subtarget.
  * @extends {goog.events.Event}
  * @constructor
  */
@@ -1144,7 +1144,7 @@ goog.fx.DragDropEvent.prototype.disposeInternal = function() {
  *
  * @param {Element|string} element Dom Node, or string representation of node
  *     id, to be used as drag source/drop target.
- * @param {Object} opt_data Data associated with the source/target.
+ * @param {Object=} opt_data Data associated with the source/target.
  * @throws Error If no element argument is provided or if the type is invalid
  * @extends {goog.events.EventTarget}
  * @constructor
@@ -1328,10 +1328,10 @@ goog.fx.DragDropItem.prototype.mouseUp_ = function(event) {
  *
  * @param {goog.math.Box} box Box describing the position and dimension of the
  *     target item.
- * @param {goog.fx.AbstractDragDrop} opt_target Target that contains the item
+ * @param {goog.fx.AbstractDragDrop=} opt_target Target that contains the item
        associated with position.
- * @param {goog.fx.DragDropItem} opt_item Item associated with position.
- * @param {Element} opt_element Element of item associated with position.
+ * @param {goog.fx.DragDropItem=} opt_item Item associated with position.
+ * @param {Element=} opt_element Element of item associated with position.
  * @constructor
  * @private
  */

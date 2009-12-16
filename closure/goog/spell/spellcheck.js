@@ -29,12 +29,12 @@ goog.require('goog.structs.Set');
  * Support class for spell checker components. Provides basic functionality
  * such as word lookup and caching.
  *
- * @param {Function} opt_lookupFunction Function to use for word lookup. Must
+ * @param {Function=} opt_lookupFunction Function to use for word lookup. Must
  *     accept an array of words, an object reference and a callback function as
  *     parameters. It must also call the callback function (as a method on the
  *     object), once ready, with an array containing the original words, their
  *     spelling status and optionally an array of suggestions.
- * @param {string} opt_language Content language.
+ * @param {string=} opt_language Content language.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
@@ -198,7 +198,7 @@ goog.spell.SpellCheck.prototype.setLookupFunction = function(f) {
 /**
  * Sets language.
  *
- * @param {string} opt_language Content language.
+ * @param {string=} opt_language Content language.
  */
 goog.spell.SpellCheck.prototype.setLanguage = function(opt_language) {
   this.language_ = opt_language || '';
@@ -380,7 +380,7 @@ goog.spell.SpellCheck.prototype.lookupCallback_ = function(data) {
  *
  * @param {string} word Word to set status for.
  * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
- * @param {Array.<string>} opt_suggestions Suggestions.
+ * @param {Array.<string>=} opt_suggestions Suggestions.
  *
  * Example:
  * obj.setWordStatus('word', VALID);
@@ -397,7 +397,7 @@ goog.spell.SpellCheck.prototype.setWordStatus =
  *
  * @param {string} word Word to set status for.
  * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
- * @param {Array.<string>} opt_suggestions Suggestions.
+ * @param {Array.<string>=} opt_suggestions Suggestions.
  * @private
  */
 goog.spell.SpellCheck.prototype.setWordStatus_ =

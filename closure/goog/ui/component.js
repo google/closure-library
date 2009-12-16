@@ -39,7 +39,7 @@ goog.require('goog.ui.IdGenerator');
 /**
  * Default implementation of UI component.
  *
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
@@ -577,7 +577,7 @@ goog.ui.Component.prototype.createDom = function() {
  *
  * Throws an Error if the component is already rendered.
  *
- * @param {Element} opt_parentElement Optional parent element to render the
+ * @param {Element=} opt_parentElement Optional parent element to render the
  *    component into.
  */
 goog.ui.Component.prototype.render = function(opt_parentElement) {
@@ -607,9 +607,9 @@ goog.ui.Component.prototype.renderBefore = function(siblingElement) {
  *
  * Throws an Error if the component is already rendered.
  *
- * @param {Element} opt_parentElement Optional parent element to render the
+ * @param {Element=} opt_parentElement Optional parent element to render the
  *    component into.
- * @param {Element} opt_beforeElement Element before which the component is to
+ * @param {Element=} opt_beforeElement Element before which the component is to
  *    be rendered.  If left out the node is appended to the parent element.
  * @private
  */
@@ -842,7 +842,7 @@ goog.ui.Component.prototype.getElementByFragment = function(idFragment) {
  *
  * @see goog.ui.Component#addChildAt
  * @param {goog.ui.Component} child The new child component.
- * @param {boolean} opt_render If true, the child component will be rendered
+ * @param {boolean=} opt_render If true, the child component will be rendered
  *    into the parent.
  */
 goog.ui.Component.prototype.addChild = function(child, opt_render) {
@@ -885,7 +885,7 @@ goog.ui.Component.prototype.addChild = function(child, opt_render) {
  * @param {goog.ui.Component} child The new child component.
  * @param {number} index 0-based index at which the new child component is to be
  *    added; must be between 0 and the current child count (inclusive).
- * @param {boolean} opt_render If true, the child component will be rendered
+ * @param {boolean=} opt_render If true, the child component will be rendered
  *    into the parent.
  */
 goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
@@ -1062,7 +1062,7 @@ goog.ui.Component.prototype.getChildAt = function(index) {
  * component and its 0-based index.  The return value is ignored.
  * @param {Function} f The function to call for every child component; should
  *    take 2 arguments (the child and its index).
- * @param {Object} opt_obj Used as the 'this' object in f when called.
+ * @param {Object=} opt_obj Used as the 'this' object in f when called.
  */
 goog.ui.Component.prototype.forEachChild = function(f, opt_obj) {
   if (this.children_) {
@@ -1097,7 +1097,7 @@ goog.ui.Component.prototype.indexOfChild = function(child) {
  * @see goog.ui.Component#removeChildAt
  * @param {string|goog.ui.Component|null} child The ID of the child to remove,
  *    or the child component itself.
- * @param {boolean} opt_unrender If true, calls {@code exitDocument} on the
+ * @param {boolean=} opt_unrender If true, calls {@code exitDocument} on the
  *    removed child component, and detaches its DOM from the document.
  * @return {goog.ui.Component} The removed component, if any.
  */
@@ -1143,7 +1143,7 @@ goog.ui.Component.prototype.removeChild = function(child, opt_unrender) {
  *
  * @see goog.ui.Component#removeChild
  * @param {number} index 0-based index of the child to remove.
- * @param {boolean} opt_unrender If true, calls {@code exitDocument} on the
+ * @param {boolean=} opt_unrender If true, calls {@code exitDocument} on the
  *    removed child component, and detaches its DOM from the document.
  * @return {goog.ui.Component} The removed component, if any.
  */
@@ -1157,7 +1157,7 @@ goog.ui.Component.prototype.removeChildAt = function(index, opt_unrender) {
  * Removes every child component attached to this one.
  *
  * @see goog.ui.Component#removeChild
- * @param {boolean} opt_unrender If true, calls {@link #exitDocument} on the
+ * @param {boolean=} opt_unrender If true, calls {@link #exitDocument} on the
  *    removed child components, and detaches their DOM from the document.
  */
 goog.ui.Component.prototype.removeChildren = function(opt_unrender) {

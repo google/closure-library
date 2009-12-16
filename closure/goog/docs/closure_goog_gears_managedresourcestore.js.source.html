@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -89,7 +90,7 @@
 <a name="line46"></a> * @param {?string} requiredCookie  A cookie that must be present for the
 <a name="line47"></a> *     managed store to be active. Should have the form &quot;foo=bar&quot;. Can be null
 <a name="line48"></a> *     if not required.
-<a name="line49"></a> * @param {GearsLocalServer} opt_localServer  Gears local server -- if not set,
+<a name="line49"></a> * @param {GearsLocalServer=} opt_localServer  Gears local server -- if not set,
 <a name="line50"></a> *     create a new one internally.
 <a name="line51"></a> *
 <a name="line52"></a> * @constructor
@@ -341,7 +342,7 @@
 <a name="line298"></a>
 <a name="line299"></a>/**
 <a name="line300"></a> * Create the ManagedResourceStore in gears
-<a name="line301"></a> * @param {string} opt_manifestUrl  The url of the manifest to associate.
+<a name="line301"></a> * @param {string=} opt_manifestUrl  The url of the manifest to associate.
 <a name="line302"></a> */
 <a name="line303"></a>goog.gears.ManagedResourceStore.prototype.create = function(opt_manifestUrl) {
 <a name="line304"></a>  if (!this.exists()) {
@@ -575,7 +576,7 @@
 <a name="line532"></a>/**
 <a name="line533"></a> * Event used when a ManagedResourceStore update is complete
 <a name="line534"></a> * @param {string} type  The type of the event.
-<a name="line535"></a> * @param {string} opt_errorMessage  The error message if failure.
+<a name="line535"></a> * @param {string=} opt_errorMessage  The error message if failure.
 <a name="line536"></a> * @constructor
 <a name="line537"></a> * @extends {goog.events.Event}
 <a name="line538"></a> */

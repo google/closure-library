@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -96,10 +97,10 @@
 <a name="line53"></a> * All setters return &lt;code&gt;this&lt;/code&gt; and so may be chained, a la
 <a name="line54"></a> * &lt;code&gt;goog.Uri.parse(&#39;/foo&#39;).setFragment(&#39;part&#39;).toString()&lt;/code&gt;.
 <a name="line55"></a> *
-<a name="line56"></a> * @param {*} opt_uri Optional string URI to parse
+<a name="line56"></a> * @param {*=} opt_uri Optional string URI to parse
 <a name="line57"></a> *        (use goog.Uri.create() to create a URI from parts), or if
 <a name="line58"></a> *        a goog.Uri is passed, a clone is created.
-<a name="line59"></a> * @param {boolean} opt_ignoreCase If true, #getParameterValue will ignore
+<a name="line59"></a> * @param {boolean=} opt_ignoreCase If true, #getParameterValue will ignore
 <a name="line60"></a> * the case of the parameter name.
 <a name="line61"></a> *
 <a name="line62"></a> * @constructor
@@ -375,7 +376,7 @@
 <a name="line332"></a>/**
 <a name="line333"></a> * Sets the scheme/protocol.
 <a name="line334"></a> * @param {string} newScheme New scheme value.
-<a name="line335"></a> * @param {boolean} opt_decode Optional param for whether to decode new value.
+<a name="line335"></a> * @param {boolean=} opt_decode Optional param for whether to decode new value.
 <a name="line336"></a> * @return {goog.Uri} Reference to this URI object.
 <a name="line337"></a> */
 <a name="line338"></a>goog.Uri.prototype.setScheme = function(newScheme, opt_decode) {
@@ -411,7 +412,7 @@
 <a name="line368"></a>/**
 <a name="line369"></a> * Sets the userInfo.
 <a name="line370"></a> * @param {string} newUserInfo New userInfo value.
-<a name="line371"></a> * @param {boolean} opt_decode Optional param for whether to decode new value.
+<a name="line371"></a> * @param {boolean=} opt_decode Optional param for whether to decode new value.
 <a name="line372"></a> * @return {goog.Uri} Reference to this URI object.
 <a name="line373"></a> */
 <a name="line374"></a>goog.Uri.prototype.setUserInfo = function(newUserInfo, opt_decode) {
@@ -442,7 +443,7 @@
 <a name="line399"></a>/**
 <a name="line400"></a> * Sets the domain.
 <a name="line401"></a> * @param {string} newDomain New domain value.
-<a name="line402"></a> * @param {boolean} opt_decode Optional param for whether to decode new value.
+<a name="line402"></a> * @param {boolean=} opt_decode Optional param for whether to decode new value.
 <a name="line403"></a> * @return {goog.Uri} Reference to this URI object.
 <a name="line404"></a> */
 <a name="line405"></a>goog.Uri.prototype.setDomain = function(newDomain, opt_decode) {
@@ -511,7 +512,7 @@
 <a name="line468"></a>/**
 <a name="line469"></a> * Sets the path.
 <a name="line470"></a> * @param {string} newPath New path value.
-<a name="line471"></a> * @param {boolean} opt_decode Optional param for whether to decode new value.
+<a name="line471"></a> * @param {boolean=} opt_decode Optional param for whether to decode new value.
 <a name="line472"></a> * @return {goog.Uri} Reference to this URI object.
 <a name="line473"></a> */
 <a name="line474"></a>goog.Uri.prototype.setPath = function(newPath, opt_decode) {
@@ -541,7 +542,7 @@
 <a name="line498"></a>/**
 <a name="line499"></a> * Sets the query data.
 <a name="line500"></a> * @param {goog.Uri.QueryData|string|undefined} queryData QueryData object.
-<a name="line501"></a> * @param {boolean} opt_decode Optional param for whether to decode new value.
+<a name="line501"></a> * @param {boolean=} opt_decode Optional param for whether to decode new value.
 <a name="line502"></a> *     Applies only if queryData is a string.
 <a name="line503"></a> * @return {goog.Uri} Reference to this URI object.
 <a name="line504"></a> */
@@ -571,7 +572,7 @@
 <a name="line528"></a>/**
 <a name="line529"></a> * Sets the URI query.
 <a name="line530"></a> * @param {string} newQuery New query value.
-<a name="line531"></a> * @param {boolean} opt_decode Optional param for whether to decode new value.
+<a name="line531"></a> * @param {boolean=} opt_decode Optional param for whether to decode new value.
 <a name="line532"></a> * @return {goog.Uri} Reference to this URI object.
 <a name="line533"></a> */
 <a name="line534"></a>goog.Uri.prototype.setQuery = function(newQuery, opt_decode) {
@@ -696,7 +697,7 @@
 <a name="line653"></a>/**
 <a name="line654"></a> * Sets the URI fragment.
 <a name="line655"></a> * @param {string} newFragment New fragment value.
-<a name="line656"></a> * @param {boolean} opt_decode Optional param for whether to decode new value.
+<a name="line656"></a> * @param {boolean=} opt_decode Optional param for whether to decode new value.
 <a name="line657"></a> * @return {goog.Uri} Reference to this URI object.
 <a name="line658"></a> */
 <a name="line659"></a>goog.Uri.prototype.setFragment = function(newFragment, opt_decode) {
@@ -817,7 +818,7 @@
 <a name="line774"></a> *
 <a name="line775"></a> * @param {*} uri Raw URI string or instance of Uri
 <a name="line776"></a> *     object.
-<a name="line777"></a> * @param {boolean} opt_ignoreCase Whether to ignore the case of parameter
+<a name="line777"></a> * @param {boolean=} opt_ignoreCase Whether to ignore the case of parameter
 <a name="line778"></a> * names in #getParameterValue.
 <a name="line779"></a> * @return {goog.Uri} The new URI object.
 <a name="line780"></a> */
@@ -830,14 +831,14 @@
 <a name="line787"></a>/**
 <a name="line788"></a> * Creates a new goog.Uri object from unencoded parts.
 <a name="line789"></a> *
-<a name="line790"></a> * @param {?string} opt_scheme Scheme/protocol or full URI to parse.
-<a name="line791"></a> * @param {?string} opt_userInfo username:password.
-<a name="line792"></a> * @param {?string} opt_domain www.google.com.
-<a name="line793"></a> * @param {?number} opt_port 9830.
-<a name="line794"></a> * @param {?string} opt_path /some/path/to/a/file.html.
-<a name="line795"></a> * @param {string|goog.Uri.QueryData} opt_query a=1&amp;b=2.
-<a name="line796"></a> * @param {?string} opt_fragment The fragment without the #.
-<a name="line797"></a> * @param {boolean} opt_ignoreCase Whether to ignore parameter name case in
+<a name="line790"></a> * @param {?string=} opt_scheme Scheme/protocol or full URI to parse.
+<a name="line791"></a> * @param {?string=} opt_userInfo username:password.
+<a name="line792"></a> * @param {?string=} opt_domain www.google.com.
+<a name="line793"></a> * @param {?number=} opt_port 9830.
+<a name="line794"></a> * @param {?string=} opt_path /some/path/to/a/file.html.
+<a name="line795"></a> * @param {string|goog.Uri.QueryData=} opt_query a=1&amp;b=2.
+<a name="line796"></a> * @param {?string=} opt_fragment The fragment without the #.
+<a name="line797"></a> * @param {boolean=} opt_ignoreCase Whether to ignore parameter name case in
 <a name="line798"></a> *     #getParameterValue.
 <a name="line799"></a> *
 <a name="line800"></a> * @return {goog.Uri} The new URI object.
@@ -1062,11 +1063,11 @@
 <a name="line1019"></a> *
 <a name="line1020"></a> * Has the same interface as the collections in goog.structs.
 <a name="line1021"></a> *
-<a name="line1022"></a> * @param {?string} opt_query Optional encoded query string to parse into
+<a name="line1022"></a> * @param {?string=} opt_query Optional encoded query string to parse into
 <a name="line1023"></a> *     the object.
-<a name="line1024"></a> * @param {goog.Uri} opt_uri Optional uri object that should have it&#39;s cache
+<a name="line1024"></a> * @param {goog.Uri=} opt_uri Optional uri object that should have it&#39;s cache
 <a name="line1025"></a> *     invalidated when this object updates.
-<a name="line1026"></a> * @param {boolean} opt_ignoreCase If true, ignore the case of the parameter
+<a name="line1026"></a> * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
 <a name="line1027"></a> *     name in #get.
 <a name="line1028"></a> * @constructor
 <a name="line1029"></a> */
@@ -1130,9 +1131,9 @@
 <a name="line1087"></a> *
 <a name="line1088"></a> * @param {!goog.structs.Map|!Object} map Map of string parameter names to
 <a name="line1089"></a> *     string parameter values.
-<a name="line1090"></a> * @param {goog.Uri} opt_uri URI object that should have it&#39;s cache
+<a name="line1090"></a> * @param {goog.Uri=} opt_uri URI object that should have it&#39;s cache
 <a name="line1091"></a> *     invalidated when this object updates.
-<a name="line1092"></a> * @param {boolean} opt_ignoreCase If true, ignore the case of the parameter
+<a name="line1092"></a> * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
 <a name="line1093"></a> *     name in #get.
 <a name="line1094"></a> * @return {!goog.Uri.QueryData} The populated query data instance.
 <a name="line1095"></a> */
@@ -1156,9 +1157,9 @@
 <a name="line1113"></a> *
 <a name="line1114"></a> * @param {Array.&lt;string&gt;} keys Parameter names.
 <a name="line1115"></a> * @param {Array} values Parameter values.
-<a name="line1116"></a> * @param {goog.Uri} opt_uri URI object that should have it&#39;s cache
+<a name="line1116"></a> * @param {goog.Uri=} opt_uri URI object that should have it&#39;s cache
 <a name="line1117"></a> *     invalidated when this object updates.
-<a name="line1118"></a> * @param {boolean} opt_ignoreCase If true, ignore the case of the parameter
+<a name="line1118"></a> * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
 <a name="line1119"></a> *     name in #get.
 <a name="line1120"></a> * @return {!goog.Uri.QueryData} The populated query data instance.
 <a name="line1121"></a> */
@@ -1342,7 +1343,7 @@
 <a name="line1299"></a> * Returns all the values of the parameters with the given name. If the query
 <a name="line1300"></a> * data has no such key this will return an empty array. If no key is given
 <a name="line1301"></a> * all values wil be returned.
-<a name="line1302"></a> * @param {string} opt_key The name of the parameter to get the values for.
+<a name="line1302"></a> * @param {string=} opt_key The name of the parameter to get the values for.
 <a name="line1303"></a> * @return {Array} All the values of the parameters with the given name.
 <a name="line1304"></a> */
 <a name="line1305"></a>goog.Uri.QueryData.prototype.getValues = function(opt_key) {
@@ -1409,7 +1410,7 @@
 <a name="line1366"></a> * Returns the first value associated with the key. If the query data has no
 <a name="line1367"></a> * such key this will return undefined or the optional default.
 <a name="line1368"></a> * @param {string} key The name of the parameter to get the value for.
-<a name="line1369"></a> * @param {*} opt_default The default value to return if the query data
+<a name="line1369"></a> * @param {*=} opt_default The default value to return if the query data
 <a name="line1370"></a> *     has no such key.
 <a name="line1371"></a> * @return {*} The first value associated with the key.
 <a name="line1372"></a> */
@@ -1563,7 +1564,7 @@
 <a name="line1520"></a> * Helper function to get the key name from a JavaScript object. Converts
 <a name="line1521"></a> * the object to a string, and to lower case if necessary.
 <a name="line1522"></a> * @private
-<a name="line1523"></a> * @param {Object} arg The object to get a key name from.
+<a name="line1523"></a> * @param {*} arg The object to get a key name from.
 <a name="line1524"></a> * @return {string} valid key name which can be looked up in #keyMap_.
 <a name="line1525"></a> */
 <a name="line1526"></a>goog.Uri.QueryData.prototype.getKeyName_ = function(arg) {
@@ -1602,8 +1603,8 @@
 <a name="line1559"></a> * Extends a query data object with another query data or map like object. This
 <a name="line1560"></a> * operates &#39;in-place&#39;, it does not create a new QueryData object.
 <a name="line1561"></a> *
-<a name="line1562"></a> * @param {goog.Uri.QueryData|goog.structs.Map|Object} var_args The object from
-<a name="line1563"></a> *     which key value pairs will be copied.
+<a name="line1562"></a> * @param {...(goog.Uri.QueryData|goog.structs.Map|Object)} var_args The object
+<a name="line1563"></a> *     from which key value pairs will be copied.
 <a name="line1564"></a> */
 <a name="line1565"></a>goog.Uri.QueryData.prototype.extend = function(var_args) {
 <a name="line1566"></a>  for (var i = 0; i &lt; arguments.length; i++) {

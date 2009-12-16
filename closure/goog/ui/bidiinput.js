@@ -33,7 +33,7 @@ goog.require('goog.ui.Component');
 /**
  * Default implementation of BidiInput.
  *
- * @param {goog.dom.DomHelper} opt_domHelper  Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper  Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */

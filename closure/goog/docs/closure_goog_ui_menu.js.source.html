@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -105,8 +106,8 @@
 <a name="line62"></a>// TODO: Reverse constructor argument order for consistency.
 <a name="line63"></a>/**
 <a name="line64"></a> * A basic menu class.
-<a name="line65"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
-<a name="line66"></a> * @param {goog.ui.MenuRenderer} opt_renderer Renderer used to render or
+<a name="line65"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+<a name="line66"></a> * @param {goog.ui.MenuRenderer=} opt_renderer Renderer used to render or
 <a name="line67"></a> *     decorate the container; defaults to {@link goog.ui.MenuRenderer}.
 <a name="line68"></a> * @constructor
 <a name="line69"></a> * @extends {goog.ui.Container}
@@ -296,7 +297,7 @@
 <a name="line253"></a>/**
 <a name="line254"></a> * Sets the position of the menu relative to the view port.
 <a name="line255"></a> * @param {number|goog.math.Coordinate} x Left position or coordinate obj.
-<a name="line256"></a> * @param {number} opt_y Top position.
+<a name="line256"></a> * @param {number=} opt_y Top position.
 <a name="line257"></a> */
 <a name="line258"></a>goog.ui.Menu.prototype.setPosition = function(x, opt_y) {
 <a name="line259"></a>  // NOTE: It is necessary to temporarily set the display from none, so

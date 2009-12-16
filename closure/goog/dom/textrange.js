@@ -47,7 +47,7 @@ goog.inherits(goog.dom.TextRange, goog.dom.AbstractRange);
  * Create a new range wrapper from the given browser range object.  Do not use
  * this method directly - please use goog.dom.Range.createFrom* instead.
  * @param {Range|TextRange} range The browser range object.
- * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+ * @param {boolean=} opt_isReversed Whether the focus node is before the anchor
  *     node.
  * @return {goog.dom.TextRange} A range wrapper object.
  */
@@ -61,7 +61,7 @@ goog.dom.TextRange.createFromBrowserRange = function(range, opt_isReversed) {
  * Create a new range wrapper from the given browser range wrapper.
  * @param {goog.dom.browserrange.AbstractRange} browserRange The browser range
  *     wrapper.
- * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+ * @param {boolean=} opt_isReversed Whether the focus node is before the anchor
  *     node.
  * @return {goog.dom.TextRange} A range wrapper object.
  * @private
@@ -82,7 +82,7 @@ goog.dom.TextRange.createFromBrowserRangeWrapper_ = function(browserRange,
  * Create a new range wrapper that selects the given node's text.  Do not use
  * this method directly - please use goog.dom.Range.createFrom* instead.
  * @param {Node} node The node to select.
- * @param {boolean} opt_isReversed Whether the focus node is before the anchor
+ * @param {boolean=} opt_isReversed Whether the focus node is before the anchor
  *     node.
  * @return {goog.dom.TextRange} A range wrapper object.
  */
@@ -456,7 +456,7 @@ goog.dom.TextRange.prototype.getPastableHtml = function() {
 /**
  * Returns a TextRangeIterator over the contents of the range.  Regardless of
  * the direction of the range, the iterator will move in document order.
- * @param {boolean} opt_keys Unused for this iterator.
+ * @param {boolean=} opt_keys Unused for this iterator.
  * @return {goog.dom.TextRangeIterator} An iterator over tags in the range.
  */
 goog.dom.TextRange.prototype.__iterator__ = function(opt_keys) {

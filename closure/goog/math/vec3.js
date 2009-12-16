@@ -33,9 +33,9 @@ goog.require('goog.math.Coordinate3');
  * Inherits from goog.math.Coordinate3 so that a Vec3 may be passed in to any
  * function that requires a Coordinate.
  *
- * @param {number} opt_x The x value for the vector.
- * @param {number} opt_y The y value for the vector.
- * @param {number} opt_z The z value for the vector.
+ * @param {number=} opt_x The x value for the vector.
+ * @param {number=} opt_y The y value for the vector.
+ * @param {number=} opt_z The z value for the vector.
  * @constructor
  * @extends {goog.math.Coordinate3}
  */

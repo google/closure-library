@@ -34,10 +34,10 @@ goog.require('goog.testing.asserts');
  * start from the end tag of the node, meaning all its descendants will be
  * included in the search, unless opt_skipDescendants is true.
  * @param {Node} node Node to start searching from.
- * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
- *     to this node's subtree), defaults to the body of the document containing
- *     node.
- * @param {boolean} opt_skipDescendants Whether to skip searching the given
+ * @param {Node=} opt_stopAt Node to stop searching at (search will be
+ *     restricted to this node's subtree), defaults to the body of the document
+ *     containing node.
+ * @param {boolean=} opt_skipDescendants Whether to skip searching the given
  *     node's descentants.
  * @return {Text} The previous (in document order) node from the given node
  *     that is a non-empty text node, or null if none is found.
@@ -56,10 +56,10 @@ goog.testing.editor.dom.getPreviousNonEmptyTextNode = function(
  * start from the start tag of the node, meaning all its descendants will be
  * included in the search, unless opt_skipDescendants is true.
  * @param {Node} node Node to start searching from.
- * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
- *     to this node's subtree), defaults to the body of the document containing
- *     node.
- * @param {boolean} opt_skipDescendants Whether to skip searching the given
+ * @param {Node=} opt_stopAt Node to stop searching at (search will be
+ *     restricted to this node's subtree), defaults to the body of the document
+ *     containing node.
+ * @param {boolean=} opt_skipDescendants Whether to skip searching the given
  *     node's descentants.
  * @return {Text} The next (in document order) node from the given node that
  *     is a non-empty text node, or null if none is found or opt_stopAt is not
@@ -81,12 +81,12 @@ goog.testing.editor.dom.getNextNonEmptyTextNode = function(
  * all its descendants will be included in the search, unless
  * opt_skipDescendants is true.
  * @param {Node} node Node to start searching from.
- * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
- *     to this node's subtree), defaults to the body of the document containing
- *     node.
- * @param {boolean} opt_skipDescendants Whether to skip searching the given
+ * @param {Node=} opt_stopAt Node to stop searching at (search will be
+ *     restricted to this node's subtree), defaults to the body of the document
+ *     containing node.
+ * @param {boolean=} opt_skipDescendants Whether to skip searching the given
  *   node's descentants.
- * @param {boolean} opt_isPrevious Whether to search for the previous non-empty
+ * @param {boolean=} opt_isPrevious Whether to search for the previous non-empty
  *     text node instead of the next one.
  * @return {Text} The next (in document order) node from the given node that
  *     is a non-empty text node, or null if none is found or opt_stopAt is not
@@ -192,8 +192,8 @@ goog.testing.editor.dom.getRelativeDepth_ = function(node, parentNode) {
  *     point of the range. If this is the empty string, assert will only succeed
  *     if there is no text after the end point of the range.
  * @param {goog.dom.AbstractRange} range The range to be tested.
- * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
- *     to this node's subtree).
+ * @param {Node=} opt_stopAt Node to stop searching at (search will be
+ *     restricted to this node's subtree).
  */
 goog.testing.editor.dom.assertRangeBetweenText = function(before,
                                                           after,
@@ -235,8 +235,8 @@ goog.testing.editor.dom.assertRangeBetweenText = function(before,
  * @param {goog.dom.AbstractRange} range The range to search from.
  * @param {boolean} isBefore Whether to search before the range instead of
  *     after it.
- * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
- *     to this node's subtree).
+ * @param {Node=} opt_stopAt Node to stop searching at (search will be
+ *     restricted to this node's subtree).
  * @return {?string} The text that follows the given range, or null if no
  *     non-empty text node is found.
  * @private

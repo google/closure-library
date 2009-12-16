@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -279,12 +280,12 @@
 <a name="line236"></a> * request.
 <a name="line237"></a> * @param {goog.Uri|string} uri Uri of the request, it is up the caller to
 <a name="line238"></a> *     manage query string params.
-<a name="line239"></a> * @param {Function} opt_callback Event handler for when request is completed.
-<a name="line240"></a> * @param {string} opt_method Default is GET, POST uses a form to submit the
+<a name="line239"></a> * @param {Function=} opt_callback Event handler for when request is completed.
+<a name="line240"></a> * @param {string=} opt_method Default is GET, POST uses a form to submit the
 <a name="line241"></a> *     request.
-<a name="line242"></a> * @param {boolean} opt_noCache Append a timestamp to the request to avoid
+<a name="line242"></a> * @param {boolean=} opt_noCache Append a timestamp to the request to avoid
 <a name="line243"></a> *     caching.
-<a name="line244"></a> * @param {Object|goog.structs.Map} opt_data Map of key-value pairs that
+<a name="line244"></a> * @param {Object|goog.structs.Map=} opt_data Map of key-value pairs that
 <a name="line245"></a> *     will be posted to the server via the iframe&#39;s form.
 <a name="line246"></a> */
 <a name="line247"></a>goog.net.IframeIo.send = function(
@@ -540,11 +541,11 @@
 <a name="line497"></a> * stop a history entry being added for POST requests.
 <a name="line498"></a> *
 <a name="line499"></a> * @param {goog.Uri|string} uri Uri of the request.
-<a name="line500"></a> * @param {string} opt_method Default is GET, POST uses a form to submit the
+<a name="line500"></a> * @param {string=} opt_method Default is GET, POST uses a form to submit the
 <a name="line501"></a> *     request.
-<a name="line502"></a> * @param {boolean} opt_noCache Append a timestamp to the request to avoid
+<a name="line502"></a> * @param {boolean=} opt_noCache Append a timestamp to the request to avoid
 <a name="line503"></a> *     caching.
-<a name="line504"></a> * @param {Object|goog.structs.Map} opt_data Map of key-value pairs.
+<a name="line504"></a> * @param {Object|goog.structs.Map=} opt_data Map of key-value pairs.
 <a name="line505"></a> */
 <a name="line506"></a>goog.net.IframeIo.prototype.send = function(
 <a name="line507"></a>    uri, opt_method, opt_noCache, opt_data) {
@@ -603,9 +604,9 @@
 <a name="line560"></a> *
 <a name="line561"></a> * @param {HTMLFormElement} form Form element used to send the request to the
 <a name="line562"></a> *     server.
-<a name="line563"></a> * @param {string} opt_uri Uri to set for the destination of the request, by
+<a name="line563"></a> * @param {string=} opt_uri Uri to set for the destination of the request, by
 <a name="line564"></a> *     default the uri will come from the form.
-<a name="line565"></a> * @param {boolean} opt_noCache Append a timestamp to the request to avoid
+<a name="line565"></a> * @param {boolean=} opt_noCache Append a timestamp to the request to avoid
 <a name="line566"></a> *     caching.
 <a name="line567"></a> */
 <a name="line568"></a>goog.net.IframeIo.prototype.sendFromForm = function(form, opt_uri,
@@ -630,7 +631,7 @@
 <a name="line587"></a>
 <a name="line588"></a>/**
 <a name="line589"></a> * Abort the current Iframe request
-<a name="line590"></a> * @param {goog.net.ErrorCode} opt_failureCode Optional error code to use -
+<a name="line590"></a> * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
 <a name="line591"></a> *     defaults to ABORT.
 <a name="line592"></a> */
 <a name="line593"></a>goog.net.IframeIo.prototype.abort = function(opt_failureCode) {
@@ -1098,8 +1099,8 @@
 <a name="line1055"></a>/**
 <a name="line1056"></a> * Handles errors.
 <a name="line1057"></a> * @param {goog.net.ErrorCode} errorCode Error code.
-<a name="line1058"></a> * @param {Object} opt_customError If error is CUSTOM_ERROR, this is the client-
-<a name="line1059"></a> *     provided custom error.
+<a name="line1058"></a> * @param {Object=} opt_customError If error is CUSTOM_ERROR, this is the
+<a name="line1059"></a> *     client-provided custom error.
 <a name="line1060"></a> * @private
 <a name="line1061"></a> */
 <a name="line1062"></a>goog.net.IframeIo.prototype.handleError_ = function(errorCode,

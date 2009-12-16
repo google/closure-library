@@ -48,7 +48,7 @@ goog.require('goog.ds.logger');
  *
  * @param {string|goog.Uri} uri URI for the request.
  * @param {string} name Name of the datasource.
- * @param {string} opt_callbackParamName The parameter name that is used to
+ * @param {string=} opt_callbackParamName The parameter name that is used to
  *     specify the callback. Defaults to 'callback'.
  *
  * @extends {goog.ds.JsDataSource}

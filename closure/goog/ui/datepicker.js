@@ -45,10 +45,10 @@ goog.require('goog.style');
  * manipulation.
  *
  * @extends {goog.events.EventTarget}
- * @param {goog.date.Date|Date} opt_date Date to initialize the date picker
+ * @param {goog.date.Date|Date=} opt_date Date to initialize the date picker
  *     with, defaults to the current date.
- * @param {Object} opt_dateTimeSymbols Date and time symbols to use. Defaults to
- *     goog.i18n.DateTimeSymbols if not set.
+ * @param {Object=} opt_dateTimeSymbols Date and time symbols to use.
+ *     Defaults to goog.i18n.DateTimeSymbols if not set.
  * @constructor
  * @see goog.date.Date
  */
@@ -1070,7 +1070,7 @@ goog.ui.DatePicker.prototype.destroyMenu_ = function() {
  * @param {Element} parentNode Container the button should be added to.
  * @param {string} label Button label.
  * @param {Function} method Event handler.
- * @param {string} opt_className Class name for button, which will be used
+ * @param {string=} opt_className Class name for button, which will be used
  *    in addition to "goog-date-picker-btn".
  * @private
  * @return {Element} The created button element.

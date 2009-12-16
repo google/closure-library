@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -75,11 +76,11 @@
 <a name="line32"></a> * of this class. Instead us goog.graphics.createGraphics
 <a name="line33"></a> * @param {number|string} width The width in pixels or percent.
 <a name="line34"></a> * @param {number|string} height The height in pixels or percent.
-<a name="line35"></a> * @param {?number} opt_coordWidth Optional coordinate system width - if
+<a name="line35"></a> * @param {?number=} opt_coordWidth Optional coordinate system width - if
 <a name="line36"></a> *     omitted or null, defaults to same as width.
-<a name="line37"></a> * @param {?number} opt_coordHeight Optional coordinate system height - if
+<a name="line37"></a> * @param {?number=} opt_coordHeight Optional coordinate system height - if
 <a name="line38"></a> *     omitted or null, defaults to same as height.
-<a name="line39"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+<a name="line39"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
 <a name="line40"></a> *     document we want to render in.
 <a name="line41"></a> * @constructor
 <a name="line42"></a> * @extends {goog.ui.Component}
@@ -299,7 +300,7 @@
 <a name="line256"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
 <a name="line257"></a> *    stroke.
 <a name="line258"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line259"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line259"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
 <a name="line260"></a> *     append to. If not specified, appends to the main canvas.
 <a name="line261"></a> *
 <a name="line262"></a> * @return {goog.graphics.EllipseElement} The newly created element.
@@ -320,7 +321,7 @@
 <a name="line277"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
 <a name="line278"></a> *    stroke.
 <a name="line279"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line280"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line280"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
 <a name="line281"></a> *     append to. If not specified, appends to the main canvas.
 <a name="line282"></a> *
 <a name="line283"></a> * @return {goog.graphics.EllipseElement} The newly created element.
@@ -338,7 +339,7 @@
 <a name="line295"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
 <a name="line296"></a> *    stroke.
 <a name="line297"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line298"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line298"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
 <a name="line299"></a> *     append to. If not specified, appends to the main canvas.
 <a name="line300"></a> *
 <a name="line301"></a> * @return {goog.graphics.RectElement} The newly created element.
@@ -360,7 +361,7 @@
 <a name="line317"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
 <a name="line318"></a> *    stroke.
 <a name="line319"></a> * @param {goog.graphics.Fill?} fill  Fill object describing the fill.
-<a name="line320"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line320"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
 <a name="line321"></a> *     append to. If not specified, appends to the main canvas.
 <a name="line322"></a> *
 <a name="line323"></a> * @return {goog.graphics.TextElement} The newly created element.
@@ -395,7 +396,7 @@
 <a name="line352"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
 <a name="line353"></a> *    stroke.
 <a name="line354"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line355"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line355"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
 <a name="line356"></a> *     append to. If not specified, appends to the main canvas.
 <a name="line357"></a> *
 <a name="line358"></a> * @return {goog.graphics.TextElement} The newly created element.
@@ -410,7 +411,7 @@
 <a name="line367"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
 <a name="line368"></a> *    stroke.
 <a name="line369"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line370"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line370"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
 <a name="line371"></a> *     append to. If not specified, appends to the main canvas.
 <a name="line372"></a> *
 <a name="line373"></a> * @return {goog.graphics.PathElement} The newly created element.
@@ -421,7 +422,7 @@
 <a name="line378"></a>/**
 <a name="line379"></a> * Create an empty group of drawing elements.
 <a name="line380"></a> *
-<a name="line381"></a> * @param {goog.graphics.GroupElement} opt_group The group wrapper element to
+<a name="line381"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element to
 <a name="line382"></a> *     append to. If not specified, appends to the main canvas.
 <a name="line383"></a> *
 <a name="line384"></a> * @return {goog.graphics.GroupElement} The newly created group.

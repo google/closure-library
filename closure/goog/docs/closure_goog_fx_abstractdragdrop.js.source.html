@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -534,7 +535,7 @@
 <a name="line491"></a>/**
 <a name="line492"></a> * Called after a drag operation has finished.
 <a name="line493"></a> *
-<a name="line494"></a> * @param {goog.fx.DragDropItem} opt_dropTarget Target for successful drop.
+<a name="line494"></a> * @param {goog.fx.DragDropItem=} opt_dropTarget Target for successful drop.
 <a name="line495"></a> * @protected
 <a name="line496"></a> */
 <a name="line497"></a>goog.fx.AbstractDragDrop.prototype.afterEndDrag = function(opt_dropTarget) {
@@ -1085,14 +1086,14 @@
 <a name="line1042"></a> * @param {string} type Event type.
 <a name="line1043"></a> * @param {goog.fx.AbstractDragDrop} source Source drag drop object.
 <a name="line1044"></a> * @param {goog.fx.DragDropItem} sourceItem Source item.
-<a name="line1045"></a> * @param {goog.fx.AbstractDragDrop} opt_target Target drag drop object.
-<a name="line1046"></a> * @param {goog.fx.DragDropItem} opt_targetItem Target item.
-<a name="line1047"></a> * @param {Element} opt_targetElement Target element.
-<a name="line1048"></a> * @param {number} opt_clientX X-Position relative to the screen.
-<a name="line1049"></a> * @param {number} opt_clientY Y-Position relative to the screen.
-<a name="line1050"></a> * @param {number} opt_x X-Position relative to the viewport.
-<a name="line1051"></a> * @param {number} opt_y Y-Position relative to the viewport.
-<a name="line1052"></a> * @param {Object} opt_subtarget The currently active subtarget.
+<a name="line1045"></a> * @param {goog.fx.AbstractDragDrop=} opt_target Target drag drop object.
+<a name="line1046"></a> * @param {goog.fx.DragDropItem=} opt_targetItem Target item.
+<a name="line1047"></a> * @param {Element=} opt_targetElement Target element.
+<a name="line1048"></a> * @param {number=} opt_clientX X-Position relative to the screen.
+<a name="line1049"></a> * @param {number=} opt_clientY Y-Position relative to the screen.
+<a name="line1050"></a> * @param {number=} opt_x X-Position relative to the viewport.
+<a name="line1051"></a> * @param {number=} opt_y Y-Position relative to the viewport.
+<a name="line1052"></a> * @param {Object=} opt_subtarget The currently active subtarget.
 <a name="line1053"></a> * @extends {goog.events.Event}
 <a name="line1054"></a> * @constructor
 <a name="line1055"></a> */
@@ -1187,7 +1188,7 @@
 <a name="line1144"></a> *
 <a name="line1145"></a> * @param {Element|string} element Dom Node, or string representation of node
 <a name="line1146"></a> *     id, to be used as drag source/drop target.
-<a name="line1147"></a> * @param {Object} opt_data Data associated with the source/target.
+<a name="line1147"></a> * @param {Object=} opt_data Data associated with the source/target.
 <a name="line1148"></a> * @throws Error If no element argument is provided or if the type is invalid
 <a name="line1149"></a> * @extends {goog.events.EventTarget}
 <a name="line1150"></a> * @constructor
@@ -1371,10 +1372,10 @@
 <a name="line1328"></a> *
 <a name="line1329"></a> * @param {goog.math.Box} box Box describing the position and dimension of the
 <a name="line1330"></a> *     target item.
-<a name="line1331"></a> * @param {goog.fx.AbstractDragDrop} opt_target Target that contains the item
+<a name="line1331"></a> * @param {goog.fx.AbstractDragDrop=} opt_target Target that contains the item
 <a name="line1332"></a>       associated with position.
-<a name="line1333"></a> * @param {goog.fx.DragDropItem} opt_item Item associated with position.
-<a name="line1334"></a> * @param {Element} opt_element Element of item associated with position.
+<a name="line1333"></a> * @param {goog.fx.DragDropItem=} opt_item Item associated with position.
+<a name="line1334"></a> * @param {Element=} opt_element Element of item associated with position.
 <a name="line1335"></a> * @constructor
 <a name="line1336"></a> * @private
 <a name="line1337"></a> */

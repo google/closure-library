@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -77,10 +78,10 @@
 <a name="line34"></a> * start from the end tag of the node, meaning all its descendants will be
 <a name="line35"></a> * included in the search, unless opt_skipDescendants is true.
 <a name="line36"></a> * @param {Node} node Node to start searching from.
-<a name="line37"></a> * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
-<a name="line38"></a> *     to this node&#39;s subtree), defaults to the body of the document containing
-<a name="line39"></a> *     node.
-<a name="line40"></a> * @param {boolean} opt_skipDescendants Whether to skip searching the given
+<a name="line37"></a> * @param {Node=} opt_stopAt Node to stop searching at (search will be
+<a name="line38"></a> *     restricted to this node&#39;s subtree), defaults to the body of the document
+<a name="line39"></a> *     containing node.
+<a name="line40"></a> * @param {boolean=} opt_skipDescendants Whether to skip searching the given
 <a name="line41"></a> *     node&#39;s descentants.
 <a name="line42"></a> * @return {Text} The previous (in document order) node from the given node
 <a name="line43"></a> *     that is a non-empty text node, or null if none is found.
@@ -99,10 +100,10 @@
 <a name="line56"></a> * start from the start tag of the node, meaning all its descendants will be
 <a name="line57"></a> * included in the search, unless opt_skipDescendants is true.
 <a name="line58"></a> * @param {Node} node Node to start searching from.
-<a name="line59"></a> * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
-<a name="line60"></a> *     to this node&#39;s subtree), defaults to the body of the document containing
-<a name="line61"></a> *     node.
-<a name="line62"></a> * @param {boolean} opt_skipDescendants Whether to skip searching the given
+<a name="line59"></a> * @param {Node=} opt_stopAt Node to stop searching at (search will be
+<a name="line60"></a> *     restricted to this node&#39;s subtree), defaults to the body of the document
+<a name="line61"></a> *     containing node.
+<a name="line62"></a> * @param {boolean=} opt_skipDescendants Whether to skip searching the given
 <a name="line63"></a> *     node&#39;s descentants.
 <a name="line64"></a> * @return {Text} The next (in document order) node from the given node that
 <a name="line65"></a> *     is a non-empty text node, or null if none is found or opt_stopAt is not
@@ -124,12 +125,12 @@
 <a name="line81"></a> * all its descendants will be included in the search, unless
 <a name="line82"></a> * opt_skipDescendants is true.
 <a name="line83"></a> * @param {Node} node Node to start searching from.
-<a name="line84"></a> * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
-<a name="line85"></a> *     to this node&#39;s subtree), defaults to the body of the document containing
-<a name="line86"></a> *     node.
-<a name="line87"></a> * @param {boolean} opt_skipDescendants Whether to skip searching the given
+<a name="line84"></a> * @param {Node=} opt_stopAt Node to stop searching at (search will be
+<a name="line85"></a> *     restricted to this node&#39;s subtree), defaults to the body of the document
+<a name="line86"></a> *     containing node.
+<a name="line87"></a> * @param {boolean=} opt_skipDescendants Whether to skip searching the given
 <a name="line88"></a> *   node&#39;s descentants.
-<a name="line89"></a> * @param {boolean} opt_isPrevious Whether to search for the previous non-empty
+<a name="line89"></a> * @param {boolean=} opt_isPrevious Whether to search for the previous non-empty
 <a name="line90"></a> *     text node instead of the next one.
 <a name="line91"></a> * @return {Text} The next (in document order) node from the given node that
 <a name="line92"></a> *     is a non-empty text node, or null if none is found or opt_stopAt is not
@@ -235,8 +236,8 @@
 <a name="line192"></a> *     point of the range. If this is the empty string, assert will only succeed
 <a name="line193"></a> *     if there is no text after the end point of the range.
 <a name="line194"></a> * @param {goog.dom.AbstractRange} range The range to be tested.
-<a name="line195"></a> * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
-<a name="line196"></a> *     to this node&#39;s subtree).
+<a name="line195"></a> * @param {Node=} opt_stopAt Node to stop searching at (search will be
+<a name="line196"></a> *     restricted to this node&#39;s subtree).
 <a name="line197"></a> */
 <a name="line198"></a>goog.testing.editor.dom.assertRangeBetweenText = function(before,
 <a name="line199"></a>                                                          after,
@@ -278,8 +279,8 @@
 <a name="line235"></a> * @param {goog.dom.AbstractRange} range The range to search from.
 <a name="line236"></a> * @param {boolean} isBefore Whether to search before the range instead of
 <a name="line237"></a> *     after it.
-<a name="line238"></a> * @param {Node} opt_stopAt Node to stop searching at (search will be restricted
-<a name="line239"></a> *     to this node&#39;s subtree).
+<a name="line238"></a> * @param {Node=} opt_stopAt Node to stop searching at (search will be
+<a name="line239"></a> *     restricted to this node&#39;s subtree).
 <a name="line240"></a> * @return {?string} The text that follows the given range, or null if no
 <a name="line241"></a> *     non-empty text node is found.
 <a name="line242"></a> * @private

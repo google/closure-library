@@ -188,6 +188,27 @@ limitations under the License.
                   'Should not be undefined\nExpected not to be <undefined>');
   }
 
+  function testAssertNotNullNorUndefined() {
+    assertNotNullNorUndefined(true);
+    assertNotNullNorUndefined('Good assertion', true);
+    assertNotNullNorUndefined(false);
+    assertNotNullNorUndefined(1);
+    assertNotNullNorUndefined(0);
+    assertNotNullNorUndefined('a');
+    assertFailure(function() {
+      assertNotNullNorUndefined(undefined);
+    }, 'Expected not to be <undefined>');
+    assertFailure(function() {
+      assertNotNullNorUndefined('Should not be undefined', undefined);
+    }, 'Should not be undefined\nExpected not to be <undefined>');
+    assertFailure(function() {
+      assertNotNullNorUndefined(null);
+    }, 'Expected not to be <null>');
+    assertFailure(function() {
+      assertNotNullNorUndefined('Should not be null', null);
+    }, 'Should not be null\nExpected not to be <null>');
+  }
+
   function testAssertNonEmptyString() {
     assertNonEmptyString('hello');
     assertNonEmptyString('Good assertion', 'hello');
@@ -634,7 +655,6 @@ limitations under the License.
     }
     assertFalse('Fail should not get set to true', fail);
 
-
     try {
       assertThrows('assertThrows should not pass with number param', 1);
       fail = true;
@@ -657,14 +677,23 @@ limitations under the License.
     assertFalse('Fail should not get set to true', fail);
 
     try {
-      assertThrows('valid function',
+      var error = assertThrows('valid function throws Error', function() {
+        throw new Error('test');
+      });
+    } catch (e) {
+      fail('assertThrows incorrectly doesn\'t detect a thrown exception');
+    }
+    assertEquals('error message', 'test', error.message);
+
+    try {
+      var stringError = assertThrows('valid function throws string error',
           function() {
-            throw new Error('test');
+            throw 'string error test';
           });
     } catch (e) {
-      assertFalse(
-          'assertThrows incorrectly doesn\'t detect a thrown exception', true);
+      fail('assertThrows doesn\'t detect a thrown string exception');
     }
+    assertEquals('string error', 'string error test', stringError);
   }
 
   function testAssertNotThrows() {

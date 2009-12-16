@@ -35,7 +35,7 @@ goog.require('goog.events.EventTarget');
  * the current idle time.
  * TODO: Expand this class to allow it to monitor multiple DOMs.
  *
- * @param {goog.dom.DomHelper|Array.<goog.dom.DomHelper>} opt_domHelper
+ * @param {goog.dom.DomHelper|Array.<goog.dom.DomHelper>=} opt_domHelper
  *     DomHelper which contains the document(s) to listen to.  If null, the
  *     default document is usedinstead.
  *
@@ -232,7 +232,7 @@ goog.ui.ActivityMonitor.prototype.updateIdleTime_ = function(eventTime,
 
 /**
  * Returns the amount of time the user has been idle.
- * @param {number} opt_now The current time can optionally be passed in for the
+ * @param {number=} opt_now The current time can optionally be passed in for the
  *     computation to avoid an extra Date allocation.
  * @return {number} The amount of time in ms that the user has been idle.
  */

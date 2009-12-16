@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -74,13 +75,13 @@
 <a name="line31"></a> * @param {string|RegExp} tag Name of the tag.  Also will accept a regular
 <a name="line32"></a> *     expression to match against the tag name.
 <a name="line33"></a> * @param {goog.dom.TagWalkType} type Type of token to match.
-<a name="line34"></a> * @param {Object} opt_attrs Optional map of attribute names to desired values.
+<a name="line34"></a> * @param {Object=} opt_attrs Optional map of attribute names to desired values.
 <a name="line35"></a> *     This pattern will only match when all attributes are present and match
 <a name="line36"></a> *     the string or regular expression value provided here.
-<a name="line37"></a> * @param {Object} opt_styles Optional map of CSS style names to desired values.
-<a name="line38"></a> *     This pattern will only match when all styles are present and match the
-<a name="line39"></a> *     string or regular expression value provided here.
-<a name="line40"></a> * @param {Function} opt_test Optional function that takes the element as a
+<a name="line37"></a> * @param {Object=} opt_styles Optional map of CSS style names to desired
+<a name="line38"></a> *     values. This pattern will only match when all styles are present and
+<a name="line39"></a> *     match the string or regular expression value provided here.
+<a name="line40"></a> * @param {Function=} opt_test Optional function that takes the element as a
 <a name="line41"></a> *     parameter and returns true if this pattern should match it.
 <a name="line42"></a> * @constructor
 <a name="line43"></a> * @extends {goog.dom.pattern.AbstractPattern}

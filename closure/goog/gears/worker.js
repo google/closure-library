@@ -30,7 +30,7 @@ goog.require('goog.events.EventTarget');
  * This is an absctraction of workers that can be used with Gears WorkerPool.
  * @constructor
  * @param {goog.gears.WorkerPool} workerPool  WorkerPool object.
- * @param {number} opt_id  The id of the worker this represents.
+ * @param {number=} opt_id  The id of the worker this represents.
  *
  * @extends {goog.events.EventTarget}
  */

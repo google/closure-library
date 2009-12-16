@@ -28,8 +28,8 @@ goog.require('goog.Disposable');
  * stopPropagation.
  *
  * @param {string} type Event Type.
- * @param {Object} opt_target Reference to the object that is the target of this
- *     event.
+ * @param {Object=} opt_target Reference to the object that is the target of
+ *     this event.
  * @constructor
  * @extends {goog.Disposable}
  */

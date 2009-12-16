@@ -118,7 +118,7 @@ goog.require('goog.userAgent');
  * A wrapper around an element that you want to listen to keyboard events on.
  * XXX: {Document|Element} != {Element|Document}.
  * see: http://b/1470354
- * @param {Element|Document} opt_element The element or document to listen on.
+ * @param {Element|Document=} opt_element The element or document to listen on.
  * @constructor
  * @extends {goog.events.EventTarget}
  */

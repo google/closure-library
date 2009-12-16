@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -354,7 +355,7 @@
 <a name="line311"></a>/**
 <a name="line312"></a> * Sets the current value of any element with a type.
 <a name="line313"></a> * @param {Element} el The element.
-<a name="line314"></a> * @param {string|Array} opt_value The value to give to the element.
+<a name="line314"></a> * @param {string|Array=} opt_value The value to give to the element.
 <a name="line315"></a> */
 <a name="line316"></a>goog.dom.forms.setValue = function(el, opt_value) {
 <a name="line317"></a>  var type = el.type;
@@ -386,7 +387,7 @@
 <a name="line343"></a> * the value property but my hunch is that the primary use case is to check a
 <a name="line344"></a> * checkbox, not to reset its value property.
 <a name="line345"></a> * @param {Element} el The element.
-<a name="line346"></a> * @param {string|boolean} opt_value The value, sets the element checked if
+<a name="line346"></a> * @param {string|boolean=} opt_value The value, sets the element checked if
 <a name="line347"></a> *     val is set.
 <a name="line348"></a> * @private
 <a name="line349"></a> */
@@ -398,7 +399,7 @@
 <a name="line355"></a>/**
 <a name="line356"></a> * Sets the value of a select-one element.
 <a name="line357"></a> * @param {Element} el The element.
-<a name="line358"></a> * @param {string} opt_value The value of the selected option element.
+<a name="line358"></a> * @param {string=} opt_value The value of the selected option element.
 <a name="line359"></a> * @private
 <a name="line360"></a> */
 <a name="line361"></a>goog.dom.forms.setSelectSingle_ = function(el, opt_value) {
@@ -418,7 +419,7 @@
 <a name="line375"></a>/**
 <a name="line376"></a> * Sets the value of a select-multiple element.
 <a name="line377"></a> * @param {Element} el The element.
-<a name="line378"></a> * @param {Array.&lt;string&gt;|string} opt_value The value of the selected option
+<a name="line378"></a> * @param {Array.&lt;string&gt;|string=} opt_value The value of the selected option
 <a name="line379"></a> *     element(s).
 <a name="line380"></a> * @private
 <a name="line381"></a> */

@@ -33,11 +33,11 @@ goog.require('goog.ui.HsvPalette');
 /**
  * Creates an HSVA palette. Allows a user to select the hue, saturation,
  * value/brightness and alpha/opacity.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
- * @param {string} opt_color Optional initial color, without alpha (default is
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {string=} opt_color Optional initial color, without alpha (default is
  *     red).
- * @param {number} opt_alpha Optional initial alpha (default is 1).
- * @param {string} opt_class Optional base for creating classnames (default is
+ * @param {number=} opt_alpha Optional initial alpha (default is 1).
+ * @param {string=} opt_class Optional base for creating classnames (default is
  *     'goog-hsva-palette').
  * @extends {goog.ui.HsvPalette}
  * @constructor

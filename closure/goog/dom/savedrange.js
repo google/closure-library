@@ -47,7 +47,7 @@ goog.dom.SavedRange.logger_ =
 /**
  * Restores the range and by default disposes of the saved copy.  Take note:
  * this means the by default SavedRange objects are single use objects.
- * @param {boolean} opt_stayAlive Whether this SavedRange should stay alive
+ * @param {boolean=} opt_stayAlive Whether this SavedRange should stay alive
  *     (not be disposed) after restoring the range. Defaults to false (dispose).
  * @return {goog.dom.AbstractRange} The restored range.
  */

@@ -158,7 +158,7 @@ goog.gears.FakeWorkerPool_.prototype.sendMessage =
  * messages
  * @param {string} message  The message sent to this worker.
  * @param {number} sender  The id of the worker that sent this message.
- * @param {Object} opt_messageObject An object containing all information about
+ * @param {Object=} opt_messageObject An object containing all information about
  *     the message.
  */
 goog.gears.FakeWorkerPool_.prototype.onmessage = function(message,

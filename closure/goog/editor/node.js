@@ -216,7 +216,7 @@ goog.editor.node.isAllNonNbspWhiteSpace = function(textNode) {
  * Returns true if the node contains only whitespace and is not and does not
  * contain any images, iframes or embed tags.
  * @param {Node} node The node to check.
- * @param {boolean} opt_prohibitSingleNbsp By default, this function treats a
+ * @param {boolean=} opt_prohibitSingleNbsp By default, this function treats a
  *     single nbsp as empty.  Set this to true to treat this case as non-empty.
  * @return {boolean} Whether the node contains only whitespace.
  */
@@ -378,10 +378,10 @@ goog.editor.node.findTopMostEditableAncestor = function(node, criteria) {
 /**
  * Splits off a subtree.
  * @param {!Node} currentNode The starting splitting point.
- * @param {Node} opt_secondHalf The initial leftmost leaf the new subtree.
+ * @param {Node=} opt_secondHalf The initial leftmost leaf the new subtree.
  *     If null, siblings after currentNode will be placed in the subtree, but
  *     no additional node will be.
- * @param {Node} opt_root The top of the tree where splitting stops at.
+ * @param {Node=} opt_root The top of the tree where splitting stops at.
  * @return {!Node} The new subtree.
  */
 goog.editor.node.splitDomTreeAt = function(currentNode,

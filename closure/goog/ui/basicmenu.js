@@ -42,8 +42,8 @@ goog.require('goog.ui.ItemEvent');
  * code.The ITEM_EVENT instead of returning the DOM node returns a reference the
  * menu item.
  *
- * @param {string} opt_class Optional class for menu element, Default: 'menu'.
- * @param {Element} opt_parent Optional parent element, otherwise it will be
+ * @param {string=} opt_class Optional class for menu element, Default: 'menu'.
+ * @param {Element=} opt_parent Optional parent element, otherwise it will be
  *     added to the end of the document body.
  * @constructor
  * @extends {goog.ui.AttachableMenu}
@@ -230,8 +230,8 @@ goog.ui.BasicMenu.prototype.getParentMenu = function() {
 /**
  * Anchor the menu position to an element, and attach a click event.
  * @param {Element} el Element to anchor menu to.
- * @param {goog.positioning.Corner} opt_pos Corner: Default Bottom-left.
- * @param {goog.events.EventType} opt_eventType Event that triggers menu.
+ * @param {goog.positioning.Corner=} opt_pos Corner: Default Bottom-left.
+ * @param {goog.events.EventType=} opt_eventType Event that triggers menu.
  *     Default click.
  */
 goog.ui.BasicMenu.prototype.setAnchorElement = function(el, opt_pos,
@@ -274,7 +274,7 @@ goog.ui.BasicMenu.prototype.disposeInternal = function() {
 /**
  * Sets whether the popup should be visible.
  * @param {boolean} visible Show menu?.
-*  @param {boolean} opt_bubble Bubble to parent menu?.
+*  @param {boolean=} opt_bubble Bubble to parent menu?.
  */
 goog.ui.BasicMenu.prototype.setVisible = function(visible, opt_bubble) {
   // Ignore setVisible(true) if already visible
@@ -331,7 +331,7 @@ goog.ui.BasicMenu.prototype.setSelectedIndex = function(index) {
  * Select menu item by element reference and active it (open/close submenus)
  * with a slight delay.
  * @param {Element} el Element for item to select.
- * @param {boolean} opt_keyEvent Was item selected using keyboard? In that case
+ * @param {boolean=} opt_keyEvent Was item selected using keyboard? In that case
  *     open submenus are closed immediately and new submenus are not opened
  *     automatically.
  * @private
@@ -700,8 +700,8 @@ goog.ui.BasicMenu.prototype.getItemForElement_ = function(el) {
  * A menu item
  *
  * @param {?string} caption Html caption that gets shown in the menu.
- * @param {Object} opt_value The value that gets returned in the ItemEvent.
- * @param {goog.ui.BasicMenu} opt_submenu Optional menu that this item is the
+ * @param {Object=} opt_value The value that gets returned in the ItemEvent.
+ * @param {goog.ui.BasicMenu=} opt_submenu Optional menu that this item is the
  *    anchor for.
  * @constructor
  * @extends {goog.Disposable}

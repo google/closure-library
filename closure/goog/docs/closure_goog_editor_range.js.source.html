@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -124,7 +125,7 @@
 <a name="line81"></a> * Ex. &lt;li&gt;foo&lt;/li&gt; if &quot;foo&quot; is selected, instead of returning start and end
 <a name="line82"></a> * nodes as the foo text node, return the li.
 <a name="line83"></a> * @param {goog.dom.AbstractRange} range The range.
-<a name="line84"></a> * @param {Node} opt_stopNode Optional node to stop expanding past.
+<a name="line84"></a> * @param {Node=} opt_stopNode Optional node to stop expanding past.
 <a name="line85"></a> * @return {goog.dom.AbstractRange} The expanded range.
 <a name="line86"></a> */
 <a name="line87"></a>goog.editor.range.expand = function(range, opt_stopNode) {
@@ -166,7 +167,7 @@
 <a name="line123"></a> *
 <a name="line124"></a> * @param {goog.dom.AbstractRange} range The range to expand.
 <a name="line125"></a> * @param {goog.dom.RangeEndpoint} endpoint The endpoint to expand.
-<a name="line126"></a> * @param {Node} opt_stopNode Optional node to stop expanding past.
+<a name="line126"></a> * @param {Node=} opt_stopNode Optional node to stop expanding past.
 <a name="line127"></a> * @return {goog.dom.AbstractRange} The expanded range.
 <a name="line128"></a> * @private
 <a name="line129"></a> */
@@ -559,7 +560,7 @@
 <a name="line516"></a>
 <a name="line517"></a>/**
 <a name="line518"></a> * Normalizes text nodes whenever carets are removed from the document.
-<a name="line519"></a> * @param {goog.dom.AbstractRange} opt_range A range whose offsets have already
+<a name="line519"></a> * @param {goog.dom.AbstractRange=} opt_range A range whose offsets have already
 <a name="line520"></a> *     been adjusted for caret removal; it will be adjusted and returned if it
 <a name="line521"></a> *     is also affected by post-removal operations, such as text node
 <a name="line522"></a> *     normalization.

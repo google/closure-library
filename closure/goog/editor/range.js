@@ -81,7 +81,7 @@ goog.editor.range.narrow = function(range, el) {
  * Ex. <li>foo</li> if "foo" is selected, instead of returning start and end
  * nodes as the foo text node, return the li.
  * @param {goog.dom.AbstractRange} range The range.
- * @param {Node} opt_stopNode Optional node to stop expanding past.
+ * @param {Node=} opt_stopNode Optional node to stop expanding past.
  * @return {goog.dom.AbstractRange} The expanded range.
  */
 goog.editor.range.expand = function(range, opt_stopNode) {
@@ -123,7 +123,7 @@ goog.editor.range.expand = function(range, opt_stopNode) {
  *
  * @param {goog.dom.AbstractRange} range The range to expand.
  * @param {goog.dom.RangeEndpoint} endpoint The endpoint to expand.
- * @param {Node} opt_stopNode Optional node to stop expanding past.
+ * @param {Node=} opt_stopNode Optional node to stop expanding past.
  * @return {goog.dom.AbstractRange} The expanded range.
  * @private
  */
@@ -516,7 +516,7 @@ goog.inherits(goog.editor.range.NormalizedCaretRange_,
 
 /**
  * Normalizes text nodes whenever carets are removed from the document.
- * @param {goog.dom.AbstractRange} opt_range A range whose offsets have already
+ * @param {goog.dom.AbstractRange=} opt_range A range whose offsets have already
  *     been adjusted for caret removal; it will be adjusted and returned if it
  *     is also affected by post-removal operations, such as text node
  *     normalization.

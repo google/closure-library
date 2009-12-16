@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -66,39 +67,44 @@
 <a name="line23"></a>goog.require(&#39;goog.testing.LooseMock&#39;);
 <a name="line24"></a>
 <a name="line25"></a>
-<a name="line26"></a>/**
-<a name="line27"></a> * LooseMock of goog.dom.AbstractRange. Useful because the mock framework cannot
-<a name="line28"></a> * simply create a mock out of an abstract class, and cannot create a mock out
-<a name="line29"></a> * of classes that implements __iterator__ because it relies on the default
-<a name="line30"></a> * behavior of iterating through all of an object&#39;s properties.
-<a name="line31"></a> * @constructor
-<a name="line32"></a> * @extends {goog.testing.LooseMock}
-<a name="line33"></a> */
-<a name="line34"></a>goog.testing.MockRange = function() {
-<a name="line35"></a>  goog.testing.LooseMock.call(this, goog.testing.MockRange.ConcreteRange_);
-<a name="line36"></a>};
-<a name="line37"></a>goog.inherits(goog.testing.MockRange, goog.testing.LooseMock);
-<a name="line38"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * LooseMock of goog.dom.AbstractRange. Useful because the mock framework cannot
+<a name="line29"></a> * simply create a mock out of an abstract class, and cannot create a mock out
+<a name="line30"></a> * of classes that implements __iterator__ because it relies on the default
+<a name="line31"></a> * behavior of iterating through all of an object&#39;s properties.
+<a name="line32"></a> * @constructor
+<a name="line33"></a> * @extends {goog.testing.LooseMock}
+<a name="line34"></a> */
+<a name="line35"></a>goog.testing.MockRange = function() {
+<a name="line36"></a>  goog.testing.LooseMock.call(this, goog.testing.MockRange.ConcreteRange_);
+<a name="line37"></a>};
+<a name="line38"></a>goog.inherits(goog.testing.MockRange, goog.testing.LooseMock);
 <a name="line39"></a>
-<a name="line40"></a>// *** Private helper class ************************************************* //
-<a name="line41"></a>
-<a name="line42"></a>/**
-<a name="line43"></a> * Concrete subclass of goog.dom.AbstractRange that simply sets the abstract
-<a name="line44"></a> * method __iterator__ to undefined so that javascript defaults to iterating
-<a name="line45"></a> * through all of the object&#39;s properties.
-<a name="line46"></a> * @constructor
-<a name="line47"></a> * @extends {goog.dom.AbstractRange}
-<a name="line48"></a> * @private
-<a name="line49"></a> */
-<a name="line50"></a>goog.testing.MockRange.ConcreteRange_ = function() {
-<a name="line51"></a>  goog.dom.AbstractRange.call(this);
-<a name="line52"></a>};
-<a name="line53"></a>goog.inherits(goog.testing.MockRange.ConcreteRange_, goog.dom.AbstractRange);
-<a name="line54"></a>
-<a name="line55"></a>// Must undefine this so the mock framework can loop through this class&#39;
-<a name="line56"></a>// properties.
-<a name="line57"></a>/** @inheritDoc */
-<a name="line58"></a>goog.testing.MockRange.ConcreteRange_.prototype.__iterator__ = undefined;
+<a name="line40"></a>
+<a name="line41"></a>// *** Private helper class ************************************************* //
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * Concrete subclass of goog.dom.AbstractRange that simply sets the abstract
+<a name="line45"></a> * method __iterator__ to undefined so that javascript defaults to iterating
+<a name="line46"></a> * through all of the object&#39;s properties.
+<a name="line47"></a> * @constructor
+<a name="line48"></a> * @extends {goog.dom.AbstractRange}
+<a name="line49"></a> * @private
+<a name="line50"></a> */
+<a name="line51"></a>goog.testing.MockRange.ConcreteRange_ = function() {
+<a name="line52"></a>  goog.dom.AbstractRange.call(this);
+<a name="line53"></a>};
+<a name="line54"></a>goog.inherits(goog.testing.MockRange.ConcreteRange_, goog.dom.AbstractRange);
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Undefine the iterator so the mock framework can loop through this class&#39;
+<a name="line59"></a> * properties.
+<a name="line60"></a> * @type {undefined}
+<a name="line61"></a> * @override
+<a name="line62"></a> */
+<a name="line63"></a>goog.testing.MockRange.ConcreteRange_.prototype.__iterator__ = undefined;
 </pre>
 
 

@@ -30,7 +30,7 @@ goog.require('goog.string');
  * Base class for Formatters. A Formatter is used to format a LogRecord into
  * something that can be displayed to the user.
  *
- * @param {string} opt_prefix The prefix to place before text records.
+ * @param {string=} opt_prefix The prefix to place before text records.
  * @constructor
  */
 goog.debug.Formatter = function(opt_prefix) {
@@ -174,7 +174,7 @@ goog.debug.Formatter.getRelativeTime_ = function(logRecord,
  * Formatter that returns formatted html. See formatRecord for the classes
  * it uses for various types of formatted output.
  *
- * @param {string} opt_prefix The prefix to place before text records.
+ * @param {string=} opt_prefix The prefix to place before text records.
  * @constructor
  * @extends {goog.debug.Formatter}
  */
@@ -253,7 +253,7 @@ goog.debug.HtmlFormatter.prototype.formatRecord = function(logRecord) {
 /**
  * Formatter that returns formatted plain text
  *
- * @param {string} opt_prefix The prefix to place before text records.
+ * @param {string=} opt_prefix The prefix to place before text records.
  * @constructor
  * @extends {goog.debug.Formatter}
  */

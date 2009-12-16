@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -71,9 +72,9 @@
 <a name="line28"></a>/**
 <a name="line29"></a> * Iterator over a Node&#39;s siblings.
 <a name="line30"></a> * @param {Node} node The node to start with.
-<a name="line31"></a> * @param {boolean} opt_includeNode Whether to return the given node as the
+<a name="line31"></a> * @param {boolean=} opt_includeNode Whether to return the given node as the
 <a name="line32"></a> *     first return value from next.
-<a name="line33"></a> * @param {boolean} opt_reverse Whether to traverse siblings in reverse
+<a name="line33"></a> * @param {boolean=} opt_reverse Whether to traverse siblings in reverse
 <a name="line34"></a> *     document order.
 <a name="line35"></a> * @constructor
 <a name="line36"></a> * @extends {goog.iter.Iterator}
@@ -114,9 +115,9 @@
 <a name="line71"></a>/**
 <a name="line72"></a> * Iterator over an Element&#39;s children.
 <a name="line73"></a> * @param {Element} element The element to iterate over.
-<a name="line74"></a> * @param {boolean} opt_reverse Optionally traverse children from last to
+<a name="line74"></a> * @param {boolean=} opt_reverse Optionally traverse children from last to
 <a name="line75"></a> *     first.
-<a name="line76"></a> * @param {number} opt_startIndex Optional starting index.
+<a name="line76"></a> * @param {number=} opt_startIndex Optional starting index.
 <a name="line77"></a> * @constructor
 <a name="line78"></a> * @extends {goog.dom.iter.SiblingIterator}
 <a name="line79"></a> */
@@ -134,7 +135,7 @@
 <a name="line91"></a>/**
 <a name="line92"></a> * Iterator over a Node&#39;s ancestors, stopping after the document body.
 <a name="line93"></a> * @param {Node} node The node to start with.
-<a name="line94"></a> * @param {boolean} opt_includeNode Whether to return the given node as the
+<a name="line94"></a> * @param {boolean=} opt_includeNode Whether to return the given node as the
 <a name="line95"></a> *     first return value from next.
 <a name="line96"></a> * @constructor
 <a name="line97"></a> * @extends {goog.iter.Iterator}

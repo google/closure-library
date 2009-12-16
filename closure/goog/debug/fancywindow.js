@@ -39,8 +39,8 @@ goog.require('goog.userAgent');
  * Provides a Fancy extension to the DebugWindow class.  Allows filtering based
  * on loggers and levels.
  *
- * @param {string} opt_identifier Idenitifier for this logging class.
- * @param {string} opt_prefix Prefix pre-pended to messages.
+ * @param {string=} opt_identifier Idenitifier for this logging class.
+ * @param {string=} opt_prefix Prefix pre-pended to messages.
  * @constructor
  * @extends {goog.debug.DebugWindow}
  */

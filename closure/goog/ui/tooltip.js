@@ -47,10 +47,10 @@ goog.require('goog.ui.PopupBase');
  * slight delay, when the the cursor is over the element or the element gains
  * focus.
  *
- * @param {Element|string} opt_el Element to display tooltip for, either element
- *                                reference or string id.
- * @param {?string} opt_str Text message to display in tooltip.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {Element|string=} opt_el Element to display tooltip for, either
+ *     element reference or string id.
+ * @param {?string=} opt_str Text message to display in tooltip.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Popup}
  */
@@ -243,7 +243,7 @@ goog.ui.Tooltip.prototype.attach = function(el) {
 /**
  * Detach from element(s).
  *
- * @param {Element|string} opt_el Element to detach from, either element
+ * @param {Element|string=} opt_el Element to detach from, either element
  *                                reference or string id. If no element is
  *                                specified all are detached.
  */
@@ -499,7 +499,7 @@ goog.ui.Tooltip.prototype.onHide_ = function() {
  * over the same element.
  *
  * @param {Element} el Element to show tooltip for.
- * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+ * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
  *     at.
  */
 goog.ui.Tooltip.prototype.maybeShow = function(el, opt_pos) {
@@ -522,7 +522,7 @@ goog.ui.Tooltip.prototype.maybeShow = function(el, opt_pos) {
  * Shows tooltip for a specific element.
  *
  * @param {Element} el Element to show tooltip for.
- * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+ * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
  *     at.
  */
 goog.ui.Tooltip.prototype.showForElement = function(el, opt_pos) {
@@ -537,7 +537,7 @@ goog.ui.Tooltip.prototype.showForElement = function(el, opt_pos) {
  * Sets tooltip position and shows it.
  *
  * @param {Element} el Element to show tooltip for.
- * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+ * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
  *     at.
  * @private
  */
@@ -752,7 +752,7 @@ goog.ui.Tooltip.prototype.handleTooltipMouseOut = function(event) {
  * the maybeShow method.
  *
  * @param {Element} el Element to show tooltip for.
- * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+ * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
  *     at.
  * @protected
  */
@@ -828,7 +828,7 @@ goog.ui.Tooltip.prototype.disposeInternal = function() {
  * Used to position tooltips triggered by the cursor.
  *
  * @param {number|!goog.math.Coordinate} arg1 Left position or coordinate.
- * @param {number} opt_arg2 Top position.
+ * @param {number=} opt_arg2 Top position.
  * @constructor
  * @extends {goog.positioning.ViewportPosition}
  */
@@ -845,7 +845,7 @@ goog.inherits(goog.ui.Tooltip.CursorTooltipPosition,
  * @param {Element} element The DOM element of the popup.
  * @param {goog.positioning.Corner} popupCorner The corner of the popup element
  *     that that should be positioned adjacent to the anchorElement.
- * @param {goog.math.Box} opt_margin A margin specified in pixels.
+ * @param {goog.math.Box=} opt_margin A margin specified in pixels.
  */
 goog.ui.Tooltip.CursorTooltipPosition.prototype.reposition = function(
     element, popupCorner, opt_margin) {
@@ -894,7 +894,7 @@ goog.inherits(goog.ui.Tooltip.ElementTooltipPosition,
  * @param {Element} element The DOM element of the popup.
  * @param {goog.positioning.Corner} popupCorner The corner of the popup element
  *     that should be positioned adjacent to the anchorElement.
- * @param {goog.math.Box} opt_margin A margin specified in pixels.
+ * @param {goog.math.Box=} opt_margin A margin specified in pixels.
  */
 goog.ui.Tooltip.ElementTooltipPosition.prototype.reposition = function(
     element, popupCorner, opt_margin) {

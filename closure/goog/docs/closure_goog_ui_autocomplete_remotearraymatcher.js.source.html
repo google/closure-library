@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -75,7 +76,7 @@
 <a name="line32"></a> * An array matcher that requests matches via ajax.
 <a name="line33"></a> * @param {string} url The Uri which generates the auto complete matches.  The
 <a name="line34"></a> *     search term is passed to the server as the &#39;token&#39; query param.
-<a name="line35"></a> * @param {boolean} opt_noSimilar If true, request that the server does not do
+<a name="line35"></a> * @param {boolean=} opt_noSimilar If true, request that the server does not do
 <a name="line36"></a> *     similarity matches for the input token against the dictionary.
 <a name="line37"></a> *     The value is sent to the server as the &#39;use_similar&#39; query param which is
 <a name="line38"></a> *     either &quot;1&quot; (opt_noSimilar==false) or &quot;0&quot; (opt_noSimilar==true).
@@ -192,7 +193,7 @@
 <a name="line149"></a> * @param {string} token Current token in autocomplete.
 <a name="line150"></a> * @param {number} maxMatches Maximum number of matches required.
 <a name="line151"></a> * @param {boolean} useSimilar A hint to the server.
-<a name="line152"></a> * @param {string} opt_fullString Complete text in the input element.
+<a name="line152"></a> * @param {string=} opt_fullString Complete text in the input element.
 <a name="line153"></a> * @return {?string} The complete url. Return null if no request should be sent.
 <a name="line154"></a> * @protected
 <a name="line155"></a> */
@@ -213,7 +214,7 @@
 <a name="line170"></a> * @param {string} token Current token in autocomplete.
 <a name="line171"></a> * @param {number} maxMatches Maximum number of matches required.
 <a name="line172"></a> * @param {boolean} useSimilar A hint to the server.
-<a name="line173"></a> * @param {string} opt_fullString Complete text in the input element.
+<a name="line173"></a> * @param {string=} opt_fullString Complete text in the input element.
 <a name="line174"></a> * @return {boolean} Whether new matches be requested.
 <a name="line175"></a> * @protected
 <a name="line176"></a> */
@@ -268,7 +269,7 @@
 <a name="line225"></a> *     responsible for limiting the number of matches that are returned.
 <a name="line226"></a> * @param {Function} matchHandler Callback to execute on the result after
 <a name="line227"></a> *     matching.
-<a name="line228"></a> * @param {string} opt_fullString The full string from the input box.
+<a name="line228"></a> * @param {string=} opt_fullString The full string from the input box.
 <a name="line229"></a> */
 <a name="line230"></a>goog.ui.AutoComplete.RemoteArrayMatcher.prototype.requestMatchingRows =
 <a name="line231"></a>    function(token, maxMatches, matchHandler, opt_fullString) {

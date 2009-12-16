@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -201,7 +202,7 @@
 <a name="line158"></a>
 <a name="line159"></a>/**
 <a name="line160"></a> * Returns the range from yesterday to yesterday.
-<a name="line161"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line161"></a> * @param {Date=} opt_today The date to consider today. Defaults to today.
 <a name="line162"></a> * @return {goog.date.DateRange} The range that includes only yesterday.
 <a name="line163"></a> */
 <a name="line164"></a>goog.date.DateRange.yesterday = function(opt_today) {
@@ -213,7 +214,7 @@
 <a name="line170"></a>
 <a name="line171"></a>/**
 <a name="line172"></a> * Returns the range from today to today.
-<a name="line173"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line173"></a> * @param {Date=} opt_today The date to consider today. Defaults to today.
 <a name="line174"></a> * @return {goog.date.DateRange} The range that includes only today.
 <a name="line175"></a> */
 <a name="line176"></a>goog.date.DateRange.today = function(opt_today) {
@@ -224,7 +225,7 @@
 <a name="line181"></a>
 <a name="line182"></a>/**
 <a name="line183"></a> * Returns the range that includes the seven days that end yesterday.
-<a name="line184"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line184"></a> * @param {Date=} opt_today The date to consider today. Defaults to today.
 <a name="line185"></a> * @return {goog.date.DateRange} The range that includes the seven days that
 <a name="line186"></a> *     end yesterday.
 <a name="line187"></a> */
@@ -239,7 +240,7 @@
 <a name="line196"></a>/**
 <a name="line197"></a> * Returns the range that starts the first of this month and ends the last day
 <a name="line198"></a> * of this month.
-<a name="line199"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line199"></a> * @param {Date=} opt_today The date to consider today. Defaults to today.
 <a name="line200"></a> * @return {goog.date.DateRange} The range that starts the first of this month
 <a name="line201"></a> *     and ends the last day of this month.
 <a name="line202"></a> */
@@ -256,7 +257,7 @@
 <a name="line213"></a>/**
 <a name="line214"></a> * Returns the range that starts the first of last month and ends the last day
 <a name="line215"></a> * of last month.
-<a name="line216"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line216"></a> * @param {Date=} opt_today The date to consider today. Defaults to today.
 <a name="line217"></a> * @return {goog.date.DateRange} The range that starts the first of last month
 <a name="line218"></a> *     and ends the last day of last month.
 <a name="line219"></a> */
@@ -273,7 +274,7 @@
 <a name="line230"></a>/**
 <a name="line231"></a> * Returns the range that starts the Monday on or before today and ends the
 <a name="line232"></a> * Sunday on or after today.
-<a name="line233"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line233"></a> * @param {Date=} opt_today The date to consider today. Defaults to today.
 <a name="line234"></a> * @return {goog.date.DateRange} The range that starts the Monday on or before
 <a name="line235"></a> *     today and ends the Sunday on or after today.
 <a name="line236"></a> */
@@ -288,7 +289,7 @@
 <a name="line245"></a>/**
 <a name="line246"></a> * Returns the range that starts seven days before the Monday on or before
 <a name="line247"></a> * today and ends the Sunday on or before yesterday.
-<a name="line248"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line248"></a> * @param {Date=} opt_today The date to consider today. Defaults to today.
 <a name="line249"></a> * @return {goog.date.DateRange} The range that starts seven days before the
 <a name="line250"></a> *     Monday on or before today and ends the Sunday on or before yesterday.
 <a name="line251"></a> */
@@ -304,7 +305,7 @@
 <a name="line261"></a>/**
 <a name="line262"></a> * Returns the range that starts seven days before the Monday on or before
 <a name="line263"></a> * today and ends the Friday before today.
-<a name="line264"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line264"></a> * @param {Date=} opt_today The date to consider today. Defaults to today.
 <a name="line265"></a> * @return {goog.date.DateRange} The range that starts seven days before the
 <a name="line266"></a> *     Monday on or before today and ends the Friday before today.
 <a name="line267"></a> */
@@ -320,7 +321,7 @@
 <a name="line277"></a>/**
 <a name="line278"></a> * Returns the range that includes all days between January 1, 1900 and
 <a name="line279"></a> * December 31, 9999.
-<a name="line280"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line280"></a> * @param {Date=} opt_today The date to consider today. Defaults to today.
 <a name="line281"></a> * @return {goog.date.DateRange} The range that includes all days between
 <a name="line282"></a> *     January 1, 1900 and December 31, 9999.
 <a name="line283"></a> */
@@ -352,7 +353,7 @@
 <a name="line309"></a>
 <a name="line310"></a>/**
 <a name="line311"></a> * @param {string} dateRangeKey A standard date range key.
-<a name="line312"></a> * @param {Date} opt_today The date to consider today. Defaults to today.
+<a name="line312"></a> * @param {Date=} opt_today The date to consider today. Defaults to today.
 <a name="line313"></a> * @return {goog.date.DateRange} The date range that corresponds to that key.
 <a name="line314"></a> * @throws {Error} If no standard date range with that key exists.
 <a name="line315"></a> */

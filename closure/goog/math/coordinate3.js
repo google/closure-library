@@ -24,9 +24,9 @@ goog.provide('goog.math.Coordinate3');
 /**
  * Class for representing coordinates and positions in 3 dimensions.
  *
- * @param {number} opt_x X.
- * @param {number} opt_y Y.
- * @param {number} opt_z Z.
+ * @param {number=} opt_x X.
+ * @param {number=} opt_y Y.
+ * @param {number=} opt_z Z.
  * @constructor
  */
 goog.math.Coordinate3 = function(opt_x, opt_y, opt_z) {

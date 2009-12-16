@@ -20,8 +20,6 @@
 
 goog.provide('goog.proto2.ObjectSerializer');
 
-goog.require('goog.proto2.Descriptor');
-goog.require('goog.proto2.FieldDescriptor');
 goog.require('goog.proto2.Serializer');
 goog.require('goog.proto2.Util');
 goog.require('goog.string');
@@ -32,7 +30,7 @@ goog.require('goog.string');
  * ObjectSerializer, a serializer which turns Messages into simplified
  * ECMAScript objects.
  *
- * @param {goog.proto2.ObjectSerializer.KeyOption} opt_keyOption If specified,
+ * @param {goog.proto2.ObjectSerializer.KeyOption=} opt_keyOption If specified,
  *     which key option to use when serializing/deserializing.
  *
  * @constructor

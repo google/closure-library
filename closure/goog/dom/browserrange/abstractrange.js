@@ -118,7 +118,7 @@ goog.dom.browserrange.AbstractRange.prototype.compareBrowserRangeEndpoints =
 /**
  * Tests if this range contains the given range.
  * @param {goog.dom.browserrange.AbstractRange} range The range to test.
- * @param {boolean} opt_allowPartial If not set or false, the range must be
+ * @param {boolean=} opt_allowPartial If not set or false, the range must be
  *     entirely contained in the selection for this function to return true.
  * @return {boolean} Whether this range contains the given range.
  */
@@ -131,7 +131,7 @@ goog.dom.browserrange.AbstractRange.prototype.containsRange = function(range,
 /**
  * Tests if this range contains any or all of the given browser range.
  * @param {Range|TextRange} range The browser native range to test.
- * @param {boolean} opt_allowPartial If not set or false, the range must be
+ * @param {boolean=} opt_allowPartial If not set or false, the range must be
  *     entirely contained in the selection for this function to return true.
  * @return {boolean} Whether this range contains the given browser range.
  */
@@ -168,7 +168,7 @@ goog.dom.browserrange.AbstractRange.prototype.containsBrowserRange =
 /**
  * Tests if this range contains the given node.
  * @param {Node} node The node to test.
- * @param {boolean} opt_allowPartial If not set or false, the node must be
+ * @param {boolean=} opt_allowPartial If not set or false, the node must be
  *     entirely contained in the selection for this function to return true.
  * @return {boolean} Whether this range contains the given node.
  */
@@ -242,7 +242,7 @@ goog.dom.browserrange.AbstractRange.prototype.getValidHtml =
 /**
  * Returns a RangeIterator over the contents of the range.  Regardless of the
  * direction of the range, the iterator will move in document order.
- * @param {boolean} opt_keys Unused for this iterator.
+ * @param {boolean=} opt_keys Unused for this iterator.
  * @return {goog.dom.RangeIterator} An iterator over tags in the range.
  */
 goog.dom.browserrange.AbstractRange.prototype.__iterator__ = function(
@@ -257,7 +257,7 @@ goog.dom.browserrange.AbstractRange.prototype.__iterator__ = function(
 
 /**
  * Set this range as the selection in its window.
- * @param {boolean} opt_reverse Whether to select the range in reverse,
+ * @param {boolean=} opt_reverse Whether to select the range in reverse,
  *     if possible.
  */
 goog.dom.browserrange.AbstractRange.prototype.select =

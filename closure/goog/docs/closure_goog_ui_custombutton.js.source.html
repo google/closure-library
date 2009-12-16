@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -77,26 +78,27 @@
 <a name="line34"></a> *
 <a name="line35"></a> * @param {goog.ui.ControlContent} content Text caption or existing DOM
 <a name="line36"></a> *    structure to display as the button&#39;s caption.
-<a name="line37"></a> * @param {goog.ui.ButtonRenderer} opt_renderer Optional renderer used to render
-<a name="line38"></a> *    or decorate the button; defaults to {@link goog.ui.CustomButtonRenderer}.
-<a name="line39"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
-<a name="line40"></a> *    document interaction.
-<a name="line41"></a> * @constructor
-<a name="line42"></a> * @extends {goog.ui.Button}
-<a name="line43"></a> */
-<a name="line44"></a>goog.ui.CustomButton = function(content, opt_renderer, opt_domHelper) {
-<a name="line45"></a>  goog.ui.Button.call(this, content, opt_renderer ||
-<a name="line46"></a>      goog.ui.CustomButtonRenderer.getInstance(), opt_domHelper);
-<a name="line47"></a>};
-<a name="line48"></a>goog.inherits(goog.ui.CustomButton, goog.ui.Button);
-<a name="line49"></a>
+<a name="line37"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Optional renderer used to
+<a name="line38"></a> *    render or decorate the button; defaults to
+<a name="line39"></a> *    {@link goog.ui.CustomButtonRenderer}.
+<a name="line40"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
+<a name="line41"></a> *    document interaction.
+<a name="line42"></a> * @constructor
+<a name="line43"></a> * @extends {goog.ui.Button}
+<a name="line44"></a> */
+<a name="line45"></a>goog.ui.CustomButton = function(content, opt_renderer, opt_domHelper) {
+<a name="line46"></a>  goog.ui.Button.call(this, content, opt_renderer ||
+<a name="line47"></a>      goog.ui.CustomButtonRenderer.getInstance(), opt_domHelper);
+<a name="line48"></a>};
+<a name="line49"></a>goog.inherits(goog.ui.CustomButton, goog.ui.Button);
 <a name="line50"></a>
-<a name="line51"></a>// Register a decorator factory function for goog.ui.CustomButtons.
-<a name="line52"></a>goog.ui.registry.setDecoratorByClassName(goog.ui.CustomButtonRenderer.CSS_CLASS,
-<a name="line53"></a>    function() {
-<a name="line54"></a>      // CustomButton defaults to using CustomButtonRenderer.
-<a name="line55"></a>      return new goog.ui.CustomButton(null);
-<a name="line56"></a>    });
+<a name="line51"></a>
+<a name="line52"></a>// Register a decorator factory function for goog.ui.CustomButtons.
+<a name="line53"></a>goog.ui.registry.setDecoratorByClassName(goog.ui.CustomButtonRenderer.CSS_CLASS,
+<a name="line54"></a>    function() {
+<a name="line55"></a>      // CustomButton defaults to using CustomButtonRenderer.
+<a name="line56"></a>      return new goog.ui.CustomButton(null);
+<a name="line57"></a>    });
 </pre>
 
 

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -117,7 +118,7 @@
 <a name="line74"></a> * the current value.
 <a name="line75"></a> * @param {number} width The width in pixels.
 <a name="line76"></a> * @param {number} height The height in pixels.
-<a name="line77"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+<a name="line77"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
 <a name="line78"></a> *     document we want to render in.
 <a name="line79"></a> * @constructor
 <a name="line80"></a> * @extends {goog.ui.Component}
@@ -147,7 +148,7 @@
 <a name="line104"></a>   * @private
 <a name="line105"></a>   */
 <a name="line106"></a>  this.graphics_ = goog.graphics.createGraphics(width, height,
-<a name="line107"></a>      opt_domHelper);
+<a name="line107"></a>      null, null, opt_domHelper);
 <a name="line108"></a>
 <a name="line109"></a>
 <a name="line110"></a>  /**
@@ -519,7 +520,7 @@
 <a name="line476"></a> * Sets the current value range displayed by the gauge.
 <a name="line477"></a> * @param {number} value The current value for the gauge. This value
 <a name="line478"></a> *     determines the position of the needle of the gauge.
-<a name="line479"></a> * @param {string} opt_formattedValue The string value to show in the gauge.
+<a name="line479"></a> * @param {string=} opt_formattedValue The string value to show in the gauge.
 <a name="line480"></a> *     If not specified, no string value will be displayed.
 <a name="line481"></a> */
 <a name="line482"></a>goog.ui.Gauge.prototype.setValue = function(value, opt_formattedValue) {

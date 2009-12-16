@@ -20,11 +20,9 @@
 goog.provide('goog.positioning.AnchoredViewportPosition');
 
 goog.require('goog.math.Box');
-goog.require('goog.math.Coordinate');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.Corner');
-goog.require('goog.positioning.CornerBit');
 goog.require('goog.positioning.Overflow');
 goog.require('goog.positioning.OverflowStatus');
 
@@ -43,7 +41,7 @@ goog.require('goog.positioning.OverflowStatus');
  *     anchored against.
  * @param {goog.positioning.Corner} corner Corner of anchored element the
  *     movable element should be positioned at.
- * @param {boolean} opt_adjust Whether the positioning should be adjusted until
+ * @param {boolean=} opt_adjust Whether the positioning should be adjusted until
  *    the element fits inside the viewport even if that means that the anchored
  *    corners are ignored.
  * @constructor
@@ -72,28 +70,41 @@ goog.inherits(goog.positioning.AnchoredViewportPosition,
  * @param {Element} movableElement Element to position.
  * @param {goog.positioning.Corner} movableCorner Corner of the movable element
  *     that should be positioned adjacent to the anchored element.
- * @param {goog.math.Box} opt_margin A margin specified in pixels.
- * @param {goog.math.Size} opt_preferredSize The preferred size of the
+ * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+ * @param {goog.math.Size=} opt_preferredSize The preferred size of the
  *     movableElement.
  */
 goog.positioning.AnchoredViewportPosition.prototype.reposition = function(
     movableElement, movableCorner, opt_margin, opt_preferredSize) {
-  // TODO: Rewrite retry logic to use the positioning status code.
   var status = goog.positioning.positionAtAnchor(this.element, this.corner,
       movableElement, movableCorner, null, opt_margin,
       goog.positioning.Overflow.FAIL_X | goog.positioning.Overflow.FAIL_Y,
-      opt_preferredSize) & goog.positioning.OverflowStatus.FAILED;
+      opt_preferredSize);
 
-  // If the desired position is outside the viewport swap the specified corners
-  // to display it on the other side (above rather than below, to the left
-  // rather then to the right and so on) of the anchor element.
-  if (status) {
-    status = goog.positioning.positionAtAnchor(this.element, movableCorner,
-        movableElement, this.corner, null, opt_margin,
+  // If the desired position is outside the viewport try mirroring the corners
+  // horizontally or vertically.
+  if (status & goog.positioning.OverflowStatus.FAILED) {
+    var cornerFallback = this.corner;
+    var movableCornerFallback = movableCorner;
+
+    if (status & goog.positioning.OverflowStatus.FAILED_HORIZONTAL) {
+      cornerFallback = goog.positioning.flipCornerHorizontal(cornerFallback);
+      movableCornerFallback = goog.positioning.flipCornerHorizontal(
+          movableCornerFallback);
+    }
+
+    if (status & goog.positioning.OverflowStatus.FAILED_VERTICAL) {
+      cornerFallback = goog.positioning.flipCornerVertical(cornerFallback);
+      movableCornerFallback = goog.positioning.flipCornerVertical(
+          movableCornerFallback);
+    }
+
+    status = goog.positioning.positionAtAnchor(this.element, cornerFallback,
+        movableElement, movableCornerFallback, null, opt_margin,
         goog.positioning.Overflow.FAIL_X | goog.positioning.Overflow.FAIL_Y,
-        opt_preferredSize) & goog.positioning.OverflowStatus.FAILED;
+        opt_preferredSize);
 
-    if (status) {
+    if (status & goog.positioning.OverflowStatus.FAILED) {
       // If that also fails adjust the position until it fits.
       if (this.adjust_) {
         goog.positioning.positionAtAnchor(this.element, this.corner,
@@ -101,8 +112,8 @@ goog.positioning.AnchoredViewportPosition.prototype.reposition = function(
             goog.positioning.Overflow.ADJUST_X |
             goog.positioning.Overflow.ADJUST_Y, opt_preferredSize);
 
-      // Or display it anyway at the prefered position, if the adjust option was
-      // not enabled.
+      // Or display it anyway at the preferred position, if the adjust option
+      // was not enabled.
       } else {
         goog.positioning.positionAtAnchor(this.element, this.corner,
             movableElement, movableCorner, null, opt_margin,

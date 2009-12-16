@@ -296,7 +296,7 @@ goog.locale.getNativeCountryName = function(countryCode) {
  * has to add dependacy to this.
  *
  * @param {string} languageCode Language code to lookup the country name for.
- * @param {Object} opt_localeSymbols If omitted the current locale symbol
+ * @param {Object=} opt_localeSymbols If omitted the current locale symbol
  *     set is used.
  *
  * @return {string} Localized country name.
@@ -340,7 +340,7 @@ goog.locale.getNativeLanguageName = function(languageCode) {
  * has to add dependacy to this.
  *
  * @param {string} languageCode Language code to lookup the language name for.
- * @param {Object} opt_localeSymbols locale symbol set if given.
+ * @param {Object=} opt_localeSymbols locale symbol set if given.
  *
  * @return {string} Localized language name of the provided language code.
  */
@@ -493,7 +493,7 @@ goog.locale.registerTimeZoneAllLongNames = function(dataObj, localeName) {
 /**
  * Retrieve specified resource for certain locale.
  * @param {string} resourceName String that represents the type of resource.
- * @param {string} opt_locale Locale ID, if not given, current locale
+ * @param {string=} opt_locale Locale ID, if not given, current locale
  *     will be assumed.
  * @return {Object|undefined} The resource object that hold all the resource
  *     data, or undefined if not available.
@@ -515,7 +515,7 @@ goog.locale.getResource = function(resourceName, opt_locale) {
  * resourceName does not exist at all, undefined will be returned.
  *
  * @param {string} resourceName String that represents the type of resource.
- * @param {string} opt_locale locale ID, if not given, current locale
+ * @param {string=} opt_locale locale ID, if not given, current locale
  *     will be assumed.
  * @return {Object|undefined} The resource object for desired locale.
  */

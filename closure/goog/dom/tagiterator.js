@@ -81,15 +81,15 @@ goog.dom.TagWalkType = {
  * that it will continue iterating until the end of the document instead of
  * until exiting the start node.
  *
- * @param {Node} opt_node The start node.  If unspecified or null, defaults to
+ * @param {Node=} opt_node The start node.  If unspecified or null, defaults to
  *     an empty iterator.
- * @param {boolean} opt_reversed Whether to traverse the tree in reverse.
- * @param {boolean} opt_unconstrained Whether the iterator is not constrained to
- *     the starting node and its children.
- * @param {goog.dom.TagWalkType?} opt_tagType The type of the position.
+ * @param {boolean=} opt_reversed Whether to traverse the tree in reverse.
+ * @param {boolean=} opt_unconstrained Whether the iterator is not constrained
+ *     to the starting node and its children.
+ * @param {goog.dom.TagWalkType?=} opt_tagType The type of the position.
  *     Defaults to the start of the given node for forward iterators, and
  *     the end of the node for reverse iterators.
- * @param {number} opt_depth The starting tree depth.
+ * @param {number=} opt_depth The starting tree depth.
  * @constructor
  * @extends {goog.iter.Iterator}
  */
@@ -161,9 +161,9 @@ goog.dom.TagIterator.prototype.started_ = false;
  * type which can be one of the {@link goog.dom.TagWalkType} token types.
  * Only overwrites the tree depth when the parameter is specified.
  * @param {Node} node The node to set the position to.
- * @param {goog.dom.TagWalkType?} opt_tagType The type of the position
+ * @param {goog.dom.TagWalkType?=} opt_tagType The type of the position
  *     Defaults to the start of the given node.
- * @param {number} opt_depth The tree depth.
+ * @param {number=} opt_depth The tree depth.
  */
 goog.dom.TagIterator.prototype.setPosition = function(node,
     opt_tagType, opt_depth) {
@@ -339,8 +339,8 @@ goog.dom.TagIterator.prototype.equals = function(other) {
 /**
  * Replace the current node with the list of nodes. Reset the iterator so that
  * it visits the first of the nodes next.
- * @param {Object} var_args A list of nodes to replace the current node with. If
- *     the first argument is array-like, it will be used, otherwise all the
+ * @param {...Object} var_args A list of nodes to replace the current node with.
+ *     If the first argument is array-like, it will be used, otherwise all the
  *     arguments are assumed to be nodes.
  */
 goog.dom.TagIterator.prototype.splice = function(var_args) {

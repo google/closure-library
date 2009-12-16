@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -125,7 +126,7 @@
 <a name="line82"></a> * @param {Array.&lt;number&gt;} start Array for start coordinates.
 <a name="line83"></a> * @param {Array.&lt;number&gt;} end Array for end coordinates.
 <a name="line84"></a> * @param {number} duration Length of animation in milliseconds.
-<a name="line85"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line85"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line86"></a> * @constructor
 <a name="line87"></a> * @extends {goog.events.EventTarget}
 <a name="line88"></a> */
@@ -369,7 +370,7 @@
 <a name="line326"></a>
 <a name="line327"></a>/**
 <a name="line328"></a> * Starts or resumes an animation.
-<a name="line329"></a> * @param {boolean} opt_restart Whether to restart the
+<a name="line329"></a> * @param {boolean=} opt_restart Whether to restart the
 <a name="line330"></a> *     animation from the beginning if it has been paused.
 <a name="line331"></a> * @return {boolean} Whether animation was started.
 <a name="line332"></a> */

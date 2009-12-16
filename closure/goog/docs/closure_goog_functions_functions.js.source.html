@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -94,8 +95,8 @@
 <a name="line51"></a>/**
 <a name="line52"></a> * A simple function that returns the first argument of whatever is passed
 <a name="line53"></a> * into it.
-<a name="line54"></a> * @param {*} opt_returnValue The single value that will be returned.
-<a name="line55"></a> * @param {*} var_args Optional trailing arguments. These are ignored.
+<a name="line54"></a> * @param {*=} opt_returnValue The single value that will be returned.
+<a name="line55"></a> * @param {...*} var_args Optional trailing arguments. These are ignored.
 <a name="line56"></a> * @return {*} The first argument passed in, or undefined if nothing was passed.
 <a name="line57"></a> */
 <a name="line58"></a>goog.functions.identity = function(opt_returnValue, var_args) {
@@ -131,7 +132,7 @@
 <a name="line88"></a>/**
 <a name="line89"></a> * Creates the composition of the functions passed in.
 <a name="line90"></a> * For example, (goog.functions.compose(f, g))(a) is equivalent to f(g(a)).
-<a name="line91"></a> * @param {Function} var_args A list of functions.
+<a name="line91"></a> * @param {...Function} var_args A list of functions.
 <a name="line92"></a> * @return {!Function} The composition of all inputs.
 <a name="line93"></a> */
 <a name="line94"></a>goog.functions.compose = function(var_args) {
@@ -155,7 +156,7 @@
 <a name="line112"></a> * Creates a function that calls the functions passed in in sequence, and
 <a name="line113"></a> * returns the value of the last function. For example,
 <a name="line114"></a> * (goog.functions.sequence(f, g))(x) is equivalent to f(x),g(x).
-<a name="line115"></a> * @param {Function} var_args A list of functions.
+<a name="line115"></a> * @param {...Function} var_args A list of functions.
 <a name="line116"></a> * @return {!Function} A function that calls all inputs in sequence.
 <a name="line117"></a> */
 <a name="line118"></a>goog.functions.sequence = function(var_args) {
@@ -176,7 +177,7 @@
 <a name="line133"></a> * to true. The components are evaluated in order, and the evaluation will be
 <a name="line134"></a> * short-circuited as soon as a function returns false.
 <a name="line135"></a> * For example, (goog.functions.and(f, g))(x) is equivalent to f(x) &amp;&amp; g(x).
-<a name="line136"></a> * @param {Function} var_args A list of functions.
+<a name="line136"></a> * @param {...Function} var_args A list of functions.
 <a name="line137"></a> * @return {!Function} A function that ANDs its component functions.
 <a name="line138"></a> */
 <a name="line139"></a>goog.functions.and = function(var_args) {
@@ -198,7 +199,7 @@
 <a name="line155"></a> * to true. The components are evaluated in order, and the evaluation will be
 <a name="line156"></a> * short-circuited as soon as a function returns true.
 <a name="line157"></a> * For example, (goog.functions.and(f, g))(x) is equivalent to f(x) || g(x).
-<a name="line158"></a> * @param {Function} var_args A list of functions.
+<a name="line158"></a> * @param {...Function} var_args A list of functions.
 <a name="line159"></a> * @return {!Function} A function that ORs its component functions.
 <a name="line160"></a> */
 <a name="line161"></a>goog.functions.or = function(var_args) {

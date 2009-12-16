@@ -274,7 +274,7 @@ goog.editor.Plugin.prototype.handleKeyUp;
 
 /**
  * Handles selection change.
- * @param {!goog.events.BrowserEvent} opt_e The browser event.
+ * @param {!goog.events.BrowserEvent=} opt_e The browser event.
  * @return {boolean} Whether the event was handled and thus should *not* be
  *     propagated to other plugins.
  */
@@ -316,7 +316,7 @@ goog.editor.Plugin.prototype.handleKeyboardShortcut;
  * Multi-field plugins must override execCommand.
  *
  * @param {string} command The command to execute.
- * @param {Object} var_args Any additional parameters needed to
+ * @param {...Object} var_args Any additional parameters needed to
  *     execute the command.
  * @return {Object|undefined} The result of the execCommand, if any.
  */
@@ -371,7 +371,7 @@ goog.editor.Plugin.prototype.execCommand = function(command, var_args) {
  * instead.
  *
  * @param {string} command The command to execute.
- * @param {Object} var_args Any additional parameters needed to
+ * @param {...Object} var_args Any additional parameters needed to
  *     execute the command.
  * @return {Object|undefined} The result of the execCommand, if any.
  * @protected

@@ -148,16 +148,16 @@ goog.ui.editor.AbstractDialog.Builder.prototype.setTitle = function(title) {
 /**
  * Adds an OK button to the dialog. Clicking this button will cause {@link
  * handleOk} to run, subsequently dispatching an OK event.
- * @param {string} opt_label The caption for the button, if not "OK".
+ * @param {string=} opt_label The caption for the button, if not "OK".
  * @return {goog.ui.editor.AbstractDialog.Builder} This.
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.addOkButton =
     function(opt_label) {
   var key = goog.ui.Dialog.DefaultButtonKeys.OK;
   /** @desc Label for an OK button in an editor dialog. */
-  var MSG_EDITOR_DIALOG_OK = goog.getMsg('OK');
+  var MSG_TR_DIALOG_OK = goog.getMsg('OK');
   // True means this is the default/OK button.
-  this.buttonSet_.set(key, opt_label || MSG_EDITOR_DIALOG_OK, true);
+  this.buttonSet_.set(key, opt_label || MSG_TR_DIALOG_OK, true);
   this.buttonHandlers_[key] = goog.bind(this.editorDialog_.handleOk,
                                         this.editorDialog_);
   return this;
@@ -166,16 +166,16 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addOkButton =
 /**
  * Adds a Cancel button to the dialog. Clicking this button will cause {@link
  * handleCancel} to run, subsequently dispatching a CANCEL event.
- * @param {string} opt_label The caption for the button, if not "Cancel".
+ * @param {string=} opt_label The caption for the button, if not "Cancel".
  * @return {goog.ui.editor.AbstractDialog.Builder} This.
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.addCancelButton =
     function(opt_label) {
   var key = goog.ui.Dialog.DefaultButtonKeys.CANCEL;
   /** @desc Label for a cancel button in an editor dialog. */
-  var MSG_EDITOR_DIALOG_CANCEL = goog.getMsg('Cancel');
+  var MSG_TR_DIALOG_CANCEL = goog.getMsg('Cancel');
   // False means it's not the OK button, true means it's the Cancel button.
-  this.buttonSet_.set(key, opt_label || MSG_EDITOR_DIALOG_CANCEL, false, true);
+  this.buttonSet_.set(key, opt_label || MSG_TR_DIALOG_CANCEL, false, true);
   this.buttonHandlers_[key] = goog.bind(this.editorDialog_.handleCancel,
                                         this.editorDialog_);
   return this;
@@ -188,7 +188,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addCancelButton =
  *     the button is clicked. It is recommended that this function be a method
  *     in the concrete subclass of AbstractDialog using this Builder, and that
  *     it dispatch an event (see {@link handleOk}).
- * @param {string} opt_buttonId Identifier to be used to access the button when
+ * @param {string=} opt_buttonId Identifier to be used to access the button when
  *     calling AbstractDialog.getButtonElement().
  * @return {goog.ui.editor.AbstractDialog.Builder} This.
  */

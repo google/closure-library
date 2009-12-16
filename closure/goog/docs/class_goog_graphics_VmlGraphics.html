@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,7 +88,7 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
@@ -85,7 +97,7 @@
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -125,7 +137,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_coordWidth</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
         <div class="entryOverview">The coordinate width - if omitted or null, defaults to same as width.</div>
      </td>
    </tr>
@@ -133,7 +145,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_coordHeight</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
         <div class="entryOverview">The coordinate height - if omitted or null, defaults to same as height.</div>
      </td>
    </tr>
@@ -141,7 +153,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_domHelper</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        : <div class="fullType"><span class="type">goog.dom.DomHelper=</span></div>
         <div class="entryOverview">The DOM helper object for the document we want to render in.</div>
      </td>
    </tr>
@@ -231,7 +243,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_group</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_graphics_VmlGroupElement.html">goog.graphics.VmlGroupElement</a></span></div>
+        : <div class="fullType"><span class="type">goog.graphics.VmlGroupElement=</span></div>
         <div class="entryOverview">The group wrapper element to append to. If not specified, appends to the main canvas.</div>
      </td>
    </tr>
@@ -245,7 +257,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line225">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line252">code &raquo;</a>
   </td>
      </tr>
 
@@ -279,7 +291,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line574">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line604">code &raquo;</a>
   </td>
      </tr>
 
@@ -313,7 +325,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line412">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line442">code &raquo;</a>
   </td>
      </tr>
 
@@ -378,7 +390,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line386">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line416">code &raquo;</a>
   </td>
      </tr>
 
@@ -425,7 +437,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_group</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_graphics_VmlGroupElement.html">goog.graphics.VmlGroupElement</a></span></div>
+        : <div class="fullType"><span class="type">goog.graphics.VmlGroupElement=</span></div>
         <div class="entryOverview">The group wrapper element to append to. If not specified, appends to the main canvas.</div>
      </td>
    </tr>
@@ -443,7 +455,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line788">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line818">code &raquo;</a>
   </td>
      </tr>
 
@@ -542,7 +554,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line826">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line857">code &raquo;</a>
   </td>
      </tr>
 
@@ -637,7 +649,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_group</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_graphics_VmlGroupElement.html">goog.graphics.VmlGroupElement</a></span></div>
+        : <div class="fullType"><span class="type">goog.graphics.VmlGroupElement=</span></div>
         <div class="entryOverview">The group wrapper element to append to. If not specified, appends to the main canvas.</div>
      </td>
    </tr>
@@ -655,7 +667,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line594">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line624">code &raquo;</a>
   </td>
      </tr>
 
@@ -742,7 +754,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_group</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_graphics_VmlGroupElement.html">goog.graphics.VmlGroupElement</a></span></div>
+        : <div class="fullType"><span class="type">goog.graphics.VmlGroupElement=</span></div>
         <div class="entryOverview">The group wrapper element to append to. If not specified, appends to the main canvas.</div>
      </td>
    </tr>
@@ -760,7 +772,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line644">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line674">code &raquo;</a>
   </td>
      </tr>
 
@@ -831,7 +843,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_group</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_graphics_VmlGroupElement.html">goog.graphics.VmlGroupElement</a></span></div>
+        : <div class="fullType"><span class="type">goog.graphics.VmlGroupElement=</span></div>
         <div class="entryOverview">The group wrapper element to append to. If not specified, appends to the main canvas.</div>
      </td>
    </tr>
@@ -849,7 +861,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line719">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line749">code &raquo;</a>
   </td>
      </tr>
 
@@ -944,7 +956,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_group</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_graphics_VmlGroupElement.html">goog.graphics.VmlGroupElement</a></span></div>
+        : <div class="fullType"><span class="type">goog.graphics.VmlGroupElement=</span></div>
         <div class="entryOverview">The group wrapper element to append to. If not specified, appends to the main canvas.</div>
      </td>
    </tr>
@@ -962,7 +974,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line621">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line651">code &raquo;</a>
   </td>
      </tr>
 
@@ -1081,7 +1093,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_group</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_graphics_VmlGroupElement.html">goog.graphics.VmlGroupElement</a></span></div>
+        : <div class="fullType"><span class="type">goog.graphics.VmlGroupElement=</span></div>
         <div class="entryOverview">The group wrapper element to append to. If not specified, appends to the main canvas.</div>
      </td>
    </tr>
@@ -1099,7 +1111,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line672">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line702">code &raquo;</a>
   </td>
      </tr>
 
@@ -1133,7 +1145,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line816">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line846">code &raquo;</a>
   </td>
      </tr>
 
@@ -1179,7 +1191,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line563">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line593">code &raquo;</a>
   </td>
      </tr>
 
@@ -1256,12 +1268,79 @@ written value.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line809">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line839">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.graphics.VmlGraphics.prototype.getVmlElement"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getVmlElement<span class="args">(<span class="arg">id</span>)</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the VML element with the given id that is a child of this graphics
+object.
+Should be considered package private, and not used externally.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        <div class="entryOverview">The element id to find.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+            The element with the given id, or null if none is found.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line227">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -1290,12 +1369,12 @@ written value.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line481">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line511">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -1350,12 +1429,12 @@ written value.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line509">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line539">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1410,12 +1489,12 @@ written value.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line340">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line370">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1478,12 +1557,12 @@ written value.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line524">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line554">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1546,12 +1625,12 @@ written value.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line539">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line569">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1614,12 +1693,12 @@ written value.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line236">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line264">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1682,12 +1761,12 @@ written value.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line280">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line309">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1782,12 +1861,12 @@ written value.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line322">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line352">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1850,7 +1929,42 @@ written value.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line554">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line584">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.graphics.VmlGraphics.prototype.updateGraphics_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">updateGraphics_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Resets the graphics so they will display properly on IE8.  Noop in older
+versions.
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line237">code &raquo;</a>
   </td>
      </tr>
 
@@ -2086,7 +2200,7 @@ written value.
    <tr class="odd">
      <td>
         <span class="entryName">opt_group</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_graphics_GroupElement.html">goog.graphics.GroupElement</a></span></div>
+        : <div class="fullType"><span class="type">goog.graphics.GroupElement=</span></div>
         <div class="entryOverview">The group wrapper element to append to. If not specified, appends to the main canvas.</div>
      </td>
    </tr>
@@ -2369,7 +2483,7 @@ written value.
    <tr class="even">
      <td>
         <span class="entryName">opt_group</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_graphics_GroupElement.html">goog.graphics.GroupElement</a></span></div>
+        : <div class="fullType"><span class="type">goog.graphics.GroupElement=</span></div>
         <div class="entryOverview">The group wrapper element to append to. If not specified, appends to the main canvas.</div>
      </td>
    </tr>
@@ -3296,7 +3410,7 @@ goog.ui.Component#addChildAt for detailed semantics.
    <tr class="odd">
      <td>
         <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, the child component will be rendered into the parent.</div>
      </td>
    </tr>
@@ -3400,7 +3514,7 @@ different parent, or the given index is out of bounds.
    <tr class="even">
      <td>
         <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, the child component will be rendered into the parent.</div>
      </td>
    </tr>
@@ -3799,7 +3913,7 @@ component and its 0-based index.  The return value is ignored.
    <tr class="odd">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Used as the &#39;this&#39; object in f when called.</div>
      </td>
    </tr>
@@ -4831,7 +4945,7 @@ component&#39;s DOM.
    <tr class="odd">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
      </td>
    </tr>
@@ -4907,7 +5021,7 @@ detailed semantics.
    <tr class="odd">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
      </td>
    </tr>
@@ -4971,7 +5085,7 @@ detailed semantics.
    <tr class="even">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls #exitDocument on the removed child components, and detaches their DOM from the document.</div>
      </td>
    </tr>
@@ -5036,7 +5150,7 @@ Throws an Error if the component is already rendered.
    <tr class="even">
      <td>
         <span class="entryName">opt_parentElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Optional parent element to render the component into.</div>
      </td>
    </tr>
@@ -5164,7 +5278,7 @@ Throws an Error if the component is already rendered.
    <tr class="even">
      <td>
         <span class="entryName">opt_parentElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Optional parent element to render the component into.</div>
      </td>
    </tr>
@@ -5172,7 +5286,7 @@ Throws an Error if the component is already rendered.
    <tr class="odd">
      <td>
         <span class="entryName">opt_beforeElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Element before which the component is to be rendered.  If left out the node is appended to the parent element.</div>
      </td>
    </tr>
@@ -5694,7 +5808,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -5702,7 +5816,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -5939,7 +6053,7 @@ nothing is done.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -5947,7 +6061,7 @@ nothing is done.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -6954,7 +7068,7 @@ a VML element.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line738">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line768">code &raquo;</a>
   </td>
      </tr>
 
@@ -7125,7 +7239,7 @@ should not be used externally.
 
 
   <td class="view-code">
-     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line363">code &raquo;</a>
+     <a href="closure_goog_graphics_vmlgraphics.js.source.html#line393">code &raquo;</a>
   </td>
      </tr>
 

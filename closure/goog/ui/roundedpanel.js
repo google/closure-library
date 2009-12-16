@@ -40,11 +40,11 @@ goog.require('goog.userAgent');
  * @param {number} radius The radius of the rounded corner(s), in pixels.
  * @param {number} borderWidth The thickness of the border, in pixels.
  * @param {string} borderColor The border color of the panel.
- * @param {string} opt_backgroundColor The background color of the panel.
- * @param {number} opt_corners The corners of the panel to be rounded. Any
+ * @param {string=} opt_backgroundColor The background color of the panel.
+ * @param {number=} opt_corners The corners of the panel to be rounded. Any
  *     corners not specified will be rendered as square corners. Will default
  *     to all square corners if not specified.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @return {goog.ui.BaseRoundedPanel} An instance of a
  *     goog.ui.BaseRoundedPanel subclass.
@@ -124,11 +124,11 @@ goog.ui.RoundedPanel.Classes_ = {
  * @param {number} radius The radius of the rounded corner(s), in pixels.
  * @param {number} borderWidth The thickness of the border, in pixels.
  * @param {string} borderColor The border color of the panel.
- * @param {string} opt_backgroundColor The background color of the panel.
- * @param {number} opt_corners The corners of the panel to be rounded. Any
+ * @param {string=} opt_backgroundColor The background color of the panel.
+ * @param {number=} opt_corners The corners of the panel to be rounded. Any
  *     corners not specified will be rendered as square corners. Will default
  *     to all square corners if not specified.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @extends {goog.ui.Component}
  * @constructor
@@ -250,11 +250,11 @@ goog.ui.BaseRoundedPanel.prototype.getContentElement = function() {
  * @param {number} radius The radius of the rounded corner(s), in pixels.
  * @param {number} borderWidth The thickness of the border, in pixels.
  * @param {string} borderColor The border color of the panel.
- * @param {string} opt_backgroundColor The background color of the panel.
- * @param {number} opt_corners The corners of the panel to be rounded. Any
+ * @param {string=} opt_backgroundColor The background color of the panel.
+ * @param {number=} opt_corners The corners of the panel to be rounded. Any
  *     corners not specified will be rendered as square corners. Will
  *     default to all square corners if not specified.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @extends {goog.ui.BaseRoundedPanel}
  * @constructor
@@ -373,11 +373,11 @@ goog.ui.CssRoundedPanel.prototype.getStyle_ = function(corner) {
  * @param {number} radius The radius of the rounded corner(s), in pixels.
  * @param {number} borderWidth The thickness of the border, in pixels.
  * @param {string} borderColor The border color of the panel.
- * @param {string} opt_backgroundColor The background color of the panel.
- * @param {number} opt_corners The corners of the panel to be rounded. Any
+ * @param {string=} opt_backgroundColor The background color of the panel.
+ * @param {number=} opt_corners The corners of the panel to be rounded. Any
  *     corners not specified will be rendered as square corners. Will
  *     default to all square corners if not specified.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @extends {goog.ui.BaseRoundedPanel}
  * @constructor

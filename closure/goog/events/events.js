@@ -128,9 +128,9 @@ goog.events.keySeparator_ = '_';
  * @param {string|Array.<string>} type Event type or array of event types.
  * @param {Function|Object} listener Callback method, or an object with a
  *     handleEvent function.
- * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+ * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
- * @param {Object} opt_handler Element in whose scope to call the listener.
+ * @param {Object=} opt_handler Element in whose scope to call the listener.
  * @return {?number} Unique key for the listener.
  */
 goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
@@ -238,8 +238,8 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
  *     events on.
  * @param {string|Array.<string>} type Event type or array of event types.
  * @param {Function|Object} listener Callback method.
- * @param {boolean} opt_capt Fire in capture phase?.
- * @param {Object} opt_handler Element in whose scope to call the listener.
+ * @param {boolean=} opt_capt Fire in capture phase?.
+ * @param {Object=} opt_handler Element in whose scope to call the listener.
  * @return {?number} Unique key for the listener.
  */
 goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
@@ -267,9 +267,9 @@ goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
  * @param {Function|Object} listener Callback method, or an object with a
  *     handleEvent function.
- * @param {boolean} opt_capt Whether to fire in capture phase (defaults to
+ * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
- * @param {Object} opt_handler Element in whose scope to call the listener.
+ * @param {Object=} opt_handler Element in whose scope to call the listener.
  */
 goog.events.listenWithWrapper = function(src, wrapper, listener, opt_capt,
     opt_handler) {
@@ -285,10 +285,10 @@ goog.events.listenWithWrapper = function(src, wrapper, listener, opt_capt,
  * @param {string|Array.<string>} type The name of the event without the 'on'
  *     prefix.
  * @param {Function|Object} listener The listener function to remove.
- * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+ * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
  *     whether the listener is fired during the capture or bubble phase of the
  *     event.
- * @param {Object} opt_handler Element in whose scope to call the listener.
+ * @param {Object=} opt_handler Element in whose scope to call the listener.
  * @return {?boolean} indicating whether the listener was there to remove.
  */
 goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
@@ -389,10 +389,10 @@ goog.events.unlistenByKey = function(key) {
  *     listening to events on.
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
  * @param {Function|Object} listener The listener function to remove.
- * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+ * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
  *     whether the listener is fired during the capture or bubble phase of the
  *     event.
- * @param {Object} opt_handler Element in whose scope to call the listener.
+ * @param {Object=} opt_handler Element in whose scope to call the listener.
  */
 goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
     opt_handler) {
@@ -470,10 +470,10 @@ goog.events.cleanUp_ = function(type, capture, srcHashCode, listenerArray) {
  * remove all listeners that have been registered.  You can also optionally
  * remove listeners of a particular type or capture phase.
  *
- * @param {Object} opt_obj Object to remove listeners from.
- * @param {string} opt_type Type of event to, default is all types.
- * @param {boolean} opt_capt Whether to remove the listeners from the capture or
- * bubble phase.  If unspecified, will remove both.
+ * @param {Object=} opt_obj Object to remove listeners from.
+ * @param {string=} opt_type Type of event to, default is all types.
+ * @param {boolean=} opt_capt Whether to remove the listeners from the capture
+ *     or bubble phase.  If unspecified, will remove both.
  * @return {number} Number of listeners removed.
  */
 goog.events.removeAll = function(opt_obj, opt_type, opt_capt) {
@@ -564,10 +564,10 @@ goog.events.getListeners_ = function(obj, type, capture) {
  *     listening to events on.
  * @param {?string} type The name of the event without the 'on' prefix.
  * @param {Function|Object} listener The listener function to remove.
- * @param {boolean} opt_capt In DOM-compliant browsers, this determines
+ * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
  *                            whether the listener is fired during the
  *                            capture or bubble phase of the event.
- * @param {Object} opt_handler Element in whose scope to call the listener.
+ * @param {Object=} opt_handler Element in whose scope to call the listener.
  * @return {goog.events.Listener?} the found listener or null if not found.
  */
 goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
@@ -593,8 +593,8 @@ goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
  * unspecified, the function will match on the remaining criteria.
  *
  * @param {EventTarget|goog.events.EventTarget} obj Target to get listeners for.
- * @param {string} opt_type Event type.
- * @param {boolean} opt_capture Whether to check for capture or bubble-phase
+ * @param {string=} opt_type Event type.
+ * @param {boolean=} opt_capture Whether to check for capture or bubble-phase
  *     listeners.
  * @return {boolean} Whether an event target has one or more listeners matching
  *     the requested type and/or capture phase.
@@ -913,7 +913,7 @@ goog.events.dispatchEvent = function(src, e) {
  *
  * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
  *     protect the entry point.
- * @param {boolean} opt_tracers Whether to install tracers around the browser
+ * @param {boolean=} opt_tracers Whether to install tracers around the browser
  *     event entry point.
  */
 goog.events.protectBrowserEventEntryPoint = function(
@@ -929,7 +929,7 @@ goog.events.protectBrowserEventEntryPoint = function(
  * function is a proxy for the real listener the user specified.
  *
  * @param {string} key Unique key for the listener.
- * @param {Event} opt_evt Optional event object that gets passed in via the
+ * @param {Event=} opt_evt Optional event object that gets passed in via the
  *     native event handlers.
  * @return {boolean} Result of the event handler.
  * @this {goog.events.EventTarget|Object} The object or Element that

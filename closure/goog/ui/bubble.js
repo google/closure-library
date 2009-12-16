@@ -46,10 +46,10 @@ goog.require('goog.ui.Popup');
  *
  * @param {string|Element} message HTML string or an element to display inside
  *     the bubble.
- * @param {Object} opt_config The configuration
+ * @param {Object=} opt_config The configuration
  *     for the bubble. If not specified, the default configuration will be
  *     used. {@see goog.ui.Bubble.defaultConfig}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */

@@ -34,7 +34,7 @@ goog.require('goog.userAgent');
  * </ol>
  *
  * @param {HTMLIFrameElement} iframe An iframe.
- * @param {boolean} opt_hasContent Does the loaded iframe have content.
+ * @param {boolean=} opt_hasContent Does the loaded iframe have content.
  * @extends {goog.events.EventTarget}
  * @constructor
  */

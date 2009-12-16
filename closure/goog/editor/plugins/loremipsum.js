@@ -140,7 +140,7 @@ goog.editor.plugins.LoremIpsum.prototype.updateLorem_ = function() {
  * is editable), this works for both editable and uneditable fields.
  *
  * TODO: Is this really necessary? See TODO below.
- * @param {boolean} opt_placeCursor Whether to place the cursor in the field
+ * @param {boolean=} opt_placeCursor Whether to place the cursor in the field
  *     after clearing lorem.
  * @private
  */

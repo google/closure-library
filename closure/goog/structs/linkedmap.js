@@ -25,7 +25,6 @@
 
 goog.provide('goog.structs.LinkedMap');
 
-goog.require('goog.array');
 goog.require('goog.structs.Map');
 
 
@@ -52,10 +51,11 @@ goog.require('goog.structs.Map');
  * alert(c.getKeys()); // entry1, entry5, entry9, entry8, entry7
  * </pre>
  *
- * @param {number} opt_maxCount The maximum number of objects to store in the
+ * @param {number=} opt_maxCount The maximum number of objects to store in the
  *     LinkedMap. If unspecified or 0, there is no maximum.
- * @param {boolean} opt_cache When set, the LinkedMap stores items in order from
- *     most recently used to least recently used, instead of insertion order.
+ * @param {boolean=} opt_cache When set, the LinkedMap stores items in order
+ *     from most recently used to least recently used, instead of insertion
+ *     order.
  * @constructor
  */
 goog.structs.LinkedMap = function(opt_maxCount, opt_cache) {
@@ -84,7 +84,7 @@ goog.structs.LinkedMap = function(opt_maxCount, opt_cache) {
  * Retrieves the value for a given key. If this is a caching LinkedMap, the
  * entry will become the most recently used.
  * @param {string} key The key to retrieve the value for.
- * @param {*} opt_val A default value that will be returned if the key is
+ * @param {*=} opt_val A default value that will be returned if the key is
  *     not found, defaults to undefined.
  * @return {*} The retrieved value.
  */
@@ -105,7 +105,7 @@ goog.structs.LinkedMap.prototype.get = function(key, opt_val) {
  * Retrieves the value for a given key without updating the entry to be the
  * most recently used.
  * @param {string} key The key to retrieve the value for.
- * @param {*} opt_val A default value that will be returned if the key is
+ * @param {*=} opt_val A default value that will be returned if the key is
  *     not found.
  * @return {*} The retrieved value.
  */
@@ -282,7 +282,8 @@ goog.structs.LinkedMap.prototype.clear = function() {
  * @see goog.structs.forEach
  * @param {Function} f The function to call for each item. The function takes
  *     three arguments: the value, the key, and the LinkedMap.
- * @param {Object} opt_obj The object context to use as "this" for the function.
+ * @param {Object=} opt_obj The object context to use as "this" for the
+ *     function.
  */
 goog.structs.LinkedMap.prototype.forEach = function(f, opt_obj) {
   for (var n = this.head_.next; n != this.head_; n = n.next) {
@@ -298,7 +299,8 @@ goog.structs.LinkedMap.prototype.forEach = function(f, opt_obj) {
  * @see goog.structs.map
  * @param {Function} f The function to call for each item. The function takes
  *     three arguments: the value, the key, and the LinkedMap.
- * @param {Object} opt_obj The object context to use as "this" for the function.
+ * @param {Object=} opt_obj The object context to use as "this" for the
+ *     function.
  * @return {Array} The results of the function calls for each item in the
  *     LinkedMap.
  */
@@ -319,7 +321,8 @@ goog.structs.LinkedMap.prototype.map = function(f, opt_obj) {
  * @param {Function} f The function to call for each item. The function takes
  *     three arguments: the value, the key, and the LinkedMap, and returns a
  *     boolean.
- * @param {Object} opt_obj The object context to use as "this" for the function.
+ * @param {Object=} opt_obj The object context to use as "this" for the
+ *     function.
  * @return {boolean} Whether f evaluates to true for at least one item in the
  *     LinkedMap.
  */
@@ -341,7 +344,8 @@ goog.structs.LinkedMap.prototype.some = function(f, opt_obj) {
  * @param {Function} f The function to call for each item. The function takes
  *     three arguments: the value, the key, and the Cache, and returns a
  *     boolean.
- * @param {Object} opt_obj The object context to use as "this" for the function.
+ * @param {Object=} opt_obj The object context to use as "this" for the
+ *     function.
  * @return {boolean} Whether f evaluates to true for every item in the Cache.
  */
 goog.structs.LinkedMap.prototype.every = function(f, opt_obj) {

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -64,83 +65,80 @@
 <a name="line21"></a>goog.provide(&#39;goog.positioning.MenuAnchoredPosition&#39;);
 <a name="line22"></a>
 <a name="line23"></a>goog.require(&#39;goog.math.Box&#39;);
-<a name="line24"></a>goog.require(&#39;goog.math.Coordinate&#39;);
-<a name="line25"></a>goog.require(&#39;goog.math.Size&#39;);
-<a name="line26"></a>goog.require(&#39;goog.positioning&#39;);
-<a name="line27"></a>goog.require(&#39;goog.positioning.AnchoredViewportPosition&#39;);
-<a name="line28"></a>goog.require(&#39;goog.positioning.Corner&#39;);
-<a name="line29"></a>goog.require(&#39;goog.positioning.CornerBit&#39;);
-<a name="line30"></a>goog.require(&#39;goog.positioning.Overflow&#39;);
-<a name="line31"></a>goog.require(&#39;goog.positioning.OverflowStatus&#39;);
-<a name="line32"></a>
-<a name="line33"></a>
-<a name="line34"></a>/**
-<a name="line35"></a> * Encapsulates a popup position where the popup is anchored at a corner of
-<a name="line36"></a> * an element.  The positioning behavior changes based on the values of
-<a name="line37"></a> * opt_adjust and opt_resize.
+<a name="line24"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line25"></a>goog.require(&#39;goog.positioning&#39;);
+<a name="line26"></a>goog.require(&#39;goog.positioning.AnchoredViewportPosition&#39;);
+<a name="line27"></a>goog.require(&#39;goog.positioning.Corner&#39;);
+<a name="line28"></a>goog.require(&#39;goog.positioning.Overflow&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Encapsulates a popup position where the popup is anchored at a corner of
+<a name="line33"></a> * an element.  The positioning behavior changes based on the values of
+<a name="line34"></a> * opt_adjust and opt_resize.
+<a name="line35"></a> *
+<a name="line36"></a> * When using this positioning object it&#39;s recommended that the movable element
+<a name="line37"></a> * be absolutely positioned.
 <a name="line38"></a> *
-<a name="line39"></a> * When using this positioning object it&#39;s recommended that the movable element
-<a name="line40"></a> * be absolutely positioned.
-<a name="line41"></a> *
-<a name="line42"></a> * @param {Element} anchorElement Element the movable element should be
-<a name="line43"></a> *     anchored against.
-<a name="line44"></a> * @param {goog.positioning.Corner} corner Corner of anchored element the
-<a name="line45"></a> *     movable element should be positioned at.
-<a name="line46"></a> * @param {boolean} opt_adjust Whether the positioning should be adjusted until
-<a name="line47"></a> *    the element fits inside the viewport even if that means that the anchored
-<a name="line48"></a> *    corners are ignored.
-<a name="line49"></a> * @param {boolean} opt_resize Whether the positioning should be adjusted until
-<a name="line50"></a> *    the element fits inside the viewport on the X axis and it&#39;s heigh is
-<a name="line51"></a> *    resized so if fits in the viewport.  This take precedence over
-<a name="line52"></a> *    opt_adjust.
-<a name="line53"></a> * @constructor
-<a name="line54"></a> * @extends {goog.positioning.AnchoredViewportPosition}
-<a name="line55"></a> */
-<a name="line56"></a>goog.positioning.MenuAnchoredPosition = function(anchorElement,
-<a name="line57"></a>                                                 corner,
-<a name="line58"></a>                                                 opt_adjust,
-<a name="line59"></a>                                                 opt_resize) {
-<a name="line60"></a>  goog.positioning.AnchoredViewportPosition.call(this, anchorElement, corner,
-<a name="line61"></a>                                                 opt_adjust);
-<a name="line62"></a>  /**
-<a name="line63"></a>   * Whether the positioning should be adjusted until the element fits inside
-<a name="line64"></a>   * the viewport even if that means that the anchored corners are ignored.
-<a name="line65"></a>   * @type {boolean|undefined}
-<a name="line66"></a>   * @private
-<a name="line67"></a>   */
-<a name="line68"></a>  this.resize_ = opt_resize;
-<a name="line69"></a>};
-<a name="line70"></a>goog.inherits(goog.positioning.MenuAnchoredPosition,
-<a name="line71"></a>              goog.positioning.AnchoredViewportPosition);
-<a name="line72"></a>
-<a name="line73"></a>
-<a name="line74"></a>/**
-<a name="line75"></a> * Repositions the movable element.
-<a name="line76"></a> *
-<a name="line77"></a> * @param {Element} movableElement Element to position.
-<a name="line78"></a> * @param {goog.positioning.Corner} movableCorner Corner of the movable element
-<a name="line79"></a> *     that should be positioned adjacent to the anchored element.
-<a name="line80"></a> * @param {goog.math.Box} opt_margin A margin specifin pixels.
-<a name="line81"></a> * @param {goog.math.Size} opt_preferredSize Preferred size of the
-<a name="line82"></a> *     moveableElement.
-<a name="line83"></a> */
-<a name="line84"></a>goog.positioning.MenuAnchoredPosition.prototype.reposition =
-<a name="line85"></a>    function(movableElement, movableCorner, opt_margin, opt_preferredSize) {
-<a name="line86"></a>
-<a name="line87"></a>  if (this.resize_) {
-<a name="line88"></a>    goog.positioning.positionAtAnchor(this.element, this.corner,
-<a name="line89"></a>        movableElement, movableCorner, null, opt_margin,
-<a name="line90"></a>        goog.positioning.Overflow.ADJUST_X |
-<a name="line91"></a>        goog.positioning.Overflow.RESIZE_HEIGHT, opt_preferredSize);
-<a name="line92"></a>  } else {
-<a name="line93"></a>    goog.positioning.MenuAnchoredPosition.superClass_.reposition.call(
-<a name="line94"></a>        this,
-<a name="line95"></a>        movableElement,
-<a name="line96"></a>        movableCorner,
-<a name="line97"></a>        opt_margin,
-<a name="line98"></a>        opt_preferredSize);
-<a name="line99"></a>  }
-<a name="line100"></a>};
+<a name="line39"></a> * @param {Element} anchorElement Element the movable element should be
+<a name="line40"></a> *     anchored against.
+<a name="line41"></a> * @param {goog.positioning.Corner} corner Corner of anchored element the
+<a name="line42"></a> *     movable element should be positioned at.
+<a name="line43"></a> * @param {boolean=} opt_adjust Whether the positioning should be adjusted until
+<a name="line44"></a> *    the element fits inside the viewport even if that means that the anchored
+<a name="line45"></a> *    corners are ignored.
+<a name="line46"></a> * @param {boolean=} opt_resize Whether the positioning should be adjusted until
+<a name="line47"></a> *    the element fits inside the viewport on the X axis and it&#39;s heigh is
+<a name="line48"></a> *    resized so if fits in the viewport.  This take precedence over
+<a name="line49"></a> *    opt_adjust.
+<a name="line50"></a> * @constructor
+<a name="line51"></a> * @extends {goog.positioning.AnchoredViewportPosition}
+<a name="line52"></a> */
+<a name="line53"></a>goog.positioning.MenuAnchoredPosition = function(anchorElement,
+<a name="line54"></a>                                                 corner,
+<a name="line55"></a>                                                 opt_adjust,
+<a name="line56"></a>                                                 opt_resize) {
+<a name="line57"></a>  goog.positioning.AnchoredViewportPosition.call(this, anchorElement, corner,
+<a name="line58"></a>                                                 opt_adjust);
+<a name="line59"></a>  /**
+<a name="line60"></a>   * Whether the positioning should be adjusted until the element fits inside
+<a name="line61"></a>   * the viewport even if that means that the anchored corners are ignored.
+<a name="line62"></a>   * @type {boolean|undefined}
+<a name="line63"></a>   * @private
+<a name="line64"></a>   */
+<a name="line65"></a>  this.resize_ = opt_resize;
+<a name="line66"></a>};
+<a name="line67"></a>goog.inherits(goog.positioning.MenuAnchoredPosition,
+<a name="line68"></a>              goog.positioning.AnchoredViewportPosition);
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Repositions the movable element.
+<a name="line73"></a> *
+<a name="line74"></a> * @param {Element} movableElement Element to position.
+<a name="line75"></a> * @param {goog.positioning.Corner} movableCorner Corner of the movable element
+<a name="line76"></a> *     that should be positioned adjacent to the anchored element.
+<a name="line77"></a> * @param {goog.math.Box=} opt_margin A margin specifin pixels.
+<a name="line78"></a> * @param {goog.math.Size=} opt_preferredSize Preferred size of the
+<a name="line79"></a> *     moveableElement.
+<a name="line80"></a> */
+<a name="line81"></a>goog.positioning.MenuAnchoredPosition.prototype.reposition =
+<a name="line82"></a>    function(movableElement, movableCorner, opt_margin, opt_preferredSize) {
+<a name="line83"></a>
+<a name="line84"></a>  if (this.resize_) {
+<a name="line85"></a>    goog.positioning.positionAtAnchor(this.element, this.corner,
+<a name="line86"></a>        movableElement, movableCorner, null, opt_margin,
+<a name="line87"></a>        goog.positioning.Overflow.ADJUST_X |
+<a name="line88"></a>        goog.positioning.Overflow.RESIZE_HEIGHT, opt_preferredSize);
+<a name="line89"></a>  } else {
+<a name="line90"></a>    goog.positioning.MenuAnchoredPosition.superClass_.reposition.call(
+<a name="line91"></a>        this,
+<a name="line92"></a>        movableElement,
+<a name="line93"></a>        movableCorner,
+<a name="line94"></a>        opt_margin,
+<a name="line95"></a>        opt_preferredSize);
+<a name="line96"></a>  }
+<a name="line97"></a>};
 </pre>
 
 

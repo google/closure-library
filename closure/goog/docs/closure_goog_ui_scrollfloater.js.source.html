@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -91,12 +92,12 @@
 <a name="line48"></a>/**
 <a name="line49"></a> * Creates a ScrollFloater; see file overview for details.
 <a name="line50"></a> *
-<a name="line51"></a> * @param {Element} opt_parentElement Where to attach the element when it&#39;s
+<a name="line51"></a> * @param {Element=} opt_parentElement Where to attach the element when it&#39;s
 <a name="line52"></a> *     floating.  Default is the document body.  If the floating element
 <a name="line53"></a> *     contains form inputs, it will be necessary to attach it to the
 <a name="line54"></a> *     corresponding form element, or to an element in the DOM subtree under
 <a name="line55"></a> *     the form element.
-<a name="line56"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line56"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line57"></a> * @constructor
 <a name="line58"></a> * @extends {goog.ui.Component}
 <a name="line59"></a> */
@@ -272,7 +273,7 @@
 <a name="line229"></a>/**
 <a name="line230"></a> * When a scroll event occurs, compares the element&#39;s position to the current
 <a name="line231"></a> * document scroll position, and stops or starts floating behavior if needed.
-<a name="line232"></a> * @param {goog.events.Event} opt_e The event, which is ignored.
+<a name="line232"></a> * @param {goog.events.Event=} opt_e The event, which is ignored.
 <a name="line233"></a> * @private
 <a name="line234"></a> */
 <a name="line235"></a>goog.ui.ScrollFloater.prototype.update_ = function(opt_e) {

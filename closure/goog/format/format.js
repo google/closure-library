@@ -28,7 +28,7 @@ goog.require('goog.userAgent');
  * Formats a number of bytes in human readable form.
  * 54, 450K, 1.3M, 5G etc.
  * @param {number} bytes The number of bytes to show.
- * @param {number} opt_decimals The number of decimals to use.  Defaults to 2.
+ * @param {number=} opt_decimals The number of decimals to use.  Defaults to 2.
  * @return {string} The human readable form of the byte size.
  */
 goog.format.fileSize = function(bytes, opt_decimals) {
@@ -87,7 +87,7 @@ goog.format.stringToNumBytes = function(stringValue) {
 /**
  * Converts a numeric value to string representation. SI conversion.
  * @param {number} val Value to be converted.
- * @param {number} opt_decimals The number of decimals to use.  Defaults to 2.
+ * @param {number=} opt_decimals The number of decimals to use.  Defaults to 2.
  * @return {string} String representation of number.
  */
 goog.format.numericValueToString = function(val, opt_decimals) {
@@ -101,8 +101,8 @@ goog.format.numericValueToString = function(val, opt_decimals) {
  * Default is to return the additional 'B' suffix, e.g. '10.5KB' to minimize
  * confusion with counts that are scaled by powers of 1000.
  * @param {number} val Value to be converted.
- * @param {number} opt_decimals The number of decimals to use.  Defaults to 2.
- * @param {boolean} opt_suffix If true, include trailing 'B' in returned
+ * @param {number=} opt_decimals The number of decimals to use.  Defaults to 2.
+ * @param {boolean=} opt_suffix If true, include trailing 'B' in returned
  *     string.  Default is true.
  * @return {string} String representation of number of bytes.
  */
@@ -139,8 +139,8 @@ goog.format.stringToNumericValue_ = function(stringValue, conversion) {
  * scales.
  * @param {number} val Value to be converted.
  * @param {Object} conversion Dictionary of scaling factors.
- * @param {number} opt_decimals The number of decimals to use.  Default is 2.
- * @param {string} opt_suffix Optional suffix to append.
+ * @param {number=} opt_decimals The number of decimals to use.  Default is 2.
+ * @param {string=} opt_suffix Optional suffix to append.
  * @return {string} The human readable form of the byte size.
  * @private
  */
@@ -259,7 +259,7 @@ goog.format.FIRST_GRAPHEME_EXTEND_ = 0x300;
  * @param {function(number, number, boolean): boolean} hasGraphemeBreak A
  *     function determining if there is a grapheme break between two characters,
  *     in the same signature as goog.i18n.GraphemeBreak.hasGraphemeBreak.
- * @param {number} opt_maxlen Maximum length after which to ensure
+ * @param {number=} opt_maxlen Maximum length after which to ensure
  *     there is a break.  Default is 10 characters.
  * @return {string} The string including word breaks.
  * @private
@@ -354,7 +354,7 @@ goog.format.insertWordBreaksGeneric_ = function(str, hasGraphemeBreak,
  * insertWordBreaksBasic to minimize the size impact.
  *
  * @param {string} str HTML to insert word breaks into.
- * @param {number} opt_maxlen Maximum length after which to ensure there is a
+ * @param {number=} opt_maxlen Maximum length after which to ensure there is a
  *     break.  Default is 10 characters.
  * @return {string} The string including word breaks.
  */
@@ -375,7 +375,7 @@ goog.format.insertWordBreaks = function(str, opt_maxlen) {
  * @param {number} charCode The character code under consideration.  It must be
  *     at least \u0300 as a precondition -- this case is covered by
  *     insertWordBreaksGeneric_.
- * @param {boolean} opt_extended Ignored, to conform with the interface.
+ * @param {boolean=} opt_extended Ignored, to conform with the interface.
  * @return {boolean} Whether it is one of the recognized subsets of characters
  *     with a grapheme break.
  * @private
@@ -404,7 +404,7 @@ goog.format.conservativelyHasGraphemeBreak_ = function(
  * code eliminated.
  *
  * @param {string} str HTML to insert word breaks into.
- * @param {number} opt_maxlen Maximum length after which to ensure there is a
+ * @param {number=} opt_maxlen Maximum length after which to ensure there is a
  *     break.  Default is 10 characters.
  * @return {string} The string including word breaks.
  */

@@ -26,7 +26,7 @@ goog.require('goog.testing.net.XhrIo');
 /**
  * Mock implementation of goog.net.XhrLite. This doesn't provide a mock
  * implementation for all cases, but it's not too hard to add them as needed.
- * @param {goog.testing.TestQueue} opt_testQueue Test queue for inserting test
+ * @param {goog.testing.TestQueue=} opt_testQueue Test queue for inserting test
  *     events.
  * @deprecated Use goog.testing.net.XhrIo.
  * @constructor

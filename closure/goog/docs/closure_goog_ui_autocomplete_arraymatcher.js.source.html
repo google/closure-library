@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -73,7 +74,7 @@
 <a name="line30"></a> * @constructor
 <a name="line31"></a> * @param {Array} rows Dictionary of items to match.  Can be objects if they
 <a name="line32"></a> *     have a toString method that returns the value to match against.
-<a name="line33"></a> * @param {boolean} opt_noSimilar if true, do not do similarity matches for the
+<a name="line33"></a> * @param {boolean=} opt_noSimilar if true, do not do similarity matches for the
 <a name="line34"></a> *     input token against the dictionary.
 <a name="line35"></a> */
 <a name="line36"></a>goog.ui.AutoComplete.ArrayMatcher = function(rows, opt_noSimilar) {
@@ -87,7 +88,7 @@
 <a name="line44"></a> * @param {string} token Token to match.
 <a name="line45"></a> * @param {number} maxMatches Max number of matches to return.
 <a name="line46"></a> * @param {Function} matchHandler callback to execute after matching.
-<a name="line47"></a> * @param {string} opt_fullString The full string from the input box.
+<a name="line47"></a> * @param {string=} opt_fullString The full string from the input box.
 <a name="line48"></a> */
 <a name="line49"></a>goog.ui.AutoComplete.ArrayMatcher.prototype.requestMatchingRows =
 <a name="line50"></a>    function(token, maxMatches, matchHandler, opt_fullString) {

@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,13 +88,13 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_proto2_Message.html">goog.proto2.Message</a></span></td><td></td></tr>
   <tr><td>someprotopackage.TestPackageTypes</td><td><span class="type"><a href="class_goog_proto2_Message.html">goog.proto2.Message</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -681,7 +693,7 @@ given field descriptor. Note that the field must be repeated.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line297">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line296">code &raquo;</a>
   </td>
      </tr>
 
@@ -751,7 +763,7 @@ GENERATED CODE USE ONLY. Basis of the add{Field} methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line514">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line513">code &raquo;</a>
   </td>
      </tr>
 
@@ -818,7 +830,7 @@ GENERATED CODE USE ONLY. Basis of the {field}Array methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line441">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line440">code &raquo;</a>
   </td>
      </tr>
 
@@ -883,7 +895,7 @@ GENERATED CODE USE ONLY. Basis of the {field}Array methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line206">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line205">code &raquo;</a>
   </td>
      </tr>
 
@@ -952,7 +964,7 @@ is valid.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line540">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line539">code &raquo;</a>
   </td>
      </tr>
 
@@ -1012,7 +1024,7 @@ is valid.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line311">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line310">code &raquo;</a>
   </td>
      </tr>
 
@@ -1074,7 +1086,7 @@ GENERATED CODE USE ONLY. Basis of the clear{Field} methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line571">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line570">code &raquo;</a>
   </td>
      </tr>
 
@@ -1141,7 +1153,7 @@ GENERATED CODE USE ONLY. Basis of the {field}Count methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line469">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line468">code &raquo;</a>
   </td>
      </tr>
 
@@ -1206,7 +1218,7 @@ GENERATED CODE USE ONLY. Basis of the {field}Count methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line223">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line222">code &raquo;</a>
   </td>
      </tr>
 
@@ -1266,7 +1278,7 @@ GENERATED CODE USE ONLY. Basis of the {field}Count methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line145">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line144">code &raquo;</a>
   </td>
      </tr>
 
@@ -1322,7 +1334,7 @@ given field descriptor.
    <tr class="odd">
      <td>
         <span class="entryName">opt_index</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">If the field is repeated, the index to use when looking up the value.</div>
      </td>
    </tr>
@@ -1340,7 +1352,7 @@ given field descriptor.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line243">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line242">code &raquo;</a>
   </td>
      </tr>
 
@@ -1397,7 +1409,7 @@ GENERATED CODE USE ONLY. Basis of the get{Field} methods.
    <tr class="odd">
      <td>
         <span class="entryName">opt_index</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">If the field is a repeated field, the index at which to get the value.</div>
      </td>
    </tr>
@@ -1415,7 +1427,7 @@ GENERATED CODE USE ONLY. Basis of the get{Field} methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line388">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line387">code &raquo;</a>
   </td>
      </tr>
 
@@ -1473,7 +1485,7 @@ GENERATED CODE USE ONLY. Basis of the get{Field} methods.
    <tr class="odd">
      <td>
         <span class="entryName">opt_index</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">If the field is a repeated field, the index at which to get the value.</div>
      </td>
    </tr>
@@ -1491,7 +1503,7 @@ GENERATED CODE USE ONLY. Basis of the get{Field} methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line420">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line419">code &raquo;</a>
   </td>
      </tr>
 
@@ -1537,7 +1549,7 @@ GENERATED CODE USE ONLY. Basis of the get{Field} methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line159">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line158">code &raquo;</a>
   </td>
      </tr>
 
@@ -1603,7 +1615,7 @@ such field exists, throws an exception.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line328">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line327">code &raquo;</a>
   </td>
      </tr>
 
@@ -1659,7 +1671,7 @@ given field descriptor or the default value if none exists.
    <tr class="odd">
      <td>
         <span class="entryName">opt_index</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">If the field is repeated, the index to use when looking up the value.</div>
      </td>
    </tr>
@@ -1677,7 +1689,7 @@ given field descriptor or the default value if none exists.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line263">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line262">code &raquo;</a>
   </td>
      </tr>
 
@@ -1743,7 +1755,7 @@ given field descriptor.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line189">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line188">code &raquo;</a>
   </td>
      </tr>
 
@@ -1811,7 +1823,7 @@ GENERATED CODE USE ONLY. Basis of the has{Field} methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line346">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line345">code &raquo;</a>
   </td>
      </tr>
 
@@ -1880,7 +1892,7 @@ This method should be called by internal methods ONLY.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line113">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line112">code &raquo;</a>
   </td>
      </tr>
 
@@ -1941,7 +1953,7 @@ field if required.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line361">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line360">code &raquo;</a>
   </td>
      </tr>
 
@@ -2010,7 +2022,7 @@ given field descriptor. Note that the field must not be repeated.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line280">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line279">code &raquo;</a>
   </td>
      </tr>
 
@@ -2080,7 +2092,7 @@ GENERATED CODE USE ONLY. Basis of the set{Field} methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line492">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line491">code &raquo;</a>
   </td>
      </tr>
 
@@ -2148,7 +2160,7 @@ GENERATED CODE USE ONLY. Basis of the set{Field} methods.
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line128">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line127">code &raquo;</a>
   </td>
      </tr>
 
@@ -2196,7 +2208,7 @@ ECMAScript object (i.e a simple key/value pair object).
    <tr class="even">
      <td>
         <span class="entryName">opt_keyOption</span>
-        : <div class="fullType"><span class="type">goog.proto2.ObjectSerializer.KeyOption</span></div>
+        : <div class="fullType"><span class="type">goog.proto2.ObjectSerializer.KeyOption=</span></div>
         <div class="entryOverview">Specifies the format of the keys in the generated object. See the definition of the enumeration for more information.</div>
      </td>
    </tr>
@@ -2214,7 +2226,7 @@ ECMAScript object (i.e a simple key/value pair object).
 
 
   <td class="view-code">
-     <a href="closure_goog_proto2_message.js.source.html#line174">code &raquo;</a>
+     <a href="closure_goog_proto2_message.js.source.html#line173">code &raquo;</a>
   </td>
      </tr>
 

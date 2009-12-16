@@ -44,9 +44,9 @@ goog.require('goog.ui.SelectionModel');
  *
  * @param {Array.<Node>} items Array of DOM nodes to be displayed as items
  *     in the palette grid (limited to one per cell).
- * @param {goog.ui.PaletteRenderer} opt_renderer Renderer used to render or
+ * @param {goog.ui.PaletteRenderer=} opt_renderer Renderer used to render or
  *     decorate the palette; defaults to {@link goog.ui.PaletteRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Control}
@@ -350,7 +350,7 @@ goog.ui.Palette.prototype.getSize = function() {
  * been rendered.
  * @param {goog.math.Size|number} size Either a size object or the number of
  *     columns.
- * @param {number} opt_rows The number of rows (optional).
+ * @param {number=} opt_rows The number of rows (optional).
  */
 goog.ui.Palette.prototype.setSize = function(size, opt_rows) {
   if (this.getElement()) {

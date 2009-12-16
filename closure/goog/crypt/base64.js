@@ -89,7 +89,7 @@ goog.crypt.base64.ENCODED_VALS_WEBSAFE =
  *
  * @param {Array.<number>} input An array of bytes (numbers with value in
  *     [0, 255]) to encode.
- * @param {boolean} opt_webSafe Boolean indicating we should use the
+ * @param {boolean=} opt_webSafe Boolean indicating we should use the
  *     alternative alphabet.
  * @return {string} The base64 encoded string.
  */
@@ -140,7 +140,7 @@ goog.crypt.base64.encodeByteArray = function(input, opt_webSafe) {
  * Base64-encode a string.
  *
  * @param {string} input A string to encode.
- * @param {boolean} opt_webSafe If true, we should use the
+ * @param {boolean=} opt_webSafe If true, we should use the
  *     alternative alphabet.
  * @return {string} The base64 encoded string.
  */
@@ -159,7 +159,7 @@ goog.crypt.base64.encodeString = function(input, opt_webSafe) {
  * Base64-decode a string.
  *
  * @param {string} input to decode.
- * @param {boolean} opt_webSafe True if we should use the
+ * @param {boolean=} opt_webSafe True if we should use the
  *     alternative alphabet.
  * @return {string} string representing the decoded value.
  */
@@ -178,7 +178,7 @@ goog.crypt.base64.decodeString = function(input, opt_webSafe) {
  * Base64-decode a string.
  *
  * @param {string} input to decode.
- * @param {boolean} opt_webSafe True if we should use the
+ * @param {boolean=} opt_webSafe True if we should use the
  *     alternative alphabet.
  * @return {Array} bytes representing the decoded value.
  */

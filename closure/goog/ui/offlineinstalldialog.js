@@ -42,11 +42,11 @@ goog.require('goog.window');
 
 /**
  * An offline install dialog.
- * @param {string} opt_class CSS class name for the dialog element, also used
+ * @param {string=} opt_class CSS class name for the dialog element, also used
  *    as a class name prefix for related elements; defaults to modal-dialog.
- * @param {boolean} opt_useIframeMask Work around windowed controls z-index
+ * @param {boolean=} opt_useIframeMask Work around windowed controls z-index
  *     issue by using an iframe instead of a div for bg element.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Dialog}
  */
@@ -649,7 +649,7 @@ goog.ui.OfflineInstallDialog.EnableScreen.prototype.getButtonSet = function() {
  * not enabled the current application for offline access.
  * @param {goog.ui.OfflineInstallDialog} dialog  The dialog this is a screen
  *     for.
- * @param {string} opt_type An optional type, for specifying a more specific
+ * @param {string=} opt_type An optional type, for specifying a more specific
  *     type of dialog. Only for use by subclasses.
  * @constructor
  * @extends {goog.ui.OfflineInstallDialogScreen}

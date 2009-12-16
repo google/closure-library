@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -83,9 +84,9 @@
 <a name="line40"></a> * A simple interface for executing argument matching.  A match in this case is
 <a name="line41"></a> * testing to see if a supplied object fits a given criteria.  True is returned
 <a name="line42"></a> * if the given criteria is met.
-<a name="line43"></a> * @param {Function} opt_matchFn A function that evaluates a given argument
+<a name="line43"></a> * @param {Function=} opt_matchFn A function that evaluates a given argument
 <a name="line44"></a> *     and returns true if it meets a given criteria.
-<a name="line45"></a> * @param {?string} opt_matchName The name expressing intent as part of
+<a name="line45"></a> * @param {?string=} opt_matchName The name expressing intent as part of
 <a name="line46"></a> *      an error message for when a match fails.
 <a name="line47"></a> * @constructor
 <a name="line48"></a> */
@@ -113,7 +114,7 @@
 <a name="line70"></a> * which (if provided) will get error information and returns whether or
 <a name="line71"></a> * not it matches.
 <a name="line72"></a> * @param {*} toVerify The argument that should be verified.
-<a name="line73"></a> * @param {goog.testing.MockExpectation?} opt_expectation The expectation
+<a name="line73"></a> * @param {goog.testing.MockExpectation?=} opt_expectation The expectation
 <a name="line74"></a> *     for this match.
 <a name="line75"></a> * @return {boolean} Whether or not a given argument passes verification.
 <a name="line76"></a> */
@@ -249,10 +250,10 @@
 <a name="line206"></a> * can perform extra tests with this argument later.  For example, if the
 <a name="line207"></a> * argument is a callback method, the unit test can then later call this
 <a name="line208"></a> * callback to test the asynchronous portion of the call.
-<a name="line209"></a> * @param {goog.testing.mockmatchers.ArgumentMatcher|Function} opt_matcher
+<a name="line209"></a> * @param {goog.testing.mockmatchers.ArgumentMatcher|Function=} opt_matcher
 <a name="line210"></a> *     Argument matcher or matching function that will be used to validate the
 <a name="line211"></a> *     argument.  By default, argument will always be valid.
-<a name="line212"></a> * @param {?string} opt_matchName The name expressing intent as part of
+<a name="line212"></a> * @param {?string=} opt_matchName The name expressing intent as part of
 <a name="line213"></a> *      an error message for when a match fails.
 <a name="line214"></a> * @constructor
 <a name="line215"></a> * @extends {goog.testing.mockmatchers.ArgumentMatcher}
@@ -393,7 +394,7 @@
 <a name="line350"></a> * @param {Array} expectedArr An array of expectations which can be either
 <a name="line351"></a> *     values to check for equality or ArgumentMatchers.
 <a name="line352"></a> * @param {Array} arr The array to match.
-<a name="line353"></a> * @param {goog.testing.MockExpectation?} opt_expectation The expectation
+<a name="line353"></a> * @param {goog.testing.MockExpectation?=} opt_expectation The expectation
 <a name="line354"></a> *     for this match.
 <a name="line355"></a> * @return {boolean} Whether or not the given array matches the expectations.
 <a name="line356"></a> */

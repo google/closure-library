@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -85,8 +86,8 @@
 <a name="line42"></a> * code.The ITEM_EVENT instead of returning the DOM node returns a reference the
 <a name="line43"></a> * menu item.
 <a name="line44"></a> *
-<a name="line45"></a> * @param {string} opt_class Optional class for menu element, Default: &#39;menu&#39;.
-<a name="line46"></a> * @param {Element} opt_parent Optional parent element, otherwise it will be
+<a name="line45"></a> * @param {string=} opt_class Optional class for menu element, Default: &#39;menu&#39;.
+<a name="line46"></a> * @param {Element=} opt_parent Optional parent element, otherwise it will be
 <a name="line47"></a> *     added to the end of the document body.
 <a name="line48"></a> * @constructor
 <a name="line49"></a> * @extends {goog.ui.AttachableMenu}
@@ -273,8 +274,8 @@
 <a name="line230"></a>/**
 <a name="line231"></a> * Anchor the menu position to an element, and attach a click event.
 <a name="line232"></a> * @param {Element} el Element to anchor menu to.
-<a name="line233"></a> * @param {goog.positioning.Corner} opt_pos Corner: Default Bottom-left.
-<a name="line234"></a> * @param {goog.events.EventType} opt_eventType Event that triggers menu.
+<a name="line233"></a> * @param {goog.positioning.Corner=} opt_pos Corner: Default Bottom-left.
+<a name="line234"></a> * @param {goog.events.EventType=} opt_eventType Event that triggers menu.
 <a name="line235"></a> *     Default click.
 <a name="line236"></a> */
 <a name="line237"></a>goog.ui.BasicMenu.prototype.setAnchorElement = function(el, opt_pos,
@@ -317,7 +318,7 @@
 <a name="line274"></a>/**
 <a name="line275"></a> * Sets whether the popup should be visible.
 <a name="line276"></a> * @param {boolean} visible Show menu?.
-<a name="line277"></a>*  @param {boolean} opt_bubble Bubble to parent menu?.
+<a name="line277"></a>*  @param {boolean=} opt_bubble Bubble to parent menu?.
 <a name="line278"></a> */
 <a name="line279"></a>goog.ui.BasicMenu.prototype.setVisible = function(visible, opt_bubble) {
 <a name="line280"></a>  // Ignore setVisible(true) if already visible
@@ -374,7 +375,7 @@
 <a name="line331"></a> * Select menu item by element reference and active it (open/close submenus)
 <a name="line332"></a> * with a slight delay.
 <a name="line333"></a> * @param {Element} el Element for item to select.
-<a name="line334"></a> * @param {boolean} opt_keyEvent Was item selected using keyboard? In that case
+<a name="line334"></a> * @param {boolean=} opt_keyEvent Was item selected using keyboard? In that case
 <a name="line335"></a> *     open submenus are closed immediately and new submenus are not opened
 <a name="line336"></a> *     automatically.
 <a name="line337"></a> * @private
@@ -743,8 +744,8 @@
 <a name="line700"></a> * A menu item
 <a name="line701"></a> *
 <a name="line702"></a> * @param {?string} caption Html caption that gets shown in the menu.
-<a name="line703"></a> * @param {Object} opt_value The value that gets returned in the ItemEvent.
-<a name="line704"></a> * @param {goog.ui.BasicMenu} opt_submenu Optional menu that this item is the
+<a name="line703"></a> * @param {Object=} opt_value The value that gets returned in the ItemEvent.
+<a name="line704"></a> * @param {goog.ui.BasicMenu=} opt_submenu Optional menu that this item is the
 <a name="line705"></a> *    anchor for.
 <a name="line706"></a> * @constructor
 <a name="line707"></a> * @extends {goog.Disposable}

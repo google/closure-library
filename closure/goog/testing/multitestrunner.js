@@ -37,7 +37,7 @@ goog.require('goog.ui.ServerChart.ChartType');
 
 /**
  * A component for running multiple tests within the browser.
- * @param {goog.dom.DomHelper} opt_domHelper A DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper A DOM helper.
  * @extends {goog.ui.Component}
  * @constructor
  */
@@ -685,7 +685,9 @@ goog.testing.MultiTestRunner.prototype.processResult = function(frame) {
 
   this.stats_.push(frame.getStats());
 
-  this.log(this.trimFileName_(test) + ' : ' + (success ? 'Passed' : 'Failed'));
+  var prefix = success ? '' : '*** FAILURE *** ';
+  this.log(prefix +
+      this.trimFileName_(test) + ' : ' + (success ? 'Passed' : 'Failed'));
 
   this.resultCount_++;
 
@@ -1105,7 +1107,7 @@ goog.testing.MultiTestRunner.prototype.onStatsTabClicked_ = function(e) {
  * @param {string} basePath The base path for tests.
  * @param {number} timeoutMs The time to wait for the test to load and run.
  * @param {boolean} verbosePasses Whether to show results for passes.
- * @param {goog.dom.DomHelper} opt_domHelper Optional dom helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional dom helper.
  * @constructor
  * @extends {goog.ui.Component}
  */

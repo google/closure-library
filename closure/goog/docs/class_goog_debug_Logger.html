@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -87,12 +99,12 @@ should always use the goog.debug.Logger.getLogger function.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.debug.Logger</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -220,7 +232,7 @@ should always use the goog.debug.Logger.getLogger function.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line596">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line598">code &raquo;</a>
   </td>
      </tr>
 
@@ -341,7 +353,7 @@ we want to be able to add logging to the event system.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line573">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line575">code &raquo;</a>
   </td>
      </tr>
 
@@ -397,7 +409,7 @@ given message is forwarded to all the registered output Handler objects.
    <tr class="odd">
      <td>
         <span class="entryName">opt_exception</span>
-        : <div class="fullType"><span class="type">Error</span></div>
+        : <div class="fullType"><span class="type">Error=</span></div>
         <div class="entryOverview">An exception associated with the message.</div>
      </td>
    </tr>
@@ -411,7 +423,7 @@ given message is forwarded to all the registered output Handler objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line510">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line512">code &raquo;</a>
   </td>
      </tr>
 
@@ -467,7 +479,7 @@ given message is forwarded to all the registered output Handler objects.
    <tr class="odd">
      <td>
         <span class="entryName">opt_exception</span>
-        : <div class="fullType"><span class="type">Error</span></div>
+        : <div class="fullType"><span class="type">Error=</span></div>
         <div class="entryOverview">An exception associated with the message.</div>
      </td>
    </tr>
@@ -481,7 +493,7 @@ given message is forwarded to all the registered output Handler objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line522">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line524">code &raquo;</a>
   </td>
      </tr>
 
@@ -537,7 +549,7 @@ given message is forwarded to all the registered output Handler objects.
    <tr class="odd">
      <td>
         <span class="entryName">opt_exception</span>
-        : <div class="fullType"><span class="type">Error</span></div>
+        : <div class="fullType"><span class="type">Error=</span></div>
         <div class="entryOverview">An exception associated with the message.</div>
      </td>
    </tr>
@@ -551,7 +563,7 @@ given message is forwarded to all the registered output Handler objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line534">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line536">code &raquo;</a>
   </td>
      </tr>
 
@@ -607,7 +619,7 @@ given message is forwarded to all the registered output Handler objects.
    <tr class="odd">
      <td>
         <span class="entryName">opt_exception</span>
-        : <div class="fullType"><span class="type">Error</span></div>
+        : <div class="fullType"><span class="type">Error=</span></div>
         <div class="entryOverview">An exception associated with the message.</div>
      </td>
    </tr>
@@ -621,7 +633,7 @@ given message is forwarded to all the registered output Handler objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line546">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line548">code &raquo;</a>
   </td>
      </tr>
 
@@ -826,7 +838,7 @@ ancestor with a specific (non-null) level value.
    <tr class="even">
      <td>
         <span class="entryName">opt_exception</span>
-        : <div class="fullType"><span class="type">Error</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Error</span><span>&nbsp;|&nbsp;</span><span class="type">Object=</span></div>
         <div class="entryOverview">An exception associated with the message.</div>
      </td>
    </tr>
@@ -844,7 +856,7 @@ ancestor with a specific (non-null) level value.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line444">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line446">code &raquo;</a>
   </td>
      </tr>
 
@@ -992,7 +1004,7 @@ given message is forwarded to all the registered output Handler objects.
    <tr class="odd">
      <td>
         <span class="entryName">opt_exception</span>
-        : <div class="fullType"><span class="type">Error</span></div>
+        : <div class="fullType"><span class="type">Error=</span></div>
         <div class="entryOverview">An exception associated with the message.</div>
      </td>
    </tr>
@@ -1006,7 +1018,7 @@ given message is forwarded to all the registered output Handler objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line498">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line500">code &raquo;</a>
   </td>
      </tr>
 
@@ -1137,7 +1149,7 @@ registered output Handler objects.
    <tr class="even">
      <td>
         <span class="entryName">opt_exception</span>
-        : <div class="fullType"><span class="type">Error</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Error</span><span>&nbsp;|&nbsp;</span><span class="type">Object=</span></div>
         <div class="entryOverview">An exception associated with the message.</div>
      </td>
    </tr>
@@ -1151,7 +1163,7 @@ registered output Handler objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line429">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line430">code &raquo;</a>
   </td>
      </tr>
 
@@ -1213,7 +1225,7 @@ registered output Handler objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line557">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line559">code &raquo;</a>
   </td>
      </tr>
 
@@ -1403,7 +1415,7 @@ ancestor with a specific (non-null) level value.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line585">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line587">code &raquo;</a>
   </td>
      </tr>
 
@@ -1459,7 +1471,7 @@ given message is forwarded to all the registered output Handler objects.
    <tr class="odd">
      <td>
         <span class="entryName">opt_exception</span>
-        : <div class="fullType"><span class="type">Error</span></div>
+        : <div class="fullType"><span class="type">Error=</span></div>
         <div class="entryOverview">An exception associated with the message.</div>
      </td>
    </tr>
@@ -1473,7 +1485,7 @@ given message is forwarded to all the registered output Handler objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line474">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line476">code &raquo;</a>
   </td>
      </tr>
 
@@ -1529,7 +1541,7 @@ given message is forwarded to all the registered output Handler objects.
    <tr class="odd">
      <td>
         <span class="entryName">opt_exception</span>
-        : <div class="fullType"><span class="type">Error</span></div>
+        : <div class="fullType"><span class="type">Error=</span></div>
         <div class="entryOverview">An exception associated with the message.</div>
      </td>
    </tr>
@@ -1543,7 +1555,7 @@ given message is forwarded to all the registered output Handler objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line462">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line464">code &raquo;</a>
   </td>
      </tr>
 
@@ -1599,7 +1611,7 @@ given message is forwarded to all the registered output Handler objects.
    <tr class="odd">
      <td>
         <span class="entryName">opt_exception</span>
-        : <div class="fullType"><span class="type">Error</span></div>
+        : <div class="fullType"><span class="type">Error=</span></div>
         <div class="entryOverview">An exception associated with the message.</div>
      </td>
    </tr>
@@ -1613,7 +1625,7 @@ given message is forwarded to all the registered output Handler objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_logger.js.source.html#line486">code &raquo;</a>
+     <a href="closure_goog_debug_logger.js.source.html#line488">code &raquo;</a>
   </td>
      </tr>
 

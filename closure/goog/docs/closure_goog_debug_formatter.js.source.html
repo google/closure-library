@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -73,7 +74,7 @@
 <a name="line30"></a> * Base class for Formatters. A Formatter is used to format a LogRecord into
 <a name="line31"></a> * something that can be displayed to the user.
 <a name="line32"></a> *
-<a name="line33"></a> * @param {string} opt_prefix The prefix to place before text records.
+<a name="line33"></a> * @param {string=} opt_prefix The prefix to place before text records.
 <a name="line34"></a> * @constructor
 <a name="line35"></a> */
 <a name="line36"></a>goog.debug.Formatter = function(opt_prefix) {
@@ -217,7 +218,7 @@
 <a name="line174"></a> * Formatter that returns formatted html. See formatRecord for the classes
 <a name="line175"></a> * it uses for various types of formatted output.
 <a name="line176"></a> *
-<a name="line177"></a> * @param {string} opt_prefix The prefix to place before text records.
+<a name="line177"></a> * @param {string=} opt_prefix The prefix to place before text records.
 <a name="line178"></a> * @constructor
 <a name="line179"></a> * @extends {goog.debug.Formatter}
 <a name="line180"></a> */
@@ -296,7 +297,7 @@
 <a name="line253"></a>/**
 <a name="line254"></a> * Formatter that returns formatted plain text
 <a name="line255"></a> *
-<a name="line256"></a> * @param {string} opt_prefix The prefix to place before text records.
+<a name="line256"></a> * @param {string=} opt_prefix The prefix to place before text records.
 <a name="line257"></a> * @constructor
 <a name="line258"></a> * @extends {goog.debug.Formatter}
 <a name="line259"></a> */

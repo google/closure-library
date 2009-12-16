@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -166,30 +167,31 @@
 <a name="line123"></a> * @param {Node|string} from Node or text of the node to start the selection at.
 <a name="line124"></a> * @param {number} fromOffset Offset within the above node to start the
 <a name="line125"></a> *     selection at.
-<a name="line126"></a> * @param {Node|string} opt_to Node or text of the node to end the selection at.
-<a name="line127"></a> * @param {number} opt_toOffset Offset within the above node to end the
-<a name="line128"></a> *     selection at.
-<a name="line129"></a> */
-<a name="line130"></a>goog.testing.editor.TestHelper.prototype.select = function(from, fromOffset,
-<a name="line131"></a>    opt_to, opt_toOffset) {
-<a name="line132"></a>  var end;
-<a name="line133"></a>  var start = end = goog.isString(from) ? this.findTextNode(from) : from;
-<a name="line134"></a>  var endOffset;
-<a name="line135"></a>  var startOffset = endOffset = fromOffset;
-<a name="line136"></a>
-<a name="line137"></a>  if (opt_to &amp;&amp; goog.isNumber(opt_toOffset)) {
-<a name="line138"></a>    end = goog.isString(opt_to) ? this.findTextNode(opt_to) : opt_to;
-<a name="line139"></a>    endOffset = opt_toOffset;
-<a name="line140"></a>  }
-<a name="line141"></a>
-<a name="line142"></a>  goog.dom.Range.createFromNodes(start, startOffset, end, endOffset).select();
-<a name="line143"></a>};
-<a name="line144"></a>
+<a name="line126"></a> * @param {Node|string=} opt_to Node or text of the node to end the selection
+<a name="line127"></a> *     at.
+<a name="line128"></a> * @param {number=} opt_toOffset Offset within the above node to end the
+<a name="line129"></a> *     selection at.
+<a name="line130"></a> */
+<a name="line131"></a>goog.testing.editor.TestHelper.prototype.select = function(from, fromOffset,
+<a name="line132"></a>    opt_to, opt_toOffset) {
+<a name="line133"></a>  var end;
+<a name="line134"></a>  var start = end = goog.isString(from) ? this.findTextNode(from) : from;
+<a name="line135"></a>  var endOffset;
+<a name="line136"></a>  var startOffset = endOffset = fromOffset;
+<a name="line137"></a>
+<a name="line138"></a>  if (opt_to &amp;&amp; goog.isNumber(opt_toOffset)) {
+<a name="line139"></a>    end = goog.isString(opt_to) ? this.findTextNode(opt_to) : opt_to;
+<a name="line140"></a>    endOffset = opt_toOffset;
+<a name="line141"></a>  }
+<a name="line142"></a>
+<a name="line143"></a>  goog.dom.Range.createFromNodes(start, startOffset, end, endOffset).select();
+<a name="line144"></a>};
 <a name="line145"></a>
-<a name="line146"></a>/** @inheritDoc */
-<a name="line147"></a>goog.testing.editor.TestHelper.prototype.disposeInternal = function() {
-<a name="line148"></a>  delete this.root_;
-<a name="line149"></a>};
+<a name="line146"></a>
+<a name="line147"></a>/** @inheritDoc */
+<a name="line148"></a>goog.testing.editor.TestHelper.prototype.disposeInternal = function() {
+<a name="line149"></a>  delete this.root_;
+<a name="line150"></a>};
 </pre>
 
 

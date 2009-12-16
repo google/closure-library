@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,7 +88,7 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_editor_Plugin.html">goog.editor.Plugin</a></span></td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
@@ -84,7 +96,7 @@
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -190,7 +202,7 @@ background color in Opera. It made me cry.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line798">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line795">code &raquo;</a>
   </td>
      </tr>
 
@@ -250,7 +262,7 @@ background color in Opera. It made me cry.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1282">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1279">code &raquo;</a>
   </td>
      </tr>
 
@@ -315,7 +327,7 @@ background color in Opera. It made me cry.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line973">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line970">code &raquo;</a>
   </td>
      </tr>
 
@@ -380,7 +392,7 @@ background color in Opera. It made me cry.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1248">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1245">code &raquo;</a>
   </td>
      </tr>
 
@@ -441,7 +453,7 @@ versa. Fixes {@link <a href="http://buganizer/issue?id=1173491">http://buganizer
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line899">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line896">code &raquo;</a>
   </td>
      </tr>
 
@@ -493,7 +505,7 @@ TODO: work around this issue in WebKit and Opera as well.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1348">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1345">code &raquo;</a>
   </td>
      </tr>
 
@@ -553,7 +565,7 @@ TODO: work around this issue in WebKit and Opera as well.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line403">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line400">code &raquo;</a>
   </td>
      </tr>
 
@@ -613,7 +625,7 @@ TODO: work around this issue in WebKit and Opera as well.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line428">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line425">code &raquo;</a>
   </td>
      </tr>
 
@@ -651,7 +663,7 @@ making things headings anyway.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1091">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1088">code &raquo;</a>
   </td>
      </tr>
 
@@ -698,7 +710,7 @@ This is only intended to be used in IE and Opera.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line509">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line506">code &raquo;</a>
   </td>
      </tr>
 
@@ -752,7 +764,7 @@ This is only intended to be used in IE and Opera.
    <tr class="odd">
      <td>
         <span class="entryName">opt_value</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span><span>&nbsp;|&nbsp;</span><span class="type">null</span></div>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span><span>&nbsp;|&nbsp;</span><span class="type">null=</span></div>
         <div class="entryOverview">Optional value.</div>
      </td>
    </tr>
@@ -760,7 +772,7 @@ This is only intended to be used in IE and Opera.
    <tr class="even">
      <td>
         <span class="entryName">opt_preserveDir</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Set true to make sure that command does not change directionality of the selected text (works only if all selected text has the same directionality, otherwise ignored). Should not be true if bidi plugin is not loaded.</div>
      </td>
    </tr>
@@ -768,7 +780,7 @@ This is only intended to be used in IE and Opera.
    <tr class="odd">
      <td>
         <span class="entryName">opt_styleWithCss</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Set to true to ask the browser to use CSS to perform the execCommand.</div>
      </td>
    </tr>
@@ -782,7 +794,7 @@ This is only intended to be used in IE and Opera.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line689">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line686">code &raquo;</a>
   </td>
      </tr>
 
@@ -837,7 +849,7 @@ This is only intended to be used in IE and Opera.
    <tr class="odd">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span><span>&nbsp;|&nbsp;</span><span class="type">null</span></div>
+        : <div class="fullType"><span class="type">...string</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span><span>&nbsp;|&nbsp;</span><span class="type">null</span></div>
         <div class="entryOverview">For color commands, this should be the hex color (with the #). It will be unused for other commands.</div>
      </td>
    </tr>
@@ -855,7 +867,7 @@ This is only intended to be used in IE and Opera.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line152">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line149">code &raquo;</a>
   </td>
      </tr>
 
@@ -892,7 +904,7 @@ automatically, but IE doesn&#39;t. This does it manually.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1181">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1178">code &raquo;</a>
   </td>
      </tr>
 
@@ -928,7 +940,7 @@ unordered to ordered lists.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1110">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1107">code &raquo;</a>
   </td>
      </tr>
 
@@ -974,7 +986,7 @@ unordered to ordered lists.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line138">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line135">code &raquo;</a>
   </td>
      </tr>
 
@@ -1020,7 +1032,7 @@ unordered to ordered lists.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line128">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line125">code &raquo;</a>
   </td>
      </tr>
 
@@ -1054,7 +1066,7 @@ unordered to ordered lists.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line55">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line52">code &raquo;</a>
   </td>
      </tr>
 
@@ -1130,7 +1142,7 @@ unordered to ordered lists.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line456">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line453">code &raquo;</a>
   </td>
      </tr>
 
@@ -1168,7 +1180,7 @@ this code once that fix is released.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1317">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1314">code &raquo;</a>
   </td>
      </tr>
 
@@ -1234,7 +1246,7 @@ command for the entire selection.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1398">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1395">code &raquo;</a>
   </td>
      </tr>
 
@@ -1301,7 +1313,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1481">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1478">code &raquo;</a>
   </td>
      </tr>
 
@@ -1366,7 +1378,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line115">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line112">code &raquo;</a>
   </td>
      </tr>
 
@@ -1426,7 +1438,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line631">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line628">code &raquo;</a>
   </td>
      </tr>
 
@@ -1486,7 +1498,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line380">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line377">code &raquo;</a>
   </td>
      </tr>
 
@@ -1557,7 +1569,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
    <tr class="odd">
      <td>
         <span class="entryName">opt_styleWithCss</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Set to true to enable styleWithCSS before performing the queryCommand(Value|State).</div>
      </td>
    </tr>
@@ -1575,7 +1587,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1533">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1530">code &raquo;</a>
   </td>
      </tr>
 
@@ -1638,7 +1650,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
    <tr class="even">
      <td>
         <span class="entryName">opt_styleWithCss</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Set to true to enable styleWithCSS before performing the queryCommandState.</div>
      </td>
    </tr>
@@ -1656,7 +1668,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1499">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1496">code &raquo;</a>
   </td>
      </tr>
 
@@ -1721,7 +1733,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line326">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line323">code &raquo;</a>
   </td>
      </tr>
 
@@ -1784,7 +1796,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
    <tr class="even">
      <td>
         <span class="entryName">opt_styleWithCss</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Set to true to enable styleWithCSS before performing the queryCommandValue.</div>
      </td>
    </tr>
@@ -1802,7 +1814,7 @@ strong element and nodeName is &quot;strong&quot;, then it will return true.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1515">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1512">code &raquo;</a>
   </td>
      </tr>
 
@@ -1838,7 +1850,7 @@ See 1286408.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line945">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line942">code &raquo;</a>
   </td>
      </tr>
 
@@ -2124,7 +2136,7 @@ Multi-field plugins must override execCommand.
    <tr class="odd">
      <td>
         <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">...Object</span></div>
         <div class="entryOverview">Any additional parameters needed to execute the command.</div>
      </td>
    </tr>
@@ -2681,7 +2693,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -2689,7 +2701,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -2926,7 +2938,7 @@ nothing is done.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -2934,7 +2946,7 @@ nothing is done.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -3274,7 +3286,7 @@ mypackage.MyClass.superClass_.disposeInternal.call(this);
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line66">Code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line63">Code &raquo;</a>
   </td>
      </tr>
 
@@ -3599,7 +3611,7 @@ the end of block level containers in those browsers&#39; editors.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line499">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line496">code &raquo;</a>
   </td>
      </tr>
 
@@ -3660,7 +3672,7 @@ instead of the align property.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line665">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line662">code &raquo;</a>
   </td>
      </tr>
 
@@ -3716,7 +3728,7 @@ This is only intended to be used in IE and Opera.
    <tr class="odd">
      <td>
         <span class="entryName">opt_convertBrs</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, also convert BRs to divs.</div>
      </td>
    </tr>
@@ -3730,7 +3742,7 @@ This is only intended to be used in IE and Opera.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line587">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line584">code &raquo;</a>
   </td>
      </tr>
 
@@ -3799,7 +3811,7 @@ TODO: Consider doing away with the + and converter completely.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line620">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line617">code &raquo;</a>
   </td>
      </tr>
 
@@ -3864,7 +3876,7 @@ TODO: Consider doing away with the + and converter completely.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1458">code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1455">code &raquo;</a>
   </td>
      </tr>
 
@@ -3916,7 +3928,7 @@ handles in O(1) time.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line105">Code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line102">Code &raquo;</a>
   </td>
      </tr>
 
@@ -3949,7 +3961,7 @@ handles in O(1) time.
 
 
   <td class="view-code">
-     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1383">Code &raquo;</a>
+     <a href="closure_goog_editor_plugins_basictextformatter.js.source.html#line1380">Code &raquo;</a>
   </td>
      </tr>
 

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -304,7 +305,7 @@
 <a name="line261"></a> * Creates a {@link goog.ui.Toolbar} containing a default set of editor
 <a name="line262"></a> * toolbar buttons, and renders it into the given parent element.
 <a name="line263"></a> * @param {!Element} elem Toolbar parent element.
-<a name="line264"></a> * @param {boolean} opt_isRightToLeft Whether the editor chrome is
+<a name="line264"></a> * @param {boolean=} opt_isRightToLeft Whether the editor chrome is
 <a name="line265"></a> *     right-to-left; defaults to the directionality of the toolbar parent
 <a name="line266"></a> *     element.
 <a name="line267"></a> * @return {!goog.ui.Toolbar} Default editor toolbar, rendered into the given
@@ -331,7 +332,7 @@
 <a name="line288"></a> * @param {!Array.&lt;string|goog.ui.Control&gt;} items Toolbar items; each must
 <a name="line289"></a> *     be a {@link goog.editor.Command} or a {@link goog.ui.Control}.
 <a name="line290"></a> * @param {!Element} elem Toolbar parent element.
-<a name="line291"></a> * @param {boolean} opt_isRightToLeft Whether the editor chrome is
+<a name="line291"></a> * @param {boolean=} opt_isRightToLeft Whether the editor chrome is
 <a name="line292"></a> *     right-to-left; defaults to the directionality of the toolbar parent
 <a name="line293"></a> *     element.
 <a name="line294"></a> * @return {!goog.ui.Toolbar} Editor toolbar, rendered into the given parent
@@ -363,7 +364,7 @@
 <a name="line320"></a> * command.  Note that this function is only intended to create built-in
 <a name="line321"></a> * buttons; please don&#39;t try to hack it!
 <a name="line322"></a> * @param {string} command Editor command ID.
-<a name="line323"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line323"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line324"></a> *     creation; defaults to the current document if unspecified.
 <a name="line325"></a> * @return {goog.ui.Button} Toolbar button (null if no built-in button exists
 <a name="line326"></a> *     for the command).
@@ -447,11 +448,11 @@
 <a name="line404"></a> *     built-in buttons, anything else for custom buttons.
 <a name="line405"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line406"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line407"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line407"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line408"></a> *     element.
-<a name="line409"></a> * @param {goog.ui.ButtonRenderer} opt_renderer Button renderer; defaults to
+<a name="line409"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Button renderer; defaults to
 <a name="line410"></a> *     {@link goog.ui.ToolbarButtonRenderer} if unspecified.
-<a name="line411"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line411"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line412"></a> *     creation; defaults to the current document if unspecified.
 <a name="line413"></a> * @return {!goog.ui.Button} A toolbar button.
 <a name="line414"></a> * @private
@@ -482,11 +483,11 @@
 <a name="line439"></a> *     built-in buttons, anything else for custom buttons.
 <a name="line440"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line441"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line442"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line442"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line443"></a> *     element.
-<a name="line444"></a> * @param {goog.ui.ButtonRenderer} opt_renderer Button renderer; defaults to
+<a name="line444"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Button renderer; defaults to
 <a name="line445"></a> *     {@link goog.ui.ToolbarButtonRenderer} if unspecified.
-<a name="line446"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line446"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line447"></a> *     creation; defaults to the current document if unspecified.
 <a name="line448"></a> * @return {!goog.ui.Button} A toolbar button.
 <a name="line449"></a> * @private
@@ -510,11 +511,11 @@
 <a name="line467"></a> *     built-in buttons, anything else for custom buttons.
 <a name="line468"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line469"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line470"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line470"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line471"></a> *     element.
-<a name="line472"></a> * @param {goog.ui.MenuButtonRenderer} opt_renderer Button renderer; defaults to
-<a name="line473"></a> *     {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
-<a name="line474"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line472"></a> * @param {goog.ui.MenuButtonRenderer=} opt_renderer Button renderer; defaults
+<a name="line473"></a> *     to {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
+<a name="line474"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line475"></a> *     creation; defaults to the current document if unspecified.
 <a name="line476"></a> * @return {!goog.ui.Button} A toolbar button.
 <a name="line477"></a> * @private
@@ -559,11 +560,11 @@
 <a name="line516"></a> *     built-in buttons, anything else for custom buttons.
 <a name="line517"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line518"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line519"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line519"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line520"></a> *     element.
-<a name="line521"></a> * @param {goog.ui.MenuButtonRenderer} opt_renderer Button renderer; defaults to
-<a name="line522"></a> *     {@link goog.ui.ToolbarMebuButtonRenderer} if unspecified.
-<a name="line523"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line521"></a> * @param {goog.ui.MenuButtonRenderer=} opt_renderer Button renderer; defaults
+<a name="line522"></a> *     to {@link goog.ui.ToolbarMebuButtonRenderer} if unspecified.
+<a name="line523"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line524"></a> *     creation; defaults to the current document if unspecified.
 <a name="line525"></a> * @return {!goog.ui.Button} A toolbar button.
 <a name="line526"></a> * @private
@@ -625,12 +626,12 @@
 <a name="line582"></a> *     built-in buttons, anything else for custom buttons.
 <a name="line583"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line584"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line585"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line585"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line586"></a> *     element.
-<a name="line587"></a> * @param {goog.ui.ColorMenuButtonRenderer} opt_renderer Button renderer;
+<a name="line587"></a> * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Button renderer;
 <a name="line588"></a> *     defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer} if
 <a name="line589"></a> *     unspecified.
-<a name="line590"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line590"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line591"></a> *     creation; defaults to the current document if unspecified.
 <a name="line592"></a> * @return {!goog.ui.Button} A toolbar button.
 <a name="line593"></a> * @private
@@ -655,12 +656,12 @@
 <a name="line612"></a> *     built-in buttons, anything else for custom buttons.
 <a name="line613"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line614"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line615"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line615"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line616"></a> *     element.
-<a name="line617"></a> * @param {goog.ui.ColorMenuButtonRenderer} opt_renderer Button renderer;
+<a name="line617"></a> * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Button renderer;
 <a name="line618"></a> *     defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer} if
 <a name="line619"></a> *     unspecified.
-<a name="line620"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
+<a name="line620"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
 <a name="line621"></a> *     creation; defaults to the current document if unspecified.
 <a name="line622"></a> * @return {!goog.ui.Button} A toolbar button.
 <a name="line623"></a> * @private
@@ -685,374 +686,375 @@
 <a name="line642"></a> *     built-in buttons, anything else for custom buttons.
 <a name="line643"></a> * @param {string} tooltip Tooltip to be shown on hover.
 <a name="line644"></a> * @param {goog.ui.ControlContent} caption Button caption.
-<a name="line645"></a> * @param {string} opt_classNames CSS class name(s) to apply to the caption
+<a name="line645"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
 <a name="line646"></a> *     element.
-<a name="line647"></a> * @param {goog.ui.MenuButtonRenderer} opt_renderer Button renderer; defaults to
-<a name="line648"></a> *     {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
-<a name="line649"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper, used for DOM
-<a name="line650"></a> *     creation; defaults to the current document if unspecified.
-<a name="line651"></a> * @return {!goog.ui.Button} A toolbar button.
-<a name="line652"></a> * @private
-<a name="line653"></a> */
-<a name="line654"></a>goog.ui.editor.DefaultToolbar.formatBlockFactory_ = function(id, tooltip,
-<a name="line655"></a>    caption, opt_classNames, opt_renderer, opt_domHelper) {
-<a name="line656"></a>  var button = goog.ui.editor.ToolbarFactory.makeSelectButton(id, tooltip,
-<a name="line657"></a>      caption, opt_classNames, opt_renderer, opt_domHelper);
-<a name="line658"></a>  goog.ui.editor.DefaultToolbar.addDefaultFormatOptions(button);
-<a name="line659"></a>  button.setDefaultCaption(goog.ui.editor.DefaultToolbar.MSG_FORMAT_NORMAL);
-<a name="line660"></a>  // Format options don&#39;t have keyboard accelerators.
-<a name="line661"></a>  goog.dom.classes.add(button.getMenu().getContentElement(),
-<a name="line662"></a>      goog.getCssName(&#39;goog-menu-noaccel&#39;));
-<a name="line663"></a>  // How to update this button.
-<a name="line664"></a>  button.updateFromValue = function(value) {
-<a name="line665"></a>    // Normalize value to null or a nonempty string (sometimes we get
-<a name="line666"></a>    // the empty string, sometimes we get false...)
-<a name="line667"></a>    value = value &amp;&amp; value.length &gt; 0 ? value : null;
-<a name="line668"></a>    if (value != button.getValue()) {
-<a name="line669"></a>      button.setValue(value);
-<a name="line670"></a>     }
-<a name="line671"></a>  }
-<a name="line672"></a>  return button;
-<a name="line673"></a>};
-<a name="line674"></a>
+<a name="line647"></a> * @param {goog.ui.MenuButtonRenderer=} opt_renderer Button renderer;
+<a name="line648"></a> *     defaults to
+<a name="line649"></a> *     {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
+<a name="line650"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
+<a name="line651"></a> *     creation; defaults to the current document if unspecified.
+<a name="line652"></a> * @return {!goog.ui.Button} A toolbar button.
+<a name="line653"></a> * @private
+<a name="line654"></a> */
+<a name="line655"></a>goog.ui.editor.DefaultToolbar.formatBlockFactory_ = function(id, tooltip,
+<a name="line656"></a>    caption, opt_classNames, opt_renderer, opt_domHelper) {
+<a name="line657"></a>  var button = goog.ui.editor.ToolbarFactory.makeSelectButton(id, tooltip,
+<a name="line658"></a>      caption, opt_classNames, opt_renderer, opt_domHelper);
+<a name="line659"></a>  goog.ui.editor.DefaultToolbar.addDefaultFormatOptions(button);
+<a name="line660"></a>  button.setDefaultCaption(goog.ui.editor.DefaultToolbar.MSG_FORMAT_NORMAL);
+<a name="line661"></a>  // Format options don&#39;t have keyboard accelerators.
+<a name="line662"></a>  goog.dom.classes.add(button.getMenu().getContentElement(),
+<a name="line663"></a>      goog.getCssName(&#39;goog-menu-noaccel&#39;));
+<a name="line664"></a>  // How to update this button.
+<a name="line665"></a>  button.updateFromValue = function(value) {
+<a name="line666"></a>    // Normalize value to null or a nonempty string (sometimes we get
+<a name="line667"></a>    // the empty string, sometimes we get false...)
+<a name="line668"></a>    value = value &amp;&amp; value.length &gt; 0 ? value : null;
+<a name="line669"></a>    if (value != button.getValue()) {
+<a name="line670"></a>      button.setValue(value);
+<a name="line671"></a>     }
+<a name="line672"></a>  }
+<a name="line673"></a>  return button;
+<a name="line674"></a>};
 <a name="line675"></a>
-<a name="line676"></a>// Messages used for tooltips and captions.
-<a name="line677"></a>
-<a name="line678"></a>/** @desc Format menu tooltip. */
-<a name="line679"></a>goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_TITLE = goog.getMsg(&#39;Format&#39;);
-<a name="line680"></a>
-<a name="line681"></a>/** @desc Format menu caption. */
-<a name="line682"></a>goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_CAPTION = goog.getMsg(&#39;Format&#39;);
-<a name="line683"></a>
-<a name="line684"></a>/** @desc Undo button tooltip. */
-<a name="line685"></a>goog.ui.editor.DefaultToolbar.MSG_UNDO_TITLE = goog.getMsg(&#39;Undo&#39;);
-<a name="line686"></a>
-<a name="line687"></a>/** @desc Redo button tooltip. */
-<a name="line688"></a>goog.ui.editor.DefaultToolbar.MSG_REDO_TITLE = goog.getMsg(&#39;Redo&#39;);
-<a name="line689"></a>
-<a name="line690"></a>/** @desc Font menu tooltip. */
-<a name="line691"></a>goog.ui.editor.DefaultToolbar.MSG_FONT_FACE_TITLE = goog.getMsg(&#39;Font&#39;);
-<a name="line692"></a>
-<a name="line693"></a>/** @desc Font size menu tooltip. */
-<a name="line694"></a>goog.ui.editor.DefaultToolbar.MSG_FONT_SIZE_TITLE = goog.getMsg(&#39;Font size&#39;);
-<a name="line695"></a>
-<a name="line696"></a>/** @desc Text foreground color menu tooltip. */
-<a name="line697"></a>goog.ui.editor.DefaultToolbar.MSG_FONT_COLOR_TITLE = goog.getMsg(&#39;Text color&#39;);
-<a name="line698"></a>
-<a name="line699"></a>/** @desc Bold button tooltip. */
-<a name="line700"></a>goog.ui.editor.DefaultToolbar.MSG_BOLD_TITLE = goog.getMsg(&#39;Bold&#39;);
-<a name="line701"></a>
-<a name="line702"></a>/** @desc Italic button tooltip. */
-<a name="line703"></a>goog.ui.editor.DefaultToolbar.MSG_ITALIC_TITLE = goog.getMsg(&#39;Italic&#39;);
-<a name="line704"></a>
-<a name="line705"></a>/** @desc Underline button tooltip. */
-<a name="line706"></a>goog.ui.editor.DefaultToolbar.MSG_UNDERLINE_TITLE = goog.getMsg(&#39;Underline&#39;);
-<a name="line707"></a>
-<a name="line708"></a>/** @desc Text background color menu tooltip. */
-<a name="line709"></a>goog.ui.editor.DefaultToolbar.MSG_BACKGROUND_COLOR_TITLE =
-<a name="line710"></a>    goog.getMsg(&#39;Text background color&#39;);
-<a name="line711"></a>
-<a name="line712"></a>/** @desc Link button tooltip. */
-<a name="line713"></a>goog.ui.editor.DefaultToolbar.MSG_LINK_TITLE =
-<a name="line714"></a>    goog.getMsg(&#39;Add or remove link&#39;);
-<a name="line715"></a>
-<a name="line716"></a>/** @desc Numbered list button tooltip. */
-<a name="line717"></a>goog.ui.editor.DefaultToolbar.MSG_ORDERED_LIST_TITLE =
-<a name="line718"></a>    goog.getMsg(&#39;Numbered list&#39;);
-<a name="line719"></a>
-<a name="line720"></a>/** @desc Bullet list button tooltip. */
-<a name="line721"></a>goog.ui.editor.DefaultToolbar.MSG_UNORDERED_LIST_TITLE =
-<a name="line722"></a>    goog.getMsg(&#39;Bullet list&#39;);
-<a name="line723"></a>
-<a name="line724"></a>/** @desc Outdent button tooltip. */
-<a name="line725"></a>goog.ui.editor.DefaultToolbar.MSG_OUTDENT_TITLE =
-<a name="line726"></a>    goog.getMsg(&#39;Decrease indent&#39;);
-<a name="line727"></a>
-<a name="line728"></a>/** @desc Indent button tooltip. */
-<a name="line729"></a>goog.ui.editor.DefaultToolbar.MSG_INDENT_TITLE = goog.getMsg(&#39;Increase indent&#39;);
-<a name="line730"></a>
-<a name="line731"></a>/** @desc Align left button tooltip. */
-<a name="line732"></a>goog.ui.editor.DefaultToolbar.MSG_ALIGN_LEFT_TITLE = goog.getMsg(&#39;Align left&#39;);
-<a name="line733"></a>
-<a name="line734"></a>/** @desc Align center button tooltip. */
-<a name="line735"></a>goog.ui.editor.DefaultToolbar.MSG_ALIGN_CENTER_TITLE =
-<a name="line736"></a>    goog.getMsg(&#39;Align center&#39;);
-<a name="line737"></a>
-<a name="line738"></a>/** @desc Align right button tooltip. */
-<a name="line739"></a>goog.ui.editor.DefaultToolbar.MSG_ALIGN_RIGHT_TITLE =
-<a name="line740"></a>    goog.getMsg(&#39;Align right&#39;);
-<a name="line741"></a>
-<a name="line742"></a>/** @desc Justify button tooltip. */
-<a name="line743"></a>goog.ui.editor.DefaultToolbar.MSG_JUSTIFY_TITLE = goog.getMsg(&#39;Justify&#39;);
-<a name="line744"></a>
-<a name="line745"></a>/** @desc Remove formatting button tooltip. */
-<a name="line746"></a>goog.ui.editor.DefaultToolbar.MSG_REMOVE_FORMAT_TITLE =
-<a name="line747"></a>    goog.getMsg(&#39;Remove formatting&#39;);
-<a name="line748"></a>
-<a name="line749"></a>/** @desc Insert image button tooltip. */
-<a name="line750"></a>goog.ui.editor.DefaultToolbar.MSG_IMAGE_TITLE = goog.getMsg(&#39;Insert image&#39;);
-<a name="line751"></a>
-<a name="line752"></a>/** @desc Strike through button tooltip. */
-<a name="line753"></a>goog.ui.editor.DefaultToolbar.MSG_STRIKE_THROUGH_TITLE =
-<a name="line754"></a>    goog.getMsg(&#39;Strikethrough&#39;);
-<a name="line755"></a>
-<a name="line756"></a>/** @desc Left-to-right button tooltip. */
-<a name="line757"></a>goog.ui.editor.DefaultToolbar.MSG_DIR_LTR_TITLE = goog.getMsg(&#39;Left-to-right&#39;);
-<a name="line758"></a>
-<a name="line759"></a>/** @desc Right-to-left button tooltip. */
-<a name="line760"></a>goog.ui.editor.DefaultToolbar.MSG_DIR_RTL_TITLE = goog.getMsg(&#39;Right-to-left&#39;);
-<a name="line761"></a>
-<a name="line762"></a>/** @desc Blockquote button tooltip. */
-<a name="line763"></a>goog.ui.editor.DefaultToolbar.MSG_BLOCKQUOTE_TITLE = goog.getMsg(&#39;Quote&#39;);
-<a name="line764"></a>
-<a name="line765"></a>/** @desc Edit HTML button tooltip. */
-<a name="line766"></a>goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_TITLE =
-<a name="line767"></a>    goog.getMsg(&#39;Edit HTML source&#39;);
-<a name="line768"></a>
-<a name="line769"></a>/** @desc Link button caption. */
-<a name="line770"></a>goog.ui.editor.DefaultToolbar.MSG_LINK_CAPTION = goog.getMsg(&#39;Link&#39;);
-<a name="line771"></a>
-<a name="line772"></a>/** @desc Subscript button tooltip. */
-<a name="line773"></a>goog.ui.editor.DefaultToolbar.MSG_SUBSCRIPT = goog.getMsg(&#39;Subscript&#39;);
-<a name="line774"></a>
-<a name="line775"></a>/** @desc Superscript button tooltip. */
-<a name="line776"></a>goog.ui.editor.DefaultToolbar.MSG_SUPERSCRIPT = goog.getMsg(&#39;Superscript&#39;);
-<a name="line777"></a>
-<a name="line778"></a>/** @desc Edit HTML button caption. */
-<a name="line779"></a>goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION = goog.getMsg(&#39;Edit HTML&#39;);
-<a name="line780"></a>
+<a name="line676"></a>
+<a name="line677"></a>// Messages used for tooltips and captions.
+<a name="line678"></a>
+<a name="line679"></a>/** @desc Format menu tooltip. */
+<a name="line680"></a>goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_TITLE = goog.getMsg(&#39;Format&#39;);
+<a name="line681"></a>
+<a name="line682"></a>/** @desc Format menu caption. */
+<a name="line683"></a>goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_CAPTION = goog.getMsg(&#39;Format&#39;);
+<a name="line684"></a>
+<a name="line685"></a>/** @desc Undo button tooltip. */
+<a name="line686"></a>goog.ui.editor.DefaultToolbar.MSG_UNDO_TITLE = goog.getMsg(&#39;Undo&#39;);
+<a name="line687"></a>
+<a name="line688"></a>/** @desc Redo button tooltip. */
+<a name="line689"></a>goog.ui.editor.DefaultToolbar.MSG_REDO_TITLE = goog.getMsg(&#39;Redo&#39;);
+<a name="line690"></a>
+<a name="line691"></a>/** @desc Font menu tooltip. */
+<a name="line692"></a>goog.ui.editor.DefaultToolbar.MSG_FONT_FACE_TITLE = goog.getMsg(&#39;Font&#39;);
+<a name="line693"></a>
+<a name="line694"></a>/** @desc Font size menu tooltip. */
+<a name="line695"></a>goog.ui.editor.DefaultToolbar.MSG_FONT_SIZE_TITLE = goog.getMsg(&#39;Font size&#39;);
+<a name="line696"></a>
+<a name="line697"></a>/** @desc Text foreground color menu tooltip. */
+<a name="line698"></a>goog.ui.editor.DefaultToolbar.MSG_FONT_COLOR_TITLE = goog.getMsg(&#39;Text color&#39;);
+<a name="line699"></a>
+<a name="line700"></a>/** @desc Bold button tooltip. */
+<a name="line701"></a>goog.ui.editor.DefaultToolbar.MSG_BOLD_TITLE = goog.getMsg(&#39;Bold&#39;);
+<a name="line702"></a>
+<a name="line703"></a>/** @desc Italic button tooltip. */
+<a name="line704"></a>goog.ui.editor.DefaultToolbar.MSG_ITALIC_TITLE = goog.getMsg(&#39;Italic&#39;);
+<a name="line705"></a>
+<a name="line706"></a>/** @desc Underline button tooltip. */
+<a name="line707"></a>goog.ui.editor.DefaultToolbar.MSG_UNDERLINE_TITLE = goog.getMsg(&#39;Underline&#39;);
+<a name="line708"></a>
+<a name="line709"></a>/** @desc Text background color menu tooltip. */
+<a name="line710"></a>goog.ui.editor.DefaultToolbar.MSG_BACKGROUND_COLOR_TITLE =
+<a name="line711"></a>    goog.getMsg(&#39;Text background color&#39;);
+<a name="line712"></a>
+<a name="line713"></a>/** @desc Link button tooltip. */
+<a name="line714"></a>goog.ui.editor.DefaultToolbar.MSG_LINK_TITLE =
+<a name="line715"></a>    goog.getMsg(&#39;Add or remove link&#39;);
+<a name="line716"></a>
+<a name="line717"></a>/** @desc Numbered list button tooltip. */
+<a name="line718"></a>goog.ui.editor.DefaultToolbar.MSG_ORDERED_LIST_TITLE =
+<a name="line719"></a>    goog.getMsg(&#39;Numbered list&#39;);
+<a name="line720"></a>
+<a name="line721"></a>/** @desc Bullet list button tooltip. */
+<a name="line722"></a>goog.ui.editor.DefaultToolbar.MSG_UNORDERED_LIST_TITLE =
+<a name="line723"></a>    goog.getMsg(&#39;Bullet list&#39;);
+<a name="line724"></a>
+<a name="line725"></a>/** @desc Outdent button tooltip. */
+<a name="line726"></a>goog.ui.editor.DefaultToolbar.MSG_OUTDENT_TITLE =
+<a name="line727"></a>    goog.getMsg(&#39;Decrease indent&#39;);
+<a name="line728"></a>
+<a name="line729"></a>/** @desc Indent button tooltip. */
+<a name="line730"></a>goog.ui.editor.DefaultToolbar.MSG_INDENT_TITLE = goog.getMsg(&#39;Increase indent&#39;);
+<a name="line731"></a>
+<a name="line732"></a>/** @desc Align left button tooltip. */
+<a name="line733"></a>goog.ui.editor.DefaultToolbar.MSG_ALIGN_LEFT_TITLE = goog.getMsg(&#39;Align left&#39;);
+<a name="line734"></a>
+<a name="line735"></a>/** @desc Align center button tooltip. */
+<a name="line736"></a>goog.ui.editor.DefaultToolbar.MSG_ALIGN_CENTER_TITLE =
+<a name="line737"></a>    goog.getMsg(&#39;Align center&#39;);
+<a name="line738"></a>
+<a name="line739"></a>/** @desc Align right button tooltip. */
+<a name="line740"></a>goog.ui.editor.DefaultToolbar.MSG_ALIGN_RIGHT_TITLE =
+<a name="line741"></a>    goog.getMsg(&#39;Align right&#39;);
+<a name="line742"></a>
+<a name="line743"></a>/** @desc Justify button tooltip. */
+<a name="line744"></a>goog.ui.editor.DefaultToolbar.MSG_JUSTIFY_TITLE = goog.getMsg(&#39;Justify&#39;);
+<a name="line745"></a>
+<a name="line746"></a>/** @desc Remove formatting button tooltip. */
+<a name="line747"></a>goog.ui.editor.DefaultToolbar.MSG_REMOVE_FORMAT_TITLE =
+<a name="line748"></a>    goog.getMsg(&#39;Remove formatting&#39;);
+<a name="line749"></a>
+<a name="line750"></a>/** @desc Insert image button tooltip. */
+<a name="line751"></a>goog.ui.editor.DefaultToolbar.MSG_IMAGE_TITLE = goog.getMsg(&#39;Insert image&#39;);
+<a name="line752"></a>
+<a name="line753"></a>/** @desc Strike through button tooltip. */
+<a name="line754"></a>goog.ui.editor.DefaultToolbar.MSG_STRIKE_THROUGH_TITLE =
+<a name="line755"></a>    goog.getMsg(&#39;Strikethrough&#39;);
+<a name="line756"></a>
+<a name="line757"></a>/** @desc Left-to-right button tooltip. */
+<a name="line758"></a>goog.ui.editor.DefaultToolbar.MSG_DIR_LTR_TITLE = goog.getMsg(&#39;Left-to-right&#39;);
+<a name="line759"></a>
+<a name="line760"></a>/** @desc Right-to-left button tooltip. */
+<a name="line761"></a>goog.ui.editor.DefaultToolbar.MSG_DIR_RTL_TITLE = goog.getMsg(&#39;Right-to-left&#39;);
+<a name="line762"></a>
+<a name="line763"></a>/** @desc Blockquote button tooltip. */
+<a name="line764"></a>goog.ui.editor.DefaultToolbar.MSG_BLOCKQUOTE_TITLE = goog.getMsg(&#39;Quote&#39;);
+<a name="line765"></a>
+<a name="line766"></a>/** @desc Edit HTML button tooltip. */
+<a name="line767"></a>goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_TITLE =
+<a name="line768"></a>    goog.getMsg(&#39;Edit HTML source&#39;);
+<a name="line769"></a>
+<a name="line770"></a>/** @desc Link button caption. */
+<a name="line771"></a>goog.ui.editor.DefaultToolbar.MSG_LINK_CAPTION = goog.getMsg(&#39;Link&#39;);
+<a name="line772"></a>
+<a name="line773"></a>/** @desc Subscript button tooltip. */
+<a name="line774"></a>goog.ui.editor.DefaultToolbar.MSG_SUBSCRIPT = goog.getMsg(&#39;Subscript&#39;);
+<a name="line775"></a>
+<a name="line776"></a>/** @desc Superscript button tooltip. */
+<a name="line777"></a>goog.ui.editor.DefaultToolbar.MSG_SUPERSCRIPT = goog.getMsg(&#39;Superscript&#39;);
+<a name="line778"></a>
+<a name="line779"></a>/** @desc Edit HTML button caption. */
+<a name="line780"></a>goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION = goog.getMsg(&#39;Edit HTML&#39;);
 <a name="line781"></a>
-<a name="line782"></a>/**
-<a name="line783"></a> * Map of {@code goog.editor.Command}s to toolbar button descriptor objects,
-<a name="line784"></a> * each of which has the following attributes:
-<a name="line785"></a> * &lt;ul&gt;
-<a name="line786"></a> *   &lt;li&gt;{@code command} - The command corresponding to the
-<a name="line787"></a> *       button (mandatory)
-<a name="line788"></a> *   &lt;li&gt;{@code tooltip} - Tooltip text (optional); if unspecified, the button
-<a name="line789"></a> *       has no hover text
-<a name="line790"></a> *   &lt;li&gt;{@code caption} - Caption to display on the button (optional); if
-<a name="line791"></a> *       unspecified, the button has no text caption
-<a name="line792"></a> *   &lt;li&gt;{@code classes} - CSS class name(s) to be applied to the button&#39;s
-<a name="line793"></a> *       element when rendered (optional); if unspecified, defaults to
-<a name="line794"></a> *       &#39;tr-icon&#39;
-<a name="line795"></a> *       plus &#39;tr-&#39; followed by the command ID, but without any leading &#39;+&#39;
-<a name="line796"></a> *       character (e.g. if the command ID is &#39;+undo&#39;, then {@code classes}
-<a name="line797"></a> *       defaults to &#39;tr-icon tr-undo&#39;)
-<a name="line798"></a> *   &lt;li&gt;{@code factory} - factory function used to create the button, which
-<a name="line799"></a> *       must accept {@code id}, {@code tooltip}, {@code caption}, and
-<a name="line800"></a> *       {@code classes} as arguments, and must return an instance of
-<a name="line801"></a> *       {@link goog.ui.Button} or an appropriate subclass (optional); if
-<a name="line802"></a> *       unspecified, defaults to
-<a name="line803"></a> *       {@link goog.ui.editor.DefaultToolbar.makeToggleButton},
-<a name="line804"></a> *       since most built-in toolbar buttons are toggle buttons
-<a name="line805"></a> *   &lt;li&gt;(@code queryable} - Whether the button&#39;s state should be queried
-<a name="line806"></a> *       when updating the toolbar (optional).
-<a name="line807"></a> * &lt;/ul&gt;
-<a name="line808"></a> * Note that this object is only used for creating toolbar buttons for
-<a name="line809"></a> * built-in editor commands; custom buttons aren&#39;t listed here.  Please don&#39;t
-<a name="line810"></a> * try to hack this!
-<a name="line811"></a> * @type {Object.&lt;!goog.ui.editor.ButtonDescriptor&gt;}.
-<a name="line812"></a> * @private
-<a name="line813"></a> */
-<a name="line814"></a>goog.ui.editor.DefaultToolbar.buttons_ = {};
-<a name="line815"></a>
+<a name="line782"></a>
+<a name="line783"></a>/**
+<a name="line784"></a> * Map of {@code goog.editor.Command}s to toolbar button descriptor objects,
+<a name="line785"></a> * each of which has the following attributes:
+<a name="line786"></a> * &lt;ul&gt;
+<a name="line787"></a> *   &lt;li&gt;{@code command} - The command corresponding to the
+<a name="line788"></a> *       button (mandatory)
+<a name="line789"></a> *   &lt;li&gt;{@code tooltip} - Tooltip text (optional); if unspecified, the button
+<a name="line790"></a> *       has no hover text
+<a name="line791"></a> *   &lt;li&gt;{@code caption} - Caption to display on the button (optional); if
+<a name="line792"></a> *       unspecified, the button has no text caption
+<a name="line793"></a> *   &lt;li&gt;{@code classes} - CSS class name(s) to be applied to the button&#39;s
+<a name="line794"></a> *       element when rendered (optional); if unspecified, defaults to
+<a name="line795"></a> *       &#39;tr-icon&#39;
+<a name="line796"></a> *       plus &#39;tr-&#39; followed by the command ID, but without any leading &#39;+&#39;
+<a name="line797"></a> *       character (e.g. if the command ID is &#39;+undo&#39;, then {@code classes}
+<a name="line798"></a> *       defaults to &#39;tr-icon tr-undo&#39;)
+<a name="line799"></a> *   &lt;li&gt;{@code factory} - factory function used to create the button, which
+<a name="line800"></a> *       must accept {@code id}, {@code tooltip}, {@code caption}, and
+<a name="line801"></a> *       {@code classes} as arguments, and must return an instance of
+<a name="line802"></a> *       {@link goog.ui.Button} or an appropriate subclass (optional); if
+<a name="line803"></a> *       unspecified, defaults to
+<a name="line804"></a> *       {@link goog.ui.editor.DefaultToolbar.makeToggleButton},
+<a name="line805"></a> *       since most built-in toolbar buttons are toggle buttons
+<a name="line806"></a> *   &lt;li&gt;(@code queryable} - Whether the button&#39;s state should be queried
+<a name="line807"></a> *       when updating the toolbar (optional).
+<a name="line808"></a> * &lt;/ul&gt;
+<a name="line809"></a> * Note that this object is only used for creating toolbar buttons for
+<a name="line810"></a> * built-in editor commands; custom buttons aren&#39;t listed here.  Please don&#39;t
+<a name="line811"></a> * try to hack this!
+<a name="line812"></a> * @type {Object.&lt;!goog.ui.editor.ButtonDescriptor&gt;}.
+<a name="line813"></a> * @private
+<a name="line814"></a> */
+<a name="line815"></a>goog.ui.editor.DefaultToolbar.buttons_ = {};
 <a name="line816"></a>
-<a name="line817"></a>/**
-<a name="line818"></a> * @type {{command: string, tooltip: ?string,
-<a name="line819"></a> *   caption: ?goog.ui.ControlContent, classes: ?string,
-<a name="line820"></a> *   factory: ?function(string, string, goog.ui.ControlContent, ?string,
-<a name="line821"></a> *       goog.ui.ButtonRenderer, goog.dom.DomHelper):goog.ui.Button,
-<a name="line822"></a> *   queryable:?boolean}}
-<a name="line823"></a> */
-<a name="line824"></a>goog.ui.editor.ButtonDescriptor = goog.typedef;
-<a name="line825"></a>
+<a name="line817"></a>
+<a name="line818"></a>/**
+<a name="line819"></a> * @type {{command: string, tooltip: ?string,
+<a name="line820"></a> *   caption: ?goog.ui.ControlContent, classes: ?string,
+<a name="line821"></a> *   factory: ?function(string, string, goog.ui.ControlContent, ?string,
+<a name="line822"></a> *       goog.ui.ButtonRenderer, goog.dom.DomHelper):goog.ui.Button,
+<a name="line823"></a> *   queryable:?boolean}}
+<a name="line824"></a> */
+<a name="line825"></a>goog.ui.editor.ButtonDescriptor = goog.typedef;
 <a name="line826"></a>
-<a name="line827"></a>/**
-<a name="line828"></a> * Built-in toolbar button descriptors.  See
-<a name="line829"></a> * {@link goog.ui.editor.DefaultToolbar.buttons_} for details on button
-<a name="line830"></a> * descriptor objects.  This array is processed at JS parse time; each item is
-<a name="line831"></a> * inserted into {@link goog.ui.editor.DefaultToolbar.buttons_}, and the array
-<a name="line832"></a> * itself is deleted and (hopefully) garbage-collected.
-<a name="line833"></a> * @type {Array.&lt;!goog.ui.editor.ButtonDescriptor&gt;}.
-<a name="line834"></a> * @private
-<a name="line835"></a> */
-<a name="line836"></a>goog.ui.editor.DefaultToolbar.BUTTONS_ = [{
-<a name="line837"></a>  command: goog.editor.Command.UNDO,
-<a name="line838"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_UNDO_TITLE,
-<a name="line839"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-undo&#39;),
-<a name="line840"></a>  factory: goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_,
-<a name="line841"></a>  queryable: true
-<a name="line842"></a>}, {
-<a name="line843"></a>  command: goog.editor.Command.REDO,
-<a name="line844"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_REDO_TITLE,
-<a name="line845"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-redo&#39;),
-<a name="line846"></a>  factory: goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_,
-<a name="line847"></a>  queryable: true
-<a name="line848"></a>}, {
-<a name="line849"></a>  command: goog.editor.Command.FONT_FACE,
-<a name="line850"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_FACE_TITLE,
-<a name="line851"></a>  classes: goog.getCssName(&#39;tr-fontName&#39;),
-<a name="line852"></a>  factory: goog.ui.editor.DefaultToolbar.fontFaceFactory_,
-<a name="line853"></a>  queryable: true
-<a name="line854"></a>}, {
-<a name="line855"></a>  command: goog.editor.Command.FONT_SIZE,
-<a name="line856"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_SIZE_TITLE,
-<a name="line857"></a>  classes: goog.getCssName(&#39;tr-fontSize&#39;),
-<a name="line858"></a>  factory: goog.ui.editor.DefaultToolbar.fontSizeFactory_,
-<a name="line859"></a>  queryable: true
-<a name="line860"></a>}, {
-<a name="line861"></a>  command: goog.editor.Command.BOLD,
-<a name="line862"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_BOLD_TITLE,
-<a name="line863"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-bold&#39;),
-<a name="line864"></a>  queryable: true
-<a name="line865"></a>}, {
-<a name="line866"></a>  command: goog.editor.Command.ITALIC,
-<a name="line867"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_ITALIC_TITLE,
-<a name="line868"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-italic&#39;),
-<a name="line869"></a>  queryable: true
-<a name="line870"></a>}, {
-<a name="line871"></a>  command: goog.editor.Command.UNDERLINE,
-<a name="line872"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_UNDERLINE_TITLE,
-<a name="line873"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-underline&#39;),
-<a name="line874"></a>  queryable: true
-<a name="line875"></a>}, {
-<a name="line876"></a>  command: goog.editor.Command.FONT_COLOR,
-<a name="line877"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_COLOR_TITLE,
-<a name="line878"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-foreColor&#39;),
-<a name="line879"></a>  factory: goog.ui.editor.DefaultToolbar.fontColorFactory_,
-<a name="line880"></a>  queryable: true
-<a name="line881"></a>}, {
-<a name="line882"></a>  command: goog.editor.Command.BACKGROUND_COLOR,
-<a name="line883"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_BACKGROUND_COLOR_TITLE,
-<a name="line884"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-backColor&#39;),
-<a name="line885"></a>  factory: goog.ui.editor.DefaultToolbar.backgroundColorFactory_,
-<a name="line886"></a>  queryable: true
-<a name="line887"></a>}, {
-<a name="line888"></a>  command: goog.editor.Command.LINK,
-<a name="line889"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_LINK_TITLE,
-<a name="line890"></a>  caption: goog.ui.editor.DefaultToolbar.MSG_LINK_CAPTION,
-<a name="line891"></a>  classes: goog.getCssName(&#39;tr-link&#39;),
-<a name="line892"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
-<a name="line893"></a>}, {
-<a name="line894"></a>  command: goog.editor.Command.ORDERED_LIST,
-<a name="line895"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_ORDERED_LIST_TITLE,
-<a name="line896"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
-<a name="line897"></a>      goog.getCssName(&#39;tr-insertOrderedList&#39;),
-<a name="line898"></a>  queryable: true
-<a name="line899"></a>}, {
-<a name="line900"></a>  command: goog.editor.Command.UNORDERED_LIST,
-<a name="line901"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_UNORDERED_LIST_TITLE,
-<a name="line902"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
-<a name="line903"></a>      goog.getCssName(&#39;tr-insertUnorderedList&#39;),
-<a name="line904"></a>  queryable: true
-<a name="line905"></a>}, {
-<a name="line906"></a>  command: goog.editor.Command.OUTDENT,
-<a name="line907"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_OUTDENT_TITLE,
-<a name="line908"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-outdent&#39;),
-<a name="line909"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
-<a name="line910"></a>}, {
-<a name="line911"></a>  command: goog.editor.Command.INDENT,
-<a name="line912"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_INDENT_TITLE,
-<a name="line913"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-indent&#39;),
-<a name="line914"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
-<a name="line915"></a>}, {
-<a name="line916"></a>  command: goog.editor.Command.JUSTIFY_LEFT,
-<a name="line917"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_LEFT_TITLE,
-<a name="line918"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
-<a name="line919"></a>      goog.getCssName(&#39;tr-justifyLeft&#39;),
-<a name="line920"></a>  queryable: true
-<a name="line921"></a>}, {
-<a name="line922"></a>  command: goog.editor.Command.JUSTIFY_CENTER,
-<a name="line923"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_CENTER_TITLE,
-<a name="line924"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
-<a name="line925"></a>      goog.getCssName(&#39;tr-justifyCenter&#39;),
-<a name="line926"></a>  queryable: true
-<a name="line927"></a>}, {
-<a name="line928"></a>  command: goog.editor.Command.JUSTIFY_RIGHT,
-<a name="line929"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_RIGHT_TITLE,
-<a name="line930"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
-<a name="line931"></a>      goog.getCssName(&#39;tr-justifyRight&#39;),
-<a name="line932"></a>  queryable: true
-<a name="line933"></a>}, {
-<a name="line934"></a>  command: goog.editor.Command.JUSTIFY_FULL,
-<a name="line935"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_JUSTIFY_TITLE,
-<a name="line936"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
-<a name="line937"></a>      goog.getCssName(&#39;tr-justifyFull&#39;),
-<a name="line938"></a>  queryable: true
-<a name="line939"></a>}, {
-<a name="line940"></a>  command: goog.editor.Command.REMOVE_FORMAT,
-<a name="line941"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_REMOVE_FORMAT_TITLE,
-<a name="line942"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
-<a name="line943"></a>      goog.getCssName(&#39;tr-removeFormat&#39;),
-<a name="line944"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
-<a name="line945"></a>}, {
-<a name="line946"></a>  command: goog.editor.Command.IMAGE,
-<a name="line947"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_IMAGE_TITLE,
-<a name="line948"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-image&#39;),
-<a name="line949"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
-<a name="line950"></a>}, {
-<a name="line951"></a>  command: goog.editor.Command.STRIKE_THROUGH,
-<a name="line952"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_STRIKE_THROUGH_TITLE,
-<a name="line953"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
-<a name="line954"></a>      goog.getCssName(&#39;tr-strikeThrough&#39;),
-<a name="line955"></a>  queryable: true
-<a name="line956"></a>}, {
-<a name="line957"></a>  command: goog.editor.Command.SUBSCRIPT,
-<a name="line958"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_SUBSCRIPT,
-<a name="line959"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-subscript&#39;),
-<a name="line960"></a>  queryable: true
-<a name="line961"></a>} , {
-<a name="line962"></a>  command: goog.editor.Command.SUPERSCRIPT,
-<a name="line963"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_SUPERSCRIPT,
-<a name="line964"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
-<a name="line965"></a>       goog.getCssName(&#39;tr-superscript&#39;),
-<a name="line966"></a>  queryable: true
-<a name="line967"></a>}, {
-<a name="line968"></a>  command: goog.editor.Command.DIR_LTR,
-<a name="line969"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_DIR_LTR_TITLE,
-<a name="line970"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-ltr&#39;),
-<a name="line971"></a>  queryable: true
-<a name="line972"></a>}, {
-<a name="line973"></a>  command: goog.editor.Command.DIR_RTL,
-<a name="line974"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_DIR_RTL_TITLE,
-<a name="line975"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-rtl&#39;),
-<a name="line976"></a>  factory: goog.ui.editor.DefaultToolbar.rtlButtonFactory_,
-<a name="line977"></a>  queryable: true
-<a name="line978"></a>}, {
-<a name="line979"></a>  command: goog.editor.Command.BLOCKQUOTE,
-<a name="line980"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_BLOCKQUOTE_TITLE,
-<a name="line981"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
-<a name="line982"></a>      goog.getCssName(&#39;tr-BLOCKQUOTE&#39;),
-<a name="line983"></a>  queryable: true
-<a name="line984"></a>}, {
-<a name="line985"></a>  command: goog.editor.Command.FORMAT_BLOCK,
-<a name="line986"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_TITLE,
-<a name="line987"></a>  caption: goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_CAPTION,
-<a name="line988"></a>  classes: goog.getCssName(&#39;tr-formatBlock&#39;),
-<a name="line989"></a>  factory: goog.ui.editor.DefaultToolbar.formatBlockFactory_,
-<a name="line990"></a>  queryable: true
-<a name="line991"></a>}, {
-<a name="line992"></a>  command: goog.editor.Command.EDIT_HTML,
-<a name="line993"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_TITLE,
-<a name="line994"></a>  caption: goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION,
-<a name="line995"></a>  classes: goog.getCssName(&#39;tr-editHtml&#39;),
-<a name="line996"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
-<a name="line997"></a>}];
-<a name="line998"></a>
+<a name="line827"></a>
+<a name="line828"></a>/**
+<a name="line829"></a> * Built-in toolbar button descriptors.  See
+<a name="line830"></a> * {@link goog.ui.editor.DefaultToolbar.buttons_} for details on button
+<a name="line831"></a> * descriptor objects.  This array is processed at JS parse time; each item is
+<a name="line832"></a> * inserted into {@link goog.ui.editor.DefaultToolbar.buttons_}, and the array
+<a name="line833"></a> * itself is deleted and (hopefully) garbage-collected.
+<a name="line834"></a> * @type {Array.&lt;!goog.ui.editor.ButtonDescriptor&gt;}.
+<a name="line835"></a> * @private
+<a name="line836"></a> */
+<a name="line837"></a>goog.ui.editor.DefaultToolbar.BUTTONS_ = [{
+<a name="line838"></a>  command: goog.editor.Command.UNDO,
+<a name="line839"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_UNDO_TITLE,
+<a name="line840"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-undo&#39;),
+<a name="line841"></a>  factory: goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_,
+<a name="line842"></a>  queryable: true
+<a name="line843"></a>}, {
+<a name="line844"></a>  command: goog.editor.Command.REDO,
+<a name="line845"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_REDO_TITLE,
+<a name="line846"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-redo&#39;),
+<a name="line847"></a>  factory: goog.ui.editor.DefaultToolbar.undoRedoButtonFactory_,
+<a name="line848"></a>  queryable: true
+<a name="line849"></a>}, {
+<a name="line850"></a>  command: goog.editor.Command.FONT_FACE,
+<a name="line851"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_FACE_TITLE,
+<a name="line852"></a>  classes: goog.getCssName(&#39;tr-fontName&#39;),
+<a name="line853"></a>  factory: goog.ui.editor.DefaultToolbar.fontFaceFactory_,
+<a name="line854"></a>  queryable: true
+<a name="line855"></a>}, {
+<a name="line856"></a>  command: goog.editor.Command.FONT_SIZE,
+<a name="line857"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_SIZE_TITLE,
+<a name="line858"></a>  classes: goog.getCssName(&#39;tr-fontSize&#39;),
+<a name="line859"></a>  factory: goog.ui.editor.DefaultToolbar.fontSizeFactory_,
+<a name="line860"></a>  queryable: true
+<a name="line861"></a>}, {
+<a name="line862"></a>  command: goog.editor.Command.BOLD,
+<a name="line863"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_BOLD_TITLE,
+<a name="line864"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-bold&#39;),
+<a name="line865"></a>  queryable: true
+<a name="line866"></a>}, {
+<a name="line867"></a>  command: goog.editor.Command.ITALIC,
+<a name="line868"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_ITALIC_TITLE,
+<a name="line869"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-italic&#39;),
+<a name="line870"></a>  queryable: true
+<a name="line871"></a>}, {
+<a name="line872"></a>  command: goog.editor.Command.UNDERLINE,
+<a name="line873"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_UNDERLINE_TITLE,
+<a name="line874"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-underline&#39;),
+<a name="line875"></a>  queryable: true
+<a name="line876"></a>}, {
+<a name="line877"></a>  command: goog.editor.Command.FONT_COLOR,
+<a name="line878"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_FONT_COLOR_TITLE,
+<a name="line879"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-foreColor&#39;),
+<a name="line880"></a>  factory: goog.ui.editor.DefaultToolbar.fontColorFactory_,
+<a name="line881"></a>  queryable: true
+<a name="line882"></a>}, {
+<a name="line883"></a>  command: goog.editor.Command.BACKGROUND_COLOR,
+<a name="line884"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_BACKGROUND_COLOR_TITLE,
+<a name="line885"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-backColor&#39;),
+<a name="line886"></a>  factory: goog.ui.editor.DefaultToolbar.backgroundColorFactory_,
+<a name="line887"></a>  queryable: true
+<a name="line888"></a>}, {
+<a name="line889"></a>  command: goog.editor.Command.LINK,
+<a name="line890"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_LINK_TITLE,
+<a name="line891"></a>  caption: goog.ui.editor.DefaultToolbar.MSG_LINK_CAPTION,
+<a name="line892"></a>  classes: goog.getCssName(&#39;tr-link&#39;),
+<a name="line893"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
+<a name="line894"></a>}, {
+<a name="line895"></a>  command: goog.editor.Command.ORDERED_LIST,
+<a name="line896"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_ORDERED_LIST_TITLE,
+<a name="line897"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
+<a name="line898"></a>      goog.getCssName(&#39;tr-insertOrderedList&#39;),
+<a name="line899"></a>  queryable: true
+<a name="line900"></a>}, {
+<a name="line901"></a>  command: goog.editor.Command.UNORDERED_LIST,
+<a name="line902"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_UNORDERED_LIST_TITLE,
+<a name="line903"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
+<a name="line904"></a>      goog.getCssName(&#39;tr-insertUnorderedList&#39;),
+<a name="line905"></a>  queryable: true
+<a name="line906"></a>}, {
+<a name="line907"></a>  command: goog.editor.Command.OUTDENT,
+<a name="line908"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_OUTDENT_TITLE,
+<a name="line909"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-outdent&#39;),
+<a name="line910"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
+<a name="line911"></a>}, {
+<a name="line912"></a>  command: goog.editor.Command.INDENT,
+<a name="line913"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_INDENT_TITLE,
+<a name="line914"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-indent&#39;),
+<a name="line915"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
+<a name="line916"></a>}, {
+<a name="line917"></a>  command: goog.editor.Command.JUSTIFY_LEFT,
+<a name="line918"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_LEFT_TITLE,
+<a name="line919"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
+<a name="line920"></a>      goog.getCssName(&#39;tr-justifyLeft&#39;),
+<a name="line921"></a>  queryable: true
+<a name="line922"></a>}, {
+<a name="line923"></a>  command: goog.editor.Command.JUSTIFY_CENTER,
+<a name="line924"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_CENTER_TITLE,
+<a name="line925"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
+<a name="line926"></a>      goog.getCssName(&#39;tr-justifyCenter&#39;),
+<a name="line927"></a>  queryable: true
+<a name="line928"></a>}, {
+<a name="line929"></a>  command: goog.editor.Command.JUSTIFY_RIGHT,
+<a name="line930"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_ALIGN_RIGHT_TITLE,
+<a name="line931"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
+<a name="line932"></a>      goog.getCssName(&#39;tr-justifyRight&#39;),
+<a name="line933"></a>  queryable: true
+<a name="line934"></a>}, {
+<a name="line935"></a>  command: goog.editor.Command.JUSTIFY_FULL,
+<a name="line936"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_JUSTIFY_TITLE,
+<a name="line937"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
+<a name="line938"></a>      goog.getCssName(&#39;tr-justifyFull&#39;),
+<a name="line939"></a>  queryable: true
+<a name="line940"></a>}, {
+<a name="line941"></a>  command: goog.editor.Command.REMOVE_FORMAT,
+<a name="line942"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_REMOVE_FORMAT_TITLE,
+<a name="line943"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
+<a name="line944"></a>      goog.getCssName(&#39;tr-removeFormat&#39;),
+<a name="line945"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
+<a name="line946"></a>}, {
+<a name="line947"></a>  command: goog.editor.Command.IMAGE,
+<a name="line948"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_IMAGE_TITLE,
+<a name="line949"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-image&#39;),
+<a name="line950"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
+<a name="line951"></a>}, {
+<a name="line952"></a>  command: goog.editor.Command.STRIKE_THROUGH,
+<a name="line953"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_STRIKE_THROUGH_TITLE,
+<a name="line954"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
+<a name="line955"></a>      goog.getCssName(&#39;tr-strikeThrough&#39;),
+<a name="line956"></a>  queryable: true
+<a name="line957"></a>}, {
+<a name="line958"></a>  command: goog.editor.Command.SUBSCRIPT,
+<a name="line959"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_SUBSCRIPT,
+<a name="line960"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-subscript&#39;),
+<a name="line961"></a>  queryable: true
+<a name="line962"></a>} , {
+<a name="line963"></a>  command: goog.editor.Command.SUPERSCRIPT,
+<a name="line964"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_SUPERSCRIPT,
+<a name="line965"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
+<a name="line966"></a>       goog.getCssName(&#39;tr-superscript&#39;),
+<a name="line967"></a>  queryable: true
+<a name="line968"></a>}, {
+<a name="line969"></a>  command: goog.editor.Command.DIR_LTR,
+<a name="line970"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_DIR_LTR_TITLE,
+<a name="line971"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-ltr&#39;),
+<a name="line972"></a>  queryable: true
+<a name="line973"></a>}, {
+<a name="line974"></a>  command: goog.editor.Command.DIR_RTL,
+<a name="line975"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_DIR_RTL_TITLE,
+<a name="line976"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; + goog.getCssName(&#39;tr-rtl&#39;),
+<a name="line977"></a>  factory: goog.ui.editor.DefaultToolbar.rtlButtonFactory_,
+<a name="line978"></a>  queryable: true
+<a name="line979"></a>}, {
+<a name="line980"></a>  command: goog.editor.Command.BLOCKQUOTE,
+<a name="line981"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_BLOCKQUOTE_TITLE,
+<a name="line982"></a>  classes: goog.getCssName(&#39;tr-icon&#39;) + &#39; &#39; +
+<a name="line983"></a>      goog.getCssName(&#39;tr-BLOCKQUOTE&#39;),
+<a name="line984"></a>  queryable: true
+<a name="line985"></a>}, {
+<a name="line986"></a>  command: goog.editor.Command.FORMAT_BLOCK,
+<a name="line987"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_TITLE,
+<a name="line988"></a>  caption: goog.ui.editor.DefaultToolbar.MSG_FORMAT_BLOCK_CAPTION,
+<a name="line989"></a>  classes: goog.getCssName(&#39;tr-formatBlock&#39;),
+<a name="line990"></a>  factory: goog.ui.editor.DefaultToolbar.formatBlockFactory_,
+<a name="line991"></a>  queryable: true
+<a name="line992"></a>}, {
+<a name="line993"></a>  command: goog.editor.Command.EDIT_HTML,
+<a name="line994"></a>  tooltip: goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_TITLE,
+<a name="line995"></a>  caption: goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION,
+<a name="line996"></a>  classes: goog.getCssName(&#39;tr-editHtml&#39;),
+<a name="line997"></a>  factory: goog.ui.editor.ToolbarFactory.makeButton
+<a name="line998"></a>}];
 <a name="line999"></a>
-<a name="line1000"></a>(function() {
-<a name="line1001"></a>// Create the goog.ui.editor.DefaultToolbar.buttons_ map from
-<a name="line1002"></a>// goog.ui.editor.DefaultToolbar.BUTTONS_.
-<a name="line1003"></a>for (var i = 0, button;
-<a name="line1004"></a>    button = goog.ui.editor.DefaultToolbar.BUTTONS_[i]; i++) {
-<a name="line1005"></a>  goog.ui.editor.DefaultToolbar.buttons_[button.command] = button;
-<a name="line1006"></a>}
-<a name="line1007"></a>
-<a name="line1008"></a>// goog.ui.editor.DefaultToolbar.BUTTONS_ is no longer needed
-<a name="line1009"></a>// once the map is ready.
-<a name="line1010"></a>delete goog.ui.editor.DefaultToolbar.BUTTONS_;
-<a name="line1011"></a>
-<a name="line1012"></a>})();
+<a name="line1000"></a>
+<a name="line1001"></a>(function() {
+<a name="line1002"></a>// Create the goog.ui.editor.DefaultToolbar.buttons_ map from
+<a name="line1003"></a>// goog.ui.editor.DefaultToolbar.BUTTONS_.
+<a name="line1004"></a>for (var i = 0, button;
+<a name="line1005"></a>    button = goog.ui.editor.DefaultToolbar.BUTTONS_[i]; i++) {
+<a name="line1006"></a>  goog.ui.editor.DefaultToolbar.buttons_[button.command] = button;
+<a name="line1007"></a>}
+<a name="line1008"></a>
+<a name="line1009"></a>// goog.ui.editor.DefaultToolbar.BUTTONS_ is no longer needed
+<a name="line1010"></a>// once the map is ready.
+<a name="line1011"></a>delete goog.ui.editor.DefaultToolbar.BUTTONS_;
+<a name="line1012"></a>
+<a name="line1013"></a>})();
 </pre>
 
 

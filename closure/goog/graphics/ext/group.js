@@ -21,14 +21,13 @@
 goog.provide('goog.graphics.ext.Group');
 
 goog.require('goog.graphics.ext.Element');
-goog.require('goog.structs.Map')
 
 
 /**
  * Wrapper for a graphics group.
  * @param {goog.graphics.ext.Group} group Parent for this element.  Can be null
  *     if this is a Graphics instance.
- * @param {goog.graphics.Element} opt_wrapper The thin wrapper to wrap.  If
+ * @param {goog.graphics.Element=} opt_wrapper The thin wrapper to wrap.  If
  *     omitted, a new group will be created.  Must be included when group is
  *     null.
  * @constructor
@@ -55,7 +54,7 @@ goog.graphics.ext.Group.prototype.children_;
  * Add an element to the group.  This should be treated as package local, as
  * it is called by the draw* methods.
  * @param {!goog.graphics.ext.Element} element The element to add.
- * @param {boolean} opt_chain Whether this addition is part of a longer set
+ * @param {boolean=} opt_chain Whether this addition is part of a longer set
  *     of element additions.
  */
 goog.graphics.ext.Group.prototype.addChild = function(element, opt_chain) {
@@ -99,7 +98,7 @@ goog.graphics.ext.Group.prototype.removeChild = function(element) {
  * component and its 0-based index.  The return value is ignored.
  * @param {Function} f The function to call for every child component; should
  *    take 2 arguments (the child and its index).
- * @param {Object} opt_obj Used as the 'this' object in f when called.
+ * @param {Object=} opt_obj Used as the 'this' object in f when called.
  */
 goog.graphics.ext.Group.prototype.forEachChild = function(f, opt_obj) {
   if (this.children_) {

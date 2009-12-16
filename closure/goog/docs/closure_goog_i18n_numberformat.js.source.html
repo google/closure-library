@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -73,7 +74,7 @@
 <a name="line30"></a> * Constructor of NumberFormat.
 <a name="line31"></a> * @param {number|string} pattern The number that indicates a predefined
 <a name="line32"></a> *     number format pattern.
-<a name="line33"></a> * @param {string} opt_currency Optional international currency code. This
+<a name="line33"></a> * @param {string=} opt_currency Optional international currency code. This
 <a name="line34"></a> *     determines the currency code/symbol used in format/parse. If not given,
 <a name="line35"></a> *     the currency code for current locale will be used.
 <a name="line36"></a> * @constructor
@@ -186,7 +187,7 @@
 <a name="line143"></a> * parsing stops after the call. If an error occurs, opt_pos won&#39;t be updated.
 <a name="line144"></a> *
 <a name="line145"></a> * @param {string} text The string to be parsed.
-<a name="line146"></a> * @param {Array.&lt;number&gt;} opt_pos Position to pass in and get back.
+<a name="line146"></a> * @param {Array.&lt;number&gt;=} opt_pos Position to pass in and get back.
 <a name="line147"></a> * @return {number} Parsed number. This throws an error if the text cannot be
 <a name="line148"></a> *     parsed.
 <a name="line149"></a> */

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -151,14 +152,14 @@
 <a name="line108"></a> * request.
 <a name="line109"></a> * @see goog.net.XhrIo.cleanupAllPendingStaticSends
 <a name="line110"></a> * @param {string|goog.Uri} url Uri to make request too.
-<a name="line111"></a> * @param {Function} opt_callback Callback function for when request is
+<a name="line111"></a> * @param {Function=} opt_callback Callback function for when request is
 <a name="line112"></a> *     complete.
-<a name="line113"></a> * @param {string} opt_method Send method, default: GET.
-<a name="line114"></a> * @param {string|GearsBlob} opt_content Post data. This can be a Gears blob
+<a name="line113"></a> * @param {string=} opt_method Send method, default: GET.
+<a name="line114"></a> * @param {string|GearsBlob=} opt_content Post data. This can be a Gears blob
 <a name="line115"></a> *     if the underlying HTTP request object is a Gears HTTP request.
-<a name="line116"></a> * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+<a name="line116"></a> * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
 <a name="line117"></a> *     request.
-<a name="line118"></a> * @param {number} opt_timeoutInterval Number of milliseconds after which an
+<a name="line118"></a> * @param {number=} opt_timeoutInterval Number of milliseconds after which an
 <a name="line119"></a> *     incomplete request will be aborted; 0 means no timeout is set.
 <a name="line120"></a> */
 <a name="line121"></a>goog.net.XhrIo.send = function(url, opt_callback, opt_method, opt_content,
@@ -211,7 +212,7 @@
 <a name="line168"></a> *
 <a name="line169"></a> * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
 <a name="line170"></a> *     protect the entry point(s).
-<a name="line171"></a> * @param {boolean} opt_tracers Whether to install tracers around the entry
+<a name="line171"></a> * @param {boolean=} opt_tracers Whether to install tracers around the entry
 <a name="line172"></a> *     point.
 <a name="line173"></a> */
 <a name="line174"></a>goog.net.XhrIo.protectEntryPoints = function(
@@ -374,10 +375,10 @@
 <a name="line331"></a>/**
 <a name="line332"></a> * Instance send that actually uses XMLHttpRequest to make a server call.
 <a name="line333"></a> * @param {string|goog.Uri} url Uri to make request too.
-<a name="line334"></a> * @param {string} opt_method Send method, default: GET.
-<a name="line335"></a> * @param {string|GearsBlob} opt_content Post data. This can be a Gears blob
+<a name="line334"></a> * @param {string=} opt_method Send method, default: GET.
+<a name="line335"></a> * @param {string|GearsBlob=} opt_content Post data. This can be a Gears blob
 <a name="line336"></a> *     if the underlying HTTP request object is a Gears HTTP request.
-<a name="line337"></a> * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+<a name="line337"></a> * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
 <a name="line338"></a> *     request.
 <a name="line339"></a> */
 <a name="line340"></a>goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
@@ -557,7 +558,7 @@
 <a name="line514"></a>
 <a name="line515"></a>/**
 <a name="line516"></a> * Abort the current XMLHttpRequest
-<a name="line517"></a> * @param {goog.net.ErrorCode} opt_failureCode Optional error code to use -
+<a name="line517"></a> * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
 <a name="line518"></a> *     defaults to ABORT.
 <a name="line519"></a> */
 <a name="line520"></a>goog.net.XhrIo.prototype.abort = function(opt_failureCode) {
@@ -696,7 +697,7 @@
 <a name="line653"></a>/**
 <a name="line654"></a> * Remove the listener to protect against leaks, and nullify the XMLHttpRequest
 <a name="line655"></a> * object.
-<a name="line656"></a> * @param {boolean} opt_fromDispose If this is from the dispose (don&#39;t want to
+<a name="line656"></a> * @param {boolean=} opt_fromDispose If this is from the dispose (don&#39;t want to
 <a name="line657"></a> *     fire any events).
 <a name="line658"></a> * @private
 <a name="line659"></a> */

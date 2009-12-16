@@ -24,8 +24,8 @@ goog.require('goog.testing.PerformanceTimer');
 /**
  * A UI widget that runs performance tests and displays the results.
  * @param {Element} root The element where the table should be attached.
- * @param {goog.testing.PerformanceTimer} opt_timer A timer to use for executing
- *     functions and profiling them.
+ * @param {goog.testing.PerformanceTimer=} opt_timer A timer to use for
+ *     executing functions and profiling them.
  * @constructor
  */
 goog.testing.PerformanceTable = function(root, opt_timer) {
@@ -100,7 +100,7 @@ goog.testing.PerformanceTable.prototype.getTableBody_ = function() {
 /**
  * Run the given function with the performance timer, and show the results.
  * @param {Function} fn The function to run.
- * @param {string} opt_desc A description to associate with this run.
+ * @param {string=} opt_desc A description to associate with this run.
  */
 goog.testing.PerformanceTable.prototype.run = function(fn, opt_desc) {
   var results = this.timer_.run(fn);

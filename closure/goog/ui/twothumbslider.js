@@ -47,7 +47,7 @@ goog.require('goog.ui.SliderBase');
 
 /**
  * This creates a TwoThumbSlider object.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.SliderBase}
  */

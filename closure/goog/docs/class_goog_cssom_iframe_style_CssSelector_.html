@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -84,12 +96,12 @@ Currently UNSUPPORTED are the following selector features:
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.cssom.iframe.style.CssSelector_</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -113,7 +125,7 @@ Currently UNSUPPORTED are the following selector features:
    <tr class="even">
      <td>
         <span class="entryName">opt_selectorString</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">String containing selectors to parse.</div>
      </td>
    </tr>
@@ -225,7 +237,7 @@ the css selector at index 1.
 
 
   <td class="view-code">
-     <a href="closure_goog_cssom_iframe_style.js.source.html#line364">code &raquo;</a>
+     <a href="closure_goog_cssom_iframe_style.js.source.html#line362">code &raquo;</a>
   </td>
      </tr>
 
@@ -285,7 +297,7 @@ the css selector at index 1.
 
 
   <td class="view-code">
-     <a href="closure_goog_cssom_iframe_style.js.source.html#line330">code &raquo;</a>
+     <a href="closure_goog_cssom_iframe_style.js.source.html#line328">code &raquo;</a>
   </td>
      </tr>
 

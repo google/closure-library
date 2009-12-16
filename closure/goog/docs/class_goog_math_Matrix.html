@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -92,12 +104,12 @@ The m-by-n matrix A would have its entries referred to as:
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.math.Matrix</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -129,7 +141,7 @@ The m-by-n matrix A would have its entries referred to as:
    <tr class="odd">
      <td>
         <span class="entryName">opt_n</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Number of columns of the matrix (only applicable if the first argument is also numeric).</div>
      </td>
    </tr>
@@ -415,7 +427,7 @@ The m-by-n matrix A would have its entries referred to as:
    <tr class="odd">
      <td>
         <span class="entryName">opt_tolerance</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The tolerance when comparing array entries.</div>
      </td>
    </tr>
@@ -877,7 +889,7 @@ and column j.
    <tr class="even">
      <td>
         <span class="entryName">opt_i2</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The lower row index.</div>
      </td>
    </tr>
@@ -885,7 +897,7 @@ and column j.
    <tr class="odd">
      <td>
         <span class="entryName">opt_j2</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">The right column index.</div>
      </td>
    </tr>
@@ -2056,7 +2068,7 @@ bounds of the matrix).
    <tr class="even">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object to be used as the value of &#39;this&#39; within <code>fn</code>.</div>
      </td>
    </tr>
@@ -2200,7 +2212,7 @@ new matrix of equal dimensions.
    <tr class="even">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The object to be used as the value of &#39;this&#39; within <code>fn</code>.</div>
      </td>
    </tr>

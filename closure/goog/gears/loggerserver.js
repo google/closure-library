@@ -32,7 +32,7 @@ goog.require('goog.gears.Worker.EventType');
  * @param {goog.gears.Worker} worker The worker thread that
  *     we are managing the loggers on.
  * @param {number} logCommandId The command id used for logging.
- * @param {string} opt_workerName The name of the worker. If present then this
+ * @param {string=} opt_workerName The name of the worker. If present then this
  *     is added to the log records and to exceptions as {@code workerName}.
  * @constructor
  * @extends {goog.Disposable}

@@ -29,7 +29,7 @@ goog.require('goog.array');
  *     increasing integer values, with at least one instance.
  * @param {Array.<*>} valueArray An array of corresponding values.
  *     Length must be the same as rangeArray.
- * @param {boolean} opt_delta If true, saves only delta from previous value.
+ * @param {boolean=} opt_delta If true, saves only delta from previous value.
  * @constructor
  */
 goog.structs.InversionMap = function(rangeArray, valueArray, opt_delta) {
@@ -61,7 +61,7 @@ goog.structs.InversionMap.prototype.rangeArray;
  * When used as a set, even indices are IN, and odd are OUT.
  * @param {Array.<number?>} rangeArray An array of monotonically
  *     increasing integer values, with at least one instance.
- * @param {boolean} opt_delta If true, saves only delta from previous value.
+ * @param {boolean=} opt_delta If true, saves only delta from previous value.
  * @private
  */
 goog.structs.InversionMap.prototype.storeInversion_ = function(rangeArray,
@@ -84,7 +84,7 @@ goog.structs.InversionMap.prototype.storeInversion_ = function(rangeArray,
  *     increasing integer values, with at least one instance.
  * @param {Array.<*>} valueArray An array of corresponding values.
  *     Length must be the same as rangeArray.
- * @param {boolean} opt_delta If true, saves only delta from previous value.
+ * @param {boolean=} opt_delta If true, saves only delta from previous value.
  */
 goog.structs.InversionMap.prototype.spliceInversion = function(
     rangeArray, valueArray, opt_delta) {

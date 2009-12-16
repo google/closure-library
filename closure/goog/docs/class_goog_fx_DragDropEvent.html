@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -76,14 +88,14 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td>goog.fx.DragDropEvent</td><td><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -131,7 +143,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_target</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_fx_AbstractDragDrop.html">goog.fx.AbstractDragDrop</a></span></div>
+        : <div class="fullType"><span class="type">goog.fx.AbstractDragDrop=</span></div>
         <div class="entryOverview">Target drag drop object.</div>
      </td>
    </tr>
@@ -139,7 +151,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_targetItem</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_fx_DragDropItem.html">goog.fx.DragDropItem</a></span></div>
+        : <div class="fullType"><span class="type">goog.fx.DragDropItem=</span></div>
         <div class="entryOverview">Target item.</div>
      </td>
    </tr>
@@ -147,7 +159,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_targetElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Target element.</div>
      </td>
    </tr>
@@ -155,7 +167,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_clientX</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">X-Position relative to the screen.</div>
      </td>
    </tr>
@@ -163,7 +175,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_clientY</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Y-Position relative to the screen.</div>
      </td>
    </tr>
@@ -171,7 +183,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_x</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">X-Position relative to the viewport.</div>
      </td>
    </tr>
@@ -179,7 +191,7 @@
    <tr class="odd">
      <td>
         <span class="entryName">opt_y</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Y-Position relative to the viewport.</div>
      </td>
    </tr>
@@ -187,7 +199,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_subtarget</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">The currently active subtarget.</div>
      </td>
    </tr>

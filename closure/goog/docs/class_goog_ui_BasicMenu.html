@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,7 +90,7 @@ menu item.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_ui_PopupBase.html">goog.ui.PopupBase</a></span></td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
@@ -89,7 +101,7 @@ menu item.
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -113,7 +125,7 @@ menu item.
    <tr class="even">
      <td>
         <span class="entryName">opt_class</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">Optional class for menu element, Default: &#39;menu&#39;.</div>
      </td>
    </tr>
@@ -121,7 +133,7 @@ menu item.
    <tr class="odd">
      <td>
         <span class="entryName">opt_parent</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Optional parent element, otherwise it will be added to the end of the document body.</div>
      </td>
    </tr>
@@ -738,7 +750,7 @@ with a slight delay.
    <tr class="odd">
      <td>
         <span class="entryName">opt_keyEvent</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Was item selected using keyboard? In that case open submenus are closed immediately and new submenus are not opened automatically.</div>
      </td>
    </tr>
@@ -1453,7 +1465,7 @@ open submenus.
    <tr class="odd">
      <td>
         <span class="entryName">opt_pos</span>
-        : <div class="fullType"><span class="type">goog.positioning.Corner</span></div>
+        : <div class="fullType"><span class="type">goog.positioning.Corner=</span></div>
         <div class="entryOverview">Corner: Default Bottom-left.</div>
      </td>
    </tr>
@@ -1461,7 +1473,7 @@ open submenus.
    <tr class="even">
      <td>
         <span class="entryName">opt_eventType</span>
-        : <div class="fullType"><span class="type">goog.events.EventType</span></div>
+        : <div class="fullType"><span class="type">goog.events.EventType=</span></div>
         <div class="entryOverview">Event that triggers menu. Default click.</div>
      </td>
    </tr>
@@ -1709,7 +1721,7 @@ open submenus.
    <tr class="odd">
      <td>
         <span class="entryName">opt_bubble</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Bubble to parent menu?.</div>
      </td>
    </tr>
@@ -2222,7 +2234,7 @@ TODO - reevaluate if we can simulate pseudo classes in IE
    <tr class="even">
      <td>
         <span class="entryName">opt_item</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Item selected.</div>
      </td>
    </tr>
@@ -2624,7 +2636,7 @@ TODO - reevaluate if we can simulate pseudo classes in IE
    <tr class="odd">
      <td>
         <span class="entryName">opt_direction</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">1 to search forward from the selection (default), -1 to search backward (e.g. to go to the previous match).</div>
      </td>
    </tr>
@@ -2632,7 +2644,7 @@ TODO - reevaluate if we can simulate pseudo classes in IE
    <tr class="even">
      <td>
         <span class="entryName">opt_skip</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">True if should skip the current selection, unless no other item has the given prefix.</div>
      </td>
    </tr>
@@ -3011,7 +3023,7 @@ event but should make sure to call the parent class method.
    <tr class="even">
      <td>
         <span class="entryName">opt_target</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Target of the event causing the hide.</div>
      </td>
    </tr>
@@ -3669,7 +3681,7 @@ event but should make sure to call the parent class method.
    <tr class="odd">
      <td>
         <span class="entryName">opt_arg2</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Right value.</div>
      </td>
    </tr>
@@ -3677,7 +3689,7 @@ event but should make sure to call the parent class method.
    <tr class="even">
      <td>
         <span class="entryName">opt_arg3</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Bottom value.</div>
      </td>
    </tr>
@@ -3685,7 +3697,7 @@ event but should make sure to call the parent class method.
    <tr class="odd">
      <td>
         <span class="entryName">opt_arg4</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+        : <div class="fullType"><span class="type">number=</span></div>
         <div class="entryOverview">Left value.</div>
      </td>
    </tr>
@@ -4361,7 +4373,7 @@ clicks, or null if it&#39;s the entire document.
    <tr class="even">
      <td>
         <span class="entryName">opt_target</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Target of the event causing the hide.</div>
      </td>
    </tr>
@@ -4567,7 +4579,7 @@ event but should make sure to call the parent class method.
    <tr class="even">
      <td>
         <span class="entryName">opt_target</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Target of the event causing the hide.</div>
      </td>
    </tr>
@@ -4861,7 +4873,7 @@ event but should make sure to call the parent class method.
    <tr class="even">
      <td>
         <span class="entryName">opt_target</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Target of the event causing the hide.</div>
      </td>
    </tr>
@@ -5678,7 +5690,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -5686,7 +5698,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -5923,7 +5935,7 @@ nothing is done.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -5931,7 +5943,7 @@ nothing is done.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>

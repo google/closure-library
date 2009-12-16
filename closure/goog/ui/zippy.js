@@ -38,10 +38,10 @@ goog.require('goog.events.KeyCodes');
  * @param {Element|string|null} header Header element, either element
  *                              reference, string id or null if no header
  *                              exists.
- * @param {Element|string} opt_content Content element (if any), either element
+ * @param {Element|string=} opt_content Content element (if any), either element
  *                         reference or string id.  If skipped, the caller
  *                         should handle the TOGGLE event in its own way.
- * @param {boolean} opt_expanded Initial expanded/visibility state. Defaults to
+ * @param {boolean=} opt_expanded Initial expanded/visibility state. Defaults to
  *                  false.
  * @constructor
  */

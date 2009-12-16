@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -105,8 +106,8 @@
 <a name="line62"></a>
 <a name="line63"></a>/**
 <a name="line64"></a> * Creates a Box by bounding a collection of goog.math.Coordinate objects
-<a name="line65"></a> * @param {goog.math.Coordinate} var_args Coordinates to be included inside the
-<a name="line66"></a> *     box.
+<a name="line65"></a> * @param {...goog.math.Coordinate} var_args Coordinates to be included inside
+<a name="line66"></a> *     the box.
 <a name="line67"></a> * @return {goog.math.Box} A Box containing all the specified Coordinates.
 <a name="line68"></a> */
 <a name="line69"></a>goog.math.Box.boundingBox = function(var_args) {
@@ -159,9 +160,9 @@
 <a name="line116"></a> * Expands box with the given margins.
 <a name="line117"></a> *
 <a name="line118"></a> * @param {number|goog.math.Box} top Top margin or box with all margins.
-<a name="line119"></a> * @param {number} opt_right Right margin.
-<a name="line120"></a> * @param {number} opt_bottom Bottom margin.
-<a name="line121"></a> * @param {number} opt_left Left margin.
+<a name="line119"></a> * @param {number=} opt_right Right margin.
+<a name="line120"></a> * @param {number=} opt_bottom Bottom margin.
+<a name="line121"></a> * @param {number=} opt_left Left margin.
 <a name="line122"></a> * @return {goog.math.Box} A reference to this Box.
 <a name="line123"></a> */
 <a name="line124"></a>goog.math.Box.prototype.expand = function(top, opt_right, opt_bottom,

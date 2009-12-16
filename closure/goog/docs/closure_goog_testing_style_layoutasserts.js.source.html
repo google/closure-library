@@ -1,0 +1,416 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>layoutasserts.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_testing_style_layoutasserts.js.html">layoutasserts.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2009 Google Inc.  All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A utility class for making layout assertions. This is a port
+<a name="line17"></a> * of j/c/g/ads/apps/testing/selenium/LayoutBot.java.
+<a name="line18"></a> * See {@link http://go/layouttesting}.
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.testing.style.layoutasserts&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.style&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Asserts that an element has:
+<a name="line28"></a> *   1 - a CSS rendering the makes the element visible.
+<a name="line29"></a> *   2 - a non-zero width and height.
+<a name="line30"></a> * @param {Element|string} a The element or optionally the comment string.
+<a name="line31"></a> * @param {Element=} opt_b The element when a comment string is present.
+<a name="line32"></a> */
+<a name="line33"></a>function assertIsVisible(a, opt_b) {
+<a name="line34"></a>  _validateArguments(1, arguments);
+<a name="line35"></a>  var element = nonCommentArg(1, 1, arguments);
+<a name="line36"></a>
+<a name="line37"></a>  _assert(commentArg(1, arguments),
+<a name="line38"></a>      goog.testing.style.layoutasserts.isVisible_(element) &amp;&amp;
+<a name="line39"></a>      goog.testing.style.layoutasserts.hasVisibleDimension_(element),
+<a name="line40"></a>      &#39;Specified element should be visible.&#39;);
+<a name="line41"></a>}
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * The counter assertion of assertIsVisible().
+<a name="line46"></a> * @param {Element|string} a The element or optionally the comment string.
+<a name="line47"></a> * @param {Element=} opt_b The element when a comment string is present.
+<a name="line48"></a> */
+<a name="line49"></a>function assertNotVisible(a, opt_b) {
+<a name="line50"></a>  _validateArguments(1, arguments);
+<a name="line51"></a>  var element = nonCommentArg(1, 1, arguments);
+<a name="line52"></a>  if (!element) {
+<a name="line53"></a>    return;
+<a name="line54"></a>  }
+<a name="line55"></a>
+<a name="line56"></a>  _assert(commentArg(1, arguments),
+<a name="line57"></a>      !goog.testing.style.layoutasserts.isVisible_(element) ||
+<a name="line58"></a>      !goog.testing.style.layoutasserts.hasVisibleDimension_(element),
+<a name="line59"></a>    &#39;Specified element should not be visible.&#39;);
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Asserts that the two specified elements intersect.
+<a name="line65"></a> * @param {Element|string} a The first element or optionally the comment string.
+<a name="line66"></a> * @param {Element} b The second element or the first element if comment string
+<a name="line67"></a> *     is present.
+<a name="line68"></a> * @param {Element=} opt_c The second element if comment string is present.
+<a name="line69"></a> */
+<a name="line70"></a>function assertIntersect(a, b, opt_c) {
+<a name="line71"></a>  _validateArguments(2, arguments);
+<a name="line72"></a>  var element = nonCommentArg(1, 2, arguments);
+<a name="line73"></a>  var otherElement = nonCommentArg(2, 2, arguments);
+<a name="line74"></a>
+<a name="line75"></a>  _assert(commentArg(1, arguments),
+<a name="line76"></a>      goog.testing.style.layoutasserts.intersects_(element, otherElement),
+<a name="line77"></a>      &#39;Elements should intersect.&#39;);
+<a name="line78"></a>}
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Asserts that the two specified elements do not intersect.
+<a name="line83"></a> * @param {Element|string} a The first element or optionally the comment string.
+<a name="line84"></a> * @param {Element} b The second element or the first element if comment string
+<a name="line85"></a> *     is present.
+<a name="line86"></a> * @param {Element=} opt_c The second element if comment string is present.
+<a name="line87"></a> */
+<a name="line88"></a>function assertNoIntersect(a, b, opt_c) {
+<a name="line89"></a>  _validateArguments(2, arguments);
+<a name="line90"></a>  var element = nonCommentArg(1, 2, arguments);
+<a name="line91"></a>  var otherElement = nonCommentArg(2, 2, arguments);
+<a name="line92"></a>
+<a name="line93"></a>  _assert(commentArg(1, arguments),
+<a name="line94"></a>      !goog.testing.style.layoutasserts.intersects_(element, otherElement),
+<a name="line95"></a>      &#39;Elements should not intersect.&#39;);
+<a name="line96"></a>}
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Asserts that the element must have the specified width.
+<a name="line101"></a> * @param {Element|string} a The first element or optionally the comment string.
+<a name="line102"></a> * @param {Element} b The second element or the first element if comment string
+<a name="line103"></a> *     is present.
+<a name="line104"></a> * @param {Element=} opt_c The second element if comment string is present.
+<a name="line105"></a> */
+<a name="line106"></a>function assertWidth(a, b, opt_c) {
+<a name="line107"></a>  _validateArguments(2, arguments);
+<a name="line108"></a>  var element = nonCommentArg(1, 2, arguments);
+<a name="line109"></a>  var width = nonCommentArg(2, 2, arguments);
+<a name="line110"></a>  var size = goog.style.getSize(element);
+<a name="line111"></a>  var elementWidth = size.width;
+<a name="line112"></a>
+<a name="line113"></a>  _assert(commentArg(1, arguments),
+<a name="line114"></a>      goog.testing.style.layoutasserts.isWithinThreshold_(
+<a name="line115"></a>          width, elementWidth, 0 /* tolerance */),
+<a name="line116"></a>      &#39;Element should have width &#39; + width + &#39; but was &#39; + elementWidth + &#39;.&#39;);
+<a name="line117"></a>}
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Asserts that the element must have the specified width within the specified
+<a name="line122"></a> * tolerance.
+<a name="line123"></a> * @param {Element|string} a The element or optionally the comment string.
+<a name="line124"></a> * @param {number|Element} b The height or the element if comment string is
+<a name="line125"></a> *     present.
+<a name="line126"></a> * @param {number} c The tolerance or the height if comment string is
+<a name="line127"></a> *     present.
+<a name="line128"></a> * @param {number=} opt_d The tolerance if comment string is present.
+<a name="line129"></a> */
+<a name="line130"></a>function assertWidthWithinTolerance(a, b, c, opt_d) {
+<a name="line131"></a>  _validateArguments(3, arguments);
+<a name="line132"></a>  var element = nonCommentArg(1, 3, arguments);
+<a name="line133"></a>  var width = nonCommentArg(2, 3, arguments);
+<a name="line134"></a>  var tolerance = nonCommentArg(3, 3, arguments);
+<a name="line135"></a>  var size = goog.style.getSize(element);
+<a name="line136"></a>  var elementWidth = size.width;
+<a name="line137"></a>
+<a name="line138"></a>  _assert(commentArg(1, arguments),
+<a name="line139"></a>      goog.testing.style.layoutasserts.isWithinThreshold_(
+<a name="line140"></a>          width, elementWidth, tolerance),
+<a name="line141"></a>      &#39;Element width(&#39; + elementWidth + &#39;) should be within given width(&#39; +
+<a name="line142"></a>      width + &#39;) with tolerance value of &#39; + tolerance + &#39;.&#39;);
+<a name="line143"></a>}
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>/**
+<a name="line147"></a> * Asserts that the element must have the specified height.
+<a name="line148"></a> * @param {Element|string} a The first element or optionally the comment string.
+<a name="line149"></a> * @param {Element} b The second element or the first element if comment string
+<a name="line150"></a> *     is present.
+<a name="line151"></a> * @param {Element=} opt_c The second element if comment string is present.
+<a name="line152"></a> */
+<a name="line153"></a>function assertHeight(a, b, opt_c) {
+<a name="line154"></a>  _validateArguments(2, arguments);
+<a name="line155"></a>  var element = nonCommentArg(1, 2, arguments);
+<a name="line156"></a>  var height = nonCommentArg(2, 2, arguments);
+<a name="line157"></a>  var size = goog.style.getSize(element);
+<a name="line158"></a>  var elementHeight = size.height;
+<a name="line159"></a>
+<a name="line160"></a>  _assert(commentArg(1, arguments),
+<a name="line161"></a>      goog.testing.style.layoutasserts.isWithinThreshold_(
+<a name="line162"></a>          height, elementHeight, 0 /* tolerance */),
+<a name="line163"></a>      &#39;Element should have height &#39; + height + &#39;.&#39;);
+<a name="line164"></a>}
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Asserts that the element must have the specified height within the specified
+<a name="line169"></a> * tolerance.
+<a name="line170"></a> * @param {Element|string} a The element or optionally the comment string.
+<a name="line171"></a> * @param {number|Element} b The height or the element if comment string is
+<a name="line172"></a> *     present.
+<a name="line173"></a> * @param {number} c The tolerance or the height if comment string is
+<a name="line174"></a> *     present.
+<a name="line175"></a> * @param {number=} opt_d The tolerance if comment string is present.
+<a name="line176"></a> */
+<a name="line177"></a>function assertHeightWithinTolerance(a, b, c, opt_d) {
+<a name="line178"></a>  _validateArguments(3, arguments);
+<a name="line179"></a>  var element = nonCommentArg(1, 3, arguments);
+<a name="line180"></a>  var height = nonCommentArg(2, 3, arguments);
+<a name="line181"></a>  var tolerance = nonCommentArg(3, 3, arguments);
+<a name="line182"></a>  var size = goog.style.getSize(element);
+<a name="line183"></a>  var elementHeight = size.height;
+<a name="line184"></a>
+<a name="line185"></a>  _assert(commentArg(1, arguments),
+<a name="line186"></a>    goog.testing.style.layoutasserts.isWithinThreshold_(
+<a name="line187"></a>        height, elementHeight, tolerance),
+<a name="line188"></a>    &#39;Element width(&#39; + elementHeight + &#39;) should be within given width(&#39; +
+<a name="line189"></a>    height + &#39;) with tolerance value of &#39; + tolerance + &#39;.&#39;);
+<a name="line190"></a>}
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Asserts that the first element is to the left of the second element.
+<a name="line195"></a> * @param {Element|string} a The first element or optionally the comment string.
+<a name="line196"></a> * @param {Element} b The second element or the first element if comment string
+<a name="line197"></a> *     is present.
+<a name="line198"></a> * @param {Element=} opt_c The second element if comment string is present.
+<a name="line199"></a> */
+<a name="line200"></a>function assertIsLeftOf(a, b, opt_c) {
+<a name="line201"></a>  _validateArguments(2, arguments);
+<a name="line202"></a>  var element = nonCommentArg(1, 2, arguments);
+<a name="line203"></a>  var otherElement = nonCommentArg(2, 2, arguments);
+<a name="line204"></a>  var elementRect = goog.style.getBounds(element);
+<a name="line205"></a>  var otherElementRect = goog.style.getBounds(otherElement);
+<a name="line206"></a>
+<a name="line207"></a>  _assert(commentArg(1, arguments),
+<a name="line208"></a>      elementRect.left &lt; otherElementRect.left,
+<a name="line209"></a>      &#39;Elements should be left to right.&#39;);
+<a name="line210"></a>}
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Asserts that the first element is strictly left of the second element.
+<a name="line215"></a> * @param {Element|string} a The first element or optionally the comment string.
+<a name="line216"></a> * @param {Element} b The second element or the first element if comment string
+<a name="line217"></a> *     is present.
+<a name="line218"></a> * @param {Element=} opt_c The second element if comment string is present.
+<a name="line219"></a> */
+<a name="line220"></a>function assertIsStrictlyLeftOf(a, b, opt_c) {
+<a name="line221"></a>  _validateArguments(2, arguments);
+<a name="line222"></a>  var element = nonCommentArg(1, 2, arguments);
+<a name="line223"></a>  var otherElement = nonCommentArg(2, 2, arguments);
+<a name="line224"></a>  var elementRect = goog.style.getBounds(element);
+<a name="line225"></a>  var otherElementRect = goog.style.getBounds(otherElement);
+<a name="line226"></a>
+<a name="line227"></a>  _assert(commentArg(1, arguments),
+<a name="line228"></a>      elementRect.left + elementRect.width &lt; otherElementRect.left,
+<a name="line229"></a>      &#39;Elements should be strictly left to right.&#39;);
+<a name="line230"></a>}
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Asserts that the first element is higher than the second element.
+<a name="line235"></a> * @param {Element|string} a The first element or optionally the comment string.
+<a name="line236"></a> * @param {Element} b The second element or the first element if comment string
+<a name="line237"></a> *     is present.
+<a name="line238"></a> * @param {Element=} opt_c The second element if comment string is present.
+<a name="line239"></a> */
+<a name="line240"></a>function assertIsAbove(a, b, opt_c) {
+<a name="line241"></a>  _validateArguments(2, arguments);
+<a name="line242"></a>  var element = nonCommentArg(1, 2, arguments);
+<a name="line243"></a>  var otherElement = nonCommentArg(2, 2, arguments);
+<a name="line244"></a>  var elementRect = goog.style.getBounds(element);
+<a name="line245"></a>  var otherElementRect = goog.style.getBounds(otherElement);
+<a name="line246"></a>
+<a name="line247"></a>  _assert(commentArg(1, arguments),
+<a name="line248"></a>      elementRect.top &lt; otherElementRect.top,
+<a name="line249"></a>      &#39;Elements should be top to bottom.&#39;);
+<a name="line250"></a>}
+<a name="line251"></a>
+<a name="line252"></a>
+<a name="line253"></a>/**
+<a name="line254"></a> * Asserts that the first element is strictly higher than the second element.
+<a name="line255"></a> * @param {Element|string} a The first element or optionally the comment string.
+<a name="line256"></a> * @param {Element} b The second element or the first element if comment string
+<a name="line257"></a> *     is present.
+<a name="line258"></a> * @param {Element=} opt_c The second element if comment string is present.
+<a name="line259"></a> */
+<a name="line260"></a>function assertIsStrictlyAbove(a, b, opt_c) {
+<a name="line261"></a>  _validateArguments(2, arguments);
+<a name="line262"></a>  var element = nonCommentArg(1, 2, arguments);
+<a name="line263"></a>  var otherElement = nonCommentArg(2, 2, arguments);
+<a name="line264"></a>  var elementRect = goog.style.getBounds(element);
+<a name="line265"></a>  var otherElementRect = goog.style.getBounds(otherElement);
+<a name="line266"></a>
+<a name="line267"></a>  _assert(commentArg(1, arguments),
+<a name="line268"></a>      elementRect.top + elementRect.height &lt; otherElementRect.top,
+<a name="line269"></a>      &#39;Elements should be strictly top to bottom.&#39;);
+<a name="line270"></a>}
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * Asserts that the first element&#39;s bounds contain the bounds of the second
+<a name="line275"></a> * element.
+<a name="line276"></a> * @param {Element|string} a The first element or optionally the comment string.
+<a name="line277"></a> * @param {Element} b The second element or the first element if comment string
+<a name="line278"></a> *     is present.
+<a name="line279"></a> * @param {Element=} opt_c The second element if comment string is present.
+<a name="line280"></a> */
+<a name="line281"></a>function assertContained(a, b, opt_c) {
+<a name="line282"></a>  _validateArguments(2, arguments);
+<a name="line283"></a>  var element = nonCommentArg(1, 2, arguments);
+<a name="line284"></a>  var otherElement = nonCommentArg(2, 2, arguments);
+<a name="line285"></a>  var elementRect = goog.style.getBounds(element);
+<a name="line286"></a>  var otherElementRect = goog.style.getBounds(otherElement);
+<a name="line287"></a>
+<a name="line288"></a>  _assert(commentArg(1, arguments),
+<a name="line289"></a>      elementRect.contains(otherElementRect),
+<a name="line290"></a>      &#39;Element should be contained within the other element.&#39;);
+<a name="line291"></a>}
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * Returns true if the bounding rectangle of the given elements intersect.
+<a name="line296"></a> * @param {Element} element The first element.
+<a name="line297"></a> * @param {Element} otherElement The second element.
+<a name="line298"></a> * @private
+<a name="line299"></a> */
+<a name="line300"></a>goog.testing.style.layoutasserts.intersects_ = function(element, otherElement) {
+<a name="line301"></a>  var elementRect = goog.style.getBounds(element);
+<a name="line302"></a>  var otherElementRect = goog.style.getBounds(otherElement);
+<a name="line303"></a>  return goog.math.Rect.intersects(elementRect, otherElementRect);
+<a name="line304"></a>};
+<a name="line305"></a>
+<a name="line306"></a>
+<a name="line307"></a>/**
+<a name="line308"></a> * Returns true if the difference between val1 and val2 is less than or equal to
+<a name="line309"></a> * the threashold.
+<a name="line310"></a> * @param {number} val1 The first value.
+<a name="line311"></a> * @param {number} val2 The second value.
+<a name="line312"></a> * @param {number} threshold The threshold value.
+<a name="line313"></a> * @return {boolean} Whether or not the the values are within the threshold.
+<a name="line314"></a> * @private
+<a name="line315"></a> */
+<a name="line316"></a>goog.testing.style.layoutasserts.isWithinThreshold_ = function(
+<a name="line317"></a>    val1, val2, threshold) {
+<a name="line318"></a>  return Math.abs(val1 - val2) &lt;= threshold;
+<a name="line319"></a>};
+<a name="line320"></a>
+<a name="line321"></a>
+<a name="line322"></a>/**
+<a name="line323"></a> * Returns true if the element has a visible dimension, i.e. x &gt; 0 &amp;&amp; y &gt; 0.
+<a name="line324"></a> * @param {Element} element The element to check for visible dimension.
+<a name="line325"></a> * @private
+<a name="line326"></a> */
+<a name="line327"></a>goog.testing.style.layoutasserts.hasVisibleDimension_ = function(element) {
+<a name="line328"></a>  var elSize = goog.style.getSize(element);
+<a name="line329"></a>  var longest = elSize.getLongest();
+<a name="line330"></a>  if (longest &lt;= 0) {
+<a name="line331"></a>    return false;
+<a name="line332"></a>  }
+<a name="line333"></a>
+<a name="line334"></a>  return true;
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * Returns true if the CSS style of the element renders it visible.
+<a name="line340"></a> * @param {Element} element The element to check for visibility.
+<a name="line341"></a> * @private
+<a name="line342"></a> */
+<a name="line343"></a>goog.testing.style.layoutasserts.isVisible_ = function(element) {
+<a name="line344"></a>  var visibilityStyle =
+<a name="line345"></a>      goog.testing.style.layoutasserts.getAvailableStyle_(
+<a name="line346"></a>          element, &#39;visibility&#39;);
+<a name="line347"></a>  var displayStyle =
+<a name="line348"></a>      goog.testing.style.layoutasserts.getAvailableStyle_(element, &#39;display&#39;);
+<a name="line349"></a>
+<a name="line350"></a>  return (visibilityStyle != &#39;hidden&#39; &amp;&amp; displayStyle != &#39;none&#39;);
+<a name="line351"></a>};
+<a name="line352"></a>
+<a name="line353"></a>
+<a name="line354"></a>/**
+<a name="line355"></a> * This is essentially goog.style.getStyle_. goog.style.getStyle_ is private
+<a name="line356"></a> * and is not a recommended way for general purpose style extractor. For the
+<a name="line357"></a> * purposes of layout testing, we only use this function for retrieving
+<a name="line358"></a> * &#39;visiblity&#39; and &#39;display&#39; style.
+<a name="line359"></a> * @param {Element} element The element to retrieve the style from.
+<a name="line360"></a> * @param {string} style Style property name.
+<a name="line361"></a> * @private
+<a name="line362"></a> */
+<a name="line363"></a>goog.testing.style.layoutasserts.getAvailableStyle_ = function(element, style) {
+<a name="line364"></a>  return goog.style.getComputedStyle(element, style) ||
+<a name="line365"></a>      goog.style.getCascadedStyle(element, style) ||
+<a name="line366"></a>      goog.style.getStyle(element, style);
+<a name="line367"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -93,7 +94,7 @@
 <a name="line50"></a> * @param {Array.&lt;number&gt;} start Array for start coordinates.
 <a name="line51"></a> * @param {Array.&lt;number&gt;} end Array for end coordinates.
 <a name="line52"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line53"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line53"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line54"></a> * @extends {goog.fx.Animation}
 <a name="line55"></a> * @constructor
 <a name="line56"></a> */
@@ -148,7 +149,7 @@
 <a name="line105"></a> * @param {Array.&lt;number&gt;} start 2D array for start coordinates (X, Y).
 <a name="line106"></a> * @param {Array.&lt;number&gt;} end 2D array for end coordinates (X, Y).
 <a name="line107"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line108"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line108"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line109"></a> * @extends {goog.fx.dom.PredefinedEffect}
 <a name="line110"></a> * @constructor
 <a name="line111"></a> */
@@ -175,7 +176,7 @@
 <a name="line132"></a> * @param {Element} element Dom Node to be used in the animation.
 <a name="line133"></a> * @param {Array.&lt;number&gt;} end 2D array for end coordinates (X, Y).
 <a name="line134"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line135"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line135"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line136"></a> * @extends {goog.fx.dom.Slide}
 <a name="line137"></a> * @constructor
 <a name="line138"></a> */
@@ -202,7 +203,7 @@
 <a name="line159"></a> * @param {Array.&lt;number&gt;} start 2D array for start size (W, H).
 <a name="line160"></a> * @param {Array.&lt;number&gt;} end 2D array for end size (W, H).
 <a name="line161"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line162"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line162"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line163"></a> * @extends {goog.fx.dom.PredefinedEffect}
 <a name="line164"></a> * @constructor
 <a name="line165"></a> */
@@ -269,7 +270,7 @@
 <a name="line226"></a> * @param {Array.&lt;number&gt;} start 2D array for start scroll left and top.
 <a name="line227"></a> * @param {Array.&lt;number&gt;} end 2D array for end scroll left and top.
 <a name="line228"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line229"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line229"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line230"></a> * @extends {goog.fx.dom.PredefinedEffect}
 <a name="line231"></a> * @constructor
 <a name="line232"></a> */
@@ -304,7 +305,7 @@
 <a name="line261"></a> * @param {Array.&lt;number&gt;} start 2D array for start width and height.
 <a name="line262"></a> * @param {Array.&lt;number&gt;} end 2D array for end width and height.
 <a name="line263"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line264"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line264"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line265"></a> * @extends {goog.fx.dom.PredefinedEffect}
 <a name="line266"></a> * @constructor
 <a name="line267"></a> */
@@ -339,7 +340,7 @@
 <a name="line296"></a> * @param {number} start Start width.
 <a name="line297"></a> * @param {number} end End width.
 <a name="line298"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line299"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line299"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line300"></a> * @extends {goog.fx.dom.PredefinedEffect}
 <a name="line301"></a> * @constructor
 <a name="line302"></a> */
@@ -370,7 +371,7 @@
 <a name="line327"></a> * @param {number} start Start height.
 <a name="line328"></a> * @param {number} end End height.
 <a name="line329"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line330"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line330"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line331"></a> * @extends {goog.fx.dom.PredefinedEffect}
 <a name="line332"></a> * @constructor
 <a name="line333"></a> */
@@ -402,7 +403,7 @@
 <a name="line359"></a> * @param {Array.&lt;number&gt;|number} start 1D Array or Number with start opacity.
 <a name="line360"></a> * @param {Array.&lt;number&gt;|number} end 1D Array or Number for end opacity.
 <a name="line361"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line362"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line362"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line363"></a> * @extends {goog.fx.dom.PredefinedEffect}
 <a name="line364"></a> * @constructor
 <a name="line365"></a> */
@@ -451,7 +452,7 @@
 <a name="line408"></a> *
 <a name="line409"></a> * @param {Element} element Dom Node to be used in the animation.
 <a name="line410"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line411"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line411"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line412"></a> * @extends {goog.fx.dom.Fade}
 <a name="line413"></a> * @constructor
 <a name="line414"></a> */
@@ -467,7 +468,7 @@
 <a name="line424"></a> *
 <a name="line425"></a> * @param {Element} element Dom Node to be used in the animation.
 <a name="line426"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line427"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line427"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line428"></a> * @extends {goog.fx.dom.Fade}
 <a name="line429"></a> * @constructor
 <a name="line430"></a> */
@@ -483,7 +484,7 @@
 <a name="line440"></a> *
 <a name="line441"></a> * @param {Element} element Dom Node to be used in the animation.
 <a name="line442"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line443"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line443"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line444"></a> * @extends {goog.fx.dom.Fade}
 <a name="line445"></a> * @constructor
 <a name="line446"></a> */
@@ -514,7 +515,7 @@
 <a name="line471"></a> *
 <a name="line472"></a> * @param {Element} element Dom Node to be used in the animation.
 <a name="line473"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line474"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line474"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line475"></a> * @extends {goog.fx.dom.Fade}
 <a name="line476"></a> * @constructor
 <a name="line477"></a> */
@@ -541,7 +542,7 @@
 <a name="line498"></a> * @param {Array.&lt;number&gt;} start 3D Array for RGB of start color.
 <a name="line499"></a> * @param {Array.&lt;number&gt;} end 3D Array for RGB of end color.
 <a name="line500"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line501"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line501"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line502"></a> * @extends {goog.fx.dom.PredefinedEffect}
 <a name="line503"></a> * @constructor
 <a name="line504"></a> */
@@ -609,7 +610,7 @@
 <a name="line566"></a> * @param {Array.&lt;number&gt;} start 3D Array representing R,G,B.
 <a name="line567"></a> * @param {Array.&lt;number&gt;} end 3D Array representing R,G,B.
 <a name="line568"></a> * @param {number} time Length of animation in milliseconds.
-<a name="line569"></a> * @param {Function} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
+<a name="line569"></a> * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
 <a name="line570"></a> * @constructor
 <a name="line571"></a> * @extends {goog.fx.dom.PredefinedEffect}
 <a name="line572"></a> */

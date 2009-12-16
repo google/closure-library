@@ -43,10 +43,10 @@ goog.require('goog.userAgent');
  * This creates a TreeControl object. A tree control provides a way to
  * view a hierachical set of data.
  * @param {string} html The html content of the node label.
- * @param {Object} opt_config The configuration for the tree. See
+ * @param {Object=} opt_config The configuration for the tree. See
  *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
  *    will be used.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.tree.BaseNode}
  */

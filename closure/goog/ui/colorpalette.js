@@ -35,11 +35,11 @@ goog.require('goog.ui.PaletteRenderer');
  * component fires an ACTION event.  Event listeners may retrieve the selected
  * color using the {@link #getSelectedColor} method.
  *
- * @param {Array.<string>} opt_colors Array of colors in any valid CSS color
+ * @param {Array.<string>=} opt_colors Array of colors in any valid CSS color
  *     format.
- * @param {goog.ui.PaletteRenderer} opt_renderer Renderer used to render or
+ * @param {goog.ui.PaletteRenderer=} opt_renderer Renderer used to render or
  *     decorate the palette; defaults to {@link goog.ui.PaletteRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Palette}

@@ -35,9 +35,9 @@ goog.require('goog.style');
  * Controller for an iframe mask. The mask is only valid in the current
  * document, or else the document of the given DOM helper.
  *
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper for the relevant
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper for the relevant
  *     document.
- * @param {goog.structs.Pool} opt_iframePool An optional source of iframes.
+ * @param {goog.structs.Pool=} opt_iframePool An optional source of iframes.
  *     Iframes will be grabbed from the pool when they're needed and returned
  *     to the pool (but still attached to the DOM) when they're done.
  * @constructor
@@ -220,7 +220,7 @@ goog.ui.IframeMask.prototype.setSnapElement = function(snapElement) {
  * @param {goog.events.EventTarget} target The event target to listen on.
  * @param {string} showEvent When this event fires, the mask will be applied.
  * @param {string} hideEvent When this event fires, the mask will be hidden.
- * @param {Element} opt_snapElement When the mask is applied, it will
+ * @param {Element=} opt_snapElement When the mask is applied, it will
  *     automatically snap to this element. If no element is specified, it will
  *     use the default snap element.
  */

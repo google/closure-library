@@ -116,7 +116,7 @@ if (goog.userAgent.WEBKIT) {
 
   /**
    * Remove all relay-iframes which are older than the maximal age.
-   * @param {number} opt_maxAge The maximal age in milliseconds.
+   * @param {number=} opt_maxAge The maximal age in milliseconds.
    * @private
    */
   goog.net.xpc.IframeRelayTransport.cleanup_ = function(opt_maxAge) {

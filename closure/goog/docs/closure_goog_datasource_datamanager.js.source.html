@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -125,9 +126,9 @@
 <a name="line82"></a>/**
 <a name="line83"></a> * Add a data source
 <a name="line84"></a> * @param {goog.ds.DataNode} ds The data source.
-<a name="line85"></a> * @param {boolean} opt_autoload Whether to automatically load the data,
+<a name="line85"></a> * @param {boolean=} opt_autoload Whether to automatically load the data,
 <a name="line86"></a> *   defaults to false.
-<a name="line87"></a> * @param {string} opt_name Optional name, can also get name
+<a name="line87"></a> * @param {string=} opt_name Optional name, can also get name
 <a name="line88"></a> *   from the datasource.
 <a name="line89"></a> */
 <a name="line90"></a>goog.ds.DataManager.prototype.addDataSource = function(ds, opt_autoload,
@@ -227,7 +228,7 @@
 <a name="line184"></a>
 <a name="line185"></a>/**
 <a name="line186"></a> * Gets all of the child nodes of the current node.
-<a name="line187"></a> * @param {string} opt_selector String selector to choose child nodes
+<a name="line187"></a> * @param {string=} opt_selector String selector to choose child nodes
 <a name="line188"></a> * Should return an empty DataNode list if no child nodes.
 <a name="line189"></a> *
 <a name="line190"></a> * @return {goog.ds.DataNodeList} The child nodes.
@@ -332,7 +333,7 @@
 <a name="line289"></a> *
 <a name="line290"></a> * @param {Function} fn Callback function, signature function(dataPath, id).
 <a name="line291"></a> * @param {string} dataPath Fully qualified data path.
-<a name="line292"></a> * @param {string} opt_id A value passed back to the listener when the dataPath
+<a name="line292"></a> * @param {string=} opt_id A value passed back to the listener when the dataPath
 <a name="line293"></a> *   is matched.
 <a name="line294"></a> */
 <a name="line295"></a>goog.ds.DataManager.prototype.addListener = function(fn, dataPath, opt_id) {
@@ -390,7 +391,7 @@
 <a name="line347"></a> *
 <a name="line348"></a> * @param {Function} fn Callback function, signature (dataPath, id, indexes).
 <a name="line349"></a> * @param {string} dataPath Fully qualified data path.
-<a name="line350"></a> * @param {string} opt_id A value passed back to the listener when the dataPath
+<a name="line350"></a> * @param {string=} opt_id A value passed back to the listener when the dataPath
 <a name="line351"></a> *   is matched.
 <a name="line352"></a> */
 <a name="line353"></a>goog.ds.DataManager.prototype.addIndexedListener = function(fn, dataPath,
@@ -441,8 +442,8 @@
 <a name="line398"></a> * matching datapath and matching id.
 <a name="line399"></a> *
 <a name="line400"></a> * @param {Function} fn Callback function, signature function(dataPath, id).
-<a name="line401"></a> * @param {string} opt_dataPath Fully qualified data path.
-<a name="line402"></a> * @param {string} opt_id A value passed back to the listener when the dataPath
+<a name="line401"></a> * @param {string=} opt_dataPath Fully qualified data path.
+<a name="line402"></a> * @param {string=} opt_id A value passed back to the listener when the dataPath
 <a name="line403"></a> *   is matched.
 <a name="line404"></a> */
 <a name="line405"></a>goog.ds.DataManager.prototype.removeIndexedListeners = function(
@@ -457,8 +458,8 @@
 <a name="line414"></a> * matching dataPath and matching id
 <a name="line415"></a> *
 <a name="line416"></a> * @param {Function} fn Callback function, signature function(dataPath, id).
-<a name="line417"></a> * @param {string} opt_dataPath Fully qualified data path.
-<a name="line418"></a> * @param {string} opt_id A value passed back to the listener when the dataPath
+<a name="line417"></a> * @param {string=} opt_dataPath Fully qualified data path.
+<a name="line418"></a> * @param {string=} opt_id A value passed back to the listener when the dataPath
 <a name="line419"></a> *   is matched.
 <a name="line420"></a> */
 <a name="line421"></a>goog.ds.DataManager.prototype.removeListeners = function(fn, opt_dataPath,
@@ -485,8 +486,8 @@
 <a name="line442"></a> * @param {boolean} indexed Indicates whether the listenersByFunction are
 <a name="line443"></a> *     indexed or not.
 <a name="line444"></a> * @param {Function} fn Callback function, signature function(dataPath, id).
-<a name="line445"></a> * @param {string} opt_dataPath Fully qualified data path.
-<a name="line446"></a> * @param {string} opt_id A value passed back to the listener when the dataPath
+<a name="line445"></a> * @param {string=} opt_dataPath Fully qualified data path.
+<a name="line446"></a> * @param {string=} opt_id A value passed back to the listener when the dataPath
 <a name="line447"></a> *   is matched.
 <a name="line448"></a> * @private
 <a name="line449"></a> */

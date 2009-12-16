@@ -184,7 +184,7 @@ goog.i18n.DateTimeFormat.prototype.applyPattern_ = function(pattern) {
 /**
  * Format the given date object according to preset pattern and current lcoale.
  * @param {Date} date The Date object that is being formatted.
- * @param {goog.i18n.TimeZone} opt_timeZone optional, if specified, time
+ * @param {goog.i18n.TimeZone=} opt_timeZone optional, if specified, time
  *    related fields will be formatted based on its setting. When this field
  *    is not specified, "undefined" will be pass around and those function
  *    that really need time zone service will create a default one.
@@ -547,7 +547,7 @@ goog.i18n.DateTimeFormat.prototype.formatSeconds_ =
  * @param {number} count Number of time pattern char repeats, it controls
  *     how a field should be formatted.
  * @param {Date} date It holds the date object to be formatted.
- * @param {goog.i18n.TimeZone} opt_timeZone This holds current time zone info.
+ * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
  * @return {string} Formatted string that represent this field.
  * @private
  */
@@ -565,7 +565,7 @@ goog.i18n.DateTimeFormat.prototype.formatTimeZoneRFC_ =
  * @param {number} count Number of time pattern char repeats, it controls
  *     how a field should be formatted.
  * @param {Date} date Whose value being evaluated.
- * @param {goog.i18n.TimeZone} opt_timeZone This holds current time zone info.
+ * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
  * @return {string} GMT timeZone string.
  * @private
  */
@@ -581,7 +581,7 @@ goog.i18n.DateTimeFormat.prototype.formatTimeZone_ =
 /**
  * Generate GMT timeZone string for given date
  * @param {Date} date Whose value being evaluated.
- * @param {goog.i18n.TimeZone} opt_timeZone This holds current time zone info.
+ * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
  * @return {string} GMT timeZone string.
  * @private
  */
@@ -599,7 +599,7 @@ goog.i18n.DateTimeFormat.prototype.formatTimeZoneId_ =
  * @param {Date} date represents the real date to be formatted.
  * @param {Date} dateForDate used to resolve date fields for formatting.
  * @param {Date} dateForTime used to resolve time fields for formatting.
- * @param {goog.i18n.TimeZone} opt_timeZone This holds current time zone info.
+ * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
  * @return {string} string representation for the given field.
  * @private
  */

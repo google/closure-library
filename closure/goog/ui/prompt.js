@@ -43,12 +43,12 @@ goog.require('goog.userAgent');
  *     Cancel. The function should expect a single argument which represents
  *     what the user entered into the prompt. If the user presses cancel, the
  *     value of the argument will be null.
- * @param {string} opt_defaultValue Optional default value that should be in
+ * @param {string=} opt_defaultValue Optional default value that should be in
  *     the text box when the prompt appears.
- * @param {string} opt_class Optional prefix for the classes.
- * @param {boolean} opt_useIframeForIE For IE, workaround windowed controls
+ * @param {string=} opt_class Optional prefix for the classes.
+ * @param {boolean=} opt_useIframeForIE For IE, workaround windowed controls
  *     z-index issue by using a an iframe instead of a div for bg element.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper; see {@link
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
  *    goog.ui.Component} for semantics.
  * @constructor
  * @extends {goog.ui.Dialog}

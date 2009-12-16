@@ -66,9 +66,9 @@ goog.require('goog.userAgent');
  * for example usage.
  * @param {goog.ui.ControlContent} content Text caption or DOM structure
  *     to display as the content of the component (if any).
- * @param {goog.ui.ControlRenderer} opt_renderer Renderer used to render or
+ * @param {goog.ui.ControlRenderer=} opt_renderer Renderer used to render or
  *     decorate the component; defaults to {@link goog.ui.ControlRenderer}.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Component}
@@ -714,7 +714,7 @@ goog.ui.Control.prototype.isVisible = function() {
  * its key target has a tab index.  When hiding a component that is enabled
  * and focusable, blurs its key target and removes its tab index.
  * @param {boolean} visible Whether to show or hide the component.
- * @param {boolean} opt_force If true, doesn't check whether the component
+ * @param {boolean=} opt_force If true, doesn't check whether the component
  *     already has the requested visibility, and doesn't dispatch any events.
  * @return {boolean} Whether the visibility was changed.
  */

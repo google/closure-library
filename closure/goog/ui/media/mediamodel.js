@@ -41,11 +41,11 @@ goog.provide('goog.ui.media.MediaModel.Thumbnail');
  * {@link fava.data.Node} is under fava, and not available in closure. Add
  * setters to MediaModel once this is supported.
  *
- * @param {string} opt_url An optional URL of the media.
- * @param {string} opt_caption An optional caption of the media.
- * @param {string} opt_description An optional description of the media.
- * @param {goog.ui.media.MediaModel.MimeType} opt_type The type of the media.
- * @param {goog.ui.media.MediaModel.Medium} opt_medium The medium of the media.
+ * @param {string=} opt_url An optional URL of the media.
+ * @param {string=} opt_caption An optional caption of the media.
+ * @param {string=} opt_description An optional description of the media.
+ * @param {goog.ui.media.MediaModel.MimeType=} opt_type The type of the media.
+ * @param {goog.ui.media.MediaModel.Medium=} opt_medium The medium of the media.
  * @constructor
  */
 goog.ui.media.MediaModel = function(opt_url,
@@ -310,7 +310,7 @@ goog.ui.media.MediaModel.prototype.setCategories = function(categories) {
  * Constructs a thumbnail containing details of the thumbnail's image URL and
  * optionally it's size.
  * @param {string} url The URL of the thumbnail's image.
- * @param {goog.math.Size} opt_size The size of the thumbnail's image if known.
+ * @param {goog.math.Size=} opt_size The size of the thumbnail's image if known.
  * @constructor
  */
 goog.ui.media.MediaModel.Thumbnail = function(url, opt_size) {
@@ -376,8 +376,8 @@ goog.ui.media.MediaModel.Thumbnail.prototype.setSize = function(size) {
  * Constructs a player containing details of the player's URL and
  * optionally it's size.
  * @param {string} url The URL of the player.
- * @param {Object} opt_vars Optional map of arguments to the player.
- * @param {goog.math.Size} opt_size The size of the player if known.
+ * @param {Object=} opt_vars Optional map of arguments to the player.
+ * @param {goog.math.Size=} opt_size The size of the player if known.
  * @constructor
  */
 goog.ui.media.MediaModel.Player = function(url, opt_vars, opt_size) {
@@ -472,7 +472,7 @@ goog.ui.media.MediaModel.Player.prototype.setSize = function(size) {
  * and its particular contents.
  * @param {string} scheme The URI that identifies the categorization scheme.
  * @param {string} value The value of the category.
- * @param {string} opt_label The human readable label that can be displayed in
+ * @param {string=} opt_label The human readable label that can be displayed in
  *     end user applications.
  * @constructor
  */

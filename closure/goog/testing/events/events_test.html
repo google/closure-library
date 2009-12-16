@@ -23,8 +23,10 @@ limitations under the License.
   <title>Closure Unit Tests - goog.testing.events</title>
   <script src="../../base.js"></script>
   <script>
+    goog.require('goog.array');
     goog.require('goog.dom');
     goog.require('goog.math.Coordinate');
+    goog.require('goog.string');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
     goog.require('goog.userAgent');
@@ -38,24 +40,26 @@ limitations under the License.
 <script type="text/javascript">
   var firedEventTypes;
   var firedEventCoordinates;
+  var firedShiftKeys;
   var root = goog.dom.$('root');
   var log = goog.dom.$('log');
   var input = goog.dom.$('input');
   var testButton = goog.dom.$('testButton');
   var coordinate = new goog.math.Coordinate(123, 456);
-  var coordTestString = '(123, 456)';
 
   function setUp() {
     goog.events.removeAll();
     root.innerHTML = '';
     firedEventTypes = [];
     firedEventCoordinates = [];
+    firedShiftKeys = [];
 
     for (var key in goog.events.EventType) {
       goog.events.listen(root, goog.events.EventType[key], function(e) {
         firedEventTypes.push(e.type);
         var coord = new goog.math.Coordinate(e.clientX, e.clientY);
-        firedEventCoordinates.push(coord.toString());
+        firedEventCoordinates.push(coord);
+        firedShiftKeys.push(!!e.shiftKey);
       });
     }
   }
@@ -77,9 +81,24 @@ limitations under the License.
           e.preventDefault();
         }
 
-        log.innerHTML += '<br/>' + e.type;
+        log.innerHTML += goog.string.subs('<br/>%s (%s, %s)',
+            e.type, e.clientX, e.clientY);
       });
     }
+  }
+
+  function testMouseOver() {
+    goog.testing.events.fireMouseOverEvent(root, null);
+    goog.testing.events.fireMouseOverEvent(root, null, coordinate);
+    assertEventTypes(['mouseover', 'mouseover']);
+    assertCoordinates([new goog.math.Coordinate(), coordinate]);
+  }
+
+  function testMouseOut() {
+    goog.testing.events.fireMouseOutEvent(root, null);
+    goog.testing.events.fireMouseOutEvent(root, null, coordinate);
+    assertEventTypes(['mouseout', 'mouseout']);
+    assertCoordinates([new goog.math.Coordinate(), coordinate]);
   }
 
   function testClickSequence() {
@@ -88,8 +107,15 @@ limitations under the License.
   }
 
   function testClickSequenceWithCoordinate() {
-    assertTrue(goog.testing.events.fireClickSequence(root, null,coordinate));
-    assertCoordinates([coordTestString, coordTestString, coordTestString]);
+    assertTrue(goog.testing.events.fireClickSequence(root, null, coordinate));
+    assertCoordinates([coordinate, coordinate, coordinate]);
+    assertArrayEquals([false, false, false], firedShiftKeys);
+  }
+
+  function testClickSequenceWithEventProperty() {
+    assertTrue(goog.testing.events.fireClickSequence(
+          root, null, undefined, { shiftKey: true }));
+    assertArrayEquals([true, true, true], firedShiftKeys);
   }
 
   function testClickSequenceCancellingMousedown() {
@@ -100,8 +126,8 @@ limitations under the License.
 
   function testClickSequenceCancellingMousedownWithCoordinate() {
     preventDefaultEventType('mousedown');
-    assertFalse(goog.testing.events.fireClickSequence(root, null,coordinate));
-    assertCoordinates([coordTestString, coordTestString, coordTestString]);
+    assertFalse(goog.testing.events.fireClickSequence(root, null, coordinate));
+    assertCoordinates([coordinate, coordinate, coordinate]);
   }
 
   function testClickSequenceCancellingMouseup() {
@@ -112,8 +138,8 @@ limitations under the License.
 
   function testClickSequenceCancellingMouseupWithCoordinate() {
     preventDefaultEventType('mouseup');
-    assertFalse(goog.testing.events.fireClickSequence(root, null,coordinate));
-    assertCoordinates([coordTestString, coordTestString, coordTestString]);
+    assertFalse(goog.testing.events.fireClickSequence(root, null, coordinate));
+    assertCoordinates([coordinate, coordinate, coordinate]);
   }
 
   function testClickSequenceCancellingClick() {
@@ -124,8 +150,8 @@ limitations under the License.
 
   function testClickSequenceCancellingClickWithCoordinate() {
     preventDefaultEventType('click');
-    assertFalse(goog.testing.events.fireClickSequence(root, null,coordinate));
-    assertCoordinates([coordTestString, coordTestString, coordTestString]);
+    assertFalse(goog.testing.events.fireClickSequence(root, null, coordinate));
+    assertCoordinates([coordinate, coordinate, coordinate]);
   }
 
   // For a double click, IE fires selectstart instead of the second mousedown,
@@ -145,15 +171,7 @@ limitations under the License.
                        'dblclick']);
 
 
-  var DBLCLICK_SEQ_COORDS = function() {
-    var list = [];
-    var length = DBLCLICK_SEQ.length;
-    while (length > 0) {
-      list.push(coordTestString);
-      length--;
-    }
-    return list;
-  }();
+  var DBLCLICK_SEQ_COORDS = goog.array.repeat(coordinate, DBLCLICK_SEQ.length);
 
   function testDoubleClickSequence() {
     assertTrue(goog.testing.events.fireDoubleClickSequence(root));
@@ -215,14 +233,14 @@ limitations under the License.
 
   function testKeySequence() {
     assertTrue(goog.testing.events.fireKeySequence(
-            root, goog.events.KeyCodes.ZERO));
+        root, goog.events.KeyCodes.ZERO));
     assertEventTypes(['keydown', 'keypress', 'keyup']);
   }
 
   function testKeySequenceCancellingKeydown() {
     preventDefaultEventType('keydown');
     assertFalse(goog.testing.events.fireKeySequence(
-            root, goog.events.KeyCodes.ZERO));
+        root, goog.events.KeyCodes.ZERO));
     if (goog.userAgent.IE) {
       assertEventTypes(['keydown', 'keyup']);
     } else {
@@ -233,20 +251,20 @@ limitations under the License.
   function testKeySequenceCancellingKeypress() {
     preventDefaultEventType('keypress');
     assertFalse(goog.testing.events.fireKeySequence(
-            root, goog.events.KeyCodes.ZERO));
+        root, goog.events.KeyCodes.ZERO));
     assertEventTypes(['keydown', 'keypress', 'keyup']);
   }
 
   function testKeySequenceCancellingKeyup() {
     preventDefaultEventType('keyup');
     assertFalse(goog.testing.events.fireKeySequence(
-            root, goog.events.KeyCodes.ZERO));
+        root, goog.events.KeyCodes.ZERO));
     assertEventTypes(['keydown', 'keypress', 'keyup']);
   }
 
   function testKeySequenceWithEscapeKey() {
     assertTrue(goog.testing.events.fireKeySequence(
-            root, goog.events.KeyCodes.ESC));
+        root, goog.events.KeyCodes.ESC));
     if (goog.userAgent.WEBKIT && goog.userAgent.isVersion('525')) {
       assertEventTypes(['keydown', 'keyup']);
     } else {
@@ -254,25 +272,26 @@ limitations under the License.
     }
   }
 
-  function assertContextMenuEventSequence() {
-    if (goog.userAgent.WINDOWS) {
-      assertEventTypes(['mousedown', 'mouseup', 'contextmenu']);
-    } else if (goog.userAgent.GECKO) {
-      assertEventTypes(['mousedown', 'contextmenu', 'mouseup']);
-    } else {
-      assertEventTypes(['mousedown', 'contextmenu']);
-    }
-  }
+  var CONTEXTMENU_SEQ =
+      goog.userAgent.WINDOWS ? ['mousedown', 'mouseup', 'contextmenu'] :
+      goog.userAgent.GECKO ? ['mousedown', 'contextmenu', 'mouseup'] :
+      ['mousedown', 'contextmenu'];
 
   function testContextMenuSequence() {
     assertTrue(goog.testing.events.fireContextMenuSequence(root));
-    assertContextMenuEventSequence();
+    assertEventTypes(CONTEXTMENU_SEQ);
+  }
+
+  function testContextMenuSequenceWithCoordinate() {
+    assertTrue(goog.testing.events.fireContextMenuSequence(root, coordinate));
+    assertEventTypes(CONTEXTMENU_SEQ);
+    assertCoordinates(goog.array.repeat(coordinate, CONTEXTMENU_SEQ.length));
   }
 
   function testContextMenuSequenceCancellingMousedown() {
     preventDefaultEventType('mousedown');
     assertFalse(goog.testing.events.fireContextMenuSequence(root));
-    assertContextMenuEventSequence();
+    assertEventTypes(CONTEXTMENU_SEQ);
   }
 
   function testContextMenuSequenceCancellingMouseup() {
@@ -282,13 +301,13 @@ limitations under the License.
     } else {
       assertTrue(goog.testing.events.fireContextMenuSequence(root));
     }
-    assertContextMenuEventSequence();
+    assertEventTypes(CONTEXTMENU_SEQ);
   }
 
   function testContextMenuSequenceCancellingContextMenu() {
     preventDefaultEventType('contextmenu');
     assertFalse(goog.testing.events.fireContextMenuSequence(root));
-    assertContextMenuEventSequence();
+    assertEventTypes(CONTEXTMENU_SEQ);
   }
 
   /**

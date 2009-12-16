@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -156,7 +157,7 @@
 <a name="line113"></a> * except if you need more fine control over the configuration.
 <a name="line114"></a> *
 <a name="line115"></a> * @param {goog.ui.media.VimeoModel} dataModel A vimeo video URL.
-<a name="line116"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+<a name="line116"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
 <a name="line117"></a> *     document interaction.
 <a name="line118"></a> * @return {goog.ui.media.Media} A Control binded to the Vimeo renderer.
 <a name="line119"></a> */
@@ -209,8 +210,8 @@
 <a name="line166"></a> * parameters.
 <a name="line167"></a> *
 <a name="line168"></a> * @param {string} videoId The vimeo video id.
-<a name="line169"></a> * @param {string} opt_caption An optional caption of the vimeo video.
-<a name="line170"></a> * @param {string} opt_description An optional description of the vimeo video.
+<a name="line169"></a> * @param {string=} opt_caption An optional caption of the vimeo video.
+<a name="line170"></a> * @param {string=} opt_description An optional description of the vimeo video.
 <a name="line171"></a> * @constructor
 <a name="line172"></a> * @extends {goog.ui.media.MediaModel}
 <a name="line173"></a> */
@@ -252,8 +253,8 @@
 <a name="line209"></a> * Takes a {@code vimeoUrl} and extracts the video id.
 <a name="line210"></a> *
 <a name="line211"></a> * @param {string} vimeoUrl A vimeo video URL.
-<a name="line212"></a> * @param {string} opt_caption An optional caption of the vimeo video.
-<a name="line213"></a> * @param {string} opt_description An optional description of the vimeo video.
+<a name="line212"></a> * @param {string=} opt_caption An optional caption of the vimeo video.
+<a name="line213"></a> * @param {string=} opt_description An optional description of the vimeo video.
 <a name="line214"></a> * @return {goog.ui.media.VimeoModel} The vimeo data model that represents this
 <a name="line215"></a> *     URL.
 <a name="line216"></a> * @throws exception in case the parsing fails

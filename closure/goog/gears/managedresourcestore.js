@@ -46,7 +46,7 @@ goog.require('goog.string');
  * @param {?string} requiredCookie  A cookie that must be present for the
  *     managed store to be active. Should have the form "foo=bar". Can be null
  *     if not required.
- * @param {GearsLocalServer} opt_localServer  Gears local server -- if not set,
+ * @param {GearsLocalServer=} opt_localServer  Gears local server -- if not set,
  *     create a new one internally.
  *
  * @constructor
@@ -298,7 +298,7 @@ goog.gears.ManagedResourceStore.prototype.assertNotExists_ = function() {
 
 /**
  * Create the ManagedResourceStore in gears
- * @param {string} opt_manifestUrl  The url of the manifest to associate.
+ * @param {string=} opt_manifestUrl  The url of the manifest to associate.
  */
 goog.gears.ManagedResourceStore.prototype.create = function(opt_manifestUrl) {
   if (!this.exists()) {
@@ -532,7 +532,7 @@ goog.gears.ManagedResourceStore.EventType = {
 /**
  * Event used when a ManagedResourceStore update is complete
  * @param {string} type  The type of the event.
- * @param {string} opt_errorMessage  The error message if failure.
+ * @param {string=} opt_errorMessage  The error message if failure.
  * @constructor
  * @extends {goog.events.Event}
  */

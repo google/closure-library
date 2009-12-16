@@ -35,7 +35,7 @@ goog.require('goog.ui.AbstractSpellChecker.AsyncResult');
  * @param {goog.spell.SpellCheck} handler Instance of the SpellCheckHandler
  *     support object to use. A single instance can be shared by multiple editor
  *     components.
- * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.AbstractSpellChecker}
  */

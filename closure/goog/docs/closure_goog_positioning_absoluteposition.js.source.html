@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -78,7 +79,7 @@
 <a name="line35"></a> * is scoped by an element with relative position.
 <a name="line36"></a> *
 <a name="line37"></a> * @param {number|!goog.math.Coordinate} arg1 Left position or coordinate.
-<a name="line38"></a> * @param {number} opt_arg2 Top position.
+<a name="line38"></a> * @param {number=} opt_arg2 Top position.
 <a name="line39"></a> * @constructor
 <a name="line40"></a> * @extends {goog.positioning.AbstractPosition}
 <a name="line41"></a> */
@@ -100,8 +101,8 @@
 <a name="line57"></a> * @param {Element} movableElement The DOM element to position.
 <a name="line58"></a> * @param {goog.positioning.Corner} movableCorner The corner of the movable
 <a name="line59"></a> *     element that should be positioned at the specified position.
-<a name="line60"></a> * @param {goog.math.Box} opt_margin A margin specified in pixels.
-<a name="line61"></a> * @param {goog.math.Size} opt_preferredSize Prefered size of the
+<a name="line60"></a> * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+<a name="line61"></a> * @param {goog.math.Size=} opt_preferredSize Prefered size of the
 <a name="line62"></a> *     movableElement.
 <a name="line63"></a> */
 <a name="line64"></a>goog.positioning.AbsolutePosition.prototype.reposition = function(

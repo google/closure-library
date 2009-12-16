@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -112,15 +113,15 @@
 <a name="line69"></a> * No encoding is performed.  Any component may be omitted as either null or
 <a name="line70"></a> * undefined.
 <a name="line71"></a> *
-<a name="line72"></a> * @param {?string} opt_scheme The scheme such as &#39;http&#39;.
-<a name="line73"></a> * @param {?string} opt_userInfo The user name before the &#39;@&#39;.
-<a name="line74"></a> * @param {?string} opt_domain The domain such as &#39;www.google.com&#39;, already
+<a name="line72"></a> * @param {?string=} opt_scheme The scheme such as &#39;http&#39;.
+<a name="line73"></a> * @param {?string=} opt_userInfo The user name before the &#39;@&#39;.
+<a name="line74"></a> * @param {?string=} opt_domain The domain such as &#39;www.google.com&#39;, already
 <a name="line75"></a> *     URI-encoded.
-<a name="line76"></a> * @param {string|number|null} opt_port The port number.
-<a name="line77"></a> * @param {?string} opt_path The path, already URI-encoded.  If it is not
+<a name="line76"></a> * @param {(string|number|null)=} opt_port The port number.
+<a name="line77"></a> * @param {?string=} opt_path The path, already URI-encoded.  If it is not
 <a name="line78"></a> *     empty, it must begin with a slash.
-<a name="line79"></a> * @param {?string} opt_queryData The URI-encoded query data.
-<a name="line80"></a> * @param {?string} opt_fragment The URI-encoded fragment identifier.
+<a name="line79"></a> * @param {?string=} opt_queryData The URI-encoded query data.
+<a name="line80"></a> * @param {?string=} opt_fragment The URI-encoded fragment identifier.
 <a name="line81"></a> * @return {string} The fully combined URI.
 <a name="line82"></a> */
 <a name="line83"></a>goog.uri.utils.buildFromEncodedParts = function(opt_scheme, opt_userInfo,
@@ -610,7 +611,7 @@
 <a name="line567"></a> *     first element appended will be an &#39;&amp;&#39;, and may be replaced by the caller.
 <a name="line568"></a> * @param {goog.uri.utils.QueryArray|Arguments} keysAndValues An array with
 <a name="line569"></a> *     alternating keys and values -- see the typedef.
-<a name="line570"></a> * @param {number} opt_startIndex A start offset into the arary, defaults to 0.
+<a name="line570"></a> * @param {number=} opt_startIndex A start offset into the arary, defaults to 0.
 <a name="line571"></a> * @return {!Array.&lt;string|undefined&gt;} The buffer argument.
 <a name="line572"></a> * @private
 <a name="line573"></a> */
@@ -636,7 +637,7 @@
 <a name="line593"></a> *
 <a name="line594"></a> * @param {goog.uri.utils.QueryArray} keysAndValues Alternating keys and
 <a name="line595"></a> *     values.  See the typedef.
-<a name="line596"></a> * @param {number} opt_startIndex A start offset into the arary, defaults to 0.
+<a name="line596"></a> * @param {number=} opt_startIndex A start offset into the arary, defaults to 0.
 <a name="line597"></a> * @return {string} The encoded query string, in the for &#39;a=1&amp;b=2&#39;.
 <a name="line598"></a> */
 <a name="line599"></a>goog.uri.utils.buildQueryData = function(keysAndValues, opt_startIndex) {

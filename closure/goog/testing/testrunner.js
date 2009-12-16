@@ -215,7 +215,7 @@ goog.testing.TestRunner.prototype.setErrorFilter = function(fn) {
 /**
  * Returns a report of the test case that ran.
  * Used by Selenium Hooks.
- * @param {boolean} opt_verbose If true results will include data about all
+ * @param {boolean=} opt_verbose If true results will include data about all
  *     tests, not just what failed.
  * @return {string} A report summary of the test.
  */

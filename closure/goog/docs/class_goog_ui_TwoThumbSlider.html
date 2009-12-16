@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -77,7 +89,7 @@
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
@@ -86,7 +98,7 @@
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -110,7 +122,7 @@
    <tr class="even">
      <td>
         <span class="entryName">opt_domHelper</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        : <div class="fullType"><span class="type">goog.dom.DomHelper=</span></div>
         <div class="entryOverview">Optional DOM helper.</div>
      </td>
    </tr>
@@ -359,7 +371,7 @@
 
 
      <div class="entryOverview">
-       Sets the value and starts animating the handle towards that position
+       Sets the value and starts animating the handle towards that position.
      </div>
 
 
@@ -393,7 +405,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line810">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line812">code &raquo;</a>
   </td>
      </tr>
 
@@ -556,7 +568,7 @@ extentThumb to non-null values.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line880">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line882">code &raquo;</a>
   </td>
      </tr>
 
@@ -582,7 +594,7 @@ extentThumb to non-null values.
 
 
      <div class="entryOverview">
-       Sets the isAnimating_ field to false once the animation is done
+       Sets the isAnimating_ field to false once the animation is done.
      </div>
 
 
@@ -616,7 +628,7 @@ extentThumb to non-null values.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line844">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line846">code &raquo;</a>
   </td>
      </tr>
 
@@ -696,7 +708,7 @@ extentThumb to non-null values.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line909">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line911">code &raquo;</a>
   </td>
      </tr>
 
@@ -761,7 +773,7 @@ extentThumb to non-null values.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line728">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line730">code &raquo;</a>
   </td>
      </tr>
 
@@ -854,7 +866,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line1024">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line1026">code &raquo;</a>
   </td>
      </tr>
 
@@ -900,7 +912,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line718">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line720">code &raquo;</a>
   </td>
      </tr>
 
@@ -946,7 +958,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line693">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line695">code &raquo;</a>
   </td>
      </tr>
 
@@ -992,7 +1004,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line676">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line678">code &raquo;</a>
   </td>
      </tr>
 
@@ -1038,7 +1050,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line985">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line987">code &raquo;</a>
   </td>
      </tr>
 
@@ -1084,7 +1096,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line874">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line876">code &raquo;</a>
   </td>
      </tr>
 
@@ -1149,7 +1161,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line506">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line508">code &raquo;</a>
   </td>
      </tr>
 
@@ -1195,7 +1207,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line965">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line967">code &raquo;</a>
   </td>
      </tr>
 
@@ -1260,7 +1272,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line780">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line782">code &raquo;</a>
   </td>
      </tr>
 
@@ -1325,7 +1337,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line554">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line556">code &raquo;</a>
   </td>
      </tr>
 
@@ -1371,7 +1383,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line947">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line949">code &raquo;</a>
   </td>
      </tr>
 
@@ -1417,7 +1429,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line1003">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line1005">code &raquo;</a>
   </td>
      </tr>
 
@@ -1482,7 +1494,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line532">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line534">code &raquo;</a>
   </td>
      </tr>
 
@@ -1528,7 +1540,7 @@ orientation. Subclasses must override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line710">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line712">code &raquo;</a>
   </td>
      </tr>
 
@@ -1554,8 +1566,8 @@ orientation. Subclasses must override this method.
 
 
      <div class="entryOverview">
-       Handler for the before drag event. We prevent the default action and use the
-event properties to determine the new value
+       Handler for the before drag event. We use the event properties to determine
+the new value.
      </div>
 
 
@@ -1589,7 +1601,7 @@ event properties to determine the new value
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line293">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line296">code &raquo;</a>
   </td>
      </tr>
 
@@ -1616,7 +1628,7 @@ event properties to determine the new value
 
      <div class="entryOverview">
        Event handler for the key down event. This is used to update the value
-based on the key pressed
+based on the key pressed.
      </div>
 
 
@@ -1650,7 +1662,7 @@ based on the key pressed
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line327">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line329">code &raquo;</a>
   </td>
      </tr>
 
@@ -1710,7 +1722,7 @@ based on the key pressed
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line368">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line370">code &raquo;</a>
   </td>
      </tr>
 
@@ -1770,7 +1782,7 @@ based on the key pressed
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line487">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line489">code &raquo;</a>
   </td>
      </tr>
 
@@ -1830,7 +1842,7 @@ based on the key pressed
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line394">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line396">code &raquo;</a>
   </td>
      </tr>
 
@@ -1857,7 +1869,7 @@ based on the key pressed
 
      <div class="entryOverview">
        Call back when the internal range model changes. Sub-classes may override
-and re-enter this method to update a11y state. Consider protected
+and re-enter this method to update a11y state. Consider protected.
      </div>
 
 
@@ -1891,7 +1903,7 @@ and re-enter this method to update a11y state. Consider protected
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line744">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line746">code &raquo;</a>
   </td>
      </tr>
 
@@ -1927,7 +1939,7 @@ startBlockIncrementing_.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line442">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line444">code &raquo;</a>
   </td>
      </tr>
 
@@ -1991,7 +2003,7 @@ In case both thumbs have reached min (or max), no change event will fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line573">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line575">code &raquo;</a>
   </td>
      </tr>
 
@@ -2025,7 +2037,7 @@ In case both thumbs have reached min (or max), no change event will fire.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line1060">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line1062">code &raquo;</a>
   </td>
      </tr>
 
@@ -2086,7 +2098,7 @@ holding down the mouse button on the background.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line920">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line922">code &raquo;</a>
   </td>
      </tr>
 
@@ -2149,7 +2161,7 @@ CHANGE event fires.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line1036">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line1038">code &raquo;</a>
   </td>
      </tr>
 
@@ -2175,7 +2187,7 @@ CHANGE event fires.
 
 
      <div class="entryOverview">
-       Sets the maximum number
+       Sets the maximum number.
      </div>
 
 
@@ -2209,7 +2221,7 @@ CHANGE event fires.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line702">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line704">code &raquo;</a>
   </td>
      </tr>
 
@@ -2269,7 +2281,7 @@ CHANGE event fires.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line930">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line932">code &raquo;</a>
   </td>
      </tr>
 
@@ -2295,7 +2307,7 @@ CHANGE event fires.
 
 
      <div class="entryOverview">
-       Sets the minimum number
+       Sets the minimum number.
      </div>
 
 
@@ -2329,7 +2341,7 @@ CHANGE event fires.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line685">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line687">code &raquo;</a>
   </td>
      </tr>
 
@@ -2389,7 +2401,7 @@ CHANGE event fires.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line995">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line997">code &raquo;</a>
   </td>
      </tr>
 
@@ -2415,7 +2427,7 @@ CHANGE event fires.
 
 
      <div class="entryOverview">
-       changes the orientation
+       Changes the orientation.
      </div>
 
 
@@ -2449,7 +2461,7 @@ CHANGE event fires.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line853">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line855">code &raquo;</a>
   </td>
      </tr>
 
@@ -2510,7 +2522,7 @@ value.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line975">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line977">code &raquo;</a>
   </td>
      </tr>
 
@@ -2585,7 +2597,7 @@ call. Callers must make these adjustements explicitly if they wish.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line599">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line601">code &raquo;</a>
   </td>
      </tr>
 
@@ -2646,7 +2658,7 @@ keys.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line957">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line959">code &raquo;</a>
   </td>
      </tr>
 
@@ -2709,7 +2721,7 @@ CHANGE event fires.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line1015">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line1017">code &raquo;</a>
   </td>
      </tr>
 
@@ -2782,7 +2794,7 @@ simultaneously and ensuring that only one event fires.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line650">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line652">code &raquo;</a>
   </td>
      </tr>
 
@@ -2843,7 +2855,7 @@ You must call this if you had set the slider&#39;s value when it was invisible.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line1048">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line1050">code &raquo;</a>
   </td>
      </tr>
 
@@ -2904,7 +2916,7 @@ block increment when the user presses down on the background.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line408">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line410">code &raquo;</a>
   </td>
      </tr>
 
@@ -2930,7 +2942,7 @@ block increment when the user presses down on the background.
 
 
      <div class="entryOverview">
-       Stores the current mouse position so that it can be used in the timer
+       Stores the current mouse position so that it can be used in the timer.
      </div>
 
 
@@ -2964,7 +2976,7 @@ block increment when the user presses down on the background.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line521">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line523">code &raquo;</a>
   </td>
      </tr>
 
@@ -2998,7 +3010,7 @@ block increment when the user presses down on the background.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line1070">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line1072">code &raquo;</a>
   </td>
      </tr>
 
@@ -3033,7 +3045,7 @@ when first created as well as when the value and the orientation changes.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line756">code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line758">code &raquo;</a>
   </td>
      </tr>
 
@@ -3111,7 +3123,7 @@ goog.ui.Component#addChildAt for detailed semantics.
    <tr class="odd">
      <td>
         <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, the child component will be rendered into the parent.</div>
      </td>
    </tr>
@@ -3215,7 +3227,7 @@ different parent, or the given index is out of bounds.
    <tr class="even">
      <td>
         <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, the child component will be rendered into the parent.</div>
      </td>
    </tr>
@@ -3614,7 +3626,7 @@ component and its 0-based index.  The return value is ignored.
    <tr class="odd">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Used as the &#39;this&#39; object in f when called.</div>
      </td>
    </tr>
@@ -4646,7 +4658,7 @@ component&#39;s DOM.
    <tr class="odd">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
      </td>
    </tr>
@@ -4722,7 +4734,7 @@ detailed semantics.
    <tr class="odd">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
      </td>
    </tr>
@@ -4786,7 +4798,7 @@ detailed semantics.
    <tr class="even">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls #exitDocument on the removed child components, and detaches their DOM from the document.</div>
      </td>
    </tr>
@@ -4851,7 +4863,7 @@ Throws an Error if the component is already rendered.
    <tr class="even">
      <td>
         <span class="entryName">opt_parentElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Optional parent element to render the component into.</div>
      </td>
    </tr>
@@ -4979,7 +4991,7 @@ Throws an Error if the component is already rendered.
    <tr class="even">
      <td>
         <span class="entryName">opt_parentElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Optional parent element to render the component into.</div>
      </td>
    </tr>
@@ -4987,7 +4999,7 @@ Throws an Error if the component is already rendered.
    <tr class="odd">
      <td>
         <span class="entryName">opt_beforeElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Element before which the component is to be rendered.  If left out the node is appended to the parent element.</div>
      </td>
    </tr>
@@ -5509,7 +5521,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -5517,7 +5529,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -5754,7 +5766,7 @@ nothing is done.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -5762,7 +5774,7 @@ nothing is done.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -6129,7 +6141,7 @@ down the mouse button on the background.
 
 
      <div class="entryOverview">
-       If we are currently animating the thumb
+       If we are currently animating the thumb.
      </div>
 
   </td>
@@ -6196,7 +6208,7 @@ to a value smaller than minExtent.
 
 
      <div class="entryOverview">
-       Whether clicking on the backgtround should move directly to that point
+       Whether clicking on the backgtround should move directly to that point.
      </div>
 
   </td>
@@ -6236,7 +6248,7 @@ to a value smaller than minExtent.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_sliderbase.js.source.html#line940">Code &raquo;</a>
+     <a href="closure_goog_ui_sliderbase.js.source.html#line942">Code &raquo;</a>
   </td>
      </tr>
 

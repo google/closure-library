@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -253,9 +254,9 @@
 <a name="line210"></a>
 <a name="line211"></a>  // the first request returns server specific parameters
 <a name="line212"></a>  sendDataUri.setParameterValues(&#39;MODE&#39;, &#39;init&#39;);
-<a name="line213"></a>  this.request_ = new goog.net.ChannelRequest(this, this.channelDebug_);
-<a name="line214"></a>  this.request_.setExtraHeaders(this.extraHeaders_);
-<a name="line215"></a>  this.request_.setMaxRetries(0);
+<a name="line213"></a>  this.request_ = goog.net.BrowserChannel.createChannelRequest(
+<a name="line214"></a>      this, this.channelDebug_);
+<a name="line215"></a>  this.request_.setExtraHeaders(this.extraHeaders_);
 <a name="line216"></a>  this.request_.xmlHttpGet(sendDataUri, false, true);
 <a name="line217"></a>  this.state_ = goog.net.BrowserTestChannel.State_.INIT;
 <a name="line218"></a>};
@@ -310,9 +311,9 @@
 <a name="line267"></a> */
 <a name="line268"></a>goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
 <a name="line269"></a>  this.channelDebug_.debug(&#39;TestConnection: starting stage 2&#39;);
-<a name="line270"></a>  this.request_ = new goog.net.ChannelRequest(this, this.channelDebug_);
-<a name="line271"></a>  this.request_.setExtraHeaders(this.extraHeaders_);
-<a name="line272"></a>  this.request_.setMaxRetries(0);
+<a name="line270"></a>  this.request_ = goog.net.BrowserChannel.createChannelRequest(
+<a name="line271"></a>      this, this.channelDebug_);
+<a name="line272"></a>  this.request_.setExtraHeaders(this.extraHeaders_);
 <a name="line273"></a>  var recvDataUri = this.channel_.getBackChannelUri(this.hostPrefix_,
 <a name="line274"></a>      /** @type {string} */ (this.path_));
 <a name="line275"></a>
@@ -457,50 +458,49 @@
 <a name="line414"></a>        // TODO: need to empirically verify that this number is OK
 <a name="line415"></a>        // for slow computers
 <a name="line416"></a>        goodConn = false;
-<a name="line417"></a>      }
-<a name="line418"></a>      else {
-<a name="line419"></a>        goodConn = true;
-<a name="line420"></a>      }
-<a name="line421"></a>    } else {
-<a name="line422"></a>      goodConn = this.receivedIntermediateResult_;
-<a name="line423"></a>    }
-<a name="line424"></a>
-<a name="line425"></a>    if (goodConn) {
-<a name="line426"></a>      this.channelDebug_.debug(
-<a name="line427"></a>          &#39;Test connection succeeded; using streaming connection&#39;);
-<a name="line428"></a>      goog.net.BrowserChannel.notifyStatEvent(
-<a name="line429"></a>          goog.net.BrowserChannel.Stat.NOPROXY);
-<a name="line430"></a>      this.channel_.testConnectionFinished(this, true);
-<a name="line431"></a>    } else {
-<a name="line432"></a>      this.channelDebug_.debug(
-<a name="line433"></a>          &#39;Test connection failed; not using streaming&#39;);
-<a name="line434"></a>      goog.net.BrowserChannel.notifyStatEvent(
-<a name="line435"></a>          goog.net.BrowserChannel.Stat.PROXY);
-<a name="line436"></a>      this.channel_.testConnectionFinished(this, false);
-<a name="line437"></a>    }
-<a name="line438"></a>  }
-<a name="line439"></a>};
-<a name="line440"></a>
-<a name="line441"></a>/**
-<a name="line442"></a> * Returns the last status code received for a request.
-<a name="line443"></a> * @return {number} The last status code received for a request.
-<a name="line444"></a> */
-<a name="line445"></a>goog.net.BrowserTestChannel.prototype.getLastStatusCode = function() {
-<a name="line446"></a>  return this.lastStatusCode_;
-<a name="line447"></a>};
+<a name="line417"></a>      } else {
+<a name="line418"></a>        goodConn = true;
+<a name="line419"></a>      }
+<a name="line420"></a>    } else {
+<a name="line421"></a>      goodConn = this.receivedIntermediateResult_;
+<a name="line422"></a>    }
+<a name="line423"></a>
+<a name="line424"></a>    if (goodConn) {
+<a name="line425"></a>      this.channelDebug_.debug(
+<a name="line426"></a>          &#39;Test connection succeeded; using streaming connection&#39;);
+<a name="line427"></a>      goog.net.BrowserChannel.notifyStatEvent(
+<a name="line428"></a>          goog.net.BrowserChannel.Stat.NOPROXY);
+<a name="line429"></a>      this.channel_.testConnectionFinished(this, true);
+<a name="line430"></a>    } else {
+<a name="line431"></a>      this.channelDebug_.debug(
+<a name="line432"></a>          &#39;Test connection failed; not using streaming&#39;);
+<a name="line433"></a>      goog.net.BrowserChannel.notifyStatEvent(
+<a name="line434"></a>          goog.net.BrowserChannel.Stat.PROXY);
+<a name="line435"></a>      this.channel_.testConnectionFinished(this, false);
+<a name="line436"></a>    }
+<a name="line437"></a>  }
+<a name="line438"></a>};
+<a name="line439"></a>
+<a name="line440"></a>/**
+<a name="line441"></a> * Returns the last status code received for a request.
+<a name="line442"></a> * @return {number} The last status code received for a request.
+<a name="line443"></a> */
+<a name="line444"></a>goog.net.BrowserTestChannel.prototype.getLastStatusCode = function() {
+<a name="line445"></a>  return this.lastStatusCode_;
+<a name="line446"></a>};
+<a name="line447"></a>
 <a name="line448"></a>
-<a name="line449"></a>
-<a name="line450"></a>/**
-<a name="line451"></a> * Gets whether this channel is currently active. This is used to determine the
-<a name="line452"></a> * length of time to wait before retrying.
-<a name="line453"></a> *
-<a name="line454"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
-<a name="line455"></a> * @return {boolean} Whether the channel is currently active.
-<a name="line456"></a> */
-<a name="line457"></a>goog.net.BrowserTestChannel.prototype.isActive =
-<a name="line458"></a>    function(browserChannel) {
-<a name="line459"></a>  return this.channel_.isActive();
-<a name="line460"></a>};
+<a name="line449"></a>/**
+<a name="line450"></a> * Gets whether this channel is currently active. This is used to determine the
+<a name="line451"></a> * length of time to wait before retrying.
+<a name="line452"></a> *
+<a name="line453"></a> * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+<a name="line454"></a> * @return {boolean} Whether the channel is currently active.
+<a name="line455"></a> */
+<a name="line456"></a>goog.net.BrowserTestChannel.prototype.isActive =
+<a name="line457"></a>    function(browserChannel) {
+<a name="line458"></a>  return this.channel_.isActive();
+<a name="line459"></a>};
 </pre>
 
 

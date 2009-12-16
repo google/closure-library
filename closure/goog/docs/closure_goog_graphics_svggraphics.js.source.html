@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -86,11 +87,11 @@
 <a name="line43"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
 <a name="line44"></a> * @param {string|number} height The height in pixels.  Strings
 <a name="line45"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
-<a name="line46"></a> * @param {?number} opt_coordWidth The coordinate width - if
+<a name="line46"></a> * @param {?number=} opt_coordWidth The coordinate width - if
 <a name="line47"></a> *     omitted or null, defaults to same as width.
-<a name="line48"></a> * @param {?number} opt_coordHeight The coordinate height - if
+<a name="line48"></a> * @param {?number=} opt_coordHeight The coordinate height - if
 <a name="line49"></a> *     omitted or null, defaults to same as height.
-<a name="line50"></a> * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+<a name="line50"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
 <a name="line51"></a> *     document we want to render in.
 <a name="line52"></a> * @constructor
 <a name="line53"></a> * @extends {goog.graphics.AbstractGraphics}
@@ -169,7 +170,7 @@
 <a name="line126"></a>/**
 <a name="line127"></a> * Creates an SVG element. Used internally and by different SVG classes.
 <a name="line128"></a> * @param {string} tagName The type of element to create.
-<a name="line129"></a> * @param {Object} opt_attributes Map of name-value pairs for attributes.
+<a name="line129"></a> * @param {Object=} opt_attributes Map of name-value pairs for attributes.
 <a name="line130"></a> * @return {Element} The created element.
 <a name="line131"></a> * @private
 <a name="line132"></a> */
@@ -204,7 +205,7 @@
 <a name="line161"></a> * Appends an element.
 <a name="line162"></a> *
 <a name="line163"></a> * @param {goog.graphics.Element} element The element wrapper.
-<a name="line164"></a> * @param {goog.graphics.SvgGroupElement} opt_group The group wrapper element
+<a name="line164"></a> * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
 <a name="line165"></a> *     to append to. If not specified, appends to the main canvas.
 <a name="line166"></a> * @private
 <a name="line167"></a> */
@@ -489,7 +490,7 @@
 <a name="line446"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
 <a name="line447"></a> *    stroke.
 <a name="line448"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line449"></a> * @param {goog.graphics.SvgGroupElement} opt_group The group wrapper element
+<a name="line449"></a> * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
 <a name="line450"></a> *     to append to. If not specified, appends to the main canvas.
 <a name="line451"></a> *
 <a name="line452"></a> * @return {goog.graphics.EllipseElement} The newly created element.
@@ -515,7 +516,7 @@
 <a name="line472"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
 <a name="line473"></a> *    stroke.
 <a name="line474"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line475"></a> * @param {goog.graphics.SvgGroupElement} opt_group The group wrapper element
+<a name="line475"></a> * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
 <a name="line476"></a> *     to append to. If not specified, appends to the main canvas.
 <a name="line477"></a> *
 <a name="line478"></a> * @return {goog.graphics.RectElement} The newly created element.
@@ -538,7 +539,7 @@
 <a name="line495"></a> * @param {number} width Width of the image.
 <a name="line496"></a> * @param {number} height Height of the image.
 <a name="line497"></a> * @param {string} src The source fo the image.
-<a name="line498"></a> * @param {goog.graphics.SvgGroupElement} opt_group The group wrapper element
+<a name="line498"></a> * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
 <a name="line499"></a> *     to append to. If not specified, appends to the main canvas.
 <a name="line500"></a> *
 <a name="line501"></a> * @return {goog.graphics.ImageElement} The newly created image wrapped in a
@@ -569,7 +570,7 @@
 <a name="line526"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
 <a name="line527"></a> *    stroke.
 <a name="line528"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line529"></a> * @param {goog.graphics.SvgGroupElement} opt_group The group wrapper element
+<a name="line529"></a> * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
 <a name="line530"></a> *     to append to. If not specified, appends to the main canvas.
 <a name="line531"></a> *
 <a name="line532"></a> * @return {goog.graphics.TextElement} The newly created element.
@@ -634,7 +635,7 @@
 <a name="line591"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
 <a name="line592"></a> *    stroke.
 <a name="line593"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
-<a name="line594"></a> * @param {goog.graphics.SvgGroupElement} opt_group The group wrapper element
+<a name="line594"></a> * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
 <a name="line595"></a> *     to append to. If not specified, appends to the main canvas.
 <a name="line596"></a> *
 <a name="line597"></a> * @return {goog.graphics.PathElement} The newly created element.
@@ -692,7 +693,7 @@
 <a name="line649"></a>/**
 <a name="line650"></a> * Create an empty group of drawing elements.
 <a name="line651"></a> *
-<a name="line652"></a> * @param {goog.graphics.SvgGroupElement} opt_group The group wrapper element
+<a name="line652"></a> * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
 <a name="line653"></a> *     to append to. If not specified, appends to the main canvas.
 <a name="line654"></a> *
 <a name="line655"></a> * @return {goog.graphics.GroupElement} The newly created group.

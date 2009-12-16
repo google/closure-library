@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -173,202 +174,207 @@
 <a name="line130"></a> */
 <a name="line131"></a>goog.module.ModuleInfo.prototype.setModuleConstructor = function(
 <a name="line132"></a>    constructor) {
-<a name="line133"></a>  this.moduleConstructor_ = constructor;
-<a name="line134"></a>};
-<a name="line135"></a>
-<a name="line136"></a>
-<a name="line137"></a>/**
-<a name="line138"></a> * Registers a function that should be called after the module is loaded. These
-<a name="line139"></a> * early callbacks are called after {@link Module#initialize} is called but
-<a name="line140"></a> * before the other callbacks are called.
-<a name="line141"></a> * @param {Function} fn A callback function that takes a single argument which
-<a name="line142"></a> *    is the module context.
-<a name="line143"></a> * @param {Object} opt_handler Optional handler under whose scope to execute
-<a name="line144"></a> *     the callback.
-<a name="line145"></a> * @return {goog.module.ModuleInfo.Callback} Reference to the callback
-<a name="line146"></a> *     object.
-<a name="line147"></a> */
-<a name="line148"></a>goog.module.ModuleInfo.prototype.registerEarlyCallback = function(
-<a name="line149"></a>    fn, opt_handler) {
-<a name="line150"></a>  return this.registerCallback_(this.earlyOnloadCallbacks_, fn, opt_handler);
-<a name="line151"></a>};
-<a name="line152"></a>
-<a name="line153"></a>
-<a name="line154"></a>/**
-<a name="line155"></a> * Registers a function that should be called after the module is loaded.
-<a name="line156"></a> * @param {Function} fn A callback function that takes a single argument which
-<a name="line157"></a> *    is the module context.
-<a name="line158"></a> * @param {Object} opt_handler Optional handler under whose scope to execute
-<a name="line159"></a> *     the callback.
-<a name="line160"></a> * @return {goog.module.ModuleInfo.Callback} Reference to the callback
-<a name="line161"></a> *     object.
-<a name="line162"></a> */
-<a name="line163"></a>goog.module.ModuleInfo.prototype.registerCallback = function(
-<a name="line164"></a>    fn, opt_handler) {
-<a name="line165"></a>  return this.registerCallback_(this.onloadCallbacks_, fn, opt_handler);
-<a name="line166"></a>};
-<a name="line167"></a>
-<a name="line168"></a>
-<a name="line169"></a>/**
-<a name="line170"></a> * Registers a function that should be called if the module load fails.
-<a name="line171"></a> * @param {Function} fn A callback function that takes a single argument which
-<a name="line172"></a> *    is the module context.
-<a name="line173"></a> * @param {Object} opt_handler Optional handler under whose scope to execute
-<a name="line174"></a> *     the callback.
-<a name="line175"></a> * @return {goog.module.ModuleInfo.Callback} Reference to the callback
-<a name="line176"></a> *     object.
-<a name="line177"></a> */
-<a name="line178"></a>goog.module.ModuleInfo.prototype.registerErrback = function(
-<a name="line179"></a>    fn, opt_handler) {
-<a name="line180"></a>  return this.registerCallback_(this.onErrorCallbacks_, fn, opt_handler);
-<a name="line181"></a>};
-<a name="line182"></a>
-<a name="line183"></a>
-<a name="line184"></a>/**
-<a name="line185"></a> * Registers a function that should be called after the module is loaded.
-<a name="line186"></a> * @param {Array.&lt;goog.module.ModuleInfo.Callback&gt;} callbacks The array to
-<a name="line187"></a> *     add the callback to.
-<a name="line188"></a> * @param {Function} fn A callback function that takes a single argument which
-<a name="line189"></a> *     is the module context.
-<a name="line190"></a> * @param {Object} opt_handler Optional handler under whose scope to execute
-<a name="line191"></a> *     the callback.
-<a name="line192"></a> * @return {goog.module.ModuleInfo.Callback} Reference to the callback
-<a name="line193"></a> *     object.
-<a name="line194"></a> * @private
-<a name="line195"></a> */
-<a name="line196"></a>goog.module.ModuleInfo.prototype.registerCallback_ = function(
-<a name="line197"></a>    callbacks, fn, opt_handler) {
-<a name="line198"></a>  var callback = new goog.module.ModuleInfo.Callback(fn, opt_handler);
-<a name="line199"></a>  callbacks.push(callback);
-<a name="line200"></a>  return callback;
-<a name="line201"></a>};
-<a name="line202"></a>
-<a name="line203"></a>
-<a name="line204"></a>/**
-<a name="line205"></a> * Determines whether the module has been loaded.
-<a name="line206"></a> * @return {boolean} Whether the module has been loaded.
-<a name="line207"></a> */
-<a name="line208"></a>goog.module.ModuleInfo.prototype.isLoaded = function() {
-<a name="line209"></a>  return !!this.module_;
-<a name="line210"></a>};
-<a name="line211"></a>
-<a name="line212"></a>
-<a name="line213"></a>/**
-<a name="line214"></a> * Gets the module.
-<a name="line215"></a> * @return {goog.module.BaseModule?} The module if it has been loaded.
-<a name="line216"></a> *     Otherwise, null.
-<a name="line217"></a> */
-<a name="line218"></a>goog.module.ModuleInfo.prototype.getModule = function() {
-<a name="line219"></a>  return this.module_;
-<a name="line220"></a>};
-<a name="line221"></a>
-<a name="line222"></a>
-<a name="line223"></a>/**
-<a name="line224"></a> * Sets this module as loaded.
-<a name="line225"></a> * @param {function() : Object} contextProvider A function that provides the
-<a name="line226"></a> *     module context.
-<a name="line227"></a> */
-<a name="line228"></a>goog.module.ModuleInfo.prototype.onLoad = function(contextProvider) {
-<a name="line229"></a>  // Instantiate and initialize the module object.
-<a name="line230"></a>  var module = new this.moduleConstructor_;
-<a name="line231"></a>  module.initialize(contextProvider());
-<a name="line232"></a>
-<a name="line233"></a>  // Keep an internal reference to the module.
-<a name="line234"></a>  this.module_ = module;
-<a name="line235"></a>
-<a name="line236"></a>  // Fire any early callbacks that were waiting for the module to be loaded.
-<a name="line237"></a>  this.callCallbacks_(this.earlyOnloadCallbacks_, contextProvider());
-<a name="line238"></a>
-<a name="line239"></a>  // Fire any callbacks that were waiting for the module to be loaded.
-<a name="line240"></a>  this.callCallbacks_(this.onloadCallbacks_, contextProvider());
-<a name="line241"></a>
-<a name="line242"></a>  // Clear the errbacks.
-<a name="line243"></a>  this.onErrorCallbacks_.length = 0;
-<a name="line244"></a>};
+<a name="line133"></a>  if (this.moduleConstructor_ === goog.module.BaseModule) {
+<a name="line134"></a>    this.moduleConstructor_ = constructor;
+<a name="line135"></a>  } else {
+<a name="line136"></a>    throw Error(&#39;Cannot set module constructor more than once.&#39;);
+<a name="line137"></a>  }
+<a name="line138"></a>};
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * Registers a function that should be called after the module is loaded. These
+<a name="line143"></a> * early callbacks are called after {@link Module#initialize} is called but
+<a name="line144"></a> * before the other callbacks are called.
+<a name="line145"></a> * @param {Function} fn A callback function that takes a single argument which
+<a name="line146"></a> *    is the module context.
+<a name="line147"></a> * @param {Object=} opt_handler Optional handler under whose scope to execute
+<a name="line148"></a> *     the callback.
+<a name="line149"></a> * @return {goog.module.ModuleInfo.Callback} Reference to the callback
+<a name="line150"></a> *     object.
+<a name="line151"></a> */
+<a name="line152"></a>goog.module.ModuleInfo.prototype.registerEarlyCallback = function(
+<a name="line153"></a>    fn, opt_handler) {
+<a name="line154"></a>  return this.registerCallback_(this.earlyOnloadCallbacks_, fn, opt_handler);
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * Registers a function that should be called after the module is loaded.
+<a name="line160"></a> * @param {Function} fn A callback function that takes a single argument which
+<a name="line161"></a> *    is the module context.
+<a name="line162"></a> * @param {Object=} opt_handler Optional handler under whose scope to execute
+<a name="line163"></a> *     the callback.
+<a name="line164"></a> * @return {goog.module.ModuleInfo.Callback} Reference to the callback
+<a name="line165"></a> *     object.
+<a name="line166"></a> */
+<a name="line167"></a>goog.module.ModuleInfo.prototype.registerCallback = function(
+<a name="line168"></a>    fn, opt_handler) {
+<a name="line169"></a>  return this.registerCallback_(this.onloadCallbacks_, fn, opt_handler);
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Registers a function that should be called if the module load fails.
+<a name="line175"></a> * @param {Function} fn A callback function that takes a single argument which
+<a name="line176"></a> *    is the failure type.
+<a name="line177"></a> * @param {Object=} opt_handler Optional handler under whose scope to execute
+<a name="line178"></a> *     the callback.
+<a name="line179"></a> * @return {goog.module.ModuleInfo.Callback} Reference to the callback
+<a name="line180"></a> *     object.
+<a name="line181"></a> */
+<a name="line182"></a>goog.module.ModuleInfo.prototype.registerErrback = function(
+<a name="line183"></a>    fn, opt_handler) {
+<a name="line184"></a>  return this.registerCallback_(this.onErrorCallbacks_, fn, opt_handler);
+<a name="line185"></a>};
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Registers a function that should be called after the module is loaded.
+<a name="line190"></a> * @param {Array.&lt;goog.module.ModuleInfo.Callback&gt;} callbacks The array to
+<a name="line191"></a> *     add the callback to.
+<a name="line192"></a> * @param {Function} fn A callback function that takes a single argument which
+<a name="line193"></a> *     is the module context.
+<a name="line194"></a> * @param {Object=} opt_handler Optional handler under whose scope to execute
+<a name="line195"></a> *     the callback.
+<a name="line196"></a> * @return {goog.module.ModuleInfo.Callback} Reference to the callback
+<a name="line197"></a> *     object.
+<a name="line198"></a> * @private
+<a name="line199"></a> */
+<a name="line200"></a>goog.module.ModuleInfo.prototype.registerCallback_ = function(
+<a name="line201"></a>    callbacks, fn, opt_handler) {
+<a name="line202"></a>  var callback = new goog.module.ModuleInfo.Callback(fn, opt_handler);
+<a name="line203"></a>  callbacks.push(callback);
+<a name="line204"></a>  return callback;
+<a name="line205"></a>};
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * Determines whether the module has been loaded.
+<a name="line210"></a> * @return {boolean} Whether the module has been loaded.
+<a name="line211"></a> */
+<a name="line212"></a>goog.module.ModuleInfo.prototype.isLoaded = function() {
+<a name="line213"></a>  return !!this.module_;
+<a name="line214"></a>};
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * Gets the module.
+<a name="line219"></a> * @return {goog.module.BaseModule?} The module if it has been loaded.
+<a name="line220"></a> *     Otherwise, null.
+<a name="line221"></a> */
+<a name="line222"></a>goog.module.ModuleInfo.prototype.getModule = function() {
+<a name="line223"></a>  return this.module_;
+<a name="line224"></a>};
+<a name="line225"></a>
+<a name="line226"></a>
+<a name="line227"></a>/**
+<a name="line228"></a> * Sets this module as loaded.
+<a name="line229"></a> * @param {function() : Object} contextProvider A function that provides the
+<a name="line230"></a> *     module context.
+<a name="line231"></a> */
+<a name="line232"></a>goog.module.ModuleInfo.prototype.onLoad = function(contextProvider) {
+<a name="line233"></a>  // Instantiate and initialize the module object.
+<a name="line234"></a>  var module = new this.moduleConstructor_;
+<a name="line235"></a>  module.initialize(contextProvider());
+<a name="line236"></a>
+<a name="line237"></a>  // Keep an internal reference to the module.
+<a name="line238"></a>  this.module_ = module;
+<a name="line239"></a>
+<a name="line240"></a>  // Fire any early callbacks that were waiting for the module to be loaded.
+<a name="line241"></a>  this.callCallbacks_(this.earlyOnloadCallbacks_, contextProvider());
+<a name="line242"></a>
+<a name="line243"></a>  // Fire any callbacks that were waiting for the module to be loaded.
+<a name="line244"></a>  this.callCallbacks_(this.onloadCallbacks_, contextProvider());
 <a name="line245"></a>
-<a name="line246"></a>
-<a name="line247"></a>/**
-<a name="line248"></a> * Calls the error callbacks for the module.
-<a name="line249"></a> * @param {goog.module.ModuleManager.FailureType} cause What caused the error.
-<a name="line250"></a> */
-<a name="line251"></a>goog.module.ModuleInfo.prototype.onError = function(cause) {
-<a name="line252"></a>  this.callCallbacks_(this.onErrorCallbacks_, cause);
-<a name="line253"></a>  this.earlyOnloadCallbacks_.length = 0;
-<a name="line254"></a>  this.onloadCallbacks_.length = 0;
-<a name="line255"></a>};
-<a name="line256"></a>
-<a name="line257"></a>/**
-<a name="line258"></a> * Helper to call the callbacks after module load.
-<a name="line259"></a> * @param {Array.&lt;goog.module.ModuleInfo.Callback&gt;} callbacks The callbacks
-<a name="line260"></a> *     to call and then clear.
-<a name="line261"></a> * @param {Object} context The module context.
-<a name="line262"></a> * @private
-<a name="line263"></a> */
-<a name="line264"></a>goog.module.ModuleInfo.prototype.callCallbacks_ = function(callbacks, context) {
-<a name="line265"></a>  // Call each callback in the order they were registered
-<a name="line266"></a>  for (var i = 0; i &lt; callbacks.length; i++) {
-<a name="line267"></a>    callbacks[i].execute(context);
-<a name="line268"></a>  }
-<a name="line269"></a>
-<a name="line270"></a>  // Clear the list of callbacks.
-<a name="line271"></a>  callbacks.length = 0;
-<a name="line272"></a>};
-<a name="line273"></a>
+<a name="line246"></a>  // Clear the errbacks.
+<a name="line247"></a>  this.onErrorCallbacks_.length = 0;
+<a name="line248"></a>};
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>/**
+<a name="line252"></a> * Calls the error callbacks for the module.
+<a name="line253"></a> * @param {goog.module.ModuleManager.FailureType} cause What caused the error.
+<a name="line254"></a> */
+<a name="line255"></a>goog.module.ModuleInfo.prototype.onError = function(cause) {
+<a name="line256"></a>  this.callCallbacks_(this.onErrorCallbacks_, cause);
+<a name="line257"></a>  this.earlyOnloadCallbacks_.length = 0;
+<a name="line258"></a>  this.onloadCallbacks_.length = 0;
+<a name="line259"></a>};
+<a name="line260"></a>
+<a name="line261"></a>
+<a name="line262"></a>/**
+<a name="line263"></a> * Helper to call the callbacks after module load.
+<a name="line264"></a> * @param {Array.&lt;goog.module.ModuleInfo.Callback&gt;} callbacks The callbacks
+<a name="line265"></a> *     to call and then clear.
+<a name="line266"></a> * @param {*} context The module context.
+<a name="line267"></a> * @private
+<a name="line268"></a> */
+<a name="line269"></a>goog.module.ModuleInfo.prototype.callCallbacks_ = function(callbacks, context) {
+<a name="line270"></a>  // Call each callback in the order they were registered
+<a name="line271"></a>  for (var i = 0; i &lt; callbacks.length; i++) {
+<a name="line272"></a>    callbacks[i].execute(context);
+<a name="line273"></a>  }
 <a name="line274"></a>
-<a name="line275"></a>/** @inheritDoc */
-<a name="line276"></a>goog.module.ModuleInfo.prototype.disposeInternal = function() {
-<a name="line277"></a>  goog.module.ModuleInfo.superClass_.disposeInternal.call(this);
+<a name="line275"></a>  // Clear the list of callbacks.
+<a name="line276"></a>  callbacks.length = 0;
+<a name="line277"></a>};
 <a name="line278"></a>
-<a name="line279"></a>  if (this.module_) {
-<a name="line280"></a>    this.module_.dispose();
-<a name="line281"></a>  }
-<a name="line282"></a>};
+<a name="line279"></a>
+<a name="line280"></a>/** @inheritDoc */
+<a name="line281"></a>goog.module.ModuleInfo.prototype.disposeInternal = function() {
+<a name="line282"></a>  goog.module.ModuleInfo.superClass_.disposeInternal.call(this);
 <a name="line283"></a>
-<a name="line284"></a>
-<a name="line285"></a>/**
-<a name="line286"></a> * Class used to encapsulate the callbacks to be called when a module loads.
-<a name="line287"></a> * @param {Function} fn Callback function.
-<a name="line288"></a> * @param {Object} opt_handler Optional handler under whose scope to execute
-<a name="line289"></a> *     the callback.
-<a name="line290"></a> * @constructor
-<a name="line291"></a> */
-<a name="line292"></a>goog.module.ModuleInfo.Callback = function(fn, opt_handler) {
-<a name="line293"></a>  /**
-<a name="line294"></a>   * Callback function.
-<a name="line295"></a>   * @type {Function}
-<a name="line296"></a>   * @private
-<a name="line297"></a>   */
-<a name="line298"></a>  this.fn_ = fn;
-<a name="line299"></a>
-<a name="line300"></a>  /**
-<a name="line301"></a>   * Optional handler under whose scope to execute the callback.
-<a name="line302"></a>   * @type {Object|undefined}
-<a name="line303"></a>   * @private
-<a name="line304"></a>   */
-<a name="line305"></a>  this.handler_ = opt_handler;
-<a name="line306"></a>};
-<a name="line307"></a>
-<a name="line308"></a>
-<a name="line309"></a>/**
-<a name="line310"></a> * Completes the operation and calls the callback function if appropriate.
-<a name="line311"></a> * @param {Object} context The module context.
-<a name="line312"></a> */
-<a name="line313"></a>goog.module.ModuleInfo.Callback.prototype.execute = function(context) {
-<a name="line314"></a>  if (this.fn_) {
-<a name="line315"></a>    this.fn_.call(this.handler_ || null, context);
-<a name="line316"></a>    this.handler_ = null;
-<a name="line317"></a>    this.fn_ = null;
-<a name="line318"></a>  }
-<a name="line319"></a>};
-<a name="line320"></a>
-<a name="line321"></a>
-<a name="line322"></a>/**
-<a name="line323"></a> * Abort the callback, but not the actual module load.
-<a name="line324"></a> */
-<a name="line325"></a>goog.module.ModuleInfo.Callback.prototype.abort = function() {
-<a name="line326"></a>  this.fn_ = null;
-<a name="line327"></a>  this.handler_ = null;
-<a name="line328"></a>};
+<a name="line284"></a>  if (this.module_) {
+<a name="line285"></a>    this.module_.dispose();
+<a name="line286"></a>  }
+<a name="line287"></a>};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * Class used to encapsulate the callbacks to be called when a module loads.
+<a name="line292"></a> * @param {Function} fn Callback function.
+<a name="line293"></a> * @param {Object=} opt_handler Optional handler under whose scope to execute
+<a name="line294"></a> *     the callback.
+<a name="line295"></a> * @constructor
+<a name="line296"></a> */
+<a name="line297"></a>goog.module.ModuleInfo.Callback = function(fn, opt_handler) {
+<a name="line298"></a>  /**
+<a name="line299"></a>   * Callback function.
+<a name="line300"></a>   * @type {Function}
+<a name="line301"></a>   * @private
+<a name="line302"></a>   */
+<a name="line303"></a>  this.fn_ = fn;
+<a name="line304"></a>
+<a name="line305"></a>  /**
+<a name="line306"></a>   * Optional handler under whose scope to execute the callback.
+<a name="line307"></a>   * @type {Object|undefined}
+<a name="line308"></a>   * @private
+<a name="line309"></a>   */
+<a name="line310"></a>  this.handler_ = opt_handler;
+<a name="line311"></a>};
+<a name="line312"></a>
+<a name="line313"></a>
+<a name="line314"></a>/**
+<a name="line315"></a> * Completes the operation and calls the callback function if appropriate.
+<a name="line316"></a> * @param {*} context The module context.
+<a name="line317"></a> */
+<a name="line318"></a>goog.module.ModuleInfo.Callback.prototype.execute = function(context) {
+<a name="line319"></a>  if (this.fn_) {
+<a name="line320"></a>    this.fn_.call(this.handler_ || null, context);
+<a name="line321"></a>    this.handler_ = null;
+<a name="line322"></a>    this.fn_ = null;
+<a name="line323"></a>  }
+<a name="line324"></a>};
+<a name="line325"></a>
+<a name="line326"></a>
+<a name="line327"></a>/**
+<a name="line328"></a> * Abort the callback, but not the actual module load.
+<a name="line329"></a> */
+<a name="line330"></a>goog.module.ModuleInfo.Callback.prototype.abort = function() {
+<a name="line331"></a>  this.fn_ = null;
+<a name="line332"></a>  this.handler_ = null;
+<a name="line333"></a>};
 </pre>
 
 

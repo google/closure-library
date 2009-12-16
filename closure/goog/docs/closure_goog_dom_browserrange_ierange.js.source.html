@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -178,7 +179,7 @@
 <a name="line135"></a>    }
 <a name="line136"></a>    child = startNode.childNodes[startOffset];
 <a name="line137"></a>    collapse = !child;
-<a name="line138"></a>    startNode = child || startNode;
+<a name="line138"></a>    startNode = child || startNode.lastChild || startNode;
 <a name="line139"></a>    startOffset = 0;
 <a name="line140"></a>  }
 <a name="line141"></a>  var leftRange = goog.dom.browserrange.IeRange.
@@ -193,12 +194,12 @@
 <a name="line150"></a>  // Create a range that ends at the right position.
 <a name="line151"></a>  collapse = false;
 <a name="line152"></a>  if (endNode.nodeType == goog.dom.NodeType.ELEMENT) {
-<a name="line153"></a>    if (startOffset &gt; startNode.childNodes.length) {
+<a name="line153"></a>    if (endOffset &gt; endNode.childNodes.length) {
 <a name="line154"></a>      goog.dom.browserrange.IeRange.logger_.severe(
 <a name="line155"></a>          &#39;Cannot have endOffset &gt; endNode child count&#39;);
 <a name="line156"></a>    }
 <a name="line157"></a>    child = endNode.childNodes[endOffset];
-<a name="line158"></a>    endNode = child || endNode;
+<a name="line158"></a>    endNode = child || endNode.lastChild || endNode;
 <a name="line159"></a>    endOffset = 0;
 <a name="line160"></a>    collapse = !child;
 <a name="line161"></a>  }
@@ -430,7 +431,7 @@
 <a name="line387"></a>/**
 <a name="line388"></a> * Recurses to find the correct node for the given endpoint.
 <a name="line389"></a> * @param {goog.dom.RangeEndpoint} endpoint The endpoint to get the node for.
-<a name="line390"></a> * @param {Node} opt_node Optional node to start the search from.
+<a name="line390"></a> * @param {Node=} opt_node Optional node to start the search from.
 <a name="line391"></a> * @return {Node} The deepest node containing the endpoint.
 <a name="line392"></a> * @private
 <a name="line393"></a> */
@@ -477,7 +478,7 @@
 <a name="line434"></a>/**
 <a name="line435"></a> * Returns the offset into the start/end container.
 <a name="line436"></a> * @param {goog.dom.RangeEndpoint} endpoint The endpoint to get the offset for.
-<a name="line437"></a> * @param {Node} opt_container The container to get the offset relative to.
+<a name="line437"></a> * @param {Node=} opt_container The container to get the offset relative to.
 <a name="line438"></a> *     Defaults to the value returned by getStartNode/getEndNode.
 <a name="line439"></a> * @return {number} The offset.
 <a name="line440"></a> * @private
@@ -682,7 +683,7 @@
 <a name="line639"></a> * element.
 <a name="line640"></a> * @param {TextRange} range The range to paste into.
 <a name="line641"></a> * @param {Element} element The node to insert a copy of.
-<a name="line642"></a> * @param {goog.dom.DomHelper} opt_domHelper DOM helper object for the document
+<a name="line642"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper object for the document
 <a name="line643"></a> *     the range resides in.
 <a name="line644"></a> * @return {Element} The resulting copy of element.
 <a name="line645"></a> * @private
@@ -744,7 +745,7 @@
 <a name="line701"></a> * @param {TextRange} clone A clone of this range&#39;s browser range object.
 <a name="line702"></a> * @param {Node} node The node to insert.
 <a name="line703"></a> * @param {boolean} before Whether to insert the node before or after the range.
-<a name="line704"></a> * @param {goog.dom.DomHelper} opt_domHelper The dom helper to use.
+<a name="line704"></a> * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use.
 <a name="line705"></a> * @return {Node} The resulting copy of node.
 <a name="line706"></a> * @private
 <a name="line707"></a> */

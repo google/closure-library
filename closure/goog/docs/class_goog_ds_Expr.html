@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -78,12 +90,12 @@ or a DataNodeList.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td>goog.ds.Expr</td><td></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -107,7 +119,7 @@ or a DataNodeList.
    <tr class="even">
      <td>
         <span class="entryName">opt_expr</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span class="type">string=</span></div>
         <div class="entryOverview">The string expression.</div>
      </td>
    </tr>
@@ -283,7 +295,7 @@ Recursively walks through child nodes to evaluate
    <tr class="even">
      <td>
         <span class="entryName">opt_ds</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></div>
+        : <div class="fullType"><span class="type">goog.ds.DataNode=</span></div>
         <div class="entryOverview">Optional datasource to evaluate against. If not provided, evaluates against DataManager global root.</div>
      </td>
    </tr>
@@ -291,7 +303,7 @@ Recursively walks through child nodes to evaluate
    <tr class="odd">
      <td>
         <span class="entryName">opt_canCreate</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, will try to create new nodes.</div>
      </td>
    </tr>
@@ -357,7 +369,7 @@ Recursively walks through child nodes to evaluate
    <tr class="even">
      <td>
         <span class="entryName">opt_ds</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></div>
+        : <div class="fullType"><span class="type">goog.ds.DataNode=</span></div>
         <div class="entryOverview">Optional datasource to evaluate against. If not provided, evaluates against data root.</div>
      </td>
    </tr>
@@ -365,7 +377,7 @@ Recursively walks through child nodes to evaluate
    <tr class="odd">
      <td>
         <span class="entryName">opt_canCreate</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, will try to create new nodes.</div>
      </td>
    </tr>
@@ -431,7 +443,7 @@ Recursively walks through child nodes to evaluate
    <tr class="even">
      <td>
         <span class="entryName">opt_ds</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></div>
+        : <div class="fullType"><span class="type">goog.ds.DataNode=</span></div>
         <div class="entryOverview">Optional datasource to evaluate against. If not provided, evaluates against DataManager global root.</div>
      </td>
    </tr>
@@ -439,7 +451,7 @@ Recursively walks through child nodes to evaluate
    <tr class="odd">
      <td>
         <span class="entryName">opt_selectOne</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to return single matching DataNode or matching nodes in DataNodeList.</div>
      </td>
    </tr>
@@ -447,7 +459,7 @@ Recursively walks through child nodes to evaluate
    <tr class="even">
      <td>
         <span class="entryName">opt_canCreate</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, will try to create new nodes.</div>
      </td>
    </tr>
@@ -606,7 +618,7 @@ TODO Support other expression functions
    <tr class="even">
      <td>
         <span class="entryName">opt_ds</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ds_DataNode.html">goog.ds.DataNode</a></span></div>
+        : <div class="fullType"><span class="type">goog.ds.DataNode=</span></div>
         <div class="entryOverview">Optional datasource to evaluate against. If not provided, evaluates against DataManager global root.</div>
      </td>
    </tr>
@@ -678,7 +690,7 @@ TODO Support other expression functions
    <tr class="odd">
      <td>
         <span class="entryName">opt_parts</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
+        : <div class="fullType"><span class="type">Array=</span></div>
         <div class="entryOverview">Array of the parts of an expression.</div>
      </td>
    </tr>
@@ -686,7 +698,7 @@ TODO Support other expression functions
    <tr class="even">
      <td>
         <span class="entryName">opt_childExpr</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ds_Expr.html">goog.ds.Expr</a></span></div>
+        : <div class="fullType"><span class="type">goog.ds.Expr=</span></div>
         <div class="entryOverview">Optional child of this expression, passed in as a hint for processing.</div>
      </td>
    </tr>
@@ -694,7 +706,7 @@ TODO Support other expression functions
    <tr class="odd">
      <td>
         <span class="entryName">opt_prevExpr</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ds_Expr.html">goog.ds.Expr</a></span></div>
+        : <div class="fullType"><span class="type">goog.ds.Expr=</span></div>
         <div class="entryOverview">Optional preceding expression (i.e. $A/B/C is previous expression to B/C) passed in as a hint for processing.</div>
      </td>
    </tr>
@@ -1269,7 +1281,7 @@ Uses hints from related expressions to help in creation
    <tr class="even">
      <td>
         <span class="entryName">opt_expr</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
+        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
         <div class="entryOverview">The string expression source.</div>
      </td>
    </tr>
@@ -1277,7 +1289,7 @@ Uses hints from related expressions to help in creation
    <tr class="odd">
      <td>
         <span class="entryName">opt_parts</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
+        : <div class="fullType"><span class="type">Array=</span></div>
         <div class="entryOverview">Array of the parts of an expression.</div>
      </td>
    </tr>
@@ -1285,7 +1297,7 @@ Uses hints from related expressions to help in creation
    <tr class="even">
      <td>
         <span class="entryName">opt_childExpr</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ds_Expr.html">goog.ds.Expr</a></span></div>
+        : <div class="fullType"><span class="type">goog.ds.Expr=</span></div>
         <div class="entryOverview">Optional child of this expression, passed in as a hint for processing.</div>
      </td>
    </tr>
@@ -1293,7 +1305,7 @@ Uses hints from related expressions to help in creation
    <tr class="odd">
      <td>
         <span class="entryName">opt_prevExpr</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ds_Expr.html">goog.ds.Expr</a></span></div>
+        : <div class="fullType"><span class="type">goog.ds.Expr=</span></div>
         <div class="entryOverview">Optional preceding expression (i.e. $A/B/C is previous expression to B/C) passed in as a hint for processing.</div>
      </td>
    </tr>

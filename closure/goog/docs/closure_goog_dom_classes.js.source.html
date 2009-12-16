@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -94,7 +95,7 @@
 <a name="line51"></a>/**
 <a name="line52"></a> * Adds a class or classes to an element. Does not add multiples of class names.
 <a name="line53"></a> * @param {Node} element DOM node to add class to.
-<a name="line54"></a> * @param {string} var_args Class names to add.
+<a name="line54"></a> * @param {...string} var_args Class names to add.
 <a name="line55"></a> * @return {boolean} Whether class was added (or all classes were added).
 <a name="line56"></a> */
 <a name="line57"></a>goog.dom.classes.add = function(element, var_args) {
@@ -111,7 +112,7 @@
 <a name="line68"></a>/**
 <a name="line69"></a> * Removes a class or classes from an element.
 <a name="line70"></a> * @param {Node} element DOM node to remove class from.
-<a name="line71"></a> * @param {string} var_args Class name(s) to remove.
+<a name="line71"></a> * @param {...string} var_args Class name(s) to remove.
 <a name="line72"></a> * @return {boolean} Whether all classes in {@code var_args} were found and
 <a name="line73"></a> *     removed.
 <a name="line74"></a> */

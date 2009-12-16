@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -63,61 +64,60 @@
 <a name="line20"></a>
 <a name="line21"></a>goog.provide(&#39;goog.editor.plugins.AbstractTabHandler&#39;);
 <a name="line22"></a>
-<a name="line23"></a>goog.require(&#39;goog.editor.BrowserFeature&#39;);
-<a name="line24"></a>goog.require(&#39;goog.editor.Plugin&#39;);
-<a name="line25"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line23"></a>goog.require(&#39;goog.editor.Plugin&#39;);
+<a name="line24"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line25"></a>
 <a name="line26"></a>
 <a name="line27"></a>
-<a name="line28"></a>
-<a name="line29"></a>/**
-<a name="line30"></a> * Plugin to handle tab keys. Specific tab behavior defined by subclasses.
-<a name="line31"></a> *
-<a name="line32"></a> * @constructor
-<a name="line33"></a> * @extends {goog.editor.Plugin}
-<a name="line34"></a> */
-<a name="line35"></a>goog.editor.plugins.AbstractTabHandler = function() {
-<a name="line36"></a>  goog.editor.Plugin.call(this);
-<a name="line37"></a>};
-<a name="line38"></a>goog.inherits(goog.editor.plugins.AbstractTabHandler, goog.editor.Plugin);
+<a name="line28"></a>/**
+<a name="line29"></a> * Plugin to handle tab keys. Specific tab behavior defined by subclasses.
+<a name="line30"></a> *
+<a name="line31"></a> * @constructor
+<a name="line32"></a> * @extends {goog.editor.Plugin}
+<a name="line33"></a> */
+<a name="line34"></a>goog.editor.plugins.AbstractTabHandler = function() {
+<a name="line35"></a>  goog.editor.Plugin.call(this);
+<a name="line36"></a>};
+<a name="line37"></a>goog.inherits(goog.editor.plugins.AbstractTabHandler, goog.editor.Plugin);
+<a name="line38"></a>
 <a name="line39"></a>
-<a name="line40"></a>
-<a name="line41"></a>/** @inheritDoc */
-<a name="line42"></a>goog.editor.plugins.AbstractTabHandler.prototype.getTrogClassId =
-<a name="line43"></a>    goog.abstractMethod;
+<a name="line40"></a>/** @inheritDoc */
+<a name="line41"></a>goog.editor.plugins.AbstractTabHandler.prototype.getTrogClassId =
+<a name="line42"></a>    goog.abstractMethod;
+<a name="line43"></a>
 <a name="line44"></a>
-<a name="line45"></a>
-<a name="line46"></a>/** @inheritDoc */
-<a name="line47"></a>goog.editor.plugins.AbstractTabHandler.prototype.handleKeyboardShortcut =
-<a name="line48"></a>    function(e, key, isModifierPressed) {
-<a name="line49"></a>  // If a dialog doesn&#39;t have selectable field, Moz grabs the event and
-<a name="line50"></a>  // performs actions in editor window. This solves that problem and allows
-<a name="line51"></a>  // the event to be passed on to proper handlers.
-<a name="line52"></a>  if (goog.userAgent.GECKO &amp;&amp; this.fieldObject.inModalMode()) {
-<a name="line53"></a>    return false;
-<a name="line54"></a>  }
-<a name="line55"></a>
-<a name="line56"></a>  // Don&#39;t handle Ctrl+Tab since the user is most likely trying to switch
-<a name="line57"></a>  // browser tabs. See bug 1305086.
-<a name="line58"></a>  // FF3 on Mac sends Ctrl-Tab to trogedit and we end up inserting a tab, but
-<a name="line59"></a>  // then it also switches the tabs. See bug 1511681. Note that we don&#39;t use
-<a name="line60"></a>  // isModifierPressed here since isModifierPressed is true only if metaKey
-<a name="line61"></a>  // is true on Mac.
-<a name="line62"></a>  if (e.keyCode == goog.events.KeyCodes.TAB &amp;&amp; !e.metaKey &amp;&amp; !e.ctrlKey) {
-<a name="line63"></a>    return this.handleTabKey(e);
-<a name="line64"></a>  }
-<a name="line65"></a>
-<a name="line66"></a>  return false;
-<a name="line67"></a>};
+<a name="line45"></a>/** @inheritDoc */
+<a name="line46"></a>goog.editor.plugins.AbstractTabHandler.prototype.handleKeyboardShortcut =
+<a name="line47"></a>    function(e, key, isModifierPressed) {
+<a name="line48"></a>  // If a dialog doesn&#39;t have selectable field, Moz grabs the event and
+<a name="line49"></a>  // performs actions in editor window. This solves that problem and allows
+<a name="line50"></a>  // the event to be passed on to proper handlers.
+<a name="line51"></a>  if (goog.userAgent.GECKO &amp;&amp; this.fieldObject.inModalMode()) {
+<a name="line52"></a>    return false;
+<a name="line53"></a>  }
+<a name="line54"></a>
+<a name="line55"></a>  // Don&#39;t handle Ctrl+Tab since the user is most likely trying to switch
+<a name="line56"></a>  // browser tabs. See bug 1305086.
+<a name="line57"></a>  // FF3 on Mac sends Ctrl-Tab to trogedit and we end up inserting a tab, but
+<a name="line58"></a>  // then it also switches the tabs. See bug 1511681. Note that we don&#39;t use
+<a name="line59"></a>  // isModifierPressed here since isModifierPressed is true only if metaKey
+<a name="line60"></a>  // is true on Mac.
+<a name="line61"></a>  if (e.keyCode == goog.events.KeyCodes.TAB &amp;&amp; !e.metaKey &amp;&amp; !e.ctrlKey) {
+<a name="line62"></a>    return this.handleTabKey(e);
+<a name="line63"></a>  }
+<a name="line64"></a>
+<a name="line65"></a>  return false;
+<a name="line66"></a>};
+<a name="line67"></a>
 <a name="line68"></a>
-<a name="line69"></a>
-<a name="line70"></a>/**
-<a name="line71"></a> * Handle a tab key press.
-<a name="line72"></a> * @param {goog.events.Event} e The key event.
-<a name="line73"></a> * @return {boolean} Whether this event was handled by this plugin.
-<a name="line74"></a> * @protected
-<a name="line75"></a> */
-<a name="line76"></a>goog.editor.plugins.AbstractTabHandler.prototype.handleTabKey =
-<a name="line77"></a>    goog.abstractMethod;
+<a name="line69"></a>/**
+<a name="line70"></a> * Handle a tab key press.
+<a name="line71"></a> * @param {goog.events.Event} e The key event.
+<a name="line72"></a> * @return {boolean} Whether this event was handled by this plugin.
+<a name="line73"></a> * @protected
+<a name="line74"></a> */
+<a name="line75"></a>goog.editor.plugins.AbstractTabHandler.prototype.handleTabKey =
+<a name="line76"></a>    goog.abstractMethod;
 </pre>
 
 

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -90,12 +91,12 @@
 <a name="line47"></a>
 <a name="line48"></a>/**
 <a name="line49"></a> * A manager of an XhrIoPool.
-<a name="line50"></a> * @param {number} opt_maxRetries Max. number of retries (Default: 1).
-<a name="line51"></a> * @param {goog.structs.Map} opt_headers Map of default headers to add to every
+<a name="line50"></a> * @param {number=} opt_maxRetries Max. number of retries (Default: 1).
+<a name="line51"></a> * @param {goog.structs.Map=} opt_headers Map of default headers to add to every
 <a name="line52"></a> *     request.
-<a name="line53"></a> * @param {number} opt_minCount Min. number of objects (Default: 1).
-<a name="line54"></a> * @param {number} opt_maxCount Max. number of objects (Default: 10).
-<a name="line55"></a> * @param {number} opt_timeoutInterval Timeout (in ms) before aborting an
+<a name="line53"></a> * @param {number=} opt_minCount Min. number of objects (Default: 1).
+<a name="line54"></a> * @param {number=} opt_maxCount Max. number of objects (Default: 10).
+<a name="line55"></a> * @param {number=} opt_timeoutInterval Timeout (in ms) before aborting an
 <a name="line56"></a> *     attempt (Default: 0ms).
 <a name="line57"></a> * @constructor
 <a name="line58"></a> * @extends {goog.events.EventTarget}
@@ -209,612 +210,615 @@
 <a name="line166"></a> * priority.
 <a name="line167"></a> * @param {string} id The id of the request.
 <a name="line168"></a> * @param {string} url Uri to make the request too.
-<a name="line169"></a> * @param {string} opt_method Send method, default: GET.
-<a name="line170"></a> * @param {string} opt_content Post data.
-<a name="line171"></a> * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
+<a name="line169"></a> * @param {string=} opt_method Send method, default: GET.
+<a name="line170"></a> * @param {string=} opt_content Post data.
+<a name="line171"></a> * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
 <a name="line172"></a> *     request.
-<a name="line173"></a> * @param {Object} opt_priority The priority of the request.
-<a name="line174"></a> * @param {Function} opt_callback Callback function for when request is complete
-<a name="line175"></a> *     The only param is the event object from the COMPLETE event.
-<a name="line176"></a> * @param {number} opt_maxRetries The maximum number of times the request should
-<a name="line177"></a> *     be retried.
-<a name="line178"></a> */
-<a name="line179"></a>goog.net.XhrManager.prototype.send = function(
-<a name="line180"></a>    id,
-<a name="line181"></a>    url,
-<a name="line182"></a>    opt_method,
-<a name="line183"></a>    opt_content,
-<a name="line184"></a>    opt_headers,
-<a name="line185"></a>    opt_priority,
-<a name="line186"></a>    opt_callback,
-<a name="line187"></a>    opt_maxRetries) {
-<a name="line188"></a>  var requests = this.requests_;
-<a name="line189"></a>  // Check if there is already a request with the given id.
-<a name="line190"></a>  if (requests.get(id)) {
-<a name="line191"></a>    throw Error(goog.net.XhrManager.ERROR_ID_IN_USE_);
-<a name="line192"></a>  }
-<a name="line193"></a>
-<a name="line194"></a>  // Make the Request object.
-<a name="line195"></a>  var request = new goog.net.XhrManager.Request(
-<a name="line196"></a>      url,
-<a name="line197"></a>      goog.bind(this.handleEvent_, this, id),
-<a name="line198"></a>      opt_method,
-<a name="line199"></a>      opt_content,
-<a name="line200"></a>      opt_headers,
-<a name="line201"></a>      opt_callback,
-<a name="line202"></a>      goog.isDef(opt_maxRetries) ? opt_maxRetries : this.maxRetries_);
-<a name="line203"></a>  this.requests_.set(id, request);
-<a name="line204"></a>
-<a name="line205"></a>  // Setup the callback for the pool.
-<a name="line206"></a>  var callback = goog.bind(this.handleAvailableXhr_, this, id);
-<a name="line207"></a>  this.xhrPool_.getObject(callback, opt_priority);
-<a name="line208"></a>};
+<a name="line173"></a> * @param {Object=} opt_priority The priority of the request.
+<a name="line174"></a> * @param {Function=} opt_callback Callback function for when request is
+<a name="line175"></a> *     complete. The only param is the event object from the COMPLETE event.
+<a name="line176"></a> * @param {number=} opt_maxRetries The maximum number of times the request
+<a name="line177"></a> *     should be retried.
+<a name="line178"></a> * @return {goog.net.XhrManager.Request} The queued request object.
+<a name="line179"></a> */
+<a name="line180"></a>goog.net.XhrManager.prototype.send = function(
+<a name="line181"></a>    id,
+<a name="line182"></a>    url,
+<a name="line183"></a>    opt_method,
+<a name="line184"></a>    opt_content,
+<a name="line185"></a>    opt_headers,
+<a name="line186"></a>    opt_priority,
+<a name="line187"></a>    opt_callback,
+<a name="line188"></a>    opt_maxRetries) {
+<a name="line189"></a>  var requests = this.requests_;
+<a name="line190"></a>  // Check if there is already a request with the given id.
+<a name="line191"></a>  if (requests.get(id)) {
+<a name="line192"></a>    throw Error(goog.net.XhrManager.ERROR_ID_IN_USE_);
+<a name="line193"></a>  }
+<a name="line194"></a>
+<a name="line195"></a>  // Make the Request object.
+<a name="line196"></a>  var request = new goog.net.XhrManager.Request(
+<a name="line197"></a>      url,
+<a name="line198"></a>      goog.bind(this.handleEvent_, this, id),
+<a name="line199"></a>      opt_method,
+<a name="line200"></a>      opt_content,
+<a name="line201"></a>      opt_headers,
+<a name="line202"></a>      opt_callback,
+<a name="line203"></a>      goog.isDef(opt_maxRetries) ? opt_maxRetries : this.maxRetries_);
+<a name="line204"></a>  this.requests_.set(id, request);
+<a name="line205"></a>
+<a name="line206"></a>  // Setup the callback for the pool.
+<a name="line207"></a>  var callback = goog.bind(this.handleAvailableXhr_, this, id);
+<a name="line208"></a>  this.xhrPool_.getObject(callback, opt_priority);
 <a name="line209"></a>
-<a name="line210"></a>
-<a name="line211"></a>/**
-<a name="line212"></a> * Aborts the request associated with id.
-<a name="line213"></a> * @param {string} id The id of the request to abort.
-<a name="line214"></a> * @param {boolean} opt_force If true, remove the id now so it can be reused.
-<a name="line215"></a> *     No events are fired and the callback is not called when forced.
-<a name="line216"></a> */
-<a name="line217"></a>goog.net.XhrManager.prototype.abort = function(id, opt_force) {
-<a name="line218"></a>  var request = this.requests_.get(id);
-<a name="line219"></a>  if (request) {
-<a name="line220"></a>    var xhrIo = request.xhrIo;
-<a name="line221"></a>    request.setAborted(true);
-<a name="line222"></a>    if (opt_force) {
-<a name="line223"></a>      // We remove listeners to make sure nothing gets called if a new request
-<a name="line224"></a>      // with the same id is made.
-<a name="line225"></a>      this.removeXhrListener_(xhrIo, request.getXhrEventCallback());
-<a name="line226"></a>      goog.events.listenOnce(
-<a name="line227"></a>          xhrIo,
-<a name="line228"></a>          goog.net.EventType.READY,
-<a name="line229"></a>          function() { this.xhrPool_.releaseObject(xhrIo); },
-<a name="line230"></a>          false,
-<a name="line231"></a>          this);
-<a name="line232"></a>      this.requests_.remove(id);
-<a name="line233"></a>    }
-<a name="line234"></a>    if (xhrIo) {
-<a name="line235"></a>      xhrIo.abort();
+<a name="line210"></a>  return request;
+<a name="line211"></a>};
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/**
+<a name="line215"></a> * Aborts the request associated with id.
+<a name="line216"></a> * @param {string} id The id of the request to abort.
+<a name="line217"></a> * @param {boolean=} opt_force If true, remove the id now so it can be reused.
+<a name="line218"></a> *     No events are fired and the callback is not called when forced.
+<a name="line219"></a> */
+<a name="line220"></a>goog.net.XhrManager.prototype.abort = function(id, opt_force) {
+<a name="line221"></a>  var request = this.requests_.get(id);
+<a name="line222"></a>  if (request) {
+<a name="line223"></a>    var xhrIo = request.xhrIo;
+<a name="line224"></a>    request.setAborted(true);
+<a name="line225"></a>    if (opt_force) {
+<a name="line226"></a>      // We remove listeners to make sure nothing gets called if a new request
+<a name="line227"></a>      // with the same id is made.
+<a name="line228"></a>      this.removeXhrListener_(xhrIo, request.getXhrEventCallback());
+<a name="line229"></a>      goog.events.listenOnce(
+<a name="line230"></a>          xhrIo,
+<a name="line231"></a>          goog.net.EventType.READY,
+<a name="line232"></a>          function() { this.xhrPool_.releaseObject(xhrIo); },
+<a name="line233"></a>          false,
+<a name="line234"></a>          this);
+<a name="line235"></a>      this.requests_.remove(id);
 <a name="line236"></a>    }
-<a name="line237"></a>  }
-<a name="line238"></a>};
-<a name="line239"></a>
-<a name="line240"></a>
-<a name="line241"></a>/**
-<a name="line242"></a> * Handles when an XhrIo object becomes available. Sets up the events, fires
-<a name="line243"></a> * the READY event, and starts the process to send the request.
-<a name="line244"></a> * @param {string} id The id of the request the XhrIo is for.
-<a name="line245"></a> * @param {goog.net.XhrIo} xhrIo The available XhrIo object.
-<a name="line246"></a> * @private
-<a name="line247"></a> */
-<a name="line248"></a>goog.net.XhrManager.prototype.handleAvailableXhr_ = function(id, xhrIo) {
-<a name="line249"></a>  var request = this.requests_.get(id);
-<a name="line250"></a>  // Make sure the request doesn&#39;t already have an XhrIo attached. This can
-<a name="line251"></a>  // happen if a forced abort occurs before an XhrIo is available, and a new
-<a name="line252"></a>  // request with the same id is made.
-<a name="line253"></a>  if (request &amp;&amp; !request.xhrIo) {
-<a name="line254"></a>    this.addXhrListener_(xhrIo, request.getXhrEventCallback());
-<a name="line255"></a>
-<a name="line256"></a>    // Set properties for the XhrIo.
-<a name="line257"></a>    xhrIo.setTimeoutInterval(this.timeoutInterval_);
+<a name="line237"></a>    if (xhrIo) {
+<a name="line238"></a>      xhrIo.abort();
+<a name="line239"></a>    }
+<a name="line240"></a>  }
+<a name="line241"></a>};
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Handles when an XhrIo object becomes available. Sets up the events, fires
+<a name="line246"></a> * the READY event, and starts the process to send the request.
+<a name="line247"></a> * @param {string} id The id of the request the XhrIo is for.
+<a name="line248"></a> * @param {goog.net.XhrIo} xhrIo The available XhrIo object.
+<a name="line249"></a> * @private
+<a name="line250"></a> */
+<a name="line251"></a>goog.net.XhrManager.prototype.handleAvailableXhr_ = function(id, xhrIo) {
+<a name="line252"></a>  var request = this.requests_.get(id);
+<a name="line253"></a>  // Make sure the request doesn&#39;t already have an XhrIo attached. This can
+<a name="line254"></a>  // happen if a forced abort occurs before an XhrIo is available, and a new
+<a name="line255"></a>  // request with the same id is made.
+<a name="line256"></a>  if (request &amp;&amp; !request.xhrIo) {
+<a name="line257"></a>    this.addXhrListener_(xhrIo, request.getXhrEventCallback());
 <a name="line258"></a>
-<a name="line259"></a>    // Add a reference to the XhrIo object to the request.
-<a name="line260"></a>    request.xhrIo = request.xhrLite = xhrIo;
+<a name="line259"></a>    // Set properties for the XhrIo.
+<a name="line260"></a>    xhrIo.setTimeoutInterval(this.timeoutInterval_);
 <a name="line261"></a>
-<a name="line262"></a>    // Notify the listeners.
-<a name="line263"></a>    this.dispatchEvent(new goog.net.XhrManager.Event(
-<a name="line264"></a>        goog.net.EventType.READY, this, id, xhrIo));
-<a name="line265"></a>
-<a name="line266"></a>    // Send the request.
-<a name="line267"></a>    this.retry_(id, xhrIo);
+<a name="line262"></a>    // Add a reference to the XhrIo object to the request.
+<a name="line263"></a>    request.xhrIo = request.xhrLite = xhrIo;
+<a name="line264"></a>
+<a name="line265"></a>    // Notify the listeners.
+<a name="line266"></a>    this.dispatchEvent(new goog.net.XhrManager.Event(
+<a name="line267"></a>        goog.net.EventType.READY, this, id, xhrIo));
 <a name="line268"></a>
-<a name="line269"></a>    // If the request was aborted before it got an XhrIo object, abort it now.
-<a name="line270"></a>    if (request.getAborted()) {
-<a name="line271"></a>      xhrIo.abort();
-<a name="line272"></a>    }
-<a name="line273"></a>  } else {
-<a name="line274"></a>    // If the request has an XhrIo object already, or no request exists, just
-<a name="line275"></a>    // return the XhrIo back to the pool.
-<a name="line276"></a>    this.xhrPool_.releaseObject(xhrIo);
-<a name="line277"></a>  }
-<a name="line278"></a>};
-<a name="line279"></a>
-<a name="line280"></a>
-<a name="line281"></a>/**
-<a name="line282"></a> * Handles all events fired by the XhrIo object for a given request.
-<a name="line283"></a> * @param {string} id The id of the request.
-<a name="line284"></a> * @param {goog.events.Event} e The event.
-<a name="line285"></a> * @return {Object} The return value from the handler, if any.
-<a name="line286"></a> * @private
-<a name="line287"></a> */
-<a name="line288"></a>goog.net.XhrManager.prototype.handleEvent_ = function(id, e) {
-<a name="line289"></a>  var xhrIo = /** @type {goog.net.XhrIo} */(e.target);
-<a name="line290"></a>  switch (e.type) {
-<a name="line291"></a>    case goog.net.EventType.READY:
-<a name="line292"></a>      this.retry_(id, xhrIo);
-<a name="line293"></a>      break;
-<a name="line294"></a>
-<a name="line295"></a>    case goog.net.EventType.COMPLETE:
-<a name="line296"></a>      return this.handleComplete_(id, xhrIo, e);
+<a name="line269"></a>    // Send the request.
+<a name="line270"></a>    this.retry_(id, xhrIo);
+<a name="line271"></a>
+<a name="line272"></a>    // If the request was aborted before it got an XhrIo object, abort it now.
+<a name="line273"></a>    if (request.getAborted()) {
+<a name="line274"></a>      xhrIo.abort();
+<a name="line275"></a>    }
+<a name="line276"></a>  } else {
+<a name="line277"></a>    // If the request has an XhrIo object already, or no request exists, just
+<a name="line278"></a>    // return the XhrIo back to the pool.
+<a name="line279"></a>    this.xhrPool_.releaseObject(xhrIo);
+<a name="line280"></a>  }
+<a name="line281"></a>};
+<a name="line282"></a>
+<a name="line283"></a>
+<a name="line284"></a>/**
+<a name="line285"></a> * Handles all events fired by the XhrIo object for a given request.
+<a name="line286"></a> * @param {string} id The id of the request.
+<a name="line287"></a> * @param {goog.events.Event} e The event.
+<a name="line288"></a> * @return {Object} The return value from the handler, if any.
+<a name="line289"></a> * @private
+<a name="line290"></a> */
+<a name="line291"></a>goog.net.XhrManager.prototype.handleEvent_ = function(id, e) {
+<a name="line292"></a>  var xhrIo = /** @type {goog.net.XhrIo} */(e.target);
+<a name="line293"></a>  switch (e.type) {
+<a name="line294"></a>    case goog.net.EventType.READY:
+<a name="line295"></a>      this.retry_(id, xhrIo);
+<a name="line296"></a>      break;
 <a name="line297"></a>
-<a name="line298"></a>    case goog.net.EventType.SUCCESS:
-<a name="line299"></a>      this.handleSuccess_(id, xhrIo);
-<a name="line300"></a>      break;
-<a name="line301"></a>
-<a name="line302"></a>    // A timeout is handled like an error.
-<a name="line303"></a>    case goog.net.EventType.TIMEOUT:
-<a name="line304"></a>    case goog.net.EventType.ERROR:
-<a name="line305"></a>      this.handleError_(id, xhrIo);
-<a name="line306"></a>      break;
-<a name="line307"></a>
-<a name="line308"></a>    case goog.net.EventType.ABORT:
-<a name="line309"></a>      this.handleAbort_(id, xhrIo);
-<a name="line310"></a>      break;
-<a name="line311"></a>  }
-<a name="line312"></a>  return null;
-<a name="line313"></a>};
-<a name="line314"></a>
-<a name="line315"></a>
-<a name="line316"></a>/**
-<a name="line317"></a> * Attempts to retry the given request. If the request has already attempted
-<a name="line318"></a> * the maximum number of retries, then it removes the request and releases
-<a name="line319"></a> * the XhrIo object back into the pool.
-<a name="line320"></a> * @param {string} id The id of the request.
-<a name="line321"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object.
-<a name="line322"></a> * @private
-<a name="line323"></a> */
-<a name="line324"></a>goog.net.XhrManager.prototype.retry_ = function(id, xhrIo) {
-<a name="line325"></a>  var request = this.requests_.get(id);
-<a name="line326"></a>
-<a name="line327"></a>  // If the request has not completed and it is below its max. retries.
-<a name="line328"></a>  if (request &amp;&amp; !request.getCompleted() &amp;&amp; !request.hasReachedMaxRetries()) {
-<a name="line329"></a>    request.increaseAttemptCount();
-<a name="line330"></a>    xhrIo.send(request.getUrl(), request.getMethod(), request.getContent(),
-<a name="line331"></a>                 request.getHeaders());
-<a name="line332"></a>  } else {
-<a name="line333"></a>    if (request) {
-<a name="line334"></a>      // Remove the events on the XhrIo objects.
-<a name="line335"></a>      this.removeXhrListener_(xhrIo, request.getXhrEventCallback());
-<a name="line336"></a>
-<a name="line337"></a>      // Remove the request.
-<a name="line338"></a>      this.requests_.remove(id);
-<a name="line339"></a>    }
-<a name="line340"></a>    // Release the XhrIo object back into the pool.
-<a name="line341"></a>    this.xhrPool_.releaseObject(xhrIo);
-<a name="line342"></a>  }
-<a name="line343"></a>};
-<a name="line344"></a>
-<a name="line345"></a>
-<a name="line346"></a>/**
-<a name="line347"></a> * Handles the complete of a request. Dispatches the COMPLETE event and sets the
-<a name="line348"></a> * the request as completed if the request has succeeded, or is done retrying.
-<a name="line349"></a> * @param {string} id The id of the request.
-<a name="line350"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object.
-<a name="line351"></a> * @param {goog.events.Event} e The original event.
-<a name="line352"></a> * @return {Object} The return value from the callback, if any.
-<a name="line353"></a> * @private
-<a name="line354"></a> */
-<a name="line355"></a>goog.net.XhrManager.prototype.handleComplete_ = function(id, xhrIo, e) {
-<a name="line356"></a>  // Only if the request is done processing should a COMPLETE event be fired.
-<a name="line357"></a>  var request = this.requests_.get(id);
-<a name="line358"></a>  if (xhrIo.getLastErrorCode() == goog.net.ErrorCode.ABORT ||
-<a name="line359"></a>      xhrIo.isSuccess() || request.hasReachedMaxRetries()) {
-<a name="line360"></a>    this.dispatchEvent(new goog.net.XhrManager.Event(
-<a name="line361"></a>        goog.net.EventType.COMPLETE, this, id, xhrIo));
-<a name="line362"></a>
-<a name="line363"></a>    // If the request exists, we mark it as completed and call the callback
-<a name="line364"></a>    if (request) {
-<a name="line365"></a>      request.setCompleted(true);
-<a name="line366"></a>      // Call the complete callback as if it was set as a COMPLETE event on the
-<a name="line367"></a>      // XhrIo directly.
-<a name="line368"></a>      if (request.getCompleteCallback()) {
-<a name="line369"></a>        return request.getCompleteCallback().call(xhrIo, e);
-<a name="line370"></a>      }
-<a name="line371"></a>    }
-<a name="line372"></a>  }
-<a name="line373"></a>  return null;
-<a name="line374"></a>};
-<a name="line375"></a>
-<a name="line376"></a>
-<a name="line377"></a>/**
-<a name="line378"></a> * Handles the abort of an underlying XhrIo object.
-<a name="line379"></a> * @param {string} id The id of the request.
-<a name="line380"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object.
-<a name="line381"></a> * @private
-<a name="line382"></a> */
-<a name="line383"></a>goog.net.XhrManager.prototype.handleAbort_ = function(id, xhrIo) {
-<a name="line384"></a>  // Fire event.
-<a name="line385"></a>  // NOTE: The complete event should always be fired before the abort event, so
-<a name="line386"></a>  // the bulk of the work is done in handleComplete.
-<a name="line387"></a>  this.dispatchEvent(new goog.net.XhrManager.Event(goog.net.EventType.ABORT,
-<a name="line388"></a>                     this, id, xhrIo));
-<a name="line389"></a>};
-<a name="line390"></a>
-<a name="line391"></a>
-<a name="line392"></a>/**
-<a name="line393"></a> * Handles the success of a request. Dispatches the SUCCESS event and sets the
-<a name="line394"></a> * the request as completed.
-<a name="line395"></a> * @param {string} id The id of the request.
-<a name="line396"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object.
-<a name="line397"></a> * @private
-<a name="line398"></a> */
-<a name="line399"></a>goog.net.XhrManager.prototype.handleSuccess_ = function(id, xhrIo) {
-<a name="line400"></a>  // Fire event.
-<a name="line401"></a>  // NOTE: We don&#39;t release the XhrIo object from the pool here.
-<a name="line402"></a>  // It is released in the retry method, when we know it is back in the
-<a name="line403"></a>  // ready state.
-<a name="line404"></a>  this.dispatchEvent(new goog.net.XhrManager.Event(goog.net.EventType.SUCCESS,
-<a name="line405"></a>                     this, id, xhrIo));
-<a name="line406"></a>};
-<a name="line407"></a>
-<a name="line408"></a>
-<a name="line409"></a>/**
-<a name="line410"></a> * Handles the error of a request. If the request has not reach its maximum
-<a name="line411"></a> * number of retries, then it lets the request retry naturally (will let the
-<a name="line412"></a> * request hit the READY state). Else, it dispatches the ERROR event.
-<a name="line413"></a> * @param {string} id The id of the request.
-<a name="line414"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object.
-<a name="line415"></a> * @private
-<a name="line416"></a> */
-<a name="line417"></a>goog.net.XhrManager.prototype.handleError_ = function(id, xhrIo) {
-<a name="line418"></a>  var request = this.requests_.get(id);
-<a name="line419"></a>
-<a name="line420"></a>  // If the maximum number of retries has been reached.
-<a name="line421"></a>  if (request.hasReachedMaxRetries()) {
-<a name="line422"></a>    // Fire event.
-<a name="line423"></a>    // NOTE: We don&#39;t release the XhrIo object from the pool here.
-<a name="line424"></a>    // It is released in the retry method, when we know it is back in the
-<a name="line425"></a>    // ready state.
-<a name="line426"></a>    this.dispatchEvent(new goog.net.XhrManager.Event(goog.net.EventType.ERROR,
-<a name="line427"></a>                       this, id, xhrIo));
-<a name="line428"></a>  }
-<a name="line429"></a>};
-<a name="line430"></a>
-<a name="line431"></a>
-<a name="line432"></a>/**
-<a name="line433"></a> * Remove listeners for XHR events on an XhrIo object.
-<a name="line434"></a> * @param {goog.net.XhrIo} xhrIo The object to stop listenening to events on.
-<a name="line435"></a> * @param {Function} func The callback to remove from event handling.
-<a name="line436"></a> * @param {string|Array.&lt;string&gt;} opt_types Event types to remove listeners for.
-<a name="line437"></a> *     Defaults to XHR_EVENT_TYPES_.
-<a name="line438"></a> * @private
-<a name="line439"></a> */
-<a name="line440"></a>goog.net.XhrManager.prototype.removeXhrListener_ = function(xhrIo,
-<a name="line441"></a>                                                            func,
-<a name="line442"></a>                                                            opt_types) {
-<a name="line443"></a>   var types = opt_types || goog.net.XhrManager.XHR_EVENT_TYPES_;
-<a name="line444"></a>   this.eventHandler_.unlisten(xhrIo, types, func);
-<a name="line445"></a>};
-<a name="line446"></a>
-<a name="line447"></a>
-<a name="line448"></a>/**
-<a name="line449"></a> * Adds a listener for XHR events on an XhrIo object.
-<a name="line450"></a> * @param {goog.net.XhrIo} xhrIo The object listen to events on.
-<a name="line451"></a> * @param {Function} func The callback when the event occurs.
-<a name="line452"></a> * @param {string|Array.&lt;string&gt;} opt_types Event types to attach listeners to.
-<a name="line453"></a> *     Defaults to XHR_EVENT_TYPES_.
-<a name="line454"></a> * @private
-<a name="line455"></a> */
-<a name="line456"></a>goog.net.XhrManager.prototype.addXhrListener_ = function(xhrIo,
-<a name="line457"></a>                                                         func,
-<a name="line458"></a>                                                         opt_types) {
-<a name="line459"></a>   var types = opt_types || goog.net.XhrManager.XHR_EVENT_TYPES_;
-<a name="line460"></a>   this.eventHandler_.listen(xhrIo, types, func);
-<a name="line461"></a>};
-<a name="line462"></a>
-<a name="line463"></a>
-<a name="line464"></a>/**
-<a name="line465"></a> * Disposes of the manager.
-<a name="line466"></a> */
-<a name="line467"></a>goog.net.XhrManager.prototype.disposeInternal = function() {
-<a name="line468"></a>  goog.net.XhrManager.superClass_.disposeInternal.call(this);
-<a name="line469"></a>
-<a name="line470"></a>  this.xhrPool_.dispose();
-<a name="line471"></a>  this.xhrPool_ = null;
+<a name="line298"></a>    case goog.net.EventType.COMPLETE:
+<a name="line299"></a>      return this.handleComplete_(id, xhrIo, e);
+<a name="line300"></a>
+<a name="line301"></a>    case goog.net.EventType.SUCCESS:
+<a name="line302"></a>      this.handleSuccess_(id, xhrIo);
+<a name="line303"></a>      break;
+<a name="line304"></a>
+<a name="line305"></a>    // A timeout is handled like an error.
+<a name="line306"></a>    case goog.net.EventType.TIMEOUT:
+<a name="line307"></a>    case goog.net.EventType.ERROR:
+<a name="line308"></a>      this.handleError_(id, xhrIo);
+<a name="line309"></a>      break;
+<a name="line310"></a>
+<a name="line311"></a>    case goog.net.EventType.ABORT:
+<a name="line312"></a>      this.handleAbort_(id, xhrIo);
+<a name="line313"></a>      break;
+<a name="line314"></a>  }
+<a name="line315"></a>  return null;
+<a name="line316"></a>};
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/**
+<a name="line320"></a> * Attempts to retry the given request. If the request has already attempted
+<a name="line321"></a> * the maximum number of retries, then it removes the request and releases
+<a name="line322"></a> * the XhrIo object back into the pool.
+<a name="line323"></a> * @param {string} id The id of the request.
+<a name="line324"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object.
+<a name="line325"></a> * @private
+<a name="line326"></a> */
+<a name="line327"></a>goog.net.XhrManager.prototype.retry_ = function(id, xhrIo) {
+<a name="line328"></a>  var request = this.requests_.get(id);
+<a name="line329"></a>
+<a name="line330"></a>  // If the request has not completed and it is below its max. retries.
+<a name="line331"></a>  if (request &amp;&amp; !request.getCompleted() &amp;&amp; !request.hasReachedMaxRetries()) {
+<a name="line332"></a>    request.increaseAttemptCount();
+<a name="line333"></a>    xhrIo.send(request.getUrl(), request.getMethod(), request.getContent(),
+<a name="line334"></a>                 request.getHeaders());
+<a name="line335"></a>  } else {
+<a name="line336"></a>    if (request) {
+<a name="line337"></a>      // Remove the events on the XhrIo objects.
+<a name="line338"></a>      this.removeXhrListener_(xhrIo, request.getXhrEventCallback());
+<a name="line339"></a>
+<a name="line340"></a>      // Remove the request.
+<a name="line341"></a>      this.requests_.remove(id);
+<a name="line342"></a>    }
+<a name="line343"></a>    // Release the XhrIo object back into the pool.
+<a name="line344"></a>    this.xhrPool_.releaseObject(xhrIo);
+<a name="line345"></a>  }
+<a name="line346"></a>};
+<a name="line347"></a>
+<a name="line348"></a>
+<a name="line349"></a>/**
+<a name="line350"></a> * Handles the complete of a request. Dispatches the COMPLETE event and sets the
+<a name="line351"></a> * the request as completed if the request has succeeded, or is done retrying.
+<a name="line352"></a> * @param {string} id The id of the request.
+<a name="line353"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object.
+<a name="line354"></a> * @param {goog.events.Event} e The original event.
+<a name="line355"></a> * @return {Object} The return value from the callback, if any.
+<a name="line356"></a> * @private
+<a name="line357"></a> */
+<a name="line358"></a>goog.net.XhrManager.prototype.handleComplete_ = function(id, xhrIo, e) {
+<a name="line359"></a>  // Only if the request is done processing should a COMPLETE event be fired.
+<a name="line360"></a>  var request = this.requests_.get(id);
+<a name="line361"></a>  if (xhrIo.getLastErrorCode() == goog.net.ErrorCode.ABORT ||
+<a name="line362"></a>      xhrIo.isSuccess() || request.hasReachedMaxRetries()) {
+<a name="line363"></a>    this.dispatchEvent(new goog.net.XhrManager.Event(
+<a name="line364"></a>        goog.net.EventType.COMPLETE, this, id, xhrIo));
+<a name="line365"></a>
+<a name="line366"></a>    // If the request exists, we mark it as completed and call the callback
+<a name="line367"></a>    if (request) {
+<a name="line368"></a>      request.setCompleted(true);
+<a name="line369"></a>      // Call the complete callback as if it was set as a COMPLETE event on the
+<a name="line370"></a>      // XhrIo directly.
+<a name="line371"></a>      if (request.getCompleteCallback()) {
+<a name="line372"></a>        return request.getCompleteCallback().call(xhrIo, e);
+<a name="line373"></a>      }
+<a name="line374"></a>    }
+<a name="line375"></a>  }
+<a name="line376"></a>  return null;
+<a name="line377"></a>};
+<a name="line378"></a>
+<a name="line379"></a>
+<a name="line380"></a>/**
+<a name="line381"></a> * Handles the abort of an underlying XhrIo object.
+<a name="line382"></a> * @param {string} id The id of the request.
+<a name="line383"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object.
+<a name="line384"></a> * @private
+<a name="line385"></a> */
+<a name="line386"></a>goog.net.XhrManager.prototype.handleAbort_ = function(id, xhrIo) {
+<a name="line387"></a>  // Fire event.
+<a name="line388"></a>  // NOTE: The complete event should always be fired before the abort event, so
+<a name="line389"></a>  // the bulk of the work is done in handleComplete.
+<a name="line390"></a>  this.dispatchEvent(new goog.net.XhrManager.Event(goog.net.EventType.ABORT,
+<a name="line391"></a>                     this, id, xhrIo));
+<a name="line392"></a>};
+<a name="line393"></a>
+<a name="line394"></a>
+<a name="line395"></a>/**
+<a name="line396"></a> * Handles the success of a request. Dispatches the SUCCESS event and sets the
+<a name="line397"></a> * the request as completed.
+<a name="line398"></a> * @param {string} id The id of the request.
+<a name="line399"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object.
+<a name="line400"></a> * @private
+<a name="line401"></a> */
+<a name="line402"></a>goog.net.XhrManager.prototype.handleSuccess_ = function(id, xhrIo) {
+<a name="line403"></a>  // Fire event.
+<a name="line404"></a>  // NOTE: We don&#39;t release the XhrIo object from the pool here.
+<a name="line405"></a>  // It is released in the retry method, when we know it is back in the
+<a name="line406"></a>  // ready state.
+<a name="line407"></a>  this.dispatchEvent(new goog.net.XhrManager.Event(goog.net.EventType.SUCCESS,
+<a name="line408"></a>                     this, id, xhrIo));
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>/**
+<a name="line413"></a> * Handles the error of a request. If the request has not reach its maximum
+<a name="line414"></a> * number of retries, then it lets the request retry naturally (will let the
+<a name="line415"></a> * request hit the READY state). Else, it dispatches the ERROR event.
+<a name="line416"></a> * @param {string} id The id of the request.
+<a name="line417"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object.
+<a name="line418"></a> * @private
+<a name="line419"></a> */
+<a name="line420"></a>goog.net.XhrManager.prototype.handleError_ = function(id, xhrIo) {
+<a name="line421"></a>  var request = this.requests_.get(id);
+<a name="line422"></a>
+<a name="line423"></a>  // If the maximum number of retries has been reached.
+<a name="line424"></a>  if (request.hasReachedMaxRetries()) {
+<a name="line425"></a>    // Fire event.
+<a name="line426"></a>    // NOTE: We don&#39;t release the XhrIo object from the pool here.
+<a name="line427"></a>    // It is released in the retry method, when we know it is back in the
+<a name="line428"></a>    // ready state.
+<a name="line429"></a>    this.dispatchEvent(new goog.net.XhrManager.Event(goog.net.EventType.ERROR,
+<a name="line430"></a>                       this, id, xhrIo));
+<a name="line431"></a>  }
+<a name="line432"></a>};
+<a name="line433"></a>
+<a name="line434"></a>
+<a name="line435"></a>/**
+<a name="line436"></a> * Remove listeners for XHR events on an XhrIo object.
+<a name="line437"></a> * @param {goog.net.XhrIo} xhrIo The object to stop listenening to events on.
+<a name="line438"></a> * @param {Function} func The callback to remove from event handling.
+<a name="line439"></a> * @param {string|Array.&lt;string&gt;=} opt_types Event types to remove listeners
+<a name="line440"></a> *     for. Defaults to XHR_EVENT_TYPES_.
+<a name="line441"></a> * @private
+<a name="line442"></a> */
+<a name="line443"></a>goog.net.XhrManager.prototype.removeXhrListener_ = function(xhrIo,
+<a name="line444"></a>                                                            func,
+<a name="line445"></a>                                                            opt_types) {
+<a name="line446"></a>   var types = opt_types || goog.net.XhrManager.XHR_EVENT_TYPES_;
+<a name="line447"></a>   this.eventHandler_.unlisten(xhrIo, types, func);
+<a name="line448"></a>};
+<a name="line449"></a>
+<a name="line450"></a>
+<a name="line451"></a>/**
+<a name="line452"></a> * Adds a listener for XHR events on an XhrIo object.
+<a name="line453"></a> * @param {goog.net.XhrIo} xhrIo The object listen to events on.
+<a name="line454"></a> * @param {Function} func The callback when the event occurs.
+<a name="line455"></a> * @param {string|Array.&lt;string&gt;=} opt_types Event types to attach listeners to.
+<a name="line456"></a> *     Defaults to XHR_EVENT_TYPES_.
+<a name="line457"></a> * @private
+<a name="line458"></a> */
+<a name="line459"></a>goog.net.XhrManager.prototype.addXhrListener_ = function(xhrIo,
+<a name="line460"></a>                                                         func,
+<a name="line461"></a>                                                         opt_types) {
+<a name="line462"></a>   var types = opt_types || goog.net.XhrManager.XHR_EVENT_TYPES_;
+<a name="line463"></a>   this.eventHandler_.listen(xhrIo, types, func);
+<a name="line464"></a>};
+<a name="line465"></a>
+<a name="line466"></a>
+<a name="line467"></a>/**
+<a name="line468"></a> * Disposes of the manager.
+<a name="line469"></a> */
+<a name="line470"></a>goog.net.XhrManager.prototype.disposeInternal = function() {
+<a name="line471"></a>  goog.net.XhrManager.superClass_.disposeInternal.call(this);
 <a name="line472"></a>
-<a name="line473"></a>  this.eventHandler_.dispose();
-<a name="line474"></a>  this.eventHandler_ = null;
+<a name="line473"></a>  this.xhrPool_.dispose();
+<a name="line474"></a>  this.xhrPool_ = null;
 <a name="line475"></a>
-<a name="line476"></a>  // Call dispose on each request.
-<a name="line477"></a>  var requests = this.requests_;
-<a name="line478"></a>  goog.structs.forEach(requests, function(value, key) {
-<a name="line479"></a>    value.dispose();
-<a name="line480"></a>  });
-<a name="line481"></a>  requests.clear();
-<a name="line482"></a>  this.requests_ = null;
-<a name="line483"></a>};
-<a name="line484"></a>
-<a name="line485"></a>
-<a name="line486"></a>
-<a name="line487"></a>/**
-<a name="line488"></a> * An event dispatched by XhrManager.
-<a name="line489"></a> *
-<a name="line490"></a> * @param {goog.net.EventType} type Event Type.
-<a name="line491"></a> * @param {goog.net.XhrManager} target Reference to the object that is the
-<a name="line492"></a> *     target of this event.
-<a name="line493"></a> * @param {string} id The id of the request this event is for.
-<a name="line494"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object of the request.
-<a name="line495"></a> * @constructor
-<a name="line496"></a> * @extends {goog.events.Event}
-<a name="line497"></a> */
-<a name="line498"></a>goog.net.XhrManager.Event = function(type, target, id, xhrIo) {
-<a name="line499"></a>  goog.events.Event.call(this, type, target);
-<a name="line500"></a>
-<a name="line501"></a>  /**
-<a name="line502"></a>   * The id of the request this event is for.
-<a name="line503"></a>   * @type {Object}
-<a name="line504"></a>   */
-<a name="line505"></a>  this.id = id;
-<a name="line506"></a>
-<a name="line507"></a>  /**
-<a name="line508"></a>   * The XhrIo object of the request.
-<a name="line509"></a>   * @type {goog.net.XhrIo}
-<a name="line510"></a>   */
-<a name="line511"></a>  this.xhrIo = xhrIo;
-<a name="line512"></a>
-<a name="line513"></a>  /**
-<a name="line514"></a>   * The xhrLite field aliases xhrIo for backwards compatibility.
-<a name="line515"></a>   * @type {goog.net.XhrLite}
-<a name="line516"></a>   */
-<a name="line517"></a>  this.xhrLite = /** @type {goog.net.XhrLite} */ (xhrIo);
-<a name="line518"></a>};
-<a name="line519"></a>goog.inherits(goog.net.XhrManager.Event, goog.events.Event);
-<a name="line520"></a>
-<a name="line521"></a>
-<a name="line522"></a>/**
-<a name="line523"></a> * Disposes of the event.
-<a name="line524"></a> */
-<a name="line525"></a>goog.net.XhrManager.Event.prototype.disposeInternal = function() {
-<a name="line526"></a>  goog.net.XhrManager.Event.superClass_.disposeInternal.call(this);
-<a name="line527"></a>  delete this.id;
-<a name="line528"></a>  this.xhrIo = null;
-<a name="line529"></a>  this.xhrLite = null;
-<a name="line530"></a>};
-<a name="line531"></a>
-<a name="line532"></a>
-<a name="line533"></a>
+<a name="line476"></a>  this.eventHandler_.dispose();
+<a name="line477"></a>  this.eventHandler_ = null;
+<a name="line478"></a>
+<a name="line479"></a>  // Call dispose on each request.
+<a name="line480"></a>  var requests = this.requests_;
+<a name="line481"></a>  goog.structs.forEach(requests, function(value, key) {
+<a name="line482"></a>    value.dispose();
+<a name="line483"></a>  });
+<a name="line484"></a>  requests.clear();
+<a name="line485"></a>  this.requests_ = null;
+<a name="line486"></a>};
+<a name="line487"></a>
+<a name="line488"></a>
+<a name="line489"></a>
+<a name="line490"></a>/**
+<a name="line491"></a> * An event dispatched by XhrManager.
+<a name="line492"></a> *
+<a name="line493"></a> * @param {goog.net.EventType} type Event Type.
+<a name="line494"></a> * @param {goog.net.XhrManager} target Reference to the object that is the
+<a name="line495"></a> *     target of this event.
+<a name="line496"></a> * @param {string} id The id of the request this event is for.
+<a name="line497"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo object of the request.
+<a name="line498"></a> * @constructor
+<a name="line499"></a> * @extends {goog.events.Event}
+<a name="line500"></a> */
+<a name="line501"></a>goog.net.XhrManager.Event = function(type, target, id, xhrIo) {
+<a name="line502"></a>  goog.events.Event.call(this, type, target);
+<a name="line503"></a>
+<a name="line504"></a>  /**
+<a name="line505"></a>   * The id of the request this event is for.
+<a name="line506"></a>   * @type {Object}
+<a name="line507"></a>   */
+<a name="line508"></a>  this.id = id;
+<a name="line509"></a>
+<a name="line510"></a>  /**
+<a name="line511"></a>   * The XhrIo object of the request.
+<a name="line512"></a>   * @type {goog.net.XhrIo}
+<a name="line513"></a>   */
+<a name="line514"></a>  this.xhrIo = xhrIo;
+<a name="line515"></a>
+<a name="line516"></a>  /**
+<a name="line517"></a>   * The xhrLite field aliases xhrIo for backwards compatibility.
+<a name="line518"></a>   * @type {goog.net.XhrLite}
+<a name="line519"></a>   */
+<a name="line520"></a>  this.xhrLite = /** @type {goog.net.XhrLite} */ (xhrIo);
+<a name="line521"></a>};
+<a name="line522"></a>goog.inherits(goog.net.XhrManager.Event, goog.events.Event);
+<a name="line523"></a>
+<a name="line524"></a>
+<a name="line525"></a>/**
+<a name="line526"></a> * Disposes of the event.
+<a name="line527"></a> */
+<a name="line528"></a>goog.net.XhrManager.Event.prototype.disposeInternal = function() {
+<a name="line529"></a>  goog.net.XhrManager.Event.superClass_.disposeInternal.call(this);
+<a name="line530"></a>  delete this.id;
+<a name="line531"></a>  this.xhrIo = null;
+<a name="line532"></a>  this.xhrLite = null;
+<a name="line533"></a>};
 <a name="line534"></a>
-<a name="line535"></a>/**
-<a name="line536"></a> * An encapsulation of everything needed to make a Xhr request.
-<a name="line537"></a> * NOTE: This is used internal to the XhrManager.
-<a name="line538"></a> *
-<a name="line539"></a> * @param {string} url Uri to make the request too.
-<a name="line540"></a> * @param {Function} xhrEventCallback Callback attached to the events of the
-<a name="line541"></a> *     XhrIo object of the request.
-<a name="line542"></a> * @param {string} opt_method Send method, default: GET.
-<a name="line543"></a> * @param {string} opt_content Post data.
-<a name="line544"></a> * @param {Object|goog.structs.Map} opt_headers Map of headers to add to the
-<a name="line545"></a> *     request.
-<a name="line546"></a> * @param {Function} opt_callback Callback function for when request is complete
-<a name="line547"></a> * NOTE: Only 1 callback supported across all events.
-<a name="line548"></a> * @param {number} opt_maxRetries The maximum number of times the request should
-<a name="line549"></a> *     be retried (Default: 1).
-<a name="line550"></a> *
-<a name="line551"></a> * @constructor
-<a name="line552"></a> * @extends {goog.Disposable}
-<a name="line553"></a> */
-<a name="line554"></a>goog.net.XhrManager.Request = function(
-<a name="line555"></a>    url,
-<a name="line556"></a>    xhrEventCallback,
-<a name="line557"></a>    opt_method,
-<a name="line558"></a>    opt_content,
-<a name="line559"></a>    opt_headers,
-<a name="line560"></a>    opt_callback,
-<a name="line561"></a>    opt_maxRetries) {
-<a name="line562"></a>  /**
-<a name="line563"></a>   * Uri to make the request too.
-<a name="line564"></a>   * @type {string}
-<a name="line565"></a>   * @private
-<a name="line566"></a>   */
-<a name="line567"></a>  this.url_ = url;
-<a name="line568"></a>
-<a name="line569"></a>  /**
-<a name="line570"></a>   * Send method.
-<a name="line571"></a>   * @type {string}
-<a name="line572"></a>   * @private
-<a name="line573"></a>   */
-<a name="line574"></a>  this.method_ = opt_method || &#39;GET&#39;;
-<a name="line575"></a>
-<a name="line576"></a>  /**
-<a name="line577"></a>   * Post data.
-<a name="line578"></a>   * @type {string|undefined}
-<a name="line579"></a>   * @private
-<a name="line580"></a>   */
-<a name="line581"></a>  this.content_ = opt_content;
-<a name="line582"></a>
-<a name="line583"></a>  /**
-<a name="line584"></a>   *  Map of headers
-<a name="line585"></a>   * @type {Object|goog.structs.Map|null}
-<a name="line586"></a>   * @private
-<a name="line587"></a>   */
-<a name="line588"></a>  this.headers_ = opt_headers || null;
-<a name="line589"></a>
-<a name="line590"></a>  /**
-<a name="line591"></a>   * The maximum number of times the request should be retried.
-<a name="line592"></a>   * @type {number}
-<a name="line593"></a>   * @private
-<a name="line594"></a>   */
-<a name="line595"></a>  this.maxRetries_ = goog.isDef(opt_maxRetries) ? opt_maxRetries : 1;
-<a name="line596"></a>
-<a name="line597"></a>  /**
-<a name="line598"></a>   * The number of attempts  so far.
-<a name="line599"></a>   * @type {number}
-<a name="line600"></a>   * @private
-<a name="line601"></a>   */
-<a name="line602"></a>  this.attemptCount_ = 0;
-<a name="line603"></a>
-<a name="line604"></a>  /**
-<a name="line605"></a>   * Whether the request has been completed.
-<a name="line606"></a>   * @type {boolean}
-<a name="line607"></a>   * @private
-<a name="line608"></a>   */
-<a name="line609"></a>  this.completed_ = false;
-<a name="line610"></a>
-<a name="line611"></a>  /**
-<a name="line612"></a>   * Whether the request has been aborted.
-<a name="line613"></a>   * @type {boolean}
-<a name="line614"></a>   * @private
-<a name="line615"></a>   */
-<a name="line616"></a>  this.aborted_ = false;
-<a name="line617"></a>
-<a name="line618"></a>  /**
-<a name="line619"></a>   * Callback attached to the events of the XhrIo object.
-<a name="line620"></a>   * @type {Function|undefined}
-<a name="line621"></a>   * @private
-<a name="line622"></a>   */
-<a name="line623"></a>  this.xhrEventCallback_ = xhrEventCallback;
-<a name="line624"></a>
-<a name="line625"></a>  /**
-<a name="line626"></a>   * Callback function called when request is complete.
-<a name="line627"></a>   * @type {Function|undefined}
-<a name="line628"></a>   * @private
-<a name="line629"></a>   */
-<a name="line630"></a>  this.completeCallback_ = opt_callback;
-<a name="line631"></a>
-<a name="line632"></a>  /**
-<a name="line633"></a>   * The XhrIo instance handling this request. Set in handleAvailableXhr.
-<a name="line634"></a>   * @type {goog.net.XhrIo}
-<a name="line635"></a>   */
-<a name="line636"></a>  this.xhrIo = null;
-<a name="line637"></a>
-<a name="line638"></a>};
-<a name="line639"></a>goog.inherits(goog.net.XhrManager.Request, goog.Disposable);
+<a name="line535"></a>
+<a name="line536"></a>
+<a name="line537"></a>
+<a name="line538"></a>/**
+<a name="line539"></a> * An encapsulation of everything needed to make a Xhr request.
+<a name="line540"></a> * NOTE: This is used internal to the XhrManager.
+<a name="line541"></a> *
+<a name="line542"></a> * @param {string} url Uri to make the request too.
+<a name="line543"></a> * @param {Function} xhrEventCallback Callback attached to the events of the
+<a name="line544"></a> *     XhrIo object of the request.
+<a name="line545"></a> * @param {string=} opt_method Send method, default: GET.
+<a name="line546"></a> * @param {string=} opt_content Post data.
+<a name="line547"></a> * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
+<a name="line548"></a> *     request.
+<a name="line549"></a> * @param {Function=} opt_callback Callback function for when request is
+<a name="line550"></a> *     complete. NOTE: Only 1 callback supported across all events.
+<a name="line551"></a> * @param {number=} opt_maxRetries The maximum number of times the request
+<a name="line552"></a> *     should be retried (Default: 1).
+<a name="line553"></a> *
+<a name="line554"></a> * @constructor
+<a name="line555"></a> * @extends {goog.Disposable}
+<a name="line556"></a> */
+<a name="line557"></a>goog.net.XhrManager.Request = function(
+<a name="line558"></a>    url,
+<a name="line559"></a>    xhrEventCallback,
+<a name="line560"></a>    opt_method,
+<a name="line561"></a>    opt_content,
+<a name="line562"></a>    opt_headers,
+<a name="line563"></a>    opt_callback,
+<a name="line564"></a>    opt_maxRetries) {
+<a name="line565"></a>  /**
+<a name="line566"></a>   * Uri to make the request too.
+<a name="line567"></a>   * @type {string}
+<a name="line568"></a>   * @private
+<a name="line569"></a>   */
+<a name="line570"></a>  this.url_ = url;
+<a name="line571"></a>
+<a name="line572"></a>  /**
+<a name="line573"></a>   * Send method.
+<a name="line574"></a>   * @type {string}
+<a name="line575"></a>   * @private
+<a name="line576"></a>   */
+<a name="line577"></a>  this.method_ = opt_method || &#39;GET&#39;;
+<a name="line578"></a>
+<a name="line579"></a>  /**
+<a name="line580"></a>   * Post data.
+<a name="line581"></a>   * @type {string|undefined}
+<a name="line582"></a>   * @private
+<a name="line583"></a>   */
+<a name="line584"></a>  this.content_ = opt_content;
+<a name="line585"></a>
+<a name="line586"></a>  /**
+<a name="line587"></a>   *  Map of headers
+<a name="line588"></a>   * @type {Object|goog.structs.Map|null}
+<a name="line589"></a>   * @private
+<a name="line590"></a>   */
+<a name="line591"></a>  this.headers_ = opt_headers || null;
+<a name="line592"></a>
+<a name="line593"></a>  /**
+<a name="line594"></a>   * The maximum number of times the request should be retried.
+<a name="line595"></a>   * @type {number}
+<a name="line596"></a>   * @private
+<a name="line597"></a>   */
+<a name="line598"></a>  this.maxRetries_ = goog.isDef(opt_maxRetries) ? opt_maxRetries : 1;
+<a name="line599"></a>
+<a name="line600"></a>  /**
+<a name="line601"></a>   * The number of attempts  so far.
+<a name="line602"></a>   * @type {number}
+<a name="line603"></a>   * @private
+<a name="line604"></a>   */
+<a name="line605"></a>  this.attemptCount_ = 0;
+<a name="line606"></a>
+<a name="line607"></a>  /**
+<a name="line608"></a>   * Whether the request has been completed.
+<a name="line609"></a>   * @type {boolean}
+<a name="line610"></a>   * @private
+<a name="line611"></a>   */
+<a name="line612"></a>  this.completed_ = false;
+<a name="line613"></a>
+<a name="line614"></a>  /**
+<a name="line615"></a>   * Whether the request has been aborted.
+<a name="line616"></a>   * @type {boolean}
+<a name="line617"></a>   * @private
+<a name="line618"></a>   */
+<a name="line619"></a>  this.aborted_ = false;
+<a name="line620"></a>
+<a name="line621"></a>  /**
+<a name="line622"></a>   * Callback attached to the events of the XhrIo object.
+<a name="line623"></a>   * @type {Function|undefined}
+<a name="line624"></a>   * @private
+<a name="line625"></a>   */
+<a name="line626"></a>  this.xhrEventCallback_ = xhrEventCallback;
+<a name="line627"></a>
+<a name="line628"></a>  /**
+<a name="line629"></a>   * Callback function called when request is complete.
+<a name="line630"></a>   * @type {Function|undefined}
+<a name="line631"></a>   * @private
+<a name="line632"></a>   */
+<a name="line633"></a>  this.completeCallback_ = opt_callback;
+<a name="line634"></a>
+<a name="line635"></a>  /**
+<a name="line636"></a>   * The XhrIo instance handling this request. Set in handleAvailableXhr.
+<a name="line637"></a>   * @type {goog.net.XhrIo}
+<a name="line638"></a>   */
+<a name="line639"></a>  this.xhrIo = null;
 <a name="line640"></a>
-<a name="line641"></a>
-<a name="line642"></a>/**
-<a name="line643"></a> * Gets the uri.
-<a name="line644"></a> * @return {string} The uri to make the request to.
-<a name="line645"></a> */
-<a name="line646"></a>goog.net.XhrManager.Request.prototype.getUrl = function() {
-<a name="line647"></a>  return this.url_;
-<a name="line648"></a>};
-<a name="line649"></a>
-<a name="line650"></a>
-<a name="line651"></a>/**
-<a name="line652"></a> * Gets the send method.
-<a name="line653"></a> * @return {string} The send method.
-<a name="line654"></a> */
-<a name="line655"></a>goog.net.XhrManager.Request.prototype.getMethod = function() {
-<a name="line656"></a>  return this.method_;
-<a name="line657"></a>};
-<a name="line658"></a>
-<a name="line659"></a>
-<a name="line660"></a>/**
-<a name="line661"></a> * Gets the post data.
-<a name="line662"></a> * @return {string|undefined} The post data.
-<a name="line663"></a> */
-<a name="line664"></a>goog.net.XhrManager.Request.prototype.getContent = function() {
-<a name="line665"></a>  return this.content_;
-<a name="line666"></a>};
-<a name="line667"></a>
-<a name="line668"></a>
-<a name="line669"></a>/**
-<a name="line670"></a> * Gets the map of headers.
-<a name="line671"></a> * @return {Object|goog.structs.Map} The map of headers.
-<a name="line672"></a> */
-<a name="line673"></a>goog.net.XhrManager.Request.prototype.getHeaders = function() {
-<a name="line674"></a>  return this.headers_;
-<a name="line675"></a>};
-<a name="line676"></a>
-<a name="line677"></a>
-<a name="line678"></a>/**
-<a name="line679"></a> * Gets the maximum number of times the request should be retried.
-<a name="line680"></a> * @return {number} The maximum number of times the request should be retried.
-<a name="line681"></a> */
-<a name="line682"></a>goog.net.XhrManager.Request.prototype.getMaxRetries = function() {
-<a name="line683"></a>  return this.maxRetries_;
-<a name="line684"></a>};
-<a name="line685"></a>
-<a name="line686"></a>/**
-<a name="line687"></a> * Gets the number of attempts so far.
-<a name="line688"></a> * @return {number} The number of attempts so far.
-<a name="line689"></a> */
-<a name="line690"></a>goog.net.XhrManager.Request.prototype.getAttemptCount = function() {
-<a name="line691"></a>  return this.attemptCount_;
-<a name="line692"></a>};
-<a name="line693"></a>
-<a name="line694"></a>
-<a name="line695"></a>/**
-<a name="line696"></a> * Increases the number of attempts so far.
-<a name="line697"></a> */
-<a name="line698"></a>goog.net.XhrManager.Request.prototype.increaseAttemptCount = function() {
-<a name="line699"></a>  this.attemptCount_++;
-<a name="line700"></a>};
-<a name="line701"></a>
-<a name="line702"></a>
-<a name="line703"></a>/**
-<a name="line704"></a> * Returns whether the request has reached the maximum number of retries.
-<a name="line705"></a> * @return {boolean} Whether the request has reached the maximum number of
-<a name="line706"></a> *     retries.
-<a name="line707"></a> */
-<a name="line708"></a>goog.net.XhrManager.Request.prototype.hasReachedMaxRetries = function() {
-<a name="line709"></a>  return this.attemptCount_ &gt; this.maxRetries_;
-<a name="line710"></a>};
-<a name="line711"></a>
-<a name="line712"></a>/**
-<a name="line713"></a> * Sets the completed status.
-<a name="line714"></a> * @param {boolean} complete The completed status.
-<a name="line715"></a> */
-<a name="line716"></a>goog.net.XhrManager.Request.prototype.setCompleted = function(complete) {
-<a name="line717"></a>  this.completed_ = complete;
-<a name="line718"></a>};
-<a name="line719"></a>
-<a name="line720"></a>
-<a name="line721"></a>/**
-<a name="line722"></a> * Gets the completed status.
-<a name="line723"></a> * @return {boolean} The completed status.
-<a name="line724"></a> */
-<a name="line725"></a>goog.net.XhrManager.Request.prototype.getCompleted = function() {
-<a name="line726"></a>  return this.completed_;
-<a name="line727"></a>};
-<a name="line728"></a>
-<a name="line729"></a>
-<a name="line730"></a>/**
-<a name="line731"></a> * Sets the aborted status.
-<a name="line732"></a> * @param {boolean} aborted True if the request was aborted, otherwise False.
-<a name="line733"></a> */
-<a name="line734"></a>goog.net.XhrManager.Request.prototype.setAborted = function(aborted) {
-<a name="line735"></a>  this.aborted_ = aborted;
-<a name="line736"></a>};
-<a name="line737"></a>
-<a name="line738"></a>
-<a name="line739"></a>/**
-<a name="line740"></a> * Gets the aborted status.
-<a name="line741"></a> * @return {boolean} True if request was aborted, otherwise False.
-<a name="line742"></a> */
-<a name="line743"></a>goog.net.XhrManager.Request.prototype.getAborted = function() {
-<a name="line744"></a>  return this.aborted_;
-<a name="line745"></a>};
-<a name="line746"></a>
-<a name="line747"></a>
-<a name="line748"></a>/**
-<a name="line749"></a> * Gets the callback attached to the events of the XhrIo object.
-<a name="line750"></a> * @return {Function|undefined} The callback attached to the events of the
-<a name="line751"></a> *     XhrIo object.
-<a name="line752"></a> */
-<a name="line753"></a>goog.net.XhrManager.Request.prototype.getXhrEventCallback = function() {
-<a name="line754"></a>  return this.xhrEventCallback_;
-<a name="line755"></a>};
-<a name="line756"></a>
-<a name="line757"></a>
-<a name="line758"></a>/**
-<a name="line759"></a> * Gets the callback for when the request is complete.
-<a name="line760"></a> * @return {Function|undefined} The callback for when the request is complete.
-<a name="line761"></a> */
-<a name="line762"></a>goog.net.XhrManager.Request.prototype.getCompleteCallback = function() {
-<a name="line763"></a>  return this.completeCallback_;
-<a name="line764"></a>};
-<a name="line765"></a>
-<a name="line766"></a>
-<a name="line767"></a>/**
-<a name="line768"></a> * Disposes of the request.
-<a name="line769"></a> */
-<a name="line770"></a>goog.net.XhrManager.Request.prototype.disposeInternal = function() {
-<a name="line771"></a>  goog.net.XhrManager.Request.superClass_.disposeInternal.call(this);
-<a name="line772"></a>  delete this.xhrEventCallback_;
-<a name="line773"></a>  delete this.completeCallback_;
-<a name="line774"></a>};
+<a name="line641"></a>};
+<a name="line642"></a>goog.inherits(goog.net.XhrManager.Request, goog.Disposable);
+<a name="line643"></a>
+<a name="line644"></a>
+<a name="line645"></a>/**
+<a name="line646"></a> * Gets the uri.
+<a name="line647"></a> * @return {string} The uri to make the request to.
+<a name="line648"></a> */
+<a name="line649"></a>goog.net.XhrManager.Request.prototype.getUrl = function() {
+<a name="line650"></a>  return this.url_;
+<a name="line651"></a>};
+<a name="line652"></a>
+<a name="line653"></a>
+<a name="line654"></a>/**
+<a name="line655"></a> * Gets the send method.
+<a name="line656"></a> * @return {string} The send method.
+<a name="line657"></a> */
+<a name="line658"></a>goog.net.XhrManager.Request.prototype.getMethod = function() {
+<a name="line659"></a>  return this.method_;
+<a name="line660"></a>};
+<a name="line661"></a>
+<a name="line662"></a>
+<a name="line663"></a>/**
+<a name="line664"></a> * Gets the post data.
+<a name="line665"></a> * @return {string|undefined} The post data.
+<a name="line666"></a> */
+<a name="line667"></a>goog.net.XhrManager.Request.prototype.getContent = function() {
+<a name="line668"></a>  return this.content_;
+<a name="line669"></a>};
+<a name="line670"></a>
+<a name="line671"></a>
+<a name="line672"></a>/**
+<a name="line673"></a> * Gets the map of headers.
+<a name="line674"></a> * @return {Object|goog.structs.Map} The map of headers.
+<a name="line675"></a> */
+<a name="line676"></a>goog.net.XhrManager.Request.prototype.getHeaders = function() {
+<a name="line677"></a>  return this.headers_;
+<a name="line678"></a>};
+<a name="line679"></a>
+<a name="line680"></a>
+<a name="line681"></a>/**
+<a name="line682"></a> * Gets the maximum number of times the request should be retried.
+<a name="line683"></a> * @return {number} The maximum number of times the request should be retried.
+<a name="line684"></a> */
+<a name="line685"></a>goog.net.XhrManager.Request.prototype.getMaxRetries = function() {
+<a name="line686"></a>  return this.maxRetries_;
+<a name="line687"></a>};
+<a name="line688"></a>
+<a name="line689"></a>/**
+<a name="line690"></a> * Gets the number of attempts so far.
+<a name="line691"></a> * @return {number} The number of attempts so far.
+<a name="line692"></a> */
+<a name="line693"></a>goog.net.XhrManager.Request.prototype.getAttemptCount = function() {
+<a name="line694"></a>  return this.attemptCount_;
+<a name="line695"></a>};
+<a name="line696"></a>
+<a name="line697"></a>
+<a name="line698"></a>/**
+<a name="line699"></a> * Increases the number of attempts so far.
+<a name="line700"></a> */
+<a name="line701"></a>goog.net.XhrManager.Request.prototype.increaseAttemptCount = function() {
+<a name="line702"></a>  this.attemptCount_++;
+<a name="line703"></a>};
+<a name="line704"></a>
+<a name="line705"></a>
+<a name="line706"></a>/**
+<a name="line707"></a> * Returns whether the request has reached the maximum number of retries.
+<a name="line708"></a> * @return {boolean} Whether the request has reached the maximum number of
+<a name="line709"></a> *     retries.
+<a name="line710"></a> */
+<a name="line711"></a>goog.net.XhrManager.Request.prototype.hasReachedMaxRetries = function() {
+<a name="line712"></a>  return this.attemptCount_ &gt; this.maxRetries_;
+<a name="line713"></a>};
+<a name="line714"></a>
+<a name="line715"></a>/**
+<a name="line716"></a> * Sets the completed status.
+<a name="line717"></a> * @param {boolean} complete The completed status.
+<a name="line718"></a> */
+<a name="line719"></a>goog.net.XhrManager.Request.prototype.setCompleted = function(complete) {
+<a name="line720"></a>  this.completed_ = complete;
+<a name="line721"></a>};
+<a name="line722"></a>
+<a name="line723"></a>
+<a name="line724"></a>/**
+<a name="line725"></a> * Gets the completed status.
+<a name="line726"></a> * @return {boolean} The completed status.
+<a name="line727"></a> */
+<a name="line728"></a>goog.net.XhrManager.Request.prototype.getCompleted = function() {
+<a name="line729"></a>  return this.completed_;
+<a name="line730"></a>};
+<a name="line731"></a>
+<a name="line732"></a>
+<a name="line733"></a>/**
+<a name="line734"></a> * Sets the aborted status.
+<a name="line735"></a> * @param {boolean} aborted True if the request was aborted, otherwise False.
+<a name="line736"></a> */
+<a name="line737"></a>goog.net.XhrManager.Request.prototype.setAborted = function(aborted) {
+<a name="line738"></a>  this.aborted_ = aborted;
+<a name="line739"></a>};
+<a name="line740"></a>
+<a name="line741"></a>
+<a name="line742"></a>/**
+<a name="line743"></a> * Gets the aborted status.
+<a name="line744"></a> * @return {boolean} True if request was aborted, otherwise False.
+<a name="line745"></a> */
+<a name="line746"></a>goog.net.XhrManager.Request.prototype.getAborted = function() {
+<a name="line747"></a>  return this.aborted_;
+<a name="line748"></a>};
+<a name="line749"></a>
+<a name="line750"></a>
+<a name="line751"></a>/**
+<a name="line752"></a> * Gets the callback attached to the events of the XhrIo object.
+<a name="line753"></a> * @return {Function|undefined} The callback attached to the events of the
+<a name="line754"></a> *     XhrIo object.
+<a name="line755"></a> */
+<a name="line756"></a>goog.net.XhrManager.Request.prototype.getXhrEventCallback = function() {
+<a name="line757"></a>  return this.xhrEventCallback_;
+<a name="line758"></a>};
+<a name="line759"></a>
+<a name="line760"></a>
+<a name="line761"></a>/**
+<a name="line762"></a> * Gets the callback for when the request is complete.
+<a name="line763"></a> * @return {Function|undefined} The callback for when the request is complete.
+<a name="line764"></a> */
+<a name="line765"></a>goog.net.XhrManager.Request.prototype.getCompleteCallback = function() {
+<a name="line766"></a>  return this.completeCallback_;
+<a name="line767"></a>};
+<a name="line768"></a>
+<a name="line769"></a>
+<a name="line770"></a>/**
+<a name="line771"></a> * Disposes of the request.
+<a name="line772"></a> */
+<a name="line773"></a>goog.net.XhrManager.Request.prototype.disposeInternal = function() {
+<a name="line774"></a>  goog.net.XhrManager.Request.superClass_.disposeInternal.call(this);
+<a name="line775"></a>  delete this.xhrEventCallback_;
+<a name="line776"></a>  delete this.completeCallback_;
+<a name="line777"></a>};
 </pre>
 
 

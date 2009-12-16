@@ -8,3 +8,9 @@
 
 /** @type {string} */
 var _staticFilePath;
+
+// for prettify.js
+function prettyPrint(opt_whenDone) {}
+
+var console;
+var PR;

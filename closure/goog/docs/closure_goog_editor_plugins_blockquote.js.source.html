@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -80,7 +81,7 @@
 <a name="line37"></a> * subclasses.
 <a name="line38"></a> * @param {boolean} requiresClassnameToSplit Whether to split only blockquotes
 <a name="line39"></a> *     that have the given classname.
-<a name="line40"></a> * @param {string} opt_classname The classname to apply to generated
+<a name="line40"></a> * @param {string=} opt_classname The classname to apply to generated
 <a name="line41"></a> *     blockquotes.  Defaults to &#39;tr_bq&#39;.
 <a name="line42"></a> * @constructor
 <a name="line43"></a> * @extends {goog.editor.Plugin}
@@ -234,7 +235,7 @@
 <a name="line191"></a> * function returns true, the event that caused it to be called should be
 <a name="line192"></a> * canceled.
 <a name="line193"></a> * @param {string} command The command to execute.
-<a name="line194"></a> * @param {Node|Object} var_args Single additional argument representing the
+<a name="line194"></a> * @param {...Node|Object} var_args Single additional argument representing the
 <a name="line195"></a> *     current cursor position.  In IE, it is a single node.  In any other
 <a name="line196"></a> *     browser, it is an object with a {@code node} key and an {@code offset}
 <a name="line197"></a> *     key.

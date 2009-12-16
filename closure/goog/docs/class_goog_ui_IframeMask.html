@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -77,13 +89,13 @@ document, or else the document of the given DOM helper.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td>goog.ui.IframeMask</td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -107,7 +119,7 @@ document, or else the document of the given DOM helper.
    <tr class="even">
      <td>
         <span class="entryName">opt_domHelper</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        : <div class="fullType"><span class="type">goog.dom.DomHelper=</span></div>
         <div class="entryOverview">The DOM helper for the relevant document.</div>
      </td>
    </tr>
@@ -115,7 +127,7 @@ document, or else the document of the given DOM helper.
    <tr class="odd">
      <td>
         <span class="entryName">opt_iframePool</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_structs_Pool.html">goog.structs.Pool</a></span></div>
+        : <div class="fullType"><span class="type">goog.structs.Pool=</span></div>
         <div class="entryOverview">An optional source of iframes. Iframes will be grabbed from the pool when they&#39;re needed and returned to the pool (but still attached to the DOM) when they&#39;re done.</div>
      </td>
    </tr>
@@ -371,7 +383,7 @@ when the given event types are dispatched.
    <tr class="odd">
      <td>
         <span class="entryName">opt_snapElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">When the mask is applied, it will automatically snap to this element. If no element is specified, it will use the default snap element.</div>
      </td>
    </tr>

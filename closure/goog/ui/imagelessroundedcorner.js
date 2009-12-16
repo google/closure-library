@@ -52,9 +52,9 @@ goog.require('goog.userAgent');
  *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
  *     BOTTOM_LEFT, or BOTTOM_RIGHT.
  * @param {string} borderColor The color of the rounded corner.
- * @param {string} opt_backgroundColor The background color of the rounded
+ * @param {string=} opt_backgroundColor The background color of the rounded
  *     corner.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @return {goog.ui.AbstractImagelessRoundedCorner|undefined} Imageless rounded
  *     corner instance.
@@ -180,9 +180,9 @@ goog.ui.ImagelessRoundedCorner.Corner.ALL =
  *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
  *     BOTTOM_LEFT, or BOTTOM_RIGHT.
  * @param {string} borderColor The color of the rounded corner.
- * @param {string} opt_backgroundColor The background color of the
+ * @param {string=} opt_backgroundColor The background color of the
  *     rounded corner.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @constructor
  */
@@ -526,9 +526,9 @@ goog.ui.AbstractImagelessRoundedCorner.prototype.setBackgroundColor =
  *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
  *     BOTTOM_LEFT, or BOTTOM_RIGHT.
  * @param {string} borderColor The color of the rounded corner.
- * @param {string} opt_backgroundColor The background color of the rounded
+ * @param {string=} opt_backgroundColor The background color of the rounded
  *     corner.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @constructor
  * @extends {goog.ui.AbstractImagelessRoundedCorner}
@@ -807,9 +807,9 @@ goog.ui.CanvasRoundedCorner.prototype.drawSafari2WithBackground_ =
  *     value from goog.ui.ImagelessRoundedCorner.Corner: TOP_LEFT, TOP_RIGHT,
  *     BOTTOM_LEFT, or BOTTOM_RIGHT.
  * @param {string} borderColor The color of the rounded corner.
- * @param {string} opt_backgroundColor The background color of the rounded
+ * @param {string=} opt_backgroundColor The background color of the rounded
  *     corner.
- * @param {goog.dom.DomHelper} opt_domHelper The DOM helper object for the
+ * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @constructor
  * @extends {goog.ui.AbstractImagelessRoundedCorner}

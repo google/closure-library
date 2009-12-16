@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -72,7 +73,7 @@
 <a name="line29"></a> * The MenuBase class provides an abstract base class for different
 <a name="line30"></a> * implementations of menu controls.
 <a name="line31"></a> *
-<a name="line32"></a> * @param {Element} opt_element A DOM element for the popup.
+<a name="line32"></a> * @param {Element=} opt_element A DOM element for the popup.
 <a name="line33"></a> * @deprecated Use goog.ui.Menu.
 <a name="line34"></a> * @constructor
 <a name="line35"></a> * @extends {goog.ui.Popup}
@@ -145,7 +146,7 @@
 <a name="line102"></a>/**
 <a name="line103"></a> * Called after the menu is hidden. Derived classes can override to hook this
 <a name="line104"></a> * event but should make sure to call the parent class method.
-<a name="line105"></a> * @param {Object} opt_target Target of the event causing the hide.
+<a name="line105"></a> * @param {Object=} opt_target Target of the event causing the hide.
 <a name="line106"></a> * @private
 <a name="line107"></a> */
 <a name="line108"></a>goog.ui.MenuBase.prototype.onHide_ = function(opt_target) {

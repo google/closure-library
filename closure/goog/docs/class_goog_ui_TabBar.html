@@ -17,6 +17,18 @@
   <script src="static/js/doc.js">
   </script>
 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+
+     var timeout = window.setInterval(function() {
+       if (google.visualization) {
+         window.clearInterval(timeout);
+         grokdoc.gviz.init();
+       }
+     }, 100);
+  </script>
+
   <meta charset="utf8">
 </head>
 
@@ -90,7 +102,7 @@ already selected tab only result in <code>ACTION</code> events.
 
 <h2 class="g-first">Inheritance</h2>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
   <tr><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td><td></td></tr>
   <tr><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td><td><span class="type"><a href="class_goog_Disposable.html">goog.Disposable</a></span></td></tr>
   <tr><td><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></td><td><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></td></tr>
@@ -99,7 +111,7 @@ already selected tab only result in <code>ACTION</code> events.
 </table>
 </div>
 <div class='gviz-org-chart-container goog-inline-block'>
-<table class='gviz-org-chart'>
+<table class='gviz-org-chart' style='display:none'>
 </table>
 </div>
 
@@ -123,7 +135,7 @@ already selected tab only result in <code>ACTION</code> events.
    <tr class="even">
      <td>
         <span class="entryName">opt_location</span>
-        : <div class="fullType"><span class="type">goog.ui.TabBar.Location</span></div>
+        : <div class="fullType"><span class="type">goog.ui.TabBar.Location=</span></div>
         <div class="entryOverview">Tab bar location; defaults to goog.ui.TabBar.Location.TOP.</div>
      </td>
    </tr>
@@ -131,7 +143,7 @@ already selected tab only result in <code>ACTION</code> events.
    <tr class="odd">
      <td>
         <span class="entryName">opt_renderer</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ui_TabBarRenderer.html">goog.ui.TabBarRenderer</a></span></div>
+        : <div class="fullType"><span class="type">goog.ui.TabBarRenderer=</span></div>
         <div class="entryOverview">Renderer used to render or decorate the container; defaults to goog.ui.TabBarRenderer.</div>
      </td>
    </tr>
@@ -139,7 +151,7 @@ already selected tab only result in <code>ACTION</code> events.
    <tr class="even">
      <td>
         <span class="entryName">opt_domHelper</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
+        : <div class="fullType"><span class="type">goog.dom.DomHelper=</span></div>
         <div class="entryOverview">DOM helper, used for document interaction.</div>
      </td>
    </tr>
@@ -882,7 +894,7 @@ by deselecting the tab being removed.  Since #removeChildAt uses
    <tr class="odd">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to call <code>exitDocument</code> on the removed tab, and detach its DOM from the document (defaults to false).</div>
      </td>
    </tr>
@@ -1282,7 +1294,7 @@ goog.ui.Container#addChildAt for detailed semantics.
    <tr class="odd">
      <td>
         <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the new child should be rendered immediately after being added (defaults to false).</div>
      </td>
    </tr>
@@ -1361,7 +1373,7 @@ container&#39;s highlight index.  Since goog.ui.Component#addChild uses
    <tr class="even">
      <td>
         <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether the new child should be rendered immediately after being added (defaults to false).</div>
      </td>
    </tr>
@@ -1375,7 +1387,7 @@ container&#39;s highlight index.  Since goog.ui.Component#addChild uses
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line813">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line833">code &raquo;</a>
   </td>
      </tr>
 
@@ -1506,7 +1518,7 @@ Overrides goog.ui.Component#canDecorate.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1187">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1206">code &raquo;</a>
   </td>
      </tr>
 
@@ -1857,7 +1869,7 @@ goog.ui.Component#getContentElement by delegating to the renderer.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1100">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1120">code &raquo;</a>
   </td>
      </tr>
 
@@ -1903,7 +1915,7 @@ goog.ui.Component#getContentElement by delegating to the renderer.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1065">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1085">code &raquo;</a>
   </td>
      </tr>
 
@@ -2045,7 +2057,7 @@ renderer.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line887">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line907">code &raquo;</a>
   </td>
      </tr>
 
@@ -2943,7 +2955,7 @@ they are unhighlighted.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1109">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1128">code &raquo;</a>
   </td>
      </tr>
 
@@ -3017,7 +3029,7 @@ child controls in response to keyboard events.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1159">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1178">code &raquo;</a>
   </td>
      </tr>
 
@@ -3051,7 +3063,7 @@ child controls in response to keyboard events.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1119">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1138">code &raquo;</a>
   </td>
      </tr>
 
@@ -3085,7 +3097,7 @@ child controls in response to keyboard events.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1131">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1150">code &raquo;</a>
   </td>
      </tr>
 
@@ -3119,7 +3131,7 @@ child controls in response to keyboard events.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1142">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1161">code &raquo;</a>
   </td>
      </tr>
 
@@ -3165,7 +3177,7 @@ child controls in response to keyboard events.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line958">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line978">code &raquo;</a>
   </td>
      </tr>
 
@@ -3213,7 +3225,7 @@ handler to handle keyboard events while focused.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1016">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1036">code &raquo;</a>
   </td>
      </tr>
 
@@ -3260,7 +3272,7 @@ otherwise.  Only effective if the container is not focusable.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1043">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1063">code &raquo;</a>
   </td>
      </tr>
 
@@ -3306,7 +3318,7 @@ otherwise.  Only effective if the container is not focusable.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1210">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1229">code &raquo;</a>
   </td>
      </tr>
 
@@ -3356,7 +3368,7 @@ element, rendered off-screen, or hidden using direct CSS manipulation.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line915">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line935">code &raquo;</a>
   </td>
      </tr>
 
@@ -3474,7 +3486,7 @@ uses #removeChild internally, we only need to override this method.
    <tr class="odd">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">Whether to call <code>exitDocument</code> on the removed control, and detach its DOM from the document (defaults to false).</div>
      </td>
    </tr>
@@ -3492,7 +3504,7 @@ uses #removeChild internally, we only need to override this method.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line851">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line871">code &raquo;</a>
   </td>
      </tr>
 
@@ -3555,7 +3567,7 @@ container from changing state.  Also enables/disables child controls.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line970">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line990">code &raquo;</a>
   </td>
      </tr>
 
@@ -3617,7 +3629,7 @@ keyboard events while focused.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1027">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1047">code &raquo;</a>
   </td>
      </tr>
 
@@ -3678,7 +3690,7 @@ otherwise.  Only effective if the container is not focusable.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1053">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1073">code &raquo;</a>
   </td>
      </tr>
 
@@ -3739,7 +3751,7 @@ otherwise un-highlights the currently highlighted item.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1091">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1111">code &raquo;</a>
   </td>
      </tr>
 
@@ -3800,7 +3812,7 @@ was previously highlighted, it is un-highlighted.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1076">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1096">code &raquo;</a>
   </td>
      </tr>
 
@@ -3863,7 +3875,7 @@ behavior as needed.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1201">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1220">code &raquo;</a>
   </td>
      </tr>
 
@@ -3983,7 +3995,7 @@ behavior as needed.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line1219">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line1238">code &raquo;</a>
   </td>
      </tr>
 
@@ -4043,7 +4055,7 @@ behavior as needed.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line897">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line917">code &raquo;</a>
   </td>
      </tr>
 
@@ -4161,7 +4173,7 @@ appropriate, giving listeners a chance to prevent the visibility change.
    <tr class="odd">
      <td>
         <span class="entryName">opt_force</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, doesn&#39;t check whether the container already has the requested visibility, and doesn&#39;t dispatch any events.</div>
      </td>
    </tr>
@@ -4179,7 +4191,7 @@ appropriate, giving listeners a chance to prevent the visibility change.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_container.js.source.html#line929">code &raquo;</a>
+     <a href="closure_goog_ui_container.js.source.html#line949">code &raquo;</a>
   </td>
      </tr>
 
@@ -4257,7 +4269,7 @@ goog.ui.Component#addChildAt for detailed semantics.
    <tr class="odd">
      <td>
         <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, the child component will be rendered into the parent.</div>
      </td>
    </tr>
@@ -4361,7 +4373,7 @@ different parent, or the given index is out of bounds.
    <tr class="even">
      <td>
         <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, the child component will be rendered into the parent.</div>
      </td>
    </tr>
@@ -4760,7 +4772,7 @@ component and its 0-based index.  The return value is ignored.
    <tr class="odd">
      <td>
         <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Used as the &#39;this&#39; object in f when called.</div>
      </td>
    </tr>
@@ -5792,7 +5804,7 @@ component&#39;s DOM.
    <tr class="odd">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
      </td>
    </tr>
@@ -5868,7 +5880,7 @@ detailed semantics.
    <tr class="odd">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
      </td>
    </tr>
@@ -5932,7 +5944,7 @@ detailed semantics.
    <tr class="even">
      <td>
         <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">If true, calls #exitDocument on the removed child components, and detaches their DOM from the document.</div>
      </td>
    </tr>
@@ -5997,7 +6009,7 @@ Throws an Error if the component is already rendered.
    <tr class="even">
      <td>
         <span class="entryName">opt_parentElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Optional parent element to render the component into.</div>
      </td>
    </tr>
@@ -6125,7 +6137,7 @@ Throws an Error if the component is already rendered.
    <tr class="even">
      <td>
         <span class="entryName">opt_parentElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Optional parent element to render the component into.</div>
      </td>
    </tr>
@@ -6133,7 +6145,7 @@ Throws an Error if the component is already rendered.
    <tr class="odd">
      <td>
         <span class="entryName">opt_beforeElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+        : <div class="fullType"><span class="type">Element=</span></div>
         <div class="entryOverview">Element before which the component is to be rendered.  If left out the node is appended to the parent element.</div>
      </td>
    </tr>
@@ -6655,7 +6667,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -6663,7 +6675,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>
@@ -6900,7 +6912,7 @@ nothing is done.
    <tr class="even">
      <td>
         <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
+        : <div class="fullType"><span class="type">boolean=</span></div>
         <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
      </td>
    </tr>
@@ -6908,7 +6920,7 @@ nothing is done.
    <tr class="odd">
      <td>
         <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
+        : <div class="fullType"><span class="type">Object=</span></div>
         <div class="entryOverview">Object in whose scope to call the listener.</div>
      </td>
    </tr>

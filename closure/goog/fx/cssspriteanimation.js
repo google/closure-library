@@ -40,7 +40,7 @@ goog.require('goog.fx.Animation');
  * @param {number} time The duration in milliseconds for one iteration of the
  *     animation.  For example, if the sprite contains 4 images and the duration
  *     is set to 400ms then each sprite will be displayed for 100ms.
- * @param {function(number) : number} opt_acc Acceleration function,
+ * @param {function(number) : number=} opt_acc Acceleration function,
  *    returns 0-1 for inputs 0-1.  This can be used to make certain frames be
  *    shown for a longer period of time.
  *

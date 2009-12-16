@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -133,7 +134,7 @@
 <a name="line90"></a> * Gets the value of the point at (x, y) or null if the point is empty.
 <a name="line91"></a> * @param {number} x The x-coordinate.
 <a name="line92"></a> * @param {number} y The y-coordinate.
-<a name="line93"></a> * @param {*} opt_default The default value to return if the node doesn&#39;t
+<a name="line93"></a> * @param {*=} opt_default The default value to return if the node doesn&#39;t
 <a name="line94"></a> *     exist.
 <a name="line95"></a> * @return {*} The value of the node, the default value if the node
 <a name="line96"></a> *     doesn&#39;t exist, or undefined if the node doesn&#39;t exist and no default
@@ -258,7 +259,7 @@
 <a name="line215"></a> *     The function to call for every value. This function takes 3 arguments
 <a name="line216"></a> *     (the value, the coordinate, and the tree itself) and the return value is
 <a name="line217"></a> *     irrelevant.
-<a name="line218"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line218"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line219"></a> *     within {@ code fn}.
 <a name="line220"></a> */
 <a name="line221"></a>goog.structs.QuadTree.prototype.forEach = function(fn, opt_obj) {
@@ -505,7 +506,7 @@
 <a name="line462"></a> * @param {number} y Y-coordinate of node.
 <a name="line463"></a> * @param {number} w Width of node.
 <a name="line464"></a> * @param {number} h Height of node.
-<a name="line465"></a> * @param {goog.structs.QuadTree.Node} opt_parent Optional parent node.
+<a name="line465"></a> * @param {goog.structs.QuadTree.Node=} opt_parent Optional parent node.
 <a name="line466"></a> * @constructor
 <a name="line467"></a> */
 <a name="line468"></a>goog.structs.QuadTree.Node = function(x, y, w, h, opt_parent) {
@@ -588,7 +589,7 @@
 <a name="line545"></a> * Creates a new point object.
 <a name="line546"></a> * @param {number} x The x-coordinate of the point.
 <a name="line547"></a> * @param {number} y The y-coordinate of the point.
-<a name="line548"></a> * @param {*} opt_value Optional value associated with the point.
+<a name="line548"></a> * @param {*=} opt_value Optional value associated with the point.
 <a name="line549"></a> * @constructor
 <a name="line550"></a> */
 <a name="line551"></a>goog.structs.QuadTree.Point = function(x, y, opt_value) {

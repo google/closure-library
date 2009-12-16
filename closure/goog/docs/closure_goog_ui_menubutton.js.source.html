@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -90,10 +91,10 @@
 <a name="line47"></a> *
 <a name="line48"></a> * @param {goog.ui.ControlContent} content Text caption or existing DOM
 <a name="line49"></a> *     structure to display as the button&#39;s caption (if any).
-<a name="line50"></a> * @param {goog.ui.Menu} opt_menu Menu to render under the button when clicked.
-<a name="line51"></a> * @param {goog.ui.ButtonRenderer} opt_renderer Renderer used to render or
+<a name="line50"></a> * @param {goog.ui.Menu=} opt_menu Menu to render under the button when clicked.
+<a name="line51"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Renderer used to render or
 <a name="line52"></a> *     decorate the menu button; defaults to {@link goog.ui.MenuButtonRenderer}.
-<a name="line53"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+<a name="line53"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
 <a name="line54"></a> *     document interaction.
 <a name="line55"></a> * @constructor
 <a name="line56"></a> * @extends {goog.ui.Button}
@@ -502,7 +503,7 @@
 <a name="line459"></a> * Shows/hides the menu button based on the value of the argument.  Also hides
 <a name="line460"></a> * the popup menu if the button is being hidden.
 <a name="line461"></a> * @param {boolean} visible Whether to show or hide the button.
-<a name="line462"></a> * @param {boolean} opt_force If true, doesn&#39;t check whether the component
+<a name="line462"></a> * @param {boolean=} opt_force If true, doesn&#39;t check whether the component
 <a name="line463"></a> *     already has the requested visibility, and doesn&#39;t dispatch any events.
 <a name="line464"></a> * @return {boolean} Whether the visibility was changed.
 <a name="line465"></a> * @override

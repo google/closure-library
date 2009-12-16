@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -82,7 +83,7 @@
 <a name="line39"></a>/**
 <a name="line40"></a> * Default implementation of UI component.
 <a name="line41"></a> *
-<a name="line42"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line42"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line43"></a> * @constructor
 <a name="line44"></a> * @extends {goog.events.EventTarget}
 <a name="line45"></a> */
@@ -620,7 +621,7 @@
 <a name="line577"></a> *
 <a name="line578"></a> * Throws an Error if the component is already rendered.
 <a name="line579"></a> *
-<a name="line580"></a> * @param {Element} opt_parentElement Optional parent element to render the
+<a name="line580"></a> * @param {Element=} opt_parentElement Optional parent element to render the
 <a name="line581"></a> *    component into.
 <a name="line582"></a> */
 <a name="line583"></a>goog.ui.Component.prototype.render = function(opt_parentElement) {
@@ -650,9 +651,9 @@
 <a name="line607"></a> *
 <a name="line608"></a> * Throws an Error if the component is already rendered.
 <a name="line609"></a> *
-<a name="line610"></a> * @param {Element} opt_parentElement Optional parent element to render the
+<a name="line610"></a> * @param {Element=} opt_parentElement Optional parent element to render the
 <a name="line611"></a> *    component into.
-<a name="line612"></a> * @param {Element} opt_beforeElement Element before which the component is to
+<a name="line612"></a> * @param {Element=} opt_beforeElement Element before which the component is to
 <a name="line613"></a> *    be rendered.  If left out the node is appended to the parent element.
 <a name="line614"></a> * @private
 <a name="line615"></a> */
@@ -885,7 +886,7 @@
 <a name="line842"></a> *
 <a name="line843"></a> * @see goog.ui.Component#addChildAt
 <a name="line844"></a> * @param {goog.ui.Component} child The new child component.
-<a name="line845"></a> * @param {boolean} opt_render If true, the child component will be rendered
+<a name="line845"></a> * @param {boolean=} opt_render If true, the child component will be rendered
 <a name="line846"></a> *    into the parent.
 <a name="line847"></a> */
 <a name="line848"></a>goog.ui.Component.prototype.addChild = function(child, opt_render) {
@@ -928,7 +929,7 @@
 <a name="line885"></a> * @param {goog.ui.Component} child The new child component.
 <a name="line886"></a> * @param {number} index 0-based index at which the new child component is to be
 <a name="line887"></a> *    added; must be between 0 and the current child count (inclusive).
-<a name="line888"></a> * @param {boolean} opt_render If true, the child component will be rendered
+<a name="line888"></a> * @param {boolean=} opt_render If true, the child component will be rendered
 <a name="line889"></a> *    into the parent.
 <a name="line890"></a> */
 <a name="line891"></a>goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
@@ -1105,7 +1106,7 @@
 <a name="line1062"></a> * component and its 0-based index.  The return value is ignored.
 <a name="line1063"></a> * @param {Function} f The function to call for every child component; should
 <a name="line1064"></a> *    take 2 arguments (the child and its index).
-<a name="line1065"></a> * @param {Object} opt_obj Used as the &#39;this&#39; object in f when called.
+<a name="line1065"></a> * @param {Object=} opt_obj Used as the &#39;this&#39; object in f when called.
 <a name="line1066"></a> */
 <a name="line1067"></a>goog.ui.Component.prototype.forEachChild = function(f, opt_obj) {
 <a name="line1068"></a>  if (this.children_) {
@@ -1140,7 +1141,7 @@
 <a name="line1097"></a> * @see goog.ui.Component#removeChildAt
 <a name="line1098"></a> * @param {string|goog.ui.Component|null} child The ID of the child to remove,
 <a name="line1099"></a> *    or the child component itself.
-<a name="line1100"></a> * @param {boolean} opt_unrender If true, calls {@code exitDocument} on the
+<a name="line1100"></a> * @param {boolean=} opt_unrender If true, calls {@code exitDocument} on the
 <a name="line1101"></a> *    removed child component, and detaches its DOM from the document.
 <a name="line1102"></a> * @return {goog.ui.Component} The removed component, if any.
 <a name="line1103"></a> */
@@ -1186,7 +1187,7 @@
 <a name="line1143"></a> *
 <a name="line1144"></a> * @see goog.ui.Component#removeChild
 <a name="line1145"></a> * @param {number} index 0-based index of the child to remove.
-<a name="line1146"></a> * @param {boolean} opt_unrender If true, calls {@code exitDocument} on the
+<a name="line1146"></a> * @param {boolean=} opt_unrender If true, calls {@code exitDocument} on the
 <a name="line1147"></a> *    removed child component, and detaches its DOM from the document.
 <a name="line1148"></a> * @return {goog.ui.Component} The removed component, if any.
 <a name="line1149"></a> */
@@ -1200,7 +1201,7 @@
 <a name="line1157"></a> * Removes every child component attached to this one.
 <a name="line1158"></a> *
 <a name="line1159"></a> * @see goog.ui.Component#removeChild
-<a name="line1160"></a> * @param {boolean} opt_unrender If true, calls {@link #exitDocument} on the
+<a name="line1160"></a> * @param {boolean=} opt_unrender If true, calls {@link #exitDocument} on the
 <a name="line1161"></a> *    removed child components, and detaches their DOM from the document.
 <a name="line1162"></a> */
 <a name="line1163"></a>goog.ui.Component.prototype.removeChildren = function(opt_unrender) {

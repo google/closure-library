@@ -246,6 +246,29 @@ Copyright 2007 Google Inc. All Rights Reserved.
     assertEquals('Should have correct text.', 'text', range.getText());
   }
 
+  function testEndOfDiv() {
+    dynamic.innerHTML = '<div id="a">abc</div><div id="b">def</div>';
+    var a = goog.dom.$('a');
+    var range = goog.dom.browserrange.createRangeFromNodes(a, 1, a, 1);
+    var expectedStartNode = a;
+    var expectedStartOffset = 1;
+    var expectedEndNode = a;
+    var expectedEndOffset = 1;
+    if (goog.userAgent.IE) {
+      // In case of IE, the startNode and endNode is the #text node in the DIV.
+      // Accordingly the startOffset and endOffset also changes.
+      expectedStartNode = a.lastChild;
+      expectedStartOffset = expectedStartNode.length;
+      expectedEndNode = a.lastChild;
+      expectedEndOffset = expectedEndNode.length;
+    }
+    assertEquals('startNode is wrong', expectedStartNode, range.getStartNode());
+    assertEquals('startOffset is wrong',
+        expectedStartOffset, range.getStartOffset());
+    assertEquals('endNode is wrong', expectedEndNode, range.getEndNode());
+    assertEquals('endOffset is wrong', expectedEndOffset, range.getEndOffset());
+  }
+
   function testRangeEndingWithBR() {
     dynamic.innerHTML = '<span id="a">123<br>456</span>';
     var range = goog.dom.browserrange.createRangeFromNodes(goog.dom.$('a'), 0,

@@ -28,8 +28,8 @@ goog.require('goog.events.EventTarget');
 /**
  * Class for handling timing events.
  *
- * @param {number} opt_interval Number of ms between ticks (Default: 1ms).
- * @param {Object} opt_timerObject  An object that has setTimeout, setInterval,
+ * @param {number=} opt_interval Number of ms between ticks (Default: 1ms).
+ * @param {Object=} opt_timerObject  An object that has setTimeout, setInterval,
  *     clearTimeout and clearInterval (eg Window).
  * @constructor
  * @extends {goog.events.EventTarget}
@@ -243,8 +243,8 @@ goog.Timer.TICK = 'tick';
 /**
  * Calls the given function once, after the optional pause
  * @param {Function} listener Function or object that has a handleEvent method.
- * @param {number} opt_interval Number of ms between ticks (Default: 1ms).
- * @param {Object} opt_handler Object in whose scope to call the listener.
+ * @param {number=} opt_interval Number of ms between ticks (Default: 1ms).
+ * @param {Object=} opt_handler Object in whose scope to call the listener.
  * @return {number} A handle to the timer ID.
  */
 goog.Timer.callOnce = function(listener, opt_interval, opt_handler) {

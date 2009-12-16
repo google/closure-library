@@ -151,19 +151,28 @@ function assert(a, opt_b) {
   _assert(comment, booleanValue, 'Call to assert(boolean) with false');
 }
 
+/**
+ * Asserts that the function throws an error.
+ *
+ * @param {!(string|Function)} a The assertion comment or the function to call.
+ * @param {!Function=} opt_b The function to call (if the first argument of
+ *     {@code assertThrows} was the comment).
+ * @return {*} The error thrown by the function.
+ * @throws {goog.testing.JsUnitException} If the assertion failed.
+ */
 function assertThrows(a, opt_b) {
   _validateArguments(1, arguments);
   var func = nonCommentArg(1, 1, arguments);
-  _assert(commentArg(1, arguments), typeof func == 'function',
+  var comment = commentArg(1, arguments);
+  _assert(comment, typeof func == 'function',
       'Argument passed to assertThrows is not a function');
 
-  var isOk = false;
   try {
     func();
   } catch (e) {
-    isOk = true;
+    return e;
   }
-  _assert(commentArg(1, arguments), isOk,
+  goog.testing.asserts.raiseException_(comment,
       'No exception thrown from function passed to assertThrows');
 }
 
@@ -249,6 +258,12 @@ function assertNotUndefined(a, opt_b) {
   var aVar = nonCommentArg(1, 1, arguments);
   _assert(commentArg(1, arguments), aVar !== JSUNIT_UNDEFINED_VALUE,
       'Expected not to be ' + _displayStringForValue(JSUNIT_UNDEFINED_VALUE));
+}
+
+function assertNotNullNorUndefined(a, opt_b) {
+  _validateArguments(1, arguments);
+  assertNotNull.apply(null, arguments);
+  assertNotUndefined.apply(null, arguments);
 }
 
 function assertNonEmptyString(a, opt_b) {
@@ -401,7 +416,7 @@ function assertArrayEquals(a, b, opt_c) {
  *     expected elements.
  * @param {goog.testing.asserts.ArrayLike} b Expected elements or the actual
  *     elements.
- * @param {goog.testing.asserts.ArrayLike} opt_c Actual elements.
+ * @param {goog.testing.asserts.ArrayLike=} opt_c Actual elements.
  */
 function assertSameElements(a, b, opt_c) {
   _validateArguments(2, arguments);
@@ -470,7 +485,7 @@ function assertHTMLEquals(a, b, opt_c) {
  * @param {string} a Assertion message, or the CSS property name.
  * @param {string} b CSS property name, or the expected value.
  * @param {string} c The expected value, or the actual value.
- * @param {string} opt_d The actual value.
+ * @param {string=} opt_d The actual value.
  */
 function assertCSSValueEquals(a, b, c, opt_d) {
   _validateArguments(3, arguments);
@@ -611,7 +626,7 @@ function standardizeCSSValue(propertyName, value) {
 /**
  * Raises a JsUnit exception with the given comment.
  * @param {string} comment A summary for the exception.
- * @param {string} opt_message A description of the exception.
+ * @param {string=} opt_message A description of the exception.
  * @private
  */
 goog.testing.asserts.raiseException_ = function(comment, opt_message) {
@@ -626,7 +641,7 @@ goog.testing.asserts.raiseException_ = function(comment, opt_message) {
 
 /**
  * @param {string} comment A summary for the exception.
- * @param {?string} opt_message A description of the exception.
+ * @param {?string=} opt_message A description of the exception.
  * @constructor
  */
 goog.testing.JsUnitException = function(comment, opt_message) {
@@ -656,6 +671,7 @@ goog.exportSymbol('assertNull', assertNull);
 goog.exportSymbol('assertNotNull', assertNotNull);
 goog.exportSymbol('assertUndefined', assertUndefined);
 goog.exportSymbol('assertNotUndefined', assertNotUndefined);
+goog.exportSymbol('assertNotNullNorUndefined', assertNotNullNorUndefined);
 goog.exportSymbol('assertNonEmptyString', assertNonEmptyString);
 goog.exportSymbol('assertNaN', assertNaN);
 goog.exportSymbol('assertNotNaN', assertNotNaN);

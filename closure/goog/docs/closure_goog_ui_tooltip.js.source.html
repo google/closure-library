@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -90,10 +91,10 @@
 <a name="line47"></a> * slight delay, when the the cursor is over the element or the element gains
 <a name="line48"></a> * focus.
 <a name="line49"></a> *
-<a name="line50"></a> * @param {Element|string} opt_el Element to display tooltip for, either element
-<a name="line51"></a> *                                reference or string id.
-<a name="line52"></a> * @param {?string} opt_str Text message to display in tooltip.
-<a name="line53"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper.
+<a name="line50"></a> * @param {Element|string=} opt_el Element to display tooltip for, either
+<a name="line51"></a> *     element reference or string id.
+<a name="line52"></a> * @param {?string=} opt_str Text message to display in tooltip.
+<a name="line53"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
 <a name="line54"></a> * @constructor
 <a name="line55"></a> * @extends {goog.ui.Popup}
 <a name="line56"></a> */
@@ -286,7 +287,7 @@
 <a name="line243"></a>/**
 <a name="line244"></a> * Detach from element(s).
 <a name="line245"></a> *
-<a name="line246"></a> * @param {Element|string} opt_el Element to detach from, either element
+<a name="line246"></a> * @param {Element|string=} opt_el Element to detach from, either element
 <a name="line247"></a> *                                reference or string id. If no element is
 <a name="line248"></a> *                                specified all are detached.
 <a name="line249"></a> */
@@ -542,7 +543,7 @@
 <a name="line499"></a> * over the same element.
 <a name="line500"></a> *
 <a name="line501"></a> * @param {Element} el Element to show tooltip for.
-<a name="line502"></a> * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+<a name="line502"></a> * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
 <a name="line503"></a> *     at.
 <a name="line504"></a> */
 <a name="line505"></a>goog.ui.Tooltip.prototype.maybeShow = function(el, opt_pos) {
@@ -565,7 +566,7 @@
 <a name="line522"></a> * Shows tooltip for a specific element.
 <a name="line523"></a> *
 <a name="line524"></a> * @param {Element} el Element to show tooltip for.
-<a name="line525"></a> * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+<a name="line525"></a> * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
 <a name="line526"></a> *     at.
 <a name="line527"></a> */
 <a name="line528"></a>goog.ui.Tooltip.prototype.showForElement = function(el, opt_pos) {
@@ -580,7 +581,7 @@
 <a name="line537"></a> * Sets tooltip position and shows it.
 <a name="line538"></a> *
 <a name="line539"></a> * @param {Element} el Element to show tooltip for.
-<a name="line540"></a> * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+<a name="line540"></a> * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
 <a name="line541"></a> *     at.
 <a name="line542"></a> * @private
 <a name="line543"></a> */
@@ -795,7 +796,7 @@
 <a name="line752"></a> * the maybeShow method.
 <a name="line753"></a> *
 <a name="line754"></a> * @param {Element} el Element to show tooltip for.
-<a name="line755"></a> * @param {goog.positioning.AbstractPosition} opt_pos Position to display popup
+<a name="line755"></a> * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
 <a name="line756"></a> *     at.
 <a name="line757"></a> * @protected
 <a name="line758"></a> */
@@ -871,7 +872,7 @@
 <a name="line828"></a> * Used to position tooltips triggered by the cursor.
 <a name="line829"></a> *
 <a name="line830"></a> * @param {number|!goog.math.Coordinate} arg1 Left position or coordinate.
-<a name="line831"></a> * @param {number} opt_arg2 Top position.
+<a name="line831"></a> * @param {number=} opt_arg2 Top position.
 <a name="line832"></a> * @constructor
 <a name="line833"></a> * @extends {goog.positioning.ViewportPosition}
 <a name="line834"></a> */
@@ -888,7 +889,7 @@
 <a name="line845"></a> * @param {Element} element The DOM element of the popup.
 <a name="line846"></a> * @param {goog.positioning.Corner} popupCorner The corner of the popup element
 <a name="line847"></a> *     that that should be positioned adjacent to the anchorElement.
-<a name="line848"></a> * @param {goog.math.Box} opt_margin A margin specified in pixels.
+<a name="line848"></a> * @param {goog.math.Box=} opt_margin A margin specified in pixels.
 <a name="line849"></a> */
 <a name="line850"></a>goog.ui.Tooltip.CursorTooltipPosition.prototype.reposition = function(
 <a name="line851"></a>    element, popupCorner, opt_margin) {
@@ -937,7 +938,7 @@
 <a name="line894"></a> * @param {Element} element The DOM element of the popup.
 <a name="line895"></a> * @param {goog.positioning.Corner} popupCorner The corner of the popup element
 <a name="line896"></a> *     that should be positioned adjacent to the anchorElement.
-<a name="line897"></a> * @param {goog.math.Box} opt_margin A margin specified in pixels.
+<a name="line897"></a> * @param {goog.math.Box=} opt_margin A margin specified in pixels.
 <a name="line898"></a> */
 <a name="line899"></a>goog.ui.Tooltip.ElementTooltipPosition.prototype.reposition = function(
 <a name="line900"></a>    element, popupCorner, opt_margin) {

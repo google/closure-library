@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -81,7 +82,7 @@
 <a name="line38"></a> * The TABLE should use a THEAD containing TH elements for the table column
 <a name="line39"></a> * headers.
 <a name="line40"></a> *
-<a name="line41"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM helper, used for
+<a name="line41"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
 <a name="line42"></a> *     document interaction.
 <a name="line43"></a> * @constructor
 <a name="line44"></a> * @extends {goog.ui.Component}
@@ -215,7 +216,7 @@
 <a name="line172"></a>/**
 <a name="line173"></a> * Sort the table contents by the values in the given column.
 <a name="line174"></a> * @param {number} column The column to sort by.
-<a name="line175"></a> * @param {boolean} opt_reverse Whether to sort in reverse.
+<a name="line175"></a> * @param {boolean=} opt_reverse Whether to sort in reverse.
 <a name="line176"></a> */
 <a name="line177"></a>goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
 <a name="line178"></a>  // Get some useful DOM nodes.

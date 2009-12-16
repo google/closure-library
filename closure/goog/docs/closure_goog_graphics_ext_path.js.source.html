@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -63,123 +64,122 @@
 <a name="line20"></a>
 <a name="line21"></a>goog.provide(&#39;goog.graphics.ext.Path&#39;);
 <a name="line22"></a>
-<a name="line23"></a>goog.require(&#39;goog.array&#39;);
-<a name="line24"></a>goog.require(&#39;goog.graphics.AffineTransform&#39;);
-<a name="line25"></a>goog.require(&#39;goog.graphics.Path&#39;);
-<a name="line26"></a>goog.require(&#39;goog.math&#39;);
-<a name="line27"></a>goog.require(&#39;goog.math.Rect&#39;);
+<a name="line23"></a>goog.require(&#39;goog.graphics.AffineTransform&#39;);
+<a name="line24"></a>goog.require(&#39;goog.graphics.Path&#39;);
+<a name="line25"></a>goog.require(&#39;goog.math&#39;);
+<a name="line26"></a>goog.require(&#39;goog.math.Rect&#39;);
+<a name="line27"></a>
 <a name="line28"></a>
-<a name="line29"></a>
-<a name="line30"></a>/**
-<a name="line31"></a> * Creates a path object
-<a name="line32"></a> * @constructor
-<a name="line33"></a> * @extends {goog.graphics.Path}
-<a name="line34"></a> */
-<a name="line35"></a>goog.graphics.ext.Path = function() {
-<a name="line36"></a>  goog.graphics.Path.call(this);
-<a name="line37"></a>};
-<a name="line38"></a>goog.inherits(goog.graphics.ext.Path, goog.graphics.Path);
+<a name="line29"></a>/**
+<a name="line30"></a> * Creates a path object
+<a name="line31"></a> * @constructor
+<a name="line32"></a> * @extends {goog.graphics.Path}
+<a name="line33"></a> */
+<a name="line34"></a>goog.graphics.ext.Path = function() {
+<a name="line35"></a>  goog.graphics.Path.call(this);
+<a name="line36"></a>};
+<a name="line37"></a>goog.inherits(goog.graphics.ext.Path, goog.graphics.Path);
+<a name="line38"></a>
 <a name="line39"></a>
-<a name="line40"></a>
-<a name="line41"></a>/**
-<a name="line42"></a> * Optional cached or user specified bounding box.  A user may wish to
-<a name="line43"></a> * precompute a bounding box to save time and include more accurate
-<a name="line44"></a> * computations.
-<a name="line45"></a> * @type {goog.math.Rect?}
-<a name="line46"></a> * @private
-<a name="line47"></a> */
-<a name="line48"></a>goog.graphics.ext.Path.prototype.bounds_ = null;
+<a name="line40"></a>/**
+<a name="line41"></a> * Optional cached or user specified bounding box.  A user may wish to
+<a name="line42"></a> * precompute a bounding box to save time and include more accurate
+<a name="line43"></a> * computations.
+<a name="line44"></a> * @type {goog.math.Rect?}
+<a name="line45"></a> * @private
+<a name="line46"></a> */
+<a name="line47"></a>goog.graphics.ext.Path.prototype.bounds_ = null;
+<a name="line48"></a>
 <a name="line49"></a>
-<a name="line50"></a>
-<a name="line51"></a>/**
-<a name="line52"></a> * Clones the path.
-<a name="line53"></a> * @return {goog.graphics.ext.Path} A clone of this path.
-<a name="line54"></a> */
-<a name="line55"></a>goog.graphics.ext.Path.prototype.clone = function() {
-<a name="line56"></a>  var output = /** @type {goog.graphics.ext.Path} */
-<a name="line57"></a>      (goog.graphics.ext.Path.superClass_.clone.call(this));
-<a name="line58"></a>  output.bounds_ = this.bounds_ &amp;&amp; this.bounds_.clone();
-<a name="line59"></a>  return output;
-<a name="line60"></a>};
+<a name="line50"></a>/**
+<a name="line51"></a> * Clones the path.
+<a name="line52"></a> * @return {goog.graphics.ext.Path} A clone of this path.
+<a name="line53"></a> */
+<a name="line54"></a>goog.graphics.ext.Path.prototype.clone = function() {
+<a name="line55"></a>  var output = /** @type {goog.graphics.ext.Path} */
+<a name="line56"></a>      (goog.graphics.ext.Path.superClass_.clone.call(this));
+<a name="line57"></a>  output.bounds_ = this.bounds_ &amp;&amp; this.bounds_.clone();
+<a name="line58"></a>  return output;
+<a name="line59"></a>};
+<a name="line60"></a>
 <a name="line61"></a>
-<a name="line62"></a>
-<a name="line63"></a>/**
-<a name="line64"></a> * Transforms the path. Only simple paths are transformable. Attempting
-<a name="line65"></a> * to transform a non-simple path will throw an error.
-<a name="line66"></a> * @param {!goog.graphics.AffineTransform} tx The transformation to perform.
-<a name="line67"></a> * @return {goog.graphics.ext.Path} The path itself.
-<a name="line68"></a> */
-<a name="line69"></a>goog.graphics.ext.Path.prototype.transform = function(tx) {
-<a name="line70"></a>  goog.graphics.ext.Path.superClass_.transform.call(this, tx);
-<a name="line71"></a>
-<a name="line72"></a>  // Make sure the precomputed bounds are cleared when the path is transformed.
-<a name="line73"></a>  this.bounds_ = null;
-<a name="line74"></a>
-<a name="line75"></a>  return this;
-<a name="line76"></a>};
+<a name="line62"></a>/**
+<a name="line63"></a> * Transforms the path. Only simple paths are transformable. Attempting
+<a name="line64"></a> * to transform a non-simple path will throw an error.
+<a name="line65"></a> * @param {!goog.graphics.AffineTransform} tx The transformation to perform.
+<a name="line66"></a> * @return {goog.graphics.ext.Path} The path itself.
+<a name="line67"></a> */
+<a name="line68"></a>goog.graphics.ext.Path.prototype.transform = function(tx) {
+<a name="line69"></a>  goog.graphics.ext.Path.superClass_.transform.call(this, tx);
+<a name="line70"></a>
+<a name="line71"></a>  // Make sure the precomputed bounds are cleared when the path is transformed.
+<a name="line72"></a>  this.bounds_ = null;
+<a name="line73"></a>
+<a name="line74"></a>  return this;
+<a name="line75"></a>};
+<a name="line76"></a>
 <a name="line77"></a>
-<a name="line78"></a>
-<a name="line79"></a>/**
-<a name="line80"></a> * Modify the bounding box of the path.  This may cause the path to be
-<a name="line81"></a> * simplified (i.e. arcs converted to curves) as a side-effect.
-<a name="line82"></a> * @param {number} deltaX How far to translate the x coordinates.
-<a name="line83"></a> * @param {number} deltaY How far to translate the y coordinates.
-<a name="line84"></a> * @param {number} xFactor After translation, all x coordinates are multiplied
-<a name="line85"></a> *     by this number.
-<a name="line86"></a> * @param {number} yFactor After translation, all y coordinates are multiplied
-<a name="line87"></a> *     by this number.
-<a name="line88"></a> * @return {goog.graphics.ext.Path} The path itself.
-<a name="line89"></a> */
-<a name="line90"></a>goog.graphics.ext.Path.prototype.modifyBounds = function(deltaX, deltaY,
-<a name="line91"></a>    xFactor, yFactor) {
-<a name="line92"></a>  if (!this.isSimple()) {
-<a name="line93"></a>    var simple = goog.graphics.Path.createSimplifiedPath(this);
-<a name="line94"></a>    this.clear();
-<a name="line95"></a>    this.appendPath(simple);
-<a name="line96"></a>  }
-<a name="line97"></a>
-<a name="line98"></a>  return this.transform(goog.graphics.AffineTransform.getScaleInstance(
-<a name="line99"></a>      xFactor, yFactor).translate(deltaX, deltaY));
-<a name="line100"></a>};
+<a name="line78"></a>/**
+<a name="line79"></a> * Modify the bounding box of the path.  This may cause the path to be
+<a name="line80"></a> * simplified (i.e. arcs converted to curves) as a side-effect.
+<a name="line81"></a> * @param {number} deltaX How far to translate the x coordinates.
+<a name="line82"></a> * @param {number} deltaY How far to translate the y coordinates.
+<a name="line83"></a> * @param {number} xFactor After translation, all x coordinates are multiplied
+<a name="line84"></a> *     by this number.
+<a name="line85"></a> * @param {number} yFactor After translation, all y coordinates are multiplied
+<a name="line86"></a> *     by this number.
+<a name="line87"></a> * @return {goog.graphics.ext.Path} The path itself.
+<a name="line88"></a> */
+<a name="line89"></a>goog.graphics.ext.Path.prototype.modifyBounds = function(deltaX, deltaY,
+<a name="line90"></a>    xFactor, yFactor) {
+<a name="line91"></a>  if (!this.isSimple()) {
+<a name="line92"></a>    var simple = goog.graphics.Path.createSimplifiedPath(this);
+<a name="line93"></a>    this.clear();
+<a name="line94"></a>    this.appendPath(simple);
+<a name="line95"></a>  }
+<a name="line96"></a>
+<a name="line97"></a>  return this.transform(goog.graphics.AffineTransform.getScaleInstance(
+<a name="line98"></a>      xFactor, yFactor).translate(deltaX, deltaY));
+<a name="line99"></a>};
+<a name="line100"></a>
 <a name="line101"></a>
-<a name="line102"></a>
-<a name="line103"></a>/**
-<a name="line104"></a> * Set the precomputed bounds.
-<a name="line105"></a> * @param {goog.math.Rect?} bounds The bounds to use, or set to null to clear
-<a name="line106"></a> *     and recompute on the next call to getBoundingBox.
-<a name="line107"></a> */
-<a name="line108"></a>goog.graphics.ext.Path.prototype.useBoundingBox = function(bounds) {
-<a name="line109"></a>  this.bounds_ = bounds &amp;&amp; bounds.clone();
-<a name="line110"></a>};
+<a name="line102"></a>/**
+<a name="line103"></a> * Set the precomputed bounds.
+<a name="line104"></a> * @param {goog.math.Rect?} bounds The bounds to use, or set to null to clear
+<a name="line105"></a> *     and recompute on the next call to getBoundingBox.
+<a name="line106"></a> */
+<a name="line107"></a>goog.graphics.ext.Path.prototype.useBoundingBox = function(bounds) {
+<a name="line108"></a>  this.bounds_ = bounds &amp;&amp; bounds.clone();
+<a name="line109"></a>};
+<a name="line110"></a>
 <a name="line111"></a>
-<a name="line112"></a>
-<a name="line113"></a>/**
-<a name="line114"></a> * @return {goog.math.Rect?} The bounding box of the path, or null if the
-<a name="line115"></a> *     path is empty.
-<a name="line116"></a> */
-<a name="line117"></a>goog.graphics.ext.Path.prototype.getBoundingBox = function() {
-<a name="line118"></a>  if (!this.bounds_ &amp;&amp; !this.isEmpty()) {
-<a name="line119"></a>    var minY;
-<a name="line120"></a>    var minX = minY = Number.POSITIVE_INFINITY;
-<a name="line121"></a>    var maxY;
-<a name="line122"></a>    var maxX = maxY = Number.NEGATIVE_INFINITY;
-<a name="line123"></a>
-<a name="line124"></a>    var simplePath = this.isSimple() ? this :
-<a name="line125"></a>        goog.graphics.Path.createSimplifiedPath(this);
-<a name="line126"></a>    simplePath.forEachSegment(function(type, points) {
-<a name="line127"></a>      for (var i = 0, len = points.length; i &lt; len; i += 2) {
-<a name="line128"></a>        minX = Math.min(minX, points[i]);
-<a name="line129"></a>        maxX = Math.max(maxX, points[i]);
-<a name="line130"></a>        minY = Math.min(minY, points[i + 1]);
-<a name="line131"></a>        maxY = Math.max(maxY, points[i + 1]);
-<a name="line132"></a>      }
-<a name="line133"></a>    });
-<a name="line134"></a>
-<a name="line135"></a>    this.bounds_ = new goog.math.Rect(minX, minY, maxX - minX, maxY - minY);
-<a name="line136"></a>  }
-<a name="line137"></a>
-<a name="line138"></a>  return this.bounds_;
-<a name="line139"></a>};
+<a name="line112"></a>/**
+<a name="line113"></a> * @return {goog.math.Rect?} The bounding box of the path, or null if the
+<a name="line114"></a> *     path is empty.
+<a name="line115"></a> */
+<a name="line116"></a>goog.graphics.ext.Path.prototype.getBoundingBox = function() {
+<a name="line117"></a>  if (!this.bounds_ &amp;&amp; !this.isEmpty()) {
+<a name="line118"></a>    var minY;
+<a name="line119"></a>    var minX = minY = Number.POSITIVE_INFINITY;
+<a name="line120"></a>    var maxY;
+<a name="line121"></a>    var maxX = maxY = Number.NEGATIVE_INFINITY;
+<a name="line122"></a>
+<a name="line123"></a>    var simplePath = this.isSimple() ? this :
+<a name="line124"></a>        goog.graphics.Path.createSimplifiedPath(this);
+<a name="line125"></a>    simplePath.forEachSegment(function(type, points) {
+<a name="line126"></a>      for (var i = 0, len = points.length; i &lt; len; i += 2) {
+<a name="line127"></a>        minX = Math.min(minX, points[i]);
+<a name="line128"></a>        maxX = Math.max(maxX, points[i]);
+<a name="line129"></a>        minY = Math.min(minY, points[i + 1]);
+<a name="line130"></a>        maxY = Math.max(maxY, points[i + 1]);
+<a name="line131"></a>      }
+<a name="line132"></a>    });
+<a name="line133"></a>
+<a name="line134"></a>    this.bounds_ = new goog.math.Rect(minX, minY, maxX - minX, maxY - minY);
+<a name="line135"></a>  }
+<a name="line136"></a>
+<a name="line137"></a>  return this.bounds_;
+<a name="line138"></a>};
 </pre>
 
 

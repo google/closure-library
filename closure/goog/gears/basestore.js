@@ -285,7 +285,7 @@ goog.gears.BaseStore.prototype.getCreateTriggerStatement_ =
 /**
  * Generates an SQLITE CREATE statement from a definition object.
  * @param {Object} def  a schema statement definition.
- * @param {boolean} opt_ifNotExists true if the table or index should be
+ * @param {boolean=} opt_ifNotExists true if the table or index should be
  *     created only if it does not exist. Otherwise trying to create a table
  *     or index that already exists will result in an exception being thrown.
  * @return {string} the statement.
@@ -372,7 +372,7 @@ goog.gears.BaseStore.prototype.getDropStatement_ = function(def) {
  *       the when clause for the trigger. The trigger object also contains
  *       an 'actions' field which is an array of strings containing
  *       the actions for this trigger.
- * @param {boolean} opt_ifNotExists true if the table or index should be
+ * @param {boolean=} opt_ifNotExists true if the table or index should be
  *     created only if it does not exist. Otherwise trying to create a table
  *     or index that already exists will result in an exception being thrown.
  */

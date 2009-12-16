@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -138,7 +139,7 @@
 <a name="line95"></a> * @param {function(!GearsErrorObject):boolean} fn An error handler function
 <a name="line96"></a> *     that gets passed an error object with message and line number attributes.
 <a name="line97"></a> *     Returns whether the error was handled. If true stops propagation.
-<a name="line98"></a> * @param {Object} opt_handler This object for the function.
+<a name="line98"></a> * @param {Object=} opt_handler This object for the function.
 <a name="line99"></a> */
 <a name="line100"></a>goog.gears.WorkerPool.prototype.setErrorHandler = function(fn, opt_handler) {
 <a name="line101"></a>  this.workerPool_.onerror = goog.bind(fn, opt_handler);

@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -75,7 +76,7 @@
 <a name="line32"></a>/**
 <a name="line33"></a> * Checks if the condition evaluates to true if goog.DEBUG is true.
 <a name="line34"></a> * @param {*} condition The condition to check.
-<a name="line35"></a> * @param {string} opt_message Error message in case of failure.
+<a name="line35"></a> * @param {string=} opt_message Error message in case of failure.
 <a name="line36"></a> * @throws {Error} Assertion failed, the condition evaluates to false.
 <a name="line37"></a> */
 <a name="line38"></a>goog.asserts.assert = function(condition, opt_message) {
@@ -98,7 +99,7 @@
 <a name="line55"></a> *  }
 <a name="line56"></a> * &lt;/pre&gt;
 <a name="line57"></a> *
-<a name="line58"></a> * @param {string} opt_message Error message for failure.
+<a name="line58"></a> * @param {string=} opt_message Error message for failure.
 <a name="line59"></a> * @throws {Error} Failure.
 <a name="line60"></a> */
 <a name="line61"></a>goog.asserts.fail = function(opt_message) {
@@ -111,7 +112,7 @@
 <a name="line68"></a>/**
 <a name="line69"></a> * Checks if the value is a number if goog.DEBUG is true.
 <a name="line70"></a> * @param {*} value The value to check.
-<a name="line71"></a> * @param {string} opt_message Error message in case of failure.
+<a name="line71"></a> * @param {string=} opt_message Error message in case of failure.
 <a name="line72"></a> * @throws {Error} Assertion failed, the condition evaluates to false.
 <a name="line73"></a> */
 <a name="line74"></a>goog.asserts.assertNumber = function(value, opt_message) {
@@ -122,7 +123,7 @@
 <a name="line79"></a>/**
 <a name="line80"></a> * Checks if the value is a string if goog.DEBUG is true.
 <a name="line81"></a> * @param {*} value The value to check.
-<a name="line82"></a> * @param {string} opt_message Error message in case of failure.
+<a name="line82"></a> * @param {string=} opt_message Error message in case of failure.
 <a name="line83"></a> * @throws {Error} Assertion failed, the condition evaluates to false.
 <a name="line84"></a> */
 <a name="line85"></a>goog.asserts.assertString = function(value, opt_message) {
@@ -133,7 +134,7 @@
 <a name="line90"></a>/**
 <a name="line91"></a> * Checks if the value is a function if goog.DEBUG is true.
 <a name="line92"></a> * @param {*} value The value to check.
-<a name="line93"></a> * @param {string} opt_message Error message in case of failure.
+<a name="line93"></a> * @param {string=} opt_message Error message in case of failure.
 <a name="line94"></a> * @throws {Error} Assertion failed, the condition evaluates to false.
 <a name="line95"></a> */
 <a name="line96"></a>goog.asserts.assertFunction = function(value, opt_message) {
@@ -144,7 +145,7 @@
 <a name="line101"></a>/**
 <a name="line102"></a> * Checks if the value is an Object if goog.DEBUG is true.
 <a name="line103"></a> * @param {*} value The value to check.
-<a name="line104"></a> * @param {string} opt_message Error message in case of failure.
+<a name="line104"></a> * @param {string=} opt_message Error message in case of failure.
 <a name="line105"></a> * @throws {Error} Assertion failed, the condition evaluates to false.
 <a name="line106"></a> */
 <a name="line107"></a>goog.asserts.assertObject = function(value, opt_message) {
@@ -157,7 +158,7 @@
 <a name="line114"></a> * goog.DEBUG is true.
 <a name="line115"></a> * @param {*} value The value to check.
 <a name="line116"></a> * @param {!Function} type A user-defined constructor.
-<a name="line117"></a> * @param {string} opt_message Error message in case of failure.
+<a name="line117"></a> * @param {string=} opt_message Error message in case of failure.
 <a name="line118"></a> * @throws {Error} Assertion failed, the condition evaluates to false.
 <a name="line119"></a> */
 <a name="line120"></a>goog.asserts.assertInstanceof = function(value, type, opt_message) {

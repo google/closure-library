@@ -17,6 +17,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -57,7 +58,7 @@
 
  This class implements a set data structure. Adding and removing is O(1). It
  supports both object and primitive values. Be careful because you can add
- both 1 and new Number(1), beacuse these are not the same. You can even add
+ both 1 and new Number(1), because these are not the same. You can even add
  multiple new Number(1) because these are not equal.
   </div>
   
@@ -83,7 +84,16 @@
  <div class="fn-constructor">
         <a href="class_goog_structs_Set.html">
           goog.structs.Set</a><br/>
-        <div class="class-details">Class for Set datastructure.</div>
+        <div class="class-details">A set that can contain both primitives and objects.  Adding and removing
+elements is O(1).  Primitives are treated as identical if they have the same
+type and convert to the same string.  Objects are treated as identical only
+if they are references to the same object.  WARNING: A goog.structs.Set can
+contain both 1 and (new Number(1)), because they are not the same.  WARNING:
+Adding (new Number(1)) twice will yield two distinct elements, because they
+are two different objects.  WARNING: Any object that is added to a
+goog.structs.Set will be modified!  Because goog.getHashCode() is used to
+identify objects, every object in the set will gain a property whose name
+begins with &#39;closure_hashCode_&#39;.</div>
  </div>
       
 <br/>
@@ -127,8 +137,9 @@
 
 
      <div class="entryOverview">
-       This is used to get the key or the hash. We are not using getHashCode
-because it only works with objects.
+       Obtains a unique key for an element of the set.  Primitives will yield the
+same key if they have the same type and convert to the same string.  Object
+references will yield the same key only if they refer to the same object.
      </div>
 
 
@@ -166,7 +177,7 @@ because it only works with objects.
 
 
   <td class="view-code">
-     <a href="closure_goog_structs_set.js.source.html#line53">code &raquo;</a>
+     <a href="closure_goog_structs_set.js.source.html#line62">code &raquo;</a>
   </td>
      </tr>
 

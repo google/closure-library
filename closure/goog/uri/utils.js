@@ -69,15 +69,15 @@ goog.uri.utils.CharCode_ = {
  * No encoding is performed.  Any component may be omitted as either null or
  * undefined.
  *
- * @param {?string} opt_scheme The scheme such as 'http'.
- * @param {?string} opt_userInfo The user name before the '@'.
- * @param {?string} opt_domain The domain such as 'www.google.com', already
+ * @param {?string=} opt_scheme The scheme such as 'http'.
+ * @param {?string=} opt_userInfo The user name before the '@'.
+ * @param {?string=} opt_domain The domain such as 'www.google.com', already
  *     URI-encoded.
- * @param {string|number|null} opt_port The port number.
- * @param {?string} opt_path The path, already URI-encoded.  If it is not
+ * @param {(string|number|null)=} opt_port The port number.
+ * @param {?string=} opt_path The path, already URI-encoded.  If it is not
  *     empty, it must begin with a slash.
- * @param {?string} opt_queryData The URI-encoded query data.
- * @param {?string} opt_fragment The URI-encoded fragment identifier.
+ * @param {?string=} opt_queryData The URI-encoded query data.
+ * @param {?string=} opt_fragment The URI-encoded fragment identifier.
  * @return {string} The fully combined URI.
  */
 goog.uri.utils.buildFromEncodedParts = function(opt_scheme, opt_userInfo,
@@ -567,7 +567,7 @@ goog.uri.utils.appendKeyValuePairs_ = function(key, value, pairs) {
  *     first element appended will be an '&', and may be replaced by the caller.
  * @param {goog.uri.utils.QueryArray|Arguments} keysAndValues An array with
  *     alternating keys and values -- see the typedef.
- * @param {number} opt_startIndex A start offset into the arary, defaults to 0.
+ * @param {number=} opt_startIndex A start offset into the arary, defaults to 0.
  * @return {!Array.<string|undefined>} The buffer argument.
  * @private
  */
@@ -593,7 +593,7 @@ goog.uri.utils.buildQueryDataBuffer_ = function(
  *
  * @param {goog.uri.utils.QueryArray} keysAndValues Alternating keys and
  *     values.  See the typedef.
- * @param {number} opt_startIndex A start offset into the arary, defaults to 0.
+ * @param {number=} opt_startIndex A start offset into the arary, defaults to 0.
  * @return {string} The encoded query string, in the for 'a=1&b=2'.
  */
 goog.uri.utils.buildQueryData = function(keysAndValues, opt_startIndex) {

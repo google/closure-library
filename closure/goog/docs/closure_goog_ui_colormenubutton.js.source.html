@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -81,11 +82,11 @@
 <a name="line38"></a> *
 <a name="line39"></a> * @param {goog.ui.ControlContent} content Text caption or existing DOM
 <a name="line40"></a> *     structure to display as the button&#39;s caption.
-<a name="line41"></a> * @param {goog.ui.Menu} opt_menu Menu to render under the button when clicked;
+<a name="line41"></a> * @param {goog.ui.Menu=} opt_menu Menu to render under the button when clicked;
 <a name="line42"></a> *     should contain at least one {@link goog.ui.ColorPalette} if present.
-<a name="line43"></a> * @param {goog.ui.MenuButtonRenderer} opt_renderer Button renderer;
+<a name="line43"></a> * @param {goog.ui.MenuButtonRenderer=} opt_renderer Button renderer;
 <a name="line44"></a> *     defaults to {@link goog.ui.ColorMenuButtonRenderer}.
-<a name="line45"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+<a name="line45"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
 <a name="line46"></a> *     document interaction.
 <a name="line47"></a> * @constructor
 <a name="line48"></a> * @extends {goog.ui.MenuButton}
@@ -144,9 +145,9 @@
 <a name="line101"></a>/**
 <a name="line102"></a> * Factory method that creates and returns a new {@link goog.ui.Menu} instance
 <a name="line103"></a> * containing default color palettes.
-<a name="line104"></a> * @param {Array.&lt;goog.ui.Control&gt;} opt_extraItems Optional extra menu items to
+<a name="line104"></a> * @param {Array.&lt;goog.ui.Control&gt;=} opt_extraItems Optional extra menu items to
 <a name="line105"></a> *     add before the color palettes.
-<a name="line106"></a> * @param {goog.dom.DomHelper} opt_domHelper Optional DOM hepler, used for
+<a name="line106"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
 <a name="line107"></a> *     document interaction.
 <a name="line108"></a> * @return {goog.ui.Menu} Color menu.
 <a name="line109"></a> */

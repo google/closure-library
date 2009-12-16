@@ -16,6 +16,7 @@
   <script src="static/js/doc.js">
   </script>
 
+
   <meta charset="utf8">
 </head>
 
@@ -88,8 +89,8 @@
 <a name="line45"></a> * @param {goog.math.Matrix|Array.&lt;Array.&lt;number&gt;&gt;|goog.math.Size|number} m
 <a name="line46"></a> *     A matrix to copy, a 2D-array to take as a template, a size object for
 <a name="line47"></a> *     dimensions, or the number of rows.
-<a name="line48"></a> * @param {number} opt_n Number of columns of the matrix (only applicable if the
-<a name="line49"></a> *     first argument is also numeric).
+<a name="line48"></a> * @param {number=} opt_n Number of columns of the matrix (only applicable if
+<a name="line49"></a> *     the first argument is also numeric).
 <a name="line50"></a> * @constructor
 <a name="line51"></a> */
 <a name="line52"></a>goog.math.Matrix = function(m, opt_n) {
@@ -139,7 +140,7 @@
 <a name="line96"></a> * @param {Function} fn The function to call for every element. This function
 <a name="line97"></a> *     takes 4 arguments (value, i, j, and the matrix)
 <a name="line98"></a> *     and the return value is irrelevant.
-<a name="line99"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line99"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line100"></a> *     within {@code fn}.
 <a name="line101"></a> */
 <a name="line102"></a>goog.math.Matrix.forEach = function(matrix, fn, opt_obj) {
@@ -184,7 +185,7 @@
 <a name="line141"></a> *                     takes 4 arguments (value, i, j and the matrix)
 <a name="line142"></a> *                     and should return something. The result will be inserted
 <a name="line143"></a> *                     into a new matrix.
-<a name="line144"></a> * @param {Object} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line144"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
 <a name="line145"></a> *     within {@code fn}.
 <a name="line146"></a> * @return {goog.math.Matrix} A new matrix with the results from {@code fn}.
 <a name="line147"></a> */
@@ -294,7 +295,7 @@
 <a name="line251"></a>/**
 <a name="line252"></a> * Returns whether the given matrix equals this matrix.
 <a name="line253"></a> * @param {goog.math.Matrix} m The matrix to compare to this one.
-<a name="line254"></a> * @param {number} opt_tolerance The tolerance when comparing array entries.
+<a name="line254"></a> * @param {number=} opt_tolerance The tolerance when comparing array entries.
 <a name="line255"></a> * @return {boolean} Whether the given matrix equals this matrix.
 <a name="line256"></a> */
 <a name="line257"></a>goog.math.Matrix.prototype.equals = function(m, opt_tolerance) {
@@ -612,8 +613,8 @@
 <a name="line569"></a> * Returns a submatrix contained within this matrix.
 <a name="line570"></a> * @param {number} i1 The upper row index.
 <a name="line571"></a> * @param {number} j1 The left column index.
-<a name="line572"></a> * @param {number} opt_i2 The lower row index.
-<a name="line573"></a> * @param {number} opt_j2 The right column index.
+<a name="line572"></a> * @param {number=} opt_i2 The lower row index.
+<a name="line573"></a> * @param {number=} opt_j2 The right column index.
 <a name="line574"></a> * @return {goog.math.Matrix} The submatrix contained within the given bounds.
 <a name="line575"></a> * @private
 <a name="line576"></a> */
