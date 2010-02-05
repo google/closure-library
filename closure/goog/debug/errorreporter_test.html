@@ -37,8 +37,11 @@ limitations under the License.
 
   MockXhrIo.lastUrl = null;
 
-  MockXhrIo.send = function(url) {
+  MockXhrIo.send = function(url, opt_callback, opt_method, opt_content,
+      opt_headers, opt_timeInterval) {
     MockXhrIo.lastUrl = url;
+    MockXhrIo.lastContent = opt_content;
+    MockXhrIo.lastHeaders = opt_headers;
   };
 
   var stubs = new goog.testing.PropertyReplacer();
@@ -52,11 +55,15 @@ limitations under the License.
     MockXhrIo.lastUrl = null;
   }
 
-  function throwAnErrorWith(script, line, message) {
+  function throwAnErrorWith(script, line, message, opt_stack) {
     var error = {
         message: message,
         fileName: script,
         lineNumber: line};
+    if (opt_stack) {
+      error['stack'] = opt_stack
+    }
+
     throw error;
   }
 
@@ -69,8 +76,8 @@ limitations under the License.
 
     goog.debug.ErrorReporter.install("/errorreporter");
 
-    var errorFunction = goog.bind(
-      throwAnErrorWith, null, "http://www.my.tst/some/bogus.js", 5, "Hello :)");
+    var errorFunction = goog.partial(
+        throwAnErrorWith, "http://www.my.tst/some/bogus.js", 5, "Hello :)");
 
     try {
       goog.global.setTimeout(errorFunction, 0);
@@ -78,8 +85,10 @@ limitations under the License.
       // Expected. The error is rethrown after sending.
     }
 
-    assertEquals("/errorreporter?script=bogus.js&error=Hello%20%3A)&line=5",
+    assertEquals(
+        "/errorreporter?script=bogus.js&error=Hello%20%3A)&line=5",
         MockXhrIo.lastUrl);
+    assertEquals("trace=Not%20available", MockXhrIo.lastContent);
   }
 
   function test_internetExplorerSendErrorReport() {
@@ -88,10 +97,74 @@ limitations under the License.
     // Remove test runner's onerror handler so the test doesn't fail.
     stubs.set(goog.global, 'onerror', null);
 
-    goog.debug.ErrorReporter.install("/errorreporter");
+    var errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
     goog.global.onerror("Goodbye :(", "http://www.your.tst/more/bogus.js", 22);
-    assertEquals("/errorreporter?script=bogus.js&error=Goodbye%20%3A(&line=22",
+    assertEquals(
+        "/errorreporter?script=bogus.js&error=Goodbye%20%3A(&line=22",
         MockXhrIo.lastUrl);
+    assertEquals("trace=Not%20available", MockXhrIo.lastContent);
+  }
+
+  function test_setLoggingUrl() {
+    stubs.set(goog.userAgent, 'IE', true);
+    // Remove test runner's onerror handler so the test doesn't fail.
+    stubs.set(goog.global, 'onerror', null);
+
+    var errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
+    errorReporter.setLoggingUrl("/newerrorreporter?key=param");
+    goog.global.onerror("Goodbye :(", "http://www.your.tst/more/bogus.js", 22);
+    assertEquals(
+        "/newerrorreporter?key=param&script=bogus.js&error=Goodbye%20%3A(" +
+        "&line=22",
+        MockXhrIo.lastUrl);
+    assertEquals("trace=Not%20available", MockXhrIo.lastContent);
+  }
+
+  function test_setLoggingHeaders() {
+    stubs.set(goog.userAgent, 'IE', true);
+    // Remove test runner's onerror handler so the test doesn't fail.
+    stubs.set(goog.global, 'onerror', null);
+
+    var errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
+    errorReporter.setLoggingHeaders("header!");
+    goog.global.onerror("Goodbye :(", "http://www.your.tst/more/bogus.js", 22);
+    assertEquals("header!", MockXhrIo.lastHeaders);
+  }
+
+  function test_nonInternetExplorerSendErrorReportWithTrace() {
+    stubs.set(goog.userAgent, 'IE', false);
+    stubs.set(goog.global, 'setTimeout',
+        function(fcn, time) {
+          fcn.call();
+        });
+
+    goog.debug.ErrorReporter.install("/errorreporter");
+
+    var trace =
+        "Error(\"Something Wrong\")@:0\n" +
+        "$MF$E$Nx$([object Object])@http://a.b.c:83/a/f.js:901\n" +
+        "([object Object])@http://a.b.c:813/a/f.js:37";
+
+
+    var errorFunction = goog.partial(
+        throwAnErrorWith, "http://www.my.tst/some/bogus.js", 5, "Hello :)",
+        trace);
+
+    try {
+      goog.global.setTimeout(errorFunction, 0);
+    } catch (e) {
+      // Expected. The error is rethrown after sending.
+    }
+
+    assertEquals(
+        "/errorreporter?script=bogus.js&error=Hello%20%3A)&line=5",
+        MockXhrIo.lastUrl);
+    assertEquals("trace=" +
+        "Error(%22Something%20Wrong%22)%40%3A0%0A" +
+        "%24MF%24E%24Nx%24(%5Bobject%20Object%5D)%40"+
+        "http%3A%2F%2Fa.b.c%3A83%2Fa%2Ff.js%3A901%0A"+
+        "(%5Bobject%20Object%5D)%40http%3A%2F%2Fa.b.c%3A813%2Fa%2Ff.js%3A37",
+        MockXhrIo.lastContent);
   }
 </script>
 </body>

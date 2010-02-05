@@ -39,7 +39,6 @@ goog.require('goog.ui.Component.Error');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.ContainerRenderer');
-goog.require('goog.userAgent');
 
 /**
  * Base class for containers.  Extends {@link goog.ui.Component} by adding

@@ -844,7 +844,7 @@ goog.fx.AbstractDragDrop.prototype.addDragTarget_ = function(target, item) {
  *
  * NOTE: For performance reasons the box construction algorithm is kept simple
  * and it is not optimal (see example below). Currently it is O(n) in regard to
- * the number of real drop target boxes, but it's result depends on the order
+ * the number of real drop target boxes, but its result depends on the order
  * of those boxes being processed (the order in which they're added to the
  * targetList_ collection).
  *

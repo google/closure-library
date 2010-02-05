@@ -22,6 +22,7 @@ limitations under the License.
   <script>
     goog.require('goog.dom');
     goog.require('goog.ui.CharCounter');
+    goog.require('goog.ui.CharCounter.Display');
   </script>
   <link rel="stylesheet" href="css/demo.css">
 </head>
@@ -34,13 +35,17 @@ limitations under the License.
   </p>
   <p>
   <input type="text" id="input2">
-  <span id="counter2"></span> character(s) remaining
-  <button onclick="c2.setMaxLength(10);">setMaxLength(10)</button>
-  <button onclick="c2.setMaxLength(20);">setMaxLength(20)</button>
+  You have entered <span id="counter2"></span> character(s) of a maximum 160.
   </p>
   <p>
-  <textarea id="input3"></textarea>
+  <input type="text" id="input3">
   <span id="counter3"></span> character(s) remaining
+  <button onclick="c3.setMaxLength(10);">setMaxLength(10)</button>
+  <button onclick="c3.setMaxLength(20);">setMaxLength(20)</button>
+  </p>
+  <p>
+  <textarea id="input4"></textarea>
+  <span id="counter4"></span> character(s) remaining
   </p>
 
   <script>
@@ -49,10 +54,14 @@ limitations under the License.
                                      document.getElementById('counter1'), 160);
 
     var c2 = new goog.ui.CharCounter(document.getElementById('input2'),
-                                     document.getElementById('counter2'), 10);
+                                     document.getElementById('counter2'), 160,
+                                     goog.ui.CharCounter.Display.INCREMENTAL);
 
     var c3 = new goog.ui.CharCounter(document.getElementById('input3'),
-                                     document.getElementById('counter3'), 255);
+                                     document.getElementById('counter3'), 10);
+
+    var c4 = new goog.ui.CharCounter(document.getElementById('input4'),
+                                     document.getElementById('counter4'), 255);
   </script>
 </body>
 </html>

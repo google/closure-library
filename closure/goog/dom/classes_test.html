@@ -63,7 +63,10 @@ Copyright 2006 Google Inc. All Rights Reserved.
     g
     <!-- Comment -->
   </p>
-
+  <p id="p3" class="someclass
+                    otherclass">
+    h
+  </p>
   <iframe name="frame" src="../math/math_test.html"></iframe>
 
 <script>
@@ -221,6 +224,13 @@ Copyright 2006 Google Inc. All Rights Reserved.
 
     goog.dom.classes.addRemove(el, ['b'], ['g']);
     assertEquals('d f g', el.className);
+  }
+
+  function testHasWithNewlines() {
+    var el = $('p3');
+    assertTrue('Should have someclass', classes.has(el, 'someclass'));
+    assertTrue('Should also have otherclass', classes.has(el, 'otherclass'));
+    assertFalse('Should not have weirdclass', classes.has(el, 'weirdclass'));
   }
 
 </script>

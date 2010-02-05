@@ -24,6 +24,7 @@ limitations under the License.
   goog.require('goog.ui.Dialog');
   goog.require('goog.dom');
   goog.require('goog.events');
+  goog.require('goog.style');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
 </script>
@@ -191,9 +192,8 @@ limitations under the License.
     dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK_CANCEL);
 
     var callCount = 0;
-    var callRecorder = function() {
-      callCount++;
-    };
+    var keypressCount = 0;
+    var keydownCount = 0;
 
     var preventDefaulter = function(e) {
       e.preventDefault();
@@ -202,23 +202,63 @@ limitations under the License.
     goog.events.listen(
         dialog, goog.ui.Dialog.EventType.SELECT, preventDefaulter);
     goog.events.listen(
-        document.body, goog.events.EventType.KEYDOWN, callRecorder);
+        document.body, goog.events.EventType.KEYPRESS, function() {
+          keypressCount++;
+        });
+    goog.events.listen(
+        document.body, goog.events.EventType.KEYDOWN, function() {
+          keydownCount++;
+        });
 
     // Ensure that if the SELECT event is prevented, all key events
     // are still stopped from propagating.
     goog.testing.events.fireKeySequence(
         dialog.getElement(), goog.events.KeyCodes.ENTER);
-    assertEquals(0, callCount);
+    assertEquals('The KEYPRESS should be stopped', 0, keypressCount);
+    assertEquals('The KEYDOWN should not be stopped', 1, keydownCount);
+
+    keypressCount = 0;
+    keydownCount = 0;
     goog.testing.events.fireKeySequence(
         dialog.getElement(), goog.events.KeyCodes.ESC);
-    assertEquals(0, callCount);
+    assertEquals('The KEYDOWN should be stopped', 0, keydownCount);
+    // Note: Some browsers don't yield keypresses on escape, so don't check.
 
     goog.events.unlisten(
         dialog, goog.ui.Dialog.EventType.SELECT, preventDefaulter);
 
+    keypressCount = 0;
+    keydownCount = 0;
     goog.testing.events.fireKeySequence(
         dialog.getElement(), goog.events.KeyCodes.ENTER);
-    assertEquals(0, callCount);
+    assertEquals('The KEYPRESS should be stopped', 0, keypressCount);
+    assertEquals('The KEYDOWN should not be stopped', 1, keydownCount);
+  }
+
+  function testEnterKeyHandledInKeypress() {
+    var inKeyPress = false;
+    goog.events.listen(
+        document.body, goog.events.EventType.KEYPRESS,
+        function() {
+          inKeyPress = true;
+        }, true /* capture */);
+    goog.events.listen(
+        document.body, goog.events.EventType.KEYPRESS,
+        function() {
+          inKeyPress = false;
+        }, false /* !capture */);
+    var selectCalled = false;
+    goog.events.listen(
+        dialog, goog.ui.Dialog.EventType.SELECT, function() {
+          selectCalled = true;
+          assertTrue(
+              'Select must be dispatched during keypress to allow popups',
+              inKeyPress);
+        });
+
+    goog.testing.events.fireKeySequence(
+        dialog.getElement(), goog.events.KeyCodes.ENTER);
+    assertTrue(selectCalled);
   }
 
   function testButtonsWithContentsDispatchSelectEvents() {
@@ -322,6 +362,29 @@ limitations under the License.
     // NOTE: one iframe already exists in the document, so we check there are
     // no extra iframes in the document.
     assertEquals('Iframe mask created for modal dialog', 1, iframes.length);
+  }
+
+  function testSwapModalForOpenDialog() {
+    dialog.dispose();
+    dialog = new goog.ui.Dialog(null, true /* iframe mask */);
+    dialog.setVisible(true);
+    dialog.setModal(false);
+    assertNull('IFrame bg element should be null', dialog.bgIframeEl_);
+    assertNull('bg element should be null', dialog.bgEl_);
+
+    dialog.setModal(true);
+    assertNotNull('IFrame bg element should not be null', dialog.bgIframeEl_);
+    assertNotNull('bg element should not be null', dialog.bgEl_);
+
+    assertEquals('IFrame bg element is a child of body',
+        document.body, dialog.bgIframeEl_.parentNode);
+    assertEquals('bg element is a child of body',
+        document.body, dialog.bgEl_.parentNode);
+
+    assertTrue('IFrame bg element should visible',
+        goog.style.isElementShown(dialog.bgIframeEl_));
+    assertTrue('bg element should be visible',
+        goog.style.isElementShown(dialog.bgEl_));
   }
 
   function testRepositionInRtlContext() {

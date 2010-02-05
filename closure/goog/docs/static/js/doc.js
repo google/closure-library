@@ -188,7 +188,13 @@ goog.inherits = function(childCtor, parentCtor) {
   childCtor.prototype = new tempCtor;
   childCtor.prototype.constructor = childCtor
 };
-goog.base = function() {
+goog.base = function(me, opt_methodName) {
+  var caller = arguments.callee.caller;
+  if(caller.superClass_)return caller.superClass_.constructor.apply(me, Array.prototype.slice.call(arguments, 1));
+  for(var args = Array.prototype.slice.call(arguments, 2), foundCaller = false, ctor = me.constructor;ctor;ctor = ctor.superClass_ && ctor.superClass_.constructor)if(ctor.prototype[opt_methodName] === caller)foundCaller = true;
+  else if(foundCaller)return ctor.prototype[opt_methodName].apply(me, args);
+  if(me[opt_methodName] === caller)return me.constructor.prototype[opt_methodName].apply(me, args);
+  else throw Error("goog.base called from a method of one name to a method of a different name");
 };
 goog.MODIFY_FUNCTION_PROTOTYPES = true;
 if(goog.MODIFY_FUNCTION_PROTOTYPES) {
@@ -256,7 +262,7 @@ goog.array.filter = goog.array.ARRAY_PROTOTYPE_.filter ? function(arr, f, opt_ob
 goog.array.map = goog.array.ARRAY_PROTOTYPE_.map ? function(arr, f, opt_obj) {
   return goog.array.ARRAY_PROTOTYPE_.map.call(arr, f, opt_obj)
 } : function(arr, f, opt_obj) {
-  for(var l = arr.length, res = [], resLength = 0, arr2 = goog.isString(arr) ? arr.split("") : arr, i = 0;i < l;i++)if(i in arr2)res[resLength++] = f.call(opt_obj, arr2[i], i, arr);
+  for(var l = arr.length, res = new Array(l), arr2 = goog.isString(arr) ? arr.split("") : arr, i = 0;i < l;i++)if(i in arr2)res[i] = f.call(opt_obj, arr2[i], i, arr);
   return res
 };
 goog.array.reduce = function(arr, f, val, opt_obj) {
@@ -341,24 +347,26 @@ goog.array.removeIf = function(arr, f, opt_obj) {
     return true
   }return false
 };
+goog.array.concat = function() {
+  return goog.array.ARRAY_PROTOTYPE_.concat.apply(goog.array.ARRAY_PROTOTYPE_, arguments)
+};
 goog.array.clone = function(arr) {
-  if(goog.isArray(arr))return arr.concat();
+  if(goog.isArray(arr))return goog.array.concat(arr);
   else {
     for(var rv = [], i = 0, len = arr.length;i < len;i++)rv[i] = arr[i];
     return rv
   }
 };
 goog.array.toArray = function(object) {
-  if(goog.isArray(object))return object.concat();
+  if(goog.isArray(object))return goog.array.concat(object);
   return goog.array.clone(object)
 };
 goog.array.extend = function(arr1) {
   for(var i = 1;i < arguments.length;i++) {
-    var arr2 = arguments[i];
-    if(goog.isArrayLike(arr2)) {
-      arr2 = goog.array.toArray(arr2);
-      arr1.push.apply(arr1, arr2)
-    }else arr1.push(arr2)
+    var arr2 = arguments[i], isArrayLike;
+    if(goog.isArray(arr2) || (isArrayLike = goog.isArrayLike(arr2)) && arr2.hasOwnProperty("callee"))arr1.push.apply(arr1, arr2);
+    else if(isArrayLike)for(var len1 = arr1.length, len2 = arr2.length, j = 0;j < len2;j++)arr1[len1 + j] = arr2[j];
+    else arr1.push(arr2)
   }
 };
 goog.array.splice = function(arr) {
@@ -456,7 +464,7 @@ goog.dom.classes.set = function(element, className) {
 };
 goog.dom.classes.get = function(element) {
   var className = element.className;
-  return className && typeof className.split == "function" ? className.split(" ") : []
+  return className && typeof className.split == "function" ? className.split(/\s+/) : []
 };
 goog.dom.classes.add = function(element) {
   var classes = goog.dom.classes.get(element), args = goog.array.slice(arguments, 1), b = goog.dom.classes.add_(classes, args);
@@ -919,7 +927,7 @@ goog.string.buildString = function() {
   return Array.prototype.join.call(arguments, "")
 };
 goog.string.getRandomString = function() {
-  return Math.floor(Math.random() * 2147483648).toString(36) + (Math.floor(Math.random() * 2147483648) ^ (new Date).getTime()).toString(36)
+  return Math.floor(Math.random() * 2147483648).toString(36) + (Math.floor(Math.random() * 2147483648) ^ goog.now()).toString(36)
 };
 goog.string.compareVersions = function(version1, version2) {
   for(var order = 0, v1Subs = goog.string.trim(String(version1)).split("."), v2Subs = goog.string.trim(String(version2)).split("."), subCount = Math.max(v1Subs.length, v2Subs.length), subIdx = 0;order == 0 && subIdx < subCount;subIdx++) {
@@ -1050,12 +1058,12 @@ goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
   return goog.dom.getElementsByTagNameAndClass_(document, opt_tag, opt_class, opt_el)
 };
 goog.dom.getElementsByTagNameAndClass_ = function(doc, opt_tag, opt_class, opt_el) {
-  var parent = opt_el || doc, tagName = opt_tag && opt_tag != "*" ? opt_tag.toLowerCase() : "";
+  var parent = opt_el || doc, tagName = opt_tag && opt_tag != "*" ? opt_tag.toUpperCase() : "";
   if(parent.querySelectorAll && (tagName || opt_class) && (!goog.userAgent.WEBKIT || goog.dom.isCss1CompatMode_(doc) || goog.userAgent.isVersion("528")))return parent.querySelectorAll(tagName + (opt_class ? "." + opt_class : ""));
   if(opt_class && parent.getElementsByClassName) {
     var els = parent.getElementsByClassName(opt_class);
     if(tagName) {
-      for(var arrayLike = {}, len = 0, i = 0, el;el = els[i];i++)if(tagName == el.nodeName.toLowerCase())arrayLike[len++] = el;
+      for(var arrayLike = {}, len = 0, i = 0, el;el = els[i];i++)if(tagName == el.nodeName)arrayLike[len++] = el;
       arrayLike.length = len;
       return arrayLike
     }else return els
@@ -1064,7 +1072,7 @@ goog.dom.getElementsByTagNameAndClass_ = function(doc, opt_tag, opt_class, opt_e
     arrayLike = {};
     for(i = len = 0;el = els[i];i++) {
       var className = el.className;
-      if(typeof className.split == "function" && goog.array.contains(className.split(" "), opt_class))arrayLike[len++] = el
+      if(typeof className.split == "function" && goog.array.contains(className.split(/\s+/), opt_class))arrayLike[len++] = el
     }arrayLike.length = len;
     return arrayLike
   }else return els
@@ -1443,8 +1451,9 @@ goog.dom.isNodeList = function(val) {
   return false
 };
 goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
+  var tagName = opt_tag ? opt_tag.toUpperCase() : null;
   return goog.dom.getAncestor(element, function(node) {
-    return(!opt_tag || node.nodeName == opt_tag) && (!opt_class || goog.dom.classes.has(node, opt_class))
+    return(!tagName || node.nodeName == tagName) && (!opt_class || goog.dom.classes.has(node, opt_class))
   }, true)
 };
 goog.dom.getAncestor = function(element, matcher, opt_includeNode, opt_maxSearchSteps) {
@@ -2775,12 +2784,12 @@ a.isSubsetOf = function(col) {
 };
 a.__iterator__ = function() {
   return this.map_.__iterator__(false)
-};goog.debug.catchErrors = function(opt_logger, opt_cancel, opt_target) {
-  var logger = opt_logger || goog.debug.LogManager.getRoot(), target = opt_target || goog.global, oldErrorHandler = target.onerror;
+};goog.debug.catchErrors = function(logFunc, opt_cancel, opt_target) {
+  var target = opt_target || goog.global, oldErrorHandler = target.onerror;
   target.onerror = function(message, url, line) {
     oldErrorHandler && oldErrorHandler(message, url, line);
     var file = String(url).split(/[\/\\]/).pop();
-    goog.isFunction(logger) ? logger({message:message, fileName:file, line:line}) : logger.severe("Error: " + message + " (" + file + " @ Line: " + line + ")");
+    logFunc({message:message, fileName:file, line:line});
     return Boolean(opt_cancel)
   }
 };
@@ -3068,6 +3077,11 @@ goog.debug.LogManager.getLogger = function(name) {
   goog.debug.LogManager.initialize();
   return name in goog.debug.LogManager.loggers_ ? goog.debug.LogManager.loggers_[name] : goog.debug.LogManager.createLogger_(name)
 };
+goog.debug.LogManager.createFunctionForCatchErrors = function(opt_logger) {
+  return function(info) {
+    (opt_logger || goog.debug.LogManager.getRoot()).severe("Error: " + info.message + " (" + info.fileName + " @ Line: " + info.line + ")")
+  }
+};
 goog.debug.LogManager.createLogger_ = function(name) {
   var logger = new goog.debug.Logger(name), parts = name.split("."), leafName = parts[parts.length - 1];
   parts.length -= 1;
@@ -3317,7 +3331,7 @@ a.send = function(url, opt_method, opt_content, opt_headers) {
   this.lastMethod_ = method;
   this.errorDispatched_ = false;
   this.active_ = true;
-  this.xhr_ = new goog.net.XmlHttp;
+  this.xhr_ = this.createXhr();
   this.xhrOptions_ = goog.net.XmlHttp.getOptions();
   goog.net.xhrMonitor.markXhrOpen(this.xhr_);
   this.xhr_.onreadystatechange = goog.bind(this.onReadyStateChange_, this);
@@ -3353,6 +3367,9 @@ a.send = function(url, opt_method, opt_content, opt_headers) {
     this.logger_.fine(this.formatMsg_("Send error: " + err$$5.message));
     this.error_(goog.net.ErrorCode.EXCEPTION, err$$5)
   }
+};
+a.createXhr = function() {
+  return new goog.net.XmlHttp
 };
 a.dispatchEvent = function(e) {
   if(this.xhr_) {
@@ -3521,6 +3538,9 @@ goog.ui.AutoComplete.prototype.allowFreeSelect_ = false;
 goog.ui.AutoComplete.prototype.triggerSuggestionsOnUpdate_ = false;
 goog.ui.AutoComplete.EventType = {HILITE:"hilite", SELECT:"select", DISMISS:"dismiss", CANCEL_DISMISS:"canceldismiss", UPDATE:"update"};
 a = goog.ui.AutoComplete.prototype;
+a.getRenderer = function() {
+  return this.renderer_
+};
 a.handleEvent = function(e) {
   if(e.target == this.renderer_)switch(e.type) {
     case goog.ui.AutoComplete.EventType.HILITE:
@@ -3546,9 +3566,6 @@ a.setToken = function(token, opt_fullString) {
     this.matcher_.requestMatchingRows(this.token_, this.maxMatches_, goog.bind(this.matchListener_, this), opt_fullString);
     this.cancelDelayedDismiss()
   }
-};
-a.getTarget = function() {
-  return this.target_
 };
 a.setTarget = function(target) {
   this.target_ = target
@@ -3999,6 +4016,9 @@ a.handleEvent = function(e) {
     event.dispose()
   }
 };
+a.getElement = function() {
+  return this.element_
+};
 a.attach = function(element) {
   this.keyUpKey_ && this.detach();
   this.element_ = element;
@@ -4054,6 +4074,19 @@ a.updateDuringTyping_ = true;
 a.attachAutoComplete = function(ac) {
   this.ac_ = ac
 };
+a.getValue = function() {
+  return this.activeElement_.value
+};
+a.setValue = function(value) {
+  this.activeElement_.value = value
+};
+a.getCursorPosition = function() {
+  return goog.dom.selection.getStart(this.activeElement_)
+};
+a.setCursorPosition = function(pos) {
+  goog.dom.selection.setStart(this.activeElement_, pos);
+  goog.dom.selection.setEnd(this.activeElement_, pos)
+};
 a.attachInput = function(el) {
   goog.dom.a11y.setState(el, "haspopup", true);
   this.eh_.listen(el, goog.events.EventType.FOCUS, this.onFocus_);
@@ -4064,22 +4097,20 @@ a.attachInputs = function() {
   for(var i = 0;i < arguments.length;i++)this.attachInput(arguments[i])
 };
 a.selectRow = function(row, opt_multi) {
-  var target = this.ac_.getTarget();
   if(goog.isDef(opt_multi) ? opt_multi : this.multi_) {
-    var caret = goog.dom.selection.getStart(target), index = this.getTokenIndex_(target.value, caret), entries = this.splitInput_(target.value), replaceValue = row.toString();
+    var index = this.getTokenIndex_(this.getValue(), this.getCursorPosition()), entries = this.splitInput_(this.getValue()), replaceValue = row.toString();
     this.separatorCheck_.test(replaceValue) || (replaceValue = goog.string.trimRight(replaceValue) + this.defaultSeparator_);
     if(this.whitespaceWrapEntries_) {
       if(index != 0 && !goog.string.isEmpty(entries[index - 1]))replaceValue = " " + replaceValue;
       if(index < entries.length && !goog.string.isEmpty(entries[index + 1]))replaceValue += " "
     }if(replaceValue != entries[index]) {
       entries[index] = replaceValue;
-      target.value = entries.join("");
+      this.setValue(entries.join(""));
       for(var pos = 0, i = 0;i <= index;i++)pos += entries[i].length;
-      target.focus();
-      goog.dom.selection.setStart(target, pos);
-      goog.dom.selection.setEnd(target, pos)
+      this.activeElement_.focus();
+      this.setCursorPosition(pos)
     }
-  }else target.value = row.toString();
+  }else this.setValue(row.toString());
   this.rowJustSelected_ = true;
   return false
 };
@@ -4180,7 +4211,7 @@ a.onFocus_ = function(e) {
     if(this.timer_) {
       this.timer_.start();
       this.eh_.listen(this.timer_, goog.Timer.TICK, this.onTick_)
-    }this.lastValue_ = this.activeElement_.value;
+    }this.lastValue_ = this.getValue();
     this.addKeyEvents_()
   }
 };
@@ -4228,15 +4259,18 @@ a.onIeKeyPress_ = function(e) {
   this.handleSeparator_(e)
 };
 a.update = function(opt_force) {
-  if(opt_force || this.activeElement_ && this.activeElement_.value != this.lastValue_) {
+  if(opt_force || this.activeElement_ && this.getValue() != this.lastValue_) {
     if(opt_force || !this.rowJustSelected_) {
-      var token = this.parseToken_();
+      var token = this.parseToken();
       if(this.ac_) {
         this.ac_.setTarget(this.activeElement_);
-        this.ac_.setToken(token, this.activeElement_.value)
+        this.ac_.setToken(token, this.getValue())
       }
-    }this.lastValue_ = this.activeElement_.value
+    }this.lastValue_ = this.getValue()
   }this.rowJustSelected_ = false
+};
+a.parseToken = function() {
+  return this.parseToken_()
 };
 a.moveUp_ = function() {
   return this.upsideDown_ ? this.ac_.hiliteNext() : this.ac_.hilitePrev()
@@ -4245,7 +4279,7 @@ a.moveDown_ = function() {
   return this.upsideDown_ ? this.ac_.hilitePrev() : this.ac_.hiliteNext()
 };
 a.parseToken_ = function() {
-  var caret = goog.dom.selection.getStart(this.activeElement_), text = this.activeElement_.value;
+  var caret = this.getCursorPosition(), text = this.getValue();
   return this.trim_(this.splitInput_(text)[this.getTokenIndex_(text, caret)])
 };
 a.trim_ = function(text) {
@@ -4314,6 +4348,9 @@ goog.math.Box.distance = function(box, coord) {
     return coord.y < box.top ? box.top - coord.y : coord.y - box.bottom
   }if(coord.y >= box.top && coord.y <= box.bottom)return coord.x < box.left ? box.left - coord.x : coord.x - box.right;
   return goog.math.Coordinate.distance(coord, new goog.math.Coordinate(coord.x < box.left ? box.left : box.right, coord.y < box.top ? box.top : box.bottom))
+};
+goog.math.Box.intersects = function(a, b) {
+  return a.left <= b.right && b.left <= a.right && a.top <= b.bottom && b.top <= a.bottom
 };goog.math.Rect = function(x, y, w, h) {
   this.left = x;
   this.top = y;
@@ -4355,8 +4392,7 @@ goog.math.Rect.intersection = function(a, b) {
   }return null
 };
 goog.math.Rect.intersects = function(a, b) {
-  if(Math.max(a.left, b.left) <= Math.min(a.left + a.width, b.left + b.width))if(Math.max(a.top, b.top) <= Math.min(a.top + a.height, b.top + b.height))return true;
-  return false
+  return a.left <= b.left + b.width && b.left <= a.left + a.width && a.top <= b.top + b.height && b.top <= a.top + a.height
 };
 goog.math.Rect.prototype.intersects = function(rect) {
   return goog.math.Rect.intersects(this, rect)
@@ -4478,7 +4514,7 @@ goog.style.getOffsetParent = function(element) {
   }return null
 };
 goog.style.getVisibleRectForElement = function(element) {
-  for(var visibleRect = new goog.math.Box(0, Infinity, Infinity, 0), dom = goog.dom.getDomHelper(element), scrollEl = dom.getDocumentScrollElement(), inContainer, el = element;el = goog.style.getOffsetParent(el);)if((!goog.userAgent.IE || el.clientWidth != 0) && (el.scrollWidth != el.clientWidth || el.scrollHeight != el.clientHeight) && goog.style.getStyle_(el, "overflow") != "visible") {
+  for(var visibleRect = new goog.math.Box(0, Infinity, Infinity, 0), dom = goog.dom.getDomHelper(element), body = dom.getDocument().body, scrollEl = dom.getDocumentScrollElement(), inContainer, el = element;el = goog.style.getOffsetParent(el);)if((!goog.userAgent.IE || el.clientWidth != 0) && (!goog.userAgent.WEBKIT || el.clientHeight != 0 || el != body) && (el.scrollWidth != el.clientWidth || el.scrollHeight != el.clientHeight) && goog.style.getStyle_(el, "overflow") != "visible") {
     var pos = goog.style.getPageOffset(el), client = goog.style.getClientLeftTop(el);
     pos.x += client.x;
     pos.y += client.y;
@@ -4896,6 +4932,14 @@ goog.style.setFloat = function(el, value) {
 };
 goog.style.getFloat = function(el) {
   return el.style[goog.userAgent.IE ? "styleFloat" : "cssFloat"] || ""
+};
+goog.style.getScrollbarWidth = function() {
+  var mockElement = goog.dom.createElement("div");
+  mockElement.style.cssText = "visibility:hidden;overflow:scroll;position:absolute;top:0;width:100px;height:100px";
+  goog.dom.appendChild(goog.dom.getDocument().body, mockElement);
+  var width = mockElement.offsetWidth - mockElement.clientWidth;
+  goog.dom.removeNode(mockElement);
+  return width
 };goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer, opt_rightAlign, opt_useStandardHighlighting) {
   this.parent_ = opt_parentNode || goog.dom.getDocument().body;
   this.dom_ = goog.dom.getDomHelper(this.parent_);
@@ -4920,6 +4964,9 @@ goog.inherits(goog.ui.AutoComplete.Renderer, goog.events.EventTarget);
 goog.ui.AutoComplete.Renderer.nextId_ = 0;
 goog.ui.AutoComplete.Renderer.DELAY_BEFORE_MOUSEOVER = 300;
 a = goog.ui.AutoComplete.Renderer.prototype;
+a.getElement = function() {
+  return this.element_
+};
 a.renderRows = function(rows, token, opt_target) {
   this.token_ = token;
   this.rows_ = rows;
@@ -5252,21 +5299,29 @@ goog.fx.AnimationEvent = function(type, anim) {
   this.state = anim.state_;
   this.anim = anim
 };
-goog.inherits(goog.fx.AnimationEvent, goog.events.Event);goog.ui.Zippy = function(header, opt_content, opt_expanded) {
+goog.inherits(goog.fx.AnimationEvent, goog.events.Event);goog.ui.Zippy = function(header, opt_content, opt_expanded, opt_expandedHeader) {
+  function addHeaderEvents(el) {
+    if(el) {
+      el.tabIndex = 0;
+      goog.events.listen(el, goog.events.EventType.CLICK, self.onHeaderClick_, false, self);
+      goog.events.listen(el, goog.events.EventType.KEYDOWN, self.onHeaderKeyDown_, false, self)
+    }
+  }
   this.elHeader_ = goog.dom.getElement(header) || null;
-  this.elContent_ = opt_content ? goog.dom.getElement(opt_content) : null;
+  this.elExpandedHeader_ = goog.dom.getElement(opt_expandedHeader || null);
+  this.elContent_ = (this.lazyCreateFunc_ = goog.isFunction(opt_content) ? opt_content : null) || !opt_content ? null : goog.dom.getElement(opt_content);
   this.expanded_ = opt_expanded == true;
-  if(this.elHeader_) {
-    this.elHeader_.tabIndex = 0;
-    goog.events.listen(this.elHeader_, goog.events.EventType.CLICK, this.onHeaderClick_, false, this);
-    goog.events.listen(this.elHeader_, goog.events.EventType.KEYDOWN, this.onHeaderKeyDown_, false, this)
-  }this.setExpanded(this.expanded_)
+  var self = this;
+  addHeaderEvents(this.elHeader_);
+  addHeaderEvents(this.elExpandedHeader_);
+  this.setExpanded(this.expanded_)
 };
 goog.inherits(goog.ui.Zippy, goog.events.EventTarget);
 goog.ui.Zippy.Events = {TOGGLE:"toggle"};
 a = goog.ui.Zippy.prototype;
 a.disposeInternal = function() {
   this.elHeader_ && goog.events.removeAll(this.elHeader_);
+  this.elExpandedHeader_ && goog.events.removeAll(this.elExpandedHeader_);
   goog.ui.Zippy.superClass_.disposeInternal.call(this)
 };
 a.collapse = function() {
@@ -5276,8 +5331,12 @@ a.toggle = function() {
   this.setExpanded(!this.expanded_)
 };
 a.setExpanded = function(expanded) {
-  if(this.elContent_)this.elContent_.style.display = expanded ? "" : "none";
-  this.updateHeaderClassName_(expanded);
+  if(this.elContent_)goog.style.showElement(this.elContent_, expanded);
+  else if(expanded && this.lazyCreateFunc_)this.elContent_ = this.lazyCreateFunc_();
+  if(this.elExpandedHeader_) {
+    goog.style.showElement(this.elHeader_, !expanded);
+    goog.style.showElement(this.elExpandedHeader_, expanded)
+  }else this.updateHeaderClassName_(expanded);
   this.expanded_ = expanded;
   this.dispatchEvent(new goog.ui.ZippyEvent(goog.ui.Zippy.Events.TOGGLE, this, this.expanded_))
 };
@@ -5550,102 +5609,7 @@ a.removeChildAt = function(index, opt_unrender) {
 };
 a.removeChildren = function(opt_unrender) {
   for(;this.hasChildren();)this.removeChildAt(0, opt_unrender)
-};goog.ui.Checkbox = function(opt_checked) {
-  goog.ui.Component.call(this);
-  if(goog.isDef(opt_checked))this.checked_ = opt_checked
-};
-goog.inherits(goog.ui.Checkbox, goog.ui.Component);
-goog.ui.Checkbox.State = {CHECKED:true, UNCHECKED:false, UNDETERMINED:null};
-goog.ui.Checkbox.CSS_CLASS = "goog-checkbox";
-a = goog.ui.Checkbox.prototype;
-a.checked_ = goog.ui.Checkbox.State.UNCHECKED;
-a.enabled_ = true;
-a.label_ = null;
-a.isChecked = function() {
-  return this.checked_ == goog.ui.Checkbox.State.CHECKED
-};
-a.isUnchecked = function() {
-  return this.checked_ == goog.ui.Checkbox.State.UNCHECKED
-};
-a.isUndetermined = function() {
-  return this.checked_ == goog.ui.Checkbox.State.UNDETERMINED
-};
-a.setChecked = function(checked) {
-  if(checked != this.checked_) {
-    this.checked_ = checked;
-    this.updateView()
-  }
-};
-a.isEnabled = function() {
-  return this.enabled_
-};
-a.setEnabled = function(enabled) {
-  if(enabled != this.enabled_) {
-    this.enabled_ = enabled;
-    this.updateView()
-  }
-};
-a.toggle = function() {
-  this.checked_ = this.checked_ ? goog.ui.Checkbox.State.UNCHECKED : goog.ui.Checkbox.State.CHECKED;
-  this.updateView()
-};
-a.createDom = function() {
-  this.decorateInternal(goog.dom.$dom("span"))
-};
-a.decorateInternal = function(element) {
-  goog.ui.Checkbox.superClass_.decorateInternal.call(this, element);
-  goog.dom.classes.add(element, goog.ui.Checkbox.CSS_CLASS);
-  this.updateView()
-};
-a.enterDocument = function() {
-  goog.ui.Checkbox.superClass_.enterDocument.call(this);
-  this.getHandler().listen(this.label_ || this.getElement(), goog.events.EventType.CLICK, this.handleClick_)
-};
-a.updateView = function() {
-  var el = this.getElement();
-  if(el) {
-    goog.dom.classes.enable(el, goog.ui.Checkbox.CSS_CLASS + "-unchecked", this.isUnchecked());
-    goog.dom.classes.enable(el, goog.ui.Checkbox.CSS_CLASS + "-checked", this.isChecked());
-    goog.dom.classes.enable(el, goog.ui.Checkbox.CSS_CLASS + "-undetermined", this.isUndetermined());
-    goog.dom.classes.enable(el, goog.ui.Checkbox.CSS_CLASS + "-disabled", !this.enabled_)
-  }
-};
-a.handleClick_ = function(e) {
-  e.stopPropagation();
-  var eventType = this.checked_ ? goog.ui.Component.EventType.UNCHECK : goog.ui.Component.EventType.CHECK;
-  if(this.enabled_ && this.dispatchEvent(eventType)) {
-    this.toggle();
-    this.dispatchEvent(goog.ui.Component.EventType.CHANGE)
-  }
-};goog.ui.registry = {};
-goog.ui.registry.getDefaultRenderer = function(componentCtor) {
-  for(var key, rendererCtor;componentCtor;) {
-    key = goog.getHashCode(componentCtor);
-    if(rendererCtor = goog.ui.registry.defaultRenderers_[key])break;
-    componentCtor = componentCtor.superClass_ ? componentCtor.superClass_.constructor : null
-  }if(rendererCtor)return goog.isFunction(rendererCtor.getInstance) ? rendererCtor.getInstance() : new rendererCtor;
-  return null
-};
-goog.ui.registry.setDefaultRenderer = function(componentCtor, rendererCtor) {
-  if(!goog.isFunction(componentCtor))throw Error("Invalid component class " + componentCtor);if(!goog.isFunction(rendererCtor))throw Error("Invalid renderer class " + rendererCtor);var key = goog.getHashCode(componentCtor);
-  goog.ui.registry.defaultRenderers_[key] = rendererCtor
-};
-goog.ui.registry.getDecoratorByClassName = function(className) {
-  return className in goog.ui.registry.decoratorFunctions_ ? goog.ui.registry.decoratorFunctions_[className]() : null
-};
-goog.ui.registry.setDecoratorByClassName = function(className, decoratorFn) {
-  if(!className)throw Error("Invalid class name " + className);if(!goog.isFunction(decoratorFn))throw Error("Invalid decorator function " + decoratorFn);goog.ui.registry.decoratorFunctions_[className] = decoratorFn
-};
-goog.ui.registry.getDecorator = function(element) {
-  for(var decorator, classNames = goog.dom.classes.get(element), i = 0, len = classNames.length;i < len;i++)if(decorator = goog.ui.registry.getDecoratorByClassName(classNames[i]))return decorator;
-  return null
-};
-goog.ui.registry.reset = function() {
-  goog.ui.registry.defaultRenderers_ = {};
-  goog.ui.registry.decoratorFunctions_ = {}
-};
-goog.ui.registry.defaultRenderers_ = {};
-goog.ui.registry.decoratorFunctions_ = {};goog.ui.ControlContent = goog.typedef;goog.ui.ControlRenderer = function() {
+};goog.ui.ControlContent = goog.typedef;goog.ui.ControlRenderer = function() {
 };
 goog.addSingletonGetter(goog.ui.ControlRenderer);
 goog.ui.ControlRenderer.getCustomRenderer = function(ctor, cssClassName) {
@@ -5774,7 +5738,7 @@ a.getClassNames = function(control) {
   var cssClass = this.getCssClass(), classNames = [cssClass], structuralCssClass = this.getStructuralCssClass();
   structuralCssClass != cssClass && classNames.push(structuralCssClass);
   var classNamesForState = this.getClassNamesForState(control.getState());
-  classNamesForState && classNames.push.apply(classNames, classNamesForState);
+  classNames.push.apply(classNames, classNamesForState);
   var extraClassNames = control.getExtraClassNames();
   extraClassNames && classNames.push.apply(classNames, extraClassNames);
   goog.userAgent.IE && !goog.userAgent.isVersion("7") && classNames.push.apply(classNames, this.getAppliedCombinedClassNames_(classNames));
@@ -5789,12 +5753,11 @@ a.getAppliedCombinedClassNames_ = function(classes, opt_includedClass) {
   return toAdd
 };
 a.getClassNamesForState = function(state) {
-  if(state) {
-    for(var classNames = [], mask = 1;state;mask <<= 1)if(state & mask) {
-      classNames.push(this.getClassForState(mask));
-      state &= ~mask
-    }return classNames
-  }return null
+  for(var classNames = [];state;) {
+    var mask = state & -state;
+    classNames.push(this.getClassForState(mask));
+    state &= ~mask
+  }return classNames
 };
 a.getClassForState = function(state) {
   this.classByState_ || this.createClassByStateMap_();
@@ -5812,7 +5775,35 @@ a.createClassByStateMap_ = function() {
 a.createStateByClassMap_ = function() {
   this.classByState_ || this.createClassByStateMap_();
   this.stateByClass_ = goog.object.transpose(this.classByState_)
-};goog.ui.decorate = function(element) {
+};goog.ui.registry = {};
+goog.ui.registry.getDefaultRenderer = function(componentCtor) {
+  for(var key, rendererCtor;componentCtor;) {
+    key = goog.getHashCode(componentCtor);
+    if(rendererCtor = goog.ui.registry.defaultRenderers_[key])break;
+    componentCtor = componentCtor.superClass_ ? componentCtor.superClass_.constructor : null
+  }if(rendererCtor)return goog.isFunction(rendererCtor.getInstance) ? rendererCtor.getInstance() : new rendererCtor;
+  return null
+};
+goog.ui.registry.setDefaultRenderer = function(componentCtor, rendererCtor) {
+  if(!goog.isFunction(componentCtor))throw Error("Invalid component class " + componentCtor);if(!goog.isFunction(rendererCtor))throw Error("Invalid renderer class " + rendererCtor);var key = goog.getHashCode(componentCtor);
+  goog.ui.registry.defaultRenderers_[key] = rendererCtor
+};
+goog.ui.registry.getDecoratorByClassName = function(className) {
+  return className in goog.ui.registry.decoratorFunctions_ ? goog.ui.registry.decoratorFunctions_[className]() : null
+};
+goog.ui.registry.setDecoratorByClassName = function(className, decoratorFn) {
+  if(!className)throw Error("Invalid class name " + className);if(!goog.isFunction(decoratorFn))throw Error("Invalid decorator function " + decoratorFn);goog.ui.registry.decoratorFunctions_[className] = decoratorFn
+};
+goog.ui.registry.getDecorator = function(element) {
+  for(var decorator, classNames = goog.dom.classes.get(element), i = 0, len = classNames.length;i < len;i++)if(decorator = goog.ui.registry.getDecoratorByClassName(classNames[i]))return decorator;
+  return null
+};
+goog.ui.registry.reset = function() {
+  goog.ui.registry.defaultRenderers_ = {};
+  goog.ui.registry.decoratorFunctions_ = {}
+};
+goog.ui.registry.defaultRenderers_ = {};
+goog.ui.registry.decoratorFunctions_ = {};goog.ui.decorate = function(element) {
   var decorator = goog.ui.registry.getDecorator(element);
   decorator && decorator.decorate(element);
   return decorator
@@ -6101,6 +6092,78 @@ a.handleKeyEventInternal = function(e) {
 goog.ui.registry.setDefaultRenderer(goog.ui.Control, goog.ui.ControlRenderer);
 goog.ui.registry.setDecoratorByClassName(goog.ui.ControlRenderer.CSS_CLASS, function() {
   return new goog.ui.Control(null)
+});goog.ui.Checkbox = function(opt_checked, opt_domHelper) {
+  var checkboxRenderer = goog.ui.ControlRenderer.getCustomRenderer(goog.ui.ControlRenderer, goog.ui.Checkbox.CSS_CLASS);
+  goog.ui.Control.call(this, null, checkboxRenderer, opt_domHelper);
+  this.setSupportedState(goog.ui.Component.State.ACTIVE, false);
+  this.checked_ = goog.isDef(opt_checked) ? opt_checked : goog.ui.Checkbox.State.UNCHECKED
+};
+goog.inherits(goog.ui.Checkbox, goog.ui.Control);
+goog.ui.Checkbox.State = {CHECKED:true, UNCHECKED:false, UNDETERMINED:null};
+goog.ui.Checkbox.CSS_CLASS = "goog-checkbox";
+goog.ui.Checkbox.Css = {CHECKED:goog.ui.Checkbox.CSS_CLASS + "-checked", UNCHECKED:goog.ui.Checkbox.CSS_CLASS + "-unchecked", UNDETERMINED:goog.ui.Checkbox.CSS_CLASS + "-undetermined"};
+goog.ui.Checkbox.classByState_ = goog.object.create(goog.ui.Checkbox.State.CHECKED, goog.ui.Checkbox.Css.CHECKED, goog.ui.Checkbox.State.UNCHECKED, goog.ui.Checkbox.Css.UNCHECKED, goog.ui.Checkbox.State.UNDETERMINED, goog.ui.Checkbox.Css.UNDETERMINED);
+a = goog.ui.Checkbox.prototype;
+a.label_ = null;
+a.isChecked = function() {
+  return this.checked_ == goog.ui.Checkbox.State.CHECKED
+};
+a.setChecked = function(checked) {
+  if(checked != this.checked_) {
+    this.checked_ = checked;
+    this.updateView()
+  }
+};
+a.toggle = function() {
+  this.checked_ = this.checked_ ? goog.ui.Checkbox.State.UNCHECKED : goog.ui.Checkbox.State.CHECKED;
+  this.updateView()
+};
+a.createDom = function() {
+  this.decorateInternal(this.getDomHelper().createElement("span"))
+};
+a.decorateInternal = function(element) {
+  goog.ui.Checkbox.superClass_.decorateInternal.call(this, element);
+  var classes = goog.dom.classes.get(element);
+  if(goog.array.contains(classes, goog.ui.Checkbox.Css.UNDETERMINED))this.checked_ = goog.ui.Checkbox.State.UNDETERMINED;
+  else if(goog.array.contains(classes, goog.ui.Checkbox.Css.CHECKED))this.checked_ = goog.ui.Checkbox.State.CHECKED;
+  else if(goog.array.contains(classes, goog.ui.Checkbox.Css.UNCHECKED))this.checked_ = goog.ui.Checkbox.State.UNCHECKED;
+  else this.updateView()
+};
+a.enterDocument = function() {
+  goog.ui.Checkbox.superClass_.enterDocument.call(this);
+  if(this.isHandleMouseEvents())this.getHandler().listen(this.label_ || this.getElement(), goog.events.EventType.CLICK, this.handleClickOrSpace_)
+};
+a.updateView = function() {
+  var el = this.getElement();
+  if(el) {
+    var classToAdd = goog.ui.Checkbox.classByState_[this.checked_], elementClassNames = goog.dom.classes.get(el);
+    if(!goog.array.contains(elementClassNames, classToAdd)) {
+      var classesToAssign = [classToAdd], checkStateClasses = goog.object.getValues(goog.ui.Checkbox.Css);
+      goog.array.forEach(elementClassNames, function(name) {
+        goog.array.contains(checkStateClasses, name) || classesToAssign.push(name)
+      });
+      goog.dom.classes.set(el, classesToAssign.join(" "))
+    }
+  }
+};
+a.setEnabled = function(enabled) {
+  goog.ui.Checkbox.superClass_.setEnabled.call(this, enabled);
+  var el = this.getElement();
+  if(el)el.tabIndex = this.isEnabled() ? 0 : -1
+};
+a.handleClickOrSpace_ = function(e) {
+  e.stopPropagation();
+  var eventType = this.checked_ ? goog.ui.Component.EventType.UNCHECK : goog.ui.Component.EventType.CHECK;
+  if(this.isEnabled() && this.dispatchEvent(eventType)) {
+    this.toggle();
+    this.dispatchEvent(goog.ui.Component.EventType.CHANGE)
+  }
+};
+a.handleKeyEventInternal = function(e) {
+  return e.keyCode == goog.events.KeyCodes.SPACE && this.handleClickOrSpace_(e)
+};
+goog.ui.registry.setDecoratorByClassName(goog.ui.Checkbox.CSS_CLASS, function() {
+  return new goog.ui.Checkbox
 });goog.ui.MenuSeparatorRenderer = function() {
 };
 goog.inherits(goog.ui.MenuSeparatorRenderer, goog.ui.ControlRenderer);
@@ -8070,8 +8133,11 @@ a.maybeShow = function(el, opt_pos) {
 };
 a.positionAndShow_ = function(el, opt_pos) {
   var pos;
-  pos = opt_pos ? opt_pos : new goog.ui.Tooltip.CursorTooltipPosition(new goog.math.Coordinate(this.cursorPosition.x, this.cursorPosition.y));
-  this.anchor = el;
+  if(opt_pos)pos = opt_pos;
+  else {
+    var coord = this.cursorPosition.clone();
+    pos = new goog.ui.Tooltip.CursorTooltipPosition(coord)
+  }this.anchor = el;
   this.setPosition(pos);
   this.setVisible(true)
 };
@@ -8607,7 +8673,7 @@ window._pr_isIE6 = function() {
                 var JSCompiler_inline_result_91;
                 if("PRE" === cs.tagName)JSCompiler_inline_result_91 = true;
                 else if(newlineRe.test(JSCompiler_inline_content)) {
-                  var JSCompiler_inline_whitespace_97 = undefined;
+                  var JSCompiler_inline_whitespace_97 = void 0;
                   if(cs.currentStyle)JSCompiler_inline_whitespace_97 = cs.currentStyle.whiteSpace;
                   else if(window.getComputedStyle)JSCompiler_inline_whitespace_97 = window.getComputedStyle(cs, null).whiteSpace;
                   JSCompiler_inline_result_91 = !JSCompiler_inline_whitespace_97 || JSCompiler_inline_whitespace_97 === "pre"
@@ -8987,7 +9053,7 @@ grokdoc.Selector = function(autocompleteField, opt_maxMatches, opt_blankUrl) {
 };
 grokdoc.Selector.DEFAULT_MAX_MATCHES = 25;
 grokdoc.Selector.DEFAULT_BLANK_URL = _staticFilePath + "images/blank.gif";
-grokdoc.Selector.KIND_TO_SEPARATOR = {"class":".", file:"/"};
+grokdoc.Selector.KIND_TO_SEPARATOR = {"class":".", "interface":".", file:"/"};
 grokdoc.Selector.prototype.buildAc = function(tree) {
   this.rows_ = [];
   this.index_ = [];
@@ -9036,7 +9102,7 @@ grokdoc.IconRowRenderer = function(blankImgUrl) {
   this.blankImg = blankImgUrl
 };
 grokdoc.IconRowRenderer.DEFAULT_ICON_KIND_CLASS = "gdoc-ac-file-icon";
-grokdoc.IconRowRenderer.KIND_ICON_MAP = {"class":"gdoc-ac-class-icon", file:"gdoc-ac-file-icon"};
+grokdoc.IconRowRenderer.KIND_ICON_MAP = {"class":"gdoc-ac-class-icon", file:"gdoc-ac-file-icon", "interface":"gdoc-ac-iface-icon"};
 grokdoc.IconRowRenderer.ICON_CLASS = "goog-tree-icon";
 grokdoc.IconRowRenderer.PATH_CLASS = "entryNamespace";
 grokdoc.IconRowRenderer.prototype.renderRow = function(row, token, node) {
@@ -9080,8 +9146,8 @@ grokdoc.TypedTreeNode = function(name, html, opt_config, opt_domHelper, opt_kind
   this.type_ = opt_kind
 };
 goog.inherits(grokdoc.TypedTreeNode, goog.ui.tree.TreeNode);
-grokdoc.TypedTreeNode.KIND_ICON_MAP = {"class":"gdoc-tree-class-icon", file:"gdoc-tree-file-icon"};
-grokdoc.TypedTreeNode.KIND_LABEL_MAP = {"class":"gdoc-tree-class-label", namespace:"gdoc-tree-namespace-label", file:"gdoc-tree-class-label", folder:"gdoc-tree-namespace-label"};
+grokdoc.TypedTreeNode.KIND_ICON_MAP = {"class":"gdoc-tree-class-icon", file:"gdoc-tree-file-icon", "interface":"gdoc-tree-iface-icon"};
+grokdoc.TypedTreeNode.KIND_LABEL_MAP = {"class":"gdoc-tree-class-label", "interface":"gdoc-tree-class-label", namespace:"gdoc-tree-namespace-label", file:"gdoc-tree-class-label", folder:"gdoc-tree-namespace-label"};
 grokdoc.TypedTreeNode.CURRENT_CLASS = "current";
 a = grokdoc.TypedTreeNode.prototype;
 a.getName = function() {

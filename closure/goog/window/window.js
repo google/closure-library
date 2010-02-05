@@ -19,6 +19,8 @@
 
 goog.provide('goog.window');
 
+goog.require('goog.string');
+
 
 /**
  * Default height for popup windows
@@ -111,7 +113,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     newWin = parentWin.open('', target, optionString);
     if (newWin) {
       newWin.document.write('<META HTTP-EQUIV="refresh" content="0; url=' +
-                            encodeURI(href) + '">');
+                            goog.string.htmlEscape(href) + '">');
       newWin.document.close();
     }
   } else {

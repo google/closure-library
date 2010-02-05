@@ -452,6 +452,16 @@ xxxxxxxx x</div>
  style="overflow:auto;position:absolute;left:100px;top:350px;width:200px;height:200px;border:0px;margin:0px;">
 </iframe>
 
+<iframe
+    id="test-visible-frame"
+    src="style_test_iframe_standard.html"
+    style="width: 200px; height: 200px; border: 0px;">
+</iframe>
+
+<div id="test-scrollbarwidth" style="background-color: orange; width: 100px; height: 100px; overflow: auto;">
+  <div style='width: 200px; height: 200px; background-color: red'>Test Scroll bar width with scroll</div>
+</div>
+
 <div id="scrollable-container" class="scrollable-container">
   <!--
     Workaround for overlapping top padding of the container and top margin of
@@ -1834,6 +1844,14 @@ function testGetVisibleRectForElement() {
   goog.style.setPosition(container, 8, winScroll.y + winSize.height);
   visible = goog.style.getVisibleRectForElement(el);
   assertNull(visible);
+
+  // Test the case with body element of height 0
+  var iframe = goog.dom.getElement('test-visible-frame');
+  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
+  el = iframeDoc.getElementById('test-visible');
+  visible = goog.style.getVisibleRectForElement(el);
+  // Just check whether it is not null, which means non-zero height
+  assertNotNull(visible);
 };
 
 function testGeckoMacOrX11RoundPosition() {
@@ -1884,6 +1902,42 @@ function testScrollIntoContainerView() {
   goog.dom.$('item4').style.height = '';
 }
 
+function testScrollBarWidth() {
+  var width = goog.style.getScrollbarWidth();
+  assertTrue(width > 0);
+
+  var outer = goog.dom.$('test-scrollbarwidth');
+  var inner = goog.dom.getElementsByTagNameAndClass('div', null, outer)[0];
+  assertTrue('should have a scroll bar', hasVerticalScroll(outer));
+  assertTrue('should have a scroll bar', hasHorizontalScroll(outer));
+
+  // Get the inner div absolute width
+  goog.style.setStyle(outer, 'width', '100%');
+  assertTrue('should have a scroll bar', hasVerticalScroll(outer));
+  assertFalse('should not have a scroll bar', hasHorizontalScroll(outer));
+  var innerAbsoluteWidth = inner.offsetWidth;
+
+  // Leave the vertical scroll and remove the horizontal by using the scroll
+  // bar width calculation.
+  goog.style.setStyle(outer, 'width',
+      (innerAbsoluteWidth + width) + 'px');
+  assertTrue('should have a scroll bar', hasVerticalScroll(outer));
+  assertFalse('should not have a scroll bar', hasHorizontalScroll(outer));
+
+  // verify by adding 1 more pixel (brings back the vertical scroll bar).
+  goog.style.setStyle(outer, 'width',
+      (innerAbsoluteWidth + width - 1) + 'px');
+  assertTrue('should have a scroll bar', hasVerticalScroll(outer));
+  assertTrue('should have a scroll bar', hasHorizontalScroll(outer));
+}
+
+function hasVerticalScroll(el) {
+  return el.clientWidth != 0 && el.offsetWidth - el.clientWidth  > 0;
+}
+
+function hasHorizontalScroll(el) {
+  return el.clientHeight != 0 && el.offsetHeight - el.clientHeight  > 0;
+}
 </script>
 
 </body>

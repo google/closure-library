@@ -22,16 +22,27 @@ limitations under the License.
   <title>Closure Unit Tests - goog.ui.Checkbox</title>
   <script src="../base.js"></script>
   <script>
+    goog.require('goog.array');
     goog.require('goog.dom');
     goog.require('goog.dom.classes');
+    goog.require('goog.events.KeyCodes');
     goog.require('goog.testing.asserts');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Checkbox');
+    goog.require('goog.ui.decorate');
   </script>
 </head>
 <body>
-<script>
+<div>
+  <span id="normal" class="goog-checkbox"></span>
+  <span id="checked" class="goog-checkbox goog-checkbox-checked"></span>
+  <span id="unchecked" class="goog-checkbox goog-checkbox-unchecked"></span>
+  <span id="undetermined" class="goog-checkbox goog-checkbox-undetermined">
+  </span>
+  <span id="disabled" class="goog-checkbox goog-checkbox-disabled"></span>
+</div>
+<script type="text/javascript">
   var checkbox;
 
   function setUp() {
@@ -137,21 +148,84 @@ limitations under the License.
 
   function testLabel() {
     var label = goog.dom.$dom('div');
-    checkbox.setChecked(false);
-    checkbox.setLabel(label);
-    checkbox.render(label);
+    document.body.appendChild(label);
+    try {
+      checkbox.setChecked(false);
+      checkbox.setLabel(label);
+      checkbox.render(label);
 
-    goog.testing.events.fireClickSequence(label);
-    assertTrue('checkbox toggled if the label is clicked',
+      goog.testing.events.fireClickSequence(label);
+      assertTrue('checkbox toggled if the label is clicked',
+          checkbox.getChecked());
+      goog.testing.events.fireClickSequence(checkbox.getElement());
+      assertFalse('checkbox toggled if it is clicked', checkbox.getChecked());
+
+      checkbox.setLabel(null);
+      goog.testing.events.fireClickSequence(label);
+      assertFalse('label element deactivated', checkbox.getChecked());
+      goog.testing.events.fireClickSequence(checkbox.getElement());
+      assertTrue('checkbox still active', checkbox.getChecked());
+    } finally {
+      document.body.removeChild(label);
+    }
+  }
+
+  function testConstructor() {
+    assertEquals('state is unchecked', goog.ui.Checkbox.State.UNCHECKED,
         checkbox.getChecked());
-    goog.testing.events.fireClickSequence(checkbox.getElement());
-    assertFalse('checkbox toggled if it is clicked', checkbox.getChecked());
 
-    checkbox.setLabel(null);
-    goog.testing.events.fireClickSequence(label);
-    assertFalse('label element deactivated', checkbox.getChecked());
-    goog.testing.events.fireClickSequence(checkbox.getElement());
-    assertTrue('checkbox still active', checkbox.getChecked());
+    var testCheckboxWithState = new goog.ui.Checkbox(
+        goog.ui.Checkbox.State.UNDETERMINED);
+    assertNotNull('checkbox created with custom state', testCheckboxWithState);
+    assertEquals('checkbox state is undetermined',
+        goog.ui.Checkbox.State.UNDETERMINED,
+        testCheckboxWithState.getChecked());
+    testCheckboxWithState.dispose();
+  }
+
+  function testSpaceKey() {
+    var normalSpan = goog.dom.getElement('normal');
+
+    checkbox.decorate(normalSpan);
+    assertEquals('default state is unchecked',
+        goog.ui.Checkbox.State.UNCHECKED, checkbox.getChecked());
+    goog.testing.events.fireKeySequence(normalSpan, goog.events.KeyCodes.SPACE);
+    assertEquals('SPACE toggles checkbox to be checked',
+        goog.ui.Checkbox.State.CHECKED, checkbox.getChecked());
+    goog.testing.events.fireKeySequence(normalSpan, goog.events.KeyCodes.SPACE);
+    assertEquals('another SPACE toggles checkbox to be unchecked',
+        goog.ui.Checkbox.State.UNCHECKED, checkbox.getChecked());
+
+    // Enter for example doesn't work
+    goog.testing.events.fireKeySequence(normalSpan, goog.events.KeyCodes.ENTER);
+    assertEquals('Enter leaves checkbox unchecked',
+        goog.ui.Checkbox.State.UNCHECKED, checkbox.getChecked());
+  }
+
+  function testDecorate() {
+    var normalSpan = goog.dom.getElement('normal');
+    var checkedSpan = goog.dom.getElement('checked');
+    var uncheckedSpan = goog.dom.getElement('unchecked');
+    var undeterminedSpan = goog.dom.getElement('undetermined');
+    var disabledSpan = goog.dom.getElement('disabled');
+
+    validateCheckBox(normalSpan, goog.ui.Checkbox.State.UNCHECKED);
+    validateCheckBox(checkedSpan, goog.ui.Checkbox.State.CHECKED);
+    validateCheckBox(uncheckedSpan, goog.ui.Checkbox.State.UNCHECKED);
+    validateCheckBox(undeterminedSpan, goog.ui.Checkbox.State.UNDETERMINED);
+    validateCheckBox(disabledSpan, goog.ui.Checkbox.State.UNCHECKED, true);
+  }
+
+  function validateCheckBox(span, state, opt_disabled) {
+    var testCheckbox = goog.ui.decorate(span);
+    assertNotNull('checkbox created', testCheckbox);
+    assertEquals('decorate was successful',
+        goog.ui.Checkbox, testCheckbox.constructor)
+    assertEquals('checkbox state should be: ' + state, state,
+        testCheckbox.getChecked());
+    assertEquals('checkbox is ' + (!opt_disabled ? 'enabled' : 'disabled'),
+        !opt_disabled, testCheckbox.isEnabled());
+    testCheckbox.dispose();
   }
 
 </script>

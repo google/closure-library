@@ -515,6 +515,28 @@
 <a name="line471"></a>  return this.setTransform(cos, sin, -sin, cos,
 <a name="line472"></a>      x - x * cos + y * sin, y - x * sin - y * cos);
 <a name="line473"></a>};
+<a name="line474"></a>
+<a name="line475"></a>
+<a name="line476"></a>/**
+<a name="line477"></a> * Compares two affine transforms for equality.
+<a name="line478"></a> *
+<a name="line479"></a> * @param {goog.graphics.AffineTransform} tx The other affine transform.
+<a name="line480"></a> * @return {boolean} whether the two transforms are equal.
+<a name="line481"></a> */
+<a name="line482"></a>goog.graphics.AffineTransform.prototype.equals = function(tx) {
+<a name="line483"></a>  if (this == tx) {
+<a name="line484"></a>    return true;
+<a name="line485"></a>  }
+<a name="line486"></a>  if (!tx) {
+<a name="line487"></a>    return false;
+<a name="line488"></a>  }
+<a name="line489"></a>  return this.m00_ == tx.m00_ &amp;&amp;
+<a name="line490"></a>      this.m01_ == tx.m01_ &amp;&amp;
+<a name="line491"></a>      this.m02_ == tx.m02_ &amp;&amp;
+<a name="line492"></a>      this.m10_ == tx.m10_ &amp;&amp;
+<a name="line493"></a>      this.m11_ == tx.m11_ &amp;&amp;
+<a name="line494"></a>      this.m12_ == tx.m12_;
+<a name="line495"></a>};
 </pre>
 
 

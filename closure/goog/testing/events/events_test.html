@@ -27,9 +27,12 @@ limitations under the License.
     goog.require('goog.dom');
     goog.require('goog.math.Coordinate');
     goog.require('goog.string');
+    goog.require('goog.testing.PropertyReplacer');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
     goog.require('goog.userAgent');
+
+
   </script>
 </head>
 <body>
@@ -46,8 +49,10 @@ limitations under the License.
   var input = goog.dom.$('input');
   var testButton = goog.dom.$('testButton');
   var coordinate = new goog.math.Coordinate(123, 456);
+  var stubs = new goog.testing.PropertyReplacer();
 
   function setUp() {
+    stubs.reset();
     goog.events.removeAll();
     root.innerHTML = '';
     firedEventTypes = [];
@@ -270,6 +275,21 @@ limitations under the License.
     } else {
       assertEventTypes(['keydown', 'keypress', 'keyup']);
     }
+  }
+
+  function testKeySequenceForMacActionKeysNegative() {
+    stubs.set(goog.userAgent, 'GECKO', false);
+    goog.testing.events.fireKeySequence(
+        root, goog.events.KeyCodes.C, {'metaKey': true});
+    assertEventTypes(['keydown', 'keypress', 'keyup']);
+  }
+
+  function testKeySequenceForMacActionKeysPositive() {
+    stubs.set(goog.userAgent, 'GECKO', true);
+    stubs.set(goog.userAgent, 'MAC', true);
+    goog.testing.events.fireKeySequence(
+        root, goog.events.KeyCodes.C, {'metaKey': true});
+    assertEventTypes(['keypress', 'keyup']);
   }
 
   var CONTEXTMENU_SEQ =

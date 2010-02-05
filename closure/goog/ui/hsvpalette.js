@@ -155,6 +155,17 @@ goog.ui.HsvPalette.prototype.getColor = function() {
 
 
 /**
+ * Alpha transparency of the currently selected color, in [0, 1].
+ * For the HSV palette this always returns 1. The HSVA palette overrides
+ * this method.
+ * @return {number} The current alpha value.
+ */
+goog.ui.HsvPalette.prototype.getAlpha = function() {
+  return 1;
+};
+
+
+/**
  * Updates the text entry field.
  * @protected
  */

@@ -116,6 +116,18 @@ goog.module.ModuleManager.CallbackType = {
 
 
 /**
+ * A non-HTTP status code indicating a corruption in loaded module.
+ * This should be used by a ModuleLoader as a replacement for the HTTP code
+ * given to the error handler function to indicated that the module was
+ * corrupted.
+ * This will set the forceReload flag on the loadModules method when retrying
+ * module loading.
+ * @type {number}
+ */
+goog.module.ModuleManager.CORRUPT_RESPONSE_STATUS_CODE = 8001;
+
+
+/**
  * A logger.
  * @type {goog.debug.Logger}
  * @private
@@ -135,7 +147,7 @@ goog.module.ModuleManager.prototype.batchModeEnabled_ = false;
 
 /**
  * A loader for the modules that implements loadModules(ids, moduleInfoMap,
- * opt_successFn, opt_errorFn, opt_timeoutFn) method.
+ * opt_successFn, opt_errorFn, opt_timeoutFn, opt_forceReload) method.
  * @type {goog.module.AbstractModuleLoader}
  * @private
  */
@@ -236,7 +248,7 @@ goog.module.ModuleManager.prototype.setModuleUris = function(moduleUriMap) {
  * Gets the application-specific module loader.
  * @return {goog.module.AbstractModuleLoader} An object that has a
  *     loadModules(ids, moduleInfoMap, opt_successFn, opt_errFn,
- *         opt_timeoutFn) method.
+ *         opt_timeoutFn, opt_forceReload) method.
  */
 goog.module.ModuleManager.prototype.getLoader = function() {
   return this.loader_;
@@ -247,7 +259,7 @@ goog.module.ModuleManager.prototype.getLoader = function() {
  * Sets the application-specific module loader.
  * @param {goog.module.AbstractModuleLoader} loader An object that has a
  *     loadModules(ids, moduleInfoMap, opt_successFn, opt_errFn,
- *         opt_timeoutFn) method.
+ *         opt_timeoutFn, opt_forceReload) method.
  */
 goog.module.ModuleManager.prototype.setLoader = function(loader) {
   this.loader_ = loader;
@@ -397,10 +409,12 @@ goog.module.ModuleManager.prototype.loadModuleOrEnqueue_ = function(id) {
  * @param {string} id The id of the module to load.
  * @param {boolean=} opt_isRetry If the load is a retry of a previous load
  *     attempt.
+ * @param {boolean=} opt_forceReload Whether to bypass cache while loading the
+ *     module.
  * @private
  */
 goog.module.ModuleManager.prototype.loadModule_ = function(
-    id, opt_isRetry) {
+    id, opt_isRetry, opt_forceReload) {
   var moduleInfo = this.moduleInfoMap_[id];
   if (moduleInfo.isLoaded()) {
     throw Error('Module already loaded: ' + id);
@@ -433,7 +447,8 @@ goog.module.ModuleManager.prototype.loadModule_ = function(
   this.loader_.loadModules(
       goog.array.clone(ids), this.moduleInfoMap_, null,
       goog.bind(this.handleLoadError_, this),
-      goog.bind(this.handleLoadTimeout_, this));
+      goog.bind(this.handleLoadTimeout_, this),
+      !!opt_forceReload);
 };
 
 
@@ -736,7 +751,9 @@ goog.module.ModuleManager.prototype.handleLoadError_ = function(status) {
     // batchModeEnabled_ may have changed.
     var id = this.loadingModuleIds_.pop();
     this.loadingModuleIds_.length = 0;
-    this.loadModule_(id, true);
+    var forceReload =
+        status == goog.module.ModuleManager.CORRUPT_RESPONSE_STATUS_CODE;
+    this.loadModule_(id, true, forceReload);
   }
 };
 

@@ -1300,7 +1300,7 @@
 <a name="line1256"></a>/**
 <a name="line1257"></a> * Executes an editing command as per the registered plugins.
 <a name="line1258"></a> * @param {string} command The command to execute.
-<a name="line1259"></a> * @param {...Object|undefined} var_args Any additional parameters needed to
+<a name="line1259"></a> * @param {...*} var_args Any additional parameters needed to
 <a name="line1260"></a> *     execute the command.
 <a name="line1261"></a> * @return {Object|boolean} False if the command wasn&#39;t handled,
 <a name="line1262"></a> *     otherwise, the result of the command.
@@ -1327,9 +1327,9 @@
 <a name="line1283"></a>/**
 <a name="line1284"></a> * Gets the value of command(s).
 <a name="line1285"></a> * @param {string|Array.&lt;string&gt;} commands String name(s) of the command.
-<a name="line1286"></a> * @return {string|Object} Value of each command. Returns false (or array of
-<a name="line1287"></a> *     falses) if designMode is off or the field is otherwise uneditable,
-<a name="line1288"></a> *     and there are no activeOnUneditable plugins for the command.
+<a name="line1286"></a> * @return {*} Value of each command. Returns false (or array of falses)
+<a name="line1287"></a> *     if designMode is off or the field is otherwise uneditable, and
+<a name="line1288"></a> *     there are no activeOnUneditable plugins for the command.
 <a name="line1289"></a> */
 <a name="line1290"></a>goog.editor.Field.prototype.queryCommandValue = function(commands) {
 <a name="line1291"></a>  var isEditable = this.isLoaded() &amp;&amp; this.isSelectionEditable();
@@ -1573,7 +1573,7 @@
 <a name="line1529"></a>    // In the case where change events were stopped and we&#39;re not firing
 <a name="line1530"></a>    // them on start, the user was trying to suppress all change or delayed
 <a name="line1531"></a>    // change events. Clear the change timer now while the events are still
-<a name="line1532"></a>    // stopped so that it&#39;s firing doesn&#39;t fire a stopped change event, or
+<a name="line1532"></a>    // stopped so that its firing doesn&#39;t fire a stopped change event, or
 <a name="line1533"></a>    // queue up a delayed change event that we were trying to stop.
 <a name="line1534"></a>    this.changeTimerGecko_.fireIfActive();
 <a name="line1535"></a>  }
@@ -2191,7 +2191,7 @@
 <a name="line2147"></a> */
 <a name="line2148"></a>goog.editor.Field.prototype.focusAndPlaceCursorAtStart = function() {
 <a name="line2149"></a>  // NOTE: Excluding Gecko to maintain existing behavior post refactoring
-<a name="line2150"></a>  // placeCursorAtStart into it&#39;s own method. In Gecko browsers that currently
+<a name="line2150"></a>  // placeCursorAtStart into its own method. In Gecko browsers that currently
 <a name="line2151"></a>  // have a selection the existing selection will be restored, otherwise it
 <a name="line2152"></a>  // will go to the start.
 <a name="line2153"></a>  // TODO: Refactor the code using this and related methods. We should
@@ -2590,24 +2590,31 @@
 <a name="line2546"></a> * @protected
 <a name="line2547"></a> */
 <a name="line2548"></a>goog.editor.Field.prototype.getIframeAttributes = function() {
-<a name="line2549"></a>  var iframeStyle = &#39;padding:0;&#39; + this.getOriginalElement().style.cssText;
+<a name="line2549"></a>  var attrs = {&#39;frameBorder&#39;: 0};
 <a name="line2550"></a>
-<a name="line2551"></a>  if (!goog.string.endsWith(iframeStyle, &#39;;&#39;)) {
-<a name="line2552"></a>    iframeStyle += &#39;;&#39;;
-<a name="line2553"></a>  }
-<a name="line2554"></a>
-<a name="line2555"></a>  iframeStyle += &#39;background-color:white;&#39;;
+<a name="line2551"></a>  var iframeStyle = &#39;padding:0;&#39; + this.getOriginalElement().style.cssText;
+<a name="line2552"></a>
+<a name="line2553"></a>  if (!goog.string.endsWith(iframeStyle, &#39;;&#39;)) {
+<a name="line2554"></a>    iframeStyle += &#39;;&#39;;
+<a name="line2555"></a>  }
 <a name="line2556"></a>
-<a name="line2557"></a>  // Ensure that the iframe has default overflow styling.  If overflow is
-<a name="line2558"></a>  // set to auto, an IE rendering bug can occur when it tries to render a
-<a name="line2559"></a>  // table at the very bottom of the field, such that the table would cause
-<a name="line2560"></a>  // a scrollbar, that makes the entire field go blank.
-<a name="line2561"></a>  if (goog.userAgent.IE) {
-<a name="line2562"></a>    iframeStyle += &#39;overflow:visible;&#39;;
-<a name="line2563"></a>  }
-<a name="line2564"></a>
-<a name="line2565"></a>  return { &#39;frameBorder&#39;: 0, &#39;style&#39;: iframeStyle };
-<a name="line2566"></a>};
+<a name="line2557"></a>  iframeStyle += &#39;background-color:white;&#39;;
+<a name="line2558"></a>
+<a name="line2559"></a>  if (goog.userAgent.IE) {
+<a name="line2560"></a>    // Ensure that the iframe has default overflow styling.  If overflow is
+<a name="line2561"></a>    // set to auto, an IE rendering bug can occur when it tries to render a
+<a name="line2562"></a>    // table at the very bottom of the field, such that the table would cause
+<a name="line2563"></a>    // a scrollbar, that makes the entire field go blank.
+<a name="line2564"></a>    iframeStyle += &#39;overflow:visible;&#39;;
+<a name="line2565"></a>    // Prevent inline events from executing. Protects against XSS attacks where
+<a name="line2566"></a>    // attacker convinces user to unknowingly paste malicious content.
+<a name="line2567"></a>    // See http://b/2316154 .
+<a name="line2568"></a>    attrs[&#39;security&#39;] = &#39;restricted&#39;;
+<a name="line2569"></a>  }
+<a name="line2570"></a>
+<a name="line2571"></a>  attrs[&#39;style&#39;] = iframeStyle;
+<a name="line2572"></a>  return attrs;
+<a name="line2573"></a>};
 </pre>
 
 

@@ -38,7 +38,7 @@ goog.require('goog.object');
  * customized without modifying the code that listens for them.
  *
  * Supports keyboard shortcuts triggered by a single key, a stroke stroke (key
- * plus at leat one modifier) and a sequence of keys or strokes.
+ * plus at least one modifier) and a sequence of keys or strokes.
  *
  * @param {goog.events.EventTarget|EventTarget} keyTarget Event target that the
  *     key event listener is attached to, typically the applications root
@@ -715,7 +715,7 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
     this.lastKeys_.strokes.length = 0;
   }
 
-  // Check if this stroke triggers a shortcut, either on it's own or combined
+  // Check if this stroke triggers a shortcut, either on its own or combined
   // with previous strokes.
   node = node ? node[stroke] : this.shortcuts_[stroke];
   if (!node) {
@@ -732,7 +732,7 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
   else if (node) {
     this.lastKeys_.strokes.push(stroke);
     this.lastKeys_.time = now;
-    // Prevent default action so find-as-you-type doesn't steal keybord focus.
+    // Prevent default action so find-as-you-type doesn't steal keyboard focus.
     if (goog.userAgent.GECKO) {
       event.preventDefault();
     }
@@ -747,6 +747,10 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
   // to the generic keyboard shortcut event a more specifc fine grained one,
   // specific for the shortcut identifier, is fired.
   if (shortcut) {
+    if (this.alwaysPreventDefault_) {
+      event.preventDefault();
+    }
+
     var types = goog.ui.KeyboardShortcutHandler.EventType;
 
     // Dispatch SHORTCUT_TRIGGERED event
@@ -759,10 +763,9 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
         types.SHORTCUT_PREFIX + shortcut, shortcut, event.target);
     retVal &= this.dispatchEvent(prefixEvent);
 
-    // The default action is prevented if 'preventDefault' was called on either
-    // event, or if a listener returned false, or if the alwaysPreventDefault_
-    // flag is enabled.
-    if (this.alwaysPreventDefault_ || !retVal) {
+    // The default action is prevented if 'preventDefault' was
+    // called on either event, or if a listener returned false.
+    if (!retVal) {
       event.preventDefault();
     }
 

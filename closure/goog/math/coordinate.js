@@ -43,7 +43,7 @@ goog.math.Coordinate = function(opt_x, opt_y) {
 
 /**
  * Returns a new copy of the coordinate.
- * @return {goog.math.Coordinate} A clone of this coordinate.
+ * @return {!goog.math.Coordinate} A clone of this coordinate.
  */
 goog.math.Coordinate.prototype.clone = function() {
   return new goog.math.Coordinate(this.x, this.y);

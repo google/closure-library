@@ -45,6 +45,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
   <div id="removeNodeTest"><div>Will be removed</div></div>
 
   <div id='bug1480638'></div>
+  <div id='textWithSpaces'>hello world !</div>
 
 <script>
   function normalizeHtml(str) {
@@ -583,6 +584,42 @@ Copyright 2007 Google Inc. All Rights Reserved.
     assertForward('End of element is after children', text2, 0, root, 3);
     assertForward('End of element is after end of last child',
         text2, 3, root, 3);
+  }
+
+  function testSelectAroundSpaces() {
+    // set the selection
+    var textNode = goog.dom.$('textWithSpaces').firstChild;
+    goog.dom.TextRange.createFromNodes(
+        textNode, 5, textNode, 12).select();
+
+    // get the selection and check that it matches what we set it to
+    var range = goog.dom.Range.createFromWindow();
+    assertEquals(' world ', range.getText());
+    assertEquals(5, range.getStartOffset());
+    assertEquals(12, range.getEndOffset());
+    assertEquals(textNode, range.getContainer());
+
+    // Check the contents again, because there used to be a bug where
+    // it changed after calling getContainer().
+    assertEquals(' world ', range.getText());
+  }
+
+  function testSelectInsideSpaces() {
+    // set the selection
+    var textNode = goog.dom.$('textWithSpaces').firstChild;
+    goog.dom.TextRange.createFromNodes(
+        textNode, 6, textNode, 11).select();
+
+    // get the selection and check that it matches what we set it to
+    var range = goog.dom.Range.createFromWindow();
+    assertEquals('world', range.getText());
+    assertEquals(6, range.getStartOffset());
+    assertEquals(11, range.getEndOffset());
+    assertEquals(textNode, range.getContainer());
+
+    // Check the contents again, because there used to be a bug where
+    // it changed after calling getContainer().
+    assertEquals('world', range.getText());
   }
 </script>
 </body>

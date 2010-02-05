@@ -308,7 +308,7 @@ goog.ui.media.MediaModel.prototype.setCategories = function(categories) {
 
 /**
  * Constructs a thumbnail containing details of the thumbnail's image URL and
- * optionally it's size.
+ * optionally its size.
  * @param {string} url The URL of the thumbnail's image.
  * @param {goog.math.Size=} opt_size The size of the thumbnail's image if known.
  * @constructor
@@ -374,7 +374,7 @@ goog.ui.media.MediaModel.Thumbnail.prototype.setSize = function(size) {
 
 /**
  * Constructs a player containing details of the player's URL and
- * optionally it's size.
+ * optionally its size.
  * @param {string} url The URL of the player.
  * @param {Object=} opt_vars Optional map of arguments to the player.
  * @param {goog.math.Size=} opt_size The size of the player if known.

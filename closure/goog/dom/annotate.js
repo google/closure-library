@@ -135,7 +135,7 @@ goog.dom.annotate.annotateTermsInNode_ =
   } else if (node.hasChildNodes() &&
              !goog.array.contains(goog.dom.annotate.NODES_TO_SKIP_,
                  node.tagName)) {
-    var classes = node.className.split(' ');
+    var classes = node.className.split(/\s+/);
     var skip = goog.array.some(classes, function(className) {
         return goog.array.contains(classesToSkip, className);
       });

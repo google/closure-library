@@ -24,6 +24,7 @@ goog.provide('goog.date.Interval');
 goog.provide('goog.date.month');
 goog.provide('goog.date.weekDay');
 
+goog.require('goog.asserts');
 goog.require('goog.string');
 
 
@@ -625,7 +626,7 @@ goog.date.Interval.MINUTES = 'n';
 
 
 /**
- *
+ * Seconds constant for the date parts.
  * @type {string}
  */
 goog.date.Interval.SECONDS = 's';
@@ -635,8 +636,34 @@ goog.date.Interval.SECONDS = 's';
  * @return {!goog.date.Interval} Negative of this interval.
  */
 goog.date.Interval.prototype.getInverse = function() {
-  return new goog.date.Interval(-this.years, -this.months, -this.days,
-      -this.hours, -this.minutes, -this.seconds);
+  return this.times(-1);
+};
+
+
+/**
+ * Calculates n * (this interval) by memberwise multiplication.
+ * @param {number} n An integer.
+ * @return {!goog.date.Interval} n * this.
+ */
+goog.date.Interval.prototype.times = function(n) {
+  return new goog.date.Interval(this.years * n,
+                                this.months * n,
+                                this.days * n,
+                                this.hours * n,
+                                this.minutes * n,
+                                this.seconds * n);
+};
+
+
+/**
+ * Gets the total number of seconds in the time interval. Assumes that months
+ * and years are empty.
+ * @return {number} Total number of seconds in the interval.
+ */
+goog.date.Interval.prototype.getTotalSeconds = function() {
+  goog.asserts.assert(this.years == 0 && this.months == 0);
+  return ((this.days * 24 + this.hours) * 60 + this.minutes) * 60 +
+      this.seconds;
 };
 
 
@@ -1595,7 +1622,7 @@ goog.date.DateTime.prototype.toIsoTimeString = function(opt_showSeconds) {
  */
 goog.date.DateTime.prototype.clone = function() {
   var date = new goog.date.DateTime(this.date_);
-  date.firstDayOfWeek_ = this.firstDayOfWeek_;
-  date.firstWeekCutOffDay_ = this.firstWeekCutOffDay_;
+  date.setFirstDayOfWeek(this.getFirstDayOfWeek());
+  date.setFirstWeekCutOffDay(this.getFirstWeekCutOffDay());
   return date;
 };

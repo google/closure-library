@@ -21,18 +21,19 @@ See the COPYING file for details.
 }
 
 .goog-checkbox-checked {
-  background: white url('../images/check.gif') no-repeat center;
+  background: #fff url('../images/check-sprite.gif') no-repeat 2px center;
+}
+
+.goog-checkbox-undetermined {
+  background: #bbb url('../images/check-sprite.gif') no-repeat 2px center;
+}
+
+.goog-checkbox-unchecked {
+  background: #fff;
 }
 
 .goog-checkbox-disabled {
   border: 1px solid lightgray;
   cursor: default !important;
-}
-
-.goog-checkbox-unchecked {
-  background: white;
-}
-
-.goog-checkbox-undetermined {
-  background: #BBB url('../images/check.gif') no-repeat center;
+  background-position: -7px;
 }

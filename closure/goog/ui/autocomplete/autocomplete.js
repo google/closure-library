@@ -21,7 +21,6 @@
 goog.provide('goog.ui.AutoComplete');
 goog.provide('goog.ui.AutoComplete.EventType');
 
-goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 
@@ -190,6 +189,16 @@ goog.ui.AutoComplete.EventType = {
    * return custom-type row data.
    */
   UPDATE: 'update'
+};
+
+
+/**
+ * Returns the renderer that renders/shows/highlights/hides the autocomplete
+ * menu.
+ * @return {goog.events.EventTarget} Renderer used by the this widget.
+ */
+goog.ui.AutoComplete.prototype.getRenderer = function() {
+  return this.renderer_;
 };
 
 

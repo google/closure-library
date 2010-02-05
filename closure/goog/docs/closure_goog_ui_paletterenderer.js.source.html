@@ -243,8 +243,8 @@
 <a name="line199"></a> */
 <a name="line200"></a>goog.ui.PaletteRenderer.prototype.setContent = function(element, items) {
 <a name="line201"></a>  if (element) {
-<a name="line202"></a>    var tbody = goog.dom.$$(&#39;tbody&#39;,
-<a name="line203"></a>        goog.getCssName(this.getCssClass(), &#39;body&#39;), element)[0];
+<a name="line202"></a>    var tbody = goog.dom.getElementsByTagNameAndClass(
+<a name="line203"></a>        &#39;tbody&#39;, goog.getCssName(this.getCssClass(), &#39;body&#39;), element)[0];
 <a name="line204"></a>    if (tbody) {
 <a name="line205"></a>      var index = 0;
 <a name="line206"></a>      goog.array.forEach(tbody.rows, function(row) {

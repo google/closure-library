@@ -136,117 +136,121 @@
 <a name="line92"></a>
 <a name="line93"></a>/** @inheritDoc */
 <a name="line94"></a>goog.module.BaseModuleLoader.prototype.loadModules = function(
-<a name="line95"></a>    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {
-<a name="line96"></a>  this.loadModulesInternal(ids, moduleInfoMap, opt_successFn, opt_errorFn,
-<a name="line97"></a>      opt_timeoutFn);
-<a name="line98"></a>};
-<a name="line99"></a>
+<a name="line95"></a>    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
+<a name="line96"></a>    opt_forceReload) {
+<a name="line97"></a>  this.loadModulesInternal(ids, moduleInfoMap, opt_successFn, opt_errorFn,
+<a name="line98"></a>      opt_timeoutFn, opt_forceReload);
+<a name="line99"></a>};
 <a name="line100"></a>
-<a name="line101"></a>/**
-<a name="line102"></a> * Loads a list of JavaScript modules.
-<a name="line103"></a> * @param {Array.&lt;string&gt;} ids The module ids in dependency order.
-<a name="line104"></a> * @param {Object} moduleInfoMap A mapping from module id to ModuleInfo object.
-<a name="line105"></a> * @param {function()=} opt_successFn The callback if module loading is a
-<a name="line106"></a> *     success.
-<a name="line107"></a> * @param {function(number)=} opt_errorFn The callback if module loading is in
-<a name="line108"></a> *     error.
-<a name="line109"></a> * @param {function()=} opt_timeoutFn The callback if module loading times out.
-<a name="line110"></a> * @protected
-<a name="line111"></a> */
-<a name="line112"></a>goog.module.BaseModuleLoader.prototype.loadModulesInternal = function(
-<a name="line113"></a>    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {
-<a name="line114"></a>  // Should be overridden by the derived class.
-<a name="line115"></a>};
-<a name="line116"></a>
-<a name="line117"></a>
-<a name="line118"></a>/**
-<a name="line119"></a> * Evaluate the JS code.
-<a name="line120"></a> * @param {Array.&lt;string&gt;} moduleIds The module ids.
-<a name="line121"></a> * @param {string} jsCode The JS code.
-<a name="line122"></a> * @return {boolean} Whether the JS code was evaluated successfully.
-<a name="line123"></a> */
-<a name="line124"></a>goog.module.BaseModuleLoader.prototype.evaluateCode = function(
-<a name="line125"></a>    moduleIds, jsCode) {
-<a name="line126"></a>  var success = true;
-<a name="line127"></a>  try {
-<a name="line128"></a>    if (this.validateCodePostfix_(jsCode)) {
-<a name="line129"></a>      goog.globalEval(jsCode);
-<a name="line130"></a>    } else {
-<a name="line131"></a>      success = false;
-<a name="line132"></a>    }
-<a name="line133"></a>  } catch (e) {
-<a name="line134"></a>    success = false;
-<a name="line135"></a>    // TODO: Consider throwing an exception here.
-<a name="line136"></a>    this.logger.warning(&#39;Loaded incomplete code for module(s): &#39; +
-<a name="line137"></a>        moduleIds, e);
-<a name="line138"></a>  }
-<a name="line139"></a>
-<a name="line140"></a>  return success;
-<a name="line141"></a>};
-<a name="line142"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Loads a list of JavaScript modules.
+<a name="line104"></a> * @param {Array.&lt;string&gt;} ids The module ids in dependency order.
+<a name="line105"></a> * @param {Object} moduleInfoMap A mapping from module id to ModuleInfo object.
+<a name="line106"></a> * @param {?function()=} opt_successFn The callback if module loading is a
+<a name="line107"></a> *     success.
+<a name="line108"></a> * @param {?function(number)=} opt_errorFn The callback if module loading is in
+<a name="line109"></a> *     error.
+<a name="line110"></a> * @param {?function()=} opt_timeoutFn The callback if module loading times out.
+<a name="line111"></a> * @param {boolean=} opt_forceReload Whether to bypass cache while loading the
+<a name="line112"></a> *     module.
+<a name="line113"></a> * @protected
+<a name="line114"></a> */
+<a name="line115"></a>goog.module.BaseModuleLoader.prototype.loadModulesInternal = function(
+<a name="line116"></a>    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
+<a name="line117"></a>    opt_forceReload) {
+<a name="line118"></a>  // Should be overridden by the derived class.
+<a name="line119"></a>};
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Evaluate the JS code.
+<a name="line124"></a> * @param {Array.&lt;string&gt;} moduleIds The module ids.
+<a name="line125"></a> * @param {string} jsCode The JS code.
+<a name="line126"></a> * @return {boolean} Whether the JS code was evaluated successfully.
+<a name="line127"></a> */
+<a name="line128"></a>goog.module.BaseModuleLoader.prototype.evaluateCode = function(
+<a name="line129"></a>    moduleIds, jsCode) {
+<a name="line130"></a>  var success = true;
+<a name="line131"></a>  try {
+<a name="line132"></a>    if (this.validateCodePostfix_(jsCode)) {
+<a name="line133"></a>      goog.globalEval(jsCode);
+<a name="line134"></a>    } else {
+<a name="line135"></a>      success = false;
+<a name="line136"></a>    }
+<a name="line137"></a>  } catch (e) {
+<a name="line138"></a>    success = false;
+<a name="line139"></a>    // TODO: Consider throwing an exception here.
+<a name="line140"></a>    this.logger.warning(&#39;Loaded incomplete code for module(s): &#39; +
+<a name="line141"></a>        moduleIds, e);
+<a name="line142"></a>  }
 <a name="line143"></a>
-<a name="line144"></a>/**
-<a name="line145"></a> * Handles a successful response to a request for one or more modules.
-<a name="line146"></a> * @param {string} jsCode the JS code.
-<a name="line147"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
-<a name="line148"></a> * @param {function()} successFn The callback for success.
-<a name="line149"></a> * @param {function(?number)} errorFn The callback for error.
-<a name="line150"></a> */
-<a name="line151"></a>goog.module.BaseModuleLoader.prototype.handleRequestSuccess = function(
-<a name="line152"></a>  jsCode, moduleIds, successFn, errorFn) {
-<a name="line153"></a>  this.logger.info(&#39;Code loaded for module(s): &#39; + moduleIds);
-<a name="line154"></a>
-<a name="line155"></a>  var success = this.evaluateCode(moduleIds, jsCode);
-<a name="line156"></a>  if (!success) {
-<a name="line157"></a>    this.handleRequestError(moduleIds, errorFn, null);
-<a name="line158"></a>  } else if (success &amp;&amp; successFn) {
-<a name="line159"></a>    successFn();
-<a name="line160"></a>  }
-<a name="line161"></a>};
-<a name="line162"></a>
-<a name="line163"></a>
-<a name="line164"></a>/**
-<a name="line165"></a> * Handles an error during a request for one or more modules.
-<a name="line166"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
-<a name="line167"></a> * @param {function(?number)} errorFn The function to call on failure.
-<a name="line168"></a> * @param {?number} status The response status.
-<a name="line169"></a> */
-<a name="line170"></a>goog.module.BaseModuleLoader.prototype.handleRequestError = function(
-<a name="line171"></a>    moduleIds, errorFn, status) {
-<a name="line172"></a>  this.logger.warning(&#39;Request failed for module(s): &#39; + moduleIds);
-<a name="line173"></a>
-<a name="line174"></a>  if (errorFn) {
-<a name="line175"></a>    errorFn(status);
-<a name="line176"></a>  }
-<a name="line177"></a>};
-<a name="line178"></a>
-<a name="line179"></a>
-<a name="line180"></a>/**
-<a name="line181"></a> * Handles a timeout during a request for one or more modules.
-<a name="line182"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
-<a name="line183"></a> * @param {function()} timeoutFn The function to call on timeout.
-<a name="line184"></a> */
-<a name="line185"></a>goog.module.BaseModuleLoader.prototype.handleRequestTimeout = function(
-<a name="line186"></a>    moduleIds, timeoutFn) {
-<a name="line187"></a>  this.logger.warning(&#39;Request timed out for module(s): &#39; + moduleIds);
-<a name="line188"></a>
-<a name="line189"></a>  if (timeoutFn) {
-<a name="line190"></a>    timeoutFn();
-<a name="line191"></a>  }
-<a name="line192"></a>};
-<a name="line193"></a>
-<a name="line194"></a>
-<a name="line195"></a>/**
-<a name="line196"></a> * Validate the js code received from the server.
-<a name="line197"></a> * @param {string} jsCode The JS code.
-<a name="line198"></a> * @return {boolean} TRUE iff the jsCode is valid.
-<a name="line199"></a> * @private
-<a name="line200"></a> */
-<a name="line201"></a>goog.module.BaseModuleLoader.prototype.validateCodePostfix_ = function(
-<a name="line202"></a>    jsCode) {
-<a name="line203"></a>  return this.codePostfix_ ?
-<a name="line204"></a>      goog.string.endsWith(jsCode, this.codePostfix_) : true;
-<a name="line205"></a>};
+<a name="line144"></a>  return success;
+<a name="line145"></a>};
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Handles a successful response to a request for one or more modules.
+<a name="line150"></a> * @param {string} jsCode the JS code.
+<a name="line151"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
+<a name="line152"></a> * @param {function()} successFn The callback for success.
+<a name="line153"></a> * @param {function(?number)} errorFn The callback for error.
+<a name="line154"></a> */
+<a name="line155"></a>goog.module.BaseModuleLoader.prototype.handleRequestSuccess = function(
+<a name="line156"></a>  jsCode, moduleIds, successFn, errorFn) {
+<a name="line157"></a>  this.logger.info(&#39;Code loaded for module(s): &#39; + moduleIds);
+<a name="line158"></a>
+<a name="line159"></a>  var success = this.evaluateCode(moduleIds, jsCode);
+<a name="line160"></a>  if (!success) {
+<a name="line161"></a>    this.handleRequestError(moduleIds, errorFn, null);
+<a name="line162"></a>  } else if (success &amp;&amp; successFn) {
+<a name="line163"></a>    successFn();
+<a name="line164"></a>  }
+<a name="line165"></a>};
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * Handles an error during a request for one or more modules.
+<a name="line170"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
+<a name="line171"></a> * @param {function(?number)} errorFn The function to call on failure.
+<a name="line172"></a> * @param {?number} status The response status.
+<a name="line173"></a> */
+<a name="line174"></a>goog.module.BaseModuleLoader.prototype.handleRequestError = function(
+<a name="line175"></a>    moduleIds, errorFn, status) {
+<a name="line176"></a>  this.logger.warning(&#39;Request failed for module(s): &#39; + moduleIds);
+<a name="line177"></a>
+<a name="line178"></a>  if (errorFn) {
+<a name="line179"></a>    errorFn(status);
+<a name="line180"></a>  }
+<a name="line181"></a>};
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * Handles a timeout during a request for one or more modules.
+<a name="line186"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
+<a name="line187"></a> * @param {function()} timeoutFn The function to call on timeout.
+<a name="line188"></a> */
+<a name="line189"></a>goog.module.BaseModuleLoader.prototype.handleRequestTimeout = function(
+<a name="line190"></a>    moduleIds, timeoutFn) {
+<a name="line191"></a>  this.logger.warning(&#39;Request timed out for module(s): &#39; + moduleIds);
+<a name="line192"></a>
+<a name="line193"></a>  if (timeoutFn) {
+<a name="line194"></a>    timeoutFn();
+<a name="line195"></a>  }
+<a name="line196"></a>};
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * Validate the js code received from the server.
+<a name="line201"></a> * @param {string} jsCode The JS code.
+<a name="line202"></a> * @return {boolean} TRUE iff the jsCode is valid.
+<a name="line203"></a> * @private
+<a name="line204"></a> */
+<a name="line205"></a>goog.module.BaseModuleLoader.prototype.validateCodePostfix_ = function(
+<a name="line206"></a>    jsCode) {
+<a name="line207"></a>  return this.codePostfix_ ?
+<a name="line208"></a>      goog.string.endsWith(jsCode, this.codePostfix_) : true;
+<a name="line209"></a>};
 </pre>
 
 

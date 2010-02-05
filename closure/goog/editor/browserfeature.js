@@ -21,6 +21,8 @@ goog.provide('goog.editor.BrowserFeature');
 
 goog.require('goog.editor.defines');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
+goog.require('goog.userAgent.product.isVersion');
 
 
 /**
@@ -242,7 +244,8 @@ goog.editor.BrowserFeature = {
   // attr.
   DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR: !goog.userAgent.WEBKIT,
 
-  // Changing the href of a link in IE automatically updates the anchor
-  // text too.  See http://b/issue?id=2182147.
-  SETTING_HREF_RESETS_ANCHOR_TEXT: goog.userAgent.IE
+  // Implements this spec about dragging files from the filesystem to the
+  // browser: http://www.whatwg/org/specs/web-apps/current-work/#dnd
+  SUPPORTS_HTML5_FILE_DRAGGING: goog.userAgent.product.CHROME &&
+      goog.userAgent.product.isVersion('4')
 };

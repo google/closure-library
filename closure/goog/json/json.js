@@ -108,7 +108,7 @@ goog.json.unsafeParse = function(s) {
 /**
  * Serializes an object or a value to a JSON string.
  *
- * @param {Object} object The object to serialize.
+ * @param {*} object The object to serialize.
  * @throws Error if there are loops in the object graph.
  * @return {string} A JSON string representation of the input.
  */
@@ -129,7 +129,7 @@ goog.json.Serializer = function() {
 /**
  * Serializes an object or a value to a JSON string.
  *
- * @param {Object} object The object to serialize.
+ * @param {*} object The object to serialize.
  * @throws Error if there are loops in the object graph.
  * @return {string} A JSON string representation of the input.
  */
@@ -143,8 +143,7 @@ goog.json.Serializer.prototype.serialize = function(object) {
 /**
  * Serializes a generic value to a JSON string
  * @private
- * @param {string|number|boolean|undefined|Object|Array} object The object to
- *     serialize.
+ * @param {*} object The object to serialize.
  * @param {Array} sb Array used as a string builder.
  * @throws Error if there are loops in the object graph.
  */
@@ -168,13 +167,13 @@ goog.json.Serializer.prototype.serialize_ = function(object, sb) {
         break;
       }
       if (goog.isArray(object)) {
-        this.serializeArray_(object, sb);
+        this.serializeArray_((/** @type {Array} */ object), sb);
         break;
       }
       // should we allow new String, new Number and new Boolean to be treated
       // as string, number and boolean? Most implementations do not and the
       // need is not very big
-      this.serializeObject_(object, sb);
+      this.serializeObject_((/** @type {Object} */ object), sb);
       break;
     case 'function':
       // Skip functions.

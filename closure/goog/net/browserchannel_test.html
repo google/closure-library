@@ -240,9 +240,9 @@ function formatArrayOfMaps(arrayOfMaps) {
   var result = [];
   for (var i = 0; i < arrayOfMaps.length; i++) {
     var map = arrayOfMaps[i];
-    var keys = map.getKeys();
+    var keys = map.map.getKeys();
     for (var j = 0; j < keys.length; j++) {
-      result.push(keys[j] + ':' + map.get(keys[j]));
+      result.push(keys[j] + ':' + map.map.get(keys[j]));
     }
   }
   return result.join(', ');
@@ -263,15 +263,15 @@ function testFormatArrayOfMaps() {
 
   // One map.
   var a = [];
-  a.push(map1);
+  a.push(new goog.net.BrowserChannel.QueuedMap(0, map1));
   assertEquals('k1:v1, k2:v2',
       formatArrayOfMaps(a));
 
   // Many maps.
   var b = [];
-  b.push(map1);
-  b.push(map2);
-  b.push(map3);
+  b.push(new goog.net.BrowserChannel.QueuedMap(0, map1));
+  b.push(new goog.net.BrowserChannel.QueuedMap(0, map2));
+  b.push(new goog.net.BrowserChannel.QueuedMap(0, map3));
   assertEquals('k1:v1, k2:v2, k3:v3, k4:v4, k5:v5, k6:v6',
       formatArrayOfMaps(b));
 }

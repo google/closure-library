@@ -452,7 +452,7 @@ goog.dom.selection.canonicalizePositionIe_ = function(textfield, pos) {
  * selectionStart/selectionEnd.
  *
  * @param {Element} el The element to check for.
- * @return {boolean} Wether it's okay to use the selectionStart and
+ * @return {boolean} Whether it's okay to use the selectionStart and
  *     selectionEnd properties on {@code el}.
  * @private
  */

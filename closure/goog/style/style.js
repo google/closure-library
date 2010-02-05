@@ -256,7 +256,7 @@ goog.style.setPosition = function(el, arg1, opt_arg2) {
  * Gets the offsetLeft and offsetTop properties of an element and returns them
  * in a Coordinate object
  * @param {Element} element Element.
- * @return {goog.math.Coordinate} The position.
+ * @return {!goog.math.Coordinate} The position.
  */
 goog.style.getPosition = function(element) {
   return new goog.math.Coordinate(element.offsetLeft, element.offsetTop);
@@ -379,6 +379,7 @@ goog.style.getOffsetParent = function(element) {
 goog.style.getVisibleRectForElement = function(element) {
   var visibleRect = new goog.math.Box(0, Infinity, Infinity, 0);
   var dom = goog.dom.getDomHelper(element);
+  var body = dom.getDocument().body;
   var scrollEl = dom.getDocumentScrollElement();
   var inContainer;
 
@@ -386,7 +387,9 @@ goog.style.getVisibleRectForElement = function(element) {
   // all scrollable containers.
   for (var el = element; el = goog.style.getOffsetParent(el); ) {
     // clientWidth is zero for inline block elements in IE.
+    // on WEBKIT, body element can have clientHeight = 0 and scrollHeight > 0
     if ((!goog.userAgent.IE || el.clientWidth != 0) &&
+        (!goog.userAgent.WEBKIT || el.clientHeight != 0 || el != body) &&
         (el.scrollWidth != el.clientWidth ||
          el.scrollHeight != el.clientHeight) &&
         goog.style.getStyle_(el, 'overflow') != 'visible') {
@@ -480,7 +483,7 @@ goog.style.scrollIntoContainerView = function(element, container, opt_center) {
  * right to left, the vertical scrollbar) and clientTop as a coordinate object.
  *
  * @param {Element} el Element to get clientLeft for.
- * @return {goog.math.Coordinate} Client left and top.
+ * @return {!goog.math.Coordinate} Client left and top.
  */
 goog.style.getClientLeftTop = function(el) {
   // NOTE: Gecko prior to 1.9 doesn't support clientTop/Left, see
@@ -508,7 +511,7 @@ goog.style.getClientLeftTop = function(el) {
  * note if you call both those methods the tree will be analysed twice.
  *
  * @param {Element} el Element to get the page offset for.
- * @return {goog.math.Coordinate} The page offset.
+ * @return {!goog.math.Coordinate} The page offset.
  */
 goog.style.getPageOffset = function(el) {
   var box, doc = goog.dom.getOwnerDocument(el);
@@ -636,7 +639,7 @@ goog.style.getPageOffsetTop = function(el) {
  * @param {Window} relativeWin The window to measure relative to. If relativeWin
  *     is not in the ancestor frame chain of the element, we measure relative to
  *     the top-most window.
- * @return {goog.math.Coordinate} The page offset.
+ * @return {!goog.math.Coordinate} The page offset.
  */
 goog.style.getFramedPageOffset = function(el, relativeWin) {
   var position = new goog.math.Coordinate(0, 0);
@@ -700,7 +703,7 @@ goog.style.translateRectForAnotherFrame = function(rect, origBase, newBase) {
  *     position we're calculating.
  * @param {Element|Event|goog.events.Event} b Element or mouse event position
  *     is relative to.
- * @return {goog.math.Coordinate} The relative position.
+ * @return {!goog.math.Coordinate} The relative position.
  */
 goog.style.getRelativePosition = function(a, b) {
   var ap = goog.style.getClientPosition(a);
@@ -802,7 +805,7 @@ goog.style.setSize = function(element, w, opt_h) {
  * Specifically, this returns the height and width of the border box,
  * irrespective of the box model in effect.
  * @param {Element} element Element to get width of.
- * @return {goog.math.Size} Object with width/height properties.
+ * @return {!goog.math.Size} Object with width/height properties.
  */
 goog.style.getSize = function(element) {
   var hasOperaBug = goog.userAgent.OPERA && !goog.userAgent.isVersion('10');
@@ -844,7 +847,7 @@ goog.style.getSize = function(element) {
 /**
  * Returns a bounding rectangle for a given element in page space.
  * @param {Element} element Element to get bounds of.
- * @return {goog.math.Rect} Bounding rectangle for the element.
+ * @return {!goog.math.Rect} Bounding rectangle for the element.
  */
 goog.style.getBounds = function(element) {
   var o = goog.style.getPageOffset(element);
@@ -1232,7 +1235,7 @@ goog.style.setUnselectable = function(el, unselectable, opt_noRecurse) {
 /**
  * Gets the border box size for an element.
  * @param {Element} element  The element to get the size for.
- * @return {goog.math.Size} The border box size.
+ * @return {!goog.math.Size} The border box size.
  */
 goog.style.getBorderBoxSize = function(element) {
   return new goog.math.Size(element.offsetWidth, element.offsetHeight);
@@ -1273,7 +1276,7 @@ goog.style.setBorderBoxSize = function(element, size) {
  * Gets the content box size for an element.  This is potentially expensive in
  * all browsers.
  * @param {Element} element  The element to get the size for.
- * @return {goog.math.Size} The content box size.
+ * @return {!goog.math.Size} The content box size.
  */
 goog.style.getContentBoxSize = function(element) {
   var doc = goog.dom.getOwnerDocument(element);
@@ -1413,7 +1416,7 @@ goog.style.getIePixelDistance_ = function(element, propName) {
  * @param {Element} element  The element to get the padding for.
  * @param {string} stylePrefix  Pass 'padding' to retrieve the padding box,
  *     or 'margin' to retrieve the margin box.
- * @return {goog.math.Box} The computed paddings or margins.
+ * @return {!goog.math.Box} The computed paddings or margins.
  * @private
  */
 goog.style.getBox_ = function(element, stylePrefix) {
@@ -1448,7 +1451,7 @@ goog.style.getBox_ = function(element, stylePrefix) {
 /**
  * Gets the computed paddings (on all sides) in pixels.
  * @param {Element} element  The element to get the padding for.
- * @return {goog.math.Box} The computed paddings.
+ * @return {!goog.math.Box} The computed paddings.
  */
 goog.style.getPaddingBox = function(element) {
   return goog.style.getBox_(element, 'padding');
@@ -1458,7 +1461,7 @@ goog.style.getPaddingBox = function(element) {
 /**
  * Gets the computed margins (on all sides) in pixels.
  * @param {Element} element  The element to get the margins for.
- * @return {goog.math.Box} The computed margins.
+ * @return {!goog.math.Box} The computed margins.
  */
 goog.style.getMarginBox = function(element) {
   return goog.style.getBox_(element, 'margin');
@@ -1499,7 +1502,7 @@ goog.style.getIePixelBorder_ = function(element, prop) {
 /**
  * Gets the computed border widths (on all sides) in pixels
  * @param {Element} element  The element to get the border widths for.
- * @return {goog.math.Box} The computed border widths.
+ * @return {!goog.math.Box} The computed border widths.
  */
 goog.style.getBorderBox = function(element) {
   if (goog.userAgent.IE) {
@@ -1723,4 +1726,22 @@ goog.style.setFloat = function(el, value) {
  */
 goog.style.getFloat = function(el) {
   return el.style[goog.userAgent.IE ? 'styleFloat' : 'cssFloat'] || '';
+};
+
+
+/**
+ * Returns the scroll bar width (represents the width of both horizontal
+ * and vertical scroll).
+ *
+ * @return {number} The scroll bar width in px.
+ */
+goog.style.getScrollbarWidth = function() {
+  // Add a div outside of the viewport.
+  var mockElement = goog.dom.createElement('div');
+  mockElement.style.cssText = 'visibility:hidden;overflow:scroll;' +
+      'position:absolute;top:0;width:100px;height:100px';
+  goog.dom.appendChild(goog.dom.getDocument().body, mockElement);
+  var width = mockElement.offsetWidth - mockElement.clientWidth;
+  goog.dom.removeNode(mockElement);
+  return width;
 };

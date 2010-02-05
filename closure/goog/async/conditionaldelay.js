@@ -52,7 +52,7 @@ goog.require('goog.async.Delay');
 
 /**
  * A ConditionalDelay object invokes the associated function after a specified
- * interval delay and checks it's return value. If the function returns
+ * interval delay and checks its return value. If the function returns
  * {@code true} the conditional delay is cancelled and {@see #onSuccess}
  * is called. Otherwise this object keeps to invoke the deferred function until
  * either it returns {@code true} or the timeout is exceeded. In the latter case

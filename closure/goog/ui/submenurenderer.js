@@ -91,7 +91,8 @@ goog.ui.SubMenuRenderer.prototype.decorate = function(subMenu, element) {
   this.addArrow_(subMenu, element);
 
   // Search for a child menu and decorate it.
-  var childMenuEls = goog.dom.$$('div', goog.getCssName('goog-menu'), element);
+  var childMenuEls = goog.dom.getElementsByTagNameAndClass(
+      'div', goog.getCssName('goog-menu'), element);
   if (childMenuEls.length) {
     var childMenu = new goog.ui.Menu(subMenu.getDomHelper());
     var childMenuEl = childMenuEls[0];

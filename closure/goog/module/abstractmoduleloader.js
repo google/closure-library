@@ -35,6 +35,9 @@ goog.module.AbstractModuleLoader = function() {};
  * @param {function(number)?=} opt_errorFn The callback if module loading is an
  *     error.
  * @param {function()?=} opt_timeoutFn The callback if module loading times out.
+ * @param {boolean=} opt_forceReload Whether to bypass cache while loading the
+ *     module.
  */
 goog.module.AbstractModuleLoader.prototype.loadModules = function(
-  ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {};
+    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
+    opt_forceReload) {};

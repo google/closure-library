@@ -282,7 +282,8 @@ goog.ui.SplitPane.prototype.createDom = function() {
  */
 goog.ui.SplitPane.prototype.canDecorate = function(element) {
   var className = goog.ui.SplitPane.FIRST_CONTAINER_CLASS_NAME_;
-  var firstContainer = goog.dom.$$(null, className, element)[0];
+  var firstContainer = goog.dom.getElementsByTagNameAndClass(
+      null, className, element)[0];
   if (!firstContainer) {
     return false;
   }
@@ -291,14 +292,16 @@ goog.ui.SplitPane.prototype.canDecorate = function(element) {
   this.firstComponentContainer_ = firstContainer;
 
   className = goog.ui.SplitPane.SECOND_CONTAINER_CLASS_NAME_;
-  var secondContainer = goog.dom.$$(null, className, element)[0];
+  var secondContainer = goog.dom.getElementsByTagNameAndClass(
+      null, className, element)[0];
   if (!secondContainer) {
     return false;
   }
   this.secondComponentContainer_ = secondContainer;
 
   className = goog.ui.SplitPane.HANDLE_CLASS_NAME_;
-  var splitpaneHandle = goog.dom.$$(null, className, element)[0];
+  var splitpaneHandle = goog.dom.getElementsByTagNameAndClass(
+      null, className, element)[0];
   if (!splitpaneHandle) {
     return false;
   }

@@ -44,7 +44,6 @@
 goog.provide('goog.ui.Menu');
 goog.provide('goog.ui.Menu.EventType');
 
-goog.require('goog.array');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Component.EventType');

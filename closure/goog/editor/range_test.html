@@ -52,6 +52,9 @@ limitations under the License.
   stu
 </div>
 
+<div id='normalizeTest-with-br'>abc<br/>def</div>
+<div id='normalizeTest-with-div'><div>abc</div></div>
+
 <div id='normalizeTest-2'>
   abc
   <div id='def-2'>def</div>
@@ -565,6 +568,35 @@ function testRangePreservingNormalize() {
                                      range);
 }
 
+function testRangePreservingNormalizeWhereEndNodePreviousSiblingIsSplit() {
+  var parent = goog.dom.$('normalizeTest-with-br');
+  var br = parent.childNodes[1];
+  fragmentText(parent.firstChild);
+
+  var range = goog.dom.Range.createFromNodes(parent, 3, br, 0);
+  range = goog.editor.range.rangePreservingNormalize_(parent, range);
+
+  // Code used to throw an error here.
+
+  assertEquals('parent should have 3 children', 3, parent.childNodes.length);
+  goog.testing.dom.assertRangeEquals(parent.firstChild, 1, parent, 1, range);
+}
+
+function testRangePreservingNormalizeWhereStartNodePreviousSiblingIsSplit() {
+  var parent = goog.dom.$('normalizeTest-with-br');
+  var br = parent.childNodes[1];
+  fragmentText(parent.firstChild);
+  fragmentText(parent.lastChild);
+
+  var range = goog.dom.Range.createFromNodes(br, 0, parent, 9);
+  range = goog.editor.range.rangePreservingNormalize_(parent, range);
+
+  // Code used to throw an error here.
+
+  assertEquals('parent should have 3 children', 3, parent.childNodes.length);
+  goog.testing.dom.assertRangeEquals(parent, 1, parent.lastChild, 1, range);
+}
+
 function testSelectionPreservingNormalize1() {
   var parent = goog.dom.$('normalizeTest-2');
   var def = goog.dom.$('def-2');
@@ -579,6 +611,7 @@ function testSelectionPreservingNormalize1() {
 
   // Check that everything was normalized ok.
   var range = goog.dom.Range.createFromWindow(window);
+
   assertEquals("def should have 1 child; range is " + rangeToString(range) +
       ", range was " + oldRangeDescription,
       1, def.childNodes.length);
@@ -608,6 +641,15 @@ function testSelectionPreservingNormalize2() {
   assertEquals(1, jkl.childNodes.length);
   assertFalse(goog.dom.Range.hasSelection(window));
 }
+
+function testSelectionPreservingNormalizeAfterPlaceCursorNextTo() {
+  var parent = goog.dom.$('normalizeTest-with-div');
+  goog.editor.range.placeCursorNextTo(parent.firstChild);
+  goog.editor.range.selectionPreservingNormalize(parent);
+
+  // Code used to throw an exception here.
+}
+
 
 /** Normalize the body and return the normalized range. */
 function normalizeBody(range) {
@@ -712,7 +754,7 @@ function testIsEditable() {
   assertTrue('Range of some container element children considered editable',
     goog.editor.range.isEditable(someEditableChildren));
 
-  
+
   var mixedEditableNonEditable = goog.dom.Range.createFromNodes(
     containerElement.previousSibling, 0, containerElement, 2);
   assertFalse('Range overlapping some content not considered editable',
@@ -759,6 +801,34 @@ function testIntersectsTag() {
   assertFalse(goog.editor.range.intersectsTag(range, goog.dom.TagName.U));
 }
 
+function testNormalizeNode() {
+  var div = goog.dom.createDom('DIV', null, 'a', 'b', 'c');
+  assertEquals(3, div.childNodes.length);
+  goog.editor.range.normalizeNode_(div);
+  assertEquals(1, div.childNodes.length);
+  assertEquals('abc', div.firstChild.nodeValue);
+
+  div = goog.dom.createDom('DIV', null,
+      goog.dom.createDom('SPAN', null, '1', '2'),
+      goog.dom.createTextNode(''),
+      goog.dom.createDom('BR'),
+      'b',
+      'c');
+  assertEquals(5, div.childNodes.length);
+  assertEquals(2, div.firstChild.childNodes.length);
+  goog.editor.range.normalizeNode_(div);
+  if (goog.userAgent.GECKO && !goog.userAgent.isVersion(1.9) ||
+      goog.userAgent.WEBKIT && !goog.userAgent.isVersion(526)) {
+    // Old Gecko and Webkit versions don't delete the empty node.
+    assertEquals(4, div.childNodes.length);
+  } else {
+    assertEquals(3, div.childNodes.length);
+  }
+  assertEquals(1, div.firstChild.childNodes.length);
+  assertEquals('12', div.firstChild.firstChild.nodeValue);
+  assertEquals('bc', div.lastChild.nodeValue);
+  assertEquals('BR', div.lastChild.previousSibling.tagName);
+}
 
 // Some debugging utilities.
 

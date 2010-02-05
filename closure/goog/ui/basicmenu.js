@@ -26,7 +26,6 @@ goog.provide('goog.ui.BasicMenu');
 goog.provide('goog.ui.BasicMenu.Item');
 goog.provide('goog.ui.BasicMenu.Separator');
 
-goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');

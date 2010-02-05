@@ -60,14 +60,14 @@
 <a name="line16"></a> * @fileoverview Wrapper class for handling XmlHttpRequests.
 <a name="line17"></a> *
 <a name="line18"></a> * One off requests can be sent through goog.net.XhrIo.send() or an
-<a name="line19"></a> * instance can be created to send multiple requests.  Each request uses it&#39;s
+<a name="line19"></a> * instance can be created to send multiple requests.  Each request uses its
 <a name="line20"></a> * own XmlHttpRequest object and handles clearing of the event callback to
 <a name="line21"></a> * ensure no leaks.
 <a name="line22"></a> *
-<a name="line23"></a> * XhrIo is event based, it dispatches events for when a request has finished,
-<a name="line24"></a> * when it is errorred or has succeeded, or when the ready-state changes.
-<a name="line25"></a> * The Ready-state event fires first first, followed by a generic completed
-<a name="line26"></a> * event, and lastly the error or success event is fired as appropriate.
+<a name="line23"></a> * XhrIo is event based, it dispatches events when a request finishes, fails or
+<a name="line24"></a> * succeeds or when the ready-state changes. The ready-state event fires first,
+<a name="line25"></a> * followed by a generic completed event, and lastly the error or success event
+<a name="line26"></a> * is fired as appropriate.
 <a name="line27"></a> *
 <a name="line28"></a> * The error event may also be called before completed and
 <a name="line29"></a> * ready-state-change if the XmlHttpRequest.open() or .send() methods throw.
@@ -189,8 +189,8 @@
 <a name="line145"></a> * We could have {@link goog.net.XhrIo.send} return the goog.net.XhrIo
 <a name="line146"></a> * it creates and make the client of {@link goog.net.XhrIo.send} be
 <a name="line147"></a> * responsible for disposing it in this case.  However, this makes things
-<a name="line148"></a> * significanly more complicated for the client, and the whole point
-<a name="line149"></a> * of {@link goog.net.XhrIo.send} is that its simple and easy to use.
+<a name="line148"></a> * significantly more complicated for the client, and the whole point
+<a name="line149"></a> * of {@link goog.net.XhrIo.send} is that it&#39;s simple and easy to use.
 <a name="line150"></a> * Clients of {@link goog.net.XhrIo.send} should call
 <a name="line151"></a> * {@link goog.net.XhrIo.cleanupAllPendingStaticSends} when doing final
 <a name="line152"></a> * cleanup on window unload.
@@ -397,7 +397,7 @@
 <a name="line353"></a>  this.active_ = true;
 <a name="line354"></a>
 <a name="line355"></a>  // Use the factory to create the XHR object and options
-<a name="line356"></a>  this.xhr_ = new goog.net.XmlHttp();
+<a name="line356"></a>  this.xhr_ = this.createXhr();
 <a name="line357"></a>  this.xhrOptions_ = goog.net.XmlHttp.getOptions();
 <a name="line358"></a>
 <a name="line359"></a>  // We tell the Xhr Monitor that we are opening an XMLHttpRequest.  This stops
@@ -480,441 +480,463 @@
 <a name="line436"></a>
 <a name="line437"></a>
 <a name="line438"></a>/**
-<a name="line439"></a> * Override of dispatchEvent.  We need to keep track if an XMLHttpRequest is
-<a name="line440"></a> * being sent from the context of another requests&#39; repsonse.  If it is then, we
-<a name="line441"></a> * make the XHR send async.
-<a name="line442"></a> * @param {goog.events.Event|string} e Event to dispatch.
-<a name="line443"></a> * @return {boolean} Whether the dispatch completed without a handler calling
-<a name="line444"></a> *     preventDefault.
-<a name="line445"></a> */
-<a name="line446"></a>goog.net.XhrIo.prototype.dispatchEvent = function(e) {
-<a name="line447"></a>  if (this.xhr_) {
-<a name="line448"></a>    goog.net.xhrMonitor.pushContext(this.xhr_);
-<a name="line449"></a>    try {
-<a name="line450"></a>      return goog.net.XhrIo.superClass_.dispatchEvent.call(this, e);
-<a name="line451"></a>    } finally {
-<a name="line452"></a>      goog.net.xhrMonitor.popContext();
-<a name="line453"></a>    }
-<a name="line454"></a>  } else {
-<a name="line455"></a>    return goog.net.XhrIo.superClass_.dispatchEvent.call(this, e);
-<a name="line456"></a>  }
-<a name="line457"></a>};
-<a name="line458"></a>
-<a name="line459"></a>
-<a name="line460"></a>/**
-<a name="line461"></a> * The request didn&#39;t complete after {@link goog.net.XhrIo#timeoutInterval_}
-<a name="line462"></a> * milliseconds; raises a {@link goog.net.EventType.TIMEOUT} event and aborts
-<a name="line463"></a> * the request.
-<a name="line464"></a> * @private
-<a name="line465"></a> */
-<a name="line466"></a>goog.net.XhrIo.prototype.timeout_ = function() {
-<a name="line467"></a>  if (typeof goog == &#39;undefined&#39;) {
-<a name="line468"></a>    // If goog is undefined then the callback has occurred as the application
-<a name="line469"></a>    // is unloading and will error.  Thus we let it silently fail.
-<a name="line470"></a>  } else if (this.xhr_) {
-<a name="line471"></a>    this.lastError_ = &#39;Timed out after &#39; + this.timeoutInterval_ +
-<a name="line472"></a>                      &#39;ms, aborting&#39;;
-<a name="line473"></a>    this.lastErrorCode_ = goog.net.ErrorCode.TIMEOUT;
-<a name="line474"></a>    this.logger_.fine(this.formatMsg_(this.lastError_));
-<a name="line475"></a>    this.dispatchEvent(goog.net.EventType.TIMEOUT);
-<a name="line476"></a>    this.abort(goog.net.ErrorCode.TIMEOUT);
-<a name="line477"></a>  }
-<a name="line478"></a>};
-<a name="line479"></a>
-<a name="line480"></a>
-<a name="line481"></a>/**
-<a name="line482"></a> * Something errorred, so inactivate, fire error callback and clean up
-<a name="line483"></a> * @param {goog.net.ErrorCode} errorCode The error code.
-<a name="line484"></a> * @param {Error} err The error object.
-<a name="line485"></a> * @private
-<a name="line486"></a> */
-<a name="line487"></a>goog.net.XhrIo.prototype.error_ = function(errorCode, err) {
-<a name="line488"></a>  this.active_ = false;
-<a name="line489"></a>  if (this.xhr_) {
-<a name="line490"></a>    this.inAbort_ = true;
-<a name="line491"></a>    this.xhr_.abort();  // Ensures XHR isn&#39;t hung (FF)
-<a name="line492"></a>    this.inAbort_ = false;
-<a name="line493"></a>  }
-<a name="line494"></a>  this.lastError_ = err;
-<a name="line495"></a>  this.lastErrorCode_ = errorCode;
-<a name="line496"></a>  this.dispatchErrors_();
-<a name="line497"></a>  this.cleanUpXhr_()
-<a name="line498"></a>};
-<a name="line499"></a>
-<a name="line500"></a>
-<a name="line501"></a>/**
-<a name="line502"></a> * Dispatches COMPLETE and ERROR in case of an error. This ensures that we do
-<a name="line503"></a> * not dispatch multiple error events.
-<a name="line504"></a> * @private
-<a name="line505"></a> */
-<a name="line506"></a>goog.net.XhrIo.prototype.dispatchErrors_ = function() {
-<a name="line507"></a>  if (!this.errorDispatched_) {
-<a name="line508"></a>    this.errorDispatched_ = true;
-<a name="line509"></a>    this.dispatchEvent(goog.net.EventType.COMPLETE);
-<a name="line510"></a>    this.dispatchEvent(goog.net.EventType.ERROR);
-<a name="line511"></a>  }
-<a name="line512"></a>};
-<a name="line513"></a>
-<a name="line514"></a>
-<a name="line515"></a>/**
-<a name="line516"></a> * Abort the current XMLHttpRequest
-<a name="line517"></a> * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
-<a name="line518"></a> *     defaults to ABORT.
-<a name="line519"></a> */
-<a name="line520"></a>goog.net.XhrIo.prototype.abort = function(opt_failureCode) {
-<a name="line521"></a>  if (this.xhr_) {
-<a name="line522"></a>    this.logger_.fine(this.formatMsg_(&#39;Aborting&#39;));
-<a name="line523"></a>    this.active_ = false;
-<a name="line524"></a>    this.inAbort_ = true;
-<a name="line525"></a>    this.xhr_.abort();
-<a name="line526"></a>    this.inAbort_ = false;
-<a name="line527"></a>    this.lastErrorCode_ = opt_failureCode || goog.net.ErrorCode.ABORT;
-<a name="line528"></a>    this.dispatchEvent(goog.net.EventType.COMPLETE);
-<a name="line529"></a>    this.dispatchEvent(goog.net.EventType.ABORT);
-<a name="line530"></a>    this.cleanUpXhr_();
-<a name="line531"></a>  }
-<a name="line532"></a>};
-<a name="line533"></a>
-<a name="line534"></a>
-<a name="line535"></a>/**
-<a name="line536"></a> * Nullifies all callbacks to reduce risks of leaks.
-<a name="line537"></a> */
-<a name="line538"></a>goog.net.XhrIo.prototype.disposeInternal = function() {
-<a name="line539"></a>  if (this.xhr_) {
-<a name="line540"></a>    // We explicitly do not call xhr_.abort() unless active_ is still true.
-<a name="line541"></a>    // This is to avoid unnecessarily aborting a successful request when
-<a name="line542"></a>    // disposeInternal() is called in a callback triggered by a complete
-<a name="line543"></a>    // response, but in which browser cleanup has not yet finished.
-<a name="line544"></a>    // (See http://b/issue?id=1684217.)
-<a name="line545"></a>    if (this.active_) {
-<a name="line546"></a>      this.active_ = false;
-<a name="line547"></a>      this.inAbort_ = true;
-<a name="line548"></a>      this.xhr_.abort();
-<a name="line549"></a>      this.inAbort_ = false;
-<a name="line550"></a>    }
-<a name="line551"></a>    this.cleanUpXhr_(true);
-<a name="line552"></a>  }
-<a name="line553"></a>
-<a name="line554"></a>  goog.net.XhrIo.superClass_.disposeInternal.call(this);
-<a name="line555"></a>};
-<a name="line556"></a>
-<a name="line557"></a>
-<a name="line558"></a>/**
-<a name="line559"></a> * Internal handler for the XHR object&#39;s readystatechange event.  This method
-<a name="line560"></a> * checks the status and the readystate and fires the correct callbacks.
-<a name="line561"></a> * If the request has ended, the handlers are cleaned up and the XHR object is
-<a name="line562"></a> * nullified.
-<a name="line563"></a> * @private
-<a name="line564"></a> */
-<a name="line565"></a>goog.net.XhrIo.prototype.onReadyStateChange_ = function() {
-<a name="line566"></a>  if (!this.inOpen_ &amp;&amp; !this.inSend_ &amp;&amp; !this.inAbort_) {
-<a name="line567"></a>    // Were not being called from within a call to this.xhr_.send
-<a name="line568"></a>    // this.xhr_.abort, or this.xhr_.open, so this is an entry point
-<a name="line569"></a>    this.onReadyStateChangeEntryPoint_();
-<a name="line570"></a>  } else {
-<a name="line571"></a>    this.onReadyStateChangeHelper_();
-<a name="line572"></a>  }
-<a name="line573"></a>};
-<a name="line574"></a>
-<a name="line575"></a>
-<a name="line576"></a>/**
-<a name="line577"></a> * Used to protect the onreadystatechange handler entry point.  Necessary
-<a name="line578"></a> * as {#onReadyStateChange_} maybe called from within send or abort, this
-<a name="line579"></a> * method is only called when {#onReadyStateChange_} is called as an
-<a name="line580"></a> * entry point.
-<a name="line581"></a> * {@see #protectEntryPoints}
-<a name="line582"></a> * @private
-<a name="line583"></a> */
-<a name="line584"></a>goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ = function() {
-<a name="line585"></a>  this.onReadyStateChangeHelper_();
-<a name="line586"></a>};
-<a name="line587"></a>
-<a name="line588"></a>
-<a name="line589"></a>/**
-<a name="line590"></a> * Helper for {@link #onReadyStateChange_}.  This is used so that
-<a name="line591"></a> * entry point calls to {@link #onReadyStateChange_} can be routed through
-<a name="line592"></a> * {@link #onReadyStateChangeEntryPoint_}.
-<a name="line593"></a> * @private
-<a name="line594"></a> */
-<a name="line595"></a>goog.net.XhrIo.prototype.onReadyStateChangeHelper_ = function() {
-<a name="line596"></a>  if (!this.active_) {
-<a name="line597"></a>    // can get called inside abort call
-<a name="line598"></a>    return;
-<a name="line599"></a>  }
-<a name="line600"></a>
-<a name="line601"></a>  if (typeof goog == &#39;undefined&#39;) {
-<a name="line602"></a>    // NOTE: If goog is undefined then the callback has occurred as the
-<a name="line603"></a>    // application is unloading and will error.  Thus we let it silently fail.
-<a name="line604"></a>
-<a name="line605"></a>  } else if (
-<a name="line606"></a>      this.xhrOptions_[goog.net.XmlHttp.OptionType.LOCAL_REQUEST_ERROR] &amp;&amp;
-<a name="line607"></a>      this.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE &amp;&amp;
-<a name="line608"></a>      this.getStatus() == 2) {
-<a name="line609"></a>    // NOTE: In IE if send() errors on a *local* request the readystate
-<a name="line610"></a>    // is still changed to COMPLETE.  We need to ignore it and allow the
-<a name="line611"></a>    // try/catch around send() to pick up the error.
-<a name="line612"></a>    this.logger_.fine(this.formatMsg_(
-<a name="line613"></a>        &#39;Local request error detected and ignored&#39;));
+<a name="line439"></a> * Creates a new XHR object.
+<a name="line440"></a> * @return {XMLHttpRequest|GearsHttpRequest} The newly created XHR object.
+<a name="line441"></a> * @protected
+<a name="line442"></a> */
+<a name="line443"></a>goog.net.XhrIo.prototype.createXhr = function() {
+<a name="line444"></a>  return new goog.net.XmlHttp();
+<a name="line445"></a>};
+<a name="line446"></a>
+<a name="line447"></a>
+<a name="line448"></a>/**
+<a name="line449"></a> * Override of dispatchEvent.  We need to keep track if an XMLHttpRequest is
+<a name="line450"></a> * being sent from the context of another requests&#39; repsonse.  If it is then, we
+<a name="line451"></a> * make the XHR send async.
+<a name="line452"></a> * @param {goog.events.Event|string} e Event to dispatch.
+<a name="line453"></a> * @return {boolean} Whether the dispatch completed without a handler calling
+<a name="line454"></a> *     preventDefault.
+<a name="line455"></a> */
+<a name="line456"></a>goog.net.XhrIo.prototype.dispatchEvent = function(e) {
+<a name="line457"></a>  if (this.xhr_) {
+<a name="line458"></a>    goog.net.xhrMonitor.pushContext(this.xhr_);
+<a name="line459"></a>    try {
+<a name="line460"></a>      return goog.net.XhrIo.superClass_.dispatchEvent.call(this, e);
+<a name="line461"></a>    } finally {
+<a name="line462"></a>      goog.net.xhrMonitor.popContext();
+<a name="line463"></a>    }
+<a name="line464"></a>  } else {
+<a name="line465"></a>    return goog.net.XhrIo.superClass_.dispatchEvent.call(this, e);
+<a name="line466"></a>  }
+<a name="line467"></a>};
+<a name="line468"></a>
+<a name="line469"></a>
+<a name="line470"></a>/**
+<a name="line471"></a> * The request didn&#39;t complete after {@link goog.net.XhrIo#timeoutInterval_}
+<a name="line472"></a> * milliseconds; raises a {@link goog.net.EventType.TIMEOUT} event and aborts
+<a name="line473"></a> * the request.
+<a name="line474"></a> * @private
+<a name="line475"></a> */
+<a name="line476"></a>goog.net.XhrIo.prototype.timeout_ = function() {
+<a name="line477"></a>  if (typeof goog == &#39;undefined&#39;) {
+<a name="line478"></a>    // If goog is undefined then the callback has occurred as the application
+<a name="line479"></a>    // is unloading and will error.  Thus we let it silently fail.
+<a name="line480"></a>  } else if (this.xhr_) {
+<a name="line481"></a>    this.lastError_ = &#39;Timed out after &#39; + this.timeoutInterval_ +
+<a name="line482"></a>                      &#39;ms, aborting&#39;;
+<a name="line483"></a>    this.lastErrorCode_ = goog.net.ErrorCode.TIMEOUT;
+<a name="line484"></a>    this.logger_.fine(this.formatMsg_(this.lastError_));
+<a name="line485"></a>    this.dispatchEvent(goog.net.EventType.TIMEOUT);
+<a name="line486"></a>    this.abort(goog.net.ErrorCode.TIMEOUT);
+<a name="line487"></a>  }
+<a name="line488"></a>};
+<a name="line489"></a>
+<a name="line490"></a>
+<a name="line491"></a>/**
+<a name="line492"></a> * Something errorred, so inactivate, fire error callback and clean up
+<a name="line493"></a> * @param {goog.net.ErrorCode} errorCode The error code.
+<a name="line494"></a> * @param {Error} err The error object.
+<a name="line495"></a> * @private
+<a name="line496"></a> */
+<a name="line497"></a>goog.net.XhrIo.prototype.error_ = function(errorCode, err) {
+<a name="line498"></a>  this.active_ = false;
+<a name="line499"></a>  if (this.xhr_) {
+<a name="line500"></a>    this.inAbort_ = true;
+<a name="line501"></a>    this.xhr_.abort();  // Ensures XHR isn&#39;t hung (FF)
+<a name="line502"></a>    this.inAbort_ = false;
+<a name="line503"></a>  }
+<a name="line504"></a>  this.lastError_ = err;
+<a name="line505"></a>  this.lastErrorCode_ = errorCode;
+<a name="line506"></a>  this.dispatchErrors_();
+<a name="line507"></a>  this.cleanUpXhr_()
+<a name="line508"></a>};
+<a name="line509"></a>
+<a name="line510"></a>
+<a name="line511"></a>/**
+<a name="line512"></a> * Dispatches COMPLETE and ERROR in case of an error. This ensures that we do
+<a name="line513"></a> * not dispatch multiple error events.
+<a name="line514"></a> * @private
+<a name="line515"></a> */
+<a name="line516"></a>goog.net.XhrIo.prototype.dispatchErrors_ = function() {
+<a name="line517"></a>  if (!this.errorDispatched_) {
+<a name="line518"></a>    this.errorDispatched_ = true;
+<a name="line519"></a>    this.dispatchEvent(goog.net.EventType.COMPLETE);
+<a name="line520"></a>    this.dispatchEvent(goog.net.EventType.ERROR);
+<a name="line521"></a>  }
+<a name="line522"></a>};
+<a name="line523"></a>
+<a name="line524"></a>
+<a name="line525"></a>/**
+<a name="line526"></a> * Abort the current XMLHttpRequest
+<a name="line527"></a> * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
+<a name="line528"></a> *     defaults to ABORT.
+<a name="line529"></a> */
+<a name="line530"></a>goog.net.XhrIo.prototype.abort = function(opt_failureCode) {
+<a name="line531"></a>  if (this.xhr_) {
+<a name="line532"></a>    this.logger_.fine(this.formatMsg_(&#39;Aborting&#39;));
+<a name="line533"></a>    this.active_ = false;
+<a name="line534"></a>    this.inAbort_ = true;
+<a name="line535"></a>    this.xhr_.abort();
+<a name="line536"></a>    this.inAbort_ = false;
+<a name="line537"></a>    this.lastErrorCode_ = opt_failureCode || goog.net.ErrorCode.ABORT;
+<a name="line538"></a>    this.dispatchEvent(goog.net.EventType.COMPLETE);
+<a name="line539"></a>    this.dispatchEvent(goog.net.EventType.ABORT);
+<a name="line540"></a>    this.cleanUpXhr_();
+<a name="line541"></a>  }
+<a name="line542"></a>};
+<a name="line543"></a>
+<a name="line544"></a>
+<a name="line545"></a>/**
+<a name="line546"></a> * Nullifies all callbacks to reduce risks of leaks.
+<a name="line547"></a> */
+<a name="line548"></a>goog.net.XhrIo.prototype.disposeInternal = function() {
+<a name="line549"></a>  if (this.xhr_) {
+<a name="line550"></a>    // We explicitly do not call xhr_.abort() unless active_ is still true.
+<a name="line551"></a>    // This is to avoid unnecessarily aborting a successful request when
+<a name="line552"></a>    // disposeInternal() is called in a callback triggered by a complete
+<a name="line553"></a>    // response, but in which browser cleanup has not yet finished.
+<a name="line554"></a>    // (See http://b/issue?id=1684217.)
+<a name="line555"></a>    if (this.active_) {
+<a name="line556"></a>      this.active_ = false;
+<a name="line557"></a>      this.inAbort_ = true;
+<a name="line558"></a>      this.xhr_.abort();
+<a name="line559"></a>      this.inAbort_ = false;
+<a name="line560"></a>    }
+<a name="line561"></a>    this.cleanUpXhr_(true);
+<a name="line562"></a>  }
+<a name="line563"></a>
+<a name="line564"></a>  goog.net.XhrIo.superClass_.disposeInternal.call(this);
+<a name="line565"></a>};
+<a name="line566"></a>
+<a name="line567"></a>
+<a name="line568"></a>/**
+<a name="line569"></a> * Internal handler for the XHR object&#39;s readystatechange event.  This method
+<a name="line570"></a> * checks the status and the readystate and fires the correct callbacks.
+<a name="line571"></a> * If the request has ended, the handlers are cleaned up and the XHR object is
+<a name="line572"></a> * nullified.
+<a name="line573"></a> * @private
+<a name="line574"></a> */
+<a name="line575"></a>goog.net.XhrIo.prototype.onReadyStateChange_ = function() {
+<a name="line576"></a>  if (!this.inOpen_ &amp;&amp; !this.inSend_ &amp;&amp; !this.inAbort_) {
+<a name="line577"></a>    // Were not being called from within a call to this.xhr_.send
+<a name="line578"></a>    // this.xhr_.abort, or this.xhr_.open, so this is an entry point
+<a name="line579"></a>    this.onReadyStateChangeEntryPoint_();
+<a name="line580"></a>  } else {
+<a name="line581"></a>    this.onReadyStateChangeHelper_();
+<a name="line582"></a>  }
+<a name="line583"></a>};
+<a name="line584"></a>
+<a name="line585"></a>
+<a name="line586"></a>/**
+<a name="line587"></a> * Used to protect the onreadystatechange handler entry point.  Necessary
+<a name="line588"></a> * as {#onReadyStateChange_} maybe called from within send or abort, this
+<a name="line589"></a> * method is only called when {#onReadyStateChange_} is called as an
+<a name="line590"></a> * entry point.
+<a name="line591"></a> * {@see #protectEntryPoints}
+<a name="line592"></a> * @private
+<a name="line593"></a> */
+<a name="line594"></a>goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ = function() {
+<a name="line595"></a>  this.onReadyStateChangeHelper_();
+<a name="line596"></a>};
+<a name="line597"></a>
+<a name="line598"></a>
+<a name="line599"></a>/**
+<a name="line600"></a> * Helper for {@link #onReadyStateChange_}.  This is used so that
+<a name="line601"></a> * entry point calls to {@link #onReadyStateChange_} can be routed through
+<a name="line602"></a> * {@link #onReadyStateChangeEntryPoint_}.
+<a name="line603"></a> * @private
+<a name="line604"></a> */
+<a name="line605"></a>goog.net.XhrIo.prototype.onReadyStateChangeHelper_ = function() {
+<a name="line606"></a>  if (!this.active_) {
+<a name="line607"></a>    // can get called inside abort call
+<a name="line608"></a>    return;
+<a name="line609"></a>  }
+<a name="line610"></a>
+<a name="line611"></a>  if (typeof goog == &#39;undefined&#39;) {
+<a name="line612"></a>    // NOTE: If goog is undefined then the callback has occurred as the
+<a name="line613"></a>    // application is unloading and will error.  Thus we let it silently fail.
 <a name="line614"></a>
-<a name="line615"></a>  } else {
-<a name="line616"></a>
-<a name="line617"></a>    // In IE when the response has been cached we sometimes get the callback
-<a name="line618"></a>    // from inside the send call and this usually breaks code that assumes that
-<a name="line619"></a>    // XhrIo is asynchronous.  If that is the case we delay the callback
-<a name="line620"></a>    // using a timer.
-<a name="line621"></a>    if (this.inSend_ &amp;&amp;
-<a name="line622"></a>        this.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE) {
-<a name="line623"></a>      goog.Timer.defaultTimerObject.setTimeout(
-<a name="line624"></a>          goog.bind(this.onReadyStateChange_, this), 0);
-<a name="line625"></a>      return;
-<a name="line626"></a>    }
-<a name="line627"></a>
-<a name="line628"></a>    this.dispatchEvent(goog.net.EventType.READY_STATE_CHANGE);
-<a name="line629"></a>
-<a name="line630"></a>    // readyState indicates the transfer has finished
-<a name="line631"></a>    if (this.isComplete()) {
-<a name="line632"></a>      this.logger_.fine(this.formatMsg_(&#39;Request complete&#39;));
-<a name="line633"></a>
-<a name="line634"></a>      this.active_ = false;
-<a name="line635"></a>
-<a name="line636"></a>      // Call the specific callbacks for success or failure. Only call the
-<a name="line637"></a>      // success if the status is 200 (HTTP_OK) or 304 (HTTP_CACHED)
-<a name="line638"></a>      if (this.isSuccess()) {
-<a name="line639"></a>        this.dispatchEvent(goog.net.EventType.COMPLETE);
-<a name="line640"></a>        this.dispatchEvent(goog.net.EventType.SUCCESS);
-<a name="line641"></a>      } else {
-<a name="line642"></a>        this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
-<a name="line643"></a>        this.lastError_ = this.getStatusText() + &#39; [&#39; + this.getStatus() + &#39;]&#39;;
-<a name="line644"></a>        this.dispatchErrors_();
-<a name="line645"></a>      }
-<a name="line646"></a>
-<a name="line647"></a>      this.cleanUpXhr_();
-<a name="line648"></a>    }
-<a name="line649"></a>  }
-<a name="line650"></a>};
-<a name="line651"></a>
-<a name="line652"></a>
-<a name="line653"></a>/**
-<a name="line654"></a> * Remove the listener to protect against leaks, and nullify the XMLHttpRequest
-<a name="line655"></a> * object.
-<a name="line656"></a> * @param {boolean=} opt_fromDispose If this is from the dispose (don&#39;t want to
-<a name="line657"></a> *     fire any events).
-<a name="line658"></a> * @private
-<a name="line659"></a> */
-<a name="line660"></a>goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
-<a name="line661"></a>  if (this.xhr_) {
-<a name="line662"></a>    // Save reference so we can mark it as closed after the READY event.  The
-<a name="line663"></a>    // READY event may trigger another request, thus we must nullify this.xhr_
-<a name="line664"></a>    var xhr = this.xhr_;
-<a name="line665"></a>    var clearedOnReadyStateChange =
-<a name="line666"></a>        this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ?
-<a name="line667"></a>              goog.nullFunction : null;
-<a name="line668"></a>    this.xhr_ = null;
-<a name="line669"></a>    this.xhrOptions_ = null;
-<a name="line670"></a>
-<a name="line671"></a>    if (this.timeoutId_) {
-<a name="line672"></a>      // Cancel any pending timeout event handler.
-<a name="line673"></a>      goog.Timer.defaultTimerObject.clearTimeout(this.timeoutId_);
-<a name="line674"></a>      this.timeoutId_ = null;
-<a name="line675"></a>    }
-<a name="line676"></a>
-<a name="line677"></a>    if (!opt_fromDispose) {
-<a name="line678"></a>      goog.net.xhrMonitor.pushContext(xhr);
-<a name="line679"></a>      this.dispatchEvent(goog.net.EventType.READY);
-<a name="line680"></a>      goog.net.xhrMonitor.popContext();
-<a name="line681"></a>    }
-<a name="line682"></a>
-<a name="line683"></a>    // Mark the request as having completed.
-<a name="line684"></a>    goog.net.xhrMonitor.markXhrClosed(xhr);
-<a name="line685"></a>
-<a name="line686"></a>    try {
-<a name="line687"></a>      // NOTE: Not nullifying in FireFox can still leak if the callbacks
-<a name="line688"></a>      // are defined in the same scope as the instance of XhrIo. But, IE doesn&#39;t
-<a name="line689"></a>      // allow you to set the onreadystatechange to NULL so nullFunction is
-<a name="line690"></a>      // used.
-<a name="line691"></a>      xhr.onreadystatechange = clearedOnReadyStateChange;
-<a name="line692"></a>    } catch (e) {
-<a name="line693"></a>      // This seems to occur with a Gears HTTP request. Delayed the setting of
-<a name="line694"></a>      // this onreadystatechange until after READY is sent out and catching the
-<a name="line695"></a>      // error to see if we can track down the problem.
-<a name="line696"></a>      this.logger_.severe(&#39;Problem encountered resetting onreadystatechange: &#39; +
-<a name="line697"></a>                          e.message);
-<a name="line698"></a>    }
-<a name="line699"></a>  }
-<a name="line700"></a>};
-<a name="line701"></a>
-<a name="line702"></a>
-<a name="line703"></a>/**
-<a name="line704"></a> * @return {boolean} Whether there is an active request.
-<a name="line705"></a> */
-<a name="line706"></a>goog.net.XhrIo.prototype.isActive = function() {
-<a name="line707"></a>  return this.active_;
-<a name="line708"></a>};
-<a name="line709"></a>
-<a name="line710"></a>
-<a name="line711"></a>/**
-<a name="line712"></a> * @return {boolean} Whether the request has completed.
-<a name="line713"></a> */
-<a name="line714"></a>goog.net.XhrIo.prototype.isComplete = function() {
-<a name="line715"></a>  return this.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE;
-<a name="line716"></a>};
-<a name="line717"></a>
-<a name="line718"></a>
-<a name="line719"></a>/**
-<a name="line720"></a> * @return {boolean} Whether the request completed with a success.
-<a name="line721"></a> */
-<a name="line722"></a>goog.net.XhrIo.prototype.isSuccess = function() {
-<a name="line723"></a>  switch (this.getStatus()) {
-<a name="line724"></a>    case 0:         // Used for local XHR requests
-<a name="line725"></a>    case 200:       // Http Success
-<a name="line726"></a>    case 204:       // Http Success - no content
-<a name="line727"></a>    case 304:       // Http Cache
-<a name="line728"></a>      return true;
-<a name="line729"></a>
-<a name="line730"></a>    default:
-<a name="line731"></a>      return false;
-<a name="line732"></a>  }
-<a name="line733"></a>};
-<a name="line734"></a>
-<a name="line735"></a>
-<a name="line736"></a>/**
-<a name="line737"></a> * Get the readystate from the Xhr object
-<a name="line738"></a> * Will only return correct result when called from the context of a callback
-<a name="line739"></a> * @return {goog.net.XmlHttp.ReadyState} goog.net.XmlHttp.ReadyState.*.
-<a name="line740"></a> */
-<a name="line741"></a>goog.net.XhrIo.prototype.getReadyState = function() {
-<a name="line742"></a>  return this.xhr_ ?
-<a name="line743"></a>      /** @type {goog.net.XmlHttp.ReadyState} */ (this.xhr_.readyState) :
-<a name="line744"></a>      goog.net.XmlHttp.ReadyState.UNINITIALIZED;
-<a name="line745"></a>};
-<a name="line746"></a>
-<a name="line747"></a>
-<a name="line748"></a>/**
-<a name="line749"></a> * Get the status from the Xhr object
-<a name="line750"></a> * Will only return correct result when called from the context of a callback
-<a name="line751"></a> * @return {number} Http status.
-<a name="line752"></a> */
-<a name="line753"></a>goog.net.XhrIo.prototype.getStatus = function() {
-<a name="line754"></a>  /**
-<a name="line755"></a>   * IE doesn&#39;t like you checking status until the readystate is greater than 2
-<a name="line756"></a>   * (i.e. it is recieving or complete).  The try/catch is used for when the
-<a name="line757"></a>   * page is unloading and an ERROR_NOT_AVAILABLE may occur when accessing xhr_.
-<a name="line758"></a>   * @preserveTry
-<a name="line759"></a>   */
-<a name="line760"></a>  try {
-<a name="line761"></a>    return this.getReadyState() &gt; goog.net.XmlHttp.ReadyState.LOADED ?
-<a name="line762"></a>        this.xhr_.status : -1;
-<a name="line763"></a>  } catch (e) {
-<a name="line764"></a>    this.logger_.warning(&#39;Can not get status: &#39; + e.message);
-<a name="line765"></a>    return -1;
-<a name="line766"></a>  }
-<a name="line767"></a>};
-<a name="line768"></a>
-<a name="line769"></a>
-<a name="line770"></a>/**
-<a name="line771"></a> * Get the status text from the Xhr object
-<a name="line772"></a> * Will only return correct result when called from the context of a callback
-<a name="line773"></a> * @return {string} Status text.
-<a name="line774"></a> */
-<a name="line775"></a>goog.net.XhrIo.prototype.getStatusText = function() {
-<a name="line776"></a>  /**
-<a name="line777"></a>   * IE doesn&#39;t like you checking status until the readystate is greater than 2
-<a name="line778"></a>   * (i.e. it is recieving or complete).  The try/catch is used for when the
-<a name="line779"></a>   * page is unloading and an ERROR_NOT_AVAILABLE may occur when accessing xhr_.
-<a name="line780"></a>   * @preserveTry
-<a name="line781"></a>   */
-<a name="line782"></a>  try {
-<a name="line783"></a>    return this.getReadyState() &gt; goog.net.XmlHttp.ReadyState.LOADED ?
-<a name="line784"></a>        this.xhr_.statusText : &#39;&#39;;
-<a name="line785"></a>  } catch (e) {
-<a name="line786"></a>    this.logger_.fine(&#39;Can not get status: &#39; + e.message);
-<a name="line787"></a>    return &#39;&#39;;
-<a name="line788"></a>  }
-<a name="line789"></a>};
-<a name="line790"></a>
-<a name="line791"></a>
-<a name="line792"></a>/**
-<a name="line793"></a> * Get the last Uri that was requested
-<a name="line794"></a> * @return {string} Last Uri.
-<a name="line795"></a> */
-<a name="line796"></a>goog.net.XhrIo.prototype.getLastUri = function() {
-<a name="line797"></a>  return String(this.lastUri_);
-<a name="line798"></a>};
-<a name="line799"></a>
+<a name="line615"></a>  } else if (
+<a name="line616"></a>      this.xhrOptions_[goog.net.XmlHttp.OptionType.LOCAL_REQUEST_ERROR] &amp;&amp;
+<a name="line617"></a>      this.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE &amp;&amp;
+<a name="line618"></a>      this.getStatus() == 2) {
+<a name="line619"></a>    // NOTE: In IE if send() errors on a *local* request the readystate
+<a name="line620"></a>    // is still changed to COMPLETE.  We need to ignore it and allow the
+<a name="line621"></a>    // try/catch around send() to pick up the error.
+<a name="line622"></a>    this.logger_.fine(this.formatMsg_(
+<a name="line623"></a>        &#39;Local request error detected and ignored&#39;));
+<a name="line624"></a>
+<a name="line625"></a>  } else {
+<a name="line626"></a>
+<a name="line627"></a>    // In IE when the response has been cached we sometimes get the callback
+<a name="line628"></a>    // from inside the send call and this usually breaks code that assumes that
+<a name="line629"></a>    // XhrIo is asynchronous.  If that is the case we delay the callback
+<a name="line630"></a>    // using a timer.
+<a name="line631"></a>    if (this.inSend_ &amp;&amp;
+<a name="line632"></a>        this.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE) {
+<a name="line633"></a>      goog.Timer.defaultTimerObject.setTimeout(
+<a name="line634"></a>          goog.bind(this.onReadyStateChange_, this), 0);
+<a name="line635"></a>      return;
+<a name="line636"></a>    }
+<a name="line637"></a>
+<a name="line638"></a>    this.dispatchEvent(goog.net.EventType.READY_STATE_CHANGE);
+<a name="line639"></a>
+<a name="line640"></a>    // readyState indicates the transfer has finished
+<a name="line641"></a>    if (this.isComplete()) {
+<a name="line642"></a>      this.logger_.fine(this.formatMsg_(&#39;Request complete&#39;));
+<a name="line643"></a>
+<a name="line644"></a>      this.active_ = false;
+<a name="line645"></a>
+<a name="line646"></a>      // Call the specific callbacks for success or failure. Only call the
+<a name="line647"></a>      // success if the status is 200 (HTTP_OK) or 304 (HTTP_CACHED)
+<a name="line648"></a>      if (this.isSuccess()) {
+<a name="line649"></a>        this.dispatchEvent(goog.net.EventType.COMPLETE);
+<a name="line650"></a>        this.dispatchEvent(goog.net.EventType.SUCCESS);
+<a name="line651"></a>      } else {
+<a name="line652"></a>        this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
+<a name="line653"></a>        this.lastError_ = this.getStatusText() + &#39; [&#39; + this.getStatus() + &#39;]&#39;;
+<a name="line654"></a>        this.dispatchErrors_();
+<a name="line655"></a>      }
+<a name="line656"></a>
+<a name="line657"></a>      this.cleanUpXhr_();
+<a name="line658"></a>    }
+<a name="line659"></a>  }
+<a name="line660"></a>};
+<a name="line661"></a>
+<a name="line662"></a>
+<a name="line663"></a>/**
+<a name="line664"></a> * Remove the listener to protect against leaks, and nullify the XMLHttpRequest
+<a name="line665"></a> * object.
+<a name="line666"></a> * @param {boolean=} opt_fromDispose If this is from the dispose (don&#39;t want to
+<a name="line667"></a> *     fire any events).
+<a name="line668"></a> * @private
+<a name="line669"></a> */
+<a name="line670"></a>goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
+<a name="line671"></a>  if (this.xhr_) {
+<a name="line672"></a>    // Save reference so we can mark it as closed after the READY event.  The
+<a name="line673"></a>    // READY event may trigger another request, thus we must nullify this.xhr_
+<a name="line674"></a>    var xhr = this.xhr_;
+<a name="line675"></a>    var clearedOnReadyStateChange =
+<a name="line676"></a>        this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ?
+<a name="line677"></a>              goog.nullFunction : null;
+<a name="line678"></a>    this.xhr_ = null;
+<a name="line679"></a>    this.xhrOptions_ = null;
+<a name="line680"></a>
+<a name="line681"></a>    if (this.timeoutId_) {
+<a name="line682"></a>      // Cancel any pending timeout event handler.
+<a name="line683"></a>      goog.Timer.defaultTimerObject.clearTimeout(this.timeoutId_);
+<a name="line684"></a>      this.timeoutId_ = null;
+<a name="line685"></a>    }
+<a name="line686"></a>
+<a name="line687"></a>    if (!opt_fromDispose) {
+<a name="line688"></a>      goog.net.xhrMonitor.pushContext(xhr);
+<a name="line689"></a>      this.dispatchEvent(goog.net.EventType.READY);
+<a name="line690"></a>      goog.net.xhrMonitor.popContext();
+<a name="line691"></a>    }
+<a name="line692"></a>
+<a name="line693"></a>    // Mark the request as having completed.
+<a name="line694"></a>    goog.net.xhrMonitor.markXhrClosed(xhr);
+<a name="line695"></a>
+<a name="line696"></a>    try {
+<a name="line697"></a>      // NOTE: Not nullifying in FireFox can still leak if the callbacks
+<a name="line698"></a>      // are defined in the same scope as the instance of XhrIo. But, IE doesn&#39;t
+<a name="line699"></a>      // allow you to set the onreadystatechange to NULL so nullFunction is
+<a name="line700"></a>      // used.
+<a name="line701"></a>      xhr.onreadystatechange = clearedOnReadyStateChange;
+<a name="line702"></a>    } catch (e) {
+<a name="line703"></a>      // This seems to occur with a Gears HTTP request. Delayed the setting of
+<a name="line704"></a>      // this onreadystatechange until after READY is sent out and catching the
+<a name="line705"></a>      // error to see if we can track down the problem.
+<a name="line706"></a>      this.logger_.severe(&#39;Problem encountered resetting onreadystatechange: &#39; +
+<a name="line707"></a>                          e.message);
+<a name="line708"></a>    }
+<a name="line709"></a>  }
+<a name="line710"></a>};
+<a name="line711"></a>
+<a name="line712"></a>
+<a name="line713"></a>/**
+<a name="line714"></a> * @return {boolean} Whether there is an active request.
+<a name="line715"></a> */
+<a name="line716"></a>goog.net.XhrIo.prototype.isActive = function() {
+<a name="line717"></a>  return this.active_;
+<a name="line718"></a>};
+<a name="line719"></a>
+<a name="line720"></a>
+<a name="line721"></a>/**
+<a name="line722"></a> * @return {boolean} Whether the request has completed.
+<a name="line723"></a> */
+<a name="line724"></a>goog.net.XhrIo.prototype.isComplete = function() {
+<a name="line725"></a>  return this.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE;
+<a name="line726"></a>};
+<a name="line727"></a>
+<a name="line728"></a>
+<a name="line729"></a>/**
+<a name="line730"></a> * @return {boolean} Whether the request completed with a success.
+<a name="line731"></a> */
+<a name="line732"></a>goog.net.XhrIo.prototype.isSuccess = function() {
+<a name="line733"></a>  switch (this.getStatus()) {
+<a name="line734"></a>    case 0:         // Used for local XHR requests
+<a name="line735"></a>    case 200:       // Http Success
+<a name="line736"></a>    case 204:       // Http Success - no content
+<a name="line737"></a>    case 304:       // Http Cache
+<a name="line738"></a>      return true;
+<a name="line739"></a>
+<a name="line740"></a>    default:
+<a name="line741"></a>      return false;
+<a name="line742"></a>  }
+<a name="line743"></a>};
+<a name="line744"></a>
+<a name="line745"></a>
+<a name="line746"></a>/**
+<a name="line747"></a> * Get the readystate from the Xhr object
+<a name="line748"></a> * Will only return correct result when called from the context of a callback
+<a name="line749"></a> * @return {goog.net.XmlHttp.ReadyState} goog.net.XmlHttp.ReadyState.*.
+<a name="line750"></a> */
+<a name="line751"></a>goog.net.XhrIo.prototype.getReadyState = function() {
+<a name="line752"></a>  return this.xhr_ ?
+<a name="line753"></a>      /** @type {goog.net.XmlHttp.ReadyState} */ (this.xhr_.readyState) :
+<a name="line754"></a>      goog.net.XmlHttp.ReadyState.UNINITIALIZED;
+<a name="line755"></a>};
+<a name="line756"></a>
+<a name="line757"></a>
+<a name="line758"></a>/**
+<a name="line759"></a> * Get the status from the Xhr object
+<a name="line760"></a> * Will only return correct result when called from the context of a callback
+<a name="line761"></a> * @return {number} Http status.
+<a name="line762"></a> */
+<a name="line763"></a>goog.net.XhrIo.prototype.getStatus = function() {
+<a name="line764"></a>  /**
+<a name="line765"></a>   * IE doesn&#39;t like you checking status until the readystate is greater than 2
+<a name="line766"></a>   * (i.e. it is recieving or complete).  The try/catch is used for when the
+<a name="line767"></a>   * page is unloading and an ERROR_NOT_AVAILABLE may occur when accessing xhr_.
+<a name="line768"></a>   * @preserveTry
+<a name="line769"></a>   */
+<a name="line770"></a>  try {
+<a name="line771"></a>    return this.getReadyState() &gt; goog.net.XmlHttp.ReadyState.LOADED ?
+<a name="line772"></a>        this.xhr_.status : -1;
+<a name="line773"></a>  } catch (e) {
+<a name="line774"></a>    this.logger_.warning(&#39;Can not get status: &#39; + e.message);
+<a name="line775"></a>    return -1;
+<a name="line776"></a>  }
+<a name="line777"></a>};
+<a name="line778"></a>
+<a name="line779"></a>
+<a name="line780"></a>/**
+<a name="line781"></a> * Get the status text from the Xhr object
+<a name="line782"></a> * Will only return correct result when called from the context of a callback
+<a name="line783"></a> * @return {string} Status text.
+<a name="line784"></a> */
+<a name="line785"></a>goog.net.XhrIo.prototype.getStatusText = function() {
+<a name="line786"></a>  /**
+<a name="line787"></a>   * IE doesn&#39;t like you checking status until the readystate is greater than 2
+<a name="line788"></a>   * (i.e. it is recieving or complete).  The try/catch is used for when the
+<a name="line789"></a>   * page is unloading and an ERROR_NOT_AVAILABLE may occur when accessing xhr_.
+<a name="line790"></a>   * @preserveTry
+<a name="line791"></a>   */
+<a name="line792"></a>  try {
+<a name="line793"></a>    return this.getReadyState() &gt; goog.net.XmlHttp.ReadyState.LOADED ?
+<a name="line794"></a>        this.xhr_.statusText : &#39;&#39;;
+<a name="line795"></a>  } catch (e) {
+<a name="line796"></a>    this.logger_.fine(&#39;Can not get status: &#39; + e.message);
+<a name="line797"></a>    return &#39;&#39;;
+<a name="line798"></a>  }
+<a name="line799"></a>};
 <a name="line800"></a>
-<a name="line801"></a>/**
-<a name="line802"></a> * Get the response text from the Xhr object
-<a name="line803"></a> * Will only return correct result when called from the context of a callback
-<a name="line804"></a> * @return {string} Result from the server.
+<a name="line801"></a>
+<a name="line802"></a>/**
+<a name="line803"></a> * Get the last Uri that was requested
+<a name="line804"></a> * @return {string} Last Uri.
 <a name="line805"></a> */
-<a name="line806"></a>goog.net.XhrIo.prototype.getResponseText = function() {
-<a name="line807"></a>  return this.xhr_ ? this.xhr_.responseText : &#39;&#39;;
+<a name="line806"></a>goog.net.XhrIo.prototype.getLastUri = function() {
+<a name="line807"></a>  return String(this.lastUri_);
 <a name="line808"></a>};
 <a name="line809"></a>
 <a name="line810"></a>
 <a name="line811"></a>/**
-<a name="line812"></a> * Get the response XML from the Xhr object
+<a name="line812"></a> * Get the response text from the Xhr object
 <a name="line813"></a> * Will only return correct result when called from the context of a callback
-<a name="line814"></a> * @return {Document} The DOM Document representing the XML file.
+<a name="line814"></a> * @return {string} Result from the server.
 <a name="line815"></a> */
-<a name="line816"></a>goog.net.XhrIo.prototype.getResponseXml = function() {
-<a name="line817"></a>  return this.xhr_ ? this.xhr_.responseXML : null;
+<a name="line816"></a>goog.net.XhrIo.prototype.getResponseText = function() {
+<a name="line817"></a>  return this.xhr_ ? this.xhr_.responseText : &#39;&#39;;
 <a name="line818"></a>};
 <a name="line819"></a>
 <a name="line820"></a>
 <a name="line821"></a>/**
-<a name="line822"></a> * Get the response and evaluates it as JSON from the Xhr object
+<a name="line822"></a> * Get the response XML from the Xhr object
 <a name="line823"></a> * Will only return correct result when called from the context of a callback
-<a name="line824"></a> * @return {Object|undefined} JavaScript object.
+<a name="line824"></a> * @return {Document} The DOM Document representing the XML file.
 <a name="line825"></a> */
-<a name="line826"></a>goog.net.XhrIo.prototype.getResponseJson = function() {
-<a name="line827"></a>  return this.xhr_ ? goog.json.parse(this.xhr_.responseText) : undefined;
+<a name="line826"></a>goog.net.XhrIo.prototype.getResponseXml = function() {
+<a name="line827"></a>  return this.xhr_ ? this.xhr_.responseXML : null;
 <a name="line828"></a>};
 <a name="line829"></a>
 <a name="line830"></a>
 <a name="line831"></a>/**
-<a name="line832"></a> * Get the value of the response-header with the given name from the Xhr object
+<a name="line832"></a> * Get the response and evaluates it as JSON from the Xhr object
 <a name="line833"></a> * Will only return correct result when called from the context of a callback
-<a name="line834"></a> * and the request has completed
-<a name="line835"></a> * @param {string} key The name of the response-header to retrieve.
-<a name="line836"></a> * @return {string|undefined} The value of the response-header named key.
-<a name="line837"></a> */
-<a name="line838"></a>goog.net.XhrIo.prototype.getResponseHeader = function(key) {
-<a name="line839"></a>  return this.xhr_ &amp;&amp; this.isComplete() ?
-<a name="line840"></a>      this.xhr_.getResponseHeader(key) : undefined;
-<a name="line841"></a>};
-<a name="line842"></a>
+<a name="line834"></a> * @param {string=} opt_xssiPrefix Optional XSSI prefix string to use for
+<a name="line835"></a> *     stripping of the response before parsing. This needs to be set only if
+<a name="line836"></a> *     your backend server prepends the same prefix string to the JSON response.
+<a name="line837"></a> * @return {Object|undefined} JavaScript object.
+<a name="line838"></a> */
+<a name="line839"></a>goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
+<a name="line840"></a>  if (!this.xhr_) {
+<a name="line841"></a>    return undefined;
+<a name="line842"></a>  }
 <a name="line843"></a>
-<a name="line844"></a>/**
-<a name="line845"></a> * Get the last error message
-<a name="line846"></a> * @return {goog.net.ErrorCode} Last error code.
-<a name="line847"></a> */
-<a name="line848"></a>goog.net.XhrIo.prototype.getLastErrorCode = function() {
-<a name="line849"></a>  return this.lastErrorCode_;
+<a name="line844"></a>  var responseText = this.xhr_.responseText;
+<a name="line845"></a>  if (opt_xssiPrefix &amp;&amp; responseText.indexOf(opt_xssiPrefix) == 0) {
+<a name="line846"></a>    responseText = responseText.substring(opt_xssiPrefix.length);
+<a name="line847"></a>  }
+<a name="line848"></a>
+<a name="line849"></a>  return goog.json.parse(responseText);
 <a name="line850"></a>};
 <a name="line851"></a>
 <a name="line852"></a>
 <a name="line853"></a>/**
-<a name="line854"></a> * Get the last error message
-<a name="line855"></a> * @return {string} Last error message.
-<a name="line856"></a> */
-<a name="line857"></a>goog.net.XhrIo.prototype.getLastError = function() {
-<a name="line858"></a>  return goog.isString(this.lastError_) ? this.lastError_ :
-<a name="line859"></a>    String(this.lastError_);
-<a name="line860"></a>};
-<a name="line861"></a>
-<a name="line862"></a>
-<a name="line863"></a>/**
-<a name="line864"></a> * Adds the last method, status and URI to the message.  This is used to add
-<a name="line865"></a> * this information to the logging calls.
-<a name="line866"></a> * @param {string} msg The message text that we want to add the extra text to.
-<a name="line867"></a> * @return {string} The message with the extra text appended.
-<a name="line868"></a> * @private
+<a name="line854"></a> * Get the value of the response-header with the given name from the Xhr object
+<a name="line855"></a> * Will only return correct result when called from the context of a callback
+<a name="line856"></a> * and the request has completed
+<a name="line857"></a> * @param {string} key The name of the response-header to retrieve.
+<a name="line858"></a> * @return {string|undefined} The value of the response-header named key.
+<a name="line859"></a> */
+<a name="line860"></a>goog.net.XhrIo.prototype.getResponseHeader = function(key) {
+<a name="line861"></a>  return this.xhr_ &amp;&amp; this.isComplete() ?
+<a name="line862"></a>      this.xhr_.getResponseHeader(key) : undefined;
+<a name="line863"></a>};
+<a name="line864"></a>
+<a name="line865"></a>
+<a name="line866"></a>/**
+<a name="line867"></a> * Get the last error message
+<a name="line868"></a> * @return {goog.net.ErrorCode} Last error code.
 <a name="line869"></a> */
-<a name="line870"></a>goog.net.XhrIo.prototype.formatMsg_ = function(msg) {
-<a name="line871"></a>  return msg + &#39; [&#39; + this.lastMethod_ + &#39; &#39; + this.lastUri_ + &#39; &#39; +
-<a name="line872"></a>      this.getStatus() + &#39;]&#39;;
-<a name="line873"></a>};
+<a name="line870"></a>goog.net.XhrIo.prototype.getLastErrorCode = function() {
+<a name="line871"></a>  return this.lastErrorCode_;
+<a name="line872"></a>};
+<a name="line873"></a>
+<a name="line874"></a>
+<a name="line875"></a>/**
+<a name="line876"></a> * Get the last error message
+<a name="line877"></a> * @return {string} Last error message.
+<a name="line878"></a> */
+<a name="line879"></a>goog.net.XhrIo.prototype.getLastError = function() {
+<a name="line880"></a>  return goog.isString(this.lastError_) ? this.lastError_ :
+<a name="line881"></a>    String(this.lastError_);
+<a name="line882"></a>};
+<a name="line883"></a>
+<a name="line884"></a>
+<a name="line885"></a>/**
+<a name="line886"></a> * Adds the last method, status and URI to the message.  This is used to add
+<a name="line887"></a> * this information to the logging calls.
+<a name="line888"></a> * @param {string} msg The message text that we want to add the extra text to.
+<a name="line889"></a> * @return {string} The message with the extra text appended.
+<a name="line890"></a> * @private
+<a name="line891"></a> */
+<a name="line892"></a>goog.net.XhrIo.prototype.formatMsg_ = function(msg) {
+<a name="line893"></a>  return msg + &#39; [&#39; + this.lastMethod_ + &#39; &#39; + this.lastUri_ + &#39; &#39; +
+<a name="line894"></a>      this.getStatus() + &#39;]&#39;;
+<a name="line895"></a>};
 </pre>
 
 

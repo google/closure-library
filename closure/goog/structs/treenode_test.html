@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<!--
+  Copyright 2010 Google Inc. All Rights Reserved.
+
+-->
+<head>
+<title>Closure Unit Tests - goog.structs.TreeNode</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.array');
+  goog.require('goog.structs.TreeNode');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<script>
+
+function testConstructor() {
+  var node = new goog.structs.TreeNode('key', 'value');
+  assertEquals('key', 'key', node.getKey());
+  assertEquals('value', 'value', node.getValue());
+  assertNull('parent', node.getParent());
+  assertArrayEquals('children', [], node.getChildren());
+  assertTrue('leaf', node.isLeaf());
+}
+
+function testClone() {
+  var node1 = new goog.structs.TreeNode(1, '1');
+  var node2 = new goog.structs.TreeNode(2, '2');
+  var node3 = new goog.structs.TreeNode(3, '3');
+  node1.addChild(node2);
+  node2.addChild(node3);
+
+  var clone = node2.clone();
+  assertEquals('key', 2, clone.getKey());
+  assertEquals('value', '2', clone.getValue());
+  assertNull('parent', clone.getParent());
+  assertArrayEquals('children', [], clone.getChildren());
+}
+
+function testGetParent() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  node1.addChild(node2);
+  assertEquals('parent', node1, node2.getParent());
+  assertNull('orphan', node1.getParent());
+}
+
+function testIsLeaf() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  node1.addChild(node2);
+  assertFalse('not leaf', node1.isLeaf());
+  assertTrue('leaf', node2.isLeaf());
+}
+
+function testGetChildren() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  node1.addChild(node2);
+  assertArrayEquals('1 child', [node2], node1.getChildren());
+  assertArrayEquals('no children', [], node2.getChildren());
+}
+
+function testGetDepth() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  node1.addChild(node2);
+  node2.addChild(node3);
+  assertEquals('no parent', 0, node1.getDepth());
+  assertEquals('1 ancestor', 1, node2.getDepth());
+  assertEquals('2 ancestors', 2, node3.getDepth());
+}
+
+function testGetAncestors() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  node1.addChild(node2);
+  node2.addChild(node3);
+  assertArrayEquals('no ancestors', [], node1.getAncestors());
+  assertArrayEquals('2 ancestors', [node2, node1], node3.getAncestors());
+}
+
+function testGetRoot() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  node1.addChild(node2);
+  assertEquals('no ancestors', node1, node1.getRoot());
+  assertEquals('has ancestors', node1, node2.getRoot());
+}
+
+function testContains() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  var node4 = new goog.structs.TreeNode(4, null);
+  node1.addChild(node2);
+  node2.addChild(node3);
+  node2.addChild(node4);
+
+  assertTrue('parent', node1.contains(node2));
+  assertTrue('grandparent', node1.contains(node3));
+  assertFalse('child', node2.contains(node1));
+  assertFalse('grandchild', node3.contains(node1));
+  assertFalse('sibling', node3.contains(node4));
+}
+
+function testForEachChild() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  node1.addChild(node2);
+  node1.addChild(node3);
+
+  var thisContext = {};
+  var visitedNodes = [];
+  var indices = [];
+  node1.forEachChild(function(node, index, children) {
+    assertEquals('value of this', thisContext, this);
+    visitedNodes.push(node);
+    indices.push(index);
+    assertArrayEquals('children argument', [node2, node3], children);
+  }, thisContext);
+  assertArrayEquals('visited nodes', [node2, node3], visitedNodes);
+  assertArrayEquals('index of visited nodes', [0, 1],  indices);
+}
+
+function testForEachDescendant() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  var node4 = new goog.structs.TreeNode(4, null);
+  node1.addChild(node2);
+  node2.addChild(node3);
+  node2.addChild(node4);
+
+  var thisContext = {};
+  var visitedNodes = [];
+  node1.forEachDescendant(function(node) {
+    assertEquals('value of this', thisContext, this);
+    visitedNodes.push(node);
+  }, thisContext);
+  assertArrayEquals('visited nodes', [node2, node3, node4], visitedNodes);
+}
+
+function testAddChild() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  assertArrayEquals('0 children', [], node1.getChildren());
+  node1.addChild(node2);
+  assertArrayEquals('1 child', [node2], node1.getChildren());
+  assertEquals('parent is set', node1, node2.getParent());
+  node1.addChild(node3);
+  assertArrayEquals('2 children', [node2, node3], node1.getChildren());
+}
+
+function testAddChildAt() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  var node4 = new goog.structs.TreeNode(4, null);
+  var node5 = new goog.structs.TreeNode(5, null);
+  node1.addChildAt(node2, 0);
+  assertArrayEquals('add first child', [node2], node1.getChildren());
+  assertEquals('parent is set', node1, node2.getParent());
+  node1.addChildAt(node3, 0);
+  assertArrayEquals('add to the front', [node3, node2],
+      node1.getChildren());
+  node1.addChildAt(node4, 1);
+  assertArrayEquals('add to the middle', [node3, node4, node2],
+      node1.getChildren());
+  node1.addChildAt(node5, 3);
+  assertArrayEquals('add to the end', [node3, node4, node2, node5],
+      node1.getChildren());
+}
+
+function testRemoveChildAt() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  node1.addChild(node2);
+  node1.addChild(node3);
+
+  node1.removeChildAt(0);
+  assertArrayEquals('remove from the front', [node3], node1.getChildren());
+  assertNull('parent is unset', node2.getParent());
+
+  node1.removeChildAt(0);
+  assertArrayEquals('remove last child', [], node1.getChildren());
+  assertTrue('node1 became leaf', node1.isLeaf());
+}
+
+function testRemoveChildren() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  node1.addChild(node2);
+  node1.addChild(node3);
+
+  node2.removeChildren();
+  assertArrayEquals('removing a leaf node\'s children has no effect', [],
+      node2.getChildren());
+  assertEquals('node still has parent', node1, node2.getParent());
+
+  node1.removeChildren();
+  assertArrayEquals('children have been removed', [], node1.getChildren());
+  assertNull('children\'s parents have been unset', node2.getParent());
+}
+
+</script>
+</body>
+</html>

@@ -718,28 +718,44 @@
 <a name="line674"></a>
 <a name="line675"></a>
 <a name="line676"></a>/**
-<a name="line677"></a> * Creates the named logger. Will also create the parents of the named logger
-<a name="line678"></a> * if they don&#39;t yet exist.
-<a name="line679"></a> * @param {string} name The name of the logger.
-<a name="line680"></a> * @return {!goog.debug.Logger} The named logger.
-<a name="line681"></a> * @private
+<a name="line677"></a> * Creates a function that can be passed to goog.debug.catchErrors. The function
+<a name="line678"></a> * will log all reported errors using the given logger.
+<a name="line679"></a> * @param {goog.debug.Logger=} opt_logger The logger to log the errors to.
+<a name="line680"></a> *     Defaults to the root logger.
+<a name="line681"></a> * @return {function(Object)} The created function.
 <a name="line682"></a> */
-<a name="line683"></a>goog.debug.LogManager.createLogger_ = function(name) {
-<a name="line684"></a>  // find parent logger
-<a name="line685"></a>  var logger = new goog.debug.Logger(name);
-<a name="line686"></a>  var parts = name.split(&#39;.&#39;);
-<a name="line687"></a>  var leafName = parts[parts.length - 1];
-<a name="line688"></a>  parts.length = parts.length - 1;
-<a name="line689"></a>  var parentName = parts.join(&#39;.&#39;);
-<a name="line690"></a>  var parentLogger = goog.debug.LogManager.getLogger(parentName);
+<a name="line683"></a>goog.debug.LogManager.createFunctionForCatchErrors = function(opt_logger) {
+<a name="line684"></a>  return function(info) {
+<a name="line685"></a>    var logger = opt_logger || goog.debug.LogManager.getRoot();
+<a name="line686"></a>    logger.severe(&#39;Error: &#39; + info.message + &#39; (&#39; + info.fileName +
+<a name="line687"></a>                  &#39; @ Line: &#39; + info.line + &#39;)&#39;);
+<a name="line688"></a>  };
+<a name="line689"></a>};
+<a name="line690"></a>
 <a name="line691"></a>
-<a name="line692"></a>  // tell the parent about the child and the child about the parent
-<a name="line693"></a>  parentLogger.addChild_(leafName, logger);
-<a name="line694"></a>  logger.setParent_(parentLogger);
-<a name="line695"></a>
-<a name="line696"></a>  goog.debug.LogManager.loggers_[name] = logger;
-<a name="line697"></a>  return logger;
-<a name="line698"></a>};
+<a name="line692"></a>/**
+<a name="line693"></a> * Creates the named logger. Will also create the parents of the named logger
+<a name="line694"></a> * if they don&#39;t yet exist.
+<a name="line695"></a> * @param {string} name The name of the logger.
+<a name="line696"></a> * @return {!goog.debug.Logger} The named logger.
+<a name="line697"></a> * @private
+<a name="line698"></a> */
+<a name="line699"></a>goog.debug.LogManager.createLogger_ = function(name) {
+<a name="line700"></a>  // find parent logger
+<a name="line701"></a>  var logger = new goog.debug.Logger(name);
+<a name="line702"></a>  var parts = name.split(&#39;.&#39;);
+<a name="line703"></a>  var leafName = parts[parts.length - 1];
+<a name="line704"></a>  parts.length = parts.length - 1;
+<a name="line705"></a>  var parentName = parts.join(&#39;.&#39;);
+<a name="line706"></a>  var parentLogger = goog.debug.LogManager.getLogger(parentName);
+<a name="line707"></a>
+<a name="line708"></a>  // tell the parent about the child and the child about the parent
+<a name="line709"></a>  parentLogger.addChild_(leafName, logger);
+<a name="line710"></a>  logger.setParent_(parentLogger);
+<a name="line711"></a>
+<a name="line712"></a>  goog.debug.LogManager.loggers_[name] = logger;
+<a name="line713"></a>  return logger;
+<a name="line714"></a>};
 </pre>
 
 

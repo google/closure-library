@@ -157,9 +157,9 @@
 <a name="line113"></a> */
 <a name="line114"></a>goog.ui.TwoThumbSlider.prototype.createThumbs = function() {
 <a name="line115"></a>  // find thumbs
-<a name="line116"></a>  var valueThumb = goog.dom.$$(
+<a name="line116"></a>  var valueThumb = goog.dom.getElementsByTagNameAndClass(
 <a name="line117"></a>      null, goog.ui.TwoThumbSlider.VALUE_THUMB_CSS_CLASS, this.getElement())[0];
-<a name="line118"></a>  var extentThumb = goog.dom.$$(null,
+<a name="line118"></a>  var extentThumb = goog.dom.getElementsByTagNameAndClass(null,
 <a name="line119"></a>      goog.ui.TwoThumbSlider.EXTENT_THUMB_CSS_CLASS, this.getElement())[0];
 <a name="line120"></a>  if (!valueThumb) {
 <a name="line121"></a>    valueThumb =

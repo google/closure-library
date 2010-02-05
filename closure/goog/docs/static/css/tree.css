@@ -121,6 +121,13 @@
   background-position: -70px -24px;
 }
 
+.gdoc-tree-iface-icon {
+  vertical-align: middle;
+  height: 16px;
+  width: 16px;
+  background-position: -92px -24px;
+}
+
 .gdoc-tree-class-icon {
   vertical-align: middle;
   height: 16px;

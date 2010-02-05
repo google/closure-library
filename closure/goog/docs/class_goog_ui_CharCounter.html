@@ -63,7 +63,8 @@
         <span>Extends</span>
         <span class="fn-name">
           <a href="class_goog_events_EventTarget.html">
-            goog.events.EventTarget</a>
+          goog.events.EventTarget
+</a>
         </span>
 </div>
 
@@ -107,7 +108,7 @@ entered before the maximum length is reached.
 
   <h2>Constructor</h2>
       <div class="fn-constructor">
-    goog.ui.CharCounter(<span><span class="arg">elInput</span>,&nbsp;<span class="arg">elCount</span>,&nbsp;<span class="arg">maxLength</span></span>)
+    goog.ui.CharCounter(<span><span class="arg">CharCounter@elInput</span>,&nbsp;<span class="arg">CharCounter@elCount</span>,&nbsp;<span class="arg">CharCounter@maxLength</span>,&nbsp;<span class="arg">CharCounter@opt_displayMode</span></span>)
   </div>
 
    <h3>Parameters</h3>
@@ -121,25 +122,33 @@ entered before the maximum length is reached.
      
    <tr class="even">
      <td>
-        <span class="entryName">elInput</span>
-        : <div class="fullType"><span class="type">HTMLInputElement</span><span>&nbsp;|&nbsp;</span><span class="type">HTMLTextAreaElement</span></div>
-        <div class="entryOverview">Input or text area element to count the number of characters in.</div>
+        <span class="entryName">CharCounter@elInput</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">elCount</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">HTML element to display the remaining number of characters in.</div>
+        <span class="entryName">CharCounter@elCount</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">maxLength</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">The maximum length.</div>
+        <span class="entryName">CharCounter@maxLength</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">CharCounter@opt_displayMode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -209,7 +218,7 @@ if the maximum lengths is exceeded.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_charcounter.js.source.html#line124">code &raquo;</a>
+     <a href="closure_goog_ui_charcounter.js.source.html#line167">code &raquo;</a>
   </td>
      </tr>
 
@@ -243,12 +252,58 @@ if the maximum lengths is exceeded.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_charcounter.js.source.html#line149">code &raquo;</a>
+     <a href="closure_goog_ui_charcounter.js.source.html#line193">code &raquo;</a>
   </td>
      </tr>
 
 
      <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.CharCounter.prototype.getDisplayMode"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getDisplayMode<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span>!</span><span class="type">goog.ui.CharCounter.Display</span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the display mode.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span>!</span><span class="type">goog.ui.CharCounter.Display</span></div>&nbsp;
+            The display mode.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_charcounter.js.source.html#line145">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -289,12 +344,12 @@ if the maximum lengths is exceeded.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_charcounter.js.source.html#line102">code &raquo;</a>
+     <a href="closure_goog_ui_charcounter.js.source.html#line124">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -309,7 +364,7 @@ if the maximum lengths is exceeded.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">onChange_<span class="args">(<span class="arg">event</span>)</span>
+        <span class="entryName">onChange_<span class="args">(<span class="arg">onChange_@event</span>)</span>
         </span>
       </div>
 
@@ -334,9 +389,9 @@ if the maximum lengths is exceeded.
      
    <tr class="even">
      <td>
-        <span class="entryName">event</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span></div>
-        <div class="entryOverview">Change event.</div>
+        <span class="entryName">onChange_@event</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -349,7 +404,67 @@ if the maximum lengths is exceeded.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_charcounter.js.source.html#line113">code &raquo;</a>
+     <a href="closure_goog_ui_charcounter.js.source.html#line156">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.CharCounter.prototype.setDisplayMode"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setDisplayMode<span class="args">(<span class="arg">setDisplayMode@displayMode</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the display mode.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">setDisplayMode@displayMode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_charcounter.js.source.html#line134">code &raquo;</a>
   </td>
      </tr>
 
@@ -369,7 +484,7 @@ if the maximum lengths is exceeded.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setMaxLength<span class="args">(<span class="arg">maxLength</span>)</span>
+        <span class="entryName">setMaxLength<span class="args">(<span class="arg">setMaxLength@maxLength</span>)</span>
         </span>
       </div>
 
@@ -394,9 +509,9 @@ if the maximum lengths is exceeded.
      
    <tr class="even">
      <td>
-        <span class="entryName">maxLength</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">The maximum length.</div>
+        <span class="entryName">setMaxLength@maxLength</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -409,7 +524,7 @@ if the maximum lengths is exceeded.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_charcounter.js.source.html#line90">code &raquo;</a>
+     <a href="closure_goog_ui_charcounter.js.source.html#line112">code &raquo;</a>
   </td>
      </tr>
 
@@ -452,7 +567,7 @@ if the maximum lengths is exceeded.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">addEventListener<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_capture</span>,&nbsp;<span class="arg">opt_handlerScope</span>)</span>
+        <span class="entryName">addEventListener<span class="args">(<span class="arg">addEventListener@type</span>,&nbsp;<span class="arg">addEventListener@handler</span>,&nbsp;<span class="arg">addEventListener@opt_capture</span>,&nbsp;<span class="arg">addEventListener@opt_handlerScope</span>)</span>
         </span>
       </div>
 
@@ -482,33 +597,33 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
      
    <tr class="even">
      <td>
-        <span class="entryName">type</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The type of the event to listen for.</div>
+        <span class="entryName">addEventListener@type</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The function to handle the event. The handler can also be an object that implements the handleEvent method which takes the event object as argument.</div>
+        <span class="entryName">addEventListener@handler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
+        <span class="entryName">addEventListener@opt_capture</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Object in whose scope to call the listener.</div>
+        <span class="entryName">addEventListener@opt_handlerScope</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -541,7 +656,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">dispatchEvent@e</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -573,9 +688,9 @@ stopPropagation, then the bubble listeners won&#39;t fire.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
-        <div class="entryOverview">Event object.</div>
+        <span class="entryName">dispatchEvent@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -700,7 +815,7 @@ MyClass.superClass_.disposeInternal.call(this);
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">removeEventListener<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_capture</span>,&nbsp;<span class="arg">opt_handlerScope</span>)</span>
+        <span class="entryName">removeEventListener<span class="args">(<span class="arg">removeEventListener@type</span>,&nbsp;<span class="arg">removeEventListener@handler</span>,&nbsp;<span class="arg">removeEventListener@opt_capture</span>,&nbsp;<span class="arg">removeEventListener@opt_handlerScope</span>)</span>
         </span>
       </div>
 
@@ -727,33 +842,33 @@ nothing is done.
      
    <tr class="even">
      <td>
-        <span class="entryName">type</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The type of the event to listen for.</div>
+        <span class="entryName">removeEventListener@type</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The function to handle the event. The handler can also be an object that implements the handleEvent method which takes the event object as argument.</div>
+        <span class="entryName">removeEventListener@handler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
+        <span class="entryName">removeEventListener@opt_capture</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Object in whose scope to call the listener.</div>
+        <span class="entryName">removeEventListener@opt_handlerScope</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -786,7 +901,7 @@ nothing is done.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">parent</span>)</span>
+        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">setParentEventTarget@parent</span>)</span>
         </span>
       </div>
 
@@ -811,9 +926,9 @@ nothing is done.
      
    <tr class="even">
      <td>
-        <span class="entryName">parent</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></div>
-        <div class="entryOverview">Parent EventTarget (null if none).</div>
+        <span class="entryName">setParentEventTarget@parent</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>

@@ -471,3 +471,25 @@ goog.graphics.AffineTransform.prototype.setToRotation = function(theta, x, y) {
   return this.setTransform(cos, sin, -sin, cos,
       x - x * cos + y * sin, y - x * sin - y * cos);
 };
+
+
+/**
+ * Compares two affine transforms for equality.
+ *
+ * @param {goog.graphics.AffineTransform} tx The other affine transform.
+ * @return {boolean} whether the two transforms are equal.
+ */
+goog.graphics.AffineTransform.prototype.equals = function(tx) {
+  if (this == tx) {
+    return true;
+  }
+  if (!tx) {
+    return false;
+  }
+  return this.m00_ == tx.m00_ &&
+      this.m01_ == tx.m01_ &&
+      this.m02_ == tx.m02_ &&
+      this.m10_ == tx.m10_ &&
+      this.m11_ == tx.m11_ &&
+      this.m12_ == tx.m12_;
+};

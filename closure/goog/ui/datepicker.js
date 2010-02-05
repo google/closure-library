@@ -127,15 +127,6 @@ goog.inherits(goog.ui.DatePicker, goog.events.EventTarget);
 goog.ui.DatePicker.prototype.showFixedNumWeeks_ = true;
 
 /**
- * Formatter used to generate selected date as tbody's title. Primarily used
- * for accessibility purposes.
- * @type {goog.i18n.DateTimeFormat}
- * @private
- */
-goog.ui.DatePicker.DATE_FORMATTER_ = new goog.i18n.DateTimeFormat(
-        goog.i18n.DateTimeFormat.Format.FULL_DATE);
-
-/**
  * Flag indicating if days from other months should be shown.
  * @type {boolean}
  * @private
@@ -1178,9 +1169,6 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
       goog.dom.classes.set(this.elTable_[y + 1][0], '');
     }
 
-    this.tableBody_.title = this.date_ ?
-        goog.ui.DatePicker.DATE_FORMATTER_.format(this.date_) : '';
-
     for (var x = 0; x < 7; x++) {
       var o = this.grid_[y][x];
       var el = this.elTable_[y + 1][x + 1];
@@ -1208,10 +1196,6 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
         if (o.getDate() == todayDate && o.getMonth() == todayMonth &&
             o.getFullYear() == todayYear) {
           classes.push(goog.getCssName('goog-date-picker-today'));
-
-          /** @desc Title for todays date. */
-          var MSG_DATEPICKER_TODAY_TITLE = goog.getMsg('Today');
-          el.title = MSG_DATEPICKER_TODAY_TITLE;
         }
 
         // Selected date

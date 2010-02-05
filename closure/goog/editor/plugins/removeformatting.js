@@ -448,7 +448,7 @@ goog.editor.plugins.RemoveFormatting.prototype.convertSelectedHtmlText_ =
 
   // For multiple ranges, it is really hard to do our custom remove formatting
   // without invalidating other ranges. So instead of always losing the
-  // content, this solution at least lets the browser do it's own remove
+  // content, this solution at least lets the browser do its own remove
   // formatting which works correctly most of the time.
   if (range.getTextRangeCount() > 1) {
     return;

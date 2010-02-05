@@ -110,7 +110,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.memoize.</span><span class="entryName">clearCache<span class="args">(<span class="arg">cacheOwner</span>)</span>
+        <span class="entryNamespace">goog.memoize.</span><span class="entryName">clearCache<span class="args">(<span class="arg">clearCache@cacheOwner</span>)</span>
         </span>
       </div>
 
@@ -135,9 +135,9 @@
      
    <tr class="even">
      <td>
-        <span class="entryName">cacheOwner</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The owner of the cache. This is the <code>this</code> context of the memoized function.</div>
+        <span class="entryName">clearCache@cacheOwner</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -170,7 +170,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.memoize.</span><span class="entryName">jsonSerializer<span class="args">(<span class="arg">functionHash</span>,&nbsp;<span class="arg">args</span>)</span>
+        <span class="entryNamespace">goog.memoize.</span><span class="entryName">jsonSerializer<span class="args">(<span class="arg">jsonSerializer@functionHash</span>,&nbsp;<span class="arg">jsonSerializer@args</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -199,17 +199,17 @@ from undefined. The arguments can&#39;t contain loops.
      
    <tr class="even">
      <td>
-        <span class="entryName">functionHash</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Unique identifier of the function whose result is cached.</div>
+        <span class="entryName">jsonSerializer@functionHash</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The arguments that the function to memoize is called with. Note: it is an array-like object, because supports indexing and has the length property.</div>
+        <span class="entryName">jsonSerializer@args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -246,7 +246,7 @@ from undefined. The arguments can&#39;t contain loops.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.</span><span class="entryName">memoize<span class="args">(<span class="arg">f</span>,&nbsp;<span class="arg">opt_serializer</span>)</span>
+        <span class="entryNamespace">goog.</span><span class="entryName">memoize<span class="args">(<span class="arg">memoize@f</span>,&nbsp;<span class="arg">memoize@opt_serializer</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
       </div>
@@ -272,17 +272,17 @@ from undefined. The arguments can&#39;t contain loops.
      
    <tr class="even">
      <td>
-        <span class="entryName">f</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
-        <div class="entryOverview">The function to wrap. Its return value may only depend on its arguments and &#39;this&#39; context. There may be further restrictions on the arguments depending on the capabilities of the serializer used.</div>
+        <span class="entryName">memoize@f</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_serializer</span>
-        : <div class="fullType"><span class="type">function(number, Object): string=</span></div>
-        <div class="entryOverview">A function to serialize f&#39;s arguments. It must have the same signature as goog.memoize.simpleSerializer. It defaults to that function.</div>
+        <span class="entryName">memoize@opt_serializer</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -319,7 +319,7 @@ from undefined. The arguments can&#39;t contain loops.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.memoize.</span><span class="entryName">simpleSerializer<span class="args">(<span class="arg">functionHash</span>,&nbsp;<span class="arg">args</span>)</span>
+        <span class="entryNamespace">goog.memoize.</span><span class="entryName">simpleSerializer<span class="args">(<span class="arg">simpleSerializer@functionHash</span>,&nbsp;<span class="arg">simpleSerializer@args</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -347,17 +347,17 @@ support \x0B characters in the strings.
      
    <tr class="even">
      <td>
-        <span class="entryName">functionHash</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Unique identifier of the function whose result is cached.</div>
+        <span class="entryName">simpleSerializer@functionHash</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">args</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The arguments that the function to memoize is called with. Note: it is an array-like object, because supports indexing and has the length property.</div>
+        <span class="entryName">simpleSerializer@args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>

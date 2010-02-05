@@ -654,9 +654,7 @@ goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
 
   // Add state-specific class names, if any.
   var classNamesForState = this.getClassNamesForState(control.getState());
-  if (classNamesForState) {
-    classNames.push.apply(classNames, classNamesForState);
-  }
+  classNames.push.apply(classNames, classNamesForState);
 
   // Add extra class names, if any.
   var extraClassNames = control.getExtraClassNames();
@@ -716,25 +714,21 @@ goog.ui.ControlRenderer.prototype.getAppliedCombinedClassNames_ = function(
  * implementation uses the renderer's {@link getClassForState} method to
  * generate each state-specific class.
  * @param {number} state Bit mask of component states.
- * @return {Array.<string>?} Array of CSS class names representing the given
- *     state (null if none).
+ * @return {!Array.<string>} Array of CSS class names representing the given
+ *     state.
  * @protected
  */
 goog.ui.ControlRenderer.prototype.getClassNamesForState = function(state) {
-  if (state) {
-    var classNames = [];
+  var classNames = [];
+  while (state) {
     // For each enabled state, push the corresponding CSS class name onto
     // the classNames array.
-    for (var mask = 0x01; state; mask <<= 1) {
-      if (state & mask) {
-        classNames.push(this.getClassForState(
-                            /** @type {goog.ui.Component.State} */ (mask)));
-        state &= ~mask;
-      }
-    }
-    return classNames;
+    var mask = state & -state;  // Least significant bit
+    classNames.push(this.getClassForState(
+        /** @type {goog.ui.Component.State} */ (mask)));
+    state &= ~mask;
   }
-  return null;
+  return classNames;
 };
 
 

@@ -341,7 +341,7 @@ goog.structs.QuadTree.prototype.split_ = function(node) {
 
 
 /**
- * Attempts to balance a node.  A node will need balancing if all it's children
+ * Attempts to balance a node. A node will need balancing if all its children
  * are empty or it contains just one leaf.
  * @param {goog.structs.QuadTree.Node} node The node to balance.
  * @private

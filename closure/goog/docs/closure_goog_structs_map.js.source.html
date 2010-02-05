@@ -77,8 +77,8 @@
 <a name="line33"></a>
 <a name="line34"></a>/**
 <a name="line35"></a> * Class for Hash Map datastructure.
-<a name="line36"></a> * @param {Object=} opt_map Map or Object to initialize the map with.
-<a name="line37"></a> * @param {...Object} var_args If 2 or more arguments are present then they
+<a name="line36"></a> * @param {*=} opt_map Map or Object to initialize the map with.
+<a name="line37"></a> * @param {...*} var_args If 2 or more arguments are present then they
 <a name="line38"></a> *     will be used as key-value pairs.
 <a name="line39"></a> * @constructor
 <a name="line40"></a> */
@@ -117,7 +117,7 @@
 <a name="line73"></a>      this.set(arguments[i], arguments[i + 1]);
 <a name="line74"></a>    }
 <a name="line75"></a>  } else if (opt_map) {
-<a name="line76"></a>    this.addAll(opt_map);
+<a name="line76"></a>    this.addAll(/** @type {Object} */ (opt_map));
 <a name="line77"></a>  }
 <a name="line78"></a>};
 <a name="line79"></a>

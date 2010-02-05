@@ -44,7 +44,7 @@ goog.dom.classes.get = function(element) {
   // Furthermore, in Firefox, className is not a string when the element is
   // an SVG element.
   return className && typeof className.split == 'function' ?
-      className.split(' ') : [];
+      className.split(/\s+/) : [];
 };
 
 

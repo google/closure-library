@@ -21,7 +21,7 @@
  * handles this) and retrying of requests.
  *
  * The events fired by the XhrManager are an aggregation of the events of
- * each of it's XhrIo objects (with some filtering, i.e., ERROR only called
+ * each of its XhrIo objects (with some filtering, i.e., ERROR only called
  * when there are no more retries left). For this reason, all send requests have
  * to have an id, so that the user of this object can know which event is for
  * which request.
@@ -503,7 +503,7 @@ goog.net.XhrManager.Event = function(type, target, id, xhrIo) {
 
   /**
    * The id of the request this event is for.
-   * @type {Object}
+   * @type {string}
    */
   this.id = id;
 

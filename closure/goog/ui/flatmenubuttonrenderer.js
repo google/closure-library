@@ -22,7 +22,6 @@
 
 goog.provide('goog.ui.FlatMenuButtonRenderer');
 
-goog.require('goog.dom.classes');
 goog.require('goog.style');
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.FlatButtonRenderer');
@@ -106,8 +105,9 @@ goog.ui.FlatMenuButtonRenderer.prototype.getContentElement = function(element) {
  */
 goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
   // TODO: MenuButtonRenderer uses the exact same code.
-  // Refactor this block to it's own module where both can use it.
-  var menuElem = goog.dom.$$('*', goog.ui.MenuRenderer.CSS_CLASS, element)[0];
+  // Refactor this block to its own module where both can use it.
+  var menuElem = goog.dom.getElementsByTagNameAndClass(
+      '*', goog.ui.MenuRenderer.CSS_CLASS, element)[0];
   if (menuElem) {
     // Move the menu element directly under the body, but hide it first; see
     // bug 1089244.
@@ -121,16 +121,16 @@ goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
   }
 
   // Add the caption if it's not already there.
-  var captionElem = goog.dom.$$('*',
-      goog.getCssName(this.getCssClass(), 'caption'), element)[0];
+  var captionElem = goog.dom.getElementsByTagNameAndClass(
+      '*', goog.getCssName(this.getCssClass(), 'caption'), element)[0];
   if (!captionElem) {
     element.appendChild(
         this.createCaption(element.childNodes, button.getDomHelper()));
   }
 
   // Add the dropdown icon if it's not already there.
-  var dropdownElem = goog.dom.$$('*',
-      goog.getCssName(this.getCssClass(), 'dropdown'), element)[0];
+  var dropdownElem = goog.dom.getElementsByTagNameAndClass(
+      '*', goog.getCssName(this.getCssClass(), 'dropdown'), element)[0];
   if (!dropdownElem) {
     element.appendChild(this.createDropdown(button.getDomHelper()));
   }

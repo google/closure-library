@@ -37,6 +37,7 @@
 goog.provide('goog.net.BrowserChannel');
 goog.provide('goog.net.BrowserChannel.Handler');
 goog.provide('goog.net.BrowserChannel.LogSaver');
+goog.provide('goog.net.BrowserChannel.QueuedMap');
 goog.provide('goog.net.BrowserChannel.StatEvent');
 goog.provide('goog.net.BrowserChannel.TimingEvent');
 
@@ -79,7 +80,7 @@ goog.net.BrowserChannel = function(clientVersion) {
 
   /**
    * An array of queued maps that need to be sent to the server.
-   * @type {Array.<Object|goog.structs.Map>}
+   * @type {Array.<goog.net.BrowserChannel.QueuedMap>}
    * @private
    */
   this.outgoingMaps_ = [];
@@ -88,7 +89,7 @@ goog.net.BrowserChannel = function(clientVersion) {
    * An array of dequeued maps that we have either received a non-successful
    * response for, or no response at all, and which therefore may or may not
    * have been received by the server.
-   * @type {Array.<Object|goog.structs.Map>}
+   * @type {Array.<goog.net.BrowserChannel.QueuedMap>}
    * @private
    */
   this.pendingMaps_ = [];
@@ -101,6 +102,25 @@ goog.net.BrowserChannel = function(clientVersion) {
   this.channelDebug_ = new goog.net.ChannelDebug();
 };
 
+/**
+ * Simple container class for a (mapId, map) pair.
+ * @param {number} mapId The id for this map.
+ * @param {Object|goog.structs.Map} map The map itself.
+ * @constructor
+ */
+goog.net.BrowserChannel.QueuedMap = function(mapId, map) {
+  /**
+   * The id for this map.
+   * @type {number}
+   */
+  this.mapId = mapId;
+
+  /**
+   * The map itself.
+   * @type {Object|goog.structs.Map}
+   */
+  this.map = map;
+};
 
 /**
  * Extra HTTP headers to add to all the requests sent to the server.
@@ -173,6 +193,14 @@ goog.net.BrowserChannel.prototype.allowHostPrefix_ = true;
  * @private
  */
 goog.net.BrowserChannel.prototype.nextRid_ = 0;
+
+/**
+ * The id to use for the next outgoing map. This identifier uniquely
+ * identifies a sent map.
+ * @type {number}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.nextMapId_ = 0;
 
 /**
  * Whether to fail forward-channel requests after one try, or after a few tries.
@@ -264,6 +292,24 @@ goog.net.BrowserChannel.prototype.backChannelRetryCount_;
 goog.net.BrowserChannel.prototype.backChannelAttemptId_;
 
 /**
+ * The latest protocol version that this class supports. We request this version
+ * from the server when opening the connection. Should match
+ * com.google.net.browserchannel.BrowserChannel.LATEST_CHANNEL_VERSION.
+ * @type {number}
+ */
+goog.net.BrowserChannel.LATEST_CHANNEL_VERSION = 7;
+
+/**
+ * The channel version that we negotiated with the server for this session.
+ * Starts out as the version we request, and then is changed to the negotiated
+ * version after the initial open.
+ * @type {number}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.channelVersion_ =
+    goog.net.BrowserChannel.LATEST_CHANNEL_VERSION;
+
+/**
  * Enum type for the browser channel state machine.
  * @enum {number}
  */
@@ -301,12 +347,6 @@ goog.net.BrowserChannel.FORWARD_CHANNEL_RETRY_TIMEOUT = 20 * 1000;
  * @type {number}
  */
 goog.net.BrowserChannel.BACK_CHANNEL_MAX_RETRIES = 3;
-
-/**
- * The version of the protocol used.
- * @type {number}
- */
-goog.net.BrowserChannel.VERSION = 6;
 
 /**
  * Default timeout in MS before the initial retry. Subsequent retries will be
@@ -377,6 +417,14 @@ goog.net.BrowserChannel.ChannelType_ = {
 
   BACK_CHANNEL: 2
 };
+
+/**
+ * The maximum number of maps that can be sent in one POST. Should match
+ * com.google.net.browserchannel.BrowserChannel.MAX_MAPS_PER_REQUEST.
+ * @type {number}
+ * @private
+ */
+goog.net.BrowserChannel.MAX_MAPS_PER_REQUEST_ = 1000;
 
 
 /**
@@ -722,7 +770,8 @@ goog.net.BrowserChannel.prototype.connectTest_ = function(testPath) {
  */
 goog.net.BrowserChannel.prototype.connectChannel_ = function() {
   this.channelDebug_.debug('connectChannel_()');
-  this.ensureInState_(goog.net.BrowserChannel.State.INIT);
+  this.ensureInState_(goog.net.BrowserChannel.State.INIT,
+      goog.net.BrowserChannel.State.CLOSED);
   this.forwardChannelUri_ =
       this.getForwardChannelUri(/** @type {string} */ (this.path_));
   this.ensureForwardChannel_();
@@ -871,7 +920,19 @@ goog.net.BrowserChannel.prototype.sendMap = function(map) {
     throw Error('Invalid operation: sending map when state is closed');
   }
 
-  this.outgoingMaps_.push(map);
+  // We can only send 1000 maps per POST, but typically we should never have
+  // that much to send, so warn if we exceed that (we still send all the maps).
+  if (this.outgoingMaps_.length ==
+      goog.net.BrowserChannel.MAX_MAPS_PER_REQUEST_) {
+    // severe() is temporary so that we get these uploaded and can figure out
+    // what's causing them. Afterwards can change to warning().
+    this.channelDebug_.severe(
+        'Already have ' + goog.net.BrowserChannel.MAX_MAPS_PER_REQUEST_ +
+        ' queued maps upon queueing ' + goog.json.serialize(map));
+  }
+
+  this.outgoingMaps_.push(
+      new goog.net.BrowserChannel.QueuedMap(this.nextMapId_++, map));
   if (this.state_ == goog.net.BrowserChannel.State.OPENING ||
       this.state_ == goog.net.BrowserChannel.State.OPENED) {
     this.ensureForwardChannel_();
@@ -1089,9 +1150,9 @@ goog.net.BrowserChannel.prototype.startForwardChannel_ = function(
     }
 
     if (this.forwardChannelRequest_) {
-      this.channelDebug_.debug('startForwardChannel_ returned: ' +
-                                  'connection already in progress');
-      // no need to start a new forward channel request
+      // Should be impossible to be called in this state.
+      this.channelDebug_.severe('startForwardChannel_ returned: ' +
+                                    'connection already in progress');
       return;
     }
 
@@ -1138,14 +1199,17 @@ goog.net.BrowserChannel.prototype.makeForwardChannelRequest_ =
   var rid;
   var requestText;
   if (opt_retryRequest) {
-    // TODO: Ideally we should send up any new arrays we have too,
-    // but currently the server's logic for detecting incoming duplicates is
-    // based purely on RID, so we have to send up the exact same data because it
-    // may ignore it. But if we change the server's duplicate detection to be
-    // based on array IDs then we can just send up everything we've got. That
-    // will also eliminate the extra opt_retryRequest cases throughout the code.
-    rid = opt_retryRequest.getRequestId();
-    requestText = /** @type {string} */ (opt_retryRequest.getPostData());
+    if (this.channelVersion_ > 6) {
+      // In version 7 and up we can tack on new arrays to a retry.
+      this.requeuePendingMaps_();
+      rid = this.nextRid_ - 1;  // Must use last RID
+      requestText = this.dequeueOutgoingMaps_();
+    } else {
+      // TODO: Remove this code and the opt_retryRequest passing
+      // once server-side support for ver 7 is ubiquitous.
+      rid = opt_retryRequest.getRequestId();
+      requestText = /** @type {string} */ (opt_retryRequest.getPostData());
+    }
   } else {
     rid = this.nextRid_++;
     requestText = this.dequeueOutgoingMaps_();
@@ -1202,16 +1266,55 @@ goog.net.BrowserChannel.prototype.addAdditionalParams_ = function(uri) {
  * @private
  */
 goog.net.BrowserChannel.prototype.dequeueOutgoingMaps_ = function() {
-  var sb = ['count=' + this.outgoingMaps_.length];
-  for (var i = 0; i < this.outgoingMaps_.length; i++) {
-    var map = this.outgoingMaps_[i];
-    goog.structs.forEach(map, function(value, key, coll) {
-      sb.push('req' + i + '_' + key + '=' + encodeURIComponent(value));
-    });
-    this.pendingMaps_.push(map);
+  var count = Math.min(this.outgoingMaps_.length,
+                       goog.net.BrowserChannel.MAX_MAPS_PER_REQUEST_);
+  var sb = ['count=' + count];
+  var offset;
+  if (this.channelVersion_ > 6 && count > 0) {
+    // To save a bit of bandwidth, specify the base mapId and the rest as
+    // offsets from it.
+    offset = this.outgoingMaps_[0].mapId;
+    sb.push('ofs=' + offset);
+  } else {
+    offset = 0;
   }
-  this.outgoingMaps_.length = 0;
+  for (var i = 0; i < count; i++) {
+    var mapId = this.outgoingMaps_[i].mapId;
+    var map = this.outgoingMaps_[i].map;
+    if (this.channelVersion_ <= 6) {
+      // Map IDs were not used in ver 6 and before, just indexes in the request.
+      mapId = i;
+    } else {
+      mapId -= offset;
+    }
+    try {
+      goog.structs.forEach(map, function(value, key, coll) {
+        sb.push('req' + mapId + '_' + key + '=' + encodeURIComponent(value));
+      });
+    } catch (ex) {
+      // We send a map here because lots of the retry logic relies on map IDs,
+      // so we have to send something.
+      sb.push('req' + mapId + '_' + 'type' + '=' +
+              encodeURIComponent('_badmap'));
+      if (this.handler_) {
+        this.handler_.badMapError(this, map);
+      }
+    }
+  }
+  this.pendingMaps_ = this.pendingMaps_.concat(
+      this.outgoingMaps_.splice(0, count));
   return sb.join('&');
+};
+
+
+/**
+ * Requeues unacknowledged sent arrays for retransmission in the next forward
+ * channel request.
+ * @private
+ */
+goog.net.BrowserChannel.prototype.requeuePendingMaps_ = function() {
+  this.outgoingMaps_ = this.pendingMaps_.concat(this.outgoingMaps_);
+  this.pendingMaps_.length = 0;
 };
 
 
@@ -1549,6 +1652,13 @@ goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
         } else {
           this.hostPrefix_ = null;
         }
+        var negotiatedVersion = nextArray[3];
+        if (goog.isDefAndNotNull(negotiatedVersion)) {
+          this.channelVersion_ = negotiatedVersion;
+        } else {
+          // Servers prior to version 7 did not send this, so assume version 6.
+          this.channelVersion_ = 6;
+        }
         this.state_ = goog.net.BrowserChannel.State.OPENED;
         if (this.handler_) {
           this.handler_.channelOpened(this);
@@ -1593,13 +1703,13 @@ goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
 
 /**
  * Helper to ensure the BrowserChannel is in the expected state.
- * @param {number} state The expected state.
+ * @param {...number} var_args The channel must be in one of the indicated
+ *     states.
  * @private
  */
-goog.net.BrowserChannel.prototype.ensureInState_ = function(state) {
-  if (this.state_ != state) {
-    throw Error('Invalid operation: expected channel state ' + state +
-      ' got channel state ' + this.state_);
+goog.net.BrowserChannel.prototype.ensureInState_ = function(var_args) {
+  if (!goog.array.contains(arguments, this.state_)) {
+    throw Error('Unexpected channel state: ' + this.state_);
   }
 };
 
@@ -1747,7 +1857,7 @@ goog.net.BrowserChannel.prototype.createDataUri =
   }
 
   // Add the protocol version to the URI.
-  uri.setParameterValue('VER', goog.net.BrowserChannel.VERSION);
+  uri.setParameterValue('VER', this.channelVersion_);
 
   // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
@@ -1990,10 +2100,12 @@ goog.net.BrowserChannel.Handler.prototype.channelError =
  * Indicates the BrowserChannel is closed. Also notifies about which maps,
  * if any, that may not have been delivered to the server.
  * @param {goog.net.BrowserChannel} browserChannel The browser channel.
- * @param {Array.<Object|goog.structs.Map>} opt_pendingMaps The array of
- *     pending maps, which may or may not have been delivered to the server.
- * @param {Array.<Object|goog.structs.Map>} opt_undeliveredMaps The array of
- *     undelivered maps, which have definitely not been delivered to the server.
+ * @param {Array.<goog.net.BrowserChannel.QueuedMap>} opt_pendingMaps The
+ *     array of pending maps, which may or may not have been delivered to the
+ *     server.
+ * @param {Array.<goog.net.BrowserChannel.QueuedMap>} opt_undeliveredMaps
+ *     The array of undelivered maps, which have definitely not been delivered
+ *     to the server.
  */
 goog.net.BrowserChannel.Handler.prototype.channelClosed =
     function(browserChannel, opt_pendingMaps, opt_undeliveredMaps) {
@@ -2032,4 +2144,15 @@ goog.net.BrowserChannel.Handler.prototype.getNetworkTestImageUri =
  */
 goog.net.BrowserChannel.Handler.prototype.isActive = function(browserChannel) {
   return true;
+};
+
+
+/**
+ * Called by the channel if enumeration of the map throws an exception.
+ * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+ * @param {Object} map The map that can't be enumerated.
+ */
+goog.net.BrowserChannel.Handler.prototype.badMapError =
+    function(browserChannel, map) {
+  return;
 };

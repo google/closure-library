@@ -85,6 +85,46 @@ function testBoxContainsBox() {
   assertNotContains(new goog.math.Box(60, 90, 60, 40));
 }
 
+function testBoxesIntersect() {
+  var box = new goog.math.Box(50, 100, 100, 50);
+
+  function assertIntersects(boxB) {
+    assertTrue(box + ' expected to intersect ' + boxB,
+        goog.math.Box.intersects(box, boxB));
+  }
+  function assertNotIntersects(boxB) {
+    assertFalse(box + ' expected to not intersect ' + boxB,
+        goog.math.Box.intersects(box, boxB));
+  }
+
+  assertIntersects(box);
+  assertIntersects(new goog.math.Box(20, 80, 80, 20));
+  assertIntersects(new goog.math.Box(50, 80, 100, 20));
+  assertIntersects(new goog.math.Box(80, 80, 120, 20));
+  assertIntersects(new goog.math.Box(20, 100, 80, 50));
+  assertIntersects(new goog.math.Box(80, 100, 120, 50));
+  assertIntersects(new goog.math.Box(20, 120, 80, 80));
+  assertIntersects(new goog.math.Box(50, 120, 100, 80));
+  assertIntersects(new goog.math.Box(80, 120, 120, 80));
+  assertIntersects(new goog.math.Box(20, 120, 120, 20));
+  assertIntersects(new goog.math.Box(70, 80, 80, 70));
+  assertNotIntersects(new goog.math.Box(10, 30, 30, 10));
+  assertNotIntersects(new goog.math.Box(10, 70, 30, 30));
+  assertNotIntersects(new goog.math.Box(10, 100, 30, 50));
+  assertNotIntersects(new goog.math.Box(10, 120, 30, 80));
+  assertNotIntersects(new goog.math.Box(10, 140, 30, 120));
+  assertNotIntersects(new goog.math.Box(30, 30, 70, 10));
+  assertNotIntersects(new goog.math.Box(30, 140, 70, 120));
+  assertNotIntersects(new goog.math.Box(50, 30, 100, 10));
+  assertNotIntersects(new goog.math.Box(50, 140, 100, 120));
+  assertNotIntersects(new goog.math.Box(80, 30, 120, 10));
+  assertNotIntersects(new goog.math.Box(80, 140, 120, 120));
+  assertNotIntersects(new goog.math.Box(120, 30, 140, 10));
+  assertNotIntersects(new goog.math.Box(120, 70, 140, 30));
+  assertNotIntersects(new goog.math.Box(120, 100, 140, 50));
+  assertNotIntersects(new goog.math.Box(120, 120, 140, 80));
+  assertNotIntersects(new goog.math.Box(120, 140, 140, 120));
+}
 </script>
 </body>
 </html>

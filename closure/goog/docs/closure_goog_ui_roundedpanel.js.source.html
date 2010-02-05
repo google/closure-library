@@ -257,7 +257,7 @@
 <a name="line213"></a>
 <a name="line214"></a>  // Set contentElement_ by finding a child node within element_ with the
 <a name="line215"></a>  // proper class name. If none exists, create it and add it to the DOM.
-<a name="line216"></a>  this.contentElement_ = goog.dom.$$(
+<a name="line216"></a>  this.contentElement_ = goog.dom.getElementsByTagNameAndClass(
 <a name="line217"></a>      null, goog.ui.RoundedPanel.Classes_.CONTENT, this.getElement())[0];
 <a name="line218"></a>  if (!this.contentElement_) {
 <a name="line219"></a>    this.contentElement_ = this.getDomHelper().createDom(&#39;div&#39;);

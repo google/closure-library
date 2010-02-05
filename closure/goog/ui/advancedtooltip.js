@@ -20,7 +20,6 @@
 
 goog.provide('goog.ui.AdvancedTooltip');
 
-goog.require('goog.debug.Logger');
 goog.require('goog.math.Coordinate');
 goog.require('goog.ui.Tooltip');
 goog.require('goog.userAgent');
@@ -297,14 +296,16 @@ goog.ui.AdvancedTooltip.prototype.maybeHide = function(el) {
 goog.ui.AdvancedTooltip.prototype.handleMouseMove = function(event) {
   var startTimer = true;
   if (this.boundingBox_) {
-    var c = new goog.math.Coordinate(event.clientX, event.clientY);
+    var scroll = this.getDomHelper().getDocumentScroll();
+    var c = new goog.math.Coordinate(event.clientX + scroll.x,
+        event.clientY + scroll.y);
     if (this.isCoordinateActive_(c)) {
       startTimer = false;
     } else if (this.tracking_) {
-        var prevDist = goog.math.Box.distance(this.boundingBox_,
-                                              this.cursorPosition);
-        var currDist = goog.math.Box.distance(this.boundingBox_, c);
-        startTimer = currDist >= prevDist;
+      var prevDist = goog.math.Box.distance(this.boundingBox_,
+          this.cursorPosition);
+      var currDist = goog.math.Box.distance(this.boundingBox_, c);
+      startTimer = currDist >= prevDist;
     }
   }
 

@@ -84,1477 +84,1516 @@
 <a name="line40"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
 <a name="line41"></a>goog.require(&#39;goog.fx.Dragger&#39;);
 <a name="line42"></a>goog.require(&#39;goog.math.Rect&#39;);
-<a name="line43"></a>goog.require(&#39;goog.string&#39;);
-<a name="line44"></a>goog.require(&#39;goog.structs&#39;);
-<a name="line45"></a>goog.require(&#39;goog.structs.Map&#39;);
-<a name="line46"></a>goog.require(&#39;goog.style&#39;);
-<a name="line47"></a>goog.require(&#39;goog.ui.Component&#39;);
-<a name="line48"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line43"></a>goog.require(&#39;goog.structs&#39;);
+<a name="line44"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line45"></a>goog.require(&#39;goog.style&#39;);
+<a name="line46"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line47"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line48"></a>
 <a name="line49"></a>
-<a name="line50"></a>
-<a name="line51"></a>/**
-<a name="line52"></a> * Class for showing simple dialog boxes.
-<a name="line53"></a> * The Html structure of the dialog box is:
-<a name="line54"></a> * &lt;pre&gt;
-<a name="line55"></a> *  Element         Function                Class-name, modal-dialog = default
-<a name="line56"></a> * ----------------------------------------------------------------------------
-<a name="line57"></a> * - iframe         Iframe mask              modal-dialog-bg
-<a name="line58"></a> * - div            Background mask          modal-dialog-bg
-<a name="line59"></a> * - div            Dialog area              modal-dialog
-<a name="line60"></a> *     - div        Title bar                modal-dialog-title
-<a name="line61"></a> *        - span                             modal-dialog-title-text
-<a name="line62"></a> *          - text  Title text               N/A
-<a name="line63"></a> *        - span                             modal-dialog-title-close
-<a name="line64"></a> *          - ??    Close box                N/A
-<a name="line65"></a> *     - div        Content area             modal-dialog-content
-<a name="line66"></a> *        - ??      User specified content   N/A
-<a name="line67"></a> *     - div        Button area              modal-dialog-buttons
-<a name="line68"></a> *        - button                           N/A
-<a name="line69"></a> *        - button
-<a name="line70"></a> *        - ...
-<a name="line71"></a> * &lt;/pre&gt;
-<a name="line72"></a> * @constructor
-<a name="line73"></a> * @param {string=} opt_class CSS class name for the dialog element, also used
-<a name="line74"></a> *    as a class name prefix for related elements; defaults to modal-dialog.
-<a name="line75"></a> * @param {boolean=} opt_useIframeMask Work around windowed controls z-index
-<a name="line76"></a> *     issue by using an iframe instead of a div for bg element.
-<a name="line77"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
-<a name="line78"></a> *    goog.ui.Component} for semantics.
-<a name="line79"></a> * @extends {goog.ui.Component}
-<a name="line80"></a> */
-<a name="line81"></a>goog.ui.Dialog = function(opt_class, opt_useIframeMask, opt_domHelper) {
-<a name="line82"></a>  goog.ui.Component.call(this, opt_domHelper);
-<a name="line83"></a>
-<a name="line84"></a>  /**
-<a name="line85"></a>   * CSS class name for the dialog element, also used as a class name prefix for
-<a name="line86"></a>   * related elements.  Defaults to goog.getCssName(&#39;modal-dialog&#39;).
-<a name="line87"></a>   * @type {string}
-<a name="line88"></a>   * @private
-<a name="line89"></a>   */
-<a name="line90"></a>  this.class_ = opt_class || goog.getCssName(&#39;modal-dialog&#39;);
-<a name="line91"></a>
-<a name="line92"></a>  this.useIframeMask_ = !!opt_useIframeMask;
-<a name="line93"></a>
-<a name="line94"></a>  // Set the default button set to show ok and cancel
-<a name="line95"></a>  this.buttons_ = goog.ui.Dialog.ButtonSet.OK_CANCEL;
-<a name="line96"></a>
-<a name="line97"></a>  this.focusHandler_ = new goog.events.FocusHandler(
-<a name="line98"></a>      this.getDomHelper().getDocument());
-<a name="line99"></a>};
-<a name="line100"></a>goog.inherits(goog.ui.Dialog, goog.ui.Component);
-<a name="line101"></a>
-<a name="line102"></a>
-<a name="line103"></a>/**
-<a name="line104"></a> * Whether the dialog should use an iframe as the background element to work
-<a name="line105"></a> * around z-order issues.  Defaults to false.
-<a name="line106"></a> * @type {boolean}
-<a name="line107"></a> * @private
-<a name="line108"></a> */
-<a name="line109"></a>goog.ui.Dialog.prototype.useIframeMask_ = false;
-<a name="line110"></a>
-<a name="line111"></a>
-<a name="line112"></a>/**
-<a name="line113"></a> * Whether the dialog is modal. Defaults to true.
-<a name="line114"></a> * @type {boolean}
-<a name="line115"></a> * @private
-<a name="line116"></a> */
-<a name="line117"></a>goog.ui.Dialog.prototype.modal_ = true;
-<a name="line118"></a>
-<a name="line119"></a>
-<a name="line120"></a>/**
-<a name="line121"></a> * Whether the dialog is draggable. Defaults to true.
-<a name="line122"></a> * @type {boolean}
-<a name="line123"></a> * @private
-<a name="line124"></a> */
-<a name="line125"></a>goog.ui.Dialog.prototype.draggable_ = true;
-<a name="line126"></a>
-<a name="line127"></a>
-<a name="line128"></a>/**
-<a name="line129"></a> * Opacity for background mask.  Defaults to 30%.
-<a name="line130"></a> * @type {number}
-<a name="line131"></a> * @private
-<a name="line132"></a> */
-<a name="line133"></a>goog.ui.Dialog.prototype.backgroundElementOpacity_ = 0.30;
-<a name="line134"></a>
-<a name="line135"></a>
-<a name="line136"></a>/**
-<a name="line137"></a> * Dialog&#39;s title.
-<a name="line138"></a> * @type {string}
-<a name="line139"></a> * @private
-<a name="line140"></a> */
-<a name="line141"></a>goog.ui.Dialog.prototype.title_ = &#39;&#39;;
-<a name="line142"></a>
-<a name="line143"></a>
-<a name="line144"></a>/**
-<a name="line145"></a> * Dialog&#39;s content (HTML).
-<a name="line146"></a> * @type {string}
-<a name="line147"></a> * @private
-<a name="line148"></a> */
-<a name="line149"></a>goog.ui.Dialog.prototype.content_ = &#39;&#39;;
-<a name="line150"></a>
-<a name="line151"></a>
-<a name="line152"></a>/**
-<a name="line153"></a> * Button set.  Default: Ok/Cancel.
-<a name="line154"></a> * @type {goog.ui.Dialog.ButtonSet?}
-<a name="line155"></a> * @private
-<a name="line156"></a> */
-<a name="line157"></a>goog.ui.Dialog.prototype.buttons_ = null;
-<a name="line158"></a>
-<a name="line159"></a>
-<a name="line160"></a>/**
-<a name="line161"></a> * Dragger.
-<a name="line162"></a> * @type {?goog.fx.Dragger}
-<a name="line163"></a> * @private
-<a name="line164"></a> */
-<a name="line165"></a>goog.ui.Dialog.prototype.dragger_ = null;
-<a name="line166"></a>
-<a name="line167"></a>
-<a name="line168"></a>/**
-<a name="line169"></a> * Whether dialog is visible.
-<a name="line170"></a> * @type {boolean}
-<a name="line171"></a> * @private
-<a name="line172"></a> */
-<a name="line173"></a>goog.ui.Dialog.prototype.visible_ = false;
-<a name="line174"></a>
-<a name="line175"></a>
-<a name="line176"></a>/**
-<a name="line177"></a> * Whether the dialog should be disposed when it is hidden.
-<a name="line178"></a> * @type {boolean}
-<a name="line179"></a> * @private
-<a name="line180"></a> */
-<a name="line181"></a>goog.ui.Dialog.prototype.disposeOnHide_ = false;
-<a name="line182"></a>
-<a name="line183"></a>
-<a name="line184"></a>/**
-<a name="line185"></a> * Element for the background which obscures the UI and blocks events.
-<a name="line186"></a> * @type {Element}
-<a name="line187"></a> * @private
-<a name="line188"></a> */
-<a name="line189"></a>goog.ui.Dialog.prototype.bgEl_ = null;
-<a name="line190"></a>
-<a name="line191"></a>
-<a name="line192"></a>/**
-<a name="line193"></a> * Iframe element that is only used for IE as a workaround to keep select-type
-<a name="line194"></a> * elements from burning through background.
-<a name="line195"></a> * @type {Element}
-<a name="line196"></a> * @private
-<a name="line197"></a> */
-<a name="line198"></a>goog.ui.Dialog.prototype.bgIframeEl_ = null;
-<a name="line199"></a>
-<a name="line200"></a>
-<a name="line201"></a>/**
-<a name="line202"></a> * Element for the title bar.
-<a name="line203"></a> * @type {Element}
-<a name="line204"></a> * @private
-<a name="line205"></a> */
-<a name="line206"></a>goog.ui.Dialog.prototype.titleEl_ = null;
-<a name="line207"></a>
-<a name="line208"></a>
-<a name="line209"></a>/**
-<a name="line210"></a> * Element for the text area of the title bar.
-<a name="line211"></a> * @type {Element}
-<a name="line212"></a> * @private
-<a name="line213"></a> */
-<a name="line214"></a>goog.ui.Dialog.prototype.titleTextEl_ = null;
-<a name="line215"></a>
-<a name="line216"></a>
-<a name="line217"></a>
-<a name="line218"></a>/**
-<a name="line219"></a> * Id of element for the text area of the title bar.
-<a name="line220"></a> * @type {?string}
-<a name="line221"></a> * @private
-<a name="line222"></a> */
-<a name="line223"></a>goog.ui.Dialog.prototype.titleId_ = null;
-<a name="line224"></a>
-<a name="line225"></a>
-<a name="line226"></a>/**
-<a name="line227"></a> * Element for the close box area of the title bar.
-<a name="line228"></a> * @type {Element}
-<a name="line229"></a> * @private
-<a name="line230"></a> */
-<a name="line231"></a>goog.ui.Dialog.prototype.titleCloseEl_ = null;
-<a name="line232"></a>
-<a name="line233"></a>
-<a name="line234"></a>/**
-<a name="line235"></a> * Element for the content area.
-<a name="line236"></a> * @type {Element}
-<a name="line237"></a> * @private
-<a name="line238"></a> */
-<a name="line239"></a>goog.ui.Dialog.prototype.contentEl_ = null;
-<a name="line240"></a>
-<a name="line241"></a>
-<a name="line242"></a>/**
-<a name="line243"></a> * Element for the button bar.
-<a name="line244"></a> * @type {Element}
-<a name="line245"></a> * @private
-<a name="line246"></a> */
-<a name="line247"></a>goog.ui.Dialog.prototype.buttonEl_ = null;
-<a name="line248"></a>
-<a name="line249"></a>
-<a name="line250"></a>/**
-<a name="line251"></a> * Sets the title.
-<a name="line252"></a> * @param {string} title Title HTML (escaped).
-<a name="line253"></a> */
-<a name="line254"></a>goog.ui.Dialog.prototype.setTitle = function(title) {
-<a name="line255"></a>  this.title_ = title;
-<a name="line256"></a>  if (this.titleTextEl_) {
-<a name="line257"></a>    goog.dom.setTextContent(this.titleTextEl_, title);
-<a name="line258"></a>  }
-<a name="line259"></a>};
-<a name="line260"></a>
-<a name="line261"></a>
-<a name="line262"></a>/**
-<a name="line263"></a> * Gets the title.
-<a name="line264"></a> * @return {string} The title.
-<a name="line265"></a> */
-<a name="line266"></a>goog.ui.Dialog.prototype.getTitle = function() {
-<a name="line267"></a>  return this.title_;
-<a name="line268"></a>};
-<a name="line269"></a>
-<a name="line270"></a>
-<a name="line271"></a>/**
-<a name="line272"></a> * Allows arbitrary HTML to be set in the content element.
-<a name="line273"></a> * @param {string} html Content HTML.
-<a name="line274"></a> */
-<a name="line275"></a>goog.ui.Dialog.prototype.setContent = function(html) {
-<a name="line276"></a>  this.content_ = html;
-<a name="line277"></a>  if (this.contentEl_) {
-<a name="line278"></a>    this.contentEl_.innerHTML = html;
-<a name="line279"></a>  }
-<a name="line280"></a>};
-<a name="line281"></a>
-<a name="line282"></a>
-<a name="line283"></a>/**
-<a name="line284"></a> * Gets the content HTML of the content element.
-<a name="line285"></a> * @return {string} Content HTML.
-<a name="line286"></a> */
-<a name="line287"></a>goog.ui.Dialog.prototype.getContent = function() {
-<a name="line288"></a>  return this.content_;
-<a name="line289"></a>};
-<a name="line290"></a>
-<a name="line291"></a>
-<a name="line292"></a>/**
-<a name="line293"></a> * Returns the content element so that more complicated things can be done with
-<a name="line294"></a> * the content area.  Lazily renders the component if needed.  Overrides
-<a name="line295"></a> * {@link goog.ui.Component#getContentElement}.
-<a name="line296"></a> * @return {Element} The content element.
-<a name="line297"></a> */
-<a name="line298"></a>goog.ui.Dialog.prototype.getContentElement = function() {
-<a name="line299"></a>  if (!this.contentEl_) {
-<a name="line300"></a>    this.render();
-<a name="line301"></a>  }
-<a name="line302"></a>  return this.contentEl_;
-<a name="line303"></a>};
-<a name="line304"></a>
-<a name="line305"></a>
-<a name="line306"></a>/**
-<a name="line307"></a> * Returns the title element so that more complicated things can be done with
-<a name="line308"></a> * the title.  Lazily renders the component if needed.
-<a name="line309"></a> * @return {Element} The title element.
-<a name="line310"></a> */
-<a name="line311"></a>goog.ui.Dialog.prototype.getTitleElement = function() {
-<a name="line312"></a>  if (!this.isInDocument()) {
-<a name="line313"></a>    this.render();
-<a name="line314"></a>  }
-<a name="line315"></a>  return this.titleEl_;
-<a name="line316"></a>};
-<a name="line317"></a>
-<a name="line318"></a>
-<a name="line319"></a>/**
-<a name="line320"></a> * Returns the title text element so that more complicated things can be done
-<a name="line321"></a> * with the text of the title.  Lazily renders the component if needed.
-<a name="line322"></a> * @return {Element} The title text element.
-<a name="line323"></a> */
-<a name="line324"></a>goog.ui.Dialog.prototype.getTitleTextElement = function() {
-<a name="line325"></a>  if (!this.isInDocument()) {
-<a name="line326"></a>    this.render();
-<a name="line327"></a>  }
-<a name="line328"></a>  return this.titleTextEl_;
-<a name="line329"></a>};
-<a name="line330"></a>
-<a name="line331"></a>
-<a name="line332"></a>/**
-<a name="line333"></a> * Returns the title close element so that more complicated things can be done
-<a name="line334"></a> * with the close area of the title.
-<a name="line335"></a> * @return {Element} The close box.
-<a name="line336"></a> */
-<a name="line337"></a>goog.ui.Dialog.prototype.getTitleCloseElement = function() {
-<a name="line338"></a>  if (!this.isInDocument()) {
-<a name="line339"></a>    this.render();
-<a name="line340"></a>  }
-<a name="line341"></a>  return this.titleCloseEl_;
-<a name="line342"></a>};
-<a name="line343"></a>
-<a name="line344"></a>
-<a name="line345"></a>/**
-<a name="line346"></a> * Returns the button element so that more complicated things can be done with
-<a name="line347"></a> * the button area.  Lazily renders the component if needed.
-<a name="line348"></a> * @return {Element} The button container element.
-<a name="line349"></a> */
-<a name="line350"></a>goog.ui.Dialog.prototype.getButtonElement = function() {
-<a name="line351"></a>  if (!this.isInDocument()) {
-<a name="line352"></a>    this.render();
-<a name="line353"></a>  }
-<a name="line354"></a>  return this.buttonEl_;
-<a name="line355"></a>};
-<a name="line356"></a>
-<a name="line357"></a>
-<a name="line358"></a>/**
-<a name="line359"></a> * Returns the dialog element so that more complicated things can be done with
-<a name="line360"></a> * the dialog box.  Lazily renders the component if needed.
-<a name="line361"></a> * @return {Element} The dialog element.
-<a name="line362"></a> */
-<a name="line363"></a>goog.ui.Dialog.prototype.getDialogElement = function() {
-<a name="line364"></a>  if (!this.isInDocument()) {
-<a name="line365"></a>    this.render();
-<a name="line366"></a>  }
-<a name="line367"></a>  return this.getElement();
-<a name="line368"></a>};
-<a name="line369"></a>
-<a name="line370"></a>
-<a name="line371"></a>/**
-<a name="line372"></a> * Returns the background mask element so that more complicated things can be
-<a name="line373"></a> * done with the background region.  Lazily renders the component if needed.
-<a name="line374"></a> * @return {Element} The background mask element.
-<a name="line375"></a> */
-<a name="line376"></a>goog.ui.Dialog.prototype.getBackgroundElement = function() {
-<a name="line377"></a>  if (!this.isInDocument()) {
-<a name="line378"></a>    this.render();
-<a name="line379"></a>  }
-<a name="line380"></a>  return this.bgEl_;
-<a name="line381"></a>};
-<a name="line382"></a>
-<a name="line383"></a>
-<a name="line384"></a>/**
-<a name="line385"></a> * Gets the opacity of the background mask.
-<a name="line386"></a> * @return {number} Background mask opacity.
-<a name="line387"></a> */
-<a name="line388"></a>goog.ui.Dialog.prototype.getBackgroundElementOpacity = function() {
-<a name="line389"></a>  return this.backgroundElementOpacity_;
-<a name="line390"></a>};
-<a name="line391"></a>
-<a name="line392"></a>
-<a name="line393"></a>/**
-<a name="line394"></a> * Sets the opacity of the background mask.
-<a name="line395"></a> * @param {number} opacity Background mask opacity.
-<a name="line396"></a> */
-<a name="line397"></a>goog.ui.Dialog.prototype.setBackgroundElementOpacity = function(opacity) {
-<a name="line398"></a>  this.backgroundElementOpacity_ = opacity;
-<a name="line399"></a>
-<a name="line400"></a>  if (this.bgEl_) {
-<a name="line401"></a>    goog.style.setOpacity(this.bgEl_, this.backgroundElementOpacity_);
-<a name="line402"></a>  }
-<a name="line403"></a>};
-<a name="line404"></a>
-<a name="line405"></a>
-<a name="line406"></a>/**
-<a name="line407"></a> * Sets the modal property of the dialog.
-<a name="line408"></a> *
-<a name="line409"></a> * Note that non-modal dialogs cannot use an iframe mask.
-<a name="line410"></a> *
-<a name="line411"></a> * @param {boolean} modal Whether the dialog is modal.
-<a name="line412"></a> */
-<a name="line413"></a>goog.ui.Dialog.prototype.setModal = function(modal) {
-<a name="line414"></a>  this.modal_ = modal;
-<a name="line415"></a>  this.manageBackgroundDom_();
-<a name="line416"></a>};
-<a name="line417"></a>
-<a name="line418"></a>
-<a name="line419"></a>/**
-<a name="line420"></a> * @return {boolean} modal Whether the dialog is modal.
-<a name="line421"></a> */
-<a name="line422"></a>goog.ui.Dialog.prototype.getModal = function() {
-<a name="line423"></a>  return this.modal_;
-<a name="line424"></a>};
-<a name="line425"></a>
-<a name="line426"></a>
-<a name="line427"></a>/**
-<a name="line428"></a> * @return {string} The CSS class name for the dialog element.
-<a name="line429"></a> */
-<a name="line430"></a>goog.ui.Dialog.prototype.getClass = function() {
-<a name="line431"></a>  return this.class_;
-<a name="line432"></a>};
-<a name="line433"></a>
-<a name="line434"></a>
-<a name="line435"></a>/**
-<a name="line436"></a> * Sets whether the dialog can be dragged.
-<a name="line437"></a> * @param {boolean} draggable Whether the dialog can be dragged.
-<a name="line438"></a> */
-<a name="line439"></a>goog.ui.Dialog.prototype.setDraggable = function(draggable) {
-<a name="line440"></a>  this.draggable_ = draggable;
-<a name="line441"></a>
-<a name="line442"></a>  // this will add the dragger if we&#39;ve already rendered, and gone through
-<a name="line443"></a>  // the enterDocument routine, but now want to dynamically add draggability
-<a name="line444"></a>  if (this.draggable_ &amp;&amp; !this.dragger_ &amp;&amp; this.getElement()) {
-<a name="line445"></a>    this.dragger_ = this.createDraggableTitleDom_();
-<a name="line446"></a>
-<a name="line447"></a>  } else if (!this.draggable_ &amp;&amp; this.dragger_) {
-<a name="line448"></a>    // removes draggable classname post-render
-<a name="line449"></a>    if (this.getElement()) {
-<a name="line450"></a>      goog.dom.classes.remove(this.titleEl_,
-<a name="line451"></a>          goog.getCssName(this.class_, &#39;title-draggable&#39;));
-<a name="line452"></a>    }
-<a name="line453"></a>    this.dragger_.dispose();
-<a name="line454"></a>    this.dragger_ = null;
-<a name="line455"></a>  }
-<a name="line456"></a>};
-<a name="line457"></a>
-<a name="line458"></a>
-<a name="line459"></a>/**
-<a name="line460"></a> * Creates a dragger on the title element and adds a classname for
-<a name="line461"></a> * cursor:move targeting.
-<a name="line462"></a> * @return {goog.fx.Dragger} The created dragger instance.
-<a name="line463"></a> * @private
-<a name="line464"></a> */
-<a name="line465"></a>goog.ui.Dialog.prototype.createDraggableTitleDom_ = function() {
-<a name="line466"></a>  var dragger = new goog.fx.Dragger(this.getElement(), this.titleEl_);
-<a name="line467"></a>  goog.dom.classes.add(this.titleEl_,
-<a name="line468"></a>      goog.getCssName(this.class_, &#39;title-draggable&#39;));
-<a name="line469"></a>  return dragger;
-<a name="line470"></a>};
-<a name="line471"></a>
-<a name="line472"></a>
-<a name="line473"></a>/**
-<a name="line474"></a> * @return {boolean} Whether the dialog is draggable.
-<a name="line475"></a> */
-<a name="line476"></a>goog.ui.Dialog.prototype.getDraggable = function() {
-<a name="line477"></a>  return this.draggable_;
-<a name="line478"></a>};
-<a name="line479"></a>
-<a name="line480"></a>
-<a name="line481"></a>/**
-<a name="line482"></a> * Creates the initial DOM representation for the dialog.  Overrides {@link
-<a name="line483"></a> * goog.ui.Component#createDom}.
-<a name="line484"></a> */
-<a name="line485"></a>goog.ui.Dialog.prototype.createDom = function() {
-<a name="line486"></a>  // Manages the DOM for background mask elements.
-<a name="line487"></a>  this.manageBackgroundDom_();
-<a name="line488"></a>
-<a name="line489"></a>  // Create the dialog element, and make sure it&#39;s hidden.
-<a name="line490"></a>  var dom = this.getDomHelper();
-<a name="line491"></a>  this.setElementInternal(dom.createDom(&#39;div&#39;,
-<a name="line492"></a>      {&#39;className&#39;: this.class_, &#39;tabIndex&#39;: 0},
-<a name="line493"></a>      this.titleEl_ = dom.createDom(&#39;div&#39;,
-<a name="line494"></a>          {&#39;className&#39;: goog.getCssName(this.class_, &#39;title&#39;),
-<a name="line495"></a>           &#39;id&#39;: this.getId()},
-<a name="line496"></a>          this.titleTextEl_ = dom.createDom(&#39;span&#39;,
-<a name="line497"></a>              goog.getCssName(this.class_, &#39;title-text&#39;), this.title_),
-<a name="line498"></a>          this.titleCloseEl_ = dom.createDom(&#39;span&#39;,
-<a name="line499"></a>              goog.getCssName(this.class_, &#39;title-close&#39;))),
-<a name="line500"></a>      this.contentEl_ = dom.createDom(&#39;div&#39;,
-<a name="line501"></a>          goog.getCssName(this.class_, &#39;content&#39;)),
-<a name="line502"></a>      this.buttonEl_ = dom.createDom(&#39;div&#39;,
-<a name="line503"></a>          goog.getCssName(this.class_, &#39;buttons&#39;)),
-<a name="line504"></a>      this.tabCatcherEl_ = dom.createDom(&#39;span&#39;, {&#39;tabIndex&#39;: 0})));
-<a name="line505"></a>  this.titleId_ = this.titleEl_.id;
-<a name="line506"></a>  goog.dom.a11y.setRole(this.getElement(), &#39;dialog&#39;);
-<a name="line507"></a>  goog.dom.a11y.setState(this.getElement(), &#39;labelledby&#39;, this.titleId_ || &#39;&#39;);
-<a name="line508"></a>  // If setContent() was called before createDom(), make sure the inner HTML of
-<a name="line509"></a>  // the content element is initialized.
-<a name="line510"></a>  if (this.content_) {
-<a name="line511"></a>    this.contentEl_.innerHTML = this.content_;
-<a name="line512"></a>  }
-<a name="line513"></a>  goog.style.showElement(this.getElement(), false);
-<a name="line514"></a>
-<a name="line515"></a>  // Render the buttons.
-<a name="line516"></a>  if (this.buttons_) {
-<a name="line517"></a>    this.buttons_.attachToElement(this.buttonEl_);
-<a name="line518"></a>  }
-<a name="line519"></a>};
-<a name="line520"></a>
-<a name="line521"></a>
-<a name="line522"></a>/**
-<a name="line523"></a> * Creates and disposes of the DOM for background mask elements.
-<a name="line524"></a> * @private
-<a name="line525"></a> */
-<a name="line526"></a>goog.ui.Dialog.prototype.manageBackgroundDom_ = function() {
-<a name="line527"></a>  if (this.useIframeMask_ &amp;&amp; this.modal_ &amp;&amp; !this.bgIframeEl_) {
-<a name="line528"></a>    // IE renders the iframe on top of the select elements while still
-<a name="line529"></a>    // respecting the z-index of the other elements on the page.  See
-<a name="line530"></a>    // http://support.microsoft.com/kb/177378 for more information.
-<a name="line531"></a>    // Flash and other controls behave in similar ways for other browsers
-<a name="line532"></a>    this.bgIframeEl_ = goog.dom.iframe.createBlank(this.getDomHelper());
-<a name="line533"></a>    this.bgIframeEl_.className = goog.getCssName(this.class_, &#39;bg&#39;);
-<a name="line534"></a>    goog.style.showElement(this.bgIframeEl_, false);
-<a name="line535"></a>    goog.style.setOpacity(this.bgIframeEl_, 0);
-<a name="line536"></a>
-<a name="line537"></a>  // Removes the iframe mask if it exists and we don&#39;t want it to
-<a name="line538"></a>  } else if ((!this.useIframeMask_ || !this.modal_) &amp;&amp; this.bgIframeEl_) {
-<a name="line539"></a>    goog.dom.removeNode(this.bgIframeEl_);
-<a name="line540"></a>    this.bgIframeEl_ = null;
-<a name="line541"></a>  }
-<a name="line542"></a>
-<a name="line543"></a>  // Create the backgound mask, initialize its opacity, and make sure it&#39;s
-<a name="line544"></a>  // hidden.
-<a name="line545"></a>  if (this.modal_ &amp;&amp; !this.bgEl_) {
-<a name="line546"></a>    this.bgEl_ = this.getDomHelper().createDom(&#39;div&#39;,
-<a name="line547"></a>        goog.getCssName(this.class_, &#39;bg&#39;));
-<a name="line548"></a>    goog.style.setOpacity(this.bgEl_, this.backgroundElementOpacity_);
-<a name="line549"></a>    goog.style.showElement(this.bgEl_, false);
-<a name="line550"></a>
-<a name="line551"></a>  // Removes the background mask if it exists and we don&#39;t want it to
-<a name="line552"></a>  } else if (!this.modal_ &amp;&amp; this.bgEl_) {
-<a name="line553"></a>    goog.dom.removeNode(this.bgEl_);
-<a name="line554"></a>    this.bgEl_ = null;
-<a name="line555"></a>  }
-<a name="line556"></a>};
-<a name="line557"></a>
-<a name="line558"></a>
-<a name="line559"></a>/**
-<a name="line560"></a> * Renders the component.  Overrides {@link goog.ui.Component#render}.  Accepts
-<a name="line561"></a> * an {@code opt_parent} argument for compatibility with the superclass method,
-<a name="line562"></a> * but rendering a dialog into anything other than a body element will likely
-<a name="line563"></a> * have unexpected results.  The parent element defaults to the current document
-<a name="line564"></a> * body if unspecified, which is almost always what you want.
-<a name="line565"></a> *
-<a name="line566"></a> * @param {Element=} opt_parent Element into which the component is to be
-<a name="line567"></a> *    rendered; defaults to the current document&#39;s body element if unspecified.
-<a name="line568"></a> * @throws {goog.ui.Component.Error.ALREADY_RENDERED} If the component is
-<a name="line569"></a> *    already rendered.
-<a name="line570"></a> */
-<a name="line571"></a>goog.ui.Dialog.prototype.render = function(opt_parent) {
-<a name="line572"></a>  // We have to replicate some of the logic from goog.ui.Component#render here,
-<a name="line573"></a>  // since dialogs are made up of three elements (the bacground mask, the dialog
-<a name="line574"></a>  // itself, and the optional iframe mask on IE), and all of them must be
-<a name="line575"></a>  // appended to the parent element before enterDocument is called.
-<a name="line576"></a>  if (this.isInDocument()) {
-<a name="line577"></a>    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
-<a name="line578"></a>  }
-<a name="line579"></a>
-<a name="line580"></a>  if (!this.getElement()) {
-<a name="line581"></a>    // This creates both (or, on IE, possibly all three) elements.
-<a name="line582"></a>    this.createDom();
-<a name="line583"></a>  }
-<a name="line584"></a>
-<a name="line585"></a>  // First, render the background mask...
-<a name="line586"></a>  var parent = opt_parent || this.getDomHelper().getDocument().body;
-<a name="line587"></a>  this.renderBackground_(parent);
-<a name="line588"></a>
-<a name="line589"></a>  // ...then call the superclass method to attach the dialog element and call
-<a name="line590"></a>  // enterDocument().
-<a name="line591"></a>  goog.ui.Dialog.superClass_.render.call(this, parent);
-<a name="line592"></a>};
-<a name="line593"></a>
-<a name="line594"></a>
-<a name="line595"></a>/**
-<a name="line596"></a> * Renders the background mask.
-<a name="line597"></a> * @param {Element} parent Parent element; typically the document body.
-<a name="line598"></a> * @private
-<a name="line599"></a> */
-<a name="line600"></a>goog.ui.Dialog.prototype.renderBackground_ = function(parent) {
-<a name="line601"></a>  if (this.bgIframeEl_) {
-<a name="line602"></a>    parent.appendChild(this.bgIframeEl_);
-<a name="line603"></a>  }
-<a name="line604"></a>  if (this.bgEl_) {
-<a name="line605"></a>    parent.appendChild(this.bgEl_);
-<a name="line606"></a>  }
-<a name="line607"></a>};
-<a name="line608"></a>
-<a name="line609"></a>
-<a name="line610"></a>/**
-<a name="line611"></a> * Overrides {@link goog.ui.Component#renderBefore} to throw a NOT_SUPPORTED
-<a name="line612"></a> * error, since dialogs don&#39;t support being rendered before another DOM element.
-<a name="line613"></a> * TODO: Figure out how to do this cleanly between Component and this.
-<a name="line614"></a> *
-<a name="line615"></a> * @param {Element} sibling Element before which the component is to be
-<a name="line616"></a> *    rendered (ignored).
+<a name="line50"></a>/**
+<a name="line51"></a> * Class for showing simple dialog boxes.
+<a name="line52"></a> * The Html structure of the dialog box is:
+<a name="line53"></a> * &lt;pre&gt;
+<a name="line54"></a> *  Element         Function                Class-name, modal-dialog = default
+<a name="line55"></a> * ----------------------------------------------------------------------------
+<a name="line56"></a> * - iframe         Iframe mask              modal-dialog-bg
+<a name="line57"></a> * - div            Background mask          modal-dialog-bg
+<a name="line58"></a> * - div            Dialog area              modal-dialog
+<a name="line59"></a> *     - div        Title bar                modal-dialog-title
+<a name="line60"></a> *        - span                             modal-dialog-title-text
+<a name="line61"></a> *          - text  Title text               N/A
+<a name="line62"></a> *        - span                             modal-dialog-title-close
+<a name="line63"></a> *          - ??    Close box                N/A
+<a name="line64"></a> *     - div        Content area             modal-dialog-content
+<a name="line65"></a> *        - ??      User specified content   N/A
+<a name="line66"></a> *     - div        Button area              modal-dialog-buttons
+<a name="line67"></a> *        - button                           N/A
+<a name="line68"></a> *        - button
+<a name="line69"></a> *        - ...
+<a name="line70"></a> * &lt;/pre&gt;
+<a name="line71"></a> * @constructor
+<a name="line72"></a> * @param {string=} opt_class CSS class name for the dialog element, also used
+<a name="line73"></a> *    as a class name prefix for related elements; defaults to modal-dialog.
+<a name="line74"></a> * @param {boolean=} opt_useIframeMask Work around windowed controls z-index
+<a name="line75"></a> *     issue by using an iframe instead of a div for bg element.
+<a name="line76"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
+<a name="line77"></a> *    goog.ui.Component} for semantics.
+<a name="line78"></a> * @extends {goog.ui.Component}
+<a name="line79"></a> */
+<a name="line80"></a>goog.ui.Dialog = function(opt_class, opt_useIframeMask, opt_domHelper) {
+<a name="line81"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line82"></a>
+<a name="line83"></a>  /**
+<a name="line84"></a>   * CSS class name for the dialog element, also used as a class name prefix for
+<a name="line85"></a>   * related elements.  Defaults to goog.getCssName(&#39;modal-dialog&#39;).
+<a name="line86"></a>   * @type {string}
+<a name="line87"></a>   * @private
+<a name="line88"></a>   */
+<a name="line89"></a>  this.class_ = opt_class || goog.getCssName(&#39;modal-dialog&#39;);
+<a name="line90"></a>
+<a name="line91"></a>  this.useIframeMask_ = !!opt_useIframeMask;
+<a name="line92"></a>
+<a name="line93"></a>  // Set the default button set to show ok and cancel
+<a name="line94"></a>  this.buttons_ = goog.ui.Dialog.ButtonSet.OK_CANCEL;
+<a name="line95"></a>};
+<a name="line96"></a>goog.inherits(goog.ui.Dialog, goog.ui.Component);
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Focus handler. It will be initialized in enterDocument.
+<a name="line101"></a> * @type {goog.events.FocusHandler}
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.ui.Dialog.prototype.focusHandler_ = null;
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Whether the dialog should use an iframe as the background element to work
+<a name="line109"></a> * around z-order issues.  Defaults to false.
+<a name="line110"></a> * @type {boolean}
+<a name="line111"></a> * @private
+<a name="line112"></a> */
+<a name="line113"></a>goog.ui.Dialog.prototype.useIframeMask_ = false;
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Whether the dialog is modal. Defaults to true.
+<a name="line118"></a> * @type {boolean}
+<a name="line119"></a> * @private
+<a name="line120"></a> */
+<a name="line121"></a>goog.ui.Dialog.prototype.modal_ = true;
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Whether the dialog is draggable. Defaults to true.
+<a name="line126"></a> * @type {boolean}
+<a name="line127"></a> * @private
+<a name="line128"></a> */
+<a name="line129"></a>goog.ui.Dialog.prototype.draggable_ = true;
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Opacity for background mask.  Defaults to 30%.
+<a name="line134"></a> * @type {number}
+<a name="line135"></a> * @private
+<a name="line136"></a> */
+<a name="line137"></a>goog.ui.Dialog.prototype.backgroundElementOpacity_ = 0.30;
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * Dialog&#39;s title.
+<a name="line142"></a> * @type {string}
+<a name="line143"></a> * @private
+<a name="line144"></a> */
+<a name="line145"></a>goog.ui.Dialog.prototype.title_ = &#39;&#39;;
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Dialog&#39;s content (HTML).
+<a name="line150"></a> * @type {string}
+<a name="line151"></a> * @private
+<a name="line152"></a> */
+<a name="line153"></a>goog.ui.Dialog.prototype.content_ = &#39;&#39;;
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>/**
+<a name="line157"></a> * Button set.  Default: Ok/Cancel.
+<a name="line158"></a> * @type {goog.ui.Dialog.ButtonSet?}
+<a name="line159"></a> * @private
+<a name="line160"></a> */
+<a name="line161"></a>goog.ui.Dialog.prototype.buttons_ = null;
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>/**
+<a name="line165"></a> * Dragger.
+<a name="line166"></a> * @type {?goog.fx.Dragger}
+<a name="line167"></a> * @private
+<a name="line168"></a> */
+<a name="line169"></a>goog.ui.Dialog.prototype.dragger_ = null;
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Whether dialog is visible.
+<a name="line174"></a> * @type {boolean}
+<a name="line175"></a> * @private
+<a name="line176"></a> */
+<a name="line177"></a>goog.ui.Dialog.prototype.visible_ = false;
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * Whether the dialog should be disposed when it is hidden.
+<a name="line182"></a> * @type {boolean}
+<a name="line183"></a> * @private
+<a name="line184"></a> */
+<a name="line185"></a>goog.ui.Dialog.prototype.disposeOnHide_ = false;
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Element for the background which obscures the UI and blocks events.
+<a name="line190"></a> * @type {Element}
+<a name="line191"></a> * @private
+<a name="line192"></a> */
+<a name="line193"></a>goog.ui.Dialog.prototype.bgEl_ = null;
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Iframe element that is only used for IE as a workaround to keep select-type
+<a name="line198"></a> * elements from burning through background.
+<a name="line199"></a> * @type {Element}
+<a name="line200"></a> * @private
+<a name="line201"></a> */
+<a name="line202"></a>goog.ui.Dialog.prototype.bgIframeEl_ = null;
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * Element for the title bar.
+<a name="line207"></a> * @type {Element}
+<a name="line208"></a> * @private
+<a name="line209"></a> */
+<a name="line210"></a>goog.ui.Dialog.prototype.titleEl_ = null;
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Element for the text area of the title bar.
+<a name="line215"></a> * @type {Element}
+<a name="line216"></a> * @private
+<a name="line217"></a> */
+<a name="line218"></a>goog.ui.Dialog.prototype.titleTextEl_ = null;
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * Id of element for the text area of the title bar.
+<a name="line224"></a> * @type {?string}
+<a name="line225"></a> * @private
+<a name="line226"></a> */
+<a name="line227"></a>goog.ui.Dialog.prototype.titleId_ = null;
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Element for the close box area of the title bar.
+<a name="line232"></a> * @type {Element}
+<a name="line233"></a> * @private
+<a name="line234"></a> */
+<a name="line235"></a>goog.ui.Dialog.prototype.titleCloseEl_ = null;
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>/**
+<a name="line239"></a> * Element for the content area.
+<a name="line240"></a> * @type {Element}
+<a name="line241"></a> * @private
+<a name="line242"></a> */
+<a name="line243"></a>goog.ui.Dialog.prototype.contentEl_ = null;
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/**
+<a name="line247"></a> * Element for the button bar.
+<a name="line248"></a> * @type {Element}
+<a name="line249"></a> * @private
+<a name="line250"></a> */
+<a name="line251"></a>goog.ui.Dialog.prototype.buttonEl_ = null;
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>/**
+<a name="line255"></a> * Sets the title.
+<a name="line256"></a> * @param {string} title Title HTML (escaped).
+<a name="line257"></a> */
+<a name="line258"></a>goog.ui.Dialog.prototype.setTitle = function(title) {
+<a name="line259"></a>  this.title_ = title;
+<a name="line260"></a>  if (this.titleTextEl_) {
+<a name="line261"></a>    goog.dom.setTextContent(this.titleTextEl_, title);
+<a name="line262"></a>  }
+<a name="line263"></a>};
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * Gets the title.
+<a name="line268"></a> * @return {string} The title.
+<a name="line269"></a> */
+<a name="line270"></a>goog.ui.Dialog.prototype.getTitle = function() {
+<a name="line271"></a>  return this.title_;
+<a name="line272"></a>};
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * Allows arbitrary HTML to be set in the content element.
+<a name="line277"></a> * @param {string} html Content HTML.
+<a name="line278"></a> */
+<a name="line279"></a>goog.ui.Dialog.prototype.setContent = function(html) {
+<a name="line280"></a>  this.content_ = html;
+<a name="line281"></a>  if (this.contentEl_) {
+<a name="line282"></a>    this.contentEl_.innerHTML = html;
+<a name="line283"></a>  }
+<a name="line284"></a>};
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>/**
+<a name="line288"></a> * Gets the content HTML of the content element.
+<a name="line289"></a> * @return {string} Content HTML.
+<a name="line290"></a> */
+<a name="line291"></a>goog.ui.Dialog.prototype.getContent = function() {
+<a name="line292"></a>  return this.content_;
+<a name="line293"></a>};
+<a name="line294"></a>
+<a name="line295"></a>
+<a name="line296"></a>/**
+<a name="line297"></a> * Returns the content element so that more complicated things can be done with
+<a name="line298"></a> * the content area.  Lazily renders the component if needed.  Overrides
+<a name="line299"></a> * {@link goog.ui.Component#getContentElement}.
+<a name="line300"></a> * @return {Element} The content element.
+<a name="line301"></a> */
+<a name="line302"></a>goog.ui.Dialog.prototype.getContentElement = function() {
+<a name="line303"></a>  if (!this.contentEl_) {
+<a name="line304"></a>    this.render();
+<a name="line305"></a>  }
+<a name="line306"></a>  return this.contentEl_;
+<a name="line307"></a>};
+<a name="line308"></a>
+<a name="line309"></a>
+<a name="line310"></a>/**
+<a name="line311"></a> * Returns the title element so that more complicated things can be done with
+<a name="line312"></a> * the title.  Lazily renders the component if needed.
+<a name="line313"></a> * @return {Element} The title element.
+<a name="line314"></a> */
+<a name="line315"></a>goog.ui.Dialog.prototype.getTitleElement = function() {
+<a name="line316"></a>  if (!this.isInDocument()) {
+<a name="line317"></a>    this.render();
+<a name="line318"></a>  }
+<a name="line319"></a>  return this.titleEl_;
+<a name="line320"></a>};
+<a name="line321"></a>
+<a name="line322"></a>
+<a name="line323"></a>/**
+<a name="line324"></a> * Returns the title text element so that more complicated things can be done
+<a name="line325"></a> * with the text of the title.  Lazily renders the component if needed.
+<a name="line326"></a> * @return {Element} The title text element.
+<a name="line327"></a> */
+<a name="line328"></a>goog.ui.Dialog.prototype.getTitleTextElement = function() {
+<a name="line329"></a>  if (!this.isInDocument()) {
+<a name="line330"></a>    this.render();
+<a name="line331"></a>  }
+<a name="line332"></a>  return this.titleTextEl_;
+<a name="line333"></a>};
+<a name="line334"></a>
+<a name="line335"></a>
+<a name="line336"></a>/**
+<a name="line337"></a> * Returns the title close element so that more complicated things can be done
+<a name="line338"></a> * with the close area of the title.
+<a name="line339"></a> * @return {Element} The close box.
+<a name="line340"></a> */
+<a name="line341"></a>goog.ui.Dialog.prototype.getTitleCloseElement = function() {
+<a name="line342"></a>  if (!this.isInDocument()) {
+<a name="line343"></a>    this.render();
+<a name="line344"></a>  }
+<a name="line345"></a>  return this.titleCloseEl_;
+<a name="line346"></a>};
+<a name="line347"></a>
+<a name="line348"></a>
+<a name="line349"></a>/**
+<a name="line350"></a> * Returns the button element so that more complicated things can be done with
+<a name="line351"></a> * the button area.  Lazily renders the component if needed.
+<a name="line352"></a> * @return {Element} The button container element.
+<a name="line353"></a> */
+<a name="line354"></a>goog.ui.Dialog.prototype.getButtonElement = function() {
+<a name="line355"></a>  if (!this.isInDocument()) {
+<a name="line356"></a>    this.render();
+<a name="line357"></a>  }
+<a name="line358"></a>  return this.buttonEl_;
+<a name="line359"></a>};
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * Returns the dialog element so that more complicated things can be done with
+<a name="line364"></a> * the dialog box.  Lazily renders the component if needed.
+<a name="line365"></a> * @return {Element} The dialog element.
+<a name="line366"></a> */
+<a name="line367"></a>goog.ui.Dialog.prototype.getDialogElement = function() {
+<a name="line368"></a>  if (!this.isInDocument()) {
+<a name="line369"></a>    this.render();
+<a name="line370"></a>  }
+<a name="line371"></a>  return this.getElement();
+<a name="line372"></a>};
+<a name="line373"></a>
+<a name="line374"></a>
+<a name="line375"></a>/**
+<a name="line376"></a> * Returns the background mask element so that more complicated things can be
+<a name="line377"></a> * done with the background region.  Lazily renders the component if needed.
+<a name="line378"></a> * @return {Element} The background mask element.
+<a name="line379"></a> */
+<a name="line380"></a>goog.ui.Dialog.prototype.getBackgroundElement = function() {
+<a name="line381"></a>  if (!this.isInDocument()) {
+<a name="line382"></a>    this.render();
+<a name="line383"></a>  }
+<a name="line384"></a>  return this.bgEl_;
+<a name="line385"></a>};
+<a name="line386"></a>
+<a name="line387"></a>
+<a name="line388"></a>/**
+<a name="line389"></a> * Gets the opacity of the background mask.
+<a name="line390"></a> * @return {number} Background mask opacity.
+<a name="line391"></a> */
+<a name="line392"></a>goog.ui.Dialog.prototype.getBackgroundElementOpacity = function() {
+<a name="line393"></a>  return this.backgroundElementOpacity_;
+<a name="line394"></a>};
+<a name="line395"></a>
+<a name="line396"></a>
+<a name="line397"></a>/**
+<a name="line398"></a> * Sets the opacity of the background mask.
+<a name="line399"></a> * @param {number} opacity Background mask opacity.
+<a name="line400"></a> */
+<a name="line401"></a>goog.ui.Dialog.prototype.setBackgroundElementOpacity = function(opacity) {
+<a name="line402"></a>  this.backgroundElementOpacity_ = opacity;
+<a name="line403"></a>
+<a name="line404"></a>  if (this.bgEl_) {
+<a name="line405"></a>    goog.style.setOpacity(this.bgEl_, this.backgroundElementOpacity_);
+<a name="line406"></a>  }
+<a name="line407"></a>};
+<a name="line408"></a>
+<a name="line409"></a>
+<a name="line410"></a>/**
+<a name="line411"></a> * Sets the modal property of the dialog. In case the dialog is already
+<a name="line412"></a> * inDocument, renders the modal background elements according to the specified
+<a name="line413"></a> * modal parameter.
+<a name="line414"></a> *
+<a name="line415"></a> * Note that non-modal dialogs cannot use an iframe mask.
+<a name="line416"></a> *
+<a name="line417"></a> * @param {boolean} modal Whether the dialog is modal.
+<a name="line418"></a> */
+<a name="line419"></a>goog.ui.Dialog.prototype.setModal = function(modal) {
+<a name="line420"></a>  this.modal_ = modal;
+<a name="line421"></a>  this.manageBackgroundDom_();
+<a name="line422"></a>  var dom = this.getDomHelper();
+<a name="line423"></a>  if (this.isInDocument() &amp;&amp; modal &amp;&amp; this.isVisible()) {
+<a name="line424"></a>    // Insert the bg elements before the dialog so that they don&#39;t block
+<a name="line425"></a>    // the dialog itself.
+<a name="line426"></a>    if (this.bgIframeEl_) {
+<a name="line427"></a>      dom.insertSiblingBefore(this.bgIframeEl_, this.getElement());
+<a name="line428"></a>    }
+<a name="line429"></a>    if (this.bgEl_) {
+<a name="line430"></a>      dom.insertSiblingBefore(this.bgEl_, this.getElement());
+<a name="line431"></a>    }
+<a name="line432"></a>    this.resizeBackground_();
+<a name="line433"></a>  }
+<a name="line434"></a>};
+<a name="line435"></a>
+<a name="line436"></a>
+<a name="line437"></a>/**
+<a name="line438"></a> * @return {boolean} modal Whether the dialog is modal.
+<a name="line439"></a> */
+<a name="line440"></a>goog.ui.Dialog.prototype.getModal = function() {
+<a name="line441"></a>  return this.modal_;
+<a name="line442"></a>};
+<a name="line443"></a>
+<a name="line444"></a>
+<a name="line445"></a>/**
+<a name="line446"></a> * @return {string} The CSS class name for the dialog element.
+<a name="line447"></a> */
+<a name="line448"></a>goog.ui.Dialog.prototype.getClass = function() {
+<a name="line449"></a>  return this.class_;
+<a name="line450"></a>};
+<a name="line451"></a>
+<a name="line452"></a>
+<a name="line453"></a>/**
+<a name="line454"></a> * Sets whether the dialog can be dragged.
+<a name="line455"></a> * @param {boolean} draggable Whether the dialog can be dragged.
+<a name="line456"></a> */
+<a name="line457"></a>goog.ui.Dialog.prototype.setDraggable = function(draggable) {
+<a name="line458"></a>  this.draggable_ = draggable;
+<a name="line459"></a>
+<a name="line460"></a>  // this will add the dragger if we&#39;ve already rendered, and gone through
+<a name="line461"></a>  // the enterDocument routine, but now want to dynamically add draggability
+<a name="line462"></a>  if (this.draggable_ &amp;&amp; !this.dragger_ &amp;&amp; this.getElement()) {
+<a name="line463"></a>    this.dragger_ = this.createDraggableTitleDom_();
+<a name="line464"></a>
+<a name="line465"></a>  } else if (!this.draggable_ &amp;&amp; this.dragger_) {
+<a name="line466"></a>    // removes draggable classname post-render
+<a name="line467"></a>    if (this.getElement()) {
+<a name="line468"></a>      goog.dom.classes.remove(this.titleEl_,
+<a name="line469"></a>          goog.getCssName(this.class_, &#39;title-draggable&#39;));
+<a name="line470"></a>    }
+<a name="line471"></a>    this.dragger_.dispose();
+<a name="line472"></a>    this.dragger_ = null;
+<a name="line473"></a>  }
+<a name="line474"></a>};
+<a name="line475"></a>
+<a name="line476"></a>
+<a name="line477"></a>/**
+<a name="line478"></a> * Creates a dragger on the title element and adds a classname for
+<a name="line479"></a> * cursor:move targeting.
+<a name="line480"></a> * @return {goog.fx.Dragger} The created dragger instance.
+<a name="line481"></a> * @private
+<a name="line482"></a> */
+<a name="line483"></a>goog.ui.Dialog.prototype.createDraggableTitleDom_ = function() {
+<a name="line484"></a>  var dragger = new goog.fx.Dragger(this.getElement(), this.titleEl_);
+<a name="line485"></a>  goog.dom.classes.add(this.titleEl_,
+<a name="line486"></a>      goog.getCssName(this.class_, &#39;title-draggable&#39;));
+<a name="line487"></a>  return dragger;
+<a name="line488"></a>};
+<a name="line489"></a>
+<a name="line490"></a>
+<a name="line491"></a>/**
+<a name="line492"></a> * @return {boolean} Whether the dialog is draggable.
+<a name="line493"></a> */
+<a name="line494"></a>goog.ui.Dialog.prototype.getDraggable = function() {
+<a name="line495"></a>  return this.draggable_;
+<a name="line496"></a>};
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * Creates the initial DOM representation for the dialog.  Overrides {@link
+<a name="line501"></a> * goog.ui.Component#createDom}.
+<a name="line502"></a> */
+<a name="line503"></a>goog.ui.Dialog.prototype.createDom = function() {
+<a name="line504"></a>  // Manages the DOM for background mask elements.
+<a name="line505"></a>  this.manageBackgroundDom_();
+<a name="line506"></a>
+<a name="line507"></a>  // Create the dialog element, and make sure it&#39;s hidden.
+<a name="line508"></a>  var dom = this.getDomHelper();
+<a name="line509"></a>  this.setElementInternal(dom.createDom(&#39;div&#39;,
+<a name="line510"></a>      {&#39;className&#39;: this.class_, &#39;tabIndex&#39;: 0},
+<a name="line511"></a>      this.titleEl_ = dom.createDom(&#39;div&#39;,
+<a name="line512"></a>          {&#39;className&#39;: goog.getCssName(this.class_, &#39;title&#39;),
+<a name="line513"></a>           &#39;id&#39;: this.getId()},
+<a name="line514"></a>          this.titleTextEl_ = dom.createDom(&#39;span&#39;,
+<a name="line515"></a>              goog.getCssName(this.class_, &#39;title-text&#39;), this.title_),
+<a name="line516"></a>          this.titleCloseEl_ = dom.createDom(&#39;span&#39;,
+<a name="line517"></a>              goog.getCssName(this.class_, &#39;title-close&#39;))),
+<a name="line518"></a>      this.contentEl_ = dom.createDom(&#39;div&#39;,
+<a name="line519"></a>          goog.getCssName(this.class_, &#39;content&#39;)),
+<a name="line520"></a>      this.buttonEl_ = dom.createDom(&#39;div&#39;,
+<a name="line521"></a>          goog.getCssName(this.class_, &#39;buttons&#39;)),
+<a name="line522"></a>      this.tabCatcherEl_ = dom.createDom(&#39;span&#39;, {&#39;tabIndex&#39;: 0})));
+<a name="line523"></a>  this.titleId_ = this.titleEl_.id;
+<a name="line524"></a>  goog.dom.a11y.setRole(this.getElement(), &#39;dialog&#39;);
+<a name="line525"></a>  goog.dom.a11y.setState(this.getElement(), &#39;labelledby&#39;, this.titleId_ || &#39;&#39;);
+<a name="line526"></a>  // If setContent() was called before createDom(), make sure the inner HTML of
+<a name="line527"></a>  // the content element is initialized.
+<a name="line528"></a>  if (this.content_) {
+<a name="line529"></a>    this.contentEl_.innerHTML = this.content_;
+<a name="line530"></a>  }
+<a name="line531"></a>  goog.style.showElement(this.getElement(), false);
+<a name="line532"></a>
+<a name="line533"></a>  // Render the buttons.
+<a name="line534"></a>  if (this.buttons_) {
+<a name="line535"></a>    this.buttons_.attachToElement(this.buttonEl_);
+<a name="line536"></a>  }
+<a name="line537"></a>};
+<a name="line538"></a>
+<a name="line539"></a>
+<a name="line540"></a>/**
+<a name="line541"></a> * Creates and disposes of the DOM for background mask elements.
+<a name="line542"></a> * @private
+<a name="line543"></a> */
+<a name="line544"></a>goog.ui.Dialog.prototype.manageBackgroundDom_ = function() {
+<a name="line545"></a>  if (this.useIframeMask_ &amp;&amp; this.modal_ &amp;&amp; !this.bgIframeEl_) {
+<a name="line546"></a>    // IE renders the iframe on top of the select elements while still
+<a name="line547"></a>    // respecting the z-index of the other elements on the page.  See
+<a name="line548"></a>    // http://support.microsoft.com/kb/177378 for more information.
+<a name="line549"></a>    // Flash and other controls behave in similar ways for other browsers
+<a name="line550"></a>    this.bgIframeEl_ = goog.dom.iframe.createBlank(this.getDomHelper());
+<a name="line551"></a>    this.bgIframeEl_.className = goog.getCssName(this.class_, &#39;bg&#39;);
+<a name="line552"></a>    goog.style.showElement(this.bgIframeEl_, false);
+<a name="line553"></a>    goog.style.setOpacity(this.bgIframeEl_, 0);
+<a name="line554"></a>
+<a name="line555"></a>  // Removes the iframe mask if it exists and we don&#39;t want it to
+<a name="line556"></a>  } else if ((!this.useIframeMask_ || !this.modal_) &amp;&amp; this.bgIframeEl_) {
+<a name="line557"></a>    goog.dom.removeNode(this.bgIframeEl_);
+<a name="line558"></a>    this.bgIframeEl_ = null;
+<a name="line559"></a>  }
+<a name="line560"></a>
+<a name="line561"></a>  // Create the backgound mask, initialize its opacity, and make sure it&#39;s
+<a name="line562"></a>  // hidden.
+<a name="line563"></a>  if (this.modal_ &amp;&amp; !this.bgEl_) {
+<a name="line564"></a>    this.bgEl_ = this.getDomHelper().createDom(&#39;div&#39;,
+<a name="line565"></a>        goog.getCssName(this.class_, &#39;bg&#39;));
+<a name="line566"></a>    goog.style.setOpacity(this.bgEl_, this.backgroundElementOpacity_);
+<a name="line567"></a>    goog.style.showElement(this.bgEl_, false);
+<a name="line568"></a>
+<a name="line569"></a>  // Removes the background mask if it exists and we don&#39;t want it to
+<a name="line570"></a>  } else if (!this.modal_ &amp;&amp; this.bgEl_) {
+<a name="line571"></a>    goog.dom.removeNode(this.bgEl_);
+<a name="line572"></a>    this.bgEl_ = null;
+<a name="line573"></a>  }
+<a name="line574"></a>};
+<a name="line575"></a>
+<a name="line576"></a>
+<a name="line577"></a>/**
+<a name="line578"></a> * Renders the component.  Overrides {@link goog.ui.Component#render}.  Accepts
+<a name="line579"></a> * an {@code opt_parent} argument for compatibility with the superclass method,
+<a name="line580"></a> * but rendering a dialog into anything other than a body element will likely
+<a name="line581"></a> * have unexpected results.  The parent element defaults to the current document
+<a name="line582"></a> * body if unspecified, which is almost always what you want.
+<a name="line583"></a> *
+<a name="line584"></a> * @param {Element=} opt_parent Element into which the component is to be
+<a name="line585"></a> *    rendered; defaults to the current document&#39;s body element if unspecified.
+<a name="line586"></a> * @throws {goog.ui.Component.Error.ALREADY_RENDERED} If the component is
+<a name="line587"></a> *    already rendered.
+<a name="line588"></a> */
+<a name="line589"></a>goog.ui.Dialog.prototype.render = function(opt_parent) {
+<a name="line590"></a>  // We have to replicate some of the logic from goog.ui.Component#render here,
+<a name="line591"></a>  // since dialogs are made up of three elements (the bacground mask, the dialog
+<a name="line592"></a>  // itself, and the optional iframe mask on IE), and all of them must be
+<a name="line593"></a>  // appended to the parent element before enterDocument is called.
+<a name="line594"></a>  if (this.isInDocument()) {
+<a name="line595"></a>    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+<a name="line596"></a>  }
+<a name="line597"></a>
+<a name="line598"></a>  if (!this.getElement()) {
+<a name="line599"></a>    // This creates both (or, on IE, possibly all three) elements.
+<a name="line600"></a>    this.createDom();
+<a name="line601"></a>  }
+<a name="line602"></a>
+<a name="line603"></a>  // First, render the background mask...
+<a name="line604"></a>  var parent = opt_parent || this.getDomHelper().getDocument().body;
+<a name="line605"></a>  this.renderBackground_(parent);
+<a name="line606"></a>
+<a name="line607"></a>  // ...then call the superclass method to attach the dialog element and call
+<a name="line608"></a>  // enterDocument().
+<a name="line609"></a>  goog.ui.Dialog.superClass_.render.call(this, parent);
+<a name="line610"></a>};
+<a name="line611"></a>
+<a name="line612"></a>
+<a name="line613"></a>/**
+<a name="line614"></a> * Renders the background mask.
+<a name="line615"></a> * @param {Element} parent Parent element; typically the document body.
+<a name="line616"></a> * @private
 <a name="line617"></a> */
-<a name="line618"></a>goog.ui.Dialog.prototype.renderBefore = function(sibling) {
-<a name="line619"></a>  throw Error(goog.ui.Component.Error.NOT_SUPPORTED);
-<a name="line620"></a>};
-<a name="line621"></a>
-<a name="line622"></a>
-<a name="line623"></a>/**
-<a name="line624"></a> * Determines if the given element can be decorated by this dialog component.
-<a name="line625"></a> * Overrides {@link goog.ui.Component#canDecorate}.
-<a name="line626"></a> * @param {Element} element Element to decorate.
-<a name="line627"></a> * @return {*} True-ish if the element can be decorated, false-ish otherwise.
-<a name="line628"></a> */
-<a name="line629"></a>goog.ui.Dialog.prototype.canDecorate = function(element) {
-<a name="line630"></a>  // Assume we can decorate any DIV.
-<a name="line631"></a>  return element &amp;&amp; element.tagName &amp;&amp; element.tagName == &#39;DIV&#39; &amp;&amp;
-<a name="line632"></a>         goog.ui.Dialog.superClass_.canDecorate.call(this, element);
-<a name="line633"></a>};
-<a name="line634"></a>
-<a name="line635"></a>
-<a name="line636"></a>/**
-<a name="line637"></a> * Decorates the given element as a dialog.  Overrides {@link
-<a name="line638"></a> * goog.ui.Component#decorateInternal}.  Considered protected.
-<a name="line639"></a> * @param {Element} element Element to decorate.
-<a name="line640"></a> * @protected
-<a name="line641"></a> */
-<a name="line642"></a>goog.ui.Dialog.prototype.decorateInternal = function(element) {
-<a name="line643"></a>  // Decorate the dialog area element.
-<a name="line644"></a>  goog.ui.Dialog.superClass_.decorateInternal.call(this, element);
-<a name="line645"></a>  goog.dom.classes.add(this.getElement(), this.class_);
-<a name="line646"></a>
-<a name="line647"></a>  // Decorate or create the content element.
-<a name="line648"></a>  var contentClass = goog.getCssName(this.class_, &#39;content&#39;);
-<a name="line649"></a>  this.contentEl_ = goog.dom.$$(null, contentClass, this.getElement())[0];
-<a name="line650"></a>  if (this.contentEl_) {
-<a name="line651"></a>    this.content_ = this.contentEl_.innerHTML;
-<a name="line652"></a>  } else {
-<a name="line653"></a>    this.contentEl_ = this.getDomHelper().createDom(&#39;div&#39;, contentClass);
-<a name="line654"></a>    if (this.content_) {
-<a name="line655"></a>      this.contentEl_.innerHTML = this.content_;
-<a name="line656"></a>    }
-<a name="line657"></a>    this.getElement().appendChild(this.contentEl_);
-<a name="line658"></a>  }
-<a name="line659"></a>
-<a name="line660"></a>  // Decorate or create the title bar element.
-<a name="line661"></a>  var titleClass = goog.getCssName(this.class_, &#39;title&#39;);
-<a name="line662"></a>  var titleTextClass = goog.getCssName(this.class_, &#39;title-text&#39;);
-<a name="line663"></a>  var titleCloseClass = goog.getCssName(this.class_, &#39;title-close&#39;);
-<a name="line664"></a>  this.titleEl_ = goog.dom.$$(null, titleClass, this.getElement())[0];
-<a name="line665"></a>  if (this.titleEl_) {
-<a name="line666"></a>    // Only look for title text &amp; title close elements if a title bar element
-<a name="line667"></a>    // was found.  Otherwise assume that the entire title bar has to be
-<a name="line668"></a>    // created from scratch.
-<a name="line669"></a>    this.titleTextEl_ = goog.dom.$$(null, titleTextClass, this.titleEl_)[0];
-<a name="line670"></a>    this.titleCloseEl_ = goog.dom.$$(null, titleCloseClass, this.titleEl_)[0];
+<a name="line618"></a>goog.ui.Dialog.prototype.renderBackground_ = function(parent) {
+<a name="line619"></a>  if (this.bgIframeEl_) {
+<a name="line620"></a>    parent.appendChild(this.bgIframeEl_);
+<a name="line621"></a>  }
+<a name="line622"></a>  if (this.bgEl_) {
+<a name="line623"></a>    parent.appendChild(this.bgEl_);
+<a name="line624"></a>  }
+<a name="line625"></a>};
+<a name="line626"></a>
+<a name="line627"></a>
+<a name="line628"></a>/**
+<a name="line629"></a> * Overrides {@link goog.ui.Component#renderBefore} to throw a NOT_SUPPORTED
+<a name="line630"></a> * error, since dialogs don&#39;t support being rendered before another DOM element.
+<a name="line631"></a> * TODO: Figure out how to do this cleanly between Component and this.
+<a name="line632"></a> *
+<a name="line633"></a> * @param {Element} sibling Element before which the component is to be
+<a name="line634"></a> *    rendered (ignored).
+<a name="line635"></a> */
+<a name="line636"></a>goog.ui.Dialog.prototype.renderBefore = function(sibling) {
+<a name="line637"></a>  throw Error(goog.ui.Component.Error.NOT_SUPPORTED);
+<a name="line638"></a>};
+<a name="line639"></a>
+<a name="line640"></a>
+<a name="line641"></a>/**
+<a name="line642"></a> * Determines if the given element can be decorated by this dialog component.
+<a name="line643"></a> * Overrides {@link goog.ui.Component#canDecorate}.
+<a name="line644"></a> * @param {Element} element Element to decorate.
+<a name="line645"></a> * @return {*} True-ish if the element can be decorated, false-ish otherwise.
+<a name="line646"></a> */
+<a name="line647"></a>goog.ui.Dialog.prototype.canDecorate = function(element) {
+<a name="line648"></a>  // Assume we can decorate any DIV.
+<a name="line649"></a>  return element &amp;&amp; element.tagName &amp;&amp; element.tagName == &#39;DIV&#39; &amp;&amp;
+<a name="line650"></a>         goog.ui.Dialog.superClass_.canDecorate.call(this, element);
+<a name="line651"></a>};
+<a name="line652"></a>
+<a name="line653"></a>
+<a name="line654"></a>/**
+<a name="line655"></a> * Decorates the given element as a dialog.  Overrides {@link
+<a name="line656"></a> * goog.ui.Component#decorateInternal}.  Considered protected.
+<a name="line657"></a> * @param {Element} element Element to decorate.
+<a name="line658"></a> * @protected
+<a name="line659"></a> */
+<a name="line660"></a>goog.ui.Dialog.prototype.decorateInternal = function(element) {
+<a name="line661"></a>  // Decorate the dialog area element.
+<a name="line662"></a>  goog.ui.Dialog.superClass_.decorateInternal.call(this, element);
+<a name="line663"></a>  goog.dom.classes.add(this.getElement(), this.class_);
+<a name="line664"></a>
+<a name="line665"></a>  // Decorate or create the content element.
+<a name="line666"></a>  var contentClass = goog.getCssName(this.class_, &#39;content&#39;);
+<a name="line667"></a>  this.contentEl_ = goog.dom.getElementsByTagNameAndClass(
+<a name="line668"></a>      null, contentClass, this.getElement())[0];
+<a name="line669"></a>  if (this.contentEl_) {
+<a name="line670"></a>    this.content_ = this.contentEl_.innerHTML;
 <a name="line671"></a>  } else {
-<a name="line672"></a>    // Create the title bar element and insert it before the content area.
-<a name="line673"></a>    // This is useful if the element to decorate only includes a content area.
-<a name="line674"></a>    this.titleEl_ = this.getDomHelper().createDom(&#39;div&#39;, titleClass);
-<a name="line675"></a>    this.getElement().insertBefore(this.titleEl_, this.contentEl_);
-<a name="line676"></a>  }
-<a name="line677"></a>
-<a name="line678"></a>  // Decorate or create the title text element.
-<a name="line679"></a>  if (this.titleTextEl_) {
-<a name="line680"></a>    this.title_ = goog.dom.getTextContent(this.titleTextEl_);
-<a name="line681"></a>  } else {
-<a name="line682"></a>    this.titleTextEl_ = this.getDomHelper().createDom(&#39;span&#39;, titleTextClass,
-<a name="line683"></a>        this.title_);
-<a name="line684"></a>    this.titleEl_.appendChild(this.titleTextEl_);
-<a name="line685"></a>  }
-<a name="line686"></a>  goog.dom.a11y.setState(this.getElement(), &#39;labelledby&#39;, this.titleId_ || &#39;&#39;);
-<a name="line687"></a>  // Decorate or create the title close element.
-<a name="line688"></a>  if (!this.titleCloseEl_) {
-<a name="line689"></a>    this.titleCloseEl_ = this.getDomHelper().createDom(&#39;span&#39;, titleCloseClass);
-<a name="line690"></a>    this.titleEl_.appendChild(this.titleCloseEl_);
-<a name="line691"></a>  }
-<a name="line692"></a>
-<a name="line693"></a>  // Decorate or create the button container element.
-<a name="line694"></a>  var buttonsClass = goog.getCssName(this.class_, &#39;buttons&#39;);
-<a name="line695"></a>  this.buttonEl_ = goog.dom.$$(null, buttonsClass, this.getElement())[0];
-<a name="line696"></a>  if (this.buttonEl_) {
-<a name="line697"></a>    // Button container element found.  Create empty button set and use it to
-<a name="line698"></a>    // decorate the button container.
-<a name="line699"></a>    this.buttons_ = new goog.ui.Dialog.ButtonSet(this.getDomHelper());
-<a name="line700"></a>    this.buttons_.decorate(this.buttonEl_);
-<a name="line701"></a>  } else {
-<a name="line702"></a>    // Create new button container element, and render a button set into it.
-<a name="line703"></a>    this.buttonEl_ = this.getDomHelper().createDom(&#39;div&#39;, buttonsClass);
-<a name="line704"></a>    this.getElement().appendChild(this.buttonEl_);
-<a name="line705"></a>    if (this.buttons_) {
-<a name="line706"></a>      this.buttons_.attachToElement(this.buttonEl_);
-<a name="line707"></a>    }
-<a name="line708"></a>  }
-<a name="line709"></a>
-<a name="line710"></a>  // Create the background mask...
-<a name="line711"></a>  this.manageBackgroundDom_();
-<a name="line712"></a>
-<a name="line713"></a>  // ...and render it.
-<a name="line714"></a>  this.renderBackground_(goog.dom.getOwnerDocument(this.getElement()).body);
-<a name="line715"></a>
-<a name="line716"></a>  // Make sure the decorated dialog is hidden.
-<a name="line717"></a>  goog.style.showElement(this.getElement(), false);
-<a name="line718"></a>};
-<a name="line719"></a>
-<a name="line720"></a>
-<a name="line721"></a>/**
-<a name="line722"></a> * Initializes the component just after its DOM has been rendered into the
-<a name="line723"></a> * document.  Overrides {@link goog.ui.Component#enterDocument}.
-<a name="line724"></a> */
-<a name="line725"></a>goog.ui.Dialog.prototype.enterDocument = function() {
-<a name="line726"></a>  goog.ui.Dialog.superClass_.enterDocument.call(this);
-<a name="line727"></a>
-<a name="line728"></a>  // Add drag support.
-<a name="line729"></a>  if (this.draggable_ &amp;&amp; !this.dragger_) {
-<a name="line730"></a>    this.dragger_ = this.createDraggableTitleDom_();
+<a name="line672"></a>    this.contentEl_ = this.getDomHelper().createDom(&#39;div&#39;, contentClass);
+<a name="line673"></a>    if (this.content_) {
+<a name="line674"></a>      this.contentEl_.innerHTML = this.content_;
+<a name="line675"></a>    }
+<a name="line676"></a>    this.getElement().appendChild(this.contentEl_);
+<a name="line677"></a>  }
+<a name="line678"></a>
+<a name="line679"></a>  // Decorate or create the title bar element.
+<a name="line680"></a>  var titleClass = goog.getCssName(this.class_, &#39;title&#39;);
+<a name="line681"></a>  var titleTextClass = goog.getCssName(this.class_, &#39;title-text&#39;);
+<a name="line682"></a>  var titleCloseClass = goog.getCssName(this.class_, &#39;title-close&#39;);
+<a name="line683"></a>  this.titleEl_ = goog.dom.getElementsByTagNameAndClass(
+<a name="line684"></a>      null, titleClass, this.getElement())[0];
+<a name="line685"></a>  if (this.titleEl_) {
+<a name="line686"></a>    // Only look for title text &amp; title close elements if a title bar element
+<a name="line687"></a>    // was found.  Otherwise assume that the entire title bar has to be
+<a name="line688"></a>    // created from scratch.
+<a name="line689"></a>    this.titleTextEl_ = goog.dom.getElementsByTagNameAndClass(
+<a name="line690"></a>        null, titleTextClass, this.titleEl_)[0];
+<a name="line691"></a>    this.titleCloseEl_ = goog.dom.getElementsByTagNameAndClass(
+<a name="line692"></a>        null, titleCloseClass, this.titleEl_)[0];
+<a name="line693"></a>  } else {
+<a name="line694"></a>    // Create the title bar element and insert it before the content area.
+<a name="line695"></a>    // This is useful if the element to decorate only includes a content area.
+<a name="line696"></a>    this.titleEl_ = this.getDomHelper().createDom(&#39;div&#39;, titleClass);
+<a name="line697"></a>    this.getElement().insertBefore(this.titleEl_, this.contentEl_);
+<a name="line698"></a>  }
+<a name="line699"></a>
+<a name="line700"></a>  // Decorate or create the title text element.
+<a name="line701"></a>  if (this.titleTextEl_) {
+<a name="line702"></a>    this.title_ = goog.dom.getTextContent(this.titleTextEl_);
+<a name="line703"></a>  } else {
+<a name="line704"></a>    this.titleTextEl_ = this.getDomHelper().createDom(&#39;span&#39;, titleTextClass,
+<a name="line705"></a>        this.title_);
+<a name="line706"></a>    this.titleEl_.appendChild(this.titleTextEl_);
+<a name="line707"></a>  }
+<a name="line708"></a>  goog.dom.a11y.setState(this.getElement(), &#39;labelledby&#39;, this.titleId_ || &#39;&#39;);
+<a name="line709"></a>  // Decorate or create the title close element.
+<a name="line710"></a>  if (!this.titleCloseEl_) {
+<a name="line711"></a>    this.titleCloseEl_ = this.getDomHelper().createDom(&#39;span&#39;, titleCloseClass);
+<a name="line712"></a>    this.titleEl_.appendChild(this.titleCloseEl_);
+<a name="line713"></a>  }
+<a name="line714"></a>
+<a name="line715"></a>  // Decorate or create the button container element.
+<a name="line716"></a>  var buttonsClass = goog.getCssName(this.class_, &#39;buttons&#39;);
+<a name="line717"></a>  this.buttonEl_ = goog.dom.getElementsByTagNameAndClass(
+<a name="line718"></a>      null, buttonsClass, this.getElement())[0];
+<a name="line719"></a>  if (this.buttonEl_) {
+<a name="line720"></a>    // Button container element found.  Create empty button set and use it to
+<a name="line721"></a>    // decorate the button container.
+<a name="line722"></a>    this.buttons_ = new goog.ui.Dialog.ButtonSet(this.getDomHelper());
+<a name="line723"></a>    this.buttons_.decorate(this.buttonEl_);
+<a name="line724"></a>  } else {
+<a name="line725"></a>    // Create new button container element, and render a button set into it.
+<a name="line726"></a>    this.buttonEl_ = this.getDomHelper().createDom(&#39;div&#39;, buttonsClass);
+<a name="line727"></a>    this.getElement().appendChild(this.buttonEl_);
+<a name="line728"></a>    if (this.buttons_) {
+<a name="line729"></a>      this.buttons_.attachToElement(this.buttonEl_);
+<a name="line730"></a>    }
 <a name="line731"></a>  }
 <a name="line732"></a>
-<a name="line733"></a>  // Add event listeners to the close box and the button container.
-<a name="line734"></a>  this.getHandler().
-<a name="line735"></a>      listen(this.titleCloseEl_, goog.events.EventType.CLICK,
-<a name="line736"></a>          this.onTitleCloseClick_).
-<a name="line737"></a>
-<a name="line738"></a>      // We need to watch the entire document so that we can detect when the
-<a name="line739"></a>      // focus is moved out of this dialog.
-<a name="line740"></a>      listen(this.focusHandler_, goog.events.FocusHandler.EventType.FOCUSIN,
-<a name="line741"></a>          this.onFocus_);
+<a name="line733"></a>  // Create the background mask...
+<a name="line734"></a>  this.manageBackgroundDom_();
+<a name="line735"></a>
+<a name="line736"></a>  // ...and render it.
+<a name="line737"></a>  this.renderBackground_(goog.dom.getOwnerDocument(this.getElement()).body);
+<a name="line738"></a>
+<a name="line739"></a>  // Make sure the decorated dialog is hidden.
+<a name="line740"></a>  goog.style.showElement(this.getElement(), false);
+<a name="line741"></a>};
 <a name="line742"></a>
-<a name="line743"></a>  goog.dom.a11y.setRole(this.getElement(), &#39;dialog&#39;);
-<a name="line744"></a>  if (this.titleTextEl_.id !== &#39;&#39;) {
-<a name="line745"></a>    goog.dom.a11y.setState(
-<a name="line746"></a>        this.getElement(), &#39;labelledby&#39;, this.titleTextEl_.id);
-<a name="line747"></a>  }
-<a name="line748"></a>};
-<a name="line749"></a>
+<a name="line743"></a>
+<a name="line744"></a>/**
+<a name="line745"></a> * Initializes the component just after its DOM has been rendered into the
+<a name="line746"></a> * document.  Overrides {@link goog.ui.Component#enterDocument}.
+<a name="line747"></a> */
+<a name="line748"></a>goog.ui.Dialog.prototype.enterDocument = function() {
+<a name="line749"></a>  goog.ui.Dialog.superClass_.enterDocument.call(this);
 <a name="line750"></a>
-<a name="line751"></a>/**
-<a name="line752"></a> * Cleans up the dialog component just before it is disposed of.  Overrides
-<a name="line753"></a> * {@link goog.ui.Component#exitDocument}.
-<a name="line754"></a> */
-<a name="line755"></a>goog.ui.Dialog.prototype.exitDocument = function() {
-<a name="line756"></a>  if (this.isVisible()) {
-<a name="line757"></a>    this.setVisible(false);
-<a name="line758"></a>  }
-<a name="line759"></a>
-<a name="line760"></a>  // Remove drag support.
-<a name="line761"></a>  if (this.dragger_) {
-<a name="line762"></a>    this.dragger_.dispose();
-<a name="line763"></a>    this.dragger_ = null;
-<a name="line764"></a>  }
-<a name="line765"></a>
-<a name="line766"></a>  goog.ui.Dialog.superClass_.exitDocument.call(this);
-<a name="line767"></a>};
+<a name="line751"></a>  this.focusHandler_ = new goog.events.FocusHandler(
+<a name="line752"></a>      this.getDomHelper().getDocument());
+<a name="line753"></a>
+<a name="line754"></a>  // Add drag support.
+<a name="line755"></a>  if (this.draggable_ &amp;&amp; !this.dragger_) {
+<a name="line756"></a>    this.dragger_ = this.createDraggableTitleDom_();
+<a name="line757"></a>  }
+<a name="line758"></a>
+<a name="line759"></a>  // Add event listeners to the close box and the button container.
+<a name="line760"></a>  this.getHandler().
+<a name="line761"></a>      listen(this.titleCloseEl_, goog.events.EventType.CLICK,
+<a name="line762"></a>          this.onTitleCloseClick_).
+<a name="line763"></a>
+<a name="line764"></a>      // We need to watch the entire document so that we can detect when the
+<a name="line765"></a>      // focus is moved out of this dialog.
+<a name="line766"></a>      listen(this.focusHandler_, goog.events.FocusHandler.EventType.FOCUSIN,
+<a name="line767"></a>          this.onFocus_);
 <a name="line768"></a>
-<a name="line769"></a>
-<a name="line770"></a>/**
-<a name="line771"></a> * Sets the visibility of the dialog box and moves focus to the default button.
-<a name="line772"></a> * Lazily renders the component if needed.
-<a name="line773"></a> * @param {boolean} visible Whether the dialog should be visible.
-<a name="line774"></a> */
-<a name="line775"></a>goog.ui.Dialog.prototype.setVisible = function(visible) {
-<a name="line776"></a>  if (visible == this.visible_) {
-<a name="line777"></a>    return;
-<a name="line778"></a>  }
-<a name="line779"></a>
-<a name="line780"></a>  // TODO:  Add utility methods to Component to get window &amp; document?
-<a name="line781"></a>  var doc = this.getDomHelper().getDocument();
-<a name="line782"></a>
-<a name="line783"></a>  // Older versions of Safari did not know how to get a window for a given
-<a name="line784"></a>  // document, so just fall up to the window we&#39;re running in.
-<a name="line785"></a>  var win = goog.dom.getWindow(doc) || window;
-<a name="line786"></a>
-<a name="line787"></a>  // If the dialog hasn&#39;t been rendered yet, render it now.
-<a name="line788"></a>  if (!this.isInDocument()) {
-<a name="line789"></a>    this.render(doc.body);
-<a name="line790"></a>  }
-<a name="line791"></a>
-<a name="line792"></a>  if (visible) {
-<a name="line793"></a>    this.resizeBackground_();
-<a name="line794"></a>    this.reposition();
-<a name="line795"></a>    // Listen for keyboard and resize events while the dialog is visible.
-<a name="line796"></a>    this.getHandler().
-<a name="line797"></a>        listen(this.getElement(), goog.events.EventType.KEYDOWN,
-<a name="line798"></a>            this.onKeyDown_, true).
-<a name="line799"></a>        listen(win, goog.events.EventType.RESIZE,
-<a name="line800"></a>            this.onResize_, true);
-<a name="line801"></a>  } else {
-<a name="line802"></a>    // Stop listening for keyboard and resize events while the dialog is hidden.
-<a name="line803"></a>    this.getHandler().
-<a name="line804"></a>        unlisten(this.getElement(), goog.events.EventType.KEYDOWN,
-<a name="line805"></a>            this.onKeyDown_, true).
-<a name="line806"></a>        unlisten(win, goog.events.EventType.RESIZE,
-<a name="line807"></a>            this.onResize_, true);
-<a name="line808"></a>  }
-<a name="line809"></a>
-<a name="line810"></a>  // Show/hide the iframe mask (on IE), the background mask, and the dialog.
-<a name="line811"></a>  if (this.bgIframeEl_) {
-<a name="line812"></a>    goog.style.showElement(this.bgIframeEl_, visible);
-<a name="line813"></a>  }
-<a name="line814"></a>  if (this.bgEl_) {
-<a name="line815"></a>    goog.style.showElement(this.bgEl_, visible);
-<a name="line816"></a>  }
-<a name="line817"></a>  goog.style.showElement(this.getElement(), visible);
-<a name="line818"></a>
-<a name="line819"></a>  if (visible) {
-<a name="line820"></a>    if (goog.userAgent.GECKO) {
-<a name="line821"></a>      // In FF, start with the focus on the dialog itself.  Otherwise if we
-<a name="line822"></a>      // focus on a sub-element first, then hitting tab moves the focus outside
-<a name="line823"></a>      // of the dialog, which we don&#39;t want.
-<a name="line824"></a>      this.getElement().focus();
-<a name="line825"></a>    }
-<a name="line826"></a>    // Move focus to the default button (if any).
-<a name="line827"></a>    if (this.getButtonSet()) {
-<a name="line828"></a>      var defaultButton = this.getButtonSet().getDefault();
-<a name="line829"></a>      if (defaultButton) {
-<a name="line830"></a>        var buttons = this.buttonEl_.getElementsByTagName(&#39;button&#39;);
-<a name="line831"></a>        for (var i = 0, button; button = buttons[i]; i++) {
-<a name="line832"></a>          if (button.name == defaultButton) {
-<a name="line833"></a>            try {
-<a name="line834"></a>              // Reopening a dialog can cause focusing the button to fail in
-<a name="line835"></a>              // WebKit and Opera. Shift the focus to a temporary &lt;input&gt;
-<a name="line836"></a>              // element to make refocusing the button possible.
-<a name="line837"></a>              if (goog.userAgent.WEBKIT || goog.userAgent.OPERA) {
-<a name="line838"></a>                var temp = doc.createElement(&#39;input&#39;);
-<a name="line839"></a>                temp.style.cssText = &#39;position:fixed;width:0;height:0&#39;;
-<a name="line840"></a>                this.getElement().appendChild(temp);
-<a name="line841"></a>                temp.focus();
-<a name="line842"></a>                this.getElement().removeChild(temp);
-<a name="line843"></a>              }
-<a name="line844"></a>              button.focus();
-<a name="line845"></a>            } catch (e) {
-<a name="line846"></a>              // Swallow this. Could be the button is disabled
-<a name="line847"></a>              // and IE6 wishes to throw an error.
-<a name="line848"></a>            }
-<a name="line849"></a>            break;
-<a name="line850"></a>          }
-<a name="line851"></a>        }
-<a name="line852"></a>      }
-<a name="line853"></a>    }
-<a name="line854"></a>  }
-<a name="line855"></a>
-<a name="line856"></a>  this.visible_ = visible;
-<a name="line857"></a>
-<a name="line858"></a>  if (!visible) {
-<a name="line859"></a>    this.getHandler().unlisten(this.buttonEl_,
-<a name="line860"></a>        goog.events.EventType.CLICK, this.onButtonClick_);
-<a name="line861"></a>    this.dispatchEvent(goog.ui.Dialog.EventType.AFTER_HIDE);
-<a name="line862"></a>    if (this.disposeOnHide_) {
-<a name="line863"></a>      this.dispose();
-<a name="line864"></a>    }
-<a name="line865"></a>  } else {
-<a name="line866"></a>    // NOTE: see bug 1163154 for an example of an edge case where making the
-<a name="line867"></a>    // dialog visible in response to a KEYDOWN will result in a CLICK event
-<a name="line868"></a>    // firing on the default button (immediately closing the dialog) if the key
-<a name="line869"></a>    // that fired the KEYDOWN is also normally used to activate controls
-<a name="line870"></a>    // (i.e. SPACE/ENTER).
-<a name="line871"></a>    //
-<a name="line872"></a>    // This could be worked around by attaching the onButtonClick_ handler in a
-<a name="line873"></a>    // setTimeout, but that was deemed undesirable.
-<a name="line874"></a>    this.getHandler().listen(this.buttonEl_,
-<a name="line875"></a>        goog.events.EventType.CLICK, this.onButtonClick_);
-<a name="line876"></a>  }
-<a name="line877"></a>};
-<a name="line878"></a>
-<a name="line879"></a>
-<a name="line880"></a>/**
-<a name="line881"></a> * @return {boolean} Whether the dialog box is visible.
-<a name="line882"></a> */
-<a name="line883"></a>goog.ui.Dialog.prototype.isVisible = function() {
-<a name="line884"></a>  return this.visible_;
-<a name="line885"></a>};
-<a name="line886"></a>
-<a name="line887"></a>
-<a name="line888"></a>/**
-<a name="line889"></a> * Make the background element the size of the document.
-<a name="line890"></a> *
-<a name="line891"></a> * NOTE: We must hide the background element before measuring the
-<a name="line892"></a> * document, otherwise the size of the background will stop the document from
-<a name="line893"></a> * shrinking to fit a smaller window.  This does cause a slight flicker in Linux
-<a name="line894"></a> * browsers, but should not be a common scenario.
-<a name="line895"></a> * @private
-<a name="line896"></a> */
-<a name="line897"></a>goog.ui.Dialog.prototype.resizeBackground_ = function() {
-<a name="line898"></a>  if (this.bgIframeEl_) {
-<a name="line899"></a>    goog.style.showElement(this.bgIframeEl_, false);
-<a name="line900"></a>  }
-<a name="line901"></a>  if (this.bgEl_) {
-<a name="line902"></a>    goog.style.showElement(this.bgEl_, false);
-<a name="line903"></a>  }
-<a name="line904"></a>
-<a name="line905"></a>  var doc = this.getDomHelper().getDocument();
-<a name="line906"></a>  var win = goog.dom.getWindow(doc) || window;
-<a name="line907"></a>
-<a name="line908"></a>  // Take the max of scroll height and view height for cases in which document
-<a name="line909"></a>  // does not fill screen.  Don&#39;t worry about width.
-<a name="line910"></a>  var viewSize = goog.dom.getViewportSize(win);
-<a name="line911"></a>  var w = doc.body.scrollWidth;
-<a name="line912"></a>  var h = Math.max(doc.body.scrollHeight, viewSize.height);
-<a name="line913"></a>
-<a name="line914"></a>  if (this.bgIframeEl_) {
-<a name="line915"></a>    goog.style.showElement(this.bgIframeEl_, true);
-<a name="line916"></a>    goog.style.setSize(this.bgIframeEl_, w, h);
-<a name="line917"></a>  }
-<a name="line918"></a>  if (this.bgEl_) {
-<a name="line919"></a>    goog.style.showElement(this.bgEl_, true);
-<a name="line920"></a>    goog.style.setSize(this.bgEl_, w, h);
-<a name="line921"></a>  }
-<a name="line922"></a>
-<a name="line923"></a>  if (this.draggable_) {
-<a name="line924"></a>    var dialogSize = goog.style.getSize(this.getElement());
-<a name="line925"></a>    this.dragger_.limits =
-<a name="line926"></a>        new goog.math.Rect(0, 0, w - dialogSize.width, h - dialogSize.height);
-<a name="line927"></a>  }
-<a name="line928"></a>};
-<a name="line929"></a>
-<a name="line930"></a>
-<a name="line931"></a>/**
-<a name="line932"></a> * Centers the dialog in the viewport, taking scrolling into account.
+<a name="line769"></a>  goog.dom.a11y.setRole(this.getElement(), &#39;dialog&#39;);
+<a name="line770"></a>  if (this.titleTextEl_.id !== &#39;&#39;) {
+<a name="line771"></a>    goog.dom.a11y.setState(
+<a name="line772"></a>        this.getElement(), &#39;labelledby&#39;, this.titleTextEl_.id);
+<a name="line773"></a>  }
+<a name="line774"></a>};
+<a name="line775"></a>
+<a name="line776"></a>
+<a name="line777"></a>/**
+<a name="line778"></a> * Cleans up the dialog component just before it is disposed of.  Overrides
+<a name="line779"></a> * {@link goog.ui.Component#exitDocument}.
+<a name="line780"></a> */
+<a name="line781"></a>goog.ui.Dialog.prototype.exitDocument = function() {
+<a name="line782"></a>  if (this.isVisible()) {
+<a name="line783"></a>    this.setVisible(false);
+<a name="line784"></a>  }
+<a name="line785"></a>
+<a name="line786"></a>  this.focusHandler_.dispose();
+<a name="line787"></a>  this.focusHandler_ = null;
+<a name="line788"></a>
+<a name="line789"></a>  // Remove drag support.
+<a name="line790"></a>  if (this.dragger_) {
+<a name="line791"></a>    this.dragger_.dispose();
+<a name="line792"></a>    this.dragger_ = null;
+<a name="line793"></a>  }
+<a name="line794"></a>
+<a name="line795"></a>  goog.ui.Dialog.superClass_.exitDocument.call(this);
+<a name="line796"></a>};
+<a name="line797"></a>
+<a name="line798"></a>
+<a name="line799"></a>/**
+<a name="line800"></a> * Sets the visibility of the dialog box and moves focus to the default button.
+<a name="line801"></a> * Lazily renders the component if needed.
+<a name="line802"></a> * @param {boolean} visible Whether the dialog should be visible.
+<a name="line803"></a> */
+<a name="line804"></a>goog.ui.Dialog.prototype.setVisible = function(visible) {
+<a name="line805"></a>  if (visible == this.visible_) {
+<a name="line806"></a>    return;
+<a name="line807"></a>  }
+<a name="line808"></a>
+<a name="line809"></a>  // TODO:  Add utility methods to Component to get window &amp; document?
+<a name="line810"></a>  var doc = this.getDomHelper().getDocument();
+<a name="line811"></a>
+<a name="line812"></a>  // Older versions of Safari did not know how to get a window for a given
+<a name="line813"></a>  // document, so just fall up to the window we&#39;re running in.
+<a name="line814"></a>  var win = goog.dom.getWindow(doc) || window;
+<a name="line815"></a>
+<a name="line816"></a>  // If the dialog hasn&#39;t been rendered yet, render it now.
+<a name="line817"></a>  if (!this.isInDocument()) {
+<a name="line818"></a>    this.render(doc.body);
+<a name="line819"></a>  }
+<a name="line820"></a>
+<a name="line821"></a>  if (visible) {
+<a name="line822"></a>    this.resizeBackground_();
+<a name="line823"></a>    this.reposition();
+<a name="line824"></a>    // Listen for keyboard and resize events while the dialog is visible.
+<a name="line825"></a>    this.getHandler().
+<a name="line826"></a>        listen(this.getElement(), goog.events.EventType.KEYDOWN,
+<a name="line827"></a>            this.onKey_, true).
+<a name="line828"></a>        listen(this.getElement(), goog.events.EventType.KEYPRESS,
+<a name="line829"></a>            this.onKey_, true).
+<a name="line830"></a>        listen(win, goog.events.EventType.RESIZE,
+<a name="line831"></a>            this.onResize_, true);
+<a name="line832"></a>  } else {
+<a name="line833"></a>    // Stop listening for keyboard and resize events while the dialog is hidden.
+<a name="line834"></a>    this.getHandler().
+<a name="line835"></a>        unlisten(this.getElement(), goog.events.EventType.KEYDOWN,
+<a name="line836"></a>            this.onKey_, true).
+<a name="line837"></a>        unlisten(this.getElement(), goog.events.EventType.KEYPRESS,
+<a name="line838"></a>            this.onKey_, true).
+<a name="line839"></a>        unlisten(win, goog.events.EventType.RESIZE,
+<a name="line840"></a>            this.onResize_, true);
+<a name="line841"></a>  }
+<a name="line842"></a>
+<a name="line843"></a>  // Show/hide the iframe mask (on IE), the background mask, and the dialog.
+<a name="line844"></a>  if (this.bgIframeEl_) {
+<a name="line845"></a>    goog.style.showElement(this.bgIframeEl_, visible);
+<a name="line846"></a>  }
+<a name="line847"></a>  if (this.bgEl_) {
+<a name="line848"></a>    goog.style.showElement(this.bgEl_, visible);
+<a name="line849"></a>  }
+<a name="line850"></a>  goog.style.showElement(this.getElement(), visible);
+<a name="line851"></a>
+<a name="line852"></a>  if (visible) {
+<a name="line853"></a>    // Start with the focus on the dialog itself.  In FF, if we focus on a
+<a name="line854"></a>    // sub-element first, then hitting tab moves the focus outside of the
+<a name="line855"></a>    // dialog, which we don&#39;t want.  In addition, there may not be a default
+<a name="line856"></a>    // button, but we certainly want focus to remain within the dialog.
+<a name="line857"></a>    try {
+<a name="line858"></a>      this.getElement().focus();
+<a name="line859"></a>    } catch (e) {
+<a name="line860"></a>      // Swallow this. IE can throw an error if the element can not be focused.
+<a name="line861"></a>    }
+<a name="line862"></a>    // Move focus to the default button (if any).
+<a name="line863"></a>    if (this.getButtonSet()) {
+<a name="line864"></a>      var defaultButton = this.getButtonSet().getDefault();
+<a name="line865"></a>      if (defaultButton) {
+<a name="line866"></a>        var buttons = this.buttonEl_.getElementsByTagName(&#39;button&#39;);
+<a name="line867"></a>        for (var i = 0, button; button = buttons[i]; i++) {
+<a name="line868"></a>          if (button.name == defaultButton) {
+<a name="line869"></a>            try {
+<a name="line870"></a>              // Reopening a dialog can cause focusing the button to fail in
+<a name="line871"></a>              // WebKit and Opera. Shift the focus to a temporary &lt;input&gt;
+<a name="line872"></a>              // element to make refocusing the button possible.
+<a name="line873"></a>              if (goog.userAgent.WEBKIT || goog.userAgent.OPERA) {
+<a name="line874"></a>                var temp = doc.createElement(&#39;input&#39;);
+<a name="line875"></a>                temp.style.cssText =
+<a name="line876"></a>                    &#39;position:fixed;width:0;height:0;left:0;top:0;&#39;;
+<a name="line877"></a>                this.getElement().appendChild(temp);
+<a name="line878"></a>                temp.focus();
+<a name="line879"></a>                this.getElement().removeChild(temp);
+<a name="line880"></a>              }
+<a name="line881"></a>              button.focus();
+<a name="line882"></a>            } catch (e) {
+<a name="line883"></a>              // Swallow this. Could be the button is disabled
+<a name="line884"></a>              // and IE6 wishes to throw an error.
+<a name="line885"></a>            }
+<a name="line886"></a>            break;
+<a name="line887"></a>          }
+<a name="line888"></a>        }
+<a name="line889"></a>      }
+<a name="line890"></a>    }
+<a name="line891"></a>  }
+<a name="line892"></a>
+<a name="line893"></a>  this.visible_ = visible;
+<a name="line894"></a>
+<a name="line895"></a>  if (!visible) {
+<a name="line896"></a>    this.getHandler().unlisten(this.buttonEl_,
+<a name="line897"></a>        goog.events.EventType.CLICK, this.onButtonClick_);
+<a name="line898"></a>    this.dispatchEvent(goog.ui.Dialog.EventType.AFTER_HIDE);
+<a name="line899"></a>    if (this.disposeOnHide_) {
+<a name="line900"></a>      this.dispose();
+<a name="line901"></a>    }
+<a name="line902"></a>  } else {
+<a name="line903"></a>    // NOTE: see bug 1163154 for an example of an edge case where making the
+<a name="line904"></a>    // dialog visible in response to a KEYDOWN will result in a CLICK event
+<a name="line905"></a>    // firing on the default button (immediately closing the dialog) if the key
+<a name="line906"></a>    // that fired the KEYDOWN is also normally used to activate controls
+<a name="line907"></a>    // (i.e. SPACE/ENTER).
+<a name="line908"></a>    //
+<a name="line909"></a>    // This could be worked around by attaching the onButtonClick_ handler in a
+<a name="line910"></a>    // setTimeout, but that was deemed undesirable.
+<a name="line911"></a>    this.getHandler().listen(this.buttonEl_,
+<a name="line912"></a>        goog.events.EventType.CLICK, this.onButtonClick_);
+<a name="line913"></a>  }
+<a name="line914"></a>};
+<a name="line915"></a>
+<a name="line916"></a>
+<a name="line917"></a>/**
+<a name="line918"></a> * @return {boolean} Whether the dialog box is visible.
+<a name="line919"></a> */
+<a name="line920"></a>goog.ui.Dialog.prototype.isVisible = function() {
+<a name="line921"></a>  return this.visible_;
+<a name="line922"></a>};
+<a name="line923"></a>
+<a name="line924"></a>
+<a name="line925"></a>/**
+<a name="line926"></a> * Make the background element the size of the document.
+<a name="line927"></a> *
+<a name="line928"></a> * NOTE: We must hide the background element before measuring the
+<a name="line929"></a> * document, otherwise the size of the background will stop the document from
+<a name="line930"></a> * shrinking to fit a smaller window.  This does cause a slight flicker in Linux
+<a name="line931"></a> * browsers, but should not be a common scenario.
+<a name="line932"></a> * @private
 <a name="line933"></a> */
-<a name="line934"></a>goog.ui.Dialog.prototype.reposition = function() {
-<a name="line935"></a>  // Get the current viewport to obtain the scroll offset.
-<a name="line936"></a>  var doc = this.getDomHelper().getDocument();
-<a name="line937"></a>  var win = goog.dom.getWindow(doc) || window;
-<a name="line938"></a>  if (goog.style.getComputedPosition(this.getElement()) == &#39;fixed&#39;) {
-<a name="line939"></a>    var x = 0;
-<a name="line940"></a>    var y = 0;
-<a name="line941"></a>  } else {
-<a name="line942"></a>    var scroll = this.getDomHelper().getDocumentScroll();
-<a name="line943"></a>    var x = scroll.x;
-<a name="line944"></a>    var y = scroll.y;
-<a name="line945"></a>  }
-<a name="line946"></a>
-<a name="line947"></a>  var dialogSize = goog.style.getSize(this.getElement());
-<a name="line948"></a>  var viewSize = goog.dom.getViewportSize(win);
-<a name="line949"></a>
-<a name="line950"></a>  // Make sure left and top are non-negatives.
-<a name="line951"></a>  var left = Math.max(x + viewSize.width / 2 - dialogSize.width / 2, 0);
-<a name="line952"></a>  var top = Math.max(y + viewSize.height / 2 - dialogSize.height / 2, 0);
-<a name="line953"></a>
-<a name="line954"></a>  var el = this.getElement()
-<a name="line955"></a>  if (this.isRightToLeft()) {
-<a name="line956"></a>    // Round the values since that&#39;s what setPosition does.
-<a name="line957"></a>    el.style.right = Math.round(left) + &#39;px&#39;;
-<a name="line958"></a>    el.style.top = Math.round(top) + &#39;px&#39;;
-<a name="line959"></a>  } else {
-<a name="line960"></a>    goog.style.setPosition(el, left, top);
-<a name="line961"></a>  }
-<a name="line962"></a>};
-<a name="line963"></a>
-<a name="line964"></a>
-<a name="line965"></a>/**
-<a name="line966"></a> * Handles a click on the title close area.
-<a name="line967"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
-<a name="line968"></a> * @private
-<a name="line969"></a> */
-<a name="line970"></a>goog.ui.Dialog.prototype.onTitleCloseClick_ = function(e) {
-<a name="line971"></a>  var bs = this.getButtonSet();
-<a name="line972"></a>  var key = bs &amp;&amp; bs.getCancel();
-<a name="line973"></a>  // Only if there is a valid cancel button is an event dispatched.
-<a name="line974"></a>  if (key) {
-<a name="line975"></a>    var caption = /** @type {Element|string} */(bs.get(key));
-<a name="line976"></a>    if (this.dispatchEvent(new goog.ui.Dialog.Event(key, caption))) {
-<a name="line977"></a>      this.setVisible(false);
-<a name="line978"></a>    }
-<a name="line979"></a>  } else {
-<a name="line980"></a>    this.setVisible(false);
-<a name="line981"></a>  }
-<a name="line982"></a>};
+<a name="line934"></a>goog.ui.Dialog.prototype.resizeBackground_ = function() {
+<a name="line935"></a>  if (this.bgIframeEl_) {
+<a name="line936"></a>    goog.style.showElement(this.bgIframeEl_, false);
+<a name="line937"></a>  }
+<a name="line938"></a>  if (this.bgEl_) {
+<a name="line939"></a>    goog.style.showElement(this.bgEl_, false);
+<a name="line940"></a>  }
+<a name="line941"></a>
+<a name="line942"></a>  var doc = this.getDomHelper().getDocument();
+<a name="line943"></a>  var win = goog.dom.getWindow(doc) || window;
+<a name="line944"></a>
+<a name="line945"></a>  // Take the max of scroll height and view height for cases in which document
+<a name="line946"></a>  // does not fill screen.  Don&#39;t worry about width.
+<a name="line947"></a>  var viewSize = goog.dom.getViewportSize(win);
+<a name="line948"></a>  var w = doc.body.scrollWidth;
+<a name="line949"></a>  var h = Math.max(doc.body.scrollHeight, viewSize.height);
+<a name="line950"></a>
+<a name="line951"></a>  if (this.bgIframeEl_) {
+<a name="line952"></a>    goog.style.showElement(this.bgIframeEl_, true);
+<a name="line953"></a>    goog.style.setSize(this.bgIframeEl_, w, h);
+<a name="line954"></a>  }
+<a name="line955"></a>  if (this.bgEl_) {
+<a name="line956"></a>    goog.style.showElement(this.bgEl_, true);
+<a name="line957"></a>    goog.style.setSize(this.bgEl_, w, h);
+<a name="line958"></a>  }
+<a name="line959"></a>
+<a name="line960"></a>  if (this.draggable_) {
+<a name="line961"></a>    var dialogSize = goog.style.getSize(this.getElement());
+<a name="line962"></a>    this.dragger_.limits =
+<a name="line963"></a>        new goog.math.Rect(0, 0, w - dialogSize.width, h - dialogSize.height);
+<a name="line964"></a>  }
+<a name="line965"></a>};
+<a name="line966"></a>
+<a name="line967"></a>
+<a name="line968"></a>/**
+<a name="line969"></a> * Centers the dialog in the viewport, taking scrolling into account.
+<a name="line970"></a> */
+<a name="line971"></a>goog.ui.Dialog.prototype.reposition = function() {
+<a name="line972"></a>  // Get the current viewport to obtain the scroll offset.
+<a name="line973"></a>  var doc = this.getDomHelper().getDocument();
+<a name="line974"></a>  var win = goog.dom.getWindow(doc) || window;
+<a name="line975"></a>  if (goog.style.getComputedPosition(this.getElement()) == &#39;fixed&#39;) {
+<a name="line976"></a>    var x = 0;
+<a name="line977"></a>    var y = 0;
+<a name="line978"></a>  } else {
+<a name="line979"></a>    var scroll = this.getDomHelper().getDocumentScroll();
+<a name="line980"></a>    var x = scroll.x;
+<a name="line981"></a>    var y = scroll.y;
+<a name="line982"></a>  }
 <a name="line983"></a>
-<a name="line984"></a>
-<a name="line985"></a>/**
-<a name="line986"></a> * Sets whether the dialog should be disposed when it is hidden.  By default
-<a name="line987"></a> * dialogs are not disposed when they are hidden.
-<a name="line988"></a> * @param {boolean} b Whether the dialog should get disposed when it gets
-<a name="line989"></a> *     hidden.
-<a name="line990"></a> */
-<a name="line991"></a>goog.ui.Dialog.prototype.setDisposeOnHide = function(b) {
-<a name="line992"></a>  this.disposeOnHide_ = b;
-<a name="line993"></a>};
-<a name="line994"></a>
-<a name="line995"></a>
-<a name="line996"></a>/**
-<a name="line997"></a> * @return {boolean} Whether the dialog should be disposed when it is hidden.
-<a name="line998"></a> */
-<a name="line999"></a>goog.ui.Dialog.prototype.getDisposeOnHide = function() {
-<a name="line1000"></a>  return this.disposeOnHide_;
-<a name="line1001"></a>};
-<a name="line1002"></a>
-<a name="line1003"></a>
-<a name="line1004"></a>/** @inheritDoc */
-<a name="line1005"></a>goog.ui.Dialog.prototype.disposeInternal = function() {
-<a name="line1006"></a>  // The superclass method calls exitDocument, which in turn calls
-<a name="line1007"></a>  // setVisible(false).  Between them they clean up all event handlers.
-<a name="line1008"></a>  goog.ui.Dialog.superClass_.disposeInternal.call(this);
-<a name="line1009"></a>
-<a name="line1010"></a>  if (this.focusHandler_) {
-<a name="line1011"></a>    this.focusHandler_.dispose();
-<a name="line1012"></a>    this.focusHandler_ = null;
-<a name="line1013"></a>  }
-<a name="line1014"></a>
-<a name="line1015"></a>  // The superclass method disposes of the element and its children,
-<a name="line1016"></a>  // unless the dialog was decorated.  We only have to worry about
-<a name="line1017"></a>  // background mask elements.
-<a name="line1018"></a>  if (this.bgEl_) {
-<a name="line1019"></a>    goog.dom.removeNode(this.bgEl_);
-<a name="line1020"></a>    this.bgEl_ = null;
-<a name="line1021"></a>  }
-<a name="line1022"></a>  if (this.bgIframeEl_) {
-<a name="line1023"></a>    goog.dom.removeNode(this.bgIframeEl_);
-<a name="line1024"></a>    this.bgIframeEl_ = null;
-<a name="line1025"></a>  }
-<a name="line1026"></a>
-<a name="line1027"></a>  this.titleCloseEl_ = null;
-<a name="line1028"></a>  this.buttonEl_ = null;
-<a name="line1029"></a>  this.tabCatcherEl_ = null;
+<a name="line984"></a>  var dialogSize = goog.style.getSize(this.getElement());
+<a name="line985"></a>  var viewSize = goog.dom.getViewportSize(win);
+<a name="line986"></a>
+<a name="line987"></a>  // Make sure left and top are non-negatives.
+<a name="line988"></a>  var left = Math.max(x + viewSize.width / 2 - dialogSize.width / 2, 0);
+<a name="line989"></a>  var top = Math.max(y + viewSize.height / 2 - dialogSize.height / 2, 0);
+<a name="line990"></a>
+<a name="line991"></a>  var el = this.getElement()
+<a name="line992"></a>  if (this.isRightToLeft()) {
+<a name="line993"></a>    // Round the values since that&#39;s what setPosition does.
+<a name="line994"></a>    el.style.right = Math.round(left) + &#39;px&#39;;
+<a name="line995"></a>    el.style.top = Math.round(top) + &#39;px&#39;;
+<a name="line996"></a>  } else {
+<a name="line997"></a>    goog.style.setPosition(el, left, top);
+<a name="line998"></a>  }
+<a name="line999"></a>};
+<a name="line1000"></a>
+<a name="line1001"></a>
+<a name="line1002"></a>/**
+<a name="line1003"></a> * Handles a click on the title close area.
+<a name="line1004"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
+<a name="line1005"></a> * @private
+<a name="line1006"></a> */
+<a name="line1007"></a>goog.ui.Dialog.prototype.onTitleCloseClick_ = function(e) {
+<a name="line1008"></a>  var bs = this.getButtonSet();
+<a name="line1009"></a>  var key = bs &amp;&amp; bs.getCancel();
+<a name="line1010"></a>  // Only if there is a valid cancel button is an event dispatched.
+<a name="line1011"></a>  if (key) {
+<a name="line1012"></a>    var caption = /** @type {Element|string} */(bs.get(key));
+<a name="line1013"></a>    if (this.dispatchEvent(new goog.ui.Dialog.Event(key, caption))) {
+<a name="line1014"></a>      this.setVisible(false);
+<a name="line1015"></a>    }
+<a name="line1016"></a>  } else {
+<a name="line1017"></a>    this.setVisible(false);
+<a name="line1018"></a>  }
+<a name="line1019"></a>};
+<a name="line1020"></a>
+<a name="line1021"></a>
+<a name="line1022"></a>/**
+<a name="line1023"></a> * Sets whether the dialog should be disposed when it is hidden.  By default
+<a name="line1024"></a> * dialogs are not disposed when they are hidden.
+<a name="line1025"></a> * @param {boolean} b Whether the dialog should get disposed when it gets
+<a name="line1026"></a> *     hidden.
+<a name="line1027"></a> */
+<a name="line1028"></a>goog.ui.Dialog.prototype.setDisposeOnHide = function(b) {
+<a name="line1029"></a>  this.disposeOnHide_ = b;
 <a name="line1030"></a>};
 <a name="line1031"></a>
 <a name="line1032"></a>
 <a name="line1033"></a>/**
-<a name="line1034"></a> * Sets the button set to use.
-<a name="line1035"></a> * Note: Passing in null will cause no button set to be rendered.
-<a name="line1036"></a> * @param {goog.ui.Dialog.ButtonSet?} buttons The button set to use.
-<a name="line1037"></a> */
-<a name="line1038"></a>goog.ui.Dialog.prototype.setButtonSet = function(buttons) {
-<a name="line1039"></a>  this.buttons_ = buttons;
-<a name="line1040"></a>  if (this.buttonEl_) {
-<a name="line1041"></a>    if (this.buttons_) {
-<a name="line1042"></a>      this.buttons_.attachToElement(this.buttonEl_);
-<a name="line1043"></a>    } else {
-<a name="line1044"></a>      this.buttonEl_.innerHTML = &#39;&#39;;
-<a name="line1045"></a>    }
-<a name="line1046"></a>  }
-<a name="line1047"></a>};
-<a name="line1048"></a>
-<a name="line1049"></a>
-<a name="line1050"></a>/**
-<a name="line1051"></a> * Returns the button set being used.
-<a name="line1052"></a> * @return {goog.ui.Dialog.ButtonSet?} The button set being used.
-<a name="line1053"></a> */
-<a name="line1054"></a>goog.ui.Dialog.prototype.getButtonSet = function() {
-<a name="line1055"></a>  return this.buttons_;
-<a name="line1056"></a>};
-<a name="line1057"></a>
+<a name="line1034"></a> * @return {boolean} Whether the dialog should be disposed when it is hidden.
+<a name="line1035"></a> */
+<a name="line1036"></a>goog.ui.Dialog.prototype.getDisposeOnHide = function() {
+<a name="line1037"></a>  return this.disposeOnHide_;
+<a name="line1038"></a>};
+<a name="line1039"></a>
+<a name="line1040"></a>
+<a name="line1041"></a>/** @inheritDoc */
+<a name="line1042"></a>goog.ui.Dialog.prototype.disposeInternal = function() {
+<a name="line1043"></a>  // The superclass method calls exitDocument, which in turn calls
+<a name="line1044"></a>  // setVisible(false).  Between them they clean up all event handlers.
+<a name="line1045"></a>  goog.ui.Dialog.superClass_.disposeInternal.call(this);
+<a name="line1046"></a>
+<a name="line1047"></a>  // The superclass method disposes of the element and its children,
+<a name="line1048"></a>  // unless the dialog was decorated.  We only have to worry about
+<a name="line1049"></a>  // background mask elements.
+<a name="line1050"></a>  if (this.bgEl_) {
+<a name="line1051"></a>    goog.dom.removeNode(this.bgEl_);
+<a name="line1052"></a>    this.bgEl_ = null;
+<a name="line1053"></a>  }
+<a name="line1054"></a>  if (this.bgIframeEl_) {
+<a name="line1055"></a>    goog.dom.removeNode(this.bgIframeEl_);
+<a name="line1056"></a>    this.bgIframeEl_ = null;
+<a name="line1057"></a>  }
 <a name="line1058"></a>
-<a name="line1059"></a>/**
-<a name="line1060"></a> * Handles a click on the button container.
-<a name="line1061"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
-<a name="line1062"></a> * @private
-<a name="line1063"></a> */
-<a name="line1064"></a>goog.ui.Dialog.prototype.onButtonClick_ = function(e) {
-<a name="line1065"></a>  var button = this.findParentButton_(/** @type {Element} */ (e.target));
-<a name="line1066"></a>  if (button &amp;&amp; !button.disabled) {
-<a name="line1067"></a>    var key = button.name;
-<a name="line1068"></a>    var caption = /** @type {Element|string} */(
-<a name="line1069"></a>        this.getButtonSet().get(key));
-<a name="line1070"></a>    if (this.dispatchEvent(new goog.ui.Dialog.Event(key, caption))) {
-<a name="line1071"></a>      this.setVisible(false);
-<a name="line1072"></a>    }
-<a name="line1073"></a>  }
-<a name="line1074"></a>};
-<a name="line1075"></a>
-<a name="line1076"></a>/**
-<a name="line1077"></a> * Finds the parent button of an element (or null if there was no button
-<a name="line1078"></a> * parent).
-<a name="line1079"></a> * @param {Element} element The element that was clicked on.
-<a name="line1080"></a> * @return {Element} Returns the parent button or null if not found.
-<a name="line1081"></a> * @private
-<a name="line1082"></a> */
-<a name="line1083"></a>goog.ui.Dialog.prototype.findParentButton_ = function(element) {
-<a name="line1084"></a>  var el = element;
-<a name="line1085"></a>  while (el != null &amp;&amp; el != this.buttonEl_) {
-<a name="line1086"></a>    if (el.tagName == &#39;BUTTON&#39;) {
-<a name="line1087"></a>      return /** @type {Element} */(el);
-<a name="line1088"></a>    }
-<a name="line1089"></a>    el = el.parentNode;
-<a name="line1090"></a>  }
-<a name="line1091"></a>  return null;
-<a name="line1092"></a>};
-<a name="line1093"></a>
-<a name="line1094"></a>
-<a name="line1095"></a>/**
-<a name="line1096"></a> * Handles keydown events, and dismisses the popup if cancel is pressed.  If
-<a name="line1097"></a> * there is a cancel action in the ButtonSet, than that will be fired.
-<a name="line1098"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
-<a name="line1099"></a> * @private
-<a name="line1100"></a> */
-<a name="line1101"></a>goog.ui.Dialog.prototype.onKeyDown_ = function(e) {
-<a name="line1102"></a>  var close = false;
-<a name="line1103"></a>  var hasHandler = false;
-<a name="line1104"></a>  var buttonSet = this.getButtonSet();
-<a name="line1105"></a>  var target = e.target;
-<a name="line1106"></a>  if (e.keyCode == goog.events.KeyCodes.ESC) {
-<a name="line1107"></a>    // Only if there is a valid cancel button is an event dispatched.
-<a name="line1108"></a>    var cancel = buttonSet &amp;&amp; buttonSet.getCancel();
-<a name="line1109"></a>
-<a name="line1110"></a>    // Users may expect to hit escape on a SELECT element.
-<a name="line1111"></a>    var isSpecialFormElement =
-<a name="line1112"></a>        target.tagName == &#39;SELECT&#39; &amp;&amp; !target.disabled;
-<a name="line1113"></a>
-<a name="line1114"></a>    if (cancel &amp;&amp; !isSpecialFormElement) {
-<a name="line1115"></a>      hasHandler = true;
-<a name="line1116"></a>
-<a name="line1117"></a>      var caption = buttonSet.get(cancel);
-<a name="line1118"></a>      close = this.dispatchEvent(
-<a name="line1119"></a>          new goog.ui.Dialog.Event(cancel,
-<a name="line1120"></a>              /** @type {Element|null|string} */(caption)));
-<a name="line1121"></a>    } else if (!isSpecialFormElement) {
-<a name="line1122"></a>      close = true;
-<a name="line1123"></a>    }
-<a name="line1124"></a>  } else if (e.keyCode == goog.events.KeyCodes.ENTER) {
-<a name="line1125"></a>    var key;
-<a name="line1126"></a>    if (target.tagName == &#39;BUTTON&#39;) {
-<a name="line1127"></a>      // If focus was on a button, it must have been enabled, so we can fire
-<a name="line1128"></a>      // that button&#39;s handler.
-<a name="line1129"></a>      key = target.name;
-<a name="line1130"></a>    } else if (buttonSet) {
-<a name="line1131"></a>      // Try to fire the default button&#39;s handler (if one exists), but only if
-<a name="line1132"></a>      // the button is enabled.
-<a name="line1133"></a>      var defaultKey = buttonSet.getDefault();
-<a name="line1134"></a>      var defaultButton = defaultKey &amp;&amp; buttonSet.getButton(defaultKey);
-<a name="line1135"></a>
-<a name="line1136"></a>      // Users may expect to hit enter on a TEXTAREA or a SELECT element.
-<a name="line1137"></a>      var isSpecialFormElement =
-<a name="line1138"></a>          (target.tagName == &#39;TEXTAREA&#39; || target.tagName == &#39;SELECT&#39;) &amp;&amp;
-<a name="line1139"></a>          !target.disabled;
-<a name="line1140"></a>
-<a name="line1141"></a>      if (defaultButton &amp;&amp; !defaultButton.disabled &amp;&amp; !isSpecialFormElement) {
-<a name="line1142"></a>        key = defaultKey;
-<a name="line1143"></a>      }
-<a name="line1144"></a>    }
-<a name="line1145"></a>    if (key) {
-<a name="line1146"></a>      hasHandler = true;
-<a name="line1147"></a>      close = this.dispatchEvent(
-<a name="line1148"></a>          new goog.ui.Dialog.Event(key, String(buttonSet.get(key))));
-<a name="line1149"></a>    }
-<a name="line1150"></a>  } else if (e.keyCode == goog.events.KeyCodes.TAB &amp;&amp; e.shiftKey &amp;&amp;
-<a name="line1151"></a>      target == this.getElement()) {
-<a name="line1152"></a>    // Prevent the user from shift-tabbing backwards out of the dialog box.
-<a name="line1153"></a>    // TODO: Instead, we should move the focus to the last tabbable
-<a name="line1154"></a>    // element inside the dialog.
-<a name="line1155"></a>    hasHandler = true;
-<a name="line1156"></a>  }
-<a name="line1157"></a>
-<a name="line1158"></a>  if (close || hasHandler) {
-<a name="line1159"></a>    e.stopPropagation();
-<a name="line1160"></a>    e.preventDefault();
-<a name="line1161"></a>  }
-<a name="line1162"></a>
-<a name="line1163"></a>  if (close) {
-<a name="line1164"></a>    this.setVisible(false);
-<a name="line1165"></a>  }
-<a name="line1166"></a>};
-<a name="line1167"></a>
-<a name="line1168"></a>
-<a name="line1169"></a>/**
-<a name="line1170"></a> * Handles window resize events.
-<a name="line1171"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
-<a name="line1172"></a> * @private
-<a name="line1173"></a> */
-<a name="line1174"></a>goog.ui.Dialog.prototype.onResize_ = function(e) {
-<a name="line1175"></a>  this.resizeBackground_();
-<a name="line1176"></a>};
-<a name="line1177"></a>
-<a name="line1178"></a>
-<a name="line1179"></a>/**
-<a name="line1180"></a> * Handles focus events.  Makes sure that if the user tabs past the
-<a name="line1181"></a> * elements in the dialog, the focus wraps back to the beginning.
-<a name="line1182"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
-<a name="line1183"></a> * @private
-<a name="line1184"></a> */
-<a name="line1185"></a>goog.ui.Dialog.prototype.onFocus_ = function(e) {
-<a name="line1186"></a>  if (this.tabCatcherEl_ == e.target) {
-<a name="line1187"></a>    goog.Timer.callOnce(this.focusElement_, 0, this);
-<a name="line1188"></a>  }
-<a name="line1189"></a>};
-<a name="line1190"></a>
-<a name="line1191"></a>
-<a name="line1192"></a>/**
-<a name="line1193"></a> * Moves the focus to the dialog.
-<a name="line1194"></a> * @private
-<a name="line1195"></a> */
-<a name="line1196"></a>goog.ui.Dialog.prototype.focusElement_ = function() {
-<a name="line1197"></a>  if (goog.userAgent.IE) {
-<a name="line1198"></a>    // In IE, we must first focus on the body or else focussing on a
-<a name="line1199"></a>    // sub-element will not work.
-<a name="line1200"></a>    this.getDomHelper().getDocument().body.focus();
-<a name="line1201"></a>  }
-<a name="line1202"></a>  this.getElement().focus();
-<a name="line1203"></a>};
-<a name="line1204"></a>
-<a name="line1205"></a>
-<a name="line1206"></a>/**
-<a name="line1207"></a> * Dialog event class.
-<a name="line1208"></a> * @param {string} key Key identifier for the button.
-<a name="line1209"></a> * @param {string|Element} caption Caption on the button (might be i18nlized).
-<a name="line1210"></a> * @constructor
-<a name="line1211"></a> * @extends {goog.events.Event}
+<a name="line1059"></a>  this.titleCloseEl_ = null;
+<a name="line1060"></a>  this.buttonEl_ = null;
+<a name="line1061"></a>  this.tabCatcherEl_ = null;
+<a name="line1062"></a>};
+<a name="line1063"></a>
+<a name="line1064"></a>
+<a name="line1065"></a>/**
+<a name="line1066"></a> * Sets the button set to use.
+<a name="line1067"></a> * Note: Passing in null will cause no button set to be rendered.
+<a name="line1068"></a> * @param {goog.ui.Dialog.ButtonSet?} buttons The button set to use.
+<a name="line1069"></a> */
+<a name="line1070"></a>goog.ui.Dialog.prototype.setButtonSet = function(buttons) {
+<a name="line1071"></a>  this.buttons_ = buttons;
+<a name="line1072"></a>  if (this.buttonEl_) {
+<a name="line1073"></a>    if (this.buttons_) {
+<a name="line1074"></a>      this.buttons_.attachToElement(this.buttonEl_);
+<a name="line1075"></a>    } else {
+<a name="line1076"></a>      this.buttonEl_.innerHTML = &#39;&#39;;
+<a name="line1077"></a>    }
+<a name="line1078"></a>  }
+<a name="line1079"></a>};
+<a name="line1080"></a>
+<a name="line1081"></a>
+<a name="line1082"></a>/**
+<a name="line1083"></a> * Returns the button set being used.
+<a name="line1084"></a> * @return {goog.ui.Dialog.ButtonSet?} The button set being used.
+<a name="line1085"></a> */
+<a name="line1086"></a>goog.ui.Dialog.prototype.getButtonSet = function() {
+<a name="line1087"></a>  return this.buttons_;
+<a name="line1088"></a>};
+<a name="line1089"></a>
+<a name="line1090"></a>
+<a name="line1091"></a>/**
+<a name="line1092"></a> * Handles a click on the button container.
+<a name="line1093"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
+<a name="line1094"></a> * @private
+<a name="line1095"></a> */
+<a name="line1096"></a>goog.ui.Dialog.prototype.onButtonClick_ = function(e) {
+<a name="line1097"></a>  var button = this.findParentButton_(/** @type {Element} */ (e.target));
+<a name="line1098"></a>  if (button &amp;&amp; !button.disabled) {
+<a name="line1099"></a>    var key = button.name;
+<a name="line1100"></a>    var caption = /** @type {Element|string} */(
+<a name="line1101"></a>        this.getButtonSet().get(key));
+<a name="line1102"></a>    if (this.dispatchEvent(new goog.ui.Dialog.Event(key, caption))) {
+<a name="line1103"></a>      this.setVisible(false);
+<a name="line1104"></a>    }
+<a name="line1105"></a>  }
+<a name="line1106"></a>};
+<a name="line1107"></a>
+<a name="line1108"></a>/**
+<a name="line1109"></a> * Finds the parent button of an element (or null if there was no button
+<a name="line1110"></a> * parent).
+<a name="line1111"></a> * @param {Element} element The element that was clicked on.
+<a name="line1112"></a> * @return {Element} Returns the parent button or null if not found.
+<a name="line1113"></a> * @private
+<a name="line1114"></a> */
+<a name="line1115"></a>goog.ui.Dialog.prototype.findParentButton_ = function(element) {
+<a name="line1116"></a>  var el = element;
+<a name="line1117"></a>  while (el != null &amp;&amp; el != this.buttonEl_) {
+<a name="line1118"></a>    if (el.tagName == &#39;BUTTON&#39;) {
+<a name="line1119"></a>      return /** @type {Element} */(el);
+<a name="line1120"></a>    }
+<a name="line1121"></a>    el = el.parentNode;
+<a name="line1122"></a>  }
+<a name="line1123"></a>  return null;
+<a name="line1124"></a>};
+<a name="line1125"></a>
+<a name="line1126"></a>
+<a name="line1127"></a>/**
+<a name="line1128"></a> * Handles keydown and keypress events, and dismisses the popup if cancel is
+<a name="line1129"></a> * pressed.  If there is a cancel action in the ButtonSet, than that will be
+<a name="line1130"></a> * fired.  Also prevents tabbing out of the dialog.
+<a name="line1131"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
+<a name="line1132"></a> * @private
+<a name="line1133"></a> */
+<a name="line1134"></a>goog.ui.Dialog.prototype.onKey_ = function(e) {
+<a name="line1135"></a>  var close = false;
+<a name="line1136"></a>  var hasHandler = false;
+<a name="line1137"></a>  var buttonSet = this.getButtonSet();
+<a name="line1138"></a>  var target = e.target;
+<a name="line1139"></a>
+<a name="line1140"></a>  if (e.type == goog.events.EventType.KEYDOWN) {
+<a name="line1141"></a>    // Escape and tab can only properly be handled in keydown handlers.
+<a name="line1142"></a>    if (e.keyCode == goog.events.KeyCodes.ESC) {
+<a name="line1143"></a>      // Only if there is a valid cancel button is an event dispatched.
+<a name="line1144"></a>      var cancel = buttonSet &amp;&amp; buttonSet.getCancel();
+<a name="line1145"></a>
+<a name="line1146"></a>      // Users may expect to hit escape on a SELECT element.
+<a name="line1147"></a>      var isSpecialFormElement =
+<a name="line1148"></a>          target.tagName == &#39;SELECT&#39; &amp;&amp; !target.disabled;
+<a name="line1149"></a>
+<a name="line1150"></a>      if (cancel &amp;&amp; !isSpecialFormElement) {
+<a name="line1151"></a>        hasHandler = true;
+<a name="line1152"></a>
+<a name="line1153"></a>        var caption = buttonSet.get(cancel);
+<a name="line1154"></a>        close = this.dispatchEvent(
+<a name="line1155"></a>            new goog.ui.Dialog.Event(cancel,
+<a name="line1156"></a>                /** @type {Element|null|string} */(caption)));
+<a name="line1157"></a>      } else if (!isSpecialFormElement) {
+<a name="line1158"></a>        close = true;
+<a name="line1159"></a>      }
+<a name="line1160"></a>    } else if (e.keyCode == goog.events.KeyCodes.TAB &amp;&amp; e.shiftKey &amp;&amp;
+<a name="line1161"></a>        target == this.getElement()) {
+<a name="line1162"></a>      // Prevent the user from shift-tabbing backwards out of the dialog box.
+<a name="line1163"></a>      // TODO: Instead, we should move the focus to the last tabbable
+<a name="line1164"></a>      // element inside the dialog.
+<a name="line1165"></a>      hasHandler = true;
+<a name="line1166"></a>    }
+<a name="line1167"></a>  } else if (e.keyCode == goog.events.KeyCodes.ENTER) {
+<a name="line1168"></a>    // Only handle ENTER in keypress events, in case the action opens a
+<a name="line1169"></a>    // popup window.
+<a name="line1170"></a>    var key;
+<a name="line1171"></a>    if (target.tagName == &#39;BUTTON&#39;) {
+<a name="line1172"></a>      // If focus was on a button, it must have been enabled, so we can fire
+<a name="line1173"></a>      // that button&#39;s handler.
+<a name="line1174"></a>      key = target.name;
+<a name="line1175"></a>    } else if (buttonSet) {
+<a name="line1176"></a>      // Try to fire the default button&#39;s handler (if one exists), but only if
+<a name="line1177"></a>      // the button is enabled.
+<a name="line1178"></a>      var defaultKey = buttonSet.getDefault();
+<a name="line1179"></a>      var defaultButton = defaultKey &amp;&amp; buttonSet.getButton(defaultKey);
+<a name="line1180"></a>
+<a name="line1181"></a>      // Users may expect to hit enter on a TEXTAREA or a SELECT element.
+<a name="line1182"></a>      var isSpecialFormElement =
+<a name="line1183"></a>          (target.tagName == &#39;TEXTAREA&#39; || target.tagName == &#39;SELECT&#39;) &amp;&amp;
+<a name="line1184"></a>          !target.disabled;
+<a name="line1185"></a>
+<a name="line1186"></a>      if (defaultButton &amp;&amp; !defaultButton.disabled &amp;&amp; !isSpecialFormElement) {
+<a name="line1187"></a>        key = defaultKey;
+<a name="line1188"></a>      }
+<a name="line1189"></a>    }
+<a name="line1190"></a>    if (key) {
+<a name="line1191"></a>      hasHandler = true;
+<a name="line1192"></a>      close = this.dispatchEvent(
+<a name="line1193"></a>          new goog.ui.Dialog.Event(key, String(buttonSet.get(key))));
+<a name="line1194"></a>    }
+<a name="line1195"></a>  }
+<a name="line1196"></a>
+<a name="line1197"></a>  if (close || hasHandler) {
+<a name="line1198"></a>    e.stopPropagation();
+<a name="line1199"></a>    e.preventDefault();
+<a name="line1200"></a>  }
+<a name="line1201"></a>
+<a name="line1202"></a>  if (close) {
+<a name="line1203"></a>    this.setVisible(false);
+<a name="line1204"></a>  }
+<a name="line1205"></a>};
+<a name="line1206"></a>
+<a name="line1207"></a>
+<a name="line1208"></a>/**
+<a name="line1209"></a> * Handles window resize events.
+<a name="line1210"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
+<a name="line1211"></a> * @private
 <a name="line1212"></a> */
-<a name="line1213"></a>goog.ui.Dialog.Event = function(key, caption) {
-<a name="line1214"></a>  this.type = goog.ui.Dialog.EventType.SELECT;
-<a name="line1215"></a>  this.key = key;
-<a name="line1216"></a>  this.caption = caption;
-<a name="line1217"></a>};
-<a name="line1218"></a>goog.inherits(goog.ui.Dialog.Event, goog.events.Event);
-<a name="line1219"></a>
-<a name="line1220"></a>
-<a name="line1221"></a>/**
-<a name="line1222"></a> * Event type constant for dialog events.
-<a name="line1223"></a> * TODO: Change this to goog.ui.Dialog.EventType.SELECT.
-<a name="line1224"></a> * @type {string}
-<a name="line1225"></a> * @deprecated Use goog.ui.Dialog.EventType.SELECT.
-<a name="line1226"></a> */
-<a name="line1227"></a>goog.ui.Dialog.SELECT_EVENT = &#39;dialogselect&#39;;
-<a name="line1228"></a>
+<a name="line1213"></a>goog.ui.Dialog.prototype.onResize_ = function(e) {
+<a name="line1214"></a>  this.resizeBackground_();
+<a name="line1215"></a>};
+<a name="line1216"></a>
+<a name="line1217"></a>
+<a name="line1218"></a>/**
+<a name="line1219"></a> * Handles focus events.  Makes sure that if the user tabs past the
+<a name="line1220"></a> * elements in the dialog, the focus wraps back to the beginning.
+<a name="line1221"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
+<a name="line1222"></a> * @private
+<a name="line1223"></a> */
+<a name="line1224"></a>goog.ui.Dialog.prototype.onFocus_ = function(e) {
+<a name="line1225"></a>  if (this.tabCatcherEl_ == e.target) {
+<a name="line1226"></a>    goog.Timer.callOnce(this.focusElement_, 0, this);
+<a name="line1227"></a>  }
+<a name="line1228"></a>};
 <a name="line1229"></a>
-<a name="line1230"></a>/**
-<a name="line1231"></a> * Events dispatched by dialogs.
-<a name="line1232"></a> * @enum {string}
-<a name="line1233"></a> */
-<a name="line1234"></a>goog.ui.Dialog.EventType = {
-<a name="line1235"></a>  /**
-<a name="line1236"></a>   * Dispatched when the user closes the dialog.
-<a name="line1237"></a>   * The dispatched event will always be of type {@link goog.ui.Dialog.Event}.
-<a name="line1238"></a>   * Canceling the event will prevent the dialog from closing.
-<a name="line1239"></a>   */
-<a name="line1240"></a>  SELECT: &#39;dialogselect&#39;,
-<a name="line1241"></a>
-<a name="line1242"></a>  /**
-<a name="line1243"></a>   * Dispatched after the dialog is closed. Not cancelable.
-<a name="line1244"></a>   */
-<a name="line1245"></a>  AFTER_HIDE: &#39;afterhide&#39;
-<a name="line1246"></a>};
-<a name="line1247"></a>
-<a name="line1248"></a>
-<a name="line1249"></a>/**
-<a name="line1250"></a> * A button set defines the behaviour of a set of buttons that the dialog can
-<a name="line1251"></a> * show.  Uses the {@link goog.structs.Map} interface.
-<a name="line1252"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
-<a name="line1253"></a> *    goog.ui.Component} for semantics.
-<a name="line1254"></a> * @constructor
-<a name="line1255"></a> * @extends {goog.structs.Map}
-<a name="line1256"></a> */
-<a name="line1257"></a>goog.ui.Dialog.ButtonSet = function(opt_domHelper) {
-<a name="line1258"></a>  // TODO:  Refactor ButtonSet to extend goog.ui.Component?
-<a name="line1259"></a>  this.dom_ = opt_domHelper || goog.dom.getDomHelper();
-<a name="line1260"></a>  goog.structs.Map.call(this);
-<a name="line1261"></a>};
-<a name="line1262"></a>goog.inherits(goog.ui.Dialog.ButtonSet, goog.structs.Map);
-<a name="line1263"></a>
-<a name="line1264"></a>
-<a name="line1265"></a>/**
-<a name="line1266"></a> * A CSS className for this component.
-<a name="line1267"></a> * @type {string}
-<a name="line1268"></a> * @private
-<a name="line1269"></a> */
-<a name="line1270"></a>goog.ui.Dialog.ButtonSet.prototype.class_ = goog.getCssName(&#39;goog-buttonset&#39;);
-<a name="line1271"></a>
-<a name="line1272"></a>
-<a name="line1273"></a>/**
-<a name="line1274"></a> * The button that has default focus (references key in buttons_ map).
-<a name="line1275"></a> * @type {?string}
-<a name="line1276"></a> * @private
-<a name="line1277"></a> */
-<a name="line1278"></a>goog.ui.Dialog.ButtonSet.prototype.defaultButton_ = null;
-<a name="line1279"></a>
+<a name="line1230"></a>
+<a name="line1231"></a>/**
+<a name="line1232"></a> * Moves the focus to the dialog.
+<a name="line1233"></a> * @private
+<a name="line1234"></a> */
+<a name="line1235"></a>goog.ui.Dialog.prototype.focusElement_ = function() {
+<a name="line1236"></a>  if (goog.userAgent.IE) {
+<a name="line1237"></a>    // In IE, we must first focus on the body or else focussing on a
+<a name="line1238"></a>    // sub-element will not work.
+<a name="line1239"></a>    this.getDomHelper().getDocument().body.focus();
+<a name="line1240"></a>  }
+<a name="line1241"></a>  this.getElement().focus();
+<a name="line1242"></a>};
+<a name="line1243"></a>
+<a name="line1244"></a>
+<a name="line1245"></a>/**
+<a name="line1246"></a> * Dialog event class.
+<a name="line1247"></a> * @param {string} key Key identifier for the button.
+<a name="line1248"></a> * @param {string|Element} caption Caption on the button (might be i18nlized).
+<a name="line1249"></a> * @constructor
+<a name="line1250"></a> * @extends {goog.events.Event}
+<a name="line1251"></a> */
+<a name="line1252"></a>goog.ui.Dialog.Event = function(key, caption) {
+<a name="line1253"></a>  this.type = goog.ui.Dialog.EventType.SELECT;
+<a name="line1254"></a>  this.key = key;
+<a name="line1255"></a>  this.caption = caption;
+<a name="line1256"></a>};
+<a name="line1257"></a>goog.inherits(goog.ui.Dialog.Event, goog.events.Event);
+<a name="line1258"></a>
+<a name="line1259"></a>
+<a name="line1260"></a>/**
+<a name="line1261"></a> * Event type constant for dialog events.
+<a name="line1262"></a> * TODO: Change this to goog.ui.Dialog.EventType.SELECT.
+<a name="line1263"></a> * @type {string}
+<a name="line1264"></a> * @deprecated Use goog.ui.Dialog.EventType.SELECT.
+<a name="line1265"></a> */
+<a name="line1266"></a>goog.ui.Dialog.SELECT_EVENT = &#39;dialogselect&#39;;
+<a name="line1267"></a>
+<a name="line1268"></a>
+<a name="line1269"></a>/**
+<a name="line1270"></a> * Events dispatched by dialogs.
+<a name="line1271"></a> * @enum {string}
+<a name="line1272"></a> */
+<a name="line1273"></a>goog.ui.Dialog.EventType = {
+<a name="line1274"></a>  /**
+<a name="line1275"></a>   * Dispatched when the user closes the dialog.
+<a name="line1276"></a>   * The dispatched event will always be of type {@link goog.ui.Dialog.Event}.
+<a name="line1277"></a>   * Canceling the event will prevent the dialog from closing.
+<a name="line1278"></a>   */
+<a name="line1279"></a>  SELECT: &#39;dialogselect&#39;,
 <a name="line1280"></a>
-<a name="line1281"></a>/**
-<a name="line1282"></a> * Optional container the button set should be rendered into.
-<a name="line1283"></a> * @type {Element}
-<a name="line1284"></a> * @private
-<a name="line1285"></a> */
-<a name="line1286"></a>goog.ui.Dialog.ButtonSet.prototype.element_ = null;
+<a name="line1281"></a>  /**
+<a name="line1282"></a>   * Dispatched after the dialog is closed. Not cancelable.
+<a name="line1283"></a>   */
+<a name="line1284"></a>  AFTER_HIDE: &#39;afterhide&#39;
+<a name="line1285"></a>};
+<a name="line1286"></a>
 <a name="line1287"></a>
-<a name="line1288"></a>
-<a name="line1289"></a>/**
-<a name="line1290"></a> * The button whose action is associated with the escape key and the X button
-<a name="line1291"></a> * on the dialog.
-<a name="line1292"></a> * @type {?string}
-<a name="line1293"></a> * @private
-<a name="line1294"></a> */
-<a name="line1295"></a>goog.ui.Dialog.ButtonSet.prototype.cancelButton_ = null;
-<a name="line1296"></a>
-<a name="line1297"></a>
-<a name="line1298"></a>/**
-<a name="line1299"></a> * Adds a button to the button set.  Buttons will be displayed in the order they
-<a name="line1300"></a> * are added.
-<a name="line1301"></a> *
-<a name="line1302"></a> * @param {string} key Key used to identify the button in events.
-<a name="line1303"></a> * @param {string|Element} caption A string caption or a DOM node that can be
-<a name="line1304"></a> *     appended to a button element.
-<a name="line1305"></a> * @param {boolean=} opt_isDefault Whether this button is the default button,
-<a name="line1306"></a> *     Dialog will dispatch for this button if enter is pressed.
-<a name="line1307"></a> * @param {boolean=} opt_isCancel Whether this button has the same behaviour as
-<a name="line1308"></a> *    cancel.  If escape is pressed this button will fire.
-<a name="line1309"></a> * @return {goog.ui.Dialog.ButtonSet} The button set, to make it easy to chain
-<a name="line1310"></a> *    &quot;set&quot; calls and build new ButtonSets.
-<a name="line1311"></a> */
-<a name="line1312"></a>goog.ui.Dialog.ButtonSet.prototype.set = function(key, caption,
-<a name="line1313"></a>      opt_isDefault, opt_isCancel) {
-<a name="line1314"></a>  goog.structs.Map.prototype.set.call(this, key, caption);
-<a name="line1315"></a>
-<a name="line1316"></a>  if (opt_isDefault) {
-<a name="line1317"></a>    this.defaultButton_ = key;
-<a name="line1318"></a>  }
-<a name="line1319"></a>  if (opt_isCancel) {
-<a name="line1320"></a>    this.cancelButton_ = key;
-<a name="line1321"></a>  }
-<a name="line1322"></a>
-<a name="line1323"></a>  return this;
-<a name="line1324"></a>};
-<a name="line1325"></a>
+<a name="line1288"></a>/**
+<a name="line1289"></a> * A button set defines the behaviour of a set of buttons that the dialog can
+<a name="line1290"></a> * show.  Uses the {@link goog.structs.Map} interface.
+<a name="line1291"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
+<a name="line1292"></a> *    goog.ui.Component} for semantics.
+<a name="line1293"></a> * @constructor
+<a name="line1294"></a> * @extends {goog.structs.Map}
+<a name="line1295"></a> */
+<a name="line1296"></a>goog.ui.Dialog.ButtonSet = function(opt_domHelper) {
+<a name="line1297"></a>  // TODO:  Refactor ButtonSet to extend goog.ui.Component?
+<a name="line1298"></a>  this.dom_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line1299"></a>  goog.structs.Map.call(this);
+<a name="line1300"></a>};
+<a name="line1301"></a>goog.inherits(goog.ui.Dialog.ButtonSet, goog.structs.Map);
+<a name="line1302"></a>
+<a name="line1303"></a>
+<a name="line1304"></a>/**
+<a name="line1305"></a> * A CSS className for this component.
+<a name="line1306"></a> * @type {string}
+<a name="line1307"></a> * @private
+<a name="line1308"></a> */
+<a name="line1309"></a>goog.ui.Dialog.ButtonSet.prototype.class_ = goog.getCssName(&#39;goog-buttonset&#39;);
+<a name="line1310"></a>
+<a name="line1311"></a>
+<a name="line1312"></a>/**
+<a name="line1313"></a> * The button that has default focus (references key in buttons_ map).
+<a name="line1314"></a> * @type {?string}
+<a name="line1315"></a> * @private
+<a name="line1316"></a> */
+<a name="line1317"></a>goog.ui.Dialog.ButtonSet.prototype.defaultButton_ = null;
+<a name="line1318"></a>
+<a name="line1319"></a>
+<a name="line1320"></a>/**
+<a name="line1321"></a> * Optional container the button set should be rendered into.
+<a name="line1322"></a> * @type {Element}
+<a name="line1323"></a> * @private
+<a name="line1324"></a> */
+<a name="line1325"></a>goog.ui.Dialog.ButtonSet.prototype.element_ = null;
 <a name="line1326"></a>
-<a name="line1327"></a>/**
-<a name="line1328"></a> * Attaches the button set to an element, rendering it inside.
-<a name="line1329"></a> * @param {Element} el Container.
-<a name="line1330"></a> */
-<a name="line1331"></a>goog.ui.Dialog.ButtonSet.prototype.attachToElement = function(el) {
-<a name="line1332"></a>  this.element_ = el;
-<a name="line1333"></a>  this.render();
-<a name="line1334"></a>};
+<a name="line1327"></a>
+<a name="line1328"></a>/**
+<a name="line1329"></a> * The button whose action is associated with the escape key and the X button
+<a name="line1330"></a> * on the dialog.
+<a name="line1331"></a> * @type {?string}
+<a name="line1332"></a> * @private
+<a name="line1333"></a> */
+<a name="line1334"></a>goog.ui.Dialog.ButtonSet.prototype.cancelButton_ = null;
 <a name="line1335"></a>
 <a name="line1336"></a>
 <a name="line1337"></a>/**
-<a name="line1338"></a> * Renders the button set inside its container element.
-<a name="line1339"></a> */
-<a name="line1340"></a>goog.ui.Dialog.ButtonSet.prototype.render = function() {
-<a name="line1341"></a>  if (this.element_) {
-<a name="line1342"></a>    this.element_.innerHTML = &#39;&#39;;
-<a name="line1343"></a>    var domHelper = goog.dom.getDomHelper(this.element_);
-<a name="line1344"></a>    goog.structs.forEach(this, function(caption, key) {
-<a name="line1345"></a>      var button = domHelper.createDom(&#39;button&#39;, {&#39;name&#39;: key}, caption);
-<a name="line1346"></a>      if (key == this.defaultButton_) {
-<a name="line1347"></a>        button.className = goog.getCssName(this.class_, &#39;default&#39;);
-<a name="line1348"></a>      }
-<a name="line1349"></a>      this.element_.appendChild(button);
-<a name="line1350"></a>    }, this);
-<a name="line1351"></a>  }
-<a name="line1352"></a>};
-<a name="line1353"></a>
+<a name="line1338"></a> * Adds a button to the button set.  Buttons will be displayed in the order they
+<a name="line1339"></a> * are added.
+<a name="line1340"></a> *
+<a name="line1341"></a> * @param {string} key Key used to identify the button in events.
+<a name="line1342"></a> * @param {string|Element} caption A string caption or a DOM node that can be
+<a name="line1343"></a> *     appended to a button element.
+<a name="line1344"></a> * @param {boolean=} opt_isDefault Whether this button is the default button,
+<a name="line1345"></a> *     Dialog will dispatch for this button if enter is pressed.
+<a name="line1346"></a> * @param {boolean=} opt_isCancel Whether this button has the same behaviour as
+<a name="line1347"></a> *    cancel.  If escape is pressed this button will fire.
+<a name="line1348"></a> * @return {goog.ui.Dialog.ButtonSet} The button set, to make it easy to chain
+<a name="line1349"></a> *    &quot;set&quot; calls and build new ButtonSets.
+<a name="line1350"></a> */
+<a name="line1351"></a>goog.ui.Dialog.ButtonSet.prototype.set = function(key, caption,
+<a name="line1352"></a>      opt_isDefault, opt_isCancel) {
+<a name="line1353"></a>  goog.structs.Map.prototype.set.call(this, key, caption);
 <a name="line1354"></a>
-<a name="line1355"></a>/**
-<a name="line1356"></a> * Decorates the given element by adding any {@code button} elements found
-<a name="line1357"></a> * among its descendants to the button set.  The first button found is assumed
-<a name="line1358"></a> * to be the default and will receive focus when the button set is rendered.
-<a name="line1359"></a> * If a button with a name of {@link goog.ui.Dialog.DefaultButtonKeys.CANCEL}
-<a name="line1360"></a> * is found, it is assumed to have &quot;Cancel&quot; semantics.
-<a name="line1361"></a> * TODO:  ButtonSet should be a goog.ui.Component.  Really.
-<a name="line1362"></a> * @param {Element} element The element to decorate; should contain buttons.
-<a name="line1363"></a> */
-<a name="line1364"></a>goog.ui.Dialog.ButtonSet.prototype.decorate = function(element) {
-<a name="line1365"></a>  if (!element || element.nodeType != goog.dom.NodeType.ELEMENT) {
-<a name="line1366"></a>    return;
-<a name="line1367"></a>  }
-<a name="line1368"></a>
-<a name="line1369"></a>  this.element_ = element;
-<a name="line1370"></a>  var buttons = this.element_.getElementsByTagName(&#39;button&#39;);
-<a name="line1371"></a>  for (var i = 0, button, key, caption; button = buttons[i]; i++) {
-<a name="line1372"></a>    // Buttons should have a &quot;name&quot; attribute and have their caption defined by
-<a name="line1373"></a>    // their innerHTML, but not everyone knows this, and we should play nice.
-<a name="line1374"></a>    key = button.name || button.id;
-<a name="line1375"></a>    caption = goog.dom.getTextContent(button) || button.value;
-<a name="line1376"></a>    if (key) {
-<a name="line1377"></a>      var isDefault = i == 0;
-<a name="line1378"></a>      var isCancel = button.name == goog.ui.Dialog.DefaultButtonKeys.CANCEL;
-<a name="line1379"></a>      this.set(key, caption, isDefault, isCancel);
-<a name="line1380"></a>      if (isDefault) {
-<a name="line1381"></a>        goog.dom.classes.add(button, goog.getCssName(this.class_,
-<a name="line1382"></a>            &#39;default&#39;));
-<a name="line1383"></a>      }
-<a name="line1384"></a>    }
-<a name="line1385"></a>  }
-<a name="line1386"></a>};
-<a name="line1387"></a>
-<a name="line1388"></a>
-<a name="line1389"></a>/**
-<a name="line1390"></a> * Sets the default button.
-<a name="line1391"></a> * @param {?string} key The default button.
-<a name="line1392"></a> */
-<a name="line1393"></a>goog.ui.Dialog.ButtonSet.prototype.setDefault = function(key) {
-<a name="line1394"></a>  this.defaultButton_ = key;
-<a name="line1395"></a>};
-<a name="line1396"></a>
-<a name="line1397"></a>
-<a name="line1398"></a>/**
-<a name="line1399"></a> * Returns the default button.
-<a name="line1400"></a> * @return {?string} The default button.
-<a name="line1401"></a> */
-<a name="line1402"></a>goog.ui.Dialog.ButtonSet.prototype.getDefault = function() {
-<a name="line1403"></a>  return this.defaultButton_;
-<a name="line1404"></a>};
-<a name="line1405"></a>
-<a name="line1406"></a>
-<a name="line1407"></a>/**
-<a name="line1408"></a> * Sets the cancel button.
-<a name="line1409"></a> * @param {?string} key The cancel button.
-<a name="line1410"></a> */
-<a name="line1411"></a>goog.ui.Dialog.ButtonSet.prototype.setCancel = function(key) {
-<a name="line1412"></a>  this.cancelButton_ = key;
-<a name="line1413"></a>};
-<a name="line1414"></a>
-<a name="line1415"></a>
-<a name="line1416"></a>/**
-<a name="line1417"></a> * Returns the cancel button.
-<a name="line1418"></a> * @return {?string} The cancel button.
-<a name="line1419"></a> */
-<a name="line1420"></a>goog.ui.Dialog.ButtonSet.prototype.getCancel = function() {
-<a name="line1421"></a>  return this.cancelButton_;
-<a name="line1422"></a>};
-<a name="line1423"></a>
-<a name="line1424"></a>
-<a name="line1425"></a>/**
-<a name="line1426"></a> * Returns the HTML Button element.
-<a name="line1427"></a> * @param {string} key The button to return.
-<a name="line1428"></a> * @return {Element} The button, if found else null.
-<a name="line1429"></a> */
-<a name="line1430"></a>goog.ui.Dialog.ButtonSet.prototype.getButton = function(key) {
-<a name="line1431"></a>  var buttons = this.getAllButtons();
-<a name="line1432"></a>  for (var i = 0, nextButton; nextButton = buttons[i]; i++) {
-<a name="line1433"></a>    if (nextButton.name == key || nextButton.id == key) {
-<a name="line1434"></a>      return nextButton;
-<a name="line1435"></a>    }
-<a name="line1436"></a>  }
-<a name="line1437"></a>  return null;
-<a name="line1438"></a>};
-<a name="line1439"></a>
-<a name="line1440"></a>
-<a name="line1441"></a>/**
-<a name="line1442"></a> * Returns all the HTML Button elements in the button set container.
-<a name="line1443"></a> * @return {NodeList} A live NodeList of the buttons.
-<a name="line1444"></a> */
-<a name="line1445"></a>goog.ui.Dialog.ButtonSet.prototype.getAllButtons = function() {
-<a name="line1446"></a>  return this.element_.getElementsByTagName(goog.dom.TagName.BUTTON);
-<a name="line1447"></a>};
-<a name="line1448"></a>
-<a name="line1449"></a>
-<a name="line1450"></a>/**
-<a name="line1451"></a> * The keys used to identify standard buttons in events.
-<a name="line1452"></a> * @enum {string}
-<a name="line1453"></a> */
-<a name="line1454"></a>goog.ui.Dialog.DefaultButtonKeys = {
-<a name="line1455"></a>  OK: &#39;ok&#39;,
-<a name="line1456"></a>  CANCEL: &#39;cancel&#39;,
-<a name="line1457"></a>  YES: &#39;yes&#39;,
-<a name="line1458"></a>  NO: &#39;no&#39;,
-<a name="line1459"></a>  SAVE: &#39;save&#39;,
-<a name="line1460"></a>  CONTINUE: &#39;continue&#39;
+<a name="line1355"></a>  if (opt_isDefault) {
+<a name="line1356"></a>    this.defaultButton_ = key;
+<a name="line1357"></a>  }
+<a name="line1358"></a>  if (opt_isCancel) {
+<a name="line1359"></a>    this.cancelButton_ = key;
+<a name="line1360"></a>  }
+<a name="line1361"></a>
+<a name="line1362"></a>  return this;
+<a name="line1363"></a>};
+<a name="line1364"></a>
+<a name="line1365"></a>
+<a name="line1366"></a>/**
+<a name="line1367"></a> * Attaches the button set to an element, rendering it inside.
+<a name="line1368"></a> * @param {Element} el Container.
+<a name="line1369"></a> */
+<a name="line1370"></a>goog.ui.Dialog.ButtonSet.prototype.attachToElement = function(el) {
+<a name="line1371"></a>  this.element_ = el;
+<a name="line1372"></a>  this.render();
+<a name="line1373"></a>};
+<a name="line1374"></a>
+<a name="line1375"></a>
+<a name="line1376"></a>/**
+<a name="line1377"></a> * Renders the button set inside its container element.
+<a name="line1378"></a> */
+<a name="line1379"></a>goog.ui.Dialog.ButtonSet.prototype.render = function() {
+<a name="line1380"></a>  if (this.element_) {
+<a name="line1381"></a>    this.element_.innerHTML = &#39;&#39;;
+<a name="line1382"></a>    var domHelper = goog.dom.getDomHelper(this.element_);
+<a name="line1383"></a>    goog.structs.forEach(this, function(caption, key) {
+<a name="line1384"></a>      var button = domHelper.createDom(&#39;button&#39;, {&#39;name&#39;: key}, caption);
+<a name="line1385"></a>      if (key == this.defaultButton_) {
+<a name="line1386"></a>        button.className = goog.getCssName(this.class_, &#39;default&#39;);
+<a name="line1387"></a>      }
+<a name="line1388"></a>      this.element_.appendChild(button);
+<a name="line1389"></a>    }, this);
+<a name="line1390"></a>  }
+<a name="line1391"></a>};
+<a name="line1392"></a>
+<a name="line1393"></a>
+<a name="line1394"></a>/**
+<a name="line1395"></a> * Decorates the given element by adding any {@code button} elements found
+<a name="line1396"></a> * among its descendants to the button set.  The first button found is assumed
+<a name="line1397"></a> * to be the default and will receive focus when the button set is rendered.
+<a name="line1398"></a> * If a button with a name of {@link goog.ui.Dialog.DefaultButtonKeys.CANCEL}
+<a name="line1399"></a> * is found, it is assumed to have &quot;Cancel&quot; semantics.
+<a name="line1400"></a> * TODO:  ButtonSet should be a goog.ui.Component.  Really.
+<a name="line1401"></a> * @param {Element} element The element to decorate; should contain buttons.
+<a name="line1402"></a> */
+<a name="line1403"></a>goog.ui.Dialog.ButtonSet.prototype.decorate = function(element) {
+<a name="line1404"></a>  if (!element || element.nodeType != goog.dom.NodeType.ELEMENT) {
+<a name="line1405"></a>    return;
+<a name="line1406"></a>  }
+<a name="line1407"></a>
+<a name="line1408"></a>  this.element_ = element;
+<a name="line1409"></a>  var buttons = this.element_.getElementsByTagName(&#39;button&#39;);
+<a name="line1410"></a>  for (var i = 0, button, key, caption; button = buttons[i]; i++) {
+<a name="line1411"></a>    // Buttons should have a &quot;name&quot; attribute and have their caption defined by
+<a name="line1412"></a>    // their innerHTML, but not everyone knows this, and we should play nice.
+<a name="line1413"></a>    key = button.name || button.id;
+<a name="line1414"></a>    caption = goog.dom.getTextContent(button) || button.value;
+<a name="line1415"></a>    if (key) {
+<a name="line1416"></a>      var isDefault = i == 0;
+<a name="line1417"></a>      var isCancel = button.name == goog.ui.Dialog.DefaultButtonKeys.CANCEL;
+<a name="line1418"></a>      this.set(key, caption, isDefault, isCancel);
+<a name="line1419"></a>      if (isDefault) {
+<a name="line1420"></a>        goog.dom.classes.add(button, goog.getCssName(this.class_,
+<a name="line1421"></a>            &#39;default&#39;));
+<a name="line1422"></a>      }
+<a name="line1423"></a>    }
+<a name="line1424"></a>  }
+<a name="line1425"></a>};
+<a name="line1426"></a>
+<a name="line1427"></a>
+<a name="line1428"></a>/**
+<a name="line1429"></a> * Sets the default button.
+<a name="line1430"></a> * @param {?string} key The default button.
+<a name="line1431"></a> */
+<a name="line1432"></a>goog.ui.Dialog.ButtonSet.prototype.setDefault = function(key) {
+<a name="line1433"></a>  this.defaultButton_ = key;
+<a name="line1434"></a>};
+<a name="line1435"></a>
+<a name="line1436"></a>
+<a name="line1437"></a>/**
+<a name="line1438"></a> * Returns the default button.
+<a name="line1439"></a> * @return {?string} The default button.
+<a name="line1440"></a> */
+<a name="line1441"></a>goog.ui.Dialog.ButtonSet.prototype.getDefault = function() {
+<a name="line1442"></a>  return this.defaultButton_;
+<a name="line1443"></a>};
+<a name="line1444"></a>
+<a name="line1445"></a>
+<a name="line1446"></a>/**
+<a name="line1447"></a> * Sets the cancel button.
+<a name="line1448"></a> * @param {?string} key The cancel button.
+<a name="line1449"></a> */
+<a name="line1450"></a>goog.ui.Dialog.ButtonSet.prototype.setCancel = function(key) {
+<a name="line1451"></a>  this.cancelButton_ = key;
+<a name="line1452"></a>};
+<a name="line1453"></a>
+<a name="line1454"></a>
+<a name="line1455"></a>/**
+<a name="line1456"></a> * Returns the cancel button.
+<a name="line1457"></a> * @return {?string} The cancel button.
+<a name="line1458"></a> */
+<a name="line1459"></a>goog.ui.Dialog.ButtonSet.prototype.getCancel = function() {
+<a name="line1460"></a>  return this.cancelButton_;
 <a name="line1461"></a>};
 <a name="line1462"></a>
 <a name="line1463"></a>
-<a name="line1464"></a>// Construct some default sets
-<a name="line1465"></a>(function() {
-<a name="line1466"></a>
-<a name="line1467"></a>  // TODO: Sharing the button set between instances does not work. We
-<a name="line1468"></a>  // should create factory methods for these instead.
-<a name="line1469"></a>
-<a name="line1470"></a>  /** @desc label for a dialog button. */
-<a name="line1471"></a>  var MSG_DIALOG_OK = goog.getMsg(&#39;OK&#39;);
-<a name="line1472"></a>
-<a name="line1473"></a>  /** @desc label for a dialog button. */
-<a name="line1474"></a>  var MSG_DIALOG_CANCEL = goog.getMsg(&#39;Cancel&#39;);
-<a name="line1475"></a>
-<a name="line1476"></a>  /** @desc label for a dialog button. */
-<a name="line1477"></a>  var MSG_DIALOG_YES = goog.getMsg(&#39;Yes&#39;);
+<a name="line1464"></a>/**
+<a name="line1465"></a> * Returns the HTML Button element.
+<a name="line1466"></a> * @param {string} key The button to return.
+<a name="line1467"></a> * @return {Element} The button, if found else null.
+<a name="line1468"></a> */
+<a name="line1469"></a>goog.ui.Dialog.ButtonSet.prototype.getButton = function(key) {
+<a name="line1470"></a>  var buttons = this.getAllButtons();
+<a name="line1471"></a>  for (var i = 0, nextButton; nextButton = buttons[i]; i++) {
+<a name="line1472"></a>    if (nextButton.name == key || nextButton.id == key) {
+<a name="line1473"></a>      return nextButton;
+<a name="line1474"></a>    }
+<a name="line1475"></a>  }
+<a name="line1476"></a>  return null;
+<a name="line1477"></a>};
 <a name="line1478"></a>
-<a name="line1479"></a>  /** @desc label for a dialog button. */
-<a name="line1480"></a>  var MSG_DIALOG_NO = goog.getMsg(&#39;No&#39;);
-<a name="line1481"></a>
-<a name="line1482"></a>  /** @desc label for a dialog button. */
-<a name="line1483"></a>  var MSG_DIALOG_SAVE = goog.getMsg(&#39;Save&#39;);
-<a name="line1484"></a>
-<a name="line1485"></a>  /** @desc label for a dialog button. */
-<a name="line1486"></a>  var MSG_DIALOG_CONTINUE = goog.getMsg(&#39;Continue&#39;);
+<a name="line1479"></a>
+<a name="line1480"></a>/**
+<a name="line1481"></a> * Returns all the HTML Button elements in the button set container.
+<a name="line1482"></a> * @return {NodeList} A live NodeList of the buttons.
+<a name="line1483"></a> */
+<a name="line1484"></a>goog.ui.Dialog.ButtonSet.prototype.getAllButtons = function() {
+<a name="line1485"></a>  return this.element_.getElementsByTagName(goog.dom.TagName.BUTTON);
+<a name="line1486"></a>};
 <a name="line1487"></a>
-<a name="line1488"></a>  goog.ui.Dialog.ButtonSet.OK = new goog.ui.Dialog.ButtonSet()
-<a name="line1489"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.OK, MSG_DIALOG_OK, true, true);
-<a name="line1490"></a>
-<a name="line1491"></a>  goog.ui.Dialog.ButtonSet.OK_CANCEL = new goog.ui.Dialog.ButtonSet()
-<a name="line1492"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.OK, MSG_DIALOG_OK, true)
-<a name="line1493"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.CANCEL,
-<a name="line1494"></a>          MSG_DIALOG_CANCEL, false, true);
-<a name="line1495"></a>
-<a name="line1496"></a>  goog.ui.Dialog.ButtonSet.YES_NO = new goog.ui.Dialog.ButtonSet()
-<a name="line1497"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.YES, MSG_DIALOG_YES, true)
-<a name="line1498"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.NO, MSG_DIALOG_NO, false, true);
-<a name="line1499"></a>
-<a name="line1500"></a>  goog.ui.Dialog.ButtonSet.YES_NO_CANCEL = new goog.ui.Dialog.ButtonSet()
-<a name="line1501"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.YES, MSG_DIALOG_YES)
-<a name="line1502"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.NO, MSG_DIALOG_NO, true)
-<a name="line1503"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.CANCEL, MSG_DIALOG_CANCEL,
-<a name="line1504"></a>          false, true);
+<a name="line1488"></a>
+<a name="line1489"></a>/**
+<a name="line1490"></a> * The keys used to identify standard buttons in events.
+<a name="line1491"></a> * @enum {string}
+<a name="line1492"></a> */
+<a name="line1493"></a>goog.ui.Dialog.DefaultButtonKeys = {
+<a name="line1494"></a>  OK: &#39;ok&#39;,
+<a name="line1495"></a>  CANCEL: &#39;cancel&#39;,
+<a name="line1496"></a>  YES: &#39;yes&#39;,
+<a name="line1497"></a>  NO: &#39;no&#39;,
+<a name="line1498"></a>  SAVE: &#39;save&#39;,
+<a name="line1499"></a>  CONTINUE: &#39;continue&#39;
+<a name="line1500"></a>};
+<a name="line1501"></a>
+<a name="line1502"></a>
+<a name="line1503"></a>// Construct some default sets
+<a name="line1504"></a>(function() {
 <a name="line1505"></a>
-<a name="line1506"></a>  goog.ui.Dialog.ButtonSet.CONTINUE_SAVE_CANCEL =
-<a name="line1507"></a>      new goog.ui.Dialog.ButtonSet()
-<a name="line1508"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.CONTINUE, MSG_DIALOG_CONTINUE)
-<a name="line1509"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.SAVE, MSG_DIALOG_SAVE)
-<a name="line1510"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.CANCEL, MSG_DIALOG_CANCEL,
-<a name="line1511"></a>          true, true);
-<a name="line1512"></a>
-<a name="line1513"></a>})();
+<a name="line1506"></a>  // TODO: Sharing the button set between instances does not work. We
+<a name="line1507"></a>  // should create factory methods for these instead.
+<a name="line1508"></a>
+<a name="line1509"></a>  /** @desc label for a dialog button. */
+<a name="line1510"></a>  var MSG_DIALOG_OK = goog.getMsg(&#39;OK&#39;);
+<a name="line1511"></a>
+<a name="line1512"></a>  /** @desc label for a dialog button. */
+<a name="line1513"></a>  var MSG_DIALOG_CANCEL = goog.getMsg(&#39;Cancel&#39;);
+<a name="line1514"></a>
+<a name="line1515"></a>  /** @desc label for a dialog button. */
+<a name="line1516"></a>  var MSG_DIALOG_YES = goog.getMsg(&#39;Yes&#39;);
+<a name="line1517"></a>
+<a name="line1518"></a>  /** @desc label for a dialog button. */
+<a name="line1519"></a>  var MSG_DIALOG_NO = goog.getMsg(&#39;No&#39;);
+<a name="line1520"></a>
+<a name="line1521"></a>  /** @desc label for a dialog button. */
+<a name="line1522"></a>  var MSG_DIALOG_SAVE = goog.getMsg(&#39;Save&#39;);
+<a name="line1523"></a>
+<a name="line1524"></a>  /** @desc label for a dialog button. */
+<a name="line1525"></a>  var MSG_DIALOG_CONTINUE = goog.getMsg(&#39;Continue&#39;);
+<a name="line1526"></a>
+<a name="line1527"></a>  goog.ui.Dialog.ButtonSet.OK = new goog.ui.Dialog.ButtonSet()
+<a name="line1528"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.OK, MSG_DIALOG_OK, true, true);
+<a name="line1529"></a>
+<a name="line1530"></a>  goog.ui.Dialog.ButtonSet.OK_CANCEL = new goog.ui.Dialog.ButtonSet()
+<a name="line1531"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.OK, MSG_DIALOG_OK, true)
+<a name="line1532"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.CANCEL,
+<a name="line1533"></a>          MSG_DIALOG_CANCEL, false, true);
+<a name="line1534"></a>
+<a name="line1535"></a>  goog.ui.Dialog.ButtonSet.YES_NO = new goog.ui.Dialog.ButtonSet()
+<a name="line1536"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.YES, MSG_DIALOG_YES, true)
+<a name="line1537"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.NO, MSG_DIALOG_NO, false, true);
+<a name="line1538"></a>
+<a name="line1539"></a>  goog.ui.Dialog.ButtonSet.YES_NO_CANCEL = new goog.ui.Dialog.ButtonSet()
+<a name="line1540"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.YES, MSG_DIALOG_YES)
+<a name="line1541"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.NO, MSG_DIALOG_NO, true)
+<a name="line1542"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.CANCEL, MSG_DIALOG_CANCEL,
+<a name="line1543"></a>          false, true);
+<a name="line1544"></a>
+<a name="line1545"></a>  goog.ui.Dialog.ButtonSet.CONTINUE_SAVE_CANCEL =
+<a name="line1546"></a>      new goog.ui.Dialog.ButtonSet()
+<a name="line1547"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.CONTINUE, MSG_DIALOG_CONTINUE)
+<a name="line1548"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.SAVE, MSG_DIALOG_SAVE)
+<a name="line1549"></a>      .set(goog.ui.Dialog.DefaultButtonKeys.CANCEL, MSG_DIALOG_CANCEL,
+<a name="line1550"></a>          true, true);
+<a name="line1551"></a>
+<a name="line1552"></a>})();
 </pre>
 
 

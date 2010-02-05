@@ -94,7 +94,7 @@ goog.ui.PopupColorPicker.prototype.lastTarget_ = null;
 
 
 /**
- * Whether the color picker can move the focus to it's key event target when it
+ * Whether the color picker can move the focus to its key event target when it
  * is shown.  The default is true.  Setting to false can break keyboard
  * navigation, but this is needed for certain scenarios, for example the
  * toolbar menu in trogedit which can't have the selection changed.
@@ -280,7 +280,7 @@ goog.ui.PopupColorPicker.prototype.setFocusable = function(focusable) {
 
 
 /**
- * Sets whether the color picker can automatically move focus to it's key event
+ * Sets whether the color picker can automatically move focus to its key event
  * target when it is set to visible.
  * @param {boolean} allow Whether to allow auto focus.
  */
@@ -291,7 +291,7 @@ goog.ui.PopupColorPicker.prototype.setAllowAutoFocus = function(allow) {
 
 /**
  * @return {boolean} Whether the color picker can automatically move focus to
- *     it's key event target when it is set to visible.
+ *     its key event target when it is set to visible.
  */
 goog.ui.PopupColorPicker.prototype.getAllowAutoFocus = function() {
   return this.allowAutoFocus_;

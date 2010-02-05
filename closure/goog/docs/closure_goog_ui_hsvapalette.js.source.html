@@ -140,221 +140,217 @@
 <a name="line96"></a>goog.ui.HsvaPalette.prototype.swatchBackdropEl_;
 <a name="line97"></a>
 <a name="line98"></a>
-<a name="line99"></a>/**
-<a name="line100"></a> * Gets the color that is currently selected in this color picker.
-<a name="line101"></a> * Alpha transparency of the currently selected color, in [0, 1].
-<a name="line102"></a> * @return {number} The current alpha value.
-<a name="line103"></a> */
-<a name="line104"></a>goog.ui.HsvaPalette.prototype.getAlpha = function() {
-<a name="line105"></a>  return this.alpha_;
-<a name="line106"></a>};
-<a name="line107"></a>
-<a name="line108"></a>
-<a name="line109"></a>/**
-<a name="line110"></a> * Sets which color is selected and update the UI. The passed color should be
-<a name="line111"></a> * in #rrggbb format. The alpha value will be set to 1.
-<a name="line112"></a> * @param {number} alpha The selected alpha value, in [0, 1].
-<a name="line113"></a> */
-<a name="line114"></a>goog.ui.HsvaPalette.prototype.setAlpha = function(alpha) {
-<a name="line115"></a>  this.setColorAlphaHelper_(this.color_, alpha);
-<a name="line116"></a>};
-<a name="line117"></a>
-<a name="line118"></a>
-<a name="line119"></a>/**
-<a name="line120"></a> * Sets which color is selected and update the UI. The passed color should be
-<a name="line121"></a> * in #rrggbb format. The alpha value will be set to 1.
-<a name="line122"></a> * @param {string} color The selected color.
-<a name="line123"></a> */
-<a name="line124"></a>goog.ui.HsvaPalette.prototype.setColor = function(color) {
-<a name="line125"></a>  this.setColorAlphaHelper_(color, 1);
-<a name="line126"></a>};
-<a name="line127"></a>
-<a name="line128"></a>
-<a name="line129"></a>/**
-<a name="line130"></a> * Gets the color that is currently selected in this color picker, in #rrggbbaa
-<a name="line131"></a> * format.
-<a name="line132"></a> * @return {string} The string of the selected color with alpha.
-<a name="line133"></a> */
-<a name="line134"></a>goog.ui.HsvaPalette.prototype.getColorRgbaHex = function() {
-<a name="line135"></a>  var alphaHex = Math.floor(this.alpha_ * 255).toString(16);
-<a name="line136"></a>  return this.color_ + (alphaHex.length == 1 ? &#39;0&#39; + alphaHex : alphaHex);
-<a name="line137"></a>};
-<a name="line138"></a>
-<a name="line139"></a>
-<a name="line140"></a>/**
-<a name="line141"></a> * Sets which color is selected and update the UI. The passed color should be
-<a name="line142"></a> * in #rrggbbaa format. The alpha value will be set to 1.
-<a name="line143"></a> * @param {string} color The selected color with alpha.
-<a name="line144"></a> */
-<a name="line145"></a>goog.ui.HsvaPalette.prototype.setColorRgbaHex = function(color) {
-<a name="line146"></a>  var parsed = goog.ui.HsvaPalette.parseColorRgbaHex_(color);
-<a name="line147"></a>  this.setColorAlphaHelper_(parsed[0], parsed[1]);
-<a name="line148"></a>};
-<a name="line149"></a>
-<a name="line150"></a>
-<a name="line151"></a>/**
-<a name="line152"></a> * Sets which color and alpha value are selected and update the UI. The passed
-<a name="line153"></a> * color should be in #rrggbb format.
-<a name="line154"></a> * @param {string} color The selected color in #rrggbb format.
-<a name="line155"></a> * @param {number} alpha The selected alpha value, in [0, 1].
-<a name="line156"></a> * @private
-<a name="line157"></a> */
-<a name="line158"></a>goog.ui.HsvaPalette.prototype.setColorAlphaHelper_ = function(color, alpha) {
-<a name="line159"></a>  var colorChange = this.color_ != color;
-<a name="line160"></a>  var alphaChange = this.alpha_ != alpha;
-<a name="line161"></a>  this.alpha_ = alpha;
-<a name="line162"></a>  this.color_ = color;
-<a name="line163"></a>  if (colorChange) {
-<a name="line164"></a>    // This is to prevent multiple event dispatches.
-<a name="line165"></a>    goog.ui.HsvaPalette.superClass_.setColor_.call(this, color);
+<a name="line99"></a>/** @inheritDoc */
+<a name="line100"></a>goog.ui.HsvaPalette.prototype.getAlpha = function() {
+<a name="line101"></a>  return this.alpha_;
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Sets which color is selected and update the UI. The passed color should be
+<a name="line107"></a> * in #rrggbb format. The alpha value will be set to 1.
+<a name="line108"></a> * @param {number} alpha The selected alpha value, in [0, 1].
+<a name="line109"></a> */
+<a name="line110"></a>goog.ui.HsvaPalette.prototype.setAlpha = function(alpha) {
+<a name="line111"></a>  this.setColorAlphaHelper_(this.color_, alpha);
+<a name="line112"></a>};
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * Sets which color is selected and update the UI. The passed color should be
+<a name="line117"></a> * in #rrggbb format. The alpha value will be set to 1.
+<a name="line118"></a> * @param {string} color The selected color.
+<a name="line119"></a> */
+<a name="line120"></a>goog.ui.HsvaPalette.prototype.setColor = function(color) {
+<a name="line121"></a>  this.setColorAlphaHelper_(color, 1);
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Gets the color that is currently selected in this color picker, in #rrggbbaa
+<a name="line127"></a> * format.
+<a name="line128"></a> * @return {string} The string of the selected color with alpha.
+<a name="line129"></a> */
+<a name="line130"></a>goog.ui.HsvaPalette.prototype.getColorRgbaHex = function() {
+<a name="line131"></a>  var alphaHex = Math.floor(this.alpha_ * 255).toString(16);
+<a name="line132"></a>  return this.color_ + (alphaHex.length == 1 ? &#39;0&#39; + alphaHex : alphaHex);
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Sets which color is selected and update the UI. The passed color should be
+<a name="line138"></a> * in #rrggbbaa format. The alpha value will be set to 1.
+<a name="line139"></a> * @param {string} color The selected color with alpha.
+<a name="line140"></a> */
+<a name="line141"></a>goog.ui.HsvaPalette.prototype.setColorRgbaHex = function(color) {
+<a name="line142"></a>  var parsed = goog.ui.HsvaPalette.parseColorRgbaHex_(color);
+<a name="line143"></a>  this.setColorAlphaHelper_(parsed[0], parsed[1]);
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * Sets which color and alpha value are selected and update the UI. The passed
+<a name="line149"></a> * color should be in #rrggbb format.
+<a name="line150"></a> * @param {string} color The selected color in #rrggbb format.
+<a name="line151"></a> * @param {number} alpha The selected alpha value, in [0, 1].
+<a name="line152"></a> * @private
+<a name="line153"></a> */
+<a name="line154"></a>goog.ui.HsvaPalette.prototype.setColorAlphaHelper_ = function(color, alpha) {
+<a name="line155"></a>  var colorChange = this.color_ != color;
+<a name="line156"></a>  var alphaChange = this.alpha_ != alpha;
+<a name="line157"></a>  this.alpha_ = alpha;
+<a name="line158"></a>  this.color_ = color;
+<a name="line159"></a>  if (colorChange) {
+<a name="line160"></a>    // This is to prevent multiple event dispatches.
+<a name="line161"></a>    goog.ui.HsvaPalette.superClass_.setColor_.call(this, color);
+<a name="line162"></a>  }
+<a name="line163"></a>  if (colorChange || alphaChange) {
+<a name="line164"></a>    this.updateUi_();
+<a name="line165"></a>    this.dispatchEvent(goog.ui.Component.EventType.ACTION);
 <a name="line166"></a>  }
-<a name="line167"></a>  if (colorChange || alphaChange) {
-<a name="line168"></a>    this.updateUi_();
-<a name="line169"></a>    this.dispatchEvent(goog.ui.Component.EventType.ACTION);
-<a name="line170"></a>  }
-<a name="line171"></a>};
-<a name="line172"></a>
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/** @inheritDoc */
+<a name="line171"></a>goog.ui.HsvaPalette.prototype.createDom = function() {
+<a name="line172"></a>  goog.ui.HsvaPalette.superClass_.createDom.call(this);
 <a name="line173"></a>
-<a name="line174"></a>/** @inheritDoc */
-<a name="line175"></a>goog.ui.HsvaPalette.prototype.createDom = function() {
-<a name="line176"></a>  goog.ui.HsvaPalette.superClass_.createDom.call(this);
-<a name="line177"></a>
-<a name="line178"></a>  var dom = this.getDomHelper();
-<a name="line179"></a>  this.aImageEl_ = dom.createDom(
-<a name="line180"></a>      goog.dom.TagName.DIV, this.class_ + &#39;-a-image&#39;);
-<a name="line181"></a>  this.aHandleEl_ = dom.createDom(
-<a name="line182"></a>      goog.dom.TagName.DIV, this.class_ + &#39;-a-handle&#39;);
-<a name="line183"></a>  this.swatchBackdropEl_ = dom.createDom(
-<a name="line184"></a>      goog.dom.TagName.DIV, this.class_ + &#39;-swatch-backdrop&#39;),
-<a name="line185"></a>  dom.appendChild(this.element_, this.aImageEl_);
-<a name="line186"></a>  dom.appendChild(this.element_, this.aHandleEl_);
-<a name="line187"></a>  dom.appendChild(this.element_, this.swatchBackdropEl_);
-<a name="line188"></a>};
-<a name="line189"></a>
-<a name="line190"></a>
-<a name="line191"></a>/**
-<a name="line192"></a> * Destroys this widget and removes all event listeners.
-<a name="line193"></a> * @override
-<a name="line194"></a> */
-<a name="line195"></a>goog.ui.HsvaPalette.prototype.disposeInternal = function() {
-<a name="line196"></a>  goog.ui.HsvaPalette.superClass_.disposeInternal.call(this);
-<a name="line197"></a>
-<a name="line198"></a>  delete this.aImageEl_;
-<a name="line199"></a>  delete this.aHandleEl_;
-<a name="line200"></a>  delete this.swatchBackdropEl_;
-<a name="line201"></a>};
-<a name="line202"></a>
-<a name="line203"></a>
-<a name="line204"></a>/**
-<a name="line205"></a> * Updates the position, opacity, and styles for the UI representation of the
-<a name="line206"></a> * palette.
-<a name="line207"></a> * @private
-<a name="line208"></a> */
-<a name="line209"></a>goog.ui.HsvaPalette.prototype.updateUi_ = function() {
-<a name="line210"></a>  goog.ui.HsvaPalette.superClass_.updateUi_.call(this);
-<a name="line211"></a>  if (this.isInDocument()) {
-<a name="line212"></a>    var a = this.alpha_ * 255;
-<a name="line213"></a>    var top = this.aImageEl_.offsetTop -
-<a name="line214"></a>        Math.floor(this.aHandleEl_.offsetHeight / 2) +
-<a name="line215"></a>        this.aImageEl_.offsetHeight * ((255 - a) / 255);
-<a name="line216"></a>    this.aHandleEl_.style.top = top + &#39;px&#39;;
-<a name="line217"></a>    this.aImageEl_.style.backgroundColor = this.color_;
-<a name="line218"></a>    goog.style.setOpacity(this.swatchEl_, a / 255);
-<a name="line219"></a>  }
-<a name="line220"></a>};
-<a name="line221"></a>
-<a name="line222"></a>
-<a name="line223"></a>/** @inheritDoc */
-<a name="line224"></a>goog.ui.HsvaPalette.prototype.updateInput = function() {
-<a name="line225"></a>  if (!goog.array.equals([this.color_, this.alpha_],
-<a name="line226"></a>      goog.ui.HsvaPalette.parseUserInput_(this.inputEl_.value))) {
-<a name="line227"></a>    this.inputEl_.value = this.getColorRgbaHex();
-<a name="line228"></a>  }
-<a name="line229"></a>};
-<a name="line230"></a>
-<a name="line231"></a>
-<a name="line232"></a>/**
-<a name="line233"></a> * Handles mousedown events on palette UI elements.
-<a name="line234"></a> * @param {goog.events.BrowserEvent} e Event object.
-<a name="line235"></a> * @private
-<a name="line236"></a> */
-<a name="line237"></a>goog.ui.HsvaPalette.prototype.handleMouseDown_ = function(e) {
-<a name="line238"></a>  goog.ui.HsvaPalette.superClass_.handleMouseDown_.call(this, e);
-<a name="line239"></a>  if (e.target == this.aImageEl_ || e.target == this.aHandleEl_) {
-<a name="line240"></a>    // Setup value change listeners
-<a name="line241"></a>    var b = goog.style.getBounds(this.vImageEl_);
-<a name="line242"></a>    this.handleMouseMoveA_(b, e);
-<a name="line243"></a>    this.mouseMoveListener_ = goog.events.listen(this.document_,
-<a name="line244"></a>        goog.events.EventType.MOUSEMOVE,
-<a name="line245"></a>        goog.bind(this.handleMouseMoveA_, this, b));
-<a name="line246"></a>    this.mouseUpListener_ = goog.events.listen(this.document_,
-<a name="line247"></a>        goog.events.EventType.MOUSEUP, this.handleMouseUp_, false, this);
-<a name="line248"></a>  }
-<a name="line249"></a>};
-<a name="line250"></a>
-<a name="line251"></a>
-<a name="line252"></a>/**
-<a name="line253"></a> * Handles mousemove events on the document once a drag operation on the alpha
-<a name="line254"></a> * slider has started.
-<a name="line255"></a> * @param {goog.math.Rect} b Boundaries of the value slider object at the start
-<a name="line256"></a> *     of the drag operation.
-<a name="line257"></a> * @param {goog.events.Event} e Event object.
-<a name="line258"></a> * @private
-<a name="line259"></a> */
-<a name="line260"></a>goog.ui.HsvaPalette.prototype.handleMouseMoveA_ = function(b, e) {
-<a name="line261"></a>  e.preventDefault();
-<a name="line262"></a>  var vportPos = goog.dom.getPageScroll();
-<a name="line263"></a>  var newA = (b.top + b.height - Math.min(
-<a name="line264"></a>      Math.max(vportPos.y + e.clientY, b.top),
-<a name="line265"></a>      b.top + b.height)) / b.height;
-<a name="line266"></a>  this.setAlpha(newA);
-<a name="line267"></a>};
-<a name="line268"></a>
-<a name="line269"></a>
-<a name="line270"></a>/**
-<a name="line271"></a> * Handles input events on the hex value input field.
-<a name="line272"></a> * @param {goog.events.Event} e Event object.
-<a name="line273"></a> * @private
-<a name="line274"></a> */
-<a name="line275"></a>goog.ui.HsvaPalette.prototype.handleInput_ = function(e) {
-<a name="line276"></a>  var parsed = goog.ui.HsvaPalette.parseUserInput_(this.inputEl_.value);
-<a name="line277"></a>  if (parsed) {
-<a name="line278"></a>    this.setColorAlphaHelper_(parsed[0], parsed[1]);
-<a name="line279"></a>  }
-<a name="line280"></a>};
-<a name="line281"></a>
-<a name="line282"></a>
-<a name="line283"></a>/**
-<a name="line284"></a> * Parses an #rrggbb or #rrggbbaa color string.
-<a name="line285"></a> * @param {string} value User-entered color value.
-<a name="line286"></a> * @return {Array} A two element array [color, alpha], where color is #rrggbb
-<a name="line287"></a> *     and alpha is in [0, 1]. Null if the argument was invalid.
-<a name="line288"></a> * @private
-<a name="line289"></a> */
-<a name="line290"></a>goog.ui.HsvaPalette.parseUserInput_ = function(value) {
-<a name="line291"></a>  if (/^#[0-9a-f]{8}$/i.test(value)) {
-<a name="line292"></a>    return goog.ui.HsvaPalette.parseColorRgbaHex_(value);
-<a name="line293"></a>  } else if (/^#[0-9a-f]{6}$/i.test(value)) {
-<a name="line294"></a>    return [value, 1];
-<a name="line295"></a>  }
-<a name="line296"></a>  return null;
-<a name="line297"></a>};
-<a name="line298"></a>
-<a name="line299"></a>
-<a name="line300"></a>/**
-<a name="line301"></a> * Parses a #rrggbbaa color string.
-<a name="line302"></a> * @param {string} color The color and alpha in #rrggbbaa format.
-<a name="line303"></a> * @return {Array} A two element array [color, alpha], where color is #rrggbb
-<a name="line304"></a> *     and alpha is in [0, 1].
-<a name="line305"></a> * @private
-<a name="line306"></a> */
-<a name="line307"></a>goog.ui.HsvaPalette.parseColorRgbaHex_ = function(color) {
-<a name="line308"></a>  var hex = goog.color.alpha.parse(color).hex;
-<a name="line309"></a>  return [
-<a name="line310"></a>    goog.color.alpha.extractHexColor(hex),
-<a name="line311"></a>    parseInt(goog.color.alpha.extractAlpha(hex), 16) / 255
-<a name="line312"></a>  ];
-<a name="line313"></a>};
+<a name="line174"></a>  var dom = this.getDomHelper();
+<a name="line175"></a>  this.aImageEl_ = dom.createDom(
+<a name="line176"></a>      goog.dom.TagName.DIV, this.class_ + &#39;-a-image&#39;);
+<a name="line177"></a>  this.aHandleEl_ = dom.createDom(
+<a name="line178"></a>      goog.dom.TagName.DIV, this.class_ + &#39;-a-handle&#39;);
+<a name="line179"></a>  this.swatchBackdropEl_ = dom.createDom(
+<a name="line180"></a>      goog.dom.TagName.DIV, this.class_ + &#39;-swatch-backdrop&#39;),
+<a name="line181"></a>  dom.appendChild(this.element_, this.aImageEl_);
+<a name="line182"></a>  dom.appendChild(this.element_, this.aHandleEl_);
+<a name="line183"></a>  dom.appendChild(this.element_, this.swatchBackdropEl_);
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Destroys this widget and removes all event listeners.
+<a name="line189"></a> * @override
+<a name="line190"></a> */
+<a name="line191"></a>goog.ui.HsvaPalette.prototype.disposeInternal = function() {
+<a name="line192"></a>  goog.ui.HsvaPalette.superClass_.disposeInternal.call(this);
+<a name="line193"></a>
+<a name="line194"></a>  delete this.aImageEl_;
+<a name="line195"></a>  delete this.aHandleEl_;
+<a name="line196"></a>  delete this.swatchBackdropEl_;
+<a name="line197"></a>};
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Updates the position, opacity, and styles for the UI representation of the
+<a name="line202"></a> * palette.
+<a name="line203"></a> * @private
+<a name="line204"></a> */
+<a name="line205"></a>goog.ui.HsvaPalette.prototype.updateUi_ = function() {
+<a name="line206"></a>  goog.ui.HsvaPalette.superClass_.updateUi_.call(this);
+<a name="line207"></a>  if (this.isInDocument()) {
+<a name="line208"></a>    var a = this.alpha_ * 255;
+<a name="line209"></a>    var top = this.aImageEl_.offsetTop -
+<a name="line210"></a>        Math.floor(this.aHandleEl_.offsetHeight / 2) +
+<a name="line211"></a>        this.aImageEl_.offsetHeight * ((255 - a) / 255);
+<a name="line212"></a>    this.aHandleEl_.style.top = top + &#39;px&#39;;
+<a name="line213"></a>    this.aImageEl_.style.backgroundColor = this.color_;
+<a name="line214"></a>    goog.style.setOpacity(this.swatchEl_, a / 255);
+<a name="line215"></a>  }
+<a name="line216"></a>};
+<a name="line217"></a>
+<a name="line218"></a>
+<a name="line219"></a>/** @inheritDoc */
+<a name="line220"></a>goog.ui.HsvaPalette.prototype.updateInput = function() {
+<a name="line221"></a>  if (!goog.array.equals([this.color_, this.alpha_],
+<a name="line222"></a>      goog.ui.HsvaPalette.parseUserInput_(this.inputEl_.value))) {
+<a name="line223"></a>    this.inputEl_.value = this.getColorRgbaHex();
+<a name="line224"></a>  }
+<a name="line225"></a>};
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>/**
+<a name="line229"></a> * Handles mousedown events on palette UI elements.
+<a name="line230"></a> * @param {goog.events.BrowserEvent} e Event object.
+<a name="line231"></a> * @private
+<a name="line232"></a> */
+<a name="line233"></a>goog.ui.HsvaPalette.prototype.handleMouseDown_ = function(e) {
+<a name="line234"></a>  goog.ui.HsvaPalette.superClass_.handleMouseDown_.call(this, e);
+<a name="line235"></a>  if (e.target == this.aImageEl_ || e.target == this.aHandleEl_) {
+<a name="line236"></a>    // Setup value change listeners
+<a name="line237"></a>    var b = goog.style.getBounds(this.vImageEl_);
+<a name="line238"></a>    this.handleMouseMoveA_(b, e);
+<a name="line239"></a>    this.mouseMoveListener_ = goog.events.listen(this.document_,
+<a name="line240"></a>        goog.events.EventType.MOUSEMOVE,
+<a name="line241"></a>        goog.bind(this.handleMouseMoveA_, this, b));
+<a name="line242"></a>    this.mouseUpListener_ = goog.events.listen(this.document_,
+<a name="line243"></a>        goog.events.EventType.MOUSEUP, this.handleMouseUp_, false, this);
+<a name="line244"></a>  }
+<a name="line245"></a>};
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * Handles mousemove events on the document once a drag operation on the alpha
+<a name="line250"></a> * slider has started.
+<a name="line251"></a> * @param {goog.math.Rect} b Boundaries of the value slider object at the start
+<a name="line252"></a> *     of the drag operation.
+<a name="line253"></a> * @param {goog.events.Event} e Event object.
+<a name="line254"></a> * @private
+<a name="line255"></a> */
+<a name="line256"></a>goog.ui.HsvaPalette.prototype.handleMouseMoveA_ = function(b, e) {
+<a name="line257"></a>  e.preventDefault();
+<a name="line258"></a>  var vportPos = goog.dom.getPageScroll();
+<a name="line259"></a>  var newA = (b.top + b.height - Math.min(
+<a name="line260"></a>      Math.max(vportPos.y + e.clientY, b.top),
+<a name="line261"></a>      b.top + b.height)) / b.height;
+<a name="line262"></a>  this.setAlpha(newA);
+<a name="line263"></a>};
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * Handles input events on the hex value input field.
+<a name="line268"></a> * @param {goog.events.Event} e Event object.
+<a name="line269"></a> * @private
+<a name="line270"></a> */
+<a name="line271"></a>goog.ui.HsvaPalette.prototype.handleInput_ = function(e) {
+<a name="line272"></a>  var parsed = goog.ui.HsvaPalette.parseUserInput_(this.inputEl_.value);
+<a name="line273"></a>  if (parsed) {
+<a name="line274"></a>    this.setColorAlphaHelper_(parsed[0], parsed[1]);
+<a name="line275"></a>  }
+<a name="line276"></a>};
+<a name="line277"></a>
+<a name="line278"></a>
+<a name="line279"></a>/**
+<a name="line280"></a> * Parses an #rrggbb or #rrggbbaa color string.
+<a name="line281"></a> * @param {string} value User-entered color value.
+<a name="line282"></a> * @return {Array} A two element array [color, alpha], where color is #rrggbb
+<a name="line283"></a> *     and alpha is in [0, 1]. Null if the argument was invalid.
+<a name="line284"></a> * @private
+<a name="line285"></a> */
+<a name="line286"></a>goog.ui.HsvaPalette.parseUserInput_ = function(value) {
+<a name="line287"></a>  if (/^#[0-9a-f]{8}$/i.test(value)) {
+<a name="line288"></a>    return goog.ui.HsvaPalette.parseColorRgbaHex_(value);
+<a name="line289"></a>  } else if (/^#[0-9a-f]{6}$/i.test(value)) {
+<a name="line290"></a>    return [value, 1];
+<a name="line291"></a>  }
+<a name="line292"></a>  return null;
+<a name="line293"></a>};
+<a name="line294"></a>
+<a name="line295"></a>
+<a name="line296"></a>/**
+<a name="line297"></a> * Parses a #rrggbbaa color string.
+<a name="line298"></a> * @param {string} color The color and alpha in #rrggbbaa format.
+<a name="line299"></a> * @return {Array} A two element array [color, alpha], where color is #rrggbb
+<a name="line300"></a> *     and alpha is in [0, 1].
+<a name="line301"></a> * @private
+<a name="line302"></a> */
+<a name="line303"></a>goog.ui.HsvaPalette.parseColorRgbaHex_ = function(color) {
+<a name="line304"></a>  var hex = goog.color.alpha.parse(color).hex;
+<a name="line305"></a>  return [
+<a name="line306"></a>    goog.color.alpha.extractHexColor(hex),
+<a name="line307"></a>    parseInt(goog.color.alpha.extractAlpha(hex), 16) / 255
+<a name="line308"></a>  ];
+<a name="line309"></a>};
 </pre>
 
 

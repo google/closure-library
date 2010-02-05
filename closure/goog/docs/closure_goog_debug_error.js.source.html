@@ -64,24 +64,30 @@
 <a name="line20"></a>
 <a name="line21"></a>goog.provide(&#39;goog.debug.Error&#39;);
 <a name="line22"></a>
-<a name="line23"></a>
-<a name="line24"></a>/**
-<a name="line25"></a> * Base class for custom error objects.
-<a name="line26"></a> * @param {*=} opt_msg The message associated with the error.
-<a name="line27"></a> * @constructor
-<a name="line28"></a> * @extends {Error}
-<a name="line29"></a> */
-<a name="line30"></a>goog.debug.Error = function(opt_msg) {
-<a name="line31"></a>  this.stack = new Error().stack || &#39;&#39;;
-<a name="line32"></a>  if (opt_msg) {
-<a name="line33"></a>    this.message = String(opt_msg);
-<a name="line34"></a>  }
-<a name="line35"></a>};
-<a name="line36"></a>goog.inherits(goog.debug.Error, Error);
+<a name="line23"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Base class for custom error objects.
+<a name="line28"></a> * @param {*=} opt_msg The message associated with the error.
+<a name="line29"></a> * @constructor
+<a name="line30"></a> * @extends {Error}
+<a name="line31"></a> */
+<a name="line32"></a>goog.debug.Error = function(opt_msg) {
+<a name="line33"></a>
+<a name="line34"></a>  // Ensure there is a stack trace.
+<a name="line35"></a>  this.stack = new Error().stack || &#39;&#39;;
+<a name="line36"></a>  goog.debug.enhanceError(this);
 <a name="line37"></a>
-<a name="line38"></a>
-<a name="line39"></a>/** @inheritDoc */
-<a name="line40"></a>goog.debug.Error.prototype.name = &#39;CustomError&#39;;
+<a name="line38"></a>  if (opt_msg) {
+<a name="line39"></a>    this.message = String(opt_msg);
+<a name="line40"></a>  }
+<a name="line41"></a>};
+<a name="line42"></a>goog.inherits(goog.debug.Error, Error);
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/** @inheritDoc */
+<a name="line46"></a>goog.debug.Error.prototype.name = &#39;CustomError&#39;;
 </pre>
 
 

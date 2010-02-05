@@ -183,8 +183,8 @@ goog.ui.RoundedTabRenderer.prototype.createEdge = function(dom, isTopEdge) {
 /** @inheritDoc */
 goog.ui.RoundedTabRenderer.prototype.getContentElement = function(element) {
   var baseClass = this.getStructuralCssClass();
-  return element &&
-      goog.dom.$$('div', goog.getCssName(baseClass, 'caption'), element)[0];
+  return element && goog.dom.getElementsByTagNameAndClass(
+      'div', goog.getCssName(baseClass, 'caption'), element)[0];
 };
 
 

@@ -397,6 +397,62 @@ limitations under the License.
     }
   }
 
+  function testAssertHtmlMatchesWithWhitespace() {
+    root.innerHTML = '';
+    root.appendChild(goog.dom.createTextNode('  A  '));
+    goog.testing.dom.assertHtmlContentsMatch('  A  ', root);
+
+    root.innerHTML = '';
+    root.appendChild(goog.dom.createTextNode('  A  '));
+    root.appendChild(goog.dom.createDom('span', null, '  B  '));
+    root.appendChild(goog.dom.createTextNode('  C  '));
+    goog.testing.dom.assertHtmlContentsMatch(
+        '  A  <span>  B  </span>  C  ', root);
+
+    root.innerHTML = '';
+    root.appendChild(goog.dom.createTextNode('  A'));
+    root.appendChild(goog.dom.createDom('span', null, '  B'));
+    root.appendChild(goog.dom.createTextNode('  C'));
+    goog.testing.dom.assertHtmlContentsMatch(
+        '  A<span>  B</span>  C', root);
+  }
+
+  function testAssertHtmlMatchesWithWhitespaceAndNesting() {
+    root.innerHTML = '';
+    root.appendChild(goog.dom.createDom('div', null,
+        goog.dom.createDom('b', null, '  A  '),
+        goog.dom.createDom('b', null, '  B  ')));
+    root.appendChild(goog.dom.createDom('div', null,
+        goog.dom.createDom('b', null, '  C  '),
+        goog.dom.createDom('b', null, '  D  ')));
+
+    goog.testing.dom.assertHtmlContentsMatch(
+        '<div><b>  A  </b><b>  B  </b></div>' +
+        '<div><b>  C  </b><b>  D  </b></div>', root);
+
+    root.innerHTML = '';
+    root.appendChild(goog.dom.createDom('b', null,
+        goog.dom.createDom('b', null,
+            goog.dom.createDom('b', null, '  A  '))));
+    root.appendChild(goog.dom.createDom('b', null, '  B  '));
+
+    goog.testing.dom.assertHtmlContentsMatch(
+        '<b><b><b>  A  </b></b></b><b>  B  </b>', root);
+
+    root.innerHTML = '';
+    root.appendChild(goog.dom.createDom('div', null,
+        goog.dom.createDom('b', null,
+            goog.dom.createDom('b', null, '  A  '))));
+    root.appendChild(goog.dom.createDom('b', null, '  B  '));
+
+    goog.testing.dom.assertHtmlContentsMatch(
+        '<div><b><b>  A  </b></b></div><b>  B  </b>', root);
+
+    root.innerHTML = '&nbsp;';
+    goog.testing.dom.assertHtmlContentsMatch(
+        '&nbsp;', root);
+  }
+
   function testAssertHtmlMatches() {
     // Since assertHtmlMatches is based on assertHtmlContentsMatch, we leave the
     // majority of edge case testing to the above.  Here we just do a sanity

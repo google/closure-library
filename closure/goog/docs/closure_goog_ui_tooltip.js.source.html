@@ -112,8 +112,8 @@
 <a name="line68"></a>      &#39;div&#39;, {&#39;style&#39;: &#39;position:absolute;display:none;&#39;}));
 <a name="line69"></a>
 <a name="line70"></a>  /**
-<a name="line71"></a>   * Object for representing cursor position.
-<a name="line72"></a>   * @type {goog.math.Coordinate}
+<a name="line71"></a>   * Cursor position relative to the page.
+<a name="line72"></a>   * @type {!goog.math.Coordinate}
 <a name="line73"></a>   * @protected
 <a name="line74"></a>   */
 <a name="line75"></a>  this.cursorPosition = new goog.math.Coordinate(1, 1);
@@ -590,371 +590,369 @@
 <a name="line546"></a>  if (opt_pos) {
 <a name="line547"></a>    pos = opt_pos;
 <a name="line548"></a>  } else {
-<a name="line549"></a>    var coord = new goog.math.Coordinate(
-<a name="line550"></a>       this.cursorPosition.x,
-<a name="line551"></a>       this.cursorPosition.y);
-<a name="line552"></a>    pos = new goog.ui.Tooltip.CursorTooltipPosition(coord);
-<a name="line553"></a>  }
-<a name="line554"></a>
-<a name="line555"></a>  this.anchor = el;
-<a name="line556"></a>  this.setPosition(pos);
-<a name="line557"></a>  this.setVisible(true);
-<a name="line558"></a>};
-<a name="line559"></a>
-<a name="line560"></a>
-<a name="line561"></a>/**
-<a name="line562"></a> * Called by timer from mouse out handler. Hides tooltip if cursor is still
-<a name="line563"></a> * outside element and tooltip, or if a child of tooltip has the focus.
-<a name="line564"></a> * @param {Element} el Tooltip&#39;s anchor when hide timer was started.
-<a name="line565"></a> */
-<a name="line566"></a>goog.ui.Tooltip.prototype.maybeHide = function(el) {
-<a name="line567"></a>  this.hideTimer = undefined;
-<a name="line568"></a>  if (el == this.anchor) {
-<a name="line569"></a>    if ((this.activeEl_ == null || (this.activeEl_ != this.getElement() &amp;&amp;
-<a name="line570"></a>                                   !this.elements_.contains(this.activeEl_))) &amp;&amp;
-<a name="line571"></a>        !this.hasActiveChild()) {
-<a name="line572"></a>      this.setVisible(false);
-<a name="line573"></a>    }
-<a name="line574"></a>  }
-<a name="line575"></a>};
-<a name="line576"></a>
-<a name="line577"></a>
-<a name="line578"></a>/**
-<a name="line579"></a> * @return {boolean} Whether tooltip element contains an active child tooltip,
-<a name="line580"></a> *     and should thus not be hidden.  When the child tooltip is hidden, it
-<a name="line581"></a> *     will check if the parent should be hidden, too.
-<a name="line582"></a> * @protected
-<a name="line583"></a> */
-<a name="line584"></a>goog.ui.Tooltip.prototype.hasActiveChild = function() {
-<a name="line585"></a>  return !!(this.childTooltip_ &amp;&amp; this.childTooltip_.activeEl_);
-<a name="line586"></a>};
-<a name="line587"></a>
-<a name="line588"></a>
-<a name="line589"></a>/**
-<a name="line590"></a> * Handler for mouse over events.
-<a name="line591"></a> *
-<a name="line592"></a> * @param {goog.events.BrowserEvent} event Event object.
-<a name="line593"></a> * @protected
-<a name="line594"></a> */
-<a name="line595"></a>goog.ui.Tooltip.prototype.handleMouseOver = function(event) {
-<a name="line596"></a>  var el = this.getAnchorFromElement(/** @type {Element} */ (event.target));
-<a name="line597"></a>  this.activeEl_ = /** @type {Element} */ (el);
-<a name="line598"></a>  this.clearHideTimer_();
-<a name="line599"></a>  if (el != this.anchor) {
-<a name="line600"></a>    this.anchor = el;
-<a name="line601"></a>    this.startShowTimer(/** @type {Element} */ (el));
-<a name="line602"></a>    this.checkForParentTooltip_();
-<a name="line603"></a>  }
-<a name="line604"></a>};
-<a name="line605"></a>
-<a name="line606"></a>
-<a name="line607"></a>/**
-<a name="line608"></a> * Find anchor containing the given element, if any.
-<a name="line609"></a> *
-<a name="line610"></a> * @param {Element} el Element that triggered event.
-<a name="line611"></a> * @return {Element} Element in elements_ array that contains given element,
-<a name="line612"></a> *     or null if not found.
-<a name="line613"></a> * @protected
-<a name="line614"></a> */
-<a name="line615"></a>goog.ui.Tooltip.prototype.getAnchorFromElement = function(el) {
-<a name="line616"></a>  // FireFox has a bug where mouse events relating to &lt;input&gt; elements are
-<a name="line617"></a>  // sometimes duplicated (often in FF2, rarely in FF3): once for the
-<a name="line618"></a>  // &lt;input&gt; element and once for a magic hidden &lt;div&gt; element.  Javascript
-<a name="line619"></a>  // code does not have sufficient permissions to read properties on that
-<a name="line620"></a>  // magic element and thus will throw an error in this call to
-<a name="line621"></a>  // getAnchorFromElement_().  In that case we swallow the error.
-<a name="line622"></a>  // See https://bugzilla.mozilla.org/show_bug.cgi?id=330961
-<a name="line623"></a>  try {
-<a name="line624"></a>    while (el &amp;&amp; !this.elements_.contains(el)) {
-<a name="line625"></a>      el = /** @type {Element} */ (el.parentNode);
-<a name="line626"></a>    }
-<a name="line627"></a>    return el;
-<a name="line628"></a>  } catch (e) {
-<a name="line629"></a>    return null;
-<a name="line630"></a>  }
-<a name="line631"></a>};
-<a name="line632"></a>
-<a name="line633"></a>
-<a name="line634"></a>/**
-<a name="line635"></a> * Handler for mouse move events.
-<a name="line636"></a> *
-<a name="line637"></a> * @param {goog.events.BrowserEvent} event Event object.
-<a name="line638"></a> * @protected
-<a name="line639"></a> */
-<a name="line640"></a>goog.ui.Tooltip.prototype.handleMouseMove = function(event) {
-<a name="line641"></a>  var scroll = this.dom_.getDocumentScroll();
-<a name="line642"></a>  this.cursorPosition.x = event.clientX + scroll.x;
-<a name="line643"></a>  this.cursorPosition.y = event.clientY + scroll.y;
-<a name="line644"></a>  this.seenInteraction_ = true;
-<a name="line645"></a>};
-<a name="line646"></a>
-<a name="line647"></a>
-<a name="line648"></a>/**
-<a name="line649"></a> * Handler for focus events.
-<a name="line650"></a> *
-<a name="line651"></a> * @param {goog.events.BrowserEvent} event Event object.
-<a name="line652"></a> * @protected
-<a name="line653"></a> */
-<a name="line654"></a>goog.ui.Tooltip.prototype.handleFocus = function(event) {
-<a name="line655"></a>  var el = this.getAnchorFromElement(/** @type {Element} */ (event.target));
-<a name="line656"></a>  this.activeEl_ = el;
-<a name="line657"></a>  this.seenInteraction_ = true;
-<a name="line658"></a>
-<a name="line659"></a>  if (this.anchor != el) {
-<a name="line660"></a>    this.anchor = el;
-<a name="line661"></a>    var pos = new goog.ui.Tooltip.ElementTooltipPosition(this.activeEl_);
-<a name="line662"></a>    this.clearHideTimer_();
-<a name="line663"></a>    this.startShowTimer(/** @type {Element} */ (el), pos);
-<a name="line664"></a>
-<a name="line665"></a>    this.checkForParentTooltip_();
-<a name="line666"></a>  }
-<a name="line667"></a>};
-<a name="line668"></a>
-<a name="line669"></a>
-<a name="line670"></a>/**
-<a name="line671"></a> * Looks for an active tooltip whose element contains this tooltip&#39;s anchor.
-<a name="line672"></a> * This allows us to prevent hides until they are really necessary.
-<a name="line673"></a> *
-<a name="line674"></a> * @private
-<a name="line675"></a> */
-<a name="line676"></a>goog.ui.Tooltip.prototype.checkForParentTooltip_ = function() {
-<a name="line677"></a>  if (this.anchor) {
-<a name="line678"></a>    for (var tt, i = 0; tt = goog.ui.Tooltip.activeInstances_[i]; i++) {
-<a name="line679"></a>      if (goog.dom.contains(tt.getElement(), this.anchor)) {
-<a name="line680"></a>        tt.childTooltip_ = this;
-<a name="line681"></a>        this.parentTooltip_ = tt;
-<a name="line682"></a>      }
-<a name="line683"></a>    }
-<a name="line684"></a>  }
-<a name="line685"></a>};
-<a name="line686"></a>
-<a name="line687"></a>
-<a name="line688"></a>/**
-<a name="line689"></a> * Handler for mouse out and blur events.
-<a name="line690"></a> *
-<a name="line691"></a> * @param {goog.events.BrowserEvent} event Event object.
-<a name="line692"></a> * @protected
-<a name="line693"></a> */
-<a name="line694"></a>goog.ui.Tooltip.prototype.handleMouseOutAndBlur = function(event) {
-<a name="line695"></a>  var el = this.getAnchorFromElement(/** @type {Element} */ (event.target));
-<a name="line696"></a>  var elTo = this.getAnchorFromElement(
-<a name="line697"></a>      /** @type {Element} */ (event.relatedTarget));
-<a name="line698"></a>  if (el == elTo) {
-<a name="line699"></a>    // We haven&#39;t really left the anchor, just moved from one child to
-<a name="line700"></a>    // another.
-<a name="line701"></a>    return;
-<a name="line702"></a>  }
-<a name="line703"></a>
-<a name="line704"></a>  if (el == this.activeEl_) {
-<a name="line705"></a>    this.activeEl_ = null;
-<a name="line706"></a>  }
-<a name="line707"></a>
-<a name="line708"></a>  this.clearShowTimer();
-<a name="line709"></a>  this.seenInteraction_ = false;
-<a name="line710"></a>  if (this.isVisible() &amp;&amp; (!event.relatedTarget ||
-<a name="line711"></a>      !goog.dom.contains(this.getElement(), event.relatedTarget))) {
-<a name="line712"></a>    this.startHideTimer_();
-<a name="line713"></a>  } else {
-<a name="line714"></a>    this.anchor = undefined;
-<a name="line715"></a>  }
-<a name="line716"></a>};
-<a name="line717"></a>
-<a name="line718"></a>
-<a name="line719"></a>/**
-<a name="line720"></a> * Handler for mouse over events for the tooltip element.
-<a name="line721"></a> *
-<a name="line722"></a> * @param {goog.events.BrowserEvent} event Event object.
-<a name="line723"></a> * @protected
-<a name="line724"></a> */
-<a name="line725"></a>goog.ui.Tooltip.prototype.handleTooltipMouseOver = function(event) {
-<a name="line726"></a>  var element = this.getElement();
-<a name="line727"></a>  if (this.activeEl_ != element) {
-<a name="line728"></a>    this.clearHideTimer_();
-<a name="line729"></a>    this.activeEl_ = element;
-<a name="line730"></a>  }
-<a name="line731"></a>};
-<a name="line732"></a>
-<a name="line733"></a>
-<a name="line734"></a>/**
-<a name="line735"></a> * Handler for mouse out events for the tooltip element.
-<a name="line736"></a> *
-<a name="line737"></a> * @param {goog.events.BrowserEvent} event Event object.
-<a name="line738"></a> * @protected
-<a name="line739"></a> */
-<a name="line740"></a>goog.ui.Tooltip.prototype.handleTooltipMouseOut = function(event) {
-<a name="line741"></a>  var element = this.getElement();
-<a name="line742"></a>  if (this.activeEl_ == element &amp;&amp; (!event.relatedTarget ||
-<a name="line743"></a>      !goog.dom.contains(element, event.relatedTarget))) {
-<a name="line744"></a>    this.activeEl_ = null;
-<a name="line745"></a>    this.startHideTimer_();
-<a name="line746"></a>  }
-<a name="line747"></a>};
-<a name="line748"></a>
-<a name="line749"></a>
-<a name="line750"></a>/**
-<a name="line751"></a> * Helper method, starts timer that calls maybeShow. Parameters are passed to
-<a name="line752"></a> * the maybeShow method.
-<a name="line753"></a> *
-<a name="line754"></a> * @param {Element} el Element to show tooltip for.
-<a name="line755"></a> * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
-<a name="line756"></a> *     at.
-<a name="line757"></a> * @protected
-<a name="line758"></a> */
-<a name="line759"></a>goog.ui.Tooltip.prototype.startShowTimer = function(el, opt_pos) {
-<a name="line760"></a>  if (!this.showTimer) {
-<a name="line761"></a>    this.showTimer = goog.Timer.callOnce(
-<a name="line762"></a>        goog.bind(this.maybeShow, this, el, opt_pos), this.showDelayMs_);
-<a name="line763"></a>  }
-<a name="line764"></a>};
-<a name="line765"></a>
-<a name="line766"></a>
-<a name="line767"></a>/**
-<a name="line768"></a> * Helper method called to clear the show timer.
-<a name="line769"></a> *
-<a name="line770"></a> * @protected
-<a name="line771"></a> */
-<a name="line772"></a>goog.ui.Tooltip.prototype.clearShowTimer = function() {
-<a name="line773"></a>  if (this.showTimer) {
-<a name="line774"></a>    goog.Timer.clear(this.showTimer);
-<a name="line775"></a>    this.showTimer = undefined;
-<a name="line776"></a>  }
-<a name="line777"></a>};
-<a name="line778"></a>
-<a name="line779"></a>
-<a name="line780"></a>/**
-<a name="line781"></a> * Helper method called to start the close timer.
-<a name="line782"></a> *
-<a name="line783"></a> * @private
-<a name="line784"></a> */
-<a name="line785"></a>goog.ui.Tooltip.prototype.startHideTimer_ = function() {
-<a name="line786"></a>  if (this.getState() == goog.ui.Tooltip.State.SHOWING) {
-<a name="line787"></a>    this.hideTimer = goog.Timer.callOnce(
-<a name="line788"></a>        goog.bind(this.maybeHide, this, this.anchor), this.getHideDelayMs());
-<a name="line789"></a>  }
-<a name="line790"></a>};
-<a name="line791"></a>
-<a name="line792"></a>
-<a name="line793"></a>/**
-<a name="line794"></a> * Helper method called to clear the close timer.
-<a name="line795"></a> *
-<a name="line796"></a> * @private
-<a name="line797"></a> */
-<a name="line798"></a>goog.ui.Tooltip.prototype.clearHideTimer_ = function() {
-<a name="line799"></a>  if (this.hideTimer) {
-<a name="line800"></a>    goog.Timer.clear(this.hideTimer);
-<a name="line801"></a>    this.hideTimer = undefined;
-<a name="line802"></a>  }
-<a name="line803"></a>};
-<a name="line804"></a>
-<a name="line805"></a>/**
-<a name="line806"></a> * Destroys widget and removes all event listeners.
-<a name="line807"></a> */
-<a name="line808"></a>goog.ui.Tooltip.prototype.disposeInternal = function() {
-<a name="line809"></a>  this.setVisible(false);
-<a name="line810"></a>  this.clearShowTimer();
-<a name="line811"></a>  this.detach();
-<a name="line812"></a>  if (this.getElement()) {
-<a name="line813"></a>    goog.dom.removeNode(this.getElement());
-<a name="line814"></a>  }
-<a name="line815"></a>  this.activeEl_ = null;
-<a name="line816"></a>  delete this.dom_;
-<a name="line817"></a>  goog.ui.Tooltip.superClass_.disposeInternal.call(this);
-<a name="line818"></a>};
+<a name="line549"></a>    var coord = this.cursorPosition.clone();
+<a name="line550"></a>    pos = new goog.ui.Tooltip.CursorTooltipPosition(coord);
+<a name="line551"></a>  }
+<a name="line552"></a>
+<a name="line553"></a>  this.anchor = el;
+<a name="line554"></a>  this.setPosition(pos);
+<a name="line555"></a>  this.setVisible(true);
+<a name="line556"></a>};
+<a name="line557"></a>
+<a name="line558"></a>
+<a name="line559"></a>/**
+<a name="line560"></a> * Called by timer from mouse out handler. Hides tooltip if cursor is still
+<a name="line561"></a> * outside element and tooltip, or if a child of tooltip has the focus.
+<a name="line562"></a> * @param {Element} el Tooltip&#39;s anchor when hide timer was started.
+<a name="line563"></a> */
+<a name="line564"></a>goog.ui.Tooltip.prototype.maybeHide = function(el) {
+<a name="line565"></a>  this.hideTimer = undefined;
+<a name="line566"></a>  if (el == this.anchor) {
+<a name="line567"></a>    if ((this.activeEl_ == null || (this.activeEl_ != this.getElement() &amp;&amp;
+<a name="line568"></a>                                   !this.elements_.contains(this.activeEl_))) &amp;&amp;
+<a name="line569"></a>        !this.hasActiveChild()) {
+<a name="line570"></a>      this.setVisible(false);
+<a name="line571"></a>    }
+<a name="line572"></a>  }
+<a name="line573"></a>};
+<a name="line574"></a>
+<a name="line575"></a>
+<a name="line576"></a>/**
+<a name="line577"></a> * @return {boolean} Whether tooltip element contains an active child tooltip,
+<a name="line578"></a> *     and should thus not be hidden.  When the child tooltip is hidden, it
+<a name="line579"></a> *     will check if the parent should be hidden, too.
+<a name="line580"></a> * @protected
+<a name="line581"></a> */
+<a name="line582"></a>goog.ui.Tooltip.prototype.hasActiveChild = function() {
+<a name="line583"></a>  return !!(this.childTooltip_ &amp;&amp; this.childTooltip_.activeEl_);
+<a name="line584"></a>};
+<a name="line585"></a>
+<a name="line586"></a>
+<a name="line587"></a>/**
+<a name="line588"></a> * Handler for mouse over events.
+<a name="line589"></a> *
+<a name="line590"></a> * @param {goog.events.BrowserEvent} event Event object.
+<a name="line591"></a> * @protected
+<a name="line592"></a> */
+<a name="line593"></a>goog.ui.Tooltip.prototype.handleMouseOver = function(event) {
+<a name="line594"></a>  var el = this.getAnchorFromElement(/** @type {Element} */ (event.target));
+<a name="line595"></a>  this.activeEl_ = /** @type {Element} */ (el);
+<a name="line596"></a>  this.clearHideTimer_();
+<a name="line597"></a>  if (el != this.anchor) {
+<a name="line598"></a>    this.anchor = el;
+<a name="line599"></a>    this.startShowTimer(/** @type {Element} */ (el));
+<a name="line600"></a>    this.checkForParentTooltip_();
+<a name="line601"></a>  }
+<a name="line602"></a>};
+<a name="line603"></a>
+<a name="line604"></a>
+<a name="line605"></a>/**
+<a name="line606"></a> * Find anchor containing the given element, if any.
+<a name="line607"></a> *
+<a name="line608"></a> * @param {Element} el Element that triggered event.
+<a name="line609"></a> * @return {Element} Element in elements_ array that contains given element,
+<a name="line610"></a> *     or null if not found.
+<a name="line611"></a> * @protected
+<a name="line612"></a> */
+<a name="line613"></a>goog.ui.Tooltip.prototype.getAnchorFromElement = function(el) {
+<a name="line614"></a>  // FireFox has a bug where mouse events relating to &lt;input&gt; elements are
+<a name="line615"></a>  // sometimes duplicated (often in FF2, rarely in FF3): once for the
+<a name="line616"></a>  // &lt;input&gt; element and once for a magic hidden &lt;div&gt; element.  Javascript
+<a name="line617"></a>  // code does not have sufficient permissions to read properties on that
+<a name="line618"></a>  // magic element and thus will throw an error in this call to
+<a name="line619"></a>  // getAnchorFromElement_().  In that case we swallow the error.
+<a name="line620"></a>  // See https://bugzilla.mozilla.org/show_bug.cgi?id=330961
+<a name="line621"></a>  try {
+<a name="line622"></a>    while (el &amp;&amp; !this.elements_.contains(el)) {
+<a name="line623"></a>      el = /** @type {Element} */ (el.parentNode);
+<a name="line624"></a>    }
+<a name="line625"></a>    return el;
+<a name="line626"></a>  } catch (e) {
+<a name="line627"></a>    return null;
+<a name="line628"></a>  }
+<a name="line629"></a>};
+<a name="line630"></a>
+<a name="line631"></a>
+<a name="line632"></a>/**
+<a name="line633"></a> * Handler for mouse move events.
+<a name="line634"></a> *
+<a name="line635"></a> * @param {goog.events.BrowserEvent} event MOUSEMOVE event.
+<a name="line636"></a> * @protected
+<a name="line637"></a> */
+<a name="line638"></a>goog.ui.Tooltip.prototype.handleMouseMove = function(event) {
+<a name="line639"></a>  var scroll = this.dom_.getDocumentScroll();
+<a name="line640"></a>  this.cursorPosition.x = event.clientX + scroll.x;
+<a name="line641"></a>  this.cursorPosition.y = event.clientY + scroll.y;
+<a name="line642"></a>  this.seenInteraction_ = true;
+<a name="line643"></a>};
+<a name="line644"></a>
+<a name="line645"></a>
+<a name="line646"></a>/**
+<a name="line647"></a> * Handler for focus events.
+<a name="line648"></a> *
+<a name="line649"></a> * @param {goog.events.BrowserEvent} event Event object.
+<a name="line650"></a> * @protected
+<a name="line651"></a> */
+<a name="line652"></a>goog.ui.Tooltip.prototype.handleFocus = function(event) {
+<a name="line653"></a>  var el = this.getAnchorFromElement(/** @type {Element} */ (event.target));
+<a name="line654"></a>  this.activeEl_ = el;
+<a name="line655"></a>  this.seenInteraction_ = true;
+<a name="line656"></a>
+<a name="line657"></a>  if (this.anchor != el) {
+<a name="line658"></a>    this.anchor = el;
+<a name="line659"></a>    var pos = new goog.ui.Tooltip.ElementTooltipPosition(this.activeEl_);
+<a name="line660"></a>    this.clearHideTimer_();
+<a name="line661"></a>    this.startShowTimer(/** @type {Element} */ (el), pos);
+<a name="line662"></a>
+<a name="line663"></a>    this.checkForParentTooltip_();
+<a name="line664"></a>  }
+<a name="line665"></a>};
+<a name="line666"></a>
+<a name="line667"></a>
+<a name="line668"></a>/**
+<a name="line669"></a> * Looks for an active tooltip whose element contains this tooltip&#39;s anchor.
+<a name="line670"></a> * This allows us to prevent hides until they are really necessary.
+<a name="line671"></a> *
+<a name="line672"></a> * @private
+<a name="line673"></a> */
+<a name="line674"></a>goog.ui.Tooltip.prototype.checkForParentTooltip_ = function() {
+<a name="line675"></a>  if (this.anchor) {
+<a name="line676"></a>    for (var tt, i = 0; tt = goog.ui.Tooltip.activeInstances_[i]; i++) {
+<a name="line677"></a>      if (goog.dom.contains(tt.getElement(), this.anchor)) {
+<a name="line678"></a>        tt.childTooltip_ = this;
+<a name="line679"></a>        this.parentTooltip_ = tt;
+<a name="line680"></a>      }
+<a name="line681"></a>    }
+<a name="line682"></a>  }
+<a name="line683"></a>};
+<a name="line684"></a>
+<a name="line685"></a>
+<a name="line686"></a>/**
+<a name="line687"></a> * Handler for mouse out and blur events.
+<a name="line688"></a> *
+<a name="line689"></a> * @param {goog.events.BrowserEvent} event Event object.
+<a name="line690"></a> * @protected
+<a name="line691"></a> */
+<a name="line692"></a>goog.ui.Tooltip.prototype.handleMouseOutAndBlur = function(event) {
+<a name="line693"></a>  var el = this.getAnchorFromElement(/** @type {Element} */ (event.target));
+<a name="line694"></a>  var elTo = this.getAnchorFromElement(
+<a name="line695"></a>      /** @type {Element} */ (event.relatedTarget));
+<a name="line696"></a>  if (el == elTo) {
+<a name="line697"></a>    // We haven&#39;t really left the anchor, just moved from one child to
+<a name="line698"></a>    // another.
+<a name="line699"></a>    return;
+<a name="line700"></a>  }
+<a name="line701"></a>
+<a name="line702"></a>  if (el == this.activeEl_) {
+<a name="line703"></a>    this.activeEl_ = null;
+<a name="line704"></a>  }
+<a name="line705"></a>
+<a name="line706"></a>  this.clearShowTimer();
+<a name="line707"></a>  this.seenInteraction_ = false;
+<a name="line708"></a>  if (this.isVisible() &amp;&amp; (!event.relatedTarget ||
+<a name="line709"></a>      !goog.dom.contains(this.getElement(), event.relatedTarget))) {
+<a name="line710"></a>    this.startHideTimer_();
+<a name="line711"></a>  } else {
+<a name="line712"></a>    this.anchor = undefined;
+<a name="line713"></a>  }
+<a name="line714"></a>};
+<a name="line715"></a>
+<a name="line716"></a>
+<a name="line717"></a>/**
+<a name="line718"></a> * Handler for mouse over events for the tooltip element.
+<a name="line719"></a> *
+<a name="line720"></a> * @param {goog.events.BrowserEvent} event Event object.
+<a name="line721"></a> * @protected
+<a name="line722"></a> */
+<a name="line723"></a>goog.ui.Tooltip.prototype.handleTooltipMouseOver = function(event) {
+<a name="line724"></a>  var element = this.getElement();
+<a name="line725"></a>  if (this.activeEl_ != element) {
+<a name="line726"></a>    this.clearHideTimer_();
+<a name="line727"></a>    this.activeEl_ = element;
+<a name="line728"></a>  }
+<a name="line729"></a>};
+<a name="line730"></a>
+<a name="line731"></a>
+<a name="line732"></a>/**
+<a name="line733"></a> * Handler for mouse out events for the tooltip element.
+<a name="line734"></a> *
+<a name="line735"></a> * @param {goog.events.BrowserEvent} event Event object.
+<a name="line736"></a> * @protected
+<a name="line737"></a> */
+<a name="line738"></a>goog.ui.Tooltip.prototype.handleTooltipMouseOut = function(event) {
+<a name="line739"></a>  var element = this.getElement();
+<a name="line740"></a>  if (this.activeEl_ == element &amp;&amp; (!event.relatedTarget ||
+<a name="line741"></a>      !goog.dom.contains(element, event.relatedTarget))) {
+<a name="line742"></a>    this.activeEl_ = null;
+<a name="line743"></a>    this.startHideTimer_();
+<a name="line744"></a>  }
+<a name="line745"></a>};
+<a name="line746"></a>
+<a name="line747"></a>
+<a name="line748"></a>/**
+<a name="line749"></a> * Helper method, starts timer that calls maybeShow. Parameters are passed to
+<a name="line750"></a> * the maybeShow method.
+<a name="line751"></a> *
+<a name="line752"></a> * @param {Element} el Element to show tooltip for.
+<a name="line753"></a> * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
+<a name="line754"></a> *     at.
+<a name="line755"></a> * @protected
+<a name="line756"></a> */
+<a name="line757"></a>goog.ui.Tooltip.prototype.startShowTimer = function(el, opt_pos) {
+<a name="line758"></a>  if (!this.showTimer) {
+<a name="line759"></a>    this.showTimer = goog.Timer.callOnce(
+<a name="line760"></a>        goog.bind(this.maybeShow, this, el, opt_pos), this.showDelayMs_);
+<a name="line761"></a>  }
+<a name="line762"></a>};
+<a name="line763"></a>
+<a name="line764"></a>
+<a name="line765"></a>/**
+<a name="line766"></a> * Helper method called to clear the show timer.
+<a name="line767"></a> *
+<a name="line768"></a> * @protected
+<a name="line769"></a> */
+<a name="line770"></a>goog.ui.Tooltip.prototype.clearShowTimer = function() {
+<a name="line771"></a>  if (this.showTimer) {
+<a name="line772"></a>    goog.Timer.clear(this.showTimer);
+<a name="line773"></a>    this.showTimer = undefined;
+<a name="line774"></a>  }
+<a name="line775"></a>};
+<a name="line776"></a>
+<a name="line777"></a>
+<a name="line778"></a>/**
+<a name="line779"></a> * Helper method called to start the close timer.
+<a name="line780"></a> *
+<a name="line781"></a> * @private
+<a name="line782"></a> */
+<a name="line783"></a>goog.ui.Tooltip.prototype.startHideTimer_ = function() {
+<a name="line784"></a>  if (this.getState() == goog.ui.Tooltip.State.SHOWING) {
+<a name="line785"></a>    this.hideTimer = goog.Timer.callOnce(
+<a name="line786"></a>        goog.bind(this.maybeHide, this, this.anchor), this.getHideDelayMs());
+<a name="line787"></a>  }
+<a name="line788"></a>};
+<a name="line789"></a>
+<a name="line790"></a>
+<a name="line791"></a>/**
+<a name="line792"></a> * Helper method called to clear the close timer.
+<a name="line793"></a> *
+<a name="line794"></a> * @private
+<a name="line795"></a> */
+<a name="line796"></a>goog.ui.Tooltip.prototype.clearHideTimer_ = function() {
+<a name="line797"></a>  if (this.hideTimer) {
+<a name="line798"></a>    goog.Timer.clear(this.hideTimer);
+<a name="line799"></a>    this.hideTimer = undefined;
+<a name="line800"></a>  }
+<a name="line801"></a>};
+<a name="line802"></a>
+<a name="line803"></a>/**
+<a name="line804"></a> * Destroys widget and removes all event listeners.
+<a name="line805"></a> */
+<a name="line806"></a>goog.ui.Tooltip.prototype.disposeInternal = function() {
+<a name="line807"></a>  this.setVisible(false);
+<a name="line808"></a>  this.clearShowTimer();
+<a name="line809"></a>  this.detach();
+<a name="line810"></a>  if (this.getElement()) {
+<a name="line811"></a>    goog.dom.removeNode(this.getElement());
+<a name="line812"></a>  }
+<a name="line813"></a>  this.activeEl_ = null;
+<a name="line814"></a>  delete this.dom_;
+<a name="line815"></a>  goog.ui.Tooltip.superClass_.disposeInternal.call(this);
+<a name="line816"></a>};
+<a name="line817"></a>
+<a name="line818"></a>
 <a name="line819"></a>
-<a name="line820"></a>
-<a name="line821"></a>
-<a name="line822"></a>/**
-<a name="line823"></a> * Popup position implementation that positions the popup (the tooltip in this
-<a name="line824"></a> * case) based on the cursor position. It&#39;s positioned below the cursor to the
-<a name="line825"></a> * right if there&#39;s enough room to fit all of it inside the Viewport. Otherwise
-<a name="line826"></a> * it&#39;s displayed as far right as possible either above or below the element.
+<a name="line820"></a>/**
+<a name="line821"></a> * Popup position implementation that positions the popup (the tooltip in this
+<a name="line822"></a> * case) based on the cursor position. It&#39;s positioned below the cursor to the
+<a name="line823"></a> * right if there&#39;s enough room to fit all of it inside the Viewport. Otherwise
+<a name="line824"></a> * it&#39;s displayed as far right as possible either above or below the element.
+<a name="line825"></a> *
+<a name="line826"></a> * Used to position tooltips triggered by the cursor.
 <a name="line827"></a> *
-<a name="line828"></a> * Used to position tooltips triggered by the cursor.
-<a name="line829"></a> *
-<a name="line830"></a> * @param {number|!goog.math.Coordinate} arg1 Left position or coordinate.
-<a name="line831"></a> * @param {number=} opt_arg2 Top position.
-<a name="line832"></a> * @constructor
-<a name="line833"></a> * @extends {goog.positioning.ViewportPosition}
-<a name="line834"></a> */
-<a name="line835"></a>goog.ui.Tooltip.CursorTooltipPosition = function(arg1, opt_arg2) {
-<a name="line836"></a>  goog.positioning.ViewportPosition.call(this, arg1, opt_arg2);
-<a name="line837"></a>};
-<a name="line838"></a>goog.inherits(goog.ui.Tooltip.CursorTooltipPosition,
-<a name="line839"></a>              goog.positioning.ViewportPosition);
-<a name="line840"></a>
-<a name="line841"></a>
-<a name="line842"></a>/**
-<a name="line843"></a> * Repositions the popup based on cursor position.
-<a name="line844"></a> *
-<a name="line845"></a> * @param {Element} element The DOM element of the popup.
-<a name="line846"></a> * @param {goog.positioning.Corner} popupCorner The corner of the popup element
-<a name="line847"></a> *     that that should be positioned adjacent to the anchorElement.
-<a name="line848"></a> * @param {goog.math.Box=} opt_margin A margin specified in pixels.
-<a name="line849"></a> */
-<a name="line850"></a>goog.ui.Tooltip.CursorTooltipPosition.prototype.reposition = function(
-<a name="line851"></a>    element, popupCorner, opt_margin) {
-<a name="line852"></a>  var viewportElt = goog.style.getClientViewportElement(element);
-<a name="line853"></a>  var viewport = goog.style.getVisibleRectForElement(viewportElt);
-<a name="line854"></a>  var margin = opt_margin ? new goog.math.Box(opt_margin.top + 10,
-<a name="line855"></a>      opt_margin.right, opt_margin.bottom, opt_margin.left + 10) :
-<a name="line856"></a>      new goog.math.Box(10, 0, 0, 10);
-<a name="line857"></a>
-<a name="line858"></a>  if (goog.positioning.positionAtCoordinate(this.coordinate, element,
-<a name="line859"></a>          goog.positioning.Corner.TOP_START, margin, viewport,
-<a name="line860"></a>          goog.positioning.Overflow.ADJUST_X | goog.positioning.Overflow.FAIL_Y
-<a name="line861"></a>      ) &amp; goog.positioning.OverflowStatus.FAILED) {
-<a name="line862"></a>    goog.positioning.positionAtCoordinate(this.coordinate, element,
-<a name="line863"></a>        goog.positioning.Corner.TOP_START, margin, viewport,
-<a name="line864"></a>        goog.positioning.Overflow.ADJUST_X |
-<a name="line865"></a>            goog.positioning.Overflow.ADJUST_Y);
-<a name="line866"></a>  }
-<a name="line867"></a>};
+<a name="line828"></a> * @param {number|!goog.math.Coordinate} arg1 Left position or coordinate.
+<a name="line829"></a> * @param {number=} opt_arg2 Top position.
+<a name="line830"></a> * @constructor
+<a name="line831"></a> * @extends {goog.positioning.ViewportPosition}
+<a name="line832"></a> */
+<a name="line833"></a>goog.ui.Tooltip.CursorTooltipPosition = function(arg1, opt_arg2) {
+<a name="line834"></a>  goog.positioning.ViewportPosition.call(this, arg1, opt_arg2);
+<a name="line835"></a>};
+<a name="line836"></a>goog.inherits(goog.ui.Tooltip.CursorTooltipPosition,
+<a name="line837"></a>              goog.positioning.ViewportPosition);
+<a name="line838"></a>
+<a name="line839"></a>
+<a name="line840"></a>/**
+<a name="line841"></a> * Repositions the popup based on cursor position.
+<a name="line842"></a> *
+<a name="line843"></a> * @param {Element} element The DOM element of the popup.
+<a name="line844"></a> * @param {goog.positioning.Corner} popupCorner The corner of the popup element
+<a name="line845"></a> *     that that should be positioned adjacent to the anchorElement.
+<a name="line846"></a> * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+<a name="line847"></a> */
+<a name="line848"></a>goog.ui.Tooltip.CursorTooltipPosition.prototype.reposition = function(
+<a name="line849"></a>    element, popupCorner, opt_margin) {
+<a name="line850"></a>  var viewportElt = goog.style.getClientViewportElement(element);
+<a name="line851"></a>  var viewport = goog.style.getVisibleRectForElement(viewportElt);
+<a name="line852"></a>  var margin = opt_margin ? new goog.math.Box(opt_margin.top + 10,
+<a name="line853"></a>      opt_margin.right, opt_margin.bottom, opt_margin.left + 10) :
+<a name="line854"></a>      new goog.math.Box(10, 0, 0, 10);
+<a name="line855"></a>
+<a name="line856"></a>  if (goog.positioning.positionAtCoordinate(this.coordinate, element,
+<a name="line857"></a>          goog.positioning.Corner.TOP_START, margin, viewport,
+<a name="line858"></a>          goog.positioning.Overflow.ADJUST_X | goog.positioning.Overflow.FAIL_Y
+<a name="line859"></a>      ) &amp; goog.positioning.OverflowStatus.FAILED) {
+<a name="line860"></a>    goog.positioning.positionAtCoordinate(this.coordinate, element,
+<a name="line861"></a>        goog.positioning.Corner.TOP_START, margin, viewport,
+<a name="line862"></a>        goog.positioning.Overflow.ADJUST_X |
+<a name="line863"></a>            goog.positioning.Overflow.ADJUST_Y);
+<a name="line864"></a>  }
+<a name="line865"></a>};
+<a name="line866"></a>
+<a name="line867"></a>
 <a name="line868"></a>
-<a name="line869"></a>
-<a name="line870"></a>
-<a name="line871"></a>/**
-<a name="line872"></a> * Popup position implementation that positions the popup (the tooltip in this
-<a name="line873"></a> * case) based on the element position. It&#39;s positioned below the element to the
-<a name="line874"></a> * right if there&#39;s enough room to fit all of it inside the Viewport. Otherwise
-<a name="line875"></a> * it&#39;s displayed as far right as possible either above or below the element.
+<a name="line869"></a>/**
+<a name="line870"></a> * Popup position implementation that positions the popup (the tooltip in this
+<a name="line871"></a> * case) based on the element position. It&#39;s positioned below the element to the
+<a name="line872"></a> * right if there&#39;s enough room to fit all of it inside the Viewport. Otherwise
+<a name="line873"></a> * it&#39;s displayed as far right as possible either above or below the element.
+<a name="line874"></a> *
+<a name="line875"></a> * Used to position tooltips triggered by focus changes.
 <a name="line876"></a> *
-<a name="line877"></a> * Used to position tooltips triggered by focus changes.
-<a name="line878"></a> *
-<a name="line879"></a> * @param {Element} element The element to anchor the popup at.
-<a name="line880"></a> * @constructor
-<a name="line881"></a> * @extends {goog.positioning.AnchoredPosition}
-<a name="line882"></a> */
-<a name="line883"></a>goog.ui.Tooltip.ElementTooltipPosition = function(element) {
-<a name="line884"></a>  goog.positioning.AnchoredPosition.call(this, element,
-<a name="line885"></a>      goog.positioning.Corner.BOTTOM_RIGHT);
-<a name="line886"></a>};
-<a name="line887"></a>goog.inherits(goog.ui.Tooltip.ElementTooltipPosition,
-<a name="line888"></a>              goog.positioning.AnchoredPosition);
-<a name="line889"></a>
-<a name="line890"></a>
-<a name="line891"></a>/**
-<a name="line892"></a> * Repositions the popup based on element position.
-<a name="line893"></a> *
-<a name="line894"></a> * @param {Element} element The DOM element of the popup.
-<a name="line895"></a> * @param {goog.positioning.Corner} popupCorner The corner of the popup element
-<a name="line896"></a> *     that should be positioned adjacent to the anchorElement.
-<a name="line897"></a> * @param {goog.math.Box=} opt_margin A margin specified in pixels.
-<a name="line898"></a> */
-<a name="line899"></a>goog.ui.Tooltip.ElementTooltipPosition.prototype.reposition = function(
-<a name="line900"></a>    element, popupCorner, opt_margin) {
-<a name="line901"></a>  var offset = new goog.math.Coordinate(10, 0);
-<a name="line902"></a>
-<a name="line903"></a>  if (goog.positioning.positionAtAnchor(this.element, this.corner, element,
-<a name="line904"></a>          popupCorner, offset, opt_margin,
-<a name="line905"></a>          goog.positioning.Overflow.ADJUST_X | goog.positioning.Overflow.FAIL_Y
-<a name="line906"></a>      ) &amp; goog.positioning.OverflowStatus.FAILED) {
-<a name="line907"></a>    goog.positioning.positionAtAnchor(this.element,
-<a name="line908"></a>        goog.positioning.Corner.TOP_RIGHT, element,
-<a name="line909"></a>        goog.positioning.Corner.BOTTOM_LEFT, offset, opt_margin,
-<a name="line910"></a>        goog.positioning.Overflow.ADJUST_X |
-<a name="line911"></a>            goog.positioning.Overflow.ADJUST_Y);
-<a name="line912"></a>  }
-<a name="line913"></a>};
+<a name="line877"></a> * @param {Element} element The element to anchor the popup at.
+<a name="line878"></a> * @constructor
+<a name="line879"></a> * @extends {goog.positioning.AnchoredPosition}
+<a name="line880"></a> */
+<a name="line881"></a>goog.ui.Tooltip.ElementTooltipPosition = function(element) {
+<a name="line882"></a>  goog.positioning.AnchoredPosition.call(this, element,
+<a name="line883"></a>      goog.positioning.Corner.BOTTOM_RIGHT);
+<a name="line884"></a>};
+<a name="line885"></a>goog.inherits(goog.ui.Tooltip.ElementTooltipPosition,
+<a name="line886"></a>              goog.positioning.AnchoredPosition);
+<a name="line887"></a>
+<a name="line888"></a>
+<a name="line889"></a>/**
+<a name="line890"></a> * Repositions the popup based on element position.
+<a name="line891"></a> *
+<a name="line892"></a> * @param {Element} element The DOM element of the popup.
+<a name="line893"></a> * @param {goog.positioning.Corner} popupCorner The corner of the popup element
+<a name="line894"></a> *     that should be positioned adjacent to the anchorElement.
+<a name="line895"></a> * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+<a name="line896"></a> */
+<a name="line897"></a>goog.ui.Tooltip.ElementTooltipPosition.prototype.reposition = function(
+<a name="line898"></a>    element, popupCorner, opt_margin) {
+<a name="line899"></a>  var offset = new goog.math.Coordinate(10, 0);
+<a name="line900"></a>
+<a name="line901"></a>  if (goog.positioning.positionAtAnchor(this.element, this.corner, element,
+<a name="line902"></a>          popupCorner, offset, opt_margin,
+<a name="line903"></a>          goog.positioning.Overflow.ADJUST_X | goog.positioning.Overflow.FAIL_Y
+<a name="line904"></a>      ) &amp; goog.positioning.OverflowStatus.FAILED) {
+<a name="line905"></a>    goog.positioning.positionAtAnchor(this.element,
+<a name="line906"></a>        goog.positioning.Corner.TOP_RIGHT, element,
+<a name="line907"></a>        goog.positioning.Corner.BOTTOM_LEFT, offset, opt_margin,
+<a name="line908"></a>        goog.positioning.Overflow.ADJUST_X |
+<a name="line909"></a>            goog.positioning.Overflow.ADJUST_Y);
+<a name="line910"></a>  }
+<a name="line911"></a>};
 </pre>
 
 

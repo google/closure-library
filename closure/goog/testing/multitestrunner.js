@@ -53,6 +53,13 @@ goog.testing.MultiTestRunner = function(opt_domHelper) {
   this.allTests_ = [];
 
   /**
+   * Tests that match the filter function.
+   * @type {Array.<string>}
+   * @private
+   */
+  this.activeTests_ = [];
+
+  /**
    * An event handler for handling events.
    * @type {goog.events.EventHandler}
    * @private
@@ -97,6 +104,14 @@ goog.testing.MultiTestRunner.prototype.basePath_ = '';
 
 
 /**
+ * A set of tests that have finished.  All extant keys map to true.
+ * @type {Object.<boolean>}
+ * @private
+ */
+goog.testing.MultiTestRunner.prototype.finished_ = null;
+
+
+/**
  * Whether the report should contain verbose information about the passes.
  * @type {boolean}
  * @private
@@ -127,14 +142,6 @@ goog.testing.MultiTestRunner.prototype.stopped_ = false;
  * @private
  */
 goog.testing.MultiTestRunner.prototype.active_ = false;
-
-
-/**
- * Tests that match the filter function.
- * @type {Array.<string>}
- * @private
- */
-goog.testing.MultiTestRunner.prototype.activeTests_ = [];
 
 
 /**
@@ -618,6 +625,7 @@ goog.testing.MultiTestRunner.prototype.start = function() {
   this.stopButtonEl_.disabled = false;
   this.stopped_ = false;
   this.active_ = true;
+  this.finished_ = {};
   this.activeTests_ = this.getTestsToRun();
   this.startedCount_ = 0;
   this.resultCount_ = 0;
@@ -684,6 +692,7 @@ goog.testing.MultiTestRunner.prototype.processResult = function(frame) {
   var test = frame.getTestFile();
 
   this.stats_.push(frame.getStats());
+  this.finished_[test] = true;
 
   var prefix = success ? '' : '*** FAILURE *** ';
   this.log(prefix +
@@ -744,6 +753,20 @@ goog.testing.MultiTestRunner.prototype.finish_ = function() {
   // Remove all the test frames
   while (this.getChildCount() > 0) {
     this.removeChildAt(0, true).disposeInternal();
+  }
+
+  // Compute tests that did not finish before the stop button was hit.
+  var unfinished = [];
+  for (var i = 0; i < this.activeTests_.length; i++) {
+    var test = this.activeTests_[i];
+    if (!this.finished_[test]) {
+      unfinished.push(test);
+    }
+  }
+
+  if (unfinished.length) {
+    this.reportEl_.appendChild(goog.dom.createDom('pre', undefined,
+        'Theses tests did not finish:\n' + unfinished.join('\n')));
   }
 };
 

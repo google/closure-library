@@ -231,7 +231,7 @@ goog.ui.LabelInput.prototype.handleBlur_ = function(e) {
  * Handler for key events in Firefox.
  *
  * If the escape key is pressed when a text input has not been changed manually
- * since being focussed, the text input will revert to it's previous value.
+ * since being focused, the text input will revert to its previous value.
  * Firefox does not honor preventDefault for the escape key. The revert happens
  * after the keydown event and before every keypress. We therefore store the
  * element's value on keydown and restore it on keypress. The restore value is

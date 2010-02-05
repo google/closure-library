@@ -58,7 +58,8 @@ goog.module.ModuleLoader.prototype.logger = goog.debug.Logger.getLogger(
 
 /** @inheritDoc */
 goog.module.ModuleLoader.prototype.loadModulesInternal = function(
-    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {
+    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
+    opt_forceReload) {
   var uris = [];
   for (var i = 0; i < ids.length; i++) {
     goog.array.extend(uris, moduleInfoMap[ids[i]].getUris());

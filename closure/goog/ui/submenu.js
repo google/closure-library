@@ -46,7 +46,7 @@ goog.require('goog.ui.registry');
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to
  *     display as the content of the submenu (use to add icons or styling to
  *     menus).
- * @param {Object=} opt_model Data/model associated with the menu item.
+ * @param {*=} opt_model Data/model associated with the menu item.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional dom helper used for dom
  *     interactions.
  * @param {goog.ui.MenuItemRenderer=} opt_renderer Renderer used to render or
@@ -300,7 +300,7 @@ goog.ui.SubMenu.prototype.handleKeyEvent = function(e) {
       return false;
     }
 
-  // Menu item has control, so let it's menu try to handle the keys (this may
+  // Menu item has control, so let its menu try to handle the keys (this may
   // in turn be handled by sub-sub menus).
   } else if (this.getMenu().handleKeyEvent(e)) {
     // Nothing to do
@@ -346,7 +346,7 @@ goog.ui.SubMenu.prototype.onParentHidden_ = function(e) {
   // Ignore propagated events
   if (e.target == this.getParentEventTarget()) {
     // TODO: Using an event for this is expensive.  Consider having a
-    // generalized interface that the parent menu calls on it's children when
+    // generalized interface that the parent menu calls on its children when
     // it is hidden.
     this.dismissSubMenu();
     this.clearTimers();

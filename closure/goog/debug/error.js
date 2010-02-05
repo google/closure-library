@@ -20,6 +20,8 @@
 
 goog.provide('goog.debug.Error');
 
+goog.require('goog.debug');
+
 
 /**
  * Base class for custom error objects.
@@ -28,7 +30,11 @@ goog.provide('goog.debug.Error');
  * @extends {Error}
  */
 goog.debug.Error = function(opt_msg) {
+
+  // Ensure there is a stack trace.
   this.stack = new Error().stack || '';
+  goog.debug.enhanceError(this);
+
   if (opt_msg) {
     this.message = String(opt_msg);
   }

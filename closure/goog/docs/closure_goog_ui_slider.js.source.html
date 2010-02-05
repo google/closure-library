@@ -144,26 +144,27 @@
 <a name="line100"></a>goog.ui.Slider.prototype.createThumbs = function() {
 <a name="line101"></a>  // find thumb
 <a name="line102"></a>  var element = this.getElement();
-<a name="line103"></a>  var thumb = goog.dom.$$(null, goog.ui.Slider.THUMB_CSS_CLASS, element)[0];
-<a name="line104"></a>  if (!thumb) {
-<a name="line105"></a>    thumb = this.createThumb_();
-<a name="line106"></a>    element.appendChild(thumb);
-<a name="line107"></a>  }
-<a name="line108"></a>  this.valueThumb = this.extentThumb = thumb;
-<a name="line109"></a>};
-<a name="line110"></a>
+<a name="line103"></a>  var thumb = goog.dom.getElementsByTagNameAndClass(
+<a name="line104"></a>      null, goog.ui.Slider.THUMB_CSS_CLASS, element)[0];
+<a name="line105"></a>  if (!thumb) {
+<a name="line106"></a>    thumb = this.createThumb_();
+<a name="line107"></a>    element.appendChild(thumb);
+<a name="line108"></a>  }
+<a name="line109"></a>  this.valueThumb = this.extentThumb = thumb;
+<a name="line110"></a>};
 <a name="line111"></a>
-<a name="line112"></a>/**
-<a name="line113"></a> * Creates the thumb element.
-<a name="line114"></a> * @return {HTMLDivElement} The created thumb element.
-<a name="line115"></a> * @private
-<a name="line116"></a> */
-<a name="line117"></a>goog.ui.Slider.prototype.createThumb_ = function() {
-<a name="line118"></a>  var thumb =
-<a name="line119"></a>      this.getDomHelper().createDom(&#39;div&#39;, goog.ui.Slider.THUMB_CSS_CLASS);
-<a name="line120"></a>  goog.dom.a11y.setRole(thumb, goog.dom.a11y.Role.BUTTON);
-<a name="line121"></a>  return /** @type {HTMLDivElement} */ (thumb);
-<a name="line122"></a>};
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Creates the thumb element.
+<a name="line115"></a> * @return {HTMLDivElement} The created thumb element.
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.ui.Slider.prototype.createThumb_ = function() {
+<a name="line119"></a>  var thumb =
+<a name="line120"></a>      this.getDomHelper().createDom(&#39;div&#39;, goog.ui.Slider.THUMB_CSS_CLASS);
+<a name="line121"></a>  goog.dom.a11y.setRole(thumb, goog.dom.a11y.Role.BUTTON);
+<a name="line122"></a>  return /** @type {HTMLDivElement} */ (thumb);
+<a name="line123"></a>};
 </pre>
 
 

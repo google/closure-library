@@ -63,14 +63,15 @@
         <span>Extends</span>
         <span class="fn-name">
           <a href="class_goog_Disposable.html">
-            goog.Disposable</a>
+          goog.Disposable
+</a>
         </span>
 </div>
 
 <div class="g-section g-tpl-75-25">
   <div class="g-unit g-first" id="description">
     A ConditionalDelay object invokes the associated function after a specified
-interval delay and checks it&#39;s return value. If the function returns
+interval delay and checks its return value. If the function returns
 <code>true</code> the conditional delay is cancelled and #onSuccess
 is called. Otherwise this object keeps to invoke the deferred function until
 either it returns <code>true</code> or the timeout is exceeded. In the latter case
@@ -111,7 +112,7 @@ started. Calling start on an active delay will reset the timer.
 
   <h2>Constructor</h2>
       <div class="fn-constructor">
-    goog.async.ConditionalDelay(<span><span class="arg">listener</span>,&nbsp;<span class="arg">opt_handler</span></span>)
+    goog.async.ConditionalDelay(<span><span class="arg">ConditionalDelay@listener</span>,&nbsp;<span class="arg">ConditionalDelay@opt_handler</span></span>)
   </div>
 
    <h3>Parameters</h3>
@@ -125,17 +126,17 @@ started. Calling start on an active delay will reset the timer.
      
    <tr class="even">
      <td>
-        <span class="entryName">listener</span>
-        : <div class="fullType"><span class="type">function():boolean</span></div>
-        <div class="entryOverview">Function to call when the delay completes. Should return a value that type-converts to <code>true</code> if the call succeeded and this delay should be stopped.</div>
+        <span class="entryName">ConditionalDelay@listener</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_handler</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">The object scope to invoke the function in.</div>
+        <span class="entryName">ConditionalDelay@opt_handler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -422,7 +423,7 @@ If the timeout is exceeded the delay is stopped and the
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">start<span class="args">(<span class="arg">opt_interval</span>,&nbsp;<span class="arg">opt_timeout</span>)</span>
+        <span class="entryName">start<span class="args">(<span class="arg">start@opt_interval</span>,&nbsp;<span class="arg">start@opt_timeout</span>)</span>
         </span>
       </div>
 
@@ -450,17 +451,17 @@ will stop the timer first.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_interval</span>
-        : <div class="fullType"><span class="type">number=</span></div>
-        <div class="entryOverview">The time interval between the function invocations (in milliseconds). Default is 0.</div>
+        <span class="entryName">start@opt_interval</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_timeout</span>
-        : <div class="fullType"><span class="type">number=</span></div>
-        <div class="entryOverview">The timeout interval (in milliseconds). Takes precedence over the <code>opt_interval</code>, i.e. if the timeout is less than the invocation interval, the function will be called when the timeout is exceeded. A negative value means no timeout. Default is 0.</div>
+        <span class="entryName">start@opt_timeout</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>

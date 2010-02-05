@@ -92,9 +92,10 @@ goog.module.BaseModuleLoader.prototype.setCodePostfix = function(
 
 /** @inheritDoc */
 goog.module.BaseModuleLoader.prototype.loadModules = function(
-    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {
+    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
+    opt_forceReload) {
   this.loadModulesInternal(ids, moduleInfoMap, opt_successFn, opt_errorFn,
-      opt_timeoutFn);
+      opt_timeoutFn, opt_forceReload);
 };
 
 
@@ -102,15 +103,18 @@ goog.module.BaseModuleLoader.prototype.loadModules = function(
  * Loads a list of JavaScript modules.
  * @param {Array.<string>} ids The module ids in dependency order.
  * @param {Object} moduleInfoMap A mapping from module id to ModuleInfo object.
- * @param {function()=} opt_successFn The callback if module loading is a
+ * @param {?function()=} opt_successFn The callback if module loading is a
  *     success.
- * @param {function(number)=} opt_errorFn The callback if module loading is in
+ * @param {?function(number)=} opt_errorFn The callback if module loading is in
  *     error.
- * @param {function()=} opt_timeoutFn The callback if module loading times out.
+ * @param {?function()=} opt_timeoutFn The callback if module loading times out.
+ * @param {boolean=} opt_forceReload Whether to bypass cache while loading the
+ *     module.
  * @protected
  */
 goog.module.BaseModuleLoader.prototype.loadModulesInternal = function(
-    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {
+    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
+    opt_forceReload) {
   // Should be overridden by the derived class.
 };
 

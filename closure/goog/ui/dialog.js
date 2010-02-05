@@ -40,7 +40,6 @@ goog.require('goog.events.FocusHandler');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.fx.Dragger');
 goog.require('goog.math.Rect');
-goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.style');
@@ -93,11 +92,16 @@ goog.ui.Dialog = function(opt_class, opt_useIframeMask, opt_domHelper) {
 
   // Set the default button set to show ok and cancel
   this.buttons_ = goog.ui.Dialog.ButtonSet.OK_CANCEL;
-
-  this.focusHandler_ = new goog.events.FocusHandler(
-      this.getDomHelper().getDocument());
 };
 goog.inherits(goog.ui.Dialog, goog.ui.Component);
+
+
+/**
+ * Focus handler. It will be initialized in enterDocument.
+ * @type {goog.events.FocusHandler}
+ * @private
+ */
+goog.ui.Dialog.prototype.focusHandler_ = null;
 
 
 /**
@@ -404,7 +408,9 @@ goog.ui.Dialog.prototype.setBackgroundElementOpacity = function(opacity) {
 
 
 /**
- * Sets the modal property of the dialog.
+ * Sets the modal property of the dialog. In case the dialog is already
+ * inDocument, renders the modal background elements according to the specified
+ * modal parameter.
  *
  * Note that non-modal dialogs cannot use an iframe mask.
  *
@@ -413,6 +419,18 @@ goog.ui.Dialog.prototype.setBackgroundElementOpacity = function(opacity) {
 goog.ui.Dialog.prototype.setModal = function(modal) {
   this.modal_ = modal;
   this.manageBackgroundDom_();
+  var dom = this.getDomHelper();
+  if (this.isInDocument() && modal && this.isVisible()) {
+    // Insert the bg elements before the dialog so that they don't block
+    // the dialog itself.
+    if (this.bgIframeEl_) {
+      dom.insertSiblingBefore(this.bgIframeEl_, this.getElement());
+    }
+    if (this.bgEl_) {
+      dom.insertSiblingBefore(this.bgEl_, this.getElement());
+    }
+    this.resizeBackground_();
+  }
 };
 
 
@@ -646,7 +664,8 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
 
   // Decorate or create the content element.
   var contentClass = goog.getCssName(this.class_, 'content');
-  this.contentEl_ = goog.dom.$$(null, contentClass, this.getElement())[0];
+  this.contentEl_ = goog.dom.getElementsByTagNameAndClass(
+      null, contentClass, this.getElement())[0];
   if (this.contentEl_) {
     this.content_ = this.contentEl_.innerHTML;
   } else {
@@ -661,13 +680,16 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
   var titleClass = goog.getCssName(this.class_, 'title');
   var titleTextClass = goog.getCssName(this.class_, 'title-text');
   var titleCloseClass = goog.getCssName(this.class_, 'title-close');
-  this.titleEl_ = goog.dom.$$(null, titleClass, this.getElement())[0];
+  this.titleEl_ = goog.dom.getElementsByTagNameAndClass(
+      null, titleClass, this.getElement())[0];
   if (this.titleEl_) {
     // Only look for title text & title close elements if a title bar element
     // was found.  Otherwise assume that the entire title bar has to be
     // created from scratch.
-    this.titleTextEl_ = goog.dom.$$(null, titleTextClass, this.titleEl_)[0];
-    this.titleCloseEl_ = goog.dom.$$(null, titleCloseClass, this.titleEl_)[0];
+    this.titleTextEl_ = goog.dom.getElementsByTagNameAndClass(
+        null, titleTextClass, this.titleEl_)[0];
+    this.titleCloseEl_ = goog.dom.getElementsByTagNameAndClass(
+        null, titleCloseClass, this.titleEl_)[0];
   } else {
     // Create the title bar element and insert it before the content area.
     // This is useful if the element to decorate only includes a content area.
@@ -692,7 +714,8 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
 
   // Decorate or create the button container element.
   var buttonsClass = goog.getCssName(this.class_, 'buttons');
-  this.buttonEl_ = goog.dom.$$(null, buttonsClass, this.getElement())[0];
+  this.buttonEl_ = goog.dom.getElementsByTagNameAndClass(
+      null, buttonsClass, this.getElement())[0];
   if (this.buttonEl_) {
     // Button container element found.  Create empty button set and use it to
     // decorate the button container.
@@ -725,6 +748,9 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
 goog.ui.Dialog.prototype.enterDocument = function() {
   goog.ui.Dialog.superClass_.enterDocument.call(this);
 
+  this.focusHandler_ = new goog.events.FocusHandler(
+      this.getDomHelper().getDocument());
+
   // Add drag support.
   if (this.draggable_ && !this.dragger_) {
     this.dragger_ = this.createDraggableTitleDom_();
@@ -756,6 +782,9 @@ goog.ui.Dialog.prototype.exitDocument = function() {
   if (this.isVisible()) {
     this.setVisible(false);
   }
+
+  this.focusHandler_.dispose();
+  this.focusHandler_ = null;
 
   // Remove drag support.
   if (this.dragger_) {
@@ -795,14 +824,18 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
     // Listen for keyboard and resize events while the dialog is visible.
     this.getHandler().
         listen(this.getElement(), goog.events.EventType.KEYDOWN,
-            this.onKeyDown_, true).
+            this.onKey_, true).
+        listen(this.getElement(), goog.events.EventType.KEYPRESS,
+            this.onKey_, true).
         listen(win, goog.events.EventType.RESIZE,
             this.onResize_, true);
   } else {
     // Stop listening for keyboard and resize events while the dialog is hidden.
     this.getHandler().
         unlisten(this.getElement(), goog.events.EventType.KEYDOWN,
-            this.onKeyDown_, true).
+            this.onKey_, true).
+        unlisten(this.getElement(), goog.events.EventType.KEYPRESS,
+            this.onKey_, true).
         unlisten(win, goog.events.EventType.RESIZE,
             this.onResize_, true);
   }
@@ -817,11 +850,14 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
   goog.style.showElement(this.getElement(), visible);
 
   if (visible) {
-    if (goog.userAgent.GECKO) {
-      // In FF, start with the focus on the dialog itself.  Otherwise if we
-      // focus on a sub-element first, then hitting tab moves the focus outside
-      // of the dialog, which we don't want.
+    // Start with the focus on the dialog itself.  In FF, if we focus on a
+    // sub-element first, then hitting tab moves the focus outside of the
+    // dialog, which we don't want.  In addition, there may not be a default
+    // button, but we certainly want focus to remain within the dialog.
+    try {
       this.getElement().focus();
+    } catch (e) {
+      // Swallow this. IE can throw an error if the element can not be focused.
     }
     // Move focus to the default button (if any).
     if (this.getButtonSet()) {
@@ -836,7 +872,8 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
               // element to make refocusing the button possible.
               if (goog.userAgent.WEBKIT || goog.userAgent.OPERA) {
                 var temp = doc.createElement('input');
-                temp.style.cssText = 'position:fixed;width:0;height:0';
+                temp.style.cssText =
+                    'position:fixed;width:0;height:0;left:0;top:0;';
                 this.getElement().appendChild(temp);
                 temp.focus();
                 this.getElement().removeChild(temp);
@@ -1007,11 +1044,6 @@ goog.ui.Dialog.prototype.disposeInternal = function() {
   // setVisible(false).  Between them they clean up all event handlers.
   goog.ui.Dialog.superClass_.disposeInternal.call(this);
 
-  if (this.focusHandler_) {
-    this.focusHandler_.dispose();
-    this.focusHandler_ = null;
-  }
-
   // The superclass method disposes of the element and its children,
   // unless the dialog was decorated.  We only have to worry about
   // background mask elements.
@@ -1093,35 +1125,48 @@ goog.ui.Dialog.prototype.findParentButton_ = function(element) {
 
 
 /**
- * Handles keydown events, and dismisses the popup if cancel is pressed.  If
- * there is a cancel action in the ButtonSet, than that will be fired.
+ * Handles keydown and keypress events, and dismisses the popup if cancel is
+ * pressed.  If there is a cancel action in the ButtonSet, than that will be
+ * fired.  Also prevents tabbing out of the dialog.
  * @param {goog.events.BrowserEvent} e Browser's event object.
  * @private
  */
-goog.ui.Dialog.prototype.onKeyDown_ = function(e) {
+goog.ui.Dialog.prototype.onKey_ = function(e) {
   var close = false;
   var hasHandler = false;
   var buttonSet = this.getButtonSet();
   var target = e.target;
-  if (e.keyCode == goog.events.KeyCodes.ESC) {
-    // Only if there is a valid cancel button is an event dispatched.
-    var cancel = buttonSet && buttonSet.getCancel();
 
-    // Users may expect to hit escape on a SELECT element.
-    var isSpecialFormElement =
-        target.tagName == 'SELECT' && !target.disabled;
+  if (e.type == goog.events.EventType.KEYDOWN) {
+    // Escape and tab can only properly be handled in keydown handlers.
+    if (e.keyCode == goog.events.KeyCodes.ESC) {
+      // Only if there is a valid cancel button is an event dispatched.
+      var cancel = buttonSet && buttonSet.getCancel();
 
-    if (cancel && !isSpecialFormElement) {
+      // Users may expect to hit escape on a SELECT element.
+      var isSpecialFormElement =
+          target.tagName == 'SELECT' && !target.disabled;
+
+      if (cancel && !isSpecialFormElement) {
+        hasHandler = true;
+
+        var caption = buttonSet.get(cancel);
+        close = this.dispatchEvent(
+            new goog.ui.Dialog.Event(cancel,
+                /** @type {Element|null|string} */(caption)));
+      } else if (!isSpecialFormElement) {
+        close = true;
+      }
+    } else if (e.keyCode == goog.events.KeyCodes.TAB && e.shiftKey &&
+        target == this.getElement()) {
+      // Prevent the user from shift-tabbing backwards out of the dialog box.
+      // TODO: Instead, we should move the focus to the last tabbable
+      // element inside the dialog.
       hasHandler = true;
-
-      var caption = buttonSet.get(cancel);
-      close = this.dispatchEvent(
-          new goog.ui.Dialog.Event(cancel,
-              /** @type {Element|null|string} */(caption)));
-    } else if (!isSpecialFormElement) {
-      close = true;
     }
   } else if (e.keyCode == goog.events.KeyCodes.ENTER) {
+    // Only handle ENTER in keypress events, in case the action opens a
+    // popup window.
     var key;
     if (target.tagName == 'BUTTON') {
       // If focus was on a button, it must have been enabled, so we can fire
@@ -1147,12 +1192,6 @@ goog.ui.Dialog.prototype.onKeyDown_ = function(e) {
       close = this.dispatchEvent(
           new goog.ui.Dialog.Event(key, String(buttonSet.get(key))));
     }
-  } else if (e.keyCode == goog.events.KeyCodes.TAB && e.shiftKey &&
-      target == this.getElement()) {
-    // Prevent the user from shift-tabbing backwards out of the dialog box.
-    // TODO: Instead, we should move the focus to the last tabbable
-    // element inside the dialog.
-    hasHandler = true;
   }
 
   if (close || hasHandler) {

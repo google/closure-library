@@ -94,7 +94,6 @@
 goog.provide('goog.ui.media.Media');
 goog.provide('goog.ui.media.MediaRenderer');
 
-goog.require('goog.array');
 goog.require('goog.style');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Control');

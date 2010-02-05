@@ -113,9 +113,9 @@ goog.ui.TwoThumbSlider.prototype.createThumb_ = function(cs) {
  */
 goog.ui.TwoThumbSlider.prototype.createThumbs = function() {
   // find thumbs
-  var valueThumb = goog.dom.$$(
+  var valueThumb = goog.dom.getElementsByTagNameAndClass(
       null, goog.ui.TwoThumbSlider.VALUE_THUMB_CSS_CLASS, this.getElement())[0];
-  var extentThumb = goog.dom.$$(null,
+  var extentThumb = goog.dom.getElementsByTagNameAndClass(null,
       goog.ui.TwoThumbSlider.EXTENT_THUMB_CSS_CLASS, this.getElement())[0];
   if (!valueThumb) {
     valueThumb =

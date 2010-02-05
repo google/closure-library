@@ -26,16 +26,12 @@
 
 goog.provide('goog.ui.emoji.EmojiPalette');
 
-goog.require('goog.debug.Logger');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
-goog.require('goog.events.KeyCodes');
-goog.require('goog.math.Size');
 goog.require('goog.net.ImageLoader');
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.emoji.Emoji');
 goog.require('goog.ui.emoji.EmojiPaletteRenderer');
-goog.require('goog.ui.emoji.SpriteInfo');
 
 
 /**

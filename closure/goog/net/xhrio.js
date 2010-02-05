@@ -16,14 +16,14 @@
  * @fileoverview Wrapper class for handling XmlHttpRequests.
  *
  * One off requests can be sent through goog.net.XhrIo.send() or an
- * instance can be created to send multiple requests.  Each request uses it's
+ * instance can be created to send multiple requests.  Each request uses its
  * own XmlHttpRequest object and handles clearing of the event callback to
  * ensure no leaks.
  *
- * XhrIo is event based, it dispatches events for when a request has finished,
- * when it is errorred or has succeeded, or when the ready-state changes.
- * The Ready-state event fires first first, followed by a generic completed
- * event, and lastly the error or success event is fired as appropriate.
+ * XhrIo is event based, it dispatches events when a request finishes, fails or
+ * succeeds or when the ready-state changes. The ready-state event fires first,
+ * followed by a generic completed event, and lastly the error or success event
+ * is fired as appropriate.
  *
  * The error event may also be called before completed and
  * ready-state-change if the XmlHttpRequest.open() or .send() methods throw.
@@ -145,8 +145,8 @@ goog.net.XhrIo.send = function(url, opt_callback, opt_method, opt_content,
  * We could have {@link goog.net.XhrIo.send} return the goog.net.XhrIo
  * it creates and make the client of {@link goog.net.XhrIo.send} be
  * responsible for disposing it in this case.  However, this makes things
- * significanly more complicated for the client, and the whole point
- * of {@link goog.net.XhrIo.send} is that its simple and easy to use.
+ * significantly more complicated for the client, and the whole point
+ * of {@link goog.net.XhrIo.send} is that it's simple and easy to use.
  * Clients of {@link goog.net.XhrIo.send} should call
  * {@link goog.net.XhrIo.cleanupAllPendingStaticSends} when doing final
  * cleanup on window unload.
@@ -353,7 +353,7 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
   this.active_ = true;
 
   // Use the factory to create the XHR object and options
-  this.xhr_ = new goog.net.XmlHttp();
+  this.xhr_ = this.createXhr();
   this.xhrOptions_ = goog.net.XmlHttp.getOptions();
 
   // We tell the Xhr Monitor that we are opening an XMLHttpRequest.  This stops
@@ -432,6 +432,16 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
     this.logger_.fine(this.formatMsg_('Send error: ' + err.message));
     this.error_(goog.net.ErrorCode.EXCEPTION, err);
   }
+};
+
+
+/**
+ * Creates a new XHR object.
+ * @return {XMLHttpRequest|GearsHttpRequest} The newly created XHR object.
+ * @protected
+ */
+goog.net.XhrIo.prototype.createXhr = function() {
+  return new goog.net.XmlHttp();
 };
 
 
@@ -821,10 +831,22 @@ goog.net.XhrIo.prototype.getResponseXml = function() {
 /**
  * Get the response and evaluates it as JSON from the Xhr object
  * Will only return correct result when called from the context of a callback
+ * @param {string=} opt_xssiPrefix Optional XSSI prefix string to use for
+ *     stripping of the response before parsing. This needs to be set only if
+ *     your backend server prepends the same prefix string to the JSON response.
  * @return {Object|undefined} JavaScript object.
  */
-goog.net.XhrIo.prototype.getResponseJson = function() {
-  return this.xhr_ ? goog.json.parse(this.xhr_.responseText) : undefined;
+goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
+  if (!this.xhr_) {
+    return undefined;
+  }
+
+  var responseText = this.xhr_.responseText;
+  if (opt_xssiPrefix && responseText.indexOf(opt_xssiPrefix) == 0) {
+    responseText = responseText.substring(opt_xssiPrefix.length);
+  }
+
+  return goog.json.parse(responseText);
 };
 
 

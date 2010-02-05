@@ -79,9 +79,12 @@
 <a name="line35"></a> * @param {function(number)?=} opt_errorFn The callback if module loading is an
 <a name="line36"></a> *     error.
 <a name="line37"></a> * @param {function()?=} opt_timeoutFn The callback if module loading times out.
-<a name="line38"></a> */
-<a name="line39"></a>goog.module.AbstractModuleLoader.prototype.loadModules = function(
-<a name="line40"></a>  ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {};
+<a name="line38"></a> * @param {boolean=} opt_forceReload Whether to bypass cache while loading the
+<a name="line39"></a> *     module.
+<a name="line40"></a> */
+<a name="line41"></a>goog.module.AbstractModuleLoader.prototype.loadModules = function(
+<a name="line42"></a>    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
+<a name="line43"></a>    opt_forceReload) {};
 </pre>
 
 

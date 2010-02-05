@@ -1256,7 +1256,7 @@ goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
 /**
  * Executes an editing command as per the registered plugins.
  * @param {string} command The command to execute.
- * @param {...Object|undefined} var_args Any additional parameters needed to
+ * @param {...*} var_args Any additional parameters needed to
  *     execute the command.
  * @return {Object|boolean} False if the command wasn't handled,
  *     otherwise, the result of the command.
@@ -1283,9 +1283,9 @@ goog.editor.Field.prototype.execCommand = function(command, var_args) {
 /**
  * Gets the value of command(s).
  * @param {string|Array.<string>} commands String name(s) of the command.
- * @return {string|Object} Value of each command. Returns false (or array of
- *     falses) if designMode is off or the field is otherwise uneditable,
- *     and there are no activeOnUneditable plugins for the command.
+ * @return {*} Value of each command. Returns false (or array of falses)
+ *     if designMode is off or the field is otherwise uneditable, and
+ *     there are no activeOnUneditable plugins for the command.
  */
 goog.editor.Field.prototype.queryCommandValue = function(commands) {
   var isEditable = this.isLoaded() && this.isSelectionEditable();
@@ -1529,7 +1529,7 @@ goog.editor.Field.prototype.startChangeEvents = function(opt_fireChange,
     // In the case where change events were stopped and we're not firing
     // them on start, the user was trying to suppress all change or delayed
     // change events. Clear the change timer now while the events are still
-    // stopped so that it's firing doesn't fire a stopped change event, or
+    // stopped so that its firing doesn't fire a stopped change event, or
     // queue up a delayed change event that we were trying to stop.
     this.changeTimerGecko_.fireIfActive();
   }
@@ -2147,7 +2147,7 @@ goog.editor.Field.prototype.focus = function() {
  */
 goog.editor.Field.prototype.focusAndPlaceCursorAtStart = function() {
   // NOTE: Excluding Gecko to maintain existing behavior post refactoring
-  // placeCursorAtStart into it's own method. In Gecko browsers that currently
+  // placeCursorAtStart into its own method. In Gecko browsers that currently
   // have a selection the existing selection will be restored, otherwise it
   // will go to the start.
   // TODO: Refactor the code using this and related methods. We should
@@ -2546,6 +2546,8 @@ goog.editor.Field.prototype.clearFieldLoadListener_ = function() {
  * @protected
  */
 goog.editor.Field.prototype.getIframeAttributes = function() {
+  var attrs = {'frameBorder': 0};
+
   var iframeStyle = 'padding:0;' + this.getOriginalElement().style.cssText;
 
   if (!goog.string.endsWith(iframeStyle, ';')) {
@@ -2554,13 +2556,18 @@ goog.editor.Field.prototype.getIframeAttributes = function() {
 
   iframeStyle += 'background-color:white;';
 
-  // Ensure that the iframe has default overflow styling.  If overflow is
-  // set to auto, an IE rendering bug can occur when it tries to render a
-  // table at the very bottom of the field, such that the table would cause
-  // a scrollbar, that makes the entire field go blank.
   if (goog.userAgent.IE) {
+    // Ensure that the iframe has default overflow styling.  If overflow is
+    // set to auto, an IE rendering bug can occur when it tries to render a
+    // table at the very bottom of the field, such that the table would cause
+    // a scrollbar, that makes the entire field go blank.
     iframeStyle += 'overflow:visible;';
+    // Prevent inline events from executing. Protects against XSS attacks where
+    // attacker convinces user to unknowingly paste malicious content.
+    // See http://b/2316154 .
+    attrs['security'] = 'restricted';
   }
 
-  return { 'frameBorder': 0, 'style': iframeStyle };
+  attrs['style'] = iframeStyle;
+  return attrs;
 };

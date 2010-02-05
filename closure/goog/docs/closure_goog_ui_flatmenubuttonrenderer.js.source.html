@@ -66,92 +66,92 @@
 <a name="line22"></a>
 <a name="line23"></a>goog.provide(&#39;goog.ui.FlatMenuButtonRenderer&#39;);
 <a name="line24"></a>
-<a name="line25"></a>goog.require(&#39;goog.dom.classes&#39;);
-<a name="line26"></a>goog.require(&#39;goog.style&#39;);
-<a name="line27"></a>goog.require(&#39;goog.ui.ControlContent&#39;);
-<a name="line28"></a>goog.require(&#39;goog.ui.FlatButtonRenderer&#39;);
-<a name="line29"></a>goog.require(&#39;goog.ui.INLINE_BLOCK_CLASSNAME&#39;);
-<a name="line30"></a>goog.require(&#39;goog.ui.Menu&#39;);
-<a name="line31"></a>goog.require(&#39;goog.ui.MenuButton&#39;);
-<a name="line32"></a>goog.require(&#39;goog.ui.MenuRenderer&#39;);
-<a name="line33"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line25"></a>goog.require(&#39;goog.style&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.ControlContent&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.FlatButtonRenderer&#39;);
+<a name="line28"></a>goog.require(&#39;goog.ui.INLINE_BLOCK_CLASSNAME&#39;);
+<a name="line29"></a>goog.require(&#39;goog.ui.Menu&#39;);
+<a name="line30"></a>goog.require(&#39;goog.ui.MenuButton&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.MenuRenderer&#39;);
+<a name="line32"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line33"></a>
 <a name="line34"></a>
-<a name="line35"></a>
-<a name="line36"></a>/**
-<a name="line37"></a> * Flat Menu Button renderer. Creates a simpler version of
-<a name="line38"></a> * {@link goog.ui.MenuButton} that doesn&#39;t look like a button and
-<a name="line39"></a> * doesn&#39;t have rounded corners. Uses just a &lt;div&gt; and looks more like
-<a name="line40"></a> * a traditional &lt;select&gt; element.
-<a name="line41"></a> * @constructor
-<a name="line42"></a> * @extends {goog.ui.FlatButtonRenderer}
-<a name="line43"></a> */
-<a name="line44"></a>goog.ui.FlatMenuButtonRenderer = function() {
-<a name="line45"></a>  goog.ui.FlatButtonRenderer.call(this);
-<a name="line46"></a>};
-<a name="line47"></a>goog.inherits(goog.ui.FlatMenuButtonRenderer, goog.ui.FlatButtonRenderer);
-<a name="line48"></a>goog.addSingletonGetter(goog.ui.FlatMenuButtonRenderer);
+<a name="line35"></a>/**
+<a name="line36"></a> * Flat Menu Button renderer. Creates a simpler version of
+<a name="line37"></a> * {@link goog.ui.MenuButton} that doesn&#39;t look like a button and
+<a name="line38"></a> * doesn&#39;t have rounded corners. Uses just a &lt;div&gt; and looks more like
+<a name="line39"></a> * a traditional &lt;select&gt; element.
+<a name="line40"></a> * @constructor
+<a name="line41"></a> * @extends {goog.ui.FlatButtonRenderer}
+<a name="line42"></a> */
+<a name="line43"></a>goog.ui.FlatMenuButtonRenderer = function() {
+<a name="line44"></a>  goog.ui.FlatButtonRenderer.call(this);
+<a name="line45"></a>};
+<a name="line46"></a>goog.inherits(goog.ui.FlatMenuButtonRenderer, goog.ui.FlatButtonRenderer);
+<a name="line47"></a>goog.addSingletonGetter(goog.ui.FlatMenuButtonRenderer);
+<a name="line48"></a>
 <a name="line49"></a>
-<a name="line50"></a>
-<a name="line51"></a>/**
-<a name="line52"></a> * Default CSS class to be applied to the root element of components rendered
-<a name="line53"></a> * by this renderer.
-<a name="line54"></a> * @type {string}
-<a name="line55"></a> */
-<a name="line56"></a>goog.ui.FlatMenuButtonRenderer.CSS_CLASS =
-<a name="line57"></a>    goog.getCssName(&#39;goog-flat-menu-button&#39;);
+<a name="line50"></a>/**
+<a name="line51"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line52"></a> * by this renderer.
+<a name="line53"></a> * @type {string}
+<a name="line54"></a> */
+<a name="line55"></a>goog.ui.FlatMenuButtonRenderer.CSS_CLASS =
+<a name="line56"></a>    goog.getCssName(&#39;goog-flat-menu-button&#39;);
+<a name="line57"></a>
 <a name="line58"></a>
-<a name="line59"></a>
-<a name="line60"></a>/**
-<a name="line61"></a> * Returns the button&#39;s contents wrapped in the following DOM structure:
-<a name="line62"></a> *    &lt;div class=&quot;goog-inline-block goog-flat-menu-button&quot;&gt;
-<a name="line63"></a> *        &lt;div class=&quot;goog-inline-block goog-flat-menu-button-caption&quot;&gt;
-<a name="line64"></a> *          Contents...
-<a name="line65"></a> *        &lt;/div&gt;
-<a name="line66"></a> *        &lt;div class=&quot;goog-inline-block goog-flat-menu-button-dropdown&quot;&gt;
-<a name="line67"></a> *          &amp;nbsp;
-<a name="line68"></a> *        &lt;/div&gt;
-<a name="line69"></a> *    &lt;/div&gt;
-<a name="line70"></a> * Overrides {@link goog.ui.FlatButtonRenderer#createDom}.
-<a name="line71"></a> * @param {goog.ui.Button} button Button to render.
-<a name="line72"></a> * @return {Element} Root element for the button.
-<a name="line73"></a> */
-<a name="line74"></a>goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(button) {
-<a name="line75"></a>  var classNames = this.getClassNames(button);
-<a name="line76"></a>  var attributes = {
-<a name="line77"></a>    &#39;class&#39;: goog.ui.INLINE_BLOCK_CLASSNAME + &#39; &#39; + classNames.join(&#39; &#39;),
-<a name="line78"></a>    &#39;title&#39;: button.getTooltip() || &#39;&#39;
-<a name="line79"></a>  };
-<a name="line80"></a>  return button.getDomHelper().createDom(&#39;div&#39;, attributes,
-<a name="line81"></a>      [this.createCaption(button.getContent(), button.getDomHelper()),
-<a name="line82"></a>       this.createDropdown(button.getDomHelper())]);
-<a name="line83"></a>};
+<a name="line59"></a>/**
+<a name="line60"></a> * Returns the button&#39;s contents wrapped in the following DOM structure:
+<a name="line61"></a> *    &lt;div class=&quot;goog-inline-block goog-flat-menu-button&quot;&gt;
+<a name="line62"></a> *        &lt;div class=&quot;goog-inline-block goog-flat-menu-button-caption&quot;&gt;
+<a name="line63"></a> *          Contents...
+<a name="line64"></a> *        &lt;/div&gt;
+<a name="line65"></a> *        &lt;div class=&quot;goog-inline-block goog-flat-menu-button-dropdown&quot;&gt;
+<a name="line66"></a> *          &amp;nbsp;
+<a name="line67"></a> *        &lt;/div&gt;
+<a name="line68"></a> *    &lt;/div&gt;
+<a name="line69"></a> * Overrides {@link goog.ui.FlatButtonRenderer#createDom}.
+<a name="line70"></a> * @param {goog.ui.Button} button Button to render.
+<a name="line71"></a> * @return {Element} Root element for the button.
+<a name="line72"></a> */
+<a name="line73"></a>goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(button) {
+<a name="line74"></a>  var classNames = this.getClassNames(button);
+<a name="line75"></a>  var attributes = {
+<a name="line76"></a>    &#39;class&#39;: goog.ui.INLINE_BLOCK_CLASSNAME + &#39; &#39; + classNames.join(&#39; &#39;),
+<a name="line77"></a>    &#39;title&#39;: button.getTooltip() || &#39;&#39;
+<a name="line78"></a>  };
+<a name="line79"></a>  return button.getDomHelper().createDom(&#39;div&#39;, attributes,
+<a name="line80"></a>      [this.createCaption(button.getContent(), button.getDomHelper()),
+<a name="line81"></a>       this.createDropdown(button.getDomHelper())]);
+<a name="line82"></a>};
+<a name="line83"></a>
 <a name="line84"></a>
-<a name="line85"></a>
-<a name="line86"></a>/**
-<a name="line87"></a> * Takes the button&#39;s root element and returns the parent element of the
-<a name="line88"></a> * button&#39;s contents.
-<a name="line89"></a> * @param {Element} element Root element of the button whose content
-<a name="line90"></a> * element is to be returned.
-<a name="line91"></a> * @return {Element} The button&#39;s content element (if any).
-<a name="line92"></a> */
-<a name="line93"></a>goog.ui.FlatMenuButtonRenderer.prototype.getContentElement = function(element) {
-<a name="line94"></a>  return element &amp;&amp; /** @type {Element} */ (element.firstChild);
-<a name="line95"></a>};
+<a name="line85"></a>/**
+<a name="line86"></a> * Takes the button&#39;s root element and returns the parent element of the
+<a name="line87"></a> * button&#39;s contents.
+<a name="line88"></a> * @param {Element} element Root element of the button whose content
+<a name="line89"></a> * element is to be returned.
+<a name="line90"></a> * @return {Element} The button&#39;s content element (if any).
+<a name="line91"></a> */
+<a name="line92"></a>goog.ui.FlatMenuButtonRenderer.prototype.getContentElement = function(element) {
+<a name="line93"></a>  return element &amp;&amp; /** @type {Element} */ (element.firstChild);
+<a name="line94"></a>};
+<a name="line95"></a>
 <a name="line96"></a>
-<a name="line97"></a>
-<a name="line98"></a>/**
-<a name="line99"></a> * Takes an element, decorates it with the menu button control, and returns
-<a name="line100"></a> * the element.  Overrides {@link goog.ui.CustomButtonRenderer#decorate} by
-<a name="line101"></a> * looking for a child element that can be decorated by a menu, and if it
-<a name="line102"></a> * finds one, decorates it and attaches it to the menu button.
-<a name="line103"></a> * @param {goog.ui.MenuButton} button Menu button to decorate the element.
-<a name="line104"></a> * @param {Element} element Element to decorate.
-<a name="line105"></a> * @return {Element} Decorated element.
-<a name="line106"></a> */
-<a name="line107"></a>goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
-<a name="line108"></a>  // TODO: MenuButtonRenderer uses the exact same code.
-<a name="line109"></a>  // Refactor this block to it&#39;s own module where both can use it.
-<a name="line110"></a>  var menuElem = goog.dom.$$(&#39;*&#39;, goog.ui.MenuRenderer.CSS_CLASS, element)[0];
+<a name="line97"></a>/**
+<a name="line98"></a> * Takes an element, decorates it with the menu button control, and returns
+<a name="line99"></a> * the element.  Overrides {@link goog.ui.CustomButtonRenderer#decorate} by
+<a name="line100"></a> * looking for a child element that can be decorated by a menu, and if it
+<a name="line101"></a> * finds one, decorates it and attaches it to the menu button.
+<a name="line102"></a> * @param {goog.ui.MenuButton} button Menu button to decorate the element.
+<a name="line103"></a> * @param {Element} element Element to decorate.
+<a name="line104"></a> * @return {Element} Decorated element.
+<a name="line105"></a> */
+<a name="line106"></a>goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
+<a name="line107"></a>  // TODO: MenuButtonRenderer uses the exact same code.
+<a name="line108"></a>  // Refactor this block to its own module where both can use it.
+<a name="line109"></a>  var menuElem = goog.dom.getElementsByTagNameAndClass(
+<a name="line110"></a>      &#39;*&#39;, goog.ui.MenuRenderer.CSS_CLASS, element)[0];
 <a name="line111"></a>  if (menuElem) {
 <a name="line112"></a>    // Move the menu element directly under the body, but hide it first; see
 <a name="line113"></a>    // bug 1089244.
@@ -165,16 +165,16 @@
 <a name="line121"></a>  }
 <a name="line122"></a>
 <a name="line123"></a>  // Add the caption if it&#39;s not already there.
-<a name="line124"></a>  var captionElem = goog.dom.$$(&#39;*&#39;,
-<a name="line125"></a>      goog.getCssName(this.getCssClass(), &#39;caption&#39;), element)[0];
+<a name="line124"></a>  var captionElem = goog.dom.getElementsByTagNameAndClass(
+<a name="line125"></a>      &#39;*&#39;, goog.getCssName(this.getCssClass(), &#39;caption&#39;), element)[0];
 <a name="line126"></a>  if (!captionElem) {
 <a name="line127"></a>    element.appendChild(
 <a name="line128"></a>        this.createCaption(element.childNodes, button.getDomHelper()));
 <a name="line129"></a>  }
 <a name="line130"></a>
 <a name="line131"></a>  // Add the dropdown icon if it&#39;s not already there.
-<a name="line132"></a>  var dropdownElem = goog.dom.$$(&#39;*&#39;,
-<a name="line133"></a>      goog.getCssName(this.getCssClass(), &#39;dropdown&#39;), element)[0];
+<a name="line132"></a>  var dropdownElem = goog.dom.getElementsByTagNameAndClass(
+<a name="line133"></a>      &#39;*&#39;, goog.getCssName(this.getCssClass(), &#39;dropdown&#39;), element)[0];
 <a name="line134"></a>  if (!dropdownElem) {
 <a name="line135"></a>    element.appendChild(this.createDropdown(button.getDomHelper()));
 <a name="line136"></a>  }

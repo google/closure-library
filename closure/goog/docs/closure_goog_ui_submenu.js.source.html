@@ -90,7 +90,7 @@
 <a name="line46"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure to
 <a name="line47"></a> *     display as the content of the submenu (use to add icons or styling to
 <a name="line48"></a> *     menus).
-<a name="line49"></a> * @param {Object=} opt_model Data/model associated with the menu item.
+<a name="line49"></a> * @param {*=} opt_model Data/model associated with the menu item.
 <a name="line50"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional dom helper used for dom
 <a name="line51"></a> *     interactions.
 <a name="line52"></a> * @param {goog.ui.MenuItemRenderer=} opt_renderer Renderer used to render or
@@ -344,7 +344,7 @@
 <a name="line300"></a>      return false;
 <a name="line301"></a>    }
 <a name="line302"></a>
-<a name="line303"></a>  // Menu item has control, so let it&#39;s menu try to handle the keys (this may
+<a name="line303"></a>  // Menu item has control, so let its menu try to handle the keys (this may
 <a name="line304"></a>  // in turn be handled by sub-sub menus).
 <a name="line305"></a>  } else if (this.getMenu().handleKeyEvent(e)) {
 <a name="line306"></a>    // Nothing to do
@@ -390,7 +390,7 @@
 <a name="line346"></a>  // Ignore propagated events
 <a name="line347"></a>  if (e.target == this.getParentEventTarget()) {
 <a name="line348"></a>    // TODO: Using an event for this is expensive.  Consider having a
-<a name="line349"></a>    // generalized interface that the parent menu calls on it&#39;s children when
+<a name="line349"></a>    // generalized interface that the parent menu calls on its children when
 <a name="line350"></a>    // it is hidden.
 <a name="line351"></a>    this.dismissSubMenu();
 <a name="line352"></a>    this.clearTimers();

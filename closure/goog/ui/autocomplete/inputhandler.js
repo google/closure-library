@@ -368,6 +368,43 @@ goog.ui.AutoComplete.InputHandler.prototype.getActiveElement = function() {
 
 
 /**
+ * Returns the value of the current active element.
+ * @return {string} The value of the current active element.
+ */
+goog.ui.AutoComplete.InputHandler.prototype.getValue = function() {
+  return this.activeElement_.value;
+};
+
+
+/**
+ * Sets the value of the current active element.
+ * @param {string} value The new value.
+ */
+goog.ui.AutoComplete.InputHandler.prototype.setValue = function(value) {
+  this.activeElement_.value = value;
+};
+
+
+/**
+ * Returns the current cursor position.
+ * @return {number} The index of the cursor position.
+ */
+goog.ui.AutoComplete.InputHandler.prototype.getCursorPosition = function() {
+  return goog.dom.selection.getStart(this.activeElement_);
+};
+
+
+/**
+ * Sets the cursor at the given position.
+ * @param {number} pos The index of the cursor position.
+ */
+goog.ui.AutoComplete.InputHandler.prototype.setCursorPosition = function(pos) {
+  goog.dom.selection.setStart(this.activeElement_, pos);
+  goog.dom.selection.setEnd(this.activeElement_, pos);
+};
+
+
+/**
  * Attaches the input handler to an element such as a textarea or input box.
  * The element could basically be anything as long as it exposes the correct
  * interface and events.
@@ -435,14 +472,11 @@ goog.ui.AutoComplete.InputHandler.prototype.detachInputs = function(var_args) {
  */
 goog.ui.AutoComplete.InputHandler.prototype.selectRow = function(row,
                                                                  opt_multi) {
-  var target = this.ac_.getTarget();
-
   if (goog.isDef(opt_multi) ? opt_multi : this.multi_) {
-    var caret = goog.dom.selection.getStart(target);
-    var index = this.getTokenIndex_(target.value, caret);
+    var index = this.getTokenIndex_(this.getValue(), this.getCursorPosition());
 
     // Break up the current input string.
-    var entries = this.splitInput_(target.value);
+    var entries = this.splitInput_(this.getValue());
 
 
     // Get the new value, ignoring whitespace associated with the entry.
@@ -473,22 +507,20 @@ goog.ui.AutoComplete.InputHandler.prototype.selectRow = function(row,
       entries[index] = replaceValue;
 
       // Join the array and replace the contents of the input.
-      target.value = entries.join('');
+      this.setValue(entries.join(''));
 
       // Calculate which position to put the cursor at.
-      var str = ''
       var pos = 0;
       for (var i = 0; i <= index; i++) {
         pos += entries[i].length;
       }
 
       // Set the cursor.
-      target.focus();
-      goog.dom.selection.setStart(target, pos);
-      goog.dom.selection.setEnd(target, pos);
+      this.activeElement_.focus();
+      this.setCursorPosition(pos);
     }
   } else {
-    target.value = row.toString();
+    this.setValue(row.toString());
   }
 
   this.rowJustSelected_ = true;
@@ -852,7 +884,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onFocus_ = function(e) {
       this.timer_.start();
       this.eh_.listen(this.timer_, goog.Timer.TICK, this.onTick_);
     }
-    this.lastValue_ = this.activeElement_.value;
+    this.lastValue_ = this.getValue();
     this.addKeyEvents_();
   }
 };
@@ -999,19 +1031,28 @@ goog.ui.AutoComplete.InputHandler.prototype.onIeKeyPress_ = function(e) {
  * @param {boolean=} opt_force If true the menu will be forced to update.
  */
 goog.ui.AutoComplete.InputHandler.prototype.update = function(opt_force) {
-  if (opt_force ||
-      this.activeElement_ && this.activeElement_.value != this.lastValue_) {
+  if (opt_force || this.activeElement_ && this.getValue() != this.lastValue_) {
     if (opt_force || !this.rowJustSelected_) {
-      var token = this.parseToken_();
+      var token = this.parseToken();
 
       if (this.ac_) {
         this.ac_.setTarget(this.activeElement_);
-        this.ac_.setToken(token, this.activeElement_.value);
+        this.ac_.setToken(token, this.getValue());
       }
     }
-    this.lastValue_ = this.activeElement_.value;
+    this.lastValue_ = this.getValue();
   }
   this.rowJustSelected_ = false;
+};
+
+
+/**
+ * Parses a text area or input box for the currently highlighted token.
+ * @return {string} Token to complete.
+ * @protected
+ */
+goog.ui.AutoComplete.InputHandler.prototype.parseToken = function() {
+  return this.parseToken_()
 };
 
 
@@ -1036,13 +1077,13 @@ goog.ui.AutoComplete.InputHandler.prototype.moveDown_ = function() {
 
 
 /**
- * Parses a text area or input box for the currently highlighted token
+ * Parses a text area or input box for the currently highlighted token.
  * @return {string} Token to complete.
  * @private
  */
 goog.ui.AutoComplete.InputHandler.prototype.parseToken_ = function() {
-  var caret = goog.dom.selection.getStart(this.activeElement_);
-  var text = this.activeElement_.value;
+  var caret = this.getCursorPosition();
+  var text = this.getValue();
   return this.trim_(this.splitInput_(text)[this.getTokenIndex_(text, caret)]);
 };
 

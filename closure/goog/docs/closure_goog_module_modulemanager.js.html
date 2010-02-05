@@ -82,11 +82,68 @@
 Since modules may not have their code loaded, we must keep track of them.</div>
  </div>
       
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
 
 
 
 
 
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.module.ModuleManager.CORRUPT_RESPONSE_STATUS_CODE"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.module.ModuleManager.</span><span class="entryName">CORRUPT_RESPONSE_STATUS_CODE</span>
+        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+     </div>
+
+
+     <div class="entryOverview">
+       A non-HTTP status code indicating a corruption in loaded module.
+This should be used by a ModuleLoader as a replacement for the HTTP code
+given to the error handler function to indicated that the module was
+corrupted.
+This will set the forceReload flag on the loadModules method when retrying
+module loading.
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_module_modulemanager.js.source.html#line127">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
 
 
 

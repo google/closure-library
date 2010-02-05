@@ -25,8 +25,6 @@ goog.provide('goog.positioning.OverflowStatus');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
-goog.require('goog.events');
-goog.require('goog.events.Event');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
@@ -171,7 +169,7 @@ goog.positioning.positionAtAnchor = function(anchorElement,
                                              opt_margin,
                                              opt_overflow,
                                              opt_preferredSize) {
-  // Ignore offset for the BODY element unless it's position is non-static.
+  // Ignore offset for the BODY element unless its position is non-static.
   // For cases where the offset parent is HTML rather than the BODY (such as in
   // IE strict mode) there's no need to get the position of the BODY as it
   // doesn't affect the page offset.
@@ -344,7 +342,7 @@ goog.positioning.positionAtCoordinate = function(absolutePos,
 
 
 /**
- * Adjusts the position and/or size of an element, identified by it's position
+ * Adjusts the position and/or size of an element, identified by its position
  * and size, to fit inside the viewport. If the position or size of the element
  * is adjusted the pos or size objects, respectively, are modified.
  *

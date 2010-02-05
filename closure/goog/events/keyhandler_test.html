@@ -21,6 +21,7 @@ limitations under the License.
 <title>Closure Unit Tests - goog.events.KeyHandler</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.dom')
   goog.require('goog.events.KeyEvent');
   goog.require('goog.testing.jsunit');
 </script>
@@ -485,6 +486,30 @@ limitations under the License.
     assertEquals('= should fire a key event with the charCode 63',
                  goog.events.KeyCodes.QUESTION_MARK,
                  keyEvent.charCode);
+  }
+
+  function testGetElement() {
+    var target = goog.dom.createDom('div');
+    var target2 = goog.dom.createDom('div');
+    var keyHandler = new goog.events.KeyHandler();
+    assertNull(keyHandler.getElement());
+
+    keyHandler.attach(target);
+    assertEquals(target, keyHandler.getElement());
+
+    keyHandler.attach(target2);
+    assertNotEquals(target, keyHandler.getElement());
+    assertEquals(target2, keyHandler.getElement());
+
+    var doc = goog.dom.getDocument();
+    keyHandler.attach(doc);
+    assertEquals(doc, keyHandler.getElement());
+
+    keyHandler = new goog.events.KeyHandler(doc);
+    assertEquals(doc, keyHandler.getElement());
+
+    keyHandler = new goog.events.KeyHandler(target);
+    assertEquals(target, keyHandler.getElement());
   }
 
   function fireKeyDown(keyHandler, keyCode, opt_charCode, opt_keyIdentifier,

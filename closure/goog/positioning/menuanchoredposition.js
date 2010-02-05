@@ -41,12 +41,11 @@ goog.require('goog.positioning.Overflow');
  * @param {goog.positioning.Corner} corner Corner of anchored element the
  *     movable element should be positioned at.
  * @param {boolean=} opt_adjust Whether the positioning should be adjusted until
- *    the element fits inside the viewport even if that means that the anchored
- *    corners are ignored.
+ *     the element fits inside the viewport even if that means that the anchored
+ *     corners are ignored.
  * @param {boolean=} opt_resize Whether the positioning should be adjusted until
- *    the element fits inside the viewport on the X axis and it's heigh is
- *    resized so if fits in the viewport.  This take precedence over
- *    opt_adjust.
+ *     the element fits inside the viewport on the X axis and its height is
+ *     resized so if fits in the viewport. This take precedence over opt_adjust.
  * @constructor
  * @extends {goog.positioning.AnchoredViewportPosition}
  */

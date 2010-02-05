@@ -79,7 +79,13 @@
 <hr/>
 
 
-   
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_asserts_AssertionError.html">
+          goog.asserts.AssertionError</a><br/>
+        <div class="class-details">Error object for failed assertions.</div>
+ </div>
+      
 <br/>
 
   <div class="legend">
@@ -114,13 +120,14 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assert<span class="args">(<span class="arg">condition</span>,&nbsp;<span class="arg">opt_message</span>)</span>
+        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assert<span class="args">(<span class="arg">assert@condition</span>,&nbsp;<span class="arg">assert@opt_message</span>,&nbsp;<span class="arg">assert@var_args</span>)</span>
         </span>
       </div>
 
 
      <div class="entryOverview">
-       Checks if the condition evaluates to true if goog.DEBUG is true.
+       Checks if the condition evaluates to true if goog.asserts.ENABLE_ASSERTS is
+true.
      </div>
 
 
@@ -139,17 +146,25 @@
      
    <tr class="even">
      <td>
-        <span class="entryName">condition</span>
-        : <div class="fullType"><span class="type">*</span></div>
-        <div class="entryOverview">The condition to check.</div>
+        <span class="entryName">assert@condition</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_message</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Error message in case of failure.</div>
+        <span class="entryName">assert@opt_message</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">assert@var_args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -162,7 +177,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_asserts_asserts.js.source.html#line38">code &raquo;</a>
+     <a href="closure_goog_asserts_asserts.js.source.html#line106">code &raquo;</a>
   </td>
      </tr>
 
@@ -182,13 +197,13 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assertFunction<span class="args">(<span class="arg">value</span>,&nbsp;<span class="arg">opt_message</span>)</span>
+        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assertFunction<span class="args">(<span class="arg">assertFunction@value</span>,&nbsp;<span class="arg">assertFunction@opt_message</span>,&nbsp;<span class="arg">assertFunction@var_args</span>)</span>
         </span>
       </div>
 
 
      <div class="entryOverview">
-       Checks if the value is a function if goog.DEBUG is true.
+       Checks if the value is a function if goog.asserts.ENABLE_ASSERTS is true.
      </div>
 
 
@@ -207,17 +222,25 @@
      
    <tr class="even">
      <td>
-        <span class="entryName">value</span>
-        : <div class="fullType"><span class="type">*</span></div>
-        <div class="entryOverview">The value to check.</div>
+        <span class="entryName">assertFunction@value</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_message</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Error message in case of failure.</div>
+        <span class="entryName">assertFunction@opt_message</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">assertFunction@var_args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -230,7 +253,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_asserts_asserts.js.source.html#line96">code &raquo;</a>
+     <a href="closure_goog_asserts_asserts.js.source.html#line178">code &raquo;</a>
   </td>
      </tr>
 
@@ -250,14 +273,14 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assertInstanceof<span class="args">(<span class="arg">value</span>,&nbsp;<span class="arg">type</span>,&nbsp;<span class="arg">opt_message</span>)</span>
+        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assertInstanceof<span class="args">(<span class="arg">assertInstanceof@value</span>,&nbsp;<span class="arg">assertInstanceof@type</span>,&nbsp;<span class="arg">assertInstanceof@opt_message</span>,&nbsp;<span class="arg">assertInstanceof@var_args</span>)</span>
         </span>
       </div>
 
 
      <div class="entryOverview">
        Checks if the value is an instance of the user-defined type if
-goog.DEBUG is true.
+goog.asserts.ENABLE_ASSERTS is true.
      </div>
 
 
@@ -276,25 +299,33 @@ goog.DEBUG is true.
      
    <tr class="even">
      <td>
-        <span class="entryName">value</span>
-        : <div class="fullType"><span class="type">*</span></div>
-        <div class="entryOverview">The value to check.</div>
+        <span class="entryName">assertInstanceof@value</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">type</span>
-        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
-        <div class="entryOverview">A user-defined constructor.</div>
+        <span class="entryName">assertInstanceof@type</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_message</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Error message in case of failure.</div>
+        <span class="entryName">assertInstanceof@opt_message</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">assertInstanceof@var_args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -307,7 +338,7 @@ goog.DEBUG is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_asserts_asserts.js.source.html#line120">code &raquo;</a>
+     <a href="closure_goog_asserts_asserts.js.source.html#line211">code &raquo;</a>
   </td>
      </tr>
 
@@ -327,13 +358,13 @@ goog.DEBUG is true.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assertNumber<span class="args">(<span class="arg">value</span>,&nbsp;<span class="arg">opt_message</span>)</span>
+        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assertNumber<span class="args">(<span class="arg">assertNumber@value</span>,&nbsp;<span class="arg">assertNumber@opt_message</span>,&nbsp;<span class="arg">assertNumber@var_args</span>)</span>
         </span>
       </div>
 
 
      <div class="entryOverview">
-       Checks if the value is a number if goog.DEBUG is true.
+       Checks if the value is a number if goog.asserts.ENABLE_ASSERTS is true.
      </div>
 
 
@@ -352,17 +383,25 @@ goog.DEBUG is true.
      
    <tr class="even">
      <td>
-        <span class="entryName">value</span>
-        : <div class="fullType"><span class="type">*</span></div>
-        <div class="entryOverview">The value to check.</div>
+        <span class="entryName">assertNumber@value</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_message</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Error message in case of failure.</div>
+        <span class="entryName">assertNumber@opt_message</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">assertNumber@var_args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -375,7 +414,7 @@ goog.DEBUG is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_asserts_asserts.js.source.html#line74">code &raquo;</a>
+     <a href="closure_goog_asserts_asserts.js.source.html#line148">code &raquo;</a>
   </td>
      </tr>
 
@@ -395,13 +434,13 @@ goog.DEBUG is true.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assertObject<span class="args">(<span class="arg">value</span>,&nbsp;<span class="arg">opt_message</span>)</span>
+        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assertObject<span class="args">(<span class="arg">assertObject@value</span>,&nbsp;<span class="arg">assertObject@opt_message</span>,&nbsp;<span class="arg">assertObject@var_args</span>)</span>
         </span>
       </div>
 
 
      <div class="entryOverview">
-       Checks if the value is an Object if goog.DEBUG is true.
+       Checks if the value is an Object if goog.asserts.ENABLE_ASSERTS is true.
      </div>
 
 
@@ -420,17 +459,25 @@ goog.DEBUG is true.
      
    <tr class="even">
      <td>
-        <span class="entryName">value</span>
-        : <div class="fullType"><span class="type">*</span></div>
-        <div class="entryOverview">The value to check.</div>
+        <span class="entryName">assertObject@value</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_message</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Error message in case of failure.</div>
+        <span class="entryName">assertObject@opt_message</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">assertObject@var_args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -443,7 +490,7 @@ goog.DEBUG is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_asserts_asserts.js.source.html#line107">code &raquo;</a>
+     <a href="closure_goog_asserts_asserts.js.source.html#line193">code &raquo;</a>
   </td>
      </tr>
 
@@ -463,13 +510,13 @@ goog.DEBUG is true.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assertString<span class="args">(<span class="arg">value</span>,&nbsp;<span class="arg">opt_message</span>)</span>
+        <span class="entryNamespace">goog.asserts.</span><span class="entryName">assertString<span class="args">(<span class="arg">assertString@value</span>,&nbsp;<span class="arg">assertString@opt_message</span>,&nbsp;<span class="arg">assertString@var_args</span>)</span>
         </span>
       </div>
 
 
      <div class="entryOverview">
-       Checks if the value is a string if goog.DEBUG is true.
+       Checks if the value is a string if goog.asserts.ENABLE_ASSERTS is true.
      </div>
 
 
@@ -488,17 +535,25 @@ goog.DEBUG is true.
      
    <tr class="even">
      <td>
-        <span class="entryName">value</span>
-        : <div class="fullType"><span class="type">*</span></div>
-        <div class="entryOverview">The value to check.</div>
+        <span class="entryName">assertString@value</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_message</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Error message in case of failure.</div>
+        <span class="entryName">assertString@opt_message</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">assertString@var_args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -511,12 +566,97 @@ goog.DEBUG is true.
 
 
   <td class="view-code">
-     <a href="closure_goog_asserts_asserts.js.source.html#line85">code &raquo;</a>
+     <a href="closure_goog_asserts_asserts.js.source.html#line163">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.asserts.doAssertFailure_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.asserts.</span><span class="entryName">doAssertFailure_<span class="args">(<span class="arg">doAssertFailure_@defaultMessage</span>,&nbsp;<span class="arg">doAssertFailure_@defaultArgs</span>,&nbsp;<span class="arg">doAssertFailure_@givenMessage</span>,&nbsp;<span class="arg">doAssertFailure_@givenArgs</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Throws an exception with the given message and &quot;Assertion failed&quot; prefixed
+onto it.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">doAssertFailure_@defaultMessage</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">doAssertFailure_@defaultArgs</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">doAssertFailure_@givenMessage</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">doAssertFailure_@givenArgs</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_asserts_asserts.js.source.html#line80">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -531,14 +671,15 @@ goog.DEBUG is true.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.asserts.</span><span class="entryName">fail<span class="args">(<span class="arg">opt_message</span>)</span>
+        <span class="entryNamespace">goog.asserts.</span><span class="entryName">fail<span class="args">(<span class="arg">fail@opt_message</span>,&nbsp;<span class="arg">fail@var_args</span>)</span>
         </span>
       </div>
 
 
      <div class="entryOverview">
-       Fails if goog.DEBUG is true. This function is useful in case when we want
-to add a check in the unreachable area like switch-case statement:
+       Fails if goog.asserts.ENABLE_ASSERTS is true. This function is useful in case
+when we want to add a check in the unreachable area like switch-case
+statement:
 
 <pre class="lang-js">
 switch(type) {
@@ -566,9 +707,17 @@ default: goog.assert.fail(&#39;Unrecognized type: &#39; + type);
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_message</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Error message for failure.</div>
+        <span class="entryName">fail@opt_message</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">fail@var_args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -581,7 +730,7 @@ default: goog.assert.fail(&#39;Unrecognized type: &#39; + type);
 
 
   <td class="view-code">
-     <a href="closure_goog_asserts_asserts.js.source.html#line61">code &raquo;</a>
+     <a href="closure_goog_asserts_asserts.js.source.html#line132">code &raquo;</a>
   </td>
      </tr>
 

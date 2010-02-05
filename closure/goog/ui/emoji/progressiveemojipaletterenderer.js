@@ -19,9 +19,7 @@
 
 goog.provide('goog.ui.emoji.ProgressiveEmojiPaletteRenderer');
 
-goog.require('goog.dom');
 goog.require('goog.ui.emoji.EmojiPaletteRenderer');
-goog.require('goog.ui.emoji.SpriteInfo');
 
 
 /**

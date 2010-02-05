@@ -511,6 +511,7 @@ grokdoc.Selector.DEFAULT_BLANK_URL = _staticFilePath + 'images/blank.gif';
   */
 grokdoc.Selector.KIND_TO_SEPARATOR = {
   'class': '.',
+  'interface': '.',
   'file': '/'
 };
 
@@ -684,7 +685,8 @@ grokdoc.IconRowRenderer.DEFAULT_ICON_KIND_CLASS = 'gdoc-ac-file-icon';
  */
 grokdoc.IconRowRenderer.KIND_ICON_MAP = {
   'class': 'gdoc-ac-class-icon',
-  'file': 'gdoc-ac-file-icon'
+  'file': 'gdoc-ac-file-icon',
+  'interface': 'gdoc-ac-iface-icon'
 };
 
 /**
@@ -846,7 +848,8 @@ goog.inherits(grokdoc.TypedTreeNode, goog.ui.tree.TreeNode);
  */
 grokdoc.TypedTreeNode.KIND_ICON_MAP = {
   'class': 'gdoc-tree-class-icon',
-  'file': 'gdoc-tree-file-icon'
+  'file': 'gdoc-tree-file-icon',
+  'interface': 'gdoc-tree-iface-icon'
 };
 
 /**
@@ -854,6 +857,7 @@ grokdoc.TypedTreeNode.KIND_ICON_MAP = {
  */
 grokdoc.TypedTreeNode.KIND_LABEL_MAP = {
   'class': 'gdoc-tree-class-label',
+  'interface': 'gdoc-tree-class-label',
   'namespace': 'gdoc-tree-namespace-label',
   'file': 'gdoc-tree-class-label',
   'folder': 'gdoc-tree-namespace-label'

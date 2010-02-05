@@ -454,7 +454,7 @@ goog.ui.PopupBase.prototype.show_ = function() {
         try {
           var tempDoc = goog.dom.getFrameContentDocument(activeElement);
         } catch (e) {
-          // The frame is on a different domain that it's parent document
+          // The frame is on a different domain that its parent document
           // This way, we grab the lowest-level document object we can get
           // a handle on given cross-domain security.
           break;

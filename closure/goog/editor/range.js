@@ -18,6 +18,7 @@
  */
 
 goog.provide('goog.editor.range');
+goog.provide('goog.editor.range.Point');
 
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -246,6 +247,49 @@ goog.editor.range.selectionPreservingNormalize = function(node) {
 
 
 /**
+ * Manually normalizes the node in IE, since native normalize in IE causes
+ * transient problems.
+ * @param {Node} node The node to normalize.
+ * @private
+ */
+goog.editor.range.normalizeNodeIe_ = function(node) {
+  var lastText = null;
+  var child = node.firstChild;
+  while (child) {
+    var next = child.nextSibling;
+    if (child.nodeType == goog.dom.NodeType.TEXT) {
+      if (child.nodeValue == '') {
+        node.removeChild(child);
+      } else if (lastText) {
+        lastText.nodeValue += child.nodeValue;
+        node.removeChild(child);
+      } else {
+        lastText = child;
+      }
+    } else {
+      goog.editor.range.normalizeNodeIe_(child);
+      lastText = null;
+    }
+    child = next;
+  }
+};
+
+
+/**
+ * Normalizes the given node.
+ * @param {Node} node The node to normalize.
+ * @private
+ */
+goog.editor.range.normalizeNode_ = function(node) {
+  if (goog.userAgent.IE) {
+    goog.editor.range.normalizeNodeIe_(node);
+  } else {
+    node.normalize();
+  }
+};
+
+
+/**
  * Normalizes the node, preserving a range of the document.
  *
  * May also normalize things outside the node, if it is more efficient to do so.
@@ -268,9 +312,10 @@ goog.editor.range.rangePreservingNormalize_ = function(node, range) {
   }
 
   if (container) {
-    goog.dom.findCommonAncestor(container, node).normalize();
+    goog.editor.range.normalizeNode_(
+        goog.dom.findCommonAncestor(container, node));
   } else if (node) {
-    node.normalize();
+    goog.editor.range.normalizeNode_(node);
   }
 
   if (rangeFactory) {
@@ -287,14 +332,14 @@ goog.editor.range.rangePreservingNormalize_ = function(node, range) {
  *
  * @param {goog.dom.AbstractRange} range A range.
  * @param {boolean} atStart True for the start point, false for the end point.
- * @return {goog.editor.range.Point_} The end point, expressed as a node
+ * @return {goog.editor.range.Point} The end point, expressed as a node
  *    and an offset.
  */
 goog.editor.range.getDeepEndPoint = function(range, atStart) {
   return atStart ?
-      goog.editor.range.Point_.createDeepestPoint(
+      goog.editor.range.Point.createDeepestPoint(
           range.getStartNode(), range.getStartOffset()) :
-      goog.editor.range.Point_.createDeepestPoint(
+      goog.editor.range.Point.createDeepestPoint(
           range.getEndNode(), range.getEndOffset());
 };
 
@@ -328,33 +373,61 @@ goog.editor.range.normalize = function(range) {
       goog.editor.range.getDeepEndPoint(range, true));
   var startParent = startPoint.getParentPoint();
   var startPreviousSibling = startPoint.node.previousSibling;
+  if (startPoint.node.nodeType == goog.dom.NodeType.TEXT) {
+    startPoint.node = null;
+  }
 
   var endPoint = goog.editor.range.normalizePoint_(
       goog.editor.range.getDeepEndPoint(range, false));
   var endParent = endPoint.getParentPoint();
   var endPreviousSibling = endPoint.node.previousSibling;
+  if (endPoint.node.nodeType == goog.dom.NodeType.TEXT) {
+    endPoint.node = null;
+  }
 
   /** @return {goog.dom.AbstractRange} The normalized range. */
   return function() {
+    if (!startPoint.node && startPreviousSibling) {
+      // If startPoint.node was previously an empty text node with no siblings,
+      // startPreviousSibling may not have a nextSibling since that node will no
+      // longer exist.  Do our best and point to the end of the previous
+      // element.
+      startPoint.node = startPreviousSibling.nextSibling;
+      if (!startPoint.node) {
+        startPoint = goog.editor.range.Point.getPointAtEndOfNode(
+            startPreviousSibling);
+      }
+    }
+
+    if (!endPoint.node && endPreviousSibling) {
+      // If endPoint.node was previously an empty text node with no siblings,
+      // endPreviousSibling may not have a nextSibling since that node will no
+      // longer exist.  Do our best and point to the end of the previous
+      // element.
+      endPoint.node = endPreviousSibling.nextSibling;
+      if (!endPoint.node) {
+        endPoint = goog.editor.range.Point.getPointAtEndOfNode(
+            endPreviousSibling);
+      }
+    }
+
     return goog.dom.Range.createFromNodes(
-        startPreviousSibling ? startPreviousSibling.nextSibling :
-            startParent.node.firstChild,
+        startPoint.node || startParent.node.firstChild,
         startPoint.offset,
-        endPreviousSibling ? endPreviousSibling.nextSibling :
-            endParent.node.firstChild,
+        endPoint.node || endParent.node.firstChild,
         endPoint.offset);
   };
 };
 
 
 /**
- * Given a point in the current DOM, adjust it to reprecent the same point in
+ * Given a point in the current DOM, adjust it to represent the same point in
  * a normalized DOM.
  *
  * See the comments on goog.editor.range.normalize for more context.
  *
- * @param {goog.editor.range.Point_} point A point in the document.
- * @return {goog.editor.range.Point_} The same point, for easy chaining.
+ * @param {goog.editor.range.Point} point A point in the document.
+ * @return {goog.editor.range.Point} The same point, for easy chaining.
  * @private
  */
 goog.editor.range.normalizePoint_ = function(point) {
@@ -427,10 +500,9 @@ goog.editor.range.intersectsTag = function(range, tagName) {
  * One endpoint of a range, represented as a Node and and offset.
  * @param {Node} node The node containing the point.
  * @param {number} offset The offset of the point into the node.
- * @private
  * @constructor
  */
-goog.editor.range.Point_ = function(node, offset) {
+goog.editor.range.Point = function(node, offset) {
   /**
    * The node containing the point.
    * @type {Node}
@@ -447,11 +519,11 @@ goog.editor.range.Point_ = function(node, offset) {
 
 /**
  * Gets the point of this point's node in the DOM.
- * @return {goog.editor.range.Point_} The node's point.
+ * @return {goog.editor.range.Point} The node's point.
  */
-goog.editor.range.Point_.prototype.getParentPoint = function() {
+goog.editor.range.Point.prototype.getParentPoint = function() {
   var parent = this.node.parentNode;
-  return new goog.editor.range.Point_(
+  return new goog.editor.range.Point(
       parent, goog.array.indexOf(parent.childNodes, this.node));
 };
 
@@ -461,9 +533,9 @@ goog.editor.range.Point_.prototype.getParentPoint = function() {
  * to the given point, expressed as a node and an offset.
  * @param {Node} node The node containing the point.
  * @param {number} offset The offset of the point from the node.
- * @return {goog.editor.range.Point_} A new point.
+ * @return {goog.editor.range.Point} A new point.
  */
-goog.editor.range.Point_.createDeepestPoint = function(node, offset) {
+goog.editor.range.Point.createDeepestPoint = function(node, offset) {
   while (node.nodeType == goog.dom.NodeType.ELEMENT) {
     var child = node.childNodes[offset];
     if (!child && !node.lastChild) {
@@ -478,8 +550,19 @@ goog.editor.range.Point_.createDeepestPoint = function(node, offset) {
     }
   }
 
-  return new goog.editor.range.Point_(node, offset);
+  return new goog.editor.range.Point(node, offset);
 };
+
+
+/**
+ * Construct a point at the very end of the given node.
+ * @param {Node} node The node to create a point for.
+ * @return {goog.editor.range.Point} A new point.
+ */
+goog.editor.range.Point.getPointAtEndOfNode = function(node) {
+  return new goog.editor.range.Point(node, goog.editor.node.getLength(node));
+};
+
 
 
 /**

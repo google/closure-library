@@ -135,99 +135,100 @@
 <a name="line91"></a>  this.addArrow_(subMenu, element);
 <a name="line92"></a>
 <a name="line93"></a>  // Search for a child menu and decorate it.
-<a name="line94"></a>  var childMenuEls = goog.dom.$$(&#39;div&#39;, goog.getCssName(&#39;goog-menu&#39;), element);
-<a name="line95"></a>  if (childMenuEls.length) {
-<a name="line96"></a>    var childMenu = new goog.ui.Menu(subMenu.getDomHelper());
-<a name="line97"></a>    var childMenuEl = childMenuEls[0];
-<a name="line98"></a>    // Hide the menu element before attaching it to the document body; see
-<a name="line99"></a>    // bug 1089244.
-<a name="line100"></a>    goog.style.showElement(childMenuEl, false);
-<a name="line101"></a>    subMenu.getDomHelper().getDocument().body.appendChild(childMenuEl);
-<a name="line102"></a>    childMenu.decorate(childMenuEl);
-<a name="line103"></a>    subMenu.setMenu(childMenu, true);
-<a name="line104"></a>  }
-<a name="line105"></a>  return element;
-<a name="line106"></a>};
-<a name="line107"></a>
+<a name="line94"></a>  var childMenuEls = goog.dom.getElementsByTagNameAndClass(
+<a name="line95"></a>      &#39;div&#39;, goog.getCssName(&#39;goog-menu&#39;), element);
+<a name="line96"></a>  if (childMenuEls.length) {
+<a name="line97"></a>    var childMenu = new goog.ui.Menu(subMenu.getDomHelper());
+<a name="line98"></a>    var childMenuEl = childMenuEls[0];
+<a name="line99"></a>    // Hide the menu element before attaching it to the document body; see
+<a name="line100"></a>    // bug 1089244.
+<a name="line101"></a>    goog.style.showElement(childMenuEl, false);
+<a name="line102"></a>    subMenu.getDomHelper().getDocument().body.appendChild(childMenuEl);
+<a name="line103"></a>    childMenu.decorate(childMenuEl);
+<a name="line104"></a>    subMenu.setMenu(childMenu, true);
+<a name="line105"></a>  }
+<a name="line106"></a>  return element;
+<a name="line107"></a>};
 <a name="line108"></a>
-<a name="line109"></a>/**
-<a name="line110"></a> * Overrides {@link goog.ui.MenuItemRenderer#initializeDom} to tweak
-<a name="line111"></a> * the DOM structure for the span.goog-submenu-arrow element
-<a name="line112"></a> * depending on the text direction (LTR or RTL). When the SubMenu is RTL
-<a name="line113"></a> * the arrow will be given the additional class of goog-submenu-arrow-rtl,
-<a name="line114"></a> * and the arrow will be moved up to be the first child in the SubMenu&#39;s
-<a name="line115"></a> * element. Otherwise the arrow will have the class goog-submenu-arrow-ltr,
-<a name="line116"></a> * and be kept as the last child of the SubMenu&#39;s element.
-<a name="line117"></a> * @param {goog.ui.SubMenu} subMenu SubMenu whose DOM is to be initialized
-<a name="line118"></a> *     as it enters the document.
-<a name="line119"></a> */
-<a name="line120"></a>goog.ui.SubMenuRenderer.prototype.initializeDom = function(subMenu) {
-<a name="line121"></a>  goog.ui.SubMenuRenderer.superClass_.initializeDom.call(this, subMenu);
-<a name="line122"></a>  var element = subMenu.getContentElement();
-<a name="line123"></a>  var arrow = subMenu.getDomHelper().getElementsByTagNameAndClass(
-<a name="line124"></a>      &#39;span&#39;, goog.getCssName(&#39;goog-submenu-arrow&#39;), element)[0];
-<a name="line125"></a>  goog.ui.SubMenuRenderer.setArrowTextContent_(subMenu, arrow);
-<a name="line126"></a>  if (arrow != element.lastChild) {
-<a name="line127"></a>    element.appendChild(arrow);
-<a name="line128"></a>  }
-<a name="line129"></a>  goog.dom.a11y.setState(subMenu.getElement(), goog.dom.a11y.State.HASPOPUP,
-<a name="line130"></a>      &#39;true&#39;);
-<a name="line131"></a>};
-<a name="line132"></a>
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Overrides {@link goog.ui.MenuItemRenderer#initializeDom} to tweak
+<a name="line112"></a> * the DOM structure for the span.goog-submenu-arrow element
+<a name="line113"></a> * depending on the text direction (LTR or RTL). When the SubMenu is RTL
+<a name="line114"></a> * the arrow will be given the additional class of goog-submenu-arrow-rtl,
+<a name="line115"></a> * and the arrow will be moved up to be the first child in the SubMenu&#39;s
+<a name="line116"></a> * element. Otherwise the arrow will have the class goog-submenu-arrow-ltr,
+<a name="line117"></a> * and be kept as the last child of the SubMenu&#39;s element.
+<a name="line118"></a> * @param {goog.ui.SubMenu} subMenu SubMenu whose DOM is to be initialized
+<a name="line119"></a> *     as it enters the document.
+<a name="line120"></a> */
+<a name="line121"></a>goog.ui.SubMenuRenderer.prototype.initializeDom = function(subMenu) {
+<a name="line122"></a>  goog.ui.SubMenuRenderer.superClass_.initializeDom.call(this, subMenu);
+<a name="line123"></a>  var element = subMenu.getContentElement();
+<a name="line124"></a>  var arrow = subMenu.getDomHelper().getElementsByTagNameAndClass(
+<a name="line125"></a>      &#39;span&#39;, goog.getCssName(&#39;goog-submenu-arrow&#39;), element)[0];
+<a name="line126"></a>  goog.ui.SubMenuRenderer.setArrowTextContent_(subMenu, arrow);
+<a name="line127"></a>  if (arrow != element.lastChild) {
+<a name="line128"></a>    element.appendChild(arrow);
+<a name="line129"></a>  }
+<a name="line130"></a>  goog.dom.a11y.setState(subMenu.getElement(), goog.dom.a11y.State.HASPOPUP,
+<a name="line131"></a>      &#39;true&#39;);
+<a name="line132"></a>};
 <a name="line133"></a>
-<a name="line134"></a>/**
-<a name="line135"></a> * Appends a child node with the class goog.getCssName(&#39;goog-submenu-arrow&#39;) or
-<a name="line136"></a> * &#39;goog-submenu-arrow-rtl&#39; which can be styled to show an arrow.
-<a name="line137"></a> * @param {goog.ui.SubMenu} subMenu SubMenu to render.
-<a name="line138"></a> * @param {Element} element Element to decorate.
-<a name="line139"></a> * @private
-<a name="line140"></a> */
-<a name="line141"></a>goog.ui.SubMenuRenderer.prototype.addArrow_ = function(subMenu, element) {
-<a name="line142"></a>  var arrow = subMenu.getDomHelper().createDom(&#39;span&#39;);
-<a name="line143"></a>  arrow.className = goog.getCssName(&#39;goog-submenu-arrow&#39;);
-<a name="line144"></a>  goog.ui.SubMenuRenderer.setArrowTextContent_(subMenu, arrow);
-<a name="line145"></a>  this.getContentElement(element).appendChild(arrow);
-<a name="line146"></a>};
-<a name="line147"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Appends a child node with the class goog.getCssName(&#39;goog-submenu-arrow&#39;) or
+<a name="line137"></a> * &#39;goog-submenu-arrow-rtl&#39; which can be styled to show an arrow.
+<a name="line138"></a> * @param {goog.ui.SubMenu} subMenu SubMenu to render.
+<a name="line139"></a> * @param {Element} element Element to decorate.
+<a name="line140"></a> * @private
+<a name="line141"></a> */
+<a name="line142"></a>goog.ui.SubMenuRenderer.prototype.addArrow_ = function(subMenu, element) {
+<a name="line143"></a>  var arrow = subMenu.getDomHelper().createDom(&#39;span&#39;);
+<a name="line144"></a>  arrow.className = goog.getCssName(&#39;goog-submenu-arrow&#39;);
+<a name="line145"></a>  goog.ui.SubMenuRenderer.setArrowTextContent_(subMenu, arrow);
+<a name="line146"></a>  this.getContentElement(element).appendChild(arrow);
+<a name="line147"></a>};
 <a name="line148"></a>
-<a name="line149"></a>/**
-<a name="line150"></a> * The unicode char for a left arrow.
-<a name="line151"></a> * @type {string}
-<a name="line152"></a> * @private
-<a name="line153"></a> */
-<a name="line154"></a>goog.ui.SubMenuRenderer.LEFT_ARROW_ = &#39;\u25C4&#39;;
-<a name="line155"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * The unicode char for a left arrow.
+<a name="line152"></a> * @type {string}
+<a name="line153"></a> * @private
+<a name="line154"></a> */
+<a name="line155"></a>goog.ui.SubMenuRenderer.LEFT_ARROW_ = &#39;\u25C4&#39;;
 <a name="line156"></a>
-<a name="line157"></a>/**
-<a name="line158"></a> * The unicode char for a right arrow.
-<a name="line159"></a> * @type {string}
-<a name="line160"></a> * @private
-<a name="line161"></a> */
-<a name="line162"></a>goog.ui.SubMenuRenderer.RIGHT_ARROW_ = &#39;\u25BA&#39;;
-<a name="line163"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * The unicode char for a right arrow.
+<a name="line160"></a> * @type {string}
+<a name="line161"></a> * @private
+<a name="line162"></a> */
+<a name="line163"></a>goog.ui.SubMenuRenderer.RIGHT_ARROW_ = &#39;\u25BA&#39;;
 <a name="line164"></a>
-<a name="line165"></a>/**
-<a name="line166"></a> * Set the text content of an arrow.
-<a name="line167"></a> * @param {goog.ui.SubMenu} subMenu The sub menu that owns the arrow.
-<a name="line168"></a> * @param {Element} arrow The arrow element.
-<a name="line169"></a> * @private
-<a name="line170"></a> */
-<a name="line171"></a>goog.ui.SubMenuRenderer.setArrowTextContent_ = function(subMenu, arrow) {
-<a name="line172"></a>  // Fix arrow rtl
-<a name="line173"></a>  var leftArrow = goog.ui.SubMenuRenderer.LEFT_ARROW_;
-<a name="line174"></a>  var rightArrow = goog.ui.SubMenuRenderer.RIGHT_ARROW_;
-<a name="line175"></a>  if (subMenu.isRightToLeft()) {
-<a name="line176"></a>    goog.dom.classes.add(arrow, goog.getCssName(&#39;goog-submenu-arrow-rtl&#39;));
-<a name="line177"></a>    // Unicode character - Black left-pointing pointer iff aligned to end.
-<a name="line178"></a>    goog.dom.setTextContent(arrow, subMenu.isAlignedToEnd() ?
-<a name="line179"></a>        leftArrow : rightArrow);
-<a name="line180"></a>  } else {
-<a name="line181"></a>    goog.dom.classes.remove(arrow, goog.getCssName(&#39;goog-submenu-arrow-rtl&#39;));
-<a name="line182"></a>    // Unicode character - Black right-pointing pointer iff aligned to end.
-<a name="line183"></a>    goog.dom.setTextContent(arrow, subMenu.isAlignedToEnd() ?
-<a name="line184"></a>        rightArrow : leftArrow);
-<a name="line185"></a>  }
-<a name="line186"></a>};
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Set the text content of an arrow.
+<a name="line168"></a> * @param {goog.ui.SubMenu} subMenu The sub menu that owns the arrow.
+<a name="line169"></a> * @param {Element} arrow The arrow element.
+<a name="line170"></a> * @private
+<a name="line171"></a> */
+<a name="line172"></a>goog.ui.SubMenuRenderer.setArrowTextContent_ = function(subMenu, arrow) {
+<a name="line173"></a>  // Fix arrow rtl
+<a name="line174"></a>  var leftArrow = goog.ui.SubMenuRenderer.LEFT_ARROW_;
+<a name="line175"></a>  var rightArrow = goog.ui.SubMenuRenderer.RIGHT_ARROW_;
+<a name="line176"></a>  if (subMenu.isRightToLeft()) {
+<a name="line177"></a>    goog.dom.classes.add(arrow, goog.getCssName(&#39;goog-submenu-arrow-rtl&#39;));
+<a name="line178"></a>    // Unicode character - Black left-pointing pointer iff aligned to end.
+<a name="line179"></a>    goog.dom.setTextContent(arrow, subMenu.isAlignedToEnd() ?
+<a name="line180"></a>        leftArrow : rightArrow);
+<a name="line181"></a>  } else {
+<a name="line182"></a>    goog.dom.classes.remove(arrow, goog.getCssName(&#39;goog-submenu-arrow-rtl&#39;));
+<a name="line183"></a>    // Unicode character - Black right-pointing pointer iff aligned to end.
+<a name="line184"></a>    goog.dom.setTextContent(arrow, subMenu.isAlignedToEnd() ?
+<a name="line185"></a>        rightArrow : leftArrow);
+<a name="line186"></a>  }
+<a name="line187"></a>};
 </pre>
 
 

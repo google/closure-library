@@ -110,7 +110,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">catchErrors<span class="args">(<span class="arg">opt_logger</span>,&nbsp;<span class="arg">opt_cancel</span>,&nbsp;<span class="arg">opt_target</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">catchErrors<span class="args">(<span class="arg">catchErrors@logFunc</span>,&nbsp;<span class="arg">catchErrors@opt_cancel</span>,&nbsp;<span class="arg">catchErrors@opt_target</span>)</span>
         </span>
       </div>
 
@@ -135,25 +135,25 @@
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_logger</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span><span>&nbsp;|&nbsp;</span><span class="type">function(Object)=</span></div>
-        <div class="entryOverview">The logger to use to catch errors or a function to call instead. The function takes a single parameter that contains information about the error.</div>
+        <span class="entryName">catchErrors@logFunc</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_cancel</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether to stop the error from reaching the browser.</div>
+        <span class="entryName">catchErrors@opt_cancel</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_target</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Object that fires onerror events.</div>
+        <span class="entryName">catchErrors@opt_target</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -166,7 +166,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line38">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line37">code &raquo;</a>
   </td>
      </tr>
 
@@ -186,7 +186,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">deepExpose<span class="args">(<span class="arg">obj</span>,&nbsp;<span class="arg">opt_showFn</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">deepExpose<span class="args">(<span class="arg">deepExpose@obj</span>,&nbsp;<span class="arg">deepExpose@opt_showFn</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -217,17 +217,17 @@ object it touches will gain a property whose name begins with
      
    <tr class="even">
      <td>
-        <span class="entryName">obj</span>
-        : <div class="fullType"><span class="type">*</span></div>
-        <div class="entryOverview">Object to expose.</div>
+        <span class="entryName">deepExpose@obj</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_showFn</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Also show properties that are functions (by default, functions are omitted).</div>
+        <span class="entryName">deepExpose@opt_showFn</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -244,7 +244,7 @@ object it touches will gain a property whose name begins with
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line107">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line100">code &raquo;</a>
   </td>
      </tr>
 
@@ -264,7 +264,7 @@ object it touches will gain a property whose name begins with
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">enhanceError<span class="args">(<span class="arg">err</span>,&nbsp;<span class="arg">opt_message</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">enhanceError<span class="args">(<span class="arg">enhanceError@err</span>,&nbsp;<span class="arg">enhanceError@opt_message</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type">Error</span></div>
       </div>
@@ -292,17 +292,17 @@ and optionally adds an extra message.
      
    <tr class="even">
      <td>
-        <span class="entryName">err</span>
-        : <div class="fullType"><span class="type">Error</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">the original thrown object or string.</div>
+        <span class="entryName">enhanceError@err</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_message</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">optional additional message to add to the error.</div>
+        <span class="entryName">enhanceError@opt_message</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -319,7 +319,7 @@ and optionally adds an extra message.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line247">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line240">code &raquo;</a>
   </td>
      </tr>
 
@@ -339,7 +339,7 @@ and optionally adds an extra message.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">expose<span class="args">(<span class="arg">obj</span>,&nbsp;<span class="arg">opt_showFn</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">expose<span class="args">(<span class="arg">expose@obj</span>,&nbsp;<span class="arg">expose@opt_showFn</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -365,17 +365,17 @@ and optionally adds an extra message.
      
    <tr class="even">
      <td>
-        <span class="entryName">obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">null</span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>
-        <div class="entryOverview">Object to expose.</div>
+        <span class="entryName">expose@obj</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_showFn</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Show the functions as well as the properties, default is false.</div>
+        <span class="entryName">expose@opt_showFn</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -392,7 +392,7 @@ and optionally adds an extra message.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line69">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line62">code &raquo;</a>
   </td>
      </tr>
 
@@ -412,7 +412,7 @@ and optionally adds an extra message.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">exposeArray<span class="args">(<span class="arg">arr</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">exposeArray<span class="args">(<span class="arg">exposeArray@arr</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -438,9 +438,9 @@ and optionally adds an extra message.
      
    <tr class="even">
      <td>
-        <span class="entryName">arr</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
-        <div class="entryOverview">The array.</div>
+        <span class="entryName">exposeArray@arr</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -457,7 +457,7 @@ and optionally adds an extra message.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line165">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line158">code &raquo;</a>
   </td>
      </tr>
 
@@ -477,7 +477,7 @@ and optionally adds an extra message.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">exposeException<span class="args">(<span class="arg">err</span>,&nbsp;<span class="arg">opt_fn</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">exposeException<span class="args">(<span class="arg">exposeException@err</span>,&nbsp;<span class="arg">exposeException@opt_fn</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -504,17 +504,17 @@ error with a stack trace.
      
    <tr class="even">
      <td>
-        <span class="entryName">err</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">Error object or string.</div>
+        <span class="entryName">exposeException@err</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_fn</span>
-        : <div class="fullType"><span class="type">Function=</span></div>
-        <div class="entryOverview">Optional function to start stack trace from.</div>
+        <span class="entryName">exposeException@opt_fn</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -531,7 +531,7 @@ error with a stack trace.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line185">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line178">code &raquo;</a>
   </td>
      </tr>
 
@@ -551,7 +551,7 @@ error with a stack trace.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">getFunctionName<span class="args">(<span class="arg">fn</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">getFunctionName<span class="args">(<span class="arg">getFunctionName@fn</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -577,9 +577,9 @@ error with a stack trace.
      
    <tr class="even">
      <td>
-        <span class="entryName">fn</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
-        <div class="entryOverview">Function to get name of.</div>
+        <span class="entryName">getFunctionName@fn</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -596,7 +596,7 @@ error with a stack trace.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line402">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line395">code &raquo;</a>
   </td>
      </tr>
 
@@ -616,7 +616,7 @@ error with a stack trace.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">getStacktrace<span class="args">(<span class="arg">opt_fn</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">getStacktrace<span class="args">(<span class="arg">getStacktrace@opt_fn</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -643,9 +643,9 @@ from a specified function that&#39;s currently on the call stack.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_fn</span>
-        : <div class="fullType"><span class="type">Function=</span></div>
-        <div class="entryOverview">Optional function to start getting the trace from. If not provided, defaults to the function that called this.</div>
+        <span class="entryName">getStacktrace@opt_fn</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -662,7 +662,7 @@ from a specified function that&#39;s currently on the call stack.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line316">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line309">code &raquo;</a>
   </td>
      </tr>
 
@@ -682,7 +682,7 @@ from a specified function that&#39;s currently on the call stack.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">getStacktraceHelper_<span class="args">(<span class="arg">fn</span>,&nbsp;<span class="arg">visited</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">getStacktraceHelper_<span class="args">(<span class="arg">getStacktraceHelper_@fn</span>,&nbsp;<span class="arg">getStacktraceHelper_@visited</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -708,17 +708,17 @@ from a specified function that&#39;s currently on the call stack.
      
    <tr class="even">
      <td>
-        <span class="entryName">fn</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
-        <div class="entryOverview">Function to start getting the trace from.</div>
+        <span class="entryName">getStacktraceHelper_@fn</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">visited</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
-        <div class="entryOverview">List of functions visited so far.</div>
+        <span class="entryName">getStacktraceHelper_@visited</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -735,7 +735,7 @@ from a specified function that&#39;s currently on the call stack.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line328">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line321">code &raquo;</a>
   </td>
      </tr>
 
@@ -755,7 +755,7 @@ from a specified function that&#39;s currently on the call stack.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">getStacktraceSimple<span class="args">(<span class="arg">opt_depth</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">getStacktraceSimple<span class="args">(<span class="arg">getStacktraceSimple@opt_depth</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -782,9 +782,9 @@ catching circular references or getting the args.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_depth</span>
-        : <div class="fullType"><span class="type">number=</span></div>
-        <div class="entryOverview">Optional maximum depth to trace back to.</div>
+        <span class="entryName">getStacktraceSimple@opt_depth</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -801,7 +801,7 @@ catching circular references or getting the args.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line271">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line264">code &raquo;</a>
   </td>
      </tr>
 
@@ -821,7 +821,7 @@ catching circular references or getting the args.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">makeWhitespaceVisible<span class="args">(<span class="arg">string</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">makeWhitespaceVisible<span class="args">(<span class="arg">makeWhitespaceVisible@string</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -849,9 +849,9 @@ output strings of a testcase.
      
    <tr class="even">
      <td>
-        <span class="entryName">string</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">whose whitespace needs to be made visible.</div>
+        <span class="entryName">makeWhitespaceVisible@string</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -868,7 +868,7 @@ output strings of a testcase.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line425">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line418">code &raquo;</a>
   </td>
      </tr>
 
@@ -888,7 +888,7 @@ output strings of a testcase.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.</span><span class="entryName">normalizeErrorObject<span class="args">(<span class="arg">err</span>)</span>
+        <span class="entryNamespace">goog.debug.</span><span class="entryName">normalizeErrorObject<span class="args">(<span class="arg">normalizeErrorObject@err</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
       </div>
@@ -914,9 +914,9 @@ output strings of a testcase.
      
    <tr class="even">
      <td>
-        <span class="entryName">err</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">Raw error object.</div>
+        <span class="entryName">normalizeErrorObject@err</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -933,7 +933,7 @@ output strings of a testcase.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line209">code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line202">code &raquo;</a>
   </td>
      </tr>
 
@@ -981,7 +981,7 @@ output strings of a testcase.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line306">Code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line299">Code &raquo;</a>
   </td>
      </tr>
 
@@ -1014,7 +1014,7 @@ output strings of a testcase.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_debug.js.source.html#line439">Code &raquo;</a>
+     <a href="closure_goog_debug_debug.js.source.html#line432">Code &raquo;</a>
   </td>
      </tr>
 

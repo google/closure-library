@@ -15,7 +15,7 @@
 /**
  * @fileoverview Menu item observing the filter text in a
  * {@link goog.ui.FilteredMenu}. The observer method is called when the filter
- * text changes and allows the menu item to update it's content and state based
+ * text changes and allows the menu item to update its content and state based
  * on the filter.
  *
  */
@@ -34,7 +34,7 @@ goog.require('goog.ui.registry');
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to
  *     display as the content of the item (use to add icons or styling to
  *     menus).
- * @param {Object=} opt_model Data/model associated with the menu item.
+ * @param {*=} opt_model Data/model associated with the menu item.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper used for
  *     document interactions.
  * @param {goog.ui.MenuItemRenderer=} opt_renderer Optional renderer.

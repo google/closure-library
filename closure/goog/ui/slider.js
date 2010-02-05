@@ -100,7 +100,8 @@ goog.ui.Slider.prototype.getCssClass = function(orient) {
 goog.ui.Slider.prototype.createThumbs = function() {
   // find thumb
   var element = this.getElement();
-  var thumb = goog.dom.$$(null, goog.ui.Slider.THUMB_CSS_CLASS, element)[0];
+  var thumb = goog.dom.getElementsByTagNameAndClass(
+      null, goog.ui.Slider.THUMB_CSS_CLASS, element)[0];
   if (!thumb) {
     thumb = this.createThumb_();
     element.appendChild(thumb);

@@ -134,7 +134,7 @@ function checkPathsEndWithSameFile(path1, path2) {
 function checkPostLoadStructureForFastLoadNonProgressivePicker(palette,
                                                                emoji,
                                                                images) {
- for (var i = 0; i < emoji[1].length; i++) {
+  for (var i = 0; i < emoji[1].length; i++) {
     palette.setSelectedIndex(i);
     var emojiInfo = emoji[1][i];
     var cell = palette.getSelectedItem();
@@ -240,6 +240,12 @@ testCase.tearDownPage = function() {
 };
 
 testCase.testStructure = function() {
+  // Bug 2280968
+  if (goog.userAgent.IE && goog.userAgent.VERSION == '6.0') {
+    this.log('Not testing emojipicker structure');
+    return;
+  }
+
   this.log('Testing emojipicker structure');
   checkPostLoadStructureForFastLoadNonProgressivePicker(this.palette,
       spritedEmoji2, this.images);

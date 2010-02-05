@@ -102,99 +102,100 @@
 <a name="line58"></a>
 <a name="line59"></a>/** @inheritDoc */
 <a name="line60"></a>goog.module.ModuleLoader.prototype.loadModulesInternal = function(
-<a name="line61"></a>    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn) {
-<a name="line62"></a>  var uris = [];
-<a name="line63"></a>  for (var i = 0; i &lt; ids.length; i++) {
-<a name="line64"></a>    goog.array.extend(uris, moduleInfoMap[ids[i]].getUris());
-<a name="line65"></a>  }
-<a name="line66"></a>  this.logger.info(&#39;loadModules ids:&#39; + ids + &#39; uris:&#39; + uris);
-<a name="line67"></a>
-<a name="line68"></a>  // In prod, we don&#39;t load via a script tag because it is difficult to
-<a name="line69"></a>  // determine if the script has been loaded and to handle errors conditions.
-<a name="line70"></a>  if (this.getDebugMode() &amp;&amp; goog.userAgent.GECKO) {
-<a name="line71"></a>    // In debug mode on FF, we do not load via an XHR + eval as the script will
-<a name="line72"></a>    // not show in firebug.
-<a name="line73"></a>    for (var i = 0; i &lt; uris.length; i++) {
-<a name="line74"></a>      var scriptElt = goog.dom.createElement(&#39;script&#39;);
-<a name="line75"></a>      scriptElt.src = uris[i];
-<a name="line76"></a>      scriptElt.type = &#39;text/javascript&#39;;
-<a name="line77"></a>      document.documentElement.appendChild(scriptElt);
-<a name="line78"></a>    }
-<a name="line79"></a>  } else {
-<a name="line80"></a>    var bulkLoader = new goog.net.BulkLoader(uris);
-<a name="line81"></a>    var eventHandler = this.eventHandler_;
-<a name="line82"></a>    eventHandler.listen(
-<a name="line83"></a>        bulkLoader,
-<a name="line84"></a>        goog.net.EventType.SUCCESS,
-<a name="line85"></a>        goog.bind(this.handleSuccess, this, bulkLoader, ids,
-<a name="line86"></a>            opt_successFn, opt_errorFn),
-<a name="line87"></a>        false,
-<a name="line88"></a>        null);
-<a name="line89"></a>    eventHandler.listen(
-<a name="line90"></a>        bulkLoader,
-<a name="line91"></a>        goog.net.EventType.ERROR,
-<a name="line92"></a>        goog.bind(this.handleError, this, bulkLoader, ids, opt_errorFn),
-<a name="line93"></a>        false,
-<a name="line94"></a>        null);
-<a name="line95"></a>    // TODO: Need to handle timeouts in the module loading code.
-<a name="line96"></a>
-<a name="line97"></a>    bulkLoader.load();
-<a name="line98"></a>  }
-<a name="line99"></a>};
-<a name="line100"></a>
+<a name="line61"></a>    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
+<a name="line62"></a>    opt_forceReload) {
+<a name="line63"></a>  var uris = [];
+<a name="line64"></a>  for (var i = 0; i &lt; ids.length; i++) {
+<a name="line65"></a>    goog.array.extend(uris, moduleInfoMap[ids[i]].getUris());
+<a name="line66"></a>  }
+<a name="line67"></a>  this.logger.info(&#39;loadModules ids:&#39; + ids + &#39; uris:&#39; + uris);
+<a name="line68"></a>
+<a name="line69"></a>  // In prod, we don&#39;t load via a script tag because it is difficult to
+<a name="line70"></a>  // determine if the script has been loaded and to handle errors conditions.
+<a name="line71"></a>  if (this.getDebugMode() &amp;&amp; goog.userAgent.GECKO) {
+<a name="line72"></a>    // In debug mode on FF, we do not load via an XHR + eval as the script will
+<a name="line73"></a>    // not show in firebug.
+<a name="line74"></a>    for (var i = 0; i &lt; uris.length; i++) {
+<a name="line75"></a>      var scriptElt = goog.dom.createElement(&#39;script&#39;);
+<a name="line76"></a>      scriptElt.src = uris[i];
+<a name="line77"></a>      scriptElt.type = &#39;text/javascript&#39;;
+<a name="line78"></a>      document.documentElement.appendChild(scriptElt);
+<a name="line79"></a>    }
+<a name="line80"></a>  } else {
+<a name="line81"></a>    var bulkLoader = new goog.net.BulkLoader(uris);
+<a name="line82"></a>    var eventHandler = this.eventHandler_;
+<a name="line83"></a>    eventHandler.listen(
+<a name="line84"></a>        bulkLoader,
+<a name="line85"></a>        goog.net.EventType.SUCCESS,
+<a name="line86"></a>        goog.bind(this.handleSuccess, this, bulkLoader, ids,
+<a name="line87"></a>            opt_successFn, opt_errorFn),
+<a name="line88"></a>        false,
+<a name="line89"></a>        null);
+<a name="line90"></a>    eventHandler.listen(
+<a name="line91"></a>        bulkLoader,
+<a name="line92"></a>        goog.net.EventType.ERROR,
+<a name="line93"></a>        goog.bind(this.handleError, this, bulkLoader, ids, opt_errorFn),
+<a name="line94"></a>        false,
+<a name="line95"></a>        null);
+<a name="line96"></a>    // TODO: Need to handle timeouts in the module loading code.
+<a name="line97"></a>
+<a name="line98"></a>    bulkLoader.load();
+<a name="line99"></a>  }
+<a name="line100"></a>};
 <a name="line101"></a>
-<a name="line102"></a>/**
-<a name="line103"></a> * Handles a successful response to a request for one or more modules.
-<a name="line104"></a> *
-<a name="line105"></a> * @param {goog.net.BulkLoader} bulkLoader The bulk loader.
-<a name="line106"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
-<a name="line107"></a> * @param {function()} successFn The callback for success.
-<a name="line108"></a> * @param {function(?number)} errorFn The callback for error.
-<a name="line109"></a> */
-<a name="line110"></a>goog.module.ModuleLoader.prototype.handleSuccess = function(
-<a name="line111"></a>  bulkLoader, moduleIds, successFn, errorFn) {
-<a name="line112"></a>  var jsCode = bulkLoader.getResponseTexts().join(&#39;\n&#39;);
-<a name="line113"></a>
-<a name="line114"></a>  this.handleRequestSuccess(jsCode, moduleIds, successFn, errorFn);
-<a name="line115"></a>
-<a name="line116"></a>  // NOTE: A bulk loader instance is used for loading a set of module ids. Once
-<a name="line117"></a>  // these modules have been loaded succesfully or in error the bulk loader
-<a name="line118"></a>  // should be disposed as it is not needed anymore. A new bulk loader is
-<a name="line119"></a>  // instantiated for any new modules to be loaded. The dispose is called
-<a name="line120"></a>  // on a timer so that the bulkloader has a chance to release its
-<a name="line121"></a>  // objects.
-<a name="line122"></a>  goog.Timer.callOnce(bulkLoader.dispose, 5, bulkLoader);
-<a name="line123"></a>};
-<a name="line124"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Handles a successful response to a request for one or more modules.
+<a name="line105"></a> *
+<a name="line106"></a> * @param {goog.net.BulkLoader} bulkLoader The bulk loader.
+<a name="line107"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
+<a name="line108"></a> * @param {function()} successFn The callback for success.
+<a name="line109"></a> * @param {function(?number)} errorFn The callback for error.
+<a name="line110"></a> */
+<a name="line111"></a>goog.module.ModuleLoader.prototype.handleSuccess = function(
+<a name="line112"></a>  bulkLoader, moduleIds, successFn, errorFn) {
+<a name="line113"></a>  var jsCode = bulkLoader.getResponseTexts().join(&#39;\n&#39;);
+<a name="line114"></a>
+<a name="line115"></a>  this.handleRequestSuccess(jsCode, moduleIds, successFn, errorFn);
+<a name="line116"></a>
+<a name="line117"></a>  // NOTE: A bulk loader instance is used for loading a set of module ids. Once
+<a name="line118"></a>  // these modules have been loaded succesfully or in error the bulk loader
+<a name="line119"></a>  // should be disposed as it is not needed anymore. A new bulk loader is
+<a name="line120"></a>  // instantiated for any new modules to be loaded. The dispose is called
+<a name="line121"></a>  // on a timer so that the bulkloader has a chance to release its
+<a name="line122"></a>  // objects.
+<a name="line123"></a>  goog.Timer.callOnce(bulkLoader.dispose, 5, bulkLoader);
+<a name="line124"></a>};
 <a name="line125"></a>
-<a name="line126"></a>/**
-<a name="line127"></a> * Handles an error during a request for one or more modules.
-<a name="line128"></a> * @param {goog.net.BulkLoader} bulkLoader The bulk loader.
-<a name="line129"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
-<a name="line130"></a> * @param {function(?number)} errorFn The function to call on failure.
-<a name="line131"></a> * @param {number} status The response status.
-<a name="line132"></a> */
-<a name="line133"></a>goog.module.ModuleLoader.prototype.handleError = function(
-<a name="line134"></a>    bulkLoader, moduleIds, errorFn, status) {
-<a name="line135"></a>  this.handleRequestError(moduleIds, errorFn, status);
-<a name="line136"></a>
-<a name="line137"></a>  // NOTE: A bulk loader instance is used for loading a set of module ids. Once
-<a name="line138"></a>  // these modules have been loaded succesfully or in error the bulk loader
-<a name="line139"></a>  // should be disposed as it is not needed anymore. A new bulk loader is
-<a name="line140"></a>  // instantiated for any new modules to be loaded. The dispose is called
-<a name="line141"></a>  // on another thread so that the bulkloader has a chance to release its
-<a name="line142"></a>  // objects.
-<a name="line143"></a>  goog.Timer.callOnce(bulkLoader.dispose, 5, bulkLoader);
-<a name="line144"></a>};
-<a name="line145"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Handles an error during a request for one or more modules.
+<a name="line129"></a> * @param {goog.net.BulkLoader} bulkLoader The bulk loader.
+<a name="line130"></a> * @param {Array.&lt;string&gt;} moduleIds The ids of the modules requested.
+<a name="line131"></a> * @param {function(?number)} errorFn The function to call on failure.
+<a name="line132"></a> * @param {number} status The response status.
+<a name="line133"></a> */
+<a name="line134"></a>goog.module.ModuleLoader.prototype.handleError = function(
+<a name="line135"></a>    bulkLoader, moduleIds, errorFn, status) {
+<a name="line136"></a>  this.handleRequestError(moduleIds, errorFn, status);
+<a name="line137"></a>
+<a name="line138"></a>  // NOTE: A bulk loader instance is used for loading a set of module ids. Once
+<a name="line139"></a>  // these modules have been loaded succesfully or in error the bulk loader
+<a name="line140"></a>  // should be disposed as it is not needed anymore. A new bulk loader is
+<a name="line141"></a>  // instantiated for any new modules to be loaded. The dispose is called
+<a name="line142"></a>  // on another thread so that the bulkloader has a chance to release its
+<a name="line143"></a>  // objects.
+<a name="line144"></a>  goog.Timer.callOnce(bulkLoader.dispose, 5, bulkLoader);
+<a name="line145"></a>};
 <a name="line146"></a>
-<a name="line147"></a>/** @inheritDoc */
-<a name="line148"></a>goog.module.ModuleLoader.prototype.disposeInternal = function() {
-<a name="line149"></a>  goog.module.ModuleLoader.superClass_.disposeInternal.call(this);
-<a name="line150"></a>
-<a name="line151"></a>  this.eventHandler_.dispose();
-<a name="line152"></a>  this.eventHandler_ = null;
-<a name="line153"></a>};
+<a name="line147"></a>
+<a name="line148"></a>/** @inheritDoc */
+<a name="line149"></a>goog.module.ModuleLoader.prototype.disposeInternal = function() {
+<a name="line150"></a>  goog.module.ModuleLoader.superClass_.disposeInternal.call(this);
+<a name="line151"></a>
+<a name="line152"></a>  this.eventHandler_.dispose();
+<a name="line153"></a>  this.eventHandler_ = null;
+<a name="line154"></a>};
 </pre>
 
 

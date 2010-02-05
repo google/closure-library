@@ -46,7 +46,7 @@ limitations under the License.
       goog.graphics.Path.Segment.LINETO,
       goog.graphics.Path.Segment.CURVETO,
       goog.graphics.Path.Segment.ARCTO,
-      goog.graphics.Path.Segment.CLOSE,
+      goog.graphics.Path.Segment.CLOSE
     ], goog.graphics.Path.getSegmentCount));
   }
 
@@ -59,7 +59,7 @@ limitations under the License.
     goog.testing.graphics.assertPathEquals(['M', 30, 50], path);
   }
 
-  
+
   function testRepeatedMoveTo() {
     var path = new goog.graphics.Path();
     path.moveTo(30, 50);

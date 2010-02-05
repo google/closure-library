@@ -28,15 +28,13 @@ goog.require('goog.structs.Set');
 
 /**
  * Catches onerror events fired by windows and similar objects.
- * @param {goog.debug.Logger|function(Object)=} opt_logger The logger to use to
- *    catch errors or a function to call instead. The function takes a single
- *    parameter that contains information about the error.
+ * @param {function(Object)} logFunc The function to call with the error
+ *    information.
  * @param {boolean=} opt_cancel Whether to stop the error from reaching the
  *    browser.
  * @param {Object=} opt_target Object that fires onerror events.
  */
-goog.debug.catchErrors = function(opt_logger, opt_cancel, opt_target) {
-  var logger = opt_logger || goog.debug.LogManager.getRoot();
+goog.debug.catchErrors = function(logFunc, opt_cancel, opt_target) {
   var target = opt_target || goog.global;
   var oldErrorHandler = target.onerror;
   target.onerror = function(message, url, line) {
@@ -44,16 +42,11 @@ goog.debug.catchErrors = function(opt_logger, opt_cancel, opt_target) {
       oldErrorHandler(message, url, line);
     }
     var file = String(url).split(/[\/\\]/).pop();
-    if (goog.isFunction(logger)) {
-      logger({
-        message: message,
-        fileName: file,
-        line: line
-        });
-    } else {
-      logger.severe('Error: ' + message + ' (' + file + ' @ Line: ' +
-                    line + ')');
-    }
+    logFunc({
+      message: message,
+      fileName: file,
+      line: line
+    });
     return Boolean(opt_cancel);
   };
 };

@@ -463,7 +463,7 @@ goog.editor.plugins.UndoRedo.prototype.handleKeyboardShortcut = function(e, key,
     }
 
     if (command) {
-      // In the case where Trogedit shares it's undo redo stack with another
+      // In the case where Trogedit shares its undo redo stack with another
       // application it's possible that an undo or redo will not be for an
       // goog.editor.Field. In this case we don't want to go through the
       // goog.editor.Field execCommand flow which stops and restarts events on

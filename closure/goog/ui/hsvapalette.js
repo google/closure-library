@@ -96,11 +96,7 @@ goog.ui.HsvaPalette.prototype.aHandleEl_;
 goog.ui.HsvaPalette.prototype.swatchBackdropEl_;
 
 
-/**
- * Gets the color that is currently selected in this color picker.
- * Alpha transparency of the currently selected color, in [0, 1].
- * @return {number} The current alpha value.
- */
+/** @inheritDoc */
 goog.ui.HsvaPalette.prototype.getAlpha = function() {
   return this.alpha_;
 };

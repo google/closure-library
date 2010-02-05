@@ -91,1017 +91,1016 @@
 <a name="line47"></a>goog.require(&#39;goog.ui.MenuItem&#39;);
 <a name="line48"></a>goog.require(&#39;goog.ui.MenuSeparator&#39;);
 <a name="line49"></a>goog.require(&#39;goog.ui.PopupMenu&#39;);
-<a name="line50"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line50"></a>
 <a name="line51"></a>
-<a name="line52"></a>
-<a name="line53"></a>/**
-<a name="line54"></a> * Abstract base class for spell checker editor implementations. Provides basic
-<a name="line55"></a> * functionality such as word lookup and caching.
-<a name="line56"></a> *
-<a name="line57"></a> * @param {goog.spell.SpellCheck} handler Instance of the SpellCheckHandler
-<a name="line58"></a> *     support object to use. A single instance can be shared by multiple editor
-<a name="line59"></a> *     components.
-<a name="line60"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
-<a name="line61"></a> * @constructor
-<a name="line62"></a> * @extends {goog.ui.Component}
-<a name="line63"></a> */
-<a name="line64"></a>goog.ui.AbstractSpellChecker = function(handler, opt_domHelper) {
-<a name="line65"></a>  goog.ui.Component.call(this, opt_domHelper);
-<a name="line66"></a>
-<a name="line67"></a>  /**
-<a name="line68"></a>   * Handler to use for caching and lookups.
-<a name="line69"></a>   * @type {goog.spell.SpellCheck}
-<a name="line70"></a>   * @protected
-<a name="line71"></a>   * @suppress {underscore}
-<a name="line72"></a>   */
-<a name="line73"></a>  this.handler_ = handler;
-<a name="line74"></a>
-<a name="line75"></a>  /**
-<a name="line76"></a>   * Word to element references. Used by replace/ignore.
-<a name="line77"></a>   * @type {Object}
-<a name="line78"></a>   * @private
-<a name="line79"></a>   */
-<a name="line80"></a>  this.wordElements_ = {};
-<a name="line81"></a>
-<a name="line82"></a>  /**
-<a name="line83"></a>   * List of all &#39;edit word&#39; input elements.
-<a name="line84"></a>   * @type {Array.&lt;Element&gt;}
-<a name="line85"></a>   * @private
-<a name="line86"></a>   */
-<a name="line87"></a>  this.inputElements_ = [];
-<a name="line88"></a>
-<a name="line89"></a>  /**
-<a name="line90"></a>   * Global regular expression for splitting a string into individual words and
-<a name="line91"></a>   * blocks of separators. Matches zero or one word followed by zero or more
-<a name="line92"></a>   * separators.
-<a name="line93"></a>   * @type {RegExp}
-<a name="line94"></a>   * @private
-<a name="line95"></a>   */
-<a name="line96"></a>  this.splitRegex_ = new RegExp(
-<a name="line97"></a>      &#39;([^&#39; + goog.spell.SpellCheck.WORD_BOUNDARY_CHARS + &#39;]*)&#39; +
-<a name="line98"></a>      &#39;([&#39; + goog.spell.SpellCheck.WORD_BOUNDARY_CHARS + &#39;]*)&#39;, &#39;g&#39;);
-<a name="line99"></a>
-<a name="line100"></a>  goog.events.listen(this.handler_,
-<a name="line101"></a>      goog.spell.SpellCheck.EventType.WORD_CHANGED, this.onWordChanged_,
-<a name="line102"></a>      false, this);
-<a name="line103"></a>};
-<a name="line104"></a>goog.inherits(goog.ui.AbstractSpellChecker, goog.ui.Component);
-<a name="line105"></a>
-<a name="line106"></a>/**
-<a name="line107"></a> * The prefix to mark keys with.
-<a name="line108"></a> * @type {string}
-<a name="line109"></a> * @private
-<a name="line110"></a> */
-<a name="line111"></a>goog.ui.AbstractSpellChecker.KEY_PREFIX_ = &#39;:&#39;;
-<a name="line112"></a>
-<a name="line113"></a>/**
-<a name="line114"></a> * The prefix for ids on the spans.
-<a name="line115"></a> * @type {string}
-<a name="line116"></a> * @private
-<a name="line117"></a> */
-<a name="line118"></a>goog.ui.AbstractSpellChecker.ID_SUFFIX_ = &#39;sc&#39;;
-<a name="line119"></a>
-<a name="line120"></a>/**
-<a name="line121"></a> * The attribute name for original element contents (to offer subsequent
-<a name="line122"></a> * correction menu).
-<a name="line123"></a> * @type {string}
-<a name="line124"></a> * @private
-<a name="line125"></a> */
-<a name="line126"></a>goog.ui.AbstractSpellChecker.ORIGINAL_ = &#39;goog-spell-original&#39;;
-<a name="line127"></a>
-<a name="line128"></a>/**
-<a name="line129"></a> * Suggestions menu.
-<a name="line130"></a> *
-<a name="line131"></a> * @type {goog.ui.PopupMenu|undefined}
-<a name="line132"></a> * @private
-<a name="line133"></a> */
-<a name="line134"></a>goog.ui.AbstractSpellChecker.prototype.menu_;
-<a name="line135"></a>
-<a name="line136"></a>/**
-<a name="line137"></a> * Separator between suggestions and ignore in suggestions menu.
-<a name="line138"></a> *
-<a name="line139"></a> * @type {goog.ui.MenuSeparator|undefined}
-<a name="line140"></a> * @private
-<a name="line141"></a> */
-<a name="line142"></a>goog.ui.AbstractSpellChecker.prototype.menuSeparator_;
-<a name="line143"></a>
-<a name="line144"></a>/**
-<a name="line145"></a> * Menu item for ignore option.
-<a name="line146"></a> *
-<a name="line147"></a> * @type {goog.ui.MenuItem|undefined}
-<a name="line148"></a> * @private
-<a name="line149"></a> */
-<a name="line150"></a>goog.ui.AbstractSpellChecker.prototype.menuIgnore_;
-<a name="line151"></a>
-<a name="line152"></a>/**
-<a name="line153"></a> * Menu item for edit word option.
-<a name="line154"></a> *
-<a name="line155"></a> * @type {goog.ui.MenuItem|undefined}
-<a name="line156"></a> * @private
-<a name="line157"></a> */
-<a name="line158"></a>goog.ui.AbstractSpellChecker.prototype.menuEdit_;
-<a name="line159"></a>
-<a name="line160"></a>/**
-<a name="line161"></a> * Whether the correction UI is visible.
-<a name="line162"></a> *
-<a name="line163"></a> * @type {boolean}
-<a name="line164"></a> * @private
-<a name="line165"></a> */
-<a name="line166"></a>goog.ui.AbstractSpellChecker.prototype.isVisible_ = false;
-<a name="line167"></a>
-<a name="line168"></a>/**
-<a name="line169"></a> * Cache for corrected words. All corrected words are reverted to their original
-<a name="line170"></a> * status on resume. Therefore that status is never written to the cache and is
-<a name="line171"></a> * instead indicated by this set.
-<a name="line172"></a> *
-<a name="line173"></a> * @type {goog.structs.Set|undefined}
-<a name="line174"></a> * @private
-<a name="line175"></a> */
-<a name="line176"></a>goog.ui.AbstractSpellChecker.prototype.correctedWords_;
-<a name="line177"></a>
-<a name="line178"></a>/**
-<a name="line179"></a> * Class name for suggestions menu.
-<a name="line180"></a> *
-<a name="line181"></a> * @type {string}
-<a name="line182"></a> */
-<a name="line183"></a>goog.ui.AbstractSpellChecker.prototype.suggestionsMenuClassName =
-<a name="line184"></a>    goog.getCssName(&#39;goog-menu&#39;);
-<a name="line185"></a>
-<a name="line186"></a>/**
-<a name="line187"></a> * Whether corrected words should be highlighted.
-<a name="line188"></a> *
-<a name="line189"></a> * @type {boolean}
-<a name="line190"></a> */
-<a name="line191"></a>goog.ui.AbstractSpellChecker.prototype.markCorrected = false;
-<a name="line192"></a>
-<a name="line193"></a>/**
-<a name="line194"></a> * Word the correction menu is displayed for.
-<a name="line195"></a> *
-<a name="line196"></a> * @type {string|undefined}
-<a name="line197"></a> * @private
-<a name="line198"></a> */
-<a name="line199"></a>goog.ui.AbstractSpellChecker.prototype.activeWord_;
-<a name="line200"></a>
-<a name="line201"></a>/**
-<a name="line202"></a> * Element the correction menu is displayed for.
-<a name="line203"></a> *
-<a name="line204"></a> * @type {Element|undefined}
-<a name="line205"></a> * @private
-<a name="line206"></a> */
-<a name="line207"></a>goog.ui.AbstractSpellChecker.prototype.activeElement_;
-<a name="line208"></a>
-<a name="line209"></a>/**
-<a name="line210"></a> * Indicator that the spell checker is running in the asynchronous mode.
-<a name="line211"></a> *
-<a name="line212"></a> * @type {boolean}
-<a name="line213"></a> * @private
-<a name="line214"></a> */
-<a name="line215"></a>goog.ui.AbstractSpellChecker.prototype.asyncMode_ = false;
-<a name="line216"></a>
-<a name="line217"></a>/**
-<a name="line218"></a> * Maximum number of words to process on a single stack in asynchronous mode.
-<a name="line219"></a> *
-<a name="line220"></a> * @type {number}
-<a name="line221"></a> * @private
-<a name="line222"></a> */
-<a name="line223"></a>goog.ui.AbstractSpellChecker.prototype.asyncWordsPerBatch_ = 1000;
-<a name="line224"></a>
-<a name="line225"></a>/**
-<a name="line226"></a> * Current text to process when running in the asyncronous mode.
-<a name="line227"></a> *
-<a name="line228"></a> * @type {string|undefined}
-<a name="line229"></a> * @private
-<a name="line230"></a> */
-<a name="line231"></a>goog.ui.AbstractSpellChecker.prototype.asyncText_;
-<a name="line232"></a>
-<a name="line233"></a>/**
-<a name="line234"></a> * Current start index of the range that spell-checked correctly.
-<a name="line235"></a> *
-<a name="line236"></a> * @type {number|undefined}
-<a name="line237"></a> * @private
-<a name="line238"></a> */
-<a name="line239"></a>goog.ui.AbstractSpellChecker.prototype.asyncRangeStart_;
-<a name="line240"></a>
-<a name="line241"></a>/**
-<a name="line242"></a> * Current node with which the asynchronous text is associated.
-<a name="line243"></a> *
-<a name="line244"></a> * @type {Node|undefined}
-<a name="line245"></a> * @private
-<a name="line246"></a> */
-<a name="line247"></a>goog.ui.AbstractSpellChecker.prototype.asyncNode_;
-<a name="line248"></a>
-<a name="line249"></a>/**
-<a name="line250"></a> * Number of elements processed in the asyncronous mode since last yield.
-<a name="line251"></a> *
-<a name="line252"></a> * @type {number}
-<a name="line253"></a> * @private
-<a name="line254"></a> */
-<a name="line255"></a>goog.ui.AbstractSpellChecker.prototype.processedElementsCount_ = 0;
-<a name="line256"></a>
-<a name="line257"></a>/**
-<a name="line258"></a> * Marker for the text that does not need to be included in the processing.
-<a name="line259"></a> *
-<a name="line260"></a> * For rich text editor this is the class name for the element.
-<a name="line261"></a> * For plain text editor this is a RegExp that matches the excluded text.
-<a name="line262"></a> *
-<a name="line263"></a> * Used exclusively by the derived classes
-<a name="line264"></a> *
-<a name="line265"></a> * @type {RegExp|string|undefined}
-<a name="line266"></a> * @protected
-<a name="line267"></a> */
-<a name="line268"></a>goog.ui.AbstractSpellChecker.prototype.excludeMarker;
+<a name="line52"></a>/**
+<a name="line53"></a> * Abstract base class for spell checker editor implementations. Provides basic
+<a name="line54"></a> * functionality such as word lookup and caching.
+<a name="line55"></a> *
+<a name="line56"></a> * @param {goog.spell.SpellCheck} handler Instance of the SpellCheckHandler
+<a name="line57"></a> *     support object to use. A single instance can be shared by multiple editor
+<a name="line58"></a> *     components.
+<a name="line59"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+<a name="line60"></a> * @constructor
+<a name="line61"></a> * @extends {goog.ui.Component}
+<a name="line62"></a> */
+<a name="line63"></a>goog.ui.AbstractSpellChecker = function(handler, opt_domHelper) {
+<a name="line64"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line65"></a>
+<a name="line66"></a>  /**
+<a name="line67"></a>   * Handler to use for caching and lookups.
+<a name="line68"></a>   * @type {goog.spell.SpellCheck}
+<a name="line69"></a>   * @protected
+<a name="line70"></a>   * @suppress {underscore}
+<a name="line71"></a>   */
+<a name="line72"></a>  this.handler_ = handler;
+<a name="line73"></a>
+<a name="line74"></a>  /**
+<a name="line75"></a>   * Word to element references. Used by replace/ignore.
+<a name="line76"></a>   * @type {Object}
+<a name="line77"></a>   * @private
+<a name="line78"></a>   */
+<a name="line79"></a>  this.wordElements_ = {};
+<a name="line80"></a>
+<a name="line81"></a>  /**
+<a name="line82"></a>   * List of all &#39;edit word&#39; input elements.
+<a name="line83"></a>   * @type {Array.&lt;Element&gt;}
+<a name="line84"></a>   * @private
+<a name="line85"></a>   */
+<a name="line86"></a>  this.inputElements_ = [];
+<a name="line87"></a>
+<a name="line88"></a>  /**
+<a name="line89"></a>   * Global regular expression for splitting a string into individual words and
+<a name="line90"></a>   * blocks of separators. Matches zero or one word followed by zero or more
+<a name="line91"></a>   * separators.
+<a name="line92"></a>   * @type {RegExp}
+<a name="line93"></a>   * @private
+<a name="line94"></a>   */
+<a name="line95"></a>  this.splitRegex_ = new RegExp(
+<a name="line96"></a>      &#39;([^&#39; + goog.spell.SpellCheck.WORD_BOUNDARY_CHARS + &#39;]*)&#39; +
+<a name="line97"></a>      &#39;([&#39; + goog.spell.SpellCheck.WORD_BOUNDARY_CHARS + &#39;]*)&#39;, &#39;g&#39;);
+<a name="line98"></a>
+<a name="line99"></a>  goog.events.listen(this.handler_,
+<a name="line100"></a>      goog.spell.SpellCheck.EventType.WORD_CHANGED, this.onWordChanged_,
+<a name="line101"></a>      false, this);
+<a name="line102"></a>};
+<a name="line103"></a>goog.inherits(goog.ui.AbstractSpellChecker, goog.ui.Component);
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * The prefix to mark keys with.
+<a name="line107"></a> * @type {string}
+<a name="line108"></a> * @private
+<a name="line109"></a> */
+<a name="line110"></a>goog.ui.AbstractSpellChecker.KEY_PREFIX_ = &#39;:&#39;;
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * The prefix for ids on the spans.
+<a name="line114"></a> * @type {string}
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.AbstractSpellChecker.ID_SUFFIX_ = &#39;sc&#39;;
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * The attribute name for original element contents (to offer subsequent
+<a name="line121"></a> * correction menu).
+<a name="line122"></a> * @type {string}
+<a name="line123"></a> * @private
+<a name="line124"></a> */
+<a name="line125"></a>goog.ui.AbstractSpellChecker.ORIGINAL_ = &#39;goog-spell-original&#39;;
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Suggestions menu.
+<a name="line129"></a> *
+<a name="line130"></a> * @type {goog.ui.PopupMenu|undefined}
+<a name="line131"></a> * @private
+<a name="line132"></a> */
+<a name="line133"></a>goog.ui.AbstractSpellChecker.prototype.menu_;
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Separator between suggestions and ignore in suggestions menu.
+<a name="line137"></a> *
+<a name="line138"></a> * @type {goog.ui.MenuSeparator|undefined}
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.ui.AbstractSpellChecker.prototype.menuSeparator_;
+<a name="line142"></a>
+<a name="line143"></a>/**
+<a name="line144"></a> * Menu item for ignore option.
+<a name="line145"></a> *
+<a name="line146"></a> * @type {goog.ui.MenuItem|undefined}
+<a name="line147"></a> * @private
+<a name="line148"></a> */
+<a name="line149"></a>goog.ui.AbstractSpellChecker.prototype.menuIgnore_;
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Menu item for edit word option.
+<a name="line153"></a> *
+<a name="line154"></a> * @type {goog.ui.MenuItem|undefined}
+<a name="line155"></a> * @private
+<a name="line156"></a> */
+<a name="line157"></a>goog.ui.AbstractSpellChecker.prototype.menuEdit_;
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * Whether the correction UI is visible.
+<a name="line161"></a> *
+<a name="line162"></a> * @type {boolean}
+<a name="line163"></a> * @private
+<a name="line164"></a> */
+<a name="line165"></a>goog.ui.AbstractSpellChecker.prototype.isVisible_ = false;
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Cache for corrected words. All corrected words are reverted to their original
+<a name="line169"></a> * status on resume. Therefore that status is never written to the cache and is
+<a name="line170"></a> * instead indicated by this set.
+<a name="line171"></a> *
+<a name="line172"></a> * @type {goog.structs.Set|undefined}
+<a name="line173"></a> * @private
+<a name="line174"></a> */
+<a name="line175"></a>goog.ui.AbstractSpellChecker.prototype.correctedWords_;
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * Class name for suggestions menu.
+<a name="line179"></a> *
+<a name="line180"></a> * @type {string}
+<a name="line181"></a> */
+<a name="line182"></a>goog.ui.AbstractSpellChecker.prototype.suggestionsMenuClassName =
+<a name="line183"></a>    goog.getCssName(&#39;goog-menu&#39;);
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Whether corrected words should be highlighted.
+<a name="line187"></a> *
+<a name="line188"></a> * @type {boolean}
+<a name="line189"></a> */
+<a name="line190"></a>goog.ui.AbstractSpellChecker.prototype.markCorrected = false;
+<a name="line191"></a>
+<a name="line192"></a>/**
+<a name="line193"></a> * Word the correction menu is displayed for.
+<a name="line194"></a> *
+<a name="line195"></a> * @type {string|undefined}
+<a name="line196"></a> * @private
+<a name="line197"></a> */
+<a name="line198"></a>goog.ui.AbstractSpellChecker.prototype.activeWord_;
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Element the correction menu is displayed for.
+<a name="line202"></a> *
+<a name="line203"></a> * @type {Element|undefined}
+<a name="line204"></a> * @private
+<a name="line205"></a> */
+<a name="line206"></a>goog.ui.AbstractSpellChecker.prototype.activeElement_;
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * Indicator that the spell checker is running in the asynchronous mode.
+<a name="line210"></a> *
+<a name="line211"></a> * @type {boolean}
+<a name="line212"></a> * @private
+<a name="line213"></a> */
+<a name="line214"></a>goog.ui.AbstractSpellChecker.prototype.asyncMode_ = false;
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Maximum number of words to process on a single stack in asynchronous mode.
+<a name="line218"></a> *
+<a name="line219"></a> * @type {number}
+<a name="line220"></a> * @private
+<a name="line221"></a> */
+<a name="line222"></a>goog.ui.AbstractSpellChecker.prototype.asyncWordsPerBatch_ = 1000;
+<a name="line223"></a>
+<a name="line224"></a>/**
+<a name="line225"></a> * Current text to process when running in the asyncronous mode.
+<a name="line226"></a> *
+<a name="line227"></a> * @type {string|undefined}
+<a name="line228"></a> * @private
+<a name="line229"></a> */
+<a name="line230"></a>goog.ui.AbstractSpellChecker.prototype.asyncText_;
+<a name="line231"></a>
+<a name="line232"></a>/**
+<a name="line233"></a> * Current start index of the range that spell-checked correctly.
+<a name="line234"></a> *
+<a name="line235"></a> * @type {number|undefined}
+<a name="line236"></a> * @private
+<a name="line237"></a> */
+<a name="line238"></a>goog.ui.AbstractSpellChecker.prototype.asyncRangeStart_;
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * Current node with which the asynchronous text is associated.
+<a name="line242"></a> *
+<a name="line243"></a> * @type {Node|undefined}
+<a name="line244"></a> * @private
+<a name="line245"></a> */
+<a name="line246"></a>goog.ui.AbstractSpellChecker.prototype.asyncNode_;
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * Number of elements processed in the asyncronous mode since last yield.
+<a name="line250"></a> *
+<a name="line251"></a> * @type {number}
+<a name="line252"></a> * @private
+<a name="line253"></a> */
+<a name="line254"></a>goog.ui.AbstractSpellChecker.prototype.processedElementsCount_ = 0;
+<a name="line255"></a>
+<a name="line256"></a>/**
+<a name="line257"></a> * Marker for the text that does not need to be included in the processing.
+<a name="line258"></a> *
+<a name="line259"></a> * For rich text editor this is the class name for the element.
+<a name="line260"></a> * For plain text editor this is a RegExp that matches the excluded text.
+<a name="line261"></a> *
+<a name="line262"></a> * Used exclusively by the derived classes
+<a name="line263"></a> *
+<a name="line264"></a> * @type {RegExp|string|undefined}
+<a name="line265"></a> * @protected
+<a name="line266"></a> */
+<a name="line267"></a>goog.ui.AbstractSpellChecker.prototype.excludeMarker;
+<a name="line268"></a>
 <a name="line269"></a>
-<a name="line270"></a>
-<a name="line271"></a>/**
-<a name="line272"></a> * Next unique instance ID for a misspelled word.
-<a name="line273"></a> * @type {number}
-<a name="line274"></a> * @private
-<a name="line275"></a> */
-<a name="line276"></a>goog.ui.AbstractSpellChecker.nextId_ = 1;
+<a name="line270"></a>/**
+<a name="line271"></a> * Next unique instance ID for a misspelled word.
+<a name="line272"></a> * @type {number}
+<a name="line273"></a> * @private
+<a name="line274"></a> */
+<a name="line275"></a>goog.ui.AbstractSpellChecker.nextId_ = 1;
+<a name="line276"></a>
 <a name="line277"></a>
-<a name="line278"></a>
-<a name="line279"></a>/**
-<a name="line280"></a> * @return {goog.spell.SpellCheck} The handler used for caching and lookups.
-<a name="line281"></a> */
-<a name="line282"></a>goog.ui.AbstractSpellChecker.prototype.getHandler = function() {
-<a name="line283"></a>  return this.handler_;
-<a name="line284"></a>};
+<a name="line278"></a>/**
+<a name="line279"></a> * @return {goog.spell.SpellCheck} The handler used for caching and lookups.
+<a name="line280"></a> */
+<a name="line281"></a>goog.ui.AbstractSpellChecker.prototype.getHandler = function() {
+<a name="line282"></a>  return this.handler_;
+<a name="line283"></a>};
+<a name="line284"></a>
 <a name="line285"></a>
-<a name="line286"></a>
-<a name="line287"></a>/**
-<a name="line288"></a> * Sets the handler used for caching and lookups.
-<a name="line289"></a> *
-<a name="line290"></a> * @param {goog.spell.SpellCheck} handler The handler used for caching and
-<a name="line291"></a> *     lookups.
-<a name="line292"></a> */
-<a name="line293"></a>goog.ui.AbstractSpellChecker.prototype.setHandler = function(handler) {
-<a name="line294"></a>  this.handler_ = handler;
-<a name="line295"></a>};
+<a name="line286"></a>/**
+<a name="line287"></a> * Sets the handler used for caching and lookups.
+<a name="line288"></a> *
+<a name="line289"></a> * @param {goog.spell.SpellCheck} handler The handler used for caching and
+<a name="line290"></a> *     lookups.
+<a name="line291"></a> */
+<a name="line292"></a>goog.ui.AbstractSpellChecker.prototype.setHandler = function(handler) {
+<a name="line293"></a>  this.handler_ = handler;
+<a name="line294"></a>};
+<a name="line295"></a>
 <a name="line296"></a>
-<a name="line297"></a>
-<a name="line298"></a>/**
-<a name="line299"></a> * Sets the marker for the excluded text.
-<a name="line300"></a> *
-<a name="line301"></a> * {@see goog.ui.AbstractSpellChecker.prototype.excludeMarker_}
-<a name="line302"></a> *
-<a name="line303"></a> * @param {RegExp|string|null} marker RegExp for plain text or class name for
-<a name="line304"></a> *        the rich text spell checker for the elements to exclude from
-<a name="line305"></a> *        checking.
-<a name="line306"></a> */
-<a name="line307"></a>goog.ui.AbstractSpellChecker.prototype.setExcludeMarker = function(marker) {
-<a name="line308"></a>  this.excludeMarker = marker || undefined;
-<a name="line309"></a>};
+<a name="line297"></a>/**
+<a name="line298"></a> * Sets the marker for the excluded text.
+<a name="line299"></a> *
+<a name="line300"></a> * {@see goog.ui.AbstractSpellChecker.prototype.excludeMarker_}
+<a name="line301"></a> *
+<a name="line302"></a> * @param {RegExp|string|null} marker RegExp for plain text or class name for
+<a name="line303"></a> *        the rich text spell checker for the elements to exclude from
+<a name="line304"></a> *        checking.
+<a name="line305"></a> */
+<a name="line306"></a>goog.ui.AbstractSpellChecker.prototype.setExcludeMarker = function(marker) {
+<a name="line307"></a>  this.excludeMarker = marker || undefined;
+<a name="line308"></a>};
+<a name="line309"></a>
 <a name="line310"></a>
-<a name="line311"></a>
-<a name="line312"></a>/**
-<a name="line313"></a> * Checks spelling for all text.
-<a name="line314"></a> * Should be overridden by implementation.
-<a name="line315"></a> */
-<a name="line316"></a>goog.ui.AbstractSpellChecker.prototype.check = function() {
-<a name="line317"></a>  this.isVisible_ = true;
-<a name="line318"></a>  if (this.markCorrected) {
-<a name="line319"></a>    this.correctedWords_ = new goog.structs.Set();
-<a name="line320"></a>  }
-<a name="line321"></a>};
+<a name="line311"></a>/**
+<a name="line312"></a> * Checks spelling for all text.
+<a name="line313"></a> * Should be overridden by implementation.
+<a name="line314"></a> */
+<a name="line315"></a>goog.ui.AbstractSpellChecker.prototype.check = function() {
+<a name="line316"></a>  this.isVisible_ = true;
+<a name="line317"></a>  if (this.markCorrected) {
+<a name="line318"></a>    this.correctedWords_ = new goog.structs.Set();
+<a name="line319"></a>  }
+<a name="line320"></a>};
+<a name="line321"></a>
 <a name="line322"></a>
-<a name="line323"></a>
-<a name="line324"></a>/**
-<a name="line325"></a> * Hides correction UI.
-<a name="line326"></a> * Should be overridden by implementation.
-<a name="line327"></a> */
-<a name="line328"></a>goog.ui.AbstractSpellChecker.prototype.resume = function() {
-<a name="line329"></a>  this.isVisible_ = false;
-<a name="line330"></a>  this.wordElements_ = {};
-<a name="line331"></a>
-<a name="line332"></a>  var input;
-<a name="line333"></a>  while (input = this.inputElements_.pop()) {
-<a name="line334"></a>    input.parentNode.replaceChild(
-<a name="line335"></a>        this.getDomHelper().createTextNode(input.value), input);
-<a name="line336"></a>  }
-<a name="line337"></a>
-<a name="line338"></a>  if (this.correctedWords_) {
-<a name="line339"></a>    this.correctedWords_.clear();
-<a name="line340"></a>  }
-<a name="line341"></a>};
+<a name="line323"></a>/**
+<a name="line324"></a> * Hides correction UI.
+<a name="line325"></a> * Should be overridden by implementation.
+<a name="line326"></a> */
+<a name="line327"></a>goog.ui.AbstractSpellChecker.prototype.resume = function() {
+<a name="line328"></a>  this.isVisible_ = false;
+<a name="line329"></a>  this.wordElements_ = {};
+<a name="line330"></a>
+<a name="line331"></a>  var input;
+<a name="line332"></a>  while (input = this.inputElements_.pop()) {
+<a name="line333"></a>    input.parentNode.replaceChild(
+<a name="line334"></a>        this.getDomHelper().createTextNode(input.value), input);
+<a name="line335"></a>  }
+<a name="line336"></a>
+<a name="line337"></a>  if (this.correctedWords_) {
+<a name="line338"></a>    this.correctedWords_.clear();
+<a name="line339"></a>  }
+<a name="line340"></a>};
+<a name="line341"></a>
 <a name="line342"></a>
-<a name="line343"></a>
-<a name="line344"></a>/**
-<a name="line345"></a> * @return {boolean} Whether the correction ui is visible.
-<a name="line346"></a> */
-<a name="line347"></a>goog.ui.AbstractSpellChecker.prototype.isVisible = function() {
-<a name="line348"></a>  return this.isVisible_;
-<a name="line349"></a>};
+<a name="line343"></a>/**
+<a name="line344"></a> * @return {boolean} Whether the correction ui is visible.
+<a name="line345"></a> */
+<a name="line346"></a>goog.ui.AbstractSpellChecker.prototype.isVisible = function() {
+<a name="line347"></a>  return this.isVisible_;
+<a name="line348"></a>};
+<a name="line349"></a>
 <a name="line350"></a>
-<a name="line351"></a>
-<a name="line352"></a>/**
-<a name="line353"></a> * Ignores spelling of word.
-<a name="line354"></a> *
-<a name="line355"></a> * @param {string} word Word to add.
-<a name="line356"></a> */
-<a name="line357"></a>goog.ui.AbstractSpellChecker.prototype.ignoreWord = function(word) {
-<a name="line358"></a>  this.handler_.setWordStatus(word,
-<a name="line359"></a>      goog.spell.SpellCheck.WordStatus.IGNORED);
-<a name="line360"></a>};
+<a name="line351"></a>/**
+<a name="line352"></a> * Ignores spelling of word.
+<a name="line353"></a> *
+<a name="line354"></a> * @param {string} word Word to add.
+<a name="line355"></a> */
+<a name="line356"></a>goog.ui.AbstractSpellChecker.prototype.ignoreWord = function(word) {
+<a name="line357"></a>  this.handler_.setWordStatus(word,
+<a name="line358"></a>      goog.spell.SpellCheck.WordStatus.IGNORED);
+<a name="line359"></a>};
+<a name="line360"></a>
 <a name="line361"></a>
-<a name="line362"></a>
-<a name="line363"></a>/**
-<a name="line364"></a> * Edits a word.
-<a name="line365"></a> *
-<a name="line366"></a> * @param {Element} el An element wrapping the word that should be edited.
-<a name="line367"></a> * @param {string} old Word to edit.
-<a name="line368"></a> * @private
-<a name="line369"></a> */
-<a name="line370"></a>goog.ui.AbstractSpellChecker.prototype.editWord_ = function(el, old) {
-<a name="line371"></a>  var input = this.getDomHelper().createDom(
-<a name="line372"></a>      &#39;input&#39;, {&#39;type&#39;: &#39;text&#39;, &#39;value&#39;: old});
-<a name="line373"></a>  var w = goog.style.getSize(el).width;
-<a name="line374"></a>
-<a name="line375"></a>  // Minimum width to ensure there&#39;s always enough room to type.
-<a name="line376"></a>  if (w &lt; 50) {
-<a name="line377"></a>    w = 50;
-<a name="line378"></a>  }
-<a name="line379"></a>  input.style.width = w + &#39;px&#39;;
-<a name="line380"></a>  el.parentNode.replaceChild(input, el);
-<a name="line381"></a>  try {
-<a name="line382"></a>    input.focus();
-<a name="line383"></a>    goog.dom.selection.setCursorPosition(input, old.length);
-<a name="line384"></a>  } catch (o) { }
-<a name="line385"></a>
-<a name="line386"></a>  this.inputElements_.push(input);
-<a name="line387"></a>};
+<a name="line362"></a>/**
+<a name="line363"></a> * Edits a word.
+<a name="line364"></a> *
+<a name="line365"></a> * @param {Element} el An element wrapping the word that should be edited.
+<a name="line366"></a> * @param {string} old Word to edit.
+<a name="line367"></a> * @private
+<a name="line368"></a> */
+<a name="line369"></a>goog.ui.AbstractSpellChecker.prototype.editWord_ = function(el, old) {
+<a name="line370"></a>  var input = this.getDomHelper().createDom(
+<a name="line371"></a>      &#39;input&#39;, {&#39;type&#39;: &#39;text&#39;, &#39;value&#39;: old});
+<a name="line372"></a>  var w = goog.style.getSize(el).width;
+<a name="line373"></a>
+<a name="line374"></a>  // Minimum width to ensure there&#39;s always enough room to type.
+<a name="line375"></a>  if (w &lt; 50) {
+<a name="line376"></a>    w = 50;
+<a name="line377"></a>  }
+<a name="line378"></a>  input.style.width = w + &#39;px&#39;;
+<a name="line379"></a>  el.parentNode.replaceChild(input, el);
+<a name="line380"></a>  try {
+<a name="line381"></a>    input.focus();
+<a name="line382"></a>    goog.dom.selection.setCursorPosition(input, old.length);
+<a name="line383"></a>  } catch (o) { }
+<a name="line384"></a>
+<a name="line385"></a>  this.inputElements_.push(input);
+<a name="line386"></a>};
+<a name="line387"></a>
 <a name="line388"></a>
-<a name="line389"></a>
-<a name="line390"></a>/**
-<a name="line391"></a> * Replaces word.
-<a name="line392"></a> *
-<a name="line393"></a> * @param {Element} el An element wrapping the word that should be replaced.
-<a name="line394"></a> * @param {string} old Word that was replaced.
-<a name="line395"></a> * @param {string} word Word to replace with.
-<a name="line396"></a> */
-<a name="line397"></a>goog.ui.AbstractSpellChecker.prototype.replaceWord = function(el, old, word) {
-<a name="line398"></a>  if (old != word) {
-<a name="line399"></a>    if (!el.getAttribute(goog.ui.AbstractSpellChecker.ORIGINAL_)) {
-<a name="line400"></a>      el.setAttribute(goog.ui.AbstractSpellChecker.ORIGINAL_, old);
-<a name="line401"></a>    }
-<a name="line402"></a>    goog.dom.setTextContent(el, word);
-<a name="line403"></a>
-<a name="line404"></a>    var status = this.handler_.checkWord(word);
-<a name="line405"></a>
-<a name="line406"></a>    // Indicate that the word is corrected unless the status is &#39;INVALID&#39;.
-<a name="line407"></a>    // (if markCorrected is enabled).
-<a name="line408"></a>    if (this.markCorrected &amp;&amp; this.correctedWords_ &amp;&amp;
-<a name="line409"></a>        status != goog.spell.SpellCheck.WordStatus.INVALID) {
-<a name="line410"></a>      this.correctedWords_.add(word);
-<a name="line411"></a>      status = goog.spell.SpellCheck.WordStatus.CORRECTED;
-<a name="line412"></a>    }
-<a name="line413"></a>
-<a name="line414"></a>    // Avoid potential collision with the built-in object namespace. For
-<a name="line415"></a>    // example, &#39;watch&#39; is a reserved name in FireFox.
-<a name="line416"></a>    var oldIndex = goog.ui.AbstractSpellChecker.toInternalKey_(old);
-<a name="line417"></a>    var newIndex = goog.ui.AbstractSpellChecker.toInternalKey_(word);
-<a name="line418"></a>
-<a name="line419"></a>    // Remove reference between old word and element
-<a name="line420"></a>    var elements = this.wordElements_[oldIndex];
-<a name="line421"></a>    goog.array.remove(elements, el);
-<a name="line422"></a>
-<a name="line423"></a>    if (status != goog.spell.SpellCheck.WordStatus.VALID) {
-<a name="line424"></a>      // Create reference between new word and element
-<a name="line425"></a>      if (this.wordElements_[newIndex]) {
-<a name="line426"></a>        this.wordElements_[newIndex].push(el);
-<a name="line427"></a>      } else {
-<a name="line428"></a>        this.wordElements_[newIndex] = [el];
-<a name="line429"></a>      }
-<a name="line430"></a>    }
-<a name="line431"></a>
-<a name="line432"></a>    // Update element based on status.
-<a name="line433"></a>    this.updateElement(el, word, status);
-<a name="line434"></a>
-<a name="line435"></a>    this.dispatchEvent(goog.events.EventType.CHANGE);
-<a name="line436"></a>  }
-<a name="line437"></a>};
+<a name="line389"></a>/**
+<a name="line390"></a> * Replaces word.
+<a name="line391"></a> *
+<a name="line392"></a> * @param {Element} el An element wrapping the word that should be replaced.
+<a name="line393"></a> * @param {string} old Word that was replaced.
+<a name="line394"></a> * @param {string} word Word to replace with.
+<a name="line395"></a> */
+<a name="line396"></a>goog.ui.AbstractSpellChecker.prototype.replaceWord = function(el, old, word) {
+<a name="line397"></a>  if (old != word) {
+<a name="line398"></a>    if (!el.getAttribute(goog.ui.AbstractSpellChecker.ORIGINAL_)) {
+<a name="line399"></a>      el.setAttribute(goog.ui.AbstractSpellChecker.ORIGINAL_, old);
+<a name="line400"></a>    }
+<a name="line401"></a>    goog.dom.setTextContent(el, word);
+<a name="line402"></a>
+<a name="line403"></a>    var status = this.handler_.checkWord(word);
+<a name="line404"></a>
+<a name="line405"></a>    // Indicate that the word is corrected unless the status is &#39;INVALID&#39;.
+<a name="line406"></a>    // (if markCorrected is enabled).
+<a name="line407"></a>    if (this.markCorrected &amp;&amp; this.correctedWords_ &amp;&amp;
+<a name="line408"></a>        status != goog.spell.SpellCheck.WordStatus.INVALID) {
+<a name="line409"></a>      this.correctedWords_.add(word);
+<a name="line410"></a>      status = goog.spell.SpellCheck.WordStatus.CORRECTED;
+<a name="line411"></a>    }
+<a name="line412"></a>
+<a name="line413"></a>    // Avoid potential collision with the built-in object namespace. For
+<a name="line414"></a>    // example, &#39;watch&#39; is a reserved name in FireFox.
+<a name="line415"></a>    var oldIndex = goog.ui.AbstractSpellChecker.toInternalKey_(old);
+<a name="line416"></a>    var newIndex = goog.ui.AbstractSpellChecker.toInternalKey_(word);
+<a name="line417"></a>
+<a name="line418"></a>    // Remove reference between old word and element
+<a name="line419"></a>    var elements = this.wordElements_[oldIndex];
+<a name="line420"></a>    goog.array.remove(elements, el);
+<a name="line421"></a>
+<a name="line422"></a>    if (status != goog.spell.SpellCheck.WordStatus.VALID) {
+<a name="line423"></a>      // Create reference between new word and element
+<a name="line424"></a>      if (this.wordElements_[newIndex]) {
+<a name="line425"></a>        this.wordElements_[newIndex].push(el);
+<a name="line426"></a>      } else {
+<a name="line427"></a>        this.wordElements_[newIndex] = [el];
+<a name="line428"></a>      }
+<a name="line429"></a>    }
+<a name="line430"></a>
+<a name="line431"></a>    // Update element based on status.
+<a name="line432"></a>    this.updateElement(el, word, status);
+<a name="line433"></a>
+<a name="line434"></a>    this.dispatchEvent(goog.events.EventType.CHANGE);
+<a name="line435"></a>  }
+<a name="line436"></a>};
+<a name="line437"></a>
 <a name="line438"></a>
-<a name="line439"></a>
-<a name="line440"></a>/**
-<a name="line441"></a> * Retrieves the array of suggested spelling choices.
-<a name="line442"></a> *
-<a name="line443"></a> * @return {Array.&lt;String&gt;} Suggested spelling choices.
-<a name="line444"></a> * @private
-<a name="line445"></a> */
-<a name="line446"></a>goog.ui.AbstractSpellChecker.prototype.getSuggestions_ = function() {
-<a name="line447"></a>  // Add new suggestion entries.
-<a name="line448"></a>  var suggestions = this.handler_.getSuggestions(
-<a name="line449"></a>      /** @type {string} */ (this.activeWord_));
-<a name="line450"></a>  if (!suggestions[0]) {
-<a name="line451"></a>    var originalWord = this.activeElement_.getAttribute(
-<a name="line452"></a>        goog.ui.AbstractSpellChecker.ORIGINAL_);
-<a name="line453"></a>    if (originalWord &amp;&amp; originalWord != this.activeWord_) {
-<a name="line454"></a>      suggestions = this.handler_.getSuggestions(originalWord);
-<a name="line455"></a>    }
-<a name="line456"></a>  }
-<a name="line457"></a>  return suggestions;
-<a name="line458"></a>};
+<a name="line439"></a>/**
+<a name="line440"></a> * Retrieves the array of suggested spelling choices.
+<a name="line441"></a> *
+<a name="line442"></a> * @return {Array.&lt;String&gt;} Suggested spelling choices.
+<a name="line443"></a> * @private
+<a name="line444"></a> */
+<a name="line445"></a>goog.ui.AbstractSpellChecker.prototype.getSuggestions_ = function() {
+<a name="line446"></a>  // Add new suggestion entries.
+<a name="line447"></a>  var suggestions = this.handler_.getSuggestions(
+<a name="line448"></a>      /** @type {string} */ (this.activeWord_));
+<a name="line449"></a>  if (!suggestions[0]) {
+<a name="line450"></a>    var originalWord = this.activeElement_.getAttribute(
+<a name="line451"></a>        goog.ui.AbstractSpellChecker.ORIGINAL_);
+<a name="line452"></a>    if (originalWord &amp;&amp; originalWord != this.activeWord_) {
+<a name="line453"></a>      suggestions = this.handler_.getSuggestions(originalWord);
+<a name="line454"></a>    }
+<a name="line455"></a>  }
+<a name="line456"></a>  return suggestions;
+<a name="line457"></a>};
+<a name="line458"></a>
 <a name="line459"></a>
-<a name="line460"></a>
-<a name="line461"></a>/**
-<a name="line462"></a> * Displays suggestions menu.
-<a name="line463"></a> *
-<a name="line464"></a> * @param {Element} el Element to display menu for.
-<a name="line465"></a> * @param {goog.events.BrowserEvent|goog.math.Coordinate=} opt_pos Position to
-<a name="line466"></a> *     display menu at relative to the viewport (in client coordinates), or a
-<a name="line467"></a> *     mouse event.
-<a name="line468"></a> */
-<a name="line469"></a>goog.ui.AbstractSpellChecker.prototype.showSuggestionsMenu = function(el,
-<a name="line470"></a>                                                                      opt_pos) {
-<a name="line471"></a>  this.activeWord_ = goog.dom.getTextContent(el);
-<a name="line472"></a>  this.activeElement_ = el;
-<a name="line473"></a>
-<a name="line474"></a>  // Remove suggestion entries from menu, if any.
-<a name="line475"></a>  while (this.menu_.getChildAt(0) != this.menuSeparator_) {
-<a name="line476"></a>    this.menu_.removeChildAt(0, true).dispose();
-<a name="line477"></a>  }
-<a name="line478"></a>
-<a name="line479"></a>  // Add new suggestion entries.
-<a name="line480"></a>  var suggestions = this.getSuggestions_();
-<a name="line481"></a>  for (var suggestion, i = 0; suggestion = suggestions[i]; i++) {
-<a name="line482"></a>    this.menu_.addChildAt(new goog.ui.MenuItem(
-<a name="line483"></a>        suggestion, suggestion, this.getDomHelper()), i, true);
-<a name="line484"></a>  }
-<a name="line485"></a>
-<a name="line486"></a>  if (!suggestions[0]) {
-<a name="line487"></a>    /** @desc Item shown in menu when no suggestions are available. */
-<a name="line488"></a>    var MSG_SPELL_NO_SUGGESTIONS = goog.getMsg(&#39;No Suggestions&#39;);
-<a name="line489"></a>    var item = new goog.ui.MenuItem(
-<a name="line490"></a>        MSG_SPELL_NO_SUGGESTIONS, &#39;&#39;, this.getDomHelper());
-<a name="line491"></a>    item.setEnabled(false);
-<a name="line492"></a>    this.menu_.addChildAt(item, 0, true);
-<a name="line493"></a>  }
-<a name="line494"></a>
-<a name="line495"></a>  // Show &#39;Edit word&#39; option if {@link markCorrected} is enabled and don&#39;t show
-<a name="line496"></a>  // &#39;Ignore&#39; option for corrected words.
-<a name="line497"></a>  if (this.markCorrected) {
-<a name="line498"></a>    var corrected = this.correctedWords_ &amp;&amp;
-<a name="line499"></a>                    this.correctedWords_.contains(this.activeWord_);
-<a name="line500"></a>    this.menuIgnore_.setVisible(!corrected);
-<a name="line501"></a>    this.menuEdit_.setVisible(true);
-<a name="line502"></a>  } else {
-<a name="line503"></a>    this.menuIgnore_.setVisible(true);
-<a name="line504"></a>    this.menuEdit_.setVisible(false);
-<a name="line505"></a>  }
-<a name="line506"></a>
-<a name="line507"></a>  if (opt_pos) {
-<a name="line508"></a>    if (!(opt_pos instanceof goog.math.Coordinate)) { // it&#39;s an event
-<a name="line509"></a>      var posX = opt_pos.clientX;
-<a name="line510"></a>      var posY = opt_pos.clientY;
-<a name="line511"></a>      // Certain implementations which derive from AbstractSpellChecker
-<a name="line512"></a>      // use an iframe in which case the coordinates are relative to
-<a name="line513"></a>      // that iframe&#39;s view port.
-<a name="line514"></a>      if (this.getElement().contentDocument ||
-<a name="line515"></a>          this.getElement().contentWindow) {
-<a name="line516"></a>        var offset = goog.style.getClientPosition(this.getElement());
-<a name="line517"></a>        posX += offset.x;
-<a name="line518"></a>        posY += offset.y;
-<a name="line519"></a>      }
-<a name="line520"></a>      opt_pos = new goog.math.Coordinate(posX, posY);
-<a name="line521"></a>    }
-<a name="line522"></a>    this.menu_.showAt(opt_pos.x, opt_pos.y);
-<a name="line523"></a>  } else {
-<a name="line524"></a>    this.menu_.setVisible(true);
-<a name="line525"></a>  }
-<a name="line526"></a>};
+<a name="line460"></a>/**
+<a name="line461"></a> * Displays suggestions menu.
+<a name="line462"></a> *
+<a name="line463"></a> * @param {Element} el Element to display menu for.
+<a name="line464"></a> * @param {goog.events.BrowserEvent|goog.math.Coordinate=} opt_pos Position to
+<a name="line465"></a> *     display menu at relative to the viewport (in client coordinates), or a
+<a name="line466"></a> *     mouse event.
+<a name="line467"></a> */
+<a name="line468"></a>goog.ui.AbstractSpellChecker.prototype.showSuggestionsMenu = function(el,
+<a name="line469"></a>                                                                      opt_pos) {
+<a name="line470"></a>  this.activeWord_ = goog.dom.getTextContent(el);
+<a name="line471"></a>  this.activeElement_ = el;
+<a name="line472"></a>
+<a name="line473"></a>  // Remove suggestion entries from menu, if any.
+<a name="line474"></a>  while (this.menu_.getChildAt(0) != this.menuSeparator_) {
+<a name="line475"></a>    this.menu_.removeChildAt(0, true).dispose();
+<a name="line476"></a>  }
+<a name="line477"></a>
+<a name="line478"></a>  // Add new suggestion entries.
+<a name="line479"></a>  var suggestions = this.getSuggestions_();
+<a name="line480"></a>  for (var suggestion, i = 0; suggestion = suggestions[i]; i++) {
+<a name="line481"></a>    this.menu_.addChildAt(new goog.ui.MenuItem(
+<a name="line482"></a>        suggestion, suggestion, this.getDomHelper()), i, true);
+<a name="line483"></a>  }
+<a name="line484"></a>
+<a name="line485"></a>  if (!suggestions[0]) {
+<a name="line486"></a>    /** @desc Item shown in menu when no suggestions are available. */
+<a name="line487"></a>    var MSG_SPELL_NO_SUGGESTIONS = goog.getMsg(&#39;No Suggestions&#39;);
+<a name="line488"></a>    var item = new goog.ui.MenuItem(
+<a name="line489"></a>        MSG_SPELL_NO_SUGGESTIONS, &#39;&#39;, this.getDomHelper());
+<a name="line490"></a>    item.setEnabled(false);
+<a name="line491"></a>    this.menu_.addChildAt(item, 0, true);
+<a name="line492"></a>  }
+<a name="line493"></a>
+<a name="line494"></a>  // Show &#39;Edit word&#39; option if {@link markCorrected} is enabled and don&#39;t show
+<a name="line495"></a>  // &#39;Ignore&#39; option for corrected words.
+<a name="line496"></a>  if (this.markCorrected) {
+<a name="line497"></a>    var corrected = this.correctedWords_ &amp;&amp;
+<a name="line498"></a>                    this.correctedWords_.contains(this.activeWord_);
+<a name="line499"></a>    this.menuIgnore_.setVisible(!corrected);
+<a name="line500"></a>    this.menuEdit_.setVisible(true);
+<a name="line501"></a>  } else {
+<a name="line502"></a>    this.menuIgnore_.setVisible(true);
+<a name="line503"></a>    this.menuEdit_.setVisible(false);
+<a name="line504"></a>  }
+<a name="line505"></a>
+<a name="line506"></a>  if (opt_pos) {
+<a name="line507"></a>    if (!(opt_pos instanceof goog.math.Coordinate)) { // it&#39;s an event
+<a name="line508"></a>      var posX = opt_pos.clientX;
+<a name="line509"></a>      var posY = opt_pos.clientY;
+<a name="line510"></a>      // Certain implementations which derive from AbstractSpellChecker
+<a name="line511"></a>      // use an iframe in which case the coordinates are relative to
+<a name="line512"></a>      // that iframe&#39;s view port.
+<a name="line513"></a>      if (this.getElement().contentDocument ||
+<a name="line514"></a>          this.getElement().contentWindow) {
+<a name="line515"></a>        var offset = goog.style.getClientPosition(this.getElement());
+<a name="line516"></a>        posX += offset.x;
+<a name="line517"></a>        posY += offset.y;
+<a name="line518"></a>      }
+<a name="line519"></a>      opt_pos = new goog.math.Coordinate(posX, posY);
+<a name="line520"></a>    }
+<a name="line521"></a>    this.menu_.showAt(opt_pos.x, opt_pos.y);
+<a name="line522"></a>  } else {
+<a name="line523"></a>    this.menu_.setVisible(true);
+<a name="line524"></a>  }
+<a name="line525"></a>};
+<a name="line526"></a>
 <a name="line527"></a>
-<a name="line528"></a>
-<a name="line529"></a>/**
-<a name="line530"></a> * Initializes suggestions menu. Populates menu with separator and ignore option
-<a name="line531"></a> * that are always valid. Suggestions are later added above the separator.
-<a name="line532"></a> *
-<a name="line533"></a> * @protected
-<a name="line534"></a> */
-<a name="line535"></a>goog.ui.AbstractSpellChecker.prototype.initSuggestionsMenu = function() {
-<a name="line536"></a>  this.menu_ = new goog.ui.PopupMenu(this.getDomHelper());
-<a name="line537"></a>  this.menuSeparator_ = new goog.ui.MenuSeparator(this.getDomHelper());
-<a name="line538"></a>
-<a name="line539"></a>  // Leave alone setAllowAutoFocus at default (true). This allows menu to get
-<a name="line540"></a>  // keyboard focus and thus allowing non-mouse users to get to the menu.
-<a name="line541"></a>
-<a name="line542"></a>  /** @desc Ignore entry in suggestions menu. */
-<a name="line543"></a>  var MSG_SPELL_IGNORE = goog.getMsg(&#39;Ignore&#39;);
-<a name="line544"></a>
-<a name="line545"></a>  /** @desc Edit word entry in suggestions menu. */
-<a name="line546"></a>  var MSG_SPELL_EDIT_WORD = goog.getMsg(&#39;Edit Word&#39;);
-<a name="line547"></a>
-<a name="line548"></a>  this.menu_.addChild(this.menuSeparator_, true);
-<a name="line549"></a>  this.menuIgnore_ =
-<a name="line550"></a>      new goog.ui.MenuItem(MSG_SPELL_IGNORE, &#39;&#39;, this.getDomHelper());
-<a name="line551"></a>  this.menu_.addChild(this.menuIgnore_, true);
-<a name="line552"></a>  this.menuEdit_ =
-<a name="line553"></a>      new goog.ui.MenuItem(MSG_SPELL_EDIT_WORD, &#39;&#39;, this.getDomHelper());
-<a name="line554"></a>  this.menuEdit_.setVisible(false);
-<a name="line555"></a>  this.menu_.addChild(this.menuEdit_, true);
-<a name="line556"></a>  this.menu_.render();
-<a name="line557"></a>
-<a name="line558"></a>  goog.dom.classes.add(this.menu_.getElement(), this.suggestionsMenuClassName);
-<a name="line559"></a>
-<a name="line560"></a>  goog.events.listen(this.menu_, goog.ui.Component.EventType.ACTION,
-<a name="line561"></a>      this.onCorrectionAction, false, this);
-<a name="line562"></a>};
+<a name="line528"></a>/**
+<a name="line529"></a> * Initializes suggestions menu. Populates menu with separator and ignore option
+<a name="line530"></a> * that are always valid. Suggestions are later added above the separator.
+<a name="line531"></a> *
+<a name="line532"></a> * @protected
+<a name="line533"></a> */
+<a name="line534"></a>goog.ui.AbstractSpellChecker.prototype.initSuggestionsMenu = function() {
+<a name="line535"></a>  this.menu_ = new goog.ui.PopupMenu(this.getDomHelper());
+<a name="line536"></a>  this.menuSeparator_ = new goog.ui.MenuSeparator(this.getDomHelper());
+<a name="line537"></a>
+<a name="line538"></a>  // Leave alone setAllowAutoFocus at default (true). This allows menu to get
+<a name="line539"></a>  // keyboard focus and thus allowing non-mouse users to get to the menu.
+<a name="line540"></a>
+<a name="line541"></a>  /** @desc Ignore entry in suggestions menu. */
+<a name="line542"></a>  var MSG_SPELL_IGNORE = goog.getMsg(&#39;Ignore&#39;);
+<a name="line543"></a>
+<a name="line544"></a>  /** @desc Edit word entry in suggestions menu. */
+<a name="line545"></a>  var MSG_SPELL_EDIT_WORD = goog.getMsg(&#39;Edit Word&#39;);
+<a name="line546"></a>
+<a name="line547"></a>  this.menu_.addChild(this.menuSeparator_, true);
+<a name="line548"></a>  this.menuIgnore_ =
+<a name="line549"></a>      new goog.ui.MenuItem(MSG_SPELL_IGNORE, &#39;&#39;, this.getDomHelper());
+<a name="line550"></a>  this.menu_.addChild(this.menuIgnore_, true);
+<a name="line551"></a>  this.menuEdit_ =
+<a name="line552"></a>      new goog.ui.MenuItem(MSG_SPELL_EDIT_WORD, &#39;&#39;, this.getDomHelper());
+<a name="line553"></a>  this.menuEdit_.setVisible(false);
+<a name="line554"></a>  this.menu_.addChild(this.menuEdit_, true);
+<a name="line555"></a>  this.menu_.render();
+<a name="line556"></a>
+<a name="line557"></a>  goog.dom.classes.add(this.menu_.getElement(), this.suggestionsMenuClassName);
+<a name="line558"></a>
+<a name="line559"></a>  goog.events.listen(this.menu_, goog.ui.Component.EventType.ACTION,
+<a name="line560"></a>      this.onCorrectionAction, false, this);
+<a name="line561"></a>};
+<a name="line562"></a>
 <a name="line563"></a>
-<a name="line564"></a>
-<a name="line565"></a>/**
-<a name="line566"></a> * Handles correction menu actions.
-<a name="line567"></a> *
-<a name="line568"></a> * @param {goog.events.Event} event Action event.
-<a name="line569"></a> * @protected
-<a name="line570"></a> */
-<a name="line571"></a>goog.ui.AbstractSpellChecker.prototype.onCorrectionAction = function(event) {
-<a name="line572"></a>  var word = /** @type {string} */ (this.activeWord_);
-<a name="line573"></a>  var el = /** @type {Element} */ (this.activeElement_);
-<a name="line574"></a>  if (event.target == this.menuIgnore_) {
-<a name="line575"></a>    this.ignoreWord(word);
-<a name="line576"></a>  } else if (event.target == this.menuEdit_) {
-<a name="line577"></a>    this.editWord_(el, word);
-<a name="line578"></a>  } else {
-<a name="line579"></a>    this.replaceWord(el, word, event.target.getModel());
-<a name="line580"></a>    this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
-<a name="line581"></a>  }
-<a name="line582"></a>
-<a name="line583"></a>  delete this.activeWord_;
-<a name="line584"></a>  delete this.activeElement_;
-<a name="line585"></a>};
+<a name="line564"></a>/**
+<a name="line565"></a> * Handles correction menu actions.
+<a name="line566"></a> *
+<a name="line567"></a> * @param {goog.events.Event} event Action event.
+<a name="line568"></a> * @protected
+<a name="line569"></a> */
+<a name="line570"></a>goog.ui.AbstractSpellChecker.prototype.onCorrectionAction = function(event) {
+<a name="line571"></a>  var word = /** @type {string} */ (this.activeWord_);
+<a name="line572"></a>  var el = /** @type {Element} */ (this.activeElement_);
+<a name="line573"></a>  if (event.target == this.menuIgnore_) {
+<a name="line574"></a>    this.ignoreWord(word);
+<a name="line575"></a>  } else if (event.target == this.menuEdit_) {
+<a name="line576"></a>    this.editWord_(el, word);
+<a name="line577"></a>  } else {
+<a name="line578"></a>    this.replaceWord(el, word, event.target.getModel());
+<a name="line579"></a>    this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line580"></a>  }
+<a name="line581"></a>
+<a name="line582"></a>  delete this.activeWord_;
+<a name="line583"></a>  delete this.activeElement_;
+<a name="line584"></a>};
+<a name="line585"></a>
 <a name="line586"></a>
-<a name="line587"></a>
-<a name="line588"></a>/**
-<a name="line589"></a> * Removes spell-checker markup and restore the node to text.
-<a name="line590"></a> *
-<a name="line591"></a> * @param {Element} el Word element. MUST have a text node child.
-<a name="line592"></a> * @protected
-<a name="line593"></a> */
-<a name="line594"></a>goog.ui.AbstractSpellChecker.prototype.removeMarkup = function(el) {
-<a name="line595"></a>  var firstChild = el.firstChild;
-<a name="line596"></a>  var text = firstChild.nodeValue;
-<a name="line597"></a>
-<a name="line598"></a>  if (el.nextSibling &amp;&amp;
-<a name="line599"></a>      el.nextSibling.nodeType == goog.dom.NodeType.TEXT) {
-<a name="line600"></a>    if (el.previousSibling &amp;&amp;
-<a name="line601"></a>        el.previousSibling.nodeType == goog.dom.NodeType.TEXT) {
-<a name="line602"></a>      el.previousSibling.nodeValue = el.previousSibling.nodeValue + text +
-<a name="line603"></a>          el.nextSibling.nodeValue;
-<a name="line604"></a>      this.getDomHelper().removeNode(el.nextSibling);
-<a name="line605"></a>    } else {
-<a name="line606"></a>      el.nextSibling.nodeValue = text + el.nextSibling.nodeValue;
-<a name="line607"></a>    }
-<a name="line608"></a>  } else if (el.previousSibling &amp;&amp;
-<a name="line609"></a>      el.previousSibling.nodeType == goog.dom.NodeType.TEXT) {
-<a name="line610"></a>    el.previousSibling.nodeValue += text;
-<a name="line611"></a>  } else {
-<a name="line612"></a>    el.parentNode.insertBefore(firstChild, el);
-<a name="line613"></a>  }
-<a name="line614"></a>
-<a name="line615"></a>  this.getDomHelper().removeNode(el);
-<a name="line616"></a>};
+<a name="line587"></a>/**
+<a name="line588"></a> * Removes spell-checker markup and restore the node to text.
+<a name="line589"></a> *
+<a name="line590"></a> * @param {Element} el Word element. MUST have a text node child.
+<a name="line591"></a> * @protected
+<a name="line592"></a> */
+<a name="line593"></a>goog.ui.AbstractSpellChecker.prototype.removeMarkup = function(el) {
+<a name="line594"></a>  var firstChild = el.firstChild;
+<a name="line595"></a>  var text = firstChild.nodeValue;
+<a name="line596"></a>
+<a name="line597"></a>  if (el.nextSibling &amp;&amp;
+<a name="line598"></a>      el.nextSibling.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line599"></a>    if (el.previousSibling &amp;&amp;
+<a name="line600"></a>        el.previousSibling.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line601"></a>      el.previousSibling.nodeValue = el.previousSibling.nodeValue + text +
+<a name="line602"></a>          el.nextSibling.nodeValue;
+<a name="line603"></a>      this.getDomHelper().removeNode(el.nextSibling);
+<a name="line604"></a>    } else {
+<a name="line605"></a>      el.nextSibling.nodeValue = text + el.nextSibling.nodeValue;
+<a name="line606"></a>    }
+<a name="line607"></a>  } else if (el.previousSibling &amp;&amp;
+<a name="line608"></a>      el.previousSibling.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line609"></a>    el.previousSibling.nodeValue += text;
+<a name="line610"></a>  } else {
+<a name="line611"></a>    el.parentNode.insertBefore(firstChild, el);
+<a name="line612"></a>  }
+<a name="line613"></a>
+<a name="line614"></a>  this.getDomHelper().removeNode(el);
+<a name="line615"></a>};
+<a name="line616"></a>
 <a name="line617"></a>
-<a name="line618"></a>
-<a name="line619"></a>/**
-<a name="line620"></a> * Updates element based on word status. Either converts it to a text node, or
-<a name="line621"></a> * merges it with the previous or next text node if the status of the world is
-<a name="line622"></a> * VALID, in which case the element itself is eliminated.
-<a name="line623"></a> *
-<a name="line624"></a> * @param {Element} el Word element.
-<a name="line625"></a> * @param {string} word Word to update status for.
-<a name="line626"></a> * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
-<a name="line627"></a> * @protected
-<a name="line628"></a> */
-<a name="line629"></a>goog.ui.AbstractSpellChecker.prototype.updateElement =
-<a name="line630"></a>    function(el, word, status) {
-<a name="line631"></a>  if (this.markCorrected &amp;&amp; this.correctedWords_ &amp;&amp;
-<a name="line632"></a>      this.correctedWords_.contains(word)) {
-<a name="line633"></a>    status = goog.spell.SpellCheck.WordStatus.CORRECTED;
-<a name="line634"></a>  }
-<a name="line635"></a>  if (status == goog.spell.SpellCheck.WordStatus.VALID) {
-<a name="line636"></a>    this.removeMarkup(el);
-<a name="line637"></a>  } else {
-<a name="line638"></a>    goog.dom.setProperties(el, this.getElementProperties(status));
-<a name="line639"></a>  }
-<a name="line640"></a>};
+<a name="line618"></a>/**
+<a name="line619"></a> * Updates element based on word status. Either converts it to a text node, or
+<a name="line620"></a> * merges it with the previous or next text node if the status of the world is
+<a name="line621"></a> * VALID, in which case the element itself is eliminated.
+<a name="line622"></a> *
+<a name="line623"></a> * @param {Element} el Word element.
+<a name="line624"></a> * @param {string} word Word to update status for.
+<a name="line625"></a> * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
+<a name="line626"></a> * @protected
+<a name="line627"></a> */
+<a name="line628"></a>goog.ui.AbstractSpellChecker.prototype.updateElement =
+<a name="line629"></a>    function(el, word, status) {
+<a name="line630"></a>  if (this.markCorrected &amp;&amp; this.correctedWords_ &amp;&amp;
+<a name="line631"></a>      this.correctedWords_.contains(word)) {
+<a name="line632"></a>    status = goog.spell.SpellCheck.WordStatus.CORRECTED;
+<a name="line633"></a>  }
+<a name="line634"></a>  if (status == goog.spell.SpellCheck.WordStatus.VALID) {
+<a name="line635"></a>    this.removeMarkup(el);
+<a name="line636"></a>  } else {
+<a name="line637"></a>    goog.dom.setProperties(el, this.getElementProperties(status));
+<a name="line638"></a>  }
+<a name="line639"></a>};
+<a name="line640"></a>
 <a name="line641"></a>
-<a name="line642"></a>
-<a name="line643"></a>/**
-<a name="line644"></a> * Generates unique Ids for spell checker elements.
-<a name="line645"></a> * @param {number=} opt_id Id to suffix with.
-<a name="line646"></a> * @return {string} Unique element id.
-<a name="line647"></a> * @protected
-<a name="line648"></a> */
-<a name="line649"></a>goog.ui.AbstractSpellChecker.prototype.makeElementId = function(opt_id) {
-<a name="line650"></a>  return (opt_id ? opt_id : goog.ui.AbstractSpellChecker.nextId_++) +
-<a name="line651"></a>    &#39;.&#39; + goog.ui.AbstractSpellChecker.ID_SUFFIX_;
-<a name="line652"></a>};
+<a name="line642"></a>/**
+<a name="line643"></a> * Generates unique Ids for spell checker elements.
+<a name="line644"></a> * @param {number=} opt_id Id to suffix with.
+<a name="line645"></a> * @return {string} Unique element id.
+<a name="line646"></a> * @protected
+<a name="line647"></a> */
+<a name="line648"></a>goog.ui.AbstractSpellChecker.prototype.makeElementId = function(opt_id) {
+<a name="line649"></a>  return (opt_id ? opt_id : goog.ui.AbstractSpellChecker.nextId_++) +
+<a name="line650"></a>    &#39;.&#39; + goog.ui.AbstractSpellChecker.ID_SUFFIX_;
+<a name="line651"></a>};
+<a name="line652"></a>
 <a name="line653"></a>
-<a name="line654"></a>
-<a name="line655"></a>/**
-<a name="line656"></a> * Returns the span element that matches the given number id.
-<a name="line657"></a> * @param {number} id Number id to make the element id.
-<a name="line658"></a> * @return {Element} The matching span element or null if no span matches.
-<a name="line659"></a> * @protected
-<a name="line660"></a> */
-<a name="line661"></a>goog.ui.AbstractSpellChecker.prototype.getElementById = function(id) {
-<a name="line662"></a>  return this.getDomHelper().getElement(this.makeElementId(id));
-<a name="line663"></a>};
+<a name="line654"></a>/**
+<a name="line655"></a> * Returns the span element that matches the given number id.
+<a name="line656"></a> * @param {number} id Number id to make the element id.
+<a name="line657"></a> * @return {Element} The matching span element or null if no span matches.
+<a name="line658"></a> * @protected
+<a name="line659"></a> */
+<a name="line660"></a>goog.ui.AbstractSpellChecker.prototype.getElementById = function(id) {
+<a name="line661"></a>  return this.getDomHelper().getElement(this.makeElementId(id));
+<a name="line662"></a>};
+<a name="line663"></a>
 <a name="line664"></a>
-<a name="line665"></a>
-<a name="line666"></a>/**
-<a name="line667"></a> * Creates an element for a specified word and stores a reference to it.
-<a name="line668"></a> *
-<a name="line669"></a> * @param {string} word Word to create element for.
-<a name="line670"></a> * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
-<a name="line671"></a> * @return {HTMLSpanElement} The created element.
-<a name="line672"></a> * @private
-<a name="line673"></a> */
-<a name="line674"></a>goog.ui.AbstractSpellChecker.prototype.createWordElement_ = function(word,
-<a name="line675"></a>                                                                     status) {
-<a name="line676"></a>  var parameters = this.getElementProperties(status);
-<a name="line677"></a>
-<a name="line678"></a>  // Add id &amp; tabindex as necessary.
-<a name="line679"></a>  if (!parameters[&#39;id&#39;]) {
-<a name="line680"></a>    parameters[&#39;id&#39;] = this.makeElementId();
-<a name="line681"></a>  }
-<a name="line682"></a>  if (!parameters[&#39;tabIndex&#39;]) {
-<a name="line683"></a>    parameters[&#39;tabIndex&#39;] = -1;
-<a name="line684"></a>  }
-<a name="line685"></a>
-<a name="line686"></a>  var el = /** @type {HTMLSpanElement} */
-<a name="line687"></a>      (this.getDomHelper().createDom(&#39;span&#39;, parameters, word));
-<a name="line688"></a>  goog.dom.a11y.setRole(el, &#39;menuitem&#39;);
-<a name="line689"></a>  goog.dom.a11y.setState(el, &#39;haspopup&#39;, true);
-<a name="line690"></a>  this.registerWordElement_(word, el);
-<a name="line691"></a>
-<a name="line692"></a>  return el;
-<a name="line693"></a>};
+<a name="line665"></a>/**
+<a name="line666"></a> * Creates an element for a specified word and stores a reference to it.
+<a name="line667"></a> *
+<a name="line668"></a> * @param {string} word Word to create element for.
+<a name="line669"></a> * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
+<a name="line670"></a> * @return {HTMLSpanElement} The created element.
+<a name="line671"></a> * @private
+<a name="line672"></a> */
+<a name="line673"></a>goog.ui.AbstractSpellChecker.prototype.createWordElement_ = function(word,
+<a name="line674"></a>                                                                     status) {
+<a name="line675"></a>  var parameters = this.getElementProperties(status);
+<a name="line676"></a>
+<a name="line677"></a>  // Add id &amp; tabindex as necessary.
+<a name="line678"></a>  if (!parameters[&#39;id&#39;]) {
+<a name="line679"></a>    parameters[&#39;id&#39;] = this.makeElementId();
+<a name="line680"></a>  }
+<a name="line681"></a>  if (!parameters[&#39;tabIndex&#39;]) {
+<a name="line682"></a>    parameters[&#39;tabIndex&#39;] = -1;
+<a name="line683"></a>  }
+<a name="line684"></a>
+<a name="line685"></a>  var el = /** @type {HTMLSpanElement} */
+<a name="line686"></a>      (this.getDomHelper().createDom(&#39;span&#39;, parameters, word));
+<a name="line687"></a>  goog.dom.a11y.setRole(el, &#39;menuitem&#39;);
+<a name="line688"></a>  goog.dom.a11y.setState(el, &#39;haspopup&#39;, true);
+<a name="line689"></a>  this.registerWordElement_(word, el);
+<a name="line690"></a>
+<a name="line691"></a>  return el;
+<a name="line692"></a>};
+<a name="line693"></a>
 <a name="line694"></a>
-<a name="line695"></a>
-<a name="line696"></a>/**
-<a name="line697"></a> * Stores a reference to word element.
-<a name="line698"></a> *
-<a name="line699"></a> * @param {string} word The word to store.
-<a name="line700"></a> * @param {HTMLSpanElement} el The element associated with it.
-<a name="line701"></a> * @private
-<a name="line702"></a> */
-<a name="line703"></a>goog.ui.AbstractSpellChecker.prototype.registerWordElement_ = function(word,
-<a name="line704"></a>                                                                       el) {
-<a name="line705"></a>  // Avoid potential collision with the built-in object namespace. For
-<a name="line706"></a>  // example, &#39;watch&#39; is a reserved name in FireFox.
-<a name="line707"></a>  var index = goog.ui.AbstractSpellChecker.toInternalKey_(word);
-<a name="line708"></a>  if (this.wordElements_[index]) {
-<a name="line709"></a>    this.wordElements_[index].push(el);
-<a name="line710"></a>  } else {
-<a name="line711"></a>    this.wordElements_[index] = [el];
-<a name="line712"></a>  }
-<a name="line713"></a>};
+<a name="line695"></a>/**
+<a name="line696"></a> * Stores a reference to word element.
+<a name="line697"></a> *
+<a name="line698"></a> * @param {string} word The word to store.
+<a name="line699"></a> * @param {HTMLSpanElement} el The element associated with it.
+<a name="line700"></a> * @private
+<a name="line701"></a> */
+<a name="line702"></a>goog.ui.AbstractSpellChecker.prototype.registerWordElement_ = function(word,
+<a name="line703"></a>                                                                       el) {
+<a name="line704"></a>  // Avoid potential collision with the built-in object namespace. For
+<a name="line705"></a>  // example, &#39;watch&#39; is a reserved name in FireFox.
+<a name="line706"></a>  var index = goog.ui.AbstractSpellChecker.toInternalKey_(word);
+<a name="line707"></a>  if (this.wordElements_[index]) {
+<a name="line708"></a>    this.wordElements_[index].push(el);
+<a name="line709"></a>  } else {
+<a name="line710"></a>    this.wordElements_[index] = [el];
+<a name="line711"></a>  }
+<a name="line712"></a>};
+<a name="line713"></a>
 <a name="line714"></a>
-<a name="line715"></a>
-<a name="line716"></a>/**
-<a name="line717"></a> * Returns desired element properties for the specified status.
-<a name="line718"></a> * Should be overridden by implementation.
-<a name="line719"></a> *
-<a name="line720"></a> * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
-<a name="line721"></a> * @protected
-<a name="line722"></a> */
-<a name="line723"></a>goog.ui.AbstractSpellChecker.prototype.getElementProperties =
-<a name="line724"></a>    function(status) {
-<a name="line725"></a>  throw Error(&#39;Need to override getElementProperties_ in derivative class&#39;);
-<a name="line726"></a>};
+<a name="line715"></a>/**
+<a name="line716"></a> * Returns desired element properties for the specified status.
+<a name="line717"></a> * Should be overridden by implementation.
+<a name="line718"></a> *
+<a name="line719"></a> * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
+<a name="line720"></a> * @protected
+<a name="line721"></a> */
+<a name="line722"></a>goog.ui.AbstractSpellChecker.prototype.getElementProperties =
+<a name="line723"></a>    function(status) {
+<a name="line724"></a>  throw Error(&#39;Need to override getElementProperties_ in derivative class&#39;);
+<a name="line725"></a>};
+<a name="line726"></a>
 <a name="line727"></a>
-<a name="line728"></a>
-<a name="line729"></a>/**
-<a name="line730"></a> * Handles word change events and updates the word elements accordingly.
-<a name="line731"></a> *
-<a name="line732"></a> * @param {goog.spell.SpellCheck.WordChangedEvent} event The event object.
-<a name="line733"></a> * @private
-<a name="line734"></a> */
-<a name="line735"></a>goog.ui.AbstractSpellChecker.prototype.onWordChanged_ = function(event) {
-<a name="line736"></a>  // Avoid potential collision with the built-in object namespace. For
-<a name="line737"></a>  // example, &#39;watch&#39; is a reserved name in FireFox.
-<a name="line738"></a>  var index = goog.ui.AbstractSpellChecker.toInternalKey_(event.word);
-<a name="line739"></a>  var elements = this.wordElements_[index];
-<a name="line740"></a>  if (elements) {
-<a name="line741"></a>    for (var el, i = 0; el = elements[i]; i++) {
-<a name="line742"></a>      this.updateElement(el, event.word, event.status);
-<a name="line743"></a>    }
-<a name="line744"></a>  }
-<a name="line745"></a>};
+<a name="line728"></a>/**
+<a name="line729"></a> * Handles word change events and updates the word elements accordingly.
+<a name="line730"></a> *
+<a name="line731"></a> * @param {goog.spell.SpellCheck.WordChangedEvent} event The event object.
+<a name="line732"></a> * @private
+<a name="line733"></a> */
+<a name="line734"></a>goog.ui.AbstractSpellChecker.prototype.onWordChanged_ = function(event) {
+<a name="line735"></a>  // Avoid potential collision with the built-in object namespace. For
+<a name="line736"></a>  // example, &#39;watch&#39; is a reserved name in FireFox.
+<a name="line737"></a>  var index = goog.ui.AbstractSpellChecker.toInternalKey_(event.word);
+<a name="line738"></a>  var elements = this.wordElements_[index];
+<a name="line739"></a>  if (elements) {
+<a name="line740"></a>    for (var el, i = 0; el = elements[i]; i++) {
+<a name="line741"></a>      this.updateElement(el, event.word, event.status);
+<a name="line742"></a>    }
+<a name="line743"></a>  }
+<a name="line744"></a>};
+<a name="line745"></a>
 <a name="line746"></a>
-<a name="line747"></a>
-<a name="line748"></a>/** @inheritDoc */
-<a name="line749"></a>goog.ui.AbstractSpellChecker.prototype.disposeInternal = function() {
-<a name="line750"></a>  if (this.isVisible_) {
-<a name="line751"></a>    // Clears wordElements_
-<a name="line752"></a>    this.resume();
-<a name="line753"></a>  }
-<a name="line754"></a>
-<a name="line755"></a>  goog.events.unlisten(this.handler_,
-<a name="line756"></a>      goog.spell.SpellCheck.EventType.WORD_CHANGED, this.onWordChanged_,
-<a name="line757"></a>      false, this);
-<a name="line758"></a>
-<a name="line759"></a>  if (this.menu_) {
-<a name="line760"></a>    this.menu_.dispose();
-<a name="line761"></a>    delete this.menu_;
-<a name="line762"></a>    delete this.menuIgnore_;
-<a name="line763"></a>    delete this.menuSeparator_;
-<a name="line764"></a>  }
-<a name="line765"></a>  delete this.handler_;
-<a name="line766"></a>  delete this.wordElements_;
-<a name="line767"></a>
-<a name="line768"></a>  goog.ui.AbstractSpellChecker.superClass_.disposeInternal.call(this);
-<a name="line769"></a>};
+<a name="line747"></a>/** @inheritDoc */
+<a name="line748"></a>goog.ui.AbstractSpellChecker.prototype.disposeInternal = function() {
+<a name="line749"></a>  if (this.isVisible_) {
+<a name="line750"></a>    // Clears wordElements_
+<a name="line751"></a>    this.resume();
+<a name="line752"></a>  }
+<a name="line753"></a>
+<a name="line754"></a>  goog.events.unlisten(this.handler_,
+<a name="line755"></a>      goog.spell.SpellCheck.EventType.WORD_CHANGED, this.onWordChanged_,
+<a name="line756"></a>      false, this);
+<a name="line757"></a>
+<a name="line758"></a>  if (this.menu_) {
+<a name="line759"></a>    this.menu_.dispose();
+<a name="line760"></a>    delete this.menu_;
+<a name="line761"></a>    delete this.menuIgnore_;
+<a name="line762"></a>    delete this.menuSeparator_;
+<a name="line763"></a>  }
+<a name="line764"></a>  delete this.handler_;
+<a name="line765"></a>  delete this.wordElements_;
+<a name="line766"></a>
+<a name="line767"></a>  goog.ui.AbstractSpellChecker.superClass_.disposeInternal.call(this);
+<a name="line768"></a>};
+<a name="line769"></a>
 <a name="line770"></a>
-<a name="line771"></a>
-<a name="line772"></a>/**
-<a name="line773"></a> * Precharges local dictionary cache. This is optional, but greatly reduces
-<a name="line774"></a> * amount of subsequent churn in the DOM tree because most of the words become
-<a name="line775"></a> * known from the very beginning.
-<a name="line776"></a> *
-<a name="line777"></a> * @param {string} text Text to process.
-<a name="line778"></a> * @param {number} words Max number of words to scan.
-<a name="line779"></a> * @return {number} number of words actually scanned.
-<a name="line780"></a> * @protected
-<a name="line781"></a> */
-<a name="line782"></a>goog.ui.AbstractSpellChecker.prototype.populateDictionary = function(text,
-<a name="line783"></a>                                                                     words) {
-<a name="line784"></a>  this.splitRegex_.lastIndex = 0;
-<a name="line785"></a>  var result;
-<a name="line786"></a>  var numScanned = 0;
-<a name="line787"></a>  while (result = this.splitRegex_.exec(text)) {
-<a name="line788"></a>    if (result[0].length == 0) {
-<a name="line789"></a>      break;
-<a name="line790"></a>    }
-<a name="line791"></a>    var word = result[1];
-<a name="line792"></a>    if (word) {
-<a name="line793"></a>      this.handler_.checkWord(word);
-<a name="line794"></a>      ++numScanned;
-<a name="line795"></a>      if (numScanned &gt;= words) {
-<a name="line796"></a>        break;
-<a name="line797"></a>      }
-<a name="line798"></a>    }
-<a name="line799"></a>  }
-<a name="line800"></a>  this.handler_.processPending();
-<a name="line801"></a>  return numScanned;
-<a name="line802"></a>};
+<a name="line771"></a>/**
+<a name="line772"></a> * Precharges local dictionary cache. This is optional, but greatly reduces
+<a name="line773"></a> * amount of subsequent churn in the DOM tree because most of the words become
+<a name="line774"></a> * known from the very beginning.
+<a name="line775"></a> *
+<a name="line776"></a> * @param {string} text Text to process.
+<a name="line777"></a> * @param {number} words Max number of words to scan.
+<a name="line778"></a> * @return {number} number of words actually scanned.
+<a name="line779"></a> * @protected
+<a name="line780"></a> */
+<a name="line781"></a>goog.ui.AbstractSpellChecker.prototype.populateDictionary = function(text,
+<a name="line782"></a>                                                                     words) {
+<a name="line783"></a>  this.splitRegex_.lastIndex = 0;
+<a name="line784"></a>  var result;
+<a name="line785"></a>  var numScanned = 0;
+<a name="line786"></a>  while (result = this.splitRegex_.exec(text)) {
+<a name="line787"></a>    if (result[0].length == 0) {
+<a name="line788"></a>      break;
+<a name="line789"></a>    }
+<a name="line790"></a>    var word = result[1];
+<a name="line791"></a>    if (word) {
+<a name="line792"></a>      this.handler_.checkWord(word);
+<a name="line793"></a>      ++numScanned;
+<a name="line794"></a>      if (numScanned &gt;= words) {
+<a name="line795"></a>        break;
+<a name="line796"></a>      }
+<a name="line797"></a>    }
+<a name="line798"></a>  }
+<a name="line799"></a>  this.handler_.processPending();
+<a name="line800"></a>  return numScanned;
+<a name="line801"></a>};
+<a name="line802"></a>
 <a name="line803"></a>
-<a name="line804"></a>
-<a name="line805"></a>/**
-<a name="line806"></a> * Processes word.
-<a name="line807"></a> * Should be overridden by implementation.
-<a name="line808"></a> *
-<a name="line809"></a> * @param {Node} node Node containing word.
-<a name="line810"></a> * @param {string} text Word to process.
-<a name="line811"></a> * @param {goog.spell.SpellCheck.WordStatus} status Status of the word.
-<a name="line812"></a> * @protected
-<a name="line813"></a> */
-<a name="line814"></a>goog.ui.AbstractSpellChecker.prototype.processWord = function(node, text,
-<a name="line815"></a>                                                               status) {
-<a name="line816"></a>  throw Error(&#39;Need to override processWord_ in derivative class&#39;);
-<a name="line817"></a>};
+<a name="line804"></a>/**
+<a name="line805"></a> * Processes word.
+<a name="line806"></a> * Should be overridden by implementation.
+<a name="line807"></a> *
+<a name="line808"></a> * @param {Node} node Node containing word.
+<a name="line809"></a> * @param {string} text Word to process.
+<a name="line810"></a> * @param {goog.spell.SpellCheck.WordStatus} status Status of the word.
+<a name="line811"></a> * @protected
+<a name="line812"></a> */
+<a name="line813"></a>goog.ui.AbstractSpellChecker.prototype.processWord = function(node, text,
+<a name="line814"></a>                                                               status) {
+<a name="line815"></a>  throw Error(&#39;Need to override processWord_ in derivative class&#39;);
+<a name="line816"></a>};
+<a name="line817"></a>
 <a name="line818"></a>
-<a name="line819"></a>
-<a name="line820"></a>/**
-<a name="line821"></a> * Processes range of text that checks out (contains no unrecognized words).
-<a name="line822"></a> * Should be overridden by implementation. May contain words and separators.
-<a name="line823"></a> *
-<a name="line824"></a> * @param {Node} node Node containing text range.
-<a name="line825"></a> * @param {string} text text to process.
-<a name="line826"></a> * @protected
-<a name="line827"></a> */
-<a name="line828"></a>goog.ui.AbstractSpellChecker.prototype.processRange = function(node, text) {
-<a name="line829"></a>  throw Error(&#39;Need to override processRange_ in derivative class&#39;);
-<a name="line830"></a>};
+<a name="line819"></a>/**
+<a name="line820"></a> * Processes range of text that checks out (contains no unrecognized words).
+<a name="line821"></a> * Should be overridden by implementation. May contain words and separators.
+<a name="line822"></a> *
+<a name="line823"></a> * @param {Node} node Node containing text range.
+<a name="line824"></a> * @param {string} text text to process.
+<a name="line825"></a> * @protected
+<a name="line826"></a> */
+<a name="line827"></a>goog.ui.AbstractSpellChecker.prototype.processRange = function(node, text) {
+<a name="line828"></a>  throw Error(&#39;Need to override processRange_ in derivative class&#39;);
+<a name="line829"></a>};
+<a name="line830"></a>
 <a name="line831"></a>
-<a name="line832"></a>
-<a name="line833"></a>/**
-<a name="line834"></a> * Starts asynchronous processing mode.
-<a name="line835"></a> *
-<a name="line836"></a> * @protected
-<a name="line837"></a> */
-<a name="line838"></a>goog.ui.AbstractSpellChecker.prototype.initializeAsyncMode = function() {
-<a name="line839"></a>  if (this.asyncMode_ || this.processedElementsCount_ ||
-<a name="line840"></a>      this.asyncText_ != null || this.asyncNode_) {
-<a name="line841"></a>    throw Error(&#39;Async mode already in progress.&#39;);
-<a name="line842"></a>  }
-<a name="line843"></a>  this.asyncMode_ = true;
-<a name="line844"></a>  this.processedElementsCount_ = 0;
-<a name="line845"></a>  delete this.asyncText_;
-<a name="line846"></a>  this.asyncRangeStart_ = 0;
-<a name="line847"></a>  delete this.asyncNode_;
-<a name="line848"></a>
-<a name="line849"></a>  this.blockReadyEvents();
-<a name="line850"></a>};
+<a name="line832"></a>/**
+<a name="line833"></a> * Starts asynchronous processing mode.
+<a name="line834"></a> *
+<a name="line835"></a> * @protected
+<a name="line836"></a> */
+<a name="line837"></a>goog.ui.AbstractSpellChecker.prototype.initializeAsyncMode = function() {
+<a name="line838"></a>  if (this.asyncMode_ || this.processedElementsCount_ ||
+<a name="line839"></a>      this.asyncText_ != null || this.asyncNode_) {
+<a name="line840"></a>    throw Error(&#39;Async mode already in progress.&#39;);
+<a name="line841"></a>  }
+<a name="line842"></a>  this.asyncMode_ = true;
+<a name="line843"></a>  this.processedElementsCount_ = 0;
+<a name="line844"></a>  delete this.asyncText_;
+<a name="line845"></a>  this.asyncRangeStart_ = 0;
+<a name="line846"></a>  delete this.asyncNode_;
+<a name="line847"></a>
+<a name="line848"></a>  this.blockReadyEvents();
+<a name="line849"></a>};
+<a name="line850"></a>
 <a name="line851"></a>
-<a name="line852"></a>
-<a name="line853"></a>/**
-<a name="line854"></a> * Finalizes asynchronous processing mode. Should be called after there is no
-<a name="line855"></a> * more text to process and processTextAsync and/or continueAsyncProcessing
-<a name="line856"></a> * returned FINISHED.
-<a name="line857"></a> *
-<a name="line858"></a> * @protected
-<a name="line859"></a> */
-<a name="line860"></a>goog.ui.AbstractSpellChecker.prototype.finishAsyncProcessing = function() {
-<a name="line861"></a>  if (!this.asyncMode_ || this.asyncText_ != null || this.asyncNode_) {
-<a name="line862"></a>    throw Error(&#39;Async mode not started or there is still text to process.&#39;);
-<a name="line863"></a>  }
-<a name="line864"></a>  this.asyncMode_ = false;
-<a name="line865"></a>  this.processedElementsCount_ = 0;
-<a name="line866"></a>
-<a name="line867"></a>  this.unblockReadyEvents();
-<a name="line868"></a>  this.handler_.processPending();
-<a name="line869"></a>};
+<a name="line852"></a>/**
+<a name="line853"></a> * Finalizes asynchronous processing mode. Should be called after there is no
+<a name="line854"></a> * more text to process and processTextAsync and/or continueAsyncProcessing
+<a name="line855"></a> * returned FINISHED.
+<a name="line856"></a> *
+<a name="line857"></a> * @protected
+<a name="line858"></a> */
+<a name="line859"></a>goog.ui.AbstractSpellChecker.prototype.finishAsyncProcessing = function() {
+<a name="line860"></a>  if (!this.asyncMode_ || this.asyncText_ != null || this.asyncNode_) {
+<a name="line861"></a>    throw Error(&#39;Async mode not started or there is still text to process.&#39;);
+<a name="line862"></a>  }
+<a name="line863"></a>  this.asyncMode_ = false;
+<a name="line864"></a>  this.processedElementsCount_ = 0;
+<a name="line865"></a>
+<a name="line866"></a>  this.unblockReadyEvents();
+<a name="line867"></a>  this.handler_.processPending();
+<a name="line868"></a>};
+<a name="line869"></a>
 <a name="line870"></a>
-<a name="line871"></a>
-<a name="line872"></a>/**
-<a name="line873"></a> * Captures and drops goog.spell.SpellCheck.EventType.READY events. This is
-<a name="line874"></a> * used in dictionary recharge and async mode so that completion is not
-<a name="line875"></a> * signalled prematurely.
-<a name="line876"></a> *
-<a name="line877"></a> * @param {goog.events.Event} e goog.spell.SpellCheck.EventType.READY event.
-<a name="line878"></a> * @private
-<a name="line879"></a> */
-<a name="line880"></a>goog.ui.AbstractSpellChecker.prototype.captureReadyEvents_ = function(e) {
-<a name="line881"></a>  e.stopPropagation();
-<a name="line882"></a>};
+<a name="line871"></a>/**
+<a name="line872"></a> * Captures and drops goog.spell.SpellCheck.EventType.READY events. This is
+<a name="line873"></a> * used in dictionary recharge and async mode so that completion is not
+<a name="line874"></a> * signalled prematurely.
+<a name="line875"></a> *
+<a name="line876"></a> * @param {goog.events.Event} e goog.spell.SpellCheck.EventType.READY event.
+<a name="line877"></a> * @private
+<a name="line878"></a> */
+<a name="line879"></a>goog.ui.AbstractSpellChecker.prototype.captureReadyEvents_ = function(e) {
+<a name="line880"></a>  e.stopPropagation();
+<a name="line881"></a>};
+<a name="line882"></a>
 <a name="line883"></a>
-<a name="line884"></a>
-<a name="line885"></a>/**
-<a name="line886"></a> * Blocks processing of spell checker READY events. This is used in dictionary
-<a name="line887"></a> * recharge and async mode so that completion is not signalled prematurely.
-<a name="line888"></a> *
-<a name="line889"></a> * @protected
-<a name="line890"></a> */
-<a name="line891"></a>goog.ui.AbstractSpellChecker.prototype.blockReadyEvents = function() {
-<a name="line892"></a>  goog.events.listen(this.handler_, goog.spell.SpellCheck.EventType.READY,
-<a name="line893"></a>                     this.captureReadyEvents_, true, this);
-<a name="line894"></a>};
+<a name="line884"></a>/**
+<a name="line885"></a> * Blocks processing of spell checker READY events. This is used in dictionary
+<a name="line886"></a> * recharge and async mode so that completion is not signalled prematurely.
+<a name="line887"></a> *
+<a name="line888"></a> * @protected
+<a name="line889"></a> */
+<a name="line890"></a>goog.ui.AbstractSpellChecker.prototype.blockReadyEvents = function() {
+<a name="line891"></a>  goog.events.listen(this.handler_, goog.spell.SpellCheck.EventType.READY,
+<a name="line892"></a>                     this.captureReadyEvents_, true, this);
+<a name="line893"></a>};
+<a name="line894"></a>
 <a name="line895"></a>
-<a name="line896"></a>
-<a name="line897"></a>/**
-<a name="line898"></a> * Unblocks processing of spell checker READY events. This is used in
-<a name="line899"></a> * dictionary recharge and async mode so that completion is not signalled
-<a name="line900"></a> * prematurely.
-<a name="line901"></a> *
-<a name="line902"></a> * @protected
-<a name="line903"></a> */
-<a name="line904"></a>goog.ui.AbstractSpellChecker.prototype.unblockReadyEvents = function() {
-<a name="line905"></a>  goog.events.unlisten(this.handler_, goog.spell.SpellCheck.EventType.READY,
-<a name="line906"></a>                     this.captureReadyEvents_, true, this);
-<a name="line907"></a>};
+<a name="line896"></a>/**
+<a name="line897"></a> * Unblocks processing of spell checker READY events. This is used in
+<a name="line898"></a> * dictionary recharge and async mode so that completion is not signalled
+<a name="line899"></a> * prematurely.
+<a name="line900"></a> *
+<a name="line901"></a> * @protected
+<a name="line902"></a> */
+<a name="line903"></a>goog.ui.AbstractSpellChecker.prototype.unblockReadyEvents = function() {
+<a name="line904"></a>  goog.events.unlisten(this.handler_, goog.spell.SpellCheck.EventType.READY,
+<a name="line905"></a>                     this.captureReadyEvents_, true, this);
+<a name="line906"></a>};
+<a name="line907"></a>
 <a name="line908"></a>
-<a name="line909"></a>
-<a name="line910"></a>/**
-<a name="line911"></a> * Splits text into individual words and blocks of separators. Calls virtual
-<a name="line912"></a> * processWord_ and processRange_ methods.
-<a name="line913"></a> *
-<a name="line914"></a> * @param {Node} node Node containing text.
-<a name="line915"></a> * @param {string} text Text to process.
-<a name="line916"></a> * @return {goog.ui.AbstractSpellChecker.AsyncResult} operation result.
-<a name="line917"></a> * @protected
-<a name="line918"></a> */
-<a name="line919"></a>goog.ui.AbstractSpellChecker.prototype.processTextAsync = function(node,
-<a name="line920"></a>                                                                    text) {
-<a name="line921"></a>  if (!this.asyncMode_ || this.asyncText_ != null || this.asyncNode_) {
-<a name="line922"></a>    throw Error(&#39;Not in async mode or previous text has not been processed.&#39;);
-<a name="line923"></a>  }
-<a name="line924"></a>
-<a name="line925"></a>  this.splitRegex_.lastIndex = 0;
-<a name="line926"></a>  var stringSegmentStart = 0;
-<a name="line927"></a>
-<a name="line928"></a>  var result;
-<a name="line929"></a>  while (result = this.splitRegex_.exec(text)) {
-<a name="line930"></a>    if (result[0].length == 0) {
-<a name="line931"></a>      break;
-<a name="line932"></a>    }
-<a name="line933"></a>    var word = result[1];
-<a name="line934"></a>    if (word) {
-<a name="line935"></a>      var status = this.handler_.checkWord(word);
-<a name="line936"></a>      if (status != goog.spell.SpellCheck.WordStatus.VALID) {
-<a name="line937"></a>        var preceedingText = text.substr(stringSegmentStart, result.index -
-<a name="line938"></a>            stringSegmentStart);
-<a name="line939"></a>        if (preceedingText) {
-<a name="line940"></a>          this.processRange(node, preceedingText);
-<a name="line941"></a>        }
-<a name="line942"></a>        stringSegmentStart = result.index + word.length;
-<a name="line943"></a>        this.processWord(node, word, status);
-<a name="line944"></a>      }
-<a name="line945"></a>    }
-<a name="line946"></a>    this.processedElementsCount_++;
-<a name="line947"></a>    if (this.processedElementsCount_ &gt; this.asyncWordsPerBatch_) {
-<a name="line948"></a>      this.asyncText_ = text;
-<a name="line949"></a>      this.asyncRangeStart_ = stringSegmentStart;
-<a name="line950"></a>      this.asyncNode_ = node;
-<a name="line951"></a>      this.processedElementsCount_ = 0;
-<a name="line952"></a>      return goog.ui.AbstractSpellChecker.AsyncResult.PENDING;
-<a name="line953"></a>    }
-<a name="line954"></a>  }
-<a name="line955"></a>
-<a name="line956"></a>  var leftoverText = text.substr(stringSegmentStart);
-<a name="line957"></a>  if (leftoverText) {
-<a name="line958"></a>    this.processRange(node, leftoverText);
-<a name="line959"></a>  }
-<a name="line960"></a>
-<a name="line961"></a>  return goog.ui.AbstractSpellChecker.AsyncResult.DONE;
-<a name="line962"></a>};
+<a name="line909"></a>/**
+<a name="line910"></a> * Splits text into individual words and blocks of separators. Calls virtual
+<a name="line911"></a> * processWord_ and processRange_ methods.
+<a name="line912"></a> *
+<a name="line913"></a> * @param {Node} node Node containing text.
+<a name="line914"></a> * @param {string} text Text to process.
+<a name="line915"></a> * @return {goog.ui.AbstractSpellChecker.AsyncResult} operation result.
+<a name="line916"></a> * @protected
+<a name="line917"></a> */
+<a name="line918"></a>goog.ui.AbstractSpellChecker.prototype.processTextAsync = function(node,
+<a name="line919"></a>                                                                    text) {
+<a name="line920"></a>  if (!this.asyncMode_ || this.asyncText_ != null || this.asyncNode_) {
+<a name="line921"></a>    throw Error(&#39;Not in async mode or previous text has not been processed.&#39;);
+<a name="line922"></a>  }
+<a name="line923"></a>
+<a name="line924"></a>  this.splitRegex_.lastIndex = 0;
+<a name="line925"></a>  var stringSegmentStart = 0;
+<a name="line926"></a>
+<a name="line927"></a>  var result;
+<a name="line928"></a>  while (result = this.splitRegex_.exec(text)) {
+<a name="line929"></a>    if (result[0].length == 0) {
+<a name="line930"></a>      break;
+<a name="line931"></a>    }
+<a name="line932"></a>    var word = result[1];
+<a name="line933"></a>    if (word) {
+<a name="line934"></a>      var status = this.handler_.checkWord(word);
+<a name="line935"></a>      if (status != goog.spell.SpellCheck.WordStatus.VALID) {
+<a name="line936"></a>        var preceedingText = text.substr(stringSegmentStart, result.index -
+<a name="line937"></a>            stringSegmentStart);
+<a name="line938"></a>        if (preceedingText) {
+<a name="line939"></a>          this.processRange(node, preceedingText);
+<a name="line940"></a>        }
+<a name="line941"></a>        stringSegmentStart = result.index + word.length;
+<a name="line942"></a>        this.processWord(node, word, status);
+<a name="line943"></a>      }
+<a name="line944"></a>    }
+<a name="line945"></a>    this.processedElementsCount_++;
+<a name="line946"></a>    if (this.processedElementsCount_ &gt; this.asyncWordsPerBatch_) {
+<a name="line947"></a>      this.asyncText_ = text;
+<a name="line948"></a>      this.asyncRangeStart_ = stringSegmentStart;
+<a name="line949"></a>      this.asyncNode_ = node;
+<a name="line950"></a>      this.processedElementsCount_ = 0;
+<a name="line951"></a>      return goog.ui.AbstractSpellChecker.AsyncResult.PENDING;
+<a name="line952"></a>    }
+<a name="line953"></a>  }
+<a name="line954"></a>
+<a name="line955"></a>  var leftoverText = text.substr(stringSegmentStart);
+<a name="line956"></a>  if (leftoverText) {
+<a name="line957"></a>    this.processRange(node, leftoverText);
+<a name="line958"></a>  }
+<a name="line959"></a>
+<a name="line960"></a>  return goog.ui.AbstractSpellChecker.AsyncResult.DONE;
+<a name="line961"></a>};
+<a name="line962"></a>
 <a name="line963"></a>
-<a name="line964"></a>
-<a name="line965"></a>/**
-<a name="line966"></a> * Continues processing started by processTextAsync. Calls virtual
-<a name="line967"></a> * processWord_ and processRange_ methods.
-<a name="line968"></a> *
-<a name="line969"></a> * @return {goog.ui.AbstractSpellChecker.AsyncResult} operation result.
-<a name="line970"></a> * @protected
-<a name="line971"></a> */
-<a name="line972"></a>goog.ui.AbstractSpellChecker.prototype.continueAsyncProcessing = function() {
-<a name="line973"></a>  if (!this.asyncMode_ || this.asyncText_ == null || !this.asyncNode_) {
-<a name="line974"></a>    throw Error(&#39;Not in async mode or processing not started.&#39;);
-<a name="line975"></a>  }
-<a name="line976"></a>  var node = /** @type {Node} */ (this.asyncNode_);
-<a name="line977"></a>  var stringSegmentStart = this.asyncRangeStart_;
-<a name="line978"></a>  var text = this.asyncText_;
-<a name="line979"></a>
-<a name="line980"></a>  var result;
-<a name="line981"></a>  while (result = this.splitRegex_.exec(text)) {
-<a name="line982"></a>    if (result[0].length == 0) {
-<a name="line983"></a>      break;
-<a name="line984"></a>    }
-<a name="line985"></a>    var word = result[1];
-<a name="line986"></a>    if (word) {
-<a name="line987"></a>      var status = this.handler_.checkWord(word);
-<a name="line988"></a>      if (status != goog.spell.SpellCheck.WordStatus.VALID) {
-<a name="line989"></a>        var preceedingText = text.substr(stringSegmentStart, result.index -
-<a name="line990"></a>            stringSegmentStart);
-<a name="line991"></a>        if (preceedingText) {
-<a name="line992"></a>          this.processRange(node, preceedingText);
-<a name="line993"></a>        }
-<a name="line994"></a>        stringSegmentStart = result.index + word.length;
-<a name="line995"></a>        this.processWord(node, word, status);
-<a name="line996"></a>      }
-<a name="line997"></a>    }
-<a name="line998"></a>    this.processedElementsCount_++;
-<a name="line999"></a>    if (this.processedElementsCount_ &gt; this.asyncWordsPerBatch_) {
-<a name="line1000"></a>      this.processedElementsCount_ = 0;
-<a name="line1001"></a>      this.asyncRangeStart_ = stringSegmentStart;
-<a name="line1002"></a>      return goog.ui.AbstractSpellChecker.AsyncResult.PENDING;
-<a name="line1003"></a>    }
-<a name="line1004"></a>  }
-<a name="line1005"></a>  delete this.asyncText_;
-<a name="line1006"></a>  this.asyncRangeStart_ = 0;
-<a name="line1007"></a>  delete this.asyncNode_;
-<a name="line1008"></a>
-<a name="line1009"></a>  var leftoverText = text.substr(stringSegmentStart);
-<a name="line1010"></a>  if (leftoverText) {
-<a name="line1011"></a>    this.processRange(node, leftoverText);
-<a name="line1012"></a>  }
-<a name="line1013"></a>
-<a name="line1014"></a>  return goog.ui.AbstractSpellChecker.AsyncResult.DONE;
-<a name="line1015"></a>};
+<a name="line964"></a>/**
+<a name="line965"></a> * Continues processing started by processTextAsync. Calls virtual
+<a name="line966"></a> * processWord_ and processRange_ methods.
+<a name="line967"></a> *
+<a name="line968"></a> * @return {goog.ui.AbstractSpellChecker.AsyncResult} operation result.
+<a name="line969"></a> * @protected
+<a name="line970"></a> */
+<a name="line971"></a>goog.ui.AbstractSpellChecker.prototype.continueAsyncProcessing = function() {
+<a name="line972"></a>  if (!this.asyncMode_ || this.asyncText_ == null || !this.asyncNode_) {
+<a name="line973"></a>    throw Error(&#39;Not in async mode or processing not started.&#39;);
+<a name="line974"></a>  }
+<a name="line975"></a>  var node = /** @type {Node} */ (this.asyncNode_);
+<a name="line976"></a>  var stringSegmentStart = this.asyncRangeStart_;
+<a name="line977"></a>  var text = this.asyncText_;
+<a name="line978"></a>
+<a name="line979"></a>  var result;
+<a name="line980"></a>  while (result = this.splitRegex_.exec(text)) {
+<a name="line981"></a>    if (result[0].length == 0) {
+<a name="line982"></a>      break;
+<a name="line983"></a>    }
+<a name="line984"></a>    var word = result[1];
+<a name="line985"></a>    if (word) {
+<a name="line986"></a>      var status = this.handler_.checkWord(word);
+<a name="line987"></a>      if (status != goog.spell.SpellCheck.WordStatus.VALID) {
+<a name="line988"></a>        var preceedingText = text.substr(stringSegmentStart, result.index -
+<a name="line989"></a>            stringSegmentStart);
+<a name="line990"></a>        if (preceedingText) {
+<a name="line991"></a>          this.processRange(node, preceedingText);
+<a name="line992"></a>        }
+<a name="line993"></a>        stringSegmentStart = result.index + word.length;
+<a name="line994"></a>        this.processWord(node, word, status);
+<a name="line995"></a>      }
+<a name="line996"></a>    }
+<a name="line997"></a>    this.processedElementsCount_++;
+<a name="line998"></a>    if (this.processedElementsCount_ &gt; this.asyncWordsPerBatch_) {
+<a name="line999"></a>      this.processedElementsCount_ = 0;
+<a name="line1000"></a>      this.asyncRangeStart_ = stringSegmentStart;
+<a name="line1001"></a>      return goog.ui.AbstractSpellChecker.AsyncResult.PENDING;
+<a name="line1002"></a>    }
+<a name="line1003"></a>  }
+<a name="line1004"></a>  delete this.asyncText_;
+<a name="line1005"></a>  this.asyncRangeStart_ = 0;
+<a name="line1006"></a>  delete this.asyncNode_;
+<a name="line1007"></a>
+<a name="line1008"></a>  var leftoverText = text.substr(stringSegmentStart);
+<a name="line1009"></a>  if (leftoverText) {
+<a name="line1010"></a>    this.processRange(node, leftoverText);
+<a name="line1011"></a>  }
+<a name="line1012"></a>
+<a name="line1013"></a>  return goog.ui.AbstractSpellChecker.AsyncResult.DONE;
+<a name="line1014"></a>};
+<a name="line1015"></a>
 <a name="line1016"></a>
-<a name="line1017"></a>
-<a name="line1018"></a>/**
-<a name="line1019"></a> * Converts a word to an internal key representation. This is necessary to
-<a name="line1020"></a> * avoid collisions with object&#39;s internal namespace. Only words that are
-<a name="line1021"></a> * reserved need to be escaped.
-<a name="line1022"></a> *
-<a name="line1023"></a> * @param {string} word The word to map.
-<a name="line1024"></a> * @return {string} The index.
-<a name="line1025"></a> * @private
-<a name="line1026"></a> */
-<a name="line1027"></a>goog.ui.AbstractSpellChecker.toInternalKey_ = function(word) {
-<a name="line1028"></a>  if (word in Object.prototype) {
-<a name="line1029"></a>    return goog.ui.AbstractSpellChecker.KEY_PREFIX_ + word;
-<a name="line1030"></a>  }
-<a name="line1031"></a>  return word;
-<a name="line1032"></a>};
-<a name="line1033"></a>
-<a name="line1034"></a>/**
-<a name="line1035"></a> * Constants for representing the direction while navigating.
-<a name="line1036"></a> *
-<a name="line1037"></a> * @enum {number}
-<a name="line1038"></a> */
-<a name="line1039"></a>goog.ui.AbstractSpellChecker.Direction = {
-<a name="line1040"></a>  PREVIOUS: 0,
-<a name="line1041"></a>  NEXT: 1
-<a name="line1042"></a>};
+<a name="line1017"></a>/**
+<a name="line1018"></a> * Converts a word to an internal key representation. This is necessary to
+<a name="line1019"></a> * avoid collisions with object&#39;s internal namespace. Only words that are
+<a name="line1020"></a> * reserved need to be escaped.
+<a name="line1021"></a> *
+<a name="line1022"></a> * @param {string} word The word to map.
+<a name="line1023"></a> * @return {string} The index.
+<a name="line1024"></a> * @private
+<a name="line1025"></a> */
+<a name="line1026"></a>goog.ui.AbstractSpellChecker.toInternalKey_ = function(word) {
+<a name="line1027"></a>  if (word in Object.prototype) {
+<a name="line1028"></a>    return goog.ui.AbstractSpellChecker.KEY_PREFIX_ + word;
+<a name="line1029"></a>  }
+<a name="line1030"></a>  return word;
+<a name="line1031"></a>};
+<a name="line1032"></a>
+<a name="line1033"></a>/**
+<a name="line1034"></a> * Constants for representing the direction while navigating.
+<a name="line1035"></a> *
+<a name="line1036"></a> * @enum {number}
+<a name="line1037"></a> */
+<a name="line1038"></a>goog.ui.AbstractSpellChecker.Direction = {
+<a name="line1039"></a>  PREVIOUS: 0,
+<a name="line1040"></a>  NEXT: 1
+<a name="line1041"></a>};
+<a name="line1042"></a>
 <a name="line1043"></a>
-<a name="line1044"></a>
-<a name="line1045"></a>/**
-<a name="line1046"></a> * Constants for the result of asynchrnonus processing.
-<a name="line1047"></a> * @enum {number}
-<a name="line1048"></a> */
-<a name="line1049"></a>goog.ui.AbstractSpellChecker.AsyncResult = {
-<a name="line1050"></a>  /**
-<a name="line1051"></a>   * Caller must reschedule operation and call continueAsyncProcessing on the
-<a name="line1052"></a>   * new stack frame.
-<a name="line1053"></a>   */
-<a name="line1054"></a>  PENDING : 1,
-<a name="line1055"></a>  /**
-<a name="line1056"></a>   * Current element has been fully processed. Caller can call
-<a name="line1057"></a>   * processTextAsync or finishAsyncProcessing.
-<a name="line1058"></a>   */
-<a name="line1059"></a>  DONE : 2
-<a name="line1060"></a>};
+<a name="line1044"></a>/**
+<a name="line1045"></a> * Constants for the result of asynchrnonus processing.
+<a name="line1046"></a> * @enum {number}
+<a name="line1047"></a> */
+<a name="line1048"></a>goog.ui.AbstractSpellChecker.AsyncResult = {
+<a name="line1049"></a>  /**
+<a name="line1050"></a>   * Caller must reschedule operation and call continueAsyncProcessing on the
+<a name="line1051"></a>   * new stack frame.
+<a name="line1052"></a>   */
+<a name="line1053"></a>  PENDING : 1,
+<a name="line1054"></a>  /**
+<a name="line1055"></a>   * Current element has been fully processed. Caller can call
+<a name="line1056"></a>   * processTextAsync or finishAsyncProcessing.
+<a name="line1057"></a>   */
+<a name="line1058"></a>  DONE : 2
+<a name="line1059"></a>};
 </pre>
 
 

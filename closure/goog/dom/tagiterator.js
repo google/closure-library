@@ -128,7 +128,7 @@ goog.dom.TagIterator.prototype.tagType = null;
  * iterator is at position <pre>
  *     <div>|</div>
  * </pre>
- * (i.e. the node is the div and the type is START_TAG) it's depth will be 1.
+ * (i.e. the node is the div and the type is START_TAG) its depth will be 1.
  * @type {number}
  */
 goog.dom.TagIterator.prototype.depth;

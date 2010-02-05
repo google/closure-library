@@ -360,9 +360,9 @@
 <a name="line316"></a> * Multi-field plugins must override execCommand.
 <a name="line317"></a> *
 <a name="line318"></a> * @param {string} command The command to execute.
-<a name="line319"></a> * @param {...Object} var_args Any additional parameters needed to
+<a name="line319"></a> * @param {...*} var_args Any additional parameters needed to
 <a name="line320"></a> *     execute the command.
-<a name="line321"></a> * @return {Object|undefined} The result of the execCommand, if any.
+<a name="line321"></a> * @return {*} The result of the execCommand, if any.
 <a name="line322"></a> */
 <a name="line323"></a>goog.editor.Plugin.prototype.execCommand = function(command, var_args) {
 <a name="line324"></a>  // TODO: Replace all uses of isSilentCommand with plugins that just
@@ -415,9 +415,9 @@
 <a name="line371"></a> * instead.
 <a name="line372"></a> *
 <a name="line373"></a> * @param {string} command The command to execute.
-<a name="line374"></a> * @param {...Object} var_args Any additional parameters needed to
+<a name="line374"></a> * @param {...*} var_args Any additional parameters needed to
 <a name="line375"></a> *     execute the command.
-<a name="line376"></a> * @return {Object|undefined} The result of the execCommand, if any.
+<a name="line376"></a> * @return {*} The result of the execCommand, if any.
 <a name="line377"></a> * @protected
 <a name="line378"></a> */
 <a name="line379"></a>goog.editor.Plugin.prototype.execCommandInternal;

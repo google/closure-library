@@ -249,434 +249,441 @@
 <a name="line205"></a>
 <a name="line206"></a>
 <a name="line207"></a>/**
-<a name="line208"></a> * Gets the a qualified data path to this node
-<a name="line209"></a> * @return {string} The data path.
+<a name="line208"></a> * Get the name of the node relative to the parent node
+<a name="line209"></a> * @return {string} The name of the node.
 <a name="line210"></a> */
-<a name="line211"></a>goog.ds.BaseDataNode.prototype.getDataPath = function() {
-<a name="line212"></a>  var parentPath = &#39;&#39;;
-<a name="line213"></a>  var myName = this.getDataName();
-<a name="line214"></a>  if (this.getParent_ &amp;&amp; this.getParent_()) {
-<a name="line215"></a>    parentPath = this.getParent_().getDataPath() +
-<a name="line216"></a>        (myName.indexOf(goog.ds.STR_ARRAY_START) != -1 ? &#39;&#39; :
-<a name="line217"></a>        goog.ds.STR_PATH_SEPARATOR);
-<a name="line218"></a>  }
-<a name="line219"></a>
-<a name="line220"></a>  return parentPath + myName;
-<a name="line221"></a>};
-<a name="line222"></a>
-<a name="line223"></a>
-<a name="line224"></a>/**
-<a name="line225"></a> * Load or reload the backing data for this node
-<a name="line226"></a> */
-<a name="line227"></a>goog.ds.BaseDataNode.prototype.load = goog.nullFunction;
-<a name="line228"></a>
+<a name="line211"></a>goog.ds.BaseDataNode.prototype.getDataName = goog.nullFunction;
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/**
+<a name="line215"></a> * Gets the a qualified data path to this node
+<a name="line216"></a> * @return {string} The data path.
+<a name="line217"></a> */
+<a name="line218"></a>goog.ds.BaseDataNode.prototype.getDataPath = function() {
+<a name="line219"></a>  var parentPath = &#39;&#39;;
+<a name="line220"></a>  var myName = this.getDataName();
+<a name="line221"></a>  if (this.getParent_ &amp;&amp; this.getParent_()) {
+<a name="line222"></a>    parentPath = this.getParent_().getDataPath() +
+<a name="line223"></a>        (myName.indexOf(goog.ds.STR_ARRAY_START) != -1 ? &#39;&#39; :
+<a name="line224"></a>        goog.ds.STR_PATH_SEPARATOR);
+<a name="line225"></a>  }
+<a name="line226"></a>
+<a name="line227"></a>  return parentPath + myName;
+<a name="line228"></a>};
 <a name="line229"></a>
-<a name="line230"></a>/**
-<a name="line231"></a> * Gets the state of the backing data for this node
-<a name="line232"></a> * @return {goog.ds.LoadState} The state.
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Load or reload the backing data for this node
 <a name="line233"></a> */
-<a name="line234"></a>goog.ds.BaseDataNode.prototype.getLoadState = function() {
-<a name="line235"></a>  return goog.ds.LoadState.LOADED;
-<a name="line236"></a>};
-<a name="line237"></a>
-<a name="line238"></a>
-<a name="line239"></a>/**
-<a name="line240"></a> * Gets the parent node. Subclasses implement this function
-<a name="line241"></a> * @type {Function}
-<a name="line242"></a> * @protected
-<a name="line243"></a> * @suppress {underscore}
-<a name="line244"></a> */
-<a name="line245"></a>goog.ds.BaseDataNode.prototype.getParent_ = null;
-<a name="line246"></a>
-<a name="line247"></a>
-<a name="line248"></a>/**
-<a name="line249"></a> * Interface for node list in rich data tree.
-<a name="line250"></a> *
-<a name="line251"></a> * Has both map and list-style accessors
-<a name="line252"></a> *
-<a name="line253"></a> * @constructor
-<a name="line254"></a> * @extends {goog.ds.DataNode}
-<a name="line255"></a> */
-<a name="line256"></a>// TODO: Use interfaces when available.
-<a name="line257"></a>goog.ds.DataNodeList = function() {};
-<a name="line258"></a>
-<a name="line259"></a>
-<a name="line260"></a>/**
-<a name="line261"></a> * Add a node to the node list.
-<a name="line262"></a> * If the node has a dataName, uses this for the key in the map.
-<a name="line263"></a> *
-<a name="line264"></a> * @param {goog.ds.DataNode} node The node to add.
-<a name="line265"></a> */
-<a name="line266"></a>goog.ds.DataNodeList.prototype.add = goog.nullFunction;
-<a name="line267"></a>
-<a name="line268"></a>
-<a name="line269"></a>/**
-<a name="line270"></a> * Get a node by string key.
-<a name="line271"></a> * Returns null if node doesn&#39;t exist.
-<a name="line272"></a> *
-<a name="line273"></a> * @param {string} key String lookup key.
-<a name="line274"></a> * @return {goog.ds.DataNode} The node, or null if doesn&#39;t exist.
-<a name="line275"></a> */
-<a name="line276"></a>goog.ds.DataNodeList.prototype.get = goog.nullFunction;
-<a name="line277"></a>
-<a name="line278"></a>
-<a name="line279"></a>/**
-<a name="line280"></a> * Get a node by index
-<a name="line281"></a> * Returns null if the index is out of range
-<a name="line282"></a> *
-<a name="line283"></a> * @param {number} index The index of the node.
-<a name="line284"></a> * @return {goog.ds.DataNode} The node, or null if doesn&#39;t exist.
-<a name="line285"></a> */
-<a name="line286"></a>goog.ds.DataNodeList.prototype.getByIndex = goog.nullFunction;
-<a name="line287"></a>
-<a name="line288"></a>
-<a name="line289"></a>/**
-<a name="line290"></a> * Gets the size of the node list
-<a name="line291"></a> *
-<a name="line292"></a> * @return {number} The size of the list.
-<a name="line293"></a> */
-<a name="line294"></a>goog.ds.DataNodeList.prototype.getCount = goog.nullFunction;
+<a name="line234"></a>goog.ds.BaseDataNode.prototype.load = goog.nullFunction;
+<a name="line235"></a>
+<a name="line236"></a>
+<a name="line237"></a>/**
+<a name="line238"></a> * Gets the state of the backing data for this node
+<a name="line239"></a> * @return {goog.ds.LoadState} The state.
+<a name="line240"></a> */
+<a name="line241"></a>goog.ds.BaseDataNode.prototype.getLoadState = function() {
+<a name="line242"></a>  return goog.ds.LoadState.LOADED;
+<a name="line243"></a>};
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/**
+<a name="line247"></a> * Gets the parent node. Subclasses implement this function
+<a name="line248"></a> * @type {Function}
+<a name="line249"></a> * @protected
+<a name="line250"></a> * @suppress {underscore}
+<a name="line251"></a> */
+<a name="line252"></a>goog.ds.BaseDataNode.prototype.getParent_ = null;
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * Interface for node list in rich data tree.
+<a name="line257"></a> *
+<a name="line258"></a> * Has both map and list-style accessors
+<a name="line259"></a> *
+<a name="line260"></a> * @constructor
+<a name="line261"></a> * @extends {goog.ds.DataNode}
+<a name="line262"></a> */
+<a name="line263"></a>// TODO: Use interfaces when available.
+<a name="line264"></a>goog.ds.DataNodeList = function() {};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Add a node to the node list.
+<a name="line269"></a> * If the node has a dataName, uses this for the key in the map.
+<a name="line270"></a> *
+<a name="line271"></a> * @param {goog.ds.DataNode} node The node to add.
+<a name="line272"></a> */
+<a name="line273"></a>goog.ds.DataNodeList.prototype.add = goog.nullFunction;
+<a name="line274"></a>
+<a name="line275"></a>
+<a name="line276"></a>/**
+<a name="line277"></a> * Get a node by string key.
+<a name="line278"></a> * Returns null if node doesn&#39;t exist.
+<a name="line279"></a> *
+<a name="line280"></a> * @param {string} key String lookup key.
+<a name="line281"></a> * @return {goog.ds.DataNode} The node, or null if doesn&#39;t exist.
+<a name="line282"></a> */
+<a name="line283"></a>goog.ds.DataNodeList.prototype.get = goog.nullFunction;
+<a name="line284"></a>
+<a name="line285"></a>
+<a name="line286"></a>/**
+<a name="line287"></a> * Get a node by index
+<a name="line288"></a> * Returns null if the index is out of range
+<a name="line289"></a> *
+<a name="line290"></a> * @param {number} index The index of the node.
+<a name="line291"></a> * @return {goog.ds.DataNode} The node, or null if doesn&#39;t exist.
+<a name="line292"></a> */
+<a name="line293"></a>goog.ds.DataNodeList.prototype.getByIndex = goog.nullFunction;
+<a name="line294"></a>
 <a name="line295"></a>
-<a name="line296"></a>
-<a name="line297"></a>/**
-<a name="line298"></a> * Sets a node in the list of a given name
-<a name="line299"></a> * @param {string} name Name of the node.
-<a name="line300"></a> * @param {goog.ds.DataNode} node The node.
-<a name="line301"></a> */
-<a name="line302"></a>goog.ds.DataNodeList.prototype.setNode = goog.nullFunction;
+<a name="line296"></a>/**
+<a name="line297"></a> * Gets the size of the node list
+<a name="line298"></a> *
+<a name="line299"></a> * @return {number} The size of the list.
+<a name="line300"></a> */
+<a name="line301"></a>goog.ds.DataNodeList.prototype.getCount = goog.nullFunction;
+<a name="line302"></a>
 <a name="line303"></a>
-<a name="line304"></a>
-<a name="line305"></a>/**
-<a name="line306"></a> * Removes a node in the list of a given name
-<a name="line307"></a> * @param {string} name Name of the node.
-<a name="line308"></a> * @return {boolean} True if node existed and was deleted.
-<a name="line309"></a> */
-<a name="line310"></a>goog.ds.DataNodeList.prototype.removeNode = goog.nullFunction;
+<a name="line304"></a>/**
+<a name="line305"></a> * Sets a node in the list of a given name
+<a name="line306"></a> * @param {string} name Name of the node.
+<a name="line307"></a> * @param {goog.ds.DataNode} node The node.
+<a name="line308"></a> */
+<a name="line309"></a>goog.ds.DataNodeList.prototype.setNode = goog.nullFunction;
+<a name="line310"></a>
 <a name="line311"></a>
-<a name="line312"></a>
-<a name="line313"></a>/**
-<a name="line314"></a> * Simple node list implementation with underlying array and map
-<a name="line315"></a> * implements goog.ds.DataNodeList.
-<a name="line316"></a> *
-<a name="line317"></a> * Names that are reserved for system use and shouldn&#39;t be used for data node
-<a name="line318"></a> * names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
-<a name="line319"></a> * undefined if these names are used.
-<a name="line320"></a> *
-<a name="line321"></a> * @param {Array.&lt;goog.ds.DataNode&gt;=} opt_nodes optional nodes to add to list.
-<a name="line322"></a> * @constructor
-<a name="line323"></a> * @extends {goog.ds.DataNodeList}
-<a name="line324"></a> */
-<a name="line325"></a>// TODO: Use interfaces when available.
-<a name="line326"></a>goog.ds.BasicNodeList = function(opt_nodes) {
-<a name="line327"></a>  this.map_ = {};
-<a name="line328"></a>  this.list_ = [];
-<a name="line329"></a>  this.indexMap_ = {};
-<a name="line330"></a>  if (opt_nodes) {
-<a name="line331"></a>    for (var i = 0, node; node = opt_nodes[i]; i++) {
-<a name="line332"></a>      this.add(node);
-<a name="line333"></a>    }
-<a name="line334"></a>  }
-<a name="line335"></a>};
-<a name="line336"></a>
-<a name="line337"></a>
-<a name="line338"></a>/**
-<a name="line339"></a> * Add a node to the node list.
-<a name="line340"></a> * If the node has a dataName, uses this for the key in the map.
-<a name="line341"></a> * TODO Remove function as well
-<a name="line342"></a> *
-<a name="line343"></a> * @param {goog.ds.DataNode} node The node to add.
-<a name="line344"></a> */
-<a name="line345"></a>goog.ds.BasicNodeList.prototype.add = function(node) {
-<a name="line346"></a>  this.list_.push(node);
-<a name="line347"></a>  var dataName = node.getDataName();
-<a name="line348"></a>  if (dataName) {
-<a name="line349"></a>    this.map_[dataName] = node;
-<a name="line350"></a>    this.indexMap_[dataName] = this.list_.length - 1;
-<a name="line351"></a>  }
-<a name="line352"></a>};
-<a name="line353"></a>
-<a name="line354"></a>
-<a name="line355"></a>/**
-<a name="line356"></a> * Get a node by string key.
-<a name="line357"></a> * Returns null if node doesn&#39;t exist.
-<a name="line358"></a> *
-<a name="line359"></a> * @param {string} key String lookup key.
-<a name="line360"></a> * @return {goog.ds.DataNode} The node, or null if doesn&#39;t exist.
-<a name="line361"></a> */
-<a name="line362"></a>goog.ds.BasicNodeList.prototype.get = function(key) {
-<a name="line363"></a>  return this.map_[key] || null;
-<a name="line364"></a>};
-<a name="line365"></a>
-<a name="line366"></a>
-<a name="line367"></a>/**
-<a name="line368"></a> * Get a node by index
-<a name="line369"></a> * Returns null if the index is out of range
-<a name="line370"></a> *
-<a name="line371"></a> * @param {number} index The index of the node.
-<a name="line372"></a> * @return {goog.ds.DataNode} The node, or null if doesn&#39;t exist.
-<a name="line373"></a> */
-<a name="line374"></a>goog.ds.BasicNodeList.prototype.getByIndex = function(index) {
-<a name="line375"></a>  return this.list_[index] || null;
-<a name="line376"></a>};
-<a name="line377"></a>
-<a name="line378"></a>
-<a name="line379"></a>/**
-<a name="line380"></a> * Gets the size of the node list
-<a name="line381"></a> *
-<a name="line382"></a> * @return {number} The size of the list.
-<a name="line383"></a> */
-<a name="line384"></a>goog.ds.BasicNodeList.prototype.getCount = function() {
-<a name="line385"></a>  return this.list_.length;
-<a name="line386"></a>};
-<a name="line387"></a>
-<a name="line388"></a>
-<a name="line389"></a>/**
-<a name="line390"></a> * Sets a node in the list of a given name
-<a name="line391"></a> * @param {string} name Name of the node.
-<a name="line392"></a> * @param {goog.ds.DataNode} node The node.
-<a name="line393"></a> */
-<a name="line394"></a>goog.ds.BasicNodeList.prototype.setNode = function(name, node) {
-<a name="line395"></a>  if (node == null) {
-<a name="line396"></a>    this.removeNode(name);
-<a name="line397"></a>  } else {
-<a name="line398"></a>    var existingNode = this.indexMap_[name];
-<a name="line399"></a>    if (existingNode != null) {
-<a name="line400"></a>      this.map_[name] = node;
-<a name="line401"></a>      this.list_[existingNode] = node;
-<a name="line402"></a>    } else {
-<a name="line403"></a>      this.add(node);
-<a name="line404"></a>    }
-<a name="line405"></a>  }
-<a name="line406"></a>};
-<a name="line407"></a>
-<a name="line408"></a>
-<a name="line409"></a>/**
-<a name="line410"></a> * Removes a node in the list of a given name
-<a name="line411"></a> * @param {string} name Name of the node.
-<a name="line412"></a> * @return {boolean} True if node existed and was deleted.
-<a name="line413"></a> */
-<a name="line414"></a>goog.ds.BasicNodeList.prototype.removeNode = function(name) {
-<a name="line415"></a>  var existingNode = this.indexMap_[name];
-<a name="line416"></a>  if (existingNode != null) {
-<a name="line417"></a>    this.list_.splice(existingNode, 1);
-<a name="line418"></a>    delete this.map_[name];
-<a name="line419"></a>    delete this.indexMap_[name];
-<a name="line420"></a>    for (var index in this.indexMap_) {
-<a name="line421"></a>      if (this.indexMap_[index] &gt; existingNode) {
-<a name="line422"></a>        this.indexMap_[index]--;
-<a name="line423"></a>      }
-<a name="line424"></a>    }
-<a name="line425"></a>  }
-<a name="line426"></a>  return existingNode != null;
-<a name="line427"></a>};
-<a name="line428"></a>
-<a name="line429"></a>
-<a name="line430"></a>/**
-<a name="line431"></a> * Get the index of a named node
-<a name="line432"></a> * @param {string} name The name of the node to get the index of.
-<a name="line433"></a> * @return {number|undefined} The index.
-<a name="line434"></a> */
-<a name="line435"></a>goog.ds.BasicNodeList.prototype.indexOf = function(name) {
-<a name="line436"></a>  return this.indexMap_[name];
-<a name="line437"></a>};
-<a name="line438"></a>
-<a name="line439"></a>
-<a name="line440"></a>/**
-<a name="line441"></a> * Immulatable empty node list
-<a name="line442"></a> * @extends {goog.ds.BasicNodeList}
-<a name="line443"></a> * @constructor
-<a name="line444"></a> */
+<a name="line312"></a>/**
+<a name="line313"></a> * Removes a node in the list of a given name
+<a name="line314"></a> * @param {string} name Name of the node.
+<a name="line315"></a> * @return {boolean} True if node existed and was deleted.
+<a name="line316"></a> */
+<a name="line317"></a>goog.ds.DataNodeList.prototype.removeNode = goog.nullFunction;
+<a name="line318"></a>
+<a name="line319"></a>
+<a name="line320"></a>/**
+<a name="line321"></a> * Simple node list implementation with underlying array and map
+<a name="line322"></a> * implements goog.ds.DataNodeList.
+<a name="line323"></a> *
+<a name="line324"></a> * Names that are reserved for system use and shouldn&#39;t be used for data node
+<a name="line325"></a> * names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
+<a name="line326"></a> * undefined if these names are used.
+<a name="line327"></a> *
+<a name="line328"></a> * @param {Array.&lt;goog.ds.DataNode&gt;=} opt_nodes optional nodes to add to list.
+<a name="line329"></a> * @constructor
+<a name="line330"></a> * @extends {goog.ds.DataNodeList}
+<a name="line331"></a> */
+<a name="line332"></a>// TODO: Use interfaces when available.
+<a name="line333"></a>goog.ds.BasicNodeList = function(opt_nodes) {
+<a name="line334"></a>  this.map_ = {};
+<a name="line335"></a>  this.list_ = [];
+<a name="line336"></a>  this.indexMap_ = {};
+<a name="line337"></a>  if (opt_nodes) {
+<a name="line338"></a>    for (var i = 0, node; node = opt_nodes[i]; i++) {
+<a name="line339"></a>      this.add(node);
+<a name="line340"></a>    }
+<a name="line341"></a>  }
+<a name="line342"></a>};
+<a name="line343"></a>
+<a name="line344"></a>
+<a name="line345"></a>/**
+<a name="line346"></a> * Add a node to the node list.
+<a name="line347"></a> * If the node has a dataName, uses this for the key in the map.
+<a name="line348"></a> * TODO Remove function as well
+<a name="line349"></a> *
+<a name="line350"></a> * @param {goog.ds.DataNode} node The node to add.
+<a name="line351"></a> */
+<a name="line352"></a>goog.ds.BasicNodeList.prototype.add = function(node) {
+<a name="line353"></a>  this.list_.push(node);
+<a name="line354"></a>  var dataName = node.getDataName();
+<a name="line355"></a>  if (dataName) {
+<a name="line356"></a>    this.map_[dataName] = node;
+<a name="line357"></a>    this.indexMap_[dataName] = this.list_.length - 1;
+<a name="line358"></a>  }
+<a name="line359"></a>};
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * Get a node by string key.
+<a name="line364"></a> * Returns null if node doesn&#39;t exist.
+<a name="line365"></a> *
+<a name="line366"></a> * @param {string} key String lookup key.
+<a name="line367"></a> * @return {goog.ds.DataNode} The node, or null if doesn&#39;t exist.
+<a name="line368"></a> */
+<a name="line369"></a>goog.ds.BasicNodeList.prototype.get = function(key) {
+<a name="line370"></a>  return this.map_[key] || null;
+<a name="line371"></a>};
+<a name="line372"></a>
+<a name="line373"></a>
+<a name="line374"></a>/**
+<a name="line375"></a> * Get a node by index
+<a name="line376"></a> * Returns null if the index is out of range
+<a name="line377"></a> *
+<a name="line378"></a> * @param {number} index The index of the node.
+<a name="line379"></a> * @return {goog.ds.DataNode} The node, or null if doesn&#39;t exist.
+<a name="line380"></a> */
+<a name="line381"></a>goog.ds.BasicNodeList.prototype.getByIndex = function(index) {
+<a name="line382"></a>  return this.list_[index] || null;
+<a name="line383"></a>};
+<a name="line384"></a>
+<a name="line385"></a>
+<a name="line386"></a>/**
+<a name="line387"></a> * Gets the size of the node list
+<a name="line388"></a> *
+<a name="line389"></a> * @return {number} The size of the list.
+<a name="line390"></a> */
+<a name="line391"></a>goog.ds.BasicNodeList.prototype.getCount = function() {
+<a name="line392"></a>  return this.list_.length;
+<a name="line393"></a>};
+<a name="line394"></a>
+<a name="line395"></a>
+<a name="line396"></a>/**
+<a name="line397"></a> * Sets a node in the list of a given name
+<a name="line398"></a> * @param {string} name Name of the node.
+<a name="line399"></a> * @param {goog.ds.DataNode} node The node.
+<a name="line400"></a> */
+<a name="line401"></a>goog.ds.BasicNodeList.prototype.setNode = function(name, node) {
+<a name="line402"></a>  if (node == null) {
+<a name="line403"></a>    this.removeNode(name);
+<a name="line404"></a>  } else {
+<a name="line405"></a>    var existingNode = this.indexMap_[name];
+<a name="line406"></a>    if (existingNode != null) {
+<a name="line407"></a>      this.map_[name] = node;
+<a name="line408"></a>      this.list_[existingNode] = node;
+<a name="line409"></a>    } else {
+<a name="line410"></a>      this.add(node);
+<a name="line411"></a>    }
+<a name="line412"></a>  }
+<a name="line413"></a>};
+<a name="line414"></a>
+<a name="line415"></a>
+<a name="line416"></a>/**
+<a name="line417"></a> * Removes a node in the list of a given name
+<a name="line418"></a> * @param {string} name Name of the node.
+<a name="line419"></a> * @return {boolean} True if node existed and was deleted.
+<a name="line420"></a> */
+<a name="line421"></a>goog.ds.BasicNodeList.prototype.removeNode = function(name) {
+<a name="line422"></a>  var existingNode = this.indexMap_[name];
+<a name="line423"></a>  if (existingNode != null) {
+<a name="line424"></a>    this.list_.splice(existingNode, 1);
+<a name="line425"></a>    delete this.map_[name];
+<a name="line426"></a>    delete this.indexMap_[name];
+<a name="line427"></a>    for (var index in this.indexMap_) {
+<a name="line428"></a>      if (this.indexMap_[index] &gt; existingNode) {
+<a name="line429"></a>        this.indexMap_[index]--;
+<a name="line430"></a>      }
+<a name="line431"></a>    }
+<a name="line432"></a>  }
+<a name="line433"></a>  return existingNode != null;
+<a name="line434"></a>};
+<a name="line435"></a>
+<a name="line436"></a>
+<a name="line437"></a>/**
+<a name="line438"></a> * Get the index of a named node
+<a name="line439"></a> * @param {string} name The name of the node to get the index of.
+<a name="line440"></a> * @return {number|undefined} The index.
+<a name="line441"></a> */
+<a name="line442"></a>goog.ds.BasicNodeList.prototype.indexOf = function(name) {
+<a name="line443"></a>  return this.indexMap_[name];
+<a name="line444"></a>};
 <a name="line445"></a>
-<a name="line446"></a>goog.ds.EmptyNodeList = function() {
-<a name="line447"></a>  goog.ds.BasicNodeList.call(this);
-<a name="line448"></a>};
-<a name="line449"></a>goog.inherits(goog.ds.EmptyNodeList, goog.ds.BasicNodeList);
-<a name="line450"></a>
-<a name="line451"></a>
-<a name="line452"></a>/**
-<a name="line453"></a> * Add a node to the node list.
-<a name="line454"></a> * If the node has a dataName, uses this for the key in the map.
-<a name="line455"></a> *
-<a name="line456"></a> * @param {goog.ds.DataNode} node The node to add.
-<a name="line457"></a> */
-<a name="line458"></a>goog.ds.EmptyNodeList.prototype.add = function(node) {
-<a name="line459"></a>  throw Error(&#39;Can\&#39;t add to EmptyNodeList&#39;);
-<a name="line460"></a>};
-<a name="line461"></a>
-<a name="line462"></a>
-<a name="line463"></a>
-<a name="line464"></a>/**
-<a name="line465"></a> * Node list implementation which maintains sort order during insertion and
-<a name="line466"></a> * modification operations based on a comparison function.
-<a name="line467"></a> *
-<a name="line468"></a> * The SortedNodeList does not guarantee sort order will be maintained if
-<a name="line469"></a> * the underlying data nodes are modified externally.
-<a name="line470"></a> *
-<a name="line471"></a> * Names that are reserved for system use and shouldn&#39;t be used for data node
-<a name="line472"></a> * names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
-<a name="line473"></a> * undefined if these names are used.
+<a name="line446"></a>
+<a name="line447"></a>/**
+<a name="line448"></a> * Immulatable empty node list
+<a name="line449"></a> * @extends {goog.ds.BasicNodeList}
+<a name="line450"></a> * @constructor
+<a name="line451"></a> */
+<a name="line452"></a>
+<a name="line453"></a>goog.ds.EmptyNodeList = function() {
+<a name="line454"></a>  goog.ds.BasicNodeList.call(this);
+<a name="line455"></a>};
+<a name="line456"></a>goog.inherits(goog.ds.EmptyNodeList, goog.ds.BasicNodeList);
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>/**
+<a name="line460"></a> * Add a node to the node list.
+<a name="line461"></a> * If the node has a dataName, uses this for the key in the map.
+<a name="line462"></a> *
+<a name="line463"></a> * @param {goog.ds.DataNode} node The node to add.
+<a name="line464"></a> */
+<a name="line465"></a>goog.ds.EmptyNodeList.prototype.add = function(node) {
+<a name="line466"></a>  throw Error(&#39;Can\&#39;t add to EmptyNodeList&#39;);
+<a name="line467"></a>};
+<a name="line468"></a>
+<a name="line469"></a>
+<a name="line470"></a>
+<a name="line471"></a>/**
+<a name="line472"></a> * Node list implementation which maintains sort order during insertion and
+<a name="line473"></a> * modification operations based on a comparison function.
 <a name="line474"></a> *
-<a name="line475"></a> * @param {Function} compareFn Comparison function by which the
-<a name="line476"></a> *     node list is sorted. Should take 2 arguments to compare, and return a
-<a name="line477"></a> *     negative integer, zero, or a positive integer depending on whether the
-<a name="line478"></a> *     first argument is less than, equal to, or greater than the second.
-<a name="line479"></a> * @param {Array.&lt;goog.ds.DataNode&gt;=} opt_nodes optional nodes to add to list;
-<a name="line480"></a> *    these are assumed to be in sorted order.
-<a name="line481"></a> * @extends {goog.ds.BasicNodeList}
-<a name="line482"></a> * @constructor
-<a name="line483"></a> */
-<a name="line484"></a>goog.ds.SortedNodeList = function(compareFn, opt_nodes) {
-<a name="line485"></a>  this.compareFn_ = compareFn;
-<a name="line486"></a>  goog.ds.BasicNodeList.call(this, opt_nodes);
-<a name="line487"></a>};
-<a name="line488"></a>goog.inherits(goog.ds.SortedNodeList, goog.ds.BasicNodeList);
-<a name="line489"></a>
-<a name="line490"></a>
-<a name="line491"></a>/**
-<a name="line492"></a> * Add a node to the node list, maintaining sort order.
-<a name="line493"></a> * If the node has a dataName, uses this for the key in the map.
-<a name="line494"></a> *
-<a name="line495"></a> * @param {goog.ds.DataNode} node The node to add.
-<a name="line496"></a> */
-<a name="line497"></a>goog.ds.SortedNodeList.prototype.add = function(node) {
-<a name="line498"></a>  if (!this.compareFn_) {
-<a name="line499"></a>    this.append(node);
-<a name="line500"></a>    return;
-<a name="line501"></a>  }
-<a name="line502"></a>
-<a name="line503"></a>  var searchLoc = goog.array.binarySearch(this.list_, node, this.compareFn_);
-<a name="line504"></a>
-<a name="line505"></a>  // if there is another node that is &quot;equal&quot; according to the comparison
-<a name="line506"></a>  // function, insert before that one; otherwise insert at the location
-<a name="line507"></a>  // goog.array.binarySearch indicated
-<a name="line508"></a>  if (searchLoc &lt; 0) {
-<a name="line509"></a>    searchLoc = -(searchLoc + 1);
-<a name="line510"></a>  }
+<a name="line475"></a> * The SortedNodeList does not guarantee sort order will be maintained if
+<a name="line476"></a> * the underlying data nodes are modified externally.
+<a name="line477"></a> *
+<a name="line478"></a> * Names that are reserved for system use and shouldn&#39;t be used for data node
+<a name="line479"></a> * names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
+<a name="line480"></a> * undefined if these names are used.
+<a name="line481"></a> *
+<a name="line482"></a> * @param {Function} compareFn Comparison function by which the
+<a name="line483"></a> *     node list is sorted. Should take 2 arguments to compare, and return a
+<a name="line484"></a> *     negative integer, zero, or a positive integer depending on whether the
+<a name="line485"></a> *     first argument is less than, equal to, or greater than the second.
+<a name="line486"></a> * @param {Array.&lt;goog.ds.DataNode&gt;=} opt_nodes optional nodes to add to list;
+<a name="line487"></a> *    these are assumed to be in sorted order.
+<a name="line488"></a> * @extends {goog.ds.BasicNodeList}
+<a name="line489"></a> * @constructor
+<a name="line490"></a> */
+<a name="line491"></a>goog.ds.SortedNodeList = function(compareFn, opt_nodes) {
+<a name="line492"></a>  this.compareFn_ = compareFn;
+<a name="line493"></a>  goog.ds.BasicNodeList.call(this, opt_nodes);
+<a name="line494"></a>};
+<a name="line495"></a>goog.inherits(goog.ds.SortedNodeList, goog.ds.BasicNodeList);
+<a name="line496"></a>
+<a name="line497"></a>
+<a name="line498"></a>/**
+<a name="line499"></a> * Add a node to the node list, maintaining sort order.
+<a name="line500"></a> * If the node has a dataName, uses this for the key in the map.
+<a name="line501"></a> *
+<a name="line502"></a> * @param {goog.ds.DataNode} node The node to add.
+<a name="line503"></a> */
+<a name="line504"></a>goog.ds.SortedNodeList.prototype.add = function(node) {
+<a name="line505"></a>  if (!this.compareFn_) {
+<a name="line506"></a>    this.append(node);
+<a name="line507"></a>    return;
+<a name="line508"></a>  }
+<a name="line509"></a>
+<a name="line510"></a>  var searchLoc = goog.array.binarySearch(this.list_, node, this.compareFn_);
 <a name="line511"></a>
-<a name="line512"></a>  // update any indexes that are after the insertion point
-<a name="line513"></a>  for (var index in this.indexMap_) {
-<a name="line514"></a>    if (this.indexMap_[index] &gt;= searchLoc) {
-<a name="line515"></a>      this.indexMap_[index]++;
-<a name="line516"></a>    }
+<a name="line512"></a>  // if there is another node that is &quot;equal&quot; according to the comparison
+<a name="line513"></a>  // function, insert before that one; otherwise insert at the location
+<a name="line514"></a>  // goog.array.binarySearch indicated
+<a name="line515"></a>  if (searchLoc &lt; 0) {
+<a name="line516"></a>    searchLoc = -(searchLoc + 1);
 <a name="line517"></a>  }
 <a name="line518"></a>
-<a name="line519"></a>  goog.array.insertAt(this.list_, node, searchLoc);
-<a name="line520"></a>  var dataName = node.getDataName();
-<a name="line521"></a>  if (dataName) {
-<a name="line522"></a>    this.map_[dataName] = node;
-<a name="line523"></a>    this.indexMap_[dataName] = searchLoc;
+<a name="line519"></a>  // update any indexes that are after the insertion point
+<a name="line520"></a>  for (var index in this.indexMap_) {
+<a name="line521"></a>    if (this.indexMap_[index] &gt;= searchLoc) {
+<a name="line522"></a>      this.indexMap_[index]++;
+<a name="line523"></a>    }
 <a name="line524"></a>  }
-<a name="line525"></a>};
-<a name="line526"></a>
-<a name="line527"></a>
-<a name="line528"></a>/**
-<a name="line529"></a> * Adds the given node to the end of the SortedNodeList. This should
-<a name="line530"></a> * only be used when the caller can guarantee that the sort order will
-<a name="line531"></a> * be maintained according to this SortedNodeList&#39;s compareFn (e.g.
-<a name="line532"></a> * when initializing a new SortedNodeList from a list of nodes that has
-<a name="line533"></a> * already been sorted).
-<a name="line534"></a> * @param {goog.ds.DataNode} node The node to append.
-<a name="line535"></a> */
-<a name="line536"></a>goog.ds.SortedNodeList.prototype.append = function(node) {
-<a name="line537"></a>  goog.ds.SortedNodeList.superClass_.add.call(this, node);
-<a name="line538"></a>};
-<a name="line539"></a>
-<a name="line540"></a>
-<a name="line541"></a>/**
-<a name="line542"></a> * Sets a node in the list of a given name, maintaining sort order.
-<a name="line543"></a> * @param {string} name Name of the node.
-<a name="line544"></a> * @param {goog.ds.DataNode} node The node.
-<a name="line545"></a> */
-<a name="line546"></a>goog.ds.SortedNodeList.prototype.setNode = function(name, node) {
-<a name="line547"></a>  if (node == null) {
-<a name="line548"></a>    this.removeNode(name);
-<a name="line549"></a>  } else {
-<a name="line550"></a>    var existingNode = this.indexMap_[name];
-<a name="line551"></a>    if (existingNode != null) {
-<a name="line552"></a>      if (this.compareFn_) {
-<a name="line553"></a>        var compareResult = this.compareFn_(this.list_[existingNode], node);
-<a name="line554"></a>        if (compareResult == 0) {
-<a name="line555"></a>          // the new node can just replace the old one
-<a name="line556"></a>          this.map_[name] = node;
-<a name="line557"></a>          this.list_[existingNode] = node;
-<a name="line558"></a>        } else {
-<a name="line559"></a>          // remove the old node, then add the new one
-<a name="line560"></a>          this.removeNode(name);
-<a name="line561"></a>          this.add(node);
-<a name="line562"></a>        }
-<a name="line563"></a>      }
-<a name="line564"></a>    } else {
-<a name="line565"></a>      this.add(node);
-<a name="line566"></a>    }
-<a name="line567"></a>  }
-<a name="line568"></a>};
-<a name="line569"></a>
-<a name="line570"></a>
-<a name="line571"></a>/**
-<a name="line572"></a> * The character denoting an attribute.
-<a name="line573"></a> * @type {string}
-<a name="line574"></a> * @private
-<a name="line575"></a> */
-<a name="line576"></a>goog.ds.STR_ATTRIBUTE_START_ = &#39;@&#39;;
+<a name="line525"></a>
+<a name="line526"></a>  goog.array.insertAt(this.list_, node, searchLoc);
+<a name="line527"></a>  var dataName = node.getDataName();
+<a name="line528"></a>  if (dataName) {
+<a name="line529"></a>    this.map_[dataName] = node;
+<a name="line530"></a>    this.indexMap_[dataName] = searchLoc;
+<a name="line531"></a>  }
+<a name="line532"></a>};
+<a name="line533"></a>
+<a name="line534"></a>
+<a name="line535"></a>/**
+<a name="line536"></a> * Adds the given node to the end of the SortedNodeList. This should
+<a name="line537"></a> * only be used when the caller can guarantee that the sort order will
+<a name="line538"></a> * be maintained according to this SortedNodeList&#39;s compareFn (e.g.
+<a name="line539"></a> * when initializing a new SortedNodeList from a list of nodes that has
+<a name="line540"></a> * already been sorted).
+<a name="line541"></a> * @param {goog.ds.DataNode} node The node to append.
+<a name="line542"></a> */
+<a name="line543"></a>goog.ds.SortedNodeList.prototype.append = function(node) {
+<a name="line544"></a>  goog.ds.SortedNodeList.superClass_.add.call(this, node);
+<a name="line545"></a>};
+<a name="line546"></a>
+<a name="line547"></a>
+<a name="line548"></a>/**
+<a name="line549"></a> * Sets a node in the list of a given name, maintaining sort order.
+<a name="line550"></a> * @param {string} name Name of the node.
+<a name="line551"></a> * @param {goog.ds.DataNode} node The node.
+<a name="line552"></a> */
+<a name="line553"></a>goog.ds.SortedNodeList.prototype.setNode = function(name, node) {
+<a name="line554"></a>  if (node == null) {
+<a name="line555"></a>    this.removeNode(name);
+<a name="line556"></a>  } else {
+<a name="line557"></a>    var existingNode = this.indexMap_[name];
+<a name="line558"></a>    if (existingNode != null) {
+<a name="line559"></a>      if (this.compareFn_) {
+<a name="line560"></a>        var compareResult = this.compareFn_(this.list_[existingNode], node);
+<a name="line561"></a>        if (compareResult == 0) {
+<a name="line562"></a>          // the new node can just replace the old one
+<a name="line563"></a>          this.map_[name] = node;
+<a name="line564"></a>          this.list_[existingNode] = node;
+<a name="line565"></a>        } else {
+<a name="line566"></a>          // remove the old node, then add the new one
+<a name="line567"></a>          this.removeNode(name);
+<a name="line568"></a>          this.add(node);
+<a name="line569"></a>        }
+<a name="line570"></a>      }
+<a name="line571"></a>    } else {
+<a name="line572"></a>      this.add(node);
+<a name="line573"></a>    }
+<a name="line574"></a>  }
+<a name="line575"></a>};
+<a name="line576"></a>
 <a name="line577"></a>
-<a name="line578"></a>
-<a name="line579"></a>/**
-<a name="line580"></a> * The character denoting all children.
-<a name="line581"></a> * @type {string}
+<a name="line578"></a>/**
+<a name="line579"></a> * The character denoting an attribute.
+<a name="line580"></a> * @type {string}
+<a name="line581"></a> * @private
 <a name="line582"></a> */
-<a name="line583"></a>goog.ds.STR_ALL_CHILDREN_SELECTOR = &#39;*&#39;;
+<a name="line583"></a>goog.ds.STR_ATTRIBUTE_START_ = &#39;@&#39;;
 <a name="line584"></a>
 <a name="line585"></a>
 <a name="line586"></a>/**
-<a name="line587"></a> * The wildcard character.
+<a name="line587"></a> * The character denoting all children.
 <a name="line588"></a> * @type {string}
 <a name="line589"></a> */
-<a name="line590"></a>goog.ds.STR_WILDCARD = &#39;*&#39;;
+<a name="line590"></a>goog.ds.STR_ALL_CHILDREN_SELECTOR = &#39;*&#39;;
 <a name="line591"></a>
 <a name="line592"></a>
 <a name="line593"></a>/**
-<a name="line594"></a> * The character denoting path separation.
+<a name="line594"></a> * The wildcard character.
 <a name="line595"></a> * @type {string}
 <a name="line596"></a> */
-<a name="line597"></a>goog.ds.STR_PATH_SEPARATOR = &#39;/&#39;;
+<a name="line597"></a>goog.ds.STR_WILDCARD = &#39;*&#39;;
 <a name="line598"></a>
 <a name="line599"></a>
 <a name="line600"></a>/**
-<a name="line601"></a> * The character denoting the start of an array.
+<a name="line601"></a> * The character denoting path separation.
 <a name="line602"></a> * @type {string}
 <a name="line603"></a> */
-<a name="line604"></a>goog.ds.STR_ARRAY_START = &#39;[&#39;;
+<a name="line604"></a>goog.ds.STR_PATH_SEPARATOR = &#39;/&#39;;
 <a name="line605"></a>
 <a name="line606"></a>
 <a name="line607"></a>/**
-<a name="line608"></a> * Shared logger instance for data package
-<a name="line609"></a> * @type {goog.debug.Logger}
+<a name="line608"></a> * The character denoting the start of an array.
+<a name="line609"></a> * @type {string}
 <a name="line610"></a> */
-<a name="line611"></a>goog.ds.logger = goog.debug.Logger.getLogger(&#39;goog.ds&#39;);
+<a name="line611"></a>goog.ds.STR_ARRAY_START = &#39;[&#39;;
 <a name="line612"></a>
 <a name="line613"></a>
 <a name="line614"></a>/**
-<a name="line615"></a> * Create a data node that references another data node,
-<a name="line616"></a> * useful for pointer-like functionality.
-<a name="line617"></a> * All functions will return same values as the original node except for
-<a name="line618"></a> * getDataName()
-<a name="line619"></a> * @param {!goog.ds.DataNode} node The original node.
-<a name="line620"></a> * @param {string} name The new name.
-<a name="line621"></a> * @return {!goog.ds.DataNode} The new data node.
-<a name="line622"></a> */
-<a name="line623"></a>goog.ds.Util.makeReferenceNode = function(node, name) {
-<a name="line624"></a>  /**
-<a name="line625"></a>   * @constructor
-<a name="line626"></a>   * @extends {goog.ds.DataNode}
-<a name="line627"></a>   */
-<a name="line628"></a>  var nodeCreator = function() {};
-<a name="line629"></a>  nodeCreator.prototype = node;
-<a name="line630"></a>  var newNode = new nodeCreator();
-<a name="line631"></a>  newNode.getDataName = function() {
-<a name="line632"></a>    return name;
-<a name="line633"></a>  };
-<a name="line634"></a>  return newNode;
-<a name="line635"></a>};
+<a name="line615"></a> * Shared logger instance for data package
+<a name="line616"></a> * @type {goog.debug.Logger}
+<a name="line617"></a> */
+<a name="line618"></a>goog.ds.logger = goog.debug.Logger.getLogger(&#39;goog.ds&#39;);
+<a name="line619"></a>
+<a name="line620"></a>
+<a name="line621"></a>/**
+<a name="line622"></a> * Create a data node that references another data node,
+<a name="line623"></a> * useful for pointer-like functionality.
+<a name="line624"></a> * All functions will return same values as the original node except for
+<a name="line625"></a> * getDataName()
+<a name="line626"></a> * @param {!goog.ds.DataNode} node The original node.
+<a name="line627"></a> * @param {string} name The new name.
+<a name="line628"></a> * @return {!goog.ds.DataNode} The new data node.
+<a name="line629"></a> */
+<a name="line630"></a>goog.ds.Util.makeReferenceNode = function(node, name) {
+<a name="line631"></a>  /**
+<a name="line632"></a>   * @constructor
+<a name="line633"></a>   * @extends {goog.ds.DataNode}
+<a name="line634"></a>   */
+<a name="line635"></a>  var nodeCreator = function() {};
+<a name="line636"></a>  nodeCreator.prototype = node;
+<a name="line637"></a>  var newNode = new nodeCreator();
+<a name="line638"></a>  newNode.getDataName = function() {
+<a name="line639"></a>    return name;
+<a name="line640"></a>  };
+<a name="line641"></a>  return newNode;
+<a name="line642"></a>};
 </pre>
 
 

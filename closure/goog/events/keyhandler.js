@@ -400,6 +400,16 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
 
 
 /**
+ * Returns the element listened on for the real keyboard events.
+ * @return {Element|Document|null} The element listened on for the real
+ *     keyboard events.
+ */
+goog.events.KeyHandler.prototype.getElement = function() {
+  return this.element_;
+};
+
+
+/**
  * Adds the proper key event listeners to the element.
  * XXX: {Document|Element} != {Element|Document}.
  * see: http://b/1470354

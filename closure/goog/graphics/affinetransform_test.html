@@ -313,6 +313,37 @@ limitations under the License.
     var tx = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, 6);
     assertEquals("matrix(1,2,3,4,5,6)", tx.toString());
   }
+
+  function testEquals() {
+    var tx1 = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, 6);
+    var tx2 = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, 6);
+    assertEqualsMethod(tx1, tx2, true);
+
+    tx2 = new goog.graphics.AffineTransform(-1, 2, 3, 4, 5, 6);
+    assertEqualsMethod(tx1, tx2, false);
+
+    tx2 = new goog.graphics.AffineTransform(1, -1, 3, 4, 5, 6);
+    assertEqualsMethod(tx1, tx2, false);
+
+    tx2 = new goog.graphics.AffineTransform(1, 2, -3, 4, 5, 6);
+    assertEqualsMethod(tx1, tx2, false);
+
+    tx2 = new goog.graphics.AffineTransform(1, 2, 3, -4, 5, 6);
+    assertEqualsMethod(tx1, tx2, false);
+
+    tx2 = new goog.graphics.AffineTransform(1, 2, 3, 4, -5, 6);
+    assertEqualsMethod(tx1, tx2, false);
+    
+    tx2 = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, -6);
+    assertEqualsMethod(tx1, tx2, false);
+  }
+
+  function assertEqualsMethod(tx1, tx2, expected) {
+    assertEquals(expected, tx1.equals(tx2));
+    assertEquals(expected, tx2.equals(tx1));
+    assertEquals(true, tx1.equals(tx1));
+    assertEquals(true, tx2.equals(tx2));
+  }
 </script>
 </body>
 </html>

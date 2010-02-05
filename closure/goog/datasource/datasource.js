@@ -205,6 +205,13 @@ goog.ds.BaseDataNode.prototype.getChildNodeValue = function(name) {
 
 
 /**
+ * Get the name of the node relative to the parent node
+ * @return {string} The name of the node.
+ */
+goog.ds.BaseDataNode.prototype.getDataName = goog.nullFunction;
+
+
+/**
  * Gets the a qualified data path to this node
  * @return {string} The data path.
  */

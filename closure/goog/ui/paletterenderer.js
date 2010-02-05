@@ -199,8 +199,8 @@ goog.ui.PaletteRenderer.prototype.decorate = function(palette, element) {
  */
 goog.ui.PaletteRenderer.prototype.setContent = function(element, items) {
   if (element) {
-    var tbody = goog.dom.$$('tbody',
-        goog.getCssName(this.getCssClass(), 'body'), element)[0];
+    var tbody = goog.dom.getElementsByTagNameAndClass(
+        'tbody', goog.getCssName(this.getCssClass(), 'body'), element)[0];
     if (tbody) {
       var index = 0;
       goog.array.forEach(tbody.rows, function(row) {

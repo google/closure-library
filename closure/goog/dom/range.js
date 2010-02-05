@@ -104,7 +104,6 @@ goog.dom.Range.createFromBrowserRange = function(range, opt_isReversed) {
  * @return {goog.dom.AbstractRange} A range wrapper object.
  */
 goog.dom.Range.createFromNodeContents = function(node, opt_isReversed) {
-  // TODO: Use control ranges for IMGs and TDs?
   return goog.dom.TextRange.createFromNodeContents(node, opt_isReversed);
 };
 

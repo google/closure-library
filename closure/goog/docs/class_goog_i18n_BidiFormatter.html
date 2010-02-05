@@ -62,8 +62,7 @@
         <span class="fn">i18n.BidiFormatter</span>
         <span>Extends</span>
         <span class="fn-name">
-          <a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">
-            Object</a>
+          Object
         </span>
 </div>
 
@@ -139,7 +138,7 @@ See <a href="http://wiki/Main/TemplatesAndBiDi">http://wiki/Main/TemplatesAndBiD
 
   <h2>Constructor</h2>
       <div class="fn-constructor">
-    goog.i18n.BidiFormatter(<span><span class="arg">contextDir</span>,&nbsp;<span class="arg">opt_alwaysSpan</span></span>)
+    goog.i18n.BidiFormatter(<span><span class="arg">BidiFormatter@contextDir</span>,&nbsp;<span class="arg">BidiFormatter@opt_alwaysSpan</span></span>)
   </div>
 
    <h3>Parameters</h3>
@@ -153,17 +152,17 @@ See <a href="http://wiki/Main/TemplatesAndBiDi">http://wiki/Main/TemplatesAndBiD
      
    <tr class="even">
      <td>
-        <span class="entryName">contextDir</span>
-        : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">The context directionality. May be supplied either as a goog.i18n.bidi.Dir constant, as a number (positive = LRT, negative = RTL, 0 = unknown) or as a boolean (true = RTL, false = LTR).</div>
+        <span class="entryName">BidiFormatter@contextDir</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_alwaysSpan</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether #spanWrap should always use a &#39;span&#39; tag, even when the input directionality is neutral or matches the context, so that the DOM structure of the output does not depend on the combination of directionalities. Default: false.</div>
+        <span class="entryName">BidiFormatter@opt_alwaysSpan</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -218,7 +217,7 @@ See <a href="http://wiki/Main/TemplatesAndBiDi">http://wiki/Main/TemplatesAndBiD
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">areDirectionalitiesOpposite_<span class="args">(<span class="arg">dir1</span>,&nbsp;<span class="arg">dir2</span>)</span>
+        <span class="entryName">areDirectionalitiesOpposite_<span class="args">(<span class="arg">areDirectionalitiesOpposite_@dir1</span>,&nbsp;<span class="arg">areDirectionalitiesOpposite_@dir2</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -245,17 +244,17 @@ Note: the implementation is based on the numeric values of the Dir enum.
      
    <tr class="even">
      <td>
-        <span class="entryName">dir1</span>
-        : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>
-        <div class="entryOverview">1st directionality.</div>
+        <span class="entryName">areDirectionalitiesOpposite_@dir1</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">dir2</span>
-        : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>
-        <div class="entryOverview">2nd directionality.</div>
+        <span class="entryName">areDirectionalitiesOpposite_@dir2</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -292,7 +291,7 @@ Note: the implementation is based on the numeric values of the Dir enum.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">dirAttr<span class="args">(<span class="arg">str</span>,&nbsp;<span class="arg">opt_isHtml</span>)</span>
+        <span class="entryName">dirAttr<span class="args">(<span class="arg">dirAttr@str</span>,&nbsp;<span class="arg">dirAttr@opt_isHtml</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -320,17 +319,17 @@ Otherwise, returns the empty string.
      
    <tr class="even">
      <td>
-        <span class="entryName">str</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Text whose directionality is to be estimated.</div>
+        <span class="entryName">dirAttr@str</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_isHtml</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
+        <span class="entryName">dirAttr@opt_isHtml</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -367,7 +366,7 @@ Otherwise, returns the empty string.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">dirAttrValue<span class="args">(<span class="arg">str</span>,&nbsp;<span class="arg">opt_isHtml</span>)</span>
+        <span class="entryName">dirAttrValue<span class="args">(<span class="arg">dirAttrValue@str</span>,&nbsp;<span class="arg">dirAttrValue@opt_isHtml</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -398,17 +397,17 @@ Example use case:
      
    <tr class="even">
      <td>
-        <span class="entryName">str</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Text whose directionality is to be estimated.</div>
+        <span class="entryName">dirAttrValue@str</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_isHtml</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
+        <span class="entryName">dirAttrValue@opt_isHtml</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -445,7 +444,7 @@ Example use case:
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">dirResetIfNeeded_<span class="args">(<span class="arg">str</span>,&nbsp;<span class="arg">dir</span>,&nbsp;<span class="arg">opt_isHtml</span>,&nbsp;<span class="arg">opt_dirReset</span>)</span>
+        <span class="entryName">dirResetIfNeeded_<span class="args">(<span class="arg">dirResetIfNeeded_@str</span>,&nbsp;<span class="arg">dirResetIfNeeded_@dir</span>,&nbsp;<span class="arg">dirResetIfNeeded_@opt_isHtml</span>,&nbsp;<span class="arg">dirResetIfNeeded_@opt_dirReset</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -474,33 +473,33 @@ Otherwise returns the empty string.
      
    <tr class="even">
      <td>
-        <span class="entryName">str</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The input text.</div>
+        <span class="entryName">dirResetIfNeeded_@str</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">dir</span>
-        : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>
-        <div class="entryOverview"><code>str</code>&#39;s overall directionality.</div>
+        <span class="entryName">dirResetIfNeeded_@dir</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_isHtml</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
+        <span class="entryName">dirResetIfNeeded_@opt_isHtml</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_dirReset</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether to perform the reset. Default: false.</div>
+        <span class="entryName">dirResetIfNeeded_@opt_dirReset</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -723,7 +722,7 @@ Identical to goog.i18n.bidi.estimateDirection.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">knownDirAttr<span class="args">(<span class="arg">dir</span>)</span>
+        <span class="entryName">knownDirAttr<span class="args">(<span class="arg">knownDirAttr@dir</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -751,9 +750,9 @@ string.
      
    <tr class="even">
      <td>
-        <span class="entryName">dir</span>
-        : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>
-        <div class="entryOverview">A directionality.</div>
+        <span class="entryName">knownDirAttr@dir</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -790,7 +789,7 @@ string.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">knownDirAttrValue<span class="args">(<span class="arg">dir</span>)</span>
+        <span class="entryName">knownDirAttrValue<span class="args">(<span class="arg">knownDirAttrValue@dir</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -818,9 +817,9 @@ case it&#39;s UNKNOWN, returns &quot;rtl&quot; if the context directionality is 
      
    <tr class="even">
      <td>
-        <span class="entryName">dir</span>
-        : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>
-        <div class="entryOverview">A directionality.</div>
+        <span class="entryName">knownDirAttrValue@dir</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -905,7 +904,7 @@ empty string for neutral / unknown context directionality.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">markAfter<span class="args">(<span class="arg">str</span>,&nbsp;<span class="arg">opt_isHtml</span>)</span>
+        <span class="entryName">markAfter<span class="args">(<span class="arg">markAfter@str</span>,&nbsp;<span class="arg">markAfter@opt_isHtml</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -933,17 +932,17 @@ to the context directionality. Otherwise returns the empty string.
      
    <tr class="even">
      <td>
-        <span class="entryName">str</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The input text.</div>
+        <span class="entryName">markAfter@str</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_isHtml</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
+        <span class="entryName">markAfter@opt_isHtml</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -980,7 +979,7 @@ to the context directionality. Otherwise returns the empty string.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setAlwaysSpan<span class="args">(<span class="arg">alwaysSpan</span>)</span>
+        <span class="entryName">setAlwaysSpan<span class="args">(<span class="arg">setAlwaysSpan@alwaysSpan</span>)</span>
         </span>
       </div>
 
@@ -1005,9 +1004,9 @@ to the context directionality. Otherwise returns the empty string.
      
    <tr class="even">
      <td>
-        <span class="entryName">alwaysSpan</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether #spanWrap should always use a &#39;span&#39; tag, even when the input directionality is neutral or matches the context, so that the DOM structure of the output does not depend on the combination of directionalities.</div>
+        <span class="entryName">setAlwaysSpan@alwaysSpan</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1040,7 +1039,7 @@ to the context directionality. Otherwise returns the empty string.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setContextDir<span class="args">(<span class="arg">contextDir</span>)</span>
+        <span class="entryName">setContextDir<span class="args">(<span class="arg">setContextDir@contextDir</span>)</span>
         </span>
       </div>
 
@@ -1065,9 +1064,9 @@ to the context directionality. Otherwise returns the empty string.
      
    <tr class="even">
      <td>
-        <span class="entryName">contextDir</span>
-        : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">The context directionality. May be supplied either as a goog.i18n.bidi.Dir constant, as a number (positive = LRT, negative = RTL, 0 = unknown) or as a boolean (true = RTL, false = LTR).</div>
+        <span class="entryName">setContextDir@contextDir</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1100,7 +1099,7 @@ to the context directionality. Otherwise returns the empty string.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">spanWrap<span class="args">(<span class="arg">str</span>,&nbsp;<span class="arg">opt_isHtml</span>,&nbsp;<span class="arg">opt_dirReset</span>)</span>
+        <span class="entryName">spanWrap<span class="args">(<span class="arg">spanWrap@str</span>,&nbsp;<span class="arg">spanWrap@opt_isHtml</span>,&nbsp;<span class="arg">spanWrap@opt_dirReset</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -1140,25 +1139,25 @@ If !<code>opt_isHtml</code>, HTML-escapes <code>str</code> regardless of wrappin
      
    <tr class="even">
      <td>
-        <span class="entryName">str</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The input text.</div>
+        <span class="entryName">spanWrap@str</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_isHtml</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
+        <span class="entryName">spanWrap@opt_isHtml</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_dirReset</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow <code>str</code>. Default: true.</div>
+        <span class="entryName">spanWrap@opt_dirReset</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1195,7 +1194,7 @@ If !<code>opt_isHtml</code>, HTML-escapes <code>str</code> regardless of wrappin
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">spanWrapWithKnownDir<span class="args">(<span class="arg">dir</span>,&nbsp;<span class="arg">str</span>,&nbsp;<span class="arg">opt_isHtml</span>,&nbsp;<span class="arg">opt_dirReset</span>)</span>
+        <span class="entryName">spanWrapWithKnownDir<span class="args">(<span class="arg">spanWrapWithKnownDir@dir</span>,&nbsp;<span class="arg">spanWrapWithKnownDir@str</span>,&nbsp;<span class="arg">spanWrapWithKnownDir@opt_isHtml</span>,&nbsp;<span class="arg">spanWrapWithKnownDir@opt_dirReset</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -1233,33 +1232,33 @@ If !<code>opt_isHtml</code>, HTML-escapes <code>str</code> regardless of wrappin
      
    <tr class="even">
      <td>
-        <span class="entryName">dir</span>
-        : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>
-        <div class="entryOverview"><code>str</code>&#39;s overall directionality.</div>
+        <span class="entryName">spanWrapWithKnownDir@dir</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">str</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The input text.</div>
+        <span class="entryName">spanWrapWithKnownDir@str</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_isHtml</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
+        <span class="entryName">spanWrapWithKnownDir@opt_isHtml</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_dirReset</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow <code>str</code>. Default: true.</div>
+        <span class="entryName">spanWrapWithKnownDir@opt_dirReset</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1343,7 +1342,7 @@ unknown context directionality) returns &#39;left&#39;.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">unicodeWrap<span class="args">(<span class="arg">str</span>,&nbsp;<span class="arg">opt_isHtml</span>,&nbsp;<span class="arg">opt_dirReset</span>)</span>
+        <span class="entryName">unicodeWrap<span class="args">(<span class="arg">unicodeWrap@str</span>,&nbsp;<span class="arg">unicodeWrap@opt_isHtml</span>,&nbsp;<span class="arg">unicodeWrap@opt_dirReset</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -1386,25 +1385,25 @@ The return value can be HTML-escaped as necessary.
      
    <tr class="even">
      <td>
-        <span class="entryName">str</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The input text.</div>
+        <span class="entryName">unicodeWrap@str</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_isHtml</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
+        <span class="entryName">unicodeWrap@opt_isHtml</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_dirReset</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow <code>str</code>. Default: true.</div>
+        <span class="entryName">unicodeWrap@opt_dirReset</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1441,7 +1440,7 @@ The return value can be HTML-escaped as necessary.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">unicodeWrapWithKnownDir<span class="args">(<span class="arg">dir</span>,&nbsp;<span class="arg">str</span>,&nbsp;<span class="arg">opt_isHtml</span>,&nbsp;<span class="arg">opt_dirReset</span>)</span>
+        <span class="entryName">unicodeWrapWithKnownDir<span class="args">(<span class="arg">unicodeWrapWithKnownDir@dir</span>,&nbsp;<span class="arg">unicodeWrapWithKnownDir@str</span>,&nbsp;<span class="arg">unicodeWrapWithKnownDir@opt_isHtml</span>,&nbsp;<span class="arg">unicodeWrapWithKnownDir@opt_dirReset</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -1483,33 +1482,33 @@ The return value can be HTML-escaped as necessary.
      
    <tr class="even">
      <td>
-        <span class="entryName">dir</span>
-        : <div class="fullType"><span class="type">goog.i18n.bidi.Dir</span></div>
-        <div class="entryOverview"><code>str</code>&#39;s overall directionality.</div>
+        <span class="entryName">unicodeWrapWithKnownDir@dir</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">str</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The input text.</div>
+        <span class="entryName">unicodeWrapWithKnownDir@str</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_isHtml</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether <code>str</code> is HTML / HTML-escaped. Default: false.</div>
+        <span class="entryName">unicodeWrapWithKnownDir@opt_isHtml</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_dirReset</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether to append a trailing unicode bidi mark matching the context directionality, when needed, to prevent the possible garbling of whatever may follow <code>str</code>. Default: true.</div>
+        <span class="entryName">unicodeWrapWithKnownDir@opt_dirReset</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>

@@ -76,7 +76,7 @@ goog.testing.MethodMock = function(scope, functionName) {
 
 
 /**
- * Reset the global function that we mocked back to it's original state
+ * Resets the global function that we mocked back to its original state.
  */
 goog.testing.MethodMock.prototype.$tearDown = function() {
   this.$propertyReplacer_.reset();

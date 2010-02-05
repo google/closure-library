@@ -127,9 +127,9 @@ goog.fx.dom.Slide.prototype.updateStyle = function() {
 
 
 /**
- * Slides an element from it's current position
+ * Slides an element from its current position.
  *
- * @param {Element} element Dom Node to be used in the animation.
+ * @param {Element} element DOM node to be used in the animation.
  * @param {Array.<number>} end 2D array for end coordinates (X, Y).
  * @param {number} time Length of animation in milliseconds.
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
@@ -152,7 +152,7 @@ goog.fx.dom.SlideFrom.prototype.onBegin = function() {
 
 
 /**
- * Creates an animation object that will slide an element into it's final size.
+ * Creates an animation object that will slide an element into its final size.
  * Requires that the element is absolutely positioned.
  *
  * @param {Element} element Dom Node to be used in the animation.
@@ -187,7 +187,7 @@ goog.inherits(goog.fx.dom.Swipe, goog.fx.dom.PredefinedEffect);
 
 
 /**
- * Animation event handler that will resize an element by setting it's width,
+ * Animation event handler that will resize an element by setting its width,
  * height and clipping.
  * @protected
  * @override
@@ -275,7 +275,7 @@ goog.inherits(goog.fx.dom.Resize, goog.fx.dom.PredefinedEffect);
 
 
 /**
- * Animation event handler that will resize an element by setting it's width and
+ * Animation event handler that will resize an element by setting its width and
  * height.
  * @protected
  * @override
@@ -308,7 +308,7 @@ goog.inherits(goog.fx.dom.ResizeWidth, goog.fx.dom.PredefinedEffect);
 
 
 /**
- * Animation event handler that will resize an element by setting it's width.
+ * Animation event handler that will resize an element by setting its width.
  * @protected
  * @override
  */
@@ -339,7 +339,7 @@ goog.inherits(goog.fx.dom.ResizeHeight, goog.fx.dom.PredefinedEffect);
 
 
 /**
- * Animation event handler that will resize an element by setting it's height.
+ * Animation event handler that will resize an element by setting its height.
  * @protected
  * @override
  */

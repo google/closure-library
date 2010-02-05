@@ -28,9 +28,6 @@ goog.provide('goog.ui.emoji.EmojiPicker');
 
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
-goog.require('goog.events.Event');
-goog.require('goog.events.KeyCodes');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.TabPane');
 goog.require('goog.ui.TabPane.TabPage');

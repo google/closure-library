@@ -1021,7 +1021,7 @@ goog.Uri.haveSameDomain = function(uri1String, uri2String) {
  *
  * @param {?string=} opt_query Optional encoded query string to parse into
  *     the object.
- * @param {goog.Uri=} opt_uri Optional uri object that should have it's cache
+ * @param {goog.Uri=} opt_uri Optional uri object that should have its cache
  *     invalidated when this object updates.
  * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
  *     name in #get.
@@ -1087,7 +1087,7 @@ goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
  *
  * @param {!goog.structs.Map|!Object} map Map of string parameter names to
  *     string parameter values.
- * @param {goog.Uri=} opt_uri URI object that should have it's cache
+ * @param {goog.Uri=} opt_uri URI object that should have its cache
  *     invalidated when this object updates.
  * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
  *     name in #get.
@@ -1113,7 +1113,7 @@ goog.Uri.QueryData.createFromMap = function(map, opt_uri, opt_ignoreCase) {
  *
  * @param {Array.<string>} keys Parameter names.
  * @param {Array} values Parameter values.
- * @param {goog.Uri=} opt_uri URI object that should have it's cache
+ * @param {goog.Uri=} opt_uri URI object that should have its cache
  *     invalidated when this object updates.
  * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
  *     name in #get.

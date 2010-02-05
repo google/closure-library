@@ -28,7 +28,6 @@
 goog.provide('goog.ui.ColorPicker');
 goog.provide('goog.ui.ColorPicker.EventType');
 
-goog.require('goog.color');
 goog.require('goog.ui.ColorPalette');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Component.State');

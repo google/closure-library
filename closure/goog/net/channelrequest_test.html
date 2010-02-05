@@ -82,7 +82,7 @@ function MockBrowserChannel() {
  * <ul>
  * <li>The BrowserChannel is a MockBrowserChannel.
  * <li>createXhrIo_() returns the xhrIo that is passed in.
- * <li>The new watchdogTimeoutCallCount property tracks onWatchDogTimout_()
+ * <li>The new watchdogTimeoutCallCount property tracks onWatchDogTimeout_()
  *     calls.
  * <li>The timeout is set to WATCHDOG_TIME.
  * </ul>
@@ -102,10 +102,10 @@ function createChannelRequest(xhrIo) {
 
   // Install watchdogTimeoutCallCount.
   req.watchdogTimeoutCallCount = 0;
-  req.originalOnWatchDogTimout = req.onWatchDogTimout_;
-  req.onWatchDogTimout_ = function() {
+  req.originalOnWatchDogTimeout = req.onWatchDogTimeout_;
+  req.onWatchDogTimeout_ = function() {
     this.watchdogTimeoutCallCount++;
-    return this.originalOnWatchDogTimout();
+    return this.originalOnWatchDogTimeout();
   };
 
   req.setTimeout(WATCHDOG_TIME);

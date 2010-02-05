@@ -1,0 +1,282 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>treenode.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="prettyPrint()">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="closure_goog_structs_treenode.js.html">treenode.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line2"></a>// you may not use this file except in compliance with the License.
+<a name="line3"></a>// You may obtain a copy of the License at
+<a name="line4"></a>//
+<a name="line5"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line6"></a>//
+<a name="line7"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line8"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line9"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line10"></a>// See the License for the specific language governing permissions and
+<a name="line11"></a>// limitations under the License.
+<a name="line12"></a>
+<a name="line13"></a>// Copyright 2010 Google Inc. All Rights Reserved.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Generic tree node data structure with arbitrary number of child
+<a name="line17"></a> * nodes.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.structs.TreeNode&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line25"></a>goog.require(&#39;goog.structs.Node&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Generic tree node data structure with arbitrary number of child nodes.
+<a name="line31"></a> * It is possible to create a dynamic tree structure by overriding
+<a name="line32"></a> * {@link #getParent} and {@link #getChildren} in a subclass. All other getters
+<a name="line33"></a> * will automatically work.
+<a name="line34"></a> *
+<a name="line35"></a> * @param {*} key Key.
+<a name="line36"></a> * @param {*} value Value.
+<a name="line37"></a> * @constructor
+<a name="line38"></a> * @extends {goog.structs.Node}
+<a name="line39"></a> */
+<a name="line40"></a>goog.structs.TreeNode = function(key, value) {
+<a name="line41"></a>  goog.structs.Node.call(this, key, value);
+<a name="line42"></a>};
+<a name="line43"></a>goog.inherits(goog.structs.TreeNode, goog.structs.Node);
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Constant for empty array to avoid unnecessary allocations.
+<a name="line48"></a> * @private
+<a name="line49"></a> */
+<a name="line50"></a>goog.structs.TreeNode.EMPTY_ARRAY_ = [];
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Reference to the parent node or null if it has no parent.
+<a name="line55"></a> * @type {goog.structs.TreeNode}
+<a name="line56"></a> * @private
+<a name="line57"></a> */
+<a name="line58"></a>goog.structs.TreeNode.prototype.parent_ = null;
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * Child nodes or null in case of leaf node.
+<a name="line63"></a> * @type {Array.&lt;!goog.structs.TreeNode&gt;}
+<a name="line64"></a> * @private
+<a name="line65"></a> */
+<a name="line66"></a>goog.structs.TreeNode.prototype.children_ = null;
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * @return {!goog.structs.TreeNode} Clone of the tree node without its parent
+<a name="line71"></a> *     and child nodes. The key and the value are copied by reference.
+<a name="line72"></a> */
+<a name="line73"></a>goog.structs.TreeNode.prototype.clone = function() {
+<a name="line74"></a>  return new goog.structs.TreeNode(this.getKey(), this.getValue());
+<a name="line75"></a>};
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * @return {goog.structs.TreeNode} Parent node or null if it has no parent.
+<a name="line80"></a> */
+<a name="line81"></a>goog.structs.TreeNode.prototype.getParent = function() {
+<a name="line82"></a>  return this.parent_;
+<a name="line83"></a>};
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * @return {boolean} Whether the node is a leaf node.
+<a name="line88"></a> */
+<a name="line89"></a>goog.structs.TreeNode.prototype.isLeaf = function() {
+<a name="line90"></a>  return this.getChildren().length == 0;
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * @return {!Array.&lt;!goog.structs.TreeNode&gt;} Immutable child nodes.
+<a name="line96"></a> */
+<a name="line97"></a>goog.structs.TreeNode.prototype.getChildren = function() {
+<a name="line98"></a>  return this.children_ || goog.structs.TreeNode.EMPTY_ARRAY_;
+<a name="line99"></a>};
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * @return {number} The number of ancestors of the node.
+<a name="line104"></a> */
+<a name="line105"></a>goog.structs.TreeNode.prototype.getDepth = function() {
+<a name="line106"></a>  var depth = 0;
+<a name="line107"></a>  var node = this;
+<a name="line108"></a>  while (node.getParent()) {
+<a name="line109"></a>    depth++;
+<a name="line110"></a>    node = node.getParent();
+<a name="line111"></a>  }
+<a name="line112"></a>  return depth;
+<a name="line113"></a>};
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * @return {!Array.&lt;!goog.structs.TreeNode&gt;} All ancestor nodes in bottom-up
+<a name="line118"></a> *     order.
+<a name="line119"></a> */
+<a name="line120"></a>goog.structs.TreeNode.prototype.getAncestors = function() {
+<a name="line121"></a>  var ancestors = [];
+<a name="line122"></a>  var node = this.getParent();
+<a name="line123"></a>  while (node) {
+<a name="line124"></a>    ancestors.push(node);
+<a name="line125"></a>    node = node.getParent();
+<a name="line126"></a>  }
+<a name="line127"></a>  return ancestors;
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * @return {!goog.structs.TreeNode} The root of the tree structure, i.e. the
+<a name="line133"></a> *     farthest ancestor of the node or the node itself if it has no parents.
+<a name="line134"></a> */
+<a name="line135"></a>goog.structs.TreeNode.prototype.getRoot = function() {
+<a name="line136"></a>  var root = this;
+<a name="line137"></a>  while (root.getParent()) {
+<a name="line138"></a>    root = root.getParent();
+<a name="line139"></a>  }
+<a name="line140"></a>  return root;
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Tells whether this node is the ancestor of the given node.
+<a name="line146"></a> * @param {!goog.structs.TreeNode} node A node.
+<a name="line147"></a> * @return {boolean} Whether this node is the ancestor of {@code node}.
+<a name="line148"></a> */
+<a name="line149"></a>goog.structs.TreeNode.prototype.contains = function(node) {
+<a name="line150"></a>  do {
+<a name="line151"></a>    node = node.getParent();
+<a name="line152"></a>  } while (node &amp;&amp; node != this);
+<a name="line153"></a>  return Boolean(node);
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Traverses all child nodes.
+<a name="line159"></a> * @param {function(!goog.structs.TreeNode, number,
+<a name="line160"></a> *     !Array.&lt;!goog.structs.TreeNode&gt;)} f Callback function. It takes the
+<a name="line161"></a> *     node, its index and the array of all child nodes as arguments.
+<a name="line162"></a> * @param {Object} opt_this The object to be used as the value of {@code this}
+<a name="line163"></a> *     within {@code f}.
+<a name="line164"></a> */
+<a name="line165"></a>goog.structs.TreeNode.prototype.forEachChild = function(f, opt_this) {
+<a name="line166"></a>  goog.array.forEach(this.getChildren(), f, opt_this);
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Traverses all child nodes recursively.
+<a name="line172"></a> * @param {function(!goog.structs.TreeNode)} f Callback function. It takes the
+<a name="line173"></a> *     node as argument.
+<a name="line174"></a> * @param {Object} opt_this The object to be used as the value of {@code this}
+<a name="line175"></a> *     within {@code f}.
+<a name="line176"></a> */
+<a name="line177"></a>goog.structs.TreeNode.prototype.forEachDescendant = function(f, opt_this) {
+<a name="line178"></a>  goog.array.forEach(this.getChildren(), function(child) {
+<a name="line179"></a>    f.call(opt_this, child);
+<a name="line180"></a>    child.forEachDescendant(f, opt_this);
+<a name="line181"></a>  });
+<a name="line182"></a>};
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Appends a child node to this node.
+<a name="line187"></a> * @param {!goog.structs.TreeNode} child Orphan child node.
+<a name="line188"></a> */
+<a name="line189"></a>goog.structs.TreeNode.prototype.addChild = function(child) {
+<a name="line190"></a>  this.addChildAt(child, this.children_ ? this.children_.length : 0);
+<a name="line191"></a>};
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>/**
+<a name="line195"></a> * Inserts a child node at the given index.
+<a name="line196"></a> * @param {!goog.structs.TreeNode} child Orphan child node.
+<a name="line197"></a> * @param {number} index The position to insert at.
+<a name="line198"></a> */
+<a name="line199"></a>goog.structs.TreeNode.prototype.addChildAt = function(child, index) {
+<a name="line200"></a>  goog.asserts.assert(!child.parent_);
+<a name="line201"></a>  child.parent_ = this;
+<a name="line202"></a>  this.children_ = this.children_ || [];
+<a name="line203"></a>  goog.asserts.assert(index &gt;= 0 &amp;&amp; index &lt;= this.children_.length);
+<a name="line204"></a>  goog.array.insertAt(this.children_, child, index);
+<a name="line205"></a>};
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * Removes the child node at the given index.
+<a name="line210"></a> * @param {number} index The position to remove from.
+<a name="line211"></a> */
+<a name="line212"></a>goog.structs.TreeNode.prototype.removeChildAt = function(index) {
+<a name="line213"></a>  goog.asserts.assert(index &gt;= 0 &amp;&amp; index &lt;= this.children_.length);
+<a name="line214"></a>  var child = this.children_[index];
+<a name="line215"></a>  delete child.parent_;
+<a name="line216"></a>  goog.array.removeAt(this.children_, index);
+<a name="line217"></a>  if (this.children_.length == 0) {
+<a name="line218"></a>    delete this.children_;
+<a name="line219"></a>  }
+<a name="line220"></a>};
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/**
+<a name="line224"></a> * Removes all child nodes of this node.
+<a name="line225"></a> */
+<a name="line226"></a>goog.structs.TreeNode.prototype.removeChildren = function() {
+<a name="line227"></a>  if (this.children_) {
+<a name="line228"></a>    goog.array.forEach(this.children_, function(child) {
+<a name="line229"></a>      child.parent_ = null;
+<a name="line230"></a>    });
+<a name="line231"></a>  }
+<a name="line232"></a>  delete this.children_;
+<a name="line233"></a>};
+</pre>
+
+
+</body>
+</html>

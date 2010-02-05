@@ -560,7 +560,7 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionIE_ =
 /**
  * Delete the selection at the current cursor position, then returns the node
  * at the current position.
- * @return {goog.editor.range.Point_} The current cursor position. Note that
+ * @return {goog.editor.range.Point} The current cursor position. Note that
  *    unlike simulateEnterIE_, this should not be removed from the DOM.
  * @private
  */

@@ -997,323 +997,322 @@
 <a name="line953"></a>
 <a name="line954"></a>
 <a name="line955"></a>/**
-<a name="line956"></a> * Copies all the members of a source object to a target object.
-<a name="line957"></a> * @param {Object} target Target.
-<a name="line958"></a> * @param {Object} source Source.
-<a name="line959"></a> * @deprecated Use goog.object.extend instead.
-<a name="line960"></a> */
-<a name="line961"></a>goog.mixin = function(target, source) {
-<a name="line962"></a>  for (var x in source) {
-<a name="line963"></a>    target[x] = source[x];
-<a name="line964"></a>  }
-<a name="line965"></a>
-<a name="line966"></a>  // For IE the for-in-loop does not contain any properties that are not
-<a name="line967"></a>  // enumerable on the prototype object (for example, isPrototypeOf from
-<a name="line968"></a>  // Object.prototype) but also it will not include &#39;replace&#39; on objects that
-<a name="line969"></a>  // extend String and change &#39;replace&#39; (not that it is common for anyone to
-<a name="line970"></a>  // extend anything except Object).
-<a name="line971"></a>};
-<a name="line972"></a>
+<a name="line956"></a> * Copies all the members of a source object to a target object. This method
+<a name="line957"></a> * does not work on all browsers for all objects that contain keys such as
+<a name="line958"></a> * toString or hasOwnProperty. Use goog.object.extend for this purpose.
+<a name="line959"></a> * @param {Object} target Target.
+<a name="line960"></a> * @param {Object} source Source.
+<a name="line961"></a> */
+<a name="line962"></a>goog.mixin = function(target, source) {
+<a name="line963"></a>  for (var x in source) {
+<a name="line964"></a>    target[x] = source[x];
+<a name="line965"></a>  }
+<a name="line966"></a>
+<a name="line967"></a>  // For IE7 or lower, the for-in-loop does not contain any properties that are
+<a name="line968"></a>  // not enumerable on the prototype object (for example, isPrototypeOf from
+<a name="line969"></a>  // Object.prototype) but also it will not include &#39;replace&#39; on objects that
+<a name="line970"></a>  // extend String and change &#39;replace&#39; (not that it is common for anyone to
+<a name="line971"></a>  // extend anything except Object).
+<a name="line972"></a>};
 <a name="line973"></a>
-<a name="line974"></a>/**
-<a name="line975"></a> * @return {number} An integer value representing the number of milliseconds
-<a name="line976"></a> *     between midnight, January 1, 1970 and the current time.
-<a name="line977"></a> */
-<a name="line978"></a>goog.now = Date.now || (function() {
-<a name="line979"></a>  // Unary plus operator converts its operand to a number which in the case of
-<a name="line980"></a>  // a date is done by calling getTime().
-<a name="line981"></a>  return +new Date();
-<a name="line982"></a>});
-<a name="line983"></a>
+<a name="line974"></a>
+<a name="line975"></a>/**
+<a name="line976"></a> * @return {number} An integer value representing the number of milliseconds
+<a name="line977"></a> *     between midnight, January 1, 1970 and the current time.
+<a name="line978"></a> */
+<a name="line979"></a>goog.now = Date.now || (function() {
+<a name="line980"></a>  // Unary plus operator converts its operand to a number which in the case of
+<a name="line981"></a>  // a date is done by calling getTime().
+<a name="line982"></a>  return +new Date();
+<a name="line983"></a>});
 <a name="line984"></a>
-<a name="line985"></a>/**
-<a name="line986"></a> * Evals javascript in the global scope.  In IE this uses execScript, other
-<a name="line987"></a> * browsers use goog.global.eval. If goog.global.eval does not evaluate in the
-<a name="line988"></a> * global scope (for example, in Safari), appends a script tag instead.
-<a name="line989"></a> * Throws an exception if neither execScript or eval is defined.
-<a name="line990"></a> * @param {string} script JavaScript string.
-<a name="line991"></a> */
-<a name="line992"></a>goog.globalEval = function(script) {
-<a name="line993"></a>  if (goog.global.execScript) {
-<a name="line994"></a>    goog.global.execScript(script, &#39;JavaScript&#39;);
-<a name="line995"></a>  } else if (goog.global.eval) {
-<a name="line996"></a>    // Test to see if eval works
-<a name="line997"></a>    if (goog.evalWorksForGlobals_ == null) {
-<a name="line998"></a>      goog.global.eval(&#39;var _et_ = 1;&#39;);
-<a name="line999"></a>      if (typeof goog.global[&#39;_et_&#39;] != &#39;undefined&#39;) {
-<a name="line1000"></a>        delete goog.global[&#39;_et_&#39;];
-<a name="line1001"></a>        goog.evalWorksForGlobals_ = true;
-<a name="line1002"></a>      } else {
-<a name="line1003"></a>        goog.evalWorksForGlobals_ = false;
-<a name="line1004"></a>      }
-<a name="line1005"></a>    }
-<a name="line1006"></a>
-<a name="line1007"></a>    if (goog.evalWorksForGlobals_) {
-<a name="line1008"></a>      goog.global.eval(script);
-<a name="line1009"></a>    } else {
-<a name="line1010"></a>      var doc = goog.global.document;
-<a name="line1011"></a>      var scriptElt = doc.createElement(&#39;script&#39;);
-<a name="line1012"></a>      scriptElt.type = &#39;text/javascript&#39;;
-<a name="line1013"></a>      scriptElt.defer = false;
-<a name="line1014"></a>      // NOTE: can&#39;t use .innerHTML since &quot;t(&#39;&lt;test&gt;&#39;)&quot; will fail and
-<a name="line1015"></a>      // .text doesn&#39;t work in Safari 2.  Therefore we append a text node.
-<a name="line1016"></a>      scriptElt.appendChild(doc.createTextNode(script));
-<a name="line1017"></a>      doc.body.appendChild(scriptElt);
-<a name="line1018"></a>      doc.body.removeChild(scriptElt);
-<a name="line1019"></a>    }
-<a name="line1020"></a>  } else {
-<a name="line1021"></a>    throw Error(&#39;goog.globalEval not available&#39;);
-<a name="line1022"></a>  }
-<a name="line1023"></a>};
-<a name="line1024"></a>
+<a name="line985"></a>
+<a name="line986"></a>/**
+<a name="line987"></a> * Evals javascript in the global scope.  In IE this uses execScript, other
+<a name="line988"></a> * browsers use goog.global.eval. If goog.global.eval does not evaluate in the
+<a name="line989"></a> * global scope (for example, in Safari), appends a script tag instead.
+<a name="line990"></a> * Throws an exception if neither execScript or eval is defined.
+<a name="line991"></a> * @param {string} script JavaScript string.
+<a name="line992"></a> */
+<a name="line993"></a>goog.globalEval = function(script) {
+<a name="line994"></a>  if (goog.global.execScript) {
+<a name="line995"></a>    goog.global.execScript(script, &#39;JavaScript&#39;);
+<a name="line996"></a>  } else if (goog.global.eval) {
+<a name="line997"></a>    // Test to see if eval works
+<a name="line998"></a>    if (goog.evalWorksForGlobals_ == null) {
+<a name="line999"></a>      goog.global.eval(&#39;var _et_ = 1;&#39;);
+<a name="line1000"></a>      if (typeof goog.global[&#39;_et_&#39;] != &#39;undefined&#39;) {
+<a name="line1001"></a>        delete goog.global[&#39;_et_&#39;];
+<a name="line1002"></a>        goog.evalWorksForGlobals_ = true;
+<a name="line1003"></a>      } else {
+<a name="line1004"></a>        goog.evalWorksForGlobals_ = false;
+<a name="line1005"></a>      }
+<a name="line1006"></a>    }
+<a name="line1007"></a>
+<a name="line1008"></a>    if (goog.evalWorksForGlobals_) {
+<a name="line1009"></a>      goog.global.eval(script);
+<a name="line1010"></a>    } else {
+<a name="line1011"></a>      var doc = goog.global.document;
+<a name="line1012"></a>      var scriptElt = doc.createElement(&#39;script&#39;);
+<a name="line1013"></a>      scriptElt.type = &#39;text/javascript&#39;;
+<a name="line1014"></a>      scriptElt.defer = false;
+<a name="line1015"></a>      // NOTE: can&#39;t use .innerHTML since &quot;t(&#39;&lt;test&gt;&#39;)&quot; will fail and
+<a name="line1016"></a>      // .text doesn&#39;t work in Safari 2.  Therefore we append a text node.
+<a name="line1017"></a>      scriptElt.appendChild(doc.createTextNode(script));
+<a name="line1018"></a>      doc.body.appendChild(scriptElt);
+<a name="line1019"></a>      doc.body.removeChild(scriptElt);
+<a name="line1020"></a>    }
+<a name="line1021"></a>  } else {
+<a name="line1022"></a>    throw Error(&#39;goog.globalEval not available&#39;);
+<a name="line1023"></a>  }
+<a name="line1024"></a>};
 <a name="line1025"></a>
-<a name="line1026"></a>/**
-<a name="line1027"></a> * A macro for defining composite types.
-<a name="line1028"></a> *
-<a name="line1029"></a> * By assigning goog.typedef to a name, this tells JSCompiler that this is not
-<a name="line1030"></a> * the name of a class, but rather it&#39;s the name of a composite type.
-<a name="line1031"></a> *
-<a name="line1032"></a> * For example,
-<a name="line1033"></a> * /** @type {Array|NodeList} / goog.ArrayLike = goog.typedef;
-<a name="line1034"></a> * will tell JSCompiler to replace all appearances of goog.ArrayLike in type
-<a name="line1035"></a> * definitions with the union of Array and NodeList.
-<a name="line1036"></a> *
-<a name="line1037"></a> * Does nothing in uncompiled code.
-<a name="line1038"></a> */
-<a name="line1039"></a>goog.typedef = true;
-<a name="line1040"></a>
+<a name="line1026"></a>
+<a name="line1027"></a>/**
+<a name="line1028"></a> * A macro for defining composite types.
+<a name="line1029"></a> *
+<a name="line1030"></a> * By assigning goog.typedef to a name, this tells JSCompiler that this is not
+<a name="line1031"></a> * the name of a class, but rather it&#39;s the name of a composite type.
+<a name="line1032"></a> *
+<a name="line1033"></a> * For example,
+<a name="line1034"></a> * /** @type {Array|NodeList} / goog.ArrayLike = goog.typedef;
+<a name="line1035"></a> * will tell JSCompiler to replace all appearances of goog.ArrayLike in type
+<a name="line1036"></a> * definitions with the union of Array and NodeList.
+<a name="line1037"></a> *
+<a name="line1038"></a> * Does nothing in uncompiled code.
+<a name="line1039"></a> */
+<a name="line1040"></a>goog.typedef = true;
 <a name="line1041"></a>
-<a name="line1042"></a>/**
-<a name="line1043"></a> * Optional map of CSS class names to obfuscated names used with
-<a name="line1044"></a> * goog.getCssName().
-<a name="line1045"></a> * @type {Object|undefined}
-<a name="line1046"></a> * @private
-<a name="line1047"></a> * @see goog.setCssNameMapping
-<a name="line1048"></a> */
-<a name="line1049"></a>goog.cssNameMapping_;
-<a name="line1050"></a>
+<a name="line1042"></a>
+<a name="line1043"></a>/**
+<a name="line1044"></a> * Optional map of CSS class names to obfuscated names used with
+<a name="line1045"></a> * goog.getCssName().
+<a name="line1046"></a> * @type {Object|undefined}
+<a name="line1047"></a> * @private
+<a name="line1048"></a> * @see goog.setCssNameMapping
+<a name="line1049"></a> */
+<a name="line1050"></a>goog.cssNameMapping_;
 <a name="line1051"></a>
-<a name="line1052"></a>/**
-<a name="line1053"></a> * Handles strings that are intended to be used as CSS class names.
-<a name="line1054"></a> *
-<a name="line1055"></a> * Without JS Compiler the arguments are simple joined with a hyphen and passed
-<a name="line1056"></a> * through unaltered.
-<a name="line1057"></a> *
-<a name="line1058"></a> * With the JS Compiler the arguments are inlined, e.g:
-<a name="line1059"></a> *     var x = goog.getCssName(&#39;foo&#39;);
-<a name="line1060"></a> *     var y = goog.getCssName(this.baseClass, &#39;active&#39;);
-<a name="line1061"></a> *  becomes:
-<a name="line1062"></a> *     var x= &#39;foo&#39;;
-<a name="line1063"></a> *     var y = this.baseClass + &#39;-active&#39;;
-<a name="line1064"></a> *
-<a name="line1065"></a> * If a CSS renaming map is passed to the compiler it will replace symbols in
-<a name="line1066"></a> * the classname.  If one argument is passed it will be processed, if two are
-<a name="line1067"></a> * passed only the modifier will be processed, as it is assumed the first
-<a name="line1068"></a> * argument was generated as a result of calling goog.getCssName.
-<a name="line1069"></a> *
-<a name="line1070"></a> * Names are split on &#39;hyphen&#39; and processed in parts such that the following
-<a name="line1071"></a> * are equivalent:
-<a name="line1072"></a> *   var base = goog.getCssName(&#39;baseclass&#39;);
-<a name="line1073"></a> *   goog.getCssName(base, &#39;modifier&#39;);
-<a name="line1074"></a> *   goog.getCSsName(&#39;baseclass-modifier&#39;);
-<a name="line1075"></a> *
-<a name="line1076"></a> * If any part does not appear in the renaming map a warning is logged and the
-<a name="line1077"></a> * original, unobfuscated class name is inlined.
-<a name="line1078"></a> *
-<a name="line1079"></a> * @param {string} className The class name.
-<a name="line1080"></a> * @param {string=} opt_modifier A modifier to be appended to the class name.
-<a name="line1081"></a> * @return {string} The class name or the concatenation of the class name and
-<a name="line1082"></a> *     the modifier.
-<a name="line1083"></a> */
-<a name="line1084"></a>goog.getCssName = function(className, opt_modifier) {
-<a name="line1085"></a>  var cssName = className + (opt_modifier ? &#39;-&#39; + opt_modifier : &#39;&#39;);
-<a name="line1086"></a>  return (goog.cssNameMapping_ &amp;&amp; (cssName in goog.cssNameMapping_)) ?
-<a name="line1087"></a>      goog.cssNameMapping_[cssName] : cssName;
-<a name="line1088"></a>};
-<a name="line1089"></a>
+<a name="line1052"></a>
+<a name="line1053"></a>/**
+<a name="line1054"></a> * Handles strings that are intended to be used as CSS class names.
+<a name="line1055"></a> *
+<a name="line1056"></a> * Without JS Compiler the arguments are simple joined with a hyphen and passed
+<a name="line1057"></a> * through unaltered.
+<a name="line1058"></a> *
+<a name="line1059"></a> * With the JS Compiler the arguments are inlined, e.g:
+<a name="line1060"></a> *     var x = goog.getCssName(&#39;foo&#39;);
+<a name="line1061"></a> *     var y = goog.getCssName(this.baseClass, &#39;active&#39;);
+<a name="line1062"></a> *  becomes:
+<a name="line1063"></a> *     var x= &#39;foo&#39;;
+<a name="line1064"></a> *     var y = this.baseClass + &#39;-active&#39;;
+<a name="line1065"></a> *
+<a name="line1066"></a> * If a CSS renaming map is passed to the compiler it will replace symbols in
+<a name="line1067"></a> * the classname.  If one argument is passed it will be processed, if two are
+<a name="line1068"></a> * passed only the modifier will be processed, as it is assumed the first
+<a name="line1069"></a> * argument was generated as a result of calling goog.getCssName.
+<a name="line1070"></a> *
+<a name="line1071"></a> * Names are split on &#39;hyphen&#39; and processed in parts such that the following
+<a name="line1072"></a> * are equivalent:
+<a name="line1073"></a> *   var base = goog.getCssName(&#39;baseclass&#39;);
+<a name="line1074"></a> *   goog.getCssName(base, &#39;modifier&#39;);
+<a name="line1075"></a> *   goog.getCSsName(&#39;baseclass-modifier&#39;);
+<a name="line1076"></a> *
+<a name="line1077"></a> * If any part does not appear in the renaming map a warning is logged and the
+<a name="line1078"></a> * original, unobfuscated class name is inlined.
+<a name="line1079"></a> *
+<a name="line1080"></a> * @param {string} className The class name.
+<a name="line1081"></a> * @param {string=} opt_modifier A modifier to be appended to the class name.
+<a name="line1082"></a> * @return {string} The class name or the concatenation of the class name and
+<a name="line1083"></a> *     the modifier.
+<a name="line1084"></a> */
+<a name="line1085"></a>goog.getCssName = function(className, opt_modifier) {
+<a name="line1086"></a>  var cssName = className + (opt_modifier ? &#39;-&#39; + opt_modifier : &#39;&#39;);
+<a name="line1087"></a>  return (goog.cssNameMapping_ &amp;&amp; (cssName in goog.cssNameMapping_)) ?
+<a name="line1088"></a>      goog.cssNameMapping_[cssName] : cssName;
+<a name="line1089"></a>};
 <a name="line1090"></a>
-<a name="line1091"></a>/**
-<a name="line1092"></a> * Sets the map to check when returning a value from goog.getCssName(). Example:
-<a name="line1093"></a> * &lt;pre&gt;
-<a name="line1094"></a> * goog.setCssNameMapping({
-<a name="line1095"></a> *   &quot;goog-menu&quot;: &quot;a&quot;,
-<a name="line1096"></a> *   &quot;goog-menu-disabled&quot;: &quot;a-b&quot;,
-<a name="line1097"></a> *   &quot;CSS_LOGO&quot;: &quot;b&quot;,
-<a name="line1098"></a> *   &quot;hidden&quot;: &quot;c&quot;
-<a name="line1099"></a> * });
-<a name="line1100"></a> *
-<a name="line1101"></a> * // The following evaluates to: &quot;a a-b&quot;.
-<a name="line1102"></a> * goog.getCssName(&#39;goog-menu&#39;) + &#39; &#39; + goog.getCssName(&#39;goog-menu&#39;, &#39;disabled&#39;)
-<a name="line1103"></a> * &lt;/pre&gt;
-<a name="line1104"></a> * When declared as a map of string literals to string literals, the JSCompiler
-<a name="line1105"></a> * will replace all calls to goog.getCssName() using the supplied map if the
-<a name="line1106"></a> * --closure_pass flag is set.
-<a name="line1107"></a> *
-<a name="line1108"></a> * @param {!Object} mapping A map of strings to strings where keys are possible
-<a name="line1109"></a> *     arguments to goog.getCssName() and values are the corresponding values
-<a name="line1110"></a> *     that should be returned.
-<a name="line1111"></a> */
-<a name="line1112"></a>goog.setCssNameMapping = function(mapping) {
-<a name="line1113"></a>  goog.cssNameMapping_ = mapping;
-<a name="line1114"></a>};
-<a name="line1115"></a>
+<a name="line1091"></a>
+<a name="line1092"></a>/**
+<a name="line1093"></a> * Sets the map to check when returning a value from goog.getCssName(). Example:
+<a name="line1094"></a> * &lt;pre&gt;
+<a name="line1095"></a> * goog.setCssNameMapping({
+<a name="line1096"></a> *   &quot;goog-menu&quot;: &quot;a&quot;,
+<a name="line1097"></a> *   &quot;goog-menu-disabled&quot;: &quot;a-b&quot;,
+<a name="line1098"></a> *   &quot;CSS_LOGO&quot;: &quot;b&quot;,
+<a name="line1099"></a> *   &quot;hidden&quot;: &quot;c&quot;
+<a name="line1100"></a> * });
+<a name="line1101"></a> *
+<a name="line1102"></a> * // The following evaluates to: &quot;a a-b&quot;.
+<a name="line1103"></a> * goog.getCssName(&#39;goog-menu&#39;) + &#39; &#39; + goog.getCssName(&#39;goog-menu&#39;, &#39;disabled&#39;)
+<a name="line1104"></a> * &lt;/pre&gt;
+<a name="line1105"></a> * When declared as a map of string literals to string literals, the JSCompiler
+<a name="line1106"></a> * will replace all calls to goog.getCssName() using the supplied map if the
+<a name="line1107"></a> * --closure_pass flag is set.
+<a name="line1108"></a> *
+<a name="line1109"></a> * @param {!Object} mapping A map of strings to strings where keys are possible
+<a name="line1110"></a> *     arguments to goog.getCssName() and values are the corresponding values
+<a name="line1111"></a> *     that should be returned.
+<a name="line1112"></a> */
+<a name="line1113"></a>goog.setCssNameMapping = function(mapping) {
+<a name="line1114"></a>  goog.cssNameMapping_ = mapping;
+<a name="line1115"></a>};
 <a name="line1116"></a>
-<a name="line1117"></a>/**
-<a name="line1118"></a> * Abstract implementation of goog.getMsg for use with localized messages.
-<a name="line1119"></a> * @param {string} str Translatable string, places holders in the form {$foo}.
-<a name="line1120"></a> * @param {Object=} opt_values Map of place holder name to value.
-<a name="line1121"></a> * @return {string} message with placeholders filled.
-<a name="line1122"></a> */
-<a name="line1123"></a>goog.getMsg = function(str, opt_values) {
-<a name="line1124"></a>  var values = opt_values || {};
-<a name="line1125"></a>  for (var key in values) {
-<a name="line1126"></a>    str = str.replace(new RegExp(&#39;\\{\\$&#39; + key + &#39;\\}&#39;, &#39;gi&#39;), values[key]);
-<a name="line1127"></a>  }
-<a name="line1128"></a>  return str;
-<a name="line1129"></a>};
-<a name="line1130"></a>
+<a name="line1117"></a>
+<a name="line1118"></a>/**
+<a name="line1119"></a> * Abstract implementation of goog.getMsg for use with localized messages.
+<a name="line1120"></a> * @param {string} str Translatable string, places holders in the form {$foo}.
+<a name="line1121"></a> * @param {Object=} opt_values Map of place holder name to value.
+<a name="line1122"></a> * @return {string} message with placeholders filled.
+<a name="line1123"></a> */
+<a name="line1124"></a>goog.getMsg = function(str, opt_values) {
+<a name="line1125"></a>  var values = opt_values || {};
+<a name="line1126"></a>  for (var key in values) {
+<a name="line1127"></a>    str = str.replace(new RegExp(&#39;\\{\\$&#39; + key + &#39;\\}&#39;, &#39;gi&#39;), values[key]);
+<a name="line1128"></a>  }
+<a name="line1129"></a>  return str;
+<a name="line1130"></a>};
 <a name="line1131"></a>
-<a name="line1132"></a>/**
-<a name="line1133"></a> * Exposes an unobfuscated global namespace path for the given object.
-<a name="line1134"></a> * Note that fields of the exported object *will* be obfuscated,
-<a name="line1135"></a> * unless they are exported in turn via this function or
-<a name="line1136"></a> * goog.exportProperty
-<a name="line1137"></a> *
-<a name="line1138"></a> * &lt;p&gt;Also handy for making public items that are defined in anonymous
-<a name="line1139"></a> * closures.
-<a name="line1140"></a> *
-<a name="line1141"></a> * ex. goog.exportSymbol(&#39;Foo&#39;, Foo);
-<a name="line1142"></a> *
-<a name="line1143"></a> * ex. goog.exportSymbol(&#39;public.path.Foo.staticFunction&#39;,
-<a name="line1144"></a> *                       Foo.staticFunction);
-<a name="line1145"></a> *     public.path.Foo.staticFunction();
-<a name="line1146"></a> *
-<a name="line1147"></a> * ex. goog.exportSymbol(&#39;public.path.Foo.prototype.myMethod&#39;,
-<a name="line1148"></a> *                       Foo.prototype.myMethod);
-<a name="line1149"></a> *     new public.path.Foo().myMethod();
-<a name="line1150"></a> *
-<a name="line1151"></a> * @param {string} publicPath Unobfuscated name to export.
-<a name="line1152"></a> * @param {*} object Object the name should point to.
-<a name="line1153"></a> * @param {Object=} opt_objectToExportTo The object to add the path to; default
-<a name="line1154"></a> *     is |goog.global|.
-<a name="line1155"></a> */
-<a name="line1156"></a>goog.exportSymbol = function(publicPath, object, opt_objectToExportTo) {
-<a name="line1157"></a>  goog.exportPath_(publicPath, object, opt_objectToExportTo);
-<a name="line1158"></a>};
-<a name="line1159"></a>
+<a name="line1132"></a>
+<a name="line1133"></a>/**
+<a name="line1134"></a> * Exposes an unobfuscated global namespace path for the given object.
+<a name="line1135"></a> * Note that fields of the exported object *will* be obfuscated,
+<a name="line1136"></a> * unless they are exported in turn via this function or
+<a name="line1137"></a> * goog.exportProperty
+<a name="line1138"></a> *
+<a name="line1139"></a> * &lt;p&gt;Also handy for making public items that are defined in anonymous
+<a name="line1140"></a> * closures.
+<a name="line1141"></a> *
+<a name="line1142"></a> * ex. goog.exportSymbol(&#39;Foo&#39;, Foo);
+<a name="line1143"></a> *
+<a name="line1144"></a> * ex. goog.exportSymbol(&#39;public.path.Foo.staticFunction&#39;,
+<a name="line1145"></a> *                       Foo.staticFunction);
+<a name="line1146"></a> *     public.path.Foo.staticFunction();
+<a name="line1147"></a> *
+<a name="line1148"></a> * ex. goog.exportSymbol(&#39;public.path.Foo.prototype.myMethod&#39;,
+<a name="line1149"></a> *                       Foo.prototype.myMethod);
+<a name="line1150"></a> *     new public.path.Foo().myMethod();
+<a name="line1151"></a> *
+<a name="line1152"></a> * @param {string} publicPath Unobfuscated name to export.
+<a name="line1153"></a> * @param {*} object Object the name should point to.
+<a name="line1154"></a> * @param {Object=} opt_objectToExportTo The object to add the path to; default
+<a name="line1155"></a> *     is |goog.global|.
+<a name="line1156"></a> */
+<a name="line1157"></a>goog.exportSymbol = function(publicPath, object, opt_objectToExportTo) {
+<a name="line1158"></a>  goog.exportPath_(publicPath, object, opt_objectToExportTo);
+<a name="line1159"></a>};
 <a name="line1160"></a>
-<a name="line1161"></a>/**
-<a name="line1162"></a> * Exports a property unobfuscated into the object&#39;s namespace.
-<a name="line1163"></a> * ex. goog.exportProperty(Foo, &#39;staticFunction&#39;, Foo.staticFunction);
-<a name="line1164"></a> * ex. goog.exportProperty(Foo.prototype, &#39;myMethod&#39;, Foo.prototype.myMethod);
-<a name="line1165"></a> * @param {Object} object Object whose static property is being exported.
-<a name="line1166"></a> * @param {string} publicName Unobfuscated name to export.
-<a name="line1167"></a> * @param {*} symbol Object the name should point to.
-<a name="line1168"></a> */
-<a name="line1169"></a>goog.exportProperty = function(object, publicName, symbol) {
-<a name="line1170"></a>  object[publicName] = symbol;
-<a name="line1171"></a>};
-<a name="line1172"></a>
+<a name="line1161"></a>
+<a name="line1162"></a>/**
+<a name="line1163"></a> * Exports a property unobfuscated into the object&#39;s namespace.
+<a name="line1164"></a> * ex. goog.exportProperty(Foo, &#39;staticFunction&#39;, Foo.staticFunction);
+<a name="line1165"></a> * ex. goog.exportProperty(Foo.prototype, &#39;myMethod&#39;, Foo.prototype.myMethod);
+<a name="line1166"></a> * @param {Object} object Object whose static property is being exported.
+<a name="line1167"></a> * @param {string} publicName Unobfuscated name to export.
+<a name="line1168"></a> * @param {*} symbol Object the name should point to.
+<a name="line1169"></a> */
+<a name="line1170"></a>goog.exportProperty = function(object, publicName, symbol) {
+<a name="line1171"></a>  object[publicName] = symbol;
+<a name="line1172"></a>};
 <a name="line1173"></a>
-<a name="line1174"></a>/**
-<a name="line1175"></a> * Inherit the prototype methods from one constructor into another.
-<a name="line1176"></a> *
-<a name="line1177"></a> * Usage:
-<a name="line1178"></a> * &lt;pre&gt;
-<a name="line1179"></a> * function ParentClass(a, b) { }
-<a name="line1180"></a> * ParentClass.prototype.foo = function(a) { }
-<a name="line1181"></a> *
-<a name="line1182"></a> * function ChildClass(a, b, c) {
-<a name="line1183"></a> *   ParentClass.call(this, a, b);
-<a name="line1184"></a> * }
-<a name="line1185"></a> *
-<a name="line1186"></a> * goog.inherits(ChildClass, ParentClass);
-<a name="line1187"></a> *
-<a name="line1188"></a> * var child = new ChildClass(&#39;a&#39;, &#39;b&#39;, &#39;see&#39;);
-<a name="line1189"></a> * child.foo(); // works
-<a name="line1190"></a> * &lt;/pre&gt;
-<a name="line1191"></a> *
-<a name="line1192"></a> * In addition, a superclass&#39; implementation of a method can be invoked
-<a name="line1193"></a> * as follows:
-<a name="line1194"></a> *
-<a name="line1195"></a> * &lt;pre&gt;
-<a name="line1196"></a> * ChildClass.prototype.foo = function(a) {
-<a name="line1197"></a> *   ChildClass.superClass_.foo.call(this, a);
-<a name="line1198"></a> *   // other code
-<a name="line1199"></a> * };
-<a name="line1200"></a> * &lt;/pre&gt;
-<a name="line1201"></a> *
-<a name="line1202"></a> * @param {Function} childCtor Child class.
-<a name="line1203"></a> * @param {Function} parentCtor Parent class.
-<a name="line1204"></a> */
-<a name="line1205"></a>goog.inherits = function(childCtor, parentCtor) {
-<a name="line1206"></a>  /** @constructor */
-<a name="line1207"></a>  function tempCtor() {};
-<a name="line1208"></a>  tempCtor.prototype = parentCtor.prototype;
-<a name="line1209"></a>  childCtor.superClass_ = parentCtor.prototype;
-<a name="line1210"></a>  childCtor.prototype = new tempCtor();
-<a name="line1211"></a>  childCtor.prototype.constructor = childCtor;
-<a name="line1212"></a>};
-<a name="line1213"></a>
+<a name="line1174"></a>
+<a name="line1175"></a>/**
+<a name="line1176"></a> * Inherit the prototype methods from one constructor into another.
+<a name="line1177"></a> *
+<a name="line1178"></a> * Usage:
+<a name="line1179"></a> * &lt;pre&gt;
+<a name="line1180"></a> * function ParentClass(a, b) { }
+<a name="line1181"></a> * ParentClass.prototype.foo = function(a) { }
+<a name="line1182"></a> *
+<a name="line1183"></a> * function ChildClass(a, b, c) {
+<a name="line1184"></a> *   ParentClass.call(this, a, b);
+<a name="line1185"></a> * }
+<a name="line1186"></a> *
+<a name="line1187"></a> * goog.inherits(ChildClass, ParentClass);
+<a name="line1188"></a> *
+<a name="line1189"></a> * var child = new ChildClass(&#39;a&#39;, &#39;b&#39;, &#39;see&#39;);
+<a name="line1190"></a> * child.foo(); // works
+<a name="line1191"></a> * &lt;/pre&gt;
+<a name="line1192"></a> *
+<a name="line1193"></a> * In addition, a superclass&#39; implementation of a method can be invoked
+<a name="line1194"></a> * as follows:
+<a name="line1195"></a> *
+<a name="line1196"></a> * &lt;pre&gt;
+<a name="line1197"></a> * ChildClass.prototype.foo = function(a) {
+<a name="line1198"></a> *   ChildClass.superClass_.foo.call(this, a);
+<a name="line1199"></a> *   // other code
+<a name="line1200"></a> * };
+<a name="line1201"></a> * &lt;/pre&gt;
+<a name="line1202"></a> *
+<a name="line1203"></a> * @param {Function} childCtor Child class.
+<a name="line1204"></a> * @param {Function} parentCtor Parent class.
+<a name="line1205"></a> */
+<a name="line1206"></a>goog.inherits = function(childCtor, parentCtor) {
+<a name="line1207"></a>  /** @constructor */
+<a name="line1208"></a>  function tempCtor() {};
+<a name="line1209"></a>  tempCtor.prototype = parentCtor.prototype;
+<a name="line1210"></a>  childCtor.superClass_ = parentCtor.prototype;
+<a name="line1211"></a>  childCtor.prototype = new tempCtor();
+<a name="line1212"></a>  childCtor.prototype.constructor = childCtor;
+<a name="line1213"></a>};
 <a name="line1214"></a>
-<a name="line1215"></a>/**
-<a name="line1216"></a> * Call up to the superclass.
-<a name="line1217"></a> *
-<a name="line1218"></a> * If this is called from a constructor, then this calls the superclass
-<a name="line1219"></a> * contructor with arguments 1-N.
-<a name="line1220"></a> *
-<a name="line1221"></a> * If this is called from a prototype method, then you must pass
-<a name="line1222"></a> * the name of the method as the second argument to this function. If
-<a name="line1223"></a> * you do not, you will get a runtime error. This calls the superclass&#39;
-<a name="line1224"></a> * method with arguments 2-N.
-<a name="line1225"></a> *
-<a name="line1226"></a> * This function only works if you use goog.inherits to express
-<a name="line1227"></a> * inheritance relationships between your classes.
-<a name="line1228"></a> *
-<a name="line1229"></a> * This function is a compiler primitive. At compile-time, the
-<a name="line1230"></a> * compiler will do macro expansion to remove a lot of
-<a name="line1231"></a> * the extra overhead that this function introduces. The compiler
-<a name="line1232"></a> * will also enforce a lot of the assumptions that this function
-<a name="line1233"></a> * makes, and treat it as a compiler error if you break them.
-<a name="line1234"></a> *
-<a name="line1235"></a> * @param {!Object} me Should always be &quot;this&quot;.
-<a name="line1236"></a> * @param {*=} opt_methodName The method name if calling a super method.
-<a name="line1237"></a> * @param {...*} var_args The rest of the arguments.
-<a name="line1238"></a> * @return {*} The return value of the superclass method.
-<a name="line1239"></a> */
-<a name="line1240"></a>goog.base = function(me, opt_methodName, var_args) {
-<a name="line1241"></a>  if (!COMPILED) {
-<a name="line1242"></a>    var caller = arguments.callee.caller;
-<a name="line1243"></a>    if (caller.superClass_) {
-<a name="line1244"></a>      // This is a constructor. Call the superclass constructor.
-<a name="line1245"></a>      return caller.superClass_.constructor.apply(
-<a name="line1246"></a>          me, Array.prototype.slice.call(arguments, 1));
-<a name="line1247"></a>    }
+<a name="line1215"></a>
+<a name="line1216"></a>/**
+<a name="line1217"></a> * Call up to the superclass.
+<a name="line1218"></a> *
+<a name="line1219"></a> * If this is called from a constructor, then this calls the superclass
+<a name="line1220"></a> * contructor with arguments 1-N.
+<a name="line1221"></a> *
+<a name="line1222"></a> * If this is called from a prototype method, then you must pass
+<a name="line1223"></a> * the name of the method as the second argument to this function. If
+<a name="line1224"></a> * you do not, you will get a runtime error. This calls the superclass&#39;
+<a name="line1225"></a> * method with arguments 2-N.
+<a name="line1226"></a> *
+<a name="line1227"></a> * This function only works if you use goog.inherits to express
+<a name="line1228"></a> * inheritance relationships between your classes.
+<a name="line1229"></a> *
+<a name="line1230"></a> * This function is a compiler primitive. At compile-time, the
+<a name="line1231"></a> * compiler will do macro expansion to remove a lot of
+<a name="line1232"></a> * the extra overhead that this function introduces. The compiler
+<a name="line1233"></a> * will also enforce a lot of the assumptions that this function
+<a name="line1234"></a> * makes, and treat it as a compiler error if you break them.
+<a name="line1235"></a> *
+<a name="line1236"></a> * @param {!Object} me Should always be &quot;this&quot;.
+<a name="line1237"></a> * @param {*=} opt_methodName The method name if calling a super method.
+<a name="line1238"></a> * @param {...*} var_args The rest of the arguments.
+<a name="line1239"></a> * @return {*} The return value of the superclass method.
+<a name="line1240"></a> */
+<a name="line1241"></a>goog.base = function(me, opt_methodName, var_args) {
+<a name="line1242"></a>  var caller = arguments.callee.caller;
+<a name="line1243"></a>  if (caller.superClass_) {
+<a name="line1244"></a>    // This is a constructor. Call the superclass constructor.
+<a name="line1245"></a>    return caller.superClass_.constructor.apply(
+<a name="line1246"></a>        me, Array.prototype.slice.call(arguments, 1));
+<a name="line1247"></a>  }
 <a name="line1248"></a>
-<a name="line1249"></a>    var args = Array.prototype.slice.call(arguments, 2);
-<a name="line1250"></a>    var foundCaller = false;
-<a name="line1251"></a>    for (var ctor = me.constructor;
-<a name="line1252"></a>         ctor; ctor = ctor.superClass_ &amp;&amp; ctor.superClass_.constructor) {
-<a name="line1253"></a>      if (ctor.prototype[opt_methodName] === caller) {
-<a name="line1254"></a>        foundCaller = true;
-<a name="line1255"></a>      } else if (foundCaller) {
-<a name="line1256"></a>        return ctor.prototype[opt_methodName].apply(me, args);
-<a name="line1257"></a>      }
-<a name="line1258"></a>    }
+<a name="line1249"></a>  var args = Array.prototype.slice.call(arguments, 2);
+<a name="line1250"></a>  var foundCaller = false;
+<a name="line1251"></a>  for (var ctor = me.constructor;
+<a name="line1252"></a>       ctor; ctor = ctor.superClass_ &amp;&amp; ctor.superClass_.constructor) {
+<a name="line1253"></a>    if (ctor.prototype[opt_methodName] === caller) {
+<a name="line1254"></a>      foundCaller = true;
+<a name="line1255"></a>    } else if (foundCaller) {
+<a name="line1256"></a>      return ctor.prototype[opt_methodName].apply(me, args);
+<a name="line1257"></a>    }
+<a name="line1258"></a>  }
 <a name="line1259"></a>
-<a name="line1260"></a>    // If we did not find the caller in the prototype chain,
-<a name="line1261"></a>    // then one of two things happened:
-<a name="line1262"></a>    // 1) The caller is an instance method.
-<a name="line1263"></a>    // 2) This method was not called by the right caller.
-<a name="line1264"></a>    if (me[opt_methodName] === caller) {
-<a name="line1265"></a>      return me.constructor.prototype[opt_methodName].apply(me, args);
-<a name="line1266"></a>    } else {
-<a name="line1267"></a>      throw Error(
-<a name="line1268"></a>          &#39;goog.base called from a method of one name &#39; +
-<a name="line1269"></a>          &#39;to a method of a different name&#39;);
-<a name="line1270"></a>    }
-<a name="line1271"></a>  }
-<a name="line1272"></a>};
+<a name="line1260"></a>  // If we did not find the caller in the prototype chain,
+<a name="line1261"></a>  // then one of two things happened:
+<a name="line1262"></a>  // 1) The caller is an instance method.
+<a name="line1263"></a>  // 2) This method was not called by the right caller.
+<a name="line1264"></a>  if (me[opt_methodName] === caller) {
+<a name="line1265"></a>    return me.constructor.prototype[opt_methodName].apply(me, args);
+<a name="line1266"></a>  } else {
+<a name="line1267"></a>    throw Error(
+<a name="line1268"></a>        &#39;goog.base called from a method of one name &#39; +
+<a name="line1269"></a>        &#39;to a method of a different name&#39;);
+<a name="line1270"></a>  }
+<a name="line1271"></a>};
 </pre>
 
 

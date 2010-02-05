@@ -15,7 +15,7 @@
 /**
  * @fileoverview Menu item observing the filter text in a
  * {@link goog.ui.FilteredMenu}. The observer method is called when the filter
- * text changes and allows the menu item to update it's content and state based
+ * text changes and allows the menu item to update its content and state based
  * on the filter.
  *
  */

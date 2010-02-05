@@ -664,17 +664,16 @@ goog.net.ChannelRequest.prototype.decodeNextChunks_ = function(readyState,
     this.lastError_ = goog.net.ChannelRequest.Error.NO_DATA;
     goog.net.BrowserChannel.notifyStatEvent(
         goog.net.BrowserChannel.Stat.REQUEST_NO_DATA);
-    this.decodeNextChunksSuccessful = false;
+    decodeNextChunksSuccessful = false;
   }
+  this.successful_ = this.successful_ && decodeNextChunksSuccessful;
   if (!decodeNextChunksSuccessful) {
-    // we can get set back to unsuccessful if the response
-    // wasn't parsed correctly - we make this trigger retry logic
+    // malformed response - we make this trigger retry logic
     this.channelDebug_.xmlHttpChannelResponseText(
         this.rid_, responseText, '[Invalid Chunked Response]');
     this.cleanup_();
     this.dispatchFailure_();
   }
-  this.successful_ = this.successful_ && decodeNextChunksSuccessful;
 };
 
 
@@ -938,7 +937,7 @@ goog.net.ChannelRequest.prototype.startWatchDogTimer_ = function(time) {
     throw Error('WatchDog timer not null');
   }
   this.watchDogTimerId_ = goog.net.BrowserChannel.setTimeout(
-      goog.bind(this.onWatchDogTimout_, this), time);
+      goog.bind(this.onWatchDogTimeout_, this), time);
 };
 
 
@@ -962,7 +961,7 @@ goog.net.ChannelRequest.prototype.cancelWatchDogTimer_ = function() {
  *
  * @private
  */
-goog.net.ChannelRequest.prototype.onWatchDogTimout_ = function() {
+goog.net.ChannelRequest.prototype.onWatchDogTimeout_ = function() {
   this.watchDogTimerId_ = null;
   var now = goog.now();
   if (now - this.watchDogTimeoutTime_ >= 0) {
@@ -983,7 +982,8 @@ goog.net.ChannelRequest.prototype.onWatchDogTimout_ = function() {
  */
 goog.net.ChannelRequest.prototype.handleTimeout_ = function() {
   if (this.successful_) {
-    this.channelDebug_.debug(
+    // Should never happen.
+    this.channelDebug_.severe(
         'Received watchdog timeout even though request loaded successfully');
   }
 

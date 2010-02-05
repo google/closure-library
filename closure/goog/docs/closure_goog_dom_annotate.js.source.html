@@ -179,7 +179,7 @@
 <a name="line135"></a>  } else if (node.hasChildNodes() &amp;&amp;
 <a name="line136"></a>             !goog.array.contains(goog.dom.annotate.NODES_TO_SKIP_,
 <a name="line137"></a>                 node.tagName)) {
-<a name="line138"></a>    var classes = node.className.split(&#39; &#39;);
+<a name="line138"></a>    var classes = node.className.split(/\s+/);
 <a name="line139"></a>    var skip = goog.array.some(classes, function(className) {
 <a name="line140"></a>        return goog.array.contains(classesToSkip, className);
 <a name="line141"></a>      });

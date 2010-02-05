@@ -127,7 +127,7 @@ goog.ui.media.FlashObject.Wmodes = {
   OPAQUE: 'opaque',
 
   /**
-   * Allows for z-ordering of the SWF and plays the swf with a transparent BG.
+   * Allows for z-ordering of the SWF and plays the SWF with a transparent BG.
    */
   TRANSPARENT: 'transparent',
 
@@ -337,11 +337,12 @@ goog.ui.media.FlashObject.prototype.setFlashVars = function(flashVar,
                                                             opt_value) {
   if (flashVar instanceof goog.structs.Map ||
       goog.typeOf(flashVar) == 'object') {
-    this.addFlashVars(flashVar);
+    this.addFlashVars(/**@type {!goog.structs.Map|!Object}*/(flashVar));
   } else {
     goog.asserts.assert(goog.isString(flashVar) && goog.isDef(opt_value),
         'Invalid argument(s)');
-    this.setFlashVar(String(flashVar), String(opt_value));
+    this.setFlashVar(/**@type {string}*/(flashVar),
+                     /**@type {string}*/(opt_value));
   }
   return this;
 };
@@ -424,11 +425,20 @@ goog.ui.media.FlashObject.prototype.hasRequiredVersion = function() {
 
 
 /**
- * On {@code enterDocument}, listen for all events to handle them consistently.
+ * Writes the Flash embedding {@code HTMLObjectElement} to this components root
+ * element and adds listeners for all events to handle them consistently.
  * @inheritDoc
  */
 goog.ui.media.FlashObject.prototype.enterDocument = function() {
   goog.ui.media.FlashObject.superClass_.enterDocument.call(this);
+
+  // The SWF tag must be written after this component's element is appended to
+  // the DOM. Otherwise Flash's ExternalInterface is broken in IE.
+  this.getElement().innerHTML = this.generateSwfTag_();
+  if (this.width_ && this.height_) {
+    this.setSize(this.width_, this.height_);
+  }
+
   this.eventHandler_.listen(
       this.getElement(),
       goog.object.getValues(goog.events.EventType),
@@ -484,12 +494,7 @@ goog.ui.media.FlashObject.prototype.createDom = function() {
 
   var element = this.getDomHelper().createElement('div');
   element.className = goog.ui.media.FlashObject.CSS_CLASS;
-  element.innerHTML = this.generateSwfTag_();
   this.setElementInternal(element);
-
-  if (this.width_ && this.height_) {
-    this.setSize(this.width_, this.height_);
-  }
 };
 
 
@@ -532,10 +537,12 @@ goog.ui.media.FlashObject.prototype.generateSwfTag_ = function() {
 
 
 /**
- * @return {Element} The flash element.
+ * @return {HTMLObjectElement} The flash element or null if the element can't
+ *     be found.
  */
 goog.ui.media.FlashObject.prototype.getFlashElement = function() {
-  return /** @type {Element} */ this.getElement().firstChild;
+  return /** @type {HTMLObjectElement} */(this.getElement() ?
+      this.getElement().firstChild : null);
 };
 
 

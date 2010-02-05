@@ -227,8 +227,8 @@
 <a name="line183"></a>/** @inheritDoc */
 <a name="line184"></a>goog.ui.RoundedTabRenderer.prototype.getContentElement = function(element) {
 <a name="line185"></a>  var baseClass = this.getStructuralCssClass();
-<a name="line186"></a>  return element &amp;&amp;
-<a name="line187"></a>      goog.dom.$$(&#39;div&#39;, goog.getCssName(baseClass, &#39;caption&#39;), element)[0];
+<a name="line186"></a>  return element &amp;&amp; goog.dom.getElementsByTagNameAndClass(
+<a name="line187"></a>      &#39;div&#39;, goog.getCssName(baseClass, &#39;caption&#39;), element)[0];
 <a name="line188"></a>};
 <a name="line189"></a>
 <a name="line190"></a>

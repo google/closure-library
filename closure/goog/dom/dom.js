@@ -16,12 +16,6 @@
  * @fileoverview Utilities for manipulating the browser's Document Object Model
  * Inspiration taken *heavily* from mochikit (http://mochikit.com/).
  *
- * If you want to do extensive DOM building you can create local aliases,
- * such as:<br>
- * var $DIV = goog.bind(goog.dom.createDom, goog.dom, 'div');<br>
- * var $A = goog.bind(goog.dom.createDom, goog.dom, 'a');<br>
- * var $TABLE = goog.bind(goog.dom.createDom, goog.dom, 'table');<br>
- *
  * You can use {@link goog.dom.DomHelper} to create new dom helpers that refer
  * to a different document object.  This is useful if you are working with
  * frames or multiple windows.
@@ -181,7 +175,7 @@ goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
 goog.dom.getElementsByTagNameAndClass_ = function(doc, opt_tag, opt_class,
                                                   opt_el) {
   var parent = opt_el || doc;
-  var tagName = (opt_tag && opt_tag != '*') ? opt_tag.toLowerCase() : '';
+  var tagName = (opt_tag && opt_tag != '*') ? opt_tag.toUpperCase() : '';
 
   // Prefer the standardized (http://www.w3.org/TR/selectors-api/), native and
   // fast W3C Selectors API. However, the version of WebKit that shipped with
@@ -207,7 +201,7 @@ goog.dom.getElementsByTagNameAndClass_ = function(doc, opt_tag, opt_class,
 
       // Filter for specific tags if requested.
       for (var i = 0, el; el = els[i]; i++) {
-        if (tagName == el.nodeName.toLowerCase()) {
+        if (tagName == el.nodeName) {
           arrayLike[len++] = el;
         }
       }
@@ -228,7 +222,7 @@ goog.dom.getElementsByTagNameAndClass_ = function(doc, opt_tag, opt_class,
       var className = el.className;
       // Check if className has a split function since SVG className does not.
       if (typeof className.split == 'function' &&
-          goog.array.contains(className.split(' '), opt_class)) {
+          goog.array.contains(className.split(/\s+/), opt_class)) {
         arrayLike[len++] = el;
       }
     }
@@ -968,7 +962,7 @@ goog.dom.getNextElementNode_ = function(node, forward) {
 
 /**
  * Whether the object looks like a DOM node.
- * @param {Object} obj The object being tested for node likeness.
+ * @param {*} obj The object being tested for node likeness.
  * @return {boolean} Whether the object looks like a DOM node.
  */
 goog.dom.isNodeLike = function(obj) {
@@ -1030,7 +1024,7 @@ goog.dom.compareNodeOrder = function(node1, node2) {
   }
 
   // Process in IE using sourceIndex - we check to see if the first node has
-  // a source index or if it's parent has one.
+  // a source index or if its parent has one.
   if ('sourceIndex' in node1 ||
       (node1.parentNode && 'sourceIndex' in node1.parentNode)) {
     var isElement1 = node1.nodeType == goog.dom.NodeType.ELEMENT;
@@ -1582,9 +1576,10 @@ goog.dom.isNodeList = function(val) {
  *     null if none match.
  */
 goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
+  var tagName = opt_tag ? opt_tag.toUpperCase() : null;
   return goog.dom.getAncestor(element,
       function(node) {
-        return (!opt_tag || node.nodeName == opt_tag) &&
+        return (!tagName || node.nodeName == tagName) &&
                (!opt_class || goog.dom.classes.has(node, opt_class));
       }, true);
 };
@@ -1982,7 +1977,7 @@ goog.dom.DomHelper.prototype.getPreviousElementSibling =
 
 /**
  * Whether the object looks like a DOM node.
- * @param {Object} obj The object being tested for node likeness.
+ * @param {*} obj The object being tested for node likeness.
  * @return {boolean} Whether the object looks like a DOM node.
  */
 goog.dom.DomHelper.prototype.isNodeLike = goog.dom.isNodeLike;

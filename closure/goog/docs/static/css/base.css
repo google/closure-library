@@ -220,6 +220,13 @@ div.clear {
   background-color: #e5ecf9;
 }
 
+.gdoc-ac-iface-icon {
+  vertical-align: middle;
+  height: 16px;
+  width: 16px;
+  background-position: -92px -24px;
+}
+
 .gdoc-ac-class-icon {
   vertical-align: middle;
   height: 16px;
@@ -283,3 +290,4 @@ html>body .goog-inline-block {
 .gviz-org-chart-container {
   margin: 1em;
 }
+

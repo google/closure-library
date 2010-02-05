@@ -178,7 +178,10 @@ goog.testing.events.fireKeySequence = function(
 
   // Fire keydown, keypress, and keyup. Note that if the keydown is
   // prevent-defaulted, then the keypress will not fire on IE.
-  var result = goog.testing.events.fireBrowserEvent(keydown);
+  var result = true;
+  if (!goog.testing.events.isBrokenGeckoMacActionKey_(keydown)) {
+    result = goog.testing.events.fireBrowserEvent(keydown);
+  }
   if (goog.events.KeyCodes.firesKeyPressEvent(
           keyCode, undefined, keydown.shiftKey, keydown.ctrlKey,
           keydown.altKey) &&
@@ -188,6 +191,18 @@ goog.testing.events.fireKeySequence = function(
   return !!(result & goog.testing.events.fireBrowserEvent(keyup));
 };
 
+
+/**
+ * @param {goog.testing.events.Event} e
+ * @return {boolean} Whether this is the Gecko/Mac's Meta-C/V/X, which
+ *     is broken and requires special handling.
+ */
+goog.testing.events.isBrokenGeckoMacActionKey_ = function(e) {
+  return goog.userAgent.MAC && goog.userAgent.GECKO &&
+      (e.keyCode == goog.events.KeyCodes.C ||
+       e.keyCode == goog.events.KeyCodes.X ||
+       e.keyCode == goog.events.KeyCodes.V) && e.metaKey;
+};
 
 /**
  * Simulates a mouseover event on the given target.

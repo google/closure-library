@@ -82,7 +82,7 @@
 <a name="line38"></a> * customized without modifying the code that listens for them.
 <a name="line39"></a> *
 <a name="line40"></a> * Supports keyboard shortcuts triggered by a single key, a stroke stroke (key
-<a name="line41"></a> * plus at leat one modifier) and a sequence of keys or strokes.
+<a name="line41"></a> * plus at least one modifier) and a sequence of keys or strokes.
 <a name="line42"></a> *
 <a name="line43"></a> * @param {goog.events.EventTarget|EventTarget} keyTarget Event target that the
 <a name="line44"></a> *     key event listener is attached to, typically the applications root
@@ -759,7 +759,7 @@
 <a name="line715"></a>    this.lastKeys_.strokes.length = 0;
 <a name="line716"></a>  }
 <a name="line717"></a>
-<a name="line718"></a>  // Check if this stroke triggers a shortcut, either on it&#39;s own or combined
+<a name="line718"></a>  // Check if this stroke triggers a shortcut, either on its own or combined
 <a name="line719"></a>  // with previous strokes.
 <a name="line720"></a>  node = node ? node[stroke] : this.shortcuts_[stroke];
 <a name="line721"></a>  if (!node) {
@@ -776,7 +776,7 @@
 <a name="line732"></a>  else if (node) {
 <a name="line733"></a>    this.lastKeys_.strokes.push(stroke);
 <a name="line734"></a>    this.lastKeys_.time = now;
-<a name="line735"></a>    // Prevent default action so find-as-you-type doesn&#39;t steal keybord focus.
+<a name="line735"></a>    // Prevent default action so find-as-you-type doesn&#39;t steal keyboard focus.
 <a name="line736"></a>    if (goog.userAgent.GECKO) {
 <a name="line737"></a>      event.preventDefault();
 <a name="line738"></a>    }
@@ -791,105 +791,108 @@
 <a name="line747"></a>  // to the generic keyboard shortcut event a more specifc fine grained one,
 <a name="line748"></a>  // specific for the shortcut identifier, is fired.
 <a name="line749"></a>  if (shortcut) {
-<a name="line750"></a>    var types = goog.ui.KeyboardShortcutHandler.EventType;
-<a name="line751"></a>
-<a name="line752"></a>    // Dispatch SHORTCUT_TRIGGERED event
-<a name="line753"></a>    var triggerEvent = new goog.ui.KeyboardShortcutEvent(
-<a name="line754"></a>        types.SHORTCUT_TRIGGERED, shortcut, event.target);
-<a name="line755"></a>    var retVal = this.dispatchEvent(triggerEvent);
-<a name="line756"></a>
-<a name="line757"></a>    // Dispatch SHORTCUT_PREFIX_&lt;identifier&gt; event
-<a name="line758"></a>    var prefixEvent = new goog.ui.KeyboardShortcutEvent(
-<a name="line759"></a>        types.SHORTCUT_PREFIX + shortcut, shortcut, event.target);
-<a name="line760"></a>    retVal &amp;= this.dispatchEvent(prefixEvent);
-<a name="line761"></a>
-<a name="line762"></a>    // The default action is prevented if &#39;preventDefault&#39; was called on either
-<a name="line763"></a>    // event, or if a listener returned false, or if the alwaysPreventDefault_
-<a name="line764"></a>    // flag is enabled.
-<a name="line765"></a>    if (this.alwaysPreventDefault_ || !retVal) {
-<a name="line766"></a>      event.preventDefault();
-<a name="line767"></a>    }
-<a name="line768"></a>
-<a name="line769"></a>    // Clear stored strokes
-<a name="line770"></a>    this.lastKeys_.strokes.length = 0;
-<a name="line771"></a>  }
-<a name="line772"></a>};
-<a name="line773"></a>
-<a name="line774"></a>
-<a name="line775"></a>/**
-<a name="line776"></a> * Checks if a given keypress event may be treated as a shortcut.
-<a name="line777"></a> * @param {goog.events.BrowserEvent} event Keypress event.
-<a name="line778"></a> * @return {boolean} Whether to attempt to process the event as a shortcut.
-<a name="line779"></a> * @private
-<a name="line780"></a> */
-<a name="line781"></a>goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
-<a name="line782"></a>  var keyCode = event.keyCode;
-<a name="line783"></a>
-<a name="line784"></a>  // Ignore Ctrl, Shift and ALT
-<a name="line785"></a>  if (keyCode == goog.events.KeyCodes.SHIFT ||
-<a name="line786"></a>      keyCode == goog.events.KeyCodes.CTRL ||
-<a name="line787"></a>      keyCode == goog.events.KeyCodes.ALT) {
-<a name="line788"></a>    return false;
-<a name="line789"></a>  }
-<a name="line790"></a>  var el = /** @type {Element} */ (event.target);
-<a name="line791"></a>  var isFormElement =
-<a name="line792"></a>      el.tagName == &#39;TEXTAREA&#39; || el.tagName == &#39;INPUT&#39; ||
-<a name="line793"></a>      el.tagName == &#39;BUTTON&#39; || el.tagName == &#39;SELECT&#39;;
-<a name="line794"></a>
-<a name="line795"></a>  var isContentEditable = !isFormElement &amp;&amp; (el.isContentEditable ||
-<a name="line796"></a>      (el.ownerDocument &amp;&amp; el.ownerDocument.designMode == &#39;on&#39;));
+<a name="line750"></a>    if (this.alwaysPreventDefault_) {
+<a name="line751"></a>      event.preventDefault();
+<a name="line752"></a>    }
+<a name="line753"></a>
+<a name="line754"></a>    var types = goog.ui.KeyboardShortcutHandler.EventType;
+<a name="line755"></a>
+<a name="line756"></a>    // Dispatch SHORTCUT_TRIGGERED event
+<a name="line757"></a>    var triggerEvent = new goog.ui.KeyboardShortcutEvent(
+<a name="line758"></a>        types.SHORTCUT_TRIGGERED, shortcut, event.target);
+<a name="line759"></a>    var retVal = this.dispatchEvent(triggerEvent);
+<a name="line760"></a>
+<a name="line761"></a>    // Dispatch SHORTCUT_PREFIX_&lt;identifier&gt; event
+<a name="line762"></a>    var prefixEvent = new goog.ui.KeyboardShortcutEvent(
+<a name="line763"></a>        types.SHORTCUT_PREFIX + shortcut, shortcut, event.target);
+<a name="line764"></a>    retVal &amp;= this.dispatchEvent(prefixEvent);
+<a name="line765"></a>
+<a name="line766"></a>    // The default action is prevented if &#39;preventDefault&#39; was
+<a name="line767"></a>    // called on either event, or if a listener returned false.
+<a name="line768"></a>    if (!retVal) {
+<a name="line769"></a>      event.preventDefault();
+<a name="line770"></a>    }
+<a name="line771"></a>
+<a name="line772"></a>    // Clear stored strokes
+<a name="line773"></a>    this.lastKeys_.strokes.length = 0;
+<a name="line774"></a>  }
+<a name="line775"></a>};
+<a name="line776"></a>
+<a name="line777"></a>
+<a name="line778"></a>/**
+<a name="line779"></a> * Checks if a given keypress event may be treated as a shortcut.
+<a name="line780"></a> * @param {goog.events.BrowserEvent} event Keypress event.
+<a name="line781"></a> * @return {boolean} Whether to attempt to process the event as a shortcut.
+<a name="line782"></a> * @private
+<a name="line783"></a> */
+<a name="line784"></a>goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
+<a name="line785"></a>  var keyCode = event.keyCode;
+<a name="line786"></a>
+<a name="line787"></a>  // Ignore Ctrl, Shift and ALT
+<a name="line788"></a>  if (keyCode == goog.events.KeyCodes.SHIFT ||
+<a name="line789"></a>      keyCode == goog.events.KeyCodes.CTRL ||
+<a name="line790"></a>      keyCode == goog.events.KeyCodes.ALT) {
+<a name="line791"></a>    return false;
+<a name="line792"></a>  }
+<a name="line793"></a>  var el = /** @type {Element} */ (event.target);
+<a name="line794"></a>  var isFormElement =
+<a name="line795"></a>      el.tagName == &#39;TEXTAREA&#39; || el.tagName == &#39;INPUT&#39; ||
+<a name="line796"></a>      el.tagName == &#39;BUTTON&#39; || el.tagName == &#39;SELECT&#39;;
 <a name="line797"></a>
-<a name="line798"></a>  if (!isFormElement &amp;&amp; !isContentEditable) {
-<a name="line799"></a>    return true;
-<a name="line800"></a>  }
-<a name="line801"></a>  // Always allow keys registered as global to be used (typically Esc, the
-<a name="line802"></a>  // F-keys and other keys that are not typically used to manipulate text).
-<a name="line803"></a>  if (this.globalKeys_[keyCode] || this.allShortcutsAreGlobal_) {
-<a name="line804"></a>    return true;
-<a name="line805"></a>  }
-<a name="line806"></a>  if (isContentEditable) {
-<a name="line807"></a>    // For events originating from an element in editing mode we only let
-<a name="line808"></a>    // global key codes through.
-<a name="line809"></a>    return false;
-<a name="line810"></a>  }
-<a name="line811"></a>  // Event target is one of (TEXTAREA, INPUT, BUTTON, SELECT).
-<a name="line812"></a>  // Allow modifier shortcuts, unless we shouldn&#39;t.
-<a name="line813"></a>  if (this.modifierShortcutsAreGlobal_ &amp;&amp; (
-<a name="line814"></a>      event.altKey || event.ctrlKey || event.metaKey)) {
-<a name="line815"></a>    return true;
-<a name="line816"></a>  }
-<a name="line817"></a>  // Allow ENTER to be used as shortcut for text inputs.
-<a name="line818"></a>  if (el.tagName == &#39;INPUT&#39; &amp;&amp; (el.type == &#39;text&#39; || el.type == &#39;password&#39;)) {
-<a name="line819"></a>    return keyCode == goog.events.KeyCodes.ENTER;
-<a name="line820"></a>  }
-<a name="line821"></a>  // Checkboxes, radiobuttons and buttons. Allow all but SPACE as shortcut.
-<a name="line822"></a>  if (el.tagName == &#39;INPUT&#39; || el.tagName == &#39;BUTTON&#39;) {
-<a name="line823"></a>    return keyCode != goog.events.KeyCodes.SPACE;
-<a name="line824"></a>  }
-<a name="line825"></a>  // Don&#39;t allow any additional shortcut keys for textareas or selects.
-<a name="line826"></a>  return false;
-<a name="line827"></a>};
-<a name="line828"></a>
-<a name="line829"></a>
-<a name="line830"></a>/**
-<a name="line831"></a> * Object representing a keyboard shortcut event.
-<a name="line832"></a> * @param {string} type Event type.
-<a name="line833"></a> * @param {string} identifier Task identifier for the triggered shortcut.
-<a name="line834"></a> * @param {Node|goog.events.EventTarget} target Target the original key press
-<a name="line835"></a> *     event originated from.
-<a name="line836"></a> * @extends {goog.events.Event}
-<a name="line837"></a> * @constructor
-<a name="line838"></a> */
-<a name="line839"></a>goog.ui.KeyboardShortcutEvent = function(type, identifier, target) {
-<a name="line840"></a>  goog.events.Event.call(this, type, target);
-<a name="line841"></a>
-<a name="line842"></a>  /**
-<a name="line843"></a>   * Task identifier for the triggered shortcut
-<a name="line844"></a>   * @type {string}
-<a name="line845"></a>   */
-<a name="line846"></a>  this.identifier = identifier;
-<a name="line847"></a>};
-<a name="line848"></a>goog.inherits(goog.ui.KeyboardShortcutEvent, goog.events.Event);
+<a name="line798"></a>  var isContentEditable = !isFormElement &amp;&amp; (el.isContentEditable ||
+<a name="line799"></a>      (el.ownerDocument &amp;&amp; el.ownerDocument.designMode == &#39;on&#39;));
+<a name="line800"></a>
+<a name="line801"></a>  if (!isFormElement &amp;&amp; !isContentEditable) {
+<a name="line802"></a>    return true;
+<a name="line803"></a>  }
+<a name="line804"></a>  // Always allow keys registered as global to be used (typically Esc, the
+<a name="line805"></a>  // F-keys and other keys that are not typically used to manipulate text).
+<a name="line806"></a>  if (this.globalKeys_[keyCode] || this.allShortcutsAreGlobal_) {
+<a name="line807"></a>    return true;
+<a name="line808"></a>  }
+<a name="line809"></a>  if (isContentEditable) {
+<a name="line810"></a>    // For events originating from an element in editing mode we only let
+<a name="line811"></a>    // global key codes through.
+<a name="line812"></a>    return false;
+<a name="line813"></a>  }
+<a name="line814"></a>  // Event target is one of (TEXTAREA, INPUT, BUTTON, SELECT).
+<a name="line815"></a>  // Allow modifier shortcuts, unless we shouldn&#39;t.
+<a name="line816"></a>  if (this.modifierShortcutsAreGlobal_ &amp;&amp; (
+<a name="line817"></a>      event.altKey || event.ctrlKey || event.metaKey)) {
+<a name="line818"></a>    return true;
+<a name="line819"></a>  }
+<a name="line820"></a>  // Allow ENTER to be used as shortcut for text inputs.
+<a name="line821"></a>  if (el.tagName == &#39;INPUT&#39; &amp;&amp; (el.type == &#39;text&#39; || el.type == &#39;password&#39;)) {
+<a name="line822"></a>    return keyCode == goog.events.KeyCodes.ENTER;
+<a name="line823"></a>  }
+<a name="line824"></a>  // Checkboxes, radiobuttons and buttons. Allow all but SPACE as shortcut.
+<a name="line825"></a>  if (el.tagName == &#39;INPUT&#39; || el.tagName == &#39;BUTTON&#39;) {
+<a name="line826"></a>    return keyCode != goog.events.KeyCodes.SPACE;
+<a name="line827"></a>  }
+<a name="line828"></a>  // Don&#39;t allow any additional shortcut keys for textareas or selects.
+<a name="line829"></a>  return false;
+<a name="line830"></a>};
+<a name="line831"></a>
+<a name="line832"></a>
+<a name="line833"></a>/**
+<a name="line834"></a> * Object representing a keyboard shortcut event.
+<a name="line835"></a> * @param {string} type Event type.
+<a name="line836"></a> * @param {string} identifier Task identifier for the triggered shortcut.
+<a name="line837"></a> * @param {Node|goog.events.EventTarget} target Target the original key press
+<a name="line838"></a> *     event originated from.
+<a name="line839"></a> * @extends {goog.events.Event}
+<a name="line840"></a> * @constructor
+<a name="line841"></a> */
+<a name="line842"></a>goog.ui.KeyboardShortcutEvent = function(type, identifier, target) {
+<a name="line843"></a>  goog.events.Event.call(this, type, target);
+<a name="line844"></a>
+<a name="line845"></a>  /**
+<a name="line846"></a>   * Task identifier for the triggered shortcut
+<a name="line847"></a>   * @type {string}
+<a name="line848"></a>   */
+<a name="line849"></a>  this.identifier = identifier;
+<a name="line850"></a>};
+<a name="line851"></a>goog.inherits(goog.ui.KeyboardShortcutEvent, goog.events.Event);
 </pre>
 
 

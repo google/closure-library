@@ -674,6 +674,22 @@ goog.debug.LogManager.getLogger = function(name) {
 
 
 /**
+ * Creates a function that can be passed to goog.debug.catchErrors. The function
+ * will log all reported errors using the given logger.
+ * @param {goog.debug.Logger=} opt_logger The logger to log the errors to.
+ *     Defaults to the root logger.
+ * @return {function(Object)} The created function.
+ */
+goog.debug.LogManager.createFunctionForCatchErrors = function(opt_logger) {
+  return function(info) {
+    var logger = opt_logger || goog.debug.LogManager.getRoot();
+    logger.severe('Error: ' + info.message + ' (' + info.fileName +
+                  ' @ Line: ' + info.line + ')');
+  };
+};
+
+
+/**
  * Creates the named logger. Will also create the parents of the named logger
  * if they don't yet exist.
  * @param {string} name The name of the logger.

@@ -151,7 +151,7 @@ goog.editor.SeamlessField.prototype.handleOuterDocChange_ = function() {
 
 
 /**
- * Sizes the iframe to it's body's height.
+ * Sizes the iframe to its body's height.
  * @private
  */
 goog.editor.SeamlessField.prototype.sizeIframeToBodyHeightGecko_ = function() {
@@ -242,8 +242,8 @@ goog.editor.SeamlessField.getScrollbarThickness_ = function() {
 
 
 /**
- * Sizes the iframe to it's container div's width. The width of the div
- * is controlled by it's containing context, not by it's contents.
+ * Sizes the iframe to its container div's width. The width of the div
+ * is controlled by its containing context, not by its contents.
  * if it extends outside of it's contents, then it gets a horizontal scroll.
  * @private
  */
@@ -592,7 +592,7 @@ goog.editor.SeamlessField.prototype.attachIframe = function(iframe) {
   var dh = goog.dom.getDomHelper(field);
 
   // Grab the width/height values of the field before modifying any CSS
-  // as some of the modifications affect it's size (e.g. innerHTML='')
+  // as some of the modifications affect its size (e.g. innerHTML='')
   // Here, we set the size of the field to fixed so there's not too much
   // jiggling when we set the innerHTML of the field.
   var oldWidth = field.style.width;

@@ -21,6 +21,7 @@
 goog.provide('goog.debug.ErrorReporter');
 
 goog.require('goog.Uri');
+goog.require('goog.Uri.QueryData');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.events');
 goog.require('goog.net.XhrIo');
@@ -29,8 +30,8 @@ goog.require('goog.string');
 
 
 /**
- * Constructs an error reporter. Internal Use Only. To install an error reporter
- * see the {@see #install} method below.
+ * Constructs an error reporter. Internal Use Only. To install an error
+ * reporter see the {@see #install} method below.
  *
  * @param {string} handlerUrl The URL to which all errors will be reported.
  * @constructor
@@ -58,6 +59,14 @@ goog.debug.ErrorReporter.prototype.errorHandler_ = null;
 
 
 /**
+ * Extra headers for the error-reporting XHR.
+ * @type {Object|goog.structs.Map|undefined}
+ * @private
+ */
+goog.debug.ErrorReporter.prototype.extraHeaders_;
+
+
+/**
  * Logging object.
  *
  * @type {goog.debug.Logger}
@@ -71,7 +80,7 @@ goog.debug.ErrorReporter.logger_ =
  * Installs an error reporter to catch all JavaScript errors raised.
  *
  * @param {string} loggingUrl The URL to which the errors caught will be
- *   reported.
+ *     reported.
  * @return {goog.debug.ErrorReporter} The error reporter.
  */
 goog.debug.ErrorReporter.install = function(loggingUrl) {
@@ -81,7 +90,30 @@ goog.debug.ErrorReporter.install = function(loggingUrl) {
 
 
 /**
+ * Change the error handler URL.
+ *
+ * @param {string} loggingUrl The new URL to which the errors caught
+ *     will be reported.
+ */
+goog.debug.ErrorReporter.prototype.setLoggingUrl = function(loggingUrl) {
+  this.handlerUrl_ = loggingUrl;
+};
+
+
+/**
+ * Add headers to the logging url.
+ * @param {Object|goog.structs.Map} loggingHeaders Extra headers to send
+ *     to the logging URL.
+ */
+goog.debug.ErrorReporter.prototype.setLoggingHeaders =
+    function(loggingHeaders) {
+  this.extraHeaders_ = loggingHeaders;
+};
+
+
+/**
  * Sets up the error reporter.
+ *
  * @private
  */
 goog.debug.ErrorReporter.prototype.setup_ = function() {
@@ -116,7 +148,10 @@ goog.debug.ErrorReporter.prototype.handleException_ = function(e) {
   // but goog.debug.ErrorHandler.protectEntryPoint does not.
   var baseName = String(error.fileName).split(/[\/\\]/).pop();
 
-  this.sendErrorReport(error.message, baseName, error.lineNumber);
+  // Strip the query part of the URL.
+  baseName = String(baseName).split('?', 2)[0];
+
+  this.sendErrorReport(error.message, baseName, error.lineNumber, error.stack);
 };
 
 
@@ -126,24 +161,31 @@ goog.debug.ErrorReporter.prototype.handleException_ = function(e) {
  * @param {string} message Error description.
  * @param {string} fileName URL of the JavaScript file with the error.
  * @param {number} line Line number of the error.
+ * @param {string} opt_trace Call stack trace of the error.
  */
 goog.debug.ErrorReporter.prototype.sendErrorReport =
-    function(message, fileName, line) {
+    function(message, fileName, line, opt_trace) {
   try {
     // Create the logging URL.
     var requestUrl = new goog.Uri(this.handlerUrl_);
     requestUrl.setParameterValue('script', fileName);
     requestUrl.setParameterValue('error', message);
     requestUrl.setParameterValue('line', line);
+    var queryData = new goog.Uri.QueryData();
+    if (goog.isDefAndNotNull(opt_trace)) {
+      queryData.add('trace', opt_trace);
+    }
 
     // Send the request with the contents of the error.
-    goog.net.XhrIo.send(requestUrl.toString());
+    goog.net.XhrIo.send(requestUrl.toString(), null, 'POST',
+        queryData.toString(), this.extraHeaders_);
   } catch (e) {
     var logMessage = goog.string.buildString(
         'Error occurred in sending an error report.\n\n',
         'script:', fileName, '\n',
         'line:', line, '\n',
-        'error:', message);
+        'error:', message, '\n',
+        'trace:', opt_trace);
     goog.debug.ErrorReporter.logger_.info(logMessage);
   }
 };

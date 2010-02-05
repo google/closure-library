@@ -152,7 +152,7 @@
 <a name="line108"></a>/**
 <a name="line109"></a> * Serializes an object or a value to a JSON string.
 <a name="line110"></a> *
-<a name="line111"></a> * @param {Object} object The object to serialize.
+<a name="line111"></a> * @param {*} object The object to serialize.
 <a name="line112"></a> * @throws Error if there are loops in the object graph.
 <a name="line113"></a> * @return {string} A JSON string representation of the input.
 <a name="line114"></a> */
@@ -173,7 +173,7 @@
 <a name="line129"></a>/**
 <a name="line130"></a> * Serializes an object or a value to a JSON string.
 <a name="line131"></a> *
-<a name="line132"></a> * @param {Object} object The object to serialize.
+<a name="line132"></a> * @param {*} object The object to serialize.
 <a name="line133"></a> * @throws Error if there are loops in the object graph.
 <a name="line134"></a> * @return {string} A JSON string representation of the input.
 <a name="line135"></a> */
@@ -187,164 +187,163 @@
 <a name="line143"></a>/**
 <a name="line144"></a> * Serializes a generic value to a JSON string
 <a name="line145"></a> * @private
-<a name="line146"></a> * @param {string|number|boolean|undefined|Object|Array} object The object to
-<a name="line147"></a> *     serialize.
-<a name="line148"></a> * @param {Array} sb Array used as a string builder.
-<a name="line149"></a> * @throws Error if there are loops in the object graph.
-<a name="line150"></a> */
-<a name="line151"></a>goog.json.Serializer.prototype.serialize_ = function(object, sb) {
-<a name="line152"></a>  switch (typeof object) {
-<a name="line153"></a>    case &#39;string&#39;:
-<a name="line154"></a>      this.serializeString_((/** @type {string} */ object), sb);
-<a name="line155"></a>      break;
-<a name="line156"></a>    case &#39;number&#39;:
-<a name="line157"></a>      this.serializeNumber_((/** @type {number} */ object), sb);
-<a name="line158"></a>      break;
-<a name="line159"></a>    case &#39;boolean&#39;:
-<a name="line160"></a>      sb.push(object);
-<a name="line161"></a>      break;
-<a name="line162"></a>    case &#39;undefined&#39;:
-<a name="line163"></a>      sb.push(&#39;null&#39;);
-<a name="line164"></a>      break;
-<a name="line165"></a>    case &#39;object&#39;:
-<a name="line166"></a>      if (object == null) {
-<a name="line167"></a>        sb.push(&#39;null&#39;);
-<a name="line168"></a>        break;
-<a name="line169"></a>      }
-<a name="line170"></a>      if (goog.isArray(object)) {
-<a name="line171"></a>        this.serializeArray_(object, sb);
-<a name="line172"></a>        break;
-<a name="line173"></a>      }
-<a name="line174"></a>      // should we allow new String, new Number and new Boolean to be treated
-<a name="line175"></a>      // as string, number and boolean? Most implementations do not and the
-<a name="line176"></a>      // need is not very big
-<a name="line177"></a>      this.serializeObject_(object, sb);
-<a name="line178"></a>      break;
-<a name="line179"></a>    case &#39;function&#39;:
-<a name="line180"></a>      // Skip functions.
-<a name="line181"></a>      // TODO Should we return something here?
-<a name="line182"></a>      break;
-<a name="line183"></a>    default:
-<a name="line184"></a>      throw Error(&#39;Unknown type: &#39; + typeof object);
-<a name="line185"></a>  }
-<a name="line186"></a>};
+<a name="line146"></a> * @param {*} object The object to serialize.
+<a name="line147"></a> * @param {Array} sb Array used as a string builder.
+<a name="line148"></a> * @throws Error if there are loops in the object graph.
+<a name="line149"></a> */
+<a name="line150"></a>goog.json.Serializer.prototype.serialize_ = function(object, sb) {
+<a name="line151"></a>  switch (typeof object) {
+<a name="line152"></a>    case &#39;string&#39;:
+<a name="line153"></a>      this.serializeString_((/** @type {string} */ object), sb);
+<a name="line154"></a>      break;
+<a name="line155"></a>    case &#39;number&#39;:
+<a name="line156"></a>      this.serializeNumber_((/** @type {number} */ object), sb);
+<a name="line157"></a>      break;
+<a name="line158"></a>    case &#39;boolean&#39;:
+<a name="line159"></a>      sb.push(object);
+<a name="line160"></a>      break;
+<a name="line161"></a>    case &#39;undefined&#39;:
+<a name="line162"></a>      sb.push(&#39;null&#39;);
+<a name="line163"></a>      break;
+<a name="line164"></a>    case &#39;object&#39;:
+<a name="line165"></a>      if (object == null) {
+<a name="line166"></a>        sb.push(&#39;null&#39;);
+<a name="line167"></a>        break;
+<a name="line168"></a>      }
+<a name="line169"></a>      if (goog.isArray(object)) {
+<a name="line170"></a>        this.serializeArray_((/** @type {Array} */ object), sb);
+<a name="line171"></a>        break;
+<a name="line172"></a>      }
+<a name="line173"></a>      // should we allow new String, new Number and new Boolean to be treated
+<a name="line174"></a>      // as string, number and boolean? Most implementations do not and the
+<a name="line175"></a>      // need is not very big
+<a name="line176"></a>      this.serializeObject_((/** @type {Object} */ object), sb);
+<a name="line177"></a>      break;
+<a name="line178"></a>    case &#39;function&#39;:
+<a name="line179"></a>      // Skip functions.
+<a name="line180"></a>      // TODO Should we return something here?
+<a name="line181"></a>      break;
+<a name="line182"></a>    default:
+<a name="line183"></a>      throw Error(&#39;Unknown type: &#39; + typeof object);
+<a name="line184"></a>  }
+<a name="line185"></a>};
+<a name="line186"></a>
 <a name="line187"></a>
-<a name="line188"></a>
-<a name="line189"></a>/**
-<a name="line190"></a> * Character mappings used internally for goog.string.quote
-<a name="line191"></a> * @private
-<a name="line192"></a> * @type {Object}
-<a name="line193"></a> */
-<a name="line194"></a>goog.json.Serializer.charToJsonCharCache_ = {
-<a name="line195"></a>  &#39;\&quot;&#39;: &#39;\\&quot;&#39;,
-<a name="line196"></a>  &#39;\\&#39;: &#39;\\\\&#39;,
-<a name="line197"></a>  &#39;/&#39;: &#39;\\/&#39;,
-<a name="line198"></a>  &#39;\b&#39;: &#39;\\b&#39;,
-<a name="line199"></a>  &#39;\f&#39;: &#39;\\f&#39;,
-<a name="line200"></a>  &#39;\n&#39;: &#39;\\n&#39;,
-<a name="line201"></a>  &#39;\r&#39;: &#39;\\r&#39;,
-<a name="line202"></a>  &#39;\t&#39;: &#39;\\t&#39;,
-<a name="line203"></a>
-<a name="line204"></a>  &#39;\x0B&#39;: &#39;\\u000b&#39; // &#39;\v&#39; is not supported in JScript
-<a name="line205"></a>};
+<a name="line188"></a>/**
+<a name="line189"></a> * Character mappings used internally for goog.string.quote
+<a name="line190"></a> * @private
+<a name="line191"></a> * @type {Object}
+<a name="line192"></a> */
+<a name="line193"></a>goog.json.Serializer.charToJsonCharCache_ = {
+<a name="line194"></a>  &#39;\&quot;&#39;: &#39;\\&quot;&#39;,
+<a name="line195"></a>  &#39;\\&#39;: &#39;\\\\&#39;,
+<a name="line196"></a>  &#39;/&#39;: &#39;\\/&#39;,
+<a name="line197"></a>  &#39;\b&#39;: &#39;\\b&#39;,
+<a name="line198"></a>  &#39;\f&#39;: &#39;\\f&#39;,
+<a name="line199"></a>  &#39;\n&#39;: &#39;\\n&#39;,
+<a name="line200"></a>  &#39;\r&#39;: &#39;\\r&#39;,
+<a name="line201"></a>  &#39;\t&#39;: &#39;\\t&#39;,
+<a name="line202"></a>
+<a name="line203"></a>  &#39;\x0B&#39;: &#39;\\u000b&#39; // &#39;\v&#39; is not supported in JScript
+<a name="line204"></a>};
+<a name="line205"></a>
 <a name="line206"></a>
-<a name="line207"></a>
-<a name="line208"></a>/**
-<a name="line209"></a> * Regular expression used to match characters that need to be replaced.
-<a name="line210"></a> * The S60 browser has a bug where unicode characters are not matched by
-<a name="line211"></a> * regular expressions. The condition below detects such behaviour and
-<a name="line212"></a> * adjusts the regular expression accordingly.
-<a name="line213"></a> * @private
-<a name="line214"></a> * @type {RegExp}
-<a name="line215"></a> */
-<a name="line216"></a>goog.json.Serializer.charsToReplace_ = /\uffff/.test(&#39;\uffff&#39;) ?
-<a name="line217"></a>    /[\\\&quot;\x00-\x1f\x7f-\uffff]/g : /[\\\&quot;\x00-\x1f\x7f-\xff]/g;
+<a name="line207"></a>/**
+<a name="line208"></a> * Regular expression used to match characters that need to be replaced.
+<a name="line209"></a> * The S60 browser has a bug where unicode characters are not matched by
+<a name="line210"></a> * regular expressions. The condition below detects such behaviour and
+<a name="line211"></a> * adjusts the regular expression accordingly.
+<a name="line212"></a> * @private
+<a name="line213"></a> * @type {RegExp}
+<a name="line214"></a> */
+<a name="line215"></a>goog.json.Serializer.charsToReplace_ = /\uffff/.test(&#39;\uffff&#39;) ?
+<a name="line216"></a>    /[\\\&quot;\x00-\x1f\x7f-\uffff]/g : /[\\\&quot;\x00-\x1f\x7f-\xff]/g;
+<a name="line217"></a>
 <a name="line218"></a>
-<a name="line219"></a>
-<a name="line220"></a>/**
-<a name="line221"></a> * Serializes a string to a JSON string
-<a name="line222"></a> * @private
-<a name="line223"></a> * @param {string} s The string to serialize.
-<a name="line224"></a> * @param {Array} sb Array used as a string builder.
-<a name="line225"></a> */
-<a name="line226"></a>goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
-<a name="line227"></a>  // The official JSON implementation does not work with international
-<a name="line228"></a>  // characters.
-<a name="line229"></a>  sb.push(&#39;&quot;&#39;, s.replace(goog.json.Serializer.charsToReplace_, function(c) {
-<a name="line230"></a>    // caching the result improves performance by a factor 2-3
-<a name="line231"></a>    if (c in goog.json.Serializer.charToJsonCharCache_) {
-<a name="line232"></a>      return goog.json.Serializer.charToJsonCharCache_[c];
-<a name="line233"></a>    }
-<a name="line234"></a>
-<a name="line235"></a>    var cc = c.charCodeAt(0);
-<a name="line236"></a>    var rv = &#39;\\u&#39;;
-<a name="line237"></a>    if (cc &lt; 16) {
-<a name="line238"></a>      rv += &#39;000&#39;;
-<a name="line239"></a>    } else if (cc &lt; 256) {
-<a name="line240"></a>      rv += &#39;00&#39;;
-<a name="line241"></a>    } else if (cc &lt; 4096) { // \u1000
-<a name="line242"></a>      rv += &#39;0&#39;;
-<a name="line243"></a>    }
-<a name="line244"></a>    return goog.json.Serializer.charToJsonCharCache_[c] = rv + cc.toString(16);
-<a name="line245"></a>  }), &#39;&quot;&#39;);
-<a name="line246"></a>};
+<a name="line219"></a>/**
+<a name="line220"></a> * Serializes a string to a JSON string
+<a name="line221"></a> * @private
+<a name="line222"></a> * @param {string} s The string to serialize.
+<a name="line223"></a> * @param {Array} sb Array used as a string builder.
+<a name="line224"></a> */
+<a name="line225"></a>goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
+<a name="line226"></a>  // The official JSON implementation does not work with international
+<a name="line227"></a>  // characters.
+<a name="line228"></a>  sb.push(&#39;&quot;&#39;, s.replace(goog.json.Serializer.charsToReplace_, function(c) {
+<a name="line229"></a>    // caching the result improves performance by a factor 2-3
+<a name="line230"></a>    if (c in goog.json.Serializer.charToJsonCharCache_) {
+<a name="line231"></a>      return goog.json.Serializer.charToJsonCharCache_[c];
+<a name="line232"></a>    }
+<a name="line233"></a>
+<a name="line234"></a>    var cc = c.charCodeAt(0);
+<a name="line235"></a>    var rv = &#39;\\u&#39;;
+<a name="line236"></a>    if (cc &lt; 16) {
+<a name="line237"></a>      rv += &#39;000&#39;;
+<a name="line238"></a>    } else if (cc &lt; 256) {
+<a name="line239"></a>      rv += &#39;00&#39;;
+<a name="line240"></a>    } else if (cc &lt; 4096) { // \u1000
+<a name="line241"></a>      rv += &#39;0&#39;;
+<a name="line242"></a>    }
+<a name="line243"></a>    return goog.json.Serializer.charToJsonCharCache_[c] = rv + cc.toString(16);
+<a name="line244"></a>  }), &#39;&quot;&#39;);
+<a name="line245"></a>};
+<a name="line246"></a>
 <a name="line247"></a>
-<a name="line248"></a>
-<a name="line249"></a>/**
-<a name="line250"></a> * Serializes a number to a JSON string
-<a name="line251"></a> * @private
-<a name="line252"></a> * @param {number} n The number to serialize.
-<a name="line253"></a> * @param {Array} sb Array used as a string builder.
-<a name="line254"></a> */
-<a name="line255"></a>goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
-<a name="line256"></a>  sb.push(isFinite(n) &amp;&amp; !isNaN(n) ? n : &#39;null&#39;);
-<a name="line257"></a>};
+<a name="line248"></a>/**
+<a name="line249"></a> * Serializes a number to a JSON string
+<a name="line250"></a> * @private
+<a name="line251"></a> * @param {number} n The number to serialize.
+<a name="line252"></a> * @param {Array} sb Array used as a string builder.
+<a name="line253"></a> */
+<a name="line254"></a>goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
+<a name="line255"></a>  sb.push(isFinite(n) &amp;&amp; !isNaN(n) ? n : &#39;null&#39;);
+<a name="line256"></a>};
+<a name="line257"></a>
 <a name="line258"></a>
-<a name="line259"></a>
-<a name="line260"></a>/**
-<a name="line261"></a> * Serializes an array to a JSON string
-<a name="line262"></a> * @private
-<a name="line263"></a> * @param {Array} arr The array to serialize.
-<a name="line264"></a> * @param {Array} sb Array used as a string builder.
-<a name="line265"></a> */
-<a name="line266"></a>goog.json.Serializer.prototype.serializeArray_ = function(arr, sb) {
-<a name="line267"></a>  var l = arr.length;
-<a name="line268"></a>  sb.push(&#39;[&#39;);
-<a name="line269"></a>  var sep = &#39;&#39;;
-<a name="line270"></a>  for (var i = 0; i &lt; l; i++) {
-<a name="line271"></a>    sb.push(sep)
-<a name="line272"></a>    this.serialize_(arr[i], sb);
-<a name="line273"></a>    sep = &#39;,&#39;;
-<a name="line274"></a>  }
-<a name="line275"></a>  sb.push(&#39;]&#39;);
-<a name="line276"></a>};
+<a name="line259"></a>/**
+<a name="line260"></a> * Serializes an array to a JSON string
+<a name="line261"></a> * @private
+<a name="line262"></a> * @param {Array} arr The array to serialize.
+<a name="line263"></a> * @param {Array} sb Array used as a string builder.
+<a name="line264"></a> */
+<a name="line265"></a>goog.json.Serializer.prototype.serializeArray_ = function(arr, sb) {
+<a name="line266"></a>  var l = arr.length;
+<a name="line267"></a>  sb.push(&#39;[&#39;);
+<a name="line268"></a>  var sep = &#39;&#39;;
+<a name="line269"></a>  for (var i = 0; i &lt; l; i++) {
+<a name="line270"></a>    sb.push(sep)
+<a name="line271"></a>    this.serialize_(arr[i], sb);
+<a name="line272"></a>    sep = &#39;,&#39;;
+<a name="line273"></a>  }
+<a name="line274"></a>  sb.push(&#39;]&#39;);
+<a name="line275"></a>};
+<a name="line276"></a>
 <a name="line277"></a>
-<a name="line278"></a>
-<a name="line279"></a>/**
-<a name="line280"></a> * Serializes an object to a JSON string
-<a name="line281"></a> * @private
-<a name="line282"></a> * @param {Object} obj The object to serialize.
-<a name="line283"></a> * @param {Array} sb Array used as a string builder.
-<a name="line284"></a> */
-<a name="line285"></a>goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
-<a name="line286"></a>  sb.push(&#39;{&#39;);
-<a name="line287"></a>  var sep = &#39;&#39;;
-<a name="line288"></a>  for (var key in obj) {
-<a name="line289"></a>    if (obj.hasOwnProperty(key)) {
-<a name="line290"></a>      var value = obj[key];
-<a name="line291"></a>      // Skip functions.
-<a name="line292"></a>      // TODO Should we return something for function properties?
-<a name="line293"></a>      if (typeof value != &#39;function&#39;) {
-<a name="line294"></a>        sb.push(sep);
-<a name="line295"></a>        this.serializeString_(key, sb);
-<a name="line296"></a>        sb.push(&#39;:&#39;);
-<a name="line297"></a>        this.serialize_(value, sb);
-<a name="line298"></a>        sep = &#39;,&#39;;
-<a name="line299"></a>      }
-<a name="line300"></a>    }
-<a name="line301"></a>  }
-<a name="line302"></a>  sb.push(&#39;}&#39;);
-<a name="line303"></a>};
+<a name="line278"></a>/**
+<a name="line279"></a> * Serializes an object to a JSON string
+<a name="line280"></a> * @private
+<a name="line281"></a> * @param {Object} obj The object to serialize.
+<a name="line282"></a> * @param {Array} sb Array used as a string builder.
+<a name="line283"></a> */
+<a name="line284"></a>goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
+<a name="line285"></a>  sb.push(&#39;{&#39;);
+<a name="line286"></a>  var sep = &#39;&#39;;
+<a name="line287"></a>  for (var key in obj) {
+<a name="line288"></a>    if (obj.hasOwnProperty(key)) {
+<a name="line289"></a>      var value = obj[key];
+<a name="line290"></a>      // Skip functions.
+<a name="line291"></a>      // TODO Should we return something for function properties?
+<a name="line292"></a>      if (typeof value != &#39;function&#39;) {
+<a name="line293"></a>        sb.push(sep);
+<a name="line294"></a>        this.serializeString_(key, sb);
+<a name="line295"></a>        sb.push(&#39;:&#39;);
+<a name="line296"></a>        this.serialize_(value, sb);
+<a name="line297"></a>        sep = &#39;,&#39;;
+<a name="line298"></a>      }
+<a name="line299"></a>    }
+<a name="line300"></a>  }
+<a name="line301"></a>  sb.push(&#39;}&#39;);
+<a name="line302"></a>};
 </pre>
 
 

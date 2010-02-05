@@ -63,7 +63,8 @@
         <span>Extends</span>
         <span class="fn-name">
           <a href="class_goog_events_EventTarget.html">
-            goog.events.EventTarget</a>
+          goog.events.EventTarget
+</a>
         </span>
 </div>
 
@@ -158,7 +159,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">abort<span class="args">(<span class="arg">opt_failureCode</span>)</span>
+        <span class="entryName">abort<span class="args">(<span class="arg">abort@opt_failureCode</span>)</span>
         </span>
       </div>
 
@@ -183,9 +184,9 @@
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_failureCode</span>
-        : <div class="fullType"><span class="type">goog.net.ErrorCode=</span></div>
-        <div class="entryOverview">Optional error code to use - defaults to ABORT.</div>
+        <span class="entryName">abort@opt_failureCode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -198,7 +199,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line520">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line530">code &raquo;</a>
   </td>
      </tr>
 
@@ -218,7 +219,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">cleanUpXhr_<span class="args">(<span class="arg">opt_fromDispose</span>)</span>
+        <span class="entryName">cleanUpXhr_<span class="args">(<span class="arg">cleanUpXhr_@opt_fromDispose</span>)</span>
         </span>
       </div>
 
@@ -244,9 +245,9 @@ object.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_fromDispose</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">If this is from the dispose (don&#39;t want to fire any events).</div>
+        <span class="entryName">cleanUpXhr_@opt_fromDispose</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -259,12 +260,58 @@ object.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line660">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line670">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="even entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.XhrIo.prototype.createXhr"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createXhr<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type">XMLHttpRequest</span><span>&nbsp;|&nbsp;</span><span class="type">GearsHttpRequest</span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new XHR object.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type">XMLHttpRequest</span><span>&nbsp;|&nbsp;</span><span class="type">GearsHttpRequest</span></div>&nbsp;
+            The newly created XHR object.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_net_xhrio.js.source.html#line443">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -294,12 +341,12 @@ not dispatch multiple error events.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line506">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line516">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -314,7 +361,7 @@ not dispatch multiple error events.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">dispatchEvent@e</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -342,9 +389,9 @@ make the XHR send async.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Event to dispatch.</div>
+        <span class="entryName">dispatchEvent@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -361,12 +408,12 @@ make the XHR send async.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line446">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line456">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -395,12 +442,12 @@ make the XHR send async.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line538">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line548">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -415,7 +462,7 @@ make the XHR send async.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">error_<span class="args">(<span class="arg">errorCode</span>,&nbsp;<span class="arg">err</span>)</span>
+        <span class="entryName">error_<span class="args">(<span class="arg">error_@errorCode</span>,&nbsp;<span class="arg">error_@err</span>)</span>
         </span>
       </div>
 
@@ -440,17 +487,17 @@ make the XHR send async.
      
    <tr class="even">
      <td>
-        <span class="entryName">errorCode</span>
-        : <div class="fullType"><span class="type">goog.net.ErrorCode</span></div>
-        <div class="entryOverview">The error code.</div>
+        <span class="entryName">error_@errorCode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">err</span>
-        : <div class="fullType"><span class="type">Error</span></div>
-        <div class="entryOverview">The error object.</div>
+        <span class="entryName">error_@err</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -463,12 +510,12 @@ make the XHR send async.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line487">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line497">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -483,7 +530,7 @@ make the XHR send async.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">formatMsg_<span class="args">(<span class="arg">msg</span>)</span>
+        <span class="entryName">formatMsg_<span class="args">(<span class="arg">formatMsg_@msg</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -510,9 +557,9 @@ this information to the logging calls.
      
    <tr class="even">
      <td>
-        <span class="entryName">msg</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The message text that we want to add the extra text to.</div>
+        <span class="entryName">formatMsg_@msg</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -529,12 +576,12 @@ this information to the logging calls.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line870">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line892">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -575,12 +622,12 @@ this information to the logging calls.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line857">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line879">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -621,12 +668,12 @@ this information to the logging calls.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line848">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line870">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -667,12 +714,12 @@ this information to the logging calls.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line796">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line806">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -714,12 +761,12 @@ Will only return correct result when called from the context of a callback
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line741">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line751">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -734,7 +781,7 @@ Will only return correct result when called from the context of a callback
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getResponseHeader<span class="args">(<span class="arg">key</span>)</span>
+        <span class="entryName">getResponseHeader<span class="args">(<span class="arg">getResponseHeader@key</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>
       </div>
@@ -762,9 +809,9 @@ and the request has completed
      
    <tr class="even">
      <td>
-        <span class="entryName">key</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The name of the response-header to retrieve.</div>
+        <span class="entryName">getResponseHeader@key</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -781,12 +828,12 @@ and the request has completed
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line838">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line860">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -801,7 +848,7 @@ and the request has completed
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getResponseJson<span class="args">()</span>
+        <span class="entryName">getResponseJson<span class="args">(<span class="arg">getResponseJson@opt_xssiPrefix</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>
       </div>
@@ -816,6 +863,25 @@ Will only return correct result when called from the context of a callback
     <! -- Method details -->
     <div class="entryDetails">
 
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">getResponseJson@opt_xssiPrefix</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
    
       <div class="detailsSection">
         <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>&nbsp;
@@ -828,12 +894,12 @@ Will only return correct result when called from the context of a callback
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line826">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line839">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -875,12 +941,12 @@ Will only return correct result when called from the context of a callback
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line806">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line816">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -922,12 +988,12 @@ Will only return correct result when called from the context of a callback
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line816">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line826">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -969,12 +1035,12 @@ Will only return correct result when called from the context of a callback
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line753">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line763">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1016,12 +1082,12 @@ Will only return correct result when called from the context of a callback
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line775">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line785">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1068,7 +1134,7 @@ aborted, or 0 if no timeout is set.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1109,12 +1175,12 @@ aborted, or 0 if no timeout is set.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line706">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line716">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1155,12 +1221,12 @@ aborted, or 0 if no timeout is set.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line714">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line724">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1201,12 +1267,12 @@ aborted, or 0 if no timeout is set.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line722">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line732">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -1240,7 +1306,7 @@ aborted, or 0 if no timeout is set.
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -1271,12 +1337,12 @@ entry point calls to #onReadyStateChange_ can be routed through
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line595">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line605">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -1308,12 +1374,12 @@ nullified.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line565">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line575">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1328,7 +1394,7 @@ nullified.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">send<span class="args">(<span class="arg">url</span>,&nbsp;<span class="arg">opt_method</span>,&nbsp;<span class="arg">opt_content</span>,&nbsp;<span class="arg">opt_headers</span>)</span>
+        <span class="entryName">send<span class="args">(<span class="arg">send@url</span>,&nbsp;<span class="arg">send@opt_method</span>,&nbsp;<span class="arg">send@opt_content</span>,&nbsp;<span class="arg">send@opt_headers</span>)</span>
         </span>
       </div>
 
@@ -1353,33 +1419,33 @@ nullified.
      
    <tr class="even">
      <td>
-        <span class="entryName">url</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
-        <div class="entryOverview">Uri to make request too.</div>
+        <span class="entryName">send@url</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_method</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Send method, default: GET.</div>
+        <span class="entryName">send@opt_method</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_content</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">GearsBlob=</span></div>
-        <div class="entryOverview">Post data. This can be a Gears blob if the underlying HTTP request object is a Gears HTTP request.</div>
+        <span class="entryName">send@opt_content</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_headers</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">goog.structs.Map=</span></div>
-        <div class="entryOverview">Map of headers to add to the request.</div>
+        <span class="entryName">send@opt_headers</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1397,7 +1463,7 @@ nullified.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1412,7 +1478,7 @@ nullified.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setTimeoutInterval<span class="args">(<span class="arg">ms</span>)</span>
+        <span class="entryName">setTimeoutInterval<span class="args">(<span class="arg">setTimeoutInterval@ms</span>)</span>
         </span>
       </div>
 
@@ -1439,9 +1505,9 @@ timeout is set.
      
    <tr class="even">
      <td>
-        <span class="entryName">ms</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Timeout interval in milliseconds; 0 means none.</div>
+        <span class="entryName">setTimeoutInterval@ms</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1459,7 +1525,7 @@ timeout is set.
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -1490,7 +1556,7 @@ the request.
 
 
   <td class="view-code">
-     <a href="closure_goog_net_xhrio.js.source.html#line466">code &raquo;</a>
+     <a href="closure_goog_net_xhrio.js.source.html#line476">code &raquo;</a>
   </td>
      </tr>
 
@@ -1533,7 +1599,7 @@ the request.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">addEventListener<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_capture</span>,&nbsp;<span class="arg">opt_handlerScope</span>)</span>
+        <span class="entryName">addEventListener<span class="args">(<span class="arg">addEventListener@type</span>,&nbsp;<span class="arg">addEventListener@handler</span>,&nbsp;<span class="arg">addEventListener@opt_capture</span>,&nbsp;<span class="arg">addEventListener@opt_handlerScope</span>)</span>
         </span>
       </div>
 
@@ -1563,33 +1629,33 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
      
    <tr class="even">
      <td>
-        <span class="entryName">type</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The type of the event to listen for.</div>
+        <span class="entryName">addEventListener@type</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The function to handle the event. The handler can also be an object that implements the handleEvent method which takes the event object as argument.</div>
+        <span class="entryName">addEventListener@handler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
+        <span class="entryName">addEventListener@opt_capture</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Object in whose scope to call the listener.</div>
+        <span class="entryName">addEventListener@opt_handlerScope</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1622,7 +1688,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">dispatchEvent@e</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -1654,9 +1720,9 @@ stopPropagation, then the bubble listeners won&#39;t fire.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
-        <div class="entryOverview">Event object.</div>
+        <span class="entryName">dispatchEvent@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1781,7 +1847,7 @@ MyClass.superClass_.disposeInternal.call(this);
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">removeEventListener<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_capture</span>,&nbsp;<span class="arg">opt_handlerScope</span>)</span>
+        <span class="entryName">removeEventListener<span class="args">(<span class="arg">removeEventListener@type</span>,&nbsp;<span class="arg">removeEventListener@handler</span>,&nbsp;<span class="arg">removeEventListener@opt_capture</span>,&nbsp;<span class="arg">removeEventListener@opt_handlerScope</span>)</span>
         </span>
       </div>
 
@@ -1808,33 +1874,33 @@ nothing is done.
      
    <tr class="even">
      <td>
-        <span class="entryName">type</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The type of the event to listen for.</div>
+        <span class="entryName">removeEventListener@type</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The function to handle the event. The handler can also be an object that implements the handleEvent method which takes the event object as argument.</div>
+        <span class="entryName">removeEventListener@handler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
+        <span class="entryName">removeEventListener@opt_capture</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Object in whose scope to call the listener.</div>
+        <span class="entryName">removeEventListener@opt_handlerScope</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1867,7 +1933,7 @@ nothing is done.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">parent</span>)</span>
+        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">setParentEventTarget@parent</span>)</span>
         </span>
       </div>
 
@@ -1892,9 +1958,9 @@ nothing is done.
      
    <tr class="even">
      <td>
-        <span class="entryName">parent</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></div>
-        <div class="entryOverview">Parent EventTarget (null if none).</div>
+        <span class="entryName">setParentEventTarget@parent</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2796,7 +2862,7 @@ get listen() calling addEventListener() and vice-versa.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">cleanupSend_<span class="args">(<span class="arg">XhrIo</span>)</span>
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">cleanupSend_<span class="args">(<span class="arg">cleanupSend_@XhrIo</span>)</span>
         </span>
       </div>
 
@@ -2823,9 +2889,9 @@ goog.net.XhrIo.pendingStaticSendInstances_.
      
    <tr class="even">
      <td>
-        <span class="entryName">XhrIo</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_net_XhrIo.html">goog.net.XhrIo</a></span></div>
-        <div class="entryOverview">An XhrIo created by goog.net.XhrIo.send.</div>
+        <span class="entryName">cleanupSend_@XhrIo</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2858,7 +2924,7 @@ goog.net.XhrIo.pendingStaticSendInstances_.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">protectEntryPoints<span class="args">(<span class="arg">errorHandler</span>,&nbsp;<span class="arg">opt_tracers</span>)</span>
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">protectEntryPoints<span class="args">(<span class="arg">protectEntryPoints@errorHandler</span>,&nbsp;<span class="arg">protectEntryPoints@opt_tracers</span>)</span>
         </span>
       </div>
 
@@ -2887,17 +2953,17 @@ goog.events.protectBrowserEventEntryPoint.
      
    <tr class="even">
      <td>
-        <span class="entryName">errorHandler</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_debug_ErrorHandler.html">goog.debug.ErrorHandler</a></span></div>
-        <div class="entryOverview">Error handler with which to protect the entry point(s).</div>
+        <span class="entryName">protectEntryPoints@errorHandler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_tracers</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether to install tracers around the entry point.</div>
+        <span class="entryName">protectEntryPoints@opt_tracers</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2930,7 +2996,7 @@ goog.events.protectBrowserEventEntryPoint.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">send<span class="args">(<span class="arg">url</span>,&nbsp;<span class="arg">opt_callback</span>,&nbsp;<span class="arg">opt_method</span>,&nbsp;<span class="arg">opt_content</span>,&nbsp;<span class="arg">opt_headers</span>,&nbsp;<span class="arg">opt_timeoutInterval</span>)</span>
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">send<span class="args">(<span class="arg">send@url</span>,&nbsp;<span class="arg">send@opt_callback</span>,&nbsp;<span class="arg">send@opt_method</span>,&nbsp;<span class="arg">send@opt_content</span>,&nbsp;<span class="arg">send@opt_headers</span>,&nbsp;<span class="arg">send@opt_timeoutInterval</span>)</span>
         </span>
       </div>
 
@@ -2956,49 +3022,49 @@ request.
      
    <tr class="even">
      <td>
-        <span class="entryName">url</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
-        <div class="entryOverview">Uri to make request too.</div>
+        <span class="entryName">send@url</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_callback</span>
-        : <div class="fullType"><span class="type">Function=</span></div>
-        <div class="entryOverview">Callback function for when request is complete.</div>
+        <span class="entryName">send@opt_callback</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_method</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Send method, default: GET.</div>
+        <span class="entryName">send@opt_method</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_content</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">GearsBlob=</span></div>
-        <div class="entryOverview">Post data. This can be a Gears blob if the underlying HTTP request object is a Gears HTTP request.</div>
+        <span class="entryName">send@opt_content</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_headers</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">goog.structs.Map=</span></div>
-        <div class="entryOverview">Map of headers to add to the request.</div>
+        <span class="entryName">send@opt_headers</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_timeoutInterval</span>
-        : <div class="fullType"><span class="type">number=</span></div>
-        <div class="entryOverview">Number of milliseconds after which an incomplete request will be aborted; 0 means no timeout is set.</div>
+        <span class="entryName">send@opt_timeoutInterval</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>

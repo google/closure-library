@@ -240,12 +240,11 @@ goog.array.map = goog.array.ARRAY_PROTOTYPE_.map ?
     } :
     function(arr, f, opt_obj) {
       var l = arr.length;  // must be fixed during loop... see docs
-      var res = [];
-      var resLength = 0;
+      var res = new Array(l);
       var arr2 = goog.isString(arr) ? arr.split('') : arr;
       for (var i = 0; i < l; i++) {
         if (i in arr2) {
-          res[resLength++] = f.call(opt_obj, arr2[i], i, arr);
+          res[i] = f.call(opt_obj, arr2[i], i, arr);
         }
       }
       return res;
@@ -612,17 +611,48 @@ goog.array.removeIf = function(arr, f, opt_obj) {
 
 
 /**
+ * Returns a new array that is the result of joining the arguments.  If arrays
+ * are passed then their items are added, however, if non-arrays are passed they
+ * will be added to the return array as is.
+ *
+ * Note that ArrayLike objects will be added as is, rather than having their
+ * items added.
+ *
+ * goog.array.concat([1, 2], [3, 4]) -> [1, 2, 3, 4]
+ * goog.array.concat(0, [1, 2]) -> [0, 1, 2]
+ * goog.array.concat([1, 2], null) -> [1, 2, null]
+ *
+ * There is bug in all current versions of IE (6, 7 and 8) where arrays created
+ * in an iframe become corrupted soon (not immediately) after the iframe is
+ * destroyed. This is common if loading data via goog.net.IframeIo, for example.
+ * This corruption only affects the concat method which will start throwing
+ * Catastrophic Errors (#-2147418113).
+ *
+ * See http://endoflow.com/scratch/corrupted-arrays.html for a test case.
+ *
+ * Internally goog.array should use this, so that all methods will continue to
+ * work on these broken array objects.
+ *
+ * @param {...*} var_args Items to concatenate.  Arrays will have each item
+ *     added, while primitives and objects will be added as is.
+ * @return {!Array} The new resultant array.
+ */
+goog.array.concat = function(var_args) {
+  return goog.array.ARRAY_PROTOTYPE_.concat.apply(
+      goog.array.ARRAY_PROTOTYPE_, arguments);
+};
+
+
+/**
  * Does a shallow copy of an array.
  * @param {goog.array.ArrayLike} arr  Array or array-like object to clone.
  * @return {!Array} Clone of the input array.
  */
 goog.array.clone = function(arr) {
   if (goog.isArray(arr)) {
-    // Generic concat does not seem to work so lets just use the plain old
-    // instance method.
-    return arr.concat();
+    return goog.array.concat(/** @type {!Array} */ (arr));
   } else { // array like
-    // Concat does not work with non arrays
+    // Concat does not work with non arrays.
     var rv = [];
     for (var i = 0, len = arr.length; i < len; i++) {
       rv[i] = arr[i];
@@ -643,7 +673,7 @@ goog.array.clone = function(arr) {
 goog.array.toArray = function(object) {
   if (goog.isArray(object)) {
     // This fixes the JS compiler warning and forces the Object to an Array type
-    return object.concat();
+    return goog.array.concat(/** @type {!Array} */ (object));
   }
   // Clone what we hope to be an array-like object to an array.
   // We could check isArrayLike() first, but no check we perform would be as
@@ -669,10 +699,26 @@ goog.array.toArray = function(object) {
 goog.array.extend = function(arr1, var_args) {
   for (var i = 1; i < arguments.length; i++) {
     var arr2 = arguments[i];
-    if (goog.isArrayLike(arr2)) {
-      // Make sure arr2 is a real array, and not just "array like."
-      arr2 = goog.array.toArray(arr2);
+    // If we have an Array or an Arguments object we can just call push
+    // directly.
+    var isArrayLike;
+    if (goog.isArray(arr2) ||
+        // Detect Arguments. ES5 says that the [[Class]] of an Arguments object
+        // is "Arguments" but only V8 and JSC/Safari gets this right. We instead
+        // detect Arguments by checking for array like and presence of "callee".
+        (isArrayLike = goog.isArrayLike(arr2)) &&
+            // The getter for callee throws an exception in strict mode
+            // according to section 10.6 in ES5 so check for presence instead.
+            arr2.hasOwnProperty('callee')) {
       arr1.push.apply(arr1, arr2);
+
+    // Otherwise loop over arr2 to prevent copying the object.
+    } else if (isArrayLike) {
+      var len1 = arr1.length;
+      var len2 = arr2.length;
+      for (var j = 0; j < len2; j++) {
+        arr1[len1 + j] = arr2[j];
+      }
     } else {
       arr1.push(arr2);
     }

@@ -88,7 +88,7 @@
 <a name="line44"></a>  // Furthermore, in Firefox, className is not a string when the element is
 <a name="line45"></a>  // an SVG element.
 <a name="line46"></a>  return className &amp;&amp; typeof className.split == &#39;function&#39; ?
-<a name="line47"></a>      className.split(&#39; &#39;) : [];
+<a name="line47"></a>      className.split(/\s+/) : [];
 <a name="line48"></a>};
 <a name="line49"></a>
 <a name="line50"></a>

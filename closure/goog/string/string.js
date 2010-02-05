@@ -967,8 +967,7 @@ goog.string.buildString = function(var_args) {
  */
 goog.string.getRandomString = function() {
   return Math.floor(Math.random() * 2147483648).toString(36) +
-         (Math.floor(Math.random() * 2147483648) ^
-          (new Date).getTime()).toString(36);
+         (Math.floor(Math.random() * 2147483648) ^ goog.now()).toString(36);
 };
 
 

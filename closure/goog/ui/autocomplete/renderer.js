@@ -218,6 +218,15 @@ goog.ui.AutoComplete.Renderer.DELAY_BEFORE_MOUSEOVER = 300;
 
 
 /**
+ * Gets the renderer's element.
+ * @return {Element} The  main element that controls the rendered autocomplete.
+ */
+goog.ui.AutoComplete.Renderer.prototype.getElement = function() {
+  return this.element_;
+};
+
+
+/**
  * Set whether to align autocomplete to top of target element
  * @param {boolean} align If true, align to top.
  */
@@ -490,7 +499,7 @@ goog.ui.AutoComplete.Renderer.prototype.setAutoPosition = function(auto) {
 
 
 /**
- * Disposes of the renderer and it's associated HTML.
+ * Disposes of the renderer and its associated HTML.
  */
 goog.ui.AutoComplete.Renderer.prototype.disposeInternal = function() {
   goog.ui.AutoComplete.Renderer.superClass_.disposeInternal.call(this);
@@ -549,8 +558,8 @@ goog.ui.AutoComplete.Renderer.prototype.renderRowContents_ =
 
 
 /**
- * Goes through a node and all of it's child nodes, replacing HTML text that
- * matches a token with <b>token</b>
+ * Goes through a node and all of its child nodes, replacing HTML text that
+ * matches a token with <b>token</b>.
  *
  * @param {Node} node Node to match.
  * @param {string | Array} tokenOrArray Token to match or array of tokens to

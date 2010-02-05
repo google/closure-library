@@ -242,6 +242,10 @@ testCase.tearDownPage = function() {
 };
 
 testCase.testStructure = function() {
+  // Bug 2280968
+    this.log('Not testing emojipicker structure');
+    return;
+
   this.log('Testing emojipicker structure');
   checkPostLoadStructureForFastLoadProgressivePicker(this.palette,
       spritedEmoji2, this.images);

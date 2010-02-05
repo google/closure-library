@@ -300,7 +300,7 @@
 <a name="line256"></a> * Gets the offsetLeft and offsetTop properties of an element and returns them
 <a name="line257"></a> * in a Coordinate object
 <a name="line258"></a> * @param {Element} element Element.
-<a name="line259"></a> * @return {goog.math.Coordinate} The position.
+<a name="line259"></a> * @return {!goog.math.Coordinate} The position.
 <a name="line260"></a> */
 <a name="line261"></a>goog.style.getPosition = function(element) {
 <a name="line262"></a>  return new goog.math.Coordinate(element.offsetLeft, element.offsetTop);
@@ -423,1351 +423,1372 @@
 <a name="line379"></a>goog.style.getVisibleRectForElement = function(element) {
 <a name="line380"></a>  var visibleRect = new goog.math.Box(0, Infinity, Infinity, 0);
 <a name="line381"></a>  var dom = goog.dom.getDomHelper(element);
-<a name="line382"></a>  var scrollEl = dom.getDocumentScrollElement();
-<a name="line383"></a>  var inContainer;
-<a name="line384"></a>
-<a name="line385"></a>  // Determine the size of the visible rect by climbing the dom accounting for
-<a name="line386"></a>  // all scrollable containers.
-<a name="line387"></a>  for (var el = element; el = goog.style.getOffsetParent(el); ) {
-<a name="line388"></a>    // clientWidth is zero for inline block elements in IE.
-<a name="line389"></a>    if ((!goog.userAgent.IE || el.clientWidth != 0) &amp;&amp;
-<a name="line390"></a>        (el.scrollWidth != el.clientWidth ||
-<a name="line391"></a>         el.scrollHeight != el.clientHeight) &amp;&amp;
-<a name="line392"></a>        goog.style.getStyle_(el, &#39;overflow&#39;) != &#39;visible&#39;) {
-<a name="line393"></a>      var pos = goog.style.getPageOffset(el);
-<a name="line394"></a>      var client = goog.style.getClientLeftTop(el);
-<a name="line395"></a>      pos.x += client.x;
-<a name="line396"></a>      pos.y += client.y;
-<a name="line397"></a>
-<a name="line398"></a>      visibleRect.top = Math.max(visibleRect.top, pos.y);
-<a name="line399"></a>      visibleRect.right = Math.min(visibleRect.right,
-<a name="line400"></a>                                   pos.x + el.clientWidth);
-<a name="line401"></a>      visibleRect.bottom = Math.min(visibleRect.bottom,
-<a name="line402"></a>                                    pos.y + el.clientHeight);
-<a name="line403"></a>      visibleRect.left = Math.max(visibleRect.left, pos.x);
-<a name="line404"></a>      inContainer = inContainer || el != scrollEl;
-<a name="line405"></a>    }
-<a name="line406"></a>  }
-<a name="line407"></a>
-<a name="line408"></a>  // Compensate for document scroll in non webkit browsers.
-<a name="line409"></a>  var scrollX = scrollEl.scrollLeft, scrollY = scrollEl.scrollTop;
-<a name="line410"></a>  if (goog.userAgent.WEBKIT) {
-<a name="line411"></a>    visibleRect.left += scrollX;
-<a name="line412"></a>    visibleRect.top += scrollY;
-<a name="line413"></a>  } else {
-<a name="line414"></a>    visibleRect.left = Math.max(visibleRect.left, scrollX);
-<a name="line415"></a>    visibleRect.top = Math.max(visibleRect.top, scrollY);
-<a name="line416"></a>  }
-<a name="line417"></a>  if (!inContainer || goog.userAgent.WEBKIT) {
-<a name="line418"></a>    visibleRect.right += scrollX;
-<a name="line419"></a>    visibleRect.bottom += scrollY;
-<a name="line420"></a>  }
-<a name="line421"></a>
-<a name="line422"></a>  // Clip by the window&#39;s viewport.
-<a name="line423"></a>  var winSize = dom.getViewportSize();
-<a name="line424"></a>  visibleRect.right = Math.min(visibleRect.right, scrollX + winSize.width);
-<a name="line425"></a>  visibleRect.bottom = Math.min(visibleRect.bottom, scrollY + winSize.height);
-<a name="line426"></a>
-<a name="line427"></a>  return visibleRect.top &gt;= 0 &amp;&amp; visibleRect.left &gt;= 0 &amp;&amp;
-<a name="line428"></a>         visibleRect.bottom &gt; visibleRect.top &amp;&amp;
-<a name="line429"></a>         visibleRect.right &gt; visibleRect.left ?
-<a name="line430"></a>         visibleRect : null;
-<a name="line431"></a>};
-<a name="line432"></a>
-<a name="line433"></a>
-<a name="line434"></a>/**
-<a name="line435"></a> * Changes the scroll position of {@code container} with the minimum amount so
-<a name="line436"></a> * that the content and the borders of the given {@code element} become visible.
-<a name="line437"></a> * If the element is bigger than the container, its top left corner will be
-<a name="line438"></a> * aligned to the container&#39;s top left corner.
-<a name="line439"></a> *
-<a name="line440"></a> * @param {Element} element The element to make visible.
-<a name="line441"></a> * @param {Element} container The container to scroll.
-<a name="line442"></a> * @param {boolean=} opt_center Whether to center the element in the container.
-<a name="line443"></a> *     Defaults to false.
-<a name="line444"></a> */
-<a name="line445"></a>goog.style.scrollIntoContainerView = function(element, container, opt_center) {
-<a name="line446"></a>  // Absolute position of the element&#39;s border&#39;s top left corner.
-<a name="line447"></a>  var elementPos = goog.style.getPageOffset(element);
-<a name="line448"></a>  // Absolute position of the container&#39;s border&#39;s top left corner.
-<a name="line449"></a>  var containerPos = goog.style.getPageOffset(container);
-<a name="line450"></a>  var containerBorder = goog.style.getBorderBox(container);
-<a name="line451"></a>  // Relative pos. of the element&#39;s border box to the container&#39;s content box.
-<a name="line452"></a>  var relX = elementPos.x - containerPos.x - containerBorder.left;
-<a name="line453"></a>  var relY = elementPos.y - containerPos.y - containerBorder.top;
-<a name="line454"></a>  // How much the element can move in the container, i.e. the difference between
-<a name="line455"></a>  // the element&#39;s bottom-right-most and top-left-most position where it&#39;s
-<a name="line456"></a>  // fully visible.
-<a name="line457"></a>  var spaceX = container.clientWidth - element.offsetWidth;
-<a name="line458"></a>  var spaceY = container.clientHeight - element.offsetHeight;
-<a name="line459"></a>
-<a name="line460"></a>  if (opt_center) {
-<a name="line461"></a>    // All browsers round non-integer scroll positions down.
-<a name="line462"></a>    container.scrollLeft += relX - spaceX / 2;
-<a name="line463"></a>    container.scrollTop += relY - spaceY / 2;
-<a name="line464"></a>  } else {
-<a name="line465"></a>    // This formula was designed to give the correct scroll values in the
-<a name="line466"></a>    // following cases:
-<a name="line467"></a>    // - element is higher than container (spaceY &lt; 0) =&gt; scroll down by relY
-<a name="line468"></a>    // - element is not higher that container (spaceY &gt;= 0):
-<a name="line469"></a>    //   - it is above container (relY &lt; 0) =&gt; scroll up by abs(relY)
-<a name="line470"></a>    //   - it is below container (relY &gt; spaceY) =&gt; scroll down by relY - spaceY
-<a name="line471"></a>    //   - it is in the container =&gt; don&#39;t scroll
-<a name="line472"></a>    container.scrollLeft += Math.min(relX, Math.max(relX - spaceX, 0));
-<a name="line473"></a>    container.scrollTop += Math.min(relY, Math.max(relY - spaceY, 0));
-<a name="line474"></a>  }
-<a name="line475"></a>};
-<a name="line476"></a>
-<a name="line477"></a>
-<a name="line478"></a>/**
-<a name="line479"></a> * Returns clientLeft (width of the left border and, if the directionality is
-<a name="line480"></a> * right to left, the vertical scrollbar) and clientTop as a coordinate object.
-<a name="line481"></a> *
-<a name="line482"></a> * @param {Element} el Element to get clientLeft for.
-<a name="line483"></a> * @return {goog.math.Coordinate} Client left and top.
-<a name="line484"></a> */
-<a name="line485"></a>goog.style.getClientLeftTop = function(el) {
-<a name="line486"></a>  // NOTE: Gecko prior to 1.9 doesn&#39;t support clientTop/Left, see
-<a name="line487"></a>  // https://bugzilla.mozilla.org/show_bug.cgi?id=111207
-<a name="line488"></a>  if (goog.userAgent.GECKO &amp;&amp; !goog.userAgent.isVersion(&#39;1.9&#39;)) {
-<a name="line489"></a>    var left = parseFloat(goog.style.getComputedStyle(el, &#39;borderLeftWidth&#39;));
-<a name="line490"></a>    if (goog.style.isRightToLeft(el)) {
-<a name="line491"></a>      var scrollbarWidth = el.offsetWidth - el.clientWidth - left -
-<a name="line492"></a>          parseFloat(goog.style.getComputedStyle(el, &#39;borderRightWidth&#39;));
-<a name="line493"></a>      left += scrollbarWidth;
-<a name="line494"></a>    }
-<a name="line495"></a>    return new goog.math.Coordinate(left,
-<a name="line496"></a>        parseFloat(goog.style.getComputedStyle(el, &#39;borderTopWidth&#39;)));
-<a name="line497"></a>  }
-<a name="line498"></a>
-<a name="line499"></a>  return new goog.math.Coordinate(el.clientLeft, el.clientTop);
-<a name="line500"></a>};
+<a name="line382"></a>  var body = dom.getDocument().body;
+<a name="line383"></a>  var scrollEl = dom.getDocumentScrollElement();
+<a name="line384"></a>  var inContainer;
+<a name="line385"></a>
+<a name="line386"></a>  // Determine the size of the visible rect by climbing the dom accounting for
+<a name="line387"></a>  // all scrollable containers.
+<a name="line388"></a>  for (var el = element; el = goog.style.getOffsetParent(el); ) {
+<a name="line389"></a>    // clientWidth is zero for inline block elements in IE.
+<a name="line390"></a>    // on WEBKIT, body element can have clientHeight = 0 and scrollHeight &gt; 0
+<a name="line391"></a>    if ((!goog.userAgent.IE || el.clientWidth != 0) &amp;&amp;
+<a name="line392"></a>        (!goog.userAgent.WEBKIT || el.clientHeight != 0 || el != body) &amp;&amp;
+<a name="line393"></a>        (el.scrollWidth != el.clientWidth ||
+<a name="line394"></a>         el.scrollHeight != el.clientHeight) &amp;&amp;
+<a name="line395"></a>        goog.style.getStyle_(el, &#39;overflow&#39;) != &#39;visible&#39;) {
+<a name="line396"></a>      var pos = goog.style.getPageOffset(el);
+<a name="line397"></a>      var client = goog.style.getClientLeftTop(el);
+<a name="line398"></a>      pos.x += client.x;
+<a name="line399"></a>      pos.y += client.y;
+<a name="line400"></a>
+<a name="line401"></a>      visibleRect.top = Math.max(visibleRect.top, pos.y);
+<a name="line402"></a>      visibleRect.right = Math.min(visibleRect.right,
+<a name="line403"></a>                                   pos.x + el.clientWidth);
+<a name="line404"></a>      visibleRect.bottom = Math.min(visibleRect.bottom,
+<a name="line405"></a>                                    pos.y + el.clientHeight);
+<a name="line406"></a>      visibleRect.left = Math.max(visibleRect.left, pos.x);
+<a name="line407"></a>      inContainer = inContainer || el != scrollEl;
+<a name="line408"></a>    }
+<a name="line409"></a>  }
+<a name="line410"></a>
+<a name="line411"></a>  // Compensate for document scroll in non webkit browsers.
+<a name="line412"></a>  var scrollX = scrollEl.scrollLeft, scrollY = scrollEl.scrollTop;
+<a name="line413"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line414"></a>    visibleRect.left += scrollX;
+<a name="line415"></a>    visibleRect.top += scrollY;
+<a name="line416"></a>  } else {
+<a name="line417"></a>    visibleRect.left = Math.max(visibleRect.left, scrollX);
+<a name="line418"></a>    visibleRect.top = Math.max(visibleRect.top, scrollY);
+<a name="line419"></a>  }
+<a name="line420"></a>  if (!inContainer || goog.userAgent.WEBKIT) {
+<a name="line421"></a>    visibleRect.right += scrollX;
+<a name="line422"></a>    visibleRect.bottom += scrollY;
+<a name="line423"></a>  }
+<a name="line424"></a>
+<a name="line425"></a>  // Clip by the window&#39;s viewport.
+<a name="line426"></a>  var winSize = dom.getViewportSize();
+<a name="line427"></a>  visibleRect.right = Math.min(visibleRect.right, scrollX + winSize.width);
+<a name="line428"></a>  visibleRect.bottom = Math.min(visibleRect.bottom, scrollY + winSize.height);
+<a name="line429"></a>
+<a name="line430"></a>  return visibleRect.top &gt;= 0 &amp;&amp; visibleRect.left &gt;= 0 &amp;&amp;
+<a name="line431"></a>         visibleRect.bottom &gt; visibleRect.top &amp;&amp;
+<a name="line432"></a>         visibleRect.right &gt; visibleRect.left ?
+<a name="line433"></a>         visibleRect : null;
+<a name="line434"></a>};
+<a name="line435"></a>
+<a name="line436"></a>
+<a name="line437"></a>/**
+<a name="line438"></a> * Changes the scroll position of {@code container} with the minimum amount so
+<a name="line439"></a> * that the content and the borders of the given {@code element} become visible.
+<a name="line440"></a> * If the element is bigger than the container, its top left corner will be
+<a name="line441"></a> * aligned to the container&#39;s top left corner.
+<a name="line442"></a> *
+<a name="line443"></a> * @param {Element} element The element to make visible.
+<a name="line444"></a> * @param {Element} container The container to scroll.
+<a name="line445"></a> * @param {boolean=} opt_center Whether to center the element in the container.
+<a name="line446"></a> *     Defaults to false.
+<a name="line447"></a> */
+<a name="line448"></a>goog.style.scrollIntoContainerView = function(element, container, opt_center) {
+<a name="line449"></a>  // Absolute position of the element&#39;s border&#39;s top left corner.
+<a name="line450"></a>  var elementPos = goog.style.getPageOffset(element);
+<a name="line451"></a>  // Absolute position of the container&#39;s border&#39;s top left corner.
+<a name="line452"></a>  var containerPos = goog.style.getPageOffset(container);
+<a name="line453"></a>  var containerBorder = goog.style.getBorderBox(container);
+<a name="line454"></a>  // Relative pos. of the element&#39;s border box to the container&#39;s content box.
+<a name="line455"></a>  var relX = elementPos.x - containerPos.x - containerBorder.left;
+<a name="line456"></a>  var relY = elementPos.y - containerPos.y - containerBorder.top;
+<a name="line457"></a>  // How much the element can move in the container, i.e. the difference between
+<a name="line458"></a>  // the element&#39;s bottom-right-most and top-left-most position where it&#39;s
+<a name="line459"></a>  // fully visible.
+<a name="line460"></a>  var spaceX = container.clientWidth - element.offsetWidth;
+<a name="line461"></a>  var spaceY = container.clientHeight - element.offsetHeight;
+<a name="line462"></a>
+<a name="line463"></a>  if (opt_center) {
+<a name="line464"></a>    // All browsers round non-integer scroll positions down.
+<a name="line465"></a>    container.scrollLeft += relX - spaceX / 2;
+<a name="line466"></a>    container.scrollTop += relY - spaceY / 2;
+<a name="line467"></a>  } else {
+<a name="line468"></a>    // This formula was designed to give the correct scroll values in the
+<a name="line469"></a>    // following cases:
+<a name="line470"></a>    // - element is higher than container (spaceY &lt; 0) =&gt; scroll down by relY
+<a name="line471"></a>    // - element is not higher that container (spaceY &gt;= 0):
+<a name="line472"></a>    //   - it is above container (relY &lt; 0) =&gt; scroll up by abs(relY)
+<a name="line473"></a>    //   - it is below container (relY &gt; spaceY) =&gt; scroll down by relY - spaceY
+<a name="line474"></a>    //   - it is in the container =&gt; don&#39;t scroll
+<a name="line475"></a>    container.scrollLeft += Math.min(relX, Math.max(relX - spaceX, 0));
+<a name="line476"></a>    container.scrollTop += Math.min(relY, Math.max(relY - spaceY, 0));
+<a name="line477"></a>  }
+<a name="line478"></a>};
+<a name="line479"></a>
+<a name="line480"></a>
+<a name="line481"></a>/**
+<a name="line482"></a> * Returns clientLeft (width of the left border and, if the directionality is
+<a name="line483"></a> * right to left, the vertical scrollbar) and clientTop as a coordinate object.
+<a name="line484"></a> *
+<a name="line485"></a> * @param {Element} el Element to get clientLeft for.
+<a name="line486"></a> * @return {!goog.math.Coordinate} Client left and top.
+<a name="line487"></a> */
+<a name="line488"></a>goog.style.getClientLeftTop = function(el) {
+<a name="line489"></a>  // NOTE: Gecko prior to 1.9 doesn&#39;t support clientTop/Left, see
+<a name="line490"></a>  // https://bugzilla.mozilla.org/show_bug.cgi?id=111207
+<a name="line491"></a>  if (goog.userAgent.GECKO &amp;&amp; !goog.userAgent.isVersion(&#39;1.9&#39;)) {
+<a name="line492"></a>    var left = parseFloat(goog.style.getComputedStyle(el, &#39;borderLeftWidth&#39;));
+<a name="line493"></a>    if (goog.style.isRightToLeft(el)) {
+<a name="line494"></a>      var scrollbarWidth = el.offsetWidth - el.clientWidth - left -
+<a name="line495"></a>          parseFloat(goog.style.getComputedStyle(el, &#39;borderRightWidth&#39;));
+<a name="line496"></a>      left += scrollbarWidth;
+<a name="line497"></a>    }
+<a name="line498"></a>    return new goog.math.Coordinate(left,
+<a name="line499"></a>        parseFloat(goog.style.getComputedStyle(el, &#39;borderTopWidth&#39;)));
+<a name="line500"></a>  }
 <a name="line501"></a>
-<a name="line502"></a>
-<a name="line503"></a>/**
-<a name="line504"></a> * Returns a Coordinate object relative to the top-left of the HTML document.
-<a name="line505"></a> * Implemented as a single function to save having to do two recursive loops in
-<a name="line506"></a> * opera and safari just to get both coordinates.  If you just want one value do
-<a name="line507"></a> * use goog.style.getPageOffsetLeft() and goog.style.getPageOffsetTop(), but
-<a name="line508"></a> * note if you call both those methods the tree will be analysed twice.
-<a name="line509"></a> *
-<a name="line510"></a> * @param {Element} el Element to get the page offset for.
-<a name="line511"></a> * @return {goog.math.Coordinate} The page offset.
-<a name="line512"></a> */
-<a name="line513"></a>goog.style.getPageOffset = function(el) {
-<a name="line514"></a>  var box, doc = goog.dom.getOwnerDocument(el);
-<a name="line515"></a>  var positionStyle = goog.style.getStyle_(el, &#39;position&#39;);
-<a name="line516"></a>
-<a name="line517"></a>  // NOTE: Gecko pre 1.9 normally use getBoxObjectFor to calculate the
-<a name="line518"></a>  // position. When invoked for an element with position absolute and a negative
-<a name="line519"></a>  // position though it can be off by one. Therefor the recursive implementation
-<a name="line520"></a>  // is used in those (relatively rare) cases.
-<a name="line521"></a>  var BUGGY_GECKO_BOX_OBJECT = goog.userAgent.GECKO &amp;&amp; doc.getBoxObjectFor &amp;&amp;
-<a name="line522"></a>      !el.getBoundingClientRect &amp;&amp; positionStyle == &#39;absolute&#39; &amp;&amp;
-<a name="line523"></a>      (box = doc.getBoxObjectFor(el)) &amp;&amp; (box.screenX &lt; 0 || box.screenY &lt; 0);
-<a name="line524"></a>
-<a name="line525"></a>  // NOTE: If element is hidden (display none or disconnected or any the
-<a name="line526"></a>  // ancestors are hidden) we get (0,0) by default but we still do the
-<a name="line527"></a>  // accumulation of scroll position.
-<a name="line528"></a>
-<a name="line529"></a>  // TODO: Should we check if the node is disconnected and in that case
-<a name="line530"></a>  //            return (0,0)?
+<a name="line502"></a>  return new goog.math.Coordinate(el.clientLeft, el.clientTop);
+<a name="line503"></a>};
+<a name="line504"></a>
+<a name="line505"></a>
+<a name="line506"></a>/**
+<a name="line507"></a> * Returns a Coordinate object relative to the top-left of the HTML document.
+<a name="line508"></a> * Implemented as a single function to save having to do two recursive loops in
+<a name="line509"></a> * opera and safari just to get both coordinates.  If you just want one value do
+<a name="line510"></a> * use goog.style.getPageOffsetLeft() and goog.style.getPageOffsetTop(), but
+<a name="line511"></a> * note if you call both those methods the tree will be analysed twice.
+<a name="line512"></a> *
+<a name="line513"></a> * @param {Element} el Element to get the page offset for.
+<a name="line514"></a> * @return {!goog.math.Coordinate} The page offset.
+<a name="line515"></a> */
+<a name="line516"></a>goog.style.getPageOffset = function(el) {
+<a name="line517"></a>  var box, doc = goog.dom.getOwnerDocument(el);
+<a name="line518"></a>  var positionStyle = goog.style.getStyle_(el, &#39;position&#39;);
+<a name="line519"></a>
+<a name="line520"></a>  // NOTE: Gecko pre 1.9 normally use getBoxObjectFor to calculate the
+<a name="line521"></a>  // position. When invoked for an element with position absolute and a negative
+<a name="line522"></a>  // position though it can be off by one. Therefor the recursive implementation
+<a name="line523"></a>  // is used in those (relatively rare) cases.
+<a name="line524"></a>  var BUGGY_GECKO_BOX_OBJECT = goog.userAgent.GECKO &amp;&amp; doc.getBoxObjectFor &amp;&amp;
+<a name="line525"></a>      !el.getBoundingClientRect &amp;&amp; positionStyle == &#39;absolute&#39; &amp;&amp;
+<a name="line526"></a>      (box = doc.getBoxObjectFor(el)) &amp;&amp; (box.screenX &lt; 0 || box.screenY &lt; 0);
+<a name="line527"></a>
+<a name="line528"></a>  // NOTE: If element is hidden (display none or disconnected or any the
+<a name="line529"></a>  // ancestors are hidden) we get (0,0) by default but we still do the
+<a name="line530"></a>  // accumulation of scroll position.
 <a name="line531"></a>
-<a name="line532"></a>  var pos = new goog.math.Coordinate(0, 0);
-<a name="line533"></a>  var viewportElement = goog.style.getClientViewportElement(doc);
-<a name="line534"></a>  if (el == viewportElement) {
-<a name="line535"></a>    // viewport is always at 0,0 as that defined the coordinate system for this
-<a name="line536"></a>    // function - this avoids special case checks in the code below
-<a name="line537"></a>    return pos;
-<a name="line538"></a>  }
-<a name="line539"></a>
-<a name="line540"></a>  // IE and Gecko 1.9+.
-<a name="line541"></a>  if (el.getBoundingClientRect) {
-<a name="line542"></a>    box = goog.style.getBoundingClientRect_(el);
-<a name="line543"></a>    // Must add the scroll coordinates in to get the absolute page offset
-<a name="line544"></a>    // of element since getBoundingClientRect returns relative coordinates to
-<a name="line545"></a>    // the viewport.
-<a name="line546"></a>    var scrollCoord = goog.dom.getDomHelper(doc).getDocumentScroll();
-<a name="line547"></a>    pos.x = box.left + scrollCoord.x;
-<a name="line548"></a>    pos.y = box.top + scrollCoord.y;
-<a name="line549"></a>
-<a name="line550"></a>  // Gecko prior to 1.9.
-<a name="line551"></a>  } else if (doc.getBoxObjectFor &amp;&amp; !BUGGY_GECKO_BOX_OBJECT) {
-<a name="line552"></a>    // Gecko ignores the scroll values for ancestors, up to 1.9.  See:
-<a name="line553"></a>    // https://bugzilla.mozilla.org/show_bug.cgi?id=328881 and
-<a name="line554"></a>    // https://bugzilla.mozilla.org/show_bug.cgi?id=330619
-<a name="line555"></a>
-<a name="line556"></a>    box = doc.getBoxObjectFor(el);
-<a name="line557"></a>    // TODO: Fix the off-by-one error when window is scrolled down
-<a name="line558"></a>    // or right more than 1 pixel. The viewport offset does not move in lock
-<a name="line559"></a>    // step with the window scroll; it moves in increments of 2px and at
-<a name="line560"></a>    // somewhat random intervals.
-<a name="line561"></a>    var vpBox = doc.getBoxObjectFor(viewportElement);
-<a name="line562"></a>    pos.x = box.screenX - vpBox.screenX;
-<a name="line563"></a>    pos.y = box.screenY - vpBox.screenY;
-<a name="line564"></a>
-<a name="line565"></a>  // Safari, Opera and Camino up to 1.0.4.
-<a name="line566"></a>  } else {
-<a name="line567"></a>    var parent = el;
-<a name="line568"></a>    do {
-<a name="line569"></a>      pos.x += parent.offsetLeft;
-<a name="line570"></a>      pos.y += parent.offsetTop;
-<a name="line571"></a>      // For safari/chrome, we need to add parent&#39;s clientLeft/Top as well.
-<a name="line572"></a>      if (parent != el) {
-<a name="line573"></a>        pos.x += parent.clientLeft || 0;
-<a name="line574"></a>        pos.y += parent.clientTop || 0;
-<a name="line575"></a>      }
-<a name="line576"></a>      // In Safari when hit a position fixed element the rest of the offsets
-<a name="line577"></a>      // are not correct.
-<a name="line578"></a>      if (goog.userAgent.WEBKIT &amp;&amp;
-<a name="line579"></a>          goog.style.getComputedPosition(parent) == &#39;fixed&#39;) {
-<a name="line580"></a>        pos.x += doc.body.scrollLeft;
-<a name="line581"></a>        pos.y += doc.body.scrollTop;
-<a name="line582"></a>        break;
-<a name="line583"></a>      }
-<a name="line584"></a>      parent = parent.offsetParent;
-<a name="line585"></a>    } while (parent &amp;&amp; parent != el)
-<a name="line586"></a>
-<a name="line587"></a>    // Opera &amp; (safari absolute) incorrectly account for body offsetTop.
-<a name="line588"></a>    if (goog.userAgent.OPERA || (goog.userAgent.WEBKIT &amp;&amp;
-<a name="line589"></a>        positionStyle == &#39;absolute&#39;)) {
-<a name="line590"></a>      pos.y -= doc.body.offsetTop;
-<a name="line591"></a>    }
-<a name="line592"></a>
-<a name="line593"></a>    for (parent = el; (parent = goog.style.getOffsetParent(parent)) &amp;&amp;
-<a name="line594"></a>        parent != doc.body &amp;&amp; parent != viewportElement; ) {
-<a name="line595"></a>      pos.x -= parent.scrollLeft;
-<a name="line596"></a>      // Workaround for a bug in Opera 9.2 (and earlier) where table rows may
-<a name="line597"></a>      // report an invalid scroll top value. The bug was fixed in Opera 9.5
-<a name="line598"></a>      // however as that version supports getBoundingClientRect it won&#39;t
-<a name="line599"></a>      // trigger this code path. https://bugs.opera.com/show_bug.cgi?id=249965
-<a name="line600"></a>      if (!goog.userAgent.OPERA || parent.tagName != &#39;TR&#39;) {
-<a name="line601"></a>        pos.y -= parent.scrollTop;
-<a name="line602"></a>      }
-<a name="line603"></a>    }
-<a name="line604"></a>  }
-<a name="line605"></a>
-<a name="line606"></a>  return pos;
-<a name="line607"></a>};
+<a name="line532"></a>  // TODO: Should we check if the node is disconnected and in that case
+<a name="line533"></a>  //            return (0,0)?
+<a name="line534"></a>
+<a name="line535"></a>  var pos = new goog.math.Coordinate(0, 0);
+<a name="line536"></a>  var viewportElement = goog.style.getClientViewportElement(doc);
+<a name="line537"></a>  if (el == viewportElement) {
+<a name="line538"></a>    // viewport is always at 0,0 as that defined the coordinate system for this
+<a name="line539"></a>    // function - this avoids special case checks in the code below
+<a name="line540"></a>    return pos;
+<a name="line541"></a>  }
+<a name="line542"></a>
+<a name="line543"></a>  // IE and Gecko 1.9+.
+<a name="line544"></a>  if (el.getBoundingClientRect) {
+<a name="line545"></a>    box = goog.style.getBoundingClientRect_(el);
+<a name="line546"></a>    // Must add the scroll coordinates in to get the absolute page offset
+<a name="line547"></a>    // of element since getBoundingClientRect returns relative coordinates to
+<a name="line548"></a>    // the viewport.
+<a name="line549"></a>    var scrollCoord = goog.dom.getDomHelper(doc).getDocumentScroll();
+<a name="line550"></a>    pos.x = box.left + scrollCoord.x;
+<a name="line551"></a>    pos.y = box.top + scrollCoord.y;
+<a name="line552"></a>
+<a name="line553"></a>  // Gecko prior to 1.9.
+<a name="line554"></a>  } else if (doc.getBoxObjectFor &amp;&amp; !BUGGY_GECKO_BOX_OBJECT) {
+<a name="line555"></a>    // Gecko ignores the scroll values for ancestors, up to 1.9.  See:
+<a name="line556"></a>    // https://bugzilla.mozilla.org/show_bug.cgi?id=328881 and
+<a name="line557"></a>    // https://bugzilla.mozilla.org/show_bug.cgi?id=330619
+<a name="line558"></a>
+<a name="line559"></a>    box = doc.getBoxObjectFor(el);
+<a name="line560"></a>    // TODO: Fix the off-by-one error when window is scrolled down
+<a name="line561"></a>    // or right more than 1 pixel. The viewport offset does not move in lock
+<a name="line562"></a>    // step with the window scroll; it moves in increments of 2px and at
+<a name="line563"></a>    // somewhat random intervals.
+<a name="line564"></a>    var vpBox = doc.getBoxObjectFor(viewportElement);
+<a name="line565"></a>    pos.x = box.screenX - vpBox.screenX;
+<a name="line566"></a>    pos.y = box.screenY - vpBox.screenY;
+<a name="line567"></a>
+<a name="line568"></a>  // Safari, Opera and Camino up to 1.0.4.
+<a name="line569"></a>  } else {
+<a name="line570"></a>    var parent = el;
+<a name="line571"></a>    do {
+<a name="line572"></a>      pos.x += parent.offsetLeft;
+<a name="line573"></a>      pos.y += parent.offsetTop;
+<a name="line574"></a>      // For safari/chrome, we need to add parent&#39;s clientLeft/Top as well.
+<a name="line575"></a>      if (parent != el) {
+<a name="line576"></a>        pos.x += parent.clientLeft || 0;
+<a name="line577"></a>        pos.y += parent.clientTop || 0;
+<a name="line578"></a>      }
+<a name="line579"></a>      // In Safari when hit a position fixed element the rest of the offsets
+<a name="line580"></a>      // are not correct.
+<a name="line581"></a>      if (goog.userAgent.WEBKIT &amp;&amp;
+<a name="line582"></a>          goog.style.getComputedPosition(parent) == &#39;fixed&#39;) {
+<a name="line583"></a>        pos.x += doc.body.scrollLeft;
+<a name="line584"></a>        pos.y += doc.body.scrollTop;
+<a name="line585"></a>        break;
+<a name="line586"></a>      }
+<a name="line587"></a>      parent = parent.offsetParent;
+<a name="line588"></a>    } while (parent &amp;&amp; parent != el)
+<a name="line589"></a>
+<a name="line590"></a>    // Opera &amp; (safari absolute) incorrectly account for body offsetTop.
+<a name="line591"></a>    if (goog.userAgent.OPERA || (goog.userAgent.WEBKIT &amp;&amp;
+<a name="line592"></a>        positionStyle == &#39;absolute&#39;)) {
+<a name="line593"></a>      pos.y -= doc.body.offsetTop;
+<a name="line594"></a>    }
+<a name="line595"></a>
+<a name="line596"></a>    for (parent = el; (parent = goog.style.getOffsetParent(parent)) &amp;&amp;
+<a name="line597"></a>        parent != doc.body &amp;&amp; parent != viewportElement; ) {
+<a name="line598"></a>      pos.x -= parent.scrollLeft;
+<a name="line599"></a>      // Workaround for a bug in Opera 9.2 (and earlier) where table rows may
+<a name="line600"></a>      // report an invalid scroll top value. The bug was fixed in Opera 9.5
+<a name="line601"></a>      // however as that version supports getBoundingClientRect it won&#39;t
+<a name="line602"></a>      // trigger this code path. https://bugs.opera.com/show_bug.cgi?id=249965
+<a name="line603"></a>      if (!goog.userAgent.OPERA || parent.tagName != &#39;TR&#39;) {
+<a name="line604"></a>        pos.y -= parent.scrollTop;
+<a name="line605"></a>      }
+<a name="line606"></a>    }
+<a name="line607"></a>  }
 <a name="line608"></a>
-<a name="line609"></a>
-<a name="line610"></a>/**
-<a name="line611"></a> * Returns the left coordinate of an element relative to the HTML document
-<a name="line612"></a> * @param {Element} el Elements.
-<a name="line613"></a> * @return {number} The left coordinate.
-<a name="line614"></a> */
-<a name="line615"></a>goog.style.getPageOffsetLeft = function(el) {
-<a name="line616"></a>  return goog.style.getPageOffset(el).x;
-<a name="line617"></a>};
-<a name="line618"></a>
-<a name="line619"></a>
-<a name="line620"></a>/**
-<a name="line621"></a> * Returns the top coordinate of an element relative to the HTML document
-<a name="line622"></a> * @param {Element} el Elements.
-<a name="line623"></a> * @return {number} The top coordinate.
-<a name="line624"></a> */
-<a name="line625"></a>goog.style.getPageOffsetTop = function(el) {
-<a name="line626"></a>  return goog.style.getPageOffset(el).y;
-<a name="line627"></a>};
-<a name="line628"></a>
-<a name="line629"></a>
-<a name="line630"></a>/**
-<a name="line631"></a> * Returns a Coordinate object relative to the top-left of an HTML document
-<a name="line632"></a> * in an ancestor frame of this element. Used for measuring the position of
-<a name="line633"></a> * an element inside a frame relative to a containing frame.
-<a name="line634"></a> *
-<a name="line635"></a> * @param {Element} el Element to get the page offset for.
-<a name="line636"></a> * @param {Window} relativeWin The window to measure relative to. If relativeWin
-<a name="line637"></a> *     is not in the ancestor frame chain of the element, we measure relative to
-<a name="line638"></a> *     the top-most window.
-<a name="line639"></a> * @return {goog.math.Coordinate} The page offset.
-<a name="line640"></a> */
-<a name="line641"></a>goog.style.getFramedPageOffset = function(el, relativeWin) {
-<a name="line642"></a>  var position = new goog.math.Coordinate(0, 0);
-<a name="line643"></a>
-<a name="line644"></a>  // Iterate up the ancestor frame chain, keeping track of the current window
-<a name="line645"></a>  // and the current element in that window.
-<a name="line646"></a>  var currentWin = goog.dom.getWindow(goog.dom.getOwnerDocument(el));
-<a name="line647"></a>  var currentEl = el;
-<a name="line648"></a>  do {
-<a name="line649"></a>    // if we&#39;re at the top window, we want to get the page offset.
-<a name="line650"></a>    // if we&#39;re at an inner frame, we only want to get the window position
-<a name="line651"></a>    // so that we can determine the actual page offset in the context of
-<a name="line652"></a>    // the outer window.
-<a name="line653"></a>    var offset = currentWin == relativeWin ?
-<a name="line654"></a>        goog.style.getPageOffset(currentEl) :
-<a name="line655"></a>        goog.style.getClientPosition(currentEl);
-<a name="line656"></a>
-<a name="line657"></a>    position.x += offset.x;
-<a name="line658"></a>    position.y += offset.y;
-<a name="line659"></a>  } while (currentWin &amp;&amp; currentWin != relativeWin &amp;&amp;
-<a name="line660"></a>      (currentEl = currentWin.frameElement) &amp;&amp;
-<a name="line661"></a>      (currentWin = currentWin.parent));
-<a name="line662"></a>
-<a name="line663"></a>  return position;
-<a name="line664"></a>};
+<a name="line609"></a>  return pos;
+<a name="line610"></a>};
+<a name="line611"></a>
+<a name="line612"></a>
+<a name="line613"></a>/**
+<a name="line614"></a> * Returns the left coordinate of an element relative to the HTML document
+<a name="line615"></a> * @param {Element} el Elements.
+<a name="line616"></a> * @return {number} The left coordinate.
+<a name="line617"></a> */
+<a name="line618"></a>goog.style.getPageOffsetLeft = function(el) {
+<a name="line619"></a>  return goog.style.getPageOffset(el).x;
+<a name="line620"></a>};
+<a name="line621"></a>
+<a name="line622"></a>
+<a name="line623"></a>/**
+<a name="line624"></a> * Returns the top coordinate of an element relative to the HTML document
+<a name="line625"></a> * @param {Element} el Elements.
+<a name="line626"></a> * @return {number} The top coordinate.
+<a name="line627"></a> */
+<a name="line628"></a>goog.style.getPageOffsetTop = function(el) {
+<a name="line629"></a>  return goog.style.getPageOffset(el).y;
+<a name="line630"></a>};
+<a name="line631"></a>
+<a name="line632"></a>
+<a name="line633"></a>/**
+<a name="line634"></a> * Returns a Coordinate object relative to the top-left of an HTML document
+<a name="line635"></a> * in an ancestor frame of this element. Used for measuring the position of
+<a name="line636"></a> * an element inside a frame relative to a containing frame.
+<a name="line637"></a> *
+<a name="line638"></a> * @param {Element} el Element to get the page offset for.
+<a name="line639"></a> * @param {Window} relativeWin The window to measure relative to. If relativeWin
+<a name="line640"></a> *     is not in the ancestor frame chain of the element, we measure relative to
+<a name="line641"></a> *     the top-most window.
+<a name="line642"></a> * @return {!goog.math.Coordinate} The page offset.
+<a name="line643"></a> */
+<a name="line644"></a>goog.style.getFramedPageOffset = function(el, relativeWin) {
+<a name="line645"></a>  var position = new goog.math.Coordinate(0, 0);
+<a name="line646"></a>
+<a name="line647"></a>  // Iterate up the ancestor frame chain, keeping track of the current window
+<a name="line648"></a>  // and the current element in that window.
+<a name="line649"></a>  var currentWin = goog.dom.getWindow(goog.dom.getOwnerDocument(el));
+<a name="line650"></a>  var currentEl = el;
+<a name="line651"></a>  do {
+<a name="line652"></a>    // if we&#39;re at the top window, we want to get the page offset.
+<a name="line653"></a>    // if we&#39;re at an inner frame, we only want to get the window position
+<a name="line654"></a>    // so that we can determine the actual page offset in the context of
+<a name="line655"></a>    // the outer window.
+<a name="line656"></a>    var offset = currentWin == relativeWin ?
+<a name="line657"></a>        goog.style.getPageOffset(currentEl) :
+<a name="line658"></a>        goog.style.getClientPosition(currentEl);
+<a name="line659"></a>
+<a name="line660"></a>    position.x += offset.x;
+<a name="line661"></a>    position.y += offset.y;
+<a name="line662"></a>  } while (currentWin &amp;&amp; currentWin != relativeWin &amp;&amp;
+<a name="line663"></a>      (currentEl = currentWin.frameElement) &amp;&amp;
+<a name="line664"></a>      (currentWin = currentWin.parent));
 <a name="line665"></a>
-<a name="line666"></a>
-<a name="line667"></a>/**
-<a name="line668"></a> * Translates the specified rect relative to origBase page, for newBase page.
-<a name="line669"></a> * If origBase and newBase are the same, this function does nothing.
-<a name="line670"></a> *
-<a name="line671"></a> * @param {goog.math.Rect} rect The source rectangle relative to origBase page,
-<a name="line672"></a> *     and it will have the translated result.
-<a name="line673"></a> * @param {goog.dom.DomHelper} origBase The DomHelper for the input rectangle.
-<a name="line674"></a> * @param {goog.dom.DomHelper} newBase The DomHelper for the resultant
-<a name="line675"></a> *     coordinate.  This must be a DOM for an ancestor frame of origBase
-<a name="line676"></a> *     or the same as origBase.
-<a name="line677"></a> */
-<a name="line678"></a>goog.style.translateRectForAnotherFrame = function(rect, origBase, newBase) {
-<a name="line679"></a>  if (origBase.getDocument() != newBase.getDocument()) {
-<a name="line680"></a>    var body = origBase.getDocument().body;
-<a name="line681"></a>    var pos = goog.style.getFramedPageOffset(body, newBase.getWindow());
-<a name="line682"></a>
-<a name="line683"></a>    // Adjust Body&#39;s margin.
-<a name="line684"></a>    pos = goog.math.Coordinate.difference(pos, goog.style.getPageOffset(body));
+<a name="line666"></a>  return position;
+<a name="line667"></a>};
+<a name="line668"></a>
+<a name="line669"></a>
+<a name="line670"></a>/**
+<a name="line671"></a> * Translates the specified rect relative to origBase page, for newBase page.
+<a name="line672"></a> * If origBase and newBase are the same, this function does nothing.
+<a name="line673"></a> *
+<a name="line674"></a> * @param {goog.math.Rect} rect The source rectangle relative to origBase page,
+<a name="line675"></a> *     and it will have the translated result.
+<a name="line676"></a> * @param {goog.dom.DomHelper} origBase The DomHelper for the input rectangle.
+<a name="line677"></a> * @param {goog.dom.DomHelper} newBase The DomHelper for the resultant
+<a name="line678"></a> *     coordinate.  This must be a DOM for an ancestor frame of origBase
+<a name="line679"></a> *     or the same as origBase.
+<a name="line680"></a> */
+<a name="line681"></a>goog.style.translateRectForAnotherFrame = function(rect, origBase, newBase) {
+<a name="line682"></a>  if (origBase.getDocument() != newBase.getDocument()) {
+<a name="line683"></a>    var body = origBase.getDocument().body;
+<a name="line684"></a>    var pos = goog.style.getFramedPageOffset(body, newBase.getWindow());
 <a name="line685"></a>
-<a name="line686"></a>    if (goog.userAgent.IE &amp;&amp; !origBase.isCss1CompatMode()) {
-<a name="line687"></a>      pos = goog.math.Coordinate.difference(pos, origBase.getDocumentScroll());
-<a name="line688"></a>    }
-<a name="line689"></a>
-<a name="line690"></a>    rect.left += pos.x;
-<a name="line691"></a>    rect.top += pos.y;
-<a name="line692"></a>  }
-<a name="line693"></a>};
-<a name="line694"></a>
-<a name="line695"></a>
-<a name="line696"></a>/**
-<a name="line697"></a> * Returns the position of an element relative to another element in the
-<a name="line698"></a> * document.  A relative to B
-<a name="line699"></a> * @param {Element|Event|goog.events.Event} a Element or mouse event whose
-<a name="line700"></a> *     position we&#39;re calculating.
-<a name="line701"></a> * @param {Element|Event|goog.events.Event} b Element or mouse event position
-<a name="line702"></a> *     is relative to.
-<a name="line703"></a> * @return {goog.math.Coordinate} The relative position.
-<a name="line704"></a> */
-<a name="line705"></a>goog.style.getRelativePosition = function(a, b) {
-<a name="line706"></a>  var ap = goog.style.getClientPosition(a);
-<a name="line707"></a>  var bp = goog.style.getClientPosition(b);
-<a name="line708"></a>  return new goog.math.Coordinate(ap.x - bp.x, ap.y - bp.y);
-<a name="line709"></a>};
-<a name="line710"></a>
-<a name="line711"></a>
-<a name="line712"></a>/**
-<a name="line713"></a> * Returns the position relative to the client viewport.
-<a name="line714"></a> * @param {Element|Event|goog.events.Event} el Element or a mouse event object.
-<a name="line715"></a> * @return {!goog.math.Coordinate} The position.
-<a name="line716"></a> */
-<a name="line717"></a>goog.style.getClientPosition = function(el) {
-<a name="line718"></a>  var pos = new goog.math.Coordinate;
-<a name="line719"></a>  if (el.nodeType == goog.dom.NodeType.ELEMENT) {
-<a name="line720"></a>    if (el.getBoundingClientRect) {  // IE and Gecko 1.9+
-<a name="line721"></a>      var box = goog.style.getBoundingClientRect_(/** @type {Element} */ (el));
-<a name="line722"></a>      pos.x = box.left;
-<a name="line723"></a>      pos.y = box.top;
-<a name="line724"></a>    } else {
-<a name="line725"></a>      var scrollCoord = goog.dom.getDomHelper(/** @type {Element} */ (el))
-<a name="line726"></a>          .getDocumentScroll();
-<a name="line727"></a>      var pageCoord = goog.style.getPageOffset(/** @type {Element} */ (el));
-<a name="line728"></a>      pos.x = pageCoord.x - scrollCoord.x;
-<a name="line729"></a>      pos.y = pageCoord.y - scrollCoord.y;
-<a name="line730"></a>    }
-<a name="line731"></a>  } else {
-<a name="line732"></a>    pos.x = el.clientX;
-<a name="line733"></a>    pos.y = el.clientY;
-<a name="line734"></a>  }
-<a name="line735"></a>
-<a name="line736"></a>  return pos;
-<a name="line737"></a>};
+<a name="line686"></a>    // Adjust Body&#39;s margin.
+<a name="line687"></a>    pos = goog.math.Coordinate.difference(pos, goog.style.getPageOffset(body));
+<a name="line688"></a>
+<a name="line689"></a>    if (goog.userAgent.IE &amp;&amp; !origBase.isCss1CompatMode()) {
+<a name="line690"></a>      pos = goog.math.Coordinate.difference(pos, origBase.getDocumentScroll());
+<a name="line691"></a>    }
+<a name="line692"></a>
+<a name="line693"></a>    rect.left += pos.x;
+<a name="line694"></a>    rect.top += pos.y;
+<a name="line695"></a>  }
+<a name="line696"></a>};
+<a name="line697"></a>
+<a name="line698"></a>
+<a name="line699"></a>/**
+<a name="line700"></a> * Returns the position of an element relative to another element in the
+<a name="line701"></a> * document.  A relative to B
+<a name="line702"></a> * @param {Element|Event|goog.events.Event} a Element or mouse event whose
+<a name="line703"></a> *     position we&#39;re calculating.
+<a name="line704"></a> * @param {Element|Event|goog.events.Event} b Element or mouse event position
+<a name="line705"></a> *     is relative to.
+<a name="line706"></a> * @return {!goog.math.Coordinate} The relative position.
+<a name="line707"></a> */
+<a name="line708"></a>goog.style.getRelativePosition = function(a, b) {
+<a name="line709"></a>  var ap = goog.style.getClientPosition(a);
+<a name="line710"></a>  var bp = goog.style.getClientPosition(b);
+<a name="line711"></a>  return new goog.math.Coordinate(ap.x - bp.x, ap.y - bp.y);
+<a name="line712"></a>};
+<a name="line713"></a>
+<a name="line714"></a>
+<a name="line715"></a>/**
+<a name="line716"></a> * Returns the position relative to the client viewport.
+<a name="line717"></a> * @param {Element|Event|goog.events.Event} el Element or a mouse event object.
+<a name="line718"></a> * @return {!goog.math.Coordinate} The position.
+<a name="line719"></a> */
+<a name="line720"></a>goog.style.getClientPosition = function(el) {
+<a name="line721"></a>  var pos = new goog.math.Coordinate;
+<a name="line722"></a>  if (el.nodeType == goog.dom.NodeType.ELEMENT) {
+<a name="line723"></a>    if (el.getBoundingClientRect) {  // IE and Gecko 1.9+
+<a name="line724"></a>      var box = goog.style.getBoundingClientRect_(/** @type {Element} */ (el));
+<a name="line725"></a>      pos.x = box.left;
+<a name="line726"></a>      pos.y = box.top;
+<a name="line727"></a>    } else {
+<a name="line728"></a>      var scrollCoord = goog.dom.getDomHelper(/** @type {Element} */ (el))
+<a name="line729"></a>          .getDocumentScroll();
+<a name="line730"></a>      var pageCoord = goog.style.getPageOffset(/** @type {Element} */ (el));
+<a name="line731"></a>      pos.x = pageCoord.x - scrollCoord.x;
+<a name="line732"></a>      pos.y = pageCoord.y - scrollCoord.y;
+<a name="line733"></a>    }
+<a name="line734"></a>  } else {
+<a name="line735"></a>    pos.x = el.clientX;
+<a name="line736"></a>    pos.y = el.clientY;
+<a name="line737"></a>  }
 <a name="line738"></a>
-<a name="line739"></a>
-<a name="line740"></a>/**
-<a name="line741"></a> * Sets the top and left of an element such that it will have a
-<a name="line742"></a> *
-<a name="line743"></a> * @param {Element} el The element to set page offset for.
-<a name="line744"></a> * @param {number|goog.math.Coordinate} x Left position or coordinate obj.
-<a name="line745"></a> * @param {number=} opt_y Top position.
-<a name="line746"></a> */
-<a name="line747"></a>goog.style.setPageOffset = function(el, x, opt_y) {
-<a name="line748"></a>  // Get current pageoffset
-<a name="line749"></a>  var cur = goog.style.getPageOffset(el);
-<a name="line750"></a>
-<a name="line751"></a>  if (x instanceof goog.math.Coordinate) {
-<a name="line752"></a>    opt_y = x.y;
-<a name="line753"></a>    x = x.x;
-<a name="line754"></a>  }
-<a name="line755"></a>
-<a name="line756"></a>  // NOTE: We cannot allow strings for x and y. We could but that would
-<a name="line757"></a>  // require us to manually transform between different units
+<a name="line739"></a>  return pos;
+<a name="line740"></a>};
+<a name="line741"></a>
+<a name="line742"></a>
+<a name="line743"></a>/**
+<a name="line744"></a> * Sets the top and left of an element such that it will have a
+<a name="line745"></a> *
+<a name="line746"></a> * @param {Element} el The element to set page offset for.
+<a name="line747"></a> * @param {number|goog.math.Coordinate} x Left position or coordinate obj.
+<a name="line748"></a> * @param {number=} opt_y Top position.
+<a name="line749"></a> */
+<a name="line750"></a>goog.style.setPageOffset = function(el, x, opt_y) {
+<a name="line751"></a>  // Get current pageoffset
+<a name="line752"></a>  var cur = goog.style.getPageOffset(el);
+<a name="line753"></a>
+<a name="line754"></a>  if (x instanceof goog.math.Coordinate) {
+<a name="line755"></a>    opt_y = x.y;
+<a name="line756"></a>    x = x.x;
+<a name="line757"></a>  }
 <a name="line758"></a>
-<a name="line759"></a>  // Work out deltas
-<a name="line760"></a>  var dx = x - cur.x;
-<a name="line761"></a>  var dy = opt_y - cur.y;
-<a name="line762"></a>
-<a name="line763"></a>  // Set position to current left/top + delta
-<a name="line764"></a>  goog.style.setPosition(el, el.offsetLeft + dx, el.offsetTop + dy);
-<a name="line765"></a>};
-<a name="line766"></a>
-<a name="line767"></a>
-<a name="line768"></a>/**
-<a name="line769"></a> * Sets the width/height values of an element.  If an argument is numeric,
-<a name="line770"></a> * or a goog.math.Size is passed, it is assumed to be pixels and will add
-<a name="line771"></a> * &#39;px&#39; after converting it to an integer in string form. (This just sets the
-<a name="line772"></a> * CSS width and height properties so it might set content-box or border-box
-<a name="line773"></a> * size depending on the box model the browser is using.)
-<a name="line774"></a> *
-<a name="line775"></a> * @param {Element} element Element to move.
-<a name="line776"></a> * @param {string|number|goog.math.Size} w Width of the element, or a
-<a name="line777"></a> *     size object.
-<a name="line778"></a> * @param {string|number=} opt_h Height of the element. Required if w is not a
-<a name="line779"></a> *     size object.
-<a name="line780"></a> */
-<a name="line781"></a>goog.style.setSize = function(element, w, opt_h) {
-<a name="line782"></a>  var h;
-<a name="line783"></a>  if (w instanceof goog.math.Size) {
-<a name="line784"></a>    h = w.height;
-<a name="line785"></a>    w = w.width;
-<a name="line786"></a>  } else {
-<a name="line787"></a>    if (opt_h == undefined) {
-<a name="line788"></a>      throw Error(&#39;missing height argument&#39;);
-<a name="line789"></a>    }
-<a name="line790"></a>    h = opt_h;
-<a name="line791"></a>  }
-<a name="line792"></a>
-<a name="line793"></a>  element.style.width = typeof w == &#39;number&#39; ? Math.round(w) + &#39;px&#39; :
-<a name="line794"></a>                                               /** @type {string} */(w);
-<a name="line795"></a>  element.style.height = typeof h == &#39;number&#39; ? Math.round(h) + &#39;px&#39; :
-<a name="line796"></a>                                                /** @type {string} */(h);
-<a name="line797"></a>};
-<a name="line798"></a>
-<a name="line799"></a>
-<a name="line800"></a>/**
-<a name="line801"></a> * Gets the height and width of an element, even if its display is none.
-<a name="line802"></a> * Specifically, this returns the height and width of the border box,
-<a name="line803"></a> * irrespective of the box model in effect.
-<a name="line804"></a> * @param {Element} element Element to get width of.
-<a name="line805"></a> * @return {goog.math.Size} Object with width/height properties.
-<a name="line806"></a> */
-<a name="line807"></a>goog.style.getSize = function(element) {
-<a name="line808"></a>  var hasOperaBug = goog.userAgent.OPERA &amp;&amp; !goog.userAgent.isVersion(&#39;10&#39;);
-<a name="line809"></a>  if (goog.style.getStyle_(element, &#39;display&#39;) != &#39;none&#39;) {
-<a name="line810"></a>    if (hasOperaBug) {
-<a name="line811"></a>      return new goog.math.Size(element.offsetWidth || element.clientWidth,
-<a name="line812"></a>                                element.offsetHeight || element.clientHeight);
-<a name="line813"></a>    } else {
-<a name="line814"></a>      return new goog.math.Size(element.offsetWidth, element.offsetHeight);
-<a name="line815"></a>    }
-<a name="line816"></a>  }
-<a name="line817"></a>
-<a name="line818"></a>  var style = element.style;
-<a name="line819"></a>  var originalDisplay = style.display;
-<a name="line820"></a>  var originalVisibility = style.visibility;
-<a name="line821"></a>  var originalPosition = style.position;
-<a name="line822"></a>
-<a name="line823"></a>  style.visibility = &#39;hidden&#39;;
-<a name="line824"></a>  style.position = &#39;absolute&#39;;
-<a name="line825"></a>  style.display = &#39;inline&#39;;
-<a name="line826"></a>
-<a name="line827"></a>  var originalWidth, originalHeight;
-<a name="line828"></a>  if (hasOperaBug) {
-<a name="line829"></a>    originalWidth = element.offsetWidth || element.clientWidth;
-<a name="line830"></a>    originalHeight = element.offsetHeight || element.clientHeight;
-<a name="line831"></a>  } else {
-<a name="line832"></a>    originalWidth = element.offsetWidth;
-<a name="line833"></a>    originalHeight = element.offsetHeight;
-<a name="line834"></a>  }
-<a name="line835"></a>
-<a name="line836"></a>  style.display = originalDisplay;
-<a name="line837"></a>  style.position = originalPosition;
-<a name="line838"></a>  style.visibility = originalVisibility;
-<a name="line839"></a>
-<a name="line840"></a>  return new goog.math.Size(originalWidth, originalHeight);
-<a name="line841"></a>};
+<a name="line759"></a>  // NOTE: We cannot allow strings for x and y. We could but that would
+<a name="line760"></a>  // require us to manually transform between different units
+<a name="line761"></a>
+<a name="line762"></a>  // Work out deltas
+<a name="line763"></a>  var dx = x - cur.x;
+<a name="line764"></a>  var dy = opt_y - cur.y;
+<a name="line765"></a>
+<a name="line766"></a>  // Set position to current left/top + delta
+<a name="line767"></a>  goog.style.setPosition(el, el.offsetLeft + dx, el.offsetTop + dy);
+<a name="line768"></a>};
+<a name="line769"></a>
+<a name="line770"></a>
+<a name="line771"></a>/**
+<a name="line772"></a> * Sets the width/height values of an element.  If an argument is numeric,
+<a name="line773"></a> * or a goog.math.Size is passed, it is assumed to be pixels and will add
+<a name="line774"></a> * &#39;px&#39; after converting it to an integer in string form. (This just sets the
+<a name="line775"></a> * CSS width and height properties so it might set content-box or border-box
+<a name="line776"></a> * size depending on the box model the browser is using.)
+<a name="line777"></a> *
+<a name="line778"></a> * @param {Element} element Element to move.
+<a name="line779"></a> * @param {string|number|goog.math.Size} w Width of the element, or a
+<a name="line780"></a> *     size object.
+<a name="line781"></a> * @param {string|number=} opt_h Height of the element. Required if w is not a
+<a name="line782"></a> *     size object.
+<a name="line783"></a> */
+<a name="line784"></a>goog.style.setSize = function(element, w, opt_h) {
+<a name="line785"></a>  var h;
+<a name="line786"></a>  if (w instanceof goog.math.Size) {
+<a name="line787"></a>    h = w.height;
+<a name="line788"></a>    w = w.width;
+<a name="line789"></a>  } else {
+<a name="line790"></a>    if (opt_h == undefined) {
+<a name="line791"></a>      throw Error(&#39;missing height argument&#39;);
+<a name="line792"></a>    }
+<a name="line793"></a>    h = opt_h;
+<a name="line794"></a>  }
+<a name="line795"></a>
+<a name="line796"></a>  element.style.width = typeof w == &#39;number&#39; ? Math.round(w) + &#39;px&#39; :
+<a name="line797"></a>                                               /** @type {string} */(w);
+<a name="line798"></a>  element.style.height = typeof h == &#39;number&#39; ? Math.round(h) + &#39;px&#39; :
+<a name="line799"></a>                                                /** @type {string} */(h);
+<a name="line800"></a>};
+<a name="line801"></a>
+<a name="line802"></a>
+<a name="line803"></a>/**
+<a name="line804"></a> * Gets the height and width of an element, even if its display is none.
+<a name="line805"></a> * Specifically, this returns the height and width of the border box,
+<a name="line806"></a> * irrespective of the box model in effect.
+<a name="line807"></a> * @param {Element} element Element to get width of.
+<a name="line808"></a> * @return {!goog.math.Size} Object with width/height properties.
+<a name="line809"></a> */
+<a name="line810"></a>goog.style.getSize = function(element) {
+<a name="line811"></a>  var hasOperaBug = goog.userAgent.OPERA &amp;&amp; !goog.userAgent.isVersion(&#39;10&#39;);
+<a name="line812"></a>  if (goog.style.getStyle_(element, &#39;display&#39;) != &#39;none&#39;) {
+<a name="line813"></a>    if (hasOperaBug) {
+<a name="line814"></a>      return new goog.math.Size(element.offsetWidth || element.clientWidth,
+<a name="line815"></a>                                element.offsetHeight || element.clientHeight);
+<a name="line816"></a>    } else {
+<a name="line817"></a>      return new goog.math.Size(element.offsetWidth, element.offsetHeight);
+<a name="line818"></a>    }
+<a name="line819"></a>  }
+<a name="line820"></a>
+<a name="line821"></a>  var style = element.style;
+<a name="line822"></a>  var originalDisplay = style.display;
+<a name="line823"></a>  var originalVisibility = style.visibility;
+<a name="line824"></a>  var originalPosition = style.position;
+<a name="line825"></a>
+<a name="line826"></a>  style.visibility = &#39;hidden&#39;;
+<a name="line827"></a>  style.position = &#39;absolute&#39;;
+<a name="line828"></a>  style.display = &#39;inline&#39;;
+<a name="line829"></a>
+<a name="line830"></a>  var originalWidth, originalHeight;
+<a name="line831"></a>  if (hasOperaBug) {
+<a name="line832"></a>    originalWidth = element.offsetWidth || element.clientWidth;
+<a name="line833"></a>    originalHeight = element.offsetHeight || element.clientHeight;
+<a name="line834"></a>  } else {
+<a name="line835"></a>    originalWidth = element.offsetWidth;
+<a name="line836"></a>    originalHeight = element.offsetHeight;
+<a name="line837"></a>  }
+<a name="line838"></a>
+<a name="line839"></a>  style.display = originalDisplay;
+<a name="line840"></a>  style.position = originalPosition;
+<a name="line841"></a>  style.visibility = originalVisibility;
 <a name="line842"></a>
-<a name="line843"></a>
-<a name="line844"></a>/**
-<a name="line845"></a> * Returns a bounding rectangle for a given element in page space.
-<a name="line846"></a> * @param {Element} element Element to get bounds of.
-<a name="line847"></a> * @return {goog.math.Rect} Bounding rectangle for the element.
-<a name="line848"></a> */
-<a name="line849"></a>goog.style.getBounds = function(element) {
-<a name="line850"></a>  var o = goog.style.getPageOffset(element);
-<a name="line851"></a>  var s = goog.style.getSize(element);
-<a name="line852"></a>  return new goog.math.Rect(o.x, o.y, s.width, s.height);
-<a name="line853"></a>};
-<a name="line854"></a>
-<a name="line855"></a>
-<a name="line856"></a>/**
-<a name="line857"></a> * A memoized cache for goog.style.toCamelCase.
-<a name="line858"></a> * @type {Object}
-<a name="line859"></a> * @private
-<a name="line860"></a> */
-<a name="line861"></a>goog.style.toCamelCaseCache_ = {};
-<a name="line862"></a>
-<a name="line863"></a>
-<a name="line864"></a>/**
-<a name="line865"></a> * Converts a CSS selector in the form style-property to styleProperty
-<a name="line866"></a> * @param {*} selector CSS Selector.
-<a name="line867"></a> * @return {string} Camel case selector.
-<a name="line868"></a> */
-<a name="line869"></a>goog.style.toCamelCase = function(selector) {
-<a name="line870"></a>  return goog.style.toCamelCaseCache_[selector] ||
-<a name="line871"></a>    (goog.style.toCamelCaseCache_[selector] =
-<a name="line872"></a>        String(selector).replace(/\-([a-z])/g, function(all, match) {
-<a name="line873"></a>          return match.toUpperCase();
-<a name="line874"></a>        }));
-<a name="line875"></a>};
-<a name="line876"></a>
-<a name="line877"></a>
-<a name="line878"></a>/**
-<a name="line879"></a> * Converts a CSS selector in the form styleProperty to style-property
-<a name="line880"></a> * @param {string} selector Camel case selector.
-<a name="line881"></a> * @return {string} Selector cased.
-<a name="line882"></a> */
-<a name="line883"></a>goog.style.toSelectorCase = function(selector) {
-<a name="line884"></a>  return selector.replace(/([A-Z])/g, &#39;-$1&#39;).toLowerCase();
-<a name="line885"></a>};
-<a name="line886"></a>
-<a name="line887"></a>
-<a name="line888"></a>/**
-<a name="line889"></a> * Gets the opacity of a node (x-browser). This gets the inline style opacity
-<a name="line890"></a> * of the node, and does not take into account the cascaded or the computed
-<a name="line891"></a> * style for this node.
-<a name="line892"></a> * @param {Element} el Element whose opacity has to be found.
-<a name="line893"></a> * @return {number|string} Opacity between 0 and 1 or an empty string {@code &#39;&#39;}
-<a name="line894"></a> *     if the opacity is not set.
-<a name="line895"></a> */
-<a name="line896"></a>goog.style.getOpacity = function(el) {
-<a name="line897"></a>  var style = el.style;
-<a name="line898"></a>  var result = &#39;&#39;;
-<a name="line899"></a>  if (&#39;opacity&#39; in style) {
-<a name="line900"></a>    result = style.opacity;
-<a name="line901"></a>  } else if (&#39;MozOpacity&#39; in style) {
-<a name="line902"></a>    result = style.MozOpacity;
-<a name="line903"></a>  } else if (&#39;filter&#39; in style) {
-<a name="line904"></a>    var match = style.filter.match(/alpha\(opacity=([\d.]+)\)/);
-<a name="line905"></a>    if (match) {
-<a name="line906"></a>      result = String(match[1] / 100);
-<a name="line907"></a>    }
-<a name="line908"></a>  }
-<a name="line909"></a>  return result == &#39;&#39; ? result : Number(result);
-<a name="line910"></a>};
-<a name="line911"></a>
-<a name="line912"></a>
-<a name="line913"></a>/**
-<a name="line914"></a> * Sets the opacity of a node (x-browser).
-<a name="line915"></a> * @param {Element} el Elements whose opacity has to be set.
-<a name="line916"></a> * @param {number|string} alpha Opacity between 0 and 1 or an empty string
-<a name="line917"></a> *     {@code &#39;&#39;} to clear the opacity.
-<a name="line918"></a> */
-<a name="line919"></a>goog.style.setOpacity = function(el, alpha) {
-<a name="line920"></a>  var style = el.style;
-<a name="line921"></a>  if (&#39;opacity&#39; in style) {
-<a name="line922"></a>    style.opacity = alpha;
-<a name="line923"></a>  } else if (&#39;MozOpacity&#39; in style) {
-<a name="line924"></a>    style.MozOpacity = alpha;
-<a name="line925"></a>  } else if (&#39;filter&#39; in style) {
-<a name="line926"></a>    // TODO: Overwriting the filter might have undesired side effects.
-<a name="line927"></a>    if (alpha === &#39;&#39;) {
-<a name="line928"></a>      style.filter = &#39;&#39;;
-<a name="line929"></a>    } else {
-<a name="line930"></a>      style.filter = &#39;alpha(opacity=&#39; + alpha * 100 + &#39;)&#39;;
-<a name="line931"></a>    }
-<a name="line932"></a>  }
-<a name="line933"></a>};
-<a name="line934"></a>
-<a name="line935"></a>
-<a name="line936"></a>/**
-<a name="line937"></a> * Sets the background of an element to a transparent image in a browser-
-<a name="line938"></a> * independent manner.
-<a name="line939"></a> *
-<a name="line940"></a> * This function does not support repeating backgrounds or alternate background
-<a name="line941"></a> * positions to match the behavior of Internet Explorer. It also does not
-<a name="line942"></a> * support sizingMethods other than crop since they cannot be replicated in
-<a name="line943"></a> * browsers other than Internet Explorer.
-<a name="line944"></a> *
-<a name="line945"></a> * @param {Element} el The element to set background on.
-<a name="line946"></a> * @param {string} src The image source URL.
-<a name="line947"></a> */
-<a name="line948"></a>goog.style.setTransparentBackgroundImage = function(el, src) {
-<a name="line949"></a>  var style = el.style;
-<a name="line950"></a>  // It is safe to use the style.filter in IE only. In Safari &#39;filter&#39; is in
-<a name="line951"></a>  // style object but access to style.filter causes it to throw an exception.
-<a name="line952"></a>  // Note: IE8 supports images with an alpha channel.
-<a name="line953"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;8&#39;)) {
-<a name="line954"></a>    // See TODO in setOpacity.
-<a name="line955"></a>    style.filter = &#39;progid:DXImageTransform.Microsoft.AlphaImageLoader(&#39; +
-<a name="line956"></a>        &#39;src=&quot;&#39; + src + &#39;&quot;, sizingMethod=&quot;crop&quot;)&#39;;
-<a name="line957"></a>  } else {
-<a name="line958"></a>    // Set style properties individually instead of using background shorthand
-<a name="line959"></a>    // to prevent overwriting a pre-existing background color.
-<a name="line960"></a>    style.backgroundImage = &#39;url(&#39; + src + &#39;)&#39;;
-<a name="line961"></a>    style.backgroundPosition = &#39;top left&#39;;
-<a name="line962"></a>    style.backgroundRepeat = &#39;no-repeat&#39;;
-<a name="line963"></a>  }
-<a name="line964"></a>};
-<a name="line965"></a>
-<a name="line966"></a>
-<a name="line967"></a>/**
-<a name="line968"></a> * Clears the background image of an element in a browser independent manner.
-<a name="line969"></a> * @param {Element} el The element to clear background image for.
-<a name="line970"></a> */
-<a name="line971"></a>goog.style.clearTransparentBackgroundImage = function(el) {
-<a name="line972"></a>  var style = el.style;
-<a name="line973"></a>  if (&#39;filter&#39; in style) {
-<a name="line974"></a>    // See TODO in setOpacity.
-<a name="line975"></a>    style.filter = &#39;&#39;;
-<a name="line976"></a>  } else {
-<a name="line977"></a>    // Set style properties individually instead of using background shorthand
-<a name="line978"></a>    // to prevent overwriting a pre-existing background color.
-<a name="line979"></a>    style.backgroundImage = &#39;none&#39;;
-<a name="line980"></a>  }
-<a name="line981"></a>};
-<a name="line982"></a>
-<a name="line983"></a>
-<a name="line984"></a>/**
-<a name="line985"></a> * Shows or hides an element from the page. Hiding the element is done by
-<a name="line986"></a> * setting the display property to &quot;none&quot;, removing the element from the
-<a name="line987"></a> * rendering hierarchy so it takes up no space. To show the element, the default
-<a name="line988"></a> * inherited display property is restored (defined either in stylesheets or by
-<a name="line989"></a> * the browser&#39;s default style rules.)
-<a name="line990"></a> *
-<a name="line991"></a> * Caveat 1: if the inherited display property for the element is set to &quot;none&quot;
-<a name="line992"></a> * by the stylesheets, that is the property that will be restored by a call to
-<a name="line993"></a> * showElement(), effectively toggling the display between &quot;none&quot; and &quot;none&quot;.
-<a name="line994"></a> *
-<a name="line995"></a> * Caveat 2: if the element display style is set inline (by setting either
-<a name="line996"></a> * element.style.display or a style attribute in the HTML), a call to
-<a name="line997"></a> * showElement will clear that setting and defer to the inherited style in the
-<a name="line998"></a> * stylesheet.
-<a name="line999"></a> * @param {Element} el Element to show or hide.
-<a name="line1000"></a> * @param {*} display True to render the element in its default style,
-<a name="line1001"></a> * false to disable rendering the element.
-<a name="line1002"></a> */
-<a name="line1003"></a>goog.style.showElement = function(el, display) {
-<a name="line1004"></a>  el.style.display = display ? &#39;&#39; : &#39;none&#39;;
-<a name="line1005"></a>};
-<a name="line1006"></a>
-<a name="line1007"></a>
-<a name="line1008"></a>/**
-<a name="line1009"></a> * Test whether the given element has been shown or hidden via a call to
-<a name="line1010"></a> * {@link #showElement}.
-<a name="line1011"></a> *
-<a name="line1012"></a> * Note this is strictly a companion method for a call
-<a name="line1013"></a> * to {@link #showElement} and the same caveats apply; in particular, this
-<a name="line1014"></a> * method does not guarantee that the return value will be consistent with
-<a name="line1015"></a> * whether or not the element is actually visible.
-<a name="line1016"></a> *
-<a name="line1017"></a> * @param {Element} el The element to test.
-<a name="line1018"></a> * @return {boolean} Whether the element has been shown.
-<a name="line1019"></a> * @see #showElement
-<a name="line1020"></a> */
-<a name="line1021"></a>goog.style.isElementShown = function(el) {
-<a name="line1022"></a>  return el.style.display != &#39;none&#39;;
-<a name="line1023"></a>};
-<a name="line1024"></a>
-<a name="line1025"></a>
-<a name="line1026"></a>/**
-<a name="line1027"></a> * Installs the styles string into the window that contains opt_element.  If
-<a name="line1028"></a> * opt_element is null, the main window is used.
-<a name="line1029"></a> * @param {string} stylesString The style string to install.
-<a name="line1030"></a> * @param {Node=} opt_node Node whose parent document should have the
-<a name="line1031"></a> *     styles installed.
-<a name="line1032"></a> * @return {Element|StyleSheet} The style element created.
-<a name="line1033"></a> */
-<a name="line1034"></a>goog.style.installStyles = function(stylesString, opt_node) {
-<a name="line1035"></a>  var dh = goog.dom.getDomHelper(opt_node);
-<a name="line1036"></a>  var styleSheet = null;
-<a name="line1037"></a>
-<a name="line1038"></a>  if (goog.userAgent.IE) {
-<a name="line1039"></a>    styleSheet = dh.getDocument().createStyleSheet();
-<a name="line1040"></a>    goog.style.setStyles(styleSheet, stylesString);
-<a name="line1041"></a>  } else {
-<a name="line1042"></a>    var head = dh.getElementsByTagNameAndClass(&#39;head&#39;)[0];
-<a name="line1043"></a>
-<a name="line1044"></a>    // In opera documents are not guaranteed to have a head element, thus we
-<a name="line1045"></a>    // have to make sure one exists before using it.
-<a name="line1046"></a>    if (!head) {
-<a name="line1047"></a>      var body = dh.getElementsByTagNameAndClass(&#39;body&#39;)[0];
-<a name="line1048"></a>      head = dh.createDom(&#39;head&#39;);
-<a name="line1049"></a>      body.parentNode.insertBefore(head, body);
-<a name="line1050"></a>    }
-<a name="line1051"></a>    styleSheet = dh.createDom(&#39;style&#39;);
-<a name="line1052"></a>    // NOTE: Setting styles after the style element has been appended
-<a name="line1053"></a>    // to the head results in a nasty Webkit bug in certain scenarios. Please
-<a name="line1054"></a>    // refer to https://bugs.webkit.org/show_bug.cgi?id=26307 for additional
-<a name="line1055"></a>    // details.
-<a name="line1056"></a>    goog.style.setStyles(styleSheet, stylesString);
-<a name="line1057"></a>    dh.appendChild(head, styleSheet);
-<a name="line1058"></a>  }
-<a name="line1059"></a>  return styleSheet;
-<a name="line1060"></a>};
-<a name="line1061"></a>
-<a name="line1062"></a>
-<a name="line1063"></a>/**
-<a name="line1064"></a> * Removes the styles added by {@link #installStyles}.
-<a name="line1065"></a> * @param {Element|StyleSheet} styleSheet The value returned by
-<a name="line1066"></a> *     {@link #installStyles}.
-<a name="line1067"></a> */
-<a name="line1068"></a>goog.style.uninstallStyles = function(styleSheet) {
-<a name="line1069"></a>  var node = styleSheet.ownerNode || styleSheet.owningElement ||
-<a name="line1070"></a>      /** @type {Element} */ (styleSheet);
-<a name="line1071"></a>  goog.dom.removeNode(node);
-<a name="line1072"></a>};
-<a name="line1073"></a>
-<a name="line1074"></a>
-<a name="line1075"></a>/**
-<a name="line1076"></a> * Sets the content of a style element.  The style element can be any valid
-<a name="line1077"></a> * style element.  This element will have its content completely replaced by
-<a name="line1078"></a> * the new stylesString.
-<a name="line1079"></a> * @param {Element|StyleSheet} element A stylesheet element as returned by
-<a name="line1080"></a> *     installStyles.
-<a name="line1081"></a> * @param {string} stylesString The new content of the stylesheet.
-<a name="line1082"></a> */
-<a name="line1083"></a>goog.style.setStyles = function(element, stylesString) {
-<a name="line1084"></a>  if (goog.userAgent.IE) {
-<a name="line1085"></a>    // Adding the selectors individually caused the browser to hang if the
-<a name="line1086"></a>    // selector was invalid or there were CSS comments.  Setting the cssText of
-<a name="line1087"></a>    // the style node works fine and ignores CSS that IE doesn&#39;t understand
-<a name="line1088"></a>    element.cssText = stylesString;
-<a name="line1089"></a>  } else {
-<a name="line1090"></a>    var propToSet = goog.userAgent.WEBKIT ? &#39;innerText&#39; : &#39;innerHTML&#39;;
-<a name="line1091"></a>    element[propToSet] = stylesString;
-<a name="line1092"></a>  }
-<a name="line1093"></a>};
-<a name="line1094"></a>
-<a name="line1095"></a>
-<a name="line1096"></a>/**
-<a name="line1097"></a> * Sets &#39;white-space: pre-wrap&#39; for a node (x-browser).
-<a name="line1098"></a> *
-<a name="line1099"></a> * There are as many ways of specifying pre-wrap as there are browsers.
-<a name="line1100"></a> *
-<a name="line1101"></a> * CSS3/IE8: white-space: pre-wrap;
-<a name="line1102"></a> * Mozilla:  white-space: -moz-pre-wrap;
-<a name="line1103"></a> * Opera:    white-space: -o-pre-wrap;
-<a name="line1104"></a> * IE6/7:    white-space: pre; word-wrap: break-word;
-<a name="line1105"></a> *
-<a name="line1106"></a> * @param {Element} el Element to enable pre-wrap for.
-<a name="line1107"></a> */
-<a name="line1108"></a>goog.style.setPreWrap = function(el) {
-<a name="line1109"></a>  var style = el.style;
-<a name="line1110"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;8&#39;)) {
-<a name="line1111"></a>    style.whiteSpace = &#39;pre&#39;;
-<a name="line1112"></a>    style.wordWrap = &#39;break-word&#39;;
-<a name="line1113"></a>  } else if (goog.userAgent.GECKO) {
-<a name="line1114"></a>    style.whiteSpace = &#39;-moz-pre-wrap&#39;;
-<a name="line1115"></a>  } else if (goog.userAgent.OPERA) {
-<a name="line1116"></a>    style.whiteSpace = &#39;-o-pre-wrap&#39;;
-<a name="line1117"></a>  } else {
-<a name="line1118"></a>    style.whiteSpace = &#39;pre-wrap&#39;;
-<a name="line1119"></a>  }
-<a name="line1120"></a>};
-<a name="line1121"></a>
-<a name="line1122"></a>
-<a name="line1123"></a>/**
-<a name="line1124"></a> * Sets &#39;display: inline-block&#39; for an element (cross-browser).
-<a name="line1125"></a> * @param {Element} el Element to which the inline-block display style is to be
-<a name="line1126"></a> *    applied.
-<a name="line1127"></a> * @see ../demos/inline_block_quirks.html
-<a name="line1128"></a> * @see ../demos/inline_block_standards.html
-<a name="line1129"></a> */
-<a name="line1130"></a>goog.style.setInlineBlock = function(el) {
-<a name="line1131"></a>  var style = el.style;
-<a name="line1132"></a>  // Without position:relative, weirdness ensues.  Just accept it and move on.
-<a name="line1133"></a>  style.position = &#39;relative&#39;;
-<a name="line1134"></a>
-<a name="line1135"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;8&#39;)) {
-<a name="line1136"></a>    // IE8 supports inline-block so fall through to the else
-<a name="line1137"></a>    // Zoom:1 forces hasLayout, display:inline gives inline behavior.
-<a name="line1138"></a>    style.zoom = &#39;1&#39;;
-<a name="line1139"></a>    style.display = &#39;inline&#39;;
-<a name="line1140"></a>  } else if (goog.userAgent.GECKO) {
-<a name="line1141"></a>    // Pre-Firefox 3, Gecko doesn&#39;t support inline-block, but -moz-inline-box
-<a name="line1142"></a>    // is close enough.
-<a name="line1143"></a>    style.display = goog.userAgent.isVersion(&#39;1.9a&#39;) ? &#39;inline-block&#39; :
-<a name="line1144"></a>        &#39;-moz-inline-box&#39;;
-<a name="line1145"></a>  } else {
-<a name="line1146"></a>    // Opera, Webkit, and Safari seem to do OK with the standard inline-block
-<a name="line1147"></a>    // style.
-<a name="line1148"></a>    style.display = &#39;inline-block&#39;;
-<a name="line1149"></a>  }
-<a name="line1150"></a>};
-<a name="line1151"></a>
-<a name="line1152"></a>
-<a name="line1153"></a>/**
-<a name="line1154"></a> * Returns true if the element is using right to left (rtl) direction.
-<a name="line1155"></a> * @param {Element} el  The element to test.
-<a name="line1156"></a> * @return {boolean} True for right to left, false for left to right.
-<a name="line1157"></a> */
-<a name="line1158"></a>goog.style.isRightToLeft = function(el) {
-<a name="line1159"></a>  return &#39;rtl&#39; == goog.style.getStyle_(el, &#39;direction&#39;);
-<a name="line1160"></a>};
-<a name="line1161"></a>
-<a name="line1162"></a>
-<a name="line1163"></a>/**
-<a name="line1164"></a> * The CSS style property corresponding to an element being
-<a name="line1165"></a> * unselectable on the current browser platform (null if none).
-<a name="line1166"></a> * Opera and IE instead use a DOM attribute &#39;unselectable&#39;.
-<a name="line1167"></a> * @type {?string}
-<a name="line1168"></a> * @private
-<a name="line1169"></a> */
-<a name="line1170"></a>goog.style.unselectableStyle_ =
-<a name="line1171"></a>    goog.userAgent.GECKO ? &#39;MozUserSelect&#39; :
-<a name="line1172"></a>    goog.userAgent.WEBKIT ? &#39;WebkitUserSelect&#39; :
-<a name="line1173"></a>    null;
-<a name="line1174"></a>
-<a name="line1175"></a>
-<a name="line1176"></a>/**
-<a name="line1177"></a> * Returns true if the element is set to be unselectable, false otherwise.
-<a name="line1178"></a> * Note that on some platforms (e.g. Mozilla), even if an element isn&#39;t set
-<a name="line1179"></a> * to be unselectable, it will behave as such if any of its ancestors is
-<a name="line1180"></a> * unselectable.
-<a name="line1181"></a> * @param {Element} el  Element to check.
-<a name="line1182"></a> * @return {boolean}  Whether the element is set to be unselectable.
-<a name="line1183"></a> */
-<a name="line1184"></a>goog.style.isUnselectable = function(el) {
-<a name="line1185"></a>  if (goog.style.unselectableStyle_) {
-<a name="line1186"></a>    return el.style[goog.style.unselectableStyle_].toLowerCase() == &#39;none&#39;;
-<a name="line1187"></a>  } else if (goog.userAgent.IE || goog.userAgent.OPERA) {
-<a name="line1188"></a>    return el.getAttribute(&#39;unselectable&#39;) == &#39;on&#39;;
-<a name="line1189"></a>  }
-<a name="line1190"></a>  return false;
-<a name="line1191"></a>};
-<a name="line1192"></a>
-<a name="line1193"></a>
-<a name="line1194"></a>/**
-<a name="line1195"></a> * Makes the element and its descendants selectable or unselectable.  Note
-<a name="line1196"></a> * that on some platforms (e.g. Mozilla), even if an element isn&#39;t set to
-<a name="line1197"></a> * be unselectable, it will behave as such if any of its ancestors is
-<a name="line1198"></a> * unselectable.
-<a name="line1199"></a> * @param {Element} el  The element to alter.
-<a name="line1200"></a> * @param {boolean} unselectable  Whether the element and its descendants
-<a name="line1201"></a> *     should be made unselectable.
-<a name="line1202"></a> * @param {boolean=} opt_noRecurse  Whether to only alter the element&#39;s own
-<a name="line1203"></a> *     selectable state, and leave its descendants alone; defaults to false.
-<a name="line1204"></a> */
-<a name="line1205"></a>goog.style.setUnselectable = function(el, unselectable, opt_noRecurse) {
-<a name="line1206"></a>  // TODO: Do we need all of TR_DomUtil.makeUnselectable() in Closure?
-<a name="line1207"></a>  var descendants = !opt_noRecurse ? el.getElementsByTagName(&#39;*&#39;) : null;
-<a name="line1208"></a>  var name = goog.style.unselectableStyle_;
-<a name="line1209"></a>  if (name) {
-<a name="line1210"></a>    // Add/remove the appropriate CSS style to/from the element and its
-<a name="line1211"></a>    // descendants.
-<a name="line1212"></a>    var value = unselectable ? &#39;none&#39; : &#39;&#39;;
-<a name="line1213"></a>    el.style[name] = value;
-<a name="line1214"></a>    if (descendants) {
-<a name="line1215"></a>      for (var i = 0, descendant; descendant = descendants[i]; i++) {
-<a name="line1216"></a>        descendant.style[name] = value;
-<a name="line1217"></a>      }
-<a name="line1218"></a>    }
-<a name="line1219"></a>  } else if (goog.userAgent.IE || goog.userAgent.OPERA) {
-<a name="line1220"></a>    // Toggle the &#39;unselectable&#39; attribute on the element and its descendants.
-<a name="line1221"></a>    var value = unselectable ? &#39;on&#39; : &#39;&#39;;
-<a name="line1222"></a>    el.setAttribute(&#39;unselectable&#39;, value);
-<a name="line1223"></a>    if (descendants) {
-<a name="line1224"></a>      for (var i = 0, descendant; descendant = descendants[i]; i++) {
-<a name="line1225"></a>        descendant.setAttribute(&#39;unselectable&#39;, value);
-<a name="line1226"></a>      }
-<a name="line1227"></a>    }
-<a name="line1228"></a>  }
-<a name="line1229"></a>};
-<a name="line1230"></a>
-<a name="line1231"></a>
-<a name="line1232"></a>/**
-<a name="line1233"></a> * Gets the border box size for an element.
-<a name="line1234"></a> * @param {Element} element  The element to get the size for.
-<a name="line1235"></a> * @return {goog.math.Size} The border box size.
-<a name="line1236"></a> */
-<a name="line1237"></a>goog.style.getBorderBoxSize = function(element) {
-<a name="line1238"></a>  return new goog.math.Size(element.offsetWidth, element.offsetHeight);
-<a name="line1239"></a>};
-<a name="line1240"></a>
-<a name="line1241"></a>
-<a name="line1242"></a>/**
-<a name="line1243"></a> * Sets the border box size of an element. This is potentially expensive in IE
-<a name="line1244"></a> * if the document is CSS1Compat mode
-<a name="line1245"></a> * @param {Element} element  The element to set the size on.
-<a name="line1246"></a> * @param {goog.math.Size} size  The new size.
-<a name="line1247"></a> */
-<a name="line1248"></a>goog.style.setBorderBoxSize = function(element, size) {
-<a name="line1249"></a>  var doc = goog.dom.getOwnerDocument(element);
-<a name="line1250"></a>  var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
-<a name="line1251"></a>
-<a name="line1252"></a>  if (goog.userAgent.IE &amp;&amp;
-<a name="line1253"></a>      (!isCss1CompatMode || !goog.userAgent.isVersion(&#39;8&#39;))) {
-<a name="line1254"></a>    var style = element.style;
-<a name="line1255"></a>    if (isCss1CompatMode) {
-<a name="line1256"></a>      var paddingBox = goog.style.getPaddingBox(element);
-<a name="line1257"></a>      var borderBox = goog.style.getBorderBox(element);
-<a name="line1258"></a>      style.pixelWidth = size.width - borderBox.left - paddingBox.left -
-<a name="line1259"></a>                         paddingBox.right - borderBox.right;
-<a name="line1260"></a>      style.pixelHeight = size.height - borderBox.top - paddingBox.top -
-<a name="line1261"></a>                          paddingBox.bottom - borderBox.bottom;
-<a name="line1262"></a>    } else {
-<a name="line1263"></a>      style.pixelWidth = size.width;
-<a name="line1264"></a>      style.pixelHeight = size.height;
-<a name="line1265"></a>    }
-<a name="line1266"></a>  } else {
-<a name="line1267"></a>    goog.style.setBoxSizingSize_(element, size, &#39;border-box&#39;);
-<a name="line1268"></a>  }
-<a name="line1269"></a>};
-<a name="line1270"></a>
-<a name="line1271"></a>
-<a name="line1272"></a>/**
-<a name="line1273"></a> * Gets the content box size for an element.  This is potentially expensive in
-<a name="line1274"></a> * all browsers.
-<a name="line1275"></a> * @param {Element} element  The element to get the size for.
-<a name="line1276"></a> * @return {goog.math.Size} The content box size.
-<a name="line1277"></a> */
-<a name="line1278"></a>goog.style.getContentBoxSize = function(element) {
-<a name="line1279"></a>  var doc = goog.dom.getOwnerDocument(element);
-<a name="line1280"></a>  var ieCurrentStyle = goog.userAgent.IE &amp;&amp; element.currentStyle;
-<a name="line1281"></a>  if (ieCurrentStyle &amp;&amp;
-<a name="line1282"></a>      goog.dom.getDomHelper(doc).isCss1CompatMode() &amp;&amp;
-<a name="line1283"></a>      ieCurrentStyle.width != &#39;auto&#39; &amp;&amp; ieCurrentStyle.height != &#39;auto&#39; &amp;&amp;
-<a name="line1284"></a>      !ieCurrentStyle.boxSizing) {
-<a name="line1285"></a>    // If IE in CSS1Compat mode than just use the width and height.
-<a name="line1286"></a>    // If we have a boxSizing then fall back on measuring the borders etc.
-<a name="line1287"></a>    var width = goog.style.getIePixelValue_(element, ieCurrentStyle.width,
-<a name="line1288"></a>                                            &#39;width&#39;, &#39;pixelWidth&#39;);
-<a name="line1289"></a>    var height = goog.style.getIePixelValue_(element, ieCurrentStyle.height,
-<a name="line1290"></a>                                             &#39;height&#39;, &#39;pixelHeight&#39;);
-<a name="line1291"></a>    return new goog.math.Size(width, height);
-<a name="line1292"></a>  } else {
-<a name="line1293"></a>    var borderBoxSize = goog.style.getBorderBoxSize(element);
-<a name="line1294"></a>    var paddingBox = goog.style.getPaddingBox(element);
-<a name="line1295"></a>    var borderBox = goog.style.getBorderBox(element);
-<a name="line1296"></a>    return new goog.math.Size(borderBoxSize.width -
-<a name="line1297"></a>                              borderBox.left - paddingBox.left -
-<a name="line1298"></a>                              paddingBox.right - borderBox.right,
-<a name="line1299"></a>                              borderBoxSize.height -
-<a name="line1300"></a>                              borderBox.top - paddingBox.top -
-<a name="line1301"></a>                              paddingBox.bottom - borderBox.bottom);
-<a name="line1302"></a>  }
-<a name="line1303"></a>};
-<a name="line1304"></a>
-<a name="line1305"></a>
-<a name="line1306"></a>/**
-<a name="line1307"></a> * Sets the content box size of an element. This is potentially expensive in IE
-<a name="line1308"></a> * if the document is BackCompat mode.
-<a name="line1309"></a> * @param {Element} element  The element to set the size on.
-<a name="line1310"></a> * @param {goog.math.Size} size  The new size.
-<a name="line1311"></a> */
-<a name="line1312"></a>goog.style.setContentBoxSize = function(element, size) {
-<a name="line1313"></a>  var doc = goog.dom.getOwnerDocument(element);
-<a name="line1314"></a>  var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
-<a name="line1315"></a>  if (goog.userAgent.IE &amp;&amp;
-<a name="line1316"></a>      (!isCss1CompatMode || !goog.userAgent.isVersion(&#39;8&#39;))) {
-<a name="line1317"></a>    var style = element.style;
-<a name="line1318"></a>    if (isCss1CompatMode) {
-<a name="line1319"></a>      style.pixelWidth = size.width;
-<a name="line1320"></a>      style.pixelHeight = size.height;
-<a name="line1321"></a>    } else {
-<a name="line1322"></a>      var paddingBox = goog.style.getPaddingBox(element);
-<a name="line1323"></a>      var borderBox = goog.style.getBorderBox(element);
-<a name="line1324"></a>      style.pixelWidth = size.width + borderBox.left + paddingBox.left +
-<a name="line1325"></a>                         paddingBox.right + borderBox.right;
-<a name="line1326"></a>      style.pixelHeight = size.height + borderBox.top + paddingBox.top +
-<a name="line1327"></a>                          paddingBox.bottom + borderBox.bottom;
-<a name="line1328"></a>    }
-<a name="line1329"></a>  } else {
-<a name="line1330"></a>    goog.style.setBoxSizingSize_(element, size, &#39;content-box&#39;);
-<a name="line1331"></a>  }
-<a name="line1332"></a>};
-<a name="line1333"></a>
-<a name="line1334"></a>
-<a name="line1335"></a>/**
-<a name="line1336"></a> * Helper function that sets the box sizing as well as the width and height
-<a name="line1337"></a> * @param {Element} element  The element to set the size on.
-<a name="line1338"></a> * @param {goog.math.Size} size  The new size to set.
-<a name="line1339"></a> * @param {string} boxSizing  The box-sizing value.
-<a name="line1340"></a> * @private
-<a name="line1341"></a> */
-<a name="line1342"></a>goog.style.setBoxSizingSize_ = function(element, size, boxSizing) {
-<a name="line1343"></a>  var style = element.style;
-<a name="line1344"></a>  if (goog.userAgent.GECKO) {
-<a name="line1345"></a>    style.MozBoxSizing = boxSizing;
-<a name="line1346"></a>  } else if (goog.userAgent.WEBKIT) {
-<a name="line1347"></a>    style.WebkitBoxSizing = boxSizing;
-<a name="line1348"></a>  } else if (goog.userAgent.OPERA &amp;&amp; !goog.userAgent.isVersion(&#39;9.50&#39;)) {
-<a name="line1349"></a>    // Opera pre-9.5 does not have CSSStyleDeclaration::boxSizing, but
-<a name="line1350"></a>    // box-sizing can still be set via CSSStyleDeclaration::setProperty.
-<a name="line1351"></a>    if (boxSizing) {
-<a name="line1352"></a>      style.setProperty(&#39;box-sizing&#39;, boxSizing);
-<a name="line1353"></a>    } else {
-<a name="line1354"></a>      style.removeProperty(&#39;box-sizing&#39;);
-<a name="line1355"></a>    }
-<a name="line1356"></a>  } else {
-<a name="line1357"></a>    // Includes IE8
-<a name="line1358"></a>    style.boxSizing = boxSizing;
-<a name="line1359"></a>  }
-<a name="line1360"></a>  style.width = size.width + &#39;px&#39;;
-<a name="line1361"></a>  style.height = size.height + &#39;px&#39;;
-<a name="line1362"></a>};
-<a name="line1363"></a>
-<a name="line1364"></a>
-<a name="line1365"></a>/**
-<a name="line1366"></a> * IE specific function that converts a non pixel unit to pixels.
-<a name="line1367"></a> * @param {Element} element  The element to convert the value for.
-<a name="line1368"></a> * @param {string} value  The current value as a string. The value must not be
-<a name="line1369"></a> *     &#39;&#39;.
-<a name="line1370"></a> * @param {string} name  The CSS property name to use for the converstion. This
-<a name="line1371"></a> *     should be &#39;left&#39;, &#39;top&#39;, &#39;width&#39; or &#39;height&#39;.
-<a name="line1372"></a> * @param {string} pixelName  The CSS pixel property name to use to get the
-<a name="line1373"></a> *     value in pixels.
-<a name="line1374"></a> * @return {number} The value in pixels.
-<a name="line1375"></a> * @private
-<a name="line1376"></a> */
-<a name="line1377"></a>goog.style.getIePixelValue_ = function(element, value, name, pixelName) {
-<a name="line1378"></a>  // Try if we already have a pixel value. IE does not do half pixels so we
-<a name="line1379"></a>  // only check if it matches a number followed by &#39;px&#39;.
-<a name="line1380"></a>  if (/^\d+px?$/.test(value)) {
-<a name="line1381"></a>    return parseInt(value, 10);
-<a name="line1382"></a>  } else {
-<a name="line1383"></a>    var oldStyleValue = element.style[name];
-<a name="line1384"></a>    var oldRuntimeValue = element.runtimeStyle[name];
-<a name="line1385"></a>    // set runtime style to prevent changes
-<a name="line1386"></a>    element.runtimeStyle[name] = element.currentStyle[name];
-<a name="line1387"></a>    element.style[name] = value;
-<a name="line1388"></a>    var pixelValue = element.style[pixelName];
-<a name="line1389"></a>    // restore
-<a name="line1390"></a>    element.style[name] = oldStyleValue;
-<a name="line1391"></a>    element.runtimeStyle[name] = oldRuntimeValue;
-<a name="line1392"></a>    return pixelValue;
-<a name="line1393"></a>  }
-<a name="line1394"></a>};
-<a name="line1395"></a>
-<a name="line1396"></a>
-<a name="line1397"></a>/**
-<a name="line1398"></a> * Helper function for getting the pixel padding or margin for IE.
-<a name="line1399"></a> * @param {Element} element  The element to get the padding for.
-<a name="line1400"></a> * @param {string} propName  The property name.
-<a name="line1401"></a> * @return {number} The pixel padding.
-<a name="line1402"></a> * @private
-<a name="line1403"></a> */
-<a name="line1404"></a>goog.style.getIePixelDistance_ = function(element, propName) {
-<a name="line1405"></a>  return goog.style.getIePixelValue_(element,
-<a name="line1406"></a>      goog.style.getCascadedStyle(element, propName),
-<a name="line1407"></a>      &#39;left&#39;, &#39;pixelLeft&#39;);
-<a name="line1408"></a>};
-<a name="line1409"></a>
-<a name="line1410"></a>
-<a name="line1411"></a>/**
-<a name="line1412"></a> * Gets the computed paddings or margins (on all sides) in pixels.
-<a name="line1413"></a> * @param {Element} element  The element to get the padding for.
-<a name="line1414"></a> * @param {string} stylePrefix  Pass &#39;padding&#39; to retrieve the padding box,
-<a name="line1415"></a> *     or &#39;margin&#39; to retrieve the margin box.
-<a name="line1416"></a> * @return {goog.math.Box} The computed paddings or margins.
-<a name="line1417"></a> * @private
-<a name="line1418"></a> */
-<a name="line1419"></a>goog.style.getBox_ = function(element, stylePrefix) {
-<a name="line1420"></a>  if (goog.userAgent.IE) {
-<a name="line1421"></a>    var left = goog.style.getIePixelDistance_(element, stylePrefix + &#39;Left&#39;);
-<a name="line1422"></a>    var right = goog.style.getIePixelDistance_(element, stylePrefix + &#39;Right&#39;);
-<a name="line1423"></a>    var top = goog.style.getIePixelDistance_(element, stylePrefix + &#39;Top&#39;);
-<a name="line1424"></a>    var bottom = goog.style.getIePixelDistance_(
-<a name="line1425"></a>        element, stylePrefix + &#39;Bottom&#39;);
-<a name="line1426"></a>    return new goog.math.Box(top, right, bottom, left);
-<a name="line1427"></a>  } else {
-<a name="line1428"></a>    // On non-IE browsers, getComputedStyle is always non-null.
-<a name="line1429"></a>    var left = /** @type {string} */ (
-<a name="line1430"></a>        goog.style.getComputedStyle(element, stylePrefix + &#39;Left&#39;));
-<a name="line1431"></a>    var right = /** @type {string} */ (
-<a name="line1432"></a>        goog.style.getComputedStyle(element, stylePrefix + &#39;Right&#39;));
-<a name="line1433"></a>    var top = /** @type {string} */ (
-<a name="line1434"></a>        goog.style.getComputedStyle(element, stylePrefix + &#39;Top&#39;));
-<a name="line1435"></a>    var bottom = /** @type {string} */ (
-<a name="line1436"></a>        goog.style.getComputedStyle(element, stylePrefix + &#39;Bottom&#39;));
-<a name="line1437"></a>
-<a name="line1438"></a>    // NOTE: Gecko can return floating point numbers for the computed
-<a name="line1439"></a>    // style values.
-<a name="line1440"></a>    return new goog.math.Box(parseFloat(top),
-<a name="line1441"></a>                             parseFloat(right),
-<a name="line1442"></a>                             parseFloat(bottom),
-<a name="line1443"></a>                             parseFloat(left));
-<a name="line1444"></a>  }
-<a name="line1445"></a>};
-<a name="line1446"></a>
-<a name="line1447"></a>
-<a name="line1448"></a>/**
-<a name="line1449"></a> * Gets the computed paddings (on all sides) in pixels.
-<a name="line1450"></a> * @param {Element} element  The element to get the padding for.
-<a name="line1451"></a> * @return {goog.math.Box} The computed paddings.
-<a name="line1452"></a> */
-<a name="line1453"></a>goog.style.getPaddingBox = function(element) {
-<a name="line1454"></a>  return goog.style.getBox_(element, &#39;padding&#39;);
-<a name="line1455"></a>};
-<a name="line1456"></a>
-<a name="line1457"></a>
-<a name="line1458"></a>/**
-<a name="line1459"></a> * Gets the computed margins (on all sides) in pixels.
-<a name="line1460"></a> * @param {Element} element  The element to get the margins for.
-<a name="line1461"></a> * @return {goog.math.Box} The computed margins.
-<a name="line1462"></a> */
-<a name="line1463"></a>goog.style.getMarginBox = function(element) {
-<a name="line1464"></a>  return goog.style.getBox_(element, &#39;margin&#39;);
-<a name="line1465"></a>};
-<a name="line1466"></a>
-<a name="line1467"></a>
-<a name="line1468"></a>/**
-<a name="line1469"></a> * A map used to map the border width keywords to a pixel width.
-<a name="line1470"></a> * @type {Object}
-<a name="line1471"></a> * @private
-<a name="line1472"></a> */
-<a name="line1473"></a>goog.style.ieBorderWidthKeywords_ = {
-<a name="line1474"></a>  &#39;thin&#39;: 2,
-<a name="line1475"></a>  &#39;medium&#39;: 4,
-<a name="line1476"></a>  &#39;thick&#39;: 6
-<a name="line1477"></a>};
-<a name="line1478"></a>
-<a name="line1479"></a>
-<a name="line1480"></a>/**
-<a name="line1481"></a> * Helper function for IE to get the pixel border.
-<a name="line1482"></a> * @param {Element} element  The element to get the pixel border for.
-<a name="line1483"></a> * @param {string} prop  The part of the property name.
-<a name="line1484"></a> * @return {number} The value in pixels.
-<a name="line1485"></a> * @private
-<a name="line1486"></a> */
-<a name="line1487"></a>goog.style.getIePixelBorder_ = function(element, prop) {
-<a name="line1488"></a>  if (goog.style.getCascadedStyle(element, prop + &#39;Style&#39;) == &#39;none&#39;) {
-<a name="line1489"></a>    return 0;
-<a name="line1490"></a>  }
-<a name="line1491"></a>  var width = goog.style.getCascadedStyle(element, prop + &#39;Width&#39;);
-<a name="line1492"></a>  if (width in goog.style.ieBorderWidthKeywords_) {
-<a name="line1493"></a>    return goog.style.ieBorderWidthKeywords_[width];
-<a name="line1494"></a>  }
-<a name="line1495"></a>  return goog.style.getIePixelValue_(element, width, &#39;left&#39;, &#39;pixelLeft&#39;);
-<a name="line1496"></a>};
-<a name="line1497"></a>
-<a name="line1498"></a>
-<a name="line1499"></a>/**
-<a name="line1500"></a> * Gets the computed border widths (on all sides) in pixels
-<a name="line1501"></a> * @param {Element} element  The element to get the border widths for.
-<a name="line1502"></a> * @return {goog.math.Box} The computed border widths.
-<a name="line1503"></a> */
-<a name="line1504"></a>goog.style.getBorderBox = function(element) {
-<a name="line1505"></a>  if (goog.userAgent.IE) {
-<a name="line1506"></a>    var left = goog.style.getIePixelBorder_(element, &#39;borderLeft&#39;);
-<a name="line1507"></a>    var right = goog.style.getIePixelBorder_(element, &#39;borderRight&#39;);
-<a name="line1508"></a>    var top = goog.style.getIePixelBorder_(element, &#39;borderTop&#39;);
-<a name="line1509"></a>    var bottom = goog.style.getIePixelBorder_(element, &#39;borderBottom&#39;);
-<a name="line1510"></a>    return new goog.math.Box(top, right, bottom, left);
-<a name="line1511"></a>  } else {
-<a name="line1512"></a>    // On non-IE browsers, getComputedStyle is always non-null.
-<a name="line1513"></a>    var left = /** @type {string} */ (
-<a name="line1514"></a>        goog.style.getComputedStyle(element, &#39;borderLeftWidth&#39;));
-<a name="line1515"></a>    var right = /** @type {string} */ (
-<a name="line1516"></a>        goog.style.getComputedStyle(element, &#39;borderRightWidth&#39;));
-<a name="line1517"></a>    var top = /** @type {string} */ (
-<a name="line1518"></a>        goog.style.getComputedStyle(element, &#39;borderTopWidth&#39;));
-<a name="line1519"></a>    var bottom = /** @type {string} */ (
-<a name="line1520"></a>        goog.style.getComputedStyle(element, &#39;borderBottomWidth&#39;));
-<a name="line1521"></a>
-<a name="line1522"></a>    return new goog.math.Box(parseFloat(top),
-<a name="line1523"></a>                             parseFloat(right),
-<a name="line1524"></a>                             parseFloat(bottom),
-<a name="line1525"></a>                             parseFloat(left));
-<a name="line1526"></a>  }
-<a name="line1527"></a>};
-<a name="line1528"></a>
-<a name="line1529"></a>
-<a name="line1530"></a>/**
-<a name="line1531"></a> * Returns the font face applied to a given node. Opera and IE should return
-<a name="line1532"></a> * the font actually displayed. Firefox returns the author&#39;s most-preferred
-<a name="line1533"></a> * font (whether the browser is capable of displaying it or not.)
-<a name="line1534"></a> * @param {Element} el  The element whose font family is returned.
-<a name="line1535"></a> * @return {string} The font family applied to el.
-<a name="line1536"></a> */
-<a name="line1537"></a>goog.style.getFontFamily = function(el) {
-<a name="line1538"></a>  var doc = goog.dom.getOwnerDocument(el);
-<a name="line1539"></a>  var font = &#39;&#39;;
-<a name="line1540"></a>  if (doc.createTextRange) {
-<a name="line1541"></a>    var range = doc.body.createTextRange();
-<a name="line1542"></a>    range.moveToElementText(el);
-<a name="line1543"></a>    font = range.queryCommandValue(&#39;FontName&#39;);
-<a name="line1544"></a>  }
-<a name="line1545"></a>  if (!font) {
-<a name="line1546"></a>    // Note if for some reason IE can&#39;t derive FontName with a TextRange, we
-<a name="line1547"></a>    // fallback to using currentStyle
-<a name="line1548"></a>    font = goog.style.getStyle_(el, &#39;fontFamily&#39;);
-<a name="line1549"></a>    // Opera on Linux provides the font vendor&#39;s name in square-brackets.
-<a name="line1550"></a>    if (goog.userAgent.OPERA &amp;&amp; goog.userAgent.LINUX) {
-<a name="line1551"></a>      font = font.replace(/ \[[^\]]*\]/, &#39;&#39;);
-<a name="line1552"></a>    }
-<a name="line1553"></a>  }
-<a name="line1554"></a>
-<a name="line1555"></a>  // Firefox returns the applied font-family string (author&#39;s list of
-<a name="line1556"></a>  // preferred fonts.) We want to return the most-preferred font, in lieu of
-<a name="line1557"></a>  // the *actually* applied font.
-<a name="line1558"></a>  var fontsArray = font.split(&#39;,&#39;);
-<a name="line1559"></a>  if (fontsArray.length &gt; 1) font = fontsArray[0];
-<a name="line1560"></a>
-<a name="line1561"></a>  // Sanitize for x-browser consistency:
-<a name="line1562"></a>  // Strip quotes because browsers aren&#39;t consistent with how they&#39;re
-<a name="line1563"></a>  // applied; Opera always encloses, Firefox sometimes, and IE never.
-<a name="line1564"></a>  return goog.string.stripQuotes(font, &#39;&quot;\&#39;&#39;);
-<a name="line1565"></a>};
-<a name="line1566"></a>
-<a name="line1567"></a>
-<a name="line1568"></a>/**
-<a name="line1569"></a> * Regular expression used for getLengthUnits.
-<a name="line1570"></a> * @type {RegExp}
-<a name="line1571"></a> * @private
-<a name="line1572"></a> */
-<a name="line1573"></a>goog.style.lengthUnitRegex_ = /[^\d]+$/;
-<a name="line1574"></a>
-<a name="line1575"></a>
-<a name="line1576"></a>/**
-<a name="line1577"></a> * Returns the units used for a CSS length measurement.
-<a name="line1578"></a> * @param {string} value  A CSS length quantity.
-<a name="line1579"></a> * @return {?string} The units of measurement.
-<a name="line1580"></a> */
-<a name="line1581"></a>goog.style.getLengthUnits = function(value) {
-<a name="line1582"></a>  var units = value.match(goog.style.lengthUnitRegex_);
-<a name="line1583"></a>  return units &amp;&amp; units[0] || null;
-<a name="line1584"></a>};
-<a name="line1585"></a>
-<a name="line1586"></a>
-<a name="line1587"></a>/**
-<a name="line1588"></a> * Map of absolute CSS length units
-<a name="line1589"></a> * @type {Object}
-<a name="line1590"></a> * @private
-<a name="line1591"></a> */
-<a name="line1592"></a>goog.style.ABSOLUTE_CSS_LENGTH_UNITS_ = {
-<a name="line1593"></a>  &#39;cm&#39; : 1,
-<a name="line1594"></a>  &#39;in&#39; : 1,
-<a name="line1595"></a>  &#39;mm&#39; : 1,
-<a name="line1596"></a>  &#39;pc&#39; : 1,
-<a name="line1597"></a>  &#39;pt&#39; : 1
-<a name="line1598"></a>};
-<a name="line1599"></a>
-<a name="line1600"></a>
-<a name="line1601"></a>/**
-<a name="line1602"></a> * Map of relative CSS length units that can be accurately converted to px
-<a name="line1603"></a> * font-size values using getIePixelValue_. Only units that are defined in
-<a name="line1604"></a> * relation to a font size are convertible (%, small, etc. are not).
-<a name="line1605"></a> * @type {Object}
-<a name="line1606"></a> * @private
-<a name="line1607"></a> */
-<a name="line1608"></a>goog.style.CONVERTIBLE_RELATIVE_CSS_UNITS_ = {
-<a name="line1609"></a>  &#39;em&#39; : 1,
-<a name="line1610"></a>  &#39;ex&#39; : 1
-<a name="line1611"></a>};
-<a name="line1612"></a>
-<a name="line1613"></a>
-<a name="line1614"></a>/**
-<a name="line1615"></a> * Returns the font size, in pixels, of text in an element.
-<a name="line1616"></a> * @param {Element} el  The element whose font size is returned.
-<a name="line1617"></a> * @return {number} The font size (in pixels).
-<a name="line1618"></a> */
-<a name="line1619"></a>goog.style.getFontSize = function(el) {
-<a name="line1620"></a>  var fontSize = goog.style.getStyle_(el, &#39;fontSize&#39;);
-<a name="line1621"></a>  var sizeUnits = goog.style.getLengthUnits(fontSize);
-<a name="line1622"></a>  if (fontSize &amp;&amp; &#39;px&#39; == sizeUnits) {
-<a name="line1623"></a>    // NOTE: This could be parseFloat instead, but IE doesn&#39;t return
-<a name="line1624"></a>    // decimal fractions in getStyle_ and Firefox reports the fractions, but
-<a name="line1625"></a>    // ignores them when rendering. Interestingly enough, when we force the
-<a name="line1626"></a>    // issue and size something to e.g., 50% of 25px, the browsers round in
-<a name="line1627"></a>    // opposite directions with Firefox reporting 12px and IE 13px. I punt.
-<a name="line1628"></a>    return parseInt(fontSize, 10);
-<a name="line1629"></a>  }
-<a name="line1630"></a>
-<a name="line1631"></a>  // In IE, we can convert absolute length units to a px value using
-<a name="line1632"></a>  // goog.style.getIePixelValue_. Units defined in relation to a font size
-<a name="line1633"></a>  // (em, ex) are applied relative to the element&#39;s parentNode and can also
-<a name="line1634"></a>  // be converted.
-<a name="line1635"></a>  if (goog.userAgent.IE) {
-<a name="line1636"></a>    if (sizeUnits in goog.style.ABSOLUTE_CSS_LENGTH_UNITS_) {
-<a name="line1637"></a>      return goog.style.getIePixelValue_(el,
-<a name="line1638"></a>                                         fontSize,
-<a name="line1639"></a>                                         &#39;left&#39;,
-<a name="line1640"></a>                                         &#39;pixelLeft&#39;);
-<a name="line1641"></a>    } else if (el.parentNode &amp;&amp;
-<a name="line1642"></a>               el.parentNode.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp;
-<a name="line1643"></a>               sizeUnits in goog.style.CONVERTIBLE_RELATIVE_CSS_UNITS_) {
-<a name="line1644"></a>      // Check the parent size - if it is the same it means the relative size
-<a name="line1645"></a>      // value is inherited and we therefore don&#39;t want to count it twice.  If
-<a name="line1646"></a>      // it is different, this element either has explicit style or has a CSS
-<a name="line1647"></a>      // rule applying to it.
-<a name="line1648"></a>      var parentElement = /** @type {Element} */ (el.parentNode);
-<a name="line1649"></a>      var parentSize = goog.style.getStyle_(parentElement, &#39;fontSize&#39;);
-<a name="line1650"></a>      return goog.style.getIePixelValue_(parentElement,
-<a name="line1651"></a>                                         fontSize == parentSize ?
-<a name="line1652"></a>                                             &#39;1em&#39; : fontSize,
-<a name="line1653"></a>                                         &#39;left&#39;,
-<a name="line1654"></a>                                         &#39;pixelLeft&#39;);
-<a name="line1655"></a>    }
-<a name="line1656"></a>  }
-<a name="line1657"></a>
-<a name="line1658"></a>  // Sometimes we can&#39;t cleanly find the font size (some units relative to a
-<a name="line1659"></a>  // node&#39;s parent&#39;s font size are difficult: %, smaller et al), so we create
-<a name="line1660"></a>  // an invisible, absolutely-positioned span sized to be the height of an &#39;M&#39;
-<a name="line1661"></a>  // rendered in its parent&#39;s (i.e., our target element&#39;s) font size. This is
-<a name="line1662"></a>  // the definition of CSS&#39;s font size attribute.
-<a name="line1663"></a>  var sizeElement = goog.dom.createDom(
-<a name="line1664"></a>      &#39;span&#39;,
-<a name="line1665"></a>      {&#39;style&#39;: &#39;visibility:hidden;position:absolute;&#39; +
-<a name="line1666"></a>                &#39;line-height:0;padding:0;margin:0;border:0;height:1em;&#39;});
-<a name="line1667"></a>  goog.dom.appendChild(el, sizeElement);
-<a name="line1668"></a>  fontSize = sizeElement.offsetHeight;
-<a name="line1669"></a>  goog.dom.removeNode(sizeElement);
-<a name="line1670"></a>
-<a name="line1671"></a>  return fontSize;
-<a name="line1672"></a>};
+<a name="line843"></a>  return new goog.math.Size(originalWidth, originalHeight);
+<a name="line844"></a>};
+<a name="line845"></a>
+<a name="line846"></a>
+<a name="line847"></a>/**
+<a name="line848"></a> * Returns a bounding rectangle for a given element in page space.
+<a name="line849"></a> * @param {Element} element Element to get bounds of.
+<a name="line850"></a> * @return {!goog.math.Rect} Bounding rectangle for the element.
+<a name="line851"></a> */
+<a name="line852"></a>goog.style.getBounds = function(element) {
+<a name="line853"></a>  var o = goog.style.getPageOffset(element);
+<a name="line854"></a>  var s = goog.style.getSize(element);
+<a name="line855"></a>  return new goog.math.Rect(o.x, o.y, s.width, s.height);
+<a name="line856"></a>};
+<a name="line857"></a>
+<a name="line858"></a>
+<a name="line859"></a>/**
+<a name="line860"></a> * A memoized cache for goog.style.toCamelCase.
+<a name="line861"></a> * @type {Object}
+<a name="line862"></a> * @private
+<a name="line863"></a> */
+<a name="line864"></a>goog.style.toCamelCaseCache_ = {};
+<a name="line865"></a>
+<a name="line866"></a>
+<a name="line867"></a>/**
+<a name="line868"></a> * Converts a CSS selector in the form style-property to styleProperty
+<a name="line869"></a> * @param {*} selector CSS Selector.
+<a name="line870"></a> * @return {string} Camel case selector.
+<a name="line871"></a> */
+<a name="line872"></a>goog.style.toCamelCase = function(selector) {
+<a name="line873"></a>  return goog.style.toCamelCaseCache_[selector] ||
+<a name="line874"></a>    (goog.style.toCamelCaseCache_[selector] =
+<a name="line875"></a>        String(selector).replace(/\-([a-z])/g, function(all, match) {
+<a name="line876"></a>          return match.toUpperCase();
+<a name="line877"></a>        }));
+<a name="line878"></a>};
+<a name="line879"></a>
+<a name="line880"></a>
+<a name="line881"></a>/**
+<a name="line882"></a> * Converts a CSS selector in the form styleProperty to style-property
+<a name="line883"></a> * @param {string} selector Camel case selector.
+<a name="line884"></a> * @return {string} Selector cased.
+<a name="line885"></a> */
+<a name="line886"></a>goog.style.toSelectorCase = function(selector) {
+<a name="line887"></a>  return selector.replace(/([A-Z])/g, &#39;-$1&#39;).toLowerCase();
+<a name="line888"></a>};
+<a name="line889"></a>
+<a name="line890"></a>
+<a name="line891"></a>/**
+<a name="line892"></a> * Gets the opacity of a node (x-browser). This gets the inline style opacity
+<a name="line893"></a> * of the node, and does not take into account the cascaded or the computed
+<a name="line894"></a> * style for this node.
+<a name="line895"></a> * @param {Element} el Element whose opacity has to be found.
+<a name="line896"></a> * @return {number|string} Opacity between 0 and 1 or an empty string {@code &#39;&#39;}
+<a name="line897"></a> *     if the opacity is not set.
+<a name="line898"></a> */
+<a name="line899"></a>goog.style.getOpacity = function(el) {
+<a name="line900"></a>  var style = el.style;
+<a name="line901"></a>  var result = &#39;&#39;;
+<a name="line902"></a>  if (&#39;opacity&#39; in style) {
+<a name="line903"></a>    result = style.opacity;
+<a name="line904"></a>  } else if (&#39;MozOpacity&#39; in style) {
+<a name="line905"></a>    result = style.MozOpacity;
+<a name="line906"></a>  } else if (&#39;filter&#39; in style) {
+<a name="line907"></a>    var match = style.filter.match(/alpha\(opacity=([\d.]+)\)/);
+<a name="line908"></a>    if (match) {
+<a name="line909"></a>      result = String(match[1] / 100);
+<a name="line910"></a>    }
+<a name="line911"></a>  }
+<a name="line912"></a>  return result == &#39;&#39; ? result : Number(result);
+<a name="line913"></a>};
+<a name="line914"></a>
+<a name="line915"></a>
+<a name="line916"></a>/**
+<a name="line917"></a> * Sets the opacity of a node (x-browser).
+<a name="line918"></a> * @param {Element} el Elements whose opacity has to be set.
+<a name="line919"></a> * @param {number|string} alpha Opacity between 0 and 1 or an empty string
+<a name="line920"></a> *     {@code &#39;&#39;} to clear the opacity.
+<a name="line921"></a> */
+<a name="line922"></a>goog.style.setOpacity = function(el, alpha) {
+<a name="line923"></a>  var style = el.style;
+<a name="line924"></a>  if (&#39;opacity&#39; in style) {
+<a name="line925"></a>    style.opacity = alpha;
+<a name="line926"></a>  } else if (&#39;MozOpacity&#39; in style) {
+<a name="line927"></a>    style.MozOpacity = alpha;
+<a name="line928"></a>  } else if (&#39;filter&#39; in style) {
+<a name="line929"></a>    // TODO: Overwriting the filter might have undesired side effects.
+<a name="line930"></a>    if (alpha === &#39;&#39;) {
+<a name="line931"></a>      style.filter = &#39;&#39;;
+<a name="line932"></a>    } else {
+<a name="line933"></a>      style.filter = &#39;alpha(opacity=&#39; + alpha * 100 + &#39;)&#39;;
+<a name="line934"></a>    }
+<a name="line935"></a>  }
+<a name="line936"></a>};
+<a name="line937"></a>
+<a name="line938"></a>
+<a name="line939"></a>/**
+<a name="line940"></a> * Sets the background of an element to a transparent image in a browser-
+<a name="line941"></a> * independent manner.
+<a name="line942"></a> *
+<a name="line943"></a> * This function does not support repeating backgrounds or alternate background
+<a name="line944"></a> * positions to match the behavior of Internet Explorer. It also does not
+<a name="line945"></a> * support sizingMethods other than crop since they cannot be replicated in
+<a name="line946"></a> * browsers other than Internet Explorer.
+<a name="line947"></a> *
+<a name="line948"></a> * @param {Element} el The element to set background on.
+<a name="line949"></a> * @param {string} src The image source URL.
+<a name="line950"></a> */
+<a name="line951"></a>goog.style.setTransparentBackgroundImage = function(el, src) {
+<a name="line952"></a>  var style = el.style;
+<a name="line953"></a>  // It is safe to use the style.filter in IE only. In Safari &#39;filter&#39; is in
+<a name="line954"></a>  // style object but access to style.filter causes it to throw an exception.
+<a name="line955"></a>  // Note: IE8 supports images with an alpha channel.
+<a name="line956"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;8&#39;)) {
+<a name="line957"></a>    // See TODO in setOpacity.
+<a name="line958"></a>    style.filter = &#39;progid:DXImageTransform.Microsoft.AlphaImageLoader(&#39; +
+<a name="line959"></a>        &#39;src=&quot;&#39; + src + &#39;&quot;, sizingMethod=&quot;crop&quot;)&#39;;
+<a name="line960"></a>  } else {
+<a name="line961"></a>    // Set style properties individually instead of using background shorthand
+<a name="line962"></a>    // to prevent overwriting a pre-existing background color.
+<a name="line963"></a>    style.backgroundImage = &#39;url(&#39; + src + &#39;)&#39;;
+<a name="line964"></a>    style.backgroundPosition = &#39;top left&#39;;
+<a name="line965"></a>    style.backgroundRepeat = &#39;no-repeat&#39;;
+<a name="line966"></a>  }
+<a name="line967"></a>};
+<a name="line968"></a>
+<a name="line969"></a>
+<a name="line970"></a>/**
+<a name="line971"></a> * Clears the background image of an element in a browser independent manner.
+<a name="line972"></a> * @param {Element} el The element to clear background image for.
+<a name="line973"></a> */
+<a name="line974"></a>goog.style.clearTransparentBackgroundImage = function(el) {
+<a name="line975"></a>  var style = el.style;
+<a name="line976"></a>  if (&#39;filter&#39; in style) {
+<a name="line977"></a>    // See TODO in setOpacity.
+<a name="line978"></a>    style.filter = &#39;&#39;;
+<a name="line979"></a>  } else {
+<a name="line980"></a>    // Set style properties individually instead of using background shorthand
+<a name="line981"></a>    // to prevent overwriting a pre-existing background color.
+<a name="line982"></a>    style.backgroundImage = &#39;none&#39;;
+<a name="line983"></a>  }
+<a name="line984"></a>};
+<a name="line985"></a>
+<a name="line986"></a>
+<a name="line987"></a>/**
+<a name="line988"></a> * Shows or hides an element from the page. Hiding the element is done by
+<a name="line989"></a> * setting the display property to &quot;none&quot;, removing the element from the
+<a name="line990"></a> * rendering hierarchy so it takes up no space. To show the element, the default
+<a name="line991"></a> * inherited display property is restored (defined either in stylesheets or by
+<a name="line992"></a> * the browser&#39;s default style rules.)
+<a name="line993"></a> *
+<a name="line994"></a> * Caveat 1: if the inherited display property for the element is set to &quot;none&quot;
+<a name="line995"></a> * by the stylesheets, that is the property that will be restored by a call to
+<a name="line996"></a> * showElement(), effectively toggling the display between &quot;none&quot; and &quot;none&quot;.
+<a name="line997"></a> *
+<a name="line998"></a> * Caveat 2: if the element display style is set inline (by setting either
+<a name="line999"></a> * element.style.display or a style attribute in the HTML), a call to
+<a name="line1000"></a> * showElement will clear that setting and defer to the inherited style in the
+<a name="line1001"></a> * stylesheet.
+<a name="line1002"></a> * @param {Element} el Element to show or hide.
+<a name="line1003"></a> * @param {*} display True to render the element in its default style,
+<a name="line1004"></a> * false to disable rendering the element.
+<a name="line1005"></a> */
+<a name="line1006"></a>goog.style.showElement = function(el, display) {
+<a name="line1007"></a>  el.style.display = display ? &#39;&#39; : &#39;none&#39;;
+<a name="line1008"></a>};
+<a name="line1009"></a>
+<a name="line1010"></a>
+<a name="line1011"></a>/**
+<a name="line1012"></a> * Test whether the given element has been shown or hidden via a call to
+<a name="line1013"></a> * {@link #showElement}.
+<a name="line1014"></a> *
+<a name="line1015"></a> * Note this is strictly a companion method for a call
+<a name="line1016"></a> * to {@link #showElement} and the same caveats apply; in particular, this
+<a name="line1017"></a> * method does not guarantee that the return value will be consistent with
+<a name="line1018"></a> * whether or not the element is actually visible.
+<a name="line1019"></a> *
+<a name="line1020"></a> * @param {Element} el The element to test.
+<a name="line1021"></a> * @return {boolean} Whether the element has been shown.
+<a name="line1022"></a> * @see #showElement
+<a name="line1023"></a> */
+<a name="line1024"></a>goog.style.isElementShown = function(el) {
+<a name="line1025"></a>  return el.style.display != &#39;none&#39;;
+<a name="line1026"></a>};
+<a name="line1027"></a>
+<a name="line1028"></a>
+<a name="line1029"></a>/**
+<a name="line1030"></a> * Installs the styles string into the window that contains opt_element.  If
+<a name="line1031"></a> * opt_element is null, the main window is used.
+<a name="line1032"></a> * @param {string} stylesString The style string to install.
+<a name="line1033"></a> * @param {Node=} opt_node Node whose parent document should have the
+<a name="line1034"></a> *     styles installed.
+<a name="line1035"></a> * @return {Element|StyleSheet} The style element created.
+<a name="line1036"></a> */
+<a name="line1037"></a>goog.style.installStyles = function(stylesString, opt_node) {
+<a name="line1038"></a>  var dh = goog.dom.getDomHelper(opt_node);
+<a name="line1039"></a>  var styleSheet = null;
+<a name="line1040"></a>
+<a name="line1041"></a>  if (goog.userAgent.IE) {
+<a name="line1042"></a>    styleSheet = dh.getDocument().createStyleSheet();
+<a name="line1043"></a>    goog.style.setStyles(styleSheet, stylesString);
+<a name="line1044"></a>  } else {
+<a name="line1045"></a>    var head = dh.getElementsByTagNameAndClass(&#39;head&#39;)[0];
+<a name="line1046"></a>
+<a name="line1047"></a>    // In opera documents are not guaranteed to have a head element, thus we
+<a name="line1048"></a>    // have to make sure one exists before using it.
+<a name="line1049"></a>    if (!head) {
+<a name="line1050"></a>      var body = dh.getElementsByTagNameAndClass(&#39;body&#39;)[0];
+<a name="line1051"></a>      head = dh.createDom(&#39;head&#39;);
+<a name="line1052"></a>      body.parentNode.insertBefore(head, body);
+<a name="line1053"></a>    }
+<a name="line1054"></a>    styleSheet = dh.createDom(&#39;style&#39;);
+<a name="line1055"></a>    // NOTE: Setting styles after the style element has been appended
+<a name="line1056"></a>    // to the head results in a nasty Webkit bug in certain scenarios. Please
+<a name="line1057"></a>    // refer to https://bugs.webkit.org/show_bug.cgi?id=26307 for additional
+<a name="line1058"></a>    // details.
+<a name="line1059"></a>    goog.style.setStyles(styleSheet, stylesString);
+<a name="line1060"></a>    dh.appendChild(head, styleSheet);
+<a name="line1061"></a>  }
+<a name="line1062"></a>  return styleSheet;
+<a name="line1063"></a>};
+<a name="line1064"></a>
+<a name="line1065"></a>
+<a name="line1066"></a>/**
+<a name="line1067"></a> * Removes the styles added by {@link #installStyles}.
+<a name="line1068"></a> * @param {Element|StyleSheet} styleSheet The value returned by
+<a name="line1069"></a> *     {@link #installStyles}.
+<a name="line1070"></a> */
+<a name="line1071"></a>goog.style.uninstallStyles = function(styleSheet) {
+<a name="line1072"></a>  var node = styleSheet.ownerNode || styleSheet.owningElement ||
+<a name="line1073"></a>      /** @type {Element} */ (styleSheet);
+<a name="line1074"></a>  goog.dom.removeNode(node);
+<a name="line1075"></a>};
+<a name="line1076"></a>
+<a name="line1077"></a>
+<a name="line1078"></a>/**
+<a name="line1079"></a> * Sets the content of a style element.  The style element can be any valid
+<a name="line1080"></a> * style element.  This element will have its content completely replaced by
+<a name="line1081"></a> * the new stylesString.
+<a name="line1082"></a> * @param {Element|StyleSheet} element A stylesheet element as returned by
+<a name="line1083"></a> *     installStyles.
+<a name="line1084"></a> * @param {string} stylesString The new content of the stylesheet.
+<a name="line1085"></a> */
+<a name="line1086"></a>goog.style.setStyles = function(element, stylesString) {
+<a name="line1087"></a>  if (goog.userAgent.IE) {
+<a name="line1088"></a>    // Adding the selectors individually caused the browser to hang if the
+<a name="line1089"></a>    // selector was invalid or there were CSS comments.  Setting the cssText of
+<a name="line1090"></a>    // the style node works fine and ignores CSS that IE doesn&#39;t understand
+<a name="line1091"></a>    element.cssText = stylesString;
+<a name="line1092"></a>  } else {
+<a name="line1093"></a>    var propToSet = goog.userAgent.WEBKIT ? &#39;innerText&#39; : &#39;innerHTML&#39;;
+<a name="line1094"></a>    element[propToSet] = stylesString;
+<a name="line1095"></a>  }
+<a name="line1096"></a>};
+<a name="line1097"></a>
+<a name="line1098"></a>
+<a name="line1099"></a>/**
+<a name="line1100"></a> * Sets &#39;white-space: pre-wrap&#39; for a node (x-browser).
+<a name="line1101"></a> *
+<a name="line1102"></a> * There are as many ways of specifying pre-wrap as there are browsers.
+<a name="line1103"></a> *
+<a name="line1104"></a> * CSS3/IE8: white-space: pre-wrap;
+<a name="line1105"></a> * Mozilla:  white-space: -moz-pre-wrap;
+<a name="line1106"></a> * Opera:    white-space: -o-pre-wrap;
+<a name="line1107"></a> * IE6/7:    white-space: pre; word-wrap: break-word;
+<a name="line1108"></a> *
+<a name="line1109"></a> * @param {Element} el Element to enable pre-wrap for.
+<a name="line1110"></a> */
+<a name="line1111"></a>goog.style.setPreWrap = function(el) {
+<a name="line1112"></a>  var style = el.style;
+<a name="line1113"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;8&#39;)) {
+<a name="line1114"></a>    style.whiteSpace = &#39;pre&#39;;
+<a name="line1115"></a>    style.wordWrap = &#39;break-word&#39;;
+<a name="line1116"></a>  } else if (goog.userAgent.GECKO) {
+<a name="line1117"></a>    style.whiteSpace = &#39;-moz-pre-wrap&#39;;
+<a name="line1118"></a>  } else if (goog.userAgent.OPERA) {
+<a name="line1119"></a>    style.whiteSpace = &#39;-o-pre-wrap&#39;;
+<a name="line1120"></a>  } else {
+<a name="line1121"></a>    style.whiteSpace = &#39;pre-wrap&#39;;
+<a name="line1122"></a>  }
+<a name="line1123"></a>};
+<a name="line1124"></a>
+<a name="line1125"></a>
+<a name="line1126"></a>/**
+<a name="line1127"></a> * Sets &#39;display: inline-block&#39; for an element (cross-browser).
+<a name="line1128"></a> * @param {Element} el Element to which the inline-block display style is to be
+<a name="line1129"></a> *    applied.
+<a name="line1130"></a> * @see ../demos/inline_block_quirks.html
+<a name="line1131"></a> * @see ../demos/inline_block_standards.html
+<a name="line1132"></a> */
+<a name="line1133"></a>goog.style.setInlineBlock = function(el) {
+<a name="line1134"></a>  var style = el.style;
+<a name="line1135"></a>  // Without position:relative, weirdness ensues.  Just accept it and move on.
+<a name="line1136"></a>  style.position = &#39;relative&#39;;
+<a name="line1137"></a>
+<a name="line1138"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;8&#39;)) {
+<a name="line1139"></a>    // IE8 supports inline-block so fall through to the else
+<a name="line1140"></a>    // Zoom:1 forces hasLayout, display:inline gives inline behavior.
+<a name="line1141"></a>    style.zoom = &#39;1&#39;;
+<a name="line1142"></a>    style.display = &#39;inline&#39;;
+<a name="line1143"></a>  } else if (goog.userAgent.GECKO) {
+<a name="line1144"></a>    // Pre-Firefox 3, Gecko doesn&#39;t support inline-block, but -moz-inline-box
+<a name="line1145"></a>    // is close enough.
+<a name="line1146"></a>    style.display = goog.userAgent.isVersion(&#39;1.9a&#39;) ? &#39;inline-block&#39; :
+<a name="line1147"></a>        &#39;-moz-inline-box&#39;;
+<a name="line1148"></a>  } else {
+<a name="line1149"></a>    // Opera, Webkit, and Safari seem to do OK with the standard inline-block
+<a name="line1150"></a>    // style.
+<a name="line1151"></a>    style.display = &#39;inline-block&#39;;
+<a name="line1152"></a>  }
+<a name="line1153"></a>};
+<a name="line1154"></a>
+<a name="line1155"></a>
+<a name="line1156"></a>/**
+<a name="line1157"></a> * Returns true if the element is using right to left (rtl) direction.
+<a name="line1158"></a> * @param {Element} el  The element to test.
+<a name="line1159"></a> * @return {boolean} True for right to left, false for left to right.
+<a name="line1160"></a> */
+<a name="line1161"></a>goog.style.isRightToLeft = function(el) {
+<a name="line1162"></a>  return &#39;rtl&#39; == goog.style.getStyle_(el, &#39;direction&#39;);
+<a name="line1163"></a>};
+<a name="line1164"></a>
+<a name="line1165"></a>
+<a name="line1166"></a>/**
+<a name="line1167"></a> * The CSS style property corresponding to an element being
+<a name="line1168"></a> * unselectable on the current browser platform (null if none).
+<a name="line1169"></a> * Opera and IE instead use a DOM attribute &#39;unselectable&#39;.
+<a name="line1170"></a> * @type {?string}
+<a name="line1171"></a> * @private
+<a name="line1172"></a> */
+<a name="line1173"></a>goog.style.unselectableStyle_ =
+<a name="line1174"></a>    goog.userAgent.GECKO ? &#39;MozUserSelect&#39; :
+<a name="line1175"></a>    goog.userAgent.WEBKIT ? &#39;WebkitUserSelect&#39; :
+<a name="line1176"></a>    null;
+<a name="line1177"></a>
+<a name="line1178"></a>
+<a name="line1179"></a>/**
+<a name="line1180"></a> * Returns true if the element is set to be unselectable, false otherwise.
+<a name="line1181"></a> * Note that on some platforms (e.g. Mozilla), even if an element isn&#39;t set
+<a name="line1182"></a> * to be unselectable, it will behave as such if any of its ancestors is
+<a name="line1183"></a> * unselectable.
+<a name="line1184"></a> * @param {Element} el  Element to check.
+<a name="line1185"></a> * @return {boolean}  Whether the element is set to be unselectable.
+<a name="line1186"></a> */
+<a name="line1187"></a>goog.style.isUnselectable = function(el) {
+<a name="line1188"></a>  if (goog.style.unselectableStyle_) {
+<a name="line1189"></a>    return el.style[goog.style.unselectableStyle_].toLowerCase() == &#39;none&#39;;
+<a name="line1190"></a>  } else if (goog.userAgent.IE || goog.userAgent.OPERA) {
+<a name="line1191"></a>    return el.getAttribute(&#39;unselectable&#39;) == &#39;on&#39;;
+<a name="line1192"></a>  }
+<a name="line1193"></a>  return false;
+<a name="line1194"></a>};
+<a name="line1195"></a>
+<a name="line1196"></a>
+<a name="line1197"></a>/**
+<a name="line1198"></a> * Makes the element and its descendants selectable or unselectable.  Note
+<a name="line1199"></a> * that on some platforms (e.g. Mozilla), even if an element isn&#39;t set to
+<a name="line1200"></a> * be unselectable, it will behave as such if any of its ancestors is
+<a name="line1201"></a> * unselectable.
+<a name="line1202"></a> * @param {Element} el  The element to alter.
+<a name="line1203"></a> * @param {boolean} unselectable  Whether the element and its descendants
+<a name="line1204"></a> *     should be made unselectable.
+<a name="line1205"></a> * @param {boolean=} opt_noRecurse  Whether to only alter the element&#39;s own
+<a name="line1206"></a> *     selectable state, and leave its descendants alone; defaults to false.
+<a name="line1207"></a> */
+<a name="line1208"></a>goog.style.setUnselectable = function(el, unselectable, opt_noRecurse) {
+<a name="line1209"></a>  // TODO: Do we need all of TR_DomUtil.makeUnselectable() in Closure?
+<a name="line1210"></a>  var descendants = !opt_noRecurse ? el.getElementsByTagName(&#39;*&#39;) : null;
+<a name="line1211"></a>  var name = goog.style.unselectableStyle_;
+<a name="line1212"></a>  if (name) {
+<a name="line1213"></a>    // Add/remove the appropriate CSS style to/from the element and its
+<a name="line1214"></a>    // descendants.
+<a name="line1215"></a>    var value = unselectable ? &#39;none&#39; : &#39;&#39;;
+<a name="line1216"></a>    el.style[name] = value;
+<a name="line1217"></a>    if (descendants) {
+<a name="line1218"></a>      for (var i = 0, descendant; descendant = descendants[i]; i++) {
+<a name="line1219"></a>        descendant.style[name] = value;
+<a name="line1220"></a>      }
+<a name="line1221"></a>    }
+<a name="line1222"></a>  } else if (goog.userAgent.IE || goog.userAgent.OPERA) {
+<a name="line1223"></a>    // Toggle the &#39;unselectable&#39; attribute on the element and its descendants.
+<a name="line1224"></a>    var value = unselectable ? &#39;on&#39; : &#39;&#39;;
+<a name="line1225"></a>    el.setAttribute(&#39;unselectable&#39;, value);
+<a name="line1226"></a>    if (descendants) {
+<a name="line1227"></a>      for (var i = 0, descendant; descendant = descendants[i]; i++) {
+<a name="line1228"></a>        descendant.setAttribute(&#39;unselectable&#39;, value);
+<a name="line1229"></a>      }
+<a name="line1230"></a>    }
+<a name="line1231"></a>  }
+<a name="line1232"></a>};
+<a name="line1233"></a>
+<a name="line1234"></a>
+<a name="line1235"></a>/**
+<a name="line1236"></a> * Gets the border box size for an element.
+<a name="line1237"></a> * @param {Element} element  The element to get the size for.
+<a name="line1238"></a> * @return {!goog.math.Size} The border box size.
+<a name="line1239"></a> */
+<a name="line1240"></a>goog.style.getBorderBoxSize = function(element) {
+<a name="line1241"></a>  return new goog.math.Size(element.offsetWidth, element.offsetHeight);
+<a name="line1242"></a>};
+<a name="line1243"></a>
+<a name="line1244"></a>
+<a name="line1245"></a>/**
+<a name="line1246"></a> * Sets the border box size of an element. This is potentially expensive in IE
+<a name="line1247"></a> * if the document is CSS1Compat mode
+<a name="line1248"></a> * @param {Element} element  The element to set the size on.
+<a name="line1249"></a> * @param {goog.math.Size} size  The new size.
+<a name="line1250"></a> */
+<a name="line1251"></a>goog.style.setBorderBoxSize = function(element, size) {
+<a name="line1252"></a>  var doc = goog.dom.getOwnerDocument(element);
+<a name="line1253"></a>  var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
+<a name="line1254"></a>
+<a name="line1255"></a>  if (goog.userAgent.IE &amp;&amp;
+<a name="line1256"></a>      (!isCss1CompatMode || !goog.userAgent.isVersion(&#39;8&#39;))) {
+<a name="line1257"></a>    var style = element.style;
+<a name="line1258"></a>    if (isCss1CompatMode) {
+<a name="line1259"></a>      var paddingBox = goog.style.getPaddingBox(element);
+<a name="line1260"></a>      var borderBox = goog.style.getBorderBox(element);
+<a name="line1261"></a>      style.pixelWidth = size.width - borderBox.left - paddingBox.left -
+<a name="line1262"></a>                         paddingBox.right - borderBox.right;
+<a name="line1263"></a>      style.pixelHeight = size.height - borderBox.top - paddingBox.top -
+<a name="line1264"></a>                          paddingBox.bottom - borderBox.bottom;
+<a name="line1265"></a>    } else {
+<a name="line1266"></a>      style.pixelWidth = size.width;
+<a name="line1267"></a>      style.pixelHeight = size.height;
+<a name="line1268"></a>    }
+<a name="line1269"></a>  } else {
+<a name="line1270"></a>    goog.style.setBoxSizingSize_(element, size, &#39;border-box&#39;);
+<a name="line1271"></a>  }
+<a name="line1272"></a>};
+<a name="line1273"></a>
+<a name="line1274"></a>
+<a name="line1275"></a>/**
+<a name="line1276"></a> * Gets the content box size for an element.  This is potentially expensive in
+<a name="line1277"></a> * all browsers.
+<a name="line1278"></a> * @param {Element} element  The element to get the size for.
+<a name="line1279"></a> * @return {!goog.math.Size} The content box size.
+<a name="line1280"></a> */
+<a name="line1281"></a>goog.style.getContentBoxSize = function(element) {
+<a name="line1282"></a>  var doc = goog.dom.getOwnerDocument(element);
+<a name="line1283"></a>  var ieCurrentStyle = goog.userAgent.IE &amp;&amp; element.currentStyle;
+<a name="line1284"></a>  if (ieCurrentStyle &amp;&amp;
+<a name="line1285"></a>      goog.dom.getDomHelper(doc).isCss1CompatMode() &amp;&amp;
+<a name="line1286"></a>      ieCurrentStyle.width != &#39;auto&#39; &amp;&amp; ieCurrentStyle.height != &#39;auto&#39; &amp;&amp;
+<a name="line1287"></a>      !ieCurrentStyle.boxSizing) {
+<a name="line1288"></a>    // If IE in CSS1Compat mode than just use the width and height.
+<a name="line1289"></a>    // If we have a boxSizing then fall back on measuring the borders etc.
+<a name="line1290"></a>    var width = goog.style.getIePixelValue_(element, ieCurrentStyle.width,
+<a name="line1291"></a>                                            &#39;width&#39;, &#39;pixelWidth&#39;);
+<a name="line1292"></a>    var height = goog.style.getIePixelValue_(element, ieCurrentStyle.height,
+<a name="line1293"></a>                                             &#39;height&#39;, &#39;pixelHeight&#39;);
+<a name="line1294"></a>    return new goog.math.Size(width, height);
+<a name="line1295"></a>  } else {
+<a name="line1296"></a>    var borderBoxSize = goog.style.getBorderBoxSize(element);
+<a name="line1297"></a>    var paddingBox = goog.style.getPaddingBox(element);
+<a name="line1298"></a>    var borderBox = goog.style.getBorderBox(element);
+<a name="line1299"></a>    return new goog.math.Size(borderBoxSize.width -
+<a name="line1300"></a>                              borderBox.left - paddingBox.left -
+<a name="line1301"></a>                              paddingBox.right - borderBox.right,
+<a name="line1302"></a>                              borderBoxSize.height -
+<a name="line1303"></a>                              borderBox.top - paddingBox.top -
+<a name="line1304"></a>                              paddingBox.bottom - borderBox.bottom);
+<a name="line1305"></a>  }
+<a name="line1306"></a>};
+<a name="line1307"></a>
+<a name="line1308"></a>
+<a name="line1309"></a>/**
+<a name="line1310"></a> * Sets the content box size of an element. This is potentially expensive in IE
+<a name="line1311"></a> * if the document is BackCompat mode.
+<a name="line1312"></a> * @param {Element} element  The element to set the size on.
+<a name="line1313"></a> * @param {goog.math.Size} size  The new size.
+<a name="line1314"></a> */
+<a name="line1315"></a>goog.style.setContentBoxSize = function(element, size) {
+<a name="line1316"></a>  var doc = goog.dom.getOwnerDocument(element);
+<a name="line1317"></a>  var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
+<a name="line1318"></a>  if (goog.userAgent.IE &amp;&amp;
+<a name="line1319"></a>      (!isCss1CompatMode || !goog.userAgent.isVersion(&#39;8&#39;))) {
+<a name="line1320"></a>    var style = element.style;
+<a name="line1321"></a>    if (isCss1CompatMode) {
+<a name="line1322"></a>      style.pixelWidth = size.width;
+<a name="line1323"></a>      style.pixelHeight = size.height;
+<a name="line1324"></a>    } else {
+<a name="line1325"></a>      var paddingBox = goog.style.getPaddingBox(element);
+<a name="line1326"></a>      var borderBox = goog.style.getBorderBox(element);
+<a name="line1327"></a>      style.pixelWidth = size.width + borderBox.left + paddingBox.left +
+<a name="line1328"></a>                         paddingBox.right + borderBox.right;
+<a name="line1329"></a>      style.pixelHeight = size.height + borderBox.top + paddingBox.top +
+<a name="line1330"></a>                          paddingBox.bottom + borderBox.bottom;
+<a name="line1331"></a>    }
+<a name="line1332"></a>  } else {
+<a name="line1333"></a>    goog.style.setBoxSizingSize_(element, size, &#39;content-box&#39;);
+<a name="line1334"></a>  }
+<a name="line1335"></a>};
+<a name="line1336"></a>
+<a name="line1337"></a>
+<a name="line1338"></a>/**
+<a name="line1339"></a> * Helper function that sets the box sizing as well as the width and height
+<a name="line1340"></a> * @param {Element} element  The element to set the size on.
+<a name="line1341"></a> * @param {goog.math.Size} size  The new size to set.
+<a name="line1342"></a> * @param {string} boxSizing  The box-sizing value.
+<a name="line1343"></a> * @private
+<a name="line1344"></a> */
+<a name="line1345"></a>goog.style.setBoxSizingSize_ = function(element, size, boxSizing) {
+<a name="line1346"></a>  var style = element.style;
+<a name="line1347"></a>  if (goog.userAgent.GECKO) {
+<a name="line1348"></a>    style.MozBoxSizing = boxSizing;
+<a name="line1349"></a>  } else if (goog.userAgent.WEBKIT) {
+<a name="line1350"></a>    style.WebkitBoxSizing = boxSizing;
+<a name="line1351"></a>  } else if (goog.userAgent.OPERA &amp;&amp; !goog.userAgent.isVersion(&#39;9.50&#39;)) {
+<a name="line1352"></a>    // Opera pre-9.5 does not have CSSStyleDeclaration::boxSizing, but
+<a name="line1353"></a>    // box-sizing can still be set via CSSStyleDeclaration::setProperty.
+<a name="line1354"></a>    if (boxSizing) {
+<a name="line1355"></a>      style.setProperty(&#39;box-sizing&#39;, boxSizing);
+<a name="line1356"></a>    } else {
+<a name="line1357"></a>      style.removeProperty(&#39;box-sizing&#39;);
+<a name="line1358"></a>    }
+<a name="line1359"></a>  } else {
+<a name="line1360"></a>    // Includes IE8
+<a name="line1361"></a>    style.boxSizing = boxSizing;
+<a name="line1362"></a>  }
+<a name="line1363"></a>  style.width = size.width + &#39;px&#39;;
+<a name="line1364"></a>  style.height = size.height + &#39;px&#39;;
+<a name="line1365"></a>};
+<a name="line1366"></a>
+<a name="line1367"></a>
+<a name="line1368"></a>/**
+<a name="line1369"></a> * IE specific function that converts a non pixel unit to pixels.
+<a name="line1370"></a> * @param {Element} element  The element to convert the value for.
+<a name="line1371"></a> * @param {string} value  The current value as a string. The value must not be
+<a name="line1372"></a> *     &#39;&#39;.
+<a name="line1373"></a> * @param {string} name  The CSS property name to use for the converstion. This
+<a name="line1374"></a> *     should be &#39;left&#39;, &#39;top&#39;, &#39;width&#39; or &#39;height&#39;.
+<a name="line1375"></a> * @param {string} pixelName  The CSS pixel property name to use to get the
+<a name="line1376"></a> *     value in pixels.
+<a name="line1377"></a> * @return {number} The value in pixels.
+<a name="line1378"></a> * @private
+<a name="line1379"></a> */
+<a name="line1380"></a>goog.style.getIePixelValue_ = function(element, value, name, pixelName) {
+<a name="line1381"></a>  // Try if we already have a pixel value. IE does not do half pixels so we
+<a name="line1382"></a>  // only check if it matches a number followed by &#39;px&#39;.
+<a name="line1383"></a>  if (/^\d+px?$/.test(value)) {
+<a name="line1384"></a>    return parseInt(value, 10);
+<a name="line1385"></a>  } else {
+<a name="line1386"></a>    var oldStyleValue = element.style[name];
+<a name="line1387"></a>    var oldRuntimeValue = element.runtimeStyle[name];
+<a name="line1388"></a>    // set runtime style to prevent changes
+<a name="line1389"></a>    element.runtimeStyle[name] = element.currentStyle[name];
+<a name="line1390"></a>    element.style[name] = value;
+<a name="line1391"></a>    var pixelValue = element.style[pixelName];
+<a name="line1392"></a>    // restore
+<a name="line1393"></a>    element.style[name] = oldStyleValue;
+<a name="line1394"></a>    element.runtimeStyle[name] = oldRuntimeValue;
+<a name="line1395"></a>    return pixelValue;
+<a name="line1396"></a>  }
+<a name="line1397"></a>};
+<a name="line1398"></a>
+<a name="line1399"></a>
+<a name="line1400"></a>/**
+<a name="line1401"></a> * Helper function for getting the pixel padding or margin for IE.
+<a name="line1402"></a> * @param {Element} element  The element to get the padding for.
+<a name="line1403"></a> * @param {string} propName  The property name.
+<a name="line1404"></a> * @return {number} The pixel padding.
+<a name="line1405"></a> * @private
+<a name="line1406"></a> */
+<a name="line1407"></a>goog.style.getIePixelDistance_ = function(element, propName) {
+<a name="line1408"></a>  return goog.style.getIePixelValue_(element,
+<a name="line1409"></a>      goog.style.getCascadedStyle(element, propName),
+<a name="line1410"></a>      &#39;left&#39;, &#39;pixelLeft&#39;);
+<a name="line1411"></a>};
+<a name="line1412"></a>
+<a name="line1413"></a>
+<a name="line1414"></a>/**
+<a name="line1415"></a> * Gets the computed paddings or margins (on all sides) in pixels.
+<a name="line1416"></a> * @param {Element} element  The element to get the padding for.
+<a name="line1417"></a> * @param {string} stylePrefix  Pass &#39;padding&#39; to retrieve the padding box,
+<a name="line1418"></a> *     or &#39;margin&#39; to retrieve the margin box.
+<a name="line1419"></a> * @return {!goog.math.Box} The computed paddings or margins.
+<a name="line1420"></a> * @private
+<a name="line1421"></a> */
+<a name="line1422"></a>goog.style.getBox_ = function(element, stylePrefix) {
+<a name="line1423"></a>  if (goog.userAgent.IE) {
+<a name="line1424"></a>    var left = goog.style.getIePixelDistance_(element, stylePrefix + &#39;Left&#39;);
+<a name="line1425"></a>    var right = goog.style.getIePixelDistance_(element, stylePrefix + &#39;Right&#39;);
+<a name="line1426"></a>    var top = goog.style.getIePixelDistance_(element, stylePrefix + &#39;Top&#39;);
+<a name="line1427"></a>    var bottom = goog.style.getIePixelDistance_(
+<a name="line1428"></a>        element, stylePrefix + &#39;Bottom&#39;);
+<a name="line1429"></a>    return new goog.math.Box(top, right, bottom, left);
+<a name="line1430"></a>  } else {
+<a name="line1431"></a>    // On non-IE browsers, getComputedStyle is always non-null.
+<a name="line1432"></a>    var left = /** @type {string} */ (
+<a name="line1433"></a>        goog.style.getComputedStyle(element, stylePrefix + &#39;Left&#39;));
+<a name="line1434"></a>    var right = /** @type {string} */ (
+<a name="line1435"></a>        goog.style.getComputedStyle(element, stylePrefix + &#39;Right&#39;));
+<a name="line1436"></a>    var top = /** @type {string} */ (
+<a name="line1437"></a>        goog.style.getComputedStyle(element, stylePrefix + &#39;Top&#39;));
+<a name="line1438"></a>    var bottom = /** @type {string} */ (
+<a name="line1439"></a>        goog.style.getComputedStyle(element, stylePrefix + &#39;Bottom&#39;));
+<a name="line1440"></a>
+<a name="line1441"></a>    // NOTE: Gecko can return floating point numbers for the computed
+<a name="line1442"></a>    // style values.
+<a name="line1443"></a>    return new goog.math.Box(parseFloat(top),
+<a name="line1444"></a>                             parseFloat(right),
+<a name="line1445"></a>                             parseFloat(bottom),
+<a name="line1446"></a>                             parseFloat(left));
+<a name="line1447"></a>  }
+<a name="line1448"></a>};
+<a name="line1449"></a>
+<a name="line1450"></a>
+<a name="line1451"></a>/**
+<a name="line1452"></a> * Gets the computed paddings (on all sides) in pixels.
+<a name="line1453"></a> * @param {Element} element  The element to get the padding for.
+<a name="line1454"></a> * @return {!goog.math.Box} The computed paddings.
+<a name="line1455"></a> */
+<a name="line1456"></a>goog.style.getPaddingBox = function(element) {
+<a name="line1457"></a>  return goog.style.getBox_(element, &#39;padding&#39;);
+<a name="line1458"></a>};
+<a name="line1459"></a>
+<a name="line1460"></a>
+<a name="line1461"></a>/**
+<a name="line1462"></a> * Gets the computed margins (on all sides) in pixels.
+<a name="line1463"></a> * @param {Element} element  The element to get the margins for.
+<a name="line1464"></a> * @return {!goog.math.Box} The computed margins.
+<a name="line1465"></a> */
+<a name="line1466"></a>goog.style.getMarginBox = function(element) {
+<a name="line1467"></a>  return goog.style.getBox_(element, &#39;margin&#39;);
+<a name="line1468"></a>};
+<a name="line1469"></a>
+<a name="line1470"></a>
+<a name="line1471"></a>/**
+<a name="line1472"></a> * A map used to map the border width keywords to a pixel width.
+<a name="line1473"></a> * @type {Object}
+<a name="line1474"></a> * @private
+<a name="line1475"></a> */
+<a name="line1476"></a>goog.style.ieBorderWidthKeywords_ = {
+<a name="line1477"></a>  &#39;thin&#39;: 2,
+<a name="line1478"></a>  &#39;medium&#39;: 4,
+<a name="line1479"></a>  &#39;thick&#39;: 6
+<a name="line1480"></a>};
+<a name="line1481"></a>
+<a name="line1482"></a>
+<a name="line1483"></a>/**
+<a name="line1484"></a> * Helper function for IE to get the pixel border.
+<a name="line1485"></a> * @param {Element} element  The element to get the pixel border for.
+<a name="line1486"></a> * @param {string} prop  The part of the property name.
+<a name="line1487"></a> * @return {number} The value in pixels.
+<a name="line1488"></a> * @private
+<a name="line1489"></a> */
+<a name="line1490"></a>goog.style.getIePixelBorder_ = function(element, prop) {
+<a name="line1491"></a>  if (goog.style.getCascadedStyle(element, prop + &#39;Style&#39;) == &#39;none&#39;) {
+<a name="line1492"></a>    return 0;
+<a name="line1493"></a>  }
+<a name="line1494"></a>  var width = goog.style.getCascadedStyle(element, prop + &#39;Width&#39;);
+<a name="line1495"></a>  if (width in goog.style.ieBorderWidthKeywords_) {
+<a name="line1496"></a>    return goog.style.ieBorderWidthKeywords_[width];
+<a name="line1497"></a>  }
+<a name="line1498"></a>  return goog.style.getIePixelValue_(element, width, &#39;left&#39;, &#39;pixelLeft&#39;);
+<a name="line1499"></a>};
+<a name="line1500"></a>
+<a name="line1501"></a>
+<a name="line1502"></a>/**
+<a name="line1503"></a> * Gets the computed border widths (on all sides) in pixels
+<a name="line1504"></a> * @param {Element} element  The element to get the border widths for.
+<a name="line1505"></a> * @return {!goog.math.Box} The computed border widths.
+<a name="line1506"></a> */
+<a name="line1507"></a>goog.style.getBorderBox = function(element) {
+<a name="line1508"></a>  if (goog.userAgent.IE) {
+<a name="line1509"></a>    var left = goog.style.getIePixelBorder_(element, &#39;borderLeft&#39;);
+<a name="line1510"></a>    var right = goog.style.getIePixelBorder_(element, &#39;borderRight&#39;);
+<a name="line1511"></a>    var top = goog.style.getIePixelBorder_(element, &#39;borderTop&#39;);
+<a name="line1512"></a>    var bottom = goog.style.getIePixelBorder_(element, &#39;borderBottom&#39;);
+<a name="line1513"></a>    return new goog.math.Box(top, right, bottom, left);
+<a name="line1514"></a>  } else {
+<a name="line1515"></a>    // On non-IE browsers, getComputedStyle is always non-null.
+<a name="line1516"></a>    var left = /** @type {string} */ (
+<a name="line1517"></a>        goog.style.getComputedStyle(element, &#39;borderLeftWidth&#39;));
+<a name="line1518"></a>    var right = /** @type {string} */ (
+<a name="line1519"></a>        goog.style.getComputedStyle(element, &#39;borderRightWidth&#39;));
+<a name="line1520"></a>    var top = /** @type {string} */ (
+<a name="line1521"></a>        goog.style.getComputedStyle(element, &#39;borderTopWidth&#39;));
+<a name="line1522"></a>    var bottom = /** @type {string} */ (
+<a name="line1523"></a>        goog.style.getComputedStyle(element, &#39;borderBottomWidth&#39;));
+<a name="line1524"></a>
+<a name="line1525"></a>    return new goog.math.Box(parseFloat(top),
+<a name="line1526"></a>                             parseFloat(right),
+<a name="line1527"></a>                             parseFloat(bottom),
+<a name="line1528"></a>                             parseFloat(left));
+<a name="line1529"></a>  }
+<a name="line1530"></a>};
+<a name="line1531"></a>
+<a name="line1532"></a>
+<a name="line1533"></a>/**
+<a name="line1534"></a> * Returns the font face applied to a given node. Opera and IE should return
+<a name="line1535"></a> * the font actually displayed. Firefox returns the author&#39;s most-preferred
+<a name="line1536"></a> * font (whether the browser is capable of displaying it or not.)
+<a name="line1537"></a> * @param {Element} el  The element whose font family is returned.
+<a name="line1538"></a> * @return {string} The font family applied to el.
+<a name="line1539"></a> */
+<a name="line1540"></a>goog.style.getFontFamily = function(el) {
+<a name="line1541"></a>  var doc = goog.dom.getOwnerDocument(el);
+<a name="line1542"></a>  var font = &#39;&#39;;
+<a name="line1543"></a>  if (doc.createTextRange) {
+<a name="line1544"></a>    var range = doc.body.createTextRange();
+<a name="line1545"></a>    range.moveToElementText(el);
+<a name="line1546"></a>    font = range.queryCommandValue(&#39;FontName&#39;);
+<a name="line1547"></a>  }
+<a name="line1548"></a>  if (!font) {
+<a name="line1549"></a>    // Note if for some reason IE can&#39;t derive FontName with a TextRange, we
+<a name="line1550"></a>    // fallback to using currentStyle
+<a name="line1551"></a>    font = goog.style.getStyle_(el, &#39;fontFamily&#39;);
+<a name="line1552"></a>    // Opera on Linux provides the font vendor&#39;s name in square-brackets.
+<a name="line1553"></a>    if (goog.userAgent.OPERA &amp;&amp; goog.userAgent.LINUX) {
+<a name="line1554"></a>      font = font.replace(/ \[[^\]]*\]/, &#39;&#39;);
+<a name="line1555"></a>    }
+<a name="line1556"></a>  }
+<a name="line1557"></a>
+<a name="line1558"></a>  // Firefox returns the applied font-family string (author&#39;s list of
+<a name="line1559"></a>  // preferred fonts.) We want to return the most-preferred font, in lieu of
+<a name="line1560"></a>  // the *actually* applied font.
+<a name="line1561"></a>  var fontsArray = font.split(&#39;,&#39;);
+<a name="line1562"></a>  if (fontsArray.length &gt; 1) font = fontsArray[0];
+<a name="line1563"></a>
+<a name="line1564"></a>  // Sanitize for x-browser consistency:
+<a name="line1565"></a>  // Strip quotes because browsers aren&#39;t consistent with how they&#39;re
+<a name="line1566"></a>  // applied; Opera always encloses, Firefox sometimes, and IE never.
+<a name="line1567"></a>  return goog.string.stripQuotes(font, &#39;&quot;\&#39;&#39;);
+<a name="line1568"></a>};
+<a name="line1569"></a>
+<a name="line1570"></a>
+<a name="line1571"></a>/**
+<a name="line1572"></a> * Regular expression used for getLengthUnits.
+<a name="line1573"></a> * @type {RegExp}
+<a name="line1574"></a> * @private
+<a name="line1575"></a> */
+<a name="line1576"></a>goog.style.lengthUnitRegex_ = /[^\d]+$/;
+<a name="line1577"></a>
+<a name="line1578"></a>
+<a name="line1579"></a>/**
+<a name="line1580"></a> * Returns the units used for a CSS length measurement.
+<a name="line1581"></a> * @param {string} value  A CSS length quantity.
+<a name="line1582"></a> * @return {?string} The units of measurement.
+<a name="line1583"></a> */
+<a name="line1584"></a>goog.style.getLengthUnits = function(value) {
+<a name="line1585"></a>  var units = value.match(goog.style.lengthUnitRegex_);
+<a name="line1586"></a>  return units &amp;&amp; units[0] || null;
+<a name="line1587"></a>};
+<a name="line1588"></a>
+<a name="line1589"></a>
+<a name="line1590"></a>/**
+<a name="line1591"></a> * Map of absolute CSS length units
+<a name="line1592"></a> * @type {Object}
+<a name="line1593"></a> * @private
+<a name="line1594"></a> */
+<a name="line1595"></a>goog.style.ABSOLUTE_CSS_LENGTH_UNITS_ = {
+<a name="line1596"></a>  &#39;cm&#39; : 1,
+<a name="line1597"></a>  &#39;in&#39; : 1,
+<a name="line1598"></a>  &#39;mm&#39; : 1,
+<a name="line1599"></a>  &#39;pc&#39; : 1,
+<a name="line1600"></a>  &#39;pt&#39; : 1
+<a name="line1601"></a>};
+<a name="line1602"></a>
+<a name="line1603"></a>
+<a name="line1604"></a>/**
+<a name="line1605"></a> * Map of relative CSS length units that can be accurately converted to px
+<a name="line1606"></a> * font-size values using getIePixelValue_. Only units that are defined in
+<a name="line1607"></a> * relation to a font size are convertible (%, small, etc. are not).
+<a name="line1608"></a> * @type {Object}
+<a name="line1609"></a> * @private
+<a name="line1610"></a> */
+<a name="line1611"></a>goog.style.CONVERTIBLE_RELATIVE_CSS_UNITS_ = {
+<a name="line1612"></a>  &#39;em&#39; : 1,
+<a name="line1613"></a>  &#39;ex&#39; : 1
+<a name="line1614"></a>};
+<a name="line1615"></a>
+<a name="line1616"></a>
+<a name="line1617"></a>/**
+<a name="line1618"></a> * Returns the font size, in pixels, of text in an element.
+<a name="line1619"></a> * @param {Element} el  The element whose font size is returned.
+<a name="line1620"></a> * @return {number} The font size (in pixels).
+<a name="line1621"></a> */
+<a name="line1622"></a>goog.style.getFontSize = function(el) {
+<a name="line1623"></a>  var fontSize = goog.style.getStyle_(el, &#39;fontSize&#39;);
+<a name="line1624"></a>  var sizeUnits = goog.style.getLengthUnits(fontSize);
+<a name="line1625"></a>  if (fontSize &amp;&amp; &#39;px&#39; == sizeUnits) {
+<a name="line1626"></a>    // NOTE: This could be parseFloat instead, but IE doesn&#39;t return
+<a name="line1627"></a>    // decimal fractions in getStyle_ and Firefox reports the fractions, but
+<a name="line1628"></a>    // ignores them when rendering. Interestingly enough, when we force the
+<a name="line1629"></a>    // issue and size something to e.g., 50% of 25px, the browsers round in
+<a name="line1630"></a>    // opposite directions with Firefox reporting 12px and IE 13px. I punt.
+<a name="line1631"></a>    return parseInt(fontSize, 10);
+<a name="line1632"></a>  }
+<a name="line1633"></a>
+<a name="line1634"></a>  // In IE, we can convert absolute length units to a px value using
+<a name="line1635"></a>  // goog.style.getIePixelValue_. Units defined in relation to a font size
+<a name="line1636"></a>  // (em, ex) are applied relative to the element&#39;s parentNode and can also
+<a name="line1637"></a>  // be converted.
+<a name="line1638"></a>  if (goog.userAgent.IE) {
+<a name="line1639"></a>    if (sizeUnits in goog.style.ABSOLUTE_CSS_LENGTH_UNITS_) {
+<a name="line1640"></a>      return goog.style.getIePixelValue_(el,
+<a name="line1641"></a>                                         fontSize,
+<a name="line1642"></a>                                         &#39;left&#39;,
+<a name="line1643"></a>                                         &#39;pixelLeft&#39;);
+<a name="line1644"></a>    } else if (el.parentNode &amp;&amp;
+<a name="line1645"></a>               el.parentNode.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp;
+<a name="line1646"></a>               sizeUnits in goog.style.CONVERTIBLE_RELATIVE_CSS_UNITS_) {
+<a name="line1647"></a>      // Check the parent size - if it is the same it means the relative size
+<a name="line1648"></a>      // value is inherited and we therefore don&#39;t want to count it twice.  If
+<a name="line1649"></a>      // it is different, this element either has explicit style or has a CSS
+<a name="line1650"></a>      // rule applying to it.
+<a name="line1651"></a>      var parentElement = /** @type {Element} */ (el.parentNode);
+<a name="line1652"></a>      var parentSize = goog.style.getStyle_(parentElement, &#39;fontSize&#39;);
+<a name="line1653"></a>      return goog.style.getIePixelValue_(parentElement,
+<a name="line1654"></a>                                         fontSize == parentSize ?
+<a name="line1655"></a>                                             &#39;1em&#39; : fontSize,
+<a name="line1656"></a>                                         &#39;left&#39;,
+<a name="line1657"></a>                                         &#39;pixelLeft&#39;);
+<a name="line1658"></a>    }
+<a name="line1659"></a>  }
+<a name="line1660"></a>
+<a name="line1661"></a>  // Sometimes we can&#39;t cleanly find the font size (some units relative to a
+<a name="line1662"></a>  // node&#39;s parent&#39;s font size are difficult: %, smaller et al), so we create
+<a name="line1663"></a>  // an invisible, absolutely-positioned span sized to be the height of an &#39;M&#39;
+<a name="line1664"></a>  // rendered in its parent&#39;s (i.e., our target element&#39;s) font size. This is
+<a name="line1665"></a>  // the definition of CSS&#39;s font size attribute.
+<a name="line1666"></a>  var sizeElement = goog.dom.createDom(
+<a name="line1667"></a>      &#39;span&#39;,
+<a name="line1668"></a>      {&#39;style&#39;: &#39;visibility:hidden;position:absolute;&#39; +
+<a name="line1669"></a>                &#39;line-height:0;padding:0;margin:0;border:0;height:1em;&#39;});
+<a name="line1670"></a>  goog.dom.appendChild(el, sizeElement);
+<a name="line1671"></a>  fontSize = sizeElement.offsetHeight;
+<a name="line1672"></a>  goog.dom.removeNode(sizeElement);
 <a name="line1673"></a>
-<a name="line1674"></a>
-<a name="line1675"></a>/**
-<a name="line1676"></a> * Parses a style attribute value.  Converts CSS property names to camel case.
-<a name="line1677"></a> * @param {string} value The style attribute value.
-<a name="line1678"></a> * @return {!Object} Map of CSS properties to string values.
-<a name="line1679"></a> */
-<a name="line1680"></a>goog.style.parseStyleAttribute = function(value) {
-<a name="line1681"></a>  var result = {};
-<a name="line1682"></a>  goog.array.forEach(value.split(/\s*;\s*/), function(pair) {
-<a name="line1683"></a>    var keyValue = pair.split(/\s*:\s*/);
-<a name="line1684"></a>    if (keyValue.length == 2) {
-<a name="line1685"></a>      result[goog.style.toCamelCase(keyValue[0].toLowerCase())] = keyValue[1];
-<a name="line1686"></a>    }
-<a name="line1687"></a>  });
-<a name="line1688"></a>  return result;
-<a name="line1689"></a>};
-<a name="line1690"></a>
-<a name="line1691"></a>
-<a name="line1692"></a>/**
-<a name="line1693"></a> * Reverse of parseStyleAttribute; that is, takes a style object and returns the
-<a name="line1694"></a> * corresponding attribute value.  Converts camel case property names to proper
-<a name="line1695"></a> * CSS selector names.
-<a name="line1696"></a> * @param {Object} obj Map of CSS properties to values.
-<a name="line1697"></a> * @return {string} The style attribute value.
-<a name="line1698"></a> */
-<a name="line1699"></a>goog.style.toStyleAttribute = function(obj) {
-<a name="line1700"></a>  var buffer = [];
-<a name="line1701"></a>  goog.object.forEach(obj, function(value, key) {
-<a name="line1702"></a>    buffer.push(goog.style.toSelectorCase(key), &#39;:&#39;, value, &#39;;&#39;);
-<a name="line1703"></a>  });
-<a name="line1704"></a>  return buffer.join(&#39;&#39;);
-<a name="line1705"></a>};
-<a name="line1706"></a>
-<a name="line1707"></a>
-<a name="line1708"></a>/**
-<a name="line1709"></a> * Sets CSS float property on an element.
-<a name="line1710"></a> * @param {Element} el The element to set float property on.
-<a name="line1711"></a> * @param {string} value The value of float CSS property to set on this element.
-<a name="line1712"></a> */
-<a name="line1713"></a>goog.style.setFloat = function(el, value) {
-<a name="line1714"></a>  el.style[goog.userAgent.IE ? &#39;styleFloat&#39; : &#39;cssFloat&#39;] = value;
-<a name="line1715"></a>};
-<a name="line1716"></a>
-<a name="line1717"></a>
-<a name="line1718"></a>/**
-<a name="line1719"></a> * Gets value of explicitly-set float CSS property on an element.
-<a name="line1720"></a> * @param {Element} el The element to get float property of.
-<a name="line1721"></a> * @return {string} The value of explicitly-set float CSS property on this
-<a name="line1722"></a> *     element.
-<a name="line1723"></a> */
-<a name="line1724"></a>goog.style.getFloat = function(el) {
-<a name="line1725"></a>  return el.style[goog.userAgent.IE ? &#39;styleFloat&#39; : &#39;cssFloat&#39;] || &#39;&#39;;
-<a name="line1726"></a>};
+<a name="line1674"></a>  return fontSize;
+<a name="line1675"></a>};
+<a name="line1676"></a>
+<a name="line1677"></a>
+<a name="line1678"></a>/**
+<a name="line1679"></a> * Parses a style attribute value.  Converts CSS property names to camel case.
+<a name="line1680"></a> * @param {string} value The style attribute value.
+<a name="line1681"></a> * @return {!Object} Map of CSS properties to string values.
+<a name="line1682"></a> */
+<a name="line1683"></a>goog.style.parseStyleAttribute = function(value) {
+<a name="line1684"></a>  var result = {};
+<a name="line1685"></a>  goog.array.forEach(value.split(/\s*;\s*/), function(pair) {
+<a name="line1686"></a>    var keyValue = pair.split(/\s*:\s*/);
+<a name="line1687"></a>    if (keyValue.length == 2) {
+<a name="line1688"></a>      result[goog.style.toCamelCase(keyValue[0].toLowerCase())] = keyValue[1];
+<a name="line1689"></a>    }
+<a name="line1690"></a>  });
+<a name="line1691"></a>  return result;
+<a name="line1692"></a>};
+<a name="line1693"></a>
+<a name="line1694"></a>
+<a name="line1695"></a>/**
+<a name="line1696"></a> * Reverse of parseStyleAttribute; that is, takes a style object and returns the
+<a name="line1697"></a> * corresponding attribute value.  Converts camel case property names to proper
+<a name="line1698"></a> * CSS selector names.
+<a name="line1699"></a> * @param {Object} obj Map of CSS properties to values.
+<a name="line1700"></a> * @return {string} The style attribute value.
+<a name="line1701"></a> */
+<a name="line1702"></a>goog.style.toStyleAttribute = function(obj) {
+<a name="line1703"></a>  var buffer = [];
+<a name="line1704"></a>  goog.object.forEach(obj, function(value, key) {
+<a name="line1705"></a>    buffer.push(goog.style.toSelectorCase(key), &#39;:&#39;, value, &#39;;&#39;);
+<a name="line1706"></a>  });
+<a name="line1707"></a>  return buffer.join(&#39;&#39;);
+<a name="line1708"></a>};
+<a name="line1709"></a>
+<a name="line1710"></a>
+<a name="line1711"></a>/**
+<a name="line1712"></a> * Sets CSS float property on an element.
+<a name="line1713"></a> * @param {Element} el The element to set float property on.
+<a name="line1714"></a> * @param {string} value The value of float CSS property to set on this element.
+<a name="line1715"></a> */
+<a name="line1716"></a>goog.style.setFloat = function(el, value) {
+<a name="line1717"></a>  el.style[goog.userAgent.IE ? &#39;styleFloat&#39; : &#39;cssFloat&#39;] = value;
+<a name="line1718"></a>};
+<a name="line1719"></a>
+<a name="line1720"></a>
+<a name="line1721"></a>/**
+<a name="line1722"></a> * Gets value of explicitly-set float CSS property on an element.
+<a name="line1723"></a> * @param {Element} el The element to get float property of.
+<a name="line1724"></a> * @return {string} The value of explicitly-set float CSS property on this
+<a name="line1725"></a> *     element.
+<a name="line1726"></a> */
+<a name="line1727"></a>goog.style.getFloat = function(el) {
+<a name="line1728"></a>  return el.style[goog.userAgent.IE ? &#39;styleFloat&#39; : &#39;cssFloat&#39;] || &#39;&#39;;
+<a name="line1729"></a>};
+<a name="line1730"></a>
+<a name="line1731"></a>
+<a name="line1732"></a>/**
+<a name="line1733"></a> * Returns the scroll bar width (represents the width of both horizontal
+<a name="line1734"></a> * and vertical scroll).
+<a name="line1735"></a> *
+<a name="line1736"></a> * @return {number} The scroll bar width in px.
+<a name="line1737"></a> */
+<a name="line1738"></a>goog.style.getScrollbarWidth = function() {
+<a name="line1739"></a>  // Add a div outside of the viewport.
+<a name="line1740"></a>  var mockElement = goog.dom.createElement(&#39;div&#39;);
+<a name="line1741"></a>  mockElement.style.cssText = &#39;visibility:hidden;overflow:scroll;&#39; +
+<a name="line1742"></a>      &#39;position:absolute;top:0;width:100px;height:100px&#39;;
+<a name="line1743"></a>  goog.dom.appendChild(goog.dom.getDocument().body, mockElement);
+<a name="line1744"></a>  var width = mockElement.offsetWidth - mockElement.clientWidth;
+<a name="line1745"></a>  goog.dom.removeNode(mockElement);
+<a name="line1746"></a>  return width;
+<a name="line1747"></a>};
 </pre>
 
 

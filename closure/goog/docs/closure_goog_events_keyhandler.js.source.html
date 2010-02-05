@@ -444,101 +444,111 @@
 <a name="line400"></a>
 <a name="line401"></a>
 <a name="line402"></a>/**
-<a name="line403"></a> * Adds the proper key event listeners to the element.
-<a name="line404"></a> * XXX: {Document|Element} != {Element|Document}.
-<a name="line405"></a> * see: http://b/1470354
-<a name="line406"></a> * @param {Element|Document} element The element to listen on.
-<a name="line407"></a> */
-<a name="line408"></a>goog.events.KeyHandler.prototype.attach = function(element) {
-<a name="line409"></a>  if (this.keyUpKey_) {
-<a name="line410"></a>    this.detach();
-<a name="line411"></a>  }
-<a name="line412"></a>
-<a name="line413"></a>  this.element_ = element;
-<a name="line414"></a>
-<a name="line415"></a>  this.keyPressKey_ = goog.events.listen(this.element_,
-<a name="line416"></a>                                         goog.events.EventType.KEYPRESS,
-<a name="line417"></a>                                         this);
-<a name="line418"></a>
-<a name="line419"></a>  // Most browsers (Safari 2 being the notable exception) doesn&#39;t include the
-<a name="line420"></a>  // keyCode in keypress events (IE has the char code in the keyCode field and
-<a name="line421"></a>  // Mozilla only included the keyCode if there&#39;s no charCode). Thus we have to
-<a name="line422"></a>  // listen for keydown to capture the keycode.
-<a name="line423"></a>  this.keyDownKey_ = goog.events.listen(this.element_,
-<a name="line424"></a>                                        goog.events.EventType.KEYDOWN,
-<a name="line425"></a>                                        this.handleKeyDown_,
-<a name="line426"></a>                                        false,
-<a name="line427"></a>                                        this);
+<a name="line403"></a> * Returns the element listened on for the real keyboard events.
+<a name="line404"></a> * @return {Element|Document|null} The element listened on for the real
+<a name="line405"></a> *     keyboard events.
+<a name="line406"></a> */
+<a name="line407"></a>goog.events.KeyHandler.prototype.getElement = function() {
+<a name="line408"></a>  return this.element_;
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>/**
+<a name="line413"></a> * Adds the proper key event listeners to the element.
+<a name="line414"></a> * XXX: {Document|Element} != {Element|Document}.
+<a name="line415"></a> * see: http://b/1470354
+<a name="line416"></a> * @param {Element|Document} element The element to listen on.
+<a name="line417"></a> */
+<a name="line418"></a>goog.events.KeyHandler.prototype.attach = function(element) {
+<a name="line419"></a>  if (this.keyUpKey_) {
+<a name="line420"></a>    this.detach();
+<a name="line421"></a>  }
+<a name="line422"></a>
+<a name="line423"></a>  this.element_ = element;
+<a name="line424"></a>
+<a name="line425"></a>  this.keyPressKey_ = goog.events.listen(this.element_,
+<a name="line426"></a>                                         goog.events.EventType.KEYPRESS,
+<a name="line427"></a>                                         this);
 <a name="line428"></a>
-<a name="line429"></a>
-<a name="line430"></a>  this.keyUpKey_ = goog.events.listen(this.element_,
-<a name="line431"></a>                                      goog.events.EventType.KEYUP,
-<a name="line432"></a>                                      this.handleKeyup_,
-<a name="line433"></a>                                      false,
-<a name="line434"></a>                                      this);
-<a name="line435"></a>};
-<a name="line436"></a>
-<a name="line437"></a>
-<a name="line438"></a>/**
-<a name="line439"></a> * Removes the listeners that may exist.
-<a name="line440"></a> */
-<a name="line441"></a>goog.events.KeyHandler.prototype.detach = function() {
-<a name="line442"></a>  if (this.keyPressKey_) {
-<a name="line443"></a>    goog.events.unlistenByKey(this.keyPressKey_);
-<a name="line444"></a>    goog.events.unlistenByKey(this.keyDownKey_);
-<a name="line445"></a>    goog.events.unlistenByKey(this.keyUpKey_);
-<a name="line446"></a>    this.keyPressKey_ = null;
-<a name="line447"></a>    this.keyDownKey_ = null;
-<a name="line448"></a>    this.keyUpKey_ = null;
-<a name="line449"></a>  }
-<a name="line450"></a>  this.element_ = null;
-<a name="line451"></a>  this.lastKey_ = -1;
-<a name="line452"></a>};
-<a name="line453"></a>
-<a name="line454"></a>
-<a name="line455"></a>/**
-<a name="line456"></a> * Disposes of the key handler.
-<a name="line457"></a> */
-<a name="line458"></a>goog.events.KeyHandler.prototype.disposeInternal = function() {
-<a name="line459"></a>  goog.events.KeyHandler.superClass_.disposeInternal.call(this);
-<a name="line460"></a>  this.detach();
-<a name="line461"></a>};
-<a name="line462"></a>
+<a name="line429"></a>  // Most browsers (Safari 2 being the notable exception) doesn&#39;t include the
+<a name="line430"></a>  // keyCode in keypress events (IE has the char code in the keyCode field and
+<a name="line431"></a>  // Mozilla only included the keyCode if there&#39;s no charCode). Thus we have to
+<a name="line432"></a>  // listen for keydown to capture the keycode.
+<a name="line433"></a>  this.keyDownKey_ = goog.events.listen(this.element_,
+<a name="line434"></a>                                        goog.events.EventType.KEYDOWN,
+<a name="line435"></a>                                        this.handleKeyDown_,
+<a name="line436"></a>                                        false,
+<a name="line437"></a>                                        this);
+<a name="line438"></a>
+<a name="line439"></a>
+<a name="line440"></a>  this.keyUpKey_ = goog.events.listen(this.element_,
+<a name="line441"></a>                                      goog.events.EventType.KEYUP,
+<a name="line442"></a>                                      this.handleKeyup_,
+<a name="line443"></a>                                      false,
+<a name="line444"></a>                                      this);
+<a name="line445"></a>};
+<a name="line446"></a>
+<a name="line447"></a>
+<a name="line448"></a>/**
+<a name="line449"></a> * Removes the listeners that may exist.
+<a name="line450"></a> */
+<a name="line451"></a>goog.events.KeyHandler.prototype.detach = function() {
+<a name="line452"></a>  if (this.keyPressKey_) {
+<a name="line453"></a>    goog.events.unlistenByKey(this.keyPressKey_);
+<a name="line454"></a>    goog.events.unlistenByKey(this.keyDownKey_);
+<a name="line455"></a>    goog.events.unlistenByKey(this.keyUpKey_);
+<a name="line456"></a>    this.keyPressKey_ = null;
+<a name="line457"></a>    this.keyDownKey_ = null;
+<a name="line458"></a>    this.keyUpKey_ = null;
+<a name="line459"></a>  }
+<a name="line460"></a>  this.element_ = null;
+<a name="line461"></a>  this.lastKey_ = -1;
+<a name="line462"></a>};
 <a name="line463"></a>
-<a name="line464"></a>/**
-<a name="line465"></a> * This class is used for the goog.events.KeyHandler.EventType.KEY event and
-<a name="line466"></a> * it overrides the key code with the fixed key code.
-<a name="line467"></a> * @param {number} keyCode The adjusted key code.
-<a name="line468"></a> * @param {number} charCode The unicode character code.
-<a name="line469"></a> * @param {boolean} repeat Whether this event was generated by keyboard repeat.
-<a name="line470"></a> * @param {Event} browserEvent Browser event object.
-<a name="line471"></a> * @constructor
-<a name="line472"></a> * @extends {goog.events.BrowserEvent}
-<a name="line473"></a> */
-<a name="line474"></a>goog.events.KeyEvent = function(keyCode, charCode, repeat, browserEvent) {
-<a name="line475"></a>  goog.events.BrowserEvent.call(this, browserEvent);
-<a name="line476"></a>  this.type = goog.events.KeyHandler.EventType.KEY;
-<a name="line477"></a>
-<a name="line478"></a>  /**
-<a name="line479"></a>   * Keycode of key press.
-<a name="line480"></a>   * @type {number}
-<a name="line481"></a>   */
-<a name="line482"></a>  this.keyCode = keyCode;
-<a name="line483"></a>
-<a name="line484"></a>  /**
-<a name="line485"></a>   * Unicode character code.
-<a name="line486"></a>   * @type {number}
-<a name="line487"></a>   */
-<a name="line488"></a>  this.charCode = charCode;
-<a name="line489"></a>
-<a name="line490"></a>  /**
-<a name="line491"></a>   * True if this event was generated by keyboard auto-repeat (i.e., the user is
-<a name="line492"></a>   * holding the key down.)
-<a name="line493"></a>   * @type {boolean}
-<a name="line494"></a>   */
-<a name="line495"></a>  this.repeat = repeat;
-<a name="line496"></a>};
-<a name="line497"></a>goog.inherits(goog.events.KeyEvent, goog.events.BrowserEvent);
+<a name="line464"></a>
+<a name="line465"></a>/**
+<a name="line466"></a> * Disposes of the key handler.
+<a name="line467"></a> */
+<a name="line468"></a>goog.events.KeyHandler.prototype.disposeInternal = function() {
+<a name="line469"></a>  goog.events.KeyHandler.superClass_.disposeInternal.call(this);
+<a name="line470"></a>  this.detach();
+<a name="line471"></a>};
+<a name="line472"></a>
+<a name="line473"></a>
+<a name="line474"></a>/**
+<a name="line475"></a> * This class is used for the goog.events.KeyHandler.EventType.KEY event and
+<a name="line476"></a> * it overrides the key code with the fixed key code.
+<a name="line477"></a> * @param {number} keyCode The adjusted key code.
+<a name="line478"></a> * @param {number} charCode The unicode character code.
+<a name="line479"></a> * @param {boolean} repeat Whether this event was generated by keyboard repeat.
+<a name="line480"></a> * @param {Event} browserEvent Browser event object.
+<a name="line481"></a> * @constructor
+<a name="line482"></a> * @extends {goog.events.BrowserEvent}
+<a name="line483"></a> */
+<a name="line484"></a>goog.events.KeyEvent = function(keyCode, charCode, repeat, browserEvent) {
+<a name="line485"></a>  goog.events.BrowserEvent.call(this, browserEvent);
+<a name="line486"></a>  this.type = goog.events.KeyHandler.EventType.KEY;
+<a name="line487"></a>
+<a name="line488"></a>  /**
+<a name="line489"></a>   * Keycode of key press.
+<a name="line490"></a>   * @type {number}
+<a name="line491"></a>   */
+<a name="line492"></a>  this.keyCode = keyCode;
+<a name="line493"></a>
+<a name="line494"></a>  /**
+<a name="line495"></a>   * Unicode character code.
+<a name="line496"></a>   * @type {number}
+<a name="line497"></a>   */
+<a name="line498"></a>  this.charCode = charCode;
+<a name="line499"></a>
+<a name="line500"></a>  /**
+<a name="line501"></a>   * True if this event was generated by keyboard auto-repeat (i.e., the user is
+<a name="line502"></a>   * holding the key down.)
+<a name="line503"></a>   * @type {boolean}
+<a name="line504"></a>   */
+<a name="line505"></a>  this.repeat = repeat;
+<a name="line506"></a>};
+<a name="line507"></a>goog.inherits(goog.events.KeyEvent, goog.events.BrowserEvent);
 </pre>
 
 

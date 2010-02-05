@@ -62,8 +62,7 @@
         <span class="fn">module.Loader</span>
         <span>Extends</span>
         <span class="fn-name">
-          <a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">
-            Object</a>
+          Object
         </span>
 </div>
 
@@ -159,7 +158,7 @@ the goog.module.Loader instance.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getModuleUrl_<span class="args">(<span class="arg">urlBase</span>,&nbsp;<span class="arg">module</span>)</span>
+        <span class="entryName">getModuleUrl_<span class="args">(<span class="arg">getModuleUrl_@urlBase</span>,&nbsp;<span class="arg">getModuleUrl_@module</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -186,17 +185,17 @@ module name. By default it&#39;s urlBase + &#39;_&#39; + module + &#39;.js&#39;.
      
    <tr class="even">
      <td>
-        <span class="entryName">urlBase</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">URL to the module files.</div>
+        <span class="entryName">getModuleUrl_@urlBase</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">module</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Module name.</div>
+        <span class="entryName">getModuleUrl_@module</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -233,7 +232,7 @@ module name. By default it&#39;s urlBase + &#39;_&#39; + module + &#39;.js&#39;.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">init<span class="args">(<span class="arg">baseUrl</span>,&nbsp;<span class="arg">opt_urlFunction</span>)</span>
+        <span class="entryName">init<span class="args">(<span class="arg">init@baseUrl</span>,&nbsp;<span class="arg">init@opt_urlFunction</span>)</span>
         </span>
       </div>
 
@@ -262,17 +261,17 @@ name, preceded by a period, before the .js prefix of the base URL.
      
    <tr class="even">
      <td>
-        <span class="entryName">baseUrl</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The URL of the base library.</div>
+        <span class="entryName">init@baseUrl</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_urlFunction</span>
-        : <div class="fullType"><span class="type">Function=</span></div>
-        <div class="entryOverview">Function that creates the URL for the module file. It will be passed the base URL for module files and the module name and should return the fully-formed URL to the module file to load.</div>
+        <span class="entryName">init@opt_urlFunction</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -305,7 +304,7 @@ name, preceded by a period, before the .js prefix of the base URL.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">load_<span class="args">(<span class="arg">module</span>)</span>
+        <span class="entryName">load_<span class="args">(<span class="arg">load_@module</span>)</span>
         </span>
       </div>
 
@@ -330,9 +329,9 @@ name, preceded by a period, before the .js prefix of the base URL.
      
    <tr class="even">
      <td>
-        <span class="entryName">module</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The name of the module.</div>
+        <span class="entryName">load_@module</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -365,7 +364,7 @@ name, preceded by a period, before the .js prefix of the base URL.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">provide<span class="args">(<span class="arg">module</span>,&nbsp;<span class="arg">opt_symbol</span>,&nbsp;<span class="arg">opt_object</span>)</span>
+        <span class="entryName">provide<span class="args">(<span class="arg">provide@module</span>,&nbsp;<span class="arg">provide@opt_symbol</span>,&nbsp;<span class="arg">provide@opt_object</span>)</span>
         </span>
       </div>
 
@@ -392,25 +391,25 @@ from pending require() callbacks for this module.
      
    <tr class="even">
      <td>
-        <span class="entryName">module</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The name of the module. Cf. parameter module of method require().</div>
+        <span class="entryName">provide@module</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_symbol</span>
-        : <div class="fullType"><span class="type">number=</span></div>
-        <div class="entryOverview">The symbol being defined, or nothing when all symbols of the module are defined. Cf. parameter symbol of method require().</div>
+        <span class="entryName">provide@opt_symbol</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_object</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">The object bound to the symbol, or nothing when all symbols of the module are defined.</div>
+        <span class="entryName">provide@opt_object</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -443,7 +442,7 @@ from pending require() callbacks for this module.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">require<span class="args">(<span class="arg">module</span>,&nbsp;<span class="arg">symbol</span>,&nbsp;<span class="arg">callback</span>)</span>
+        <span class="entryName">require<span class="args">(<span class="arg">require@module</span>,&nbsp;<span class="arg">require@symbol</span>,&nbsp;<span class="arg">require@callback</span>)</span>
         </span>
       </div>
 
@@ -470,25 +469,25 @@ function callback.
      
    <tr class="even">
      <td>
-        <span class="entryName">module</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The name of the module. Usually, the value is defined as a constant whose name starts with MOD_.</div>
+        <span class="entryName">require@module</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">symbol</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">The ID of the symbol. Usually, the value is defined as a constant whose name starts with SYM_.</div>
+        <span class="entryName">require@symbol</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">callback</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
-        <div class="entryOverview">This function will be called with the resolved symbol as the argument once the module is loaded.</div>
+        <span class="entryName">require@callback</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -549,7 +548,7 @@ function callback.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.module.Loader.</span><span class="entryName">loaderEval_<span class="args">(<span class="arg">t_</span>)</span>
+        <span class="entryNamespace">goog.module.Loader.</span><span class="entryName">loaderEval_<span class="args">(<span class="arg">loaderEval_@t_</span>)</span>
         </span>
       </div>
 
@@ -579,9 +578,9 @@ namespace function that the jscompiled code lives in.
      
    <tr class="even">
      <td>
-        <span class="entryName">t_</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The javascript text to evaluate. IMPORTANT: The name of the identifier is chosen so that it isn&#39;t compiled and hence cannot shadow compiled identifiers in the surrounding scope.</div>
+        <span class="entryName">loaderEval_@t_</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>

@@ -21,11 +21,12 @@ limitations under the License.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
-    goog.require('goog.ui.KeyboardShortcutHandler');
     goog.require('goog.testing.MockClock');
+    goog.require('goog.testing.PropertyReplacer');
     goog.require('goog.testing.StrictMock');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
+    goog.require('goog.ui.KeyboardShortcutHandler');
   </script>
 </head>
 <body>
@@ -46,6 +47,7 @@ limitations under the License.
     var targetDiv;
     var listener;
     var mockClock;
+    var stubs = new goog.testing.PropertyReplacer();
 
     /**
      * Fires a keypress on the target div.
@@ -79,6 +81,7 @@ limitations under the License.
     function tearDown() {
       mockClock.uninstall();
       handler.dispose();
+      stubs.reset();
     }
 
     function testAllowsSingleLetterKeyBindingsSpecifiedAsString() {
@@ -213,6 +216,31 @@ limitations under the License.
       listener.$verify();
 
       goog.events.unlistenByKey(key);
+    }
+
+    function testPreventsDefaultWhenExceptionThrown() {
+      handler.registerShortcut('x', 'x');
+      handler.setAlwaysPreventDefault(true);
+      goog.events.listenOnce(handler,
+          goog.ui.KeyboardShortcutHandler.EventType.SHORTCUT_TRIGGERED,
+          function (event) { throw new Error('x'); });
+
+      // We can't use the standard infrastructure to detect that
+      // the event was preventDefaulted, because of the exception.
+      var callCount = 0;
+      stubs.set(goog.events.BrowserEvent.prototype, 'preventDefault',
+          function() {
+        callCount++;
+      });
+
+      try {
+        fire(KeyCodes.X);
+        fail('Expected exception');
+      } catch (e) {
+        assertContains(e.message, 'x');
+      }
+
+      assertEquals(1, callCount);
     }
 
     function testDoesntFireWhenUserForgetsRequiredModifier() {

@@ -58,8 +58,8 @@ goog.net.XhrLite.send = goog.net.XhrIo.send;
  * We could have {@link goog.net.XhrIo.send} return the goog.net.XhrIo
  * it creates and make the client of {@link goog.net.XhrIo.send} be
  * responsible for disposing it in this case.  However, this makes things
- * significanly more complicated for the client, and the whole point
- * of {@link goog.net.XhrIo.send} is that its simple and easy to use.
+ * significantly more complicated for the client, and the whole point
+ * of {@link goog.net.XhrIo.send} is that it's simple and easy to use.
  * Clients of {@link goog.net.XhrIo.send} should call
  * {@link goog.net.XhrIo.cleanupAllPendingStaticSends} when doing final
  * cleanup on window unload.

@@ -256,6 +256,16 @@ goog.testing.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
 
 
 /**
+ * Creates a new XHR object.
+ * @return {XMLHttpRequest|GearsHttpRequest} The newly created XHR object.
+ * @protected
+ */
+goog.testing.net.XhrIo.prototype.createXhr = function() {
+  return new goog.net.XmlHttp();
+};
+
+
+/**
  * Simulates changing to the new ready state.
  * @param {number} readyState Ready state to change to.
  */
@@ -413,10 +423,18 @@ goog.testing.net.XhrIo.prototype.getResponseText = function() {
 /**
  * Gets the response and evaluates it as JSON from the Xhr object.  Will only
  * return correct result when called from the context of a callback.
+ * @param {string=} opt_xssiPrefix Optional XSSI prefix string to use for
+ *     stripping of the response before parsing. This needs to be set only if
+ *     your backend server prepends the same prefix string to the JSON response.
  * @return {Object} JavaScript object.
  */
-goog.testing.net.XhrIo.prototype.getResponseJson = function() {
-  return goog.json.parse(this.getResponseText());
+goog.testing.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
+  var responseText = this.getResponseText();
+  if (opt_xssiPrefix && responseText.indexOf(opt_xssiPrefix) == 0) {
+    responseText = responseText.substring(opt_xssiPrefix.length);
+  }
+
+  return goog.json.parse(responseText);
 };
 
 

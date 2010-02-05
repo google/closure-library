@@ -37,6 +37,7 @@ goog.provide('goog.events.PasteHandler.EventType');
 goog.provide('goog.events.PasteHandler.State');
 
 goog.require('goog.debug.Logger');
+goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.KeyCodes');

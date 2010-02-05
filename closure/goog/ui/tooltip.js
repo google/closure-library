@@ -68,8 +68,8 @@ goog.ui.Tooltip = function(opt_el, opt_str, opt_domHelper) {
       'div', {'style': 'position:absolute;display:none;'}));
 
   /**
-   * Object for representing cursor position.
-   * @type {goog.math.Coordinate}
+   * Cursor position relative to the page.
+   * @type {!goog.math.Coordinate}
    * @protected
    */
   this.cursorPosition = new goog.math.Coordinate(1, 1);
@@ -546,9 +546,7 @@ goog.ui.Tooltip.prototype.positionAndShow_ = function(el, opt_pos) {
   if (opt_pos) {
     pos = opt_pos;
   } else {
-    var coord = new goog.math.Coordinate(
-       this.cursorPosition.x,
-       this.cursorPosition.y);
+    var coord = this.cursorPosition.clone();
     pos = new goog.ui.Tooltip.CursorTooltipPosition(coord);
   }
 
@@ -634,7 +632,7 @@ goog.ui.Tooltip.prototype.getAnchorFromElement = function(el) {
 /**
  * Handler for mouse move events.
  *
- * @param {goog.events.BrowserEvent} event Event object.
+ * @param {goog.events.BrowserEvent} event MOUSEMOVE event.
  * @protected
  */
 goog.ui.Tooltip.prototype.handleMouseMove = function(event) {

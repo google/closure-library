@@ -22,7 +22,6 @@ goog.provide('goog.ui.AnimatedZippy');
 
 goog.require('goog.dom');
 goog.require('goog.events');
-goog.require('goog.events.EventTarget');
 goog.require('goog.fx.Animation');
 goog.require('goog.ui.Zippy');
 goog.require('goog.ui.ZippyEvent');

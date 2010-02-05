@@ -77,8 +77,8 @@ goog.date.UtcDateTime.fromIsoString = function(formatted) {
  */
 goog.date.UtcDateTime.prototype.clone = function() {
   var date = new goog.date.UtcDateTime(this.date_);
-  date.firstDayOfWeek_ = this.firstDayOfWeek_;
-  date.firstWeekCutOffDay_ = this.firstWeekCutOffDay_;
+  date.setFirstDayOfWeek(this.getFirstDayOfWeek());
+  date.setFirstWeekCutOffDay(this.getFirstWeekCutOffDay());
   return date;
 };
 

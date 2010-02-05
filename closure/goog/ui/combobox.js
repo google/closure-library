@@ -23,10 +23,8 @@ goog.provide('goog.ui.ComboBox');
 goog.provide('goog.ui.ComboBoxItem');
 
 goog.require('goog.Timer');
-goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom.classes');
-goog.require('goog.dom.selection');
 goog.require('goog.events');
 goog.require('goog.events.InputHandler');
 goog.require('goog.events.KeyCodes');

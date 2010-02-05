@@ -35,6 +35,8 @@ goog.debug.DivConsole = function(element) {
   this.formatter_.showAbsoluteTime = false;
   this.isCapturing_ = false;
   this.element_ = element;
+  this.elementOwnerDocument_ =
+      this.element_.ownerDocument || this.element_.document;
 
   this.installStyles();
 };
@@ -90,7 +92,7 @@ goog.debug.DivConsole.prototype.addLogRecord = function(logRecord) {
   var scroll = this.element_.scrollHeight - this.element_.scrollTop -
       this.element_.clientHeight <= 100;
 
-  var div = document.createElement('div');
+  var div = this.elementOwnerDocument_.createElement('div');
   div.className = 'logmsg';
   div.innerHTML = this.formatter_.formatRecord(logRecord);
   this.element_.appendChild(div);
@@ -124,7 +126,7 @@ goog.debug.DivConsole.prototype.setFormatter = function(formatter) {
  * Adds a separator to the debug window.
  */
 goog.debug.DivConsole.prototype.addSeparator = function() {
-  var div = document.createElement('div');
+  var div = this.elementOwnerDocument_.createElement('div');
   div.className = 'logmsg logsep';
   this.element_.appendChild(div);
 };

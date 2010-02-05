@@ -207,8 +207,8 @@
 <a name="line163"></a>      ORIENTATION_TO_CSS_NAME_[this.orientation_]);
 <a name="line164"></a>
 <a name="line165"></a>  // find thumb
-<a name="line166"></a>  var thumb = goog.dom.$$(null, goog.getCssName(&#39;progress-bar-thumb&#39;),
-<a name="line167"></a>      this.getElement())[0];
+<a name="line166"></a>  var thumb = goog.dom.getElementsByTagNameAndClass(
+<a name="line167"></a>      null, goog.getCssName(&#39;progress-bar-thumb&#39;), this.getElement())[0];
 <a name="line168"></a>  if (!thumb) {
 <a name="line169"></a>    thumb = this.createThumb_();
 <a name="line170"></a>    this.getElement().appendChild(thumb);

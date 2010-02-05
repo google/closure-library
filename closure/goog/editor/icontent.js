@@ -120,7 +120,7 @@ goog.editor.icontent.getInitialIframeContent_ =
   // to the HTML element's height.
   // For fixed-height it should be 100% since we want the body to fill the
   // whole height. For growing fields it should be auto since we want the
-  // body to size to it's content.
+  // body to size to its content.
   if (info.blended_) {
     html.push('height:', info.fixedHeight_ ? '100%' : 'auto');
   }

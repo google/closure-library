@@ -38,10 +38,13 @@ limitations under the License.
   <span>(use "Space" to open dialog with no Iframe, "Enter" to open with Iframe
   mask</span>
   </div>
-  <button onclick="dialog1.setVisible(true)">
+  <div><input id="swapModalOnShift" type="checkbox">
+  <label>Enable modal change with shift when the dialog is open</label>
+  </div>
+  <button onclick="showDialog(dialog1);">
     Open Dialog (no Iframe)</button>
   <br>
-  <button onclick="dialog2.setVisible(true)">
+  <button onclick="showDialog(dialog2);">
     Open Dialog (w/ Iframe mask)
   </button>
 
@@ -89,15 +92,26 @@ limitations under the License.
   </fieldset>
   <script>
     goog.events.listen(document, goog.events.EventType.KEYDOWN, function(e) {
+      var code = e.keyCode;
       if (goog.dom.$('openOnKeyDown').checked) {
-        var code = e.keyCode;
         switch (code) {
           case goog.events.KeyCodes.MAC_ENTER:
           case goog.events.KeyCodes.ENTER:
-            dialog1.setVisible(true);
+            showDialog(dialog1);
             break;
           case goog.events.KeyCodes.SPACE:
-            dialog2.setVisible(true);
+            showDialog(dialog2);
+            break;
+          default:
+            // no-op
+        }
+      }
+      if (goog.dom.$('swapModalOnShift').checked) {
+        switch (code) {
+          case goog.events.KeyCodes.SHIFT:
+            if (currDialog && currDialog.isVisible()) {
+              currDialog.setModal(!currDialog.getModal());
+            }
             break;
           default:
             // no-op
@@ -137,6 +151,14 @@ limitations under the License.
     goog.events.listen(window, 'unload', function() {
       goog.events.removeAll();
     });
+
+    var currDialog;
+
+    function showDialog(dialog) {
+      currDialog = dialog;
+      dialog.setVisible(true);
+    }
+
   </script>
 </body>
 </html>

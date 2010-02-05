@@ -281,7 +281,7 @@ goog.ui.Select.prototype.setSelectedIndex = function(index) {
  * argument, or clears the selection if no such option is found.  A null
  * argument also clears the selection.  Overrides {@link
  * goog.ui.Button#setValue}.
- * @param {Object} value Value of the option to be selected (null to clear
+ * @param {*} value Value of the option to be selected (null to clear
  *     the selection).
  */
 goog.ui.Select.prototype.setValue = function(value) {

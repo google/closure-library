@@ -63,7 +63,8 @@
         <span>Extends</span>
         <span class="fn-name">
           <a href="class_goog_events_EventTarget.html">
-            goog.events.EventTarget</a>
+          goog.events.EventTarget
+</a>
         </span>
 </div>
 
@@ -104,7 +105,7 @@
 
   <h2>Constructor</h2>
       <div class="fn-constructor">
-    goog.ui.AutoComplete.Renderer(<span><span class="arg">opt_parentNode</span>,&nbsp;<span class="arg">opt_customRenderer</span>,&nbsp;<span class="arg">opt_rightAlign</span>,&nbsp;<span class="arg">opt_useStandardHighlighting</span></span>)
+    goog.ui.AutoComplete.Renderer(<span><span class="arg">Renderer@opt_parentNode</span>,&nbsp;<span class="arg">Renderer@opt_customRenderer</span>,&nbsp;<span class="arg">Renderer@opt_rightAlign</span>,&nbsp;<span class="arg">Renderer@opt_useStandardHighlighting</span></span>)
   </div>
 
    <h3>Parameters</h3>
@@ -118,33 +119,33 @@
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_parentNode</span>
-        : <div class="fullType"><span class="type">Element=</span></div>
-        <div class="entryOverview">optional reference to the parent element that will hold the autocomplete elements. goog.dom.getDocument().body will be used if this is null.</div>
+        <span class="entryName">Renderer@opt_parentNode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_customRenderer</span>
-        : <div class="fullType"><span>?</span><span class="type">({renderRow}</span><span>&nbsp;|&nbsp;</span><span class="type">{render})=</span></div>
-        <div class="entryOverview">Custom full renderer to render each row. Should be something with a renderRow or render method.</div>
+        <span class="entryName">Renderer@opt_customRenderer</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_rightAlign</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Determines if the autocomplete will always be right aligned. False by default.</div>
+        <span class="entryName">Renderer@opt_rightAlign</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_useStandardHighlighting</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Determines if standard highlighting should be applied to each row of data. Standard highlighting bolds every matching substring for a given token in each row.</div>
+        <span class="entryName">Renderer@opt_useStandardHighlighting</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -213,7 +214,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line262">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line271">code &raquo;</a>
   </td>
      </tr>
 
@@ -247,12 +248,58 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line495">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line504">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.AutoComplete.Renderer.prototype.getElement"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getElement<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the renderer&#39;s element.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>&nbsp;
+            The  main element that controls the rendered autocomplete.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line224">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -267,7 +314,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getRowFromEventTarget_<span class="args">(<span class="arg">et</span>)</span>
+        <span class="entryName">getRowFromEventTarget_<span class="args">(<span class="arg">getRowFromEventTarget_@et</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
       </div>
@@ -295,9 +342,9 @@ then the index is returned, otherwise -1 is returned.
      
    <tr class="even">
      <td>
-        <span class="entryName">et</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">HtmlElement.</div>
+        <span class="entryName">getRowFromEventTarget_@et</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -314,12 +361,12 @@ then the index is returned, otherwise -1 is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line662">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line671">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -334,7 +381,7 @@ then the index is returned, otherwise -1 is returned.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">handleClick_<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">handleClick_<span class="args">(<span class="arg">handleClick_@e</span>)</span>
         </span>
       </div>
 
@@ -360,9 +407,9 @@ which then makes a callback to select the correct row.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
-        <div class="entryOverview">Browser event object.</div>
+        <span class="entryName">handleClick_@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -375,12 +422,12 @@ which then makes a callback to select the correct row.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line677">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line686">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -395,7 +442,7 @@ which then makes a callback to select the correct row.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">handleDocumentClick_<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">handleDocumentClick_<span class="args">(<span class="arg">handleDocumentClick_@e</span>)</span>
         </span>
       </div>
 
@@ -420,9 +467,9 @@ which then makes a callback to select the correct row.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The document click event.</div>
+        <span class="entryName">handleDocumentClick_@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -435,12 +482,12 @@ which then makes a callback to select the correct row.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line706">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line715">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -455,7 +502,7 @@ which then makes a callback to select the correct row.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">handleMouseDown_<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">handleMouseDown_<span class="args">(<span class="arg">handleMouseDown_@e</span>)</span>
         </span>
       </div>
 
@@ -480,9 +527,9 @@ which then makes a callback to select the correct row.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
-        <div class="entryOverview">Browser event object.</div>
+        <span class="entryName">handleMouseDown_@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -495,12 +542,12 @@ which then makes a callback to select the correct row.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line694">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line703">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -515,7 +562,7 @@ which then makes a callback to select the correct row.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">handleMouseOver_<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">handleMouseOver_<span class="args">(<span class="arg">handleMouseOver_@e</span>)</span>
         </span>
       </div>
 
@@ -543,9 +590,9 @@ duplicating the code
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
-        <div class="entryOverview">Browser event object.</div>
+        <span class="entryName">handleMouseOver_@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -558,12 +605,12 @@ duplicating the code
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line719">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line728">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -578,7 +625,7 @@ duplicating the code
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">hiliteId<span class="args">(<span class="arg">id</span>)</span>
+        <span class="entryName">hiliteId<span class="args">(<span class="arg">hiliteId@id</span>)</span>
         </span>
       </div>
 
@@ -603,9 +650,9 @@ duplicating the code
      
    <tr class="even">
      <td>
-        <span class="entryName">id</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Id of the row to hilight. If id is -1 then no rows get hilited.</div>
+        <span class="entryName">hiliteId@id</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -618,12 +665,12 @@ duplicating the code
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line327">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line336">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -638,14 +685,14 @@ duplicating the code
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">hiliteMatchingText_<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">tokenOrArray</span>)</span>
+        <span class="entryName">hiliteMatchingText_<span class="args">(<span class="arg">hiliteMatchingText_@node</span>,&nbsp;<span class="arg">hiliteMatchingText_@tokenOrArray</span>)</span>
         </span>
       </div>
 
 
      <div class="entryOverview">
-       Goes through a node and all of it&#39;s child nodes, replacing HTML text that
-matches a token with <b>token</b>
+       Goes through a node and all of its child nodes, replacing HTML text that
+matches a token with <b>token</b>.
      </div>
 
 
@@ -664,17 +711,17 @@ matches a token with <b>token</b>
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">Node to match.</div>
+        <span class="entryName">hiliteMatchingText_@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">tokenOrArray</span>
-        : <div class="fullType"><span class="type">string </span><span>&nbsp;|&nbsp;</span><span class="type"> Array</span></div>
-        <div class="entryOverview">Token to match or array of tokens to match, the first match will be highlighted.</div>
+        <span class="entryName">hiliteMatchingText_@tokenOrArray</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -687,12 +734,12 @@ matches a token with <b>token</b>
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line560">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line569">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -721,12 +768,12 @@ matches a token with <b>token</b>
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line314">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line323">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -741,7 +788,7 @@ matches a token with <b>token</b>
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">hiliteRow<span class="args">(<span class="arg">index</span>)</span>
+        <span class="entryName">hiliteRow<span class="args">(<span class="arg">hiliteRow@index</span>)</span>
         </span>
       </div>
 
@@ -766,9 +813,9 @@ matches a token with <b>token</b>
      
    <tr class="even">
      <td>
-        <span class="entryName">index</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Index of the item to highlight.</div>
+        <span class="entryName">hiliteRow@index</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -781,12 +828,12 @@ matches a token with <b>token</b>
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line296">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line305">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -827,12 +874,12 @@ matches a token with <b>token</b>
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line287">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line296">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -862,12 +909,12 @@ to the parent.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line357">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line366">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -882,7 +929,7 @@ to the parent.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">preventMacScrollbarResurface_<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryName">preventMacScrollbarResurface_<span class="args">(<span class="arg">preventMacScrollbarResurface_@node</span>)</span>
         </span>
       </div>
 
@@ -908,9 +955,9 @@ node. This is a known bug in Firefox on Mac.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to prevent scrollbars from resurfacing through.</div>
+        <span class="entryName">preventMacScrollbarResurface_@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -923,12 +970,12 @@ node. This is a known bug in Firefox on Mac.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line523">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line532">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -957,12 +1004,12 @@ node. This is a known bug in Firefox on Mac.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line395">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line404">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -977,7 +1024,7 @@ node. This is a known bug in Firefox on Mac.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">renderRowContents_<span class="args">(<span class="arg">row</span>,&nbsp;<span class="arg">token</span>,&nbsp;<span class="arg">node</span>)</span>
+        <span class="entryName">renderRowContents_<span class="args">(<span class="arg">renderRowContents_@row</span>,&nbsp;<span class="arg">renderRowContents_@token</span>,&nbsp;<span class="arg">renderRowContents_@node</span>)</span>
         </span>
       </div>
 
@@ -1005,25 +1052,25 @@ Normally this will only be matching a maximum of 20 or so items.  Even with
      
    <tr class="even">
      <td>
-        <span class="entryName">row</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">Object representing row.</div>
+        <span class="entryName">renderRowContents_@row</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">token</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Token to highlight.</div>
+        <span class="entryName">renderRowContents_@token</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to render into.</div>
+        <span class="entryName">renderRowContents_@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1036,12 +1083,12 @@ Normally this will only be matching a maximum of 20 or so items.  Even with
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line545">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line554">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1056,7 +1103,7 @@ Normally this will only be matching a maximum of 20 or so items.  Even with
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">renderRowHtml<span class="args">(<span class="arg">row</span>,&nbsp;<span class="arg">token</span>)</span>
+        <span class="entryName">renderRowHtml<span class="args">(<span class="arg">renderRowHtml@row</span>,&nbsp;<span class="arg">renderRowHtml@token</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -1083,17 +1130,17 @@ default row handler
      
    <tr class="even">
      <td>
-        <span class="entryName">row</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">Object representing row.</div>
+        <span class="entryName">renderRowHtml@row</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">token</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Token to highlight.</div>
+        <span class="entryName">renderRowHtml@token</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1110,12 +1157,12 @@ default row handler
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line631">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line640">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1130,7 +1177,7 @@ default row handler
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">renderRows<span class="args">(<span class="arg">rows</span>,&nbsp;<span class="arg">token</span>,&nbsp;<span class="arg">opt_target</span>)</span>
+        <span class="entryName">renderRows<span class="args">(<span class="arg">renderRows@rows</span>,&nbsp;<span class="arg">renderRows@token</span>,&nbsp;<span class="arg">renderRows@opt_target</span>)</span>
         </span>
       </div>
 
@@ -1155,25 +1202,25 @@ default row handler
      
    <tr class="even">
      <td>
-        <span class="entryName">rows</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
-        <div class="entryOverview">Matching UI rows.</div>
+        <span class="entryName">renderRows@rows</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">token</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Token we are currently matching against.</div>
+        <span class="entryName">renderRows@token</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_target</span>
-        : <div class="fullType"><span class="type">Element=</span></div>
-        <div class="entryOverview">Current HTML node, will position popup beneath this node.</div>
+        <span class="entryName">renderRows@opt_target</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1186,12 +1233,12 @@ default row handler
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line247">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line256">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1220,12 +1267,12 @@ default row handler
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line451">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line460">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1240,7 +1287,7 @@ default row handler
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setAutoPosition<span class="args">(<span class="arg">auto</span>)</span>
+        <span class="entryName">setAutoPosition<span class="args">(<span class="arg">setAutoPosition@auto</span>)</span>
         </span>
       </div>
 
@@ -1266,9 +1313,9 @@ drop down.
      
    <tr class="even">
      <td>
-        <span class="entryName">auto</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether to autoposition the drop down.</div>
+        <span class="entryName">setAutoPosition@auto</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1281,12 +1328,12 @@ drop down.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line487">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line496">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -1301,7 +1348,7 @@ drop down.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setMenuClasses_<span class="args">(<span class="arg">elt</span>)</span>
+        <span class="entryName">setMenuClasses_<span class="args">(<span class="arg">setMenuClasses_@elt</span>)</span>
         </span>
       </div>
 
@@ -1326,9 +1373,9 @@ drop down.
      
    <tr class="even">
      <td>
-        <span class="entryName">elt</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">The container element.</div>
+        <span class="entryName">setMenuClasses_@elt</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1341,12 +1388,12 @@ drop down.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line347">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line356">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1361,7 +1408,7 @@ drop down.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setTopAlign<span class="args">(<span class="arg">align</span>)</span>
+        <span class="entryName">setTopAlign<span class="args">(<span class="arg">setTopAlign@align</span>)</span>
         </span>
       </div>
 
@@ -1386,9 +1433,9 @@ drop down.
      
    <tr class="even">
      <td>
-        <span class="entryName">align</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">If true, align to top.</div>
+        <span class="entryName">setTopAlign@align</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1401,12 +1448,12 @@ drop down.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line224">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line233">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1421,7 +1468,7 @@ drop down.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setUseStandardHighlighting<span class="args">(<span class="arg">useStandardHighlighting</span>)</span>
+        <span class="entryName">setUseStandardHighlighting<span class="args">(<span class="arg">setUseStandardHighlighting@useStandardHighlighting</span>)</span>
         </span>
       </div>
 
@@ -1446,9 +1493,9 @@ drop down.
      
    <tr class="even">
      <td>
-        <span class="entryName">useStandardHighlighting</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">true if standard highlighting used.</div>
+        <span class="entryName">setUseStandardHighlighting@useStandardHighlighting</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1461,12 +1508,12 @@ drop down.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line233">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line242">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1495,7 +1542,7 @@ drop down.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line276">code &raquo;</a>
+     <a href="closure_goog_ui_autocomplete_renderer.js.source.html#line285">code &raquo;</a>
   </td>
      </tr>
 
@@ -1538,7 +1585,7 @@ drop down.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">addEventListener<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_capture</span>,&nbsp;<span class="arg">opt_handlerScope</span>)</span>
+        <span class="entryName">addEventListener<span class="args">(<span class="arg">addEventListener@type</span>,&nbsp;<span class="arg">addEventListener@handler</span>,&nbsp;<span class="arg">addEventListener@opt_capture</span>,&nbsp;<span class="arg">addEventListener@opt_handlerScope</span>)</span>
         </span>
       </div>
 
@@ -1568,33 +1615,33 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
      
    <tr class="even">
      <td>
-        <span class="entryName">type</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The type of the event to listen for.</div>
+        <span class="entryName">addEventListener@type</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The function to handle the event. The handler can also be an object that implements the handleEvent method which takes the event object as argument.</div>
+        <span class="entryName">addEventListener@handler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
+        <span class="entryName">addEventListener@opt_capture</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Object in whose scope to call the listener.</div>
+        <span class="entryName">addEventListener@opt_handlerScope</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1627,7 +1674,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">dispatchEvent@e</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -1659,9 +1706,9 @@ stopPropagation, then the bubble listeners won&#39;t fire.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
-        <div class="entryOverview">Event object.</div>
+        <span class="entryName">dispatchEvent@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1786,7 +1833,7 @@ MyClass.superClass_.disposeInternal.call(this);
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">removeEventListener<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_capture</span>,&nbsp;<span class="arg">opt_handlerScope</span>)</span>
+        <span class="entryName">removeEventListener<span class="args">(<span class="arg">removeEventListener@type</span>,&nbsp;<span class="arg">removeEventListener@handler</span>,&nbsp;<span class="arg">removeEventListener@opt_capture</span>,&nbsp;<span class="arg">removeEventListener@opt_handlerScope</span>)</span>
         </span>
       </div>
 
@@ -1813,33 +1860,33 @@ nothing is done.
      
    <tr class="even">
      <td>
-        <span class="entryName">type</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The type of the event to listen for.</div>
+        <span class="entryName">removeEventListener@type</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The function to handle the event. The handler can also be an object that implements the handleEvent method which takes the event object as argument.</div>
+        <span class="entryName">removeEventListener@handler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
+        <span class="entryName">removeEventListener@opt_capture</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Object in whose scope to call the listener.</div>
+        <span class="entryName">removeEventListener@opt_handlerScope</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1872,7 +1919,7 @@ nothing is done.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">parent</span>)</span>
+        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">setParentEventTarget@parent</span>)</span>
         </span>
       </div>
 
@@ -1897,9 +1944,9 @@ nothing is done.
      
    <tr class="even">
      <td>
-        <span class="entryName">parent</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></div>
-        <div class="entryOverview">Parent EventTarget (null if none).</div>
+        <span class="entryName">setParentEventTarget@parent</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>

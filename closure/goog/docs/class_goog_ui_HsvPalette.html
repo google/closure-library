@@ -63,7 +63,8 @@
         <span>Extends</span>
         <span class="fn-name">
           <a href="class_goog_ui_Component.html">
-            goog.ui.Component</a>
+          goog.ui.Component
+</a>
         </span>
 </div>
 
@@ -108,7 +109,7 @@ value/brightness.
 
   <h2>Constructor</h2>
       <div class="fn-constructor">
-    goog.ui.HsvPalette(<span><span class="arg">opt_domHelper</span>,&nbsp;<span class="arg">opt_color</span>,&nbsp;<span class="arg">opt_class</span></span>)
+    goog.ui.HsvPalette(<span><span class="arg">HsvPalette@opt_domHelper</span>,&nbsp;<span class="arg">HsvPalette@opt_color</span>,&nbsp;<span class="arg">HsvPalette@opt_class</span></span>)
   </div>
 
    <h3>Parameters</h3>
@@ -122,25 +123,25 @@ value/brightness.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_domHelper</span>
-        : <div class="fullType"><span class="type">goog.dom.DomHelper=</span></div>
-        <div class="entryOverview">Optional DOM helper.</div>
+        <span class="entryName">HsvPalette@opt_domHelper</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_color</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Optional initial color (default is red).</div>
+        <span class="entryName">HsvPalette@opt_color</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_class</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Optional base for creating classnames (default is goog.getCssName(&#39;goog-hsv-palette&#39;)).</div>
+        <span class="entryName">HsvPalette@opt_class</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -195,7 +196,7 @@ value/brightness.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">canDecorate<span class="args">(<span class="arg">element</span>)</span>
+        <span class="entryName">canDecorate<span class="args">(<span class="arg">canDecorate@element</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -222,9 +223,9 @@ structure they build is fairly complicated.
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Element to decorate.</div>
+        <span class="entryName">canDecorate@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -241,7 +242,7 @@ structure they build is fairly complicated.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line252">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line263">code &raquo;</a>
   </td>
      </tr>
 
@@ -275,7 +276,7 @@ structure they build is fairly complicated.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line258">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line269">code &raquo;</a>
   </td>
      </tr>
 
@@ -309,7 +310,7 @@ structure they build is fairly complicated.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line315">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line326">code &raquo;</a>
   </td>
      </tr>
 
@@ -343,12 +344,60 @@ structure they build is fairly complicated.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line292">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line303">code &raquo;</a>
   </td>
      </tr>
 
 
      <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.HsvPalette.prototype.getAlpha"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getAlpha<span class="args">()</span>
+        </span>
+        &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
+      </div>
+
+
+     <div class="entryOverview">
+       Alpha transparency of the currently selected color, in [0, 1].
+For the HSV palette this always returns 1. The HSVA palette overrides
+this method.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>&nbsp;
+            The current alpha value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line163">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -394,7 +443,7 @@ structure they build is fairly complicated.
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -409,7 +458,7 @@ structure they build is fairly complicated.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">handleInput_<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">handleInput_<span class="args">(<span class="arg">handleInput_@e</span>)</span>
         </span>
       </div>
 
@@ -434,9 +483,9 @@ structure they build is fairly complicated.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
-        <div class="entryOverview">Event object.</div>
+        <span class="entryName">handleInput_@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -449,12 +498,12 @@ structure they build is fairly complicated.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line454">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line465">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -469,7 +518,7 @@ structure they build is fairly complicated.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">handleMouseDown_<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">handleMouseDown_<span class="args">(<span class="arg">handleMouseDown_@e</span>)</span>
         </span>
       </div>
 
@@ -494,9 +543,9 @@ structure they build is fairly complicated.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span></div>
-        <div class="entryOverview">Event object.</div>
+        <span class="entryName">handleMouseDown_@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -509,12 +558,12 @@ structure they build is fairly complicated.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line375">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line386">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -529,7 +578,7 @@ structure they build is fairly complicated.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">handleMouseMoveHs_<span class="args">(<span class="arg">b</span>,&nbsp;<span class="arg">e</span>)</span>
+        <span class="entryName">handleMouseMoveHs_<span class="args">(<span class="arg">handleMouseMoveHs_@b</span>,&nbsp;<span class="arg">handleMouseMoveHs_@e</span>)</span>
         </span>
       </div>
 
@@ -555,17 +604,17 @@ hue/saturation slider has started.
      
    <tr class="even">
      <td>
-        <span class="entryName">b</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Rect.html">goog.math.Rect</a></span></div>
-        <div class="entryOverview">Boundaries of the value slider object at the start of the drag operation.</div>
+        <span class="entryName">handleMouseMoveHs_@b</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span></div>
-        <div class="entryOverview">Event object.</div>
+        <span class="entryName">handleMouseMoveHs_@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -578,12 +627,12 @@ hue/saturation slider has started.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line427">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line438">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -598,7 +647,7 @@ hue/saturation slider has started.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">handleMouseMoveV_<span class="args">(<span class="arg">b</span>,&nbsp;<span class="arg">e</span>)</span>
+        <span class="entryName">handleMouseMoveV_<span class="args">(<span class="arg">handleMouseMoveV_@b</span>,&nbsp;<span class="arg">handleMouseMoveV_@e</span>)</span>
         </span>
       </div>
 
@@ -624,17 +673,17 @@ slider has started.
      
    <tr class="even">
      <td>
-        <span class="entryName">b</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_math_Rect.html">goog.math.Rect</a></span></div>
-        <div class="entryOverview">Boundaries of the value slider object at the start of the drag operation.</div>
+        <span class="entryName">handleMouseMoveV_@b</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span></div>
-        <div class="entryOverview">Event object.</div>
+        <span class="entryName">handleMouseMoveV_@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -647,12 +696,12 @@ slider has started.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line406">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line417">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -667,7 +716,7 @@ slider has started.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">handleMouseUp_<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">handleMouseUp_<span class="args">(<span class="arg">handleMouseUp_@e</span>)</span>
         </span>
       </div>
 
@@ -692,9 +741,9 @@ slider has started.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
-        <div class="entryOverview">Event object.</div>
+        <span class="entryName">handleMouseUp_@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -707,12 +756,12 @@ slider has started.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line443">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line454">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -727,7 +776,7 @@ slider has started.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setColor<span class="args">(<span class="arg">color</span>)</span>
+        <span class="entryName">setColor<span class="args">(<span class="arg">setColor@color</span>)</span>
         </span>
       </div>
 
@@ -752,9 +801,9 @@ slider has started.
      
    <tr class="even">
      <td>
-        <span class="entryName">color</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The selected color.</div>
+        <span class="entryName">setColor@color</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -767,12 +816,12 @@ slider has started.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line178">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line189">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -787,7 +836,7 @@ slider has started.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setColor_<span class="args">(<span class="arg">color</span>)</span>
+        <span class="entryName">setColor_<span class="args">(<span class="arg">setColor_@color</span>)</span>
         </span>
       </div>
 
@@ -812,9 +861,9 @@ slider has started.
      
    <tr class="even">
      <td>
-        <span class="entryName">color</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The selected color.</div>
+        <span class="entryName">setColor_@color</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -827,12 +876,12 @@ slider has started.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line192">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line203">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -847,7 +896,7 @@ slider has started.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setHsv<span class="args">(<span class="arg">opt_hue</span>,&nbsp;<span class="arg">opt_saturation</span>,&nbsp;<span class="arg">opt_value</span>)</span>
+        <span class="entryName">setHsv<span class="args">(<span class="arg">setHsv@opt_hue</span>,&nbsp;<span class="arg">setHsv@opt_saturation</span>,&nbsp;<span class="arg">setHsv@opt_value</span>)</span>
         </span>
       </div>
 
@@ -873,25 +922,25 @@ updates the UI.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_hue</span>
-        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
-        <div class="entryOverview">(optional) hue in [0, 1].</div>
+        <span class="entryName">setHsv@opt_hue</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_saturation</span>
-        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
-        <div class="entryOverview">(optional) saturation in [0, 1].</div>
+        <span class="entryName">setHsv@opt_saturation</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_value</span>
-        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
-        <div class="entryOverview">(optional) value in [0, 255].</div>
+        <span class="entryName">setHsv@opt_value</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -904,12 +953,12 @@ updates the UI.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line211">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line222">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -924,7 +973,7 @@ updates the UI.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setHsv_<span class="args">(<span class="arg">opt_hue</span>,&nbsp;<span class="arg">opt_saturation</span>,&nbsp;<span class="arg">opt_value</span>)</span>
+        <span class="entryName">setHsv_<span class="args">(<span class="arg">setHsv_@opt_hue</span>,&nbsp;<span class="arg">setHsv_@opt_saturation</span>,&nbsp;<span class="arg">setHsv_@opt_value</span>)</span>
         </span>
       </div>
 
@@ -949,25 +998,25 @@ updates the UI.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_hue</span>
-        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
-        <div class="entryOverview">(optional) hue in [0, 1].</div>
+        <span class="entryName">setHsv_@opt_hue</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_saturation</span>
-        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
-        <div class="entryOverview">(optional) saturation in [0, 1].</div>
+        <span class="entryName">setHsv_@opt_saturation</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_value</span>
-        : <div class="fullType"><span>?</span><span class="type">number=</span></div>
-        <div class="entryOverview">(optional) value in [0, 255].</div>
+        <span class="entryName">setHsv_@opt_value</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -980,12 +1029,12 @@ updates the UI.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line229">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line240">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry protected">
+     <tr class="odd entry protected">
        <td class="access"></td>
 
 
@@ -1014,12 +1063,12 @@ updates the UI.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line161">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line172">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -1049,7 +1098,7 @@ palette.
 
 
   <td class="view-code">
-     <a href="closure_goog_ui_hsvpalette.js.source.html#line338">code &raquo;</a>
+     <a href="closure_goog_ui_hsvpalette.js.source.html#line349">code &raquo;</a>
   </td>
      </tr>
 
@@ -1092,7 +1141,7 @@ palette.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">addChild<span class="args">(<span class="arg">child</span>,&nbsp;<span class="arg">opt_render</span>)</span>
+        <span class="entryName">addChild<span class="args">(<span class="arg">addChild@child</span>,&nbsp;<span class="arg">addChild@opt_render</span>)</span>
         </span>
       </div>
 
@@ -1118,17 +1167,17 @@ goog.ui.Component#addChildAt for detailed semantics.
      
    <tr class="even">
      <td>
-        <span class="entryName">child</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></div>
-        <div class="entryOverview">The new child component.</div>
+        <span class="entryName">addChild@child</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">If true, the child component will be rendered into the parent.</div>
+        <span class="entryName">addChild@opt_render</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1161,7 +1210,7 @@ goog.ui.Component#addChildAt for detailed semantics.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">addChildAt<span class="args">(<span class="arg">child</span>,&nbsp;<span class="arg">index</span>,&nbsp;<span class="arg">opt_render</span>)</span>
+        <span class="entryName">addChildAt<span class="args">(<span class="arg">addChildAt@child</span>,&nbsp;<span class="arg">addChildAt@index</span>,&nbsp;<span class="arg">addChildAt@opt_render</span>)</span>
         </span>
       </div>
 
@@ -1214,25 +1263,25 @@ different parent, or the given index is out of bounds.
      
    <tr class="even">
      <td>
-        <span class="entryName">child</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></div>
-        <div class="entryOverview">The new child component.</div>
+        <span class="entryName">addChildAt@child</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">index</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">0-based index at which the new child component is to be added; must be between 0 and the current child count (inclusive).</div>
+        <span class="entryName">addChildAt@index</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_render</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">If true, the child component will be rendered into the parent.</div>
+        <span class="entryName">addChildAt@opt_render</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1265,7 +1314,7 @@ different parent, or the given index is out of bounds.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">canDecorate<span class="args">(<span class="arg">element</span>)</span>
+        <span class="entryName">canDecorate<span class="args">(<span class="arg">canDecorate@element</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -1292,9 +1341,9 @@ This method should be overridden by inheriting objects.
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Element to decorate.</div>
+        <span class="entryName">canDecorate@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1365,7 +1414,7 @@ This method should be overridden by inheriting objects.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">decorate<span class="args">(<span class="arg">element</span>)</span>
+        <span class="entryName">decorate<span class="args">(<span class="arg">decorate@element</span>)</span>
         </span>
       </div>
 
@@ -1390,9 +1439,9 @@ This method should be overridden by inheriting objects.
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Element to decorate.</div>
+        <span class="entryName">decorate@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1425,7 +1474,7 @@ This method should be overridden by inheriting objects.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">decorateInternal<span class="args">(<span class="arg">element</span>)</span>
+        <span class="entryName">decorateInternal<span class="args">(<span class="arg">decorateInternal@element</span>)</span>
         </span>
       </div>
 
@@ -1453,9 +1502,9 @@ afterwards. This method is considered protected.
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Element to decorate.</div>
+        <span class="entryName">decorateInternal@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1593,7 +1642,7 @@ document unless it was decorated.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">forEachChild<span class="args">(<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        <span class="entryName">forEachChild<span class="args">(<span class="arg">forEachChild@f</span>,&nbsp;<span class="arg">forEachChild@opt_obj</span>)</span>
         </span>
       </div>
 
@@ -1621,17 +1670,17 @@ component and its 0-based index.  The return value is ignored.
      
    <tr class="even">
      <td>
-        <span class="entryName">f</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span></div>
-        <div class="entryOverview">The function to call for every child component; should take 2 arguments (the child and its index).</div>
+        <span class="entryName">forEachChild@f</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_obj</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Used as the &#39;this&#39; object in f when called.</div>
+        <span class="entryName">forEachChild@opt_obj</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1664,7 +1713,7 @@ component and its 0-based index.  The return value is ignored.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getChild<span class="args">(<span class="arg">id</span>)</span>
+        <span class="entryName">getChild<span class="args">(<span class="arg">getChild@id</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>?</span><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></div>
       </div>
@@ -1690,9 +1739,9 @@ component and its 0-based index.  The return value is ignored.
      
    <tr class="even">
      <td>
-        <span class="entryName">id</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Child component ID.</div>
+        <span class="entryName">getChild@id</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1729,7 +1778,7 @@ component and its 0-based index.  The return value is ignored.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getChildAt<span class="args">(<span class="arg">index</span>)</span>
+        <span class="entryName">getChildAt<span class="args">(<span class="arg">getChildAt@index</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>?</span><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></div>
       </div>
@@ -1755,9 +1804,9 @@ component and its 0-based index.  The return value is ignored.
      
    <tr class="even">
      <td>
-        <span class="entryName">index</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">0-based index.</div>
+        <span class="entryName">getChildAt@index</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2028,7 +2077,7 @@ complex DOM structures must override this method.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getElementByFragment<span class="args">(<span class="arg">idFragment</span>)</span>
+        <span class="entryName">getElementByFragment<span class="args">(<span class="arg">getElementByFragment@idFragment</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -2055,9 +2104,9 @@ generated using makeId().
      
    <tr class="even">
      <td>
-        <span class="entryName">idFragment</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The partial id.</div>
+        <span class="entryName">getElementByFragment@idFragment</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2094,7 +2143,7 @@ generated using makeId().
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getFragmentFromId<span class="args">(<span class="arg">id</span>)</span>
+        <span class="entryName">getFragmentFromId<span class="args">(<span class="arg">getFragmentFromId@id</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -2121,9 +2170,9 @@ makeId().
      
    <tr class="even">
      <td>
-        <span class="entryName">id</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Id generated with makeId().</div>
+        <span class="entryName">getFragmentFromId@id</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2392,7 +2441,7 @@ doesn&#39;t already have an ID, generates one on the fly.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">indexOfChild<span class="args">(<span class="arg">child</span>)</span>
+        <span class="entryName">indexOfChild<span class="args">(<span class="arg">indexOfChild@child</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
       </div>
@@ -2419,9 +2468,9 @@ child is found.
      
    <tr class="even">
      <td>
-        <span class="entryName">child</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></div>
-        <div class="entryOverview">The child component.</div>
+        <span class="entryName">indexOfChild@child</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2552,7 +2601,7 @@ is set if it has not been already.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">makeId<span class="args">(<span class="arg">idFragment</span>)</span>
+        <span class="entryName">makeId<span class="args">(<span class="arg">makeId@idFragment</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -2580,9 +2629,9 @@ generate unique string ids for DOM elements
      
    <tr class="even">
      <td>
-        <span class="entryName">idFragment</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">A partial id.</div>
+        <span class="entryName">makeId@idFragment</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2619,7 +2668,7 @@ generate unique string ids for DOM elements
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">removeChild<span class="args">(<span class="arg">child</span>,&nbsp;<span class="arg">opt_unrender</span>)</span>
+        <span class="entryName">removeChild<span class="args">(<span class="arg">removeChild@child</span>,&nbsp;<span class="arg">removeChild@opt_unrender</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></div>
       </div>
@@ -2653,17 +2702,17 @@ component&#39;s DOM.
      
    <tr class="even">
      <td>
-        <span class="entryName">child</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span><span>&nbsp;|&nbsp;</span><span class="type">null</span></div>
-        <div class="entryOverview">The ID of the child to remove, or the child component itself.</div>
+        <span class="entryName">removeChild@child</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
+        <span class="entryName">removeChild@opt_unrender</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2700,7 +2749,7 @@ component&#39;s DOM.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">removeChildAt<span class="args">(<span class="arg">index</span>,&nbsp;<span class="arg">opt_unrender</span>)</span>
+        <span class="entryName">removeChildAt<span class="args">(<span class="arg">removeChildAt@index</span>,&nbsp;<span class="arg">removeChildAt@opt_unrender</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></div>
       </div>
@@ -2729,17 +2778,17 @@ detailed semantics.
      
    <tr class="even">
      <td>
-        <span class="entryName">index</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">0-based index of the child to remove.</div>
+        <span class="entryName">removeChildAt@index</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">If true, calls <code>exitDocument</code> on the removed child component, and detaches its DOM from the document.</div>
+        <span class="entryName">removeChildAt@opt_unrender</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2776,7 +2825,7 @@ detailed semantics.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">removeChildren<span class="args">(<span class="arg">opt_unrender</span>)</span>
+        <span class="entryName">removeChildren<span class="args">(<span class="arg">removeChildren@opt_unrender</span>)</span>
         </span>
       </div>
 
@@ -2801,9 +2850,9 @@ detailed semantics.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_unrender</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">If true, calls #exitDocument on the removed child components, and detaches their DOM from the document.</div>
+        <span class="entryName">removeChildren@opt_unrender</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2836,7 +2885,7 @@ detailed semantics.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">render<span class="args">(<span class="arg">opt_parentElement</span>)</span>
+        <span class="entryName">render<span class="args">(<span class="arg">render@opt_parentElement</span>)</span>
         </span>
       </div>
 
@@ -2866,9 +2915,9 @@ Throws an Error if the component is already rendered.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_parentElement</span>
-        : <div class="fullType"><span class="type">Element=</span></div>
-        <div class="entryOverview">Optional parent element to render the component into.</div>
+        <span class="entryName">render@opt_parentElement</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2901,7 +2950,7 @@ Throws an Error if the component is already rendered.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">renderBefore<span class="args">(<span class="arg">siblingElement</span>)</span>
+        <span class="entryName">renderBefore<span class="args">(<span class="arg">renderBefore@siblingElement</span>)</span>
         </span>
       </div>
 
@@ -2929,9 +2978,9 @@ Throws an Error if the component is already rendered.
      
    <tr class="even">
      <td>
-        <span class="entryName">siblingElement</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Element to render the component before.</div>
+        <span class="entryName">renderBefore@siblingElement</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2964,7 +3013,7 @@ Throws an Error if the component is already rendered.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">render_<span class="args">(<span class="arg">opt_parentElement</span>,&nbsp;<span class="arg">opt_beforeElement</span>)</span>
+        <span class="entryName">render_<span class="args">(<span class="arg">render_@opt_parentElement</span>,&nbsp;<span class="arg">render_@opt_beforeElement</span>)</span>
         </span>
       </div>
 
@@ -2994,17 +3043,17 @@ Throws an Error if the component is already rendered.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_parentElement</span>
-        : <div class="fullType"><span class="type">Element=</span></div>
-        <div class="entryOverview">Optional parent element to render the component into.</div>
+        <span class="entryName">render_@opt_parentElement</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_beforeElement</span>
-        : <div class="fullType"><span class="type">Element=</span></div>
-        <div class="entryOverview">Element before which the component is to be rendered.  If left out the node is appended to the parent element.</div>
+        <span class="entryName">render_@opt_beforeElement</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3037,7 +3086,7 @@ Throws an Error if the component is already rendered.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setElementInternal<span class="args">(<span class="arg">element</span>)</span>
+        <span class="entryName">setElementInternal<span class="args">(<span class="arg">setElementInternal@element</span>)</span>
         </span>
       </div>
 
@@ -3063,9 +3112,9 @@ protected and final.
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Root element for the component.</div>
+        <span class="entryName">setElementInternal@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3098,7 +3147,7 @@ protected and final.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setId<span class="args">(<span class="arg">id</span>)</span>
+        <span class="entryName">setId<span class="args">(<span class="arg">setId@id</span>)</span>
         </span>
       </div>
 
@@ -3127,9 +3176,9 @@ that conflicts with the new ID.
      
    <tr class="even">
      <td>
-        <span class="entryName">id</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Unique component ID.</div>
+        <span class="entryName">setId@id</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3162,7 +3211,7 @@ that conflicts with the new ID.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setModel<span class="args">(<span class="arg">obj</span>)</span>
+        <span class="entryName">setModel<span class="args">(<span class="arg">setModel@obj</span>)</span>
         </span>
       </div>
 
@@ -3187,9 +3236,9 @@ that conflicts with the new ID.
      
    <tr class="even">
      <td>
-        <span class="entryName">obj</span>
-        : <div class="fullType"><span class="type">*</span></div>
-        <div class="entryOverview">The model.</div>
+        <span class="entryName">setModel@obj</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3222,7 +3271,7 @@ that conflicts with the new ID.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setParent<span class="args">(<span class="arg">parent</span>)</span>
+        <span class="entryName">setParent<span class="args">(<span class="arg">setParent@parent</span>)</span>
         </span>
       </div>
 
@@ -3251,9 +3300,9 @@ calling this method.
      
    <tr class="even">
      <td>
-        <span class="entryName">parent</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_ui_Component.html">goog.ui.Component</a></span></div>
-        <div class="entryOverview">The parent component.</div>
+        <span class="entryName">setParent@parent</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3286,7 +3335,7 @@ calling this method.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">parent</span>)</span>
+        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">setParentEventTarget@parent</span>)</span>
         </span>
       </div>
 
@@ -3312,9 +3361,9 @@ error if the parent component is set, and the argument is not the parent.
      
    <tr class="even">
      <td>
-        <span class="entryName">parent</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></div>
-        <div class="entryOverview">Parent EventTarget (null if none).</div>
+        <span class="entryName">setParentEventTarget@parent</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3347,7 +3396,7 @@ error if the parent component is set, and the argument is not the parent.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setRightToLeft<span class="args">(<span class="arg">rightToLeft</span>)</span>
+        <span class="entryName">setRightToLeft<span class="args">(<span class="arg">setRightToLeft@rightToLeft</span>)</span>
         </span>
       </div>
 
@@ -3374,9 +3423,9 @@ to know the rendering direction during dom creation (i.e. before
      
    <tr class="even">
      <td>
-        <span class="entryName">rightToLeft</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether the component is rendered right-to-left.</div>
+        <span class="entryName">setRightToLeft@rightToLeft</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3478,7 +3527,7 @@ to know the rendering direction during dom creation (i.e. before
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">addEventListener<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_capture</span>,&nbsp;<span class="arg">opt_handlerScope</span>)</span>
+        <span class="entryName">addEventListener<span class="args">(<span class="arg">addEventListener@type</span>,&nbsp;<span class="arg">addEventListener@handler</span>,&nbsp;<span class="arg">addEventListener@opt_capture</span>,&nbsp;<span class="arg">addEventListener@opt_handlerScope</span>)</span>
         </span>
       </div>
 
@@ -3508,33 +3557,33 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
      
    <tr class="even">
      <td>
-        <span class="entryName">type</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The type of the event to listen for.</div>
+        <span class="entryName">addEventListener@type</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The function to handle the event. The handler can also be an object that implements the handleEvent method which takes the event object as argument.</div>
+        <span class="entryName">addEventListener@handler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
+        <span class="entryName">addEventListener@opt_capture</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Object in whose scope to call the listener.</div>
+        <span class="entryName">addEventListener@opt_handlerScope</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3567,7 +3616,7 @@ Supported for legacy but use goog.events.listen(src, type, handler) instead.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">dispatchEvent<span class="args">(<span class="arg">dispatchEvent@e</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -3599,9 +3648,9 @@ stopPropagation, then the bubble listeners won&#39;t fire.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></div>
-        <div class="entryOverview">Event object.</div>
+        <span class="entryName">dispatchEvent@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3726,7 +3775,7 @@ MyClass.superClass_.disposeInternal.call(this);
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">removeEventListener<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_capture</span>,&nbsp;<span class="arg">opt_handlerScope</span>)</span>
+        <span class="entryName">removeEventListener<span class="args">(<span class="arg">removeEventListener@type</span>,&nbsp;<span class="arg">removeEventListener@handler</span>,&nbsp;<span class="arg">removeEventListener@opt_capture</span>,&nbsp;<span class="arg">removeEventListener@opt_handlerScope</span>)</span>
         </span>
       </div>
 
@@ -3753,33 +3802,33 @@ nothing is done.
      
    <tr class="even">
      <td>
-        <span class="entryName">type</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The type of the event to listen for.</div>
+        <span class="entryName">removeEventListener@type</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">handler</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The function to handle the event. The handler can also be an object that implements the handleEvent method which takes the event object as argument.</div>
+        <span class="entryName">removeEventListener@handler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_capture</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">In DOM-compliant browsers, this determines whether the listener is fired during the capture or bubble phase of the event.</div>
+        <span class="entryName">removeEventListener@opt_capture</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_handlerScope</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Object in whose scope to call the listener.</div>
+        <span class="entryName">removeEventListener@opt_handlerScope</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3812,7 +3861,7 @@ nothing is done.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">parent</span>)</span>
+        <span class="entryName">setParentEventTarget<span class="args">(<span class="arg">setParentEventTarget@parent</span>)</span>
         </span>
       </div>
 
@@ -3837,9 +3886,9 @@ nothing is done.
      
    <tr class="even">
      <td>
-        <span class="entryName">parent</span>
-        : <div class="fullType"><span>?</span><span class="type"><a href="class_goog_events_EventTarget.html">goog.events.EventTarget</a></span></div>
-        <div class="entryOverview">Parent EventTarget (null if none).</div>
+        <span class="entryName">setParentEventTarget@parent</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>

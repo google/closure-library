@@ -29,9 +29,9 @@ goog.require('goog.structs.PriorityPool');
 /**
  * A pool of XhrIo objects.
  * @param {goog.structs.Map=} opt_headers Map of default headers to add to every
- *                                       request.
- * @param {number=} opt_minCount Min. number of objects (Default: 1).
- * @param {number=} opt_maxCount Max. number of objects (Default: 10).
+ *     request.
+ * @param {number=} opt_minCount Minimum number of objects (Default: 1).
+ * @param {number=} opt_maxCount Maximum number of objects (Default: 10).
  * @constructor
  * @extends {goog.structs.PriorityPool}
  */
@@ -64,8 +64,8 @@ goog.net.XhrIoPool.prototype.createObject = function() {
 
 
 /**
- * Should be overriden to dispose of an object, default implementation is to
- * remove all it's members which should render it useless.
+ * Should be overridden to dispose of an object, default implementation is to
+ * remove all its members which should render it useless.
  * @param {goog.net.XhrIo} obj The object to dispose.
  */
 goog.net.XhrIoPool.prototype.disposeObject = function(obj) {
@@ -76,7 +76,7 @@ goog.net.XhrIoPool.prototype.disposeObject = function(obj) {
 /**
  * Determine if an object has become unusable and should not be used.
  * @param {goog.net.XhrIo} obj The object to test.
- * @return {boolean} Whether the objct can be reused, which is true if the
+ * @return {boolean} Whether the object can be reused, which is true if the
  *     object is not disposed and not active.
  */
 goog.net.XhrIoPool.prototype.objectCanBeReused = function(obj) {

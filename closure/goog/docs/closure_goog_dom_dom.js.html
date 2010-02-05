@@ -56,12 +56,6 @@
     Utilities for manipulating the browser&#39;s Document Object Model
  Inspiration taken *heavily* from mochikit (<a href="http://mochikit.com/">http://mochikit.com/</a>).
 
- If you want to do extensive DOM building you can create local aliases,
- such as:<br>
- var $DIV = goog.bind(goog.dom.createDom, goog.dom, &#39;div&#39;);<br>
- var $A = goog.bind(goog.dom.createDom, goog.dom, &#39;a&#39;);<br>
- var $TABLE = goog.bind(goog.dom.createDom, goog.dom, &#39;table&#39;);<br>
-
  You can use goog.dom.DomHelper to create new dom helpers that refer
  to a different document object.  This is useful if you are working with
  frames or multiple windows.
@@ -152,7 +146,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line143">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line137">code &raquo;</a>
   </td>
      </tr>
 
@@ -198,7 +192,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line252">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line246">code &raquo;</a>
   </td>
      </tr>
 
@@ -244,7 +238,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line677">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line671">code &raquo;</a>
   </td>
      </tr>
 
@@ -264,7 +258,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">appendChild<span class="args">(<span class="arg">parent</span>,&nbsp;<span class="arg">child</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">appendChild<span class="args">(<span class="arg">appendChild@parent</span>,&nbsp;<span class="arg">appendChild@child</span>)</span>
         </span>
       </div>
 
@@ -289,17 +283,17 @@
      
    <tr class="even">
      <td>
-        <span class="entryName">parent</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">Parent.</div>
+        <span class="entryName">appendChild@parent</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">child</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">Child.</div>
+        <span class="entryName">appendChild@child</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -312,7 +306,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line814">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line808">code &raquo;</a>
   </td>
      </tr>
 
@@ -332,7 +326,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">canHaveChildren<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">canHaveChildren<span class="args">(<span class="arg">canHaveChildren@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -358,9 +352,9 @@
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to check.</div>
+        <span class="entryName">canHaveChildren@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -377,7 +371,7 @@
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line775">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line769">code &raquo;</a>
   </td>
      </tr>
 
@@ -397,7 +391,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">compareNodeOrder<span class="args">(<span class="arg">node1</span>,&nbsp;<span class="arg">node2</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">compareNodeOrder<span class="args">(<span class="arg">compareNodeOrder@node1</span>,&nbsp;<span class="arg">compareNodeOrder@node2</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
       </div>
@@ -427,17 +421,17 @@ before the I node.
      
    <tr class="even">
      <td>
-        <span class="entryName">node1</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The first node to compare.</div>
+        <span class="entryName">compareNodeOrder@node1</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">node2</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The second node to compare.</div>
+        <span class="entryName">compareNodeOrder@node2</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -454,7 +448,7 @@ before the I node.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1020">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1014">code &raquo;</a>
   </td>
      </tr>
 
@@ -474,7 +468,7 @@ before the I node.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">compareParentsDescendantNodeIe_<span class="args">(<span class="arg">textNode</span>,&nbsp;<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">compareParentsDescendantNodeIe_<span class="args">(<span class="arg">compareParentsDescendantNodeIe_@textNode</span>,&nbsp;<span class="arg">compareParentsDescendantNodeIe_@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
       </div>
@@ -502,17 +496,17 @@ condition is not met, this function will attempt to reference a null object.
      
    <tr class="even">
      <td>
-        <span class="entryName">textNode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The textNode to compare.</div>
+        <span class="entryName">compareParentsDescendantNodeIe_@textNode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to compare.</div>
+        <span class="entryName">compareParentsDescendantNodeIe_@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -529,7 +523,7 @@ condition is not met, this function will attempt to reference a null object.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1089">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1083">code &raquo;</a>
   </td>
      </tr>
 
@@ -549,7 +543,7 @@ condition is not met, this function will attempt to reference a null object.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">compareSiblingOrder_<span class="args">(<span class="arg">node1</span>,&nbsp;<span class="arg">node2</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">compareSiblingOrder_<span class="args">(<span class="arg">compareSiblingOrder_@node1</span>,&nbsp;<span class="arg">compareSiblingOrder_@node2</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
       </div>
@@ -576,17 +570,17 @@ siblings.
      
    <tr class="even">
      <td>
-        <span class="entryName">node1</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The first node to compare.</div>
+        <span class="entryName">compareSiblingOrder_@node1</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">node2</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The second node to compare.</div>
+        <span class="entryName">compareSiblingOrder_@node2</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -603,7 +597,7 @@ siblings.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1111">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1105">code &raquo;</a>
   </td>
      </tr>
 
@@ -623,7 +617,7 @@ siblings.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">contains<span class="args">(<span class="arg">parent</span>,&nbsp;<span class="arg">descendant</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">contains<span class="args">(<span class="arg">contains@parent</span>,&nbsp;<span class="arg">contains@descendant</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -649,17 +643,17 @@ siblings.
      
    <tr class="even">
      <td>
-        <span class="entryName">parent</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node that should contain the other node.</div>
+        <span class="entryName">contains@parent</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">descendant</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to test presence of.</div>
+        <span class="entryName">contains@descendant</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -676,7 +670,7 @@ siblings.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line985">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line979">code &raquo;</a>
   </td>
      </tr>
 
@@ -696,7 +690,7 @@ siblings.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">createDom<span class="args">(<span class="arg">tagName</span>,&nbsp;<span class="arg">opt_attributes</span>,&nbsp;<span class="arg">var_args</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">createDom<span class="args">(<span class="arg">createDom@tagName</span>,&nbsp;<span class="arg">createDom@opt_attributes</span>,&nbsp;<span class="arg">createDom@var_args</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -728,25 +722,25 @@ would return a div with two child paragraphs
      
    <tr class="even">
      <td>
-        <span class="entryName">tagName</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Tag to create.</div>
+        <span class="entryName">createDom@tagName</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_attributes</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">string=</span></div>
-        <div class="entryOverview">If object, then a map of name-value pairs for attributes. If a string, then this is the className of the new element.</div>
+        <span class="entryName">createDom@opt_attributes</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type">...Object</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span><span>&nbsp;|&nbsp;</span><span class="type">NodeList</span></div>
-        <div class="entryOverview">Further DOM nodes or strings for text nodes. If one of the var_args is an array or NodeList,i its elements will be added as childNodes instead.</div>
+        <span class="entryName">createDom@var_args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -763,7 +757,7 @@ would return a div with two child paragraphs
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line592">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line586">code &raquo;</a>
   </td>
      </tr>
 
@@ -783,7 +777,7 @@ would return a div with two child paragraphs
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">createDom_<span class="args">(<span class="arg">doc</span>,&nbsp;<span class="arg">args</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">createDom_<span class="args">(<span class="arg">createDom_@doc</span>,&nbsp;<span class="arg">createDom_@args</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -809,17 +803,17 @@ would return a div with two child paragraphs
      
    <tr class="even">
      <td>
-        <span class="entryName">doc</span>
-        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
-        <div class="entryOverview">The document to create the DOM in.</div>
+        <span class="entryName">createDom_@doc</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">args</span>
-        : <div class="fullType"><span class="type">Arguments</span></div>
-        <div class="entryOverview">Argument object passed from the callers. See <code>goog.dom.createDom</code> for details.</div>
+        <span class="entryName">createDom_@args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -836,7 +830,7 @@ would return a div with two child paragraphs
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line604">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line598">code &raquo;</a>
   </td>
      </tr>
 
@@ -856,7 +850,7 @@ would return a div with two child paragraphs
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">createElement<span class="args">(<span class="arg">name</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">createElement<span class="args">(<span class="arg">createElement@name</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -882,9 +876,9 @@ would return a div with two child paragraphs
      
    <tr class="even">
      <td>
-        <span class="entryName">name</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Tag name.</div>
+        <span class="entryName">createElement@name</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -901,7 +895,7 @@ would return a div with two child paragraphs
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line685">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line679">code &raquo;</a>
   </td>
      </tr>
 
@@ -921,7 +915,7 @@ would return a div with two child paragraphs
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">createTextNode<span class="args">(<span class="arg">content</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">createTextNode<span class="args">(<span class="arg">createTextNode@content</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type">Text</span></div>
       </div>
@@ -947,9 +941,9 @@ would return a div with two child paragraphs
      
    <tr class="even">
      <td>
-        <span class="entryName">content</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Content.</div>
+        <span class="entryName">createTextNode@content</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -966,7 +960,7 @@ would return a div with two child paragraphs
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line695">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line689">code &raquo;</a>
   </td>
      </tr>
 
@@ -986,7 +980,7 @@ would return a div with two child paragraphs
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">findCommonAncestor<span class="args">(<span class="arg">var_args</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">findCommonAncestor<span class="args">(<span class="arg">findCommonAncestor@var_args</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
       </div>
@@ -1012,9 +1006,9 @@ would return a div with two child paragraphs
      
    <tr class="even">
      <td>
-        <span class="entryName">var_args</span>
-        : <div class="fullType"><span class="type">...Node</span></div>
-        <div class="entryOverview">The nodes to find a common ancestor of.</div>
+        <span class="entryName">findCommonAncestor@var_args</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1031,7 +1025,7 @@ would return a div with two child paragraphs
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1132">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1126">code &raquo;</a>
   </td>
      </tr>
 
@@ -1051,7 +1045,7 @@ would return a div with two child paragraphs
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">findNode<span class="args">(<span class="arg">root</span>,&nbsp;<span class="arg">p</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">findNode<span class="args">(<span class="arg">findNode@root</span>,&nbsp;<span class="arg">findNode@p</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>
       </div>
@@ -1082,17 +1076,17 @@ compact representation of the desired result.
      
    <tr class="even">
      <td>
-        <span class="entryName">root</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The root of the tree to search.</div>
+        <span class="entryName">findNode@root</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">p</span>
-        : <div class="fullType"><span class="type">function(Node) : boolean</span></div>
-        <div class="entryOverview">The filter function.</div>
+        <span class="entryName">findNode@p</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1109,7 +1103,7 @@ compact representation of the desired result.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1267">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1261">code &raquo;</a>
   </td>
      </tr>
 
@@ -1129,7 +1123,7 @@ compact representation of the desired result.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">findNodes<span class="args">(<span class="arg">root</span>,&nbsp;<span class="arg">p</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">findNodes<span class="args">(<span class="arg">findNodes@root</span>,&nbsp;<span class="arg">findNodes@p</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span>&gt;</div>
       </div>
@@ -1160,17 +1154,17 @@ compact representation of the desired result.
      
    <tr class="even">
      <td>
-        <span class="entryName">root</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The root of the tree to search.</div>
+        <span class="entryName">findNodes@root</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">p</span>
-        : <div class="fullType"><span class="type">function(Node) : boolean</span></div>
-        <div class="entryOverview">The filter function.</div>
+        <span class="entryName">findNodes@p</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1187,7 +1181,7 @@ compact representation of the desired result.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1286">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1280">code &raquo;</a>
   </td>
      </tr>
 
@@ -1207,7 +1201,7 @@ compact representation of the desired result.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">findNodes_<span class="args">(<span class="arg">root</span>,&nbsp;<span class="arg">p</span>,&nbsp;<span class="arg">rv</span>,&nbsp;<span class="arg">findOne</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">findNodes_<span class="args">(<span class="arg">findNodes_@root</span>,&nbsp;<span class="arg">findNodes_@p</span>,&nbsp;<span class="arg">findNodes_@rv</span>,&nbsp;<span class="arg">findNodes_@findOne</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -1234,33 +1228,33 @@ using a depth first search.
      
    <tr class="even">
      <td>
-        <span class="entryName">root</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The root of the tree to search.</div>
+        <span class="entryName">findNodes_@root</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">p</span>
-        : <div class="fullType"><span class="type">function(Node) : boolean</span></div>
-        <div class="entryOverview">The filter function.</div>
+        <span class="entryName">findNodes_@p</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">rv</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span>&gt;</div>
-        <div class="entryOverview">The found nodes are added to this array.</div>
+        <span class="entryName">findNodes_@rv</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">findOne</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">If true we exit after the first found node.</div>
+        <span class="entryName">findNodes_@findOne</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1277,7 +1271,7 @@ using a depth first search.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1304">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1298">code &raquo;</a>
   </td>
      </tr>
 
@@ -1297,7 +1291,7 @@ using a depth first search.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">flattenElement<span class="args">(<span class="arg">element</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">flattenElement<span class="args">(<span class="arg">flattenElement@element</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span></div>
       </div>
@@ -1324,9 +1318,9 @@ Does nothing if the element is not in the document.
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">The element to flatten.</div>
+        <span class="entryName">flattenElement@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1343,7 +1337,7 @@ Does nothing if the element is not in the document.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line892">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line886">code &raquo;</a>
   </td>
      </tr>
 
@@ -1363,7 +1357,7 @@ Does nothing if the element is not in the document.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getAncestor<span class="args">(<span class="arg">element</span>,&nbsp;<span class="arg">matcher</span>,&nbsp;<span class="arg">opt_includeNode</span>,&nbsp;<span class="arg">opt_maxSearchSteps</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getAncestor<span class="args">(<span class="arg">getAncestor@element</span>,&nbsp;<span class="arg">getAncestor@matcher</span>,&nbsp;<span class="arg">getAncestor@opt_includeNode</span>,&nbsp;<span class="arg">getAncestor@opt_maxSearchSteps</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
       </div>
@@ -1390,33 +1384,33 @@ matcher function.
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The DOM node to start with.</div>
+        <span class="entryName">getAncestor@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">matcher</span>
-        : <div class="fullType"><span class="type">function(Node) : boolean</span></div>
-        <div class="entryOverview">A function that returns true if the passed node matches the desired criteria.</div>
+        <span class="entryName">getAncestor@matcher</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_includeNode</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">If true, the node itself is included in the search (the first call to the matcher will pass startElement as the node to test).</div>
+        <span class="entryName">getAncestor@opt_includeNode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_maxSearchSteps</span>
-        : <div class="fullType"><span class="type">number=</span></div>
-        <div class="entryOverview">Maximum number of levels to search up the dom.</div>
+        <span class="entryName">getAncestor@opt_maxSearchSteps</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1433,7 +1427,7 @@ matcher function.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1607">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1602">code &raquo;</a>
   </td>
      </tr>
 
@@ -1453,7 +1447,7 @@ matcher function.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getAncestorByTagNameAndClass<span class="args">(<span class="arg">element</span>,&nbsp;<span class="arg">opt_tag</span>,&nbsp;<span class="arg">opt_class</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getAncestorByTagNameAndClass<span class="args">(<span class="arg">getAncestorByTagNameAndClass@element</span>,&nbsp;<span class="arg">getAncestorByTagNameAndClass@opt_tag</span>,&nbsp;<span class="arg">getAncestorByTagNameAndClass@opt_class</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
       </div>
@@ -1481,25 +1475,25 @@ criteria, the element itself is returned.
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The DOM node to start with.</div>
+        <span class="entryName">getAncestorByTagNameAndClass@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_tag</span>
-        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
-        <div class="entryOverview">The tag name to match (or null/undefined to match any node regardless of tag name). Must be uppercase (goog.dom.TagName).</div>
+        <span class="entryName">getAncestorByTagNameAndClass@opt_tag</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_class</span>
-        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
-        <div class="entryOverview">The class name to match (or null/undefined to match any node regardless of class name).</div>
+        <span class="entryName">getAncestorByTagNameAndClass@opt_class</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1516,7 +1510,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1584">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1578">code &raquo;</a>
   </td>
      </tr>
 
@@ -1562,7 +1556,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line739">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line733">code &raquo;</a>
   </td>
      </tr>
 
@@ -1608,7 +1602,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line120">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line114">code &raquo;</a>
   </td>
      </tr>
 
@@ -1654,7 +1648,7 @@ criteria, the element itself is returned.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line415">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line409">code &raquo;</a>
   </td>
      </tr>
 
@@ -1674,7 +1668,7 @@ criteria, the element itself is returned.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getDocumentHeight_<span class="args">(<span class="arg">win</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getDocumentHeight_<span class="args">(<span class="arg">getDocumentHeight_@win</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
       </div>
@@ -1703,9 +1697,9 @@ gadgets.window.adjustHeight(opt_height)
      
    <tr class="even">
      <td>
-        <span class="entryName">win</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/window">Window</a></span></div>
-        <div class="entryOverview">The window whose document height to retrieve.</div>
+        <span class="entryName">getDocumentHeight_@win</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1722,7 +1716,7 @@ gadgets.window.adjustHeight(opt_height)
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line429">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line423">code &raquo;</a>
   </td>
      </tr>
 
@@ -1768,7 +1762,7 @@ gadgets.window.adjustHeight(opt_height)
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line510">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line504">code &raquo;</a>
   </td>
      </tr>
 
@@ -1814,7 +1808,7 @@ gadgets.window.adjustHeight(opt_height)
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line532">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line526">code &raquo;</a>
   </td>
      </tr>
 
@@ -1834,7 +1828,7 @@ gadgets.window.adjustHeight(opt_height)
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getDocumentScrollElement_<span class="args">(<span class="arg">doc</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getDocumentScrollElement_<span class="args">(<span class="arg">getDocumentScrollElement_@doc</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -1860,9 +1854,9 @@ gadgets.window.adjustHeight(opt_height)
      
    <tr class="even">
      <td>
-        <span class="entryName">doc</span>
-        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
-        <div class="entryOverview">The document to get the scroll element for.</div>
+        <span class="entryName">getDocumentScrollElement_@doc</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1879,7 +1873,7 @@ gadgets.window.adjustHeight(opt_height)
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line543">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line537">code &raquo;</a>
   </td>
      </tr>
 
@@ -1899,7 +1893,7 @@ gadgets.window.adjustHeight(opt_height)
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getDocumentScroll_<span class="args">(<span class="arg">doc</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getDocumentScroll_<span class="args">(<span class="arg">getDocumentScroll_@doc</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
       </div>
@@ -1925,9 +1919,9 @@ gadgets.window.adjustHeight(opt_height)
      
    <tr class="even">
      <td>
-        <span class="entryName">doc</span>
-        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
-        <div class="entryOverview">The document to get the scroll for.</div>
+        <span class="entryName">getDocumentScroll_@doc</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1944,7 +1938,7 @@ gadgets.window.adjustHeight(opt_height)
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line522">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line516">code &raquo;</a>
   </td>
      </tr>
 
@@ -1964,7 +1958,7 @@ gadgets.window.adjustHeight(opt_height)
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getDomHelper<span class="args">(<span class="arg">opt_element</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getDomHelper<span class="args">(<span class="arg">getDomHelper@opt_element</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span></div>
       </div>
@@ -1990,9 +1984,9 @@ gadgets.window.adjustHeight(opt_height)
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span><span>&nbsp;|&nbsp;</span><span class="type">Window=</span></div>
-        <div class="entryOverview">If present, gets the DomHelper for this element.</div>
+        <span class="entryName">getDomHelper@opt_element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2009,7 +2003,7 @@ gadgets.window.adjustHeight(opt_height)
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line100">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line94">code &raquo;</a>
   </td>
      </tr>
 
@@ -2029,7 +2023,7 @@ gadgets.window.adjustHeight(opt_height)
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getElement<span class="args">(<span class="arg">element</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getElement<span class="args">(<span class="arg">getElement@element</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -2056,9 +2050,9 @@ that.
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Element ID or a DOM node.</div>
+        <span class="entryName">getElement@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2075,7 +2069,7 @@ that.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line131">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line125">code &raquo;</a>
   </td>
      </tr>
 
@@ -2095,7 +2089,7 @@ that.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getElementsByTagNameAndClass<span class="args">(<span class="arg">opt_tag</span>,&nbsp;<span class="arg">opt_class</span>,&nbsp;<span class="arg">opt_el</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getElementsByTagNameAndClass<span class="args">(<span class="arg">getElementsByTagNameAndClass@opt_tag</span>,&nbsp;<span class="arg">getElementsByTagNameAndClass@opt_class</span>,&nbsp;<span class="arg">getElementsByTagNameAndClass@opt_el</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type">{length: number}</span></div>
       </div>
@@ -2129,25 +2123,25 @@ is fast and sleek.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_tag</span>
-        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
-        <div class="entryOverview">Element tag name.</div>
+        <span class="entryName">getElementsByTagNameAndClass@opt_tag</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_class</span>
-        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
-        <div class="entryOverview">Optional class name.</div>
+        <span class="entryName">getElementsByTagNameAndClass@opt_class</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_el</span>
-        : <div class="fullType"><span class="type">Element=</span></div>
-        <div class="entryOverview">Optional element to look in.</div>
+        <span class="entryName">getElementsByTagNameAndClass@opt_el</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2164,7 +2158,7 @@ is fast and sleek.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line165">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line159">code &raquo;</a>
   </td>
      </tr>
 
@@ -2184,7 +2178,7 @@ is fast and sleek.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getElementsByTagNameAndClass_<span class="args">(<span class="arg">doc</span>,&nbsp;<span class="arg">opt_tag</span>,&nbsp;<span class="arg">opt_class</span>,&nbsp;<span class="arg">opt_el</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getElementsByTagNameAndClass_<span class="args">(<span class="arg">getElementsByTagNameAndClass_@doc</span>,&nbsp;<span class="arg">getElementsByTagNameAndClass_@opt_tag</span>,&nbsp;<span class="arg">getElementsByTagNameAndClass_@opt_class</span>,&nbsp;<span class="arg">getElementsByTagNameAndClass_@opt_el</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type">{length: number}</span></div>
       </div>
@@ -2210,33 +2204,33 @@ is fast and sleek.
      
    <tr class="even">
      <td>
-        <span class="entryName">doc</span>
-        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
-        <div class="entryOverview">The document to get the elements in.</div>
+        <span class="entryName">getElementsByTagNameAndClass_@doc</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_tag</span>
-        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
-        <div class="entryOverview">Element tag name.</div>
+        <span class="entryName">getElementsByTagNameAndClass_@opt_tag</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_class</span>
-        : <div class="fullType"><span>?</span><span class="type">string=</span></div>
-        <div class="entryOverview">Optional class name.</div>
+        <span class="entryName">getElementsByTagNameAndClass_@opt_class</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_el</span>
-        : <div class="fullType"><span class="type">Element=</span></div>
-        <div class="entryOverview">Optional element to look in.</div>
+        <span class="entryName">getElementsByTagNameAndClass_@opt_el</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2253,7 +2247,7 @@ is fast and sleek.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line181">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line175">code &raquo;</a>
   </td>
      </tr>
 
@@ -2273,7 +2267,7 @@ is fast and sleek.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getFirstElementChild<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getFirstElementChild<span class="args">(<span class="arg">getFirstElementChild@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -2299,9 +2293,9 @@ is fast and sleek.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to get the first child element of.</div>
+        <span class="entryName">getFirstElementChild@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2318,7 +2312,7 @@ is fast and sleek.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line916">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line910">code &raquo;</a>
   </td>
      </tr>
 
@@ -2338,7 +2332,7 @@ is fast and sleek.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getFrameContentDocument<span class="args">(<span class="arg">frame</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getFrameContentDocument<span class="args">(<span class="arg">getFrameContentDocument@frame</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
       </div>
@@ -2364,9 +2358,9 @@ is fast and sleek.
      
    <tr class="even">
      <td>
-        <span class="entryName">frame</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Frame element.</div>
+        <span class="entryName">getFrameContentDocument@frame</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2383,7 +2377,7 @@ is fast and sleek.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1188">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1182">code &raquo;</a>
   </td>
      </tr>
 
@@ -2403,7 +2397,7 @@ is fast and sleek.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getFrameContentWindow<span class="args">(<span class="arg">frame</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getFrameContentWindow<span class="args">(<span class="arg">getFrameContentWindow@frame</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/window">Window</a></span></div>
       </div>
@@ -2429,9 +2423,9 @@ is fast and sleek.
      
    <tr class="even">
      <td>
-        <span class="entryName">frame</span>
-        : <div class="fullType"><span class="type">HTMLIFrameElement</span><span>&nbsp;|&nbsp;</span><span class="type">HTMLFrameElement</span></div>
-        <div class="entryOverview">Frame element.</div>
+        <span class="entryName">getFrameContentWindow@frame</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2448,7 +2442,7 @@ is fast and sleek.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1204">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1198">code &raquo;</a>
   </td>
      </tr>
 
@@ -2468,7 +2462,7 @@ is fast and sleek.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getLastElementChild<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getLastElementChild<span class="args">(<span class="arg">getLastElementChild@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -2494,9 +2488,9 @@ is fast and sleek.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to get the last child element of.</div>
+        <span class="entryName">getLastElementChild@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2513,7 +2507,7 @@ is fast and sleek.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line926">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line920">code &raquo;</a>
   </td>
      </tr>
 
@@ -2533,7 +2527,7 @@ is fast and sleek.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getNextElementNode_<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">forward</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getNextElementNode_<span class="args">(<span class="arg">getNextElementNode_@node</span>,&nbsp;<span class="arg">getNextElementNode_@forward</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -2560,17 +2554,17 @@ starting with <code>node</code>.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to get the next element from.</div>
+        <span class="entryName">getNextElementNode_@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">forward</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether to look forwards or backwards.</div>
+        <span class="entryName">getNextElementNode_@forward</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2587,7 +2581,7 @@ starting with <code>node</code>.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line960">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line954">code &raquo;</a>
   </td>
      </tr>
 
@@ -2607,7 +2601,7 @@ starting with <code>node</code>.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getNextElementSibling<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getNextElementSibling<span class="args">(<span class="arg">getNextElementSibling@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -2633,9 +2627,9 @@ starting with <code>node</code>.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to get the next sibling element of.</div>
+        <span class="entryName">getNextElementSibling@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2652,7 +2646,7 @@ starting with <code>node</code>.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line936">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line930">code &raquo;</a>
   </td>
      </tr>
 
@@ -2672,7 +2666,7 @@ starting with <code>node</code>.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getNodeAtOffset<span class="args">(<span class="arg">parent</span>,&nbsp;<span class="arg">offset</span>,&nbsp;<span class="arg">opt_result</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getNodeAtOffset<span class="args">(<span class="arg">getNodeAtOffset@parent</span>,&nbsp;<span class="arg">getNodeAtOffset@offset</span>,&nbsp;<span class="arg">getNodeAtOffset@opt_result</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
       </div>
@@ -2700,25 +2694,25 @@ offset will stored as properties of this object.
      
    <tr class="even">
      <td>
-        <span class="entryName">parent</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The parent node.</div>
+        <span class="entryName">getNodeAtOffset@parent</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">offset</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">The offset into the parent node.</div>
+        <span class="entryName">getNodeAtOffset@offset</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_result</span>
-        : <div class="fullType"><span class="type">Object=</span></div>
-        <div class="entryOverview">Object to be used to store the return value. The return value will be stored in the form {node: Node, remainder: number} if this object is provided.</div>
+        <span class="entryName">getNodeAtOffset@opt_result</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2735,7 +2729,7 @@ offset will stored as properties of this object.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1517">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1511">code &raquo;</a>
   </td>
      </tr>
 
@@ -2755,7 +2749,7 @@ offset will stored as properties of this object.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getNodeTextLength<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getNodeTextLength<span class="args">(<span class="arg">getNodeTextLength@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
       </div>
@@ -2784,9 +2778,9 @@ lines are ignored.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node whose text content length is being calculated.</div>
+        <span class="entryName">getNodeTextLength@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2803,7 +2797,7 @@ lines are ignored.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1476">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1470">code &raquo;</a>
   </td>
      </tr>
 
@@ -2823,7 +2817,7 @@ lines are ignored.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getNodeTextOffset<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">opt_offsetParent</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getNodeTextOffset<span class="args">(<span class="arg">getNodeTextOffset@node</span>,&nbsp;<span class="arg">getNodeTextOffset@opt_offsetParent</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
       </div>
@@ -2850,17 +2844,17 @@ length is the same as the length calculated by goog.dom.getNodeTextLength.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node whose offset is being calculated.</div>
+        <span class="entryName">getNodeTextOffset@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_offsetParent</span>
-        : <div class="fullType"><span class="type">Node=</span></div>
-        <div class="entryOverview">The node relative to which the offset will be calculated. Defaults to the node&#39;s owner document&#39;s body.</div>
+        <span class="entryName">getNodeTextOffset@opt_offsetParent</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2877,7 +2871,7 @@ length is the same as the length calculated by goog.dom.getNodeTextLength.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1490">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1484">code &raquo;</a>
   </td>
      </tr>
 
@@ -2897,7 +2891,7 @@ length is the same as the length calculated by goog.dom.getNodeTextLength.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getOuterHtml<span class="args">(<span class="arg">element</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getOuterHtml<span class="args">(<span class="arg">getOuterHtml@element</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -2924,9 +2918,9 @@ actually contains the HTML of the node itself.
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">The element to get the HTML of.</div>
+        <span class="entryName">getOuterHtml@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -2943,7 +2937,7 @@ actually contains the HTML of the node itself.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1241">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1235">code &raquo;</a>
   </td>
      </tr>
 
@@ -2963,7 +2957,7 @@ actually contains the HTML of the node itself.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getOwnerDocument<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getOwnerDocument<span class="args">(<span class="arg">getOwnerDocument@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
       </div>
@@ -2989,9 +2983,9 @@ actually contains the HTML of the node itself.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/window">Window</a></span></div>
-        <div class="entryOverview">The node to get the document for.</div>
+        <span class="entryName">getOwnerDocument@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3008,7 +3002,7 @@ actually contains the HTML of the node itself.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1174">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1168">code &raquo;</a>
   </td>
      </tr>
 
@@ -3028,7 +3022,7 @@ actually contains the HTML of the node itself.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getPageScroll<span class="args">(<span class="arg">opt_window</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getPageScroll<span class="args">(<span class="arg">getPageScroll@opt_window</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span></div>
       </div>
@@ -3054,9 +3048,9 @@ actually contains the HTML of the node itself.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_window</span>
-        : <div class="fullType"><span class="type">Window=</span></div>
-        <div class="entryOverview">Optional window element to test.</div>
+        <span class="entryName">getPageScroll@opt_window</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3073,7 +3067,7 @@ actually contains the HTML of the node itself.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line499">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line493">code &raquo;</a>
   </td>
      </tr>
 
@@ -3093,7 +3087,7 @@ actually contains the HTML of the node itself.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getPreviousElementSibling<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getPreviousElementSibling<span class="args">(<span class="arg">getPreviousElementSibling@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
       </div>
@@ -3119,9 +3113,9 @@ actually contains the HTML of the node itself.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to get the previous sibling element of.</div>
+        <span class="entryName">getPreviousElementSibling@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3138,7 +3132,7 @@ actually contains the HTML of the node itself.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line947">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line941">code &raquo;</a>
   </td>
      </tr>
 
@@ -3158,7 +3152,7 @@ actually contains the HTML of the node itself.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getRawTextContent<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getRawTextContent<span class="args">(<span class="arg">getRawTextContent@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -3187,9 +3181,9 @@ or normalize lines breaks.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node from which we are getting content.</div>
+        <span class="entryName">getRawTextContent@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3206,7 +3200,7 @@ or normalize lines breaks.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1430">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1424">code &raquo;</a>
   </td>
      </tr>
 
@@ -3226,7 +3220,7 @@ or normalize lines breaks.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getTextContent<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getTextContent<span class="args">(<span class="arg">getTextContent@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -3257,9 +3251,9 @@ simulate it via node traversal.  Line breaks are canonicalized in IE.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node from which we are getting content.</div>
+        <span class="entryName">getTextContent@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3276,7 +3270,7 @@ simulate it via node traversal.  Line breaks are canonicalized in IE.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1395">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1389">code &raquo;</a>
   </td>
      </tr>
 
@@ -3296,7 +3290,7 @@ simulate it via node traversal.  Line breaks are canonicalized in IE.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getTextContent_<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">buf</span>,&nbsp;<span class="arg">normalizeWhitespace</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getTextContent_<span class="args">(<span class="arg">getTextContent_@node</span>,&nbsp;<span class="arg">getTextContent_@buf</span>,&nbsp;<span class="arg">getTextContent_@normalizeWhitespace</span>)</span>
         </span>
       </div>
 
@@ -3321,25 +3315,25 @@ simulate it via node traversal.  Line breaks are canonicalized in IE.
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node from which we are getting content.</div>
+        <span class="entryName">getTextContent_@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">buf</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
-        <div class="entryOverview">string buffer.</div>
+        <span class="entryName">getTextContent_@buf</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">normalizeWhitespace</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether to normalize whitespace.</div>
+        <span class="entryName">getTextContent_@normalizeWhitespace</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3352,7 +3346,7 @@ simulate it via node traversal.  Line breaks are canonicalized in IE.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1446">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1440">code &raquo;</a>
   </td>
      </tr>
 
@@ -3372,7 +3366,7 @@ simulate it via node traversal.  Line breaks are canonicalized in IE.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getViewportSize<span class="args">(<span class="arg">opt_window</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getViewportSize<span class="args">(<span class="arg">getViewportSize@opt_window</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_math_Size.html">goog.math.Size</a></span></div>
       </div>
@@ -3457,9 +3451,9 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_window</span>
-        : <div class="fullType"><span class="type">Window=</span></div>
-        <div class="entryOverview">Optional window element to test.</div>
+        <span class="entryName">getViewportSize@opt_window</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3476,7 +3470,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line364">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line358">code &raquo;</a>
   </td>
      </tr>
 
@@ -3496,7 +3490,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getViewportSize_<span class="args">(<span class="arg">win</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getViewportSize_<span class="args">(<span class="arg">getViewportSize_@win</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="class_goog_math_Size.html">goog.math.Size</a></span></div>
       </div>
@@ -3522,9 +3516,9 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      
    <tr class="even">
      <td>
-        <span class="entryName">win</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/window">Window</a></span></div>
-        <div class="entryOverview">The window to get the view port size for.</div>
+        <span class="entryName">getViewportSize_@win</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3541,7 +3535,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line376">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line370">code &raquo;</a>
   </td>
      </tr>
 
@@ -3561,7 +3555,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getWindow<span class="args">(<span class="arg">opt_doc</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getWindow<span class="args">(<span class="arg">getWindow@opt_doc</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/window">Window</a></span></div>
       </div>
@@ -3587,9 +3581,9 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_doc</span>
-        : <div class="fullType"><span class="type">Document=</span></div>
-        <div class="entryOverview">Document object to get window for.</div>
+        <span class="entryName">getWindow@opt_doc</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3606,7 +3600,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line556">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line550">code &raquo;</a>
   </td>
      </tr>
 
@@ -3626,7 +3620,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">getWindow_<span class="args">(<span class="arg">doc</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">getWindow_<span class="args">(<span class="arg">getWindow_@doc</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/window">Window</a></span></div>
       </div>
@@ -3652,9 +3646,9 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      
    <tr class="even">
      <td>
-        <span class="entryName">doc</span>
-        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
-        <div class="entryOverview">Document object to get window for.</div>
+        <span class="entryName">getWindow_@doc</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3671,7 +3665,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line569">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line563">code &raquo;</a>
   </td>
      </tr>
 
@@ -3691,7 +3685,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">htmlToDocumentFragment<span class="args">(<span class="arg">htmlString</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">htmlToDocumentFragment<span class="args">(<span class="arg">htmlToDocumentFragment@htmlString</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
       </div>
@@ -3717,9 +3711,9 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      
    <tr class="even">
      <td>
-        <span class="entryName">htmlString</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The HTML string to convert.</div>
+        <span class="entryName">htmlToDocumentFragment@htmlString</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3736,7 +3730,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line706">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line700">code &raquo;</a>
   </td>
      </tr>
 
@@ -3756,7 +3750,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">htmlToDocumentFragment_<span class="args">(<span class="arg">doc</span>,&nbsp;<span class="arg">htmlString</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">htmlToDocumentFragment_<span class="args">(<span class="arg">htmlToDocumentFragment_@doc</span>,&nbsp;<span class="arg">htmlToDocumentFragment_@htmlString</span>)</span>
         </span>
         &#8658; <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
       </div>
@@ -3782,17 +3776,17 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      
    <tr class="even">
      <td>
-        <span class="entryName">doc</span>
-        : <div class="fullType"><span>!</span><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
-        <div class="entryOverview">The document.</div>
+        <span class="entryName">htmlToDocumentFragment_@doc</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">htmlString</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The HTML string to convert.</div>
+        <span class="entryName">htmlToDocumentFragment_@htmlString</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3809,7 +3803,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line719">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line713">code &raquo;</a>
   </td>
      </tr>
 
@@ -3829,7 +3823,7 @@ body.clientHeight  Height of viewport excluding scrollbar in quirks mode.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">insertSiblingAfter<span class="args">(<span class="arg">newNode</span>,&nbsp;<span class="arg">refNode</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">insertSiblingAfter<span class="args">(<span class="arg">insertSiblingAfter@newNode</span>,&nbsp;<span class="arg">insertSiblingAfter@refNode</span>)</span>
         </span>
       </div>
 
@@ -3855,17 +3849,17 @@ sibling). If the reference node has no parent, then does nothing.
      
    <tr class="even">
      <td>
-        <span class="entryName">newNode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">Node to insert.</div>
+        <span class="entryName">insertSiblingAfter@newNode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">refNode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">Reference node to insert after.</div>
+        <span class="entryName">insertSiblingAfter@refNode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3878,7 +3872,7 @@ sibling). If the reference node has no parent, then does nothing.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line853">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line847">code &raquo;</a>
   </td>
      </tr>
 
@@ -3898,7 +3892,7 @@ sibling). If the reference node has no parent, then does nothing.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">insertSiblingBefore<span class="args">(<span class="arg">newNode</span>,&nbsp;<span class="arg">refNode</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">insertSiblingBefore<span class="args">(<span class="arg">insertSiblingBefore@newNode</span>,&nbsp;<span class="arg">insertSiblingBefore@refNode</span>)</span>
         </span>
       </div>
 
@@ -3924,17 +3918,17 @@ sibling). If the reference node has no parent, then does nothing.
      
    <tr class="even">
      <td>
-        <span class="entryName">newNode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">Node to insert.</div>
+        <span class="entryName">insertSiblingBefore@newNode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">refNode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">Reference node to insert before.</div>
+        <span class="entryName">insertSiblingBefore@refNode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -3947,7 +3941,7 @@ sibling). If the reference node has no parent, then does nothing.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line840">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line834">code &raquo;</a>
   </td>
      </tr>
 
@@ -3994,7 +3988,7 @@ mode, false otherwise.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line749">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line743">code &raquo;</a>
   </td>
      </tr>
 
@@ -4014,7 +4008,7 @@ mode, false otherwise.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">isCss1CompatMode_<span class="args">(<span class="arg">doc</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">isCss1CompatMode_<span class="args">(<span class="arg">isCss1CompatMode_@doc</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -4041,9 +4035,9 @@ mode, false otherwise.
      
    <tr class="even">
      <td>
-        <span class="entryName">doc</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/document">Document</a></span></div>
-        <div class="entryOverview">The document to check.</div>
+        <span class="entryName">isCss1CompatMode_@doc</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -4060,7 +4054,7 @@ mode, false otherwise.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line761">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line755">code &raquo;</a>
   </td>
      </tr>
 
@@ -4080,7 +4074,7 @@ mode, false otherwise.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">isFocusableTabIndex<span class="args">(<span class="arg">element</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">isFocusableTabIndex<span class="args">(<span class="arg">isFocusableTabIndex@element</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -4109,9 +4103,9 @@ natively support keyboard focus, even if they have no tab index.  See
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Element to check.</div>
+        <span class="entryName">isFocusableTabIndex@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -4128,7 +4122,7 @@ natively support keyboard focus, even if they have no tab index.  See
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1353">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1347">code &raquo;</a>
   </td>
      </tr>
 
@@ -4148,7 +4142,7 @@ natively support keyboard focus, even if they have no tab index.  See
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">isNodeLike<span class="args">(<span class="arg">obj</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">isNodeLike<span class="args">(<span class="arg">isNodeLike@obj</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -4174,9 +4168,9 @@ natively support keyboard focus, even if they have no tab index.  See
      
    <tr class="even">
      <td>
-        <span class="entryName">obj</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">The object being tested for node likeness.</div>
+        <span class="entryName">isNodeLike@obj</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -4193,7 +4187,7 @@ natively support keyboard focus, even if they have no tab index.  See
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line974">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line968">code &raquo;</a>
   </td>
      </tr>
 
@@ -4213,7 +4207,7 @@ natively support keyboard focus, even if they have no tab index.  See
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">isNodeList<span class="args">(<span class="arg">val</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">isNodeList<span class="args">(<span class="arg">isNodeList@val</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -4241,9 +4235,9 @@ has type &#39;string&#39; on IE for some reason).
      
    <tr class="even">
      <td>
-        <span class="entryName">val</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">Object to test.</div>
+        <span class="entryName">isNodeList@val</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -4260,7 +4254,7 @@ has type &#39;string&#39; on IE for some reason).
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1550">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1544">code &raquo;</a>
   </td>
      </tr>
 
@@ -4280,7 +4274,7 @@ has type &#39;string&#39; on IE for some reason).
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">removeChildren<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">removeChildren<span class="args">(<span class="arg">removeChildren@node</span>)</span>
         </span>
       </div>
 
@@ -4305,9 +4299,9 @@ has type &#39;string&#39; on IE for some reason).
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">Node to remove children from.</div>
+        <span class="entryName">removeChildren@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -4320,7 +4314,7 @@ has type &#39;string&#39; on IE for some reason).
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line823">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line817">code &raquo;</a>
   </td>
      </tr>
 
@@ -4340,7 +4334,7 @@ has type &#39;string&#39; on IE for some reason).
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">removeNode<span class="args">(<span class="arg">node</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">removeNode<span class="args">(<span class="arg">removeNode@node</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
       </div>
@@ -4366,9 +4360,9 @@ has type &#39;string&#39; on IE for some reason).
      
    <tr class="even">
      <td>
-        <span class="entryName">node</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">The node to remove.</div>
+        <span class="entryName">removeNode@node</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -4385,7 +4379,7 @@ has type &#39;string&#39; on IE for some reason).
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line865">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line859">code &raquo;</a>
   </td>
      </tr>
 
@@ -4405,7 +4399,7 @@ has type &#39;string&#39; on IE for some reason).
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">replaceNode<span class="args">(<span class="arg">newNode</span>,&nbsp;<span class="arg">oldNode</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">replaceNode<span class="args">(<span class="arg">replaceNode@newNode</span>,&nbsp;<span class="arg">replaceNode@oldNode</span>)</span>
         </span>
       </div>
 
@@ -4431,17 +4425,17 @@ parent.
      
    <tr class="even">
      <td>
-        <span class="entryName">newNode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">Node to insert.</div>
+        <span class="entryName">replaceNode@newNode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">oldNode</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Node">Node</a></span></div>
-        <div class="entryOverview">Node to replace.</div>
+        <span class="entryName">replaceNode@oldNode</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -4454,7 +4448,7 @@ parent.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line876">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line870">code &raquo;</a>
   </td>
      </tr>
 
@@ -4474,7 +4468,7 @@ parent.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">setFocusableTabIndex<span class="args">(<span class="arg">element</span>,&nbsp;<span class="arg">enable</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">setFocusableTabIndex<span class="args">(<span class="arg">setFocusableTabIndex@element</span>,&nbsp;<span class="arg">setFocusableTabIndex@enable</span>)</span>
         </span>
       </div>
 
@@ -4502,17 +4496,17 @@ receive keyboard focus.  See <a href="http://go/tabindex">http://go/tabindex</a>
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">Element whose tab index is to be changed.</div>
+        <span class="entryName">setFocusableTabIndex@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">enable</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
-        <div class="entryOverview">Whether to set or remove a tab index on the element that supports keyboard focus.</div>
+        <span class="entryName">setFocusableTabIndex@enable</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -4525,7 +4519,7 @@ receive keyboard focus.  See <a href="http://go/tabindex">http://go/tabindex</a>
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1375">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1369">code &raquo;</a>
   </td>
      </tr>
 
@@ -4545,7 +4539,7 @@ receive keyboard focus.  See <a href="http://go/tabindex">http://go/tabindex</a>
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">setProperties<span class="args">(<span class="arg">element</span>,&nbsp;<span class="arg">properties</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">setProperties<span class="args">(<span class="arg">setProperties@element</span>,&nbsp;<span class="arg">setProperties@properties</span>)</span>
         </span>
       </div>
 
@@ -4570,17 +4564,17 @@ receive keyboard focus.  See <a href="http://go/tabindex">http://go/tabindex</a>
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">DOM node to set properties on.</div>
+        <span class="entryName">setProperties@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">properties</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">Hash of property:value pairs.</div>
+        <span class="entryName">setProperties@properties</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -4593,7 +4587,7 @@ receive keyboard focus.  See <a href="http://go/tabindex">http://go/tabindex</a>
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line260">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line254">code &raquo;</a>
   </td>
      </tr>
 
@@ -4613,7 +4607,7 @@ receive keyboard focus.  See <a href="http://go/tabindex">http://go/tabindex</a>
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.dom.</span><span class="entryName">setTextContent<span class="args">(<span class="arg">element</span>,&nbsp;<span class="arg">text</span>)</span>
+        <span class="entryNamespace">goog.dom.</span><span class="entryName">setTextContent<span class="args">(<span class="arg">setTextContent@element</span>,&nbsp;<span class="arg">setTextContent@text</span>)</span>
         </span>
       </div>
 
@@ -4638,17 +4632,17 @@ receive keyboard focus.  See <a href="http://go/tabindex">http://go/tabindex</a>
      
    <tr class="even">
      <td>
-        <span class="entryName">element</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/DOM/Element">Element</a></span></div>
-        <div class="entryOverview">The element to change the text content of.</div>
+        <span class="entryName">setTextContent@element</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">text</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The string that should replace the current element content.</div>
+        <span class="entryName">setTextContent@text</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -4661,7 +4655,7 @@ receive keyboard focus.  See <a href="http://go/tabindex">http://go/tabindex</a>
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1216">code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1210">code &raquo;</a>
   </td>
      </tr>
 
@@ -4709,7 +4703,7 @@ receive keyboard focus.  See <a href="http://go/tabindex">http://go/tabindex</a>
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line70">Code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line64">Code &raquo;</a>
   </td>
      </tr>
 
@@ -4744,7 +4738,7 @@ by goog.dom.setProperties.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line285">Code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line279">Code &raquo;</a>
   </td>
      </tr>
 
@@ -4777,7 +4771,7 @@ by goog.dom.setProperties.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1341">Code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1335">Code &raquo;</a>
   </td>
      </tr>
 
@@ -4810,7 +4804,7 @@ by goog.dom.setProperties.
 
 
   <td class="view-code">
-     <a href="closure_goog_dom_dom.js.source.html#line1327">Code &raquo;</a>
+     <a href="closure_goog_dom_dom.js.source.html#line1321">Code &raquo;</a>
   </td>
      </tr>
 

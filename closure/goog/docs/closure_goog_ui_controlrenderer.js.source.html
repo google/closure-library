@@ -698,169 +698,163 @@
 <a name="line654"></a>
 <a name="line655"></a>  // Add state-specific class names, if any.
 <a name="line656"></a>  var classNamesForState = this.getClassNamesForState(control.getState());
-<a name="line657"></a>  if (classNamesForState) {
-<a name="line658"></a>    classNames.push.apply(classNames, classNamesForState);
-<a name="line659"></a>  }
-<a name="line660"></a>
-<a name="line661"></a>  // Add extra class names, if any.
-<a name="line662"></a>  var extraClassNames = control.getExtraClassNames();
-<a name="line663"></a>  if (extraClassNames) {
-<a name="line664"></a>    classNames.push.apply(classNames, extraClassNames);
-<a name="line665"></a>  }
-<a name="line666"></a>
-<a name="line667"></a>  // Add composite classes for IE6 support
-<a name="line668"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;7&#39;)) {
-<a name="line669"></a>    classNames.push.apply(classNames,
-<a name="line670"></a>        this.getAppliedCombinedClassNames_(classNames));
-<a name="line671"></a>  }
-<a name="line672"></a>
-<a name="line673"></a>  return classNames;
-<a name="line674"></a>};
-<a name="line675"></a>
-<a name="line676"></a>
-<a name="line677"></a>/**
-<a name="line678"></a> * Returns an array of all the combined class names that should be applied based
-<a name="line679"></a> * on the given list of classes. Checks the result of
-<a name="line680"></a> * {@link getIe6ClassCombinations} for any combinations that have all
-<a name="line681"></a> * members contained in classes. If a combination matches, the members are
-<a name="line682"></a> * joined with an underscore (in order), and added to the return array.
-<a name="line683"></a> *
-<a name="line684"></a> * If opt_includedClass is provided, return only the combined classes that have
-<a name="line685"></a> * all members contained in classes AND include opt_includedClass as well.
-<a name="line686"></a> * opt_includedClass is added to classes as well.
-<a name="line687"></a> * @param {Array.&lt;string&gt;} classes Array of classes to return matching combined
-<a name="line688"></a> *     classes for.
-<a name="line689"></a> * @param {?string=} opt_includedClass If provided, get only the combined
-<a name="line690"></a> *     classes that include this one.
-<a name="line691"></a> * @return {Array.&lt;string&gt;} Array of combined class names that should be
-<a name="line692"></a> *     applied.
-<a name="line693"></a> * @private
-<a name="line694"></a> */
-<a name="line695"></a>goog.ui.ControlRenderer.prototype.getAppliedCombinedClassNames_ = function(
-<a name="line696"></a>    classes, opt_includedClass) {
-<a name="line697"></a>  var toAdd = [];
-<a name="line698"></a>  if (opt_includedClass) {
-<a name="line699"></a>    classes = classes.concat([opt_includedClass]);
-<a name="line700"></a>  }
-<a name="line701"></a>  goog.array.forEach(this.getIe6ClassCombinations(), function(combo) {
-<a name="line702"></a>    if (goog.array.every(combo, goog.partial(goog.array.contains, classes)) &amp;&amp;
-<a name="line703"></a>        (!opt_includedClass || goog.array.contains(combo, opt_includedClass))) {
-<a name="line704"></a>      toAdd.push(combo.join(&#39;_&#39;));
-<a name="line705"></a>    }
-<a name="line706"></a>  });
-<a name="line707"></a>  return toAdd;
-<a name="line708"></a>};
-<a name="line709"></a>
-<a name="line710"></a>
-<a name="line711"></a>/**
-<a name="line712"></a> * Takes a bit mask of {@link goog.ui.Component.State}s, and returns an array
-<a name="line713"></a> * of the appropriate class names representing the given state, suitable to be
-<a name="line714"></a> * applied to the root element of a component rendered using this renderer, or
-<a name="line715"></a> * null if no state-specific classes need to be applied.  This default
-<a name="line716"></a> * implementation uses the renderer&#39;s {@link getClassForState} method to
-<a name="line717"></a> * generate each state-specific class.
-<a name="line718"></a> * @param {number} state Bit mask of component states.
-<a name="line719"></a> * @return {Array.&lt;string&gt;?} Array of CSS class names representing the given
-<a name="line720"></a> *     state (null if none).
-<a name="line721"></a> * @protected
-<a name="line722"></a> */
-<a name="line723"></a>goog.ui.ControlRenderer.prototype.getClassNamesForState = function(state) {
-<a name="line724"></a>  if (state) {
-<a name="line725"></a>    var classNames = [];
-<a name="line726"></a>    // For each enabled state, push the corresponding CSS class name onto
-<a name="line727"></a>    // the classNames array.
-<a name="line728"></a>    for (var mask = 0x01; state; mask &lt;&lt;= 1) {
-<a name="line729"></a>      if (state &amp; mask) {
-<a name="line730"></a>        classNames.push(this.getClassForState(
-<a name="line731"></a>                            /** @type {goog.ui.Component.State} */ (mask)));
-<a name="line732"></a>        state &amp;= ~mask;
-<a name="line733"></a>      }
-<a name="line734"></a>    }
-<a name="line735"></a>    return classNames;
-<a name="line736"></a>  }
-<a name="line737"></a>  return null;
-<a name="line738"></a>};
-<a name="line739"></a>
-<a name="line740"></a>
-<a name="line741"></a>/**
-<a name="line742"></a> * Takes a single {@link goog.ui.Component.State}, and returns the
-<a name="line743"></a> * corresponding CSS class name (null if none).
-<a name="line744"></a> * @param {goog.ui.Component.State} state Component state.
-<a name="line745"></a> * @return {string|undefined} CSS class representing the given state (undefined
-<a name="line746"></a> *     if none).
-<a name="line747"></a> * @protected
-<a name="line748"></a> */
-<a name="line749"></a>  goog.ui.ControlRenderer.prototype.getClassForState = function(state) {
-<a name="line750"></a>    if (!this.classByState_) {
-<a name="line751"></a>      this.createClassByStateMap_();
-<a name="line752"></a>    }
-<a name="line753"></a>    return this.classByState_[state];
-<a name="line754"></a>  };
-<a name="line755"></a>
-<a name="line756"></a>
-<a name="line757"></a>/**
-<a name="line758"></a> * Takes a single CSS class name which may represent a component state, and
-<a name="line759"></a> * returns the corresponding component state (0x00 if none).
-<a name="line760"></a> * @param {string} className CSS class name, possibly representing a component
-<a name="line761"></a> *     state.
-<a name="line762"></a> * @return {goog.ui.Component.State} state Component state corresponding
-<a name="line763"></a> *     to the given CSS class (0x00 if none).
-<a name="line764"></a> * @protected
-<a name="line765"></a> */
-<a name="line766"></a>goog.ui.ControlRenderer.prototype.getStateFromClass = function(className) {
-<a name="line767"></a>  if (!this.stateByClass_) {
-<a name="line768"></a>    this.createStateByClassMap_();
-<a name="line769"></a>  }
-<a name="line770"></a>  var state = parseInt(this.stateByClass_[className], 10);
-<a name="line771"></a>  return /** @type {goog.ui.Component.State} */ (isNaN(state) ? 0x00 : state);
-<a name="line772"></a>};
-<a name="line773"></a>
-<a name="line774"></a>
-<a name="line775"></a>/**
-<a name="line776"></a> * Creates the lookup table of states to classes, used during state changes.
-<a name="line777"></a> * @private
-<a name="line778"></a> */
-<a name="line779"></a>goog.ui.ControlRenderer.prototype.createClassByStateMap_ = function() {
-<a name="line780"></a>  var baseClass = this.getStructuralCssClass();
-<a name="line781"></a>
-<a name="line782"></a>  /**
-<a name="line783"></a>   * Map of component states to state-specific structural class names,
-<a name="line784"></a>   * used when changing the DOM in response to a state change.  Precomputed
-<a name="line785"></a>   * and cached on first use to minimize object allocations and string
-<a name="line786"></a>   * concatenation.
-<a name="line787"></a>   * @type {Object}
-<a name="line788"></a>   * @private
-<a name="line789"></a>   */
-<a name="line790"></a>  this.classByState_ = goog.object.create(
-<a name="line791"></a>      goog.ui.Component.State.DISABLED, goog.getCssName(baseClass, &#39;disabled&#39;),
-<a name="line792"></a>      goog.ui.Component.State.HOVER, goog.getCssName(baseClass, &#39;hover&#39;),
-<a name="line793"></a>      goog.ui.Component.State.ACTIVE, goog.getCssName(baseClass, &#39;active&#39;),
-<a name="line794"></a>      goog.ui.Component.State.SELECTED, goog.getCssName(baseClass, &#39;selected&#39;),
-<a name="line795"></a>      goog.ui.Component.State.CHECKED, goog.getCssName(baseClass, &#39;checked&#39;),
-<a name="line796"></a>      goog.ui.Component.State.FOCUSED, goog.getCssName(baseClass, &#39;focused&#39;),
-<a name="line797"></a>      goog.ui.Component.State.OPENED, goog.getCssName(baseClass, &#39;open&#39;));
-<a name="line798"></a>};
-<a name="line799"></a>
-<a name="line800"></a>
-<a name="line801"></a>/**
-<a name="line802"></a> * Creates the lookup table of classes to states, used during decoration.
-<a name="line803"></a> * @private
-<a name="line804"></a> */
-<a name="line805"></a>goog.ui.ControlRenderer.prototype.createStateByClassMap_ = function() {
-<a name="line806"></a>  // We need the classByState_ map so we can transpose it.
-<a name="line807"></a>  if (!this.classByState_) {
-<a name="line808"></a>    this.createClassByStateMap_();
-<a name="line809"></a>  }
-<a name="line810"></a>
-<a name="line811"></a>  /**
-<a name="line812"></a>   * Map of state-specific structural class names to component states,
-<a name="line813"></a>   * used during element decoration.  Precomputed and cached on first use
-<a name="line814"></a>   * to minimize object allocations and string concatenation.
-<a name="line815"></a>   * @type {Object}
-<a name="line816"></a>   * @private
-<a name="line817"></a>   */
-<a name="line818"></a>  this.stateByClass_ = goog.object.transpose(this.classByState_);
-<a name="line819"></a>};
+<a name="line657"></a>  classNames.push.apply(classNames, classNamesForState);
+<a name="line658"></a>
+<a name="line659"></a>  // Add extra class names, if any.
+<a name="line660"></a>  var extraClassNames = control.getExtraClassNames();
+<a name="line661"></a>  if (extraClassNames) {
+<a name="line662"></a>    classNames.push.apply(classNames, extraClassNames);
+<a name="line663"></a>  }
+<a name="line664"></a>
+<a name="line665"></a>  // Add composite classes for IE6 support
+<a name="line666"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;7&#39;)) {
+<a name="line667"></a>    classNames.push.apply(classNames,
+<a name="line668"></a>        this.getAppliedCombinedClassNames_(classNames));
+<a name="line669"></a>  }
+<a name="line670"></a>
+<a name="line671"></a>  return classNames;
+<a name="line672"></a>};
+<a name="line673"></a>
+<a name="line674"></a>
+<a name="line675"></a>/**
+<a name="line676"></a> * Returns an array of all the combined class names that should be applied based
+<a name="line677"></a> * on the given list of classes. Checks the result of
+<a name="line678"></a> * {@link getIe6ClassCombinations} for any combinations that have all
+<a name="line679"></a> * members contained in classes. If a combination matches, the members are
+<a name="line680"></a> * joined with an underscore (in order), and added to the return array.
+<a name="line681"></a> *
+<a name="line682"></a> * If opt_includedClass is provided, return only the combined classes that have
+<a name="line683"></a> * all members contained in classes AND include opt_includedClass as well.
+<a name="line684"></a> * opt_includedClass is added to classes as well.
+<a name="line685"></a> * @param {Array.&lt;string&gt;} classes Array of classes to return matching combined
+<a name="line686"></a> *     classes for.
+<a name="line687"></a> * @param {?string=} opt_includedClass If provided, get only the combined
+<a name="line688"></a> *     classes that include this one.
+<a name="line689"></a> * @return {Array.&lt;string&gt;} Array of combined class names that should be
+<a name="line690"></a> *     applied.
+<a name="line691"></a> * @private
+<a name="line692"></a> */
+<a name="line693"></a>goog.ui.ControlRenderer.prototype.getAppliedCombinedClassNames_ = function(
+<a name="line694"></a>    classes, opt_includedClass) {
+<a name="line695"></a>  var toAdd = [];
+<a name="line696"></a>  if (opt_includedClass) {
+<a name="line697"></a>    classes = classes.concat([opt_includedClass]);
+<a name="line698"></a>  }
+<a name="line699"></a>  goog.array.forEach(this.getIe6ClassCombinations(), function(combo) {
+<a name="line700"></a>    if (goog.array.every(combo, goog.partial(goog.array.contains, classes)) &amp;&amp;
+<a name="line701"></a>        (!opt_includedClass || goog.array.contains(combo, opt_includedClass))) {
+<a name="line702"></a>      toAdd.push(combo.join(&#39;_&#39;));
+<a name="line703"></a>    }
+<a name="line704"></a>  });
+<a name="line705"></a>  return toAdd;
+<a name="line706"></a>};
+<a name="line707"></a>
+<a name="line708"></a>
+<a name="line709"></a>/**
+<a name="line710"></a> * Takes a bit mask of {@link goog.ui.Component.State}s, and returns an array
+<a name="line711"></a> * of the appropriate class names representing the given state, suitable to be
+<a name="line712"></a> * applied to the root element of a component rendered using this renderer, or
+<a name="line713"></a> * null if no state-specific classes need to be applied.  This default
+<a name="line714"></a> * implementation uses the renderer&#39;s {@link getClassForState} method to
+<a name="line715"></a> * generate each state-specific class.
+<a name="line716"></a> * @param {number} state Bit mask of component states.
+<a name="line717"></a> * @return {!Array.&lt;string&gt;} Array of CSS class names representing the given
+<a name="line718"></a> *     state.
+<a name="line719"></a> * @protected
+<a name="line720"></a> */
+<a name="line721"></a>goog.ui.ControlRenderer.prototype.getClassNamesForState = function(state) {
+<a name="line722"></a>  var classNames = [];
+<a name="line723"></a>  while (state) {
+<a name="line724"></a>    // For each enabled state, push the corresponding CSS class name onto
+<a name="line725"></a>    // the classNames array.
+<a name="line726"></a>    var mask = state &amp; -state;  // Least significant bit
+<a name="line727"></a>    classNames.push(this.getClassForState(
+<a name="line728"></a>        /** @type {goog.ui.Component.State} */ (mask)));
+<a name="line729"></a>    state &amp;= ~mask;
+<a name="line730"></a>  }
+<a name="line731"></a>  return classNames;
+<a name="line732"></a>};
+<a name="line733"></a>
+<a name="line734"></a>
+<a name="line735"></a>/**
+<a name="line736"></a> * Takes a single {@link goog.ui.Component.State}, and returns the
+<a name="line737"></a> * corresponding CSS class name (null if none).
+<a name="line738"></a> * @param {goog.ui.Component.State} state Component state.
+<a name="line739"></a> * @return {string|undefined} CSS class representing the given state (undefined
+<a name="line740"></a> *     if none).
+<a name="line741"></a> * @protected
+<a name="line742"></a> */
+<a name="line743"></a>  goog.ui.ControlRenderer.prototype.getClassForState = function(state) {
+<a name="line744"></a>    if (!this.classByState_) {
+<a name="line745"></a>      this.createClassByStateMap_();
+<a name="line746"></a>    }
+<a name="line747"></a>    return this.classByState_[state];
+<a name="line748"></a>  };
+<a name="line749"></a>
+<a name="line750"></a>
+<a name="line751"></a>/**
+<a name="line752"></a> * Takes a single CSS class name which may represent a component state, and
+<a name="line753"></a> * returns the corresponding component state (0x00 if none).
+<a name="line754"></a> * @param {string} className CSS class name, possibly representing a component
+<a name="line755"></a> *     state.
+<a name="line756"></a> * @return {goog.ui.Component.State} state Component state corresponding
+<a name="line757"></a> *     to the given CSS class (0x00 if none).
+<a name="line758"></a> * @protected
+<a name="line759"></a> */
+<a name="line760"></a>goog.ui.ControlRenderer.prototype.getStateFromClass = function(className) {
+<a name="line761"></a>  if (!this.stateByClass_) {
+<a name="line762"></a>    this.createStateByClassMap_();
+<a name="line763"></a>  }
+<a name="line764"></a>  var state = parseInt(this.stateByClass_[className], 10);
+<a name="line765"></a>  return /** @type {goog.ui.Component.State} */ (isNaN(state) ? 0x00 : state);
+<a name="line766"></a>};
+<a name="line767"></a>
+<a name="line768"></a>
+<a name="line769"></a>/**
+<a name="line770"></a> * Creates the lookup table of states to classes, used during state changes.
+<a name="line771"></a> * @private
+<a name="line772"></a> */
+<a name="line773"></a>goog.ui.ControlRenderer.prototype.createClassByStateMap_ = function() {
+<a name="line774"></a>  var baseClass = this.getStructuralCssClass();
+<a name="line775"></a>
+<a name="line776"></a>  /**
+<a name="line777"></a>   * Map of component states to state-specific structural class names,
+<a name="line778"></a>   * used when changing the DOM in response to a state change.  Precomputed
+<a name="line779"></a>   * and cached on first use to minimize object allocations and string
+<a name="line780"></a>   * concatenation.
+<a name="line781"></a>   * @type {Object}
+<a name="line782"></a>   * @private
+<a name="line783"></a>   */
+<a name="line784"></a>  this.classByState_ = goog.object.create(
+<a name="line785"></a>      goog.ui.Component.State.DISABLED, goog.getCssName(baseClass, &#39;disabled&#39;),
+<a name="line786"></a>      goog.ui.Component.State.HOVER, goog.getCssName(baseClass, &#39;hover&#39;),
+<a name="line787"></a>      goog.ui.Component.State.ACTIVE, goog.getCssName(baseClass, &#39;active&#39;),
+<a name="line788"></a>      goog.ui.Component.State.SELECTED, goog.getCssName(baseClass, &#39;selected&#39;),
+<a name="line789"></a>      goog.ui.Component.State.CHECKED, goog.getCssName(baseClass, &#39;checked&#39;),
+<a name="line790"></a>      goog.ui.Component.State.FOCUSED, goog.getCssName(baseClass, &#39;focused&#39;),
+<a name="line791"></a>      goog.ui.Component.State.OPENED, goog.getCssName(baseClass, &#39;open&#39;));
+<a name="line792"></a>};
+<a name="line793"></a>
+<a name="line794"></a>
+<a name="line795"></a>/**
+<a name="line796"></a> * Creates the lookup table of classes to states, used during decoration.
+<a name="line797"></a> * @private
+<a name="line798"></a> */
+<a name="line799"></a>goog.ui.ControlRenderer.prototype.createStateByClassMap_ = function() {
+<a name="line800"></a>  // We need the classByState_ map so we can transpose it.
+<a name="line801"></a>  if (!this.classByState_) {
+<a name="line802"></a>    this.createClassByStateMap_();
+<a name="line803"></a>  }
+<a name="line804"></a>
+<a name="line805"></a>  /**
+<a name="line806"></a>   * Map of state-specific structural class names to component states,
+<a name="line807"></a>   * used during element decoration.  Precomputed and cached on first use
+<a name="line808"></a>   * to minimize object allocations and string concatenation.
+<a name="line809"></a>   * @type {Object}
+<a name="line810"></a>   * @private
+<a name="line811"></a>   */
+<a name="line812"></a>  this.stateByClass_ = goog.object.transpose(this.classByState_);
+<a name="line813"></a>};
 </pre>
 
 

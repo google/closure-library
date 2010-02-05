@@ -848,6 +848,13 @@ function testIntervalGetInverse() {
 }
 
 
+function testIntervalTimes() {
+  var i = new goog.date.Interval(1, 2, 3, 4, 5, 6);
+  var expected = new goog.date.Interval(2, 4, 6, 8, 10, 12);
+  assertTrue('double interval', expected.equals(i.times(2)));
+}
+
+
 //=== tests for goog.date.Interval.equals() ===
 function testIntervalEquals() {
   var i1 = new goog.date.Interval(goog.date.Interval.DAYS, -1);
@@ -976,6 +983,13 @@ function testIsoDuration() {
   var duration13 = 'PT1.S';
   assertNull('invalid seconds, missing fractional part',
              goog.date.Interval.fromIsoString(duration13));
+}
+
+
+function testGetTotalSeconds() {
+  var duration = new goog.date.Interval(0, 0, 2, 3, 4, 5);
+  assertEquals('seconds in 2d3h4m5s', 2 * 86400 + 3 * 3600 + 4 * 60 + 5,
+      duration.getTotalSeconds());
 }
 
 

@@ -213,7 +213,7 @@ goog.ui.BaseRoundedPanel.prototype.decorateInternal = function(element) {
 
   // Set contentElement_ by finding a child node within element_ with the
   // proper class name. If none exists, create it and add it to the DOM.
-  this.contentElement_ = goog.dom.$$(
+  this.contentElement_ = goog.dom.getElementsByTagNameAndClass(
       null, goog.ui.RoundedPanel.Classes_.CONTENT, this.getElement())[0];
   if (!this.contentElement_) {
     this.contentElement_ = this.getDomHelper().createDom('div');

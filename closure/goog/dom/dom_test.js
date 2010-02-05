@@ -55,8 +55,10 @@ function testGetElement() {
 
 function testGetElementsByTagNameAndClass() {
   assertEquals('Should get 6 spans', goog.dom.$$('span').length, 6);
+  assertEquals('Should get 6 spans', goog.dom.$$('SPAN').length, 6);
   assertEquals('Should get 3 spans', goog.dom.$$('span', 'test1').length, 3);
   assertEquals('Should get 1 span', goog.dom.$$('span', 'test2').length, 1);
+  assertEquals('Should get 1 span', goog.dom.$$('SPAN', 'test2').length, 1);
   assertEquals('Should get lots of elements', goog.dom.$$().length,
       document.getElementsByTagName('*').length);
 
@@ -868,6 +870,8 @@ function testGetAncestorByTagNameOnly() {
   var expected = goog.dom.$('testAncestorDiv');
   assertEquals(expected,
       goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV));
+  assertEquals(expected,
+      goog.dom.getAncestorByTagNameAndClass(elem, 'div'));
 }
 
 function testGetAncestorByClassNameNoMatch() {

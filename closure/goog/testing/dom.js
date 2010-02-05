@@ -203,7 +203,7 @@ goog.testing.dom.describeNode_ = function(node) {
  * expected to show up in that user agent and expected not to show up in
  * others.
  * @param {string} htmlPattern The pattern to match.
- * @param {Element} actual The element to check: its contents are matched
+ * @param {!Element} actual The element to check: its contents are matched
  *     against the HTML pattern.
  * @param {boolean=} opt_strictAttributes If false, attributes that appear in
  *     htmlPattern must be in actual, but actual can have attributes not
@@ -241,6 +241,15 @@ goog.testing.dom.assertHtmlContentsMatch = function(htmlPattern, actual,
     }
   };
 
+  // HACK: IE has unique ideas about whitespace handling when setting
+  // innerHTML. This results in elision of leading whitespace in the expected
+  // nodes where doing so doesn't affect visible rendering. As a workaround, we
+  // remove the leading whitespace in the actual nodes where necessary.
+  //
+  // The collapsible variable tracks whether we should collapse the whitespace
+  // in the next Text node we encounter.
+  var collapsible = true;
+
   var number = 0;
   goog.iter.forEach(expectedIt, function(expectedNode) {
     advanceActualNode();
@@ -267,6 +276,13 @@ goog.testing.dom.assertHtmlContentsMatch = function(htmlPattern, actual,
           goog.style.parseStyleAttribute(actualNode.style.cssText));
       goog.testing.dom.assertAttributesEqual_(errorSuffix, expectedNode,
           actualNode, !!opt_strictAttributes);
+
+      if (goog.userAgent.IE &&
+          goog.style.getCascadedStyle(
+              /** @type {Element} */ (actualNode), 'display') != 'inline') {
+        // Text may be collapsed after any non-inline element.
+        collapsible = true;
+      }
     } else {
       // Concatenate text nodes until we reach a non text node.
       var actualText = actualNode.nodeValue;
@@ -274,6 +290,17 @@ goog.testing.dom.assertHtmlContentsMatch = function(htmlPattern, actual,
       while ((actualNode = goog.iter.nextOrValue(actualIt, null)) &&
           actualNode.nodeType == goog.dom.NodeType.TEXT) {
         actualText += actualNode.nodeValue;
+      }
+
+      if (goog.userAgent.IE) {
+        // Collapse the leading whitespace, unless the string consists entirely
+        // of whitespace.
+        if (collapsible && !goog.string.isEmpty(actualText)) {
+          actualText = goog.string.trimLeft(actualText);
+        }
+        // Prepare to collapse whitespace in the next Text node if this one does
+        // not end in a whitespace character.
+        collapsible = /\s$/.test(actualText);
       }
 
       var expectedText = goog.testing.dom.getExpectedText_(expectedNode);

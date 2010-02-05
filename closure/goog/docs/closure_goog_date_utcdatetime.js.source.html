@@ -121,8 +121,8 @@
 <a name="line77"></a> */
 <a name="line78"></a>goog.date.UtcDateTime.prototype.clone = function() {
 <a name="line79"></a>  var date = new goog.date.UtcDateTime(this.date_);
-<a name="line80"></a>  date.firstDayOfWeek_ = this.firstDayOfWeek_;
-<a name="line81"></a>  date.firstWeekCutOffDay_ = this.firstWeekCutOffDay_;
+<a name="line80"></a>  date.setFirstDayOfWeek(this.getFirstDayOfWeek());
+<a name="line81"></a>  date.setFirstWeekCutOffDay(this.getFirstWeekCutOffDay());
 <a name="line82"></a>  return date;
 <a name="line83"></a>};
 <a name="line84"></a>

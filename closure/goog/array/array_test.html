@@ -164,7 +164,7 @@ function testArrayFilter() {
     assertEquals('index is not a number', 'number', typeof index);
     return val > 1;
   });
-  assertEquals(a.join(''), '23');
+  assertArrayEquals([2, 3], a);
 }
 
 function testArrayFilterOmitsDeleted() {
@@ -177,7 +177,7 @@ function testArrayFilterOmitsDeleted() {
     assertEquals('index is not a number', 'number', typeof index);
     return val > 1;
   });
-  assertEquals(a.join(''), '2');
+  assertArrayEquals([2], a);
 }
 
 function testArrayFilterPreservesValues() {
@@ -189,28 +189,36 @@ function testArrayFilterPreservesValues() {
     a2[index] = a2[index] - 1;
     return a2[index] >= 1;
   });
-  assertEquals(a.join(''), '23');
+  assertArrayEquals([2, 3], a);
 }
 
 function testArrayMap() {
   var a = [0, 1, 2, 3];
-  assertEquals(goog.array.map(a, function (val, index, a2) {
+  var result = goog.array.map(a, function (val, index, a2) {
     assertEquals(a, a2);
     assertEquals('index is not a number', 'number', typeof index);
     return val * val;
-  }).join(''), '0149');
+  });
+  assertArrayEquals([0, 1, 4, 9], result);
 }
 
 function testArrayMapOmitsDeleted() {
   var a = [0, 1, 2, 3];
   delete a[1];
   delete a[3];
-  assertEquals(goog.array.map(a, function (val, index, a2) {
+  var result = goog.array.map(a, function (val, index, a2) {
     assertEquals(a, a2);
     assertEquals('number', typeof val);
     assertEquals('index is not a number', 'number', typeof index);
     return val * val;
-  }).join(''), '04');
+  });
+  var expected = [0, 1, 4, 9];
+  delete expected[1];
+  delete expected[3];
+
+  assertArrayEquals(expected, result);
+  assertFalse('1' in result);
+  assertFalse('3' in result);
 }
 
 function testArrayReduce() {
@@ -601,67 +609,76 @@ function testArrayInsertAt() {
   var a = [0, 1, 2, 3];
 
   goog.array.insertAt(a, 4, 2);
-  assertEquals('insertAt, insert in middle', a.join(''), '01423');
+  assertArrayEquals('insertAt, insert in middle', [0, 1, 4, 2, 3], a);
   goog.array.insertAt(a, 5, 10);
-  assertEquals('insertAt, too large value should append', a.join(''), '014235');
+  assertArrayEquals('insertAt, too large value should append',
+                    [0, 1, 4, 2, 3, 5], a);
   goog.array.insertAt(a, 6);
-  assertEquals('insertAt, null/undefined value should insert at 0', a.join(''), '6014235');
+  assertArrayEquals('insertAt, null/undefined value should insert at 0',
+                    [6, 0, 1, 4, 2, 3, 5], a);
   goog.array.insertAt(a, 7, -2);
-  assertEquals('insertAt, negative values start from end', a.join(''), '60142735');
+  assertArrayEquals('insertAt, negative values start from end',
+                    [6, 0, 1, 4, 2, 7, 3, 5], a);
 }
 
 function testArrayInsertArrayAt() {
   var a = [2, 5];
   goog.array.insertArrayAt(a, [3, 4], 1);
-  assertEquals('insertArrayAt, insert in middle', '2345', a.join(''));
+  assertArrayEquals('insertArrayAt, insert in middle', [2, 3, 4, 5], a);
   goog.array.insertArrayAt(a, [0, 1], 0);
-  assertEquals('insertArrayAt, insert at beginning', '012345', a.join(''));
+  assertArrayEquals('insertArrayAt, insert at beginning',
+                    [0, 1, 2, 3, 4, 5], a);
   goog.array.insertArrayAt(a, [6, 7], 6);
-  assertEquals('insertArrayAt, insert at end', '01234567', a.join(''));
+  assertArrayEquals('insertArrayAt, insert at end',
+                    [0, 1, 2, 3, 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, ['x'], 4);
-  assertEquals('insertArrayAt, insert one element', '0123x4567', a.join(''));
+  assertArrayEquals('insertArrayAt, insert one element',
+                    [0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, [], 4);
-  assertEquals('insertArrayAt, insert 0 elements', '0123x4567', a.join(''));
+  assertArrayEquals('insertArrayAt, insert 0 elements',
+                    [0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, ['y', 'z']);
-  assertEquals('insertArrayAt, undefined value should insert at 0',
-      'yz0123x4567', a.join(''));
+  assertArrayEquals('insertArrayAt, undefined value should insert at 0',
+      ['y', 'z', 0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, ['a'], null);
-  assertEquals('insertArrayAt, null value should insert at 0',
-      'ayz0123x4567', a.join(''));
+  assertArrayEquals('insertArrayAt, null value should insert at 0',
+      ['a', 'y', 'z', 0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, ['b'], 100);
-  assertEquals('insertArrayAt, too large value should append',
-      'ayz0123x4567b', a.join(''));
+  assertArrayEquals('insertArrayAt, too large value should append',
+      ['a', 'y', 'z', 0, 1, 2, 3, 'x', 4, 5, 6, 7, 'b'], a);
   goog.array.insertArrayAt(a, ['c', 'd'], -2);
-  assertEquals('insertArrayAt, negative values start from end',
-      'ayz0123x456cd7b', a.join(''));
+  assertArrayEquals('insertArrayAt, negative values start from end',
+      ['a', 'y', 'z', 0, 1, 2, 3, 'x', 4, 5, 6, 'c', 'd', 7, 'b'], a);
 }
 
 function testArrayInsertBefore() {
   var a = ['a', 'b', 'c', 'd'];
   goog.array.insertBefore(a, 'e', 'b');
-  assertEquals('insertBefore, with existing element', a.join(''), 'aebcd');
+  assertArrayEquals('insertBefore, with existing element',
+                    ['a', 'e', 'b', 'c', 'd'], a);
   goog.array.insertBefore(a, 'f', 'x');
-  assertEquals('insertBefore, with non existing element', a.join(''), 'aebcdf');
+  assertArrayEquals('insertBefore, with non existing element',
+                    ['a', 'e', 'b', 'c', 'd', 'f'], a);
 }
 
 function testArrayRemove() {
   var a = ['a', 'b', 'c', 'd'];
   goog.array.remove(a, 'c');
-  assertEquals('remove, remove existing element', a.join(''), 'abd');
+  assertArrayEquals('remove, remove existing element', ['a', 'b', 'd'], a);
   goog.array.remove(a, 'x');
-  assertEquals('remove, remove non existing element', a.join(''), 'abd');
+  assertArrayEquals('remove, remove non existing element', ['a', 'b', 'd'], a);
 }
 
 function testArrayRemoveAt() {
   var a = [0, 1, 2, 3];
   goog.array.removeAt(a, 2);
-  assertEquals('removeAt, remove existing index', a.join(''), '013');
+  assertArrayEquals('removeAt, remove existing index', [0, 1, 3], a);
   a = [0, 1, 2, 3];
   goog.array.removeAt(a, 10);
-  assertEquals('removeAt, remove non existing index', a.join(''), '0123');
+  assertArrayEquals('removeAt, remove non existing index', [0, 1, 2, 3], a);
   a = [0, 1, 2, 3];
   goog.array.removeAt(a, -2);
-  assertEquals('removeAt, remove with negative index', a.join(''), '013');
+  assertArrayEquals('removeAt, remove with negative index', [0, 1, 3], a);
 }
 
 function testArrayRemoveIf() {
@@ -671,7 +688,7 @@ function testArrayRemoveIf() {
     assertEquals('index is not a number', 'number', typeof index);
     return val > 1;
   });
-  assertEquals('removeIf, remove existing element', '013', a.join(''));
+  assertArrayEquals('removeIf, remove existing element', [0, 1, 3], a);
 
   a = [0, 1, 2, 3];
   var b = goog.array.removeIf(a, function (val, index, a2) {
@@ -679,13 +696,13 @@ function testArrayRemoveIf() {
     assertEquals('index is not a number', 'number', typeof index);
     return val > 100;
   });
-  assertEquals('removeIf, remove non-existing element', '0123', a.join(''));
+  assertArrayEquals('removeIf, remove non-existing element', [0, 1, 2, 3], a);
 }
 
 function testArrayClone() {
   var a = [0, 1, 2, 3];
   var a2 = goog.array.clone(a);
-  assertEquals('clone, should be equal', a.join(''), a2.join(''));
+  assertArrayEquals('clone, should be equal', a, a2);
 
   var b = {0: 0, 1: 1, 2: 2, 3: 3, length: 4};
   var b2 = goog.array.clone(b);
@@ -697,7 +714,7 @@ function testArrayClone() {
 function testToArray() {
   var a = [0, 1, 2, 3];
   var a2 = goog.array.toArray(a);
-  assertEquals('toArray, should be equal', a.join(''), a2.join(''));
+  assertArrayEquals('toArray, should be equal', a, a2);
 
   var b = {0: 0, 1: 1, 2: 2, 3: 3, length: 4};
   var b2 = goog.array.toArray(b);
@@ -710,61 +727,82 @@ function testExtend() {
   var a = [0, 1];
   goog.array.extend(a, [2, 3]);
   var a2 = [0, 1, 2, 3];
-  assertEquals('extend, should be equal', a.join(''), a2.join(''));
+  assertArrayEquals('extend, should be equal', a, a2);
 
   var b = [0, 1];
   goog.array.extend(b, 2);
   var b2 = [0, 1, 2];
-  assertEquals('extend, should be equal', b.join(''), b2.join(''));
+  assertArrayEquals('extend, should be equal', b, b2);
 
   a = [0, 1];
   goog.array.extend(a, [2, 3], [4, 5]);
   a2 = [0, 1, 2, 3, 4, 5];
-  assertEquals('extend, should be equal', a.join(''), a2.join(''));
+  assertArrayEquals('extend, should be equal', a, a2);
 
   b = [0, 1];
   goog.array.extend(b, 2, 3);
   b2 = [0, 1, 2, 3];
-  assertEquals('extend, should be equal', b.join(''), b2.join(''));
+  assertArrayEquals('extend, should be equal', b, b2);
 
   var c = [0, 1];
   goog.array.extend(c, 2, [3, 4], 5, [6]);
   var c2 = [0, 1, 2, 3, 4, 5, 6];
-  assertEquals('extend, should be equal', c.join(''), c2.join(''));
+  assertArrayEquals('extend, should be equal', c, c2);
 
   var d = [0, 1];
   var arrayLikeObject = {0: 2, 1: 3, length: 2};
   goog.array.extend(d, arrayLikeObject);
   var d2 = [0, 1, 2, 3];
-  assertEquals('extend, should be equal', d.join(''), d2.join(''));
+  assertArrayEquals('extend, should be equal', d, d2);
+
+  var e = [0, 1];
+  var emptyArrayLikeObject = {length: 0};
+  goog.array.extend(e, emptyArrayLikeObject);
+  assertArrayEquals('extend, should be equal', e, e);
+
+  var f = [0, 1];
+  var length3ArrayLikeObject = {0: 2, 1: 4, 2: 8, length: 3};
+  goog.array.extend(f, length3ArrayLikeObject, length3ArrayLikeObject);
+  var f2 = [0, 1, 2, 4, 8, 2, 4, 8];
+  assertArrayEquals('extend, should be equal', f2, f);
+}
+
+function testExtendWithArguments() {
+  function f() {
+    return arguments;
+  }
+  var a = [0];
+  var a2 = [0, 1, 2, 3, 4, 5];
+  goog.array.extend(a, f(1, 2, 3), f(4, 5));
+  assertArrayEquals('extend, should be equal', a, a2);
 }
 
 function testArraySplice() {
   var a = [0, 1, 2, 3];
   goog.array.splice(a, 1, 0, 4);
-  assertEquals(a.join(''), '04123');
+  assertArrayEquals([0, 4, 1, 2, 3], a);
   goog.array.splice(a, 1, 1, 5);
-  assertEquals(a.join(''), '05123');
+  assertArrayEquals([0, 5, 1, 2, 3], a);
   goog.array.splice(a, 1, 1);
-  assertEquals(a.join(''), '0123');
+  assertArrayEquals([0, 1, 2, 3], a);
   // var args
   goog.array.splice(a, 1, 1, 4, 5, 6);
-  assertEquals(a.join(''), '045623');
+  assertArrayEquals([0, 4, 5, 6, 2, 3], a);
 }
 
 function testArraySlice() {
   var a = [0, 1, 2, 3];
   a = goog.array.slice(a, 1, 3);
-  assertEquals(a.join(''), '12');
+  assertArrayEquals([1, 2], a);
   a = [0, 1, 2, 3];
   a = goog.array.slice(a, 1, 6);
-  assertEquals('slice, with too large end', a.join(''), '123');
+  assertArrayEquals('slice, with too large end', [1, 2, 3], a);
   a = [0, 1, 2, 3];
   a = goog.array.slice(a, 1, -1);
-  assertEquals('slice, with negative end', a.join(''), '12');
+  assertArrayEquals('slice, with negative end', [1, 2], a);
   a = [0, 1, 2, 3];
   a = goog.array.slice(a, -2, 3);
-  assertEquals('slice, with negative start', a.join(''), '2');
+  assertArrayEquals('slice, with negative start', [2], a);
 }
 
 function testRemoveDuplicates() {
@@ -1322,6 +1360,37 @@ function testRotate() {
   assertRotated([0, 1, 2, 3, 4], [0, 1, 2, 3, 4], 5);
   assertRotated([4, 0, 1, 2, 3], [0, 1, 2, 3, 4], 6);
 }
+
+function testConcat() {
+  var a1 = [1, 2, 3];
+  var a2 = [4, 5, 6];
+  var a3 = goog.array.concat(a1, a2);
+  a1.push(1);
+  a2.push(5);
+  assertArrayEquals([1, 2, 3, 4, 5, 6], a3);
+}
+
+function testConcatWithNoSecondArg() {
+  var a1 = [1, 2, 3, 4];
+  var a2 = goog.array.concat(a1);
+  a1.push(5);
+  assertArrayEquals([1, 2, 3, 4], a2);
+}
+
+function testConcatWithNonArrayArgs() {
+  var a1 = [1, 2, 3, 4];
+  var o = {0: 'a', 1: 'b', length: 2};
+  var a2 = goog.array.concat(a1, 5, '10', o);
+  assertArrayEquals([1, 2, 3, 4, 5, '10', o], a2);
+}
+
+function testConcatWithNull() {
+  var a1 = goog.array.concat(null, [1, 2, 3]);
+  var a2 = goog.array.concat([1, 2, 3], null);
+  assertArrayEquals([null, 1, 2, 3], a1);
+  assertArrayEquals([1, 2, 3, null], a2);
+}
+
 
 </script>
 </body>

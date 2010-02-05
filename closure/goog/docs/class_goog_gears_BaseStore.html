@@ -63,7 +63,8 @@
         <span>Extends</span>
         <span class="fn-name">
           <a href="class_goog_Disposable.html">
-            goog.Disposable</a>
+          goog.Disposable
+</a>
         </span>
 </div>
 
@@ -104,7 +105,7 @@
 
   <h2>Constructor</h2>
       <div class="fn-constructor">
-    goog.gears.BaseStore(<span><span class="arg">database</span></span>)
+    goog.gears.BaseStore(<span><span class="arg">BaseStore@database</span></span>)
   </div>
 
    <h3>Parameters</h3>
@@ -118,9 +119,9 @@
      
    <tr class="even">
      <td>
-        <span class="entryName">database</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_gears_Database.html">goog.gears.Database</a></span></div>
-        <div class="entryOverview">The data base to store the data in.</div>
+        <span class="entryName">BaseStore@database</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -175,7 +176,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">createSchema<span class="args">(<span class="arg">defs</span>,&nbsp;<span class="arg">opt_ifNotExists</span>)</span>
+        <span class="entryName">createSchema<span class="args">(<span class="arg">createSchema@defs</span>,&nbsp;<span class="arg">createSchema@opt_ifNotExists</span>)</span>
         </span>
       </div>
 
@@ -200,17 +201,17 @@
      
    <tr class="even">
      <td>
-        <span class="entryName">defs</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
-        <div class="entryOverview">definition arrays. This is an array of objects where each object describes a database object to create and drop. each object contains a &#39;type&#39; field which of type goog.gears.BaseStore.SchemaType. Each object also contains a &#39;name&#39; which contains the name of the object to create. A table object contains a &#39;columns&#39; field which is an array that contains the column definitions for the table. A virtual table object contains c &#39;columns&#39; field which contains the name of the columns. They are assumed to be of type text. An index object contains a &#39;tableName&#39; field which is the name of the table that the index is on. It contains an &#39;isUnique&#39; field which is a boolean indicating whether the index is unqiue or not. It also contains a &#39;columns&#39; field which is an array that contains the columns names (possibly along with the ordering) that form the index. The trigger objects contain a &#39;tableName&#39; field indicating the table the trigger is on. The type indicates the type of trigger. The trigger object may include a &#39;when&#39; field which contains the when clause for the trigger. The trigger object also contains an &#39;actions&#39; field which is an array of strings containing the actions for this trigger.</div>
+        <span class="entryName">createSchema@defs</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_ifNotExists</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">true if the table or index should be created only if it does not exist. Otherwise trying to create a table or index that already exists will result in an exception being thrown.</div>
+        <span class="entryName">createSchema@opt_ifNotExists</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -243,7 +244,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">createTriggers<span class="args">(<span class="arg">defs</span>)</span>
+        <span class="entryName">createTriggers<span class="args">(<span class="arg">createTriggers@defs</span>)</span>
         </span>
       </div>
 
@@ -269,9 +270,9 @@ to drop the trigger with this name first.
      
    <tr class="even">
      <td>
-        <span class="entryName">defs</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
-        <div class="entryOverview">Definition arrays.</div>
+        <span class="entryName">createTriggers@defs</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -338,7 +339,7 @@ to drop the trigger with this name first.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">dropSchema<span class="args">(<span class="arg">defs</span>)</span>
+        <span class="entryName">dropSchema<span class="args">(<span class="arg">dropSchema@defs</span>)</span>
         </span>
       </div>
 
@@ -363,9 +364,9 @@ to drop the trigger with this name first.
      
    <tr class="even">
      <td>
-        <span class="entryName">defs</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span></div>
-        <div class="entryOverview">Definition arrays.</div>
+        <span class="entryName">dropSchema@defs</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -466,7 +467,7 @@ to drop the trigger with this name first.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getCreateStatement_<span class="args">(<span class="arg">def</span>,&nbsp;<span class="arg">opt_ifNotExists</span>)</span>
+        <span class="entryName">getCreateStatement_<span class="args">(<span class="arg">getCreateStatement_@def</span>,&nbsp;<span class="arg">getCreateStatement_@opt_ifNotExists</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -492,17 +493,17 @@ to drop the trigger with this name first.
      
    <tr class="even">
      <td>
-        <span class="entryName">def</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">a schema statement definition.</div>
+        <span class="entryName">getCreateStatement_@def</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_ifNotExists</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">true if the table or index should be created only if it does not exist. Otherwise trying to create a table or index that already exists will result in an exception being thrown.</div>
+        <span class="entryName">getCreateStatement_@opt_ifNotExists</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -539,7 +540,7 @@ to drop the trigger with this name first.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getCreateTriggerStatement_<span class="args">(<span class="arg">onStr</span>,&nbsp;<span class="arg">def</span>,&nbsp;<span class="arg">notExistsStr</span>)</span>
+        <span class="entryName">getCreateTriggerStatement_<span class="args">(<span class="arg">getCreateTriggerStatement_@onStr</span>,&nbsp;<span class="arg">getCreateTriggerStatement_@def</span>,&nbsp;<span class="arg">getCreateTriggerStatement_@notExistsStr</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -565,25 +566,25 @@ to drop the trigger with this name first.
      
    <tr class="even">
      <td>
-        <span class="entryName">onStr</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">the type of trigger to create.</div>
+        <span class="entryName">getCreateTriggerStatement_@onStr</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">def</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">a schema statement definition.</div>
+        <span class="entryName">getCreateTriggerStatement_@def</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">notExistsStr</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">string to be included in the create indicating what to do.</div>
+        <span class="entryName">getCreateTriggerStatement_@notExistsStr</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -620,7 +621,7 @@ to drop the trigger with this name first.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">getDropStatement_<span class="args">(<span class="arg">def</span>)</span>
+        <span class="entryName">getDropStatement_<span class="args">(<span class="arg">getDropStatement_@def</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
       </div>
@@ -646,9 +647,9 @@ to drop the trigger with this name first.
      
    <tr class="even">
      <td>
-        <span class="entryName">def</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span></div>
-        <div class="entryOverview">a schema statement definition.</div>
+        <span class="entryName">getDropStatement_@def</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -777,7 +778,7 @@ to drop the trigger with this name first.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">hasInSchema_<span class="args">(<span class="arg">type</span>,&nbsp;<span class="arg">name</span>)</span>
+        <span class="entryName">hasInSchema_<span class="args">(<span class="arg">hasInSchema_@type</span>,&nbsp;<span class="arg">hasInSchema_@name</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -803,17 +804,17 @@ to drop the trigger with this name first.
      
    <tr class="even">
      <td>
-        <span class="entryName">type</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The type of object to test for, &#39;table&#39; or &#39;index&#39;.</div>
+        <span class="entryName">hasInSchema_@type</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">name</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The table or index name.</div>
+        <span class="entryName">hasInSchema_@name</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -850,7 +851,7 @@ to drop the trigger with this name first.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">hasIndex<span class="args">(<span class="arg">name</span>)</span>
+        <span class="entryName">hasIndex<span class="args">(<span class="arg">hasIndex@name</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -876,9 +877,9 @@ to drop the trigger with this name first.
      
    <tr class="even">
      <td>
-        <span class="entryName">name</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The index name.</div>
+        <span class="entryName">hasIndex@name</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -915,7 +916,7 @@ to drop the trigger with this name first.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">hasTable<span class="args">(<span class="arg">name</span>)</span>
+        <span class="entryName">hasTable<span class="args">(<span class="arg">hasTable@name</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -941,9 +942,9 @@ to drop the trigger with this name first.
      
    <tr class="even">
      <td>
-        <span class="entryName">name</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The table name.</div>
+        <span class="entryName">hasTable@name</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -980,7 +981,7 @@ to drop the trigger with this name first.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">hasTrigger<span class="args">(<span class="arg">name</span>)</span>
+        <span class="entryName">hasTrigger<span class="args">(<span class="arg">hasTrigger@name</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span></div>
       </div>
@@ -1006,9 +1007,9 @@ to drop the trigger with this name first.
      
    <tr class="even">
      <td>
-        <span class="entryName">name</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The name of the trigger.</div>
+        <span class="entryName">hasTrigger@name</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1181,7 +1182,7 @@ to drop the trigger with this name first.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">setStoreVersion_<span class="args">(<span class="arg">version</span>)</span>
+        <span class="entryName">setStoreVersion_<span class="args">(<span class="arg">setStoreVersion_@version</span>)</span>
         </span>
       </div>
 
@@ -1206,9 +1207,9 @@ to drop the trigger with this name first.
      
    <tr class="even">
      <td>
-        <span class="entryName">version</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">The version number for the store.</div>
+        <span class="entryName">setStoreVersion_@version</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -1241,7 +1242,7 @@ to drop the trigger with this name first.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">updateStore<span class="args">(<span class="arg">persistedVersion</span>)</span>
+        <span class="entryName">updateStore<span class="args">(<span class="arg">updateStore@persistedVersion</span>)</span>
         </span>
       </div>
 
@@ -1267,9 +1268,9 @@ they are out of date.
      
    <tr class="even">
      <td>
-        <span class="entryName">persistedVersion</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">the current version of the tables in the database.</div>
+        <span class="entryName">updateStore@persistedVersion</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>

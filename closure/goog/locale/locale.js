@@ -269,11 +269,11 @@ goog.locale.getVariantSubTag = function(languageCode) {
 
 
 /**
- * Returns the country name of the provided language code in it's native
+ * Returns the country name of the provided language code in its native
  * language.
  *
  * This method depends on goog.locale.nativeNameConstants available from
- * nativenameconstants.js. User of this method has to add dependacy to this.
+ * nativenameconstants.js. User of this method has to add dependency to this.
  *
  * @param {string} countryCode Code to lookup the country name for.
  *
@@ -293,7 +293,7 @@ goog.locale.getNativeCountryName = function(countryCode) {
  *
  * This method depends on goog.locale.LocaleNameConstants__<locale> available
  * from //javascript/googledata/i18n/js_locale_data. User of this method
- * has to add dependacy to this.
+ * has to add dependency to this.
  *
  * @param {string} languageCode Language code to lookup the country name for.
  * @param {Object=} opt_localeSymbols If omitted the current locale symbol
@@ -314,11 +314,11 @@ goog.locale.getLocalizedCountryName = function(languageCode,
 
 
 /**
- * Returns the language name of the provided language code in it's native
+ * Returns the language name of the provided language code in its native
  * language.
  *
  * This method depends on goog.locale.nativeNameConstants available from
- * nativenameconstants.js. User of this method has to add dependacy to this.
+ * nativenameconstants.js. User of this method has to add dependency to this.
  *
  * @param {string} languageCode Language code to lookup the language name for.
  *
@@ -337,7 +337,7 @@ goog.locale.getNativeLanguageName = function(languageCode) {
  *
  * This method depends on goog.locale.LocaleNameConstants__<locale> available
  * from //javascript/googledata/i18n/js_locale_data. User of this method
- * has to add dependacy to this.
+ * has to add dependency to this.
  *
  * @param {string} languageCode Language code to lookup the language name for.
  * @param {Object=} opt_localeSymbols locale symbol set if given.

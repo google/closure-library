@@ -953,18 +953,19 @@ goog.partial = function(fn, var_args) {
 
 
 /**
- * Copies all the members of a source object to a target object.
+ * Copies all the members of a source object to a target object. This method
+ * does not work on all browsers for all objects that contain keys such as
+ * toString or hasOwnProperty. Use goog.object.extend for this purpose.
  * @param {Object} target Target.
  * @param {Object} source Source.
- * @deprecated Use goog.object.extend instead.
  */
 goog.mixin = function(target, source) {
   for (var x in source) {
     target[x] = source[x];
   }
 
-  // For IE the for-in-loop does not contain any properties that are not
-  // enumerable on the prototype object (for example, isPrototypeOf from
+  // For IE7 or lower, the for-in-loop does not contain any properties that are
+  // not enumerable on the prototype object (for example, isPrototypeOf from
   // Object.prototype) but also it will not include 'replace' on objects that
   // extend String and change 'replace' (not that it is common for anyone to
   // extend anything except Object).
@@ -1238,36 +1239,34 @@ goog.inherits = function(childCtor, parentCtor) {
  * @return {*} The return value of the superclass method.
  */
 goog.base = function(me, opt_methodName, var_args) {
-  if (!COMPILED) {
-    var caller = arguments.callee.caller;
-    if (caller.superClass_) {
-      // This is a constructor. Call the superclass constructor.
-      return caller.superClass_.constructor.apply(
-          me, Array.prototype.slice.call(arguments, 1));
-    }
+  var caller = arguments.callee.caller;
+  if (caller.superClass_) {
+    // This is a constructor. Call the superclass constructor.
+    return caller.superClass_.constructor.apply(
+        me, Array.prototype.slice.call(arguments, 1));
+  }
 
-    var args = Array.prototype.slice.call(arguments, 2);
-    var foundCaller = false;
-    for (var ctor = me.constructor;
-         ctor; ctor = ctor.superClass_ && ctor.superClass_.constructor) {
-      if (ctor.prototype[opt_methodName] === caller) {
-        foundCaller = true;
-      } else if (foundCaller) {
-        return ctor.prototype[opt_methodName].apply(me, args);
-      }
+  var args = Array.prototype.slice.call(arguments, 2);
+  var foundCaller = false;
+  for (var ctor = me.constructor;
+       ctor; ctor = ctor.superClass_ && ctor.superClass_.constructor) {
+    if (ctor.prototype[opt_methodName] === caller) {
+      foundCaller = true;
+    } else if (foundCaller) {
+      return ctor.prototype[opt_methodName].apply(me, args);
     }
+  }
 
-    // If we did not find the caller in the prototype chain,
-    // then one of two things happened:
-    // 1) The caller is an instance method.
-    // 2) This method was not called by the right caller.
-    if (me[opt_methodName] === caller) {
-      return me.constructor.prototype[opt_methodName].apply(me, args);
-    } else {
-      throw Error(
-          'goog.base called from a method of one name ' +
-          'to a method of a different name');
-    }
+  // If we did not find the caller in the prototype chain,
+  // then one of two things happened:
+  // 1) The caller is an instance method.
+  // 2) This method was not called by the right caller.
+  if (me[opt_methodName] === caller) {
+    return me.constructor.prototype[opt_methodName].apply(me, args);
+  } else {
+    throw Error(
+        'goog.base called from a method of one name ' +
+        'to a method of a different name');
   }
 };
 

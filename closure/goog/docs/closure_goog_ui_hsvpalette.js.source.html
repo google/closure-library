@@ -199,307 +199,318 @@
 <a name="line155"></a>
 <a name="line156"></a>
 <a name="line157"></a>/**
-<a name="line158"></a> * Updates the text entry field.
-<a name="line159"></a> * @protected
-<a name="line160"></a> */
-<a name="line161"></a>goog.ui.HsvPalette.prototype.updateInput = function() {
-<a name="line162"></a>  var parsed;
-<a name="line163"></a>  try {
-<a name="line164"></a>    parsed = goog.color.parse(this.inputEl_.value).hex;
-<a name="line165"></a>  } catch (e) {
-<a name="line166"></a>    // ignore
-<a name="line167"></a>  }
-<a name="line168"></a>  if (this.color_ != parsed) {
-<a name="line169"></a>    this.inputEl_.value = this.color_;
-<a name="line170"></a>  }
-<a name="line171"></a>};
-<a name="line172"></a>
-<a name="line173"></a>
-<a name="line174"></a>/**
-<a name="line175"></a> * Sets which color is selected and update the UI.
-<a name="line176"></a> * @param {string} color The selected color.
-<a name="line177"></a> */
-<a name="line178"></a>goog.ui.HsvPalette.prototype.setColor = function(color) {
-<a name="line179"></a>  if (color != this.color_) {
-<a name="line180"></a>    this.setColor_(color);
-<a name="line181"></a>    this.updateUi_();
-<a name="line182"></a>    this.dispatchEvent(goog.ui.Component.EventType.ACTION);
-<a name="line183"></a>  }
-<a name="line184"></a>};
-<a name="line185"></a>
-<a name="line186"></a>
-<a name="line187"></a>/**
-<a name="line188"></a> * Sets which color is selected.
-<a name="line189"></a> * @param {string} color The selected color.
-<a name="line190"></a> * @private
-<a name="line191"></a> */
-<a name="line192"></a>goog.ui.HsvPalette.prototype.setColor_ = function(color) {
-<a name="line193"></a>  var rgbHex = goog.color.parse(color).hex;
-<a name="line194"></a>  var rgbArray = goog.color.hexToRgb(rgbHex);
-<a name="line195"></a>  this.hsv_ = goog.color.rgbArrayToHsv(rgbArray);
-<a name="line196"></a>  // Hue is divided by 360 because the documentation for goog.color is currently
-<a name="line197"></a>  // incorrect.
-<a name="line198"></a>  // TODO: Fix this, see http://1324469 .
-<a name="line199"></a>  this.hsv_[0] = this.hsv_[0] / 360;
-<a name="line200"></a>  this.color_ = rgbHex;
-<a name="line201"></a>};
-<a name="line202"></a>
-<a name="line203"></a>
-<a name="line204"></a>/**
-<a name="line205"></a> * Alters the hue, saturation, and/or value of the currently selected color and
-<a name="line206"></a> * updates the UI.
-<a name="line207"></a> * @param {?number=} opt_hue (optional) hue in [0, 1].
-<a name="line208"></a> * @param {?number=} opt_saturation (optional) saturation in [0, 1].
-<a name="line209"></a> * @param {?number=} opt_value (optional) value in [0, 255].
-<a name="line210"></a> */
-<a name="line211"></a>goog.ui.HsvPalette.prototype.setHsv = function(opt_hue,
-<a name="line212"></a>                                               opt_saturation,
-<a name="line213"></a>                                               opt_value) {
-<a name="line214"></a>  if (opt_hue != null || opt_saturation != null || opt_value != null) {
-<a name="line215"></a>    this.setHsv_(opt_hue, opt_saturation, opt_value);
-<a name="line216"></a>    this.updateUi_();
-<a name="line217"></a>    this.dispatchEvent(goog.ui.Component.EventType.ACTION);
-<a name="line218"></a>  }
-<a name="line219"></a>};
-<a name="line220"></a>
-<a name="line221"></a>
-<a name="line222"></a>/**
-<a name="line223"></a> * Alters the hue, saturation, and/or value of the currently selected color.
-<a name="line224"></a> * @param {?number=} opt_hue (optional) hue in [0, 1].
-<a name="line225"></a> * @param {?number=} opt_saturation (optional) saturation in [0, 1].
-<a name="line226"></a> * @param {?number=} opt_value (optional) value in [0, 255].
-<a name="line227"></a> * @private
-<a name="line228"></a> */
-<a name="line229"></a>goog.ui.HsvPalette.prototype.setHsv_ = function(opt_hue,
-<a name="line230"></a>                                                opt_saturation,
-<a name="line231"></a>                                                opt_value) {
-<a name="line232"></a>  this.hsv_[0] = (opt_hue != null) ? opt_hue : this.hsv_[0];
-<a name="line233"></a>  this.hsv_[1] = (opt_saturation != null) ? opt_saturation : this.hsv_[1];
-<a name="line234"></a>  this.hsv_[2] = (opt_value != null) ? opt_value : this.hsv_[2];
-<a name="line235"></a>  // Hue is multiplied by 360 because the documentation for goog.color is
-<a name="line236"></a>  // currently incorrect.
-<a name="line237"></a>  // TODO: Fix this, see http://1324469 .
-<a name="line238"></a>  this.color_ = goog.color.hsvArrayToHex([
-<a name="line239"></a>    this.hsv_[0] * 360,
-<a name="line240"></a>    this.hsv_[1],
-<a name="line241"></a>    this.hsv_[2]
-<a name="line242"></a>  ]);
-<a name="line243"></a>};
-<a name="line244"></a>
-<a name="line245"></a>
-<a name="line246"></a>/**
-<a name="line247"></a> * HsvPalettes cannot be used to decorate pre-existing html, since the
-<a name="line248"></a> * structure they build is fairly complicated.
-<a name="line249"></a> * @param {Element} element Element to decorate.
-<a name="line250"></a> * @return {boolean} Returns always false.
-<a name="line251"></a> */
-<a name="line252"></a>goog.ui.HsvPalette.prototype.canDecorate = function(element) {
-<a name="line253"></a>  return false;
+<a name="line158"></a> * Alpha transparency of the currently selected color, in [0, 1].
+<a name="line159"></a> * For the HSV palette this always returns 1. The HSVA palette overrides
+<a name="line160"></a> * this method.
+<a name="line161"></a> * @return {number} The current alpha value.
+<a name="line162"></a> */
+<a name="line163"></a>goog.ui.HsvPalette.prototype.getAlpha = function() {
+<a name="line164"></a>  return 1;
+<a name="line165"></a>};
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * Updates the text entry field.
+<a name="line170"></a> * @protected
+<a name="line171"></a> */
+<a name="line172"></a>goog.ui.HsvPalette.prototype.updateInput = function() {
+<a name="line173"></a>  var parsed;
+<a name="line174"></a>  try {
+<a name="line175"></a>    parsed = goog.color.parse(this.inputEl_.value).hex;
+<a name="line176"></a>  } catch (e) {
+<a name="line177"></a>    // ignore
+<a name="line178"></a>  }
+<a name="line179"></a>  if (this.color_ != parsed) {
+<a name="line180"></a>    this.inputEl_.value = this.color_;
+<a name="line181"></a>  }
+<a name="line182"></a>};
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Sets which color is selected and update the UI.
+<a name="line187"></a> * @param {string} color The selected color.
+<a name="line188"></a> */
+<a name="line189"></a>goog.ui.HsvPalette.prototype.setColor = function(color) {
+<a name="line190"></a>  if (color != this.color_) {
+<a name="line191"></a>    this.setColor_(color);
+<a name="line192"></a>    this.updateUi_();
+<a name="line193"></a>    this.dispatchEvent(goog.ui.Component.EventType.ACTION);
+<a name="line194"></a>  }
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Sets which color is selected.
+<a name="line200"></a> * @param {string} color The selected color.
+<a name="line201"></a> * @private
+<a name="line202"></a> */
+<a name="line203"></a>goog.ui.HsvPalette.prototype.setColor_ = function(color) {
+<a name="line204"></a>  var rgbHex = goog.color.parse(color).hex;
+<a name="line205"></a>  var rgbArray = goog.color.hexToRgb(rgbHex);
+<a name="line206"></a>  this.hsv_ = goog.color.rgbArrayToHsv(rgbArray);
+<a name="line207"></a>  // Hue is divided by 360 because the documentation for goog.color is currently
+<a name="line208"></a>  // incorrect.
+<a name="line209"></a>  // TODO: Fix this, see http://1324469 .
+<a name="line210"></a>  this.hsv_[0] = this.hsv_[0] / 360;
+<a name="line211"></a>  this.color_ = rgbHex;
+<a name="line212"></a>};
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * Alters the hue, saturation, and/or value of the currently selected color and
+<a name="line217"></a> * updates the UI.
+<a name="line218"></a> * @param {?number=} opt_hue (optional) hue in [0, 1].
+<a name="line219"></a> * @param {?number=} opt_saturation (optional) saturation in [0, 1].
+<a name="line220"></a> * @param {?number=} opt_value (optional) value in [0, 255].
+<a name="line221"></a> */
+<a name="line222"></a>goog.ui.HsvPalette.prototype.setHsv = function(opt_hue,
+<a name="line223"></a>                                               opt_saturation,
+<a name="line224"></a>                                               opt_value) {
+<a name="line225"></a>  if (opt_hue != null || opt_saturation != null || opt_value != null) {
+<a name="line226"></a>    this.setHsv_(opt_hue, opt_saturation, opt_value);
+<a name="line227"></a>    this.updateUi_();
+<a name="line228"></a>    this.dispatchEvent(goog.ui.Component.EventType.ACTION);
+<a name="line229"></a>  }
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Alters the hue, saturation, and/or value of the currently selected color.
+<a name="line235"></a> * @param {?number=} opt_hue (optional) hue in [0, 1].
+<a name="line236"></a> * @param {?number=} opt_saturation (optional) saturation in [0, 1].
+<a name="line237"></a> * @param {?number=} opt_value (optional) value in [0, 255].
+<a name="line238"></a> * @private
+<a name="line239"></a> */
+<a name="line240"></a>goog.ui.HsvPalette.prototype.setHsv_ = function(opt_hue,
+<a name="line241"></a>                                                opt_saturation,
+<a name="line242"></a>                                                opt_value) {
+<a name="line243"></a>  this.hsv_[0] = (opt_hue != null) ? opt_hue : this.hsv_[0];
+<a name="line244"></a>  this.hsv_[1] = (opt_saturation != null) ? opt_saturation : this.hsv_[1];
+<a name="line245"></a>  this.hsv_[2] = (opt_value != null) ? opt_value : this.hsv_[2];
+<a name="line246"></a>  // Hue is multiplied by 360 because the documentation for goog.color is
+<a name="line247"></a>  // currently incorrect.
+<a name="line248"></a>  // TODO: Fix this, see http://1324469 .
+<a name="line249"></a>  this.color_ = goog.color.hsvArrayToHex([
+<a name="line250"></a>    this.hsv_[0] * 360,
+<a name="line251"></a>    this.hsv_[1],
+<a name="line252"></a>    this.hsv_[2]
+<a name="line253"></a>  ]);
 <a name="line254"></a>};
 <a name="line255"></a>
 <a name="line256"></a>
-<a name="line257"></a>/** @inheritDoc */
-<a name="line258"></a>goog.ui.HsvPalette.prototype.createDom = function() {
-<a name="line259"></a>  var dom = this.getDomHelper();
-<a name="line260"></a>  var noalpha = (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;7&#39;)) ?
-<a name="line261"></a>      &#39; &#39; + goog.getCssName(this.class_, &#39;noalpha&#39;) : &#39;&#39;;
-<a name="line262"></a>  var element = dom.createDom(goog.dom.TagName.DIV,
-<a name="line263"></a>      this.class_ + noalpha,
-<a name="line264"></a>      dom.createDom(goog.dom.TagName.DIV,
-<a name="line265"></a>            goog.getCssName(this.class_, &#39;hs-backdrop&#39;)),
-<a name="line266"></a>      this.hsImageEl_ = dom.createDom(goog.dom.TagName.DIV,
-<a name="line267"></a>            goog.getCssName(this.class_, &#39;hs-image&#39;)),
-<a name="line268"></a>      this.hsHandleEl_ = dom.createDom(goog.dom.TagName.DIV,
-<a name="line269"></a>            goog.getCssName(this.class_, &#39;hs-handle&#39;)),
-<a name="line270"></a>      this.vImageEl_ = dom.createDom(goog.dom.TagName.DIV,
-<a name="line271"></a>            goog.getCssName(this.class_, &#39;v-image&#39;)),
-<a name="line272"></a>      this.vHandleEl_ = dom.createDom(goog.dom.TagName.DIV,
-<a name="line273"></a>            goog.getCssName(this.class_, &#39;v-handle&#39;)),
-<a name="line274"></a>      this.swatchEl_ = dom.createDom(goog.dom.TagName.DIV,
-<a name="line275"></a>            goog.getCssName(this.class_, &#39;swatch&#39;)),
-<a name="line276"></a>      dom.createDom(&#39;label&#39;, null,
-<a name="line277"></a>          //dom.createDom(&#39;span&#39;, null, &#39;Hex color &#39;),
-<a name="line278"></a>          this.inputEl_ = dom.createDom(&#39;input&#39;,
-<a name="line279"></a>              {&#39;class&#39;: goog.getCssName(this.class_, &#39;input&#39;), &#39;type&#39;: &#39;text&#39;})
-<a name="line280"></a>      )
-<a name="line281"></a>  );
-<a name="line282"></a>  this.setElementInternal(element);
-<a name="line283"></a>
-<a name="line284"></a>  // TODO: Set tabIndex
-<a name="line285"></a>};
-<a name="line286"></a>
-<a name="line287"></a>
-<a name="line288"></a>/**
-<a name="line289"></a> * Renders the color picker inside the provided element. This will override the
-<a name="line290"></a> * current content of the element.
-<a name="line291"></a> */
-<a name="line292"></a>goog.ui.HsvPalette.prototype.enterDocument = function() {
-<a name="line293"></a>  goog.ui.HsvPalette.superClass_.enterDocument.call(this);
+<a name="line257"></a>/**
+<a name="line258"></a> * HsvPalettes cannot be used to decorate pre-existing html, since the
+<a name="line259"></a> * structure they build is fairly complicated.
+<a name="line260"></a> * @param {Element} element Element to decorate.
+<a name="line261"></a> * @return {boolean} Returns always false.
+<a name="line262"></a> */
+<a name="line263"></a>goog.ui.HsvPalette.prototype.canDecorate = function(element) {
+<a name="line264"></a>  return false;
+<a name="line265"></a>};
+<a name="line266"></a>
+<a name="line267"></a>
+<a name="line268"></a>/** @inheritDoc */
+<a name="line269"></a>goog.ui.HsvPalette.prototype.createDom = function() {
+<a name="line270"></a>  var dom = this.getDomHelper();
+<a name="line271"></a>  var noalpha = (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersion(&#39;7&#39;)) ?
+<a name="line272"></a>      &#39; &#39; + goog.getCssName(this.class_, &#39;noalpha&#39;) : &#39;&#39;;
+<a name="line273"></a>  var element = dom.createDom(goog.dom.TagName.DIV,
+<a name="line274"></a>      this.class_ + noalpha,
+<a name="line275"></a>      dom.createDom(goog.dom.TagName.DIV,
+<a name="line276"></a>            goog.getCssName(this.class_, &#39;hs-backdrop&#39;)),
+<a name="line277"></a>      this.hsImageEl_ = dom.createDom(goog.dom.TagName.DIV,
+<a name="line278"></a>            goog.getCssName(this.class_, &#39;hs-image&#39;)),
+<a name="line279"></a>      this.hsHandleEl_ = dom.createDom(goog.dom.TagName.DIV,
+<a name="line280"></a>            goog.getCssName(this.class_, &#39;hs-handle&#39;)),
+<a name="line281"></a>      this.vImageEl_ = dom.createDom(goog.dom.TagName.DIV,
+<a name="line282"></a>            goog.getCssName(this.class_, &#39;v-image&#39;)),
+<a name="line283"></a>      this.vHandleEl_ = dom.createDom(goog.dom.TagName.DIV,
+<a name="line284"></a>            goog.getCssName(this.class_, &#39;v-handle&#39;)),
+<a name="line285"></a>      this.swatchEl_ = dom.createDom(goog.dom.TagName.DIV,
+<a name="line286"></a>            goog.getCssName(this.class_, &#39;swatch&#39;)),
+<a name="line287"></a>      dom.createDom(&#39;label&#39;, null,
+<a name="line288"></a>          //dom.createDom(&#39;span&#39;, null, &#39;Hex color &#39;),
+<a name="line289"></a>          this.inputEl_ = dom.createDom(&#39;input&#39;,
+<a name="line290"></a>              {&#39;class&#39;: goog.getCssName(this.class_, &#39;input&#39;), &#39;type&#39;: &#39;text&#39;})
+<a name="line291"></a>      )
+<a name="line292"></a>  );
+<a name="line293"></a>  this.setElementInternal(element);
 <a name="line294"></a>
-<a name="line295"></a>  // TODO: Accessibility.
-<a name="line296"></a>
-<a name="line297"></a>  this.updateUi_();
+<a name="line295"></a>  // TODO: Set tabIndex
+<a name="line296"></a>};
+<a name="line297"></a>
 <a name="line298"></a>
-<a name="line299"></a>  var handler = this.getHandler();
-<a name="line300"></a>  handler.listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-<a name="line301"></a>      this.handleMouseDown_, false, this);
-<a name="line302"></a>
-<a name="line303"></a>  // Cannot create InputHandler in createDom because IE throws an exception
-<a name="line304"></a>  // on document.activeElement
-<a name="line305"></a>  if (!this.inputHandler_) {
-<a name="line306"></a>    this.inputHandler_ = new goog.events.InputHandler(this.inputEl_);
-<a name="line307"></a>  }
-<a name="line308"></a>
-<a name="line309"></a>  handler.listen(this.inputHandler_,
-<a name="line310"></a>      goog.events.InputHandler.EventType.INPUT, this.handleInput_, false, this);
-<a name="line311"></a>};
-<a name="line312"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * Renders the color picker inside the provided element. This will override the
+<a name="line301"></a> * current content of the element.
+<a name="line302"></a> */
+<a name="line303"></a>goog.ui.HsvPalette.prototype.enterDocument = function() {
+<a name="line304"></a>  goog.ui.HsvPalette.superClass_.enterDocument.call(this);
+<a name="line305"></a>
+<a name="line306"></a>  // TODO: Accessibility.
+<a name="line307"></a>
+<a name="line308"></a>  this.updateUi_();
+<a name="line309"></a>
+<a name="line310"></a>  var handler = this.getHandler();
+<a name="line311"></a>  handler.listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
+<a name="line312"></a>      this.handleMouseDown_, false, this);
 <a name="line313"></a>
-<a name="line314"></a>/** @inheritDoc */
-<a name="line315"></a>goog.ui.HsvPalette.prototype.disposeInternal = function() {
-<a name="line316"></a>  goog.ui.HsvPalette.superClass_.disposeInternal.call(this);
-<a name="line317"></a>
-<a name="line318"></a>  delete this.hsImageEl_;
-<a name="line319"></a>  delete this.hsHandleEl_;
-<a name="line320"></a>  delete this.vImageEl_;
-<a name="line321"></a>  delete this.vHandleEl_;
-<a name="line322"></a>  delete this.swatchEl_;
-<a name="line323"></a>  delete this.inputEl_;
-<a name="line324"></a>  if (this.inputHandler_) {
-<a name="line325"></a>    this.inputHandler_.dispose();
-<a name="line326"></a>    delete this.inputHandler_;
-<a name="line327"></a>  }
-<a name="line328"></a>  goog.events.unlistenByKey(this.mouseMoveListener_);
-<a name="line329"></a>  goog.events.unlistenByKey(this.mouseUpListener_);
-<a name="line330"></a>};
-<a name="line331"></a>
-<a name="line332"></a>
-<a name="line333"></a>/**
-<a name="line334"></a> * Updates the position, opacity, and styles for the UI representation of the
-<a name="line335"></a> * palette.
-<a name="line336"></a> * @private
-<a name="line337"></a> */
-<a name="line338"></a>goog.ui.HsvPalette.prototype.updateUi_ = function() {
-<a name="line339"></a>  if (this.isInDocument()) {
-<a name="line340"></a>    var h = this.hsv_[0];
-<a name="line341"></a>    var s = this.hsv_[1];
-<a name="line342"></a>    var v = this.hsv_[2];
+<a name="line314"></a>  // Cannot create InputHandler in createDom because IE throws an exception
+<a name="line315"></a>  // on document.activeElement
+<a name="line316"></a>  if (!this.inputHandler_) {
+<a name="line317"></a>    this.inputHandler_ = new goog.events.InputHandler(this.inputEl_);
+<a name="line318"></a>  }
+<a name="line319"></a>
+<a name="line320"></a>  handler.listen(this.inputHandler_,
+<a name="line321"></a>      goog.events.InputHandler.EventType.INPUT, this.handleInput_, false, this);
+<a name="line322"></a>};
+<a name="line323"></a>
+<a name="line324"></a>
+<a name="line325"></a>/** @inheritDoc */
+<a name="line326"></a>goog.ui.HsvPalette.prototype.disposeInternal = function() {
+<a name="line327"></a>  goog.ui.HsvPalette.superClass_.disposeInternal.call(this);
+<a name="line328"></a>
+<a name="line329"></a>  delete this.hsImageEl_;
+<a name="line330"></a>  delete this.hsHandleEl_;
+<a name="line331"></a>  delete this.vImageEl_;
+<a name="line332"></a>  delete this.vHandleEl_;
+<a name="line333"></a>  delete this.swatchEl_;
+<a name="line334"></a>  delete this.inputEl_;
+<a name="line335"></a>  if (this.inputHandler_) {
+<a name="line336"></a>    this.inputHandler_.dispose();
+<a name="line337"></a>    delete this.inputHandler_;
+<a name="line338"></a>  }
+<a name="line339"></a>  goog.events.unlistenByKey(this.mouseMoveListener_);
+<a name="line340"></a>  goog.events.unlistenByKey(this.mouseUpListener_);
+<a name="line341"></a>};
+<a name="line342"></a>
 <a name="line343"></a>
-<a name="line344"></a>    var left = this.hsImageEl_.offsetLeft -
-<a name="line345"></a>        Math.floor(this.hsHandleEl_.offsetWidth / 2) +
-<a name="line346"></a>        this.hsImageEl_.offsetWidth * h;
-<a name="line347"></a>    this.hsHandleEl_.style.left = left + &#39;px&#39;;
-<a name="line348"></a>    var top = this.hsImageEl_.offsetTop -
-<a name="line349"></a>        Math.floor(this.hsHandleEl_.offsetHeight / 2) +
-<a name="line350"></a>        this.hsImageEl_.offsetHeight * (1 - s);
-<a name="line351"></a>    this.hsHandleEl_.style.top = top + &#39;px&#39;;
-<a name="line352"></a>
-<a name="line353"></a>    top = this.vImageEl_.offsetTop -
-<a name="line354"></a>        Math.floor(this.vHandleEl_.offsetHeight / 2) +
-<a name="line355"></a>        this.vImageEl_.offsetHeight * ((255 - v) / 255);
-<a name="line356"></a>    this.vHandleEl_.style.top = top + &#39;px&#39;;
-<a name="line357"></a>    goog.style.setOpacity(this.hsImageEl_, (v / 255));
-<a name="line358"></a>
-<a name="line359"></a>    goog.style.setStyle(this.vImageEl_, &#39;background-color&#39;,
-<a name="line360"></a>        goog.color.hsvToHex(this.hsv_[0] * 360, this.hsv_[1], 255));
-<a name="line361"></a>
-<a name="line362"></a>    goog.style.setStyle(this.swatchEl_, &#39;background-color&#39;, this.color_);
-<a name="line363"></a>    goog.style.setStyle(this.swatchEl_, &#39;color&#39;,
-<a name="line364"></a>                        (this.hsv_[2] &gt; 255 / 2) ? &#39;#000&#39; : &#39;#fff&#39;);
-<a name="line365"></a>    this.updateInput();
-<a name="line366"></a>  }
-<a name="line367"></a>};
-<a name="line368"></a>
+<a name="line344"></a>/**
+<a name="line345"></a> * Updates the position, opacity, and styles for the UI representation of the
+<a name="line346"></a> * palette.
+<a name="line347"></a> * @private
+<a name="line348"></a> */
+<a name="line349"></a>goog.ui.HsvPalette.prototype.updateUi_ = function() {
+<a name="line350"></a>  if (this.isInDocument()) {
+<a name="line351"></a>    var h = this.hsv_[0];
+<a name="line352"></a>    var s = this.hsv_[1];
+<a name="line353"></a>    var v = this.hsv_[2];
+<a name="line354"></a>
+<a name="line355"></a>    var left = this.hsImageEl_.offsetLeft -
+<a name="line356"></a>        Math.floor(this.hsHandleEl_.offsetWidth / 2) +
+<a name="line357"></a>        this.hsImageEl_.offsetWidth * h;
+<a name="line358"></a>    this.hsHandleEl_.style.left = left + &#39;px&#39;;
+<a name="line359"></a>    var top = this.hsImageEl_.offsetTop -
+<a name="line360"></a>        Math.floor(this.hsHandleEl_.offsetHeight / 2) +
+<a name="line361"></a>        this.hsImageEl_.offsetHeight * (1 - s);
+<a name="line362"></a>    this.hsHandleEl_.style.top = top + &#39;px&#39;;
+<a name="line363"></a>
+<a name="line364"></a>    top = this.vImageEl_.offsetTop -
+<a name="line365"></a>        Math.floor(this.vHandleEl_.offsetHeight / 2) +
+<a name="line366"></a>        this.vImageEl_.offsetHeight * ((255 - v) / 255);
+<a name="line367"></a>    this.vHandleEl_.style.top = top + &#39;px&#39;;
+<a name="line368"></a>    goog.style.setOpacity(this.hsImageEl_, (v / 255));
 <a name="line369"></a>
-<a name="line370"></a>/**
-<a name="line371"></a> * Handles mousedown events on palette UI elements.
-<a name="line372"></a> * @param {goog.events.BrowserEvent} e Event object.
-<a name="line373"></a> * @private
-<a name="line374"></a> */
-<a name="line375"></a>goog.ui.HsvPalette.prototype.handleMouseDown_ = function(e) {
-<a name="line376"></a>  if (e.target == this.vImageEl_ || e.target == this.vHandleEl_) {
-<a name="line377"></a>    // Setup value change listeners
-<a name="line378"></a>    var b = goog.style.getBounds(this.vImageEl_);
-<a name="line379"></a>    this.handleMouseMoveV_(b, e);
-<a name="line380"></a>    this.mouseMoveListener_ = goog.events.listen(this.document_,
-<a name="line381"></a>        goog.events.EventType.MOUSEMOVE,
-<a name="line382"></a>        goog.bind(this.handleMouseMoveV_, this, b));
-<a name="line383"></a>    this.mouseUpListener_ = goog.events.listen(this.document_,
-<a name="line384"></a>        goog.events.EventType.MOUSEUP, this.handleMouseUp_, false, this);
-<a name="line385"></a>  } else if (e.target == this.hsImageEl_ || e.target == this.hsHandleEl_) {
-<a name="line386"></a>    // Setup hue/saturation change listeners
-<a name="line387"></a>    var b = goog.style.getBounds(this.hsImageEl_);
-<a name="line388"></a>    this.handleMouseMoveHs_(b, e);
-<a name="line389"></a>    this.mouseMoveListener_ = goog.events.listen(this.document_,
-<a name="line390"></a>        goog.events.EventType.MOUSEMOVE,
-<a name="line391"></a>        goog.bind(this.handleMouseMoveHs_, this, b));
-<a name="line392"></a>    this.mouseUpListener_ = goog.events.listen(this.document_,
-<a name="line393"></a>        goog.events.EventType.MOUSEUP, this.handleMouseUp_, false, this);
-<a name="line394"></a>  }
-<a name="line395"></a>};
-<a name="line396"></a>
-<a name="line397"></a>
-<a name="line398"></a>/**
-<a name="line399"></a> * Handles mousemove events on the document once a drag operation on the value
-<a name="line400"></a> * slider has started.
-<a name="line401"></a> * @param {goog.math.Rect} b Boundaries of the value slider object at the start
-<a name="line402"></a> *     of the drag operation.
-<a name="line403"></a> * @param {goog.events.BrowserEvent} e Event object.
-<a name="line404"></a> * @private
-<a name="line405"></a> */
-<a name="line406"></a>goog.ui.HsvPalette.prototype.handleMouseMoveV_ = function(b, e) {
-<a name="line407"></a>  e.preventDefault();
-<a name="line408"></a>  var vportPos = goog.dom.getPageScroll();
-<a name="line409"></a>  var newV = Math.round(
-<a name="line410"></a>      255 * (b.top + b.height - Math.min(
-<a name="line411"></a>          Math.max(vportPos.y + e.clientY, b.top),
-<a name="line412"></a>          b.top + b.height)
-<a name="line413"></a>      ) / b.height
-<a name="line414"></a>  );
-<a name="line415"></a>  this.setHsv(null, null, newV);
-<a name="line416"></a>};
-<a name="line417"></a>
-<a name="line418"></a>
-<a name="line419"></a>/**
-<a name="line420"></a> * Handles mousemove events on the document once a drag operation on the
-<a name="line421"></a> * hue/saturation slider has started.
-<a name="line422"></a> * @param {goog.math.Rect} b Boundaries of the value slider object at the start
-<a name="line423"></a> *     of the drag operation.
-<a name="line424"></a> * @param {goog.events.BrowserEvent} e Event object.
-<a name="line425"></a> * @private
-<a name="line426"></a> */
-<a name="line427"></a>goog.ui.HsvPalette.prototype.handleMouseMoveHs_ = function(b, e) {
-<a name="line428"></a>  e.preventDefault();
-<a name="line429"></a>  var vportPos = goog.dom.getPageScroll();
-<a name="line430"></a>  var newH = (Math.min(Math.max(vportPos.x + e.clientX, b.left),
-<a name="line431"></a>      b.left + b.width) - b.left) / b.width;
-<a name="line432"></a>  var newS = (-Math.min(Math.max(vportPos.y + e.clientY, b.top),
-<a name="line433"></a>      b.top + b.height) + b.top + b.height) / b.height;
-<a name="line434"></a>  this.setHsv(newH, newS, null);
-<a name="line435"></a>};
-<a name="line436"></a>
-<a name="line437"></a>
-<a name="line438"></a>/**
-<a name="line439"></a> * Handles mouseup events on the document, which ends a drag operation.
-<a name="line440"></a> * @param {goog.events.Event} e Event object.
-<a name="line441"></a> * @private
-<a name="line442"></a> */
-<a name="line443"></a>goog.ui.HsvPalette.prototype.handleMouseUp_ = function(e) {
-<a name="line444"></a>  goog.events.unlistenByKey(this.mouseMoveListener_);
-<a name="line445"></a>  goog.events.unlistenByKey(this.mouseUpListener_);
+<a name="line370"></a>    goog.style.setStyle(this.vImageEl_, &#39;background-color&#39;,
+<a name="line371"></a>        goog.color.hsvToHex(this.hsv_[0] * 360, this.hsv_[1], 255));
+<a name="line372"></a>
+<a name="line373"></a>    goog.style.setStyle(this.swatchEl_, &#39;background-color&#39;, this.color_);
+<a name="line374"></a>    goog.style.setStyle(this.swatchEl_, &#39;color&#39;,
+<a name="line375"></a>                        (this.hsv_[2] &gt; 255 / 2) ? &#39;#000&#39; : &#39;#fff&#39;);
+<a name="line376"></a>    this.updateInput();
+<a name="line377"></a>  }
+<a name="line378"></a>};
+<a name="line379"></a>
+<a name="line380"></a>
+<a name="line381"></a>/**
+<a name="line382"></a> * Handles mousedown events on palette UI elements.
+<a name="line383"></a> * @param {goog.events.BrowserEvent} e Event object.
+<a name="line384"></a> * @private
+<a name="line385"></a> */
+<a name="line386"></a>goog.ui.HsvPalette.prototype.handleMouseDown_ = function(e) {
+<a name="line387"></a>  if (e.target == this.vImageEl_ || e.target == this.vHandleEl_) {
+<a name="line388"></a>    // Setup value change listeners
+<a name="line389"></a>    var b = goog.style.getBounds(this.vImageEl_);
+<a name="line390"></a>    this.handleMouseMoveV_(b, e);
+<a name="line391"></a>    this.mouseMoveListener_ = goog.events.listen(this.document_,
+<a name="line392"></a>        goog.events.EventType.MOUSEMOVE,
+<a name="line393"></a>        goog.bind(this.handleMouseMoveV_, this, b));
+<a name="line394"></a>    this.mouseUpListener_ = goog.events.listen(this.document_,
+<a name="line395"></a>        goog.events.EventType.MOUSEUP, this.handleMouseUp_, false, this);
+<a name="line396"></a>  } else if (e.target == this.hsImageEl_ || e.target == this.hsHandleEl_) {
+<a name="line397"></a>    // Setup hue/saturation change listeners
+<a name="line398"></a>    var b = goog.style.getBounds(this.hsImageEl_);
+<a name="line399"></a>    this.handleMouseMoveHs_(b, e);
+<a name="line400"></a>    this.mouseMoveListener_ = goog.events.listen(this.document_,
+<a name="line401"></a>        goog.events.EventType.MOUSEMOVE,
+<a name="line402"></a>        goog.bind(this.handleMouseMoveHs_, this, b));
+<a name="line403"></a>    this.mouseUpListener_ = goog.events.listen(this.document_,
+<a name="line404"></a>        goog.events.EventType.MOUSEUP, this.handleMouseUp_, false, this);
+<a name="line405"></a>  }
+<a name="line406"></a>};
+<a name="line407"></a>
+<a name="line408"></a>
+<a name="line409"></a>/**
+<a name="line410"></a> * Handles mousemove events on the document once a drag operation on the value
+<a name="line411"></a> * slider has started.
+<a name="line412"></a> * @param {goog.math.Rect} b Boundaries of the value slider object at the start
+<a name="line413"></a> *     of the drag operation.
+<a name="line414"></a> * @param {goog.events.BrowserEvent} e Event object.
+<a name="line415"></a> * @private
+<a name="line416"></a> */
+<a name="line417"></a>goog.ui.HsvPalette.prototype.handleMouseMoveV_ = function(b, e) {
+<a name="line418"></a>  e.preventDefault();
+<a name="line419"></a>  var vportPos = goog.dom.getPageScroll();
+<a name="line420"></a>  var newV = Math.round(
+<a name="line421"></a>      255 * (b.top + b.height - Math.min(
+<a name="line422"></a>          Math.max(vportPos.y + e.clientY, b.top),
+<a name="line423"></a>          b.top + b.height)
+<a name="line424"></a>      ) / b.height
+<a name="line425"></a>  );
+<a name="line426"></a>  this.setHsv(null, null, newV);
+<a name="line427"></a>};
+<a name="line428"></a>
+<a name="line429"></a>
+<a name="line430"></a>/**
+<a name="line431"></a> * Handles mousemove events on the document once a drag operation on the
+<a name="line432"></a> * hue/saturation slider has started.
+<a name="line433"></a> * @param {goog.math.Rect} b Boundaries of the value slider object at the start
+<a name="line434"></a> *     of the drag operation.
+<a name="line435"></a> * @param {goog.events.BrowserEvent} e Event object.
+<a name="line436"></a> * @private
+<a name="line437"></a> */
+<a name="line438"></a>goog.ui.HsvPalette.prototype.handleMouseMoveHs_ = function(b, e) {
+<a name="line439"></a>  e.preventDefault();
+<a name="line440"></a>  var vportPos = goog.dom.getPageScroll();
+<a name="line441"></a>  var newH = (Math.min(Math.max(vportPos.x + e.clientX, b.left),
+<a name="line442"></a>      b.left + b.width) - b.left) / b.width;
+<a name="line443"></a>  var newS = (-Math.min(Math.max(vportPos.y + e.clientY, b.top),
+<a name="line444"></a>      b.top + b.height) + b.top + b.height) / b.height;
+<a name="line445"></a>  this.setHsv(newH, newS, null);
 <a name="line446"></a>};
 <a name="line447"></a>
 <a name="line448"></a>
 <a name="line449"></a>/**
-<a name="line450"></a> * Handles input events on the hex value input field.
+<a name="line450"></a> * Handles mouseup events on the document, which ends a drag operation.
 <a name="line451"></a> * @param {goog.events.Event} e Event object.
 <a name="line452"></a> * @private
 <a name="line453"></a> */
-<a name="line454"></a>goog.ui.HsvPalette.prototype.handleInput_ = function(e) {
-<a name="line455"></a>  if (/^#[0-9a-f]{6}$/i.test(this.inputEl_.value)) {
-<a name="line456"></a>    this.setColor(this.inputEl_.value);
-<a name="line457"></a>  }
-<a name="line458"></a>};
+<a name="line454"></a>goog.ui.HsvPalette.prototype.handleMouseUp_ = function(e) {
+<a name="line455"></a>  goog.events.unlistenByKey(this.mouseMoveListener_);
+<a name="line456"></a>  goog.events.unlistenByKey(this.mouseUpListener_);
+<a name="line457"></a>};
+<a name="line458"></a>
+<a name="line459"></a>
+<a name="line460"></a>/**
+<a name="line461"></a> * Handles input events on the hex value input field.
+<a name="line462"></a> * @param {goog.events.Event} e Event object.
+<a name="line463"></a> * @private
+<a name="line464"></a> */
+<a name="line465"></a>goog.ui.HsvPalette.prototype.handleInput_ = function(e) {
+<a name="line466"></a>  if (/^#[0-9a-f]{6}$/i.test(this.inputEl_.value)) {
+<a name="line467"></a>    this.setColor(this.inputEl_.value);
+<a name="line468"></a>  }
+<a name="line469"></a>};
 </pre>
 
 

@@ -62,15 +62,14 @@
         <span class="fn">debug.ErrorReporter</span>
         <span>Extends</span>
         <span class="fn-name">
-          <a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">
-            Object</a>
+          Object
         </span>
 </div>
 
 <div class="g-section g-tpl-75-25">
   <div class="g-unit g-first" id="description">
-    Constructs an error reporter. Internal Use Only. To install an error reporter
-see the #install method below.
+    Constructs an error reporter. Internal Use Only. To install an error
+reporter see the #install method below.
   </div>
 
 
@@ -103,7 +102,7 @@ see the #install method below.
 
   <h2>Constructor</h2>
       <div class="fn-constructor">
-    goog.debug.ErrorReporter(<span><span class="arg">handlerUrl</span></span>)
+    goog.debug.ErrorReporter(<span><span class="arg">ErrorReporter@handlerUrl</span></span>)
   </div>
 
    <h3>Parameters</h3>
@@ -117,9 +116,9 @@ see the #install method below.
      
    <tr class="even">
      <td>
-        <span class="entryName">handlerUrl</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The URL to which all errors will be reported.</div>
+        <span class="entryName">ErrorReporter@handlerUrl</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -174,7 +173,7 @@ see the #install method below.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">handleException_<span class="args">(<span class="arg">e</span>)</span>
+        <span class="entryName">handleException_<span class="args">(<span class="arg">handleException_@e</span>)</span>
         </span>
       </div>
 
@@ -199,9 +198,9 @@ see the #install method below.
      
    <tr class="even">
      <td>
-        <span class="entryName">e</span>
-        : <div class="fullType"><span class="type">Error</span></div>
-        <div class="entryOverview">The exception.</div>
+        <span class="entryName">handleException_@e</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -214,7 +213,7 @@ see the #install method below.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_errorreporter.js.source.html#line111">code &raquo;</a>
+     <a href="closure_goog_debug_errorreporter.js.source.html#line143">code &raquo;</a>
   </td>
      </tr>
 
@@ -234,7 +233,7 @@ see the #install method below.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">sendErrorReport<span class="args">(<span class="arg">message</span>,&nbsp;<span class="arg">fileName</span>,&nbsp;<span class="arg">line</span>)</span>
+        <span class="entryName">sendErrorReport<span class="args">(<span class="arg">sendErrorReport@message</span>,&nbsp;<span class="arg">sendErrorReport@fileName</span>,&nbsp;<span class="arg">sendErrorReport@line</span>,&nbsp;<span class="arg">sendErrorReport@opt_trace</span>)</span>
         </span>
       </div>
 
@@ -259,25 +258,33 @@ see the #install method below.
      
    <tr class="even">
      <td>
-        <span class="entryName">message</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">Error description.</div>
+        <span class="entryName">sendErrorReport@message</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">fileName</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">URL of the JavaScript file with the error.</div>
+        <span class="entryName">sendErrorReport@fileName</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">line</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span></div>
-        <div class="entryOverview">Line number of the error.</div>
+        <span class="entryName">sendErrorReport@line</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">sendErrorReport@opt_trace</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -290,7 +297,127 @@ see the #install method below.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_errorreporter.js.source.html#line130">code &raquo;</a>
+     <a href="closure_goog_debug_errorreporter.js.source.html#line166">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.ErrorReporter.prototype.setLoggingHeaders"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setLoggingHeaders<span class="args">(<span class="arg">setLoggingHeaders@loggingHeaders</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Add headers to the logging url.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">setLoggingHeaders@loggingHeaders</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_debug_errorreporter.js.source.html#line108">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.ErrorReporter.prototype.setLoggingUrl"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setLoggingUrl<span class="args">(<span class="arg">setLoggingUrl@loggingUrl</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Change the error handler URL.
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">setLoggingUrl@loggingUrl</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="closure_goog_debug_errorreporter.js.source.html#line98">code &raquo;</a>
   </td>
      </tr>
 
@@ -324,7 +451,7 @@ see the #install method below.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_errorreporter.js.source.html#line87">code &raquo;</a>
+     <a href="closure_goog_debug_errorreporter.js.source.html#line119">code &raquo;</a>
   </td>
      </tr>
 
@@ -391,7 +518,7 @@ see the #install method below.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_errorreporter.js.source.html#line57">Code &raquo;</a>
+     <a href="closure_goog_debug_errorreporter.js.source.html#line58">Code &raquo;</a>
   </td>
      </tr>
 
@@ -429,7 +556,7 @@ see the #install method below.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.debug.ErrorReporter.</span><span class="entryName">install<span class="args">(<span class="arg">loggingUrl</span>)</span>
+        <span class="entryNamespace">goog.debug.ErrorReporter.</span><span class="entryName">install<span class="args">(<span class="arg">install@loggingUrl</span>)</span>
         </span>
         &#8658; <div class="fullType"><span class="type"><a href="class_goog_debug_ErrorReporter.html">goog.debug.ErrorReporter</a></span></div>
       </div>
@@ -455,9 +582,9 @@ see the #install method below.
      
    <tr class="even">
      <td>
-        <span class="entryName">loggingUrl</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span></div>
-        <div class="entryOverview">The URL to which the errors caught will be reported.</div>
+        <span class="entryName">install@loggingUrl</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -474,7 +601,7 @@ see the #install method below.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_errorreporter.js.source.html#line77">code &raquo;</a>
+     <a href="closure_goog_debug_errorreporter.js.source.html#line86">code &raquo;</a>
   </td>
      </tr>
 
@@ -523,7 +650,7 @@ see the #install method below.
 
 
   <td class="view-code">
-     <a href="closure_goog_debug_errorreporter.js.source.html#line66">Code &raquo;</a>
+     <a href="closure_goog_debug_errorreporter.js.source.html#line75">Code &raquo;</a>
   </td>
      </tr>
 

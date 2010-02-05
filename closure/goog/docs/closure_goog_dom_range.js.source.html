@@ -148,118 +148,117 @@
 <a name="line104"></a> * @return {goog.dom.AbstractRange} A range wrapper object.
 <a name="line105"></a> */
 <a name="line106"></a>goog.dom.Range.createFromNodeContents = function(node, opt_isReversed) {
-<a name="line107"></a>  // TODO: Use control ranges for IMGs and TDs?
-<a name="line108"></a>  return goog.dom.TextRange.createFromNodeContents(node, opt_isReversed);
-<a name="line109"></a>};
+<a name="line107"></a>  return goog.dom.TextRange.createFromNodeContents(node, opt_isReversed);
+<a name="line108"></a>};
+<a name="line109"></a>
 <a name="line110"></a>
-<a name="line111"></a>
-<a name="line112"></a>/**
-<a name="line113"></a> * Create a new range wrapper that represents a caret at the given node,
-<a name="line114"></a> * accounting for the given offset.  This always creates a TextRange, regardless
-<a name="line115"></a> * of whether node is an image node or other control range type node.
-<a name="line116"></a> * @param {Node} node The node to place a caret at.
-<a name="line117"></a> * @param {number} offset The offset within the node to place the caret at.
-<a name="line118"></a> * @return {goog.dom.AbstractRange} A range wrapper object.
-<a name="line119"></a> */
-<a name="line120"></a>goog.dom.Range.createCaret = function(node, offset) {
-<a name="line121"></a>  return goog.dom.TextRange.createFromNodes(node, offset, node, offset);
-<a name="line122"></a>};
+<a name="line111"></a>/**
+<a name="line112"></a> * Create a new range wrapper that represents a caret at the given node,
+<a name="line113"></a> * accounting for the given offset.  This always creates a TextRange, regardless
+<a name="line114"></a> * of whether node is an image node or other control range type node.
+<a name="line115"></a> * @param {Node} node The node to place a caret at.
+<a name="line116"></a> * @param {number} offset The offset within the node to place the caret at.
+<a name="line117"></a> * @return {goog.dom.AbstractRange} A range wrapper object.
+<a name="line118"></a> */
+<a name="line119"></a>goog.dom.Range.createCaret = function(node, offset) {
+<a name="line120"></a>  return goog.dom.TextRange.createFromNodes(node, offset, node, offset);
+<a name="line121"></a>};
+<a name="line122"></a>
 <a name="line123"></a>
-<a name="line124"></a>
-<a name="line125"></a>/**
-<a name="line126"></a> * Create a new range wrapper that selects the area between the given nodes,
-<a name="line127"></a> * accounting for the given offsets.
-<a name="line128"></a> * @param {Node} startNode The node to start with.
-<a name="line129"></a> * @param {number} startOffset The offset within the node to start.
-<a name="line130"></a> * @param {Node} endNode The node to end with.
-<a name="line131"></a> * @param {number} endOffset The offset within the node to end.
-<a name="line132"></a> * @return {goog.dom.AbstractRange} A range wrapper object.
-<a name="line133"></a> */
-<a name="line134"></a>goog.dom.Range.createFromNodes = function(startNode, startOffset, endNode,
-<a name="line135"></a>    endOffset) {
-<a name="line136"></a>  return goog.dom.TextRange.createFromNodes(startNode, startOffset, endNode,
-<a name="line137"></a>      endOffset);
-<a name="line138"></a>};
+<a name="line124"></a>/**
+<a name="line125"></a> * Create a new range wrapper that selects the area between the given nodes,
+<a name="line126"></a> * accounting for the given offsets.
+<a name="line127"></a> * @param {Node} startNode The node to start with.
+<a name="line128"></a> * @param {number} startOffset The offset within the node to start.
+<a name="line129"></a> * @param {Node} endNode The node to end with.
+<a name="line130"></a> * @param {number} endOffset The offset within the node to end.
+<a name="line131"></a> * @return {goog.dom.AbstractRange} A range wrapper object.
+<a name="line132"></a> */
+<a name="line133"></a>goog.dom.Range.createFromNodes = function(startNode, startOffset, endNode,
+<a name="line134"></a>    endOffset) {
+<a name="line135"></a>  return goog.dom.TextRange.createFromNodes(startNode, startOffset, endNode,
+<a name="line136"></a>      endOffset);
+<a name="line137"></a>};
+<a name="line138"></a>
 <a name="line139"></a>
-<a name="line140"></a>
-<a name="line141"></a>/**
-<a name="line142"></a> * Clears the window&#39;s selection.
-<a name="line143"></a> * @param {Window=} opt_win The window to get the selection of.  Defaults to the
-<a name="line144"></a> *     window this class was defined in.
-<a name="line145"></a> */
-<a name="line146"></a>goog.dom.Range.clearSelection = function(opt_win) {
-<a name="line147"></a>  var sel = goog.dom.AbstractRange.getBrowserSelectionForWindow(
-<a name="line148"></a>      opt_win || window);
-<a name="line149"></a>  if (!sel) {
-<a name="line150"></a>    return;
-<a name="line151"></a>  }
-<a name="line152"></a>  if (sel.empty) {
-<a name="line153"></a>    // We can&#39;t just check that the selection is empty, becuase IE
-<a name="line154"></a>    // sometimes gets confused.
-<a name="line155"></a>    try {
-<a name="line156"></a>      sel.empty();
-<a name="line157"></a>    } catch (e) {
-<a name="line158"></a>      // Emptying an already empty selection throws an exception in IE
-<a name="line159"></a>    }
-<a name="line160"></a>  } else {
-<a name="line161"></a>    sel.removeAllRanges();
-<a name="line162"></a>  }
-<a name="line163"></a>};
+<a name="line140"></a>/**
+<a name="line141"></a> * Clears the window&#39;s selection.
+<a name="line142"></a> * @param {Window=} opt_win The window to get the selection of.  Defaults to the
+<a name="line143"></a> *     window this class was defined in.
+<a name="line144"></a> */
+<a name="line145"></a>goog.dom.Range.clearSelection = function(opt_win) {
+<a name="line146"></a>  var sel = goog.dom.AbstractRange.getBrowserSelectionForWindow(
+<a name="line147"></a>      opt_win || window);
+<a name="line148"></a>  if (!sel) {
+<a name="line149"></a>    return;
+<a name="line150"></a>  }
+<a name="line151"></a>  if (sel.empty) {
+<a name="line152"></a>    // We can&#39;t just check that the selection is empty, becuase IE
+<a name="line153"></a>    // sometimes gets confused.
+<a name="line154"></a>    try {
+<a name="line155"></a>      sel.empty();
+<a name="line156"></a>    } catch (e) {
+<a name="line157"></a>      // Emptying an already empty selection throws an exception in IE
+<a name="line158"></a>    }
+<a name="line159"></a>  } else {
+<a name="line160"></a>    sel.removeAllRanges();
+<a name="line161"></a>  }
+<a name="line162"></a>};
+<a name="line163"></a>
 <a name="line164"></a>
-<a name="line165"></a>
-<a name="line166"></a>/**
-<a name="line167"></a> * Tests if the window has a selection.
-<a name="line168"></a> * @param {Window=} opt_win The window to check the selection of.  Defaults to
-<a name="line169"></a> *     the window this class was defined in.
-<a name="line170"></a> * @return {boolean} Whether the window has a selection.
-<a name="line171"></a> */
-<a name="line172"></a>goog.dom.Range.hasSelection = function(opt_win) {
-<a name="line173"></a>  var sel = goog.dom.AbstractRange.getBrowserSelectionForWindow(
-<a name="line174"></a>      opt_win || window);
-<a name="line175"></a>  return !!sel &amp;&amp; (goog.userAgent.IE ? sel.type != &#39;None&#39; : !!sel.rangeCount);
-<a name="line176"></a>};
+<a name="line165"></a>/**
+<a name="line166"></a> * Tests if the window has a selection.
+<a name="line167"></a> * @param {Window=} opt_win The window to check the selection of.  Defaults to
+<a name="line168"></a> *     the window this class was defined in.
+<a name="line169"></a> * @return {boolean} Whether the window has a selection.
+<a name="line170"></a> */
+<a name="line171"></a>goog.dom.Range.hasSelection = function(opt_win) {
+<a name="line172"></a>  var sel = goog.dom.AbstractRange.getBrowserSelectionForWindow(
+<a name="line173"></a>      opt_win || window);
+<a name="line174"></a>  return !!sel &amp;&amp; (goog.userAgent.IE ? sel.type != &#39;None&#39; : !!sel.rangeCount);
+<a name="line175"></a>};
+<a name="line176"></a>
 <a name="line177"></a>
-<a name="line178"></a>
-<a name="line179"></a>/**
-<a name="line180"></a> * Returns whether the focus position occurs before the anchor position.
-<a name="line181"></a> * @param {Node} anchorNode The node to start with.
-<a name="line182"></a> * @param {number} anchorOffset The offset within the node to start.
-<a name="line183"></a> * @param {Node} focusNode The node to end with.
-<a name="line184"></a> * @param {number} focusOffset The offset within the node to end.
-<a name="line185"></a> * @return {boolean} Whether the focus position occurs before the anchor
-<a name="line186"></a> *     position.
-<a name="line187"></a> */
-<a name="line188"></a>goog.dom.Range.isReversed = function(anchorNode, anchorOffset, focusNode,
-<a name="line189"></a>    focusOffset) {
-<a name="line190"></a>  if (anchorNode == focusNode) {
-<a name="line191"></a>    return focusOffset &lt; anchorOffset;
-<a name="line192"></a>  }
-<a name="line193"></a>  var child;
-<a name="line194"></a>  if (anchorNode.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp; anchorOffset) {
-<a name="line195"></a>    child = anchorNode.childNodes[anchorOffset];
-<a name="line196"></a>    if (child) {
-<a name="line197"></a>      anchorNode = child;
-<a name="line198"></a>      anchorOffset = 0;
-<a name="line199"></a>    } else if (goog.dom.contains(anchorNode, focusNode)) {
-<a name="line200"></a>      // If focus node is contained in anchorNode, it must be before the
-<a name="line201"></a>      // end of the node.  Hence we are reversed.
-<a name="line202"></a>      return true;
-<a name="line203"></a>    }
-<a name="line204"></a>  }
-<a name="line205"></a>  if (focusNode.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp; focusOffset) {
-<a name="line206"></a>    child = focusNode.childNodes[focusOffset];
-<a name="line207"></a>    if (child) {
-<a name="line208"></a>      focusNode = child;
-<a name="line209"></a>      focusOffset = 0;
-<a name="line210"></a>    } else if (goog.dom.contains(focusNode, anchorNode)) {
-<a name="line211"></a>      // If anchor node is contained in focusNode, it must be before the
-<a name="line212"></a>      // end of the node.  Hence we are not reversed.
-<a name="line213"></a>      return false;
-<a name="line214"></a>    }
-<a name="line215"></a>  }
-<a name="line216"></a>  return (goog.dom.compareNodeOrder(anchorNode, focusNode) ||
-<a name="line217"></a>      anchorOffset - focusOffset) &gt; 0;
-<a name="line218"></a>};
+<a name="line178"></a>/**
+<a name="line179"></a> * Returns whether the focus position occurs before the anchor position.
+<a name="line180"></a> * @param {Node} anchorNode The node to start with.
+<a name="line181"></a> * @param {number} anchorOffset The offset within the node to start.
+<a name="line182"></a> * @param {Node} focusNode The node to end with.
+<a name="line183"></a> * @param {number} focusOffset The offset within the node to end.
+<a name="line184"></a> * @return {boolean} Whether the focus position occurs before the anchor
+<a name="line185"></a> *     position.
+<a name="line186"></a> */
+<a name="line187"></a>goog.dom.Range.isReversed = function(anchorNode, anchorOffset, focusNode,
+<a name="line188"></a>    focusOffset) {
+<a name="line189"></a>  if (anchorNode == focusNode) {
+<a name="line190"></a>    return focusOffset &lt; anchorOffset;
+<a name="line191"></a>  }
+<a name="line192"></a>  var child;
+<a name="line193"></a>  if (anchorNode.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp; anchorOffset) {
+<a name="line194"></a>    child = anchorNode.childNodes[anchorOffset];
+<a name="line195"></a>    if (child) {
+<a name="line196"></a>      anchorNode = child;
+<a name="line197"></a>      anchorOffset = 0;
+<a name="line198"></a>    } else if (goog.dom.contains(anchorNode, focusNode)) {
+<a name="line199"></a>      // If focus node is contained in anchorNode, it must be before the
+<a name="line200"></a>      // end of the node.  Hence we are reversed.
+<a name="line201"></a>      return true;
+<a name="line202"></a>    }
+<a name="line203"></a>  }
+<a name="line204"></a>  if (focusNode.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp; focusOffset) {
+<a name="line205"></a>    child = focusNode.childNodes[focusOffset];
+<a name="line206"></a>    if (child) {
+<a name="line207"></a>      focusNode = child;
+<a name="line208"></a>      focusOffset = 0;
+<a name="line209"></a>    } else if (goog.dom.contains(focusNode, anchorNode)) {
+<a name="line210"></a>      // If anchor node is contained in focusNode, it must be before the
+<a name="line211"></a>      // end of the node.  Hence we are not reversed.
+<a name="line212"></a>      return false;
+<a name="line213"></a>    }
+<a name="line214"></a>  }
+<a name="line215"></a>  return (goog.dom.compareNodeOrder(anchorNode, focusNode) ||
+<a name="line216"></a>      anchorOffset - focusOffset) &gt; 0;
+<a name="line217"></a>};
 </pre>
 
 

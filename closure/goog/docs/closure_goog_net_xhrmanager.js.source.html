@@ -65,7 +65,7 @@
 <a name="line21"></a> * handles this) and retrying of requests.
 <a name="line22"></a> *
 <a name="line23"></a> * The events fired by the XhrManager are an aggregation of the events of
-<a name="line24"></a> * each of it&#39;s XhrIo objects (with some filtering, i.e., ERROR only called
+<a name="line24"></a> * each of its XhrIo objects (with some filtering, i.e., ERROR only called
 <a name="line25"></a> * when there are no more retries left). For this reason, all send requests have
 <a name="line26"></a> * to have an id, so that the user of this object can know which event is for
 <a name="line27"></a> * which request.
@@ -547,7 +547,7 @@
 <a name="line503"></a>
 <a name="line504"></a>  /**
 <a name="line505"></a>   * The id of the request this event is for.
-<a name="line506"></a>   * @type {Object}
+<a name="line506"></a>   * @type {string}
 <a name="line507"></a>   */
 <a name="line508"></a>  this.id = id;
 <a name="line509"></a>

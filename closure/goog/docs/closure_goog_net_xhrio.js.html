@@ -56,14 +56,14 @@
     Wrapper class for handling XmlHttpRequests.
 
  One off requests can be sent through goog.net.XhrIo.send() or an
- instance can be created to send multiple requests.  Each request uses it&#39;s
+ instance can be created to send multiple requests.  Each request uses its
  own XmlHttpRequest object and handles clearing of the event callback to
  ensure no leaks.
 
- XhrIo is event based, it dispatches events for when a request has finished,
- when it is errorred or has succeeded, or when the ready-state changes.
- The Ready-state event fires first first, followed by a generic completed
- event, and lastly the error or success event is fired as appropriate.
+ XhrIo is event based, it dispatches events when a request finishes, fails or
+ succeeds or when the ready-state changes. The ready-state event fires first,
+ followed by a generic completed event, and lastly the error or success event
+ is fired as appropriate.
 
  The error event may also be called before completed and
  ready-state-change if the XmlHttpRequest.open() or .send() methods throw.
@@ -168,7 +168,7 @@
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">cleanupSend_<span class="args">(<span class="arg">XhrIo</span>)</span>
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">cleanupSend_<span class="args">(<span class="arg">cleanupSend_@XhrIo</span>)</span>
         </span>
       </div>
 
@@ -195,9 +195,9 @@ goog.net.XhrIo.pendingStaticSendInstances_.
      
    <tr class="even">
      <td>
-        <span class="entryName">XhrIo</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_net_XhrIo.html">goog.net.XhrIo</a></span></div>
-        <div class="entryOverview">An XhrIo created by goog.net.XhrIo.send.</div>
+        <span class="entryName">cleanupSend_@XhrIo</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -230,7 +230,7 @@ goog.net.XhrIo.pendingStaticSendInstances_.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">protectEntryPoints<span class="args">(<span class="arg">errorHandler</span>,&nbsp;<span class="arg">opt_tracers</span>)</span>
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">protectEntryPoints<span class="args">(<span class="arg">protectEntryPoints@errorHandler</span>,&nbsp;<span class="arg">protectEntryPoints@opt_tracers</span>)</span>
         </span>
       </div>
 
@@ -259,17 +259,17 @@ goog.events.protectBrowserEventEntryPoint.
      
    <tr class="even">
      <td>
-        <span class="entryName">errorHandler</span>
-        : <div class="fullType"><span class="type"><a href="class_goog_debug_ErrorHandler.html">goog.debug.ErrorHandler</a></span></div>
-        <div class="entryOverview">Error handler with which to protect the entry point(s).</div>
+        <span class="entryName">protectEntryPoints@errorHandler</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_tracers</span>
-        : <div class="fullType"><span class="type">boolean=</span></div>
-        <div class="entryOverview">Whether to install tracers around the entry point.</div>
+        <span class="entryName">protectEntryPoints@opt_tracers</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>
@@ -302,7 +302,7 @@ goog.events.protectBrowserEventEntryPoint.
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">send<span class="args">(<span class="arg">url</span>,&nbsp;<span class="arg">opt_callback</span>,&nbsp;<span class="arg">opt_method</span>,&nbsp;<span class="arg">opt_content</span>,&nbsp;<span class="arg">opt_headers</span>,&nbsp;<span class="arg">opt_timeoutInterval</span>)</span>
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">send<span class="args">(<span class="arg">send@url</span>,&nbsp;<span class="arg">send@opt_callback</span>,&nbsp;<span class="arg">send@opt_method</span>,&nbsp;<span class="arg">send@opt_content</span>,&nbsp;<span class="arg">send@opt_headers</span>,&nbsp;<span class="arg">send@opt_timeoutInterval</span>)</span>
         </span>
       </div>
 
@@ -328,49 +328,49 @@ request.
      
    <tr class="even">
      <td>
-        <span class="entryName">url</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span></div>
-        <div class="entryOverview">Uri to make request too.</div>
+        <span class="entryName">send@url</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_callback</span>
-        : <div class="fullType"><span class="type">Function=</span></div>
-        <div class="entryOverview">Callback function for when request is complete.</div>
+        <span class="entryName">send@opt_callback</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_method</span>
-        : <div class="fullType"><span class="type">string=</span></div>
-        <div class="entryOverview">Send method, default: GET.</div>
+        <span class="entryName">send@opt_method</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_content</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">GearsBlob=</span></div>
-        <div class="entryOverview">Post data. This can be a Gears blob if the underlying HTTP request object is a Gears HTTP request.</div>
+        <span class="entryName">send@opt_content</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="even">
      <td>
-        <span class="entryName">opt_headers</span>
-        : <div class="fullType"><span class="type"><a href="http://www.google.com/url?sa=D&q=https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">goog.structs.Map=</span></div>
-        <div class="entryOverview">Map of headers to add to the request.</div>
+        <span class="entryName">send@opt_headers</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
      
    <tr class="odd">
      <td>
-        <span class="entryName">opt_timeoutInterval</span>
-        : <div class="fullType"><span class="type">number=</span></div>
-        <div class="entryOverview">Number of milliseconds after which an incomplete request will be aborted; 0 means no timeout is set.</div>
+        <span class="entryName">send@opt_timeoutInterval</span>
+        : 
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
      </td>
    </tr>
   </table>

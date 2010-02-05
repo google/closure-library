@@ -33,8 +33,8 @@ goog.require('goog.structs');
 
 /**
  * Class for Hash Map datastructure.
- * @param {Object=} opt_map Map or Object to initialize the map with.
- * @param {...Object} var_args If 2 or more arguments are present then they
+ * @param {*=} opt_map Map or Object to initialize the map with.
+ * @param {...*} var_args If 2 or more arguments are present then they
  *     will be used as key-value pairs.
  * @constructor
  */
@@ -73,7 +73,7 @@ goog.structs.Map = function(opt_map, var_args) {
       this.set(arguments[i], arguments[i + 1]);
     }
   } else if (opt_map) {
-    this.addAll(opt_map);
+    this.addAll(/** @type {Object} */ (opt_map));
   }
 };
 

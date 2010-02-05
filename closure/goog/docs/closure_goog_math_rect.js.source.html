@@ -234,161 +234,151 @@
 <a name="line190"></a> * @return {boolean} Whether a and b intersect.
 <a name="line191"></a> */
 <a name="line192"></a>goog.math.Rect.intersects = function(a, b) {
-<a name="line193"></a>  var x0 = Math.max(a.left, b.left);
-<a name="line194"></a>  var x1 = Math.min(a.left + a.width, b.left + b.width);
-<a name="line195"></a>
-<a name="line196"></a>  if (x0 &lt;= x1) {
-<a name="line197"></a>    var y0 = Math.max(a.top, b.top);
-<a name="line198"></a>    var y1 = Math.min(a.top + a.height, b.top + b.height);
-<a name="line199"></a>
-<a name="line200"></a>    if (y0 &lt;= y1) {
-<a name="line201"></a>      return true;
-<a name="line202"></a>    }
-<a name="line203"></a>  }
-<a name="line204"></a>  return false;
+<a name="line193"></a>  return (a.left &lt;= b.left + b.width &amp;&amp; b.left &lt;= a.left + a.width &amp;&amp;
+<a name="line194"></a>      a.top &lt;= b.top + b.height &amp;&amp; b.top &lt;= a.top + a.height);
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Returns whether a rectangle intersects this rectangle.
+<a name="line200"></a> * @param {goog.math.Rect} rect A rectangle.
+<a name="line201"></a> * @return {boolean} Whether rect intersects this rectangle.
+<a name="line202"></a> */
+<a name="line203"></a>goog.math.Rect.prototype.intersects = function(rect) {
+<a name="line204"></a>  return goog.math.Rect.intersects(this, rect);
 <a name="line205"></a>};
 <a name="line206"></a>
 <a name="line207"></a>
 <a name="line208"></a>/**
-<a name="line209"></a> * Returns whether a rectangle intersects this rectangle.
-<a name="line210"></a> * @param {goog.math.Rect} rect A rectangle.
-<a name="line211"></a> * @return {boolean} Whether rect intersects this rectangle.
-<a name="line212"></a> */
-<a name="line213"></a>goog.math.Rect.prototype.intersects = function(rect) {
-<a name="line214"></a>  return goog.math.Rect.intersects(this, rect);
-<a name="line215"></a>};
-<a name="line216"></a>
-<a name="line217"></a>
-<a name="line218"></a>/**
-<a name="line219"></a> * Computes the difference regions between two rectangles. The return value is
-<a name="line220"></a> * an array of 0 to 4 rectangles defining the remaining regions of the first
-<a name="line221"></a> * rectangle after the second has been subtracted.
-<a name="line222"></a> * @param {goog.math.Rect} a A Rectangle.
-<a name="line223"></a> * @param {goog.math.Rect} b A Rectangle.
-<a name="line224"></a> * @return {Array.&lt;goog.math.Rect&gt;} An array with 0 to 4 rectangles which
-<a name="line225"></a> *     together define the difference area of rectangle a minus rectangle b.
-<a name="line226"></a> */
-<a name="line227"></a>goog.math.Rect.difference = function(a, b) {
-<a name="line228"></a>  var intersection = goog.math.Rect.intersection(a, b);
-<a name="line229"></a>  if (!intersection || !intersection.height || !intersection.width) {
-<a name="line230"></a>    return [a.clone()];
-<a name="line231"></a>  }
-<a name="line232"></a>
-<a name="line233"></a>  var result = [];
-<a name="line234"></a>
-<a name="line235"></a>  var top = a.top;
-<a name="line236"></a>  var height = a.height;
-<a name="line237"></a>
-<a name="line238"></a>  var ar = a.left + a.width;
-<a name="line239"></a>  var ab = a.top + a.height;
-<a name="line240"></a>
-<a name="line241"></a>  var br = b.left + b.width;
-<a name="line242"></a>  var bb = b.top + b.height;
-<a name="line243"></a>
-<a name="line244"></a>  // Subtract off any area on top where A extends past B
-<a name="line245"></a>  if (b.top &gt; a.top) {
-<a name="line246"></a>    result.push(new goog.math.Rect(a.left, a.top, a.width, b.top - a.top));
-<a name="line247"></a>    top = b.top;
-<a name="line248"></a>    // If we&#39;re moving the top down, we also need to subtract the height diff.
-<a name="line249"></a>    height -= b.top - a.top;
-<a name="line250"></a>  }
-<a name="line251"></a>  // Subtract off any area on bottom where A extends past B
-<a name="line252"></a>  if (bb &lt; ab) {
-<a name="line253"></a>    result.push(new goog.math.Rect(a.left, bb, a.width, ab - bb));
-<a name="line254"></a>    height = bb - top;
-<a name="line255"></a>  }
-<a name="line256"></a>  // Subtract any area on left where A extends past B
-<a name="line257"></a>  if (b.left &gt; a.left) {
-<a name="line258"></a>    result.push(new goog.math.Rect(a.left, top, b.left - a.left, height));
-<a name="line259"></a>  }
-<a name="line260"></a>  // Subtract any area on right where A extends past B
-<a name="line261"></a>  if (br &lt; ar) {
-<a name="line262"></a>    result.push(new goog.math.Rect(br, top, ar - br, height));
-<a name="line263"></a>  }
-<a name="line264"></a>
-<a name="line265"></a>  return result;
-<a name="line266"></a>};
-<a name="line267"></a>
-<a name="line268"></a>
-<a name="line269"></a>/**
-<a name="line270"></a> * Computes the difference regions between this rectangle and {@code rect}. The
-<a name="line271"></a> * return value is an array of 0 to 4 rectangles defining the remaining regions
-<a name="line272"></a> * of this rectangle after the other has been subtracted.
-<a name="line273"></a> * @param {goog.math.Rect} rect A Rectangle.
-<a name="line274"></a> * @return {Array.&lt;goog.math.Rect&gt;} An array with 0 to 4 rectangles which
-<a name="line275"></a> *     together define the difference area of rectangle a minus rectangle b.
-<a name="line276"></a> */
-<a name="line277"></a>goog.math.Rect.prototype.difference = function(rect) {
-<a name="line278"></a>  return goog.math.Rect.difference(this, rect);
-<a name="line279"></a>};
+<a name="line209"></a> * Computes the difference regions between two rectangles. The return value is
+<a name="line210"></a> * an array of 0 to 4 rectangles defining the remaining regions of the first
+<a name="line211"></a> * rectangle after the second has been subtracted.
+<a name="line212"></a> * @param {goog.math.Rect} a A Rectangle.
+<a name="line213"></a> * @param {goog.math.Rect} b A Rectangle.
+<a name="line214"></a> * @return {Array.&lt;goog.math.Rect&gt;} An array with 0 to 4 rectangles which
+<a name="line215"></a> *     together define the difference area of rectangle a minus rectangle b.
+<a name="line216"></a> */
+<a name="line217"></a>goog.math.Rect.difference = function(a, b) {
+<a name="line218"></a>  var intersection = goog.math.Rect.intersection(a, b);
+<a name="line219"></a>  if (!intersection || !intersection.height || !intersection.width) {
+<a name="line220"></a>    return [a.clone()];
+<a name="line221"></a>  }
+<a name="line222"></a>
+<a name="line223"></a>  var result = [];
+<a name="line224"></a>
+<a name="line225"></a>  var top = a.top;
+<a name="line226"></a>  var height = a.height;
+<a name="line227"></a>
+<a name="line228"></a>  var ar = a.left + a.width;
+<a name="line229"></a>  var ab = a.top + a.height;
+<a name="line230"></a>
+<a name="line231"></a>  var br = b.left + b.width;
+<a name="line232"></a>  var bb = b.top + b.height;
+<a name="line233"></a>
+<a name="line234"></a>  // Subtract off any area on top where A extends past B
+<a name="line235"></a>  if (b.top &gt; a.top) {
+<a name="line236"></a>    result.push(new goog.math.Rect(a.left, a.top, a.width, b.top - a.top));
+<a name="line237"></a>    top = b.top;
+<a name="line238"></a>    // If we&#39;re moving the top down, we also need to subtract the height diff.
+<a name="line239"></a>    height -= b.top - a.top;
+<a name="line240"></a>  }
+<a name="line241"></a>  // Subtract off any area on bottom where A extends past B
+<a name="line242"></a>  if (bb &lt; ab) {
+<a name="line243"></a>    result.push(new goog.math.Rect(a.left, bb, a.width, ab - bb));
+<a name="line244"></a>    height = bb - top;
+<a name="line245"></a>  }
+<a name="line246"></a>  // Subtract any area on left where A extends past B
+<a name="line247"></a>  if (b.left &gt; a.left) {
+<a name="line248"></a>    result.push(new goog.math.Rect(a.left, top, b.left - a.left, height));
+<a name="line249"></a>  }
+<a name="line250"></a>  // Subtract any area on right where A extends past B
+<a name="line251"></a>  if (br &lt; ar) {
+<a name="line252"></a>    result.push(new goog.math.Rect(br, top, ar - br, height));
+<a name="line253"></a>  }
+<a name="line254"></a>
+<a name="line255"></a>  return result;
+<a name="line256"></a>};
+<a name="line257"></a>
+<a name="line258"></a>
+<a name="line259"></a>/**
+<a name="line260"></a> * Computes the difference regions between this rectangle and {@code rect}. The
+<a name="line261"></a> * return value is an array of 0 to 4 rectangles defining the remaining regions
+<a name="line262"></a> * of this rectangle after the other has been subtracted.
+<a name="line263"></a> * @param {goog.math.Rect} rect A Rectangle.
+<a name="line264"></a> * @return {Array.&lt;goog.math.Rect&gt;} An array with 0 to 4 rectangles which
+<a name="line265"></a> *     together define the difference area of rectangle a minus rectangle b.
+<a name="line266"></a> */
+<a name="line267"></a>goog.math.Rect.prototype.difference = function(rect) {
+<a name="line268"></a>  return goog.math.Rect.difference(this, rect);
+<a name="line269"></a>};
+<a name="line270"></a>
+<a name="line271"></a>
+<a name="line272"></a>/**
+<a name="line273"></a> * Expand this rectangle to also include the area of the given rectangle.
+<a name="line274"></a> * @param {goog.math.Rect} rect The other rectangle.
+<a name="line275"></a> */
+<a name="line276"></a>goog.math.Rect.prototype.boundingRect = function(rect) {
+<a name="line277"></a>  // We compute right and bottom before we change left and top below.
+<a name="line278"></a>  var right = Math.max(this.left + this.width, rect.left + rect.width);
+<a name="line279"></a>  var bottom = Math.max(this.top + this.height, rect.top + rect.height);
 <a name="line280"></a>
-<a name="line281"></a>
-<a name="line282"></a>/**
-<a name="line283"></a> * Expand this rectangle to also include the area of the given rectangle.
-<a name="line284"></a> * @param {goog.math.Rect} rect The other rectangle.
-<a name="line285"></a> */
-<a name="line286"></a>goog.math.Rect.prototype.boundingRect = function(rect) {
-<a name="line287"></a>  // We compute right and bottom before we change left and top below.
-<a name="line288"></a>  var right = Math.max(this.left + this.width, rect.left + rect.width);
-<a name="line289"></a>  var bottom = Math.max(this.top + this.height, rect.top + rect.height);
-<a name="line290"></a>
-<a name="line291"></a>  this.left = Math.min(this.left, rect.left);
-<a name="line292"></a>  this.top = Math.min(this.top, rect.top);
-<a name="line293"></a>
-<a name="line294"></a>  this.width = right - this.left;
-<a name="line295"></a>  this.height = bottom - this.top;
-<a name="line296"></a>};
-<a name="line297"></a>
-<a name="line298"></a>
-<a name="line299"></a>/**
-<a name="line300"></a> * Returns a new rectangle which completely contains both input rectangles.
-<a name="line301"></a> * @param {goog.math.Rect} a A rectangle.
-<a name="line302"></a> * @param {goog.math.Rect} b A rectangle.
-<a name="line303"></a> * @return {goog.math.Rect?} A new bounding rect, or null if either rect is
-<a name="line304"></a> *     null.
-<a name="line305"></a> */
-<a name="line306"></a>goog.math.Rect.boundingRect = function(a, b) {
-<a name="line307"></a>  if (!a || !b) {
-<a name="line308"></a>    return null;
-<a name="line309"></a>  }
-<a name="line310"></a>
-<a name="line311"></a>  var clone = a.clone();
-<a name="line312"></a>  clone.boundingRect(b);
-<a name="line313"></a>
-<a name="line314"></a>  return clone;
-<a name="line315"></a>};
-<a name="line316"></a>
-<a name="line317"></a>/**
-<a name="line318"></a> * Tests whether this rectangle entirely contains another rectangle or
-<a name="line319"></a> * coordinate.
-<a name="line320"></a> *
-<a name="line321"></a> * @param {goog.math.Rect|goog.math.Coordinate} another The rectangle or
-<a name="line322"></a> *     coordinate to test for containment.
-<a name="line323"></a> * @return {boolean} Whether this rectangle contains given rectangle or
-<a name="line324"></a> *     coordinate.
-<a name="line325"></a> */
-<a name="line326"></a>goog.math.Rect.prototype.contains = function(another) {
-<a name="line327"></a>  if (another instanceof goog.math.Rect) {
-<a name="line328"></a>    return this.left &lt;= another.left &amp;&amp;
-<a name="line329"></a>           this.left + this.width &gt;= another.left + another.width &amp;&amp;
-<a name="line330"></a>           this.top &lt;= another.top &amp;&amp;
-<a name="line331"></a>           this.top + this.height &gt;= another.top + another.height;
-<a name="line332"></a>  } else { // (another instanceof goog.math.Coordinate)
-<a name="line333"></a>    return another.x &gt;= this.left &amp;&amp;
-<a name="line334"></a>           another.x &lt;= this.left + this.width &amp;&amp;
-<a name="line335"></a>           another.y &gt;= this.top &amp;&amp;
-<a name="line336"></a>           another.y &lt;= this.top + this.height;
-<a name="line337"></a>  }
-<a name="line338"></a>};
-<a name="line339"></a>
-<a name="line340"></a>
-<a name="line341"></a>/**
-<a name="line342"></a> * Returns the size of this rectangle.
-<a name="line343"></a> * @return {goog.math.Size} The size of this rectangle.
-<a name="line344"></a> */
-<a name="line345"></a>goog.math.Rect.prototype.getSize = function() {
-<a name="line346"></a>  return new goog.math.Size(this.width, this.height);
-<a name="line347"></a>};
+<a name="line281"></a>  this.left = Math.min(this.left, rect.left);
+<a name="line282"></a>  this.top = Math.min(this.top, rect.top);
+<a name="line283"></a>
+<a name="line284"></a>  this.width = right - this.left;
+<a name="line285"></a>  this.height = bottom - this.top;
+<a name="line286"></a>};
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * Returns a new rectangle which completely contains both input rectangles.
+<a name="line291"></a> * @param {goog.math.Rect} a A rectangle.
+<a name="line292"></a> * @param {goog.math.Rect} b A rectangle.
+<a name="line293"></a> * @return {goog.math.Rect?} A new bounding rect, or null if either rect is
+<a name="line294"></a> *     null.
+<a name="line295"></a> */
+<a name="line296"></a>goog.math.Rect.boundingRect = function(a, b) {
+<a name="line297"></a>  if (!a || !b) {
+<a name="line298"></a>    return null;
+<a name="line299"></a>  }
+<a name="line300"></a>
+<a name="line301"></a>  var clone = a.clone();
+<a name="line302"></a>  clone.boundingRect(b);
+<a name="line303"></a>
+<a name="line304"></a>  return clone;
+<a name="line305"></a>};
+<a name="line306"></a>
+<a name="line307"></a>/**
+<a name="line308"></a> * Tests whether this rectangle entirely contains another rectangle or
+<a name="line309"></a> * coordinate.
+<a name="line310"></a> *
+<a name="line311"></a> * @param {goog.math.Rect|goog.math.Coordinate} another The rectangle or
+<a name="line312"></a> *     coordinate to test for containment.
+<a name="line313"></a> * @return {boolean} Whether this rectangle contains given rectangle or
+<a name="line314"></a> *     coordinate.
+<a name="line315"></a> */
+<a name="line316"></a>goog.math.Rect.prototype.contains = function(another) {
+<a name="line317"></a>  if (another instanceof goog.math.Rect) {
+<a name="line318"></a>    return this.left &lt;= another.left &amp;&amp;
+<a name="line319"></a>           this.left + this.width &gt;= another.left + another.width &amp;&amp;
+<a name="line320"></a>           this.top &lt;= another.top &amp;&amp;
+<a name="line321"></a>           this.top + this.height &gt;= another.top + another.height;
+<a name="line322"></a>  } else { // (another instanceof goog.math.Coordinate)
+<a name="line323"></a>    return another.x &gt;= this.left &amp;&amp;
+<a name="line324"></a>           another.x &lt;= this.left + this.width &amp;&amp;
+<a name="line325"></a>           another.y &gt;= this.top &amp;&amp;
+<a name="line326"></a>           another.y &lt;= this.top + this.height;
+<a name="line327"></a>  }
+<a name="line328"></a>};
+<a name="line329"></a>
+<a name="line330"></a>
+<a name="line331"></a>/**
+<a name="line332"></a> * Returns the size of this rectangle.
+<a name="line333"></a> * @return {goog.math.Size} The size of this rectangle.
+<a name="line334"></a> */
+<a name="line335"></a>goog.math.Rect.prototype.getSize = function() {
+<a name="line336"></a>  return new goog.math.Size(this.width, this.height);
+<a name="line337"></a>};
 </pre>
 
 

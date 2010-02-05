@@ -250,6 +250,19 @@
 <a name="line206"></a>      new goog.math.Coordinate(coord.x &lt; box.left ? box.left : box.right,
 <a name="line207"></a>                               coord.y &lt; box.top ? box.top : box.bottom));
 <a name="line208"></a>};
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/**
+<a name="line212"></a> * Returns whether two boxes intersect.
+<a name="line213"></a> *
+<a name="line214"></a> * @param {goog.math.Box} a A Box.
+<a name="line215"></a> * @param {goog.math.Box} b A second Box.
+<a name="line216"></a> * @return {boolean} Whether the boxes intersect.
+<a name="line217"></a> */
+<a name="line218"></a>goog.math.Box.intersects = function(a, b) {
+<a name="line219"></a>  return (a.left &lt;= b.right &amp;&amp; b.left &lt;= a.right &amp;&amp;
+<a name="line220"></a>          a.top &lt;= b.bottom &amp;&amp; b.top &lt;= a.bottom);
+<a name="line221"></a>};
 </pre>
 
 

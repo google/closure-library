@@ -270,12 +270,13 @@ goog.dom.browserrange.IeRange.prototype.getContainer = function() {
     // inconsistency where it selects the spaces after a word when you double
     // click, but leaves out the spaces during execCommands.
     // NOTE: this relies on the fact that 'foo'.charAt(-1) == ''
+    var range = this.range_.duplicate();
     for (var i = 1; selectText.charAt(selectText.length - i) == ' '; i++) {
-      this.range_.moveEnd('character', -1);
+      range.moveEnd('character', -1);
     }
 
     // Get the parent node.  This should be the end, but alas, it is not.
-    var parent = this.range_.parentElement();
+    var parent = range.parentElement();
 
     // Deal with selection bug where IE thinks one of the selection's children
     // is actually the selection's parent. Relies on the assumption that the
@@ -284,7 +285,7 @@ goog.dom.browserrange.IeRange.prototype.getContainer = function() {
 
     // Also note IE will sometimes insert \r and \n whitespace, which should be
     // disregarded. Otherwise the loop may run too long and return wrong parent
-    var htmlText = goog.string.stripNewlines(this.range_.htmlText);
+    var htmlText = goog.string.stripNewlines(range.htmlText);
     while (htmlText.length >
            goog.string.stripNewlines(parent.outerHTML).length) {
       parent = parent.parentNode;
