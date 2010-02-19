@@ -14,6 +14,9 @@
 
 /**
  * @fileoverview A table for showing the results of performance testing.
+ *
+ * {@see goog.testing.benchmark} for an easy way to use this functionality.
+ *
  */
 
 goog.provide('goog.testing.PerformanceTable');
@@ -26,15 +29,25 @@ goog.require('goog.testing.PerformanceTimer');
  * @param {Element} root The element where the table should be attached.
  * @param {goog.testing.PerformanceTimer=} opt_timer A timer to use for
  *     executing functions and profiling them.
+ * @param {number=} opt_precision Number of digits of precision to include in
+ *     results.  Defaults to 0.
  * @constructor
  */
-goog.testing.PerformanceTable = function(root, opt_timer) {
+goog.testing.PerformanceTable = function(root, opt_timer, opt_precision) {
   /**
    * Where the table should be attached.
    * @type {Element}
    * @private
    */
   this.root_ = root;
+
+  /**
+   * Number of digits of precision to include in results.
+   * Defaults to 0.
+   * @type {number}
+   * @private
+   */
+  this.precision_ = opt_precision || 0;
 
   var timer = opt_timer;
   if (!timer) {
@@ -98,6 +111,18 @@ goog.testing.PerformanceTable.prototype.getTableBody_ = function() {
 
 
 /**
+ * Round to the specified precision.
+ * @param {number} num The number to round.
+ * @return {string} The rounded number, as a string.
+ * @private
+ */
+goog.testing.PerformanceTable.prototype.round_ = function(num) {
+  var factor = Math.pow(10, this.precision_);
+  return String(Math.round(num * factor) / factor);
+};
+
+
+/**
  * Run the given function with the performance timer, and show the results.
  * @param {Function} fn The function to run.
  * @param {string=} opt_desc A description to associate with this run.
@@ -111,9 +136,9 @@ goog.testing.PerformanceTable.prototype.run = function(fn, opt_desc) {
       goog.dom.createDom('td', 'test-description',
           opt_desc || 'No description'),
       goog.dom.createDom('td', 'test-count', String(results['count'])),
-      goog.dom.createDom('td', 'test-average', String(Math.round(average))),
+      goog.dom.createDom('td', 'test-average', this.round_(average)),
       goog.dom.createDom('td', 'test-standard-deviation',
-          String(Math.round(standardDeviation))),
+          this.round_(standardDeviation)),
       goog.dom.createDom('td', 'test-minimum', String(results['minimum'])),
       goog.dom.createDom('td', 'test-maximum', String(results['maximum'])));
   if (isSuspicious) {

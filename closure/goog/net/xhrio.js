@@ -107,7 +107,7 @@ goog.net.XhrIo.sendInstances_ = [];
  * Static send that creates a short lived instance of XhrIo to send the
  * request.
  * @see goog.net.XhrIo.cleanupAllPendingStaticSends
- * @param {string|goog.Uri} url Uri to make request too.
+ * @param {string|goog.Uri} url Uri to make request to.
  * @param {Function=} opt_callback Callback function for when request is
  *     complete.
  * @param {string=} opt_method Send method, default: GET.

@@ -170,7 +170,7 @@ goog.net.XhrManager.prototype.getOutstandingCount = function() {
  * @param {string=} opt_content Post data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
- * @param {Object=} opt_priority The priority of the request.
+ * @param {*=} opt_priority The priority of the request.
  * @param {Function=} opt_callback Callback function for when request is
  *     complete. The only param is the event object from the COMPLETE event.
  * @param {number=} opt_maxRetries The maximum number of times the request

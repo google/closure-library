@@ -32,5 +32,6 @@ goog.net.EventType = {
   READY: 'ready',
   READY_STATE_CHANGE: 'readystatechange',
   TIMEOUT: 'timeout',
-  INCREMENTAL_DATA: 'incrementaldata'
+  INCREMENTAL_DATA: 'incrementaldata',
+  PROGRESS: 'progress'
 };

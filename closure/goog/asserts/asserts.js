@@ -143,6 +143,7 @@ goog.asserts.fail = function(opt_message, var_args) {
  * @param {*} value The value to check.
  * @param {string=} opt_message Error message in case of failure.
  * @param {...*} var_args The items to substitute into the failure message.
+ * @return {number} The value, guaranteed to be a number when asserts enabled.
  * @throws {goog.asserts.AssertionError} When the value is not a number.
  */
 goog.asserts.assertNumber = function(value, opt_message, var_args) {
@@ -150,6 +151,7 @@ goog.asserts.assertNumber = function(value, opt_message, var_args) {
     goog.asserts.doAssertFailure_('Expected number but got %s.', [value],
          opt_message, Array.prototype.slice.call(arguments, 2));
   }
+  return /** @type {number} */ (value);
 };
 
 
@@ -158,6 +160,7 @@ goog.asserts.assertNumber = function(value, opt_message, var_args) {
  * @param {*} value The value to check.
  * @param {string=} opt_message Error message in case of failure.
  * @param {...*} var_args The items to substitute into the failure message.
+ * @return {string} The value, guaranteed to be a string when asserts enabled.
  * @throws {goog.asserts.AssertionError} When the value is not a string.
  */
 goog.asserts.assertString = function(value, opt_message, var_args) {
@@ -165,6 +168,7 @@ goog.asserts.assertString = function(value, opt_message, var_args) {
     goog.asserts.doAssertFailure_('Expected string but got %s.', [value],
          opt_message, Array.prototype.slice.call(arguments, 2));
   }
+  return /** @type {string} */ (value);
 };
 
 
@@ -173,6 +177,8 @@ goog.asserts.assertString = function(value, opt_message, var_args) {
  * @param {*} value The value to check.
  * @param {string=} opt_message Error message in case of failure.
  * @param {...*} var_args The items to substitute into the failure message.
+ * @return {!Function} The value, guaranteed to be a function when asserts
+ *     enabled.
  * @throws {goog.asserts.AssertionError} When the value is not a function.
  */
 goog.asserts.assertFunction = function(value, opt_message, var_args) {
@@ -180,6 +186,7 @@ goog.asserts.assertFunction = function(value, opt_message, var_args) {
     goog.asserts.doAssertFailure_('Expected function but got %s.', [value],
          opt_message, Array.prototype.slice.call(arguments, 2));
   }
+  return /** @type {!Function} */ (value);
 };
 
 
@@ -188,6 +195,7 @@ goog.asserts.assertFunction = function(value, opt_message, var_args) {
  * @param {*} value The value to check.
  * @param {string=} opt_message Error message in case of failure.
  * @param {...*} var_args The items to substitute into the failure message.
+ * @return {!Object} The value, guaranteed to be a non-null object.
  * @throws {goog.asserts.AssertionError} When the value is not an object.
  */
 goog.asserts.assertObject = function(value, opt_message, var_args) {
@@ -195,6 +203,24 @@ goog.asserts.assertObject = function(value, opt_message, var_args) {
     goog.asserts.doAssertFailure_('Expected object but got %s.', [value],
          opt_message, Array.prototype.slice.call(arguments, 2));
   }
+  return /** @type {!Object} */ (value);
+};
+
+
+/**
+ * Checks if the value is an Array if goog.asserts.ENABLE_ASSERTS is true.
+ * @param {*} value The value to check.
+ * @param {string=} opt_message Error message in case of failure.
+ * @param {...*} var_args The items to substitute into the failure message.
+ * @return {!Array} The value, guaranteed to be a non-null array.
+ * @throws {goog.asserts.AssertionError} When the value is not an array.
+ */
+goog.asserts.assertArray = function(value, opt_message, var_args) {
+  if (goog.asserts.ENABLE_ASSERTS && !goog.isArray(value)) {
+    goog.asserts.doAssertFailure_('Expected array but got %s.', [value],
+         opt_message, Array.prototype.slice.call(arguments, 2));
+  }
+  return /** @type {!Array} */ (value);
 };
 
 

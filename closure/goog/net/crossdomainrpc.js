@@ -205,7 +205,7 @@ goog.net.CrossDomainRpc.logger_ =
 /**
  * Creates the HTML of an input element
  * @param {string} name Name of input element.
- * @param {Object} value Value of input element.
+ * @param {*} value Value of input element.
  * @return {string} HTML of input element with that name and value.
  * @private
  */
@@ -218,8 +218,8 @@ goog.net.CrossDomainRpc.createInputHtml_ = function(name, value) {
 /**
  * Escapes ampersand so that XML/HTML entities are submitted as is because
  * browser unescapes them when they are put into a text area.
- * @param {Object} value Value to escape.
- * @return {Object} Value with ampersand escaped, if value is a string;
+ * @param {*} value Value to escape.
+ * @return {*} Value with ampersand escaped, if value is a string;
  *     otherwise the value itself is returned.
  * @private
  */

@@ -10,7 +10,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2006 Google Inc. All Rights Reserved.
+// 11Copyright 2006 Google Inc. All Rights Reserved.
 
 /**
  * @fileoverview Definition of the BrowserChannel class.  A BrowserChannel
@@ -231,6 +231,14 @@ goog.net.BrowserChannel.prototype.forwardChannelTimerId_ = null;
 goog.net.BrowserChannel.prototype.backChannelTimerId_ = null;
 
 /**
+ * Timer identifier for the timer that waits for us to retry the backchannel in
+ * the case where it is dead and no longer receiving data.
+ * @type {?number}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.deadBackChannelTimerId_ = null;
+
+/**
  * The BrowserTestChannel object which encapsulates the logic for determining
  * interesting network conditions about the client.
  * @type {goog.net.BrowserTestChannel?}
@@ -261,6 +269,13 @@ goog.net.BrowserChannel.prototype.allowChunkedMode_ = true;
 goog.net.BrowserChannel.prototype.lastArrayId_ = -1;
 
 /**
+ * The array identifier of the last array sent by the server that we know about.
+ * @type {number}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.lastPostResponseArrayId_ = -1;
+
+/**
  * The last status code received.
  * @type {number}
  * @private
@@ -272,7 +287,7 @@ goog.net.BrowserChannel.prototype.lastStatusCode_ = -1;
  * @type {number}
  * @private
  */
-goog.net.BrowserChannel.prototype.forwardChannelRetryCount_;
+goog.net.BrowserChannel.prototype.forwardChannelRetryCount_ = 0;
 
 /**
  * Number of times it a row that we have retried the current back channel
@@ -280,7 +295,7 @@ goog.net.BrowserChannel.prototype.forwardChannelRetryCount_;
  * @type {number}
  * @private
  */
-goog.net.BrowserChannel.prototype.backChannelRetryCount_;
+goog.net.BrowserChannel.prototype.backChannelRetryCount_ = 0;
 
 /**
  * The attempt id for the current back channel request. Starts at 1 and
@@ -297,7 +312,7 @@ goog.net.BrowserChannel.prototype.backChannelAttemptId_;
  * com.google.net.browserchannel.BrowserChannel.LATEST_CHANNEL_VERSION.
  * @type {number}
  */
-goog.net.BrowserChannel.LATEST_CHANNEL_VERSION = 7;
+goog.net.BrowserChannel.LATEST_CHANNEL_VERSION = 8;
 
 /**
  * The channel version that we negotiated with the server for this session.
@@ -361,6 +376,14 @@ goog.net.BrowserChannel.RETRY_DELAY_MS = 5 * 1000;
  * @type {number}
  */
 goog.net.BrowserChannel.RETRY_DELAY_SEED = 10 * 1000;
+
+/**
+ * A number in MS of how long we guess the maxmium amount of time a round trip
+ * to the server should take. In the future this could be substituted with a
+ * real measurement of the RTT.
+ * @type {number}
+ */
+goog.net.BrowserChannel.RTT_ESTIMATE = 3 * 1000;
 
 /**
  * When retrying for an inactive channel, we will multiply the total delay by
@@ -588,16 +611,38 @@ goog.net.BrowserChannel.Stat = {
   REQUEST_NO_DATA: 17,
 
   /** Event indicating a request timeout. */
-  REQUEST_TIMEOUT: 18
+  REQUEST_TIMEOUT: 18,
+
+  /**
+   * Event indicating that the server never received our hanging GET and so it
+   * is being retried.
+   */
+  BACKCHANNEL_MISSING: 19,
+
+  /**
+   * Event indicating that we have determined that our hanging GET is not
+   * receiving data when it should be. Thus it is dead dead and will be retried.
+   */
+  BACKCHANNEL_DEAD: 20
 };
 
 
 /**
- * Magic response cookie that is the response for forward channel requests.
+ * The normal response for forward channel requests.
+ * Used only before version 8 of the protocol.
  * @type {string}
  */
 goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE = 'y2f%';
 
+/**
+ * A guess at a cutoff at which to no longer assume the backchannel is dead
+ * when we are slow to receive data. Number in bytes.
+ *
+ * Assumption: The worst bandwidth we work on is 50 kilobits/sec
+ * 50kbits/sec * (1 byte / 8 bits) * 6 sec dead backchannel timeout
+ * @type {number}
+ */
+goog.net.BrowserChannel.OUTSTANDING_DATA_BACKCHANNEL_RETRY_CUTOFF = 37500;
 
 /**
  * Returns the browserchannel logger.
@@ -797,6 +842,8 @@ goog.net.BrowserChannel.prototype.cancelRequests_ = function() {
     goog.global.clearTimeout(this.backChannelTimerId_);
     this.backChannelTimerId_ = null;
   }
+
+  this.clearDeadBackchannelTimer_();
 
   if (this.forwardChannelRequest_) {
     this.forwardChannelRequest_.cancel();
@@ -1494,16 +1541,136 @@ goog.net.BrowserChannel.prototype.onRequestData =
 
   if (this.forwardChannelRequest_ == request &&
       this.state_ == goog.net.BrowserChannel.State.OPENED) {
-    // expect magic cookie in response
-    if (responseText != goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE) {
+    if (this.channelVersion_ > 7) {
+      var response;
+      try {
+        response = (/** @type {Array} */ goog.json.unsafeParse(responseText));
+      } catch (ex) {
+        response = null;
+      }
+      if (goog.isArray(response) && response.length == 3) {
+        this.handlePostResponse_(response);
+      } else {
+        this.channelDebug_.debug('Bad POST response data returned');
+        this.signalError_(goog.net.BrowserChannel.Error.BAD_RESPONSE);
+      }
+    } else if (responseText != goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE) {
       this.channelDebug_.debug('Bad data returned - missing/invald ' +
                                   'magic cookie');
       this.signalError_(goog.net.BrowserChannel.Error.BAD_RESPONSE);
     }
   } else {
+    if (this.backChannelRequest_ == request) {
+      this.clearDeadBackchannelTimer_();
+    }
     if (!goog.string.isEmpty(responseText)) {
       this.onInput_(/** @type {Array} */ (goog.json.unsafeParse(responseText)));
     }
+  }
+};
+
+
+/**
+ * Handles a POST response from the server.
+ * @param {Array} responseValues The key value pairs in the POST response.
+ * @private
+ */
+goog.net.BrowserChannel.prototype.handlePostResponse_ = function(
+    responseValues) {
+  // The first response value is set to 0 if server is missing backchannel.
+  if (responseValues[0] == 0) {
+    this.handleBackchannelMissing_();
+    return;
+  }
+  this.lastPostResponseArrayId_ = responseValues[1];
+  var outstandingArrays = this.lastPostResponseArrayId_ - this.lastArrayId_;
+  if (0 < outstandingArrays) {
+    var numOutstandingBackchannelBytes = responseValues[2];
+    this.channelDebug_.debug(numOutstandingBackchannelBytes + ' bytes (in ' +
+         outstandingArrays + ' arrays) are outstanding on the BackChannel');
+    if (!this.shouldRetryBackChannel_(numOutstandingBackchannelBytes)) {
+      return;
+    }
+    if (!this.deadBackChannelTimerId_) {
+      // We expect to receive data within 2 RTTs or we retry the backchannel.
+      this.deadBackChannelTimerId_ = goog.net.BrowserChannel.setTimeout(
+        goog.bind(this.onBackChannelDead_, this),
+        2 * goog.net.BrowserChannel.RTT_ESTIMATE);
+    }
+  }
+};
+
+
+/**
+ * Handles a POST response from the server telling us that it has detected that
+ * we have no hanging GET connection.
+ * @private
+ */
+goog.net.BrowserChannel.prototype.handleBackchannelMissing_ = function() {
+  // As long as the back channel was started before the POST was sent,
+  // we should retry the backchannel.
+  this.channelDebug_.debug('Server claims our backchannel is missing.')
+  if (!this.backChannelRequest_) {
+    this.channelDebug_.warning(
+        'We do not have a BackChannel established');
+  } else if (this.backChannelRequest_.getRequestStartTime() <
+      this.forwardChannelRequest_.getRequestStartTime()) {
+    this.clearDeadBackchannelTimer_();
+    this.backChannelRequest_.cancel();
+    this.backChannelRequest_ = null;
+  } else {
+    return;
+  }
+  this.maybeRetryBackChannel_();
+  goog.net.BrowserChannel.notifyStatEvent(
+        goog.net.BrowserChannel.Stat.BACKCHANNEL_MISSING);
+};
+
+
+/**
+ * Determines whether we should start the process of retrying a possibly
+ * dead backchannel.
+ * @param {number} outstandingBytes The number of bytes for which the server has
+ *     not yet received acknowledgement.
+ * @return {boolean} Whether to start the backchannel retry timer.
+ * @private
+ */
+goog.net.BrowserChannel.prototype.shouldRetryBackChannel_ = function(
+    outstandingBytes) {
+  // Not too many outstanding bytes, not buffered and not after a retry.
+  return outstandingBytes <
+      goog.net.BrowserChannel.OUTSTANDING_DATA_BACKCHANNEL_RETRY_CUTOFF &&
+      !this.isBuffered() &&
+      this.backChannelRetryCount_ == 0;
+};
+
+
+/**
+ * Handles the timer that indicates that our backchannel is no longer able to
+ * successfully receive data from the server.
+ * @private
+ */
+goog.net.BrowserChannel.prototype.onBackChannelDead_ = function() {
+  if (goog.isDefAndNotNull(this.deadBackChannelTimerId_)) {
+    this.deadBackChannelTimerId_ = null;
+    this.backChannelRequest_.cancel();
+    this.backChannelRequest_ = null;
+    this.maybeRetryBackChannel_();
+    goog.net.BrowserChannel.notifyStatEvent(
+        goog.net.BrowserChannel.Stat.BACKCHANNEL_DEAD);
+  }
+};
+
+
+/**
+ * Clears the timer that indicates that our backchannel is no longer able to
+ * successfully receive data from the server.
+ * @private
+ */
+goog.net.BrowserChannel.prototype.clearDeadBackchannelTimer_ = function() {
+  if (goog.isDefAndNotNull(this.deadBackChannelTimerId_)) {
+    goog.global.clearTimeout(this.deadBackChannelTimerId_)
+    this.deadBackChannelTimerId_ = null;
   }
 };
 
@@ -1535,6 +1702,7 @@ goog.net.BrowserChannel.prototype.onRequestComplete =
   this.channelDebug_.debug('Request complete');
   var type;
   if (this.backChannelRequest_ == request) {
+    this.clearDeadBackchannelTimer_();
     this.backChannelRequest_ = null;
     type = goog.net.BrowserChannel.ChannelType_.BACK_CHANNEL;
   } else if (this.forwardChannelRequest_ == request) {
@@ -1752,6 +1920,9 @@ goog.net.BrowserChannel.prototype.testGoogleComCallback_ = function(networkUp) {
     this.channelDebug_.info('Failed to ping google.com');
     goog.net.BrowserChannel.notifyStatEvent(
         goog.net.BrowserChannel.Stat.ERROR_NETWORK);
+    // We cann onError_ here instead of signalError_ because the latter just
+    // calls notifyStatEvent, and we don't want to have another stat event.
+    this.onError_(goog.net.BrowserChannel.Error.NETWORK);
   }
 };
 

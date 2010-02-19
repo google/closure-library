@@ -294,6 +294,15 @@ constructornamespace.MyConstructorWithArgument.prototype.myMethod = function() {
   return this.argument_;
 };
 
+constructornamespace.MyConstructorWithClassMembers = function() {
+};
+
+constructornamespace.MyConstructorWithClassMembers.CONSTANT = 42;
+
+constructornamespace.MyConstructorWithClassMembers.classMethod = function() {
+  return 'class method return value';
+};
+
 function testConstructorMock() {
   var mockObject =
       new goog.testing.StrictMock(constructornamespace.MyConstructor);
@@ -326,6 +335,18 @@ function testConstructorMockWithArgument() {
           .myMethod());
   mockConstructor.$verify();
   mockObject.$verify();
+  mockConstructor.$tearDown();
+}
+
+/**
+ * Test that class members are copied to the mock constructor.
+ */
+function testConstructorMockWithClassMembers() {
+  var mockConstructor = goog.testing.createConstructorMock(
+      constructornamespace, 'MyConstructorWithClassMembers');
+  assertEquals(42, constructornamespace.MyConstructorWithClassMembers.CONSTANT);
+  assertEquals('class method return value',
+      constructornamespace.MyConstructorWithClassMembers.classMethod());
   mockConstructor.$tearDown();
 }
 

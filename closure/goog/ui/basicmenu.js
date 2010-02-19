@@ -90,7 +90,7 @@ goog.inherits(goog.ui.BasicMenu, goog.ui.AttachableMenu);
 
 /**
  * Key for the event used to trigger the menu
- * @type {?string}
+ * @type {?number}
  * @private
  */
 goog.ui.BasicMenu.prototype.evtKey_ = null;
@@ -98,7 +98,7 @@ goog.ui.BasicMenu.prototype.evtKey_ = null;
 
 /**
  * Key for the window resize event listener
- * @type {?string}
+ * @type {?number}
  * @private
  */
 goog.ui.BasicMenu.prototype.resizeEvtKey_ = null;
@@ -518,7 +518,7 @@ goog.ui.BasicMenu.prototype.containsElement_ = function(el) {
 
 /**
  * Mouse down handler for the document on capture phase. Hides the menu.
- * @param {goog.events.Event} e The event object.
+ * @param {goog.events.BrowserEvent} e The event object.
  * @private
  */
 goog.ui.BasicMenu.prototype.onDocumentMouseDown_ = function(e) {
@@ -717,7 +717,7 @@ goog.ui.BasicMenu.Item = function(caption, opt_value, opt_submenu) {
 
   /**
    * Value associated with the menu option.
-   * @type {Object}
+   * @type {*}
    * @private
    */
   this.value_ = opt_value || caption;
@@ -755,7 +755,7 @@ goog.ui.BasicMenu.Item.prototype.getCaption = function() {
 
 
 /**
- * @return {Object} The value associated with menu item.
+ * @return {*} The value associated with menu item.
  */
 goog.ui.BasicMenu.Item.prototype.getValue = function() {
   return this.value_;

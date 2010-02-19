@@ -1395,6 +1395,9 @@ goog.editor.plugins.BasicTextFormatter.SUPPORTED_JUSTIFICATIONS_ = {
 goog.editor.plugins.BasicTextFormatter.prototype.isJustification_ =
     function(command) {
   var alignment = command.replace('+justify', '').toLowerCase();
+  if (alignment == 'full') {
+    alignment = 'justify';
+  }
   var bidiPlugin = this.fieldObject.getPluginByClassId('Bidi');
   if (bidiPlugin) {
     // BiDi aware version

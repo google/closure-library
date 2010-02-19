@@ -496,6 +496,72 @@ function testGetPreviousElementSibling() {
   assertNull('Previous element sibling of b1 should be null', c);
 }
 
+function testGetNextNode() {
+  var tree = goog.dom.htmlToDocumentFragment(
+      '<div>' +
+        '<p>Some text</p>' +
+        '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
+        '<address><!-- comment -->Foo</address>' +
+      '</div>');
+
+  assertNull(goog.dom.getNextNode(null));
+
+  var node = tree;
+  var next = function() {
+    return node = goog.dom.getNextNode(node);
+  };
+
+  assertEquals('P', next().tagName);
+  assertEquals('Some text', next().nodeValue);
+  assertEquals('BLOCKQUOTE', next().tagName);
+  assertEquals('Some ', next().nodeValue);
+  assertEquals('I', next().tagName);
+  assertEquals('special', next().nodeValue);
+  assertEquals(' ', next().nodeValue);
+  assertEquals('B', next().tagName);
+  assertEquals('text', next().nodeValue);
+  assertEquals('ADDRESS', next().tagName);
+  assertEquals(goog.dom.NodeType.COMMENT, next().nodeType);
+  assertEquals('Foo', next().nodeValue);
+
+  assertNull(next());
+}
+
+function testGetPreviousNode() {
+  var tree = goog.dom.htmlToDocumentFragment(
+      '<div>' +
+        '<p>Some text</p>' +
+        '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
+        '<address><!-- comment -->Foo</address>' +
+      '</div>');
+
+  assertNull(goog.dom.getPreviousNode(null));
+
+  var node = tree.lastChild.lastChild;
+  var previous = function() {
+    return node = goog.dom.getPreviousNode(node);
+  };
+
+  assertEquals(goog.dom.NodeType.COMMENT, previous().nodeType);
+  assertEquals('ADDRESS', previous().tagName);
+  assertEquals('text', previous().nodeValue);
+  assertEquals('B', previous().tagName);
+  assertEquals(' ', previous().nodeValue);
+  assertEquals('special', previous().nodeValue);
+  assertEquals('I', previous().tagName);
+  assertEquals('Some ', previous().nodeValue);
+  assertEquals('BLOCKQUOTE', previous().tagName);
+  assertEquals('Some text', previous().nodeValue);
+  assertEquals('P', previous().tagName);
+  assertEquals('DIV', previous().tagName);
+
+  if (!goog.userAgent.IE) {
+    // Internet Explorer maintains a parentNode for Elements after they are
+    // removed from the hierarchy. Everyone else agrees on a null parentNode.
+    assertNull(previous());
+  }
+}
+
 function testSetTextContent() {
   var p1 = $('p1');
   var s = 'hello world';
@@ -790,7 +856,7 @@ function testCanHaveChildren() {
     switch (tag) {
       case goog.dom.TagName.BASE:
         // Before version 8, IE incorrectly reports that BASE can have children.
-        expected = goog.userAgent.IE && !goog.userAgent.isVersion(8);
+        expected = goog.userAgent.IE && !goog.userAgent.isVersion('8');
         break;
       case goog.dom.TagName.APPLET:
       case goog.dom.TagName.AREA:
@@ -893,4 +959,40 @@ function testGetAncestorByTagNameAndClass() {
   assertEquals(expected,
       goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV,
           'testAncestor'));
+}
+
+function testCreateTable() {
+  var table = goog.dom.createTable(2, 3, true);
+  assertEquals(2, table.getElementsByTagName(goog.dom.TagName.TR).length);
+  assertEquals(3,
+      table.getElementsByTagName(goog.dom.TagName.TR)[0].childNodes.length);
+  assertEquals(6, table.getElementsByTagName(goog.dom.TagName.TD).length);
+  assertEquals(goog.string.Unicode.NBSP,
+      table.getElementsByTagName(goog.dom.TagName.TD)[0].firstChild.nodeValue);
+
+  table = goog.dom.createTable(2, 3, false);
+  assertEquals(2, table.getElementsByTagName(goog.dom.TagName.TR).length);
+  assertEquals(3,
+      table.getElementsByTagName(goog.dom.TagName.TR)[0].childNodes.length);
+  assertEquals(6, table.getElementsByTagName(goog.dom.TagName.TD).length);
+  assertEquals(0,
+      table.getElementsByTagName(goog.dom.TagName.TD)[0].childNodes.length);
+}
+
+function testHtmlToDocumentFragment() {
+  var docFragment = goog.dom.htmlToDocumentFragment('<a>1</a><b>2</b>');
+  assertNull(docFragment.parentNode);
+  assertEquals(2, docFragment.childNodes.length);
+
+  var div = goog.dom.htmlToDocumentFragment('<div>3</div>');
+  assertEquals('DIV', div.tagName);
+
+  if (goog.userAgent.IE) {
+    // Removing an Element from a DOM tree in IE sets its parentNode to a new
+    // DocumentFragment. Bizarre!
+    assertEquals(goog.dom.NodeType.DOCUMENT_FRAGMENT,
+                 goog.dom.removeNode(div).parentNode.nodeType);
+  } else {
+    assertNull(div.parentNode);
+  }
 }

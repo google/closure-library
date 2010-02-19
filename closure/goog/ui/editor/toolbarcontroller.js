@@ -249,7 +249,8 @@ goog.ui.editor.ToolbarController.prototype.updateToolbar = function(e) {
     // If the COMMAND_VALUE_CHANGE event specifies which commands changed
     // state, then we only need to update those ones, otherwise update all
     // commands.
-    state = this.field_.queryCommandValue(e.commands || this.queryCommands_);
+    state = /** @type {Object} */ (
+        this.field_.queryCommandValue(e.commands || this.queryCommands_));
   } catch (ex) {
     // TODO: Find out when/why this happens.
     state = {};

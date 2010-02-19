@@ -43,6 +43,9 @@ goog.require('goog.testing.stacktrace');
  *   - tearDownPage - called after all tests are finished
  *   - setUp - called before each of the test functions
  *   - tearDown - called after each of the test functions
+ *   - shouldRunTests - called before a test run, all tests are skipped if it
+ *                      returns false.  Can be used to disable tests on browsers
+ *                      where they aren't expected to pass.
  *
  * Use {@link #autoDiscoverTests}
  *
@@ -66,7 +69,22 @@ goog.testing.TestCase = function(opt_name) {
   this.tests_ = [];
 
   /**
-   * Set of test names to execute, or null if all tests should be executed.
+   * Set of test names and/or indices to execute, or null if all tests should
+   * be executed.
+   *
+   * Indices are included to allow automation tools to run a subset of the
+   * tests without knowing the exact contents of the test file.
+   *
+   * Indices should only be used with SORTED ordering.
+   *
+   * Example valid values:
+   * <ul>
+   * <li>[testName]
+   * <li>[testName1, testName2]
+   * <li>[2] - will run the 3rd test in the order specified
+   * <li>[1,3,5]
+   * <li>[testName1, testName2, 3, 5] - will work
+   * <ul>
    * @type {Object}
    * @private
    */
@@ -74,7 +92,8 @@ goog.testing.TestCase = function(opt_name) {
 
   var search = window.location.search;
 
-  // Parse the 'runTests' query parameter into a set of test names.
+  // Parse the 'runTests' query parameter into a set of test names and/or
+  // test indices.
   var runTestsMatch = search.match(/(?:\?|&)runTests=([^?&]+)/i);
   if (runTestsMatch) {
     this.testsToRun_ = {};
@@ -218,12 +237,14 @@ goog.testing.TestCase.prototype.currentTestPointer_ = 0;
  */
 goog.testing.TestCase.prototype.onCompleteCallback_ = null;
 
+
 /**
  * The test runner that is running this case.
  * @type {goog.testing.TestRunner?}
  * @private
  */
 goog.testing.TestCase.prototype.testRunner_ = null;
+
 
 /**
  * Adds a new test to the test case.
@@ -250,7 +271,8 @@ goog.testing.TestCase.prototype.getCount = function() {
 goog.testing.TestCase.prototype.next = function() {
   var test;
   while ((test = this.tests_[this.currentTestPointer_++])) {
-    if (!this.testsToRun_ || this.testsToRun_[test.name]) {
+    if (!this.testsToRun_ || this.testsToRun_[test.name] ||
+        this.testsToRun_[this.currentTestPointer_ - 1]) {
       return test;
     }
   }
@@ -287,15 +309,35 @@ goog.testing.TestCase.prototype.setTestRunner = function(tr) {
 
 
 /**
+ * Can be overridden in test classes to indicate whether the tests in a case
+ * should be run in that particular situation.  For example, this could be used
+ * to stop tests running in a particular browser, where browser support for
+ * the class under test was absent.
+ * @return {boolean} Whether any of the tests in the case should be run.
+ */
+goog.testing.TestCase.prototype.shouldRunTests = function() {
+  return true;
+};
+
+
+/**
  * Executes each of the tests.
  */
 goog.testing.TestCase.prototype.execute = function() {
-  this.log('Starting tests: ' + this.name_);
   this.started = true;
   this.reset();
   this.startTime_ = this.now_();
   this.running = true;
   this.result_.totalCount = this.getCount();
+
+  if (!this.shouldRunTests()) {
+    this.log('shouldRunTests() returned false, skipping these tests.');
+    this.result_.testSuppressed = true;
+    this.finalize();
+    return;
+  }
+
+  this.log('Starting tests: ' + this.name_);
   this.cycleTests();
 };
 
@@ -366,14 +408,14 @@ goog.testing.TestCase.prototype.isInsideMultiTestRunner = function() {
 
 /**
  * Logs an object to the console, if available.
- * @param {Object} obj The object to log.
+ * @param {*} val The value to log. Will be ToString'd
  */
-goog.testing.TestCase.prototype.log = function(obj) {
+goog.testing.TestCase.prototype.log = function(val) {
   if (!this.isInsideMultiTestRunner() && window.console) {
-    if (typeof obj == 'string') {
-      obj = this.getTimeStamp_() + ' : ' + obj;
+    if (typeof val == 'string') {
+      val = this.getTimeStamp_() + ' : ' + val;
     }
-    window.console.log(obj);
+    window.console.log(val);
   }
 };
 
@@ -394,11 +436,12 @@ goog.testing.TestCase.prototype.isSuccess = function() {
  */
 goog.testing.TestCase.prototype.getReport = function(opt_verbose) {
   var rv = [];
-  var success = this.result_.isSuccess();
-  if (this.testRunner_) {
-    success = success && !this.testRunner_.hasErrors();
+  if (this.testRunner_ && !this.testRunner_.isFinished()) {
+    rv.push(this.name_ + ' [RUNNING]');
+  } else {
+    var success = this.result_.isSuccess() && !this.testRunner_.hasErrors();
+    rv.push(this.name_ + ' [' + (success ? 'PASSED' : 'FAILED') + ']');
   }
-  rv.push(this.name_ + ' [' + (success ? 'PASSED' : 'FAILED') + ']');
   rv.push(this.trimPath_(window.location.href));
   rv.push(this.result_.getSummary());
   if (opt_verbose) {
@@ -575,6 +618,9 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
     this.tearDownPage = goog.global['tearDownPage'];
   }
   if (goog.global['runTests']) this.runTests = goog.global['runTests'];
+  if (goog.global['shouldRunTests']) {
+      this.shouldRunTests = goog.global['shouldRunTests'];
+  }
 };
 
 
@@ -856,6 +902,12 @@ goog.testing.TestCase.Result = function(testCase) {
   this.numFilesLoaded = 0;
 
   /**
+   * Whether this test case was suppressed by shouldRunTests() returning false.
+   * @type {boolean}
+   */
+  this.testSuppressed = false;
+
+  /**
    * Errors encountered while running the test.
    * @type {Array.<goog.testing.TestCase.Error>}
    */
@@ -874,7 +926,7 @@ goog.testing.TestCase.Result = function(testCase) {
  */
 goog.testing.TestCase.Result.prototype.isSuccess = function() {
   var noErrors = this.runCount == this.successCount && this.errors.length == 0;
-  if (noErrors && this.isStrict()) {
+  if (noErrors && !this.testSuppressed && this.isStrict()) {
     return this.runCount > 0;
   }
   return noErrors;
@@ -888,7 +940,9 @@ goog.testing.TestCase.Result.prototype.isSuccess = function() {
 goog.testing.TestCase.Result.prototype.getSummary = function() {
   var summary = this.runCount + ' of ' + this.totalCount + ' tests run in ' +
       this.runTime + 'ms.\n';
-  if (this.runCount == 0) {
+  if (this.testSuppressed) {
+    summary += 'Tests not run because shouldRunTests() returned false.';
+  } else if (this.runCount == 0) {
     summary += 'No tests found.  ';
     if (this.isStrict()) {
       summary +=

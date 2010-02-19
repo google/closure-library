@@ -1,0 +1,134 @@
+/*
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+*/
+
+/*
+ * Copyright 2009 Google Inc.  All Rights Reserved.
+ *
+ * Standard styling for a goog.ui.DatePicker.
+ *
+
+ */
+
+.goog-date-picker {
+  -moz-user-focus: normal;
+  -moz-user-select: none;
+  background: white;
+  border: 1px solid black;
+  color: black;
+  cursor: default;
+  float: left;
+  font: menu;
+  padding: 0 1px;
+  position: relative;
+}
+
+.goog-date-picker th {
+  font: menu;
+  text-align: center;
+}
+
+.goog-date-picker td {
+  border: 1px solid white;
+  border-width: 0 1px;
+  font: menu;
+  padding: 1px 3px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+.goog-date-picker-menu {
+  -moz-user-focus: normal;
+  background: threedface;
+  border: 1px solid gray;
+  outline: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.goog-date-picker-menu ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.goog-date-picker-menu ul li {
+  cursor: default;
+}
+
+.goog-date-picker-menu-selected {
+  background: #ccf;
+}
+
+.goog-date-picker th {
+  color: gray;
+  font-size: 0.9em;
+}
+
+.goog-date-picker td div {
+  float: left;
+}
+
+.goog-date-picker button {
+  border: 1px solid gray;
+  margin: 1px;
+  padding: 0px;
+}
+
+.goog-date-picker-week,
+.goog-date-picker-wday {
+  padding: 1px 3px;
+}
+
+.goog-date-picker-head td {
+  text-align: center;
+}
+
+/** Use td.className instead of !important */
+td.goog-date-picker-today-cont {
+  text-align: center;
+}
+
+/** Use td.className instead of !important */
+td.goog-date-picker-none-cont {
+  text-align: center;
+}
+
+.goog-date-picker-month {
+  width: 12ex;
+}
+
+.goog-date-picker-year {
+  width: 6ex;
+}
+
+.goog-date-picker table {
+  border-collapse: collapse;
+}
+
+.goog-date-picker-other-month {
+  opacity: 0.3;
+  -moz-opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+
+.goog-date-picker-wkend-start {
+  background: #fcc;
+}
+
+.goog-date-picker-wkend-end {
+  background: #fcc;
+  color: red;
+}
+
+.goog-date-picker-selected {
+  background: #ccf;
+  color: blue;
+}
+
+.goog-date-picker-today {
+  font-weight: bold !important;
+}
+

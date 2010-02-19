@@ -74,13 +74,7 @@ goog.ui.tree.TreeNode.prototype.getTree = function() {
  * @return {string} Src for the icon.
  */
 goog.ui.tree.TreeNode.prototype.getCalculatedIconClass = function() {
-  // if classic then the openIcon is used for expanded, otherwise openIcon is
-  // used for selected
-  var config = this.getConfig();
-  var behavior = this.getTree() ? this.getTree().getBehavior() :
-                 config.defaultBehavior;
-  var expanded = behavior == 'classic' && this.getExpanded() ||
-                 behavior != 'classic' && this.isSelected();
+  var expanded = this.getExpanded();
   if (expanded && this.expandedIconClass_) {
     return this.expandedIconClass_;
   }
@@ -89,6 +83,7 @@ goog.ui.tree.TreeNode.prototype.getCalculatedIconClass = function() {
   }
 
   // fall back on default icons
+  var config = this.getConfig();
   if (this.hasChildren()) {
     if (expanded && config.cssExpandedFolderIcon) {
       return config.cssTreeIcon + ' ' +

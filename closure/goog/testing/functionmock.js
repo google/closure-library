@@ -119,7 +119,8 @@ goog.testing.createMethodMock = function(scope, functionName) {
 
 
 /**
- * Convenience method for creating a mock for a constructor.
+ * Convenience method for creating a mock for a constructor. Copies class
+ * members to the mock.
  *
  * <p>When mocking a constructor to return a mocked instance, remember to create
  * the instance mock before mocking the constructor. If you mock the constructor
@@ -131,11 +132,21 @@ goog.testing.createMethodMock = function(scope, functionName) {
  * @return {goog.testing.MethodMock} the mocked constructor.
  */
 goog.testing.createConstructorMock = function(scope, constructorName) {
-  // The return value is a MethodMock and there is no difference in
-  // implementation between this method and createMethodMock. This alias is
-  // provided just to make code clearer and to make it easier to introduce a
-  // more specialized implementation if that is ever necessary.
-  return new goog.testing.MethodMock(scope, constructorName);
+  var realConstructor = scope[constructorName];
+  var constructorMock = new goog.testing.MethodMock(scope, constructorName);
+
+  // Copy class members from the real constructor to the mock. Do not copy
+  // the closure superClass_ property (see goog.inherits), the built-in
+  // prototype property, or properties added to Function.prototype
+  // (see goog.MODIFY_FUNCTION_PROTOTYPES in closure/base.js).
+  for (var property in realConstructor) {
+    if (property != 'superClass_' &&
+        property != 'prototype' &&
+        realConstructor.hasOwnProperty(property)) {
+      constructorMock[property] = realConstructor[property];
+    }
+  }
+  return constructorMock;
 };
 
 

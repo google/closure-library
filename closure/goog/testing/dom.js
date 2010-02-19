@@ -90,6 +90,38 @@ goog.testing.dom.assertNodesMatch = function(it, array) {
 
 
 /**
+ * Exposes a node as a string.
+ * @param {Node} node A node.
+ * @return {string} A string representation of the node.
+ */
+goog.testing.dom.exposeNode = function(node) {
+  return (node.tagName || node.nodeValue) + (node.id ? '#' + node.id : '') +
+      ':"' + (node.innerHTML || '') + '"';
+};
+
+
+/**
+ * Exposes the nodes of a range wrapper as a string.
+ * @param {goog.dom.AbstractRange} range A range.
+ * @return {string} A string representation of the range.
+ */
+goog.testing.dom.exposeRange = function(range) {
+  // This is deliberately not implemented as
+  // goog.dom.AbstractRange.prototype.toString, because it is non-authoritative.
+  // Two equivalent ranges may have very different exposeRange values, and
+  // two different ranges may have equal exposeRange values.
+  // (The mapping of ranges to DOM nodes/offsets is a many-to-many mapping).
+  if (!range) {
+    return 'null';
+  }
+  return goog.testing.dom.exposeNode(range.getStartNode()) + ':' +
+         range.getStartOffset() + ' to ' +
+         goog.testing.dom.exposeNode(range.getEndNode()) + ':' +
+         range.getEndOffset();
+};
+
+
+/**
  * Determines if the current user agent matches the specified string.  Returns
  * false if the string does specify at least one user agent but does not match
  * the running agent.

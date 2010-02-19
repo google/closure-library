@@ -187,7 +187,7 @@ goog.fx.AbstractDragDrop.EventType = {
 /**
  * Constant for distance threshold, in pixels, an element has to be moved to
  * initiate a drag operation.
- * @type {Object}
+ * @type {number}
  */
 goog.fx.AbstractDragDrop.initDragDistanceThreshold = 5;
 

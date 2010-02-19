@@ -90,7 +90,7 @@ limitations under the License.
         var childNotCollapsible = 3; // Hard coded to reduce randomness.
         for (var i = 0; i < children.length; i++) {
           var child = children[i];
-          var childNode = node.getTree().createNode();
+          var childNode = node.getTree().createNode('');
 
           node.add(childNode);
           createTreeFromTestData(childNode, child);

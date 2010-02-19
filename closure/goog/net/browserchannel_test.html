@@ -24,6 +24,7 @@ limitations under the License.
 <script type="text/javascript">
   goog.require('goog.Timer');
   goog.require('goog.dom');
+  goog.require('goog.json');
   goog.require('goog.net.ChannelRequest');
   goog.require('goog.net.BrowserChannel');
   goog.require('goog.net.ChannelRequest');
@@ -116,6 +117,7 @@ MockChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
 };
 
 MockChannelRequest.prototype.tridentGet = function(uri, usingSecondaryDomain) {
+  this.channelDebug_.debug('<---GET (T): ' + uri);
   this.requestStartTime_ = goog.now()
 };
 
@@ -277,11 +279,11 @@ function testFormatArrayOfMaps() {
 }
 
 
-function connect() {
+function connect(opt_serverVersion) {
   browserChannel.connect('/test', '/bind', null);
   mockClock.tick(0);
   completeTestConnection();
-  completeForwardChannel();
+  completeForwardChannel(opt_serverVersion);
   completeBackChannel();
 }
 
@@ -314,16 +316,25 @@ function completeBackTestConnection() {
   browserChannel.connectionTest_.onRequestData(
       browserChannel.connectionTest_,
       '11111');
+  mockClock.tick(201);
+  browserChannel.connectionTest_.onRequestData(
+      browserChannel.connectionTest_,
+      '2');
   browserChannel.connectionTest_.onRequestComplete(
       browserChannel.connectionTest_);
   mockClock.tick(0);
 }
 
 
-function completeForwardChannel() {
+function completeForwardChannel(opt_serverVersion) {
+  var responseData = '[[0,["c","1234567890ABCDEF",null]]]'
+  if (opt_serverVersion) {
+    responseData = '[[0,["c","1234567890ABCDEF",null,' + opt_serverVersion
+        + ']]]';
+  }
   browserChannel.onRequestData(
       browserChannel.forwardChannelRequest_,
-      '[[0,["c","1234567890ABCDEF"]]]');
+      responseData);
   browserChannel.onRequestComplete(
       browserChannel.forwardChannelRequest_);
   mockClock.tick(0);
@@ -340,10 +351,33 @@ function completeBackChannel() {
 }
 
 
-function response() {
+function responseVersion7() {
   browserChannel.onRequestData(
       browserChannel.forwardChannelRequest_,
       goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE);
+  browserChannel.onRequestComplete(
+      browserChannel.forwardChannelRequest_);
+  mockClock.tick(0);
+}
+
+function responseNoBackchannel(lastArrayIdSentFromServer, outstandingDataSize) {
+  responseData = goog.json.serialize(
+      [0, lastArrayIdSentFromServer, outstandingDataSize]);
+  browserChannel.onRequestData(
+      browserChannel.forwardChannelRequest_,
+      responseData);
+  browserChannel.onRequestComplete(
+      browserChannel.forwardChannelRequest_);
+  mockClock.tick(0);
+}
+
+function response(lastArrayIdSentFromServer, outstandingDataSize) {
+  responseData = goog.json.serialize(
+      [1, lastArrayIdSentFromServer, outstandingDataSize]);
+  browserChannel.onRequestData(
+      browserChannel.forwardChannelRequest_,
+      responseData
+      );
   browserChannel.onRequestComplete(
       browserChannel.forwardChannelRequest_);
   mockClock.tick(0);
@@ -410,6 +444,11 @@ function hasBackChannel() {
 }
 
 
+function hasDeadBackChannelTimer() {
+  return goog.isDefAndNotNull(browserChannel.deadBackChannelTimerId_);
+};
+
+
 function assertHasForwardChannel() {
   assertTrue('Forward channel missing.', hasForwardChannel());
 }
@@ -424,6 +463,9 @@ function testConnect() {
   connect();
   assertEquals(goog.net.BrowserChannel.State.OPENED,
       browserChannel.getState());
+  // If the server specifies no version, the client assumes 6
+  assertEquals(6, browserChannel.channelVersion_);
+  assertFalse(browserChannel.isBuffered());
 }
 
 
@@ -432,12 +474,17 @@ function testConnect_backChannelEstablished() {
   assertHasBackChannel();
 }
 
+function testConnect_withServerVersion() {
+  connect(8);
+  assertEquals(8, browserChannel.channelVersion_);
+}
+
 
 function testSendMap() {
   connect();
   assertEquals(1, numTimingEvents);
   sendMap('foo', 'bar');
-  response();
+  responseVersion7();
   assertEquals(2, numTimingEvents);
 }
 
@@ -445,16 +492,16 @@ function testSendMap() {
 function testSendMap_twice() {
   connect();
   sendMap('foo1', 'bar1');
-  response();
+  responseVersion7();
   sendMap('foo2', 'bar2');
-  response();
+  responseVersion7();
 }
 
 
 function testSendMap_andReceive() {
   connect();
   sendMap('foo', 'bar');
-  response();
+  responseVersion7();
   receive('["the server reply"]');
 }
 
@@ -478,7 +525,7 @@ function testReceive_andSendMap() {
   connect();
   receive('["the server reply"]');
   sendMap('foo', 'bar');
-  response();
+  responseVersion7();
   assertHasBackChannel();
 }
 
@@ -487,7 +534,7 @@ function testBackChannelRemainsEstablished_afterSingleSendMap() {
   connect();
 
   sendMap('foo', 'bar');
-  response();
+  responseVersion7();
   receive('["ack"]');
 
   assertHasBackChannel();
@@ -499,7 +546,7 @@ function testBackChannelRemainsEstablished_afterDoubleSendMap() {
 
   sendMap('foo1', 'bar1');
   sendMap('foo2', 'bar2');
-  response();
+  responseVersion7();
   receive('["ack"]');
 
   // This assertion would fail prior to CL 13302660.
@@ -514,7 +561,7 @@ function testTimingEvent(){
   assertEquals(1, numTimingEvents);
   mockClock.tick(20);
   var expSize = browserChannel.forwardChannelRequest_.getPostData().length;
-  response();
+  responseVersion7();
 
   assertEquals(2, numTimingEvents);
   assertEquals(expSize, lastPostSize);
@@ -526,7 +573,7 @@ function testTimingEvent(){
   responseTimeout();
   assertEquals(2, numTimingEvents);
   mockClock.tick(RETRY_TIME + 1);
-  response();
+  responseVersion7();
   assertEquals(3, numTimingEvents);
   assertEquals(expSize, lastPostSize);
   assertEquals(1, lastPostRetryCount);
@@ -568,10 +615,11 @@ function testSetFailFastWhileWaitingForRetry() {
 
   assertTrue(gotError);
   // We get the error immediately before starting to ping google.com.
-  // Simulate that timing out, and ensure we don't get duplicate errors.
+  // Simulate that timing out. We should get a network error in addition to the
+  // initial failure.
   gotError = false;
   mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
-  assertFalse(gotError);
+  assertTrue(gotError);
  
   // Make sure no more retry timers are firing.
   mockClock.tick(ALL_DAY_MS);
@@ -628,10 +676,10 @@ function testSetFailFastWhileRetryXhrIsInFlight() {
 
   assertTrue(gotError);
   // We get the error immediately before starting to ping google.com.
-  // Simulate that timing out, and ensure we don't get duplicate errors.
+  // Simulate that timing out. We should get a network error in addition to the
   gotError = false;
   mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
-  assertFalse(gotError);
+  assertTrue(gotError);
 
   // Make sure no more retry timers are firing.
   mockClock.tick(ALL_DAY_MS);
@@ -669,10 +717,11 @@ function testSetFailFastAtRetryCount() {
 
   assertTrue(gotError);
   // We get the error immediately before starting to ping google.com.
-  // Simulate that timing out, and ensure we don't get duplicate errors.
+  // Simulate that timing out. We should get a network error in addition to the
+  // initial failure.
   gotError = false;
   mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
-  assertFalse(gotError);
+  assertTrue(gotError);
 
   // Make sure no more retry timers are firing.
   mockClock.tick(ALL_DAY_MS);
@@ -769,7 +818,7 @@ function testOutgoingMapsAwaitsResponse() {
   sendMap('foo4', 'bar');
   assertEquals(3, browserChannel.outgoingMaps_.length);
 
-  response();
+  responseVersion7();
   // Now the forward channel request is completed and a new started, so all maps
   // are dequeued from the array of outgoing maps into this new forward request.
   assertEquals(0, browserChannel.outgoingMaps_.length);
@@ -786,9 +835,9 @@ function testUndeliveredMaps_doesNotNotifyWhenSuccessful() {
 
   connect();
   sendMap('foo1', 'bar1');
-  response();
+  responseVersion7();
   sendMap('foo2', 'bar2');
-  response();
+  responseVersion7();
   disconnect();
 }
 
@@ -828,9 +877,9 @@ function testUndeliveredMaps_notifiesWhenNoResponseReceived() {
 
   // First send two messages that succeed.
   sendMap('foo1', 'bar1');
-  response();
+  responseVersion7();
   sendMap('foo2', 'bar2');
-  response();
+  responseVersion7();
 
   // Pretend the server hangs and no longer responds.
   sendMap('foo3', 'bar3');
@@ -852,7 +901,7 @@ function testUndeliveredMaps_serviceUnavailable() {
   // Send a few maps, and let one fail.
   connect();
   sendMap('foo1', 'bar1');
-  response();
+  responseVersion7();
   sendMap('foo2', 'bar2');
   responseRequestFailed();
 
@@ -885,6 +934,199 @@ function testUndeliveredMaps_onPingTimeout() {
   assertEquals('', handler.undeliveredMapsString);
 }
 
+
+function testResponseNoBackchannelPostNotBeforeBackchannel() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+
+  mockClock.tick(10);
+  assertFalse(browserChannel.backChannelRequest_.getRequestStartTime() <
+      browserChannel.forwardChannelRequest_.getRequestStartTime());
+  responseNoBackchannel();
+  assertNotEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_MISSING,
+      lastStatEvent);
+}
+
+
+function testResponseNoBackchannel() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+  response(-1, 0);
+  mockClock.tick(10);
+  sendMap('foo2', 'bar2');
+  assertTrue(browserChannel.backChannelRequest_.getRequestStartTime() <
+      browserChannel.forwardChannelRequest_.getRequestStartTime());
+  responseNoBackchannel();
+  assertEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_MISSING, lastStatEvent);
+}
+
+function testResponseNoBackchannelWithNoBackchannel() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+  browserChannel.backChannelRequest_.cancel();
+  browserChannel.backChannelRequest_ = null;
+  responseNoBackchannel();
+  assertEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_MISSING, lastStatEvent);
+}
+
+
+function testResponseWithNoArraySent() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+
+  // Send a response as if the server hasn't sent down an array.
+  response(-1, 0);
+
+  // POST response with an array ID lower than our last received is OK.
+  assertEquals(1, browserChannel.lastArrayId_);
+  assertEquals(-1, browserChannel.lastPostResponseArrayId_);
+}
+
+
+function testResponseWithArraysMissing() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+  assertEquals(-1, browserChannel.lastPostResponseArrayId_);
+
+  // Send a response as if the server has sent down seven arrays.
+  response(7, 111);
+
+  assertEquals(1, browserChannel.lastArrayId_);
+  assertEquals(7, browserChannel.lastPostResponseArrayId_);
+  mockClock.tick(goog.net.BrowserChannel.RTT_ESTIMATE * 2);
+  assertEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_DEAD, lastStatEvent);
+}
+
+function testMultipleResponsesWithArraysMissing() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+  assertEquals(-1, browserChannel.lastPostResponseArrayId_);
+
+  // Send a response as if the server has sent down seven arrays.
+  response(7, 111);
+
+  assertEquals(1, browserChannel.lastArrayId_);
+  assertEquals(7, browserChannel.lastPostResponseArrayId_);
+  sendMap('foo2', 'bar2');
+  mockClock.tick(goog.net.BrowserChannel.RTT_ESTIMATE);
+  response(8, 119);
+  mockClock.tick(goog.net.BrowserChannel.RTT_ESTIMATE);
+  // The original timer should still fire.
+  assertEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_DEAD, lastStatEvent);
+}
+
+function testOnlyRetryOnceBasedOnResponse() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+  assertEquals(-1, browserChannel.lastPostResponseArrayId_);
+
+  // Send a response as if the server has sent down seven arrays.
+  response(7, 111);
+
+  assertEquals(1, browserChannel.lastArrayId_);
+  assertEquals(7, browserChannel.lastPostResponseArrayId_);
+  assertTrue(hasDeadBackChannelTimer());
+  mockClock.tick(goog.net.BrowserChannel.RTT_ESTIMATE * 2);
+  assertEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_DEAD, lastStatEvent);
+  assertEquals(1, browserChannel.backChannelRetryCount_);
+  mockClock.tick(goog.net.BrowserChannel.RTT_ESTIMATE);
+  sendMap('foo2', 'bar2');
+  assertFalse(hasDeadBackChannelTimer());
+  response(8, 119);
+  assertFalse(hasDeadBackChannelTimer());
+
+
+}
+
+
+function testResponseWithArraysMissingAndLiveChannel() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+  assertEquals(-1, browserChannel.lastPostResponseArrayId_);
+
+  // Send a response as if the server has sent down seven arrays.
+  response(7, 111);
+
+  assertEquals(1, browserChannel.lastArrayId_);
+  assertEquals(7, browserChannel.lastPostResponseArrayId_);
+  mockClock.tick(goog.net.BrowserChannel.RTT_ESTIMATE);
+  assertTrue(hasDeadBackChannelTimer());
+  receive('["ack"]');
+  assertFalse(hasDeadBackChannelTimer());
+  mockClock.tick(goog.net.BrowserChannel.RTT_ESTIMATE);
+  assertNotEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_DEAD, lastStatEvent);
+}
+
+
+function testResponseWithBigOutstandingData() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+  assertEquals(-1, browserChannel.lastPostResponseArrayId_);
+
+  // Send a response as if the server has sent down seven arrays and 50kbytes.
+  response(7, 50000);
+
+  assertEquals(1, browserChannel.lastArrayId_);
+  assertEquals(7, browserChannel.lastPostResponseArrayId_);
+  assertFalse(hasDeadBackChannelTimer());
+  mockClock.tick(goog.net.BrowserChannel.RTT_ESTIMATE * 2);
+  assertNotEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_DEAD,
+      lastStatEvent);
+}
+
+
+function testResponseInBufferedMode() {
+  connect(8);
+  browserChannel.useChunked_ = false;
+  sendMap('foo1', 'bar1');
+  assertEquals(-1, browserChannel.lastPostResponseArrayId_);
+  response(7, 111);
+
+  assertEquals(1, browserChannel.lastArrayId_);
+  assertEquals(7, browserChannel.lastPostResponseArrayId_);
+  assertFalse(hasDeadBackChannelTimer());
+  mockClock.tick(goog.net.BrowserChannel.RTT_ESTIMATE * 2);
+  assertNotEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_DEAD,
+      lastStatEvent);
+}
+
+
+function testResponseWithGarbage() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+  browserChannel.onRequestData(
+      browserChannel.forwardChannelRequest_,
+      'garbage'
+      );
+  assertEquals(goog.net.BrowserChannel.State.CLOSED,
+      browserChannel.getState());
+}
+
+
+function testResponseWithGarbageInArray() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+  browserChannel.onRequestData(
+      browserChannel.forwardChannelRequest_,
+      '["garbage"]'
+      );
+  assertEquals(goog.net.BrowserChannel.State.CLOSED,
+      browserChannel.getState());
+}
+
+
+function testResponseWithEvilData() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+  browserChannel.onRequestData(
+      browserChannel.forwardChannelRequest_,
+      goog.net.BrowserChannel.LAST_ARRAY_ID_RESPONSE_PREFIX +
+          '=<script>evil()\<\/script>&' +
+      goog.net.BrowserChannel.OUTSTANDING_DATA_RESPONSE_PREFIX +
+          '=<script>moreEvil()\<\/script>');
+  assertEquals(goog.net.BrowserChannel.State.CLOSED,
+      browserChannel.getState());
+}
 
 </script>
 <div id="debug" style="font-size: small"></div>

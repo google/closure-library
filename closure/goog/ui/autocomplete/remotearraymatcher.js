@@ -261,3 +261,11 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.requestMatchingRows =
       goog.net.EventType.SUCCESS, callback);
   this.xhr_.send(url, this.method_, this.content_, this.headers_);
 };
+
+
+/** @inheritDoc */
+goog.ui.AutoComplete.RemoteArrayMatcher.prototype.disposeInternal = function() {
+  this.xhr_.dispose();
+  goog.ui.AutoComplete.RemoteArrayMatcher.superClass_.disposeInternal.call(
+      this);
+};

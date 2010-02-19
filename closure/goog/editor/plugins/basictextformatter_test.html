@@ -750,6 +750,50 @@ Copyright 2008 Google Inc.
   }
 
   /**
+   * @bug 2420054
+   */
+  var JUSTIFICATION_COMMANDS = [
+      goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_LEFT,
+      goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_RIGHT,
+      goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_CENTER,
+      goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_FULL
+  ];
+  function doTestIsJustification(command) {
+    setUpRealField();
+    REAL_FIELD.setHtml(false, 'foo');
+    selectRealField();
+    REAL_FIELD.execCommand(command);
+
+    for (var i = 0; i < JUSTIFICATION_COMMANDS.length; i++) {
+      if (JUSTIFICATION_COMMANDS[i] == command) {
+        assertTrue('queryCommandValue(' +JUSTIFICATION_COMMANDS[i] +
+                   ') should be true after execCommand(' + command + ')',
+            REAL_FIELD.queryCommandValue(JUSTIFICATION_COMMANDS[i]));
+      } else {
+        assertFalse('queryCommandValue(' +JUSTIFICATION_COMMANDS[i] +
+                   ') should be false after execCommand(' + command + ')',
+            REAL_FIELD.queryCommandValue(JUSTIFICATION_COMMANDS[i]));
+      }
+    }
+  }
+  function testIsJustificationLeft() {
+    doTestIsJustification(
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_LEFT);
+  }
+  function testIsJustificationRight() {
+    doTestIsJustification(
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_RIGHT);
+  }
+  function testIsJustificationCenter() {
+    doTestIsJustification(
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_CENTER);
+  }
+  function testIsJustificationFull() {
+    doTestIsJustification(
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_FULL);
+  }
+
+  /**
    * Regression test for {@bug 1414813}, where all 3 justification buttons are
    * considered "on" when you first tab into the editable field. In this
    * situation, when lorem ipsum is the only node in the editable field iframe

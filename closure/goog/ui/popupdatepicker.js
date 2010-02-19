@@ -98,12 +98,12 @@ goog.ui.PopupDatePicker.prototype.enterDocument = function() {
   // Create the DatePicker, if it isn't already.
   // Done here as DatePicker assumes that the element passed to it is attached
   // to a document.
-  if (!this.datePicker_.isCreated()) {
+  if (!this.datePicker_.isInDocument()) {
     var el = this.getElement();
-    this.datePicker_.create(el);
     // Make it initially invisible
     el.style.visibility = 'hidden';
     goog.style.showElement(el, false);
+    this.datePicker_.decorate(el);
   }
   this.getHandler().listen(this.datePicker_, goog.ui.DatePicker.Events.CHANGE,
                            this.onDateChanged_);

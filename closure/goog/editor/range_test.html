@@ -554,14 +554,16 @@ function testRangePreservingNormalize() {
   fragmentText(jkl.firstChild);
 
   var range = goog.dom.Range.createFromNodes(def, 3, jkl, 4);
-  var oldRangeDescription = rangeToString(range);
+  var oldRangeDescription = goog.testing.dom.exposeRange(range);
   range = goog.editor.range.rangePreservingNormalize_(parent, range);
 
   // Check that everything was normalized ok.
-  assertEquals("def should have 1 child; range is " + rangeToString(range) +
+  assertEquals("def should have 1 child; range is " +
+      goog.testing.dom.exposeRange(range) +
       ", range was " + oldRangeDescription,
       1, def.childNodes.length);
-  assertEquals("jkl should have 1 child; range is " + rangeToString(range) +
+  assertEquals("jkl should have 1 child; range is " +
+      goog.testing.dom.exposeRange(range) +
       ", range was " + oldRangeDescription,
       1, jkl.childNodes.length);
   goog.testing.dom.assertRangeEquals(def.firstChild, 1, jkl.firstChild, 2,
@@ -605,17 +607,19 @@ function testSelectionPreservingNormalize1() {
   fragmentText(jkl.firstChild);
 
   goog.dom.Range.createFromNodes(def, 3, jkl, 4).select();
-  var oldRangeDescription = rangeToString(
+  var oldRangeDescription = goog.testing.dom.exposeRange(
       goog.dom.Range.createFromWindow(window));
   goog.editor.range.selectionPreservingNormalize(parent);
 
   // Check that everything was normalized ok.
   var range = goog.dom.Range.createFromWindow(window);
 
-  assertEquals("def should have 1 child; range is " + rangeToString(range) +
+  assertEquals("def should have 1 child; range is " +
+      goog.testing.dom.exposeRange(range) +
       ", range was " + oldRangeDescription,
       1, def.childNodes.length);
-  assertEquals("jkl should have 1 child; range is " + rangeToString(range) +
+  assertEquals("jkl should have 1 child; range is " +
+      goog.testing.dom.exposeRange(range) +
       ", range was " + oldRangeDescription,
       1, jkl.childNodes.length);
   goog.testing.dom.assertRangeEquals(def.firstChild, 1, jkl.firstChild, 2,
@@ -829,23 +833,6 @@ function testNormalizeNode() {
   assertEquals('bc', div.lastChild.nodeValue);
   assertEquals('BR', div.lastChild.previousSibling.tagName);
 }
-
-// Some debugging utilities.
-
-function nodeToString(node) {
-  return (node.tagName || node.nodeValue) + (node.id ? '#' + node.id : '') +
-      ':"' + (node.innerHTML || '') + '"';
-};
-
-function rangeToString(range) {
-  if (!range) {
-    return "null";
-  }
-  return nodeToString(range.getStartNode()) + ':' +
-         range.getStartOffset() + ' to ' +
-         nodeToString(range.getEndNode()) + ':' +
-         range.getEndOffset();
-};
 
 
 </script>

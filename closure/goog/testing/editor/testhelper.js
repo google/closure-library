@@ -32,9 +32,13 @@ goog.require('goog.testing.dom');
  * @extends {goog.Disposable}
  */
 goog.testing.editor.TestHelper = function(root) {
+  if (!root) {
+    throw Error('Null root');
+  }
+
   /**
    * Convenience variable for root DOM element.
-   * @type {Element}
+   * @type {!Element}
    * @private
    */
   this.root_ = root;
@@ -55,6 +59,9 @@ goog.inherits(goog.testing.editor.TestHelper, goog.Disposable);
  * @param {Element} root The root editable element.
  */
 goog.testing.editor.TestHelper.prototype.setRoot = function(root) {
+  if (!root) {
+    throw Error('Null root');
+  }
   this.root_ = root;
 };
 

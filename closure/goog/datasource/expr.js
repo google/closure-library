@@ -187,7 +187,7 @@ goog.ds.Expr.prototype.getNext = function() {
  *
  * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
  *     If not provided, evaluates against DataManager global root.
- * @return {Object} Value of the node, or null if doesn't exist.
+ * @return {*} Value of the node, or null if doesn't exist.
  */
 goog.ds.Expr.prototype.getValue = function(opt_ds) {
   if (opt_ds == null) {

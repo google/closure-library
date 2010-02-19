@@ -53,12 +53,12 @@ function createTreeFromTestData(node, data, maxLevels) {
   node.setHtml(data[0]);
   if (maxLevels < 0) {
     return;
-}
+  }
 
   var children = data[1];
   for (var i = 0; i < children.length; i++) {
     var child = children[i];
-    var childNode = node.getTree().createNode();
+    var childNode = node.getTree().createNode('');
     node.add(childNode);
     createTreeFromTestData(childNode, child, maxLevels - 1);
   }

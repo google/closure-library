@@ -61,8 +61,8 @@ goog.proto2.LazyDeserializer.prototype.deserializeTo = function(message, data) {
  *     place the information.
  * @param {goog.proto2.FieldDescriptor} field The field for which to set the
  *     message value.
- * @param {Object} data The serialized data for the field.
+ * @param {*} data The serialized data for the field.
  *
- * @return {Object} The deserialized data or null for no value found.
+ * @return {*} The deserialized data or null for no value found.
  */
 goog.proto2.LazyDeserializer.prototype.deserializeField = goog.abstractMethod;

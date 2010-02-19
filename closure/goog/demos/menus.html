@@ -18,20 +18,20 @@ limitations under the License.
 <html>
 <head>
 <title>Menus</title>
-<script type="text/javascript" src="../base.js"></script>
-<script type="text/javascript">
+<script src="../base.js"></script>
+<script>
   goog.require('goog.debug');
   goog.require('goog.ui.Menu');
   goog.require('goog.ui.MenuItem');
   goog.require('goog.ui.PopupMenu');
 </script>
-<link rel="stylesheet" type="text/css" href="css/common.css">
-<link rel="stylesheet" type="text/css" href="css/menus.css">
-<style class="text/css">
+<link rel="stylesheet" href="css/demo.css">
+<link rel="stylesheet" href="../css/menus.css">
+<style>
 
 /* --- Search Menu Styles --- */
 
-#searchMenu .goog-menu { 
+#searchMenu .goog-menu {
   position: relative;
   color: #000;
   border: 1px solid #B5B6B5;
@@ -43,7 +43,7 @@ limitations under the License.
 #searchMenu .goog-menuitem {
   border: 1px solid #B5B6B5;
   background-color: #DAE1EE;
-  margin-bottom: 2px;  
+  margin-bottom: 2px;
 }
 
 #searchMenu .goog-menuitem-highlight {
@@ -69,7 +69,7 @@ limitations under the License.
 
 /* --- Toolbar Menu Styles --- */
 
-#toolbarMenu { 
+#toolbarMenu {
   position: relative;
   margin-top: 25px;
   width: 75ex;
@@ -79,7 +79,7 @@ limitations under the License.
 }
 
 #toolbarMenu .goog-menuitem {
-  display: inline; 
+  display: inline;
   padding: 0px 5px;
 }
 
@@ -121,16 +121,16 @@ limitations under the License.
 <h2 id="x">...</h2>
 <h3 id="y">...</h2>
 
-<script type="text/javascript">
-  
+<script>
+
   /* Fixed search menu demo */
- 
+
   var search = new goog.ui.Menu();
   var h = new goog.ui.MenuItem('Search', '');
   h.setEnabled(false);
   search.addItem(h);
   var googleName = goog.dom.createDom('span', {'style': 'font-family:serif;color:red'}, 'Google');
-  
+
   search.addItem(new goog.ui.MenuItem(googleName, 'http://www.google.com'));
   search.addItem(new goog.ui.MenuItem('Yahoo!', 'http://www.yahoo.com'));
   search.addItem(new goog.ui.MenuItem('Live search', 'http://www.live.com'));
@@ -154,11 +154,11 @@ limitations under the License.
   goog.events.listen(search.getElement(), 'click', function(e) {
     e.stopPropagation();
   });
-  
-  
-  
+
+
+
   /* Popup context style menu (left click) */
- 
+
   var popup = new goog.ui.PopupMenu();
   popup.addItem(new goog.ui.MenuItem('Red', '#FAA'));
   popup.addItem(new goog.ui.MenuItem('Green', '#AFA'));
@@ -171,9 +171,9 @@ limitations under the License.
   popup.attach(document.body);
   goog.events.listen(popup, 'action', function(e) {
     document.body.style.backgroundColor = e.target.getModel();
-  });  
-  
-  
+  });
+
+
   /* Toolbar menu */
   var toolbar = new goog.ui.Menu();
   toolbar.decorate(document.getElementById('toolbarMenu'));

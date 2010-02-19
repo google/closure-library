@@ -158,7 +158,7 @@ goog.math.Box.equals = function(a, b) {
 
 
 /**
- * Returns whether a box contains a coordinate.
+ * Returns whether a box contains a coordinate or another box.
  *
  * @param {goog.math.Box} box A Box.
  * @param {goog.math.Coordinate|goog.math.Box} other A Coordinate or a Box.

@@ -18,8 +18,8 @@ limitations under the License.
 <html>
 <head>
 <title>goog.ui.FilteredMenu</title>
-<script type="text/javascript" src="../base.js"></script>
-<script type="text/javascript">
+<script src="../base.js"></script>
+<script>
   goog.require('goog.events');
   goog.require('goog.ui.Menu');
   goog.require('goog.ui.MenuItem');
@@ -28,9 +28,9 @@ limitations under the License.
   goog.require('goog.ui.TriStateMenuItem');
   goog.require('goog.ui.FilterObservingMenuItem');
 </script>
-<link rel="stylesheet" type="text/css" href="css/common.css">
-<link rel="stylesheet" type="text/css" href="css/menus.css">
-<style type="text/css">
+<link rel="stylesheet" href="css/demo.css">
+<link rel="stylesheet" href="../css/menus.css">
+<style>
 
 .goog-menu {
   width: 30ex;
@@ -38,7 +38,7 @@ limitations under the License.
 
 .goog-menu-filter input {
   width: 100%;
-  
+
   /* width: 100% interferes with the input event handler in IE6 */
   width: expression('30ex');
 }
@@ -89,7 +89,7 @@ for (var str, i = 0; str = labels[i]; i++) {
 menu1.addItem(new goog.ui.MenuSeparator());
 for (var str, i = 0; str = folders[i]; i++) {
   menu1.addItem(new goog.ui.MenuItem(str));
-} 
+}
 menu1.addItem(new goog.ui.MenuSeparator());
 menu1.addItem(cm = new goog.ui.FilterObservingMenuItem(''));
 menu1.addItem(cm2 = new goog.ui.FilterObservingMenuItem('Manage tags'));
@@ -101,7 +101,7 @@ menu1.setPosition(10, 10);
 cm.setObserver(function(item, str) {
   str = goog.string.trim(str);
   var b = str == '' || goog.array.contains(folders, str) ||
-                       goog.array.contains(labels, str); 
+                       goog.array.contains(labels, str);
   item.setVisible(!b);
   if (!b) {
     item.setContent(this.dom_.createDom(

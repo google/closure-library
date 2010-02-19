@@ -55,11 +55,11 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
   this.config_ = opt_config || goog.ui.tree.TreeControl.defaultConfig;
 
   /**
-   * Html content of the node label.
+   * HTML content of the node label.
    * @type {string}
    * @private
    */
-  this.html_ = html || this.config_.defaultHtml;
+  this.html_ = html;
 
   /**
    * Extra data associated with the node.
@@ -328,9 +328,6 @@ goog.ui.tree.BaseNode.prototype.add = function(child, opt_before) {
     if (emptyBefore) {
       el.style.display = '';
       this.setExpanded(this.getExpanded());
-      // if we are using classic expand will not update icon
-      if (t && t.getBehavior() != 'classic')
-        this.updateIcon();
     }
   }
   return child;
@@ -610,9 +607,6 @@ goog.ui.tree.BaseNode.prototype.setSelectedInternal_ = function(selected) {
 
   this.updateRow();
   var tree = this.getTree();
-  if (tree.getBehavior() != 'classic') {
-    this.updateIcon();
-  }
 
   var el = this.getElement();
   if (el) {
@@ -683,7 +677,7 @@ goog.ui.tree.BaseNode.prototype.setExpanded = function(b) {
       ce.style.display = 'none';
     }
   }
-  if (t && t.getBehavior() == 'classic') {
+  if (t) {
     this.updateIcon();
   }
   if (el) {

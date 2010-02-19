@@ -20,13 +20,13 @@ limitations under the License.
   <title>goog.ui.CharPicker</title>
   <meta charset=utf-8>
   <!-- common css used by all closure demos; not required for char picker -->
-  <link type="text/css" rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="css/demo.css">
 
   <!-- used only for button in this page; not required for char picker-->
-  <link type="text/css" rel="stylesheet" href="css/menubutton.css">
+  <link rel="stylesheet" href="../css/menubutton.css">
 
   <!-- only required css for char picker -->
-  <link type="text/css" rel="stylesheet" href="css/charpicker.css">
+  <link rel="stylesheet" href="../css/charpicker.css">
 
   <script src="../base.js"></script>
   <script>
@@ -35,10 +35,6 @@ limitations under the License.
   </script>
 
   <style>
-    body {
-      background-color: #ffe;
-    }
-
     #p1_value {
       color: red;
       font-weight: bold;
@@ -52,27 +48,27 @@ limitations under the License.
 </head>
 
 <body>
-<h2>Demo of <strong>goog.ui.CharPicker</strong>:</h2>
-<p>You have selected: <span id="p1_value">none</span>
-<div id="char-picker"></div>
+  <h1>goog.ui.CharPicker</h1>
+  <p>You have selected: <span id="p1_value">none</span>
+  <div id="char-picker"></div>
 
-<script>
-  var picker = new goog.ui.CharPicker(new goog.i18n.CharPickerData(),
-      ["\uD869\uDED6", "a", "b", "c"], 10, 1);
-  var el = goog.dom.getElement('char-picker');
-  picker.decorate(el);
+  <script>
+    var picker = new goog.ui.CharPicker(new goog.i18n.CharPickerData(),
+        ["\uD869\uDED6", "a", "b", "c"], 10, 1);
+    var el = goog.dom.getElement('char-picker');
+    picker.decorate(el);
 
-  // Action on selection
-  var selectionAction = function() {
-    goog.dom.setTextContent(goog.dom.$('p1_value'),
-        picker.getSelectedChar());
-  };
+    // Action on selection
+    var selectionAction = function() {
+      goog.dom.setTextContent(goog.dom.$('p1_value'),
+          picker.getSelectedChar());
+    };
 
-  // Get selected locale from the char picker.
-  goog.events.listen(picker, 'action', function(e) { selectionAction(); });
-</script>
-<p>
-<input type="button" value="Dispose" onclick="picker.dispose()">
-</p>
+    // Get selected locale from the char picker.
+    goog.events.listen(picker, 'action', function(e) { selectionAction(); });
+  </script>
+  <p>
+    <input type="button" value="Dispose" onclick="picker.dispose()">
+  </p>
 </body>
 </html>

@@ -650,6 +650,9 @@ goog.testing.JsUnitException = function(comment, opt_message) {
                  (comment && opt_message ? '\n' : '') +
                  (opt_message ? opt_message : '');
   this.stackTrace = goog.testing.stacktrace.get();
+  // These fields are for compatibility with jsUnitTestManager.
+  this.comment = comment || null;
+  this.jsUnitMessage = opt_message || '';
 };
 
 /** @inheritDoc */

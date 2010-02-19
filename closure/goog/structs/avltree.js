@@ -98,7 +98,7 @@ goog.structs.AvlTree.prototype.root_ = null;
  *  x = 0 otherwise
  * </pre>
  *
- * @type {goog.structs.AvlTree.Node}
+ * @type {Function}
  * @private
  */
 goog.structs.AvlTree.prototype.comparator_ = null;

@@ -23,11 +23,11 @@ limitations under the License.
 <script>
   goog.require('goog.structs.LinkedMap');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.recordFunction');
 </script>
 </head>
 <body>
 <script>
-
 
 function fillLinkedMap(m) {
   m.set('a', 0);
@@ -37,10 +37,6 @@ function fillLinkedMap(m) {
 }
 
 var someObj = {};
-
-function getLruLinkedMap() {
-  var m = new goog.structs.LinkedMap(10)
-}
 
 function testLinkedMap() {
   var m = new goog.structs.LinkedMap();
@@ -240,7 +236,7 @@ function testPop() {
 function testContains() {
   var m = new goog.structs.LinkedMap();
   fillLinkedMap(m);
-  
+
   assertTrue(m.contains(2));
   assertFalse(m.contains(4));
 }
@@ -248,12 +244,66 @@ function testContains() {
 function testContainsKey() {
   var m = new goog.structs.LinkedMap();
   fillLinkedMap(m);
-  
+
   assertTrue(m.containsKey('b'));
   assertFalse(m.containsKey('elephant'));
   assertFalse(m.containsKey('undefined'));
 }
 
+function testRemoveNodeCalls() {
+  var m = new goog.structs.LinkedMap(1);
+  m.removeNode = goog.testing.recordFunction(m.removeNode);
+
+  m.set('1', 1);
+  assertEquals('removeNode not called after adding an element', 0,
+      m.removeNode.getCallCount());
+  m.set('1', 2);
+  assertEquals('removeNode not called after updating an element', 0,
+      m.removeNode.getCallCount());
+  m.set('2', 2);
+  assertEquals('removeNode called after adding an overflowing element', 1,
+      m.removeNode.getCallCount());
+
+  m.remove('3');
+  assertEquals('removeNode not called after removing a non-existing element', 1,
+      m.removeNode.getCallCount());
+  m.remove('2');
+  assertEquals('removeNode called after removing an existing element', 2,
+      m.removeNode.getCallCount());
+
+  m.set('1', 1);
+  m.clear();
+  assertEquals('removeNode called after clearing the map', 3,
+      m.removeNode.getCallCount());
+  m.clear();
+  assertEquals('removeNode not called after clearing an empty map', 3,
+      m.removeNode.getCallCount());
+
+  m.set('1', 1);
+  m.pop();
+  assertEquals('removeNode called after calling pop', 4,
+      m.removeNode.getCallCount());
+  m.pop();
+  assertEquals('removeNode not called after calling pop on an empty map', 4,
+      m.removeNode.getCallCount());
+
+  m.set('1', 1);
+  m.shift();
+  assertEquals('removeNode called after calling shift', 5,
+      m.removeNode.getCallCount());
+  m.shift();
+  assertEquals('removeNode not called after calling shift on an empty map', 5,
+      m.removeNode.getCallCount());
+
+  m.setMaxCount(2);
+  m.set('1', 1);
+  m.set('2', 2);
+  assertEquals('removeNode not called after increasing the maximum map size', 5,
+      m.removeNode.getCallCount());
+  m.setMaxCount(1);
+  assertEquals('removeNode called after decreasing the maximum map size', 6,
+      m.removeNode.getCallCount());
+}
 
 </script>
 </body>

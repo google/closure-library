@@ -50,7 +50,6 @@ limitations under the License.
   var plugin;
   var mockCtrl;
   var mockField;
-  var mockRange = {};
   var mockSavedRange;
   var mockOpenedHandler;
   var mockClosedHandler;
@@ -68,27 +67,28 @@ limitations under the License.
     mockOpenedHandler = mockCtrl.createLooseMock(goog.events.EventHandler);
     mockClosedHandler = mockCtrl.createLooseMock(goog.events.EventHandler);
 
-    mockSavedRange = mockCtrl.createLooseMock(goog.dom.SavedRange);
-    mockSavedRange.restore();
-
-    // Can't create a mock of AbstractRange because it's abstract, and can't
-    // create a mock of TextRange because it throws some error while the mock is
-    // initializing.
-    stubs.set(mockRange,
-              'saveUsingCarets',
-              goog.functions.constant(mockSavedRange));
-
-    mockField =
-        new goog.testing.editor.FieldMock(undefined, undefined, mockRange);
+    mockField = new goog.testing.editor.FieldMock(undefined, undefined, {});
     mockCtrl.addMock(mockField);
     mockField.focus();
 
     plugin = createDialogPlugin();
   }
 
+  function setUpMockRange() {
+    mockSavedRange = mockCtrl.createLooseMock(goog.dom.SavedRange);
+    mockSavedRange.restore();
+
+    stubs.set(goog.editor.range, 'saveUsingNormalizedCarets',
+        goog.functions.constant(mockSavedRange));
+  }
+
   function tearDown() {
+    stubs.reset();
     tearDownRealEditableField();
-    tearDownNoSelectionChange();
+    if (mockClock) {
+      // Crucial to letting time operations work normally in the rest of tests.
+      mockClock.dispose();
+    }
     if (plugin) {
       mockField.$setIgnoreUnexpectedCalls(true);
       plugin.dispose();
@@ -139,8 +139,10 @@ limitations under the License.
           return arg.type ==
                  goog.editor.plugins.AbstractDialogPlugin.EventType.OPENED;
         }));
+    mockField.dispatchSelectionChangeEvent();
     if (opt_times) {
       mockOpenedHandler.$times(opt_times);
+      mockField.$times(opt_times);
     }
   }
 
@@ -153,8 +155,10 @@ limitations under the License.
           return arg.type ==
                  goog.editor.plugins.AbstractDialogPlugin.EventType.CLOSED;
         }));
+    mockField.dispatchSelectionChangeEvent();
     if (opt_times) {
       mockClosedHandler.$times(opt_times);
+      mockField.$times(opt_times);
     }
   }
 
@@ -165,6 +169,7 @@ limitations under the License.
    * @param {boolean} opt_reuse Whether to set the plugin to reuse its dialog.
    */
   function testExecAndDispose(opt_reuse) {
+    setUpMockRange();
     expectOpened();
     expectClosed();
     mockField.debounceEvent(goog.editor.Field.EventType.SELECTIONCHANGE);
@@ -201,6 +206,7 @@ limitations under the License.
    * @param {boolean} reuse Whether to set the plugin to reuse its dialog.
    */
   function testExecAndHide(opt_reuse) {
+    setUpMockRange();
     expectOpened();
     expectClosed();
     mockField.debounceEvent(goog.editor.Field.EventType.SELECTIONCHANGE);
@@ -237,7 +243,6 @@ limitations under the License.
     testExecAndHide(true);
   }
 
-
   /**
    * Tests the flow of calling execCommand (which opens a dialog) and
    * then calling it again before the first dialog is closed. This is not
@@ -248,6 +253,7 @@ limitations under the License.
    * @param {boolean} reuse Whether to set the plugin to reuse its dialog.
    */
   function testExecTwice(opt_reuse) {
+    setUpMockRange();
     if (opt_reuse) {
       expectOpened(2); // The second exec should cause a second OPENED event.
       // But the dialog was not closed between exec calls, so only one CLOSED is
@@ -348,6 +354,7 @@ limitations under the License.
     if (fieldObj) {
       fieldObj.makeUneditable();
       fieldObj.dispose();
+      fieldObj = null;
     }
     if (fieldElem && fieldElem.parentNode == document.body) {
       document.body.removeChild(fieldElem);
@@ -357,16 +364,31 @@ limitations under the License.
 
   /**
    * Tests that after the dialog is hidden via a keystroke, the editable field
-   * doesn't fire a SELECTIONCHANGE event due to the keyup from that keystroke.
+   * doesn't fire an extra SELECTIONCHANGE event due to the keyup from that
+   * keystroke.
    * There is also a robot test in dialog_robot.html to test debouncing the
    * SELECTIONCHANGE event when the dialog closes.
    */
-  function testNoSelectionChange() {
-    setUpNoSelectionChange();
-    mockHandler.$replay();
+  function testDebounceSelectionChange() {
+    mockClock = new goog.testing.MockClock(true);
+    // Initial time is 0 which evaluates to false in debouncing implementation.
+    mockClock.tick(1);
 
+    setUpRealEditableField();
+
+    // Set up a mock event handler to make sure selection change isn't fired
+    // more than once on close and a second time on close.
+    var count = 0;
+    fieldObj.addEventListener(goog.editor.Field.EventType.SELECTIONCHANGE,
+                              function(e) {
+                                count++;
+                              });
+
+    assertEquals(0, count);
     plugin.execCommand(COMMAND);
+    assertEquals(1, count);
     plugin.getDialog().hide();
+    assertEquals(2, count);
 
     // Fake the keyup event firing on the field after the dialog closes.
     var e = new goog.events.Event('keyup', plugin.fieldObject.getElement());
@@ -376,40 +398,9 @@ limitations under the License.
     // Tick the mock clock so that selection change tries to fire.
     mockClock.tick(goog.editor.Field.SELECTION_CHANGE_FREQUENCY_ + 1);
 
-    mockHandler.$verify(); // Verifies SELECTIONCHANGE did not fire.
+    // Ensure the handler did not fire again.
+    assertEquals(2, count);
   }
-
-  /**
-   * Setup for testing the selection change event. Creates a real editable field
-   * to register the plugin to, and listens for SELECTIONCHANGE on that field.
-   * Also sets up a mock clock in order to properly control timing, since
-   * SELECTIONCHANGE is only fired after a brief interval.
-   */
-  function setUpNoSelectionChange() {
-    mockClock = new goog.testing.MockClock(true);
-    // Initial time is 0 which evaluates to false in debouncing implementation.
-    mockClock.tick(1);
-
-    setUpRealEditableField();
-
-    // Set up a mock event handler to make sure selection change isn't fired.
-    mockHandler = new goog.testing.LooseMock(goog.events.EventHandler);
-    fieldObj.addEventListener(goog.editor.Field.EventType.SELECTIONCHANGE,
-                              mockHandler);
-  }
-
-  /**
-   * Cleans up what was created for testing the selection change. Most crucial
-   * is disposing the mock clock to revert the timing methods back to normal
-   * for other tests to work.
-   */
-  function tearDownNoSelectionChange() {
-    if (mockClock) {
-      // Crucial to letting time operations work normally in the rest of tests!
-      mockClock.dispose();
-    }
-  }
-
 
 </script>
 </body>

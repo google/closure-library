@@ -1,0 +1,20 @@
+/*
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+*/
+
+/*
+ * Copyright 2009 Google Inc.  All Rights Reserved.
+ *
+ * Standard styling for menus created by goog.ui.MenuSeparatorRenderer.
+ *
+
+ */
+
+
+.goog-menuseparator {
+  border-top: 1px solid #ccc;
+  margin: 4px 0;
+  padding: 0;
+  position: relative;
+}

@@ -106,7 +106,7 @@ goog.structs.QuadTree.prototype.get = function(x, y, opt_default) {
  * Removes a point from (x, y) if it exists.
  * @param {number} x The x-coordinate.
  * @param {number} y The y-coordinate.
- * @return {Object} The value of the node that was removed, or null if the
+ * @return {*} The value of the node that was removed, or null if the
  *     node doesn't exist.
  */
 goog.structs.QuadTree.prototype.remove = function(x, y) {
@@ -563,7 +563,7 @@ goog.structs.QuadTree.Point = function(x, y, opt_value) {
 
   /**
    * Optional value associated with the point.
-   * @type {Object}
+   * @type {*}
    */
   this.value = goog.isDef(opt_value) ? opt_value : null;
 };

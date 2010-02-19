@@ -64,7 +64,7 @@ goog.structs.PriorityPool.DEFAULT_PRIORITY_ = 100;
  * @param {Function=} opt_callback The function to callback when an object is
  *     available. This could be immediately. If this is not present, then an
  *     object is immediately returned if available, or undefined if not.
- * @param {Object=} opt_priority The priority of the request.
+ * @param {*=} opt_priority The priority of the request.
  * @return {Object|undefined} The new object from the pool if there is one
  *     available and a callback is not given. Otherwise, undefined.
  */

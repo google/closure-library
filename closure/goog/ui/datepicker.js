@@ -30,40 +30,28 @@ goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.Event');
-goog.require('goog.events.EventHandler');
-goog.require('goog.events.EventTarget');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
+goog.require('goog.ui.Component');
+
 
 
 /**
  * DatePicker widget. Allows a single date to be selected from a calendar like
- * view. Uses goog.date.Date and goog.date.Interval for date representation and
- * manipulation.
+ * view.
  *
- * @extends {goog.events.EventTarget}
  * @param {goog.date.Date|Date=} opt_date Date to initialize the date picker
  *     with, defaults to the current date.
  * @param {Object=} opt_dateTimeSymbols Date and time symbols to use.
  *     Defaults to goog.i18n.DateTimeSymbols if not set.
  * @constructor
- * @see goog.date.Date
+ * @extends {goog.ui.Component}
  */
 goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols) {
-  goog.events.EventTarget.call(this);
-
-  // If a standard JavaScript Date object, or anything that looks like a date
-  // object, was supplied instead of a goog.date.Date one a new new
-  // goog.date.Date is constructed from it.
-  var date;
-  if (goog.isObject(opt_date)) {
-    date = new goog.date.Date(opt_date);
-  } else {
-    date = new goog.date.Date();
-  }
+  goog.ui.Component.call(this);
 
   /**
    * Date and time symbols to use.
@@ -73,15 +61,16 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols) {
   this.symbols_ = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
 
   this.wdayNames_ = this.symbols_.SHORTWEEKDAYS;
-  date.setFirstWeekCutOffDay(this.symbols_.FIRSTWEEKCUTOFFDAY);
-  date.setFirstDayOfWeek(this.symbols_.FIRSTDAYOFWEEK);
 
   /**
    * Selected date.
    * @type {goog.date.Date}
    * @private
    */
-  this.date_ = date;
+  this.date_ = new goog.date.Date(opt_date);
+  this.date_.setFirstWeekCutOffDay(this.symbols_.FIRSTWEEKCUTOFFDAY);
+  this.date_.setFirstDayOfWeek(this.symbols_.FIRSTDAYOFWEEK);
+
 
   /**
    * Active month.
@@ -103,20 +92,13 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols) {
       goog.getCssName('goog-date-picker-wkend-end');
 
   /**
-   * Handler for events.
-   * @type {goog.events.EventHandler}
-   * @private
-   */
-  this.eventHandler_ = new goog.events.EventHandler(this);
-
-  /**
    * Object that is being used to cache key handlers.
    * @type {Object}
    * @private
    */
   this.keyHandlers_ = {};
 };
-goog.inherits(goog.ui.DatePicker, goog.events.EventTarget);
+goog.inherits(goog.ui.DatePicker, goog.ui.Component);
 
 
 /**
@@ -126,12 +108,14 @@ goog.inherits(goog.ui.DatePicker, goog.events.EventTarget);
  */
 goog.ui.DatePicker.prototype.showFixedNumWeeks_ = true;
 
+
 /**
  * Flag indicating if days from other months should be shown.
  * @type {boolean}
  * @private
  */
 goog.ui.DatePicker.prototype.showOtherMonths_ = true;
+
 
 /**
  * Flag indicating if extra week(s) always should be added at the end. If not
@@ -142,6 +126,7 @@ goog.ui.DatePicker.prototype.showOtherMonths_ = true;
  */
 goog.ui.DatePicker.prototype.extraWeekAtEnd_ = true;
 
+
 /**
  * Flag indicating if week numbers should be shown.
  * @type {boolean}
@@ -149,12 +134,14 @@ goog.ui.DatePicker.prototype.extraWeekAtEnd_ = true;
  */
 goog.ui.DatePicker.prototype.showWeekNum_ = true;
 
+
 /**
  * Flag indicating if weekday names should be shown.
  * @type {boolean}
  * @private
  */
 goog.ui.DatePicker.prototype.showWeekdays_ = true;
+
 
 /**
  * Flag indicating if none is a valid selection. Also controls if the none
@@ -164,12 +151,14 @@ goog.ui.DatePicker.prototype.showWeekdays_ = true;
  */
 goog.ui.DatePicker.prototype.allowNone_ = true;
 
+
 /**
  * Flag indicating if the today button should be shown.
  * @type {boolean}
  * @private
  */
 goog.ui.DatePicker.prototype.showToday_ = true;
+
 
 /**
  * Flag indicating if the picker should use a simple navigation menu that only
@@ -181,12 +170,14 @@ goog.ui.DatePicker.prototype.showToday_ = true;
  */
 goog.ui.DatePicker.prototype.simpleNavigation_ = false;
 
+
 /**
  * Flag indicating that the widget has been created.
  * @type {boolean}
  * @private
  */
 goog.ui.DatePicker.prototype.created_ = false;
+
 
 /**
  * Custom decorator function. Takes a goog.date.Date object, returns a String
@@ -196,12 +187,14 @@ goog.ui.DatePicker.prototype.created_ = false;
  */
 goog.ui.DatePicker.prototype.decoratorFunction_ = null;
 
+
 /**
  * Next unique instance ID of a datepicker cell.
  * @type {number}
  * @private
  */
 goog.ui.DatePicker.nextId_ = 0;
+
 
 /**
  * Constants for event names
@@ -651,16 +644,13 @@ goog.ui.DatePicker.prototype.updateNavigationRow_ = function() {
 };
 
 
-/**
- * Creates date picker widget.
- *
- * @param {Element} el Element to create widget out of.
- */
-goog.ui.DatePicker.prototype.create = function(el) {
-  this.el_ = el;
-  var dom = goog.dom.getDomHelper(el);
+/** @inheritDoc */
+goog.ui.DatePicker.prototype.decorateInternal = function(el) {
+  goog.ui.DatePicker.superClass_.decorateInternal.call(this, el);
 
   el.className = goog.getCssName('goog-date-picker');
+
+  var dom = goog.dom.getDomHelper(el);
 
   var table = dom.createElement('table');
   var thead = dom.createElement('thead');
@@ -709,7 +699,7 @@ goog.ui.DatePicker.prototype.create = function(el) {
                                      this.selectToday);
   row.appendChild(cell);
 
-  cell = dom.createDom('td', { colSpan: 4 });
+  cell = dom.createDom('td', {colSpan: 4});
   row.appendChild(cell);
 
   cell = dom.createElement('td');
@@ -737,14 +727,45 @@ goog.ui.DatePicker.prototype.create = function(el) {
   this.redrawWeekdays_();
   this.updateCalendarGrid_();
 
-  this.eventHandler_.listen(tbody, goog.events.EventType.CLICK,
-                            this.handleGridClick_);
-  this.eventHandler_.listen(this.getKeyHandlerForElement_(el),
-                            goog.events.KeyHandler.EventType.KEY,
-                            this.handleGridKeyPress_);
-
   el.tabIndex = 0;
 };
+
+
+/** @inheritDoc */
+goog.ui.DatePicker.prototype.createDom = function() {
+  goog.ui.DatePicker.superClass_.createDom.call(this);
+  this.decorateInternal(this.getElement());
+};
+
+
+/** @inheritDoc */
+goog.ui.DatePicker.prototype.enterDocument = function() {
+  goog.ui.DatePicker.superClass_.enterDocument.call(this);
+
+  var eh = this.getHandler();
+  eh.listen(this.tableBody_, goog.events.EventType.CLICK,
+      this.handleGridClick_);
+  eh.listen(this.getKeyHandlerForElement_(this.getElement()),
+      goog.events.KeyHandler.EventType.KEY, this.handleGridKeyPress_);
+};
+
+
+/** @inheritDoc */
+goog.ui.DatePicker.prototype.exitDocument = function() {
+  goog.ui.DatePicker.superClass_.exitDocument.call(this);
+  this.destroyMenu_();
+  for (var hashCode in this.keyHandlers_) {
+    this.keyHandlers_[hashCode].dispose();
+  }
+  this.keyHandlers_ = {};
+};
+
+
+/**
+ * @deprecated Use decorate instead.
+ */
+goog.ui.DatePicker.prototype.create =
+    goog.ui.DatePicker.prototype.decorate;
 
 
 /**
@@ -753,20 +774,6 @@ goog.ui.DatePicker.prototype.create = function(el) {
 goog.ui.DatePicker.prototype.disposeInternal = function() {
   goog.ui.DatePicker.superClass_.disposeInternal.call(this);
 
-  this.destroyMenu_();
-
-  for (var hashCode in this.keyHandlers_) {
-    this.keyHandlers_[hashCode].dispose();
-  }
-  delete this.keyHandlers_;
-
-  if (this.eventHandler_) {
-    this.eventHandler_.dispose();
-    delete this.eventHandler_;
-  }
-
-  this.el_.innerHTML = '';
-  this.el_ = null;
   this.elTable_ = null;
   this.tableBody_ = null;
   this.tableFoot_ = null;
@@ -963,13 +970,11 @@ goog.ui.DatePicker.prototype.createMenu_ = function(srcEl, items, method,
       goog.getCssName('goog-date-picker-menu-selected');
   this.menuCallback_ = method;
 
-  this.eventHandler_.listen(this.menu_, goog.events.EventType.CLICK,
-                            this.handleMenuClick_);
-  this.eventHandler_.listen(this.getKeyHandlerForElement_(this.menu_),
-                            goog.events.KeyHandler.EventType.KEY,
-                            this.handleMenuKeyPress_);
-  this.eventHandler_.listen(dom.getDocument(), goog.events.EventType.CLICK,
-                            this.destroyMenu_);
+  var eh = this.getHandler();
+  eh.listen(this.menu_, goog.events.EventType.CLICK, this.handleMenuClick_);
+  eh.listen(this.getKeyHandlerForElement_(this.menu_),
+      goog.events.KeyHandler.EventType.KEY, this.handleMenuKeyPress_);
+  eh.listen(dom.getDocument(), goog.events.EventType.CLICK, this.destroyMenu_);
   el.tabIndex = 0;
   el.focus();
 };
@@ -1035,6 +1040,7 @@ goog.ui.DatePicker.prototype.handleMenuKeyPress_ = function(event) {
   }
 };
 
+
 /**
  * Support function for menu destruction.
  * @private
@@ -1042,13 +1048,12 @@ goog.ui.DatePicker.prototype.handleMenuKeyPress_ = function(event) {
 goog.ui.DatePicker.prototype.destroyMenu_ = function() {
   if (this.menu_) {
     var dom = goog.dom.getDomHelper(this.menu_);
-    this.eventHandler_.unlisten(this.menu_, goog.events.EventType.CLICK,
-                                this.handleMenuClick_);
-    this.eventHandler_.unlisten(this.getKeyHandlerForElement_(this.menu_),
-                                goog.events.KeyHandler.EventType.KEY,
-                                this.handleMenuKeyPress_);
-    this.eventHandler_.unlisten(dom.getDocument(), goog.events.EventType.CLICK,
-                                this.destroyMenu_);
+    var eh = this.getHandler();
+    eh.unlisten(this.menu_, goog.events.EventType.CLICK, this.handleMenuClick_);
+    eh.unlisten(this.getKeyHandlerForElement_(this.menu_),
+        goog.events.KeyHandler.EventType.KEY, this.handleMenuKeyPress_);
+    eh.unlisten(dom.getDocument(), goog.events.EventType.CLICK,
+        this.destroyMenu_);
     dom.removeNode(this.menu_);
     delete this.menu_;
   }
@@ -1077,7 +1082,7 @@ goog.ui.DatePicker.prototype.createButton_ = function(parentNode, label,
   el.className = classes.join(' ');
   el.appendChild(dom.createTextNode(label));
   parentNode.appendChild(el);
-  this.eventHandler_.listen(el, goog.events.EventType.CLICK, method);
+  this.getHandler().listen(el, goog.events.EventType.CLICK, method);
 
   return el;
 };
@@ -1272,23 +1277,18 @@ goog.ui.DatePicker.prototype.getKeyHandlerForElement_ = function(el) {
 };
 
 
+
 /**
  * Object representing a date picker event.
  *
  * @param {string} type Event type.
  * @param {goog.ui.DatePicker} target Date picker initiating event.
  * @param {goog.date.Date} date Selected date.
- * @extends {goog.events.Event}
  * @constructor
+ * @extends {goog.events.Event}
  */
 goog.ui.DatePickerEvent = function(type, target, date) {
-  goog.events.Event.call(this, type);
-
-  /**
-   * Reference to the date picker initiating the event.
-   * @type {goog.ui.DatePicker}
-   */
-  this.target = target;
+  goog.events.Event.call(this, type, target);
 
   /**
    * The selected date

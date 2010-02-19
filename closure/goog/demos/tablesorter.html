@@ -18,12 +18,13 @@ limitations under the License.
 <html>
 <head>
   <title>goog.ui.TableSorter</title>
-  <script type="text/javascript" src="../base.js"></script>
-  <script type="text/javascript">
+  <script src="../base.js"></script>
+  <script>
     goog.require('goog.ui.TableSorter');
   </script>
-  <link rel="stylesheet" href="css/tablesorter.css"/>
-  <style type="text/css">
+  <link rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="../css/tablesorter.css">
+  <style>
     /** Each application can choose how to show sorted state.
         This is a simple way, just toggling background colors. */
 
@@ -37,12 +38,12 @@ limitations under the License.
   </style>
 </head>
 <body>
-  <h2>Demo of goog.ui.TableSorter</h2>
+  <h1>goog.ui.TableSorter</h1>
   <p>
     Number sorts numerically, month sorts alphabetically, and days sorts
     numerically in reverse.
   </p>
-  <table border="0" cellpadding="3" id="sortMe">
+  <table border="0" cellpang="3" id="sortMe">
     <thead>
       <tr>
         <th>Number</th>
@@ -114,7 +115,7 @@ limitations under the License.
     </tbody>
   </table>
   <br/>
-  <script type="text/javascript">
+  <script>
     var component = new goog.ui.TableSorter();
     component.decorate(goog.dom.$('sortMe'));
     component.setSortFunction(1, goog.ui.TableSorter.alphaSort);

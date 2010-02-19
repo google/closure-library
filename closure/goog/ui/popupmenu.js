@@ -42,6 +42,7 @@ goog.provide('goog.ui.PopupMenu');
 goog.require('goog.events.EventType');
 goog.require('goog.positioning.AnchoredViewportPosition');
 goog.require('goog.positioning.Corner');
+goog.require('goog.positioning.MenuAnchoredPosition');
 goog.require('goog.positioning.ViewportClientPosition');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
@@ -56,11 +57,13 @@ goog.require('goog.userAgent');
 /**
  * A basic menu class.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {goog.ui.MenuRenderer=} opt_renderer Renderer used to render or
+ *     decorate the container; defaults to {@link goog.ui.MenuRenderer}.
  * @extends {goog.ui.Menu}
  * @constructor
  */
-goog.ui.PopupMenu = function(opt_domHelper) {
-  goog.ui.Menu.call(this, opt_domHelper);
+goog.ui.PopupMenu = function(opt_domHelper, opt_renderer) {
+  goog.ui.Menu.call(this, opt_domHelper, opt_renderer);
 
   this.setAllowAutoFocus(true);
 
@@ -339,13 +342,14 @@ goog.ui.PopupMenu.prototype.getToggleMode = function() {
 
 
 /**
- * Show the menu at a given attached target.
- * @param {Object} target Popup target.
- * @param {number} x The client-X associated with the show event.
- * @param {number} y The client-Y associated with the show event.
- * @protected
+ * Show the menu using given positioning object.
+ * @param {goog.positioning.AbstractPosition} position The positioning instance.
+ * @param {goog.positioning.Corner} opt_menuCorner The corner of the menu to be
+ *     positioned.
+ * @param {goog.math.Box=} opt_margin A margin specified in pixels.
  */
-goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
+goog.ui.PopupMenu.prototype.showWithPosition = function(position,
+    opt_menuCorner, opt_margin) {
   var isVisible = this.isVisible();
   if ((isVisible || this.wasRecentlyHidden()) && this.toggleMode_) {
     this.hide();
@@ -357,13 +361,9 @@ goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
     return;
   }
 
-  var position = goog.isDef(target.targetCorner_) ?
-      new goog.positioning.AnchoredViewportPosition(target.element_,
-          target.targetCorner_) :
-      new goog.positioning.ViewportClientPosition(x, y);
-
-  var menuCorner = goog.isDef(target.menuCorner_) ?
-      target.menuCorner_ : goog.positioning.Corner.TOP_START;
+  var menuCorner = typeof opt_menuCorner != 'undefined' ?
+                   opt_menuCorner :
+                   goog.positioning.Corner.TOP_START;
 
   // This is a little hacky so that we can position the menu with minimal
   // flicker.
@@ -375,19 +375,34 @@ goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
   }
 
   goog.style.showElement(this.getElement(), true);
-  position.reposition(this.getElement(), menuCorner, target.margin_);
+  position.reposition(this.getElement(), menuCorner, opt_margin);
 
   if (!isVisible) {
     this.getElement().style.visibility = 'visible';
   }
-
-  this.currentAnchor_ = target.element_;
 
   this.setHighlightedIndex(-1);
 
   // setVisible dispatches a goog.ui.Component.EventType.SHOW event, which may
   // be canceled to prevent the menu from being shown.
   this.setVisible(true);
+};
+
+
+/**
+ * Show the menu at a given attached target.
+ * @param {Object} target Popup target.
+ * @param {number} x The client-X associated with the show event.
+ * @param {number} y The client-Y associated with the show event.
+ * @protected
+ */
+goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
+  var position = goog.isDef(target.targetCorner_) ?
+      new goog.positioning.AnchoredViewportPosition(target.element_,
+          target.targetCorner_, true) :
+      new goog.positioning.ViewportClientPosition(x, y);
+  this.showWithPosition(position, target.menuCorner_, target.margin_);
+  this.currentAnchor_ = target.element_;
 };
 
 
@@ -399,7 +414,9 @@ goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
  *     should be anchored.
  */
 goog.ui.PopupMenu.prototype.showAt = function(x, y, opt_menuCorner) {
-  this.showMenu({menuCorner_: opt_menuCorner}, x, y);
+  this.showWithPosition(
+      new goog.positioning.ViewportClientPosition(x, y), opt_menuCorner);
+  this.currentAnchor_ = null;
 };
 
 
@@ -413,11 +430,10 @@ goog.ui.PopupMenu.prototype.showAt = function(x, y, opt_menuCorner) {
  */
 goog.ui.PopupMenu.prototype.showAtElement = function(element, targetCorner,
     opt_menuCorner) {
-  this.showMenu({
-    menuCorner_: opt_menuCorner,
-    element_: element,
-    targetCorner_: targetCorner
-  }, 0, 0);
+  this.showWithPosition(
+      new goog.positioning.MenuAnchoredPosition(element, targetCorner, true),
+      opt_menuCorner);
+  this.currentAnchor_ = element;
 };
 
 

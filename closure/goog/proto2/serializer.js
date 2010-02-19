@@ -52,15 +52,15 @@ goog.proto2.Serializer.prototype.serialize = goog.abstractMethod;
  * @param {goog.proto2.FieldDescriptor} field The field from which this
  *     value came.
  *
- * @param {Object} value The value of the field.
+ * @param {*} value The value of the field.
  *
- * @return {Object} The value.
+ * @return {*} The value.
  * @protected
  */
 goog.proto2.Serializer.prototype.getSerializedValue = function(field, value) {
   if (field.getFieldType() == goog.proto2.Message.FieldType.MESSAGE ||
       field.getFieldType() == goog.proto2.Message.FieldType.GROUP) {
-      return this.serialize(value);
+    return this.serialize(/** @type {goog.proto2.Message} */ (value));
   } else {
     return value;
   }
@@ -72,7 +72,7 @@ goog.proto2.Serializer.prototype.getSerializedValue = function(field, value) {
  *
  * @param {goog.proto2.Descriptor} descriptor The descriptor of the message
  *     to be created.
- * @param {Object} data The data of the message.
+ * @param {*} data The data of the message.
  *
  * @return {goog.proto2.Message} The message created.
  */
@@ -90,7 +90,7 @@ goog.proto2.Serializer.prototype.deserialize = function(descriptor, data) {
  *
  * @param {goog.proto2.Message} message The message in which to
  *     place the information.
- * @param {Object} data The data of the message.
+ * @param {*} data The data of the message.
  */
 goog.proto2.Serializer.prototype.deserializeTo = goog.abstractMethod;
 
@@ -103,16 +103,16 @@ goog.proto2.Serializer.prototype.deserializeTo = goog.abstractMethod;
  * @param {goog.proto2.FieldDescriptor} field The field from which this
  *     value came.
  *
- * @param {Object} value The value of the field.
+ * @param {*} value The value of the field.
  *
- * @return {Object} The value.
+ * @return {*} The value.
  * @protected
  */
 goog.proto2.Serializer.prototype.getDeserializedValue =
   function(field, value) {
   if (field.getFieldType() == goog.proto2.Message.FieldType.MESSAGE ||
       field.getFieldType() == goog.proto2.Message.FieldType.GROUP) {
-      return this.deserialize(field.getFieldMessageType(), value);
+    return this.deserialize(field.getFieldMessageType(), value);
   } else {
     return value;
   }

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <!--
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,137 +19,129 @@ limitations under the License.
 
 -->
 <head>
-<title>Closure AutoComplete RichRemote Demo</title>
-<script type="text/javascript" src="../base.js"></script>
-<script type="text/javascript">
-  goog.require('goog.array');
-  goog.require('goog.dom');
-  goog.require('goog.ui.AutoComplete.RichRemote');
-</script>
-<link rel="stylesheet" type="text/css" href="css/autocomplete.css">
-<style type="text/css">
-  small {
-    color: #999;
-    font-size: x-small;
-  }
+  <title>goog.ui.AutoComplete.RichRemote</title>
+  <script src="../base.js"></script>
+  <script>
+    goog.require("goog.array");
+    goog.require("goog.dom");
+    goog.require("goog.ui.AutoComplete.RichRemote");
+  </script>
+  <link rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="../css/autocomplete.css">
+  <style type="text/css">
+    .apple {
+      background-color: #990033;
+      color: #FFFFFF;
+      margin: 3px;
+      font-style: italic;
+    }
 
-  h1 {
-    font-size: small;
-  }
+    .citrus {
+      background-color: #CCCC33;
+      color: #FFFFFF;
+      margin: 3px;
+      font-style: italic;
+    }
 
-  .apple {
-    background-color: #990033;
-    color: #FFFFFF;
-    margin: 3px;
-    font-style: italic;
-  }
-
-  .citrus {
-    background-color: #CCCC33;
-    color: #FFFFFF;
-    margin: 3px;
-    font-style: italic;
-  }
-
-  .berry {
-    background-color: #009933;
-    color: #FFFFFF;
-    margin: 3px;
-    font-style: italic;
-  }
-
-</style>
+    .berry {
+      background-color: #009933;
+      color: #FFFFFF;
+      margin: 3px;
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
-<h1>AutoComplete RichRemote Demo</h1>
-<p>
-  Fruit Selector:<br>
-  <input type="text" id="txtInput" style="width:500px"/>
-  <input type='checkbox' id='berryAllergy' onclick='setFilter()'/>
-  <label for='berryAllergy'>berry allergy</label>
-  <input type='checkbox' id='setHighlighting'
-      onclick='setHighlighting()'/>
-  <label for='setHighlighting'>standard highlighting</label>
-  <br>
-  <small>This data is being pulled from the server at
-    <a href='autocompleterichremotedata.js'>autocompleterichremotedata.js</a>.
-    Ideally the server would perform a search on the query and would only
-    return relevant results; however, this response is static.
-  </small>
-</p>
+  <h1>goog.ui.AutoComplete.RichRemote</h1>
+  <p>
+    Fruit Selector:<br>
+    <input type="text" id="txtInput" style="width:500px"/>
+    <input type="checkbox" id="berryAllergy" onclick="setFilter()"/>
+    <label for="berryAllergy">berry allergy</label>
+    <input type="checkbox" id="setHighlighting"
+        onclick="setHighlighting()"/>
+    <label for="setHighlighting">standard highlighting</label>
+    <p>
+      This data is being pulled from the server at
+      <a href="autocompleterichremotedata.js">autocompleterichremotedata.js</a>.
+    </p>
+    <p>
+      Ideally the server would perform a search on the query and would only
+      return relevant results; however, this response is static.
+    </p>
+  </p>
 
-<iframe id='wikipedia' width='900' height='600'>
-</iframe>
+  <iframe id="wikipedia" width="900" height="600"></iframe>
 
-<script type="text/javascript">
-  var makeRichRow_ = function(item, itemType, itemClassName) {
-    item.type = itemType;
+  <script>
+    var makeRichRow_ = function(item, itemType, itemClassName) {
+      item.type = itemType;
 
-    item.render = function(node, token) {
-      var dom_ = goog.dom.getDomHelper(node);
-      var typeNode = dom_.createDom('span', itemClassName);
-      dom_.appendChild(typeNode, dom_.createTextNode(itemType));
+      item.render = function(node, token) {
+        var dom_ = goog.dom.getDomHelper(node);
+        var typeNode = dom_.createDom("span", itemClassName);
+        dom_.appendChild(typeNode, dom_.createTextNode(itemType));
 
-      var nameNode = dom_.createDom('span');
-      dom_.appendChild(nameNode, dom_.createTextNode(item.name));
+        var nameNode = dom_.createDom("span");
+        dom_.appendChild(nameNode, dom_.createTextNode(item.name));
 
-      dom_.appendChild(node, typeNode);
-      dom_.appendChild(node, nameNode);
+        dom_.appendChild(node, typeNode);
+        dom_.appendChild(node, nameNode);
+      };
+
+      item.select = function(target) {
+        target.value = item.name;
+        wikipedia.src = item.url;
+      };
+
+      return item;
     };
 
-    item.select = function(target) {
-      target.value = item.name;
-      wikipedia.src = item.url;
+    var apple = function(item) {
+      return makeRichRow_(item, "Apple", "apple");
     };
 
-    return item;
-  };
+    var citrus = function(item) {
+      return makeRichRow_(item, "Citrus", "citrus");
+    };
 
-  var apple = function(item) {
-    return makeRichRow_(item, 'Apple', 'apple');
-  };
+    var berry = function(item) {
+      return makeRichRow_(item, "Berry", "berry");
+    };
 
-  var citrus = function(item) {
-    return makeRichRow_(item, 'Citrus', 'citrus');
-  };
+    var input = document.getElementById("txtInput");
+    var wikipedia = document.getElementById("wikipedia");
+    var ac = new goog.ui.AutoComplete.RichRemote("autocompleterichremotedata.js",
+        input);
 
-  var berry = function(item) {
-    return makeRichRow_(item, 'Berry', 'berry');
-  };
+    // Set the autocomplete"s rowFilter appropriately
+    var setFilter = function() {
+      var checkbox = document.getElementById("berryAllergy");
+      if (checkbox.checked) {
+        ac.setRowFilter(filterOutBerries);
+      } else {
+        ac.setRowFilter();
+      }
+    };
 
-  var input = document.getElementById('txtInput');
-  var wikipedia = document.getElementById('wikipedia');
-  var ac = new goog.ui.AutoComplete.RichRemote('autocompleterichremotedata.js',
-      input);
+    // Set the autocomplete"s standard highlighting
+    var setHighlighting = function() {
+      var checkbox = document.getElementById("setHighlighting");
+      ac.setUseStandardHighlighting(checkbox.checked);
+    };
 
-  // Set the autocomplete's rowFilter appropriately
-  var setFilter = function() {
-    var checkbox = document.getElementById('berryAllergy');
-    if (checkbox.checked) {
-      ac.setRowFilter(filterOutBerries);
-    } else {
-      ac.setRowFilter();
-    }
-  };
+    // Do not include berries in the search results
+    var filterOutBerries = function(rows) {
+      var filterFunction = function(item) { return item.type != "Berry"; };
+      return goog.array.filter(rows, filterFunction);
+    };
 
-  // Set the autocomplete's standard highlighting
-  var setHighlighting = function() {
-    var checkbox = document.getElementById('setHighlighting');
-    ac.setUseStandardHighlighting(checkbox.checked);
-  };
+    // When the page loads, make sure to set the filter appropriately
+    window.onload = function() {
+      setFilter();
+      setHighlighting();
+    };
 
-  // Do not include berries in the search results
-  var filterOutBerries = function(rows) {
-    var filterFunction = function(item) { return item.type != 'Berry'; };
-    return goog.array.filter(rows, filterFunction);
-  };
-
-  // When the page loads, make sure to set the filter appropriately
-  window.onload = function() {
-    setFilter();
-    setHighlighting();
-  };
-
-</script>
+  </script>
 </body>
 </html>

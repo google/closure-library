@@ -25,6 +25,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.Range');
 goog.require('goog.editor.Field.EventType');
 goog.require('goog.editor.Plugin');
+goog.require('goog.editor.range');
 goog.require('goog.events');
 goog.require('goog.ui.editor.AbstractDialog.EventType');
 
@@ -61,7 +62,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.isSupportedCommand =
  * supported). Hence this method does not dispatch the change events that the
  * superclass method does.
  * @param {string} command The command to execute.
- * @param {...Object} var_args Any additional parameters needed to
+ * @param {...*} var_args Any additional parameters needed to
  *     execute the command.
  * @return {Object|undefined} The result of the execCommand, if any.
  * @override
@@ -91,7 +92,7 @@ goog.editor.plugins.AbstractDialogPlugin.EventType = {
 /**
  * Creates a new instance of this plugin's dialog. Must be overridden by
  * subclasses.
- * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
+ * @param {!goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
  *     create the dialog.
  * @param {*=} opt_arg The dialog specific argument. Concrete subclasses should
  *     declare a specific type.
@@ -159,8 +160,10 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.execCommandInternal =
   // save it so we can restore it when the dialog closes.
   // getRange may return null if there is no selection in the field.
   var tempRange = this.fieldObject.getRange();
-  // saveUsingDom() did not work as well as saveUsingCarets(), not sure why.
-  this.savedRange_ = tempRange && tempRange.saveUsingCarets();
+  // saveUsingDom() did not work as well as saveUsingNormalizedCarets(),
+  // not sure why.
+  this.savedRange_ = tempRange && goog.editor.range.saveUsingNormalizedCarets(
+      tempRange);
   goog.dom.Range.clearSelection(
       this.fieldObject.getEditableDomHelper().getWindow());
 
@@ -174,6 +177,10 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.execCommandInternal =
   this.fieldObject.setModalMode(true);
   this.dialog_.show();
   this.dispatchEvent(goog.editor.plugins.AbstractDialogPlugin.EventType.OPENED);
+
+  // Since the selection has left the document, dispatch a selection
+  // change event.
+  this.fieldObject.dispatchSelectionChangeEvent();
 };
 
 
@@ -192,6 +199,17 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.handleAfterHide = function(
     e) {
   this.fieldObject.setModalMode(false);
 
+  if (!this.reuseDialog_) {
+    this.disposeDialog_();
+  }
+
+  this.restoreOriginalSelection();
+  this.dispatchEvent(goog.editor.plugins.AbstractDialogPlugin.EventType.CLOSED);
+
+  // Since the selection has returned to the document, dispatch a selection
+  // change event.
+  this.fieldObject.dispatchSelectionChangeEvent();
+
   // When the dialog closes due to pressing enter or escape, that happens on the
   // keydown event. But the browser will still fire a keyup event after that,
   // which is caught by the editable field and causes it to try to fire a
@@ -200,13 +218,6 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.handleAfterHide = function(
   // that caused it immediately after this dialog was hidden ("immediately"
   // means a small number of milliseconds defined by the editable field).
   this.fieldObject.debounceEvent(goog.editor.Field.EventType.SELECTIONCHANGE);
-
-  if (!this.reuseDialog_) {
-    this.disposeDialog_();
-  }
-
-  this.restoreOriginalSelection();
-  this.dispatchEvent(goog.editor.plugins.AbstractDialogPlugin.EventType.CLOSED);
 };
 
 
@@ -244,8 +255,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.disposeOriginalSelection =
 goog.editor.plugins.AbstractDialogPlugin.prototype.disposeInternal =
     function() {
   this.disposeDialog_();
-  goog.editor.plugins.AbstractDialogPlugin.superClass_.disposeInternal.call(
-      this);
+  goog.base(this, 'disposeInternal');
 };
 
 

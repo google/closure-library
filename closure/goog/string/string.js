@@ -40,7 +40,7 @@ goog.string.Unicode = {
  * @return {boolean} True if {@code str} begins with {@code prefix}.
  */
 goog.string.startsWith = function(str, prefix) {
-  return str.indexOf(prefix) == 0;
+  return str.lastIndexOf(prefix, 0) == 0;
 };
 
 
@@ -52,7 +52,7 @@ goog.string.startsWith = function(str, prefix) {
  */
 goog.string.endsWith = function(str, suffix) {
   var l = str.length - suffix.length;
-  return l >= 0 && str.lastIndexOf(suffix, l) == l;
+  return l >= 0 && str.indexOf(suffix, l) == l;
 };
 
 

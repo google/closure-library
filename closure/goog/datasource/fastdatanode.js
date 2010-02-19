@@ -409,7 +409,7 @@ goog.inherits(goog.ds.PrimitiveFastDataNode, goog.ds.AbstractFastDataNode);
 
 /**
  * Returns the value of this data node.
- * @return {Object} Value of this data node.
+ * @return {*} Value of this data node.
  */
 goog.ds.PrimitiveFastDataNode.prototype.get = function() {
   return this.value_;
@@ -483,7 +483,7 @@ goog.ds.PrimitiveFastDataNode.prototype.isList = function() {
 /**
  * Returns a javascript object representation of this data node. You should
  * not modify the object returned by this function.
- * @return {Object} Javascript object representation of this data node.
+ * @return {*} Javascript object representation of this data node.
  */
 goog.ds.PrimitiveFastDataNode.prototype.getJsObject = function() {
   return this.value_;

@@ -205,6 +205,14 @@ goog.events.BrowserEvent.prototype.metaKey = false;
 
 
 /**
+ * Whether the deafault platform modifier key was pressed at time of event.
+ * (This is control for all platformes except Mac, where it's Meta.
+ * @type {boolean}
+ */
+goog.events.BrowserEvent.prototype.platformModifierKey = false;
+
+
+/**
  * The browser event object.
  * @type {Event}
  * @private
@@ -262,6 +270,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   this.altKey = e.altKey;
   this.shiftKey = e.shiftKey;
   this.metaKey = e.metaKey;
+  this.platformModifierKey = goog.userAgent.MAC ? e.metaKey : e.ctrlKey;
   this.event_ = e;
   delete this.returnValue_;
   delete this.propagationStopped_;

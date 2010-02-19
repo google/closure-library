@@ -76,6 +76,18 @@ goog.structs.TreeNode.prototype.clone = function() {
 
 
 /**
+ * @return {!goog.structs.TreeNode} Clone of the subtree with this node as root.
+ */
+goog.structs.TreeNode.prototype.deepClone = function() {
+  var clone = this.clone();
+  this.forEachChild(function(child) {
+    clone.addChild(child.deepClone());
+  });
+  return clone;
+};
+
+
+/**
  * @return {goog.structs.TreeNode} Parent node or null if it has no parent.
  */
 goog.structs.TreeNode.prototype.getParent = function() {
@@ -96,6 +108,17 @@ goog.structs.TreeNode.prototype.isLeaf = function() {
  */
 goog.structs.TreeNode.prototype.getChildren = function() {
   return this.children_ || goog.structs.TreeNode.EMPTY_ARRAY_;
+};
+
+
+/**
+ * Gets the child node of this node at the given index.
+ * @param {number} index Child index.
+ * @return {goog.structs.TreeNode} The node at the given index or null if not
+ *     found.
+ */
+goog.structs.TreeNode.prototype.getChildAt = function(index) {
+  return this.getChildren()[index] || null;
 };
 
 
@@ -183,6 +206,18 @@ goog.structs.TreeNode.prototype.forEachDescendant = function(f, opt_this) {
 
 
 /**
+ * Sets the parent node of this node. The callers must ensure that the parent
+ * node and only that has this node among its children.
+ * @param {goog.structs.TreeNode} parent The parent to set. If null, the node
+ *     will be detached from the tree.
+ * @protected
+ */
+goog.structs.TreeNode.prototype.setParent = function(parent) {
+  this.parent_ = parent;
+};
+
+
+/**
  * Appends a child node to this node.
  * @param {!goog.structs.TreeNode} child Orphan child node.
  */
@@ -197,8 +232,8 @@ goog.structs.TreeNode.prototype.addChild = function(child) {
  * @param {number} index The position to insert at.
  */
 goog.structs.TreeNode.prototype.addChildAt = function(child, index) {
-  goog.asserts.assert(!child.parent_);
-  child.parent_ = this;
+  goog.asserts.assert(!child.getParent());
+  child.setParent(this);
   this.children_ = this.children_ || [];
   goog.asserts.assert(index >= 0 && index <= this.children_.length);
   goog.array.insertAt(this.children_, child, index);
@@ -208,15 +243,29 @@ goog.structs.TreeNode.prototype.addChildAt = function(child, index) {
 /**
  * Removes the child node at the given index.
  * @param {number} index The position to remove from.
+ * @return {goog.structs.TreeNode} The removed node if any.
  */
 goog.structs.TreeNode.prototype.removeChildAt = function(index) {
-  goog.asserts.assert(index >= 0 && index <= this.children_.length);
-  var child = this.children_[index];
-  delete child.parent_;
-  goog.array.removeAt(this.children_, index);
-  if (this.children_.length == 0) {
-    delete this.children_;
+  var child = this.children_ && this.children_[index];
+  if (child) {
+    child.setParent(null);
+    goog.array.removeAt(this.children_, index);
+    if (this.children_.length == 0) {
+      delete this.children_;
+    }
+    return child;
   }
+  return null;
+};
+
+
+/**
+ * Removes the given child node of this node.
+ * @param {goog.structs.TreeNode} child The node to remove.
+ * @return {goog.structs.TreeNode} The removed node if any.
+ */
+goog.structs.TreeNode.prototype.removeChild = function(child) {
+  return this.removeChildAt(goog.array.indexOf(this.getChildren(), child));
 };
 
 
@@ -226,7 +275,7 @@ goog.structs.TreeNode.prototype.removeChildAt = function(index) {
 goog.structs.TreeNode.prototype.removeChildren = function() {
   if (this.children_) {
     goog.array.forEach(this.children_, function(child) {
-      child.parent_ = null;
+      child.setParent(null);
     });
   }
   delete this.children_;
