@@ -37,6 +37,7 @@ def _GetOptionsParser():
                     '--input',
                     dest='inputs',
                     action='append',
+                    default=[],
                     help='One or more input files to calculate dependencies '
                     'for.  The namespaces in this file will be combined with '
                     'those given with the -n flag to form the set of '
@@ -45,6 +46,7 @@ def _GetOptionsParser():
                     '--namespace',
                     dest='namespaces',
                     action='append',
+                    default=[],
                     help='One or more namespaces to calculate dependencies '
                     'for.  These namespaces will be combined with those given '
                     'with the -i flag to form the set of namespaces to find '

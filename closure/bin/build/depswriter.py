@@ -33,7 +33,7 @@ def MakeDepsFile(source_map):
     str, A generated deps file source.
   """
   return ''.join([_GetDepsLine(path, js_source)
-                  for path, js_source in source_map.iteritems()])
+                  for path, js_source in source_map.items()])
 
 
 def _GetDepsLine(path, js_source):
