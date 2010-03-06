@@ -438,13 +438,17 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
 
   var paragraph;
   while (container && container != field) {
-    // We only need to ensure a block if we aren't already in the same block,
-    // or another block level node that we don't want to change the format of.
+    // We don't need to ensure a block if we are already in the same block, or
+    // in another block level node that we don't want to change the format of
+    // (unless we're handling keyUp and that block node just contains a BR).
     var nodeName = container.nodeName;
-    var doNotEnsureBlock =
-        goog.editor.plugins.EnterHandler.DO_NOT_ENSURE_BLOCK_NODES_[nodeName];
-    var isBr = goog.editor.plugins.EnterHandler.isBrElem(container);
-    if (nodeName == tag || (doNotEnsureBlock && (!opt_keyUp || !isBr))) {
+    // Due to @bug 2455389, the call to isBrElem needs to be inlined in the if
+    // instead of done before and saved in a variable, so that it can be
+    // short-circuited and avoid a weird IE edge case.
+    if (nodeName == tag ||
+        (goog.editor.plugins.EnterHandler.DO_NOT_ENSURE_BLOCK_NODES_[nodeName]
+         && !(opt_keyUp &&
+              goog.editor.plugins.EnterHandler.isBrElem(container)))) {
       // Opera can create a <p> inside of a <div> in some situations,
       // such as when breaking out of a list that is contained in a <div>.
       if (goog.userAgent.OPERA && paragraph) {

@@ -64,7 +64,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.isSupportedCommand =
  * @param {string} command The command to execute.
  * @param {...*} var_args Any additional parameters needed to
  *     execute the command.
- * @return {Object|undefined} The result of the execCommand, if any.
+ * @return {*} The result of the execCommand, if any.
  * @override
  */
 goog.editor.plugins.AbstractDialogPlugin.prototype.execCommand = function(
@@ -132,7 +132,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.setReuseDialog =
  * @param {string} command The command to execute.
  * @param {*=} opt_arg The dialog specific argument. Should be the same as
  *     {@link createDialog}.
- * @return {Object|undefined} The result of the execCommand, if any.
+ * @return {*} Always returns true, indicating the dialog was shown.
  * @protected
  * @override
  */
@@ -181,6 +181,8 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.execCommandInternal =
   // Since the selection has left the document, dispatch a selection
   // change event.
   this.fieldObject.dispatchSelectionChangeEvent();
+
+  return true;
 };
 
 

@@ -237,15 +237,6 @@ goog.fx.Dragger.prototype.getHandler = function() {
 
 
 /**
- * Event handler used to cancel IE's 'ondragstart' event.
- * @param {goog.events.BrowserEvent} e The drag-start event.
- */
-goog.fx.Dragger.cancelIeDragStart = function(e) {
-  e.preventDefault();
-};
-
-
-/**
  * Sets (or reset) the Drag limits after a Dragger is created.
  * @param {goog.math.Rect?} limits Object containing left, top, width,
  *     height for new Dragger limits.
@@ -401,8 +392,9 @@ goog.fx.Dragger.prototype.setupDragHandlers = function() {
   }
 
   if (goog.userAgent.IE && this.ieDragStartCancellingOn_) {
+    // Cancel IE's 'ondragstart' event.
     this.eventHandler_.listen(doc, goog.events.EventType.DRAGSTART,
-                              goog.fx.Dragger.cancelIeDragStart);
+                              goog.events.Event.preventDefault);
   }
 
   if (this.scrollTarget_) {

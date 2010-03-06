@@ -141,7 +141,6 @@ function testAssertionError() {
   var error = new goog.asserts.AssertionError('foo %s %s', [1, 'two']);
   assertEquals('Wrong message', 'foo 1 two', error.message);
   assertEquals('Wrong messagePattern', 'foo %s %s', error.messagePattern);
-  assertTrue('Should have a stack trace.', !!error.stack);
 }
 
 </script>

@@ -536,11 +536,21 @@ goog.ui.editor.DefaultToolbar.fontSizeFactory_ = function(id, tooltip,
       goog.getCssName('goog-menu-noaccel'));
   // How to update this button's state.
   button.updateFromValue = function(value) {
-   // Normalize value to null or a positive integer (sometimes we get
-   // the empty string, sometimes we get false...)
-   value = value > 0 ? value : null;
-   if (value != button.getValue()) {
-     button.setValue(value);
+    // Webkit returns a string like '32px' instead of the equivalent
+    // integer, so normalize that first.
+    // NOTE: Gecko returns "6" so can't just normalize all
+    // strings, only ones ending in "px".
+    if (goog.isString(value) &&
+        goog.style.getLengthUnits(value) == 'px') {
+      value = goog.ui.editor.ToolbarFactory.getLegacySizeFromPx(
+          parseInt(value, 10));
+    }
+    // Normalize value to null or a positive integer (sometimes we get
+    // the empty string, sometimes we get false, or -1 if the above
+    // normalization didn't match to a particular 0-7 size)
+    value = value > 0 ? value : null;
+    if (value != button.getValue()) {
+      button.setValue(value);
     }
   }
   return button;
@@ -890,7 +900,7 @@ goog.ui.editor.DefaultToolbar.BUTTONS_ = [{
   tooltip: goog.ui.editor.DefaultToolbar.MSG_LINK_TITLE,
   caption: goog.ui.editor.DefaultToolbar.MSG_LINK_CAPTION,
   classes: goog.getCssName('tr-link'),
-  factory: goog.ui.editor.ToolbarFactory.makeButton
+  queryable: true
 }, {
   command: goog.editor.Command.ORDERED_LIST,
   tooltip: goog.ui.editor.DefaultToolbar.MSG_ORDERED_LIST_TITLE,

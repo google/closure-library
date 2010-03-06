@@ -170,9 +170,18 @@ goog.dom.xml.createMsXmlDocument_ = function() {
     // http://b/1707300 and http://wiki/Main/ISETeamXMLAttacks for details.
     doc.resolveExternals = false;
     doc.validateOnParse = false;
-    doc.setProperty('ProhibitDTD', true);
-    doc.setProperty('MaxXMLSize', goog.dom.xml.MAX_XML_SIZE_KB);
-    doc.setProperty('MaxElementDepth', goog.dom.xml.MAX_ELEMENT_DEPTH);
+    // Add a try catch block because accessing these properties will throw an
+    // error on unsupported MSXML versions. This affects Windows machines
+    // running IE6 or IE7 that are on XP SP2 or earlier without MSXML updates.
+    // See http://msdn.microsoft.com/en-us/library/ms766391(VS.85).aspx for
+    // specific details on which MSXML versions support these properties.
+    try {
+      doc.setProperty('ProhibitDTD', true);
+      doc.setProperty('MaxXMLSize', goog.dom.xml.MAX_XML_SIZE_KB);
+      doc.setProperty('MaxElementDepth', goog.dom.xml.MAX_ELEMENT_DEPTH);
+    } catch (e) {
+      // No-op.
+    }
   }
   return doc;
 };

@@ -85,7 +85,7 @@ goog.format.JsonPrettyPrinter.prototype.format = function(json) {
   if (!goog.isDefAndNotNull(json)) {
     return '';
   }
-  if (goog.typeOf(json) == 'string') {
+  if (goog.isString(json)) {
     if (goog.string.isEmpty(json)) {
       return '';
     }
@@ -117,7 +117,9 @@ goog.format.JsonPrettyPrinter.prototype.printObject_ = function(val,
     case 'string':
       // "null", "boolean", "number" and "string" properties are printed
       // directly to the output.
-      this.printValue_(val, typeOf, outputBuffer);
+      this.printValue_(
+          /** @type {null|string|boolean|number} */ (val),
+          typeOf, outputBuffer);
       break;
     case 'array':
       // Example of how an array looks when formatted

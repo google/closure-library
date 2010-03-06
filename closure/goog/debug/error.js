@@ -20,7 +20,6 @@
 
 goog.provide('goog.debug.Error');
 
-goog.require('goog.debug');
 
 
 /**
@@ -33,7 +32,6 @@ goog.debug.Error = function(opt_msg) {
 
   // Ensure there is a stack trace.
   this.stack = new Error().stack || '';
-  goog.debug.enhanceError(this);
 
   if (opt_msg) {
     this.message = String(opt_msg);

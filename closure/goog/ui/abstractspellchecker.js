@@ -15,21 +15,21 @@
 /**
  * @fileoverview Abstract base class for spell checker implementations.
  *
- * The spell checker supports two modes - synchrnous and asynchronous.
+ * The spell checker supports two modes - synchronous and asynchronous.
  *
- * In synchrnonus mode subclass calls processText_ which processes all the text
+ * In synchronous mode subclass calls processText_ which processes all the text
  * given to it before it returns. If the text string is very long, it could
  * cause warnings from the browser that considers the script to be
  * busy-looping.
  *
- * Asyncronous mode allows breaking processing large text segments without
+ * Asynchronous mode allows breaking processing large text segments without
  * encountering stop script warnings by rescheduling remaining parts of the
  * text processing to another stack.
  *
  * In asynchronous mode abstract spell checker keeps track of a number of text
  * chunks that have been processed after the very beginning, and returns every
  * so often so that the calling function could reschedule its execution on a
- * different stach (for example by calling setInterval(0)).
+ * different stack (for example by calling setInterval(0)).
  *
  */
 
@@ -222,7 +222,7 @@ goog.ui.AbstractSpellChecker.prototype.asyncMode_ = false;
 goog.ui.AbstractSpellChecker.prototype.asyncWordsPerBatch_ = 1000;
 
 /**
- * Current text to process when running in the asyncronous mode.
+ * Current text to process when running in the asynchronous mode.
  *
  * @type {string|undefined}
  * @private
@@ -869,40 +869,27 @@ goog.ui.AbstractSpellChecker.prototype.finishAsyncProcessing = function() {
 
 
 /**
- * Captures and drops goog.spell.SpellCheck.EventType.READY events. This is
- * used in dictionary recharge and async mode so that completion is not
- * signalled prematurely.
- *
- * @param {goog.events.Event} e goog.spell.SpellCheck.EventType.READY event.
- * @private
- */
-goog.ui.AbstractSpellChecker.prototype.captureReadyEvents_ = function(e) {
-  e.stopPropagation();
-};
-
-
-/**
  * Blocks processing of spell checker READY events. This is used in dictionary
- * recharge and async mode so that completion is not signalled prematurely.
+ * recharge and async mode so that completion is not signaled prematurely.
  *
  * @protected
  */
 goog.ui.AbstractSpellChecker.prototype.blockReadyEvents = function() {
   goog.events.listen(this.handler_, goog.spell.SpellCheck.EventType.READY,
-                     this.captureReadyEvents_, true, this);
+      goog.events.Event.stopPropagation, true);
 };
 
 
 /**
  * Unblocks processing of spell checker READY events. This is used in
- * dictionary recharge and async mode so that completion is not signalled
+ * dictionary recharge and async mode so that completion is not signaled
  * prematurely.
  *
  * @protected
  */
 goog.ui.AbstractSpellChecker.prototype.unblockReadyEvents = function() {
   goog.events.unlisten(this.handler_, goog.spell.SpellCheck.EventType.READY,
-                     this.captureReadyEvents_, true, this);
+      goog.events.Event.stopPropagation, true);
 };
 
 
@@ -1042,7 +1029,7 @@ goog.ui.AbstractSpellChecker.Direction = {
 
 
 /**
- * Constants for the result of asynchrnonus processing.
+ * Constants for the result of asynchronous processing.
  * @enum {number}
  */
 goog.ui.AbstractSpellChecker.AsyncResult = {

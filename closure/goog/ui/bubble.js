@@ -36,7 +36,7 @@ goog.require('goog.positioning.Corner');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Popup');
-
+goog.require('goog.ui.Popup.AnchoredPosition');
 
 
 /**

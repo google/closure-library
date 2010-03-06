@@ -506,8 +506,19 @@ goog.ui.AutoComplete.InputHandler.prototype.selectRow = function(row,
       // Replace the value in the array.
       entries[index] = replaceValue;
 
+      var el = this.activeElement_;
+      // If there is an uncommitted IME in Firefox, setting the value fails and
+      // results in actually clearing the value that's already in the input.
+      // The FF bug is http://bugzilla.mozilla.org/show_bug.cgi?id=549674
+      // Blurring before setting the value works around this problem. We'd like
+      // to do this only if there is an uncommitted IME, but this isn't possible
+      // to detect for FF/Mac. Since text editing is finicky we restrict this
+      // workaround to Firefox.
+      if (goog.userAgent.GECKO) {
+        el.blur();
+      }
       // Join the array and replace the contents of the input.
-      this.setValue(entries.join(''));
+      el.value = entries.join('');
 
       // Calculate which position to put the cursor at.
       var pos = 0;
@@ -516,7 +527,7 @@ goog.ui.AutoComplete.InputHandler.prototype.selectRow = function(row,
       }
 
       // Set the cursor.
-      this.activeElement_.focus();
+      el.focus();
       this.setCursorPosition(pos);
     }
   } else {

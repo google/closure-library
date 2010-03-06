@@ -39,7 +39,7 @@ goog.editor.Command = {
   SUBSCRIPT: '+subscript',
   SUPERSCRIPT: '+superscript',
   UNDERLINE: '+underline',
-  UNLINK: '+unlink',
+  UNLINK: '+unlink', // TODO: Is this necessary?
   BOLD: '+bold',
   ITALIC: '+italic',
   FONT_SIZE: '+fontSize',
@@ -68,5 +68,8 @@ goog.editor.Command = {
   // these execCommands.
   CLEAR_LOREM: 'clearlorem',
   UPDATE_LOREM: 'updatelorem',
-  USING_LOREM: 'usinglorem'
+  USING_LOREM: 'usinglorem',
+
+  // Modal editor commands (usually dialogs).
+  MODAL_LINK_EDITOR: 'link'
 };

@@ -347,6 +347,69 @@ Copyright 2008 Google Inc.
     tearDownSubSuperTests();
   }
 
+  function setUpLinkTests(url) {
+    stubs.set(window, 'prompt', function() {
+      return url;
+    });
+
+    ROOT.innerHTML = '12345';
+    HELPER = new goog.testing.editor.TestHelper(ROOT);
+    HELPER.setUpEditableElement();
+
+    FIELDMOCK.getElement().$anyTimes().$returns(ROOT);
+
+    FIELDMOCK.execCommand(goog.editor.Command.MODAL_LINK_EDITOR,
+        goog.testing.mockmatchers.isObject).$returns(undefined);
+  }
+
+  function tearDownLinkTests() {
+    tearDownHelper();
+  }
+
+  function testLink() {
+    setUpLinkTests('http://www.x.com/');
+    FIELDMOCK.$replay();
+
+    HELPER.select('12345', 3);
+    FORMATTER.execCommandInternal(goog.editor.Command.LINK);
+    HELPER.assertHtmlMatches(
+        goog.editor.BrowserFeature.GETS_STUCK_IN_LINKS ?
+            '123<a href="http://www.x.com/">http://www.x.com/</a>&nbsp;45' :
+            '123<a href="http://www.x.com/">http://www.x.com/</a>45');
+
+    FIELDMOCK.$verify();
+    tearDownLinkTests();
+  }
+
+  function testSelectedLink() {
+    setUpLinkTests('http://www.x.com/');
+    FIELDMOCK.$replay();
+
+    HELPER.select('12345', 1, '12345', 4);
+    FORMATTER.execCommandInternal(goog.editor.Command.LINK);
+    HELPER.assertHtmlMatches(
+        goog.editor.BrowserFeature.GETS_STUCK_IN_LINKS ?
+            '1<a href="http://www.x.com/">234</a>&nbsp;5' :
+            '1<a href="http://www.x.com/">234</a>5');
+
+    FIELDMOCK.$verify();
+    tearDownLinkTests();
+  }
+
+  function testCanceledLink() {
+    setUpLinkTests(undefined);
+    FIELDMOCK.$replay();
+
+    HELPER.select('12345', 1, '12345', 4);
+    FORMATTER.execCommandInternal(goog.editor.Command.LINK);
+    HELPER.assertHtmlMatches('12345');
+
+    assertEquals('234', FIELDMOCK.getRange().getText());
+
+    FIELDMOCK.$verify();
+    tearDownLinkTests();
+  }
+
   function setUpJustifyTests(html) {
     ROOT.innerHTML = html;
     HELPER = new goog.testing.editor.TestHelper(ROOT);
@@ -832,6 +895,28 @@ Copyright 2008 Google Inc.
     mockField.$verify();
   }
 
+  function testIsJustificationSimple1() {
+    setUpRealField();
+    REAL_FIELD.setHtml(false,'<div align="right">foo</div>');
+    selectRealField();
+
+    assertFalse(REAL_FIELD.queryCommandValue(
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_LEFT));
+    assertTrue(REAL_FIELD.queryCommandValue(
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_RIGHT));
+  }
+
+  function testIsJustificationSimple2() {
+    setUpRealField();
+    REAL_FIELD.setHtml(false,'<div style="text-align: right;">foo</div>');
+    selectRealField();
+
+    assertFalse(REAL_FIELD.queryCommandValue(
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_LEFT));
+    assertTrue(REAL_FIELD.queryCommandValue(
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_RIGHT));
+  }
+
   function testIsJustificationComplete1() {
     setUpRealField();
     REAL_FIELD.setHtml(false,
@@ -893,6 +978,53 @@ Copyright 2008 Google Inc.
     assertFalse(REAL_FIELD.queryCommandValue(
         goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_RIGHT));
   }
+
+  /** @bug 2472589 */
+  function doTestIsJustificationPInDiv(useCss, align, command) {
+    setUpRealField();
+    var html = '<div ' +
+               (useCss ? 'style="text-align:' : 'align="') + align +
+               '"><p>foo</p></div>';
+    REAL_FIELD.setHtml(false, html);
+    selectRealField();
+    assertTrue(
+        'P inside ' + align + ' aligned' + (useCss ? ' (using CSS)' : '') +
+            ' DIV should be considered ' + align + ' aligned',
+        REAL_FIELD.queryCommandValue(command));
+  }
+  function testIsJustificationPInDivLeft() {
+    doTestIsJustificationPInDiv(false, 'left',
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_LEFT);
+  }
+  function testIsJustificationPInDivRight() {
+    doTestIsJustificationPInDiv(false, 'right',
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_RIGHT);
+  }
+  function testIsJustificationPInDivCenter() {
+    doTestIsJustificationPInDiv(false, 'center',
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_CENTER);
+  }
+  function testIsJustificationPInDivJustify() {
+    doTestIsJustificationPInDiv(false, 'justify',
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_FULL);
+  }
+  function testIsJustificationPInDivLeftCss() {
+    doTestIsJustificationPInDiv(true, 'left',
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_LEFT);
+  }
+  function testIsJustificationPInDivRightCss() {
+    doTestIsJustificationPInDiv(true, 'right',
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_RIGHT);
+  }
+  function testIsJustificationPInDivCenterCss() {
+    doTestIsJustificationPInDiv(true, 'center',
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_CENTER);
+  }
+  function testIsJustificationPInDivJustifyCss() {
+    doTestIsJustificationPInDiv(true, 'justify',
+        goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_FULL);
+  }
+
 
   function testPrepareContent() {
     setUpRealField();

@@ -7,11 +7,12 @@ See the COPYING file for details.
 /**/
 
 
-@import url(../common.css);
+@import url(../../css/common.css);
 
 
 body {
   background-color: #ffe;
+  font: normal 10pt Arial, sans-serif;
 }
 
 

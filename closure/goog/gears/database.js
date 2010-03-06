@@ -420,7 +420,7 @@ goog.gears.Database.prototype.queryArrays = function(sql, var_args) {
  * This calls query on the database and builds an array containing hashes
  *
  * @param {string} sql Ths SQL statement.
- * @param {...Object} var_args query params. An array or multiple arguments.
+ * @param {...*} var_args query params. An array or multiple arguments.
  * @return {Array} An array of hashes containing the results of the query.
  */
 goog.gears.Database.prototype.queryObjectArray = function(sql, var_args) {
@@ -453,7 +453,7 @@ goog.gears.Database.prototype.queryValueArray = function(sql, var_args) {
  * row.
  *
  * @param {string} sql SQL statement.
- * @param {...Object} var_args query params. An array or multiple arguments.
+ * @param {...*} var_args query params. An array or multiple arguments.
  * @return {(number,string,null)} The first value in
  *     the first row.
  */

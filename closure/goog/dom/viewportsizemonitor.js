@@ -80,6 +80,33 @@ goog.inherits(goog.dom.ViewportSizeMonitor, goog.events.EventTarget);
 
 
 /**
+ * Returns a viewport size monitor for the given window.  A new one is created
+ * if it doesn't exist already.  This prevents the unnecessary creation of
+ * multiple spooling monitors for a window.
+ * @param {Window=} opt_window The window to monitor; defaults to the window in
+ *     which this code is executing.
+ * @return {goog.dom.ViewportSizeMonitor} Monitor for the given window.
+ */
+goog.dom.ViewportSizeMonitor.getInstanceForWindow = function(opt_window) {
+  var currentWindow = opt_window || window;
+  var hash = goog.getHashCode(currentWindow);
+
+  return goog.dom.ViewportSizeMonitor.windowInstanceMap_[hash] =
+      goog.dom.ViewportSizeMonitor.windowInstanceMap_[hash] ||
+      new goog.dom.ViewportSizeMonitor(currentWindow);
+};
+
+
+/**
+ * Map of window hash code to viewport size monitor for that window, if
+ * created.
+ * @type {Object.<number,goog.dom.ViewportSizeMonitor>}
+ * @private
+ */
+goog.dom.ViewportSizeMonitor.windowInstanceMap_ = {};
+
+
+/**
  * Rate in milliseconds at which to poll the window size on browsers that
  * need polling.
  * @type {number}

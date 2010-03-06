@@ -850,44 +850,7 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
   goog.style.showElement(this.getElement(), visible);
 
   if (visible) {
-    // Start with the focus on the dialog itself.  In FF, if we focus on a
-    // sub-element first, then hitting tab moves the focus outside of the
-    // dialog, which we don't want.  In addition, there may not be a default
-    // button, but we certainly want focus to remain within the dialog.
-    try {
-      this.getElement().focus();
-    } catch (e) {
-      // Swallow this. IE can throw an error if the element can not be focused.
-    }
-    // Move focus to the default button (if any).
-    if (this.getButtonSet()) {
-      var defaultButton = this.getButtonSet().getDefault();
-      if (defaultButton) {
-        var buttons = this.buttonEl_.getElementsByTagName('button');
-        for (var i = 0, button; button = buttons[i]; i++) {
-          if (button.name == defaultButton) {
-            try {
-              // Reopening a dialog can cause focusing the button to fail in
-              // WebKit and Opera. Shift the focus to a temporary <input>
-              // element to make refocusing the button possible.
-              if (goog.userAgent.WEBKIT || goog.userAgent.OPERA) {
-                var temp = doc.createElement('input');
-                temp.style.cssText =
-                    'position:fixed;width:0;height:0;left:0;top:0;';
-                this.getElement().appendChild(temp);
-                temp.focus();
-                this.getElement().removeChild(temp);
-              }
-              button.focus();
-            } catch (e) {
-              // Swallow this. Could be the button is disabled
-              // and IE6 wishes to throw an error.
-            }
-            break;
-          }
-        }
-      }
-    }
+    this.focus();
   }
 
   this.visible_ = visible;
@@ -919,6 +882,52 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
  */
 goog.ui.Dialog.prototype.isVisible = function() {
   return this.visible_;
+};
+
+
+/**
+ * Focuses the dialog contents and the default dialog button if there is one.
+ */
+goog.ui.Dialog.prototype.focus = function() {
+  // Start with the focus on the dialog itself.  In FF, if we focus on a
+  // sub-element first, then hitting tab moves the focus outside of the
+  // dialog, which we don't want.  In addition, there may not be a default
+  // button, but we certainly want focus to remain within the dialog.
+  try {
+    this.getElement().focus();
+  } catch (e) {
+    // Swallow this. IE can throw an error if the element can not be focused.
+  }
+  // Move focus to the default button (if any).
+  if (this.getButtonSet()) {
+    var defaultButton = this.getButtonSet().getDefault();
+    if (defaultButton) {
+      var doc = this.getDomHelper().getDocument();
+      var buttons = this.buttonEl_.getElementsByTagName('button');
+      for (var i = 0, button; button = buttons[i]; i++) {
+        if (button.name == defaultButton) {
+          try {
+            // Reopening a dialog can cause focusing the button to fail in
+            // WebKit and Opera. Shift the focus to a temporary <input>
+            // element to make refocusing the button possible.
+            if (goog.userAgent.WEBKIT || goog.userAgent.OPERA) {
+              var temp = doc.createElement('input');
+              temp.style.cssText =
+                  'position:fixed;width:0;height:0;left:0;top:0;';
+              this.getElement().appendChild(temp);
+              temp.focus();
+              this.getElement().removeChild(temp);
+            }
+            button.focus();
+          } catch (e) {
+            // Swallow this. Could be the button is disabled
+            // and IE6 wishes to throw an error.
+          }
+          break;
+        }
+      }
+    }
+  }
 };
 
 

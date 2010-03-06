@@ -167,6 +167,20 @@ function testOr() {
   assertFalse(goog.functions.or(goog.functions.identity)(false));
 }
 
+function testCreate(expectedArray) {
+  var tempConstructor = function(a, b) {
+    this.foo = a;
+    this.bar = b;
+  };
+
+  var factory = goog.partial(goog.functions.create, tempConstructor, 'baz');
+  var instance = factory('qux');
+
+  assert(instance instanceof tempConstructor);
+  assertEquals(instance.foo, 'baz');
+  assertEquals(instance.bar, 'qux');
+}
+
 function makeCallOrderLogger(name, returnValue) {
   return function() {
     callOrder.push(name);

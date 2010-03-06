@@ -108,7 +108,7 @@ goog.ui.Css3ButtonRenderer.prototype.canDecorate = function(element) {
 goog.ui.Css3ButtonRenderer.prototype.decorate = function(button, element) {
   goog.dom.classes.add(element, goog.ui.INLINE_BLOCK_CLASSNAME,
       this.getCssClass());
-  return goog.ui.CustomButtonRenderer.superClass_.decorate.call(this, button,
+  return goog.ui.Css3ButtonRenderer.superClass_.decorate.call(this, button,
       element);
 };
 

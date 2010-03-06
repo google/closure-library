@@ -62,7 +62,9 @@ goog.dom.a11y.State = {
   // ARIA state for slider minimum value.
   VALUEMIN: 'valuemin',
   // ARIA state for slider active value.
-  VALUENOW: 'valuenow'
+  VALUENOW: 'valuenow',
+  // ARIA state for slider active value represented as text.
+  VALUETEXT: 'valuetext'
 };
 
 

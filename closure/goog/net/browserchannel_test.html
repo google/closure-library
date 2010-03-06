@@ -620,7 +620,7 @@ function testSetFailFastWhileWaitingForRetry() {
   gotError = false;
   mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
   assertTrue(gotError);
- 
+
   // Make sure no more retry timers are firing.
   mockClock.tick(ALL_DAY_MS);
   assertNull(browserChannel.forwardChannelTimerId_);
@@ -952,21 +952,37 @@ function testResponseNoBackchannel() {
   connect(8);
   sendMap('foo1', 'bar1');
   response(-1, 0);
-  mockClock.tick(10);
+  mockClock.tick(goog.net.BrowserChannel.RTT_ESTIMATE + 1);
   sendMap('foo2', 'bar2');
-  assertTrue(browserChannel.backChannelRequest_.getRequestStartTime() <
+  assertTrue(browserChannel.backChannelRequest_.getRequestStartTime() +
+      goog.net.BrowserChannel.RTT_ESTIMATE <
       browserChannel.forwardChannelRequest_.getRequestStartTime());
   responseNoBackchannel();
   assertEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_MISSING, lastStatEvent);
 }
 
+
 function testResponseNoBackchannelWithNoBackchannel() {
   connect(8);
   sendMap('foo1', 'bar1');
+  assertNull(browserChannel.backChannelTimerId_);
   browserChannel.backChannelRequest_.cancel();
   browserChannel.backChannelRequest_ = null;
   responseNoBackchannel();
   assertEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_MISSING, lastStatEvent);
+}
+
+
+function testResponseNoBackchannelWithStartTimer() {
+  connect(8);
+  sendMap('foo1', 'bar1');
+
+  browserChannel.backChannelRequest_.cancel();
+  browserChannel.backChannelRequest_ = null;
+  browserChannel.backChannelTimerId_ = 123;
+  responseNoBackchannel();
+  assertNotEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_MISSING,
+      lastStatEvent);
 }
 
 
@@ -997,6 +1013,7 @@ function testResponseWithArraysMissing() {
   assertEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_DEAD, lastStatEvent);
 }
 
+
 function testMultipleResponsesWithArraysMissing() {
   connect(8);
   sendMap('foo1', 'bar1');
@@ -1014,6 +1031,7 @@ function testMultipleResponsesWithArraysMissing() {
   // The original timer should still fire.
   assertEquals(goog.net.BrowserChannel.Stat.BACKCHANNEL_DEAD, lastStatEvent);
 }
+
 
 function testOnlyRetryOnceBasedOnResponse() {
   connect(8);
@@ -1034,8 +1052,6 @@ function testOnlyRetryOnceBasedOnResponse() {
   assertFalse(hasDeadBackChannelTimer());
   response(8, 119);
   assertFalse(hasDeadBackChannelTimer());
-
-
 }
 
 

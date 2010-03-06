@@ -19,6 +19,7 @@
 
 goog.provide('goog.i18n.TimeZone');
 
+goog.require('goog.array');
 goog.require('goog.string');
 
 
@@ -196,6 +197,22 @@ goog.i18n.TimeZone.composeUTCString_ = function(offset) {
     parts.push(':', offset);
   }
   return parts.join('');
+};
+
+
+/**
+ * Convert the contents of time zone object to a timeZoneData object, suitable
+ * for passing to goog.i18n.TimeZone.createTimeZone.
+ * @return {Object} A timeZoneData object (see the documentation for
+ *     goog.i18n.TimeZone.createTimeZone).
+ */
+goog.i18n.TimeZone.prototype.getTimeZoneData = function() {
+  return {
+    'id': this.timeZoneId_,
+    'std_offset': -this.standardOffset_,  // note createTimeZone flips the sign
+    'names': goog.array.clone(this.tzNames_),  // avoid aliasing the array
+    'transitions': goog.array.clone(this.transitions_)  // avoid aliasing
+  };
 };
 
 

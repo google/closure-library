@@ -233,10 +233,6 @@ goog.editor.BrowserFeature = {
 
   CAN_LISTIFY_BR: !goog.userAgent.IE && !goog.userAgent.OPERA,
 
-  // Opera has a bad habit of making empty text nodes cause a newline
-  // (kind of like a <br>), but only in an editable element.
-  EMPTY_TEXT_NODES_ACT_LIKE_BR: goog.userAgent.OPERA,
-
   // See bug 1286408. When somewhere inside your selection there is an element
   // with a style attribute that sets the font size, if you change the font
   // size, the browser creates a font tag, but the font size in the style attr

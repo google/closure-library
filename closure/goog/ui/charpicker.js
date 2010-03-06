@@ -430,22 +430,18 @@ goog.ui.CharPicker.prototype.enterDocument = function() {
   var inputkh = new goog.events.InputHandler(this.input_.getElement());
   this.keyHandler_ = new goog.events.KeyHandler(this.input_.getElement());
 
-  // Use this function to stop menu click event in the bubbling phase.
+  // Stop the propagation of ACTION events at menu and submenu buttons.
   // If stopped at capture phase, the button will not be set to normal state.
   // If not stopped, the user widget will receive the event, which is
   // undesired. User widget should receive an event only on the character
   // click.
-  var stopPropagationFn = function(e) {
-    e.stopPropagation();
-  };
-
   this.eventHandler_.listen(
       this.menubutton_,
       goog.ui.Component.EventType.ACTION,
-      stopPropagationFn).listen(
+      goog.events.Event.stopPropagation).listen(
           this.submenubutton_,
           goog.ui.Component.EventType.ACTION,
-          stopPropagationFn).listen(
+          goog.events.Event.stopPropagation).listen(
               this,
               goog.ui.Component.EventType.ACTION,
               this.handleSelectedItem_,
@@ -699,7 +695,7 @@ goog.ui.CharPicker.prototype.modifyGridWithItems_ = function(grid, items,
     grid.getChildAt(buttonpos).setVisible(false);
   }
   var first = grid.getChildAt(0);
-  first.getElement().setAttribute('tabindex', 0);
+  goog.dom.setFocusableTabIndex(first.getElement(), true);
 };
 
 
@@ -733,7 +729,7 @@ goog.ui.CharPicker.prototype.modifyCharNode_ = function(button, ch) {
   var buttonEl = button.getElement();
   buttonEl.innerHTML = text;
   buttonEl.setAttribute('char', ch);
-  buttonEl.removeAttribute('tabindex');
+  goog.dom.setFocusableTabIndex(buttonEl, false);
   button.setVisible(true);
 };
 

@@ -71,7 +71,6 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols) {
   this.date_.setFirstWeekCutOffDay(this.symbols_.FIRSTWEEKCUTOFFDAY);
   this.date_.setFirstDayOfWeek(this.symbols_.FIRSTDAYOFWEEK);
 
-
   /**
    * Active month.
    * @type {goog.date.Date}
@@ -172,14 +171,6 @@ goog.ui.DatePicker.prototype.simpleNavigation_ = false;
 
 
 /**
- * Flag indicating that the widget has been created.
- * @type {boolean}
- * @private
- */
-goog.ui.DatePicker.prototype.created_ = false;
-
-
-/**
  * Custom decorator function. Takes a goog.date.Date object, returns a String
  * representing a CSS class or null if no special styling applies
  * @type {Function}
@@ -208,11 +199,10 @@ goog.ui.DatePicker.Events = {
 
 
 /**
- * @return {boolean} Whether or not this DatePicker's UI has been created.
+ * @deprecated Use isInDocument.
  */
-goog.ui.DatePicker.prototype.isCreated = function() {
-  return this.created_;
-};
+goog.ui.DatePicker.prototype.isCreated =
+    goog.ui.DatePicker.prototype.isInDocument;
 
 
 /**
@@ -523,32 +513,18 @@ goog.ui.DatePicker.prototype.getDate = function() {
 /**
  * Sets the selected date.
  *
- * @param {goog.date.Date|Date} date Date to select.
+ * @param {goog.date.Date|Date} date Date to select or null to select nothing.
  */
 goog.ui.DatePicker.prototype.setDate = function(date) {
-
   // Check if date has been changed
-  var changed = false;
-  if ((date == null && this.date_ != null) ||
-      (date != null && this.date_ == null)) {
-    changed = true;
-  }
-  else if (date == null) {
-    changed = false;
-  }
-  else if (date.getDate() != this.date_.getDate() ||
-      date.getMonth() != this.date_.getMonth() ||
-      date.getFullYear() != this.date_.getFullYear()) {
-    changed = true;
-  }
+  var changed = date != this.date_ &&
+      !(date && this.date_ &&
+        date.getFullYear() == this.date_.getFullYear() &&
+        date.getMonth() == this.date_.getMonth() &&
+        date.getDate() == this.date_.getDate());
 
   // Set current date to clone of supplied goog.date.Date or Date.
-  if (goog.isObject(date)) {
-    this.date_ = new goog.date.Date(date);
-  }
-  else {
-    this.date_ = null;
-  }
+  this.date_ = date && new goog.date.Date(date);
 
   // Set current month
   if (date) {
@@ -560,16 +536,16 @@ goog.ui.DatePicker.prototype.setDate = function(date) {
   // selected another month can be displayed.
   this.updateCalendarGrid_();
 
-  // Fire select event
   // TODO: Standardize selection and change events with other components.
+  // Fire select event.
   var selectEvent = new goog.ui.DatePickerEvent(
-      goog.ui.DatePicker.Events.SELECT, this, this.date_ ? this.date_ : null);
+      goog.ui.DatePicker.Events.SELECT, this, this.date_);
   this.dispatchEvent(selectEvent);
 
-  // Fire change event
+  // Fire change event.
   if (changed) {
     var changeEvent = new goog.ui.DatePickerEvent(
-        goog.ui.DatePicker.Events.CHANGE, this, this.date_ ? this.date_ : null);
+        goog.ui.DatePicker.Events.CHANGE, this, this.date_);
     this.dispatchEvent(changeEvent);
   }
 };
@@ -723,7 +699,6 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   table.appendChild(tfoot);
   el.appendChild(table);
 
-  this.created_ = true;
   this.redrawWeekdays_();
   this.updateCalendarGrid_();
 
@@ -768,9 +743,7 @@ goog.ui.DatePicker.prototype.create =
     goog.ui.DatePicker.prototype.decorate;
 
 
-/**
- * Destroys widget and removes all event listeners.
- */
+/** @inheritDoc */
 goog.ui.DatePicker.prototype.disposeInternal = function() {
   goog.ui.DatePicker.superClass_.disposeInternal.call(this);
 
@@ -1095,7 +1068,7 @@ goog.ui.DatePicker.prototype.createButton_ = function(parentNode, label,
  * @private
  */
 goog.ui.DatePicker.prototype.updateCalendarGrid_ = function() {
-  if (!this.created_) {
+  if (!this.getElement()) {
     return;
   }
 
@@ -1150,7 +1123,7 @@ goog.ui.DatePicker.prototype.updateCalendarGrid_ = function() {
  * @private
  */
 goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
-  if (!this.created_) {
+  if (!this.getElement()) {
     return;
   }
 
@@ -1247,7 +1220,7 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
  * @private
  */
 goog.ui.DatePicker.prototype.redrawWeekdays_ = function() {
-  if (!this.created_) {
+  if (!this.getElement()) {
     return;
   }
   if (this.showWeekdays_) {

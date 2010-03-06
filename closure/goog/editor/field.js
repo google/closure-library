@@ -2169,25 +2169,23 @@ goog.editor.Field.prototype.placeCursorAtStart = function() {
   var field = this.getElement();
   var cursorPosition = field;
 
-  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-    if (field) {
-      cursorPosition = goog.editor.node.getLeftMostLeaf(field);
-      // NOTE:
-      // If the field does not itself have any children (for example, if the
-      // lorem ipsum plugin was not loaded) then getLeftMostLeaf will have
-      // returned the field itself.  We need to avoid calling placeCursorNextTo
-      // in that case, because that would result in a text node as a sibling of
-      // the field, which isn't what we want at all.  We also don't want to
-      // create a child text node and then call placeCursorNextTo, because that
-      // could result in two adjacent text nodes, which may crash some browsers.
-      // So instead, we'll add an empty text node and create a caret around it.
-      if (field == cursorPosition) {
-        var textNode = goog.dom.getDomHelper(cursorPosition).createTextNode('');
-        field.appendChild(textNode);
-        goog.dom.Range.createCaret(textNode, 0);
-        this.dispatchSelectionChangeEvent();
-        return;
-      }
+  if (field) {
+    cursorPosition = goog.editor.node.getLeftMostLeaf(field);
+    // NOTE:
+    // If the field does not itself have any children (for example, if the
+    // lorem ipsum plugin was not loaded) then getLeftMostLeaf will have
+    // returned the field itself.  We need to avoid calling placeCursorNextTo
+    // in that case, because that would result in a text node as a sibling of
+    // the field, which isn't what we want at all.  We also don't want to
+    // create a child text node and then call placeCursorNextTo, because that
+    // could result in two adjacent text nodes, which may crash some browsers.
+    // So instead, we'll add an empty text node and create a caret around it.
+    if (field == cursorPosition) {
+      var textNode = goog.dom.getDomHelper(cursorPosition).createTextNode('');
+      field.appendChild(textNode);
+      goog.dom.Range.createCaret(textNode, 0);
+      this.dispatchSelectionChangeEvent();
+      return;
     }
   }
 
@@ -2546,8 +2544,6 @@ goog.editor.Field.prototype.clearFieldLoadListener_ = function() {
  * @protected
  */
 goog.editor.Field.prototype.getIframeAttributes = function() {
-  var attrs = {'frameBorder': 0};
-
   var iframeStyle = 'padding:0;' + this.getOriginalElement().style.cssText;
 
   if (!goog.string.endsWith(iframeStyle, ';')) {
@@ -2556,18 +2552,13 @@ goog.editor.Field.prototype.getIframeAttributes = function() {
 
   iframeStyle += 'background-color:white;';
 
+  // Ensure that the iframe has default overflow styling.  If overflow is
+  // set to auto, an IE rendering bug can occur when it tries to render a
+  // table at the very bottom of the field, such that the table would cause
+  // a scrollbar, that makes the entire field go blank.
   if (goog.userAgent.IE) {
-    // Ensure that the iframe has default overflow styling.  If overflow is
-    // set to auto, an IE rendering bug can occur when it tries to render a
-    // table at the very bottom of the field, such that the table would cause
-    // a scrollbar, that makes the entire field go blank.
     iframeStyle += 'overflow:visible;';
-    // Prevent inline events from executing. Protects against XSS attacks where
-    // attacker convinces user to unknowingly paste malicious content.
-    // See http://b/2316154 .
-    attrs['security'] = 'restricted';
   }
 
-  attrs['style'] = iframeStyle;
-  return attrs;
+  return { 'frameBorder': 0, 'style': iframeStyle };
 };

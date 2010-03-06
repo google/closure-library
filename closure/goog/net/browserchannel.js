@@ -1608,12 +1608,17 @@ goog.net.BrowserChannel.prototype.handlePostResponse_ = function(
  */
 goog.net.BrowserChannel.prototype.handleBackchannelMissing_ = function() {
   // As long as the back channel was started before the POST was sent,
-  // we should retry the backchannel.
+  // we should retry the backchannel. We give a slight buffer of RTT_ESTIMATE
+  // so as not to excessively retry the backchannel
   this.channelDebug_.debug('Server claims our backchannel is missing.')
-  if (!this.backChannelRequest_) {
+  if (this.backChannelTimerId_) {
+    this.channelDebug_.debug('But we are currently starting the request.');
+    return;
+  } else if (!this.backChannelRequest_) {
     this.channelDebug_.warning(
         'We do not have a BackChannel established');
-  } else if (this.backChannelRequest_.getRequestStartTime() <
+  } else if (this.backChannelRequest_.getRequestStartTime() +
+      goog.net.BrowserChannel.RTT_ESTIMATE <
       this.forwardChannelRequest_.getRequestStartTime()) {
     this.clearDeadBackchannelTimer_();
     this.backChannelRequest_.cancel();

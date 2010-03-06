@@ -49,6 +49,11 @@ limitations under the License.
       stubs.reset();
     }
 
+    function testZeroAlpha() {
+      var palette = new goog.ui.HsvaPalette(null, undefined, 0);
+      assertEquals(0, palette.getAlpha());
+    }
+
     function testOptionalInitialColor() {
       var alpha = 0.5;
       var color = '#0000ff';

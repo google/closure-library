@@ -99,29 +99,30 @@ limitations under the License.
 <script>
 
 var savedHtml;
+var $ = goog.dom.getElement;
 
 function setUp() {
-  savedHtml = goog.dom.$('root').innerHTML;
+  savedHtml = $('root').innerHTML;
 }
 
 function tearDown() {
-  goog.dom.$('root').innerHTML = savedHtml;
+  $('root').innerHTML = savedHtml;
 }
 
 function testNoNarrow() {
-  var def = goog.dom.$('def');
-  var jkl = goog.dom.$('jkl');
+  var def = $('def');
+  var jkl = $('jkl');
   var range = goog.dom.Range.createFromNodes(
       def.firstChild, 1, jkl.firstChild, 2);
 
-  range = goog.editor.range.narrow(range, goog.dom.$('parentNode'));
+  range = goog.editor.range.narrow(range, $('parentNode'));
   goog.testing.dom.assertRangeEquals(
       def.firstChild, 1, jkl.firstChild, 2, range);
 }
 
 function testNarrowAtEndEdge() {
-  var def = goog.dom.$('def');
-  var jkl = goog.dom.$('jkl');
+  var def = $('def');
+  var jkl = $('jkl');
   var range = goog.dom.Range.createFromNodes(
       def.firstChild, 1, jkl.firstChild, 2);
 
@@ -131,8 +132,8 @@ function testNarrowAtEndEdge() {
 }
 
 function testNarrowAtStartEdge() {
-  var def = goog.dom.$('def');
-  var jkl = goog.dom.$('jkl');
+  var def = $('def');
+  var jkl = $('jkl');
   var range = goog.dom.Range.createFromNodes(
       def.firstChild, 1, jkl.firstChild, 2);
 
@@ -143,17 +144,17 @@ function testNarrowAtStartEdge() {
 }
 
 function testNarrowOutsideElement() {
-  var def = goog.dom.$('def');
-  var jkl = goog.dom.$('jkl');
+  var def = $('def');
+  var jkl = $('jkl');
   var range = goog.dom.Range.createFromNodes(
       def.firstChild, 1, jkl.firstChild, 2);
 
-  range = goog.editor.range.narrow(range, goog.dom.$('pqr'));
+  range = goog.editor.range.narrow(range, $('pqr'));
   assertNull(range);
 }
 
 function testNoExpand() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<div>longword</div>';
   // Select "ongwo" and make sure we don't expand since this is not
   // a full container.
@@ -165,7 +166,7 @@ function testNoExpand() {
 }
 
 function testSimpleExpand() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<div>longword</div>foo';
   // Select "longword" and make sure we do expand to include the div since
   // the full container text is selected.
@@ -184,7 +185,7 @@ function testSimpleExpand() {
 }
 
 function testDoubleExpand() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<div><span>longword</span></div>foo';
   // Select "longword" and make sure we do expand to include the span
   // and the div since both of their full contents are selected.
@@ -203,7 +204,7 @@ function testDoubleExpand() {
 }
 
 function testMultipleChildrenExpand() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<ol><li>one</li><li>two</li><li>three</li></ol>';
   // Select "two" and make sure we expand to the li, but not the ol.
   var li = div.firstChild.childNodes[1];
@@ -224,7 +225,7 @@ function testMultipleChildrenExpand() {
 }
 
 function testSimpleDifferentContainersExpand() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<ol><li>1</li><li><b>bold</b><i>italic</i></li></ol>';
   // Select all of "bold" and "italic" at the text node level, and
   // make sure we expand to the li.
@@ -249,7 +250,7 @@ function testSimpleDifferentContainersExpand() {
 }
 
 function testSimpleDifferentContainersSmallExpand() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<ol><li>1</li><li><b>bold</b><i>italic</i>' +
       '<u>under</u<</li></ol>';
   // Select all of "bold" and "italic", but we can't expand to the
@@ -273,7 +274,7 @@ function testSimpleDifferentContainersSmallExpand() {
 }
 
 function testEmbeddedDifferentContainersExpand() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<div><b><i>italic</i>after</b><u>under</u></div>foo';
   // Select "italic" "after" "under", should expand all the way to parent.
   var boldNode = div.firstChild.childNodes[0];
@@ -287,7 +288,7 @@ function testEmbeddedDifferentContainersExpand() {
 }
 
 function testReverseSimpleExpand() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<div>longword</div>foo';
   // Select "longword" and make sure we do expand to include the div since
   // the full container text is selected.
@@ -300,7 +301,7 @@ function testReverseSimpleExpand() {
 }
 
 function testExpandWithStopNode() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<div><span>word</span></div>foo';
   // Select "word".
   var span = div.firstChild.firstChild;
@@ -322,7 +323,7 @@ function testExpandWithStopNode() {
 // Ojan didn't believe this code worked, this was the case he
 // thought was broken.  Keeping just as a regression test.
 function testOjanCase() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<em><i><b>foo</b>bar</i></em>';
   // Select "foo", at text node level.
   var iNode = div.firstChild.firstChild;
@@ -342,51 +343,46 @@ function testOjanCase() {
 }
 
 function testPlaceCursorNextToLeft() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = 'foo<div id="bar">bar</div>baz';
-  var node = goog.dom.$('bar');
+  var node = $('bar');
   var range = goog.editor.range.placeCursorNextTo(node, true);
 
-  // In IE, we just use the built in collapse function, which will
-  // move it to the start of the text node.
-  if (goog.userAgent.IE) {
-    assertEquals('Selection should be at the start of the node',
-        node.firstChild, range.getStartNode());
-    assertEquals('Selection should be at the start of the node',
-        0, range.getStartOffset());
-  } else {
-    assertEquals('Selection should be to the left of the node',
-        node, range.getStartNode().nextSibling);
-  }
+  var expose = goog.testing.dom.exposeNode;
+  assertEquals('Selection should be to the left of the node ' +
+      expose(node) + ',' + expose(range.getStartNode().nextSibling),
+      node, range.getStartNode().nextSibling);
   assertEquals('Selection should be collapsed',
       true, range.isCollapsed());
 }
 
 
 function testPlaceCursorNextToRight() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = 'foo<div id="bar">bar</div>baz';
-  var node = goog.dom.$('bar');
+  var node = $('bar');
   var range = goog.editor.range.placeCursorNextTo(node, false);
-  // In IE, we use the built in collapse function, which will move it to
-  // the end of the div node.
-  if (goog.userAgent.IE) {
-    assertEquals('Selection should be at the end of the node',
-        node, range.getStartNode());
-    assertEquals('Selection should be at the end of the node',
-        1, range.getStartOffset());
-  } else {
-    assertEquals('Selection should be to the right of the node',
-        node, range.getStartNode().previousSibling);
-  }
+
+  assertEquals('Selection should be to the right of the node',
+      node, range.getStartNode().previousSibling);
   assertEquals('Selection should be collapsed',
       true, range.isCollapsed());
 }
 
+function testPlaceCursorNextTo_rightOfLineBreak() {
+  var div = $('parentNode');
+  div.innerHTML = '<div contentEditable="true">hhhh<br />h</div>';
+  var children = div.firstChild.childNodes;
+  assertEquals(3, children.length);
+  var node = children[1];
+  var range = goog.editor.range.placeCursorNextTo(node, false);
+  assertEquals(node.nextSibling, range.getStartNode());
+}
+
 function testGetDeepEndPoint() {
-  var div = goog.dom.$('parentNode');
-  var def = goog.dom.$('def');
-  var jkl = goog.dom.$('jkl');
+  var div = $('parentNode');
+  var def = $('def');
+  var jkl = $('jkl');
 
   assertPointEquals(div.firstChild, 0,
       goog.editor.range.getDeepEndPoint(
@@ -404,14 +400,9 @@ function testGetDeepEndPoint() {
 
 }
 
-function assertPointEquals(node, offset, actualPoint) {
-  assertEquals('Point has wrong node', node, actualPoint.node);
-  assertEquals('Point has wrong offset', offset, actualPoint.offset);
-}
-
 function testNormalizeOnNormalizedDom() {
-  var defText = goog.dom.$('def').firstChild;
-  var jklText = goog.dom.$('jkl').firstChild;
+  var defText = $('def').firstChild;
+  var jklText = $('jkl').firstChild;
   var range = goog.dom.Range.createFromNodes(defText, 1, jklText, 2);
 
   var newRange = normalizeBody(range);
@@ -419,8 +410,8 @@ function testNormalizeOnNormalizedDom() {
 }
 
 function testDeepPointFindingOnNormalizedDom() {
-  var def = goog.dom.$('def');
-  var jkl = goog.dom.$('jkl');
+  var def = $('def');
+  var jkl = $('jkl');
   var range = goog.dom.Range.createFromNodes(def, 0, jkl, 1);
 
   var newRange = normalizeBody(range);
@@ -432,8 +423,8 @@ function testDeepPointFindingOnNormalizedDom() {
 }
 
 function testNormalizeOnVeryFragmentedDom() {
-  var defText = goog.dom.$('def').firstChild;
-  var jklText = goog.dom.$('jkl').firstChild;
+  var defText = $('def').firstChild;
+  var jklText = $('jkl').firstChild;
   var range = goog.dom.Range.createFromNodes(defText, 1, jklText, 2);
 
   // Fragment the DOM a bunch.
@@ -443,16 +434,16 @@ function testNormalizeOnVeryFragmentedDom() {
   var newRange = normalizeBody(range);
 
   // our old text nodes may not be valid anymore. find new ones.
-  defText = goog.dom.$('def').firstChild;
-  jklText = goog.dom.$('jkl').firstChild;
+  defText = $('def').firstChild;
+  jklText = $('jkl').firstChild;
 
   goog.testing.dom.assertRangeEquals(defText, 1, jklText, 2, newRange);
 }
 
 function testRangeCreatedInVeryFragmentedDom() {
-  var def = goog.dom.$('def');
+  var def = $('def');
   var defText = def.firstChild;
-  var jkl = goog.dom.$('jkl');
+  var jkl = $('jkl');
   var jklText = jkl.firstChild;
 
   // Fragment the DOM a bunch.
@@ -466,51 +457,51 @@ function testRangeCreatedInVeryFragmentedDom() {
   var newRange = normalizeBody(range);
 
   // our old text nodes may not be valid anymore. find new ones.
-  defText = goog.dom.$('def').firstChild;
-  jklText = goog.dom.$('jkl').firstChild;
+  defText = $('def').firstChild;
+  jklText = $('jkl').firstChild;
   goog.testing.dom.assertRangeEquals(defText, 1, jklText, 2, newRange);
 }
 
 function testNormalizeInFragmentedDomWithPreviousSiblings() {
-  var ghiText = goog.dom.$('def').nextSibling;
-  var mnoText = goog.dom.$('jkl').nextSibling;
+  var ghiText = $('def').nextSibling;
+  var mnoText = $('jkl').nextSibling;
   var range = goog.dom.Range.createFromNodes(ghiText, 1, mnoText, 2);
 
   // Fragment the DOM a bunch.
-  fragmentText(goog.dom.$('def').previousSibling); // fragment abc
+  fragmentText($('def').previousSibling); // fragment abc
   fragmentText(ghiText);
   fragmentText(mnoText);
 
   var newRange = normalizeBody(range);
 
   // our old text nodes may not be valid anymore. find new ones.
-  ghiText = goog.dom.$('def').nextSibling;
-  mnoText = goog.dom.$('jkl').nextSibling;
+  ghiText = $('def').nextSibling;
+  mnoText = $('jkl').nextSibling;
 
   goog.testing.dom.assertRangeEquals(ghiText, 1, mnoText, 2, newRange);
 }
 
 function testRangeCreatedInFragmentedDomWithPreviousSiblings() {
-  var def = goog.dom.$('def');
-  var ghiText = goog.dom.$('def').nextSibling;
-  var jkl = goog.dom.$('jkl');
-  var mnoText = goog.dom.$('jkl').nextSibling;
+  var def = $('def');
+  var ghiText = $('def').nextSibling;
+  var jkl = $('jkl');
+  var mnoText = $('jkl').nextSibling;
 
   // Fragment the DOM a bunch.
-  fragmentText(goog.dom.$('def').previousSibling); // fragment abc
+  fragmentText($('def').previousSibling); // fragment abc
   fragmentText(ghiText);
   fragmentText(mnoText);
 
   // Notice that there are two empty text nodes at the beginning of each
   // fragmented node.
-  var root = goog.dom.$('parentNode');
+  var root = $('parentNode');
   var range = goog.dom.Range.createFromNodes(root, 9, root, 16);
 
   var newRange = normalizeBody(range);
 
   // our old text nodes may not be valid anymore. find new ones.
-  ghiText = goog.dom.$('def').nextSibling;
-  mnoText = goog.dom.$('jkl').nextSibling;
+  ghiText = $('def').nextSibling;
+  mnoText = $('jkl').nextSibling;
   goog.testing.dom.assertRangeEquals(ghiText, 1, mnoText, 2, newRange);
 }
 
@@ -518,8 +509,8 @@ function testRangeCreatedInFragmentedDomWithPreviousSiblings() {
  * Branched from the tests for goog.dom.SavedCaretRange.
  */
 function testSavedCaretRange() {
-  var def = goog.dom.$('def-1');
-  var jkl = goog.dom.$('jkl-1');
+  var def = $('def-1');
+  var jkl = $('jkl-1');
 
   var range = goog.dom.Range.createFromNodes(
       def.firstChild, 1, jkl.firstChild, 2);
@@ -534,8 +525,8 @@ function testSavedCaretRange() {
   clearSelectionAndRestoreSaved(saved);
 
   var selection = goog.dom.Range.createFromWindow(window);
-  def = goog.dom.$('def-1');
-  jkl = goog.dom.$('jkl-1');
+  def = $('def-1');
+  jkl = $('jkl-1');
   assertHTMLEquals('def', def.innerHTML);
   assertHTMLEquals('jkl', jkl.innerHTML);
 
@@ -547,9 +538,9 @@ function testSavedCaretRange() {
 }
 
 function testRangePreservingNormalize() {
-  var parent = goog.dom.$('normalizeTest-4');
-  var def = goog.dom.$('def-4');
-  var jkl = goog.dom.$('jkl-4');
+  var parent = $('normalizeTest-4');
+  var def = $('def-4');
+  var jkl = $('jkl-4');
   fragmentText(def.firstChild);
   fragmentText(jkl.firstChild);
 
@@ -571,7 +562,7 @@ function testRangePreservingNormalize() {
 }
 
 function testRangePreservingNormalizeWhereEndNodePreviousSiblingIsSplit() {
-  var parent = goog.dom.$('normalizeTest-with-br');
+  var parent = $('normalizeTest-with-br');
   var br = parent.childNodes[1];
   fragmentText(parent.firstChild);
 
@@ -585,7 +576,7 @@ function testRangePreservingNormalizeWhereEndNodePreviousSiblingIsSplit() {
 }
 
 function testRangePreservingNormalizeWhereStartNodePreviousSiblingIsSplit() {
-  var parent = goog.dom.$('normalizeTest-with-br');
+  var parent = $('normalizeTest-with-br');
   var br = parent.childNodes[1];
   fragmentText(parent.firstChild);
   fragmentText(parent.lastChild);
@@ -600,9 +591,9 @@ function testRangePreservingNormalizeWhereStartNodePreviousSiblingIsSplit() {
 }
 
 function testSelectionPreservingNormalize1() {
-  var parent = goog.dom.$('normalizeTest-2');
-  var def = goog.dom.$('def-2');
-  var jkl = goog.dom.$('jkl-2');
+  var parent = $('normalizeTest-2');
+  var def = $('def-2');
+  var jkl = $('jkl-2');
   fragmentText(def.firstChild);
   fragmentText(jkl.firstChild);
 
@@ -631,9 +622,9 @@ function testSelectionPreservingNormalize1() {
  * selection in the document.
  */
 function testSelectionPreservingNormalize2() {
-  var parent = goog.dom.$('normalizeTest-3');
-  var def = goog.dom.$('def-3');
-  var jkl = goog.dom.$('jkl-3');
+  var parent = $('normalizeTest-3');
+  var def = $('def-3');
+  var jkl = $('jkl-3');
   def.firstChild.splitText(1);
   jkl.firstChild.splitText(2);
 
@@ -647,7 +638,7 @@ function testSelectionPreservingNormalize2() {
 }
 
 function testSelectionPreservingNormalizeAfterPlaceCursorNextTo() {
-  var parent = goog.dom.$('normalizeTest-with-div');
+  var parent = $('normalizeTest-with-div');
   goog.editor.range.placeCursorNextTo(parent.firstChild);
   goog.editor.range.selectionPreservingNormalize(parent);
 
@@ -702,7 +693,7 @@ function manualSplitText(node, pos) {
 }
 
 function testSelectNodeStartSimple() {
-  var div = goog.dom.$('parentNode');
+  var div = $('parentNode');
   div.innerHTML = '<p>Cursor should go in here</p>';
 
   goog.editor.range.selectNodeStart(div);
@@ -723,7 +714,7 @@ function testSelectNodeStartSimple() {
 }
 
 function testSelectNodeStartBr() {
-  var div = goog.dom.$('parentNode')
+  var div = $('parentNode')
   div.innerHTML = '<p><br>Cursor should go in here</p>';
 
   goog.editor.range.selectNodeStart(div);
@@ -766,7 +757,7 @@ function testIsEditable() {
 }
 
 function testIntersectsTag() {
-  var root = goog.dom.$('root');
+  var root = $('root');
   root.innerHTML =
       '<b>Bold</b><p><span><code>x</code></span></p><p>y</p><i>Italic</i>';
 
@@ -834,6 +825,33 @@ function testNormalizeNode() {
   assertEquals('BR', div.lastChild.previousSibling.tagName);
 }
 
+function testDeepestPoint() {
+  var parent = $('parentNode');
+  var def = $('def');
+
+  assertEquals(def, parent.childNodes[1]);
+
+  var deepestPoint = goog.editor.range.Point.createDeepestPoint;
+
+  var defStartLeft = deepestPoint(parent, 1, true);
+  assertPointEquals(def.previousSibling, def.previousSibling.nodeValue.length,
+      defStartLeft);
+
+  var defStartRight = deepestPoint(parent, 1, false);
+  assertPointEquals(def.firstChild, 0, defStartRight);
+
+  var defEndLeft = deepestPoint(parent, 2, true);
+  assertPointEquals(def.firstChild, def.firstChild.nodeValue.length,
+      defEndLeft);
+
+  var defEndRight = deepestPoint(parent, 2, false);
+  assertPointEquals(def.nextSibling, 0, defEndRight);
+}
+
+function assertPointEquals(node, offset, actualPoint) {
+  assertEquals('Point has wrong node', node, actualPoint.node);
+  assertEquals('Point has wrong offset', offset, actualPoint.offset);
+}
 
 </script>
 </body>

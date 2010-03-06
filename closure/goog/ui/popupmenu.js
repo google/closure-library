@@ -347,9 +347,11 @@ goog.ui.PopupMenu.prototype.getToggleMode = function() {
  * @param {goog.positioning.Corner} opt_menuCorner The corner of the menu to be
  *     positioned.
  * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+ * @param {Element=} opt_anchor The element which acts as visual anchor for this
+ *     menu.
  */
 goog.ui.PopupMenu.prototype.showWithPosition = function(position,
-    opt_menuCorner, opt_margin) {
+    opt_menuCorner, opt_margin, opt_anchor) {
   var isVisible = this.isVisible();
   if ((isVisible || this.wasRecentlyHidden()) && this.toggleMode_) {
     this.hide();
@@ -383,6 +385,8 @@ goog.ui.PopupMenu.prototype.showWithPosition = function(position,
 
   this.setHighlightedIndex(-1);
 
+  this.currentAnchor_ = opt_anchor || null;
+
   // setVisible dispatches a goog.ui.Component.EventType.SHOW event, which may
   // be canceled to prevent the menu from being shown.
   this.setVisible(true);
@@ -401,8 +405,8 @@ goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
       new goog.positioning.AnchoredViewportPosition(target.element_,
           target.targetCorner_, true) :
       new goog.positioning.ViewportClientPosition(x, y);
-  this.showWithPosition(position, target.menuCorner_, target.margin_);
-  this.currentAnchor_ = target.element_;
+  this.showWithPosition(position, target.menuCorner_, target.margin_,
+                        target.element_);
 };
 
 
@@ -416,7 +420,6 @@ goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
 goog.ui.PopupMenu.prototype.showAt = function(x, y, opt_menuCorner) {
   this.showWithPosition(
       new goog.positioning.ViewportClientPosition(x, y), opt_menuCorner);
-  this.currentAnchor_ = null;
 };
 
 
@@ -432,8 +435,7 @@ goog.ui.PopupMenu.prototype.showAtElement = function(element, targetCorner,
     opt_menuCorner) {
   this.showWithPosition(
       new goog.positioning.MenuAnchoredPosition(element, targetCorner, true),
-      opt_menuCorner);
-  this.currentAnchor_ = element;
+      opt_menuCorner, null, element);
 };
 
 

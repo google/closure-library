@@ -30,6 +30,7 @@ goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.HsvPalette');
 
 
+
 /**
  * Creates an HSVA palette. Allows a user to select the hue, saturation,
  * value/brightness and alpha/opacity.
@@ -52,7 +53,7 @@ goog.ui.HsvaPalette = function(opt_domHelper, opt_color, opt_alpha, opt_class) {
    * @type {number}
    * @private
    */
-  this.alpha_ = opt_alpha || 1;
+  this.alpha_ = goog.isDef(opt_alpha) ? opt_alpha : 1;
 
   /**
    * The base class name for the component.

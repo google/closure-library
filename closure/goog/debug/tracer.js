@@ -400,6 +400,8 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
     }
   }
 
+  this.logToSpeedTracer_('Start : ' + comment);
+
   var event = this.eventPool_.getObject();
   event.totalVarAlloc = varAlloc;
   event.eventType = goog.debug.Trace_.EventType.START;
@@ -478,6 +480,8 @@ goog.debug.Trace_.prototype.stopTracer = function(id, opt_silenceThreshold) {
     stat.time += elapsed;
   }
   if (stopEvent) {
+    this.logToSpeedTracer_('Stop : ' + stopEvent.comment);
+
     stopEvent.totalVarAlloc = this.getTotalVarAlloc();
 
     if (stat) {
@@ -639,6 +643,21 @@ goog.debug.Trace_.prototype.toString = function() {
       'Overhead comment: ', this.tracerOverheadComment_, ' ms\n');
 
   return sb.join('');
+};
+
+
+/**
+ * Logs the trace event to speed tracer, if it is available.
+ * {@see http://code.google.com/webtoolkit/speedtracer/logging-api.html}
+ * @param {string} msg The message to log.
+ * @private
+ */
+goog.debug.Trace_.prototype.logToSpeedTracer_ = function(msg) {
+  // Use goog.global because Tracers are used in contexts that may not have a
+  // window.
+  if (goog.global['console'] && goog.global['console']['markTimeline']) {
+    goog.global['console']['markTimeline'](msg);
+  }
 };
 
 

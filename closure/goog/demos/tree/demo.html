@@ -27,7 +27,7 @@ limitations under the License.
   </script>
   <script src="testdata.js"></script>
   <link rel="stylesheet" href="../css/demo.css">
-  <link rel="stylesheet" href="css/tree.css">
+  <link rel="stylesheet" href="../../css/tree.css">
   <style>
     #div-console {
       position: absolute;
@@ -72,7 +72,9 @@ limitations under the License.
     function makeTree() {
       goog.debug.Trace.initCurrentTrace();
       var tracerId = goog.debug.Trace.startTracer('makeTree');
-      tree = new goog.ui.tree.TreeControl('root');
+      var treeConfig = goog.ui.tree.TreeControl.defaultConfig;
+      treeConfig['cleardotPath'] = '../../images/tree/cleardot.gif';
+      tree = new goog.ui.tree.TreeControl('root', treeConfig);
 
       createTreeFromTestData(tree, testData);
 

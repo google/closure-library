@@ -439,42 +439,32 @@ goog.ui.media.FlashObject.prototype.enterDocument = function() {
     this.setSize(this.width_, this.height_);
   }
 
+  // Sinks all the events on the bubble phase.
+  //
+  // Flash plugins propagates events from/to the plugin to the browser
+  // inconsistently:
+  //
+  // 1) FF2 + linux: the flash plugin will stop the propagation of all events
+  // from the plugin to the browser.
+  // 2) FF3 + mac: the flash plugin will propagate events on the <embed> object
+  // but that will get propagated to its parents.
+  // 3) Safari 3.1.1 + mac: the flash plugin will propagate the event to the
+  // <object> tag that event will propagate to its parents.
+  // 4) IE7 + windows: the flash plugin  will eat all events, not propagating
+  // anything to the javascript.
+  // 5) Chrome + windows: the flash plugin will eat all events, not propagating
+  // anything to the javascript.
+  //
+  // To overcome this inconsistency, all events from/to the plugin are sinked,
+  // since you can't assume that the events will be propagated.
+  //
+  // NOTE: we only sink events on the bubbling phase, since there are no
+  // inexpensive/scalable way to stop events on the capturing phase unless we
+  // added an event listener on the document for each flash object.
   this.eventHandler_.listen(
       this.getElement(),
       goog.object.getValues(goog.events.EventType),
-      this.onAnyEvent_);
-};
-
-
-/**
- * Sinks all the events on the bubble phase.
- *
- * Flash plugins propagates events from/to the plugin to the browser
- * inconsistently:
- *
- * 1) FF2 + linux: the flash plugin will stop the propagation of all events from
- * the plugin to the browser.
- * 2) FF3 + mac: the flash plugin will propagate events on the <embed> object
- * but that will get propagated to its parents.
- * 3) Safari 3.1.1 + mac: the flash plugin will propagate the event to the
- * <object> tag that event will propagate to its parents.
- * 4) IE7 + windows: the flash plugin  will eat all events, not propagating
- * anything to the javascript.
- * 5) Chrome + windows: the flash plugin will eat all events, not propagating
- * anything to the javascript.
- *
- * To overcome this inconsistency, all events from/to the plugin are sinked,
- * since you can't assume that the events will be propagated.
- *
- * NOTE: we only sink events on the bubbling phase, since there are no
- * inexpensive/scalable way to stop events on the capturing phase unless we
- * added an event listener on the document for each flash object.
- *
- * @param {goog.events.Event} e The event to be stopped.
- * @private
- */
-goog.ui.media.FlashObject.prototype.onAnyEvent_ = function(e) {
-  e.stopPropagation();
+      goog.events.Event.stopPropagation);
 };
 
 

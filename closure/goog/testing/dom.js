@@ -257,8 +257,8 @@ goog.testing.dom.assertHtmlContentsMatch = function(htmlPattern, actual,
 
   var expectedIt = goog.iter.filter(new goog.dom.NodeIterator(div),
       goog.testing.dom.nodeFilter_);
-  var actualNode;
 
+  var actualNode;
   var preIterated = false;
   var advanceActualNode = function() {
     // If the iterator has already been advanced, don't advance it again.
@@ -284,6 +284,8 @@ goog.testing.dom.assertHtmlContentsMatch = function(htmlPattern, actual,
 
   var number = 0;
   goog.iter.forEach(expectedIt, function(expectedNode) {
+    expectedNode = /** @type {Node} */ (expectedNode);
+
     advanceActualNode();
     assertNotNull('Finished actual HTML before finishing expected HTML at ' +
                   'node number ' + number + ': ' +
@@ -319,7 +321,8 @@ goog.testing.dom.assertHtmlContentsMatch = function(htmlPattern, actual,
       // Concatenate text nodes until we reach a non text node.
       var actualText = actualNode.nodeValue;
       preIterated = true;
-      while ((actualNode = goog.iter.nextOrValue(actualIt, null)) &&
+      while ((actualNode = /** @type {Node} */
+              (goog.iter.nextOrValue(actualIt, null))) &&
           actualNode.nodeType == goog.dom.NodeType.TEXT) {
         actualText += actualNode.nodeValue;
       }

@@ -127,10 +127,10 @@ goog.ui.DeprecatedButton.prototype.rendered_ = false;
 
 /**
  * HTML caption displayed in the component.
- * @type {?string}
+ * @type {string}
  * @private
  */
-goog.ui.DeprecatedButton.prototype.caption_ = null;
+goog.ui.DeprecatedButton.prototype.caption_ = '';
 
 
 /**

@@ -26,6 +26,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.BrowserFeature');
+goog.require('goog.editor.Link');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
@@ -69,6 +70,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.logger =
  * @enum {string}
  */
 goog.editor.plugins.BasicTextFormatter.COMMAND = {
+  LINK: '+link',
   INDENT: '+indent',
   OUTDENT: '+outdent',
   STRIKE_THROUGH: '+strikeThrough',
@@ -166,6 +168,10 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
           this.execCommandHelper_(command, opt_arg);
         }
       }
+      break;
+
+    case goog.editor.plugins.BasicTextFormatter.COMMAND.LINK:
+      result = this.toggleLink_(opt_arg);
       break;
 
     case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_CENTER:
@@ -324,6 +330,9 @@ goog.editor.plugins.BasicTextFormatter.prototype.queryCommandValue = function(
     command) {
   var styleWithCss;
   switch (command) {
+    case goog.editor.plugins.BasicTextFormatter.COMMAND.LINK:
+      return this.isNodeInState_(goog.dom.TagName.A);
+
     case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_CENTER:
     case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_FULL:
     case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_RIGHT:
@@ -845,6 +854,110 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyBgColorManually_ =
     parentTag.style.textIndent = '';
     // execCommand modified our span so we leave it in place.
   }
+};
+
+
+/**
+ * Toggle link for the current selection:
+ *   If selection contains a link, unlink it, return null.
+ *   Otherwise, make selection into a link, return the link.
+ * @param {string} opt_target Target for the link.
+ * @return {goog.editor.Link?} The resulting link, or null if a link was
+ *     removed.
+ * @private
+ */
+goog.editor.plugins.BasicTextFormatter.prototype.toggleLink_ = function(
+    opt_target) {
+  var range = this.getRange_();
+  // Since we wrap images in links, its possible that the user selected an
+  // image and clicked link, in which case we want to actually use the
+  // image as the selection.
+  var parent = range && range.getContainerElement();
+  var link = /** @type {Element} */
+      (goog.dom.getAncestorByTagNameAndClass(parent, goog.dom.TagName.A));
+  if (link && goog.editor.node.isEditable(link)) {
+    goog.dom.flattenElement(link);
+  } else {
+    var editableLink = this.createLink_(range, '/', opt_target);
+    if (editableLink) {
+      if (!this.fieldObject.execCommand(goog.editor.Command.MODAL_LINK_EDITOR,
+          editableLink)) {
+        /** @desc Prompt the user for the URL of the link they've created. */
+        var MSG_LINK_TO = goog.getMsg('Link to:');
+
+        var url = this.fieldObject.getAppWindow().prompt(MSG_LINK_TO,
+            'http://');
+        if (url) {
+          editableLink.setTextAndUrl(editableLink.getCurrentText() || url, url);
+          editableLink.placeCursorRightOf();
+        } else {
+          var savedRange = goog.editor.range.saveUsingNormalizedCarets(
+              goog.dom.Range.createFromNodeContents(editableLink.getAnchor()));
+          editableLink.removeLink();
+          savedRange.restore().select();
+          return null;
+        }
+      }
+      return editableLink;
+    }
+  }
+  return null;
+};
+
+
+/**
+ * Create a link out of the current selection.  If nothing is selected, insert
+ * a new link.  Otherwise, enclose the selection in a link.
+ * @param {goog.dom.AbstractRange} range The closure range object for the
+ *     current selection.
+ * @param {string} url The url to link to.
+ * @param {string} opt_target Target for the link.
+ * @return {goog.editor.Link?} The newly created link.
+ * @private
+ */
+goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(range,
+    url, opt_target) {
+  // TODO: Handle multi-line links without requiring crazy hacks!
+  var anchor = null;
+  var parent = range && range.getContainerElement();
+  // We do not yet support creating links around images.  Instead of throwing
+  // lots of js errors, just fail silently.
+  // TODO: Add support for linking images.
+  if (parent && parent.tagName == goog.dom.TagName.IMG) {
+    return null;
+  }
+  if (range && range.isCollapsed()) {
+    var textRange = range.getTextRange(0).getBrowserRangeObject();
+    if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
+      anchor = this.getFieldDomHelper().createElement(goog.dom.TagName.A);
+      textRange.insertNode(anchor);
+    } else if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
+      // TODO: Use goog.dom.AbstractRange's surroundContents
+      textRange.pasteHTML("<a id='newLink'></a>");
+      anchor = this.getFieldDomHelper().getElement('newLink');
+      anchor.removeAttribute('id');
+    }
+  } else {
+    // Create a unique identifier for the link so we can retrieve it later.
+    // execCommand doesn't return the link to us, and we need a way to find
+    // the newly created link in the dom, and the url is the only property
+    // we have control over, so we set that to be unique and then find it.
+    var uniqueId = goog.string.createUniqueString();
+    this.execCommandHelper_('CreateLink', uniqueId);
+    var setHrefAndLink = function(element, index, arr) {
+      // We can't do straight comparision since the href can contain the
+      // absolute url.
+      if (goog.string.endsWith(element.href, uniqueId)) {
+        anchor = element;
+      }
+    };
+
+    goog.array.forEach(this.fieldObject.getElement().getElementsByTagName(
+        goog.dom.TagName.A), setHrefAndLink);
+  }
+
+  return goog.editor.Link.createNewLink(
+      /** @type {HTMLAnchorElement} */ (anchor), url, opt_target);
 };
 
 
@@ -1458,6 +1571,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.isJustification_ =
 goog.editor.plugins.BasicTextFormatter.getNodeJustification_ =
     function(element) {
   var value = goog.style.getComputedTextAlign(element);
+  // Strip preceding -moz- or -webkit- (@bug 2472589).
+  value = value.replace(/^-(moz|webkit)-/, '');
 
   // If there is no alignment, try the inline property,
   // otherwise assume left aligned.

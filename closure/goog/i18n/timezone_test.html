@@ -107,6 +107,7 @@ limitations under the License.
       assertEquals(480, usPacific.getOffset(date));
     }
     assertEquals('America/Los_Angeles', usPacific.getTimeZoneId());
+    assertObjectEquals(americaLosAngelesData, usPacific.getTimeZoneData());
   }
 
   function testNames() {

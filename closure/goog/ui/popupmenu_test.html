@@ -33,11 +33,12 @@ limitations under the License.
 <div id="popup-anchor"></div>
 <script>
 
+var anchor = goog.dom.$('popup-anchor');
+
 // Event handler
 var handler;
 var showPopup;
 var beforeShowPopupCalled;
-var target = goog.dom.getElement('popup-anchor');
 var popup;
 
 function setUp() {
@@ -58,6 +59,11 @@ function beforeShowPopup() {
        goog.style.isElementShown(popup.getElement()));
   beforeShowPopupCalled = true;
   return showPopup;
+}
+
+function onShowPopup(target) {
+  assertEquals('The attached anchor element is incorrect',
+      target.element_, popup.getAttachedElement());
 }
 
 /**
@@ -92,10 +98,15 @@ function assertTarget(target, expectedElement, expectedTargetCorner,
  * Test menu receives BEFORE_SHOW event before it's displayed.
  */
 function testBeforeShowEvent() {
+  var target = popup.createAttachTarget(anchor);
+  popup.attach(anchor);
   handler.listen(popup,
                  goog.ui.Menu.EventType.BEFORE_SHOW,
                  beforeShowPopup);
-  beforeShowPopupCalled = false;
+  handler.listen(popup,
+                 goog.ui.Menu.EventType.SHOW,
+                 goog.bind(onShowPopup, null, target));
+  seforeShowPopupCalled = false;
   showPopup = false;
   popup.showMenu(target, 0, 0);
   assertTrue('BEFORE_SHOW event handler should be called on #showMenu',
@@ -116,7 +127,6 @@ function testBeforeShowEvent() {
  * Test the behavior of {@link PopupMenu.isAttachTarget}.
  */
 function testIsAttachTarget() {
-  var anchor = goog.dom.$('popup-anchor');
   // Before 'attach' is called.
   assertFalse('Menu should not be attached to the element',
       popup.isAttachTarget(anchor));
@@ -134,7 +144,6 @@ function testIsAttachTarget() {
  * Tests the behavior of {@link PopupMenu.createAttachTarget}.
  */
 function testCreateAttachTarget() {
-  var element = goog.dom.$('popup-anchor');
   // Randomly picking parameters.
   var targetCorner = goog.positioning.Corner.TOP_END;
   var menuCorner = goog.positioning.Corner.BOTTOM_LEFT;
@@ -142,22 +151,22 @@ function testCreateAttachTarget() {
   var margin = new goog.math.Box(0, 10, 5, 25);
 
   // Simply setting the required parameters.
-  var target = popup.createAttachTarget(element);
-  assertTrue(popup.isAttachTarget(element));
-  assertTarget(target, element, undefined, undefined,
+  var target = popup.createAttachTarget(anchor);
+  assertTrue(popup.isAttachTarget(anchor));
+  assertTarget(target, anchor, undefined, undefined,
       goog.events.EventType.MOUSEDOWN, undefined);
 
   // Creating another target with all the parameters.
-  target = popup.createAttachTarget(element, targetCorner, menuCorner,
+  target = popup.createAttachTarget(anchor, targetCorner, menuCorner,
       contextMenu, margin);
-  assertTrue(popup.isAttachTarget(element));
-  assertTarget(target, element, targetCorner, menuCorner,
+  assertTrue(popup.isAttachTarget(anchor));
+  assertTarget(target, anchor, targetCorner, menuCorner,
       goog.events.EventType.MOUSEDOWN, margin);
 
   // Finally, switch up the 'contextMenu'
-  target = popup.createAttachTarget(element, undefined, undefined,
+  target = popup.createAttachTarget(anchor, undefined, undefined,
       true /*opt_contextMenu*/, undefined);
-  assertTarget(target, element, undefined, undefined,
+  assertTarget(target, anchor, undefined, undefined,
       goog.events.EventType.CONTEXTMENU, undefined);
 }
 
@@ -165,9 +174,8 @@ function testCreateAttachTarget() {
  * Tests the behavior of {@link PopupMenu.getAttachTarget}.
  */
 function testGetAttachTarget() {
-  var element = goog.dom.$('popup-anchor');
   // Before the menu is attached to the anchor.
-  var target = popup.getAttachTarget(element);
+  var target = popup.getAttachTarget(anchor);
   assertTrue('Not expecting a target before the element is attach to the menu',
       target == null);
 
@@ -177,13 +185,13 @@ function testGetAttachTarget() {
   var contextMenu = false;   // Show menu on mouse down event.
   var margin = new goog.math.Box(0, 10, 5, 25);
 
-  popup.attach(element, targetCorner, menuCorner, contextMenu, margin);
-  target = popup.getAttachTarget(element);
+  popup.attach(anchor, targetCorner, menuCorner, contextMenu, margin);
+  target = popup.getAttachTarget(anchor);
   assertTrue('Failed to get target after attaching element to menu',
       target != null);
 
   // Make sure we got the right target back.
-  assertTarget(target, element, targetCorner, menuCorner,
+  assertTarget(target, anchor, targetCorner, menuCorner,
       goog.events.EventType.MOUSEDOWN, margin);
 }
 

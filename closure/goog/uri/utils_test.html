@@ -56,6 +56,8 @@ function testSplit() {
   assertEquals('q=query&hl=en', utils.getQueryData(uri));
   assertEquals('fragment', utils.getFragmentEncoded(uri));
   assertEquals('fragment', utils.getFragment(uri));
+  assertNull(utils.getDomain('http://!!!'));
+  assertNull(utils.getScheme('www.x.com:80'));
 
   assertEquals('terer258+foo@gmail.com',
       utils.getPath('mailto:terer258+foo@gmail.com'));

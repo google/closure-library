@@ -149,6 +149,27 @@ limitations under the License.
         viewportSizeMonitor.isPollingRequired_(), false);
   };
 
+
+  function testInstanceGetter() {
+    var fakeWindow1 = new FakeWindow();
+    var monitor1 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
+        fakeWindow1);
+    var monitor2 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
+        fakeWindow1);
+    assertEquals('The same window should give us the same instance monitor',
+        monitor1, monitor2);
+
+    var fakeWindow2 = new FakeWindow();
+    var monitor3 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
+        fakeWindow2);
+    assertNotEquals('Different windows should give different instances',
+        monitor1, monitor3);
+
+    assertEquals('Monitors should match if opt_window is not provided',
+        goog.dom.ViewportSizeMonitor.getInstanceForWindow(),
+        goog.dom.ViewportSizeMonitor.getInstanceForWindow());
+  }
+
 </script>
 </body>
 </html>

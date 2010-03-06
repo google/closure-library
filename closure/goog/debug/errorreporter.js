@@ -22,6 +22,7 @@ goog.provide('goog.debug.ErrorReporter');
 
 goog.require('goog.Uri');
 goog.require('goog.Uri.QueryData');
+goog.require('goog.debug');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.events');
 goog.require('goog.net.XhrIo');
@@ -120,11 +121,11 @@ goog.debug.ErrorReporter.prototype.setup_ = function() {
   if (goog.userAgent.IE) {
     // Use "onerror" because caught exceptions in IE don't provide line number.
     goog.debug.catchErrors(
-        goog.bind(this.handleException_, this), false, null);
+        goog.bind(this.handleException, this), false, null);
   } else {
     // "onerror" doesn't work with FF2 or Chrome
     this.errorHandler_ = new goog.debug.ErrorHandler(
-        goog.bind(this.handleException_, this));
+        goog.bind(this.handleException, this));
 
     this.errorHandler_.protectWindowSetTimeout();
     this.errorHandler_.protectWindowSetInterval();
@@ -138,9 +139,8 @@ goog.debug.ErrorReporter.prototype.setup_ = function() {
  * Handler for caught exceptions. Sends report to the LoggingServlet.
  *
  * @param {Error} e The exception.
- * @private
  */
-goog.debug.ErrorReporter.prototype.handleException_ = function(e) {
+goog.debug.ErrorReporter.prototype.handleException = function(e) {
   var error = goog.debug.normalizeErrorObject(e);
 
   // Make sure when handling exceptions that the error file name contains only

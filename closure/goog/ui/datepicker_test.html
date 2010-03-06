@@ -143,6 +143,45 @@ Copyright 2008 Google Inc. All Rights Reserved.
     assertTrue(goog.style.isElementShown(tFoot))
   }
 
+  function testSetDate() {
+    picker = new goog.ui.DatePicker();
+    picker.createDom();
+    picker.enterDocument();
+    var selectEvents = 0;
+    var changeEvents = 0;
+    goog.events.listen(picker, goog.ui.DatePicker.Events.SELECT,
+        function() {
+          selectEvents++;
+        });
+    goog.events.listen(picker, goog.ui.DatePicker.Events.CHANGE,
+        function() {
+          changeEvents++;
+        });
+
+    // Set date.
+    picker.setDate(new Date(2010, 1, 26));
+    assertEquals('no select event dispatched', 1, selectEvents);
+    assertEquals('no change event dispatched', 1, changeEvents);
+    assertTrue('date is set',
+        new goog.date.Date(2010, 1, 26).equals(picker.getDate()));
+
+    // Set date to same date.
+    picker.setDate(new Date(2010, 1, 26));
+    assertEquals('1 select event dispatched', 2, selectEvents);
+    assertEquals('no change event dispatched', 1, changeEvents);
+
+    // Set date to different date.
+    picker.setDate(new Date(2010, 1, 27));
+    assertEquals('another select event dispatched', 3, selectEvents);
+    assertEquals('1 change event dispatched', 2, changeEvents);
+
+    // Set date to none.
+    picker.setDate(null);
+    assertEquals('another select event dispatched', 4, selectEvents);
+    assertEquals('another change event dispatched', 3, changeEvents);
+    assertNull('date cleared', picker.getDate());
+  }
+
   function testEventListenerLeaks() {
     var listeners = goog.events.getTotalListenerCount();
     picker = new goog.ui.DatePicker();

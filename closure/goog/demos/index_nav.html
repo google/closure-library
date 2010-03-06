@@ -18,13 +18,13 @@ limitations under the License.
 <html>
 <head>
   <title>Closure Demos</title>
-  <script type="text/javascript" src="../base.js"></script>
-  <script type="text/javascript">
+  <script src="../base.js"></script>
+  <script>
     goog.require('goog.ui.tree.TreeControl');
     goog.require('goog.dom');
     goog.require('goog.events.EventType');
   </script>
-  <script type="text/javascript">
+  <script>
     var treeData = [
       {name: 'Advanced Tooltip', url: 'advancedtooltip.html'},
       {name: 'Auto Complete - Basic', url: 'autocomplete-basic.html'},
@@ -121,7 +121,7 @@ limitations under the License.
 
     function initTree() {
       goog.ui.tree.TreeControl.defaultConfig.cleardotPath =
-          'tree/images/cleardot.gif';
+          '../images/tree/cleardot.gif';
       var tree = new goog.ui.tree.TreeControl('All Demos');
       tree.setIsUserCollapsible(false);
       buildNode(tree, treeData);
@@ -150,8 +150,8 @@ limitations under the License.
     //  window.top.frames['demo'].location = node.getClientData();
     //}
   </script>
-  <link type="text/css" rel="stylesheet" href="tree/css/tree.css">
-  <style type='text/css'>
+  <link rel="stylesheet" href="../css/tree.css">
+  <style>
     body {
       font: normal 10pt Tahoma, Arial, sans-serif;
       color: #333;
@@ -171,13 +171,13 @@ limitations under the License.
 
     .goog-tree-children {
       background-repeat: repeat-y;
-      background-image: url("tree/images/I.png") !important;
+      background-image: url("../images/tree/I.png") !important;
       background-position-y: 1px !important; /* IE only */
       font: icon;
     }
 
     .goog-tree-icon {
-      background-image:url("tree/images/tree.png");
+      background-image:url("../images/tree/tree.png");
     }
 
     .goog-tree-item-label {
@@ -200,7 +200,7 @@ limitations under the License.
 </head>
 <body>
   <h2><a href="index_splash.html" title="Home" target="demo">Index</a></h2>
-  <div id='demo-list'></div>
-  <script language="JavaScript" type="text/javascript">initTree();</script>
+  <div id="demo-list"></div>
+  <script>initTree();</script>
 </body>
 </html>
