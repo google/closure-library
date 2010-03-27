@@ -41,13 +41,15 @@ limitations under the License.
   </script>
   <script>
     function inlineBlockify(tag, className, parentElement) {
-      goog.array.forEach(goog.dom.$$(tag, className, parentElement), function(el) {
-        goog.style.setInlineBlock(el);
-      });
+      goog.array.forEach(
+          goog.dom.getElementsByTagNameAndClass(tag, className, parentElement),
+          function(el) {
+            goog.style.setInlineBlock(el);
+          });
     }
 
     function inlineBlockifyAll() {
-      inlineBlockify('span', 'demo', goog.dom.$('foo'));
+      inlineBlockify('span', 'demo', goog.dom.getElement('foo'));
     }
   </script>
 </head>

@@ -93,7 +93,7 @@ limitations under the License.
   <script>
     goog.events.listen(document, goog.events.EventType.KEYDOWN, function(e) {
       var code = e.keyCode;
-      if (goog.dom.$('openOnKeyDown').checked) {
+      if (goog.dom.getElement('openOnKeyDown').checked) {
         switch (code) {
           case goog.events.KeyCodes.MAC_ENTER:
           case goog.events.KeyCodes.ENTER:
@@ -106,7 +106,7 @@ limitations under the License.
             // no-op
         }
       }
-      if (goog.dom.$('swapModalOnShift').checked) {
+      if (goog.dom.getElement('swapModalOnShift').checked) {
         switch (code) {
           case goog.events.KeyCodes.SHIFT:
             if (currDialog && currDialog.isVisible()) {

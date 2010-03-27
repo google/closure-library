@@ -46,7 +46,7 @@ var HTML;
 var UPPERCASE_CONTENTS = '<P>THE OWLS ARE NOT WHAT THEY SEEM.</P>';
 
 function setUp() {
-  HTML = goog.dom.$('root').innerHTML;
+  HTML = goog.dom.getElement('root').innerHTML;
 
   FIELD = new goog.editor.Field('field');
 
@@ -57,7 +57,7 @@ function setUp() {
 
 function tearDown() {
   FIELD.dispose();
-  goog.dom.$('root').innerHTML = HTML;
+  goog.dom.getElement('root').innerHTML = HTML;
 }
 
 function testQueryUsingLorem() {
@@ -69,7 +69,7 @@ function testQueryUsingLorem() {
 }
 
 function testUpdateLoremIpsum() {
-  goog.dom.$('field').innerHTML = 'stuff';
+  goog.dom.getElement('field').innerHTML = 'stuff';
 
   var loremPlugin = FIELD.getPluginByClassId('LoremIpsum');
   FIELD.makeEditable();
@@ -111,7 +111,7 @@ function testUpdateLoremIpsum() {
 }
 
 function testLoremIpsumAndGetCleanContents() {
-  goog.dom.$('field').innerHTML = 'This is a field';
+  goog.dom.getElement('field').innerHTML = 'This is a field';
   FIELD.makeEditable();
 
   // test direct getCleanContents
@@ -141,7 +141,7 @@ function testLoremIpsumAndGetCleanContents2() {
   // make a field blank before we make it editable, and then check
   // that making it editable activates lorem.
   assert('field is editable', FIELD.isUneditable());
-  goog.dom.$('field').innerHTML = '   ';
+  goog.dom.getElement('field').innerHTML = '   ';
 
   FIELD.makeEditable();
   assertEquals('field contains unexpected contents',
@@ -149,7 +149,7 @@ function testLoremIpsumAndGetCleanContents2() {
 
   FIELD.makeUneditable();
   assertEquals('field contains unexpected contents',
-      UPPERCASE_CONTENTS, goog.dom.$('field').innerHTML.toUpperCase());
+      UPPERCASE_CONTENTS, goog.dom.getElement('field').innerHTML.toUpperCase());
 }
 
 function testLoremIpsumInClickToEditMode() {
@@ -162,7 +162,7 @@ function testLoremIpsumInClickToEditMode() {
 
   FIELD.makeUneditable();
   assertEquals('field contains unexpected contents',
-      UPPERCASE_CONTENTS, goog.dom.$('field').innerHTML.toUpperCase());
+      UPPERCASE_CONTENTS, goog.dom.getElement('field').innerHTML.toUpperCase());
 }
 
 function getNbsp() {

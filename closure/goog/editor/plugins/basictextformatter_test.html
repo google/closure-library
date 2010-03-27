@@ -102,10 +102,10 @@ Copyright 2008 Google Inc.
 <script type="text/javascript">
   var stubs = new goog.testing.PropertyReplacer();
 
-  var SAVED_HTML = goog.dom.$('html').innerHTML;
+  var SAVED_HTML = goog.dom.getElement('html').innerHTML;
   var FIELDMOCK;
   var FORMATTER;
-  var ROOT = goog.dom.$('root');
+  var ROOT = goog.dom.getElement('root');
   var HELPER;
   var OPEN_SUB = goog.userAgent.WEBKIT && !goog.userAgent.isVersion('530') ?
       '<span class="Apple-style-span" style="vertical-align: sub;">' :
@@ -165,7 +165,7 @@ Copyright 2008 Google Inc.
     expectedFailures.handleTearDown();
     stubs.reset();
 
-    goog.dom.$('html').innerHTML = SAVED_HTML;
+    goog.dom.getElement('html').innerHTML = SAVED_HTML;
   }
 
   function setUpListAndBlockquoteTests() {
@@ -195,11 +195,11 @@ Copyright 2008 Google Inc.
       FIELDMOCK.queryCommandValue('rtl').$returns(null);
 
       FIELDMOCK.$replay();
-      var ul = goog.dom.$('outerUL');
+      var ul = goog.dom.getElement('outerUL');
       goog.dom.Range.createFromNodeContents(ul.firstChild.firstChild).select();
       FORMATTER.fixIELists_();
       assertFalse('Unordered list must not have ordered type', ul.type == '1');
-      var ol = goog.dom.$('ol');
+      var ol = goog.dom.getElement('ol');
       ol.type = 'disc';
       goog.dom.Range.createFromNodeContents(ol.firstChild.firstChild).select();
       FORMATTER.fixIELists_();
@@ -247,7 +247,7 @@ Copyright 2008 Google Inc.
           goog.editor.Command.DEFAULT_TAG).$returns('BR').$times(2);
 
       FIELDMOCK.$replay();
-      var p = goog.dom.$('geckolist');
+      var p = goog.dom.getElement('geckolist');
       var font = p.firstChild;
       goog.dom.Range.createFromNodeContents(font).select();
       retVal = FORMATTER.beforeInsertListGecko_();
@@ -360,6 +360,13 @@ Copyright 2008 Google Inc.
 
     FIELDMOCK.execCommand(goog.editor.Command.MODAL_LINK_EDITOR,
         goog.testing.mockmatchers.isObject).$returns(undefined);
+    FIELDMOCK.setModalMode(true);
+
+    FIELDMOCK.isSelectionEditable().$anyTimes().$returns(true);
+
+    FORMATTER.focusField_ = function() {
+      throw 'Field should not be re-focused';
+    }
   }
 
   function tearDownLinkTests() {
@@ -1049,7 +1056,7 @@ Copyright 2008 Google Inc.
   }
 
   function testScrubImagesRemovesCustomAttributes() {
-    var fieldElem = goog.dom.$('real-field');
+    var fieldElem = goog.dom.getElement('real-field');
     fieldElem.innerHTML = '';
     var attrs = {'src': 'http://www.google.com/foo.jpg',
                  'tabIndex': '0',

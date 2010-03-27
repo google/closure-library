@@ -35,12 +35,12 @@ limitations under the License.
 
   <script>
     var picker02 = new goog.ui.ColorPicker.createSimpleColorGrid();
-    picker02.render(goog.dom.$('colorpicker02'));
+    picker02.render(goog.dom.getElement('colorpicker02'));
 
     goog.events.listen(picker02, goog.ui.ColorPicker.EventType.CHANGE,
       function(event) {
         var color = event.target.getSelectedColor() || '#000000';
-        var el = goog.dom.$('picker02message');
+        var el = goog.dom.getElement('picker02message');
         el.innerHTML = 'You selected: ' + color;
         el.style.color = color;
       });

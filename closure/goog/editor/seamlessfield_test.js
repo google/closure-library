@@ -31,7 +31,7 @@ var fieldElem;
 var fieldElemClone;
 
 function setUp() {
-  fieldElem = goog.dom.$('field');
+  fieldElem = goog.dom.getElement('field');
   fieldElemClone = fieldElem.cloneNode(true);
 }
 
@@ -332,7 +332,7 @@ function testAttachIframe() {
   var iframe = createSeamlessIframe();
   try {
     blendedField.attachIframe(iframe);
-  } catch(err) {
+  } catch (err) {
     fail('Error occurred while attaching iframe.');
   }
 }
@@ -352,7 +352,7 @@ function createSeamlessIframe() {
  *
  * @param {string} innerHTML html for the field contents.
  * @param {Object} styles Key-value pairs for styles on the field.
- * @return {goog.editor.SeamlessField}
+ * @return {goog.editor.SeamlessField} The field.
  */
 function initSeamlessField(innerHTML, styles) {
   var field = new goog.editor.SeamlessField('field');
@@ -367,8 +367,8 @@ function initSeamlessField(innerHTML, styles) {
  * true, then the field will fidget while we're initializing the field,
  * and that's not what we want.
  *
- * @param {goog.editor.Field} fieldObj
- * @param {HTMLIFrameElement} iframe
+ * @param {goog.editor.Field} fieldObj The field.
+ * @param {HTMLIFrameElement} iframe The iframe.
  */
 function assertAttachSeamlessIframeSizesCorrectly(fieldObj, iframe) {
   var size = goog.style.getSize(fieldObj.getOriginalElement());

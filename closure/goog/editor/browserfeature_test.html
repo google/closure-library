@@ -44,13 +44,13 @@ goog.require('goog.testing.jsunit');
 var expectedFailures = new goog.testing.ExpectedFailures();
 
 function tearDown() {
-  var root = goog.dom.$('root');
+  var root = goog.dom.getElement('root');
   goog.dom.removeChildren(root);
   expectedFailures.handleTearDown();
 }
 
 function testEmptyNodeNormalization() {
-  var root = goog.dom.$('root');
+  var root = goog.dom.getElement('root');
   goog.dom.appendChild(root, goog.dom.createTextNode('text'));
 
   var textNode = root.firstChild;
@@ -68,7 +68,7 @@ function testLeavesPWhenRemovingLists() {
   if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
     return;
   }
-  var root = goog.dom.$('root');
+  var root = goog.dom.getElement('root');
   goog.dom.removeChildren(root);
   root.innerHTML = '<div>foo</div>';
   goog.dom.Range.createFromNodeContents(root.firstChild.firstChild).select();
@@ -83,7 +83,7 @@ function testLeavesPWhenRemovingLists() {
 }
 
 function testActiveElement() {
-  var root = goog.dom.$('root');
+  var root = goog.dom.getElement('root');
   var div = goog.dom.$dom('div');
   root.appendChild(div);
   div.tabIndex = 0;
@@ -100,7 +100,7 @@ function testActiveElement() {
 }
 
 function testNormalizeCorruption() {
-  var root = goog.dom.$('testNormalizeCorruption');
+  var root = goog.dom.getElement('testNormalizeCorruption');
   var textNode = root.firstChild;
   textNode.splitText(0);
   var secondTextNode = textNode.nextSibling;

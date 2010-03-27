@@ -140,6 +140,6 @@ See the COPYING file for details.
 .goog-menu-button-dropdown {
   width: 7px;
   /* Client apps may override the URL at which they serve the sprite. */
-  background: url(https://ssl.gstatic.com/editor/editortoolbar.png) no-repeat -388px;
+  background: url(https://ssl.gstatic.com/editor/editortoolbar.png) no-repeat -388px 0;
   vertical-align: top;
 }

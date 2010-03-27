@@ -38,8 +38,8 @@ Copyright 2008 Google Inc. All Rights Reserved.
 <ul id="test2">foo<br>bar</ul>
 
 <script>
-  var test = goog.dom.$('test');
-  var test2 = goog.dom.$('test2');
+  var test = goog.dom.getElement('test');
+  var test2 = goog.dom.getElement('test2');
 
   function testBasic() {
     goog.testing.dom.assertNodesMatch(
@@ -50,7 +50,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
   function testAdjustStart() {
     var iterator = new goog.dom.TextRangeIterator(test, 0, test, 2);
-    iterator.setStartNode(goog.dom.$('span1'));
+    iterator.setStartNode(goog.dom.getElement('span1'));
 
     goog.testing.dom.assertNodesMatch(iterator,
         ['#span1', '#span1', '#p1']);
@@ -58,7 +58,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
   function testAdjustEnd() {
     var iterator = new goog.dom.TextRangeIterator(test, 0, test, 2);
-    iterator.setEndNode(goog.dom.$('span1'));
+    iterator.setEndNode(goog.dom.getElement('span1'));
 
     goog.testing.dom.assertNodesMatch(iterator,
         ['#a1', 'T', '#b1', 'e', '#b1', 'xt', '#a1', '#span1']);
@@ -108,7 +108,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
   function testEndNodeOffsetAtEnd() {
     var iterator = new goog.dom.TextRangeIterator(
-        goog.dom.$('b1').firstChild, 0, goog.dom.$('b1'), 1);
+        goog.dom.getElement('b1').firstChild, 0, goog.dom.getElement('b1'), 1);
     goog.testing.dom.assertNodesMatch(iterator, ['e', '#b1']);
   }
 

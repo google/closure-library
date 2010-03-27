@@ -70,7 +70,7 @@ goog.fx.DragListGroup = function() {
 
   /**
    * Which drag item corresponds to a given handle.  Set by init().
-   * Specifically, this maps from the hash code (as given by goog.getHashCode)
+   * Specifically, this maps from the unique ID (as given by goog.getUid)
    * of the handle to the drag item.
    * @type {Object}
    * @private
@@ -330,8 +330,8 @@ goog.fx.DragListGroup.prototype.init = function() {
       var dragItem = dragItems[j];
       var dragItemHandle = this.getHandleForDragItem_(dragItem);
 
-      var hc = goog.getHashCode(dragItemHandle);
-      this.dragItemForHandle_[hc] = dragItem;
+      var uid = goog.getUid(dragItemHandle);
+      this.dragItemForHandle_[uid] = dragItem;
 
       if (this.dragItemHoverClass_) {
         this.eventHandler_.listen(
@@ -394,8 +394,8 @@ goog.fx.DragListGroup.prototype.disposeInternal = function() {
  */
 goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
 
-  var hc = goog.getHashCode(/** @type {Node} */ (e.currentTarget));
-  var currDragItem = /** @type {Element} */ (this.dragItemForHandle_[hc]);
+  var uid = goog.getUid(/** @type {Node} */ (e.currentTarget));
+  var currDragItem = /** @type {Element} */ (this.dragItemForHandle_[uid]);
 
   var rv = this.dispatchEvent(
       new goog.fx.DragListGroupEvent(

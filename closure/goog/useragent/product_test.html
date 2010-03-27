@@ -74,6 +74,7 @@ limitations under the License.
     goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
     goog.userAgent.product.CAMINO = goog.userAgent.product.detectedCamino_;
     goog.userAgent.product.IPHONE = goog.userAgent.product.detectedIphone_;
+    goog.userAgent.product.IPAD = goog.userAgent.product.detectedIpad_;
     goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
     goog.userAgent.product.CHROME = goog.userAgent.product.detectedChrome_;
     goog.userAgent.product.SAFARI = goog.userAgent.product.detectedSafari_;
@@ -83,7 +84,7 @@ limitations under the License.
   // The set of products whose corresponding goog.userAgent.product value is set
   // in goog.userAgent.product.init_().
   var DETECTED_BROWSER_KEYS =
-      ['FIREFOX', 'CAMINO', 'IPHONE', 'ANDROID', 'CHROME', 'SAFARI'];
+      ['FIREFOX', 'CAMINO', 'IPHONE', 'IPAD', 'ANDROID', 'CHROME', 'SAFARI'];
 
   function assertIsBrowser(browser) {
     function createDetectedBrowserKey(browser) {
@@ -91,6 +92,7 @@ limitations under the License.
         case 'FIREFOX': return 'detectedFirefox_';
         case 'CAMINO': return 'detectedCamino_';
         case 'IPHONE': return 'detectedIphone_';
+        case 'IPAD': return 'detectedIpad_';
         case 'ANDROID': return 'detectedAndroid_';
         case 'CHROME': return 'detectedChrome_';
         case 'SAFARI': return 'detectedSafari_';
@@ -280,6 +282,23 @@ limitations under the License.
        ]}
     ];
     checkEachUserAgentDetected(userAgents, 'IPHONE');
+  }
+
+  function testIpad() {
+    var userAgents = [
+      {ua: 'Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) ' +
+           'AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 ' +
+           'Mobile/7B334b Safari/531.21.10',
+       versions: [
+        {num: '4.0.4.7B334b', truth: true},
+        {num: '4.0', truth: true},
+        {num: '4.0.4.7C334b', truth: false},
+        {num: '4.1.7B334b', truth: false},
+        {num: '4.0.4.7B320c', truth: true},
+        {num: '4.0.4.8B334b', truth: false}
+       ]}
+    ];
+    checkEachUserAgentDetected(userAgents, 'IPAD');
   }
 
   function testAndroid() {

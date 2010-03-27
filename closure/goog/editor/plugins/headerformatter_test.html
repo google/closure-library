@@ -25,12 +25,15 @@ Copyright 2008 Google Inc.
 <script type="text/javascript" src="../../base.js"></script>
 <script type="text/javascript">
   goog.require('goog.dom');
-  goog.require('goog.editor.plugins.HeaderFormatter');
   goog.require('goog.editor.Command');
+  goog.require('goog.editor.plugins.BasicTextFormatter');
+  goog.require('goog.editor.plugins.HeaderFormatter');
   goog.require('goog.testing.editor.FieldMock');
   goog.require('goog.testing.editor.TestHelper');
   goog.require('goog.testing.jsunit');
   goog.require('goog.userAgent');
+
+
 </script>
 </head>
 <body>
@@ -38,9 +41,10 @@ Copyright 2008 Google Inc.
 <div id="field"></div>
 
 <script type="text/javascript">
-  var field = goog.dom.$('field');
+  var field = goog.dom.getElement('field');
   var editableField;
   var headerFormatter;
+  var btf;
   var testHelper = new goog.testing.editor.TestHelper(field);
 
   function setUp() {
@@ -48,6 +52,8 @@ Copyright 2008 Google Inc.
     editableField = new goog.testing.editor.FieldMock();
     headerFormatter = new goog.editor.plugins.HeaderFormatter();
     headerFormatter.registerFieldObject(editableField);
+    btf = new goog.editor.plugins.BasicTextFormatter();
+    btf.registerFieldObject(editableField);
   }
 
   function tearDown() {
@@ -75,13 +81,12 @@ Copyright 2008 Google Inc.
         goog.editor.Command.FORMAT_BLOCK,
         goog.editor.plugins.HeaderFormatter.HEADER_COMMAND.H1);
     // Bypass EditableField's execCommand and directly call
-    // built in execommand.  Future version of headerformatter will include
+    // basicTextFormatter's.  Future version of headerformatter will include
     // that code in its own execCommand.
     editableField.$does(function() {
-      // IE requires brackets, webkit works with either,
-      // FF pre-3 doesn't want brackets.
-      var tag = goog.userAgent.IE ? "<H1>" : "H1";
-      document.execCommand('formatBlock', false, tag); });
+      btf.execCommandInternal(
+          goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK,
+          goog.editor.plugins.HeaderFormatter.HEADER_COMMAND.H1); });
 
     var event = new goog.testing.LooseMock(goog.events.BrowserEvent);
     if (goog.userAgent.GECKO) {

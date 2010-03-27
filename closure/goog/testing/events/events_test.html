@@ -44,10 +44,10 @@ limitations under the License.
   var firedEventTypes;
   var firedEventCoordinates;
   var firedShiftKeys;
-  var root = goog.dom.$('root');
-  var log = goog.dom.$('log');
-  var input = goog.dom.$('input');
-  var testButton = goog.dom.$('testButton');
+  var root = goog.dom.getElement('root');
+  var log = goog.dom.getElement('log');
+  var input = goog.dom.getElement('input');
+  var testButton = goog.dom.getElement('testButton');
   var coordinate = new goog.math.Coordinate(123, 456);
   var stubs = new goog.testing.PropertyReplacer();
 
@@ -82,7 +82,7 @@ limitations under the License.
               type,
               goog.dom.createDom('br')));
       goog.events.listen(testButton, type, function(e) {
-        if (goog.dom.$(e.type).checked) {
+        if (goog.dom.getElement(e.type).checked) {
           e.preventDefault();
         }
 

@@ -20,14 +20,12 @@
 
 goog.provide('goog.debug.ErrorReporter');
 
-goog.require('goog.Uri');
-goog.require('goog.Uri.QueryData');
 goog.require('goog.debug');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.events');
 goog.require('goog.net.XhrIo');
 goog.require('goog.string');
-
+goog.require('goog.uri.utils');
 
 
 /**
@@ -91,13 +89,22 @@ goog.debug.ErrorReporter.install = function(loggingUrl) {
 
 
 /**
- * Change the error handler URL.
+ * Installs exception protection for an entry point function in addition
+ * to those that are protected by default.
+ * Has no effect in IE because window.onerror is used for reporting
+ * exceptions in that case.
  *
- * @param {string} loggingUrl The new URL to which the errors caught
- *     will be reported.
+ * @param {Function} fn An entry point function to be protected.
+ * @param {boolean=} opt_tracers Whether to install tracers around the fn.
+ * @return {Function} A protected wrapper function that calls the entry point
+ *     function or null if the entry point could not be protected.
  */
-goog.debug.ErrorReporter.prototype.setLoggingUrl = function(loggingUrl) {
-  this.handlerUrl_ = loggingUrl;
+goog.debug.ErrorReporter.prototype.protectAdditionalEntryPoint = function(fn,
+    opt_tracers) {
+  if (this.errorHandler_) {
+    return this.errorHandler_.protectEntryPoint(fn, opt_tracers);
+  }
+  return null;
 };
 
 
@@ -161,24 +168,19 @@ goog.debug.ErrorReporter.prototype.handleException = function(e) {
  * @param {string} message Error description.
  * @param {string} fileName URL of the JavaScript file with the error.
  * @param {number} line Line number of the error.
- * @param {string} opt_trace Call stack trace of the error.
+ * @param {string=} opt_trace Call stack trace of the error.
  */
 goog.debug.ErrorReporter.prototype.sendErrorReport =
     function(message, fileName, line, opt_trace) {
   try {
     // Create the logging URL.
-    var requestUrl = new goog.Uri(this.handlerUrl_);
-    requestUrl.setParameterValue('script', fileName);
-    requestUrl.setParameterValue('error', message);
-    requestUrl.setParameterValue('line', line);
-    var queryData = new goog.Uri.QueryData();
-    if (goog.isDefAndNotNull(opt_trace)) {
-      queryData.add('trace', opt_trace);
-    }
+    var requestUrl = goog.uri.utils.appendParams(this.handlerUrl_,
+        'script', fileName, 'error', message, 'line', line);
+    var queryData = goog.uri.utils.buildQueryData(['trace', opt_trace]);
 
     // Send the request with the contents of the error.
-    goog.net.XhrIo.send(requestUrl.toString(), null, 'POST',
-        queryData.toString(), this.extraHeaders_);
+    goog.net.XhrIo.send(requestUrl, null, 'POST',
+        queryData, this.extraHeaders_);
   } catch (e) {
     var logMessage = goog.string.buildString(
         'Error occurred in sending an error report.\n\n',

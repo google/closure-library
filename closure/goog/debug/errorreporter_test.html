@@ -48,6 +48,9 @@ limitations under the License.
 
   function setUp() {
     stubs.set(goog.net, 'XhrIo', MockXhrIo);
+    // Ensure that setTimeout always gets cleaned up, since ErrorReporter
+    // nukes setTimeout.
+    stubs.set(goog.global, 'setTimeout', window.setTimeout);
   }
 
   function tearDown() {
@@ -65,6 +68,24 @@ limitations under the License.
     }
 
     throw error;
+  }
+
+  function testsendErrorReport() {
+    new goog.debug.ErrorReporter('/log').sendErrorReport(
+        'message', 'filename.js', 123, 'trace');
+
+    assertEquals('/log?script=filename.js&error=message&line=123',
+        MockXhrIo.lastUrl);
+    assertEquals('trace=trace', MockXhrIo.lastContent);
+  }
+
+  function testsendErrorReport_noTrace() {
+    new goog.debug.ErrorReporter('/log').sendErrorReport(
+        'message', 'filename.js', 123);
+
+    assertEquals('/log?script=filename.js&error=message&line=123',
+        MockXhrIo.lastUrl);
+    assertEquals('', MockXhrIo.lastContent);
   }
 
   function test_nonInternetExplorerSendErrorReport() {
@@ -101,21 +122,6 @@ limitations under the License.
     goog.global.onerror("Goodbye :(", "http://www.your.tst/more/bogus.js", 22);
     assertEquals(
         "/errorreporter?script=bogus.js&error=Goodbye%20%3A(&line=22",
-        MockXhrIo.lastUrl);
-    assertEquals("trace=Not%20available", MockXhrIo.lastContent);
-  }
-
-  function test_setLoggingUrl() {
-    stubs.set(goog.userAgent, 'IE', true);
-    // Remove test runner's onerror handler so the test doesn't fail.
-    stubs.set(goog.global, 'onerror', null);
-
-    var errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
-    errorReporter.setLoggingUrl("/newerrorreporter?key=param");
-    goog.global.onerror("Goodbye :(", "http://www.your.tst/more/bogus.js", 22);
-    assertEquals(
-        "/newerrorreporter?key=param&script=bogus.js&error=Goodbye%20%3A(" +
-        "&line=22",
         MockXhrIo.lastUrl);
     assertEquals("trace=Not%20available", MockXhrIo.lastContent);
   }
@@ -165,6 +171,25 @@ limitations under the License.
         "http%3A%2F%2Fa.b.c%3A83%2Fa%2Ff.js%3A901%0A"+
         "(%5Bobject%20Object%5D)%40http%3A%2F%2Fa.b.c%3A813%2Fa%2Ff.js%3A37",
         MockXhrIo.lastContent);
+  }
+
+  function testProtectAdditionalEntryPoint_nonIE() {
+    stubs.set(goog.userAgent, 'IE', false);
+
+    var reporter = goog.debug.ErrorReporter.install("/errorreporter");
+    var fn = function() {};
+    var protectedFn = reporter.protectAdditionalEntryPoint(fn);
+    assertNotNull(protectedFn);
+    assertNotEquals(fn, protectedFn);
+  }
+
+  function testProtectAdditionalEntryPoint_IE() {
+    stubs.set(goog.userAgent, 'IE', true);
+
+    var reporter = goog.debug.ErrorReporter.install("/errorreporter");
+    var fn = function() {};
+    var protectedFn = reporter.protectAdditionalEntryPoint(fn);
+    assertNull(protectedFn);
   }
 </script>
 </body>

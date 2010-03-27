@@ -221,7 +221,7 @@ goog.ui.PopupMenu.prototype.createAttachTarget = function(
     margin_: opt_margin
   };
 
-  this.targets_.set(goog.getHashCode(element), target);
+  this.targets_.set(goog.getUid(element), target);
 
   return target;
 };
@@ -241,7 +241,7 @@ goog.ui.PopupMenu.prototype.createAttachTarget = function(
  */
 goog.ui.PopupMenu.prototype.getAttachTarget = function(element) {
   return element ?
-      /** @type {Object} */(this.targets_.get(goog.getHashCode(element))) :
+      /** @type {Object} */(this.targets_.get(goog.getUid(element))) :
       null;
 };
 
@@ -254,7 +254,7 @@ goog.ui.PopupMenu.prototype.getAttachTarget = function(element) {
  * @protected
  */
 goog.ui.PopupMenu.prototype.isAttachTarget = function(element) {
-  return element ? this.targets_.containsKey(goog.getHashCode(element)) : false;
+  return element ? this.targets_.containsKey(goog.getUid(element)) : false;
 };
 
 
@@ -302,7 +302,7 @@ goog.ui.PopupMenu.prototype.detach = function(element) {
     throw Error('Menu not attached to provided element, unable to detach.');
   }
 
-  var key = goog.getHashCode(element);
+  var key = goog.getUid(element);
   if (this.isInDocument()) {
     this.detachEvent_(/** @type {Object} */ (this.targets_.get(key)));
   }
@@ -344,7 +344,7 @@ goog.ui.PopupMenu.prototype.getToggleMode = function() {
 /**
  * Show the menu using given positioning object.
  * @param {goog.positioning.AbstractPosition} position The positioning instance.
- * @param {goog.positioning.Corner} opt_menuCorner The corner of the menu to be
+ * @param {goog.positioning.Corner=} opt_menuCorner The corner of the menu to be
  *     positioned.
  * @param {goog.math.Box=} opt_margin A margin specified in pixels.
  * @param {Element=} opt_anchor The element which acts as visual anchor for this
@@ -357,6 +357,11 @@ goog.ui.PopupMenu.prototype.showWithPosition = function(position,
     this.hide();
     return;
   }
+
+  // Set current anchor before dispatching BEFORE_SHOW. This is typically useful
+  // when we would need to make modifications based on the current anchor to the
+  // menu just before displaying it.
+  this.currentAnchor_ = opt_anchor || null;
 
   // Notify event handlers that the menu is about to be shown.
   if (!this.dispatchEvent(goog.ui.Component.EventType.BEFORE_SHOW)) {
@@ -384,8 +389,6 @@ goog.ui.PopupMenu.prototype.showWithPosition = function(position,
   }
 
   this.setHighlightedIndex(-1);
-
-  this.currentAnchor_ = opt_anchor || null;
 
   // setVisible dispatches a goog.ui.Component.EventType.SHOW event, which may
   // be canceled to prevent the menu from being shown.

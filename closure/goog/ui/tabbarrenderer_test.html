@@ -37,7 +37,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 <body>
   <div id="sandbox"></div>
   <script>
-    var sandbox = goog.dom.$('sandbox');
+    var sandbox = goog.dom.getElement('sandbox');
     var renderer = goog.ui.TabBarRenderer.getInstance();
     var tabBar;
   
@@ -75,10 +75,10 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     function testDecorate() {
       sandbox.innerHTML = '<div id="start" class="goog-tab-bar-start"></div>';
-      var element = renderer.decorate(tabBar, goog.dom.$('start'));
+      var element = renderer.decorate(tabBar, goog.dom.getElement('start'));
       assertNotNull('Decorated element must not be null', element);
-      assertEquals('Decorated element must be as expected', goog.dom.$('start'),
-          element);
+      assertEquals('Decorated element must be as expected',
+          goog.dom.getElement('start'), element);
       // Due to a bug in ContainerRenderer, the "-vertical" class isn't applied.
       // TODO: Fix this!
       assertSameElements('Decorated element must have expected class names',

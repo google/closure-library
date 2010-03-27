@@ -49,6 +49,13 @@ goog.ui.emoji.Emoji = function(url, id) {
 
 
 /**
+ * The name of the goomoji attribute, used for emoji image elements.
+ * @type {string}
+ */
+goog.ui.emoji.Emoji.ATTRIBUTE = 'goomoji';
+
+
+/**
  * @return {string} The URL for this emoji.
  */
 goog.ui.emoji.Emoji.prototype.getUrl = function() {

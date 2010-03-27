@@ -32,7 +32,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
 <script>
   function testSaved() {
-    var node = goog.dom.$('test1');
+    var node = goog.dom.getElement('test1');
     var range = goog.dom.Range.createFromNodeContents(node);
     var savedRange = range.saveUsingDom();
 
@@ -54,7 +54,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
   }
 
   function testReversedSave() {
-    var node = goog.dom.$('test1').firstChild;
+    var node = goog.dom.getElement('test1').firstChild;
     var range = goog.dom.Range.createFromNodes(node, 4, node, 0);
     var savedRange = range.saveUsingDom();
 

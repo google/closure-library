@@ -50,7 +50,7 @@ var renderedButton;
 var savedRootTree;
 
 function setUp() {
-  savedRootTree = goog.dom.$('root').cloneNode(true);
+  savedRootTree = goog.dom.getElement('root').cloneNode(true);
   decoratedButton = null;
   renderedButton = null;
 }
@@ -64,7 +64,7 @@ function tearDown() {
     renderedButton.dispose();
   }
 
-  var root = goog.dom.$('root');
+  var root = goog.dom.getElement('root');
   root.parentNode.replaceChild(savedRootTree, root);
 }
 
@@ -127,7 +127,7 @@ function assertButtonsEqual() {
  * @param {goog.ui.Button} button A button with content 'Foo'.
  */
 function renderOnParent(button) {
-  button.render(goog.dom.$('parent'));
+  button.render(goog.dom.getElement('parent'));
 }
 
 /**
@@ -135,7 +135,7 @@ function renderOnParent(button) {
  * @param {goog.ui.Button} button A button with no content.
  */
 function decorateDemoButton(button) {
-  button.decorate(goog.dom.$('decoratedButton'));
+  button.decorate(goog.dom.getElement('decoratedButton'));
 }
 
 /**

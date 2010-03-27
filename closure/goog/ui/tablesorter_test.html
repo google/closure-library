@@ -42,12 +42,12 @@ limitations under the License.
     </table>
   </div>
   <script>
-    var oldHtml = goog.dom.$('content').innerHTML;
+    var oldHtml = goog.dom.getElement('content').innerHTML;
     var alphaHeader, numberHeader, table, tableSorter;
 
     function setUp() {
-      goog.dom.$('content').innerHTML = oldHtml;
-      table = goog.dom.$('sortable');
+      goog.dom.getElement('content').innerHTML = oldHtml;
+      table = goog.dom.getElement('sortable');
       alphaHeader = table.getElementsByTagName('TH')[0];
       numberHeader = table.getElementsByTagName('TH')[1];
 

@@ -1440,14 +1440,24 @@ goog.Uri.QueryData.prototype.toString = function() {
         if (count > 0) {
           sb.push('&');
         }
-        sb.push(encodedKey, '=', goog.string.urlEncode(val[j]));
+        sb.push(encodedKey);
+        // Check for empty string, null and undefined get encoded
+        // into the url as literal strings
+        if (val[j] !== '') {
+          sb.push('=', goog.string.urlEncode(val[j]));
+        }
         count++;
       }
     } else {
       if (count > 0) {
         sb.push('&');
       }
-      sb.push(encodedKey, '=', goog.string.urlEncode(val));
+      sb.push(encodedKey);
+      // Check for empty string, null and undefined get encoded
+      // into the url as literal strings
+      if (val !== '') {
+        sb.push('=', goog.string.urlEncode(val));
+      }
       count++;
     }
   }

@@ -64,7 +64,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
     logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
@@ -73,17 +73,17 @@ limitations under the License.
     }
 
     var all = new goog.ui.Checkbox();
-    all.decorate(goog.dom.$('all'));
+    all.decorate(goog.dom.getElement('all'));
     all.setLabel(all.getElement().parentNode);
     goog.events.listen(all, EVENTS, goog.partial(logEvent, 'root'));
 
     var leaf1 = new goog.ui.Checkbox();
-    leaf1.decorate(goog.dom.$('leaf1'));
+    leaf1.decorate(goog.dom.getElement('leaf1'));
     leaf1.setLabel(leaf1.getElement().parentNode);
     goog.events.listen(leaf1, EVENTS, goog.partial(logEvent, 'leaf1'));
 
     var leaf2 = new goog.ui.Checkbox();
-    leaf2.decorate(goog.dom.$('leaf2'));
+    leaf2.decorate(goog.dom.getElement('leaf2'));
     leaf2.setLabel(leaf2.getElement().parentNode);
     goog.events.listen(leaf2, EVENTS, goog.partial(logEvent, 'leaf2'));
 

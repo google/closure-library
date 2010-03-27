@@ -70,7 +70,7 @@ goog.debug.ErrorHandler.prototype.protectEntryPoint = function(fn,
                                                                opt_tracers) {
   var tracers = !!opt_tracers;
   var protectedFnName =
-      '__protected_' + goog.getHashCode(this) + '_' + tracers + '__';
+      '__protected_' + goog.getUid(this) + '_' + tracers + '__';
   if (!fn[protectedFnName]) {
     fn[protectedFnName] = this.getProtectedFunction(fn, tracers);
   }

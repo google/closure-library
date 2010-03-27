@@ -926,7 +926,7 @@ goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
     // Changing the position of an existing child, move the DOM node.
     var contentElement = this.getContentElement();
     contentElement.insertBefore(child.getElement(),
-        (contentElement.childNodes[index + 1] || null));
+        (contentElement.childNodes[index] || null));
 
   } else if (opt_render) {
     // If this (parent) component doesn't have a DOM yet, call createDom now

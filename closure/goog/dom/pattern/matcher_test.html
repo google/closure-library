@@ -154,7 +154,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
     matcher.addPattern(pattern1, callback);
     matcher.addPattern(pattern2, callback);
 
-    matcher.match(goog.dom.$('div1'));
+    matcher.match(goog.dom.getElement('div1'));
 
     assertEquals('i|b->i should match 5 times in div1', 5, count);
   }
@@ -167,12 +167,12 @@ Copyright 2007 Google Inc. All Rights Reserved.
     var matcher = new goog.dom.pattern.Matcher();
     matcher.addPattern(pattern, test.getCallback());
 
-    matcher.match(goog.dom.$('p1'));
+    matcher.match(goog.dom.getElement('p1'));
 
     assert('FullTag(p) should match on p1', test.matched);
 
     test.reset();
-    matcher.match(goog.dom.$('div1'));
+    matcher.match(goog.dom.getElement('div1'));
 
     assert('FullTag(p) should not match on div1', !test.matched);
   }

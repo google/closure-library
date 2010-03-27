@@ -23,6 +23,7 @@ limitations under the License.
 <script>
   goog.require('goog.array');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.recordFunction');
 </script>
 </head>
 <body>
@@ -105,18 +106,16 @@ function testArrayForEachWithOnlySomeValuesAsigned(){
 }
 
 function testArrayForEachWithArrayLikeObject(){
-  var count = 0;
+  var counter = goog.testing.recordFunction();
   var a = {
     'length':1,
     '0':0,
     '100':100,
     '101':102
   };
-  goog.array.forEach(a, function(val, index, a2) {
-    count++;
-  });
+  goog.array.forEach(a, counter);
   assertEquals('Number of calls should not exceed the value of its length', 1,
-      count);
+      counter.getCallCount());
 }
 
 function testArrayForEachOmitsDeleted() {

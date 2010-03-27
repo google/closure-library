@@ -38,19 +38,19 @@ Copyright 2008 Google Inc. All Rights Reserved.
 <script>
   function testBasic() {
     goog.testing.dom.assertNodesMatch(
-        new goog.dom.NodeIterator(goog.dom.$('test')),
+        new goog.dom.NodeIterator(goog.dom.getElement('test')),
         ['#test', '#a1', 'T', '#b1', 'e', 'xt', '#span1', '#p1', 'Text']);
   }
 
   function testUnclosed() {
     goog.testing.dom.assertNodesMatch(
-        new goog.dom.NodeIterator(goog.dom.$('test2')),
+        new goog.dom.NodeIterator(goog.dom.getElement('test2')),
         ['#test2', '#li1', 'Not', '#li2', 'Closed']);
   }
 
   function testReverse() {
     goog.testing.dom.assertNodesMatch(
-        new goog.dom.NodeIterator(goog.dom.$('test'), true),
+        new goog.dom.NodeIterator(goog.dom.getElement('test'), true),
         ['Text', '#p1', '#span1', 'xt', 'e', '#b1', 'T', '#a1', '#test']);
   }
 

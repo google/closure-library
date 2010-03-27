@@ -103,6 +103,20 @@ goog.inherits(goog.ui.Dialog, goog.ui.Component);
  */
 goog.ui.Dialog.prototype.focusHandler_ = null;
 
+/**
+ * Whether the escape key closes this dialog.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.Dialog.prototype.escapeToCancel_ = true;
+
+
+/**
+ * Whether this dialog should include a title close button.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.Dialog.prototype.hasTitleCloseButton_ = true;
 
 /**
  * Whether the dialog should use an iframe as the background element to work
@@ -130,11 +144,11 @@ goog.ui.Dialog.prototype.draggable_ = true;
 
 
 /**
- * Opacity for background mask.  Defaults to 30%.
+ * Opacity for background mask.  Defaults to 50%.
  * @type {number}
  * @private
  */
-goog.ui.Dialog.prototype.backgroundElementOpacity_ = 0.30;
+goog.ui.Dialog.prototype.backgroundElementOpacity_ = 0.50;
 
 
 /**
@@ -294,93 +308,94 @@ goog.ui.Dialog.prototype.getContent = function() {
 
 
 /**
+ * Renders if the DOM is not created.
+ * @private
+ */
+goog.ui.Dialog.prototype.renderIfNoDom_ = function() {
+  if (!this.getElement()) {
+    // TODO: Ideally we'd only create the DOM, but many applications
+    // are requiring this behavior.  Eventually, it would be best if the
+    // element getters could return null if the elements have not been
+    // created.
+    this.render();
+  }
+};
+
+
+/**
  * Returns the content element so that more complicated things can be done with
- * the content area.  Lazily renders the component if needed.  Overrides
+ * the content area.  Renders if the DOM is not yet created.  Overrides
  * {@link goog.ui.Component#getContentElement}.
  * @return {Element} The content element.
  */
 goog.ui.Dialog.prototype.getContentElement = function() {
-  if (!this.contentEl_) {
-    this.render();
-  }
+  this.renderIfNoDom_();
   return this.contentEl_;
 };
 
 
 /**
  * Returns the title element so that more complicated things can be done with
- * the title.  Lazily renders the component if needed.
+ * the title.  Renders if the DOM is not yet created.
  * @return {Element} The title element.
  */
 goog.ui.Dialog.prototype.getTitleElement = function() {
-  if (!this.isInDocument()) {
-    this.render();
-  }
+  this.renderIfNoDom_();
   return this.titleEl_;
 };
 
 
 /**
  * Returns the title text element so that more complicated things can be done
- * with the text of the title.  Lazily renders the component if needed.
+ * with the text of the title.  Renders if the DOM is not yet created.
  * @return {Element} The title text element.
  */
 goog.ui.Dialog.prototype.getTitleTextElement = function() {
-  if (!this.isInDocument()) {
-    this.render();
-  }
+  this.renderIfNoDom_();
   return this.titleTextEl_;
 };
 
 
 /**
  * Returns the title close element so that more complicated things can be done
- * with the close area of the title.
+ * with the close area of the title.  Renders if the DOM is not yet created.
  * @return {Element} The close box.
  */
 goog.ui.Dialog.prototype.getTitleCloseElement = function() {
-  if (!this.isInDocument()) {
-    this.render();
-  }
+  this.renderIfNoDom_();
   return this.titleCloseEl_;
 };
 
 
 /**
  * Returns the button element so that more complicated things can be done with
- * the button area.  Lazily renders the component if needed.
+ * the button area.  Renders if the DOM is not yet created.
  * @return {Element} The button container element.
  */
 goog.ui.Dialog.prototype.getButtonElement = function() {
-  if (!this.isInDocument()) {
-    this.render();
-  }
+  this.renderIfNoDom_();
   return this.buttonEl_;
 };
 
 
 /**
  * Returns the dialog element so that more complicated things can be done with
- * the dialog box.  Lazily renders the component if needed.
+ * the dialog box.  Renders if the DOM is not yet created.
  * @return {Element} The dialog element.
  */
 goog.ui.Dialog.prototype.getDialogElement = function() {
-  if (!this.isInDocument()) {
-    this.render();
-  }
+  this.renderIfNoDom_();
   return this.getElement();
 };
 
 
 /**
  * Returns the background mask element so that more complicated things can be
- * done with the background region.  Lazily renders the component if needed.
+ * done with the background region.  Renders if the DOM is not yet created.
  * @return {Element} The background mask element.
  */
 goog.ui.Dialog.prototype.getBackgroundElement = function() {
-  if (!this.isInDocument()) {
-    this.render();
-  }
+  this.renderIfNoDom_();
   return this.bgEl_;
 };
 
@@ -528,6 +543,7 @@ goog.ui.Dialog.prototype.createDom = function() {
   if (this.content_) {
     this.contentEl_.innerHTML = this.content_;
   }
+  goog.style.showElement(this.titleCloseEl_, this.hasTitleCloseButton_);
   goog.style.showElement(this.getElement(), false);
 
   // Render the buttons.
@@ -711,6 +727,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
     this.titleCloseEl_ = this.getDomHelper().createDom('span', titleCloseClass);
     this.titleEl_.appendChild(this.titleCloseEl_);
   }
+  goog.style.showElement(this.titleCloseEl_, this.hasTitleCloseButton_);
 
   // Decorate or create the button container element.
   var buttonsClass = goog.getCssName(this.class_, 'buttons');
@@ -1014,6 +1031,10 @@ goog.ui.Dialog.prototype.reposition = function() {
  * @private
  */
 goog.ui.Dialog.prototype.onTitleCloseClick_ = function(e) {
+  if (!this.hasTitleCloseButton_) {
+    return;
+  }
+
   var bs = this.getButtonSet();
   var key = bs && bs.getCancel();
   // Only if there is a valid cancel button is an event dispatched.
@@ -1025,6 +1046,44 @@ goog.ui.Dialog.prototype.onTitleCloseClick_ = function(e) {
   } else {
     this.setVisible(false);
   }
+};
+
+
+/**
+ * @return {boolean} Whether this dialog has a title close button.
+ */
+goog.ui.Dialog.prototype.getHasTitleCloseButton = function() {
+  return this.hasTitleCloseButton_;
+};
+
+
+/**
+ * Sets whether the dialog should have a close button in the title bar. There
+ * will always be an element for the title close button, but setting this
+ * parameter to false will cause it to be hidden and have no active listener.
+ * @param {boolean} b Whether this dialog should have a title close button.
+ */
+goog.ui.Dialog.prototype.setHasTitleCloseButton = function(b) {
+  this.hasTitleCloseButton_ = b;
+  if (this.titleCloseEl_) {
+    goog.style.showElement(this.titleCloseEl_, this.hasTitleCloseButton_);
+  }
+};
+
+
+/**
+ * @return {boolean} Whether the escape key should close this dialog.
+ */
+goog.ui.Dialog.prototype.isEscapeToCancel = function() {
+  return this.escapeToCancel_;
+};
+
+
+/**
+ * @param {boolean} b Whether the escape key should close this dialog.
+ */
+goog.ui.Dialog.prototype.setEscapeToCancel = function(b) {
+  this.escapeToCancel_ = b;
 };
 
 
@@ -1148,7 +1207,7 @@ goog.ui.Dialog.prototype.onKey_ = function(e) {
 
   if (e.type == goog.events.EventType.KEYDOWN) {
     // Escape and tab can only properly be handled in keydown handlers.
-    if (e.keyCode == goog.events.KeyCodes.ESC) {
+    if (this.escapeToCancel_ && e.keyCode == goog.events.KeyCodes.ESC) {
       // Only if there is a valid cancel button is an event dispatched.
       var cancel = buttonSet && buttonSet.getCancel();
 

@@ -201,7 +201,7 @@ limitations under the License.
     assertEquals('test2', fn('test2'));
     assertEquals('', fn(null));
     var o = {};
-    assertEquals(goog.getHashCode(o), fn(o));
+    assertEquals(goog.getUid(o), fn(o));
   }
 
 </script>

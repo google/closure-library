@@ -68,7 +68,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testBasicHTML() {
-    it = new goog.dom.TagIterator(goog.dom.$('test'));
+    it = new goog.dom.TagIterator(goog.dom.getElement('test'));
     pos = 0;
 
     goog.iter.forEach(it, function() {
@@ -125,7 +125,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSkipTag() {
-    it = new goog.dom.TagIterator(goog.dom.$('test'));
+    it = new goog.dom.TagIterator(goog.dom.getElement('test'));
     pos = 0;
 
     goog.iter.forEach(it, function() {
@@ -164,7 +164,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testRestartTag() {
-    it = new goog.dom.TagIterator(goog.dom.$('test'));
+    it = new goog.dom.TagIterator(goog.dom.getElement('test'));
     pos = 0;
     var done = false;
 
@@ -212,7 +212,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
 
   function testSkipTagReverse() {
-    it = new goog.dom.TagIterator(goog.dom.$('test'), true);
+    it = new goog.dom.TagIterator(goog.dom.getElement('test'), true);
     pos = 9;
 
     goog.iter.forEach(it, function() {
@@ -252,7 +252,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
 
   function testUnclosedLI() {
-    it = new goog.dom.TagIterator(goog.dom.$('test2'));
+    it = new goog.dom.TagIterator(goog.dom.getElement('test2'));
     pos = 0;
 
     goog.iter.forEach(it, function() {
@@ -292,7 +292,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testReversedUnclosedLI() {
-    it = new goog.dom.TagIterator(goog.dom.$('test2'), true);
+    it = new goog.dom.TagIterator(goog.dom.getElement('test2'), true);
     pos = 9;
 
     goog.iter.forEach(it, function() {
@@ -332,7 +332,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testConstrained() {
-    it = new goog.dom.TagIterator(goog.dom.$('test3'), false, false);
+    it = new goog.dom.TagIterator(goog.dom.getElement('test3'), false, false);
     pos = 0;
 
     goog.iter.forEach(it, function() {
@@ -354,7 +354,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testUnconstrained() {
-    it = new goog.dom.TagIterator(goog.dom.$('test3'), false, true);
+    it = new goog.dom.TagIterator(goog.dom.getElement('test3'), false, true);
     pos = 0;
 
     goog.iter.forEach(it, function() {
@@ -377,8 +377,8 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testConstrainedText() {
-    it = new goog.dom.TagIterator(goog.dom.$('test3').firstChild, false,
-        false);
+    it = new goog.dom.TagIterator(goog.dom.getElement('test3').firstChild,
+        false, false);
     pos = 0;
 
     goog.iter.forEach(it, function() {
@@ -395,7 +395,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testReverseConstrained() {
-    it = new goog.dom.TagIterator(goog.dom.$('test3'), true, false);
+    it = new goog.dom.TagIterator(goog.dom.getElement('test3'), true, false);
     pos = 4;
 
     goog.iter.forEach(it, function() {
@@ -418,7 +418,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceRemoveSingleNode() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = '<br/>';
     it = new goog.dom.TagIterator(testDiv.firstChild);
 
@@ -430,7 +430,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceRemoveFirstTextNode() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = 'hello<b>world</b><em>goodbye</em>';
     it = new goog.dom.TagIterator(testDiv.firstChild, false, true);
 
@@ -448,7 +448,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceReplaceFirstTextNode() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = 'hello<b>world</b>';
     it = new goog.dom.TagIterator(testDiv.firstChild, false, true);
 
@@ -465,7 +465,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceReplaceSingleNode() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = '<br/>';
     it = new goog.dom.TagIterator(testDiv.firstChild);
 
@@ -477,7 +477,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceFlattenSingleNode() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = '<div><b>one</b>two<i>three</i></div>';
     it = new goog.dom.TagIterator(testDiv.firstChild);
 
@@ -490,7 +490,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceMiddleNode() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = 'a<b>hello<span>world</span></b>c';
     it = new goog.dom.TagIterator(testDiv);
 
@@ -504,7 +504,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceMiddleNodeReversed() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = 'a<b>hello<span>world</span></b>c';
     it = new goog.dom.TagIterator(testDiv, true);
 
@@ -518,7 +518,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceMiddleNodeAtEndTag() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = 'a<b>hello<span>world</span></b>c';
     it = new goog.dom.TagIterator(testDiv);
 
@@ -532,7 +532,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceMultipleNodes() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = '<STRONG>this</STRONG> is <EM>from IE</EM>';
     it = new goog.dom.TagIterator(testDiv);
 
@@ -553,7 +553,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceMultipleNodesAtEnd() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = '<STRONG>this</STRONG> is <EM>from IE</EM>';
     it = new goog.dom.TagIterator(testDiv);
 
@@ -574,7 +574,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSpliceMultipleNodesReversed() {
-    var testDiv = goog.dom.$('testSplice');
+    var testDiv = goog.dom.getElement('testSplice');
     testDiv.innerHTML = '<STRONG>this</STRONG> is <EM>from IE</EM>';
     it = new goog.dom.TagIterator(testDiv, true);
 

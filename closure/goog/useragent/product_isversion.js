@@ -46,7 +46,7 @@ goog.userAgent.product.determineVersion_ = function() {
   } else if (goog.userAgent.product.SAFARI) {
     // Safari/530.19.1
     re = /Safari\/([0-9.]+)/;
-  } else if (goog.userAgent.product.IPHONE) {
+  } else if (goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) {
     // Mozilla/5.0 (iPod; U; CPU like Mac OS X; en) AppleWebKit/420.1
     // (KHTML, like Gecko) Version/3.0 Mobile/3A100a Safari/419.3
     // Version is the browser version, Mobile is the build number. We combine

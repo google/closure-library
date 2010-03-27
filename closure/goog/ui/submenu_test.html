@@ -100,7 +100,7 @@ goog.positioning.positionAtCoordinate = function(absolutePos, movableElement,
 };
 
 function setUp() {
-  clonedMenuDom = goog.dom.$('demoMenu').cloneNode(true);
+  clonedMenuDom = goog.dom.getElement('demoMenu').cloneNode(true);
 
   menu = new goog.ui.Menu();
 }
@@ -109,10 +109,10 @@ function tearDown() {
   document.body.style.direction = 'ltr';
   menu.dispose();
 
-  var element = goog.dom.$('demoMenu');
+  var element = goog.dom.getElement('demoMenu');
   element.parentNode.replaceChild(clonedMenuDom, element);
 
-  goog.dom.$('sandbox').innerHTML = '';
+  goog.dom.getElement('sandbox').innerHTML = '';
 
   if (mockClock) {
     mockClock.uninstall();
@@ -121,7 +121,7 @@ function tearDown() {
 }
 
 function testNormalLtrSubMenu() {
-  menu.decorate(goog.dom.$('demoMenu'));
+  menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
   assertArrowDirection(subMenu, false);
   assertRenderDirection(subMenu, false);
@@ -130,7 +130,7 @@ function testNormalLtrSubMenu() {
 
 function testNormalRtlSubMenu() {
   document.body.style.direction = 'rtl';
-  menu.decorate(goog.dom.$('demoMenu'));
+  menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
   assertArrowDirection(subMenu, true);
   assertRenderDirection(subMenu, true);
@@ -138,7 +138,7 @@ function testNormalRtlSubMenu() {
 }
 
 function testLtrSubMenuAlignedToStart() {
-  menu.decorate(goog.dom.$('demoMenu'));
+  menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
   subMenu.setAlignToEnd(false);
   assertArrowDirection(subMenu, true);
@@ -148,7 +148,7 @@ function testLtrSubMenuAlignedToStart() {
 
 function testRtlSubMenuAlignedToStart() {
   document.body.style.direction = 'rtl';
-  menu.decorate(goog.dom.$('demoMenu'));
+  menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
   subMenu.setAlignToEnd(false);
   assertArrowDirection(subMenu, false);
@@ -157,7 +157,7 @@ function testRtlSubMenuAlignedToStart() {
 }
 
 function testExitDocument() {
-  menu.decorate(goog.dom.$('demoMenu'));
+  menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
   var innerMenu = subMenu.getMenu();
 
@@ -173,7 +173,7 @@ function testExitDocument() {
 }
 
 function testDisposal() {
-  menu.decorate(goog.dom.$('demoMenu'));
+  menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
   var innerMenu = subMenu.getMenu();
   menu.dispose();
@@ -200,7 +200,7 @@ function testShowAndDismissSubMenu() {
     }
   }
 
-  menu.decorate(goog.dom.$('demoMenu'));
+  menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
   subMenu.setHighlighted(true);
 
@@ -238,7 +238,7 @@ function testShowAndDismissSubMenu() {
 }
 
 function testLazyInstantiateSubMenu() {
-  menu.decorate(goog.dom.$('demoMenu'));
+  menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
   subMenu.setHighlighted(true);
 
@@ -274,7 +274,7 @@ function testReusableMenu() {
   var subMenuTwo = new goog.ui.SubMenu('SubMenu Two');
   menu.addItem(subMenuOne);
   menu.addItem(subMenuTwo);
-  menu.render(goog.dom.$('sandbox'));
+  menu.render(goog.dom.getElement('sandbox'));
 
   // It is possible for the same popup menu to be shared between different
   // submenus.

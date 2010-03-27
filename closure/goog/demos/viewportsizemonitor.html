@@ -63,8 +63,9 @@ limitations under the License.
     // Takes a goog.math.Size object containing the viewport size, and updates
     // the UI accordingly.
     function updateUi(size) {
-      goog.style.setSize(goog.dom.$('demo'), size);
-      goog.dom.setTextContent(goog.dom.$('current_size'), size.toString());
+      goog.style.setSize(goog.dom.getElement('demo'), size);
+      goog.dom.setTextContent(goog.dom.getElement('current_size'),
+          size.toString());
     }
 
     // Initialize the layout.

@@ -227,8 +227,8 @@ goog.fx.Animation.cycleAnimations_ = function() {
   // Cycle all animations at the "same time".
   var now = goog.now();
 
-  for (var hc in goog.fx.Animation.activeAnimations_) {
-    goog.fx.Animation.activeAnimations_[hc].cycle(now);
+  for (var uid in goog.fx.Animation.activeAnimations_) {
+    goog.fx.Animation.activeAnimations_[uid].cycle(now);
   }
 
   goog.fx.Animation.globalTimer_ =
@@ -244,9 +244,9 @@ goog.fx.Animation.cycleAnimations_ = function() {
  * @param {Object} animation The animation to register.
  */
 goog.fx.Animation.registerAnimation = function(animation) {
-  var hc = goog.getHashCode(animation);
-  if (!(hc in goog.fx.Animation.activeAnimations_)) {
-    goog.fx.Animation.activeAnimations_[hc] = animation;
+  var uid = goog.getUid(animation);
+  if (!(uid in goog.fx.Animation.activeAnimations_)) {
+    goog.fx.Animation.activeAnimations_[uid] = animation;
   }
 
   // If the timer is not already started, start it now.
@@ -263,8 +263,8 @@ goog.fx.Animation.registerAnimation = function(animation) {
  * @param {Object} animation The animation to unregister.
  */
 goog.fx.Animation.unregisterAnimation = function(animation) {
-  var hc = goog.getHashCode(animation);
-  delete goog.fx.Animation.activeAnimations_[hc];
+  var uid = goog.getUid(animation);
+  delete goog.fx.Animation.activeAnimations_[uid];
 
   // If a timer is running and we no longer have any active timers we stop the
   // timers.

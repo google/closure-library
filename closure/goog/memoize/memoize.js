@@ -37,7 +37,7 @@ goog.require('goog.json');
  * @return {!Function} The wrapped function.
  */
 goog.memoize = function(f, opt_serializer) {
-  var functionHash = goog.getHashCode(f);
+  var functionUid = goog.getUid(f);
   var serializer = opt_serializer || goog.memoize.simpleSerializer;
 
   return function() {
@@ -46,7 +46,7 @@ goog.memoize = function(f, opt_serializer) {
     if (!cache) {
       cache = this[goog.memoize.CACHE_PROPERTY_] = {};
     }
-    var key = serializer(functionHash, arguments);
+    var key = serializer(functionUid, arguments);
     if (!(key in cache)) {
       cache[key] = f.apply(this, arguments);
     }
@@ -78,17 +78,17 @@ goog.memoize.CACHE_PROPERTY_ = 'closure_memoize_cache_';
  * Supports simple, array and object arguments. Serializes two equal objects
  * with different key order to different strings, but doesn't distinguish null
  * from undefined. The arguments can't contain loops.
- * @param {number} functionHash Unique identifier of the function whose result
+ * @param {number} functionUid Unique identifier of the function whose result
  *     is cached.
  * @param {Object} args The arguments that the function to memoize is called
  *     with. Note: it is an array-like object, because supports indexing and
  *     has the length property.
- * @return {string} The list of arguments concatenated with the functionHash
+ * @return {string} The list of arguments concatenated with the functionUid
  *     argument, serialized as JSON.
  */
-goog.memoize.jsonSerializer = function(functionHash, args) {
+goog.memoize.jsonSerializer = function(functionUid, args) {
   var context = Array.prototype.slice.call(args);
-  context.push(functionHash);
+  context.push(functionUid);
   return goog.json.serialize(context);
 };
 
@@ -97,16 +97,16 @@ goog.memoize.jsonSerializer = function(functionHash, args) {
  * Simple and fast argument serializer function for goog.memoize.
  * Supports string, number, boolean, null and undefined arguments. Doesn't
  * support \x0B characters in the strings.
- * @param {number} functionHash Unique identifier of the function whose result
+ * @param {number} functionUid Unique identifier of the function whose result
  *     is cached.
  * @param {Object} args The arguments that the function to memoize is called
  *     with. Note: it is an array-like object, because supports indexing and
  *     has the length property.
  * @return {string} The list of arguments with type information concatenated
- *     with the functionHash argument, serialized as \x0B-separated string.
+ *     with the functionUid argument, serialized as \x0B-separated string.
  */
-goog.memoize.simpleSerializer = function(functionHash, args) {
-  var context = [functionHash];
+goog.memoize.simpleSerializer = function(functionUid, args) {
+  var context = [functionUid];
   for (var i = args.length - 1; i >= 0; --i) {
     context.push(typeof args[i], args[i]);
   }

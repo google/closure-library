@@ -33,7 +33,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 <body>
   <div id="sandbox"></div>
   <script>
-    var sandbox = goog.dom.$('sandbox');
+    var sandbox = goog.dom.getElement('sandbox');
     var item, renderer;
 
     function setUp() {
@@ -118,7 +118,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     function testDecorate() {
       sandbox.innerHTML = '<div id="foo">Hello</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
 
       var element = renderer.decorate(item, foo);
       assertSameElements('Element must have the expected class names',
@@ -133,7 +133,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     function testDecorateWithContentStructure() {
       sandbox.innerHTML =
           '<div id="foo"><div class="goog-menuitem-content">Hello</div></div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
 
       var element = renderer.decorate(item, foo);
       assertSameElements('Element must have the expected class names',
@@ -148,7 +148,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     function testDecorateWithHoverState() {
       sandbox.innerHTML =
           '<div id="foo" class="goog-menuitem-highlight">Hello</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
 
       assertFalse('Item must not be highlighted', item.isHighlighted());
       var element = renderer.decorate(item, foo);
@@ -160,7 +160,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     function testDecorateCheckableItem() {
       sandbox.innerHTML = '<div id="foo" class="goog-option">Hello</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
 
       assertFalse('Item must not be checkable',
           item.isSupportedState(goog.ui.Component.State.CHECKED));

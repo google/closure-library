@@ -182,7 +182,7 @@ goog.structs.TreeNode.prototype.contains = function(node) {
  * @param {function(!goog.structs.TreeNode, number,
  *     !Array.<!goog.structs.TreeNode>)} f Callback function. It takes the
  *     node, its index and the array of all child nodes as arguments.
- * @param {Object} opt_this The object to be used as the value of {@code this}
+ * @param {Object=} opt_this The object to be used as the value of {@code this}
  *     within {@code f}.
  */
 goog.structs.TreeNode.prototype.forEachChild = function(f, opt_this) {
@@ -194,7 +194,7 @@ goog.structs.TreeNode.prototype.forEachChild = function(f, opt_this) {
  * Traverses all child nodes recursively.
  * @param {function(!goog.structs.TreeNode)} f Callback function. It takes the
  *     node as argument.
- * @param {Object} opt_this The object to be used as the value of {@code this}
+ * @param {Object=} opt_this The object to be used as the value of {@code this}
  *     within {@code f}.
  */
 goog.structs.TreeNode.prototype.forEachDescendant = function(f, opt_this) {

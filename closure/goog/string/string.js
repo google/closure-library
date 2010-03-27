@@ -1080,17 +1080,16 @@ goog.string.hashCode = function(str) {
 
 
 /**
- * The most recent globally unique ID.
+ * The most recent unique ID. |0 is equivalent to Math.floor in this case.
  * @type {number}
  * @private
  */
-goog.string.uniqueStringCounter_ = goog.now();
+goog.string.uniqueStringCounter_ = Math.random() * 0x80000000 | 0;
 
 
 /**
- * Generates and returns a unique string based on the current date so strings
- * remain unique between sessions.  This is useful, for example, to create
- * unique IDs for DOM elements.
+ * Generates and returns a string which is unique in the current document.
+ * This is useful, for example, to create unique IDs for DOM elements.
  * @return {string} A unique id.
  */
 goog.string.createUniqueString = function() {

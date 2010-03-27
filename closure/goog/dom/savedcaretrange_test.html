@@ -77,7 +77,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     // NOTE: We cannot detect this bug programatically. The only
     // way to detect it is to run this test manually and look at the selection
     // when it ends.
-    var div = goog.dom.$('bug1480638');
+    var div = goog.dom.getElement('bug1480638');
     var range = goog.dom.Range.createFromNodes(
         div.firstChild, 0, div.lastChild, 1);
     range.select();
@@ -90,9 +90,9 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testSavedCaretRange() {
-    var parent = goog.dom.$('caretRangeTest');
-    var def = goog.dom.$('def');
-    var jkl = goog.dom.$('jkl');
+    var parent = goog.dom.getElement('caretRangeTest');
+    var def = goog.dom.getElement('def');
+    var jkl = goog.dom.getElement('jkl');
 
     var range = goog.dom.Range.createFromNodes(
         def.firstChild, 1, jkl.firstChild, 2);
@@ -108,8 +108,8 @@ Copyright 2008 Google Inc. All Rights Reserved.
         def.childNodes[1], 0, jkl.childNodes[1], 0,
         saved.toAbstractRange());
 
-    def = goog.dom.$('def');
-    jkl = goog.dom.$('jkl');
+    def = goog.dom.getElement('def');
+    jkl = goog.dom.getElement('jkl');
 
     var restoredRange = clearSelectionAndRestoreSaved(parent, saved);
     goog.testing.dom.assertRangeEquals(
@@ -139,8 +139,8 @@ Copyright 2008 Google Inc. All Rights Reserved.
   /*
   TODO: Look into why removeCarets test doesn't pass.
   function testRemoveCarets() {
-    var def = goog.dom.$('def');
-    var jkl = goog.dom.$('jkl');
+    var def = goog.dom.getElement('def');
+    var jkl = goog.dom.getElement('jkl');
 
     var range = goog.dom.Range.createFromNodes(
         def.firstChild, 1, jkl.firstChild, 2);
@@ -166,11 +166,11 @@ Copyright 2008 Google Inc. All Rights Reserved.
 */
 
   function testRemoveContents()  {
-    var def = goog.dom.$('def-4');
-    var jkl = goog.dom.$('jkl-4');
+    var def = goog.dom.getElement('def-4');
+    var jkl = goog.dom.getElement('jkl-4');
 
     // Sanity check.
-    var container = goog.dom.$('removeContentsTest');
+    var container = goog.dom.getElement('removeContentsTest');
     assertEquals(7, container.childNodes.length);
     assertEquals('def', def.innerHTML);
     assertEquals('jkl', jkl.innerHTML);
@@ -189,9 +189,9 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testHtmlEqual() {
-    var parent = goog.dom.$('caretRangeTest-2');
-    var def = goog.dom.$('def-2');
-    var jkl = goog.dom.$('jkl-2');
+    var parent = goog.dom.getElement('caretRangeTest-2');
+    var def = goog.dom.getElement('def-2');
+    var jkl = goog.dom.getElement('jkl-2');
 
     var range = goog.dom.Range.createFromNodes(
         def.firstChild, 1, jkl.firstChild, 2);
@@ -216,9 +216,9 @@ Copyright 2008 Google Inc. All Rights Reserved.
   }
 
   function testStartCaretIsAtEndOfParent() {
-    var parent = goog.dom.$('caretRangeTest-3');
-    var def = goog.dom.$('def-3');
-    var jkl = goog.dom.$('jkl-3');
+    var parent = goog.dom.getElement('caretRangeTest-3');
+    var def = goog.dom.getElement('def-3');
+    var jkl = goog.dom.getElement('jkl-3');
 
     var range = goog.dom.Range.createFromNodes(
         def, 1, jkl, 1);

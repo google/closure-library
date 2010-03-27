@@ -460,7 +460,6 @@ Copyright 2008 Google Inc. All Rights Reserved.
     assertNull(error);
   }
 
-
  /**
    * Tests loading a module via load when the module is already
    * loaded.  The deferred's callback should be called immediately.
@@ -1033,6 +1032,31 @@ Copyright 2008 Google Inc. All Rights Reserved.
     assertTrue(info['c'].count == 1);
     assertTrue(mm.getModuleInfo('a').getModule() instanceof AModule);
     assertTrue(mm.getModuleInfo('c').getModule() instanceof CModule);
+  }
+
+  /**
+   * Tests that a call to load the loading module during module initialization
+   * doesn't trigger a second load.
+   */
+  function testLoadWhenInitializing() {
+    var mm = getModuleManager({'a': []});
+    mm.setLoader(createSuccessfulNonBatchLoader(mm));
+
+    var info = {
+      'a': { ctor: AModule, count: 0 }
+    };
+    function AModule() {
+      ++info['a'].count;
+      goog.module.BaseModule.call(this);
+    }
+    goog.inherits(AModule, goog.module.BaseModule);
+    AModule.prototype.initialize = function() {
+      mm.load('a');
+    };
+    mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(mm, info));
+    mm.preloadModule('a');
+    clock.tick(5);
+    assertEquals(info['a'].count, 1);
   }
 
   function createSuccessfulNonBatchLoaderWithConstructor(moduleMgr, info) {

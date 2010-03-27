@@ -252,14 +252,16 @@ limitations under the License.
 
   // Be sure to call this after setting up goog.userAgent mock and not before.
   function createHandlerAndListen() {
-    mouseWheelHandler = new goog.events.MouseWheelHandler(goog.dom.$('foo'));
+    mouseWheelHandler = new goog.events.MouseWheelHandler(
+        goog.dom.getElement('foo'));
 
     goog.events.listen(mouseWheelHandler,
         goog.events.MouseWheelHandler.EventType.MOUSEWHEEL,
         function(e) { mouseWheelEvent = e; });
   }
 
-  function assertMouseWheelEvent(expectedDetail, expectedDeltaX, expectedDeltaY) {
+  function assertMouseWheelEvent(expectedDetail, expectedDeltaX,
+      expectedDeltaY) {
     assertTrue("event should be non-null", !!mouseWheelEvent);
     assertTrue("event should have correct JS type",
         mouseWheelEvent instanceof goog.events.MouseWheelEvent);

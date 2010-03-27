@@ -74,7 +74,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
@@ -103,24 +103,25 @@ limitations under the License.
 
     var p1 = new goog.ui.DimensionPicker();
     p1.setRightToLeft(true);
-    p1.render(goog.dom.$('p1'));
+    p1.render(goog.dom.getElement('p1'));
     goog.events.listen(p1, goog.ui.Component.EventType.ACTION,
         function(e) {
           var picker = e.target;
           var size = picker.getValue();
 
-          goog.dom.setTextContent(goog.dom.$('p1_value'),
+          goog.dom.setTextContent(goog.dom.getElement('p1_value'),
               size.width + ' x ' + size.height);
         });
     goog.events.listen(p1, EVENTS, logEvent);
 
     // Perf and clean up
 
-    goog.dom.setTextContent(goog.dom.$('perf'), (goog.now() - timer) + 'ms');
+    goog.dom.setTextContent(goog.dom.getElement('perf'),
+        (goog.now() - timer) + 'ms');
 
     var p2 = new goog.ui.DimensionPicker();
     p2.setRightToLeft(true);
-    p2.decorate(goog.dom.$('decorateTarget'));
+    p2.decorate(goog.dom.getElement('decorateTarget'));
 
     goog.events.listen(window, 'unload', function() {
       goog.events.removeAll();

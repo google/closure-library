@@ -35,13 +35,13 @@ Copyright 2008 Google Inc. All Rights Reserved.
 <div id="empty"></div>
 
 <script>
-  var test1 = goog.dom.$('test1');
-  var i = goog.dom.$('i');
+  var test1 = goog.dom.getElement('test1');
+  var i = goog.dom.getElement('i');
 
-  var test2 = goog.dom.$('test2');
+  var test2 = goog.dom.getElement('test2');
   test2.innerHTML = test1.innerHTML;
 
-  var empty = goog.dom.$('empty');
+  var empty = goog.dom.getElement('empty');
 
   function testElementOffset() {
     var nodeOffset = new goog.dom.NodeOffset(i, test1);

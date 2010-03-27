@@ -132,7 +132,7 @@ limitations under the License.
     assertArrayEquals(
         'Internal arrays should be the same', m1.toArray(), m2.toArray());
     assertNotEquals(
-        'Should be different objects', goog.getHashCode(m1), goog.getHashCode(m2));
+        'Should be different objects', goog.getUid(m1), goog.getUid(m2));
   }
 
 

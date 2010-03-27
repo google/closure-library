@@ -879,12 +879,22 @@ goog.style.toCamelCase = function(selector) {
 
 
 /**
- * Converts a CSS selector in the form styleProperty to style-property
+ * A memoized cache for goog.style.toSelectorCase.
+ * @type {Object.<string>}
+ * @private
+ */
+goog.style.toSelectorCaseCache_ = {};
+
+
+/**
+ * Converts a CSS selector in the form styleProperty to style-property.
  * @param {string} selector Camel case selector.
  * @return {string} Selector cased.
  */
 goog.style.toSelectorCase = function(selector) {
-  return selector.replace(/([A-Z])/g, '-$1').toLowerCase();
+  return goog.style.toSelectorCaseCache_[selector] ||
+      (goog.style.toSelectorCaseCache_[selector] =
+          selector.replace(/([A-Z])/g, '-$1').toLowerCase());
 };
 
 

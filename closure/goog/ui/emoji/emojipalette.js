@@ -264,7 +264,7 @@ goog.ui.emoji.EmojiPalette.prototype.getGoomojiIdFromElement_ = function(el) {
   }
 
   var item = this.getRenderer().getContainingItem(this, el);
-  return item ? item.getAttribute('goomoji') : null;
+  return item ? item.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE) : null;
 };
 
 

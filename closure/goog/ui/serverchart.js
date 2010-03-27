@@ -1614,26 +1614,30 @@ goog.ui.ServerChart.EXTENDED_UPPER_BOUND =
 
 
 /**
- * Converts a number --> letter[s] suitable for graphing in ChartServer.
+ * Converts a single number to an encoded data value suitable for ChartServer.
+ * The TEXT encoding is the number in decimal; the SIMPLE encoding is a single
+ * character, and the EXTENDED encoding is two characters.  See
+ * http://code.google.com/apis/chart/docs/data_formats.html for the detailed
+ * specification of these encoding formats.
  *
  * @private
- * @param {number} value The value to convert.
+ * @param {?number} value The value to convert (null for a missing data point).
  * @param {number} minValue The minimum value (used for normalization).
  * @param {number} maxValue The maximum value (used for normalization).
  * @param {goog.ui.ServerChart.EncodingType} encoding The data encoding to use;
  *     must not be AUTOMATIC.
- * @return {string} The converted number.
+ * @return {string} The encoded data value.
  */
 goog.ui.ServerChart.prototype.getConvertedValue_ = function(value,
                                                             minValue,
                                                             maxValue,
                                                             encoding) {
-  if (minValue > maxValue) {
-    throw Error('minValue is greater than maxValue');
-  }
-  var isExtended = encoding == goog.ui.ServerChart.EncodingType.EXTENDED;
+  goog.asserts.assert(minValue <= maxValue,
+      'minValue should be less than or equal to maxValue');
+  var isExtended = (encoding == goog.ui.ServerChart.EncodingType.EXTENDED);
 
-  if (!goog.isDefAndNotNull(value) || isNaN(value)) {
+  if (goog.isNull(value) || !goog.isDef(value) || isNaN(value) ||
+      value < minValue || value > maxValue) {
     return isExtended ? '__' : '_';
   }
 
@@ -1644,6 +1648,7 @@ goog.ui.ServerChart.prototype.getConvertedValue_ = function(value,
   var frac = goog.ui.ServerChart.DEFAULT_NORMALIZATION;
   if (maxValue > minValue) {
     frac = (value - minValue) / (maxValue - minValue);
+    // Previous checks of value ensure that 0 <= frac <= 1 at this point.
   }
 
   if (isExtended) {

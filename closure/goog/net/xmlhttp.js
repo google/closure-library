@@ -16,8 +16,10 @@
  * @fileoverview Low level handling of XMLHttpRequest.
  */
 
-
 goog.provide('goog.net.XmlHttp');
+goog.provide('goog.net.XmlHttp.OptionType');
+goog.provide('goog.net.XmlHttp.ReadyState');
+
 
 
 /**

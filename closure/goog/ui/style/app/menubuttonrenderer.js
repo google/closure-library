@@ -112,7 +112,8 @@ goog.ui.style.app.MenuButtonRenderer.prototype.getContentElement =
 goog.ui.style.app.MenuButtonRenderer.prototype.decorate = function(button,
     element) {
   // TODO:  Add more robust support for subclasses of goog.ui.Menu.
-  var menuElem = goog.dom.$$('*', goog.ui.MenuRenderer.CSS_CLASS, element)[0];
+  var menuElem = goog.dom.getElementsByTagNameAndClass(
+      '*', goog.ui.MenuRenderer.CSS_CLASS, element)[0];
   if (menuElem) {
     // Move the menu element directly under the body (but hide it first to
     // prevent flicker; see bug 1089244).

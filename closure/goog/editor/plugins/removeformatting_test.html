@@ -217,6 +217,38 @@ limitations under the License.
     }
   }
 
+  function testGetValueForNode() {
+    // Override getValueForNode to keep bold tags.
+    var oldGetValue =
+        goog.editor.plugins.RemoveFormatting.prototype.getValueForNode;
+    goog.editor.plugins.RemoveFormatting.prototype.getValueForNode =
+        function(node) {
+      if (node.nodeName == goog.dom.TagName.B) {
+        return '<b>' + this.removeFormattingWorker_(node.innerHTML) + '</b>';
+      }
+      return null;
+    }
+
+    var html = FORMATTER.removeFormattingWorker_('<div>foo<b>bar</b></div>');
+    assertHTMLEquals('B tags should remain','foo<b>bar</b>', html);
+
+    // Override getValueForNode to throw out bold tags, and their contents.
+    goog.editor.plugins.RemoveFormatting.prototype.getValueForNode =
+        function(node) {
+      if (node.nodeName == goog.dom.TagName.B) {
+        return '';
+      }
+      return null;
+    }
+
+    html = FORMATTER.removeFormattingWorker_('<div>foo<b>bar</b></div>');
+    assertHTMLEquals('B tag and its contents should be removed', 'foo', html);
+
+    FIELDMOCK.$verify();
+    goog.editor.plugins.RemoveFormatting.prototype.getValueForNode =
+        oldGetValue;
+  }
+
   function testRemoveFormattingAddsNoNbsps() {
     var div = document.getElementById('html');
     div.innerHTML = '"<span id="toStrip">Twin <b>Cinema</b></span>"';
@@ -441,8 +473,8 @@ limitations under the License.
       // We should still remove the table, even if the selection is inside the
       // table and it is fully selected.
       div.innerHTML = "foo<table><tr><td id='td'>bar</td></tr></table>baz3";
-      goog.dom.Range.createFromNodeContents(goog.dom.$('td').firstChild).
-          select();
+      goog.dom.Range.createFromNodeContents(
+          goog.dom.getElement('td').firstChild).select();
       FORMATTER.removeFormatting_();
       assertHTMLEquals("foo<br>bar<br>baz3", div.innerHTML);
       FIELDMOCK.$verify();
@@ -454,7 +486,7 @@ limitations under the License.
     div.innerHTML =
     "<table><tr><td><b id='b'>foo</b></td></tr><tr><td>ba</td></tr></table>";
 
-    goog.dom.Range.createFromNodeContents(goog.dom.$('b')).select();
+    goog.dom.Range.createFromNodeContents(goog.dom.getElement('b')).select();
 
     // Webkit adds some apple style span crap during execCommand("removeFormat")
     // Our workaround for the nbsp bug removes these, but causes worse problems.
@@ -489,8 +521,8 @@ limitations under the License.
                     "baz</div>";
 
     // Select from the "oo" inside the b tag to the end of "baz".
-    goog.dom.Range.createFromNodes(goog.dom.$('b').firstChild, 1,
-        goog.dom.$('baz').firstChild, 3).select();
+    goog.dom.Range.createFromNodes(goog.dom.getElement('b').firstChild, 1,
+        goog.dom.getElement('baz').firstChild, 3).select();
 
     // All browsers currently clobber the table cells that are selected.
     expectedFailures.expectFailureFor(goog.userAgent.WEBKIT);
@@ -550,8 +582,8 @@ limitations under the License.
       // also remove them completely.
       div.innerHTML = '<table><tr><td id="td1">foo</td></tr></table>' +
                       '<table><tr><td id="td2">bar</td></tr></table>';
-      goog.dom.Range.createFromNodes(goog.dom.$("td1").firstChild, 0,
-          goog.dom.$("td2").firstChild, 3).select();
+      goog.dom.Range.createFromNodes(goog.dom.getElement("td1").firstChild, 0,
+          goog.dom.getElement("td2").firstChild, 3).select();
       FORMATTER.removeFormatting_();
       assertHTMLEquals('<br>foo<br><br>bar<br>', div.innerHTML);
       FIELDMOCK.$verify();
@@ -566,8 +598,8 @@ limitations under the License.
       // partially selected one.
       div.innerHTML = '<table><tr><td id="td1">foo</td></tr></table>' +
                       '<table><tr><td id="td2"><b>bar<b></td></tr></table>';
-      goog.dom.Range.createFromNodes(goog.dom.$("td1").firstChild, 0,
-          goog.dom.$("td2").firstChild.firstChild, 2).select();
+      goog.dom.Range.createFromNodes(goog.dom.getElement("td1").firstChild, 0,
+          goog.dom.getElement("td2").firstChild.firstChild, 2).select();
       FORMATTER.removeFormatting_();
       assertHTMLEquals('<br>foo<br>' +
                        '<table><tr><td id="td2">ba<b>r</b></td></tr></table>',
@@ -583,8 +615,8 @@ limitations under the License.
       // but remove styles.
       div.innerHTML = '<table><tr><td id="td1">f<i>o</i>o</td></tr></table>' +
                       '<table><tr><td id="td2">b<b>a</b>r</td></tr></table>';
-      goog.dom.Range.createFromNodes(goog.dom.$("td1").firstChild, 1,
-          goog.dom.$("td2").childNodes[1], 1).select();
+      goog.dom.Range.createFromNodes(goog.dom.getElement("td1").firstChild, 1,
+          goog.dom.getElement("td2").childNodes[1], 1).select();
       FORMATTER.removeFormatting_();
       assertHTMLEquals('<table><tr><td id="td1">foo</td></tr></table>' +
                        '<table><tr><td id="td2">bar</td></tr></table>',
@@ -621,7 +653,7 @@ function testRandomGoogleNewsSnippetRemoveFormatting() {
       'iPvAMHe_0B4A:r-1-0_1268233361_6_H0_MH20_PL60"><b>Britney\'s son ' +
       'released from hospital</b></a><br><font size="-1"><b><font color=' +
       '"#6f6f6f">NME.com&nbsp;-</font> <nobr>53 minutes ago</nobr></b>' +
-      '</font><br><font size="-1">Britney Spears’ youngest son Jayden James ' +
+      '</font><br><font size="-1">Britney Spearsï¿½ youngest son Jayden James ' +
       'has been released from hospital, having been admitted on Sunday after' +
       ' suffering a severe reaction to something he ingested.</font><br><fon' +
       'tsize="-1"><a href="http://www.celebrity-gossip.net/celebrities/holly' +
@@ -647,7 +679,7 @@ function testRandomGoogleNewsSnippetRemoveFormatting() {
       '8oX6hVDe4Qbcl1x5Rua_EA:u-AFQjCNEpn3nOHA8EB0pxJAPf6diOicMRDg"><nobr>eF' +
       'luxMedia</nobr></a></font><br><font class="p" size="-1"><a class="p" ' +
       'href="http://news.google.com/news?ncl=1268233361&amp;hl=en"><nobr><b>' +
-      'all 950 news articles&nbsp;»</b></nobr></a></font>';
+      'all 950 news articles&nbsp;ï¿½</b></nobr></a></font>';
   // Select it all.
   goog.dom.Range.createFromNodeContents(div).select();
 
@@ -663,7 +695,7 @@ function testRandomGoogleNewsSnippetRemoveFormatting() {
         'npost.com/wp-dyn/content/photo/2008/11/11/PH2008111101091.jpg"><br>' +
         'Washington Post</a><br><a href="http://www.nme.com/news/britney-spe' +
         'ars/40995">Britney\'s son released from hospital</a><br>NME.com - 5' +
-        '3 minutes ago<br>Britney Spears’ youngest son Jayden James has been' +
+        '3 minutes ago<br>Britney Spearsï¿½ youngest son Jayden James has been' +
         ' released from hospital, having been admitted on Sunday after suffe' +
         'ring a severe reaction to something he ingested.<br><a href="http:/' +
         '/www.celebrity-gossip.net/celebrities/hollywood/britney-and-jamie-l' +
@@ -679,13 +711,13 @@ function testRandomGoogleNewsSnippetRemoveFormatting() {
         'm/">Just Jared</a> - <a href="http://www.efluxmedia.com/news_Britne' +
         'y_Spears_Son_Released_from_Hospital_28696.html">eFluxMedia</a><br><' +
         'a href="http://news.google.com/news?ncl=1268233361&amp;hl=en">all 9' +
-        '50 news articles »</a>', div.innerHTML);
+        '50 news articles ï¿½</a>', div.innerHTML);
     FIELDMOCK.$verify();
   });
 }
 
 function testRangeDelimitedByRanges() {
-  var abcde = goog.dom.$('abcde').firstChild;
+  var abcde = goog.dom.getElement('abcde').firstChild;
   var start = goog.dom.Range.createFromNodes(abcde, 1, abcde, 2);
   var end = goog.dom.Range.createFromNodes(abcde, 3, abcde, 4);
   

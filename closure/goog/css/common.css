@@ -14,18 +14,11 @@ See the COPYING file for details.
  */
 
 /*
- * Gecko hack; Pre-FF3 Gecko uses -moz-inline-box instead of inline-block.
- */
-html>body .goog-inline-block {
-  display: -moz-inline-box; /* Ignored by FF3 and later. */
-  display: inline-block; /* Ignored by pre-FF3 Gecko. */
-}
-
-/*
  * Default rule; only Safari, Webkit, and Opera handle it without hacks.
  */
 .goog-inline-block {
   position: relative;
+  display: -moz-inline-box; /* Ignored by FF3 and later. */
   display: inline-block;
 }
 

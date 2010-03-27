@@ -441,6 +441,10 @@ goog.ui.TabPane.prototype.onHeaderClick_ = function(event) {
  * @private
  */
 goog.ui.TabPane.prototype.onHeaderKeyDown_ = function(event) {
+  if (event.altKey || event.metaKey || event.ctrlKey) {
+    return;
+  }
+
   switch (event.keyCode) {
     case goog.events.KeyCodes.LEFT:
       var index = this.selected_.getIndex() - 1;

@@ -492,13 +492,13 @@ goog.module.ModuleManager.prototype.getNotYetLoadedTransitiveDepIds_ =
 goog.module.ModuleManager.prototype.setLoaded = function(id) {
   this.logger_.info('Module loaded: ' + id);
 
+  this.moduleInfoMap_[id].onLoad(goog.bind(this.getModuleContext, this));
+
   // Remove the module id from the user initiated set if it existed there.
   goog.array.remove(this.userInitiatedLoadingModuleIds_, id);
 
   // Remove the module id from the loading modules if it exists there.
   goog.array.remove(this.loadingModuleIds_, id);
-
-  this.moduleInfoMap_[id].onLoad(goog.bind(this.getModuleContext, this));
 
   if (goog.array.isEmpty(this.loadingModuleIds_)) {
     // No more modules are currently being loaded (e.g. arriving later in the
@@ -588,7 +588,7 @@ goog.module.ModuleManager.prototype.execOnLoad = function(
  * result.
  *
  * @param {string} moduleId A module id.
- * @param {boolean} opt_userInitiated If the load is a result of a user action.
+ * @param {boolean=} opt_userInitiated If the load is a result of a user action.
  * @return {goog.async.Deferred} A deferred object.
  */
 goog.module.ModuleManager.prototype.load = function(

@@ -28,16 +28,16 @@ limitations under the License.
   <link rel="stylesheet" type="text/css" href="../../demos/css/toolbar.css">
   <script>
   function setUp() {
-    goog.dom.$('toolbar').innerHTML = '';
+    goog.dom.getElement('toolbar').innerHTML = '';
   }
 
   function tearDown() {
-    goog.dom.$('toolbar').innerHTML = '';
+    goog.dom.getElement('toolbar').innerHTML = '';
   }
 
   function testDrawToolbar() {
     drawToolbar();
-    var toolbarElem = goog.dom.$('toolbar').firstChild
+    var toolbarElem = goog.dom.getElement('toolbar').firstChild
     assertNotNull("Toolbar container was not rendered", toolbarElem);
     assertEquals("Toolbar does not have expected number of children", 3,
         toolbarElem.childNodes.length);

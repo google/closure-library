@@ -117,7 +117,7 @@ limitations under the License.
   <br/>
   <script>
     var component = new goog.ui.TableSorter();
-    component.decorate(goog.dom.$('sortMe'));
+    component.decorate(goog.dom.getElement('sortMe'));
     component.setSortFunction(1, goog.ui.TableSorter.alphaSort);
     component.setSortFunction(2,
         goog.ui.TableSorter.createReverseSort(goog.ui.TableSorter.numericSort));

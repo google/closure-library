@@ -89,6 +89,8 @@ goog.crypt.Sha1.prototype.reset = function() {
 
 /**
  * Internal helper performing 32 bit left rotate.
+ * @param {number} w 32-bit integer to rotate.
+ * @param {number} r Bits to rotate left by.
  * @return {number} w rotated left by r bits.
  * @private
  */
@@ -164,7 +166,7 @@ goog.crypt.Sha1.prototype.compress_ = function(buf) {
 /**
  * Adds a byte array to internal accumulator.
  * @param {Array.<number>} bytes to add to digest.
- * @param {number} opt_length is # of bytes to compress.
+ * @param {number=} opt_length is # of bytes to compress.
  */
 goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
   if (!opt_length) {
@@ -219,7 +221,7 @@ goog.crypt.Sha1.prototype.digest = function() {
   for (var i = 63; i >= 56; i--) {
     this.buf_[i] = totalBits & 255;
     totalBits >>>= 8;
-    }
+  }
 
   this.compress_(this.buf_);
 

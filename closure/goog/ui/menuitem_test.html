@@ -34,7 +34,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 <body>
   <div id="sandbox"></div>
   <script>
-    var sandbox = goog.dom.$('sandbox');
+    var sandbox = goog.dom.getElement('sandbox');
     var item;
   
     function setUp() {
@@ -347,7 +347,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     function testDecorate() {
       sandbox.innerHTML = '<div id="foo">Foo</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       item.decorate(foo);
       assertEquals('Decorated element must be as expected', foo,
           item.getElement());
@@ -362,7 +362,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     function testDecorateCheckableItem() {
       sandbox.innerHTML = '<div id="foo" class="goog-option">Foo</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       item.decorate(foo);
       assertEquals('Decorated element must be as expected', foo,
           item.getElement());
@@ -379,7 +379,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     function testDecorateCheckedItem() {
       sandbox.innerHTML =
           '<div id="foo" class="goog-option goog-option-selected">Foo</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       item.decorate(foo);
       assertEquals('Decorated element must be as expected', foo,
           item.getElement());
@@ -396,7 +396,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     function testDecorateTemplate() {
       sandbox.innerHTML = '<div id="foo" class="goog-menuitem">' +
           '<div class="goog-menuitem-content">Foo</div></div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       item.decorate(foo);
       assertEquals('Decorated element must be as expected', foo,
           item.getElement());
@@ -414,7 +414,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
           '<div class="goog-menuitem-content">' +
           '<div class="goog-menuitem-checkbox"></div>' +
           'Foo</div></div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       item.decorate(foo);
       assertEquals('Decorated element must be as expected', foo,
           item.getElement());
@@ -426,7 +426,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
       assertTrue('Item must have checkbox structure',
           item.getRenderer().hasCheckBoxStructure(item.getElement()));
       assertEquals('Item must have exactly one checkbox structure', 1,
-          goog.dom.$$('div', 'goog-menuitem-checkbox',
+          goog.dom.getElementsByTagNameAndClass('div', 'goog-menuitem-checkbox',
               item.getElement()).length);
       assertFalse('Item must not be checked', item.isChecked());
     }
@@ -437,7 +437,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
           '<div class="goog-menuitem-content">' +
           '<div class="goog-menuitem-checkbox"></div>' +
           'Foo</div></div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       item.decorate(foo);
       assertEquals('Decorated element must be as expected', foo,
           item.getElement());
@@ -449,7 +449,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
       assertTrue('Item must have checkbox structure',
           item.getRenderer().hasCheckBoxStructure(item.getElement()));
       assertEquals('Item must have exactly one checkbox structure', 1,
-          goog.dom.$$('div', 'goog-menuitem-checkbox',
+          goog.dom.getElementsByTagNameAndClass('div', 'goog-menuitem-checkbox',
               item.getElement()).length);
       assertTrue('Item must be checked', item.isChecked());
     }

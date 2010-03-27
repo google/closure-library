@@ -42,8 +42,8 @@ limitations under the License.
 
 <script>
 
-var targetDiv = goog.dom.$('targetDiv');
-var popupDiv = goog.dom.$('popupDiv');
+var targetDiv = goog.dom.getElement('targetDiv');
+var popupDiv = goog.dom.getElement('popupDiv');
 var clock;
 var popup;
 
@@ -94,7 +94,7 @@ function testEscapeDismissalDoesNotRecognizeOtherKeys() {
   popup.setHideOnEscape(true);
   popup.setVisible(true);
   var eventsPropagated = 0;
-  goog.events.listenOnce(goog.dom.$('commonAncestor'),
+  goog.events.listenOnce(goog.dom.getElement('commonAncestor'),
       [goog.events.EventType.KEYDOWN,
        goog.events.EventType.KEYUP,
        goog.events.EventType.KEYPRESS],
@@ -113,7 +113,7 @@ function testEscapeDismissalCanBeCancelledByBeforeHideEvent() {
   popup.setHideOnEscape(true);
   popup.setVisible(true);
   var eventsPropagated = 0;
-  goog.events.listenOnce(goog.dom.$('commonAncestor'),
+  goog.events.listenOnce(goog.dom.getElement('commonAncestor'),
       goog.events.EventType.KEYDOWN,
       function() {
         ++eventsPropagated;

@@ -58,7 +58,7 @@ function drawToolbar() {
 
   t1.addChild(s1, true);
   goog.events.listen(t1, EVENTS, logEvent);
-  t1.render(goog.dom.$('toolbar'));
+  t1.render(goog.dom.getElement('toolbar'));
 }
 
 goog.exportSymbol('drawToolbar', drawToolbar);

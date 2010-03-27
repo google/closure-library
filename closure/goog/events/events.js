@@ -44,13 +44,13 @@
 
 
 // This uses 3 lookup tables/trees.
-// listenerTree_ is a tree of type -> capture -> src hash code -> [Listener]
+// listenerTree_ is a tree of type -> capture -> src uid -> [Listener]
 // listeners_ is a map of key -> [Listener]
 //
 // The key is a field of the Listener. The Listener class also has the type,
 // capture and the src so one can always trace back in the tree
 //
-// sources_: src hc -> [Listener]
+// sources_: src uid -> [Listener]
 
 
 goog.provide('goog.events');
@@ -84,7 +84,7 @@ goog.events.listenerTree_ = {};
 
 
 /**
- * Lookup for mapping source hash codes to listeners
+ * Lookup for mapping source UIDs to listeners.
  * @private
  * @type {Object}
  */
@@ -156,7 +156,7 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
     }
     map = map[capture];
 
-    var srcHashCode = goog.getHashCode(src);
+    var srcUid = goog.getUid(src);
     var listenerArray, listenerObj;
 
     // The remaining_ property is used to be able to short circuit the iteration
@@ -168,13 +168,13 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
     // guaranteed that we will not skip any event listeners.
     map.remaining_++;
 
-    // Do not use srcHashCode in map here since that will cast the number to a
+    // Do not use srcUid in map here since that will cast the number to a
     // string which will allocate one string object.
-    if (!map[srcHashCode]) {
-      listenerArray = map[srcHashCode] = goog.events.pools.getArray();
+    if (!map[srcUid]) {
+      listenerArray = map[srcUid] = goog.events.pools.getArray();
       map.count_++;
     } else {
-      listenerArray = map[srcHashCode];
+      listenerArray = map[srcUid];
       // Ensure that the listeners do not already contain the current listener
       for (var i = 0; i < listenerArray.length; i++) {
         listenerObj = listenerArray[i];
@@ -204,10 +204,10 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
     listenerArray.push(listenerObj);
     goog.events.listeners_[key] = listenerObj;
 
-    if (!goog.events.sources_[srcHashCode]) {
-      goog.events.sources_[srcHashCode] = goog.events.pools.getArray();
+    if (!goog.events.sources_[srcUid]) {
+      goog.events.sources_[srcUid] = goog.events.pools.getArray();
     }
-    goog.events.sources_[srcHashCode].push(listenerObj);
+    goog.events.sources_[srcUid].push(listenerObj);
 
 
     // Attach the proxy through the browser's API
@@ -355,8 +355,8 @@ goog.events.unlistenByKey = function(key) {
     src.detachEvent(goog.events.getOnString_(type), proxy);
   }
 
-  var srcHashCode = goog.getHashCode(src);
-  var listenerArray = goog.events.listenerTree_[type][capture][srcHashCode];
+  var srcUid = goog.getUid(src);
+  var listenerArray = goog.events.listenerTree_[type][capture][srcUid];
 
   // In a perfect implementation we would decrement the remaining_ field here
   // but then we would need to know if the listener has already been fired or
@@ -364,17 +364,17 @@ goog.events.unlistenByKey = function(key) {
   // ancestor chain will need to be traversed as before.
 
   // Remove from sources_
-  if (goog.events.sources_[srcHashCode]) {
-    var sourcesArray = goog.events.sources_[srcHashCode];
+  if (goog.events.sources_[srcUid]) {
+    var sourcesArray = goog.events.sources_[srcUid];
     goog.array.remove(sourcesArray, listener);
     if (sourcesArray.length == 0) {
-      delete goog.events.sources_[srcHashCode];
+      delete goog.events.sources_[srcUid];
     }
   }
 
   listener.removed = true;
   listenerArray.needsCleanup_ = true;
-  goog.events.cleanUp_(type, capture, srcHashCode, listenerArray);
+  goog.events.cleanUp_(type, capture, srcUid, listenerArray);
 
   delete goog.events.listeners_[key];
 
@@ -405,11 +405,11 @@ goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
  * @param {string} type  The type of the event.
  * @param {boolean} capture Whether to clean up capture phase listeners instead
  *     bubble phase listeners.
- * @param {number} srcHashCode  The hash code of the source.
+ * @param {number} srcUid  The unique ID of the source.
  * @param {Array.<goog.events.Listener>} listenerArray The array being cleaned.
  * @private
  */
-goog.events.cleanUp_ = function(type, capture, srcHashCode, listenerArray) {
+goog.events.cleanUp_ = function(type, capture, srcUid, listenerArray) {
   // The listener array gets locked during the dispatch phase so that removals
   // of listeners during this phase does not screw up the indeces. This method
   // is called after we have removed a listener as well as after the dispatch
@@ -444,7 +444,7 @@ goog.events.cleanUp_ = function(type, capture, srcHashCode, listenerArray) {
       // In case the length is now zero we release the object.
       if (newIndex == 0) {
         goog.events.pools.releaseArray(listenerArray);
-        delete goog.events.listenerTree_[type][capture][srcHashCode];
+        delete goog.events.listenerTree_[type][capture][srcUid];
         goog.events.listenerTree_[type][capture].count_--;
 
         if (goog.events.listenerTree_[type][capture].count_ == 0) {
@@ -485,9 +485,9 @@ goog.events.removeAll = function(opt_obj, opt_type, opt_capt) {
   opt_capt = !!opt_capt;
 
   if (!noObj) {
-    var srcHashCode = goog.getHashCode(/** @type {Object} */ (opt_obj));
-    if (goog.events.sources_[srcHashCode]) {
-      var sourcesArray = goog.events.sources_[srcHashCode];
+    var srcUid = goog.getUid(/** @type {Object} */ (opt_obj));
+    if (goog.events.sources_[srcUid]) {
+      var sourcesArray = goog.events.sources_[srcUid];
       for (var i = sourcesArray.length - 1; i >= 0; i--) {
         var listener = sourcesArray[i];
         if ((noType || opt_type == listener.type) &&
@@ -545,9 +545,9 @@ goog.events.getListeners_ = function(obj, type, capture) {
     map = map[type];
     if (capture in map) {
       map = map[capture];
-      var objHashCode = goog.getHashCode(obj);
-      if (map[objHashCode]) {
-        return map[objHashCode];
+      var objUid = goog.getUid(obj);
+      if (map[objUid]) {
+        return map[objUid];
       }
     }
   }
@@ -600,8 +600,8 @@ goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
  *     the requested type and/or capture phase.
  */
 goog.events.hasListener = function(obj, opt_type, opt_capture) {
-  var objHashCode = goog.getHashCode(obj)
-  var listeners = goog.events.sources_[objHashCode];
+  var objUid = goog.getUid(obj)
+  var listeners = goog.events.sources_[objUid];
 
   if (listeners) {
     var hasType = goog.isDef(opt_type);
@@ -610,7 +610,7 @@ goog.events.hasListener = function(obj, opt_type, opt_capture) {
     if (hasType && hasCapture) {
       // Lookup in the listener tree whether the specified listener exists.
       var map = goog.events.listenerTree_[opt_type]
-      return !!map && !!map[opt_capture] && objHashCode in map[opt_capture];
+      return !!map && !!map[opt_capture] && objUid in map[opt_capture];
 
     } else if (!(hasType || hasCapture)) {
       // Simple check for whether the event target has any listeners at all.
@@ -749,10 +749,10 @@ goog.events.fireListeners = function(obj, type, capture, eventObject) {
 goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
   var retval = 1;
 
-  var objHashCode = goog.getHashCode(obj);
-  if (map[objHashCode]) {
+  var objUid = goog.getUid(obj);
+  if (map[objUid]) {
     map.remaining_--;
-    var listenerArray = map[objHashCode];
+    var listenerArray = map[objUid];
 
     // If locked_ is not set (and if already 0) initialize it to 1.
     if (!listenerArray.locked_) {
@@ -776,7 +776,7 @@ goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
       }
     } finally {
       listenerArray.locked_--;
-      goog.events.cleanUp_(type, capture, objHashCode, listenerArray);
+      goog.events.cleanUp_(type, capture, objUid, listenerArray);
     }
   }
 

@@ -24,7 +24,6 @@
 goog.provide('goog.structs.Pool');
 
 goog.require('goog.Disposable');
-goog.require('goog.iter');
 goog.require('goog.structs.Queue');
 goog.require('goog.structs.Set');
 
@@ -333,12 +332,9 @@ goog.structs.Pool.prototype.disposeInternal = function() {
   if (this.getInUseCount() > 0) {
     throw Error(goog.structs.Pool.ERROR_DISPOSE_UNRELEASED_OBJS_);
   }
-
-  // Call disposeObject on each object held by the pool.
-  goog.iter.forEach(this.inUseSet_, this.disposeObject, this);
-  this.inUseSet_.clear();
   delete this.inUseSet_;
 
+  // Call disposeObject on each object held by the pool.
   var freeQueue = this.freeQueue_;
   while (!freeQueue.isEmpty()) {
     this.disposeObject(/** @type {Object} */ (freeQueue.dequeue()));

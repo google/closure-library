@@ -44,7 +44,7 @@ var HAS_SET_CAPTURE = goog.fx.Dragger.HAS_SET_CAPTURE_;
 
 var target;
 function setUp() {
-  var sandbox = goog.dom.$('sandbox');
+  var sandbox = goog.dom.getElement('sandbox');
   target = goog.dom.$dom('div', {
     'id': 'target',
     'style': 'display:none;position:absolute;top:15px;left:10px'
@@ -54,12 +54,12 @@ function setUp() {
 }
 
 function tearDown() {
-  goog.dom.$('sandbox').innerHTML = '';
+  goog.dom.getElement('sandbox').innerHTML = '';
   goog.events.removeAll();
 }
 
 function testStartDrag() {
-  var dragger = new goog.fx.Dragger(target, goog.dom.$('handle'));
+  var dragger = new goog.fx.Dragger(target, goog.dom.getElement('handle'));
 
   var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
   e.type = goog.events.EventType.MOUSEDOWN;
@@ -93,7 +93,7 @@ function testStartDrag() {
   assertEquals('Dragger deltaY must match target\'s offsetTop',
       15, dragger.deltaY);
 
-  dragger = new goog.fx.Dragger(target, goog.dom.$('handle'));
+  dragger = new goog.fx.Dragger(target, goog.dom.getElement('handle'));
   dragger.setHysteresis(1);
   dragger.startDrag(e);
   assertFalse('Start drag with a valid non-zero hysteresis should not start ' +
@@ -308,7 +308,7 @@ function testOnWindowMouseOut() {
 
     e = new goog.events.BrowserEvent();
     e.type = goog.events.EventType.MOUSEOUT;
-    e.target = goog.dom.$('sandbox');
+    e.target = goog.dom.getElement('sandbox');
     e.currentTarget = window.top;
     e.relatedTarget = target;
     dragger.onWindowMouseOut_(e);

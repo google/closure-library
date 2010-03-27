@@ -134,7 +134,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
@@ -159,7 +159,7 @@ limitations under the License.
     ];
     disabledButton.setEnabled(false);
     goog.array.forEach(customButtons, function(b) {
-      b.render(goog.dom.$('cb1'));
+      b.render(goog.dom.getElement('cb1'));
       goog.events.listen(b, goog.ui.Component.EventType.ACTION,
           function(e) {
             var newCaption = window.prompt('Enter new caption for button:');
@@ -172,7 +172,7 @@ limitations under the License.
     var cb2 = [];
     var decoratedButtons = goog.array.map([
       'foo', 'bar', 'fee', 'btn1', 'btn2', 'btn3', 'btn4', 'btn5', 'btn6'
-     ], goog.dom.$);
+     ], goog.dom.getElement);
     goog.array.forEach(decoratedButtons, function(element) {
       // Since the elements to be decorated each have the correct "marker" CSS
       // class ("goog-imageless-custom-button"), we can use the renderer
@@ -185,7 +185,7 @@ limitations under the License.
     });
 
     // Decorate toggle buttons.
-    var toggleEnableElem = goog.dom.$('toggleEnable');
+    var toggleEnableElem = goog.dom.getElement('toggleEnable');
     var toggleEnable = goog.ui.decorate(toggleEnableElem);
     toggleEnable.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
 
@@ -196,7 +196,7 @@ limitations under the License.
           cb2[1].setEnabled(e.target.isChecked());
         });
 
-    var hideShowElem = goog.dom.$('hideShow');
+    var hideShowElem = goog.dom.getElement('hideShow');
     var hideShow = new goog.ui.decorate(hideShowElem);
     hideShow.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
     goog.events.listen(hideShow, EVENTS, logEvent);
@@ -212,7 +212,7 @@ limitations under the License.
       goog.dom.createDom('div', 'icon insert-image-icon goog-inline-block'),
       'Insert Image'
     ], goog.ui.ImagelessButtonRenderer.getInstance());
-    iconbutton1.render(goog.dom.$('iconbuttons'));
+    iconbutton1.render(goog.dom.getElement('iconbuttons'));
     goog.events.listen(iconbutton1, EVENTS, logEvent);
 
     // Add a custom style, too.
@@ -221,10 +221,11 @@ limitations under the License.
       'Highlight Text'
     ], goog.ui.ImagelessButtonRenderer.getInstance());
     iconbutton2.addClassName('default-button');
-    iconbutton2.render(goog.dom.$('iconbuttons'));
+    iconbutton2.render(goog.dom.getElement('iconbuttons'));
     goog.events.listen(iconbutton2, EVENTS, logEvent);
 
-    goog.dom.setTextContent(goog.dom.$('perf'), (goog.now() - timer) + 'ms');
+    goog.dom.setTextContent(goog.dom.getElement('perf'),
+        (goog.now() - timer) + 'ms');
  </script>
 </body>
 </html>

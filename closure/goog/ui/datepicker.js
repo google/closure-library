@@ -729,8 +729,8 @@ goog.ui.DatePicker.prototype.enterDocument = function() {
 goog.ui.DatePicker.prototype.exitDocument = function() {
   goog.ui.DatePicker.superClass_.exitDocument.call(this);
   this.destroyMenu_();
-  for (var hashCode in this.keyHandlers_) {
-    this.keyHandlers_[hashCode].dispose();
+  for (var uid in this.keyHandlers_) {
+    this.keyHandlers_[uid].dispose();
   }
   this.keyHandlers_ = {};
 };
@@ -1242,11 +1242,11 @@ goog.ui.DatePicker.prototype.redrawWeekdays_ = function() {
  * @private
  */
 goog.ui.DatePicker.prototype.getKeyHandlerForElement_ = function(el) {
-  var hashCode = goog.getHashCode(el);
-  if (!(hashCode in this.keyHandlers_)) {
-    this.keyHandlers_[hashCode] = new goog.events.KeyHandler(el);
+  var uid = goog.getUid(el);
+  if (!(uid in this.keyHandlers_)) {
+    this.keyHandlers_[uid] = new goog.events.KeyHandler(el);
   }
-  return this.keyHandlers_[hashCode];
+  return this.keyHandlers_[uid];
 };
 
 

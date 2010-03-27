@@ -26,6 +26,7 @@ goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.string.Unicode');
+goog.require('goog.uri.utils');
 
 
 /**
@@ -176,7 +177,7 @@ goog.editor.Link.prototype.placeCursorRightOf = function() {
  * Initialize a new link.
  * @param {HTMLAnchorElement} anchor The anchor element.
  * @param {string} url The initial URL.
- * @param {string} opt_target The target.
+ * @param {string=} opt_target The target.
  * @return {goog.editor.Link} The link.
  */
 goog.editor.Link.createNewLink = function(anchor, url, opt_target) {
@@ -188,4 +189,89 @@ goog.editor.Link.createNewLink = function(anchor, url, opt_target) {
   }
 
   return link;
+};
+
+
+/**
+ * Returns true if str could be a URL, false otherwise
+ *
+ * Ex: TR_Util.isLikelyUrl_("http://www.google.com") == true
+ *     TR_Util.isLikelyUrl_("www.google.com") == true
+ *
+ * @param {string} str String to check if it looks like a URL.
+ * @return {boolean} Whether str could be a URL.
+ */
+goog.editor.Link.isLikelyUrl = function(str) {
+  // Whitespace means this isn't a domain.
+  if (/\s/.test(str)) {
+    return false;
+  }
+
+  if (goog.editor.Link.isLikelyEmailAddress(str)) {
+    return false;
+  }
+
+  // Add a scheme if the url doesn't have one - this helps the parser.
+  var addedScheme = false;
+  if (!/^[^:\/?#.]+:/.test(str)) {
+    str = 'http://' + str;
+    addedScheme = true;
+  }
+
+  // Parse the domain.
+  var parts = goog.uri.utils.split(str);
+
+  // Relax the rules for special schemes.
+  var scheme = parts[goog.uri.utils.ComponentIndex.SCHEME];
+  if (goog.array.indexOf(['mailto', 'aim'], scheme) != -1) {
+    return true;
+  }
+
+  // Require domains to contain a '.', unless the domain is fully qualified.
+  var domain = parts[goog.uri.utils.ComponentIndex.DOMAIN];
+  if (!domain || (addedScheme && domain.indexOf('.') == -1)) {
+    return false;
+  }
+
+  // Require http and ftp paths to start with '/'.
+  var path = parts[goog.uri.utils.ComponentIndex.PATH];
+  return !path || path.indexOf('/') == 0;
+};
+
+
+/**
+ * Regular expression that matches strings that could be an email address.
+ * @type {RegExp}
+ * @private
+ */
+goog.editor.Link.LIKELY_EMAIL_ADDRESS_ = new RegExp(
+    '^' +                     // Test from start of string
+    '[\\w-]+(\\.[\\w-]+)*' +  // Dot-delimited alphanumerics and dashes (name)
+    '\\@' +                   // @
+    '([\\w-]+\\.)+' +         // Alphanumerics, dashes and dots (domain)
+    '(\\d+|\\w\\w+)$',        // Domain ends in at least one number or 2 letters
+    'i');
+
+
+/**
+ * Returns true if str could be an email address, false otherwise
+ *
+ * Ex: goog.editor.Link.isLikelyEmailAddress_("some word") == false
+ *     goog.editor.Link.isLikelyEmailAddress_("foo@foo.com") == true
+ *
+ * @param {string} str String to test for being email address.
+ * @return {boolean} Whether "str" looks like an email address.
+ */
+goog.editor.Link.isLikelyEmailAddress = function(str) {
+  return goog.editor.Link.LIKELY_EMAIL_ADDRESS_.test(str);
+};
+
+
+/**
+ * Determines whether or not a url is an email link.
+ * @param {string} url A url.
+ * @return {boolean} Whether the url is a mailto link.
+ */
+goog.editor.Link.isMailto = function(url) {
+  return !!url && goog.string.startsWith(url, 'mailto:');
 };

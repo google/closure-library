@@ -1102,8 +1102,7 @@ goog.ui.Control.prototype.isTransitionAllowed = function(state, enable) {
  */
 goog.ui.Control.prototype.handleMouseOver = function(e) {
   // Ignore mouse moves between descendants.
-  if (e.relatedTarget &&
-      !goog.dom.contains(this.getElement(), e.relatedTarget) &&
+  if (!goog.ui.Control.isMouseEventWithinElement_(e, this.getElement()) &&
       this.dispatchEvent(goog.ui.Component.EventType.ENTER) &&
       this.isEnabled() &&
       this.isAutoState(goog.ui.Component.State.HOVER)) {
@@ -1120,9 +1119,7 @@ goog.ui.Control.prototype.handleMouseOver = function(e) {
  * @param {goog.events.BrowserEvent} e Mouse event to handle.
  */
 goog.ui.Control.prototype.handleMouseOut = function(e) {
-  // Ignore mouse moves between descendants.
-  if (e.relatedTarget &&
-      !goog.dom.contains(this.getElement(), e.relatedTarget) &&
+  if (!goog.ui.Control.isMouseEventWithinElement_(e, this.getElement()) &&
       this.dispatchEvent(goog.ui.Component.EventType.LEAVE)) {
     if (this.isAutoState(goog.ui.Component.State.ACTIVE)) {
       // Deactivate on mouseout; otherwise we lose track of the mouse button.
@@ -1132,6 +1129,23 @@ goog.ui.Control.prototype.handleMouseOut = function(e) {
       this.setHighlighted(false);
     }
   }
+};
+
+
+/**
+ * Checks if a mouse event (mouseover or mouseout) occured below an element.
+ * @param {goog.events.BrowserEvent} e Mouse event (should be mouseover or
+ *     mouseout).
+ * @param {Element} elem The ancestor element.
+ * @return {boolean} Whether the event has a relatedTarget (the element the
+ *     mouse is coming from) and it's a descendent of elem.
+ * @private
+ */
+goog.ui.Control.isMouseEventWithinElement_ = function(e, elem) {
+  // If relatedTarget is null, it means there was no previous element (e.g.
+  // the mouse moved out of the window).  Assume this means that the mouse
+  // event was not within the element.
+  return !!e.relatedTarget && goog.dom.contains(elem, e.relatedTarget);
 };
 
 

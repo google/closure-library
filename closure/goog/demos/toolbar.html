@@ -501,7 +501,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
@@ -516,12 +516,14 @@ limitations under the License.
     }
 
     function showPerf(id, start) {
-      goog.dom.setTextContent(goog.dom.$(id), (goog.now() - start) + 'ms');
+      goog.dom.setTextContent(goog.dom.getElement(id),
+          (goog.now() - start) + 'ms');
     }
 
-    goog.events.listen(goog.dom.$('enable_log'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('enable_log'),
+        goog.events.EventType.CLICK,
         function(e) {
-          goog.style.showElement(goog.dom.$('log'), e.target.checked);
+          goog.style.showElement(goog.dom.getElement('log'), e.target.checked);
           logconsole.setCapturing(e.target.checked);
         });
 
@@ -579,16 +581,16 @@ limitations under the License.
     var btnRight = new goog.ui.ToolbarButton('Right');
     btnRight.setCollapsed(goog.ui.Button.Side.START);
     t1.addChild(btnRight, true);
-    t1.render(goog.dom.$('t1'));
+    t1.render(goog.dom.getElement('t1'));
     showPerf('perf1', timer);
     goog.events.listen(t1, EVENTS, logEvent);
 
     // Hook up checkboxes.
-    goog.events.listen(goog.dom.$('t1_show'),
+    goog.events.listen(goog.dom.getElement('t1_show'),
         goog.events.EventType.CLICK, handleShow, false, t1);
-    goog.events.listen(goog.dom.$('t1_enable'),
+    goog.events.listen(goog.dom.getElement('t1_enable'),
         goog.events.EventType.CLICK, handleEnable, false, t1);
-    goog.events.listen(goog.dom.$('toggleButton_enable'),
+    goog.events.listen(goog.dom.getElement('toggleButton_enable'),
         goog.events.EventType.CLICK, handleEnable, false, toggleButton);
 
     // Create right-to-left toolbar programmatically.
@@ -614,60 +616,61 @@ limitations under the License.
     var btnRightRtl = new goog.ui.ToolbarButton('Right');
     t1rtl.addChild(btnRightRtl, true);
 
-    t1rtl.render(goog.dom.$('t1rtl'));
+    t1rtl.render(goog.dom.getElement('t1rtl'));
     showPerf('perf1rtl', timer);
     goog.events.listen(t1rtl, EVENTS, logEvent);
 
     // The setCollapsed method needs to be called after the toolbar is rendered
     // for it to pick up the directionality of the toolbar.
     btnLeftRtl.setCollapsed(goog.ui.Button.Side.END);
-    btnCenterRtl.setCollapsed(goog.ui.Button.Side.END | goog.ui.Button.Side.START);
+    btnCenterRtl.setCollapsed(
+        goog.ui.Button.Side.END | goog.ui.Button.Side.START);
     btnRightRtl.setCollapsed(goog.ui.Button.Side.START);
 
     // Hook up checkboxes.
-    goog.events.listen(goog.dom.$('t1rtl_show'),
+    goog.events.listen(goog.dom.getElement('t1rtl_show'),
         goog.events.EventType.CLICK, handleShow, false, t1rtl);
-    goog.events.listen(goog.dom.$('t1rtl_enable'),
+    goog.events.listen(goog.dom.getElement('t1rtl_enable'),
         goog.events.EventType.CLICK, handleEnable, false, t1rtl);
-    goog.events.listen(goog.dom.$('rtlToggleButton_enable'),
+    goog.events.listen(goog.dom.getElement('rtlToggleButton_enable'),
         goog.events.EventType.CLICK, handleEnable, false, rtlToggleButton);
 
     // Decorate the second toolbar.
     timer = goog.now();
     var t2 = new goog.ui.Toolbar();
-    t2.decorate(goog.dom.$('t2'));
+    t2.decorate(goog.dom.getElement('t2'));
     showPerf('perf2', timer);
     goog.events.listen(t2, EVENTS, logEvent);
 
     // Hook up checkboxes.
-    goog.events.listen(goog.dom.$('t2_show'),
+    goog.events.listen(goog.dom.getElement('t2_show'),
         goog.events.EventType.CLICK, handleShow, false, t2);
-    goog.events.listen(goog.dom.$('t2_enable'),
+    goog.events.listen(goog.dom.getElement('t2_enable'),
         goog.events.EventType.CLICK, handleEnable, false, t2);
-    goog.events.listen(goog.dom.$('menuButton_enable'),
+    goog.events.listen(goog.dom.getElement('menuButton_enable'),
         goog.events.EventType.CLICK, handleEnable, false,
         t2.getChild('menuButton'));
 
     // Decorate the second toolbar.
     timer = goog.now();
     var t2rtl = new goog.ui.Toolbar();
-    t2rtl.decorate(goog.dom.$('t2rtl'));
+    t2rtl.decorate(goog.dom.getElement('t2rtl'));
     showPerf('perf2rtl', timer);
     goog.events.listen(t2rtl, EVENTS, logEvent);
 
     // Hook up checkboxes.
-    goog.events.listen(goog.dom.$('t2rtl_show'),
+    goog.events.listen(goog.dom.getElement('t2rtl_show'),
         goog.events.EventType.CLICK, handleShow, false, t2rtl);
-    goog.events.listen(goog.dom.$('t2rtl_enable'),
+    goog.events.listen(goog.dom.getElement('t2rtl_enable'),
         goog.events.EventType.CLICK, handleEnable, false, t2rtl);
-    goog.events.listen(goog.dom.$('rtlMenuButton_enable'),
+    goog.events.listen(goog.dom.getElement('rtlMenuButton_enable'),
         goog.events.EventType.CLICK, handleEnable, false,
         t2rtl.getChild('rtlMenuButton'));
 
     // Decorate the third toolbar.
     timer = goog.now();
     var t3 = new goog.ui.Toolbar();
-    t3.decorate(goog.dom.$('t3'));
+    t3.decorate(goog.dom.getElement('t3'));
     showPerf('perf3', timer);
     goog.events.listen(t3, EVENTS, logEvent);
 
@@ -691,14 +694,14 @@ limitations under the License.
         });
 
     // Hook up checkboxes.
-    goog.events.listen(goog.dom.$('t3_show'),
+    goog.events.listen(goog.dom.getElement('t3_show'),
         goog.events.EventType.CLICK, handleShow, false, t3);
-    goog.events.listen(goog.dom.$('t3_enable'),
+    goog.events.listen(goog.dom.getElement('t3_enable'),
         goog.events.EventType.CLICK, handleEnable, false, t3);
-    goog.events.listen(goog.dom.$('font_enable'),
+    goog.events.listen(goog.dom.getElement('font_enable'),
         goog.events.EventType.CLICK, handleEnable, false,
         t3.getChild('font'));
-    goog.events.listen(goog.dom.$('fontSize_show'),
+    goog.events.listen(goog.dom.getElement('fontSize_show'),
         goog.events.EventType.CLICK, handleShow, false,
         t3.getChild('fontSize'));
   </script>

@@ -99,13 +99,13 @@ table {
 
     var scrollfloater1 = new goog.ui.ScrollFloater();
     var button1 = new goog.ui.ToggleButton("Enable Floater 1");
-    button1.render(goog.dom.$('floater1'));
-    scrollfloater1.decorate(goog.dom.$('floater1'));
+    button1.render(goog.dom.getElement('floater1'));
+    scrollfloater1.decorate(goog.dom.getElement('floater1'));
 
     var scrollfloater2 = new goog.ui.ScrollFloater();
     var button2 = new goog.ui.ToggleButton("Enable Floater 2");
     scrollfloater2.addChild(button2, true);
-    scrollfloater2.render(goog.dom.$('floater2container'));
+    scrollfloater2.render(goog.dom.getElement('floater2container'));
 
     function setupClickHandler(ctrl, floater) {
       goog.events.listen(ctrl, goog.ui.Component.EventType.ACTION,

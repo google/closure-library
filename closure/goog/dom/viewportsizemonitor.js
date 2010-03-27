@@ -89,10 +89,10 @@ goog.inherits(goog.dom.ViewportSizeMonitor, goog.events.EventTarget);
  */
 goog.dom.ViewportSizeMonitor.getInstanceForWindow = function(opt_window) {
   var currentWindow = opt_window || window;
-  var hash = goog.getHashCode(currentWindow);
+  var uid = goog.getUid(currentWindow);
 
-  return goog.dom.ViewportSizeMonitor.windowInstanceMap_[hash] =
-      goog.dom.ViewportSizeMonitor.windowInstanceMap_[hash] ||
+  return goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid] =
+      goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid] ||
       new goog.dom.ViewportSizeMonitor(currentWindow);
 };
 

@@ -72,13 +72,13 @@ hooked up to a toolbar.</p>
   (updates as contents of the editable field above change):<br>
   <textarea id="fieldContents" style="height:100px;width:400px;"></textarea><br>
   <input type="button" value="Set Field Contents"
-      onclick="myField.setHtml(false, goog.dom.$('fieldContents').value);" />
+      onclick="myField.setHtml(false, goog.dom.getElement('fieldContents').value);" />
   (Use to set contents of the editable field to the contents of this textarea)
   </p>
 
   <script>
   function updateFieldContents() {
-    goog.dom.$('fieldContents').value = myField.getCleanContents();
+    goog.dom.getElement('fieldContents').value = myField.getCleanContents();
   }
 
   // Create an editable field.
@@ -121,7 +121,7 @@ hooked up to a toolbar.</p>
     goog.editor.Command.REMOVE_FORMAT
   ];
   var myToolbar = goog.ui.editor.DefaultToolbar.makeToolbar(buttons,
-      goog.dom.$('toolbar'));
+      goog.dom.getElement('toolbar'));
 
   // Hook the toolbar into the field.
   var myToolbarController =

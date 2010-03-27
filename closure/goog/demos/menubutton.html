@@ -145,7 +145,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
@@ -181,11 +181,12 @@ limitations under the License.
     var b1 = new goog.ui.MenuButton('File', m1);
     b1.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
     b1.setId('FileButton');
-    b1.render(goog.dom.$('menuButtons'));
+    b1.render(goog.dom.getElement('menuButtons'));
     b1.setTooltip('File menu demo');
     goog.events.listen(b1, EVENTS, logEvent);
 
-    goog.events.listen(goog.dom.$('b1_enable'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('b1_enable'),
+        goog.events.EventType.CLICK,
         function(e) {
           b1.setEnabled(e.target.checked);
         });
@@ -218,11 +219,12 @@ limitations under the License.
     var b2 = new goog.ui.MenuButton('Edit', m2);
     b2.setId('EditButton');
     b2.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
-    b2.render(goog.dom.$('menuButtons'));
+    b2.render(goog.dom.getElement('menuButtons'));
     b2.setTooltip('Edit menu demo');
     goog.events.listen(b2, EVENTS, logEvent);
 
-    goog.events.listen(goog.dom.$('b2_show'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('b2_show'),
+        goog.events.EventType.CLICK,
         function(e) {
           b2.setVisible(e.target.checked);
         });
@@ -253,22 +255,22 @@ limitations under the License.
     var b3 = new goog.ui.MenuButton('Window', m3);
     b3.setId('WindowButton');
     b3.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
-    b3.render(goog.dom.$('menuButtons'));
+    b3.render(goog.dom.getElement('menuButtons'));
     b3.setTooltip('Windowm menu demo');
     goog.events.listen(b3, EVENTS, logEvent);
 
     // Decorate a menu button.  Note that since one of the child nodes of the
     // menu button element can be decorated as a menu, it is auto-decorated and
     // attached to the button.
-    var formatButton = goog.ui.decorate(goog.dom.$('formatButton'));
+    var formatButton = goog.ui.decorate(goog.dom.getElement('formatButton'));
 
-    goog.events.listen(goog.dom.$('formatButton_show'),
+    goog.events.listen(goog.dom.getElement('formatButton_show'),
         goog.events.EventType.CLICK,
         function(e) {
           formatButton.setVisible(e.target.checked);
         });
 
-    goog.events.listen(goog.dom.$('formatButton_enable'),
+    goog.events.listen(goog.dom.getElement('formatButton_enable'),
         goog.events.EventType.CLICK,
         function(e) {
           formatButton.setEnabled(e.target.checked);
@@ -276,7 +278,8 @@ limitations under the License.
 
     goog.events.listen(formatButton, EVENTS, logEvent);
 
-    goog.dom.setTextContent(goog.dom.$('perf'), (goog.now() - timer) + 'ms');
+    goog.dom.setTextContent(goog.dom.getElement('perf'),
+        (goog.now() - timer) + 'ms');
   </script>
 </body>
 </html>

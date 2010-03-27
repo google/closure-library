@@ -69,7 +69,7 @@ var debug = false;
 function debugToWindow(message) {
   if (debug) {
     sb.append(message + '<br>');
-    goog.dom.$('debug').innerHTML = sb.toString();
+    goog.dom.getElement('debug').innerHTML = sb.toString();
   }
 }
 

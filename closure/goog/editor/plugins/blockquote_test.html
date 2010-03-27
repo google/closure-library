@@ -44,7 +44,7 @@ var SPLIT = '<span id="split-point"></span>';
 var root, helper, field, plugin;
 
 function setUp() {
-  root = goog.dom.$('root');
+  root = goog.dom.getElement('root');
   helper = new goog.testing.editor.TestHelper(root);
   field = new goog.testing.editor.FieldMock();
 
@@ -70,7 +70,7 @@ function execCommand() {
 
   // With splitPoint we try to mimic the behavior of EnterHandler's
   // deleteCursorSelection_.
-  var splitPoint = goog.dom.$('split-point');
+  var splitPoint = goog.dom.getElement('split-point');
   var position = goog.userAgent.IE ?
       splitPoint : {node: splitPoint.nextSibling, offset: 0};
   if (!goog.userAgent.IE) {

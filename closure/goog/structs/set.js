@@ -37,9 +37,8 @@ goog.require('goog.structs.Map');
  * contain both 1 and (new Number(1)), because they are not the same.  WARNING:
  * Adding (new Number(1)) twice will yield two distinct elements, because they
  * are two different objects.  WARNING: Any object that is added to a
- * goog.structs.Set will be modified!  Because goog.getHashCode() is used to
- * identify objects, every object in the set will gain a property whose name
- * begins with 'closure_hashCode_'.
+ * goog.structs.Set will be modified!  Because goog.getUid() is used to
+ * identify objects, every object in the set will be mutated.
  * @param {Array|Object=} opt_values Initial values to start with.
  * @constructor
  */
@@ -62,7 +61,7 @@ goog.structs.Set = function(opt_values) {
 goog.structs.Set.getKey_ = function(val) {
   var type = typeof val;
   if (type == 'object' && val || type == 'function') {
-    return 'o' + goog.getHashCode(/** @type {Object} */ (val));
+    return 'o' + goog.getUid(/** @type {Object} */ (val));
   } else {
     return type.substr(0, 1) + val;
   }

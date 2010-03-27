@@ -20,6 +20,8 @@
 
 goog.provide('goog.dom.iframe');
 
+goog.require('goog.dom');
+
 
 /**
  * Safe source for a blank iframe.
@@ -30,6 +32,14 @@ goog.provide('goog.dom.iframe');
  * @type {string}
  */
 goog.dom.iframe.BLANK_SOURCE = 'javascript:""';
+
+
+/**
+ * Styles to help ensure an undecorated iframe.
+ * @type {string}
+ * @private
+ */
+goog.dom.iframe.STYLES_ = 'border:0;vertical-align:bottom;';
 
 
 /**
@@ -44,14 +54,75 @@ goog.dom.iframe.BLANK_SOURCE = 'javascript:""';
  * in quirks mode.
  *
  * @param {goog.dom.DomHelper} domHelper The dom helper to use.
- * @return {HTMLIFrameElement} A completely blank iframe.
+ * @param {string=} opt_styles CSS styles for the iframe.
+ * @return {!HTMLIFrameElement} A completely blank iframe.
  */
-goog.dom.iframe.createBlank = function(domHelper) {
-  return /** @type {HTMLIFrameElement} */ (domHelper.createDom('iframe', {
+goog.dom.iframe.createBlank = function(domHelper, opt_styles) {
+  return /** @type {!HTMLIFrameElement} */ (domHelper.createDom('iframe', {
     'frameborder': 0,
     // Since iframes are inline elements, we must align to bottom to
     // compensate for the line descent.
-    'style': 'border: 0; vertical-align: bottom',
+    'style': goog.dom.iframe.STYLES_ + (opt_styles || ''),
     'src': goog.dom.iframe.BLANK_SOURCE
   }));
+};
+
+
+/**
+ * Writes the contents of a blank iframe that has already been inserted
+ * into the document.
+ * @param {!HTMLIFrameElement} iframe An iframe with no contents, such as
+ *     one created by goog.dom.iframe.createBlank, but already appended to
+ *     a parent document.
+ * @param {string} content Content to write to the iframe, from doctype to
+ *     the HTML close tag.
+ */
+goog.dom.iframe.writeContent = function(iframe, content) {
+  var doc = goog.dom.getFrameContentDocument(iframe);
+  doc.open();
+  doc.write(content);
+  doc.close();
+};
+
+
+// TODO: Provide a higher-level API for the most common use case, so
+// that you can just provide a list of stylesheets and some content HTML.
+/**
+ * Creates a same-domain iframe containing preloaded content.
+ *
+ * This is primarily useful for DOM sandboxing.  One use case is to embed
+ * a trusted Javascript app with potentially conflicting CSS styles.  The
+ * second case is to reduce the cost of layout passes by the browser -- for
+ * example, you can perform sandbox sizing of characters in an iframe while
+ * manipulating a heavy DOM in the main window.  The iframe and parent frame
+ * can access each others' properties and functions without restriction.
+ *
+ * @param {!Element} parentElement The parent element in which to append the
+ *     iframe.
+ * @param {string=} opt_headContents Contents to go into the iframe's head.
+ * @param {string=} opt_bodyContents Contents to go into the iframe's body.
+ * @param {string=} opt_styles CSS styles for the iframe itself, before adding
+ *     to the parent element.
+ * @param {boolean=} opt_quirks Whether to use quirks mode (false by default).
+ * @return {HTMLIFrameElement} An iframe that has the specified contents.
+ */
+goog.dom.iframe.createWithContent = function(
+    parentElement, opt_headContents, opt_bodyContents, opt_styles, opt_quirks) {
+  var domHelper = goog.dom.getDomHelper(parentElement);
+  // Generate the HTML content.
+  var contentBuf = [];
+
+  if (!opt_quirks) {
+    contentBuf.push('<!DOCTYPE html>');
+  }
+  contentBuf.push('<html><head>', opt_headContents, '</head><body>',
+      opt_bodyContents, '</body></html>');
+
+  var iframe = goog.dom.iframe.createBlank(domHelper, opt_styles);
+
+  // Cannot manipulate iframe content until it is in a document.
+  parentElement.appendChild(iframe);
+  goog.dom.iframe.writeContent(iframe, contentBuf.join(''));
+
+  return iframe;
 };

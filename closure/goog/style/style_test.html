@@ -487,7 +487,7 @@ Test-visible
 
 <script>
 
-var $ = goog.dom.$;
+var $ = goog.dom.getElement;
 
 function setUpPage() {
   var viewportSize = goog.dom.getViewportSize();
@@ -1675,7 +1675,7 @@ function testSetOpacity() {
 
 function testFramedPageOffset() {
   // Set up a complicated iframe ancestor chain.
-  var iframe = goog.dom.$('test-frame-offset');
+  var iframe = goog.dom.getElement('test-frame-offset');
   var iframeDoc = goog.dom.getFrameContentDocument(iframe);
   var iframeWindow = goog.dom.getWindow(iframeDoc);
 
@@ -1803,8 +1803,8 @@ function testTranslateRectForAnotherFrame() {
 };
 
 function testGetVisibleRectForElement() {
-  var container = goog.dom.$('test-visible');
-  var el = goog.dom.$('test-visible-el');
+  var container = goog.dom.getElement('test-visible');
+  var el = goog.dom.getElement('test-visible-el');
   var dom = goog.dom.getDomHelper(el);
   var winScroll = dom.getDocumentScroll();
   var winSize = dom.getViewportSize();
@@ -1869,44 +1869,48 @@ function testGeckoMacOrX11RoundPosition() {
 }
 
 function testScrollIntoContainerView() {
-  var container = goog.dom.$('scrollable-container');
+  var container = goog.dom.getElement('scrollable-container');
 
   // Scroll the minimum amount to make the elements visible.
-  goog.style.scrollIntoContainerView(goog.dom.$('item7'), container);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item7'), container);
   assertEquals('scroll to item7', 115, container.scrollTop);
-  goog.style.scrollIntoContainerView(goog.dom.$('item8'), container);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item8'), container);
   assertEquals('scroll to item8', 148, container.scrollTop);
-  goog.style.scrollIntoContainerView(goog.dom.$('item7'), container);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item7'), container);
   assertEquals('item7 still visible', 148, container.scrollTop);
-  goog.style.scrollIntoContainerView(goog.dom.$('item1'), container);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item1'), container);
   assertEquals('scroll to item1', 17, container.scrollTop);
 
   // Center the element in the first argument.
-  goog.style.scrollIntoContainerView(goog.dom.$('item1'), container, true);
+  goog.style.scrollIntoContainerView(
+      goog.dom.getElement('item1'), container, true);
   assertEquals('center item1', 0, container.scrollTop);
-  goog.style.scrollIntoContainerView(goog.dom.$('item4'), container, true);
+  goog.style.scrollIntoContainerView(
+      goog.dom.getElement('item4'), container, true);
   assertEquals('center item4', 66, container.scrollTop);
 
   // The element is higher than the container.
-  goog.dom.$('item3').style.height = '140px';
-  goog.style.scrollIntoContainerView(goog.dom.$('item3'), container);
+  goog.dom.getElement('item3').style.height = '140px';
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item3'), container);
   assertEquals('show item3 with increased height', 83, container.scrollTop);
-  goog.style.scrollIntoContainerView(goog.dom.$('item3'), container, true);
+  goog.style.scrollIntoContainerView(
+      goog.dom.getElement('item3'), container, true);
   assertEquals('center item3 with increased height', 93, container.scrollTop);
-  goog.dom.$('item3').style.height = '';
+  goog.dom.getElement('item3').style.height = '';
 
   // Scroll to non-integer position.
-  goog.dom.$('item4').style.height = '21px';
-  goog.style.scrollIntoContainerView(goog.dom.$('item4'), container, true);
+  goog.dom.getElement('item4').style.height = '21px';
+  goog.style.scrollIntoContainerView(
+      goog.dom.getElement('item4'), container, true);
   assertEquals('scroll position is rounded down', 66, container.scrollTop);
-  goog.dom.$('item4').style.height = '';
+  goog.dom.getElement('item4').style.height = '';
 }
 
 function testScrollBarWidth() {
   var width = goog.style.getScrollbarWidth();
   assertTrue(width > 0);
 
-  var outer = goog.dom.$('test-scrollbarwidth');
+  var outer = goog.dom.getElement('test-scrollbarwidth');
   var inner = goog.dom.getElementsByTagNameAndClass('div', null, outer)[0];
   assertTrue('should have a scroll bar', hasVerticalScroll(outer));
   assertTrue('should have a scroll bar', hasHorizontalScroll(outer));

@@ -45,51 +45,56 @@ Copyright 2007 Google Inc. All Rights Reserved.
         serialBackward = new goog.fx.AnimationSerialQueue();
 
         // move forward at the same time
-        parallelForward.add(new goog.fx.dom.Slide(goog.dom.$("block1"),
+        parallelForward.add(new goog.fx.dom.Slide(goog.dom.getElement("block1"),
             [5, 5], [55, 50], 2000, goog.fx.easing.easeOut));
-        parallelForward.add(new goog.fx.dom.Slide(goog.dom.$("block2"),
+        parallelForward.add(new goog.fx.dom.Slide(goog.dom.getElement("block2"),
             [10, 5], [60, 50], 2000, goog.fx.easing.easeOut));
-        parallelForward.add(new goog.fx.dom.Slide(goog.dom.$("block3"),
+        parallelForward.add(new goog.fx.dom.Slide(goog.dom.getElement("block3"),
             [15, 5], [65, 50], 2000, goog.fx.easing.easeOut));
-        parallelForward.add(new goog.fx.dom.Slide(goog.dom.$("block4"),
+        parallelForward.add(new goog.fx.dom.Slide(goog.dom.getElement("block4"),
             [20, 5], [70, 50], 2000, goog.fx.easing.easeOut));
-        parallelForward.add(new goog.fx.dom.Slide(goog.dom.$("block5"),
+        parallelForward.add(new goog.fx.dom.Slide(goog.dom.getElement("block5"),
             [25, 5], [75, 50], 2000, goog.fx.easing.easeOut));
 
         // move backward at the same time
-        parallelBackward.add(new goog.fx.dom.Slide(goog.dom.$("block1"),
+        parallelBackward.add(new goog.fx.dom.Slide(
+            goog.dom.getElement("block1"),
             [55, 50], [5, 5], 2000, goog.fx.easing.easeOut));
-        parallelBackward.add(new goog.fx.dom.Slide(goog.dom.$("block2"),
+        parallelBackward.add(new goog.fx.dom.Slide(
+            goog.dom.getElement("block2"),
             [60, 50], [10, 5], 2000, goog.fx.easing.easeOut));
-        parallelBackward.add(new goog.fx.dom.Slide(goog.dom.$("block3"),
+        parallelBackward.add(new goog.fx.dom.Slide
+            (goog.dom.getElement("block3"),
             [65, 50], [15, 5], 2000, goog.fx.easing.easeOut));
-        parallelBackward.add(new goog.fx.dom.Slide(goog.dom.$("block4"),
+        parallelBackward.add(new goog.fx.dom.Slide(
+            goog.dom.getElement("block4"),
             [70, 50], [20, 5], 2000, goog.fx.easing.easeOut));
-        parallelBackward.add(new goog.fx.dom.Slide(goog.dom.$("block5"),
+        parallelBackward.add(new goog.fx.dom.Slide(
+            goog.dom.getElement("block5"),
             [75, 50], [25, 5], 2000, goog.fx.easing.easeOut));
 
         // move forward in order
-        serialForward.add(new goog.fx.dom.Slide(goog.dom.$("block1"),
+        serialForward.add(new goog.fx.dom.Slide(goog.dom.getElement("block1"),
             [5, 5], [55, 50], 400, goog.fx.easing.easeOut));
-        serialForward.add(new goog.fx.dom.Slide(goog.dom.$("block2"),
+        serialForward.add(new goog.fx.dom.Slide(goog.dom.getElement("block2"),
             [10, 5], [60, 50], 400, goog.fx.easing.easeOut));
-        serialForward.add(new goog.fx.dom.Slide(goog.dom.$("block3"),
+        serialForward.add(new goog.fx.dom.Slide(goog.dom.getElement("block3"),
             [15, 5], [65, 50], 400, goog.fx.easing.easeOut));
-        serialForward.add(new goog.fx.dom.Slide(goog.dom.$("block4"),
+        serialForward.add(new goog.fx.dom.Slide(goog.dom.getElement("block4"),
             [20, 5], [70, 50], 400, goog.fx.easing.easeOut));
-        serialForward.add(new goog.fx.dom.Slide(goog.dom.$("block5"),
+        serialForward.add(new goog.fx.dom.Slide(goog.dom.getElement("block5"),
             [25, 5], [75, 50], 400, goog.fx.easing.easeOut));
 
         // move backward in order
-        serialBackward.add(new goog.fx.dom.Slide(goog.dom.$("block1"),
+        serialBackward.add(new goog.fx.dom.Slide(goog.dom.getElement("block1"),
             [55, 50], [5, 5], 400, goog.fx.easing.easeOut));
-        serialBackward.add(new goog.fx.dom.Slide(goog.dom.$("block2"),
+        serialBackward.add(new goog.fx.dom.Slide(goog.dom.getElement("block2"),
             [60, 50], [10, 5], 400, goog.fx.easing.easeOut));
-        serialBackward.add(new goog.fx.dom.Slide(goog.dom.$("block3"),
+        serialBackward.add(new goog.fx.dom.Slide(goog.dom.getElement("block3"),
             [65, 50], [15, 5], 400, goog.fx.easing.easeOut));
-        serialBackward.add(new goog.fx.dom.Slide(goog.dom.$("block4"),
+        serialBackward.add(new goog.fx.dom.Slide(goog.dom.getElement("block4"),
             [70, 50], [20, 5], 400, goog.fx.easing.easeOut));
-        serialBackward.add(new goog.fx.dom.Slide(goog.dom.$("block5"),
+        serialBackward.add(new goog.fx.dom.Slide(goog.dom.getElement("block5"),
             [75, 50], [25, 5], 400, goog.fx.easing.easeOut));
       }
 

@@ -53,7 +53,7 @@ var comboBox;
 var input;
 
 function setUp() {
-  goog.dom.$('combo').innerHTML = '';
+  goog.dom.getElement('combo').innerHTML = '';
 
   comboBox = new goog.ui.ComboBox();
   comboBox.setDefaultText('Select a color...');
@@ -66,7 +66,7 @@ function setUp() {
   comboBox.addItem(new goog.ui.ComboBoxItem('Magenta'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Mouve'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Grey'));
-  comboBox.render(goog.dom.$('combo'));
+  comboBox.render(goog.dom.getElement('combo'));
 
   input = comboBox.getElement().getElementsByTagName(
       goog.dom.TagName.INPUT)[0];

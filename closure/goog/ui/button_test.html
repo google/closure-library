@@ -37,14 +37,14 @@ Copyright 2008 Google Inc. All Rights Reserved.
   <button id="demoButton">Foo</button>
   <div id="sandbox"></div>
   <script>
-    var sandbox = goog.dom.$('sandbox');
+    var sandbox = goog.dom.getElement('sandbox');
     var button;
     var clonedButtonDom;
     var demoButtonElement;
 
     function setUp() {
       button = new goog.ui.Button();
-      demoButtonElement = goog.dom.$('demoButton');
+      demoButtonElement = goog.dom.getElement('demoButton');
       clonedButtonDom = demoButtonElement.cloneNode(true);
     }
 

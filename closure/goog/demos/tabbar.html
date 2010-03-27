@@ -227,7 +227,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
@@ -241,22 +241,22 @@ limitations under the License.
     }
 
     var topTab = new goog.ui.TabBar();
-    topTab.decorate(goog.dom.$('top'));
+    topTab.decorate(goog.dom.getElement('top'));
 
     var bottom = new goog.ui.TabBar();
-    bottom.decorate(goog.dom.$('bottom'));
+    bottom.decorate(goog.dom.getElement('bottom'));
 
     var start = new goog.ui.TabBar();
-    start.decorate(goog.dom.$('start'));
+    start.decorate(goog.dom.getElement('start'));
 
     var end = new goog.ui.TabBar();
-    end.decorate(goog.dom.$('end'));
+    end.decorate(goog.dom.getElement('end'));
 
     var topRound = new goog.ui.TabBar();
-    topRound.decorate(goog.dom.$('top_round'));
+    topRound.decorate(goog.dom.getElement('top_round'));
 
     var startRound = new goog.ui.TabBar();
-    startRound.decorate(goog.dom.$('start_round'));
+    startRound.decorate(goog.dom.getElement('start_round'));
 
     goog.array.forEach([topTab, bottom, start, end, topRound, startRound],
         function(tabBar) {
@@ -267,13 +267,14 @@ limitations under the License.
         goog.events.listen(tabBar, goog.ui.Component.EventType.SELECT,
             function(e) {
               var tabSelected = e.target;
-              var contentElement = goog.dom.$(tabBar.getId() + '_content');
+              var contentElement = goog.dom.getElement(tabBar.getId() +
+                  '_content');
               goog.dom.setTextContent(contentElement,
                   'You selected the "' + tabSelected.getCaption() + '" tab.');
             });
 
         // Hook up the "Show/hide first tab" checkbox.
-        goog.events.listen(goog.dom.$('show_' + tabBar.getId()),
+        goog.events.listen(goog.dom.getElement('show_' + tabBar.getId()),
             goog.events.EventType.CLICK,
             function(e) {
               var checkbox = e.target;
@@ -281,7 +282,7 @@ limitations under the License.
             });
 
         // Hook up the "Enable/disable fourth tab" checkbox.
-        goog.events.listen(goog.dom.$('enable_' + tabBar.getId()),
+        goog.events.listen(goog.dom.getElement('enable_' + tabBar.getId()),
             goog.events.EventType.CLICK,
             function(e) {
               var checkbox = e.target;
@@ -289,7 +290,8 @@ limitations under the License.
             });
       });
 
-    goog.dom.setTextContent(goog.dom.$('perf'), (goog.now() - timer) + 'ms');
+    goog.dom.setTextContent(goog.dom.getElement('perf'),
+        (goog.now() - timer) + 'ms');
   </script>
 </body>
 </html>

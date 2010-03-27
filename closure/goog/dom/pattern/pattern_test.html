@@ -67,19 +67,19 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'StartTag(div) should match div',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'StartTag(div) should not match span',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'StartTag(div) should not match /div',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
   }
 
@@ -89,13 +89,13 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'StartTag(diV) should match div',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'StartTag(diV) should not match span',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
   }
 
@@ -105,19 +105,19 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'StartTag(/D/) should match div',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'StartTag(/D/) should not match span',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'StartTag(/D/) should not match /div',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
   }
 
@@ -127,12 +127,12 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'StartTag(div,id:div1) should match div1',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals('StartTag(div,id:div2) should not match div1',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('div2'),
+            goog.dom.getElement('div2'),
             goog.dom.TagWalkType.START_TAG));
   }
 
@@ -142,13 +142,13 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'StartTag(span,null,color:red) should match span1',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'StartTag(span,null,color:blue) should not match span1',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('span2'),
+            goog.dom.getElement('span2'),
             goog.dom.TagWalkType.START_TAG));
   }
 
@@ -158,13 +158,13 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'StartTag(span,id:/span\\d/) should match span1',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'StartTag(span,id:/span\\d/) should match span2',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
   }
 
@@ -174,7 +174,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'EndTag should match div',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
   }
 
@@ -184,19 +184,19 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'EndTag(/D/) should match /div',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'EndTag(/D/) should not match /span',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'EndTag(/D/) should not match div',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
   }
 
@@ -208,25 +208,25 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'ChildMatches should match div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'ChildMatches should match /div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'ChildMatches should match div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div2'),
+            goog.dom.getElement('div2'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'ChildMatches should match /div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div2'),
+            goog.dom.getElement('div2'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'ChildMatches should finish match at /body',
@@ -239,13 +239,13 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'ChildMatches should match div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div2'),
+            goog.dom.getElement('div2'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'ChildMatches should match /div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div2'),
+            goog.dom.getElement('div2'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'ChildMatches should fail to match at /body: not enough child matches',
@@ -261,38 +261,38 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'FullTag(div) should match div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'FullTag(div) should match /div',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
 
     assertEquals(
         'FullTag(div) should start match at div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'FullTag(div) should continue to match span',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'FullTag(div) should continue to match /span',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'FullTag(div) should finish match at /div',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
   }
 
@@ -302,13 +302,13 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'AllChildren(div) should match div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'AllChildren(div) should match /div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'AllChildren(div) should match at /body',
@@ -321,25 +321,25 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'AllChildren(div) should start match at div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'AllChildren(div) should continue to match span',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'AllChildren(div) should continue to match /span',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'AllChildren(div) should continue to match at /div',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'AllChildren(div) should finish match at /body',
@@ -355,19 +355,19 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'Text should match div3/text()',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div3').firstChild,
+            goog.dom.getElement('div3').firstChild,
             goog.dom.TagWalkType.OTHER));
     assertEquals(
         'Text should not match div4/text()',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('div4').firstChild,
+            goog.dom.getElement('div4').firstChild,
             goog.dom.TagWalkType.OTHER));
     assertEquals(
         'Text should not match div3',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('div3'),
+            goog.dom.getElement('div3'),
             goog.dom.TagWalkType.START_TAG));
 
   }
@@ -378,13 +378,13 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'Text(regex) should match div3/text()',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div3').firstChild,
+            goog.dom.getElement('div3').firstChild,
             goog.dom.TagWalkType.OTHER));
     assertEquals(
         'Text(regex) should match div4/text()',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div4').firstChild,
+            goog.dom.getElement('div4').firstChild,
             goog.dom.TagWalkType.OTHER));
   }
 
@@ -393,12 +393,12 @@ Copyright 2007 Google Inc. All Rights Reserved.
     assertEquals('Comment matcher should match a comment',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('nodeTypes').firstChild,
+            goog.dom.getElement('nodeTypes').firstChild,
             goog.dom.TagWalkType.OTHER));
     assertEquals('Comment matcher should not match a text node',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('nodeTypes').lastChild,
+            goog.dom.getElement('nodeTypes').lastChild,
             goog.dom.TagWalkType.OTHER));
   }
 
@@ -413,88 +413,88 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'Sequence[0] should match div1',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Sequence[1] should match span1',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Sequence[2] should match /span1',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'Sequence[3] should match /div1',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
 
     assertEquals(
         'Sequence[0] should match div1 again',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Sequence[1] should match span1 again',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Sequence[2] should match /span1 again',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'Sequence[3] should match /div1 again',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
 
     assertEquals(
         'Sequence[0] should match div1',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Sequence[1] should not match div1',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
 
     assertEquals(
         'Sequence[0] should match div1 after failure',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Sequence[1] should match span1 after failure',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Sequence[2] should match /span1 after failure',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('span1'),
+            goog.dom.getElement('span1'),
             goog.dom.TagWalkType.END_TAG));
     assertEquals(
         'Sequence[3] should match /div1 after failure',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('div1'),
+            goog.dom.getElement('div1'),
             goog.dom.TagWalkType.END_TAG));
   }
 
@@ -509,19 +509,19 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'Repeat[B] should match b1',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('b1'),
+            goog.dom.getElement('b1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Repeat[B] should match b2',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('b2'),
+            goog.dom.getElement('b2'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Repeat[B] should backtrack match i1',
         goog.dom.pattern.MatchType.BACKTRACK_MATCH,
         pattern.matchToken(
-            goog.dom.$('i1'),
+            goog.dom.getElement('i1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Repeat[B] should have match count of 2',
@@ -532,7 +532,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'Repeat[B] should backtrack match i1 even with no b matches',
         goog.dom.pattern.MatchType.BACKTRACK_MATCH,
         pattern.matchToken(
-            goog.dom.$('i1'),
+            goog.dom.getElement('i1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Repeat[B] should have match count of 0',
@@ -551,19 +551,19 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'Repeat[B,1] should match b1',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('b1'),
+            goog.dom.getElement('b1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Repeat[B,1] should match b2',
         goog.dom.pattern.MatchType.MATCHING,
         pattern.matchToken(
-            goog.dom.$('b2'),
+            goog.dom.getElement('b2'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Repeat[B,1] should backtrack match i1',
         goog.dom.pattern.MatchType.BACKTRACK_MATCH,
         pattern.matchToken(
-            goog.dom.$('i1'),
+            goog.dom.getElement('i1'),
             goog.dom.TagWalkType.START_TAG));
     assertEquals(
         'Repeat[B,1] should have match count of 2',
@@ -574,7 +574,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'Repeat[B,1] should not match i1',
         goog.dom.pattern.MatchType.NO_MATCH,
         pattern.matchToken(
-            goog.dom.$('i1'),
+            goog.dom.getElement('i1'),
             goog.dom.TagWalkType.START_TAG));
   }
 
@@ -589,7 +589,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
         'Repeat[B,1] should match b1',
         goog.dom.pattern.MatchType.MATCH,
         pattern.matchToken(
-            goog.dom.$('b1'),
+            goog.dom.getElement('b1'),
             goog.dom.TagWalkType.START_TAG));
   }
 
@@ -598,7 +598,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
         new goog.dom.pattern.Repeat(new goog.dom.pattern.StartTag('SPAN')),
         new goog.dom.pattern.Text('X')]);
 
-    var root = goog.dom.$('span3');
+    var root = goog.dom.getElement('span3');
     assertEquals(
         'Sequence[Repeat[SPAN],"X"] should match span3',
         goog.dom.pattern.MatchType.MATCHING,

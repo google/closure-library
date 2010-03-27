@@ -498,7 +498,7 @@ function checkStructureForNonProgressivePicker(palette, emoji) {
         cell.tagName, "DIV");
     assertNotNull('The outer div is not wrapped around another element', inner);
     assertEquals('The palette item should have the goomoji attribute',
-        cell.getAttribute('goomoji'), emojiInfo[1]);
+        cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE), emojiInfo[1]);
 
     // Now check the contents of the cells
     var spriteInfo = emojiInfo[2];
@@ -553,7 +553,7 @@ function checkStructureForProgressivePicker(palette, emoji) {
         cell.tagName, "DIV");
     assertNotNull('The outer div is not wrapped around another element', inner);
     assertEquals('The palette item should have the goomoji attribute',
-        cell.getAttribute('goomoji'), emojiInfo[1]);
+        cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE), emojiInfo[1]);
 
     // Now check the contents of the cells
     var spriteInfo = emojiInfo[2];
@@ -612,7 +612,7 @@ function checkPostLoadStructureForFastLoadNonProgressivePicker(palette, emoji) {
         cell.tagName, "DIV");
     assertNotNull('The outer div is not wrapped around another element', inner);
     assertEquals('The palette item should have the goomoji attribute',
-        cell.getAttribute('goomoji'), emojiInfo[1]);
+        cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE), emojiInfo[1]);
 
     // Now check the contents of the cells
     var url = emojiInfo[0];   // url of the animated emoji
@@ -682,7 +682,7 @@ function checkPostLoadStructureForFastLoadProgressivePicker(palette, emoji) {
         cell.tagName, "DIV");
     assertNotNull('The outer div is not wrapped around another element', inner);
     assertEquals('The palette item should have the goomoji attribute',
-        cell.getAttribute('goomoji'), emojiInfo[1]);
+        cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE), emojiInfo[1]);
 
     // Now check the contents of the cells
     var url = emojiInfo[0];  // url of the animated emoji

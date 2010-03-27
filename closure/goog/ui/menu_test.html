@@ -44,7 +44,7 @@ var menu;
 var clonedMenuDom;
     
 function setUp() {
-  clonedMenuDom = goog.dom.$('demoMenu').cloneNode(true);
+  clonedMenuDom = goog.dom.getElement('demoMenu').cloneNode(true);
   
   menu = new goog.ui.Menu();
 }
@@ -52,14 +52,14 @@ function setUp() {
 function tearDown() {
   menu.dispose();
 
-  var element = goog.dom.$('demoMenu');
+  var element = goog.dom.getElement('demoMenu');
   element.parentNode.replaceChild(clonedMenuDom, element);
 }
 
 function testHoverBehavior() {
-  menu.decorate(goog.dom.$('demoMenu'));
+  menu.decorate(goog.dom.getElement('demoMenu'));
 
-  goog.testing.events.fireMouseOverEvent(goog.dom.$('menuItem2'),
+  goog.testing.events.fireMouseOverEvent(goog.dom.getElement('menuItem2'),
       document.body);
   assertEquals(1, menu.getHighlightedIndex());
 

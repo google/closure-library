@@ -39,7 +39,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   <div id="sandbox"></div>
   <script>
     var button, buttonRenderer, testRenderer;
-    var sandbox = goog.dom.$('sandbox');
+    var sandbox = goog.dom.getElement('sandbox');
     var expectedFailures = new goog.testing.ExpectedFailures();
     
     /**
@@ -120,20 +120,20 @@ Copyright 2008 Google Inc. All Rights Reserved.
           '<div id="toggle">Toggle</div>';
 
       var foo = new goog.ui.Button(null, buttonRenderer);
-      foo.decorate(goog.dom.$('foo'));
+      foo.decorate(goog.dom.getElement('foo'));
       assertEquals('foo\'s tooltip must be the empty string', '',
           foo.getTooltip());
       foo.dispose();
 
       var bar = new goog.ui.Button(null, buttonRenderer);
-      bar.decorate(goog.dom.$('bar'));
+      bar.decorate(goog.dom.getElement('bar'));
       assertEquals('bar\'s tooltip must be initialized', 'Hello, world!',
           bar.getTooltip());
       bar.dispose();
 
       var toggle = new goog.ui.Button(null, buttonRenderer);
       toggle.setSupportedState(goog.ui.Component.State.CHECKED, true);
-      var element = goog.dom.$('toggle');
+      var element = goog.dom.getElement('toggle');
       toggle.decorate(element);
       if (goog.userAgent.GECKO) {
         assertEquals('toggle\'s aria-pressed attribute must be false', 'false',

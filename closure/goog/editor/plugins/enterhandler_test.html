@@ -82,12 +82,12 @@ var field2;
 var firedDelayedChange;
 var firedBeforeChange;
 var clock;
-var container = goog.dom.$('container');
+var container = goog.dom.getElement('container');
 var EXPECTEDFAILURES;
 
 function setUp() {
   EXPECTEDFAILURES = new goog.testing.ExpectedFailures();
-  savedHtml = goog.dom.$('root').innerHTML;
+  savedHtml = goog.dom.getElement('root').innerHTML;
   clock = new goog.testing.MockClock(true);
 }
 
@@ -104,7 +104,7 @@ function tearDown() {
 
   EXPECTEDFAILURES.handleTearDown();
 
-  goog.dom.$('root').innerHTML = savedHtml;
+  goog.dom.getElement('root').innerHTML = savedHtml;
 }
 
 function testEnterInNonSetupBlockquote() {
@@ -589,7 +589,7 @@ function testCollapsedSelectionKeepsBrOpera() {
     goog.testing.events.fireKeySequence(field1.getElement(),
                                         goog.events.KeyCodes.ENTER);
     assertNotNull('The <br> must not have been deleted',
-                  goog.dom.$('pleasedontdeleteme'));
+                  goog.dom.getElement('pleasedontdeleteme'));
   }
 }
 

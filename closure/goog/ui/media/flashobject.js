@@ -31,7 +31,7 @@
  * <pre>
  *   var flash = new goog.ui.media.FlashObject('http://hostname/flash.swf');
  *   flash.setFlashVar('myvar', 'foo');
- *   flash.render(goog.dom.$('parent'));
+ *   flash.render(goog.dom.getElement('parent'));
  * </pre>
  *
  * TODO: create a goog.ui.media.BrowserInterfaceFlashObject that

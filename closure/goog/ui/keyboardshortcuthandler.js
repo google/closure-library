@@ -86,6 +86,13 @@ goog.ui.KeyboardShortcutHandler = function(keyTarget) {
    */
   this.alwaysPreventDefault_ = true;
 
+   /**
+   * Whether to always stop propagation if a shortcut event is fired.
+   * @type {boolean}
+   * @private
+   */
+  this.alwaysStopPropagation_ = false;
+
   /**
    * Whether to treat all shortcuts as if they had been passed
    * to setGlobalKeys().
@@ -234,6 +241,33 @@ goog.ui.KeyboardShortcutHandler.prototype.setAlwaysPreventDefault = function(
  */
 goog.ui.KeyboardShortcutHandler.prototype.getAlwaysPreventDefault = function() {
   return this.alwaysPreventDefault_;
+};
+
+
+/**
+ * Sets whether to always stop propagation for the event when fired. If false,
+ * the propagation is stopped only if stopPropagation is called on either of the
+ * corresponding SHORT_CUT_TRIGGERED or SHORTCUT_PREFIX events. If true, the
+ * event is prevented from propagating beyond its target whenever it is fired.
+ * The default value is false.
+ * @param {boolean} alwaysStopPropagation Whether to always call
+ *     stopPropagation.
+ */
+goog.ui.KeyboardShortcutHandler.prototype.setAlwaysStopPropagation = function(
+    alwaysStopPropagation) {
+  this.alwaysStopPropagation_ = alwaysStopPropagation;
+};
+
+
+/**
+ * Returns whether the event will always be stopped from propagating beyond its
+ * target when a shortcut event is fired. The default value is false.
+ * @see #setAlwaysStopPropagation
+ * @return {boolean} Whether stopPropagation will always be called.
+ */
+goog.ui.KeyboardShortcutHandler.prototype.getAlwaysStopPropagation =
+    function() {
+  return this.alwaysStopPropagation_;
 };
 
 
@@ -749,6 +783,10 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
   if (shortcut) {
     if (this.alwaysPreventDefault_) {
       event.preventDefault();
+    }
+
+    if (this.alwaysStopPropagation_) {
+      event.stopPropagation();
     }
 
     var types = goog.ui.KeyboardShortcutHandler.EventType;

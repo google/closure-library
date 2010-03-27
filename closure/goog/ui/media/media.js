@@ -49,7 +49,7 @@
  * <pre>
  *   var renderer = new goog.ui.media.MediaRenderer();
  *   var control = new goog.ui.media.Media('hello world', renderer);
- *   var control.render(goog.dom.$('mediaHolder'));
+ *   var control.render(goog.dom.getElement('mediaHolder'));
  * </pre>
  *
  * It requires a few CSS rules to be defined, which you should use to control
@@ -74,7 +74,7 @@
  *   var renderer = goog.ui.ControlRenderer.getCustomRenderer(
  *       goog.ui.media.MediaRenderer, 'my-custom-namespace');
  *   var media = new goog.ui.media.Media('', renderer);
- *   media.render(goog.dom.$('parent'));
+ *   media.render(goog.dom.getElement('parent'));
  * </pre>
  *
  * Which will allow you to set your own .my-custom-namespace-hover,

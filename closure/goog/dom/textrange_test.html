@@ -53,11 +53,11 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
 
 <script>
-  var logo = goog.dom.$('logo');
-  var logo2 = goog.dom.$('logo2');
-  var table = goog.dom.$('table');
-  var table2 = goog.dom.$('table2');
-  var table2div = goog.dom.$('table2div');
+  var logo = goog.dom.getElement('logo');
+  var logo2 = goog.dom.getElement('logo2');
+  var table = goog.dom.getElement('table');
+  var table2 = goog.dom.getElement('table2');
+  var table2div = goog.dom.getElement('table2div');
 
   function testCreateFromNodeContents() {
     assertNotNull('Text range object can be created for element node',

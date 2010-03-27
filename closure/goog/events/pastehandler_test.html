@@ -347,13 +347,13 @@ function testScriptingDoesntTriggerPasteEvents() {
       function() {
         pasted = true;
       });
-  goog.dom.$('foo').value = 'dear paste handler,';
+  goog.dom.getElement('foo').value = 'dear paste handler,';
   assertFalse(pasted);
-  goog.dom.$('foo').value = 'please dont misunderstand script changes';
+  goog.dom.getElement('foo').value = 'please dont misunderstand script changes';
   assertFalse(pasted);
-  goog.dom.$('foo').value = 'with user generated paste events';
+  goog.dom.getElement('foo').value = 'with user generated paste events';
   assertFalse(pasted);
-  goog.dom.$('foo').value = 'thanks!';
+  goog.dom.getElement('foo').value = 'thanks!';
   assertFalse(pasted);
 }
 

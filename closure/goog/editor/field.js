@@ -29,6 +29,7 @@ goog.require('goog.array');
 goog.require('goog.async.Delay');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
+goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
 goog.require('goog.editor.BrowserFeature');
@@ -2167,30 +2168,18 @@ goog.editor.Field.prototype.focusAndPlaceCursorAtStart = function() {
  */
 goog.editor.Field.prototype.placeCursorAtStart = function() {
   var field = this.getElement();
-  var cursorPosition = field;
-
   if (field) {
-    cursorPosition = goog.editor.node.getLeftMostLeaf(field);
-    // NOTE:
-    // If the field does not itself have any children (for example, if the
-    // lorem ipsum plugin was not loaded) then getLeftMostLeaf will have
-    // returned the field itself.  We need to avoid calling placeCursorNextTo
-    // in that case, because that would result in a text node as a sibling of
-    // the field, which isn't what we want at all.  We also don't want to
-    // create a child text node and then call placeCursorNextTo, because that
-    // could result in two adjacent text nodes, which may crash some browsers.
-    // So instead, we'll add an empty text node and create a caret around it.
+    var cursorPosition = goog.editor.node.getLeftMostLeaf(field);
     if (field == cursorPosition) {
-      var textNode = goog.dom.getDomHelper(cursorPosition).createTextNode('');
-      field.appendChild(textNode);
-      goog.dom.Range.createCaret(textNode, 0);
-      this.dispatchSelectionChangeEvent();
-      return;
+      // The leftmost leaf we found was the field element itself (which likely
+      // means the field element is empty). We can't place the cursor next to
+      // the field element, so just place it at the beginning.
+      goog.dom.Range.createCaret(field, 0).select();
+    } else {
+      goog.editor.range.placeCursorNextTo(cursorPosition, true);
     }
+    this.dispatchSelectionChangeEvent();
   }
-
-  goog.editor.range.placeCursorNextTo(cursorPosition, true);
-  this.dispatchSelectionChangeEvent();
 };
 
 

@@ -38,7 +38,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
   <script>
     var component;
     var propertyReplacer = new goog.testing.PropertyReplacer();
-    var sandbox = goog.dom.$('sandbox');
+    var sandbox = goog.dom.getElement('sandbox');
 
     function setUp() {
       component = new goog.ui.Component();
@@ -268,7 +268,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
     function testDecorate() {
       sandbox.innerHTML = '<div id="foo">Foo</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
 
       assertFalse('wasDecorated() must be false by default',
           component.wasDecorated());
@@ -289,7 +289,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
     function testCannotDecorate() {
       sandbox.innerHTML = '<div id="foo">Foo</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
 
       // Have canDecorate() return false.
       propertyReplacer.set(component, 'canDecorate', function() {
@@ -397,7 +397,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
     function testDispose_Decorated() {
       sandbox.innerHTML = '<div id="foo">Foo</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
 
       component.decorate(foo);
       assertTrue('Component must be in the document', component.isInDocument());
@@ -685,10 +685,16 @@ Copyright 2007 Google Inc. All Rights Reserved.
     }
 
     function testMovingChildrenUsingAddChildAt() {
+      component.render(sandbox);
+
       var a = new goog.ui.Component();
       var b = new goog.ui.Component();
       var c = new goog.ui.Component();
       var d = new goog.ui.Component();
+      a.setElementInternal(goog.dom.$dom('a'));
+      b.setElementInternal(goog.dom.$dom('b'));
+      c.setElementInternal(goog.dom.$dom('c'));
+      d.setElementInternal(goog.dom.$dom('d'));
 
       a.setId('a');
       b.setId('b');
@@ -715,6 +721,12 @@ Copyright 2007 Google Inc. All Rights Reserved.
       assertEquals(a, component.getChildAt(1));
       assertEquals(c, component.getChildAt(2));
       assertEquals(b, component.getChildAt(3));
+
+      // Move child a to the top, and check that DOM nodes are in correct order.
+      component.addChildAt(a, 0);
+      assertEquals('adcb', component.getChildIds().join(''));
+      assertEquals(a, component.getChildAt(0));
+      assertEquals(a.getElement(), component.getElement().childNodes[0]);
     }
   </script>
 </body>

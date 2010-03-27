@@ -40,6 +40,12 @@ goog.userAgent.product.ASSUME_CAMINO = false;
  */
 goog.userAgent.product.ASSUME_IPHONE = false;
 
+/**
+ * @define {boolean} Whether we know at compile-time that the product is an
+ *     iPad.
+ */
+goog.userAgent.product.ASSUME_IPAD = false;
+
 
 /**
  * @define {boolean} Whether we know at compile-time that the product is an
@@ -71,6 +77,7 @@ goog.userAgent.product.PRODUCT_KNOWN_ =
     goog.userAgent.product.ASSUME_FIREFOX ||
     goog.userAgent.product.ASSUME_CAMINO ||
     goog.userAgent.product.ASSUME_IPHONE ||
+    goog.userAgent.product.ASSUME_IPAD ||
     goog.userAgent.product.ASSUME_ANDROID ||
     goog.userAgent.product.ASSUME_CHROME ||
     goog.userAgent.product.ASSUME_SAFARI;
@@ -106,6 +113,13 @@ goog.userAgent.product.init_ = function() {
    * @private
    */
   goog.userAgent.product.detectedIphone_ = false;
+
+  /**
+   * Whether the code is running on an iPad
+   * @type {boolean}
+   * @private
+   */
+  goog.userAgent.product.detectedIpad_ = false;
 
   /**
    * Whether the code is running on the default browser on an Android phone.
@@ -145,6 +159,8 @@ goog.userAgent.product.init_ = function() {
     goog.userAgent.product.detectedCamino_ = true;
   } else if (ua.indexOf('iPhone') != -1 || ua.indexOf('iPod') != -1) {
     goog.userAgent.product.detectedIphone_ = true;
+  } else if (ua.indexOf('iPad') != -1) {
+    goog.userAgent.product.detectedIpad_ = true;
   } else if (ua.indexOf('Android') != -1) {
     goog.userAgent.product.detectedAndroid_ = true;
   } else if (ua.indexOf('Chrome') != -1) {
@@ -198,6 +214,14 @@ goog.userAgent.product.CAMINO = goog.userAgent.product.PRODUCT_KNOWN_ ?
 goog.userAgent.product.IPHONE = goog.userAgent.product.PRODUCT_KNOWN_ ?
     goog.userAgent.product.ASSUME_IPHONE :
     goog.userAgent.product.detectedIphone_;
+
+/**
+ * Whether the code is running on an iPad.
+ * @type {boolean}
+ */
+goog.userAgent.product.IPAD = goog.userAgent.product.PRODUCT_KNOWN_ ?
+    goog.userAgent.product.ASSUME_IPAD :
+    goog.userAgent.product.detectedIpad_;
 
 
 /**

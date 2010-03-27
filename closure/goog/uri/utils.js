@@ -555,11 +555,21 @@ goog.uri.utils.appendKeyValuePairs_ = function(key, value, pairs) {
     // jscompiler that it is, indeed, an array.
     value = /** @type {Array} */ (value);
     for (var j = 0; j < value.length; j++) {
-      pairs.push('&', key, '=', goog.string.urlEncode(value[j]));
+      pairs.push('&', key);
+      // Check for empty string, null and undefined get encoded
+      // into the url as literal strings
+      if (value[j] !== '') {
+        pairs.push('=', goog.string.urlEncode(value[j]));
+      }
     }
   } else if (value != null) {
     // Not null or undefined, so safe to append.
-    pairs.push('&', key, '=', goog.string.urlEncode(value));
+    pairs.push('&', key);
+    // Check for empty string, null and undefined get encoded
+    // into the url as literal strings
+    if (value !== '') {
+      pairs.push('=', goog.string.urlEncode(value));
+    }
   }
 };
 
@@ -591,9 +601,7 @@ goog.uri.utils.buildQueryDataBuffer_ = function(
 
 /**
  * Builds a query data string from a sequence of alternating keys and values.
- *
- * Currently generates "&key=&" for empty args; there is no way to generate
- * "&key&" arguments with no equal sign.
+ * Currently generates "&key&" for empty args.
  *
  * @param {goog.uri.utils.QueryArray} keysAndValues Alternating keys and
  *     values.  See the typedef.
@@ -630,9 +638,7 @@ goog.uri.utils.buildQueryDataBufferFromMap_ = function(buffer, map) {
 
 /**
  * Builds a query data string from a map.
- *
- * Currently generates "&key=&" for empty args; there is no way to generate
- * "&key&" arguments with no equal sign.
+ * Currently generates "&key&" for empty args.
  *
  * @param {Object} map An object where keys are URI-encoded parameter keys,
  *     and the values are arbitrary types or arrays.  Keys with a null value

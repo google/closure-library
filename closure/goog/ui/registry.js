@@ -33,12 +33,12 @@ goog.require('goog.dom.classes');
  *     no default renderer was found.
  */
 goog.ui.registry.getDefaultRenderer = function(componentCtor) {
-  // Locate the default renderer based on the constructor's hash code.  If no
+  // Locate the default renderer based on the constructor's unique ID.  If no
   // renderer is registered for this class, walk up the superClass_ chain.
   var key;
   var /** @constructor */ rendererCtor;
   while (componentCtor) {
-    key = goog.getHashCode(componentCtor);
+    key = goog.getUid(componentCtor);
     if ((rendererCtor = goog.ui.registry.defaultRenderers_[key])) {
       break;
     }
@@ -76,8 +76,8 @@ goog.ui.registry.setDefaultRenderer = function(componentCtor, rendererCtor) {
     throw Error('Invalid renderer class ' + rendererCtor);
   }
 
-  // Map the component constructor's hash code to the renderer constructor.
-  var key = goog.getHashCode(componentCtor);
+  // Map the component constructor's unique ID to the renderer constructor.
+  var key = goog.getUid(componentCtor);
   goog.ui.registry.defaultRenderers_[key] = rendererCtor;
 };
 
@@ -147,7 +147,7 @@ goog.ui.registry.reset = function() {
 
 
 /**
- * Map of {@link goog.ui.Component} constructor hash codes to the constructors
+ * Map of {@link goog.ui.Component} constructor unique IDs to the constructors
  * of their default {@link goog.ui.Renderer}s.
  * @type {Object}
  * @private

@@ -52,8 +52,8 @@ var harness;
 function setUp() {
   harness = new goog.testing.ui.RendererHarness(
       goog.ui.ColorMenuButtonRenderer.getInstance(),
-      goog.dom.$('parent'),
-      goog.dom.$('decoratedButton'));
+      goog.dom.getElement('parent'),
+      goog.dom.getElement('decoratedButton'));
 }
 
 function tearDown() {

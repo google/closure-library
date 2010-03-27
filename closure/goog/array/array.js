@@ -776,8 +776,8 @@ goog.array.slice = function(arr, start, opt_end) {
  * occurrence of each array element).  This function modifies the
  * array in place and doesn't change the order of the non-duplicate items.
  *
- * For objects, duplicates are identified as having the same hash code property
- * as defined by {@link goog.getHashCode}.
+ * For objects, duplicates are identified as having the same unique ID as
+ * defined by {@link goog.getUid}.
  *
  * Runtime: N,
  * Worstcase space: 2N (no dupes)
@@ -792,9 +792,9 @@ goog.array.removeDuplicates = function(arr, opt_rv) {
   var seen = {}, cursorInsert = 0, cursorRead = 0;
   while (cursorRead < arr.length) {
     var current = arr[cursorRead++];
-    var hc = goog.isObject(current) ? goog.getHashCode(current) : current;
-    if (!Object.prototype.hasOwnProperty.call(seen, hc)) {
-      seen[hc] = true;
+    var uid = goog.isObject(current) ? goog.getUid(current) : current;
+    if (!Object.prototype.hasOwnProperty.call(seen, uid)) {
+      seen[uid] = true;
       rv[cursorInsert++] = current;
     }
   }

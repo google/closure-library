@@ -273,13 +273,6 @@ goog.require = function(rule) {
 
 
 /**
- * Whether goog.require should throw an exception if it fails.
- * @type {boolean}
- */
-goog.useStrictRequires = false;
-
-
-/**
  * Path for included scripts
  * @type {string}
  */
@@ -789,62 +782,86 @@ goog.isObject = function(val) {
 
 
 /**
- * Adds a hash code field to an object. The hash code is unique for the
- * given object.
- * @param {Object} obj The object to get the hash code for.
- * @return {number} The hash code for the object.
+ * Gets a unique ID for an object. This mutates the object so that further
+ * calls with the same object as a parameter returns the same value. The unique
+ * ID is guaranteed to be unique across the current session amongst objects that
+ * are passed into {@code getUid}. There is no guarantee that the ID is unique
+ * or consistent across sessions.
+ *
+ * @param {Object} obj The object to get the unique ID for.
+ * @return {number} The unique ID for the object.
  */
-goog.getHashCode = function(obj) {
+goog.getUid = function(obj) {
+  // TODO: Make the type stricter, do not accept null.
+
   // In IE, DOM nodes do not extend Object so they do not have this method.
   // we need to check hasOwnProperty because the proto might have this set.
-
-  // TODO: There is a proposal to add hashcode as a global function to JS2
-  //            we should keep track of this process so we can use that whenever
-  //            it starts to show up in the real world.
-  if (obj.hasOwnProperty && obj.hasOwnProperty(goog.HASH_CODE_PROPERTY_)) {
-    return obj[goog.HASH_CODE_PROPERTY_];
+  if (obj.hasOwnProperty && obj.hasOwnProperty(goog.UID_PROPERTY_)) {
+    return obj[goog.UID_PROPERTY_];
   }
-  if (!obj[goog.HASH_CODE_PROPERTY_]) {
-    obj[goog.HASH_CODE_PROPERTY_] = ++goog.hashCodeCounter_;
+  if (!obj[goog.UID_PROPERTY_]) {
+    obj[goog.UID_PROPERTY_] = ++goog.uidCounter_;
   }
-  return obj[goog.HASH_CODE_PROPERTY_];
+  return obj[goog.UID_PROPERTY_];
 };
 
 
 /**
- * Removes the hash code field from an object.
- * @param {Object} obj The object to remove the field from.
+ * Removes the unique ID from an object. This is useful if the object was
+ * previously mutated using {@code goog.getUid} in which case the mutation is
+ * undone.
+ * @param {Object} obj The object to remove the unique ID field from.
  */
-goog.removeHashCode = function(obj) {
+goog.removeUid = function(obj) {
+  // TODO: Make the type stricter, do not accept null.
+
   // DOM nodes in IE are not instance of Object and throws exception
   // for delete. Instead we try to use removeAttribute
   if ('removeAttribute' in obj) {
-    obj.removeAttribute(goog.HASH_CODE_PROPERTY_);
+    obj.removeAttribute(goog.UID_PROPERTY_);
   }
   /** @preserveTry */
   try {
-    delete obj[goog.HASH_CODE_PROPERTY_];
+    delete obj[goog.UID_PROPERTY_];
   } catch (ex) {
   }
 };
 
 
 /**
- * Name for hash code property. Initialized in a way to help avoid collisions
+ * Name for unique ID property. Initialized in a way to help avoid collisions
  * with other closure javascript on the same page.
  * @type {string}
  * @private
  */
-goog.HASH_CODE_PROPERTY_ = 'closure_hashCode_' +
+goog.UID_PROPERTY_ = 'closure_uid_' +
     Math.floor(Math.random() * 2147483648).toString(36);
 
 
 /**
- * Counter for hash codes.
+ * Counter for UID.
  * @type {number}
  * @private
  */
-goog.hashCodeCounter_ = 0;
+goog.uidCounter_ = 0;
+
+
+/**
+ * Adds a hash code field to an object. The hash code is unique for the
+ * given object.
+ * @param {Object} obj The object to get the hash code for.
+ * @return {number} The hash code for the object.
+ * @deprecated Use goog.getUid instead.
+ */
+goog.getHashCode = goog.getUid;
+
+
+/**
+ * Removes the hash code field from an object.
+ * @param {Object} obj The object to remove the field from.
+ * @deprecated Use goog.removeUid instead.
+ */
+goog.removeHashCode = goog.removeUid;
 
 
 /**

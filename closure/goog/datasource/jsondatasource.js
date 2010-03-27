@@ -111,7 +111,8 @@ goog.ds.JsonDataSource.prototype.load = function() {
 
     var scriptEl = goog.dom.createElement('script');
     scriptEl.src = uriToCall;
-    goog.dom.$$('head')[0].appendChild(scriptEl);
+    goog.dom.getDocument().getElementsByTagNameAndClass('head')[0].appendChild(
+        scriptEl);
   } else {
     this.root_ = {};
     this.loadState_ = goog.ds.LoadState.NOT_LOADED;

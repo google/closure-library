@@ -89,9 +89,8 @@ goog.debug.expose = function(obj, opt_showFn) {
  * Creates a string representing a given primitive or object, and for an
  * object, all its properties and nested objects.  WARNING: If an object is
  * given, it and all its nested objects will be modified.  To detect reference
- * cycles, this method identifies objects using goog.getHashCode(), so every
- * object it touches will gain a property whose name begins with
- * 'closure_hashCode_'.
+ * cycles, this method identifies objects using goog.getUid() which mutates the
+ * object.
  * @param {*} obj Object to expose.
  * @param {boolean=} opt_showFn Also show properties that are functions (by
  *     default, functions are omitted).

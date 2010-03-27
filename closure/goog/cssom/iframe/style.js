@@ -362,9 +362,9 @@ goog.cssom.iframe.style.CssSelector_.prototype.setPartsFromString_ =
 goog.cssom.iframe.style.CssSelector_.prototype.matchElementAncestry =
     function(elementAncestry) {
 
-  var ancestryHash = elementAncestry.hash;
-  if (this.ancestryMatchCache_[ancestryHash]) {
-    return this.ancestryMatchCache_[ancestryHash];
+  var ancestryUid = elementAncestry.uid;
+  if (this.ancestryMatchCache_[ancestryUid]) {
+    return this.ancestryMatchCache_[ancestryUid];
   }
 
   // Walk through the selector parts and see how far down the element hierarchy
@@ -399,7 +399,7 @@ goog.cssom.iframe.style.CssSelector_.prototype.matchElementAncestry =
     }
     lastSelectorPart = selectorPart;
   }
-  this.ancestryMatchCache_[ancestryHash] = match;
+  this.ancestryMatchCache_[ancestryUid] = match;
   return match;
 };
 
@@ -464,8 +464,8 @@ goog.cssom.iframe.style.CssSelectorPart_.instances_ = {};
 goog.cssom.iframe.style.CssSelectorPart_.prototype.testElement =
     function(elementInfo) {
 
-  var elementHash = elementInfo.hash;
-  var cachedMatch = this.testedElements_[elementHash];
+  var elementUid = elementInfo.uid;
+  var cachedMatch = this.testedElements_[elementUid];
   if (typeof cachedMatch != 'undefined') {
     return cachedMatch;
   }
@@ -485,7 +485,7 @@ goog.cssom.iframe.style.CssSelectorPart_.prototype.testElement =
     matched = false;
   }
 
-  this.testedElements_[elementHash] = matched;
+  this.testedElements_[elementUid] = matched;
   return matched;
 };
 
@@ -499,10 +499,10 @@ goog.cssom.iframe.style.CssSelectorPart_.prototype.testElement =
  * @private
  */
 goog.cssom.iframe.style.NodeAncestry_ = function(node) {
-  var nodeHash = goog.getHashCode(node);
+  var nodeUid = goog.getUid(node);
 
   // Return an existing object from the cache if one exits for this node.
-  var ancestry = goog.cssom.iframe.style.NodeAncestry_.instances_[nodeHash];
+  var ancestry = goog.cssom.iframe.style.NodeAncestry_.instances_[nodeUid];
   if (ancestry) {
     return ancestry;
   }
@@ -513,7 +513,7 @@ goog.cssom.iframe.style.NodeAncestry_ = function(node) {
       id: node.id,
       nodeName: node.nodeName
     };
-    nodeInfo.hash = goog.getHashCode(nodeInfo);
+    nodeInfo.uid = goog.getUid(nodeInfo);
     var className = node.className;
     var classNamesLookup = {};
     if (className) {
@@ -533,8 +533,8 @@ goog.cssom.iframe.style.NodeAncestry_ = function(node) {
    */
   this.nodes = nodes;
 
-  this.hash = goog.getHashCode(this);
-  goog.cssom.iframe.style.NodeAncestry_.instances_[nodeHash] = this;
+  this.uid = goog.getUid(this);
+  goog.cssom.iframe.style.NodeAncestry_.instances_[nodeUid] = this;
 };
 
 
@@ -591,7 +591,7 @@ goog.cssom.iframe.style.ruleSetCache_ = {};
 
 
 /**
- * Cache of ruleset objects keyed by document hash code.
+ * Cache of ruleset objects keyed by document unique ID.
  * @type {Object}
  * @private
  */
@@ -604,8 +604,8 @@ goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_ = {};
  * @param {Document} doc The document from which to load rulesets.
  */
 goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument = function(doc) {
-  var docHash = goog.getHashCode(doc);
-  goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_[docHash] =
+  var docUid = goog.getUid(doc);
+  goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_[docUid] =
       goog.cssom.iframe.style.getRuleSetsFromDocument_(doc);
 };
 
@@ -618,15 +618,15 @@ goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument = function(doc) {
  *     objects representing the css rule sets in the supplied document.
  */
 goog.cssom.iframe.style.ruleSetCache_.getRuleSetsForDocument = function(doc) {
-  var docHash = goog.getHashCode(doc);
+  var docUid = goog.getUid(doc);
   var cache = goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_;
-  if (!cache[docHash]) {
+  if (!cache[docUid]) {
     goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument(doc);
   }
   // Build a cloned copy of rulesets array, so if object in the returned array
   // get modified future calls will still return the original unmodified
   // versions.
-  var ruleSets = cache[docHash];
+  var ruleSets = cache[docUid];
   var ruleSetsCopy = [];
   for (var i = 0; i < ruleSets.length; i++) {
     ruleSetsCopy.push(ruleSets[i].clone());

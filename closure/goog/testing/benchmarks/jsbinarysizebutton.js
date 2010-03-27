@@ -34,7 +34,7 @@ function drawButtons() {
 
   // Create a simple button programmatically
   var b1 = new goog.ui.Button('Hello!');
-  b1.render(goog.dom.$('b1'));
+  b1.render(goog.dom.getElement('b1'));
   b1.setTooltip('I changed the tooltip.');
   goog.events.listen(b1, goog.ui.Component.EventType.ACTION, logEvent);
 
@@ -54,7 +54,7 @@ function drawButtons() {
   centerButton.setCollapsed(goog.ui.Button.Side.BOTH);
   rightButton.setCollapsed(goog.ui.Button.Side.START);
   goog.array.forEach(customButtons, function(b) {
-    b.render(goog.dom.$('cb1'));
+    b.render(goog.dom.getElement('cb1'));
     goog.events.listen(b, goog.ui.Component.EventType.ACTION, logEvent);
   });
 }

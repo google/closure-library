@@ -125,7 +125,7 @@ limitations under the License.
       var tree = new goog.ui.tree.TreeControl('All Demos');
       tree.setIsUserCollapsible(false);
       buildNode(tree, treeData);
-      tree.render(goog.dom.$('demo-list'));
+      tree.render(goog.dom.getElement('demo-list'));
     }
 
     function buildNode(parent, nodeArray) {

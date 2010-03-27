@@ -456,77 +456,77 @@ function testIsObject() {
 }
 
 
-//=== tests for hashcode methods ===
+//=== tests for unique ID methods ===
 
-function testGetHashCode() {
+function testGetUid() {
   var a = {};
   var b = {};
   var c = {};
 
-  var hc1 = goog.getHashCode(a);
-  var hc2 = goog.getHashCode(b);
-  var hc3 = goog.getHashCode(c);
+  var uid1 = goog.getUid(a);
+  var uid2 = goog.getUid(b);
+  var uid3 = goog.getUid(c);
 
-  assertNotEquals('Hash codes must be unique', hc1, hc2);
-  assertNotEquals('Hash codes must be unique', hc1, hc3);
-  assertNotEquals('Hash codes must be unique', hc2, hc3);
+  assertNotEquals('Unique IDs must be unique', uid1, uid2);
+  assertNotEquals('Unique IDs must be unique', uid1, uid3);
+  assertNotEquals('Unique IDs must be unique', uid2, uid3);
 }
 
-function testRemoveHashCodeFromPlainObject() {
+function testRemoveUidFromPlainObject() {
   var a = {};
-  var hash = goog.getHashCode(a);
-  goog.removeHashCode(a);
-  assertNotEquals("An object's old and new hashcodes should be different",
-      hash, goog.getHashCode(a));
+  var uid = goog.getUid(a);
+  goog.removeUid(a);
+  assertNotEquals("An object's old and new unique IDs should be different",
+      uid, goog.getUid(a));
 }
 
-function testRemoveHashCodeFromObjectWithoutHashCode() {
+function testRemoveUidFromObjectWithoutUid() {
   var a = {};
   try {
-    goog.removeHashCode(a);
+    goog.removeUid(a);
   } catch (e) {
-    fail('Removing a hash code should not fail even if it did not exist');
+    fail('Removing a unique ID should not fail even if it did not exist');
   }
 }
 
-function testRemoveHashCodeFromNode() {
+function testRemoveUidFromNode() {
   var node = document.createElement('div');
-  var nodeHash = goog.getHashCode(node);
-  goog.removeHashCode(node);
-  assertNotEquals("A node's old and new hashcodes should be different",
-      nodeHash, goog.getHashCode(node));
+  var nodeUid = goog.getUid(node);
+  goog.removeUid(node);
+  assertNotEquals("A node's old and new unique IDs should be different",
+      nodeUid, goog.getUid(node));
 }
 
-function testConstructorHashCode() {
+function testConstructorUid() {
   function BaseClass() {};
   function SubClass() {};
   goog.inherits(SubClass, BaseClass);
 
-  var baseClassHash = goog.getHashCode(BaseClass);
-  var subClassHash = goog.getHashCode(SubClass);
+  var baseClassUid = goog.getUid(BaseClass);
+  var subClassUid = goog.getUid(SubClass);
 
-  assertTrue('Hash code of BaseClass must be a number',
-      typeof baseClassHash == 'number');
-  assertTrue('Hash code of SubClass must be a number',
-      typeof subClassHash == 'number');
-  assertNotEquals('Hash codes of BaseClass and SubClass must differ',
-      baseClassHash, subClassHash);
+  assertTrue('Unique ID of BaseClass must be a number',
+      typeof baseClassUid == 'number');
+  assertTrue('Unique ID of SubClass must be a number',
+      typeof subClassUid == 'number');
+  assertNotEquals('Unique IDs of BaseClass and SubClass must differ',
+      baseClassUid, subClassUid);
 }
 
 /**
- * Tests against Chrome bug where the re-created element will have the hashCode
+ * Tests against Chrome bug where the re-created element will have the uid
  * property set but undefined. See bug 1252508.
  */
-function testHashCodeNotUndefinedOnReusedElement() {
+function testUidNotUndefinedOnReusedElement() {
   var div = document.createElement('DIV');
   document.body.appendChild(div);
   div.innerHTML = '<form id="form"></form>';
   var span = div.getElementsByTagName('FORM')[0];
-  goog.getHashCode(span);
+  goog.getUid(span);
 
   div.innerHTML = '<form id="form"></form>';
   var span2 = div.getElementsByTagName('FORM')[0];
-  assertNotUndefined(goog.getHashCode(span2));
+  assertNotUndefined(goog.getUid(span2));
 }
 
 //=== tests for clone method ===

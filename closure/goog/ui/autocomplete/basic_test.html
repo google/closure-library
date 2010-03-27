@@ -35,12 +35,13 @@ var input;
 var mockClock;
 
 function setUpPage() {
-  new goog.ui.AutoComplete.Basic(data, goog.dom.$('user'), true, false);
+  new goog.ui.AutoComplete.Basic(data, goog.dom.getElement('user'), true,
+      false);
 }
 
 function setUp() {
   mockClock = new goog.testing.MockClock(true);
-  input = goog.dom.$('input');
+  input = goog.dom.getElement('input');
   input.value = '';
   autocomplete = new goog.ui.AutoComplete.Basic(data, input, true, false);
 }

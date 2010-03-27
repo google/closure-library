@@ -106,7 +106,7 @@ goog.testing.PerformanceTable.prototype.initRoot_ = function() {
  * @private
  */
 goog.testing.PerformanceTable.prototype.getTableBody_ = function() {
-  return goog.dom.$$('tbody', null, this.root_)[0];
+  return this.root_.getElementsByTagName(goog.dom.TagName.TBODY)[0];
 };
 
 

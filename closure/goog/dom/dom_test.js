@@ -23,7 +23,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.testing.asserts');
 goog.require('goog.userAgent');
 
-var $ = goog.dom.$;
+var $ = goog.dom.getElement;
 
 // Setup for the iframe
 var myIframe = $('myIframe');
@@ -54,30 +54,44 @@ function testGetElement() {
 }
 
 function testGetElementsByTagNameAndClass() {
-  assertEquals('Should get 6 spans', goog.dom.$$('span').length, 6);
-  assertEquals('Should get 6 spans', goog.dom.$$('SPAN').length, 6);
-  assertEquals('Should get 3 spans', goog.dom.$$('span', 'test1').length, 3);
-  assertEquals('Should get 1 span', goog.dom.$$('span', 'test2').length, 1);
-  assertEquals('Should get 1 span', goog.dom.$$('SPAN', 'test2').length, 1);
-  assertEquals('Should get lots of elements', goog.dom.$$().length,
+  assertEquals('Should get 6 spans',
+      goog.dom.getElementsByTagNameAndClass('span').length, 6);
+  assertEquals('Should get 6 spans',
+      goog.dom.getElementsByTagNameAndClass('SPAN').length, 6);
+  assertEquals('Should get 3 spans',
+      goog.dom.getElementsByTagNameAndClass('span', 'test1').length, 3);
+  assertEquals('Should get 1 span',
+      goog.dom.getElementsByTagNameAndClass('span', 'test2').length, 1);
+  assertEquals('Should get 1 span',
+      goog.dom.getElementsByTagNameAndClass('SPAN', 'test2').length, 1);
+  assertEquals('Should get lots of elements',
+      goog.dom.getElementsByTagNameAndClass().length,
       document.getElementsByTagName('*').length);
 
-  assertEquals('Should get 1 span', goog.dom.$$('span', null,
-                                                $('testEl')).length, 1);
+  assertEquals('Should get 1 span',
+      goog.dom.getElementsByTagNameAndClass('span', null, $('testEl')).length,
+      1);
 
   // '*' as the tag name should be equivalent to all tags
-  var container = goog.dom.$('span-container');
-  assertEquals(5, goog.dom.$$('*', undefined, container).length);
-  assertEquals(3, goog.dom.$$('*', 'test1', container).length);
-  assertEquals(1, goog.dom.$$('*', 'test2', container).length);
+  var container = goog.dom.getElement('span-container');
+  assertEquals(5,
+      goog.dom.getElementsByTagNameAndClass('*', undefined, container).length);
+  assertEquals(3,
+      goog.dom.getElementsByTagNameAndClass('*', 'test1', container).length);
+  assertEquals(1,
+      goog.dom.getElementsByTagNameAndClass('*', 'test2', container).length);
 
   // Some version of WebKit have problems with mixed-case class names
-  assertEquals(1, goog.dom.$$(undefined, 'mixedCaseClass').length);
+  assertEquals(1,
+      goog.dom.getElementsByTagNameAndClass(
+          undefined, 'mixedCaseClass').length);
 
   // Make sure that out of bounds indices are OK
-  assertUndefined(goog.dom.$$(undefined, 'noSuchClass')[0]);
+  assertUndefined(
+      goog.dom.getElementsByTagNameAndClass(undefined, 'noSuchClass')[0]);
 
-  assertEquals(goog.dom.$$, goog.dom.getElementsByTagNameAndClass);
+  assertEquals(goog.dom.getElementsByTagNameAndClass,
+      goog.dom.getElementsByTagNameAndClass);
 }
 
 function testSetProperties() {
@@ -118,7 +132,7 @@ function testGetViewportSize() {
 }
 
 function testGetViewportSizeInIframe() {
-  var iframe = /** @type {HTMLIFrameElement} */ (goog.dom.$('iframe'));
+  var iframe = /** @type {HTMLIFrameElement} */ (goog.dom.getElement('iframe'));
   var contentDoc = goog.dom.getFrameContentDocument(iframe);
   contentDoc.write('<body></body>');
 
@@ -641,21 +655,21 @@ function createTestDom(txt) {
 
 function testIsFocusableTabIndex() {
   assertFalse('isFocusableTabIndex() must be false for no tab index',
-      goog.dom.isFocusableTabIndex(goog.dom.$('noTabIndex')));
+      goog.dom.isFocusableTabIndex(goog.dom.getElement('noTabIndex')));
   assertFalse('isFocusableTabIndex() must be false for tab index -2',
-      goog.dom.isFocusableTabIndex(goog.dom.$('tabIndexNegative2')));
+      goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndexNegative2')));
   assertFalse('isFocusableTabIndex() must be false for tab index -1',
-      goog.dom.isFocusableTabIndex(goog.dom.$('tabIndexNegative1')));
+      goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndexNegative1')));
 
   // WebKit on Mac doesn't support focusable DIVs until version 526 and later.
   if (!goog.userAgent.WEBKIT || !goog.userAgent.MAC ||
       goog.userAgent.isVersion('526')) {
     assertTrue('isFocusableTabIndex() must be true for tab index 0',
-        goog.dom.isFocusableTabIndex(goog.dom.$('tabIndex0')));
+        goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndex0')));
     assertTrue('isFocusableTabIndex() must be true for tab index 1',
-        goog.dom.isFocusableTabIndex(goog.dom.$('tabIndex1')));
+        goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndex1')));
     assertTrue('isFocusableTabIndex() must be true for tab index 2',
-        goog.dom.isFocusableTabIndex(goog.dom.$('tabIndex2')));
+        goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndex2')));
   }
 }
 
@@ -664,26 +678,26 @@ function testSetFocusableTabIndex() {
   if (!goog.userAgent.WEBKIT || !goog.userAgent.MAC ||
       goog.userAgent.isVersion('526')) {
     // Test enabling focusable tab index.
-    goog.dom.setFocusableTabIndex(goog.dom.$('noTabIndex'), true);
+    goog.dom.setFocusableTabIndex(goog.dom.getElement('noTabIndex'), true);
     assertTrue('isFocusableTabIndex() must be true after enabling tab index',
-        goog.dom.isFocusableTabIndex(goog.dom.$('noTabIndex')));
+        goog.dom.isFocusableTabIndex(goog.dom.getElement('noTabIndex')));
 
     // Test disabling focusable tab index that was added programmatically.
-    goog.dom.setFocusableTabIndex(goog.dom.$('noTabIndex'), false);
+    goog.dom.setFocusableTabIndex(goog.dom.getElement('noTabIndex'), false);
     assertFalse('isFocusableTabIndex() must be false after disabling tab ' +
         'index that was programmatically added',
-        goog.dom.isFocusableTabIndex(goog.dom.$('noTabIndex')));
+        goog.dom.isFocusableTabIndex(goog.dom.getElement('noTabIndex')));
 
     // Test disabling focusable tab index that was specified in markup.
-    goog.dom.setFocusableTabIndex(goog.dom.$('tabIndex0'), false);
+    goog.dom.setFocusableTabIndex(goog.dom.getElement('tabIndex0'), false);
     assertFalse('isFocusableTabIndex() must be false after disabling tab ' +
         'index that was specified in markup',
-        goog.dom.isFocusableTabIndex(goog.dom.$('tabIndex0')));
+        goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndex0')));
 
     // Test re-enabling focusable tab index.
-    goog.dom.setFocusableTabIndex(goog.dom.$('tabIndex0'), true);
-    assertTrue('isFocusableTabIndex() must be true after reenabling tab' +
-        'index', goog.dom.isFocusableTabIndex(goog.dom.$('tabIndex0')));
+    goog.dom.setFocusableTabIndex(goog.dom.getElement('tabIndex0'), true);
+    assertTrue('isFocusableTabIndex() must be true after reenabling tabindex',
+        goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndex0')));
   }
 }
 
@@ -886,31 +900,31 @@ function testCanHaveChildren() {
 }
 
 function testGetAncestorNoMatch() {
-  var elem = goog.dom.$('nestedElement');
+  var elem = goog.dom.getElement('nestedElement');
   assertNull(goog.dom.getAncestor(elem, function() {return false;}));
 }
 
 function testGetAncestorMatchSelf() {
-  var elem = goog.dom.$('nestedElement');
+  var elem = goog.dom.getElement('nestedElement');
   var matched = goog.dom.getAncestor(elem, function() {return true;}, true);
   assertEquals(elem, matched);
 }
 
 function testGetAncestorNoMatchSelf() {
-  var elem = goog.dom.$('nestedElement');
+  var elem = goog.dom.getElement('nestedElement');
   var matched = goog.dom.getAncestor(elem, function() {return true;});
   assertEquals(elem.parentNode, matched);
 }
 
 function testGetAncestorWithMaxSearchStepsMatchSelf()  {
-  var elem = goog.dom.$('nestedElement');
+  var elem = goog.dom.getElement('nestedElement');
   var matched = goog.dom.getAncestor(
       elem, function() {return true;}, true, 2);
   assertEquals(elem, matched);
 }
 
 function testGetAncestorWithMaxSearchStepsMatch() {
-  var elem = goog.dom.$('nestedElement');
+  var elem = goog.dom.getElement('nestedElement');
   var searchEl = elem.parentNode.parentNode;
   var matched = goog.dom.getAncestor(
       elem, function(el) {return el == searchEl;}, false, 1);
@@ -918,7 +932,7 @@ function testGetAncestorWithMaxSearchStepsMatch() {
 }
 
 function testGetAncestorWithMaxSearchStepsNoMatch() {
-  var elem = goog.dom.$('nestedElement');
+  var elem = goog.dom.getElement('nestedElement');
   var searchEl = elem.parentNode.parentNode;
   var matched = goog.dom.getAncestor(
       elem, function(el) {return el == searchEl;}, false, 0);
@@ -926,14 +940,14 @@ function testGetAncestorWithMaxSearchStepsNoMatch() {
 }
 
 function testGetAncestorByTagNameNoMatch() {
-  var elem = goog.dom.$('nestedElement');
+  var elem = goog.dom.getElement('nestedElement');
   assertNull(
       goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.IMG));
 }
 
 function testGetAncestorByTagNameOnly() {
-  var elem = goog.dom.$('nestedElement');
-  var expected = goog.dom.$('testAncestorDiv');
+  var elem = goog.dom.getElement('nestedElement');
+  var expected = goog.dom.getElement('testAncestorDiv');
   assertEquals(expected,
       goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV));
   assertEquals(expected,
@@ -941,21 +955,21 @@ function testGetAncestorByTagNameOnly() {
 }
 
 function testGetAncestorByClassNameNoMatch() {
-  var elem = goog.dom.$('nestedElement');
+  var elem = goog.dom.getElement('nestedElement');
   assertNull(
       goog.dom.getAncestorByTagNameAndClass(elem, null, 'bogusClassName'));
 }
 
 function testGetAncestorByClassName() {
-  var elem = goog.dom.$('nestedElement');
-  var expected = goog.dom.$('testAncestorP');
+  var elem = goog.dom.getElement('nestedElement');
+  var expected = goog.dom.getElement('testAncestorP');
   assertEquals(expected,
       goog.dom.getAncestorByTagNameAndClass(elem, null, 'testAncestor'));
 }
 
 function testGetAncestorByTagNameAndClass() {
-  var elem = goog.dom.$('nestedElement');
-  var expected = goog.dom.$('testAncestorDiv');
+  var elem = goog.dom.getElement('nestedElement');
+  var expected = goog.dom.getElement('testAncestorDiv');
   assertEquals(expected,
       goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV,
           'testAncestor'));

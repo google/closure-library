@@ -104,6 +104,41 @@ def _GetInputByPath(path, sources):
       return js_source
 
 
+def _GetClosureBaseFile(sources):
+  """Given a set of sources, returns the one base.js file.
+
+  Note that if zero or two or more base.js files are found, an error message
+  will be written and the program will be exited.
+
+  Args:
+    sources: An iterable of _PathSource objects.
+
+  Returns:
+    The _PathSource representing the base Closure file.
+  """
+  filtered_base_files = filter(_IsClosureBaseFile, sources)
+  if not filtered_base_files:
+    logging.error('No Closure base.js file found.')
+    sys.exit(1)
+  if len(filtered_base_files) > 1:
+    logging.error('More than one Closure base.js files found at these paths:')
+    for base_file in filtered_base_files:
+      logging.error(base_file.GetPath())
+    sys.exit(1)
+  return filtered_base_files[0]
+
+
+def _IsClosureBaseFile(js_source):
+  """Returns true if the given _PathSource is the Closure base.js source."""
+  if os.path.basename(js_source.GetPath()) == 'base.js':
+    # Sanity check that this is the Closure base file.  Check that this
+    # is where goog is defined.
+    for line in js_source.GetSource().splitlines():
+      if line.startswith('var goog = goog || {};'):
+        return True
+  return False
+
+
 class _PathSource(source.Source):
   """Source file subclass that remembers its file path."""
 
@@ -140,11 +175,12 @@ def main():
   for path in options.roots:
     for js_path in treescan.ScanTreeForJsFiles(path):
       sources.add(_PathSource(js_path))
-  logging.info('%s sources scanned.', len(sources))
 
   # Add scripts specified on the command line.
   for path in args:
     sources.add(source.Source(_PathSource(path)))
+
+  logging.info('%s sources scanned.', len(sources))
 
   # Though deps output doesn't need to query the tree, we still build it
   # to validate dependencies.
@@ -165,9 +201,11 @@ def main():
   if not input_namespaces:
     logging.error('No namespaces found. At least one namespace must be '
                   'specified with the --namespace or --input flags.')
-    sys.exit(1)
+    sys.exit(2)
 
-  deps = tree.GetDependencies(input_namespaces)
+  # The Closure Library base file must go first.
+  base = _GetClosureBaseFile(sources)
+  deps = [base] + tree.GetDependencies(input_namespaces)
 
   output_mode = options.output_mode
   if output_mode == 'list':
@@ -180,7 +218,7 @@ def main():
     if not options.compiler_jar:
       logging.error('--compiler_jar flag must be specified if --output is '
                     '"compiled"')
-      sys.exit(1)
+      sys.exit(2)
 
     compiled_source = jscompiler.Compile(
         options.compiler_jar,
@@ -196,7 +234,7 @@ def main():
 
   else:
     logging.error('Invalid value for --output flag.')
-    sys.exit(1)
+    sys.exit(2)
 
 
 if __name__ == '__main__':

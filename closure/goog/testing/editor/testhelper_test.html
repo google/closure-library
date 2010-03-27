@@ -32,7 +32,7 @@ limitations under the License.
 <div id="root"></div>
 <div id="root2">Root 2</div>
 <script type="text/javascript">
-  var root = goog.dom.$('root');
+  var root = goog.dom.getElement('root');
   var helper;
 
   function setUp() {
@@ -45,7 +45,7 @@ limitations under the License.
   }
 
   function testSetRoot() {
-    helper.setRoot(goog.dom.$('root2'));
+    helper.setRoot(goog.dom.getElement('root2'));
     helper.assertHtmlMatches('Root 2');
   }
 

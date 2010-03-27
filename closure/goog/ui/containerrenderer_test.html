@@ -40,7 +40,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     var expectedFailures = new goog.testing.ExpectedFailures();
 
     function setUp() {
-      var sandbox = goog.dom.$('sandbox');
+      var sandbox = goog.dom.getElement('sandbox');
 
       sandbox.appendChild(goog.dom.createDom('span', {
         id: 'noTabIndex'
@@ -77,7 +77,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     }
 
     function tearDown() {
-      goog.dom.$('sandbox').innerHTML = '';
+      goog.dom.getElement('sandbox').innerHTML = '';
       expectedFailures.handleTearDown();
     }
 
@@ -106,11 +106,11 @@ Copyright 2008 Google Inc. All Rights Reserved.
       assertFalse('hasTabIndex() must return false for null argument',
           renderer.hasTabIndex(null));
       assertFalse('hasTabIndex() must return false for no tab index',
-          renderer.hasTabIndex(goog.dom.$('noTabIndex')));
+          renderer.hasTabIndex(goog.dom.getElement('noTabIndex')));
       assertFalse('hasTabIndex() must return false for tab index -2',
-          renderer.hasTabIndex(goog.dom.$('tabIndexNegative2')));
+          renderer.hasTabIndex(goog.dom.getElement('tabIndexNegative2')));
       assertFalse('hasTabIndex() must return false for tab index -1',
-          renderer.hasTabIndex(goog.dom.$('tabIndexNegative1')));
+          renderer.hasTabIndex(goog.dom.getElement('tabIndexNegative1')));
 
       // WebKit on Mac doesn't support tabIndex for arbitrary DOM elements
       // until version 527 or later.
@@ -118,18 +118,18 @@ Copyright 2008 Google Inc. All Rights Reserved.
           goog.userAgent.MAC && !goog.userAgent.isVersion('527'));
       try {
         assertTrue('hasTabIndex() must return true for tab index 0',
-            renderer.hasTabIndex(goog.dom.$('tabIndex0')));
+            renderer.hasTabIndex(goog.dom.getElement('tabIndex0')));
         assertTrue('hasTabIndex() must return true for tab index 1',
-            renderer.hasTabIndex(goog.dom.$('tabIndex1')));
+            renderer.hasTabIndex(goog.dom.getElement('tabIndex1')));
         assertTrue('hasTabIndex() must return true for tab index 2',
-            renderer.hasTabIndex(goog.dom.$('tabIndex2')));
+            renderer.hasTabIndex(goog.dom.getElement('tabIndex2')));
       } catch (e) {
         expectedFailures.handleException(e);
       }
     }
 
     function testEnableTabIndex() {
-      var container = goog.dom.$('container');
+      var container = goog.dom.getElement('container');
       assertFalse('Container must not have any tab index',
           renderer.hasTabIndex(container));
 
@@ -174,21 +174,21 @@ Copyright 2008 Google Inc. All Rights Reserved.
     function testGetContentElement() {
       assertNull('getContentElement() must return null if element is null',
           renderer.getContentElement(null));
-      var element = goog.dom.$('container');
+      var element = goog.dom.getElement('container');
       assertEquals('getContentElement() must return its argument',
           element, renderer.getContentElement(element));
     }
 
     function testCanDecorate() {
       assertFalse('canDecorate() must return false for a SPAN',
-          renderer.canDecorate(goog.dom.$('noTabIndex')));
+          renderer.canDecorate(goog.dom.getElement('noTabIndex')));
       assertTrue('canDecorate() must return true for a DIV',
-          renderer.canDecorate(goog.dom.$('container')));
+          renderer.canDecorate(goog.dom.getElement('container')));
     }
 
     function testDecorate() {
       var container = new goog.ui.Container();
-      var element = goog.dom.$('container');
+      var element = goog.dom.getElement('container');
 
       assertFalse('Container must not be in the document',
           container.isInDocument());
@@ -232,7 +232,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     function testInitializeDom() {
       var container = new goog.ui.Container();
-      var element = goog.dom.$('container');
+      var element = goog.dom.getElement('container');
       container.decorate(element);
 
       assertTrue('Container\'s root element must be unselectable',

@@ -605,7 +605,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
       var nodeName = node.nodeName;
 
       var formatted = this.getValueForNode(node);
-      if (formatted) {
+      if (goog.isDefAndNotNull(formatted)) {
         sb.push(formatted);
         continue;
       }

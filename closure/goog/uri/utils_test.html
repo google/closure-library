@@ -372,7 +372,7 @@ function testMultiParamSkipsNullParams() {
       utils.buildQueryData(['a', [null], 'b', null, 'c', undefined]));
   assertEquals('appendParams', 'foo.com?a=null',
       utils.appendParams('foo.com', 'a', [null], 'b', null, 'c', undefined));
-  assertEquals('empty strings should NOT be skipped', 'foo.com?a=&b=',
+  assertEquals('empty strings should NOT be skipped', 'foo.com?a&b',
       utils.appendParams('foo.com', 'a', [''], 'b', ''));
 }
 

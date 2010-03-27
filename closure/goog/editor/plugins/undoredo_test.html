@@ -114,7 +114,7 @@ function tearDown() {
     editableField.makeUneditable();
   }
   editableField.dispose();
-  goog.dom.$('testField').innerHTML = '';
+  goog.dom.getElement('testField').innerHTML = '';
   stubs.reset();
 }
 

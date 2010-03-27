@@ -40,7 +40,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
   <div id="sandbox"></div>
   <script>
     var control, controlRenderer, testRenderer;
-    var sandbox = goog.dom.$('sandbox');
+    var sandbox = goog.dom.getElement('sandbox');
     var expectedFailures = new goog.testing.ExpectedFailures();
 
     /**
@@ -183,7 +183,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     function testDecorate() {
       sandbox.innerHTML = '<div id="foo">Hello, world!</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       var element = controlRenderer.decorate(control, foo);
 
       assertEquals('decorate() must return its argument', foo, element);
@@ -201,7 +201,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     function testDecorateComplexDom() {
       sandbox.innerHTML = '<div id="foo"><i>Hello</i>,<b>world</b>!</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       var element = controlRenderer.decorate(control, foo);
 
       assertEquals('decorate() must return its argument', foo, element);
@@ -220,7 +220,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     function testDecorateWithClasses() {
       sandbox.innerHTML =
           '<div id="foo" class="app goog-base-disabled goog-base-hover"></div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
 
       control.addClassName('extra');
       var element = testRenderer.decorate(control, foo);
@@ -253,19 +253,19 @@ Copyright 2008 Google Inc. All Rights Reserved.
       // Since foo has all required classes, goog.dom.classes.set() must not be
       // called at all.
       sandbox.innerHTML = '<div id="foo" class="goog-control">Foo</div>';
-      controlRenderer.decorate(control, goog.dom.$('foo'));
+      controlRenderer.decorate(control, goog.dom.getElement('foo'));
 
       // Since bar has all required classes, goog.dom.classes.set() must not be
       // called at all.
       sandbox.innerHTML = '<div id="bar" class="goog-base goog-button">Bar' +
           '</div>';
-      testRenderer.decorate(control, goog.dom.$('bar'));
+      testRenderer.decorate(control, goog.dom.getElement('bar'));
 
       // Since baz has all required classes, goog.dom.classes.set() must not be
       // called at all.
       sandbox.innerHTML = '<div id="baz" class="goog-base goog-button ' +
           'goog-button-disabled">Baz</div>';
-      testRenderer.decorate(control, goog.dom.$('baz'));
+      testRenderer.decorate(control, goog.dom.getElement('baz'));
 
       // Restore goog.dom.classes.set().
       goog.dom.classes.set = goog$dom$classes$set;
@@ -309,7 +309,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
       // When a control with default render direction enters the document,
       // setRightToLeft() must not be called.
       control.setRenderer(renderer);
-      control.decorate(goog.dom.$('foo'));
+      control.decorate(goog.dom.getElement('foo'));
 
       // When a control in the default state (enabled, visible, focusable)
       // enters the document, it must get a tab index.
@@ -361,7 +361,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
       // When a disabled control enters the document, setFocusable() must not
       // be called.
       control.setRenderer(renderer);
-      control.decorate(goog.dom.$('foo'));
+      control.decorate(goog.dom.getElement('foo'));
 
       // When a right-to-left control enters the document, special stying must
       // be applied.
@@ -373,12 +373,12 @@ Copyright 2008 Google Inc. All Rights Reserved.
     function testSetAriaRole() {
       sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
 
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       controlRenderer.setAriaRole(foo);
       assertEquals('ControlRenderer must not set ARIA role', '',
           goog.dom.a11y.getRole(foo));
 
-      var bar = goog.dom.$('bar');
+      var bar = goog.dom.getElement('bar');
       testRenderer.setAriaRole(bar);
       if (goog.userAgent.GECKO) {
         assertEquals('On Gecko, element must have expected ARIA role',
@@ -391,7 +391,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     function testSetAllowTextSelection() {
       sandbox.innerHTML = '<div id="foo"><span>Foo</span></div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
 
       controlRenderer.setAllowTextSelection(foo, false);
       assertTrue('Parent element must be unselectable on all browsers',
@@ -415,7 +415,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     function testSetRightToLeft() {
       sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
 
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       controlRenderer.setRightToLeft(foo, true);
       assertSameElements('Element must have right-to-left class applied',
           ['goog-control-rtl'], goog.dom.classes.get(foo));
@@ -423,7 +423,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
       assertSameElements('Element must not have right-to-left class applied',
           [], goog.dom.classes.get(foo));
 
-      var bar = goog.dom.$('bar');
+      var bar = goog.dom.getElement('bar');
       testRenderer.setRightToLeft(bar, true);
       assertSameElements('Element must have right-to-left class applied',
           ['goog-base-rtl'], goog.dom.classes.get(bar));
@@ -489,7 +489,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     function testSetVisible() {
       sandbox.innerHTML = '<div id="foo">Foo</div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
       assertTrue('Element must be visible', foo.style.display != 'none');
       controlRenderer.setVisible(foo, true);
       assertTrue('Element must still be visible', foo.style.display != 'none');
@@ -849,7 +849,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     function testIe6ClassCombinationsDecorate() {
       sandbox.innerHTML =
           '<div id="foo" class="combined goog-base-hover"></div>';
-      var foo = goog.dom.$('foo');
+      var foo = goog.dom.getElement('foo');
 
       var element = testRenderer.decorate(control, foo);
 

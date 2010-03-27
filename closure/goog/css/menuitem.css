@@ -80,12 +80,14 @@ See the COPYING file for details.
 .goog-option-selected .goog-menuitem-checkbox,
 .goog-option-selected .goog-menuitem-icon {
   /* Client apps may override the URL at which they serve the sprite. */
-  background: url(https://ssl.gstatic.com/editor/editortoolbar.png) no-repeat -512px;
+  background: url(https://ssl.gstatic.com/editor/editortoolbar.png) no-repeat -512px 0;
 }
 
 /* Keyboard shortcut ("accelerator") style. */
 .goog-menuitem-accel {
   color: #999;
+  /* Keyboard shortcuts are untranslated; always left-to-right. */
+  /* @noflip */ direction: ltr;
   left: auto;
   padding: 0 6px;
   position: absolute;

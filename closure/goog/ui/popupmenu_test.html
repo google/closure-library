@@ -33,7 +33,7 @@ limitations under the License.
 <div id="popup-anchor"></div>
 <script>
 
-var anchor = goog.dom.$('popup-anchor');
+var anchor = goog.dom.getElement('popup-anchor');
 
 // Event handler
 var handler;
@@ -50,20 +50,6 @@ function setUp() {
 function tearDown() {
   handler.dispose();
   popup.dispose();
-}
-
-function beforeShowPopup() {
-  // Ensure that the element is not yet visible.
-  assertFalse('The element should not be shown when BEFORE_SHOW event is ' +
-      'being handled',
-       goog.style.isElementShown(popup.getElement()));
-  beforeShowPopupCalled = true;
-  return showPopup;
-}
-
-function onShowPopup(target) {
-  assertEquals('The attached anchor element is incorrect',
-      target.element_, popup.getAttachedElement());
 }
 
 /**
@@ -100,13 +86,33 @@ function assertTarget(target, expectedElement, expectedTargetCorner,
 function testBeforeShowEvent() {
   var target = popup.createAttachTarget(anchor);
   popup.attach(anchor);
+
+  function beforeShowPopup(e) {
+    //Ensure that the element is not yet visible.
+    assertFalse('The element should not be shown when BEFORE_SHOW event is ' +
+        'being handled',
+        goog.style.isElementShown(popup.getElement()));
+    // Verify that current anchor is set before dispatching BEFORE_SHOW.
+    assertNotNullNorUndefined(popup.getAttachedElement());
+    assertEquals('The attached anchor element is incorrect',
+        target.element_, popup.getAttachedElement());
+    beforeShowPopupCalled = true;
+    return showPopup;
+
+  };
+  function onShowPopup(e) {
+    assertEquals('The attached anchor element is incorrect',
+        target.element_, popup.getAttachedElement());
+  };
+
   handler.listen(popup,
                  goog.ui.Menu.EventType.BEFORE_SHOW,
                  beforeShowPopup);
   handler.listen(popup,
                  goog.ui.Menu.EventType.SHOW,
-                 goog.bind(onShowPopup, null, target));
-  seforeShowPopupCalled = false;
+                 onShowPopup);
+
+  beforeShowPopupCalled = false;
   showPopup = false;
   popup.showMenu(target, 0, 0);
   assertTrue('BEFORE_SHOW event handler should be called on #showMenu',

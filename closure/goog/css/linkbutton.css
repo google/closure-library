@@ -1,0 +1,26 @@
+/*
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+*/
+
+/*
+ * Copyright 2010 Google Inc.  All Rights Reserved.
+ *
+ * Styling for link buttons created by goog.ui.LinkButtonRenderer.
+ *
+
+ */
+
+.goog-link-button {
+  position: relative;
+  color: #00f;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* State: disabled. */
+.goog-link-button-disabled {
+  color: #888;
+  text-decoration: none;
+  cursor: default;
+}

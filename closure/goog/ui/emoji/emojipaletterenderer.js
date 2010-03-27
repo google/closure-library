@@ -22,6 +22,7 @@ goog.provide('goog.ui.emoji.EmojiPaletteRenderer');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.ui.PaletteRenderer');
+goog.require('goog.ui.emoji.Emoji');
 goog.require('goog.ui.emoji.SpriteInfo');
 
 
@@ -95,7 +96,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.createPaletteItem =
 
   var outerdiv =
       dom.createDom('div', goog.getCssName('goog-palette-cell-wrapper'), el);
-  outerdiv.setAttribute('goomoji', id);
+  outerdiv.setAttribute(goog.ui.emoji.Emoji.ATTRIBUTE, id);
   return /** @type {HTMLDivElement} */ (outerdiv);
 };
 

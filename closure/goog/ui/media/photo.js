@@ -33,7 +33,7 @@
  * <pre>
  *   var photo = goog.ui.media.Photo.newControl(
  *       new goog.ui.media.MediaModel('http://hostname/file.jpg'));
- *   photo.render(goog.dom.$('parent'));
+ *   photo.render(goog.dom.getElement('parent'));
  * </pre>
  *
  * Photo medias currently support the following states:

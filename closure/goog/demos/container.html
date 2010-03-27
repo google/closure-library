@@ -397,7 +397,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
@@ -424,11 +424,11 @@ limitations under the License.
         });
     vc.addChildAt(new goog.ui.Separator(), 3, true);
     vc.getChild('Porthos').setEnabled(false);
-    vc.render(goog.dom.$('vc'));
+    vc.render(goog.dom.getElement('vc'));
     goog.events.listen(vc, EVENTS, logEvent);
 
     // Hook up checkboxes.
-    goog.events.listen(goog.dom.$('show_vc'),
+    goog.events.listen(goog.dom.getElement('show_vc'),
         goog.events.EventType.CLICK,
         function(e) {
           var t = goog.now();
@@ -436,28 +436,28 @@ limitations under the License.
           logger.info((e.target.checked ? 'Showed' : 'Hid') +
               ' vertical container in ' + (goog.now() - t) + 'ms');
         });
-    goog.events.listen(goog.dom.$('enable_vc'),
+    goog.events.listen(goog.dom.getElement('enable_vc'),
         goog.events.EventType.CLICK,
         function(e) {
           var t = goog.now();
           vc.setEnabled(e.target.checked);
           // If the container as a whole is disabled, you can't enable/disable
           // child controls.
-          goog.dom.$('enable_porthos').disabled = !vc.isEnabled();
+          goog.dom.getElement('enable_porthos').disabled = !vc.isEnabled();
           logger.info((e.target.checked ? 'Enabled' : 'Disabled') +
               ' vertical container in ' + (goog.now() - t) + 'ms');
         });
-    goog.events.listen(goog.dom.$('show_porthos'),
+    goog.events.listen(goog.dom.getElement('show_porthos'),
         goog.events.EventType.CLICK,
         function(e) {
           vc.getChild('Porthos').setVisible(e.target.checked);
         });
-    goog.events.listen(goog.dom.$('enable_porthos'),
+    goog.events.listen(goog.dom.getElement('enable_porthos'),
         goog.events.EventType.CLICK,
         function(e) {
           vc.getChild('Porthos').setEnabled(e.target.checked);
         });
-    goog.events.listen(goog.dom.$('enable_vc_events'),
+    goog.events.listen(goog.dom.getElement('enable_vc_events'),
         goog.events.EventType.CLICK,
         function(e) {
           vc.forEachChild(function(c) {
@@ -481,7 +481,7 @@ limitations under the License.
     hc.setId('Horizontal Container');
 
     // Pre-render the container, just to do something different.
-    hc.render(goog.dom.$('hc'));
+    hc.render(goog.dom.getElement('hc'));
     goog.array.forEach(
         ['Happy', 'Sleepy', 'Doc', 'Bashful', 'Sneezy', 'Grumpy', 'Dopey'],
         function(item) {
@@ -496,7 +496,7 @@ limitations under the License.
     goog.events.listen(hc, EVENTS, logEvent);
 
     // Hook up checkboxes.
-    goog.events.listen(goog.dom.$('show_hc'),
+    goog.events.listen(goog.dom.getElement('show_hc'),
         goog.events.EventType.CLICK,
         function(e) {
           var t = goog.now();
@@ -504,28 +504,28 @@ limitations under the License.
           logger.info((e.target.checked ? 'Showed' : 'Hid') +
               ' horizontal container in ' + (goog.now() - t) + 'ms');
         });
-    goog.events.listen(goog.dom.$('enable_hc'),
+    goog.events.listen(goog.dom.getElement('enable_hc'),
         goog.events.EventType.CLICK,
         function(e) {
           var t = goog.now();
           hc.setEnabled(e.target.checked);
           // If the container as a whole is disabled, you can't enable/disable
           // child controls.
-          goog.dom.$('enable_doc').disabled = !hc.isEnabled();
+          goog.dom.getElement('enable_doc').disabled = !hc.isEnabled();
           logger.info((e.target.checked ? 'Enabled' : 'Disabled') +
               ' horizontal container in ' + (goog.now() - t) + 'ms');
         });
-    goog.events.listen(goog.dom.$('show_doc'),
+    goog.events.listen(goog.dom.getElement('show_doc'),
         goog.events.EventType.CLICK,
         function(e) {
           hc.getChild('Doc').setVisible(e.target.checked);
         });
-    goog.events.listen(goog.dom.$('enable_doc'),
+    goog.events.listen(goog.dom.getElement('enable_doc'),
         goog.events.EventType.CLICK,
         function(e) {
           hc.getChild('Doc').setEnabled(e.target.checked);
         });
-    goog.events.listen(goog.dom.$('enable_hc_events'),
+    goog.events.listen(goog.dom.getElement('enable_hc_events'),
         goog.events.EventType.CLICK,
         function(e) {
           hc.forEachChild(function(c) {
@@ -560,7 +560,7 @@ limitations under the License.
       // See e.g. bug http://b/1359754.
       c.setSupportedState(goog.ui.Component.State.FOCUSED, true);
     });
-    nfc.render(goog.dom.$('nfc'));
+    nfc.render(goog.dom.getElement('nfc'));
     goog.events.listen(nfc, EVENTS, logEvent);
 
     // Programmatically create a toolbar.
@@ -606,11 +606,11 @@ limitations under the License.
     underlineButton.setTooltip('Underline');
     tb.addChild(underlineButton, true);
 
-    tb.render(goog.dom.$('tb'));
+    tb.render(goog.dom.getElement('tb'));
     goog.events.listen(tb, EVENTS, logEvent);
 
     // Hook up checkbox.
-    goog.events.listen(goog.dom.$('enable_tb'),
+    goog.events.listen(goog.dom.getElement('enable_tb'),
         goog.events.EventType.CLICK,
         function(e) {
           var t = goog.now();
@@ -620,11 +620,11 @@ limitations under the License.
         });
 
     var tb2 = new goog.ui.Container();
-    tb2.decorate(goog.dom.$('tb2'));
+    tb2.decorate(goog.dom.getElement('tb2'));
     goog.events.listen(tb2, EVENTS, logEvent);
 
     // Hook up checkbox.
-    goog.events.listen(goog.dom.$('enable_tb2'),
+    goog.events.listen(goog.dom.getElement('enable_tb2'),
         goog.events.EventType.CLICK,
         function(e) {
           var t = goog.now();
@@ -635,11 +635,11 @@ limitations under the License.
 
     // BiDi container example:
     var tb3 = new goog.ui.Container();
-    tb3.decorate(goog.dom.$('tb3'));
+    tb3.decorate(goog.dom.getElement('tb3'));
     goog.events.listen(tb3, EVENTS, logEvent);
 
     // Hook up checkboxes.
-    goog.events.listen(goog.dom.$('enable_tb3'),
+    goog.events.listen(goog.dom.getElement('enable_tb3'),
         goog.events.EventType.CLICK,
         function(e) {
           var t = goog.now();
@@ -647,7 +647,7 @@ limitations under the License.
           logger.info((e.target.checked ? 'Enabled' : 'Disabled') +
               ' toolbar in ' + (goog.now() - t) + 'ms');
         });
-    goog.events.listen(goog.dom.$('show_tb3'),
+    goog.events.listen(goog.dom.getElement('show_tb3'),
         goog.events.EventType.CLICK,
         function(e) {
           var t = goog.now();
@@ -658,12 +658,12 @@ limitations under the License.
 
     // Scrolling container.
     var tb4 = new goog.ui.Container();
-    tb4.decorate(goog.dom.$('tb4'));
-    tb4.setKeyEventTarget(goog.dom.$('tb4_key_target'));
+    tb4.decorate(goog.dom.getElement('tb4'));
+    tb4.setKeyEventTarget(goog.dom.getElement('tb4_key_target'));
     tb4.setFocusable(true);
     new goog.ui.ContainerScroller(tb4);
 
-    goog.events.listen(goog.dom.$('tb4_highlight_links'),
+    goog.events.listen(goog.dom.getElement('tb4_highlight_links'),
         goog.events.EventType.CLICK,
         function(event) {
           var index = parseInt(event.target.innerHTML, 10);
@@ -672,7 +672,8 @@ limitations under the License.
           }
         });
 
-    goog.dom.setTextContent(goog.dom.$('perf'), (goog.now() - timer) + 'ms');
+    goog.dom.setTextContent(goog.dom.getElement('perf'),
+        (goog.now() - timer) + 'ms');
   </script>
 </body>
 </html>

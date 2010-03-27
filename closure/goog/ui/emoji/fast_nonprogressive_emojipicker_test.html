@@ -138,7 +138,7 @@ function checkPostLoadStructureForFastLoadNonProgressivePicker(palette,
     palette.setSelectedIndex(i);
     var emojiInfo = emoji[1][i];
     var cell = palette.getSelectedItem();
-    var id = cell.getAttribute('goomoji');
+    var id = cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE);
     var inner = cell.firstChild;
 
     // Check that the cell is a div wrapped around something else, and that the
@@ -147,7 +147,7 @@ function checkPostLoadStructureForFastLoadNonProgressivePicker(palette,
         cell.tagName, "DIV");
     assertNotNull('The outer div is not wrapped around another element', inner);
     assertEquals('The palette item should have the goomoji attribute',
-        cell.getAttribute('goomoji'), emojiInfo[1]);
+        cell.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE), emojiInfo[1]);
 
     // Now check the contents of the cells
     var url = emojiInfo[0];   // url of the animated emoji

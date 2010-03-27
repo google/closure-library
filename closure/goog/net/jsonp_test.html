@@ -105,7 +105,7 @@ function testSend() {
   var payload = {atisket: 'atasket', basket: 'yellow'};
   var result = jsonp.send(payload, userCallback);
 
-  var script = goog.dom.$(result.id_);
+  var script = goog.dom.getElement(result.id_);
 
   assertNotNull('script created', script);
   assertEquals('encoding is utf-8', 'UTF-8', script.charset);
@@ -151,7 +151,7 @@ function testSendWhenCallbackHasTwoParameters() {
 
   var payload = {atisket: 'atasket', basket: 'yellow'};
   var result = jsonp.send(payload, userCallback);
-  var script = goog.dom.$(result.id_);
+  var script = goog.dom.getElement(result.id_);
 
   // Test a callback function that receives two parameters.
   var callbackName = /callback=([^&]+)/.exec(script.src)[1];
@@ -185,7 +185,7 @@ function testSendWithCallbackParamValue() {
   var payload = {atisket: 'atasket', basket: 'yellow'};
   var result = jsonp.send(payload, userCallback, undefined, 'dummyId');
 
-  var script = goog.dom.$(result.id_);
+  var script = goog.dom.getElement(result.id_);
 
   assertNotNull('script created', script);
   assertEquals('encoding is utf-8', 'UTF-8', script.charset);

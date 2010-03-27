@@ -60,8 +60,9 @@ limitations under the License.
     }
 
     function setUp() {
-      targetDiv = goog.dom.$('targetDiv');
-      handler = new goog.ui.KeyboardShortcutHandler(goog.dom.$('rootDiv'));
+      targetDiv = goog.dom.getElement('targetDiv');
+      handler = new goog.ui.KeyboardShortcutHandler(
+          goog.dom.getElement('rootDiv'));
 
       // Create a mock event listener in order to set expectations on what
       // events are fired.  We create a fake class whose only method is
@@ -456,14 +457,14 @@ limitations under the License.
     }
 
     function testIgnoreNonGlobalShortcutsInSelect() {
-      var targetSelect = goog.dom.$('targetSelect');
+      var targetSelect = goog.dom.getElement('targetSelect');
 
       listener.shortcutFired('global');
       listener.shortcutFired('withAlt');
       listener.$replay();
 
       registerEnterSpaceXF1AltY();
-      fireEnterSpaceXF1AltY(goog.dom.$('targetSelect'));
+      fireEnterSpaceXF1AltY(goog.dom.getElement('targetSelect'));
 
       listener.$verify();
     }
@@ -474,7 +475,7 @@ limitations under the License.
       listener.$replay();
 
       registerEnterSpaceXF1AltY();
-      fireEnterSpaceXF1AltY(goog.dom.$('targetTextArea'));
+      fireEnterSpaceXF1AltY(goog.dom.getElement('targetTextArea'));
 
       listener.$verify();
     }
@@ -491,8 +492,8 @@ limitations under the License.
       listener.$replay();
 
       registerEnterSpaceXF1AltY();
-      fireEnterSpaceXF1AltY(goog.dom.$('targetTextBox'));
-      fireEnterSpaceXF1AltY(goog.dom.$('targetPassword'));
+      fireEnterSpaceXF1AltY(goog.dom.getElement('targetTextBox'));
+      fireEnterSpaceXF1AltY(goog.dom.getElement('targetPassword'));
 
       listener.$verify();
     }
@@ -511,8 +512,8 @@ limitations under the License.
       listener.$replay();
 
       registerEnterSpaceXF1AltY();
-      fireEnterSpaceXF1AltY(goog.dom.$('targetCheckBox'));
-      fireEnterSpaceXF1AltY(goog.dom.$('targetButton'));
+      fireEnterSpaceXF1AltY(goog.dom.getElement('targetCheckBox'));
+      fireEnterSpaceXF1AltY(goog.dom.getElement('targetButton'));
 
       listener.$verify();
     }
@@ -546,7 +547,7 @@ limitations under the License.
 
       registerEnterSpaceXF1AltY();
       handler.setAllShortcutsAreGlobal(true);
-      fireEnterSpaceXF1AltY(goog.dom.$('targetTextArea'));
+      fireEnterSpaceXF1AltY(goog.dom.getElement('targetTextArea'));
 
       listener.$verify();
     }
@@ -557,7 +558,7 @@ limitations under the License.
 
       registerEnterSpaceXF1AltY();
       handler.setModifierShortcutsAreGlobal(false);
-      fireEnterSpaceXF1AltY(goog.dom.$('targetTextArea'));
+      fireEnterSpaceXF1AltY(goog.dom.getElement('targetTextArea'));
 
       listener.$verify();
     }

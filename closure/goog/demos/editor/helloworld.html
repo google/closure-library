@@ -61,7 +61,7 @@ limitations under the License.
   (updates as contents of the editable field above change):<br>
   <textarea id="fieldContents" style="height:100px;width:400px;"></textarea><br>
   <input type="button" value="Set Field Contents"
-      onclick="myField.setHtml(false, goog.dom.$('fieldContents').value);" />
+      onclick="myField.setHtml(false, goog.dom.getElement('fieldContents').value);" />
   (Use to set contents of the editable field to the contents of this textarea)
   </p>
 
@@ -76,7 +76,7 @@ limitations under the License.
   }
 
   function updateFieldContents() {
-    goog.dom.$('fieldContents').value = myField.getCleanContents();
+    goog.dom.getElement('fieldContents').value = myField.getCleanContents();
   }
 
   // Create an editable field.

@@ -31,7 +31,8 @@ limitations under the License.
 <script>
   var actionHandler;
   function setUp() {
-    actionHandler = new goog.events.ActionHandler(goog.dom.$('actionDiv'));
+    actionHandler = new goog.events.ActionHandler(
+        goog.dom.getElement('actionDiv'));
   }
   function tearDown() {
     actionHandler.dispose();
@@ -51,7 +52,7 @@ limitations under the License.
         function(e) {
           beforeActionFired = true;
         });
-    goog.testing.events.fireClickSequence(goog.dom.$('actionDiv'));
+    goog.testing.events.fireClickSequence(goog.dom.getElement('actionDiv'));
     assertTrue("BEFOREACTION event was not fired", beforeActionFired);
     assertTrue("ACTION event was not fired", actionEventFired);
   }
@@ -63,7 +64,7 @@ limitations under the License.
     goog.events.listen(actionHandler, 
         goog.events.ActionHandler.EventType.ACTION, 
         function(e) {actionEventFired = true;});
-    goog.testing.events.fireClickSequence(goog.dom.$('actionDiv'));
+    goog.testing.events.fireClickSequence(goog.dom.getElement('actionDiv'));
     assertTrue("ACTION event was not fired", actionEventFired);
   }
 
@@ -81,7 +82,7 @@ limitations under the License.
           beforeActionFired = true;
           e.preventDefault();
         });
-    goog.testing.events.fireClickSequence(goog.dom.$('actionDiv'));
+    goog.testing.events.fireClickSequence(goog.dom.getElement('actionDiv'));
     assertTrue(beforeActionFired);
     assertFalse(actionEventFired);
   }

@@ -167,7 +167,7 @@ goog.json.Serializer.prototype.serialize_ = function(object, sb) {
         break;
       }
       if (goog.isArray(object)) {
-        this.serializeArray_((/** @type {Array} */ object), sb);
+        this.serializeArray_((/** @type {!Array} */ object), sb);
         break;
       }
       // should we allow new String, new Number and new Boolean to be treated

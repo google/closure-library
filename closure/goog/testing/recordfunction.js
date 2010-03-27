@@ -52,10 +52,12 @@ goog.provide('goog.testing.recordFunction');
  * {@code getCallCount}, {@code getCalls} and {@code getLastCall} but won't
  * inherit the original function's prototype and static fields.
  *
- * @param {!Function} f The function to wrap and record.
+ * @param {!Function=} opt_f The function to wrap and record. Defaults to
+ *     {@link goog.nullFunction}.
  * @return {!Function} The wrapped function.
  */
-goog.testing.recordFunction = function(f) {
+goog.testing.recordFunction = function(opt_f) {
+  var f = opt_f || goog.nullFunction;
   var calls = [];
 
   function recordedFunction() {

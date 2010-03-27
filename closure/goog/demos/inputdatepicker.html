@@ -54,14 +54,14 @@ limitations under the License.
     var parser = new goog.i18n.DateTimeParse(PATTERN);
 
     var idp1 = new goog.ui.InputDatePicker(formatter, parser);
-    idp1.decorate(goog.dom.$('date-field1'));
+    idp1.decorate(goog.dom.getElement('date-field1'));
 
     var idp2 = new goog.ui.InputDatePicker(formatter, parser);
-    idp2.render(goog.dom.$('date-field2'));
+    idp2.render(goog.dom.getElement('date-field2'));
 
     // Use a LabelInput for this one:
     var fieldLabelInput = new goog.ui.LabelInput('MM/DD/YYYY');
-    fieldLabelInput.render(goog.dom.$('date-container'));
+    fieldLabelInput.render(goog.dom.getElement('date-container'));
 
     var idp3 = new goog.ui.InputDatePicker(formatter, parser);
     idp3.decorate(fieldLabelInput.getElement());

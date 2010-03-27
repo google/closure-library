@@ -291,7 +291,7 @@ limitations under the License.
     assertFalse(matchers.isNodeLike.matches(function() {}));
     assertFalse(matchers.isNodeLike.matches(false));
     assertTrue(matchers.isNodeLike.matches(document.body));
-    assertTrue(matchers.isNodeLike.matches(goog.dom.$('someDiv')));
+    assertTrue(matchers.isNodeLike.matches(goog.dom.getElement('someDiv')));
 
     assertFalse(matchers.isNodeLike.matches('test', mockExpect));
     assertEquals(1, mockExpect.errorMessages.length);

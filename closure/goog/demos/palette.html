@@ -177,7 +177,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
@@ -195,13 +195,13 @@ limitations under the License.
       items.push(goog.dom.createTextNode('' + i));
     }
     var p1 = new goog.ui.Palette(items);
-    p1.render(goog.dom.$('p1'));
+    p1.render(goog.dom.getElement('p1'));
     goog.dom.classes.add(p1.getElement(), 'simple-palette');
 
     goog.events.listen(p1, goog.ui.Component.EventType.ACTION,
         function(e) {
           var palette = e.target;
-          goog.dom.setTextContent(goog.dom.$('p1_value'),
+          goog.dom.setTextContent(goog.dom.getElement('p1_value'),
               goog.dom.getTextContent(palette.getSelectedItem()));
         });
     goog.events.listen(p1, EVENTS, logEvent);
@@ -212,10 +212,10 @@ limitations under the License.
 
 
     function createColorPaletteDemo(colors, width, caption) {
-      goog.dom.$('cp').appendChild(goog.dom.createDom('p', null, caption));
+      goog.dom.getElement('cp').appendChild(goog.dom.createDom('p', null, caption));
       var cp = new goog.ui.ColorPalette(colors);
       cp.setSize(width); // If we only set the columns, the rows are calculated.
-      cp.render(goog.dom.$('cp'));
+      cp.render(goog.dom.getElement('cp'));
       goog.events.listen(cp, goog.ui.Component.EventType.ACTION, onColorEvent);
       goog.events.listen(cp, EVENTS, logEvent);
       return cp;
@@ -224,10 +224,10 @@ limitations under the License.
     function onColorEvent(e) {
       var palette = e.target;
       var color = palette.getSelectedColor();
-      goog.style.setStyle(goog.dom.$('cp_value'), 'background-color',
+      goog.style.setStyle(goog.dom.getElement('cp_value'), 'background-color',
           color);
-      goog.dom.$('cp_value').title = color;
-      goog.dom.$('cp_text').innerHTML = goog.color.parse(color).hex;
+      goog.dom.getElement('cp_value').title = color;
+      goog.dom.getElement('cp_text').innerHTML = goog.color.parse(color).hex;
     }
 
     createColorPaletteDemo(['black', 'blue', 'red', 'magenta',
@@ -254,7 +254,7 @@ limitations under the License.
         'This is a grey scale color palette:');
 
     // Hack for the demo, don't try this at home, kids!
-    var cpc = goog.dom.$('cp');
+    var cpc = goog.dom.getElement('cp');
     cpc.appendChild(document.createTextNode('Change: '));
     cpc.appendChild(goog.dom.createDom('span',
         {'class': 'fakelink', 'onclick': function() {
@@ -286,20 +286,23 @@ limitations under the License.
 
     var cp = new goog.ui.CustomColorPalette(['#FE1', '#ACD' , '#119']);
     cp.setSize(6);
-    cp.render(goog.dom.$('ccp'));
+    cp.render(goog.dom.getElement('ccp'));
     goog.dom.classes.add(cp.getElement(), 'color-picker');
     goog.events.listen(cp, goog.ui.Component.EventType.ACTION,  function (e) {
       var palette = e.target;
       var color = palette.getSelectedColor();
-      goog.style.setStyle(goog.dom.$('ccp_value'), 'background-color', color);
-      goog.dom.$('ccp_value').title = color;
-      goog.dom.$('ccp_text').innerHTML = goog.color.parse(color).hex;
+      goog.style.setStyle(goog.dom.getElement('ccp_value'), 'background-color',
+          color);
+      goog.dom.getElement('ccp_value').title = color;
+      goog.dom.getElement('ccp_text').innerHTML =
+          goog.color.parse(color).hex;
     });
     goog.events.listen(cp, EVENTS, logEvent);
 
     // Perf and clean up
 
-    goog.dom.setTextContent(goog.dom.$('perf'), (goog.now() - timer) + 'ms');
+    goog.dom.setTextContent(goog.dom.getElement('perf'),
+        (goog.now() - timer) + 'ms');
 
     goog.events.listen(window, 'unload', function() {
       goog.events.removeAll();

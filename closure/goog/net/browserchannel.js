@@ -2276,10 +2276,10 @@ goog.net.BrowserChannel.Handler.prototype.channelError =
  * Indicates the BrowserChannel is closed. Also notifies about which maps,
  * if any, that may not have been delivered to the server.
  * @param {goog.net.BrowserChannel} browserChannel The browser channel.
- * @param {Array.<goog.net.BrowserChannel.QueuedMap>} opt_pendingMaps The
+ * @param {Array.<goog.net.BrowserChannel.QueuedMap>=} opt_pendingMaps The
  *     array of pending maps, which may or may not have been delivered to the
  *     server.
- * @param {Array.<goog.net.BrowserChannel.QueuedMap>} opt_undeliveredMaps
+ * @param {Array.<goog.net.BrowserChannel.QueuedMap>=} opt_undeliveredMaps
  *     The array of undelivered maps, which have definitely not been delivered
  *     to the server.
  */

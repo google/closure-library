@@ -51,7 +51,7 @@ var iframeMask;
 var mockClock;
 
 function setUp() {
-  goog.dom.$('sandbox').innerHTML = '<div id="popup"></div>';
+  goog.dom.getElement('sandbox').innerHTML = '<div id="popup"></div>';
   mockClock = new goog.testing.MockClock(true);
 
   iframeMask = new goog.ui.IframeMask();
@@ -65,7 +65,7 @@ function tearDown() {
 }
 
 function findOneAndOnlyIframe() {
-  var iframes = goog.dom.$$(goog.dom.TagName.IFRAME);
+  var iframes = document.getElementsByTagName(goog.dom.TagName.IFRAME);
   assertEquals('There should be exactly 1 iframe in the document',
       1, iframes.length);
   return iframes[0];
@@ -73,7 +73,7 @@ function findOneAndOnlyIframe() {
 
 function assertNoIframes() {
   assertEquals('Expected no iframes in the document', 0,
-      goog.dom.$$(goog.dom.TagName.IFRAME).length);
+      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME).length);
 }
 
 function testApplyFullScreenMask() {
@@ -112,7 +112,7 @@ function testApplyZIndex() {
 }
 
 function testSnapElement() {
-  iframeMask.setSnapElement(goog.dom.$('popup'));
+  iframeMask.setSnapElement(goog.dom.getElement('popup'));
   iframeMask.applyMask();
 
   var iframe = findOneAndOnlyIframe();
@@ -130,9 +130,9 @@ function testSnapElement() {
 }
 
 function testAttachToPopup() {
-  var popup = new goog.ui.Popup(goog.dom.$('popup'));
+  var popup = new goog.ui.Popup(goog.dom.getElement('popup'));
   iframeMask.listenOnTarget(popup, goog.ui.PopupBase.EventType.SHOW,
-      goog.ui.PopupBase.EventType.HIDE, goog.dom.$('popup'));
+      goog.ui.PopupBase.EventType.HIDE, goog.dom.getElement('popup'));
 
   assertNoIframes();
   popup.setVisible(true);
@@ -154,7 +154,7 @@ function testAttachToPopup() {
 }
 
 function testQuickHidingPopup() {
-  var popup = new goog.ui.Popup(goog.dom.$('popup'));
+  var popup = new goog.ui.Popup(goog.dom.getElement('popup'));
   iframeMask.listenOnTarget(popup, goog.ui.PopupBase.EventType.SHOW,
       goog.ui.PopupBase.EventType.HIDE);
 
@@ -172,7 +172,7 @@ function testQuickHidingPopup() {
 }
 
 function testRemoveHandlers() {
-  var popup = new goog.ui.Popup(goog.dom.$('popup'));
+  var popup = new goog.ui.Popup(goog.dom.getElement('popup'));
   iframeMask.listenOnTarget(popup, goog.ui.PopupBase.EventType.SHOW,
       goog.ui.PopupBase.EventType.HIDE);
   iframeMask.removeHandlers();

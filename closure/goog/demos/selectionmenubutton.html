@@ -140,7 +140,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
@@ -157,13 +157,14 @@ limitations under the License.
     var b1 = new goog.ui.SelectionMenuButton();
     b1.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
     b1.setId('progSelectButton');
-    b1.render(goog.dom.$('menuButtons'));
+    b1.render(goog.dom.getElement('menuButtons'));
     b1.setTooltip('Select menu demo');
     goog.events.listen(b1, EVENTS, logEvent);
     b1.addItem(new goog.ui.MenuItem('Important'));
     b1.addItem(new goog.ui.MenuItem('Unimportant'));
 
-    goog.events.listen(goog.dom.$('b1_enable'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('b1_enable'),
+        goog.events.EventType.CLICK,
         function(e) {
           b1.setEnabled(e.target.checked);
         });
@@ -171,15 +172,15 @@ limitations under the License.
     // Decorate a menu button.  Note that since one of the child nodes of the
     // menu button element can be decorated as a menu, it is auto-decorated and
     // attached to the button.
-    var selectButton = goog.ui.decorate(goog.dom.$('selectButton'));
+    var selectButton = goog.ui.decorate(goog.dom.getElement('selectButton'));
 
-    goog.events.listen(goog.dom.$('selectButton_show'),
+    goog.events.listen(goog.dom.getElement('selectButton_show'),
         goog.events.EventType.CLICK,
         function(e) {
           selectButton.setVisible(e.target.checked);
         });
 
-    goog.events.listen(goog.dom.$('selectButton_enable'),
+    goog.events.listen(goog.dom.getElement('selectButton_enable'),
         goog.events.EventType.CLICK,
         function(e) {
           selectButton.setEnabled(e.target.checked);
@@ -187,7 +188,8 @@ limitations under the License.
 
     goog.events.listen(selectButton, EVENTS, logEvent);
 
-    goog.dom.setTextContent(goog.dom.$('perf'), (goog.now() - timer) + 'ms');
+    goog.dom.setTextContent(goog.dom.getElement('perf'),
+        (goog.now() - timer) + 'ms');
   </script>
 </body>
 </html>

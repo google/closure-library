@@ -63,7 +63,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 </div>
 <script>
 
-var sandbox = goog.dom.$('sandbox');
+var sandbox = goog.dom.getElement('sandbox');
 var sandboxHtml = sandbox.innerHTML;
 var container;
 var mockClock;
@@ -155,8 +155,8 @@ function testHighlightsAreIgnoredInResponseToScrolling() {
   scroller = new goog.ui.ContainerScroller(container);
   container.getChildAt(9).setHighlighted(true);
   goog.testing.events.fireMouseOverEvent(
-      goog.dom.$('control-5'),
-      goog.dom.$('control-9'));
+      goog.dom.getElement('control-5'),
+      goog.dom.getElement('control-9'));
   assertEquals('Mouseovers due to scrolls should be ignored',
       9, container.getHighlightedIndex());
 }
@@ -166,11 +166,11 @@ function testHighlightsAreNotIgnoredWhenNotScrolling() {
   container.getChildAt(5).setHighlighted(true);
   mockClock.tick(1000);
   goog.testing.events.fireMouseOutEvent(
-      goog.dom.$('control-5'),
-      goog.dom.$('control-6'));
+      goog.dom.getElement('control-5'),
+      goog.dom.getElement('control-6'));
   goog.testing.events.fireMouseOverEvent(
-      goog.dom.$('control-6'),
-      goog.dom.$('control-5'));
+      goog.dom.getElement('control-6'),
+      goog.dom.getElement('control-5'));
   assertEquals('Mousovers not due to scrolls should not be ignored',
       6, container.getHighlightedIndex());
 }

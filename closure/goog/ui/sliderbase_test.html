@@ -52,7 +52,7 @@ goog.inherits(OneThumbSlider, goog.ui.SliderBase);
 
 /** {@inheritDoc} */
 OneThumbSlider.prototype.createThumbs = function() {
-  this.valueThumb = this.extentThumb = goog.dom.$('thumb');
+  this.valueThumb = this.extentThumb = goog.dom.getElement('thumb');
 };
 
 
@@ -75,8 +75,8 @@ goog.inherits(TwoThumbSlider, goog.ui.SliderBase);
 
 /** {@inheritDoc} */
 TwoThumbSlider.prototype.createThumbs = function() {
-  this.valueThumb = goog.dom.$('valueThumb');
-  this.extentThumb = goog.dom.$('extentThumb');
+  this.valueThumb = goog.dom.getElement('valueThumb');
+  this.extentThumb = goog.dom.getElement('extentThumb');
 };
 
 
@@ -87,7 +87,7 @@ TwoThumbSlider.prototype.getCssClass = function() {
 
 
 function setUp() {
-  var sandBox = goog.dom.$('sandbox');
+  var sandBox = goog.dom.getElement('sandbox');
 
   var oneThumbElem = goog.dom.createDom(
       'div', {'id': 'oneThumbSlider'},
@@ -120,7 +120,7 @@ function tearDown() {
   goog.events.removeAll();
   oneThumbSlider.dispose();
   twoThumbSlider.dispose();
-  goog.dom.$('sandbox').innerHTML = '';
+  goog.dom.getElement('sandbox').innerHTML = '';
 }
 
 function testGetAndSetValue() {

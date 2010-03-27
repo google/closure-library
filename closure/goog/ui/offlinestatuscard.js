@@ -51,7 +51,7 @@ goog.ui.OfflineStatusCard = function(opt_domHelper) {
   this.addChild(this.progressBar_);
 
   /**
-   * A map of action element hashcode/action event type pairs.
+   * A map of action element uid/action event type pairs.
    * @type {goog.structs.Map}
    * @private
    */
@@ -403,7 +403,7 @@ goog.ui.OfflineStatusCard.prototype.createLinkNode_ = function(
   dom.appendChild(actionEl, a);
   // A text node is needed here in order for links to wrap.
   dom.appendChild(actionEl, dom.createTextNode(' '));
-  this.actionMap_.set(goog.getHashCode(a), action.eventType);
+  this.actionMap_.set(goog.getUid(a), action.eventType);
   goog.style.showElement(a, true);
   dom.setTextContent(a, action.message);
 };
@@ -452,7 +452,7 @@ goog.ui.OfflineStatusCard.prototype.handleProgressChange_ = function(e) {
  */
 goog.ui.OfflineStatusCard.prototype.handleActionClick_ = function(e) {
   var actionEventType = /** @type {string} */ (this.actionMap_.get(
-      goog.getHashCode(e.target)));
+      goog.getUid(e.target)));
   if (actionEventType) {
     this.dispatchEvent(actionEventType);
   }

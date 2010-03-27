@@ -475,38 +475,39 @@ function testSetMultiAxisRange() {
 function testGetConvertedValue() {
   var chart = new goog.ui.ServerChart(
       goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR);
-  var convertedValue = null;
-  var threwException = false;
-  try {
-    convertedValue = chart.getConvertedValue_(90, 24, 3,
-         goog.ui.ServerChart.EncodingType.SIMPLE);
-  } catch (ex) {
-    threwException = true;
-  }
-  if (!threwException) {
-    fail('Did not throw exception when the minimum value was greater than' +
-        ' the maximum value');
-  }
-  threwException = false;
 
-  assertEquals('f', chart.getConvertedValue_(90, 100, 100,
+  assertThrows('No exception thrown when minValue > maxValue', function() {
+    var result = chart.getConvertedValue_(
+        90, 24, 3, goog.ui.ServerChart.EncodingType.SIMPLE);
+  });
+
+  assertEquals('_', chart.getConvertedValue_(90, 100, 101,
        goog.ui.ServerChart.EncodingType.SIMPLE));
-  
-  var value = null;
-  assertEquals('_', chart.getConvertedValue_(value, 0, 5,
-                        goog.ui.ServerChart.EncodingType.SIMPLE));
-  value = null;
-  assertEquals('__', chart.getConvertedValue_(value, 0, 150,
-                        goog.ui.ServerChart.EncodingType.EXTENDED));
-  value = 24;
-  assertEquals('24', chart.getConvertedValue_(value, 1, 200,
-                      goog.ui.ServerChart.EncodingType.TEXT));
-  value = 24;
-  assertEquals('H', chart.getConvertedValue_(value, 1, 200,
-                      goog.ui.ServerChart.EncodingType.SIMPLE));
-  value = 24;
-  assertEquals('HZ', chart.getConvertedValue_(value, 1, 200,
-                      goog.ui.ServerChart.EncodingType.EXTENDED));
+
+  assertEquals('_', chart.getConvertedValue_(
+      null, 0, 5, goog.ui.ServerChart.EncodingType.SIMPLE));
+  assertEquals('__', chart.getConvertedValue_(
+      null, 0, 150, goog.ui.ServerChart.EncodingType.EXTENDED));
+  assertEquals('24', chart.getConvertedValue_(
+      24, 1, 200, goog.ui.ServerChart.EncodingType.TEXT));
+  assertEquals('H', chart.getConvertedValue_(
+      24, 1, 200, goog.ui.ServerChart.EncodingType.SIMPLE));
+  assertEquals('HZ', chart.getConvertedValue_(
+      24, 1, 200, goog.ui.ServerChart.EncodingType.EXTENDED));
+
+  // Out-of-range values should give a missing data point, not an empty string.
+  assertEquals('__', chart.getConvertedValue_(
+      0, 1, 200, goog.ui.ServerChart.EncodingType.EXTENDED));
+  assertEquals('__', chart.getConvertedValue_(
+      201, 1, 200, goog.ui.ServerChart.EncodingType.EXTENDED));
+  assertEquals('_', chart.getConvertedValue_(
+      0, 1, 200, goog.ui.ServerChart.EncodingType.SIMPLE));
+  assertEquals('_', chart.getConvertedValue_(
+      201, 1, 200, goog.ui.ServerChart.EncodingType.SIMPLE));
+  assertEquals('_', chart.getConvertedValue_(
+      0, 1, 200, goog.ui.ServerChart.EncodingType.TEXT));
+  assertEquals('_', chart.getConvertedValue_(
+      201, 1, 200, goog.ui.ServerChart.EncodingType.TEXT));
 }
 
 function testGetChartServerValues() {

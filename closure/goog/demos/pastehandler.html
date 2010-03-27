@@ -47,7 +47,7 @@ limitations under the License.
   </fieldset>
 
   <script type="text/javascript">
-    var textarea = goog.dom.$('foo');
+    var textarea = goog.dom.getElement('foo');
     var pasteHandler = new goog.events.PasteHandler(textarea);
     var logger = goog.debug.Logger.getLogger('demo')
 
@@ -57,7 +57,7 @@ limitations under the License.
         });
 
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.SEVERE);
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
   </script>
 </body>

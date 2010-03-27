@@ -39,7 +39,7 @@ limitations under the License.
   var page3;
 
   function setUp() {
-    goog.dom.$('testBody').innerHTML =
+    goog.dom.getElement('testBody').innerHTML =
        "<div id='tabpane'></div>"
        "<div id='page1Content'>"
        "  Content for page 1"
@@ -51,10 +51,13 @@ limitations under the License.
        "  Content for page 3"
        "</div>";
 
-    tabPane = new goog.ui.TabPane(goog.dom.$('tabpane'));
-    page1 = new goog.ui.TabPane.TabPage(goog.dom.$('page1Content'), 'page1');
-    page2 = new goog.ui.TabPane.TabPage(goog.dom.$('page2Content'), 'page2');
-    page3 = new goog.ui.TabPane.TabPage(goog.dom.$('page3Content'), 'page3');
+    tabPane = new goog.ui.TabPane(goog.dom.getElement('tabpane'));
+    page1 = new goog.ui.TabPane.TabPage(goog.dom.getElement('page1Content'),
+        'page1');
+    page2 = new goog.ui.TabPane.TabPage(goog.dom.getElement('page2Content'),
+        'page2');
+    page3 = new goog.ui.TabPane.TabPage(goog.dom.getElement('page3Content'),
+        'page3');
 
     tabPane.addPage(page1);
     tabPane.addPage(page2);

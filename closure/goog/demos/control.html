@@ -298,7 +298,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
@@ -313,14 +313,14 @@ limitations under the License.
         goog.dom.createDom('span', null, 'Hello, ',
             goog.dom.createDom('b', null, 'world'),
             '!'));
-    c1.render(goog.dom.$('c1'));
+    c1.render(goog.dom.getElement('c1'));
     goog.events.listen(c1, EVENTS, logEvent);
 
     // Create the second control by decorating an existing element.  We can
     // use goog.ui.decorate to get a Control instance and have it
     // decorate the element, since the element to be decorated has the
     // appropriate "marker" class name.
-    var c2 = goog.ui.decorate(goog.dom.$('c2'));
+    var c2 = goog.ui.decorate(goog.dom.getElement('c2'));
     c2.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
     goog.events.listen(c2, EVENTS, logEvent);
 
@@ -359,7 +359,8 @@ limitations under the License.
     SampleCustomRenderer.prototype.getContent = function(element) {
       if (element) {
         return SampleCustomRenderer.superClass_.getContent.call(this,
-            goog.dom.$$('div', this.getCssClass() + '-content', element)[0]);
+            goog.dom.getElementsByTagNameAndClass('div',
+                this.getCssClass() + '-content', element)[0]);
       }
       return null;
     };
@@ -368,7 +369,8 @@ limitations under the License.
     SampleCustomRenderer.prototype.setContent = function(element, content) {
       if (element) {
         return SampleCustomRenderer.superClass_.setContent.call(this,
-            goog.dom.$$('div', this.getCssClass() + '-content', element)[0],
+            goog.dom.getElementsByTagNameAndClass('div',
+                this.getCssClass() + '-content', element)[0],
             content);
       }
     };
@@ -383,7 +385,7 @@ limitations under the License.
 
     // Create the third control using the custom renderer.
     var c3 = new goog.ui.Control('Custom Renderer', customRenderer);
-    c3.render(goog.dom.$('c3'));
+    c3.render(goog.dom.getElement('c3'));
     goog.events.listen(c3, EVENTS, logEvent);
 
     // Register a decorator factory function for controls to be decorated using
@@ -395,7 +397,7 @@ limitations under the License.
     });
 
     // Create the fourth control by decorating a DIV.
-    var customElem = goog.dom.$('c4');
+    var customElem = goog.dom.getElement('c4');
     // getDecorator will use the decorator factory function registered above to
     // create a control to decorate our element.
     var c4 = goog.ui.registry.getDecorator(customElem);
@@ -406,30 +408,30 @@ limitations under the License.
 
     var c5 = new goog.ui.Control('Custom Red');
     c5.addClassName('extra-red');
-    c5.render(goog.dom.$('c5'));
+    c5.render(goog.dom.getElement('c5'));
     goog.events.listen(c5, EVENTS, logEvent);
 
     var c6 = new goog.ui.Control('Custom Blue');
     c6.addClassName('extra-blue');
-    c6.render(goog.dom.$('c6'));
+    c6.render(goog.dom.getElement('c6'));
     c6.addClassName('extra-thick-border');
     goog.events.listen(c6, EVENTS, logEvent);
 
     // BiDi examples:
     var c7 = new goog.ui.Control('Hello, world');
     c7.addClassName('goog-inline-block');
-    c7.render(goog.dom.$('bidi'));
+    c7.render(goog.dom.getElement('bidi'));
     goog.events.listen(c7, EVENTS, logEvent);
 
     var c8 = new goog.ui.Control('Sample control');
     c8.addClassName('goog-inline-block');
-    c8.render(goog.dom.$('bidi'));
+    c8.render(goog.dom.getElement('bidi'));
     goog.events.listen(c8, EVENTS, logEvent);
 
-    var c9 = goog.ui.decorate(goog.dom.$('c9'));
+    var c9 = goog.ui.decorate(goog.dom.getElement('c9'));
     goog.events.listen(c9, EVENTS, logEvent);
 
-    var c10 = goog.ui.decorate(goog.dom.$('c10'));
+    var c10 = goog.ui.decorate(goog.dom.getElement('c10'));
     goog.events.listen(c10, EVENTS, logEvent);
 
     // Add some event handling to the second control, which dispatches state
@@ -437,45 +439,48 @@ limitations under the License.
 
     goog.events.listen(c2, goog.ui.Component.EventType.HIGHLIGHT,
         function(e) {
-          goog.dom.setTextContent(goog.dom.$('hint'),
+          goog.dom.setTextContent(goog.dom.getElement('hint'),
               'Click to activate.');
         });
 
     goog.events.listen(c2, [goog.ui.Component.EventType.ENABLE,
       goog.ui.Component.EventType.UNHIGHLIGHT],
         function(e) {
-          goog.dom.setTextContent(goog.dom.$('hint'),
+          goog.dom.setTextContent(goog.dom.getElement('hint'),
               'Mouse over for instructions.');
         });
 
     goog.events.listen(c2, goog.ui.Component.EventType.DISABLE,
         function(e) {
-          goog.dom.setTextContent(goog.dom.$('hint'),
+          goog.dom.setTextContent(goog.dom.getElement('hint'),
               'You need to enable this component first.');
         });
 
     goog.events.listen(c2, goog.ui.Component.EventType.ACTIVATE,
         function(e) {
-          goog.dom.setTextContent(goog.dom.$('hint'),
+          goog.dom.setTextContent(goog.dom.getElement('hint'),
               'Release the mouse button to deactivate.');
         });
 
     goog.events.listen(c2, goog.ui.Component.EventType.DEACTIVATE,
         function(e) {
-          goog.dom.setTextContent(goog.dom.$('hint'), 'You got it!');
+          goog.dom.setTextContent(goog.dom.getElement('hint'), 'You got it!');
         });
 
-    goog.events.listen(goog.dom.$('enable'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('enable'),
+        goog.events.EventType.CLICK,
         function(e) {
           c2.setEnabled(e.target.checked);
         });
 
-    goog.events.listen(goog.dom.$('visible'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('visible'),
+        goog.events.EventType.CLICK,
         function(e) {
           c2.setVisible(e.target.checked);
         });
 
-    goog.dom.setTextContent(goog.dom.$('perf'), (goog.now() - timer) + 'ms');
+    goog.dom.setTextContent(goog.dom.getElement('perf'),
+        (goog.now() - timer) + 'ms');
   </script>
 </body>
 </html>

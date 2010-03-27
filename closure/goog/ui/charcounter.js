@@ -40,7 +40,7 @@ goog.require('goog.events.InputHandler');
  * @param {Element} elCount HTML element to display the remaining number of
  *     characters in.
  * @param {number} maxLength The maximum length.
- * @param {goog.ui.CharCounter.Display} opt_displayMode Display mode for this
+ * @param {goog.ui.CharCounter.Display=} opt_displayMode Display mode for this
  *     char counter. Defaults to {@link goog.ui.CharCounter.Display.REMAINING}.
  * @constructor
  */

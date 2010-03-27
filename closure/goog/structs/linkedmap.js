@@ -250,7 +250,7 @@ goog.structs.LinkedMap.prototype.getKeys = function() {
 
 
 /**
- * @return {Array} The list of the values in the appropriate order for
+ * @return {!Array} The list of the values in the appropriate order for
  *     this LinkedMap.
  */
 goog.structs.LinkedMap.prototype.getValues = function() {
@@ -313,11 +313,11 @@ goog.structs.LinkedMap.prototype.forEach = function(f, opt_obj) {
  * those calls in an array.
  *
  * @see goog.structs.map
- * @param {Function} f The function to call for each item. The function takes
+ * @param {!Function} f The function to call for each item. The function takes
  *     three arguments: the value, the key, and the LinkedMap.
  * @param {Object=} opt_obj The object context to use as "this" for the
  *     function.
- * @return {Array} The results of the function calls for each item in the
+ * @return {!Array} The results of the function calls for each item in the
  *     LinkedMap.
  */
 goog.structs.LinkedMap.prototype.map = function(f, opt_obj) {

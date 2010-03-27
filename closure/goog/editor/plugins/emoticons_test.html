@@ -1,0 +1,75 @@
+<!--
+Copyright 2009 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+  <script src="../../base.js"></script>
+  <script>
+    goog.require('goog.Uri');
+    goog.require('goog.editor.Field');
+    goog.require('goog.editor.plugins.Emoticons');
+    goog.require('goog.testing.jsunit');
+    goog.require('goog.ui.emoji.Emoji');
+  </script>
+</head>
+<div id='parent'>
+<div id="testField">I am text.</div>
+</div>
+<script>
+
+var HTML;
+
+function setUp() {
+  HTML = goog.dom.$('parent').innerHTML;
+}
+
+function tearDown() {
+  goog.dom.$('parent').innerHTML = HTML;
+}
+
+function testEmojiWithEmoticonsPlugin() {
+  runEmojiTestWithPlugin(new goog.editor.plugins.Emoticons());
+}
+
+function runEmojiTestWithPlugin(plugin) {
+  var field = new goog.editor.Field('testField');
+  field.registerPlugin(plugin);
+  field.makeEditable();
+  field.focusAndPlaceCursorAtStart();
+
+  var src = 'testdata/emoji/4F4.gif';
+  var id = '4F4';
+  var emoji = new goog.ui.emoji.Emoji(src, id);
+  field.execCommand(goog.editor.plugins.Emoticons.COMMAND, emoji);
+
+  // The url may be relative or absolute.
+  var imgs = field.getEditableDomHelper().$$(goog.dom.TagName.IMG);
+  assertEquals(1, imgs.length);
+
+  var img = imgs[0];
+  assertUriEquals(src, img.getAttribute('src'));
+  assertEquals(id, img.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE));
+}
+
+function assertUriEquals(expected, actual) {
+  var winUri = new goog.Uri(window.location);
+  assertEquals(winUri.resolve(new goog.Uri(expected)).toString(),
+      winUri.resolve(new goog.Uri(actual)).toString());
+}
+
+</script>
+</body>
+</html>

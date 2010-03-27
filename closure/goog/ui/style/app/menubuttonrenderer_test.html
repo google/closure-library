@@ -50,11 +50,11 @@ Copyright 2008 Google Inc. All Rights Reserved.
       if (button) {
         button.dispose();
       }
-      goog.dom.$('sandbox').innerHTML = '';
+      goog.dom.getElement('sandbox').innerHTML = '';
     }
 
     function testGeneratedButton() {
-      button.render(goog.dom.$('sandbox'));
+      button.render(goog.dom.getElement('sandbox'));
       goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
         'normal-resting');
       assertEquals('Hello Generated',
@@ -64,7 +64,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     }
 
     function testButtonStates() {
-      button.render(goog.dom.$('sandbox'));
+      button.render(goog.dom.getElement('sandbox'));
       goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
         'normal-resting');
       button.setState(goog.ui.Component.State.HOVER, true);
@@ -85,7 +85,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     }
 
     function testDecoratedButton() {
-      button.decorate(goog.dom.$('button'));
+      button.decorate(goog.dom.getElement('button'));
       goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
         'normal-resting');
       assertEquals('Hello Decorated',
@@ -95,7 +95,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     }
 
     function testDecoratedButtonBox() {
-      button.decorate(goog.dom.$('button-box'));
+      button.decorate(goog.dom.getElement('button-box'));
       goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
         'normal-resting');
       assertEquals('Hello Decorated Box',
@@ -105,7 +105,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     }
 
     function testExistingContentIsUsed() {
-      button.decorate(goog.dom.$('button-with-dom-content'));
+      button.decorate(goog.dom.getElement('button-with-dom-content'));
       goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
         'normal-resting');
       // Safari 3 adds style="-webkit-user-select" to the strong tag, so we
@@ -124,7 +124,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     }
 
     function testDecoratedButtonWithMenu() {
-      button.decorate(goog.dom.$('button-with-menu'));
+      button.decorate(goog.dom.getElement('button-with-menu'));
       assertEquals('Unexpected number of menu items', 2, button.getItemCount());
       goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
         'normal-resting');
@@ -134,7 +134,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
     }
 
     function testDropDownExistsAfterButtonRename() {
-      button.decorate(goog.dom.$('button-2'));
+      button.decorate(goog.dom.getElement('button-2'));
       button.setContent('New title');
       goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
         'normal-resting');

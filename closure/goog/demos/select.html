@@ -160,7 +160,7 @@ limitations under the License.
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
     var logger = goog.debug.Logger.getLogger('demo');
-    var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
+    var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
@@ -179,7 +179,7 @@ limitations under the License.
     select1.addItem(new goog.ui.MenuItem('Godfather Part II'));
     select1.addItem(new goog.ui.MenuItem('Citizen Kane'));
     select1.setSelectedIndex(0);
-    select1.render(goog.dom.$('select1'));
+    select1.render(goog.dom.getElement('select1'));
 
     var select2 = new goog.ui.Select();
     var disabledItem;
@@ -189,36 +189,36 @@ limitations under the License.
     select2.addItem(new goog.ui.Option('Catwoman'));
     disabledItem.setEnabled(false);
     select2.setValue('Spider-Man 3');
-    select2.render(goog.dom.$('select2'));
+    select2.render(goog.dom.getElement('select2'));
 
     var select3 = new goog.ui.Select('Click to select');
     // Turn off auto-highlighting, just for fun.
     select3.setAutoStates(goog.ui.Component.State.HOVER, false);
     select3.addItem(new goog.ui.Option('enabled', true));
     select3.addItem(new goog.ui.Option('disabled', false));
-    select3.render(goog.dom.$('select3'));
+    select3.render(goog.dom.getElement('select3'));
     select3.setSelectedIndex(0);
 
     goog.events.listen(select1, goog.ui.Component.EventType.ACTION,
         function(e) {
           var select = e.target;
           var value = 'Yay ' + select.getValue() + '!';
-          goog.dom.setTextContent(goog.dom.$('value1'), value);
-          goog.dom.setTextContent(goog.dom.$('value2'), '');
+          goog.dom.setTextContent(goog.dom.getElement('value1'), value);
+          goog.dom.setTextContent(goog.dom.getElement('value2'), '');
         });
     goog.events.listen(select2, goog.ui.Component.EventType.ACTION,
         function(e) {
           var select = e.target;
           var value = 'Boo ' + select.getValue() + '...';
-          goog.dom.setTextContent(goog.dom.$('value2'), value);
-          goog.dom.setTextContent(goog.dom.$('value1'), '');
+          goog.dom.setTextContent(goog.dom.getElement('value2'), value);
+          goog.dom.setTextContent(goog.dom.getElement('value1'), '');
         });
     goog.events.listen(select3, goog.ui.Component.EventType.ACTION,
         function(e) {
           var select = e.target;
           select2.setEnabled(select.getValue());
         });
-    goog.events.listen(goog.dom.$('add'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('add'), goog.events.EventType.CLICK,
         function(e) {
           var good = prompt('What\'s another good movie...?');
           if (select1.getItemCount() == 3) {
@@ -226,17 +226,18 @@ limitations under the License.
           }
           select1.addItem(new goog.ui.MenuItem(good));
         });
-    goog.events.listen(goog.dom.$('hide'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('hide'), goog.events.EventType.CLICK,
         function(e) {
           select1.setVisible(!select1.isVisible());
         });
-    goog.events.listen(goog.dom.$('worst'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('worst'),
+        goog.events.EventType.CLICK,
         function(e) {
           select2.setValue('Catwoman');
         });
 
     // Decorate an element with a Select control.
-    var select4 = goog.ui.decorate(goog.dom.$('spaghetti'));
+    var select4 = goog.ui.decorate(goog.dom.getElement('spaghetti'));
 
     goog.events.listen(select1, EVENTS, logEvent);
     goog.events.listen(select2, EVENTS, logEvent);
@@ -250,7 +251,7 @@ limitations under the License.
     flatSelect1.addItem(new goog.ui.MenuItem('Kindergarten Cop'));
     flatSelect1.addItem(new goog.ui.MenuItem('Predator'));
     flatSelect1.setSelectedIndex(0);
-    flatSelect1.render(goog.dom.$('flat-select1'));
+    flatSelect1.render(goog.dom.getElement('flat-select1'));
 
     var flatSelect2 = new goog.ui.Select(null, null,
         goog.ui.FlatMenuButtonRenderer.getInstance());
@@ -262,7 +263,7 @@ limitations under the License.
     flatSelect2.addItem(new goog.ui.Option('Jingle All the Way'));
     flatDisabledItem.setEnabled(false);
     flatSelect2.setValue('Last Action Hero');
-    flatSelect2.render(goog.dom.$('flat-select2'));
+    flatSelect2.render(goog.dom.getElement('flat-select2'));
 
     var flatSelect3 = new goog.ui.Select('Click to select', null,
         goog.ui.FlatMenuButtonRenderer.getInstance());
@@ -270,29 +271,30 @@ limitations under the License.
     flatSelect3.setAutoStates(goog.ui.Component.State.HOVER, false);
     flatSelect3.addItem(new goog.ui.Option('enabled', true));
     flatSelect3.addItem(new goog.ui.Option('disabled', false));
-    flatSelect3.render(goog.dom.$('flat-select3'));
+    flatSelect3.render(goog.dom.getElement('flat-select3'));
     flatSelect3.setSelectedIndex(0);
 
     goog.events.listen(flatSelect1, goog.ui.Component.EventType.ACTION,
         function(e) {
           var select = e.target;
           var value = 'Yay ' + select.getValue() + '!';
-          goog.dom.setTextContent(goog.dom.$('flat-value1'), value);
-          goog.dom.setTextContent(goog.dom.$('flat-value2'), '');
+          goog.dom.setTextContent(goog.dom.getElement('flat-value1'), value);
+          goog.dom.setTextContent(goog.dom.getElement('flat-value2'), '');
         });
     goog.events.listen(flatSelect2, goog.ui.Component.EventType.ACTION,
         function(e) {
           var select = e.target;
           var value = 'Boo ' + select.getValue() + '...';
-          goog.dom.setTextContent(goog.dom.$('flat-value2'), value);
-          goog.dom.setTextContent(goog.dom.$('flat-value1'), '');
+          goog.dom.setTextContent(goog.dom.getElement('flat-value2'), value);
+          goog.dom.setTextContent(goog.dom.getElement('flat-value1'), '');
         });
     goog.events.listen(flatSelect3, goog.ui.Component.EventType.ACTION,
         function(e) {
           var select = e.target;
           flatSelect2.setEnabled(select.getValue());
         });
-    goog.events.listen(goog.dom.$('flat-add'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('flat-add'),
+        goog.events.EventType.CLICK,
         function(e) {
           var good = prompt('What\'s another good Arnold movie...?');
           if (flatSelect1.getItemCount() == 3) {
@@ -300,11 +302,13 @@ limitations under the License.
           }
           flatSelect1.addItem(new goog.ui.MenuItem(good));
         });
-    goog.events.listen(goog.dom.$('flat-hide'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('flat-hide'),
+        goog.events.EventType.CLICK,
         function(e) {
           flatSelect1.setVisible(!flatSelect1.isVisible());
         });
-    goog.events.listen(goog.dom.$('flat-worst'), goog.events.EventType.CLICK,
+    goog.events.listen(goog.dom.getElement('flat-worst'),
+        goog.events.EventType.CLICK,
         function(e) {
           flatSelect2.setValue('Jingle All the Way');
         });
@@ -312,14 +316,15 @@ limitations under the License.
     // Decorate an element with a Select control using FlatMenuButtonRenderer.
     var flatSelect4 = new goog.ui.Select(null, null,
         goog.ui.FlatMenuButtonRenderer.getInstance());
-    flatSelect4.decorate(goog.dom.$('flat-ferrell'));
+    flatSelect4.decorate(goog.dom.getElement('flat-ferrell'));
 
     goog.events.listen(flatSelect1, EVENTS, logEvent);
     goog.events.listen(flatSelect2, EVENTS, logEvent);
     goog.events.listen(flatSelect3, EVENTS, logEvent);
     goog.events.listen(flatSelect4, EVENTS, logEvent);
 
-    goog.dom.setTextContent(goog.dom.$('perf'), (goog.now() - timer) + 'ms');
+    goog.dom.setTextContent(goog.dom.getElement('perf'),
+        (goog.now() - timer) + 'ms');
   </script>
 </body>
 </html>

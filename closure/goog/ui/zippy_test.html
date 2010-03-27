@@ -81,7 +81,8 @@ Copyright 2008 Google Inc. All Rights Reserved.
   var dualHeaderZippyExpandedHeaderEl;
 
   function setUp() {
-    zippy = new goog.ui.Zippy(goog.dom.$('t1'), goog.dom.$('c1'));
+    zippy = new goog.ui.Zippy(goog.dom.getElement('t1'),
+        goog.dom.getElement('c1'));
 
     var fakeControlEl = document.createElement('button');
     var fakeContentEl = document.createElement('div');
@@ -97,7 +98,7 @@ Copyright 2008 Google Inc. All Rights Reserved.
 
     lazyZippyCallCount = 0;
     lazyZippyContentEl = fakeContentEl.cloneNode(true);
-    lazyZippy = new goog.ui.Zippy(goog.dom.$('t1'), function() {
+    lazyZippy = new goog.ui.Zippy(goog.dom.getElement('t1'), function() {
       lazyZippyCallCount++;
       return lazyZippyContentEl;
     });

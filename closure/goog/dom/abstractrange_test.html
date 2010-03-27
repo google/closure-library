@@ -40,8 +40,8 @@ Copyright 2009 Google Inc. All Rights Reserved.
 </iframe>
 <script>
   function testCorrectDocument() {
-    var a = goog.dom.$('a').contentWindow;
-    var b = goog.dom.$('b').contentWindow;
+    var a = goog.dom.getElement('a').contentWindow;
+    var b = goog.dom.getElement('b').contentWindow;
 
     a.document.body.focus();
     var selection = goog.dom.AbstractRange.getBrowserSelectionForWindow(a);
@@ -68,7 +68,7 @@ Copyright 2009 Google Inc. All Rights Reserved.
   }
 
   function testSelectionIsControlRange() {
-    var c = goog.dom.$('c').contentWindow;
+    var c = goog.dom.getElement('c').contentWindow;
     // Only IE supports control ranges
     if (c.document.body.createControlRange) {
       var controlRange = c.document.body.createControlRange();

@@ -50,17 +50,17 @@ Copyright 2008 Google Inc. All Rights Reserved.
       if (button) {
         button.dispose();
       }
-      goog.dom.$('sandbox').innerHTML = '';
+      goog.dom.getElement('sandbox').innerHTML = '';
     }
 
     function testGeneratedButton() {
-      button.render(goog.dom.$('sandbox'));
+      button.render(goog.dom.getElement('sandbox'));
       goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
         'normal-resting');
     }
 
     function testButtonStates() {
-      button.render(goog.dom.$('sandbox'));
+      button.render(goog.dom.getElement('sandbox'));
       goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
         'normal-resting');
       button.setState(goog.ui.Component.State.HOVER, true);

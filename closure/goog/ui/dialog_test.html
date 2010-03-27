@@ -58,7 +58,7 @@ limitations under the License.
       return;
     }
     dialog.setVisible(false);
-    var iframeWindow = goog.dom.$('f').contentWindow;
+    var iframeWindow = goog.dom.getElement('f').contentWindow;
     var iframeInput = iframeWindow.document.getElementsByTagName('input')[0];
     dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
     var buttonElement = dialog.getButtonSet().getButton(0);
@@ -74,6 +74,11 @@ limitations under the License.
     assertEquals(2, focusCounter);
   }
 
+  function testNoTitleClose() {
+    assertTrue(goog.style.isElementShown(dialog.getTitleCloseElement()));
+    dialog.setHasTitleCloseButton(false);
+    assertFalse(goog.style.isElementShown(dialog.getTitleCloseElement()));
+  }
 
   /**
    * Helper that clicks the first button in the dialog and checks if that
@@ -166,6 +171,28 @@ limitations under the License.
     goog.testing.events.fireKeySequence(select,
         goog.events.KeyCodes.ESC);
     assertTrue(wasCalled);
+  }
+
+  function testEscapeCloses() {
+    // If escapeCloses is set to false, the dialog should ignore the escape key
+    assertTrue(dialog.isEscapeToCancel());
+    dialog.setEscapeToCancel(false);
+    assertFalse(dialog.isEscapeToCancel());
+
+    var buttons = new goog.ui.Dialog.ButtonSet();
+    buttons.set(goog.ui.Dialog.DefaultButtonKeys.OK, 'OK', true);
+    dialog.setButtonSet(buttons);
+    goog.testing.events.fireKeySequence(dialog.getContentElement(),
+        goog.events.KeyCodes.ESC);
+    assertTrue(dialog.isVisible());
+
+    // Having a cancel button should make no difference, escape should still not
+    // work.
+    buttons.set(goog.ui.Dialog.DefaultButtonKeys.CANCEL, 'Foo!', false, true);
+    dialog.setButtonSet(buttons);
+    goog.testing.events.fireKeySequence(dialog.getContentElement(),
+        goog.events.KeyCodes.ESC);
+    assertTrue(dialog.isVisible());
   }
 
   function testEnterKeyWithoutDefaultDoesNotPreventPropagation() {
@@ -330,8 +357,8 @@ limitations under the License.
 
   function testGetAllButtons() {
     dialog.setButtonSet(goog.ui.Dialog.ButtonSet.YES_NO_CANCEL);
-    var buttons = goog.dom.$$(goog.dom.TagName.BUTTON, null,
-        dialog.getElement());
+    var buttons = dialog.getElement().getElementsByTagName(
+        goog.dom.TagName.BUTTON);
     for (var i = 0; i < buttons.length; i++) {
       assertEquals(buttons[i], dialog.getButtonSet().getAllButtons()[i]);
     }
@@ -419,8 +446,8 @@ limitations under the License.
    * @param {Array.<string>} keys An array of button keys.
    */
   function assertButtons(keys) {
-    var buttons = goog.dom.$$(goog.dom.TagName.BUTTON, null,
-        dialog.getElement());
+    var buttons = dialog.getElement().getElementsByTagName(
+        goog.dom.TagName.BUTTON);
     var actualKeys = [];
     for (var i = 0; i < buttons.length; i++) {
       actualKeys[i] = buttons[i].name;

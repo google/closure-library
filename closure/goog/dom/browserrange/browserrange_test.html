@@ -37,10 +37,10 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
 
 <script>
-  var test1 = goog.dom.$('test1');
-  var test2 = goog.dom.$('test2');
-  var empty = goog.dom.$('empty');
-  var dynamic = goog.dom.$('dynamic');
+  var test1 = goog.dom.getElement('test1');
+  var test2 = goog.dom.getElement('test2');
+  var empty = goog.dom.getElement('empty');
+  var dynamic = goog.dom.getElement('dynamic');
 
   function testCreate() {
     assertNotNull('Browser range object can be created for node',
@@ -193,7 +193,7 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
 
   function testRemoveContents() {
-    var outer = goog.dom.$('removeTest');
+    var outer = goog.dom.getElement('removeTest');
     var range = goog.dom.browserrange.createRangeFromNodeContents(
         outer.firstChild);
 
@@ -241,14 +241,14 @@ Copyright 2007 Google Inc. All Rights Reserved.
   function testEndOfChildren() {
     dynamic.innerHTML =
         '<span id="a">123<br>456</span><span id="b">text</span>';
-    var range = goog.dom.browserrange.createRangeFromNodes(goog.dom.$('a'), 3,
-        goog.dom.$('b'), 1);
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        goog.dom.getElement('a'), 3, goog.dom.getElement('b'), 1);
     assertEquals('Should have correct text.', 'text', range.getText());
   }
 
   function testEndOfDiv() {
     dynamic.innerHTML = '<div id="a">abc</div><div id="b">def</div>';
-    var a = goog.dom.$('a');
+    var a = goog.dom.getElement('a');
     var range = goog.dom.browserrange.createRangeFromNodes(a, 1, a, 1);
     var expectedStartNode = a;
     var expectedStartOffset = 1;
@@ -271,8 +271,8 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
   function testRangeEndingWithBR() {
     dynamic.innerHTML = '<span id="a">123<br>456</span>';
-    var range = goog.dom.browserrange.createRangeFromNodes(goog.dom.$('a'), 0,
-        goog.dom.$('a'), 2);
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        goog.dom.getElement('a'), 0, goog.dom.getElement('a'), 2);
     var htmlText = range.getValidHtml().toLowerCase();
     assertContains('Should include BR in HTML.', 'br', htmlText);
     assertEquals('Should have correct text.', '123', range.getText());
@@ -280,8 +280,8 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
   function testRangeEndingBeforeBR() {
     dynamic.innerHTML = '<span id="a">123<br>456</span>';
-    var range = goog.dom.browserrange.createRangeFromNodes(goog.dom.$('a'), 0,
-        goog.dom.$('a'), 1);
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        goog.dom.getElement('a'), 0, goog.dom.getElement('a'), 1);
     var htmlText = range.getValidHtml().toLowerCase();
     assertNotContains('Should not include BR in HTML.', 'br', htmlText);
     assertEquals('Should have correct text.', '123', range.getText());
@@ -289,8 +289,8 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
   function testRangeStartingWithBR() {
     dynamic.innerHTML = '<span id="a">123<br>456</span>';
-    var range = goog.dom.browserrange.createRangeFromNodes(goog.dom.$('a'), 1,
-        goog.dom.$('a'), 3);
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        goog.dom.getElement('a'), 1, goog.dom.getElement('a'), 3);
     var htmlText = range.getValidHtml().toLowerCase();
     assertContains('Should include BR in HTML.', 'br', htmlText);
     // Firefox returns '456' as the range text while IE returns '\r\n456'.
@@ -299,8 +299,8 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
   function testRangeStargingAfterBR() {
     dynamic.innerHTML = '<span id="a">123<br>456</span>';
-    var range = goog.dom.browserrange.createRangeFromNodes(goog.dom.$('a'), 2,
-        goog.dom.$('a'), 3);
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        goog.dom.getElement('a'), 2, goog.dom.getElement('a'), 3);
     var htmlText = range.getValidHtml().toLowerCase();
     assertNotContains('Should not include BR in HTML.', 'br', htmlText);
     assertEquals('Should have correct text.', '456', range.getText());
@@ -308,8 +308,8 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
   function testCollapsedRangeBeforeBR() {
     dynamic.innerHTML = '<span id="a">123<br>456</span>';
-    var range = goog.dom.browserrange.createRangeFromNodes(goog.dom.$('a'), 1,
-        goog.dom.$('a'), 1);
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        goog.dom.getElement('a'), 1, goog.dom.getElement('a'), 1);
     // Firefox returns <span id="a"></span> as the range HTML while IE returns
     // empty string. Therefore skipping the HTML check.
     assertEquals('Should have no text.', '', range.getText());
@@ -317,8 +317,8 @@ Copyright 2007 Google Inc. All Rights Reserved.
 
   function testCollapsedRangeAfterBR() {
     dynamic.innerHTML = '<span id="a">123<br>456</span>';
-    var range = goog.dom.browserrange.createRangeFromNodes(goog.dom.$('a'), 2,
-        goog.dom.$('a'), 2);
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        goog.dom.getElement('a'), 2, goog.dom.getElement('a'), 2);
     // Firefox returns <span id="a"></span> as the range HTML while IE returns
     // empty string. Therefore skipping the HTML check.
     assertEquals('Should have no text.', '', range.getText());

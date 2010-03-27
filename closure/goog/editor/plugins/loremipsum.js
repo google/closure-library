@@ -25,6 +25,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
+goog.require('goog.editor.node');
 goog.require('goog.functions');
 
 
@@ -53,9 +54,6 @@ goog.editor.plugins.LoremIpsum.prototype.getTrogClassId =
 /** @inheritDoc */
 goog.editor.plugins.LoremIpsum.prototype.activeOnUneditableFields =
     goog.functions.TRUE;
-
-/** @inheritDoc */
-goog.editor.plugins.LoremIpsum.prototype.isSilentCommand = goog.functions.TRUE;
 
 /**
  * Whether the field is currently filled with lorem ipsum text.

@@ -308,15 +308,15 @@ goog.ds.DataManager.prototype.addListener = function(fn, dataPath, opt_id) {
   }
 
   opt_id = opt_id || '';
-  var key = dataPath + ':' + opt_id + ':' + goog.getHashCode(fn);
+  var key = dataPath + ':' + opt_id + ':' + goog.getUid(fn);
   var listener = {dataPath: dataPath, id: opt_id, fn: fn};
   var expr = goog.ds.Expr.create(dataPath);
 
-  var fnHash = goog.getHashCode(fn);
-  if (!this.listenersByFunction_[fnHash]) {
-    this.listenersByFunction_[fnHash] = {};
+  var fnUid = goog.getUid(fn);
+  if (!this.listenersByFunction_[fnUid]) {
+    this.listenersByFunction_[fnUid] = {};
   }
-  this.listenersByFunction_[fnHash][key] = {listener: listener, items: []};
+  this.listenersByFunction_[fnUid][key] = {listener: listener, items: []};
 
   while (expr) {
     var listenerSpec = {listener: listener, maxAncestors: maxAncestors};
@@ -328,7 +328,7 @@ goog.ds.DataManager.prototype.addListener = function(fn, dataPath, opt_id) {
     matchingListeners[key] = listenerSpec;
     maxAncestors = 0;
     expr = expr.getParent();
-    this.listenersByFunction_[fnHash][key].items.push({key: key,
+    this.listenersByFunction_[fnUid][key].items.push({key: key,
         obj: matchingListeners});
   }
 };
@@ -383,12 +383,12 @@ goog.ds.DataManager.prototype.addIndexedListener = function(fn, dataPath,
   this.addListener(matcher, listenPath, opt_id);
 
   // Add the indexed listener to the map so that we can remove it later.
-  var fnHash = goog.getHashCode(fn);
-  if (!this.indexedListenersByFunction_[fnHash]) {
-    this.indexedListenersByFunction_[fnHash] = {};
+  var fnUid = goog.getUid(fn);
+  if (!this.indexedListenersByFunction_[fnUid]) {
+    this.indexedListenersByFunction_[fnUid] = {};
   }
   var key = dataPath + ':' + opt_id;
-  this.indexedListenersByFunction_[fnHash][key] = {listener:
+  this.indexedListenersByFunction_[fnUid][key] = {listener:
       {dataPath: listenPath, fn: matcher, id: opt_id}};
 };
 
@@ -449,8 +449,8 @@ goog.ds.DataManager.prototype.removeListeners = function(fn, opt_dataPath,
  */
 goog.ds.DataManager.prototype.removeListenersByFunction_ = function(
     listenersByFunction, indexed, fn, opt_dataPath, opt_id) {
-  var fnHash = goog.getHashCode(fn);
-  var functionMatches = listenersByFunction[fnHash];
+  var fnUid = goog.getUid(fn);
+  var functionMatches = listenersByFunction[fnUid];
   if (functionMatches != null) {
     for (var key in functionMatches) {
       var functionMatch = functionMatches[key];

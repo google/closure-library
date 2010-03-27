@@ -52,7 +52,7 @@ var clonedSelectionMenuButtonDom;
 
 function setUp() {
   clonedSelectionMenuButtonDom =
-      goog.dom.$('demoSelectionMenuButton').cloneNode(true);
+      goog.dom.getElement('demoSelectionMenuButton').cloneNode(true);
 
   selectionMenuButton = new goog.ui.SelectionMenuButton();
 }
@@ -60,7 +60,7 @@ function setUp() {
 function tearDown() {
   selectionMenuButton.dispose();
 
-  var element = goog.dom.$('demoSelectionMenuButton');
+  var element = goog.dom.getElement('demoSelectionMenuButton');
   element.parentNode.replaceChild(clonedSelectionMenuButtonDom, element);
 }
 
@@ -69,7 +69,7 @@ function tearDown() {
  * Open the menu and click on the menu item inside.
  */
 function testBasicButtonBehavior() {
-  var node = goog.dom.$('demoSelectionMenuButton');
+  var node = goog.dom.getElement('demoSelectionMenuButton');
   selectionMenuButton.decorate(node);
   goog.testing.events.fireClickSequence(node);
 
@@ -84,9 +84,10 @@ function testBasicButtonBehavior() {
       lastMenuItemClicked = e.target
     });
 
-  var menuItem2 = goog.dom.$('menuItem2');
+  var menuItem2 = goog.dom.getElement('menuItem2');
   goog.testing.events.fireClickSequence(menuItem2);
-  assertFalse('Menu must close on clicking when open', selectionMenuButton.isOpen());
+  assertFalse('Menu must close on clicking when open',
+      selectionMenuButton.isOpen());
   assertEquals('Number of menu items clicked should be 1', 1, menuItemClicked);
   assertEquals('menuItem2 should be the last menuitem clicked', menuItem2,
       lastMenuItemClicked.getElement());
@@ -97,7 +98,7 @@ function testBasicButtonBehavior() {
  * Tests that the checkbox fires the same events as the first 2 items.
  */
 function testCheckboxFireEvents() {
-  var node = goog.dom.$('demoSelectionMenuButton');
+  var node = goog.dom.getElement('demoSelectionMenuButton');
   selectionMenuButton.decorate(node);
 
   var menuItemClicked = 0;
@@ -109,22 +110,25 @@ function testCheckboxFireEvents() {
       lastMenuItemClicked = e.target;
     });
 
-  var checkbox = goog.dom.$('demoCheckbox');
+  var checkbox = goog.dom.getElement('demoCheckbox');
   assertFalse('Checkbox must be unchecked (i.e. unselected)', checkbox.checked);
 
   checkbox.checked = true;
   goog.testing.events.fireClickSequence(checkbox);
-  assertFalse('Menu must be closed when clicking checkbox', selectionMenuButton.isOpen());
+  assertFalse('Menu must be closed when clicking checkbox',
+      selectionMenuButton.isOpen());
   assertEquals('Number of menu items clicked should be 1', 1, menuItemClicked);
-  assertEquals('menuItem1 should be the last menuitem clicked', goog.dom.$('menuItem1'),
+  assertEquals('menuItem1 should be the last menuitem clicked',
+      goog.dom.getElement('menuItem1'),
       lastMenuItemClicked.getElement());
 
   checkbox.checked = false;
   goog.testing.events.fireClickSequence(checkbox);
-  assertFalse('Menu must be closed when clicking checkbox', selectionMenuButton.isOpen());
+  assertFalse('Menu must be closed when clicking checkbox',
+      selectionMenuButton.isOpen());
   assertEquals('Number of menu items clicked should be 2', 2, menuItemClicked);
-  assertEquals('menuItem2 should be the last menuitem clicked', goog.dom.$('menuItem2'),
-      lastMenuItemClicked.getElement());
+  assertEquals('menuItem2 should be the last menuitem clicked',
+      goog.dom.getElement('menuItem2'), lastMenuItemClicked.getElement());
 }
 
 
@@ -132,16 +136,16 @@ function testCheckboxFireEvents() {
  * Tests that the checkbox state gets updated when the first 2 events fire
  */
 function testCheckboxReceiveEvents() {
-  var node = goog.dom.$('demoSelectionMenuButton');
+  var node = goog.dom.getElement('demoSelectionMenuButton');
   selectionMenuButton.decorate(node);
 
-  var checkbox = goog.dom.$('demoCheckbox');
+  var checkbox = goog.dom.getElement('demoCheckbox');
   assertFalse('Checkbox must be unchecked (i.e. unselected)', checkbox.checked);
 
-  goog.testing.events.fireClickSequence(goog.dom.$('menuItem1'));
+  goog.testing.events.fireClickSequence(goog.dom.getElement('menuItem1'));
   assertTrue('Checkbox must be checked (i.e. selected)', checkbox.checked);
 
-  goog.testing.events.fireClickSequence(goog.dom.$('menuItem2'));
+  goog.testing.events.fireClickSequence(goog.dom.getElement('menuItem2'));
   assertFalse('Checkbox must be unchecked (i.e. unselected)', checkbox.checked);
 }
 
@@ -150,10 +154,10 @@ function testCheckboxReceiveEvents() {
  * Tests that set/getSelectionState correctly changes the state
  */
 function testSelectionState() {
-  var node = goog.dom.$('demoSelectionMenuButton');
+  var node = goog.dom.getElement('demoSelectionMenuButton');
   selectionMenuButton.decorate(node);
 
-  var checkbox = goog.dom.$('demoCheckbox');
+  var checkbox = goog.dom.getElement('demoCheckbox');
   assertFalse('Checkbox must be unchecked (i.e. unselected)', checkbox.checked);
 
   selectionMenuButton.setSelectionState(
@@ -184,10 +188,10 @@ function testSelectionState() {
  * Tests that the checkbox gets disabled when the button is disabled
  */
 function testCheckboxDisabled() {
-  var node = goog.dom.$('demoSelectionMenuButton');
+  var node = goog.dom.getElement('demoSelectionMenuButton');
   selectionMenuButton.decorate(node);
 
-  var checkbox = goog.dom.$('demoCheckbox');
+  var checkbox = goog.dom.getElement('demoCheckbox');
   assertFalse('Checkbox must be enabled', checkbox.disabled);
 
   selectionMenuButton.setEnabled(false);
@@ -202,18 +206,21 @@ function testCheckboxDisabled() {
  * Tests that clicking the checkbox does not open the menu
  */
 function testCheckboxClickMenuClosed() {
-  var node = goog.dom.$('demoSelectionMenuButton');
+  var node = goog.dom.getElement('demoSelectionMenuButton');
   selectionMenuButton.decorate(node);
 
-  var checkbox = goog.dom.$('demoCheckbox');
+  var checkbox = goog.dom.getElement('demoCheckbox');
   goog.testing.events.fireMouseDownEvent(checkbox);
-  assertFalse('Menu must be closed when mousedown checkbox', selectionMenuButton.isOpen());
+  assertFalse('Menu must be closed when mousedown checkbox',
+      selectionMenuButton.isOpen());
   goog.testing.events.fireMouseUpEvent(checkbox);
-  assertFalse('Menu must remain closed when mouseup checkbox', selectionMenuButton.isOpen());
+  assertFalse('Menu must remain closed when mouseup checkbox',
+      selectionMenuButton.isOpen());
 
   selectionMenuButton.setOpen(true);
   goog.testing.events.fireClickSequence(checkbox);
-  assertFalse('Menu must close when clickin checkbox', selectionMenuButton.isOpen());
+  assertFalse('Menu must close when clickin checkbox',
+      selectionMenuButton.isOpen());
 
 }
 

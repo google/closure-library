@@ -73,8 +73,8 @@ limitations under the License.
 
     clock = new goog.testing.MockClock(true);
 
-    anchor = goog.dom.$('hovertarget');
-    elsewhere = goog.dom.$('notpopup');
+    anchor = goog.dom.getElement('hovertarget');
+    elsewhere = goog.dom.getElement('notpopup');
   }
 
   function tearDown() {
@@ -179,7 +179,7 @@ limitations under the License.
 
 
   function testAnchorWithChild() {
-    var child = goog.dom.$('childtarget');
+    var child = goog.dom.getElement('childtarget');
 
     fireMouseEvents(elsewhere, anchor);
     fireMouseEvents(anchor, child);
@@ -206,7 +206,7 @@ limitations under the License.
   function checkNestedTooltips(useAdvancedTooltip) {
     popup.appendChild(goog.dom.createDom(
         'span', {id: 'nestedAnchor'}, 'Nested Anchor'));
-    var nestedAnchor = goog.dom.$('nestedAnchor');
+    var nestedAnchor = goog.dom.getElement('nestedAnchor');
     var nestedTooltip;
     if (useAdvancedTooltip) {
       nestedTooltip = new goog.ui.AdvancedTooltip(nestedAnchor, 'popup');

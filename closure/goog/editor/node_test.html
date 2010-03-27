@@ -363,7 +363,7 @@ function testActiveElementIE() {
     return;
   }
 
-  var link = goog.dom.$('link')
+  var link = goog.dom.getElement('link')
   link.focus();
 
   assertEquals(link,

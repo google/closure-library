@@ -53,11 +53,11 @@ function tearDown() {
   splitpane.dispose();
   leftComponent.dispose();
   rightComponent.dispose();
-  goog.dom.$('sandbox').innerHTML = '';
+  goog.dom.getElement('sandbox').innerHTML = '';
 }
 
 function testRender() {
-  splitpane.render(goog.dom.$('sandbox'));
+  splitpane.render(goog.dom.getElement('sandbox'));
   assertEquals(1, goog.dom.getElementsByTagNameAndClass('div',
       'goog-splitpane').length);
   assertEquals(1, goog.dom.getElementsByTagNameAndClass('div',
@@ -73,7 +73,7 @@ function testDecorate() {
       goog.dom.createDom('div', 'goog-splitpane-first-container'),
       goog.dom.createDom('div', 'goog-splitpane-second-container'),
       goog.dom.createDom('div', 'goog-splitpane-handle'));
-  var sandbox = goog.dom.$('sandbox');
+  var sandbox = goog.dom.getElement('sandbox');
   goog.dom.appendChild(sandbox, mainDiv);
 
   splitpane.decorate(mainDiv);  
@@ -82,7 +82,7 @@ function testDecorate() {
 function testSetSize() {
   splitpane.setInitialSize(200);
   splitpane.setHandleSize(10);
-  splitpane.render(goog.dom.$('sandbox'));
+  splitpane.render(goog.dom.getElement('sandbox'));
 
   splitpane.setSize(new goog.math.Size(500, 300));
   assertEquals(200, splitpane.getFirstComponentSize());
@@ -96,7 +96,7 @@ function testSetSize() {
 function testOrientationChange() {
   splitpane.setInitialSize(200);
   splitpane.setHandleSize(10);
-  splitpane.render(goog.dom.$('sandbox'));
+  splitpane.render(goog.dom.getElement('sandbox'));
   splitpane.setSize(new goog.math.Size(500, 300));
 
   var first = goog.dom.getElementsByTagNameAndClass('div',

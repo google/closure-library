@@ -147,13 +147,13 @@ Copyright 2006 Google Inc. All Rights Reserved.
 <script>
 
   function testGetFormDataString() {
-    var el = goog.dom.$('testform1');
+    var el = goog.dom.getElement('testform1');
     var result = goog.dom.forms.getFormDataString(el);
     assertEquals('in1=foo&in2=bar&in2=baaz&in3=&pass=bar&textarea=foo%20bar%20baz&select1=1&select2=a&select2=c&select3=&checkbox1=on&radio=X&radio2=Y', result);
   }
 
   function testGetFormDataMap() {
-    var el = goog.dom.$('testform1');
+    var el = goog.dom.getElement('testform1');
     var result = goog.dom.forms.getFormDataMap(el);
 
     assertArrayEquals(['foo'], result.get('in1'));
@@ -168,118 +168,118 @@ Copyright 2006 Google Inc. All Rights Reserved.
   }
 
   function testHasFileInput() {
-    var el = goog.dom.$('testform1');
+    var el = goog.dom.getElement('testform1');
     assertFalse(goog.dom.forms.hasFileInput(el));
-    el = goog.dom.$('testform2');
+    el = goog.dom.getElement('testform2');
     assertTrue(goog.dom.forms.hasFileInput(el));
   }
 
 
   function testGetValueOnAtypicalValueElements() {
-    var el = goog.dom.$('testdiv1');
+    var el = goog.dom.getElement('testdiv1');
     var result = goog.dom.$F(el);
     assertNull(result);
-    var el = goog.dom.$('testfieldset1');
+    var el = goog.dom.getElement('testfieldset1');
     var result = goog.dom.$F(el);
     assertNull(result);
-    var el = goog.dom.$('testlegend1');
+    var el = goog.dom.getElement('testlegend1');
     var result = goog.dom.$F(el);
     assertNull(result);
   }
 
   function testHasValueInput() {
-    var el = goog.dom.$('in1');
+    var el = goog.dom.getElement('in1');
     var result = goog.dom.forms.hasValue(el);
     assertTrue(result);
   }
 
   function testHasValueByNameInput() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.hasValueByName(form, 'in1');
     assertTrue(result);
   }
 
   function testHasValueInputEmpty() {
-    var el = goog.dom.$('in3');
+    var el = goog.dom.getElement('in3');
     var result = goog.dom.forms.hasValue(el);
     assertFalse(result);
   }
 
   function testHasValueByNameEmpty() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.hasValueByName(form, 'in3');
     assertFalse(result);
   }
 
   function testHasValueRadio() {
-    var el = goog.dom.$('radio1');
+    var el = goog.dom.getElement('radio1');
     var result = goog.dom.forms.hasValue(el);
     assertTrue(result);
   }
 
   function testHasValueByNameRadio() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.hasValueByName(form, 'radio');
     assertTrue(result);
   }
 
   function testHasValueRadioNotChecked() {
-    var el = goog.dom.$('radio2');
+    var el = goog.dom.getElement('radio2');
     var result = goog.dom.forms.hasValue(el);
     assertFalse(result);
   }
 
   function testHasValueByNameRadioNotChecked() {
-    var form = goog.dom.$('testform3');
+    var form = goog.dom.getElement('testform3');
     var result = goog.dom.forms.hasValueByName(form, 'radio3');
     assertFalse(result);
   }
 
   function testHasValueSelectSingle() {
-    var el = goog.dom.$('select1');
+    var el = goog.dom.getElement('select1');
     var result = goog.dom.forms.hasValue(el);
     assertTrue(result);
   }
 
   function testHasValueByNameSelectSingle() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.hasValueByName(form, 'select1');
     assertTrue(result);
   }
 
   function testHasValueSelectMultiple() {
-    var el = goog.dom.$('select2');
+    var el = goog.dom.getElement('select2');
     var result = goog.dom.forms.hasValue(el);
     assertTrue(result);
   }
 
   function testHasValueByNameSelectMultiple() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.hasValueByName(form, 'select2');
     assertTrue(result);
   }
 
   function testHasValueSelectNotSelected() {
     // select without value
-    var el = goog.dom.$('select3');
+    var el = goog.dom.getElement('select3');
     var result = goog.dom.forms.hasValue(el);
     assertFalse(result);
   }
 
   function testHasValueByNameSelectNotSelected() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.hasValueByName(form, 'select3');
     assertFalse(result);
   }
 
   function testHasValueSelectMultipleNotSelected() {
-    var el = goog.dom.$('select6');
+    var el = goog.dom.getElement('select6');
     var result = goog.dom.forms.hasValue(el);
     assertFalse(result);
   }
 
   function testHasValueByNameSelectMultipleNotSelected() {
-    var form = goog.dom.$('testform3');
+    var form = goog.dom.getElement('testform3');
     var result = goog.dom.forms.hasValueByName(form, 'select6');
     assertFalse(result);
   }
@@ -292,18 +292,18 @@ Copyright 2006 Google Inc. All Rights Reserved.
 
   // TODO: make this a meaningful selenium test
   function testFocusAndSelect() {
-    var el = goog.dom.$('in1');
+    var el = goog.dom.getElement('in1');
     goog.dom.forms.focusAndSelect(el);
   }
 
   function testGetValueInput() {
-    var el = goog.dom.$('in1');
+    var el = goog.dom.getElement('in1');
     var result = goog.dom.$F(el);
     assertEquals('foo', result);
   }
 
   function testSetValueInput() {
-    var el = goog.dom.$('in3');
+    var el = goog.dom.getElement('in3');
     goog.dom.forms.setValue(el, 'foo');
     var result = goog.dom.$F(el);
     assertEquals('foo', result);
@@ -313,50 +313,50 @@ Copyright 2006 Google Inc. All Rights Reserved.
   }
 
   function testGetValuePassword() {
-    var el = goog.dom.$('pass');
+    var el = goog.dom.getElement('pass');
     var result = goog.dom.$F(el);
     assertEquals('bar', result);
   }
 
   function testGetValueByNamePassword() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.getValueByName(form, 'pass');
     assertEquals('bar', result);
   }
 
   function testGetValueTextarea() {
-    var el = goog.dom.$('textarea1');
+    var el = goog.dom.getElement('textarea1');
     var result = goog.dom.$F(el);
     assertEquals('foo bar baz', result);
   }
 
   function testGetValueByNameTextarea() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.getValueByName(form, 'textarea1');
     assertEquals('foo bar baz', result);
   }
 
   function testSetValueTextarea() {
-    var el = goog.dom.$('textarea2');
+    var el = goog.dom.getElement('textarea2');
     goog.dom.forms.setValue(el, 'foo bar baz');
     var result = goog.dom.$F(el);
     assertEquals('foo bar baz', result);
   }
 
   function testGetValueSelectSingle() {
-    var el = goog.dom.$('select1');
+    var el = goog.dom.getElement('select1');
     var result = goog.dom.$F(el);
     assertEquals('1', result);
   }
 
   function testGetValueByNameSelectSingle() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.getValueByName(form, 'select1');
     assertEquals('1', result);
   }
 
   function testSetValueSelectSingle() {
-    var el = goog.dom.$('select4');
+    var el = goog.dom.getElement('select4');
     goog.dom.forms.setValue(el, '2');
     var result = goog.dom.$F(el);
     assertEquals('2', result);
@@ -367,7 +367,7 @@ Copyright 2006 Google Inc. All Rights Reserved.
   }
 
   function testSetValueSelectSingleEmptyString() {
-    var el = goog.dom.$('select7');
+    var el = goog.dom.getElement('select7');
     // unset
     goog.dom.forms.setValue(el);
     var result = goog.dom.$F(el);
@@ -378,25 +378,25 @@ Copyright 2006 Google Inc. All Rights Reserved.
   }
 
   function testGetValueSelectMultiple() {
-    var el = goog.dom.$('select2');
+    var el = goog.dom.getElement('select2');
     var result = goog.dom.$F(el);
     assertArrayEquals(['a', 'c'], result);
   }
 
   function testGetValueSelectMultipleNotSelected() {
-    var el = goog.dom.$('select6');
+    var el = goog.dom.getElement('select6');
     var result = goog.dom.$F(el);
     assertNull(result);
   }
 
   function testGetValueByNameSelectMultiple() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.getValueByName(form, 'select2');
     assertArrayEquals(['a', 'c'], result);
   }
 
   function testSetValueSelectMultiple() {
-    var el = goog.dom.$('select5');
+    var el = goog.dom.getElement('select5');
     goog.dom.forms.setValue(el, ['a', 'c']);
     var result = goog.dom.$F(el);
     assertArrayEquals(['a', 'c'], result);
@@ -412,16 +412,16 @@ Copyright 2006 Google Inc. All Rights Reserved.
   }
 
   function testGetValueCheckbox() {
-    var el = goog.dom.$('checkbox1');
+    var el = goog.dom.getElement('checkbox1');
     var result = goog.dom.$F(el);
     assertEquals('on', result);
-    var el = goog.dom.$('checkbox2');
+    var el = goog.dom.getElement('checkbox2');
     var result = goog.dom.$F(el);
     assertNull(result);
   }
 
   function testGetValueByNameCheckbox() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.getValueByName(form, 'checkbox1');
     assertEquals('on', result);
     result = goog.dom.forms.getValueByName(form, 'checkbox2');
@@ -429,16 +429,16 @@ Copyright 2006 Google Inc. All Rights Reserved.
   }
 
   function testGetValueRadio() {
-    var el = goog.dom.$('radio1');
+    var el = goog.dom.getElement('radio1');
     var result = goog.dom.$F(el);
     assertEquals('X', result);
-    var el = goog.dom.$('radio2');
+    var el = goog.dom.getElement('radio2');
     var result = goog.dom.$F(el);
     assertNull(result);
   }
 
   function testGetValueByNameRadio() {
-    var form = goog.dom.$('testform1');
+    var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.getValueByName(form, 'radio');
     assertEquals('X', result);
 
@@ -447,19 +447,19 @@ Copyright 2006 Google Inc. All Rights Reserved.
   }
 
   function testGetValueButton() {
-    var el = goog.dom.$('button');
+    var el = goog.dom.getElement('button');
     var result = goog.dom.$F(el);
     assertEquals('button', result);
   }
 
   function testGetValueSubmit() {
-    var el = goog.dom.$('submit');
+    var el = goog.dom.getElement('submit');
     var result = goog.dom.$F(el);
     assertEquals('submit', result);
   }
 
   function testGetValueReset() {
-    var el = goog.dom.$('reset');
+    var el = goog.dom.getElement('reset');
     var result = goog.dom.$F(el);
     assertEquals('reset', result);
   }
