@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2006 Google Inc. All Rights Reserved.
+// Copyright 2006 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview A utility class for representing rectangles.
@@ -59,7 +71,7 @@ goog.math.Rect = function(x, y, w, h) {
 
 /**
  * Returns a new copy of the rectangle.
- * @return {goog.math.Rect} A clone of this Rectangle.
+ * @return {!goog.math.Rect} A clone of this Rectangle.
  */
 goog.math.Rect.prototype.clone = function() {
   return new goog.math.Rect(this.left, this.top, this.width, this.height);
@@ -69,7 +81,7 @@ goog.math.Rect.prototype.clone = function() {
 /**
  * Returns a new Box object with the same position and dimensions as this
  * rectangle.
- * @return {goog.math.Box} A new Box representation of this Rectangle.
+ * @return {!goog.math.Box} A new Box representation of this Rectangle.
  */
 goog.math.Rect.prototype.toBox = function() {
   var right = this.left + this.width;
@@ -85,7 +97,7 @@ goog.math.Rect.prototype.toBox = function() {
  * Creates a new Rect object with the same position and dimensions as a given
  * Box.  Note that this is only the inverse of toBox if left/top are defined.
  * @param {goog.math.Box} box A box.
- * @return {goog.math.Rect} A new Rect initialized with the box's position
+ * @return {!goog.math.Rect} A new Rect initialized with the box's position
  *     and size.
  */
 goog.math.Rect.createFromBox = function(box) {
@@ -158,7 +170,7 @@ goog.math.Rect.prototype.intersection = function(rect) {
  * intersect if they had the same top and left.
  * @param {goog.math.Rect} a A Rectangle.
  * @param {goog.math.Rect} b A Rectangle.
- * @return {goog.math.Rect?} A new intersection rect (even if width and height
+ * @return {goog.math.Rect} A new intersection rect (even if width and height
  *     are 0), or null if there is no intersection.
  */
 goog.math.Rect.intersection = function(a, b) {
@@ -211,7 +223,7 @@ goog.math.Rect.prototype.intersects = function(rect) {
  * rectangle after the second has been subtracted.
  * @param {goog.math.Rect} a A Rectangle.
  * @param {goog.math.Rect} b A Rectangle.
- * @return {Array.<goog.math.Rect>} An array with 0 to 4 rectangles which
+ * @return {!Array.<!goog.math.Rect>} An array with 0 to 4 rectangles which
  *     together define the difference area of rectangle a minus rectangle b.
  */
 goog.math.Rect.difference = function(a, b) {
@@ -261,7 +273,7 @@ goog.math.Rect.difference = function(a, b) {
  * return value is an array of 0 to 4 rectangles defining the remaining regions
  * of this rectangle after the other has been subtracted.
  * @param {goog.math.Rect} rect A Rectangle.
- * @return {Array.<goog.math.Rect>} An array with 0 to 4 rectangles which
+ * @return {!Array.<!goog.math.Rect>} An array with 0 to 4 rectangles which
  *     together define the difference area of rectangle a minus rectangle b.
  */
 goog.math.Rect.prototype.difference = function(rect) {
@@ -290,7 +302,7 @@ goog.math.Rect.prototype.boundingRect = function(rect) {
  * Returns a new rectangle which completely contains both input rectangles.
  * @param {goog.math.Rect} a A rectangle.
  * @param {goog.math.Rect} b A rectangle.
- * @return {goog.math.Rect?} A new bounding rect, or null if either rect is
+ * @return {goog.math.Rect} A new bounding rect, or null if either rect is
  *     null.
  */
 goog.math.Rect.boundingRect = function(a, b) {
@@ -330,7 +342,7 @@ goog.math.Rect.prototype.contains = function(another) {
 
 /**
  * Returns the size of this rectangle.
- * @return {goog.math.Size} The size of this rectangle.
+ * @return {!goog.math.Size} The size of this rectangle.
  */
 goog.math.Rect.prototype.getSize = function() {
   return new goog.math.Size(this.width, this.height);

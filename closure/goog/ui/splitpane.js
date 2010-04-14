@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2007 Google Inc. All Rights Reserved.
+// Copyright 2007 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview  Class for splitting two areas with draggable control for
@@ -223,7 +235,7 @@ goog.ui.SplitPane.prototype.iframeOverlay_ = null;
  * @enum {number}
  * @private
  */
-goog.ui.SplitPane.prototype.iframeOverlayIndex_ = {
+goog.ui.SplitPane.IframeOverlayIndex_ = {
   HIDDEN: -1,
   OVERLAY: 1,
   SPLITTER_HANDLE: 2
@@ -361,7 +373,7 @@ goog.ui.SplitPane.prototype.finishSetup_ = function() {
   handleStyle.position = 'absolute';
   handleStyle.overflow = 'hidden';
   handleStyle.zIndex =
-      goog.ui.SplitPane.prototype.iframeOverlayIndex_.SPLITTER_HANDLE;
+      goog.ui.SplitPane.IframeOverlayIndex_.SPLITTER_HANDLE;
 };
 
 
@@ -722,7 +734,7 @@ goog.ui.SplitPane.prototype.handleDragStart_ = function(e) {
     this.getDomHelper().appendChild(this.getElement(), this.iframeOverlay_);
   }
   this.iframeOverlay_.style.zIndex =
-      goog.ui.SplitPane.prototype.iframeOverlayIndex_.OVERLAY;
+      goog.ui.SplitPane.IframeOverlayIndex_.OVERLAY;
 
   goog.style.setBorderBoxSize(this.iframeOverlay_,
       goog.style.getBorderBoxSize(this.getElement()));
@@ -807,7 +819,7 @@ goog.ui.SplitPane.prototype.handleDrag_ = function(e) {
 goog.ui.SplitPane.prototype.handleDragEnd_ = function(e) {
   // Push iframe overlay down.
   this.iframeOverlay_.style.zIndex =
-      goog.ui.SplitPane.prototype.iframeOverlayIndex_.HIDDEN;
+      goog.ui.SplitPane.IframeOverlayIndex_.HIDDEN;
   if (this.continuousResize_) {
     return;
   }

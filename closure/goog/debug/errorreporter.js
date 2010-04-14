@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2009 Google Inc. All Rights Reserved.
+// Copyright 2009 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview Definition of the ErrorReporter class, which creates an error
@@ -19,10 +31,13 @@
  */
 
 goog.provide('goog.debug.ErrorReporter');
+goog.provide('goog.debug.ErrorReporter.ExceptionEvent')
 
 goog.require('goog.debug');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.events');
+goog.require('goog.events.Event');
+goog.require('goog.events.EventTarget');
 goog.require('goog.net.XhrIo');
 goog.require('goog.string');
 goog.require('goog.uri.utils');
@@ -34,6 +49,7 @@ goog.require('goog.uri.utils');
  *
  * @param {string} handlerUrl The URL to which all errors will be reported.
  * @constructor
+ * @extends {goog.events.EventTarget}
  */
 goog.debug.ErrorReporter = function(handlerUrl) {
   /**
@@ -46,6 +62,33 @@ goog.debug.ErrorReporter = function(handlerUrl) {
 
   this.setup_();
 };
+goog.inherits(goog.debug.ErrorReporter, goog.events.EventTarget);
+
+
+/**
+ * Event broadcast when an exception is logged.
+ * @param {Error} error The exception that was was reported.
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+goog.debug.ErrorReporter.ExceptionEvent = function(error) {
+  goog.events.Event.call(this, goog.debug.ErrorReporter.ExceptionEvent.TYPE);
+
+  /**
+   * The error that was reported.
+   * @type {Error}
+   */
+  this.error = error;
+};
+goog.inherits(goog.debug.ErrorReporter.ExceptionEvent, goog.events.Event);
+
+
+/**
+ * Event type for notifying of a logged exception.
+ * @type {string}
+ */
+goog.debug.ErrorReporter.ExceptionEvent.TYPE =
+    goog.events.getUniqueId('exception');
 
 
 /**
@@ -143,12 +186,19 @@ goog.debug.ErrorReporter.prototype.setup_ = function() {
 
 
 /**
- * Handler for caught exceptions. Sends report to the LoggingServlet.
+ * Handler for caught exceptions. Sends report to the LoggingServlet and
+ * notifies any listeners.
  *
  * @param {Error} e The exception.
  */
 goog.debug.ErrorReporter.prototype.handleException = function(e) {
-  var error = goog.debug.normalizeErrorObject(e);
+  var error = (/** @type {!Error} */ goog.debug.normalizeErrorObject(e));
+
+  try {
+    this.dispatchEvent(new goog.debug.ErrorReporter.ExceptionEvent(error));
+  } catch (ex) {
+    // Swallow exception to avoid infinite recursion.
+  }
 
   // Make sure when handling exceptions that the error file name contains only
   // the basename (e.g. "file.js"). goog.debug.catchErrors does this stripping,

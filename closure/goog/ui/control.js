@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2007 Google Inc. All Rights Reserved.
+// Copyright 2007 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview Base class for UI controls such as buttons, menus, menu items,
@@ -1102,7 +1114,8 @@ goog.ui.Control.prototype.isTransitionAllowed = function(state, enable) {
  */
 goog.ui.Control.prototype.handleMouseOver = function(e) {
   // Ignore mouse moves between descendants.
-  if (!goog.ui.Control.isMouseEventWithinElement_(e, this.getElement()) &&
+  if (e.relatedTarget &&
+      !goog.dom.contains(this.getElement(), e.relatedTarget) &&
       this.dispatchEvent(goog.ui.Component.EventType.ENTER) &&
       this.isEnabled() &&
       this.isAutoState(goog.ui.Component.State.HOVER)) {
@@ -1119,7 +1132,9 @@ goog.ui.Control.prototype.handleMouseOver = function(e) {
  * @param {goog.events.BrowserEvent} e Mouse event to handle.
  */
 goog.ui.Control.prototype.handleMouseOut = function(e) {
-  if (!goog.ui.Control.isMouseEventWithinElement_(e, this.getElement()) &&
+  // Ignore mouse moves between descendants.
+  if (e.relatedTarget &&
+      !goog.dom.contains(this.getElement(), e.relatedTarget) &&
       this.dispatchEvent(goog.ui.Component.EventType.LEAVE)) {
     if (this.isAutoState(goog.ui.Component.State.ACTIVE)) {
       // Deactivate on mouseout; otherwise we lose track of the mouse button.
@@ -1129,23 +1144,6 @@ goog.ui.Control.prototype.handleMouseOut = function(e) {
       this.setHighlighted(false);
     }
   }
-};
-
-
-/**
- * Checks if a mouse event (mouseover or mouseout) occured below an element.
- * @param {goog.events.BrowserEvent} e Mouse event (should be mouseover or
- *     mouseout).
- * @param {Element} elem The ancestor element.
- * @return {boolean} Whether the event has a relatedTarget (the element the
- *     mouse is coming from) and it's a descendent of elem.
- * @private
- */
-goog.ui.Control.isMouseEventWithinElement_ = function(e, elem) {
-  // If relatedTarget is null, it means there was no previous element (e.g.
-  // the mouse moved out of the window).  Assume this means that the mouse
-  // event was not within the element.
-  return !!e.relatedTarget && goog.dom.contains(elem, e.relatedTarget);
 };
 
 
@@ -1247,7 +1245,8 @@ goog.ui.Control.prototype.performActionInternal = function(e) {
   var actionEvent = new goog.events.Event(goog.ui.Component.EventType.ACTION,
       this);
   if (e) {
-    var properties = ['altKey', 'ctrlKey', 'metaKey', 'shiftKey'];
+    var properties = ['altKey', 'ctrlKey', 'metaKey', 'shiftKey',
+        'platformModifierKey'];
     for (var property, i = 0; property = properties[i]; i++) {
       actionEvent[property] = e[property];
     }

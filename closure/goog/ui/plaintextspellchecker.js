@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2007 Google Inc. All Rights Reserved.
+// Copyright 2007 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview Plain text spell checker implementation.
@@ -540,7 +552,7 @@ goog.ui.PlainTextSpellChecker.prototype.initAccessibility_ = function() {
 /**
  * Handles key down for overlay.
  * @param {goog.events.BrowserEvent} e The browser event.
- * @return {boolean} The handled value.
+ * @return {boolean|undefined} The handled value.
  */
 goog.ui.PlainTextSpellChecker.prototype.handleOverlayKeyEvent = function(e) {
   var handled = false;
@@ -567,7 +579,8 @@ goog.ui.PlainTextSpellChecker.prototype.handleOverlayKeyEvent = function(e) {
           var size = goog.style.getSize(el);
           position.x += size.width / 2;
           position.y += size.height / 2;
-          handled = this.showSuggestionsMenu(el, position);
+          this.showSuggestionsMenu(el, position);
+          handled = undefined;
         }
       }
       break;

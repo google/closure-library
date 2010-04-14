@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2007 Google Inc. All Rights Reserved.
+// Copyright 2007 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview Base class for containers that host {@link goog.ui.Control}s,
@@ -661,7 +673,7 @@ goog.ui.Container.prototype.handleBlur = function(e) {
  * @return {boolean} Whether the key event was handled.
  */
 goog.ui.Container.prototype.handleKeyEvent = function(e) {
-  if (this.isEnabled() && this.getChildCount() != 0 &&
+  if (this.isEnabled() && this.isVisible() && this.getChildCount() != 0 &&
       this.handleKeyEventInternal(e)) {
     e.preventDefault();
     e.stopPropagation();
@@ -1181,7 +1193,7 @@ goog.ui.Container.prototype.highlightHelper = function(fn, startIndex) {
       this.indexOfChild(this.openItem_) : startIndex;
   var numItems = this.getChildCount();
 
-  curIndex = fn(curIndex, numItems);
+  curIndex = fn.call(this, curIndex, numItems);
   var visited = 0;
   while (visited <= numItems) {
     var control = this.getChildAt(curIndex);
@@ -1190,7 +1202,7 @@ goog.ui.Container.prototype.highlightHelper = function(fn, startIndex) {
       return true;
     }
     visited++;
-    curIndex = fn(curIndex, numItems);
+    curIndex = fn.call(this, curIndex, numItems);
   }
   return false;
 };

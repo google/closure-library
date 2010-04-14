@@ -15,7 +15,10 @@ limitations under the License.
 
 <html>
 <!--
-  Copyright 2006 Google Inc. All Rights Reserved.
+Copyright 2006 Google Inc. All Rights Reserved
+
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
 -->
 <head>
 <title>Closure Unit Tests - goog.array</title>
@@ -1006,6 +1009,43 @@ function testBinarySearch() {
   assertEquals('0 should have an insertion point of 1', 1,
       insertionPoint(pos));
 
+}
+
+
+function testBinarySelect() {
+  var insertionPoint = function(position) { return -(position + 1)};
+  var numbers = [-897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0, 0, 0,
+      0.31255, 5, 142.88888708, 334, 342, 453, 54254];
+  var objects = goog.array.map(numbers, function(n) {return {n: n};});
+  function makeEvaluator(target) {
+    return function(obj, i, arr) {
+      assertEquals(objects, arr);
+      assertEquals(obj, arr[i]);
+      return target - obj.n;
+    };
+  }
+  assertEquals('{n:-897123.9} should be found at index 0', 0,
+      goog.array.binarySelect(objects, makeEvaluator(-897123.9)));
+  assertEquals('{n:54254} should be found at index ' + (objects.length - 1),
+      objects.length - 1,
+      goog.array.binarySelect(objects, makeEvaluator(54254)));
+  assertEquals('{n:-3} should be found at index 5', 5,
+      goog.array.binarySelect(objects, makeEvaluator(-3)));
+  pos = goog.array.binarySelect(objects, makeEvaluator(0));
+  assertTrue('{n:0} should be found at index 6 || 7 || 8', pos == 6 ||
+      pos == 7 || pos == 8);
+  pos = goog.array.binarySelect(objects, makeEvaluator(-900000));
+  assertTrue('{n:-900000} should not be found', pos < 0);
+  assertEquals('{n:-900000} should have an insertion point of 0', 0,
+      insertionPoint(pos));
+  pos = goog.array.binarySelect(objects, makeEvaluator('54255'));
+  assertTrue('{n:54255} should not be found', pos < 0);
+  assertEquals('{n:54255} should have an insertion point of ' +
+      (objects.length), objects.length, insertionPoint(pos));
+  pos = goog.array.binarySelect(objects, makeEvaluator(1.1));
+  assertTrue('{n:1.1} should not be found', pos < 0);
+  assertEquals('{n:1.1} should have an insertion point of 10', 10,
+      insertionPoint(pos));
 }
 
 

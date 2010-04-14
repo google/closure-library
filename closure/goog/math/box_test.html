@@ -15,7 +15,10 @@ limitations under the License.
 
 <html>
 <!--
-  Copyright 2006 Google Inc. All Rights Reserved.
+Copyright 2006 Google Inc. All Rights Reserved
+
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
 -->
 <head>
 <title>Closure Unit Tests - goog.math.Box</title>
@@ -124,6 +127,25 @@ function testBoxesIntersect() {
   assertNotIntersects(new goog.math.Box(120, 100, 140, 50));
   assertNotIntersects(new goog.math.Box(120, 120, 140, 80));
   assertNotIntersects(new goog.math.Box(120, 140, 140, 120));
+}
+
+function testExpandToInclude() {
+  var box = new goog.math.Box(10, 50, 50, 10);
+  box.expandToInclude(new goog.math.Box(60, 70, 70, 60));
+  assertEquals(10, box.left);
+  assertEquals(10, box.top);
+  assertEquals(70, box.right);
+  assertEquals(70, box.bottom);
+  box.expandToInclude(new goog.math.Box(30, 40, 40, 30));
+  assertEquals(10, box.left);
+  assertEquals(10, box.top);
+  assertEquals(70, box.right);
+  assertEquals(70, box.bottom);
+  box.expandToInclude(new goog.math.Box(0, 100, 100, 0));
+  assertEquals(0, box.left);
+  assertEquals(0, box.top);
+  assertEquals(100, box.right);
+  assertEquals(100, box.bottom);
 }
 </script>
 </body>

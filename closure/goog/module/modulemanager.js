@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2008 Google Inc. All Rights Reserved.
+// Copyright 2008 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview A singleton object for managing Javascript code modules.
@@ -27,7 +39,7 @@ goog.require('goog.debug.Logger');
 goog.require('goog.debug.Trace');
 goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.module.ModuleInfo');
-goog.require('goog.module.ModuleInfo.Callback');
+goog.require('goog.module.ModuleLoadCallback');
 
 
 /**
@@ -539,7 +551,7 @@ goog.module.ModuleManager.prototype.isModuleLoading = function(id) {
  *     user initiated.
  * @param {boolean=} opt_preferSynchronous TRUE iff the function should be
  *     executed synchronously if the module has already been loaded.
- * @return {goog.module.ModuleInfo.Callback} A callback wrapper that exposes
+ * @return {goog.module.ModuleLoadCallback} A callback wrapper that exposes
  *     an abort and execute method.
  */
 goog.module.ModuleManager.prototype.execOnLoad = function(
@@ -552,7 +564,7 @@ goog.module.ModuleManager.prototype.execOnLoad = function(
     this.logger_.info(moduleId + ' module already loaded');
     // Call async so that code paths don't change between loaded and unloaded
     // cases.
-    callbackWrapper = new goog.module.ModuleInfo.Callback(fn, opt_handler);
+    callbackWrapper = new goog.module.ModuleLoadCallback(fn, opt_handler);
     if (opt_preferSynchronous) {
       callbackWrapper.execute(this.moduleContext_);
     } else {
@@ -712,7 +724,10 @@ goog.module.ModuleManager.FailureType = {
   TIMEOUT: 2,
 
   /** 410 status, old code gone. */
-  OLD_CODE_GONE: 3
+  OLD_CODE_GONE: 3,
+
+  /** The onLoad callbacks failed. */
+  INIT_ERROR: 4
 };
 
 

@@ -15,7 +15,10 @@ limitations under the License.
 
 <html>
 <!--
-  Copyright 2007 Google Inc. All Rights Reserved.
+Copyright 2007 Google Inc. All Rights Reserved
+
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
 -->
 <head>
 <title>Closure Unit Tests - goog.ui.Dialog</title>
@@ -412,32 +415,6 @@ limitations under the License.
         goog.style.isElementShown(dialog.bgIframeEl_));
     assertTrue('bg element should be visible',
         goog.style.isElementShown(dialog.bgEl_));
-  }
-
-  function testRepositionInRtlContext() {
-    dialog.dispose();
-    // LTR is the default.
-    dialog = new goog.ui.Dialog();
-    dialog.setVisible(true);
-    var el = dialog.getElement();
-    var left = el.style.left;
-
-    dialog.dispose();
-    dialog = new goog.ui.Dialog();
-    dialog.setRightToLeft(true);
-    dialog.setVisible(true);
-    el = dialog.getElement();
-    var right = el.style.right;
-
-    // We'll allow for up to 1px of variance between LTR and RTL to handle
-    // possible subpixel rounding issues in either LTR or RTL
-    // (noticed in Safari 3 & 4/Mac).
-    var acceptableVariance = 1;
-    var variance = Math.abs(parseInt(left, 10) - parseInt(right));
-
-    // Note: we have to round these values due to subpixel issues.
-    assertTrue('LTR left position ~equals RTL right position.',
-        variance <= acceptableVariance);
   }
 
   /**

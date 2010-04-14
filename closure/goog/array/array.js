@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2006 Google Inc. All Rights Reserved.
+// Copyright 2006 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview Utilities for manipulating arrays.
@@ -827,15 +839,42 @@ goog.array.removeDuplicates = function(arr, opt_rv) {
  *     iff target is found.
  */
 goog.array.binarySearch = function(arr, target, opt_compareFn) {
+  return goog.array.binarySelect(arr,
+      goog.partial(opt_compareFn || goog.array.defaultCompare, target));
+};
+
+
+/**
+ * Selects an index in the specified array using the binary search algorithm.
+ * The evaluator receives an element and determines whether the desired index
+ * is before, at, or after it.  The evaluator must be consistent (formally,
+ * goog.array.map(goog.array.map(arr, evaluator, opt_obj), goog.math.sign)
+ * must be monotonically non-increasing).
+ *
+ * Runtime: O(log n)
+ *
+ * @param {goog.array.ArrayLike} arr The array to be searched.
+ * @param {Function} evaluator Evaluator function that receives 3 arguments
+ *     (the element, the index and the array).  Should return a negative
+ *     integer, zero, or a positive integer depending on whether the
+ *     desired index is before, at, or after the element passed to it.
+ * @param {Object=} opt_obj The object to be used as the value of 'this'
+ *     within evaluator.
+ * @return {number} Index of an element matched by the evaluator, if such
+ *     exists; otherwise (-(insertion point) - 1).  The insertion point is the
+ *     index of the first element for which the evaluator returns negative, or
+ *     arr.length if no such element exists.  Return value non-negative iff a
+ *     match is found.
+ */
+goog.array.binarySelect = function(arr, evaluator, opt_obj) {
   var left = 0;
   var right = arr.length - 1;
-  var compareFn = opt_compareFn || goog.array.defaultCompare;
   while (left <= right) {
     var mid = (left + right) >> 1;
-    var compareResult = compareFn(target, arr[mid]);
-    if (compareResult > 0) {
+    var evalResult = evaluator.call(opt_obj, arr[mid], mid, arr);
+    if (evalResult > 0) {
       left = mid + 1;
-    } else if (compareResult < 0) {
+    } else if (evalResult < 0) {
       right = mid - 1;
     } else {
       return mid;

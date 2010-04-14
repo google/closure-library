@@ -15,7 +15,12 @@ limitations under the License.
 
 <html>
 <!--
-  Copyright 2009 Google Inc. All Rights Reserved.
+Copyright 2009 Google Inc. All Rights Reserved
+
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+-->
+<!--
 
 -->
 <head>
@@ -191,6 +196,30 @@ limitations under the License.
     var protectedFn = reporter.protectAdditionalEntryPoint(fn);
     assertNull(protectedFn);
   }
+
+  function testHandleException_dispatchesEvent() {
+    var reporter = goog.debug.ErrorReporter.install("/errorreporter");
+    var loggedErrors = 0;
+    goog.events.listen(reporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
+        function(event) {
+          assertNotNullNorUndefined(event.error);
+          loggedErrors++;
+        });
+    reporter.handleException(new Error());
+    reporter.handleException(new Error());
+    assertEquals('Expected 2 errors. ' +
+        '(Ensure an exception was not swallowed.)', 2, loggedErrors);
+  }
+
+  function testHandleException_ignoresExceptionsDuringEventDispatch() {
+    var reporter = goog.debug.ErrorReporter.install("/errorreporter");
+    goog.events.listen(reporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
+        function(event) {
+          fail('This exception should be swallowed.');
+        });
+    reporter.handleException(new Error());
+  }
+
 </script>
 </body>
 </html>

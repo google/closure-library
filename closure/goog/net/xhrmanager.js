@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2006 Google Inc. All Rights Reserved.
+// Copyright 2006 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview Manages a pool of XhrIo's. This handles all the details of
@@ -30,7 +42,6 @@
 
 goog.provide('goog.net.XhrManager');
 goog.provide('goog.net.XhrManager.Event');
-goog.provide('goog.net.XhrManager.EventType');
 goog.provide('goog.net.XhrManager.Request');
 
 goog.require('goog.Disposable');
@@ -125,18 +136,6 @@ goog.net.XhrManager.XHR_EVENT_TYPES_ = [
   goog.net.EventType.ERROR,
   goog.net.EventType.ABORT,
   goog.net.EventType.TIMEOUT];
-
-
-/**
- * Events specific to the XhrManager.
- * @enum {string}
- */
-goog.net.XhrManager.EventType = {
-  /**
-   * Fired by the component when a given request is retried.
-   */
-  RETRY: 'retry'
-};
 
 
 /**

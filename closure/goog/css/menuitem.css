@@ -4,8 +4,13 @@ See the COPYING file for details.
 */
 
 /*
- * Copyright 2009 Google Inc.  All Rights Reserved.
+ * Copyright 2009 Google Inc. All Rights Reserved
  *
+ * Use of this source code is governed by an Apache 2.0 License.
+ * See the COPYING file for details.
+ */
+
+/*
  * Standard styling for menus created by goog.ui.MenuItemRenderer.
  *
 
@@ -18,8 +23,8 @@ See the COPYING file for details.
   font: normal 12px Arial, sans-serif;
   list-style: none;
   margin: 0;
-  /* 28px on the left for icon or checkbox; 10ex on the right for shortcut. */
-  padding: 4px 10ex 4px 28px;
+  /* 28px on the left for icon or checkbox; 7em on the right for shortcut. */
+  padding: 4px 7em 4px 28px;
   white-space: nowrap;
 }
 

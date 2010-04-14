@@ -1,6 +1,4 @@
 <!--
-Copyright 2009 Google Inc.
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -14,12 +12,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-
+<html>
 <!--
-  Copywrite 2009 Google Inc.  All Rights Reserved.
+Copyright 2009 Google Inc. All Rights Reserved
+
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+-->
+<!--
 
 -->
-<html>
 <head>
   <title>goog.editor Demo</title>
   <script src="../../base.js"></script>
@@ -30,6 +32,7 @@ limitations under the License.
     goog.require('goog.editor.plugins.BasicTextFormatter');
     goog.require('goog.editor.plugins.EnterHandler');
     goog.require('goog.editor.plugins.HeaderFormatter');
+    goog.require('goog.editor.plugins.LinkDialogPlugin');
     goog.require('goog.editor.plugins.ListTabHandler');
     goog.require('goog.editor.plugins.LoremIpsum');
     goog.require('goog.editor.plugins.RemoveFormatting');
@@ -42,12 +45,18 @@ limitations under the License.
   <link rel="stylesheet" href="../css/demo.css">
 
   <link rel="stylesheet" href="../../css/button.css" />
+  <link rel="stylesheet" href="../../css/dialog.css" />
+  <link rel="stylesheet" href="../../css/linkbutton.css" />
   <link rel="stylesheet" href="../../css/menus.css" />
+  <link rel="stylesheet" href="../../css/tab.css" />
+  <link rel="stylesheet" href="../../css/tabbar.css" />
   <link rel="stylesheet" href="../../css/toolbar.css" />
   <link rel="stylesheet" href="../../css/colormenubutton.css" />
   <link rel="stylesheet" href="../../css/palette.css" />
   <link rel="stylesheet" href="../../css/colorpalette.css" />
 
+  <link rel="stylesheet" href="../../css/editor/dialog.css" />
+  <link rel="stylesheet" href="../../css/editor/linkdialog.css" />
   <link rel="stylesheet" href="../../css/editortoolbar.css" />
 
   <style>
@@ -94,7 +103,8 @@ hooked up to a toolbar.</p>
   myField.registerPlugin(new goog.editor.plugins.HeaderFormatter());
   myField.registerPlugin(
       new goog.editor.plugins.LoremIpsum('Click here to edit'));
-
+  myField.registerPlugin(
+      new goog.editor.plugins.LinkDialogPlugin());
 
   // Specify the buttons to add to the toolbar, using built in default buttons.
   var buttons = [

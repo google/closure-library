@@ -15,7 +15,12 @@ limitations under the License.
 
 <html>
 <!--
-Copyright 2008 Google Inc. All Rights Reserved.
+Copyright 2008 Google Inc. All Rights Reserved
+
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+-->
+<!--
 
 
 -->
@@ -24,10 +29,12 @@ Copyright 2008 Google Inc. All Rights Reserved.
 <script src="../base.js"></script>
 <script src="../../../third_party/closure/goog/deps.js"></script>
 <script>
-  goog.require('goog.module.ModuleManager');
+  goog.require('goog.functions');
   goog.require('goog.module.BaseModule');
-  goog.require('goog.testing.jsunit');
+  goog.require('goog.module.ModuleManager');
   goog.require('goog.testing.MockClock');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.recordFunction');
 </script>
 </head>
 <body>
@@ -1057,6 +1064,79 @@ Copyright 2008 Google Inc. All Rights Reserved.
     mm.preloadModule('a');
     clock.tick(5);
     assertEquals(info['a'].count, 1);
+  }
+
+  function testErrorInEarlyCallback() {
+    var errback = goog.testing.recordFunction();
+    var callback = goog.testing.recordFunction();
+    var mm = getModuleManager({'a': [], 'b': ['a']});
+    mm.getModuleInfo('a').registerEarlyCallback(goog.functions.error('error'));
+    mm.getModuleInfo('a').registerCallback(callback);
+    mm.getModuleInfo('a').registerErrback(errback);
+
+    mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
+        mm, createModulesFor('a', 'b')));
+    mm.preloadModule('b');
+    clock.tick(5);
+
+    assertEquals(1, callback.getCallCount());
+    assertEquals(1, errback.getCallCount());
+    assertEquals(goog.module.ModuleManager.FailureType.INIT_ERROR,
+        errback.getLastCall().getArguments()[0]);
+    assertTrue(mm.getModuleInfo('a').isLoaded());
+    assertFalse(mm.getModuleInfo('b').isLoaded());
+
+    clock.tick(5);
+    assertTrue(mm.getModuleInfo('b').isLoaded());
+  }
+
+  function testErrorInNormalCallback() {
+    var earlyCallback = goog.testing.recordFunction();
+    var errback = goog.testing.recordFunction();
+    var mm = getModuleManager({'a': [], 'b': ['a']});
+    mm.getModuleInfo('a').registerEarlyCallback(earlyCallback);
+    mm.getModuleInfo('a').registerEarlyCallback(goog.functions.error('error'));
+    mm.getModuleInfo('a').registerErrback(errback);
+
+    mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
+        mm, createModulesFor('a', 'b')));
+    mm.preloadModule('b');
+    clock.tick(10);
+
+    assertEquals(1, errback.getCallCount());
+    assertEquals(goog.module.ModuleManager.FailureType.INIT_ERROR,
+        errback.getLastCall().getArguments()[0]);
+    assertTrue(mm.getModuleInfo('a').isLoaded());
+    assertTrue(mm.getModuleInfo('b').isLoaded());
+  }
+
+  function testErrorInErrback() {
+    var mm = getModuleManager({'a': [], 'b': ['a']});
+    mm.getModuleInfo('a').registerCallback(goog.functions.error('error1'));
+    mm.getModuleInfo('a').registerErrback(goog.functions.error('error2'));
+
+    mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
+        mm, createModulesFor('a', 'b')));
+    mm.preloadModule('a');
+    try {
+      clock.tick(10);
+    } catch (e) {
+      assertContains('Module errback failure', e.message);
+      if (!goog.userAgent.IE) {
+        assertContains('error2', e.message);
+      }
+    }
+
+    assertTrue(mm.getModuleInfo('a').isLoaded());
+  }
+
+  function createModulesFor(var_args) {
+    var result = {};
+    for (var i = 0; i < arguments.length; i++) {
+      var key = arguments[i];
+      result[key] = {ctor: goog.module.BaseModule};
+    }
+    return result;
   }
 
   function createSuccessfulNonBatchLoaderWithConstructor(moduleMgr, info) {

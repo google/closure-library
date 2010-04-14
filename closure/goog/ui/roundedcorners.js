@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2006 Google Inc. All Rights Reserved.
+// Copyright 2006 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview Definition of the RoundedCorners class. This depends on the
@@ -343,7 +355,6 @@ goog.ui.RoundedCorners.prototype.setExplicitHeight = function(height) {
  * Returns the padding of the rounded corner border.
  *
  * @return {string} The padding as a style string (e.g. '2px 4px').
- *
  */
 goog.ui.RoundedCorners.prototype.getPadding = function() {
   return this.padding_;
@@ -354,7 +365,6 @@ goog.ui.RoundedCorners.prototype.getPadding = function() {
  * Sets the padding of the rounded corner border.
  *
  * @param {string} padding The padding as a style string (e.g. '2px 4px').
- *
  */
 goog.ui.RoundedCorners.prototype.setPadding = function(padding) {
   this.padding_ = padding;
@@ -366,7 +376,6 @@ goog.ui.RoundedCorners.prototype.setPadding = function(padding) {
  * of corners
  *
  * @return {number} The width.
- *
  */
 goog.ui.RoundedCorners.prototype.getLineWidth = function() {
   return this.lineWidth_;
@@ -378,7 +387,6 @@ goog.ui.RoundedCorners.prototype.getLineWidth = function() {
  * of corners
  *
  * @param {number} lineWidth The width.
- *
  */
 goog.ui.RoundedCorners.prototype.setLineWidth = function(lineWidth) {
   this.lineWidth_ = lineWidth;
@@ -389,7 +397,6 @@ goog.ui.RoundedCorners.prototype.setLineWidth = function(lineWidth) {
  * Returns which corners to show
  *
  * @return {number} The corners to show.
- *
  */
 goog.ui.RoundedCorners.prototype.getCornersToShow = function() {
   return this.cornersToShow_;
@@ -410,7 +417,6 @@ goog.ui.RoundedCorners.prototype.setCornersToShow = function(cornersToShow) {
  * Returns the image format. Currently, only png  and gif are supported.
  *
  * @return {string} The image format.
- *
  */
 goog.ui.RoundedCorners.prototype.getImageFormat = function() {
   return this.imageFormat_;
@@ -421,7 +427,6 @@ goog.ui.RoundedCorners.prototype.getImageFormat = function() {
  * Sets the image format. Currently, only png and gif are supported.
  *
  * @param {string} imageFormat The image format.
- *
  */
 goog.ui.RoundedCorners.prototype.setImageFormat = function(imageFormat) {
   if (imageFormat != 'png' && imageFormat != 'gif') {

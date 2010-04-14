@@ -1,5 +1,3 @@
-// Copyright 2009 Google Inc.
-//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -12,6 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Copyright 2010 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 goog.provide('goog.testing.JsUnitException');
 goog.provide('goog.testing.asserts');
 
@@ -141,6 +152,10 @@ function _assert(comment, booleanValue, failureMessage) {
   }
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assert(a, opt_b) {
   _validateArguments(1, arguments);
   var comment = commentArg(1, arguments);
@@ -176,6 +191,10 @@ function assertThrows(a, opt_b) {
       'No exception thrown from function passed to assertThrows');
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertNotThrows(a, opt_b) {
   _validateArguments(1, arguments);
   var func = nonCommentArg(1, 1, arguments);
@@ -193,6 +212,10 @@ function assertNotThrows(a, opt_b) {
       'assertNotThrows');
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertTrue(a, opt_b) {
   _validateArguments(1, arguments);
   var comment = commentArg(1, arguments);
@@ -203,6 +226,10 @@ function assertTrue(a, opt_b) {
   _assert(comment, booleanValue, 'Call to assertTrue(boolean) with false');
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertFalse(a, opt_b) {
   _validateArguments(1, arguments);
   var comment = commentArg(1, arguments);
@@ -213,6 +240,11 @@ function assertFalse(a, opt_b) {
   _assert(comment, !booleanValue, 'Call to assertFalse(boolean) with true');
 }
 
+/**
+ * @param {*} a
+ * @param {*} b
+ * @param {*=} opt_c
+ */
 function assertEquals(a, b, opt_c) {
   _validateArguments(2, arguments);
   var var1 = nonCommentArg(1, 2, arguments);
@@ -222,6 +254,11 @@ function assertEquals(a, b, opt_c) {
           _displayStringForValue(var2));
 }
 
+/**
+ * @param {*} a
+ * @param {*} b
+ * @param {*=} opt_c
+ */
 function assertNotEquals(a, b, opt_c) {
   _validateArguments(2, arguments);
   var var1 = nonCommentArg(1, 2, arguments);
@@ -230,6 +267,10 @@ function assertNotEquals(a, b, opt_c) {
       'Expected not to be ' + _displayStringForValue(var2));
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertNull(a, opt_b) {
   _validateArguments(1, arguments);
   var aVar = nonCommentArg(1, 1, arguments);
@@ -238,6 +279,10 @@ function assertNull(a, opt_b) {
       _displayStringForValue(aVar));
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertNotNull(a, opt_b) {
   _validateArguments(1, arguments);
   var aVar = nonCommentArg(1, 1, arguments);
@@ -245,6 +290,10 @@ function assertNotNull(a, opt_b) {
       'Expected not to be ' + _displayStringForValue(null));
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertUndefined(a, opt_b) {
   _validateArguments(1, arguments);
   var aVar = nonCommentArg(1, 1, arguments);
@@ -253,6 +302,10 @@ function assertUndefined(a, opt_b) {
       ' but was ' + _displayStringForValue(aVar));
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertNotUndefined(a, opt_b) {
   _validateArguments(1, arguments);
   var aVar = nonCommentArg(1, 1, arguments);
@@ -260,12 +313,20 @@ function assertNotUndefined(a, opt_b) {
       'Expected not to be ' + _displayStringForValue(JSUNIT_UNDEFINED_VALUE));
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertNotNullNorUndefined(a, opt_b) {
   _validateArguments(1, arguments);
   assertNotNull.apply(null, arguments);
   assertNotUndefined.apply(null, arguments);
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertNonEmptyString(a, opt_b) {
   _validateArguments(1, arguments);
   var aVar = nonCommentArg(1, 1, arguments);
@@ -275,29 +336,45 @@ function assertNonEmptyString(a, opt_b) {
       'Expected non-empty string but was ' + _displayStringForValue(aVar));
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertNaN(a, opt_b) {
   _validateArguments(1, arguments);
   var aVar = nonCommentArg(1, 1, arguments);
   _assert(commentArg(1, arguments), isNaN(aVar), 'Expected NaN');
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertNotNaN(a, opt_b) {
   _validateArguments(1, arguments);
   var aVar = nonCommentArg(1, 1, arguments);
   _assert(commentArg(1, arguments), !isNaN(aVar), 'Expected not NaN');
 }
 
-// Notes:
-// Object equality has some nasty browser quirks, and this implementation is
-// not 100% correct. For example,
-//
-// var a = [0, 1, 2];
-// var b = [0, 1, 2];
-// delete a[1];
-// b[1] = undefined;
-// assertObjectEquals(a, b); // should fail, but currently passes
-//
-// See asserts_test.html for more interesting edge cases.
+/**
+ * Notes:
+ * Object equality has some nasty browser quirks, and this implementation is
+ * not 100% correct. For example,
+ *
+ * <code>
+ * var a = [0, 1, 2];
+ * var b = [0, 1, 2];
+ * delete a[1];
+ * b[1] = undefined;
+ * assertObjectEquals(a, b); // should fail, but currently passes
+ * </code>
+ *
+ * See asserts_test.html for more interesting edge cases.
+ *
+ * @param {*} a
+ * @param {*} b
+ * @param {*=} opt_c
+ */
 function assertObjectEquals(a, b, opt_c) {
   _validateArguments(2, arguments);
   var v1 = nonCommentArg(1, 2, arguments);
@@ -391,6 +468,11 @@ function assertObjectEquals(a, b, opt_c) {
           failures.join('\n   '));
 }
 
+/**
+ * @param {*} a
+ * @param {*} b
+ * @param {*=} opt_c
+ */
 function assertArrayEquals(a, b, opt_c) {
   _validateArguments(2, arguments);
   var v1 = nonCommentArg(1, 2, arguments);
@@ -446,6 +528,10 @@ function assertSameElements(a, b, opt_c) {
   }
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertEvaluatesToTrue(a, opt_b) {
   _validateArguments(1, arguments);
   var value = nonCommentArg(1, 1, arguments);
@@ -454,6 +540,10 @@ function assertEvaluatesToTrue(a, opt_b) {
   }
 }
 
+/**
+ * @param {*} a
+ * @param {*=} opt_b
+ */
 function assertEvaluatesToFalse(a, opt_b) {
   _validateArguments(1, arguments);
   var value = nonCommentArg(1, 1, arguments);
@@ -462,6 +552,11 @@ function assertEvaluatesToFalse(a, opt_b) {
   }
 }
 
+/**
+ * @param {*} a
+ * @param {*} b
+ * @param {*=} opt_c
+ */
 function assertHTMLEquals(a, b, opt_c) {
   _validateArguments(2, arguments);
   var var1 = nonCommentArg(1, 2, arguments);
@@ -503,6 +598,11 @@ function assertCSSValueEquals(a, b, c, opt_d) {
           ' but was ' + _displayStringForValue(actualValueStandardized));
 }
 
+/**
+ * @param {*} a
+ * @param {*} b
+ * @param {*=} opt_c
+ */
 function assertHashEquals(a, b, opt_c) {
   _validateArguments(2, arguments);
   var var1 = nonCommentArg(1, 2, arguments);
@@ -521,6 +621,12 @@ function assertHashEquals(a, b, opt_c) {
   }
 }
 
+/**
+ * @param {*} a
+ * @param {*} b
+ * @param {*} c
+ * @param {*=} opt_d
+ */
 function assertRoughlyEquals(a, b, c, opt_d) {
   _validateArguments(3, arguments);
   var expected = nonCommentArg(1, 3, arguments);
@@ -531,6 +637,11 @@ function assertRoughlyEquals(a, b, c, opt_d) {
       ' which was more than ' + tolerance + ' away');
 }
 
+/**
+ * @param {*} a
+ * @param {*} b
+ * @param {*=} opt_c
+ */
 function assertContains(a, b, opt_c) {
   _validateArguments(2, arguments);
   var contained = nonCommentArg(1, 2, arguments);
@@ -540,6 +651,11 @@ function assertContains(a, b, opt_c) {
       'Expected \'' + container + '\' to contain \'' + contained + '\'');
 }
 
+/**
+ * @param {*} a
+ * @param {*} b
+ * @param {*=} opt_c
+ */
 function assertNotContains(a, b, opt_c) {
   _validateArguments(2, arguments);
   var contained = nonCommentArg(1, 2, arguments);

@@ -4,8 +4,13 @@ See the COPYING file for details.
 */
 
 /*
- * Copyright 2009 Google Inc.  All Rights Reserved.
+ * Copyright 2009 Google Inc. All Rights Reserved
  *
+ * Use of this source code is governed by an Apache 2.0 License.
+ * See the COPYING file for details.
+ */
+
+/*
  * Standard styling for goog.ui.Dialog.
  *
 
@@ -43,7 +48,7 @@ See the COPYING file for details.
   font-weight: bold;
   padding: 8px 15px 8px 8px;
   position: relative;
-  vertical-align: middle;
+  _zoom: 1; /* Ensures proper width in IE6 RTL. */
 }
 
 .modal-dialog-title-close {
@@ -55,6 +60,7 @@ See the COPYING file for details.
   right: 10px;
   top: 8px;
   width: 15px;
+  vertical-align: middle;
 }
 
 .modal-dialog-buttons,

@@ -10,7 +10,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2007 Google Inc. All Rights Reserved.
+// Copyright 2007 Google Inc. All Rights Reserved
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * @fileoverview Definition of the goog.ui.tree.BaseNode class.
@@ -254,11 +266,11 @@ goog.ui.tree.BaseNode.prototype.enterDocument = function() {
 
 
 /**
- * @inheritDoc
  * The method assumes that the child doesn't have parent node yet.
  * The {@code opt_render} argument is not used. If the parent node is expanded,
  * the child node's state will be the same as the parent's. Otherwise the
  * child's DOM tree won't be created.
+ * @override
  */
 goog.ui.tree.BaseNode.prototype.addChildAt = function(child, index,
     opt_render) {
@@ -314,8 +326,6 @@ goog.ui.tree.BaseNode.prototype.addChildAt = function(child, index,
       }
     }
   }
-
-  return child;
 };
 
 
@@ -333,8 +343,9 @@ goog.ui.tree.BaseNode.prototype.add = function(child, opt_before) {
   if (child.getParent()) {
     child.getParent().removeChild(child);
   }
-  return this.addChildAt(child,
+  this.addChildAt(child,
       opt_before ? this.indexOfChild(opt_before) : this.getChildCount());
+  return child;
 };
 
 

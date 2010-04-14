@@ -15,7 +15,12 @@ limitations under the License.
 
 <html>
 <!--
-Copyright 2008 Google Inc. All Rights Reserved.
+Copyright 2008 Google Inc. All Rights Reserved
+
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+-->
+<!--
 
 -->
 <head>
@@ -1748,17 +1753,6 @@ Copyright 2008 Google Inc. All Rights Reserved.
       assertEquals('Control must dispatch HIGHLIGHT event on mouseover', 1,
           getEventCount(control, goog.ui.Component.EventType.HIGHLIGHT));
       assertTrue('Control must be highlighted', control.isHighlighted());
-      resetEventCount();
-
-      // Scenario 6: relatedTarget is null
-      control.setHighlighted(false);
-      goog.testing.events.fireMouseOverEvent(element, null);
-      assertEquals('Control must dispatch ENTER event on mouseover', 1,
-          getEventCount(control, goog.ui.Component.EventType.ENTER));
-      assertEquals('Control must dispatch HIGHLIGHT event on mouseover', 1,
-          getEventCount(control, goog.ui.Component.EventType.HIGHLIGHT));
-      assertTrue('Control must be highlighted', control.isHighlighted());
-      resetEventCount();
     }
 
     /**
@@ -1850,37 +1844,6 @@ Copyright 2008 Google Inc. All Rights Reserved.
           getEventCount(control, goog.ui.Component.EventType.UNHIGHLIGHT));
       assertFalse('Control must be deactivated', control.isActive());
       assertFalse('Control must be unhighlighted', control.isHighlighted());
-      resetEventCount();
-
-      // Scenario 6: relatedTarget is null
-      control.setActive(true);
-      control.setHighlighted(true);
-      goog.testing.events.fireMouseOutEvent(element, null);
-      assertEquals('Control must dispatch LEAVE event on mouseout', 1,
-          getEventCount(control, goog.ui.Component.EventType.LEAVE));
-      assertEquals('Control must dispatch DEACTIVATE event on mouseout', 1,
-          getEventCount(control, goog.ui.Component.EventType.DEACTIVATE));
-      assertEquals('Control must dispatch UNHIGHLIGHT event on mouseout', 1,
-          getEventCount(control, goog.ui.Component.EventType.UNHIGHLIGHT));
-      assertFalse('Control must be deactivated', control.isActive());
-      assertFalse('Control must be unhighlighted', control.isHighlighted());
-      resetEventCount();
-    }
-
-    function testIsMouseEventWithinElement() {
-      var child = goog.dom.createElement('div');
-      var parent = goog.dom.createDom('div', null, child);
-      var notChild = goog.dom.createElement('div');
-
-      var event = new goog.testing.events.Event('mouseout');
-      event.relatedTarget = child;
-      assertTrue('Event is within element',
-                 goog.ui.Control.isMouseEventWithinElement_(event, parent));
-
-      var event = new goog.testing.events.Event('mouseout');
-      event.relatedTarget = notChild;
-      assertFalse('Event is not within element',
-                  goog.ui.Control.isMouseEventWithinElement_(event, parent));
     }
 
     function testHandleMouseDown() {
