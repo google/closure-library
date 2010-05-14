@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2006 Google Inc. All Rights Reserved.
+# Copyright 2006 The Closure Library Authors. All Rights Reserved.
 
 
 """Calculates Javascript dependencies without requiring Google3.
@@ -311,8 +311,10 @@ def GetRelpath(path, start):
       break
     common_prefix_count += 1
 
-  return os.sep.join(['..'] * (len(start_list) - common_prefix_count) +
-                     path_list[common_prefix_count:])
+  # Always use forward slashes, because this will get expanded to a url,
+  # not a file path.
+  return '/'.join(['..'] * (len(start_list) - common_prefix_count) +
+                  path_list[common_prefix_count:])
 
 
 def PrintLine(msg, out):
