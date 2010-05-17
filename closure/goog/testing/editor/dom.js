@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2009 Google Inc. All Rights Reserved
+// Copyright 2009 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,7 @@
 /**
  * @fileoverview Testing utilities for editor specific DOM related tests.
  *
+*
  */
 
 goog.provide('goog.testing.editor.dom');
@@ -114,7 +103,7 @@ goog.testing.editor.dom.getPreviousNextNonEmptyTextNodeHelper_ = function(
   // that starting node's subtree in the process.
   var iter = new goog.dom.TagIterator(opt_stopAt, opt_isPrevious);
 
-  // TODO: Move this logic to a new method in TagIterator such as
+  // TODO(user): Move this logic to a new method in TagIterator such as
   // skipToNode().
   // Then we set the iterator to start at the given start node, not opt_stopAt.
   var walkType; // Let TagIterator set the initial walk type by default.

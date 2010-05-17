@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,9 @@
  * @fileoverview TrogEdit plugin to handle enter keys by inserting the
  * specified block level tag.
  *
+*
+*
+ * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.editor.plugins.TagOnEnterHandler');
@@ -141,7 +132,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.handleDeleteGecko = function(
       goog.editor.plugins.EnterHandler.isBrElem(container)) {
     // Don't delete if it's the last node in the field and just has a BR.
     e.preventDefault();
-    // TODO: I think we probably don't need to stopPropagation here
+    // TODO(user): I think we probably don't need to stopPropagation here
     e.stopPropagation();
   } else {
     // Go ahead with deletion.
@@ -292,7 +283,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.
   goog.editor.range.selectNodeStart(elementAfterCursor);
 
   e.preventDefault();
-  // TODO: I think we probably don't need to stopPropagation here
+  // TODO(user): I think we probably don't need to stopPropagation here
   e.stopPropagation();
 };
 
@@ -323,7 +314,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.breakOutOfEmptyListItemGecko_ =
   var inSubList = grandparent.tagName == goog.dom.TagName.OL ||
       grandparent.tagName == goog.dom.TagName.UL;
 
-  // TODO: Should we apply the list or list item styles to the new node?
+  // TODO(robbyw): Should we apply the list or list item styles to the new node?
   var newNode = goog.dom.getDomHelper(li).createElement(
       inSubList ? goog.dom.TagName.LI : this.tag_)
 

@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,10 +20,12 @@
  * to a different document object.  This is useful if you are working with
  * frames or multiple windows.
  *
+*
+*
  */
 
 
-// TODO: Rename/refactor getTextContent and getRawTextContent. The problem
+// TODO(user): Rename/refactor getTextContent and getRawTextContent. The problem
 // is that getTextContent should mimic the DOM3 textContent. We should add a
 // getInnerText (or getText) which tries to return the visible text, innerText.
 
@@ -368,7 +358,7 @@ goog.dom.DIRECT_ATTRIBUTE_MAP_ = {
  * @return {!goog.math.Size} Object with values 'width' and 'height'.
  */
 goog.dom.getViewportSize = function(opt_window) {
-  // TODO: This should not take an argument
+  // TODO(user): This should not take an argument
   return goog.dom.getViewportSize_(opt_window || window);
 };
 
@@ -384,7 +374,7 @@ goog.dom.getViewportSize_ = function(win) {
 
   if (goog.userAgent.WEBKIT && !goog.userAgent.isVersion('500') &&
       !goog.userAgent.MOBILE) {
-    // TODO: Sometimes we get something that isn't a valid window
+    // TODO(user): Sometimes we get something that isn't a valid window
     // object. In this case we just revert to the current window. We need to
     // figure out when this happens and find a real fix for it.
     // See the comments on goog.dom.getWindow.
@@ -433,7 +423,7 @@ goog.dom.getDocumentHeight = function() {
  * @return {number} The height of the document of the given window.
  */
 goog.dom.getDocumentHeight_ = function(win) {
-  // NOTE: This method will return the window size rather than the document
+  // NOTE(user): This method will return the window size rather than the document
   // size in webkit quirks mode.
   var doc = win.document;
   var height = 0;
@@ -560,7 +550,7 @@ goog.dom.getDocumentScrollElement_ = function(doc) {
  * @return {Window} The window associated with the given document.
  */
 goog.dom.getWindow = function(opt_doc) {
-  // TODO: This should not take an argument.
+  // TODO(user): This should not take an argument.
   return opt_doc ? goog.dom.getWindow_(opt_doc) : window;
 };
 
@@ -623,8 +613,11 @@ goog.dom.createDom_ = function(doc, args) {
     if (attributes.type) {
       tagNameArr.push(' type="', goog.string.htmlEscape(attributes.type),
                       '"');
-      // Create copy of attribute map to remove 'type' without mutating argument
-      attributes = goog.cloneObject(attributes);
+
+      // Clone attributes map to remove 'type' without mutating the input.
+      var clone = {};
+      goog.object.extend(clone, attributes);
+      attributes = clone;
       delete attributes.type;
     }
     tagNameArr.push('>');
@@ -643,7 +636,7 @@ goog.dom.createDom_ = function(doc, args) {
 
   if (args.length > 2) {
     var childHandler = function(child) {
-      // TODO: More coercion, ala MochiKit?
+      // TODO(user): More coercion, ala MochiKit?
       if (child) {
         element.appendChild(goog.isString(child) ?
             doc.createTextNode(child) : child);
@@ -652,7 +645,7 @@ goog.dom.createDom_ = function(doc, args) {
 
     for (var i = 2; i < args.length; i++) {
       var arg = args[i];
-      // TODO: Fix isArrayLike to return false for a text node.
+      // TODO(user): Fix isArrayLike to return false for a text node.
       if (goog.isArrayLike(arg) && !goog.dom.isNodeLike(arg)) {
         // If the argument is a node list, not a real array, use a clone,
         // because forEach can't be used to mutate a NodeList.
@@ -1265,7 +1258,7 @@ goog.dom.findCommonAncestor = function(var_args) {
  * @return {!Document} The document owning the node.
  */
 goog.dom.getOwnerDocument = function(node) {
-  // TODO: Remove IE5 code.
+  // TODO(user): Remove IE5 code.
   // IE5 uses document instead of ownerDocument
   return /** @type {!Document} */ (
       node.nodeType == goog.dom.NodeType.DOCUMENT ? node :
@@ -1487,7 +1480,7 @@ goog.dom.setFocusableTabIndex = function(element, enable) {
  */
 goog.dom.getTextContent = function(node) {
   var textContent;
-  // NOTE: Both Opera and Safara 3 supports innerText but they include
+  // Note(user): Both Opera and Safara 3 supports innerText but they include
   // text nodes in script tags. So we revert to use a user agent test here.
   if (goog.userAgent.IE && ('innerText' in node)) {
     textContent = goog.string.canonicalizeNewlines(node.innerText);
@@ -1641,7 +1634,7 @@ goog.dom.getNodeAtOffset = function(parent, offset, opt_result) {
  * @return {boolean} Whether the object is a NodeList.
  */
 goog.dom.isNodeList = function(val) {
-  // TODO: Now the isNodeList is part of goog.dom we can use
+  // TODO(user): Now the isNodeList is part of goog.dom we can use
   // goog.userAgent to make this simpler.
   // A NodeList must have a length property of type 'number' on all platforms.
   if (val && typeof val.length == 'number') {
@@ -1835,7 +1828,7 @@ goog.dom.DomHelper.prototype.setProperties = goog.dom.setProperties;
  * @return {!goog.math.Size} Object with values 'width' and 'height'.
  */
 goog.dom.DomHelper.prototype.getViewportSize = function(opt_window) {
-  // TODO: This should not take an argument. That breaks the rule of a
+  // TODO(user): This should not take an argument. That breaks the rule of a
   // a DomHelper representing a single frame/window/document.
   return goog.dom.getViewportSize(opt_window || this.getWindow());
 };

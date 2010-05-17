@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -60,17 +48,7 @@ goog.net.HTTP_STATUS_CACHED_ = 304;
 goog.net.GOOGLECOM_TIMEOUT = 10000;
 
 
-/**
- * Pings the network to check if an error is a server error or user's network
- * error.
- *
- * @param {Function} callback The function to call back with results.
- * @param {goog.Uri?=} opt_imageUri The URI of an image to use for the
- *     network test.  You *must* provide an image URI; the default behavior is
- *     provided for compatibility with existing code, but the GWS team does not
- *     want people using images served off of google.com for this purpose. The
- *     default will go away when all usages have been changed.
- */
+
 goog.net.testGoogleCom = function(callback, opt_imageUri) {
   // We need to add a 'rand' to make sure the response is not fulfilled
   // by browser cache.
@@ -183,7 +161,7 @@ goog.net.testLoadImage = function(url, timeout, callback) {
  * @private
  */
 goog.net.clearImageCallbacks_ = function(img) {
-  // NOTE: Nullified individually to avoid compiler warnings
+  // NOTE(user): Nullified individually to avoid compiler warnings
   // (BUG 658126)
   img.onload = null;
   img.onerror = null;

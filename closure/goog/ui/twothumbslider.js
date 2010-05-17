@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -44,8 +32,9 @@
  * var slider = new goog.ui.TwoThumbSlider;
  * slider.decorate(document.getElementById('twothumbslider'));
  *
- * TODO: add a11y once we know what this element is
+ * TODO(user): add a11y once we know what this element is
  *
+*
  * @see ../demos/twothumbslider.html
  */
 
@@ -75,7 +64,8 @@ goog.inherits(goog.ui.TwoThumbSlider, goog.ui.SliderBase);
  * The prefix we use for the CSS class names for the slider and its elements.
  * @type {string}
  */
-goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX = 'goog-twothumbslider-';
+goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX =
+    goog.getCssName('goog-twothumbslider');
 
 
 /**
@@ -83,7 +73,7 @@ goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX = 'goog-twothumbslider-';
  * @type {string}
  */
 goog.ui.TwoThumbSlider.VALUE_THUMB_CSS_CLASS =
-    goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX + 'value-thumb';
+    goog.getCssName(goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX, 'value-thumb');
 
 
 /**
@@ -91,7 +81,7 @@ goog.ui.TwoThumbSlider.VALUE_THUMB_CSS_CLASS =
  * @type {string}
  */
 goog.ui.TwoThumbSlider.EXTENT_THUMB_CSS_CLASS =
-    goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX + 'extent-thumb';
+    goog.getCssName(goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX, 'extent-thumb');
 
 
 /**
@@ -100,7 +90,7 @@ goog.ui.TwoThumbSlider.EXTENT_THUMB_CSS_CLASS =
  * @protected
  */
 goog.ui.TwoThumbSlider.prototype.getCssClass = function(orient) {
-  return goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX + orient;
+  return goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX + '-' + orient;
 };
 
 

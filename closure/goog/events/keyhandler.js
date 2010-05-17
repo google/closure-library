@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -111,9 +99,10 @@
  * p:     undefined      80 undefined
  * P:     undefined      80 undefined
  *
+*
+*
  * @see ../demos/keyhandler.html
  */
-
 
 goog.provide('goog.events.KeyEvent');
 goog.provide('goog.events.KeyHandler');
@@ -126,10 +115,10 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.userAgent');
 
+
+
 /**
  * A wrapper around an element that you want to listen to keyboard events on.
- * XXX: {Document|Element} != {Element|Document}.
- * see: http://b/1470354
  * @param {Element|Document=} opt_element The element or document to listen on.
  * @constructor
  * @extends {goog.events.EventTarget}
@@ -380,7 +369,7 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
   // Correct the key value for certain browser-specific quirks.
   if (keyCode) {
     if (keyCode >= 63232 && keyCode in goog.events.KeyHandler.safariKey_) {
-      // NOTE: Safari 3 has fixed this problem,
+      // NOTE(nicksantos): Safari 3 has fixed this problem,
       // this is only needed for Safari 2.
       key = goog.events.KeyHandler.safariKey_[keyCode];
     } else {
@@ -423,8 +412,6 @@ goog.events.KeyHandler.prototype.getElement = function() {
 
 /**
  * Adds the proper key event listeners to the element.
- * XXX: {Document|Element} != {Element|Document}.
- * see: http://b/1470354
  * @param {Element|Document} element The element to listen on.
  */
 goog.events.KeyHandler.prototype.attach = function(element) {
@@ -471,6 +458,7 @@ goog.events.KeyHandler.prototype.detach = function() {
   }
   this.element_ = null;
   this.lastKey_ = -1;
+  this.keyCode_ = -1;
 };
 
 
@@ -481,6 +469,7 @@ goog.events.KeyHandler.prototype.disposeInternal = function() {
   goog.events.KeyHandler.superClass_.disposeInternal.call(this);
   this.detach();
 };
+
 
 
 /**

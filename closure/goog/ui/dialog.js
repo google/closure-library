@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,10 +15,11 @@
 /**
  * @fileoverview Class for showing simple modal dialog boxes.
  *
- * TODO:
+ * TODO(user):
  *   * Standardize CSS class names with other components
  *   * Add functionality to "host" other components in content area
  *   * Abstract out ButtonSet and make it more general
+*
  * @see ../demos/dialog.html
  */
 
@@ -325,7 +314,7 @@ goog.ui.Dialog.prototype.getContent = function() {
  */
 goog.ui.Dialog.prototype.renderIfNoDom_ = function() {
   if (!this.getElement()) {
-    // TODO: Ideally we'd only create the DOM, but many applications
+    // TODO(user): Ideally we'd only create the DOM, but many applications
     // are requiring this behavior.  Eventually, it would be best if the
     // element getters could return null if the elements have not been
     // created.
@@ -656,7 +645,7 @@ goog.ui.Dialog.prototype.renderBackground_ = function(parent) {
 /**
  * Overrides {@link goog.ui.Component#renderBefore} to throw a NOT_SUPPORTED
  * error, since dialogs don't support being rendered before another DOM element.
- * TODO: Figure out how to do this cleanly between Component and this.
+ * TODO(user): Figure out how to do this cleanly between Component and this.
  *
  * @param {Element} sibling Element before which the component is to be
  *    rendered (ignored).
@@ -835,7 +824,7 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
     return;
   }
 
-  // TODO:  Add utility methods to Component to get window & document?
+  // TODO(user):  Add utility methods to Component to get window & document?
   var doc = this.getDomHelper().getDocument();
 
   // Older versions of Safari did not know how to get a window for a given
@@ -963,7 +952,7 @@ goog.ui.Dialog.prototype.focus = function() {
 /**
  * Make the background element the size of the document.
  *
- * NOTE: We must hide the background element before measuring the
+ * NOTE(user): We must hide the background element before measuring the
  * document, otherwise the size of the background will stop the document from
  * shrinking to fit a smaller window.  This does cause a slight flicker in Linux
  * browsers, but should not be a common scenario.
@@ -1233,7 +1222,7 @@ goog.ui.Dialog.prototype.onKey_ = function(e) {
     } else if (e.keyCode == goog.events.KeyCodes.TAB && e.shiftKey &&
         target == this.getElement()) {
       // Prevent the user from shift-tabbing backwards out of the dialog box.
-      // TODO: Instead, we should move the focus to the last tabbable
+      // TODO(user): Instead, we should move the focus to the last tabbable
       // element inside the dialog.
       hasHandler = true;
     }
@@ -1332,7 +1321,7 @@ goog.inherits(goog.ui.Dialog.Event, goog.events.Event);
 
 /**
  * Event type constant for dialog events.
- * TODO: Change this to goog.ui.Dialog.EventType.SELECT.
+ * TODO(user): Change this to goog.ui.Dialog.EventType.SELECT.
  * @type {string}
  * @deprecated Use goog.ui.Dialog.EventType.SELECT.
  */
@@ -1367,7 +1356,7 @@ goog.ui.Dialog.EventType = {
  * @extends {goog.structs.Map}
  */
 goog.ui.Dialog.ButtonSet = function(opt_domHelper) {
-  // TODO:  Refactor ButtonSet to extend goog.ui.Component?
+  // TODO(user):  Refactor ButtonSet to extend goog.ui.Component?
   this.dom_ = opt_domHelper || goog.dom.getDomHelper();
   goog.structs.Map.call(this);
 };
@@ -1470,7 +1459,7 @@ goog.ui.Dialog.ButtonSet.prototype.render = function() {
  * to be the default and will receive focus when the button set is rendered.
  * If a button with a name of {@link goog.ui.Dialog.DefaultButtonKeys.CANCEL}
  * is found, it is assumed to have "Cancel" semantics.
- * TODO:  ButtonSet should be a goog.ui.Component.  Really.
+ * TODO(user):  ButtonSet should be a goog.ui.Component.  Really.
  * @param {Element} element The element to decorate; should contain buttons.
  */
 goog.ui.Dialog.ButtonSet.prototype.decorate = function(element) {
@@ -1576,7 +1565,7 @@ goog.ui.Dialog.DefaultButtonKeys = {
 // Construct some default sets
 (function() {
 
-  // TODO: Sharing the button set between instances does not work. We
+  // TODO(user): Sharing the button set between instances does not work. We
   // should create factory methods for these instead.
 
   /** @desc label for a dialog button. */

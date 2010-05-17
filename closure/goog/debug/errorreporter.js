@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2009 Google Inc. All Rights Reserved
+// Copyright 2009 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,8 @@
  * @fileoverview Definition of the ErrorReporter class, which creates an error
  * handler that reports any errors raised to a URL.
  *
+*
+*
  */
 
 goog.provide('goog.debug.ErrorReporter');
@@ -39,6 +29,7 @@ goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.net.XhrIo');
+goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.uri.utils');
 
@@ -48,10 +39,21 @@ goog.require('goog.uri.utils');
  * reporter see the {@see #install} method below.
  *
  * @param {string} handlerUrl The URL to which all errors will be reported.
+ * @param {function(!Error, !Object.<string, string>)=}
+ *     opt_contextProvider When a report is to be sent to the server,
+ *     this method will be called, and given an opportunity to modify the
+ *     context object before submission to the server.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-goog.debug.ErrorReporter = function(handlerUrl) {
+goog.debug.ErrorReporter = function(handlerUrl, opt_contextProvider) {
+  /**
+   * Context provider, if one was provided.
+   * @type {?function(!Error, !Object.<string, string>)}
+   * @private
+   */
+  this.contextProvider_ = opt_contextProvider || null;
+
   /**
    * The URL at which all errors caught by this handler will be logged.
    *
@@ -68,10 +70,12 @@ goog.inherits(goog.debug.ErrorReporter, goog.events.EventTarget);
 /**
  * Event broadcast when an exception is logged.
  * @param {Error} error The exception that was was reported.
+ * @param {!Object.<string, string>} context The context values sent to the
+ *     server alongside this error.
  * @constructor
  * @extends {goog.events.Event}
  */
-goog.debug.ErrorReporter.ExceptionEvent = function(error) {
+goog.debug.ErrorReporter.ExceptionEvent = function(error, context) {
   goog.events.Event.call(this, goog.debug.ErrorReporter.ExceptionEvent.TYPE);
 
   /**
@@ -79,6 +83,12 @@ goog.debug.ErrorReporter.ExceptionEvent = function(error) {
    * @type {Error}
    */
   this.error = error;
+
+  /**
+   * Context values sent to the server alongside this report.
+   * @type {!Object.<string, string>}
+   */
+  this.context = context;
 };
 goog.inherits(goog.debug.ErrorReporter.ExceptionEvent, goog.events.Event);
 
@@ -123,10 +133,15 @@ goog.debug.ErrorReporter.logger_ =
  *
  * @param {string} loggingUrl The URL to which the errors caught will be
  *     reported.
+ * @param {function(!Error, !Object.<string, string>)=}
+ *     opt_contextProvider When a report is to be sent to the server,
+ *     this method will be called, and given an opportunity to modify the
+ *     context object before submission to the server.
  * @return {goog.debug.ErrorReporter} The error reporter.
  */
-goog.debug.ErrorReporter.install = function(loggingUrl) {
-  var instance = new goog.debug.ErrorReporter(loggingUrl);
+goog.debug.ErrorReporter.install = function(loggingUrl,
+    opt_contextProvider) {
+  var instance = new goog.debug.ErrorReporter(loggingUrl, opt_contextProvider);
   return instance;
 };
 
@@ -190,15 +205,12 @@ goog.debug.ErrorReporter.prototype.setup_ = function() {
  * notifies any listeners.
  *
  * @param {Error} e The exception.
+ * @param {!Object.<string, string>=} opt_context Context values to optionally
+ *     include in the error report.
  */
-goog.debug.ErrorReporter.prototype.handleException = function(e) {
+goog.debug.ErrorReporter.prototype.handleException = function(e,
+    opt_context) {
   var error = (/** @type {!Error} */ goog.debug.normalizeErrorObject(e));
-
-  try {
-    this.dispatchEvent(new goog.debug.ErrorReporter.ExceptionEvent(error));
-  } catch (ex) {
-    // Swallow exception to avoid infinite recursion.
-  }
 
   // Make sure when handling exceptions that the error file name contains only
   // the basename (e.g. "file.js"). goog.debug.catchErrors does this stripping,
@@ -208,25 +220,58 @@ goog.debug.ErrorReporter.prototype.handleException = function(e) {
   // Strip the query part of the URL.
   baseName = String(baseName).split('?', 2)[0];
 
-  this.sendErrorReport(error.message, baseName, error.lineNumber, error.stack);
+  // Construct the context, possibly from the one provided in the argument, and
+  // pass it to the context provider if there is one.
+  var context = opt_context ? goog.object.clone(opt_context) : {};
+  if (this.contextProvider_) {
+    try {
+      this.contextProvider_(error, context);
+    } catch (err) {
+      goog.debug.ErrorReporter.logger_.severe('Context provider threw an ' +
+          'exception: ' + err.message);
+    }
+  }
+  this.sendErrorReport(error.message, baseName, error.lineNumber, error.stack,
+      context);
+
+  try {
+    this.dispatchEvent(
+        new goog.debug.ErrorReporter.ExceptionEvent(error, context));
+  } catch (ex) {
+    // Swallow exception to avoid infinite recursion.
+  }
 };
 
 
 /**
- * Sends an error report to the logging URL.
+ * Sends an error report to the logging URL.  This will not consult the context
+ * provider, the report will be sent exactly as specified.
  *
  * @param {string} message Error description.
  * @param {string} fileName URL of the JavaScript file with the error.
  * @param {number} line Line number of the error.
  * @param {string=} opt_trace Call stack trace of the error.
+ * @param {!Object.<string, string>=} opt_context Context information to include
+ *     in the request.
  */
 goog.debug.ErrorReporter.prototype.sendErrorReport =
-    function(message, fileName, line, opt_trace) {
+    function(message, fileName, line, opt_trace, opt_context) {
   try {
     // Create the logging URL.
     var requestUrl = goog.uri.utils.appendParams(this.handlerUrl_,
         'script', fileName, 'error', message, 'line', line);
-    var queryData = goog.uri.utils.buildQueryData(['trace', opt_trace]);
+    var queryMap = {};
+    queryMap['trace'] = opt_trace;
+
+    // Copy context into query data map
+    if (opt_context) {
+      for (var entry in opt_context) {
+        queryMap['context.' + entry] = opt_context[entry];
+      }
+    }
+
+    // Copy query data map into request.
+    var queryData = goog.uri.utils.buildQueryDataFromMap(queryMap);
 
     // Send the request with the contents of the error.
     goog.net.XhrIo.send(requestUrl, null, 'POST',

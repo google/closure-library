@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2009 Google Inc. All Rights Reserved
+// Copyright 2009 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,7 @@
 /**
  * @fileoverview Character Picker widget for picking any Unicode character.
  *
+*
  * @see ../demos/charpicker.html
  */
 
@@ -373,13 +362,11 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
   this.addChild(this.okbutton_, true);
   this.okbutton_.setEnabled(false);
 
-  this.zoomEl_ = goog.dom.createDom('div', {
-      'id': 'zoom',
-      'className': 'goog-char-picker-char-zoom'});
+  this.zoomEl_ = goog.dom.createDom('div',
+      {id: 'zoom', className: goog.getCssName('goog-char-picker-char-zoom')});
 
-  this.unicodeEl_ = goog.dom.createDom('div', {
-      'id': 'unicode',
-      'className': 'goog-char-picker-unicode'});
+  this.unicodeEl_ = goog.dom.createDom('div',
+      {id: 'unicode', className: goog.getCssName('goog-char-picker-unicode')});
 
   var card = goog.dom.createDom('div', {'id': 'preview'}, this.zoomEl_,
       this.unicodeEl_);
@@ -403,23 +390,28 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
   goog.events.listen(this.hc_, goog.ui.HoverCard.EventType.BEFORE_SHOW,
                      onBeforeShow);
 
-  goog.dom.classes.add(element, 'goog-char-picker');
-  goog.dom.classes.add(this.stick_, 'goog-stick');
-  goog.dom.classes.add(this.stickwrap_, 'goog-stickwrap');
+  goog.dom.classes.add(element, goog.getCssName('goog-char-picker'));
+  goog.dom.classes.add(this.stick_, goog.getCssName('goog-stick'));
+  goog.dom.classes.add(this.stickwrap_, goog.getCssName('goog-stickwrap'));
   goog.dom.classes.add(gridcontainer.getElement(),
-      'goog-char-picker-grid-container');
-  goog.dom.classes.add(this.grid_.getElement(), 'goog-char-picker-grid');
-  goog.dom.classes.add(this.recentgrid_.getElement(), 'goog-char-picker-grid');
+      goog.getCssName('goog-char-picker-grid-container'));
+  goog.dom.classes.add(this.grid_.getElement(),
+      goog.getCssName('goog-char-picker-grid'));
   goog.dom.classes.add(this.recentgrid_.getElement(),
-      'goog-char-picker-recents');
+      goog.getCssName('goog-char-picker-grid'));
+  goog.dom.classes.add(this.recentgrid_.getElement(),
+      goog.getCssName('goog-char-picker-recents'));
 
-  goog.dom.classes.add(this.notice_.getElement(), 'goog-char-picker-notice');
-  goog.dom.classes.add(uplus.getElement(), 'goog-char-picker-uplus');
-  goog.dom.classes.add(this.input_.getElement(), 'goog-char-picker-input-box');
+  goog.dom.classes.add(this.notice_.getElement(),
+      goog.getCssName('goog-char-picker-notice'));
+  goog.dom.classes.add(uplus.getElement(),
+      goog.getCssName('goog-char-picker-uplus'));
+  goog.dom.classes.add(this.input_.getElement(),
+      goog.getCssName('goog-char-picker-input-box'));
   goog.dom.classes.add(this.okbutton_.getElement(),
-                       'goog-char-picker-okbutton');
-  goog.dom.classes.add(card, 'goog-char-picker-hovercard');
-  this.hc_.className = 'goog-char-picker-hovercard';
+      goog.getCssName('goog-char-picker-okbutton'));
+  goog.dom.classes.add(card, goog.getCssName('goog-char-picker-hovercard'));
+  this.hc_.className = goog.getCssName('goog-char-picker-hovercard');
 
   this.grid_.buttoncount = this.gridsize_;
   this.recentgrid_.buttoncount = this.recentwidth_;
@@ -431,8 +423,10 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
   new goog.ui.ContainerScroller(this.menu_);
   new goog.ui.ContainerScroller(this.submenu_);
 
-  goog.dom.classes.add(this.menu_.getElement(), 'goog-char-picker-menu');
-  goog.dom.classes.add(this.submenu_.getElement(), 'goog-char-picker-menu');
+  goog.dom.classes.add(this.menu_.getElement(),
+      goog.getCssName('goog-char-picker-menu'));
+  goog.dom.classes.add(this.submenu_.getElement(),
+      goog.getCssName('goog-char-picker-menu'));
 };
 
 

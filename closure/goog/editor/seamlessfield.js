@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,6 +19,9 @@
  * This is a goog.editor.Field, but with blending and sizing capabilities,
  * and avoids using an iframe whenever possible.
  *
+*
+ * @author nicksantos@google.com (Nick Santos)
+*
  * @see ../demos/editor/seamlessfield.html
  */
 
@@ -372,7 +363,7 @@ goog.editor.SeamlessField.prototype.getIframeableCss = function(
  * Sets the css rules that should be used inside the editable iframe.
  * Note: to clear the css cache between makeNotEditable/makeEditable,
  * call this with "" as iframeableCss.
- * TODO: Unify all these css setting methods + Nick's open
+ * TODO(user): Unify all these css setting methods + Nick's open
  * CL.  This is getting ridiculous.
  * @param {string} iframeableCss String containing the css rules to use.
  */
@@ -384,7 +375,7 @@ goog.editor.SeamlessField.prototype.setIframeableCss = function(iframeableCss) {
 /**
  * Used to ensure that CSS stylings are only installed once for none
  * iframe seamless mode.
- * TODO: Make it a formal part of the API that you can only
+ * TODO(user): Make it a formal part of the API that you can only
  * set one set of styles globally.
  * In seamless, non-iframe mode, all the stylings would go in the
  * same document and conflict.
@@ -423,7 +414,7 @@ goog.editor.SeamlessField.prototype.inheritBlendedCSS = function() {
 
 /** @inheritDoc */
 goog.editor.SeamlessField.prototype.usesIframe = function() {
-  // TODO: Switch Firefox to using contentEditable
+  // TODO(user): Switch Firefox to using contentEditable
   // rather than designMode iframe once contentEditable support
   // is less buggy.
   return !goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE;
@@ -546,7 +537,7 @@ goog.editor.SeamlessField.prototype.installStyles = function() {
         goog.style.installStyles(this.cssStyles, this.getElement());
       }
 
-      // TODO: this should be reset to false when the editor is quit.
+      // TODO(user): this should be reset to false when the editor is quit.
       // In non-iframe mode, CSS styles should only be instaled once.
       goog.editor.SeamlessField.haveInstalledCss_ = true;
     }
@@ -703,7 +694,7 @@ goog.editor.SeamlessField.prototype.writeIframeContent = function(
 
 /** @inheritDoc */
 goog.editor.SeamlessField.prototype.restoreDom = function() {
-  // TODO: Consider only removing the iframe if we are
+  // TODO(user): Consider only removing the iframe if we are
   // restoring the original node.
   if (this.usesIframe()) {
     goog.dom.removeNode(this.getEditableIframe());

@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,8 @@
 /**
  * @fileoverview Factory functions for creating a default editing toolbar.
  *
+*
+*
  * @see ../../demos/editor/editor.html
  */
 
@@ -40,6 +30,7 @@ goog.require('goog.string.StringBuffer');
 goog.require('goog.style');
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.editor.ToolbarFactory');
+goog.require('goog.ui.editor.messages');
 
 // Font menu creation.
 
@@ -550,7 +541,7 @@ goog.ui.editor.DefaultToolbar.fontSizeFactory_ = function(id, tooltip,
   button.updateFromValue = function(value) {
     // Webkit returns a string like '32px' instead of the equivalent
     // integer, so normalize that first.
-    // NOTE: Gecko returns "6" so can't just normalize all
+    // NOTE(user): Gecko returns "6" so can't just normalize all
     // strings, only ones ending in "px".
     if (goog.isString(value) &&
         goog.style.getLengthUnits(value) == 'px') {
@@ -591,7 +582,7 @@ goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, value) {
       button.setValue(/** @type {string} */ (value));
     }
   } catch (ex) {
-    // TODO: Find out when/why this happens.
+    // TODO(user): Find out when/why this happens.
   }
 };
 
@@ -789,9 +780,6 @@ goog.ui.editor.DefaultToolbar.MSG_BLOCKQUOTE_TITLE = goog.getMsg('Quote');
 goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_TITLE =
     goog.getMsg('Edit HTML source');
 
-/** @desc Link button caption. */
-goog.ui.editor.DefaultToolbar.MSG_LINK_CAPTION = goog.getMsg('Link');
-
 /** @desc Subscript button tooltip. */
 goog.ui.editor.DefaultToolbar.MSG_SUBSCRIPT = goog.getMsg('Subscript');
 
@@ -910,7 +898,7 @@ goog.ui.editor.DefaultToolbar.BUTTONS_ = [{
 }, {
   command: goog.editor.Command.LINK,
   tooltip: goog.ui.editor.DefaultToolbar.MSG_LINK_TITLE,
-  caption: goog.ui.editor.DefaultToolbar.MSG_LINK_CAPTION,
+  caption: goog.ui.editor.messages.MSG_LINK_CAPTION,
   classes: goog.getCssName('tr-link'),
   queryable: true
 }, {

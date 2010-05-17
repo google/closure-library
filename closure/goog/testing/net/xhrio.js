@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,6 +14,8 @@
 
 /**
  * @fileoverview Mock of XhrIo for unit testing.
+*
+*
  */
 
 goog.provide('goog.testing.net.XhrIo');
@@ -456,7 +446,7 @@ goog.testing.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
  * @return {Document} Result from the server if it was XML.
  */
 goog.testing.net.XhrIo.prototype.getResponseXml = function() {
-  // NOTE: I haven't found out how to check in Internet Explorer
+  // NOTE(user): I haven't found out how to check in Internet Explorer
   // whether the response is XML document, so I do it the other way around.
   return goog.isString(this.response_) ? null : this.response_;
 };

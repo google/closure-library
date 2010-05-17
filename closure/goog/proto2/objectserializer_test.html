@@ -1,27 +1,13 @@
 <!DOCTYPE html>
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <html>
 <!--
-Copyright 2008 Google Inc. All Rights Reserved
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
 -->
 <!--
-
+  Author: jschorr@google.com (Joseph Schorr)
 -->
 <head>
 <title>Closure Unit Tests - goog.proto2 - objectserializer.js</title>
@@ -73,7 +59,7 @@ function testSerialization() {
   message.addRepeatedInt32(202);
 
   // Serialize to a simplified object.
-  var simplified = message.toJSON();
+  var simplified = new goog.proto2.ObjectSerializer().serialize(message);
 
   // Assert that everything serialized properly.
   assertEquals(101, simplified[1]);
@@ -100,7 +86,8 @@ function testSerialization() {
   assertEquals(202, simplified[31][1]);
 
   // Serialize to a simplified object (with key as name).
-  simplified = message.toJSON(goog.proto2.ObjectSerializer.KeyOption.NAME);
+  simplified = new goog.proto2.ObjectSerializer(
+      goog.proto2.ObjectSerializer.KeyOption.NAME).serialize(message);
 
   // Assert that everything serialized properly.
   assertEquals(101, simplified['optional_int32']);
@@ -145,7 +132,7 @@ function testSerializationOfUnknown() {
   message.setUnknown(1001, 302);
 
   // Serialize.
-  var simplified = message.toJSON();
+  var simplified = new goog.proto2.ObjectSerializer().serialize(message);
 
   assertEquals(101, simplified['1']);
   assertEquals(102, simplified['2']);

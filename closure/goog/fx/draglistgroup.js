@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,7 @@
  * @fileoverview A DragListGroup is a class representing a group of one or more
  * "drag lists" with items that can be dragged within them and between them.
  *
+*
  * @see ../demos/draglistgroup.html
  */
 
@@ -966,7 +955,7 @@ goog.fx.DragListGroup.prototype.insertCurrDragItem_ = function(
 
 
 /**
- * Note: Copied from abstractdragdrop.js. TODO: consolidate.
+ * Note: Copied from abstractdragdrop.js. TODO(user): consolidate.
  * Creates copy of node being dragged.
  *
  * @param {Element} sourceEl Element to copy.

@@ -1,23 +1,11 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 // Copyright 2005-2009, The Dojo Foundation
-// Modifications Copyright 2008 Google Inc.
-// All Rights Reserved
+// Modifications Copyright 2008 The Closure Library Authors.
+// All Rights Reserved.
 
 /**
  * @license Portions of this code are from the Dojo Toolkit, received by
- * Google under the BSD license. All other code is Copyright 2005-2009 Google,
- * Inc. All Rights Reserved.
+ * The Closure Library Authors under the BSD license. All other code is
+ * Copyright 2005-2009 The Closure Library Authors. All Rights Reserved.
 
 The "New" BSD License:
 
@@ -76,6 +64,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *        future queries using the same selector evaluate against the DOM branch
  *        too.
  *    5.) matched nodes are pruned to ensure they are unique
+*
+*
  */
 
 goog.provide('goog.dom.query');
@@ -1316,7 +1306,7 @@ goog.dom.query = (function() {
       //    need to tighten up browser rules on ':contains' and '|=' to
       //    figure out which aren't good
       (query.indexOf(':contains') == -1) &&
-      (query.indexOf('|=') == -1) // some browsers don't grok it
+      (query.indexOf('|=') == -1) 
     );
 
     // TODO:
@@ -1534,6 +1524,6 @@ goog.dom.query = (function() {
   return query;
 })();
 
-// TODO: Please don't export here since it clobbers dead code elimination.
+// TODO(user): Please don't export here since it clobbers dead code elimination.
 goog.exportSymbol('goog.dom.query', goog.dom.query);
 goog.exportSymbol('goog.dom.query.pseudos', goog.dom.query.pseudos);

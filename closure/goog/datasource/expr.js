@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,6 +29,7 @@
  *    provided as a flag for client code which may ignore depending on usage
  * - If expression has [INDEX], will use getChildNodes().getByIndex(INDEX)
  *
+*
  */
 
 
@@ -195,7 +184,7 @@ goog.ds.Expr.prototype.getNext = function() {
 /**
  * Evaluate an expression on a data node, and return a value
  * Recursively walks through child nodes to evaluate
- * TODO Support other expression functions
+ * TODO(user) Support other expression functions
  *
  * @param {goog.ds.DataNode=} opt_ds Optional datasource to evaluate against.
  *     If not provided, evaluates against DataManager global root.
@@ -206,7 +195,7 @@ goog.ds.Expr.prototype.getValue = function(opt_ds) {
     opt_ds = goog.ds.DataManager.getInstance();
   } else if (this.isAbsolute_) {
 
-    // TODO: Remove once JSCompiler's undefined properties warnings
+    // TODO(user): Remove once JSCompiler's undefined properties warnings
     // don't error for guarded properties.
     var magicProps = {getDataRoot: 0};
 

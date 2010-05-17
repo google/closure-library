@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,7 @@
 /**
  * @fileoverview An implementation of DataNode for wrapping JS data.
  *
+*
  */
 
 
@@ -55,7 +44,7 @@ goog.require('goog.ds.LoadState');
  * @constructor
  * @extends {goog.ds.DataNode}
  */
-// TODO: Use interfaces when available.
+// TODO(user): Use interfaces when available.
 goog.ds.JsDataSource = function(root, dataName, opt_parent) {
   this.parent_ = opt_parent;
   this.dataName_ = dataName;
@@ -131,7 +120,7 @@ goog.ds.JsDataSource.prototype.set = function(value) {
  * @param {string=} opt_selector String selector to choose child nodes.
  * @return {goog.ds.DataNodeList} The child nodes.
  *
- * TODO revisit lazy creation.
+ * TODO(user) revisit lazy creation.
  */
 goog.ds.JsDataSource.prototype.getChildNodes = function(opt_selector) {
   if (!this.root_) {
@@ -178,7 +167,7 @@ goog.ds.JsDataSource.prototype.createChildNodes_ = function(opt_force) {
     var len = this.root_.length;
     for (var i = 0; i < len; i++) {
       // "id" is reserved node name that will map to a named child node
-      // TODO Configurable logic for choosing id node
+      // TODO(user) Configurable logic for choosing id node
       var node = this.root_[i];
       var id = node.id;
       var name = id != null ? String(id) : '[' + i + ']';
@@ -281,7 +270,7 @@ goog.ds.JsDataSource.prototype.setChildNode = function(name, value) {
   // This logic will get cleaner once we can remove the backing array / object
   // and just rely on the childNodeList_. This is needed until dependent code
   // is cleaned up.
-  // TODO Remove backing array / object and just use childNodeList_
+  // TODO(user) Remove backing array / object and just use childNodeList_
 
   if (goog.isArray(this.root_)) {
     // To remove by name, need to create a map of the child nodes by ID
@@ -389,7 +378,7 @@ goog.ds.JsDataSource.prototype.load = function() {
 
 /**
  * Gets the state of the backing data for this node
- * TODO Discuss null value handling
+ * TODO(user) Discuss null value handling
  * @return {goog.ds.LoadState} The state.
  */
 goog.ds.JsDataSource.prototype.getLoadState = function() {

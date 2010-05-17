@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,6 +19,8 @@
  * global <code>CLOSURE_NO_DEPS</code> is set to true.  This allows projects to
  * include their own deps file(s) from different locations.
  *
+*
+*
  */
 
 /**
@@ -249,6 +239,7 @@ goog.addDependency = function(relPath, provides, requires) {
 };
 
 
+
 /**
  * Implements a system for the dynamic resolution of dependencies
  * that works in parallel with the BUILD system. Note that all calls
@@ -259,10 +250,10 @@ goog.addDependency = function(relPath, provides, requires) {
 goog.require = function(rule) {
 
   // if the object already exists we do not need do do anything
-  // TODO: If we start to support require based on file name this has
+  // TODO(user): If we start to support require based on file name this has
   //            to change
-  // TODO: If we allow goog.foo.* this has to change
-  // TODO: If we implement dynamic load after page load we should probably
+  // TODO(user): If we allow goog.foo.* this has to change
+  // TODO(user): If we implement dynamic load after page load we should probably
   //            not remove this code for the compiled output
   if (!COMPILED) {
     if (goog.getObjectByName(rule)) {
@@ -278,7 +269,9 @@ goog.require = function(rule) {
         goog.global.console['error'](errorMessage);
       }
 
+      
         throw Error(errorMessage);
+        
     }
   }
 };
@@ -804,7 +797,7 @@ goog.isObject = function(val) {
  * @return {number} The unique ID for the object.
  */
 goog.getUid = function(obj) {
-  // TODO: Make the type stricter, do not accept null.
+  // TODO(user): Make the type stricter, do not accept null.
 
   // In IE, DOM nodes do not extend Object so they do not have this method.
   // we need to check hasOwnProperty because the proto might have this set.
@@ -825,7 +818,7 @@ goog.getUid = function(obj) {
  * @param {Object} obj The object to remove the unique ID field from.
  */
 goog.removeUid = function(obj) {
-  // TODO: Make the type stricter, do not accept null.
+  // TODO(user): Make the type stricter, do not accept null.
 
   // DOM nodes in IE are not instance of Object and throws exception
   // for delete. Instead we try to use removeAttribute
@@ -877,25 +870,34 @@ goog.removeHashCode = goog.removeUid;
 
 
 /**
- * Clone an object/array (recursively)
- * @param {Object} proto Object to clone.
- * @return {Object} Clone of x;.
+ * Clones a value. The input may be an Object, Array, or basic type. Objects and
+ * arrays will be cloned recursively.
+ *
+ * WARNINGS:
+ * <code>goog.cloneObject</code> does not detect reference loops. Objects that
+ * refer to themselves will cause infinite recursion.
+ *
+ * <code>goog.cloneObject</code> is unaware of unique identifiers, and copies
+ * UIDs created by <code>getUid</code> into cloned results.
+ *
+ * @param {*} obj The value to clone.
+ * @return {*} A clone of the input value.
+ * @deprecated goog.cloneObject is unsafe. Prefer the goog.object methods.
  */
-goog.cloneObject = function(proto) {
-  var type = goog.typeOf(proto);
+goog.cloneObject = function(obj) {
+  var type = goog.typeOf(obj);
   if (type == 'object' || type == 'array') {
-    if (proto.clone) {
-      // TODO Change to proto.clone() once # args warn is removed
-      return proto.clone.call(proto);
+    if (obj.clone) {
+      return obj.clone();
     }
     var clone = type == 'array' ? [] : {};
-    for (var key in proto) {
-      clone[key] = goog.cloneObject(proto[key]);
+    for (var key in obj) {
+      clone[key] = goog.cloneObject(obj[key]);
     }
     return clone;
   }
 
-  return proto;
+  return obj;
 };
 
 
@@ -904,7 +906,7 @@ goog.cloneObject = function(proto) {
  * compiler can better support duck-typing constructs as used in
  * goog.cloneObject.
  *
- * TODO: Remove once the JSCompiler can infer that the check for
+ * TODO(user): Remove once the JSCompiler can infer that the check for
  * proto.clone is safe in goog.cloneObject.
  *
  * @type {Function}
@@ -1041,7 +1043,7 @@ goog.globalEval = function(script) {
       var scriptElt = doc.createElement('script');
       scriptElt.type = 'text/javascript';
       scriptElt.defer = false;
-      // NOTE: can't use .innerHTML since "t('<test>')" will fail and
+      // Note(user): can't use .innerHTML since "t('<test>')" will fail and
       // .text doesn't work in Safari 2.  Therefore we append a text node.
       scriptElt.appendChild(doc.createTextNode(script));
       doc.body.appendChild(scriptElt);
@@ -1300,3 +1302,121 @@ goog.base = function(me, opt_methodName, var_args) {
 };
 
 
+// CLOSURE_OPEN_SOURCE_STRIP_START
+
+// The section between this token and the end token below will be stripped
+// automatically by the open source release scripts.  Please leave in place.
+
+//==============================================================================
+// Extending Function
+//==============================================================================
+
+
+/**
+ * @define {boolean} Whether to extend Function.prototype.
+ *     Use --define='goog.MODIFY_FUNCTION_PROTOTYPES=false' to change.
+ */
+goog.MODIFY_FUNCTION_PROTOTYPES = true;
+
+if (goog.MODIFY_FUNCTION_PROTOTYPES) {
+
+
+  /**
+   * An alias to the {@link goog.bind()} global function.
+   *
+   * Usage:
+   * var g = f.bind(obj, arg1, arg2);
+   * g(arg3, arg4);
+   *
+   * @param {Object} selfObj Specifies the object to which |this| should point
+   *     when the function is run. If the value is null or undefined, it will
+   *     default to the global object.
+   * @param {...*} var_args Additional arguments that are partially
+   *     applied to fn.
+   * @return {!Function} A partially-applied form of the Function on which
+   *     bind() was invoked as a method.
+   * @deprecated Use the static function goog.bind instead.
+   */
+  Function.prototype.bind = function(selfObj, var_args) {
+    if (arguments.length > 1) {
+      var args = Array.prototype.slice.call(arguments, 1);
+      args.unshift(this, selfObj);
+      return goog.bind.apply(null, args);
+    } else {
+      return goog.bind(this, selfObj);
+    }
+  };
+
+
+  /**
+   * An alias to the {@link goog.partial()} static function.
+   *
+   * Usage:
+   * var g = f.partial(arg1, arg2);
+   * g(arg3, arg4);
+   *
+   * @param {...*} var_args Additional arguments that are partially
+   *     applied to fn.
+   * @return {!Function} A partially-applied form of the function partial() was
+   *     invoked as a method of.
+   * @deprecated Use the static function goog.partial instead.
+   */
+  Function.prototype.partial = function(var_args) {
+    var args = Array.prototype.slice.call(arguments);
+    args.unshift(this, null);
+    return goog.bind.apply(null, args);
+  };
+
+
+  /**
+   * Inherit the prototype methods from one constructor into another.
+   * @param {Function} parentCtor Parent class.
+   * @see goog.inherits
+   * @deprecated Use the static function goog.inherits instead.
+   */
+  Function.prototype.inherits = function(parentCtor) {
+    goog.inherits(this, parentCtor);
+  };
+
+
+  /**
+   * Mixes in an object's properties and methods into the callee's prototype.
+   * Basically mixin based inheritance, thus providing an alternative method for
+   * adding properties and methods to a class' prototype.
+   *
+   * <pre>
+   * function X() {}
+   * X.mixin({
+   *   one: 1,
+   *   two: 2,
+   *   three: 3,
+   *   doit: function() { return this.one + this.two + this.three; }
+   * });
+   *
+   * function Y() { }
+   * Y.mixin(X.prototype);
+   * Y.prototype.four = 15;
+   * Y.prototype.doit2 = function() { return this.doit() + this.four; }
+   * });
+   *
+   * // or
+   *
+   * function Y() { }
+   * Y.inherits(X);
+   * Y.mixin({
+   *   one: 10,
+   *   four: 15,
+   *   doit2: function() { return this.doit() + this.four; }
+   * });
+   * </pre>
+   *
+   * @param {Object} source from which to copy properties.
+   * @see goog.mixin
+   * @deprecated Use the static function goog.object.extend instead.
+   */
+  Function.prototype.mixin = function(source) {
+    goog.mixin(this.prototype, source);
+  };
+}
+
+// CLOSURE_OPEN_SOURCE_STRIP_END

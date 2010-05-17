@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,7 @@
 /**
  * @fileoverview Plugin that enables table editing.
  *
+*
  */
 
 goog.provide('goog.editor.plugins.TableEditor');
@@ -69,7 +58,7 @@ goog.inherits(goog.editor.plugins.TableEditor, goog.editor.Plugin);
 
 
 /** @inheritDoc */
-// TODO: remove this once there's a sensible default
+// TODO(user): remove this once there's a sensible default
 // implementation in the base Plugin.
 goog.editor.plugins.TableEditor.prototype.getTrogClassId = function() {
   return String(goog.getUid(this.constructor));
@@ -195,7 +184,7 @@ goog.editor.plugins.TableEditor.prototype.execCommandInternal = function(
     range.replaceContentsWithNode(table);
     // In IE, replaceContentsWithNode uses pasteHTML, so we lose our reference
     // to the inserted table.
-    // TODO: use the reference to the table element returned from
+    // TODO(user): use the reference to the table element returned from
     // replaceContentsWithNode.
     if (!goog.userAgent.IE) {
       cursorCell = table.getElementsByTagName('td')[0];
@@ -334,7 +323,7 @@ goog.editor.plugins.TableEditor.CellSelection_ =
   // up as a separate range in the selection. goog.dom.Range doesn't
   // currently support this, so we check for it here and use a custom
   // function instead of selection.containsNode if needed.
-  // TODO: support this case in range.js
+  // TODO(user): support this case in range.js
   var browserSelection = range.getBrowserRangeObject();
   var elementInSelection;
   var selectionContainer;
@@ -356,13 +345,13 @@ goog.editor.plugins.TableEditor.CellSelection_ =
       }
       return false;
     };
-    // TODO: verify that it's not possible to have separate
+    // TODO(user): verify that it's not possible to have separate
     // ranges selected in two different tables.
     selectionContainer = browserSelection.getRangeAt(0).startContainer;
   } else {
     selectionContainer = range.getContainerElement();
     elementInSelection = function(node) {
-      // TODO: revert to the more liberal containsNode(node, true),
+      // TODO(user): revert to the more liberal containsNode(node, true),
       // which will match partially-selected cells. We're using
       // containsNode(node, false) at the moment because otherwise it's
       // broken in WebKit due to a closure range bug.
@@ -474,7 +463,7 @@ goog.editor.plugins.TableEditor.CellSelection_.prototype.getCells = function() {
  */
 goog.editor.plugins.TableEditor.CellSelection_.prototype.isRectangle =
     function() {
-  // TODO: check for missing cells. Right now this returns
+  // TODO(user): check for missing cells. Right now this returns
   // whether all cells in the selection are in the rectangle, but doesn't
   // verify that every expected cell is present.
   if (!this.cells_.length) {

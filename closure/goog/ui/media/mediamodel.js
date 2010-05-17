@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2009 Google Inc. All Rights Reserved
+// Copyright 2009 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -48,10 +36,10 @@ goog.provide('goog.ui.media.MediaModel.Thumbnail');
  * values are allowed. {@code goog.ui.media.MediaRenderer} checks whether the
  * values are available before creating DOMs for them.
  *
- * TODO: support asynchronous data models by subclassing
+ * TODO(user): support asynchronous data models by subclassing
  * {@link goog.events.EventTarget} or {@link goog.ds.DataNode}. Understand why
- * {@link fava.data.Node} is under fava, and not available in closure. Add
- * setters to MediaModel once this is supported.
+ * {@link http://goto/datanode} is not available in closure. Add setters to
+ * MediaModel once this is supported.
  *
  * @param {string=} opt_url An optional URL of the media.
  * @param {string=} opt_caption An optional caption of the media.

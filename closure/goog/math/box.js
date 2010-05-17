@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,6 +14,7 @@
 
 /**
  * @fileoverview A utility class for representing a numeric box.
+*
  */
 
 
@@ -153,7 +142,7 @@ goog.math.Box.prototype.expand = function(top, opt_right, opt_bottom,
 
 /**
  * Expand this box to include another box.
- * NOTE: This is used in code that needs to be very fast, please don't
+ * NOTE(user): This is used in code that needs to be very fast, please don't
  * add functionality to this function at the expense of speed (variable
  * arguments, accepting multiple argument types, etc).
  * @param {goog.math.Box} box The box to include in this one.

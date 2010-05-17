@@ -1,27 +1,13 @@
 <!DOCTYPE html>
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <html>
 <!--
-Copyright 2008 Google Inc. All Rights Reserved
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
 -->
 <!--
-
+  Author:  manucornet@google.com (Manu Cornet)
 -->
 <head>
   <title>HsvPalette Unit Tests</title>
@@ -81,7 +67,7 @@ See the COPYING file for details.
     }
     
     function testChangeEvent() {
-      // TODO: Add functionality to goog.testing.events to assert
+      // TODO(user): Add functionality to goog.testing.events to assert
       // an event was fired.
       goog.events.listen(samplePalette, goog.ui.Component.EventType.ACTION,
           function() {eventWasFired = true;});
@@ -171,7 +157,7 @@ See the COPYING file for details.
 
       var event = new goog.events.Event();
       event.clientY = -50;
-      // TODO: Use
+      // TODO(user): Use
       // goog.testing.events.fireMouseDownEvent(samplePalette.vImageEl_);
       // when google.testing.events support specifying properties of the event
       // or find out how tod o it if it already supports it.
@@ -193,10 +179,10 @@ See the COPYING file for details.
       var event = new goog.events.Event();
       event.clientX = 20;
       event.clientY = 85;
-      // TODO: Use goog.testing.events when appropriate (see above).
+      // TODO(user): Use goog.testing.events when appropriate (see above).
       samplePalette.handleMouseMoveHs_(boundaries, event);
-      // TODO: Fix the main code for this, see bug #1324469.
-      // NOTE: It's a little better than before due to the
+      // TODO(user): Fix the main code for this, see bug #1324469.
+      // NOTE(user): It's a little better than before due to the
       // goog.style getBoundingClientRect fix, but still not the same. :-(
       if (goog.userAgent.IE) {
         var expectedColor = '#ffe0b2';

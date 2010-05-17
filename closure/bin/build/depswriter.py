@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2009 Google Inc. All Rights Reserved.
+# Copyright 2009 The Closure Library Authors. All Rights Reserved.
 
 """Generates out a Closure deps.js file given a list of JavaScript sources.
 

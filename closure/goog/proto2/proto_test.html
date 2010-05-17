@@ -1,27 +1,13 @@
 <!DOCTYPE html>
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <html>
 <!--
-Copyright 2008 Google Inc. All Rights Reserved
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
 -->
 <!--
-
+  Author: jschorr@google.com (Joseph Schorr)
 -->
 <head>
 <title>Closure Unit Tests - goog.proto2 - Message Tests</title>
@@ -72,6 +58,13 @@ function testFields() {
   assertUndefined(message.getOptionalBytes());
   assertUndefined(message.getOptionalNestedMessage());
   assertUndefined(message.getOptionalNestedEnum());
+
+  // Check default values.
+  assertTrue(0 == message.getOptionalInt32OrDefault());
+  assertTrue(1 == message.getOptionalInt64OrDefault());
+  assertTrue(1.5 == message.getOptionalFloatOrDefault());
+  assertTrue("" == message.getOptionalStringOrDefault());
+  assertTrue("moo" == message.getOptionalBytesOrDefault());
 
   // Set the fields.
   message.setOptionalInt32(101);
@@ -420,14 +413,14 @@ function testDescriptor() {
   var descriptor = message.getDescriptor();
 
   assertEquals('TestAllTypes', descriptor.getName());
-  assertEquals('proto2.TestAllTypes', descriptor.getFullName());
+  assertEquals('TestAllTypes', descriptor.getFullName());
   assertEquals(null, descriptor.getContainingType());
 
   var nestedMessage = new proto2.TestAllTypes.NestedMessage();
   var nestedDescriptor = nestedMessage.getDescriptor();
 
   assertEquals('NestedMessage', nestedDescriptor.getName());
-  assertEquals('proto2.TestAllTypes.NestedMessage',
+  assertEquals('TestAllTypes.NestedMessage',
                nestedDescriptor.getFullName());
   assertEquals(descriptor, nestedDescriptor.getContainingType());
 }

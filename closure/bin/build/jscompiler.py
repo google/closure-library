@@ -1,4 +1,4 @@
-# Copyright 2010 Google Inc. All Rights Reserved.
+# Copyright 2010 The Closure Library Authors. All Rights Reserved.
 
 """Utility to use the Closure Compiler CLI from Python."""
 

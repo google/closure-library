@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,8 @@
 
 /**
  * @fileoverview CanvasGraphics sub class that uses the canvas tag for drawing.
+ * @author robbyw@google.com (Robby Walker)
+*
  */
 
 
@@ -123,7 +113,7 @@ goog.graphics.CanvasGraphics.prototype.pushElementTransform = function(
 
   var transform = element.getTransform();
 
-  // TODO: Test for unsupported transforms i.e. skews.
+  // TODO(robbyw): Test for unsupported transforms i.e. skews.
   var tx = transform.getTranslateX();
   var ty = transform.getTranslateY();
   if (tx || ty) {
@@ -551,7 +541,7 @@ goog.graphics.CanvasGraphics.prototype.isDrawable = function(group) {
  * @return {boolean} Whether drawing to this group should force a redraw.
  */
 goog.graphics.CanvasGraphics.prototype.isRedrawRequired = function(group) {
-  // TODO: Moving up to any parent of lastGroup should not force redraw.
+  // TODO(robbyw): Moving up to any parent of lastGroup should not force redraw.
   return group != this.canvasElement && group != this.lastGroup_;
 };
 
@@ -569,7 +559,7 @@ goog.graphics.CanvasGraphics.prototype.createGroup = function(opt_group) {
 
   opt_group = opt_group || this.canvasElement;
 
-  // TODO: Moving up to any parent group should not force redraw.
+  // TODO(robbyw): Moving up to any parent group should not force redraw.
   if (opt_group == this.canvasElement || opt_group == this.lastGroup_) {
     this.lastGroup_ = group;
   }

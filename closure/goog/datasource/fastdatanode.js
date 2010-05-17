@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,6 +33,7 @@
  * FastDataNodes can be constructed from JSON-like objects via the function
  * goog.ds.FastDataNode.fromJs.
 
+*
  */
 
 goog.provide('goog.ds.AbstractFastDataNode');
@@ -74,7 +63,7 @@ goog.require('goog.string');
  * @constructor
  * @extends {goog.ds.DataNodeList}
  */
-// TODO: Use interfaces when available.
+// TODO(user): Use interfaces when available.
 goog.ds.AbstractFastDataNode = function(dataName, opt_parent) {
   if (!dataName) {
     throw Error('Cannot create a fast data node without a data name');
@@ -195,7 +184,7 @@ goog.ds.FastDataNode.prototype.set = function(value) {
  * @param {string=} opt_selector Children to include in child list.
  * @return {goog.ds.DataNode|goog.ds.DataNodeList} List of child nodes.
  */
-// TODO: This class implements DataNodeList but we don't support interfaces
+// TODO(user): This class implements DataNodeList but we don't support interfaces
 // yet.
 goog.ds.FastDataNode.prototype.getChildNodes = function(opt_selector) {
   if (!opt_selector || opt_selector == goog.ds.STR_ALL_CHILDREN_SELECTOR) {
@@ -510,7 +499,7 @@ goog.ds.PrimitiveFastDataNode.prototype.getJsObject = function() {
  * @extends {goog.ds.AbstractFastDataNode}
  * @constructor
  */
-// TODO: Use interfaces when available.  This implements DataNodeList
+// TODO(user): Use interfaces when available.  This implements DataNodeList
 // as well.
 goog.ds.FastListNode = function(values, dataName, opt_parent) {
   this.values_ = [];
@@ -543,7 +532,7 @@ goog.ds.FastListNode.prototype.set = function(value) {
  * returning all children.
  * @return {goog.ds.DataNode|goog.ds.DataNodeList} List of child nodes.
  */
-// TODO: This class implements DataNodeList but we don't support interfaces
+// TODO(user): This class implements DataNodeList but we don't support interfaces
 // yet.
 goog.ds.FastListNode.prototype.getChildNodes = function() {
   return this;

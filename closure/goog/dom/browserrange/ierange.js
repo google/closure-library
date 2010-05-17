@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,6 +17,9 @@
  *
  * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
  *
+ * @author robbyw@google.com (Robby Walker)
+*
+*
  */
 
 
@@ -380,13 +371,6 @@ goog.dom.browserrange.IeRange.prototype.getEndOffset = function() {
 
 
 /** @inheritDoc */
-goog.dom.browserrange.IeRange.prototype.containsRange = function(range,
-    opt_allowPartial) {
-  return this.containsBrowserRange(range.range_, opt_allowPartial);
-};
-
-
-/** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.compareBrowserRangeEndpoints =
     function(range, thisEndpoint, otherEndpoint) {
   return this.range_.compareEndPoints(
@@ -445,6 +429,32 @@ goog.dom.browserrange.IeRange.prototype.getEndpointNode_ = function(endpoint,
 
 
 /**
+ * Compares one endpoint of this range with the endpoint of a node.
+ * For internal methods, we should prefer this method to containsNode.
+ * containsNode has a lot of false negatives when we're dealing with
+ * {@code <br>} tags.
+ *
+ * @param {Node} node The node to compare against.
+ * @param {goog.dom.RangeEndpoint} thisEndpoint The endpoint of this range
+ *     to compare with.
+ * @param {goog.dom.RangeEndpoint} otherEndpoint The endpoint of the node
+ *     to compare with.
+ * @return {number} 0 if the endpoints are equal, negative if this range
+ *     endpoint comes before the other node endpoint, and positive otherwise.
+ * @private
+ */
+goog.dom.browserrange.IeRange.prototype.compareNodeEndpoints_ =
+    function(node, thisEndpoint, otherEndpoint) {
+  return this.range_.compareEndPoints(
+      (thisEndpoint == goog.dom.RangeEndpoint.START ? 'Start' : 'End') +
+      'To' +
+      (otherEndpoint == goog.dom.RangeEndpoint.START ? 'Start' : 'End'),
+      goog.dom.browserrange.createRangeFromNodeContents(node).
+          getBrowserRange());
+};
+
+
+/**
  * Returns the offset into the start/end container.
  * @param {goog.dom.RangeEndpoint} endpoint The endpoint to get the offset for.
  * @param {Node=} opt_container The container to get the offset relative to.
@@ -461,14 +471,15 @@ goog.dom.browserrange.IeRange.prototype.getOffset_ = function(endpoint,
     // Find the first/last child that overlaps the selection
     var children = container.childNodes;
     var len = children.length;
-    var i = endpoint == goog.dom.RangeEndpoint.START ? 0 : len - 1;
+    var edge = endpoint == goog.dom.RangeEndpoint.START ? 0 : len - 1;
+    var sign = endpoint == goog.dom.RangeEndpoint.START ? 1 : -1;
 
     // We find the index in the child array of the endpoint of the selection.
-    while (i >= 0 && i < len) {
+    for (var i = edge; i >= 0 && i < len; i += sign) {
       var child = children[i];
 
       // Stop looping when we reach the edge of the selection.
-      if (this.containsNode(child, true)) {
+      if (this.compareNodeEndpoints_(child, endpoint, endpoint) * sign <= 0) {
         // Special case to ensure we match W3c behavior at BR edges.
         if (endpoint == goog.dom.RangeEndpoint.END && child.previousSibling &&
             child.previousSibling.tagName == goog.dom.TagName.BR &&
@@ -478,9 +489,6 @@ goog.dom.browserrange.IeRange.prototype.getOffset_ = function(endpoint,
 
         break;
       }
-
-      // Update the child and the index.
-      i += endpoint == goog.dom.RangeEndpoint.START ? 1 : -1;
     }
 
     // When starting from the end in an empty container, we erroneously return
@@ -529,7 +537,8 @@ goog.dom.browserrange.IeRange.prototype.isRangeInDocument = function() {
   var range = this.doc_.body.createTextRange();
   range.moveToElementText(this.doc_.body);
 
-  return this.containsBrowserRange(range, true);
+  return this.containsRange(
+      new goog.dom.browserrange.IeRange(range, this.doc_), true);
 };
 
 

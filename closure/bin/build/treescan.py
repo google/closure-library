@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2010 Google Inc. All Rights Reserved.
+# Copyright 2010 The Closure Library Authors. All Rights Reserved.
 
 """Shared utility functions for scanning directory trees."""
 

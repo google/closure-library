@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2009 Google Inc. All Rights Reserved
+// Copyright 2009 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -63,10 +51,11 @@
  *   video.setSelected(true);
  * </pre>
  *
+*
  *
  * @supported IE6, FF2+, Safari. Requires flash to actually work.
  *
- * TODO: Support non flash users. Maybe show a link to the Flick set,
+ * TODO(user): Support non flash users. Maybe show a link to the Flick set,
  * or fetch the data and rendering it using javascript (instead of a broken
  * 'You need to install flash' message).
  */
@@ -142,7 +131,7 @@ goog.ui.media.FlickrSet.flashUrl_ =
  *     document interaction.
  * @return {goog.ui.media.Media} A Control binded to the FlickrSet renderer.
  * @throws exception in case {@code flickrSetUrl} is an invalid flickr set URL.
- * TODO: use {@link goog.ui.media.MediaModel} once it is checked in.
+ * TODO(user): use {@link goog.ui.media.MediaModel} once it is checked in.
  */
 goog.ui.media.FlickrSet.newControl = function(dataModel, opt_domHelper) {
   var control = new goog.ui.media.Media(
@@ -176,7 +165,7 @@ goog.ui.media.FlickrSet.prototype.createDom = function(control) {
   var model =
     /** @type {goog.ui.media.FlickrSetModel} */ (control.getDataModel());
 
-  // TODO: find out what is the policy about hosting this SWF. figure out
+  // TODO(user): find out what is the policy about hosting this SWF. figure out
   // if it works over https.
   var flash = new goog.ui.media.FlashObject(
       model.getPlayer().getUrl() || '',

@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,6 +18,8 @@
  * Without the styles from the demo css file, only a hex color label and input
  * field show up.
  *
+*
+*
  * @see ../demos/hsvapalette.html
  */
 
@@ -72,7 +62,7 @@ goog.ui.HsvaPalette = function(opt_domHelper, opt_color, opt_alpha, opt_class) {
    * @type {string}
    * @private
    */
-  this.class_ = opt_class || 'goog-hsva-palette';
+  this.class_ = opt_class || goog.getCssName('goog-hsva-palette');
 
   /**
    * The document which is being listened to.
@@ -186,11 +176,11 @@ goog.ui.HsvaPalette.prototype.createDom = function() {
 
   var dom = this.getDomHelper();
   this.aImageEl_ = dom.createDom(
-      goog.dom.TagName.DIV, this.class_ + '-a-image');
+      goog.dom.TagName.DIV, goog.getCssName(this.class_, 'a-image'));
   this.aHandleEl_ = dom.createDom(
-      goog.dom.TagName.DIV, this.class_ + '-a-handle');
+      goog.dom.TagName.DIV, goog.getCssName(this.class_, 'a-handle'));
   this.swatchBackdropEl_ = dom.createDom(
-      goog.dom.TagName.DIV, this.class_ + '-swatch-backdrop'),
+      goog.dom.TagName.DIV, goog.getCssName(this.class_, 'swatch-backdrop'));
   dom.appendChild(this.element_, this.aImageEl_);
   dom.appendChild(this.element_, this.aHandleEl_);
   dom.appendChild(this.element_, this.swatchBackdropEl_);

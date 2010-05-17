@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2009 Google Inc. All Rights Reserved
+// Copyright 2009 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,7 +23,7 @@
  * Based on the following compatibility test suite:
  * http://www.bobbyvandersluis.com/flashembed/testsuite/
  *
- * TODO: take a look at swfobject, and maybe use it instead of the current
+ * TODO(user): take a look at swfobject, and maybe use it instead of the current
  * flash embedding method.
  *
  * Examples of usage:
@@ -46,13 +34,16 @@
  *   flash.render(goog.dom.getElement('parent'));
  * </pre>
  *
- * TODO: create a goog.ui.media.BrowserInterfaceFlashObject that
+ * TODO(user, jessan): create a goog.ui.media.BrowserInterfaceFlashObject that
  * subclasses goog.ui.media.FlashObject to provide all the goodness of
  * http://go/browserinterface.as
  *
+*
+*
  */
 
 goog.provide('goog.ui.media.FlashObject');
+goog.provide('goog.ui.media.FlashObject.ScriptAccessLevel');
 goog.provide('goog.ui.media.FlashObject.Wmodes');
 
 goog.require('goog.asserts');
@@ -149,6 +140,31 @@ goog.ui.media.FlashObject.Wmodes = {
   WINDOW: 'window'
 };
 
+/**
+ * The different levels of allowScriptAccess.
+ *
+ * Talked about at:
+ * http://kb2.adobe.com/cps/164/tn_16494.html
+ *
+ * @enum {string}
+ */
+goog.ui.media.FlashObject.ScriptAccessLevel = {
+  /*
+   * The flash object can always communicate with its container page.
+   */
+  ALWAYS: 'always',
+
+  /*
+   * The flash object can only communicate with its container page if they are
+   * hosted in the same domain.
+   */
+  SAME_DOMAIN: 'sameDomain',
+
+  /*
+   * The flash can not communicate with its container page.
+   */
+  NEVER: 'never'
+};
 
 /**
  * The component CSS namespace.
@@ -183,7 +199,7 @@ goog.ui.media.FlashObject.IE_HTML_ =
       '<param name="quality" value="high"/>' +
       '<param name="FlashVars" value="%s"/>' +
       '<param name="bgcolor" value="%s"/>' +
-      '<param name="AllowScriptAccess" value="sameDomain"/>' +
+      '<param name="AllowScriptAccess" value="%s"/>' +
       '<param name="allowFullScreen" value="true"/>' +
       '<param name="SeamlessTabbing" value="false"/>' +
       '%s' +
@@ -213,7 +229,7 @@ goog.ui.media.FlashObject.FF_HTML_ =
           ' src="%s"' +
           ' FlashVars="%s"' +
           ' bgcolor="%s"' +
-          ' AllowScriptAccess="sameDomain"' +
+          ' AllowScriptAccess="%s"' +
           ' allowFullScreen="true"' +
           ' SeamlessTabbing="false"' +
           ' type="application/x-shockwave-flash"' +
@@ -288,6 +304,16 @@ goog.ui.media.FlashObject.prototype.backgroundColor_ = '#000000';
 
 
 /**
+ * The flash movie allowScriptAccess setting.
+ *
+ * @type {string}
+ * @private
+ */
+goog.ui.media.FlashObject.prototype.allowScriptAccess_ =
+    goog.ui.media.FlashObject.ScriptAccessLevel.SAME_DOMAIN;
+
+
+/**
  * Sets the flash movie Wmode.
  *
  * @param {goog.ui.media.FlashObject.Wmodes} wmode the flash movie Wmode.
@@ -336,7 +362,7 @@ goog.ui.media.FlashObject.prototype.setFlashVar = function(key, value) {
  * Sets flash variables. You can either pass a Map of key->value pairs or you
  * can pass a key, value pair to set a specific variable.
  *
- * TODO: Get rid of this method.
+ * TODO(user, martino): Get rid of this method.
  *
  * @deprecated Use {@link #addFlashVars} or {@link #setFlashVar} instead.
  * @param {goog.structs.Map|Object|string} flashVar A map of variables (given
@@ -385,6 +411,26 @@ goog.ui.media.FlashObject.prototype.setBackgroundColor = function(color) {
  */
 goog.ui.media.FlashObject.prototype.getBackgroundColor = function() {
   return this.backgroundColor_;
+};
+
+
+/**
+ * Sets the allowScriptAccess setting of the movie.
+ *
+ * @param {string} value The new value to be set.
+ * @return {goog.ui.media.FlashObject} The flash object instance for chaining.
+ */
+goog.ui.media.FlashObject.prototype.setAllowScriptAccess = function(value) {
+  this.allowScriptAccess_ = value;
+  return this;
+};
+
+
+/**
+ * @return {string} The allowScriptAccess setting color of the movie.
+ */
+goog.ui.media.FlashObject.prototype.getAllowScriptAccess = function() {
+  return this.allowScriptAccess_;
 };
 
 
@@ -470,7 +516,7 @@ goog.ui.media.FlashObject.prototype.enterDocument = function() {
   // To overcome this inconsistency, all events from/to the plugin are sinked,
   // since you can't assume that the events will be propagated.
   //
-  // NOTE: we only sink events on the bubbling phase, since there are no
+  // NOTE(user): we only sink events on the bubbling phase, since there are no
   // inexpensive/scalable way to stop events on the capturing phase unless we
   // added an event listener on the document for each flash object.
   this.eventHandler_.listen(
@@ -525,7 +571,7 @@ goog.ui.media.FlashObject.prototype.generateSwfTag_ = function() {
     flashVars.push(key + '=' + value);
   }
 
-  // TODO: find a more efficient way to build the HTML.
+  // TODO(user): find a more efficient way to build the HTML.
   return goog.string.subs(
       template,
       this.getId(),
@@ -534,6 +580,7 @@ goog.ui.media.FlashObject.prototype.generateSwfTag_ = function() {
       goog.string.htmlEscape(this.flashUrl_),
       goog.string.htmlEscape(flashVars.join('&')),
       this.backgroundColor_,
+      this.allowScriptAccess_,
       params);
 };
 

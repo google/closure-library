@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -74,6 +62,7 @@
  * <h5>System Requirements</h5>
  * Tested on IE6, IE7, Firefox 2.0 and Safari nightly r23841.
  *
+*
  */
 
 goog.provide('goog.net.CrossDomainRpc');
@@ -713,7 +702,7 @@ goog.net.CrossDomainRpc.sendResponse =
   }
 
   // usable chunk size is max less dummy URI less chunk prefix length
-  // TODO: Figure out why we need to do "- 1" below
+  // TODO(user): Figure out why we need to do "- 1" below
   var chunkSize = goog.net.CrossDomainRpc.MAX_CHUNK_SIZE_ - dummyUri.length -
       1 - // payload delimiter ('#' or '?')
       goog.net.CrossDomainRpc.CHUNK_PREFIX_.length - 1;
@@ -736,7 +725,7 @@ goog.net.CrossDomainRpc.sendResponse =
    *   automatically decode when you access it via location.hash or
    *   location.href.  So we encode it here and decode it in detectResponse_().
    *
-   * NOTE: IE actually does encode only space to %20 and decodes that
+   * Note(*): IE actually does encode only space to %20 and decodes that
    *   automatically when you do location.href or location.hash.
    */
   if (!goog.userAgent.IE) {

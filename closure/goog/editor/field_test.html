@@ -1,27 +1,13 @@
 <!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
-<!--
   All Rights Reserved.
 
   Tests for goog.editor.Field
 
-
-
+  @author nicksantos@google.com (Nick Santos)
+  @author jparent@google.com (Julie Parent)
 --><html>
 <!--
-Copyright 2008 Google Inc. All Rights Reserved
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
@@ -60,7 +46,7 @@ function setUp() {
 function tearDown() {
   goog.dom.getElement('parent').innerHTML = HTML;
 
-  // NOTE: I think IE is blowing up on this call because
+  // NOTE(nicksantos): I think IE is blowing up on this call because
   // it is lame. It manifests its lameness by throwing an exception.
   // Kudos to XT for helping me to figure this out.
   try {
@@ -97,7 +83,6 @@ goog.inherits(TestPlugin, goog.editor.Plugin);
  * Tests that calling registerPlugin will add the plugin to the
  * plugin map.
  */
-
 function testRegisterPlugin() {
   var editableField = new goog.editor.Field('testField');
   var plugin = new TestPlugin();
@@ -215,6 +200,32 @@ function getBrowserEvent() {
   e.metaKey = true;
   e.charCode = goog.events.KeyCodes.A;
   return e;
+}
+
+/**
+ * Tests that plugins are disabled when the field is made uneditable.
+ */
+
+function testMakeUneditableDisablesPlugins() {
+  var editableField = new goog.editor.Field('testField');
+  var plugin = new TestPlugin();
+
+  var calls = 0;
+  plugin.disable = function(field) {
+    assertEquals(editableField, field);
+    assertTrue(field.isUneditable());
+    calls++;
+  };
+
+  editableField.registerPlugin(plugin);
+  editableField.makeEditable();
+
+  assertEquals(0, calls);
+  editableField.makeUneditable();
+
+  assertEquals(1, calls);
+
+  editableField.dispose();
 }
 
 /**

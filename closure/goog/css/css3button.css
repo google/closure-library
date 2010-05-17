@@ -1,17 +1,12 @@
 /*
-Use of this source code is governed by an Apache 2.0 License.
-See the COPYING file for details.
-*/
-
-/*
- * Copyright 2010 Google Inc. All Rights Reserved
+ * Copyright 2010 The Closure Library Authors. All Rights Reserved.
  *
  * Use of this source code is governed by an Apache 2.0 License.
  * See the COPYING file for details.
  */
 
-/**/
-/**/
+/* Author: slightlyoff@google.com (Alex Russell) */
+/* Author: eae@google.com (Emil A Eklund) */
 
 /* Imageless button styles. */
 .goog-css3-button {

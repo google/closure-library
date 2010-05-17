@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,6 +14,7 @@
 
 /**
  * @fileoverview Date/Time parsing library with locale support.
+*
  */
 
 /**
@@ -760,7 +749,7 @@ goog.locale.DateTimeParse.prototype.subparseTimeZoneInGMT_ =
     return this.parseTimeZoneOffset_(text, pos, cal);
   }
 
-  // TODO: check for named time zones by looking through the locale
+  // TODO(user): check for named time zones by looking through the locale
   // data from the DateFormatZoneData strings. should parse both short and long
   // forms.
   // subParseZoneString(text, start, cal);

@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google, Inc. All Rights Reserved.
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,11 @@
 /**
  * @fileoverview A dialog for editing/creating a link.
  *
+*
+*
+*
+*
+ * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.ui.editor.LinkDialog');
@@ -369,7 +362,7 @@ goog.ui.editor.LinkDialog.prototype.buildTextToDisplayDiv_ = function() {
           {id: goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY}));
   var textInput = this.textToDisplayInput_;
   // 98% prevents scroll bars in standards mode.
-  // TODO: Is this necessary for quirks mode?
+  // TODO(robbyw): Is this necessary for quirks mode?
   goog.style.setStyle(textInput, 'width', '98%');
   goog.style.setStyle(table.rows[0].cells[1], 'width', '100%');
   goog.dom.appendChild(table.rows[0].cells[1], textInput);
@@ -539,7 +532,7 @@ goog.ui.editor.LinkDialog.prototype.guessUrlAndSelectTab_ = function(text) {
     this.dom.getElement(goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_INPUT)
         .value = text;
     this.setAutogenFlag_(true);
-    // TODO: Why disable right after enabling? What bug are we
+    // TODO(user): Why disable right after enabling? What bug are we
     // working around?
     this.disableAutogenFlag_(true);
   } else if (goog.editor.Link.isLikelyUrl(text)) {
@@ -741,7 +734,7 @@ goog.ui.editor.LinkDialog.prototype.setTextToDisplayFromAuto_ = function() {
  * @private
  */
 goog.ui.editor.LinkDialog.prototype.setAutogenFlag_ = function(val) {
-  // TODO: This whole autogen thing is very confusing. It needs
+  // TODO(user): This whole autogen thing is very confusing. It needs
   // to be refactored and/or explained.
   this.autogenerateTextToDisplay_ = val;
 };

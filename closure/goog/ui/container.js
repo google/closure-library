@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,10 +18,11 @@
  * handling and child management, based on a generalized version of
  * {@link goog.ui.Menu}.
  *
+*
  * @see ../demos/container.html
  */
-// TODO:  Fix code/logic duplication between this and goog.ui.Control.
-// TODO:  Maybe pull common stuff all the way up into Component...?
+// TODO(user):  Fix code/logic duplication between this and goog.ui.Control.
+// TODO(user):  Maybe pull common stuff all the way up into Component...?
 
 goog.provide('goog.ui.Container');
 goog.provide('goog.ui.Container.Orientation');
@@ -86,7 +75,7 @@ goog.inherits(goog.ui.Container, goog.ui.Component);
 goog.ui.Container.EventType = {
   /**
    * Dispatched after a goog.ui.Container becomes visible. Non-cancellable.
-   * NOTE: This event really shouldn't exist, because the
+   * NOTE(user): This event really shouldn't exist, because the
    * goog.ui.Component.EventType.SHOW event should behave like this one. But the
    * SHOW event for containers has been behaving as other components'
    * BEFORE_SHOW event for a long time, and too much code relies on that old
@@ -880,7 +869,7 @@ goog.ui.Container.prototype.addChildAt = function(control, index, opt_render) {
  * @return {goog.ui.Control} The removed control, if any.
  */
 goog.ui.Container.prototype.removeChild = function(control, opt_unrender) {
-  // TODO: Fix implementation so that it works if control is a string.
+  // TODO(user): Fix implementation so that it works if control is a string.
 
   var index = this.indexOfChild(/** @type {goog.ui.Control} */ (control));
   if (index != -1) {
@@ -924,7 +913,7 @@ goog.ui.Container.prototype.getOrientation = function() {
  * Sets the container's orientation.
  * @param {goog.ui.Container.Orientation} orientation Container orientation.
  */
-// TODO: Do we need to support containers with dynamic orientation?
+// TODO(user): Do we need to support containers with dynamic orientation?
 goog.ui.Container.prototype.setOrientation = function(orientation) {
   if (this.getElement()) {
     // Too late.

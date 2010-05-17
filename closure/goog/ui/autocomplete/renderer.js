@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,7 @@
  * @fileoverview Class for rendering the results of an auto complete and
  * allow the user to select an row.
  *
+*
  */
 
 goog.provide('goog.ui.AutoComplete.Renderer');
@@ -140,7 +129,7 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
    */
   this.rowClassName = goog.getCssName('ac-row');
 
-  // TODO: Remove this as soon as we remove references and ensure that
+  // TODO(user): Remove this as soon as we remove references and ensure that
   // no groups are pushing javascript using this.
   /**
    * The old class name for active row.  This name is deprecated because its
@@ -185,6 +174,13 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
       opt_useStandardHighlighting : true;
 
   /**
+   * Flag to set all tokens as highlighted in the autocomplete row.
+   * @type {boolean}
+   * @private
+   */
+  this.highlightAllTokens_ = false;
+
+  /**
    * Determines if the autocomplete will always be right aligned
    * @type {boolean}
    * @private
@@ -206,7 +202,7 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
    */
    this.topAlign_ = false;
 
-  // TODO: Remove once JSCompiler's undefined properties warnings
+  // TODO(user): Remove once JSCompiler's undefined properties warnings
   // don't error for guarded properties.
   var magicProps = { renderRow: 0 };
 
@@ -254,6 +250,18 @@ goog.ui.AutoComplete.Renderer.prototype.setTopAlign = function(align) {
 goog.ui.AutoComplete.Renderer.prototype.setUseStandardHighlighting =
     function(useStandardHighlighting) {
   this.useStandardHighlighting_ = useStandardHighlighting;
+};
+
+
+/**
+ * Set whether or not to highlight all matching tokens rather than just the
+ * first.
+ * @param {boolean} highlightAllTokens Whether to highlight all matching tokens
+ *     rather than just the first.
+ */
+goog.ui.AutoComplete.Renderer.prototype.setHighlightAllTokens =
+    function(highlightAllTokens) {
+  this.highlightAllTokens_ = highlightAllTokens;
 };
 
 
@@ -574,29 +582,28 @@ goog.ui.AutoComplete.Renderer.prototype.renderRowContents_ =
  * matches a token with <b>token</b>.
  *
  * @param {Node} node Node to match.
- * @param {string | Array} tokenOrArray Token to match or array of tokens to
- *     match, the first match will be highlighted.
+ * @param {string|Array.<string>} tokenOrArray Token to match or array of tokens
+ *     to match.  By default, only the first match will be highlighted.  If
+ *     highlightAllTokens is set, then all tokens appearing at the start of a
+ *     word, in whatever order and however many times, will be highlighted.
  * @private
  */
 goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
     function(node, tokenOrArray) {
   if (node.nodeType == goog.dom.NodeType.TEXT) {
 
-    var token;
     var rest = null;
-
-    if (goog.isArray(tokenOrArray)) {
-      token = tokenOrArray.length > 0 ? tokenOrArray[0] : '';
-      if (tokenOrArray.length > 1) {
-        rest = goog.array.slice(tokenOrArray, 1);
-      }
-    } else {
-      token = tokenOrArray;
+    if (goog.isArray(tokenOrArray) &&
+        tokenOrArray.length > 1 &&
+        !this.highlightAllTokens_) {
+      rest = goog.array.slice(tokenOrArray, 1);
     }
+
+    var token = this.getTokenRegExp_(tokenOrArray);
     if (token.length == 0) return;
 
     var text = node.nodeValue;
-    token = goog.string.regExpEscape(token);
+
     // Create a regular expression to match a token at the beginning of a line
     // or preceeded by non-alpha-numeric characters
     var re = new RegExp('(.*?)(^|\\W+)(' + token + ')', 'gi');
@@ -607,7 +614,9 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
     // Note: text.split(re) has inconsistencies between IE and FF, so
     // manually recreated the logic
     var match = re.exec(text);
+    var numMatches = 0;
     while (match) {
+      numMatches++;
       textNodes.push(match[1]);
       textNodes.push(match[2]);
       textNodes.push(match[3]);
@@ -616,17 +625,29 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
     }
     textNodes.push(text.substring(lastIndex));
 
-    // Replace the tokens with bolded text
+    // Replace the tokens with bolded text.  Each set of three textNodes
+    // (starting at index idx) includes two nodes of text before the bolded
+    // token, then a third node (at idx + 2) consisting of what should be
+    // enclosed in bold tags.
     if (textNodes.length > 1) {
-      node.nodeValue = textNodes[0] + textNodes[1];
-      var boldTag = this.dom_.createElement('b');
-      boldTag.className = this.highlightedClassName;
-      this.dom_.appendChild(boldTag, this.dom_.createTextNode(textNodes[2]));
-      boldTag = node.parentNode.insertBefore(boldTag, node.nextSibling);
-      for (var i = textNodes.length - 1; i >= 3; i--) {
-        node.parentNode.insertBefore(this.dom_.createTextNode(textNodes[i]),
+      var maxNumToBold = !this.highlightAllTokens_ ? 1 : numMatches;
+      for (var i = 0; i < maxNumToBold; i++) {
+        var idx = 3 * i;
+
+        node.nodeValue = textNodes[idx] + textNodes[idx + 1];
+        var boldTag = this.dom_.createElement('b');
+        boldTag.className = this.highlightedClassName;
+        this.dom_.appendChild(boldTag,
+            this.dom_.createTextNode(textNodes[idx + 2]));
+        boldTag = node.parentNode.insertBefore(boldTag, node.nextSibling);
+        node.parentNode.insertBefore(this.dom_.createTextNode(''),
             boldTag.nextSibling);
+        node = boldTag.nextSibling;
       }
+
+      // Append the remaining text nodes to the end.
+      var remainingTextNodes = goog.array.slice(textNodes, maxNumToBold * 3);
+      node.nodeValue = remainingTextNodes.join('');
     } else if (rest) {
       this.hiliteMatchingText_(node, rest);
     }
@@ -638,6 +659,58 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
        child = nextChild;
      }
   }
+};
+
+
+/**
+ * Transforms a token into a string ready to be put into the regular expression
+ * in hiliteMatchingText_.
+ * @param {string|Array.<string>} tokenOrArray The token or array to get the
+ *     regex string from.
+ * @return {!string} The regex-ready token.
+ * @private
+ */
+goog.ui.AutoComplete.Renderer.prototype.getTokenRegExp_ =
+    function(tokenOrArray) {
+  var token = '';
+
+  if (!tokenOrArray) {
+    return token;
+  }
+
+  // If highlighting all tokens, join them with '|' so the regular expression
+  // will match on any of them.
+  if (this.highlightAllTokens_) {
+    if (goog.isArray(tokenOrArray)) {
+      // Remove empty or whitespace entries from the array so the joined array
+      // will only contain valid tokens.
+      var tokenArray = goog.array.filter(tokenOrArray, function(str) {
+        return !goog.string.isEmptySafe(str);
+      });
+
+      tokenArray = goog.array.map(tokenArray, goog.string.regExpEscape);
+      token = tokenArray.join('|');
+    } else {
+      // Remove excess whitespace from the string so bars will separate valid
+      // tokens in the regular expression.
+      token = goog.string.collapseWhitespace(tokenOrArray);
+
+      token = goog.string.regExpEscape(token);
+      token = token.replace(/ /g, '|');
+    }
+  } else {
+    // Not highlighting all matching tokens.  If tokenOrArray is a string, use
+    // that as the token.  If it is an array, use the first element in the
+    // array.
+    if (goog.isArray(tokenOrArray)) {
+      token = tokenOrArray.length > 0 ?
+          goog.string.regExpEscape(tokenOrArray[0]) : '';
+    } else {
+      token = goog.string.regExpEscape(tokenOrArray);
+    }
+  }
+
+  return token;
 };
 
 

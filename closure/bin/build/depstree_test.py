@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2009 Google Inc. All Rights Reserved.
+# Copyright 2009 The Closure Library Authors. All Rights Reserved.
 
 
 """Unit test for depstree."""

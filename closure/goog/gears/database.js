@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,6 +14,7 @@
 
 /**
  * @fileoverview This file contains functions for using the Gears database.
+*
  */
 
 goog.provide('goog.gears.Database');
@@ -327,7 +316,7 @@ goog.gears.Database.resultSetToArray = function(rs) {
 goog.gears.Database.prototype.execute = function(sql, var_args) {
   this.logger_.finer('Executing SQL: ' + sql);
 
-  // TODO: Remove when Gears adds more rubust type handling.
+  // TODO(user): Remove when Gears adds more rubust type handling.
   // Safety measure since Gears behaves very badly if it gets an unexpected
   // data type.
   sql = String(sql);
@@ -345,7 +334,7 @@ goog.gears.Database.prototype.execute = function(sql, var_args) {
     }
     this.logger_.finest('SQL arguments: ' + args);
 
-    // TODO: Type safety checking for args?
+    // TODO(user): Type safety checking for args?
     return this.database_.execute(sql, args);
   } catch (e) {
     if (args) {
@@ -925,7 +914,7 @@ goog.gears.Database.prototype.disposeInternal = function() {
  * @return {boolean} Whether this is a database locked exception.
  */
 goog.gears.Database.isLockedException = function(ex) {
-  // TODO: change the test when gears provides a reasonable
+  // TODO(user): change the test when gears provides a reasonable
   // error code to check.
   var message = goog.isString(ex) ? ex : ex.message;
   return !!message && message.indexOf('database is locked') >= 0;

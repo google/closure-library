@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,6 +26,8 @@
  * The content to be split goes in the first and second DIVs, the third one
  * is for managing (and styling) the splitter handle.
  *
+*
+*
  * @see ../demos/splitpane.html
  */
 
@@ -62,10 +52,10 @@ goog.require('goog.userAgent');
 /**
  * A left/right up/down Container SplitPane.
  * Create SplitPane with two goog.ui.Component opjects to split.
- * TODO: Support minimum splitpane size.
- * TODO: Allow component change/orientation after init.
- * TODO: Support hiding either side of handle (plus handle).
- * TODO: Look at setBorderBoxSize fixes and revist borderwidth code.
+ * TODO(user): Support minimum splitpane size.
+ * TODO(user): Allow component change/orientation after init.
+ * TODO(user): Support hiding either side of handle (plus handle).
+ * TODO(user): Look at setBorderBoxSize fixes and revist borderwidth code.
  *
  * @param {goog.ui.Component} firstComponent Left or Top component.
  * @param {goog.ui.Component} secondComponent Right or Bottom component.
@@ -421,7 +411,7 @@ goog.ui.SplitPane.prototype.setInitialSize = function(size) {
 
 /**
  * Sets the SplitPane handle size.
- * TODO: Make sure this works after initialization.
+ * TODO(user): Make sure this works after initialization.
  * @param {number} size The size of the handle in pixels.
  */
 goog.ui.SplitPane.prototype.setHandleSize = function(size) {
@@ -497,12 +487,12 @@ goog.ui.SplitPane.prototype.setOrientation = function(orientation) {
     // need to be adjusted.
     if (this.isInDocument()) {
       this.setOrientationClassForHandle();
-      // TODO: Should handleSize_ and initialSize_ also be adjusted ?
+      // TODO(user): Should handleSize_ and initialSize_ also be adjusted ?
       if (goog.isNumber(this.firstComponentSize_)) {
         var splitpaneSize = goog.style.getBorderBoxSize(this.getElement());
         var ratio = isVertical ? splitpaneSize.height / splitpaneSize.width :
             splitpaneSize.width / splitpaneSize.height;
-        // TODO: Fix the behaviour for the case when the handle is
+        // TODO(user): Fix the behaviour for the case when the handle is
         // placed on either of  the edges of the split pane. Also, similar
         // behaviour is present in {@link #setSize}. Probably need to modify
         // {@link #setFirstComponentSize}.
@@ -533,7 +523,7 @@ goog.ui.SplitPane.prototype.getOrientation = function() {
 goog.ui.SplitPane.prototype.moveAndSize_ = function(element, rect) {
 
   goog.style.setPosition(element, rect.left, rect.top);
-  // TODO: Add a goog.math.Size.max call for below.
+  // TODO(user): Add a goog.math.Size.max call for below.
   goog.style.setBorderBoxSize(element,
       new goog.math.Size(Math.max(rect.width, 0), Math.max(rect.height, 0)));
 };
@@ -641,7 +631,7 @@ goog.ui.SplitPane.prototype.setFirstComponentSize = function(opt_size) {
 
 /**
  * Dummy object to work around compiler warning.
- * TODO: Fix compiler or refactor to not depend on resize()
+ * TODO(user): Fix compiler or refactor to not depend on resize()
  * @private
  * @type {Object}
  */

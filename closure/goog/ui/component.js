@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,10 @@
  * @fileoverview Abstract class for all UI components. This defines the standard
  * design pattern that all UI components should follow.
  *
+*
+*
+*
+*
  * @see ../demos/samplecomponent.html
  */
 
@@ -94,7 +86,7 @@ goog.ui.Component.EventType = {
 
   /**
    * Dispatched after the component becomes visible.
-   * NOTE: For goog.ui.Container, this actually fires before containers
+   * NOTE(user): For goog.ui.Container, this actually fires before containers
    * are shown.  Use goog.ui.Container.EventType.AFTER_SHOW if you want an event
    * that fires after a goog.ui.Container is shown.
    */
@@ -357,7 +349,7 @@ goog.ui.Component.prototype.dom_ = null;
 goog.ui.Component.prototype.inDocument_ = false;
 
 
-// TODO: Stop referring to this private field in subclasses.
+// TODO(user): Stop referring to this private field in subclasses.
 /**
  * The DOM element for the component.
  * @type {Element}
@@ -368,7 +360,7 @@ goog.ui.Component.prototype.element_ = null;
 
 /**
  * Event handler.
- * TODO: rename it to handler_ after all component subclasses in
+ * TODO(user): rename it to handler_ after all component subclasses in
  * inside Google have been cleaned up.
  * Code search: http://go/component_code_search
  * @type {goog.events.EventHandler}
@@ -952,7 +944,7 @@ goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
     }
     // Render the child into the parent at the appropriate location.  Note that
     // getChildAt(index + 1) returns undefined if inserting at the end.
-    // TODO: We should have a renderer with a renderChildAt API.
+    // TODO(user): We should have a renderer with a renderChildAt API.
     var sibling = this.getChildAt(index + 1);
     // render_() calls enterDocument() if the parent is already in the document.
     child.render_(this.getContentElement(), sibling ? sibling.element_ : null);

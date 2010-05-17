@@ -1,10 +1,5 @@
 /*
-Use of this source code is governed by an Apache 2.0 License.
-See the COPYING file for details.
-*/
-
-/*
- * Copyright 2008 Google Inc. All Rights Reserved
+ * Copyright 2008 The Closure Library Authors. All Rights Reserved.
  *
  * Use of this source code is governed by an Apache 2.0 License.
  * See the COPYING file for details.
@@ -17,8 +12,8 @@ See the COPYING file for details.
  * best to avoid using this file in extremely large, or performance
  * critical applications.
  *
-
-
+ * @author: eae@google.com (Emil A Eklund)
+ * @author: gboyer@google.com (Garrett Boyer)
  */
 
 

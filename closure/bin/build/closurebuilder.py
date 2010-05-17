@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2009 Google Inc. All Rights Reserved.
+# Copyright 2009 The Closure Library Authors. All Rights Reserved.
 
 
 """Utility for Closure Library dependency calculation.
@@ -76,7 +76,8 @@ def _GetOptionsParser():
   parser.add_option('-f',
                     '--compiler_flags',
                     dest='compiler_flags',
-                    action='store',
+                    default=[],
+                    action='append',
                     help='Additional flags to pass to the Closure compiler.')
   parser.add_option('--output_file',
                     dest='output_file',

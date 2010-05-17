@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2005 Google Inc. All Rights Reserved
+// Copyright 2005 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,6 +39,8 @@
  * key and character code use {@link goog.events.KeyHandler}.
  * </pre>
  *
+*
+*
  */
 
 goog.provide('goog.events.BrowserEvent');
@@ -257,7 +247,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
         relatedTarget = null;
       }
     }
-    // TODO: Use goog.events.EventType when it has been refactored into its
+    // TODO(user): Use goog.events.EventType when it has been refactored into its
     // own file.
   } else if (type == 'mouseover') {
     relatedTarget = e.fromElement;

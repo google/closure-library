@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2005 Google Inc. All Rights Reserved
+// Copyright 2005 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,7 +34,10 @@
  * goog.events.removeAll();
  * </pre>
  *
+*
+*
  *                                            in IE and event object patching]
+*
  *
  * @supported IE6+, FF1.5+, WebKit, Opera.
  * @see ../demos/events.html
@@ -120,6 +111,7 @@ goog.events.onString_ = 'on';
  */
 goog.events.onStringMap_ = {};
 
+
 /**
  * Separator used to split up the various parts of an event key, to help avoid
  * the possibilities of collisions.
@@ -127,6 +119,14 @@ goog.events.onStringMap_ = {};
  * @private
  */
 goog.events.keySeparator_ = '_';
+
+
+/**
+ * Whether the browser natively supports full W3C event propagation.
+ * @type {boolean}
+ * @private
+ */
+goog.events.requiresSyntheticEventPropagation_;
 
 
 /**
@@ -357,7 +357,7 @@ goog.events.unlistenByKey = function(key) {
   if (src.removeEventListener) {
     // EventTarget calls unlisten so we need to ensure that the source is not
     // an event target to prevent re-entry.
-    // TODO: What is this goog.global for? Why would anyone listen to
+    // TODO(user): What is this goog.global for? Why would anyone listen to
     // events on the [[Global]] object? Is it supposed to be window? Why would
     // we not want to allow removing event listeners on the window?
     if (src == goog.global || !src.customEvent_) {
@@ -663,7 +663,7 @@ goog.events.expose = function(e) {
  * Constants for event names.
  * @enum {string}
  */
-// TODO: Move to its own file.
+// TODO(user): Move to its own file.
 goog.events.EventType = {
   // Mouse events
   CLICK: 'click',
@@ -684,7 +684,7 @@ goog.events.EventType = {
   BLUR: 'blur',
   FOCUS: 'focus',
   DEACTIVATE: 'deactivate', // IE only
-  // TODO: Test these. I experienced problems with DOMFocusIn, the event
+  // TODO(user): Test these. I experienced problems with DOMFocusIn, the event
   // just wasn't firing.
   FOCUSIN: goog.userAgent.IE ? 'focusin' : 'DOMFocusIn',
   FOCUSOUT: goog.userAgent.IE ? 'focusout' : 'DOMFocusOut',
@@ -694,9 +694,15 @@ goog.events.EventType = {
   SELECT: 'select',
   SUBMIT: 'submit',
 
+  // Drag and drop
+  DRAGSTART: 'dragstart',
+  DRAGENTER: 'dragenter',
+  DRAGOVER: 'dragover',
+  DRAGLEAVE: 'dragleave',
+  DROP: 'drop',
+
   // Misc
   CONTEXTMENU: 'contextmenu',
-  DRAGSTART: 'dragstart',
   ERROR: 'error',
   HASHCHANGE: 'hashchange',
   HELP: 'help',
@@ -965,7 +971,7 @@ goog.events.handleBrowserEvent_ = function(key, opt_evt) {
   }
   map = map[type];
   var retval, targetsMap;
-  if (goog.userAgent.IE) {
+  if (goog.events.synthesizeEventPropagation_()) {
     var ieEvent = opt_evt ||
         /** @type {Event} */ (goog.getObjectByName('window.event'));
 
@@ -1098,7 +1104,7 @@ goog.events.markIeEvent_ = function(e) {
  * @param {Event} e  The IE browser event.
  * @return {boolean} True if the event object has been marked.
  * @private
- * @notypecheck TODO: Fix this.
+ * @notypecheck TODO(nicksantos): Fix this.
  */
 goog.events.isMarkedIeEvent_ = function(e) {
   return e.keyCode < 0 || e.returnValue != undefined;
@@ -1121,4 +1127,24 @@ goog.events.uniqueIdCounter_ = 0;
  */
 goog.events.getUniqueId = function(identifier) {
   return identifier + '_' + goog.events.uniqueIdCounter_++;
+};
+
+
+/**
+ * Returns whether we should synthesize the W3C event propagation.  Versions of
+ * IE, up to IE9, don't support addEventListener or the capture phase.
+ * @return {boolean} Whether to use IE's proprietary event model.
+ * @private
+ */
+goog.events.synthesizeEventPropagation_ = function() {
+  if (goog.events.requiresSyntheticEventPropagation_ === undefined) {
+    // TODO(user): goog.events is used in a non DOM context, even though it
+    // couldn't be used with DOM events.  We therefore assume that if we
+    // got here that goog.global===window to keep the compiler happy.  We can't
+    // use navigator.userAgent yet because the IE9 platform preview still
+    // reports as MSIE 8.0.
+    goog.events.requiresSyntheticEventPropagation_ =
+        goog.userAgent.IE && !goog.global['addEventListener'];
+  }
+  return goog.events.requiresSyntheticEventPropagation_;
 };

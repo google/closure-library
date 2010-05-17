@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,6 +24,7 @@
  *
  * Based on goog.ui.PopupColorPicker (popupcolorpicker.js).
  *
+*
  * @see ../../demos/popupemojipicker.html
  */
 
@@ -168,7 +157,7 @@ goog.ui.emoji.PopupEmojiPicker.prototype.setDelayedLoad =
 goog.ui.emoji.PopupEmojiPicker.prototype.setFocusable = function(focusable) {
   this.focusable_ = focusable;
   if (this.emojiPicker_) {
-    // TODO: In next revision sort the behavior of passing state to
+    // TODO(user): In next revision sort the behavior of passing state to
     // children correctly
     this.emojiPicker_.setFocusable(focusable);
   }
@@ -285,7 +274,7 @@ goog.ui.emoji.PopupEmojiPicker.prototype.disposeInternal = function() {
  * @param {Element} element The element to attach to.
  */
 goog.ui.emoji.PopupEmojiPicker.prototype.attach = function(element) {
-  // TODO: standardize event type, popups should use MOUSEDOWN, but
+  // TODO(user): standardize event type, popups should use MOUSEDOWN, but
   // currently apps are using click.
   this.getHandler().listen(element, goog.events.EventType.CLICK, this.show_);
 };

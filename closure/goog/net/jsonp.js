@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,6 +29,9 @@
  * the Google Maps API, which is IE 6.0+, Firefox 0.8+, Safari 1.2.4+,
  * Netscape 7.1+, Mozilla 1.4+, Opera 8.02+.
  *
+*
+*
+*
  */
 
 goog.provide('goog.net.Jsonp');
@@ -220,7 +211,7 @@ goog.net.Jsonp.prototype.send = function(payload,
     'type': 'text/javascript',
     'id': id,
     'charset': 'UTF-8',
-    // NOTE: Safari never loads the script if we don't set
+    // NOTE(user): Safari never loads the script if we don't set
     // the src attribute before appending.
     'src': uri.toString()
   });
@@ -358,7 +349,7 @@ goog.net.Jsonp.cleanup_ = function(id, scriptNode, deleteReplyHandler) {
  */
 goog.net.Jsonp.addPayloadToUri_ = function(payload, uri) {
   for (var name in payload) {
-    // NOTE: Safari/1.3 doesn't have hasOwnProperty(). In that
+    // NOTE(user): Safari/1.3 doesn't have hasOwnProperty(). In that
     // case, we iterate over all properties as a very lame workaround.
     if (!payload.hasOwnProperty || payload.hasOwnProperty(name)) {
       uri.setParameterValues(name, payload[name]);

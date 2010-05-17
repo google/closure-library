@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,6 +17,7 @@
  * dependencies this file has on other closure classes as any dependency it
  * takes won't be able to use the logging infrastructure.
  *
+*
  */
 
 goog.provide('goog.debug.LogRecord');
@@ -47,44 +36,51 @@ goog.provide('goog.debug.LogRecord');
  */
 goog.debug.LogRecord = function(level, msg, loggerName,
       opt_time, opt_sequenceNumber) {
-  /**
-   * Sequence number for the LogRecord. Each record has a unique sequence number
-   * that is greater than all log records created before it.
-   * @type {number}
-   * @private
-   */
-  this.sequenceNumber_ = typeof opt_sequenceNumber == 'number' ?
-      opt_sequenceNumber : goog.debug.LogRecord.nextSequenceNumber_++;
-
-  /**
-   * Time the LogRecord was created.
-   * @type {number}
-   * @private
-   */
-  this.time_ = opt_time || goog.now();
-
-  /**
-   * Level of the LogRecord
-   * @type {goog.debug.Logger.Level}
-   * @private
-   */
-  this.level_ = level;
-
-  /**
-   * Message associated with the record
-   * @type {string}
-   * @private
-   */
-  this.msg_ = msg;
-
-
-  /**
-   * Name of the logger that created the record.
-   * @type {string}
-   * @private
-   */
-  this.loggerName_ = loggerName;
+  this.reset(level, msg, loggerName, opt_time, opt_sequenceNumber);
 };
+
+
+/**
+ * Time the LogRecord was created.
+ * @type {number}
+ * @private
+ */
+goog.debug.LogRecord.prototype.time_;
+
+
+/**
+ * Level of the LogRecord
+ * @type {goog.debug.Logger.Level}
+ * @private
+ */
+goog.debug.LogRecord.prototype.level_;
+
+
+/**
+ * Message associated with the record
+ * @type {string}
+ * @private
+ */
+goog.debug.LogRecord.prototype.msg_;
+
+
+/**
+ * Name of the logger that created the record.
+ * @type {string}
+ * @private
+ */
+goog.debug.LogRecord.prototype.loggerName_;
+
+
+
+/**
+ * Sequence number for the LogRecord. Each record has a unique sequence number
+ * that is greater than all log records created before it.
+ * @type {number}
+ * @private
+ */
+goog.debug.LogRecord.prototype.sequenceNumber_ = 0;
+
 
 /**
  * Exception associated with the record
@@ -92,6 +88,7 @@ goog.debug.LogRecord = function(level, msg, loggerName,
  * @private
  */
 goog.debug.LogRecord.prototype.exception_ = null;
+
 
 /**
  * Exception text associated with the record
@@ -102,12 +99,44 @@ goog.debug.LogRecord.prototype.exceptionText_ = null;
 
 
 /**
+ * @define {boolean} Whether to enable log sequence numbers.
+ */
+goog.debug.LogRecord.ENABLE_SEQUENCE_NUMBERS = true;
+
+
+/**
  * A sequence counter for assigning increasing sequence numbers to LogRecord
  * objects.
  * @type {number}
  * @private
  */
 goog.debug.LogRecord.nextSequenceNumber_ = 0;
+
+
+/**
+ * Sets all fields of the log record.
+ * @param {goog.debug.Logger.Level} level One of the level identifiers.
+ * @param {string} msg The string message.
+ * @param {string} loggerName The name of the source logger.
+ * @param {number=} opt_time Time this log record was created if other than now.
+ *     If 0, we use #goog.now.
+ * @param {number=} opt_sequenceNumber Sequence number of this log record. This
+ *     should only be passed in when restoring a log record from persistence.
+ */
+goog.debug.LogRecord.prototype.reset = function(level, msg, loggerName,
+      opt_time, opt_sequenceNumber) {
+  if (goog.debug.LogRecord.ENABLE_SEQUENCE_NUMBERS) {
+    this.sequenceNumber_ = typeof opt_sequenceNumber == 'number' ?
+        opt_sequenceNumber : goog.debug.LogRecord.nextSequenceNumber_++;
+  }
+
+  this.time_ = opt_time || goog.now();
+  this.level_ = level;
+  this.msg_ = msg;
+  this.loggerName_ = loggerName;
+  delete this.exception_;
+  delete this.exceptionText_;
+};
 
 
 /**
@@ -239,3 +268,4 @@ goog.debug.LogRecord.prototype.setMillis = function(time) {
 goog.debug.LogRecord.prototype.getSequenceNumber = function() {
   return this.sequenceNumber_;
 };
+

@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,10 @@
  * @fileoverview Definition of the goog.ui.tree.TreeControl class, which
  * provides a way to view a hierarchical set of data.
  *
+*
+*
+*
+*
  *
  * This is a based on the webfx tree control. It since been updated to add
  * typeahead support, as well as accessibility support using ARIA framework.
@@ -146,14 +138,6 @@ goog.ui.tree.TreeControl.prototype.focused_ = false;
  * @private
  */
 goog.ui.tree.TreeControl.prototype.focusedNode_ = null;
-
-
-/**
- * Whether redrawing is suspended.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.suspendRedraw_ = false;
 
 
 /**
@@ -659,26 +643,6 @@ goog.ui.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
 
 
 /**
- * Sets whether to suspend redraw. This is a performance optimization to allow
- * insertion of many nodes without incremental redrawing.
- * @param {boolean} b Whether to suspend redraw.
- */
-goog.ui.tree.TreeControl.prototype.setSuspendRedraw = function(b) {
-  this.suspendRedraw = b;
-};
-
-
-/**
- * Gets whether to suspend redraw. This is a performance optimization to allow
- * insertion of many nodes without incremental redrawing.
- * @return {boolean} Whether redraw is suspended.
- */
-goog.ui.tree.TreeControl.prototype.getSuspendRedraw = function() {
-  return this.suspendRedraw;
-};
-
-
-/**
  * Creates a new tree node using the same config as the root.
  * @param {string} html The html content of the node label.
  * @return {goog.ui.tree.TreeNode} The new item.
@@ -686,7 +650,7 @@ goog.ui.tree.TreeControl.prototype.getSuspendRedraw = function() {
 goog.ui.tree.TreeControl.prototype.createNode = function(html) {
   // Some projects call createNode without arguments which causes failure.
   // See http://goto/misuse-createnode
-  // TODO: Fix them and remove the html || '' workaround.
+  // TODO(user): Fix them and remove the html || '' workaround.
   return new goog.ui.tree.TreeNode(html || '', this.getConfig(),
       this.getDomHelper());
 };

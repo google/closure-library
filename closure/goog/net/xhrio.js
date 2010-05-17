@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -44,8 +32,9 @@
  *
  * Tested = IE6, FF1.5, Safari, Opera 8.5
  *
- * TODO: Error cases aren't playing nicely in Safari.
+ * TODO(user): Error cases aren't playing nicely in Safari.
  *
+*
  */
 
 
@@ -621,14 +610,14 @@ goog.net.XhrIo.prototype.onReadyStateChangeHelper_ = function() {
   }
 
   if (typeof goog == 'undefined') {
-    // NOTE: If goog is undefined then the callback has occurred as the
+    // NOTE(user): If goog is undefined then the callback has occurred as the
     // application is unloading and will error.  Thus we let it silently fail.
 
   } else if (
       this.xhrOptions_[goog.net.XmlHttp.OptionType.LOCAL_REQUEST_ERROR] &&
       this.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE &&
       this.getStatus() == 2) {
-    // NOTE: In IE if send() errors on a *local* request the readystate
+    // NOTE(user): In IE if send() errors on a *local* request the readystate
     // is still changed to COMPLETE.  We need to ignore it and allow the
     // try/catch around send() to pick up the error.
     this.logger_.fine(this.formatMsg_(
@@ -706,7 +695,7 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
     goog.net.xhrMonitor.markXhrClosed(xhr);
 
     try {
-      // NOTE: Not nullifying in FireFox can still leak if the callbacks
+      // NOTE(user): Not nullifying in FireFox can still leak if the callbacks
       // are defined in the same scope as the instance of XhrIo. But, IE doesn't
       // allow you to set the onreadystatechange to NULL so nullFunction is
       // used.

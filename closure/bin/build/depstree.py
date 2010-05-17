@@ -1,4 +1,4 @@
-# Copyright 2009 Google Inc. All Rights Reserved.
+# Copyright 2009 The Closure Library Authors. All Rights Reserved.
 
 
 """Class to represent a full Closure Library dependency tree.

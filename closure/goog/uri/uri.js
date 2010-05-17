@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,6 +27,10 @@
  * internal representation is now of un-encoded parts, this will change the
  * behavior slightly.
  *
+*
+*
+*
+*
  */
 
 goog.provide('goog.Uri');
@@ -622,7 +614,7 @@ goog.Uri.prototype.setParameterValues = function(key, values) {
     values = [String(values)];
   }
 
-  // TODO: This cast shouldn't be necessary.
+  // TODO(nicksantos): This cast shouldn't be necessary.
   this.queryData_.setValues(key, /** @type {Array} */ (values));
 
   return this;
@@ -1013,7 +1005,7 @@ goog.Uri.reDisallowedInFragment_ = /#/g;
  */
 goog.Uri.haveSameDomain = function(uri1String, uri2String) {
   // Differs from goog.uri.utils.haveSameDomain, since this ignores scheme.
-  // TODO: Have this just call goog.uri.util.haveSameDomain.
+  // TODO(user): Have this just call goog.uri.util.haveSameDomain.
   var pieces1 = goog.uri.utils.split(uri1String);
   var pieces2 = goog.uri.utils.split(uri2String);
   return pieces1[goog.uri.utils.ComponentIndex.DOMAIN] ==
@@ -1274,7 +1266,7 @@ goog.Uri.QueryData.prototype.containsKey = function(key) {
  * @return {boolean} Whether there is a parameter with the given value.
  */
 goog.Uri.QueryData.prototype.containsValue = function(value) {
-  // NOTE: This solution goes through all the params even if it was the
+  // NOTE(user): This solution goes through all the params even if it was the
   // first param. We can get around this by not reusing code or by switching to
   // iterators.
   var vals = this.getValues();

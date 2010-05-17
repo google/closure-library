@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved.
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,6 +21,7 @@
  * and merging and splitting cells.
  *
  * @supported IE6+, WebKit 525+, Firefox 2+.
+*
  */
 
 goog.provide('goog.editor.Table');
@@ -81,7 +70,7 @@ goog.editor.Table.prototype.logger_ =
  * DOM structure is modified. Currently this means that the all existing
  * information is discarded and re-read from the DOM.
  */
-// TODO: support partial refresh to save cost of full update
+// TODO(user): support partial refresh to save cost of full update
 // every time there is a change to the DOM.
 goog.editor.Table.prototype.refresh = function() {
   var rows = this.rows = [];
@@ -116,7 +105,7 @@ goog.editor.Table.prototype.refresh = function() {
         // Create TableRow objects in this.rows as needed.
         var cellRow = rows[cellRowNum];
         if (!cellRow) {
-          // TODO: try to avoid second trs[] lookup.
+          // TODO(user): try to avoid second trs[] lookup.
           rows.push(
               cellRow = new goog.editor.TableRow(trs[cellRowNum], cellRowNum));
         }
@@ -209,7 +198,7 @@ goog.editor.Table.prototype.insertRow = function(opt_rowIndex) {
  *     to populate the new column.
  */
 goog.editor.Table.prototype.insertColumn = function(opt_colIndex) {
-  // TODO: set column widths in a way that makes sense.
+  // TODO(user): set column widths in a way that makes sense.
   var colIndex = goog.isDefAndNotNull(opt_colIndex) ? opt_colIndex :
                  (this.rows[0] && this.rows[0].columns.length) ||
                  0;
@@ -222,7 +211,7 @@ goog.editor.Table.prototype.insertColumn = function(opt_colIndex) {
       rowNum += existingCell.rowSpan - 1;
     } else {
       var newTd = this.createEmptyTd();
-      // TODO: figure out a way to intelligently size new columns.
+      // TODO(user): figure out a way to intelligently size new columns.
       newTd.style.width = goog.editor.Table.OPTIMUM_EMPTY_CELL_WIDTH + 'px';
       this.insertCellElement(newTd, rowNum, colIndex);
       newTds.push(newTd);
@@ -295,7 +284,7 @@ goog.editor.Table.prototype.removeColumn = function(colIndex) {
  */
 goog.editor.Table.prototype.mergeCells =
     function(startRowIndex, startColIndex, endRowIndex, endColIndex) {
-  // TODO: take a single goog.math.Rect parameter instead?
+  // TODO(user): take a single goog.math.Rect parameter instead?
   var cells = [];
   var cell;
   if (startRowIndex == endRowIndex && startColIndex == endColIndex) {
@@ -315,7 +304,7 @@ goog.editor.Table.prototype.mergeCells =
             'extends outside the supplied rectangle.');
         return false;
       }
-      // TODO: this is somewhat inefficient, as we will add
+      // TODO(user): this is somewhat inefficient, as we will add
       // a reference for a cell for each position, even if it's a single
       // cell with row/colspan.
       cells.push(cell);
@@ -348,7 +337,7 @@ goog.editor.Table.prototype.mergeCells =
   targetCell.setRowSpan((endRowIndex - startRowIndex) + 1);
   if (endColIndex > startColIndex) {
     // Clear width on target cell.
-    // TODO: instead of clearing width, calculate width
+    // TODO(user): instead of clearing width, calculate width
     // based on width of input cells
     targetTd.removeAttribute('width');
     targetTd.style.width = null;
@@ -366,7 +355,7 @@ goog.editor.Table.prototype.mergeCells =
  * @return {Array.<Element>} Array of new cell elements created by splitting
  *     the cell.
  */
-// TODO: support splitting only horizontally or vertically,
+// TODO(user): support splitting only horizontally or vertically,
 // support splitting cells that aren't already row/colspanned.
 goog.editor.Table.prototype.splitCell = function(rowIndex, colIndex) {
   var row = this.rows[rowIndex];
@@ -417,7 +406,7 @@ goog.editor.Table.prototype.insertCellElement =
  * @return {Element} a new TD element.
  */
 goog.editor.Table.prototype.createEmptyTd = function() {
-  // TODO: more cross-browser testing to determine best
+  // TODO(user): more cross-browser testing to determine best
   // and least annoying filler content.
   return this.dom_.$dom(goog.dom.TagName.TD, {}, goog.string.Unicode.NBSP);
 };
@@ -535,7 +524,7 @@ goog.editor.Table.DEFAULT_BORDER_COLOR = '#888';
  */
 goog.editor.Table.createDomTable =
     function(doc, columns, rows, opt_tableStyle) {
-  // TODO: define formatting properties as constants,
+  // TODO(user): define formatting properties as constants,
   // make separate formatTable() function
   var style = {
     borderWidth: '1',

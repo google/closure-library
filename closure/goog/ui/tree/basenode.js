@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,9 @@
 /**
  * @fileoverview Definition of the goog.ui.tree.BaseNode class.
  *
+*
+*
+*
  *
  * This is a based on the webfx tree control. It since been updated to add
  * typeahead support, as well as accessibility support using ARIA framework.
@@ -44,6 +35,7 @@ goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
+
 
 
 /**
@@ -301,7 +293,7 @@ goog.ui.tree.BaseNode.prototype.addChildAt = function(child, index,
 
   child.setDepth_(this.getDepth() + 1);
 
-  if (this.getElement() && (!tree || !tree.getSuspendRedraw())) {
+  if (this.getElement()) {
     this.updateExpandIcon();
     if (this.getExpanded()) {
       var el = this.getChildrenElement();
@@ -401,7 +393,7 @@ goog.ui.tree.BaseNode.prototype.removeChild =
     // Tell the tree control that this node is now removed.
     tree.removeNode(this);
 
-    if (this.isInDocument() && !tree.getSuspendRedraw()) {
+    if (this.isInDocument()) {
       var el = this.getChildrenElement();
 
       if (child.isInDocument()) {
@@ -1272,8 +1264,6 @@ goog.ui.tree.BaseNode.prototype.updateRow = function() {
  * Updates the expand icon of the node.
  */
 goog.ui.tree.BaseNode.prototype.updateExpandIcon = function() {
-  var t = this.getTree();
-  if (t.getSuspendRedraw()) return;
   var img = this.getExpandIconElement();
   if (img) {
     img.className = this.getExpandIconClass();
@@ -1289,8 +1279,6 @@ goog.ui.tree.BaseNode.prototype.updateExpandIcon = function() {
  * Updates the icon of the node.
  */
 goog.ui.tree.BaseNode.prototype.updateIcon = function() {
-  var t = this.getTree();
-  if (t.getSuspendRedraw()) return;
   var img = this.getIconElement();
   if (img) {
     img.className = this.getCalculatedIconClass();

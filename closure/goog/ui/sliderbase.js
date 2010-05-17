@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -48,6 +36,8 @@
  * - decorateInternal
  * - getCssClass
  *
+*
+*
  */
 
 goog.provide('goog.ui.SliderBase');
@@ -59,6 +49,7 @@ goog.require('goog.dom.a11y');
 goog.require('goog.dom.a11y.Role');
 goog.require('goog.dom.a11y.State');
 goog.require('goog.dom.classes');
+goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
@@ -86,8 +77,9 @@ goog.require('goog.ui.RangeModel');
 goog.ui.SliderBase = function(opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
   this.rangeModel = new goog.ui.RangeModel;
-  this.getHandler().listen(this.rangeModel, goog.ui.Component.EventType.CHANGE,
-      this.handleRangeModelChange);
+  // Don't use getHandler because it gets cleared in exitDocument.
+  goog.events.listen(this.rangeModel, goog.ui.Component.EventType.CHANGE,
+      this.handleRangeModelChange, false, this);
 };
 goog.inherits(goog.ui.SliderBase, goog.ui.Component);
 

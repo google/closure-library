@@ -1,21 +1,7 @@
 <!DOCTYPE html>
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <html>
 <!--
-Copyright 2008 Google Inc. All Rights Reserved
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
@@ -514,6 +500,26 @@ See the COPYING file for details.
     keyHandler = new goog.events.KeyHandler(target);
     assertEquals(target, keyHandler.getElement());
   }
+
+  function testDetach() {
+    var target = goog.dom.createDom('div');
+    var keyHandler = new goog.events.KeyHandler(target);
+    assertEquals(target, keyHandler.getElement());
+
+    fireKeyDown(keyHandler, 0, 63, null, false, false, true);
+    fireKeyPress(keyHandler, 0, 63, null, false, false, true);
+    keyHandler.detach();
+
+    assertNull(keyHandler.getElement());
+    // All listeners should be cleared.
+    assertNull(keyHandler.keyDownKey_);
+    assertNull(keyHandler.keyPressKey_);
+    assertNull(keyHandler.keyUpKey_);
+    // All key related state should be cleared.
+    assertEquals('Last key should be -1', -1, keyHandler.lastKey_);
+    assertEquals('keycode should be -1', -1, keyHandler.keyCode_);
+  }
+
 
   function fireKeyDown(keyHandler, keyCode, opt_charCode, opt_keyIdentifier,
       opt_ctrlKey, opt_altKey, opt_shiftKey) {

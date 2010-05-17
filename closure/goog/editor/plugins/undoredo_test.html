@@ -1,26 +1,12 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 goog.editor.plugins<!DOCTYPE html>
 <!--
   All Rights Reserved.
 
-
+  @author ajp@google.com (Andy Perelson)
 -->
 <html>
 <!--
-Copyright 2008 Google Inc. All Rights Reserved
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
@@ -108,7 +94,7 @@ function tearDown() {
   clock.dispose();
   undoPlugin.dispose();
 
-  // NOTE: I think IE is blowing up on this call because
+  // NOTE(nicksantos): I think IE is blowing up on this call because
   // it is lame. It manifests its lameness by throwing an exception.
   // Kudos to XT for helping me to figure this out.
   try {
@@ -305,7 +291,7 @@ function testUpdateCurrentState_() {
   undoPlugin.updateCurrentState_(editableField);
   assertEquals(currentState, undoPlugin.currentStates_[fieldHashCode]);
 
-  // NOTE: Because there is already a current state, this setHtml will add
+  // NOTE(user): Because there is already a current state, this setHtml will add
   // a state to the undo stack.
   editableField.setHtml(false, '<div>a</div>');
   // Select some text so we have a valid selection that gets saved in the

@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,7 @@
  * @fileoverview Interface definitions for working with ranges
  * in HTML documents.
  *
+ * @author robbyw@google.com (Robby Walker)
  */
 
 
@@ -96,7 +85,7 @@ goog.dom.AbstractRange.getBrowserSelectionForWindow = function(win) {
         // in a different domain, IE will throw an exception.
         return null;
       }
-      // TODO Sometimes IE 6 returns a selection instance
+      // TODO(user|robbyw) Sometimes IE 6 returns a selection instance
       // when there is no selection.  This object has a 'type' property equals
       // to 'None' and a typeDetail property bound to undefined. Ideally this
       // function should not return this instance.

@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,8 @@
 /**
  * @fileoverview Plugin to handle Remove Formatting.
  *
+*
+*
  */
 
 goog.provide('goog.editor.plugins.RemoveFormatting');
@@ -189,7 +179,7 @@ goog.editor.plugins.RemoveFormatting.getTableAncestor_ = function(nodeToCheck) {
  * Replaces the contents of the selection with html. Does its best to maintain
  * the original selection. Also does its best to result in a valid DOM.
  *
- * TODO: See if there's any way to make this work on Ranges, and then
+ * TODO(user): See if there's any way to make this work on Ranges, and then
  * move it into goog.editor.range. The Firefox implementation uses execCommand
  * on the document, so must work on the actual selection.
  *
@@ -250,7 +240,7 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
     var parent = this.fieldObject.getRange().getContainerElement();
     if (parent.nodeType == goog.dom.NodeType.TEXT) {
       // Opera sometimes returns a text node here.
-      // TODO: perhaps we should modify getParentContainer?
+      // TODO(user): perhaps we should modify getParentContainer?
       parent = parent.parentNode;
     }
 
@@ -311,7 +301,7 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
 /**
  * Gets the html inside the selection to send off for further processing.
  *
- * TODO: Make this general so that it can be moved into
+ * TODO(user): Make this general so that it can be moved into
  * goog.editor.range.  The main reason it can't be moved is becuase we need to
  * get the range before we do the execCommand and continue to operate on that
  * same range (reasons are documented above).
@@ -676,7 +666,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
           sb.push("'>");
           continue;
 
-        // TODO: case 'EMBED': case 'OBJECT'
+        // TODO(user): case 'EMBED': case 'OBJECT'
 
         case goog.dom.TagName.TD:
           // Don't add a space for the first TD, we only want spaces to
@@ -733,7 +723,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
  * Handle per node special processing if neccessary. If this function returns
  * null then standard cleanup is applied. Otherwise this node and all children
  * are assumed to be cleaned.
- * NOTE: If an alternate RemoveFormatting processor is provided
+ * NOTE(user): If an alternate RemoveFormatting processor is provided
  * (setRemoveFormattingFunc()), this will no longer work.
  * @param {Element} node The node to clean.
  * @return {?string} The HTML strig representation of the cleaned data.

@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,6 +17,9 @@
  *
  * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
  *
+ * @author robbyw@google.com (Robby Walker)
+*
+*
  */
 
 
@@ -129,30 +120,23 @@ goog.dom.browserrange.AbstractRange.prototype.compareBrowserRangeEndpoints =
 
 /**
  * Tests if this range contains the given range.
- * @param {goog.dom.browserrange.AbstractRange} range The range to test.
+ * @param {goog.dom.browserrange.AbstractRange} abstractRange The range to test.
  * @param {boolean=} opt_allowPartial If not set or false, the range must be
  *     entirely contained in the selection for this function to return true.
  * @return {boolean} Whether this range contains the given range.
  */
-goog.dom.browserrange.AbstractRange.prototype.containsRange = function(range,
-    opt_allowPartial) {
-  return this.containsBrowserRange(range.getBrowserRange(), opt_allowPartial);
-};
+goog.dom.browserrange.AbstractRange.prototype.containsRange =
+    function(abstractRange, opt_allowPartial) {
+  // IE sometimes misreports the boundaries for collapsed ranges. So if the
+  // other range is collapsed, make sure the whole range is contained. This is
+  // logically equivalent, and works around IE's bug.
+  var checkPartial = opt_allowPartial && !abstractRange.isCollapsed();
 
-
-/**
- * Tests if this range contains any or all of the given browser range.
- * @param {Range|TextRange} range The browser native range to test.
- * @param {boolean=} opt_allowPartial If not set or false, the range must be
- *     entirely contained in the selection for this function to return true.
- * @return {boolean} Whether this range contains the given browser range.
- */
-goog.dom.browserrange.AbstractRange.prototype.containsBrowserRange =
-    function(range, opt_allowPartial) {
+  var range = abstractRange.getBrowserRange();
   var start = goog.dom.RangeEndpoint.START, end = goog.dom.RangeEndpoint.END;
   /** {@preserveTry} */
   try {
-    if (opt_allowPartial) {
+    if (checkPartial) {
       // There are two ways to not overlap.  Being before, and being after.
       // Before is represented by this.end before range.start: comparison < 0.
       // After is represented by this.start after range.end: comparison > 0.
@@ -163,7 +147,7 @@ goog.dom.browserrange.AbstractRange.prototype.containsBrowserRange =
     } else {
       // Return true if this range bounds the parameter range from both sides.
       return this.compareBrowserRangeEndpoints(range, end, end) >= 0 &&
-             this.compareBrowserRangeEndpoints(range, start, start) <= 0;
+          this.compareBrowserRangeEndpoints(range, start, start) <= 0;
     }
   } catch (e) {
     if (!goog.userAgent.IE) {

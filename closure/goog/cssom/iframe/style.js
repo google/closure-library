@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -56,6 +44,8 @@
  * body .highlighted { background-color: yellow; }
  * </p>
  *
+*
+*
  */
 
 
@@ -221,7 +211,7 @@ goog.cssom.iframe.style.CssRuleSet_.prototype.clone = function() {
 goog.cssom.iframe.style.CssRuleSet_.prototype.setDeclarationTextFromObject =
     function(sourceObject, opt_important) {
   var stringParts = [];
-  // TODO: for ... in is costly in IE6 (extra garbage collection).
+  // TODO(user): for ... in is costly in IE6 (extra garbage collection).
   for (var prop in sourceObject) {
     var value = sourceObject[prop];
     if (value) {
@@ -990,7 +980,7 @@ goog.cssom.iframe.style.getBackgroundContext = function(element) {
           var units = positionValueParts[3];
           // This only attempts to handle pixel values for now (plus
           // '0anything', which is equivalent to 0px).
-          // TODO Convert non-pixel values to pixels when possible.
+          // TODO(user) Convert non-pixel values to pixels when possible.
           if (value == 0 || units == 'px') {
             value -= (coordinate == 'X' ?
                       relativePosition.x : relativePosition.y);

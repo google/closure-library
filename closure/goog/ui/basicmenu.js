@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,6 +20,8 @@
  * goog.ui.PopupMenu, and if you need submenus goog.ui.SubMenu.
  *
  *
+*
+*
  */
 
 goog.provide('goog.ui.BasicMenu');
@@ -415,7 +405,7 @@ goog.ui.BasicMenu.prototype.setSelectedItem = function(arg) {
   }
 
   if (el) {
-  // TODO: var item declared earlier
+  // TODO(user): var item declared earlier
     item = this.getItemForElement_(el);
     if (item.hasSubmenu()) {
       item.openSubmenu();
@@ -678,11 +668,7 @@ goog.ui.BasicMenu.prototype.onShow_ = function() {
   this.setSelectedItem(null);
 
   var rtl = goog.style.isRightToLeft(this.element_);
-  if (rtl) {
-    goog.dom.classes.add(this.element_, 'goog-rtl');
-  } else {
-    goog.dom.classes.remove(this.element_, 'goog-rtl');
-  }
+  goog.dom.classes.enable(this.element_, goog.getCssName('goog-rtl'), rtl);
 
   if (!this.parentMenu_) {
     this.element_.focus();
@@ -838,8 +824,10 @@ goog.ui.BasicMenu.Item.prototype.create = function() {
   }
   var leftArrow, rightArrow;
   if (this.submenu_) {
-    rightArrow = goog.dom.createDom('span', 'goog-menu-arrow-right', '\u25b6');
-    leftArrow = goog.dom.createDom('span', 'goog-menu-arrow-left', '\u25c0');
+    rightArrow = goog.dom.createDom('span',
+        goog.getCssName('goog-menu-arrow-right'), '\u25b6');
+    leftArrow = goog.dom.createDom('span',
+        goog.getCssName('goog-menu-arrow-left'), '\u25c0');
   }
 
   this.element_ = goog.dom.createDom('div', this.menu_.getItemClassName(),

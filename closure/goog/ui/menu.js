@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,10 +33,11 @@
  * menu.decorate(goog.dom.getElement('menu'));
  *
  * TESTED=FireFox 2.0, IE6, Opera 9, Chrome.
- * TODO: Key handling is flaky in Opera and Chrome
- * TODO: Rename all references of "item" to child since menu is
+ * TODO(user): Key handling is flaky in Opera and Chrome
+ * TODO(user): Rename all references of "item" to child since menu is
  * essentially very generic and could, in theory, host a date or color picker.
  *
+*
  * @see ../demos/menu.html
  * @see ../demos/menus.html
  */
@@ -70,7 +59,7 @@ goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.MenuSeparator');
 
 
-// TODO: Reverse constructor argument order for consistency.
+// TODO(robbyw): Reverse constructor argument order for consistency.
 /**
  * A basic menu class.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
@@ -91,7 +80,7 @@ goog.ui.Menu = function(opt_domHelper, opt_renderer) {
 goog.inherits(goog.ui.Menu, goog.ui.Container);
 
 
-// TODO: Remove this and all references to it.
+// TODO(robbyw): Remove this and all references to it.
 // Please ensure that BEFORE_SHOW behavior is not disrupted as a result.
 /**
  * Event types dispatched by the menu.
@@ -113,7 +102,7 @@ goog.ui.Menu.EventType = {
 };
 
 
-// TODO: Remove this and all references to it.
+// TODO(robbyw): Remove this and all references to it.
 /**
  * CSS class for menus.
  * @type {string}
@@ -255,7 +244,7 @@ goog.ui.Menu.prototype.getItemCount = function() {
  * @deprecated Use getChildAt, forEachChild, and getChildCount.
  */
 goog.ui.Menu.prototype.getItems = function() {
-  // TODO: Remove reference to getItems and instead use getChildAt,
+  // TODO(user): Remove reference to getItems and instead use getChildAt,
   // forEachChild, and getChildCount
   return this.children_ || [];
 };
@@ -267,7 +256,7 @@ goog.ui.Menu.prototype.getItems = function() {
  * @param {number=} opt_y Top position.
  */
 goog.ui.Menu.prototype.setPosition = function(x, opt_y) {
-  // NOTE: It is necessary to temporarily set the display from none, so
+  // NOTE(user): It is necessary to temporarily set the display from none, so
   // that the position gets set correctly.
   var visible = this.isVisible();
   if (!visible) {

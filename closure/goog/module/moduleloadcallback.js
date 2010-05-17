@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,10 @@
  * @fileoverview A simple callback mechanism for notification about module
  * loads. Should be considered package-private to goog.module.
  *
+*
+*
+*
+*
  */
 
 goog.provide('goog.module.ModuleLoadCallback');
@@ -71,7 +63,7 @@ goog.module.ModuleLoadCallback = function(fn, opt_handler) {
  */
 goog.module.ModuleLoadCallback.protectModuleLoadSequence = function(
     errorHandler, opt_tracers) {
-  // NOTE: I do like being able to protect different entry
+  // NOTE(nicksantos): I do like being able to protect different entry
   // points with different error handlers (so, in this case, goog.module
   // goog.events and goog.net all have different functions for registering
   // a protector). But in practice, i'm not sure if people are actually

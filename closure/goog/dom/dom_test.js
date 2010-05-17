@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2009 Google Inc. All Rights Reserved
+// Copyright 2009 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,8 @@
 /**
  * @fileoverview Shared code for dom_test.html and dom_quirks_test.html.
  */
+
+goog.provide('goog.dom.dom_test');
 
 goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
@@ -269,9 +259,11 @@ function testCreateDomNodeListArg() {
 }
 
 function testCreateDomWithTypeAttribute() {
-  var el = goog.dom.createDom('button', {'type': 'reset'}, 'Cool button');
+  var el = goog.dom.createDom('button', {'type': 'reset', 'id': 'cool-button'},
+      'Cool button');
   assertNotNull('Button with type attribute was created successfully', el);
   assertEquals('Button has correct type attribute', 'reset', el.type);
+  assertEquals('Button has correct id', 'cool-button', el.id);
 }
 
 function testContains() {

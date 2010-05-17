@@ -1,17 +1,12 @@
 /*
-Use of this source code is governed by an Apache 2.0 License.
-See the COPYING file for details.
-*/
-
-/*
- * Copyright 2009 Google Inc. All Rights Reserved
+ * Copyright 2009 The Closure Library Authors. All Rights Reserved.
  *
  * Use of this source code is governed by an Apache 2.0 License.
  * See the COPYING file for details.
  */
 
-/**/
-/**/
+/* Author: pupius@google.com (Daniel Pupius) */
+/* Author: cibu@google.com (Cibu Johny) */
 
 .goog-char-picker {
   background-color: #ddd;

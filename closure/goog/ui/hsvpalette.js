@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,6 +20,9 @@
  * palette. Without the styles from the demo css file, only a hex color label
  * and input field show up.
  *
+*
+*
+*
  * @see ../demos/hsvpalette.html
  */
 
@@ -81,7 +72,7 @@ goog.ui.HsvPalette = function(opt_domHelper, opt_color, opt_class) {
       goog.dom.getDomHelper().getDocument();
 };
 goog.inherits(goog.ui.HsvPalette, goog.ui.Component);
-// TODO: Make this inherit from goog.ui.Control and split this into
+// TODO(user): Make this inherit from goog.ui.Control and split this into
 // a control and a renderer.
 
 
@@ -218,7 +209,7 @@ goog.ui.HsvPalette.prototype.setColor_ = function(color) {
   this.hsv_ = goog.color.rgbArrayToHsv(rgbArray);
   // Hue is divided by 360 because the documentation for goog.color is currently
   // incorrect.
-  // TODO: Fix this, see http://1324469 .
+  // TODO(user): Fix this, see http://1324469 .
   this.hsv_[0] = this.hsv_[0] / 360;
   this.color_ = rgbHex;
 };
@@ -257,7 +248,7 @@ goog.ui.HsvPalette.prototype.setHsv_ = function(opt_hue,
   this.hsv_[2] = (opt_value != null) ? opt_value : this.hsv_[2];
   // Hue is multiplied by 360 because the documentation for goog.color is
   // currently incorrect.
-  // TODO: Fix this, see http://1324469 .
+  // TODO(user): Fix this, see http://1324469 .
   this.color_ = goog.color.hsvArrayToHex([
     this.hsv_[0] * 360,
     this.hsv_[1],
@@ -304,7 +295,7 @@ goog.ui.HsvPalette.prototype.createDom = function() {
   );
   this.setElementInternal(element);
 
-  // TODO: Set tabIndex
+  // TODO(user): Set tabIndex
 };
 
 
@@ -315,7 +306,7 @@ goog.ui.HsvPalette.prototype.createDom = function() {
 goog.ui.HsvPalette.prototype.enterDocument = function() {
   goog.ui.HsvPalette.superClass_.enterDocument.call(this);
 
-  // TODO: Accessibility.
+  // TODO(user): Accessibility.
 
   this.updateUi_();
 

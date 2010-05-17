@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,8 @@
 /**
  * @fileoverview Definition of the Popup class.
  *
+*
+*
  * @see ../demos/popup.html
  */
 
@@ -225,7 +215,7 @@ goog.ui.Popup.prototype.reposition = function() {
   this.position_.reposition(el, this.popupCorner_, this.margin_);
 
   if (hideForPositioning) {
-    // NOTE: The visibility property is reset to 'visible' by the show_
+    // NOTE(user): The visibility property is reset to 'visible' by the show_
     // method in PopupBase. Resetting it here causes flickering in some
     // situations, even if set to visible after the display property has been
     // set to none by the call below.

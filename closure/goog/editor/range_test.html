@@ -1,28 +1,14 @@
 <!DOCTYPE html>
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <html>
 <!--
-Copyright 2008 Google Inc. All Rights Reserved
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
 -->
 <!--
 
-
+  @author nicksantos@google.com (Nick Santos)
 -->
 <head>
 <title>Closure Unit Tests - goog.editor.range</title>
@@ -59,6 +45,7 @@ See the COPYING file for details.
 
 <div id='normalizeTest-with-br'>abc<br/>def</div>
 <div id='normalizeTest-with-div'><div>abc</div></div>
+<div id='normalizeTest-with-empty-text-nodes'></div>
 
 <div id='normalizeTest-2'>
   abc
@@ -445,6 +432,35 @@ function testNormalizeOnVeryFragmentedDom() {
   goog.testing.dom.assertRangeEquals(defText, 1, jklText, 2, newRange);
 }
 
+function testNormalizeOnDivWithEmptyTextNodes() {
+  var emptyDiv = $('normalizeTest-with-empty-text-nodes');
+
+  // Append empty text nodes to the emptyDiv.
+  var tnode1 = goog.dom.createTextNode('');
+  var tnode2 = goog.dom.createTextNode('');
+  var tnode3 = goog.dom.createTextNode('');
+
+  goog.dom.appendChild(emptyDiv, tnode1);
+  goog.dom.appendChild(emptyDiv, tnode2);
+  goog.dom.appendChild(emptyDiv, tnode3);
+
+  var range = goog.dom.Range.createFromNodes(emptyDiv, 1, emptyDiv, 2);
+
+  // Cannot use document.body.normalize() as it fails to normalize the div
+  // (in IE) if it has nothing but empty text nodes.
+  var newRange = goog.editor.range.rangePreservingNormalize_(emptyDiv, range);
+
+  if (goog.userAgent.GECKO &&
+      goog.string.compareVersions(goog.userAgent.VERSION, '1.9') == -1) {
+    // In FF2, node.normalize() leaves an empty textNode in the div, unlike
+    // other browsers where the div is left with no children.
+    goog.testing.dom.assertRangeEquals(
+        emptyDiv.firstChild, 0, emptyDiv.firstChild, 0, newRange);
+  } else {
+    goog.testing.dom.assertRangeEquals(emptyDiv, 0, emptyDiv, 0, newRange);
+  }
+}
+
 function testRangeCreatedInVeryFragmentedDom() {
   var def = $('def');
   var defText = def.firstChild;
@@ -660,7 +676,7 @@ function normalizeBody(range) {
 
 /** Break a text node up into lots of little fragments. */
 function fragmentText(text) {
-  // NOTE: For some reason, splitText makes IE deeply
+  // NOTE(nicksantos): For some reason, splitText makes IE deeply
   // unhappy to the point where normalize and other normal DOM operations
   // start failing. It's a useful test for Firefox though, because different
   // versions of FireFox handle empty text nodes differently.

@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,6 +18,7 @@
  * Provides functionality for implementing drag and drop classes. Also provides
  * support classes and events.
  *
+*
  */
 
 goog.provide('goog.fx.AbstractDragDrop');
@@ -410,7 +399,7 @@ goog.fx.AbstractDragDrop.prototype.startDrag = function(event, item) {
  * if the position or visibility of a drag target has changed during
  * a drag, or if targets are added or removed.
  *
- * TODO: this is an expensive operation;  more efficient APIs
+ * TODO(user): this is an expensive operation;  more efficient APIs
  * may be necessary.
  */
 goog.fx.AbstractDragDrop.prototype.recalculateDragTargets = function() {
@@ -1069,7 +1058,7 @@ goog.fx.DragDropEvent = function(type, source, sourceItem,
                                  opt_target, opt_targetItem, opt_targetElement,
                                  opt_clientX, opt_clientY, opt_x, opt_y,
                                  opt_subtarget) {
-  // TODO: Get rid of all the optional parameters and have the caller set
+  // TODO(user): Get rid of all the optional parameters and have the caller set
   // the fields directly instead.
   goog.events.Event.call(this, type);
 

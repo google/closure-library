@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,13 +40,14 @@
  * Children normally render into the document lazily, at the first
  * moment when all ancestors are expanded.
  *
+*
  * @see ../demos/drilldownrow.html
  */
 
-// TODO: Build support for dynamically loading DrilldownRows,
+// TODO(user): Build support for dynamically loading DrilldownRows,
 // probably using automplete as an example to follow.
 
-// TODO: Make DrilldownRows accessible through the keyboard.
+// TODO(user): Make DrilldownRows accessible through the keyboard.
 
 // The render method is redefined in this class because when addChildAt renders
 // the new child it assumes that the child's DOM node will be a child
@@ -160,10 +149,10 @@ goog.ui.DrilldownRow.sampleProperties = {
     goog.ui.DrilldownRow.decorate(selfObj);
     var row = selfObj.getElement();
     handler.listen(row, 'mouseover', function() {
-      goog.dom.classes.add(row, 'goog-drilldown-hover');
+      goog.dom.classes.add(row, goog.getCssName('goog-drilldown-hover'));
     });
     handler.listen(row, 'mouseout', function() {
-      goog.dom.classes.remove(row, 'goog-drilldown-hover');
+      goog.dom.classes.remove(row, goog.getCssName('goog-drilldown-hover'));
     })
   }
 };
@@ -317,8 +306,10 @@ goog.ui.DrilldownRow.prototype.isExpanded = function() {
 goog.ui.DrilldownRow.prototype.setExpanded = function(expanded) {
   if (expanded != this.expanded_) {
     this.expanded_ = expanded;
-    goog.dom.classes.toggle(this.getElement(), 'goog-drilldown-expanded');
-    goog.dom.classes.toggle(this.getElement(), 'goog-drilldown-collapsed');
+    goog.dom.classes.toggle(this.getElement(),
+        goog.getCssName('goog-drilldown-expanded'));
+    goog.dom.classes.toggle(this.getElement(),
+        goog.getCssName('goog-drilldown-collapsed'));
     if (this.isVisible_()) {
       this.forEachChild(function(child) {
         child.setDisplayable_(expanded);
@@ -377,10 +368,9 @@ goog.ui.DrilldownRow.decorate = function(selfObj) {
       '&nbsp;</div></div>';
   var fragment = selfObj.getDomHelper().htmlToDocumentFragment(html);
   cell.insertBefore(fragment, cell.firstChild);
-  goog.dom.classes.add(row,
-                       selfObj.isExpanded() ?
-                       'goog-drilldown-expanded' :
-                       'goog-drilldown-collapsed');
+  goog.dom.classes.add(row, selfObj.isExpanded() ?
+      goog.getCssName('goog-drilldown-expanded') :
+      goog.getCssName('goog-drilldown-collapsed'));
   // Default mouse event handling:
   var toggler = fragment.getElementsByTagName('div')[0];
   var key = selfObj.getHandler().listen(toggler, 'click', function(event) {

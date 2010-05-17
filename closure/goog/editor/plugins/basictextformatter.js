@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,9 @@
 /**
  * @fileoverview Functions to style text.
  *
+*
+ * @author nicksantos@google.com (Nick Santos)
+*
  */
 
 goog.provide('goog.editor.plugins.BasicTextFormatter');
@@ -127,7 +118,7 @@ goog.editor.plugins.BasicTextFormatter.SUPPORTED_COMMANDS_ =
  */
 goog.editor.plugins.BasicTextFormatter.prototype.isSupportedCommand = function(
     command) {
-  // TODO: restore this to simple check once table editing
+  // TODO(user): restore this to simple check once table editing
   // is moved out into its own plugin
   return command in goog.editor.plugins.BasicTextFormatter.SUPPORTED_COMMANDS_;
 };
@@ -272,7 +263,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
 
         case goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK:
           // Both FF & IE may lose directionality info. Save/restore it.
-          // TODO: Does Safari also need this?
+          // TODO(user): Does Safari also need this?
           // TODO (gmark, jparent): This isn't ideal because it uses a string
           // literal, so if the plugin name changes, it would break. We need a
           // better solution. See also other places in code that use
@@ -297,7 +288,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
          // false so that we generate html tags (like <b>).  If we are
          // unformatting something, we want to have styleWithCSS true so that we
          // can unformat both html tags and inline styling.
-         // TODO: What about WebKit and Opera?
+         // TODO(user): What about WebKit and Opera?
          styleWithCss = goog.userAgent.GECKO &&
                         goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &&
                         this.queryCommandValue(command);
@@ -378,7 +369,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.queryCommandValue = function(
       return this.isJustification_(command);
 
     case goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK:
-      // TODO: See if we can use queryCommandValue here.
+      // TODO(nicksantos): See if we can use queryCommandValue here.
       return goog.editor.plugins.BasicTextFormatter.getSelectionBlockState_(
           this.fieldObject.getRange());
 
@@ -518,7 +509,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.handleKeyboardShortcut =
     case 'u': // Ctrl+U
       command = goog.editor.plugins.BasicTextFormatter.COMMAND.UNDERLINE;
       break;
-    // TODO: This doesn't belong in here.  Clients should handle
+    // TODO(user): This doesn't belong in here.  Clients should handle
     // this themselves.
     // Catching control + s prevents the annoying browser save dialog
     // from appearing.
@@ -582,7 +573,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
       // Opera: <div>foo<br>bar</div> --> <div>foo<p class="temp_br">bar</div>
       // To fix bug 1939883, now does for both:
       // <div>foo<br>bar</div> --> <div>foo<p trtempbr="temp_br">bar</div>
-      // TODO: Confirm if there's any way to skip this
+      // TODO(user): Confirm if there's any way to skip this
       // intermediate step of converting br's to p's before converting those to
       // div's. The reason may be hidden in CLs 5332866 and 8530601.
       var attribute = 'trtempbr';
@@ -659,7 +650,7 @@ goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_ =
  * convert it to something that we can pass into execCommand,
  * queryCommandState, etc.
  *
- * TODO: Consider doing away with the + and converter completely.
+ * TODO(user): Consider doing away with the + and converter completely.
  *
  * @param {goog.editor.plugins.BasicTextFormatter.COMMAND|string}
  *     command A command key.
@@ -696,7 +687,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.justify_ = function(command) {
   //
   // Only for browsers that can't handle this by the styleWithCSS execCommand,
   // which allows us to specify if we should insert align or text-align.
-  // TODO: What about WebKit or Opera?
+  // TODO(user): What about WebKit or Opera?
   if (!(goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &&
         goog.userAgent.GECKO)) {
     goog.iter.forEach(this.fieldObject.getRange(),
@@ -715,7 +706,7 @@ goog.editor.plugins.BasicTextFormatter.convertContainerToTextAlign_ =
     function(node) {
   var container = goog.editor.style.getContainer(node);
 
-  // TODO: Fix this so that it doesn't screw up tables.
+  // TODO(user): Fix this so that it doesn't screw up tables.
   if (container.align) {
     container.style.textAlign = container.align;
     container.removeAttribute('align');
@@ -802,7 +793,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandHelper_ = function(
   }
 
   if (/insert(un)?orderedlist/i.test(command)) {
-    // NOTE: This doesn't check queryCommandState because it seems to
+    // NOTE(user): This doesn't check queryCommandState because it seems to
     // lie. Also, this runs for insertunorderedlist so that the the list
     // isn't made up of an <ul> for each <li> - even though it looks the same,
     // the markup is disgusting.
@@ -838,7 +829,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandHelper_ = function(
 /**
  * Applies a background color to a selection when the browser can't do the job.
  *
- * NOTE: If you think this is hacky, you should try applying
+ * NOTE(nicksantos): If you think this is hacky, you should try applying
  * background color in Opera. It made me cry.
  *
  * @param {string} bgColor backgroundColor from .formatText to .execCommand.
@@ -961,12 +952,12 @@ goog.editor.plugins.BasicTextFormatter.prototype.toggleLink_ = function(
  */
 goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(range,
     url, opt_target) {
-  // TODO: Handle multi-line links without requiring crazy hacks!
+  // TODO(robbyw): Handle multi-line links without requiring crazy hacks!
   var anchor = null;
   var parent = range && range.getContainerElement();
   // We do not yet support creating links around images.  Instead of throwing
   // lots of js errors, just fail silently.
-  // TODO: Add support for linking images.
+  // TODO(user): Add support for linking images.
   if (parent && parent.tagName == goog.dom.TagName.IMG) {
     return null;
   }
@@ -1148,7 +1139,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandIEFixes_ =
       // For now, we're just going to punt on this and try to
       // adjust the selection so that IE does something reasonable.
       //
-      // TODO: Find a better fix for this.
+      // TODO(nicksantos): Find a better fix for this.
       var bq;
       for (var i = 0; i < blockquotes.length; i++) {
         if (range.containsNode(blockquotes[i])) {
@@ -1464,7 +1455,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandGeckoFixes_ =
  * Workaround for Opera bug CORE-23903. Opera sometimes fails to invalidate
  * serialized CSS or innerHTML for the DOM after certain execCommands when
  * styleWithCSS is on. Toggling an inline style on the elements fixes it.
- * TODO: Opera says they're going to prioritize a fix for this. Remove
+ * TODO(user): Opera says they're going to prioritize a fix for this. Remove
  *              this code once that fix is released.
  * @private
  */

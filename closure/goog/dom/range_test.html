@@ -1,21 +1,7 @@
 <!DOCTYPE html>
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <html>
 <!--
-Copyright 2007 Google Inc. All Rights Reserved
+Copyright 2007 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
@@ -49,8 +35,14 @@ See the COPYING file for details.
 
   <div id='bug1480638'></div>
   <div id='textWithSpaces'>hello world !</div>
+  <div contentEditable=true>
+  <div id='rangeAroundBreaks'>abcd<br />e</div>
+  <div id='breaksAroundNode'><br />abcde<br /></div>
+  </div>
 
 <script>
+  var assertRangeEquals = goog.testing.dom.assertRangeEquals;
+
   function normalizeHtml(str) {
     return str.toLowerCase().replace(/[\n\r\f"]/g, '')
         .replace(/<\/li>/g, ''); // " for emacs
@@ -69,7 +61,7 @@ See the COPYING file for details.
     assertEquals('Selection should have correct html fragment',
         '1</td><td>2', normalizeHtml(range.getHtmlFragment()));
 
-    // TODO: On IE the TR is included, on FF it is not.
+    // TODO(robbyw): On IE the TR is included, on FF it is not.
     //assertEquals('Selection should have correct valid html',
     //    '<tr id=row><td>1</td><td>2</td></tr>',
     //    normalizeHtml(range.getValidHtml()));
@@ -85,7 +77,7 @@ See the COPYING file for details.
     assertEquals('Selection should have correct html fragment',
         '1<li>2', normalizeHtml(range.getHtmlFragment()));
 
-    // TODO: On IE the UL is included, on FF it is not.
+    // TODO(robbyw): On IE the UL is included, on FF it is not.
     //assertEquals('Selection should have correct valid html',
     //    '<li>1</li><li>2</li>', normalizeHtml(range.getValidHtml()));
 
@@ -100,7 +92,7 @@ See the COPYING file for details.
     assertEquals('Selection should have correct html fragment',
         '1<li>2', normalizeHtml(range.getHtmlFragment()));
 
-    // TODO: On IE the OL is included, on FF it is not.
+    // TODO(robbyw): On IE the OL is included, on FF it is not.
     //assertEquals('Selection should have correct valid html',
     //    '<li>1</li><li>2</li>', normalizeHtml(range.getValidHtml()));
 
@@ -239,7 +231,7 @@ See the COPYING file for details.
     assertTrue('Empty range is still collapsed', range.isCollapsed());
   }
 
-  // TODO: Test iteration over a strange document fragment.
+  // TODO(robbyw): Test iteration over a strange document fragment.
 
   function testIterator() {
     goog.testing.dom.assertNodesMatch(goog.dom.Range.createFromNodeContents(
@@ -334,7 +326,7 @@ See the COPYING file for details.
     range = goog.dom.Range.createFromNodeContents(outer.firstChild);
     removeHelper(8, range, outer, 1, '<div></div>');
 
-    // TODO: Fix the following edge cases:
+    // TODO(robbyw): Fix the following edge cases:
     //    * Selecting contents of a node containing multiply empty divs
     //    * Selecting via createFromNodes(x, 0, x, x.childNodes.length)
     //    * Consistent handling of nodeContents(<div><div></div></div>).remove
@@ -373,7 +365,7 @@ See the COPYING file for details.
     assertEquals('New element should have three children', 3,
         output.childNodes.length);
 
-    // TODO: Ensure the range stays in a reasonable state.
+    // TODO(robbyw): Ensure the range stays in a reasonable state.
   }
 
   /**
@@ -625,6 +617,73 @@ See the COPYING file for details.
     // Check the contents again, because there used to be a bug where
     // it changed after calling getContainer().
     assertEquals('world', range.getText());
+  }
+
+  function testRangeBeforeBreak() {
+    var container = goog.dom.getElement('rangeAroundBreaks');
+    var text = container.firstChild;
+    var offset = text.length;
+    assertEquals(4, offset);
+
+    var br = container.childNodes[1];
+    var caret = goog.dom.Range.createCaret(text, offset);
+    caret.select();
+    assertEquals(offset, caret.getStartOffset());
+
+    var range = goog.dom.Range.createFromWindow();
+    assertFalse('Should not contain whole <br>',
+        range.containsNode(br, false));
+    assertFalse('Should not contain partial <br>',
+        range.containsNode(br, true));
+
+    assertEquals(offset, range.getStartOffset());
+    assertEquals(text, range.getStartNode());
+  }
+
+  function testRangeAfterBreak() {
+    var container = goog.dom.getElement('rangeAroundBreaks');
+    var br = container.childNodes[1];
+    var caret = goog.dom.Range.createCaret(container.lastChild, 0);
+    caret.select();
+    assertEquals(0, caret.getStartOffset());
+
+    var range = goog.dom.Range.createFromWindow();
+    assertFalse('Should not contain whole <br>',
+        range.containsNode(br, false));
+    assertFalse('Should not contain partial <br>',
+        range.containsNode(br, true));
+
+    if (goog.userAgent.WEBKIT &&
+        !goog.userAgent.isVersion('528') /* Safari 3 */) {
+      assertEquals(2, range.getStartOffset());
+      assertEquals(container, range.getStartNode());
+    } else {
+      assertEquals(0, range.getStartOffset());
+      assertEquals(container.lastChild, range.getStartNode());
+    }
+  }
+
+  function testRangeAtBreakAtStart() {
+    var container = goog.dom.getElement('breaksAroundNode');
+    var br = container.firstChild;
+    var caret = goog.dom.Range.createCaret(container.firstChild, 0);
+    caret.select();
+    assertEquals(0, caret.getStartOffset());
+
+    var range = goog.dom.Range.createFromWindow();
+    assertFalse('Should not contain partial <br>',
+        range.containsNode(br, true));
+    assertFalse('Should not contain whole <br>',
+        range.containsNode(br, false));
+
+    assertRangeEquals(container, 0, container, 0, range);
+  }
+
+  function assertNodeEquals(expected, actual) {
+    assertEquals(
+        'Expected: ' + goog.testing.dom.exposeNode(expected) +
+        '\nActual: ' + goog.testing.dom.exposeNode(actual),
+        expected, actual);
   }
 </script>
 </body>

@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2005 Google Inc. All Rights Reserved
+// Copyright 2005 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,7 +40,7 @@ goog.editor.BrowserFeature = {
 
   // Has the contentEditable attribute, which makes nodes editable.
   //
-  // NOTE: FF3 has contentEditable, but there are 3 major reasons
+  // NOTE(nicksantos): FF3 has contentEditable, but there are 3 major reasons
   // why we don't use it:
   // 1) In FF3, we listen for key events on the document, and we'd have to
   //    filter them properly. See TR_Browser.USE_DOCUMENT_FOR_KEY_EVENTS.
@@ -74,7 +62,7 @@ goog.editor.BrowserFeature = {
   USE_MUTATION_EVENTS: goog.userAgent.GECKO,
 
   // Whether the browser has a functional DOMSubtreeModified event.
-  // TODO: Enable for all FF3 once we're confident this event fires
+  // TODO(user): Enable for all FF3 once we're confident this event fires
   // reliably. Currently it's only enabled if using contentEditable in FF as
   // we have no other choice in that case but to use this event.
   HAS_DOM_SUBTREE_MODIFIED_EVENT: goog.userAgent.WEBKIT ||
@@ -118,7 +106,7 @@ goog.editor.BrowserFeature = {
 
   // Has a standards mode quirk where width=100% doesn't do the right thing,
   // but width=99% does.
-  // TODO: This should be fixable by less hacky means
+  // TODO(user|user): This should be fixable by less hacky means
   NEEDS_99_WIDTH_IN_STANDARDS_MODE: goog.userAgent.IE,
 
   // Whether keyboard events only reliably fire on the document.
@@ -172,7 +160,7 @@ goog.editor.BrowserFeature = {
 
   // Whether this browser supports the "focusin" or "DOMFocusIn" event
   // consistently.
-  // NOTE: FF supports DOMFocusIn, but doesn't seem to do so
+  // NOTE(nicksantos): FF supports DOMFocusIn, but doesn't seem to do so
   // consistently.
   SUPPORTS_FOCUSIN: goog.userAgent.IE || goog.userAgent.OPERA,
 

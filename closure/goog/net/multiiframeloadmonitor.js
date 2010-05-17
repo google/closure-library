@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,7 @@
 /**
  * @fileoverview Class that can be used to determine when multiple iframes have
  * been loaded. Refactored from static APIs in IframeLoadMonitor.
+*
  */
 goog.provide('goog.net.MultiIframeLoadMonitor');
 
@@ -57,7 +46,7 @@ goog.net.MultiIframeLoadMonitor = function(iframes, callback, opt_hasContent) {
   /**
    * Callback which is invoked when all of the iframes are loaded.
    * @type {function():void}
-   * @private;
+   * @private
    */
   this.callback_ = callback;
 

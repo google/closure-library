@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2005 Google Inc. All Rights Reserved
+// Copyright 2005 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,7 @@
 /**
  * @fileoverview Code for handling edit history (undo/redo).
  *
+*
  */
 
 
@@ -194,7 +183,7 @@ goog.editor.plugins.UndoRedo.prototype.registerFieldObject = function(
 /**
  * Unregisters and disables the fieldObject with this plugin. Thie does *not*
  * clobber the undo stack for the fieldObject though.
- * TODO: For the multifield version, we really should add a way to
+ * TODO(user): For the multifield version, we really should add a way to
  * ignore undo actions on field's that have been made uneditable.
  * This is probably as simple as skipping over entries in the undo stack
  * that have a hashcode of an uneditable field.
@@ -252,7 +241,7 @@ goog.editor.plugins.UndoRedo.prototype.enable = function(fieldObject) {
 
   var eventHandler = new goog.events.EventHandler(this);
 
-  // TODO: From ojan during a code review:
+  // TODO(user): From ojan during a code review:
   // The beforechange handler is meant to be there so you can grab the cursor
   // position *before* the change is made as that's where you want the cursor to
   // be after an undo.
@@ -795,7 +784,7 @@ goog.editor.plugins.UndoRedo.UndoState_.prototype.equals = function(rhs) {
  * that don't modify the user-interactable content (e.g. making something bold
  * vs. typing a character).
  *
- * TODO: Completely get rid of this and use goog.dom.SavedCaretRange.
+ * TODO(user): Completely get rid of this and use goog.dom.SavedCaretRange.
  *
  * @param {goog.editor.Field} field The field the selection is in.
  * @private

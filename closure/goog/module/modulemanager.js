@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,9 @@
 /**
  * @fileoverview A singleton object for managing Javascript code modules.
  *
+*
+*
+*
  */
 
 goog.provide('goog.module.ModuleManager');
@@ -166,7 +157,7 @@ goog.module.ModuleManager.prototype.batchModeEnabled_ = false;
 goog.module.ModuleManager.prototype.loader_ = null;
 
 
-// TODO: Remove tracer.
+// TODO(user): Remove tracer.
 /**
  * Tracer that measures how long it takes to load a module.
  * @type {?number}
@@ -377,7 +368,7 @@ goog.module.ModuleManager.prototype.preloadModule = function(
 goog.module.ModuleManager.prototype.
     loadModuleOrEnqueueIfNotLoadedOrLoading_ = function(id, d) {
   var moduleInfo = this.getModuleInfo(id);
-  // TODO: Push deferred pattern further into module manager.
+  // TODO(user): Push deferred pattern further into module manager.
   if (moduleInfo.isLoaded()) {
     d.callback(this.moduleContext_);
   } else {
@@ -475,7 +466,7 @@ goog.module.ModuleManager.prototype.loadModule_ = function(
  */
 goog.module.ModuleManager.prototype.getNotYetLoadedTransitiveDepIds_ =
     function(id) {
-  // NOTE: We want the earliest occurrance of a module, not the first
+  // NOTE(user): We want the earliest occurrance of a module, not the first
   // dependency we find. Therefore we strip duplicates at the end rather than
   // during.  See the tests for concrete examples.
   var ids = [id];
@@ -608,7 +599,7 @@ goog.module.ModuleManager.prototype.load = function(
   var moduleInfo = this.moduleInfoMap_[moduleId];
   var d = new goog.async.Deferred();
 
-  // TODO: Push deferred pattern further into module manager.
+  // TODO(user): Push deferred pattern further into module manager.
   if (moduleInfo.isLoaded()) {
     d.callback(this.moduleContext_);
 

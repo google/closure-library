@@ -1,21 +1,7 @@
 <!DOCTYPE html>
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <html>
 <!--
-Copyright 2006 Google Inc. All Rights Reserved
+Copyright 2006 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
@@ -360,7 +346,7 @@ function testIsArrayLike() {
       goog.isArrayLike(notDefined));
   assertTrue('NodeList should be array-like',
       goog.isArrayLike(elem.childNodes));
-  // TODO: Fix isArrayLike to return false for text nodes!
+  // TODO(user): Fix isArrayLike to return false for text nodes!
   // assertFalse('TextNode should not be array-like', goog.isArrayLike(text));
   assertTrue('Array of nodes should be array-like',
       goog.isArrayLike([elem.firstChild, elem.lastChild]));
@@ -734,7 +720,7 @@ function testGlobalEval() {
   var foofoofoo = 128;
   assertEquals('Global should not have changed', 125, goog.global.foofoofoo);
 
-  // NOTE: foofoofoo would normally be available in the function scope,
+  // NOTE(user): foofoofoo would normally be available in the function scope,
   // via the scope chain, but the JsUnit framework seems to do something weird
   // which makes it not work.
 }
@@ -867,7 +853,7 @@ function testPropertyIsEnumerable_() {
   assertTrue('Properties on the instance should be enumerable',
              goog.propertyIsEnumerable_(a, 'y'))
 
-  // TODO: This test failed on the farm in FF3 Linux and I no one was
+  // TODO(user): This test failed on the farm in FF3 Linux and I no one was
   // able to reproduce locally. Error:
   // Permission denied to get property Window.document
   // For now get the Closure build green by skipping for FF3, and look into
@@ -877,11 +863,11 @@ function testPropertyIsEnumerable_() {
     try {
        childWindow = window.open('', '_blank');
     } catch (e) {
-      // NOTE: For some reason this line errors in Safari 3 on the farm,
+      // NOTE(user): For some reason this line errors in Safari 3 on the farm,
       // "Undefined value".  This only recently started happening (2008/10/21).
       return;
     }
-    // TODO: Find a way to test this behavior even when pop ups are
+    // TODO(user): Find a way to test this behavior even when pop ups are
     // blocked, i.e., when childWindow doesn't exist. Using an iframe doesn't
     // seem to have the same problem.
     if (childWindow) {

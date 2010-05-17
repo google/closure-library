@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2007 Google Inc. All Rights Reserved
+// Copyright 2007 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,6 +17,8 @@
  * @fileoverview A thin wrapper around the DOM element returned from
  * the different draw methods of the graphics implementation, and
  * all interfaces that the various element types support.
+*
+*
  */
 
 
@@ -57,7 +47,7 @@ goog.graphics.Element = function(element, graphics) {
   this.element_ = element;
   this.graphics_ = graphics;
   // Overloading EventTarget field to state that this is not a custom event.
-  // TODO Should be handled in EventTarget.js (see bug 846824).
+  // TODO(user) Should be handled in EventTarget.js (see bug 846824).
   this.customEvent_ = false;
 };
 goog.inherits(goog.graphics.Element, goog.events.EventTarget);
@@ -116,7 +106,7 @@ goog.graphics.Element.prototype.getGraphics = function() {
  */
 goog.graphics.Element.prototype.setTransformation = function(x, y, rotate,
     centerX, centerY) {
-  // TODO: Add skew and scale.
+  // TODO(robbyw): Add skew and scale.
 
   this.transform_ = goog.graphics.AffineTransform.getRotateInstance(
       goog.math.toRadians(rotate), centerX, centerY).translate(x, y);

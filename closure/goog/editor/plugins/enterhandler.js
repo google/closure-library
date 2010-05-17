@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,9 @@
 /**
  * @fileoverview Plugin to handle enter keys.
  *
+*
+*
+ * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.editor.plugins.EnterHandler');
@@ -111,7 +102,7 @@ goog.editor.plugins.EnterHandler.prototype.handleBackspaceInternal = function(e,
 
   if (field.firstChild == container && goog.editor.node.isEmpty(container)) {
     e.preventDefault();
-    // TODO: I think we probably don't need to stopPropagation here
+    // TODO(user): I think we probably don't need to stopPropagation here
     e.stopPropagation();
   }
 };
@@ -283,7 +274,7 @@ goog.editor.plugins.EnterHandler.prototype.handleKeyPress = function(e) {
       var split = !!this.fieldObject.execCommand(
           goog.editor.plugins.Blockquote.SPLIT_COMMAND, cursorPosition);
       if (split) {
-        // TODO: I think we probably don't need to stopPropagation here
+        // TODO(user): I think we probably don't need to stopPropagation here
         e.preventDefault();
         e.stopPropagation();
       }
@@ -346,7 +337,7 @@ goog.editor.plugins.EnterHandler.prototype.handleEnterGecko_ = function(e) {
   var handled = this.fieldObject.execCommand(
       goog.editor.plugins.Blockquote.SPLIT_COMMAND, cursorPosition);
   if (handled) {
-    // TODO: I think we probably don't need to stopPropagation here
+    // TODO(user): I think we probably don't need to stopPropagation here
     e.preventDefault();
     e.stopPropagation();
   }
@@ -437,7 +428,7 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
   // the element's parent's innerHTML and outerHTML show an &nsbp; in the
   // element. This leads to getParentContainer calculating the wrong container
   // here.
-  // TODO: Determine the reason this causes IE to work.
+  // TODO(robbyw): Determine the reason this causes IE to work.
   var container, range;
   if (goog.userAgent.IE) {
     range = this.fieldObject.getRange().getBrowserRangeObject();
@@ -592,7 +583,7 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionW3C_ =
     // preceding it. To preserve inline formatting when pressing [enter] inside
     // an empty block, don't delete the selection if it only selects a <br> at
     // the end of the block.
-    // TODO: Move this into goog.dom.Range. It should detect this state
+    // TODO(user): Move this into goog.dom.Range. It should detect this state
     // when creating a range from the window selection and fix it in the created
     // range.
     if (goog.userAgent.OPERA) {
@@ -672,7 +663,7 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
        result:
          <div>ad</div>
 
-       TODO: Should we wrap the second div's contents in a span if they
+       TODO(robbyw): Should we wrap the second div's contents in a span if they
                      have inline style?
       */
       var rangeStart = goog.editor.style.getContainer(range.getStartNode());

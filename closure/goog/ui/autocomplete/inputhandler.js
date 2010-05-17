@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,8 +19,8 @@
  * IME note:
  *
  * We used to suspend autocomplete while there are IME preedit characters, but
- * now for parity with GWS we do not. We still detect the beginning and end of
- * IME entry because we need to listen to more events while an IME commit is
+ * now for parity with Search we do not. We still detect the beginning and end
+ * of IME entry because we need to listen to more events while an IME commit is
  * happening, but we update continuously as the user types.
  *
  * IMEs vary across operating systems, browsers, and even input languages. This
@@ -41,8 +29,8 @@
  * - Mac     x {FF3, Safari3}     x Kotoeri (Japanese)
  * - Linux   x {FF3}              x UIM + Anthy (Japanese)
  *
- * TODO: We cannot handle {Mac, Linux} x FF3 correctly.
- * TODO: We need to support Windows x Google IME.
+ * TODO(user): We cannot handle {Mac, Linux} x FF3 correctly.
+ * TODO(user): We need to support Windows x Google IME.
  *
  * This class was tested with hiragana input. The event sequence when inputting
  * 'ai<enter>' with IME on (which commits two characters) is as follows:
@@ -78,8 +66,8 @@
  *   - ENTER key up following either ENTER or SPACE ends preedit.
  *   - SPACE key up following even number of LEFT, RIGHT, or SPACE (any
  *     combination) ends preedit.
- *   TODO: We only support SPACE-then-ENTER sequence.
- *   TODO: With the change to autocomplete during IME, this might not be an
+ *   TODO(user): We only support SPACE-then-ENTER sequence.
+ *   TODO(mpd): With the change to autocomplete during IME, this might not be an
  *   issue. Remove this comment once tested.
  *
  * With Microsoft Korean IME 2002,
@@ -98,6 +86,9 @@
  * and behavior above so that we can avoid regressions. Contact mpd or yuzo
  * if you have questions or concerns.
  *
+*
+*
+*
  */
 
 
@@ -164,7 +155,7 @@ goog.ui.AutoComplete.InputHandler = function(opt_separators, opt_literals,
   /**
    * A timer object used to monitor for changes when an element is active.
    *
-   * TODO: Consider tuning the throttle time, so that it takes into
+   * TODO(user): Consider tuning the throttle time, so that it takes into
    * account the length of the token.  When the token is short it is likely to
    * match lots of rows, therefore we want to check less frequently.  Even
    * something as simple as <3-chars = 150ms, then 100ms otherwise.

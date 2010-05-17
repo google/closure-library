@@ -1,16 +1,11 @@
 /*
-Use of this source code is governed by an Apache 2.0 License.
-See the COPYING file for details.
-*/
-
-/*
- * Copyright 2007 Google Inc. All Rights Reserved
+ * Copyright 2007 The Closure Library Authors. All Rights Reserved.
  *
  * Use of this source code is governed by an Apache 2.0 License.
  * See the COPYING file for details.
  */
 
-/**/
+/* Author: ssaviano@google.com (Steven Saviano) */
 
 /* We need the dialog CSS from dialog.css. */
 @import url(dialog.css);

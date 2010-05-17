@@ -291,7 +291,9 @@ def GetDepsLine(dep, base_path):
     base_path: The path to Closure's base.js including filename.
   """
   return 'goog.addDependency("%s", %s, %s);' % (
-      GetRelpath(dep.filename, base_path), dep.provides, dep.requires)
+      os.path.normpath(
+          GetRelpath(dep.filename, base_path)).replace('\\', '\\\\'),
+      dep.provides, dep.requires)
 
 
 def GetRelpath(path, start):

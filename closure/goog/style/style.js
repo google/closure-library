@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +15,10 @@
 /**
  * @fileoverview Utilities for element styles.
  *
+*
+*
+*
+*
  * @see ../demos/inline_block_quirks.html
  * @see ../demos/inline_block_standards.html
  * @see ../demos/style_viewport.html
@@ -175,7 +167,7 @@ goog.style.getComputedPosition = function(element) {
  * Whether named colors like "red" or "lightblue" get translated into a
  * format which can be parsed is browser dependent. Calling this function on
  * transparent elements will return "transparent" in most browsers or
- * "rgba(0, 0, 0, 0)" in Safari.
+ * "rgba(0, 0, 0, 0)" in WebKit.
  * @param {Element} element The element to get the background color of.
  * @return {string} The computed string value of the background color.
  */
@@ -498,7 +490,7 @@ goog.style.scrollIntoContainerView = function(element, container, opt_center) {
  * @return {!goog.math.Coordinate} Client left and top.
  */
 goog.style.getClientLeftTop = function(el) {
-  // NOTE: Gecko prior to 1.9 doesn't support clientTop/Left, see
+  // NOTE(user): Gecko prior to 1.9 doesn't support clientTop/Left, see
   // https://bugzilla.mozilla.org/show_bug.cgi?id=111207
   if (goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9')) {
     var left = parseFloat(goog.style.getComputedStyle(el, 'borderLeftWidth'));
@@ -529,7 +521,7 @@ goog.style.getPageOffset = function(el) {
   var box, doc = goog.dom.getOwnerDocument(el);
   var positionStyle = goog.style.getStyle_(el, 'position');
 
-  // NOTE: Gecko pre 1.9 normally use getBoxObjectFor to calculate the
+  // NOTE(user): Gecko pre 1.9 normally use getBoxObjectFor to calculate the
   // position. When invoked for an element with position absolute and a negative
   // position though it can be off by one. Therefor the recursive implementation
   // is used in those (relatively rare) cases.
@@ -537,11 +529,11 @@ goog.style.getPageOffset = function(el) {
       !el.getBoundingClientRect && positionStyle == 'absolute' &&
       (box = doc.getBoxObjectFor(el)) && (box.screenX < 0 || box.screenY < 0);
 
-  // NOTE: If element is hidden (display none or disconnected or any the
+  // NOTE(user): If element is hidden (display none or disconnected or any the
   // ancestors are hidden) we get (0,0) by default but we still do the
   // accumulation of scroll position.
 
-  // TODO: Should we check if the node is disconnected and in that case
+  // TODO(user): Should we check if the node is disconnected and in that case
   //            return (0,0)?
 
   var pos = new goog.math.Coordinate(0, 0);
@@ -569,7 +561,7 @@ goog.style.getPageOffset = function(el) {
     // https://bugzilla.mozilla.org/show_bug.cgi?id=330619
 
     box = doc.getBoxObjectFor(el);
-    // TODO: Fix the off-by-one error when window is scrolled down
+    // TODO(user): Fix the off-by-one error when window is scrolled down
     // or right more than 1 pixel. The viewport offset does not move in lock
     // step with the window scroll; it moves in increments of 2px and at
     // somewhat random intervals.
@@ -768,7 +760,7 @@ goog.style.setPageOffset = function(el, x, opt_y) {
     x = x.x;
   }
 
-  // NOTE: We cannot allow strings for x and y. We could but that would
+  // NOTE(user): We cannot allow strings for x and y. We could but that would
   // require us to manually transform between different units
 
   // Work out deltas
@@ -948,7 +940,7 @@ goog.style.setOpacity = function(el, alpha) {
   } else if ('MozOpacity' in style) {
     style.MozOpacity = alpha;
   } else if ('filter' in style) {
-    // TODO: Overwriting the filter might have undesired side effects.
+    // TODO(user): Overwriting the filter might have undesired side effects.
     if (alpha === '') {
       style.filter = '';
     } else {
@@ -1074,7 +1066,7 @@ goog.style.installStyles = function(stylesString, opt_node) {
       body.parentNode.insertBefore(head, body);
     }
     styleSheet = dh.createDom('style');
-    // NOTE: Setting styles after the style element has been appended
+    // NOTE(user): Setting styles after the style element has been appended
     // to the head results in a nasty Webkit bug in certain scenarios. Please
     // refer to https://bugs.webkit.org/show_bug.cgi?id=26307 for additional
     // details.
@@ -1228,7 +1220,7 @@ goog.style.isUnselectable = function(el) {
  *     selectable state, and leave its descendants alone; defaults to false.
  */
 goog.style.setUnselectable = function(el, unselectable, opt_noRecurse) {
-  // TODO: Do we need all of TR_DomUtil.makeUnselectable() in Closure?
+  // TODO(user): Do we need all of TR_DomUtil.makeUnselectable() in Closure?
   var descendants = !opt_noRecurse ? el.getElementsByTagName('*') : null;
   var name = goog.style.unselectableStyle_;
   if (name) {
@@ -1460,7 +1452,7 @@ goog.style.getBox_ = function(element, stylePrefix) {
     var bottom = /** @type {string} */ (
         goog.style.getComputedStyle(element, stylePrefix + 'Bottom'));
 
-    // NOTE: Gecko can return floating point numbers for the computed
+    // NOTE(user): Gecko can return floating point numbers for the computed
     // style values.
     return new goog.math.Box(parseFloat(top),
                              parseFloat(right),
@@ -1645,7 +1637,7 @@ goog.style.getFontSize = function(el) {
   var fontSize = goog.style.getStyle_(el, 'fontSize');
   var sizeUnits = goog.style.getLengthUnits(fontSize);
   if (fontSize && 'px' == sizeUnits) {
-    // NOTE: This could be parseFloat instead, but IE doesn't return
+    // NOTE(user): This could be parseFloat instead, but IE doesn't return
     // decimal fractions in getStyle_ and Firefox reports the fractions, but
     // ignores them when rendering. Interestingly enough, when we force the
     // issue and size something to e.g., 50% of 25px, the browsers round in

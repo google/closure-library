@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,6 +31,7 @@
  * See goog.net.BrowserChannel.Handler for the handler interface.
  *
  *
+*
  */
 
 
@@ -551,7 +540,7 @@ goog.inherits(goog.net.BrowserChannel.TimingEvent, goog.events.Event);
 
 /**
  * Enum that identifies events for statistics that are interesting to track.
- * TODO - Change name not to use Event or use EventTarget
+ * TODO(user) - Change name not to use Event or use EventTarget
  * @enum {number}
  */
 goog.net.BrowserChannel.Stat = {
@@ -668,7 +657,7 @@ goog.net.BrowserChannel.prototype.getChannelDebug = function() {
 
 /**
  * Set the browserchannel logger.
- * TODO: Add interface for channel loggers or remove this function.
+ * TODO(user): Add interface for channel loggers or remove this function.
  *
  * @param {goog.net.ChannelDebug} channelDebug The channel debug object.
  */
@@ -1264,7 +1253,7 @@ goog.net.BrowserChannel.prototype.makeForwardChannelRequest_ =
       rid = this.nextRid_ - 1;  // Must use last RID
       requestText = this.dequeueOutgoingMaps_();
     } else {
-      // TODO: Remove this code and the opt_retryRequest passing
+      // TODO(user): Remove this code and the opt_retryRequest passing
       // once server-side support for ver 7 is ubiquitous.
       rid = opt_retryRequest.getRequestId();
       requestText = /** @type {string} */ (opt_retryRequest.getPostData());

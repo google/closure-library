@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2006 Google Inc. All Rights Reserved
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +16,7 @@
  * @fileoverview
  * Implementations of DataNode for wrapping XML data.
  *
+*
  */
 
 goog.provide('goog.ds.XmlDataSource');
@@ -54,7 +43,7 @@ goog.require('goog.string');
  * @extends {goog.ds.DataNode}
  * @constructor
  */
-// TODO: Use interfaces when available.
+// TODO(user): Use interfaces when available.
 goog.ds.XmlDataSource = function(node, parent, opt_name) {
   this.parent_ = parent;
   this.dataName_ = opt_name || (node ? node.nodeName : '');
@@ -331,7 +320,7 @@ goog.ds.XmlHttpDataSource.prototype.load = function() {
     goog.ds.logger.info('Sending XML request for DataSource ' +
         this.getDataName() + ' to ' + this.uri_);
     this.loadState_ = goog.ds.LoadState.LOADING;
-    // TODO move to shared xmlhttp when ready
+    // TODO(user) move to shared xmlhttp when ready
     this.loader_ = new goog.ds.XmlHttp_(this.uri_,
                                         goog.bind(this.success_, this),
                                         goog.bind(this.failure_, this));
@@ -356,7 +345,7 @@ goog.ds.XmlHttpDataSource.prototype.getLoadState = function() {
  * and sets the XML and loadstate.
  * Currently uses internal XMLHTTP implementation pending
  * completion of core Closure XMLHTTP.
- * TODO: Switch when closure version is completed
+ * TODO(user): Switch when closure version is completed
  *
  * @private
  */
@@ -409,7 +398,7 @@ goog.ds.XmlHttpDataSource.prototype.failure_ = function() {
  *
  * XMLHttp utilities based of Prototype
  * Temporary until closure libraries are complete
- * TODO move to common xmlhttp when libraries are complete
+ * TODO(user) move to common xmlhttp when libraries are complete
  *
  * Build an XmlHttp object
  * @param {(string,goog.Uri)} uri The URL to send to.

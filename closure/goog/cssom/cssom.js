@@ -1,16 +1,4 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Copyright 2008 Google Inc. All Rights Reserved
+// Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,12 +18,13 @@
  * - W3C: http://dev.w3.org/csswg/cssom/
  * - MSDN: http://msdn.microsoft.com/en-us/library/ms531209(VS.85).aspx.
  * @supported in FF3, IE6, IE7, Safari 3.1.2, Chrome
- * TODO: Fix in Opera.
- * TODO: Consider hacking page, media, etc.. to work.
+ * TODO(user): Fix in Opera.
+ * TODO(user): Consider hacking page, media, etc.. to work.
  *     This would be pretty challenging. IE returns the text for any rule
  *     regardless of whether or not the media is correct or not. Firefox at
  *     least supports CSSRule.type to figure out if it's a media type and then
  *     we could do something interesting, but IE offers no way for us to tell.
+*
  */
 
 goog.provide('goog.cssom');
@@ -194,8 +183,8 @@ goog.cssom.getCssTextFromCssRule = function(cssRule) {
     // We also remove the special properties that we may have added in
     // getAllCssStyleRules since IE includes those in the cssText.
     var styleCssText = cssRule.style.cssText.
-        replace(/\s*-goog-parent-stylesheet:\s*\[object\];?\s*/gi, '').
-        replace(/\s*-goog-rule-index:\s*[\d]+;?\s*/gi, '');
+        replace(/\s*-closure-parent-stylesheet:\s*\[object\];?\s*/gi, '').
+        replace(/\s*-closure-rule-index:\s*[\d]+;?\s*/gi, '');
     var thisCssText = cssRule.selectorText + ' { ' + styleCssText + ' }';
     cssText = thisCssText;
   }
@@ -215,8 +204,8 @@ goog.cssom.getCssTextFromCssRule = function(cssRule) {
 goog.cssom.getCssRuleIndexInParentStyleSheet = function(cssRule,
     opt_parentStyleSheet) {
   // Look for our special style.ruleIndex property from getAllCss.
-  if (cssRule.style['-goog-rule-index']) {
-    return cssRule.style['-goog-rule-index'];
+  if (cssRule.style['-closure-rule-index']) {
+    return cssRule.style['-closure-rule-index'];
   }
 
   var parentStyleSheet = opt_parentStyleSheet ||
@@ -249,7 +238,8 @@ goog.cssom.getCssRuleIndexInParentStyleSheet = function(cssRule,
  * @return {CSSStyleSheet} A styleSheet object.
  */
 goog.cssom.getParentStyleSheet = function(cssRule) {
-  return cssRule.parentStyleSheet || cssRule.style['-goog-parent-stylesheet'];
+  return cssRule.parentStyleSheet ||
+      cssRule.style['-closure-parent-stylesheet'];
 };
 
 
@@ -293,7 +283,7 @@ goog.cssom.replaceCssRule = function(cssRule, cssText, opt_parentStyleSheet,
  * @param {string} cssText The text for the new CSSRule.
  * @param {number=} opt_index The index of the cssRule in its parentStylesheet.
  * @throws {Error} If the css rule text appears to be ill-formatted.
- * TODO: Inserting at index 0 fails on Firefox 2 and 3 with an
+ * TODO(user): Inserting at index 0 fails on Firefox 2 and 3 with an
  *     exception warning "Node cannot be inserted at the specified point in
  *     the hierarchy."
  */
@@ -435,7 +425,7 @@ goog.cssom.getAllCss_ = function(styleSheet, isTextOutput) {
             // Unfortunately we have to use the style object to store these
             // pieces of info since the rule object is read-only.
             if (!cssRule.parentStyleSheet) {
-              cssRule.style['-goog-parent-stylesheet'] = styleSheet;
+              cssRule.style['-closure-parent-stylesheet'] = styleSheet;
             }
 
             // This is a hack to help with possible removal of the rule later,
@@ -443,7 +433,7 @@ goog.cssom.getAllCss_ = function(styleSheet, isTextOutput) {
             // onto the style object as a property.
             // Unfortunately we have to use the style object to store these
             // pieces of info since the rule object is read-only.
-            cssRule.style['-goog-rule-index'] = ruleIndex;
+            cssRule.style['-closure-rule-index'] = ruleIndex;
           }
           cssOut.push(cssRule);
         }
