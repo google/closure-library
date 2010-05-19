@@ -301,6 +301,17 @@ Author:  attila@google.com (Attila Bodis)
           1, keyContainer.keyEventsHandled);
 
     }
+
+    function testHandleKeyEvent_alwaysHandlesWithKeyEventTarget() {
+      keyContainer = new KeyHandlingContainer();
+      keyContainer.render();
+      keyContainer.setKeyEventTarget(goog.dom.createDom('div'));
+      keyContainer.setVisible(true);
+
+      keyContainer.handleKeyEvent(new goog.events.Event());
+      assertEquals('One key events should be handled',
+          1, keyContainer.keyEventsHandled);
+    }
   </script>
 </body>
 </html>

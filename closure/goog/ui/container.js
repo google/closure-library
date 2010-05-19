@@ -662,7 +662,8 @@ goog.ui.Container.prototype.handleBlur = function(e) {
  * @return {boolean} Whether the key event was handled.
  */
 goog.ui.Container.prototype.handleKeyEvent = function(e) {
-  if (this.isEnabled() && this.isVisible() && this.getChildCount() != 0 &&
+  if (this.isEnabled() && this.isVisible() &&
+      (this.getChildCount() != 0 || this.keyEventTarget_) &&
       this.handleKeyEventInternal(e)) {
     e.preventDefault();
     e.stopPropagation();

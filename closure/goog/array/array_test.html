@@ -995,6 +995,10 @@ function testBinarySearch() {
   assertEquals('0 should have an insertion point of 1', 1,
       insertionPoint(pos));
 
+  assertEquals('binarySearch should find the index of the first 0',
+      0, goog.array.binarySearch([0, 0, 1], 0));
+  assertEquals('binarySearch should find the index of the first 1',
+      1, goog.array.binarySearch([0, 1, 1], 1));
 }
 
 

@@ -724,7 +724,7 @@ goog.date.Date = function(opt_year, opt_month, opt_date) {
 };
 
 
-// TODO(user): It should use DateTimeSymbols
+// TODO(anatol): It should use DateTimeSymbols
 /**
  * First day of week. 0 = Mon, 6 = Sun.
  * @type {number}
