@@ -856,13 +856,11 @@ goog.ui.ComboBoxItem.prototype.setFormatFromToken = function(token) {
     var escapedToken = goog.string.regExpEscape(token);
     var caption = this.getCaption();
     if (caption) {
-      var newElement = this.getDomHelper().createElement('span');
-      newElement.innerHTML =
+      this.getElement().innerHTML =
           caption.replace(new RegExp(escapedToken, 'i'), function(m) {
             return '<b>' + m + '</b>';
           });
-      this.setContent(newElement);
+      this.setContentInternal(caption);
     }
   }
 };
-

@@ -28,8 +28,8 @@ goog.require('goog.testing.jsunit');
 
 // The purpose of this test is less about the actual unit test, and
 // more for drawing demos of shapes.
-var regularNGon = goog.graphics.paths.regularNGon;
-var arrow = goog.graphics.paths.arrow;
+var regularNGon = goog.graphics.paths.createRegularNGon;
+var arrow = goog.graphics.paths.createArrow;
 
 function setUp() {
   goog.dom.removeChildren(goog.dom.getElement('root'));

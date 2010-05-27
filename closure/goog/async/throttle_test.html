@@ -7,10 +7,10 @@ Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
 -->
 <head>
-<title>Closure Unit Tests - goog.Throttle</title>
+<title>Closure Unit Tests - goog.async.Throttle</title>
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.Throttle');
+  goog.require('goog.async.Throttle');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.jsunit');
 </script>
@@ -19,17 +19,15 @@ See the COPYING file for details.
 
 <script>
 
-
-
 function testThrottle() {
   var clock = new goog.testing.MockClock(true);
-  
+
   var callBackCount = 0;
   var callBackFunction = function() {
     callBackCount++;
   }
 
-  var throttle = new goog.Throttle(callBackFunction, 100);
+  var throttle = new goog.async.Throttle(callBackFunction, 100);
   assertEquals(0, callBackCount);
   throttle.fire();
   assertEquals(1, callBackCount);
@@ -98,3 +96,6 @@ function testThrottle() {
 }
 
 </script>
+
+</body>
+</html>

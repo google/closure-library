@@ -33,8 +33,8 @@ function makeATree() {
 
   createTreeFromTestData(tree, testData, 3);
 
-  var treeElt = tree.createDom();
-  goog.dom.getElement('treeContainer').appendChild(treeElt);
+  tree.createDom();
+  goog.dom.getElement('treeContainer').appendChild(tree.getElement());
   tree.enterDocument();
 
   return tree;

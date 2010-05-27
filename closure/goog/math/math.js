@@ -17,18 +17,9 @@
 *
  */
 
-
 goog.provide('goog.math');
 
-
 goog.require('goog.array');
-// TODO(user): Remove this require once all dependant files require the
-// correct subclasses instead of just goog.math.
-goog.require('goog.math.Box');
-goog.require('goog.math.Coordinate');
-goog.require('goog.math.Range');
-goog.require('goog.math.Rect');
-goog.require('goog.math.Size');
 
 
 /**

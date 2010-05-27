@@ -411,7 +411,7 @@ goog.net.ChannelRequest.prototype.xmlHttpPost = function(uri, postData,
   this.baseUri_ = uri.clone().makeUnique();
   this.postData_ = postData;
   this.decodeChunks_ = decodeChunks;
-  this.sendXmlHttp_();
+  this.sendXmlHttp_(null /* hostPrefix */);
 };
 
 
@@ -421,11 +421,14 @@ goog.net.ChannelRequest.prototype.xmlHttpPost = function(uri, postData,
  * @param {goog.Uri} uri  The uri of the request.
  * @param {boolean} decodeChunks  Whether to the result is expected to be
  *     encoded for chunking and thus requires decoding.
+ * @param {?string} hostPrefix  The host prefix, if we might be using a
+ *     secondary domain.  Note that it should also be in the URL, adding this
+ *     won't cause it to be added to the URL.
  * @param {boolean=} opt_noClose   Whether to request that the tcp/ip connection
  *     should be closed.
  */
 goog.net.ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
-                                                        opt_noClose) {
+    hostPrefix, opt_noClose) {
   this.type_ = goog.net.ChannelRequest.Type_.XML_HTTP;
   this.baseUri_ = uri.clone().makeUnique();
   this.postData_ = null;
@@ -433,7 +436,7 @@ goog.net.ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
   if (opt_noClose) {
     this.sendClose_ = false;
   }
-  this.sendXmlHttp_();
+  this.sendXmlHttp_(hostPrefix);
 };
 
 
@@ -441,9 +444,11 @@ goog.net.ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
  * Sends a request via XMLHTTP according to the current state of the
  * ChannelRequest object.
  *
+ * @param {?string} hostPrefix The host prefix, if we might be using a secondary
+ *     domain.
  * @private
  */
-goog.net.ChannelRequest.prototype.sendXmlHttp_ = function() {
+goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
   // clone the base URI to create the request URI. The request uri has the
   // attempt number as a parameter which helps in debugging.
   this.requestUri_ = this.baseUri_.clone();
@@ -451,7 +456,9 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function() {
 
   // send the request either as a POST or GET
   this.xmlHttpChunkStart_ = 0;
-  this.xmlHttp_ = this.createXhrIo_();
+  var useSecondaryDomains = this.channel_.shouldUseSecondaryDomains();
+  this.xmlHttp_ = this.channel_.createXhrIo(useSecondaryDomains ?
+      hostPrefix : null);
   goog.events.listen(this.xmlHttp_, goog.net.EventType.READY_STATE_CHANGE,
       this.xmlHttpHandler_, false, this);
 
@@ -478,15 +485,6 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function() {
       this.requestUri_, this.rid_, this.retryId_,
       this.postData_);
   this.ensureWatchDogTimer_();
-};
-
-
-/**
- * @return {goog.net.XhrIo} New XhrIo.  Separated out for testing.
- * @private
- */
-goog.net.ChannelRequest.prototype.createXhrIo_ = function() {
-  return new goog.net.XhrIo();
 };
 
 

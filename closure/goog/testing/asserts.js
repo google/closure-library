@@ -173,6 +173,13 @@ function assertThrows(a, opt_b) {
   try {
     func();
   } catch (e) {
+    if (e && goog.isString(e['stacktrace']) && goog.isString(e['message'])) {
+      // Remove the stack trace appended to the error message by Opera 10.0
+      var startIndex = e['message'].length - e['stacktrace'].length;
+      if (e['message'].indexOf(e['stacktrace'], startIndex) == startIndex) {
+        e['message'] = e['message'].substr(0, startIndex - 14);
+      }
+    }
     return e;
   }
   goog.testing.asserts.raiseException_(comment,

@@ -7,12 +7,12 @@ Use of this source code is governed by an Apache 2.0 License.
 See the COPYING file for details.
 -->
 <head>
-  <title>goog.Timer, goog.Throttle goog.Delay</title>
+  <title>goog.Timer, goog.async.Throttle goog.async.Delay</title>
   <script src="../base.js"></script>
 
   <script>
-    goog.require('goog.Delay');
-    goog.require('goog.Throttle');
+    goog.require('goog.async.Delay');
+    goog.require('goog.async.Throttle');
     goog.require('goog.Timer');
     goog.require('goog.dom');
   </script>
@@ -27,7 +27,7 @@ See the COPYING file for details.
 </head>
 <body>
   <h1>A Collection of Time Based Utilities</h1>
-  <h2>goog.Delay</h2>
+  <h2>goog.async.Delay</h2>
   <p>An action can be invoked after some delay.</p>
   Delay (seconds): <input size="2" type="text" id="delaySeconds" value="2">
   <button onclick="doDelay()">Start Delay</button>
@@ -35,7 +35,7 @@ See the COPYING file for details.
   <br />
   Delay Status: <span class="userStatus" id="delayStatus">Not Set</span>
 
-  <h2>goog.Throttle</h2>
+  <h2>goog.async.Throttle</h2>
   A throttle prevents the action from being called more than once per time
   interval.
   <br />
@@ -123,9 +123,10 @@ See the COPYING file for details.
       if (!goog.isNumber(seconds)) {
         return;
       }
-      delay = new goog.Delay (delayedAction, inMs(seconds));
+      delay = new goog.async.Delay(delayedAction, inMs(seconds));
       delay.start();
-      goog.dom.setTextContent(delayStatus, 'Delay for: ' + seconds + ' seconds.');
+      goog.dom.setTextContent(delayStatus,
+                              'Delay for: ' + seconds + ' seconds.');
     };
 
     /**
@@ -173,7 +174,7 @@ See the COPYING file for details.
         throttleFireCount = 0;
       }
       // Create the throttle object for the given time.
-      throttle = new goog.Throttle(throttleAction, inMs(seconds));
+      throttle = new goog.async.Throttle(throttleAction, inMs(seconds));
       // Reset the hits and the count.
       goog.dom.setTextContent(throttleHits, throttleFireCount);
       goog.dom.setTextContent(throttleStatus, throttleCount);
@@ -281,7 +282,8 @@ See the COPYING file for details.
     var doOnceClear = function() {
       goog.Timer.clear(doOnceTimer);
       doOnceTimer = null;
-      goog.dom.setTextContent(doOnceStatus, 'Timer cleared, action not called.');
+      goog.dom.setTextContent(doOnceStatus,
+                              'Timer cleared, action not called.');
     };
 
   </script>

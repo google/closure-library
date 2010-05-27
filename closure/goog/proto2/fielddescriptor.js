@@ -60,6 +60,9 @@ goog.proto2.FieldDescriptor = function(messageType, tag, metadata) {
    */
   this.name_ = metadata.name;
 
+  /** @type {*} */
+  metadata.required;
+
   /**
    * If true, this field is a repeating field.
    * @type {boolean}
@@ -85,7 +88,7 @@ goog.proto2.FieldDescriptor = function(messageType, tag, metadata) {
    * If this field is a primitive: The native (ECMAScript) type of this field.
    * If an enumeration: The enumeration object.
    * If a message or group field: The Message function.
-   * @type {Object}
+   * @type {Function}
    * @private
    */
   this.nativeType_ = metadata.type;
@@ -93,7 +96,7 @@ goog.proto2.FieldDescriptor = function(messageType, tag, metadata) {
   /**
    * The default value of this field, if different from the default, default
    * value.
-   * @type {Object|undefined}
+   * @type {*}
    * @private
    */
   this.defaultValue_ = metadata.defaultValue;
@@ -130,17 +133,26 @@ goog.proto2.FieldDescriptor.prototype.getName = function() {
 
 /**
  * Returns the default value of this field.
- * @return {Object} The default value.
+ * @return {*} The default value.
  */
 goog.proto2.FieldDescriptor.prototype.getDefaultValue = function() {
   if (this.defaultValue_ === undefined) {
     // Set the default value based on a new instance of the native type.
     // This will be (0, false, "") for (number, boolean, string) and will
     // be a new instance of a group/message if the field is a message type.
-    this.defaultValue_ = new this.nativeType_;
+    var nativeType = this.nativeType_;
+    if (nativeType == Boolean) {
+      this.defaultValue_ = false;
+    } else if (nativeType == Number) {
+      this.defaultValue_ = 0;
+    } else if (nativeType == String) {
+      this.defaultValue_ = '';
+    } else {
+      this.defaultValue_ = new nativeType;
+    }
   }
 
-  return /** @type {Object} */ (this.defaultValue_);
+  return this.defaultValue_;
 };
 
 

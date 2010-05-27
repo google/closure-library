@@ -614,6 +614,10 @@ goog.ui.MenuButton.prototype.setOpen = function(open) {
  * the menu size is known to change.
  */
 goog.ui.MenuButton.prototype.positionMenu = function() {
+  if (!this.menu_.isInDocument()) {
+    return;
+  }
+
   var anchorCorner = this.isAlignMenuToStart() ?
       goog.positioning.Corner.BOTTOM_START : goog.positioning.Corner.BOTTOM_END;
   var position = new goog.positioning.MenuAnchoredPosition(this.getElement(),

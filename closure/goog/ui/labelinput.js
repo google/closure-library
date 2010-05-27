@@ -191,7 +191,8 @@ goog.ui.LabelInput.prototype.disposeInternal = function() {
  * The CSS class name to add to the input when the user has not entered a
  * value.
  */
-goog.ui.LabelInput.prototype.LABEL_CLASS_NAME = 'label-input-label';
+goog.ui.LabelInput.prototype.LABEL_CLASS_NAME =
+    goog.getCssName('label-input-label');
 
 
 /**

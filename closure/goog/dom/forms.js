@@ -314,7 +314,9 @@ goog.dom.forms.getSelectMultiple_ = function(el) {
 /**
  * Sets the current value of any element with a type.
  * @param {Element} el The element.
- * @param {string|Array=} opt_value The value to give to the element.
+ * @param {*} opt_value The value to give to the element, which will be coerced
+ *     by the browser in the default case using toString. This value should be
+ *     an array for setting the value of select multiple elements.
  */
 goog.dom.forms.setValue = function(el, opt_value) {
   var type = el.type;
@@ -334,7 +336,7 @@ goog.dom.forms.setValue = function(el, opt_value) {
             /** @type {Array} */ (opt_value));
         break;
       default:
-        el.value = goog.isString(opt_value) ? opt_value : '';
+        el.value = goog.isDefAndNotNull(opt_value) ? opt_value : '';
     }
   }
 };

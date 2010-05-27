@@ -34,7 +34,7 @@ goog.require('goog.math.Coordinate');
  * @param {number} n The number of vertices.
  * @return {!goog.graphics.Path} The path.
  */
-goog.graphics.paths.regularNGon = function(center, vertex, n) {
+goog.graphics.paths.createRegularNGon = function(center, vertex, n) {
   var path = new goog.graphics.Path();
   path.moveTo(vertex.x, vertex.y);
 
@@ -60,7 +60,7 @@ goog.graphics.paths.regularNGon = function(center, vertex, n) {
  *     0 omits the head.
  * @return {!goog.graphics.Path} The path.
  */
-goog.graphics.paths.arrow = function(a, b, aHead, bHead) {
+goog.graphics.paths.createArrow = function(a, b, aHead, bHead) {
   var path = new goog.graphics.Path();
   path.moveTo(a.x, a.y);
   path.lineTo(b.x, b.y);
@@ -68,7 +68,7 @@ goog.graphics.paths.arrow = function(a, b, aHead, bHead) {
   var angle = Math.atan2(b.y - a.y, b.x - a.x);
   if (aHead) {
     path.appendPath(
-        goog.graphics.paths.regularNGon(
+        goog.graphics.paths.createRegularNGon(
             new goog.math.Coordinate(
                 a.x + aHead * Math.cos(angle),
                 a.y + aHead * Math.sin(angle)),
@@ -76,7 +76,7 @@ goog.graphics.paths.arrow = function(a, b, aHead, bHead) {
   }
   if (bHead) {
     path.appendPath(
-        goog.graphics.paths.regularNGon(
+        goog.graphics.paths.createRegularNGon(
             new goog.math.Coordinate(
                 b.x + bHead * Math.cos(angle + Math.PI),
                 b.y + bHead * Math.sin(angle + Math.PI)),

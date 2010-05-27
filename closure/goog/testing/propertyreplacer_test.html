@@ -275,6 +275,39 @@ function testMathRandom() {
   assertNotEquals('original Math.random', -1, Math.random());
 }
 
+// Tests the replace method of PropertyReplacer.
+function testReplace() {
+  var stubs = new goog.testing.PropertyReplacer();
+  function C() {
+    this.a = 1;
+  };
+  C.prototype.b = 1;
+  C.prototype.toString = function() {
+    return 'obj';
+  };
+  var obj = new C();
+
+  stubs.replace(obj, 'a', 2);
+  assertEquals('successfully replaced the own property of an object', 2, obj.a);
+
+  stubs.replace(obj, 'b', 2);
+  assertEquals('successfully replaced the property in the prototype', 2, obj.b);
+
+  var error = assertThrows('cannot replace missing key',
+      goog.bind(stubs.replace, stubs, obj, 'unknown', 1));
+  // Using assertContains instead of assertEquals because Opera 10.0 adds
+  // the stack trace to the error message.
+  assertEquals('error message for missing key',
+      'Cannot replace missing property "unknown" in obj', error.message);
+  assertFalse('object not touched', 'unknown' in obj);
+
+  var error = assertThrows('cannot change value type',
+      goog.bind(stubs.replace, stubs, obj, 'a', '3'));
+  assertContains('error message for type mismatch',
+      'Cannot replace property "a" in obj with a value of different type',
+      error.message);
+}
+
 // Tests altering complete namespace paths.
 function testSetPath() {
   goog.global.a = {b: {}};

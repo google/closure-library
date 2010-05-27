@@ -377,6 +377,11 @@ goog.iter.chain = function(var_args) {
   var length = args.length;
   var i = 0;
   var newIter = new goog.iter.Iterator;
+
+  /**
+   * @return {*} The next item in the iteration.
+   * @this {goog.iter.Iterator}
+   */
   newIter.next = function() {
     /** @preserveTry */
     try {
@@ -395,6 +400,7 @@ goog.iter.chain = function(var_args) {
       }
     }
   };
+
   return newIter;
 };
 

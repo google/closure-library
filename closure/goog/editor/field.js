@@ -1261,10 +1261,10 @@ goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
 /**
  * Executes an editing command as per the registered plugins.
  * @param {string} command The command to execute.
- * @param {...*} var_args Any additional parameters needed to
- *     execute the command.
- * @return {Object|boolean} False if the command wasn't handled,
- *     otherwise, the result of the command.
+ * @param {...*} var_args Any additional parameters needed to execute the
+ *     command.
+ * @return {*} False if the command wasn't handled, otherwise, the result of
+ *     the command.
  */
 goog.editor.Field.prototype.execCommand = function(command, var_args) {
   var args = arguments;

@@ -14,6 +14,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.debug.ErrorHandler');
+  goog.require('goog.net.WrapperXmlHttpFactory');
   goog.require('goog.net.XhrIo');
   goog.require('goog.string');
   goog.require('goog.testing.MockClock');
@@ -61,15 +62,13 @@ MockXmlHttp.prototype.abort = function() {};
 
 MockXmlHttp.prototype.setRequestHeader = function(key, value) {};
 
-
-MockXmlHttp.OptionType = goog.net.XmlHttp.OptionType;
-MockXmlHttp.ReadyState = goog.net.XmlHttp.ReadyState;
-MockXmlHttp.getProgId_ = goog.net.XmlHttp.getProgId_;
-MockXmlHttp.optionsFactory_ = goog.net.XmlHttp.optionsFactory_;
-MockXmlHttp.cachedOptions_ = goog.net.XmlHttp.cachedOptions_;
-MockXmlHttp.getOptions = goog.net.XmlHttp.getOptions;
-
-goog.net.XmlHttp = MockXmlHttp;
+goog.net.XmlHttp.setGlobalFactory(new goog.net.WrapperXmlHttpFactory(
+    function() {
+      return new MockXmlHttp();
+    },
+    function() {
+      return {};
+    }));
 
 
 var clock;
@@ -174,6 +173,28 @@ function testDisposeInternalDoesNotAbortXhrRequestObjectWhenActiveIsFalse() {
 
   goog.net.XmlHttp = xmlHttp;
   assertFalse(abortCalled);
+}
+
+function testFactoryInjection() {
+  var xhr = new MockXmlHttp();
+  var optionsFactoryCalled = 0;
+  var xhrFactoryCalled = 0;
+  var wrapperFactory = new goog.net.WrapperXmlHttpFactory(
+      function() {
+        xhrFactoryCalled++;
+        return xhr;
+      },
+      function() {
+        optionsFactoryCalled++;
+        return {};
+      });
+  var xhrIo = new goog.net.XhrIo(wrapperFactory);
+
+  xhrIo.send('url');
+
+  assertEquals('XHR factory should have been called', 1, xhrFactoryCalled);
+  assertEquals('Options factory should have been called', 1,
+      optionsFactoryCalled);
 }
 
 function testGoogTestingNetXhrIoIsInSync() {

@@ -70,6 +70,12 @@ goog.debug.Formatter.prototype.showLoggerName = true;
  */
 goog.debug.Formatter.prototype.showExceptionText = false;
 
+/**
+ * Whether to show the severity level
+ * @type {boolean}
+ */
+goog.debug.Formatter.prototype.showSeverityLevel = false;
+
 
 /**
  * Formats a record
@@ -283,6 +289,9 @@ goog.debug.TextFormatter.prototype.formatRecord = function(logRecord) {
 
   if (this.showLoggerName) {
     sb.push('[', logRecord.getLoggerName(), '] ');
+  }
+  if (this.showSeverityLevel) {
+    sb.push('[', logRecord.getLevel().name, '] ');
   }
   sb.push(logRecord.getMessage(), '\n');
   if (this.showExceptionText && logRecord.getException()) {

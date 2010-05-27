@@ -1457,7 +1457,8 @@ goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
     this.backChannelRequest_.tridentGet(uri, Boolean(this.hostPrefix_));
   } else {
     uri.setParameterValue('TYPE', 'xmlhttp');
-    this.backChannelRequest_.xmlHttpGet(uri, true);
+    this.backChannelRequest_.xmlHttpGet(uri, true /* decodeChunks */,
+        this.hostPrefix_, false /* opt_noClose */);
   }
   this.channelDebug_.debug('New Request created');
 };
@@ -2000,7 +2001,8 @@ goog.net.BrowserChannel.prototype.getForwardChannelUri =
  */
 goog.net.BrowserChannel.prototype.getBackChannelUri =
     function(hostPrefix, path) {
-  var uri = this.createDataUri(goog.userAgent.IE ? hostPrefix : null, path);
+  var uri = this.createDataUri(this.shouldUseSecondaryDomains() ?
+      hostPrefix : null, path);
   this.channelDebug_.debug('GetBackChannelUri: ' + uri);
   return uri;
 };
@@ -2040,6 +2042,23 @@ goog.net.BrowserChannel.prototype.createDataUri =
   this.addAdditionalParams_(uri);
 
   return uri;
+};
+
+
+/**
+ * Called when BC needs to create an XhrIo object.  Override in a subclass if
+ * you need to customize the behavior, for example to enable the creation of
+ * XHR's capable of calling a secondary domain.
+ * @param {?string} hostPrefix The host prefix, if we need an XhrIo object
+ *     capable of calling a secondary domain.
+ * @return {!goog.net.XhrIo} A new XhrIo object.
+ */
+goog.net.BrowserChannel.prototype.createXhrIo = function(hostPrefix) {
+  if (hostPrefix) {
+    throw new Error('Can\'t create secondary domain capable XhrIo object.');
+  } else {
+    return new goog.net.XhrIo();
+  }
 };
 
 
@@ -2122,6 +2141,16 @@ goog.net.BrowserChannel.notifyTimingEvent = function(size, rtt, retries) {
   var target = goog.net.BrowserChannel.statEventTarget_;
   target.dispatchEvent(
       new goog.net.BrowserChannel.TimingEvent(target, size, rtt, retries));
+};
+
+
+/**
+ * Override this in a subclass to enable secondary domains for non-IE browsers.
+ * @return {boolean} Whether to use a secondary domain when the server
+ *     recommends it.
+ */
+goog.net.BrowserChannel.prototype.shouldUseSecondaryDomains = function() {
+  return goog.userAgent.IE;
 };
 
 

@@ -55,10 +55,12 @@ goog.require('goog.structs.Map');
 
 /**
  * Basic class for handling XMLHttpRequests.
+ * @param {goog.net.XmlHttpFactory=} opt_xmlHttpFactory Factory to use when
+ *     creating XMLHttpRequest objects.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-goog.net.XhrIo = function() {
+goog.net.XhrIo = function(opt_xmlHttpFactory) {
   goog.events.EventTarget.call(this);
 
   /**
@@ -67,6 +69,13 @@ goog.net.XhrIo = function() {
    * @type {goog.structs.Map}
    */
   this.headers = new goog.structs.Map();
+
+  /**
+   * Optional XmlHttpFactory
+   * @type {goog.net.XmlHttpFactory}
+   * @private
+   */
+  this.xmlHttpFactory_ = opt_xmlHttpFactory || null;
 };
 goog.inherits(goog.net.XhrIo, goog.events.EventTarget);
 
@@ -355,7 +364,8 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
 
   // Use the factory to create the XHR object and options
   this.xhr_ = this.createXhr();
-  this.xhrOptions_ = goog.net.XmlHttp.getOptions();
+  this.xhrOptions_ = this.xmlHttpFactory_ ?
+      this.xmlHttpFactory_.getOptions() : goog.net.XmlHttp.getOptions();
 
   // We tell the Xhr Monitor that we are opening an XMLHttpRequest.  This stops
   // IframeIo from destroying iframes that may have been the source of the
@@ -442,7 +452,8 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
  * @protected
  */
 goog.net.XhrIo.prototype.createXhr = function() {
-  return new goog.net.XmlHttp();
+  return this.xmlHttpFactory_ ?
+      this.xmlHttpFactory_.createInstance() : new goog.net.XmlHttp();
 };
 
 

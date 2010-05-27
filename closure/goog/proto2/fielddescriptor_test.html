@@ -37,6 +37,27 @@ function testFieldDescriptorConstruction() {
 
   assertEquals(7, fieldDescriptor.getFieldType());
   assertEquals(Number, fieldDescriptor.getNativeType());
+  assertEquals(0, fieldDescriptor.getDefaultValue());
+}
+
+function testFieldDescriptorConstruction2() {
+  var fieldDescriptor = new goog.proto2.FieldDescriptor({}, 10, {
+    name: 'test',
+    fieldType: 7,
+    type: String
+  });
+
+  assertEquals('', fieldDescriptor.getDefaultValue());
+}
+
+function testFieldDescriptorConstruction3() {
+  var fieldDescriptor = new goog.proto2.FieldDescriptor({}, 10, {
+    name: 'test',
+    fieldType: 7,
+    type: Boolean
+  });
+
+  assertEquals(false, fieldDescriptor.getDefaultValue());
 }
 
 function testRepeatedField() {

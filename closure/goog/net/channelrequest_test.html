@@ -53,12 +53,23 @@ function tearDown() {
   * @constructor
  */
 function MockBrowserChannel() {
+  this.createXhrIo = function(domainPrefix) {
+    assertNull(domainPrefix);
+    var xhrIo = new goog.testing.net.XhrIo();
+    xhrIo.abort = xhrIo.abort || function() {
+      this.active_ = false;
+    };
+    return xhrIo;
+  }
   this.isClosed = function() {
     return false;
   };
   this.isActive = function() {
     return true;
   };
+  this.shouldUseSecondaryDomains = function() {
+    return false;
+  }
   this.completedRequests = [];
   this.onRequestComplete = function(request) {
     this.completedRequests.push(request);

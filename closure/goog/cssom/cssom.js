@@ -283,7 +283,7 @@ goog.cssom.replaceCssRule = function(cssRule, cssText, opt_parentStyleSheet,
  * @param {string} cssText The text for the new CSSRule.
  * @param {number=} opt_index The index of the cssRule in its parentStylesheet.
  * @throws {Error} If the css rule text appears to be ill-formatted.
- * TODO(user): Inserting at index 0 fails on Firefox 2 and 3 with an
+ * TODO(bowdidge): Inserting at index 0 fails on Firefox 2 and 3 with an
  *     exception warning "Node cannot be inserted at the specified point in
  *     the hierarchy."
  */

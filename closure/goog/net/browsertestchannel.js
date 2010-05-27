@@ -214,7 +214,8 @@ goog.net.BrowserTestChannel.prototype.connect = function(path) {
   this.request_ = goog.net.BrowserChannel.createChannelRequest(
       this, this.channelDebug_);
   this.request_.setExtraHeaders(this.extraHeaders_);
-  this.request_.xmlHttpGet(sendDataUri, false, true);
+  this.request_.xmlHttpGet(sendDataUri, false /* decodeChunks */,
+      null /* hostPrefix */, true /* opt_noClose */);
   this.state_ = goog.net.BrowserTestChannel.State_.INIT;
 };
 
@@ -281,8 +282,20 @@ goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
     this.request_.tridentGet(recvDataUri, Boolean(this.hostPrefix_));
   } else {
     recvDataUri.setParameterValues('TYPE', 'xmlhttp');
-    this.request_.xmlHttpGet(recvDataUri, false);
+    this.request_.xmlHttpGet(recvDataUri, false /** decodeChunks */,
+        this.hostPrefix_, false /** opt_noClose */);
   }
+};
+
+
+/**
+ * Factory method for XhrIo objects.
+ * @param {?string} hostPrefix The host prefix, if we need an XhrIo object
+ *     capable of calling a secondary domain.
+ * @return {!goog.net.XhrIo} New XhrIo object.
+ */
+goog.net.BrowserTestChannel.prototype.createXhrIo = function(hostPrefix) {
+  return this.channel_.createXhrIo(hostPrefix);
 };
 
 
@@ -444,6 +457,15 @@ goog.net.BrowserTestChannel.prototype.onRequestComplete =
  */
 goog.net.BrowserTestChannel.prototype.getLastStatusCode = function() {
   return this.lastStatusCode_;
+};
+
+
+/**
+ * @return {boolean} Whether we should be using secondary domains when the
+ *     server instructs us to do so.
+ */
+goog.net.BrowserTestChannel.prototype.shouldUseSecondaryDomains = function() {
+  return this.channel_.shouldUseSecondaryDomains();
 };
 
 

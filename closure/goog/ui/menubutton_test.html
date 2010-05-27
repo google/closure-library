@@ -169,6 +169,17 @@ function testPositionMenu() {
 }
 
 /**
+ * Tests that calling positionMenu when the menu is not in the document does not
+ * throw an exception.
+ */
+function testPositionMenuNotInDocument() {
+  var menu = new goog.ui.Menu();
+  menu.createDom();
+  menuButton.setMenu(menu);
+  menuButton.positionMenu();
+}
+
+/**
  * Shows the menu and moves the menu button, a timer correct the menu position.
  */
 function testOpenedMenuPositionCorrection() {
