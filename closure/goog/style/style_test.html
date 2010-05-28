@@ -941,6 +941,56 @@ function testSetSize() {
   assertEquals('40px', el.style.height);
 }
 
+function testSetWidthAndHeight() {
+  var el = $('testEl');
+
+  // Replicate all of the setSize tests above.
+
+  goog.style.setWidth(el, 100);
+  goog.style.setHeight(el, 100);
+  assertEquals('100px', el.style.width);
+  assertEquals('100px', el.style.height);
+
+  goog.style.setWidth(el, '50px');
+  goog.style.setHeight(el, '25px');
+  assertEquals('should be "50px"', '50px', el.style.width);
+  assertEquals('should be "25px"', '25px', el.style.height);
+
+  goog.style.setWidth(el, '10ex');
+  goog.style.setHeight(el, '25px');
+  assertEquals('10ex', el.style.width);
+  assertEquals('25px', el.style.height);
+
+  goog.style.setWidth(el, '10%');
+  goog.style.setHeight(el, '25%');
+  assertEquals('10%', el.style.width);
+  assertEquals('25%', el.style.height);
+
+  goog.style.setWidth(el, 0);
+  goog.style.setHeight(el, 0);
+  assertEquals('0px', el.style.width);
+  assertEquals('0px', el.style.height);
+
+  goog.style.setWidth(el, 20);
+  goog.style.setHeight(el, 40);
+  assertEquals('20px', el.style.width);
+  assertEquals('40px', el.style.height);
+
+  // Additional tests testing each separately.
+  goog.style.setWidth(el, '');
+  goog.style.setHeight(el, '');
+  assertEquals('', el.style.width);
+  assertEquals('', el.style.height);
+
+  goog.style.setHeight(el, 20);
+  assertEquals('', el.style.width);
+  assertEquals('20px', el.style.height);
+
+  goog.style.setWidth(el, 40);
+  assertEquals('40px', el.style.width);
+  assertEquals('20px', el.style.height);
+}
+
 function testGetSize() {
   var el = $('testEl');
   goog.style.setSize(el, 100, 100);
