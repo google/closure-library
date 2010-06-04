@@ -115,8 +115,12 @@ function testSetPropertiesDirectAttributeMap() {
 }
 
 function testSetTableProperties() {
-  var attrs = { 'style': 'padding-left: 10px;', 'class': 'mytestclass',
-                'height': '101', 'cellpadding': '15' };
+  var attrs = {
+    'style': 'padding-left: 10px;',
+    'class': 'mytestclass',
+    'height': '101',
+    'cellpadding': '15'
+  };
   var el = $('testTable1');
 
   var res = goog.dom.setProperties(el, attrs);
@@ -155,7 +159,8 @@ function testGetDocumentHeightInIframe() {
 }
 
 function testCreateDom() {
-  var el = goog.dom.$dom('div', {
+  var el = goog.dom.$dom('div',
+      {
         style: 'border: 1px solid black; width: 50%; background-color: #EEE;',
         onclick: "alert('woo')"
       },
@@ -166,9 +171,9 @@ function testCreateDom() {
       goog.dom.$dom('p', {style: 'font: normal 24px monospace; color: green'},
                     'Para 3 ',
                     goog.dom.$dom('a', {
-                          name: 'link', href: 'http://bbc.co.uk'
-                      },
-                      'has a link'),
+                      name: 'link', href: 'http://bbc.co.uk'
+                    },
+                    'has a link'),
                     ', how cool is this?'));
 
   assertEquals('Tagname should be a DIV', 'DIV', el.tagName);
@@ -517,9 +522,9 @@ function testGetPreviousElementSibling() {
 function testGetNextNode() {
   var tree = goog.dom.htmlToDocumentFragment(
       '<div>' +
-        '<p>Some text</p>' +
-        '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
-        '<address><!-- comment -->Foo</address>' +
+      '<p>Some text</p>' +
+      '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
+      '<address><!-- comment -->Foo</address>' +
       '</div>');
 
   assertNull(goog.dom.getNextNode(null));
@@ -548,9 +553,9 @@ function testGetNextNode() {
 function testGetPreviousNode() {
   var tree = goog.dom.htmlToDocumentFragment(
       '<div>' +
-        '<p>Some text</p>' +
-        '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
-        '<address><!-- comment -->Foo</address>' +
+      '<p>Some text</p>' +
+      '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
+      '<address><!-- comment -->Foo</address>' +
       '</div>');
 
   assertNull(goog.dom.getPreviousNode(null));
@@ -709,7 +714,7 @@ function testGetTextContent() {
   function t(inp, out) {
     assertEquals(out.replace(/ /g, '_'),
                  goog.dom.getTextContent(
-                    createTestDom(inp)).replace(/ /g, '_'));
+                     createTestDom(inp)).replace(/ /g, '_'));
   }
 
   t('abcde', 'abcde');

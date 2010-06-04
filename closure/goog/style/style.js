@@ -1593,7 +1593,7 @@ goog.style.getBorderBox = function(element) {
 goog.style.getFontFamily = function(el) {
   var doc = goog.dom.getOwnerDocument(el);
   var font = '';
-  if (doc.createTextRange) {
+  if (doc.body.createTextRange) {
     var range = doc.body.createTextRange();
     range.moveToElementText(el);
     font = range.queryCommandValue('FontName');

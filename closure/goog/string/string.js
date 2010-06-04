@@ -732,11 +732,12 @@ goog.string.truncateMiddle = function(str, chars,
 
 
 /**
- * Character mappings used internally for goog.string.quote.
+ * Special chars that need to be escaped for goog.string.quote.
  * @private
  * @type {Object}
  */
-goog.string.jsEscapeCache_ = {
+goog.string.specialEscapeChars_ = {
+  '\0': '\\0',
   '\b': '\\b',
   '\f': '\\f',
   '\n': '\\n',
@@ -744,8 +745,17 @@ goog.string.jsEscapeCache_ = {
   '\t': '\\t',
   '\x0B': '\\x0B', // '\v' is not supported in JScript
   '"': '\\"',
-  '\'': '\\\'',
   '\\': '\\\\'
+};
+
+
+/**
+ * Character mappings used internally for goog.string.escapeChar.
+ * @private
+ * @type {Object}
+ */
+goog.string.jsEscapeCache_ = {
+  '\'': '\\\''
 };
 
 
@@ -762,11 +772,28 @@ goog.string.quote = function(s) {
   } else {
     var sb = ['"'];
     for (var i = 0; i < s.length; i++) {
-      sb[i + 1] = goog.string.escapeChar(s.charAt(i));
+      var ch = s.charAt(i);
+      var cc = ch.charCodeAt(0);
+      sb[i + 1] = goog.string.specialEscapeChars_[ch] ||
+          ((cc > 31 && cc < 127) ? ch : goog.string.escapeChar(ch));
     }
     sb.push('"');
     return sb.join('');
   }
+};
+
+
+/**
+ * Takes a string and returns the escaped string for that charater.
+ * @param {string} str The string to escape.
+ * @return {string} An escaped string representing {@code str}.
+ */
+goog.string.escapeString = function(str) {
+  var sb = [];
+  for (var i = 0; i < str.length; i++) {
+    sb[i] = goog.string.escapeChar(str.charAt(i));
+  }
+  return sb.join('');
 };
 
 
@@ -780,6 +807,11 @@ goog.string.escapeChar = function(c) {
   if (c in goog.string.jsEscapeCache_) {
     return goog.string.jsEscapeCache_[c];
   }
+
+  if (c in goog.string.specialEscapeChars_) {
+    return goog.string.jsEscapeCache_[c] = goog.string.specialEscapeChars_[c];
+  }
+
   var rv = c;
   var cc = c.charCodeAt(0);
   if (cc > 31 && cc < 127) {

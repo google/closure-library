@@ -362,7 +362,7 @@ goog.math.RangeSet.prototype.__iterator__ = function(opt_keys) {
       throw goog.iter.StopIteration;
     }
     return list[i++].clone();
-  }
+  };
 
   return iterator;
 };

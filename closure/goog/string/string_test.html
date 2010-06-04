@@ -577,6 +577,30 @@ function testQuote() {
   assertEquals(str, a);
 }
 
+function testQuoteSpecialChars() {
+  assertEquals('"\\""', goog.string.quote('"'));
+  assertEquals("\"'\"", goog.string.quote("'"));
+  assertEquals("\"\\\\\"", goog.string.quote("\\"));
+}
+
+function testCrossBrowserQuote() {
+  var oldQuoteFn = String.prototype.quote;
+  try {
+    // The vertical space char has weird semantics on jscript, so we don't test
+    // that one.
+    var vertChar = '\x0B'.charCodeAt(0);
+    var str = allChars(0, vertChar) + allChars(vertChar + 1, 10000);
+    var nativeQuote = goog.string.quote(str);
+
+    String.prototype.quote = null;
+    assertNull("".quote);
+
+    assertEquals(nativeQuote, goog.string.quote(str));
+  } finally {
+    String.prototype.quote = oldQuoteFn;
+  }
+}
+
 function allChars(opt_start, opt_end) {
   opt_start = opt_start || 0;
   opt_end = opt_end || 256;
@@ -585,6 +609,17 @@ function allChars(opt_start, opt_end) {
     rv += String.fromCharCode(i);
   }
   return rv;
+}
+
+function testEscapeString() {
+  var expected = allChars(0, 10000);
+  try {
+    var actual =
+        eval('"' + goog.string.escapeString(expected) + '"');
+  } catch (e) {
+    fail('Quote failed: err ' + e.message);
+  }
+  assertEquals(expected, actual);
 }
 
 function testRemoveAt() {

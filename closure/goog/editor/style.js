@@ -207,7 +207,7 @@ goog.editor.style.makeSelectable = function(element) {
     // as unselectable so the minimum set of nodes is changed.
     var child = element;
     var current = /** @type {Element} */ (element.parentNode);
-    while (current) {
+    while (current && current.tagName != goog.dom.TagName.HTML) {
       if (goog.style.isUnselectable(current)) {
         goog.style.setUnselectable(current, false, true);
 

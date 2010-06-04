@@ -522,7 +522,7 @@ goog.dom.browserrange.IeRange.prototype.getOffset_ = function(endpoint,
  */
 goog.dom.browserrange.IeRange.getNodeText_ = function(node) {
   return node.nodeType == goog.dom.NodeType.TEXT ?
-             node.nodeValue : node.innerText;
+         node.nodeValue : node.innerText;
 };
 
 
@@ -733,7 +733,7 @@ goog.dom.browserrange.IeRange.insertNode_ = function(clone, node,
   opt_domHelper = opt_domHelper || goog.dom.browserrange.IeRange.getDomHelper_(
       clone);
 
- // If it's not an element, wrap it in one.
+  // If it's not an element, wrap it in one.
   var isNonElement;
   if (node.nodeType != goog.dom.NodeType.ELEMENT) {
     isNonElement = true;

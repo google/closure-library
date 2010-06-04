@@ -155,7 +155,7 @@ goog.dom.xml.selectNodes = function(node, path) {
     }
     return results;
   } else {
-   return [];
+    return [];
   }
 };
 

@@ -16,6 +16,7 @@ Author: attila@google.com (Attila Bodis)
     goog.require('goog.dom');
     goog.require('goog.dom.classes');
     goog.require('goog.events');
+    goog.require('goog.events.KeyCodes');
     goog.require('goog.events.BrowserEvent.MouseButton');
     goog.require('goog.object');
     goog.require('goog.style');
@@ -1620,6 +1621,29 @@ Author: attila@google.com (Attila Bodis)
       assertEquals('Control must not have dispatched any ENABLE events', 0,
           getEventCount(control, goog.ui.Component.EventType.ENABLE));
     }
+
+    /**
+     * Tests {@link goog.ui.Control#handleKeyEvent}.
+     */
+    function testHandleKeyEvent() {
+      control.render()
+      control.isVisible = control.isEnabled = function() {
+        return true;
+      };
+
+
+      goog.testing.events.fireKeySequence(
+          control.getKeyEventTarget(), goog.events.KeyCodes.A);
+
+      assertEquals('Control must not have dispatched an ACTION event', 0,
+          getEventCount(control, goog.ui.Component.EventType.ACTION));
+
+      goog.testing.events.fireKeySequence(
+          control.getKeyEventTarget(), goog.events.KeyCodes.ENTER);
+      assertEquals('Control must have dispatched an ACTION event', 1,
+          getEventCount(control, goog.ui.Component.EventType.ACTION));
+    }
+
 
     /**
      * Tests {@link goog.ui.Control#performActionInternal}.

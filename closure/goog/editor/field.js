@@ -1311,7 +1311,7 @@ goog.editor.Field.prototype.queryCommandValue = function(commands) {
  * Gets the value of this command.
  * @param {string} command The command to check.
  * @param {boolean} isEditable Whether the field is currently editable.
- * @return {string|boolean|null} The state of this command. Null if not handled.
+ * @return {*} The state of this command. Null if not handled.
  *     False if the field is uneditable and there are no handlers for
  *     uneditable commands.
  * @private

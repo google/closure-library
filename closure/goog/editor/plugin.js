@@ -383,7 +383,7 @@ goog.editor.Plugin.prototype.execCommandInternal;
 /**
  * Gets the state of this command if this plugin serves that command.
  * @param {string} command The command to check.
- * @return {string|boolean|null} The value of the command.
+ * @return {*} The value of the command.
  */
 goog.editor.Plugin.prototype.queryCommandValue;
 

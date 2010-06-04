@@ -52,13 +52,10 @@ goog.net.GOOGLECOM_TIMEOUT = 10000;
 goog.net.testGoogleCom = function(callback, opt_imageUri) {
   // We need to add a 'rand' to make sure the response is not fulfilled
   // by browser cache.
-  // The 'cleardot.gif' url can't have additional parameters, so we use
-  // the url redirector.
   var uri = opt_imageUri;
   if (!uri) {
-    uri = new goog.Uri('http://www.google.com/url');
+    uri = new goog.Uri('//www.google.com/images/cleardot.gif');
     uri.makeUnique();
-    uri.setParameterValues('q', 'http://www.google.com/images/cleardot.gif');
   }
   goog.net.testLoadImage(uri.toString(), goog.net.GOOGLECOM_TIMEOUT, callback);
 };

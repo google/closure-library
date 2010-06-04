@@ -138,8 +138,8 @@ goog.dom.annotate.annotateTermsInNode_ =
                  node.tagName)) {
     var classes = node.className.split(/\s+/);
     var skip = goog.array.some(classes, function(className) {
-        return goog.array.contains(classesToSkip, className);
-      });
+      return goog.array.contains(classesToSkip, className);
+    });
 
     if (!skip) {
       ++recursionLevel;

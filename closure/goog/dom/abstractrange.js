@@ -75,9 +75,9 @@ goog.dom.AbstractRange.getBrowserSelectionForWindow = function(win) {
           if (range.parentElement().document != doc) {
             return null;
           }
-        // For ControlRanges, check that the range has items, and that
-        // the first item in the range is in the correct document.
         } else if (!range.length || range.item(0).document != doc) {
+          // For ControlRanges, check that the range has items, and that
+          // the first item in the range is in the correct document.
           return null;
         }
       } catch (e) {

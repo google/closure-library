@@ -160,8 +160,9 @@ goog.dom.selection.getEndPointsTextareaIe_ = function(
       }
     }
   }
-  return [untrimmedBeforeSelectionText.length,
-          untrimmedBeforeSelectionText.length + untrimmedSelectionText.length];
+  return [
+    untrimmedBeforeSelectionText.length,
+    untrimmedBeforeSelectionText.length + untrimmedSelectionText.length];
 };
 
 
@@ -261,7 +262,7 @@ goog.dom.selection.setEnd = function(textfield, pos) {
  *     unable to find the position or no selection exists.
  */
 goog.dom.selection.getEnd = function(textfield) {
- return goog.dom.selection.getEndPoints_(textfield, false)[1];
+  return goog.dom.selection.getEndPoints_(textfield, false)[1];
 };
 
 

@@ -1365,8 +1365,8 @@ function testIsOdd() {
   }
 }
 
-function testComparisons() {
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
+function createTestComparisons(i) {
+  return function() {
     var vi = goog.math.Long.fromBits(TEST_BITS[i+1], TEST_BITS[i]);
     for (var j = 0; j < TEST_BITS.length; j += 2) {
       var vj = goog.math.Long.fromBits(TEST_BITS[j+1], TEST_BITS[j]);
@@ -1377,11 +1377,19 @@ function testComparisons() {
       assertEquals(i > j, vi.greaterThan(vj));
       assertEquals(i >= j, vi.greaterThanOrEqual(vj));
     }
-  }
+  };
 }
 
-function testBitOperations() {
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
+// Here and below, we translate one conceptual test (e.g., "testComparisons")
+// into a number of test functions that will be run separately by jsunit. This
+// is necessary because, in some testing configurations, the full combined test
+// can take so long that it times out. These smaller tests run much faster.
+for (var i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global['testComparisons' + i] = createTestComparisons(i);
+}
+
+function createTestBitOperations(i) {
+  return function() {
     var vi = goog.math.Long.fromBits(TEST_BITS[i+1], TEST_BITS[i]);
     assertEquals(~TEST_BITS[i], vi.not().getHighBits());
     assertEquals(~TEST_BITS[i+1], vi.not().getLowBits());
@@ -1443,7 +1451,11 @@ function testBitOperations() {
     assertEquals(TEST_BITS[i+1], vi.shiftRight(64).getLowBits());
     assertEquals(TEST_BITS[i], vi.shiftRightUnsigned(64).getHighBits());
     assertEquals(TEST_BITS[i+1], vi.shiftRightUnsigned(64).getLowBits());
-  }
+  };
+}
+
+for (var i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global['testBitOperations' + i] = createTestBitOperations(i);
 }
 
 function testNegation() {
@@ -1498,9 +1510,8 @@ function testMultiply() {
   }
 }
 
-function testDivMod() {
-  var count = 0;
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
+function createTestDivMod(i, count) {
+  return function() {
     var vi = goog.math.Long.fromBits(TEST_BITS[i+1], TEST_BITS[i]);
     for (var j = 0; j < TEST_BITS.length; j += 2) {
       var vj = goog.math.Long.fromBits(TEST_BITS[j+1], TEST_BITS[j]);
@@ -1517,8 +1528,22 @@ function testDivMod() {
   }
 }
 
-function testToFromString() {
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
+var countPerDivModCall = 0;
+for (var j = 0; j < TEST_BITS.length; j += 2) {
+  var vj = goog.math.Long.fromBits(TEST_BITS[j+1], TEST_BITS[j]);
+  if (!vj.isZero()) {
+    countPerDivModCall += 2;
+  }
+}
+
+var countDivMod = 0;
+for (var i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global['testDivMod' + i] = createTestDivMod(i, countDivMod);
+  countDivMod += countPerDivModCall;
+}
+
+function createTestToFromString(i) {
+  return function() {
     var vi = goog.math.Long.fromBits(TEST_BITS[i+1], TEST_BITS[i]);
     var str = vi.toString(10);
     assertEquals(TEST_STRINGS[i/2], str);
@@ -1535,6 +1560,10 @@ function testToFromString() {
                    goog.math.Long.fromString(result, radix).getLowBits());
     }
   }
+}
+
+for (var i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global['testToFromString' + i] = createTestToFromString(i);
 }
 </script>
 </body>
