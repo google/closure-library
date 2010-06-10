@@ -144,3 +144,26 @@
   background: url(https://ssl.gstatic.com/editor/editortoolbar.png) no-repeat -388px 0;
   vertical-align: top;
 }
+
+/* Pill (collapsed border) styles. */
+/* TODO(gboyer): Remove specific menu button styles and have any button support being a menu button. */
+.goog-menu-button-collapse-right,
+.goog-menu-button-collapse-right .goog-menu-button-outer-box,
+.goog-menu-button-collapse-right .goog-menu-button-inner-box {
+  margin-right: 0;
+}
+
+.goog-menu-button-collapse-left,
+.goog-menu-button-collapse-left .goog-menu-button-outer-box,
+.goog-menu-button-collapse-left .goog-menu-button-inner-box {
+  margin-left: 0;
+}
+
+.goog-menu-button-collapse-left .goog-menu-button-inner-box  {
+  border-left: 1px solid #fff;
+}
+
+.goog-menu-button-collapse-left.goog-menu-button-checked
+.goog-menu-button-inner-box {
+  border-left: 1px solid #ddd;
+}

@@ -1502,11 +1502,13 @@ goog.Uri.QueryData.prototype.invalidateCache_ = function() {
  */
 goog.Uri.QueryData.prototype.filterKeys = function(keys) {
   this.ensureKeyMapInitialized_();
-  goog.structs.forEach(this.keyMap_, function(value, key, map) {
-    if (!goog.array.contains(keys, key)) {
-      this.remove(key);
-    }
-  }, this);
+  goog.structs.forEach(this.keyMap_,
+    /** @this {goog.Uri.QueryData} */
+    function(value, key, map) {
+      if (!goog.array.contains(keys, key)) {
+        this.remove(key);
+      }
+    }, this);
   return this;
 };
 
@@ -1557,13 +1559,15 @@ goog.Uri.QueryData.prototype.setIgnoreCase = function(ignoreCase) {
   if (resetKeys) {
     this.ensureKeyMapInitialized_();
     this.invalidateCache_();
-    goog.structs.forEach(this.keyMap_, function(value, key, map) {
-      var lowerCase = key.toLowerCase();
-      if (key != lowerCase) {
-        this.remove(key);
-        this.add(lowerCase, value);
-      }
-    }, this);
+    goog.structs.forEach(this.keyMap_,
+      /** @this {goog.Uri.QueryData} */
+      function(value, key, map) {
+        var lowerCase = key.toLowerCase();
+        if (key != lowerCase) {
+          this.remove(key);
+          this.add(lowerCase, value);
+        }
+      }, this);
   }
   this.ignoreCase_ = ignoreCase;
 };
@@ -1579,8 +1583,10 @@ goog.Uri.QueryData.prototype.setIgnoreCase = function(ignoreCase) {
 goog.Uri.QueryData.prototype.extend = function(var_args) {
   for (var i = 0; i < arguments.length; i++) {
     var data = arguments[i];
-    goog.structs.forEach(data, function(value, key) {
-      this.add(key, value);
-    }, this);
+    goog.structs.forEach(data,
+      /** @this {goog.Uri.QueryData} */
+      function(value, key) {
+        this.add(key, value);
+      }, this);
   }
 };

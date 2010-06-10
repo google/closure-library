@@ -26,11 +26,11 @@ goog.require('goog.graphics.ext.Element');
 
 /**
  * Wrapper for a graphics group.
- * @param {goog.graphics.ext.Group} group Parent for this element.  Can be null
- *     if this is a Graphics instance.
- * @param {goog.graphics.Element=} opt_wrapper The thin wrapper to wrap.  If
- *     omitted, a new group will be created.  Must be included when group is
- *     null.
+ * @param {goog.graphics.ext.Group} group Parent for this element. Can
+ *     be null if this is a Graphics instance.
+ * @param {goog.graphics.GroupElement=} opt_wrapper The thin wrapper
+ *     to wrap. If omitted, a new group will be created. Must be included
+ *     when group is null.
  * @constructor
  * @extends {goog.graphics.ext.Element}
  */
@@ -106,6 +106,13 @@ goog.graphics.ext.Group.prototype.forEachChild = function(f, opt_obj) {
     goog.array.forEach(this.children_, f, opt_obj);
   }
 };
+
+
+/**
+ * @return {goog.graphics.GroupElement} The underlying thin wrapper.
+ * @protected
+ */
+goog.graphics.ext.Group.prototype.getWrapper;
 
 
 /**

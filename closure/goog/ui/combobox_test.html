@@ -134,6 +134,24 @@ function testExternallyCreatedMenu() {
   assertEquals('Blue', input.value);
 }
 
+function testRecomputeVisibleCountAfterChangingItems() {
+  input.value = 'Black';
+  comboBox.onInputChange_();
+  assertEquals('No items should be displayed',
+      0, comboBox.getNumberOfVisibleItems_());
+  comboBox.addItem(new goog.ui.ComboBoxItem('Black'));
+  assertEquals('One item should be displayed',
+      1, comboBox.getNumberOfVisibleItems_());
+
+  input.value = 'Red';
+  comboBox.onInputChange_();
+  assertEquals('One item should be displayed',
+      1, comboBox.getNumberOfVisibleItems_());
+  comboBox.removeItemAt(0);  // Red
+  assertEquals('No items should be displayed',
+      0, comboBox.getNumberOfVisibleItems_());  
+}
+
 </script>
 </body>
 </html>

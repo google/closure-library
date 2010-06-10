@@ -32,15 +32,24 @@ def MakeDepsFile(source_map):
   Returns:
     str, A generated deps file source.
   """
-  return ''.join([_GetDepsLine(path, js_source)
-                  for path, js_source in source_map.items()])
+
+  # Write in path alphabetical order
+  paths = source_map.keys()
+  paths.sort()
+  lines = [_GetDepsLine(path, source_map[path]) for path in paths]
+  return ''.join(lines)
 
 
 def _GetDepsLine(path, js_source):
   """Get a deps.js file string for a source."""
 
-  return 'goog.addDependency(\'%s\', %s, %s);\n' % (
-      path, list(js_source.provides), list(js_source.requires))
+  provides = list(js_source.provides)
+  provides.sort()
+
+  requires = list(js_source.requires)
+  requires.sort()
+
+  return 'goog.addDependency(\'%s\', %s, %s);\n' % (path, provides, requires)
 
 
 def _GetOptionsParser():

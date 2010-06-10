@@ -284,6 +284,7 @@ goog.ui.ComboBox.prototype.dismiss = function() {
  */
 goog.ui.ComboBox.prototype.addItem = function(item) {
   this.menu_.addChild(item, true);
+  this.visibleCount_ = -1;
 };
 
 
@@ -294,6 +295,7 @@ goog.ui.ComboBox.prototype.addItem = function(item) {
  */
 goog.ui.ComboBox.prototype.addItemAt = function(item, n) {
   this.menu_.addChildAt(item, n, true);
+  this.visibleCount_ = -1;
 };
 
 
@@ -305,6 +307,7 @@ goog.ui.ComboBox.prototype.removeItem = function(item) {
   var child = this.menu_.removeChild(item, true);
   if (child) {
     child.dispose();
+    this.visibleCount_ = -1;
   }
 };
 
@@ -327,6 +330,7 @@ goog.ui.ComboBox.prototype.removeItemAt = function(n) {
   var child = this.menu_.removeChildAt(n, true);
   if (child) {
     child.dispose();
+    this.visibleCount_ = -1;
   }
 };
 

@@ -788,7 +788,7 @@ goog.graphics.ext.Element.Position_.prototype.setSize = function(size) {
 
 /**
  * Converts the given x coordinate to a number value in units.
- * @param {string|number|null} v The coordinate to retrieve the value for.
+ * @param {string|number} v The coordinate to retrieve the value for.
  * @param {boolean=} opt_forMaximum Whether we are computing the largest value
  *     this coordinate would be in a parent of no size.
  * @return {number} The correct number of coordinate space units.

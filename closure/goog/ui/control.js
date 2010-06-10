@@ -1049,7 +1049,7 @@ goog.ui.Control.prototype.isDispatchTransitionEvents = function(state) {
 /**
  * Enables or disables transition events for the given state(s).  Controls
  * handle state transitions internally by default, and only dispatch state
- * transition events if explicitly requested to do so by calling this mentod.
+ * transition events if explicitly requested to do so by calling this method.
  * @param {number} states Bit mask of {@link goog.ui.Component.State}s for
  *     which transition events should be enabled or disabled.
  * @param {boolean} enable Whether transition events should be enabled.
